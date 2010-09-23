@@ -53,7 +53,8 @@ class CoreSQLiteHandler {
 	}
 
 	public function isWriteable() {
-		return GlobalCore::getInstance()->checkWriteable($this->file);
+		return GlobalCore::getInstance()->checkWriteable(dirname($this->file))
+					 && GlobalCore::getInstance()->checkWriteable($this->file);
 	}
 	
 	public function tableExist($table) {
