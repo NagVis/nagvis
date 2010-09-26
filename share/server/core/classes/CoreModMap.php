@@ -1031,11 +1031,11 @@ class CoreModMap extends CoreModule {
 					if($SUBMAPCFG->checkMapConfigExists(0))
 						$SUBMAPCFG->readMapConfig();
 			
-					if($this->CORE->checkMapIsAutomap($objConf['map_name'])) {
+					if($this->CORE->checkMapIsAutomap($arrName1[$i])) {
 						$MAP = new NagVisAutoMap($this->CORE, $SUBMAPCFG, $BACKEND, Array(), !IS_VIEW);
 						$OBJ = $MAP->MAPOBJ;
 					} else 
-						$OBJ = new NagVisMapObj($this->CORE, $BACKEND, $MAPCFG, !IS_VIEW);
+						$OBJ = new NagVisMapObj($this->CORE, $BACKEND, $SUBMAPCFG, !IS_VIEW);
 					$OBJ->fetchMapObjects();
 				break;
 				case 'automap':
