@@ -466,12 +466,10 @@ function getBackgroundColor(oObj) {
 	var sColor;
 	
 	// When state is PENDING, OK, UP, set default background color
-	if(oObj.summary_state == 'PENDING' || oObj.summary_state == 'OK' || oObj.summary_state == 'UP')
+	if(!oObj.summary_state || oObj.summary_state == 'PENDING' || oObj.summary_state == 'OK' || oObj.summary_state == 'UP')
 		sColor = oPageProperties.background_color;
 	else
 		sColor = oStates[oObj.summary_state].bgcolor;
-	
-	eventlog("background", "debug", "State: "+oObj.summary_state+" Color is: "+sColor);
 	
 	oObj = null;
 	

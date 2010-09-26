@@ -850,14 +850,17 @@ class NagVisStatefulObject extends NagVisObject {
 			NagVisStatefulObject::$langChildStates = $this->CORE->getLang()->getText('childStatesAre');
 		
 		$this->summary_output .= NagVisStatefulObject::$langChildStates.' ';
-		foreach($arrStates AS $state => $num) {
-			if($num > 0) {
+		foreach($arrStates AS $state => $num)
+			if($num > 0)
 				$this->summary_output .= $num.' '.$state.', ';
-			}
-		}
-		
-		// Remove last comma
-		$this->summary_output = rtrim($this->summary_output, ', ').' '.$objLabel.'.';
+
+		// If some has been added remove last comma, else add a simple 0
+		if(substr($this->summary_output, -2, 2) == ', ')
+			$this->summary_output = rtrim($this->summary_output, ', ');
+		else
+			$this->summary_output .= '0 ';
+						
+		$this->summary_output .= ' '.$objLabel.'.';
 	}
 	
 	/**
