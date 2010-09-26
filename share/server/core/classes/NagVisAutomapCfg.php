@@ -27,6 +27,8 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisAutomapCfg extends GlobalMapCfg {
+	private $defaultConf = null;
+
 	/**
 	 * Class Constructor
 	 *
@@ -62,26 +64,31 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function &getObjectConfiguration() {
-		$objConf = Array();
-		
-		/*
-		 * Get object default configuration from configuration file
-		 * The dummy host MUST be the first host defined in the automap configuration file.
-		 * The settings of the first host will be used for all objects on the map
-		 */
-		foreach($this->getValidTypeKeys('host') AS $key) {
-			if($key != 'type'
-				 && $key != 'backend_id'
-				 && $key != 'host_name'
-				 && $key != 'object_id'
-				 && $key != 'x'
-				 && $key != 'y'
-				 && $key != 'line_width') {
-				$objConf[$key] = $this->getValue('host', 0, $key);
+		// Load the settings once and then remove the dummy host from host list
+		if(!$this->defaultConf) {
+			$this->defaultConf = Array();
+			
+			/*
+			 * Get object default configuration from configuration file
+			 * The dummy host MUST be the first host defined in the automap configuration file.
+			 * The settings of the first host will be used for all objects on the map
+			 */
+			foreach($this->getValidTypeKeys('host') AS $key) {
+				if($key != 'type'
+					 && $key != 'backend_id'
+					 && $key != 'host_name'
+					 && $key != 'object_id'
+					 && $key != 'x'
+					 && $key != 'y'
+					 && $key != 'line_width') {
+					$this->defaultConf[$key] = $this->getValue('host', 0, $key);
+				}
 			}
+
+			$this->deleteElement('host', 0);
 		}
 		
-		return $objConf;
+		return $this->defaultConf;
 	}
 }
 ?>

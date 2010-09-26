@@ -1941,8 +1941,8 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function deleteElement($type,$id) {
-		$this->mapConfig[$type][$id] = '';
-		return TRUE;
+		unset($this->mapConfig[$type][$id]);
+		return true;
 	}
 	
 	/**

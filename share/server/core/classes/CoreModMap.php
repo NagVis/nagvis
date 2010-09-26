@@ -1023,10 +1023,19 @@ class CoreModMap extends CoreModule {
 				break;
 				case 'map':
 					// Initialize map configuration based on map type
-					$MAPCFG = new NagVisMapCfg($this->CORE, $arrName1[$i]);
-					$MAPCFG->readMapConfig();
+					if($this->CORE->checkMapIsAutomap($arrName1[$i]))
+						$SUBMAPCFG = new NagVisAutomapCfg($this->CORE, $arrName1[$i]);
+					else
+						$SUBMAPCFG = new NagVisMapCfg($this->CORE, $arrName1[$i]);
+
+					if($SUBMAPCFG->checkMapConfigExists(0))
+						$SUBMAPCFG->readMapConfig();
 			
-					$OBJ = new NagVisMapObj($this->CORE, $BACKEND, $MAPCFG, !IS_VIEW);
+					if($this->CORE->checkMapIsAutomap($objConf['map_name'])) {
+						$MAP = new NagVisAutoMap($this->CORE, $SUBMAPCFG, $BACKEND, Array(), !IS_VIEW);
+						$OBJ = $MAP->MAPOBJ;
+					} else 
+						$OBJ = new NagVisMapObj($this->CORE, $BACKEND, $MAPCFG, !IS_VIEW);
 					$OBJ->fetchMapObjects();
 				break;
 				case 'automap':

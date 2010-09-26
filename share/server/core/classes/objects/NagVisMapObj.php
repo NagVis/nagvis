@@ -337,11 +337,9 @@ class NagVisMapObj extends NagVisStatefulObject {
 					$objConf['id'] = $index;
 					
 					// merge with "global" settings
-					foreach($typeDefs AS $key => $default) {
-						if(!isset($objConf[$key])) {
+					foreach($typeDefs AS $key => $default)
+						if(!isset($objConf[$key]))
 							$objConf[$key] = $default;
-						}
-					}
 					
 					switch($type) {
 						case 'host':
@@ -360,14 +358,20 @@ class NagVisMapObj extends NagVisStatefulObject {
 							// Initialize map configuration based on map type
 							if($this->CORE->checkMapIsAutomap($objConf['map_name'])) {
 								$SUBMAPCFG = new NagVisAutomapCfg($this->CORE, $objConf['map_name']);
-							} else {
+
+								// Override the default map url for the automaps
+								$objConf['url'] = str_replace('mod=Map', 'mod=AutoMap', $objConf['url']);
+							} else
 								$SUBMAPCFG = new NagVisMapCfg($this->CORE, $objConf['map_name']);
-							}
 							
-							if($SUBMAPCFG->checkMapConfigExists(0)) {
+							if($SUBMAPCFG->checkMapConfigExists(0))
 								$SUBMAPCFG->readMapConfig();
-							}
-							$OBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $SUBMAPCFG, !IS_VIEW);
+
+							if($this->CORE->checkMapIsAutomap($objConf['map_name'])) {
+								$MAP = new NagVisAutoMap($this->CORE, $SUBMAPCFG, $this->BACKEND, Array(), !IS_VIEW);
+								$OBJ = $MAP->MAPOBJ;
+							} else 
+								$OBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $SUBMAPCFG, !IS_VIEW);
 							
 							if(!$SUBMAPCFG->checkMapConfigExists(0)) {
 								$OBJ->summary_state = 'ERROR';

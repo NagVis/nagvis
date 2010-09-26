@@ -179,7 +179,7 @@ class WuiMapCfg extends GlobalMapCfg {
 						// check if element exists
 						if($a == $id) {
 							// check if element is an array...
-							if(is_array($this->mapConfig[$type][$a])) {
+							if(isset($this->mapConfig[$type][$a]) && is_array($this->mapConfig[$type][$a])) {
 								// ...array: update!
 								
 								// choose first parameter line

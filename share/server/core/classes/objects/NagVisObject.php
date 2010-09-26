@@ -224,13 +224,12 @@ class NagVisObject {
 		
 		// Need to remove some options which are not relevant
 		// FIXME: Would be much better to name the needed vars explicit
-		if(self::$arrDenyKeys == null) {
+		if(self::$arrDenyKeys == null)
 			self::$arrDenyKeys = Array('CORE' => '', 'BACKEND' => '', 'MAPCFG' => '',
 				'MAP' => '', 'GRAPHIC' => '', 'conf' => '', 'services' => '',
 				'fetchedChildObjects' => '', 'childObjects' => '', 'parentObjects' => '',
 				'members' => '', 'objects' => '', 'linkedMaps' => '', 'isSummaryObject' => '',
 				'isView' => '', 'dateFormat' => '', 'arrDenyKeys' => '');
-		}
 		
 		foreach($this AS $key => $val) {
 			if(!isset(self::$arrDenyKeys[$key])) {
@@ -239,11 +238,10 @@ class NagVisObject {
 		}
 
 		// Add special static options
-		if($this instanceof NagVisStatefulObject) {
+		if($this instanceof NagVisStatefulObject)
 			$arr['iconHtmlPath'] = NagVisStatefulObject::$iconHtmlPath;
-		} elseif($this instanceof NagVisStatelessObject) {
+		elseif($this instanceof NagVisStatelessObject)
 			$arr['iconHtmlPath'] = NagVisStatelessObject::$iconHtmlPath;
-		}
 		
 		// Save the number of members
 		switch($this->type) {
