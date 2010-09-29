@@ -192,6 +192,7 @@ EOD
 
 # Print line
 line() {
+  [ $INSTALLER_QUIET -eq 1 ] && return
 	DASHES="--------------------------------------------------------------------------------------------------------------"
 	SIZE2=`expr $LINE_SIZE - 4`
 	if [ -z "$1" ]; then
@@ -203,10 +204,11 @@ line() {
 			OUT=`printf "+--- %${SIZE2}.${SIZE2}s+\n" "$1 $DASHES"`
 		fi
 	fi
-	echo "$OUT"
+  echo "$OUT"
 }
 # Print text
 text() {
+  [ $INSTALLER_QUIET -eq 1 ] && return
 	SIZE2=`expr $LINE_SIZE - 3`
 	if [ -z "$1" ]; then
 		OUT=`printf "%s%${LINE_SIZE}s%s\n" "|" "" "|"`
@@ -313,6 +315,7 @@ ask_user() {
 
 # Print welcome message
 welcome() {
+  [ $INSTALLER_QUIET -eq 1 ] && return
 cat <<EOD
 +------------------------------------------------------------------------------+
 | $(printf "Welcome to NagVis Installer %-48s" $INSTALLER_VERSION) |
@@ -330,7 +333,6 @@ cat <<EOD
 | report that to the NagVis team.                                              |
 +------------------------------------------------------------------------------+
 EOD
-if [ $INSTALLER_QUIET -ne 1 ]; then
 	ask_user "ANS" "y" 1 "check_confirm" \
 	         "Do you want to proceed?"
 
@@ -340,11 +342,11 @@ if [ $INSTALLER_QUIET -ne 1 ]; then
 		line ""
 		exit 1
 	fi
-fi
 }
 
 # Print module state, exit if necessary
 log() {
+  [ $INSTALLER_QUIET -eq 1 ] && return
 	SIZE=`expr $LINE_SIZE - 8` 
 	if [ -z "$2" ]; then
 		OUT=`printf "%-${SIZE}s %s\n" "| $1" "MISSING |"`
