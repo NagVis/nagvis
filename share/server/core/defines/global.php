@@ -27,7 +27,7 @@
  */
 
 // NagVis Version
-define('CONST_VERSION', '1.5.1');
+define('CONST_VERSION', '1.5.2');
 
 // Set PHP error handling to standard level
 error_reporting(E_ALL ^ E_STRICT);
@@ -76,7 +76,7 @@ define('CONST_MAINCFG', '../../../etc/nagvis.ini.php');
 define('CONST_MAINCFG_CACHE', '../../../var/nagvis.ini.php');
 
 // Path to "site" main configuration file
-define('CONST_MAINCFG_SITE', '../../../etc/nagvis-site.ini.php');
+//define('CONST_MAINCFG_SITE', '../../../etc/nagvis-site.ini.php');
 
 // Needed minimal PHP version
 define('CONST_NEEDED_PHP_VERSION', '5.0');
