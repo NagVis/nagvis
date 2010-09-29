@@ -432,6 +432,10 @@ function saveObjectAfterMoveAndDrop(oObj) {
 	oResult = null;
 }
 
+function getDomObjectIds(objId) {
+    return [ 'box_'+objId, 'icon_'+objId+'-context', 'rel_label_'+objId, 'abs_label_'+objId ];
+}
+
 // This function handles object deletions on maps
 function deleteMapObject(objId) {
 	if(confirm(printLang(lang['confirmDelete'],''))) {
@@ -450,7 +454,7 @@ function deleteMapObject(objId) {
 
 		// Remove the object with all childs and other containers from the map
 		var oMap = document.getElementById('mymap');
-		var ids = [ objId, 'icon_'+type+'_'+id+'-context', 'rel_label_'+type+'_'+id, 'abs_label_'+type+'_'+id ];
+		var ids = getDomObjectIds(type+'_'+id)
 		for(var i in ids) {
 			var o = document.getElementById(ids[i])
 			if(o) {
@@ -459,6 +463,25 @@ function deleteMapObject(objId) {
 			}
 		}
 		oMap = null;
+
+		// Now change all objects of the same type which have a higher object id.
+		// The object id of these objects needs to be reduced by one.
+		var oObj, domIds;
+		var newId = parseInt(id);
+		var nextId = newId+1;
+		while(document.getElementById('box_'+type+'_'+nextId)) {
+			domIds = getDomObjectIds(type+'_'+nextId);
+			for(var i in domIds) {
+				var oObj = document.getElementById(domIds[i]);
+				if(oObj)
+					oObj.setAttribute('id', domIds[i].replace(nextId, newId));
+			}
+			nextId++;
+			newId++;
+		}
+    nextId = null;
+    newId = null;
+		oObj = null;
 		
 		return true;
 	} else {
