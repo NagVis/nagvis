@@ -42,9 +42,13 @@ class WuiCore extends GlobalCore {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public static function getMainCfg() {
+		// Initialize main configuration when not set yet
 		if(parent::$MAINCFG === null) {
-			// Initialize main configuration when not set yet
-			parent::$MAINCFG = new WuiMainCfg(CONST_MAINCFG);
+			if(defined('CONST_MAINCFG_SITE'))
+				parent::$MAINCFG = new WuiMainCfg(Array(CONST_MAINCFG_SITE, CONST_MAINCFG));
+			else
+				parent::$MAINCFG = new WuiMainCfg(Array(CONST_MAINCFG));
+
 			parent::$MAINCFG->init();
 			
 			// Set WuiCore MAINCFG too

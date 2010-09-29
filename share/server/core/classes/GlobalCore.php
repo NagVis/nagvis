@@ -56,9 +56,13 @@ class GlobalCore {
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public static function getMainCfg() {
+		// Initialize main configuration when not set yet
 		if(self::$MAINCFG === null) {
-			// Initialize main configuration when not set yet
-			self::$MAINCFG = new GlobalMainCfg(CONST_MAINCFG);
+			if(defined('CONST_MAINCFG_SITE'))
+				self::$MAINCFG = new GlobalMainCfg(Array(CONST_MAINCFG_SITE, CONST_MAINCFG));
+			else
+				self::$MAINCFG = new GlobalMainCfg(Array(CONST_MAINCFG));
+
 			self::$MAINCFG->init();
 		}
 		

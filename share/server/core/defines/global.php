@@ -60,9 +60,23 @@ define('DEBUGLEVEL', 6);
 // Path to the debug file
 define('DEBUGFILE', '../../../var/nagvis-debug.log');
 
+// It is possible to define a second main configuration file
+// to pre-define some options in a file the user may not be
+// able to modify.
+//
+// The parameters are applied in this direction:
+// 1. hardcoded
+// 2. CONST_MAINCFG_SITE
+// 3. CONST_MAINCFG
+//
+// The last value wins.
+//
 // Path to the main configuration file
 define('CONST_MAINCFG', '../../../etc/nagvis.ini.php');
 define('CONST_MAINCFG_CACHE', '../../../var/nagvis.ini.php');
+
+// Path to "site" main configuration file
+define('CONST_MAINCFG_SITE', '../../../etc/nagvis-site.ini.php');
 
 // Needed minimal PHP version
 define('CONST_NEEDED_PHP_VERSION', '5.0');

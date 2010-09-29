@@ -1436,8 +1436,9 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 	USERFILES_DIR="share/userfiles"
 
 	if [ $NAGVIS_TAG_OLD -ge 01050000 ]; then
- 		LINE="Restoring main configuration file..."
+ 		LINE="Restoring main configuration file(s)..."
 		copy "" "$NAGVIS_CONF" "main configuration file"
+		copy "" "etc/nagvis-site.ini.php" "site main configuration file"
 	
 		LINE="Restoring custom map configuration files..."
 		copy "\/(demo\.cfg|demo2\.cfg|demo-server\.cfg|demo-map\.cfg)$" "etc/maps" "map configuration files"

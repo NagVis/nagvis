@@ -26,26 +26,24 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalMainCfg {
-	private $CACHE;
+	private $useCache = true;
+	private $CACHES;
 	
-	protected $config;
-	protected $runtimeConfig;
+	protected $config = Array();
+	protected $runtimeConfig = Array();
 	protected $stateWeight;
 	
-	protected $configFile;
+	protected $configFiles;
 	
 	protected $validConfig;
 	
 	/**
 	 * Class Constructor
 	 *
-	 * @param	String	$configFile			String with path to config file
+	 * @param	Array $configFile    List of paths to configuration files
 	 * @author Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function __construct($configFile) {
-		$this->config = Array();
-		$this->runtimeConfig = Array();
-		
+	public function __construct($configFiles) {
 		$this->validConfig = Array(
 			'global' => Array(
 				'audit_log' => Array('must' => 1,
@@ -889,32 +887,39 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['base']['default'] = $this->getBasePath();
 		$this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
 		
-		// Define the main configuration file
-		$this->configFile = $configFile;
+		// Define the main configuration files
+		$this->configFiles = $configFiles;
+	}
+
+	private function loadConfigFile($file) {
+		// Only proceed when the configuration file exists and is readable
+		if(!GlobalCore::getInstance()->checkExisting($file, true) || !GlobalCore::getInstance()->checkReadable($file, true))
+			return false;
+		
+		// Create instance of GlobalFileCache object for caching the config
+		$id = count($this->CACHES);
+		$this->CACHES[$id] = new GlobalFileCache(GlobalCore::getInstance(), $file, CONST_MAINCFG_CACHE.'-'.CONST_VERSION.'-cache');
+
+		// When this or a file before is newer than the cache parse the file
+		if($this->useCache > 0)
+  		$this->useCache = $this->CACHES[$id]->isCached(false);
+		if($this->useCache === -1)
+			return $this->readConfig($file, true);
 	}
 	
 	public function init() {
-		// Do preflight checks
-		// Only proceed when the configuration file exists and is readable
-		if(!$this->checkNagVisConfigExists(TRUE) || !$this->checkNagVisConfigReadable(TRUE)) {
-			return FALSE;
-		}
-		
-		// Create instance of GlobalFileCache object for caching the config
-		$this->CACHE = new GlobalFileCache(GlobalCore::getInstance(), $this->configFile, CONST_MAINCFG_CACHE.'-'.CONST_VERSION.'-cache');
-		
 		// Get the valid configuration definitions from the available backends
 		$this->getBackendValidConf();
-		
-		if($this->CACHE->isCached(FALSE) !== -1) {
-			$this->config = $this->CACHE->getCache();
-		} else {
-			
-			// Read Main Config file, when succeeded cache it
-			if($this->readConfig(TRUE)) {
-				$this->CACHE->writeCache($this->config, TRUE);
-			}
-		}
+
+		// Load all given config files
+		foreach($this->configFiles AS $configFile)
+			$this->loadConfigFile($configFile);
+
+		// Use or write the cache depending on the situation
+		if($this->useCache !== -1)
+			$this->config = $this->CACHES[0]->getCache();
+		else
+			$this->CACHES[0]->writeCache($this->config, true);
 
 		// Parse the state weight array
 		$this->parseStateWeight();
@@ -1028,18 +1033,18 @@ class GlobalMainCfg {
 	}
 	
 	/**
-	 * Reads the config file specified in $this->configFile
+	 * Reads the specified config file
 	 *
 	 * @param	Boolean $printErr
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function readConfig($printErr=1) {
+	private function readConfig($configFile, $printErr=1) {
 		$numComments = 0;
 		$sec = '';
 		
 		// read thx config file line by line in array $file
-		$file = file($this->configFile);
+		$file = file($configFile);
 		
 		// Count the lines before the loop (only counts once)
 		$countLines = count($file);
@@ -1142,11 +1147,10 @@ class GlobalMainCfg {
 					}
 					
 					// write in config array
-					if(isset($sec)) {
+					if(isset($sec))
 						$this->config[$sec][$key] = $val;
-					} else {
+					else
 						$this->config[$key] = $val;
-					}
 				}
 			} else {
 				$sec = '';
@@ -1154,11 +1158,7 @@ class GlobalMainCfg {
 			}
 		}
 		
-		if($this->checkMainConfigIsValid(1)) {
-			return TRUE;
-		} else {
-			return FALSE;
-		}
+		return $this->checkMainConfigIsValid(1);
 	}
 	
 	/**
@@ -1273,35 +1273,18 @@ class GlobalMainCfg {
 	}
 	
 	/**
-	 * Checks for existing config file
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function checkNagVisConfigExists($printErr) {
-		return GlobalCore::getInstance()->checkExisting($this->configFile, $printErr);
-	}
-	
-	/**
-	 * Checks for readable config file
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function checkNagVisConfigReadable($printErr) {
-		return GlobalCore::getInstance()->checkReadable($this->configFile, $printErr);
-	}
-	
-	/**
 	 * Returns the last modification time of the configuration file
 	 *
 	 * @return	Integer	Unix Timestamp
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getConfigFileAge() {
-		return filemtime($this->configFile);
+		$newest = 0;
+		foreach($this->configFiles AS $configFile) {
+			$age = filemtime($configFile);
+			$newest = ($age > $newest ? $age : $newest);
+		}
+		return $newest;
 	}
 	
 	/**
@@ -1312,7 +1295,7 @@ class GlobalMainCfg {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function isCached() {
-		return $this->CACHE->isCached();
+		return $this->useCache;
 	}
 	
 	/**

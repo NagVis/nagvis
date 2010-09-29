@@ -100,7 +100,7 @@ class GlobalFileCache {
 	 * @return  Integer  Unix timestamp of cache creation time or -1 when not cached
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function isCached($printErr=0) {
+	public function isCached($printErr = false) {
 		// Checks
 		// a) Cache file exists
 		// b) Cache file older than regular file
