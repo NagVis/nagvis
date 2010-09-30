@@ -156,7 +156,7 @@ function drawLinkArea(objectId, lx, ly, z) {
 }
 
 function getLabelShift(str) {
-	if(str.length > 0)
+	if(str && str.length > 0)
 		return (str.length / 2) * 9;
 	else
 		return 10
