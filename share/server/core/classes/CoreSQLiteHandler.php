@@ -227,7 +227,11 @@ class CoreSQLiteHandler {
 			$this->addRolePerm($data['roleId'], 'ManageShapes', 'doUpload', '*');
 			$this->addRolePerm($data['roleId'], 'ManageShapes', 'doDelete', '*');
 		}
-		$this->updateDbVersion();
+
+		// Only apply the new version when this is the real release or newer
+		// (While development the version string remains on the old value)
+		if($this->versionToTag(CONST_VERSION) >= 1050300)
+			$this->updateDbVersion();
 	}
 
 	private function updateDb1050024() {
