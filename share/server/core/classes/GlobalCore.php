@@ -482,5 +482,22 @@ class GlobalCore {
 	public function checkSharedVarFolderWriteable($printErr) {
 		return $this->checkWriteable(substr(self::getMainCfg()->getValue('paths', 'sharedvar'),0,-1), $printErr);
 	}
+
+	/**
+	 * Transforms a NagVis version to integer which can be used
+	 * for comparing different versions.
+	 *
+	 * @param	  String    Version string
+	 * @return  Integer   Version as integer
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function versionToTag($s) {
+		$s = str_replace('a', '.0.0', str_replace('b', '.0.2', str_replace('rc', '.0.4', $s)));
+		$parts = explode('.', $s);
+		$tag = '';
+		foreach($parts AS $part)
+			$tag .= sprintf("%02s", $part);
+		return (int) sprintf("%-08s", $tag);
+	}
 }
 ?>

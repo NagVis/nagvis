@@ -180,22 +180,13 @@ class CoreSQLiteHandler {
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES ('.$roleId.', (SELECT permId FROM perms WHERE mod=\''.$mod.'\' AND act=\''.$act.'\' AND obj=\''.$obj.'\'))');
 	}
 
-	private function versionToTag($s) {
-		$s = str_replace('a', '.0.0', str_replace('b', '.0.2', str_replace('rc', '.0.4', $s)));
-		$parts = explode('.', $s);
-		$tag = '';
-		foreach($parts AS $part)
-			$tag .= sprintf("%02s", $part);
-		return (int) sprintf("%-08s", $tag);
-	}
-
 	public function updateDb() {
 		// Perform pre 1.5b4 updates
 		if(!$this->tableExist('version'))
 			$this->updateDd1050024();
 
 		// Read the current version from db
-		$dbVersion = $this->versionToTag($this->getDbVersion());
+		$dbVersion = GlobalCore::getInstance()->versionToTag($this->getDbVersion());
 
 		// Now perform the update for pre 1.5.3
 		if($dbVersion < 1050300)
@@ -230,7 +221,7 @@ class CoreSQLiteHandler {
 
 		// Only apply the new version when this is the real release or newer
 		// (While development the version string remains on the old value)
-		if($this->versionToTag(CONST_VERSION) >= 1050300)
+		if(GlobalCore::getInstance()->versionToTag(CONST_VERSION) >= 1050300)
 			$this->updateDbVersion();
 	}
 

@@ -187,35 +187,53 @@ class CoreMySQLHandler {
 	}
 
 	public function updateDb() {
-		if(!$this->tableExist('version')) {
-			// Perform pre b4 updates
-			$this->updateDb15b4();
-		}
+		// Read the current version from db
+		$dbVersion = GlobalCore::getInstance()->versionToTag($this->getDbVersion());
+
+		// Now perform the update for pre 1.5.3
+		if($dbVersion < 1050300)
+			$this->updateDb1050300();
 	}
 
-	private function updateDb15b4() {
-		if(DEBUG&&DEBUGLEVEL&2) debug('MySQLHandler: Performing update to 1.5b4 scheme');
-		
-		$this->createVersionTable();
+	private function updateDb1050300() {
+		// Create permissions for WUI management pages
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'manage\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'view\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'doCreate\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'doUpload\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'doDelete\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'manage\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'view\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'doUpload\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'doDelete\', \'*\')');
 
-		// Add addModify permission
-		$RES = $this->query('SELECT obj FROM perms WHERE `mod`=\'Map\' AND `act`=\'view\'');
-		while($data = $this->fetchAssoc($RES)) {
-			if(DEBUG&&DEBUGLEVEL&2) debug('MySQLHandler: Adding new addModify perms for map '.$data['obj']);
-			$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'addModify\', '.$this->escape($data['obj']).')');
-		}
-
-		// Assign the addModify permission to the managers
+		// Assign the new permission to the managers
 		$RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\'');
 		while($data = $this->fetchAssoc($RES)) {
-			if(DEBUG&&DEBUGLEVEL&2) debug('MySQLHandler: Assigning addModify perms to Managers role');
-			$this->addRolePerm($data['roleId'], 'Map', 'addModify', '*');
+			$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'manage', '*');
+			$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'view', '*');
+			$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'doCreate', '*');
+			$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'doUpload', '*');
+			$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'doDelete', '*');
+			$this->addRolePerm($data['roleId'], 'ManageShapes', 'manage', '*');
+			$this->addRolePerm($data['roleId'], 'ManageShapes', 'view', '*');
+			$this->addRolePerm($data['roleId'], 'ManageShapes', 'doUpload', '*');
+			$this->addRolePerm($data['roleId'], 'ManageShapes', 'doDelete', '*');
 		}
+
+		// Only apply the new version when this is the real release or newer
+		// (While development the version string remains on the old value)
+		if(GlobalCore::getInstance()->versionToTag(CONST_VERSION) >= 1050300)
+			$this->updateDbVersion();
 	}
 
-	private function createVersionTable() {
-		$this->query('CREATE TABLE version (version VARCHAR(100), PRIMARY KEY(version))');
-		$this->query('INSERT INTO version (version) VALUES (\''.CONST_VERSION.'\')');
+	private function getDbVersion() {
+		$data = $this->fetchAssoc($this->query('SELECT version FROM version'));
+		return $data['version'];
+	}
+
+	private function updateDbVersion() {
+		$this->query('UPDATE version SET version=\'' . CONST_VERSION . '\'');
 	}
 	
 	public function createInitialDb() {
@@ -225,7 +243,8 @@ class CoreMySQLHandler {
 		$this->query('CREATE TABLE users2roles (userId INTEGER, roleId INTEGER, PRIMARY KEY(userId, roleId))');
 		$this->query('CREATE TABLE roles2perms (roleId INTEGER, permId INTEGER, PRIMARY KEY(roleId, permId))');
 
-		$this->createVersionTable();
+		$this->query('CREATE TABLE version (version VARCHAR(100), PRIMARY KEY(version))');
+		$this->query('INSERT INTO version (version) VALUES (\''.CONST_VERSION.'\')');
 		
 		$this->query('INSERT INTO users (userId, name, password) VALUES (1, \'nagiosadmin\', \'7f09c620da83db16ef9b69abfb8edd6b849d2d2b\')');
 		$this->query('INSERT INTO users (userId, name, password) VALUES (2, \'guest\', \'7f09c620da83db16ef9b69abfb8edd6b849d2d2b\')');
@@ -300,6 +319,17 @@ class CoreMySQLHandler {
 		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'RoleMgmt\', \'doAdd\', \'*\')');
 		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'RoleMgmt\', \'doEdit\', \'*\')');
 		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'RoleMgmt\', \'doDelete\', \'*\')');
+
+		// Access control: WUI Management pages
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'manage\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'view\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'doCreate\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'doUpload\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'doDelete\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'manage\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'view\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'doUpload\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'doDelete\', \'*\')');
 		
 		// Access controll: Edit/Delete maps and automaps
 		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'add\', \'*\')');
@@ -359,6 +389,17 @@ class CoreMySQLHandler {
 		// Access assignment: Managers => Allowed to create automaps
 		$this->addRolePerm($data['roleId'], 'AutoMap', 'add', '*');
 		$this->addRolePerm($data['roleId'], 'AutoMap', 'doAdd', '*');
+
+		// Access assignment: Managers => Allowed to manage backgrounds and shapes
+		$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'manage', '*');
+		$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'view', '*');
+		$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'doCreate', '*');
+		$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'doUpload', '*');
+		$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'doDelete', '*');
+		$this->addRolePerm($data['roleId'], 'ManageShapes', 'manage', '*');
+		$this->addRolePerm($data['roleId'], 'ManageShapes', 'view', '*');
+		$this->addRolePerm($data['roleId'], 'ManageShapes', 'doUpload', '*');
+		$this->addRolePerm($data['roleId'], 'ManageShapes', 'doDelete', '*');
 		
 		// Access assignment: Managers => Allowed to view the overview
 		$this->addRolePerm($data['roleId'], 'Overview', 'view', '*');
