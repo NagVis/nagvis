@@ -77,9 +77,8 @@ try {
 	if($AUTH->isAuthenticated()) {
 		$AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH, $CORE->getMainCfg()->getValue('global', 'authorisationmodule'));
 		$AUTHORISATION->parsePermissions();
-	} else {
+	} else
 		$AUTHORISATION = null;
-	}
 
 	// Make the AA information available to whole NagVis for permission checks
 	$CORE->setAA($AUTH, $AUTHORISATION);
@@ -98,13 +97,12 @@ try {
 	$MHANDLER->regModule('Map');
 
 	// Load the module
-	if($UHANDLER->get('mod') !== 'Map') {
+	if($UHANDLER->get('mod') !== 'Map')
 		$UHANDLER->set('mod', 'Welcome');
-	}
 	$MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
-	if($MODULE == null) {
-		new GlobalMessage('ERROR', $CORE->getLang()->getText('The module [MOD] is not known', Array('MOD' => htmlentities($UHANDLER->get('mod')))));
-	}
+	if($MODULE == null)
+		new GlobalMessage('ERROR', $CORE->getLang()->getText('The module [MOD] is not known',
+		                                   Array('MOD' => htmlentities($UHANDLER->get('mod')))));
 	$MODULE->passAuth($AUTH, $AUTHORISATION);
 	$MODULE->setAction($UHANDLER->get('act'));
 	$MODULE->initObject();
@@ -121,16 +119,15 @@ try {
 		if($AUTH->isAuthenticated()) {
 			// In some modules not only the mod and the action need to be authorized
 			// The called object needs separate authorisation too (e.g. in maps)
-			if($MODULE->checkForObjectAuthorisation()) {
+			if($MODULE->checkForObjectAuthorisation())
 				$sObj = $MODULE->getObject();
-			} else {
+			else
 				$sObj = null;
-			}
 			
 			// Check if the user is permited to this action in the module
-			if(!isset($AUTHORISATION) || !$AUTHORISATION->isPermitted($UHANDLER->get('mod'), $UHANDLER->get('act'), $sObj)) {
-				new GlobalMessage('ERROR', $CORE->getLang()->getText('You are not permitted to access this page'), null, $CORE->getLang()->getText('Access denied'));
-			}
+			if(!isset($AUTHORISATION) || !$AUTHORISATION->isPermitted($UHANDLER->get('mod'), $UHANDLER->get('act'), $sObj))
+				new GlobalMessage('ERROR', $CORE->getLang()->getText('You are not permitted to access this page'), null,
+				                                                               $CORE->getLang()->getText('Access denied'));
 		} else {
 			// When not authenticated redirect to logon dialog
 			$MODULE = $MHANDLER->loadModule($CORE->getMainCfg()->getValue('global', 'logonmodule'));

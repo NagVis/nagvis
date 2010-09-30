@@ -6,7 +6,7 @@ class WuiModWelcome extends WuiModule {
 
 		// Register valid actions
 		$this->aActions = Array(
-			'view' => REQUIRES_AUTHORISATION
+			'view' => !REQUIRES_AUTHORISATION
 		);
 	}
 	
@@ -36,9 +36,8 @@ class WuiModWelcome extends WuiModule {
 		$INDEX->setBackgroundColor('#fff');
 		
 		// Preflight checks
-		if(!$this->CORE->checkPHPMBString(1)) {
+		if(!$this->CORE->checkPHPMBString(1))
 			exit;
-		}
 		
 		// Create welcome page
 		$this->VIEW = new WuiViewWelcome($this->CORE);

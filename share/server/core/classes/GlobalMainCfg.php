@@ -1647,7 +1647,7 @@ class GlobalMainCfg {
 				}
 			}
 			
-			if(!$handle = fopen($this->configFile, 'w+')) {
+			if(!$handle = fopen($this->configFiles[count($this->configFiles)-1], 'w+')) {
 				new GlobalMessage('ERROR', WuiCore::getInstance()->getLang()->getText('mainCfgNotWriteable'), WuiCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
 				return FALSE;
 			}
@@ -1672,7 +1672,7 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkNagVisConfigWriteable($printErr) {
-		return GlobalCore::getInstance()->checkWriteable($this->configFile, $printErr);
+		return GlobalCore::getInstance()->checkWriteable($this->configFiles[count($this->configFiles)-1], $printErr);
 	}
 
 	/**

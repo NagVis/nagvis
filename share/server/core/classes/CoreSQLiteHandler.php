@@ -180,14 +180,57 @@ class CoreSQLiteHandler {
 		$this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES ('.$roleId.', (SELECT permId FROM perms WHERE mod=\''.$mod.'\' AND act=\''.$act.'\' AND obj=\''.$obj.'\'))');
 	}
 
-	public function updateDb() {
-		if(!$this->tableExist('version')) {
-			// Perform pre b4 updates
-			$this->updateDb15b4();
-		}
+	private function versionToTag($s) {
+		$s = str_replace('a', '.0.0', str_replace('b', '.0.2', str_replace('rc', '.0.4', $s)));
+		$parts = explode('.', $s);
+		$tag = '';
+		foreach($parts AS $part)
+			$tag .= sprintf("%02s", $part);
+		return (int) sprintf("%-08s", $tag);
 	}
 
-	private function updateDb15b4() {
+	public function updateDb() {
+		// Perform pre 1.5b4 updates
+		if(!$this->tableExist('version'))
+			$this->updateDd1050024();
+
+		// Read the current version from db
+		$dbVersion = $this->versionToTag($this->getDbVersion());
+
+		// Now perform the update for pre 1.5.3
+		if($dbVersion < 1050300)
+			$this->updateDb1050300();
+	}
+
+	private function updateDb1050300() {
+		// Create permissions for WUI management pages
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageBackgrounds\', \'manage\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageBackgrounds\', \'view\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageBackgrounds\', \'doCreate\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageBackgrounds\', \'doUpload\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageBackgrounds\', \'doDelete\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageShapes\', \'manage\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageShapes\', \'view\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageShapes\', \'doUpload\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageShapes\', \'doDelete\', \'*\')');
+
+		// Assign the new permission to the managers
+		$RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\'');
+		while($data = $this->fetchAssoc($RES)) {
+			$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'manage', '*');
+			$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'view', '*');
+			$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'doCreate', '*');
+			$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'doUpload', '*');
+			$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'doDelete', '*');
+			$this->addRolePerm($data['roleId'], 'ManageShapes', 'manage', '*');
+			$this->addRolePerm($data['roleId'], 'ManageShapes', 'view', '*');
+			$this->addRolePerm($data['roleId'], 'ManageShapes', 'doUpload', '*');
+			$this->addRolePerm($data['roleId'], 'ManageShapes', 'doDelete', '*');
+		}
+		$this->updateDbVersion();
+	}
+
+	private function updateDb1050024() {
 		if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: Performing update to 1.5b4 scheme');
 		
 		$this->createVersionTable();
@@ -205,6 +248,15 @@ class CoreSQLiteHandler {
 			if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: Assigning addModify perms to Managers role');
 			$this->addRolePerm($data['roleId'], 'Map', 'addModify', '*');
 		}
+	}
+
+	private function getDbVersion() {
+		$data = $this->fetchAssoc($this->DB->query('SELECT version FROM version'));
+		return $data['version'];
+	}
+
+	private function updateDbVersion() {
+		$this->DB->query('UPDATE version SET version=\'' . CONST_VERSION . '\'');
 	}
 
 	private function createVersionTable() {
@@ -294,6 +346,17 @@ class CoreSQLiteHandler {
 		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'RoleMgmt\', \'doAdd\', \'*\')');
 		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'RoleMgmt\', \'doEdit\', \'*\')');
 		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'RoleMgmt\', \'doDelete\', \'*\')');
+
+		// Access control: WUI Management pages
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageBackgrounds\', \'manage\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageBackgrounds\', \'view\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageBackgrounds\', \'doCreate\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageBackgrounds\', \'doUpload\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageBackgrounds\', \'doDelete\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageShapes\', \'manage\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageShapes\', \'view\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageShapes\', \'doUpload\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageShapes\', \'doDelete\', \'*\')');
 		
 		// Access controll: Edit/Delete maps and automaps
 		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'add\', \'*\')');
@@ -353,6 +416,17 @@ class CoreSQLiteHandler {
 		// Access assignment: Managers => Allowed to create automaps
 		$this->addRolePerm($data['roleId'], 'AutoMap', 'add', '*');
 		$this->addRolePerm($data['roleId'], 'AutoMap', 'doAdd', '*');
+
+		// Access assignment: Managers => Allowed to manage backgrounds and shapes
+		$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'manage', '*');
+		$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'view', '*');
+		$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'doCreate', '*');
+		$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'doUpload', '*');
+		$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'doDelete', '*');
+		$this->addRolePerm($data['roleId'], 'ManageShapes', 'manage', '*');
+		$this->addRolePerm($data['roleId'], 'ManageShapes', 'view', '*');
+		$this->addRolePerm($data['roleId'], 'ManageShapes', 'doUpload', '*');
+		$this->addRolePerm($data['roleId'], 'ManageShapes', 'doDelete', '*');
 		
 		// Access assignment: Managers => Allowed to view the overview
 		$this->addRolePerm($data['roleId'], 'Overview', 'view', '*');

@@ -72,6 +72,17 @@ class CoreAuthorisationHandler {
 			'createObject' => 'edit',
 			'deleteObject' => 'edit',
 		),
+		'ManageShapes' => Array(
+			'view'                 => 'manage',
+			'doUpload'             => 'manage',
+			'doDelete'             => 'manage',
+		),
+		'ManageBackgrounds' => Array(
+			'view'                 => 'manage',
+			'doUpload'             => 'manage',
+			'doCreate'             => 'manage',
+			'doDelete'             => 'manage',
+		),
 		'ChangePassword' => Array(
 			'view' => 'change',
 		),

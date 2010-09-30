@@ -36,7 +36,7 @@
 					{/foreach}
 					<li class="spacer"><hr /></li>
 					{/if}
-					{if $permittedEditAnyMap}
+					{if $permittedEditAnyMap || $permittedEditMainCfg || $permittedManageBackgrounds || $permittedManageMaps || $permittedManageShapes}
 					<li><a href="{$pathBase}/frontend/wui/index.php" class="underline">{$langWui}</a></li>
 					{else}
 					<li class="spacer underline"></li>
@@ -126,18 +126,18 @@
 		</dl>
 	</li>
 	{/if}
-	{if ($mod == 'Map' && $act == 'edit') || ($mod == 'Welcome' && $act == 'view')}
+	{if (($mod == 'Map' && $act == 'edit') || ($mod == 'Welcome' && $act == 'view')) && ($permittedEditMainCfg || $permittedManageBackgrounds || $permittedManageMaps || $permittedManageShapes)}
 	<li>
 		<dl class="dropdown">
 			<dt id="wui-ddheader" onmouseover="ddMenu('wui',1)" onmouseout="ddMenu('wui',-1)">{$langOptions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>
 			<dd id="wui-ddcontent" onmouseover="cancelHide('wui')" onmouseout="ddMenu('wui',-1)">
 				<ul>
-					<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=MainCfg&act=edit', '{$langWuiConfiguration}', 970)">{$langWuiConfiguration}</a></li>
+					{if $permittedEditMainCfg}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=MainCfg&act=edit', '{$langWuiConfiguration}', 970)">{$langWuiConfiguration}</a></li>
 					<li class="spacer"><hr /></li>
-					<li><a href="#" onclick="showFrontendDialog('./ajax_handler.php?action=getFormContents&form=manageBackends', '{$langMgmtBackends}');">{$langMgmtBackends}</a></li>
-					<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ManageBackgrounds&act=view', '{$langMgmtBackgrounds}');">{$langMgmtBackgrounds}</a></li>
-					<li><a href="#" onclick="showFrontendDialog('./ajax_handler.php?action=getFormContents&form=manageMaps', '{$langMgmtMaps}');">{$langMgmtMaps}</a></li>
-					<li><a class="underline" href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ManageShapes&act=view', '{$langMgmtShapes}');">{$langMgmtShapes}</a></li>
+					<li><a href="#" onclick="showFrontendDialog('./ajax_handler.php?action=getFormContents&form=manageBackends', '{$langMgmtBackends}');">{$langMgmtBackends}</a></li>{/if}
+					{if $permittedManageBackgrounds}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ManageBackgrounds&act=view', '{$langMgmtBackgrounds}');">{$langMgmtBackgrounds}</a></li>{/if}
+					{if $permittedManageMaps}<li><a href="#" onclick="showFrontendDialog('./ajax_handler.php?action=getFormContents&form=manageMaps', '{$langMgmtMaps}');">{$langMgmtMaps}</a></li>{/if}
+					{if $permittedManageShapes}<li><a class="underline" href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ManageShapes&act=view', '{$langMgmtShapes}');">{$langMgmtShapes}</a></li>{/if}
 				</ul>
 			</dd>
 		</dl>
@@ -152,10 +152,10 @@
 		  <dd id="user-ddcontent" onmouseover="cancelHide('user')" onmouseout="ddMenu('user',-1)">
 		    <ul>
 		    	<li><a href="#">{$langLoggedIn}: {$currentUser}</a></li>
-		    	{if $supportedChangePassword == true && $permittedChangePassword == true}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=ChangePassword&act=view', '{$langChangePassword}');">{$langChangePassword}</a></li>{/if}
-		    	{if $permittedUserMgmt == true}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=UserMgmt&act=view', '{$langUserMgmt}');">{$langUserMgmt}</a></li>{/if}
-		    	{if $permittedRoleMgmt == true}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=RoleMgmt&act=view', '{$langManageRoles}', 500);">{$langManageRoles}</a></li>{/if}
-					{if $permittedLogout == true}<li><a href="#" onclick="getSyncRequest('{$pathBase}/server/core/ajax_handler.php?mod=Auth&amp;act=logout');return false;">{$langLogout}</a></li>{/if}
+		    	{if $supportedChangePassword && $permittedChangePassword}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=ChangePassword&act=view', '{$langChangePassword}');">{$langChangePassword}</a></li>{/if}
+		    	{if $permittedUserMgmt}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=UserMgmt&act=view', '{$langUserMgmt}');">{$langUserMgmt}</a></li>{/if}
+		    	{if $permittedRoleMgmt}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=RoleMgmt&act=view', '{$langManageRoles}', 500);">{$langManageRoles}</a></li>{/if}
+					{if $permittedLogout}<li><a href="#" onclick="getSyncRequest('{$pathBase}/server/core/ajax_handler.php?mod=Auth&amp;act=logout');return false;">{$langLogout}</a></li>{/if}
 					<li class="spacer underline"></li>
 		    </ul>
 		  </dd>

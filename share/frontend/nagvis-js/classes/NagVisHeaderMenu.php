@@ -112,6 +112,13 @@ class NagVisHeaderMenu {
 		// Check if the user is permitted to edit the current map/automap
 		$this->aMacros['permittedView'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted($this->aMacros['mod'], 'view', $this->UHANDLER->get('show'));
 		$this->aMacros['permittedEdit'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted($this->aMacros['mod'], 'edit', $this->UHANDLER->get('show'));
+
+		// Permissions for the option menu
+		$this->aMacros['permittedEditMainCfg'] = $this->AUTHORISATION->isPermitted('MainCfg', 'edit', '*');
+		$this->aMacros['permittedManageShapes'] = $this->AUTHORISATION->isPermitted('ManageShapes', 'manage', '*');
+		$this->aMacros['permittedManageBackgrounds'] = $this->AUTHORISATION->isPermitted('ManageBackgrounds', 'manage', '*');
+		$this->aMacros['permittedManageBackgrounds'] = $this->AUTHORISATION->isPermitted('ManageBackgrounds', 'manage', '*');
+		$this->aMacros['permittedManageMaps'] = $this->AUTHORISATION->isPermitted('Map', 'add', '*') && $this->AUTHORISATION->isPermitted('Map', 'edit', '*');
 		
 		$this->aMacros['currentUser'] = $this->AUTHORISATION->getAuthentication()->getUser();
 		
