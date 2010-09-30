@@ -30,6 +30,7 @@ class CoreModAuth extends CoreModule {
 	protected $FHANDLER;
 	
 	public function __construct($CORE) {
+		$this->sName = 'Auth';
 		$this->CORE = $CORE;
 		
 		$this->aActions = Array('login'  => 0,
@@ -46,7 +47,7 @@ class CoreModAuth extends CoreModule {
 				case 'login':
 					// Check if user is already authenticated
 					if(!isset($this->AUTHENTICATION) || !$this->AUTHENTICATION->isAuthenticated()) {
-						$aReturn = $this->handleResponse();
+						$aReturn = $this->handleResponseAuth();
 						
 						if($aReturn !== false) {
 							// Reset the authentication check. Without this the cached result
@@ -89,7 +90,7 @@ class CoreModAuth extends CoreModule {
 		return $sReturn;
 	}
 	
-	private function handleResponse() {
+	private function handleResponseAuth() {
 		$bValid = true;
 		// Validate the response
 		

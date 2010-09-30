@@ -35,7 +35,10 @@ class CoreAuthorisationHandler {
 	private $CORE;
 	private $MOD;
 	private $AUTHENTICATION;
-	
+
+	// FIXME: This is not really used anymore. It is only needed to hide the "hidden"
+	// permissions from the user. Those hidden permissions are not used anymore. So
+	// cleanup the auth DB and then remove this list.
 	private $summarizePerms = Array(
 		'MainCfg' => Array(
 			'doEdit' => 'edit'
@@ -208,46 +211,6 @@ class CoreAuthorisationHandler {
 	
 	public function updateRolePerms($roleId, $perms) {
 		// FIXME: First check if this is supported
-		
-		// Get current permissions
-		$aPerms = $this->MOD->getAllPerms();
-		
-		// Resolve summarized perms
-		foreach($perms AS $key => $value) {
-			$aPerm = Array();
-			
-			// Get current permissions for that access level
-			foreach($aPerms AS $perm) {
-				if($perm['permId'] == $key) {
-					$aPerm = $perm;
-					break;
-				}
-			}
-			
-			$mod = $aPerm['mod'];
-			$act = $aPerm['act'];
-			$obj = $aPerm['obj'];
-			
-			// Check if this mod+act summarizes something
-			if(isset($this->summarizePerms[$mod])) {
-				foreach($this->summarizePerms[$mod] AS $summarizedAct => $summarizingAct) {
-					if($summarizingAct === $act) {
-						// Get the id of the summaried action
-						foreach($aPerms AS $perm) {
-							if($mod == $perm['mod']
-							   && $summarizedAct == $perm['act']
-							   && $obj == $perm['obj']) {
-								$summarizedActId = $perm['permId'];
-								break;
-							}
-						}
-						// Add the summarized action to the permissions array
-						$perms[$summarizedActId] = $value;
-					}
-				}
-			}
-		}
-		
 		return $this->MOD->updateRolePerms($roleId, $perms);
 	}
 	

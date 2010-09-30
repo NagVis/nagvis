@@ -30,6 +30,7 @@ class FrontendModOverview extends FrontendModule {
 	private $rotationStep = '';
 	
 	public function __construct(GlobalCore $CORE) {
+		$this->sName = 'Overview';
 		$this->CORE = $CORE;
 		
 		// Parse the view specific options

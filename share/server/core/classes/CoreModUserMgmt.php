@@ -30,14 +30,15 @@ class CoreModUserMgmt extends CoreModule {
 	protected $FHANDLER;
 	
 	public function __construct($CORE) {
+		$this->sName = 'UserMgmt';
 		$this->CORE = $CORE;
 		
-		$this->aActions = Array('view'         => REQUIRES_AUTHORISATION,
-		                        'getUserRoles' => REQUIRES_AUTHORISATION,
-		                        'getAllRoles'  => REQUIRES_AUTHORISATION,
-		                        'doAdd'        => REQUIRES_AUTHORISATION,
-		                        'doEdit'       => REQUIRES_AUTHORISATION,
-		                        'doDelete'     => REQUIRES_AUTHORISATION);
+		$this->aActions = Array('view'         => 'manage',
+		                        'getUserRoles' => 'manage',
+		                        'getAllRoles'  => 'manage',
+		                        'doAdd'        => 'manage',
+		                        'doEdit'       => 'manage',
+		                        'doDelete'     => 'manage');
 		
 		$this->FHANDLER = new CoreRequestHandler($_POST);
 	}

@@ -2,6 +2,7 @@
 class WuiModWelcome extends WuiModule {
 	
 	public function __construct(WuiCore $CORE) {
+		$this->sName = 'Welcome';
 		$this->CORE = $CORE;
 
 		// Register valid actions

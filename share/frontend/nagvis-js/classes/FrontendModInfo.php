@@ -28,6 +28,7 @@
 class FrontendModInfo extends FrontendModule {
 	
 	public function __construct($CORE) {
+		$this->sName = 'Info';
 		$this->CORE = $CORE;
 		
 		$this->aActions = Array('view' => 0);

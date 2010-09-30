@@ -3,6 +3,7 @@ class WuiModMap extends WuiModule {
 	private $name = '';
 	
 	public function __construct(WuiCore $CORE) {
+		$this->sName = 'Map';
 		$this->CORE = $CORE;
 
 		// Parse the view specific options

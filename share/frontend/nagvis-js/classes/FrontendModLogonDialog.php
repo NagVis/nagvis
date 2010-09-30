@@ -29,6 +29,7 @@ class FrontendModLogonDialog extends FrontendModule {
 	protected $CORE;
 	
 	public function __construct($CORE) {
+		$this->sName = 'LogonDialog';
 		$this->CORE = $CORE;
 		
 		$this->aActions = Array('view' => 0);

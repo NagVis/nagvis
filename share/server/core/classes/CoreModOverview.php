@@ -33,10 +33,10 @@ class CoreModOverview extends CoreModule {
 		$this->CORE = $CORE;
 		
 		$this->aActions = Array(
-			'getOverviewProperties' => REQUIRES_AUTHORISATION,
-			'getOverviewMaps'       => REQUIRES_AUTHORISATION,
-			'getOverviewAutomaps'   => REQUIRES_AUTHORISATION,
-			'getOverviewRotations'  => REQUIRES_AUTHORISATION
+			'getOverviewProperties' => 'view',
+			'getOverviewMaps'       => 'view',
+			'getOverviewAutomaps'   => 'view',
+			'getOverviewRotations'  => 'view'
 		);
 	}
 	

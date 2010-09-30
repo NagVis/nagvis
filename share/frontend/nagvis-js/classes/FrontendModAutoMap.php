@@ -34,6 +34,7 @@ class FrontendModAutoMap extends FrontendModule {
 	private $viewOpts = Array();
 	
 	public function __construct(GlobalCore $CORE) {
+		$this->sName = 'AutoMap';
 		$this->CORE = $CORE;
 
 		// Parse the view specific options

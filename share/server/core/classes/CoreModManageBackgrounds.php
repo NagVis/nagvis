@@ -29,15 +29,16 @@ class CoreModManageBackgrounds extends CoreModule {
 	private $name = null;
 	
 	public function __construct(GlobalCore $CORE) {
+		$this->sName = 'ManageBackgrounds';
 		$this->CORE = $CORE;
 		
 		// Register valid actions
 		$this->aActions = Array(
 			// WUI specific actions
-			'view'     => REQUIRES_AUTHORISATION,
-			'doCreate' => REQUIRES_AUTHORISATION,
-			'doUpload' => REQUIRES_AUTHORISATION,
-			'doDelete' => REQUIRES_AUTHORISATION,
+			'view'     => 'manage',
+			'doCreate' => 'manage',
+			'doUpload' => 'manage',
+			'doDelete' => 'manage',
 		);
 	}
 	

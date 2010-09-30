@@ -29,14 +29,15 @@ class CoreModManageShapes extends CoreModule {
 	private $name = null;
 	
 	public function __construct(GlobalCore $CORE) {
+		$this->sName = 'ManageShapes';
 		$this->CORE = $CORE;
 		
 		// Register valid actions
 		$this->aActions = Array(
 			// WUI specific actions
-			'view'     => REQUIRES_AUTHORISATION,
-			'doUpload' => REQUIRES_AUTHORISATION,
-			'doDelete' => REQUIRES_AUTHORISATION,
+			'view'     => 'manage',
+			'doUpload' => 'manage',
+			'doDelete' => 'manage',
 		);
 	}
 	

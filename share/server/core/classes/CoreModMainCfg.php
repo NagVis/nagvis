@@ -29,13 +29,17 @@ class CoreModMainCfg extends CoreModule {
 	private $name = null;
 	
 	public function __construct(GlobalCore $CORE) {
+		$this->sName = 'MainCfg';
 		$this->CORE = $CORE;
 		
 		// Register valid actions
 		$this->aActions = Array(
 			// WUI specific actions
-			'edit'   => REQUIRES_AUTHORISATION,
-			'doEdit' => REQUIRES_AUTHORISATION,
+			'edit'             => REQUIRES_AUTHORISATION,
+			'manageBackends'   => 'edit',
+			'doEdit'           => 'edit',
+			'doBackendDefault' => 'edit',
+			'doBackendAdd'     => 'edit',
 		);
 	}
 	
@@ -49,33 +53,55 @@ class CoreModMainCfg extends CoreModule {
 					$sReturn = json_encode(Array('code' => $VIEW->parse()));
 				break;
 				case 'doEdit':
-					$aReturn = $this->handleResponseEdit();
-					
-					if($aReturn !== false) {
-						// Try to create the map
-						if($this->doEdit($aReturn)) {
-							new GlobalMessage('NOTE', 
-							                  $this->CORE->getLang()->getText('The main configuration has been updated.'),
-							                  null,
-							                  null,
-							                  1);
-							$sReturn = '';
-						} else {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The main configuration could not be updated.'));
-							$sReturn = '';
-						}
-					} else {
-						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-						$sReturn = '';
-					}
+					$this->handleResponse('handleResponseEdit', 'doEdit',
+						                    $this->CORE->getLang()->getText('The main configuration has been updated.'),
+																$this->CORE->getLang()->getText('The main configuration could not be updated.'),
+																1);
+				break;
+
+				case 'manageBackends':
+					$VIEW = new WuiViewManageBackends($this->AUTHENTICATION, $this->AUTHORISATION);
+					$sReturn = json_encode(Array('code' => $VIEW->parse()));
+				break;
+				case 'doBackendDefault':
+					$this->handleResponse('handleResponseBackendDefault', 'doBackendDefault',
+						                    $this->CORE->getLang()->getText('The default backend has been changed.'),
+																$this->CORE->getLang()->getText('The default backend could not be changed.'),
+																1);
+				break;
+				case 'doBackendAdd':
+					$this->handleResponse('handleResponseBackendAdd', 'doBackendAdd',
+						                    $this->CORE->getLang()->getText('The new backend has been added.'),
+																$this->CORE->getLang()->getText('The new backend could not be added.'),
+																1);
 				break;
 			}
 		}
 		
 		return $sReturn;
 	}
+
+	/**
+	 * Set the default backend in the main configuration
+	 */
+	protected function doBackendDefault($a) {
+			$this->CORE->getMainCfg()->setValue('defaults', 'backend', $_POST['defaultbackend']);
+			$this->CORE->getMainCfg()->writeConfig();
+			return true;
+	}
+
+	protected function handleResponseBackendDefault() {
+		$FHANDLER = new CoreRequestHandler($_POST);
+
+		if(!$FHANDLER->isSetAndNotEmpty('defaultbackend'))
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mustValueNotSet',
+			                                        Array('ATTRIBUTE' => 'defaultbackend')));
+		$this->verifyValuesSet($FHANDLER, Array('defaultbackend'));
+
+		return Array('defaultbackend' => $FHANDLER->get('map_new_name'));
+	}
 	
-	private function doEdit($a) {
+	protected function doEdit($a) {
 		foreach($a['opts'] AS $key => $val) {
 			$key = explode('_', $key, 2);
 			$this->CORE->getMainCfg()->setValue($key[0], $key[1], $val);
@@ -87,7 +113,7 @@ class CoreModMainCfg extends CoreModule {
 		return true;
 	}
 	
-	private function handleResponseEdit() {
+	protected function handleResponseEdit() {
 		$bValid = true;
 		// FIXME: Validate the response
 		
@@ -97,5 +123,87 @@ class CoreModMainCfg extends CoreModule {
 		else
 			return false;
 	}
+
+	protected function handleResponseBackendAdd() {
+		$FHANDLER = new CoreRequestHandler($_POST);
+
+		$this->verifyValuesSet($FHANDLER, Array('backendid', 'backendtype'));
+
+		return Array('backendid'   => $FHANDLER->get('backendid'),
+		             'backendtype' => $FHANDLER->get('backendtype'),
+								 'opts'        => $_POST);
+	}
+
+	protected function doBackendAdd($a) {
+		$bFoundOption = false;
+		$aOpt = Array();
+		
+		// Loop all aviable options for this backend
+		$arr = $this->CORE->getMainCfg()->getValidObjectType('backend');
+		foreach($arr['options'][$a['backendtype']] AS $key => $arr) {
+			// If there is a value for this option, set it
+			if(isset($a['opts'][$key]) && $a['opts'][$key] != '') {
+				$bFoundOption = true;
+				$aOpt[$key] = $a['opts'][$key];
+			}
+		}
+		
+		// If there is at least one option set...
+		if($bFoundOption) {
+			// Set standard values
+			$this->CORE->getMainCfg()->setSection('backend_'.$a['backendid']);
+			$this->CORE->getMainCfg()->setValue('backend_'.$a['backendid'], 'backendtype', $a['backendtype']);
+			
+			// Set all options
+			foreach($aOpt AS $key => $val) {
+				$this->CORE->getMainCfg()->setValue('backend_'.$a['backendid'], $key, $val);
+			}
+		}
+		
+		// Write the changes to the main configuration
+		$this->CORE->getMainCfg()->writeConfig();
+		return true;
+	}
+
+	/*
+	 * Edit the values of the backend with the given BACKEND-ID
+	 *
+	case 'mgt_backend_edit':
+		if(!isset($_POST['backendid']) || $_POST['backendid'] == '') {
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~backendid');
+		} else {
+			// Loop all aviable options for this backend
+			$arr = $CORE->getMainCfg()->getValidObjectType('backend');
+			foreach($arr['options'][$CORE->getMainCfg()->getValue('backend_'.$_POST['backendid'],'backendtype')] AS $key => $arr) {
+				// If there is a value for this option, set it
+				if(isset($_POST[$key]) && $_POST[$key] != '') {
+					$CORE->getMainCfg()->setValue('backend_'.$_POST['backendid'],$key,$_POST[$key]);
+				}
+			}
+			
+			// Write the changes to the main configuration
+			$CORE->getMainCfg()->writeConfig();
+			
+			// Open the management page again
+			print("<script>window.history.back();</script>");
+		}
+	break;
+	/*
+	 * Delete the specified backend with the given BACKEND-ID
+	 *
+	case 'mgt_backend_del':
+		if(!isset($_POST['backendid']) || $_POST['backendid'] == '') {
+			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~backendid');
+		} else {
+			// Delete the section of the backend
+			$CORE->getMainCfg()->delSection('backend_'.$_POST['backendid']);
+			
+			// Write the changes to the main configuration
+			$CORE->getMainCfg()->writeConfig();
+			
+			// Open the management page again
+			print("<script>window.history.back();</script>");
+		}
+		break;*/
 }
 ?>

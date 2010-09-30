@@ -30,6 +30,7 @@ class FrontendModLogonMixed extends FrontendModule {
 	protected $CORE;
 	
 	public function __construct($CORE) {
+		$this->sName = 'LogonMixed';
 		$this->CORE = $CORE;
 		
 		$this->aActions = Array('view' => 0);

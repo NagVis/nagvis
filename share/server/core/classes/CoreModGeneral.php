@@ -28,6 +28,7 @@
 class CoreModGeneral extends CoreModule {
 	
 	public function __construct(GlobalCore $CORE) {
+		$this->sName = 'General';
 		$this->CORE = $CORE;
 		
 		$this->aActions = Array(

@@ -78,7 +78,9 @@ function contextMouseDown(event) {
   // Would be nice to fix the structure
 	// For example needed by the WUI contextMenu links
 	var oNode = target;
-	while(oNode.parentNode !== null && (typeof oNode.id === 'undefined' || oNode.id === ''))
+	while(typeof oNode.parentNode != 'undefined' 
+	      && oNode.parentNode && oNode.parentNode !== null
+	      && (typeof oNode.id === 'undefined' || oNode.id === ''))
 		oNode = oNode.parentNode;
 	
 	if(typeof oNode.id !== 'undefined' && oNode.id !== '')

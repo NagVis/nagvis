@@ -32,6 +32,7 @@ class CoreModAutoMap extends CoreModule {
 	private $MAPCFG  = null;
 	
 	public function __construct(GlobalCore $CORE) {
+		$this->sName = 'AutoMap';
 		$this->CORE = $CORE;
 		
 		$this->aOpts = Array('show' => MATCH_MAP_NAME,
@@ -59,13 +60,13 @@ class CoreModAutoMap extends CoreModule {
 		
 		// Register valid actions
 		$this->aActions = Array(
-			'parseAutomap' => REQUIRES_AUTHORISATION,
-			'getAutomapProperties' => REQUIRES_AUTHORISATION,
-			'getAutomapObjects' => REQUIRES_AUTHORISATION,
-			'getObjectStates' => REQUIRES_AUTHORISATION,
-			'automapToMap' => REQUIRES_AUTHORISATION,
-			'modifyParams' => REQUIRES_AUTHORISATION,
-			'parseMapCfg' => REQUIRES_AUTHORISATION,
+			'parseAutomap'         => 'view',
+			'getAutomapProperties' => 'view',
+			'getAutomapObjects'    => 'view',
+			'getObjectStates'      => 'view',
+			'automapToMap'         => REQUIRES_AUTHORISATION,
+			'modifyParams'         => REQUIRES_AUTHORISATION,
+			'parseMapCfg'          => REQUIRES_AUTHORISATION,
 		);
 		
 		// Register valid objects

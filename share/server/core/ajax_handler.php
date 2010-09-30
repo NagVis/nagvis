@@ -69,7 +69,8 @@ try {
 	*/
 
 	if($AUTH->isAuthenticated()) {
-		$AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH, $CORE->getMainCfg()->getValue('global', 'authorisationmodule'));
+		$AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH,
+		                   $CORE->getMainCfg()->getValue('global', 'authorisationmodule'));
 		$AUTHORISATION->parsePermissions();
 	} else {
 		$AUTHORISATION = null;
@@ -105,7 +106,8 @@ try {
 	// Load the module
 	$MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
 	if($MODULE == null) {
-		new GlobalMessage('ERROR', $CORE->getLang()->getText('The module [MOD] is not known', Array('MOD' => htmlentities($UHANDLER->get('mod')))));
+		new GlobalMessage('ERROR', $CORE->getLang()->getText('The module [MOD] is not known',
+		                                      Array('MOD' => htmlentities($UHANDLER->get('mod')))));
 	}
 	$MODULE->passAuth($AUTH, $AUTHORISATION);
 	$MODULE->setAction($UHANDLER->get('act'));
@@ -121,18 +123,8 @@ try {
 	if($MODULE->actionRequiresAuthorisation()) {
 		// Only proceed with authenticated users
 		if($AUTH->isAuthenticated()) {
-			// In some modules not only the mod and the action need to be authorized
-			// The called object needs separate authorisation too (e.g. in maps)
-			if($MODULE->checkForObjectAuthorisation()) {
-				$sObj = $MODULE->getObject();
-			} else {
-				$sObj = null;
-			}
-			
-			// Check if the user is permited to this action in the module
-			if(!isset($AUTHORISATION) || !$AUTHORISATION->isPermitted($UHANDLER->get('mod'), $UHANDLER->get('act'), $sObj)) {
-				new GlobalMessage('ERROR', $CORE->getLang()->getText('You are not permitted to access this page'), null, $CORE->getLang()->getText('Access denied'));
-			}
+			// Check if the user is permited to access this (module, action, object)
+			$MODULE->isPermitted();
 		} else {
 			// At the moment the login at ajax_handler is only possible via env auth.
 			// Should be enough for the moment
@@ -145,7 +137,8 @@ try {
 			// Try to auth using the environment auth
 			if($MODULE->handleAction() === false) {
 				// When not authenticated show error message
-				new GlobalMessage('ERROR', $CORE->getLang()->getText('You are not authenticated'), null, $CORE->getLang()->getText('Access denied'));
+				new GlobalMessage('ERROR', $CORE->getLang()->getText('You are not authenticated'),
+		                                      null, $CORE->getLang()->getText('Access denied'));
 			}
 		}
 	}

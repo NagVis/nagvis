@@ -29,6 +29,7 @@ class CoreModMultisite extends CoreModule {
 	private $BACKEND = null;
 	
 	public function __construct(GlobalCore $CORE) {
+		$this->sName = 'Multisite';
 		$this->CORE = $CORE;
 		
 		$this->aActions = Array(

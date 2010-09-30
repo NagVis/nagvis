@@ -33,8 +33,9 @@ abstract class CoreModule {
 	
 	protected $aActions = Array();
 	protected $aObjects = Array();
+	protected $sName = '';
 	protected $sAction = '';
-	protected $sObject = '';
+	protected $sObject = null;
 	
 	public function passAuth($AUTHENTICATION, $AUTHORISATION) {
 		$this->AUTHENTICATION = $AUTHENTICATION;
@@ -56,12 +57,11 @@ abstract class CoreModule {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function setAction($sAction) {
-		if($this->offersAction($sAction)) {
-			$this->sAction = $sAction;
-			return true;
-		} else {
+		if(!$this->offersAction($sAction))
 			return false;
-		}
+
+		$this->sAction = $sAction;
+		return true;
 	}
 	
 	/**
@@ -70,7 +70,7 @@ abstract class CoreModule {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function actionRequiresAuthorisation() {
-		return isset($this->aActions[$this->sAction]) && $this->aActions[$this->sAction] === REQUIRES_AUTHORISATION;
+		return isset($this->aActions[$this->sAction]) && $this->aActions[$this->sAction] !== !REQUIRES_AUTHORISATION;
 	}
 	
 	/**
@@ -89,12 +89,11 @@ abstract class CoreModule {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function setObject($sObject) {
-		if($this->offersObject($sObject)) {
-			$this->sObject = $sObject;
-			return true;
-		} else {
+		if(!$this->offersObject($sObject))
 			return false;
-		}
+
+		$this->sObject = $sObject;
+		return true;
 	}
 	
 	/**
@@ -105,15 +104,26 @@ abstract class CoreModule {
 	public function getObject() {
 		return $this->sObject;
 	}
-	
+
 	/**
-	 * Checks if the users autorisation for this object should be checked.
-	 * This does not perform the permission check!
+	 * Checks if the user is permitted to perform the requested action
 	 *
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function checkForObjectAuthorisation() {
-		return $this->sObject !== '';
+	public function isPermitted() {
+		$authorized = true;
+		if(!isset($this->AUTHORISATION))
+			$authorized = false;
+
+		// Maybe the requested action is summarized by some other
+		$action = !is_bool($this->aActions[$this->sAction]) ? $this->aActions[$this->sAction] : $this->sAction;
+
+		if(!$this->AUTHORISATION->isPermitted($this->sName, $action, $this->sObject))
+			$authorized = false;
+
+		if(!$authorized)
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You are not permitted to access this page'),
+			                                                   null, $CORE->getLang()->getText('Access denied'));
 	}
 	
 	/**
@@ -132,18 +142,16 @@ abstract class CoreModule {
 	 */
 	protected function getCustomOptions($aKeys, $aDefaults = Array()) {
 		// Initialize on first call
-		if($this->UHANDLER === null) {
+		if($this->UHANDLER === null)
 			$this->initUriHandler();
-		}
 		
 		// Load the specific params to the UriHandler
 		$this->UHANDLER->parseModSpecificUri($aKeys, $aDefaults);
 		
 		// Now get those params
 		$aReturn = Array();
-		foreach($aKeys AS $key => $val) {
+		foreach($aKeys AS $key => $val)
 			$aReturn[$key] = $this->UHANDLER->get($key);
-		}
 		
 		return $aReturn;
 	}
@@ -158,7 +166,6 @@ abstract class CoreModule {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function initObject() {}
-
 	
 	/**
 	 * This method needs to be implemented by each module
@@ -167,5 +174,41 @@ abstract class CoreModule {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	abstract public function handleAction();
+
+	/**
+	 * Helper function to handle default form responses
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	protected function handleResponse($validationHandler, $action, $successMsg, $failMessage, $reload = null, $redirectUrl = null) {
+		$aReturn = $this->{$validationHandler}();
+
+		$type = 'NOTE';
+		$msg = '';
+		if($aReturn !== false)
+			if($this->{$action}($aReturn))
+				$msg = $successMsg;
+			else {
+				$type = 'ERROR';
+				$msg = $failMessage;
+			}
+		else {
+			$type = 'ERROR';
+			$msg = $this->CORE->getLang()->getText('You entered invalid information.');
+		}
+		new GlobalMessage($type, $msg, null, null, $reload, $redirectUrl);
+	}
+
+	/**
+	 * Checks if the listed values are set. Otherwise it raises and error message
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	protected function verifyValuesSet($HANDLER, $list) {
+		foreach($list AS $key)
+			if(!$HANDLER->isSetAndNotEmpty($key))
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mustValueNotSet',
+			                                                      Array('ATTRIBUTE' => $key)));
+	}
 }
 ?>

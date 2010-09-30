@@ -30,13 +30,14 @@ class CoreModRoleMgmt extends CoreModule {
 	protected $FHANDLER;
 	
 	public function __construct($CORE) {
+		$this->sName = 'RoleMgmt';
 		$this->CORE = $CORE;
 		
-		$this->aActions = Array('view'         => REQUIRES_AUTHORISATION,
-		                        'getRolePerms' => REQUIRES_AUTHORISATION,
-		                        'doAdd'        => REQUIRES_AUTHORISATION,
-		                        'doEdit'       => REQUIRES_AUTHORISATION,
-		                        'doDelete'     => REQUIRES_AUTHORISATION);
+		$this->aActions = Array('view'         => 'manage',
+		                        'getRolePerms' => 'manage',
+		                        'doAdd'        => 'manage',
+		                        'doEdit'       => 'manage',
+		                        'doDelete'     => 'manage');
 		
 		$this->FHANDLER = new CoreRequestHandler($_POST);
 	}

@@ -34,6 +34,7 @@ class FrontendModMap extends FrontendModule {
 	private $viewOpts = Array();
 	
 	public function __construct(GlobalCore $CORE) {
+		$this->sName = 'Map';
 		$this->CORE = $CORE;
 
 		// Parse the view specific options

@@ -1,0 +1,89 @@
+<script type="text/javascript" src="{$htmlBase}/frontend/wui/js/ManageBackgrounds.js"></script>
+<form name="backend_default" id="backend_default" method="POST" action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=MainCfg&amp;act=doBackendDefault', 'backend_default');">
+	<table name="mytable" class="mytable" id="table_backend_default">
+		<tr><th class="cat" colspan="2"><h2>{$langSetDefaultBackend}</h2></th></tr>
+		<tr>
+			<td class="tdlabel" style="color:red;">{$langDefaultBackend}</td>
+			<td class="tdfield">
+				<select id="defaultbackend" name="defaultbackend" onChange="" onBlur="">
+					{foreach $definedBackends backendId}
+						{if $backendId == $defaultBackend}
+							<option value="{$backendId}" selected>{$backendId}</option>
+						{else}
+							<option value="{$backendId}">{$backendId}</option>
+						{/if}
+					{/foreach}
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td class="tdlabel" colspan="2" align="center">
+				<input class="submit" type="submit" name="submit" id="commit" value="{$langSave}" />
+			</td>
+		</tr>
+	</table>
+</form>
+
+<form name="backend_add" id="backend_add" method="POST" action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=MainCfg&amp;act=doBackendAdd', 'backend_add');" onsubmit="return check_backend_add();">
+	<table name="mytable" class="mytable" id="table_backend_add">
+		<tr>
+			<th class="cat" colspan="2"><h2>{$langAddBackend}</h2></th>
+		</tr>
+		<tr>
+			<td class="tdlabel" style="color:red;">backendid</td>
+			<td class="tdfield"><input id="backendid" type="text" name="backendid" value="" /></td>
+		</tr>
+		<tr>
+			<td class="tdlabel" style="color:red;">backendtype</td>
+			<td class="tdfield">
+				<select id="backendtype" name="backendtype" onChange="updateBackendOptions(this.value, '', 'backend_add');">
+					{foreach $availableBackends type}<option value="{$type}">{$type}</option>{/foreach}
+				</select>
+			</td>
+		</tr>
+		<!-- oh, it's time for a red wine - tasty :-) -->
+		<tr>
+			<td class="tdlabel" colspan="2" align="center">
+				<input class="submit" type="submit" name="submit" id="commit" value="Save" />
+			</td>
+		</tr>
+	</table>
+</form>
+
+<form name="backend_edit" id="backend_edit" method="POST" action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=MainCfg&amp;act=doBackendEdit', 'backend_edit');" onsubmit="return check_backend_edit();">
+	<table name="mytable" class="mytable" id="table_backend_edit">
+		<tr><th class="cat" colspan="2"><h2>{$langEditBackend}</h2></th></tr>
+		<tr>
+			<td class="tdlabel" style="color:red;">backendid</td>
+			<td class="tdfield">
+				<select id="backendid" name="backendid" onChange="updateBackendOptions('', this.value, 'backend_edit');">
+					{foreach $definedBackends backendId}<option value="{$backendId}">{$backendId}</option>{/foreach}
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td class="tdlabel" colspan="2" align="center">
+				<input class="submit" type="submit" name="submit" id="commit" value="Save" />
+			</td>
+		</tr>
+	</table>
+</form>
+
+<form name="backend_del" id="backend_del" method="POST" action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=MainCfg&amp;act=doBackendDel', 'backend_del');" onsubmit="return check_backend_del();">
+	<table name="mytable" class="mytable" id="table_backend_del">
+		<tr><th class="cat" colspan="2"><h2>{$langDelBackend}</h2></th></tr>
+		<tr>
+			<td class="tdlabel" style="color:red;">backendid</td>
+			<td class="tdfield">
+				<select id="backendid" name="backendid">
+					{foreach $definedBackends backendId}<option value="{$backendId}">{$backendId}</option>{/foreach}
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td class="tdlabel" colspan="2" align="center">
+				<input class="submit" type="submit" name="submit" id="commit" value="Save" />
+			</td>
+		</tr>
+	</table>
+</form>

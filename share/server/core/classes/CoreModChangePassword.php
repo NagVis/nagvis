@@ -32,9 +32,10 @@ class CoreModChangePassword extends CoreModule {
 	protected $SHANDLER;
 	
 	public function __construct($CORE) {
+		$this->sName = 'ChangePassword';
 		$this->CORE = $CORE;
 		
-		$this->aActions = Array('view'   => REQUIRES_AUTHORISATION,
+		$this->aActions = Array('view'   => 'change',
 		                        'change' => REQUIRES_AUTHORISATION);
 		
 		$this->FHANDLER = new CoreRequestHandler($_POST);
@@ -63,7 +64,7 @@ class CoreModChangePassword extends CoreModule {
 					// Check if user is already authenticated
 					// Change password must be denied when using trusted mode
 					if(isset($this->AUTHENTICATION) && $this->AUTHENTICATION->isAuthenticated() && !$this->SHANDLER->isSetAndNotEmpty('authTrusted')) {
-						$aReturn = $this->handleResponse();
+						$aReturn = $this->handleResponseChangePassword();
 						
 						if($aReturn !== false) {
 							// Reset the authentication check. Without this the cached result
@@ -95,7 +96,7 @@ class CoreModChangePassword extends CoreModule {
 		return $sReturn;
 	}
 	
-	private function handleResponse() {
+	private function handleResponseChangePassword() {
 		$bValid = true;
 		// Validate the response
 		

@@ -32,6 +32,7 @@ class FrontendModRotation extends FrontendModule {
 	private $stepId = '';
 	
 	public function __construct(GlobalCore $CORE) {
+		$this->sName = 'Rotation';
 		$this->CORE = $CORE;
 
 		// Parse the view specific options

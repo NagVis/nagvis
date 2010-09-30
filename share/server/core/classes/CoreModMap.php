@@ -30,26 +30,27 @@ class CoreModMap extends CoreModule {
 	private $MAPCFG = null;
 	
 	public function __construct(GlobalCore $CORE) {
+		$this->sName = 'Map';
 		$this->CORE = $CORE;
 		
 		// Register valid actions
 		$this->aActions = Array(
-			'getMapProperties' => REQUIRES_AUTHORISATION,
-			'getMapObjects' => REQUIRES_AUTHORISATION,
-			'getObjectStates' => REQUIRES_AUTHORISATION,
+			'getMapProperties'  => 'view',
+			'getMapObjects'     => 'view',
+			'getObjectStates'   => 'view',
 			// WUI specific actions
-			'doAdd' => REQUIRES_AUTHORISATION,
-			'doRename' => REQUIRES_AUTHORISATION,
-			'doDelete' => REQUIRES_AUTHORISATION,
-			'addModify' => REQUIRES_AUTHORISATION,
-			'modifyObject' => REQUIRES_AUTHORISATION,
-			'createObject' => REQUIRES_AUTHORISATION,
-			'deleteObject' => REQUIRES_AUTHORISATION,
-			'manageTmpl' => REQUIRES_AUTHORISATION,
-			'getTmplOpts' => REQUIRES_AUTHORISATION,
-			'doTmplAdd' => REQUIRES_AUTHORISATION,
-			'doTmplModify' => REQUIRES_AUTHORISATION,
-			'doTmplDelete' => REQUIRES_AUTHORISATION,
+			'doAdd'             => 'add',
+			'doRename'          => 'edit',
+			'doDelete'          => 'edit',
+			'addModify'         => 'edit',
+			'modifyObject'      => 'edit',
+			'createObject'      => 'edit',
+			'deleteObject'      => 'edit',
+			'manageTmpl'        => 'edit',
+			'getTmplOpts'       => 'edit',
+			'doTmplAdd'         => 'edit',
+			'doTmplModify'      => 'edit',
+			'doTmplDelete'      => 'edit',
 		);
 		
 		// Register valid objects
@@ -105,26 +106,11 @@ class CoreModMap extends CoreModule {
 					$sReturn = $this->getObjectStates();
 				break;
 				case 'doAdd':
-					$aReturn = $this->handleResponseAdd();
-					
-					if($aReturn !== false) {
-						// Try to create the map
-						if($this->doAdd($aReturn)) {
-							new GlobalMessage('NOTE', 
-							                  $this->CORE->getLang()->getText('The map has been created.'),
-							                  null,
-							                  null,
-							                  1,
-							                  $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/frontend/wui/index.php?mod=Map&act=edit&show='.$aReturn['map']);
-							$sReturn = '';
-						} else {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map could not be created.'));
-							$sReturn = '';
-						}
-					} else {
-						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-						$sReturn = '';
-					}
+					$this->handleResponse('handleResponseAdd', 'doAdd',
+						                    $this->CORE->getLang()->getText('The map has been created.'),
+																$this->CORE->getLang()->getText('The map could not be created.'),
+																1, $this->CORE->getMainCfg()->getValue('paths','htmlbase')
+																   .'/frontend/wui/index.php?mod=Map&act=edit&show='.$aReturn['map']);
 				break;
 				case 'doRename':
 					$aReturn = $this->handleResponseRename();
@@ -156,42 +142,15 @@ class CoreModMap extends CoreModule {
 					}
 				break;
 				case 'doDelete':
-					$aReturn = $this->handleResponseDelete();
-					
-					if($aReturn !== false) {
-						// Try to create the map
-						if($this->doDelete($aReturn)) {
-							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The map has been deleted.'));
-							$sReturn = '';
-						} else {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map could not be deleted.'));
-							$sReturn = '';
-						}
-					} else {
-						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-						$sReturn = '';
-					}
+					$this->handleResponse('handleResponseDelete', 'doDelete',
+						                    $this->CORE->getLang()->getText('The map has been deleted.'),
+																$this->CORE->getLang()->getText('The map could not be deleted.'));
 				break;
 				case 'createObject':
-					$aReturn = $this->handleResponseCreateObject();
-					
-					if($aReturn !== false) {
-						// Try to create the map
-						if($this->doCreateObject($aReturn)) {
-							// FIXME: Would be nice to have the object adding without reload of the page
-							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The object has been added.'),
-							                  null,
-							                  null,
-							                  1);
-							$sReturn = '';
-						} else {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object could not be added.'));
-							$sReturn = '';
-						}
-					} else {
-						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-						$sReturn = '';
-					}
+					$this->handleResponse('handleResponseCreateObject', 'doCreateObject',
+						                    $this->CORE->getLang()->getText('The object has been added.'),
+																$this->CORE->getLang()->getText('The object could not be added.'),
+					                      1);
 				break;
 				case 'modifyObject':
 					$aReturn = $this->handleResponseModifyObject();
@@ -789,7 +748,7 @@ class CoreModMap extends CoreModule {
 		}
 	}
 	
-	private function doDelete($a) {
+	protected function doDelete($a) {
 		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
 		try {
 			$MAPCFG->readMapConfig();
@@ -799,7 +758,7 @@ class CoreModMap extends CoreModule {
 		return true;
 	}
 	
-	private function handleResponseDelete() {
+	protected function handleResponseDelete() {
 		$bValid = true;
 		// Validate the response
 		
