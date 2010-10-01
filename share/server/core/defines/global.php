@@ -30,7 +30,13 @@
 define('CONST_VERSION', '1.5.2');
 
 // Set PHP error handling to standard level
-error_reporting(E_ALL ^ E_STRICT);
+// Different levels for php versions below 5.1 because PHP 5.1 reports
+// some annoying strict messages which are OK for us. From version 5.2
+// everything is OK when using E_STRICT.
+if(version_compare(PHP_VERSION, '5.2') >= 0)
+	error_reporting(E_ALL ^ E_STRICT);
+else
+	error_reporting(E_ALL);
 
 /**
  * Set the search path for included files
