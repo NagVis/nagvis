@@ -258,11 +258,13 @@ function drawNagVisLine(objectId, lineType, cuts, x1, y1, x2, y2, z, width, colo
 			var xMid = middle(x1, x2, cut);
 			var yMid = middle(y1, y2, cut);
 			// perfdataA contains the percentage info
-			perfdataA = perfdata[0][1] + perfdata[0][2];
+			if(perfdata[0] && perfdata[0][1] && perfdata[0][2])
+				perfdataA = perfdata[0][1] + perfdata[0][2];
 			drawArrow(objectId, x1, y1, xMid, yMid, z, width, colorFill, colorBorder);
       drawLinkOrLabel(objectId, lineType, x1, y1, xMid, yMid, z, perfdataA, perfdataB, cutIn, bLinkArea, bLabelShow);
 
-			perfdataA = perfdata[1][1] + perfdata[1][2];
+			if(perfdata[1] && perfdata[1][1] && perfdata[1][2])
+				perfdataA = perfdata[1][1] + perfdata[1][2];
 			drawArrow(objectId, x2, y2, xMid, yMid, z, width, colorFill2, colorBorder);
       drawLinkOrLabel(objectId, lineType, x2, y2, xMid, yMid, z, perfdataA, perfdataB, cutOut, bLinkArea, bLabelShow);
 			break;
@@ -272,13 +274,17 @@ function drawNagVisLine(objectId, lineType, cuts, x1, y1, x2, y2, z, width, colo
 			var yMid = middle(y1, y2, cut);
 			// perfdataA contains the percentage info
 			// perfdataB contains the bandwith info
-			perfdataA = perfdata[0][1] + perfdata[0][2];
-			perfdataB = perfdata[2][1] + perfdata[2][2];
+			if(perfdata[0] && perfdata[0][1] && perfdata[0][2])
+				perfdataA = perfdata[0][1] + perfdata[0][2];
+			if(perfdata[2] && perfdata[2][1] && perfdata[2][2])
+				perfdataB = perfdata[2][1] + perfdata[2][2];
 			drawArrow(objectId, x1, y1, xMid, yMid, z, width, colorFill, colorBorder);
       drawLinkOrLabel(objectId, lineType, x1, y1, xMid, yMid, z, perfdataA, perfdataB, cutOut, bLinkArea, bLabelShow);
 
-			perfdataA = perfdata[1][1] + perfdata[1][2];
-			perfdataB = perfdata[3][1] + perfdata[3][2];
+			if(perfdata[1] && perfdata[1][1] && perfdata[1][2])
+				perfdataA = perfdata[1][1] + perfdata[1][2];
+			if(perfdata[3] && perfdata[3][1] && perfdata[3][2])
+				perfdataB = perfdata[3][1] + perfdata[3][2];
 			drawArrow(objectId, x2, y2, xMid, yMid, z, width, colorFill2, colorBorder);
       drawLinkOrLabel(objectId, lineType, x2, y2, xMid, yMid, z, perfdataA, perfdataB, cutIn, bLinkArea, bLabelShow);
 			break;
@@ -320,7 +326,7 @@ function splicePerfdata(nagiosPerfdata) {
 	var setMatches = [];
 	
 	// Check if we got any perfdata
-	if(nagiosPerfdata == '')
+	if(!nagiosPerfdata || nagiosPerfdata == '')
 		return 'empty';
 	else {
 		
