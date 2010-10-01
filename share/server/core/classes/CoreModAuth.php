@@ -33,7 +33,7 @@ class CoreModAuth extends CoreModule {
 		$this->sName = 'Auth';
 		$this->CORE = $CORE;
 		
-		$this->aActions = Array('login'  => 0,
+		$this->aActions = Array('login'  => !REQUIRES_AUTHORISATION,
 		                        'logout' => REQUIRES_AUTHORISATION);
 		
 		$this->FHANDLER = new CoreRequestHandler($_POST);
