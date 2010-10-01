@@ -340,7 +340,16 @@ class NagVisAutoMap extends GlobalMap {
 			fclose($fh);
 			
 			// Parse map
-			exec($this->CORE->getMainCfg()->getValue('automap','graphvizpath').$binary.' -Tpng -o \''.$this->CORE->getMainCfg()->getValue('paths', 'sharedvar').$this->name.'.png\' -Tcmapx '.$this->CORE->getMainCfg()->getValue('paths', 'var').$this->name.'.dot', $arrMapCode);
+			$cmd = $this->CORE->getMainCfg()->getValue('automap','graphvizpath').$binary
+			       .' -Tpng -o \''.$this->CORE->getMainCfg()->getValue('paths', 'sharedvar').$this->name.'.png\''
+			       .' -Tcmapx '.$this->CORE->getMainCfg()->getValue('paths', 'var').$this->name.'.dot 2>&1';
+
+			exec($cmd, $arrMapCode, $returnCode);
+
+			if($returnCode !== 0)
+				new GlobalMessage('ERROR',
+				       $this->CORE->getLang()->getText('Graphviz call failed ([CODE]): [OUTPUT]<br /><br >Command was: "[CMD]"',
+				       Array('CODE' => $returnCode, 'OUTPUT' => implode("\n",$arrMapCode), 'CMD' => $cmd)));
 			
 			$this->mapCode = implode("\n", $arrMapCode);
 		}
@@ -765,7 +774,7 @@ class NagVisAutoMap extends GlobalMap {
 	 */
 	private function fetchHostObjectByName($hostName) {
 		$hostObject = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $hostName);
-		$hostObject->setConfiguration($this->MAPCFG->getObjectConfiguration($hostName));
+		$hostObject->setConfiguration($this->MAPCFG->getObjectConfiguration());
 		$hostObject->setObjectId(0);
 		$this->rootObject = $hostObject;
 	}
