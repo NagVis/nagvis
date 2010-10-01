@@ -58,6 +58,7 @@ class WuiViewManageBackends {
 			'langSetDefaultBackend' => $this->CORE->getLang()->getText('defaultBackend'),
 			'langDefaultBackend'    => $this->CORE->getLang()->getText('setDefaultBackend'),
 			'langSave'              => $this->CORE->getLang()->getText('save'),
+			'langDelete'            => $this->CORE->getLang()->getText('delete'),
 			'langAddBackend'        => $this->CORE->getLang()->getText('addBackend'),
 			'langEditBackend'       => $this->CORE->getLang()->getText('editBackend'),
 			'langDelBackend'        => $this->CORE->getLang()->getText('delBackend'),

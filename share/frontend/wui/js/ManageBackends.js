@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * BackendManagement.js - Functions which are used by the backend management
+ * ManageBackends.js - Functions which are used by the backend management
  *
  * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
@@ -202,11 +202,10 @@ function check_backend_edit() {
 }
 
 function check_backend_del() {
-	form = document.backend_del;
+	var form = document.backend_del;
 	
-	if(form.backend_id.value == '') {
-		alert('backend_id not set. You have to set a backend_id.');
-		
+	if(form.backendid.value == '') {
+		alert('backendid not set. You have to set a backendid.');
 		return false;	
 	}
 	

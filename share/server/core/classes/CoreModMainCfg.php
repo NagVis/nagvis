@@ -40,6 +40,7 @@ class CoreModMainCfg extends CoreModule {
 			'doEdit'           => 'edit',
 			'doBackendDefault' => 'edit',
 			'doBackendAdd'     => 'edit',
+			'doBackendDel'     => 'edit',
 		);
 	}
 	
@@ -75,15 +76,24 @@ class CoreModMainCfg extends CoreModule {
 																$this->CORE->getLang()->getText('The new backend could not be added.'),
 																1);
 				break;
+				case 'doBackendEdit':
+					$this->handleResponse('handleResponseBackendEdit', 'doBackendEdit',
+						                    $this->CORE->getLang()->getText('The changes have been saved.'),
+																$this->CORE->getLang()->getText('Problem while saving the changes.'),
+																1);
+				break;
+				case 'doBackendDel':
+					$this->handleResponse('handleResponseBackendDel', 'doBackendDel',
+						                    $this->CORE->getLang()->getText('The backend has been deleted.'),
+																$this->CORE->getLang()->getText('The backend could bot be deleted.'),
+																1);
+				break;
 			}
 		}
 		
 		return $sReturn;
 	}
 
-	/**
-	 * Set the default backend in the main configuration
-	 */
 	protected function doBackendDefault($a) {
 			$this->CORE->getMainCfg()->setValue('defaults', 'backend', $_POST['defaultbackend']);
 			$this->CORE->getMainCfg()->writeConfig();
@@ -114,21 +124,13 @@ class CoreModMainCfg extends CoreModule {
 	}
 	
 	protected function handleResponseEdit() {
-		$bValid = true;
 		// FIXME: Validate the response
-		
-		// Store response data
-		if($bValid === true)
-			return Array('opts' => $_POST);
-		else
-			return false;
+		return Array('opts' => $_POST);
 	}
 
 	protected function handleResponseBackendAdd() {
 		$FHANDLER = new CoreRequestHandler($_POST);
-
 		$this->verifyValuesSet($FHANDLER, Array('backendid', 'backendtype'));
-
 		return Array('backendid'   => $FHANDLER->get('backendid'),
 		             'backendtype' => $FHANDLER->get('backendtype'),
 								 'opts'        => $_POST);
@@ -165,45 +167,35 @@ class CoreModMainCfg extends CoreModule {
 		return true;
 	}
 
-	/*
-	 * Edit the values of the backend with the given BACKEND-ID
-	 *
-	case 'mgt_backend_edit':
-		if(!isset($_POST['backendid']) || $_POST['backendid'] == '') {
-			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~backendid');
-		} else {
-			// Loop all aviable options for this backend
-			$arr = $CORE->getMainCfg()->getValidObjectType('backend');
-			foreach($arr['options'][$CORE->getMainCfg()->getValue('backend_'.$_POST['backendid'],'backendtype')] AS $key => $arr) {
-				// If there is a value for this option, set it
-				if(isset($_POST[$key]) && $_POST[$key] != '') {
-					$CORE->getMainCfg()->setValue('backend_'.$_POST['backendid'],$key,$_POST[$key]);
-				}
-			}
-			
-			// Write the changes to the main configuration
-			$CORE->getMainCfg()->writeConfig();
-			
-			// Open the management page again
-			print("<script>window.history.back();</script>");
-		}
-	break;
-	/*
-	 * Delete the specified backend with the given BACKEND-ID
-	 *
-	case 'mgt_backend_del':
-		if(!isset($_POST['backendid']) || $_POST['backendid'] == '') {
-			echo $CORE->getLang()->getText('mustValueNotSet', 'ATTRIBUTE~backendid');
-		} else {
-			// Delete the section of the backend
-			$CORE->getMainCfg()->delSection('backend_'.$_POST['backendid']);
-			
-			// Write the changes to the main configuration
-			$CORE->getMainCfg()->writeConfig();
-			
-			// Open the management page again
-			print("<script>window.history.back();</script>");
-		}
-		break;*/
+	protected function handleResponseBackendEdit() {
+		$FHANDLER = new CoreRequestHandler($_POST);
+		$this->verifyValuesSet($FHANDLER, Array('backendid'));
+		return Array('backendid'   => $FHANDLER->get('backendid'),
+		             'opts'        => $_POST);
+	}
+
+	protected function doBackendEdit($a) {
+		// Loop all aviable options for this backend and set them when some is given in the response
+		$arr = $this->CORE->getMainCfg()->getValidObjectType('backend');
+		foreach($arr['options'][$this->CORE->getMainCfg()->getValue('backend_'.$a['opts']['backendid'],'backendtype')] AS $key => $arr)
+			if(isset($a['opts'][$key]) && $a['opts'][$key] != '')
+				$this->CORE->getMainCfg()->setValue('backend_'.$a['opts']['backendid'],$key,$a['opts'][$key]);
+		
+		// Write the changes to the main configuration
+		$this->CORE->getMainCfg()->writeConfig();
+		return true;
+	}
+
+	protected function handleResponseBackendDel() {
+		$FHANDLER = new CoreRequestHandler($_POST);
+		$this->verifyValuesSet($FHANDLER, Array('backendid'));
+		return Array('backendid' => $FHANDLER->get('backendid'));
+	}
+
+	protected function doBackendDel($a) {
+		$this->CORE->getMainCfg()->delSection('backend_'.$a['backendid']);
+		$this->CORE->getMainCfg()->writeConfig();
+		return true;
+	}
 }
 ?>
