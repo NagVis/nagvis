@@ -136,7 +136,7 @@
 					<li class="spacer"><hr /></li>
 					<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=MainCfg&act=manageBackends', '{$langMgmtBackends}');">{$langMgmtBackends}</a></li>{/if}
 					{if $permittedManageBackgrounds}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ManageBackgrounds&act=view', '{$langMgmtBackgrounds}');">{$langMgmtBackgrounds}</a></li>{/if}
-					{if $permittedManageMaps}<li><a href="#" onclick="showFrontendDialog('./ajax_handler.php?action=getFormContents&form=manageMaps', '{$langMgmtMaps}');">{$langMgmtMaps}</a></li>{/if}
+					{if $permittedManageMaps}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&act=manage', '{$langMgmtMaps}');">{$langMgmtMaps}</a></li>{/if}
 					{if $permittedManageShapes}<li><a class="underline" href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ManageShapes&act=view', '{$langMgmtShapes}');">{$langMgmtShapes}</a></li>{/if}
 				</ul>
 			</dd>

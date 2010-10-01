@@ -32,6 +32,7 @@ class CoreModMap extends CoreModule {
 	public function __construct(GlobalCore $CORE) {
 		$this->sName = 'Map';
 		$this->CORE = $CORE;
+		$this->htmlBase = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
 		
 		// Register valid actions
 		$this->aActions = Array(
@@ -39,6 +40,7 @@ class CoreModMap extends CoreModule {
 			'getMapObjects'     => 'view',
 			'getObjectStates'   => 'view',
 			// WUI specific actions
+			'manage'            => REQUIRES_AUTHORISATION,
 			'doAdd'             => 'add',
 			'doRename'          => 'edit',
 			'doDelete'          => 'edit',
@@ -105,46 +107,45 @@ class CoreModMap extends CoreModule {
 				case 'getObjectStates':
 					$sReturn = $this->getObjectStates();
 				break;
+				case 'manage':
+					$VIEW = new WuiViewManageMaps($this->AUTHENTICATION, $this->AUTHORISATION);
+					$sReturn = json_encode(Array('code' => $VIEW->parse()));
+				break;
 				case 'doAdd':
 					$this->handleResponse('handleResponseAdd', 'doAdd',
 						                    $this->CORE->getLang()->getText('The map has been created.'),
 																$this->CORE->getLang()->getText('The map could not be created.'),
-																1, $this->CORE->getMainCfg()->getValue('paths','htmlbase')
-																   .'/frontend/wui/index.php?mod=Map&act=edit&show='.$aReturn['map']);
+																1, $this->htmlBase.'/frontend/wui/index.php?mod=Map&act=edit&show='.$_POST['map']);
 				break;
 				case 'doRename':
-					$aReturn = $this->handleResponseRename();
-					
-					if($aReturn !== false) {
-						// Try to create the map
-						if($this->doRename($aReturn)) {
-							// if renamed map is open, redirect to new name
-							if($aReturn['map_current'] == 'undefined' || $aReturn['map_current'] == '' || $aReturn['map_current'] == $aReturn['map']) {
-								$map = $aReturn['map_new_name'];
-							} else {
-								$map = $aReturn['map_current'];
-							}
+					// if renamed map is open, redirect to new name
+					$FHANDLER = new CoreRequestHandler($_POST);
+					$current = $FHANDLER->get('map_current');
+					$map     = $FHANDLER->get('map');
+					if($current == 'undefined' || $current == '' || $current == $map)
+						$map = $FHANDLER->get('map_new_name');
+					else
+						$map = $current;
 							
-							new GlobalMessage('NOTE', 
-							                  $this->CORE->getLang()->getText('The map has been renamed.'),
-							                  null,
-							                  null,
-							                  1,
-							                  $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/frontend/wui/index.php?mod=Map&act=edit&show='.$map);
-							$sReturn = '';
-						} else {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map could not be renamed.'));
-							$sReturn = '';
-						}
-					} else {
-						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-						$sReturn = '';
-					}
+					$this->handleResponse('handleResponseRename', 'doRename',
+						                    $this->CORE->getLang()->getText('The map has been renamed.'),
+																$this->CORE->getLang()->getText('The map could not be renamed.'),
+																1, $this->htmlBase.'/frontend/wui/index.php?mod=Map&act=edit&show='.$map);
 				break;
 				case 'doDelete':
+					// if deleted map is open, redirect to WUI main page
+					$FHANDLER = new CoreRequestHandler($_POST);
+					$current = $FHANDLER->get('map_current');
+					$map     = $FHANDLER->get('map');
+					if($current == 'undefined' || $current == '' || $current == $map)
+						$url = $this->htmlBase.'/frontend/wui/index.php';
+					else
+						$url = $this->htmlBase.'/frontend/wui/index.php?mod=Map&act=edit&show='.$current;
+
 					$this->handleResponse('handleResponseDelete', 'doDelete',
 						                    $this->CORE->getLang()->getText('The map has been deleted.'),
-																$this->CORE->getLang()->getText('The map could not be deleted.'));
+																$this->CORE->getLang()->getText('The map could not be deleted.'),
+															  1, $url);
 				break;
 				case 'createObject':
 					$this->handleResponse('handleResponseCreateObject', 'doCreateObject',

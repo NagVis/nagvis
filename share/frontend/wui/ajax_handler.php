@@ -150,22 +150,6 @@ switch($_GET['action']) {
 			echo json_encode($aRet);
 		}
 	break;
-	/* Returns the formular contents for the WUI popup windows
-	 */
-	case 'getFormContents':
-		switch($_GET['form']) {
-			case 'manageBackends':
-				$FRONTEND = new WuiBackendManagement($CORE);
-				$FRONTEND->getForm();
-			break;
-			case 'manageMaps':
-				$FRONTEND = new WuiMapManagement($CORE);
-				$FRONTEND->getForm();
-			break;
-		}
-		
-		echo json_encode(Array('code' => $FRONTEND->getForm()));
-	break;
 	/*
 	 * Fallback
 	 */
