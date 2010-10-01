@@ -311,7 +311,7 @@ class CoreModMap extends CoreModule {
 		return $sReturn;
 	}
 	
-	private function doTmplModify($a) {
+	protected function doTmplModify($a) {
 		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
 		$MAPCFG->readMapConfig(0, false, false);
 		
@@ -332,7 +332,7 @@ class CoreModMap extends CoreModule {
 		return true;
 	}
 	
-	private function handleResponseDoTmplModify() {
+	protected function handleResponseDoTmplModify() {
 		$bValid = true;
 		// Validate the response
 		
@@ -392,7 +392,8 @@ class CoreModMap extends CoreModule {
 			return false;
 		}
 	}
-	private function doTmplDelete($a) {
+
+	protected function doTmplDelete($a) {
 		// Read map config but don't resolve templates and don't use the cache
 		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
 		$MAPCFG->readMapConfig(0, false, false);
@@ -412,7 +413,7 @@ class CoreModMap extends CoreModule {
 		return true;
 	}
 	
-	private function handleResponseDoTmplDelete() {
+	protected function handleResponseDoTmplDelete() {
 		$bValid = true;
 		// Validate the response
 		
@@ -458,7 +459,7 @@ class CoreModMap extends CoreModule {
 		}
 	}
 	
-	private function doTmplAdd($a) {
+	protected function doTmplAdd($a) {
 		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
 		$MAPCFG->readMapConfig(0, false, false);
 		
@@ -474,7 +475,7 @@ class CoreModMap extends CoreModule {
 		return true;
 	}
 	
-	private function handleResponseDoTmplAdd() {
+	protected function handleResponseDoTmplAdd() {
 		$bValid = true;
 		// Validate the response
 		
@@ -536,7 +537,7 @@ class CoreModMap extends CoreModule {
 		}
 	}
 	
-	private function doDeleteObject($a) {
+	protected function doDeleteObject($a) {
 		// initialize map and read map config
 		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
 		// Ignore map configurations with errors in it.
@@ -558,7 +559,7 @@ class CoreModMap extends CoreModule {
 		return true;
 	}
 	
-	private function handleResponseDeleteObject() {
+	protected function handleResponseDeleteObject() {
 		$bValid = true;
 		// Validate the response
 		
@@ -598,7 +599,7 @@ class CoreModMap extends CoreModule {
 		}
 	}
 	
-	private function doModifyObject($a) {
+	protected function doModifyObject($a) {
 		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
 		try {
 			$MAPCFG->readMapConfig();
@@ -620,7 +621,7 @@ class CoreModMap extends CoreModule {
 		return true;
 	}
 	
-	private function handleResponseModifyObject() {
+	protected function handleResponseModifyObject() {
 		$bValid = true;
 		// Validate the response
 		
@@ -683,7 +684,7 @@ class CoreModMap extends CoreModule {
 		}
 	}
 	
-	private function doCreateObject($a) {
+	protected function doCreateObject($a) {
 		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
 		$MAPCFG->readMapConfig();
 		
@@ -699,7 +700,7 @@ class CoreModMap extends CoreModule {
 		return true;
 	}
 	
-	private function handleResponseCreateObject() {
+	protected function handleResponseCreateObject() {
 		$bValid = true;
 		// Validate the response
 		
@@ -788,7 +789,7 @@ class CoreModMap extends CoreModule {
 		}
 	}
 	
-	private function doRename($a) {
+	protected function doRename($a) {
 		$files = Array();
 		
 		// loop all map configs to replace mapname in all map configs
@@ -815,7 +816,7 @@ class CoreModMap extends CoreModule {
 		return true;
 	}
 	
-	private function handleResponseRename() {
+	protected function handleResponseRename() {
 		$bValid = true;
 		// Validate the response
 		
@@ -854,7 +855,7 @@ class CoreModMap extends CoreModule {
 		}
 	}
 	
-	private function doAdd($a) {
+	protected function doAdd($a) {
 		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
 		if(!$MAPCFG->createMapConfig()) {
 			return false;
@@ -864,7 +865,7 @@ class CoreModMap extends CoreModule {
 		return $MAPCFG->writeElement('global','0');
 	}
 	
-	private function handleResponseAdd() {
+	protected function handleResponseAdd() {
 		$bValid = true;
 		// Validate the response
 		
