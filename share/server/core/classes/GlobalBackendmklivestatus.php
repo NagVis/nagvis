@@ -213,15 +213,21 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// Query to get a json formated array back
 		// Use KeepAlive with fixed16 header
-		socket_write($this->SOCKET, $query . "OutputFormat:json\nKeepAlive: on\nResponseHeader: fixed16\n\n");
+		$oldLevel = error_reporting(0);
+		$write = socket_write($this->SOCKET, $query . "OutputFormat:json\nKeepAlive: on\nResponseHeader: fixed16\n\n");
+		error_reporting($oldLevel);
+		if($write === false)
+			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
+			     Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
+
 		
 		// Read 16 bytes to get the status code and body size
 		$read = $this->readSocket(16);
 		
 		// Catch problem while reading
-		if($read === false) {
-			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
-		}
+		if($read === false) 
+			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
+			     Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
 		
 		// Extract status code
 		$status = substr($read, 0, 3);
