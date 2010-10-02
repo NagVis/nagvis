@@ -976,45 +976,45 @@ class GlobalMainCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function setPathsByBase($base,$htmlBase) {
-		$this->validConfig['paths']['cfg']['default'] = $base.'etc/';
-		$this->validConfig['paths']['mapcfg']['default'] = $base.'etc/maps/';
-		$this->validConfig['paths']['automapcfg']['default'] = $base.'etc/automaps/';
+	private function setPathsByBase($base, $htmlBase) {
+		$this->validConfig['paths']['cfg']['default']                = $base.'etc/';
+		$this->validConfig['paths']['mapcfg']['default']             = $base.'etc/maps/';
+		$this->validConfig['paths']['automapcfg']['default']         = $base.'etc/automaps/';
 		
-		$this->validConfig['paths']['var']['default'] = $base.'var/';
-		$this->validConfig['paths']['sharedvar']['default'] = $base.'share/var/';
-		$this->validConfig['paths']['htmlsharedvar']['default'] = $htmlBase.'/var/';
+		$this->validConfig['paths']['var']['default']                = $base.'var/';
+		$this->validConfig['paths']['sharedvar']['default']          = $base.HTDOCS_DIR.'/var/';
+		$this->validConfig['paths']['htmlsharedvar']['default']      = $htmlBase.'/var/';
 		
-		$this->validConfig['paths']['language']['default'] = $base.'share/frontend/nagvis-js/locale';
-		$this->validConfig['paths']['class']['default'] = $base.'share/server/core/classes/';
+		$this->validConfig['paths']['language']['default']           = $base.HTDOCS_DIR.'/frontend/nagvis-js/locale';
+		$this->validConfig['paths']['class']['default']              = $base.HTDOCS_DIR.'/server/core/classes/';
 
-		$this->validConfig['paths']['htmlcss']['default'] = $htmlBase.'/frontend/nagvis-js/css/';
+		$this->validConfig['paths']['htmlcss']['default']            = $htmlBase.'/frontend/nagvis-js/css/';
 		
-		$this->validConfig['paths']['js']['default'] = $base.'share/frontend/nagvis-js/js/';
-		$this->validConfig['paths']['htmljs']['default'] = $htmlBase.'/frontend/nagvis-js/js/';
+		$this->validConfig['paths']['js']['default']                 = $base.HTDOCS_DIR.'/frontend/nagvis-js/js/';
+		$this->validConfig['paths']['htmljs']['default']             = $htmlBase.'/frontend/nagvis-js/js/';
 		
-		$this->validConfig['paths']['images']['default'] = $base.'share/frontend/nagvis-js/images/';
-		$this->validConfig['paths']['htmlimages']['default'] = $htmlBase.'/frontend/nagvis-js/images/';
+		$this->validConfig['paths']['images']['default']             = $base.HTDOCS_DIR.'/frontend/nagvis-js/images/';
+		$this->validConfig['paths']['htmlimages']['default']         = $htmlBase.'/frontend/nagvis-js/images/';
 		
-		$this->validConfig['paths']['templates']['default'] = $base.'share/userfiles/templates/';
-		$this->validConfig['paths']['htmltemplates']['default'] = $htmlBase.'/userfiles/templates/';
+		$this->validConfig['paths']['templates']['default']          = $base.HTDOCS_DIR.'/userfiles/templates/';
+		$this->validConfig['paths']['htmltemplates']['default']      = $htmlBase.'/userfiles/templates/';
 		
-		$this->validConfig['paths']['htmlsounds']['default'] = $htmlBase.'/userfiles/sounds/';
-		$this->validConfig['paths']['htmlstyles']['default'] = $htmlBase.'/userfiles/styles/';
+		$this->validConfig['paths']['htmlsounds']['default']         = $htmlBase.'/userfiles/sounds/';
+		$this->validConfig['paths']['htmlstyles']['default']         = $htmlBase.'/userfiles/styles/';
 		
-		$this->validConfig['paths']['gadget']['default'] = $base.'share/userfiles/gadgets/';
-		$this->validConfig['paths']['htmlgadgets']['default'] = $htmlBase.'/userfiles/gadgets/';
+		$this->validConfig['paths']['gadget']['default']             = $base.HTDOCS_DIR.'/userfiles/gadgets/';
+		$this->validConfig['paths']['htmlgadgets']['default']        = $htmlBase.'/userfiles/gadgets/';
 		
-		$this->validConfig['paths']['icon']['default'] = $base.'share/userfiles/images/iconsets/';
-		$this->validConfig['paths']['shape']['default'] = $base.'share/userfiles/images/shapes/';
-		$this->validConfig['paths']['map']['default'] = $base.'share/userfiles/images/maps/';
-		$this->validConfig['paths']['htmlicon']['default'] = $htmlBase.'/userfiles/images/iconsets/';
-		$this->validConfig['paths']['htmlshape']['default'] = $htmlBase.'/userfiles/images/shapes/';
-		$this->validConfig['paths']['htmlmap']['default'] = $htmlBase.'/userfiles/images/maps/';
+		$this->validConfig['paths']['icon']['default']               = $base.HTDOCS_DIR.'/userfiles/images/iconsets/';
+		$this->validConfig['paths']['shape']['default']              = $base.HTDOCS_DIR.'/userfiles/images/shapes/';
+		$this->validConfig['paths']['map']['default']                = $base.HTDOCS_DIR.'/userfiles/images/maps/';
+		$this->validConfig['paths']['htmlicon']['default']           = $htmlBase.'/userfiles/images/iconsets/';
+		$this->validConfig['paths']['htmlshape']['default']          = $htmlBase.'/userfiles/images/shapes/';
+		$this->validConfig['paths']['htmlmap']['default']            = $htmlBase.'/userfiles/images/maps/';
 		$this->validConfig['paths']['htmltemplateimages']['default'] = $htmlBase.'/userfiles/images/templates/';
 		
 		// This option directly relies on the configured htmlBase by default
-		$this->validConfig['global']['sesscookiepath']['default'] = $htmlBase;
+		$this->validConfig['global']['sesscookiepath']['default']    = $htmlBase;
 	}
 	
 	/**

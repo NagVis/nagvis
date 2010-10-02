@@ -84,6 +84,9 @@ define('CONST_MAINCFG_CACHE', '../../../var/nagvis.ini.php');
 // Path to "site" main configuration file
 //define('CONST_MAINCFG_SITE', '../../../etc/nagvis-site.ini.php');
 
+// The directory below the NagVis root which is shared by the webserver
+define('HTDOCS_DIR', 'share');
+
 // Needed minimal PHP version
 define('CONST_NEEDED_PHP_VERSION', '5.0');
 
