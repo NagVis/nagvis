@@ -177,12 +177,14 @@ class CoreMySQLHandler {
 		// Create permissions for WUI management pages
 		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'manage\', \'*\')');
 		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'manage\', \'*\')');
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'manage\', \'*\')');
 
 		// Assign the new permission to the managers
 		$RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\'');
 		while($data = $this->fetchAssoc($RES)) {
 			$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'manage', '*');
 			$this->addRolePerm($data['roleId'], 'ManageShapes', 'manage', '*');
+			$this->addRolePerm($data['roleId'], 'Map', 'manage', '*');
 		}
 
 		// Only apply the new version when this is the real release or newer
@@ -273,6 +275,7 @@ class CoreMySQLHandler {
 		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'manage\', \'*\')');
 		
 		// Access controll: Edit/Delete maps and automaps
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'manage\', \'*\')');
 		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'add\', \'*\')');
 		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'add\', \'*\')');
 		
@@ -300,6 +303,7 @@ class CoreMySQLHandler {
 		$this->addRolePerm($data['roleId'], 'General', '*', '*');
 		
 		// Access assignment: Managers => Allowed to edit/delete all maps
+		$this->addRolePerm($data['roleId'], 'Map', 'manage', '*');
 		$this->addRolePerm($data['roleId'], 'Map', 'delete', '*');
 		$this->addRolePerm($data['roleId'], 'Map', 'edit', '*');
 		

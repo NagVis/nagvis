@@ -175,12 +175,14 @@ class CoreSQLiteHandler {
 		// Create permissions for WUI management pages
 		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageBackgrounds\', \'manage\', \'*\')');
 		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageShapes\', \'manage\', \'*\')');
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'manage\', \'*\')');
 
 		// Assign the new permission to the managers
 		$RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\'');
 		while($data = $this->fetchAssoc($RES)) {
 			$this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'manage', '*');
 			$this->addRolePerm($data['roleId'], 'ManageShapes', 'manage', '*');
+			$this->addRolePerm($data['roleId'], 'Map', 'manage', '*');
 		}
 
 		// Only apply the new version when this is the real release or newer
@@ -295,6 +297,7 @@ class CoreSQLiteHandler {
 		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageShapes\', \'manage\', \'*\')');
 		
 		// Access controll: Edit/Delete maps and automaps
+		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'manage\', \'*\')');
 		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'add\', \'*\')');
 		$this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'AutoMap\', \'add\', \'*\')');
 		
@@ -322,6 +325,7 @@ class CoreSQLiteHandler {
 		$this->addRolePerm($data['roleId'], 'General', '*', '*');
 		
 		// Access assignment: Managers => Allowed to edit/delete all maps
+		$this->addRolePerm($data['roleId'], 'Map', 'manage', '*');
 		$this->addRolePerm($data['roleId'], 'Map', 'delete', '*');
 		$this->addRolePerm($data['roleId'], 'Map', 'edit', '*');
 		
