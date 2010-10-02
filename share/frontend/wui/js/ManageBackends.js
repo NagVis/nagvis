@@ -61,26 +61,22 @@ function updateBackendOptions(sBackendType, backendId, sFormId) {
 	lastRow++;
 	
 	// When no backendId and no backendType set terminate here
-	if(backendId === '' && backendType === '') {
+	if(backendId === '' && backendType === '')
 		return false;
-	}
 	
 	// Get configured values
 	var oValues;
-	if(backendId !== '') {
-		oValues = getSyncRequest('ajax_handler.php?action=getBackendOptions&backend_id='+backendId);
-	}
+	if(backendId !== '')
+		oValues = getSyncRequest(oGeneralProperties.path_server+'?mod=MainCfg&act=getBackendOptions&backendid='+backendId);
 	
 	// Get backend type from configued values when not set via function call
 	// This occurs when editing backends cause only backendid is given
-	if(backendType === '') {
+	if(backendType === '')
 		backendType = oValues['backendtype'];
-	}
 	
 	// Fallback to default backendtype when nothing set here
-	if(backendType === '') {
+	if(backendType === '')
 		backendType = validMainConfig['backend']['backendtype']['default'];
-	}
 	
 	// Merge global backend options with type specific options
 	var oOptions;

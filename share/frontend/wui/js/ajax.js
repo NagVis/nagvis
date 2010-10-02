@@ -25,23 +25,22 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-function getServices(backend_id, type, host_name, field, selected) {
-	// Only update services when host is not empty and not "Manual input..."
-	if(host_name != '' && host_name != lang['manualInput']) {
-		var oOpt = Object();
-		oOpt.field = field;
-		oOpt.selected = selected;
-		oOpt.type = type;
-		
-		printObjects(getSyncRequest('ajax_handler.php?action=getServices&backend_id='+backend_id+'&host_name='+host_name), oOpt);
-	}
-}
-
-function getObjects(backend_id, type, field, selected) {
+function getObjects(backend_id, type, field, selected, name1) {
 	var oOpt = Object();
 	oOpt.field = field;
 	oOpt.selected = selected;
 	oOpt.type = type;
+
+	if(type === 'service'
+	   && (typeof name1 === 'undefined' || name1 == ''
+	       || name1 === lang['manualInput'])) {
+		return true;
+	}
+
+	if(typeof name1 === 'undefined')
+		name1 = ''
 	
-	printObjects(getSyncRequest('ajax_handler.php?action=getObjects&backend_id='+backend_id+'&type='+type), oOpt);
+	printObjects(getSyncRequest(oGeneralProperties.path_server
+	                            +'?mod=Map&act=getObjects&backendid='+backend_id
+	                            +'&backendid='+backend_id+'&type='+type+'&name1='+name1), oOpt);
 }

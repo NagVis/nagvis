@@ -180,23 +180,29 @@ abstract class CoreModule {
 	 *
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	protected function handleResponse($validationHandler, $action, $successMsg, $failMessage, $reload = null, $redirectUrl = null) {
+	protected function handleResponse($validationHandler, $action, $successMsg = null,
+		                                $failMessage = null, $reload = null, $redirectUrl = null) {
 		$aReturn = $this->{$validationHandler}();
 
 		$type = 'NOTE';
-		$msg = '';
-		if($aReturn !== false)
-			if($this->{$action}($aReturn))
+		$msg = null;
+		if($aReturn !== false) {
+			$ret = $this->{$action}($aReturn);
+			if($ret && $successMsg) {
 				$msg = $successMsg;
-			else {
+			} elseif(!$ret && $failMsg) {
 				$type = 'ERROR';
 				$msg = $failMessage;
 			}
-		else {
+		} else {
 			$type = 'ERROR';
 			$msg = $this->CORE->getLang()->getText('You entered invalid information.');
 		}
-		new GlobalMessage($type, $msg, null, null, $reload, $redirectUrl);
+
+		if($msg)
+			new GlobalMessage($type, $msg, null, null, $reload, $redirectUrl);
+		else
+			return $ret;
 	}
 
 	/**

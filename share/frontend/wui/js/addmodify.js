@@ -36,9 +36,8 @@ function printObjects(aObjects,oOpt) {
 	
 	if(oField.nodeName == "SELECT") {
 		// delete old options
-		for(var i = oField.length; i >= 0; i--){
+		for(var i = oField.length; i >= 0; i--)
 			oField.options[i] = null;
-		}
 		
 		if(aObjects && aObjects.length > 0) {
 			var bSelected = false;
@@ -49,11 +48,10 @@ function printObjects(aObjects,oOpt) {
 				var bSelect = false;
 				var bSelectDefault = false;
 				
-				if(type == "service") {
-					oName = aObjects[i].service_description;
-				} else {
-					oName = aObjects[i].name;
-				}
+				if(type == "service")
+					oName = aObjects[i].name2;
+				else
+					oName = aObjects[i].name1;
 				
 				if(selected != '' && oName == selected) {
 					bSelectDefault = true;

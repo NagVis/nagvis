@@ -35,12 +35,13 @@ class CoreModMainCfg extends CoreModule {
 		// Register valid actions
 		$this->aActions = Array(
 			// WUI specific actions
-			'edit'             => REQUIRES_AUTHORISATION,
-			'manageBackends'   => 'edit',
-			'doEdit'           => 'edit',
-			'doBackendDefault' => 'edit',
-			'doBackendAdd'     => 'edit',
-			'doBackendDel'     => 'edit',
+			'edit'              => REQUIRES_AUTHORISATION,
+			'manageBackends'    => 'edit',
+			'getBackendOptions' => 'edit',
+			'doEdit'            => 'edit',
+			'doBackendDefault'  => 'edit',
+			'doBackendAdd'      => 'edit',
+			'doBackendDel'      => 'edit',
 		);
 	}
 	
@@ -64,26 +65,29 @@ class CoreModMainCfg extends CoreModule {
 					$VIEW = new WuiViewManageBackends($this->AUTHENTICATION, $this->AUTHORISATION);
 					$sReturn = json_encode(Array('code' => $VIEW->parse()));
 				break;
+				case 'getBackendOptions':
+					$sReturn = json_encode($this->handleResponse('handleResponse'.$this->sAction, $this->sAction));
+				break;
 				case 'doBackendDefault':
-					$this->handleResponse('handleResponseBackendDefault', 'doBackendDefault',
+					$this->handleResponse('handleResponseBackendDefault', $this->sAction,
 						                    $this->CORE->getLang()->getText('The default backend has been changed.'),
 																$this->CORE->getLang()->getText('The default backend could not be changed.'),
 																1);
 				break;
 				case 'doBackendAdd':
-					$this->handleResponse('handleResponseBackendAdd', 'doBackendAdd',
+					$this->handleResponse('handleResponseBackendAdd', $this->sAction,
 						                    $this->CORE->getLang()->getText('The new backend has been added.'),
 																$this->CORE->getLang()->getText('The new backend could not be added.'),
 																1);
 				break;
 				case 'doBackendEdit':
-					$this->handleResponse('handleResponseBackendEdit', 'doBackendEdit',
+					$this->handleResponse('handleResponseBackendEdit', $this->sAction,
 						                    $this->CORE->getLang()->getText('The changes have been saved.'),
 																$this->CORE->getLang()->getText('Problem while saving the changes.'),
 																1);
 				break;
 				case 'doBackendDel':
-					$this->handleResponse('handleResponseBackendDel', 'doBackendDel',
+					$this->handleResponse('handleResponseBackendDel', $this->sAction,
 						                    $this->CORE->getLang()->getText('The backend has been deleted.'),
 																$this->CORE->getLang()->getText('The backend could bot be deleted.'),
 																1);
@@ -94,20 +98,44 @@ class CoreModMainCfg extends CoreModule {
 		return $sReturn;
 	}
 
+	protected function handleResponsegetBackendOptions() {
+		$FHANDLER = new CoreRequestHandler($_GET);
+		$this->verifyValuesSet($FHANDLER, Array('backendid'));
+		return Array('backendid' => $FHANDLER->get('backendid'));
+	}
+	
+	protected function getBackendOptions($a) {
+			$aRet = Array();
+			$backendType = $this->CORE->getMainCfg()->getValue('backend_'.$a['backendid'],'backendtype');
+			
+			// Loop all options for this backend type
+			$aBackendOpts = $this->CORE->getMainCfg()->getValidObjectType('backend');
+			
+			// Merge global backend options with type specific options
+			$aOpts = $aBackendOpts['options'][$backendType];
+			
+			foreach($aBackendOpts AS $sKey => $aOpt)
+				if($sKey !== 'backendid' && $sKey !== 'options')
+					$aOpts[$sKey] = $aOpt;
+			
+			foreach($aOpts AS $key => $aOpt)
+				if($this->CORE->getMainCfg()->getValue('backend_'.$a['backendid'], $key, true) !== false)
+					$aRet[$key] = $this->CORE->getMainCfg()->getValue('backend_'.$a['backendid'], $key, true);
+				else
+					$aRet[$key] = '';
+			
+			return $aRet;
+	}
+
 	protected function doBackendDefault($a) {
-			$this->CORE->getMainCfg()->setValue('defaults', 'backend', $_POST['defaultbackend']);
+			$this->CORE->getMainCfg()->setValue('defaults', 'backend', $a['defaultbackend']);
 			$this->CORE->getMainCfg()->writeConfig();
 			return true;
 	}
 
 	protected function handleResponseBackendDefault() {
 		$FHANDLER = new CoreRequestHandler($_POST);
-
-		if(!$FHANDLER->isSetAndNotEmpty('defaultbackend'))
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mustValueNotSet',
-			                                        Array('ATTRIBUTE' => 'defaultbackend')));
 		$this->verifyValuesSet($FHANDLER, Array('defaultbackend'));
-
 		return Array('defaultbackend' => $FHANDLER->get('map_new_name'));
 	}
 	

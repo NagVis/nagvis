@@ -134,12 +134,12 @@ class WuiViewMapAddModify {
 								
 								if($this->aOpts['type'] == 'service' && $key == 'host_name') {
 									// Params: backend_id, type, host_name, field, selected
-									$ret .= "getServices(".
+									$ret .= "getObjects(".
 									          "'".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['clone'], 'backend_id')."',".
 									          "'".$this->aOpts['type']."',".
-									          "'".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['clone'], 'host_name', true)."',".
 									          "'service_description',".
 									          "'".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], 'service_description', true)."'".
+									          "'".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['clone'], 'host_name', true)."',".
 									        ");";
 								}
 							}
@@ -342,12 +342,12 @@ class WuiViewMapAddModify {
 							
 							$ret .= "<script type='text/Javascript'>getObjects('".$backendId."','".preg_replace('/_name/i','',$propname)."','".$propname."','".$sSelected."');</script>";
 							if($sSelected != '' && in_array('service_description', $this->MAPCFG->getValidTypeKeys($this->aOpts['type']))) {
-								$ret .= "<script type='text/Javascript'>getServices('".$backendId."', '".$this->aOpts['type']."', '".$sSelected."','service_description','".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], 'service_description', TRUE)."');</script>";
+								$ret .= "<script type='text/Javascript'>getObjects('".$backendId."', '".$this->aOpts['type']."', 'service_description','".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], 'service_description', TRUE)."', '".$sSelected."');</script>";
 							}
 							
 							if($propname == 'host_name') {
 								if($this->aOpts['type'] == 'service') {
-									$onChange = "getServices(document.getElementById('backend_id').value,'".$this->aOpts['type']."',this.value,'service_description','".$sSelected."');validateMapConfigFieldValue(this)";
+									$onChange = "getObjects(document.getElementById('backend_id').value,'".$this->aOpts['type']."','service_description','".$sSelected."', this.value);validateMapConfigFieldValue(this)";
 								} else {
 									$onChange = 'validateMapConfigFieldValue(this)';
 								}

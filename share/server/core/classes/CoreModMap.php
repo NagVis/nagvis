@@ -53,6 +53,7 @@ class CoreModMap extends CoreModule {
 			'doTmplAdd'         => 'edit',
 			'doTmplModify'      => 'edit',
 			'doTmplDelete'      => 'edit',
+			'getObjects'        => 'edit',
 		);
 		
 		// Register valid objects
@@ -247,69 +248,78 @@ class CoreModMap extends CoreModule {
 					$sReturn = json_encode(Array('opts' => $aTmp));
 				break;
 				case 'doTmplAdd':
-					$aReturn = $this->handleResponseDoTmplAdd();
-					
-					if($aReturn !== false) {
-						if($this->doTmplAdd($aReturn)) {
-							// FIXME: Would be nice to have the object adding without reload of the page
-							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The object has been added.'),
-							                  null,
-							                  null,
-							                  1);
-							$sReturn = '';
-						} else {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object could not be added.'));
-							$sReturn = '';
-						}
-					} else {
-						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-						$sReturn = '';
-					}
+					$this->handleResponse('handleResponseDoTmplAdd', 'doTmplAdd',
+						                    $this->CORE->getLang()->getText('The object has been added.'),
+																$this->CORE->getLang()->getText('The object could not be added.'),
+																1);
 				break;
 				case 'doTmplModify':
-					$aReturn = $this->handleResponseDoTmplModify();
-					
-					if($aReturn !== false) {
-						if($this->doTmplModify($aReturn)) {
-							// FIXME: Would be nice to have the object adding without reload of the page
-							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The object has been modified.'),
-							                  null,
-							                  null,
-							                  1);
-							$sReturn = '';
-						} else {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object could not be modified.'));
-							$sReturn = '';
-						}
-					} else {
-						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-						$sReturn = '';
-					}
+					$this->handleResponse('handleResponseDoTmplModify', 'doTmplModify',
+						                    $this->CORE->getLang()->getText('The object has been modified.'),
+																$this->CORE->getLang()->getText('The object could not be modified.'),
+																1);
 				break;
 				case 'doTmplDelete':
-					$aReturn = $this->handleResponseDoTmplDelete();
-					
-					if($aReturn !== false) {
-						// Try to delete the template
-						if($this->doTmplDelete($aReturn)) {
-							// FIXME: Would be nice to have the object adding without reload of the page
-							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The template has been deleted.'),
-							                  null,
-							                  null,
-							                  1);
-						} else {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The template could not be deleted.'));
-							$sReturn = '';
-						}
-					} else {
-						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-						$sReturn = '';
-					}
+					$this->handleResponse('handleResponseDoTmplDelete', 'doTmplDelete',
+						                    $this->CORE->getLang()->getText('The template has been deleted.'),
+																$this->CORE->getLang()->getText('The template could not be deleted.'),
+																1);
+				break;
+				case 'getObjects':
+					$sReturn = $this->handleResponse('handleResponseGetObjects', 'getObjects');
 				break;
 			}
 		}
 		
 		return $sReturn;
+	}
+
+	protected function handleResponseGetObjects() {
+		$FHANDLER = new CoreRequestHandler($_GET);
+
+		$this->verifyValuesSet($FHANDLER, Array('backendid', 'type'));
+		if($FHANDLER->get('type') == 'service')
+			$this->verifyValuesSet($FHANDLER, Array('name1'));
+
+		return Array('backendid' => $FHANDLER->get('backendid'),
+		             'type'      => $FHANDLER->get('type'),
+		             'name1'     => $FHANDLER->get('name1'));
+	}
+
+	protected function getObjects($a) {
+		// Initialize the backend
+		$BACKEND = new CoreBackendMgmt($this->CORE);
+		
+		try {
+			$BACKEND->checkBackendFeature($a['backendid'], 'getObjects', true);
+		} catch(BackendConnectionProblem $e) {
+			new GlobalMessage('ERROR', $CORE->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]',
+				  																						Array('BACKENDID' => $a['backendid'], 'MSG' => $e->getMessage())));
+			exit();
+		}
+
+		$name1 = ($a['type'] === 'service' ? $a['name1'] : '');
+		$type  = $a['type'];
+		
+		// Initialize an empty list
+		if($a['type'] !== 'service')
+			$aRet = Array(Array('name1' => ''));
+		else
+			$aRet = Array(Array('name1' => '', 'name2' => ''));
+		
+		// Read all objects of the requested type from the backend
+		try {
+			$objs = $BACKEND->getBackend($a['backendid'])->getObjects($type, $name1, '');
+			foreach($objs AS $obj) {
+				if($a['type'] !== 'service')
+					$aRet[] = Array('name1' => $obj['name1']);
+				else
+					$aRet[] = Array('name1' => $obj['name1'],
+					                'name2' => $obj['name2']);
+			}
+		} catch(BackendConnectionProblem $e) {}
+		
+		return json_encode($aRet);
 	}
 	
 	protected function doTmplModify($a) {
