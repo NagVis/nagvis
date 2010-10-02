@@ -61,6 +61,7 @@ function contextHide() {
 
 // call from the onMouseDown event, passing the event if standards compliant
 function contextMouseDown(event) {
+	alert(targeta);
 	var target;
 	var id = -1;
 

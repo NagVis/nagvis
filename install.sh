@@ -880,6 +880,7 @@ cmp_js() {
 	cd $NAGVIS_PATH/share/frontend/nagvis-js/js/
 	OUT=NagVisCompressed.js
 	>$OUT
+	cmp ExtStacktrace.js
 	cmp nagvis.js
 	cmp popupWindow.js
 	cmp ExtBase.js

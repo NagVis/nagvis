@@ -812,13 +812,15 @@ addDOMLoadEvent = (function(){
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function handleJSError(sMsg, sUrl, iLine) {
-    // Log to javascript eventlog
+	// Log to javascript eventlog
 	eventlog("js-error", "critical", "JS-Error occured: " + sMsg + " " + sUrl + " (" + iLine + ")");
 	
 	// Show error box
 	var oMsg = {};
 	oMsg.type = 'CRITICAL';
-	oMsg.message = "Javascript error occured:\n " + sMsg + " " + sUrl + " (" + iLine + ")";
+	oMsg.message = "Javascript error occured:\n " + sMsg + " "
+	               + sUrl + " (" + iLine + ")<br /><br /><font style='font-size:10px'>- Stacktrace - <br />"
+	               + printStackTrace().join("<br />") + '</font>';
 	oMsg.title = "Javascript error";
 	
 	// Handle application message/error
