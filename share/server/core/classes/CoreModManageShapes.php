@@ -94,8 +94,9 @@ class CoreModManageShapes extends CoreModule {
 	
 	protected function handleResponseDelete() {
 		$FHANDLER = new CoreRequestHandler($_POST);
-		$this->verifyValuesSet($FHANDLER,   Array('image'));
-		$this->verifyValuesMatch($FHANDLER, Array('image' => MATCH_PNG_GIF_JPG_FILE));
+		$attr = Array('image' => MATCH_PNG_GIF_JPG_FILE);
+		$this->verifyValuesSet($FHANDLER,   $attr);
+		$this->verifyValuesMatch($FHANDLER, $attr);
 		
 		if(!in_array($FHANDLER->get('image'), $this->CORE->getAvailableShapes()))
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The shape does not exist.'));

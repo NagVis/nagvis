@@ -78,11 +78,12 @@ class CoreModAuth extends CoreModule {
 					}
 				break;
 				case 'logout':
-					if($this->AUTHENTICATION->logout()) {
-						new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You have been logged out. You will be redirected.'), null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
-					} else {
-						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to log you out. Maybe it is not supported by your authentication module.'), null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
-					}
+					if($this->AUTHENTICATION->logout())
+						new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You have been logged out. You will be redirected.'),
+						                  null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
+					else
+						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to log you out. Maybe it is not supported by your authentication module.'),
+						                  null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
 				break;
 			}
 		}
@@ -91,29 +92,22 @@ class CoreModAuth extends CoreModule {
 	}
 	
 	private function handleResponseAuth() {
-		$bValid = true;
-		// Validate the response
-		
-		// Check for needed params
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('username'))
-			$bValid = false;
-		if($bValid && !$this->FHANDLER->isSetAndNotEmpty('password'))
-			$bValid = false;
+		$attr = Array('username' => MATCH_USER_NAME,
+		              'password' => null);
+		$this->verifyValuesSet($this->FHANDLER,   $attr);
+		$this->verifyValuesMatch($this->FHANDLER, $attr);
 		
 		// Check length limits
+		$bValid = true;
 		if($bValid && $this->FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH))
 			$bValid = false;
 		if($bValid && $this->FHANDLER->isLongerThan('password', AUTH_MAX_PASSWORD_LENGTH))
 			$bValid = false;
-
-		// Some regex validation
-		if($bValid && !$this->FHANDLER->match('username', MATCH_USER_NAME))
-			$bValid = false;
 		
 		//@todo Escape vars?
 		
-	  // Store response data
-	  if($bValid === true)
+		// Store response data
+		if($bValid)
 		  return Array('user'     => $this->FHANDLER->get('username'),
 			             'password' => $this->FHANDLER->get('password'));
 		else
@@ -121,12 +115,14 @@ class CoreModAuth extends CoreModule {
 	}
 	
 	public function msgAlreadyLoggedIn() {
-		new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You are already logged in. You will be redirected.'), null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
+		new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You are already logged in. You will be redirected.'),
+		                  null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
 		return '';
 	}
 	
 	public function msgInvalidCredentials() {
-		new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid credentials.'), null, $this->CORE->getLang()->getText('Authentication failed'), 1, CoreRequestHandler::getReferer(''));
+		new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid credentials.'),
+		                  null, $this->CORE->getLang()->getText('Authentication failed'), 1, CoreRequestHandler::getReferer(''));
 		return '';
 	}
 }

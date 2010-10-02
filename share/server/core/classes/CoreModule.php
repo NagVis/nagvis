@@ -233,7 +233,7 @@ abstract class CoreModule {
 	 */
 	protected function verifyValuesMatch($HANDLER, $list) {
 		foreach($list AS $key => $pattern)
-			if(!$HANDLER->match($key, $pattern))
+			if($pattern && !$HANDLER->match($key, $pattern))
 				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The value of option "[ATTRIBUTE]" does not match the valid format.',
 			                                                      Array('ATTRIBUTE' => $key)));
 				
