@@ -279,7 +279,7 @@ class NagVisObject {
 					}
 					
 					$arr['lang_obj_type']    = NagVisService::$langType;
-					$arr['lang_name']        = NagVisService::$langSelf;
+					$arr['lang_name']        = NagVisHost::$langSelf;
 				break;
 				case 'hostgroup':
 					if(NagVisHostgroup::$langType === null) {
