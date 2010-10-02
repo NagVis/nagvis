@@ -211,10 +211,32 @@ abstract class CoreModule {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function verifyValuesSet($HANDLER, $list) {
-		foreach($list AS $key)
+		// Check if the array is assoc. When it isn't re-format it.
+		if(array_keys($list) === range(0, count($list) - 1)) {
+			$assoc = Array();
+			foreach($list AS $value)
+				$assoc[$value] = true;
+			$list = $assoc;
+		}
+
+		foreach($list AS $key => $value)
 			if(!$HANDLER->isSetAndNotEmpty($key))
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mustValueNotSet',
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mustValueNotSet1',
 			                                                      Array('ATTRIBUTE' => $key)));
+	}
+
+	/**
+	 * Checks if the listes values match the given patterns. Otherwise it raises
+	 * an error message.
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	protected function verifyValuesMatch($HANDLER, $list) {
+		foreach($list AS $key => $pattern)
+			if(!$HANDLER->match($key, $pattern))
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The value of option "[ATTRIBUTE]" does not match the valid format.',
+			                                                      Array('ATTRIBUTE' => $key)));
+				
 	}
 }
 ?>

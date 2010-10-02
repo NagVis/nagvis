@@ -112,7 +112,7 @@ function check_map_rename() {
 }
 
 function check_map_export() {
-	if(document.map_export.map_name.value=='') {
+	if(document.map_export.map.value=='') {
 		alert(printLang(lang['foundNoMapToExport'],''));
 		return false;
 	}

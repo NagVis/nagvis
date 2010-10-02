@@ -52,132 +52,89 @@ class CoreModManageBackgrounds extends CoreModule {
 					$sReturn = json_encode(Array('code' => $VIEW->parse()));
 				break;
 				case 'doCreate':
-					$aReturn = $this->handleResponseCreate();
-					
-					if($aReturn !== false) {
-						// Try to create the map
-						if($this->doCreate($aReturn)) {
-							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The background has been created.'),
-								                  null,
-								                  null,
-								                  1);
-							$sReturn = '';
-						} else {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The background could not be created.'));
-							$sReturn = '';
-						}
-					} else {
-						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-						$sReturn = '';
-					}
+					$this->handleResponse('handleResponseCreate', 'doCreate',
+						                    $this->CORE->getLang()->getText('The background has been created.'),
+																$this->CORE->getLang()->getText('The background could not be created.'),
+					                      1);
 				break;
 				case 'doDelete':
-					$aReturn = $this->handleResponseDelete();
-					
-					if($aReturn !== false) {
-						// Try to create the map
-						if($this->doDelete($aReturn)) {
-							new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The background has been deleted.'),
-							                  null,
-							                  null,
-							                  1);
-							$sReturn = '';
-						} else {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The background could not be deleted.'));
-							$sReturn = '';
-						}
-					} else {
-						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-						$sReturn = '';
-					}
+					$this->handleResponse('handleResponseDelete', 'doDelete',
+						                    $this->CORE->getLang()->getText('The background has been deleted.'),
+																$this->CORE->getLang()->getText('The background could not be deleted.'),
+					                      1);
+				break;
+				case 'doUpload':
+					if($this->handleResponse('handleResponseDoUpload', 'doUpload'))
+						header('Location:'.$_SERVER['HTTP_REFERER']);
 				break;
 			}
 		}
 		
 		return $sReturn;
 	}
+
+	protected function handleResponseDoUpload() {
+		$FHANDLER = new CoreRequestHandler($_FILES);
+		$this->verifyValuesSet($FHANDLER, Array('image_file'));
+		return Array('image_file' => $FHANDLER->get('image_file'));
+	}
+
+	protected function doUpload($a) {
+		if(!is_uploaded_file($a['image_file']['tmp_name']))
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The file could not be uploaded (Error: [ERROR]).',
+              Array('ERROR' => $a['image_file']['error'].': '.$this->CORE->getUploadErrorMsg($a['image_file']['error']))));
 	
-	private function doDelete($a) {
+		$fileName = $a['image_file']['name'];
+
+		if(!preg_match(MATCH_PNG_GIF_JPG_FILE, $fileName))
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The uploaded file is no image (png,jpg,gif) file or contains unwanted chars.'));
+
+		$filePath = $this->CORE->getMainCfg()->getValue('paths', 'map').$fileName;
+		return move_uploaded_file($a['image_file']['tmp_name'], $filePath) && chmod($filePath, 0666);
+	}
+	
+	protected function doDelete($a) {
 		$BACKGROUND = new GlobalBackground($this->CORE, $a['image']);
 		$BACKGROUND->deleteImage();
 		
 		return true;
 	}
 	
-	private function handleResponseDelete() {
-		$bValid = true;
-		// Validate the response
-		
+	protected function handleResponseDelete() {
 		$FHANDLER = new CoreRequestHandler($_POST);
-		
-		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('map_image'))
-			$bValid = false;
+		$this->verifyValuesSet($FHANDLER,   Array('map_image'));
+		$this->verifyValuesMatch($FHANDLER, Array('map_image' => MATCH_PNG_GIF_JPG_FILE));
 
-		// Regex validate
-		if($bValid && !$FHANDLER->match('map_image', MATCH_PNG_GIF_JPG_FILE))
-			$bValid = false;
-		
-		// Check if the map exists
-		if($bValid && !in_array($FHANDLER->get('map_image'), $this->CORE->getAvailableBackgroundImages())) {
+		if(!in_array($FHANDLER->get('map_image'), $this->CORE->getAvailableBackgroundImages()))
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The background does not exist.'));
-			$bValid = false;
-		}
 		
-		// Store response data
-		if($bValid === true)
-			return Array('image' => $FHANDLER->get('map_image'));
-		else
-			return false;
+		return Array('image' => $FHANDLER->get('map_image'));
 	}
 	
-	private function doCreate($a) {
+	protected function doCreate($a) {
 		$BACKGROUND = new GlobalBackground($this->CORE, $a['name'].'.png');
 		$BACKGROUND->createImage($a['color'], $a['width'], $a['height']);
 		
 		return true;
 	}
 	
-	private function handleResponseCreate() {
-		$bValid = true;
-		// Validate the response
-		
+	protected function handleResponseCreate() {
 		$FHANDLER = new CoreRequestHandler($_POST);
-		
-		// Check for needed params
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('image_name'))
-			$bValid = false;
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('image_color'))
-			$bValid = false;
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('image_width'))
-			$bValid = false;
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('image_height'))
-			$bValid = false;
-		
-		// Validate all options
-		if($bValid && !$FHANDLER->match('image_name', MATCH_BACKGROUND_NAME))
-			$bValid = false;
-		if($bValid && !$FHANDLER->match('image_color', MATCH_COLOR))
-			$bValid = false;
-		if($bValid && !$FHANDLER->match('image_width', MATCH_INTEGER))
-			$bValid = false;
-		if($bValid && !$FHANDLER->match('image_height', MATCH_INTEGER))
-			$bValid = false;
+		$attr = Array('image_name'   => MATCH_BACKGROUND_NAME,
+		              'image_color'  => MATCH_COLOR,
+									'image_width'  => MATCH_INTEGER,
+		              'image_height' => MATCH_INTEGER);
+		$this->verifyValuesSet($FHANDLER,   $attr);
+		$this->verifyValuesMatch($FHANDLER, $attr);
 		
 		// Check if the background exists
-		if($bValid && in_array($FHANDLER->get('image_name').'.png', $this->CORE->getAvailableBackgroundImages())) {
+		if(in_array($FHANDLER->get('image_name').'.png', $this->CORE->getAvailableBackgroundImages()))
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The background does already exist.'));
-			$bValid = false;
-		}
 		
-		// Store response data
-		if($bValid === true)
-			return Array('name'   => $FHANDLER->get('image_name'),
-			             'color'  => $FHANDLER->get('image_color'),
-			             'width'  => $FHANDLER->get('image_width'),
-			             'height' => $FHANDLER->get('image_height'));
-		else
-			return false;
+		return Array('name'   => $FHANDLER->get('image_name'),
+	               'color'  => $FHANDLER->get('image_color'),
+		             'width'  => $FHANDLER->get('image_width'),
+		             'height' => $FHANDLER->get('image_height'));
 	}
 }
 ?>

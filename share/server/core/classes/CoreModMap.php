@@ -44,15 +44,20 @@ class CoreModMap extends CoreModule {
 			'doAdd'             => 'add',
 			'doRename'          => 'edit',
 			'doDelete'          => 'edit',
+			'doExportMap'       => 'edit',
+			'doImportMap'       => 'edit',
+
 			'addModify'         => 'edit',
 			'modifyObject'      => 'edit',
 			'createObject'      => 'edit',
 			'deleteObject'      => 'edit',
+
 			'manageTmpl'        => 'edit',
 			'getTmplOpts'       => 'edit',
 			'doTmplAdd'         => 'edit',
 			'doTmplModify'      => 'edit',
 			'doTmplDelete'      => 'edit',
+
 			'getObjects'        => 'edit',
 		);
 		
@@ -81,6 +86,7 @@ class CoreModMap extends CoreModule {
 			case 'doTmplAdd':
 			case 'doTmplModify':
 			case 'doTmplDelete':
+			case 'doExportMap':
 				$FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
 				if($FHANDLER->match('map', MATCH_MAP_NAME))
 					$this->name = $FHANDLER->get('map');
@@ -265,6 +271,15 @@ class CoreModMap extends CoreModule {
 																$this->CORE->getLang()->getText('The template could not be deleted.'),
 																1);
 				break;
+				case 'doExportMap':
+					$this->handleResponse('handleResponseDoExportMap', 'doExportMap',
+						                    $this->CORE->getLang()->getText('The map configuration has been exported.'),
+																$this->CORE->getLang()->getText('The map configuration could not be exported.'));
+				break;
+				case 'doImportMap':
+					if($this->handleResponse('handleResponseDoImportMap', 'doImportMap'))
+						header('Location:'.$_SERVER['HTTP_REFERER']);
+				break;
 				case 'getObjects':
 					$sReturn = $this->handleResponse('handleResponseGetObjects', 'getObjects');
 				break;
@@ -272,6 +287,36 @@ class CoreModMap extends CoreModule {
 		}
 		
 		return $sReturn;
+	}
+
+	protected function handleResponseDoImportMap() {
+		$FHANDLER = new CoreRequestHandler($_FILES);
+		$this->verifyValuesSet($FHANDLER, Array('map_file'));
+		return Array('map_file' => $FHANDLER->get('map_file'));
+	}
+
+	protected function doImportMap($a) {
+		if(!is_uploaded_file($a['map_file']['tmp_name']))
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The file could not be uploaded (Error: [ERROR]).',
+              Array('ERROR' => $a['map_file']['error'].': '.$this->CORE->getUploadErrorMsg($a['map_file']['error']))));
+	
+		$mapName = $a['map_file']['name'];
+
+		if(!preg_match(MATCH_CFG_FILE, $mapName))
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The uploaded file is no map configuration file.'));
+
+		$mapPath = $this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$mapName;
+		return move_uploaded_file($a['map_file']['tmp_name'], $mapPath) && chmod($mapPath, 0666);
+	}
+
+	protected function handleResponseDoExportMap() {
+		$FHANDLER = new CoreRequestHandler($_POST);
+		return Array('map' => $FHANDLER->get('map'));
+	}
+
+	protected function doExportMap($a) {
+		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
+		return $MAPCFG->exportMap();
 	}
 
 	protected function handleResponseGetObjects() {

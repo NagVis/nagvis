@@ -3,20 +3,20 @@
 <form name="create_image" id="create_image" method="POST" action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=ManageBackgrounds&amp;act=doCreate', 'create_image');" enctype="" onsubmit="return check_image_create();">
 	<table name="mytable" class="mytable" id="table_create_image">
 		<tr><th class="cat" colspan="2"><h2>{$langCreateBackground}</h2></th></tr>
-		<tr><td class="tdlabel" style="color:red;">{$langBackgroundName}</td><td class="tdfield"><input id="image_name" type="text" name="image_name" value="" onBlur="" /></td></tr>
-		<tr><td class="tdlabel" style="color:red;">{$langBackgroundColor}</td><td class="tdfield"><input id="image_color" type="text" name="image_color" value="#" onBlur="" /></td></tr>
-		<tr><td class="tdlabel" style="color:red;">{$langBackgroundWidth}</td><td class="tdfield"><input id="image_width" type="text" name="image_width" value="" onBlur="" /></td></tr>
-		<tr><td class="tdlabel" style="color:red;">{$langBackgroundHeight}</td><td class="tdfield"><input id="image_height" type="text" name="image_height" value="" onBlur="" /></td></tr>
-		<tr><td class="tdlabel" colspan="2" align="center"><input class="submit" type="submit" name="submit" id="commit" value="{$langCreate}" /></td></tr>
+		<tr><td class="tdlabel" style="color:red;">{$langBackgroundName}</td><td class="tdfield"><input type="text" name="image_name" value="" onBlur="" /></td></tr>
+		<tr><td class="tdlabel" style="color:red;">{$langBackgroundColor}</td><td class="tdfield"><input type="text" name="image_color" value="#" onBlur="" /></td></tr>
+		<tr><td class="tdlabel" style="color:red;">{$langBackgroundWidth}</td><td class="tdfield"><input type="text" name="image_width" value="" onBlur="" /></td></tr>
+		<tr><td class="tdlabel" style="color:red;">{$langBackgroundHeight}</td><td class="tdfield"><input type="text" name="image_height" value="" onBlur="" /></td></tr>
+		<tr><td class="tdlabel" colspan="2" align="center"><input class="submit" type="submit" name="submit" value="{$langCreate}" /></td></tr>
 	</table>
 </form>
 
-<form name="new_image" id="new_image" method="POST" action="./form_handler.php?myaction=mgt_image_upload" enctype="multipart/form-data" onsubmit="return check_image_add();">
+<form name="new_image" id="new_image" method="POST" action="{$htmlBase}/server/core/ajax_handler.php?mod=ManageBackgrounds&amp;act=doUpload" enctype="multipart/form-data" onsubmit="return check_image_add();">
 	<table name="mytable" class="mytable" id="table_new_image">
 		<tr><th class="cat" colspan="2"><h2>{$langUploadBackground}</h2></th></tr>
-		<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="3000000" />
+		<input type="hidden" name="MAX_FILE_SIZE" value="3000000" />
 		<tr><td class="tdlabel" >{$langChooseImage}</td><td class="tdfield"><input type="file" name="image_file" value="" /></td></tr>
-		<tr><td class="tdlabel" colspan="2" align="center"><input class="submit" type="submit" name="submit" id="commit" value="{$langUpload}" /></td></tr>
+		<tr><td class="tdlabel" colspan="2" align="center"><input class="submit" type="submit" name="submit" value="{$langUpload}" /></td></tr>
 	</table>
 </form>
 		
@@ -25,7 +25,7 @@
 		<tr><th class="cat" colspan="2"><h2>{$langDeleteBackground}</h2></th></tr>
 		<tr>
 			<td class="tdlabel">{$langChooseImage}</td><td class="tdfield">
-				<select id="map_image" name="map_image" onChange="" onBlur="">
+				<select name="map_image" onChange="" onBlur="">
 					<option value=""></option>
 					{foreach $images image}
 					<option value="{$image}">{$image}</option>
@@ -34,6 +34,6 @@
 			</td>
 		</tr>
 		
-		<tr><td class="tdlabel" colspan="2" align="center"><input class="submit" type="submit" name="submit" id="commit" value="{$langDelete}" /></td></tr>
+		<tr><td class="tdlabel" colspan="2" align="center"><input class="submit" type="submit" name="submit" value="{$langDelete}" /></td></tr>
 	</table>
 </form>

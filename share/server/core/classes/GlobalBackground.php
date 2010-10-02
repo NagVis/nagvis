@@ -101,13 +101,10 @@ class GlobalBackground {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getFile($bWebPath = true) {
-		if($bWebPath) {
-			$sReturn = $this->webPath;
-		} else {
-			$sReturn = $this->path;
-		}
-		
-		return $sReturn;
+		if($bWebPath)
+			return $this->webPath;
+		else
+			return $this->path;
 	}
 	
 	/**
@@ -118,7 +115,7 @@ class GlobalBackground {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function checkFileExists($printErr) {
-		return GlobalCore::getInstance()->checkExisting($this->image, $printErr);
+		return GlobalCore::getInstance()->checkExisting($this->path, $printErr);
 	}
 	
 	/**
@@ -129,7 +126,7 @@ class GlobalBackground {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function checkFileReadable($printErr) {
-		return GlobalCore::getInstance()->checkReadable($this->image, $printErr);
+		return GlobalCore::getInstance()->checkReadable($this->path, $printErr);
 	}
 	
 	/**
@@ -140,7 +137,7 @@ class GlobalBackground {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function checkFileWriteable($printErr) {
-		return GlobalCore::getInstance()->checkWriteable($this->image, $printErr);
+		return GlobalCore::getInstance()->checkWriteable($this->path, $printErr);
 	}
 	
 	/**
@@ -175,7 +172,7 @@ class GlobalBackground {
 				
 				$bgColor = imagecolorallocate($image, $r, $g, $b);
 				imagefill($image, 0, 0, $bgColor);
-				imagepng($image,$this->CORE->getMainCfg()->getValue('paths', 'map').$this->image);
+				imagepng($image, $this->path);
 				imagedestroy($image);
 				
 				return TRUE;
@@ -185,7 +182,7 @@ class GlobalBackground {
 			}
 		} else {
 			if($printErr) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('imageAlreadyExists','IMAGE~'.$this->CORE->getMainCfg()->getValue('paths', 'map').$this->image));
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('imageAlreadyExists','IMAGE~'.$this->path));
 			}
 			return FALSE;
 		}
@@ -204,7 +201,7 @@ class GlobalBackground {
 				return TRUE;
 			} else {
 				if($printErr) {
-					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('couldNotDeleteMapImage','IMGPATH~'.$this->CORE->getMainCfg()->getValue('paths', 'map').$this->image));
+					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('couldNotDeleteMapImage','IMGPATH~'.$this->path));
 				}
 				return FALSE;
 			}

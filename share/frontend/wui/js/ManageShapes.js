@@ -26,28 +26,9 @@
  */
  
 // checks that the file the user wants to upload has the .png extension
-function checkPng(imageName) {
-	if(imageName.substring(imageName.length-3,imageName.length).toLowerCase() != 'png') {
-		return false; 
-	} else {
-		return true;
-	}
-}
-
-function checkJpg(imageName) {
-	if(imageName.substring(imageName.length-3,imageName.length).toLowerCase() != 'jpg') {
-		return false; 
-	} else {
-		return true;
-	}
-}
-
-function checkGif(imageName) {
-	if(imageName.substring(imageName.length-3,imageName.length).toLowerCase() != 'gif') {
-		return false; 
-	} else {
-		return true;
-	}
+function checkPngGifOrJpg(imageName) {
+	var type = imageName.substring(imageName.length-3,imageName.length).toLowerCase();
+	return type == 'png' || type == 'jpg' || type == 'gif';
 }
 
 var usedInMap = "";
@@ -65,17 +46,17 @@ function checkShapeInUse(shapeName,mapOptions) {
 }
 
 function check_image_add() {
-  if(document.shape_add.shape_image.value.length == 0) {
+  if(document.shape_add.image_file.value.length == 0) {
 		alert(printLang(lang['firstMustChoosePngImage'],''));
 		return false;
 	}
 	
-	if(!checkPng(document.shape_add.shape_image.value) && !checkJpg(document.shape_add.shape_image.value) && !checkGif(document.shape_add.shape_image.value)) {
+	if(!checkPngGifOrJpg(document.shape_add.image_file.value)) {
 		alert(printLang(lang['mustChooseValidImageFormat'],''));
 		return false;
 	}
 
-  if(document.shape_add.shape_image.value.indexOf(" ") != -1) {
+  if(document.shape_add.image_file.value.indexOf(" ") != -1) {
 		alert(printLang(lang['noSpaceAllowedInName'],''));
 		return false;
 	}

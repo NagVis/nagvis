@@ -77,18 +77,17 @@
 	</table>
 </form>
 
-<form name="map_export" id="map_export" method="POST" action="./form_handler.php?myaction=mgt_map_export" onsubmit="return check_map_export();">
+<form name="map_export" id="map_export" method="POST" action="{$htmlBase}/server/core/ajax_handler.php?mod=Map&amp;act=doExportMap" onsubmit="return check_map_export();">
 	<table name="mytable" class="mytable" id="table_map_export">
 		<tr><th class="cat" colspan="2"><h2>{$langExportMap}</h2></th></tr>
 		<tr>
 			<td class="tdlabel">{$langChooseMap}</td><td class="tdfield">
-				<select name="map_name">
+				<select name="map">
 					<option value="" selected></option>
 					{foreach $availableMaps name}<option value="{$name}">{$name}</option>{/foreach}
 				</select>
 			</td>
 		</tr>
-		<script>toggleDefaultOption('map_name');</script>
 		<tr>
 			<td class="tdlabel" colspan="2" align="center">
 				<input class="submit" type="submit" name="submit" value="{$langExport}" />
@@ -97,7 +96,7 @@
 	</table>
 </form>
 
-<form name="map_import" id="map_import" method="POST" action="./form_handler.php?myaction=mgt_map_import" enctype="multipart/form-data" onsubmit="return check_map_import();">
+<form name="map_import" id="map_import" method="POST" action="{$htmlBase}/server/core/ajax_handler.php?mod=Map&amp;act=doImportMap" enctype="multipart/form-data" onsubmit="return check_map_import();">
 	<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="1000000" />
 	<table name="mytable" class="mytable" id="table_map_import">
 		<tr><th class="cat" colspan="2"><h2>{$langImportMap}</h2></th></tr>

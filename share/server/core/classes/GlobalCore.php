@@ -415,7 +415,7 @@ class GlobalCore {
 			return true;
 
 		if($printErr)
-			new GlobalMessage('ERROR', $this->getLang()->getText('The path "[PATH]" does not exist.', Array('PATH' => $path)));
+			new GlobalMessage('ERROR', self::getLang()->getText('The path "[PATH]" does not exist.', Array('PATH' => $path)));
 
 		return false;
 	}
@@ -425,7 +425,7 @@ class GlobalCore {
 			return true;
 		
 		if($printErr)
-			new GlobalMessage('ERROR', $this->getLang()->getText('The path "[PATH]" is not readable.', Array('PATH' => $path)));
+			new GlobalMessage('ERROR', self::getLang()->getText('The path "[PATH]" is not readable.', Array('PATH' => $path)));
 		
 		return false;
 	}
@@ -434,7 +434,7 @@ class GlobalCore {
 			return true;
 		
 		if($printErr)
-			new GlobalMessage('ERROR', $this->getLang()->getText('The path "[PATH]" is not writeable.', Array('PATH' => $path)));
+			new GlobalMessage('ERROR', self::getLang()->getText('The path "[PATH]" is not writeable.', Array('PATH' => $path)));
 		
 		return false;
 	}
@@ -498,6 +498,28 @@ class GlobalCore {
 		foreach($parts AS $part)
 			$tag .= sprintf("%02s", $part);
 		return (int) sprintf("%-08s", $tag);
+	}
+
+	/**
+	 * Returns the human readable upload error message
+	 * matching the given error code.
+	 *
+	 * @param	  Integer   Error code from $_FILE
+	 * @return  String    The error message
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getUploadErrorMsg($id) {
+		$LANG = self::getLang();
+		switch($id) {
+			case 1:  return $LANG->getText('File is too large (PHP limit)');
+			case 2:  return $LANG->getText('File is too large (FORM limit)');
+			case 3:  return $LANG->getText('Upload incomplete');
+			case 4:  return $LANG->getText('No file uploaded');
+			case 6:  return $LANG->getText('Missing a temporary folder');
+			case 7:  return $LANG->getText('Failed to write file to disk');
+			case 8:  return $LANG->getText('File upload stopped by extension');
+			default: return $LANG->getText('Unhandled error');
+		}
 	}
 }
 ?>
