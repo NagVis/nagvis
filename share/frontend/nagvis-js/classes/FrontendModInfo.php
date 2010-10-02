@@ -31,7 +31,7 @@ class FrontendModInfo extends FrontendModule {
 		$this->sName = 'Info';
 		$this->CORE = $CORE;
 		
-		$this->aActions = Array('view' => 0);
+		$this->aActions = Array('view' => !REQUIRES_AUTHORISATION);
 		
 		$this->FHANDLER = new FrontendRequestHandler($_POST);
 	}

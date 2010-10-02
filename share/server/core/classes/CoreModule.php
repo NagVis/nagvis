@@ -122,8 +122,9 @@ abstract class CoreModule {
 			$authorized = false;
 
 		if(!$authorized)
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You are not permitted to access this page'),
-			                                                   null, $CORE->getLang()->getText('Access denied'));
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You are not permitted to access this page ([PAGE]).',
+			                                                           Array('PAGE' => $this->sName.'/'.$action.'/'.$this->sObject)),
+			                                                           null, $this->CORE->getLang()->getText('Access denied'));
 	}
 	
 	/**

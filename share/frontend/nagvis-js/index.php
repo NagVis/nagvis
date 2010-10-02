@@ -100,10 +100,9 @@ try {
 
 	// Load the module
 	$MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
-	if($MODULE == null) {
+	if($MODULE == null)
 		new GlobalMessage('ERROR', $CORE->getLang()->getText('The module [MOD] is not known',
 			                                 Array('MOD' => htmlentities($UHANDLER->get('mod')))));
-	}
 	$MODULE->passAuth($AUTH, $AUTHORISATION);
 	$MODULE->setAction($UHANDLER->get('act'));
 	$MODULE->initObject();

@@ -30,6 +30,7 @@ class CoreModOverview extends CoreModule {
 	private $OVERVIEW = null;
 	
 	public function __construct(GlobalCore $CORE) {
+		$this->sName = 'Overview';
 		$this->CORE = $CORE;
 		
 		$this->aActions = Array(
