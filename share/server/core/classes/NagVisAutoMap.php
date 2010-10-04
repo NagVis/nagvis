@@ -51,7 +51,8 @@ class NagVisAutoMap extends GlobalMap {
 	private $arrHostnamesParsed;
 	
 	private $mapCode;
-	
+
+	private $graphvizPath;
 	private $noBinaryFound;
 	
 	/**
@@ -71,7 +72,8 @@ class NagVisAutoMap extends GlobalMap {
 		$this->arrHostnamesParsed = Array();
 		$this->mapCode = '';
 		
-		$this->noBinaryFound = FALSE;
+		$this->graphvizPath = '';
+		$this->noBinaryFound = false;
 		
 		parent::__construct($CORE, $MAPCFG);
 
@@ -340,7 +342,7 @@ class NagVisAutoMap extends GlobalMap {
 			fclose($fh);
 			
 			// Parse map
-			$cmd = $this->CORE->getMainCfg()->getValue('automap','graphvizpath').$binary
+			$cmd = $this->graphvizPath.$binary
 			       .' -Tpng -o \''.$this->CORE->getMainCfg()->getValue('paths', 'sharedvar').$this->name.'.png\''
 			       .' -Tcmapx '.$this->CORE->getMainCfg()->getValue('paths', 'var').$this->name.'.dot 2>&1';
 
@@ -587,7 +589,7 @@ class NagVisAutoMap extends GlobalMap {
 			!$this->checkGraphviz('twopi', $printErr) &&
 			!$this->checkGraphviz('circo', $printErr) &&
 			!$this->checkGraphviz('fdp', $printErr)) {
-			$this->noBinaryFound = TRUE;
+			$this->noBinaryFound = true;
 		}
 	}
 	
@@ -607,23 +609,23 @@ class NagVisAutoMap extends GlobalMap {
 		$bFound = false;
 		foreach(Array($this->CORE->getMainCfg()->getValue('automap','graphvizpath').$binary, $binary) AS $path) {
 			// Check if dot can be found in path (If it is there $returnCode is 0, if not it is 1)
-			exec('which '.$binary.' 2>/dev/null', $arrReturn, $exitCode);
+			exec('which '.$path.' 2>/dev/null', $arrReturn, $exitCode);
 		
 			if($exitCode == 0) {
-				$this->CORE->getMainCfg()->setValue('automap','graphvizpath', str_replace($binary, '', $arrReturn[0]));
+				$this->graphvizPath = str_replace($binary, '', $arrReturn[0]);
 				$bFound = true;
 				break;
 			}
 		}
 		
 		if(!$bFound) {
-			if($printErr) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('graphvizBinaryNotFound','NAME~'.$binary.',PATHS~'.$_SERVER['PATH'].':'.$this->CORE->getMainCfg()->getvalue('automap','graphvizpath')));
-			}
+			if($printErr)
+				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('graphvizBinaryNotFound',
+				                  Array('NAME' => $binary,
+				                        'PATHS' => $_SERVER['PATH'].':'.$this->CORE->getMainCfg()->getvalue('automap','graphvizpath'))));
 			return false;
-		} else {
+		} else
 			return true;
-		}
 	}
 	
 	/**
