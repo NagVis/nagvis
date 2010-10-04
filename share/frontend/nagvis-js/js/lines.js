@@ -300,7 +300,7 @@ function drawLinkOrLabel(objectId, lineType, x1, y1, x2, y2, z, perfdataA, perfd
 
 	// First try to create the labels (For weathermap lines only atm) and if none
 	// should be shown try to create link a link area for the line.
-	if(bLabelShow)
+	if(bLabelShow && (lineType == 13 || lineType == 14))
 		drawLabel(objectId, lineType, middle(x1, x2, labelPosition), middle(y1, y2, labelPosition), z, perfdataA, perfdataB);
 	else if(bLinkArea)
 			drawLinkArea(objectId, middle(x1, x2, labelPosition), middle(y1, y2, labelPosition), z);

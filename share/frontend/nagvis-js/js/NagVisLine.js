@@ -119,7 +119,7 @@ var NagVisLine = NagVisStatelessObject.extend({
 		drawNagVisLine(this.conf.object_id, this.conf.line_type, cuts, x[0], y[0], x[1], y[1],
 									 this.conf.z, width, colorFill, colorBorder,
 									 ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')),
-									 this.conf.line_label_show && this.conf.line_label_show === '1');
+									 (this.conf.line_label_show && this.conf.line_label_show === '1'));
 	},
 	
 	parseHoverMenu: function () {

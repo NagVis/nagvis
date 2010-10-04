@@ -347,7 +347,7 @@ var NagVisStatefulObject = NagVisObject.extend({
     // Add a context menu to the object when enabled
     if(this.conf.context_menu && this.conf.context_menu == '1') {
       if(this.conf.view_type && this.conf.view_type == 'line') {
-        this.getContextMenu(this.conf.object_id+'-link');
+        this.getContextMenu(this.conf.object_id+'-linelink');
       } else {
         this.getContextMenu(this.conf.object_id+'-icon');
 			}
@@ -582,7 +582,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		drawNagVisLine(this.conf.object_id, this.conf.line_type, cuts, x[0], y[0], x[1], y[1],
 		               this.conf.z, width, colorFill, colorFill2, setPerfdata, colorBorder,
 		               ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')),
-									 this.conf.line_label_show && this.conf.line_label_show === '1');
+									 (this.conf.line_label_show && this.conf.line_label_show === '1'));
 	},
 
 	/**
