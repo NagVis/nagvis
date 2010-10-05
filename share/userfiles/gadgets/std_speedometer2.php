@@ -240,17 +240,17 @@ for ($i=0; $i < $pdc; $i++){
 		// Warning
 		if($warn && $warnp <= -1) {
 			if ($warn < $crit) {
-				imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, $warnp, 0, $oYellow, IMG_ARC_EDGED);
+				imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 360 + $warnp, 0, $oYellow, IMG_ARC_EDGED);
 			} else {
-				imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 180, $warnp, $oYellow, IMG_ARC_EDGED);
+				imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 180, 360 + $warnp, $oYellow, IMG_ARC_EDGED);
 			}
 		}
 		// Critical
 		if($crit && $critp <= -1) {
 			if ($warn < $crit) {
-				imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, $critp, 0, $oRed, IMG_ARC_EDGED);
-			} else {
-				imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 180, $critp, $oRed, IMG_ARC_EDGED);
+				imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 360 + $critp, 0, $oRed, IMG_ARC_EDGED);
+			} else
+				imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 180, 360 + $critp, $oRed, IMG_ARC_EDGED);
 			}
 		}
 		

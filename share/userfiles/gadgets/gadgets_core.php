@@ -172,7 +172,7 @@ function errorBox($msg) {
 
 /* Now read the parameters */
 
-$aOpts = Array('name1', 'name2', 'state', 'stateType', 'perfdata');
+$aOpts = Array();
 $aPerfdata = Array();
 
 /**
@@ -204,8 +204,8 @@ elseif(!isset($_GET['opts']) || strpos($_GET['opts'], 'no_perf') === false)
 	errorBox('ERROR: The needed parameter "perfdata" is missing.');
 
 /* Now parse the perfdata */
-if(isset($_GET['opts']) && ($_GET['opts'] != ''))
-	if(strpos($_GET['opts'],'no_perf') === false)
+if(isset($_GET['opts']) && $_GET['opts'] != '')
+	if(strpos($_GET['opts'], 'no_perf') === false)
 		$aPerfdata = parsePerfdata($aOpts['perfdata']);
 else
 	$aPerfdata = parsePerfdata($aOpts['perfdata']);

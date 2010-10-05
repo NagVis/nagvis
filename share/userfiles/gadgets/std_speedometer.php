@@ -85,10 +85,12 @@ if($value == null) {
 	}
 }
 
-// If there is no max value given set it critical value
-if(intval($max) == 0 || $max == '') {
-	$max = $crit + 1;
-}
+// If there is no max value given set it critical or warning value
+if(intval($max) == 0 || $max == '')
+	if(intval($crit) == 0 || $crit != '')
+		$max = $crit + 1;
+	else
+		$max = $warn + 1;
 
 //================
 // Calculate degrees of value, warn, critical
@@ -145,13 +147,11 @@ imagecolortransparent($img, $oBackground);
 imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 180, 0, $oGreen, IMG_ARC_EDGED);
 
 // Warning
-if($warn && $warnp <= -1) {
-	imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, $warnp, 0, $oYellow, IMG_ARC_EDGED);
-}
+if($warn && $warnp <= -1)
+	imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 360 + $warnp, 0, $oYellow, IMG_ARC_EDGED);
 // Critical
-if($crit && $critp <= -1) {
-	imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, $critp, 0, $oRed, IMG_ARC_EDGED);
-}
+if($crit && $critp <= -1)
+	imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 360 + $critp, 0, $oRed, IMG_ARC_EDGED);
 
 // Borders
 imagearc($img, $centerx, $centery+1, $outerdia+2, $outerdia+2, 180, 0, $oBlack);
