@@ -59,7 +59,15 @@ var NagVisService = NagVisStatefulObject.extend({
 			sGadgetOpts = '&opts=' + escapeUrlValues(this.conf.gadget_opts.toString());
 		}
 		
-		sParams = sParams + 'name1=' + this.conf.name + '&name2=' + escapeUrlValues(this.conf.service_description) + '&scale=' + escapeUrlValues(this.conf.gadget_scale.toString()) + '&state=' + this.conf.state + '&stateType=' + this.conf.state_type + '&perfdata=' + this.conf.perfdata.replace(/\&quot\;|\&\#145\;/g,'%22') + sGadgetOpts;
+		sParams = sParams + 'name1=' + this.conf.name
+		          + '&name2=' + escapeUrlValues(this.conf.service_description)
+		          + '&scale=' + escapeUrlValues(this.conf.gadget_scale.toString())
+		          + '&state=' + this.conf.state
+		          + '&stateType=' + this.conf.state_type
+		          + '&ack=' + this.conf.summary_problem_has_been_acknowledged
+		          + '&downtime=' + this.conf.summary_in_downtime
+		          + '&perfdata=' + this.conf.perfdata.replace(/\&quot\;|\&\#145\;/g,'%22')
+		          + sGadgetOpts;
 		
 		var oIcon = document.createElement('img');
 		oIcon.setAttribute('id', this.conf.object_id+'-icon');

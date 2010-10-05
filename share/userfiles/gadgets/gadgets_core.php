@@ -187,49 +187,27 @@ $aPerfdata = Array();
  *  scale=100
  */
 
-if(isset($_GET['opts']) && $_GET['opts'] != '') {
-        $aOpts['opts'] = $_GET['opts'];
-}
+// Get params without default values
+foreach(Array('opts'  => null, 'name1'     => null, 'name2' => null,
+              'state' => null, 'stateType' => null, 'scale' => 100,
+              'ack'   => null, 'downtime'  => null) AS $opt => $default)
+	if(isset($_GET[$opt]) && $_GET[$opt] != '')
+		$aOpts[$opt] = $_GET[$opt];
+	elseif($default !== null)
+		$aOpts[$opt] = $default;
 
-if(isset($_GET['perfdata']) && $_GET['perfdata'] != '') {
+if(isset($_GET['perfdata']) && $_GET['perfdata'] != '')
 	$aOpts['perfdata'] = $_GET['perfdata'];
-} elseif(isset($_GET['conf']) &&  $_GET['conf'] != '' && isset($sDummyPerfdata) && $sDummyPerfdata != '') {
+elseif(isset($_GET['conf']) &&  $_GET['conf'] != '' && isset($sDummyPerfdata) && $sDummyPerfdata != '')
 	$aOpts['perfdata'] = $sDummyPerfdata;
-} elseif(!isset($_GET['opts']) || strpos($_GET['opts'], 'no_perf') === false) {
+elseif(!isset($_GET['opts']) || strpos($_GET['opts'], 'no_perf') === false)
 	errorBox('ERROR: The needed parameter "perfdata" is missing.');
-}
-
-if(isset($_GET['name1']) && $_GET['name1'] != '') {
-	$aOpts['name1'] = $_GET['name1'];
-}
-
-if(isset($_GET['name2']) && $_GET['name2'] != '') {
-	$aOpts['name2'] = $_GET['name2'];
-}
-
-if(isset($_GET['state']) && $_GET['state'] != '') {
-	$aOpts['state'] = $_GET['state'];
-}
-
-if(isset($_GET['stateType']) && $_GET['stateType'] != '') {
-	$aOpts['stateType'] = $_GET['stateType'];
-}
-
-if (isset($_GET['scale']) && $_GET['scale'] != '') {
-	$aOpts['scale'] = $_GET['scale'];
-} else {
-	/* If no scale is set, default to 100 */
-	$aOpts['scale'] = 100;
-}
-
 
 /* Now parse the perfdata */
-if(isset($_GET['opts']) && ($_GET['opts'] != '')) {
-	if(strpos($_GET['opts'],'no_perf') === false) {
+if(isset($_GET['opts']) && ($_GET['opts'] != ''))
+	if(strpos($_GET['opts'],'no_perf') === false)
 		$aPerfdata = parsePerfdata($aOpts['perfdata']);
-	}
-} else {
+else
 	$aPerfdata = parsePerfdata($aOpts['perfdata']);
-}
 
 ?>
