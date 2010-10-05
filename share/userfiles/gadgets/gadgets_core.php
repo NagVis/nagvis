@@ -204,10 +204,12 @@ elseif(!isset($_GET['opts']) || strpos($_GET['opts'], 'no_perf') === false)
 	errorBox('ERROR: The needed parameter "perfdata" is missing.');
 
 /* Now parse the perfdata */
-if(isset($_GET['opts']) && $_GET['opts'] != '')
-	if(strpos($_GET['opts'], 'no_perf') === false)
+if(isset($_GET['opts']) && $_GET['opts'] != '') {
+	if(strpos($_GET['opts'], 'no_perf') === false) {
 		$aPerfdata = parsePerfdata($aOpts['perfdata']);
-else
+	}
+} else {
 	$aPerfdata = parsePerfdata($aOpts['perfdata']);
+}
 
 ?>
