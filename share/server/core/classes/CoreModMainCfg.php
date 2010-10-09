@@ -41,6 +41,7 @@ class CoreModMainCfg extends CoreModule {
 			'doEdit'            => 'edit',
 			'doBackendDefault'  => 'edit',
 			'doBackendAdd'      => 'edit',
+			'doBackendEdit'     => 'edit',
 			'doBackendDel'      => 'edit',
 		);
 	}
@@ -103,22 +104,24 @@ class CoreModMainCfg extends CoreModule {
 		$this->verifyValuesSet($FHANDLER, Array('backendid'));
 		return Array('backendid' => $FHANDLER->get('backendid'));
 	}
-	
-	protected function getBackendOptions($a) {
-			$aRet = Array();
-			$backendType = $this->CORE->getMainCfg()->getValue('backend_'.$a['backendid'],'backendtype');
-			
+
+	private function getBackendAttributes($type) {
 			// Loop all options for this backend type
 			$aBackendOpts = $this->CORE->getMainCfg()->getValidObjectType('backend');
 			
 			// Merge global backend options with type specific options
-			$aOpts = $aBackendOpts['options'][$backendType];
-			
+			$aOpts = $aBackendOpts['options'][$type];
 			foreach($aBackendOpts AS $sKey => $aOpt)
 				if($sKey !== 'backendid' && $sKey !== 'options')
 					$aOpts[$sKey] = $aOpt;
-			
-			foreach($aOpts AS $key => $aOpt)
+			return $aOpts;
+	}
+	
+	protected function getBackendOptions($a) {
+			$aRet = Array();
+			$backendType = $this->CORE->getMainCfg()->getValue('backend_'.$a['backendid'], 'backendtype');
+
+			foreach($this->getBackendAttributes($backendType) AS $key => $aOpt)
 				if($this->CORE->getMainCfg()->getValue('backend_'.$a['backendid'], $key, true) !== false)
 					$aRet[$key] = $this->CORE->getMainCfg()->getValue('backend_'.$a['backendid'], $key, true);
 				else
@@ -169,8 +172,7 @@ class CoreModMainCfg extends CoreModule {
 		$aOpt = Array();
 		
 		// Loop all aviable options for this backend
-		$arr = $this->CORE->getMainCfg()->getValidObjectType('backend');
-		foreach($arr['options'][$a['backendtype']] AS $key => $arr) {
+		foreach($this->getBackendAttributes($a['backendtype']) AS $key => $arr) {
 			// If there is a value for this option, set it
 			if(isset($a['opts'][$key]) && $a['opts'][$key] != '') {
 				$bFoundOption = true;
@@ -197,15 +199,15 @@ class CoreModMainCfg extends CoreModule {
 
 	protected function handleResponseBackendEdit() {
 		$FHANDLER = new CoreRequestHandler($_POST);
-		$this->verifyValuesSet($FHANDLER, Array('backendid'));
+		$this->verifyValuesSet($FHANDLER, Array('backendid', 'backendtype'));
 		return Array('backendid'   => $FHANDLER->get('backendid'),
+		             'backendtype' => $FHANDLER->get('backendtype'),
 		             'opts'        => $_POST);
 	}
 
 	protected function doBackendEdit($a) {
 		// Loop all aviable options for this backend and set them when some is given in the response
-		$arr = $this->CORE->getMainCfg()->getValidObjectType('backend');
-		foreach($arr['options'][$this->CORE->getMainCfg()->getValue('backend_'.$a['opts']['backendid'],'backendtype')] AS $key => $arr)
+		foreach($this->getBackendAttributes($a['backendtype']) AS $key => $arr)
 			if(isset($a['opts'][$key]) && $a['opts'][$key] != '')
 				$this->CORE->getMainCfg()->setValue('backend_'.$a['opts']['backendid'],$key,$a['opts'][$key]);
 		
