@@ -114,10 +114,6 @@ class NagVisContextMenu {
 			$this->code = str_replace('[lang_schedule_downtime]',$this->CORE->getLang()->getText('contextScheduleDowntime'),$this->code);
 		}
 		
-		if(strpos($this->code,'[html_cgi]') !== FALSE) {
-			$this->code = str_replace('[html_cgi]',$this->CORE->getMainCfg()->getValue('paths','htmlcgi'),$this->code);
-		}
-		
 		if(strpos($this->code,'[html_base]') !== FALSE) {
 			$this->code = str_replace('[html_base]',$this->CORE->getMainCfg()->getValue('paths','htmlbase'),$this->code);
 		}
