@@ -240,16 +240,20 @@ for ($i=0; $i < $pdc; $i++){
 		// Warning
 		if($warn && $warnp <= -1) {
 			if ($warn < $crit) {
+				// The "360 +" fix has been worked out by hipska. Thanks for that!
 				imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 360 + $warnp, 0, $oYellow, IMG_ARC_EDGED);
 			} else {
+				// The "360 +" fix has been worked out by hipska. Thanks for that!
 				imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 180, 360 + $warnp, $oYellow, IMG_ARC_EDGED);
 			}
 		}
 		// Critical
 		if($crit && $critp <= -1) {
 			if ($warn < $crit) {
+				// The "360 +" fix has been worked out by hipska. Thanks for that!
 				imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 360 + $critp, 0, $oRed, IMG_ARC_EDGED);
 			} else
+				// The "360 +" fix has been worked out by hipska. Thanks for that!
 				imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 180, 360 + $critp, $oRed, IMG_ARC_EDGED);
 			}
 		}

@@ -147,11 +147,15 @@ imagecolortransparent($img, $oBackground);
 imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 180, 0, $oGreen, IMG_ARC_EDGED);
 
 // Warning
-if($warn && $warnp <= -1)
+if($warn && $warnp <= -1) {
+	// The "360 +" fix has been worked out by hipska. Thanks for that!
 	imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 360 + $warnp, 0, $oYellow, IMG_ARC_EDGED);
+}
 // Critical
-if($crit && $critp <= -1)
+if($crit && $critp <= -1) {
+	// The "360 +" fix has been worked out by hipska. Thanks for that!
 	imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 360 + $critp, 0, $oRed, IMG_ARC_EDGED);
+}
 
 // Borders
 imagearc($img, $centerx, $centery+1, $outerdia+2, $outerdia+2, 180, 0, $oBlack);
