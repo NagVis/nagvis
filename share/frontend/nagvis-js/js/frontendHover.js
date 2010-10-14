@@ -28,6 +28,7 @@
 // replace the system context menu?
 var _showHover = false;
 var _openHoverMenus = [];
+var _hoverTimer = null;
 
 /**
  * Checks if a hover menu is open at the moment
@@ -50,18 +51,22 @@ function hoverHide() {
 		_openHoverMenus[0] = null;
 		_openHoverMenus.splice(0,1);
 	}
+
+	// Remove the hover timer
+	clearTimeout(_hoverTimer);
+	_hoverTimer = null;
 	
 	// Change cursor to auto when hiding hover menu
 	document.body.style.cursor = 'auto';
 }
 
-function hoverShow(event, id) {
-	// IE is evil and doesn't pass the event object
-	if (event === null || typeof event === 'undefined')
-		event = window.event;
-	
+function hoverShow(x, y, id) {
 	// Hide all other hover menus
 	hoverHide();
+
+	// Remove the hover timer
+	clearTimeout(_hoverTimer);
+	_hoverTimer = null;
 
 	var hoverSpacer = 5;
 
@@ -84,8 +89,8 @@ function hoverShow(event, id) {
 
 	// hide the menu first to avoid an "up-then-over" visual effect
 	hoverMenu.style.display = 'none';
-	hoverMenu.style.left = event.clientX + scrollLeft + hoverSpacer + 'px';
-	hoverMenu.style.top = event.clientY + scrollTop + hoverSpacer - getHeaderHeight() + 'px';
+	hoverMenu.style.left = x + scrollLeft + hoverSpacer + 'px';
+	hoverMenu.style.top = y + scrollTop + hoverSpacer - getHeaderHeight() + 'px';
 	hoverMenu.style.display = '';
 
 	// Check if the context menu is "in screen".

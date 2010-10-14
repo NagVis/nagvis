@@ -350,9 +350,17 @@ function replaceHoverTemplateMacros(replaceChild, oObj, sTemplateCode) {
 	           replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode));
 }
 
-function displayHoverMenu(e, objId, iHoverDelay) {
+function displayHoverMenu(event, objId, iHoverDelay) {
+	// IE is evil and doesn't pass the event object
+	if (event === null || typeof event === 'undefined')
+		event = window.event;
+	
 	// Only show up hover menu when no context menu is opened
-	// FIXME: Re-implement the delay
-	if(!contextOpen())
-		hoverShow(e, objId);
+	// and only handle the events when no timer is in schedule at the moment to
+	// prevent strange movement effects when the timer has finished
+	if(!contextOpen() && _hoverTimer === null)
+		if(iHoverDelay && iHoverDelay != "0" && !hoverOpen())
+			_hoverTimer = setTimeout('hoverShow('+event.clientX+', '+event.clientY+', '+objId+')', parseInt(iHoverDelay)*1000);
+		else
+			hoverShow(event.clientX, event.clientY, objId);
 }
