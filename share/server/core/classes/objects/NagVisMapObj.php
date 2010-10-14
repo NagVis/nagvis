@@ -6,6 +6,9 @@
  *
  * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
  *
+ * Modifications by Super-Visions BVBA
+ * Copyright (c) 2010 Super-Visions BVBA (Contact: nagvis@super-visions.com)
+ *
  * License:
  *
  * This program is free software; you can redistribute it and/or modify
@@ -326,9 +329,10 @@ class NagVisMapObj extends NagVisStatefulObject {
 	/**
 	 * Gets all objects of the map
 	 *
+	 * @author	Thomas Casteleyn <thomas.casteleyn@super-visions.com>
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function fetchMapObjects(&$arrMapNames = Array()) {
+	public function fetchMapObjects(&$arrMapNames = Array(), $depth = 0) {
 		foreach($this->MAPCFG->getValidObjectTypes() AS $type) {
 			if($type != 'global' && $type != 'template' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
 				$typeDefs = $this->MAPCFG->getTypeDefaults($type);
@@ -395,10 +399,11 @@ class NagVisMapObj extends NagVisStatefulObject {
 								$OBJ->isSummaryObject = true;
 
 							/**
-               * All maps which were seen before are stored in the list once. If
-							 * they are already in the list skip them to prevent loops.
+							 * All maps which were seen before are stored in the list once. If
+							 * they are already in the list and depth is more than 3 levels,
+							 * skip them to prevent loops.
 							 */
-							if(isset($arrMapNames[$SUBMAPCFG->getName()])) {
+							if(isset($arrMapNames[$SUBMAPCFG->getName()]) && ($depth > 3)) {
 								$OBJ->isLoopingBacklink = true;
 								continue;
 							}
@@ -454,7 +459,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 				if($sType == 'map' && $OBJ->isLoopingBacklink)
 					continue;
 				
-				$OBJ->fetchMapObjects($arrMapNames);
+				$OBJ->fetchMapObjects($arrMapNames, $depth+1);
 			}
 		}
 	}
