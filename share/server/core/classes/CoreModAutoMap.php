@@ -29,7 +29,6 @@ class CoreModAutoMap extends CoreModule {
 	private $name = null;
 	private $aOpts = null;
 	private $opts = null;
-	private $MAPCFG  = null;
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->sName = 'AutoMap';
@@ -185,11 +184,10 @@ class CoreModAutoMap extends CoreModule {
 		$arrReturn = Array();
 		
 		$aOpts = Array('ty' => MATCH_GET_OBJECT_TYPE,
-		               't' => MATCH_OBJECT_TYPES,
+		               't'  => MATCH_OBJECT_TYPES,
 		               'n1' => MATCH_STRING,
 		               'n2' => MATCH_STRING_EMPTY,
-		               'i' => MATCH_STRING_NO_SPACE);
-		
+		               'i'  => MATCH_STRING_NO_SPACE);
 		$aVals = $this->getCustomOptions($aOpts);
 		
 		$sType = $aVals['ty'];
@@ -202,96 +200,14 @@ class CoreModAutoMap extends CoreModule {
 		$BACKEND = new CoreBackendMgmt($this->CORE);
 		
 		// Read the map configuration file
-		$this->MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
-		$this->MAPCFG->readMapConfig();
-		
-		$numObjects = count($arrType);
-		$aObjs = Array();
-		for($i = 0; $i < $numObjects; $i++) {
-			// Get the object configuration
-			$objConf = $this->getObjConf($arrType[$i], $arrName1[$i], $arrName2[$i]);
-			
-			// The object id needs to be set here to identify the object in the response
-			$objConf['object_id'] = $arrObjId[$i];
-			
-			switch($arrType[$i]) {
-				case 'host':
-					$OBJ = new NagVisHost($this->CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i]);
-				break;
-				case 'service':
-					$OBJ = new NagVisService($this->CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i], $arrName2[$i]);
-				break;
-				case 'hostgroup':
-					$OBJ = new NagVisHostgroup($this->CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i]);
-				break;
-				case 'servicegroup':
-					$OBJ = new NagVisServicegroup($this->CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i]);
-				break;
-				case 'map':
-					// Initialize map configuration based on map type
-					$MAPCFG = new NagVisMapCfg($this->CORE, $arrName1[$i]);
-					$MAPCFG->readMapConfig();
-					
-					$OBJ = new NagVisMapObj($this->CORE, $BACKEND, $MAPCFG, !IS_VIEW);
-				break;
-				case 'automap':
-					// Initialize map configuration based on map type
-					$MAPCFG = new NagVisAutomapCfg($this->CORE, $arrName1[$i]);
-					$MAPCFG->readMapConfig();
-					
-					$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, Array('automap' => $arrName1[$i], 'preview' => 1), !IS_VIEW);
-					$OBJ = $MAP->MAPOBJ;
-				break;
-				default:
-					echo 'Error: '.$this->CORE->getLang()->getText('unknownObject', Array('TYPE' => $arrType[$i], 'MAPNAME' => ''));
-				break;
-			}
-			
-			// Apply default configuration to object
-			$OBJ->setConfiguration($objConf);
-			
-			if($arrType[$i] != 'automap') {
-				$OBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
-			}
-			
-			$aObjs[] = $OBJ;
-		}
-			
-		// Now after all objects are queued execute them and then apply the states
-		$BACKEND->execute();
-	
-		foreach($aObjs AS $OBJ) {
-			$OBJ->applyState();
-			$OBJ->fetchIcon();
-		
-			switch($sType) {
-				case 'state':
-					$arr = $OBJ->getObjectStateInformations();
-				break;
-				case 'complete':
-					$arr = $OBJ->parseJson();
-				break;
-			}
-			
-			$arr['object_id'] = $OBJ->getObjectId();
-			$arr['icon'] = $OBJ->get('icon');
-			
-			$arrReturn[] = $arr;
-		}
-			
-		return json_encode($arrReturn);
-	}
+		$MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
+		$MAPCFG->readMapConfig();
+		$MAPCFG->filterMapObjects($aVals['t'], $aVals['i']);
 
-	private function getObjConf($objType, $objName1, $objName2 = '') {
-		$objConf = Array();
-		
-		// Default object configuration
-		$objConf = $this->MAPCFG->getObjectConfiguration($objName1);
 
-		// backend_id is filtered in getObjectConfiguration(). Set it manually
-		$objConf['backend_id'] = $this->MAPCFG->getValue('global', 0, 'backend_id');
-			
-		return $objConf;
+		$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts, !IS_VIEW);
+		$MAPOBJ = $MAP->MAPOBJ;
+		return $MAP->parseObjectsJson($aVals['ty']);
 	}
 }
 ?>

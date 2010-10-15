@@ -55,36 +55,5 @@ class NagVisMap extends GlobalMap {
 			}
 		}
 	}
-	
-	/**
-	 * Parses the Objects
-	 *
-	 * @return	String  Json Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parseObjectsJson() {
-		$arrRet = Array();
-		
-		// First parse the map object itselfs for having the
-		// summary information in the frontend
-		$arrRet[] = $this->MAPOBJ->parseJson();
-		
-		foreach($this->MAPOBJ->getMembers() AS $OBJ) {
-			switch(get_class($OBJ)) {
-				case 'NagVisHost':
-				case 'NagVisService':
-				case 'NagVisHostgroup':
-				case 'NagVisServicegroup':
-				case 'NagVisMapObj':
-				case 'NagVisShape':
-				case 'NagVisLine':
-				case 'NagVisTextbox':
-					$arrRet[] = $OBJ->parseJson();
-				break;
-			}
-		}
-		
-		return json_encode($arrRet);
-	}
 }
 ?>

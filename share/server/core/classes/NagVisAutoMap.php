@@ -450,36 +450,6 @@ class NagVisAutoMap extends GlobalMap {
 		
 		return $this->mapCode;
 	}
-	
-	/**
-	 * Parses the objects in JSON format for the regular frontend
-	 *
-	 * @return	String  Json Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parseObjectsJson() {
-		$arrRet = Array();
-		
-		// First parse the map object itselfs for having the
-		// summary information in the frontend
-		$arrRet[] = $this->MAPOBJ->parseJson();
-		
-		foreach($this->MAPOBJ->getMembers() AS $OBJ) {
-			switch(get_class($OBJ)) {
-				case 'NagVisHost':
-				case 'NagVisService':
-				case 'NagVisHostgroup':
-				case 'NagVisServicegroup':
-				case 'NagVisMapObj':
-				case 'NagVisShape':
-				case 'NagVisTextbox':
-					$arrRet[] = $OBJ->parseJson();
-				break;
-			}
-		}
-		
-		return json_encode($arrRet);
-	}
 
 	/**
 	 * Parses the objects in NagVis map cfg format for export to

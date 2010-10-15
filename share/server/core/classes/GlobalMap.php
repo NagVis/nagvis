@@ -24,7 +24,6 @@
  
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
- * FIXME: Maybe to be removed in future cleanups
  */
 class GlobalMap {
 	protected $CORE;
@@ -42,6 +41,48 @@ class GlobalMap {
 	public function __construct($CORE,$MAPCFG) {
 		$this->CORE = $CORE;
 		$this->MAPCFG = $MAPCFG;
+	}
+
+	/**
+	 * Parses the Objects
+	 *
+	 * @return	String  Json Code
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function parseObjectsJson($type = 'complete') {
+		$arrRet = Array();
+		
+		// First parse the map object itselfs for having the
+		// summary information in the frontend
+		if($type == 'complete')
+			$arrRet[] = $this->MAPOBJ->parseJson();
+		
+		foreach($this->MAPOBJ->getMembers() AS $OBJ) {
+			switch(get_class($OBJ)) {
+				case 'NagVisHost':
+				case 'NagVisService':
+				case 'NagVisHostgroup':
+				case 'NagVisServicegroup':
+				case 'NagVisMapObj':
+					if($type == 'state') {
+						$arr = $OBJ->getObjectStateInformations();
+						$arr['object_id'] = $OBJ->getObjectId();
+						$arr['icon'] = $OBJ->get('icon');
+						$arrRet[] = $arr;
+					} else {
+						$arrRet[] = $OBJ->parseJson();
+					}
+				break;
+				case 'NagVisShape':
+				case 'NagVisLine':
+				case 'NagVisTextbox':
+					if($type == 'complete')
+						$arrRet[] = $OBJ->parseJson();
+				break;
+			}
+		}
+		
+		return json_encode($arrRet);
 	}
 }
 ?>

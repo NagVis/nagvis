@@ -27,7 +27,6 @@
  */
 class CoreModMap extends CoreModule {
 	private $name = null;
-	private $MAPCFG = null;
 	
 	public function __construct(GlobalCore $CORE) {
 		$this->sName = 'Map';
@@ -995,148 +994,23 @@ class CoreModMap extends CoreModule {
 	}
 	
 	private function getObjectStates() {
-		$arrReturn = Array();
-		
 		$aOpts = Array('ty' => MATCH_GET_OBJECT_TYPE,
-		               't' => MATCH_OBJECT_TYPES,
+		               't'  => MATCH_OBJECT_TYPES,
 		               'n1' => MATCH_STRING,
 		               'n2' => MATCH_STRING_EMPTY,
-		               'i' => MATCH_STRING_NO_SPACE);
-		
+		               'i'  => MATCH_STRING_NO_SPACE);
 		$aVals = $this->getCustomOptions($aOpts);
-		
-		$sType = $aVals['ty'];
-		$arrType = $aVals['t'];
-		$arrName1 = $aVals['n1'];
-		$arrName2 = $aVals['n2'];
-		$arrObjId = $aVals['i'];
 		
 		// Initialize backends
 		$BACKEND = new CoreBackendMgmt($this->CORE);
 		
 		// Initialize map configuration (Needed in getMapObjConf)
-		$this->MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
-		$this->MAPCFG->readMapConfig();
-		
-		$numObjects = count($arrType);
-		$aObjs = Array();
-		for($i = 0; $i < $numObjects; $i++) {
-			// Get the object configuration
-			$objConf = $this->getMapObjConf($arrType[$i], $arrName1[$i], $arrName2[$i], $arrObjId[$i]);
-			
-			switch($arrType[$i]) {
-				case 'host':
-					$OBJ = new NagVisHost($this->CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i]);
-				break;
-				case 'service':
-					$OBJ = new NagVisService($this->CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i], $arrName2[$i]);
-				break;
-				case 'hostgroup':
-					$OBJ = new NagVisHostgroup($this->CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i]);
-				break;
-				case 'servicegroup':
-					$OBJ = new NagVisServicegroup($this->CORE, $BACKEND, $objConf['backend_id'], $arrName1[$i]);
-				break;
-				case 'map':
-					// Initialize map configuration based on map type
-					if($this->CORE->checkMapIsAutomap($arrName1[$i]))
-						$SUBMAPCFG = new NagVisAutomapCfg($this->CORE, $arrName1[$i]);
-					else
-						$SUBMAPCFG = new NagVisMapCfg($this->CORE, $arrName1[$i]);
+		$MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
+		$MAPCFG->readMapConfig();
+		$MAPCFG->filterMapObjects($aVals['t'], $aVals['i']);
 
-					if($SUBMAPCFG->checkMapConfigExists(0))
-						$SUBMAPCFG->readMapConfig();
-			
-					if($this->CORE->checkMapIsAutomap($arrName1[$i])) {
-						$MAP = new NagVisAutoMap($this->CORE, $SUBMAPCFG, $BACKEND, Array(), !IS_VIEW);
-						$OBJ = $MAP->MAPOBJ;
-					} else 
-						$OBJ = new NagVisMapObj($this->CORE, $BACKEND, $SUBMAPCFG, !IS_VIEW);
-					$OBJ->fetchMapObjects();
-				break;
-				case 'automap':
-					// Initialize map configuration based on map type
-					$MAPCFG = new NagVisAutomapCfg($this->CORE, $arrName1[$i]);
-					$MAPCFG->readMapConfig();
-					
-					$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, Array('automap' => $arrName1[$i], 'preview' => 1), !IS_VIEW);
-					$OBJ = $MAP->MAPOBJ;
-				break;
-				default:
-					echo 'Error: '.$CORE->getLang()->getText('unknownObject', Array('TYPE' => $arrType[$i], 'MAPNAME' => ''));
-				break;
-			}
-			
-			// Apply default configuration to object
-			$OBJ->setConfiguration($objConf);
-			
-			if($arrType[$i] != 'automap') {
-				$OBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
-			}
-			
-			$aObjs[] = $OBJ;
-		}
-		
-		// Now after all objects are queued execute them and then apply the states
-		$BACKEND->execute();
-		
-		foreach($aObjs AS $OBJ) {
-			$OBJ->applyState();
-			$OBJ->fetchIcon();
-			
-			switch($sType) {
-				case 'state':
-					$arr = $OBJ->getObjectStateInformations();
-				break;
-				case 'complete':
-					$arr = $OBJ->parseJson();
-				break;
-			}
-			
-			$arr['object_id'] = $OBJ->getObjectId();
-			$arr['icon'] = $OBJ->get('icon');
-			
-			$arrReturn[] = $arr;
-		}
-		
-		return json_encode($arrReturn);
-	}
-	
-	private function getMapObjConf($objType, $objName1, $objName2, $objectId) {
-		$objConf = Array();
-		
-		// Get the object configuration from map configuration (object and
-		// defaults)
-		
-		if(is_array($objs = $this->MAPCFG->getDefinitions($objType))){
-			$count = count($objs);
-			for($i = 0; $i < $count && count($objConf) >= 0; $i++) {
-				if($objs[$i]['object_id'] == $objectId) {
-					$objConf = $objs[$i];
-					$objConf['id'] = $i;
-					
-					// Break the loop on first match
-					break;
-				}
-			}
-		} else {
-			echo 'Error: '.$this->CORE->getLang()->getText('foundNoObjectOfThatTypeOnMap');
-		}
-		
-		if(count($objConf) > 0) {
-			$typeDefs = $this->MAPCFG->getTypeDefaults($objType);
-			// merge with "global" settings
-			foreach($typeDefs AS $key => $default) {
-				if(!isset($objConf[$key])) {
-					$objConf[$key] = $default;
-				}
-			}
-		} else {
-			// object not on map
-			echo 'Error: '.$this->CORE->getLang()->getText('ObjectNotFoundOnMap');
-		}
-		
-		return $objConf;
+		$MAP = new NagVisMap($this->CORE, $MAPCFG, $BACKEND, GET_STATE, IS_VIEW);
+		return $MAP->parseObjectsJson($aVals['ty']);
 	}
 }
 ?>

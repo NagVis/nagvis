@@ -2014,5 +2014,26 @@ class GlobalMapCfg {
 	public function getAlias() {
 		return $this->getValue('global', 0, 'alias');	
 	}
+
+	/**
+	 * Only selects the wanted objects of the map and removes the others
+	 *
+	 * @param   Array of object types
+	 * @param   Array of object ids
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function filterMapObjects($types, $objIds) {
+		$newConfig =  Array();
+		$numObjects = count($types);
+		for($i = 0; $i < $numObjects; $i++) {
+			$type = $types[$i];
+			$id   = $objIds[$i] - 1;
+			if(!isset($newConfig[$type]))
+				$newConfig[$type] = Array();
+			if(isset($this->mapConfig[$type][$id]))
+				$newConfig[$type][$id] = $this->mapConfig[$type][$id];
+		}
+		$this->mapConfig = $newConfig;
+	}
 }
 ?>
