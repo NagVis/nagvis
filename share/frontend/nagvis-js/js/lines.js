@@ -197,13 +197,13 @@ function drawSimpleLine(objectId, x1, y1, x2, y2, z, w, colorFill, colorBorder) 
 	var yCoord = [];
 	
 	xCoord[0] = x1 + newX(x2-x1, y2-y1, 0, w);
-	xCoord[1] = x2 + newX(x2-x1, y2-y1, -4*w, w);
-	xCoord[2] = x2 + newX(x2-x1, y2-y1, -4*w, -w);
+	xCoord[1] = x2 + newX(x2-x1, y2-y1, w, w);
+	xCoord[2] = x2 + newX(x2-x1, y2-y1, w, -w);
 	xCoord[3] = x1 + newX(x2-x1, y2-y1, 0, -w);
 	
 	yCoord[0] = y1 + newY(x2-x1, y2-y1, 0, w);
-	yCoord[1] = y2 + newY(x2-x1, y2-y1, -4*w, w);
-	yCoord[2] = y2 + newY(x2-x1, y2-y1, -4*w, -w);
+	yCoord[1] = y2 + newY(x2-x1, y2-y1, w, w);
+	yCoord[2] = y2 + newY(x2-x1, y2-y1, w, -w);
 	yCoord[3] = y1 + newY(x2-x1, y2-y1, 0, -w);
 	
 	// First create the line itselfs by the calculated coords
