@@ -776,7 +776,7 @@ function dragStart(event) {
 	
 	draggingObject = target;
 	draggingObject.x = draggingObject.offsetLeft;
-	draggingObject.y = draggingObject.offsetTop - getHeaderHeight();
+	draggingObject.y = draggingObject.offsetTop;
 	
   // Save relative offset of the mouse to the snapin title to prevent flipping on drag start
   dragObjectOffset   = [ posy - draggingObject.offsetTop - getHeaderHeight(), 
