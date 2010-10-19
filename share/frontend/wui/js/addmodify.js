@@ -27,10 +27,11 @@
 
 var bFormIsValid = true;
 
-function printObjects(aObjects,oOpt) {
+function printObjects(aObjects, oOpt) {
 	var type = oOpt.type;
 	var field = oOpt.field;
 	var selected = oOpt.selected;
+	var bSelected = false;
 	
 	var oField = document.getElementById(field);
 	
@@ -40,8 +41,6 @@ function printObjects(aObjects,oOpt) {
 			oField.options[i] = null;
 		
 		if(aObjects && aObjects.length > 0) {
-			var bSelected = false;
-			
 			// fill with new options
 			for(i = 0; i < aObjects.length; i++) {
 				var oName = '';
@@ -69,8 +68,10 @@ function printObjects(aObjects,oOpt) {
 	
 	// Fallback to input field when configured value could not be selected or
 	// the list is empty
-	if((selected != '' && !bSelected) || !aObjects || aObjects.length <= 0) {
-		toggleFieldType(oField.name, oField.value)
+	if((selected != '' && !bSelected) || !aObjects || aObjects.length == 0) {
+		toggleFieldType(oOpt.field, lang['manualInput']);
+		document.getElementById(oOpt.field).value = lang['manualInput'];
+		document.getElementById('_inp_'+oOpt.field).value = selected;
 	}
 }
 
@@ -79,9 +80,8 @@ function printObjects(aObjects,oOpt) {
 function validateMapCfgForm() {
 	// Terminate fast when validateMapConfigFieldValue marked the form contents
 	// as invalid
-	if(bFormIsValid === false) {
+	if(bFormIsValid === false)
 		return false;
-	}
 	
 	for(var i=0, len = document.addmodify.elements.length; i < len; i++) {
 		if(document.addmodify.elements[i].type != 'submit' && document.addmodify.elements[i].type != 'hidden') {
@@ -210,12 +210,10 @@ function validateMapCfgForm() {
  */
 function validateMapConfigFieldValue(oField) {
 	var sName;
-	var bInputHelper = false;
 	var bChanged;
 	
 	if(oField.name.indexOf('_inp_') !== -1) {
 		sName = oField.name.replace('_inp_', '');
-		bInputHelper = true;
 	} else {
 		sName = oField.name;
 	}
