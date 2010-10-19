@@ -926,13 +926,11 @@ function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, t
 		oLabelDiv.style.left = x + 'px';
 		oLabelDiv.style.top = y + 'px';
 		
-		if(w && w !== '' && w !== 'auto') {
+		if(w && w !== '' && w !== 'auto')
 			oLabelDiv.style.width = w+'px';
-		}
 		
-		if(h && h !== '' && h !== 'auto') {
+		if(h && h !== '' && h !== 'auto')
 			oLabelDiv.style.height = h+'px';
-		}
 		
 		oLabelDiv.style.zIndex = parseInt(z) + 1;
 		oLabelDiv.style.overflow = 'visible';
@@ -941,11 +939,10 @@ function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, t
 		 * IE workaround: The transparent for the color is not enough. The border
 		 * has really to be hidden.
 		 */
-		if(borderColor == 'transparent') {
+		if(borderColor == 'transparent')
 			oLabelDiv.style.borderStyle = 'none';
-		} else {
+		else
 			oLabelDiv.style.borderStyle = 'solid';
-		}
 		
 		// Create span for text and add label text
 		var oLabelSpan = document.createElement('span');

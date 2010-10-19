@@ -99,6 +99,10 @@ div.welcome a:hover {color:#779D2A}
 	border-color : black;
 }
 
+a.linelink {
+  color: #000000;
+}
+
 /* textbox (object on map) */
 .box {
 	position : absolute;

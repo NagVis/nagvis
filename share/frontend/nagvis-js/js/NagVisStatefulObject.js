@@ -455,6 +455,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 		if((this.conf.url && this.conf.url !== '' && this.conf.url !== '#') || (this.conf.hover_menu && this.conf.hover_menu !== '')) {
 			var oLink = document.createElement('a');
 			oLink.setAttribute('id', this.conf.object_id+'-linelink');
+			oLink.setAttribute('class', 'linelink');
+			oLink.setAttribute('className', 'linelink');
 			oLink.href = this.conf.url;
 			oLink.target = this.conf.url_target;
 			
