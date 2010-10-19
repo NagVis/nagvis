@@ -775,6 +775,8 @@ function dragStart(event) {
 	event.cancelBubble = true;*/
 	
 	draggingObject = target;
+	draggingObject.x = draggingObject.offsetLeft;
+	draggingObject.y = draggingObject.offsetTop - getHeaderHeight();
 	
   // Save relative offset of the mouse to the snapin title to prevent flipping on drag start
   dragObjectOffset   = [ posy - draggingObject.offsetTop - getHeaderHeight(), 
@@ -843,7 +845,8 @@ function moveRelativeObject(parentId, parentTop, parentLeft) {
 }
 
 function dragStop() {
-	if(!draggingEnabled || !draggingObject)
+	if(draggingObject === null || !draggingEnabled
+	   || typeof draggingObject.y == 'undefined' || typeof draggingObject.x == 'undefined')
 		return;
 	
 	// When x or y are negative just return this and make no change
