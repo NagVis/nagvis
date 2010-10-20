@@ -387,7 +387,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 							* child for preventing a loop
 							*/
 							if($this->MAPCFG->getName() == $SUBMAPCFG->getName() && $this->isSummaryObject == true)
-								continue;
+								continue 2;
 
 							/**
 							* This occurs when someone creates a map icon which links to itself
@@ -405,15 +405,16 @@ class NagVisMapObj extends NagVisStatefulObject {
 							 */
 							if(isset($arrMapNames[$SUBMAPCFG->getName()]) && ($depth > 3)) {
 								$OBJ->isLoopingBacklink = true;
-								continue;
+								continue 2;
 							}
 
 							// Store this map in the mapNames list
 							$arrMapNames[$SUBMAPCFG->getName()] = true;
 							
 							// Skip this map when the user is not permitted toview this map
-							if(!$this->isPermitted($OBJ))
-								continue;
+							if(!$this->isPermitted($OBJ)) {
+								continue 2;
+							}
 						break;
 						case 'shape':
 							$OBJ = new NagVisShape($this->CORE, $objConf['icon']);
@@ -429,7 +430,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 							$OBJ = null;
 						break;
 					}
-					
+
 					// Apply default configuration to object
 					$OBJ->setConfiguration($objConf);
 					
@@ -498,7 +499,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function isPermitted($OBJ) {
-		// Check for valid permissions
 		if($this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Map', 'view', $OBJ->getName()))
 			return true;
 		else {
