@@ -311,8 +311,8 @@ class GlobalCore {
 	 * @return	Array   Array of maps
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getAvailableAutomaps($strMatch = NULL) {
-		return self::listDirectory(self::getMainCfg()->getValue('paths', 'automapcfg'), MATCH_CFG_FILE, null, $strMatch, null, null, true);
+	public function getAvailableAutomaps($strMatch = null, $setKey = null) {
+		return self::listDirectory(self::getMainCfg()->getValue('paths', 'automapcfg'), MATCH_CFG_FILE, null, $strMatch, null, $setKey);
 	}
 	
 	/**
@@ -322,8 +322,8 @@ class GlobalCore {
 	 * @return	Array   Array of maps
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getAvailableMaps($strMatch = NULL) {
-		return self::listDirectory(self::getMainCfg()->getValue('paths', 'mapcfg'), MATCH_CFG_FILE, null, $strMatch, null, null, true);
+	public function getAvailableMaps($strMatch = null, $setKey = null) {
+		return self::listDirectory(self::getMainCfg()->getValue('paths', 'mapcfg'), MATCH_CFG_FILE, null, $strMatch, null, $setKey);
 	}
 	
 	/**

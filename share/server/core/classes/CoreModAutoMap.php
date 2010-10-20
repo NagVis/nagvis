@@ -69,7 +69,7 @@ class CoreModAutoMap extends CoreModule {
 		);
 		
 		// Register valid objects
-		$this->aObjects = $this->CORE->getAvailableAutomaps();
+		$this->aObjects = $this->CORE->getAvailableAutomaps(null, SET_KEYS);
 		
 		// Set the requested object for later authorisation
 		$this->setObject($this->name);

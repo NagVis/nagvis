@@ -61,7 +61,7 @@ class CoreModMap extends CoreModule {
 		);
 		
 		// Register valid objects
-		$this->aObjects = $this->CORE->getAvailableMaps();
+		$this->aObjects = $this->CORE->getAvailableMaps(null, SET_KEYS);
 	}
 
 	public function initObject() {

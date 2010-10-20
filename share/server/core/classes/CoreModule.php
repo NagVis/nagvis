@@ -89,8 +89,13 @@ abstract class CoreModule {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function setObject($sObject) {
-		if(!$this->offersObject($sObject))
+		if(!$this->offersObject($sObject)) {
+			// Set sObject to an empty string. This tells the isPermitted() check that
+			// this module uses object based authorisation checks. In that case it
+			// won't pass the object authorisation check.
+			$this->sObject = '';
 			return false;
+		}
 
 		$this->sObject = $sObject;
 		return true;

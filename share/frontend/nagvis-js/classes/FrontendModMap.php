@@ -66,7 +66,7 @@ class FrontendModMap extends FrontendModule {
 		);
 		
 		// Register valid objects
-		$this->aObjects = $this->CORE->getAvailableMaps();
+		$this->aObjects = $this->CORE->getAvailableMaps(null, SET_KEYS);
 		
 		// Set the requested object for later authorisation
 		$this->setObject($this->name);
