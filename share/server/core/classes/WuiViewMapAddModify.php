@@ -138,8 +138,8 @@ class WuiViewMapAddModify {
 									          "'".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['clone'], 'backend_id')."',".
 									          "'".$this->aOpts['type']."',".
 									          "'service_description',".
-									          "'".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], 'service_description', true)."'".
-									          "'".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['clone'], 'host_name', true)."',".
+									          "'".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], 'service_description', true)."',".
+									          "'".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['clone'], 'host_name', true)."'".
 									        ");";
 								}
 							}
