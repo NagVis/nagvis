@@ -202,7 +202,7 @@ var NagVisObject = Base.extend({
 
 		// Replace map range macros when not in a hostgroup
 		if(this.conf.type !== 'map')
-			oSectionMacros.hostgroup = '<!--\\sBEGIN\\smap\\s-->.+?<!--\\sEND\\smap\\s-->';
+			oSectionMacros.map = '<!--\\sBEGIN\\smap\\s-->.+?<!--\\sEND\\smap\\s-->';
 		
 		// Loop and replace all unwanted section macros
 		for (var key in oSectionMacros) {

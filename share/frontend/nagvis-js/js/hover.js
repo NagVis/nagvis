@@ -264,6 +264,14 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	if(oObj.conf.type !== 'servicegroup')
 		oSectionMacros.servicegroup = '<!--\\sBEGIN\\sservicegroup\\s-->.+?<!--\\sEND\\sservicegroup\\s-->';
 	
+	// Replace hostgroup sections when not hostgroup object
+	if(oObj.conf.type !== 'hostgroup')
+		oSectionMacros.hostgroup = '<!--\\sBEGIN\\shostgroup\\s-->.+?<!--\\sEND\\shostgroup\\s-->';
+	
+	// Replace map sections when not map object
+	if(oObj.conf.type !== 'map')
+		oSectionMacros.map = '<!--\\sBEGIN\\smap\\s-->.+?<!--\\sEND\\smap\\s-->';
+	
 	// Macros which are only for servicegroup childs
 	if(replaceChild == '1' && oObj.parent_type === 'servicegroup' && oObj.conf.type === 'service')
 		oMacros.obj_name1 = oObj.conf.name;
