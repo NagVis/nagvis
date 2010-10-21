@@ -66,12 +66,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// Run preflight checks
 		if($this->socketType == 'unix' && !$this->checkSocketExists()) {
-			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Unable to connect to livestatus socket. The socket [SOCKET] in backend [BACKENDID] does not exist. Maybe Nagios is not running or restarting.', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
+			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Unable to connect to livestatus socket. The socket [SOCKET] in backend [BACKENDID] does not exist. Maybe Nagios is not running or restarting.',
+				                                                                                              Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
 		}
-		
-		if(!function_exists('socket_create')) {
-			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('The PHP function socket_create is not available. Maybe the sockets module is missing in your PHP installation. Needed by backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
-    }
+
+		if(!function_exists('fsockopen')) {
+						throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('The PHP function fsockopen is not available. Needed by backend [BACKENDID].',
+										                                                                                  Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
+		}
 		
 		return true;
 	}
@@ -87,7 +89,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 */
 	public function __destruct() {
 		if($this->SOCKET !== null) {
-			socket_close($this->SOCKET);
+			fclose($this->SOCKET);
 			$this->SOCKET = null;
 		}
 	}
@@ -152,46 +154,25 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function connectSocket() {
-		// Create socket connection
-		if($this->socketType === 'unix') {
-			$this->SOCKET = socket_create(AF_UNIX, SOCK_STREAM, 0);
-		} elseif($this->socketType === 'tcp') {
-			$this->SOCKET = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-		}
-		
-		if($this->SOCKET == false) {
-			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Could not create livestatus socket [SOCKET] in backend [BACKENDID].', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
-		}
-		
 		// Connect to the socket
 		// don't want to see the connection error messages - want to handle the
 		// errors later with an own error message
+		// FIXME: Maybe use pfsockopen in the future to use persistent connections
 		if($this->socketType === 'unix') {
 			$oldLevel = error_reporting(0);
-			$result = socket_connect($this->SOCKET, $this->socketPath);
+			$this->SOCKET = fsockopen('unix://'.$this->socketPath, NULL, $errno, $errstr);
 			error_reporting($oldLevel);
 		} elseif($this->socketType === 'tcp') {
 			$oldLevel = error_reporting(0);
-			$result = socket_connect($this->SOCKET, $this->socketAddress, $this->socketPort);
+			$this->SOCKET = fsockopen($this->socketAddress, $this->socketPort, $errno, $errstr);
 			error_reporting($oldLevel);
 		}
 
-		if($result == false) {
-			$socketError = socket_strerror(socket_last_error($this->SOCKET));
+		if(!$this->SOCKET) {
+			$socketError = $errstr;
 			$this->SOCKET = null;
 			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]',
-			                                                         Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => $socketError)));
-		}
-
-		// Maybe set some socket options
-		if($this->socketType === 'tcp') {
-			// Disable Nagle's Alogrithm - Nagle's Algorithm is bad for brief protocols
-			if(defined('TCP_NODELAY')) {
-				socket_set_option($this->SOCKET, SOL_TCP, TCP_NODELAY, 1);
-			} else {
-				// See http://bugs.php.net/bug.php?id=46360
-				socket_set_option($this->SOCKET, SOL_TCP, 1, 1);
-			}
+		                                                        Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => $socketError)));
 		}
 	}
 	
@@ -207,27 +188,30 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 */
 	private function queryLivestatus($query) {
 		// Only connect when no connection opened yet
-		if($this->SOCKET === null) {
+		if($this->SOCKET === null)
 			$this->connectSocket();
-		}
 		
 		// Query to get a json formated array back
 		// Use KeepAlive with fixed16 header
-		$oldLevel = error_reporting(0);
-		$write = socket_write($this->SOCKET, $query . "OutputFormat:json\nKeepAlive: on\nResponseHeader: fixed16\n\n");
-		error_reporting($oldLevel);
-		if($write === false)
+		$query .= "OutputFormat:json\nKeepAlive: on\nResponseHeader: fixed16\n\n";
+		$write = fwrite($this->SOCKET, $query);
+
+		if($write=== false)
 			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
-			     Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
+			                                        Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => 'Error while sending query to socket.')));
+
+		if($write !== strlen($query))
+			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
+				                                      Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => 'Connection terminated.')));
 
 		
 		// Read 16 bytes to get the status code and body size
 		$read = $this->readSocket(16);
 		
 		// Catch problem while reading
-		if($read === false) 
+		if($read === false)
 			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
-			     Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
+				                                      Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => 'Error while reading socket (header)')));
 		
 		// Extract status code
 		$status = substr($read, 0, 3);
@@ -240,29 +224,27 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		// Catch problem while reading
 		if($read === false) {
-			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
+			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
+				                                     Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => 'Error while reading socket (content)')));
 		}
 		
 		// Catch errors (Like HTTP 200 is OK)
 		if($status != "200") {
-			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => $read)));
-		}
-		
-		// Catch problems occured while reading? 104: Connection reset by peer
-		if(socket_last_error($this->SOCKET) == 104) {
-			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]', Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => socket_strerror(socket_last_error($this->SOCKET)))));
+			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
+				                                                                      Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => $read)));
 		}
 		
 		// Decode the json response
 		$obj = json_decode(utf8_encode($read));
 		
 		// TEST: Disable KeepAlive:
-		//socket_close($this->SOCKET);
+		//fclose($this->SOCKET);
 		//$this->SOCKET = null;
 		
 		// json_decode returns null on syntax problems
 		if($obj === null) {
-			throw new BackendInvalidResponse(GlobalCore::getInstance()->getLang()->getText('The response has an invalid format in backend [BACKENDID].', Array('BACKENDID' => $this->backendId)));
+			throw new BackendInvalidResponse(GlobalCore::getInstance()->getLang()->getText('The response has an invalid format in backend [BACKENDID].',
+				                                                                                                                    Array('BACKENDID' => $this->backendId)));
 		} else {
 			// Return the response object
 			return $obj;
@@ -283,7 +265,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$socketData = '';
 		
 		while($offset < $len) {
-			if(($data = @socket_read($this->SOCKET, $len - $offset)) === false) {
+			if(($data = @fread($this->SOCKET, $len - $offset)) === false) {
 				return false;
 			}
 		
