@@ -775,7 +775,7 @@ addDOMLoadEvent = (function(){
             // for Internet Explorer
             /*@cc_on @*/
             /*@if (@_win32)
-                document.write("<script id=__ie_onload defer src=//0><\/scr"+"ipt>");
+                document.write("<script id=__ie_onload defer src=><\/script>");
                 script = document.getElementById("__ie_onload");
                 script.onreadystatechange = function() {
                     if (this.readyState == "complete")
