@@ -145,8 +145,8 @@ function drawLinkArea(objectId, lx, ly, z) {
 	oImg.style.position = 'absolute';
 	oImg.style.left = (lx-10)+"px";
 	oImg.style.top = (ly-10)+"px";
-	oImg.style.width = 10;
-	oImg.style.height = 10;
+	oImg.style.width = 20;
+	oImg.style.height = 20;
 	oImg.style.zIndex = parseInt(z)+1;
 	
 	oLinkContainer.appendChild(oImg);
