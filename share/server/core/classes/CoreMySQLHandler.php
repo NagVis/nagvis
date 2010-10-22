@@ -171,6 +171,26 @@ class CoreMySQLHandler {
 		// Now perform the update for pre 1.5.3
 		if($dbVersion < 1050300)
 			$this->updateDb1050300();
+
+		// Now perform the update for pre 1.5.4
+		if($dbVersion < 1050400)
+			$this->updateDb1050400();
+	}
+
+	private function updateDb1050400() {
+		// Create permissions for the multisite webservice
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Multisite\', \'getMaps\', \'*\')');
+
+		// Assign the new permission to the managers
+		$RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\' or name=\'Guests\'');
+		while($data = $this->fetchAssoc($RES)) {
+			$this->addRolePerm($data['roleId'], 'Multisite', 'getMaps', '*');
+		}
+
+		// Only apply the new version when this is the real release or newer
+		// (While development the version string remains on the old value)
+		if(GlobalCore::getInstance()->versionToTag(CONST_VERSION) >= 1050400)
+			$this->updateDbVersion();
 	}
 
 	private function updateDb1050300() {
@@ -248,6 +268,9 @@ class CoreMySQLHandler {
 		
 		// Access controll: Change own password
 		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ChangePassword\', \'change\', \'*\')');
+
+		// Access controll: View maps via multisite
+		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Multisite\', \'getMaps\', \'*\')');
 	
 		// Access controll: Search objects on maps
 		$this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Search\', \'view\', \'*\')');
@@ -335,6 +358,9 @@ class CoreMySQLHandler {
 		
 		// Access assignment: Managers => Allowed to change their passwords
 		$this->addRolePerm($data['roleId'], 'ChangePassword', 'change', '*');
+
+		// Access assignment: Managers => Allowed to view their maps via multisite
+		$this->addRolePerm($data['roleId'], 'Multisite', 'getMaps', '*');
 		
 		// Access assignment: Managers => Allowed to search objects
 		$this->addRolePerm($data['roleId'], 'Search', 'view', '*');
@@ -365,6 +391,9 @@ class CoreMySQLHandler {
 		
 		// Access assignment: Users => Allowed to change their passwords
 		$this->addRolePerm($data['roleId'], 'ChangePassword', 'change', '*');
+
+		// Access assignment: Users => Allowed to view their maps via multisite
+		$this->addRolePerm($data['roleId'], 'Multisite', 'getMaps', '*');
 		
 		// Access assignment: Users => Allowed to search objects
 		$this->addRolePerm($data['roleId'], 'Search', 'view', '*');
@@ -401,6 +430,9 @@ class CoreMySQLHandler {
 		
 		// Access assignment: Guests => Allowed to change their passwords
 		$this->addRolePerm($data['roleId'], 'ChangePassword', 'change', '*');
+
+		// Access assignment: Guests => Allowed to view their maps via multisite
+		$this->addRolePerm($data['roleId'], 'Multisite', 'getMaps', '*');
 		
 		// Access assignment: Guests => Allowed to search objects
 		$this->addRolePerm($data['roleId'], 'Search', 'view', '*');
