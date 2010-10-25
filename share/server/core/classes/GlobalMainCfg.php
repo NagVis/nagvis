@@ -395,6 +395,11 @@ class GlobalMainCfg {
 					'default' => '',
 					'field_type' => 'hidden',
 					'match' => MATCH_STRING_PATH),
+				'wuijs' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '',
+					'field_type' => 'hidden',
+					'match' => MATCH_STRING_PATH),
 				'shape' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
@@ -470,6 +475,11 @@ class GlobalMainCfg {
 					'field_type' => 'hidden',
 					'match' => MATCH_STRING_PATH),
 				'htmljs' => Array('must' => 1,
+					'editable' => 1,
+					'default' => '',
+					'field_type' => 'hidden',
+					'match' => MATCH_STRING_PATH),
+				'htmlwuijs' => Array('must' => 1,
 					'editable' => 1,
 					'default' => '',
 					'field_type' => 'hidden',
@@ -992,6 +1002,9 @@ class GlobalMainCfg {
 		
 		$this->validConfig['paths']['js']['default']                 = $base.HTDOCS_DIR.'/frontend/nagvis-js/js/';
 		$this->validConfig['paths']['htmljs']['default']             = $htmlBase.'/frontend/nagvis-js/js/';
+		
+		$this->validConfig['paths']['wuijs']['default']              = $base.HTDOCS_DIR.'/frontend/wui/js/';
+		$this->validConfig['paths']['htmlwuijs']['default']          = $htmlBase.'/frontend/wui/js/';
 		
 		$this->validConfig['paths']['images']['default']             = $base.HTDOCS_DIR.'/frontend/nagvis-js/images/';
 		$this->validConfig['paths']['htmlimages']['default']         = $htmlBase.'/frontend/nagvis-js/images/';

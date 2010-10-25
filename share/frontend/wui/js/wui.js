@@ -57,42 +57,6 @@ if (window.addEventListener) {
 }
 
 /**
- * Toggle the grid state in the current view and sends
- * current setting to server component for persistance
- *
- * @author  Lars Michelsen <lars@vertical-visions.de>
- */
-function gridToggle() {
-	// Toggle the grid state
-	if(oViewProperties.grid_show === 1) {
-		oViewProperties.grid_show = 0;
-		
-		// Remove from view
-		var oMap = document.getElementById('mymap');
-		var oGrid = document.getElementById('grid');
-		oMap.removeChild(oGrid);
-		oGrid = null;
-		oMap = null;
-	} else {
-		oViewProperties.grid_show = 1;
-		
-		// Add to view
-		gridParse();
-	}
-	
-	// Send current option to server component
-	var url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type=global&id=0&grid_show='+oViewProperties.grid_show;
-	
-	// Sync ajax request
-	var oResult = getSyncRequest(url);
-	if(oResult && oResult.status != 'OK') {
-		alert(oResult.message);
-	}
-	
-	oResult = null;
-}
-
-/**
  * Parses a grind to make the alignment of the icons easier
  *
  * @author  Lars Michelsen <lars@vertical-visions.de>
@@ -141,6 +105,42 @@ function gridParse() {
 		gridStep = null;
 		grid = null;
 	}
+}
+
+/**
+ * Toggle the grid state in the current view and sends
+ * current setting to server component for persistance
+ *
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function gridToggle() {
+	// Toggle the grid state
+	if(oViewProperties.grid_show === 1) {
+		oViewProperties.grid_show = 0;
+		
+		// Remove from view
+		var oMap = document.getElementById('mymap');
+		var oGrid = document.getElementById('grid');
+		oMap.removeChild(oGrid);
+		oGrid = null;
+		oMap = null;
+	} else {
+		oViewProperties.grid_show = 1;
+		
+		// Add to view
+		gridParse();
+	}
+	
+	// Send current option to server component
+	var url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type=global&id=0&grid_show='+oViewProperties.grid_show;
+	
+	// Sync ajax request
+	var oResult = getSyncRequest(url);
+	if(oResult && oResult.status != 'OK') {
+		alert(oResult.message);
+	}
+	
+	oResult = null;
 }
 
 /**

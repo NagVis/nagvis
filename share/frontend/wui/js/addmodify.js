@@ -97,29 +97,29 @@ function validateMapCfgForm() {
 			// List options can be set by dropdown field with name=<option-name> or
 			// by input field with name=_inp_<option-name>. Prefer the dropdown field,
 			// if there is a value in the dropdown field don't check the input field.
-			var varName = sName;
+			var vName = sName;
 			if(sName.substring(0, 5) === '_inp_') {
-				varName = sName.replace('_inp_', '');
-				if(document.getElementById(varName).value != lang['manualInput'] && document.getElementById(varName).value != '')
+				vName = sName.replace('_inp_', '');
+				if(document.getElementById(vName).value != lang['manualInput'] && document.getElementById(vName).value != '')
 					continue;
 			}
 			
 			// Skip options which match the default value in the helper field
 			// These options have not been changed and don't need to be checked
-			var oField = document.getElementById(varName);
-			var oFieldDefault = document.getElementById('_'+varName);
-			if(oField && oFieldDefault && oField.value === oFieldDefault.value && validMapConfig[sType][varName]['must'] != '1')
+			var oField = document.getElementById(vName);
+			var oFieldDefault = document.getElementById('_'+vName);
+			if(oField && oFieldDefault && oField.value === oFieldDefault.value && validMapConfig[sType][vName]['must'] != '1')
 				continue;
 			oFieldDefault = null;
 			oField = null;
 			
 			if(document.addmodify.elements[i].value != '') {
 				// Print a note to the user: This map object will display the summary state of the current map
-				if(sType == "map" && varName == "map_name" && document.addmodify.elements[i].value == document.addmodify.map.value)
+				if(sType == "map" && vName == "map_name" && document.addmodify.elements[i].value == document.addmodify.map.value)
 					alert(printLang(lang['mapObjectWillShowSummaryState'],''));
 			} else {
-				if(validMapConfig[sType][varName]['must'] == '1') {
-					alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+varName+',TYPE~'+sType+',MAPNAME~'+document.addmodify.map.value));
+				if(validMapConfig[sType][vName]['must'] == '1') {
+					alert(printLang(lang['mustValueNotSet'],'ATTRIBUTE~'+vName+',TYPE~'+sType+',MAPNAME~'+document.addmodify.map.value));
 					document.addmodify.elements[i].focus();
 					
 					return false;

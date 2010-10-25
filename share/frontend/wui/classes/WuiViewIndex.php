@@ -82,8 +82,8 @@ class WuiViewIndex {
 			'htmlJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
 			'htmlCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
 			'htmlTemplates' => $this->CORE->getMainCfg()->getValue('paths','htmltemplates'), 
-			'wuiJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/js/',
-			'wuiCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/css/',
+			'htmlWuiJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmlwuijs'),
+			'htmlWuiCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/css/',
 			'bUseCompressedJs' => $this->checkJsCompressed(),
 			'customStylesheet' => $this->sCustomStylesheet,
 			'backgroundColor' => $this->sBackgroundColor,
@@ -103,11 +103,7 @@ class WuiViewIndex {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkJsCompressed() {
-		if(file_exists($this->CORE->getMainCfg()->getValue('paths', 'js').'WuiCompressed.js')) {
-			return true;
-		} else {
-			return false;
-		}
+		return file_exists($this->CORE->getMainCfg()->getValue('paths', 'wuijs').'WuiCompressed.js');
 	}
 }
 ?>
