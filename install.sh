@@ -908,6 +908,23 @@ cmp_js() {
 	cmp wz_jsgraphics.js
 }
 
+cmp_js_wui() {
+	cd $NAGVIS_PATH/share/frontend/wui/js/
+	OUT=WuiCompressed.js
+	>$OUT
+	cmp wui.js
+	cmp ajax.js
+	cmp addmodify.js
+	cmp EditMainCfg.js
+	cmp ManageBackgrounds.js
+	cmp ManageBackends.js
+	cmp ManageMaps.js
+	cmp ManageShapes.js
+	cmp MapManageTmpl.js
+	cmp wz_jsgraphics.js
+	cmp ExtGenericResize.js
+}
+
 # Main program starting
 ###############################################################################
 
@@ -1315,6 +1332,7 @@ copy "" "etc" "$NAGVIS_PATH"
 copy "" "LICENCE README" "$NAGVIS_PATH"
 copy "" "docs" "$NAGVIS_PATH/share"
 cmp_js
+cmp_js_wui
 
 # Remove demo maps if desired
 if [ "$IGNORE_DEMO" != "" ]; then
