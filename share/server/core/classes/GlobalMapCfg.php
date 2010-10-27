@@ -2027,11 +2027,19 @@ class GlobalMapCfg {
 		$numObjects = count($types);
 		for($i = 0; $i < $numObjects; $i++) {
 			$type = $types[$i];
-			$id   = $objIds[$i] - 1;
+			$id   = $objIds[$i];
 			if(!isset($newConfig[$type]))
 				$newConfig[$type] = Array();
-			if(isset($this->mapConfig[$type][$id]))
-				$newConfig[$type][$id] = $this->mapConfig[$type][$id];
+
+			$matchedTypeId = null;
+			foreach($this->mapConfig[$type] AS $typeId => $opts) {
+				if($opts['object_id'] == $id) {
+					$matchedTypeId = $typeId;
+					break;
+				}
+			}
+			if($matchedTypeId !== null)
+				$newConfig[$type][$matchedTypeId] = $this->mapConfig[$type][$matchedTypeId];
 		}
 		$this->mapConfig = $newConfig;
 	}
