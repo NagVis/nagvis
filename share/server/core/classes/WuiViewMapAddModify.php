@@ -325,7 +325,8 @@ class WuiViewMapAddModify {
 							}
 							$options = $this->CORE->getDefinedBackends();
 							$selected = $this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $propname, TRUE);
-							$onChange = "getObjects(this.value,'".$type."','".$field."','".$this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE)."');validateMapConfigFieldValue(this)";
+							if($this->aOpts['type'] != 'global')
+								$onChange = "getObjects(this.value,'".$type."','".$field."','".$this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE)."');validateMapConfigFieldValue(this)";
 						break;
 						
 						case 'host_name':
