@@ -106,9 +106,9 @@ define('GET_CHILDS', true);
 define('SET_KEYS', true);
 
 // Maximum length for usernames/passwords
-define('AUTH_MAX_PASSWORD_LENGTH', 15);
-define('AUTH_MAX_USERNAME_LENGTH', 15);
-define('AUTH_MAX_ROLENAME_LENGTH', 15);
+define('AUTH_MAX_PASSWORD_LENGTH', 30);
+define('AUTH_MAX_USERNAME_LENGTH', 30);
+define('AUTH_MAX_ROLENAME_LENGTH', 30);
 
 // Permission wildcard
 define('AUTH_PERMISSION_WILDCARD', '*');
