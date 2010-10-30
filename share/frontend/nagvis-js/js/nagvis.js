@@ -38,6 +38,7 @@ var oFileAges;
 var oStatusMessageTimer;
 var aMapObjects = [];
 var oMapSummaryObj;
+var regexCache = {};
 
 // Initialize and define some other basic vars
 var iNow = Date.parse(new Date());
@@ -1006,4 +1007,13 @@ function lightenColor(code, rD, gD, bD) {
 	
 	return "#" + code.toUpperCase();
 }
-	
+
+function getRegEx(n, exp, mod) {
+	if(typeof(regexCache[n]) !== 'undefined')
+		return regexCache[n];
+	else
+		if(typeof mod !== 'undefined')
+			return regex = new RegExp(exp, mod);
+		else
+			return regex = new RegExp(exp);
+}

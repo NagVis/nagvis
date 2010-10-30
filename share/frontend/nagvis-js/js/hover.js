@@ -32,7 +32,7 @@
  */
 
 function getHoverTemplateChildCode(sTemplateCode) {
-	var regex = new RegExp("<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
+	var regex = getRegEx('loopChild', "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
 	var results = regex.exec(sTemplateCode);
 	regex = null;
 	
@@ -72,19 +72,17 @@ function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
 				}
 			} else {
 				// Create an end line which shows the number of hidden child items
-				var numHiddenMembers = oObj.conf.num_members - oObj.conf.hover_childs_limit;
-				
 				var oMember = { 'conf': { 'type': 'host', 
 																	'name': '', 
 																	'summary_state': '', 
-																	'summary_output': numHiddenMembers+' more items...', 
+																	'summary_output': (oObj.conf.num_members - oObj.conf.hover_childs_limit)+' more items...', 
 																	'<!--\\sBEGIN\\sservicegroup_child\\s-->.+?<!--\\sEND\\sservicegroup_child\\s-->': ''}};
 				
 				childsHtmlCode += replaceHoverTemplateMacros(true, oMember, rowHtmlCode);
 			}
 		}
 		
-		var regex = new RegExp('<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->');
+		var regex = getRegEx('loopChild', "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
 		sTemplateCode = sTemplateCode.replace(regex, childsHtmlCode);
 		regex = null;
 	}
@@ -152,7 +150,7 @@ function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 	// On a update the image url replacement is easier. Just replace the old
 	// timestamp with the current
 	if(oObj.firstUpdate !== null) {
-		var regex = new RegExp('_t='+oObj.firstUpdate, 'g');
+		var regex = getRegEx('img_timestamp', '_t='+oObj.firstUpdate, 'g');
 		// Search before matching - saves some time
 		if(sTemplateCode.search(regex) !== -1)
 			sTemplateCode = sTemplateCode.replace(regex, '_t='+oObj.lastUpdate);
@@ -168,7 +166,7 @@ function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// Loop and replace all normal macros
 	for (var key in oMacros) {
-		var regex = new RegExp('\\['+key+'\\]', 'g');
+		var regex = getRegEx('hover-'+key, '\\['+key+'\\]', 'g');
 		// Search before matching - saves some time
 		if(sTemplateCode.search(regex) !== -1)
 			sTemplateCode = sTemplateCode.replace(regex, oMacros[key]);
@@ -287,7 +285,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// Loop and replace all unwanted section macros
 	for (var key in oSectionMacros) {
-		var regex = new RegExp(oSectionMacros[key], 'gm');
+		var regex = getRegEx('section-'+key, oSectionMacros[key], 'gm');
 		if(sTemplateCode.search(regex) !== -1)
 			sTemplateCode = sTemplateCode.replace(regex, '');
 		regex = null;
@@ -301,7 +299,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// Loop and replace all normal macros
 	for (var key in oMacros) {
-		var regex = new RegExp('\\['+key+'\\]', 'g');
+		var regex = getRegEx('hover-'+key, '\\['+key+'\\]', 'g');
 		// Search before matching - saves some time
 		if(sTemplateCode.search(regex) != -1)
 			sTemplateCode = sTemplateCode.replace(regex, oMacros[key]);
@@ -314,7 +312,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// Re-add the clean child code
 	if(sChildCode != '') {
-		var regex = new RegExp('<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->', 'gm');
+		var regex = getRegEx('loopChild', "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
 		
 		if(sTemplateCode.search(regex) !== -1)
 			sTemplateCode = sTemplateCode.replace(regex, '<!-- BEGIN loop_child -->'+sChildCode+'<!-- END loop_child -->');
@@ -324,7 +322,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// Search for images and append current timestamp to src (prevent caching of
 	// images e.a. when some graphs should be fresh)
-	var regex = new RegExp("<img.*src=['\"]?([^>'\"]*)['\"]?", 'gi');
+	var regex = getRegEx('img', "<img.*src=['\"]?([^>'\"]*)['\"]?");
 	var results = regex.exec(sTemplateCode);
 	if(results !== null) {
 		for(var i = 0, len = results.length; i < len; i=i+2) {

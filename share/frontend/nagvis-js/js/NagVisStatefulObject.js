@@ -369,27 +369,27 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		if(this.conf.url && this.conf.url !== '') {
 			if(this.conf.htmlcgi && this.conf.htmlcgi !== '') {
-				this.conf.url = this.conf.url.replace(new RegExp('\\[htmlcgi\\]', 'g'), this.conf.htmlcgi);
+				this.conf.url = this.conf.url.replace(getRegEx('htmlcgi', '\\[htmlcgi\\]', 'g'), this.conf.htmlcgi);
 			} else {
-				this.conf.url = this.conf.url.replace(new RegExp('\\[htmlcgi\\]', 'g'), oGeneralProperties.path_cgi);
+				this.conf.url = this.conf.url.replace(getRegEx('htmlcgi', '\\[htmlcgi\\]', 'g'), oGeneralProperties.path_cgi);
 			}
 			
-			this.conf.url = this.conf.url.replace(new RegExp('\\[htmlbase\\]', 'g'), oGeneralProperties.path_base);
+			this.conf.url = this.conf.url.replace(getRegEx('htmlbase', '\\[htmlbase\\]', 'g'), oGeneralProperties.path_base);
 			
-			this.conf.url = this.conf.url.replace(new RegExp('\\['+name+'\\]', 'g'), this.conf.name);
+			this.conf.url = this.conf.url.replace(getRegEx(name, '\\['+name+'\\]', 'g'), this.conf.name);
 			if(this.conf.type == 'service') {
-				this.conf.url = this.conf.url.replace(new RegExp('\\[service_description\\]', 'g'), this.conf.service_description);
+				this.conf.url = this.conf.url.replace(getRegEx('service_description', '\\[service_description\\]', 'g'), this.conf.service_description);
 			}
 
 			if(this.conf.type != 'map') {
-				this.conf.url = this.conf.url.replace(new RegExp('\\[backend_id\\]', 'g'), this.conf.backend_id);
+				this.conf.url = this.conf.url.replace(getRegEx('backend_id', '\\[backend_id\\]', 'g'), this.conf.backend_id);
 			}
 		}
 		
 		if(this.conf.hover_url && this.conf.hover_url !== '') {
-			this.conf.hover_url = this.conf.hover_url.replace(new RegExp('\\['+name+'\\]', 'g'), this.conf.name);
+			this.conf.hover_url = this.conf.hover_url.replace(getRegEx(name, '\\['+name+'\\]', 'g'), this.conf.name);
 			if(this.conf.type == 'service') {
-				this.conf.hover_url = this.conf.hover_url.replace(new RegExp('\\[service_description\\]', 'g'), this.conf.service_description);
+				this.conf.hover_url = this.conf.hover_url.replace(getRegEx('service_description', '\\[service_description\\]', 'g'), this.conf.service_description);
 			}
 		}
 		
@@ -403,11 +403,11 @@ var NagVisStatefulObject = NagVisObject.extend({
 				objName = this.conf.name;
 			}
 			
-			this.conf.label_text = this.conf.label_text.replace(new RegExp('\\[name\\]', 'g'), objName);
-			this.conf.label_text = this.conf.label_text.replace(new RegExp('\\[alias\\]', 'g'), this.conf.alias);
+			this.conf.label_text = this.conf.label_text.replace(getRegEx('name', '\\[name\\]', 'g'), objName);
+			this.conf.label_text = this.conf.label_text.replace(getRegEx('alias', '\\[alias\\]', 'g'), this.conf.alias);
 			
 			if(this.conf.type == 'service') {
-				this.conf.label_text = this.conf.label_text.replace(new RegExp('\\[service_description\\]', 'g'), this.conf.service_description);
+				this.conf.label_text = this.conf.label_text.replace(getRegEx('service_description', '\\[service_description\\]', 'g'), this.conf.service_description);
 			}
 		}
 	},
@@ -422,10 +422,10 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		// Replace static macros in label_text when needed
 		if(sReturn && sReturn !== '') {
-			sReturn = sReturn.replace(new RegExp('\\[output\\]', 'g'), this.conf.output);
+			sReturn = sReturn.replace(getRegEx('output', '\\[output\\]', 'g'), this.conf.output);
 			
 			if(this.conf.type == 'service' || this.conf.type == 'host') {
-				sReturn = sReturn.replace(new RegExp('\\[perfdata\\]', 'g'), this.conf.perfdata);
+				sReturn = sReturn.replace(getRegEx('perfdata', '\\[perfdata\\]', 'g'), this.conf.perfdata);
 			}
 		}
 		

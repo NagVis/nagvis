@@ -207,7 +207,7 @@ var NagVisObject = Base.extend({
 		
 		// Loop and replace all unwanted section macros
 		for (var key in oSectionMacros) {
-			var regex = new RegExp(oSectionMacros[key], 'gm');
+			var regex = getRegEx('section-'+key, oSectionMacros[key], 'gm');
 			this.context_template_code = this.context_template_code.replace(regex, '');
 			regex = null;
 		}
@@ -215,7 +215,7 @@ var NagVisObject = Base.extend({
 		
 		// Loop and replace all normal macros
 		for (var key in oMacros) {
-			var regex = new RegExp('\\['+key+'\\]', 'g');
+			var regex = getRegEx('hover-'+key, '\\['+key+'\\]', 'g');
 			this.context_template_code = this.context_template_code.replace(regex, oMacros[key]);
 			regex = null;
 		}
