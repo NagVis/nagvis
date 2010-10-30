@@ -42,9 +42,8 @@ var NagVisObject = Base.extend({
 		this.conf = oConf;
 		
 		// When no object_id given by server: generate own id
-		if(this.conf.object_id == null) {
+		if(this.conf.object_id == null)
 			this.conf.object_id = getRandomLowerCaseLetter() + getRandom(1, 99999);
-		}
 		
 		// Load view specific config modifiers (Normaly triggered by url params)
 		this.loadViewOpts();
@@ -80,9 +79,8 @@ var NagVisObject = Base.extend({
 		this.lastUpdate = iNow;
 		
 		// Save datetime of the first state update (needed for hover parsing)
-		if(this.firstUpdate === null) {
+		if(this.firstUpdate === null)
 			this.firstUpdate = this.lastUpdate;
-		}
 	},
   
 	/**
@@ -117,30 +115,33 @@ var NagVisObject = Base.extend({
 			
 			// Only create a new div when the context menu does not exist
 			var contextMenu = document.getElementById(this.conf.object_id+'-context');
+			var justAdded = false;
 			if(!contextMenu) {
 				// Create context menu div
 				var contextMenu = document.createElement('div');
 				contextMenu.setAttribute('id', this.conf.object_id+'-context');
+				contextMenu.setAttribute('class', 'context');
+				contextMenu.setAttribute('className', 'context');
+				contextMenu.style.zIndex = '1000';
+				contextMenu.style.display = 'none';
+				contextMenu.style.position = 'absolute';
+				contextMenu.style.overflow = 'visible';
+				justAdded = true;
 			}
-			
-			contextMenu.setAttribute('class', 'context');
-			contextMenu.setAttribute('className', 'context');
-			contextMenu.style.zIndex = '1000';
-			contextMenu.style.display = 'none';
-			contextMenu.style.position = 'absolute';
-			contextMenu.style.overflow = 'visible';
 			
 			// Append template code to context menu div
 			contextMenu.innerHTML = this.context_template_code;
 			
-			// Append context menu div to object container
-			oContainer.appendChild(contextMenu);
+			if(justAdded) {
+				// Append context menu div to object container
+				oContainer.appendChild(contextMenu);
+			
+				// Add eventhandlers for context menu
+				oObj.onmousedown = contextMouseDown;
+				oObj.oncontextmenu = contextShow;
+			}
+			
 			contextMenu = null;
-			
-			// Add eventhandlers for context menu
-			oObj.onmousedown = contextMouseDown;
-			oObj.oncontextmenu = contextShow;
-			
 			oContainer = null;
 			oObj = null;
 		}
@@ -257,12 +258,11 @@ var NagVisObject = Base.extend({
 			} else {
 				// Only fetch hover template code and parse static macros when this is
 				// no update
-				if(this.hover_template_code === null) {
+				if(this.hover_template_code === null)
 					this.getHoverTemplateCode();
-				}
 				
 				// Replace dynamic (state dependent) macros
-				sTemplateCode = replaceHoverTemplateDynamicMacros('0', this, this.hover_template_code);
+				sTemplateCode = replaceHoverTemplateDynamicMacros(false, this, this.hover_template_code);
 			}
 			
 			var oObj = document.getElementById(sObjId);
@@ -281,35 +281,39 @@ var NagVisObject = Base.extend({
 			
 			// Only create a new div when the hover menu does not exist
 			var hoverMenu = document.getElementById(this.conf.object_id+'-hover');
+			var justCreated = false;
 			if(!hoverMenu) {
 				// Create hover menu div
 				var hoverMenu = document.createElement('div');
 				hoverMenu.setAttribute('id', this.conf.object_id+'-hover');
+				hoverMenu.setAttribute('class', 'hover');
+				hoverMenu.setAttribute('className', 'hover');
+				hoverMenu.style.zIndex = '1000';
+				hoverMenu.style.display = 'none';
+				hoverMenu.style.position = 'absolute';
+				hoverMenu.style.overflow = 'visible';
+				justCreated = true;
 			}
-			
-			hoverMenu.setAttribute('class', 'hover');
-			hoverMenu.setAttribute('className', 'hover');
-			hoverMenu.style.zIndex = '1000';
-			hoverMenu.style.display = 'none';
-			hoverMenu.style.position = 'absolute';
-			hoverMenu.style.overflow = 'visible';
 			
 			// Append template code to hover menu div
 			hoverMenu.innerHTML = sTemplateCode;
 			sTemplateCode = null;
 			
-			// Append hover menu div to object container
-			oContainer.appendChild(hoverMenu);
-			hoverMenu = null;
+			if(justCreated) {
+				// Append hover menu div to object container
+				oContainer.appendChild(hoverMenu);
 			
-			// Add eventhandlers for hover menu
-			if(oObj) {
-				oObj.onmousemove = function(e) { var id = objId; var iH = iHoverDelay; displayHoverMenu(e, id, iH); id = null; iH = null; };
-				oObj.onmouseout = function() { hoverHide(); };
-				oObj = null;
+				// Add eventhandlers for hover menu
+				if(oObj) {
+					oObj.onmousemove = function(e) { var id = objId; var iH = iHoverDelay; displayHoverMenu(e, id, iH); id = null; iH = null; };
+					oObj.onmouseout = function() { hoverHide(); };
+				}
 			}
-			
+
+			justCreated = null;
+			hoverMenu = null;
 			oContainer = null;
+			oObj = null;
 		}
 	},
 	
@@ -324,9 +328,8 @@ var NagVisObject = Base.extend({
 	getHoverUrlCode: function() {
 		this.hover_template_code = oHoverUrls[this.conf.hover_url];
 		
-		if(this.hover_template_code === null) {
+		if(this.hover_template_code === null)
 			this.hover_template_code = '';
-		}
 	},
 	
 	/**
@@ -341,6 +344,6 @@ var NagVisObject = Base.extend({
 	getHoverTemplateCode: function() {
 		// Asign the template code and replace only the static macros
 		// These are typicaly configured static configued values from nagios
-		this.hover_template_code = replaceHoverTemplateStaticMacros('0', this, oHoverTemplates[this.conf.hover_template]);
+		this.hover_template_code = replaceHoverTemplateStaticMacros(false, this, oHoverTemplates[this.conf.hover_template]);
 	}
 });

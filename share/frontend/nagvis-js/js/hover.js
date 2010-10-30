@@ -30,24 +30,16 @@
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
- 
-// Is only needed for automap atm
-function getHoverTemplate(sName) {
-	return getSyncRequest(oGeneralProperties.path_server
-	                       + '?mod=General&act=getHoverTemplate&name[]='
-	                       + escapeUrlValues(sName))[0].code;
-}
 
 function getHoverTemplateChildCode(sTemplateCode) {
-	var rowHtmlCode = '';
 	var regex = new RegExp("<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
 	var results = regex.exec(sTemplateCode);
+	regex = null;
 	
-	if(results !== null) {
-		rowHtmlCode = results[1];
-	}
-	
-	return rowHtmlCode;
+	if(results !== null) 
+		return results[1];
+	else
+		return '';
 }
 
 function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
@@ -75,7 +67,7 @@ function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
 						oObj.members[i].parent_type = oObj.conf.type;
 						oObj.members[i].parent_name = oObj.conf.name;
 						
-						childsHtmlCode = childsHtmlCode + replaceHoverTemplateMacros('1', oObj.members[i], rowHtmlCode);
+						childsHtmlCode += replaceHoverTemplateMacros(true, oObj.members[i], rowHtmlCode);
 					}
 				}
 			} else {
@@ -88,7 +80,7 @@ function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
 																	'summary_output': numHiddenMembers+' more items...', 
 																	'<!--\\sBEGIN\\sservicegroup_child\\s-->.+?<!--\\sEND\\sservicegroup_child\\s-->': ''}};
 				
-				childsHtmlCode = childsHtmlCode + replaceHoverTemplateMacros('1', oMember, rowHtmlCode);
+				childsHtmlCode += replaceHoverTemplateMacros(true, oMember, rowHtmlCode);
 			}
 		}
 		
@@ -169,7 +161,7 @@ function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// Replace child macros
 	// FIXME: Check if this can be moved to static hover template macro replacements
-	if(replaceChild != '1' && oObj.conf.hover_childs_show
+	if(replaceChild == true && oObj.conf.hover_childs_show
 		 && oObj.conf.hover_childs_show == '1'
 		 && typeof oObj.conf.num_members != 'undefined' && oObj.conf.num_members > 0)
 		sTemplateCode = replaceHoverTemplateChildMacros(oObj, sTemplateCode);
@@ -206,7 +198,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// On child service objects in hover menu replace obj_name with 
 	// service_description
-	if(replaceChild == '1' && oObj.conf.type === 'service')
+	if(replaceChild == true && oObj.conf.type === 'service')
 		oMacros.obj_name = oObj.conf.service_description;
 	else
 		oMacros.obj_name = oObj.conf.name;
@@ -273,9 +265,9 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 		oSectionMacros.map = '<!--\\sBEGIN\\smap\\s-->.+?<!--\\sEND\\smap\\s-->';
 	
 	// Macros which are only for servicegroup childs
-	if(replaceChild == '1' && oObj.parent_type === 'servicegroup' && oObj.conf.type === 'service')
+	if(replaceChild == true && oObj.parent_type === 'servicegroup' && oObj.conf.type === 'service')
 		oMacros.obj_name1 = oObj.conf.name;
-	else if(replaceChild == '0' && oObj.conf.type !== 'servicegroup')
+	else if(replaceChild == false && oObj.conf.type !== 'servicegroup')
 		oSectionMacros.servicegroupChild = '<!--\\sBEGIN\\sservicegroup_child\\s-->.+?<!--\\sEND\\sservicegroup_child\\s-->';
 	
 	// Replace child section when unwanted

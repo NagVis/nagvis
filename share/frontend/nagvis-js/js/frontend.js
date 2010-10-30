@@ -34,22 +34,28 @@ var oHoverUrls = {};
 var oContextTemplates = {};
 var oAutomapParams = {};
 var bBlockUpdates = false;
+var cacheHeaderHeight = null;
 
 /**
  * Returns the current height of the header menu
  */
 function getHeaderHeight() {
-	var ret = 0;
-	
-	var oHeader = document.getElementById('header');
-	if(oHeader) {
-		// Only return header height when header is shown
-		if(oHeader.style.display != 'none')
-			ret = oHeader.clientHeight;
-		oHeader = null;
+	// Only gather the heather height once. 
+	if(cacheHeaderHeight === null) {
+		var ret = 0;
+		
+		var oHeader = document.getElementById('header');
+		if(oHeader) {
+			// Only return header height when header is shown
+			if(oHeader.style.display != 'none')
+				ret = oHeader.clientHeight;
+			oHeader = null;
+		}
+
+		cacheHeaderHeight = ret;
 	}
-	
-	return ret;
+
+	return cacheHeaderHeight;
 }
 
 /**

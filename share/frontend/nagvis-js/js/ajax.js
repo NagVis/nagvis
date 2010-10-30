@@ -183,6 +183,7 @@ function getAsyncRequest(sUrl, bCacheable, callback, callbackParams) {
 						}
             if(oResponse)
 							callback(oResponse, callbackParams);
+						oResponse = null;
 					}
 					
 					responseText = null;
@@ -314,13 +315,6 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 		
 		oRequest = null;
 	}
-	
-	/*if(sResponse !== null && sResponse !== '') {
-		if(typeof frontendMessageHide == 'function') { 
-			frontendMessageHide();
-		}
-	}*/
-	
 	return sResponse;
 }
 
