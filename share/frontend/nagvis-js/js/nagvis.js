@@ -1012,8 +1012,11 @@ function getRegEx(n, exp, mod) {
 	if(typeof(regexCache[n]) !== 'undefined')
 		return regexCache[n];
 	else
-		if(typeof mod !== 'undefined')
-			return regex = new RegExp(exp, mod);
-		else
-			return regex = new RegExp(exp);
+		if(typeof mod !== 'undefined') {
+			regexCache[n+'-'+mod] = new RegExp(exp, mod);
+			return regexCache[n+'-'+mod];
+		} else {
+			regexCache[n] = new RegExp(exp);
+			return regexCache[n];
+		}
 }
