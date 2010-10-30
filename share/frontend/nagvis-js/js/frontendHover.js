@@ -53,8 +53,10 @@ function hoverHide() {
 	}
 
 	// Remove the hover timer
-	clearTimeout(_hoverTimer);
-	_hoverTimer = null;
+	if(_hoverTimer !== null) {
+		clearTimeout(_hoverTimer);
+		_hoverTimer = null;
+	}
 	
 	// Change cursor to auto when hiding hover menu
 	document.body.style.cursor = 'auto';
@@ -63,10 +65,6 @@ function hoverHide() {
 function hoverShow(x, y, id) {
 	// Hide all other hover menus
 	hoverHide();
-
-	// Remove the hover timer
-	clearTimeout(_hoverTimer);
-	_hoverTimer = null;
 
 	var hoverSpacer = 5;
 
@@ -80,7 +78,7 @@ function hoverShow(x, y, id) {
 
 	// Maybe there is no hover menu defined for one object?
 	if(hoverMenu === null) {
-		eventlog('hover', 'error', 'Found no context menu wit the id "'+id+'-hover"');
+		eventlog('hover', 'error', 'Found no hover menu wit the id "'+id+'-hover"');
 		return false;
 	}
 	
