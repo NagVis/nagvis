@@ -161,7 +161,7 @@ function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// Replace child macros
 	// FIXME: Check if this can be moved to static hover template macro replacements
-	if(replaceChild == true && oObj.conf.hover_childs_show
+	if(replaceChild === false && oObj.conf.hover_childs_show
 		 && oObj.conf.hover_childs_show == '1'
 		 && typeof oObj.conf.num_members != 'undefined' && oObj.conf.num_members > 0)
 		sTemplateCode = replaceHoverTemplateChildMacros(oObj, sTemplateCode);
@@ -198,7 +198,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// On child service objects in hover menu replace obj_name with 
 	// service_description
-	if(replaceChild == true && oObj.conf.type === 'service')
+	if(replaceChild === true && oObj.conf.type === 'service')
 		oMacros.obj_name = oObj.conf.service_description;
 	else
 		oMacros.obj_name = oObj.conf.name;
@@ -218,7 +218,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	else
 		oMacros.obj_notes = '';
 	
-	if(replaceChild != '1' && oObj.conf.type !== 'map') {
+	if(replaceChild === false && oObj.conf.type !== 'map') {
 		oMacros.obj_backendid = oObj.conf.backend_id;
 		oMacros.obj_backend_instancename = oObj.conf.backend_instancename;
 		oMacros.html_cgi = oObj.conf.htmlcgi;
@@ -265,9 +265,9 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 		oSectionMacros.map = '<!--\\sBEGIN\\smap\\s-->.+?<!--\\sEND\\smap\\s-->';
 	
 	// Macros which are only for servicegroup childs
-	if(replaceChild == true && oObj.parent_type === 'servicegroup' && oObj.conf.type === 'service')
+	if(replaceChild === true && oObj.parent_type === 'servicegroup' && oObj.conf.type === 'service')
 		oMacros.obj_name1 = oObj.conf.name;
-	else if(replaceChild == false && oObj.conf.type !== 'servicegroup')
+	else if(replaceChild === false && oObj.conf.type !== 'servicegroup')
 		oSectionMacros.servicegroupChild = '<!--\\sBEGIN\\sservicegroup_child\\s-->.+?<!--\\sEND\\sservicegroup_child\\s-->';
 	
 	// Replace child section when unwanted
