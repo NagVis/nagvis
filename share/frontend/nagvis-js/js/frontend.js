@@ -516,9 +516,9 @@ function getFaviconImage(oObj) {
 	var sFavicon;
 	
 	// Gather image on summary state of the object
-	if(oObj.summary_in_downtime && oObj.summary_in_downtime == '1')
+	if(oObj.summary_in_downtime && oObj.summary_in_downtime === 1)
 		sFavicon = 'downtime';
-	else if(oObj.summary_problem_has_been_acknowledged && oObj.summary_problem_has_been_acknowledged == '1')
+	else if(oObj.summary_problem_has_been_acknowledged && oObj.summary_problem_has_been_acknowledged === 1)
 		sFavicon = 'ack';
 	else if(oObj.summary_state.toLowerCase() == 'unreachable')
 		sFavicon = 'down';

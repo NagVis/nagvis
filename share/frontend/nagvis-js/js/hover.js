@@ -133,20 +133,16 @@ function replaceHoverTemplateDynamicMacros(oObj) {
 	oMacros.obj_state = oObj.conf.state;
 	oMacros.obj_summary_state = oObj.conf.summary_state;
 	
-	// FIXME: Need to use == instead of === cause there are some inconsistences
-	// in the PHP code somewhere. This should be cleaned up
-	if(oObj.conf.summary_problem_has_been_acknowledged && oObj.conf.summary_problem_has_been_acknowledged == 1)
+	if(oObj.conf.summary_problem_has_been_acknowledged && oObj.conf.summary_problem_has_been_acknowledged === 1)
 		oMacros.obj_summary_acknowledged = '(Acknowledged)';
 	
-	// FIXME: Need to use == instead of === cause there are some inconsistences
-	// in the PHP code somewhere. This should be cleaned up
-	if(oObj.conf.problem_has_been_acknowledged && oObj.conf.problem_has_been_acknowledged == 1)
+	if(oObj.conf.problem_has_been_acknowledged && oObj.conf.problem_has_been_acknowledged === 1)
 		oMacros.obj_acknowledged = '(Acknowledged)';
 	
-	if(oObj.conf.summary_in_downtime && oObj.conf.summary_in_downtime == 1)
+	if(oObj.conf.summary_in_downtime && oObj.conf.summary_in_downtime === 1)
 		oMacros.obj_summary_in_downtime = '(Downtime)';
 	
-	if(oObj.conf.in_downtime && oObj.conf.in_downtime == 1)
+	if(oObj.conf.in_downtime && oObj.conf.in_downtime === 1)
 		oMacros.obj_in_downtime = '(Downtime)';
 	
 	oMacros.obj_output = oObj.conf.output;

@@ -128,7 +128,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 */
 	stateChangedToWorse: function() {
 		var lastSubState = 'normal';
-		if(this.last_state.summary_problem_has_been_acknowledged && this.last_state.summary_problem_has_been_acknowledged == 1) {
+		if(this.last_state.summary_problem_has_been_acknowledged && this.last_state.summary_problem_has_been_acknowledged === 1) {
 			lastSubState = 'ack';
 		} else if(this.last_state.summary_in_downtime && this.last_state.summary_in_downtime == 1) {
 			lastSubState = 'downtime';
@@ -142,9 +142,9 @@ var NagVisStatefulObject = NagVisObject.extend({
 		var lastWeight = oStates[this.last_state.summary_state][lastSubState];
 		
 		var subState = 'normal';
-		if(this.conf.summary_problem_has_been_acknowledged && this.conf.summary_problem_has_been_acknowledged == 1) {
+		if(this.conf.summary_problem_has_been_acknowledged && this.conf.summary_problem_has_been_acknowledged === 1) {
 			subState = 'ack';
-		} else if(this.conf.summary_in_downtime && this.conf.summary_in_downtime == 1) {
+		} else if(this.conf.summary_in_downtime && this.conf.summary_in_downtime === 1) {
 			subState = 'downtime';
 		}
 		
@@ -570,7 +570,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		}
 
 		// Get the border color depending on ack/downtime
-		if(this.conf.summary_problem_has_been_acknowledged == 1 || this.conf.summary_in_downtime == 1) {
+		if(this.conf.summary_problem_has_been_acknowledged === 1 || this.conf.summary_in_downtime === 1) {
 			colorBorder = '#666666';
 			colorFill = lightenColor(colorFill, 100, 100, 100);
 		}
