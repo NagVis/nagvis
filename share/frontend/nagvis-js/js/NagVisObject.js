@@ -259,7 +259,7 @@ var NagVisObject = Base.extend({
 				this.getHoverTemplateCode();
 			
 			// Replace dynamic (state dependent) macros
-			sTemplateCode = replaceHoverTemplateDynamicMacros(this, this.hover_template_code);
+			sTemplateCode = replaceHoverTemplateDynamicMacros(this);
 		}
 		
 		var doc = document;

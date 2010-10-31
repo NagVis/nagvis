@@ -31,28 +31,15 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-function getHoverTemplateChildCode(sTemplateCode) {
-	var regex = getRegEx('loopChild', "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
-	var results = regex.exec(sTemplateCode);
-	regex = null;
-	
-	if(results !== null) 
-		return results[1];
-	else
-		return '';
-}
-
 function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
 	var mapName = '';
 	var childsHtmlCode = '';
 	
-	if(typeof(oPageProperties) != 'undefined' && oPageProperties != null) {
+	if(typeof(oPageProperties) != 'undefined' && oPageProperties != null)
 		mapName = oPageProperties.map_name;
-	}
 	
-	var rowHtmlCode = getHoverTemplateChildCode(sTemplateCode);
-	
-	if(rowHtmlCode != '' && oObj.members && oObj.members.length > 0) {
+	var rowHtmlCode = oHoverTemplatesChild[oObj.conf.hover_template];
+	if(typeof(rowHtmlCode) != 'undefined' && rowHtmlCode != '' && oObj.members && oObj.members.length > 0) {
 		// Loop all child objects until all looped or the child limit is reached
 		for(var i = 0, len1 = oObj.conf.hover_childs_limit, len2 = oObj.members.length;
 		    (len1 == -1 || (len1 >= 0 && i <= len1)) && i < len2; i++) {
@@ -134,7 +121,7 @@ function replaceHoverTemplateMacrosChild(oObj, sTemplateCode) {
 	return sTemplateCode;
 }
 
-function replaceHoverTemplateDynamicMacros(oObj, sTemplateCode) {
+function replaceHoverTemplateDynamicMacros(oObj) {
 	var oMacros = {};
 
 	if(typeof(oPageProperties) != 'undefined' && oPageProperties != null 
@@ -177,6 +164,8 @@ function replaceHoverTemplateDynamicMacros(oObj, sTemplateCode) {
 		oMacros.obj_state_duration = oObj.conf.state_duration;
 		oMacros.obj_perfdata = oObj.conf.perfdata;
 	}
+
+	var sTemplateCode = oObj.hover_template_code;
 	
 	// On a update the image url replacement is easier. Just replace the old
 	// timestamp with the current
@@ -296,22 +285,17 @@ function replaceHoverTemplateStaticMacros(oObj, sTemplateCode) {
 	}
 	oSectionMacros = null;
 	
-	// Get loop child code for later replacing
-	// FIXME: This is workaround is needed cause the obj_name macro is replaced
-	// by the parent objects macro in current progress
-	var sChildCode = getHoverTemplateChildCode(sTemplateCode);
-	
 	// Loop and replace all normal macros
 	sTemplateCode = sTemplateCode.replace(/\[(\w*)\]/g, function(){ return oMacros[ arguments[1] ] || '['+arguments[1]+']';});
 	
 	oMacros = null;
 	
 	// Re-add the clean child code
+	// This workaround is needed cause the obj_name macro is replaced
+	// by the parent objects macro in current progress
 	var regex = getRegEx('loopChild', "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
-	
 	if(sTemplateCode.search(regex) !== -1)
-		sTemplateCode = sTemplateCode.replace(regex, '<!-- BEGIN loop_child -->'+sChildCode+'<!-- END loop_child -->');
-	
+		sTemplateCode = sTemplateCode.replace(regex, '<!-- BEGIN loop_child -->'+oHoverTemplatesChild[oObj.hover_template]+'<!-- END loop_child -->');
 	regex = null;
 	
 	// Search for images and append current timestamp to src (prevent caching of

@@ -30,6 +30,7 @@
  * Definition of needed variables
  */
 var oHoverTemplates = {};
+var oHoverTemplatesChild = {};
 var oHoverUrls = {};
 var oContextTemplates = {};
 var oAutomapParams = {};
@@ -351,6 +352,26 @@ function parseHoverMenus(aObjs) {
 }
 
 /**
+ * getHoverTemplateChildCode()
+ *
+ * Extracts the childs code from the hover templates
+ *
+ * @param   String   The whole template code
+ * @return  String   The child part template code
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getHoverTemplateChildCode(sTemplateCode) {
+	var regex = getRegEx('loopChild', "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
+	var results = regex.exec(sTemplateCode);
+	regex = null;
+	
+	if(results !== null) 
+		return results[1];
+	else
+		return '';
+}
+
+/**
  * getHoverTemplates()
  *
  * Gets the code for needed hover templates and saves it for later use in icons
@@ -388,12 +409,15 @@ function getHoverTemplates(aObjs) {
 	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
+	aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverTemplate',
+	                                  aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oHoverTemplates
 	if(aTemplateObjects.length > 0)
-		for(var i = 0, len = aTemplateObjects.length; i < len; i++)
+		for(var i = 0, len = aTemplateObjects.length; i < len; i++) {
 			oHoverTemplates[aTemplateObjects[i].name] = aTemplateObjects[i].code;
+			oHoverTemplatesChild[aTemplateObjects[i].name] = getHoverTemplateChildCode(aTemplateObjects[i].code);
+		}
 }
 
 /**
