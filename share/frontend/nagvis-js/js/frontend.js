@@ -706,9 +706,9 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 				
 				// - Eventlog
 				if(aObjs[intIndex].conf.type == 'service') {
-					eventlog("state-change", "info", aObjs[intIndex].conf.type+" "+aObjs[intIndex].conf.name+" "+aObjs[intIndex].conf.service_description+": Old: "+aObjs[intIndex].last_conf.summary_state+"/"+aObjs[intIndex].last_conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].last_conf.summary_in_downtime+" New: "+aObjs[intIndex].conf.summary_state+"/"+aObjs[intIndex].conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].conf.summary_in_downtime);
+					eventlog("state-change", "info", aObjs[intIndex].conf.type+" "+aObjs[intIndex].conf.name+" "+aObjs[intIndex].conf.service_description+": Old: "+aObjs[intIndex].last_state.summary_state+"/"+aObjs[intIndex].last_state.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].last_state.summary_in_downtime+" New: "+aObjs[intIndex].conf.summary_state+"/"+aObjs[intIndex].conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].conf.summary_in_downtime);
 				} else {
-					eventlog("state-change", "info", aObjs[intIndex].conf.type+" "+aObjs[intIndex].conf.name+": Old: "+aObjs[intIndex].last_conf.summary_state+"/"+aObjs[intIndex].last_conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].last_conf.summary_in_downtime+" New: "+aObjs[intIndex].conf.summary_state+"/"+aObjs[intIndex].conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].conf.summary_in_downtime);
+					eventlog("state-change", "info", aObjs[intIndex].conf.type+" "+aObjs[intIndex].conf.name+": Old: "+aObjs[intIndex].last_state.summary_state+"/"+aObjs[intIndex].last_state.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].last_state.summary_in_downtime+" New: "+aObjs[intIndex].conf.summary_state+"/"+aObjs[intIndex].conf.summary_problem_has_been_acknowledged+"/"+aObjs[intIndex].conf.summary_in_downtime);
 				}
 				
 				// - Sound

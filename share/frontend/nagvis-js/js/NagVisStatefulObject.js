@@ -27,7 +27,7 @@
 
 var NagVisStatefulObject = NagVisObject.extend({
 	// Stores the information from last refresh (Needed for change detection)
-	last_conf: null,
+	last_state: null,
 	// Array of member objects
 	members: null,
 	
@@ -93,12 +93,13 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	saveLastState: function() {
-		this.last_conf = {};
-		
-		// FIXME: Do not copy the whole conf array
-		for (var i in this.conf) {
-			this.last_conf[i] = this.conf[i];
-		}
+		this.last_state = {
+		  'summary_state': this.conf.summary_state,
+			'summary_in_downtime': this.conf.summary_in_downtime,
+			'summary_problem_has_been_acknowledged': this.conf.summary_problem_has_been_acknowledged,
+			'output': this.conf.output,
+			'perfdata': this.conf.perfdata,
+		};
 	},
 	
 	/**
@@ -109,9 +110,9 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	stateChanged: function() {
-		if(this.conf.summary_state != this.last_conf.summary_state || 
-		   this.conf.summary_problem_has_been_acknowledged != this.last_conf.summary_problem_has_been_acknowledged || 
-		   this.conf.summary_in_downtime != this.last_conf.summary_in_downtime) {
+		if(this.conf.summary_state != this.last_state.summary_state || 
+		   this.conf.summary_problem_has_been_acknowledged != this.last_state.summary_problem_has_been_acknowledged || 
+		   this.conf.summary_in_downtime != this.last_state.summary_in_downtime) {
 			return true;
 		} else {
 			return false;
@@ -127,18 +128,18 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 */
 	stateChangedToWorse: function() {
 		var lastSubState = 'normal';
-		if(this.last_conf.summary_problem_has_been_acknowledged && this.last_conf.summary_problem_has_been_acknowledged == 1) {
+		if(this.last_state.summary_problem_has_been_acknowledged && this.last_state.summary_problem_has_been_acknowledged == 1) {
 			lastSubState = 'ack';
-		} else if(this.last_conf.summary_in_downtime && this.last_conf.summary_in_downtime == 1) {
+		} else if(this.last_state.summary_in_downtime && this.last_state.summary_in_downtime == 1) {
 			lastSubState = 'downtime';
 		}
 
 		// If there is no "last state" return true here
-		if(!this.last_conf.summary_state) {
+		if(!this.last_state.summary_state) {
 			return true;
 		}
 		
-		var lastWeight = oStates[this.last_conf.summary_state][lastSubState];
+		var lastWeight = oStates[this.last_state.summary_state][lastSubState];
 		
 		var subState = 'normal';
 		if(this.conf.summary_problem_has_been_acknowledged && this.conf.summary_problem_has_been_acknowledged == 1) {
@@ -164,8 +165,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	outputOrPerfdataChanged: function() {
-		if(this.conf.output != this.last_conf.output || 
-		   this.conf.perfdata != this.last_conf.perfdata) {
+		if(this.conf.output != this.last_state.output || 
+		   this.conf.perfdata != this.last_state.perfdata) {
 			return true;
 		} else {
 			return false;
