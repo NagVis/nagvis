@@ -99,8 +99,6 @@ function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 	if(typeof(oPageProperties) != 'undefined' && oPageProperties != null 
 	   && (oPageProperties.view_type === 'map' || oPageProperties.view_type === 'automap'))
 		oMacros.map_name = oPageProperties.map_name;
-	else
-		oMacros.map_name = '';
 	
 	oMacros.last_status_refresh = date(oGeneralProperties.date_format, oObj.lastUpdate/1000);
 	
@@ -111,25 +109,17 @@ function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 	// in the PHP code somewhere. This should be cleaned up
 	if(oObj.conf.summary_problem_has_been_acknowledged && oObj.conf.summary_problem_has_been_acknowledged == 1)
 		oMacros.obj_summary_acknowledged = '(Acknowledged)';
-	else
-		oMacros.obj_summary_acknowledged = '';
 	
 	// FIXME: Need to use == instead of === cause there are some inconsistences
 	// in the PHP code somewhere. This should be cleaned up
 	if(oObj.conf.problem_has_been_acknowledged && oObj.conf.problem_has_been_acknowledged == 1)
 		oMacros.obj_acknowledged = '(Acknowledged)';
-	else
-		oMacros.obj_acknowledged = '';
 	
 	if(oObj.conf.summary_in_downtime && oObj.conf.summary_in_downtime == 1)
 		oMacros.obj_summary_in_downtime = '(Downtime)';
-	else
-		oMacros.obj_summary_in_downtime = '';
 	
 	if(oObj.conf.in_downtime && oObj.conf.in_downtime == 1)
 		oMacros.obj_in_downtime = '(Downtime)';
-	else
-		oMacros.obj_in_downtime = '';
 	
 	oMacros.obj_output = oObj.conf.output;
 	oMacros.obj_summary_output = oObj.conf.summary_output;
@@ -164,16 +154,9 @@ function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 		 && typeof oObj.conf.num_members != 'undefined' && oObj.conf.num_members > 0)
 		sTemplateCode = replaceHoverTemplateChildMacros(oObj, sTemplateCode);
 	
-	// Loop and replace all normal macros
-	for (var key in oMacros) {
-		var regex = getRegEx('hover-'+key, '\\['+key+'\\]', 'g');
-		// Search before matching - saves some time
-		if(sTemplateCode.search(regex) !== -1)
-			sTemplateCode = sTemplateCode.replace(regex, oMacros[key]);
-		regex = null;
-	}
+	// Replace all normal macros
+	sTemplateCode = sTemplateCode.replace(/\[(\w*)\]/g, function(){ return oMacros[ arguments[1] ] || "";});
 	oMacros = null;
-	
 	return sTemplateCode;
 }
 
@@ -298,13 +281,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	var sChildCode = getHoverTemplateChildCode(sTemplateCode);
 	
 	// Loop and replace all normal macros
-	for (var key in oMacros) {
-		var regex = getRegEx('hover-'+key, '\\['+key+'\\]', 'g');
-		// Search before matching - saves some time
-		if(sTemplateCode.search(regex) != -1)
-			sTemplateCode = sTemplateCode.replace(regex, oMacros[key]);
-		regex = null;
-	}
+	sTemplateCode = sTemplateCode.replace(/\[(\w*)\]/g, function(){ return oMacros[ arguments[1] ] || '['+arguments[1]+']';});
 	
 	oMacros = null;
 	iChildStart = null;

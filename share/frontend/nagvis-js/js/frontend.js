@@ -345,7 +345,7 @@ function setMapHoverUrls() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function parseHoverMenus(aObjs) {
-	for(var a = 0; a < aObjs.length; a++)
+	for(var a = 0, len = aObjs.length; a < len; a++)
 		if(aObjs[a].conf.hover_menu && aObjs[a].conf.hover_menu !== '0')
 			aObjs[a].parseHoverMenu();
 }

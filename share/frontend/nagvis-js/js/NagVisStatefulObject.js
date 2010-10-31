@@ -150,11 +150,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		var weight = oStates[this.conf.summary_state][subState];
 		
-		if(lastWeight < weight) {
-			return true;
-		} else {
-			return false;
-		}
+		return lastWeight < weight;
 	},
 	
 	/**
@@ -165,12 +161,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	outputOrPerfdataChanged: function() {
-		if(this.conf.output != this.last_state.output || 
-		   this.conf.perfdata != this.last_state.perfdata) {
-			return true;
-		} else {
-			return false;
-		}
+		return this.conf.output != this.last_state.output || this.conf.perfdata != this.last_state.perfdata;
 	},
 	
 	/**
@@ -182,8 +173,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	parseAutomap: function () {
-		var oContainerDiv;
-		
 		if(!this.parsedObject) {
 			// Only replace the macros on first parse
 			this.replaceMacros();
@@ -193,7 +182,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 		this.remove();
 		
 		// Create container div
-		oContainerDiv = document.createElement('div');
+		var doc = document;
+		var oContainerDiv = doc.createElement('div');
 		oContainerDiv.setAttribute('id', this.conf.object_id);
 		
 		// Parse icon on automap
@@ -209,12 +199,13 @@ var NagVisStatefulObject = NagVisObject.extend({
 		}
     
     // Append child to map and save reference in parsedObject
-		var oMap = document.getElementById('map');
+		var oMap = doc.getElementById('map');
 		if(oMap) {
 			this.parsedObject = oMap.appendChild(oContainerDiv);
 			oMap = null;
 		}
 		oContainerDiv = null;
+		doc = null
 	},
 	
 	/**
@@ -226,8 +217,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	parse: function () {
-		var oContainerDiv;
-		
 		// Only replace the macros on first parse
 		if(!this.parsedObject) {
 			this.replaceMacros();
@@ -237,7 +226,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 		this.remove();
 		
 		// Create container div
-		oContainerDiv = document.createElement('div');
+		var doc = document;
+		var oContainerDiv = doc.createElement('div');
 		oContainerDiv.setAttribute('id', this.conf.object_id);
 		
 		// Parse object depending on line or normal icon
@@ -267,12 +257,13 @@ var NagVisStatefulObject = NagVisObject.extend({
 		}
     
     // Append child to map and save reference in parsedObject
-		var oMap = document.getElementById('map');
+		var oMap = doc.getElementById('map');
 		if(oMap) {
 			this.parsedObject = oMap.appendChild(oContainerDiv);
 			oMap = null;
 		}
 		oContainerDiv = null;
+		doc = null;
 		
 		if(this.conf.view_type && this.conf.view_type == 'line') {
 			this.drawLine();
@@ -281,15 +272,18 @@ var NagVisStatefulObject = NagVisObject.extend({
 	
 	remove: function () {
 		if(this.parsedObject) {
-			var oMap = document.getElementById('map');
-			if(!oMap)
+			var doc = document;
+			var oMap = doc.getElementById('map');
+			if(!oMap) {
+				doc = null;
 				return;
+			}
 
 			var oObj;
 			if(this.conf.view_type && this.conf.view_type === 'line') {
-				oObj = document.getElementById(this.conf.object_id+'-linediv');
+				oObj = doc.getElementById(this.conf.object_id+'-linediv');
 			} else {
-				oObj = document.getElementById(this.conf.object_id+'-icon');
+				oObj = doc.getElementById(this.conf.object_id+'-icon');
 			}
 			
 			if(oObj) {
@@ -301,7 +295,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 				oObj = null;
 			}
 
-			var oContext = document.getElementById(this.conf.object_id+'-context');
+			var oContext = doc.getElementById(this.conf.object_id+'-context');
 			// Remove context menu
 			// Needs to be removed after unsetting the eventhandlers
 			if(oContext) {
@@ -316,6 +310,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 			this.parsedObject = null;
 			
 			oMap = null;
+			doc = null;
 		}
 	},
 	
@@ -441,11 +436,12 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 */
 	parseLine: function () {
 		// Create container div
-		var oContainerDiv = document.createElement('div');
+		var doc = document;
+		var oContainerDiv = doc.createElement('div');
 		oContainerDiv.setAttribute('id', this.conf.object_id+'-linediv');
 		
 		// Create line div
-		var oLineDiv = document.createElement('div');
+		var oLineDiv = doc.createElement('div');
 		oLineDiv.setAttribute('id', this.conf.object_id+'-line');
 		oLineDiv.style.zIndex = this.conf.z;
 		
@@ -454,7 +450,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		// Parse hover/link area only when needed
 		if((this.conf.url && this.conf.url !== '' && this.conf.url !== '#') || (this.conf.hover_menu && this.conf.hover_menu !== '')) {
-			var oLink = document.createElement('a');
+			var oLink = doc.createElement('a');
 			oLink.setAttribute('id', this.conf.object_id+'-linelink');
 			oLink.setAttribute('class', 'linelink');
 			oLink.setAttribute('className', 'linelink');
@@ -465,6 +461,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 			oLink = null;
 		}
 		
+		doc = null;
 		return oContainerDiv;
 	},
 	
@@ -702,12 +699,13 @@ var NagVisStatefulObject = NagVisObject.extend({
 			alt = this.conf.name;
 		}
 		
-		var oIcon = document.createElement('img');
+		var doc = document;
+		var oIcon = doc.createElement('img');
 		oIcon.setAttribute('id', this.conf.object_id+'-icon');
 		oIcon.src = this.conf.iconHtmlPath+this.conf.icon;
 		oIcon.alt = this.conf.type+'-'+alt;
 		
-		var oIconDiv = document.createElement('div');
+		var oIconDiv = doc.createElement('div');
 		oIconDiv.setAttribute('id', this.conf.object_id+'-icondiv');
 		oIconDiv.setAttribute('class', 'icon');
 		oIconDiv.setAttribute('className', 'icon');
@@ -718,7 +716,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		// Parse link only when set
 		if(this.conf.url && this.conf.url !== '' && this.conf.url !== '#') {
-			var oIconLink = document.createElement('a');
+			var oIconLink = doc.createElement('a');
 			oIconLink.href = this.conf.url;
 			oIconLink.target = this.conf.url_target;
 			oIconLink.appendChild(oIcon);
@@ -731,6 +729,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 			oIcon = null;
 		}
 		
+		doc = null;
 		return oIconDiv;
 	},
 	
@@ -751,12 +750,13 @@ var NagVisStatefulObject = NagVisObject.extend({
 			alt = this.conf.name;
 		}
 		
-		var oIcon = document.createElement('img');
+		var doc = document;
+		var oIcon = doc.createElement('img');
 		oIcon.setAttribute('id', this.conf.object_id+'-icon');
 		oIcon.src = this.conf.iconHtmlPath+this.conf.icon;
 		oIcon.alt = this.conf.type+'-'+alt;
 		
-		var oIconDiv = document.createElement('div');
+		var oIconDiv = doc.createElement('div');
 		oIconDiv.setAttribute('id', this.conf.object_id+'-icondiv');
 		oIconDiv.setAttribute('class', 'icon');
 		oIconDiv.setAttribute('className', 'icon');
@@ -767,7 +767,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		// Parse link only when set
 		if(this.conf.url && this.conf.url !== '' && this.conf.url !== '#') {
-			var oIconLink = document.createElement('a');
+			var oIconLink = doc.createElement('a');
 			oIconLink.href = this.conf.url;
 			oIconLink.target = this.conf.url_target;
 			oIconLink.appendChild(oIcon);
@@ -780,6 +780,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 			oIcon = null;
 		}
 		
+		doc = null;
 		return oIconDiv;
 	},
 	

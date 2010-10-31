@@ -1012,7 +1012,7 @@ function getRegEx(n, exp, mod) {
 	if(typeof(regexCache[n]) !== 'undefined')
 		return regexCache[n];
 	else
-		if(typeof mod !== 'undefined') {
+		if(mod !== undefined) {
 			regexCache[n+'-'+mod] = new RegExp(exp, mod);
 			return regexCache[n+'-'+mod];
 		} else {
