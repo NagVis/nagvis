@@ -25,6 +25,8 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
+var _eventlog = null;
+
 var oSeverity = {
 	'debug':    4,
 	'info':     3,
@@ -57,40 +59,38 @@ function eventlogToggle() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function eventlogInitialize() {
-	var oEventlog = document.getElementById('eventlog');
+	var doc = document;
+	var oEventlog = doc.createElement('div');
+	oEventlog.setAttribute("id","eventlog");
+	oEventlog.style.overflow = 'auto';
 	
-	if(!oEventlog) {
-		oEventlog = document.createElement('div');
-		oEventlog.setAttribute("id","eventlog");
-		oEventlog.style.overflow = 'auto';
-		
-		var oEventlogControl = document.createElement('div');
-		oEventlogControl.setAttribute("id","eventlogControl");
-		oEventlogControl.appendChild(document.createTextNode('_'));
-		oEventlogControl.onmouseover = function() {
-			document.body.style.cursor='pointer';
-		};
-		
-		oEventlogControl.onmouseout = function() {
-			document.body.style.cursor='auto';
-		};
-		
-		oEventlogControl.onclick = function() {
-			eventlogToggle();
-		};
-		
-		document.body.appendChild(oEventlog);
-		
-		document.body.appendChild(oEventlogControl);
-		oEventlogControl = null;
-		
-		// Hide eventlog when configured
-		if(oPageProperties.event_log_hidden == 1) {
-			eventlogToggle();
-		}
-	}
+	var oEventlogControl = doc.createElement('div');
+	oEventlogControl.setAttribute("id","eventlogControl");
+	oEventlogControl.appendChild(doc.createTextNode('_'));
+	oEventlogControl.onmouseover = function() {
+		doc.body.style.cursor='pointer';
+	};
 	
+	oEventlogControl.onmouseout = function() {
+		doc.body.style.cursor='auto';
+	};
+	
+	oEventlogControl.onclick = function() {
+		eventlogToggle();
+	};
+	
+	doc.body.appendChild(oEventlog);
+	
+	doc.body.appendChild(oEventlogControl);
+	oEventlogControl = null;
+	
+	// Hide eventlog when configured
+	if(oPageProperties.event_log_hidden == 1)
+		eventlogToggle();
+	
+	_eventlog = oEventlog;
 	oEventlog = null;
+	doc = null;
 }
 
 /**
@@ -107,13 +107,13 @@ function eventlogInitialize() {
  */
 function eventlog(sComponent, sSeverity, sText) {
 	if(typeof(oPageProperties) != 'undefined' && oPageProperties !== null && oPageProperties.event_log && oPageProperties.event_log != '0') {
-		var oEventlog = document.getElementById('eventlog');
+		var doc = document;
 		
-		if(!oEventlog) {
+		if(_eventlog === null) {
 			eventlogInitialize();
 			eventlog("eventlog", "info", "Eventlog initialized (Level: "+oPageProperties.event_log_level+")");
-			oEventlog = document.getElementById('eventlog');
 		}
+		var oEventlog = _eventlog;
 
 		if(typeof oSeverity[sSeverity] === 'undefined') {
 			eventlog('eventlog', 'error', 'Unknown severity used, skipping: '+sSeverity+' '+sComponent+': '+sText)
@@ -132,21 +132,20 @@ function eventlog(sComponent, sSeverity, sText) {
 			}
 			
 			// Format the new log entry
-			var oEntry = document.createTextNode(getCurrentTime()+" "+sSeverity+" "+sComponent+": "+sText);
+			var oEntry = doc.createTextNode(getCurrentTime()+" "+sSeverity+" "+sComponent+": "+sText);
 			
 			// Append new message to log
 			oEventlog.appendChild(oEntry);
 			oEntry = null;
 			
 			// Add line break after the line
-			var oBr = document.createElement('br');
-			oEventlog.appendChild(oBr);
-			oBr = null;
+			oEventlog.appendChild(doc.createElement('br'));
 			
 			// Scroll down
 			oEventlog.scrollTop = oEventlog.scrollHeight;
 		}
 		
 		oEventlog = null;
+		doc = null;
 	}
 }
