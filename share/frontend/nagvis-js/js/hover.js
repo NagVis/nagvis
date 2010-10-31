@@ -252,9 +252,10 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 		oSectionMacros.servicegroupChild = '<!--\\sBEGIN\\sservicegroup_child\\s-->.+?<!--\\sEND\\sservicegroup_child\\s-->';
 	
 	// Replace child section when unwanted
-	if((oObj.conf.hover_childs_show && oObj.conf.hover_childs_show != '1')
-	   || typeof oObj.conf.num_members == 'undefined' || oObj.conf.num_members == 0)
-		oSectionMacros.childs = '<!--\\sBEGIN\\schilds\\s-->.+?<!--\\sEND\\schilds\\s-->';
+	if(replaceChild === false)
+		if((oObj.conf.hover_childs_show && oObj.conf.hover_childs_show != '1')
+	  	 || typeof oObj.conf.num_members == 'undefined' || oObj.conf.num_members == 0)
+			oSectionMacros.childs = '<!--\\sBEGIN\\schilds\\s-->.+?<!--\\sEND\\schilds\\s-->';
 	
 	// Replace child macros
 	// FIXME: Check if this can be moved to static hover template macro replacements
@@ -278,17 +279,16 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	// Get loop child code for later replacing
 	// FIXME: This is workaround is needed cause the obj_name macro is replaced
 	// by the parent objects macro in current progress
-	var sChildCode = getHoverTemplateChildCode(sTemplateCode);
+	if(replaceChild === false)
+		var sChildCode = getHoverTemplateChildCode(sTemplateCode);
 	
 	// Loop and replace all normal macros
 	sTemplateCode = sTemplateCode.replace(/\[(\w*)\]/g, function(){ return oMacros[ arguments[1] ] || '['+arguments[1]+']';});
 	
 	oMacros = null;
-	iChildStart = null;
-	iChildEnd = null;
 	
 	// Re-add the clean child code
-	if(sChildCode != '') {
+	if(replaceChild === false && sChildCode != '') {
 		var regex = getRegEx('loopChild', "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
 		
 		if(sTemplateCode.search(regex) !== -1)
@@ -299,23 +299,25 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// Search for images and append current timestamp to src (prevent caching of
 	// images e.a. when some graphs should be fresh)
-	var regex = getRegEx('img', "<img.*src=['\"]?([^>'\"]*)['\"]?");
-	var results = regex.exec(sTemplateCode);
-	if(results !== null) {
-		for(var i = 0, len = results.length; i < len; i=i+2) {
-			var sTmp;
-			
-			// Replace src value
-			sTmp = results[i].replace(results[i+1], results[i+1]+"&_t="+oObj.firstUpdate);
-			
-			// replace image code
-			sTemplateCode = sTemplateCode.replace(results[i], sTmp);
-			
-			sTmp = null;
+	if(replaceChild === false) {
+		var regex = getRegEx('img', "<img.*src=['\"]?([^>'\"]*)['\"]?");
+		var results = regex.exec(sTemplateCode);
+		if(results !== null) {
+			for(var i = 0, len = results.length; i < len; i=i+2) {
+				var sTmp;
+				
+				// Replace src value
+				sTmp = results[i].replace(results[i+1], results[i+1]+"&_t="+oObj.firstUpdate);
+				
+				// replace image code
+				sTemplateCode = sTemplateCode.replace(results[i], sTmp);
+				
+				sTmp = null;
+			}
 		}
+		results = null;
+		regex = null;
 	}
-	results = null;
-	regex = null;
 	
 	return sTemplateCode;
 }
