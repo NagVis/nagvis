@@ -53,23 +53,25 @@ class WuiViewMap {
 	 */
 	public function parse() {
 		// Initialize template system
-		$TMPL = New FrontendTemplateSystem($this->CORE);
+		$TMPL    = new FrontendTemplateSystem($this->CORE);
 		$TMPLSYS = $TMPL->getTmplSys();
+		$USERCFG = new CoreUserCfg();
 		
 		$aData = Array(
-				'backgroundImg' => $this->MAP->MAPCFG->BACKGROUND->getFile(),
-				'base' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+				'backgroundImg'     => $this->MAP->MAPCFG->BACKGROUND->getFile(),
+				'base'              => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
 				'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
-				'viewProperties' => $this->MAP->MAPCFG->parseViewProperties(),
-				'mapName' => $this->name,
-				'userName' => $this->CORE->getAuthentication()->getUser(),
-				'mapObjects' => $this->MAP->parseObjects(),
-				'movable' => $this->MAP->getMoveableObjects(),
-				'lang' => $this->CORE->getJsLang(),
-				'validMainCfg' => $this->CORE->getJsValidMainConfig(),
-				'validMapCfg' => $this->MAP->getJsValidMapConfig(),
-				'mapOptions' => $this->CORE->getMapOptions(),
-				'backupAvailable' => (file_exists($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->MAP->MAPCFG->getName().".cfg.bak")?'true':'false')
+				'viewProperties'    => $this->MAP->MAPCFG->parseViewProperties(),
+				'userProperties'    => $USERCFG->doGetAsJson(),
+				'mapName'           => $this->name,
+				'userName'          => $this->CORE->getAuthentication()->getUser(),
+				'mapObjects'        => $this->MAP->parseObjects(),
+				'movable'           => $this->MAP->getMoveableObjects(),
+				'lang'              => $this->CORE->getJsLang(),
+				'validMainCfg'      => $this->CORE->getJsValidMainConfig(),
+				'validMapCfg'       => $this->MAP->getJsValidMapConfig(),
+				'mapOptions'        => $this->CORE->getMapOptions(),
+				'backupAvailable'   => (file_exists($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->MAP->MAPCFG->getName().".cfg.bak")?'true':'false')
 			);
 
     // Build page based on the template file and the data array

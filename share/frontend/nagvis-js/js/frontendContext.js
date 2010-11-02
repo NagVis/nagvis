@@ -157,7 +157,7 @@ function contextShow(event) {
 		
 		// hide the menu first to avoid an "up-then-over" visual effect
 		contextMenu.style.display = 'none';
-		contextMenu.style.left = event.clientX + scrollLeft + 'px';
+		contextMenu.style.left = event.clientX + scrollLeft - getSidebarWidth() + 'px';
 		contextMenu.style.top = event.clientY + scrollTop - getHeaderHeight() + 'px';
 		contextMenu.style.display = '';
 		

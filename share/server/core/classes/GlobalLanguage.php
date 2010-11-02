@@ -26,7 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalLanguage {
-	private $SHANDLER = null;
+	private $USERCFG = null;
 	private $CORE = null;
 	private $textDomain;
 	private $sCurrentLanguage;
@@ -45,7 +45,7 @@ class GlobalLanguage {
 		$this->textDomain = $textDomain;
 		
 		if($this->CORE->getMainCfg() !== null) {
-			$this->SHANDLER = new CoreSessionHandler();
+			$this->USERCFG= new CoreUserCfg();
 		}
 		
 		$this->sCurrentLanguage = $this->gatherCurrentLanguage();
@@ -78,7 +78,7 @@ class GlobalLanguage {
 			}
 		}
 	}
-	
+
 	/**
 	 * Reads the language to use in NagVis
 	 *
@@ -93,8 +93,8 @@ class GlobalLanguage {
 			if($sReturn == '') {
 				switch($sMethod) {
 					case 'session':
-						// Read the user choice from session
-						$sReturn = $this->SHANDLER->get('userLanguage');
+						// Read the user choice from user options
+						$sReturn = $this->USERCFG->getValue('language', '');
 					break;
 					case 'browser':
 						// Read the prefered language from the users browser
@@ -105,13 +105,12 @@ class GlobalLanguage {
 						//       indirectly the language from that country.
 					break;
 					case 'user':
-						// Read the language from url
+						// Read the language from url or user config
 						$sReturn = $this->getUserLanguage();
 						
-						// Save language to session when user set one
-						if($sReturn != '' && $sReturn != $this->SHANDLER->get('userLanguage')) {
-				 			$this->SHANDLER->set('userLanguage', $sReturn);
-				 		}
+						// Save language to user config when user set one
+						if($sReturn != '' && $sReturn != $this->USERCFG->getValue('language', ''))
+				 			$this->USERCFG->doSet(Array('language' => $sReturn));
 					break;
 					case 'config':
 						// Read default language from configuration

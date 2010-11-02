@@ -89,14 +89,16 @@ class NagVisAutoMapView {
 	 */
 	public function parse() {
 		// Initialize template system
-		$TMPL = New FrontendTemplateSystem($this->CORE);
+		$TMPL    = new FrontendTemplateSystem($this->CORE);
 		$TMPLSYS = $TMPL->getTmplSys();
+		$USERCFG = new CoreUserCfg();
 		
 		$aData = Array(
 				'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
 				'workerProperties' => $this->CORE->getMainCfg()->parseWorkerProperties(),
 				'rotationProperties' => json_encode($this->aRotation),
 				'viewProperties' => $this->parseViewProperties(),
+				'userProperties' => $USERCFG->doGetAsJson(),
 				'mapName' => $this->name,
 				'automap' => $this->content,
 				'automapParams' => json_encode($this->aParams)

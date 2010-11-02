@@ -435,6 +435,11 @@ class GlobalMainCfg {
 					'default' => '',
 					'field_type' => 'hidden',
 					'match' => MATCH_STRING_PATH),
+				'profiles' => Array('must' => 0,
+					'editable' => 0,
+					'default' => '',
+					'field_type' => 'hidden',
+					'match' => MATCH_STRING_PATH),
 				'automapcfg' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
@@ -990,6 +995,7 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['cfg']['default']                = $base.'etc/';
 		$this->validConfig['paths']['mapcfg']['default']             = $base.'etc/maps/';
 		$this->validConfig['paths']['automapcfg']['default']         = $base.'etc/automaps/';
+		$this->validConfig['paths']['profiles']['default']           = $base.'etc/profiles';
 		
 		$this->validConfig['paths']['var']['default']                = $base.'var/';
 		$this->validConfig['paths']['sharedvar']['default']          = $base.HTDOCS_DIR.'/var/';

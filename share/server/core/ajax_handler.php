@@ -102,6 +102,7 @@ try {
 	$MHANDLER->regModule('ManageShapes');
 	$MHANDLER->regModule('ManageBackgrounds');
 	$MHANDLER->regModule('Multisite');
+	$MHANDLER->regModule('User');
 
 	// Load the module
 	$MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));

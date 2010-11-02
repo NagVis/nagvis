@@ -47,16 +47,18 @@ class WuiViewWelcome {
 	 */
 	public function parse() {
 		// Initialize template system
-		$TMPL = New FrontendTemplateSystem($this->CORE);
+		$TMPL    = new FrontendTemplateSystem($this->CORE);
 		$TMPLSYS = $TMPL->getTmplSys();
+		$USERCFG = new CoreUserCfg();
 		
 		$aData = Array(
-				'base' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+				'base'              => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
 				'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
-				'userName' => $this->CORE->getAuthentication()->getUser(),
-				'lang' => $this->CORE->getJsLang(),
-				'validMainCfg' => $this->CORE->getJsValidMainConfig(),
-				'mapOptions' => $this->CORE->getMapOptions()
+				'userProperties'    => $USERCFG->doGetAsJson(),
+				'userName'          => $this->CORE->getAuthentication()->getUser(),
+				'lang'              => $this->CORE->getJsLang(),
+				'validMainCfg'      => $this->CORE->getJsValidMainConfig(),
+				'mapOptions'        => $this->CORE->getMapOptions()
 			);
 
     // Build page based on the template file and the data array

@@ -962,6 +962,11 @@ function lightenColor(code, rD, gD, bD) {
 	return "#" + code.toUpperCase();
 }
 
+/**
+ * Handles regular expressions in NagVis js frontend (including regex cache)
+ *
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
 function getRegEx(n, exp, mod) {
 	if(typeof(regexCache[n]) !== 'undefined')
 		return regexCache[n];
@@ -973,4 +978,18 @@ function getRegEx(n, exp, mod) {
 			regexCache[n] = new RegExp(exp);
 			return regexCache[n];
 		}
+}
+
+/**
+ * Sends a user option to the server using an async json request
+ *
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function storeUserOption(key, value) {
+	// Set in current page
+	oUserProperties[key] = value;
+
+	// And send to server
+	var url = oGeneralProperties.path_server + '?mod=User&act=setOption&opts['+escapeUrlValues(key)+']=' + escapeUrlValues(value);
+	getAsyncRequest(url, false, undefined, undefined);
 }
