@@ -388,10 +388,8 @@ function saveObjectAfterMoveAndDrop(oObj) {
 			var objX = parseInt(document.getElementById('box_'+type+'_'+id).style.left.replace('px', ''));
 			var objY = parseInt(document.getElementById('box_'+type+'_'+id).style.top.replace('px', ''));
 			
-			// Substract height of header menu here
-			objY += getHeaderHeight();
-			
-			// +3: Is the borderWidth of the object highlighting
+			// +3: Is the borderWidth of the object highlighting.
+			// The header menu height is not needed when calculating relative coords
 			x = oObj.x - objX + borderWidth;
 			y = oObj.y - objY + borderWidth;
 			
