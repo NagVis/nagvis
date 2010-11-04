@@ -1006,4 +1006,12 @@ function lightenColor(code, rD, gD, bD) {
 	
 	return "#" + code.toUpperCase();
 }
-	
+
+/**
+ * Checks if a variable is set
+ *
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function isset(v) {
+	return typeof(v) !== 'undefined';
+}
