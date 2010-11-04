@@ -993,3 +993,12 @@ function storeUserOption(key, value) {
 	var url = oGeneralProperties.path_server + '?mod=User&act=setOption&opts['+escapeUrlValues(key)+']=' + escapeUrlValues(value);
 	getAsyncRequest(url, false, undefined, undefined);
 }
+
+/**
+ * Checks if a variable is set
+ *
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function isset(v) {
+	return typeof(v) !== 'undefined';
+}
