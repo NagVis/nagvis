@@ -196,7 +196,22 @@
 	<li class="closed"><a class="title" href="#" onclick="sidebarToggleSubtree(this)">Maps</a>
 		<ul style="display:none;">
 			{foreach $maps map}
-				<li><a class="left" href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a></li>
+				{if $map.configError == true}
+					<li>{$map.mapAlias}</li>
+				{else}
+					<li><a class="left" href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a></li>
+				{/if}
+			{/foreach}
+		</ul>
+	</li>
+	<li class="closed"><a class="title" href="#" onclick="sidebarToggleSubtree(this)">Automaps</a>
+		<ul style="display:none;">
+			{foreach $automaps map}
+				{if $map.configError == true}
+					<li>{$map.mapAlias}</li>
+				{else}
+					<li><a class="left" href="{$pathBase}/frontend/nagvis-js/index.php?mod=AutoMap&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a></li>
+				{/if}
 			{/foreach}
 		</ul>
 	</li>
