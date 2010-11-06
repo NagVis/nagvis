@@ -88,9 +88,108 @@ class NagVisHeaderMenu {
 		// Build page based on the template file and the data array
 		return $this->TMPLSYS->get($this->TMPL->getTmplFile($this->templateName, 'header'), $this->aMacros);
 	}
+
+	/**
+	 * Returns a list of available languages for the header menus macro list
+	 *
+	 * return   Array
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function getLangList() {
+		// Build language list
+		$aLang = $this->CORE->getAvailableAndEnabledLanguages();
+		$numLang = count($aLang);
+		foreach($aLang AS $lang) {
+			$aLangs[$lang] = Array();
+			$aLangs[$lang]['language'] = $lang;
+			
+			// Get translated language name
+			switch($lang) {
+				case 'en_US':
+					$languageLocated = $this->CORE->getLang()->getText('en_US');
+				break;
+				case 'de_DE':
+					$languageLocated = $this->CORE->getLang()->getText('de_DE');
+				break;
+				case 'es_ES':
+					$languageLocated = $this->CORE->getLang()->getText('es_ES');
+				break;
+				case 'fr_FR':
+					$languageLocated = $this->CORE->getLang()->getText('fr_FR');
+				break;
+				case 'pt_BR':
+					$languageLocated = $this->CORE->getLang()->getText('pt_BR');
+				break;
+				case 'ru_RU':
+					$languageLocated = $this->CORE->getLang()->getText('ru_RU');
+				break;
+				default:
+					$languageLocated = $this->CORE->getLang()->getText($lang);
+				break;
+			}
+			
+			$aLangs[$lang]['langLanguageLocated'] = $languageLocated;
+		}
+		return $aLangs;
+	}
+
+	/**
+	 * Returns a list of maps/automaps for the header menus macro list
+	 *
+	 * return   Array
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function getMapList($type, $maps) {
+		$permEditAnyMap = false;
+		$aMaps = Array();
+		foreach($maps AS $mapName) {
+			$map = Array();
+			
+			if($type == 'maps')
+				$MAPCFG1 = new NagVisMapCfg($this->CORE, $mapName);
+			else
+				$MAPCFG1 = new NagVisAutomapCfg($this->CORE, $mapName);
+			try {
+				$MAPCFG1->readMapConfig(ONLY_GLOBAL);
+			} catch(MapCfgInvalid $e) {
+				$map['configError'] = true;
+			}
+			
+			// Only show maps which should be shown
+			if($MAPCFG1->getValue('global', 0, 'show_in_lists') != 1)
+				continue;
+
+			// Only proceed permited objects
+			if($this->CORE->getAuthorization() === null
+			   || (($type == 'maps' && !$this->CORE->getAuthorization()->isPermitted('Map', 'view', $mapName))
+				     || ($type == 'automaps' && !$this->CORE->getAuthorization()->isPermitted('AutoMap', 'view', $mapName))))
+				continue;
+			
+			$map['mapName'] = $MAPCFG1->getName();
+			$map['mapAlias'] = $MAPCFG1->getValue('global', '0', 'alias');
+			if($type == 'maps') {
+				$map['urlParams'] = '';
+				$map['permittedEdit'] = $this->CORE->getAuthorization()->isPermitted('Map', 'edit', $mapName);
+
+				$permEditAnyMap |= $map['permittedEdit'];
+			} else
+				$map['urlParams'] = str_replace('&', '&amp;', $MAPCFG1->getValue('global', 0, 'default_params'));
+			
+			// auto select current map and apply map specific optins to the header menu
+			if ($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName()) {
+				$map['selected'] = True;
+				
+				$this->aMacros['bEnableFade'] = $MAPCFG1->getValue('global', 0, 'header_fade');
+			}
+			
+			$aMaps[] = $map;
+		}
+
+		return Array($aMaps, $permEditAnyMap);
+	}
 	
 	/**
-	 * ORIVATE getMacros()
+	 * PRIVATE getMacros()
 	 *
 	 * Returns all macros for the header template
 	 *
@@ -139,150 +238,9 @@ class NagVisHeaderMenu {
 		// Initialize the enable fade option. Is overridden by the current map or left as is
 		$this->aMacros['bEnableFade'] = $this->CORE->getMainCfg()->getValue('defaults', 'headerfade');
 		
-		// Build map list
-		$permEditAnyMap = False;
-		$aMaps = Array();
-		foreach($this->CORE->getAvailableMaps() AS $mapName) {
-			$map = Array();
-			
-			$MAPCFG1 = new NagVisMapCfg($this->CORE, $mapName);
-			try {
-				$MAPCFG1->readMapConfig(ONLY_GLOBAL);
-			} catch(MapCfgInvalid $e) {
-				$map['configError'] = true;
-			}
-			
-			// Only show maps which should be shown
-			if($MAPCFG1->getValue('global', 0, 'show_in_lists') != 1) {
-				continue;
-			}
-
-			// Only proceed permited objects
-			if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted('Map', 'view', $mapName)) {
-				continue;
-			}
-			
-			$map['mapName'] = $MAPCFG1->getName();
-			$map['mapAlias'] = $MAPCFG1->getValue('global', '0', 'alias');
-			$map['urlParams'] = '';
-			$map['permittedEdit'] = $this->CORE->getAuthorization()->isPermitted('Map', 'edit', $mapName);
-
-			$permEditAnyMap |= $map['permittedEdit'];
-			
-			// auto select current map and apply map specific optins to the header menu
-			if ($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName()) {
-				$map['selected'] = True;
-				
-				$this->aMacros['bEnableFade'] = $MAPCFG1->getValue('global', 0, 'header_fade');
-			}
-			
-			$aMaps[] = $map;
-		}
-		
-		$this->aMacros['maps'] = $aMaps;
-		$this->aMacros['permittedEditAnyMap'] = $permEditAnyMap; 
-		
-		// Build automap list
-		$aAutomaps = Array();
-		$aAutomap = $this->CORE->getAvailableAutomaps();
-		$numAutomaps = count($aAutomap);
-		$i = 1;
-		foreach($aAutomap AS $mapName) {
-			$map = Array();
-			
-			$MAPCFG1 = new NagVisAutomapCfg($this->CORE, $mapName);
-			try {
-				$MAPCFG1->readMapConfig(ONLY_GLOBAL);
-			} catch(MapCfgInvalid $e) {
-				$map['configError'] = true;
-			}
-			
-			// Only show maps which should be shown
-			if($mapName != '__automap' && $MAPCFG1->getValue('global',0, 'show_in_lists') != 1) {
-				continue;
-			}
-			
-			if($mapName == '__automap' && $this->CORE->getMainCfg()->getValue('automap', 'showinlists') != 1) {
-				continue;
-			}
-
-			// Only proceed permited objects
-			if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted('AutoMap', 'view', $mapName)) {
-				continue;
-			}
-			
-			$map['mapName'] = $MAPCFG1->getName();
-			$map['mapAlias'] = $MAPCFG1->getValue('global', '0', 'alias');
-			
-			// Add defaultparams to map selection
-			$map['urlParams'] = str_replace('&', '&amp;', $MAPCFG1->getValue('global', 0, 'default_params'));
-			
-			// auto select current map
-			if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName()) {
-				$map['selected'] = True;
-				
-				$this->aMacros['bEnableFade'] = $MAPCFG1->getValue('global', 0, 'header_fade');
-			}
-			
-			// Underline last element
-			$map['classUnderline'] = ($i == $numAutomaps);
-			
-			$aAutomaps[] = $map;
-			$i++;
-		}
-		
-		$this->aMacros['automaps'] = $aAutomaps;
-		
-		// Build language list
-		$aLang = $this->CORE->getAvailableAndEnabledLanguages();
-		$numLang = count($aLang);
-		$i = 1;
-		foreach($aLang AS $lang) {
-			$aLangs[$lang] = Array();
-			$aLangs[$lang]['language'] = $lang;
-			
-			// Underline last element
-			if($i == $numLang) {
-				$aLangs[$lang]['classUnderline'] = true;
-			} else {
-				$aLangs[$lang]['classUnderline'] = false;
-			}
-			
-			// Get translated language name
-			switch($lang) {
-				case 'en_US':
-					$languageLocated = $this->CORE->getLang()->getText('en_US');
-				break;
-				case 'de_DE':
-					$languageLocated = $this->CORE->getLang()->getText('de_DE');
-				break;
-				case 'es_ES':
-					$languageLocated = $this->CORE->getLang()->getText('es_ES');
-				break;
-				case 'fr_FR':
-					$languageLocated = $this->CORE->getLang()->getText('fr_FR');
-				break;
-				case 'pt_BR':
-					$languageLocated = $this->CORE->getLang()->getText('pt_BR');
-				break;
-				case 'ru_RU':
-					$languageLocated = $this->CORE->getLang()->getText('ru_RU');
-				break;
-				default:
-					$languageLocated = $this->CORE->getLang()->getText($lang);
-				break;
-			}
-			
-			$aLangs[$lang]['langLanguageLocated'] = $languageLocated;
-			
-			$i++;
-		}
-		$this->aMacros['langs'] = $aLangs;
-		
-		// Select overview in header menu when no map shown
-		if($this->aMacros['mod'] == 'Map' && $this->aMacros['mod'] != 'AutoMap') {
-			$this->aMacros['selected'] = true;
-		}
+		list($this->aMacros['maps'], $this->aMacros['permittedEditAnyMap']) = $this->getMapList('maps', $this->CORE->getAvailableMaps());
+		list($this->aMacros['automaps'], $_not_used) = $this->getMapList('automaps', $this->CORE->getAvailableAutomaps());
+		$this->aMacros['langs'] = $this->getLangList();
 	}
 	
 	/**
@@ -354,17 +312,6 @@ class NagVisHeaderMenu {
 			'permittedRoleMgmt' => $this->AUTHORISATION->isPermitted('RoleMgmt', 'manage'));
 		
 		return $aReturn;
-	}
-	
-	/**
-	 * Checks for existing header template
-	 *
-	 * @param 	Boolean	$printErr
-	 * @return	Boolean	Is Check Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function checkTemplateExists($printErr) {
-		return GlobalCore::getInstance()->checkExisting($this->pathTemplateFile, $printErr);
 	}
 	
 	/**
