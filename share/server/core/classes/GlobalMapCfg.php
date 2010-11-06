@@ -84,6 +84,9 @@ class GlobalMapCfg {
 					'default_params' => Array('must' => 0,
 						'default' => $this->CORE->getMainCfg()->getValue('automap', 'defaultparams'),
 						'match' => MATCH_STRING_URL),
+					'parent_map' => Array('must' => 0,
+						'default' => '',
+						'match' => MATCH_MAP_NAME_EMPTY),
 					
 					'context_menu' => Array('must' => 0,
 						'default' => $this->CORE->getMainCfg()->getValue('defaults', 'contextmenu'),
