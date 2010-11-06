@@ -245,7 +245,7 @@ function sidebarToggleSubtree(oTitle) {
 	// When the new state is "closed" remove it from the openNodes list
 	// When the node is visible and is not in the list yet, append it
 	if(state === 0 && open !== null) {
-		openNodes.splice(0, 1);
+		openNodes.splice(open, 1);
 	} else if(state === 1 && open === null)
 		openNodes.push(index);
 
