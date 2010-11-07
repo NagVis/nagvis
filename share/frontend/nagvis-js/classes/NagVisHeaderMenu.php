@@ -142,6 +142,7 @@ class NagVisHeaderMenu {
 	private function getMapList($type, $maps) {
 		$permEditAnyMap = false;
 		$aMaps = Array();
+		$childMaps = Array();
 		foreach($maps AS $mapName) {
 			$map = Array();
 			
@@ -167,6 +168,7 @@ class NagVisHeaderMenu {
 			
 			$map['mapName'] = $MAPCFG1->getName();
 			$map['mapAlias'] = $MAPCFG1->getValue('global', '0', 'alias');
+			$map['childs'] = Array();
 			if($type == 'maps') {
 				$map['urlParams'] = '';
 				$map['permittedEdit'] = $this->CORE->getAuthorization()->isPermitted('Map', 'edit', $mapName);
@@ -176,16 +178,32 @@ class NagVisHeaderMenu {
 				$map['urlParams'] = str_replace('&', '&amp;', $MAPCFG1->getValue('global', 0, 'default_params'));
 			
 			// auto select current map and apply map specific optins to the header menu
-			if ($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName()) {
+			if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName()) {
 				$map['selected'] = True;
 				
+				// Override header fade option with map config
 				$this->aMacros['bEnableFade'] = $MAPCFG1->getValue('global', 0, 'header_fade');
 			}
 			
-			$aMaps[] = $map;
+			$map['parent'] = $MAPCFG1->getValue('global', 0, 'parent_map');
+
+			if($map['parent'] === '')
+				$aMaps[$map['mapName']] = $map;
+			else {
+				if(!isset($childMaps[$map['parent']]))
+					$childMaps[$map['parent']] = Array();
+				$childMaps[$map['parent']][$map['mapName']] = $map;
+			}
 		}
 
-		return Array($aMaps, $permEditAnyMap);
+		return Array($this->mapListToTree($aMaps, $childMaps), $permEditAnyMap);
+	}
+
+	private function mapListToTree($maps, $childMaps) {
+		foreach(array_keys($maps) AS $freeParent)
+			if(isset($childMaps[$freeParent]))
+				$maps[$freeParent]['childs'] = $this->mapListToTree($childMaps[$freeParent], $childMaps);
+		return $maps;
 	}
 	
 	/**
@@ -282,6 +300,8 @@ class NagVisHeaderMenu {
 			'langHostgroup' => $this->CORE->getLang()->getText('hostgroup'),
 			'langServicegroup' => $this->CORE->getLang()->getText('servicegroup'),
 			'langMap' => $this->CORE->getLang()->getText('map'),
+			'langMaps' => $this->CORE->getLang()->getText('Maps'),
+			'langAutomaps' => $this->CORE->getLang()->getText('Automaps'),
 			'langTextbox' => $this->CORE->getLang()->getText('textbox'),
 			'langShape' => $this->CORE->getLang()->getText('shape'),
 			'langStateless' => $this->CORE->getLang()->getText('Stateless'),

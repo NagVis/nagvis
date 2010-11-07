@@ -18,13 +18,9 @@
 					{/if}
 					{if count($maps) > 0}
 					{foreach $maps map}<li>
-						{if $map.configError == true}
-							<a class="left error" href="#">{$map.mapAlias}</a>
-						{else}
-							<a class="left" href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a>
-						{/if}
-						{if $map.permittedEdit}<a class="right" href="{$pathBase}/frontend/wui/index.php?mod=Map&amp;act=edit&amp;show={$map.mapName}{$map.urlParams}">Edit</a>
-						{else}<a class="right">&nbsp;</a>{/if}
+						{if $map.configError == true}<a class="left error" href="#">{$map.mapAlias}</a>
+						{else}<a class="left" href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a> {/if}
+						{if $map.permittedEdit}<a class="right" href="{$pathBase}/frontend/wui/index.php?mod=Map&amp;act=edit&amp;show={$map.mapName}{$map.urlParams}">Edit</a>{else}<a class="right">&nbsp;</a>{/if}
 					</li>{/foreach}
 					<li class="spacer"><hr /></li>
 					{/if}
@@ -190,30 +186,23 @@
 </ul>
 </div>
 
+{template sideMaps maps pathBase type indent=1}
+{foreach $maps map}
+	{if $map.configError == true}<li class="lvl{$indent}">{$map.mapAlias}</li>
+	{else}<li class="lvl{$indent}"><a class="left" href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a></li>{/if}
+	{if $map.childs}
+		{sideMaps $map.childs $pathBase $type $indent+1}
+	{/if}
+{/foreach}
+{/template}
 <div id="sidebar">
 <ul>
 	{if $permittedOverview}<li class="spacerbottom"><a href="{$pathBase}/frontend/nagvis-js/index.php">{$langOverview}</a></li>{/if}
-	<li class="closed"><a class="title" href="#" onclick="sidebarToggleSubtree(this)">Maps</a>
-		<ul style="display:none;">
-			{foreach $maps map}
-				{if $map.configError == true}
-					<li>{$map.mapAlias}</li>
-				{else}
-					<li><a class="left" href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a></li>
-				{/if}
-			{/foreach}
-		</ul>
+	<li class="closed"><a class="title" href="#" onclick="sidebarToggleSubtree(this)">{$langMaps}</a>
+		<ul style="display:none;">{sideMaps $maps $pathBase "Map"}</ul>
 	</li>
-	<li class="closed"><a class="title" href="#" onclick="sidebarToggleSubtree(this)">Automaps</a>
-		<ul style="display:none;">
-			{foreach $automaps map}
-				{if $map.configError == true}
-					<li>{$map.mapAlias}</li>
-				{else}
-					<li><a class="left" href="{$pathBase}/frontend/nagvis-js/index.php?mod=AutoMap&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a></li>
-				{/if}
-			{/foreach}
-		</ul>
+	<li class="closed"><a class="title" href="#" onclick="sidebarToggleSubtree(this)">{$langAutomaps}</a>
+		<ul style="display:none;">{sideMaps $automaps $pathBase "AutoMap"}</ul>
 	</li>
 	{if $permittedEditAnyMap}<li class="spacertop"><a href="{$pathBase}/frontend/wui/index.php" class="underline">{$langWui}</a></li>{/if}
 </ul>

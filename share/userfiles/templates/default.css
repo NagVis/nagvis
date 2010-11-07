@@ -560,6 +560,11 @@ td#popupWindowContent fieldset.form label {
 #sidebar li.spacerbottom {border-bottom:1px dotted #a4a4a4}
 #sidebar li.spacertop {border-top:1px dotted #a4a4a4}
 #sidebar li a {display:block;padding-left:20px;width:180px;color:#43B3CF;text-decoration:none;}
+#sidebar li.lvl2 a{padding-left:30px;width:170px}
+#sidebar li.lvl3 a{padding-left:40px;width:160px}
+#sidebar li.lvl3 a{padding-left:50px;width:150px}
+#sidebar li.lvl4 a{padding-left:60px;width:140px}
+#sidebar li.lvl5 a{padding-left:70px;width:130px}
 #sidebar li.open a.title {background: url('../images/templates/default.folder_open.gif') no-repeat left #eaf0f2;}
 #sidebar li.closed a.title {background: url('../images/templates/default.folder_closed.gif') no-repeat left #eaf0f2;}
 #sidebar li a:hover {background-color:#d9e1e4;color:#779D2A}
