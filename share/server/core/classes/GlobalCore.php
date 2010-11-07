@@ -482,6 +482,25 @@ class GlobalCore {
 	public function checkSharedVarFolderWriteable($printErr) {
 		return $this->checkWriteable(substr(self::getMainCfg()->getValue('paths', 'sharedvar'),0,-1), $printErr);
 	}
+	
+	/**
+	 * Tries to set correct permissions on files
+	 * Works completely silent - no error messages here
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function setPerms($file) {
+		try {
+			$group = self::getMainCfg()->getValue('global', 'file_group');
+			$old = error_reporting(0);
+			if($group !== '')
+				chgrp($file, $group);
+			chmod($file, octdec(self::getMainCfg()->getValue('global', 'file_mode')));
+			error_reporting($old);
+		} catch(Exception $e) {
+			error_reporting($old);
+		}
+	}
 
 	/**
 	 * Transforms a NagVis version to integer which can be used

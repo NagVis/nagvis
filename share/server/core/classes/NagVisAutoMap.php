@@ -337,9 +337,9 @@ class NagVisAutoMap extends GlobalMap {
 			 * result in commands too long with big maps. So write the config to a file
 			 * and let it be read by graphviz binary.
 			 */
-			$fh = fopen($this->CORE->getMainCfg()->getValue('paths', 'var').$this->name.'.dot','w');
-			fwrite($fh, $this->parseGraphvizConfig());
-			fclose($fh);
+			$dotFile = $this->CORE->getMainCfg()->getValue('paths', 'var').$this->name.'.dot';
+			file_put_contents($dotFile, $this->parseGraphvizConfig());
+			$this->CORE->setPerms($dotFile);
 			
 			// Parse map
 			$cmd = $this->graphvizPath.$binary

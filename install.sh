@@ -1329,6 +1329,7 @@ makedir "$NAGVIS_PATH/share/var"
 LINE="Copying files to $NAGVIS_PATH..."
 copy "" "share" "$NAGVIS_PATH"
 copy "" "etc" "$NAGVIS_PATH"
+makedir "$NAGVIS_PATH/etc/profiles"
 copy "" "LICENCE README" "$NAGVIS_PATH"
 copy "" "docs" "$NAGVIS_PATH/share"
 cmp_js
@@ -1424,6 +1425,11 @@ if [ -f $NAGVIS_PATH/${NAGVIS_CONF}-sample ]; then
 		$SED -i 's#;socket="unix:/usr/local/nagios/var/rw/live"#socket="'"$LIVESTATUS_SOCK"'"#g' $NAGVIS_CFG
 		chk_rc "|  Error adding MKLivstatus Backend" "$DONE"
 	fi
+
+	# Add the webservers group to use it with chgrp calls in NagVis
+	DONE=`log "  Adding webserver group to file_group..." done`
+	$SED -i 's#;file_group=""#file_group="'"$WEB_GROUP"'"#g' $NAGVIS_CFG
+	chk_rc "|  Error adding file_group" "$DONE"
 fi
 
 # Create apache configuration file from sample when no file exists
@@ -1628,6 +1634,8 @@ set_perm 775 "$NAGVIS_PATH/etc/maps"
 set_perm 664 "$NAGVIS_PATH/etc/maps/*"
 set_perm 775 "$NAGVIS_PATH/etc/automaps"
 set_perm 664 "$NAGVIS_PATH/etc/automaps/*"
+set_perm 775 "$NAGVIS_PATH/etc/profiles"
+set_perm 664 "$NAGVIS_PATH/etc/profiles/*"
 set_perm 775 "$NAGVIS_PATH/share/userfiles/images/maps"
 set_perm 664 "$NAGVIS_PATH/share/userfiles/images/maps/*"
 set_perm 775 "$NAGVIS_PATH/share/userfiles/images/shapes"

@@ -86,7 +86,7 @@ class CoreUserCfg {
 	public function doSet($opts) {
 		$file = $this->profilesDir.'/'.$this->AUTHENTICATION->getUser().'.profile';
 
-		if(!$this->CORE->checkExisting($file, true) || !$this->CORE->checkWriteable($file, true))
+		if(!$this->CORE->checkExisting(dirname($file), true) || !$this->CORE->checkWriteable(dirname($file), true))
 			return false;
 
 		$cfg = $this->doGet(true);
@@ -97,7 +97,9 @@ class CoreUserCfg {
 			$cfg[$key] = $value;
 		}
 
-		return file_put_contents($file, json_encode($cfg)) !== false;
+		$ret = file_put_contents($file, json_encode($cfg)) !== false;
+		$this->CORE->setPerms($file);
+		return $ret;
 	}
 
 	public function getValue($key, $default = null) {

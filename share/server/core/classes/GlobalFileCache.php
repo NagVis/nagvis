@@ -86,6 +86,8 @@ class GlobalFileCache {
 			
 			fwrite($fp, serialize($contents));
 			fclose($fp);
+
+			$this->CORE->setPerms($this->cacheFile);
 			
 			return TRUE;
 		} else {

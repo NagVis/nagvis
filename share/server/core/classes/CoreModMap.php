@@ -912,9 +912,8 @@ class CoreModMap extends CoreModule {
 	
 	protected function doAdd($a) {
 		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
-		if(!$MAPCFG->createMapConfig()) {
+		if(!$MAPCFG->createMapConfig())
 			return false;
-		}
 		
 		$MAPCFG->addElement('global', $a);
 		return $MAPCFG->writeElement('global','0');

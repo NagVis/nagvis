@@ -318,12 +318,7 @@ class GlobalMapCfg {
 					'url_target' => Array('must' => 0,
 						'default' => $this->CORE->getMainCfg()->getValue('defaults', 'urltarget'),
 						'match' => MATCH_STRING_NO_SPACE),
-					'usegdlibs' => Array('must' => 0,
-						'deprecated' => '1',
-						'default' => $this->CORE->getMainCfg()->getValue('defaults', 'usegdlibs'),
-						'deprecated' => 1,
-						'match' => MATCH_BOOLEAN,
-						'field_type' => 'boolean')),
+				),
 				
 				'host' => Array('type' => Array('must' => 0,
 						'match' => MATCH_OBJECTTYPE,
@@ -1480,22 +1475,16 @@ class GlobalMapCfg {
 	 */
 	public function createMapConfig() {
 		// does file exist?
-		if(!$this->checkMapConfigReadable(FALSE)) {
-			if($this->checkMapCfgFolderWriteable(TRUE)) {
-				// create empty file
-				$fp = fopen($this->configFile, 'w');
-				fclose($fp); 
-				// set permissions
-				chmod($this->configFile,0666);
-				
-					return TRUE;
-				} else {
-					return FALSE;
-				}
-		} else {
-			// file exists & is readable
-			return FALSE;
-		}
+		if($this->checkMapConfigReadable(false))
+			return false;
+
+		if(!$this->checkMapCfgFolderWriteable(true))
+			return false;
+
+		// create empty file
+		fclose(fopen($this->configFile, 'w')); 
+		$this->CORE->setPerms($this->configFile);
+		return true;
 	}
 	
 	/**

@@ -68,6 +68,12 @@ class GlobalMainCfg {
 					'default' => '1',
 					'field_type' => 'boolean',
 					'match' => MATCH_BOOLEAN),
+				'file_group' => Array('must' => 0,
+					'default' => '',
+					'match' => MATCH_STRING),
+				'file_mode' => Array('must' => 1,
+					'default' => 660,
+					'match' => MATCH_INTEGER_EMPTY),
 				'language_detection' => Array('must' => 1,
 					'editable' => 1,
 					'array' => true,
@@ -319,12 +325,7 @@ class GlobalMainCfg {
 				'servicegroupurl' => Array('must' => 0,
 					'default' => '[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]&style=detail',
 					'match' => MATCH_STRING_URL_EMPTY),
-				'usegdlibs' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '1',
-          'deprecated' => 1,
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN)),
+			),
 			'wui' => Array(
 				'allowedforconfig' => Array(
 					'must' => 0,
@@ -1609,78 +1610,75 @@ class GlobalMainCfg {
 	 */
 	function writeConfig() {
 		// Check for config file write permissions
-		if($this->checkNagVisConfigWriteable(1)) {
-			$content = '';
-			foreach($this->config as $key => $item) {
-				if(is_array($item)) {
-					$content .= '['.$key.']'."\n";
-					foreach ($item as $key2 => $item2) {
-						if(substr($key2,0,8) == 'comment_') {
-							$content .= $item2."\n";
+		if(!$this->checkNagVisConfigWriteable(1))
+			return false;
+
+		$content = '';
+		foreach($this->config as $key => $item) {
+			if(is_array($item)) {
+				$content .= '['.$key.']'."\n";
+				foreach ($item as $key2 => $item2) {
+					if(substr($key2,0,8) == 'comment_') {
+						$content .= $item2."\n";
+					} else {
+						if(is_numeric($item2) || is_bool($item2)) {
+							$content .= $key2."=".$item2."\n";
 						} else {
-							if(is_numeric($item2) || is_bool($item2)) {
-								$content .= $key2."=".$item2."\n";
-							} else {
-								if(is_array($item2) && preg_match('/^rotation_/i', $key) && $key2 == 'maps') {
-									$val = '';
-									// Check if an element has a label defined
-									foreach($item2 AS $intId => $arrStep) {
-										$seperator = ',';
-										$label = '';
-										$step = '';
-										
-										if($intId == 0) {
-											$seperator = '';
-										}
-										
-										if(isset($arrStep['map']) && $arrStep['map'] != '') {
-											$step = $arrStep['map'];
-										} else {
-											$step = '['.$arrStep['url'].']';
-										}
-										
-										if(isset($arrStep['label']) && $arrStep['label'] != '' && $arrStep['label'] != $step) {
-											$label = $arrStep['label'].':';
-										}
-										
-										// Save the extracted information to an array
-										$val .= $seperator.$label.$step;
-									}
+							if(is_array($item2) && preg_match('/^rotation_/i', $key) && $key2 == 'maps') {
+								$val = '';
+								// Check if an element has a label defined
+								foreach($item2 AS $intId => $arrStep) {
+									$seperator = ',';
+									$label = '';
+									$step = '';
 									
-									$item2 = $val;
+									if($intId == 0)
+										$seperator = '';
+									
+									if(isset($arrStep['map']) && $arrStep['map'] != '')
+										$step = $arrStep['map'];
+									else
+										$step = '['.$arrStep['url'].']';
+									
+									if(isset($arrStep['label']) && $arrStep['label'] != '' && $arrStep['label'] != $step)
+										$label = $arrStep['label'].':';
+									
+									// Save the extracted information to an array
+									$val .= $seperator.$label.$step;
 								}
 								
-								// Don't write the backendid/rotationid attributes (Are internal)
-								if($key2 !== 'backendid' && $key2 !== 'rotationid') {
-									if(isset($this->validConfig[$key][$key2]['array']) && $this->validConfig[$key][$key2]['array'] === true) {
-										$item2 = implode(',', $item2);
-									}
-									
-									$content .= $key2.'="'.$item2.'"'."\n";
-								}
+								$item2 = $val;
+							}
+							
+							// Don't write the backendid/rotationid attributes (Are internal)
+							if($key2 !== 'backendid' && $key2 !== 'rotationid') {
+								if(isset($this->validConfig[$key][$key2]['array']) && $this->validConfig[$key][$key2]['array'] === true)
+									$item2 = implode(',', $item2);
+								
+								$content .= $key2.'="'.$item2.'"'."\n";
 							}
 						}
 					}
-				} elseif(substr($key,0,8) == 'comment_') {
-					$content .= $item."\n";
 				}
-			}
-			
-			if(!$handle = fopen($this->configFiles[count($this->configFiles)-1], 'w+')) {
-				new GlobalMessage('ERROR', WuiCore::getInstance()->getLang()->getText('mainCfgNotWriteable'), WuiCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
-				return FALSE;
-			}
-			
-			if(!fwrite($handle, $content)) {
-				new GlobalMessage('ERROR', WuiCore::getInstance()->getLang()->getText('mainCfgCouldNotWriteMainConfigFile'), WuiCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
-				return FALSE;
-			}
-			
-			fclose($handle);
-			return TRUE;
-		} else {
+			} elseif(substr($key,0,8) == 'comment_')
+				$content .= $item."\n";
+		}
+		
+		$cfgFile = $this->configFiles[count($this->configFiles)-1];
+		if(!$handle = fopen($cfgFile, 'w+')) {
+			new GlobalMessage('ERROR', WuiCore::getInstance()->getLang()->getText('mainCfgNotWriteable'), WuiCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
 			return FALSE;
 		}
+		
+		if(!fwrite($handle, $content)) {
+			new GlobalMessage('ERROR', WuiCore::getInstance()->getLang()->getText('mainCfgCouldNotWriteMainConfigFile'), WuiCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
+			return FALSE;
+		}
+		
+		fclose($handle);
+		$this->CORE->setPerms($cfgFile);
+
+		return TRUE;
 	}
 	
 	/**
