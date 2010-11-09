@@ -161,7 +161,7 @@ class CoreSQLiteHandler {
 	public function updateDb() {
 		// Perform pre 1.5b4 updates
 		if(!$this->tableExist('version'))
-			$this->updateDd1050024();
+			$this->updateDb1050024();
 
 		// Read the current version from db
 		$dbVersion = GlobalCore::getInstance()->versionToTag($this->getDbVersion());
