@@ -6,6 +6,7 @@ Core
     * The language of a user is stored in the profile file now
     * Added new options {file_group} and {file_mode} to global section of nagvis.ini.php.
       These options are used whenever a file is written by NagVis.
+    * Livestatus backend: Better error handling when writing to livestatus socket
 
 Frontend
     * Added new sidebar for better navigation. It can be opened by klicking on
