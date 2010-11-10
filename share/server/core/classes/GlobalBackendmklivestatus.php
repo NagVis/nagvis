@@ -194,7 +194,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		// Query to get a json formated array back
 		// Use KeepAlive with fixed16 header
 		$query .= "OutputFormat:json\nKeepAlive: on\nResponseHeader: fixed16\n\n";
+		// Disable regular error reporting to suppress php error messages
+		$oldLevel = error_reporting(0);
 		$write = fwrite($this->SOCKET, $query);
+		error_reporting($oldLevel);
 
 		if($write=== false)
 			throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
