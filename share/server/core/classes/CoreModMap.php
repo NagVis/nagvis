@@ -333,8 +333,9 @@ class CoreModMap extends CoreModule {
 	protected function getObjects($a) {
 		// Initialize the backend
 		$BACKEND = new CoreBackendMgmt($this->CORE);
-		
+
 		try {
+			$BACKEND->checkBackendExists($a['backendid'], true);
 			$BACKEND->checkBackendFeature($a['backendid'], 'getObjects', true);
 		} catch(BackendConnectionProblem $e) {
 			new GlobalMessage('ERROR', $CORE->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]',

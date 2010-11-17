@@ -368,7 +368,7 @@ class CoreBackendMgmt {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function checkBackendExists($backendId, $printErr) {
+	public function checkBackendExists($backendId, $printErr) {
 		if($this->CORE->checkExisting($this->CORE->getMainCfg()->getValue('paths','class').'GlobalBackend'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype').'.php', false))
 			return true;
 
