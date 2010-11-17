@@ -430,8 +430,17 @@ function saveObjectAfterMoveAndDrop(oObj) {
 	oResult = null;
 }
 
+function getObjectIdOfLink(obj) {
+	var par = obj.parentNode;
+	while(par && par.tagName != 'DIV')
+		par = par.parentNode;
+	if(par && par.tagName == 'DIV' && typeof par.id !== 'undefined')
+    return par.id.split('_')[2].split('-')[0]
+	return -1;
+}
+
 function getDomObjectIds(objId) {
-    return [ 'box_'+objId, 'icon_'+objId+'-context', 'rel_label_'+objId, 'abs_label_'+objId ];
+    return [ 'box_'+objId, 'icon_'+objId, 'icon_'+objId+'-context', 'rel_label_'+objId, 'abs_label_'+objId ];
 }
 
 // This function handles object deletions on maps
