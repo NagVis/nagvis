@@ -14,3 +14,6 @@ Frontend
       single nodes is stored in user specific profile files
     * Added new parameter {parent_map} to map/automap global sections which is
       used in header/sidebar menus to draw a map hierarchy
+
+WUI
+    * Bugfix: Fixed deletion of multiple objects of same type in WUI without reloading
