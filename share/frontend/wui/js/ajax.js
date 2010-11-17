@@ -31,6 +31,9 @@ function getObjects(backend_id, type, field, selected, name1) {
 	oOpt.selected = selected;
 	oOpt.type = type;
 
+	if(backend_id === lang['manualInput'])
+		return true;
+
 	if(type === 'service'
 	   && (typeof name1 === 'undefined' || name1 == ''
 	       || name1 === lang['manualInput'])) {
