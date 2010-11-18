@@ -48,8 +48,8 @@ class CoreAuthModSQLite extends CoreAuthModule {
 			
 			// Changing passwords
 			'passNewPassword' => true,
-			'changePassword' => true,
-			'passNewPassword' => true,
+			'changePassword'  => true,
+			'resetPassword'   => true,
 			
 			// Managing users
 			'createUser' => true,
@@ -100,10 +100,10 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		return intval($ret['userId']);
 	}
 	
-	private function updatePassword() {
+	private function updatePassword($uid, $pw) {
 		if(!$this->DB->isWriteable())
 			return false;
-		$this->DB->query('UPDATE users SET password='.$this->DB->escape($this->sPasswordHash).' WHERE name='.$this->DB->escape($this->sUsername));
+		$this->DB->query('UPDATE users SET password='.$this->DB->escape($pw).' WHERE userId='.$this->DB->escape($uid));
 	}
 	
 	private function addUser($user, $hash) {
@@ -166,6 +166,12 @@ class CoreAuthModSQLite extends CoreAuthModule {
 		
 		return $bReturn;
 	}
+
+	public function resetPassword($uid, $pw) {
+		// FIXME: To be coded
+		$this->updatePassword($uid, $this->createHash($pw));
+		return true;
+	}
 	
 	public function changePassword() {
 		$bReturn = false;
@@ -179,7 +185,7 @@ class CoreAuthModSQLite extends CoreAuthModule {
 			$this->sPasswordHash = $this->createHash($this->sPassword);
 			
 			// Update password
-			$this->updatePassword();
+			$this->updatePassword($this->iUserId, $this->sPasswordHash);
 			
 			$bReturn = true;
 		} else {

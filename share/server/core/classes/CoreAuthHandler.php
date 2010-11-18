@@ -50,12 +50,7 @@ class CoreAuthHandler {
 	
 	public function checkFeature($name) {
 		$a = $this->MOD->getSupportedFeatures();
-		
-		if(isset($a[$name])) {
-			return true;
-		} else {
-			return false;
-		}
+		return isset($a[$name]) && $a[$name];
 	}
 	
 	public function getModule() {
@@ -124,6 +119,12 @@ class CoreAuthHandler {
 		}
 		
 		return $bChanged;
+	}
+
+	public function resetPassword($uid, $pw) {
+		if(!$this->checkFeature('resetPassword'))
+			throw new CoreAuthModNoSupport();
+		return $this->MOD->resetPassword($uid, $pw);
 	}
 	
 	public function resetAuthCheck() {

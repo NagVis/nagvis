@@ -75,6 +75,8 @@ class NagVisViewUserMgmt {
       'langAdd' => $this->CORE->getLang()->getText('Add'),
       'langRemove' => $this->CORE->getLang()->getText('Remove'),
       'roles' => $this->AUTHORISATION->getAllRoles(),
+		  'langUserPwReset' => $this->CORE->getLang()->getText('Reset Password'),
+		  'formTargetPwReset' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doPwReset',
 		);
 		
 		// Build page based on the template file and the data array
