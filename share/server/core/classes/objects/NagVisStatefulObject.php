@@ -715,7 +715,8 @@ class NagVisStatefulObject extends NagVisObject {
 		return strtr($s, Array("\r" => '<br />',
 		                       "\n" => '<br />',
 		                       '"'  => '&quot;',
-		                       '\'' => '&#145;'));
+		                       '\'' => '&#145;',
+		                       '$'  => '&#36;'));
 	}
 
 	
