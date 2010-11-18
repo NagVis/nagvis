@@ -38,7 +38,9 @@ class CoreModUserMgmt extends CoreModule {
 		                        'getAllRoles'  => 'manage',
 		                        'doAdd'        => 'manage',
 		                        'doEdit'       => 'manage',
-		                        'doDelete'     => 'manage');
+		                        'doDelete'     => 'manage',
+		                        'doPwReset'    => 'manage',
+		);
 		
 		$this->FHANDLER = new CoreRequestHandler($_POST);
 	}
@@ -115,10 +117,60 @@ class CoreModUserMgmt extends CoreModule {
 						$sReturn = '';
 					}
 				break;
+				case 'doPwReset':
+					$this->handleResponse('handleResponseDoPwReset', 'doPwReset',
+						                    $this->CORE->getLang()->getText('The password has been reset.'),
+																$this->CORE->getLang()->getText('The password could not be reset.'));
+				break;
 			}
 		}
 		
 		return $sReturn;
+	}
+
+	protected function doPwReset($a) {
+		$SHANDLER = new CoreSessionHandler();
+		if($SHANDLER->isSetAndNotEmpty('authTrusted'))
+			return false;
+		return $this->AUTHENTICATION->resetPassword($a['userId'], $a['password1']);
+	}
+
+	protected function handleResponseDoPwReset() {
+		$bValid = true;
+		
+		$FHANDLER = new CoreRequestHandler($_POST);
+		$attr = Array('userId'     => MATCH_INTEGER,
+		              'password1'  => MATCH_STRING,
+									'password2'  => MATCH_STRING);
+		$this->verifyValuesSet($FHANDLER,   $attr);
+		$this->verifyValuesMatch($FHANDLER, $attr);
+
+		// Check length limits
+		if($bValid && $this->FHANDLER->isLongerThan('password1', AUTH_MAX_PASSWORD_LENGTH))
+			$bValid = false;
+		if($bValid && $this->FHANDLER->isLongerThan('password2', AUTH_MAX_PASSWORD_LENGTH))
+			$bValid = false;
+
+		// Check if new passwords are equal
+		if($bValid && $this->FHANDLER->get('password1') !== $this->FHANDLER->get('password2')) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The two passwords are not equal.'));
+			$bValid = false;
+		}
+		
+		// Don't change own users password
+		if($this->AUTHENTICATION->getUserId() == $FHANDLER->get('userId')) {
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to reset the password for your own user.'));
+			
+			$bValid = false;
+		}
+		
+		// Store response data
+		if($bValid === true)
+		  return Array('userId'    => $FHANDLER->get('userId'),
+			             'password1' => $FHANDLER->get('password1'),
+			             'password2' => $FHANDLER->get('password2'));
+		else
+			return false;
 	}
 		
 	private function handleResponseDelete() {

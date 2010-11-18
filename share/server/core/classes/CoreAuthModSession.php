@@ -51,8 +51,8 @@ class CoreAuthModSession extends CoreAuthModule {
 			
 			// Changing passwordss
 			'passNewPassword' => true,
-			'changePassword' => true,
-			'passNewPassword' => true
+			'changePassword'  => true,
+			'resetPassword'   => true
 		);
 		
 		$this->SHANDLER = new CoreSessionHandler();
@@ -129,6 +129,17 @@ class CoreAuthModSession extends CoreAuthModule {
 		}
 		
 		return $this->REALAUTH->changePassword();
+	}
+
+	// The session auth module does not change password itselfs. It calls the real
+	// authentication module for performing this change
+	public function resetPassword($uid, $pw) {
+		// The real authentication module should already have been initialized here
+		if($this->REALAUTH === null) {
+			return false;
+		}
+		
+		return $this->REALAUTH->resetPassword($uid, $pw);
 	}
 	
 	public function getCredentials() { return Array(); }

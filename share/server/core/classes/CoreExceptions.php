@@ -28,6 +28,8 @@
 
 class NagVisException extends Exception {}
 
+class CoreAuthModNoSupport extends NagVisException {}
+
 class BackendException extends NagVisException {}
 class BackendConnectionProblem extends BackendException {}
 class BackendInvalidResponse extends BackendException {}

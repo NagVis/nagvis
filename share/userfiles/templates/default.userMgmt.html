@@ -109,7 +109,7 @@ getUserRoles = function (id) \{
 				<td><input type="password" name="password2" id="password2" class="input" value="" size="{$maxPasswordLength}" tabindex="30" /></td>
 			</tr>
 			<tr>
-				<td colspan="2"><input type="submit" name="submit" id="submit" value="{$langUserAdd}" tabindex="100" /></td>
+				<td colspan="2"><input type="submit" name="submit" id="submit" value="{$langUserAdd}" tabindex="40" /></td>
 			</tr>
 		</table>
 	</form>
@@ -122,7 +122,7 @@ getUserRoles = function (id) \{
 	<form name="userEdit" id="userEditForm" action="#" onsubmit="selectAllOpts('rolesSelected');submitFrontendForm('{$formTargetEdit}', 'userEditForm', true);return false" method="post">
 		<p>
 			<label>{$langSelectUser}<br />
-			<select type="text" name="userId" id="userId" class="select" tabindex="40" onchange="getUserRoles(this.options[this.selectedIndex].value);" />
+			<select type="text" name="userId" id="userId" class="select" tabindex="50" onchange="getUserRoles(this.options[this.selectedIndex].value);" />
 				<option value="" selected="selected"></option>
 				{foreach $users user}<option value="{$user.userId}">{$user.name}</option>{/foreach}
 			</select>
@@ -138,15 +138,15 @@ getUserRoles = function (id) \{
 				</tr>
 				<tr>
 					<td>
-						<select style="width:100%" name="rolesAvailable" id="rolesAvailable" class="select" tabindex="50" size="5" multiple />
+						<select style="width:100%" name="rolesAvailable" id="rolesAvailable" class="select" tabindex="60" size="5" multiple />
 						</select>
 					</td>
 					<td style="vertical-align:middle">
-					<input type="button" name="add" onclick="roleModify(true)" value="&gt;" /><br />
-					<input type="button" name="remove" onclick="roleModify()" value="&lt;" /></a>
+					<input type="button" name="add" onclick="roleModify(true)" value="&gt;" tabindex="70" /><br />
+					<input type="button" name="remove" onclick="roleModify()" value="&lt;" tabindex="80" /></a>
 					</td>
 					<td>
-						<select style="width:100%" name="rolesSelected" id="rolesSelected" class="select" tabindex="50" size="5" multiple />
+						<select style="width:100%" name="rolesSelected" id="rolesSelected" class="select" tabindex="90" size="5" multiple />
 						</select>
 					</td>
 				</tr>
@@ -168,14 +168,48 @@ getUserRoles = function (id) \{
 			<tr>
 				<td><label for="username">{$langUsername}:</label></td>
 				<td>
-					<select type="text" name="userId" id="userId" class="select" tabindex="40" />
+					<select type="text" name="userId" id="userId" class="select" tabindex="110" />
 						<option value="" selected="selected"></option>
 						{foreach $users user}<option value="{$user.userId}">{$user.name}</option>{/foreach}
 					</select>
 				</td>
-				<td><input type="submit" name="submit" id="submit" value="{$langUserDelete}" tabindex="100" /></td>
+				<td><input type="submit" name="submit" id="submit" value="{$langUserDelete}" tabindex="120" /></td>
 			</tr>
 		</table>
 	</form>
 </fieldset>
 </div>
+
+<div id="userPwReset">
+<fieldset class="form">
+	<legend>{$langUserPwReset}</legend>
+	<form name="userPwReset" id="userPwResetForm" action="#" onsubmit="submitFrontendForm('{$formTargetPwReset}', 'userPwResetForm', true);return false" method="post">
+		<table>
+			<tr><td style="vertical-align:top">
+				<label>{$langSelectUser}<br />
+				<select type="text" name="userId" id="userId" class="select" tabindex="130" />
+					<option value="" selected="selected"></option>
+					{foreach $users user}<option value="{$user.userId}">{$user.name}</option>{/foreach}
+				</select>
+				</label>
+			</td>
+			<td>
+				<table>
+					<tr>
+						<td><label for="password1">{$langPassword1}:</td>
+						<td><input type="password" name="password1" id="password1" class="input" value="" size="{$maxPasswordLength}" tabindex="140" /></td>
+					</tr>
+					<tr>
+						<td><label for="password2">{$langPassword2}:</td>
+						<td><input type="password" name="password2" id="password2" class="input" value="" size="{$maxPasswordLength}" tabindex="150" /></td>
+					</tr>
+					<tr>
+						<td colspan="2"><input type="submit" name="submit" id="submit" value="{$langUserPwReset}" tabindex="160" /></td>
+					</tr>
+				</table>
+			</td></tr>
+		</table>
+	</form>
+</fieldset>
+</div>
+
