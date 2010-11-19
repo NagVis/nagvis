@@ -114,6 +114,9 @@ EVERYONE erlaubt jedem den Zugriff</strike> (<font color="red">veraltet ab 1.5</
 <td>header_template</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td><a href=header_templates.html#header/templates>header template</a> f&uuml;r diese Map </td>
 </tr>
 <tr>
+<td> header_fade </td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren des Abblendeffekts in den Untermen&uuml;s des Header-Men&uuml;s (wenn das verwendete Header-Men&uuml; diese Option unterst&uuml;tzt). <font color="#ff0000">(Neu in 1.5.2)</font></td>
+</tr>
+<tr>
 <td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
 </tr>
 <tr>
@@ -165,7 +168,23 @@ EVERYONE erlaubt jedem den Zugriff</strike> (<font color="red">veraltet ab 1.5</
 <td>label_style</td><td>#000000</td><td>Benutzerdefiniertes Aussehen des Label-Textes im Format von HTML-Style-Attributen, z.B. <code>font-family:sans;font-weight:bold;</code> (<font color="red">neu in 1.5</font>).</td>
 </tr>
 <tr>
+<td>line_arrow</td><td>forward</td>
+<td>Dies defniert die Pfeile am Linienende. Bisher wird dieses Attribut nur f&uuml;r die Linien zwischen Hosts in der Automap benutzt.
+M&ouml;gliche Werte: forward, back, both, none (<font color="#ff0000">Neu in 1.5.2</font>).</td>
+</tr>
+<tr>
+<td> line_type </td><td></td>
+<td>Gibt den Linientyp an, wenn view_type=line. G&uuml;ltige Werte sind:<br /> &quot;11&quot; f&uuml;r Linien mit einem Pfeil am Linienende.<br /> &quot;10&quot; f&uuml;r Linien mit zwei Pfeilen, die in der Linienmitte aufeinander zeigen.<br /> &quot;12&quot; f&uuml;r Linien ohne Pfeil(e). (<font color="#ff0000">Neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>line_width</td><td>3</td>
+<td>Dies definiert die Linienbreite in px, wenn dieses Objekt als Linie angezeigt wird.</td>
+</tr>
+<tr>
 <td>only_hard_states</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
+</tr>
+<tr>
+<td>parent_map</td><td></td><td>Die Eltern-Map dieser Karte. Die Option wird nur bei den Men&uuml;-Visualisierungen des Header-Men&uuml;s und der Sidebar benutzt<font color="#ff0000">(Neu in 1.6)</font></td>
 </tr>
 <tr>
 <td>recognize_services</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Definiert, ob die Services des Hosts den angezeigten Status beeinflussen. Wenn auf "1" gesetzt, wird ein Service im Status CRITICAL auch den HOST als CRITICAL anzeigen. Wenn auf "0" gesetzt, wird nur der Host-Zustand (UP oder DOWN) angezeigt und der Status der Services ignoriert. Ist dieser Wert nicht in der Konfiguration angegeben, wird er auf 1 gesetzt. </td>
@@ -270,10 +289,15 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>label_style</td><td>vererbt (<a href=#global>global</a>) </td><td>benutzerdefiniertes Aussehen des Label-Textes im Stil von HTML-Attributen, z.B. <code>font-family:sans;font-weight:bold;</code> (<font color="red">neu in 1.5</font>)</td>
 </tr>
 <tr>
-<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile (<font color="red">neu in 1.5</font>)</td>
+<td>line_arrow</td><td> vererbt (<a href=#global>global</a>)</td>
+<td>Dies definiert die Pfeile am Linienende. Bisher wird dieses Attribut nur f&uuml;r die Linien zwischen Hosts in der Automap benutzt.
+M&ouml;gliche Werte: forward, back, both, none (<font color="#ff0000">Neu in 1.5.2</font>).</td>
 </tr>
 <tr>
-<td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
+<td>line_type</td><td> vererbt (<a href=#global>global</a>)</td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>line_width </td><td>vererbt (<a href=#global>global</a>)</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
 </tr>
 <tr>
 <td>only_hard_states</td><td>vererbt (<a href=#global>global</a>) </td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
@@ -399,10 +423,23 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>label_style</td><td>vererbt (<a href=#global>global</a>) </td><td>benutzerdefiniertes Aussehen des Label-Textes im Stil von HTML-Attributen, z.B. <code>font-family:sans;font-weight:bold;</code> (<font color="red">neu in 1.5</font>)</td>
 </tr>
 <tr>
-<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile (<font color="red">neu in 1.5</font>)</td>
+<td>line_arrow</td><td> vererbt (<a href=#global>global</a>)</td>
+<td>Dies definiert die Pfeile am Linienende. Bisher wird dieses Attribut nur f&uuml;r die Linien zwischen Hosts in der Automap benutzt.
+M&ouml;gliche Werte: forward, back, both, none (<font color="#ff0000">Neu in 1.5.2</font>).</td>
 </tr>
 <tr>
-<td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
+<td>line_cut</td>
+<td>0.5</td>
+<td>Linien mit zwei Teilen haben den Schnitt in der Mitte der Linie. Dies entspricht einem "line_cut"-Wert von &quot;0.5&quot;.
+Es ist m&ouml;glich, den Schnitt durch Ver&auml;nderung des Wertes zu verschieben. G&uuml;ltige Werte sind 0.0 bis 1.0.
+(<font color="#ff0000">Neu in 1.5.2</font>)
+</td>
+</tr>
+<tr>
+<td>line_type</td><td>vererbt (<a href=#global>global</a>)</td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>line_width </td><td>vererbt (<a href=#global>global</a>)</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
 </tr>
 <tr>
 <td>only_hard_states</td><td>vererbt (<a href=#global>global</a>) </td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
@@ -507,13 +544,18 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>label_border</td><td>vererbt (<a href=#global>global</a>) </td><td>Rahmenfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
 </tr>
 <tr>
-<td>label_style</td><td>#000000</td><td>Benutzerdefiniertes Aussehen des Label-Textes im Format von HTML-Style-Attributen, z.B. <code>font-family:sans;font-weight:bold;</code> (<font color="red">neu in 1.5</font>).</td>
+<td>label_style</td><td>vererbt (<a href=#global>global</a>) </td><td>Benutzerdefiniertes Aussehen des Label-Textes im Format von HTML-Style-Attributen, z.B. <code>font-family:sans;font-weight:bold;</code> (<font color="red">neu in 1.5</font>).</td>
 </tr>
 <tr>
-<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile (<font color="red">neu in 1.5</font>)</td>
+<td>line_arrow</td><td> vererbt (<a href=#global>global</a>)</td>
+<td>Dies definiert die Pfeile am Linienende. Bisher wird dieses Attribut nur f&uuml;r die Linien zwischen Hosts in der Automap benutzt.
+M&ouml;gliche Werte: forward, back, both, none (<font color="#ff0000">Neu in 1.5.2</font>).</td>
 </tr>
 <tr>
-<td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
+<td>line_type</td><td>vererbt (<a href=#global>global</a>)</td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>line_width </td><td>vererbt (<a href=#global>global</a>)</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
 </tr>
 <tr>
 <td>only_hard_states</td><td>vererbt (<a href=#global>global</a>) </td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
@@ -621,13 +663,18 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>label_border</td><td>vererbt (<a href=#global>global</a>) </td><td>Rahmenfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
 </tr>
 <tr>
-<td>label_style</td><td>#000000</td><td>Benutzerdefiniertes Aussehen des Label-Textes im Format von HTML-Style-Attributen, z.B. <code>font-family:sans;font-weight:bold;</code> (<font color="red">neu in 1.5</font>).</td>
+<td>label_style</td><td>vererbt (<a href=#global>global</a>) </td><td>Benutzerdefiniertes Aussehen des Label-Textes im Format von HTML-Style-Attributen, z.B. <code>font-family:sans;font-weight:bold;</code> (<font color="red">neu in 1.5</font>).</td>
 </tr>
 <tr>
-<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile (<font color="red">neu in 1.5</font>)</td>
+<td>line_arrow</td><td> vererbt (<a href=#global>global</a>)</td>
+<td>Dies definiert die Pfeile am Linienende. Bisher wird dieses Attribut nur f&uuml;r die Linien zwischen Hosts in der Automap benutzt.
+M&ouml;gliche Werte: forward, back, both, none (<font color="#ff0000">Neu in 1.5.2</font>).</td>
 </tr>
 <tr>
-<td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
+<td>line_type</td><td>vererbt (<a href=#global>global</a>)</td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>line_width </td><td>vererbt (<a href=#global>global</a>)</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
 </tr>
 <tr>
 <td>only_hard_states</td><td>vererbt (<a href=#global>global</a>) </td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
@@ -732,13 +779,18 @@ Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen (beachten Sie, dass 
 <td>label_border</td><td>vererbt (<a href=#global>global</a>) </td><td>Rahmenfarbe des Labels. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
 </tr>
 <tr>
-<td>label_style</td><td>#000000</td><td>Benutzerdefiniertes Aussehen des Label-Textes im Format von HTML-Style-Attributen, z.B. <code>font-family:sans;font-weight:bold;</code> (<font color="red">neu in 1.5</font>).</td>
+<td>label_style</td><td>vererbt (<a href=#global>global</a>) </td><td>Benutzerdefiniertes Aussehen des Label-Textes im Format von HTML-Style-Attributen, z.B. <code>font-family:sans;font-weight:bold;</code> (<font color="red">neu in 1.5</font>).</td>
 </tr>
 <tr>
-<td>line_type</td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile (<font color="red">neu in 1.5</font>)</td>
+<td>line_arrow</td><td> vererbt (<a href=#global>global</a>)</td>
+<td>Dies definiert die Pfeile am Linienende. Bisher wird dieses Attribut nur f&uuml;r die Linien zwischen Hosts in der Automap benutzt.
+M&ouml;gliche Werte: forward, back, both, none (<font color="#ff0000">Neu in 1.5.2</font>).</td>
 </tr>
 <tr>
-<td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
+<td>line_type</td><td>vererbt (<a href=#global>global</a>)</td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>line_width </td><td>vererbt (<a href=#global>global</a>)</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
 </tr>
 <tr>
 <td>only_hard_states</td><td>vererbt (<a href=#global>global</a>) </td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
@@ -859,7 +911,7 @@ Beispiel mit allen Werten, die gesetzt werden m&uuml;ssen: <br>
 Die Linie ist ein statusloses Layout-Element, um Elemente zu verbinden und statuslose Verbindungen zwischen anderen Objekten darzustellen. Der Objekttyp wurde erstellt, um das Design weniger statisch zu gestalten.<br><br>
 Beispiel mit allen Werten, die gesetzt werden m&uuml;ssen: <br>
 <pre>define line {
-  line_type=1-template
+  line_type=1
   x=200
   y=100
 }</pre>
@@ -886,13 +938,18 @@ Beispiel mit allen Werten, die gesetzt werden m&uuml;ssen: <br>
 <td>hover_delay</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Verz&ouml;gerung der Anzeige des Hover-Menus in Sekunden</td>
 </tr>
 <tr>
+<td>line_arrow</td><td> vererbt (<a href=#global>global</a>)</td>
+<td>Dies definiert die Pfeile am Linienende. Bisher wird dieses Attribut nur f&uuml;r die Linien zwischen Hosts in der Automap benutzt.
+M&ouml;gliche Werte: forward, back, both, none (<font color="#ff0000">Neu in 1.5.2</font>).</td>
+</tr>
+<tr>
 <td>line_color </td><td>#ffffff</td><td> Die F&uuml;llfarbe der Linie, kann auch &quot;transparent&quot; sein. </td>
 </tr>
 <tr>
-<td>line_color_border </td><td>#ffffff</td><td> Die Randfarbe der Linie, kann auch &quot;transparent&quot; sein. </td>
+<td>line_color_border </td><td>#000000</td><td> Die Randfarbe der Linie, kann auch &quot;transparent&quot; sein. </td>
 </tr>
 <tr>
-<td>line_width </td><td>3</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
+<td>line_width </td><td>vererbt (<a href=#global>global</a>)</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
 </tr>
 <tr>
 <td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Normalerweise gibt es keinen Verweis. </td>

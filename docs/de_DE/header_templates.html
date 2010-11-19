@@ -44,6 +44,9 @@ Header-Templates sind HTML-Dateien, die einige Makros enthalten. Diese Dateien k
 <td>{$act}</td><td>Die aktuelle Aktion (view, edit, ...) <font color="#ff0000">(Neu in 1.5)</font>.</td>
 </tr>
 <tr>
+<td>{$bEnableFade}</td><td>Bewirkt bei Hover-Men&uuml;s sich schnell &ouml;ffnende oder langsam abblendende Men&uuml;s <font color="#ff0000">(Neu in 1.5.2)</font>.</td>
+</tr>
+<tr>
 <td>{$bRotation}</td><td>Ist "true" wenn gerade eine Rotation betrachtet wird, sonst "false". <font color="#ff0000">(Neu in 1.5)</font>.</td>
 </tr>
 <tr>
@@ -57,6 +60,18 @@ Header-Templates sind HTML-Dateien, die einige Makros enthalten. Diese Dateien k
 </tr>
 <tr>
 <td>{$permittedChangePassword}</td><td>Ist "true", wenn der Benutzer berechtigt ist, sein eigenes Passwort zu &auml;ndern, sonst "false". <font color="#ff0000">(Neu in 1.5)</font>.</td>
+</tr>
+<tr>
+<td>{$permittedEditMainCfg}</td><td>Ist "true", wenn der Benutzer berechtigt ist, die Hauptkonfigurationsdatei zu &auml;ndern, sonst "false". <font color="#ff0000">(Neu in 1.5.3)</font>.</td>
+</tr>
+<tr>
+<td>{$permittedManageBackgrounds}</td><td>Ist "true", wenn der Benutzer berechtigt ist, Hintergr&uuml;nde zu verwalten, sonst "false". <font color="#ff0000">(Neu in 1.5.3)</font>.</td>
+</tr>
+<tr>
+<td>{$permittedManageMaps}</td><td>Ist "true", wenn der Benutzer berechtigt ist, Maps zu verwalten, sonst "false". <font color="#ff0000">(Neu in 1.5.3)</font>.</td>
+</tr>
+<tr>
+<td>{$permittedManageShapes}</td><td>Ist "true", wenn der Benutzer berechtigt ist, Shapes zu verwalten, sonst "false". <font color="#ff0000">(Neu in 1.5.3)</font>.</td>
 </tr>
 <tr>
 <td>{$permittedUserMgmt}</td><td>Ist "true", wenn der Benutzer berechtigt ist, Benutzerkonten zu verwalten, sonst "false". <font color="#ff0000">(Neu in 1.5)</font>.</td>
@@ -90,78 +105,78 @@ wird f&uuml;r jede Map ausgef&uuml;hrt. Ein Beispiel finden Sie in <code>share/u
 <td>Um in den Templates flexibler zu sein, haben wir eine Art von "if"-Statement hinzugef&uuml;gt. Es kann wie in PHP benutzt werden. Ein Beispiel finden Sie in <code>share/userfiles/templates/pages/default.header.html</code>. <font color="#ff0000">(Neu in 1.5)</font>.</td>
 </tr>
 <tr>
-<td>{pathBase} (war [html_base])</td><td>URL zur HTML-Basis (/nagvis) </td>
+<td>{$pathBase} (war [html_base])</td><td>URL zur HTML-Basis (/nagvis) </td>
 </tr>
 <tr>
-<td>{pathImages} (war [html_images])</td><td>URL zu den HTML-Images (/nagvis/images) </td>
+<td>{$pathImages} (war [html_images])</td><td>URL zu den HTML-Images (/nagvis/images) </td>
 </tr>
 <tr>
-<td>{pathTemplates} (war [html_templates])</td><td>Pfad zu den Header-Templates (/nagvis/userfiles/templates)</td>
+<td>{$pathTemplates} (war [html_templates])</td><td>Pfad zu den Header-Templates (/nagvis/userfiles/templates)</td>
 </tr>
 <tr>
-<td>{pathTemplateImages} (war [html_template_images])</td><td>Pfad zu den Header-Template-Images (/nagvis/userfiles/images/templates)</td>
+<td>{$pathTemplateImages} (war [html_template_images])</td><td>Pfad zu den Header-Template-Images (/nagvis/userfiles/images/templates)</td>
 </tr>
 <tr>
-<td>{langOpen} (war [lang_select_map])</td><td>Label f&uuml;r das &Ouml;ffnen neuer Ansichten </td>
+<td>{$langOpen} (war [lang_select_map])</td><td>Label f&uuml;r das &Ouml;ffnen neuer Ansichten </td>
 </tr>
 <tr>
-<td>{langEditMap} (war [lang_edit_map])</td><td>Label zum Editieren einer Map</td>
+<td>{$langEditMap} (war [lang_edit_map])</td><td>Label zum Editieren einer Map</td>
 </tr>
 <tr>
-<td>{langNeedHelp} (war [lang_need_help])</td><td>Label f&uuml;r Hilfe-Auswahl </td>
+<td>{$langNeedHelp} (war [lang_need_help])</td><td>Label f&uuml;r Hilfe-Auswahl </td>
 </tr>
 <tr>
-<td>{langOnlineDoc} (war [lang_online_doc])</td><td>Label f&uuml;r den Link zur Online-Dokumentation </td>
+<td>{$langOnlineDoc} (war [lang_online_doc])</td><td>Label f&uuml;r den Link zur Online-Dokumentation </td>
 </tr>
 <tr>
-<td>{langForum} (war [lang_forum])</td><td>Label f&uuml;r den Link zum NagVis-Forum </td>
+<td>{$langForum} (war [lang_forum])</td><td>Label f&uuml;r den Link zum NagVis-Forum </td>
 </tr>
 <tr>
-<td>{langSupportInfo} (war [lang_support_info])</td><td>Label f&uuml;r den Link zu Support-Informationen </td>
+<td>{$langSupportInfo} (war [lang_support_info])</td><td>Label f&uuml;r den Link zu Support-Informationen </td>
 </tr>
 <tr>
-<td>{langOverview} (war [lang_overview])</td><td>Label f&uuml;r &Uuml;berblick</td>
+<td>{$langOverview} (war [lang_overview])</td><td>Label f&uuml;r &Uuml;berblick</td>
 </tr>
 <tr>
-<td>{langInstance} (war [lang_instance])</td><td>Label f&uuml;r den Instanznamen </td>
+<td>{$langInstance} (war [lang_instance])</td><td>Label f&uuml;r den Instanznamen </td>
 </tr>
 <tr>
-<td>{langRotationStart} (war [lang_rotation_start])</td><td>Label zum Starten der Map-Rotation </td>
+<td>{$langRotationStart} (war [lang_rotation_start])</td><td>Label zum Starten der Map-Rotation </td>
 </tr>
 <tr>
-<td>{langRotationStop} (war [lang_rotation_stop])</td><td>Label zum Stoppen der Map-Rotation</td>
+<td>{$langRotationStop} (war [lang_rotation_stop])</td><td>Label zum Stoppen der Map-Rotation</td>
 </tr>
 <tr>
-<td>{langSearch}</td><td>Label f&uuml;r das Suchen von Objekten auf der Map <font color="#ff0000">(Neu in 1.5)</font>.</td>
+<td>{$langSearch}</td><td>Label f&uuml;r das Suchen von Objekten auf der Map <font color="#ff0000">(Neu in 1.5)</font>.</td>
 </tr>
 <tr>
-<td>{langToggleGrid}</td><td>Label f&uuml;r das De/Aktivieren des Rasters <font color="#ff0000">(Neu in 1.5)</font>.</td>
+<td>{$langToggleGrid}</td><td>Label f&uuml;r das De/Aktivieren des Rasters <font color="#ff0000">(Neu in 1.5)</font>.</td>
 </tr>
 <tr>
-<td>{langActions}</td><td>Label f&uuml;r die Auswahl verf&uuml;gbarer Aktionen <font color="#ff0000">(Neu in 1.5)</font>.</td>
+<td>{$langActions}</td><td>Label f&uuml;r die Auswahl verf&uuml;gbarer Aktionen <font color="#ff0000">(Neu in 1.5)</font>.</td>
 </tr>
 <tr>
-<td>{langWui}</td><td>Label f&uuml;r die WUI <font color="#ff0000">(Neu in 1.5)</font>.</td>
+<td>{$langWui}</td><td>Label f&uuml;r die WUI <font color="#ff0000">(Neu in 1.5)</font>.</td>
 </tr>
 <tr>
-<td>{langUser}</td><td>Label f&uuml;r den Benutzer <font color="#ff0000">(Neu in 1.5)</font>.</td>
+<td>{$langUser}</td><td>Label f&uuml;r den Benutzer <font color="#ff0000">(Neu in 1.5)</font>.</td>
 </tr>
 <tr>
-<td>{langLoggedIn}</td><td>Label f&uuml;r "Logged in as" <font color="#ff0000">(Neu in 1.5)</font>.</td>
+<td>{$langLoggedIn}</td><td>Label f&uuml;r "Logged in as" <font color="#ff0000">(Neu in 1.5)</font>.</td>
 </tr>
 <tr>
-<td>{langChangePassword}</td><td>Label f&uuml;r das &Auml;ndern des Benutzer-Passworts <font color="#ff0000">(Neu in 1.5)</font>.</td>
+<td>{$langChangePassword}</td><td>Label f&uuml;r das &Auml;ndern des Benutzer-Passworts <font color="#ff0000">(Neu in 1.5)</font>.</td>
 </tr>
 <tr>
-<td>{langUserMgmt}</td><td>Label f&uuml;r die Verwaltung der Benutzer <font color="#ff0000">(Neu in 1.5)</font>.</td>
+<td>{$langUserMgmt}</td><td>Label f&uuml;r die Verwaltung der Benutzer <font color="#ff0000">(Neu in 1.5)</font>.</td>
 </tr>
 <tr>
-<td>{langRoleMgmt}</td><td>Label f&uuml;r die Verwaltung der Rollen <font color="#ff0000">(Neu in 1.5)</font>.</td>
+<td>{$langManageRoles}</td><td>Label f&uuml;r die Verwaltung der Rollen <font color="#ff0000">(Neu in 1.5)</font>.</td>
 </tr>
 <tr>
-<td>{langLogout}</td><td>Label f&uuml;r das Abmelden des Benutzers <font color="#ff0000">(Neu in 1.5)</font>.</td>
+<td>{$langLogout}</td><td>Label f&uuml;r das Abmelden des Benutzers <font color="#ff0000">(Neu in 1.5)</font>.</td>
 </tr>
 <tr>
-<td>{langChooseLanguage}</td><td>Label f&uuml;r die Auswahl der Benutzer-Sprache <font color="#ff0000">(Neu in 1.5)</font>.</td>
+<td>{$langChooseLanguage}</td><td>Label f&uuml;r die Auswahl der Benutzer-Sprache <font color="#ff0000">(Neu in 1.5)</font>.</td>
 </tr>
 </html>

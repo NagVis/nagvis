@@ -252,7 +252,7 @@ for ($i=0; $i < $pdc; $i++){
 			if ($warn < $crit) {
 				// The "360 +" fix has been worked out by hipska. Thanks for that!
 				imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 360 + $critp, 0, $oRed, IMG_ARC_EDGED);
-			} else
+			} else {
 				// The "360 +" fix has been worked out by hipska. Thanks for that!
 				imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 180, 360 + $critp, $oRed, IMG_ARC_EDGED);
 			}
