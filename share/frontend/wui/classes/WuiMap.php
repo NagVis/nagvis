@@ -302,13 +302,13 @@ class WuiMap extends GlobalMap {
 			$y = $y1;
 		}
 		
-		$ret .= "var ".$lineId." = new jsGraphics('box_".$obj['type']."_".$obj['id']."');";
+		$ret .= "var ".$lineId." = new jsGraphics('line_".$obj['type']."_".$obj['id']."');";
 		$ret .= $lineId.".setColor('#FF0000');";
 		$ret .= $lineId.".setStroke(1);";
 		$ret .= $lineId.".drawLine(".($x1-$x).",".($y1-$y).",".($x2-$x).",".($y2-$y).");";
 		$ret .= $lineId.".paint();";
 		
-		return $this->parseJs($ret);
+		return '<div style="position:absolute;top:0px;left:0px" id="line_'.$obj['type'].'_'.$obj['id'].'"></div>'.$this->parseJs($ret);
 	}
 	
 	/**
