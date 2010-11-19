@@ -701,16 +701,32 @@ function toggleBorder(oObj, state){
 	var top = parseInt(oContainer.style.top.replace('px', ''));
 	var left = parseInt(oContainer.style.left.replace('px', ''));
 
+	var parts = oObj.id.split('_');
+	var type  = parts[1];
+  var id    = parts[2];
+  var oLine = document.getElementById('line_'+type+'_'+id);
+
 	if(state === 1) {
 		oObj.style.border = iWidth + "px solid " + sColor;
-		oContainer.style.top = (top - iWidth) + 'px';
+		oContainer.style.top  = (top - iWidth) + 'px';
 		oContainer.style.left = (left - iWidth) + 'px';
+
+		if(oLine) {
+			oLine.style.top  = iWidth + 'px';
+			oLine.style.left = iWidth + 'px';
+		}
 	} else {
 		oObj.style.border = "none";
 		oContainer.style.top = (top + iWidth) + 'px';
 		oContainer.style.left = (left + iWidth) + 'px';
+
+		if(oLine) {
+			oLine.style.top  = '0px';
+			oLine.style.left = '0px';
+		}
 	}
 	
+	oLine = null;
 	oObj = null;
 	oContainer = null;
 }
