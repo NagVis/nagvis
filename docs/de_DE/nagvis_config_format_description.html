@@ -75,6 +75,9 @@ dateformat="Y-m-d H:i:s"</pre>
 <th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
 </tr>
 <tr>
+<td>audit_log</td><td>1</td><td>Aktivieren/deaktiviern der Protokollierung von sicherheitsrelevanten Benutzeraktionen in NagVis. Benutzeran- und abmeldungen werden z.B. in var/nagvis-audit.log protokolliert. (<font color="#ff0000">Neu in 1.5</font>)</td>
+</tr>
+<tr>
 <td>authmodule</td><td>CoreAuthModSQLite</td><td>Definiert das zu benutzende Authentifizierungsmodul. Per Default benutzt NagVis das eingebaute SQLite-Authentifizierungsmodul. Bei der Auslieferung ist kein anderes Authentifizierungsmodul verf&uuml;gbar. Es ist m&ouml;glich, andere Authentifizierungsmodule hinzuzuf&uuml;gen, um andere Authentifizierungsmechanismen zu unterst&uuml;tzen. Weitere Einzelheiten finden Sie in der <a href="auth_modules">Authentifizierungsmodul</a>-Dokumentation (<font color="red">neu in 1.5</font>)</td><td> 
 </tr>
 <tr>
@@ -103,6 +106,15 @@ Die Reihenfolge der Optionen bestimmt die Reihenfolge, in der NagVis die verschi
 </tr>
 <tr>
 <td>logonmodule</td><td>FrontendLogonDialog</td><td>Definiert das zu benutzende Logon-Modul. Per Default benutzt NagVis den HTML-Logon-Dialog zur Abfrage von Authentifizierungsinformationen. Bei Auslieferung gibt es kein anderes Logon-Modul. Es ist m&ouml;glich, andere Logon-Module hinzuzuf&uuml;gen. Weitere Einzelheiten finden Sie in der <a href="logon_modules">logon-Modul</a>-Dokumentation. (<font color="red">neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>logonenvvar</td><td>REMOTE_USER</td><td>Definiert die Umgebungsvariable, die f&uuml;r das Holen des authentifizierten Benutzers aus der Webserver-Umgebung benutzt werden soll. Diese Option wird nur f&uuml;r die Logon-Module LogonEnv und LogonMixed verwendet. (<font color="#ff0000">Neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>logonenvcreateuser</td><td>1</td><td>Veranlasst das LogonEnv/LogonMixedModul, ein Benutzerkonto f&uuml;r jeden unbekannten Benutzer anzulegen, der die NagVis-Seite &ouml;ffnet. Diese Option wird nur f&uuml;r die Logon-Module LogonEnv und LogonMixed verwendet. (<font color="#ff0000">Neu in 1.5</font>)</td>
+</tr>
+<tr>
+<td>logonenvcreaterole</td><td>Guests</td><td>Veranlasst das LogonEnv/LogonMixedModul, die Benutzerkonten mit der angegebenen Rolle anzulegen. Diese Option wird nur f&uuml;r die Logon-Module LogonEnv und LogonMixed verwendet. (<font color="#ff0000">Neu in 1.5</font>)</td>
 </tr>
 <tr>
 <td>refreshtime</td><td>60</td><td>Aktualisierungsintervall in Maps bzw. laden der n&auml;chsten Map bei Map-Rotation</td>
@@ -215,6 +227,9 @@ hoverchildslimit=10
 </tr>
 <tr>
 <td> eventsound </td><td> 1 </td><td> aktivieren (1) bzw. deaktivieren (0) von Sound-Signalen bei Status&auml;nderungen</td>
+</tr>
+<tr>
+<td> headerfade </td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren des Abblendeffekts in den Untermen&uuml;s des Header-Men&uuml;s (wenn das verwendete Header-Men&uuml; diese Option unterst&uuml;tzt). <font color="#ff0000">(Neu in 1.5.2)</font></td>
 </tr>
 <tr>
 <td>headermenu</td><td>1</td><td>aktivieren (1) bzw. deaktivieren (0) des Headermen&uuml;s</a></td>
@@ -432,6 +447,17 @@ socket="unix:/usr/local/nagios/var/rw/live</pre>
 <td>backendtype</td><td>mklivestatus</td><td>Art des Backends - MUSS gesetzt werden</td>
 </tr>
 <tr>
+<td>statushost</td><td>&nbsp;</td>
+<td><p>Der "statushost" kann genutzt werden, um l&auml;stige Timeouts zu vermeiden, wenn ein Backend nicht erreichbar ist. Dies ist nur sinnvoll in Multi-Backend-Umgebungen.</p>
+<p>Es funktioniert wie folgt: Die Annahme ist, dass es ein "lokales" Backend gibt, das den Host des "entfernten" Backends &uuml;berwacht.
+Wenn der entfernte Backend-Host als "UP" gemeldet wird, dann wird das Backend ganz normal abgefragt.</p>
+<p>Wenn der entfernte Backend-Host als "DOWN" oder "UNREACHABLE" gemeldet wird, dann wird NagVis solange keine Verbindung dorthin versuchen, bis der Backend-Host wieder verf&uuml;gbar ist.</p>
+<p>Der "statushost" muss im folgenden Format angegeben werdent: &quot;&lt;backend_id>:&lt;hostname>&quot;
+-> e.g. &quot;live_2:nagios&quot;</p>
+<p>Der Host muss in einem anderen Backend sein als der aktuelle, damit es funktioniert.</p>
+</td>
+</tr>
+<tr>
 <td>htmlcgi</td><td>/nagios/cgi-bin</td><td>Pfad zum cgi-bin-Verzeichnis dieses Backends (wichtig bei mehreren Backends)</td>
 </tr>
 <tr>
@@ -464,7 +490,7 @@ interval=15</pre>
 <td>maps</td><td> </td>
 <td>
 	kommaseparierte Liste von Maps in diesem Pool, die zu rotieren sind. Sie k&ouml;nnen auch externe URLs durch [ ] klammern (z.B. maps="demo1,[http://localhost/test.php]". Die URL muss von dem Server erreichbar sein, auf dem NagVis l&auml;uft.<br><br> 
-	Sie k&ouml;nnen Label im folgenden Format hinzuf&uuml;gen: &lt;label&gt;:&lt;map&gt; und &lt;label&gt;:&lt;[url]&gt;. Die Label werden in der Rotationsliste angezeigt.
+	Sie k&ouml;nnen Label im folgenden Format hinzuf&uuml;gen: &lt;label&gt;:&lt;map&gt; und &lt;label&gt;:&lt;[url]&gt;. Die Label werden in der Rotationsliste angezeigt.<br><br>
 	<font color="#ff0000">Neu in 1.5:</font> Es ist au&szlig;erdem m&ouml;glich, Automaps zu Rotationen hinzuzuf&uuml;gen. Setzen Sie einfach ein "@"-Zeichen vor den Name der Automap, um sie der Rotation hinzuzuf&uuml;gen.
 </td>
 </tr>
@@ -489,6 +515,9 @@ interval=15</pre>
 <tr> <td>warning</td><td>6</td> </tr>
 <tr> <td>warning_ack</td><td>4</td> </tr>
 <tr> <td>warning_downtime</td><td>4</td> </tr>
+<tr> <td>unknown</td><td>3</td> </tr>
+<tr> <td>unknown_ack</td><td>2</td> </tr>
+<tr> <td>unknown_downtime</td><td>2</td> </tr>
 <tr> <td>error</td><td>3</td> </tr>
 <tr> <td>error_ack</td><td>2</td> </tr>
 <tr> <td>error_downtime</td><td>2</td> </tr>
@@ -527,7 +556,7 @@ Diese Einstellungen definieren das Verhalten der Zust&auml;nde im Frontend.
 	<tr><td>error_sound</td><td></td></tr>
 	<tr><td>ok_bgcolor</td><td>#00FF00</td></tr>
 	<tr><td>ok_color</td><td>#00FF00</td></tr>
-	<tr><td>ok_sound</td><td></td></tr>
+	<tr><td>ok</td><td></td></tr>
 	<tr><td>up_bgcolor</td><td>#00FF00</td></tr>
 	<tr><td>up_color</td><td>#00FF00</td></tr>
 	<tr><td>up_sound</td><td></td></tr>
