@@ -145,12 +145,12 @@ function validateMapCfgForm() {
 		}
 		
 		// we verify we have 2 x coordinates and 2 y coordinates
-		if(document.addmodify.x && document.addmodify.x.value.split(",").length != 2) {
+		if(document.addmodify.x && document.addmodify.x.value.split(",").length < 2) {
 			alert(printLang(lang['not2coordsX'],'COORD~X'));
 			return false;
 		}
 		
-		if(document.addmodify.y && document.addmodify.y.value.split(",").length != 2) {
+		if(document.addmodify.y && document.addmodify.y.value.split(",").length < 2) {
 			alert(printLang(lang['not2coordsY'],'COORD~Y'));
 			return false;
 		}
@@ -164,7 +164,7 @@ function validateMapCfgForm() {
 	}
 	
 	if(document.addmodify.x && document.addmodify.x.value.split(",").length > 1) {
-		if(document.addmodify.x.value.split(",").length != 2) {
+		if(document.addmodify.x.value.split(",").length > 4) {
 			alert(printLang(lang["only1or2coordsX"],'COORD~X'));
 			return false;
 		} else {
@@ -181,7 +181,7 @@ function validateMapCfgForm() {
 	}
 	
 	if(document.addmodify.y && document.addmodify.y.value.split(",").length > 1) {
-		if(document.addmodify.y.value.split(",").length != 2) {
+		if(document.addmodify.y.value.split(",").length > 4) {
 			alert(printLang(lang["only1or2coordsY"],'COORD~Y'));
 			return false;
 		} else {

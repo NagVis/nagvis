@@ -163,7 +163,7 @@ function getLabelShift(str) {
 }
 
 // This function draws an arrow like it is used on NagVis maps
-// It draws following line types: ---> and ---><---
+// It draws following line types: --->
 function drawArrow(objectId, x1, y1, x2, y2, z, w, colorFill, colorBorder) {
 	var xCoord = [];
 	var yCoord = [];
@@ -214,12 +214,18 @@ function drawSimpleLine(objectId, x1, y1, x2, y2, z, w, colorFill, colorBorder) 
 }
 
 // This function is being called by NagVis for drawing the lines
-function drawNagVisLine(objectId, lineType, cuts, x1, y1, x2, y2, z, width, colorFill, colorFill2, perfdata, colorBorder, bLinkArea, bLabelShow) {
-	// Ensure format
-	x1 = parseInt(x1, 10);
-	x2 = parseInt(x2, 10);
-	y1 = parseInt(y1, 10);
-	y2 = parseInt(y2, 10);
+function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, colorFill2, perfdata, colorBorder, bLinkArea, bLabelShow) {
+	// Convert all coords to int
+	for(var i = 0; i < x.length; i++) {
+		x[i] = parseInt(x[i], 10);
+		y[i] = parseInt(y[i], 10);
+	}
+
+	var xStart = x[0];
+	var yStart = y[0];
+	var xEnd   = x[x.length - 1];
+	var yEnd   = y[y.length - 1];
+
 	width = parseInt(width, 10);
 	var perfdataA = null;
 	var perfdataB = null;
@@ -235,58 +241,73 @@ function drawNagVisLine(objectId, lineType, cuts, x1, y1, x2, y2, z, width, colo
 	switch (lineType) {
 		case '10':
 			// ---><--- lines
-			var xMid = middle(x1, x2, cut);
-			var yMid = middle(y1, y2, cut);
+			if(x.length == 2) {
+				var xMid = middle(xStart, xEnd, cut);
+				var yMid = middle(yStart, yEnd, cut);
+			} else {
+				var xMid = x[1];
+				var yMid = y[1];
+			}
 
-			drawArrow(objectId, x1, y1, xMid, yMid, z, width, colorFill, colorBorder);
-      drawLinkOrLabel(objectId, lineType, x1, y1, x2, y2, z, perfdataA, perfdataB, cutIn, bLinkArea, bLabelShow);
-			drawArrow(objectId, x2, y2, xMid, yMid, z, width, colorFill, colorBorder);
-      drawLinkOrLabel(objectId, lineType, x1, y1, x2, y2, z, perfdataA, perfdataB, cutOut, bLinkArea, bLabelShow);
+			drawArrow(objectId, xStart, yStart, xMid, yMid, z, width, colorFill, colorBorder);
+      drawLinkOrLabel(objectId, lineType, xStart, yStart, xEnd, yEnd, z, perfdataA, perfdataB, cutIn, bLinkArea, bLabelShow);
+			drawArrow(objectId, xEnd, yEnd, xMid, yMid, z, width, colorFill, colorBorder);
+      drawLinkOrLabel(objectId, lineType, xStart, yStart, xEnd, yEnd, z, perfdataA, perfdataB, cutOut, bLinkArea, bLabelShow);
 			break;
 		case '11':
 			// ---> lines
-			drawArrow(objectId, x1, y1, x2, y2, z, width, colorFill, colorBorder);
-      drawLinkOrLabel(objectId, lineType, x1, y1, x2, y2, z, perfdataA, perfdataB, cut, bLinkArea, bLabelShow);
+			drawArrow(objectId, xStart, yStart, xEnd, yEnd, z, width, colorFill, colorBorder);
+      drawLinkOrLabel(objectId, lineType, xStart, yStart, xEnd, yEnd, z, perfdataA, perfdataB, cut, bLinkArea, bLabelShow);
 			break;
 		case '12':
 			// --- lines
-			drawSimpleLine(objectId, x1, y1, x2, y2, z, width, colorFill, colorBorder);
-      drawLinkOrLabel(objectId, lineType, x1, y1, x2, y2, z, perfdataA, perfdataB, cut, bLinkArea, bLabelShow);
+			drawSimpleLine(objectId, xStart, yStart, xEnd, yEnd, z, width, colorFill, colorBorder);
+      drawLinkOrLabel(objectId, lineType, xStart, yStart, xEnd, yEnd, z, perfdataA, perfdataB, cut, bLinkArea, bLabelShow);
 			break;
 		case '13':
 			// -%-><-%- lines
-			var xMid = middle(x1, x2, cut);
-			var yMid = middle(y1, y2, cut);
+			if(x.length == 2) {
+				var xMid = middle(xStart, xEnd, cut);
+				var yMid = middle(yStart, yEnd, cut);
+			} else {
+				var xMid = x[1];
+				var yMid = y[1];
+			}
 			// perfdataA contains the percentage info
 			if(isset(perfdata[0]) && isset(perfdata[0][1]) && isset(perfdata[0][2]))
 				perfdataA = perfdata[0][1] + perfdata[0][2];
-			drawArrow(objectId, x1, y1, xMid, yMid, z, width, colorFill, colorBorder);
-      drawLinkOrLabel(objectId, lineType, x1, y1, xMid, yMid, z, perfdataA, perfdataB, cutIn, bLinkArea, bLabelShow);
+			drawArrow(objectId, xStart, yStart, xMid, yMid, z, width, colorFill, colorBorder);
+      drawLinkOrLabel(objectId, lineType, xStart, yStart, xMid, yMid, z, perfdataA, perfdataB, cutIn, bLinkArea, bLabelShow);
 
 			if(isset(perfdata[1]) && isset(perfdata[1][1]) && isset(perfdata[1][2]))
 				perfdataA = perfdata[1][1] + perfdata[1][2];
-			drawArrow(objectId, x2, y2, xMid, yMid, z, width, colorFill2, colorBorder);
-      drawLinkOrLabel(objectId, lineType, x2, y2, xMid, yMid, z, perfdataA, perfdataB, cutOut, bLinkArea, bLabelShow);
+			drawArrow(objectId, xEnd, yEnd, xMid, yMid, z, width, colorFill2, colorBorder);
+      drawLinkOrLabel(objectId, lineType, xEnd, yEnd, xMid, yMid, z, perfdataA, perfdataB, cutOut, bLinkArea, bLabelShow);
 			break;
 		case '14':
 			// -%+BW-><-%+BW- lines
-			var xMid = middle(x1, x2, cut);
-			var yMid = middle(y1, y2, cut);
+			if(x.length == 2) {
+				var xMid = middle(xStart, x2, cut);
+				var yMid = middle(y1, y2, cut);
+			} else {
+				var xMid = x[1];
+				var yMid = y[1];
+			}
 			// perfdataA contains the percentage info
 			// perfdataB contains the bandwith info
 			if(isset(perfdata[0]) && isset(perfdata[0][1]) && isset(perfdata[0][2]))
 				perfdataA = perfdata[0][1] + perfdata[0][2];
 			if(isset(perfdata[2]) && isset(perfdata[2][1]) && isset(perfdata[2][2]))
 				perfdataB = perfdata[2][1] + perfdata[2][2];
-			drawArrow(objectId, x1, y1, xMid, yMid, z, width, colorFill, colorBorder);
-      drawLinkOrLabel(objectId, lineType, x1, y1, xMid, yMid, z, perfdataA, perfdataB, cutOut, bLinkArea, bLabelShow);
+			drawArrow(objectId, xStart, yStart, xMid, yMid, z, width, colorFill, colorBorder);
+      drawLinkOrLabel(objectId, lineType, xStart, yStart, xMid, yMid, z, perfdataA, perfdataB, cutOut, bLinkArea, bLabelShow);
 
 			if(isset(perfdata[1]) && isset(perfdata[1][1]) && isset(perfdata[1][2]))
 				perfdataA = perfdata[1][1] + perfdata[1][2];
 			if(isset(perfdata[3]) && isset(perfdata[3][1]) && isset(perfdata[3][2]))
 				perfdataB = perfdata[3][1] + perfdata[3][2];
-			drawArrow(objectId, x2, y2, xMid, yMid, z, width, colorFill2, colorBorder);
-			drawLinkOrLabel(objectId, lineType, x2, y2, xMid, yMid, z, perfdataA, perfdataB, cutIn, bLinkArea, bLabelShow);
+			drawArrow(objectId, xEnd, yEnd, xMid, yMid, z, width, colorFill2, colorBorder);
+			drawLinkOrLabel(objectId, lineType, xEnd, yEnd, xMid, yMid, z, perfdataA, perfdataB, cutIn, bLinkArea, bLabelShow);
 			break;
 		default:
 			// Unknown

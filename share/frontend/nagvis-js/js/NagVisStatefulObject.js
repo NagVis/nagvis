@@ -579,7 +579,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		var cuts = [this.conf.line_cut, this.conf.line_label_pos_in, this.conf.line_label_pos_out];
 
 		// Parse the line object
-		drawNagVisLine(this.conf.object_id, this.conf.line_type, cuts, x[0], y[0], x[1], y[1],
+		drawNagVisLine(this.conf.object_id, this.conf.line_type, cuts, x, y,
 		               this.conf.z, width, colorFill, colorFill2, setPerfdata, colorBorder,
 		               ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')),
 									 (this.conf.line_label_show && this.conf.line_label_show === '1'));
