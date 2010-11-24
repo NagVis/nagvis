@@ -287,10 +287,10 @@ class WuiViewMapAddModify {
 							$options = $this->CORE->getAvailableShapes();
 							$selected = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE);
 							
-							if(preg_match("/^\[(.*)\]$/",$this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE),$match) > 0) {
-								$fieldType = 'textbox';
-								$ret .= $FORM->getInputLine($propname,$propname,$this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)');
-							}
+							//if(preg_match("/^\[(.*)\]$/",$this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE),$match) > 0) {
+							//	$fieldType = 'textbox';
+							//	$ret .= $FORM->getInputLine($propname,$propname,$this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE),$prop['must'],'validateMapConfigFieldValue(this)');
+							//}
 						break;
 						
 						case 'gadget_url':
@@ -380,7 +380,11 @@ class WuiViewMapAddModify {
 					
 					// Toggle depending fields
 					if(isset($selected) && $selected != '') {
-						$ret .= '<script type="text/javascript">toggleDependingFields("addmodify", "'.$propname.'", "'.$selected.'");</script>';
+						$ret .= '<script type="text/javascript">';
+						$ret .= 'var bChanged = toggleFieldType("'.$propname.'", "'.$this->CORE->getLang()->getText('manualInput').'");';
+						$ret .= 'toggleDefaultOption("'.$propname.'", bChanged);';
+						$ret .= 'toggleDependingFields("addmodify", "'.$propname.'", "'.$selected.'");';
+						$ret .= '</script>';
 					}                                                                         
 				break;
 				
