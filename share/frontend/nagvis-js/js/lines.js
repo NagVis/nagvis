@@ -395,38 +395,3 @@ function splicePerfdata(nagiosPerfdata) {
 		}
 	}
 }
-
-/**
- * Sets fill color for bandwidth based lines
- *
- * @param       Number  Percent value
- * @return      String  Hex value for fill color
- * @author      Greg Frater <greg@fraterfactory.com>
- */
-function getColorFill(percent) {
-	if(percent >= 0 && percent <= 10) {
-		// purple
-		return '#8c00ff';
-	} else if (percent > 10 && percent <= 25) {
-		// blue
-		return '#2020ff';
-	} else if (percent > 25 && percent <= 40) {
-		// light blue
-		return '#00c0ff';
-	} else if (percent > 40 && percent <= 55) {
-		// green
-		return '#00f000';
-	} else if (percent > 55 && percent <= 70) {
-		// yellow
-		return '#f0f000';
-	} else if (percent > 70 && percent <= 85) {
-		// orange
-		return '#ffc000';
-	} else if (percent > 85 && percent <= 100) {
-		// red
-		return '#ff0000';
-	} else {
-		return '#000000';
-	}
-}
-

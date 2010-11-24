@@ -493,11 +493,11 @@ var NagVisStatefulObject = NagVisObject.extend({
 			case 'DOWN':
 			case 'CRITICAL':
 			case 'WARNING':
-	    case 'UNKNOWN':
+			case 'UNKNOWN':
 			case 'ERROR':
-	    case 'UP':
-	    case 'OK':
-	    case 'PENDING':
+			case 'UP':
+			case 'OK':
+			case 'PENDING':
 				colorFill = oStates[this.conf.summary_state].color;
 			break;
 			default:
@@ -512,7 +512,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 
 			// Convert perfdata to structured array
 			setPerfdata = splicePerfdata(this.conf.perfdata);
-	
+
 			// array index returned from splice function
 			/* 0 = label
 			   1 = value
@@ -533,7 +533,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 				else {
 					if(setPerfdata[0][0] == 'dummyPercentIn' || setPerfdata[1][0] == 'dummyPercentOut')
 				  	msg += "value 1 is \'" + setPerfdata[0][1] + "\' value 2 is \'" + setPerfdata[1][1] + "\'";
-		
+
 					if(this.conf.line_type == 14 && (setPerfdata[2][0] == 'dummyActualIn' || setPerfdata[3][0] == 'dummyActualOut'))
 						msg += " value 3 is \'" + setPerfdata[2][1] + "\' value 4 is \'" + setPerfdata[3][1] + "\'";
 				}
@@ -553,7 +553,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 
 				// Get colorFill #1 (in)
 				if(setPerfdata[0][2] !== null && setPerfdata[0][2] == '%' && setPerfdata[0][1] !== null && setPerfdata[0][1] >= 0 && setPerfdata[0][1] <= 100)
-					colorFill = getColorFill(setPerfdata[0][1]);
+					colorFill = this.getColorFill(setPerfdata[0][1]);
 				else {
 					colorFill = '#000000';
 					this.perfdataError('First', setPerfdata[0][1], this.conf.name, this.conf.service_description);
@@ -561,7 +561,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 				
 				// Get colorFill #2 (out)
 				if(setPerfdata[1][2] !== null && setPerfdata[1][2] == '%' && setPerfdata [1][1] !== null && setPerfdata[1][1] >= 0 && setPerfdata[1][1] <= 100)
-					colorFill2 = getColorFill(setPerfdata[1][1]);
+					colorFill2 = this.getColorFill(setPerfdata[1][1]);
 				else {
 					colorFill = '#000000';
 					this.perfdataError('Second', setPerfdata[1][1], this.conf.name, this.conf.service_description);
@@ -586,6 +586,28 @@ var NagVisStatefulObject = NagVisObject.extend({
 	},
 
 	/**
+	 * PRIVATE getColorFill()
+	 *
+	 * This function returns the color to use for this line depending on the
+	 * given percentage usage and on the configured options for this object
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	getColorFill: function(perc) {
+		var ranges = this.conf.line_weather_colors.split(',');
+		for(var i = 0; i < ranges.length; i++) {
+			// 0 contains the percentage until this color is used
+			// 1 contains the color to be used
+			var parts = ranges[i].split(':');
+			if(perc <= parts[0])
+				return parts[1];
+			parts = null;
+		}
+		ranges = null;
+		return '#000000';
+	},
+
+	/**
 	 * PRIVATE calculateUsage()
 	 *
 	 * Loops all perfdata sets and searches for labels "in" and "out"
@@ -603,12 +625,12 @@ var NagVisStatefulObject = NagVisObject.extend({
 		for(var i = 0; i < oldPerfdata.length; i++) {
 			if(oldPerfdata[i][0] == 'in' && (oldPerfdata[i][2] === null || oldPerfdata[i][2] === '')) {
 				newPerfdata[0] = this.perfdataCalcPerc(oldPerfdata[i]);
-        newPerfdata[2] = this.perfdataCalcBytesReadable(oldPerfdata[i]);
+				newPerfdata[2] = this.perfdataCalcBytesReadable(oldPerfdata[i]);
 				foundNew = true;
 			}
 			if(oldPerfdata[i][0] == 'out' && (oldPerfdata[i][2] === null || oldPerfdata[i][2] === '')) {
 				newPerfdata[1] = this.perfdataCalcPerc(oldPerfdata[i]);
-        newPerfdata[3] = this.perfdataCalcBytesReadable(oldPerfdata[i]);
+				newPerfdata[3] = this.perfdataCalcBytesReadable(oldPerfdata[i]);
 				foundNew = true;
 			}
 		}

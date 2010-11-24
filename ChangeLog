@@ -16,6 +16,8 @@ Frontend
       single nodes is stored in user specific profile files
     * Added new parameter {parent_map} to map/automap global sections which is
       used in header/sidebar menus to draw a map hierarchy
+    * Colors and ranges of weathermap lines are now customizable using the
+      object configuration option line_weather_colors
     * Fixed wrong label for MBit/s in weathermap bandwidth displaying 
 
 WUI
