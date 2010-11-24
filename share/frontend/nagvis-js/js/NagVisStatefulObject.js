@@ -642,7 +642,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 			crit /= GB
 		} else if(val > MB) {
 			val  /= MB
-			uom  = 'GB'
+			uom  = 'MB'
 			crit /= MB
 		} else if(val > KB) {
 			val  /= KB
