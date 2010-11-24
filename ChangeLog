@@ -23,3 +23,5 @@ WUI
     * Fixed reposition effect when adding borders to objects while hovering over a line
     * Fixed problem showing up the dropdown menu of shape images in addmodify dialog after
       adding at least one shape with an url as image
+    * It is now possible to reset options to their default value using the addmodify dialog
+      when they have been set before
