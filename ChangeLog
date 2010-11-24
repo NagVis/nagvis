@@ -21,3 +21,5 @@ Frontend
 WUI
     * Bugfix: Fixed deletion of multiple objects of same type in WUI without reloading
     * Fixed reposition effect when adding borders to objects while hovering over a line
+    * Fixed problem showing up the dropdown menu of shape images in addmodify dialog after
+      adding at least one shape with an url as image
