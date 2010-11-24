@@ -222,6 +222,7 @@ class WuiViewMapAddModify {
 				$ret .= $FORM->getHiddenField('_'.$propname, $this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $propname, FALSE));
 			} else {
 				$ret .= $FORM->getHiddenField('_'.$propname, '');
+				$ret .= $FORM->getHiddenField('_conf_'.$propname, $this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $propname, TRUE));
 			}
 			
 			// Set field type to show

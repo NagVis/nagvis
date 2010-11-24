@@ -448,9 +448,10 @@ function getFormParams(formId) {
 	for(var i = 0, len = aFields.length; i < len; i++) {
 		// Filter helper fields (NagVis WUI specific)
 		if(aFields[i].name.charAt(0) !== '_') {
-			// Skip options which use the default value
-			var oFieldDefault = document.getElementById('_'+aFields[i].name);
-			if(aFields[i] && oFieldDefault) {
+			// Skip options which use the default value and where the value has
+			// not been set before
+			var oFieldDefault    = document.getElementById('_'+aFields[i].name);
+			if(aFields[i] && oFieldDefault && !document.getElementById('_conf_'+aFields[i].name)) {
 				if(aFields[i].value === oFieldDefault.value) {
 					continue;
 				}
