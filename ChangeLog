@@ -18,7 +18,12 @@ Frontend
       used in header/sidebar menus to draw a map hierarchy
     * Colors and ranges of weathermap lines are now customizable using the
       object configuration option line_weather_colors
-    * Fixed wrong label for MBit/s in weathermap bandwidth displaying 
+    * Fixed wrong label for MBit/s in weathermap bandwidth displaying
+    * It is now possible to lock/unlock objects in regular frontend (With the
+      needed permissions)
+    * Lines can now be repositioned by dragging the ends using the anchors in unlocked mode
+      in regular frontend
+
 
 WUI
     * Bugfix: Fixed deletion of multiple objects of same type in WUI without reloading

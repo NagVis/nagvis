@@ -1,0 +1,16 @@
+This is a small file for storing quick thoughts about new features and needed changes:
+===============================================================================
+
+WUI: Bei Typ-Wechsel einer Linie in der WUI muss die Anzahl der Koordinaten
+variieren. Normale Linien haben zwei Koordinaten, Linien mit zwei Enden können
+drei Koordinaten haben.
+
+Lock/Unlock Aktionen fuer normale Icons/Gadgets implementieren.
+
+Die Speichern-Funktion beim Editieren von Linien im normalen Frontend muss gebaut werden.
+
+Fehlerbehandlung:
+  Configfehler oder ungültige Attribute in Maps dürfen nicht zu einer großen Fehlermeldung
+  auf der Übersichtsseite führen.
+
+  Ajax Schnittstelle umbauen: Kleines Protokoll einbauen, mit Header inkl. Fehlercodes etc.

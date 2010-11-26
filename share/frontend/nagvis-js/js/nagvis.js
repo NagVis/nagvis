@@ -870,8 +870,11 @@ function hideStatusMessage() {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, text, customStyle) {
-		var oLabelDiv = document.createElement('div');
-		oLabelDiv.setAttribute('id', id);
+		var oLabelDiv = document.getElementById(id);
+		if(!oLabelDiv) {
+			oLabelDiv = document.createElement('div');
+			oLabelDiv.setAttribute('id', id);
+		}
 		oLabelDiv.setAttribute('class', className);
 		oLabelDiv.setAttribute('className', className);
 		oLabelDiv.style.background = bgColor;
@@ -900,7 +903,11 @@ function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, t
 			oLabelDiv.style.borderStyle = 'solid';
 		
 		// Create span for text and add label text
-		var oLabelSpan = document.createElement('span');
+		var oLabelSpan = null;
+		if(oLabelDiv.childNodes.length == 0)
+			oLabelSpan = document.createElement('span');
+		else
+			oLabelSpan = oLabelDiv.childNodes[0];
 		
 		// Setting custom style if someone wants the textbox to be
 		// styled.
@@ -1001,4 +1008,191 @@ function storeUserOption(key, value) {
  */
 function isset(v) {
 	return typeof(v) !== 'undefined';
+}
+
+/*** Handles the object dragging ***/
+
+var draggingEnabled = true;
+var draggingObject = null;
+var dragObjectOffset = null;
+var dragObjectPos = null;
+var dragObjectStartPos = null;
+var dragObjectChilds = {};
+var dragObjectHandler = null;
+
+function getTarget(event) {
+	var target = event.target ? event.target : event.srcElement;
+	while(target && target.tagName != 'DIV') {
+		target = target.parentNode;
+  }
+	return target;
+}
+
+function getButton(event) {
+	if (event.which == null)
+		/* IE case */
+		return (event.button < 2) ? "LEFT" : ((event.button == 4) ? "MIDDLE" : "RIGHT");
+	else
+		/* All others */
+		return (event.which < 2) ? "LEFT" : ((event.which == 2) ? "MIDDLE" : "RIGHT");
+}
+
+function makeDragable(objects, dragStopHandler, dragMoveHandler) {
+	var len = objects.length;
+	if(len == 0)
+		return false;
+	
+	for(var i = 0; i < len; i++) {
+		var o = document.getElementById(objects[i]);
+		if(o) {
+			addEvent(o, "mousedown", function(e) { dragStart(e, dragMoveHandler); }); 
+			addEvent(o, "mouseup",   function(e) { dragStop(e,  dragStopHandler); }); 
+			o = null;
+		}
+	}
+	len = null;
+}
+
+function dragStart(event, dragHandler) {
+	if(!event)
+		event = window.event;
+	
+	var target = getTarget(event);
+	var button = getButton(event);
+	
+	// Skip calls when already dragging or other button than left mouse
+	if(draggingObject !== null || button != 'LEFT' || !draggingEnabled)
+		return true;
+	
+	var posx, posy;
+	if (event.pageX || event.pageY) {
+		posx = event.pageX;
+		posy = event.pageY;
+	} else if (event.clientX || event.clientY) {
+		posx = event.clientX;
+		posy = event.clientY;
+	}
+	
+	/*if(event.stopPropagation)
+		event.stopPropagation();
+	event.cancelBubble = true;*/
+	
+	draggingObject = target;
+	draggingObject.x = draggingObject.offsetLeft;
+	draggingObject.y = draggingObject.offsetTop;
+	
+  // Save relative offset of the mouse to the snapin title to prevent flipping on drag start
+  dragObjectOffset   = [ posy - draggingObject.offsetTop - getHeaderHeight(), 
+                         posx - draggingObject.offsetLeft ];
+  dragObjectStartPos = [ draggingObject.offsetTop, draggingObject.offsetLeft ];
+
+	// Assign the handler which is called during object movements
+	dragObjectHandler = dragHandler;
+
+	// Save diff coords of relative objects
+	var sLabelName = target.id.replace('box_', 'rel_label_');
+	var oLabel = document.getElementById(sLabelName);
+	if(oLabel) {
+		dragObjectChilds[sLabelName] = [ oLabel.offsetTop - draggingObject.offsetTop,
+		                                 oLabel.offsetLeft - draggingObject.offsetLeft ];
+		oLabel = null;
+	}
+	sLabelName = null;
+	
+	// Disable the default events for all the different browsers
+	if(event.preventDefault)
+		event.preventDefault();
+	else
+		event.returnValue = false;
+	return true;
+}
+
+function dragObject(event) {
+	if(!event)
+		event = window.event;
+	
+	if(draggingObject === null || !draggingEnabled)
+		return true;
+	
+	var posx, posy;
+	if (event.pageX || event.pageY) {
+		posx = event.pageX;
+		posy = event.pageY;
+	} else if (event.clientX || event.clientY) {
+		posx = event.clientX;
+		posy = event.clientY;
+	}
+	
+	var newTop  = posy - dragObjectOffset[0] - getHeaderHeight();
+	var newLeft = posx - dragObjectOffset[1];
+
+  draggingObject.style.position = 'absolute';
+	draggingObject.style.top  = newTop + 'px';
+	draggingObject.style.left = newLeft + 'px';
+	draggingObject.x = newLeft;
+	draggingObject.y = newTop;
+
+	// When this object has a relative coordinated label, then move this too
+	moveRelativeObject(draggingObject.id, newTop, newLeft);
+
+	// Call the dragging handler when one is ste
+	if(dragObjectHandler)
+		dragObjectHandler(draggingObject);
+}
+
+function moveRelativeObject(parentId, parentTop, parentLeft) {
+	var sLabelName = parentId.replace('box_', 'rel_label_');
+	if(typeof dragObjectChilds[sLabelName] !== 'undefined') {
+		var oLabel = document.getElementById(sLabelName);
+		if(oLabel) {
+  		oLabel.style.position = 'absolute';
+			oLabel.style.top  = (dragObjectChilds[sLabelName][0] + parentTop) + 'px';
+			oLabel.style.left = (dragObjectChilds[sLabelName][1] + parentLeft) + 'px';
+			oLabel = null;
+		}
+	}
+	sLabelName = null;
+}
+
+function dragStop(event, handler) {
+	if(draggingObject === null || !draggingEnabled
+	   || typeof draggingObject.y == 'undefined' || typeof draggingObject.x == 'undefined')
+		return;
+	
+	// When x or y are negative just return this and make no change
+	if(draggingObject.y < 0 || draggingObject.x < 0) {
+		draggingObject.style.top  = dragObjectStartPos[0] + 'px';
+		draggingObject.style.left = dragObjectStartPos[1] + 'px';
+		moveRelativeObject(draggingObject.id, dragObjectStartPos[0], dragObjectStartPos[1])
+		draggingObject = null;
+		return;
+	}
+
+	// Skip when the object has not been moved
+	if(draggingObject.y == dragObjectStartPos[0] && draggingObject.x == dragObjectStartPos[1]) {
+		draggingObject = null;
+		return;
+	}
+
+	handler(draggingObject);
+	
+	dragObjectHandler = null;
+	draggingObject = null;
+}
+
+/************************************************
+ * Register events
+ *************************************************/
+
+// First firefox and the IE
+if (window.addEventListener) {
+  window.addEventListener("mousemove", function(e) {
+    dragObject(e);
+    return false;
+  }, false);
+} else {
+  document.documentElement.onmousemove  = function(e) {
+    dragObject(e);
+    return false;
+  };
 }

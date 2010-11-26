@@ -753,6 +753,24 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 	return bStateChanged;
 }
 
+function toggleMapObjectLock(objectId) {
+	var iIndex = -1;
+	for(var i = 0, len = aMapObjects.length; i < len && iIndex < 0; i++)
+		if(aMapObjects[i].conf.object_id == objectId)
+			iIndex = i;
+	
+	// Object not found
+	if(iIndex === -1) {
+		eventlog("refreshMapObject", "critical", "Could not find an object with the id "+objectId+" in object array");
+		return false;
+	}
+	
+	var oObj = aMapObjects[iIndex];
+	oObj.bIsLocked = !oObj.bIsLocked;
+	oObj.toggleObjControls();
+  oObj = null;
+}
+
 /**
  * refreshMapObject()
  *

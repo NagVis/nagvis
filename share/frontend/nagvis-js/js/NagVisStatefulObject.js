@@ -233,19 +233,13 @@ var NagVisStatefulObject = NagVisObject.extend({
 		// Parse object depending on line or normal icon
 		switch(this.conf.view_type) {
 			case 'line':
-				var oLine = this.parseLine();
-				oContainerDiv.appendChild(oLine);
-				oLine = null;
+				oContainerDiv.appendChild(this.parseLine());
 			break;
 			case 'gadget':
-				var oGadget = this.parseGadget();
-				oContainerDiv.appendChild(oGadget);
-				oGadget = null;
+				oContainerDiv.appendChild(this.parseGadget());
 			break;
 			default:
-				var oIcon = this.parseIcon();
-				oContainerDiv.appendChild(oIcon);
-				oIcon = null;
+				oContainerDiv.appendChild(this.parseIcon());
 			break;
 		}
 		
@@ -265,9 +259,13 @@ var NagVisStatefulObject = NagVisObject.extend({
 		oContainerDiv = null;
 		doc = null;
 		
-		if(this.conf.view_type && this.conf.view_type == 'line') {
+		// Now really draw the line when this is one
+		if(this.conf.view_type && this.conf.view_type == 'line')
 			this.drawLine();
-		}
+
+		// Enable the controls when the object is not locked
+		if(!this.bIsLocked)
+			this.parseControls()
 	},
 	
 	remove: function () {
@@ -832,5 +830,94 @@ var NagVisStatefulObject = NagVisObject.extend({
 		}
 
 		return drawNagVisTextbox(this.conf.object_id + '-label', 'object_label', this.conf.label_background, this.conf.label_border, this.conf.label_x, this.conf.label_y, this.conf.z, this.conf.label_width, '', this.replaceLabelTextDynamicMacros(), this.conf.label_style);
+	},
+
+	parseControls: function () {
+		// Ensure the controls container exists
+		var oControls = document.getElementById(this.conf.object_id+'-controls');
+		if(!oControls) {
+			oControls = document.createElement('div');
+			oControls.setAttribute('id', this.conf.object_id+'-controls');
+			this.parsedObject.appendChild(oControls);
+		}
+		oControls = null;
+		
+		if(this.conf.view_type === 'line')
+			this.parseLineControls();
+	},
+
+	parseLineControls: function () {
+		var x = this.conf.x.split(',');
+		var y = this.conf.y.split(',');
+
+		var size = 20;
+		for(var i = 0, l = x.length; i < l; i++) {
+			var drag = document.createElement('div');
+			drag.setAttribute('id',         this.conf.object_id+'-drag'+i);
+			drag.setAttribute('class',     'lineDrag');
+			drag.setAttribute('className', 'lineDrag');
+			drag.style.zIndex   = parseInt(this.conf.z)+1;
+			drag.style.width    = size+'px';
+			drag.style.height   = size+'px';
+			drag.style.top      = (y[i] - size/2)+'px';
+			drag.style.left     = (x[i] - size/2)+'px';
+	
+			// Add to DOM
+			document.getElementById(this.conf.object_id+'-controls').appendChild(drag);
+			// Add to controls list
+			this.objControls.push(drag);
+			drag = null;
+
+			makeDragable([this.conf.object_id+'-drag'+i], this.saveObject, this.moveObject);
+		}
+		size = null;
+		x = null;
+		y = null;
+	},
+
+	removeControls: function() {
+		var oControls = document.getElementById(this.conf.object_id+'-controls');
+		if(oControls)
+			for(var i = oControls.childNodes.length; i > 0; i--)
+				oControls.removeChild(oControls.childNodes[0]);
+		this.objControls = [];
+		oControls = null;
+	},
+
+  moveObject: function(obj) {
+		var objId    = obj.id.split('-')[0];
+		var coordNum = obj.id[obj.id.length-1];
+
+		var iIndex = -1;
+		for(var i = 0, len = aMapObjects.length; i < len && iIndex < 0; i++)
+			if(aMapObjects[i].conf.object_id == objId)
+				iIndex = i;
+
+		// Object not found
+		if(iIndex === -1) {
+			eventlog("refreshMapObject", "critical", "Could not find an object with the id "+objId+" in object array");
+			return false;
+		}
+
+		// When the object can be found update the coord of this anchor and repaint the object
+		if(iIndex) {
+			var mapObj = aMapObjects[iIndex];
+			var aX = mapObj.conf.x.split(',');
+			// add the offset of the anchor and the object position
+			aX[coordNum] = obj.x + 10;
+			var aY = mapObj.conf.y.split(',');
+			// add the offset of the anchor and the object position
+			aY[coordNum] = obj.y + 10;
+			mapObj.conf.x = aX.join(',');
+			mapObj.conf.y = aY.join(',');
+			mapObj.drawLine();
+			mapObj = null;
+		}
+		objId = null;
+		iIndex = null;
+	},
+
+	saveObject: function() {
+		alert('FIXME: save');
 	}
 });

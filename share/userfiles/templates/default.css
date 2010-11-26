@@ -125,6 +125,12 @@ a.linelink {
 	padding: 2px;
 }
 
+/* line drag nodes */
+div.lineDrag {
+  position: absolute;
+  border: 1px #ff0000 dotted;
+}
+
 /* Style on info pages (index.php?info, index.php) */
 div.infopage {
 	position:relative;

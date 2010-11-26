@@ -34,6 +34,8 @@ var NagVisObject = Base.extend({
 	lastUpdate: null,
 	firstUpdate: null,
 	bIsFlashing: false,
+	bIsLocked: true,
+	objControls: [],
 	
 	constructor: function(oConf) {
 		// Initialize
@@ -343,5 +345,22 @@ var NagVisObject = Base.extend({
 		// Asign the template code and replace only the static macros
 		// These are typicaly configured static configued values from nagios
 		this.hover_template_code = replaceHoverTemplateStaticMacros(this, oHoverTemplates[this.conf.hover_template]);
-	}
+	},
+
+	/**
+	 * Shows or hides all object controls of a map object depending
+	 * on the lock state of this object.
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	toggleObjControls: function() {
+		if(this.objControls.length == 0) {
+			this.parseControls();
+			this.bIsLocked = false;
+		} else {
+			for(var i = 0, len = this.objControls.length; i < len; i++)
+					this.removeControls();
+			this.bIsLocked = true;
+		}
+	},
 });
