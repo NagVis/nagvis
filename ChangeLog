@@ -9,6 +9,8 @@ Core
     * Livestatus backend: Better error handling when writing to livestatus socket
     * Lines can have three coords now to reposition the middle of the lines which
       are build of two arrows
+    * Better handling for map config errors on overview page and map links -
+		no whole screen errors anymore
 
 Frontend
     * Added new sidebar for better navigation. It can be opened by klicking on

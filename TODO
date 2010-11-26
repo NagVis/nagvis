@@ -10,9 +10,6 @@ Lock/Unlock Aktionen fuer normale Icons/Gadgets implementieren.
 Die Speichern-Funktion beim Editieren von Linien im normalen Frontend muss gebaut werden.
 
 Fehlerbehandlung:
-  Configfehler oder ungültige Attribute in Maps dürfen nicht zu einer großen Fehlermeldung
-  auf der Übersichtsseite führen.
-
   Ajax Schnittstelle umbauen: Kleines Protokoll einbauen, mit Header inkl. Fehlercodes etc.
 
   Bessere Fehlerbehandlung z.B. auf Übersichtsseite, wenn Antwort kein gültiges JS ist.
