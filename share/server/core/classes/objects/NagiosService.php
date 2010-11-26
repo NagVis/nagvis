@@ -122,9 +122,9 @@ class NagiosService extends NagVisStatefulObject {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function applyState() {
-		if($this->backend_msg !== null) {
+		if($this->problem_msg !== null) {
 			$this->state = 'ERROR';
-			$this->output = $this->backend_msg;
+			$this->output = $this->problem_msg;
 		}
 
 		$this->fetchSummaryState();

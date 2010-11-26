@@ -84,16 +84,20 @@ class GlobalIndexPage {
 				$MAPCFG = new NagVisAutomapCfg($this->CORE, $mapName);
 			else
 				$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
-			
+
 			try {
 				$MAPCFG->readMapConfig();
+				
+				// Only perform this check with a valid config
+				if($MAPCFG->getValue('global',0, 'show_in_lists') != 1)
+					continue;
+				
+				$objConf = $MAPCFG->getTypeDefaults('global');
 			} catch(MapCfgInvalid $e) {
+				$objConf = Array();
 				$map['configError'] = true;
 				$map['configErrorMsg'] = $e->getMessage();
 			}
-			
-			if($MAPCFG->getValue('global',0, 'show_in_lists') != 1)
-				continue;
 			
 			if($type == 'automap')
 				$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->BACKEND, Array('automap' => $mapName, 'preview' => 1), !IS_VIEW);
@@ -101,14 +105,13 @@ class GlobalIndexPage {
 				$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND, GET_STATE, !IS_VIEW);
 			
 			// Apply default configuration to object
-			$objConf = $MAPCFG->getTypeDefaults('global');
-			$objConf['type'] = 'map';
-			$objConf['map_name'] = $MAPCFG->getName();
-			$objConf['object_id'] = $type.'-'.$object_id;
+			$objConf['type']              = 'map';
+			$objConf['map_name']          = $mapName;
+			$objConf['object_id']         = $type.'-'.$object_id;
 			// Enable the hover menu in all cases - maybe make it configurable
-			$objConf['hover_menu'] = 1;
+			$objConf['hover_menu']        = 1;
 			$objConf['hover_childs_show'] = 1;
-			$objConf['hover_template'] = 'default';
+			$objConf['hover_template']    = 'default';
 			unset($objConf['alias']);
 			
 			$MAP->MAPOBJ->setConfiguration($objConf);
@@ -116,7 +119,7 @@ class GlobalIndexPage {
 			if(isset($map['configError'])) {
 				$map['overview_class']  = 'error';
 				$map['overview_url']    = 'javascript:alert(\''.$map['configErrorMsg'].'\');';
-				$map['summary_output']  = $this->CORE->getLang()->getText('Map Configuration Error: '.$map['configErrorMsg']);
+				$map['summary_output']  = $this->CORE->getLang()->getText('Map Configuration Error: [ERR]', Array('ERR' => $map['configErrorMsg']));
 				
 				$MAP->MAPOBJ->clearMembers();
 				$MAP->MAPOBJ->setSummaryState('ERROR');
@@ -200,7 +203,7 @@ class GlobalIndexPage {
 					}
 				}
 				
-				$MAP->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
+				//Duplicate code? Already done in NagVisMap constructor: $MAP->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
 				$aObjs[] = Array($MAP->MAPOBJ, $map);
 			}
 		}

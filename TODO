@@ -14,3 +14,5 @@ Fehlerbehandlung:
   auf der Übersichtsseite führen.
 
   Ajax Schnittstelle umbauen: Kleines Protokoll einbauen, mit Header inkl. Fehlercodes etc.
+
+  Bessere Fehlerbehandlung z.B. auf Übersichtsseite, wenn Antwort kein gültiges JS ist.

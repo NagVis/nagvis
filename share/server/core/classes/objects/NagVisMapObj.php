@@ -263,6 +263,12 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function applyState() {
+		if($this->problem_msg) {
+			$this->summary_state = 'ERROR';
+			$this->summary_output = $this->problem_msg;
+			return;
+		}
+
 		// Get state of all member objects
 		foreach($this->getStateRelevantMembers() AS $OBJ) {
 			$OBJ->applyState();
@@ -368,19 +374,26 @@ class NagVisMapObj extends NagVisStatefulObject {
 							} else
 								$SUBMAPCFG = new NagVisMapCfg($this->CORE, $objConf['map_name']);
 							
-							if($SUBMAPCFG->checkMapConfigExists(0))
-								$SUBMAPCFG->readMapConfig();
+							$mapCfgInvalid = null;
+							if($SUBMAPCFG->checkMapConfigExists(0)) {
+								try {
+									$SUBMAPCFG->readMapConfig();
+								} catch(MapCfgInvalid $e) {
+									$mapCfgInvalid = $this->CORE->getLang()->getText('Map Configuration Error: [ERR]', Array('ERR' => $e->getMessage()));
+								}
+							}
 
 							if($this->CORE->checkMapIsAutomap($objConf['map_name'])) {
 								$MAP = new NagVisAutoMap($this->CORE, $SUBMAPCFG, $this->BACKEND, Array(), !IS_VIEW);
 								$OBJ = $MAP->MAPOBJ;
 							} else 
 								$OBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $SUBMAPCFG, !IS_VIEW);
+
+							if($mapCfgInvalid)
+								$OBJ->setProblem($mapCfgInvalid);
 							
-							if(!$SUBMAPCFG->checkMapConfigExists(0)) {
-								$OBJ->summary_state = 'ERROR';
-								$OBJ->summary_output = $this->CORE->getLang()->getText('mapCfgNotExists', 'MAP~'.$objConf['map_name']);
-							}
+							if(!$SUBMAPCFG->checkMapConfigExists(0))
+								$OBJ->setProblem($this->CORE->getLang()->getText('mapCfgNotExists', 'MAP~'.$objConf['map_name']));
 							
 							/**
 							* When the current map object is a summary object skip the map

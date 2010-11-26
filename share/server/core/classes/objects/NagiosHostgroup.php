@@ -83,9 +83,9 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function applyState() {
-		if($this->backend_msg) {
+		if($this->problem_msg) {
 			$this->summary_state = 'ERROR';
-			$this->summary_output = $this->backend_msg;
+			$this->summary_output = $this->problem_msg;
 			return;
 		}
 

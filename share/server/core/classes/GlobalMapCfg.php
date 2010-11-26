@@ -1580,6 +1580,7 @@ class GlobalMapCfg {
 					
 					// Loop each line
 					$iNumLines = count($file);
+					$unknownObject = null;
 					for($l = 0; $l < $iNumLines; $l++) {
 						// Remove spaces, newlines, tabs, etc. (http://de.php.net/rtrim)
 						$file[$l] = rtrim($file[$l]);
@@ -1615,9 +1616,7 @@ class GlobalMapCfg {
 										// Increase the map object id to identify the object on the map
 										$iObjId++;
 									} else {
-										// unknown object type
-										new GlobalMessage('ERROR', $this->CORE->getLang()->getText('unknownObject',Array('TYPE' => $sObjType, 'MAPNAME' => $this->name)));
-										return FALSE;
+										$unknownObject = $this->CORE->getLang()->getText('unknownObject',Array('TYPE' => $sObjType, 'MAPNAME' => $this->name));
 									}
 								} else {
 									// This is another attribute
@@ -1646,15 +1645,18 @@ class GlobalMapCfg {
 							$this->mergeTemplates();
 						}
 					}
+
+					// unknown object type found on map
+					if($unknownObject)
+						throw new MapCfgInvalid($unknownObject);
 					
 					try {
 						$this->checkMapConfigIsValid();
+						$this->BACKGROUND = $this->getBackground();
 					} catch(MapCfgInvalid $e) {
 						$this->BACKGROUND = $this->getBackground();
 						throw $e;
 					}
-					
-					$this->BACKGROUND = $this->getBackground();
 					
 					if($onlyGlobal == 0) { 
 						// Build cache

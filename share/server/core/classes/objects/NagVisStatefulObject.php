@@ -33,7 +33,7 @@ class NagVisStatefulObject extends NagVisObject {
 	
 	// "Global" Configuration variables for all stateful objects
 	protected $backend_id;
-	protected $backend_msg = null;
+	protected $problem_msg = null;
 	
 	protected $iconset;
 	
@@ -752,8 +752,19 @@ class NagVisStatefulObject extends NagVisObject {
 	 * @author  Lars Michelsen <lm@larsmichelsen.com>
 	 */
 	public function setBackendProblem($s) {
-		$this->backend_msg = GlobalCore::getInstance()->getLang()->getText('Problem (Backend: [BACKENDID]): [MSG]', 
+		$this->problem_msg = GlobalCore::getInstance()->getLang()->getText('Problem (Backend: [BACKENDID]): [MSG]', 
 		                                                              Array('BACKENDID' => $this->backend_id, 'MSG' => $s));
+	}
+	
+	/**
+	 * PUBLIC setProblem()
+	 *
+	 * Sets output/state on object handling problems
+	 *
+	 * @author  Lars Michelsen <lm@larsmichelsen.com>
+	 */
+	public function setProblem($s) {
+		$this->problem_msg = GlobalCore::getInstance()->getLang()->getText('Problem: [MSG]', Array('MSG' => $s));
 	}
 	
 	/**
