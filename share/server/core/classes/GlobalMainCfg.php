@@ -27,7 +27,7 @@
  */
 class GlobalMainCfg {
 	private $useCache = true;
-	private $CACHES;
+	private $CACHE;
 	
 	protected $config = Array();
 	protected $runtimeConfig = Array();
@@ -907,35 +907,54 @@ class GlobalMainCfg {
 		$this->configFiles = $configFiles;
 	}
 
-	private function loadConfigFile($file) {
-		// Only proceed when the configuration file exists and is readable
-		if(!GlobalCore::getInstance()->checkExisting($file, true) || !GlobalCore::getInstance()->checkReadable($file, true))
-			return false;
+	/**
+	 * Get the newest of the given configuration files. This is needed to test if
+	 * the cache file is up-to-date or needs to be renewed
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function getNewestFile() {
+		$age = -1;
+		$newestFile = '';
+		foreach($this->configFiles AS $configFile) {
+			if(!GlobalCore::getInstance()->checkExisting($configFile, false) || !GlobalCore::getInstance()->checkReadable($configFile, false))
+				continue;
+			
+			$configAge = filemtime($configFile);
+			if($age === -1) {
+				$age = $configAge;
+				$newestFile = $configFile;
+			} elseif($configAge > $age) {
+				$age = $configAge;
+        $newestFile = $configFile;
+			}
+		}
 		
-		// Create instance of GlobalFileCache object for caching the config
-		$id = count($this->CACHES);
-		$this->CACHES[$id] = new GlobalFileCache(GlobalCore::getInstance(), $file, CONST_MAINCFG_CACHE.'-'.CONST_VERSION.'-cache');
-
-		// When this or a file before is newer than the cache parse the file
-		if($this->useCache > 0)
-  		$this->useCache = $this->CACHES[$id]->isCached(false);
-		if($this->useCache === -1)
-			return $this->readConfig($file, true);
+		return $newestFile;
 	}
 	
 	public function init() {
 		// Get the valid configuration definitions from the available backends
 		$this->getBackendValidConf();
 
-		// Load all given config files
-		foreach($this->configFiles AS $configFile)
-			$this->loadConfigFile($configFile);
+		// Get the path and age of the newest config file
+		$newestFile = $this->getNewestFile();
 
-		// Use or write the cache depending on the situation
-		if($this->useCache !== -1)
-			$this->config = $this->CACHES[0]->getCache();
-		else
-			$this->CACHES[0]->writeCache($this->config, true);
+		// Use the newest file as indicator for using the cache or not
+		$this->CACHE = new GlobalFileCache(GlobalCore::getInstance(), $newestFile, CONST_MAINCFG_CACHE.'-'.CONST_VERSION.'-cache');
+  	if($this->CACHE->isCached(false) === -1) {
+			// The cache is too old. Load all config files
+			foreach($this->configFiles AS $configFile) {
+				// Only proceed when the configuration file exists and is readable
+				if(!GlobalCore::getInstance()->checkExisting($configFile, true) || !GlobalCore::getInstance()->checkReadable($configFile, true))
+					return false;
+				$this->readConfig($configFile, true);
+			}
+			$this->CACHE->writeCache($this->config, true);
+		} else {
+			// Use the cache!
+			$this->config = $this->CACHE->getCache();
+		}
 
 		// Parse the state weight array
 		$this->parseStateWeight();
