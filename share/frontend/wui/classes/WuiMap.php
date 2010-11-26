@@ -555,7 +555,7 @@ class WuiMap extends GlobalMap {
 		$id = 'box_'.$obj['type'].'_'.$obj['id'];
 		
 		$ret .= "<div id=\"".$id."\" class=\"box resizeMe\" style=\"border-color:".$sBorderColor.";background-color:".$sBgColor.";left:".$obj['x']."px;top:".$obj['y']."px;z-index:".$obj['z'].";width:".$obj['w'].";height:".$obj['h'].";overflow:visible;\" onmousedown=\"contextMouseDown(event);\" oncontextmenu=\"return contextShow(event);\">";
-		$ret .= "\t<span style=\'".$obj['style']."\'>".$obj['text']."</span>";
+		$ret .= "\t<span style='".$obj['style']."'>".$obj['text']."</span>";
 		$ret .= "</div>";
 		$ret .= $this->parseContextMenu($obj);
 		$ret .= $this->parseJs('var obj = document; addEvent(obj, "mousedown", doDown); addEvent(obj, "mouseup", doUp); addEvent(obj, "mousemove", doMove); obj = null;');
