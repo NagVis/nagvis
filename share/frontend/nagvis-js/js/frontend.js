@@ -498,11 +498,16 @@ function getBackgroundColor(oObj) {
 	// When state is PENDING, OK, UP, set default background color
 	if(!oObj.summary_state || oObj.summary_state == 'PENDING' || oObj.summary_state == 'OK' || oObj.summary_state == 'UP')
 		sColor = oPageProperties.background_color;
-	else
+	else {
 		sColor = oStates[oObj.summary_state].bgcolor;
+
+		// Ack or downtime?
+		if((oObj.summary_in_downtime && oObj.summary_in_downtime === 1)
+			 || (oObj.summary_problem_has_been_acknowledged && oObj.summary_problem_has_been_acknowledged === 1))
+			sColor = lightenColor(sColor, 100, 100, 100);
+	}
 	
 	oObj = null;
-	
 	return sColor;
 }
 
