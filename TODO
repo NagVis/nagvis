@@ -9,6 +9,10 @@ Lock/Unlock Aktionen fuer normale Icons/Gadgets implementieren.
 
 Die Speichern-Funktion beim Editieren von Linien im normalen Frontend muss gebaut werden.
 
+Pro Objekt "Custom Vars" für Context- und Hover-Menus einbauen. Diese werden dann pro Objekt
+u.U. sogar in separaten Queries an das Backend abgefragt und in Hover- und Context-Menus
+als spezielle Macros angeboten.
+
 Fehlerbehandlung:
   Ajax Schnittstelle umbauen: Kleines Protokoll einbauen, mit Header inkl. Fehlercodes etc.
 
