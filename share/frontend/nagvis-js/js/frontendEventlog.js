@@ -68,11 +68,11 @@ function eventlogInitialize() {
 	oEventlogControl.setAttribute("id","eventlogControl");
 	oEventlogControl.appendChild(doc.createTextNode('_'));
 	oEventlogControl.onmouseover = function() {
-		doc.body.style.cursor='pointer';
+		document.body.style.cursor='pointer';
 	};
 	
 	oEventlogControl.onmouseout = function() {
-		doc.body.style.cursor='auto';
+		document.body.style.cursor='auto';
 	};
 	
 	oEventlogControl.onclick = function() {
