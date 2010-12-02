@@ -1198,5 +1198,3 @@ if (window.addEventListener) {
     return false;
   };
 }
-=======
->>>>>>> refs/heads/nagvis-1.5:share/frontend/nagvis-js/js/nagvis.js
