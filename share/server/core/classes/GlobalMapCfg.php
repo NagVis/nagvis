@@ -83,7 +83,8 @@ class GlobalMapCfg {
 						'match' => MATCH_COLOR),
 					'default_params' => Array('must' => 0,
 						'default' => $this->CORE->getMainCfg()->getValue('automap', 'defaultparams'),
-						'match' => MATCH_STRING_URL),
+						'match' => MATCH_STRING_URL,
+						'field_type' => 'hidden'),
 					
 					'context_menu' => Array('must' => 0,
 						'default' => $this->CORE->getMainCfg()->getValue('defaults', 'contextmenu'),
