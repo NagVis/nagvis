@@ -121,7 +121,7 @@ function hoverShow(x, y, id) {
 		if(hoverMenu.clientWidth < minWidth)
 			hoverMenu.style.left = hoverLeft - minWidth - hoverSpacer + 'px';
 		else
-			hoverMenu.style.left = hoverLeft - hoverMenu.clientWidth - hoverSpacer + 'px';
+			hoverMenu.style.left = (hoverLeft - hoverMenu.clientWidth - hoverSpacer) + 'px';
 
 		if(hoverMenuInScreen(hoverMenu, hoverSpacer)) {
 			hoverPosAndSizeOk = true;
@@ -135,7 +135,7 @@ function hoverShow(x, y, id) {
 
 	// And if the hover menu is still not on the screen move it to the left edge
 	// and fill the whole screen width
-	if(!hoverPosAndSizeOk) {
+	if(!hoverMenuInScreen(hoverMenu, hoverSpacer)) {
 		hoverMenu.style.left = hoverSpacer + 'px';
 		hoverMenu.style.width = pageWidth() - (2*hoverSpacer) + 'px';
 	}
@@ -168,26 +168,27 @@ function hoverMenuInScreen(hoverMenu, hoverSpacer) {
 	return true;
 }
 
-function tryResize(hoverMenu, hoverSpacer, minWidth, reposition) {
-	if(!isset(reposition))
+function tryResize(hoverMenu, hoverSpacer, minWidth, rightSide) {
+	if(!isset(rightSide))
 		var reposition = false;
 
 	var hoverLeft = parseInt(hoverMenu.style.left.replace('px', ''));
-	var overhead = hoverLeft + hoverMenu.clientWidth + hoverSpacer - pageWidth();
+
+	if(rightSide)
+		var overhead = hoverLeft + hoverMenu.clientWidth + hoverSpacer - pageWidth();
+	else
+		var overhead = hoverLeft;
 	var widthAfterResize = hoverMenu.clientWidth - overhead;
 
 	// If width is larger than minWidth resize it
 	if(widthAfterResize > minWidth) {
-		hoverMenu.style.display = 'none';
 		hoverMenu.style.width = widthAfterResize + 'px';
 
-		if(reposition) {
+		if(rightSide) {
 			if(overhead < 0)
-				overhead *= -1;
+				overhead *= -1
 			hoverMenu.style.left = (hoverLeft + overhead) + 'px';
 		}
-
-		hoverMenu.style.display = '';
 
 		return true;
 	} else {
