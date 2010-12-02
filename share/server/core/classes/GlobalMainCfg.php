@@ -956,6 +956,9 @@ class GlobalMainCfg {
 			$this->config = $this->CACHE->getCache();
 		}
 
+		// Update the cache time
+		$this->useCache = $this->CACHE->isCached(false);
+
 		// Parse the state weight array
 		$this->parseStateWeight();
 		

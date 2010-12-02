@@ -767,6 +767,8 @@ addDOMLoadEvent = (function(){
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function handleJSError(sMsg, sUrl, iLine) {
+	if(!isset(sUrl))
+  	var sUrl = '<Empty URL>';
 	// Log to javascript eventlog
 	eventlog("js-error", "critical", "JS-Error occured: " + sMsg + " " + sUrl + " (" + iLine + ")");
 	
@@ -1196,3 +1198,5 @@ if (window.addEventListener) {
     return false;
   };
 }
+=======
+>>>>>>> refs/heads/nagvis-1.5:share/frontend/nagvis-js/js/nagvis.js

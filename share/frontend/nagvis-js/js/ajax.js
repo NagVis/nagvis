@@ -211,10 +211,10 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 	var sResponse = null;
 	var responseText;
 	
-	if(bCacheable === null)
+	if(!isset(bCacheable))
 		bCacheable = true;
 	
-	if(bRetryable === null)
+	if(!isset(bRetryable))
 		bRetryable = true;
 	
 	// Encode the url
