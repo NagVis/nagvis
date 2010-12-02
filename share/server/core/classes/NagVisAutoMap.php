@@ -392,6 +392,9 @@ class NagVisAutoMap extends GlobalMap {
 		 * <area shape="rect" id="node1" href="/nagios/cgi-bin/status.cgi?host=test_router_0" target="_self" title="host_0" alt="" coords="509,378,525,393"/>
 		 * <area shape="rect" id="node1" href="/icinga/cgi-bin/status.cgi?host=Icinga" target="_self" title="host_0" alt="" coords="698,24,713,40"/>
 		 *
+		 * It might happen that there are html entities used in the url
+		 * <area shape="rect" href="/check_mk/view.py?view_name=host&amp;site=&amp;host=localhost" target="_self" title="host_0" alt="" coords="4,4,20,20"/>
+		 *
 		 * Coord description:
 		 * For a rectangle, you map the top left and bottom right corners. All 
 		 * coordinates are listed as x,y (over,up). So, for upper left corner 
@@ -406,7 +409,7 @@ class NagVisAutoMap extends GlobalMap {
 			$sLine = str_replace('&#45;', '-', $sLine);
 			// Extract the area objects
 			// Only parsing rect/polys at the moment
-			if(preg_match('/^<area\sshape="(rect|poly)"\s(id="[^"]+"\s)?href=".+[?&]host=([^"]+)"\starget="[a-zA-Z-_]*"\stitle="[^"]+"\salt=""\scoords="([^"]+)"\/>$/i', $sLine, $aMatches)) {
+			if(preg_match('/^<area\sshape="(rect|poly)"\s(id="[^"]+"\s)?href=".+[?&;]host=([^"]+)"\starget="[a-zA-Z-_]*"\stitle="[^"]+"\salt=""\scoords="([^"]+)"\/>$/i', $sLine, $aMatches)) {
 				if(isset($aMatches[1]) && isset($aMatches[2]) && isset($aMatches[3]) && isset($aMatches[4])) {
 					$type = $aMatches[1];
 					$name1 = str_replace('&#45;', '-', trim($aMatches[3]));
