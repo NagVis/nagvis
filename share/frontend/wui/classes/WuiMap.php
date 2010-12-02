@@ -638,14 +638,14 @@ class WuiMap extends GlobalMap {
 		// Position/Size link on lines
 		if($obj['type'] == 'line' || (isset($obj['view_type']) && $obj['view_type'] == 'line')) {
 			$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/move.png)'"
-						." href=\"javascript:objid=getObjectIdOfLink(this);get_click('".$obj['type']."',2,'modify');\" onclick=\"contextHide();\">"
+						." onclick=\"objid=getObjectIdOfLink(this);contextHide();\" href=\"javascript:get_click('".$obj['type']."',2,'modify');\">"
 						."<span>".$this->CORE->getLang()->getText('positionSize')."</span></a></li>";			
 		}
 		
 		// Show clone link only for icons
 		if((isset($obj['view_type']) && $obj['view_type'] == 'icon') || $obj['type'] == 'shape') {
 			$tooltipText .= "<li><a style='background-image:url(".$this->CORE->getMainCfg()->getValue('paths','htmlbase')."/frontend/wui/images/clone.png)'"
-						." href=\"javascript:objid=getObjectIdOfLink(this);get_click('".$obj['type']."', 1, 'clone');\" onclick=\"contextHide();\">"
+						." onclick=\"objid=getObjectIdOfLink(this);contextHide();\" href=\"javascript:get_click('".$obj['type']."', 1, 'clone');\">"
 						."<span>".$this->CORE->getLang()->getText('Clone')."</span></a></li>";
 		}
 		

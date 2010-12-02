@@ -812,6 +812,8 @@ addDOMLoadEvent = (function(){
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function handleJSError(sMsg, sUrl, iLine) {
+	if(!isset(sUrl))
+  	var sUrl = '<Empty URL>';
 	// Log to javascript eventlog
 	eventlog("js-error", "critical", "JS-Error occured: " + sMsg + " " + sUrl + " (" + iLine + ")");
 	

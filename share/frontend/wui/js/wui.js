@@ -308,7 +308,7 @@ function get_click_pos(e) {
 		}
 		
 		follow_mouse = false;
-		var sUrl;
+		var sUrl = '';
 		if(action_click == 'add' || action_click == 'clone') {
 			sUrl = oGeneralProperties.path_server+'?mod=Map&act=addModify&do=add&show='+mapname+'&type='+objtype+'&coords='+coords+'&viewType='+viewType;
 			
@@ -318,6 +318,9 @@ function get_click_pos(e) {
 		} else if(action_click == 'modify' && objid !== -1) {
 			sUrl = oGeneralProperties.path_server+'?mod=Map&act=addModify&do=modify&show='+mapname+'&type='+objtype+'&id='+objid+'&coords='+coords;
 		}
+
+		if(sUrl === '')
+			return false;
 		
 		showFrontendDialog(sUrl, printLang(lang['properties'], ''));
 		
@@ -435,7 +438,7 @@ function getObjectIdOfLink(obj) {
 	while(par && par.tagName != 'DIV')
 		par = par.parentNode;
 	if(par && par.tagName == 'DIV' && typeof par.id !== 'undefined')
-    return par.id.split('_')[2].split('-')[0]
+    return par.id.split('_')[2].split('-')[0];
 	return -1;
 }
 
