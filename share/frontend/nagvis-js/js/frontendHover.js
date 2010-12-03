@@ -136,7 +136,7 @@ function hoverShow(x, y, id) {
 	// And if the hover menu is still not on the screen move it to the left edge
 	// and fill the whole screen width
 	if(!hoverMenuInScreen(hoverMenu, hoverSpacer)) {
-		hoverMenu.style.left = hoverSpacer + 'px';
+		hoverMenu.style.left = hoverSpacer + scrollLeft + 'px';
 		hoverMenu.style.width = pageWidth() - (2*hoverSpacer) + 'px';
 	}
 
@@ -156,13 +156,16 @@ function hoverShow(x, y, id) {
 
 function hoverMenuInScreen(hoverMenu, hoverSpacer) {
 	var hoverLeft = parseInt(hoverMenu.style.left.replace('px', ''));
+	var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft :
+	document.documentElement.scrollLeft;
 
-	if(hoverLeft + hoverMenu.clientWidth >= pageWidth())
+	if(hoverLeft + hoverMenu.clientWidth >= pageWidth() - scrollLeft)
 		return false;
 
 	if(hoverLeft - hoverSpacer < 0)
 		return false;
 
+	scrollLeft = null;
 	hoverLeft = null;
 	hoverMenu = null;
 	return true;
