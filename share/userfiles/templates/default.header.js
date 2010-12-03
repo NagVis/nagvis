@@ -58,7 +58,7 @@ function ddMenu(id, d, reposition){
 	// Reposition by trigger object when some given (used on submenus)
 	if(typeof reposition !== 'undefined' && d == 1) {
 		c.style.left = (h.offsetWidth-1)+"px";
-		c.style.top = (h.offsetTop)+"px";
+		c.style.top = (h.parentNode.offsetTop)+"px";
 	}
 
 	clearInterval(c.timer);
