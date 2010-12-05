@@ -1,6 +1,7 @@
 1.1.6a1
 
 Core
+<<<<<<< HEAD:ChangeLog
     * Added user/role profile config files located in nagvis/etc/profiles/(user|role).profile
       The profile files can contain user/role specific options like languages and so on
     * The language of a user is stored in the profile file now
@@ -11,6 +12,15 @@ Core
       are build of two arrows
     * Better handling for map config errors on overview page and map links -
       no whole screen errors anymore
+  * Bugfix: SQLite Update problem while updating from 1.5b1-1.5b3 to 1.5.4/1.5.5
+  * Bugfix: Fixed configuration file cache when using multiple main config files
+
+Automap
+  * Made automap coord parsing regex resistent against html entities in the URL
+
+Backend: Livestatus
+  * Bugfix: PHP error when trying to write to socket while the remote host is not
+    available
 
 Frontend
     * Added new sidebar for better navigation. It can be opened by klicking on
@@ -25,7 +35,15 @@ Frontend
       needed permissions)
     * Lines can now be repositioned by dragging the ends using the anchors in unlocked mode
       in regular frontend
-
+  * Added password reset form to user management dialog
+  * Bugfix: Acks/downtimes of problems were not recognized by background
+    highlighting
+  * Bugfix: Weathermap lines with traffic amount label display MBits as GB
+  * Bugfix: Weathermap line labels show 'null' when usage is at 0%
+  * Bugfix: Fixed problem in JSON Response processing for getObjectStates
+  * Bugfix: Fixed header submenu top offset in Internet Explorer
+  * Bugfix: Fixed hover menu positioning out of the screen
+  * Bugfix: Minor javascript fixes during object reload
 
 WUI
     * Bugfix: Fixed deletion of multiple objects of same type in WUI without reloading
