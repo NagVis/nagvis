@@ -1,7 +1,6 @@
 1.1.6a1
 
 Core
-<<<<<<< HEAD:ChangeLog
     * Added user/role profile config files located in nagvis/etc/profiles/(user|role).profile
       The profile files can contain user/role specific options like languages and so on
     * The language of a user is stored in the profile file now
