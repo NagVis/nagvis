@@ -109,10 +109,12 @@ class WuiViewMapAddModify {
 					$myval = $this->aOpts['id'];
 					$val_coords = explode(',', $this->aOpts['coords']);
 					if ($this->aOpts['type'] == 'textbox') {
-						$objwidth = $val_coords[2] - $val_coords[0];
+						$objwidth  = $val_coords[2] - $val_coords[0];
+						$objheight = $val_coords[3] - $val_coords[1];
 						$ret .= 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].'\';';
 						$ret .= 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].'\';';
 						$ret .= 'document.addmodify.elements[\'w\'].value=\''.$objwidth.'\';';
+						$ret .= 'document.addmodify.elements[\'h\'].value=\''.$objheight.'\';';
 						$ret .= 'toggleDefaultOption(\'w\');';
 					} else {
 						$ret .= 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].','.$val_coords[2].'\';';
@@ -155,10 +157,11 @@ class WuiViewMapAddModify {
 					} elseif(count($val_coords) == 4) {
 						if ($this->aOpts['type'] == 'textbox') {
 							$objwidth = $val_coords[2] - $val_coords[0];
-							
+							$objheight = $val_coords[3] - $val_coords[1];
 							$ret .= 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].'\';';
 							$ret .= 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].'\';';
 							$ret .= 'document.addmodify.elements[\'w\'].value=\''.$objwidth.'\';';
+							$ret .= 'document.addmodify.elements[\'h\'].value=\''.$objheight.'\';';
 							$ret .= 'toggleDefaultOption(\'w\');';
 						} else {
 							$ret .= 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].','.$val_coords[2].'\';';

@@ -31,3 +31,4 @@ WUI
   * Bugfix: Fixed problem reseting hover_url to empty value in add/modify dialog
   * Bugfix: Inconsistency between textbox style attribute usage in frontend and WUI
   * Bugfix: Relative label coordinates were calculated wrong when moving objects
+  * The textbox height is now set correctly when creating a new textbox
