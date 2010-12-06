@@ -383,6 +383,7 @@ class WuiViewMapAddModify {
 						$ret .= '<script type="text/javascript">';
 						if($toggleFieldType) {
 							$ret .= 'var bChanged = toggleFieldType("'.$propname.'", "'.$this->CORE->getLang()->getText('manualInput').'");';
+							$ret .= 'document.getElementById("'.$propname.'").value = "'.$this->CORE->getLang()->getText('manualInput').'";';
 							$ret .= 'toggleDefaultOption("'.$propname.'", bChanged);';
 						}
 						$ret .= 'toggleDependingFields("addmodify", "'.$propname.'", "'.$selected.'");';
