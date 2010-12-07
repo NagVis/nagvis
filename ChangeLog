@@ -45,9 +45,12 @@ Frontend
   * Bugfix: Minor javascript fixes during object reload
 
 WUI
-    * Bugfix: Fixed deletion of multiple objects of same type in WUI without reloading
-    * Fixed reposition effect when adding borders to objects while hovering over a line
-    * Fixed problem showing up the dropdown menu of shape images in addmodify dialog after
-      adding at least one shape with an url as image
-    * It is now possible to reset options to their default value using the addmodify dialog
-      when they have been set before
+  * Bugfix: Deleting more than 2 objects was not work correctly
+  * Bugfix: Lines did reposition on mouseover in WUI by the height of the highlight 
+    border width
+  * Bugfix: The dropdown box for shapes was not shown up when there was at least one
+    shape with an url as icon
+  * Bugfix: Fixed problem reseting hover_url to empty value in add/modify dialog
+  * Bugfix: Inconsistency between textbox style attribute usage in frontend and WUI
+  * Bugfix: Relative label coordinates were calculated wrong when moving objects
+  * The textbox height is now set correctly when creating a new textbox
