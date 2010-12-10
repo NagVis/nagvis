@@ -142,7 +142,7 @@ class CoreModAutoMap extends CoreModule {
 	
 	private function getAutomapProperties() {
 		$MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
-		$MAPCFG->readMapConfig();
+		$MAPCFG->readMapConfig(ONLY_GLOBAL);
 		
 		$arr = Array();
 		$arr['map_name'] = $MAPCFG->getName();
