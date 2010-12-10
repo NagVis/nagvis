@@ -1,6 +1,7 @@
 1.5.7
 Core
   * Refactored map configuration parsing code
+  * Reimplemented maintenance mode: in_maintenance=1 is working again
 
 1.5.6
 

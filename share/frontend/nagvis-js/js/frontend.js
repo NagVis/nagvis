@@ -36,6 +36,24 @@ var oAutomapParams = {};
 var bBlockUpdates = false;
 
 /**
+ * Checks if a view is in maintenance mode and shows a message if
+ * e.g. a map is in maintenance mode. The frontend keeps refreshing
+ * to check if the mainentance mode has finished
+ */
+function inMaintenance(displayMsg) {
+	if(!isset(displayMsg))
+		var displayMsg = true;
+	if(oPageProperties && oPageProperties.in_maintenance === '1') {
+		hideStatusMessage();
+		if(displayMsg && !frontendMessageActive())
+			frontendMessage({'type': 'NOTE', 'title': 'Maintenance', 'message': 'The current page is in maintenance mode.<br />Please be patient.'});
+		return true;
+	} else {
+		return false;
+	}
+}
+
+/**
  * Returns the current height of the header menu
  */
 function getHeaderHeight() {
@@ -255,12 +273,20 @@ function getObjectsToUpdate(aObjs) {
  * @return  Boolean
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function getCfgFileAges() {
-	if(oPageProperties.view_type === 'map') {
-		return getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getCfgFileAges&f[]=mainCfg&m[]='+escapeUrlValues(oPageProperties.map_name), true);
-	} else if(oPageProperties.view_type === 'automap') {
-		return getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getCfgFileAges&f[]=mainCfg&am[]='+escapeUrlValues(oPageProperties.map_name), true);
+function getCfgFileAges(viewType, mapName) {
+	if(!isset(viewType))
+		var viewType = oPageProperties.view_type;
+	if(!isset(mapName))
+		var mapName = oPageProperties.map_name;
+
+	if(viewType === 'map') {
+		viewType = null;
+		return getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getCfgFileAges&f[]=mainCfg&m[]='+escapeUrlValues(mapName), true);
+	} else if(viewType === 'automap') {
+		viewType = null;
+		return getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getCfgFileAges&f[]=mainCfg&am[]='+escapeUrlValues(mapName), true);
 	} else {
+		viewType = null;
 		return getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getCfgFileAges&f[]=mainCfg', true);
 	}
 }
@@ -1512,13 +1538,26 @@ function parseMap(iMapCfgAge, mapName) {
 
 	// Block updates of the current map
 	bBlockUpdates = true;
-	
+
+	var wasInMaintenance = inMaintenance(false);
+
 	// Get new map/object information from ajax handler
-	var oMapBasics = getMapProperties(mapName);
+	oPageProperties = getMapProperties(mapName);
+	oPageProperties.view_type = 'map';
+
+	if(inMaintenance()) {
+		bBlockUpdates = false;
+		return false
+	} else if(wasInMaintenance === true) {
+		// Hide the maintenance message when it was in maintenance before
+		frontendMessageHide();
+	}
+	wasInMaintenance = null;
+
 	var oMapObjects = getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapObjects&show='+mapName);
 	
 	// Only perform the reparsing actions when all information are there
-	if(oMapBasics && oMapObjects) {
+	if(oPageProperties && oMapObjects) {
 		// Remove all old objects
 		var a = 0;
 		do {
@@ -1546,7 +1585,7 @@ function parseMap(iMapCfgAge, mapName) {
 		
 		// Set map basics
 		// Needs to be called after the summary state of the map is known
-		setMapBasics(oMapBasics);
+		setMapBasics(oPageProperties);
 		
 		// Bulk get all hover templates which are needed on the map
 		eventlog("worker", "info", "Fetching hover templates and hover urls");
@@ -1575,7 +1614,6 @@ function parseMap(iMapCfgAge, mapName) {
 		bReturn = false;
 	}
 	
-	oMapBasics = null;
 	oMapObjects = null;
 	
 	// Updates are allowed again
@@ -1599,13 +1637,14 @@ function parseAutomap(iMapCfgAge, mapName) {
 	bBlockUpdates = true;
 	
 	// Get new map/object information from ajax handler
-	var oMapBasics = getAutomapProperties(mapName);
+	oPageProperties = getMapProperties(mapName);
+	oPageProperties.view_type = 'automap';
 	var oMapObjects = getSyncRequest(oGeneralProperties.path_server
 									                  + '?mod=AutoMap&act=getAutomapObjects&show='
 																		+ mapName+getAutomapParams());
 	
 	// Only perform the reparsing actions when all information are there
-	if(oMapBasics && oMapObjects) {
+	if(oPageProperties && oMapObjects) {
 		// Remove all old objects
 		var a = 0;
 		do {
@@ -1633,7 +1672,7 @@ function parseAutomap(iMapCfgAge, mapName) {
 			
 		// Set map basics
 		// Needs to be called after the summary state of the map is known
-		setMapBasics(oMapBasics);
+		setMapBasics(oPageProperties);
 		
 		// Bulk get all hover templates which are needed on the map
 		eventlog("worker", "info", "Fetching hover templates and hover urls");
@@ -1662,7 +1701,6 @@ function parseAutomap(iMapCfgAge, mapName) {
 		bReturn = false;
 	}
 	
-	oMapBasics = null;
 	oMapObjects = null;
 	
 	// Updates are allowed again
@@ -1716,14 +1754,9 @@ function workerInitialize(iCount, sType, sIdentifier) {
 		// Loading a simple map
 		eventlog("worker", "debug", "Parsing map: " + sIdentifier);
 		
-		// Load the map properties
-		eventlog("worker", "debug", "Loading the map properties");
-		oPageProperties = getMapProperties(sIdentifier);
-		oPageProperties.view_type = sType;
-		
 		// Load the file ages of the important configuration files
 		eventlog("worker", "debug", "Loading the file ages");
-		oFileAges = getCfgFileAges();
+		oFileAges = getCfgFileAges(sType, sIdentifier);
 		
 		// Parse the map
 		if(parseMap(oFileAges[sIdentifier], sIdentifier) === false)
@@ -1793,14 +1826,9 @@ function workerInitialize(iCount, sType, sIdentifier) {
 		// Loading a simple map
 		eventlog("worker", "debug", "Parsing automap: " + sIdentifier);
 		
-		// Load the automap properties
-		eventlog("worker", "debug", "Loading the automap properties");
-		oPageProperties = getAutomapProperties(sIdentifier);
-		oPageProperties.view_type = sType;
-		
 		// Load the file ages of the important configuration files
 		eventlog("worker", "debug", "Loading the file ages");
-		oFileAges = getCfgFileAges();
+		oFileAges = getCfgFileAges(sType, sIdentifier);
 		
 		// Parse the map
 		if(parseAutomap(oFileAges[sIdentifier], sIdentifier) === false)

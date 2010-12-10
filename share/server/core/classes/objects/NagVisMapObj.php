@@ -316,14 +316,11 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 */
 	public function checkMaintenance($printErr) {
 		if($this->MAPCFG->getValue('global', 0, 'in_maintenance')) {
-			if($printErr) {
+			if($printErr)
 				new GlobalMessage('INFO-STOP', $this->CORE->getLang()->getText('mapInMaintenance', 'MAP~'.$this->getName()));
-			}
-			return FALSE;
-		} else {
-			return TRUE;
+			return false;
 		}
-		return TRUE;
+		return true;
 	}
 	
 	/**

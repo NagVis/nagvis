@@ -130,8 +130,8 @@ class GlobalIndexPage {
 				$map['overview_class']  = '';
 			} else {
 				$map['overview_class']  = 'disabled';
-				$map['overview_url']    = 'javascript:alert(\''.$this->CORE->getLang()->getText('mapInMaintenance').'\');';
-				$map['summary_output']  = $this->CORE->getLang()->getText('mapInMaintenance');
+				$map['overview_url']    = 'javascript:alert(\''.$this->CORE->getLang()->getText('The map is in maintenance mode. Please be patient.').'\');';
+				$map['summary_output']  = $this->CORE->getLang()->getText('The map is in maintenance mode. Please be patient.');
 				
 				$MAP->MAPOBJ->clearMembers();
 				$MAP->MAPOBJ->setSummaryState('UNKNOWN');
