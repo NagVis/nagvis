@@ -1585,55 +1585,75 @@ class GlobalMapCfg {
 					for($l = 0; $l < $iNumLines; $l++) {
 						// Remove spaces, newlines, tabs, etc. (http://de.php.net/rtrim)
 						$file[$l] = rtrim($file[$l]);
+
 						// Don't recognize empty lines
-						if($file[$l] != '') {
-							// Don't recognize comments and empty lines, do nothing with ending delimiters
-							$sFirstChar = substr(ltrim($file[$l]), 0, 1);
-							if($sFirstChar != ';' && $sFirstChar != '#' && $sFirstChar != '}') {
-								// Determine if this is a new object definition
-								if(strpos($file[$l], 'define') !== FALSE) {
-									// If only the global section should be read break the loop after the global section
-									if($onlyGlobal == 1 && $types['global'] == 1) {
-										break;
-									}
-									
-									$iDelimPos = strpos($file[$l], '{', 8);
-									$sObjType = substr($file[$l], 7, ($iDelimPos - 8));
-									
-									if(isset($sObjType) && isset(self::$validConfig[$sObjType])) {
-										// This is a new definition and it's a valid one
-										
-										// Get the type index
-										$iObjTypeId = $types[$sObjType];
-										
-										$this->mapConfig[$sObjType][$iObjTypeId] = Array(
-										  'type' => $sObjType,
-										  'object_id' => $iObjId
-										);
-										
-										// increase type index
-										$types[$sObjType]++;
-										
-										// Increase the map object id to identify the object on the map
-										$iObjId++;
-									} else {
-										$unknownObject = $this->CORE->getLang()->getText('unknownObject',Array('TYPE' => $sObjType, 'MAPNAME' => $this->name));
-									}
-								} else {
-									// This is another attribute
-									$iDelimPos = strpos($file[$l], '=');
-									$sKey = trim(substr($file[$l],0,$iDelimPos));
-									$sValue = trim(substr($file[$l],($iDelimPos+1)));
-									
-									if(!isset($ignoreKeys[$sKey])) {
-										if(isset($createArray[$sKey])) {
-											$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = explode(',', $sValue);
-										} else {
-											$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = $sValue;
-										}
-									}
-								}
-							}
+						if($file[$l] == '')
+							continue;
+
+						// Don't recognize comments and empty lines, do nothing with ending delimiters
+						$sFirstChar = substr(ltrim($file[$l]), 0, 1);
+						if($sFirstChar == ';' || $sFirstChar == '#')
+							continue;
+
+						// This is an object ending. Reset the object type and skip to next line
+						if($sFirstChar == '}') {
+							$sObjType = '';
+							$iObjTypeId = 0;
+
+							// If only the global section should be read break the loop after the global section
+							if($onlyGlobal == 1 && $types['global'] == 1)
+								break;
+							else
+								continue;
+						}
+
+						// Determine if this is a new object definition
+						if(strpos($file[$l], 'define') !== FALSE) {
+							$sObjType = substr($file[$l], 7, (strpos($file[$l], '{', 8) - 8));
+							if(!isset($sObjType) || !isset(self::$validConfig[$sObjType])) {
+								new GlobalMessage('ERROR', $this->CORE->getLang()->getText('unknownObject',Array('TYPE' => $sObjType, 'MAPNAME' => $this->name)));
+								return FALSE;
+							} 
+
+							// This is a new definition and it's a valid one
+							
+							// Get the type index
+							$iObjTypeId = $types[$sObjType];
+							
+							$this->mapConfig[$sObjType][$iObjTypeId] = Array(
+							  'type' => $sObjType,
+							  'object_id' => $iObjId
+							);
+							
+							// increase type index
+							$types[$sObjType]++;
+							
+							// Increase the map object id to identify the object on the map
+							$iObjId++;
+
+							continue;
+						}
+
+						// This is another attribute. But it is only ok to proceed here when
+						// there is an open object
+						if($sObjType === '') {
+							new GlobalMessage('ERROR',
+																$this->CORE->getLang()->getText('Attribute definition out of object. In map [MAPNAME] at line #[LINE].',
+																Array('MAPNAME' => $this->name, 'LINE' => $l+1)));
+							return FALSE;
+						}
+
+						$iDelimPos = strpos($file[$l], '=');
+						$sKey = trim(substr($file[$l],0,$iDelimPos));
+						$sValue = trim(substr($file[$l],($iDelimPos+1)));
+						
+						if(isset($ignoreKeys[$sKey]))
+							continue;
+
+						if(isset($createArray[$sKey])) {
+							$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = explode(',', $sValue);
+						} else {
+							$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = $sValue;
 						}
 					}
 					
