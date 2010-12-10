@@ -959,7 +959,7 @@ class CoreModMap extends CoreModule {
 	
 	private function getMapProperties() {
 		$MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
-		$MAPCFG->readMapConfig();
+		$MAPCFG->readMapConfig(ONLY_GLOBAL);
 		
 		$arr = Array();
 		$arr['map_name'] = $MAPCFG->getName();
@@ -978,6 +978,7 @@ class CoreModMap extends CoreModule {
 		$arr['event_log_hidden'] = $MAPCFG->getValue('global', 0, 'event_log_hidden');
 		$arr['event_scroll'] = $MAPCFG->getValue('global', 0, 'event_scroll');
 		$arr['event_sound'] = $MAPCFG->getValue('global', 0, 'event_sound');
+		$arr['in_maintenance'] = $MAPCFG->getValue('global', 0, 'in_maintenance');
 		
 		return json_encode($arr);
 	}

@@ -168,9 +168,6 @@ class FrontendModAutoMap extends FrontendModule {
 			}
 		}
 		
-    //FIXME: Maintenance mode not supported atm
-		//$this->MAP->MAPOBJ->checkMaintenance(1);
-		
     $INDEX->setContent($this->VIEW->parse());
 
 		return $INDEX->parse();
