@@ -3,6 +3,9 @@ Core
   * Refactored map configuration parsing code
   * Reimplemented maintenance mode: in_maintenance=1 is working again
 
+Automap
+  * Hiding deprecated maxLayers param from automap modify dialog
+
 1.5.6
 
 Core
