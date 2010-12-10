@@ -1637,7 +1637,7 @@ function parseAutomap(iMapCfgAge, mapName) {
 	bBlockUpdates = true;
 	
 	// Get new map/object information from ajax handler
-	oPageProperties = getMapProperties(mapName);
+	oPageProperties = getAutomapProperties(mapName);
 	oPageProperties.view_type = 'automap';
 	var oMapObjects = getSyncRequest(oGeneralProperties.path_server
 									                  + '?mod=AutoMap&act=getAutomapObjects&show='
