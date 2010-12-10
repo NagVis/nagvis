@@ -40,6 +40,7 @@ class NagVisViewAutomapModifyParams {
 	 */
 	public function __construct($CORE, $aOpts) {
 		$this->CORE = $CORE;
+
 		$this->aOpts = $aOpts;
 
 		$this->gatherParams();
@@ -56,6 +57,9 @@ class NagVisViewAutomapModifyParams {
 			$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->aOpts, IS_VIEW);
 
 			$this->aOpts = $MAP->getOptions();
+
+			// Skip old param maxLayers
+			unset($this->aOpts['maxLayers']);
 		}
 	}
 	
