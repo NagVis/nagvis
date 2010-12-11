@@ -57,3 +57,5 @@ WUI
   * Bugfix: Inconsistency between textbox style attribute usage in frontend and WUI
   * Bugfix: Relative label coordinates were calculated wrong when moving objects
   * The textbox height is now set correctly when creating a new textbox
+  * Preventing damaged map cfg due to textbox resizing in IE (only happens in
+    some rare cases)

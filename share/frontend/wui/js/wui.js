@@ -336,10 +336,15 @@ function saveObjectAfterResize(oObj) {
 	var type = arr[1];
 	var id = arr[2];
 	
-	var objX = parseInt(oObj.style.left.replace('px', ''));
-	var objY = parseInt(oObj.style.top.replace('px', ''));
+	var objX = pxToInt(oObj.style.left);
+	var objY = pxToInt(oObj.style.top);
 	var objW = parseInt(oObj.style.width);
 	var objH = parseInt(oObj.style.height);
+
+	if(!isInt(objX) || !isInt(objY) || !isInt(objW) || !isInt(objH)) {
+		alert('ERROR: Invalid coords ('+objX+'/'+objY+'/'+objW+'/'+objH+'). Terminating.');
+		return false;
+	}
 	
 	// Don't forget to substract height of header menu
 	var url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type='+type+'&id='+id+'&x='+objX+'&y='+objY+'&w='+objW+'&h='+objH;
@@ -378,7 +383,7 @@ function saveObjectAfterMoveAndDrop(oObj) {
 	}
 	
 	// Handle different ojects (Normal icons and labels)
-	var type, id , url;
+	var type, id, url = '';
 	if(arr[1] === 'label') {
 		var align = arr[0];
 		type = arr[2];
@@ -388,8 +393,8 @@ function saveObjectAfterMoveAndDrop(oObj) {
 		// Handle relative and absolute aligned labels
 		if(align === 'rel') {
 			// Calculate relative coordinates
-			var objX = parseInt(document.getElementById('box_'+type+'_'+id).style.left.replace('px', ''));
-			var objY = parseInt(document.getElementById('box_'+type+'_'+id).style.top.replace('px', ''));
+			var objX = pxToInt(document.getElementById('box_'+type+'_'+id).style.left);
+			var objY = pxToInt(document.getElementById('box_'+type+'_'+id).style.top);
 			
 			// +3: Is the borderWidth of the object highlighting.
 			// The header menu height is not needed when calculating relative coords
@@ -398,17 +403,13 @@ function saveObjectAfterMoveAndDrop(oObj) {
 			
 			// Add + sign to mark relative positive coords (On negative relative coord
 			// the - sign is added automaticaly
-			if(x >= 0) {
-				// %2B is escaped +
+			// %2B is escaped +
+			if(x >= 0)
 				x = '%2B'+x;
-			}
-			if(y >= 0) {
-				// %2B is escaped +
+			if(y >= 0)
 				y = '%2B'+y;
-			}
 		} else {
 			x = oObj.x;
-			// Substract height of header menu here
 			y = oObj.y;
 		}
 		
@@ -422,7 +423,12 @@ function saveObjectAfterMoveAndDrop(oObj) {
 		y = oObj.y + borderWidth;
 
 		// Don't forget to substract height of header menu
-		url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type='+type+'&id='+id+'&x='+x+'&y='+y;
+		if(isInt(x) && isInt(y)) {
+			url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type='+type+'&id='+id+'&x='+x+'&y='+y;
+		} else {
+			alert('ERROR: Invalid coords ('+x+'/'+y+'). Terminating.');
+			return false;
+		}
 	}
 	
 	// Sync ajax request
@@ -701,8 +707,8 @@ function toggleBorder(oObj, state){
 	
 	var oContainer = oObj.parentNode;
 
-	var top = parseInt(oContainer.style.top.replace('px', ''));
-	var left = parseInt(oContainer.style.left.replace('px', ''));
+	var top = pxToInt(oContainer.style.top);
+	var left = pxToInt(oContainer.style.left);
 
 	var parts = oObj.id.split('_');
 	var type  = parts[1];
