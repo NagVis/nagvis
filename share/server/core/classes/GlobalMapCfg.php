@@ -39,6 +39,7 @@ class GlobalMapCfg {
 	private $configFile = '';
 	protected $cacheFile = '';
 	protected $defaultsCacheFile = '';
+	protected $mapLockPath;
 	
 	// Array for config validation
 	protected static $validConfig = null;
@@ -1360,10 +1361,11 @@ class GlobalMapCfg {
 						'field_type' => 'hidden')));
 		}
 		
+		$this->mapLockPath = $this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$this->name.'.lock';
+
 		// Define the map configuration file when no one set until here
-		if($this->configFile === '') {
+		if($this->configFile === '')
 			$this->setConfigFile($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$name.'.cfg');
-		}
 
 		if($this->cacheFile === '') {
 			$this->cacheFile = $this->CORE->getMainCfg()->getValue('paths','var').$name.'.cfg-'.CONST_VERSION.'-cache';
@@ -1852,20 +1854,6 @@ class GlobalMapCfg {
 								}
 							}
 							
-							// Check wether a object has line_type set and not view_type=line
-							// Update: Only check this when not in WUI!
-							// Update: Don't check this for stateless lines
-							// FIXME: This check should be removed in 1.6
-							if($type != 'line' && $key == 'line_type' && !isset($element['view_type']) && !$this instanceof WuiMapCfg) {
-								throw new $exception($this->CORE->getLang()->getText('lineTypeButViewTypeNotSet', Array('MAP' => $this->getName(), 'TYPE' => $type)));
-							}
-							
-							// Check gadget options when object view type is gadget
-							// Update: Only check this when not in WUI!
-							if($key == 'view_type' && $val == 'gadget' && !isset($element['gadget_url']) && !$this instanceof WuiMapCfg) {
-								throw new $exception($this->CORE->getLang()->getText('viewTypeGadgetButNoGadgetUrl', Array('MAP' => $this->getName(), 'TYPE' => $type)));
-							}
-							
 							// Check if the configured backend is defined in main configuration file
 							if($key == 'backend_id' && !in_array($val, $this->CORE->getDefinedBackends())) {
 								throw new $exception($this->CORE->getLang()->getText('backendNotDefined', Array('BACKENDID' => $val)));
@@ -1975,8 +1963,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function checkMapCfgFolderWriteable($printErr) {
-		$path = substr($this->CORE->getMainCfg()->getValue('paths', 'mapcfg'),0,-1);
-		return GlobalCore::getInstance()->checkReadable($path, $printErr);
+		return GlobalCore::getInstance()->checkReadable(dirname($this->configFile), $printErr);
 	}
 	
 	/**
@@ -2089,6 +2076,372 @@ class GlobalMapCfg {
 				$newConfig[$type][$matchedTypeId] = $this->mapConfig[$type][$matchedTypeId];
 		}
 		$this->mapConfig = $newConfig;
+	}
+
+	/****************************************************************************
+	 * EDIT STUFF BELOW
+	 ***************************************************************************/
+
+	/**
+	 * Gets all information about an object type
+	 *
+	 * @param   String  Type to get the information for
+	 * @return  Array   The validConfig array
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getValidObjectType($type) {
+		return self::$validConfig[$type];
+	}
+	
+	/**
+	 * Gets the valid configuration array
+	 *
+	 * @return	Array The validConfig array
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getValidConfig() {
+		return self::$validConfig;
+	}
+	
+	/**
+	 * Reads the configuration file of the map and 
+	 * sends it as download to the client.
+	 *
+	 * @return	Boolean   Only returns FALSE if something went wrong
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function exportMap() {
+		if($this->checkMapConfigReadable(1)) {
+			header('Content-Type: application/octet-stream');
+			header('Content-Disposition: attachment; filename='.$this->getName().'.cfg');
+			header('Content-Length: '.filesize($this->configFile));
+			
+			if(readfile($this->configFile)) {
+				exit;
+			} else {
+				return FALSE;	
+			}
+		} else {
+			return FALSE;	
+		}
+	}
+	
+	/**
+	 * Deletes the map configfile
+	 *
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function deleteMapConfig($printErr=1) {
+		// is file writeable?
+		if($this->checkMapConfigWriteable($printErr)) {
+			if(unlink($this->configFile)) {
+				// Also remove cache file
+				if(file_exists($this->cacheFile))
+					unlink($this->cacheFile);
+				
+				// And also remove the permission
+				GlobalCore::getInstance()->getAuthorization()->deletePermission('Map', $this->name);
+				
+				return TRUE;
+			} else {
+				if($printErr)
+					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('couldNotDeleteMapCfg', Array('MAPPATH' => $this->configFile)));
+				return FALSE;
+			}
+		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks for writeable map config file
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function checkMapConfigWriteable($printErr) {
+		return GlobalCore::getInstance()->checkWriteable($this->configFile, $printErr);
+	}
+	
+	/**
+	 * Writes the element from array to the config file
+	 *
+	 * @param	String	$type	Type of the Element
+	 * @param	Integer	$id		Id of the Element
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function writeElement($type,$id) {
+		if($this->checkMapConfigExists(1) && $this->checkMapConfigReadable(1) && $this->checkMapConfigWriteable(1)) {
+			// read file in array
+			$file = file($this->configFile);
+			
+			// number of lines in the file
+			$l = 0;
+			// number of elements of the given type
+			$a = 0;
+			// done?!
+			$done = FALSE;
+			while(isset($file[$l]) && $file[$l] != '' && $done == FALSE) {
+				// ignore comments
+				if(!preg_match('/^#/',$file[$l]) && !preg_match('/^;/',$file[$l])) { 
+					$defineCln = explode('{', $file[$l]);
+					$define = explode(' ',$defineCln[0]);
+					// select only elements of the given type
+					if(isset($define[1]) && trim($define[1]) == $type) {
+						// check if element exists
+						if($a == $id) {
+							// check if element is an array...
+							if(isset($this->mapConfig[$type][$a]) && is_array($this->mapConfig[$type][$a])) {
+								// ...array: update!
+								
+								// choose first parameter line
+								$l++;
+								
+								// Loop all parameters from array
+								foreach($this->mapConfig[$type][$id] AS $key => $val) {
+									// if key is not type
+									if($key != 'type' && $key != 'object_id') {
+										$cfgLines = 0;
+										$cfgLine = '';
+										$cfgLineNr = 0;
+										
+										// Loop parameters from file (Find line for this option)
+										while(isset($file[($l+$cfgLines)]) && trim($file[($l+$cfgLines)]) != '}') {
+											$entry = explode('=',$file[$l+$cfgLines], 2);
+											if($key == trim($entry[0])) {
+												$cfgLineNr = $l+$cfgLines;
+												if(is_array($val)) {
+													$val = implode(',',$val);
+												}
+												$cfgLine = $key.'='.$val."\n";
+											}
+											$cfgLines++;	
+										}
+										
+										if($cfgLineNr != 0 && $val != '') {
+											// if a parameter was found in file and value is not empty, replace line
+											$file[$cfgLineNr] = $cfgLine;
+										} elseif($cfgLineNr != 0 && $val == '') {
+											// if a paremter is not in array or a value is empty, delete the line in the file
+											$file[$cfgLineNr] = '';
+											$cfgLines--;
+										} elseif($cfgLineNr == 0 && $val != '') {
+											// if a parameter is was not found in array and a value is not empty, create line
+											if(is_array($val)) {
+												$val = implode(',',$val);
+											}
+											$neu = $key.'='.$val."\n";
+											
+											for($i = $l; $i < count($file);$i++) {
+												$tmp = $file[$i];
+												$file[$i] = $neu;
+												$neu = $tmp;
+											}
+											$file[count($file)] = $neu;
+										} elseif($cfgLineNr == 0 && $val == '') {
+											// if a parameter is empty and a value is empty, do nothing
+										}
+									}
+								}
+								$l++;
+							} else {
+								// ...no array: delete!
+								$cfgLines = 0;
+								while(trim($file[($l+$cfgLines)]) != '}') {
+									$cfgLines++;
+								}
+								$cfgLines++;
+								
+								for($i = $l; $i <= $l+$cfgLines;$i++) {
+									unset($file[$i]);	
+								}
+							}
+							
+							$done = TRUE;
+						}
+						$a++;
+					}
+				}
+				$l++;	
+			}
+			
+			// reached end of file - couldn't find that element, create a new one...
+			if($done == FALSE) {
+				if(count($file) > 0 && $file[count($file)-1] != "\n") {
+					$file[] = "\n";
+				}
+				$file[] = 'define '.$type." {\n";
+
+				// Templates need a special handling here cause they can have all types
+				// of options. So read all keys which are currently set
+				if($type !== 'template') {
+					$aKeys = $this->getValidTypeKeys($type);
+				} else {
+					$aKeys = array_keys($this->mapConfig[$type][$id]);
+				}
+				
+				foreach($aKeys As $key) {
+					$val = $this->getValue($type, $id, $key, TRUE);
+					if(isset($val) && $val != '') {
+						$file[] = $key.'='.$val."\n";
+					}
+				}
+				$file[] = "}\n";
+				$file[] = "\n";
+			}
+			
+			// open file for writing and replace it
+			$fp = fopen($this->configFile, 'w');
+			fwrite($fp,implode('',$file));
+			fclose($fp);
+			
+			// Also remove cache file
+			if(file_exists($this->cacheFile))
+				unlink($this->cacheFile);
+			
+			return TRUE;
+		} else {
+		 			return FALSE;
+		} 
+	}
+	
+	/**
+	 * Gets lockfile information
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Array/Boolean   Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+   */
+	public function checkMapLocked($printErr=1) {
+		// read lockfile
+		$lockdata = $this->readMapLock();
+		if(is_array($lockdata)) {
+			// Only check locks which are not too old
+			if(time() - $lockdata['time'] < $this->CORE->getMainCfg()->getValue('wui','maplocktime') * 60) {
+				// there is a lock and it should be recognized
+				// check if this is the lock of the current user (Happens e.g. by pressing F5)
+				if(GlobalCore::getInstance()->getAuthentication()->getUser() == $lockdata['user']
+																						&& $_SERVER['REMOTE_ADDR'] == $lockdata['ip']) {
+					// refresh the lock (write a new lock)
+					$this->writeMapLock();
+					// it's locked by the current user, so it's not locked for him
+					return FALSE;
+				}
+				
+				// message the user that there is a lock by another user,
+				// the user can decide wether he want's to override it or not
+				if($printErr == 1)
+					print '<script>if(!confirm(\''.str_replace("\n", "\\n", $this->CORE->getLang()->getText('mapLocked',
+									Array('MAP' =>  $this->name,       'TIME' => date('d.m.Y H:i', $lockdata['time']),
+												'USER' => $lockdata['user'], 'IP' =>   $lockdata['ip']))).'\', \'\')) { history.back(); }</script>';
+				return TRUE;
+			} else {
+				// delete lockfile & continue
+				// try to delete map lock, if nothing to delete its OK
+				$this->deleteMapLock();
+				return FALSE;
+			}
+		} else {
+			// no valid information in lock or no lock there
+			// try to delete map lock, if nothing to delete its OK
+			$this->deleteMapLock();
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Reads the contents of the lockfile
+	 *
+	 * @return	Array/Boolean   Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function readMapLock() {
+		if($this->checkMapLockReadable(0)) {
+			$fileContent = file($this->mapLockPath);
+			// only recognize the first line, explode it by :
+			$arrContent = explode(':',$fileContent[0]);
+			// if there are more elements in the array it is OK
+			if(count($arrContent) > 0) {
+				return Array('time' => $arrContent[0], 'user' => $arrContent[1], 'ip' => trim($arrContent[2]));
+			} else {
+				return FALSE;
+			}
+		} else {
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Writes the lockfile for a map
+	 *
+	 * @return	Boolean     Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function writeMapLock() {
+		// Can an existing lock be updated?
+		if($this->checkMapLockExists(0) && !$this->checkMapLockWriteable(0))
+			return false;
+
+		// If no map lock exists: Can a new one be created?
+		if(!$this->checkMapLockExists(0) && !GlobalCore::getInstance()->checkWriteable(dirname($this->mapLockPath), 0))
+			return false;
+
+		// open file for writing and insert the needed information
+		$fp = fopen($this->mapLockPath, 'w');
+		fwrite($fp, time() . ':' . GlobalCore::getInstance()->getAuthentication()->getUser() . ':' . $_SERVER['REMOTE_ADDR']);
+		fclose($fp);
+		return true;
+	}
+	
+	/**
+	 * Deletes the lockfile for a map
+	 *
+	 * @return	Boolean     Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function deleteMapLock() {
+		if($this->checkMapLockWriteable(0)) {
+			return unlink($this->mapLockPath);
+		} else {
+			// no map lock to delete => OK
+			return TRUE;   
+		}
+	}
+	
+	/**
+	 * Checks for existing lockfile
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function checkMapLockExists($printErr) {
+		return GlobalCore::getInstance()->checkExisting($this->mapLockPath, $printErr);
+	}
+	
+	/**
+	 * Checks for readable lockfile
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function checkMapLockReadable($printErr) {
+		return GlobalCore::getInstance()->checkReadable($this->mapLockPath, $printErr);
+	}
+	
+	/**
+	 * Checks for writeable lockfile
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function checkMapLockWriteable($printErr) {
+		return GlobalCore::getInstance()->checkWriteable($this->mapLockPath, $printErr);
 	}
 }
 ?>

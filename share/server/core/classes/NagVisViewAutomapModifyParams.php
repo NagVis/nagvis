@@ -58,8 +58,9 @@ class NagVisViewAutomapModifyParams {
 
 			$this->aOpts = $MAP->getOptions();
 
-			// Skip old param maxLayers
+			// Skip unwanted params
 			unset($this->aOpts['maxLayers']);
+			unset($this->aOpts['perm']);
 		}
 	}
 	
@@ -83,7 +84,9 @@ class NagVisViewAutomapModifyParams {
 			                       'show'       => $this->CORE->getAvailableAutomaps(),
 			                       'backend'    => $this->CORE->getDefinedBackends()
 			                      ),
-			'langApply'   => $this->CORE->getLang()->getText('Apply'),
+			'langApply'       => $this->CORE->getLang()->getText('Apply'),
+			'langPermanent'   => $this->CORE->getLang()->getText('Make Permanent'),
+			'permAutomapEdit' => $this->CORE->getAuthorization()->isPermitted('AutoMap', 'edit', $this->aOpts['automap']),
 		);
 		
 		// Build page based on the template file and the data array

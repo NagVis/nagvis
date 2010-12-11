@@ -61,7 +61,7 @@ class WuiViewMap {
 				'backgroundImg'     => $this->MAP->MAPCFG->BACKGROUND->getFile(),
 				'base'              => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
 				'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
-				'viewProperties'    => $this->MAP->MAPCFG->parseViewProperties(),
+				'viewProperties'    => $this->parseViewProperties(),
 				'userProperties'    => $USERCFG->doGetAsJson(),
 				'mapName'           => $this->name,
 				'userName'          => $this->CORE->getAuthentication()->getUser(),
@@ -77,6 +77,20 @@ class WuiViewMap {
     // Build page based on the template file and the data array
     // FIXME: Make template set configurable
     return $TMPLSYS->get($TMPL->getTmplFile('default', 'wuiMap'), $aData);
+	}
+	
+	/**
+	 * Parses WUI specific settings
+	 *
+	 * @return  String  JSON Code
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function parseViewProperties() {
+		return json_encode(Array(
+			'grid_show'  => intval($this->MAP->MAPCFG->getValue('global', 0, 'grid_show')),
+			'grid_color' =>        $this->MAP->MAPCFG->getValue('global', 0, 'grid_color'),
+			'grid_steps' => intval($this->MAP->MAPCFG->getValue('global', 0, 'grid_steps'))
+		));
 	}
 }
 ?>
