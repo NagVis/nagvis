@@ -1017,3 +1017,21 @@ function lightenColor(code, rD, gD, bD) {
 function isset(v) {
 	return typeof(v) !== 'undefined';
 }
+
+/**
+ * Checks if a variable is an integer
+ *
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function isInt(v) {
+  return parseFloat(v) == parseInt(v) && !isNaN(v);
+}
+
+/**
+ * Helper to parse px values from dom to numbers
+ *
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function pxToInt(v) {
+	return parseInt(v.replace('px', ''));
+}

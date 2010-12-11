@@ -6,6 +6,10 @@ Core
 Automap
   * Hiding deprecated maxLayers param from automap modify dialog
 
+WUI
+  * Preventing damaged map cfg due to textbox resizing in IE (only happens in
+	some rare cases)
+
 1.5.6
 
 Core
