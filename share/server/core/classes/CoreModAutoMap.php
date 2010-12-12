@@ -63,9 +63,9 @@ class CoreModAutoMap extends CoreModule {
 			'getAutomapProperties' => 'view',
 			'getAutomapObjects'    => 'view',
 			'getObjectStates'      => 'view',
-			'automapToMap'         => REQUIRES_AUTHORISATION,
-			'modifyParams'         => REQUIRES_AUTHORISATION,
-			'parseMapCfg'          => REQUIRES_AUTHORISATION,
+			'automapToMap'         => 'edit',
+			'modifyParams'         => 'edit',
+			'parseMapCfg'          => 'edit',
 		);
 		
 		// Register valid objects

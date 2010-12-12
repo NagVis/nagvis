@@ -23,6 +23,12 @@
 			</td></tr>
 		{/if}
 	{/foreach}
+	{if $permAutomapEdit}
+	<tr>
+		<td>{$langPermanent}</td>
+		<td><input type="checkbox" name="perm" value="1" /></td>
+	</tr>
+	{/if}
 	</tbody></table>
 	<input type="submit" name="submit" value="{$langApply}" />
 </form>

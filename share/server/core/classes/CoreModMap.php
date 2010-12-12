@@ -242,7 +242,7 @@ class CoreModMap extends CoreModule {
 					$aVals = $this->getCustomOptions($aOpts);
 					
 					// Read map config but don't resolve templates and don't use the cache
-					$MAPCFG = new WuiMapCfg($this->CORE, $aVals['show']);
+					$MAPCFG = new GlobalMapCfg($this->CORE, $aVals['show']);
 					$MAPCFG->readMapConfig(0, false, false);
 					
 					$aTmp = $MAPCFG->getDefinitions('template');
@@ -314,7 +314,7 @@ class CoreModMap extends CoreModule {
 	}
 
 	protected function doExportMap($a) {
-		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
+		$MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
 		return $MAPCFG->exportMap();
 	}
 
@@ -368,7 +368,7 @@ class CoreModMap extends CoreModule {
 	}
 	
 	protected function doTmplModify($a) {
-		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
+		$MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
 		$MAPCFG->readMapConfig(0, false, false);
 		
 		$id = $MAPCFG->getTemplateIdByName($a['opts']['name']);
@@ -415,7 +415,7 @@ class CoreModMap extends CoreModule {
 		
 		// Check if the template already exists
 		// Read map config but don't resolve templates and don't use the cache
-		$MAPCFG = new WuiMapCfg($this->CORE, $FHANDLER->get('map'));
+		$MAPCFG = new GlobalMapCfg($this->CORE, $FHANDLER->get('map'));
 		$MAPCFG->readMapConfig(0, false, false);
 		if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) <= 0) {
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('A template with this name does not exist.'));
@@ -451,7 +451,7 @@ class CoreModMap extends CoreModule {
 
 	protected function doTmplDelete($a) {
 		// Read map config but don't resolve templates and don't use the cache
-		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
+		$MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
 		$MAPCFG->readMapConfig(0, false, false);
 		
 		$id = $MAPCFG->getTemplateIdByName($a['name']);
@@ -496,7 +496,7 @@ class CoreModMap extends CoreModule {
 		
 		// Check if the template already exists
 		// Read map config but don't resolve templates and don't use the cache
-		$MAPCFG = new WuiMapCfg($this->CORE, $FHANDLER->get('map'));
+		$MAPCFG = new GlobalMapCfg($this->CORE, $FHANDLER->get('map'));
 		$MAPCFG->readMapConfig(0, false, false);
 		if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) <= 0) {
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The template does not exist.'));
@@ -516,7 +516,7 @@ class CoreModMap extends CoreModule {
 	}
 	
 	protected function doTmplAdd($a) {
-		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
+		$MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
 		$MAPCFG->readMapConfig(0, false, false);
 		
 		// append a new object definition to the map configuration
@@ -558,7 +558,7 @@ class CoreModMap extends CoreModule {
 		
 		// Check if the template already exists
 		// Read map config but don't resolve templates and don't use the cache
-		$MAPCFG = new WuiMapCfg($this->CORE, $FHANDLER->get('map'));
+		$MAPCFG = new GlobalMapCfg($this->CORE, $FHANDLER->get('map'));
 		$MAPCFG->readMapConfig(0, false, false);
 		if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) > 0) {
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('A template with this name already exists.'));
@@ -595,7 +595,7 @@ class CoreModMap extends CoreModule {
 	
 	protected function doDeleteObject($a) {
 		// initialize map and read map config
-		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
+		$MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
 		// Ignore map configurations with errors in it.
 		// the problems may get resolved by deleting the object
 		try {
@@ -656,7 +656,7 @@ class CoreModMap extends CoreModule {
 	}
 	
 	protected function doModifyObject($a) {
-		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
+		$MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
 		try {
 			$MAPCFG->readMapConfig();
 		} catch(MapCfgInvalid $e) {}
@@ -741,7 +741,7 @@ class CoreModMap extends CoreModule {
 	}
 	
 	protected function doCreateObject($a) {
-		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
+		$MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
 		$MAPCFG->readMapConfig();
 		
 		// append a new object definition to the map configuration
@@ -806,7 +806,7 @@ class CoreModMap extends CoreModule {
 	}
 	
 	protected function doDelete($a) {
-		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
+		$MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
 		try {
 			$MAPCFG->readMapConfig();
 		} catch(MapCfgInvalidObject $e) {}
@@ -850,7 +850,7 @@ class CoreModMap extends CoreModule {
 		
 		// loop all map configs to replace mapname in all map configs
 		foreach($this->CORE->getAvailableMaps() as $mapName) {
-			$MAPCFG1 = new WuiMapCfg($this->CORE, $mapName);
+			$MAPCFG1 = new GlobalMapCfg($this->CORE, $mapName);
 			$MAPCFG1->readMapConfig();
 			
 			$i = 0;
@@ -912,7 +912,7 @@ class CoreModMap extends CoreModule {
 	}
 	
 	protected function doAdd($a) {
-		$MAPCFG = new WuiMapCfg($this->CORE, $a['map']);
+		$MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
 		if(!$MAPCFG->createMapConfig())
 			return false;
 		

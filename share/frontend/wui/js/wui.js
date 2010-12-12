@@ -336,10 +336,15 @@ function saveObjectAfterResize(oObj) {
 	var type = arr[1];
 	var id = arr[2];
 	
-	var objX = parseInt(oObj.style.left.replace('px', ''));
-	var objY = parseInt(oObj.style.top.replace('px', ''));
+	var objX = pxToInt(oObj.style.left);
+	var objY = pxToInt(oObj.style.top);
 	var objW = parseInt(oObj.style.width);
 	var objH = parseInt(oObj.style.height);
+
+	if(!isInt(objX) || !isInt(objY) || !isInt(objW) || !isInt(objH)) {
+		alert('ERROR: Invalid coords ('+objX+'/'+objY+'/'+objW+'/'+objH+'). Terminating.');
+		return false;
+	}
 	
 	// Don't forget to substract height of header menu
 	var url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type='+type+'&id='+id+'&x='+objX+'&y='+objY+'&w='+objW+'&h='+objH;
@@ -378,7 +383,7 @@ function saveObjectAfterMoveAndDrop(oObj) {
 	}
 	
 	// Handle different ojects (Normal icons and labels)
-	var type, id , url;
+	var type, id, url = '';
 	if(arr[1] === 'label') {
 		var align = arr[0];
 		type = arr[2];
@@ -388,8 +393,8 @@ function saveObjectAfterMoveAndDrop(oObj) {
 		// Handle relative and absolute aligned labels
 		if(align === 'rel') {
 			// Calculate relative coordinates
-			var objX = parseInt(document.getElementById('box_'+type+'_'+id).style.left.replace('px', ''));
-			var objY = parseInt(document.getElementById('box_'+type+'_'+id).style.top.replace('px', ''));
+			var objX = pxToInt(document.getElementById('box_'+type+'_'+id).style.left);
+			var objY = pxToInt(document.getElementById('box_'+type+'_'+id).style.top);
 			
 			// +3: Is the borderWidth of the object highlighting.
 			// The header menu height is not needed when calculating relative coords
@@ -398,17 +403,13 @@ function saveObjectAfterMoveAndDrop(oObj) {
 			
 			// Add + sign to mark relative positive coords (On negative relative coord
 			// the - sign is added automaticaly
-			if(x >= 0) {
-				// %2B is escaped +
+			// %2B is escaped +
+			if(x >= 0)
 				x = '%2B'+x;
-			}
-			if(y >= 0) {
-				// %2B is escaped +
+			if(y >= 0)
 				y = '%2B'+y;
-			}
 		} else {
 			x = oObj.x;
-			// Substract height of header menu here
 			y = oObj.y;
 		}
 		
@@ -422,7 +423,12 @@ function saveObjectAfterMoveAndDrop(oObj) {
 		y = oObj.y + borderWidth;
 
 		// Don't forget to substract height of header menu
-		url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type='+type+'&id='+id+'&x='+x+'&y='+y;
+		if(isInt(x) && isInt(y)) {
+			url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type='+type+'&id='+id+'&x='+x+'&y='+y;
+		} else {
+			alert('ERROR: Invalid coords ('+x+'/'+y+'). Terminating.');
+			return false;
+		}
 	}
 	
 	// Sync ajax request
@@ -701,8 +707,8 @@ function toggleBorder(oObj, state){
 	
 	var oContainer = oObj.parentNode;
 
-	var top = parseInt(oContainer.style.top.replace('px', ''));
-	var left = parseInt(oContainer.style.left.replace('px', ''));
+	var top = pxToInt(oContainer.style.top);
+	var left = pxToInt(oContainer.style.left);
 
 	var parts = oObj.id.split('_');
 	var type  = parts[1];
@@ -732,97 +738,4 @@ function toggleBorder(oObj, state){
 	oLine = null;
 	oObj = null;
 	oContainer = null;
-}
-
-/*** Handles the object dragging ***/
-
-var draggingEnabled = true;
-var draggingObject = null;
-var dragObjectOffset = null;
-var dragObjectPos = null;
-var dragObjectStartPos = null;
-var dragObjectChilds = {};
-
-function getTarget(event) {
-	var target = event.target ? event.target : event.srcElement;
-	while(target && target.tagName != 'DIV') {
-		target = target.parentNode;
-  }
-	return target;
-}
-
-function getButton(event) {
-	if (event.which == null)
-		/* IE case */
-		return (event.button < 2) ? "LEFT" : ((event.button == 4) ? "MIDDLE" : "RIGHT");
-	else
-		/* All others */
-		return (event.which < 2) ? "LEFT" : ((event.which == 2) ? "MIDDLE" : "RIGHT");
-}
-
-function makeDragable(objects) {
-	var len = objects.length;
-	if(len == 0)
-		return false;
-	
-	for(var i = 0; i < len; i++) {
-		var o = document.getElementById(objects[i]);
-		if(o) {
-			addEvent(o, "mousedown", dragStart); 
-			addEvent(o, "mouseup",   dragStop); 
-			o = null;
-		}
-	}
-	len = null;
-}
-
-function dragStart(event) {
-	if(!event)
-		event = window.event;
-	
-	var target = getTarget(event);
-	var button = getButton(event);
-	
-	// Skip calls when already dragging or other button than left mouse
-	if(draggingObject !== null || button != 'LEFT' || !draggingEnabled)
-		return true;
-	
-	var posx, posy;
-	if (event.pageX || event.pageY) {
-		posx = event.pageX;
-		posy = event.pageY;
-	} else if (event.clientX || event.clientY) {
-		posx = event.clientX;
-		posy = event.clientY;
-	}
-	
-	/*if(event.stopPropagation)
-		event.stopPropagation();
-	event.cancelBubble = true;*/
-	
-	draggingObject = target;
-	draggingObject.x = draggingObject.offsetLeft;
-	draggingObject.y = draggingObject.offsetTop;
-	
-  // Save relative offset of the mouse to the snapin title to prevent flipping on drag start
-  dragObjectOffset   = [ posy - draggingObject.offsetTop - getHeaderHeight(), 
-                         posx - draggingObject.offsetLeft ];
-  dragObjectStartPos = [ draggingObject.offsetTop, draggingObject.offsetLeft ];
-
-	// Save diff coords of relative objects
-	var sLabelName = target.id.replace('box_', 'rel_label_');
-	var oLabel = document.getElementById(sLabelName);
-	if(oLabel) {
-		dragObjectChilds[sLabelName] = [ oLabel.offsetTop - draggingObject.offsetTop,
-		                                 oLabel.offsetLeft - draggingObject.offsetLeft ];
-		oLabel = null;
-	}
-	sLabelName = null;
-	
-	// Disable the default events for all the different browsers
-	if(event.preventDefault)
-		event.preventDefault();
-	else
-		event.returnValue = false;
-	return true;
 }

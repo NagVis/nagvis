@@ -83,7 +83,7 @@ class WuiCore extends GlobalCore {
 		foreach($this->getAvailableMaps() AS $map) {
 			$aOpts = Array();
 			
-			$MAPCFG1 = new WuiMapCfg($this, $map);
+			$MAPCFG1 = new GlobalMapCfg($this, $map);
 			try {
 				$MAPCFG1->readMapConfig();
 			} catch(MapCfgInvalid $e) {

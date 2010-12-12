@@ -41,7 +41,7 @@ class WuiModMap extends WuiModule {
 	
 	private function showEditDialog() {
 		// Load map configuration
-		$MAPCFG = new WuiMapCfg($this->CORE, $this->name);
+		$MAPCFG = new GlobalMapCfg($this->CORE, $this->name);
 
 		try {
 			$MAPCFG->readMapConfig();

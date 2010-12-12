@@ -65,7 +65,7 @@ class WuiViewMapAddModify {
 		$TMPL = New CoreTemplateSystem($this->CORE);
 		$TMPLSYS = $TMPL->getTmplSys();
 		
-		$this->MAPCFG = new WuiMapCfg($this->CORE, $this->aOpts['show']);
+		$this->MAPCFG = new GlobalMapCfg($this->CORE, $this->aOpts['show']);
 		try {
 			$this->MAPCFG->readMapConfig();
 		} catch(MapCfgInvalid $e) {}

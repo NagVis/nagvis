@@ -55,7 +55,8 @@ class FrontendModAutoMap extends FrontendModule {
 		               'rotationStep' => MATCH_INTEGER_EMPTY,
 		               'enableHeader' => MATCH_BOOLEAN_EMPTY,
 		               'enableContext' => MATCH_BOOLEAN_EMPTY,
-		               'enableHover' => MATCH_BOOLEAN_EMPTY);
+		               'enableHover' => MATCH_BOOLEAN_EMPTY,
+		               'perm'          => MATCH_BOOLEAN_EMPTY);
 		
 		// There might be a default map when none is given
 		$aDefaults = Array('show' => $this->CORE->getMainCfg()->getValue('global', 'startshow'));
@@ -106,6 +107,15 @@ class FrontendModAutoMap extends FrontendModule {
 		
 		return $sReturn;
 	}
+
+	private function saveDefaultParams($MAPCFG) {
+		$s = '';
+		foreach($this->opts AS $key => $val)
+			$s .= '&'.$key.'='.$val;
+
+		$MAPCFG->setValue('global', 0, 'default_params', $s);
+		$MAPCFG->writeElement('global', 0);
+	}
 	
 	private function showViewDialog() {
 		// Initialize backend(s)
@@ -115,6 +125,11 @@ class FrontendModAutoMap extends FrontendModule {
     $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
     // Read the map configuration file
     $MAPCFG->readMapConfig();
+
+		// When 'perm' is set save the default_params
+		if($this->opts['perm'] === '1' && $this->AUTHORISATION->isPermitted('AutoMap', 'edit', $this->name))
+			$this->saveDefaultParams($MAPCFG);
+		unset($this->opts['perm']);
 
 		// Build index template
 		$INDEX = new NagVisIndexView($this->CORE);

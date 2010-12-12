@@ -52,14 +52,14 @@
 					{if $mod == 'Map' || $mod == 'AutoMap'}
 					<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=Search&act=view', '{$langSearch}')">{$langSearch}</a></li>
 					{/if}
-					{if $mod == 'AutoMap'}
+					{if $mod == 'AutoMap' && $permittedEdit == true}
 					<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&act=modifyParams&show={$currentMap}'+getAutomapParams(), '{$langModifyAutomapParams}')">{$langModifyAutomapParams}</a></li>
 					{/if}
 					{if $bRotation == true}
 					<li id="rotationStart" style="display:none"><a href="javascript:switchRotation()">{$langRotationStart}</a></li>
 					<li id="rotationStop" style="display:inline"><a href="javascript:switchRotation()">{$langRotationStop}</a></li>
 					{/if}
-					{if $mod == 'AutoMap'}
+					{if $mod == 'AutoMap' && $permittedEdit == true}
 					<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&act=automapToMap&show=dialog', '{$langAutomapToMap}')">{$langAutomapToMap}</a></li>
 					{/if}
 					{if $mod == 'Map' && $permittedEdit == true && $act != 'edit'}

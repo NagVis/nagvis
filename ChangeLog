@@ -19,6 +19,7 @@ Core
 Automap
   * Made automap coord parsing regex resistent against html entities in the URL
   * Hiding deprecated maxLayers option from modify view dialog
+  * Automap params changed via GUI can be made permanent now
 
 Backend: Livestatus
   * Bugfix: PHP error when trying to write to socket while the remote host is not
@@ -57,3 +58,5 @@ WUI
   * Bugfix: Inconsistency between textbox style attribute usage in frontend and WUI
   * Bugfix: Relative label coordinates were calculated wrong when moving objects
   * The textbox height is now set correctly when creating a new textbox
+  * Preventing damaged map cfg due to textbox resizing in IE (only happens in
+    some rare cases)
