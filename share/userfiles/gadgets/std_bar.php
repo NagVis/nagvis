@@ -145,7 +145,9 @@ $oBackground = imagecolorallocate($img, 122, 23, 211);
 $oBlack = imagecolorallocate($img, 0, 0, 0);
 $oGreen = imagecolorallocate($img, 0, 255, 0);
 $oYellow = imagecolorallocate($img, 255, 255, 0);
+$oYellowAck = imagecolorallocate($img, 200, 255, 0);
 $oRed = imagecolorallocate($img, 255, 0, 0);
+$oRedAck = imagecolorallocate($img, 200, 0, 0);
 $oBlue = imagecolorallocate($img, 0, 0, 255);
 
 imagefill($img, 0, 0, $oBackground);
@@ -164,6 +166,8 @@ for ($i=0; $i < $pdc; $i++){
       $min = $aPerfdata[$i]['min'];
       $max = $aPerfdata[$i]['max'];
       $uom = $aPerfdata[$i]['uom'];
+      $ack = $aPerfdata[$i]['ack'];
+      $downtime = $aPerfdata[$i]['downtime'];
       $offX = ($offG % $cols) * $imgwidth;         // calculate left x-axis position
       $offY = floor($offG / $cols) * $imgheight;   // calculate upper y-axis position
       $maxX = $imgwidth-15;
@@ -188,11 +192,11 @@ for ($i=0; $i < $pdc; $i++){
       }
       if (isset($warn) && isset($crit)) {
          if ($warn < $crit) {
-            if ($value >= $warn) { $colour = $oYellow; };
-            if ($value >= $crit) { $colour = $oRed; };
+            if ($value >= $warn) { $colour = ($ack) ? $oYellowAck : $oYellow; };
+            if ($value >= $crit) { $colour = ($ack) ? $oRedAck : $oRed; };
          } else {
-            if ($value <= $warn) { $colour = $oYellow; };
-            if ($value <= $crit) { $colour = $oRed; };
+            if ($value <= $warn) { $colour = ($ack) ? $oYellowAck : $oYellow; };
+            if ($value <= $crit) { $colour = ($ack) ? $oRedAck : $oRed; };
          }
       }
       // create box
@@ -277,6 +281,7 @@ for ($i=0; $i < $pdc; $i++){
       if ($current == 1) {
          $maxv = "";
          if (isset($aPerfdata[$i]['max'])) { $maxv = " of ".$aPerfdata[$i]['max']; }
+         if ($down) { $maxv = " [down]"; }
          if (file_exists ("$font")) {
             ImageTTFText($img, $chrSize*3.5, 0, $offX+5, $offY+$sect3-1, $oBlack, $font, $desc . ':' . $value . $uom . $maxv);
          } else {
