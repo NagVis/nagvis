@@ -33,6 +33,7 @@ class NagiosService extends NagVisStatefulObject {
 	protected $display_name;
 	protected $address;
 	protected $notes;
+	protected $check_command;
 	
 	protected $perfdata;
 	protected $last_check;

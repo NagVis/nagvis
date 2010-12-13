@@ -471,7 +471,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "address notes last_check next_check state_type ".
 		  "current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change statusmap_image perf_data ".
-		  "acknowledged scheduled_downtime_depth has_been_checked name\n".
+		  "acknowledged scheduled_downtime_depth has_been_checked name ".
+		  "check_command\n".
 		  $objFilter;
 
 		$l = $this->queryLivestatus($q);
@@ -515,7 +516,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				  'last_state_change'      => $e[11],
 				  'last_hard_state_change' => $e[12],
 				  'statusmap_image'        => $e[13],
-				  'perfdata'               => $e[14]
+				  'perfdata'               => $e[14],
+				  'check_command'          => $e[19]
 				);
 				
 				/**
@@ -583,7 +585,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		  "state_type current_attempt max_check_attempts last_state_change ".
 		  "last_hard_state_change perf_data scheduled_downtime_depth ".
 		  "acknowledged host_acknowledged host_scheduled_downtime_depth ".
-		  "has_been_checked host_name\n");
+		  "has_been_checked host_name check_command\n");
 
 		$arrReturn = Array();
 		if(is_array($l) && count($l) > 0) {
@@ -676,6 +678,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 					$arrTmpReturn['last_state_change'] = $e[12];
 					$arrTmpReturn['last_hard_state_change'] = $e[13];
 					$arrTmpReturn['perfdata'] = $e[14];
+					$arrTmpReturn['check_command'] = $e[21];
 				}
 				
 				if($specific) {

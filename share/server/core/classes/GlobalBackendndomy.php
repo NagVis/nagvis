@@ -519,7 +519,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			problem_has_been_acknowledged, 
 			statusmap_image, 
 			UNIX_TIMESTAMP(last_check) AS last_check, UNIX_TIMESTAMP(next_check) AS next_check, 
-			hs.state_type, hs.current_check_attempt, hs.max_check_attempts, 
+			hs.state_type, hs.current_check_attempt, hs.max_check_attempts, hs.check_command
 			UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end, 
 			dh.author_name AS downtime_author, dh.comment_data AS downtime_data
 		FROM 
@@ -543,6 +543,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			$arrTmpReturn['address'] = $data['address'];
 			$arrTmpReturn['statusmap_image'] = $data['statusmap_image'];
 			$arrTmpReturn['notes'] = $data['notes'];
+			$arrTmpReturn['check_command'] = $data['check_command'];
 			
 			// Add Additional information to array
 			$arrTmpReturn['perfdata'] = $data['perfdata'];
@@ -639,7 +640,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			UNIX_TIMESTAMP(ss.last_state_change) AS last_state_change, 
 			ss.output, ss.perfdata, ss.problem_has_been_acknowledged, 
 			UNIX_TIMESTAMP(ss.last_check) AS last_check, UNIX_TIMESTAMP(ss.next_check) AS next_check, 
-			ss.state_type, ss.current_check_attempt, ss.max_check_attempts,
+			ss.state_type, ss.current_check_attempt, ss.max_check_attempts, ss.check_command,
 			UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end, 
 			dh.author_name AS downtime_author, dh.comment_data AS downtime_data
 			FROM 
@@ -674,6 +675,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			$arrTmpReturn['alias'] = $data['display_name'];
 			$arrTmpReturn['address'] = $data['address'];
 			$arrTmpReturn['notes'] = $data['notes'];
+			$arrTmpReturn['check_command'] = $data['check_command'];
 			
 			// Add additional information to array
 			$arrTmpReturn['perfdata'] = $data['perfdata'];
