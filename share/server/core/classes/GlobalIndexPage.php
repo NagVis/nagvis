@@ -265,25 +265,25 @@ class GlobalIndexPage {
 	public function parseIndexPropertiesJson() {
 		$arr = Array();
 		
-		$arr['cellsperrow'] = $this->CORE->getMainCfg()->getValue('index', 'cellsperrow');
-		$arr['showautomaps'] = $this->CORE->getMainCfg()->getValue('index', 'showautomaps');
-		$arr['showmaps'] = $this->CORE->getMainCfg()->getValue('index', 'showmaps');
-		$arr['showgeomap'] = $this->CORE->getMainCfg()->getValue('index', 'showgeomap');
-		$arr['showmapthumbs'] = $this->CORE->getMainCfg()->getValue('index', 'showmapthumbs');
-		$arr['showrotations'] = $this->CORE->getMainCfg()->getValue('index', 'showrotations');
+		$arr['cellsperrow']        = (int) $this->CORE->getMainCfg()->getValue('index', 'cellsperrow');
+		$arr['showautomaps']       = (int) $this->CORE->getMainCfg()->getValue('index', 'showautomaps');
+		$arr['showmaps']           = (int) $this->CORE->getMainCfg()->getValue('index', 'showmaps');
+		$arr['showgeomap']         = (int) $this->CORE->getMainCfg()->getValue('index', 'showgeomap');
+		$arr['showmapthumbs']      = (int) $this->CORE->getMainCfg()->getValue('index', 'showmapthumbs');
+		$arr['showrotations']      = (int) $this->CORE->getMainCfg()->getValue('index', 'showrotations');
 		
-		$arr['page_title'] = $this->CORE->getMainCfg()->getValue('internal', 'title');
-		$arr['favicon_image'] = $this->CORE->getMainCfg()->getValue('paths', 'htmlimages').'internal/favicon.png';
-		$arr['background_color'] = $this->CORE->getMainCfg()->getValue('index','backgroundcolor');
+		$arr['page_title']         = $this->CORE->getMainCfg()->getValue('internal', 'title');
+		$arr['favicon_image']      = $this->CORE->getMainCfg()->getValue('paths', 'htmlimages').'internal/favicon.png';
+		$arr['background_color']   = $this->CORE->getMainCfg()->getValue('index','backgroundcolor');
 		
-		$arr['lang_mapIndex'] = $this->CORE->getLang()->getText('mapIndex');
-		$arr['lang_automapIndex'] = $this->CORE->getLang()->getText('Automap Index');
+		$arr['lang_mapIndex']      = $this->CORE->getLang()->getText('mapIndex');
+		$arr['lang_automapIndex']  = $this->CORE->getLang()->getText('Automap Index');
 		$arr['lang_rotationPools'] = $this->CORE->getLang()->getText('rotationPools');
 		
-		$arr['event_log'] = $this->CORE->getMainCfg()->getValue('defaults', 'eventlog');
-		$arr['event_log_level'] = $this->CORE->getMainCfg()->getValue('defaults', 'eventloglevel');
-		$arr['event_log_height'] = $this->CORE->getMainCfg()->getValue('defaults', 'eventlogheight');
-		$arr['event_log_hidden'] = $this->CORE->getMainCfg()->getValue('defaults', 'eventloghidden');
+		$arr['event_log']          = (int) $this->CORE->getMainCfg()->getValue('defaults', 'eventlog');
+		$arr['event_log_level']    = $this->CORE->getMainCfg()->getValue('defaults', 'eventloglevel');
+		$arr['event_log_height']   = (int) $this->CORE->getMainCfg()->getValue('defaults', 'eventlogheight');
+		$arr['event_log_hidden']   = (int) $this->CORE->getMainCfg()->getValue('defaults', 'eventloghidden');
 		
 		return json_encode($arr);
 	}
