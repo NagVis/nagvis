@@ -49,6 +49,7 @@ Frontend
   * Bugfix: Fixed header submenu top offset in Internet Explorer
   * Bugfix: Fixed hover menu positioning out of the screen
   * Bugfix: Minor javascript fixes during object reload
+  * Bugfix: Fixed showmaps,showautomaps,... option usage on overview page
 
 WUI
   * Bugfix: Deleting more than 2 objects was not work correctly
