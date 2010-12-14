@@ -6,6 +6,9 @@ Core
 Automap
   * Hiding deprecated maxLayers param from automap modify dialog
 
+Frontend
+  * Bugfix: Fixed showmaps,showautomaps,... option usage on overview page
+
 WUI
   * Preventing damaged map cfg due to textbox resizing in IE (only happens in
 	some rare cases)
