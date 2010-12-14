@@ -1109,7 +1109,7 @@ function parseOverviewPage() {
 							  [ oPageProperties.showgeomap,    'overviewGeomap',    'Geomap' ],
 							  [ oPageProperties.showrotations, 'overviewRotations', oPageProperties.lang_rotationPools ] ];
 	for(var i = 0; i < types.length; i++) {
-		if(types[i][0]) {
+		if(types[i][0] === 1) {
 			var oTable = document.createElement('table');
 			oTable.setAttribute('class', 'infobox');
 			oTable.setAttribute('className', 'infobox');
@@ -1161,7 +1161,7 @@ function parseOverviewMaps(aMapsConf) {
 	}
 	
 	// Render the maps when enabled
-	if(oPageProperties.showmaps == 1) {
+	if(oPageProperties.showmaps === 1) {
 		if(aMapsConf.length == 0) {
 			document.getElementById('overviewMaps').parentNode.style.display = 'none';
 			return false;
@@ -1230,7 +1230,7 @@ function parseOverviewAutomaps(aMapsConf) {
 	}
 	
 	// Render the maps when enabled
-	if(oPageProperties.showautomaps == 1) {
+	if(oPageProperties.showautomaps === 1) {
 		if(aMapsConf.length == 0) {
 			document.getElementById('overviewAutomaps').parentNode.style.display = 'none';
 			return false;
@@ -1293,7 +1293,7 @@ function parseOverviewGeomap() {
 	eventlog("worker", "debug", "parseOverviewGeomap: Start setting geomap");
 	
 	// Render the maps when enabled
-	if(oPageProperties.showgeomap == 1) {
+	if(oPageProperties.showgeomap === 1) {
 		var oTable = document.getElementById('overviewGeomap');
 		var oTr = document.createElement('tr');
 		
@@ -1304,7 +1304,7 @@ function parseOverviewGeomap() {
 		oTd.style.width = '200px';
 		
 		// Only show map thumb when configured
-		if(oPageProperties.showmapthumbs == 1) {
+		if(oPageProperties.showmapthumbs === 1) {
 			oTd.style.height = '200px';
 		}
 		
@@ -1334,7 +1334,7 @@ function parseOverviewGeomap() {
 		br = null;
 		
 		// Only show map thumb when configured
-		if(oPageProperties.showmapthumbs == 1) {
+		if(oPageProperties.showmapthumbs === 1) {
 			oImg = document.createElement('img');
 			oImg.style.width = '200px';
 			oImg.style.height = '150px';
@@ -1375,7 +1375,7 @@ function parseOverviewGeomap() {
 function parseOverviewRotations(aRotationsConf) {
 	eventlog("worker", "debug", "setOverviewObjects: Start setting rotations");
 	
-	if(oPageProperties.showrotations == 1 && aRotationsConf.length > 0) {
+	if(oPageProperties.showrotations === 1 && aRotationsConf.length > 0) {
 		for(var i = 0, len = aRotationsConf.length; i < len; i++) {
 			var oObj;
 			
