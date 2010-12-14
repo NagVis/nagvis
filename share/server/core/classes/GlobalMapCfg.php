@@ -2161,7 +2161,7 @@ class GlobalMapCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function checkMapConfigWriteable($printErr) {
+	public function checkMapConfigWriteable($printErr) {
 		return GlobalCore::getInstance()->checkWriteable($this->configFile, $printErr);
 	}
 	
