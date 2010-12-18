@@ -12,12 +12,12 @@
 			is provided by NagVis. The main idea is to provide the performance data 
 			of Nagios to these programs for visualizing it as nice graphs or fancy 
 			speedometers, thermometers etc.<br/>
-			<code>share/userfiles/gadgets/</code> contains some examples, others can be found at <a href="exchange.nagvis.org/exchange/Gadgets/">Nagvis Exchange</a>.</p>
+			<code>share/userfiles/gadgets/</code> contains some examples, others can be found at <a href="exchange.nagvis.org/exchange/Gadgets/">Nagvis Exchange</a><sup>[1]</sup>.</p>
 		<p>The gadgets can be written in any language which can be interpreted by 
 			your webserver. Some options can be PHP, Perl,...</p>
 		<p>Gadgets are only supported for service objects. An object can be turned 
 			into a gadget by setting view_type=&quot;gadget&quot; and a valid gadget_url.</p>
-		<p>NagVis supports gadgets since version 1.4.</p>
+		<p>NagVis supports gadgets since version 1.4.<sup>[1]</sup></p>
 		
 		<img src="../general/img/nagvis-1.4-gadget-label-hover.png" alt="NagVis 1.4 std_speedometer gadget with label and hover menu" /><br />
 		<p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.4 std_speedometer gadget on test map with enabled label.</p>
@@ -137,5 +137,6 @@
 		<p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.5 std_bar gadget in normal, warning and critical state</p>
 		<p><b>Note:</b> This gadget uses a TrueType font whose name and location is hard coded within the code (variables <i>$fontDir</i> and <i>$fontName</i>). In case the file isn&apos;t found the gadget uses a builtin font.
 			The value of $fontDir changes between distributions so if the font doesn&apos;t scale properly please check the setting (it defaults to OpenSuSE, other settings are commented out).</p>
+		<sup>[1]</sup> The directory structure changed between NagVis 1.4.x and NagVis 1.5. Gadgets were stored in <code>nagvis/nagvis/gadgets</code> and are now stored in <code>share/userfiles/gadgets</code>. Gadgets found on NagVis Exchange might use the former structure so you might have to move the files to the new location (e.g. <code>cp -pr &lt;source&gt;/nagvis/nagvis/gadgets/&lt;gadget&gt; &lt;target&gt;/share/userfiles/gadgets/</code>).
 	</body>
 </html>
