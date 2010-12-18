@@ -2380,7 +2380,7 @@ class GlobalMapCfg {
 	 * @return	Boolean     Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function writeMapLock() {
+	public function writeMapLock() {
 		// Can an existing lock be updated?
 		if($this->checkMapLockExists(0) && !$this->checkMapLockWriteable(0))
 			return false;
@@ -2402,7 +2402,7 @@ class GlobalMapCfg {
 	 * @return	Boolean     Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function deleteMapLock() {
+	public function deleteMapLock() {
 		if($this->checkMapLockWriteable(0)) {
 			return unlink($this->mapLockPath);
 		} else {
