@@ -11,7 +11,8 @@
 		<p>"Gadgets" sind kleine Programme, die Bilder aus Informationen erzeugen, die von NagVis
 		geliefert werden. Die Hauptidee besteht darin, die Performance-Daten von Nagios an diese
 		Programme zu liefern, um daraus nette Grafiken oder schicke Tachos, Thermometer oder
-		&auml;hnliches zu machen.
+		&auml;hnliches zu machen.<br/>
+		<code>share/userfiles/gadgets</code> enth&auml;lt einige Beispiele, andere finden Sie unter <a href="exchange.nagvis.org/exchange/Gadgets/">Nagvis Exchange</a>.</p>
 		<p>Die Gadgets k&ouml;nnen in jeder Sprache geschrieben werden, die von Ihrem Webserver
 		interpretiert wird, wie z.B. PHP, Perl, ...</p>
 		<p>Gadgets werden nur f&uuml;r Services unterst&uuml;tzt. Ein Objekt kann in ein Gadget
@@ -20,10 +21,10 @@
 		<p>NagVis unterst&uuml;tzt Gadgets ab Version 1.4.</p>
 		
 		<img src="../general/img/nagvis-1.4-gadget-label-hover.png" alt="NagVis 1.4 std_speedometer gadget with label and hover menu" /><br />
-		<p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.4 std_speedometer gadget on test map with enabled label.</p>
+		<p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.4 std_speedometer-Gadget auf einer Test-Map mit aktiviertem Label.</p>
 		
 		<h2>Parameter</h2>
-		<p>Die Gadgets bekommen ihre Informationen durch einen HTTP-Get-Aufruf von NagVis.</p>
+		<p>Die Gadgets bekommen ihre Informationen durch einen HTTP-Get-Aufruf von NagVis (wenn Sie <code>share/userfiles/gadgets/gadget_core.php</code> einbinden, werden zwei Arrays gef&uuml;llt. Mehr Informationen finden Sie in der (englischen) Beschreibung dort).</p>
 		<p>Die folgenden Parameter werden an die Gadgets geliefert:</p>
 		
 		<table style="width:100%">
@@ -31,32 +32,56 @@
 				<th width="200">Parameter</th>
 				<th width="150">Beispielwert</th>
 				<th>Beschreibung</th>
+				<th>Variable</th>
 			</tr>
 			<tr>
 				<td>name1</td>
 				<td>localhost</td>
-				<td>Der Name des Hosts.</td>
+				<td>Der Name des Hosts</td>
+				<td>$aOpts['name1']</td>
 			</tr>
 			<tr>
 				<td>name2</td>
 				<td>Current Load</td>
-				<td>Die Service-Beschreibung des Objekts.</td>
+				<td>Die Service-Beschreibung des Objekts</td>
+				<td>$aOpts['name2']</td>
+			</tr>
+			<tr>
+				<td>scale</td>
+				<td>100</td>
+				<td>Die Gr&ouml;&szlig;e des Gadgets (in Prozent)</td>
+				<td>$aOpts['scale']</td>
 			</tr>
 			<tr>
 				<td>state</td>
 				<td>OK</td>
-				<td>Die Zeichenkette, die den aktuellen Status beschreibt.</td>
+				<td>Die Zeichenkette, die den aktuellen Status beschreibt (OK, WARNING, CRITICAL, UNKNOWN)</td>
+				<td>$aOpts['state']</td>
 			</tr>
 			<tr>
 				<td>stateType</td>
 				<td>HARD</td>
 				<td>Der Typ des aktuelles Status. Kann HARD oder SOFT sein</td>
+				<td>$aOpts['stateType']</td>
+			</tr>
+			<tr>
+				<td>ack</td>
+				<td>0</td>
+				<td>Wird auf 1 gesetzt, wenn der Status des entsprechenden Objekts best&auml;tigt wurde (<font color="#ff0000">Neu in 1.5.4</font>)</td>
+				<td>$aOpts['ack']</td>
+			</tr>
+			<tr>
+				<td>downtime</td>
+				<td>0</td>
+				<td>Wird auf 1 gesetzt, wenn sich das entsprechende Objekt in einer Ausfallzeit (Downtime) befindet (<font color="#ff0000">Neu in 1.5.4</font>)</td>
+				<td>$aOpts['downtime']</td>
 			</tr>
 			<tr>
 				<td>perfdata</td>
 				<td>load1=0.960;5.000;10.000;0; load5=0.570;4.000;6.000;0; load15=0.540;3.000;4.000;0;</td>
 				<td>Die aktuellen Performance-Daten, die von Nagios geliefert werden. 
 					Es ist wichtig, g&uuml;ltige Performance-Daten zu haben!</td>
+				<td>$aPerfdata[&lt;index&gt][&lt;tag&gt;]</td>
 			</tr>
 		</table>
 		
@@ -64,23 +89,52 @@
 		<code>std_speedometer.php?name1=localhost&amp;name2=Current%20Load&amp;state=OK&amp;stateType=HARD&amp;perfdata=load1=0.450;5.000;10.000;0;%20load5=0.260;4.000;6.000;0;%20load15=0.750;3.000;4.000;0;</code>
 
 		<h2>wie ist es zu konfigurieren?</h2>
-		<p>Bitte pr&uuml;fen Sie die Parameter <code>view_type</code> und <code>gadget_url</code> des Service-Objekts in der <a href="map_config_format_description.html#service">Formatbeschreibung der Map-Konfiguration</a>.</p>
-
+		<p>Bitte pr&uuml;fen Sie die Parameter <code>view_type</code>, <code>gadget_url</code> und <code>gadget_opts</code> des Service-Objekts in der <a href="map_config_format_description.html#service">Formatbeschreibung der Map-Konfiguration</a>.
+		Hier eine Beispiel-Definition in Ihrer Map-Datei:</p>
+      <pre>define service {
+   host_name=localhost
+   service_description=root-volume
+   x=50
+   y=50
+   view_type=gadget
+   gadget_url=std_bar.php     // name of the file in share/userfiles/gadgets/
+   // gadget_url=[http://localhost/nagvis/userfiles/gadgets/std_bar.php]     // valid as well
+   // gadget_scale=200        // default is 100 (percent)
+   // gadget_opts=columns=3 label=1    // gadget dependent
+}</pre></p>
 
 		<h2>wie man ein eigenes Gadget anlegt</h2>
 		<p>Mit Hilfe des Codes in gadgets_core.php werden zwei Arrays gef&uuml;llt. $aPerfdata enth&auml;lt die Performance-Daten. $aOpts enth&auml;lt die Optionen, die in gadget_opts gesetzt werden.</p>
 		<p>Das Einfachste ist, einen Blick auf std_speedometer zu werfen und die Kernbestandteile von dort anzupassen.</p>
 		<p>Sie sollten einen Beispiel-Performance-Daten-String in den Gadget-Code einf&uuml;gen, indem Sie die Variable $sDummyPerfdata nutzen.
 			Dies erlaubt es, das Gadget mit Dummy-Daten in der WUI anzuzeigen. Es ist viel einfacher, die Maps zu erstellen,
-			wenn die Gadgets dort angezeigt werden. Wichtig: die Variable muss gesetzt werden, bevor gadgets_core.php &uuml; den include-Befehl geladen wird.</p>
+			wenn die Gadgets dort angezeigt werden. <b>Wichtig:</b> die Variable muss gesetzt werden, bevor gadgets_core.php &uuml;ber den include-Befehl geladen wird.</p>
 
       <p>Ein zweites Beispiel finden Sie in std_speedometer2.php. Im Gegensatz zu std_speedometer unterst&uuml;tzt es auch check_multi-Ausgaben. Verschiedene Optionen beeinflussen das Verhalten des Gadgets:
       <table>
          <tr><th>Parameter</th><th>Beispielwert</th><th>Beschreibung</th></tr>
-         <tr><td>label</td><td>1</td><td>1 = Anzeige von Host-Name / Service-Beschreibung in der linke oberen Ecke des Graphen; 0 = Informationen nicht anzeigen (Default)</td></tr>
+         <tr><td>label</td><td>1</td><td>1 = Anzeige von Host-Name / Service-Beschreibung in der linken oberen Ecke des Graphen; 0 = Informationen nicht anzeigen (Default)</td></tr>
          <tr><td>current</td><td>1</td><td>1 = Anzeige des aktuellen Performance-Daten-Wertes (Default); 0 = Informationen nicht anzeigen</td></tr>
-         <tr><td>columns</td><td>5</td><td>Graphen k&ouml;nnen in Spalten angezeigt werden. Die Zahl der Zeilen werden anhand der maximalen Anzahl von Performance-Daten-Elementen. Default ist 3</td></tr>
+         <tr><td>columns</td><td>5</td><td>Graphen k&ouml;nnen in Spalten angezeigt werden. Die Zahl der Zeilen wird anhand der maximalen Anzahl von Performance-Daten-Elementen ermittelt. Default ist 3</td></tr>
          <tr><td>string</td><td>pct</td><td>Das Performance-Daten-Label muss die Zeichenkette enthalten, damit der Graph angezeigt wird. Im Falle von check_multi-Ausgaben wird nur der letzte Teil untersucht. Default ist eine leere Zeichenkette</td></tr>
       </table>
+      <img src="../general/img/std_speedo2.png" alt="NagVis 1.5 std_speedometer2-Gadget" /><br />
+      <p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.5 std_speedometer2-Gadget im normalen, warnenden und kritischen Zustand</p>
+      <p>Ein drittes Beispiel basiert auf einer Idee auf <a href="exchange.nagvis.org/exchange/Gadgets/">Nagvis Exchange</a>.
+         Performance-Daten werden als horizontaler Balken dargestellt. Das letzte Viertel des Graphs wechselt auf gelb oder rot, wenn die Performance-Daten WARNING oder CRITICAL andeuten.
+         Der Status ist <i>nicht</i> der Zustand des Service! Das liegt daran, dass die Daten ggf. mehrere Datenreihen enthalten.
+         In vielen F&auml;llen sind nicht alle Datenreihen eines Service WARNING oder CRITICAL, so dass Sie sonst falsche Alarme bekommen w&uuml;rden (<font color="#ff0000">neu in 1.5.7 oder git neuer als 2010.12.12</font>).</p>
+      <table>
+         <tr><th>Parameter</th><th>Beispielwert</th><th>Beschreibung</th></tr>
+         <tr><td>label</td><td>1</td><td>1 = Anzeige von Host-Name / Service-Beschreibung im letzten Viertel des Graphen (Default); 0 = Informationen nicht anzeigen</td></tr>
+         <tr><td>current</td><td>1</td><td>1 = Anzeigen der aktuellen Performance-Daten (Default); 0 = Informationen nicht anzeigen</td></tr>
+         <tr><td>columns</td><td>5</td><td>Graphen k&ouml;nnen in Spalten angezeigt werden. Die Zahl der Zeilen wird anhand der maximalen Anzahl von Performance-Daten-Elementen ermittelt. Default ist 3</td></tr>
+         <tr><td>string</td><td>pct</td><td>Das Performance-Daten-Label muss die Zeichenkette enthalten, damit der Graph angezeigt wird. Im Falle von check_multi-Ausgaben wird nur der letzte Teil untersucht. Default ist eine leere Zeichenkette</td></tr>
+         <tr><td>threshold</td><td>value</td><td>Legt fest, ob die WARNING- und CRITICAL-Schwellwerte in Prozent (Default) oder als Zahlenwert angezeigt werden</td></tr>
+      </table>
+      <img src="../general/img/std_bar.png" alt="NagVis 1.5 std_bar-Gadget"/><br/>
+      <p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.5 std_bar-Gadget im normalen, warnenden und kritischen Zustand</p>
+      <p><b>Anmerkung:</b> Dieses Gadget benutzt einen TrueType-Font, dessen Position und Name hartkodiert ist (variables <i>$fontDir</i> and <i>$fontName</i>). Wird die Datei nicht gefunden, dann wird ein eingebauter Font benutzt.
+         Der Werte von $fontDir wechselt zwischen den Distributionen. Falls der Font nicht korrekt skaliert, dann pr&uuml;fen Sie bitte die Einstellung (sie ist korrekt f&uuml;r OpenSuSE, andere Einstellungen sind auskommentiert).</p>
 	</body>
 </html>

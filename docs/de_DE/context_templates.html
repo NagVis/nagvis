@@ -28,6 +28,9 @@
 		<td>[name]</td><td>Name des Objekts (Hostname, Hostgroupname, Servicegroupname, Mapname,...)</td>
 		</tr>
 		<tr>
+		<td>[backend_id]</td><td>Die backend_id des verwendeten Backends dieses Objekts <font color="#ff0000">(Neu in 1.5.2)</font>.</td>
+		</tr>
+		<tr>
 		<td>[custom_1]</td><td>Das erste benutzerdefinierte Makro je Backend. Kann n&uuml;tzlich sein, um Backend-spezifische URLs zu setzen. </td>
 		</tr>
 		<tr>
@@ -35,6 +38,9 @@
 		</tr>
 		<tr>
 		<td>[custom_3]</td><td>Drittes benutzerdefiniertes Makro je Backend (s.o.). </td>
+		</tr>
+                <tr>
+		<td>[map_name]</td><td>Name der aktuellen Map/Automap <font color="#ff0000">(Neu in 1.5.2)</font>.</td>
 		</tr>
 		<tr>
 		<th colspan="2"> Sprachmakros </th>
@@ -48,6 +54,9 @@
 		<tr>
 		<td>[lang_reschedule_next_check]</td><td>Bezeichnung f&uuml;r die erneute Planung der n&auml;chsten Pr&uuml;fung des Objekts in Nagios.</td>
 		</tr>
+                <tr>
+                <td>[lang_connect_by_ssh]</td><td>Label f&uuml;r die Verbindung eines Hosts per ssh.</td>
+                </tr>
 		<tr>
 		<th colspan="2"> Pfade </th>
 		</tr>
@@ -72,6 +81,15 @@
 		<pre>&lt;!-- BEGIN host -->.+?&lt;!-- END host --></pre>
 		
 		<p>Nachfolgend finden Sie eine vollst&auml;ndige Liste der speziellen Makros.</p>
+		<h3>Host-Objekte</h3>
+		<table style="width:100%">
+		<tr>
+		<th width="250">Makro</th><th>Beschreibung</th>
+		</tr>
+		<tr><td>[address]</td><td>Adresse des in Nagios konfigurierten Hosts</td></tr>
+		<tr><td>[pnp_hostname]</td><td>Hostname f&uuml;r Links nach PNP (Leerzeichen ersetzt, <font color="#ff0000">Neu in 1.5</font>)</td></tr>
+		</table>
+
 		<h3>Service-Objekte</h3>
 		<table style="width:100%">
 		<tr>
@@ -81,5 +99,11 @@
 		<td>[service_description]</td><td>Service-Beschreibung in Nagios</td>
 		</tr>
 		</table>
+		<h3>Host- und Servicegroup-Objekte</h3>
+
+		Die Abschnittsmakros <code>&lt;!-- BEGIN hostgroup --></code> und <code>&lt;!-- BEGIN servicegroup --></code>
+
+		existieren, um speziellen Template-Code f&uuml;r Hostgroup- und Servicegroup-Kontextmen&uuml;s zu erm&ouml;glichen.
+		Beide bringen keine speziellen objektspezifischen Makros mit sich (<font color="#ff0000">Neu in 1.5.2</font>).
 	</body>
 </html>

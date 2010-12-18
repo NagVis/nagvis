@@ -11,7 +11,8 @@
 		<p>Gadgets are small programs which generate images from information which 
 			is provided by NagVis. The main idea is to provide the performance data 
 			of Nagios to these programs for visualizing it as nice graphs or fancy 
-			speedometers, thermometers etc.</p>
+			speedometers, thermometers etc.<br/>
+			<code>share/userfiles/gadgets/</code> contains some examples, others can be found at <a href="exchange.nagvis.org/exchange/Gadgets/">Nagvis Exchange</a>.</p>
 		<p>The gadgets can be written in any language which can be interpreted by 
 			your webserver. Some options can be PHP, Perl,...</p>
 		<p>Gadgets are only supported for service objects. An object can be turned 
@@ -22,7 +23,7 @@
 		<p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.4 std_speedometer gadget on test map with enabled label.</p>
 		
 		<h2>Parameters</h2>
-		<p>The gadgets get their information via a HTTP-Get call from NagVis.</p>
+		<p>The gadgets get their information via a HTTP-Get call from NagVis (if you include <code>share/userfiles/gadgets/gadgets_core.php</code> it will be placed in two arrays. For more information take a look at the description there).</p>
 		<p>The following parameters are being passed to the gadgets:</p>
 		
 		<table style="width:100%">
@@ -30,47 +31,56 @@
 				<th width="200">Parameter</th>
 				<th width="150">Example value</th>
 				<th>Description</th>
+				<th>Variable</th>
 			</tr>
 			<tr>
 				<td>name1</td>
 				<td>localhost</td>
-				<td>The name of the host.</td>
+				<td>The name of the host</td>
+				<td>$aOpts['name1']</td>
 			</tr>
 			<tr>
 				<td>name2</td>
 				<td>Current Load</td>
-				<td>The service description of the object.</td>
+				<td>The service description of the object</td>
+				<td>$aOpts['name2']</td>
 			</tr>
 			<tr>
 				<td>scale</td>
 				<td>100</td>
-				<td>The scale of the gadget.</td>
+				<td>The scale of the gadget</td>
+				<td>$aOpts['scale']</td>
 			</tr>
 			<tr>
 				<td>state</td>
 				<td>OK</td>
-				<td>The string which represents the current state.</td>
+				<td>The string which represents the current state (OK, WARNING, CRITICAL, UNKNOWN)</td>
+				<td>$aOpts['state']</td>
 			</tr>
 			<tr>
 				<td>stateType</td>
 				<td>HARD</td>
 				<td>The type of the current state. Can be HARD or SOFT</td>
+				<td>$aOpts['stateType']</td>
 			</tr>
 			<tr>
 				<td>ack</td>
 				<td>0</td>
 				<td>Is set to 1 if the represented object state has been acknowledged (<font color="#ff0000">New in 1.5.4</font>)</td>
+				<td>$aOpts['ack']</td>
 			</tr>
 			<tr>
 				<td>downtime</td>
 				<td>0</td>
 				<td>Is set to 1 if the represented object state is in a downtime (<font color="#ff0000">New in 1.5.4</font>)</td>
+				<td>$aOpts['downtime']</td>
 			</tr>
 			<tr>
 				<td>perfdata</td>
 				<td>load1=0.960;5.000;10.000;0; load5=0.570;4.000;6.000;0; load15=0.540;3.000;4.000;0;</td>
 				<td>The current performance data information provided by Nagios. 
 					It's important to have valid performance data here.</td>
+				<td>$aPerfdata[&lt;index&gt;][&lt;tag&gt;]</td>
 			</tr>
 		</table>
 		
@@ -78,19 +88,30 @@
 		<code>std_speedometer.php?name1=localhost&amp;name2=Current%20Load&amp;state=OK&amp;stateType=HARD&amp;perfdata=load1=0.450;5.000;10.000;0;%20load5=0.260;4.000;6.000;0;%20load15=0.750;3.000;4.000;0;</code>
 		
 		<h2>How to configure?</h2>
-		<p>Please check the parameters <code>view_type</code> and <code>gadget_url</code> on service object in the <a href="map_config_format_description.html#service">map configuration format description</a></p>.
+		<p>Please check the parameters <code>view_type</code>, <code>gadget_url</code> and <code>gadget_opts</code> of the service object in the <a href="map_config_format_description.html#service">map configuration format description</a>. This is an example of a definition in your map file:
+		<pre>define service {
+   host_name=localhost
+   service_description=root-volume
+   x=50
+   y=50
+   view_type=gadget
+   gadget_url=std_bar.php     // name of the file in share/userfiles/gadgets/
+   // gadget_url=[http://localhost/nagvis/userfiles/gadgets/std_bar.php]     // valid as well
+   // gadget_scale=200        // default is 100 (percent)
+   // gadget_opts=columns=3 label=1    // gadget dependent
+}</pre></p>
 		
 		<h2>How to create a custom gadget</h2>
 		<p>Using the code shown included in gadgets_core.php two arrays are filled. $aPerfdata contains the performance data. $aOpts contains the options set in gadget_opts.</p>
-		<p>The best thing is to take a look at the std_speedometer and adapt the
+		<p>The best thing is to take a look at the code of the standard gadgets and adapt the
 			core things from there.</p>
 		<p>You should set a sample perfdata string in the gadget code by writing it to
 			the variable $sDummyPerfdata. This makes it possible to show the gadget with
 			dummy data in the WUI. It's much easier to design the maps in the WUI when
-			the gadgets are shown there. Important: The variable needs to be set before
-			the gadgets_core.php is included.</p>
+			the gadgets are shown there.<br>
+			<b>Important:</b> The variable needs to be set before the gadgets_core.php is included.</p>
 
-		<p>A second example can be found in std_speedometer2.php. In contrast to std_speedometer.php it supports output produced by check_multi. Several options influence the behaviour of the gadget:
+		<p>A second example can be found in std_speedometer2.php. In contrast to std_speedometer.php it supports output produced by check_multi. The background will be set to yellow or red if the performance data indicates such a state. The service state is not taken into account. Several options set via <code>gadget_opts</code> influence the behaviour of the gadget:
 		<table>
 			<tr><th>Parameter</th><th>Example value</th><th>Description</th></tr>
 			<tr><td>label</td><td>1</td><td>1 = Show host name / service description in the upper left corner of the graph; 0 = don&apos;t show the information (default)</td></tr>
@@ -98,5 +119,23 @@
 			<tr><td>columns</td><td>5</td><td>Graphs can be arranged in columns. The number of rows is calculated based on the maximum number of performance data items. Default is 3</td></tr>
 			<tr><td>string</td><td>pct</td><td>The performance data label has to contain the string to be displayed. In case of check_multi output only the last part is examined. Default is an empty string</td></tr>
 		</table>
+		<img src="../general/img/std_speedo2.png" alt="NagVis 1.5 std_speedometer2 gadget" /><br />
+		<p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.5 std_speedometer2 gadget in normal, warning and critical state</p>
+		<p>A third example is based on an idea found on <a href="exchange.nagvis.org/exchange/Gadgets/">Nagvis Exchange</a>.
+			Performance data is shown as a horizontal bar. The last quarter of the graph changes to yellow or red if the performance data indicates a warning or critical value.
+			The status is <i>not</i> the state of the service! That is due to the fact that the data might contain multiple data sources.
+			In many cases not all data sources of a service are found to be in a warning or critical state so you don&apos;t want to get false alarms (<font color="#ff0000">new in 1.5.7 or git newer than 2010.12.12</font>).</p>
+		<table>
+			<tr><th>Parameter</th><th>Example value</th><th>Description</th></tr>
+			<tr><td>label</td><td>1</td><td>1 = Show host name / service description label in the last quarter of the graph (default); 0 = don&apos;t show the information</td></tr>
+			<tr><td>current</td><td>1</td><td>1 = Show the current performance data value (default); 0 = don&apos;t show the information</td></tr>
+			<tr><td>columns</td><td>5</td><td>Graphs can be arranged in columns. The number of rows is calculated based on the maximum number of performance data items. Default is 3</td></tr>
+			<tr><td>string</td><td>pct</td><td>The performance data label has to contain the string to be displayed. In case of check_multi output only the last part is examined. Default is an empty string</td></tr>
+			<tr><td>threshold</td><td>value</td><td>Determines if the warning and critical thresholds are shown in percent (default) or integer values</td></tr>
+		</table>
+		<img src="../general/img/std_bar.png" alt="NagVis 1.5 std_bar gadget"/><br/>
+		<p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.5 std_bar gadget in normal, warning and critical state</p>
+		<p><b>Note:</b> This gadget uses a TrueType font whose name and location is hard coded within the code (variables <i>$fontDir</i> and <i>$fontName</i>). In case the file isn&apos;t found the gadget uses a builtin font.
+			The value of $fontDir changes between distributions so if the font doesn&apos;t scale properly please check the setting (it defaults to OpenSuSE, other settings are commented out).</p>
 	</body>
 </html>
