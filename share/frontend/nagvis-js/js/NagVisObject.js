@@ -354,13 +354,9 @@ var NagVisObject = Base.extend({
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	toggleObjControls: function() {
-		if(this.objControls.length == 0) {
+		if(!this.bIsLocked)
 			this.parseControls();
-			this.bIsLocked = false;
-		} else {
-			for(var i = 0, len = this.objControls.length; i < len; i++)
-					this.removeControls();
-			this.bIsLocked = true;
-		}
+		else
+			this.removeControls();
 	},
 });

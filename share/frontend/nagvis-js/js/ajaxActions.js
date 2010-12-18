@@ -11,15 +11,6 @@ function getDomObjType(id) {
 	return 'service';
 }
 
-function getMapObjByDomObjId(id) {
-	var iIndex = -1;
-	for(var i = 0, len = aMapObjects.length; i < len && iIndex < 0; i++)
-		if(aMapObjects[i].conf.object_id == id)
-			iIndex = i;
-
-	return aMapObjects[iIndex];
-}
-
 function getMidOfAnchor(oObj) {
 	return [ oObj.x + parseInt(oObj.style.width)  / 2,
 	         oObj.y + parseInt(oObj.style.height) / 2 ];

@@ -803,6 +803,18 @@ var NagVisStatefulObject = NagVisObject.extend({
 		doc = null;
 		return oIconDiv;
 	},
+
+	/**
+	 * Moves the icon to it's location as described by this js object
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	moveIcon: function () {
+		var container = document.getElementById(this.conf.object_id + '-icondiv');
+		container.style.top  = this.conf.y + 'px';
+		container.style.left = this.conf.x + 'px';
+		container = null;
+	},
 	
 	/**
 	 * Parses the HTML-Code of a label
@@ -921,15 +933,18 @@ var NagVisStatefulObject = NagVisObject.extend({
 			
 			oldX  = null;
 			oldY  = null;
+		} else {
+			newPos = [ obj.x, obj.y ];
 		}
-
-		// FIXME ICON GET POS
 
 		jsObj.conf.x = newPos[0];
 		jsObj.conf.y = newPos[1];
 
-		if(viewType === 'line')
+		if(viewType === 'line') {
 			jsObj.drawLine();
+		} else {
+			jsObj.moveIcon();
+		}
 
 		jsObj      = null;	
 		objId      = null;

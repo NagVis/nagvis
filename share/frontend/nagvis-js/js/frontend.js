@@ -784,19 +784,17 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 	return bStateChanged;
 }
 
-function toggleMapObjectLock(objectId) {
+function getMapObjByDomObjId(id) {
 	var iIndex = -1;
 	for(var i = 0, len = aMapObjects.length; i < len && iIndex < 0; i++)
-		if(aMapObjects[i].conf.object_id == objectId)
+		if(aMapObjects[i].conf.object_id == id)
 			iIndex = i;
-	
-	// Object not found
-	if(iIndex === -1) {
-		eventlog("refreshMapObject", "critical", "Could not find an object with the id "+objectId+" in object array");
-		return false;
-	}
-	
-	var oObj = aMapObjects[iIndex];
+
+	return aMapObjects[iIndex];
+}
+
+function toggleMapObjectLock(objectId) {
+	var oObj = getMapObjByDomObjId(objectId);
 	oObj.bIsLocked = !oObj.bIsLocked;
 	oObj.toggleObjControls();
   oObj = null;
@@ -810,28 +808,15 @@ function toggleMapObjectLock(objectId) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function refreshMapObject(objectId) {
-	var iIndex = -1;
+	var oObj = getMapObjByDomObjId(objectId);
 	
-	for(var i = 0, len = aMapObjects.length; i < len && iIndex < 0; i++) {
-		if(aMapObjects[i].conf.object_id == objectId) { 
-			iIndex = i;
-		}
-	}
+	var name = oObj.conf.name;
 	
-	// Object not found
-	if(iIndex === -1) {
-		eventlog("refreshMapObject", "critical", "Could not find an object with the id "+objectId+" in object array");
-		return false;
-	}
-	
-	var name = aMapObjects[iIndex].conf.name;
-	
-	var type = aMapObjects[iIndex].conf.type;
-	var obj_id = aMapObjects[iIndex].conf.object_id;
-	var service_description = aMapObjects[iIndex].conf.service_description;
+	var type = oObj.conf.type;
+	var obj_id = oObj.conf.object_id;
+	var service_description = oObj.conf.service_description;
 	var map = oPageProperties.map_name;
-	
-	iIndex = null;
+	oObj = null;
 	
 	// Only append map param if it is a known map
 	var sMapPart = '';
