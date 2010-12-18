@@ -844,6 +844,33 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		if(this.conf.view_type === 'line')
 			this.parseLineControls();
+		else if(this.conf.view_type === 'icon')
+			this.parseIconControls();
+	},
+
+	parseControlDrag: function (num, x, y, size) {
+		var drag = document.createElement('div');
+		drag.setAttribute('id',         this.conf.object_id+'-drag-' + num);
+		drag.setAttribute('class',     'lineDrag');
+		drag.setAttribute('className', 'lineDrag');
+		drag.style.zIndex   = parseInt(this.conf.z)+1;
+		drag.style.width    = size + 'px';
+		drag.style.height   = size + 'px';
+		drag.style.top      = y + 'px';
+		drag.style.left     = x + 'px';
+
+		// Add to DOM
+		document.getElementById(this.conf.object_id+'-controls').appendChild(drag);
+		// Add to controls list
+		this.objControls.push(drag);
+		drag = null;
+	},
+
+	parseIconControls: function () {
+		this.parseControlDrag(0, this.conf.x, this.conf.y, 20);
+
+		// Simply make it dragable. Maybe will be extended in the future...
+		makeDragable([this.conf.object_id+'-drag-0'], this.saveObject, this.moveObject);
 	},
 
 	parseLineControls: function () {
@@ -852,23 +879,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 
 		var size = 20;
 		for(var i = 0, l = x.length; i < l; i++) {
-			var drag = document.createElement('div');
-			drag.setAttribute('id',         this.conf.object_id+'-drag'+i);
-			drag.setAttribute('class',     'lineDrag');
-			drag.setAttribute('className', 'lineDrag');
-			drag.style.zIndex   = parseInt(this.conf.z)+1;
-			drag.style.width    = size+'px';
-			drag.style.height   = size+'px';
-			drag.style.top      = (y[i] - size/2)+'px';
-			drag.style.left     = (x[i] - size/2)+'px';
-	
-			// Add to DOM
-			document.getElementById(this.conf.object_id+'-controls').appendChild(drag);
-			// Add to controls list
-			this.objControls.push(drag);
-			drag = null;
-
-			makeDragable([this.conf.object_id+'-drag'+i], this.saveObject, this.moveObject);
+			this.parseControlDrag(i, x[i] - size/2, y[i] - size/2, size);
+			makeDragable([this.conf.object_id+'-drag-'+i], this.saveObject, this.moveObject);
 		}
 		size = null;
 		x = null;
@@ -885,39 +897,49 @@ var NagVisStatefulObject = NagVisObject.extend({
 	},
 
   moveObject: function(obj) {
-		var objId    = obj.id.split('-')[0];
-		var coordNum = obj.id[obj.id.length-1];
+		var arr        = obj.id.split('-');
+		var objId      = arr[0];
+		var anchorType = arr[1];
+		var anchorId   = arr[2];
 
-		var iIndex = -1;
-		for(var i = 0, len = aMapObjects.length; i < len && iIndex < 0; i++)
-			if(aMapObjects[i].conf.object_id == objId)
-				iIndex = i;
+		var newPos = null;
+		var viewType = getDomObjViewType(objId);
 
-		// Object not found
-		if(iIndex === -1) {
-			eventlog("refreshMapObject", "critical", "Could not find an object with the id "+objId+" in object array");
-			return false;
+		var jsObj = getMapObjByDomObjId(objId);
+
+		if(viewType === 'line') {
+			newPos = getMidOfAnchor(obj);
+
+			// Get current positions and replace only the current one
+			var oldX = jsObj.conf.x.split(',');
+			oldX[anchorId] = newPos[0];
+			newPos[0] = oldX.join(',');
+
+			var oldY = jsObj.conf.y.split(',');
+			oldY[anchorId] = newPos[1];
+			newPos[1] = oldY.join(',');
+			
+			oldX  = null;
+			oldY  = null;
 		}
 
-		// When the object can be found update the coord of this anchor and repaint the object
-		if(iIndex) {
-			var mapObj = aMapObjects[iIndex];
-			var aX = mapObj.conf.x.split(',');
-			// add the offset of the anchor and the object position
-			aX[coordNum] = obj.x + 10;
-			var aY = mapObj.conf.y.split(',');
-			// add the offset of the anchor and the object position
-			aY[coordNum] = obj.y + 10;
-			mapObj.conf.x = aX.join(',');
-			mapObj.conf.y = aY.join(',');
-			mapObj.drawLine();
-			mapObj = null;
-		}
-		objId = null;
-		iIndex = null;
+		// FIXME ICON GET POS
+
+		jsObj.conf.x = newPos[0];
+		jsObj.conf.y = newPos[1];
+
+		if(viewType === 'line')
+			jsObj.drawLine();
+
+		jsObj      = null;	
+		objId      = null;
+		anchorType = null;
+		anchorId   = null;
+		newPos     = null;
+		viewType   = null;
 	},
 
-	saveObject: function() {
-		alert('FIXME: save');
+	saveObject: function(obj) {
+		saveObjectAfterAnchorAction(obj);
 	}
 });

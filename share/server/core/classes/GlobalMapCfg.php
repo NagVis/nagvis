@@ -2049,6 +2049,14 @@ class GlobalMapCfg {
 		return $this->getValue('global', 0, 'alias');	
 	}
 
+	public function objIdToTypeAndNum($objId) {
+		foreach($this->mapConfig AS $type => $objects)
+			foreach($objects AS $typeId => $opts)
+				if($opts['object_id'] == $objId)
+					return Array($type, $typeId);
+		return Array(null, null);
+	}
+
 	/**
 	 * Only selects the wanted objects of the map and removes the others
 	 *

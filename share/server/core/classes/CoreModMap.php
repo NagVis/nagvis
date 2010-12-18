@@ -660,6 +660,10 @@ class CoreModMap extends CoreModule {
 		try {
 			$MAPCFG->readMapConfig();
 		} catch(MapCfgInvalid $e) {}
+
+		// Transform oid to type and id until everything is switched to oid
+		if(isset($a['oid']) && $a['oid'] !== '')
+			list($a['type'], $a['id']) = $MAPCFG->objIdToTypeAndNum($a['oid']);
 		
 		// set options in the array
 		foreach($a['opts'] AS $key => $val) {
@@ -685,23 +689,31 @@ class CoreModMap extends CoreModule {
 		$aResponse = array_merge($_GET, $_POST);
 		// FIXME: Maybe change all to POST
 		$FHANDLER = new CoreRequestHandler($aResponse);
+
+		// ID and Type are used by the WUI. OID is used
+		// by the regular frontend. Remove the type and id
+		// params 
 		
 		// Check for needed params
 		if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
 			$bValid = false;
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('type'))
-			$bValid = false;
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('id'))
-			$bValid = false;
+		if($bValid && !$FHANDLER->isSetAndNotEmpty('oid')) { 
+			if($bValid && !$FHANDLER->isSetAndNotEmpty('type'))
+				$bValid = false;
+			if($bValid && !$FHANDLER->isSetAndNotEmpty('id'))
+				$bValid = false;
+		}
 		
 		// All fields: Regex check
 		if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
 			$bValid = false;
-		if($bValid && !$FHANDLER->match('type', MATCH_OBJECTTYPE))
+		if($bValid && $FHANDLER->isSetAndNotEmpty('oid') && !$FHANDLER->match('oid', MATCH_INTEGER))
 			$bValid = false;
-		if($bValid && !$FHANDLER->match('id', MATCH_INTEGER))
+		if($bValid && $FHANDLER->isSetAndNotEmpty('type') && !$FHANDLER->match('type', MATCH_OBJECTTYPE))
 			$bValid = false;
-		
+		if($bValid && $FHANDLER->isSetAndNotEmpty('id') && !$FHANDLER->match('id', MATCH_INTEGER))
+			$bValid = false;
+
 		// Check if the map exists
 		if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
@@ -718,6 +730,7 @@ class CoreModMap extends CoreModule {
 		unset($aOpts['type']);
 		unset($aOpts['ref']);
 		unset($aOpts['id']);
+		unset($aOpts['oid']);
 		unset($aOpts['timestamp']);
 		
 		// Also remove all "helper fields" which begin with a _
@@ -733,6 +746,7 @@ class CoreModMap extends CoreModule {
 			return Array('map' => $FHANDLER->get('map'),
 			             'type' => $FHANDLER->get('type'),
 			             'id' => $FHANDLER->get('id'),
+			             'oid' => $FHANDLER->get('oid'),
 			             'refresh' => $FHANDLER->get('ref'),
 			             'opts' => $aOpts);
 		} else {

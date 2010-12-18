@@ -890,6 +890,7 @@ cmp_js() {
 	cmp hover.js
 	cmp frontendContext.js
 	cmp ajax.js
+	cmp ajaxActions.js
 	cmp dynfavicon.js
 	cmp frontend.js
 	cmp lines.js
