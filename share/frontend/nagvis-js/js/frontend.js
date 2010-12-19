@@ -34,7 +34,13 @@ var oHoverTemplatesChild = {};
 var oHoverUrls = {};
 var oContextTemplates = {};
 var oAutomapParams = {};
+// This is turned to true when the map is currently reparsing (e.g. due to
+// a changed map config file). This blocks object updates.
 var bBlockUpdates = false;
+// This is turned to true when at least one object on the map is unlocked
+// for editing. When set to true this flag prevents map reloading by changed
+// map config files
+var iNumUnlocked = false;
 var cacheHeaderHeight = null;
 
 /**
@@ -796,6 +802,12 @@ function getMapObjByDomObjId(id) {
 function toggleMapObjectLock(objectId) {
 	var oObj = getMapObjByDomObjId(objectId);
 	oObj.bIsLocked = !oObj.bIsLocked;
+
+	if(oObj.bIsLocked)
+		iNumUnlocked += 1;
+	else
+		iNumUnlocked -= 1;
+
 	oObj.toggleObjControls();
   oObj = null;
 }
@@ -1987,9 +1999,13 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		// Check for changed map configuration
 		if(oCurrentFileAges
        && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name)) {
-			eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
-			if(parseMap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false)
-				eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
+			if(iNumUnlocked > 0) {
+				eventlog("worker", "info", "Map config updated. "+iNumUnlocked+" objects unlocked - not reloading.");
+			} else {
+				eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
+				if(parseMap(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name) === false)
+					eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
+			}
 		}
 		
 		// I don't think empty maps make any sense. So when no objects are present: 
