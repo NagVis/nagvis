@@ -265,7 +265,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 
 		// Enable the controls when the object is not locked
 		if(!this.bIsLocked)
-			this.parseControls()
+			this.parseControls();
 	},
 	
 	remove: function () {
@@ -841,7 +841,11 @@ var NagVisStatefulObject = NagVisObject.extend({
 			this.conf.label_y = this.conf.y;
 		}
 
-		return drawNagVisTextbox(this.conf.object_id + '-label', 'object_label', this.conf.label_background, this.conf.label_border, this.conf.label_x, this.conf.label_y, this.conf.z, this.conf.label_width, '', this.replaceLabelTextDynamicMacros(), this.conf.label_style);
+		return drawNagVisTextbox(this.conf.object_id + '-label', 'object_label',
+		                         this.conf.label_background, this.conf.label_border,
+		                         this.conf.label_x, this.conf.label_y, this.conf.z,
+		                         this.conf.label_width, '', this.replaceLabelTextDynamicMacros(),
+		                         this.conf.label_style);
 	},
 
 	parseControls: function () {
@@ -868,8 +872,10 @@ var NagVisStatefulObject = NagVisObject.extend({
 		drag.style.zIndex   = parseInt(this.conf.z)+1;
 		drag.style.width    = size + 'px';
 		drag.style.height   = size + 'px';
-		drag.style.top      = y + 'px';
 		drag.style.left     = x + 'px';
+		drag.style.top      = y + 'px';
+		drag.objOffsetX     = x - this.conf.x;
+		drag.objOffsetY     = y - this.conf.y;
 
 		// Add to DOM
 		document.getElementById(this.conf.object_id+'-controls').appendChild(drag);
@@ -878,8 +884,20 @@ var NagVisStatefulObject = NagVisObject.extend({
 		drag = null;
 	},
 
+	getObjWidth: function () {
+		return parseInt(document.getElementById(this.conf.object_id + '-icondiv').clientWidth);
+	},
+
+	getObjHeight: function () {
+		return parseInt(document.getElementById(this.conf.object_id + '-icondiv').clientHeight);
+	},
+
 	parseIconControls: function () {
-		this.parseControlDrag(0, this.conf.x, this.conf.y, 20);
+		this.getObjWidth();
+		var size = 10;
+		this.parseControlDrag(0, parseInt(this.conf.x) + this.getObjWidth() + 5,
+		                         parseInt(this.conf.y) - size/2, size);
+		size = null;
 
 		// Simply make it dragable. Maybe will be extended in the future...
 		makeDragable([this.conf.object_id+'-drag-0'], this.saveObject, this.moveObject);
@@ -934,7 +952,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 			oldX  = null;
 			oldY  = null;
 		} else {
-			newPos = [ obj.x, obj.y ];
+			newPos = [ obj.x - obj.objOffsetX, obj.y - obj.objOffsetY ];
 		}
 
 		jsObj.conf.x = newPos[0];
