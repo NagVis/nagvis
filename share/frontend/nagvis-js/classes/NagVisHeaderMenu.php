@@ -307,6 +307,7 @@ class NagVisHeaderMenu {
 			'langStateless' => $this->CORE->getLang()->getText('Stateless'),
 			'langSpecial' => $this->CORE->getLang()->getText('special'),
 			'langEditMap' => $this->CORE->getLang()->getText('editMap'),
+			'langLockUnlockAll' => $this->CORE->getLang()->getText('Lock/Unlock all'),
 			'langViewMap' => $this->CORE->getLang()->getText('View current map'),
 			'langOptions' => $this->CORE->getLang()->getText('Options'),
 			'langWuiConfiguration' => $this->CORE->getLang()->getText('General Configuration'),

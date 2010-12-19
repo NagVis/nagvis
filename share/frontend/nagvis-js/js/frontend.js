@@ -800,17 +800,14 @@ function getMapObjByDomObjId(id) {
 }
 
 function toggleMapObjectLock(objectId) {
-	var oObj = getMapObjByDomObjId(objectId);
-	oObj.bIsLocked = !oObj.bIsLocked;
-
-	if(oObj.bIsLocked)
-		iNumUnlocked += 1;
-	else
-		iNumUnlocked -= 1;
-
-	oObj.toggleObjControls();
-  oObj = null;
+	iNumUnlocked += getMapObjByDomObjId(objectId).toggleLock();
 }
+
+function toggleAllMapObjectsLock() {
+	for(var i = 0, len = aMapObjects.length; i < len; i++)
+		iNumUnlocked += aMapObjects[i].toggleLock();
+}
+
 
 /**
  * refreshMapObject()

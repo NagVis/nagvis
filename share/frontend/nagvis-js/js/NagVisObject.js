@@ -348,15 +348,37 @@ var NagVisObject = Base.extend({
 	},
 
 	/**
+	 * Locks/Unlocks the object and fires dependent actions
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	toggleLock: function() {
+		this.bIsLocked = !this.bIsLocked;
+
+		if(this.toggleObjControls())
+			return this.bIsLocked ? -1 : 1;
+		else
+			return 0;
+	},
+
+	/**
 	 * Shows or hides all object controls of a map object depending
 	 * on the lock state of this object.
 	 *
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	toggleObjControls: function() {
-		if(!this.bIsLocked)
-			this.parseControls();
-		else
-			this.removeControls();
+		if(!this.bIsLocked) {
+			if(isset(this.parseControls)) {
+				this.parseControls();
+				return true;
+			}
+		} else {
+			if(isset(this.removeControls)) {
+				this.removeControls();
+				return true;
+			}
+		}
+		return false;
 	},
 });
