@@ -12,13 +12,13 @@
 		geliefert werden. Die Hauptidee besteht darin, die Performance-Daten von Nagios an diese
 		Programme zu liefern, um daraus nette Grafiken oder schicke Tachos, Thermometer oder
 		&auml;hnliches zu machen.<br/>
-		<code>share/userfiles/gadgets</code> enth&auml;lt einige Beispiele, andere finden Sie unter <a href="exchange.nagvis.org/exchange/Gadgets/">Nagvis Exchange</a>.</p>
+		<code>share/userfiles/gadgets</code> enth&auml;lt einige Beispiele, andere finden Sie unter <a href="exchange.nagvis.org/exchange/Gadgets/">Nagvis Exchange</a><sup>[1]</sup>.</p>
 		<p>Die Gadgets k&ouml;nnen in jeder Sprache geschrieben werden, die von Ihrem Webserver
 		interpretiert wird, wie z.B. PHP, Perl, ...</p>
 		<p>Gadgets werden nur f&uuml;r Services unterst&uuml;tzt. Ein Objekt kann in ein Gadget
 		verwandelt werden, indem Sie view_type=&quot;gadget&quot; und eine g&uuml;ltige gadget_url
 		setzen.</p>
-		<p>NagVis unterst&uuml;tzt Gadgets ab Version 1.4.</p>
+		<p>NagVis unterst&uuml;tzt Gadgets ab Version 1.4<sup>[1]</sup>.</p>
 		
 		<img src="../general/img/nagvis-1.4-gadget-label-hover.png" alt="NagVis 1.4 std_speedometer gadget with label and hover menu" /><br />
 		<p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.4 std_speedometer-Gadget auf einer Test-Map mit aktiviertem Label.</p>
@@ -134,7 +134,8 @@
       </table>
       <img src="../general/img/std_bar.png" alt="NagVis 1.5 std_bar-Gadget"/><br/>
       <p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.5 std_bar-Gadget im normalen, warnenden und kritischen Zustand</p>
-      <p><b>Anmerkung:</b> Dieses Gadget benutzt einen TrueType-Font, dessen Position und Name hartkodiert ist (variables <i>$fontDir</i> and <i>$fontName</i>). Wird die Datei nicht gefunden, dann wird ein eingebauter Font benutzt.
-         Der Werte von $fontDir wechselt zwischen den Distributionen. Falls der Font nicht korrekt skaliert, dann pr&uuml;fen Sie bitte die Einstellung (sie ist korrekt f&uuml;r OpenSuSE, andere Einstellungen sind auskommentiert).</p>
+      <p><b>Anmerkung:</b> Dieses Gadget benutzt einen TrueType-Font, dessen Position und Name hartkodiert ist (Variablen <i>$fontDir</i> und <i>$fontName</i>). Wird die Datei nicht gefunden, dann wird ein eingebauter Font benutzt.
+         Der Wert von $fontDir wechselt zwischen den Distributionen. Falls der Font nicht korrekt skaliert, dann pr&uuml;fen Sie bitte die Einstellung (sie ist korrekt f&uuml;r OpenSuSE, andere Einstellungen sind auskommentiert).</p>
+        <sup>[1]</sup> Die Verzeichnisstruktur hat sich zwischen NagVis 1.4.x und NagVis 1.5 ge&auml;ndert. Gadgets wurden in <code>nagvis/nagvis/gadgets</code> abgelegt und werden nun in <code>share/userfiles/gadgets</code> gespeichert. Gadgets von NagVis Exchange benutzen m&ouml;glicherweise die alte Struktur, so dass Sie die Dateien ggf. an die neue Stelle kopieren m&uuml;ssen (z.B. <code>cp -pr &lt;Quelle&gt;/nagvis/nagvis/gadgets/&lt;Gadget&gt; &lt;Ziel&gt;/share/userfiles/gadgets/</code>).
 	</body>
 </html>
