@@ -8,7 +8,7 @@
 	<h1>Weathermap style lines in NagVis (<font color="#ff0000">New in 1.5.</font>)</h1>
 
 	<p>By default NagVis can only visualize the normal states in lines using red, yellow
-     and green coloured lines. Did you ever wanted NagVis to display nice weathermap style lines?</p>
+     and green coloured lines. Have you ever wanted NagVis to display nice weathermap style lines?</p>
 
 	<h2>More colourful lines</h2>
 	<img style="margin:20px;" src="../general/img/sample-weathermap.jpg" align="right" alt="NagVis Weathermap style lines" />
@@ -17,19 +17,19 @@
 		 network interface you like to visualize. There can be a wide colour range
 		 of e.g. seven different colours. Take a look at the example image - isn't that beautiful?.</p>
 
-	<h2>Focus on bandwidth visualization</h2>
-	<p>The new lines are focused on bandwidth visualization. Since NagVis needs to parse the
-     performance data to gather the current colour for the line there are special requirements
-     on the performance data contents. There is a bandwidth measurement plugin for Nagios which
-		 comes with the correct performance data information out of the box. It is downloadable
-		 from <a href="http://exchange.nagios.org/directory/Plugins/Network-Connections%2C-Stats-and-Bandwidth/check_iftraffic3/details" target="_blank">Nagios Exchange</a>.</p>
-
 	<h2>Weathermap line types</h2>
 	<p>The weathermap style lines currently provide two types of lines:</p>
 	<ul>
 		<li><code>---%-->&lt;--%----</code>: Arrows with percentage labels in the middle of the line.</li>
 		<li><code>---%+BW-->&lt;--%+BW---</code>: Arrows with percentage labels in the middle of the line and additional labels which display the current bandwidth usage.</li>
 	</ul>
+
+	<h2>Focus on bandwidth visualization</h2>
+	<p>The new lines are focused on bandwidth visualization. Since NagVis needs to parse the
+     performance data to gather the current colour for the line there are special requirements
+     on the performance data contents. There is a bandwidth measurement plugin for Nagios which
+		 comes with the correct performance data information out of the box. It is downloadable
+		 from <a href="http://exchange.nagios.org/directory/Plugins/Network-Connections%2C-Stats-and-Bandwidth/check_iftraffic3/details" target="_blank">Nagios Exchange</a>.</p>
 
 	<h2>How to create weathermap lines?</h2>
 	<p>To create weathermap style lines in NagVis you need services which send the correct
@@ -39,6 +39,22 @@
 	<p>You may want to have a legend which shows you the meaning of the different colours.
 		 No problem. Simply add a shape to your map and choose the &quot;demo_traffic_load_legend&quot;
 		 shape which is delivered with the NagVis core package.</p>
+
+	<h2>Needed perfdata format</h2>
+	<p>The weathermap lines do not require a specific Nagios plugin. Only the provided performance
+	   format needs to match one of the cases below:</p>
+	<ul>
+		<li><strong>Percentage usage:</strong> four perfdata sets. While the first two sets provide
+		    the percentage usage and the second two sets provide the usage in bytes per sec.<br />
+			  One example: <code>inUsage=21103.42%;85;98 outUsage=226363.55%;85;98 inBandwidth=105.52MBs
+			  outBandwidth=212.22MBs</code>.</li>
+		<li><strong>Byte rate usage:</strong> needs at least two perfdata sets with the labels &quot;in&quot;
+		    and &quot;out&quot; with an empty UOM. It uses the current value and the maximum value to calculate
+				the current percentage usage. The current value should be given as byte rate. The maximum value
+				should provide the network interface bandwidth as bytes per seconds.<br />
+				One example: <code>in=7196.50566429;;;0;1250000.0 inucast=11.6273564992;;;; innucast=0.017617206817;;;; indisc=0.0;;;; inerr=0.0;0.01;0.1;; out=4044.9635368;;;0;1250000.0 outucast=12.1734899105;;;; outnucast=0.0;;;; outdisc=0.0;;;; outerr=0.0;0.01;0.1;; outqlen=0;;;;</code>.
+		</li>
+	</ul>
 
 	<p>Thanks to gjfrater for implementing these lines!</p>
 </body>
