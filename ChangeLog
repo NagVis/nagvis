@@ -8,6 +8,7 @@ Automap
 
 Frontend
   * Bugfix: Fixed showmaps,showautomaps,... option usage on overview page
+  * Bugfix: Fixed search dialog access when using explicit permissions
 
 WUI
   * Preventing damaged map cfg due to textbox resizing in IE (only happens in

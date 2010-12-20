@@ -29,6 +29,7 @@ class CoreModSearch extends CoreModule {
 	protected $CORE;
 	
 	public function __construct($CORE) {
+		$this->sName = 'Search';
 		$this->CORE = $CORE;
 		
 		$this->aActions = Array('view' => REQUIRES_AUTHORISATION);
