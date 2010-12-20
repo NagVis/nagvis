@@ -50,6 +50,7 @@ Frontend
   * Bugfix: Fixed hover menu positioning out of the screen
   * Bugfix: Minor javascript fixes during object reload
   * Bugfix: Fixed showmaps,showautomaps,... option usage on overview page
+  * Bugfix: Fixed search dialog access when using explicit permissions
 
 WUI
   * Bugfix: Deleting more than 2 objects was not work correctly
