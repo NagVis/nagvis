@@ -41,5 +41,21 @@
 		 shape which is delivered with the NagVis core package.</p>
 
 	<p>Thanks to gjfrater for implementing these lines!</p>
+
+	<h2>Needed perfdata format</h2>
+	<p>The weathermap lines do not require a specific Nagios plugin. Only the provided performance
+	   format needs to match one of the cases below:</p>
+	<ul>
+		<li><strong>Percentage usage:</strong> four perfdata sets. While the first two sets provide
+		    the percentage usage and the second two sets provide the usage in bytes per sec.<br />
+			  One example: <code>inUsage=21103.42%;85;98 outUsage=226363.55%;85;98 inBandwidth=105.52MBs
+			  outBandwidth=212.22MBs</code>.</li>
+		<li><strong>Byte rate usage:</strong> needs at least two perfdata sets with the labels &quot;in&quot;
+		    and &quot;out&quot; with an empty UOM. It uses the current value and the maximum value to calculate
+				the current percentage usage. The current value should be given as byte rate. The maximum value
+				should provide the network interface bandwidth as bytes per seconds.<br />
+				One example: <code>in=7196.50566429;;;0;1250000.0 inucast=11.6273564992;;;; innucast=0.017617206817;;;; indisc=0.0;;;; inerr=0.0;0.01;0.1;; out=4044.9635368;;;0;1250000.0 outucast=12.1734899105;;;; outnucast=0.0;;;; outdisc=0.0;;;; outerr=0.0;0.01;0.1;; outqlen=0;;;;</code>.
+		</li>
+	</ul>
 </body>
 </html>
