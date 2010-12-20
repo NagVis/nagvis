@@ -1,6 +1,7 @@
 body {
 	font-family: Arial, Tahoma, Verdana, Arial, sans-serif;
-	font-size: 11px;
+	font-size: 14px;
+	line-height: 1.3em;
 }
 
 table {
@@ -20,6 +21,7 @@ h1 {
 	margin:0 0 10px 0;
 	font-size:2.2em;
 	font-weight:normal;
+	line-height: 1.5em;
 }
 
 h2 {
@@ -54,6 +56,7 @@ table {
 table th, table td {
 	background-color: #E0E0E0;
 	vertical-align: top;
+	padding: 2px;
 }
 
 table th {
