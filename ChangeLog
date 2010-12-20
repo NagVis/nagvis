@@ -7,8 +7,8 @@ Core
     * Added new options {file_group} and {file_mode} to global section of nagvis.ini.php.
       These options are used whenever a file is written by NagVis
     * Livestatus backend: Better error handling when writing to livestatus socket
-    * Lines can have three coords now to reposition the middle of the lines which
-      are build of two arrows
+    * Lines can have three coords now to reposition the middle of lines having
+      two arrows
     * Better handling for map config errors on overview page and map links -
       no whole screen errors anymore
   * Refactored map configuration parsing code
@@ -28,16 +28,16 @@ Backend: Livestatus
     available
 
 Frontend
-    * Added new sidebar for better navigation. It can be opened by klicking on
+    * Added new sidebar for better navigation. It can be opened by clicking on
       the "Open" label in the header menu. The state of the sidebar and the
       single nodes is stored in user specific profile files
     * Added new parameter {parent_map} to map/automap global sections which is
       used in header/sidebar menus to draw a map hierarchy
     * Colors and ranges of weathermap lines are now customizable using the
       object configuration option line_weather_colors
-    * Fixed wrong label for MBit/s in weathermap bandwidth displaying
-    * It is now possible to lock/unlock objects in regular frontend (With the
-      needed permissions)
+    * Fixed wrong label for MBit/s in weathermap bandwidth display
+    * It is now possible to lock/unlock objects in regular frontend (with the
+      necessary permissions)
     * Lines can now be repositioned by dragging the ends using the anchors in unlocked mode
       in regular frontend
   * Added password reset form to user management dialog
@@ -53,12 +53,12 @@ Frontend
   * Bugfix: Fixed search dialog access when using explicit permissions
 
 WUI
-  * Bugfix: Deleting more than 2 objects was not work correctly
+  * Bugfix: Deleting more than two objects was not working correctly
   * Bugfix: Lines did reposition on mouseover in WUI by the height of the highlight 
     border width
   * Bugfix: The dropdown box for shapes was not shown up when there was at least one
     shape with an url as icon
-  * Bugfix: Fixed problem reseting hover_url to empty value in add/modify dialog
+  * Bugfix: Fixed problem resetting hover_url to empty value in add/modify dialog
   * Bugfix: Inconsistency between textbox style attribute usage in frontend and WUI
   * Bugfix: Relative label coordinates were calculated wrong when moving objects
   * The textbox height is now set correctly when creating a new textbox

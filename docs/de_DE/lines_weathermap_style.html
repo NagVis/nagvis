@@ -14,17 +14,17 @@
 	<img style="margin:20px;" src="../general/img/sample-weathermap.jpg" align="right" alt="NagVis Weathermap style lines" />
 	<p>Seit NagVis 1.5 ist es m&ouml;glich, solche wetterkarten&auml;hnliche Linien zu zeichnen, die mehr als drei Farben haben k&ouml;nnen, um so z.B. die aktuelle Auslastung des Netzwerk-Interfaces darzustellen. Es gibt beispielsweise eine Palette von sieben unterschiedlichen Farben. Werfen Sie einen Blick auf das Bild - sch&ouml;n, oder?</p>
 
-	<h2>Fokus auf Bandbreitenvisualisierung</h2>
-	<p>Die neuen Linien zielen auf Bandbreitenvisualisierung. Da NagVis die Performance-Daten untersuchen muss, um die richtige Farbe f&uuml;r die Linie zu ermitteln, gibt es spezielle Anforderungen an den Aufbau der Performance-Daten. 
-Es gibt ein Bandbreitenmess-Plugin f&uuml;r Nagios, das bereits die richtigen Performance-Daten-Informationen liefert.
-Sie erhalten es auf <a href="http://exchange.nagios.org/directory/Plugins/Network-Connections%2C-Stats-and-Bandwidth/check_iftraffic3/details" target="_blank">Nagios Exchange</a>.</p>
-
 	<h2>Wetterkarten &auml;hnliche Linientypen</h2>
-	<p>Die Wetterkarten-Linientypen bieten aktuell zwei Typen Linien:</p>
+	<p>Die Wetterkarten-Linientypen bieten aktuell zwei Typen von Linien:</p>
 	<ul>
 		<li><code>---%-->&lt;--%----</code>: Pfeile mit Prozentangaben in der Mitte der Linie</li>
 		<li><code>---%+BW-->&lt;--%+BW---</code>: Pfeile mit Prozentangaben in der Mitte der Linie und zus&auml;tzliche Label, die die aktuelle Bandbreitennutzung anzeigen.</li>
 	</ul>
+
+	<h2>Fokus auf Bandbreitenvisualisierung</h2>
+	<p>Die neuen Linien zielen auf Bandbreitenvisualisierung. Da NagVis die Performance-Daten untersuchen muss, um die richtige Farbe f&uuml;r die Linie zu ermitteln, gibt es spezielle Anforderungen an den Aufbau der Performance-Daten. 
+Es gibt ein Bandbreitenmess-Plugin f&uuml;r Nagios, das bereits die richtigen Performance-Daten-Informationen liefert.
+Sie erhalten es auf <a href="http://exchange.nagios.org/directory/Plugins/Network-Connections%2C-Stats-and-Bandwidth/check_iftraffic3/details" target="_blank">Nagios Exchange</a>.</p>
 
 	<h2>Wie legt man Wetterkarten-Linien an?</h2>
 	<p>Um Wetterkarten-Linientypen in NagVis anzulegen, ben&ouml;tigt man Services, die die richtigen Performance-Daten an Nagios liefern. Wenn Sie das haben, dann platzieren Sie einfach ein Linienobjekt auf der Map und w&auml;hlen Sie den richtigen Linientyp. Nun werfen Sie einen Blick auf Ihre Map - es sollte bereits funktionieren.</p>
@@ -32,6 +32,19 @@ Sie erhalten es auf <a href="http://exchange.nagios.org/directory/Plugins/Networ
 	<p>Sie m&ouml;chten vielleicht eine Legende, die Ihnen die Bedeutung der verschiedenen Farben anzeigt.
 		Kein Problem. F&uuml;gen Sie ein Shape zu Ihrer Map hinzu und w&auml;hlen Sie das &quot;demo_traffic_load_legend&quot;
 		-Shape, das mit dem NagVis-Basis-Package ausgeliefert wird.</p>
+
+        <h2>Ben&ouml;tigtes Performance-Daten-Format</h2>
+        <p>Die Wetterkartenlinien erfordern kein spezielles Nagios-Plugin. Lediglich die Performance-Daten m&uuml;ssen einem der beiden folgenden Formate entsprechen:</p>
+        <ul>
+                <li><strong>prozentuale Verwendung:</strong> vier Datenreihen, wobei die ersten beiden die Prozentwerte und die letzten beiden die Auslastung in Bytes pro Sekunde enthalten.<br />
+                          Beispiel: <code>inUsage=21103.42%;85;98 outUsage=226363.55%;85;98 inBandwidth=105.52MBs
+                          outBandwidth=212.22MBs</code>.</li>
+                <li><strong>Bandbreitenverwendung:</strong> ben&ouml;tigt mindestens zwei Datenreihen mit den Labeln &quot;in&quot;
+                    und &quot;out&quot; sowie einem leeren UOM. Es benutzt den aktuellen und den maximalen Wert zur Berechnung des momentanen Prozentwertes.
+                    Der aktuelle Wert sollte als Byte-Rate angegeben werden. Der maximale Wert sollte die Bandbreite des Netzwerk-Interface in Byte pro Sekunde enthalten.<br />
+                    Beispiel: <code>in=7196.50566429;;;0;1250000.0 inucast=11.6273564992;;;; innucast=0.017617206817;;;; indisc=0.0;;;; inerr=0.0;0.01;0.1;; out=4044.9635368;;;0;1250000.0 outucast=12.1734899105;;;; outnucast=0.0;;;; outdisc=0.0;;;; outerr=0.0;0.01;0.1;; outqlen=0;;;;</code>.
+                </li>
+        </ul>
 
 	<p>Danke an gjfrater f&uuml;r die Implementierung dieser Linien!</p>
 </body>
