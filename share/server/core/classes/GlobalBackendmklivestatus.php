@@ -175,6 +175,20 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		                                                        Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => $socketError)));
 		}
 	}
+
+	/*private function verifyLivestatusVersion() {
+		$result = $this->queryLivestatusSingleColumn("GET status\nColumns: livestatus_version\n");
+		$result[0] = '1.1.7rc1';
+		$version = str_replace('.', '0',        $result[0]);
+		$version = str_replace('i',  '0',       $version);
+		$version = str_replace('b',  '1',       $version);
+		$version = (int) str_replace('rc', '2', $version);
+		if($version < 1010903) {
+			throw new BackendConnectionProblem(
+			   GlobalCore::getInstance()->getLang()->getText('The livestatus version [VERSION] used in backend [BACKENDID] is too old. Please update.',
+		                                                                            Array('BACKENDID' => $this->backendId, 'VERSION' => $result[0])));
+		}
+	}*/
 	
 	/**
 	 * PRIVATE queryLivestatus()
@@ -188,8 +202,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	 */
 	private function queryLivestatus($query) {
 		// Only connect when no connection opened yet
-		if($this->SOCKET === null)
+		if($this->SOCKET === null) {
 			$this->connectSocket();
+
+			// Check if the livestatus version is OK
+			//$this->verifyLivestatusVersion();
+		}
 		
 		// Query to get a json formated array back
 		// Use KeepAlive with fixed16 header
@@ -791,34 +809,43 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			"Stats: host_scheduled_downtime_depth > 0\n" .
 			"StatsOr: 2\n" .
 			"StatsAnd: 2\n" .
-			"StatsGroupBy: host_name\n");
+			"StatsGroupBy: host_name host_alias\n");
 	
 		$arrReturn = Array();
 		if(is_array($l) && count($l) > 0) {
+			// livestatus previous 1.1.9i3 answers without host_alias - these users should update.
+			if(count($l[0]) == 13)
+				throw BackendInvalidResponse(
+					GlobalCore::getInstance()->getLang()->getText('Livestatus used in backend [BACKENDID] is too old. Please update.',
+					                                                    Array('BACKENDID' => $this->backendId)));
+				
 			foreach($l as $e) {
 				$arrReturn[$e[0]] = Array(
-					'PENDING' => Array(
-						'normal' => $e[1],
-					),
-					'OK' => Array(
-						'normal' => $e[2],
-						'downtime' => $e[3],
-					),
-					'WARNING' => Array(
-						'normal' => $e[4],
-						'ack' => $e[5],
-						'downtime' => $e[6],
-					),
-					'CRITICAL' => Array(
-						'normal' => $e[7],
-						'ack' => $e[8],
-						'downtime' => $e[9],
-					),
-					'UNKNOWN' => Array(
-						'normal' => $e[10],
-						'ack' => $e[11],
-						'downtime' => $e[12],
-					),
+					'details' => Array('alias' => $e[1]),
+					'counts' => Array(
+						'PENDING' => Array(
+							'normal' => $e[2],
+						),
+						'OK' => Array(
+							'normal' => $e[3],
+							'downtime' => $e[4],
+						),
+						'WARNING' => Array(
+							'normal' => $e[5],
+							'ack' => $e[6],
+							'downtime' => $e[7],
+						),
+						'CRITICAL' => Array(
+							'normal' => $e[8],
+							'ack' => $e[9],
+							'downtime' => $e[10],
+						),
+						'UNKNOWN' => Array(
+							'normal' => $e[11],
+							'ack' => $e[12],
+							'downtime' => $e[13],
+						),
+					)
 				);
 			}
 		}
@@ -888,32 +915,40 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			"Stats: ".$stateAttr." = 2\n" .
 			"Stats: scheduled_downtime_depth > 0\n" .
 			"StatsAnd: 2\n".
-			"StatsGroupBy: hostgroup_name\n");
+			"StatsGroupBy: hostgroup_name hostgroup_alias\n");
 		
 		// If the method should fetch several objects and did not find
 		// any object, don't return anything => The message
 		// that the objects were not found is added by the core
 		$arrReturn = Array();
 		if(is_array($l) && count($l) > 0) {
+			// livestatus previous 1.1.9i3 answers without hostgroup_alias - these users should update.
+			if(count($l[0]) == 10)
+				throw BackendInvalidResponse(
+					GlobalCore::getInstance()->getLang()->getText('Livestatus used in backend [BACKENDID] is too old. Please update.',
+					                                                    Array('BACKENDID' => $this->backendId)));
 			foreach($l as $e) {
 				$arrReturn[$e[0]] = Array(
-					'PENDING' => Array(
-						'normal'    => $e[1],
-					),
-					'UP' => Array(
-						'normal'    => $e[2],
-						'downtime'  => $e[3],
-					),
-					'DOWN' => Array(
-						'normal'    => $e[4],
-						'ack'       => $e[5],
-						'downtime'  => $e[6],
-					),
-					'UNREACHABLE' => Array(
-						'normal'    => $e[7],
-						'ack'       => $e[8],
-						'downtime'  => $e[9],
-					),
+					'details' => Array('alias' => $e[1]),
+					'counts' => Array(
+						'PENDING' => Array(
+							'normal'    => $e[2],
+						),
+						'UP' => Array(
+							'normal'    => $e[3],
+							'downtime'  => $e[4],
+						),
+						'DOWN' => Array(
+							'normal'    => $e[5],
+							'ack'       => $e[6],
+							'downtime'  => $e[7],
+						),
+						'UNREACHABLE' => Array(
+							'normal'    => $e[8],
+							'ack'       => $e[9],
+							'downtime'  => $e[10],
+						),
+					)
 				);
 			}
 		}
@@ -1010,18 +1045,18 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				// Special operator for PENDING cause it is set by the hosts initial
 				// FIXME: Maybe split PENDING to SPENDING and PENDING to have it separated
 				//        in NagVis. Otherwise pending hosts are counted as services.
-				$arrReturn[$e[0]]['PENDING']['normal'] += $e[1];
-				$arrReturn[$e[0]]['OK']['normal'] = $e[2];
-				$arrReturn[$e[0]]['OK']['downtime'] = $e[3];
-				$arrReturn[$e[0]]['WARNING']['normal'] = $e[4];
-				$arrReturn[$e[0]]['WARNING']['ack'] = $e[5];
-				$arrReturn[$e[0]]['WARNING']['downtime'] = $e[6];
-				$arrReturn[$e[0]]['CRITICAL']['normal'] = $e[7];
-				$arrReturn[$e[0]]['CRITICAL']['ack'] = $e[8];
-				$arrReturn[$e[0]]['CRITICAL']['downtime'] = $e[9];
-				$arrReturn[$e[0]]['UNKNOWN']['normal'] = $e[10];
-				$arrReturn[$e[0]]['UNKNOWN']['ack'] = $e[11];
-				$arrReturn[$e[0]]['UNKNOWN']['downtime'] = $e[12];
+				$arrReturn[$e[0]]['counts']['PENDING']['normal'] += $e[1];
+				$arrReturn[$e[0]]['counts']['OK']['normal'] = $e[2];
+				$arrReturn[$e[0]]['counts']['OK']['downtime'] = $e[3];
+				$arrReturn[$e[0]]['counts']['WARNING']['normal'] = $e[4];
+				$arrReturn[$e[0]]['counts']['WARNING']['ack'] = $e[5];
+				$arrReturn[$e[0]]['counts']['WARNING']['downtime'] = $e[6];
+				$arrReturn[$e[0]]['counts']['CRITICAL']['normal'] = $e[7];
+				$arrReturn[$e[0]]['counts']['CRITICAL']['ack'] = $e[8];
+				$arrReturn[$e[0]]['counts']['CRITICAL']['downtime'] = $e[9];
+				$arrReturn[$e[0]]['counts']['UNKNOWN']['normal'] = $e[10];
+				$arrReturn[$e[0]]['counts']['UNKNOWN']['ack'] = $e[11];
+				$arrReturn[$e[0]]['counts']['UNKNOWN']['downtime'] = $e[12];
 			}
 		}
 		
@@ -1123,37 +1158,45 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			"Stats: host_scheduled_downtime_depth > 0\n" .
 			"StatsOr: 2\n" .
 			"StatsAnd: 2\n".
-			"StatsGroupBy: servicegroup_name\n");
+			"StatsGroupBy: servicegroup_name servicegroup_alias\n");
 		
 		// If the method should fetch several objects and did not find
 		// any object, don't return anything => The message
 		// that the objects were not found is added by the core
 		$arrReturn = Array();
 		if(is_array($l) && count($l) > 0) {
+			// livestatus previous 1.1.9i3 answers without servicegroup_alias - these users should update.
+			if(count($l[0]) == 13)
+				throw BackendInvalidResponse(
+					GlobalCore::getInstance()->getLang()->getText('Livestatus used in backend [BACKENDID] is too old. Please update.',
+					                                                    Array('BACKENDID' => $this->backendId)));
 			foreach($l as $e) {
 				$arrReturn[$e[0]] = Array(
-					'PENDING' => Array(
-						'normal'    => $e[1],
-					),
-					'OK' => Array(
-						'normal'    => $e[2],
-						'downtime'  => $e[3],
-					),
-					'WARNING' => Array(
-						'normal'    => $e[4],
-						'ack'       => $e[5],
-						'downtime'  => $e[6],
-					),
-					'CRITICAL' => Array(
-						'normal'    => $e[7],
-						'ack'       => $e[8],
-						'downtime'  => $e[9],
-					),
-					'UNKNOWN' => Array(
-						'normal'    => $e[10],
-						'ack'       => $e[11],
-						'downtime'  => $e[12],
-					),
+					'details' => Array('alias' => $e[1]),
+					'counts' => Array(
+						'PENDING' => Array(
+							'normal'    => $e[2],
+						),
+						'OK' => Array(
+							'normal'    => $e[3],
+							'downtime'  => $e[4],
+						),
+						'WARNING' => Array(
+							'normal'    => $e[5],
+							'ack'       => $e[6],
+							'downtime'  => $e[7],
+						),
+						'CRITICAL' => Array(
+							'normal'    => $e[8],
+							'ack'       => $e[9],
+							'downtime'  => $e[10],
+						),
+						'UNKNOWN' => Array(
+							'normal'    => $e[11],
+							'ack'       => $e[12],
+							'downtime'  => $e[13],
+						),
+					)
 				);
 			}
 		}

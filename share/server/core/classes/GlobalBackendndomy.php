@@ -781,7 +781,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			$stateAttr = 'current_state';
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
-			o.name1,
+			o.name1, h.alias,
 			SUM(IF(ss.has_been_checked=0,1,0)) AS pending,
 			SUM(IF((ss.'.$stateAttr.'=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND hs.scheduled_downtime_depth=0),1,0)) AS ok,
 			SUM(IF((ss.'.$stateAttr.'=0 AND ss.has_been_checked!=0 AND (ss.scheduled_downtime_depth!=0 OR hs.scheduled_downtime_depth!=0)),1,0)) AS ok_downtime,
@@ -812,28 +812,31 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 		$arrReturn = Array();
 		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
 			$arrReturn[$data['name1']] = Array(
-				'PENDING' => Array(
-					'normal' => $data['pending'],
-				),
-				'OK' => Array(
-					'normal' => $data['ok'],
-					'downtime' => $data['ok_downtime'],
-				),
-				'WARNING' => Array(
-					'normal' => $data['warning'],
-					'ack' => $data['warning_ack'],
-					'downtime' => $data['warning_downtime'],
-				),
-				'CRITICAL' => Array(
-					'normal' => $data['critical'],
-					'ack' => $data['critical_ack'],
-					'downtime' => $data['critical_downtime'],
-				),
-				'UNKNOWN' => Array(
-					'normal' => $data['unknown'],
-					'ack' => $data['unknown_ack'],
-					'downtime' => $data['unknown_downtime'],
-				),
+				'details' => Array('alias' => $data['alias']),
+				'counts' => Array(
+					'PENDING' => Array(
+						'normal' => $data['pending'],
+					),
+					'OK' => Array(
+						'normal' => $data['ok'],
+						'downtime' => $data['ok_downtime'],
+					),
+					'WARNING' => Array(
+						'normal' => $data['warning'],
+						'ack' => $data['warning_ack'],
+						'downtime' => $data['warning_downtime'],
+					),
+					'CRITICAL' => Array(
+						'normal' => $data['critical'],
+						'ack' => $data['critical_ack'],
+						'downtime' => $data['critical_downtime'],
+					),
+					'UNKNOWN' => Array(
+						'normal' => $data['unknown'],
+						'ack' => $data['unknown_ack'],
+						'downtime' => $data['unknown_downtime'],
+					),
+				)
 			);
 		}
 		
@@ -850,7 +853,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			$stateAttr = 'current_state';
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
-			o.name1,
+			o.name1, hg.alias,
 			SUM(IF(hs.has_been_checked=0,1,0)) AS pending,
 			SUM(IF((hs.'.$stateAttr.'=0 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0),1,0)) AS up,
 			SUM(IF((hs.'.$stateAttr.'=0 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth!=0),1,0)) AS up_downtime,
@@ -881,22 +884,25 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 		$arrReturn = Array();
 		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
 			$arrReturn[$data['name1']] = Array(
-				'PENDING' => Array(
-					'normal'    => $data['pending'],
-				),
-				'UP' => Array(
-					'normal'    => $data['up'],
-					'downtime'  => $data['up_downtime'],
-				),
-				'DOWN' => Array(
-					'normal'    => $data['down'],
-					'ack'       => $data['down_ack'],
-					'downtime'  => $data['down_downtime'],
-				),
-				'UNREACHABLE' => Array(
-					'normal'    => $data['unreachable'],
-					'ack'       => $data['unreachable_ack'],
-					'downtime'  => $data['unreachable_downtime'],
+				'details' => Array('alias' => $data['alias']),
+				'counts' => Array(
+					'PENDING' => Array(
+						'normal'    => $data['pending'],
+					),
+					'UP' => Array(
+						'normal'    => $data['up'],
+						'downtime'  => $data['up_downtime'],
+					),
+					'DOWN' => Array(
+						'normal'    => $data['down'],
+						'ack'       => $data['down_ack'],
+						'downtime'  => $data['down_downtime'],
+					),
+					'UNREACHABLE' => Array(
+						'normal'    => $data['unreachable'],
+						'ack'       => $data['unreachable_ack'],
+						'downtime'  => $data['unreachable_downtime'],
+					),
 				),
 			);
 		}
@@ -941,18 +947,18 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			// Special operator for PENDING cause it is set by the hosts initial
 			// FIXME: Maybe split PENDING to SPENDING and PENDING to have it separated
 			//        in NagVis. Otherwise pending hosts are counted as services.
-			$arrReturn[$data['name1']]['PENDING']['normal'] += $data['pending'];
-			$arrReturn[$data['name1']]['OK']['normal'] = $data['ok'];
-			$arrReturn[$data['name1']]['OK']['downtime'] = $data['ok_downtime'];
-			$arrReturn[$data['name1']]['WARNING']['normal'] = $data['warning'];
-			$arrReturn[$data['name1']]['WARNING']['ack'] = $data['warning_ack'];
-			$arrReturn[$data['name1']]['WARNING']['downtime'] = $data['warning_downtime'];
-			$arrReturn[$data['name1']]['CRITICAL']['normal'] = $data['critical'];
-			$arrReturn[$data['name1']]['CRITICAL']['ack'] = $data['critical_ack'];
-			$arrReturn[$data['name1']]['CRITICAL']['downtime'] = $data['critical_downtime'];
-			$arrReturn[$data['name1']]['UNKNOWN']['normal'] = $data['unknown'];
-			$arrReturn[$data['name1']]['UNKNOWN']['ack'] = $data['unknown_ack'];
-			$arrReturn[$data['name1']]['UNKNOWN']['downtime'] = $data['unknown_downtime'];
+			$arrReturn[$data['name1']]['counts']['PENDING']['normal'] += $data['pending'];
+			$arrReturn[$data['name1']]['counts']['OK']['normal'] = $data['ok'];
+			$arrReturn[$data['name1']]['counts']['OK']['downtime'] = $data['ok_downtime'];
+			$arrReturn[$data['name1']]['counts']['WARNING']['normal'] = $data['warning'];
+			$arrReturn[$data['name1']]['counts']['WARNING']['ack'] = $data['warning_ack'];
+			$arrReturn[$data['name1']]['counts']['WARNING']['downtime'] = $data['warning_downtime'];
+			$arrReturn[$data['name1']]['counts']['CRITICAL']['normal'] = $data['critical'];
+			$arrReturn[$data['name1']]['counts']['CRITICAL']['ack'] = $data['critical_ack'];
+			$arrReturn[$data['name1']]['counts']['CRITICAL']['downtime'] = $data['critical_downtime'];
+			$arrReturn[$data['name1']]['counts']['UNKNOWN']['normal'] = $data['unknown'];
+			$arrReturn[$data['name1']]['counts']['UNKNOWN']['ack'] = $data['unknown_ack'];
+			$arrReturn[$data['name1']]['counts']['UNKNOWN']['downtime'] = $data['unknown_downtime'];
 		}
 		
 		// Free memory
@@ -969,7 +975,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 		
 		// FIXME: Recognize host ack/downtime
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
-			o.name1,
+			o.name1, sg.alias,
 			SUM(IF(ss.has_been_checked=0,1,0)) AS pending,
 			SUM(IF((ss.'.$stateAttr.'=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth=0 AND ss.scheduled_downtime_depth=0),1,0)) AS ok,
 			SUM(IF((ss.'.$stateAttr.'=0 AND ss.has_been_checked!=0 AND ss.scheduled_downtime_depth!=0),1,0)) AS ok_downtime,
@@ -1002,27 +1008,30 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 		$arrReturn = Array();
 		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
 			$arrReturn[$data['name1']] = Array(
-				'PENDING' => Array(
-					'normal' => $data['pending'],
-				),
-				'OK' => Array(
-					'normal' => $data['ok'],
-					'downtime' => $data['ok_downtime'],
-				),
-				'WARNING' => Array(
-					'normal' => $data['warning'],
-					'ack' => $data['warning_ack'],
-					'downtime' => $data['warning_downtime'],
-				),
-				'CRITICAL' => Array(
-					'normal' => $data['critical'],
-					'ack' => $data['critical_ack'],
-					'downtime' => $data['critical_downtime'],
-				),
-				'UNKNOWN' => Array(
-					'normal' => $data['unknown'],
-					'ack' => $data['unknown_ack'],
-					'downtime' => $data['unknown_downtime'],
+				'details' => Array('alias' => $data['alias']),
+				'counts' => Array(
+					'PENDING' => Array(
+						'normal' => $data['pending'],
+					),
+					'OK' => Array(
+						'normal' => $data['ok'],
+						'downtime' => $data['ok_downtime'],
+					),
+					'WARNING' => Array(
+						'normal' => $data['warning'],
+						'ack' => $data['warning_ack'],
+						'downtime' => $data['warning_downtime'],
+					),
+					'CRITICAL' => Array(
+						'normal' => $data['critical'],
+						'ack' => $data['critical_ack'],
+						'downtime' => $data['critical_downtime'],
+					),
+					'UNKNOWN' => Array(
+						'normal' => $data['unknown'],
+						'ack' => $data['unknown_ack'],
+						'downtime' => $data['unknown_downtime'],
+					),
 				),
 			);
 		}

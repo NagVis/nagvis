@@ -238,7 +238,7 @@ class CoreBackendMgmt {
 				}
 				
 				// Now fetch the service state counts for all hostgroup members
-				$aServiceStateCounts = Array();
+				$aServiceState = Array();
 				if($OBJ->getRecognizeServices()) {
 					try {
 						$filters = Array(Array('key' => 'host_groups', 'op' => '>=', 'val' => 'name'));
@@ -260,8 +260,8 @@ class CoreBackendMgmt {
 					$HOBJ->setConfiguration($OBJ->getObjectConfiguration());
 					
 					// Put state counts to the object
-					if(isset($aServiceStateCounts[$name])) {
-						$HOBJ->setStateCounts($aServiceStateCounts[$name]);
+					if(isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts'])) {
+						$HOBJ->setStateCounts($aServiceStateCounts[$name]['counts']);
 					}
 					
 					// Fetch summary state and output
@@ -280,43 +280,46 @@ class CoreBackendMgmt {
 			switch($type) {
 				case 'servicegroupMemberState':
 					$filters = Array(Array('key' => 'groups', 'op' => '>=', 'val' => 'name'));
-					$aCounts = $this->getBackend($backendId)->getServicegroupStateCounts($aObjs, $options, $filters);
+					$aResult = $this->getBackend($backendId)->getServicegroupStateCounts($aObjs, $options, $filters);
 				break;
 				case 'hostgroupMemberState':
 					$filters = Array(Array('key' => 'groups', 'op' => '>=', 'val' => 'name'));
-					$aCounts = $this->getBackend($backendId)->getHostgroupStateCounts($aObjs, $options, $filters);
+					$aResult = $this->getBackend($backendId)->getHostgroupStateCounts($aObjs, $options, $filters);
 				break;
 				case 'serviceState':
 					$filters = Array(
 											Array('key' => 'host_name', 'op' => '=', 'val' => 'name'),
 											Array('key' => 'service_description', 'op' => '=', 'service_description')
 										);
-					$aCounts = $this->getBackend($backendId)->getServiceState($aObjs, $options, $filters);
+					$aResult = $this->getBackend($backendId)->getServiceState($aObjs, $options, $filters);
 				break;
 				case 'hostState':
 					$filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
-					$aCounts = $this->getBackend($backendId)->getHostState($aObjs, $options, $filters);
+					$aResult = $this->getBackend($backendId)->getHostState($aObjs, $options, $filters);
 				break;
 				case 'hostMemberState':
 					$filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
-					$aCounts = $this->getBackend($backendId)->getHostStateCounts($aObjs, $options, $filters);
+					$aResult = $this->getBackend($backendId)->getHostStateCounts($aObjs, $options, $filters);
 				break;
 			}
 		} catch(BackendException $e) {
-			$aCounts = Array();
+			$aResult = Array();
 			$msg = $e->getMessage();
 		}
 
 		foreach($aObjs AS $name => $OBJS)
-			if(isset($aCounts[$name]))
-				foreach($OBJS AS $OBJ)
-					if($type == 'serviceState' || $type == 'hostState')
-						$OBJ->setState($aCounts[$name]);
-					else
-						$OBJ->setStateCounts($aCounts[$name]);
+			if(isset($aResult[$name]))
+				if($type == 'serviceState' || $type == 'hostState')
+					foreach($OBJS AS $OBJ)
+						$OBJ->setState($aResult[$name]);
+				else
+					foreach($OBJS AS $OBJ) {
+						$OBJ->setObjectInformation($aResult[$name]['details']);
+						$OBJ->setStateCounts($aResult[$name]['counts']);
+					}
 			else
-				foreach($OBJS AS $OBJ)
-					if($type != 'hostMemberState')
+				if($type != 'hostMemberState')
+					foreach($OBJS AS $OBJ)
 						if(isset($msg))
 							$OBJ->setBackendProblem($msg);
 						else
