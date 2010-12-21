@@ -814,7 +814,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$arrReturn = Array();
 		if(is_array($l) && count($l) > 0) {
 			// livestatus previous 1.1.9i3 answers without host_alias - these users should update.
-			if(count($l[0]) == 13)
+			if(!isset($l[0][13]))
 				throw new BackendInvalidResponse(
 					GlobalCore::getInstance()->getLang()->getText('Livestatus version used in backend [BACKENDID] is too old. Please update.',
 					                                                    Array('BACKENDID' => $this->backendId)));
@@ -923,7 +923,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$arrReturn = Array();
 		if(is_array($l) && count($l) > 0) {
 			// livestatus previous 1.1.9i3 answers without hostgroup_alias - these users should update.
-			if(count($l[0]) == 10)
+			if(!isset($l[0][10]))
 				throw new BackendInvalidResponse(
 					GlobalCore::getInstance()->getLang()->getText('Livestatus version used in backend [BACKENDID] is too old. Please update.',
 					                                                    Array('BACKENDID' => $this->backendId)));
@@ -1166,7 +1166,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		$arrReturn = Array();
 		if(is_array($l) && count($l) > 0) {
 			// livestatus previous 1.1.9i3 answers without servicegroup_alias - these users should update.
-			if(count($l[0]) == 13)
+			if(!isset($l[0][13]))
 				throw new BackendInvalidResponse(
 					GlobalCore::getInstance()->getLang()->getText('Livestatus version used in backend [BACKENDID] is too old. Please update.',
 					                                                    Array('BACKENDID' => $this->backendId)));
