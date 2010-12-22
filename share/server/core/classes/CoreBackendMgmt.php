@@ -314,8 +314,10 @@ class CoreBackendMgmt {
 						$OBJ->setState($aResult[$name]);
 				else
 					foreach($OBJS AS $OBJ) {
-						$OBJ->setObjectInformation($aResult[$name]['details']);
-						$OBJ->setStateCounts($aResult[$name]['counts']);
+						if(isset($aResult[$name]['details']))
+							$OBJ->setObjectInformation($aResult[$name]['details']);
+						if(isset($aResult[$name]['counts']))
+							$OBJ->setStateCounts($aResult[$name]['counts']);
 					}
 			else
 				if($type != 'hostMemberState')
