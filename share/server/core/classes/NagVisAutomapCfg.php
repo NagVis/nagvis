@@ -91,8 +91,15 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 		return $this->defaultConf;
 	}
 
-	public function writeElement($id) {
-		echo 'Dummy element write';
+	public function writeElement($id) { }
+
+	public function filterMapObjects($a) {
+		if(isset($this->mapConfig[2])) {
+			$global = $this->mapConfig[0];
+			$dummy  = $this->mapConfig[1];
+			parent::filterMapObjects($a);
+			$this->mapConfig = array_merge(Array($global, $dummy), $this->mapConfig);
+		}
 	}
 }
 ?>

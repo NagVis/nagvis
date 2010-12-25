@@ -187,9 +187,6 @@ class CoreModAutoMap extends CoreModule {
 		               'i'  => MATCH_STRING_NO_SPACE);
 		$aVals = $this->getCustomOptions($aOpts);
 		
-		$sType = $aVals['ty'];
-		$arrObjId = $aVals['i'];
-		
 		// Initialize backends
 		$BACKEND = new CoreBackendMgmt($this->CORE);
 		
@@ -197,7 +194,6 @@ class CoreModAutoMap extends CoreModule {
 		$MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
 		$MAPCFG->readMapConfig();
 		$MAPCFG->filterMapObjects($aVals['i']);
-
 
 		$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);
 		$MAPOBJ = $MAP->MAPOBJ;
