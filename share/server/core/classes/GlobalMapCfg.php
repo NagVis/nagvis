@@ -61,7 +61,7 @@ class GlobalMapCfg {
 						'match' => MATCH_OBJECTTYPE,
 						'field_type' => 'hidden'),
 					'object_id' => Array('must' => 0,
-						'match' => MATCH_INTEGER,
+						'match' => MATCH_OBJECTID,
 						'field_type' => 'hidden'),
 					'allowed_for_config' => Array('must' => 0,
 						'deprecated' => 1,
@@ -331,7 +331,7 @@ class GlobalMapCfg {
 						'match' => MATCH_OBJECTTYPE,
 						'field_type' => 'hidden'),
 					'object_id' => Array('must' => 0,
-						'match' => MATCH_INTEGER,
+						'match' => MATCH_OBJECTID,
 						'field_type' => 'hidden'),
 					'host_name' => Array('must' => 1,
 						'match' => MATCH_STRING,
@@ -508,7 +508,7 @@ class GlobalMapCfg {
 						'match' => MATCH_OBJECTTYPE,
 						'field_type' => 'hidden'),
 					'object_id' => Array('must' => 0,
-						'match' => MATCH_INTEGER,
+						'match' => MATCH_OBJECTID,
 						'field_type' => 'hidden'),
 					'hostgroup_name' => Array('must' => 1,
 						'match' => MATCH_STRING,
@@ -685,7 +685,7 @@ class GlobalMapCfg {
 						'match' => MATCH_OBJECTTYPE,
 						'field_type' => 'hidden'),
 					'object_id' => Array('must' => 0,
-						'match' => MATCH_INTEGER,
+						'match' => MATCH_OBJECTID,
 						'field_type' => 'hidden'),
 					'host_name' => Array('must' => 1,
 						'match' => MATCH_STRING,
@@ -894,7 +894,7 @@ class GlobalMapCfg {
 						'match' => MATCH_OBJECTTYPE,
 						'field_type' => 'hidden'),
 					'object_id' => Array('must' => 0,
-						'match' => MATCH_INTEGER,
+						'match' => MATCH_OBJECTID,
 						'field_type' => 'hidden'),
 					'servicegroup_name' => Array('must' => 1,
 						'match' => MATCH_STRING,
@@ -1067,7 +1067,7 @@ class GlobalMapCfg {
 						'match' => MATCH_OBJECTTYPE,
 						'field_type' => 'hidden'),
 					'object_id' => Array('must' => 0,
-						'match' => MATCH_INTEGER,
+						'match' => MATCH_OBJECTID,
 						'field_type' => 'hidden'),
 					'map_name' => Array('must' => 1,
 						'match' => MATCH_STRING_NO_SPACE,
@@ -1236,7 +1236,7 @@ class GlobalMapCfg {
 						'match' => MATCH_OBJECTTYPE,
 						'field_type' => 'hidden'),
 					'object_id' => Array('must' => 0,
-						'match' => MATCH_INTEGER,
+						'match' => MATCH_OBJECTID,
 						'field_type' => 'hidden'),
 					'x' => Array('must' => 1,
 						'match' => MATCH_COORDS_MULTI),
@@ -1286,7 +1286,7 @@ class GlobalMapCfg {
 						'match' => MATCH_OBJECTTYPE,
 						'field_type' => 'hidden'),
 					'object_id' => Array('must' => 0,
-						'match' => MATCH_INTEGER,
+						'match' => MATCH_OBJECTID,
 						'field_type' => 'hidden'),
 					'text' => Array('must' => 1,
 						'match' => MATCH_ALL),
@@ -1318,7 +1318,7 @@ class GlobalMapCfg {
 						'match' => MATCH_OBJECTTYPE,
 						'field_type' => 'hidden'),
 					'object_id' => Array('must' => 0,
-						'match' => MATCH_INTEGER,
+						'match' => MATCH_OBJECTID,
 						'field_type' => 'hidden'),
 					'icon' => Array('must' => 1,
 						'match' => MATCH_PNG_GIF_JPG_FILE_OR_URL,
@@ -1357,7 +1357,7 @@ class GlobalMapCfg {
 					'name' => Array('must' => 1,
 						'match' => MATCH_STRING_NO_SPACE),
 					'object_id' => Array('must' => 0,
-						'match' => MATCH_INTEGER,
+						'match' => MATCH_OBJECTID,
 						'field_type' => 'hidden')));
 		}
 		
@@ -1436,7 +1436,7 @@ class GlobalMapCfg {
 			'hover_childs_order',
 			'hover_childs_limit');
 		foreach($aVars As $sVar) {
-			$sTmp = $this->getValue('global', 0, $sVar);
+			$sTmp = $this->getValue(0, $sVar);
 			
 			$this->typeDefaults['host'][$sVar] = $sTmp;
 			$this->typeDefaults['hostgroup'][$sVar] = $sTmp;
@@ -1497,7 +1497,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function getBackground() {
-		$RET = new GlobalBackground($this->CORE, $this->getValue('global', 0, 'map_image'));
+		$RET = new GlobalBackground($this->CORE, $this->getValue(0, 'map_image'));
 		return $RET;
 	}
 	
@@ -1528,190 +1528,181 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function readMapConfig($onlyGlobal = 0, $resolveTemplates = true, $useCache = true) {
-		if($this->name != '') {
-			// Only use cache when there is
-			// a) The cache should be used
-			// b) When whole config file should be read
-			// c) Some valid cache file
-			// d) Some valid main configuration cache file
-			// e) This cache file newer than main configuration cache file
-			if($onlyGlobal == 0
-			   && $useCache === true
-			   && $this->CACHE->isCached() !== -1
-				 && $this->CORE->getMainCfg()->isCached() !== -1
-				 && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
-				$this->mapConfig = $this->CACHE->getCache();
-				$this->typeDefaults = $this->DCACHE->getCache();
-				// Cache objects are not needed anymore
-				$this->CACHE = null;
-				$this->DCACHE = null;
-				
-				$this->BACKGROUND = $this->getBackground();
-				
-				return TRUE;
-			} else {
-				if($this->checkMapConfigExists(TRUE) && $this->checkMapConfigReadable(TRUE)) {
-					$this->mapConfig = Array();
-					// Array for counting objects
-					$types = Array('global' => 0,
-									'host' => 0,
-									'service' => 0,
-									'hostgroup' => 0,
-									'servicegroup' => 0,
-									'map' => 0,
-									'textbox' => 0,
-									'shape' => 0,
-									'line' => 0,
-									'template' => 0);
-					
-					// Read file in array (Don't read empty lines and ignore new line chars)
-					$file = file($this->configFile, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
-					
-					// Create an array for these options
-					$createArray = Array('use' => 1);
-										
-					// Don't read these keys
-					$ignoreKeys = Array('object_id' => 0,
-					                    'type' => 0);
-					
-					$l = 0;
-					
-					// These variables set which object is currently being filled
+		if($this->name == '')
+			return false;
+
+		// Only use cache when there is
+		// a) The cache should be used
+		// b) When whole config file should be read
+		// c) Some valid cache file
+		// d) Some valid main configuration cache file
+		// e) This cache file newer than main configuration cache file
+		if($onlyGlobal == 0
+		   && $useCache === true
+		   && $this->CACHE->isCached() !== -1
+			 && $this->CORE->getMainCfg()->isCached() !== -1
+			 && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
+			$this->mapConfig = $this->CACHE->getCache();
+			$this->typeDefaults = $this->DCACHE->getCache();
+			// Cache objects are not needed anymore
+			$this->CACHE = null;
+			$this->DCACHE = null;
+			
+			$this->BACKGROUND = $this->getBackground();
+			
+			return TRUE;
+		} else {
+			if(!$this->checkMapConfigExists(TRUE) || !$this->checkMapConfigReadable(TRUE))
+				return false;
+
+			$this->mapConfig = Array();
+			
+			// Read file in array (Don't read empty lines and ignore new line chars)
+			$file = file($this->configFile, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
+			
+			// Create an array for these options
+			$createArray = Array('use' => 1);
+								
+			// Don't read these keys
+			$ignoreKeys = Array('type' => 0);
+			
+			$l = 0;
+			
+			// These variables set which object is currently being filled
+			$sObjType = '';
+			$iObjId = 0;
+			$obj = Array();
+			
+			// Loop each line
+			$iNumLines = count($file);
+			$unknownObject = null;
+			for($l = 0; $l < $iNumLines; $l++) {
+				// Remove spaces, newlines, tabs, etc. (http://de.php.net/rtrim)
+				$file[$l] = rtrim($file[$l]);
+
+				// Don't recognize empty lines
+				if($file[$l] == '')
+					continue;
+
+				// Don't recognize comments and empty lines, do nothing with ending delimiters
+				$sFirstChar = substr(ltrim($file[$l]), 0, 1);
+				if($sFirstChar == ';' || $sFirstChar == '#')
+					continue;
+
+				// This is an object ending. Reset the object type and skip to next line
+				if($sFirstChar == '}') {
+					if($obj['type'] === 'global')
+						$id = 0;
+					else
+						$id = isset($obj['object_id']) ? $obj['object_id'] : '_'.$iObjId;
+					$this->mapConfig[$id] = $obj;
+
 					$sObjType = '';
-					$iObjTypeId = 0;
-					$iObjId = 0;
 					
-					// Loop each line
-					$iNumLines = count($file);
-					$unknownObject = null;
-					for($l = 0; $l < $iNumLines; $l++) {
-						// Remove spaces, newlines, tabs, etc. (http://de.php.net/rtrim)
-						$file[$l] = rtrim($file[$l]);
+					// Increase the map object id to identify the object on the map
+					$iObjId++;
 
-						// Don't recognize empty lines
-						if($file[$l] == '')
-							continue;
+					// If only the global section should be read break the loop after the global section
+					if($onlyGlobal == 1 && isset($this->mapConfig[0]))
+						break;
+					else
+						continue;
+				}
 
-						// Don't recognize comments and empty lines, do nothing with ending delimiters
-						$sFirstChar = substr(ltrim($file[$l]), 0, 1);
-						if($sFirstChar == ';' || $sFirstChar == '#')
-							continue;
+				// Determine if this is a new object definition
+				if(strpos($file[$l], 'define') !== FALSE) {
+					$sObjType = substr($file[$l], 7, (strpos($file[$l], '{', 8) - 8));
+					if(!isset($sObjType) || !isset(self::$validConfig[$sObjType])) {
+						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('unknownObject',
+						                           Array('TYPE' => $sObjType, 'MAPNAME' => $this->name)));
+						return FALSE;
+					} 
 
-						// This is an object ending. Reset the object type and skip to next line
-						if($sFirstChar == '}') {
-							$sObjType = '';
-							$iObjTypeId = 0;
-
-							// If only the global section should be read break the loop after the global section
-							if($onlyGlobal == 1 && $types['global'] == 1)
-								break;
-							else
-								continue;
-						}
-
-						// Determine if this is a new object definition
-						if(strpos($file[$l], 'define') !== FALSE) {
-							$sObjType = substr($file[$l], 7, (strpos($file[$l], '{', 8) - 8));
-							if(!isset($sObjType) || !isset(self::$validConfig[$sObjType])) {
-								new GlobalMessage('ERROR', $this->CORE->getLang()->getText('unknownObject',Array('TYPE' => $sObjType, 'MAPNAME' => $this->name)));
-								return FALSE;
-							} 
-
-							// This is a new definition and it's a valid one
-							
-							// Get the type index
-							$iObjTypeId = $types[$sObjType];
-							
-							$this->mapConfig[$sObjType][$iObjTypeId] = Array(
-							  'type' => $sObjType,
-							  'object_id' => $iObjId
-							);
-							
-							// increase type index
-							$types[$sObjType]++;
-							
-							// Increase the map object id to identify the object on the map
-							$iObjId++;
-
-							continue;
-						}
-
-						// This is another attribute. But it is only ok to proceed here when
-						// there is an open object
-						if($sObjType === '') {
-							new GlobalMessage('ERROR',
-																$this->CORE->getLang()->getText('Attribute definition out of object. In map [MAPNAME] at line #[LINE].',
-																Array('MAPNAME' => $this->name, 'LINE' => $l+1)));
-							return FALSE;
-						}
-
-						$iDelimPos = strpos($file[$l], '=');
-						$sKey = trim(substr($file[$l],0,$iDelimPos));
-						$sValue = trim(substr($file[$l],($iDelimPos+1)));
-						
-						if(isset($ignoreKeys[$sKey]))
-							continue;
-
-						if(isset($createArray[$sKey])) {
-							$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = explode(',', $sValue);
-						} else {
-							$this->mapConfig[$sObjType][$iObjTypeId][$sKey] = $sValue;
-						}
-					}
+					// This is a new definition and it's a valid one
 					
-					// Gather the default values for the object types
-					$this->gatherTypeDefaults($onlyGlobal);
-						
-					if($onlyGlobal == 0) {
-						if(isset($this->mapConfig['template']) && $resolveTemplates == true) {
-							// Merge the objects with the linked templates
-							$this->mergeTemplates();
-						}
-					}
+					// Get the type index
+					$obj = Array(
+					  'type'      => $sObjType,
+					  'object_id' => $iObjId
+					);
 
-					// unknown object type found on map
-					if($unknownObject)
-						throw new MapCfgInvalid($unknownObject);
-					
-					try {
-						$this->checkMapConfigIsValid();
-						$this->BACKGROUND = $this->getBackground();
-					} catch(MapCfgInvalid $e) {
-						$this->BACKGROUND = $this->getBackground();
-						throw $e;
-					}
-					
-					if($onlyGlobal == 0) { 
-						// Build cache
-						if($useCache === true) {
-							$this->CACHE->writeCache($this->mapConfig, 1);
-							$this->DCACHE->writeCache($this->typeDefaults, 1);
-							// Cache objects are not needed anymore
-							$this->CACHE = null;
-							$this->DCACHE = null;
-						}
-						
-						// The automap also uses this method, so handle the different type
-						if($this->type === 'automap') {
-							$mod = 'AutoMap';
-						} else {
-							$mod = 'Map';
-						}
-						
-						// Trigger the autorization backend to create new permissions when needed
-						$AUTHORIZATION = $this->CORE->getAuthorization();
-						if($AUTHORIZATION !== null) {
-							$this->CORE->getAuthorization()->createPermission($mod, $this->getName());
-						}
-					}
-					
-					return TRUE;
-				} else {
+					continue;
+				}
+				
+				// This is another attribute. But it is only ok to proceed here when
+				// there is an open object
+				if($sObjType === '') {
+					new GlobalMessage('ERROR',
+														$this->CORE->getLang()->getText('Attribute definition out of object. In map [MAPNAME] at line #[LINE].',
+														Array('MAPNAME' => $this->name, 'LINE' => $l+1)));
 					return FALSE;
 				}
+
+				$iDelimPos = strpos($file[$l], '=');
+				$sKey = trim(substr($file[$l],0,$iDelimPos));
+				$sValue = trim(substr($file[$l],($iDelimPos+1)));
+
+				if(isset($ignoreKeys[$sKey]))
+					continue;
+
+				if(isset($createArray[$sKey]))
+					$obj[$sKey] = explode(',', $sValue);
+				else
+					$obj[$sKey] = $sValue;
 			}
-		} else {
-			return FALSE;
+
+			// Gather the default values for the object types
+			$this->gatherTypeDefaults($onlyGlobal);
+				
+			if($onlyGlobal == 0) {
+				// FIXME
+				if(isset($this->mapConfig['template']) && $resolveTemplates == true) {
+					// Merge the objects with the linked templates
+					$this->mergeTemplates();
+				}
+			}
+
+			// unknown object type found on map
+			if($unknownObject)
+				throw new MapCfgInvalid($unknownObject);
+			
+			try {
+				$this->checkMapConfigIsValid();
+				$this->BACKGROUND = $this->getBackground();
+			} catch(MapCfgInvalid $e) {
+				$this->BACKGROUND = $this->getBackground();
+				throw $e;
+			}
+
+			if($onlyGlobal == 0) {
+				// Check object id attribute and if there is none generate a new unique
+				// object_id on the map for the object
+				$this->verifyObjectIds();
+
+				// Build cache
+				if($useCache === true) {
+					$this->CACHE->writeCache($this->mapConfig, 1);
+					$this->DCACHE->writeCache($this->typeDefaults, 1);
+					// Cache objects are not needed anymore
+					$this->CACHE = null;
+					$this->DCACHE = null;
+				}
+				
+				// The automap also uses this method, so handle the different type
+				if($this->type === 'automap') {
+					$mod = 'AutoMap';
+				} else {
+					$mod = 'Map';
+				}
+				
+				// Trigger the autorization backend to create new permissions when needed
+				$AUTHORIZATION = $this->CORE->getAuthorization();
+				if($AUTHORIZATION !== null) {
+					$this->CORE->getAuthorization()->createPermission($mod, $this->getName());
+				}
+			}
+			
+			return TRUE;
 		}
 	}
 	
@@ -1723,10 +1714,12 @@ class GlobalMapCfg {
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getTemplateIdByName($name) {
-		foreach($this->mapConfig['template'] AS $id => $arr) {
-			if(isset($arr['name']) && $arr['name'] === $name) {
+		foreach($this->mapConfig AS $id => $arr) {
+			if($arr['type'] !== 'template')
+				continue;
+
+			if(isset($arr['name']) && $arr['name'] === $name)
 				return $id;
-			} 
 		}
 		
 		return false;
@@ -1739,33 +1732,32 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function mergeTemplates() {
-		// Loop all objects
-		foreach($this->mapConfig AS $type => &$elements) {
+		// Loop all objects of that type
+		foreach($this->mapConfig AS $id => &$element) {
 			// Except global and templates (makes no sense)
-			if($type != 'global') {
-				// Loop all objects of that type
-				foreach($elements AS $id => &$element) {
-					// Check for "use" value
-					if(isset($element['use']) && is_array($element['use'])) {
-						// loop all given templates
-						foreach($element['use'] AS &$templateName) {
-							$index = $this->getTemplateIdByName($templateName);
-							
-							if(isset($this->mapConfig['template'][$index]) && is_array($this->mapConfig['template'][$index])) {
-								// merge object array with template object array (except type and name attribute)
-								$tmpArray = $this->mapConfig['template'][$index];
-								unset($tmpArray['type']);
-								unset($tmpArray['name']);
-								unset($tmpArray['object_id']);
-								$this->mapConfig[$type][$id] = array_merge($tmpArray, $element);
-							}
-						}
+			if($type == 'global')
+				continue;
+
+			// Check for "use" value
+			if(isset($element['use']) && is_array($element['use'])) {
+				// loop all given templates
+				foreach($element['use'] AS &$templateName) {
+					$index = $this->getTemplateIdByName($templateName);
+					
+					if(isset($this->mapConfig[$index]) && is_array($this->mapConfig[$index])) {
+						// merge object array with template object array (except type and name attribute)
+						$tmpArray = $this->mapConfig[$index];
+						unset($tmpArray['type']);
+						unset($tmpArray['name']);
+						unset($tmpArray['object_id']);
+						$this->mapConfig[$id] = array_merge($tmpArray, $element);
 					}
 				}
 			}
 		}
 		
 		// Everything is merged: The templates are not relevant anymore
+		// FIXME
 		unset($this->mapConfig['template']);
 	}
 	
@@ -1792,6 +1784,57 @@ class GlobalMapCfg {
 	protected function checkMapConfigReadable($printErr) {
 		return GlobalCore::getInstance()->checkReadable($this->configFile, $printErr);
 	}
+
+	/**
+	 * Generates a new object id for an object on the map
+	 *
+	 * @return  String  The object ID
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function genObjId($s) {
+		return substr(sha1($s), 0, 6);
+	}
+
+	/**
+	 * Verifies that all objects on the map have a valid
+	 * and unique object id. Objects without valid object
+	 * IDs will get a new one generated
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function verifyObjectIds() {
+		$toBeWritten = Array();
+		$alreadySeen = Array();
+
+		foreach(array_keys($this->mapConfig) AS $id) {
+			$todo = false;
+
+			// Replace default integer object IDs
+			if($id[0] == '_')
+				$todo = true;
+
+			// Remove duplicates by generating new IDs for the later objects
+			if(isset($alreadySeen[$id]))
+				$todo = true;
+
+			if($todo) {
+				$new = $this->genObjId($id);
+				while(isset($this->mapConfig[$new]))
+					$new = $this->genObjId($id++);
+
+				$this->mapConfig[$id]['object_id'] = $new;
+				$this->mapConfig[$new] = $this->mapConfig[$id];
+				unset($this->mapConfig[$id]);
+
+				$toBeWritten[] = $new;
+				$aleadySeen[$new] = true;
+			}
+		}
+
+		// Now write down all the updated objects
+		foreach($toBeWritten AS $id)
+			$this->writeElement($id);
+	}
 	
 	/**
 	 * Checks if the config file is valid
@@ -1801,67 +1844,68 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkMapConfigIsValid() {
-		// check given objects and attributes
-		foreach($this->mapConfig AS $type => $elements) {
+		foreach($this->mapConfig AS $id => $element) {
+			$type = $element['type'];
+
+			// check given objects and attributes
 			if($type == 'global')
 				$exception = 'MapCfgInvalid';
 			else
 				$exception = 'MapCfgInvalidObject';
-			
-			foreach($elements AS $id => $element) {
-				// loop validConfig for checking: => missing "must" attributes
-				foreach(self::$validConfig[$type] AS $key => $val) {
-					if(isset($val['must']) && $val['must'] == '1') {
-						// value is "must"
-						if(!isset($element[$key]) || $element[$key] == '') {
-							// a "must" value is missing or empty
-							throw new $exception($this->CORE->getLang()->getText('mapCfgMustValueNotSet', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type, 'ID' => $id)));
-						}
-					}
-				}
-				
-				// Don't check values in templates
-				if($type !== 'template') {
-					// loop given elements for checking: => all given attributes valid
-					foreach($element AS $key => $val) {
-						// check for valid attributes
-						if(!isset(self::$validConfig[$type][$key])) {
-							// unknown attribute
-							throw new $exception($this->CORE->getLang()->getText('unknownAttribute', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type)));
-						} elseif(isset(self::$validConfig[$type][$key]['deprecated']) && self::$validConfig[$type][$key]['deprecated'] == 1) {
-							// deprecated option
-							throw new $exception($this->CORE->getLang()->getText('mapDeprecatedOption', Array('MAP' => $this->getName(), 'ATTRIBUTE' => $key, 'TYPE' => $type)));
-						} else {
-							// The object has a match regex, it can be checked
-							if(isset(self::$validConfig[$type][$key]['match'])) {
-								if(is_array($val)) {
-									// This is an array
-									
-									// Loop and check each element
-									foreach($val AS $key2 => $val2) {
-										if(!preg_match(self::$validConfig[$type][$key]['match'], $val2)) {
-											// wrong format
-											throw new $exception($this->CORE->getLang()->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
-										}
-									}
-								} else {
-									// This is a string value
-									
-									if(!preg_match(self::$validConfig[$type][$key]['match'],$val)) {
-										// Wrong format
-										throw new $exception($this->CORE->getLang()->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
-									}
-								}
-							}
-							
-							// Check if the configured backend is defined in main configuration file
-							if($key == 'backend_id' && !in_array($val, $this->CORE->getDefinedBackends())) {
-								throw new $exception($this->CORE->getLang()->getText('backendNotDefined', Array('BACKENDID' => $val)));
-							}
-						}
+		
+			// loop validConfig for checking: => missing "must" attributes
+			foreach(self::$validConfig[$type] AS $key => $val) {
+				if(isset($val['must']) && $val['must'] == '1') {
+					if(!isset($element[$key]) || $element[$key] == '') {
+						throw new $exception($this->CORE->getLang()->getText('mapCfgMustValueNotSet',
+						                     Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key,
+																       'TYPE'    => $type,       'ID'        => $id)));
 					}
 				}
 			}
+
+			if($type == 'template')
+				continue;
+			
+			// loop given elements for checking: => all given attributes valid
+			foreach($element AS $key => $val) {
+				// check for valid attributes
+				if(!isset(self::$validConfig[$type][$key])) {
+					// unknown attribute
+					throw new $exception($this->CORE->getLang()->getText('unknownAttribute', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type)));
+				} elseif(isset(self::$validConfig[$type][$key]['deprecated']) && self::$validConfig[$type][$key]['deprecated'] == 1) {
+					// deprecated option
+					throw new $exception($this->CORE->getLang()->getText('mapDeprecatedOption', Array('MAP' => $this->getName(), 'ATTRIBUTE' => $key, 'TYPE' => $type)));
+				} else {
+					// The object has a match regex, it can be checked
+					if(isset(self::$validConfig[$type][$key]['match'])) {
+						if(is_array($val)) {
+							// This is an array
+							
+							// Loop and check each element
+							foreach($val AS $key2 => $val2) {
+								if(!preg_match(self::$validConfig[$type][$key]['match'], $val2)) {
+									// wrong format
+									throw new $exception($this->CORE->getLang()->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
+								}
+							}
+						} else {
+							// This is a string value
+							
+							if(!preg_match(self::$validConfig[$type][$key]['match'],$val)) {
+								// Wrong format
+								throw new $exception($this->CORE->getLang()->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
+							}
+						}
+					}
+					
+					// Check if the configured backend is defined in main configuration file
+					if($key == 'backend_id' && !in_array($val, $this->CORE->getDefinedBackends())) {
+						throw new $exception($this->CORE->getLang()->getText('backendNotDefined', Array('BACKENDID' => $val)));
+					}
+				}
+			}
+			
 		}
 	}
 	
@@ -1914,11 +1958,16 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getDefinitions($type) {
-		if(isset($this->mapConfig[$type]) && count($this->mapConfig[$type]) > 0) {
-			return $this->mapConfig[$type];
-		} else {
-			return Array();
-		}
+		// FIXME: Can be replaced?
+		$arr = Array();
+		foreach($this->mapConfig AS $id => &$elem)
+			if($elem['type'] === $type)
+				$arr[$id] = $elem;
+		return $arr;
+	}
+
+	public function getMapObjects() {
+		return $this->mapConfig;
 	}
 	
 	/**
@@ -1969,63 +2018,60 @@ class GlobalMapCfg {
 	/**
 	 * Deletes an element of the specified type from the config array
 	 *
-	 * @param	String	$type
 	 * @param	Integer	$id
 	 * @return	Boolean	TRUE
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function deleteElement($type,$id) {
-		unset($this->mapConfig[$type][$id]);
+	public function deleteElement($id) {
+		unset($this->mapConfig[$id]);
 		return true;
 	}
 	
 	/**
 	 * Adds an element of the specified type to the config array
 	 *
-	 * @param	String	$type
 	 * @param	Array	$properties
 	 * @return	Integer	Id of the Element
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function addElement($type,$properties) {
-		$this->mapConfig[$type][] = $properties;
-		return count($this->mapConfig[$type])-1;
+	public function addElement($properties) {
+		$id = $this->genObjId(count($this->mapConfig[$type]));
+		$this->mapConfig[$id] = $properties;
+		$this->mapConfig[$id]['object_id'] = $id;
+		return $id;
 	}
 	
 	/**
 	 * Sets a config value in the array
 	 *
-	 * @param	String	$type
 	 * @param	Integer	$id
 	 * @param	String	$key
 	 * @param	String	$value
 	 * @return	Boolean	TRUE
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function setValue($type, $id, $key, $value) {
-		$this->mapConfig[$type][$id][$key] = $value;
+	public function setValue($id, $key, $value) {
+		$this->mapConfig[$id][$key] = $value;
 		return TRUE;
 	}
 	
 	/**
 	 * Gets a config value from the array
 	 *
-	 * @param	String	$type
 	 * @param	Integer	$id
 	 * @param	String	$key
 	 * @param	Boolean	$ignoreDefault
 	 * @return	String	Value
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function getValue($type, $id, $key, $ignoreDefault=FALSE) {
-		if(isset($this->mapConfig[$type][$id]) && isset($this->mapConfig[$type][$id][$key])) {
-			return $this->mapConfig[$type][$id][$key];
-		} elseif(!$ignoreDefault) {
-			if(isset($this->typeDefaults[$type][$key])) {
-				return $this->typeDefaults[$type][$key];
-			}
+	public function getValue($id, $key, $ignoreDefault = false) {
+		if(isset($this->mapConfig[$id]) && isset($this->mapConfig[$id][$key])) {
+			return $this->mapConfig[$id][$key];
+		} elseif(!$ignoreDefault && isset($this->mapConfig[$id]['type'])) {
+			$type = $this->mapConfig[$id]['type'];
+			return isset($this->typeDefaults[$type][$key]) ? $this->typeDefaults[$type][$key] : false;
 		} else {
-			return FALSE;
+			return false;
 		}
 	}
 	
@@ -2046,7 +2092,7 @@ class GlobalMapCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAlias() {
-		return $this->getValue('global', 0, 'alias');	
+		return $this->getValue(0, 'alias');	
 	}
 
 	public function objIdToTypeAndNum($objId) {
@@ -2060,29 +2106,14 @@ class GlobalMapCfg {
 	/**
 	 * Only selects the wanted objects of the map and removes the others
 	 *
-	 * @param   Array of object types
 	 * @param   Array of object ids
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function filterMapObjects($types, $objIds) {
+	public function filterMapObjects($objIds) {
 		$newConfig =  Array();
-		$numObjects = count($types);
-		for($i = 0; $i < $numObjects; $i++) {
-			$type = $types[$i];
-			$id   = $objIds[$i];
-			if(!isset($newConfig[$type]))
-				$newConfig[$type] = Array();
-
-			$matchedTypeId = null;
-			foreach($this->mapConfig[$type] AS $typeId => $opts) {
-				if($opts['object_id'] == $id) {
-					$matchedTypeId = $typeId;
-					break;
-				}
-			}
-			if($matchedTypeId !== null)
-				$newConfig[$type][$matchedTypeId] = $this->mapConfig[$type][$matchedTypeId];
-		}
+		foreach($objIds AS $id)
+			if(isset($newConfig[$id]))
+				$newConfig[$id] = $this->mapConfig[$id];
 		$this->mapConfig = $newConfig;
 	}
 
@@ -2181,139 +2212,142 @@ class GlobalMapCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function writeElement($type,$id) {
-		if($this->checkMapConfigExists(1) && $this->checkMapConfigReadable(1) && $this->checkMapConfigWriteable(1)) {
-			// read file in array
-			$file = file($this->configFile);
-			
-			// number of lines in the file
-			$l = 0;
-			// number of elements of the given type
-			$a = 0;
-			// done?!
-			$done = FALSE;
-			while(isset($file[$l]) && $file[$l] != '' && $done == FALSE) {
-				// ignore comments
-				if(!preg_match('/^#/',$file[$l]) && !preg_match('/^;/',$file[$l])) { 
-					$defineCln = explode('{', $file[$l]);
-					$define = explode(' ',$defineCln[0]);
-					// select only elements of the given type
-					if(isset($define[1]) && trim($define[1]) == $type) {
-						// check if element exists
-						if($a == $id) {
-							// check if element is an array...
-							if(isset($this->mapConfig[$type][$a]) && is_array($this->mapConfig[$type][$a])) {
-								// ...array: update!
-								
-								// choose first parameter line
-								$l++;
-								
-								// Loop all parameters from array
-								foreach($this->mapConfig[$type][$id] AS $key => $val) {
-									// if key is not type
-									if($key != 'type' && $key != 'object_id') {
-										$cfgLines = 0;
-										$cfgLine = '';
-										$cfgLineNr = 0;
-										
-										// Loop parameters from file (Find line for this option)
-										while(isset($file[($l+$cfgLines)]) && trim($file[($l+$cfgLines)]) != '}') {
-											$entry = explode('=',$file[$l+$cfgLines], 2);
-											if($key == trim($entry[0])) {
-												$cfgLineNr = $l+$cfgLines;
-												if(is_array($val)) {
-													$val = implode(',',$val);
-												}
-												$cfgLine = $key.'='.$val."\n";
-											}
-											$cfgLines++;	
-										}
-										
-										if($cfgLineNr != 0 && $val != '') {
-											// if a parameter was found in file and value is not empty, replace line
-											$file[$cfgLineNr] = $cfgLine;
-										} elseif($cfgLineNr != 0 && $val == '') {
-											// if a paremter is not in array or a value is empty, delete the line in the file
-											$file[$cfgLineNr] = '';
-											$cfgLines--;
-										} elseif($cfgLineNr == 0 && $val != '') {
-											// if a parameter is was not found in array and a value is not empty, create line
-											if(is_array($val)) {
-												$val = implode(',',$val);
-											}
-											$neu = $key.'='.$val."\n";
-											
-											for($i = $l; $i < count($file);$i++) {
-												$tmp = $file[$i];
-												$file[$i] = $neu;
-												$neu = $tmp;
-											}
-											$file[count($file)] = $neu;
-										} elseif($cfgLineNr == 0 && $val == '') {
-											// if a parameter is empty and a value is empty, do nothing
-										}
-									}
-								}
-								$l++;
-							} else {
-								// ...no array: delete!
+	public function writeElement($id) {
+		if(!$this->checkMapConfigExists(1) || !$this->checkMapConfigReadable(1) || !$this->checkMapConfigWriteable(1))
+			return false;
+
+		// read file in array
+		$file = file($this->configFile);
+
+		// Get object type
+		$type = $this->mapConfig[$id]['type'];
+		
+		// number of lines in the file
+		$l = 0;
+		// number of elements of the given type
+		$a = 0;
+		// done?!
+		$done = FALSE;
+		while(isset($file[$l]) && $file[$l] != '' && $done == FALSE) {
+			// ignore comments
+			if(!preg_match('/^#/',$file[$l]) && !preg_match('/^;/',$file[$l])) { 
+				$defineCln = explode('{', $file[$l]);
+				$define = explode(' ',$defineCln[0]);
+				// select only elements of the given type
+				if(isset($define[1]) && trim($define[1]) == $type) {
+					// check if element exists
+					if($a == $id) {
+						// check if element is an array...
+						if(isset($this->mapConfig[$a]) && is_array($this->mapConfig[$a])) {
+							// ...array: update!
+							
+							// choose first parameter line
+							$l++;
+							
+							// Loop all parameters from array
+							foreach($this->mapConfig[$id] AS $key => $val) {
+								// if key is not type
+								if($key == 'type')
+									continue;
+
 								$cfgLines = 0;
-								while(trim($file[($l+$cfgLines)]) != '}') {
-									$cfgLines++;
-								}
-								$cfgLines++;
+								$cfgLine = '';
+								$cfgLineNr = 0;
 								
-								for($i = $l; $i <= $l+$cfgLines;$i++) {
-									unset($file[$i]);	
+								// Loop parameters from file (Find line for this option)
+								while(isset($file[($l+$cfgLines)]) && trim($file[($l+$cfgLines)]) != '}') {
+									$entry = explode('=',$file[$l+$cfgLines], 2);
+									if($key == trim($entry[0])) {
+										$cfgLineNr = $l+$cfgLines;
+										if(is_array($val)) {
+											$val = implode(',',$val);
+										}
+										$cfgLine = $key.'='.$val."\n";
+									}
+									$cfgLines++;	
+								}
+								
+								if($cfgLineNr != 0 && $val != '') {
+									// if a parameter was found in file and value is not empty, replace line
+									$file[$cfgLineNr] = $cfgLine;
+								} elseif($cfgLineNr != 0 && $val == '') {
+									// if a paremter is not in array or a value is empty, delete the line in the file
+									$file[$cfgLineNr] = '';
+									$cfgLines--;
+								} elseif($cfgLineNr == 0 && $val != '') {
+									// if a parameter is was not found in array and a value is not empty, create line
+									if(is_array($val)) {
+										$val = implode(',',$val);
+									}
+									$neu = $key.'='.$val."\n";
+									
+									for($i = $l; $i < count($file);$i++) {
+										$tmp = $file[$i];
+										$file[$i] = $neu;
+										$neu = $tmp;
+									}
+									$file[count($file)] = $neu;
+								} elseif($cfgLineNr == 0 && $val == '') {
+									// if a parameter is empty and a value is empty, do nothing
 								}
 							}
+							$l++;
+						} else {
+							// ...no array: delete!
+							$cfgLines = 0;
+							while(trim($file[($l+$cfgLines)]) != '}') {
+								$cfgLines++;
+							}
+							$cfgLines++;
 							
-							$done = TRUE;
+							for($i = $l; $i <= $l+$cfgLines;$i++) {
+								unset($file[$i]);	
+							}
 						}
-						$a++;
+						
+						$done = TRUE;
 					}
+					$a++;
 				}
-				$l++;	
 			}
-			
-			// reached end of file - couldn't find that element, create a new one...
-			if($done == FALSE) {
-				if(count($file) > 0 && $file[count($file)-1] != "\n") {
-					$file[] = "\n";
-				}
-				$file[] = 'define '.$type." {\n";
-
-				// Templates need a special handling here cause they can have all types
-				// of options. So read all keys which are currently set
-				if($type !== 'template') {
-					$aKeys = $this->getValidTypeKeys($type);
-				} else {
-					$aKeys = array_keys($this->mapConfig[$type][$id]);
-				}
-				
-				foreach($aKeys As $key) {
-					$val = $this->getValue($type, $id, $key, TRUE);
-					if(isset($val) && $val != '') {
-						$file[] = $key.'='.$val."\n";
-					}
-				}
-				$file[] = "}\n";
+			$l++;	
+		}
+		
+		// reached end of file - couldn't find that element, create a new one...
+		if($done == FALSE) {
+			if(count($file) > 0 && $file[count($file)-1] != "\n") {
 				$file[] = "\n";
 			}
+			$file[] = 'define '.$type." {\n";
+
+			// Templates need a special handling here cause they can have all types
+			// of options. So read all keys which are currently set
+			if($type !== 'template') {
+				$aKeys = $this->getValidTypeKeys($type);
+			} else {
+				$aKeys = array_keys($this->mapConfig[$id]);
+			}
 			
-			// open file for writing and replace it
-			$fp = fopen($this->configFile, 'w');
-			fwrite($fp,implode('',$file));
-			fclose($fp);
-			
-			// Also remove cache file
-			if(file_exists($this->cacheFile))
-				unlink($this->cacheFile);
-			
-			return TRUE;
-		} else {
-		 			return FALSE;
-		} 
+			foreach($aKeys As $key) {
+				$val = $this->getValue($id, $key, TRUE);
+				if(isset($val) && $val != '') {
+					$file[] = $key.'='.$val."\n";
+				}
+			}
+			$file[] = "}\n";
+			$file[] = "\n";
+		}
+		
+		// open file for writing and replace it
+		$fp = fopen($this->configFile, 'w');
+		fwrite($fp,implode('',$file));
+		fclose($fp);
+		
+		// Also remove cache file
+		if(file_exists($this->cacheFile))
+			unlink($this->cacheFile);
+		
+		return TRUE;
 	}
 	
 	/**

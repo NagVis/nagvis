@@ -279,27 +279,20 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 					
 					// Clear the response
 					sResponse = '';
-					
-					// Retry after sleep of x seconds for x times
-					if(bRetryable) {
-						// FIXME: Retry after short wait
-						//for(var i = 0; i < 2 && sResponse == null; i++) {
-						//	sResponse = getSyncRequest(sUrl, bCacheable, false);
-						//}
-					}
-					
-					//FIXME: Think about caching the error!
 				} else {
 					// Handle invalid response (No JSON format)
 					try {
 						sResponse = eval('( '+responseText+')');
 					} catch(e) {
 						jsonError("Invalid json response:\nTime:" + timestamp + "\nURL: " + sUrl + "\nResponse: " + responseText);
-
-						// Clear the response
 						sResponse = '';
 					}
-					
+
+					if(typeof(sResponse) !== 'object') {
+						jsonError("Invalid json response:\nTime:" + timestamp + "\nURL: " + sUrl + "\nResponse: " + responseText);
+						sResponse = '';
+					}
+
 					if(sResponse !== null && bCacheable) {
 						// Cache that answer (only when no error/warning/...)
 						updateQueryCache(url, timestamp, responseText);

@@ -87,9 +87,9 @@ class WuiViewMap {
 	 */
 	private function parseViewProperties() {
 		return json_encode(Array(
-			'grid_show'  => intval($this->MAP->MAPCFG->getValue('global', 0, 'grid_show')),
-			'grid_color' =>        $this->MAP->MAPCFG->getValue('global', 0, 'grid_color'),
-			'grid_steps' => intval($this->MAP->MAPCFG->getValue('global', 0, 'grid_steps'))
+			'grid_show'  => intval($this->MAP->MAPCFG->getValue(0, 'grid_show')),
+			'grid_color' =>        $this->MAP->MAPCFG->getValue(0, 'grid_color'),
+			'grid_steps' => intval($this->MAP->MAPCFG->getValue(0, 'grid_steps'))
 		));
 	}
 }

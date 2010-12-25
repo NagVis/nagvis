@@ -144,40 +144,37 @@ class CoreModGeneral extends CoreModule {
 	private function getObjectStates() {
 		$arrReturn = Array();
 		
-		$aOpts = Array('ty' => MATCH_GET_OBJECT_TYPE, 't'  => MATCH_OBJECT_TYPES,
-		               'n1' => MATCH_STRING,          'n2' => MATCH_STRING_EMPTY,
+		$aOpts = Array('ty' => MATCH_GET_OBJECT_TYPE,
 		               'i'  => MATCH_STRING_NO_SPACE);
-		
+
 		$aVals = $this->getCustomOptions($aOpts);
 		
-		$sType = $aVals['ty'];
-		$arrType = $aVals['t'];
-		$arrName1 = $aVals['n1'];
-		$arrName2 = $aVals['n2'];
 		$arrObjId = $aVals['i'];
+		$sType    = $aVals['ty'];
 		
 		// Initialize backends
 		$BACKEND = new CoreBackendMgmt($this->CORE);
 			
-		$numObjects = count($arrType);
 		$aObjs = Array();
-		for($i = 0; $i < $numObjects; $i++) {
-			switch($arrType[$i]) {
+		foreach($arrObjId AS $id) {
+			list($type, $name) = explode('-', $id, 2);
+
+			switch($type) {
 				case 'map':
-					if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted('Map', 'view', $arrName1[$i]))
+					if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted('Map', 'view', $name))
 						continue 2;
 					
-					$MAPCFG = new NagVisMapCfg($this->CORE, $arrName1[$i]);
+					$MAPCFG = new NagVisMapCfg($this->CORE, $name);
 					$MAPCFG->readMapConfig();
 					
 					$OBJ = new NagVisMapObj($this->CORE, $BACKEND, $MAPCFG, !IS_VIEW);
 					$OBJ->fetchMapObjects();
 				break;
 				case 'automap':
-					if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted('AutoMap', 'view', $arrName1[$i]))
+					if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted('AutoMap', 'view', $name))
 						continue 2;
 					
-					$MAPCFG = new NagVisAutomapCfg($this->CORE, $arrName1[$i]);
+					$MAPCFG = new NagVisAutomapCfg($this->CORE, $name);
 					$MAPCFG->readMapConfig();
 					
 					$aOpts = Array('backend'     => MATCH_STRING_NO_SPACE_EMPTY,
@@ -192,7 +189,7 @@ class CoreModGeneral extends CoreModule {
 					$aOpts = $this->getCustomOptions($aOpts);
 					
 					// Save the automap name to use
-					$aOpts['automap'] = $arrName1[$i];
+					$aOpts['automap'] = $name;
 					// Save the preview mode (Enables/Disables printing of errors)
 					$aOpts['preview'] = 0;
 					
@@ -216,7 +213,7 @@ class CoreModGeneral extends CoreModule {
 					$arr[0][$key] = $default;
 			
 			$OBJ->setConfiguration($arr[0]);
-			$OBJ->setObjectId($arrObjId[$i]);
+			$OBJ->setObjectId($id);
 			
 			$OBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
 			

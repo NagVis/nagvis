@@ -157,7 +157,7 @@ class NagVisHeaderMenu {
 			}
 			
 			// Only show maps which should be shown
-			if($MAPCFG1->getValue('global', 0, 'show_in_lists') != 1)
+			if($MAPCFG1->getValue(0, 'show_in_lists') != 1)
 				continue;
 
 			// Only proceed permited objects
@@ -167,7 +167,7 @@ class NagVisHeaderMenu {
 				continue;
 			
 			$map['mapName'] = $MAPCFG1->getName();
-			$map['mapAlias'] = $MAPCFG1->getValue('global', '0', 'alias');
+			$map['mapAlias'] = $MAPCFG1->getValue(0, 'alias');
 			$map['childs'] = Array();
 			if($type == 'maps') {
 				$map['urlParams'] = '';
@@ -175,17 +175,17 @@ class NagVisHeaderMenu {
 
 				$permEditAnyMap |= $map['permittedEdit'];
 			} else
-				$map['urlParams'] = str_replace('&', '&amp;', $MAPCFG1->getValue('global', 0, 'default_params'));
+				$map['urlParams'] = str_replace('&', '&amp;', $MAPCFG1->getValue(0, 'default_params'));
 			
 			// auto select current map and apply map specific optins to the header menu
 			if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName()) {
 				$map['selected'] = True;
 				
 				// Override header fade option with map config
-				$this->aMacros['bEnableFade'] = $MAPCFG1->getValue('global', 0, 'header_fade');
+				$this->aMacros['bEnableFade'] = $MAPCFG1->getValue(0, 'header_fade');
 			}
 			
-			$map['parent'] = $MAPCFG1->getValue('global', 0, 'parent_map');
+			$map['parent'] = $MAPCFG1->getValue(0, 'parent_map');
 
 			if($map['parent'] === '')
 				$aMaps[$map['mapName']] = $map;
@@ -247,7 +247,7 @@ class NagVisHeaderMenu {
 		// Replace some special macros
 		if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap')) {
 			$this->aMacros['currentMap'] = $this->OBJ->getName();
-			$this->aMacros['currentMapAlias'] = $this->OBJ->getValue('global', '0', 'alias');
+			$this->aMacros['currentMapAlias'] = $this->OBJ->getValue(0, 'alias');
 		} else {
 			$this->aMacros['currentMap'] = '';
 			$this->aMacros['currentMapAlias'] = '';

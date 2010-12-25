@@ -145,23 +145,23 @@ class CoreModAutoMap extends CoreModule {
 		$MAPCFG->readMapConfig(ONLY_GLOBAL);
 		
 		$arr = Array();
-		$arr['map_name'] = $MAPCFG->getName();
-		$arr['alias'] = $MAPCFG->getValue('global', 0, 'alias');
-		$arr['background_image'] = $this->CORE->getMainCfg()->getValue('paths', 'htmlsharedvar').$MAPCFG->getName().'.png?'.mt_rand(0,10000);
-		$arr['background_usemap'] = '#automap';
-		$arr['background_color'] = $MAPCFG->getValue('global', 0, 'background_color');
-		$arr['favicon_image'] = $this->CORE->getMainCfg()->getValue('paths', 'htmlimages').'internal/favicon.png';
-		$arr['page_title'] = $MAPCFG->getValue('global', 0, 'alias').' ([SUMMARY_STATE]) :: '.$this->CORE->getMainCfg()->getValue('internal', 'title');
-		$arr['event_background'] = $MAPCFG->getValue('global', 0, 'event_background');
-		$arr['event_highlight'] = $MAPCFG->getValue('global', 0, 'event_highlight');
-		$arr['event_highlight_interval'] = $MAPCFG->getValue('global', 0, 'event_highlight_interval');
-		$arr['event_highlight_duration'] = $MAPCFG->getValue('global', 0, 'event_highlight_duration');
-		$arr['event_log'] = $MAPCFG->getValue('global', 0, 'event_log');
-		$arr['event_log_level'] = $MAPCFG->getValue('global', 0, 'event_log_level');
-		$arr['event_log_height'] = $MAPCFG->getValue('global', 0, 'event_log_height');
-		$arr['event_log_hidden'] = $MAPCFG->getValue('global', 0, 'event_log_hidden');
-		$arr['event_scroll'] = $MAPCFG->getValue('global', 0, 'event_scroll');
-		$arr['event_sound'] = $MAPCFG->getValue('global', 0, 'event_sound');
+		$arr['map_name']                 = $MAPCFG->getName();
+		$arr['alias']                    = $MAPCFG->getValue(0, 'alias');
+		$arr['background_image']         = $this->CORE->getMainCfg()->getValue('paths', 'htmlsharedvar').$MAPCFG->getName().'.png?'.mt_rand(0,10000);
+		$arr['background_usemap']        = '#automap';
+		$arr['background_color']         = $MAPCFG->getValue(0, 'background_color');
+		$arr['favicon_image']            = $this->CORE->getMainCfg()->getValue('paths', 'htmlimages').'internal/favicon.png';
+		$arr['page_title']               = $MAPCFG->getValue(0, 'alias').' ([SUMMARY_STATE]) :: '.$this->CORE->getMainCfg()->getValue('internal', 'title');
+		$arr['event_background']         = $MAPCFG->getValue(0, 'event_background');
+		$arr['event_highlight']          = $MAPCFG->getValue(0, 'event_highlight');
+		$arr['event_highlight_interval'] = $MAPCFG->getValue(0, 'event_highlight_interval');
+		$arr['event_highlight_duration'] = $MAPCFG->getValue(0, 'event_highlight_duration');
+		$arr['event_log']                = $MAPCFG->getValue(0, 'event_log');
+		$arr['event_log_level']          = $MAPCFG->getValue(0, 'event_log_level');
+		$arr['event_log_height']         = $MAPCFG->getValue(0, 'event_log_height');
+		$arr['event_log_hidden']         = $MAPCFG->getValue(0, 'event_log_hidden');
+		$arr['event_scroll']             = $MAPCFG->getValue(0, 'event_scroll');
+		$arr['event_sound']              = $MAPCFG->getValue(0, 'event_sound');
 		
 		return json_encode($arr);
 	}
@@ -184,16 +184,10 @@ class CoreModAutoMap extends CoreModule {
 		$arrReturn = Array();
 		
 		$aOpts = Array('ty' => MATCH_GET_OBJECT_TYPE,
-		               't'  => MATCH_OBJECT_TYPES,
-		               'n1' => MATCH_STRING,
-		               'n2' => MATCH_STRING_EMPTY,
 		               'i'  => MATCH_STRING_NO_SPACE);
 		$aVals = $this->getCustomOptions($aOpts);
 		
 		$sType = $aVals['ty'];
-		$arrType = $aVals['t'];
-		$arrName1 = $aVals['n1'];
-		$arrName2 = $aVals['n2'];
 		$arrObjId = $aVals['i'];
 		
 		// Initialize backends
@@ -202,7 +196,7 @@ class CoreModAutoMap extends CoreModule {
 		// Read the map configuration file
 		$MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
 		$MAPCFG->readMapConfig();
-		$MAPCFG->filterMapObjects($aVals['t'], $aVals['i']);
+		$MAPCFG->filterMapObjects($aVals['i']);
 
 
 		$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);

@@ -94,10 +94,10 @@ class WuiCore extends GlobalCore {
 			$aOpts['mapName'] = $map;
 			
 			// map alias
-			$aOpts['mapAlias'] = $MAPCFG1->getValue('global', '0', 'alias');
+			$aOpts['mapAlias'] = $MAPCFG1->getValue(0, 'alias');
 			
 			// used image
-			$aOpts['mapImage'] = $MAPCFG1->getValue('global', '0', 'map_image');
+			$aOpts['mapImage'] = $MAPCFG1->getValue(0, 'map_image');
 			
 			// linked maps
 			$aOpts['linkedMaps'] = Array();

@@ -55,7 +55,7 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 		// Re-initialize the cache
 		$this->initCache();
 	}
-	
+
 	/**
 	 * Gets the configuration of the objects using the global configuration
 	 *
@@ -81,14 +81,18 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 					 && $key != 'x'
 					 && $key != 'y'
 					 && $key != 'line_width') {
-					$this->defaultConf[$key] = $this->getValue('host', 0, $key);
+					$this->defaultConf[$key] = $this->getValue(0, $key);
 				}
 			}
 
-			$this->deleteElement('host', 0);
+			$this->deleteElement(0);
 		}
 		
 		return $this->defaultConf;
+	}
+
+	public function writeElement($id) {
+		echo 'Dummy element write';
 	}
 }
 ?>

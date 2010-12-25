@@ -88,7 +88,7 @@ class CoreModMultisite extends CoreModule {
 				$map['configErrorMsg'] = $e->getMessage();
 			}
 			
-			if($MAPCFG->getValue('global',0 , 'show_in_lists') != 1)
+			if($MAPCFG->getValue(0, 'show_in_lists') != 1)
 				continue;
 			
 			$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND, GET_STATE, !IS_VIEW);

@@ -97,7 +97,7 @@ class FrontendModMap extends FrontendModule {
 		$INDEX = new NagVisIndexView($this->CORE);
 		
 		// Need to load the custom stylesheet?
-		$customStylesheet = $MAPCFG->getValue('global',0, 'stylesheet');
+		$customStylesheet = $MAPCFG->getValue(0, 'stylesheet');
 		if($customStylesheet !== '') {
 			$INDEX->setCustomStylesheet($this->CORE->getMainCfg()->getValue('paths','htmlstyles') . $customStylesheet);
 		}
@@ -108,13 +108,13 @@ class FrontendModMap extends FrontendModule {
 		} elseif($this->viewOpts['enableHeader'] !== false && !$this->viewOpts['enableHeader']) {
 			$showHeader = false;
 		} else {
-			$showHeader = $MAPCFG->getValue('global',0 ,'header_menu');
+			$showHeader = $MAPCFG->getValue(0 ,'header_menu');
 		}
 		
 		// Need to parse the header menu by config or url value?
 		if($showHeader) {
       // Parse the header menu
-      $HEADER = new NagVisHeaderMenu($this->CORE, $this->AUTHORISATION, $this->UHANDLER, $MAPCFG->getValue('global',0 ,'header_template'), $MAPCFG);
+      $HEADER = new NagVisHeaderMenu($this->CORE, $this->AUTHORISATION, $this->UHANDLER, $MAPCFG->getValue(0 ,'header_template'), $MAPCFG);
       
       // Put rotation information to header menu
       if($this->rotation != '') {

@@ -57,8 +57,8 @@ class GlobalIndexPage {
 	 */
 	public function parseMapsJson($type) {
 		// Only display the rotation list when enabled
-		if(!$this->CORE->getMainCfg()->getValue('index','show'.$type.'s') == 1)
-			return Array();
+		if(!$this->CORE->getMainCfg()->getValue('index', 'show'.$type.'s') == 1)
+			return json_encode(Array());
 
 		if($type == 'automap')
 			$mapList = $this->CORE->getAvailableAutomaps();
@@ -89,7 +89,7 @@ class GlobalIndexPage {
 				$MAPCFG->readMapConfig();
 				
 				// Only perform this check with a valid config
-				if($MAPCFG->getValue('global',0, 'show_in_lists') != 1)
+				if($MAPCFG->getValue(0, 'show_in_lists') != 1)
 					continue;
 				
 				$objConf = $MAPCFG->getTypeDefaults('global');
@@ -107,7 +107,7 @@ class GlobalIndexPage {
 			// Apply default configuration to object
 			$objConf['type']              = 'map';
 			$objConf['map_name']          = $mapName;
-			$objConf['object_id']         = $type.'-'.$object_id;
+			$objConf['object_id']         = $type.'-'.$mapName;
 			// Enable the hover menu in all cases - maybe make it configurable
 			$objConf['hover_menu']        = 1;
 			$objConf['hover_childs_show'] = 1;
@@ -126,7 +126,7 @@ class GlobalIndexPage {
 				$MAP->MAPOBJ->fetchIcon();
 			} elseif($MAP->MAPOBJ->checkMaintenance(0)) {
 				if($type == 'automap')
-					$map['overview_url']    = $this->htmlBase.'/index.php?mod=AutoMap&act=view&show='.$mapName.$MAPCFG->getValue('global', 0, 'default_params');
+					$map['overview_url']    = $this->htmlBase.'/index.php?mod=AutoMap&act=view&show='.$mapName.$MAPCFG->getValue(0, 'default_params');
 				else
 					$map['overview_url']    = $this->htmlBase.'/index.php?mod=Map&act=view&show='.$mapName;
 				

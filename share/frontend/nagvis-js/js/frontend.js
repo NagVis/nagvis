@@ -623,7 +623,10 @@ function updateMapBasics() {
 		sAutomapParams = getAutomapParams();
 	
 	// Get new map state from core
-	oMapSummaryObj = new NagVisMap(getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getObjectStates&ty=state&i[]='+escapeUrlValues(oPageProperties.map_name)+'&t[]='+escapeUrlValues(oPageProperties.view_type)+'&n1[]='+escapeUrlValues(oPageProperties.map_name)+sAutomapParams, false)[0]);
+	oMapSummaryObj = new NagVisMap(getSyncRequest(oGeneralProperties.path_server
+	                               + '?mod=General&act=getObjectStates&ty=state&i[]='
+																 + escapeUrlValues(oPageProperties.map_name)
+																 + sAutomapParams, false)[0]);
 	sAutomapParams = null;
 
 	// FIXME: Add method to refetch oMapSummaryObj when it is null
@@ -820,10 +823,7 @@ function refreshMapObject(objectId) {
 	var oObj = getMapObjByDomObjId(objectId);
 	
 	var name = oObj.conf.name;
-	
-	var type = oObj.conf.type;
 	var obj_id = oObj.conf.object_id;
-	var service_description = oObj.conf.service_description;
 	var map = oPageProperties.map_name;
 	oObj = null;
 	
@@ -844,14 +844,7 @@ function refreshMapObject(objectId) {
 	}
 	
 	// Create request string
-	var sUrlPart = '&i[]=' + escapeUrlValues(obj_id)
-                  + '&t[]=' + escapeUrlValues(type)
-                  + '&n1[]=' + escapeUrlValues(name);
-	if(service_description) {
-		sUrlPart = sUrlPart + '&n2[]=' + escapeUrlValues(service_description);
-	} else {
-		sUrlPart = sUrlPart + '&n2[]=';
-	}
+	var sUrlPart = '&i[]=' + escapeUrlValues(obj_id);
 	
 	// Get the updated objectsupdateMapObjects via bulk request
 	var o = getSyncRequest(oGeneralProperties.path_server+'?mod='
@@ -864,7 +857,6 @@ function refreshMapObject(objectId) {
 	map = null;
 	service_description = null;
 	obj_id = null;
-	type = null;
 	name = null;
 	
 	var bStateChanged = false;
@@ -1942,14 +1934,10 @@ function getUrlParts(arrObj) {
 			var service_description = aMapObjects[arrObj[i]].conf.service_description;
 			
 			// Create request string
-			var sUrlPart = '&i[]='+obj_id+'&t[]='+type+'&n1[]='+name;
-			if(service_description)
-				sUrlPart += '&n2[]='+escapeUrlValues(service_description);
-			else
-				sUrlPart += '&n2[]=';
+			var sUrlPart = '&i[]='+obj_id;
 			
-			// Adding 4 params above code, count them here
-			iUrlParams += 4;
+			// Adding 1 params above code, count them here
+			iUrlParams += 1;
 			
 			// Append part to array of parts
 			aUrlParts.push(sUrlPart);

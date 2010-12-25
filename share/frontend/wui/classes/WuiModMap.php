@@ -50,10 +50,10 @@ class WuiModMap extends WuiModule {
 		// Build index template
 		$INDEX = new WuiViewIndex($this->CORE);
 		$INDEX->setSubtitle('WUI');
-		$INDEX->setBackgroundColor($MAPCFG->getValue('global', 0, 'background_color'));
+		$INDEX->setBackgroundColor($MAPCFG->getValue(0, 'background_color'));
 		
 		// Need to load the custom stylesheet?
-		$customStylesheet = $MAPCFG->getValue('global', 0, 'stylesheet');
+		$customStylesheet = $MAPCFG->getValue(0, 'stylesheet');
 		if($customStylesheet !== '') {
 			$INDEX->setCustomStylesheet($this->CORE->getMainCfg()->getValue('paths','htmlstyles') . $customStylesheet);
 		}

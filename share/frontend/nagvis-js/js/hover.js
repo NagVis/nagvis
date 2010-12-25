@@ -124,8 +124,7 @@ function replaceHoverTemplateMacrosChild(oObj, sTemplateCode) {
 function replaceHoverTemplateDynamicMacros(oObj) {
 	var oMacros = {};
 
-	if(typeof(oPageProperties) != 'undefined' && oPageProperties != null 
-	   && (oPageProperties.view_type === 'map' || oPageProperties.view_type === 'automap'))
+	if(isset(oPageProperties) && (oPageProperties.view_type === 'map' || oPageProperties.view_type === 'automap'))
 		oMacros.map_name = oPageProperties.map_name;
 	
 	oMacros.last_status_refresh = date(oGeneralProperties.date_format, oObj.lastUpdate/1000);
@@ -319,15 +318,16 @@ function replaceHoverTemplateStaticMacros(oObj, sTemplateCode) {
 
 function displayHoverMenu(event, objId, iHoverDelay) {
 	// IE is evil and doesn't pass the event object
-	if (event === null || typeof event === 'undefined')
+	if(!isset(event))
 		event = window.event;
 	
 	// Only show up hover menu when no context menu is opened
 	// and only handle the events when no timer is in schedule at the moment to
 	// prevent strange movement effects when the timer has finished
-	if(!contextOpen() && _hoverTimer === null)
+	if(!contextOpen() && _hoverTimer === null) {
 		if(iHoverDelay && iHoverDelay != "0" && !hoverOpen())
 			_hoverTimer = setTimeout('hoverShow('+event.clientX+', '+event.clientY+', '+objId+')', parseInt(iHoverDelay)*1000);
 		else
 			hoverShow(event.clientX, event.clientY, objId);
+	}
 }

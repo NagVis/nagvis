@@ -81,7 +81,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 		
 		$this->clearMembers();
 		
-		$this->backend_id = $this->MAPCFG->getValue('global', 0, 'backend_id');
+		$this->backend_id = $this->MAPCFG->getValue(0, 'backend_id');
 		
 		parent::__construct($CORE, $BACKEND);
 	}
@@ -321,7 +321,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function checkMaintenance($printErr) {
-		if($this->MAPCFG->getValue('global', 0, 'in_maintenance')) {
+		if($this->MAPCFG->getValue(0, 'in_maintenance')) {
 			if($printErr)
 				new GlobalMessage('INFO-STOP', $this->CORE->getLang()->getText('mapInMaintenance', 'MAP~'.$this->getName()));
 			return false;
@@ -336,118 +336,117 @@ class NagVisMapObj extends NagVisStatefulObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function fetchMapObjects(&$arrMapNames = Array(), $depth = 0) {
-		foreach($this->MAPCFG->getValidObjectTypes() AS $type) {
-			if($type != 'global' && $type != 'template' && is_array($objs = $this->MAPCFG->getDefinitions($type))){
-				$typeDefs = $this->MAPCFG->getTypeDefaults($type);
-				foreach($objs AS $index => $objConf) {
-					// workaround
-					$objConf['id'] = $index;
+		foreach($this->MAPCFG->getMapObjects() AS $objConf) {
+			$type = $objConf['type'];
+
+			if($type == 'global' || $type == 'template')
+				continue;
+
+			$typeDefs = $this->MAPCFG->getTypeDefaults($type);
+			
+			// merge with "global" settings
+			foreach($typeDefs AS $key => $default)
+				if(!isset($objConf[$key]))
+					$objConf[$key] = $default;
+			
+			switch($type) {
+				case 'host':
+					$OBJ = new NagVisHost($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['host_name']);
+				break;
+				case 'service':
+					$OBJ = new NagVisService($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['host_name'], $objConf['service_description']);
+				break;
+				case 'hostgroup':
+					$OBJ = new NagVisHostgroup($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['hostgroup_name']);
+				break;
+				case 'servicegroup':
+					$OBJ = new NagVisServicegroup($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['servicegroup_name']);
+				break;
+				case 'map':
+					// Initialize map configuration based on map type
+					if($this->CORE->checkMapIsAutomap($objConf['map_name'])) {
+						$SUBMAPCFG = new NagVisAutomapCfg($this->CORE, $objConf['map_name']);
+
+						// Override the default map url for the automaps
+						$objConf['url'] = str_replace('mod=Map', 'mod=AutoMap', $objConf['url']);
+					} else
+						$SUBMAPCFG = new NagVisMapCfg($this->CORE, $objConf['map_name']);
 					
-					// merge with "global" settings
-					foreach($typeDefs AS $key => $default)
-						if(!isset($objConf[$key]))
-							$objConf[$key] = $default;
-					
-					switch($type) {
-						case 'host':
-							$OBJ = new NagVisHost($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['host_name']);
-						break;
-						case 'service':
-							$OBJ = new NagVisService($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['host_name'], $objConf['service_description']);
-						break;
-						case 'hostgroup':
-							$OBJ = new NagVisHostgroup($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['hostgroup_name']);
-						break;
-						case 'servicegroup':
-							$OBJ = new NagVisServicegroup($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['servicegroup_name']);
-						break;
-						case 'map':
-							// Initialize map configuration based on map type
-							if($this->CORE->checkMapIsAutomap($objConf['map_name'])) {
-								$SUBMAPCFG = new NagVisAutomapCfg($this->CORE, $objConf['map_name']);
-
-								// Override the default map url for the automaps
-								$objConf['url'] = str_replace('mod=Map', 'mod=AutoMap', $objConf['url']);
-							} else
-								$SUBMAPCFG = new NagVisMapCfg($this->CORE, $objConf['map_name']);
-							
-							$mapCfgInvalid = null;
-							if($SUBMAPCFG->checkMapConfigExists(0)) {
-								try {
-									$SUBMAPCFG->readMapConfig();
-								} catch(MapCfgInvalid $e) {
-									$mapCfgInvalid = $this->CORE->getLang()->getText('Map Configuration Error: [ERR]', Array('ERR' => $e->getMessage()));
-								}
-							}
-
-							if($this->CORE->checkMapIsAutomap($objConf['map_name'])) {
-								$MAP = new NagVisAutoMap($this->CORE, $SUBMAPCFG, $this->BACKEND, Array(), !IS_VIEW);
-								$OBJ = $MAP->MAPOBJ;
-							} else 
-								$OBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $SUBMAPCFG, !IS_VIEW);
-
-							if($mapCfgInvalid)
-								$OBJ->setProblem($mapCfgInvalid);
-							
-							if(!$SUBMAPCFG->checkMapConfigExists(0))
-								$OBJ->setProblem($this->CORE->getLang()->getText('mapCfgNotExists', 'MAP~'.$objConf['map_name']));
-							
-							/**
-							* When the current map object is a summary object skip the map
-							* child for preventing a loop
-							*/
-							if($this->MAPCFG->getName() == $SUBMAPCFG->getName() && $this->isSummaryObject == true)
-								continue 2;
-
-							/**
-							* This occurs when someone creates a map icon which links to itself
-							*
-							* The object will be marked as summary object and is ignored on next level.
-							* See the code above.
-							*/
-							if($this->MAPCFG->getName() == $SUBMAPCFG->getName())
-								$OBJ->isSummaryObject = true;
-
-							/**
-							 * All maps which were seen before are stored in the list once. If
-							 * they are already in the list and depth is more than 3 levels,
-							 * skip them to prevent loops.
-							 */
-							if(isset($arrMapNames[$SUBMAPCFG->getName()]) && ($depth > 3)) {
-								$OBJ->isLoopingBacklink = true;
-								continue 2;
-							}
-
-							// Store this map in the mapNames list
-							$arrMapNames[$SUBMAPCFG->getName()] = true;
-							
-							// Skip this map when the user is not permitted toview this map
-							if(!$this->isPermitted($OBJ)) {
-								continue 2;
-							}
-						break;
-						case 'shape':
-							$OBJ = new NagVisShape($this->CORE, $objConf['icon']);
-						break;
-						case 'textbox':
-							$OBJ = new NagVisTextbox($this->CORE);
-						break;
-						case 'line':
-							$OBJ = new NagVisLine($this->CORE);
-						break;
-						default:
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName()));
-							$OBJ = null;
-						break;
+					$mapCfgInvalid = null;
+					if($SUBMAPCFG->checkMapConfigExists(0)) {
+						try {
+							$SUBMAPCFG->readMapConfig();
+						} catch(MapCfgInvalid $e) {
+							$mapCfgInvalid = $this->CORE->getLang()->getText('Map Configuration Error: [ERR]', Array('ERR' => $e->getMessage()));
+						}
 					}
 
-					// Apply default configuration to object
-					$OBJ->setConfiguration($objConf);
+					if($this->CORE->checkMapIsAutomap($objConf['map_name'])) {
+						$MAP = new NagVisAutoMap($this->CORE, $SUBMAPCFG, $this->BACKEND, Array(), !IS_VIEW);
+						$OBJ = $MAP->MAPOBJ;
+					} else 
+						$OBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $SUBMAPCFG, !IS_VIEW);
+
+					if($mapCfgInvalid)
+						$OBJ->setProblem($mapCfgInvalid);
 					
-					// Write member to object array
-					$this->members[] = $OBJ;
-				}
+					if(!$SUBMAPCFG->checkMapConfigExists(0))
+						$OBJ->setProblem($this->CORE->getLang()->getText('mapCfgNotExists', 'MAP~'.$objConf['map_name']));
+					
+					/**
+					* When the current map object is a summary object skip the map
+					* child for preventing a loop
+					*/
+					if($this->MAPCFG->getName() == $SUBMAPCFG->getName() && $this->isSummaryObject == true)
+						continue 2;
+
+					/**
+					* This occurs when someone creates a map icon which links to itself
+					*
+					* The object will be marked as summary object and is ignored on next level.
+					* See the code above.
+					*/
+					if($this->MAPCFG->getName() == $SUBMAPCFG->getName())
+						$OBJ->isSummaryObject = true;
+
+					/**
+					 * All maps which were seen before are stored in the list once. If
+					 * they are already in the list and depth is more than 3 levels,
+					 * skip them to prevent loops.
+					 */
+					if(isset($arrMapNames[$SUBMAPCFG->getName()]) && ($depth > 3)) {
+						$OBJ->isLoopingBacklink = true;
+						continue 2;
+					}
+
+					// Store this map in the mapNames list
+					$arrMapNames[$SUBMAPCFG->getName()] = true;
+					
+					// Skip this map when the user is not permitted toview this map
+					if(!$this->isPermitted($OBJ)) {
+						continue 2;
+					}
+				break;
+				case 'shape':
+					$OBJ = new NagVisShape($this->CORE, $objConf['icon']);
+				break;
+				case 'textbox':
+					$OBJ = new NagVisTextbox($this->CORE);
+				break;
+				case 'line':
+					$OBJ = new NagVisLine($this->CORE);
+				break;
+				default:
+					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName()));
+					$OBJ = null;
+				break;
 			}
+
+			// Apply default configuration to object
+			$OBJ->setConfiguration($objConf);
+			
+			// Write member to object array
+			$this->members[] = $OBJ;
 		}
 
 		// Now dig into the next map level. This has to be done here to fight

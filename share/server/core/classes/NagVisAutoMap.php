@@ -82,7 +82,7 @@ class NagVisAutoMap extends GlobalMap {
 		
 		// Fetch option array from defaultparams string (extract variable 
 		// names and values)
-		$params = explode('&', $this->MAPCFG->getValue('global', 0, 'default_params'));
+		$params = explode('&', $this->MAPCFG->getValue(0, 'default_params'));
 		unset($params[0]);
 		
 		foreach($params AS $set) {
@@ -103,7 +103,7 @@ class NagVisAutoMap extends GlobalMap {
 		$this->checkPreflight();
 		
 		if(!isset($prop['backend']) || $prop['backend'] == '')
-			$prop['backend'] = $this->MAPCFG->getValue('global', 0, 'backend_id');
+			$prop['backend'] = $this->MAPCFG->getValue(0, 'backend_id');
 
 		$this->backend_id = $prop['backend'];
 		
@@ -237,7 +237,7 @@ class NagVisAutoMap extends GlobalMap {
 		$str .= 'dpi="72", ';
 		//ratio: expand, auto, fill, compress
 		$str .= 'ratio="fill", ';
-		$str .= 'bgcolor="'.$this->MAPCFG->getValue('global', 0, 'background_color').'", ';
+		$str .= 'bgcolor="'.$this->MAPCFG->getValue(0, 'background_color').'", ';
 		$str .= 'root="'.$this->rootObject->getType().'_'.$this->rootObject->getObjectId().'", ';
 		
 		/* Directed (dot) only */

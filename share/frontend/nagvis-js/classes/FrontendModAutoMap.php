@@ -113,8 +113,8 @@ class FrontendModAutoMap extends FrontendModule {
 		foreach($this->opts AS $key => $val)
 			$s .= '&'.$key.'='.$val;
 
-		$MAPCFG->setValue('global', 0, 'default_params', $s);
-		$MAPCFG->writeElement('global', 0);
+		$MAPCFG->setValue(0, 'default_params', $s);
+		$MAPCFG->writeElement(0);
 	}
 	
 	private function showViewDialog() {
@@ -135,7 +135,7 @@ class FrontendModAutoMap extends FrontendModule {
 		$INDEX = new NagVisIndexView($this->CORE);
 		
 		// Need to load the custom stylesheet?
-		$customStylesheet = $MAPCFG->getValue('global',0, 'stylesheet');
+		$customStylesheet = $MAPCFG->getValue(0, 'stylesheet');
 		if($customStylesheet !== '') {
 			$INDEX->setCustomStylesheet($CORE->getMainCfg()->getValue('paths','htmlstyles') . $customStylesheet);
 		}
@@ -146,13 +146,13 @@ class FrontendModAutoMap extends FrontendModule {
 		} elseif($this->viewOpts['enableHeader'] !== false && !$this->viewOpts['enableHeader']) {
 			$showHeader = false;
 		} else {
-			$showHeader = $MAPCFG->getValue('global',0 ,'header_menu');
+			$showHeader = $MAPCFG->getValue(0 ,'header_menu');
 		}
 		
 		// Need to parse the header menu?
 		if($showHeader) {
 			// Parse the header menu
-			$HEADER = new NagVisHeaderMenu($this->CORE, $this->AUTHORISATION, $this->UHANDLER, $MAPCFG->getValue('global',0 ,'header_template'), $MAPCFG);
+			$HEADER = new NagVisHeaderMenu($this->CORE, $this->AUTHORISATION, $this->UHANDLER, $MAPCFG->getValue(0, 'header_template'), $MAPCFG);
 			
 			// Put rotation information to header menu
 			if($this->rotation != '') {
