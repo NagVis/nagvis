@@ -111,7 +111,8 @@ class FrontendModAutoMap extends FrontendModule {
 	private function saveDefaultParams($MAPCFG) {
 		$s = '';
 		foreach($this->opts AS $key => $val)
-			$s .= '&'.$key.'='.$val;
+			if($key !== 'perm')
+				$s .= '&'.$key.'='.$val;
 
 		$MAPCFG->setValue(0, 'default_params', $s);
 		$MAPCFG->writeElement(0);
