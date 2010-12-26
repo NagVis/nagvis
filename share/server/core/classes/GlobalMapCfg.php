@@ -37,6 +37,7 @@ class GlobalMapCfg {
   protected $typeDefaults = Array();
 	
 	private $configFile = '';
+	private $configFileContents = null;
 	protected $cacheFile = '';
 	protected $defaultsCacheFile = '';
 	protected $mapLockPath;
@@ -1619,11 +1620,8 @@ class GlobalMapCfg {
 					} 
 
 					// This is a new definition and it's a valid one
-					
-					// Get the type index
 					$obj = Array(
 					  'type'      => $sObjType,
-					  'object_id' => $iObjId
 					);
 
 					continue;
@@ -1758,7 +1756,7 @@ class GlobalMapCfg {
 		
 		// Everything is merged: The templates are not relevant anymore
 		// FIXME
-		unset($this->mapConfig['template']);
+		//unset($this->mapConfig['template']);
 	}
 	
 	/**
@@ -1819,13 +1817,15 @@ class GlobalMapCfg {
 
 			if($todo) {
 				$new = $this->genObjId($id);
+				$a = $id;
 				while(isset($this->mapConfig[$new]))
-					$new = $this->genObjId($id++);
+					$new = $this->genObjId($a++);
 
 				$this->mapConfig[$id]['object_id'] = $new;
 				$this->mapConfig[$new] = $this->mapConfig[$id];
 				unset($this->mapConfig[$id]);
 
+				$toBeWritten[] = $id;
 				$toBeWritten[] = $new;
 				$aleadySeen[$new] = true;
 			}
@@ -1833,7 +1833,10 @@ class GlobalMapCfg {
 
 		// Now write down all the updated objects
 		foreach($toBeWritten AS $id)
-			$this->writeElement($id);
+			if($id[0] === '_')
+				$this->storeDeleteElement($id);
+			else
+				$this->storeAddElement($id);
 	}
 	
 	/**
@@ -2022,9 +2025,164 @@ class GlobalMapCfg {
 	 * @return	Boolean	TRUE
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function deleteElement($id) {
+	public function deleteElement($id, $perm = false) {
 		unset($this->mapConfig[$id]);
+		if($perm)
+			$this->storeDeleteElement($id);
 		return true;
+	}
+
+	public function storeAddElement($id) {
+		$f = $this->getConfig();
+
+		$type = $this->mapConfig[$id]['type'];
+
+		if(count($f) > 0 && $f[count($f) - 1] !== "\n")
+			$f[] = "\n";
+		
+		$f[] = 'define '.$type." {\n";
+
+		// Templates need a special handling here cause they can have all types
+		// of options. So read all keys which are currently set
+		if($type !== 'template')
+			$aKeys = $this->getValidTypeKeys($type);
+		else
+			$aKeys = array_keys($this->mapConfig[$id]);
+		
+		foreach($aKeys As $key) {
+			$val = $this->getValue($id, $key, true);
+			if(isset($val) && $val != '')
+				$f[] = $key.'='.$val."\n";
+		}
+		$f[] = "}\n";
+		$f[] = "\n";
+		
+		$this->writeConfig($f);
+		return true;
+		
+	}
+
+	/**
+	 * Searches for an element in the configuration file and deletes it if found.
+	 * The element can be given as object_id which is the new default for object
+	 * referencing in whole NagVis. Or by object number of the map with a leading
+	 * "_" sign.
+	 *
+	 * @param   Integer $id
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function storeDeleteElement($id) {
+		$start = null;
+		$inObj = false;
+		$end = null;
+
+		if($id[0] === '_')
+			list($inObj, $start, $end) = $this->getObjectLinesByNum((int) str_replace('_', '', $id));
+		else
+			list($inObj, $start, $end) = $this->getObjectLinesById($id);
+
+		if(!$inObj)
+			return false;
+
+		$f = $this->getConfig();
+		for($i = $start; $i <= $end; $i++)
+			unset($f[$i]);
+		$this->writeConfig($f);
+	}
+
+	private function writeConfig($cfg = null) {
+		if($cfg !== null)
+			$this->configFileContents = $cfg;
+
+		// open file for writing and replace it
+		$fp = fopen($this->configFile, 'w');
+		fwrite($fp,implode('', $this->configFileContents));
+		fclose($fp);
+		
+		// Also remove cache file
+		if(file_exists($this->cacheFile))
+			unlink($this->cacheFile);
+	}
+
+	private function getConfig() {
+		if($this->configFileContents === null)
+			$this->configFileContents = file($this->configFile);
+		return $this->configFileContents;
+	}
+
+	/**
+	 * Gathers the lines of an object by the number of the object
+	 *
+	 * @param   Integer $num
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function getObjectLinesByNum($num) {
+		$count = 0;
+		$start = null;
+		$inObj = false;
+		$end   = null;
+
+		$f = $this->getConfig();
+		print_r($f);
+		for($i = 0, $len = count($f); $i < $len; $i++) {
+			if(strpos($f[$i], 'define') !== false) {
+				if($count === $num) {
+					$inObj = true;
+					$start = $i;
+				}
+
+				$count++;
+				continue;
+			}
+			
+			// Terminate on first object end when in correct object
+			if($inObj && trim($f[$i]) === '}') {
+				$end = $i;
+				break;
+			}
+		}
+
+		return Array($inObj, $start, $end);
+	}
+
+	/**
+	 * Gathers the lines of an object by the given object id
+	 *
+	 * @param   Integer $id
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function getObjectLinesById($id) {
+		$start = null;
+		$inObj = false;
+		$end   = null;
+
+		$f = $this->getConfig();
+		for($i = 0, $len = count($f); $i < $len; $i++) {
+			// Save all object beginnings
+			if(strpos($f[$i], 'define') !== false) {
+				$start = $i;
+				continue;
+			}
+			
+			// Terminate on first object end when in correct object
+			if($inObj && trim($f[$i]) === '}') {
+				$end = $i;
+				break;
+			}
+
+			// Check if this is the object_id line
+			$delimPos = strpos($f[$i], '=');
+			if($delimPos !== false) {
+				$key   = trim(substr($f[$i], 0, $delimPos));
+				$value = trim(substr($f[$i], ($delimPos+1)));
+				if($key === 'object_id' && $value === $id) {
+					$inObj = true;
+					continue;
+				}
+			}
+		}
+
+		return Array($inObj, $start, $end);
 	}
 	
 	/**
@@ -2034,10 +2192,13 @@ class GlobalMapCfg {
 	 * @return	Integer	Id of the Element
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function addElement($properties) {
-		$id = $this->genObjId(count($this->mapConfig[$type]));
+	public function addElement($type, $properties, $perm = false) {
+		$id = $this->genObjId(count($this->mapConfig));
 		$this->mapConfig[$id] = $properties;
 		$this->mapConfig[$id]['object_id'] = $id;
+		$this->mapConfig[$id]['type']      = $type;
+		if($perm)
+			$this->storeAddElement($id);
 		return $id;
 	}
 	
@@ -2217,10 +2378,11 @@ class GlobalMapCfg {
 			return false;
 
 		// read file in array
-		$file = file($this->configFile);
+		$file = $this->getConfig();
 
 		// Get object type
-		$type = $this->mapConfig[$id]['type'];
+		if(isset($this->mapConfig[$id]) && isset($this->mapConfig[$id]['type']))
+			$type = $this->mapConfig[$id]['type'];
 		
 		// number of lines in the file
 		$l = 0;
@@ -2233,82 +2395,66 @@ class GlobalMapCfg {
 			if(!preg_match('/^#/',$file[$l]) && !preg_match('/^;/',$file[$l])) { 
 				$defineCln = explode('{', $file[$l]);
 				$define = explode(' ',$defineCln[0]);
-				// select only elements of the given type
-				if(isset($define[1]) && trim($define[1]) == $type) {
-					// check if element exists
-					if($a == $id) {
-						// check if element is an array...
-						if(isset($this->mapConfig[$a]) && is_array($this->mapConfig[$a])) {
-							// ...array: update!
-							
-							// choose first parameter line
-							$l++;
-							
-							// Loop all parameters from array
-							foreach($this->mapConfig[$id] AS $key => $val) {
-								// if key is not type
-								if($key == 'type')
-									continue;
+				
+				// check if element exists
+				// check if element is an array...
+				if($a == $id && isset($this->mapConfig[$a]) && is_array($this->mapConfig[$a])) {
+					// ...array: update!
+					
+					// choose first parameter line
+					$l++;
+					
+					// Loop all parameters from array
+					foreach($this->mapConfig[$id] AS $key => $val) {
+						// if key is not type
+						if($key == 'type')
+							continue;
 
-								$cfgLines = 0;
-								$cfgLine = '';
-								$cfgLineNr = 0;
-								
-								// Loop parameters from file (Find line for this option)
-								while(isset($file[($l+$cfgLines)]) && trim($file[($l+$cfgLines)]) != '}') {
-									$entry = explode('=',$file[$l+$cfgLines], 2);
-									if($key == trim($entry[0])) {
-										$cfgLineNr = $l+$cfgLines;
-										if(is_array($val)) {
-											$val = implode(',',$val);
-										}
-										$cfgLine = $key.'='.$val."\n";
-									}
-									$cfgLines++;	
+						$cfgLines = 0;
+						$cfgLine = '';
+						$cfgLineNr = 0;
+						
+						// Loop parameters from file (Find line for this option)
+						while(isset($file[($l+$cfgLines)]) && trim($file[($l+$cfgLines)]) != '}') {
+							$entry = explode('=',$file[$l+$cfgLines], 2);
+							if($key == trim($entry[0])) {
+								$cfgLineNr = $l+$cfgLines;
+								if(is_array($val)) {
+									$val = implode(',',$val);
 								}
-								
-								if($cfgLineNr != 0 && $val != '') {
-									// if a parameter was found in file and value is not empty, replace line
-									$file[$cfgLineNr] = $cfgLine;
-								} elseif($cfgLineNr != 0 && $val == '') {
-									// if a paremter is not in array or a value is empty, delete the line in the file
-									$file[$cfgLineNr] = '';
-									$cfgLines--;
-								} elseif($cfgLineNr == 0 && $val != '') {
-									// if a parameter is was not found in array and a value is not empty, create line
-									if(is_array($val)) {
-										$val = implode(',',$val);
-									}
-									$neu = $key.'='.$val."\n";
-									
-									for($i = $l; $i < count($file);$i++) {
-										$tmp = $file[$i];
-										$file[$i] = $neu;
-										$neu = $tmp;
-									}
-									$file[count($file)] = $neu;
-								} elseif($cfgLineNr == 0 && $val == '') {
-									// if a parameter is empty and a value is empty, do nothing
-								}
+								$cfgLine = $key.'='.$val."\n";
 							}
-							$l++;
-						} else {
-							// ...no array: delete!
-							$cfgLines = 0;
-							while(trim($file[($l+$cfgLines)]) != '}') {
-								$cfgLines++;
-							}
-							$cfgLines++;
-							
-							for($i = $l; $i <= $l+$cfgLines;$i++) {
-								unset($file[$i]);	
-							}
+							$cfgLines++;	
 						}
 						
-						$done = TRUE;
+						if($cfgLineNr != 0 && $val != '') {
+							// if a parameter was found in file and value is not empty, replace line
+							$file[$cfgLineNr] = $cfgLine;
+						} elseif($cfgLineNr != 0 && $val == '') {
+							// if a paremter is not in array or a value is empty, delete the line in the file
+							$file[$cfgLineNr] = '';
+							$cfgLines--;
+						} elseif($cfgLineNr == 0 && $val != '') {
+							// if a parameter is was not found in array and a value is not empty, create line
+							if(is_array($val)) {
+								$val = implode(',',$val);
+							}
+							$neu = $key.'='.$val."\n";
+							
+							for($i = $l; $i < count($file);$i++) {
+								$tmp = $file[$i];
+								$file[$i] = $neu;
+								$neu = $tmp;
+							}
+							$file[count($file)] = $neu;
+						} elseif($cfgLineNr == 0 && $val == '') {
+							// if a parameter is empty and a value is empty, do nothing
+						}
 					}
-					$a++;
+					$l++;
+					$done = TRUE;
 				}
+				$a++;
 			}
 			$l++;	
 		}
@@ -2338,16 +2484,8 @@ class GlobalMapCfg {
 			$file[] = "\n";
 		}
 		
-		// open file for writing and replace it
-		$fp = fopen($this->configFile, 'w');
-		fwrite($fp,implode('',$file));
-		fclose($fp);
-		
-		// Also remove cache file
-		if(file_exists($this->cacheFile))
-			unlink($this->cacheFile);
-		
-		return TRUE;
+		$this->writeConfig($file);
+		return true;
 	}
 	
 	/**

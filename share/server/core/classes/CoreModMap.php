@@ -457,9 +457,7 @@ class CoreModMap extends CoreModule {
 		$id = $MAPCFG->getTemplateIdByName($a['name']);
 		
 		// first delete element from array
-		$MAPCFG->deleteElement('template', $id);
-		// then write new array to file
-		$MAPCFG->writeElement('template', $id);
+		$MAPCFG->deleteElement($id, true);
 		
 		// delete map lock
 		if(!$MAPCFG->deleteMapLock()) {
@@ -520,8 +518,7 @@ class CoreModMap extends CoreModule {
 		$MAPCFG->readMapConfig(0, false, false);
 		
 		// append a new object definition to the map configuration
-		$elementId = $MAPCFG->addElement('template', $a['opts']);
-		$MAPCFG->writeElement('template', $elementId);
+		$MAPCFG->addElement('template', $a['opts'], true);
 		
 		// delete map lock
 		if(!$MAPCFG->deleteMapLock()) {
@@ -603,9 +600,7 @@ class CoreModMap extends CoreModule {
 		} catch(MapCfgInvalid $e) {}
 		
 		// first delete element from array
-		$MAPCFG->deleteElement($a['type'], $a['id']);
-		// then write new array to file
-		$MAPCFG->writeElement($a['type'], $a['id']);
+		$MAPCFG->deleteElement($a['id'], true);
 		
 		// delete map lock
 		if(!$MAPCFG->deleteMapLock()) {
@@ -667,11 +662,11 @@ class CoreModMap extends CoreModule {
 		
 		// set options in the array
 		foreach($a['opts'] AS $key => $val) {
-			$MAPCFG->setValue($a['type'], $a['id'], $key, $val);
+			$MAPCFG->setValue($a['id'], $key, $val);
 		}
 		
 		// write element to file
-		$MAPCFG->writeElement($a['type'], $a['id']);
+		$MAPCFG->updateElement($a['id']);
 		
 		// delete map lock
 		if(!$MAPCFG->deleteMapLock()) {
@@ -759,8 +754,7 @@ class CoreModMap extends CoreModule {
 		$MAPCFG->readMapConfig();
 		
 		// append a new object definition to the map configuration
-		$elementId = $MAPCFG->addElement($a['type'], $a['opts']);
-		$MAPCFG->writeElement($a['type'], $elementId);
+		$MAPCFG->addElement($a['type'], $a['opts'], true);
 		
 		// delete map lock
 		if(!$MAPCFG->deleteMapLock()) {
@@ -930,8 +924,7 @@ class CoreModMap extends CoreModule {
 		if(!$MAPCFG->createMapConfig())
 			return false;
 		
-		$MAPCFG->addElement('global', $a);
-		return $MAPCFG->writeElement('global','0');
+		$MAPCFG->addElement('global', $a, true);
 	}
 	
 	protected function handleResponseAdd() {
