@@ -1731,7 +1731,7 @@ class GlobalMapCfg {
 	 */
 	private function mergeTemplates() {
 		// Loop all objects of that type
-		foreach($this->mapConfig AS $id => &$element) {
+		foreach($this->mapConfig AS $id => $element) {
 			// Except global and templates (makes no sense)
 			if($type == 'global')
 				continue;
@@ -1739,12 +1739,12 @@ class GlobalMapCfg {
 			// Check for "use" value
 			if(isset($element['use']) && is_array($element['use'])) {
 				// loop all given templates
-				foreach($element['use'] AS &$templateName) {
-					$index = $this->getTemplateIdByName($templateName);
+				foreach($element['use'] AS $templateName) {
+					$id = $this->getTemplateIdByName($templateName);
 					
-					if(isset($this->mapConfig[$index]) && is_array($this->mapConfig[$index])) {
+					if(isset($this->mapConfig[$id]) && is_array($this->mapConfig[$id])) {
 						// merge object array with template object array (except type and name attribute)
-						$tmpArray = $this->mapConfig[$index];
+						$tmpArray = $this->mapConfig[$id];
 						unset($tmpArray['type']);
 						unset($tmpArray['name']);
 						unset($tmpArray['object_id']);
@@ -1825,18 +1825,14 @@ class GlobalMapCfg {
 				$this->mapConfig[$new] = $this->mapConfig[$id];
 				unset($this->mapConfig[$id]);
 
-				$toBeWritten[] = $id;
-				$toBeWritten[] = $new;
+				$toBeWritten[$new] = $id;
 				$aleadySeen[$new] = true;
 			}
 		}
 
 		// Now write down all the updated objects
-		foreach($toBeWritten AS $id)
-			if($id[0] === '_')
-				$this->storeDeleteElement($id);
-			else
-				$this->storeAddElement($id);
+		foreach($toBeWritten AS $new => $id)
+			$this->storeDeleteElement($id, $this->formatElement($new));
 	}
 	
 	/**
@@ -2017,189 +2013,11 @@ class GlobalMapCfg {
 	function checkMapCfgFolderWriteable($printErr) {
 		return GlobalCore::getInstance()->checkReadable(dirname($this->configFile), $printErr);
 	}
-	
-	/**
-	 * Deletes an element of the specified type from the config array
-	 *
-	 * @param	Integer	$id
-	 * @return	Boolean	TRUE
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function deleteElement($id, $perm = false) {
-		unset($this->mapConfig[$id]);
-		if($perm)
-			$this->storeDeleteElement($id);
-		return true;
-	}
-
-	public function storeAddElement($id) {
-		$f = $this->getConfig();
-
-		$type = $this->mapConfig[$id]['type'];
-
-		if(count($f) > 0 && $f[count($f) - 1] !== "\n")
-			$f[] = "\n";
-		
-		$f[] = 'define '.$type." {\n";
-
-		// Templates need a special handling here cause they can have all types
-		// of options. So read all keys which are currently set
-		if($type !== 'template')
-			$aKeys = $this->getValidTypeKeys($type);
-		else
-			$aKeys = array_keys($this->mapConfig[$id]);
-		
-		foreach($aKeys As $key) {
-			$val = $this->getValue($id, $key, true);
-			if(isset($val) && $val != '')
-				$f[] = $key.'='.$val."\n";
-		}
-		$f[] = "}\n";
-		$f[] = "\n";
-		
-		$this->writeConfig($f);
-		return true;
-		
-	}
-
-	/**
-	 * Searches for an element in the configuration file and deletes it if found.
-	 * The element can be given as object_id which is the new default for object
-	 * referencing in whole NagVis. Or by object number of the map with a leading
-	 * "_" sign.
-	 *
-	 * @param   Integer $id
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function storeDeleteElement($id) {
-		$start = null;
-		$inObj = false;
-		$end = null;
-
-		if($id[0] === '_')
-			list($inObj, $start, $end) = $this->getObjectLinesByNum((int) str_replace('_', '', $id));
-		else
-			list($inObj, $start, $end) = $this->getObjectLinesById($id);
-
-		if(!$inObj)
-			return false;
-
-		$f = $this->getConfig();
-		for($i = $start; $i <= $end; $i++)
-			unset($f[$i]);
-		$this->writeConfig($f);
-	}
-
-	private function writeConfig($cfg = null) {
-		if($cfg !== null)
-			$this->configFileContents = $cfg;
-
-		// open file for writing and replace it
-		$fp = fopen($this->configFile, 'w');
-		fwrite($fp,implode('', $this->configFileContents));
-		fclose($fp);
-		
-		// Also remove cache file
-		if(file_exists($this->cacheFile))
-			unlink($this->cacheFile);
-	}
 
 	private function getConfig() {
 		if($this->configFileContents === null)
 			$this->configFileContents = file($this->configFile);
 		return $this->configFileContents;
-	}
-
-	/**
-	 * Gathers the lines of an object by the number of the object
-	 *
-	 * @param   Integer $num
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function getObjectLinesByNum($num) {
-		$count = 0;
-		$start = null;
-		$inObj = false;
-		$end   = null;
-
-		$f = $this->getConfig();
-		print_r($f);
-		for($i = 0, $len = count($f); $i < $len; $i++) {
-			if(strpos($f[$i], 'define') !== false) {
-				if($count === $num) {
-					$inObj = true;
-					$start = $i;
-				}
-
-				$count++;
-				continue;
-			}
-			
-			// Terminate on first object end when in correct object
-			if($inObj && trim($f[$i]) === '}') {
-				$end = $i;
-				break;
-			}
-		}
-
-		return Array($inObj, $start, $end);
-	}
-
-	/**
-	 * Gathers the lines of an object by the given object id
-	 *
-	 * @param   Integer $id
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function getObjectLinesById($id) {
-		$start = null;
-		$inObj = false;
-		$end   = null;
-
-		$f = $this->getConfig();
-		for($i = 0, $len = count($f); $i < $len; $i++) {
-			// Save all object beginnings
-			if(strpos($f[$i], 'define') !== false) {
-				$start = $i;
-				continue;
-			}
-			
-			// Terminate on first object end when in correct object
-			if($inObj && trim($f[$i]) === '}') {
-				$end = $i;
-				break;
-			}
-
-			// Check if this is the object_id line
-			$delimPos = strpos($f[$i], '=');
-			if($delimPos !== false) {
-				$key   = trim(substr($f[$i], 0, $delimPos));
-				$value = trim(substr($f[$i], ($delimPos+1)));
-				if($key === 'object_id' && $value === $id) {
-					$inObj = true;
-					continue;
-				}
-			}
-		}
-
-		return Array($inObj, $start, $end);
-	}
-	
-	/**
-	 * Adds an element of the specified type to the config array
-	 *
-	 * @param	Array	$properties
-	 * @return	Integer	Id of the Element
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function addElement($type, $properties, $perm = false) {
-		$id = $this->genObjId(count($this->mapConfig));
-		$this->mapConfig[$id] = $properties;
-		$this->mapConfig[$id]['object_id'] = $id;
-		$this->mapConfig[$id]['type']      = $type;
-		if($perm)
-			$this->storeAddElement($id);
-		return $id;
 	}
 	
 	/**
@@ -2283,6 +2101,267 @@ class GlobalMapCfg {
 	 ***************************************************************************/
 
 	/**
+	 * Formats a map object for the map configuration file
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function formatElement($id) {
+		$a = Array();
+		$type = $this->mapConfig[$id]['type'];
+
+		$a[] = 'define '.$type." {\n";
+
+		// Templates need a special handling here cause they can have all types
+		// of options. So read all keys which are currently set
+		if($type !== 'template')
+			$keys = $this->getValidTypeKeys($type);
+		else
+			$keys = array_keys($this->mapConfig[$id]);
+		
+		foreach($keys AS $key)
+			if($key !== 'type' && isset($this->mapConfig[$id][$key]) && $this->mapConfig[$id][$key] != '')
+				$a[] = $key.'='.$this->mapConfig[$id][$key]."\n";
+
+		$a[] = "}\n";
+		$a[] = "\n";
+		
+		return $a;
+	}
+	
+	/**
+	 * Adds an element of the specified type to the config array
+	 *
+	 * @param	Array	$properties
+	 * @return	Integer	Id of the Element
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function addElement($type, $properties, $perm = false) {
+		$id = $this->genObjId(count($this->mapConfig));
+		$this->mapConfig[$id] = $properties;
+		$this->mapConfig[$id]['object_id'] = $id;
+		$this->mapConfig[$id]['type']      = $type;
+		if($perm)
+			$this->storeAddElement($id);
+		return $id;
+	}
+
+	/**
+	 * Adds the given element at the end of the configuration file
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function storeAddElement($id) {
+		$f = $this->getConfig();
+
+		if(count($f) > 0 && trim($f[count($f) - 1]) !== '')
+			$f[] = "\n";
+
+		$f = array_merge($f, $this->formatElement($id));
+		$this->writeConfig($f);
+		return true;
+	}
+	
+	/**
+	 * Deletes an element of the specified type from the config array
+	 *
+	 * @param	Integer	$id
+	 * @return	Boolean	TRUE
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function deleteElement($id, $perm = false) {
+		unset($this->mapConfig[$id]);
+		if($perm)
+			$this->storeDeleteElement($id);
+		return true;
+	}
+
+	/**
+	 * Searches for an element in the configuration file and deletes it if found.
+	 * The element can be given as object_id which is the new default for object
+	 * referencing in whole NagVis. Or by object number of the map with a leading
+	 * "_" sign.
+	 *
+	 * @param   Integer $id
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function storeDeleteElement($id, $replaceWith = null) {
+		$start = null;
+		$inObj = false;
+		$end = null;
+
+		if($id[0] === '_')
+			list($inObj, $start, $end) = $this->getObjectLinesByNum((int) str_replace('_', '', $id));
+		else
+			list($inObj, $start, $end) = $this->getObjectLinesById($id);
+
+		if(!$inObj)
+			return false;
+
+		$f = $this->getConfig();
+		if($replaceWith)
+			array_splice($f, $start, $end - $start + 1, $replaceWith);
+		else
+			array_splice($f, $start, $end - $start + 1);
+		$this->writeConfig($f);
+	}
+	
+	/**
+	 * Updates an element in the configuration file with the
+	 * current object config 
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function updateElement($id) {
+		$type = $this->mapConfig[$id]['type'];
+		list($inObj, $start, $end) = $this->getObjectLinesById($id);
+
+		if(!$inObj)
+			return false;
+
+		$f = $this->getConfig();
+		
+		// Loop all parameters from array
+		foreach($this->mapConfig[$id] AS $key => $val) {
+			$lineNum = null;
+			$newLine = '';
+
+			if($key === 'type')
+				continue;
+
+			// Search for the param in the map config
+			for($i = $start; $i < $end; $i++) {
+				$entry = explode('=', $f[$i], 2);
+
+				// Skip non matching keys
+				if(trim($entry[0]) !== $key)
+					continue;
+
+				$lineNum = $i;
+
+				if(is_array($val))
+					$val = implode(',', $val);
+
+				if($val !== '')
+					$newLine = $key.'='.$val."\n";
+				break;
+			}
+
+			if($lineNum !== null && $newLine !== '')
+				// if a parameter was found in file and value is not empty, replace line
+				$f[$lineNum] = $newLine;
+			elseif($lineNum !== null && $newLine === '')
+				// if a paremter is not in array or a value is empty, delete the line in the file
+				array_splice($f, $lineNum, 1);
+			elseif($lineNum === null && $newLine !== '')
+				// if a parameter is was not found in array and a value is not empty, create line
+				array_splice($f, $end, Array($f[$end], $newLine));
+		}
+				
+		$this->writeConfig($f);
+		return true;
+	}
+
+	/**
+	 * Writes the file contents to the configuration file and removes the cache
+	 * after finishing the write operation.
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function writeConfig($cfg = null) {
+		if($cfg !== null)
+			$this->configFileContents = $cfg;
+
+		// open file for writing and replace it
+		$fp = fopen($this->configFile, 'w');
+		fwrite($fp,implode('', $this->configFileContents));
+		fclose($fp);
+		
+		// Also remove cache file
+		if(file_exists($this->cacheFile))
+			unlink($this->cacheFile);
+	}
+
+	/**
+	 * Gathers the lines of an object by the number of the object
+	 *
+	 * @param   Integer $num
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function getObjectLinesByNum($num) {
+		$count = 0;
+		$start = null;
+		$inObj = false;
+		$end   = null;
+
+		$f = $this->getConfig();
+		for($i = 0, $len = count($f); $i < $len; $i++) {
+			if(strpos($f[$i], 'define') !== false) {
+				if($count === $num) {
+					$inObj = true;
+					$start = $i;
+				}
+
+				$count++;
+				continue;
+			}
+			
+			// Terminate on first object end when in correct object
+			if($inObj && trim($f[$i]) === '}') {
+				if(isset($f[$i + 1]) && trim($f[$i + 1]) === '')
+					$end = $i + 1;
+				else
+					$end = $i;
+				break;
+			}
+		}
+
+		return Array($inObj, $start, $end);
+	}
+
+	/**
+	 * Gathers the lines of an object by the given object id
+	 *
+	 * @param   Integer $id
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function getObjectLinesById($id) {
+		$start = null;
+		$inObj = false;
+		$end   = null;
+
+		$f = $this->getConfig();
+		for($i = 0, $len = count($f); $i < $len; $i++) {
+			// Save all object beginnings
+			if(strpos($f[$i], 'define') !== false) {
+				$start = $i;
+				continue;
+			}
+			
+			// Terminate on first object end when in correct object
+			if($inObj && trim($f[$i]) === '}') {
+				if(isset($f[$i + 1]) && trim($f[$i + 1]) === '')
+					$end = $i + 1;
+				else
+					$end = $i;
+				break;
+			}
+
+			// Check if this is the object_id line
+			$delimPos = strpos($f[$i], '=');
+			if($delimPos !== false) {
+				$key   = trim(substr($f[$i], 0, $delimPos));
+				$value = trim(substr($f[$i], ($delimPos+1)));
+				if($key === 'object_id' && $value === $id) {
+					$inObj = true;
+					continue;
+				}
+			}
+		}
+
+		return Array($inObj, $start, $end);
+	}
+
+	/**
 	 * Gets all information about an object type
 	 *
 	 * @param   String  Type to get the information for
@@ -2327,6 +2406,17 @@ class GlobalMapCfg {
 	}
 	
 	/**
+	 * Checks for writeable map config file
+	 *
+	 * @param	Boolean $printErr
+	 * @return	Boolean	Is Successful?
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function checkMapConfigWriteable($printErr) {
+		return GlobalCore::getInstance()->checkWriteable($this->configFile, $printErr);
+	}
+	
+	/**
 	 * Deletes the map configfile
 	 *
 	 * @return	Boolean	Is Successful?
@@ -2352,140 +2442,6 @@ class GlobalMapCfg {
 		} else {
 			return FALSE;
 		}
-	}
-	
-	/**
-	 * Checks for writeable map config file
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function checkMapConfigWriteable($printErr) {
-		return GlobalCore::getInstance()->checkWriteable($this->configFile, $printErr);
-	}
-	
-	/**
-	 * Writes the element from array to the config file
-	 *
-	 * @param	String	$type	Type of the Element
-	 * @param	Integer	$id		Id of the Element
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function writeElement($id) {
-		if(!$this->checkMapConfigExists(1) || !$this->checkMapConfigReadable(1) || !$this->checkMapConfigWriteable(1))
-			return false;
-
-		// read file in array
-		$file = $this->getConfig();
-
-		// Get object type
-		if(isset($this->mapConfig[$id]) && isset($this->mapConfig[$id]['type']))
-			$type = $this->mapConfig[$id]['type'];
-		
-		// number of lines in the file
-		$l = 0;
-		// number of elements of the given type
-		$a = 0;
-		// done?!
-		$done = FALSE;
-		while(isset($file[$l]) && $file[$l] != '' && $done == FALSE) {
-			// ignore comments
-			if(!preg_match('/^#/',$file[$l]) && !preg_match('/^;/',$file[$l])) { 
-				$defineCln = explode('{', $file[$l]);
-				$define = explode(' ',$defineCln[0]);
-				
-				// check if element exists
-				// check if element is an array...
-				if($a == $id && isset($this->mapConfig[$a]) && is_array($this->mapConfig[$a])) {
-					// ...array: update!
-					
-					// choose first parameter line
-					$l++;
-					
-					// Loop all parameters from array
-					foreach($this->mapConfig[$id] AS $key => $val) {
-						// if key is not type
-						if($key == 'type')
-							continue;
-
-						$cfgLines = 0;
-						$cfgLine = '';
-						$cfgLineNr = 0;
-						
-						// Loop parameters from file (Find line for this option)
-						while(isset($file[($l+$cfgLines)]) && trim($file[($l+$cfgLines)]) != '}') {
-							$entry = explode('=',$file[$l+$cfgLines], 2);
-							if($key == trim($entry[0])) {
-								$cfgLineNr = $l+$cfgLines;
-								if(is_array($val)) {
-									$val = implode(',',$val);
-								}
-								$cfgLine = $key.'='.$val."\n";
-							}
-							$cfgLines++;	
-						}
-						
-						if($cfgLineNr != 0 && $val != '') {
-							// if a parameter was found in file and value is not empty, replace line
-							$file[$cfgLineNr] = $cfgLine;
-						} elseif($cfgLineNr != 0 && $val == '') {
-							// if a paremter is not in array or a value is empty, delete the line in the file
-							$file[$cfgLineNr] = '';
-							$cfgLines--;
-						} elseif($cfgLineNr == 0 && $val != '') {
-							// if a parameter is was not found in array and a value is not empty, create line
-							if(is_array($val)) {
-								$val = implode(',',$val);
-							}
-							$neu = $key.'='.$val."\n";
-							
-							for($i = $l; $i < count($file);$i++) {
-								$tmp = $file[$i];
-								$file[$i] = $neu;
-								$neu = $tmp;
-							}
-							$file[count($file)] = $neu;
-						} elseif($cfgLineNr == 0 && $val == '') {
-							// if a parameter is empty and a value is empty, do nothing
-						}
-					}
-					$l++;
-					$done = TRUE;
-				}
-				$a++;
-			}
-			$l++;	
-		}
-		
-		// reached end of file - couldn't find that element, create a new one...
-		if($done == FALSE) {
-			if(count($file) > 0 && $file[count($file)-1] != "\n") {
-				$file[] = "\n";
-			}
-			$file[] = 'define '.$type." {\n";
-
-			// Templates need a special handling here cause they can have all types
-			// of options. So read all keys which are currently set
-			if($type !== 'template') {
-				$aKeys = $this->getValidTypeKeys($type);
-			} else {
-				$aKeys = array_keys($this->mapConfig[$id]);
-			}
-			
-			foreach($aKeys As $key) {
-				$val = $this->getValue($id, $key, TRUE);
-				if(isset($val) && $val != '') {
-					$file[] = $key.'='.$val."\n";
-				}
-			}
-			$file[] = "}\n";
-			$file[] = "\n";
-		}
-		
-		$this->writeConfig($file);
-		return true;
 	}
 	
 	/**
