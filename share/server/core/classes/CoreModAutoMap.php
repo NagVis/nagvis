@@ -195,6 +195,9 @@ class CoreModAutoMap extends CoreModule {
 		$MAPCFG->readMapConfig();
 		$MAPCFG->filterMapObjects($aVals['i']);
 
+		// Filter by explicit list of host object ids
+		$this->opts['filterByIds'] = $aVals['i'];
+
 		$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);
 		$MAPOBJ = $MAP->MAPOBJ;
 		return $MAP->parseObjectsJson($aVals['ty']);

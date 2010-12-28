@@ -17,3 +17,5 @@ Fehlerbehandlung:
   Ajax Schnittstelle umbauen: Kleines Protokoll einbauen, mit Header inkl. Fehlercodes etc.
 
   Bessere Fehlerbehandlung z.B. auf Übersichtsseite, wenn Antwort kein gültiges JS ist.
+
+  Standard PHP Fehler in Exceptions umwandeln und Exceptions ordentlich behandeln

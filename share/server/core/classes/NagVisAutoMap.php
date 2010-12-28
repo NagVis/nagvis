@@ -43,6 +43,7 @@ class NagVisAutoMap extends GlobalMap {
 	private $ignoreHosts;
 	private $filterGroup;
 	private $filterByState;
+	private $filterByIds = null;
 	
 	private $rootObject;
 	private $arrMapObjects;
@@ -54,6 +55,8 @@ class NagVisAutoMap extends GlobalMap {
 
 	private $graphvizPath;
 	private $noBinaryFound;
+
+	private $objIdFile;
 	
 	/**
 	 * Automap constructor
@@ -72,6 +75,7 @@ class NagVisAutoMap extends GlobalMap {
 		$this->arrHostnamesParsed = Array();
 		$this->mapCode = '';
 		
+		$this->objIdFile = $CORE->getMainCfg()->getValue('paths', 'var').'automap.hostids';
 		$this->graphvizPath = '';
 		$this->noBinaryFound = false;
 		
@@ -148,6 +152,9 @@ class NagVisAutoMap extends GlobalMap {
 		if(!isset($prop['filterByState']) || $prop['filterByState'] == '')
 			$prop['filterByState'] = '';
 
+		if(isset($prop['filterByIds']))
+			$this->filterByIds = $prop['filterByIds'];
+
 		// Store properties in object
 		$this->options = $prop;
 		
@@ -174,6 +181,19 @@ class NagVisAutoMap extends GlobalMap {
 			if($this->BACKEND->checkBackendFeature($this->backend_id, 'getDirectParentNamesByHostName')) {
 				$this->getParentObjectTree();
 			}
+		}
+
+		/**
+		 * On automap updates not all objects are updated at once. Filter
+		 * the child tree by the given list of host object ids.
+		 */
+		if($this->filterByIds) {
+			$names = $this->objIdsToNames($this->filterByIds);
+			$this->rootObject->filterChilds($names);
+
+			// Filter the parent object tree too when enabled
+			if(isset($this->parentLayers) && $this->parentLayers != 0)
+				$this->rootObject->filterParents($names);
 		}
 		
 		/**
@@ -516,6 +536,44 @@ class NagVisAutoMap extends GlobalMap {
 	
 	# END Public Methods
 	# #####################################################
+
+	/**
+	 * Transforms a list of automap object_ids to hostnames using the object_id
+	 * translation file. Unknown object_ids are skipped
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function objIdsToNames($ids) {
+		$names = Array();
+		$map = $this->loadObjIds();
+		foreach($ids AS $id) {
+			$name = array_search($id, $map);
+			if($name !== FALSE)
+				$names[] = $name;
+		}
+		return $names;
+	}
+
+	/**
+	 * Loads the hostname to object_id mapping table from the central file
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function loadObjIds() {
+		if($this->CORE->checkExisting($this->objIdFile, false))
+			return json_decode(file_get_contents($this->objIdFile), true);
+		else
+			return Array();
+	}
+
+	/**
+	 * Saves the given hostname to object_id mapping table in the central file
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	private function storeObjIds($a) {
+		return file_put_contents($this->objIdFile, json_encode($a)) !== false;
+	}
 	
 	private function loadObjectConfigurations() {
 		// Load the hosts from mapcfg into the aConf array
@@ -524,10 +582,23 @@ class NagVisAutoMap extends GlobalMap {
 		foreach($aHosts AS $aHost) {
 			$aConf[$aHost['host_name']] = $aHost;
 		}
-		
-		// Loop all map object
+
+		// And now load the stored object id (or get a new one)
+		$objIds = $this->loadObjIds();
+		$newObjId = false;
+
+		// Loop all map objects to load host individual configurations and the uniqe
+		// object id
 		foreach(array_merge(Array($this->rootObject), $this->arrMapObjects) AS $OBJ) {
 			$name = $OBJ->getName();
+
+			if(!isset($objIds[$name])) {
+				$objIds[$name] = $this->MAPCFG->genObjIdAutomap($name);
+				$newObjId = true;
+			}
+
+			$OBJ->setObjectId($objIds[$name]);
+
 			// Try to find a matching object in the map configuration
 			if(isset($aConf[$name])) {
 				unset($aConf[$name]['type']);
@@ -536,6 +607,9 @@ class NagVisAutoMap extends GlobalMap {
 				$OBJ->setConfiguration($aConf[$name]);
 			}
 		}
+
+		// When some new object ids have been added store them
+		$this->storeObjIds($objIds);
 	}
 	
 	/**
@@ -750,7 +824,6 @@ class NagVisAutoMap extends GlobalMap {
 	private function fetchHostObjectByName($hostName) {
 		$hostObject = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $hostName);
 		$hostObject->setConfiguration($this->MAPCFG->getObjectConfiguration());
-		$hostObject->setObjectId(0);
 		$this->rootObject = $hostObject;
 	}
 

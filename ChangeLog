@@ -27,6 +27,7 @@ Automap
   * Made automap coord parsing regex resistent against html entities in the URL
   * Hiding deprecated maxLayers option from modify view dialog
   * Automap params changed via GUI can be made permanent now
+  * The x/y coords don't need to be set as dummy values in automap configs anymore
 
 Backend: Livestatus
   * Bugfix: PHP error when trying to write to socket while the remote host is not

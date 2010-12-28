@@ -46,6 +46,10 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 		
 		// Start of the parent constructor
 		parent::__construct($CORE, $this->name);
+
+		// Modify must values -> coords don't need to be set
+		parent::$validConfig['host']['x']['must'] = 0;
+		parent::$validConfig['host']['y']['must'] = 0;
 		
 		$this->type = 'automap';
 		
@@ -92,6 +96,10 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 	}
 
 	public function writeElement($id) { }
+
+	public function genObjIdAutomap($s) {
+		return $this->genObjId($s);
+	}
 
 	public function filterMapObjects($a) {
 		if(isset($this->mapConfig[2])) {
