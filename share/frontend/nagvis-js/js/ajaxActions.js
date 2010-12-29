@@ -39,7 +39,7 @@ function saveObjectAfterAnchorAction(oAnchor) {
 		urlPart = handleDragResult(objId, anchorId);
 	
 	var oResult = getSyncRequest(oGeneralProperties.path_server + '?mod=Map&act=modifyObject&map='
-	                             + oPageProperties.map_name + '&oid=' + objId + urlPart);
+	                             + oPageProperties.map_name + '&id=' + objId + urlPart);
 
 	if(oResult && oResult.status != 'OK') {
 		alert(oResult.message);
