@@ -129,7 +129,7 @@ function showFrontendDialog(sUrl, sTitle, sWidth) {
 	}
 	
 	var oContent = getSyncRequest(sUrl, false, false);
-  if(oContent && typeof oContent !== 'undefined') {
+  if(isset(oContent)) {
 		// Store url for maybe later refresh
 		oContent.url = sUrl;
 	
@@ -292,16 +292,19 @@ function getCfgFileAges(viewType, mapName) {
 	if(!isset(mapName))
 		var mapName = oPageProperties.map_name;
 
-	if(viewType === 'map') {
-		viewType = null;
-		return getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getCfgFileAges&f[]=mainCfg&m[]='+escapeUrlValues(mapName), true);
-	} else if(viewType === 'automap') {
-		viewType = null;
-		return getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getCfgFileAges&f[]=mainCfg&am[]='+escapeUrlValues(mapName), true);
-	} else {
-		viewType = null;
-		return getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getCfgFileAges&f[]=mainCfg', true);
-	}
+	var result = null;
+	if(viewType === 'map')
+		result = getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getCfgFileAges&f[]=mainCfg&m[]='+escapeUrlValues(mapName), true);
+	else if(viewType === 'automap')
+		result = getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getCfgFileAges&f[]=mainCfg&am[]='+escapeUrlValues(mapName), true);
+	else
+		result = getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getCfgFileAges&f[]=mainCfg', true);
+
+	viewType = null;
+	if(isset(result))
+		return result;
+	else
+		return {};
 }
 
 /**
@@ -860,14 +863,12 @@ function refreshMapObject(objectId) {
 	name = null;
 	
 	var bStateChanged = false;
-	if(o.length > 0) {
+	if(isset(o) && o.length > 0)
 		bStateChanged = updateObjects(o, aMapObjects, oPageProperties.view_type);
-	}
 	o = null;
 	
-	if(bStateChanged) {
+	if(bStateChanged)
 		updateMapBasics();
-	}
 	bStateChanged = null;
 }
 
@@ -1755,7 +1756,7 @@ function parseUrl(sUrl) {
 									                   + '?mod=Url&act=getContents&show='
 																		 + escapeUrlValues(sUrl));
 	
-	if(typeof oUrlContents !== 'undefined' && oUrlContents.content) {
+	if(isset(oUrlContents)) {
 		// Replace the current contents with the new url
 		var urlContainer = document.getElementById('url');
 		urlContainer.innerHTML = oUrlContents.content;

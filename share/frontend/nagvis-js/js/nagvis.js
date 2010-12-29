@@ -1009,7 +1009,7 @@ function storeUserOption(key, value) {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function isset(v) {
-	return typeof(v) !== 'undefined';
+	return typeof(v) !== 'undefined' && v !== null;
 }
 
 /*** Handles the object dragging ***/
