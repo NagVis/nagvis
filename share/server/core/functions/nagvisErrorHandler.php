@@ -38,19 +38,34 @@ function ajaxError($errno, $errstr = '', $file = '', $line = '') {
 	die();
 }
 
-function ajaxException($OBJ) {
+function nagvisException($OBJ) {
 	try {
-		echo "Error: ".$OBJ->getMessage();
+		if(get_class($OBJ) == 'ErrorException') {
+			echo "Error: (".$OBJ->getCode().") ".$OBJ->getMessage()
+			    ." (".$OBJ->getFile().":".$OBJ->getLine().")<br /><br />\n ";
+			echo "<code>".str_replace("\n", "<br />\n", $OBJ->getTraceAsString())."</code>";
+		} else {
+			echo "Error: ".$OBJ->getMessage();
+		}
+
 		die();
 	} catch(Exception $e) {
-		echo "Error: Unexpected Problem in Exception Handler!";		
+		echo "Error: Unexpected Problem in Exception Handler!: ". $e->getMessage();		
 		die();
 	}
 }
 
+function nagvisExceptionErrorHandler($errno, $errstr, $errfile, $errline ) {
+	// Use current error_reporting settings to skip unwanted errors
+	if(!(error_reporting() & $errno))
+		return false;
+	
+	throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+}
+set_error_handler("nagvisExceptionErrorHandler");
+
 // Enable custom error handling
-set_error_handler('ajaxError');
 if(function_exists('set_exception_handler')) {
-	set_exception_handler('ajaxException');
+	set_exception_handler('nagvisException');
 }
 ?>

@@ -776,8 +776,8 @@ function handleJSError(sMsg, sUrl, iLine) {
 	var oMsg = {};
 	oMsg.type = 'CRITICAL';
 	oMsg.message = "Javascript error occured:\n " + sMsg + " "
-	               + sUrl + " (" + iLine + ")<br /><br /><font style='font-size:10px'>- Stacktrace - <br />"
-	               + printStackTrace().join("<br />") + '</font>';
+	               + sUrl + " (" + iLine + ")<br /><br /><code>- Stacktrace - <br />"
+	               + printStackTrace().join("<br />") + '</code>';
 	oMsg.title = "Javascript error";
 	
 	// Handle application message/error

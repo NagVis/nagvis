@@ -22,6 +22,7 @@ Core
   * All map objects need to have an object id which needs to be unique on
     each map. All map objects which have no object id defined will ge one
     created. This makes migration easier.
+  * Catching ps_files_cleanup_dir error message (strange error debian/ubuntu)
 
 Automap
   * Made automap coord parsing regex resistent against html entities in the URL

@@ -46,10 +46,19 @@ class CoreSessionHandler {
 		
 		// Set custom params for the session cookie
 		session_set_cookie_params(0, $sPath, $sDomain);
-		
+
 		// Start a session for the user when not started yet
 		if(!isset($_SESSION)) {
-			session_start();
+			try {
+				session_start();
+			} catch(ErrorException $e) {
+				// Catch and suppress session cleanup errors. This is a problem
+				// especially on current debian/ubuntu:
+				//   PHP error in ajax request handler: Error: (8) session_start():
+				//   ps_files_cleanup_dir: opendir(/var/lib/php5) failed: Permission denied (13)
+				if(strpos($e->getMessage(), 'ps_files_cleanup_dir') === false)
+					throw $e;
+			}
 			
 			// Store the creation time of the session
 			$this->set('sessionExpires', time()+$iDuration);

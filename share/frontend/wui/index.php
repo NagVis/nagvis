@@ -37,6 +37,7 @@ require('defines/wui.php');
 require("../../server/core/functions/autoload.php");
 require("../../server/core/functions/debug.php");
 require("../../server/core/functions/oldPhpVersionFixes.php");
+require('../../server/core/functions/nagvisErrorHandler.php');
 require('../../server/core/classes/CoreExceptions.php');
 
 // This defines wether the GlobalMessage prints HTML or ajax error messages
