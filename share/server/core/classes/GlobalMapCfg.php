@@ -2211,9 +2211,13 @@ class GlobalMapCfg {
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function updateElement($id) {
+	public function storeUpdateElement($id) {
 		$type = $this->mapConfig[$id]['type'];
-		list($inObj, $start, $end) = $this->getObjectLinesById($id);
+
+		if($id === 0)
+			list($inObj, $start, $end) = $this->getObjectLinesByNum(0);
+		else
+			list($inObj, $start, $end) = $this->getObjectLinesById($id);
 
 		if(!$inObj)
 			return false;

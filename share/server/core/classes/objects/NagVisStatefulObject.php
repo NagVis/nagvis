@@ -40,6 +40,9 @@ class NagVisStatefulObject extends NagVisObject {
 	protected $label_show;
 	protected $recognize_services;
 	protected $only_hard_states;
+
+	protected $line_type;
+	protected $line_arrow = 'none';
 	
 	protected $state;
 	protected $output;

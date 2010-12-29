@@ -662,7 +662,7 @@ class CoreModMap extends CoreModule {
 		}
 		
 		// write element to file
-		$MAPCFG->updateElement($a['id']);
+		$MAPCFG->storeUpdateElement($a['id']);
 		
 		// delete map lock
 		if(!$MAPCFG->deleteMapLock()) {

@@ -77,9 +77,9 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 		if(!$this->defaultConf) {
 			$this->defaultConf = Array();
 
-			$ids = $this->loadObjIds();
-			if(isset($ids['__dummy__']))
-				$objectId = $ids['__dummy__'];
+			$keys = array_keys($this->getMapObjects());
+			if(isset($keys[1]))
+				$objectId = $keys[1];
 			else
 				return $this->defaultConf;
 			
@@ -104,7 +104,8 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 		return $this->defaultConf;
 	}
 
-	public function writeElement($id) { }
+	public function storeAddElement($unused) { }
+	public function storeDeleteElement($unused, $unused1 = null) { }
 
 	public function genObjIdAutomap($s) {
 		return $this->genObjId($s);

@@ -115,7 +115,7 @@ class FrontendModAutoMap extends FrontendModule {
 				$s .= '&'.$key.'='.$val;
 
 		$MAPCFG->setValue(0, 'default_params', $s);
-		$MAPCFG->writeElement(0);
+		$MAPCFG->storeUpdateElement(0);
 	}
 	
 	private function showViewDialog() {

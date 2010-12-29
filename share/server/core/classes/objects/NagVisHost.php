@@ -115,7 +115,7 @@ class NagVisHost extends NagiosHost {
 					$strReturn .= 'color=black, ';
 					$strReturn .= 'decorate=1, ';
 					$strReturn .= 'style=solid, ';
-						if($this->line_arrow != 'none')
+					if(isset($this->line_arrow) && $this->line_arrow != 'none')
 						$strReturn .= 'dir='.$this->line_arrow.', ';
 					$strReturn .= 'weight=2 ';
 					$strReturn .= ' ];'."\n ";
