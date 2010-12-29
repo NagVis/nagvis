@@ -702,7 +702,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 					aObjs[intIndex].conf[strIndex] = aMapObjectInformations[i][strIndex];
 				}
 			}
-			
+
 			// Update members list
 			aObjs[intIndex].getMembers();
 		}
@@ -870,7 +870,8 @@ function refreshMapObject(objectId) {
 		bStateChanged = updateObjects(o, aMapObjects, oPageProperties.view_type);
 	o = null;
 	
-	if(bStateChanged)
+	// Don't update basics on the overview page
+	if(oPageProperties.view_type !== 'overview' && bStateChanged)
 		updateMapBasics();
 	bStateChanged = null;
 }
