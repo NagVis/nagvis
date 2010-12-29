@@ -735,7 +735,7 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			// It might happen that some static things like if the host has
 			// members or not change during state change. e.g. when a map is
 			// removed while viewed via the overview page
-			aObjs[intIndex].getHoverTemplateCode();
+			aObjs[intIndex].hover_template_code = null;
 			
 			// Reparse object to map
 			if(sType === 'map') {

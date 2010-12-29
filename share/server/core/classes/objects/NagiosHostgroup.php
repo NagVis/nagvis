@@ -86,6 +86,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 		if($this->problem_msg) {
 			$this->summary_state = 'ERROR';
 			$this->summary_output = $this->problem_msg;
+			$this->members = Array();
 			return;
 		}
 
