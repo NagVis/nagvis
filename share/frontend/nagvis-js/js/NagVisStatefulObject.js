@@ -29,7 +29,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 	// Stores the information from last refresh (Needed for change detection)
 	last_state: null,
 	// Array of member objects
-	members: null,
+	members: [],
 	
 	constructor: function(oConf) {
 		// Call parent constructor

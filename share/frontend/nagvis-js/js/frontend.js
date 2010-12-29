@@ -630,7 +630,7 @@ function updateMapBasics() {
 	
 	// Get new map state from core
 	oMapSummaryObj = new NagVisMap(getSyncRequest(oGeneralProperties.path_server
-	                               + '?mod=' + mod + '&act=getObjectStates&ty=summary&i[]='
+	                               + '?mod=' + mod + '&act=getObjectStates&ty=summary&show='
 																 + escapeUrlValues(oPageProperties.map_name)
 																 + sAutomapParams, false)[0]);
 	sAutomapParams = null;
@@ -730,6 +730,12 @@ function updateObjects(aMapObjectInformations, aObjs, sType) {
 			
 			// Save for return code
 			bStateChanged = true;
+
+			// Reparse the static macros of the hover template.
+			// It might happen that some static things like if the host has
+			// members or not change during state change. e.g. when a map is
+			// removed while viewed via the overview page
+			aObjs[intIndex].getHoverTemplateCode();
 			
 			// Reparse object to map
 			if(sType === 'map') {

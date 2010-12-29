@@ -97,12 +97,16 @@ class GlobalIndexPage {
 			}
 			
 			$map = Array();
-			$map['type'] = $type;
 			
 			if($mapType == 'automap')
 				$MAPCFG = new NagVisAutomapCfg($this->CORE, $mapName);
 			else
 				$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
+
+			if(!$MAPCFG->checkMapConfigExists(false)) {
+				$aMaps[] = $this->mapError($mapType, $mapName, 'Map configuration file does not exist.');
+				continue;
+			}
 
 			try {
 				$MAPCFG->readMapConfig();
@@ -113,9 +117,8 @@ class GlobalIndexPage {
 				
 				$objConf = $MAPCFG->getTypeDefaults('global');
 			} catch(MapCfgInvalid $e) {
-				$objConf = Array();
-				$map['configError'] = true;
-				$map['configErrorMsg'] = $e->getMessage();
+				$aMaps[] = $this->mapError($mapType, $mapName, $e->getMessage());
+				continue;
 			}
 
 			if($mapType == 'automap')
@@ -125,28 +128,11 @@ class GlobalIndexPage {
 				$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND, GET_STATE, !IS_VIEW);
 			
 			// Apply default configuration to object
-			$objConf['type']              = 'map';
-			$objConf['map_name']          = $mapName;
-			$objConf['object_id']         = $mapType.'-'.$mapName;
-			// Enable the hover menu in all cases - maybe make it configurable
-			$objConf['hover_menu']        = 1;
-			$objConf['hover_childs_show'] = 1;
-			$objConf['hover_template']    = 'default';
-			// Enforce std_medium iconset - don't use map default iconset
-			$objConf['iconset']           = 'std_medium';
-			$objConf['alias']             = $MAPCFG->getAlias();
+			$objConf = array_merge($objConf, $this->getMapAndAutomapDefaultOpts($mapType, $mapName, $MAPCFG->getAlias()));
 
 			$MAP->MAPOBJ->setConfiguration($objConf);
 			
-			if(isset($map['configError'])) {
-				$map['overview_class']  = 'error';
-				$map['overview_url']    = 'javascript:alert(\''.$map['configErrorMsg'].'\');';
-				$map['summary_output']  = $this->CORE->getLang()->getText('Map Configuration Error: [ERR]', Array('ERR' => $map['configErrorMsg']));
-				
-				$MAP->MAPOBJ->clearMembers();
-				$MAP->MAPOBJ->setSummaryState('ERROR');
-				$MAP->MAPOBJ->fetchIcon();
-			} elseif($MAP->MAPOBJ->checkMaintenance(0)) {
+			if($MAP->MAPOBJ->checkMaintenance(0)) {
 				if($mapType == 'automap')
 					$map['overview_url']    = $this->htmlBase.'/index.php?mod=AutoMap&act=view&show='.$mapName.$MAPCFG->getValue(0, 'default_params');
 				else
@@ -197,6 +183,34 @@ class GlobalIndexPage {
 		}
 		
 		return json_encode($aMaps);
+	}
+
+	private function getMapAndAutomapDefaultOpts($type, $name, $alias) {
+		return Array(
+		  'type'              => 'map',
+		  'map_name'          => $name,
+		  'object_id'         => $type.'-'.$name,
+		  // Enable the hover menu in all cases - maybe make it configurable
+		  'hover_menu'        => 1,
+		  'hover_childs_show' => 1,
+		  'hover_template'    => 'default',
+		  // Enforce std_medium iconset - don't use map default iconset
+		  'iconset'           => 'std_medium',
+		  'alias'             => $alias
+		);
+	}
+
+	private function mapError($type, $name, $msg) {
+		$map = $this->getMapAndAutomapDefaultOpts($type, $name, $name);
+		$map['state']           = 'ERROR';
+		$map['summary_state']   = 'ERROR';
+		$map['icon']            = 'std_medium_error.png';
+		$map['members']         = Array();
+		$map['num_members']     = 0;
+		$map['overview_class']  = 'error';
+		$map['overview_url']    = 'javascript:alert(\''.$msg.'\');';
+		$map['summary_output']  = $this->CORE->getLang()->getText('Map Configuration Error: [ERR]', Array('ERR' => $msg));
+		return $map;
 	}
 
 	private function renderMapThumb($MAPCFG) {

@@ -33,7 +33,7 @@ class GlobalMapCfg {
 	
 	protected $name;
 	protected $type = 'map';
-	protected $mapConfig;
+	protected $mapConfig = Array();
   protected $typeDefaults = Array();
 	
 	private $configFile = '';
@@ -1556,8 +1556,6 @@ class GlobalMapCfg {
 			if(!$this->checkMapConfigExists(TRUE) || !$this->checkMapConfigReadable(TRUE))
 				return false;
 
-			$this->mapConfig = Array();
-			
 			// Read file in array (Don't read empty lines and ignore new line chars)
 			$file = file($this->configFile, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
 			
@@ -2091,7 +2089,7 @@ class GlobalMapCfg {
 	public function filterMapObjects($objIds) {
 		$newConfig =  Array();
 		foreach($objIds AS $id)
-			if(isset($newConfig[$id]))
+			if(isset($this->mapConfig[$id]))
 				$newConfig[$id] = $this->mapConfig[$id];
 		$this->mapConfig = $newConfig;
 	}
