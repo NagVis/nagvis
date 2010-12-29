@@ -19,3 +19,7 @@ Fehlerbehandlung:
   Bessere Fehlerbehandlung z.B. auf Übersichtsseite, wenn Antwort kein gültiges JS ist.
 
   Standard PHP Fehler in Exceptions umwandeln und Exceptions ordentlich behandeln
+
+Exception/Error log bauen:
+  PHP Fehler loggen
+	Eventuell sogar Javascript fehler loggen
