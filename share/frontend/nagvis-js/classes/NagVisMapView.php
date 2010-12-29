@@ -91,6 +91,7 @@ class NagVisMapView {
 				'workerProperties' => $this->CORE->getMainCfg()->parseWorkerProperties(),
 				'rotationProperties' => json_encode($this->aRotation),
 				'viewProperties' => $this->parseViewProperties(),
+				'stateProperties' => json_encode($this->CORE->getMainCfg()->getStateWeight()),
 				'userProperties' => $USERCFG->doGetAsJson(),
 				'mapName' => $this->name
 			);

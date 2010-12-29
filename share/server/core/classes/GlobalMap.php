@@ -54,8 +54,12 @@ class GlobalMap {
 		
 		// First parse the map object itselfs for having the
 		// summary information in the frontend
-		if($type == 'complete')
+		if($type === 'complete' || $type === 'summary')
 			$arrRet[] = $this->MAPOBJ->parseJson();
+
+		// In summary mode only return the map object state
+		if($type === 'summary')
+			return json_encode($arrRet);
 		
 		foreach($this->MAPOBJ->getMembers() AS $OBJ) {
 			switch(get_class($OBJ)) {

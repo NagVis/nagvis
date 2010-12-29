@@ -184,7 +184,7 @@ class CoreModAutoMap extends CoreModule {
 		$arrReturn = Array();
 		
 		$aOpts = Array('ty' => MATCH_GET_OBJECT_TYPE,
-		               'i'  => MATCH_STRING_NO_SPACE);
+		               'i'  => MATCH_STRING_NO_SPACE_EMPTY);
 		$aVals = $this->getCustomOptions($aOpts);
 		
 		// Initialize backends
@@ -193,10 +193,15 @@ class CoreModAutoMap extends CoreModule {
 		// Read the map configuration file
 		$MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
 		$MAPCFG->readMapConfig();
-		$MAPCFG->filterMapObjects($aVals['i']);
 
-		// Filter by explicit list of host object ids
-		$this->opts['filterByIds'] = $aVals['i'];
+		// i might not be set when all map objects should be fetched or when only
+		// the summary of the map is called
+		if($aVals['i'] != '') {
+			$MAPCFG->filterMapObjects($aVals['i']);
+
+			// Filter by explicit list of host object ids
+			$this->opts['filterByIds'] = $aVals['i'];
+		}
 
 		$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);
 		$MAPOBJ = $MAP->MAPOBJ;

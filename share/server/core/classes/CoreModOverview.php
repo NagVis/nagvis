@@ -37,7 +37,8 @@ class CoreModOverview extends CoreModule {
 			'getOverviewProperties' => 'view',
 			'getOverviewMaps'       => 'view',
 			'getOverviewAutomaps'   => 'view',
-			'getOverviewRotations'  => 'view'
+			'getOverviewRotations'  => 'view',
+			'getObjectStates'       => 'view',
 		);
 	}
 	
@@ -60,6 +61,12 @@ class CoreModOverview extends CoreModule {
 				break;
 				case 'getOverviewRotations':
 					$sReturn = $this->OVERVIEW->parseRotationsJson();
+				break;
+				case 'getObjectStates':
+					$aOpts = Array('i'  => MATCH_STRING_NO_SPACE);
+					$aVals = $this->getCustomOptions($aOpts);
+
+					$sReturn = $this->OVERVIEW->parseMapsJson('list', ONLY_STATE, $aVals['i']);
 				break;
 			}
 		}

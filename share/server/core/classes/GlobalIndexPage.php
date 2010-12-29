@@ -49,27 +49,46 @@ class GlobalIndexPage {
 	}
 	
 	/**
-	 * Parses the maps and automaps for the overview page
+	 * Parses the maps and automaps for the overview page. It is called twice on
+	 * initial page load explicit for maps and automaps.
+	 * Then it is called for a list of maps/automaps to return the current state
+	 * for the listed objects.
 	 *
 	 * @return	String  Json Code
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 * FIXME: More cleanups, compacting and extraction of single parts
 	 */
-	public function parseMapsJson($type) {
-		// Only display the rotation list when enabled
-		if(!$this->CORE->getMainCfg()->getValue('index', 'show'.$type.'s') == 1)
+	public function parseMapsJson($type, $what = COMPLETE, $objects = Array()) {
+		// initial parsing mode: Skip processing when this type of object should not be shown
+		if($type != 'list' && !$this->CORE->getMainCfg()->getValue('index', 'show'.$type.'s') == 1)
 			return json_encode(Array());
 
-		if($type == 'automap')
+		if($type == 'list')
+			$mapList = $objects;
+		elseif($type == 'automap')
 			$mapList = $this->CORE->getAvailableAutomaps();
 		else
 			$mapList = $this->CORE->getAvailableMaps();
 
 		$aMaps = Array();
 		$aObjs = Array();
-		foreach($mapList AS $object_id => $mapName) {
+		foreach($mapList AS $mapName) {
+			if($type == 'list') {
+				$a = explode('-', $mapName, 2);
+				if(!isset($a[1]))
+					continue;
+
+				list($mapType, $mapName) = $a;
+
+				// list mode: Skip processing when this type of object should not be shown
+				if(!$this->CORE->getMainCfg()->getValue('index', 'show'.$mapType.'s') == 1)
+					continue;
+			} else {
+				$mapType = $type;
+			}
+
 			// Check if the user is permitted to view this
-			if($type == 'automap') {
+			if($mapType == 'automap') {
 				if(!$this->AUTHORISATION->isPermitted('AutoMap', 'view', $mapName))
 					continue;
 			} else {
@@ -80,7 +99,7 @@ class GlobalIndexPage {
 			$map = Array();
 			$map['type'] = $type;
 			
-			if($type == 'automap')
+			if($mapType == 'automap')
 				$MAPCFG = new NagVisAutomapCfg($this->CORE, $mapName);
 			else
 				$MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
@@ -99,7 +118,8 @@ class GlobalIndexPage {
 				$map['configErrorMsg'] = $e->getMessage();
 			}
 
-			if($type == 'automap')
+			if($mapType == 'automap')
+				// Only set overview specific automap params here. The default_params are added in the NagVisAutomap cnstructor
 				$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->BACKEND, Array('automap' => $mapName, 'preview' => 1), !IS_VIEW);
 			else
 				$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND, GET_STATE, !IS_VIEW);
@@ -107,7 +127,7 @@ class GlobalIndexPage {
 			// Apply default configuration to object
 			$objConf['type']              = 'map';
 			$objConf['map_name']          = $mapName;
-			$objConf['object_id']         = $type.'-'.$mapName;
+			$objConf['object_id']         = $mapType.'-'.$mapName;
 			// Enable the hover menu in all cases - maybe make it configurable
 			$objConf['hover_menu']        = 1;
 			$objConf['hover_childs_show'] = 1;
@@ -127,7 +147,7 @@ class GlobalIndexPage {
 				$MAP->MAPOBJ->setSummaryState('ERROR');
 				$MAP->MAPOBJ->fetchIcon();
 			} elseif($MAP->MAPOBJ->checkMaintenance(0)) {
-				if($type == 'automap')
+				if($mapType == 'automap')
 					$map['overview_url']    = $this->htmlBase.'/index.php?mod=AutoMap&act=view&show='.$mapName.$MAPCFG->getValue(0, 'default_params');
 				else
 					$map['overview_url']    = $this->htmlBase.'/index.php?mod=Map&act=view&show='.$mapName;
@@ -144,84 +164,91 @@ class GlobalIndexPage {
 			}
 			
 			// If this is the automap display the last rendered image
-			if($type == 'automap') {
-				$imgPath     = $this->CORE->getMainCfg()->getValue('paths', 'sharedvar') . $mapName . '.png';
-				$imgPathHtml = $this->CORE->getMainCfg()->getValue('paths', 'htmlsharedvar') . $mapName . '.png';
-				
-				// Only handle the thumbnail immage when told to do so
-				if($this->CORE->getMainCfg()->getValue('index','showmapthumbs') == 1) {
-					// If there is no automap image on first load of the index page,
-					// render the image
-					if(!$this->checkImageExists($imgPath, FALSE))
-						$MAP->renderMap();
+			if($mapType == 'automap') {
+				if($this->CORE->getMainCfg()->getValue('index','showmapthumbs') == 1)
+					$map['overview_image'] = $this->renderAutomapThumb($MAP);
 
-					// If the message still does not exist print an error and skip the thumbnail generation
-          if($this->checkImageExists($imgPath, FALSE)) {
-						if($this->CORE->checkGd(0)) {
-							$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
-							$sThumbPath = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$sThumbFile;
-							$sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$sThumbFile;
-							
-							// Only create a new thumb when there is no cached one
-							$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
-							if($FCACHE->isCached() === -1) {
-								$image = $this->createThumbnail($imgPath, $sThumbPath);
-							}
-							
-							$map['overview_image'] = $sThumbPathHtml;
-						} else {
-							$map['overview_image'] = $imgPathHtml;
-						}
-					}
-				}
-				
 				$MAP->MAPOBJ->fetchIcon();
 				
-				$aMaps[] = array_merge($MAP->MAPOBJ->parseJson(), $map);
+				if($what === ONLY_STATE)
+					$aMaps[] = array_merge($MAP->MAPOBJ->getObjectStateInformations(), $map);
+				else
+					$aMaps[] = array_merge($MAP->MAPOBJ->parseJson(), $map);
 			} else {
-				// Only handle thumbnail image when told to do so
-				if($this->CORE->getMainCfg()->getValue('index','showmapthumbs') == 1) {
-					$imgPath = $MAPCFG->BACKGROUND->getFile(GET_PHYSICAL_PATH);
-					$imgPathHtml = $MAPCFG->BACKGROUND->getFile();
-					
-					// Check if
-					// a) PHP supports gd
-					// b) The image is a local one
-					// c) The image exists
-					if($this->CORE->checkGd(0) && $MAPCFG->BACKGROUND->getFileType() == 'local' && file_exists($imgPath)) {
-						$sThumbFile = $mapName.'-thumb.'.$this->getFileType($imgPath);
-						$sThumbPath = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$sThumbFile;
-						$sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$sThumbFile;
-						
-						// Only create a new thumb when there is no cached one
-						$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
-						if($FCACHE->isCached() === -1) {
-							$image = $this->createThumbnail($imgPath, $sThumbPath);
-						}
-						
-						$map['overview_image'] = $sThumbPathHtml;
-					} else {
-						$map['overview_image'] = $imgPathHtml;
-					}
-				}
+				if($this->CORE->getMainCfg()->getValue('index','showmapthumbs') == 1)
+					$map['overview_image'] = $this->renderMapThumb($MAPCFG);
 				
-				//Duplicate code? Already done in NagVisMap constructor: $MAP->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
 				$aObjs[] = Array($MAP->MAPOBJ, $map);
 			}
 		}
 		
-		if($type == 'map') {
+		if($mapType == 'map') {
 			$this->BACKEND->execute();
 				
 			foreach($aObjs AS $aObj) {
 				$aObj[0]->applyState();
 				$aObj[0]->fetchIcon();
 
-				$aMaps[] = array_merge($aObj[0]->parseJson(), $aObj[1]);
+				if($what === ONLY_STATE)
+					$aMaps[] = array_merge($aObj[0]->getObjectStateInformations(), $aObj[1]);
+				else
+					$aMaps[] = array_merge($aObj[0]->parseJson(), $aObj[1]);
 			}
 		}
 		
 		return json_encode($aMaps);
+	}
+
+	private function renderMapThumb($MAPCFG) {
+		$imgPath     = $MAPCFG->BACKGROUND->getFile(GET_PHYSICAL_PATH);
+		
+		// Check if
+		// a) PHP supports gd
+		// b) The image is a local one
+		// c) The image exists
+		// When one is not OK, then use the large map image
+		if(!$this->CORE->checkGd(0) || !$MAPCFG->BACKGROUND->getFileType() == 'local' || !file_exists($imgPath))
+			return $MAPCFG->BACKGROUND->getFile();
+
+		$sThumbFile     = $MAPCFG->getName() . '-thumb.' . $this->getFileType($imgPath);
+		$sThumbPath     = $this->CORE->getMainCfg()->getValue('paths', 'sharedvar') . $sThumbFile;
+		$sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths', 'htmlsharedvar') . $sThumbFile;
+		
+		// Only create a new thumb when there is no cached one
+		$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
+		if($FCACHE->isCached() === -1)
+			$image = $this->createThumbnail($imgPath, $sThumbPath);
+		
+		return $sThumbPathHtml;
+	}
+
+	private function renderAutomapThumb($MAP) {
+		$mapName = $MAP->MAPOBJ->getName();
+		$imgPath = $this->CORE->getMainCfg()->getValue('paths', 'sharedvar') . $mapName . '.png';
+		
+		// If there is no automap image on first load of the index page,
+		// render the image
+		if(!$this->checkImageExists($imgPath, false))
+			$MAP->renderMap();
+
+		// If the message still does not exist print an error and skip the thumbnail generation
+    if(!$this->checkImageExists($imgPath, false))
+			return '';
+
+		// Use large image when no gd is available
+		if(!$this->CORE->checkGd(0))
+			return $this->CORE->getMainCfg()->getValue('paths', 'htmlsharedvar') . $mapName . '.png';
+
+		$sThumbFile     = $mapName.'-thumb.png';
+		$sThumbPath     = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$sThumbFile;
+		$sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$sThumbFile;
+		
+		// Only create a new thumb when there is no cached one
+		$FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
+		if($FCACHE->isCached() === -1)
+			$image = $this->createThumbnail($imgPath, $sThumbPath);
+			
+		return $sThumbPathHtml;
 	}
 	
 	/**

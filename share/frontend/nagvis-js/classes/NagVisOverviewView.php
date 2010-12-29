@@ -53,6 +53,7 @@ class NagVisOverviewView {
 		$aData = Array(
 			'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
 			'workerProperties'  => $this->CORE->getMainCfg()->parseWorkerProperties(),
+			'stateProperties'   => json_encode($this->CORE->getMainCfg()->getStateWeight()),
 			'userProperties'    => $USERCFG->doGetAsJson(),
 		);
 

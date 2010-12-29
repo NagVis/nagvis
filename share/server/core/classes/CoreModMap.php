@@ -984,7 +984,7 @@ class CoreModMap extends CoreModule {
 	
 	private function getObjectStates() {
 		$aOpts = Array('ty' => MATCH_GET_OBJECT_TYPE,
-		               'i'  => MATCH_STRING_NO_SPACE);
+		               'i'  => MATCH_STRING_NO_SPACE_EMPTY);
 		$aVals = $this->getCustomOptions($aOpts);
 		
 		// Initialize backends
@@ -993,7 +993,11 @@ class CoreModMap extends CoreModule {
 		// Initialize map configuration (Needed in getMapObjConf)
 		$MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
 		$MAPCFG->readMapConfig();
-		$MAPCFG->filterMapObjects($aVals['i']);
+
+		// i might not be set when all map objects should be fetched or when only
+		// the summary of the map is called
+		if($aVals['i'] != '')
+			$MAPCFG->filterMapObjects($aVals['i']);
 
 		$MAP = new NagVisMap($this->CORE, $MAPCFG, $BACKEND, GET_STATE, IS_VIEW);
 		return $MAP->parseObjectsJson($aVals['ty']);

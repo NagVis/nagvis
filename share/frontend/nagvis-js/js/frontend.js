@@ -622,12 +622,15 @@ function setPageTitle(sTitle) {
  */
 function updateMapBasics() {
 	var sAutomapParams = '';
-	if(oPageProperties.view_type === 'automap')
+	var mod = 'Map';
+	if(oPageProperties.view_type === 'automap') {
 		sAutomapParams = getAutomapParams();
+		mod = 'AutoMap';
+	}
 	
 	// Get new map state from core
 	oMapSummaryObj = new NagVisMap(getSyncRequest(oGeneralProperties.path_server
-	                               + '?mod=General&act=getObjectStates&ty=state&i[]='
+	                               + '?mod=' + mod + '&act=getObjectStates&ty=summary&i[]='
 																 + escapeUrlValues(oPageProperties.map_name)
 																 + sAutomapParams, false)[0]);
 	sAutomapParams = null;
@@ -842,7 +845,7 @@ function refreshMapObject(objectId) {
 		sMapPart = '&show='+escapeUrlValues(map);
 		sAddPart = getAutomapParams();
 	} else if(oPageProperties.view_type === 'overview') {
-		sMod = 'General';
+		sMod = 'Overview';
 		sMapPart = '';
 	}
 	
@@ -1535,19 +1538,6 @@ function getUrlProperties(sUrl) {
 }
 
 /**
- * getStateProperties()
- *
- * Fetches the current state properties like colors and
- * sounds from the core
- *
- * @return  Boolean  Success?
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getStateProperties() {
-	return getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getStateProperties')
-}
-
-/**
  * automapParse()
  *
  * Parses the automap background image
@@ -1782,7 +1772,6 @@ function workerInitialize(iCount, sType, sIdentifier) {
 	
 	// Load state properties
 	eventlog("worker", "debug", "Loading the state properties");
-	oStates =	getStateProperties();
 	
 	// Handle the page rendering
 	if(sType == 'map') {
@@ -2111,7 +2100,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
 		 */
 		
 		// Get the updated objectsupdateMapObjects via bulk request
-		getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getObjectStates&ty=state',
+		getBulkRequest(oGeneralProperties.path_server+'?mod=Overview&act=getObjectStates&ty=state',
 		               getUrlParts(getObjectsToUpdate(aMapObjects)),
 									 oWorkerProperties.worker_request_max_length, false, handleUpdate, [ sType ]);
 	}

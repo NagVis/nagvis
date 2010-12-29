@@ -33,11 +33,9 @@ class CoreModGeneral extends CoreModule {
 		
 		$this->aActions = Array(
 			'getCfgFileAges'     => REQUIRES_AUTHORISATION,
-			'getStateProperties' => REQUIRES_AUTHORISATION,
 			'getHoverTemplate'   => REQUIRES_AUTHORISATION,
 			'getContextTemplate' => REQUIRES_AUTHORISATION,
 			'getHoverUrl'        => REQUIRES_AUTHORISATION,
-			'getObjectStates'    => REQUIRES_AUTHORISATION
 		);
 	}
 	
@@ -49,9 +47,6 @@ class CoreModGeneral extends CoreModule {
 				case 'getCfgFileAges':
 					$sReturn = $this->getCfgFileAges();
 				break;
-				case 'getStateProperties':
-					$sReturn = $this->getStateProperties();
-				break;
 				case 'getHoverTemplate':
 					$sReturn = $this->getTemplate('hover');
 				break;
@@ -60,9 +55,6 @@ class CoreModGeneral extends CoreModule {
 				break;
 				case 'getHoverUrl':
 					$sReturn = $this->getHoverUrl();
-				break;
-				case 'getObjectStates':
-					$sReturn = $this->getObjectStates();
 				break;
 			}
 		}
@@ -106,10 +98,6 @@ class CoreModGeneral extends CoreModule {
 		return json_encode($aReturn);
 	}
 	
-	private function getStateProperties() {
-		echo json_encode($this->CORE->getMainCfg()->getStateWeight());
-	}
-	
 	private function getTemplate($type) {
 		$arrReturn = Array();
 		
@@ -136,110 +124,6 @@ class CoreModGeneral extends CoreModule {
 		foreach($aOpts['url'] AS $sUrl) {
 			$OBJ = new NagVisHoverUrl($this->CORE, $sUrl);
 			$arrReturn[] = Array('url' => $sUrl, 'code' => $OBJ->__toString());
-		}
-		
-		return json_encode($arrReturn);
-	}
-	
-	private function getObjectStates() {
-		$arrReturn = Array();
-		
-		$aOpts = Array('ty' => MATCH_GET_OBJECT_TYPE,
-		               'i'  => MATCH_STRING_NO_SPACE);
-
-		$aVals = $this->getCustomOptions($aOpts);
-		
-		$arrObjId = $aVals['i'];
-		$sType    = $aVals['ty'];
-		
-		// Initialize backends
-		$BACKEND = new CoreBackendMgmt($this->CORE);
-			
-		$aObjs = Array();
-		foreach($arrObjId AS $id) {
-			list($type, $name) = explode('-', $id, 2);
-
-			switch($type) {
-				case 'map':
-					if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted('Map', 'view', $name))
-						continue 2;
-					
-					$MAPCFG = new NagVisMapCfg($this->CORE, $name);
-					$MAPCFG->readMapConfig();
-					
-					$OBJ = new NagVisMapObj($this->CORE, $BACKEND, $MAPCFG, !IS_VIEW);
-					$OBJ->fetchMapObjects();
-				break;
-				case 'automap':
-					if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted('AutoMap', 'view', $name))
-						continue 2;
-					
-					$MAPCFG = new NagVisAutomapCfg($this->CORE, $name);
-					$MAPCFG->readMapConfig();
-					
-					$aOpts = Array('backend'     => MATCH_STRING_NO_SPACE_EMPTY,
-		                     'root'        => MATCH_STRING_NO_SPACE_EMPTY,
-		                     'maxLayers'   => MATCH_INTEGER_EMPTY,
-		                     'renderMode'  => MATCH_AUTOMAP_RENDER_MODE,
-		                     'width'       => MATCH_INTEGER_EMPTY,
-		                     'height'      => MATCH_INTEGER_EMPTY,
-		                     'ignoreHosts' => MATCH_STRING_NO_SPACE_EMPTY,
-		                     'filterGroup' => MATCH_STRING_EMPTY);
-		
-					$aOpts = $this->getCustomOptions($aOpts);
-					
-					// Save the automap name to use
-					$aOpts['automap'] = $name;
-					// Save the preview mode (Enables/Disables printing of errors)
-					$aOpts['preview'] = 0;
-					
-					$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $aOpts, !IS_VIEW);
-					$OBJ = $MAP->MAPOBJ;
-				break;
-				default:
-					new GlobalMessage('ERROR', $CORE->getLang()->getText('Only map and automap states can be fetched using this module/action.'));
-				break;
-			}
-			
-			// Load configured options
-			$arr = $MAPCFG->getDefinitions('global');
-			unset($arr[0]['type']);
-			unset($arr[0]['object_id']);
-			
-			// Load default options and merge
-			$typeDefs = $MAPCFG->getTypeDefaults('global');
-			foreach($typeDefs AS $key => $default)
-				if(!isset($arr[0][$key]))
-					$arr[0][$key] = $default;
-			
-			$OBJ->setConfiguration($arr[0]);
-			$OBJ->setObjectId($id);
-			
-			$OBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
-			
-			$aObjs[] = $OBJ;
-		}
-		
-		// Now after all objects are queued execute them and then apply the states
-		$BACKEND->execute();
-		
-		foreach($aObjs AS $OBJ) {
-			$OBJ->applyState();
-			$OBJ->fetchIcon();
-			
-			switch($sType) {
-				case 'state':
-					$arr = $OBJ->getObjectStateInformations();
-				break;
-				case 'complete':
-					$arr = $OBJ->parseJson();
-				break;
-			}
-			
-			$arr['object_id'] = $OBJ->getObjectId();
-			$arr['icon'] = $OBJ->get('icon');
-			
-			$arrReturn[] = $arr;
 		}
 		
 		return json_encode($arrReturn);

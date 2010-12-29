@@ -23,6 +23,7 @@ Core
     each map. All map objects which have no object id defined will ge one
     created. This makes migration easier.
   * Catching ps_files_cleanup_dir error message (strange error debian/ubuntu)
+  * Fixed inconsistence with iconsets when refreshing overview maps/automaps
 
 Automap
   * Made automap coord parsing regex resistent against html entities in the URL
@@ -48,6 +49,7 @@ Frontend
     * Lines can now be repositioned by dragging the ends using the anchors in unlocked mode
       in regular frontend
   * Added password reset form to user management dialog
+  * Reduced ajax calls on map/automap/overview page load
   * Bugfix: Acks/downtimes of problems were not recognized by background
     highlighting
   * Bugfix: Weathermap lines with traffic amount label display MBits as GB

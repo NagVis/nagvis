@@ -100,6 +100,10 @@ define('GET_PHYSICAL_PATH', false);
 define('DONT_GET_OBJECT_STATE', false);
 define('DONT_GET_SINGLE_MEMBER_STATES', false);
 define('GET_SINGLE_MEMBER_STATES', true);
+
+define('ONLY_STATE', true);
+define('COMPLETE', false);
+
 define('IS_VIEW', true);
 define('ONLY_GLOBAL', true);
 define('GET_CHILDS', true);
