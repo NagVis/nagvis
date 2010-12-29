@@ -55,8 +55,6 @@ class NagVisAutoMap extends GlobalMap {
 
 	private $graphvizPath;
 	private $noBinaryFound;
-
-	private $objIdFile;
 	
 	/**
 	 * Automap constructor
@@ -75,7 +73,6 @@ class NagVisAutoMap extends GlobalMap {
 		$this->arrHostnamesParsed = Array();
 		$this->mapCode = '';
 		
-		$this->objIdFile = $CORE->getMainCfg()->getValue('paths', 'var').'automap.hostids';
 		$this->graphvizPath = '';
 		$this->noBinaryFound = false;
 		
@@ -188,7 +185,7 @@ class NagVisAutoMap extends GlobalMap {
 		 * the child tree by the given list of host object ids.
 		 */
 		if($this->filterByIds) {
-			$names = $this->objIdsToNames($this->filterByIds);
+			$names = $this->MAPCFG->objIdsToNames($this->filterByIds);
 			$this->rootObject->filterChilds($names);
 
 			// Filter the parent object tree too when enabled
@@ -536,44 +533,6 @@ class NagVisAutoMap extends GlobalMap {
 	
 	# END Public Methods
 	# #####################################################
-
-	/**
-	 * Transforms a list of automap object_ids to hostnames using the object_id
-	 * translation file. Unknown object_ids are skipped
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function objIdsToNames($ids) {
-		$names = Array();
-		$map = $this->loadObjIds();
-		foreach($ids AS $id) {
-			$name = array_search($id, $map);
-			if($name !== FALSE)
-				$names[] = $name;
-		}
-		return $names;
-	}
-
-	/**
-	 * Loads the hostname to object_id mapping table from the central file
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function loadObjIds() {
-		if($this->CORE->checkExisting($this->objIdFile, false))
-			return json_decode(file_get_contents($this->objIdFile), true);
-		else
-			return Array();
-	}
-
-	/**
-	 * Saves the given hostname to object_id mapping table in the central file
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function storeObjIds($a) {
-		return file_put_contents($this->objIdFile, json_encode($a)) !== false;
-	}
 	
 	private function loadObjectConfigurations() {
 		// Load the hosts from mapcfg into the aConf array
@@ -584,7 +543,7 @@ class NagVisAutoMap extends GlobalMap {
 		}
 
 		// And now load the stored object id (or get a new one)
-		$objIds = $this->loadObjIds();
+		$objIds = $this->MAPCFG->loadObjIds();
 		$newObjId = false;
 
 		// Loop all map objects to load host individual configurations and the uniqe
@@ -609,7 +568,7 @@ class NagVisAutoMap extends GlobalMap {
 		}
 
 		// When some new object ids have been added store them
-		$this->storeObjIds($objIds);
+		$this->MAPCFG->storeObjIds($objIds);
 	}
 	
 	/**

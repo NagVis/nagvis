@@ -39,6 +39,8 @@ class NagVisObject {
 	protected $y;
 	protected $z;
 	protected $icon;
+	protected $url;
+	protected $url_target;
 	
 	protected $view_type;
 	protected $hover_menu;

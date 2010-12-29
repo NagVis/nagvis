@@ -98,7 +98,7 @@ class GlobalIndexPage {
 				$map['configError'] = true;
 				$map['configErrorMsg'] = $e->getMessage();
 			}
-			
+
 			if($type == 'automap')
 				$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->BACKEND, Array('automap' => $mapName, 'preview' => 1), !IS_VIEW);
 			else
@@ -112,8 +112,10 @@ class GlobalIndexPage {
 			$objConf['hover_menu']        = 1;
 			$objConf['hover_childs_show'] = 1;
 			$objConf['hover_template']    = 'default';
-			unset($objConf['alias']);
-			
+			// Enforce std_medium iconset - don't use map default iconset
+			$objConf['iconset']           = 'std_medium';
+			$objConf['alias']             = $MAPCFG->getAlias();
+
 			$MAP->MAPOBJ->setConfiguration($objConf);
 			
 			if(isset($map['configError'])) {

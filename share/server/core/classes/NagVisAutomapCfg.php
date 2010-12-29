@@ -29,6 +29,9 @@
 class NagVisAutomapCfg extends GlobalMapCfg {
 	private $defaultConf = null;
 
+	private $objIds = Array();
+	private $objIdFile;
+
 	/**
 	 * Class Constructor
 	 *
@@ -43,6 +46,8 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 		} else {
 			$this->name	= $name;
 		}
+
+		$this->objIdFile = $CORE->getMainCfg()->getValue('paths', 'var').'automap.hostids';
 		
 		// Start of the parent constructor
 		parent::__construct($CORE, $this->name);
@@ -71,11 +76,15 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 		// Load the settings once and then remove the dummy host from host list
 		if(!$this->defaultConf) {
 			$this->defaultConf = Array();
+
+			$ids = $this->loadObjIds();
+			if(isset($ids['__dummy__']))
+				$objectId = $ids['__dummy__'];
+			else
+				return $this->defaultConf;
 			
 			/*
 			 * Get object default configuration from configuration file
-			 * The dummy host MUST be the first host defined in the automap configuration file.
-			 * The settings of the first host will be used for all objects on the map
 			 */
 			foreach($this->getValidTypeKeys('host') AS $key) {
 				if($key != 'type'
@@ -85,11 +94,11 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 					 && $key != 'x'
 					 && $key != 'y'
 					 && $key != 'line_width') {
-					$this->defaultConf[$key] = $this->getValue(0, $key);
+					$this->defaultConf[$key] = $this->getValue($objectId, $key);
 				}
 			}
 
-			$this->deleteElement(0);
+			$this->deleteElement($objectId);
 		}
 		
 		return $this->defaultConf;
@@ -108,6 +117,49 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 			parent::filterMapObjects($a);
 			$this->mapConfig = array_merge(Array($global, $dummy), $this->mapConfig);
 		}
+	}
+
+	/**
+	 * Transforms a list of automap object_ids to hostnames using the object_id
+	 * translation file. Unknown object_ids are skipped
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function objIdsToNames($ids) {
+		$names = Array();
+		$map = $this->loadObjIds();
+		foreach($ids AS $id) {
+			$name = array_search($id, $map);
+			if($name !== FALSE)
+				$names[] = $name;
+		}
+		return $names;
+	}
+
+	/**
+	 * Loads the hostname to object_id mapping table from the central file
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function loadObjIds() {
+		if($this->objIds === null)
+			if($this->CORE->checkExisting($this->objIdFile, false))
+				$this->objIds = json_decode(file_get_contents($this->objIdFile), true);
+			else
+				$this->objIds = Array();
+
+		return $this->objIds;
+	}
+
+	/**
+	 * Saves the given hostname to object_id mapping table in the central file
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function storeObjIds($a) {
+		$this->objIds = $a;
+
+		return file_put_contents($this->objIdFile, json_encode($a)) !== false;
 	}
 }
 ?>
