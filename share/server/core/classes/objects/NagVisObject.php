@@ -206,6 +206,20 @@ class NagVisObject {
 		}
 	}
 
+	protected function numMembers() {
+		// Save the number of members
+		switch($this->type) {
+			case 'host':
+			case 'hostgroup':
+			case 'servicegroup':
+				return $this->getNumMembers();
+			break;
+			case 'map':
+				return $this->getNumStatefulMembers();
+			break;
+		}
+	}
+
 	/**
 	 * PUBLIC getObjectInformation()
 	 *
@@ -245,17 +259,7 @@ class NagVisObject {
 		elseif($this instanceof NagVisStatelessObject)
 			$arr['iconHtmlPath'] = NagVisStatelessObject::$iconHtmlPath;
 		
-		// Save the number of members
-		switch($this->type) {
-			case 'host':
-			case 'hostgroup':
-			case 'servicegroup':
-				$arr['num_members'] = $this->getNumMembers();
-			break;
-			case 'map':
-				$arr['num_members'] = $this->getNumStatefulMembers();
-			break;
-		}
+		$arr['num_members'] = $this->numMembers();
 		
 		/**
 		 * FIXME: Find another place for that! This is a bad place for language strings!
