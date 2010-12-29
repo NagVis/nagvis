@@ -50,6 +50,7 @@ Frontend
       in regular frontend
   * Added password reset form to user management dialog
   * Reduced ajax calls on map/automap/overview page load
+  * Bugifx: Added missing state colors to multisite map listing (Thanks to BMuc)
   * Bugfix: Acks/downtimes of problems were not recognized by background
     highlighting
   * Bugfix: Weathermap lines with traffic amount label display MBits as GB
