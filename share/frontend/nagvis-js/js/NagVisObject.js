@@ -380,5 +380,5 @@ var NagVisObject = Base.extend({
 			}
 		}
 		return false;
-	},
+	}
 });

@@ -98,7 +98,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 			'summary_in_downtime': this.conf.summary_in_downtime,
 			'summary_problem_has_been_acknowledged': this.conf.summary_problem_has_been_acknowledged,
 			'output': this.conf.output,
-			'perfdata': this.conf.perfdata,
+			'perfdata': this.conf.perfdata
 		};
 	},
 	
