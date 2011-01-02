@@ -430,64 +430,44 @@ class WuiMap extends GlobalMap {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	function getMapObjects($mergeWithGlobals=1) {
-		$objects = Array();
-		
-		$objects = array_merge($objects,$this->getObjectsOfType('map',$mergeWithGlobals));
-		$objects = array_merge($objects,$this->getObjectsOfType('host',$mergeWithGlobals));
-		$objects = array_merge($objects,$this->getObjectsOfType('service',$mergeWithGlobals));
-		$objects = array_merge($objects,$this->getObjectsOfType('hostgroup',$mergeWithGlobals));
-		$objects = array_merge($objects,$this->getObjectsOfType('servicegroup',$mergeWithGlobals));
-		$objects = array_merge($objects,$this->getObjectsOfType('textbox',$mergeWithGlobals));
-		$objects = array_merge($objects,$this->getObjectsOfType('shape',$mergeWithGlobals));
-		$objects = array_merge($objects,$this->getObjectsOfType('line',$mergeWithGlobals));
-		
-		return $objects;
-	}
-	
-	/**
-	 * Gets all objects of the defined type from a map and return an array with states
-	 *
-	 * @param	String	$type				Type of objects
-	 * @param	Boolean	$mergeWithGlobals	Merge with globals
-	 * @return	Array	Array of Objects of this type on the map
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-	function getObjectsOfType($type,$mergeWithGlobals=1) {
 		// object array
 		$objects = Array();
 		
-		// Default object state
-		if($type == 'host' || $type == 'hostgroup') {
-			$objState = Array('state'=>'UP','stateOutput'=>'Default State');
-		} else {
-			$objState = Array('state'=>'OK','stateOutput'=>'Default State');
-		}
-		
-		if(is_array($objs = $this->MAPCFG->getDefinitions($type))){
-			foreach($objs AS $index => $obj) {
-				// workaround
-				$obj['id'] = $index;
-				
-				if($mergeWithGlobals) {
-					// merge with "global" settings
-					foreach($this->MAPCFG->getValidTypeKeys($type) AS $key) {
-						$obj[$key] = $this->MAPCFG->getValue($type, $index, $key);
-					}
+		foreach($this->MAPCFG->getMapObjects() AS $index => $obj) {
+			$type = $obj['type'];
+
+			if($type === 'global')
+				continue;
+
+			// Default object state
+			if($type == 'host' || $type == 'hostgroup') {
+				$objState = Array('state'=>'UP','stateOutput'=>'Default State');
+			} else {
+				$objState = Array('state'=>'OK','stateOutput'=>'Default State');
+			}
+
+			// workaround
+			$obj['id'] = $index;
+			
+			if($mergeWithGlobals) {
+				// merge with "global" settings
+				foreach($this->MAPCFG->getValidTypeKeys($type) AS $key) {
+					$obj[$key] = $this->MAPCFG->getValue($index, $key);
 				}
-				
-				// add default state to the object
-				$obj = array_merge($obj,$objState);
-				
-				if($obj['type'] != 'textbox' && $obj['type'] != 'shape' && $obj['type'] != 'line') {
-					$obj['icon'] = $this->getIcon($obj);
-				}
-				
-				// add object to array of objects
-				$objects[] = $obj;
+			}
+
+			// add default state to the object
+			$obj = array_merge($obj, $objState);
+			
+			if($obj['type'] != 'textbox' && $obj['type'] != 'shape' && $obj['type'] != 'line') {
+				$obj['icon'] = $this->getIcon($obj);
 			}
 			
-			return $objects;
+			// add object to array of objects
+			$objects[] = $obj;
 		}
+		
+		return $objects;
 	}
 	
 	/**
@@ -601,12 +581,12 @@ class WuiMap extends GlobalMap {
 		// Get configured/inherited variables
 		foreach($this->MAPCFG->getValidTypeKeys($obj['type']) AS $key) {
 			$bGlobal = false;
-			$value = $this->MAPCFG->getValue($obj['type'], $obj['id'], $key, true);
+			$value = $this->MAPCFG->getValue($obj['id'], $key, true);
 			
 			// Get global value when nothing set
 			if($value === false) {
 				$bGlobal = true;
-				$value = $this->MAPCFG->getValue($obj['type'], $obj['id'], $key, false);
+				$value = $this->MAPCFG->getValue($obj['id'], $key, false);
 			}
 			
 			// Change array to comma separated string

@@ -128,7 +128,7 @@ class WuiViewMapAddModify {
 					// Get the options of the object to clone from map
 					foreach($this->MAPCFG->getValidTypeKeys($this->aOpts['type']) as $i => $key) {
 						if($key !== 'x' && $key !== 'y' && $key !== 'y' && $key !== 'object_id') {
-							$val = $this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['clone'], $key, true);
+							$val = $this->MAPCFG->getValue($this->aOpts['clone'], $key, true);
 							
 							if($val !== false) {
 								$ret .= 'document.addmodify.elements[\''.$key.'\'].value=\''.$val.'\';';
@@ -137,11 +137,11 @@ class WuiViewMapAddModify {
 								if($this->aOpts['type'] == 'service' && $key == 'host_name') {
 									// Params: backend_id, type, host_name, field, selected
 									$ret .= "getObjects(".
-									          "'".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['clone'], 'backend_id')."',".
+									          "'".$this->MAPCFG->getValue($this->aOpts['clone'], 'backend_id')."',".
 									          "'".$this->aOpts['type']."',".
 									          "'service_description',".
-									          "'".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], 'service_description', true)."',".
-									          "'".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['clone'], 'host_name', true)."'".
+									          "'".$this->MAPCFG->getValue($this->aOpts['id'], 'service_description', true)."',".
+									          "'".$this->MAPCFG->getValue($this->aOpts['clone'], 'host_name', true)."'".
 									        ");";
 								}
 							}
@@ -209,12 +209,12 @@ class WuiViewMapAddModify {
 			// Check if depends_on and depends_value are defined and if the value
 			// is equal. If not equal hide the field
 			if(isset($prop['depends_on']) && isset($prop['depends_value'])
-				&& $this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $prop['depends_on'], FALSE) != $prop['depends_value']) {
+				&& $this->MAPCFG->getValue($this->aOpts['id'], $prop['depends_on'], FALSE) != $prop['depends_value']) {
 				
 				$style .= 'display:none;';
 				$class = 'child-row';
 			} elseif(isset($prop['depends_on']) && isset($prop['depends_value'])
-				&& $this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $prop['depends_on'], FALSE) == $prop['depends_value']) {
+				&& $this->MAPCFG->getValue($this->aOpts['id'], $prop['depends_on'], FALSE) == $prop['depends_value']) {
 				
 				//$style .= 'display:;';
 				$class = 'child-row';
@@ -222,10 +222,10 @@ class WuiViewMapAddModify {
 			
 			// Create a "helper" field which contains the real applied value
 			if($this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $propname, TRUE) === FALSE) {
-				$ret .= $FORM->getHiddenField('_'.$propname, $this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $propname, FALSE));
+				$ret .= $FORM->getHiddenField('_'.$propname, $this->MAPCFG->getValue($this->aOpts['id'], $propname, FALSE));
 			} else {
 				$ret .= $FORM->getHiddenField('_'.$propname, '');
-				$ret .= $FORM->getHiddenField('_conf_'.$propname, $this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $propname, TRUE));
+				$ret .= $FORM->getHiddenField('_conf_'.$propname, $this->MAPCFG->getValue($this->aOpts['id'], $propname, TRUE));
 			}
 			
 			// Set field type to show
@@ -244,61 +244,61 @@ class WuiViewMapAddModify {
 					switch ($propname) {
 						case 'iconset':
 							$options = $this->CORE->getAvailableIconsets();
-							$selected = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE);
+							$selected = $this->MAPCFG->getValue($this->aOpts['id'], $propname, TRUE);
 						break;
 						
 						case 'map_image':
 							$options = $this->CORE->getAvailableBackgroundImages();
-							$selected = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE);
+							$selected = $this->MAPCFG->getValue($this->aOpts['id'], $propname, TRUE);
 						break;
 						
 						case 'line_type':
 
 							$options = Array(Array('label' => '------><------', 'value' => '10'), Array('label' => '-------------->', 'value'=>'11'), Array('label' => '---------------', 'value'=>'12'), Array('label' => '--%--><--%--', 'value' =>'13'), Array('label' => '--%+BW-><-%+BW--', 'value'=>'14'));
-							$selected = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE);
+							$selected = $this->MAPCFG->getValue($this->aOpts['id'], $propname, TRUE);
 						break;
 						
 						case 'hover_template':
 							$options = $this->CORE->getAvailableHoverTemplates();
-							$selected = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE);
+							$selected = $this->MAPCFG->getValue($this->aOpts['id'],$propname,TRUE);
 						break;
 						
 						case 'hover_childs_order':
 							$options = Array(Array('label' => $this->CORE->getLang()->getText('Ascending'), 'value'=>'asc'), Array('label' => $this->CORE->getLang()->getText('Descending'), 'value' => 'desc'));
-							$selected = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE);
+							$selected = $this->MAPCFG->getValue($this->aOpts['id'],$propname,TRUE);
 						break;
 						
 						case 'hover_childs_sort':
 							$options = Array(Array('label' => $this->CORE->getLang()->getText('Alphabetically'), 'value'=>'a'), Array('label' => $this->CORE->getLang()->getText('State'), 'value' => 's'));
-							$selected = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE);
+							$selected = $this->MAPCFG->getValue($this->aOpts['id'],$propname,TRUE);
 						break;
 						
 						case 'header_template':
 							$options = $this->CORE->getAvailableHeaderTemplates();
-							$selected = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE);
+							$selected = $this->MAPCFG->getValue($this->aOpts['id'],$propname,TRUE);
 						break;
 						
 						case 'map_name':
 							$options = array_merge($this->CORE->getAvailableMaps(), $this->CORE->getAvailableAutomaps());
-							$selected = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE);
+							$selected = $this->MAPCFG->getValue($this->aOpts['id'],$propname,TRUE);
 						break;
 						
 						case 'context_template':
 							$options = $this->CORE->getAvailableContextTemplates();
-							$selected = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE);
+							$selected = $this->MAPCFG->getValue($this->aOpts['id'],$propname,TRUE);
 						break;
 						
 						case 'icon':
 							$options = $this->CORE->getAvailableShapes();
-							$selected = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE);
+							$selected = $this->MAPCFG->getValue($this->aOpts['id'],$propname,TRUE);
 							
-							if(preg_match("/^\[(.*)\]$/",$this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE),$match) > 0)
+							if(preg_match("/^\[(.*)\]$/",$this->MAPCFG->getValue($this->aOpts['id'],$propname,TRUE),$match) > 0)
 								$toggleFieldType = true;
 						break;
 						
 						case 'gadget_url':
 							$options = $this->CORE->getAvailableGadgets();
-							$selected = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE);
+							$selected = $this->MAPCFG->getValue($this->aOpts['id'],$propname,TRUE);
 						break;
 						
 						case 'view_type':
@@ -311,7 +311,7 @@ class WuiViewMapAddModify {
 							if($this->aOpts['viewType'] != '') {
 								$selected = $this->aOpts['viewType'];
 							} else {
-								$selected = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE);
+								$selected = $this->MAPCFG->getValue($this->aOpts['id'],$propname,TRUE);
 							}
 						break;
 						
@@ -327,26 +327,26 @@ class WuiViewMapAddModify {
 								$type = $this->aOpts['type'];
 							}
 							$options = $this->CORE->getDefinedBackends();
-							$selected = $this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $propname, TRUE);
+							$selected = $this->MAPCFG->getValue( $this->aOpts['id'], $propname, TRUE);
 							if($this->aOpts['type'] != 'global')
-								$onChange = "getObjects(this.value,'".$type."','".$field."','".$this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],$propname,TRUE)."');validateMapConfigFieldValue(this)";
+								$onChange = "getObjects(this.value,'".$type."','".$field."','".$this->MAPCFG->getValue($this->aOpts['id'],$propname,TRUE)."');validateMapConfigFieldValue(this)";
 						break;
 						
 						case 'host_name':
 						case 'hostgroup_name':
 						case 'servicegroup_name':
-							$backendId = $this->MAPCFG->getValue($this->aOpts['type'],$this->aOpts['id'],'backend_id');
+							$backendId = $this->MAPCFG->getValue($this->aOpts['id'],'backend_id');
 							$selected = NULL;
 							
 							if($this->aOpts['do'] == 'modify') {
-								$sSelected = $this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $propname, TRUE);
+								$sSelected = $this->MAPCFG->getValue( $this->aOpts['id'], $propname, TRUE);
 							} else {
 								$sSelected = '';
 							}
 							
 							$ret .= "<script type='text/Javascript'>getObjects('".$backendId."','".preg_replace('/_name/i','',$propname)."','".$propname."','".$sSelected."');</script>";
 							if($sSelected != '' && in_array('service_description', $this->MAPCFG->getValidTypeKeys($this->aOpts['type']))) {
-								$ret .= "<script type='text/Javascript'>getObjects('".$backendId."', '".$this->aOpts['type']."', 'service_description','".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], 'service_description', TRUE)."', '".$sSelected."');</script>";
+								$ret .= "<script type='text/Javascript'>getObjects('".$backendId."', '".$this->aOpts['type']."', 'service_description','".$this->MAPCFG->getValue($this->aOpts['id'], 'service_description', TRUE)."', '".$sSelected."');</script>";
 							}
 							
 							if($propname == 'host_name') {
@@ -396,7 +396,7 @@ class WuiViewMapAddModify {
 				
 				case 'boolean':
 					if($this->aOpts['do'] == 'modify') {
-						$value = $this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $propname, TRUE);
+						$value = $this->MAPCFG->getValue($this->aOpts['id'], $propname, TRUE);
 					} else {
 						$value = '';
 					}
@@ -421,7 +421,7 @@ class WuiViewMapAddModify {
 				case 'text':
 					// display a simple textbox
 					if($this->aOpts['do'] == 'modify') {
-						$value = $this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], $propname, TRUE);
+						$value = $this->MAPCFG->getValue($this->aOpts['id'], $propname, TRUE);
 						
 						if(is_array($value)) {
 							$value = implode(',', $value);

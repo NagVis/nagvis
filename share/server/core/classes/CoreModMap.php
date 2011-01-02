@@ -198,13 +198,13 @@ class CoreModMap extends CoreModule {
 					}
 				break;
 				case 'addModify':
-					$aOpts = Array('show' => MATCH_MAP_NAME,
-					               'do' => MATCH_WUI_ADDMODIFY_DO,
-					               'type' => MATCH_OBJECTTYPE,
-					               'id' => MATCH_INTEGER_EMPTY,
+					$aOpts = Array('show'     => MATCH_MAP_NAME,
+					               'do'       => MATCH_WUI_ADDMODIFY_DO,
+					               'type'     => MATCH_OBJECTTYPE,
+					               'id'       => MATCH_OBJECTID_EMPTY,
 					               'viewType' => MATCH_VIEW_TYPE_SERVICE_EMPTY,
-					               'coords' => MATCH_STRING_NO_SPACE_EMPTY,
-					               'clone' => MATCH_INTEGER_EMPTY);
+					               'coords'   => MATCH_STRING_NO_SPACE_EMPTY,
+					               'clone'    => MATCH_OBJECTID_EMPTY);
 					$aVals = $this->getCustomOptions($aOpts);
 					
 					// Initialize unset optional attributes
