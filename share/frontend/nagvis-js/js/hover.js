@@ -268,7 +268,7 @@ function replaceHoverTemplateStaticMacros(oObj, sTemplateCode) {
 	
 	// Replace child section when unwanted
 	if((oObj.conf.hover_childs_show && oObj.conf.hover_childs_show != '1')
-	 	 || typeof oObj.conf.num_members == 'undefined' || oObj.conf.num_members == 0)
+	 	 || !isset(oObj.conf.num_members) || oObj.conf.num_members == 0)
 		oSectionMacros.childs = '<!--\\sBEGIN\\schilds\\s-->.+?<!--\\sEND\\schilds\\s-->';
 	
 	// Loop and replace all unwanted section macros
