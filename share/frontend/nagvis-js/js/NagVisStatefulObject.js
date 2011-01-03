@@ -522,18 +522,30 @@ var NagVisStatefulObject = NagVisObject.extend({
 			*/
 
 			// Check perfdata array, did we get usable data back
-			if(setPerfdata == 'empty' || setPerfdata[0][0] == 'dummyPercentIn' || setPerfdata[1][0] == 'dummyPercentOut'
-				 || (this.conf.line_type == 14 && (setPerfdata[2][0] == 'dummyActualIn' || setPerfdata[3][0] == 'dummyActualOut'))) {
+			if(setPerfdata == 'empty'
+			   || !isset(setPerfdata[0]) || setPerfdata[0][0] == 'dummyPercentIn'
+			   || !isset(setPerfdata[1]) || setPerfdata[1][0] == 'dummyPercentOut'
+			   || (this.conf.line_type == 14 && (
+			       !isset(setPerfdata[2]) || setPerfdata[2][0] == 'dummyActualIn'
+			       || !isset(setPerfdata[3]) || setPerfdata[3][0] == 'dummyActualOut'))) {
 
 				var msg = "Missing performance data - ";
 				if(setPerfdata == 'empty')
 						msg += "perfdata string is empty";	
 				else {
-					if(setPerfdata[0][0] == 'dummyPercentIn' || setPerfdata[1][0] == 'dummyPercentOut')
-				  	msg += "value 1 is \'" + setPerfdata[0][1] + "\' value 2 is \'" + setPerfdata[1][1] + "\'";
+					if(isset(setPerfdata[0]) && setPerfdata[0][0] == 'dummyPercentIn')
+				  	msg += "value 1 is \'" + setPerfdata[0][1] + "\'";
 
-					if(this.conf.line_type == 14 && (setPerfdata[2][0] == 'dummyActualIn' || setPerfdata[3][0] == 'dummyActualOut'))
-						msg += " value 3 is \'" + setPerfdata[2][1] + "\' value 4 is \'" + setPerfdata[3][1] + "\'";
+					if(isset(setPerfdata[1]) && setPerfdata[1][0] == 'dummyPercentOut')
+				  	msg += " value 2 is \'" + setPerfdata[1][1] + "\'";
+
+					if(this.conf.line_type == 14) {
+						if(isset(setPerfdata[2]) && setPerfdata[2][0] == 'dummyActualIn')
+							msg += " value 3 is \'" + setPerfdata[2][1] + "\'";
+
+						if(isset(setPerfdata[3]) && setPerfdata[3][0] == 'dummyActualOut')
+							msg += " value 4 is \'" + setPerfdata[3][1] + "\'";
+					}
 				}
 				
 				this.conf.summary_output += ' (Weathermap Line Error: ' + msg + ')';
