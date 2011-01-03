@@ -129,6 +129,7 @@ a.linelink {
 div.lineDrag {
   position: absolute;
   border: 1px #ff0000 dotted;
+	background: url('../images/templates/default.control_drag.gif');
 }
 
 /* Style on info pages (index.php?info, index.php) */
