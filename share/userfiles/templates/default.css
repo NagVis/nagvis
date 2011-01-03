@@ -125,11 +125,18 @@ a.linelink {
 	padding: 2px;
 }
 
-/* line drag nodes */
-div.lineDrag {
+/* control styles */
+div.control {
   position: absolute;
   border: 1px #ff0000 dotted;
+}
+
+div.control.drag10 {
 	background: url('../images/templates/default.control_drag.gif');
+}
+
+div.control.drag20 {
+	background: url('../images/templates/default.control_drag_20.gif');
 }
 
 /* Style on info pages (index.php?info, index.php) */

@@ -879,8 +879,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 	parseControlDrag: function (num, x, y, size) {
 		var drag = document.createElement('div');
 		drag.setAttribute('id',         this.conf.object_id+'-drag-' + num);
-		drag.setAttribute('class',     'lineDrag');
-		drag.setAttribute('className', 'lineDrag');
+		drag.setAttribute('class',     'control drag' + size);
+		drag.setAttribute('className', 'control drag' + size);
 		drag.style.zIndex   = parseInt(this.conf.z)+1;
 		drag.style.width    = size + 'px';
 		drag.style.height   = size + 'px';
