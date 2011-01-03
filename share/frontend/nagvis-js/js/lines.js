@@ -27,7 +27,7 @@
 
 // Calculates a position between two integers
 function middle(x1, x2, cut) {
-	return x1+((x2-x1) * cut);
+	return parseInt(x1) + parseInt((x2 - x1) * cut);
 }
 
 // Returns the maximum value in an array

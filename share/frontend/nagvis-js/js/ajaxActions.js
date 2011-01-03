@@ -20,12 +20,16 @@ function handleDragResult(objId, anchorId) {
 	var urlParts = '';
 	var jsObj = getMapObjByDomObjId(objId);
 
-	urlParts = '&x=' + jsObj.conf.x + '&y=' + jsObj.conf.y;
+	urlParts = '&x=' + escapeUrlValues(jsObj.conf.x) + '&y=' + escapeUrlValues(jsObj.conf.y);
 
 	jsObj = null;
 	return urlParts;
 }
 
+/**
+ * Whenever an anchor action is performed this method should be called
+ * once to send the changes to the server and make the changes permanent.
+ */
 function saveObjectAfterAnchorAction(oAnchor) {
 	// Split id to get object information
 	var arr        = oAnchor.id.split('-');
@@ -38,11 +42,16 @@ function saveObjectAfterAnchorAction(oAnchor) {
 	if(anchorType === 'drag')
 		urlPart = handleDragResult(objId, anchorId);
 	
-	var oResult = getSyncRequest(oGeneralProperties.path_server + '?mod=Map&act=modifyObject&map='
-	                             + oPageProperties.map_name + '&id=' + objId + urlPart);
+	getAsyncRequest(oGeneralProperties.path_server + '?mod=Map&act=modifyObject&map='
+	                + escapeUrlValues(oPageProperties.map_name)
+	                + '&id=' + escapeUrlValues(objId) + urlPart);
+}
 
-	if(oResult && oResult.status != 'OK') {
-		alert(oResult.message);
-	}
-	oResult = null;
+function saveObjectAttr(objId, attr) {
+	var urlPart = '';
+	for (var key in attr)
+		urlPart += '&' + key + '=' + escapeUrlValues(attr[key]);
+	
+	getAsyncRequest(oGeneralProperties.path_server + '?mod=Map&act=modifyObject&map='
+	                + escapeUrlValues(oPageProperties.map_name) + '&id=' + escapeUrlValues(objId) + urlPart);
 }

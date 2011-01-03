@@ -134,10 +134,13 @@ function jsonError(text) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getAsyncRequest(sUrl, bCacheable, callback, callbackParams) {
-	var sResponse = null;
-	
+	// Handle default params
 	if(bCacheable === null)
 		bCacheable = true;
+	if(!isset(callback))
+		callback = handleAsyncResponse;
+	if(!isset(callbackParams))
+		callbackParams = null;
 	
 	// Encode the url
 	sUrl = sUrl.replace("+", "%2B");
@@ -197,6 +200,17 @@ function getAsyncRequest(sUrl, bCacheable, callback, callbackParams) {
 			ajaxError(e);
 		}
 	}
+}
+
+/**
+ * Default async request response handler
+ *
+ * This handler only displays error messages when some error occured. 
+ */
+function handleAsyncResponse(oResponse) {
+	if(isset(oResponse) && oResponse.status != 'OK')
+		alert(oResponse.message);
+	oResponse = null;
 }
 
 /**

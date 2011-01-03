@@ -986,5 +986,47 @@ var NagVisStatefulObject = NagVisObject.extend({
 
 	saveObject: function(obj) {
 		saveObjectAfterAnchorAction(obj);
+	},
+
+	/**
+	 * Toggles the position of the line middle. The mid of the line
+	 * can either be the 2nd of three line coords or is automaticaly
+	 * the middle between two line coords.
+	 */
+	toggleLineMidLock: function() {
+		// What is the current state?
+		var x = this.conf.x.split(',');
+		var y = this.conf.y.split(',');
+
+		if(this.conf.line_type != 10 || this.conf.line_type != 13 || this.conf.line_type != 14) {
+			alert('Not available for this line. Only lines with 2 line parts have a middle coordinate.');
+			return;
+		}
+
+		if(x.length == 2) {
+			// The line has 2 coords configured
+			// - Calculate and add the 3rd coord as 2nd
+			// - Add a drag control for the 2nd coord
+			this.conf.x = [ x[0], middle(x[0], x[1], this.conf.line_cut), x[1] ].join(',');
+			this.conf.y = [ y[0], middle(y[0], y[1], this.conf.line_cut), y[1] ].join(',');
+		} else {
+			// The line has 3 coords configured
+			// - Remove the 2nd coord
+			// - Remove the drag control for the 2nd coord
+			this.conf.x = [ x[0], x[2] ].join(',');
+			this.conf.y = [ y[0], y[2] ].join(',');
+		}
+
+		// send to server
+		saveObjectAttr(this.conf.object_id, { 'x': this.conf.x, 'y': this.conf.y});
+			
+		// redraw the controls
+		if(!this.bIsLocked) {
+			this.removeControls();
+			this.parseControls();
+		}
+
+		// redraw the line
+		this.drawLine();
 	}
 });

@@ -113,6 +113,12 @@ class NagVisContextMenu {
 		if(strpos($this->code,'[lang_schedule_downtime]') !== FALSE) {
 			$this->code = str_replace('[lang_schedule_downtime]',$this->CORE->getLang()->getText('contextScheduleDowntime'),$this->code);
 		}
+
+		if(strpos($this->code,'[lang_toggle_lock]') !== FALSE)
+			$this->code = str_replace('[lang_toggle_lock]', $this->CORE->getLang()->getText('Lock/Unlock'), $this->code);
+
+		if(strpos($this->code,'[lang_toggle_line_mid]') !== FALSE)
+			$this->code = str_replace('[lang_toggle_line_mid]', $this->CORE->getLang()->getText('Lock/Unlock line middle'), $this->code);
 		
 		if(strpos($this->code,'[html_base]') !== FALSE) {
 			$this->code = str_replace('[html_base]',$this->CORE->getMainCfg()->getValue('paths','htmlbase'),$this->code);
