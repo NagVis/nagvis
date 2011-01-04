@@ -998,7 +998,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		var x = this.conf.x.split(',');
 		var y = this.conf.y.split(',');
 
-		if(this.conf.line_type != 10 || this.conf.line_type != 13 || this.conf.line_type != 14) {
+		if(this.conf.line_type != 10 && this.conf.line_type != 13 && this.conf.line_type != 14) {
 			alert('Not available for this line. Only lines with 2 line parts have a middle coordinate.');
 			return;
 		}
