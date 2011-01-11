@@ -49,7 +49,7 @@ class CoreSessionHandler {
 		
 		// Start a session for the user when not started yet
 		if(!isset($_SESSION)) {
-			session_start();
+			@session_start();
 			
 			// Store the creation time of the session
 			$this->set('sessionExpires', time()+$iDuration);

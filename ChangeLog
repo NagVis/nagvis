@@ -2,6 +2,7 @@
 Core
   * Refactored map configuration parsing code
   * Reimplemented maintenance mode: in_maintenance=1 is working again
+  * Bugfix: Suppressing php errors on ps_files_cleanup_dir in debian
 
 Automap
   * Hiding deprecated maxLayers param from automap modify dialog
