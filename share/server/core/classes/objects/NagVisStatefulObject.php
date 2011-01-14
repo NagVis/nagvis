@@ -582,18 +582,16 @@ class NagVisStatefulObject extends NagVisObject {
 		if($this->getSummaryState() != '') {
 			$stateLow = strtolower($this->getSummaryState());
 			
-			// Get object type prefix
-			$sPre = '';
-			if($this->getType() == 'service' || $this->getType() == 'servicegroup') {
-				$sPre = 's';
-			}
-			
 			switch($stateLow) {
 				case 'unknown':
 				case 'unreachable':
 				case 'down':
 				case 'critical':
 				case 'warning':
+					$sPre = '';
+					if($stateLow == 'critical' || $stateLow == 'warning' || $stateLow == 'unknown')
+						$sPre = 's';
+
 					if($this->getSummaryAcknowledgement() == 1) {
 						$icon = $this->iconset.'_'.$sPre.'ack.'.$fileType;
 					} elseif($this->getSummaryInDowntime() == 1) {
