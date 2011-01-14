@@ -9,6 +9,7 @@ Automap
 
 Frontend
   * Made downtime/ack colors configurable (Seems automatic lighten of color is not enough)
+  * Fixed ack/downtime icons for hostsgroup with acked or downtime service problems
   * Bugfix: Multisite - Added state colors to multisite map listing (Thanks to BMuc)
   * Bugfix: Fixed showmaps,showautomaps,... option usage on overview page
   * Bugfix: Fixed search dialog access when using explicit permissions
