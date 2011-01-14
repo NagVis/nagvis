@@ -64,6 +64,7 @@ Frontend
   * Bugfix: Minor javascript fixes during object reload
   * Bugfix: Fixed showmaps,showautomaps,... option usage on overview page
   * Bugfix: Fixed search dialog access when using explicit permissions
+  * Bugfix: Fixed line wrapping of labels/textboxes when positioned out of screen
 
 WUI
   * Bugfix: Deleting more than two objects was not working correctly
