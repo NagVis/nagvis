@@ -52,6 +52,7 @@ Frontend
   * Added password reset form to user management dialog
   * Reduced ajax calls on map/automap/overview page load
   * Made background color in frontend configurable now
+  * Bugfix: Fixed ack/downtime icons for hostsgroup with acked or downtime service problems
   * Bugifx: Added missing state colors to multisite map listing (Thanks to BMuc)
   * Bugfix: Acks/downtimes of problems were not recognized by background
     highlighting
