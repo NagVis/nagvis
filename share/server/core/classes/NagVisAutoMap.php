@@ -192,11 +192,21 @@ class NagVisAutoMap extends GlobalMap {
 			if(isset($this->parentLayers) && $this->parentLayers != 0)
 				$this->rootObject->filterParents($names);
 		}
+
+		/**
+		 * Here we have all objects within the given layers in the tree - completely unfiltered!
+		 * Optionally: Apply the filters below
+		 */
 		
 		/**
 		 * It is possible to filter the object tree by a hostgroup.
 		 * In this mode a list of hostnames in this group is fetched and the
 		 * parent/child trees are filtered using this list.
+		 *
+		 * Added later: It is possible that a host of the given group is behind a
+		 * host which is not in the group. These 'connector' hosts need to be added
+		 * too. Those hosts will be added by default but this can be disabled by
+		 * config option. This sort of hosts should be visualized in another way.
 		 */
 		if($this->filterGroup != '') {
 			$this->filterGroupObject = new NagVisHostgroup($this->CORE, $this->BACKEND, $this->backend_id, $this->filterGroup);
@@ -438,12 +448,31 @@ class NagVisAutoMap extends GlobalMap {
 							
 							// FIXME: z-index configurable?
 							// Header menu has z-index 100, this object's label the below+1
-							$aObjCoords[$name1] = Array('x' => $aCoords[0], 'y' => $aCoords[1], 'z' => 98);
+							$aObjCoords[$name1] = Array('x' => $aCoords[0],
+							                            'y' => $aCoords[1],
+							                            'z' => 98);
 						break;
 						case 'poly':
-							//$aCoords = explode(',', $coords);
+							// Get the middle of the polygon and substract the object size
+							$x = null;
+							$y = null;
+							$aCoords = explode(' ', $coords);
+							foreach($aCoords AS $coord) {
+								list($newX, $newY) = explode(',', $coord);
+								if($x === null) {
+									$x = $newX;
+									$y = $newY;
+								} else {
+									$x = ($x + $newX) / 2;
+									$y = ($y + $newY) / 2;
+								}
+							}
+							$x -= 16;
+							$y -= 16;
 						
-							//$aObjCoords[$name1] = Array('x' => $aCoords[0], 'y' => $aCoords[1], 'z' => 101);
+							$aObjCoords[$name1] = Array('x' => $x,
+							                            'y' => $y,
+							                            'z' => 98);
 						break;
 					}
 				}

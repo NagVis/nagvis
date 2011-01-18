@@ -99,6 +99,10 @@ class NagVisHost extends NagiosHost {
 			if($height != 16) {
 				$strReturn .= 'height="'.$this->pxToInch($height).'", ';
 			}
+
+			// The automap connector hosts could be smaller
+			//if($this->automapConnector)
+			//	$strReturn .= 'height="'.$this->pxToInch($width/2).'", width="'.$this->pxToInch($width/2).'", ';
 			
 			$strReturn .= 'layer="'.$layer.'"';
 			$strReturn .= ' ];'."\n ";

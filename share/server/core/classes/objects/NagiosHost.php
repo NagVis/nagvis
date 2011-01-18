@@ -54,6 +54,9 @@ class NagiosHost extends NagVisStatefulObject {
 	protected $childObjects;
 	protected $parentObjects;
 	protected $members;
+	// An automap connector is a host which is not part of the automap selection
+	// but needed as 'bridge' between two hosts which are part of the automap
+	protected $automapConnector = false;
 
 	protected static $langHostStateIs = null;
 	protected static $langServices = null;
@@ -285,11 +288,8 @@ class NagiosHost extends NagVisStatefulObject {
 					* The current child is member of the filter group, it declares 
 					* itselfs as remaining object
 					*/
-				if(in_array($OBJ->getName(), $arrAllowedHosts)) {
+				if(in_array($OBJ->getName(), $arrAllowedHosts))
 					$selfRemain = 1;
-				} else {
-					$selfRemain = 0;
-				}
 				
 				/**
 					* If there are child objects loop them all to get their remaining
@@ -301,15 +301,14 @@ class NagiosHost extends NagVisStatefulObject {
 					
 					if(!$selfRemain && $childsRemain) {
 						$selfRemain = 1;
+						$OBJ->automapConnector = true;
 					}
 				}
 				
 				// If the host should not remain on the map remove it from the 
 				// object tree
-				if(!$selfRemain) {
-					// Remove the object from the tree
+				if(!$selfRemain)
 					unset($this->childObjects[$i]);
-				}
 			}
 			
 			$remain |= $selfRemain;
