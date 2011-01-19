@@ -470,8 +470,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	drawLine: function() {
-		var x = this.conf.x.split(',');
-		var y = this.conf.y.split(',');
+		var x = this.parseCoords(this.conf.x, 'x');
+		var y = this.parseCoords(this.conf.y, 'y');
 		
 		var width = this.conf.line_width;
 		
@@ -793,8 +793,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 		oIconDiv.setAttribute('class', 'icon');
 		oIconDiv.setAttribute('className', 'icon');
 		oIconDiv.style.position = 'absolute';
-		oIconDiv.style.top = this.conf.y+'px';
-		oIconDiv.style.left = this.conf.x+'px';
+		oIconDiv.style.top = this.parseCoord(this.conf.y, 'y')+'px';
+		oIconDiv.style.left = this.parseCoord(this.conf.x, 'x')+'px';
 		oIconDiv.style.zIndex = this.conf.z;
 		
 		// Parse link only when set
@@ -823,8 +823,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 */
 	moveIcon: function () {
 		var container = document.getElementById(this.conf.object_id + '-icondiv');
-		container.style.top  = this.conf.y + 'px';
-		container.style.left = this.conf.x + 'px';
+		container.style.top  = this.parseCoord(this.conf.y, 'y') + 'px';
+		container.style.left = this.parseCoord(this.conf.x, 'x') + 'px';
 		container = null;
 	},
 	
@@ -876,7 +876,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 			this.parseIconControls();
 	},
 
-	parseControlDrag: function (num, x, y, size) {
+	parseControlDrag: function (num, objX, objY, offX, offY, size) {
 		var drag = document.createElement('div');
 		drag.setAttribute('id',         this.conf.object_id+'-drag-' + num);
 		drag.setAttribute('class',     'control drag' + size);
@@ -884,10 +884,10 @@ var NagVisStatefulObject = NagVisObject.extend({
 		drag.style.zIndex   = parseInt(this.conf.z)+1;
 		drag.style.width    = size + 'px';
 		drag.style.height   = size + 'px';
-		drag.style.left     = x + 'px';
-		drag.style.top      = y + 'px';
-		drag.objOffsetX     = x - this.conf.x;
-		drag.objOffsetY     = y - this.conf.y;
+		drag.style.left     = (objX + offX) + 'px';
+		drag.style.top      = (objY + offY) + 'px';
+		drag.objOffsetX     = offX;
+		drag.objOffsetY     = offY;
 
 		// Add to DOM
 		document.getElementById(this.conf.object_id+'-controls').appendChild(drag);
@@ -907,8 +907,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 	parseIconControls: function () {
 		this.getObjWidth();
 		var size = 10;
-		this.parseControlDrag(0, parseInt(this.conf.x) + this.getObjWidth() + 5,
-		                         parseInt(this.conf.y) - size/2, size);
+		this.parseControlDrag(0, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
+		                         this.getObjWidth() + 5, - size / 2, size);
 		size = null;
 
 		// Simply make it dragable. Maybe will be extended in the future...
@@ -916,12 +916,12 @@ var NagVisStatefulObject = NagVisObject.extend({
 	},
 
 	parseLineControls: function () {
-		var x = this.conf.x.split(',');
-		var y = this.conf.y.split(',');
+		var x = this.parseCoords(this.conf.x, 'x');
+		var y = this.parseCoords(this.conf.y, 'y');
 
 		var size = 20;
 		for(var i = 0, l = x.length; i < l; i++) {
-			this.parseControlDrag(i, x[i] - size/2, y[i] - size/2, size);
+			this.parseControlDrag(i, x[i], y[i], - size / 2, - size / 2, size);
 			makeDragable([this.conf.object_id+'-drag-'+i], this.saveObject, this.moveObject);
 		}
 		size = null;

@@ -383,5 +383,49 @@ var NagVisObject = Base.extend({
 			}
 		}
 		return false;
+	},
+
+	/**
+	 * This method parses a given coordinate which can be a simple integer
+	 * which is simply returned or a reference to another object and/or
+	 * a specified anchor of the object.
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	parseCoord: function(val, dir) {
+		if(isInt(val)) {
+			return parseInt(val);
+		} else {
+			// This must be an object id. Is there an anchor given?
+			if(val.search('%') !== -1) {
+				var parts     = val.split('%');
+				var objectId  = parts[0];
+				var anchor    = parts[1];
+				var refObj = getMapObjByDomObjId(objectId);
+			} else {
+				alert(val);
+				// Only an object id. Get the coordinate and return it
+				var refObj = getMapObjByDomObjId(val);
+				if(refObj !== -1)
+					return refObj.conf[dir];
+				else
+					return val;
+			}
+		}
+	},
+
+	/**
+	 * Wrapper for the parseCoord method to parse multiple coords at once
+	 * e.g. for lines.
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	parseCoords: function(val, dir) {
+		var l = val.split(',');
+
+		for(var i = 0, len = l.length; i < len; i++)
+			l[i] = this.parseCoord(l[i], dir);
+
+		return l;
 	}
 });
