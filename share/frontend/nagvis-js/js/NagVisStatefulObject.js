@@ -742,8 +742,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 		oIconDiv.setAttribute('class', 'icon');
 		oIconDiv.setAttribute('className', 'icon');
 		oIconDiv.style.position = 'absolute';
-		oIconDiv.style.top = this.conf.y+'px';
-		oIconDiv.style.left = this.conf.x+'px';
+		oIconDiv.style.top    = this.parseCoord(this.conf.y, 'y') + 'px';
+		oIconDiv.style.left   = this.parseCoord(this.conf.x, 'x') + 'px';
 		oIconDiv.style.zIndex = this.conf.z;
 		
 		// Parse link only when set
@@ -793,8 +793,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 		oIconDiv.setAttribute('class', 'icon');
 		oIconDiv.setAttribute('className', 'icon');
 		oIconDiv.style.position = 'absolute';
-		oIconDiv.style.top = this.parseCoord(this.conf.y, 'y')+'px';
-		oIconDiv.style.left = this.parseCoord(this.conf.x, 'x')+'px';
+		oIconDiv.style.top  = this.parseCoord(this.conf.y, 'y') + 'px';
+		oIconDiv.style.left = this.parseCoord(this.conf.x, 'x') + 'px';
 		oIconDiv.style.zIndex = this.conf.z;
 		
 		// Parse link only when set
@@ -839,18 +839,18 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		// If there is a presign it should be relative to the objects x/y
 		if(this.conf.label_x && this.conf.label_x.toString().match(/^(?:\+|\-)/)) {
-			this.conf.label_x = parseFloat(this.conf.x) + parseFloat(this.conf.label_x);
+			this.conf.label_x = this.parseCoord(this.conf.x, 'x') + parseFloat(this.conf.label_x);
 		}
 		if(this.conf.label_y && this.conf.label_y.toString().match(/^(?:\+|\-)/)) {
-			this.conf.label_y = parseFloat(this.conf.y) + parseFloat(this.conf.label_y);
+			this.conf.label_y = this.parseCoord(this.conf.y, 'y') + parseFloat(this.conf.label_y);
 		}
 		
 		// If no x/y coords set, fallback to object x/y
 		if(!this.conf.label_x || this.conf.label_x === '' || this.conf.label_x === '0') {
-			this.conf.label_x = this.conf.x;
+			this.conf.label_x = this.parseCoord(this.conf.x, 'x');
 		}
 		if(!this.conf.label_y || this.conf.label_y === '' || this.conf.label_y === '0') {
-			this.conf.label_y = this.conf.y;
+			this.conf.label_y = this.parseCoord(this.conf.y, 'y');
 		}
 
 		return drawNagVisTextbox(this.conf.object_id + '-label', 'object_label',
@@ -938,6 +938,20 @@ var NagVisStatefulObject = NagVisObject.extend({
 		oControls = null;
 	},
 
+	move: function() {
+		if(this.conf.view_type === 'line')
+			this.drawLine();
+		else
+			this.moveIcon();
+
+		for(var i = 0, l = this.childs.length; i < l; i++)
+			this.childs[i].move();
+	},
+
+	/**
+	 * Important: This is called from an event handler
+	 * the 'this.' keyword can not be used here.
+	 */
   moveObject: function(obj) {
 		var arr        = obj.id.split('-');
 		var objId      = arr[0];
@@ -953,28 +967,17 @@ var NagVisStatefulObject = NagVisObject.extend({
 			newPos = getMidOfAnchor(obj);
 
 			// Get current positions and replace only the current one
-			var oldX = jsObj.conf.x.split(',');
-			oldX[anchorId] = newPos[0];
-			newPos[0] = oldX.join(',');
-
-			var oldY = jsObj.conf.y.split(',');
-			oldY[anchorId] = newPos[1];
-			newPos[1] = oldY.join(',');
-			
-			oldX  = null;
-			oldY  = null;
+			newPos = [ jsObj.calcNewCoord(newPos[0], 'x', anchorId),
+			           jsObj.calcNewCoord(newPos[1], 'y', anchorId) ];
 		} else {
-			newPos = [ obj.x - obj.objOffsetX, obj.y - obj.objOffsetY ];
+			newPos = [ jsObj.calcNewCoord(obj.x - obj.objOffsetX, 'x'),
+			           jsObj.calcNewCoord(obj.y - obj.objOffsetY, 'y') ];
 		}
 
 		jsObj.conf.x = newPos[0];
 		jsObj.conf.y = newPos[1];
 
-		if(viewType === 'line') {
-			jsObj.drawLine();
-		} else {
-			jsObj.moveIcon();
-		}
+		jsObj.move();
 
 		jsObj      = null;	
 		objId      = null;
@@ -995,14 +998,15 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 */
 	toggleLineMidLock: function() {
 		// What is the current state?
-		var x = this.conf.x.split(',');
-		var y = this.conf.y.split(',');
+		var x = this.parseCoords(this.conf.x, 'x');
+		var y = this.parseCoords(this.conf.y, 'y');
 
 		if(this.conf.line_type != 10 && this.conf.line_type != 13 && this.conf.line_type != 14) {
 			alert('Not available for this line. Only lines with 2 line parts have a middle coordinate.');
 			return;
 		}
 
+		// FIXME: Handle relative coordinates during this calculation and re-setting
 		if(x.length == 2) {
 			// The line has 2 coords configured
 			// - Calculate and add the 3rd coord as 2nd

@@ -818,7 +818,10 @@ function getMapObjByDomObjId(id) {
 		if(aMapObjects[i].conf.object_id == id)
 			iIndex = i;
 
-	return aMapObjects[iIndex];
+	if(iIndex !== -1)
+		return aMapObjects[iIndex];
+	else
+		return null;
 }
 
 function toggleLineMidLock(objectId) {
@@ -1034,6 +1037,23 @@ function setMapObjects(aMapObjectConf) {
 		}
 		oObj = null;
 	}
+
+	// Store the object position dependencies. Before this
+	// can be done all objects need to be added to the map.
+	// so this seems to be a good place for it
+	for(var i = 0, len = aMapObjects.length; i < len; i++) {
+		var parents = aMapObjects[i].getParentObjectIds();
+		if(parents) {
+			for (var objectId in parents) {
+				var refObj = getMapObjByDomObjId(objectId);
+				if(refObj)
+					refObj.addChild(aMapObjects[i]);
+				refObj = null;
+			}
+		}
+		parents = null;
+	}
+
 	eventlog("worker", "debug", "setMapObjects: End setting map objects");
 }
 

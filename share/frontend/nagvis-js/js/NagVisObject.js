@@ -26,22 +26,25 @@
  */
 
 var NagVisObject = Base.extend({
-	parsedObject: null,
-	hover_template_code: null,
+	parsedObject:          null,
+	hover_template_code:   null,
 	context_template_code: null,
-	conf: null,
-	contextMenu: null,
-	lastUpdate: null,
-	firstUpdate: null,
-	bIsFlashing: false,
-	bIsLocked: true,
-	objControls: [],
+	conf:                  null,
+	contextMenu:           null,
+	lastUpdate:            null,
+	firstUpdate:           null,
+	bIsFlashing:           false,
+	bIsLocked:             true,
+	objControls:           null,
+	childs:                null,
 	
 	constructor: function(oConf) {
 		// Initialize
 		this.setLastUpdate();
 		
-		this.conf = oConf;
+		this.childs      = [];
+		this.objControls = [];
+		this.conf        = oConf;
 		
 		// When no object_id given by server: generate own id
 		if(this.conf.object_id == null)
@@ -393,17 +396,17 @@ var NagVisObject = Base.extend({
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	parseCoord: function(val, dir) {
-		if(isInt(val)) {
+		if(!isRelativeCoord(val)) {
 			return parseInt(val);
 		} else {
-			// This must be an object id. Is there an anchor given?
+			// This must be an object id. Is there an offset given?
 			if(val.search('%') !== -1) {
 				var parts     = val.split('%');
 				var objectId  = parts[0];
-				var anchor    = parts[1];
-				var refObj = getMapObjByDomObjId(objectId);
+				var offset    = parts[1];
+				var refObj    = getMapObjByDomObjId(objectId);
+				return parseFloat(refObj.conf[dir]) + parseFloat(offset);
 			} else {
-				alert(val);
 				// Only an object id. Get the coordinate and return it
 				var refObj = getMapObjByDomObjId(val);
 				if(refObj !== -1)
@@ -427,5 +430,64 @@ var NagVisObject = Base.extend({
 			l[i] = this.parseCoord(l[i], dir);
 
 		return l;
+	},
+
+	calcNewCoord: function(val, dir, num) {
+		if(!isset(num))
+			num = -1;
+
+		var oldVal = null;
+		if(num === -1)
+			oldVal = this.conf[dir];
+		else
+			oldVal = this.conf[dir].split(',')[num];
+
+		// Check if the current value is an integer or a relative coord
+		if(isRelativeCoord(this.conf[dir])) {
+			// This must be an object id
+			var objectId = null;
+			if(oldVal.search('%') !== -1)
+				objectId = oldVal.split('%')[0];
+			else
+				objectId = oldVal;
+
+			// Only an object id. Get the coordinate and return it
+			var refObj = getMapObjByDomObjId(objectId);
+			if(refObj) {
+				var offset = val - refObj.parseCoord(refObj.conf[dir], dir);
+				var pre    = offset >= 0 ? '+' : '';
+				val = objectId + '%' + pre + offset;
+				refObj   = null;
+			}
+			objectId = null;
+		}
+		oldVal = null;
+
+		if(num === -1) {
+			return val;
+		} else {
+			var old  = this.conf[dir].split(',');
+			old[num] = val;
+			return old.join(',');
+		}
+	},
+
+	getParentObjectIds: function() {
+		var parentIds = {};
+		var coords = (this.conf.x + ',' + this.conf.y).split(',');
+		for(var i = 0, len = coords.length; i < len; i++)
+			if(isRelativeCoord(coords[i]))
+				if(coords[i].search('%') !== -1)
+					parentIds[coords[i].split('%')[0]] = true;
+				else
+					parentIds[coords[i]] = true;
+		coords = null;
+
+		return parentIds;
+	},
+
+	addChild: function(obj) {
+		this.childs.push(obj);
+		obj = null;
 	}
 });

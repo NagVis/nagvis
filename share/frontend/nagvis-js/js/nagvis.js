@@ -1216,3 +1216,7 @@ function isInt(v) {
 function pxToInt(v) {
 	return parseInt(v.replace('px', ''));
 }
+
+function isRelativeCoord(v) {
+  return !isInt(v);
+}

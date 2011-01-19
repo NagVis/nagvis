@@ -1,6 +1,16 @@
 This is a small file for storing quick thoughts about new features and needed changes:
 ===============================================================================
 
+Relative Koordinaten:
+  - Beim Laden der Config checken ob es das Objekt gibt
+	- Wenn ein Objekt nicht mehr existiert, dann ist 0/0 die Referenz
+	- Beim Löschen von Objekten prüfen, ob andere Objekte auf dieses Objekt verweisen
+	- Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
+  - Es gibt noch Probleme, wenn die object_id nur aus Zahlen besteht. Abfangen!
+
+HTML/JS Frontend:
+  - aMapObjects in Objekt umbauen - mit object_id als Schlüssel
+
 Linien (Auch für neue Automap wichtig!):
  - Pfeilspitzen konfigurierbar machen
    - Größe
@@ -13,8 +23,6 @@ variieren. Normale Linien haben zwei Koordinaten, Linien mit zwei Enden können
 drei Koordinaten haben.
 
 Lock/Unlock Aktionen fuer normale Icons/Gadgets implementieren.
-
-Die Speichern-Funktion beim Editieren von Linien im normalen Frontend muss gebaut werden.
 
 Pro Objekt "Custom Vars" für Context- und Hover-Menus einbauen. Diese werden dann pro Objekt
 u.U. sogar in separaten Queries an das Backend abgefragt und in Hover- und Context-Menus
