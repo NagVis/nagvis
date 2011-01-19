@@ -464,7 +464,8 @@ class NagVisObject {
 	 */
 	public function parseMapCfg($globalOpts = Array()) {
 		$ret = 'define '.$this->type." {\n";
-		$ret .= 'host_name='.$this->host_name."\n";
+		if($this->type === 'host')
+			$ret .= 'host_name='.$this->host_name."\n";
 		foreach($this->getObjectConfiguration(false) AS $key => $val) {
 			// Only set options which are different to global option
 			if((!isset($globalOpts[$key]) || $globalOpts[$key] != $val) && $val != '') {

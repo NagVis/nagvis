@@ -69,63 +69,73 @@ class NagVisHost extends NagiosHost {
 	 * @return	String		graphviz configuration code of the object
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function parseGraphviz($layer=0, &$arrHostnamesParsed) {
+	public function parseGraphviz($layer=0, &$arrHostnamesParsed, &$arrLines) {
 		$strReturn = '';
 		
-		if(!in_array($this->getName(), $arrHostnamesParsed)) {
-			if($this->icon == '')
-				$this->fetchIcon();
-			
-			// Get the image size
-			list($width, $height, $type, $attr) = getimagesize($this->CORE->getMainCfg()->getValue('paths', 'icon').$this->icon);
-			
-			$strReturn .= $this->getType().'_'.$this->getObjectId().' [ ';
-			$strReturn .= 'label="", ';
-			$strReturn .= 'URL="'.str_replace(array('[htmlcgi]', '[host_name]'),
-				array($this->CORE->getMainCfg()->getValue('backend_'.$this->backend_id, 'htmlcgi'), $this->getName()),
-				$this->CORE->getMainCfg()->getValue('defaults', 'hosturl')).'", ';
-			$strReturn .= 'target="'.$this->url_target.'", ';
-			$strReturn .= 'tooltip="'.$this->getType().'_'.$this->getObjectId().'",';
-			
-			// The root host has to be highlighted, these are the options to do this
-			/*if($layer == 0) {
-				$strReturn .= 'shape="egg",';
-			}*/
-			
-			// This should be scaled by the choosen iconset
-			if($width != 16) {
-				$strReturn .= 'width="'.$this->pxToInch($width).'", ';
-			}
-			if($height != 16) {
-				$strReturn .= 'height="'.$this->pxToInch($height).'", ';
-			}
+		$name = $this->getName();
+		if(in_array($name, $arrHostnamesParsed))
+			return '';
 
-			// The automap connector hosts could be smaller
-			//if($this->automapConnector)
-			//	$strReturn .= 'height="'.$this->pxToInch($width/2).'", width="'.$this->pxToInch($width/2).'", ';
-			
-			$strReturn .= 'layer="'.$layer.'"';
-			$strReturn .= ' ];'."\n ";
-			
-			// Add host to the list of parsed hosts
-			$arrHostnamesParsed[] = $this->getName();
-			
-			foreach($this->getChildsAndParents() As $OBJ) {
-				if(is_object($OBJ)) {
-					$strReturn .= $OBJ->parseGraphviz($layer+1, $arrHostnamesParsed);
+		if($this->icon == '')
+			$this->fetchIcon();
+		
+		// Get the image size
+		list($width, $height, $type, $attr) = $this->getIconDetails();
+		
+		$strReturn .= $this->getType().'_'.$this->getObjectId().' [ ';
+		$strReturn .= 'label="", ';
+		$strReturn .= 'URL="'.str_replace(array('[htmlcgi]', '[host_name]'),
+			array($this->CORE->getMainCfg()->getValue('backend_'.$this->backend_id, 'htmlcgi'), $name),
+			$this->CORE->getMainCfg()->getValue('defaults', 'hosturl')).'", ';
+		$strReturn .= 'target="'.$this->url_target.'", ';
+		$strReturn .= 'tooltip="'.$this->getType().'_'.$this->getObjectId().'",';
+		
+		// The root host has to be highlighted, these are the options to do this
+		/*if($layer == 0) {
+			$strReturn .= 'shape="egg",';
+		}*/
+		
+		// This should be scaled by the choosen iconset
+		if($width != 16) {
+			$strReturn .= 'width="'.$this->pxToInch($width).'", ';
+		}
+		if($height != 16) {
+			$strReturn .= 'height="'.$this->pxToInch($height).'", ';
+		}
 
-					// Add the line to visualize the direction
-					$strReturn .= $this->getType().'_'.$this->getObjectId().' -- '.$OBJ->getType().'_'.$OBJ->getObjectId().' [';
-					$strReturn .= 'color=black, ';
-					$strReturn .= 'decorate=1, ';
-					$strReturn .= 'style=solid, ';
-					if(isset($this->line_arrow) && $this->line_arrow != 'none')
-						$strReturn .= 'dir='.$this->line_arrow.', ';
-					$strReturn .= 'weight=2 ';
-					$strReturn .= ' ];'."\n ";
-				}
+		// The automap connector hosts could be smaller
+		//if($this->automapConnector)
+		//	$strReturn .= 'height="'.$this->pxToInch($width/2).'", width="'.$this->pxToInch($width/2).'", ';
+		
+		$strReturn .= 'layer="'.$layer.'"';
+		$strReturn .= ' ];'."\n ";
+		
+		// Add host to the list of parsed hosts
+		$arrHostnamesParsed[] = $name;
+		
+		foreach($this->getChildsAndParents() As $OBJ) {
+			if(is_object($OBJ)) {
+				$strReturn .= $OBJ->parseGraphviz($layer+1, $arrHostnamesParsed, $arrLines);
+
+				// Add the line to visualize the direction
+				$strReturn .= $this->getType().'_'.$this->getObjectId().' -- '.$OBJ->getType().'_'.$OBJ->getObjectId().' [';
+				//$strReturn .= 'color=black, ';
+				//$strReturn .= 'decorate=1, ';
+				//$strReturn .= 'style=solid, ';
+				/*if(isset($this->line_arrow) && $this->line_arrow != 'none')
+					$strReturn .= 'dir='.$this->line_arrow.', ';*/
+				$strReturn .= 'weight=2 ';
+				$strReturn .= ' ];'."\n ";
+
+				// Add line objects
+				$lineKey = $name.'%%'.$OBJ->getName();
+				if(isset($arrLines[$lineKey]))
+					continue;
+
+				$arrLines[$lineKey] = null;
 			}
 		}
+		
 		
 		return $strReturn;
 	}

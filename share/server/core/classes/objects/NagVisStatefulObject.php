@@ -54,6 +54,9 @@ class NagVisStatefulObject extends NagVisObject {
 	protected $summary_in_downtime;
 	protected $problem_has_been_acknowledged;
 	
+	// Details about the icon image (cache)
+	protected $iconDetails;
+
 	protected static $iconPath = null;
 	protected static $iconHtmlPath = null;
 	protected static $langChildStates = null;
@@ -133,6 +136,19 @@ class NagVisStatefulObject extends NagVisObject {
 	 */
 	public function getStateRelevantMembers() {
 		return $this->getMembers();
+	}
+
+	/**
+	 * Method to get details about the used icon image.
+	 * This is mainly a wrapper arround getimagesize with caching code.
+	 *
+	 * @return  Array  Attributes/Details about the image
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function getIconDetails() {
+		if($this->iconDetails == null)
+			$this->iconDetails = getimagesize(NagVisStatefulObject::$iconPath . $this->icon);
+		return $this->iconDetails;
 	}
 	
 	/**
@@ -572,7 +588,7 @@ class NagVisStatefulObject extends NagVisObject {
 	public function fetchIcon() {
 		// Set the paths of this iconset
 		if(NagVisStatefulObject::$iconPath === null) {
-			NagVisStatefulObject::$iconPath = $this->CORE->getMainCfg()->getValue('paths', 'icon');
+			NagVisStatefulObject::$iconPath     = $this->CORE->getMainCfg()->getValue('paths', 'icon');
 			NagVisStatefulObject::$iconHtmlPath = $this->CORE->getMainCfg()->getValue('paths', 'htmlicon');
 		}
 		

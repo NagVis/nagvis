@@ -1,6 +1,13 @@
 This is a small file for storing quick thoughts about new features and needed changes:
 ===============================================================================
 
+Linien (Auch für neue Automap wichtig!):
+ - Pfeilspitzen konfigurierbar machen
+   - Größe
+	 - Stil
+	 - Farbe (?)
+ - Offset zum Ziel
+
 WUI: Bei Typ-Wechsel einer Linie in der WUI muss die Anzahl der Koordinaten
 variieren. Normale Linien haben zwei Koordinaten, Linien mit zwei Enden können
 drei Koordinaten haben.

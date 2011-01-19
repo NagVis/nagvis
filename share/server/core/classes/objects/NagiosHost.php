@@ -470,7 +470,7 @@ class NagiosHost extends NagVisStatefulObject {
 					$this->parentObjects[] = $OBJ;
 					
 					// Append the object to the arrMapObjects array
-					$arrMapObjects[] = $this->parentObjects[count($this->parentObjects)-1];
+					$arrMapObjects[$OBJ->getName()] = $OBJ;
 					
 					// Add the name of this host to the array with hostnames which are
 					// already on the map
@@ -522,7 +522,7 @@ class NagiosHost extends NagVisStatefulObject {
 					$this->childObjects[] = $OBJ;
 					
 					// Append the object to the arrMapObjects array
-					$arrMapObjects[] = $this->childObjects[count($this->childObjects)-1];
+					$arrMapObjects[$OBJ->getName()] = $OBJ;
 					
 					// Add the name of this host to the array with hostnames which are
 					// already on the map

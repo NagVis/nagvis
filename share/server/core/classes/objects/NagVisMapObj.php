@@ -109,6 +109,15 @@ class NagVisMapObj extends NagVisStatefulObject {
 	public function getMembers() {
 		return $this->members;
 	}
+	
+	/**
+	 * Adds several members to the map
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function addMembers($add) {
+		$this->members = array_merge($this->members, $add);
+	}
 
 	/**
 	 * PUBLIC getStateRelevantMembers()

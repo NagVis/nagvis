@@ -1026,7 +1026,10 @@ function setMapObjects(aMapObjectConf) {
 			if(oPageProperties.view_type === 'map') {
 				aMapObjects[aMapObjects.length-1].parse();
 			} else if(oPageProperties.view_type === 'automap') {
-				aMapObjects[aMapObjects.length-1].parseAutomap();
+				if(aMapObjectConf[i].type === 'host')
+					aMapObjects[aMapObjects.length-1].parseAutomap();
+				else
+					aMapObjects[aMapObjects.length-1].parse();
 			}
 		}
 		oObj = null;

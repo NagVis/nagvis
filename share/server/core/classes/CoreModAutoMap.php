@@ -147,7 +147,7 @@ class CoreModAutoMap extends CoreModule {
 		$arr = Array();
 		$arr['map_name']                 = $MAPCFG->getName();
 		$arr['alias']                    = $MAPCFG->getValue(0, 'alias');
-		$arr['background_image']         = $this->CORE->getMainCfg()->getValue('paths', 'htmlsharedvar').$MAPCFG->getName().'.png?'.mt_rand(0,10000);
+		$arr['map_image']                = $MAPCFG->getValue(0, 'map_image');
 		$arr['background_usemap']        = '#automap';
 		$arr['background_color']         = $MAPCFG->getValue(0, 'background_color');
 		$arr['favicon_image']            = $this->CORE->getMainCfg()->getValue('paths', 'htmlimages').'internal/favicon.png';
@@ -177,6 +177,8 @@ class CoreModAutoMap extends CoreModule {
 		
 		// Read position from graphviz and set it on the objects
 		$MAP->setMapObjectPositions();
+		$MAP->createObjectConnectors();
+
 		return $MAP->parseObjectsJson();
 	}
 

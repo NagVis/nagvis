@@ -236,6 +236,12 @@ function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, col
 	var xEnd   = x[x.length - 1];
 	var yEnd   = y[y.length - 1];
 
+	// Handle start/end offsets
+	//xStart = xStart + newX(xEnd-xStart, yEnd-yStart, 16, 0);
+	//yStart = yStart + newY(xEnd-xStart, yEnd-yStart, 16, 0);
+	//xEnd   = xEnd + newX(xEnd-xStart, yEnd-yStart, -16, 0);
+	//yEnd   = yEnd + newY(xEnd-xStart, yEnd-yStart, -16, 0);
+
 	width = parseInt(width, 10);
 	var perfdataA = null;
 	var perfdataB = null;

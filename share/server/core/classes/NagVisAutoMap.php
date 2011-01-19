@@ -49,7 +49,14 @@ class NagVisAutoMap extends GlobalMap {
 	private $arrMapObjects;
 	private $arrHostnames;
 	
-	private $arrHostnamesParsed;
+	// Array to resolve circular child/parent connections.
+	// A host is only parsed once
+	private $arrHostnamesParsed = Array();
+
+	// Array to store the connections between hosts. Each line
+	// has a starting host and an end-host. The key is built
+	// of the names of the both objects. The value is not used.
+	private $arrLines = Array();
 	
 	private $mapCode;
 
@@ -70,7 +77,6 @@ class NagVisAutoMap extends GlobalMap {
 		
 		$this->arrHostnames = Array();
 		$this->arrMapObjects = Array();
-		$this->arrHostnamesParsed = Array();
 		$this->mapCode = '';
 		
 		$this->graphvizPath = '';
@@ -166,7 +172,7 @@ class NagVisAutoMap extends GlobalMap {
 		$this->filterByState = $prop['filterByState'];
 		
 		// Get "root" host object
-		$this->fetchHostObjectByName($this->root);
+		$this->fetchRootObject($this->root);
 		
 		// Get all child object information from backend
 		$this->getChildObjectTree();
@@ -264,7 +270,7 @@ class NagVisAutoMap extends GlobalMap {
 		$str .= 'dpi="72", ';
 		//ratio: expand, auto, fill, compress
 		$str .= 'ratio="fill", ';
-		$str .= 'bgcolor="'.$this->MAPCFG->getValue(0, 'background_color').'", ';
+		//$str .= 'bgcolor="'.$this->MAPCFG->getValue(0, 'background_color').'", ';
 		$str .= 'root="'.$this->rootObject->getType().'_'.$this->rootObject->getObjectId().'", ';
 		
 		/* Directed (dot) only */
@@ -311,7 +317,7 @@ class NagVisAutoMap extends GlobalMap {
 		$str .= '];'."\n ";
 		
 		// Create nodes for all hosts
-		$str .= $this->rootObject->parseGraphviz(0, $this->arrHostnamesParsed);
+		$str .= $this->rootObject->parseGraphviz(0, $this->arrHostnamesParsed, $this->arrLines);
 		
 		$str .= '} ';
 		
@@ -370,7 +376,6 @@ class NagVisAutoMap extends GlobalMap {
 			
 			// Parse map
 			$cmd = $this->graphvizPath.$binary
-			       .' -Tpng -o \''.$this->CORE->getMainCfg()->getValue('paths', 'sharedvar').$this->name.'.png\''
 			       .' -Tcmapx '.$this->CORE->getMainCfg()->getValue('paths', 'var').$this->name.'.dot 2>&1';
 
 			exec($cmd, $arrMapCode, $returnCode);
@@ -382,6 +387,56 @@ class NagVisAutoMap extends GlobalMap {
 			
 			$this->mapCode = implode("\n", $arrMapCode);
 		}
+	}
+
+	/**
+	 * PUBLIC createObjectConnectors()
+	 *
+	 * Creates line objects between the child/parent objects
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function createObjectConnectors() {
+		$lines = Array();
+		// FIXME: Handle line style!
+		$aConf = Array(
+			'line_type'  => '11',
+			'line_color' => '#000',
+			'line_width' => 1
+		);
+
+		$objIds = $this->MAPCFG->loadObjIds();
+		$newObjId = false;
+
+		foreach(array_keys($this->arrLines) AS $lineKey) {
+			list($start, $end) = explode('%%', $lineKey);
+			
+			$S = $this->arrMapObjects[$start];
+			$E = $this->arrMapObjects[$end];
+		
+
+			// Get the image size
+			list($sWidth, $sHeight, $sType, $sAttr) = $S->getIconDetails();
+			list($eWidth, $eHeight, $eType, $eAttr) = $E->getIconDetails();
+			
+			if(!isset($objIds[$lineKey])) {
+				$objIds[$lineKey] = $this->MAPCFG->genObjIdAutomap($lineKey);
+				$newObjId = true;
+			}
+
+			$LINE = new NagVisLine($this->CORE);
+			$LINE->setObjectId($objIds[$lineKey]);
+			$LINE->setMapCoords(Array('x' => ($S->getX() + $sWidth  / 2) . ',' . ($E->getX() + $eWidth  / 2),
+			                          'y' => ($S->getY() + $sHeight / 2) . ',' . ($E->getY() + $eHeight / 2)));
+			$LINE->setConfiguration($aConf);
+			$lines[] = $LINE;
+		}
+
+		$this->MAPOBJ->addMembers($lines);
+
+		// When some new object ids have been added store them
+		if($newObjId)
+			$this->MAPCFG->storeObjIds($objIds);
 	}
 	
 	/**
@@ -454,6 +509,7 @@ class NagVisAutoMap extends GlobalMap {
 						break;
 						case 'poly':
 							// Get the middle of the polygon and substract the object size
+							// FIXME: This is not working at the moment.
 							$x = null;
 							$y = null;
 							$aCoords = explode(' ', $coords);
@@ -517,7 +573,6 @@ class NagVisAutoMap extends GlobalMap {
 			}
 		}
 		unset($validOpts['hover_timeout']);
-		$validOpts['map_image'] = $name.'.png';
 		
 		$ret = "define global {\n";
 		foreach($validOpts AS $key => $val) {
@@ -548,14 +603,11 @@ class NagVisAutoMap extends GlobalMap {
 		
 		// Read position from graphviz and set it on the objects
 		$this->setMapObjectPositions();
+		$this->createObjectConnectors();
 
 		// Store map configuration
 		file_put_contents($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$name.'.cfg',
                       $this->parseObjectsMapCfg($name));
-		
-		// Store current automap image as background image
-		copy($this->CORE->getMainCfg()->getValue('paths', 'sharedvar').$this->name.'.png',
-		     $this->CORE->getMainCfg()->getValue('paths', 'map').$name.'.png');
 
 		return true;
 	}
@@ -577,7 +629,7 @@ class NagVisAutoMap extends GlobalMap {
 
 		// Loop all map objects to load host individual configurations and the uniqe
 		// object id
-		foreach(array_merge(Array($this->rootObject), $this->arrMapObjects) AS $OBJ) {
+		foreach($this->arrMapObjects AS $OBJ) {
 			$name = $OBJ->getName();
 
 			if(!isset($objIds[$name])) {
@@ -597,7 +649,8 @@ class NagVisAutoMap extends GlobalMap {
 		}
 
 		// When some new object ids have been added store them
-		$this->MAPCFG->storeObjIds($objIds);
+		if($newObjId)
+			$this->MAPCFG->storeObjIds($objIds);
 	}
 	
 	/**
@@ -809,9 +862,10 @@ class NagVisAutoMap extends GlobalMap {
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function fetchHostObjectByName($hostName) {
+	private function fetchRootObject($hostName) {
 		$hostObject = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $hostName);
 		$hostObject->setConfiguration($this->MAPCFG->getObjectConfiguration());
+		$this->arrMapObjects[$hostName] = $hostObject;
 		$this->rootObject = $hostObject;
 	}
 
