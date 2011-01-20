@@ -1045,18 +1045,18 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				// Special operator for PENDING cause it is set by the hosts initial
 				// FIXME: Maybe split PENDING to SPENDING and PENDING to have it separated
 				//        in NagVis. Otherwise pending hosts are counted as services.
-				$arrReturn[$e[0]]['counts']['PENDING']['normal'] += $e[1];
-				$arrReturn[$e[0]]['counts']['OK']['normal'] = $e[2];
-				$arrReturn[$e[0]]['counts']['OK']['downtime'] = $e[3];
-				$arrReturn[$e[0]]['counts']['WARNING']['normal'] = $e[4];
-				$arrReturn[$e[0]]['counts']['WARNING']['ack'] = $e[5];
-				$arrReturn[$e[0]]['counts']['WARNING']['downtime'] = $e[6];
-				$arrReturn[$e[0]]['counts']['CRITICAL']['normal'] = $e[7];
-				$arrReturn[$e[0]]['counts']['CRITICAL']['ack'] = $e[8];
+				$arrReturn[$e[0]]['counts']['PENDING']['normal']   += $e[1];
+				$arrReturn[$e[0]]['counts']['OK']['normal']         = $e[2];
+				$arrReturn[$e[0]]['counts']['OK']['downtime']       = $e[3];
+				$arrReturn[$e[0]]['counts']['WARNING']['normal']    = $e[4];
+				$arrReturn[$e[0]]['counts']['WARNING']['ack']       = $e[5];
+				$arrReturn[$e[0]]['counts']['WARNING']['downtime']  = $e[6];
+				$arrReturn[$e[0]]['counts']['CRITICAL']['normal']   = $e[7];
+				$arrReturn[$e[0]]['counts']['CRITICAL']['ack']      = $e[8];
 				$arrReturn[$e[0]]['counts']['CRITICAL']['downtime'] = $e[9];
-				$arrReturn[$e[0]]['counts']['UNKNOWN']['normal'] = $e[10];
-				$arrReturn[$e[0]]['counts']['UNKNOWN']['ack'] = $e[11];
-				$arrReturn[$e[0]]['counts']['UNKNOWN']['downtime'] = $e[12];
+				$arrReturn[$e[0]]['counts']['UNKNOWN']['normal']    = $e[10];
+				$arrReturn[$e[0]]['counts']['UNKNOWN']['ack']       = $e[11];
+				$arrReturn[$e[0]]['counts']['UNKNOWN']['downtime']  = $e[12];
 			}
 		}
 		

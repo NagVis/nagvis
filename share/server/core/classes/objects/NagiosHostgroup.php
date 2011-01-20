@@ -225,7 +225,8 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 */
 	private function fetchSummaryOutput() {
 		if($this->hasMembers()) {
-			$arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
+			$arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,
+			                   'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
 			
 			// Get summary state of this and child objects
 			foreach($this->members AS &$MEMBER) {

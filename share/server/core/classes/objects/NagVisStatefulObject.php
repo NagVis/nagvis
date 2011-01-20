@@ -622,12 +622,6 @@ class NagVisStatefulObject extends NagVisObject {
 				break;
 				case 'up':
 				case 'ok':
-					if($this->getType() == 'service' || $this->getType() == 'servicegroup') {
-						$icon = $this->iconset.'_ok.'.$fileType;
-					} else {
-						$icon = $this->iconset.'_up.'.$fileType;
-					}
-				break;
 				case 'pending':
 					$icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
 				break;
@@ -821,41 +815,41 @@ class NagVisStatefulObject extends NagVisObject {
 			foreach($this->aStateCounts AS $sState => $aSubstates) {
 				// Loop all substates (normal,ack,downtime,...)
 				foreach($aSubstates AS $sSubState => $iCount) {
-					// Found some objects with this state+substate
-					if($iCount > 0) {
-						// Count all child objects
-						$iSumCount += $iCount;
+					if($iCount === 0)
+						continue;
+
+					// Count all child objects
+					$iSumCount += $iCount;
+					
+					// Get weight
+					if(isset(NagVisObject::$stateWeight[$sState]) && isset(NagVisObject::$stateWeight[$sState][$sSubState])) {
+						$weight = NagVisObject::$stateWeight[$sState][$sSubState];
 						
-						// Get weight
-						if(isset(NagVisObject::$stateWeight[$sState]) && isset(NagVisObject::$stateWeight[$sState][$sSubState])) {
-							$weight = NagVisObject::$stateWeight[$sState][$sSubState];
+						// No "current state" yet
+						// The new state is worse than the current state
+						if($currWeight === null || $currWeight < $weight) {
+							// Set the new weight for next compare
+							$currWeight = $weight;
 							
-							// No "current state" yet
-							// The new state is worse than the current state
-							if($currWeight === null || $currWeight < $weight) {
-								// Set the new weight for next compare
-								$currWeight = $weight;
-								
-								// Modify the summary information
-								
-								$this->summary_state = $sState;
-								
-								if($sSubState == 'ack') {
-									$this->summary_problem_has_been_acknowledged = 1;
-								} else {
-									$this->summary_problem_has_been_acknowledged = 0;
-								}
-								
-								if($sSubState == 'downtime') {
-									$this->summary_in_downtime = 1;
-								} else {
-									$this->summary_in_downtime = 0;
-								}
+							// Modify the summary information
+							
+							$this->summary_state = $sState;
+							
+							if($sSubState == 'ack') {
+								$this->summary_problem_has_been_acknowledged = 1;
+							} else {
+								$this->summary_problem_has_been_acknowledged = 0;
 							}
-						} else {
-							//Error handling: Invalid state+substate
-							new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME].', Array('STATE' => $sState, 'SUBSTATE' => $sSubState, 'TYPE' => $this->getType(), 'NAME' => $this->getName())));
+							
+							if($sSubState == 'downtime') {
+								$this->summary_in_downtime = 1;
+							} else {
+								$this->summary_in_downtime = 0;
+							}
 						}
+					} else {
+						//Error handling: Invalid state+substate
+						new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME].', Array('STATE' => $sState, 'SUBSTATE' => $sSubState, 'TYPE' => $this->getType(), 'NAME' => $this->getName())));
 					}
 				}
 			}
