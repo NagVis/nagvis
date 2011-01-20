@@ -437,6 +437,15 @@ var NagVisObject = Base.extend({
 		return l;
 	},
 
+	/**
+	 * Calculates new coordinates for the object where the given parameter
+	 * 'val' is the integer representing the current position of the object
+	 * in absolute px coordinates. If the object position is related to
+	 * another object this function detects it and transforms the abslute px
+	 * coordinate to a relative coordinate and returns it.
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
 	calcNewCoord: function(val, dir, num) {
 		if(!isset(num))
 			num = -1;
@@ -477,6 +486,13 @@ var NagVisObject = Base.extend({
 		}
 	},
 
+	/**
+	 * Used to gather all referenced parent object ids from the object
+	 * configuration. Returns a object where the keys are the gathered
+	 * parent object ids.
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
 	getParentObjectIds: function() {
 		var parentIds = {};
 		var coords = (this.conf.x + ',' + this.conf.y).split(',');
@@ -491,6 +507,13 @@ var NagVisObject = Base.extend({
 		return parentIds;
 	},
 
+	/**
+	 * This is used to add a child item to the object. Child items are
+	 * gathered automatically by the frontend. Child positions depend
+	 * on the related parent position on the map -> relative positioning.
+	 *
+	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 */
 	addChild: function(obj) {
 		this.childs.push(obj);
 		obj = null;

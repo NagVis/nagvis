@@ -446,7 +446,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 		oContainerDiv.appendChild(oLineDiv);
 		oLineDiv = null;
 		
-		// Parse hover/link area only when needed
+		// Parse hover/link area only when needed. This is only the container
+		// The real area or labels are added later
 		if((this.conf.url && this.conf.url !== '' && this.conf.url !== '#') || (this.conf.hover_menu && this.conf.hover_menu !== '')) {
 			var oLink = doc.createElement('a');
 			oLink.setAttribute('id', this.conf.object_id+'-linelink');
