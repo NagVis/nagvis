@@ -266,19 +266,23 @@ function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, col
 			}
 
 			drawArrow(objectId, 1, xStart, yStart, xMid, yMid, z, width, colorFill, colorBorder);
-      drawLinkOrLabel(objectId, 1, lineType, xStart, yStart, xEnd, yEnd, z, perfdataA, perfdataB, cutIn, bLinkArea, bLabelShow);
+      drawLinkOrLabel(objectId, 1, lineType, xMid, yMid, z, perfdataA, perfdataB, bLinkArea, bLabelShow);
 			drawArrow(objectId, 2, xEnd, yEnd, xMid, yMid, z, width, colorFill, colorBorder);
-      drawLinkOrLabel(objectId, 2, lineType, xStart, yStart, xEnd, yEnd, z, perfdataA, perfdataB, cutOut, bLinkArea, bLabelShow);
+      drawLinkOrLabel(objectId, 2, lineType, xMid, yMid, z, perfdataA, perfdataB, bLinkArea, bLabelShow);
 			break;
 		case '11':
 			// ---> lines
+			var xMid = middle(xStart, xEnd, cut);
+			var yMid = middle(yStart, yEnd, cut);
 			drawArrow(objectId, 1, xStart, yStart, xEnd, yEnd, z, width, colorFill, colorBorder);
-      drawLinkOrLabel(objectId, 1, lineType, xStart, yStart, xEnd, yEnd, z, perfdataA, perfdataB, cut, bLinkArea, bLabelShow);
+      drawLinkOrLabel(objectId, 1, lineType, xMid, yMid, z, perfdataA, perfdataB, bLinkArea, bLabelShow);
 			break;
 		case '12':
 			// --- lines
+			var xMid = middle(xStart, xEnd, cut);
+			var yMid = middle(yStart, yEnd, cut);
 			drawSimpleLine(objectId, xStart, yStart, xEnd, yEnd, z, width, colorFill, colorBorder);
-      drawLinkOrLabel(objectId, 1, lineType, xStart, yStart, xEnd, yEnd, z, perfdataA, perfdataB, cut, bLinkArea, bLabelShow);
+      drawLinkOrLabel(objectId, 1, lineType, xMid, yMid, z, perfdataA, perfdataB, bLinkArea, bLabelShow);
 			break;
 		case '13':
 			// -%-><-%- lines
@@ -293,12 +297,12 @@ function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, col
 			if(isset(perfdata[0]) && isset(perfdata[0][1]) && isset(perfdata[0][2]))
 				perfdataA = perfdata[0][1] + perfdata[0][2];
 			drawArrow(objectId, 1, xStart, yStart, xMid, yMid, z, width, colorFill, colorBorder);
-      drawLinkOrLabel(objectId, 1, lineType, xStart, yStart, xMid, yMid, z, perfdataA, perfdataB, cutIn, bLinkArea, bLabelShow);
+      drawLinkOrLabel(objectId, 1, lineType, middle(xStart, xMid, cutIn), middle(yStart, yMid, cutIn), z, perfdataA, perfdataB, bLinkArea, bLabelShow);
 
 			if(isset(perfdata[1]) && isset(perfdata[1][1]) && isset(perfdata[1][2]))
 				perfdataA = perfdata[1][1] + perfdata[1][2];
 			drawArrow(objectId, 2, xEnd, yEnd, xMid, yMid, z, width, colorFill2, colorBorder);
-      drawLinkOrLabel(objectId, 2, lineType, xEnd, yEnd, xMid, yMid, z, perfdataA, perfdataB, cutOut, bLinkArea, bLabelShow);
+      drawLinkOrLabel(objectId, 2, lineType, imiddle(xEnd, xMid, cutOut), middle(yEnd, yMid, cutOut), z, perfdataA, perfdataB, bLinkArea, bLabelShow);
 			break;
 		case '14':
 			// -%+BW-><-%+BW- lines
@@ -316,14 +320,14 @@ function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, col
 			if(isset(perfdata[2]) && isset(perfdata[2][1]) && isset(perfdata[2][2]))
 				perfdataB = perfdata[2][1] + perfdata[2][2];
 			drawArrow(objectId, 1, xStart, yStart, xMid, yMid, z, width, colorFill, colorBorder);
-      drawLinkOrLabel(objectId, 1, lineType, xStart, yStart, xMid, yMid, z, perfdataA, perfdataB, cutOut, bLinkArea, bLabelShow);
+      drawLinkOrLabel(objectId, 1, lineType, middle(xStart, xMid, cutOut), middle(yStart, yMid, cutOut), z, perfdataA, perfdataB, bLinkArea, bLabelShow);
 
 			if(isset(perfdata[1]) && isset(perfdata[1][1]) && isset(perfdata[1][2]))
 				perfdataA = perfdata[1][1] + perfdata[1][2];
 			if(isset(perfdata[3]) && isset(perfdata[3][1]) && isset(perfdata[3][2]))
 				perfdataB = perfdata[3][1] + perfdata[3][2];
 			drawArrow(objectId, 2, xEnd, yEnd, xMid, yMid, z, width, colorFill2, colorBorder);
-			drawLinkOrLabel(objectId, 2, lineType, xEnd, yEnd, xMid, yMid, z, perfdataA, perfdataB, cutIn, bLinkArea, bLabelShow);
+			drawLinkOrLabel(objectId, 2, lineType, middle(xEnd, xMid, cutIn), middle(yEnd, yMid, cutIn), z, perfdataA, perfdataB, bLinkArea, bLabelShow);
 			break;
 		default:
 			// Unknown
@@ -331,16 +335,13 @@ function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, col
 	}
 }
 
-function drawLinkOrLabel(objectId, num, lineType, x1, y1, x2, y2, z, perfdataA, perfdataB, labelPosition, bLinkArea, bLabelShow) {
-	if (!labelPosition || labelPosition == 0)
-		labelPosition = 0.5;
-
+function drawLinkOrLabel(objectId, num, lineType, x, y, z, perfdataA, perfdataB, bLinkArea, bLabelShow) {
 	// First try to create the labels (For weathermap lines only atm) and if none
 	// should be shown try to create link a link area for the line.
 	if(bLabelShow && (lineType == 13 || lineType == 14))
-		drawLabel(objectId, num, lineType, middle(x1, x2, labelPosition), middle(y1, y2, labelPosition), z, perfdataA, perfdataB);
+		drawLabel(objectId, num, lineType, x, y, z, perfdataA, perfdataB);
 	else if(bLinkArea)
-		drawLinkArea(objectId, num, middle(x1, x2, labelPosition), middle(y1, y2, labelPosition), z);
+		drawLinkArea(objectId, num, x, y, z);
 }
 
 /**
