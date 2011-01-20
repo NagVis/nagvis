@@ -1083,7 +1083,7 @@ function dragStart(event, dragHandler) {
 	draggingObject.x = draggingObject.offsetLeft;
 	draggingObject.y = draggingObject.offsetTop;
 	
-  // Save relative offset of the mouse to the snapin title to prevent flipping on drag start
+  // Save relative offset of the mouse 
   dragObjectOffset   = [ posy - draggingObject.offsetTop - getHeaderHeight(), 
                          posx - draggingObject.offsetLeft ];
   dragObjectStartPos = [ draggingObject.offsetTop, draggingObject.offsetLeft ];
@@ -1180,6 +1180,13 @@ function dragStop(event, handler) {
 	
 	dragObjectHandler = null;
 	draggingObject = null;
+}
+
+/**
+ * Returns true when currently dragging an object
+ */
+function dragging() {
+	return draggingObject !== null;
 }
 
 /************************************************

@@ -410,7 +410,7 @@ var NagVisObject = Base.extend({
 				if(refObj)
 					return parseFloat(refObj.conf[dir]) + parseFloat(offset);
 				else
-					return offset;
+					return 0;
 			} else {
 				// Only an object id. Get the coordinate and return it
 				var refObj = getMapObjByDomObjId(val);
@@ -448,13 +448,9 @@ var NagVisObject = Base.extend({
 	 */
 	calcNewCoord: function(val, dir, num) {
 		if(!isset(num))
-			num = -1;
+			var num = -1;
 
-		var oldVal = null;
-		if(num === -1)
-			oldVal = this.conf[dir];
-		else
-			oldVal = this.conf[dir].split(',')[num];
+		var oldVal = num === -1 ? this.conf[dir] : this.conf[dir].split(',')[num];
 
 		// Check if the current value is an integer or a relative coord
 		if(isRelativeCoord(this.conf[dir])) {
@@ -468,7 +464,8 @@ var NagVisObject = Base.extend({
 			// Only an object id. Get the coordinate and return it
 			var refObj = getMapObjByDomObjId(objectId);
 			if(refObj) {
-				var offset = val - refObj.parseCoord(refObj.conf[dir], dir);
+				var refPos = num === -1 ? refObj.conf[dir] : refObj.conf[dir].split(',')[num];
+				var offset = val - refObj.parseCoord(refPos, dir);
 				var pre    = offset >= 0 ? '+' : '';
 				val = objectId + '%' + pre + offset;
 				refObj   = null;

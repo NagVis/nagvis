@@ -324,7 +324,7 @@ function displayHoverMenu(event, objId, iHoverDelay) {
 	// Only show up hover menu when no context menu is opened
 	// and only handle the events when no timer is in schedule at the moment to
 	// prevent strange movement effects when the timer has finished
-	if(!contextOpen() && _hoverTimer === null) {
+	if(!dragging() && !contextOpen() && _hoverTimer === null) {
 		if(iHoverDelay && iHoverDelay != "0" && !hoverOpen())
 			_hoverTimer = setTimeout('hoverShow('+event.clientX+', '+event.clientY+', '+objId+')', parseInt(iHoverDelay)*1000);
 		else

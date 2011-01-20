@@ -91,6 +91,10 @@ function contextMouseDown(event) {
 	// Hide all context menus except clicking the current open context menu
 	if(id === -1 || id.indexOf('http:') === -1 && id.indexOf('-context') === -1)
 		contextHide();
+
+	// Don't show the context menu when currently dragging
+	if(dragging())
+		return false;
 	
 	// only show the context menu if the right mouse button is pressed on the obj
 	if(event.button === 2)
@@ -110,86 +114,85 @@ function contextShow(event) {
 	else
 		target = event.srcElement;
 	
-	if(_replaceContext) {
-    // Hide hover menu
-		hoverHide();
-		
-		// document.body.scrollTop does not work in IE
-		var scrollTop = document.body.scrollTop ? document.body.scrollTop :
-			document.documentElement.scrollTop;
-		var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft :
-			document.documentElement.scrollLeft;
+	if(!_replaceContext)
+		return false;
 
-		// Maybe the event is triggered by a child si try to get the right object
-		// id from a parent element
-		while(target && (typeof target.id === 'undefined' || target.id === '')) {
-			target = target.parentNode;
-		}
+  // Hide hover menu
+	hoverHide();
+	
+	// document.body.scrollTop does not work in IE
+	var scrollTop = document.body.scrollTop ? document.body.scrollTop :
+		document.documentElement.scrollTop;
+	var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft :
+		document.documentElement.scrollLeft;
 
-		// Workaround for the different structure of targets on lines/icons
-		// Would be nice to fix the structure
-		var id;
-		if(target.id !== '')
-			id = target.id;
+	// Maybe the event is triggered by a child si try to get the right object
+	// id from a parent element
+	while(target && (typeof target.id === 'undefined' || target.id === '')) {
+		target = target.parentNode;
+	}
 
-		if(typeof id === 'undefined') {
-			eventlog("context", "error", "Target object search had no id");
+	// Workaround for the different structure of targets on lines/icons
+	// Would be nice to fix the structure
+	var id;
+	if(target.id !== '')
+		id = target.id;
 
-			_replaceContext = false;
-			return false;
-		}
-		
-		// Only the object id is interesing so remove the other contents
-		// like -icon or -line. Simply split the string by - and take the
-		// first element
-		if(id.indexOf('-') !== -1)
-			id = id.substr(0, id.lastIndexOf('-'));
-		
-		var contextMenu = document.getElementById(id+'-context');
+	if(typeof id === 'undefined') {
+		eventlog("context", "error", "Target object search had no id");
 
-		// Maybe there is no context menu defined for one object?
-		if(contextMenu === null) {
-			eventlog('context', 'error', 'Found no context menu wit the id "'+id+'-context"');
-			
-			_replaceContext = false;
-			return false;
-		}
-		
-		// hide the menu first to avoid an "up-then-over" visual effect
-		contextMenu.style.display = 'none';
-		contextMenu.style.left = event.clientX + scrollLeft - getSidebarWidth() + 'px';
-		contextMenu.style.top = event.clientY + scrollTop - getHeaderHeight() + 'px';
-		contextMenu.style.display = '';
-		
-		// Check if the context menu is "in screen".
-		// When not: reposition
-		var contextLeft = parseInt(contextMenu.style.left.replace('px', ''));
-		if(contextLeft+contextMenu.clientWidth > pageWidth()) {
-			// move the context menu to the left 
-			contextMenu.style.left = contextLeft - contextMenu.clientWidth + 'px';
-		}
-		contextLeft = null;
-		
-		var contextTop = parseInt(contextMenu.style.top.replace('px', ''));
-		if(contextTop+contextMenu.clientHeight > pageHeight()) {
-			// Only move the context menu to the top when the new top will not be
-			// out of sight
-			if(contextTop - contextMenu.clientHeight >= 0) {
-				contextMenu.style.top = contextTop - contextMenu.clientHeight + 'px';
-			}
-		}
-		contextTop = null;
-		
-		// Append to visible menus array
-		_openContextMenus.push(contextMenu);
-		
-		contextMenu = null;
+		_replaceContext = false;
+		return false;
+	}
+	
+	// Only the object id is interesing so remove the other contents
+	// like -icon or -line. Simply split the string by - and take the
+	// first element
+	if(id.indexOf('-') !== -1)
+		id = id.substr(0, id.lastIndexOf('-'));
+	
+	var contextMenu = document.getElementById(id+'-context');
+
+	// Maybe there is no context menu defined for one object?
+	if(contextMenu === null) {
+		eventlog('context', 'error', 'Found no context menu wit the id "'+id+'-context"');
 		
 		_replaceContext = false;
-		
-		// If this returns false, the browser's context menu will not show up
 		return false;
-	} else {
-		return true;
 	}
+	
+	// hide the menu first to avoid an "up-then-over" visual effect
+	contextMenu.style.display = 'none';
+	contextMenu.style.left = event.clientX + scrollLeft - getSidebarWidth() + 'px';
+	contextMenu.style.top = event.clientY + scrollTop - getHeaderHeight() + 'px';
+	contextMenu.style.display = '';
+	
+	// Check if the context menu is "in screen".
+	// When not: reposition
+	var contextLeft = parseInt(contextMenu.style.left.replace('px', ''));
+	if(contextLeft+contextMenu.clientWidth > pageWidth()) {
+		// move the context menu to the left 
+		contextMenu.style.left = contextLeft - contextMenu.clientWidth + 'px';
+	}
+	contextLeft = null;
+	
+	var contextTop = parseInt(contextMenu.style.top.replace('px', ''));
+	if(contextTop+contextMenu.clientHeight > pageHeight()) {
+		// Only move the context menu to the top when the new top will not be
+		// out of sight
+		if(contextTop - contextMenu.clientHeight >= 0) {
+			contextMenu.style.top = contextTop - contextMenu.clientHeight + 'px';
+		}
+	}
+	contextTop = null;
+	
+	// Append to visible menus array
+	_openContextMenus.push(contextMenu);
+	
+	contextMenu = null;
+	
+	_replaceContext = false;
+	
+	// If this returns false, the browser's context menu will not show up
+	return false;
 }
