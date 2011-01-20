@@ -938,14 +938,20 @@ var NagVisStatefulObject = NagVisObject.extend({
 		oControls = null;
 	},
 
-	move: function() {
+	reposition: function() {
 		if(this.conf.view_type === 'line')
 			this.drawLine();
 		else
 			this.moveIcon();
 
 		for(var i = 0, l = this.childs.length; i < l; i++)
-			this.childs[i].move();
+			this.childs[i].reposition();
+
+		// redraw the controls
+		if(!this.bIsLocked) {
+			this.removeControls();
+			this.parseControls();
+		}
 	},
 
 	/**
@@ -977,7 +983,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		jsObj.conf.x = newPos[0];
 		jsObj.conf.y = newPos[1];
 
-		jsObj.move();
+		jsObj.reposition();
 
 		jsObj      = null;	
 		objId      = null;

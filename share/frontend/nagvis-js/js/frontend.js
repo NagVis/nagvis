@@ -1021,27 +1021,29 @@ function setMapObjects(aMapObjectConf) {
 			break;
 		}
 		
-		if(oObj !== null) {
-			// Save object to map objects array
+		// Save object to map objects array
+		if(oObj !== null)
 			aMapObjects.push(oObj);
-			
-			// Parse object to map
-			if(oPageProperties.view_type === 'map') {
-				aMapObjects[aMapObjects.length-1].parse();
-			} else if(oPageProperties.view_type === 'automap') {
-				if(aMapObjectConf[i].type === 'host')
-					aMapObjects[aMapObjects.length-1].parseAutomap();
-				else
-					aMapObjects[aMapObjects.length-1].parse();
-			}
-		}
 		oObj = null;
 	}
 
-	// Store the object position dependencies. Before this
-	// can be done all objects need to be added to the map.
-	// so this seems to be a good place for it
+	// First parse the objects on the map
+	// Then store the object position dependencies.
+	//
+	// Before both can be done all objects need to be added
+	// to the map objects list
 	for(var i = 0, len = aMapObjects.length; i < len; i++) {
+		// Parse object to map
+		if(oPageProperties.view_type === 'map') {
+			aMapObjects[i].parse();
+		} else if(oPageProperties.view_type === 'automap') {
+			if(aMapObjects[i].conf.type === 'host')
+				aMapObjects[i].parseAutomap();
+			else
+				aMapObjects[i].parse();
+		}
+
+		// Store object dependencies
 		var parents = aMapObjects[i].getParentObjectIds();
 		if(parents) {
 			for (var objectId in parents) {

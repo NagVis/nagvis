@@ -405,14 +405,17 @@ var NagVisObject = Base.extend({
 				var objectId  = parts[0];
 				var offset    = parts[1];
 				var refObj    = getMapObjByDomObjId(objectId);
-				return parseFloat(refObj.conf[dir]) + parseFloat(offset);
+				if(refObj)
+					return parseFloat(refObj.conf[dir]) + parseFloat(offset);
+				else
+					return offset;
 			} else {
 				// Only an object id. Get the coordinate and return it
 				var refObj = getMapObjByDomObjId(val);
-				if(refObj !== -1)
+				if(refObj)
 					return refObj.conf[dir];
 				else
-					return val;
+					return 0;
 			}
 		}
 	},
