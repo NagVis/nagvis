@@ -1218,5 +1218,5 @@ function pxToInt(v) {
 }
 
 function isRelativeCoord(v) {
-  return !isInt(v);
+  return !isInt(v) || v.length === 6;
 }

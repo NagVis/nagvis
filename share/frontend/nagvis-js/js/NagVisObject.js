@@ -199,6 +199,8 @@ var NagVisObject = Base.extend({
 
 		if(this.conf.view_type !== 'line')
 			oSectionMacros.line = '<!--\\sBEGIN\\sline\\s-->.+?<!--\\sEND\\sline\\s-->';
+		if(this.conf.view_type !== 'line' || (this.conf.line_type == 11 || this.conf.line_type == 12))
+			oSectionMacros.line_type = '<!--\\sBEGIN\\sline_two_parts\\s-->.+?<!--\\sEND\\sline_two_parts\\s-->';
 
 		// Replace hostgroup range macros when not in a hostgroup
 		if(this.conf.type !== 'hostgroup')
