@@ -241,17 +241,17 @@ class NagVisObject {
 		// Need to remove some options which are not relevant
 		// FIXME: Would be much better to name the needed vars explicit
 		if(self::$arrDenyKeys == null)
-			self::$arrDenyKeys = Array('CORE' => '', 'BACKEND' => '', 'MAPCFG' => '',
-				'MAP' => '', 'GRAPHIC' => '', 'conf' => '', 'services' => '',
-				'fetchedChildObjects' => '', 'childObjects' => '', 'parentObjects' => '',
-				'members' => '', 'objects' => '', 'linkedMaps' => '', 'isSummaryObject' => '',
-				'isView' => '', 'dateFormat' => '', 'arrDenyKeys' => '');
+			self::$arrDenyKeys = Array(
+			  'CORE' => '', 'BACKEND' => '', 'MAPCFG' => '', 'MAP'  => '', 'GRAPHIC' => '',
+				'conf' => '', 'services' => '', 'fetchedChildObjects' => '', 'childObjects' => '',
+				'parentObjects' => '', 'members' => '', 'objects' => '', 'linkedMaps' => '',
+				'isSummaryObject' => '', 'isView' => '', 'dateFormat' => '', 'arrDenyKeys' => '',
+				'aStateCounts' => '',	'iconDetails' => '', 'problem_msg' => '', 'isLoopingBacklink' => ''
+			);
 		
-		foreach($this AS $key => $val) {
-			if(!isset(self::$arrDenyKeys[$key])) {
+		foreach($this AS $key => $val)
+			if(!isset(self::$arrDenyKeys[$key]))
 				$arr[$key] = $val;
-			}
-		}
 
 		// Add special static options
 		if($this instanceof NagVisStatefulObject)
