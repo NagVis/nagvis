@@ -69,6 +69,7 @@ Frontend
   * Bugfix: Fixed showmaps,showautomaps,... option usage on overview page
   * Bugfix: Fixed search dialog access when using explicit permissions
   * Bugfix: Fixed line wrapping of labels/textboxes when positioned out of screen
+  * Bugfix: Fixed php error when using custom css files in maps
 
 WUI
   * Bugfix: Deleting more than two objects was not working correctly
