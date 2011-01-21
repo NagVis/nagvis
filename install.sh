@@ -1479,7 +1479,7 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 		copy "" "$USERFILES_DIR/images/gadgets" "gadget image files"
 	
 		LINE="Restoring custom iconsets..."
-		copy "\/(20x20\.png|configerror_.+\.png|error\.png|std_(big|medium|small)\.png|demo_.+\.png)$" "$USERFILES_DIR/images/iconsets" "iconset files"
+		copy "\/(20x20\.png|configerror_.+\.png|error\.png|std_(big|medium|small)_.+\.png|demo_.+\.png)$" "$USERFILES_DIR/images/iconsets" "iconset files"
 	
 		LINE="Restoring custom shapes..."
 		copy "" "$USERFILES_DIR/images/shapes" "shapes"
