@@ -32,7 +32,7 @@ div.hover > table th {text-align:center;background-color:#eee}
 div.hover > table spacer {height:3px;background-color:#eee}
 div.hover > table td.label {text-align:center;background-color:#eee}
 div.hover > table td.labelACK {text-align:center;background-color: #eee}
-div.hover > table td.labelPENDING {text-align:center;background-color:#eee}
+div.hover > table td.labelPENDING, div.hover > table td.labelUNCHECKED {text-align:center;background-color:#eee}
 div.hover > table td.labelOK, div.hover > table td.labelUP {text-align:center;background-color:#66FF66}
 div.hover > table td.labelWARNING {text-align:center;background-color:#FFFF7E}
 div.hover > table td.labelCRITICAL, div.hover > table td.labelDOWN, div.hover > table td.labelUNREACHABLE {text-align:center;background-color:#FFBBBB}

@@ -170,7 +170,7 @@ class NagiosHostgroup extends NagVisStatefulObject {
 					// Count all child objects
 					$iSumCount += $iCount;
 					
-					if($sState === 'UP' || $sState === 'DOWN' || $sState === 'UNREACHABLE') {
+					if($sState === 'UP' || $sState === 'DOWN' || $sState === 'UNREACHABLE' || $sState === 'UNCHECKED') {
 						if(!isset($arrHostStates[$sState])) {
 							$arrHostStates[$sState] = $iCount;
 						} else {
@@ -225,8 +225,9 @@ class NagiosHostgroup extends NagVisStatefulObject {
 	 */
 	private function fetchSummaryOutput() {
 		if($this->hasMembers()) {
-			$arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,
-			                   'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
+			$arrStates = Array('CRITICAL' => 0, 'DOWN'    => 0, 'WARNING'   => 0,
+			                   'UNKNOWN'  => 0, 'UP'      => 0, 'OK'        => 0,
+			                   'ERROR'    => 0, 'PENDING' => 0, 'UNCHECKED' => 0);
 			
 			// Get summary state of this and child objects
 			foreach($this->members AS &$MEMBER) {

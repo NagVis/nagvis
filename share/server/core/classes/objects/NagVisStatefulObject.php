@@ -622,6 +622,7 @@ class NagVisStatefulObject extends NagVisObject {
 				break;
 				case 'up':
 				case 'ok':
+				case 'unchecked':
 				case 'pending':
 					$icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
 				break;

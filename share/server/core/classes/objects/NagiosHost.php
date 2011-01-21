@@ -613,7 +613,7 @@ class NagiosHost extends NagVisStatefulObject {
 			if($this->aStateCounts !== null) {
 				foreach($this->aStateCounts AS $sState => $aSubstates) {
 					// Ignore host state here
-					if($sState != 'UP' && $sState != 'DOWN' && $sState != 'UNREACHABLE') {
+					if($sState != 'UP' && $sState != 'DOWN' && $sState != 'UNREACHABLE' && $sState != 'UNCHECKED') {
 						// Loop all substates (normal,ack,downtime,...)
 						foreach($aSubstates AS $sSubState => $iCount) {
 							// Found some objects with this state+substate
@@ -658,7 +658,9 @@ class NagiosHost extends NagVisStatefulObject {
 		if($this->recognize_services) {
 			// If there are services write the summary state for them
 			if($this->hasMembers()) {
-				$arrStates = Array('CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
+				$arrStates = Array('CRITICAL' => 0, 'DOWN'    => 0, 'WARNING'   => 0,
+				                   'UNKNOWN'  => 0, 'UP'      => 0, 'OK'        => 0,
+													 'ERROR'    => 0, 'PENDING' => 0, 'UNCHECKED' => 0);
 				
 				foreach($this->members AS &$SERVICE) {
 					$arrStates[$SERVICE->getSummaryState()]++;

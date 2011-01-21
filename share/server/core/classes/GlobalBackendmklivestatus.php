@@ -501,12 +501,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 			foreach($l as $e) {
 				$state = $e[0];
 				
-				// Catch pending objects
+				// Catch unchecked objects
 				// $e[17]: has_been_checked
 				// $e[0]:  state
 				if($e[17] == 0 || $state === '') {
 					$arrReturn[$e[18]] = Array(
-						'state' =>  'PENDING',
+						'state'  => 'UNCHECKED',
 						'output' => GlobalCore::getInstance()->getLang()->getText('hostIsPending', Array('HOST' => $e[18]))
 					);
 					continue;
@@ -877,7 +877,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		// Get host information
 		$l = $this->queryLivestatus("GET hostsbygroup\n" .
 			$objFilter.
-			// Count PENDING
+			// Count UNCHECKED
 			"Stats: has_been_checked = 0\n" .
 			// Count UP
 			"Stats: ".$stateAttr." = 0\n" .
@@ -931,7 +931,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 				$arrReturn[$e[0]] = Array(
 					'details' => Array('alias' => $e[1]),
 					'counts' => Array(
-						'PENDING' => Array(
+						'UNCHECKED' => Array(
 							'normal'    => $e[2],
 						),
 						'UP' => Array(
@@ -1042,10 +1042,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 		
 		if(is_array($l) && count($l) > 0) {
 			foreach($l as $e) {
-				// Special operator for PENDING cause it is set by the hosts initial
-				// FIXME: Maybe split PENDING to SPENDING and PENDING to have it separated
-				//        in NagVis. Otherwise pending hosts are counted as services.
-				$arrReturn[$e[0]]['counts']['PENDING']['normal']   += $e[1];
+				$arrReturn[$e[0]]['counts']['PENDING']['normal']    = $e[1];
 				$arrReturn[$e[0]]['counts']['OK']['normal']         = $e[2];
 				$arrReturn[$e[0]]['counts']['OK']['downtime']       = $e[3];
 				$arrReturn[$e[0]]['counts']['WARNING']['normal']    = $e[4];

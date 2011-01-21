@@ -15,15 +15,18 @@ Core
   * Reimplemented maintenance mode: in_maintenance=1 is working again
   * The check_command parameter is available in NagVis now. NDO and
     MKLivestatus backends fetch this info from the datasources now
-  * Bugfix: SQLite Update problem while updating from 1.5b1-1.5b3 to 1.5.4/1.5.5
-  * Bugfix: Fixed configuration file cache when using multiple main config files
   * Hostgroup and Servicegroup aliases work again now. It might be neccessary
     to update livestatus to the newest 1.1.9i* version.
   * All map objects need to have an object id which needs to be unique on
     each map. All map objects which have no object id defined will ge one
     created. This makes migration easier.
   * Catching ps_files_cleanup_dir error message (strange error debian/ubuntu)
+  * Changed PENDING state for host objects to UNCHECKED; This was needed to
+    prevent mixups with service and host objects
   * Fixed inconsistence with iconsets when refreshing overview maps/automaps
+  * Bugfix: SQLite Update problem while updating from 1.5b1-1.5b3 to 1.5.4/1.5.5
+  * Bugfix: Fixed configuration file cache when using multiple main config files
+  * Bugfix: The installer overwrites the default iconset files on upgrade as expected
 
 Automap
   * Made automap coord parsing regex resistent against html entities in the URL

@@ -374,7 +374,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 				}
 				
 				if($data['current_state'] == '') {
-					$arrReturn['state'] = 'PENDING';
+					$arrReturn['state'] = 'UNCHECKED';
 					$arrReturn['output'] = $this->CORE->getLang()->getText('hostIsPending', Array('HOST' => $hostName));
 				} elseif($data['current_state'] == '0') {
 					// Host is UP
@@ -617,7 +617,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 				}
 				
 				if($data['current_state'] == '') {
-					$arrRow['state'] = 'PENDING';
+					$arrRow['state'] = 'UNCHECKED';
 				} elseif($data['current_state'] == '0') {
 					// Host is UP
 					$arrRow['state'] = 'UP';

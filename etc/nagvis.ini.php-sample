@@ -392,6 +392,7 @@ interval=15
 ;error_downtime=3
 ;up=2
 ;ok=1
+;unchecked=0
 ;pending=0
 ;
 ; Colors of the different states. The colors are used in lines and hover menus
@@ -413,6 +414,8 @@ interval=15
 ;up_color=#00FF00
 ;ok_bgcolor=#00FF00
 ;ok_color=#00FF00
+;unchecked_bgcolor=#C0C0C0
+;unchecked_color=#C0C0C0
 ;pending_bgcolor=#C0C0C0
 ;pending_color=#C0C0C0
 ;
@@ -428,6 +431,7 @@ interval=15
 ;error_sound=
 ;up_sound=
 ;ok_sound=
+;unchecked_sound=
 ;pending_sound=
 
 ; -------------------------

@@ -578,7 +578,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 					$data['current_state'] = $data['last_hard_state'];
 			
 			if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
-				$arrTmpReturn['state'] = 'PENDING';
+				$arrTmpReturn['state'] = 'UNCHECKED';
 				$arrTmpReturn['output'] = $this->CORE->getLang()->getText('hostIsPending', Array('HOST' => $data['name1']));
 			} elseif($data['current_state'] == '0') {
 				// Host is UP
@@ -814,7 +814,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			$arrReturn[$data['name1']] = Array(
 				'details' => Array('alias' => $data['alias']),
 				'counts' => Array(
-					'PENDING' => Array(
+					'UNCHECKED' => Array(
 						'normal' => $data['pending'],
 					),
 					'OK' => Array(
@@ -854,7 +854,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 		
 		$QUERYHANDLE = $this->mysqlQuery('SELECT 
 			o.name1, hg.alias,
-			SUM(IF(hs.has_been_checked=0,1,0)) AS pending,
+			SUM(IF(hs.has_been_checked=0,1,0)) AS unchecked,
 			SUM(IF((hs.'.$stateAttr.'=0 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0),1,0)) AS up,
 			SUM(IF((hs.'.$stateAttr.'=0 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth!=0),1,0)) AS up_downtime,
 			SUM(IF((hs.'.$stateAttr.'=1 AND hs.has_been_checked!=0 AND hs.scheduled_downtime_depth=0 AND hs.problem_has_been_acknowledged=0),1,0)) AS down,
@@ -886,8 +886,8 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			$arrReturn[$data['name1']] = Array(
 				'details' => Array('alias' => $data['alias']),
 				'counts' => Array(
-					'PENDING' => Array(
-						'normal'    => $data['pending'],
+					'UNCHECKED' => Array(
+						'normal'    => $data['unchecked'],
 					),
 					'UP' => Array(
 						'normal'    => $data['up'],
@@ -944,10 +944,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 			GROUP BY o.object_id');
 		
 		while($data = mysql_fetch_assoc($QUERYHANDLE)) {
-			// Special operator for PENDING cause it is set by the hosts initial
-			// FIXME: Maybe split PENDING to SPENDING and PENDING to have it separated
-			//        in NagVis. Otherwise pending hosts are counted as services.
-			$arrReturn[$data['name1']]['counts']['PENDING']['normal'] += $data['pending'];
+			$arrReturn[$data['name1']]['counts']['PENDING']['normal'] = $data['pending'];
 			$arrReturn[$data['name1']]['counts']['OK']['normal'] = $data['ok'];
 			$arrReturn[$data['name1']]['counts']['OK']['downtime'] = $data['ok_downtime'];
 			$arrReturn[$data['name1']]['counts']['WARNING']['normal'] = $data['warning'];
