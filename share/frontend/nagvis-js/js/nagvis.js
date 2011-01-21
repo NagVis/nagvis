@@ -36,7 +36,7 @@ var oWorkerProperties, oGeneralProperties, oRotationProperties, oPageProperties;
 var oViewProperties;
 var oFileAges;
 var oStatusMessageTimer;
-var aMapObjects = [];
+var oMapObjects = {};
 var oMapSummaryObj;
 var regexCache = {};
 
@@ -668,6 +668,17 @@ function oDump(object, depth, max){
 		}
 	}
 	return output;
+}
+
+/**
+ * This counts the elements in an object
+ * FIXME: There must be a better way!
+ */
+function oLength(object) {
+	var c = 0;
+	for(var key in object)
+		c++;
+	return c;
 }
 
 /**

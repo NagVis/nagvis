@@ -10,9 +10,6 @@ Relative Koordinaten:
 		- Dann einen Rahmen um das Untergeordnete Objekt zeichnen und beim Loslassen
 		  die object_id des Parent-Objekts an den Handler übergeben
 
-HTML/JS Frontend:
-  - aMapObjects in Objekt umbauen - mit object_id als Schlüssel
-
 Linien (Auch für neue Automap wichtig!):
  - Pfeilspitzen konfigurierbar machen
    - Größe
