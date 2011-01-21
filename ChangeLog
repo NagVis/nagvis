@@ -1,3 +1,8 @@
+1.5.8
+
+Frontend
+  * Bugfix: Fixed php error when using custom css files in maps
+
 1.5.7
 
 Core
