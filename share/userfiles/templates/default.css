@@ -113,7 +113,8 @@ a.linelink {
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	padding: 2px;
-	white-space:nowrap;
+	/* tried to solve the off-screen text wrap. This fixes the problem but
+	 * results no no linebreak at all: white-space:nowrap; */
 }
 
 /* labels for the objects on the maps */
@@ -124,7 +125,8 @@ a.linelink {
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	padding: 2px;
-	white-space:nowrap;
+	/* tried to solve the off-screen text wrap. This fixes the problem but
+	 * results no no linebreak at all: white-space:nowrap; */
 }
 
 /* control styles */
