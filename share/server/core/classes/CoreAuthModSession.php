@@ -181,11 +181,7 @@ class CoreAuthModSession extends CoreAuthModule {
 		// Validate data
 		$this->REALAUTH->passCredentials($aCredentials);
 		
-		if($this->REALAUTH->isAuthenticated($bTrustUsername)) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->REALAUTH->isAuthenticated($bTrustUsername);
 	}
 	
 	public function getUser() {
