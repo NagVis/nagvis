@@ -3,6 +3,7 @@
 Frontend
   * Bugfix: Fixed php error when using custom css files in maps
   * Bugfix: Reverted line wrapping fixt for labels/textboxes from 1.5.7
+  * Bugfix: Fixed transparent authentication on pages which require no authorisation
 
 1.5.7
 
