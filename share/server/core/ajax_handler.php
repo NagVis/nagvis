@@ -118,28 +118,27 @@ try {
 	*                  If not redirect to Msg/401 (Unauthorized) page
 	*/
 
-	// Only check modules which should have authorisation checks
-	// This are all modules excluded some core things
-	if($MODULE->actionRequiresAuthorisation()) {
-		// Only proceed with authenticated users
-		if($AUTH->isAuthenticated()) {
+	if($UHANDLER->get('mod') != $CORE->getMainCfg()->getValue('global', 'logonmodule')
+	   && $AUTH->isAuthenticated()) {
+			// Only check modules which should have authorisation checks
+			// This are all modules excluded some core things
 			// Check if the user is permited to access this (module, action, object)
-			$MODULE->isPermitted();
-		} else {
-			// At the moment the login at ajax_handler is only possible via env auth.
-			// Should be enough for the moment
-			$MHANDLER = new CoreModuleHandler($CORE);
-			$MHANDLER->regModule('LogonEnv');
-			$MODULE = $MHANDLER->loadModule('LogonEnv');
-			$MODULE->beQuiet();
-			$MODULE->setAction('view');
+			if($MODULE->actionRequiresAuthorisation())
+				$MODULE->isPermitted();
+	} else {
+		// At the moment the login at ajax_handler is only possible via env auth.
+		// Should be enough for the moment
+		$MHANDLER = new CoreModuleHandler($CORE);
+		$MHANDLER->regModule('LogonEnv');
+		$MODULE = $MHANDLER->loadModule('LogonEnv');
+		$MODULE->beQuiet();
+		$MODULE->setAction('view');
 
-			// Try to auth using the environment auth
-			if($MODULE->handleAction() === false) {
-				// When not authenticated show error message
-				new GlobalMessage('ERROR', $CORE->getLang()->getText('You are not authenticated'),
-		                                      null, $CORE->getLang()->getText('Access denied'));
-			}
+		// Try to auth using the environment auth
+		if($MODULE->handleAction() === false) {
+			// When not authenticated show error message
+			new GlobalMessage('ERROR', $CORE->getLang()->getText('You are not authenticated'),
+	                                      null, $CORE->getLang()->getText('Access denied'));
 		}
 	}
 

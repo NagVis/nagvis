@@ -112,18 +112,18 @@ try {
 	*                  If not redirect to Msg/401 (Unauthorized) page
 	*/
 
-	// Only check modules which should have authorisation checks
-	// This are all modules excluded some core things
-	if($MODULE->actionRequiresAuthorisation()) {
-		// Only proceed with authenticated users
-		if($AUTH->isAuthenticated()) {
-			// Check if the user is permited to access this (module, action, object)
+	// Only proceed with authenticated users
+	if($UHANDLER->get('mod') != $CORE->getMainCfg()->getValue('global', 'logonmodule')
+	   && $AUTH->isAuthenticated()) {
+		// Only check modules which should have authorisation checks
+		// This are all modules excluded some core things
+		// Check if the user is permited to access this (module, action, object)
+		if($MODULE->actionRequiresAuthorisation())
 			$MODULE->isPermitted();
-		} else {
-			// When not authenticated redirect to logon dialog
-			$MODULE = $MHANDLER->loadModule($CORE->getMainCfg()->getValue('global', 'logonmodule'));
-			$UHANDLER->set('act', 'view');
-		}
+	} else {
+		// When not authenticated redirect to logon dialog
+		$MODULE = $MHANDLER->loadModule($CORE->getMainCfg()->getValue('global', 'logonmodule'));
+		$UHANDLER->set('act', 'view');
 	}
 
 	/*
