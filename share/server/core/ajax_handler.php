@@ -119,7 +119,7 @@ try {
 	*/
 
 	if($UHANDLER->get('mod') != $CORE->getMainCfg()->getValue('global', 'logonmodule')
-	   && $AUTH->isAuthenticated()) {
+	   && ($UHANDLER->get('mod') == 'Auth' || $AUTH->isAuthenticated())) {
 			// Only check modules which should have authorisation checks
 			// This are all modules excluded some core things
 			// Check if the user is permited to access this (module, action, object)
