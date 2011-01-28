@@ -121,9 +121,9 @@ function hoverShow(x, y, id) {
 	if(!hoverPosAndSizeOk) {
 		// First reposition by real size or by min width
 		if(hoverMenu.clientWidth < minWidth)
-			hoverMenu.style.left = hoverLeft - minWidth - hoverSpacer + 'px';
+			hoverMenu.style.left = (x - minWidth - hoverSpacer) + 'px';
 		else
-			hoverMenu.style.left = (hoverLeft - hoverMenu.clientWidth - hoverSpacer) + 'px';
+			hoverMenu.style.left = (x - hoverMenu.clientWidth - hoverSpacer) + 'px';
 
 		if(hoverMenuInScreen(hoverMenu, hoverSpacer)) {
 			hoverPosAndSizeOk = true;
