@@ -344,14 +344,24 @@ class WuiViewMapAddModify {
 								$sSelected = '';
 							}
 							
-							$ret .= "<script type='text/Javascript'>getObjects('".$backendId."','".preg_replace('/_name/i','',$propname)."','".$propname."','".$sSelected."');</script>";
-							if($sSelected != '' && in_array('service_description', $this->MAPCFG->getValidTypeKeys($this->aOpts['type']))) {
-								$ret .= "<script type='text/Javascript'>getObjects('".$backendId."', '".$this->aOpts['type']."', 'service_description','".$this->MAPCFG->getValue($this->aOpts['id'], 'service_description', TRUE)."', '".$sSelected."');</script>";
+							// getObject params:
+							// 1. backend_id to use
+							// 2. object type to ask for
+							// 3. field name to fill
+							// 4. The value to select while filling the list (When it can not be found -> change to text field)
+							// 5. Filter name1 to use while asking the backend
+
+							// Fill the *_name list
+							$ret .= "<script type='text/Javascript'>getObjects('".$backendId."', '".preg_replace('/_name/i', '', $propname)."', '".$propname."', '".$sSelected."');</script>";
+
+							// When this is a service fill the service_description field
+							if($sSelected != '' && $propname == 'host_name' && $this->aOpts['type'] == 'service') { 
+								$ret .= "<script type='text/Javascript'>getObjects('".$backendId."', '".$this->aOpts['type']."', 'service_description', '".$this->MAPCFG->getValue($this->aOpts['type'], $this->aOpts['id'], 'service_description', true)."', '".$sSelected."');</script>";
 							}
 							
 							if($propname == 'host_name') {
 								if($this->aOpts['type'] == 'service') {
-									$onChange = "getObjects(document.getElementById('backend_id').value,'".$this->aOpts['type']."','service_description','".$sSelected."', this.value);validateMapConfigFieldValue(this)";
+									$onChange = "getObjects(document.getElementById('backend_id').value, '".$this->aOpts['type']."', 'service_description', '', this.value);validateMapConfigFieldValue(this)";
 								} else {
 									$onChange = 'validateMapConfigFieldValue(this)';
 								}
