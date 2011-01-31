@@ -1,5 +1,8 @@
 1.5.8
 
+Core
+  * Bugfix: Fixed wrong spelled var in general module action processing code
+
 Frontend
   * Bugfix: Fixed php error when using custom css files in maps
   * Bugfix: Reverted line wrapping fix for labels/textboxes from 1.5.7
