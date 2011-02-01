@@ -37,7 +37,7 @@ define('MATCH_STRING_PATH', '/^[0-9a-z\s\_\.\-\/\\\]+$/i');
 define('MATCH_STRING_URL', '/^[0-9a-z\s\:\+\[\]\(\)\=\%\?\&\_\,\.\-\#\@\=\/\\\]+$/i');
 define('MATCH_STRING_URL_EMPTY', '/^[0-9a-z\s\:\+\[\]\(\)\=\%\?\&\_\,\.\-\#\@\=\/\\\]*$/i');
 define('MATCH_GADGET_OPT', '/^[0-9a-z\s\:\+\[\]\(\)\_\.\,\-\&\?\!\#\@\=\/\\\%]+$/i');
-define('MATCH_STRING_STYLE', '/^[0-9a-z\:\;\-\+\%]*$/i');
+define('MATCH_STRING_STYLE', '/^[0-9a-z\:\;\-\+\%\#]*$/i');
 
 define('MATCH_INTEGER', '/^[0-9]+$/');
 define('MATCH_INTEGER_EMPTY', '/^[0-9]*$/');
