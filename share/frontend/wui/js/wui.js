@@ -392,10 +392,18 @@ function saveObjectAfterMoveAndDrop(oObj) {
 		
 		// Handle relative and absolute aligned labels
 		if(align === 'rel') {
-			// Calculate relative coordinates
-			var objX = pxToInt(document.getElementById('box_'+type+'_'+id).style.left);
-			var objY = pxToInt(document.getElementById('box_'+type+'_'+id).style.top);
-			
+			var objX, objY;
+			var oLine = document.getElementById('line_'+type+'_'+id);
+			if(oLine) {
+				objX = document.getElementById('line_'+type+'_'+id).startX;
+				objY = document.getElementById('line_'+type+'_'+id).startY;
+				oLine = null;
+			} else {	
+				// Calculate relative coordinates
+				objX = pxToInt(document.getElementById('box_'+type+'_'+id).style.left);
+				objY = pxToInt(document.getElementById('box_'+type+'_'+id).style.top);
+			}
+
 			// +3: Is the borderWidth of the object highlighting.
 			// The header menu height is not needed when calculating relative coords
 			x = oObj.x - objX + borderWidth;
