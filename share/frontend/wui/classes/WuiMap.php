@@ -302,11 +302,14 @@ class WuiMap extends GlobalMap {
 			$y = $y1;
 		}
 		
-		$ret .= "var ".$lineId." = new jsGraphics('line_".$obj['type']."_".$obj['id']."');";
-		$ret .= $lineId.".setColor('#FF0000');";
-		$ret .= $lineId.".setStroke(1);";
-		$ret .= $lineId.".drawLine(".($x1-$x).",".($y1-$y).",".($x2-$x).",".($y2-$y).");";
-		$ret .= $lineId.".paint();";
+		$ret .= "var ".$lineId." = new jsGraphics('line_".$obj['type']."_".$obj['id']."');\n";
+		$ret .= $lineId.".setColor('#FF0000');\n";
+		$ret .= $lineId.".setStroke(1);\n";
+		$ret .= $lineId.".drawLine(".($x1-$x).",".($y1-$y).",".($x2-$x).",".($y2-$y).");\n";
+		$ret .= $lineId.".paint();\n";
+		$ret .= "var o = document.getElementById('line_".$obj['type']."_".$obj['id']."')\n";
+		$ret .= "o.startX = ".$x1.";\n";
+		$ret .= "o.startY = ".$y1.";\n";
 		
 		return '<div style="position:absolute;top:0px;left:0px" id="line_'.$obj['type'].'_'.$obj['id'].'"></div>'.$this->parseJs($ret);
 	}

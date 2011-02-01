@@ -13,6 +13,7 @@ Frontend
 WUI
   * Bugfix: Fixed hostname filled in service dropdown menu when editing a
     service object
+  * Bugfix: Fixed dragging relative labels of line objects in WUI
 
 1.5.7
 
