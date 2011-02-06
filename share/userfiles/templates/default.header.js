@@ -44,22 +44,29 @@ function headerDraw() {
 
 function headerToggle(store) {
 	var header = document.getElementById('header');
+	var spacer = document.getElementById('headerspacer');
 	var show   = document.getElementById('headershow');
 	var state = true;
 
 	if(header.style.display === '') {
 		header.style.display = 'none';
+		spacer.style.display = 'none';
 		show.style.display   = 'block';
 		state = false;
 	} else {
 		header.style.display = '';
+		spacer.style.display = '';
 		show.style.display   = 'none';
 	}
+	
+	// Reset the header height cache
+	cacheHeaderHeight    = null;
 
 	if(store === true)
 		storeUserOption('header', state);
 	
 	show   = null;
+	spacer = null;
 	header = null;
 }
 
