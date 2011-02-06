@@ -405,7 +405,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
 		if(count($filters) == 1 && $filters[0]['key'] == 'host_name' && $filters[0]['op'] == '=') {
 			foreach($objects AS $OBJS) {
 				$name = $OBJS[0]->getName();
-				$arrReturn[$name] = $this->obj['host'][$name];
+				if(isset($this->obj['host'][$name]))
+					$arrReturn[$name] = $this->obj['host'][$name];
 			}
 		} elseif(count($filters) == 1 && $filters[0]['key'] == 'host_groups' && $filters[0]['op'] == '>=') {
 			foreach($objects AS $OBJS) {
@@ -507,13 +508,14 @@ class GlobalBackendTest implements GlobalBackendInterface {
 			foreach($objects AS $OBJS) {
 				$name = $OBJS[0]->getName();
 				$aReturn[$name] = Array('counts' => $this->serviceStates);
-				foreach($this->obj['service'][$name] AS $service) {
-					if($service['problem_has_been_acknowledged'] == 1)
-						$aReturn[$name]['counts'][$service['state']]['ack']++;
-					elseif($service['in_downtime'] == 1)
-						$aReturn[$name]['counts'][$service['state']]['downtime']++;
-					else
-						$aReturn[$name]['counts'][$service['state']]['normal']++;
+				if(isset($this->obj['service'][$name]))
+					foreach($this->obj['service'][$name] AS $service) {
+						if($service['problem_has_been_acknowledged'] == 1)
+							$aReturn[$name]['counts'][$service['state']]['ack']++;
+						elseif($service['in_downtime'] == 1)
+							$aReturn[$name]['counts'][$service['state']]['downtime']++;
+						else
+							$aReturn[$name]['counts'][$service['state']]['normal']++;
 				}
 			}
 		} elseif(count($filters) == 1 && $filters[0]['key'] == 'host_groups' && $filters[0]['op'] == '>=') {
