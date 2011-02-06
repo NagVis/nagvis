@@ -32,7 +32,10 @@ class CoreUserCfg {
 	private $profilesDir;
 
 	// Optional list of value types to be fixed
-	private $types = Array('sidebar' => 'i');
+	private $types = Array(
+	  'sidebar' => 'i',
+	  'header'  => 'b',
+	);
 
 	/**
 	 * Class Constructor
@@ -110,9 +113,12 @@ class CoreUserCfg {
 	private function fixType($val, $type) {
 		if($type == 'i')
 			return (int) $val;
-		elseif($type == 'b')
-			return (bool) $val;
-		else
+		elseif($type == 'b') {
+			if($val == '1' || $val === 'true')
+				return true;
+			else
+				return false;
+		} else
 			return $val;
 	}
 }

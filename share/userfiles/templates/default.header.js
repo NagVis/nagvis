@@ -32,6 +32,37 @@
 var DDSPEED = 10;
 var DDTIMER = 15;
 
+function headerDraw() {
+	scaleView();
+
+	if(!oUserProperties)
+		return;
+
+	if(typeof(oUserProperties.header) !== 'undefined' && oUserProperties.header === false)
+    headerToggle(false);
+}
+
+function headerToggle(store) {
+	var header = document.getElementById('header');
+	var show   = document.getElementById('headershow');
+	var state = true;
+
+	if(header.style.display === '') {
+		header.style.display = 'none';
+		show.style.display   = 'block';
+		state = false;
+	} else {
+		header.style.display = '';
+		show.style.display   = 'none';
+	}
+
+	if(store === true)
+		storeUserOption('header', state);
+	
+	show   = null;
+	header = null;
+}
+
 // Hide the given menus instant
 function ddMenuHide(aIds) {
 	var h;

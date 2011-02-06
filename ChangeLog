@@ -58,6 +58,7 @@ Frontend
   * Made background color in frontend configurable now
   * The header menu has a minimal width now to prevent broken header menu on small screens
   * The header menu is now positioned to be shown on the screen all the time
+  * Added buttons to show/hide the header menu (state saved per user)
   * Bugfix: Fixed ack/downtime icons for hostsgroup with acked or downtime service problems
   * Bugfix: Added missing state colors to multisite map listing (Thanks to BMuc)
   * Bugfix: Acks/downtimes of problems were not recognized by background

@@ -44,6 +44,7 @@ img {border:0}
 /* Global DIVs */
 .main {margin:0;padding:0;background-color:white;color:black}
 .header {position:fixed;top:0;left:0;padding:0;z-index:100;min-width:700px;}
+#headershow {display:none}
 .headerspacer {width:100%}
 .map {position:relative;top:0;left:0}
 
@@ -513,7 +514,11 @@ td#popupWindowContent fieldset.form label {
 	font-size: 0.6em;
 	height: 31px;
 	width: 100%;
-	background: url('../images/templates/default.header.png');
+	background-image: url('../images/templates/default.header.png');
+}
+
+#headershow {
+	background-image: none;
 }
 
 .header ul.head {
