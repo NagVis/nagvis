@@ -1472,6 +1472,9 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 		LINE="Restoring custom automap configuration files..."
 		copy "\/(__automap\.cfg)$" "etc/automaps" "automap configuration files"
 	
+		LINE="Restoring user configuration files..."
+		copy "" "etc/profiles" "user configuration files"
+	
 		LINE="Restoring custom map images..."
 		copy "\/nagvis-demo\.png$" "$USERFILES_DIR/images/maps" "map image files"
 	
