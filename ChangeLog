@@ -56,8 +56,10 @@ Frontend
   * Reduced ajax calls on map/automap/overview page load
   * Several code cleanups; Reduced duplicate code
   * Made background color in frontend configurable now
+  * The header menu has a minimal width now to prevent broken header menu on small screens
+  * The header menu is now positioned to be shown on the screen all the time
   * Bugfix: Fixed ack/downtime icons for hostsgroup with acked or downtime service problems
-  * Bugifx: Added missing state colors to multisite map listing (Thanks to BMuc)
+  * Bugfix: Added missing state colors to multisite map listing (Thanks to BMuc)
   * Bugfix: Acks/downtimes of problems were not recognized by background
     highlighting
   * Bugfix: Weathermap lines with traffic amount label display MBits as GB

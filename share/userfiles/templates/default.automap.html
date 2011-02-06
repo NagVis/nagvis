@@ -12,8 +12,9 @@ oStates = {$stateProperties};
 oAutomapParams = {$automapParams};
 
 // Kick of the worker
-addDOMLoadEvent(function()\{runWorker(0, 'automap', '{$mapName}')});
+addDOMLoadEvent(function()\{runWorker(0, 'automap', '{$mapName}');});
 
 // This disables the context menu when someone clicked anywhere on the map
 document.onmousedown = contextMouseDown;
+window.onresize = function() { scaleView(); }
 </script>

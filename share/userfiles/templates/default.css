@@ -43,7 +43,8 @@ img {border:0}
 
 /* Global DIVs */
 .main {margin:0;padding:0;background-color:white;color:black}
-.header {top:0;left:0;padding:0}
+.header {position:fixed;top:0;left:0;padding:0;z-index:100;min-width:700px;}
+.headerspacer {width:100%}
 .map {position:relative;top:0;left:0}
 
 /* Welcome page */
