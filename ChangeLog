@@ -11,8 +11,6 @@ Core
       two arrows
     * Better handling for map config errors on overview page and map links -
       no whole screen errors anymore
-  * Refactored map configuration parsing code
-  * Reimplemented maintenance mode: in_maintenance=1 is working again
   * The check_command parameter is available in NagVis now. NDO and
     MKLivestatus backends fetch this info from the datasources now
   * Hostgroup and Servicegroup aliases work again now. It might be neccessary
@@ -24,13 +22,10 @@ Core
   * Changed PENDING state for host objects to UNCHECKED; This was needed to
     prevent mixups with service and host objects
   * Fixed inconsistence with iconsets when refreshing overview maps/automaps
-  * Bugfix: SQLite Update problem while updating from 1.5b1-1.5b3 to 1.5.4/1.5.5
-  * Bugfix: Fixed configuration file cache when using multiple main config files
   * Bugfix: The installer overwrites the default iconset files on upgrade as expected
 
 Automap
   * Made automap coord parsing regex resistent against html entities in the URL
-  * Hiding deprecated maxLayers option from modify view dialog
   * Automap params changed via GUI can be made permanent now
   * The x/y coords don't need to be set as dummy values in automap configs anymore
 
@@ -59,30 +54,4 @@ Frontend
   * The header menu has a minimal width now to prevent broken header menu on small screens
   * The header menu is now positioned to be shown on the screen all the time
   * Added buttons to show/hide the header menu (state saved per user)
-  * Bugfix: Fixed ack/downtime icons for hostsgroup with acked or downtime service problems
-  * Bugfix: Added missing state colors to multisite map listing (Thanks to BMuc)
-  * Bugfix: Acks/downtimes of problems were not recognized by background
-    highlighting
-  * Bugfix: Weathermap lines with traffic amount label display MBits as GB
-  * Bugfix: Weathermap line labels show 'null' when usage is at 0%
-  * Bugfix: Fixed problem in JSON Response processing for getObjectStates
-  * Bugfix: Fixed header submenu top offset in Internet Explorer
-  * Bugfix: Fixed hover menu positioning out of the screen
-  * Bugfix: Minor javascript fixes during object reload
-  * Bugfix: Fixed showmaps,showautomaps,... option usage on overview page
-  * Bugfix: Fixed search dialog access when using explicit permissions
-  * Bugfix: Fixed line wrapping of labels/textboxes when positioned out of screen
   * Bugfix: Fixed php error when using custom css files in maps
-
-WUI
-  * Bugfix: Deleting more than two objects was not working correctly
-  * Bugfix: Lines did reposition on mouseover in WUI by the height of the highlight 
-    border width
-  * Bugfix: The dropdown box for shapes was not shown up when there was at least one
-    shape with an url as icon
-  * Bugfix: Fixed problem resetting hover_url to empty value in add/modify dialog
-  * Bugfix: Inconsistency between textbox style attribute usage in frontend and WUI
-  * Bugfix: Relative label coordinates were calculated wrong when moving objects
-  * The textbox height is now set correctly when creating a new textbox
-  * Preventing damaged map cfg due to textbox resizing in IE (only happens in
-    some rare cases)
