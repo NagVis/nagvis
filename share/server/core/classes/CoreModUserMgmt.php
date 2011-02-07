@@ -129,8 +129,7 @@ class CoreModUserMgmt extends CoreModule {
 	}
 
 	protected function doPwReset($a) {
-		$SHANDLER = new CoreSessionHandler();
-		if($SHANDLER->isSetAndNotEmpty('authTrusted'))
+		if($this->AUTHENTICATION->authedTrusted())
 			return false;
 		return $this->AUTHENTICATION->resetPassword($a['userId'], $a['password1']);
 	}

@@ -31,8 +31,8 @@
 class CoreSessionHandler {
 		
 	public function __construct() {
-		$sDomain = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookiedomain');
-		$sPath = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookiepath');
+		$sDomain   = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookiedomain');
+		$sPath     = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookiepath');
 		$iDuration = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookieduration');
 		
 		// Set the session name (used in params/cookie names)
@@ -40,9 +40,8 @@ class CoreSessionHandler {
 		
 		// Only add the domain when it is no simple hostname
 		// This can be easily detected searching for a dot
-		if(strpos($sDomain, '.') === false) {
+		if(strpos($sDomain, '.') === false)
 			$sDomain = null;
-		}
 		
 		// Set custom params for the session cookie
 		session_set_cookie_params(0, $sPath, $sDomain);
@@ -79,11 +78,7 @@ class CoreSessionHandler {
 	}
 	
 	public function isSetAndNotEmpty($sKey) {
-		if(isset($_SESSION[$sKey]) && $_SESSION[$sKey] != '') {
-			return true;
-		} else {
-			return false;
-		}
+		return isset($_SESSION[$sKey]) && $_SESSION[$sKey] != '';
 	}
 	
 	public function get($sKey) {

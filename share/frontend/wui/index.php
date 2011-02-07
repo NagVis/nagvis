@@ -68,7 +68,8 @@ try {
 	*                   If that fails use the configured login method
 	*/
 
-	$AUTH = new CoreAuthHandler($CORE, $SHANDLER, 'CoreAuthModSession');
+	$AUTH = new CoreAuthHandler($CORE, $SHANDLER,
+	                   $CORE->getMainCfg()->getValue('global','authmodule'));
 
 	/*
 	* Authorisation 1: Collect and save the permissions when the user is logged in

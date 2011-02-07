@@ -39,7 +39,6 @@ class CoreModChangePassword extends CoreModule {
 		                        'change' => REQUIRES_AUTHORISATION);
 		
 		$this->FHANDLER = new CoreRequestHandler($_POST);
-		$this->SHANDLER = new CoreSessionHandler();
 	}
 	
 	public function handleAction() {
@@ -53,7 +52,7 @@ class CoreModChangePassword extends CoreModule {
 				case 'view':
 					// Check if user is already authenticated
 					// Change password must be denied when using trusted mode
-					if(isset($this->AUTHENTICATION) && $this->AUTHENTICATION->isAuthenticated() && !$this->SHANDLER->isSetAndNotEmpty('authTrusted')) {
+					if(isset($this->AUTHENTICATION) && $this->AUTHENTICATION->isAuthenticated() && !$this->AUTHENTICATION->authedTrusted()) {
 						$VIEW = new NagVisViewChangePassword($this->CORE);
 						$sReturn = json_encode(Array('code' => $VIEW->parse()));
 					} else {
@@ -63,7 +62,7 @@ class CoreModChangePassword extends CoreModule {
 				case 'change':
 					// Check if user is already authenticated
 					// Change password must be denied when using trusted mode
-					if(isset($this->AUTHENTICATION) && $this->AUTHENTICATION->isAuthenticated() && !$this->SHANDLER->isSetAndNotEmpty('authTrusted')) {
+					if(isset($this->AUTHENTICATION) && $this->AUTHENTICATION->isAuthenticated() && !$this->AUTHENTICATION->authedTrusted()) {
 						$aReturn = $this->handleResponseChangePassword();
 						
 						if($aReturn !== false) {

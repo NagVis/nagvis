@@ -57,11 +57,11 @@ try {
 	$SHANDLER = new CoreSessionHandler();
 
 	/*
-	* Authentication 1: First try to use an existing session
-	*                   If that fails use the configured login method
-	*/
+	 * Authentication 1: Try to authenticate the user
+	 */
 
-	$AUTH = new CoreAuthHandler($CORE, $SHANDLER, 'CoreAuthModSession');
+	$AUTH = new CoreAuthHandler($CORE, $SHANDLER,
+	                   $CORE->getMainCfg()->getValue('global','authmodule'));
 
 	/*
 	* Authorisation 1: Collect and save the permissions when the user is logged in
