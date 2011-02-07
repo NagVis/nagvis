@@ -22,6 +22,7 @@ Core
   * Changed PENDING state for host objects to UNCHECKED; This was needed to
     prevent mixups with service and host objects
   * Fixed inconsistence with iconsets when refreshing overview maps/automaps
+  * Cleaned up session auth code (Moved session module code to auth handler)
   * Bugfix: The installer overwrites the default iconset files on upgrade as expected
 
 Automap
