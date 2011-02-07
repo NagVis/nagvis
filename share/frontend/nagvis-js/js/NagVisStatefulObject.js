@@ -828,6 +828,44 @@ var NagVisStatefulObject = NagVisObject.extend({
 		container.style.left = this.parseCoord(this.conf.x, 'x') + 'px';
 		container = null;
 	},
+
+	/**
+	 * Moves the label of the object
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	moveLabel: function () {
+		var label  = document.getElementById(this.conf.object_id + '-label');
+		var coords = this.getLabelPos();
+		label.style.top  = coords[1] + 'px';
+		label.style.left = coords[0] + 'px';
+		coords = null;
+		label  = null;
+	},
+
+	/**
+	 * Calculates and returns the positions of the objects label
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	getLabelPos: function () {
+		var x = this.conf.label_x,
+		    y = this.conf.label_y;
+
+		// If there is a presign it should be relative to the objects x/y
+		if(this.conf.label_x && this.conf.label_x.toString().match(/^(?:\+|\-)/)) 
+			x = this.parseCoord(this.conf.x, 'x') + parseFloat(this.conf.label_x);
+		if(this.conf.label_y && this.conf.label_y.toString().match(/^(?:\+|\-)/))
+			y = this.parseCoord(this.conf.y, 'y') + parseFloat(this.conf.label_y);
+		
+		// If no x/y coords set, fallback to object x/y
+		if(!this.conf.label_x || this.conf.label_x === '' || this.conf.label_x === '0')
+			x = this.parseCoord(this.conf.x, 'x');
+		if(!this.conf.label_y || this.conf.label_y === '' || this.conf.label_y === '0')
+			y = this.parseCoord(this.conf.y, 'y');
+
+		return [ x, y ];
+	},
 	
 	/**
 	 * Parses the HTML-Code of a label
@@ -836,27 +874,10 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	parseLabel: function () {
-		var oLabelDiv;
-		
-		// If there is a presign it should be relative to the objects x/y
-		if(this.conf.label_x && this.conf.label_x.toString().match(/^(?:\+|\-)/)) {
-			this.conf.label_x = this.parseCoord(this.conf.x, 'x') + parseFloat(this.conf.label_x);
-		}
-		if(this.conf.label_y && this.conf.label_y.toString().match(/^(?:\+|\-)/)) {
-			this.conf.label_y = this.parseCoord(this.conf.y, 'y') + parseFloat(this.conf.label_y);
-		}
-		
-		// If no x/y coords set, fallback to object x/y
-		if(!this.conf.label_x || this.conf.label_x === '' || this.conf.label_x === '0') {
-			this.conf.label_x = this.parseCoord(this.conf.x, 'x');
-		}
-		if(!this.conf.label_y || this.conf.label_y === '' || this.conf.label_y === '0') {
-			this.conf.label_y = this.parseCoord(this.conf.y, 'y');
-		}
-
+		var coords = this.getLabelPos();
 		return drawNagVisTextbox(this.conf.object_id + '-label', 'object_label',
 		                         this.conf.label_background, this.conf.label_border,
-		                         this.conf.label_x, this.conf.label_y, this.conf.z,
+		                         coords[0], coords[1], this.conf.z,
 		                         this.conf.label_width, '', this.replaceLabelTextDynamicMacros(),
 		                         this.conf.label_style);
 	},
@@ -945,6 +966,11 @@ var NagVisStatefulObject = NagVisObject.extend({
 		else
 			this.moveIcon();
 
+		// Move the objects label when enabled
+		if(this.conf.label_show && this.conf.label_show == '1')
+			this.moveLabel();
+
+		// Move child objects
 		for(var i = 0, l = this.childs.length; i < l; i++)
 			this.childs[i].reposition();
 
