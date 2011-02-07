@@ -302,7 +302,7 @@ function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, col
 			if(isset(perfdata[1]) && isset(perfdata[1][1]) && isset(perfdata[1][2]))
 				perfdataA = perfdata[1][1] + perfdata[1][2];
 			drawArrow(objectId, 2, xEnd, yEnd, xMid, yMid, z, width, colorFill2, colorBorder);
-      drawLinkOrLabel(objectId, 2, lineType, imiddle(xEnd, xMid, cutOut), middle(yEnd, yMid, cutOut), z, perfdataA, perfdataB, bLinkArea, bLabelShow);
+      drawLinkOrLabel(objectId, 2, lineType, middle(xEnd, xMid, cutOut), middle(yEnd, yMid, cutOut), z, perfdataA, perfdataB, bLinkArea, bLabelShow);
 			break;
 		case '14':
 			// -%+BW-><-%+BW- lines
