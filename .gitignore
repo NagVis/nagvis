@@ -1,5 +1,6 @@
 # Exclude misc files
 *.bak
+*.swp
 *~
 .metadata
 uifx/.settings
