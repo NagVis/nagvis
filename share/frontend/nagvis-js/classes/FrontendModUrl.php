@@ -3,7 +3,7 @@
  *
  * FrontendModUrl.php - Module for handling external urls in NagVis
  *
- * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

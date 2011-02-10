@@ -4,7 +4,7 @@
  * GlobalBackendndomy.php - backend class for handling object and state 
  *                           information stored in the NDO database.
  *
- * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

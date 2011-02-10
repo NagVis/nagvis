@@ -5,7 +5,7 @@
  *                 Michael Mahemoff. For details take a look at the bottom of
  *                 this file.
  *
- * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
  *****************************************************************************/
  
 

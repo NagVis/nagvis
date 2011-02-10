@@ -2,7 +2,7 @@
  *
  * ajax.js - Functions for handling NagVis Ajax requests
  *
- * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

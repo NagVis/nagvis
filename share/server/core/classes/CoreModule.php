@@ -3,7 +3,7 @@
  *
  * CoreModule.php - Abstract definition of a core module
  *
- * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

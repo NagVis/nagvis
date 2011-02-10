@@ -4,7 +4,7 @@
  * WuiForm.php - Class for managing the common form. Should be used by ALL
  *               pages of NagVis and WUI where HTML-forms are used
  *
- * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

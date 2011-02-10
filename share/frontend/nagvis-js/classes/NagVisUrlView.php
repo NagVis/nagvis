@@ -3,7 +3,7 @@
  *
  * NagVisUrlView.php - Class for parsing the NagVis urls in nagvis-js frontend
  *
- * Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
