@@ -112,6 +112,10 @@ class CoreAuthHandler {
 	public function authedTrusted() {
 		return $this->SESS->isSetAndNotEmpty('authTrusted');
 	}
+
+	public function getLogonModule() {
+		return $this->SESS->get('logonModule');
+	}
 	
 	public function changePassword() {
 		// FIXME: First check if the auth module supports this mechanism
@@ -152,7 +156,7 @@ class CoreAuthHandler {
 		// When the user authenticated in trust mode read it here and override
 		// the value handed over with the function call.
 		// The isAuthentication() function will then only check if the user exists.
-		if($this->authedTrusted());
+		if($this->authedTrusted())
 			$bTrustUsername = AUTH_TRUST_USERNAME;
 		
 		// Ask the module

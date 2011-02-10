@@ -81,9 +81,11 @@ class NagVisInfoView {
 			'logonEnvVal' => (isset($_SERVER[$this->CORE->getMainCfg()->getValue('global', 'logonenvvar')]) ? $_SERVER[$this->CORE->getMainCfg()->getValue('global', 'logonenvvar')] : ''),
 			'logonEnvCreateUser' => $this->CORE->getMainCfg()->getValue('global', 'logonenvcreateuser'),
 			'logonEnvCreateRole' => $this->CORE->getMainCfg()->getValue('global', 'logonenvcreaterole'),
-			'loggedIn' => $userName.' ('.$userId.')',
-			'userRoles' => json_encode($userRoles),
-			'userPerms' => json_encode($userPerms),
+			'loggedIn'           => $userName.' ('.$userId.')',
+			'userRoles'          => json_encode($userRoles),
+			'userPerms'          => json_encode($userPerms),
+			'userAuthModule'     => $AUTHENTICATION->getLogonModule(),
+			'userAuthTrusted'    => ($AUTHENTICATION->authedTrusted() ? "yes" : "no"),
 		);
 		
 		// Build page based on the template file and the data array
