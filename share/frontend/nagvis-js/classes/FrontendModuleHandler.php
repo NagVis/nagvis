@@ -26,8 +26,8 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class FrontendModuleHandler extends CoreModuleHandler {
-	public function __construct($CORE) {
-		parent::__construct($CORE);
+	public function __construct() {
+		parent::__construct();
 		
 		$this->sPrefix = 'FrontendMod';
 	}

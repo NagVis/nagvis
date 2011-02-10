@@ -75,4 +75,7 @@ function profilingFinalize($pre) {
 	$xhprof_runs = new XHProfRuns_Default();
 	$xhprof_runs->save_run(xhprof_disable(), 'nagvis-'.$pre);
 }
+
+// Start profiling now when configured to do so
+if (PROFILE) profilingStart();
 ?>

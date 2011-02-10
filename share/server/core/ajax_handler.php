@@ -84,7 +84,7 @@ try {
 	*/
 
 	// Load the module handler
-	$MHANDLER = new CoreModuleHandler($CORE);
+	$MHANDLER = new CoreModuleHandler();
 
 	// Register valid modules
 	// Unregistered modules can not be accessed

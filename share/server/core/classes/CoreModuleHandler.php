@@ -30,8 +30,11 @@ class CoreModuleHandler {
 	protected $aRegistered;
 	protected $sPrefix;
 	
-	public function __construct($CORE) {
-		$this->CORE = $CORE;
+	public function __construct($CORE = null) {
+	  if($CORE === null)
+			$this->CORE = GlobalCore::getInstance();
+		else
+			$this->CORE = $CORE;
 		
 		$this->aRegistered = Array();
 		$this->sPrefix = 'CoreMod';

@@ -237,11 +237,11 @@ class NagVisHeaderMenu {
 		$this->aMacros['permittedManageBackgrounds'] = $this->AUTHORISATION->isPermitted('ManageBackgrounds', 'manage', '*');
 		$this->aMacros['permittedManageMaps'] = $this->AUTHORISATION->isPermitted('Map', 'add', '*') && $this->AUTHORISATION->isPermitted('Map', 'edit', '*');
 		
-		$this->aMacros['currentUser'] = $this->AUTHORISATION->getAuthentication()->getUser();
+		$this->aMacros['currentUser'] = $this->CORE->getAuthentication()->getUser();
 		
 		$this->aMacros['permittedChangePassword'] = $this->AUTHORISATION->isPermitted('ChangePassword', 'change', '*');
 		
-		$this->aMacros['permittedLogout'] = $this->AUTHORISATION->getAuthentication()->logoutSupported()
+		$this->aMacros['permittedLogout'] = $this->CORE->getAuthentication()->logoutSupported()
                                         & $this->AUTHORISATION->isPermitted('Auth', 'logout', '*');
 		
 		// Replace some special macros
@@ -328,7 +328,7 @@ class NagVisHeaderMenu {
 			'langAutomapToMap' => $this->CORE->getLang()->getText('Export to Map'),
 			'langModifyAutomapParams' => $this->CORE->getLang()->getText('Modify Automap view'),
 			// Supported by backend and not using trusted auth
-			'supportedChangePassword' => $this->AUTHORISATION->getAuthentication()->checkFeature('changePassword') && !$SHANDLER->isSetAndNotEmpty('authTrusted'),
+			'supportedChangePassword' => $this->CORE->getAuthentication()->checkFeature('changePassword') && !$this->CORE->getAuthentication()->authedTrusted(),
 			'permittedUserMgmt' => $this->AUTHORISATION->isPermitted('UserMgmt', 'manage'),
 			'permittedRoleMgmt' => $this->AUTHORISATION->isPermitted('RoleMgmt', 'manage'));
 		

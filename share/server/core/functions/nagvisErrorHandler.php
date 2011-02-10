@@ -49,6 +49,8 @@ function nagvisException($OBJ) {
 		}
 
 		die();
+	} catch(NagVisException $e) {
+		new GlobalMessage('ERROR', $e->getMessage());
 	} catch(Exception $e) {
 		echo "Error: Unexpected Problem in Exception Handler!: ". $e->getMessage();		
 		die();

@@ -21,6 +21,10 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  ******************************************************************************/
+ 
+/**
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
 
 // Include global defines
 require('../../server/core/defines/global.php');
@@ -36,121 +40,23 @@ require('../../server/core/functions/oldPhpVersionFixes.php');
 require('../../server/core/functions/nagvisErrorHandler.php');
 require('../../server/core/classes/CoreExceptions.php');
 
-if (PROFILE) profilingStart();
-
 // This defines whether the GlobalMessage prints HTML or ajax error messages
 define('CONST_AJAX' , FALSE);
 
-try {
-	// Initialize the core
-	$CORE = GlobalCore::getInstance();
+$CORE     = GlobalCore::getInstance();
+$MHANDLER = new FrontendModuleHandler();
+$_name    = 'nagvis-js';
+$_modules = Array(
+    'Info',
+    'Map',
+    'Url',
+    'AutoMap',
+    'Overview',
+    'Rotation',
+    $CORE->getMainCfg()->getValue('global', 'logonmodule')
+);
 
-	/*
-	* Url: Parse the url to know later what module and
-	*      action is called. The requested uri is splitted
-	*      into elements for later usage.
-	*/
-
-	$UHANDLER = new CoreUriHandler();
-
-	/*
-	* Session: Handle the user session
-	*/
-
-	$SHANDLER = new CoreSessionHandler();
-
-	/*
-	 * Authentication 1: Try to authenticate the user
-	 */
-
-	$AUTH = new CoreAuthHandler($CORE, $SHANDLER,
-	                   $CORE->getMainCfg()->getValue('global','authmodule'));
-
-	/*
-	* Authorisation 1: Collect and save the permissions when the user is logged in
-	*                  and nothing other is saved yet
-	*/
-
-	if($AUTH->isAuthenticated()) {
-		$AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH,
-			            $CORE->getMainCfg()->getValue('global', 'authorisationmodule'));
-		$AUTHORISATION->parsePermissions();
-	} else {
-		$AUTHORISATION = null;
-	}
-
-	// Make the AA information available to whole NagVis for permission checks
-	$CORE->setAA($AUTH, $AUTHORISATION);
-
-	/*
-	* Module handling 1: Choose modules
-	*/
-
-	// Load the module handler
-	$MHANDLER = new FrontendModuleHandler($CORE);
-
-	// Register valid modules
-	// Unregistered modules can not be accessed
-	$MHANDLER->regModule($CORE->getMainCfg()->getValue('global', 'logonmodule'));
-	$MHANDLER->regModule('Info');
-	$MHANDLER->regModule('Map');
-	$MHANDLER->regModule('Url');
-	$MHANDLER->regModule('AutoMap');
-	$MHANDLER->regModule('Overview');
-	$MHANDLER->regModule('Rotation');
-
-	// Load the module
-	$MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
-	if($MODULE == null)
-		new GlobalMessage('ERROR', $CORE->getLang()->getText('The module [MOD] is not known',
-			                                 Array('MOD' => htmlentities($UHANDLER->get('mod')))));
-	$MODULE->passAuth($AUTH, $AUTHORISATION);
-	$MODULE->setAction($UHANDLER->get('act'));
-	$MODULE->initObject();
-
-	/*
-	* Authorisation 2: Check if the user is permitted to use this module/action
-	*                  If not redirect to Msg/401 (Unauthorized) page
-	*/
-
-	// Only proceed with authenticated users
-	if($UHANDLER->get('mod') != $CORE->getMainCfg()->getValue('global', 'logonmodule')
-	   && $AUTH->isAuthenticated()) {
-		// Only check modules which should have authorisation checks
-		// This are all modules excluded some core things
-		// Check if the user is permited to access this (module, action, object)
-		if($MODULE->actionRequiresAuthorisation())
-			$MODULE->isPermitted();
-	} else {
-		// When not authenticated redirect to logon dialog
-		$MODULE = $MHANDLER->loadModule($CORE->getMainCfg()->getValue('global', 'logonmodule'));
-		$UHANDLER->set('act', 'view');
-	}
-
-	/*
-	* Module handling 2: Render the modules when permitted
-	*                    otherwise handle other pages
-	*/
-
-	// Handle regular action when everything is ok
-	// When no matching module or action is found show the 404 error
-	if($MODULE !== false && $MODULE->offersAction($UHANDLER->get('act'))) {
-		$MODULE->setAction($UHANDLER->get('act'));
-
-		// Handle the given action in the module
-		$sContent = $MODULE->handleAction();
-	} else {
-		// Create instance of msg module
-		new GlobalMessage('ERROR', $CORE->getLang()->getText('The given action is not valid'));
-	}
-} catch(NagVisException $e) {
-	new GlobalMessage('ERROR', $e->getMessage());
-}
-
-echo $sContent;
-if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
-if (PROFILE) profilingFinalize('nagvis-js-'.$UHANDLER->get('mod').'-'.$UHANDLER->get('act'));
-
+require('../../server/core/functions/index.php');
 exit(0);
 
 ?>
