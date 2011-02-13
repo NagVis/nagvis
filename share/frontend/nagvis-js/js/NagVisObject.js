@@ -437,6 +437,22 @@ var NagVisObject = Base.extend({
 		return l;
 	},
 
+	// Transform the current coords to relative
+	// coords to the given object
+	makeRelativeCoords: function(par) {
+		this.conf.x = this.getRelCoords(par, this.parseCoord(this.conf.x, 'x'), 'x', -1);
+		this.conf.y = this.getRelCoords(par, this.parseCoord(this.conf.y, 'y'), 'y', -1);
+	},
+
+	getRelCoords: function(refObj, val, dir, num) {
+		var refPos = num === -1 ? refObj.conf[dir] : refObj.conf[dir].split(',')[num];
+		var offset = val - refObj.parseCoord(refPos, dir);
+		var pre    = offset >= 0 ? '+' : '';
+		var val    = refObj.conf.object_id + '%' + pre + offset;
+		refObj     = null;
+		return val;
+	},
+
 	/**
 	 * Calculates new coordinates for the object where the given parameter
 	 * 'val' is the integer representing the current position of the object
@@ -463,13 +479,8 @@ var NagVisObject = Base.extend({
 
 			// Only an object id. Get the coordinate and return it
 			var refObj = getMapObjByDomObjId(objectId);
-			if(refObj) {
-				var refPos = num === -1 ? refObj.conf[dir] : refObj.conf[dir].split(',')[num];
-				var offset = val - refObj.parseCoord(refPos, dir);
-				var pre    = offset >= 0 ? '+' : '';
-				val = objectId + '%' + pre + offset;
-				refObj   = null;
-			}
+			if(refObj)
+				val = this.getRelCoords(refObj, val, dir, num);
 			objectId = null;
 		}
 		oldVal = null;
@@ -514,5 +525,7 @@ var NagVisObject = Base.extend({
 	addChild: function(obj) {
 		this.childs.push(obj);
 		obj = null;
-	}
+	},
+
+	highlight: function(show) {}
 });

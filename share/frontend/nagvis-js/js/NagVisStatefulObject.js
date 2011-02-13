@@ -985,7 +985,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * Important: This is called from an event handler
 	 * the 'this.' keyword can not be used here.
 	 */
-  moveObject: function(obj) {
+  moveObject: function(obj, par) {
 		var arr        = obj.id.split('-');
 		var objId      = arr[0];
 		var anchorType = arr[1];
@@ -995,6 +995,11 @@ var NagVisStatefulObject = NagVisObject.extend({
 		var viewType = getDomObjViewType(objId);
 
 		var jsObj = getMapObjByDomObjId(objId);
+
+		// When 'par' set transform the positioning from absolute to relative
+		// FIXME: How to change it back form relative to absolute?
+		if(isset(par))
+			jsObj.makeRelativeCoords(par);
 
 		if(viewType === 'line') {
 			newPos = getMidOfAnchor(obj);
@@ -1065,5 +1070,31 @@ var NagVisStatefulObject = NagVisObject.extend({
 
 		// redraw the line
 		this.drawLine();
+	},
+
+	highlight: function(show) {
+		// FIXME: Highlight lines in the future too
+		if(this.conf.view_type !== 'icon')
+			return;
+
+		var oObjIcon = document.getElementById(this.conf.object_id + '-icon');
+		var oObjIconDiv = document.getElementById(this.conf.object_id + '-icondiv');
+		
+		var sColor = oStates[this.conf.summary_state].color;
+
+		this.bIsFlashing = show;
+		if(show) {
+			oObjIcon.style.border  = "5px solid " + sColor;
+			oObjIconDiv.style.top  = (this.conf.y - 5)+'px';
+			oObjIconDiv.style.left = (this.conf.x - 5)+'px';
+		} else {
+			oObjIcon.style.border  = "none";
+			oObjIconDiv.style.top  = this.conf.y + 'px';
+			oObjIconDiv.style.left = this.conf.x + 'px';
+		}
+
+		sColor      = null;
+		oObjIconDiv = null;
+		oObjIcon    = null;
 	}
 });

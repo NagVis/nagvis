@@ -1126,7 +1126,7 @@ function dragObject(event) {
 	
 	if(draggingObject === null || !draggingEnabled)
 		return true;
-	
+
 	var posx, posy;
 	if (event.pageX || event.pageY) {
 		posx = event.pageX;
@@ -1148,9 +1148,53 @@ function dragObject(event) {
 	// When this object has a relative coordinated label, then move this too
 	moveRelativeObject(draggingObject.id, newTop, newLeft);
 
+	// With pressed CTRL key the icon should be docked
+	// This means the object will be positioned relative to that object
+	// This code only highlights that object. When the CTRL key is still pressed
+	// when dropping the object the currently moved object will be positioned
+	// relative to this object.
+	var oParent = null;
+	if(event.ctrlKey) {
+		for(var i in oMapObjects)
+			oMapObjects[i].highlight(false);
+		oParent = getNearestObject(draggingObject.id, newLeft, newTop)
+		oParent.highlight(true);
+	}
+
 	// Call the dragging handler when one is ste
 	if(dragObjectHandler)
-		dragObjectHandler(draggingObject);
+		dragObjectHandler(draggingObject, oParent);
+	oParent = null;
+}
+
+function getNearestObject(id, x, y) {
+	var nearest = null;
+	var min     = null;
+	var dist;
+
+	var obj;
+	for(var i in oMapObjects) {
+		obj = oMapObjects[i];
+
+		// Skip own object
+		if(id.split('-')[0] == obj.conf.object_id)
+			continue;
+
+		// FIXME: Also handle lines
+		if(obj.conf.view_type !== 'icon')
+			continue;
+
+		dist = Math.sqrt(((obj.conf.x - x) * (obj.conf.x - x)) + ((obj.conf.y - y) * (obj.conf.y - y)));
+		if(min === null || dist < min) {
+			min     = dist;
+			nearest = obj;
+		}
+	}
+
+	obj     = null;
+	min     = null;
+	dist    = null;
+	return nearest;
 }
 
 function moveRelativeObject(parentId, parentTop, parentLeft) {
@@ -1187,10 +1231,13 @@ function dragStop(event, handler) {
 		return;
 	}
 
+	if(event.ctrlKey)
+		getNearestObject(draggingObject.id, draggingObject.x, draggingObject.y).highlight(false);
+
 	handler(draggingObject);
 	
 	dragObjectHandler = null;
-	draggingObject = null;
+	draggingObject    = null;
 }
 
 /**

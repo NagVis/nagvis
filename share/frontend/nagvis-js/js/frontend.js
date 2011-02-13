@@ -1133,39 +1133,13 @@ function playSound(objectId, iNumTimes){
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function flashIcon(objectId, iDuration, iInterval){
-	var id = oMapObjects[objectId].parsedObject.id;
-	
-	var oObjIcon = document.getElementById(id+'-icon');
-	var oObjIconDiv = document.getElementById(id+'-icondiv');
-	
-	var sColor = oStates[oMapObjects[objectId].conf.summary_state].color;
-	
-	// Removed attribute check: "oObjIcon.style.border && "
-	if(oMapObjects[objectId].bIsFlashing === false) {
-		// save state
-		oMapObjects[objectId].bIsFlashing = true;
-		
-		oObjIcon.style.border = "5px solid "+sColor;
-		oObjIconDiv.style.top = (oMapObjects[objectId].conf.y-5)+'px';
-		oObjIconDiv.style.left = (oMapObjects[objectId].conf.x-5)+'px';
-	} else {
-		// save state
-		oMapObjects[objectId].bIsFlashing = false;
-		
-		oObjIcon.style.border = "none";
-		oObjIconDiv.style.top = oMapObjects[objectId].conf.y+'px';
-		oObjIconDiv.style.left = oMapObjects[objectId].conf.x+'px';
-	}
+	oMapObjects[objectId].highlight(!oMapObjects[objectId].bIsFlashing);
 	
 	var iDurationNew = iDuration - iInterval;
 	
 	// Flash again until timer counted down and the border is hidden
-	if(iDurationNew > 0 || (iDurationNew <= 0 && oMapObjects[objectId].bIsFlashing === true)) {
+	if(iDurationNew > 0 || (iDurationNew <= 0 && oMapObjects[objectId].bIsFlashing === true))
 		setTimeout(function() { flashIcon(objectId, iDurationNew, iInterval); }, iInterval);
-	}
-	
-	oObjIcon = null;
-	oObjIconDiv = null;
 }
 
 //--- Overview -----------------------------------------------------------------
