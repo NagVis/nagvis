@@ -55,4 +55,5 @@ Frontend
   * The header menu has a minimal width now to prevent broken header menu on small screens
   * The header menu is now positioned to be shown on the screen all the time
   * Added buttons to show/hide the header menu (state saved per user)
+  * Added new option: event_log_events to define the number of events in the eventlog scrollback
   * Bugfix: Fixed php error when using custom css files in maps
