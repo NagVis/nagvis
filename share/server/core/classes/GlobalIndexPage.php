@@ -325,6 +325,7 @@ class GlobalIndexPage {
 		
 		$arr['event_log']          = (int) $this->CORE->getMainCfg()->getValue('defaults', 'eventlog');
 		$arr['event_log_level']    = $this->CORE->getMainCfg()->getValue('defaults', 'eventloglevel');
+		$arr['event_log_events']   = (int) $this->CORE->getMainCfg()->getValue('defaults', 'eventlogevents');
 		$arr['event_log_height']   = (int) $this->CORE->getMainCfg()->getValue('defaults', 'eventlogheight');
 		$arr['event_log_hidden']   = (int) $this->CORE->getMainCfg()->getValue('defaults', 'eventloghidden');
 		

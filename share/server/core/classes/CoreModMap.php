@@ -962,6 +962,7 @@ class CoreModMap extends CoreModule {
 		$arr['event_highlight_duration'] = $MAPCFG->getValue(0, 'event_highlight_duration');
 		$arr['event_log']                = $MAPCFG->getValue(0, 'event_log');
 		$arr['event_log_level']          = $MAPCFG->getValue(0, 'event_log_level');
+		$arr['event_log_events']         = $MAPCFG->getValue(0, 'event_log_events');
 		$arr['event_log_height']         = $MAPCFG->getValue(0, 'event_log_height');
 		$arr['event_log_hidden']         = $MAPCFG->getValue(0, 'event_log_hidden');
 		$arr['event_scroll']             = $MAPCFG->getValue(0, 'event_scroll');
