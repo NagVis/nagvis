@@ -833,8 +833,12 @@ function toggleMapObjectLock(objectId) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function toggleAllMapObjectsLock() {
+	var unlock = false;
+	if(iNumUnlocked > 0)
+		unlock = true;
+		
 	for(var i in oMapObjects)
-		iNumUnlocked += oMapObjects[i].toggleLock();
+		iNumUnlocked += oMapObjects[i].toggleLock(unlock);
 }
 
 /**

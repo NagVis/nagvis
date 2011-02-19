@@ -360,8 +360,11 @@ var NagVisObject = Base.extend({
 	 *
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	toggleLock: function() {
-		this.bIsLocked = !this.bIsLocked;
+	toggleLock: function(lock) {
+		if(isset(lock))
+			this.bIsLocked = lock;
+		else
+			this.bIsLocked = !this.bIsLocked;
 
 		if(this.toggleObjControls())
 			return this.bIsLocked ? -1 : 1;
