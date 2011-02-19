@@ -63,9 +63,11 @@ function eventlogInitialize() {
 		oEventlog = document.createElement('div');
 		oEventlog.setAttribute("id","eventlog");
 		oEventlog.style.overflow = 'auto';
+		oEventlog.style.height = oPageProperties.event_log_height+'px';
 		
 		var oEventlogControl = document.createElement('div');
 		oEventlogControl.setAttribute("id","eventlogControl");
+		oEventlogControl.style.bottom = (parseInt(oPageProperties.event_log_height, 10)+5)+'px';
 		oEventlogControl.appendChild(document.createTextNode('_'));
 		oEventlogControl.onmouseover = function() {
 			document.body.style.cursor='pointer';
