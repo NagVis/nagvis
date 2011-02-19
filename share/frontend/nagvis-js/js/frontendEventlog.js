@@ -125,7 +125,7 @@ function eventlog(sComponent, sSeverity, sText) {
 		if(oSeverity[sSeverity] <= oSeverity[oPageProperties.event_log_level]) {
 			// When the message limit is reached truncate the first log entry
 			// 24 lines is the current limit
-			if(oEventlog.childNodes && oEventlog.childNodes.length >= 24*2) {
+			if(oEventlog.childNodes && oEventlog.childNodes.length >= oPageProperties.event_log_events * 2) {
 				// Remove line
 				oEventlog.removeChild(oEventlog.firstChild);
 				
