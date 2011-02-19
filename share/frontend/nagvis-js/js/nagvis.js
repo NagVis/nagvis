@@ -1153,17 +1153,15 @@ function dragObject(event) {
 	// This code only highlights that object. When the CTRL key is still pressed
 	// when dropping the object the currently moved object will be positioned
 	// relative to this object.
-	var oParent = null;
 	if(event.ctrlKey) {
 		for(var i in oMapObjects)
 			oMapObjects[i].highlight(false);
-		oParent = getNearestObject(draggingObject.id, newLeft, newTop)
-		oParent.highlight(true);
+		getNearestObject(draggingObject.id, newLeft, newTop).highlight(true);
 	}
 
 	// Call the dragging handler when one is ste
 	if(dragObjectHandler)
-		dragObjectHandler(draggingObject, oParent);
+		dragObjectHandler(draggingObject);
 	oParent = null;
 }
 
@@ -1184,7 +1182,9 @@ function getNearestObject(id, x, y) {
 		if(obj.conf.view_type !== 'icon')
 			continue;
 
-		dist = Math.sqrt(((obj.conf.x - x) * (obj.conf.x - x)) + ((obj.conf.y - y) * (obj.conf.y - y)));
+		var objX = obj.parseCoord(obj.conf.x, 'x');
+		var objY = obj.parseCoord(obj.conf.y, 'y');
+		dist = Math.sqrt(((objX - x) * (objX - x)) + ((objY - y) * (objY - y)));
 		if(min === null || dist < min) {
 			min     = dist;
 			nearest = obj;
@@ -1231,11 +1231,15 @@ function dragStop(event, handler) {
 		return;
 	}
 
-	if(event.ctrlKey)
-		getNearestObject(draggingObject.id, draggingObject.x, draggingObject.y).highlight(false);
+	var oParent = null;
+	if(event.ctrlKey) {
+		var oParent = getNearestObject(draggingObject.id, draggingObject.x, draggingObject.y)
+		oParent.highlight(false);
+	}
 
-	handler(draggingObject);
+	handler(draggingObject, oParent);
 	
+	oParent = null;
 	dragObjectHandler = null;
 	draggingObject    = null;
 }

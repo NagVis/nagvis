@@ -408,14 +408,14 @@ var NagVisObject = Base.extend({
 				var offset    = parts[1];
 				var refObj    = getMapObjByDomObjId(objectId);
 				if(refObj)
-					return parseFloat(refObj.conf[dir]) + parseFloat(offset);
+					return parseFloat(refObj.parseCoord(refObj.conf[dir], dir)) + parseFloat(offset);
 				else
 					return 0;
 			} else {
 				// Only an object id. Get the coordinate and return it
 				var refObj = getMapObjByDomObjId(val);
 				if(refObj)
-					return refObj.conf[dir];
+					return parseInt(refObj.parseCoord(refObj.conf[dir], dir));
 				else
 					return 0;
 			}
@@ -439,16 +439,61 @@ var NagVisObject = Base.extend({
 
 	// Transform the current coords to relative
 	// coords to the given object
-	makeRelativeCoords: function(par) {
-		this.conf.x = this.getRelCoords(par, this.parseCoord(this.conf.x, 'x'), 'x', -1);
-		this.conf.y = this.getRelCoords(par, this.parseCoord(this.conf.y, 'y'), 'y', -1);
+	makeRelativeCoords: function(oParent, num) {
+		var xParent = this.getCoordParent(this.conf.x, num);
+		var yParent = this.getCoordParent(this.conf.y, num);
+
+		if(isRelativeCoord(this.conf.x.split(',')[num])
+		   && isRelativeCoord(this.conf.y.split(',')[num])) {
+
+			// Skip this when already relative to the same object
+		  if(xParent == oParent.conf.object_id
+			  && yParent == oParent.conf.object_id)
+				return;
+
+			// If this object was attached to another parent before, remove the attachment
+			if(xParent != oParent.conf.object_id)
+				getMapObjByDomObjId(xParent).delChild(this);
+			if(yParent != oParent.conf.object_id)
+				getMapObjByDomObjId(yParent).delChild(this);
+		}
+
+		// Add this object to the new parent
+		oParent.addChild(this);
+
+		// FIXME: Maybe the parent object is also a line. Then -1 is not correct
+		//        But it is not coded to attach relative objects to lines. So it is no big
+		//        deal to leave this as it is.
+		var newX = this.getRelCoords(oParent, this.parseCoords(this.conf.x, 'x')[num], 'x', -1);
+		var newY = this.getRelCoords(oParent, this.parseCoords(this.conf.y, 'y')[num], 'y', -1);
+
+		if(num === -1) {
+			this.conf.x = newX;
+			this.conf.y = newY;
+		} else {
+			var old  = this.conf.x.split(',');
+			old[num] = newX;
+			this.conf.x = old.join(',');
+
+			old  = this.conf.y.split(',');
+			old[num] = newY;
+			this.conf.y = old.join(',');
+		}
+	},
+
+	/**
+	 * Returns the object id of the parent object
+	 */
+	getCoordParent: function(val, num) {
+		var coord = num === -1 ? val : val.split(',')[num];
+		return val.search('%') !== -1 ? val.split('%')[0] : val;
 	},
 
 	getRelCoords: function(refObj, val, dir, num) {
 		var refPos = num === -1 ? refObj.conf[dir] : refObj.conf[dir].split(',')[num];
-		var offset = val - refObj.parseCoord(refPos, dir);
+		var offset = parseInt(val) - parseInt(refObj.parseCoord(refPos, dir));
 		var pre    = offset >= 0 ? '+' : '';
-		var val    = refObj.conf.object_id + '%' + pre + offset;
+		val        = refObj.conf.object_id + '%' + pre + offset;
 		refObj     = null;
 		return val;
 	},
@@ -467,9 +512,8 @@ var NagVisObject = Base.extend({
 			var num = -1;
 
 		var oldVal = num === -1 ? this.conf[dir] : this.conf[dir].split(',')[num];
-
 		// Check if the current value is an integer or a relative coord
-		if(isRelativeCoord(this.conf[dir])) {
+		if(isset(oldVal) && isRelativeCoord(oldVal)) {
 			// This must be an object id
 			var objectId = null;
 			if(oldVal.search('%') !== -1)
@@ -479,8 +523,9 @@ var NagVisObject = Base.extend({
 
 			// Only an object id. Get the coordinate and return it
 			var refObj = getMapObjByDomObjId(objectId);
+			// FIXME: Maybe the parent object is also a line. Then -1 is not correct
 			if(refObj)
-				val = this.getRelCoords(refObj, val, dir, num);
+				val = this.getRelCoords(refObj, val, dir, -1);
 			objectId = null;
 		}
 		oldVal = null;
@@ -523,7 +568,13 @@ var NagVisObject = Base.extend({
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	addChild: function(obj) {
-		this.childs.push(obj);
+		if(this.childs.indexOf(obj) === -1)
+			this.childs.push(obj);
+		obj = null;
+	},
+
+	delChild: function(obj) {
+		this.childs.splice(this.childs.indexOf(obj), 1);
 		obj = null;
 	},
 

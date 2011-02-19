@@ -985,28 +985,24 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * Important: This is called from an event handler
 	 * the 'this.' keyword can not be used here.
 	 */
-  moveObject: function(obj, par) {
+  moveObject: function(obj) {
 		var arr        = obj.id.split('-');
 		var objId      = arr[0];
 		var anchorType = arr[1];
-		var anchorId   = arr[2];
 
-		var newPos = null;
+		var newPos;
 		var viewType = getDomObjViewType(objId);
 
 		var jsObj = getMapObjByDomObjId(objId);
-
-		// When 'par' set transform the positioning from absolute to relative
-		// FIXME: How to change it back form relative to absolute?
-		if(isset(par))
-			jsObj.makeRelativeCoords(par);
 
 		if(viewType === 'line') {
 			newPos = getMidOfAnchor(obj);
 
 			// Get current positions and replace only the current one
+		  var anchorId   = arr[2];
 			newPos = [ jsObj.calcNewCoord(newPos[0], 'x', anchorId),
 			           jsObj.calcNewCoord(newPos[1], 'y', anchorId) ];
+		  anchorId   = null;
 		} else {
 			newPos = [ jsObj.calcNewCoord(obj.x - obj.objOffsetX, 'x'),
 			           jsObj.calcNewCoord(obj.y - obj.objOffsetY, 'y') ];
@@ -1020,13 +1016,30 @@ var NagVisStatefulObject = NagVisObject.extend({
 		jsObj      = null;	
 		objId      = null;
 		anchorType = null;
-		anchorId   = null;
 		newPos     = null;
 		viewType   = null;
 	},
 
-	saveObject: function(obj) {
+	saveObject: function(obj, oParent) {
+		var arr        = obj.id.split('-');
+		var objId      = arr[0];
+		var anchorId   = arr[2];
+		var viewType   = getDomObjViewType(objId);
+		var jsObj      = getMapObjByDomObjId(objId);
+
+		if(viewType !== 'line')
+			anchorId = -1
+
+		// Make relative when oParent set and not already relative
+		if(isset(oParent))
+			jsObj.makeRelativeCoords(oParent, anchorId);
+
 		saveObjectAfterAnchorAction(obj);
+
+		arr      = null;
+		objId    = null;
+		anchorId = null;
+		jsObj    = null;
 	},
 
 	/**
@@ -1036,21 +1049,28 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 */
 	toggleLineMidLock: function() {
 		// What is the current state?
-		var x = this.parseCoords(this.conf.x, 'x');
-		var y = this.parseCoords(this.conf.y, 'y');
+		var x = this.conf.x.split(',');
+		var y = this.conf.y.split(',')
 
 		if(this.conf.line_type != 10 && this.conf.line_type != 13 && this.conf.line_type != 14) {
 			alert('Not available for this line. Only lines with 2 line parts have a middle coordinate.');
 			return;
 		}
 
-		// FIXME: Handle relative coordinates during this calculation and re-setting
 		if(x.length == 2) {
 			// The line has 2 coords configured
 			// - Calculate and add the 3rd coord as 2nd
 			// - Add a drag control for the 2nd coord
-			this.conf.x = [ x[0], middle(x[0], x[1], this.conf.line_cut), x[1] ].join(',');
-			this.conf.y = [ y[0], middle(y[0], y[1], this.conf.line_cut), y[1] ].join(',');
+			this.conf.x = [
+				x[0],
+			  middle(this.parseCoords(this.conf.x, 'x')[0], this.parseCoords(this.conf.x, 'x')[1], this.conf.line_cut),
+			  x[1],
+			].join(',');
+			this.conf.y = [
+				y[0],
+				middle(this.parseCoords(this.conf.y, 'y')[0], this.parseCoords(this.conf.y, 'y')[1], this.conf.line_cut),
+				y[1],
+			].join(',');
 		} else {
 			// The line has 3 coords configured
 			// - Remove the 2nd coord
