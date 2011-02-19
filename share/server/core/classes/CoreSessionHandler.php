@@ -60,7 +60,8 @@ class CoreSessionHandler {
 			}
 			
 			// Store the creation time of the session
-			$this->set('sessionExpires', time()+$iDuration);
+			if(!$this->issetAndNotEmpty('sessionExpires'))
+				$this->set('sessionExpires', time()+$iDuration);
 		}
 		
 		// Reset the expiration time of the session cookie
