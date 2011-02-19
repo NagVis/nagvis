@@ -147,6 +147,8 @@
 ;eventlog=0
 ; Loglevel of the eventlog (available: debug, info, warning, critical)
 ;eventloglevel="info"
+; Number of events kept in the scrollback
+;eventlogevents="24"
 ; Height of the eventlog when visible in px
 ;eventlogheight="75"
 ; Hide/Show the eventlog on page load
