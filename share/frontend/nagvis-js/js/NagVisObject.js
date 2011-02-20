@@ -448,9 +448,10 @@ var NagVisObject = Base.extend({
 		var xParent = this.getCoordParent(this.conf.x, num);
 		var yParent = this.getCoordParent(this.conf.y, num);
 
-		if(isRelativeCoord(this.conf.x.split(',')[num])
-		   && isRelativeCoord(this.conf.y.split(',')[num])) {
+		var x = num === -1 ? this.conf.x : this.conf.x.split(',')[num];
+		var y = num === -1 ? this.conf.y : this.conf.y.split(',')[num];
 
+		if(isRelativeCoord(x) && isRelativeCoord(y)) {
 			// Skip this when already relative to the same object
 		  if(xParent == oParent.conf.object_id
 			  && yParent == oParent.conf.object_id)
@@ -469,13 +470,13 @@ var NagVisObject = Base.extend({
 		// FIXME: Maybe the parent object is also a line. Then -1 is not correct
 		//        But it is not coded to attach relative objects to lines. So it is no big
 		//        deal to leave this as it is.
-		var newX = this.getRelCoords(oParent, this.parseCoords(this.conf.x, 'x')[num], 'x', -1);
-		var newY = this.getRelCoords(oParent, this.parseCoords(this.conf.y, 'y')[num], 'y', -1);
-
 		if(num === -1) {
-			this.conf.x = newX;
-			this.conf.y = newY;
+			this.conf.x = this.getRelCoords(oParent, this.parseCoord(this.conf.x, 'x'), 'x', -1);
+			this.conf.y = this.getRelCoords(oParent, this.parseCoord(this.conf.y, 'y'), 'y', -1);
 		} else {
+			var newX = this.getRelCoords(oParent, this.parseCoords(this.conf.x, 'x')[num], 'x', -1);
+			var newY = this.getRelCoords(oParent, this.parseCoords(this.conf.y, 'y')[num], 'y', -1);
+
 			var old  = this.conf.x.split(',');
 			old[num] = newX;
 			this.conf.x = old.join(',');
@@ -490,8 +491,8 @@ var NagVisObject = Base.extend({
 	 * Returns the object id of the parent object
 	 */
 	getCoordParent: function(val, num) {
-		var coord = num === -1 ? val : val.split(',')[num];
-		return val.search('%') !== -1 ? val.split('%')[0] : val;
+		var coord = num === -1 ? val.toString() : val.split(',')[num].toString();
+		return coord.search('%') !== -1 ? coord.split('%')[0] : coord;
 	},
 
 	getRelCoords: function(refObj, val, dir, num) {

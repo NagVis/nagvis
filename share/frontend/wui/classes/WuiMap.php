@@ -103,7 +103,7 @@ class WuiMap extends GlobalMap {
 	function parseObjects() {
 		$ret = '';
 		
-		foreach($this->objects AS $var => $obj) {
+		foreach($this->objects AS $objectId => $obj) {
 			switch($obj['type']) {
 				case 'textbox':
 					$ret .= $this->textBox($obj);
@@ -114,7 +114,7 @@ class WuiMap extends GlobalMap {
 					
 					if($obj['type'] == 'line' || (isset($obj['view_type']) && $obj['view_type'] == 'line'))
 						$objCode .= $this->parseLine($obj);
-					else
+					elseif(!$this->isRelativeCoord($obj['x']) && !$this->isRelativeCoord($obj['y']))
 						$this->moveable[] =  'box_'.$obj['type'].'_'.$obj['id'];
 					
 					if(isset($obj['view_type']) && $obj['view_type'] == 'gadget') {
@@ -227,6 +227,26 @@ class WuiMap extends GlobalMap {
 		}
 		return $obj;
 	}
+
+	function isRelativeCoord($val) {
+		return !is_numeric($val) || strlen($val) === 6;
+	}
+
+	function parseCoord($val, $dir) {
+		if(!$this->isRelativeCoord($val)) {
+			return (int) $val;
+		} else {
+			if(strpos($val, '%') !== false) {
+				// Object id with offset -> calculate
+				list($parentId, $offset) = explode('%', $val);
+				$parentCoord = $this->parseCoord($this->objects[$parentId][$dir], $dir);
+				return $parentCoord + (int) $offset;
+			} else {
+				// Object id without offset
+				return $this->parseCoord($this->objects[$val][$dir], $dir);
+			}
+		}
+	}
 	
 	/**
 	 * Parses the HTML-Code of an icon
@@ -238,35 +258,30 @@ class WuiMap extends GlobalMap {
 	function parseIcon($obj) {
 		// Add 20x20 icon in the middle of the line in case of line objects
 		if($obj['type'] == 'line' || (isset($obj['view_type']) && $obj['view_type'] == 'line')) {
-			list($x1,$x2) = explode(",", $obj['x']);
-			list($y1,$y2) = explode(",", $obj['y']);
-			
-			if($x1 > $x2) {
-				$x = $x2;
-			} elseif($x1 < $x2) {
-				$x = $x1;
-			} else {
-				$x = $x1;
+			$x = explode(",", $obj['x']);
+			$y = explode(",", $obj['y']);
+
+			for($i = 0, $len = count($x); $i < $len; $i++) {
+				$x[$i] = $this->parseCoord($x[$i], 'x');
+				$y[$i] = $this->parseCoord($y[$i], 'y');
 			}
 			
-			if($y1 > $y2) {
-				$y = $y2;
-			} elseif($y1 < $y2) {
-				$y = $y1;
-			} else {
-				$y = $y1;
-			}
+			$xMin = min($x);
+			$yMin = min($y);
 		
-			$x = round(($x1+($x2-$x1)/2) - 10) - $x;
-			$y = round(($y1+($y2-$y1)/2) - 10) - $y;
+			if(isset($x[2])) {
+				$x = $x[1] - $xMin - 10;
+				$y = $y[1] - $yMin - 10;
+			} else {
+				$x = round(($x[0]+($x[1]-$x[0])/2) - 10) - $xMin;
+				$y = round(($y[0]+($y[1]-$y[0])/2) - 10) - $yMin;
+			}
+
 			$style = 'style="position:absolute;left:'.$x.'px;top:'.$y.'px"';
 			
 			$obj['icon'] = '20x20.gif';
-		} else {
-			$x = $obj['x'];
-			$y = $obj['y'];
+		} else
 			$style = '';
-		}
 		
 		return "<img id=\"icon_".$obj['type']."_".$obj['id']."\" src=\"".$obj['htmlPath'].$obj['icon'].$obj['iconParams']."\" ".$style." alt=\"".$obj['type']."_".$obj['id']."\" onmouseover=\"toggleBorder(this, 1)\" onmouseout=\"toggleBorder(this, 0)\" onmousedown=\"contextMouseDown(event);\" oncontextmenu=\"return contextShow(event);\" />";
 	}
@@ -283,29 +298,26 @@ class WuiMap extends GlobalMap {
 		
 		$lineId = "line_".$obj['type']."_".$obj['id'];
 		
-		list($x1,$x2) = explode(",", $obj['x']);
-		list($y1,$y2) = explode(",", $obj['y']);
-		
-		if($x1 > $x2) {
-			$x = $x2;
-		} elseif($x1 < $x2) {
-			$x = $x1;
-		} else {
-			$x = $x1;
+		$x = explode(",", $obj['x']);
+		$y = explode(",", $obj['y']);
+
+		for($i = 0, $len = count($x); $i < $len; $i++) {
+			$x[$i] = $this->parseCoord($x[$i], 'x');
+			$y[$i] = $this->parseCoord($y[$i], 'y');
 		}
 		
-		if($y1 > $y2) {
-			$y = $y2;
-		} elseif($y1 < $y2) {
-			$y = $y1;
-		} else {
-			$y = $y1;
-		}
+		$xMin = min($x);
+		$yMin = min($y);
 		
 		$ret .= "var ".$lineId." = new jsGraphics('line_".$obj['type']."_".$obj['id']."');";
 		$ret .= $lineId.".setColor('#FF0000');";
 		$ret .= $lineId.".setStroke(1);";
-		$ret .= $lineId.".drawLine(".($x1-$x).",".($y1-$y).",".($x2-$x).",".($y2-$y).");";
+		// A line can have 3 coords with a repositioned middle
+		if(isset($x[2])) {
+			$ret .= $lineId.".drawLine(".($x[0]-$xMin).",".($y[0]-$yMin).",".($x[1]-$xMin).",".($y[1]-$yMin).");";
+			$ret .= $lineId.".drawLine(".($x[1]-$xMin).",".($y[1]-$yMin).",".($x[2]-$xMin).",".($y[2]-$yMin).");";
+		} else
+			$ret .= $lineId.".drawLine(".($x[0]-$xMin).",".($y[0]-$yMin).",".($x[1]-$xMin).",".($y[1]-$yMin).");";
 		$ret .= $lineId.".paint();";
 		
 		return '<div style="position:absolute;top:0px;left:0px" id="line_'.$obj['type'].'_'.$obj['id'].'"></div>'.$this->parseJs($ret);
@@ -326,6 +338,11 @@ class WuiMap extends GlobalMap {
 		if($obj['type'] == 'line' || (isset($obj['view_type']) && $obj['view_type'] == 'line')) {
 			list($x1,$x2) = explode(",", $obj['x']);
 			list($y1,$y2) = explode(",", $obj['y']);
+
+			$x1 = $this->parseCoord($x1, 'x');
+			$x2 = $this->parseCoord($x2, 'x');
+			$y1 = $this->parseCoord($y1, 'y');
+			$y2 = $this->parseCoord($y2, 'y');
 			
 			if($x1 > $x2) {
 				$x = $x2;
@@ -343,8 +360,8 @@ class WuiMap extends GlobalMap {
 				$y = $y1;
 			}
 		} else {
-			$x = $obj['x'];
-			$y = $obj['y'];
+			$x = $this->parseCoord($obj['x'], 'x');
+			$y = $this->parseCoord($obj['y'], 'y');
 		}
 		
 		$ret .= "\n<div id=\"box_".$obj['type']."_".$obj['id']."\" class=\"icon\" style=\"left:".$x."px;top:".$y."px;z-index:".$obj['z']."\">";
@@ -433,7 +450,7 @@ class WuiMap extends GlobalMap {
 		// object array
 		$objects = Array();
 		
-		foreach($this->MAPCFG->getMapObjects() AS $index => $obj) {
+		foreach($this->MAPCFG->getMapObjects() AS $objectId => $obj) {
 			$type = $obj['type'];
 
 			if($type === 'global')
@@ -447,12 +464,12 @@ class WuiMap extends GlobalMap {
 			}
 
 			// workaround
-			$obj['id'] = $index;
+			$obj['id'] = $objectId;
 			
 			if($mergeWithGlobals) {
 				// merge with "global" settings
 				foreach($this->MAPCFG->getValidTypeKeys($type) AS $key) {
-					$obj[$key] = $this->MAPCFG->getValue($index, $key);
+					$obj[$key] = $this->MAPCFG->getValue($objectId, $key);
 				}
 			}
 
@@ -464,7 +481,7 @@ class WuiMap extends GlobalMap {
 			}
 			
 			// add object to array of objects
-			$objects[] = $obj;
+			$objects[$objectId] = $obj;
 		}
 		
 		return $objects;
