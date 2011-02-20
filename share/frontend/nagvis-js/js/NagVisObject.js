@@ -197,6 +197,8 @@ var NagVisObject = Base.extend({
 		else
 			oSectionMacros.host = '<!--\\sBEGIN\\shost\\s-->.+?<!--\\sEND\\shost\\s-->';
 
+		if(oPageProperties.view_type === 'automap')
+			oSectionMacros.not_automap = '<!--\\sBEGIN\\snot_automap\\s-->.+?<!--\\sEND\\snot_automap\\s-->';
 		if(this.conf.view_type !== 'line')
 			oSectionMacros.line = '<!--\\sBEGIN\\sline\\s-->.+?<!--\\sEND\\sline\\s-->';
 		if(this.conf.view_type !== 'line' || (this.conf.line_type == 11 || this.conf.line_type == 12))
