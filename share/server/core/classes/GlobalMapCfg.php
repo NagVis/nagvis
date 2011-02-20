@@ -2022,6 +2022,15 @@ class GlobalMapCfg {
 			$this->configFileContents = file($this->configFile);
 		return $this->configFileContents;
 	}
+
+	/**
+	 * Checks if an element with the given id exists
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function objExists($id) {
+		return isset($this->mapConfig[$id]);
+	}
 	
 	/**
 	 * Sets a config value in the array
@@ -2138,8 +2147,10 @@ class GlobalMapCfg {
 	 * @return	Integer	Id of the Element
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	public function addElement($type, $properties, $perm = false) {
-		$id = $this->genObjId(count($this->mapConfig));
+	public function addElement($type, $properties, $perm = false, $id = null) {
+		if($id === null)
+			$id = $this->genObjId(count($this->mapConfig));
+
 		$this->mapConfig[$id] = $properties;
 		$this->mapConfig[$id]['object_id'] = $id;
 		$this->mapConfig[$id]['type']      = $type;

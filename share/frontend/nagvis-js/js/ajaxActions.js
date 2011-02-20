@@ -42,7 +42,14 @@ function saveObjectAfterAnchorAction(oAnchor) {
 	if(anchorType === 'drag')
 		urlPart = handleDragResult(objId, anchorId);
 	
-	getAsyncRequest(oGeneralProperties.path_server + '?mod=Map&act=modifyObject&map='
+	var mod = 'Map';
+	var mapParam = 'map';
+	if(oPageProperties.view_type === 'automap') {
+		mod      = 'AutoMap';
+		mapParam = 'show';
+	}
+
+	getAsyncRequest(oGeneralProperties.path_server + '?mod='+mod+'&act=modifyObject&'+mapParam+'='
 	                + escapeUrlValues(oPageProperties.map_name)
 	                + '&id=' + escapeUrlValues(objId) + urlPart);
 }
@@ -52,6 +59,13 @@ function saveObjectAttr(objId, attr) {
 	for (var key in attr)
 		urlPart += '&' + key + '=' + escapeUrlValues(attr[key]);
 	
-	getAsyncRequest(oGeneralProperties.path_server + '?mod=Map&act=modifyObject&map='
+	var mod = 'Map';
+	var mapParam = 'map';
+	if(oPageProperties.view_type === 'automap') {
+		mod      = 'AutoMap';
+		mapParam = 'show';
+	}
+	
+	getAsyncRequest(oGeneralProperties.path_server + '?mod='+mod+'&act=modifyObject&'+mapParam+'='
 	                + escapeUrlValues(oPageProperties.map_name) + '&id=' + escapeUrlValues(objId) + urlPart);
 }

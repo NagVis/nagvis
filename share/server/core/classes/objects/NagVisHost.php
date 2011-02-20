@@ -103,6 +103,13 @@ class NagVisHost extends NagiosHost {
 			$strReturn .= 'height="'.$this->pxToInch($height).'", ';
 		}
 
+		// The object has configured x/y coords. Use them.
+		// FIXME: This does not work for some reason ...
+		/*if($this->x !== null && $this->y !== null) {
+			$strReturn .= 'pos="'.$this->pxToInch($this->x - $width / 2).','.$this->pxToInch($this->y - $height / 2).'", ';
+			$strReturn .= 'pin=true, ';
+		}*/
+
 		// The automap connector hosts could be smaller
 		//if($this->automapConnector)
 		//	$strReturn .= 'height="'.$this->pxToInch($width/2).'", width="'.$this->pxToInch($width/2).'", ';

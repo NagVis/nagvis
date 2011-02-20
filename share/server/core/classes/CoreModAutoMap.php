@@ -66,6 +66,8 @@ class CoreModAutoMap extends CoreModule {
 			'automapToMap'         => 'edit',
 			'modifyParams'         => 'edit',
 			'parseMapCfg'          => 'edit',
+
+			'modifyObject'         => 'edit',
 		);
 		
 		// Register valid objects
@@ -101,10 +103,78 @@ class CoreModAutoMap extends CoreModule {
 					$VIEW = new NagVisViewAutomapModifyParams($this->CORE, $this->opts);
 					$sReturn = json_encode(Array('code' => $VIEW->parse()));
 				break;
+				case 'modifyObject':
+					$refresh = null;
+					$success = null;
+					if(isset($aReturn['refresh']) && $aReturn['refresh'] == 1) {
+						$refresh = 1;
+						$success = $this->CORE->getLang()->getText('The object has been modified.');
+					}
+					$this->handleResponse('handleResponseModifyObject', 'doModifyObject',
+						                    $success,
+																$this->CORE->getLang()->getText('The object could not be modified.'),
+																$refresh);
+				break;
 			}
 		}
 		
 		return $sReturn;
+	}
+
+	protected function doModifyObject($a) {
+		$MAPCFG = new NagVisAutomapCfg($this->CORE, $a['map']);
+		$MAPCFG->readMapConfig();
+
+		// Check if the element exists and maybe create it first
+		if(!$MAPCFG->objExists($a['id'])) {
+			$a['opts']['host_name'] = $MAPCFG->objIdToName($a['id']);
+			$MAPCFG->addElement('host', $a['opts'], true, $a['id']);
+		} else {
+			foreach($a['opts'] AS $key => $val)
+				$MAPCFG->setValue($a['id'], $key, $val);
+		
+			// write element to file
+			$MAPCFG->storeUpdateElement($a['id']);
+		}
+		
+		// delete map lock
+		if(!$MAPCFG->deleteMapLock())
+			new GlobalMessage('ERROR', $CORE->getLang()->getText('mapLockNotDeleted'));
+			
+		return json_encode(Array('status' => 'OK', 'message' => ''));
+	}
+	
+	protected function handleResponseModifyObject() {
+		$aResponse = array_merge($_GET, $_POST);
+		$FHANDLER = new CoreRequestHandler($aResponse);
+
+		$this->verifyValuesSet($FHANDLER,   Array('show', 'id'));
+		$this->verifyValuesMatch($FHANDLER, Array('show' => MATCH_MAP_NAME,
+		                                          'id'   => MATCH_OBJECTID));
+
+		// Check if the map exists
+		if(count($this->CORE->getAvailableAutoMaps('/^'.$FHANDLER->get('show').'$/')) <= 0)
+			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
+
+		$aOpts = $aResponse;
+		// Remove the parameters which are not options of the object
+		unset($aOpts['act']);
+		unset($aOpts['mod']);
+		unset($aOpts['show']);
+		unset($aOpts['ref']);
+		unset($aOpts['id']);
+		unset($aOpts['timestamp']);
+		
+		// Also remove all "helper fields" which begin with a _
+		foreach($aOpts AS $key => $val)
+			if(strpos($key, '_') === 0)
+				unset($aOpts[$key]);
+		
+		return Array('map'     => $FHANDLER->get('show'),
+		             'type'    => $FHANDLER->get('type'),
+		             'id'      => $FHANDLER->get('id'),
+		             'refresh' => $FHANDLER->get('ref'),
+		             'opts'    => $aOpts);
 	}
 	
 	private function parseAutomap() {

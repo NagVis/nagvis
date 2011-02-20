@@ -196,6 +196,8 @@ abstract class CoreModule {
 			$ret = $this->{$action}($aReturn);
 			if($ret && $successMsg) {
 				$msg = $successMsg;
+			} elseif($ret && !$successMsg) {
+				$msg = $ret;
 			} elseif(!$ret && $failMessage) {
 				$type = 'ERROR';
 				$msg = $failMessage;

@@ -5,7 +5,6 @@ Relative Koordinaten:
 	- Beim Löschen von Objekten prüfen, ob andere Objekte auf dieses Objekt verweisen
 	- Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
 	- Von absoluten zu relativen Koordinaten umschalten
-	  - Per CTRL Taste auf ein Objekt ziehen (?)
 		- Dann einen Rahmen um das Untergeordnete Objekt zeichnen und beim Loslassen
 		  die object_id des Parent-Objekts an den Handler übergeben
 
@@ -28,11 +27,18 @@ als spezielle Macros angeboten.
 
 Fehlerbehandlung:
   Ajax Schnittstelle umbauen: Kleines Protokoll einbauen, mit Header inkl. Fehlercodes etc.
+  und man muss nicht bei jeder Anfrage immer die Feld-Namen mitsenden (-> weniger Overhead).
 
   Bessere Fehlerbehandlung z.B. auf Übersichtsseite, wenn Antwort kein gültiges JS ist.
 
-  Standard PHP Fehler in Exceptions umwandeln und Exceptions ordentlich behandeln
 
 Exception/Error log bauen:
   PHP Fehler loggen
 	Eventuell sogar Javascript fehler loggen
+
+
+- Dokumentation:
+  - Neue Editier-Möglichkeiten in der normalen GUI
+  - Mittleren Teil der Linien festmachen oder positionieren
+  - Relative Koordinaten
+  - Relative Koordinaten via Ctrl setzen

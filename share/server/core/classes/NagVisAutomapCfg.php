@@ -138,13 +138,22 @@ class NagVisAutomapCfg extends GlobalMapCfg {
 	}
 
 	/**
+	 * Transforms an object_id to the hostname
+	 *
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	public function objIdToName($id) {
+		return array_search($id, $this->loadObjIds());
+	}
+
+	/**
 	 * Loads the hostname to object_id mapping table from the central file
 	 *
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function loadObjIds() {
-		if($this->objIds === null)
-			if($this->CORE->checkExisting($this->objIdFile, false))
+		if(!isset($this->objIds[0]))
+			if(GlobalCore::getInstance()->checkExisting($this->objIdFile, false))
 				$this->objIds = json_decode(file_get_contents($this->objIdFile), true);
 			else
 				$this->objIds = Array();
