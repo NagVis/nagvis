@@ -110,7 +110,7 @@ class CoreModAutoMap extends CoreModule {
 						$refresh = 1;
 						$success = $this->CORE->getLang()->getText('The object has been modified.');
 					}
-					$this->handleResponse('handleResponseModifyObject', 'doModifyObject',
+					$sReturn = $this->handleResponse('handleResponseModifyObject', 'doModifyObject',
 						                    $success,
 																$this->CORE->getLang()->getText('The object could not be modified.'),
 																$refresh);

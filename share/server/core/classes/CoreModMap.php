@@ -160,27 +160,16 @@ class CoreModMap extends CoreModule {
 					                      1);
 				break;
 				case 'modifyObject':
-					$aReturn = $this->handleResponseModifyObject();
-					
-					if($aReturn !== false) {
-						if($this->doModifyObject($aReturn)) {
-							if(isset($aReturn['refresh']) && $aReturn['refresh'] == 1) {
-								new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The object has been modified.'),
-							                  null,
-							                  null,
-							                  1);
-							  $sReturn = '';
-							} else {
-								$sReturn = json_encode(Array('status' => 'OK', 'message' => ''));
-							}
-						} else {
-							new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object could not be modified.'));
-							$sReturn = '';
-						}
-					} else {
-						new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-						$sReturn = '';
+					$refresh = null;
+					$success = null;
+					if(isset($aReturn['refresh']) && $aReturn['refresh'] == 1) {
+						$refresh = 1;
+						$success = $this->CORE->getLang()->getText('The object has been modified.');
 					}
+					$sReturn = $this->handleResponse('handleResponseModifyObject', 'doModifyObject',
+						                    $success,
+																$this->CORE->getLang()->getText('The object could not be modified.'),
+																$refresh);
 				break;
 				case 'deleteObject':
 					$aReturn = $this->handleResponseDeleteObject();
@@ -669,7 +658,7 @@ class CoreModMap extends CoreModule {
 			new GlobalMessage('ERROR', $CORE->getLang()->getText('mapLockNotDeleted'));
 		}
 			
-		return true;
+		return json_encode(Array('status' => 'OK', 'message' => ''));
 	}
 	
 	protected function handleResponseModifyObject() {

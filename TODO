@@ -4,9 +4,7 @@ This is a small file for storing quick thoughts about new features and needed ch
 Relative Koordinaten:
 	- Beim Löschen von Objekten prüfen, ob andere Objekte auf dieses Objekt verweisen
 	- Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
-	- Von absoluten zu relativen Koordinaten umschalten
-		- Dann einen Rahmen um das Untergeordnete Objekt zeichnen und beim Loslassen
-		  die object_id des Parent-Objekts an den Handler übergeben
+  - Wie von relativen zu absoluten Koordinaten umschalten?
 
 Linien (Auch für neue Automap wichtig!):
  - Pfeilspitzen konfigurierbar machen
