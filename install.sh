@@ -57,10 +57,7 @@ NAGVIS_PATH_OLD_PARAM_SET=0
 # Default Path to Graphviz binaries
 GRAPHVIZ_PATH="/usr/local/bin"
 # Version of NagVis to be installed
-NAGVIS_VER=""
-[ -f share/server/core/defines/global.php ]&&NAGVIS_VER=`cat share/server/core/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
-[ -f nagvis/includes/defines/global.php ]&&NAGVIS_VER=`cat nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
-
+NAGVIS_VER=$(cat share/server/core/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }')
 # Version of old NagVis (will be detected if update)
 NAGVIS_VER_OLD=""
 # Relative path to the NagVis configuration file
@@ -85,8 +82,7 @@ WEB_USER=""
 WEB_GROUP=""
 
 # Version prerequisites
-[ -f share/server/core/defines/global.php ]&&NEED_PHP_VERSION=`cat share/server/core/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
-[ -f nagvis/includes/defines/global.php ]&&NEED_PHP_VERSION=`cat nagvis/includes/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }'`
+NEED_PHP_VERSION=$(cat share/server/core/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }')
 [ -z "$NEED_PHP_VERSION" ] && NEED_PHP_VERSION="5.0"
 
 NEED_PHP_MODULES="gd mbstring gettext session xml"
