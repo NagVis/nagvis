@@ -228,7 +228,7 @@ function searchObjects(sMatch) {
 			// Detach the handler
 			//  Had problems with this. Could not give the index to function:
 			//  function() { flashIcon(iIndex, 10); iIndex = null; }
-			setTimeout('flashIcon('+objectId+', '+oPageProperties.event_highlight_duration+', '+oPageProperties.event_highlight_interval+')', 0);
+			setTimeout('flashIcon("'+objectId+'", '+oPageProperties.event_highlight_duration+', '+oPageProperties.event_highlight_interval+')', 0);
 		} else {
 			// FIXME: Atm only flash icons, not lines or gadgets
 		}
@@ -771,7 +771,7 @@ function updateObjects(aMapObjectInformations, sType) {
 						// Detach the handler
 						//  Had problems with this. Could not give the index to function:
 						//  function() { flashIcon(objectId, 10); iIndex = null; }
-						setTimeout('flashIcon('+objectId+', '+oPageProperties.event_highlight_duration+', '+oPageProperties.event_highlight_interval+')', 0);
+						setTimeout('flashIcon("'+objectId+'", '+oPageProperties.event_highlight_duration+', '+oPageProperties.event_highlight_interval+')', 0);
 					} else {
 						// FIXME: Atm only flash icons, not lines or gadgets
 					}
@@ -789,8 +789,9 @@ function updateObjects(aMapObjectInformations, sType) {
 				}
 				
 				// - Sound
-				if(oPageProperties.event_sound === '1')
-					setTimeout('playSound('+objectId+', 1)', 0);
+				if(oPageProperties.event_sound === '1') {
+					setTimeout('playSound("'+objectId+'", 1)', 0);
+				}
 			}
 		}
 
