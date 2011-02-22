@@ -453,7 +453,7 @@ class WuiMap extends GlobalMap {
 		foreach($this->MAPCFG->getMapObjects() AS $objectId => $obj) {
 			$type = $obj['type'];
 
-			if($type === 'global')
+			if($type === 'global' || $type === 'template')
 				continue;
 
 			// Default object state
