@@ -85,9 +85,10 @@ WEB_GROUP=""
 NEED_PHP_VERSION=$(cat share/server/core/defines/global.php | grep CONST_NEEDED_PHP_VERSION | awk -F"'" '{ print $4 }')
 [ -z "$NEED_PHP_VERSION" ] && NEED_PHP_VERSION="5.0"
 
-NEED_PHP_MODULES="gd mbstring gettext session xml"
+NEED_PHP_MODULES="gd mbstring gettext session xml pdo"
 NEED_GV_MOD="dot neato twopi circo fdp"
 NEED_GV_VERSION=2.14
+NEED_SQLITE_VERSION=3.0
 
 LINE_SIZE=78
 GREP_INCOMPLETE=0
@@ -673,6 +674,28 @@ check_php_modules() {
 	done
 }
 
+# Check SQLite version
+check_sqlite_version() {
+	if [ "${PKG##/*/}" = "dpkg" ]; then
+		SQLITE_VER=`$PKG -l "sqlite" | grep "sqlite" | grep ii | awk -F' ' '{ print $3 }' | sed "s/-.*$//" | cut -d"." -f1,2`
+	elif [ "${PKG##/*/}" = "rpm" ]; then
+		SQLITE_VER=`$PKG -qa "sqlite" | sed "s/sqlite-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
+	else
+		SQLITE_VER=`$PKG list installed "sqlite" | grep "installed" | awk -F' ' '{ print $2 }' | sed "s/-.*$//" | cut -d"." -f1,2`
+	fi
+
+   SQLITE_FMT=`fmt_version $SQLITE_VER` 
+	if [ -z "$SQLITE_VER" ]; then
+		log "WARNING: The SQLite package was not found." "warning"
+		log "         This may not be a problem if you installed it from source" "warning"
+	else 
+		log "SQLite $SQLITE_VER" $SQLITE_VER
+		if [ $SQLITE_FMT -lt $SQLITE_REQ ]; then
+			log "|  Error: Version >= $1" "needed"
+		fi
+	fi
+}
+
 # Check return code
 chk_rc() {
 	LRC=$?
@@ -1173,6 +1196,10 @@ if [ $FORCE -eq 0 ]; then
 
 	# Check Graphviz Modules
 	check_graphviz_modules "$NEED_GV_MOD" $NEED_GV_VERSION
+
+	# Check SQLite
+	SQLITE_REQ=`fmt_version $NEED_SQLITE_VERSION` 
+	check_sqlite_version $NEED_SQLITE_VERSION
 
 	if [ $RC -ne 0 ]; then
 		text
