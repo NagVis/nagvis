@@ -1,23 +1,34 @@
 This is a small file for storing quick thoughts about new features and needed changes:
 ===============================================================================
 
+Neue Idee:
+- Map Aufbau gliedert sich in 2 Phasen
+  1. Was kommt auf die Map? Mögliche Quellen:
+    - Map-Konfiguration
+    - Funktion liefert Datenkostrukt zurück (wird zu Map-Konfiguration gemerged)
+    - Es könnte auch ein Include auf irgendeine Datei sein
+    - Die Funktion wird nur beim Parsen der Map Konfiguration geladen; Die Daten kommen mit in den Map-Cache
+    - Die Funktion kann dann z.B. externe Datenbanken/Livestatus oder so anzapfen um von dort automatisch Objekte zu holen
+    - Das Konstrukt kann auch Objekte mit Eigenschaften enthalen, diese könnten dann von der Map Konfiguration überschrieben werden (?)
+2. Welche Eigenschaften haben die Objekte?
+
 Relative Koordinaten:
-	- Beim Löschen von Objekten prüfen, ob andere Objekte auf dieses Objekt verweisen
-	- Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
+  - Beim Löschen von Objekten prüfen, ob andere Objekte auf dieses Objekt verweisen
+  - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
   - Wie von relativen zu absoluten Koordinaten umschalten?
 
 Linien (Auch für neue Automap wichtig!):
  - Pfeilspitzen konfigurierbar machen
    - Größe
-	 - Stil
-	 - Farbe (?)
+   - Stil
+   - Farbe (?)
  - Offset zum Ziel
 
 WUI: Bei Typ-Wechsel einer Linie in der WUI muss die Anzahl der Koordinaten
 variieren. Normale Linien haben zwei Koordinaten, Linien mit zwei Enden können
 drei Koordinaten haben.
 
-Lock/Unlock Aktionen fuer normale Icons/Gadgets implementieren.
+Lock/Unlock Aktionen fuer normale Icons/Gadgets/Textboxen implementieren.
 
 Pro Objekt "Custom Vars" für Context- und Hover-Menus einbauen. Diese werden dann pro Objekt
 u.U. sogar in separaten Queries an das Backend abgefragt und in Hover- und Context-Menus
@@ -36,6 +47,7 @@ Exception/Error log bauen:
 
 
 - Dokumentation:
+  - Objekt-IDs
   - Neue Editier-Möglichkeiten in der normalen GUI
   - Mittleren Teil der Linien festmachen oder positionieren
   - Relative Koordinaten
