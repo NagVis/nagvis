@@ -1122,11 +1122,14 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['htmlgadgets']['default']        = $htmlBase.'/userfiles/gadgets/';
 		
 		$this->validConfig['paths']['icon']['default']               = $base.HTDOCS_DIR.'/userfiles/images/iconsets/';
-		$this->validConfig['paths']['shape']['default']              = $base.HTDOCS_DIR.'/userfiles/images/shapes/';
-		$this->validConfig['paths']['map']['default']                = $base.HTDOCS_DIR.'/userfiles/images/maps/';
 		$this->validConfig['paths']['htmlicon']['default']           = $htmlBase.'/userfiles/images/iconsets/';
+
+		$this->validConfig['paths']['shape']['default']              = $base.HTDOCS_DIR.'/userfiles/images/shapes/';
 		$this->validConfig['paths']['htmlshape']['default']          = $htmlBase.'/userfiles/images/shapes/';
+
+		$this->validConfig['paths']['map']['default']                = $base.HTDOCS_DIR.'/userfiles/images/maps/';
 		$this->validConfig['paths']['htmlmap']['default']            = $htmlBase.'/userfiles/images/maps/';
+
 		$this->validConfig['paths']['htmltemplateimages']['default'] = $htmlBase.'/userfiles/images/templates/';
 		
 		// This option directly relies on the configured htmlBase by default
