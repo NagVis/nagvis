@@ -26,6 +26,7 @@ Core
   * Bugfix: The installer overwrites the default iconset files on upgrade as expected
   * Added mechanism to search userfiles in independent structures. This allows
 	usage of the local/ structure in OMD
+  * Bugfix: Fixed section merging in main config when using more than one config file
 
 Automap
   * Made automap coord parsing regex resistent against html entities in the URL
