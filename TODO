@@ -1,6 +1,10 @@
 This is a small file for storing quick thoughts about new features and needed changes:
 ===============================================================================
 
+Installer:
+ - Der Installer muss beim Update darauf achten, dass die alten [paths] Variablen aus
+   der nagvis.ini.php entfernt werden.
+
 Neue Idee:
 - Map Aufbau gliedert sich in 2 Phasen
   1. Was kommt auf die Map? Mögliche Quellen:

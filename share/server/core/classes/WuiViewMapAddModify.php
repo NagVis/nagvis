@@ -77,13 +77,13 @@ class WuiViewMapAddModify {
 		}
 		
 		$aData = Array(
-			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-			'action' => $action,
-			'type' => $this->aOpts['type'],
-			'id' => $this->aOpts['id'],
-			'map' => $this->aOpts['show'],
+			'htmlBase'     => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+			'action'       => $action,
+			'type'         => $this->aOpts['type'],
+			'id'           => $this->aOpts['id'],
+			'map'          => $this->aOpts['show'],
 			'formContents' => $this->getFields().$this->fillFields(),
-			'langSave' => $this->CORE->getLang()->getText('save')
+			'langSave'     => $this->CORE->getLang()->getText('save')
 		);
 		
 		// Build page based on the template file and the data array

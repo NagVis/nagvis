@@ -162,7 +162,7 @@ class CoreModMap extends CoreModule {
 				case 'modifyObject':
 					$refresh = null;
 					$success = null;
-					if(isset($aReturn['refresh']) && $aReturn['refresh'] == 1) {
+					if(isset($_GET['ref']) && $_GET['ref'] == 1) {
 						$refresh = 1;
 						$success = $this->CORE->getLang()->getText('The object has been modified.');
 					}
