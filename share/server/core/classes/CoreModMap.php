@@ -294,7 +294,7 @@ class CoreModMap extends CoreModule {
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The uploaded file is no map configuration file.'));
 
 		$mapPath = $this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$mapName;
-		return move_uploaded_file($a['map_file']['tmp_name'], $mapPath) && chmod($mapPath, 0666);
+		return move_uploaded_file($a['map_file']['tmp_name'], $mapPath) && $this->CORE->setPerms($filePath);
 	}
 
 	protected function handleResponseDoExportMap() {

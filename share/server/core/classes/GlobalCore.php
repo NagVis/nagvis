@@ -509,6 +509,7 @@ class GlobalCore {
 		} catch(Exception $e) {
 			error_reporting($old);
 		}
+		return true;
 	}
 
 	/**

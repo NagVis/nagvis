@@ -27,6 +27,7 @@ Core
   * Added mechanism to search userfiles in independent structures. This allows
 	usage of the local/ structure in OMD
   * Bugfix: Fixed section merging in main config when using more than one config file
+  * Using configured permissions on uploaded files (backgrounds, shapes, maps) now
 
 Automap
   * Made automap coord parsing regex resistent against html entities in the URL
