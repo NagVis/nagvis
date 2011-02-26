@@ -1,0 +1,24 @@
+#!/bin/bash
+case "$1" in
+    1.6|trunk)
+        V=1.6
+        BRANCH=master
+    ;;
+    1.5)
+        V=1.5
+        BRANCH=nagvis-1.5
+    ;;
+    1.4)
+        V=1.4
+        BRANCH=nagvis-1.4
+		;;
+    *)
+        echo "ERROR: No param given."
+        exit 1
+    ;;
+esac
+
+PREFIX="nagvis-$V-nightly"
+ARCH="$PREFIX.tar.gz"
+git archive --prefix=$PREFIX/ refs/heads/$BRANCH | gzip > $ARCH
+echo "Output: $ARCH"

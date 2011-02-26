@@ -2,6 +2,7 @@
 *.bak
 *.swp
 *~
+*.tar.gz
 .metadata
 uifx/.settings
 uifx/.actionScriptProperties
