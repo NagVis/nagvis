@@ -81,9 +81,9 @@ class GlobalBackground {
 				$this->webPath = $match[1];
 			} else {
 				$this->type = 'local';
-				
-				$this->path = $this->CORE->getMainCfg()->getValue('paths', 'map').$this->getFileName();
-				$this->webPath = $this->CORE->getMainCfg()->getValue('paths', 'htmlmap').$this->getFileName();
+			
+				$this->path    = $this->CORE->getMainCfg()->getPath('sys', '',        'backgrounds', $this->getFileName());
+				$this->webPath = $this->CORE->getMainCfg()->getPath('html', 'global', 'backgrounds', $this->getFileName());
 			}
 		} else {
 			$this->type = 'none';
@@ -148,7 +148,7 @@ class GlobalBackground {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function checkFolderWriteable($printErr) {
-		return GlobalCore::getInstance()->checkWriteable($this->CORE->getMainCfg()->getValue('paths', 'map'), $printErr);
+		return GlobalCore::getInstance()->checkWriteable(dirname($this->path), $printErr);
 	}
 	
 	/**
@@ -197,7 +197,7 @@ class GlobalBackground {
 	 */
 	function deleteImage($printErr=1) {
 		if($this->checkFolderWriteable($printErr) && $this->checkFileWriteable($printErr)) {
-			if(unlink($this->CORE->getMainCfg()->getValue('paths', 'map').$this->image)) {
+			if(unlink($this->path)) {
 				return TRUE;
 			} else {
 				if($printErr) {

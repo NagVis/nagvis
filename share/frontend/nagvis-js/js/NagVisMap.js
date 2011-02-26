@@ -71,10 +71,10 @@ var NagVisMap = NagVisStatefulObject.extend({
 		
 		// Status image
 		if(this.conf.icon !== null && this.conf.icon !== '') {
-			var oImg = document.createElement('img');
+			var oImg   = document.createElement('img');
 			oImg.align = 'right';
-			oImg.src = this.conf.iconHtmlPath+this.conf.icon;
-			oImg.alt = this.conf.type+'-'+alt;
+			oImg.src   = oGeneralProperties.path_iconsets + this.conf.icon;
+			oImg.alt   = this.conf.type + '-' + alt;
 		
 			oLink.appendChild(oImg);
 			oImg = null;

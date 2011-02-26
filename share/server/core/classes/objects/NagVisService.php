@@ -62,11 +62,10 @@ class NagVisService extends NagiosService {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	protected function parseGadgetUrl() {
-		if(preg_match('/^\[(.*)\]$/',$this->gadget_url,$match) > 0) {
+		if(preg_match('/^\[(.*)\]$/',$this->gadget_url,$match) > 0)
 			$this->gadget_url = $match[1];
-		} else {
-			$this->gadget_url = $this->CORE->getMainCfg()->getValue('paths', 'htmlgadgets').$this->gadget_url;
-		}
+		else
+			$this->gadget_url = $this->CORE->getMainCfg()->getPath('html', 'global', 'gadgets', $this->gadget_url);
 	}
 }
 ?>

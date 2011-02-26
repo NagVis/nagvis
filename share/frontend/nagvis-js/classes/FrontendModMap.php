@@ -98,9 +98,8 @@ class FrontendModMap extends FrontendModule {
 		
 		// Need to load the custom stylesheet?
 		$customStylesheet = $MAPCFG->getValue(0, 'stylesheet');
-		if($customStylesheet !== '') {
-			$INDEX->setCustomStylesheet($this->CORE->getMainCfg()->getValue('paths','htmlstyles') . $customStylesheet);
-		}
+		if($customStylesheet !== '')
+			$INDEX->setCustomStylesheet($this->CORE->getMainCfg()->getPath('html', 'global', 'styles', $customStylesheet));
 		
 		// Header menu enabled/disabled by url?
 		if($this->viewOpts['enableHeader'] !== false && $this->viewOpts['enableHeader']) {

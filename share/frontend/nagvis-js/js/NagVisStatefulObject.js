@@ -735,8 +735,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 		var doc = document;
 		var oIcon = doc.createElement('img');
 		oIcon.setAttribute('id', this.conf.object_id+'-icon');
-		oIcon.src = this.conf.iconHtmlPath+this.conf.icon;
-		oIcon.alt = this.conf.type+'-'+alt;
+		oIcon.src = oGeneralProperties.path_iconsets + this.conf.icon;
+		oIcon.alt = this.conf.type + '-' + alt;
 		
 		var oIconDiv = doc.createElement('div');
 		oIconDiv.setAttribute('id', this.conf.object_id+'-icondiv');
@@ -786,8 +786,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 		var doc = document;
 		var oIcon = doc.createElement('img');
 		oIcon.setAttribute('id', this.conf.object_id+'-icon');
-		oIcon.src = this.conf.iconHtmlPath+this.conf.icon;
-		oIcon.alt = this.conf.type+'-'+alt;
+		oIcon.src = oGeneralProperties.path_iconsets + this.conf.icon;
+		oIcon.alt = this.conf.type + '-' + alt;
 		
 		var oIconDiv = doc.createElement('div');
 		oIconDiv.setAttribute('id', this.conf.object_id+'-icondiv');

@@ -73,15 +73,15 @@ class NagVisIndexView {
 		$TMPLSYS = $TMPL->getTmplSys();
 		
 		$aData = Array(
-			'pageTitle' => $this->CORE->getMainCfg()->getValue('internal', 'title') . $this->sSubtitle,
-			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-			'htmlJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
-			'htmlCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
-			'htmlTemplates' => $this->CORE->getMainCfg()->getValue('paths','htmltemplates'), 
+			'pageTitle'        => $this->CORE->getMainCfg()->getValue('internal', 'title') . $this->sSubtitle,
+			'htmlBase'         => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+			'htmlJs'           => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
+			'htmlCss'          => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
+			'htmlTemplates'    => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'), 
 			'bUseCompressedJs' => $this->checkJsCompressed(),
 			'customStylesheet' => $this->sCustomStylesheet,
-			'headerMenu' => $this->sHeaderMenu,
-			'content' => $this->sContent
+			'headerMenu'       => $this->sHeaderMenu,
+			'content'          => $this->sContent
 		);
 		
 		// Build page based on the template file and the data array
@@ -96,11 +96,7 @@ class NagVisIndexView {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	private function checkJsCompressed() {
-		if(file_exists($this->CORE->getMainCfg()->getValue('paths', 'js').'NagVisCompressed.js')) {
-			return true;
-		} else {
-			return false;
-		}
+		return file_exists($this->CORE->getMainCfg()->getValue('paths', 'js').'NagVisCompressed.js');
 	}
 }
 ?>

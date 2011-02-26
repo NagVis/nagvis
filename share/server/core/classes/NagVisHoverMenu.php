@@ -49,7 +49,7 @@ class NagVisHoverMenu {
 		$this->templateName = $templateName;
 		
 		$this->pathHtmlBase     = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
-		$this->pathTemplateFile = $this->CORE->getMainCfg()->getPath('templates', $this->templateName.'.hover.html');
+		$this->pathTemplateFile = $this->CORE->getMainCfg()->getPath('sys', '', 'templates', $this->templateName.'.hover.html');
 		
 		$this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, $this->CORE->getMainCfg()->getValue('paths','var').'hover-'.$this->templateName.'-'.$this->CORE->getLang()->getCurrentLanguage().'.cache');
 		
@@ -176,12 +176,11 @@ class NagVisHoverMenu {
 		}
 		
 		if(strpos($this->code,'[html_templates]') !== FALSE) {
-			$this->code = str_replace('[html_templates]',$this->CORE->getMainCfg()->getPath('templates', '', ''),$this->code);
+			$this->code = str_replace('[html_templates]',$this->CORE->getMainCfg()->getPath('sys', 'global', 'templates'),$this->code);
 		}
 		
-		if(strpos($this->code,'[html_template_images]') !== FALSE) {
-			$this->code = str_replace('[html_template_images]',$this->CORE->getMainCfg()->getValue('paths','htmltemplateimages'),$this->code);
-		}
+		if(strpos($this->code,'[html_template_images]') !== FALSE)
+			$this->code = str_replace('[html_template_images]', $this->CORE->getMainCfg()->getPath('html', 'global', 'templateimages'), $this->code);
 	}
 	
 	/**
@@ -221,7 +220,7 @@ class NagVisHoverMenu {
 	}
 
 	public function getCssFile() {
-		return $this->CORE->getMainCfg()->getPath('templates', $this->templateName.'.hover.css', 'html');
+		return $this->CORE->getMainCfg()->getPath('html', 'global', 'templates', $this->templateName.'.hover.css');
 	}
 }
 ?>

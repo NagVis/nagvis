@@ -58,13 +58,13 @@ class NagVisInfoView {
 		$userPerms = $AUTHORISATION->parsePermissions();
 		
 		$aData = Array(
-			'pageTitle' => $this->CORE->getMainCfg()->getValue('internal', 'title') . ' &rsaquo; '.$this->CORE->getLang()->getText('supportInfo'),
-			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-			'htmlTemplates' => $this->CORE->getMainCfg()->getValue('paths','htmltemplates'), 
-			'nagvisVersion' => CONST_VERSION,
-			'phpVersion' => PHP_VERSION,
-			'mysqlVersion' => shell_exec('mysql --version'),
-			'os' => shell_exec('uname -a'),
+			'pageTitle'      => $this->CORE->getMainCfg()->getValue('internal', 'title') . ' &rsaquo; '.$this->CORE->getLang()->getText('supportInfo'),
+			'htmlBase'       => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+			'htmlTemplates'  => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'), 
+			'nagvisVersion'  => CONST_VERSION,
+			'phpVersion'     => PHP_VERSION,
+			'mysqlVersion'   => shell_exec('mysql --version'),
+			'os'             => shell_exec('uname -a'),
 			'serverSoftware' => $_SERVER['SERVER_SOFTWARE'],
 			'scriptFilename' => $_SERVER['SCRIPT_FILENAME'],
 			'scriptName' => $_SERVER['SCRIPT_NAME'],

@@ -31,8 +31,8 @@ class NagVisStatelessObject extends NagVisObject {
 	// "Global" Configuration variables for all stateless objects
 	protected $label_show;
 	
-	protected static $iconPath = null;
-	protected static $iconHtmlPath = null;
+	protected static $iconPath      = null;
+	protected static $iconPathLocal = null;
 	
 	/**
 	 * Class constructor

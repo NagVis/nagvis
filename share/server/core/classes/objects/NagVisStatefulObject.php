@@ -57,8 +57,8 @@ class NagVisStatefulObject extends NagVisObject {
 	// Details about the icon image (cache)
 	protected $iconDetails;
 
-	protected static $iconPath = null;
-	protected static $iconHtmlPath = null;
+	protected static $iconPath        = null;
+	protected static $iconPathLocal   = null;
 	protected static $langChildStates = null;
 	
 	protected $dateFormat;
@@ -588,8 +588,8 @@ class NagVisStatefulObject extends NagVisObject {
 	public function fetchIcon() {
 		// Set the paths of this iconset
 		if(NagVisStatefulObject::$iconPath === null) {
-			NagVisStatefulObject::$iconPath     = $this->CORE->getMainCfg()->getValue('paths', 'icon');
-			NagVisStatefulObject::$iconHtmlPath = $this->CORE->getMainCfg()->getValue('paths', 'htmlicon');
+			NagVisStatefulObject::$iconPath      = $this->CORE->getMainCfg()->getPath('sys',  'global', 'icons');
+			NagVisStatefulObject::$iconPathLocal = $this->CORE->getMainCfg()->getPath('sys',  'local',  'icons');
 		}
 		
 		// Read the filetype of the iconset
@@ -632,7 +632,8 @@ class NagVisStatefulObject extends NagVisObject {
 			}
 			
 			//Checks whether the needed file exists
-			if(@file_exists(NagVisStatefulObject::$iconPath . $icon)) {
+			if(@file_exists(NagVisStatefulObject::$iconPath . $icon)
+			   || @file_exists(NagVisStatefulObject::$iconPathLocal . $icon)) {
 				$this->icon = $icon;
 			} else {
 				$this->icon = $this->iconset.'_error.'.$fileType;

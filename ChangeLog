@@ -24,6 +24,8 @@ Core
   * Fixed inconsistence with iconsets when refreshing overview maps/automaps
   * Cleaned up session auth code (Moved session module code to auth handler)
   * Bugfix: The installer overwrites the default iconset files on upgrade as expected
+  * Added mechanism to search userfiles in independent structures. This allows
+	usage of the local/ structure in OMD
 
 Automap
   * Made automap coord parsing regex resistent against html entities in the URL

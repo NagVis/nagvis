@@ -54,9 +54,8 @@ class WuiModMap extends WuiModule {
 		
 		// Need to load the custom stylesheet?
 		$customStylesheet = $MAPCFG->getValue(0, 'stylesheet');
-		if($customStylesheet !== '') {
-			$INDEX->setCustomStylesheet($this->CORE->getMainCfg()->getValue('paths','htmlstyles') . $customStylesheet);
-		}
+		if($customStylesheet !== '')
+			$INDEX->setCustomStylesheet($this->CORE->getMainCfg()->getPath('html', 'global', 'styles', $customStylesheet));
 		
 		$MAP = new WuiMap(WuiCore::getInstance(), $MAPCFG);
 		

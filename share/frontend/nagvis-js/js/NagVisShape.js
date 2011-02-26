@@ -79,6 +79,12 @@ var NagVisShape = NagVisStatelessObject.extend({
 		
 		var oIcon = document.createElement('img');
 		oIcon.setAttribute('id', this.conf.object_id+'-icon');
+
+		// Extract external URLs
+		if(this.conf.icon.match(/^\[(.*)\]$/))
+			this.conf.icon = this.conf.icon.replace(/^\[(.*)\]$/, '$1');
+		else
+			this.conf.icon = oGeneralProperties.path_shapes + this.conf.icon;
 		
 		if(this.conf.icon.indexOf('?') !== -1) {
 			oIcon.src = this.conf.icon+'&_t='+iNow;

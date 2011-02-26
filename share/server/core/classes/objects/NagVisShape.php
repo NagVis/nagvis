@@ -38,8 +38,8 @@ class NagVisShape extends NagVisStatelessObject {
 	 */
 	public function __construct($CORE, $icon) {
 		if(parent::$iconPath === null) {
-			parent::$iconPath = $CORE->getMainCfg()->getValue('paths', 'shape');
-			parent::$iconHtmlPath = $CORE->getMainCfg()->getValue('paths', 'htmlshape');
+			parent::$iconPath      = $CORE->getMainCfg()->getValue('sys',  'global', 'shapes');
+			parent::$iconPathLocal = $CORE->getMainCfg()->getValue('sys',  'local',  'shapes');
 		}
 		
 		$this->icon = $icon;
@@ -56,8 +56,6 @@ class NagVisShape extends NagVisStatelessObject {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function parseJson() {
-		$this->setIconPath();
-		
 		return parent::parseJson();
 	}
 	
@@ -70,9 +68,8 @@ class NagVisShape extends NagVisStatelessObject {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getHoverMenu() {
-		if(isset($this->hover_url) && $this->hover_url != '') {
+		if(isset($this->hover_url) && $this->hover_url != '')
 			parent::getHoverMenu();
-		}
 	}
 	
 	/**
@@ -88,23 +85,5 @@ class NagVisShape extends NagVisStatelessObject {
 	
 	# End public methods
 	# #########################################################################
-	
-	/**
-	 * PRIVATE setIconPath()
-	 *
-	 * Parses the HTML-Code of an icon
-	 *
-	 * @param	Boolean	$link		Add a link to the icon
-	 * @param	Boolean	$hoverMenu	Add a hover menu to the icon
-	 * @return	String	String with Html Code
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function setIconPath() {
-		if(preg_match('/^\[(.*)\]$/', $this->icon, $match) > 0) {
-			$this->icon = $match[1];
-		} else {
-			$this->icon = parent::$iconHtmlPath . $this->icon;
-		}
-	}
 }
 ?>

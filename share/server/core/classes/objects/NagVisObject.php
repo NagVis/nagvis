@@ -252,12 +252,6 @@ class NagVisObject {
 		foreach($this AS $key => $val)
 			if(!isset(self::$arrDenyKeys[$key]))
 				$arr[$key] = $val;
-
-		// Add special static options
-		if($this instanceof NagVisStatefulObject)
-			$arr['iconHtmlPath'] = NagVisStatefulObject::$iconHtmlPath;
-		elseif($this instanceof NagVisStatelessObject)
-			$arr['iconHtmlPath'] = NagVisStatelessObject::$iconHtmlPath;
 		
 		$arr['num_members'] = $this->numMembers();
 		

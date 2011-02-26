@@ -382,12 +382,16 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '',
 					'match' => MATCH_STRING_PATH),
+				'local_base' => Array('must' => 0,
+					'editable' => 1,
+					'default' => '',
+					'match' => MATCH_STRING_PATH),
 				'cfg' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'field_type' => 'hidden',
 					'match' => MATCH_STRING_PATH),
-				'icon' => Array('must' => 0,
+				'icons' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'field_type' => 'hidden',
@@ -407,7 +411,7 @@ class GlobalMainCfg {
 					'default' => '',
 					'field_type' => 'hidden',
 					'match' => MATCH_STRING_PATH),
-				'shape' => Array('must' => 0,
+				'shapes' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'field_type' => 'hidden',
@@ -418,11 +422,6 @@ class GlobalMainCfg {
 					'field_type' => 'hidden',
 					'match' => MATCH_STRING_PATH),
 				'class' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'map' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'field_type' => 'hidden',
@@ -452,7 +451,7 @@ class GlobalMainCfg {
 					'default' => '',
 					'field_type' => 'hidden',
 					'match' => MATCH_STRING_PATH),
-				'gadget' => Array('must' => 0,
+				'gadgets' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'field_type' => 'hidden',
@@ -466,6 +465,10 @@ class GlobalMainCfg {
 					'editable' => 1,
 					'default' => '/nagvis',
 					'match' => MATCH_STRING_PATH),
+				'local_htmlbase' => Array('must' => 0,
+					'editable' => 1,
+					'default' => '/nagvis',
+					'match' => MATCH_STRING_PATH),
 				'htmlcgi' => Array('must' => 1,
 					'editable' => 1,
 					'field_type' => 'hidden',
@@ -473,11 +476,6 @@ class GlobalMainCfg {
 					'match' => MATCH_STRING_URL),
 				'htmlcss' => Array('must' => 1,
 					'editable' => 1,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'htmlgadgets' => Array('must' => 0,
-					'editable' => 0,
 					'default' => '',
 					'field_type' => 'hidden',
 					'match' => MATCH_STRING_PATH),
@@ -496,37 +494,12 @@ class GlobalMainCfg {
 					'default' => '',
 					'field_type' => 'hidden',
 					'match' => MATCH_STRING_PATH),
-				'htmltemplates' => Array('must' => 0,
+				'sounds' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'field_type' => 'hidden',
 					'match' => MATCH_STRING_PATH),
-				'htmltemplateimages' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'htmlicon' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'htmlshape' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'htmlsounds' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'htmlstyles' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'htmlmap' => Array('must' => 0,
+				'templateimages' => Array('must' => 0,
 					'editable' => 0,
 					'default' => '',
 					'field_type' => 'hidden',
@@ -975,7 +948,7 @@ class GlobalMainCfg {
 		
 		// Try to get the base path via $_SERVER['SCRIPT_FILENAME']
 		$this->validConfig['paths']['base']['default'] = $this->getBasePath();
-		$this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
+		$this->setPathsByBase($this->getValue('paths','base'), $this->getValue('paths','htmlbase'));
 		
 		// Define the main configuration files
 		$this->configFiles = $configFiles;
@@ -1112,25 +1085,15 @@ class GlobalMainCfg {
 		$this->validConfig['paths']['images']['default']             = $base.HTDOCS_DIR.'/frontend/nagvis-js/images/';
 		$this->validConfig['paths']['htmlimages']['default']         = $htmlBase.'/frontend/nagvis-js/images/';
 		
-		$this->validConfig['paths']['templates']['default']          = $base.HTDOCS_DIR.'/userfiles/templates/';
-		$this->validConfig['paths']['htmltemplates']['default']      = $htmlBase.'/userfiles/templates/';
-		
-		$this->validConfig['paths']['htmlsounds']['default']         = $htmlBase.'/userfiles/sounds/';
-		$this->validConfig['paths']['htmlstyles']['default']         = $htmlBase.'/userfiles/styles/';
-		
-		$this->validConfig['paths']['gadget']['default']             = $base.HTDOCS_DIR.'/userfiles/gadgets/';
-		$this->validConfig['paths']['htmlgadgets']['default']        = $htmlBase.'/userfiles/gadgets/';
-		
-		$this->validConfig['paths']['icon']['default']               = $base.HTDOCS_DIR.'/userfiles/images/iconsets/';
-		$this->validConfig['paths']['htmlicon']['default']           = $htmlBase.'/userfiles/images/iconsets/';
+		$this->validConfig['paths']['templates']['default']          = 'userfiles/templates/';
+		$this->validConfig['paths']['styles']['default']             = 'userfiles/styles/';
+		$this->validConfig['paths']['gadgets']['default']            = 'userfiles/gadgets/';
+		$this->validConfig['paths']['backgrounds']['default']        = 'userfiles/images/maps/';
+		$this->validConfig['paths']['icons']['default']              = 'userfiles/images/iconsets/';
+		$this->validConfig['paths']['shapes']['default']             = 'userfiles/images/shapes/';
+		$this->validConfig['paths']['sounds']['default']             = 'userfiles/sounds/';
 
-		$this->validConfig['paths']['shape']['default']              = $base.HTDOCS_DIR.'/userfiles/images/shapes/';
-		$this->validConfig['paths']['htmlshape']['default']          = $htmlBase.'/userfiles/images/shapes/';
-
-		$this->validConfig['paths']['map']['default']                = $base.HTDOCS_DIR.'/userfiles/images/maps/';
-		$this->validConfig['paths']['htmlmap']['default']            = $htmlBase.'/userfiles/images/maps/';
-
-		$this->validConfig['paths']['htmltemplateimages']['default'] = $htmlBase.'/userfiles/images/templates/';
+		$this->validConfig['paths']['templateimages']['default']     = 'userfiles/images/templates/';
 		
 		// This option directly relies on the configured htmlBase by default
 		$this->validConfig['global']['sesscookiepath']['default']    = $htmlBase;
@@ -1442,6 +1405,37 @@ class GlobalMainCfg {
 		}
 		return TRUE;
 	}
+
+	public function getPath($type, $loc, $var, $relfile = '') {
+		$lb = $this->getValue('paths', 'local_base', True) . HTDOCS_DIR;
+		$b  = $this->getValue('paths', 'base') . HTDOCS_DIR;
+
+		$lh = $this->getValue('paths', 'local_htmlbase', True);
+		$h  = $this->getValue('paths', 'htmlbase');
+
+		// Get the relative path
+		if(isset($this->config['paths']) && isset($this->config['paths'][$var]))
+			$relpath = $this->config['paths'][$var];
+		else
+			$relpath = $this->validConfig['paths'][$var]['default'];
+
+		// Compute the full system paths
+		$l_file = $lb !== FALSE && $lb !== '' ? $lb . '/' . $relpath . $relfile : null;
+		$file   = $b . '/' . $relpath . $relfile;
+
+		// Decide which path to return
+		// When $loc is set to local it returns the local path
+		// When $loc is set to global it returns the global path
+		// When $loc is empty it checks if the local one exist and returns this when
+		// existing. Otherwise it returns the global one when existing. When the global
+		// is also not existant it returns an empty string
+		if($loc === 'local' || ($loc === '' && $l_file && file_exists($l_file)))
+			return $type == 'sys' ? $l_file : $lh . '/' . $relpath . $relfile;
+		elseif($loc === 'global' || ($loc === '' && file_exists($file)))
+			return $type == 'sys' ? $file : $h . '/' . $relpath . $relfile;
+		else
+			return '';
+	}
 	
 	/**
 	 * Gets a config setting
@@ -1531,11 +1525,7 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getRuntimeValue($var) {
-		if(isset($this->runtimeConfig[$var])) {
-			return $this->runtimeConfig[$var];
-		} else {
-			return '';
-		}
+		return isset($this->runtimeConfig[$var]) ? $this->runtimeConfig[$var] : '';
 	}
 	
 	/**
@@ -1545,19 +1535,17 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function parseGeneralProperties() {
-		$arr = Array();
-		
-		$arr['date_format'] = $this->getValue('global', 'dateformat');
-		$arr['path_base'] = $this->getValue('paths','htmlbase');
-		$arr['path_cgi'] = $this->getValue('paths','htmlcgi');
-		$arr['path_sounds'] = $this->getValue('paths','htmlsounds');
-		$arr['path_iconsets'] = $this->getValue('paths','htmlicon');
-		$arr['path_templates'] = $this->getValue('paths','htmltemplates');
-		$arr['path_images'] = $this->getValue('paths','htmlimages');
-		$arr['path_server'] = $this->getValue('paths','htmlbase').'/server/core/ajax_handler.php';
-		$arr['internal_title'] = $this->getValue('internal', 'title');
-		
-		return json_encode($arr);
+		return json_encode(Array(
+		  'date_format'    => $this->getValue('global', 'dateformat'),
+		  'path_base'      => $this->getValue('paths','htmlbase'),
+		  'path_cgi'       => $this->getValue('paths','htmlcgi'),
+		  'path_sounds'    => $this->getPath('html', 'global', 'sounds'),
+		  'path_iconsets'  => $this->getPath('html', 'global', 'icons'),
+		  'path_shapes'    => $this->getPath('html', 'global', 'shapes'),
+		  'path_images'    => $this->getValue('paths','htmlimages'),
+		  'path_server'    => $this->getValue('paths','htmlbase').'/server/core/ajax_handler.php',
+		  'internal_title' => $this->getValue('internal', 'title')
+		));
 	}
 	
 	/**
@@ -1567,14 +1555,12 @@ class GlobalMainCfg {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function parseWorkerProperties() {
-		$arr = Array();
-		
-		$arr['worker_interval'] = $this->getValue('worker', 'interval');
-		$arr['worker_update_object_states'] = $this->getValue('worker', 'updateobjectstates');
-		$arr['worker_request_max_params'] = $this->getValue('worker', 'requestmaxparams');
-		$arr['worker_request_max_length'] = $this->getValue('worker', 'requestmaxlength');
-		
-		return json_encode($arr);
+		return json_encode(Array(
+			'worker_interval'             => $this->getValue('worker', 'interval'),
+			'worker_update_object_states' => $this->getValue('worker', 'updateobjectstates'),
+			'worker_request_max_params'   => $this->getValue('worker', 'requestmaxparams'),
+			'worker_request_max_length'   => $this->getValue('worker', 'requestmaxlength')
+		));
 	}
 
 	/**$
@@ -1804,9 +1790,8 @@ class GlobalMainCfg {
 		$val = explode(',', $val);
 		
 		// Trim surrounding spaces on each element
-		foreach($val AS $trimKey => $trimVal) {
+		foreach($val AS $trimKey => $trimVal)
 			$val[$trimKey] = trim($trimVal);
-		}
 
 		return $val;
 	}

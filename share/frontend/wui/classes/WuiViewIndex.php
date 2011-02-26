@@ -77,18 +77,19 @@ class WuiViewIndex {
 		$TMPLSYS = $TMPL->getTmplSys();
 		
 		$aData = Array(
-			'pageTitle' => $this->CORE->getMainCfg()->getValue('internal', 'title') . $this->sSubtitle,
-			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-			'htmlJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
-			'htmlCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
-			'htmlTemplates' => $this->CORE->getMainCfg()->getValue('paths','htmltemplates'), 
-			'htmlWuiJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmlwuijs'),
-			'htmlWuiCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/css/',
+			'pageTitle'        => $this->CORE->getMainCfg()->getValue('internal', 'title') . $this->sSubtitle,
+			'htmlBase'         => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+			'htmlJs'           => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
+			'htmlTemplates'    => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'), 
+			'htmlCss'          => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates', 'default.css'), 
+			'htmlContextCss'   => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates', 'default.context.css'), 
+			'htmlWuiCss'       => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase').'/frontend/wui/css/wui.css',
+			'htmlWuiJs'        => $this->CORE->getMainCfg()->getValue('paths', 'htmlwuijs'),
 			'bUseCompressedJs' => $this->checkJsCompressed(),
 			'customStylesheet' => $this->sCustomStylesheet,
-			'backgroundColor' => $this->sBackgroundColor,
-			'headerMenu' => $this->sHeaderMenu,
-			'content' => $this->sContent
+			'backgroundColor'  => $this->sBackgroundColor,
+			'headerMenu'       => $this->sHeaderMenu,
+			'content'          => $this->sContent
 		);
 		
 		// Build page based on the template file and the data array

@@ -56,7 +56,7 @@ class NagVisLoginView {
 			'htmlJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
 			'htmlCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
 			'formTarget' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase') . '/server/core/ajax_handler.php?mod=Auth&amp;act=login',
-			'htmlTemplates' => $this->CORE->getMainCfg()->getValue('paths', 'htmltemplates'),
+			'htmlTemplates' => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'),
 			'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
       'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
       'maxUsernameLength' => AUTH_MAX_USERNAME_LENGTH,

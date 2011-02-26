@@ -89,7 +89,7 @@ class CoreModManageBackgrounds extends CoreModule {
 		if(!preg_match(MATCH_PNG_GIF_JPG_FILE, $fileName))
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The uploaded file is no image (png,jpg,gif) file or contains unwanted chars.'));
 
-		$filePath = $this->CORE->getMainCfg()->getValue('paths', 'map').$fileName;
+		$filePath = $this->CORE->getMainCfg()->getPath('sys', 'local', 'backgrounds').$fileName;
 		return move_uploaded_file($a['image_file']['tmp_name'], $filePath) && chmod($filePath, 0666);
 	}
 	

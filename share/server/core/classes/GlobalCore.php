@@ -226,7 +226,10 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	public function getAvailableHoverTemplates() {
-		return self::listDirectory(self::getMainCfg()->getValue('paths', 'templates'), MATCH_HOVER_TEMPLATE_FILE);
+		return array_merge(
+		  self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'templates'), MATCH_HOVER_TEMPLATE_FILE),
+		  self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'templates'), MATCH_HOVER_TEMPLATE_FILE, null, null, null, null, false)
+		);
 	}
 	
 	/**
@@ -236,7 +239,10 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAvailableHeaderTemplates() {
-		return self::listDirectory(self::getMainCfg()->getValue('paths', 'templates'), MATCH_HEADER_TEMPLATE_FILE);
+		return array_merge(
+		  self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'templates'), MATCH_HEADER_TEMPLATE_FILE),
+		  self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'templates'), MATCH_HEADER_TEMPLATE_FILE, null, null, null, null, false)
+		);
 	}
 	
 	/**
@@ -246,7 +252,10 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAvailableContextTemplates() {
-		return self::listDirectory(self::getMainCfg()->getValue('paths', 'templates'), MATCH_CONTEXT_TEMPLATE_FILE);
+		return array_merge(
+		  self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'templates'), MATCH_CONTEXT_TEMPLATE_FILE),
+		  self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'templates'), MATCH_CONTEXT_TEMPLATE_FILE, null, null, null, null, false)
+		);
 	}
 	
 	/**
@@ -256,7 +265,10 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAvailableShapes() {
-		return self::listDirectory(self::getMainCfg()->getValue('paths', 'shape'), MATCH_PNG_GIF_JPG_FILE, null, null, 0);
+		return array_merge(
+		  self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0),
+		  self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, null, false)
+		);
 	}
 	
 	/**
@@ -266,7 +278,10 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAvailableIconsets() {
-		return self::listDirectory(self::getMainCfg()->getValue('paths', 'icon'), MATCH_ICONSET);
+		return array_merge(
+		  self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'icons'), MATCH_ICONSET),
+		  self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'icons'), MATCH_ICONSET, null, null, null, null, false)
+		);
 	}
 	
 	/**
@@ -279,26 +294,19 @@ class GlobalCore {
 	public function getIconsetFiletype($iconset) {
 		$type = '';
 		
-		if(isset($this->iconsetTypeCache[$iconset])) {
+		if(isset($this->iconsetTypeCache[$iconset]))
 			$type = $this->iconsetTypeCache[$iconset];
-		} else {
-			if($handle = opendir(self::getMainCfg()->getValue('paths', 'icon'))) {
-				while (false !== ($file = readdir($handle))) {
-					// First filter all files with _ok, it is faster than regex all
-					if(strpos($file, '_ok') !== FALSE) {
-						if(preg_match('/^'.$iconset.'_ok.(png|gif|jpg)$/', $file, $arrRet)) {
-							$type = $arrRet[1];
-						}
-					}
-				}
-			}
-			closedir($handle);
-		}
+		else
+			foreach(Array(self::getMainCfg()->getPath('sys', 'local',  'icons'),
+			              self::getMainCfg()->getPath('sys', 'global', 'icons')) AS $path)
+				if(file_exists($path))
+					foreach(Array('png', 'gif', 'jpg') AS $ext)
+						if(file_exists($path . $iconset . '_ok.'.$ext))
+							return $ext;
 		
 		// Catch error when iconset filetype could not be fetched
-		if($type === '') {
+		if($type === '')
 			new GlobalMessage('ERROR', self::getLang()->getText('iconsetFiletypeUnknown', Array('ICONSET' => $iconset)));
-		}
 		
 		$this->iconsetTypeCache[$iconset] = $type;
 		return $type;
@@ -333,7 +341,10 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
 	public function getAvailableBackgroundImages() {
-		return self::listDirectory(self::getMainCfg()->getValue('paths', 'map'), MATCH_PNG_GIF_JPG_FILE, null, null, 0);
+		return array_merge(
+		  self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'backgrounds'), MATCH_PNG_GIF_JPG_FILE, null, null, 0),
+		  self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'backgrounds'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, null, false)
+		);
 	}
 	
 	/**
@@ -343,7 +354,10 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function getAvailableGadgets() {
-		return self::listDirectory(self::getMainCfg()->getValue('paths', 'gadget'), MATCH_PHP_FILE, Array('gadgets_core.php' => true));
+		return array_merge(
+			self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'gadgets'), MATCH_PHP_FILE, Array('gadgets_core.php' => true), null, null, null, true),
+			self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'gadgets'), MATCH_PHP_FILE, Array('gadgets_core.php' => true), null, null, null, false)
+		);
 	}
 
 	/**
@@ -355,13 +369,7 @@ class GlobalCore {
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	public function checkMapIsAutomap($sMap) {
-		$aAutomaps = $this->getAvailableAutomaps();
-		
-		if(in_array($sMap, $aAutomaps)) {
-			return true;
-		} else {
-			return false;
-		}
+		return in_array($sMap, $this->getAvailableAutomaps());
 	}
 
 	/**
@@ -371,10 +379,11 @@ class GlobalCore {
 	 * @param   String  Regex the file(s) need to match
 	 * @param   Array   Lists of filenames to ignore (The filenames need to be the keys)
 	 * @param   Integer Match part to be returned
+	 * @param   Boolean Print errors when dir does not exist
 	 * @return	Array   Sorted list of file names/parts in this directory
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function listDirectory($dir, $allowRegex = null, $ignoreList = null, $allowPartRegex = null, $returnPart = null, $setKey = null) {
+	private function listDirectory($dir, $allowRegex = null, $ignoreList = null, $allowPartRegex = null, $returnPart = null, $setKey = null, $printErr = true) {
 		$files = Array();
 
     if($returnPart === null)
@@ -382,7 +391,7 @@ class GlobalCore {
     if($setKey === null)
 			$setKey = false;
 		
-    if(!self::checkExisting($dir))
+    if(!self::checkExisting($dir, $printErr))
 			return $files;
 		
 		if($handle = opendir($dir)) {

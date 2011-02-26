@@ -175,22 +175,22 @@ class WuiMap extends GlobalMap {
 				if(!isset($obj['path']) || $obj['path'] == '') {
 					$imgPath = $obj['icon'];
 				} else {
-					$imgPath = $obj['path'].$obj['icon'];
+					$imgPath = $obj['path'].'/'.$obj['icon'];
 				}
 			}
 		} else {
 			if(!isset($obj['path']) || $obj['path'] == '') {
 				$imgPath = $obj['icon'];
 			} else {
-				$imgPath = $obj['path'].$obj['icon'];
+				$imgPath = $obj['path'].'/'.$obj['icon'];
 			}
 			
 			if(!file_exists($imgPath)) {
 				new GlobalMessage('WARNING', $this->CORE->getLang()->getText('iconNotExists','IMGPATH~'.$imgPath));
 				
-				$obj['path'] = $this->CORE->getMainCfg()->getValue('paths', 'icon');
-				$obj['htmlPath'] = $this->CORE->getMainCfg()->getValue('paths', 'htmlicon');
-				$obj['icon'] = '20x20.gif';
+				$obj['path']     = '';
+				$obj['htmlPath'] = '';
+				$obj['icon'] = $this->CORE->getMainCfg()->getPath('html', 'global', 'icons', '20x20.gif');
 			}
 		}
 		
@@ -207,23 +207,23 @@ class WuiMap extends GlobalMap {
 	function getIconPaths(&$obj) {
 		if($obj['type'] == 'shape') {
 			if(preg_match('/^\[(.*)\]$/',$obj['icon'],$match) > 0) {
-				$obj['path'] = '';
+				$obj['path']     = '';
 				$obj['htmlPath'] = '';
 			} else {
-				$obj['path'] = $this->CORE->getMainCfg()->getValue('paths', 'shape');
-				$obj['htmlPath'] = $this->CORE->getMainCfg()->getValue('paths', 'htmlshape');
+				$obj['path']     = dirname($this->CORE->getMainCfg()->getPath('sys',  '',       'shapes', $obj['icon']));
+				$obj['htmlPath'] = dirname($this->CORE->getMainCfg()->getPath('html', 'global', 'shapes', $obj['icon']));
 			}
 		} elseif(isset($obj['view_type']) && $obj['view_type'] == 'gadget') {
 			if(preg_match('/^\[(.*)\]$/', $obj['gadget_url'], $match) > 0) {
-				$obj['path'] = '';
+				$obj['path']     = '';
 				$obj['htmlPath'] = '';
 			} else {
-				$obj['path'] = $this->CORE->getMainCfg()->getValue('paths', 'gadget');
-				$obj['htmlPath'] = $this->CORE->getMainCfg()->getValue('paths', 'htmlgadgets');
+				$obj['path']     = dirname($this->CORE->getMainCfg()->getPath('sys',  '',       'gadgets', $obj['icon']));
+				$obj['htmlPath'] = dirname($this->CORE->getMainCfg()->getPath('html', 'global', 'gadgets', $obj['icon']));
 			}
 		} else {
-			$obj['path'] = $this->CORE->getMainCfg()->getValue('paths', 'icon');
-			$obj['htmlPath'] = $this->CORE->getMainCfg()->getValue('paths', 'htmlicon');
+			$obj['path']     = dirname($this->CORE->getMainCfg()->getPath('sys',  '',       'icons', $obj['icon']));
+			$obj['htmlPath'] = dirname($this->CORE->getMainCfg()->getPath('html', 'global', 'icons', $obj['icon']));
 		}
 		return $obj;
 	}
@@ -283,7 +283,7 @@ class WuiMap extends GlobalMap {
 		} else
 			$style = '';
 		
-		return "<img id=\"icon_".$obj['type']."_".$obj['id']."\" src=\"".$obj['htmlPath'].$obj['icon'].$obj['iconParams']."\" ".$style." alt=\"".$obj['type']."_".$obj['id']."\" onmouseover=\"toggleBorder(this, 1)\" onmouseout=\"toggleBorder(this, 0)\" onmousedown=\"contextMouseDown(event);\" oncontextmenu=\"return contextShow(event);\" />";
+		return "<img id=\"icon_".$obj['type']."_".$obj['id']."\" src=\"".$obj['htmlPath'].'/'.$obj['icon'].$obj['iconParams']."\" ".$style." alt=\"".$obj['type']."_".$obj['id']."\" onmouseover=\"toggleBorder(this, 1)\" onmouseout=\"toggleBorder(this, 0)\" onmousedown=\"contextMouseDown(event);\" oncontextmenu=\"return contextShow(event);\" />";
 	}
 	
 	/**
@@ -508,8 +508,7 @@ class WuiMap extends GlobalMap {
 			break;
 		}
 		
-		//replaced: if(file_exists($this->CORE->getMainCfg()->getValue('paths', 'icon').$icon)) {
-		if(@fclose(@fopen($this->CORE->getMainCfg()->getValue('paths', 'icon').$icon,'r'))) {
+		if(@fclose(@fopen($this->CORE->getMainCfg()->getPath('sys', '', 'icons', $icon), 'r'))) {
 			return $icon;
 		} else {
 			return $obj['iconset'].'_error.'.$fileType;
