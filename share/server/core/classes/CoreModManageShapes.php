@@ -82,14 +82,16 @@ class CoreModManageShapes extends CoreModule {
 		if(!preg_match(MATCH_PNG_GIF_JPG_FILE, $fileName))
 			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The uploaded file is no image (png,jpg,gif) file or contains unwanted chars.'));
 
-		$filePath = $this->CORE->getMainCfg()->getValue('paths', 'shape').$fileName;
+		$filePath = $this->CORE->getMainCfg()->getPath('sys', 'local', 'shapes').$fileName;
 		return move_uploaded_file($a['image_file']['tmp_name'], $filePath) && $this->CORE->setPerms($filePath);
 	}
 	
 	protected function doDelete($a) {
-		if(file_exists($this->CORE->getMainCfg()->getValue('paths', 'shape').$a['image']))
-			return unlink($this->CORE->getMainCfg()->getValue('paths', 'shape').$a['image']);
-		return false;
+		$path = $this->CORE->getMainCfg()->getPath('sys', '', 'shapes', $a['image']);
+		if($path !== '')
+			return unlink($path);
+		else
+			return false;
 	}
 	
 	protected function handleResponseDelete() {
