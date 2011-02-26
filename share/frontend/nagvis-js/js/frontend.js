@@ -421,7 +421,6 @@ function getHoverTemplateChildCode(sTemplateCode) {
  */
 function getHoverTemplates() {
 	var aUrlParts = [];
-	var aTemplateObjects;
 	
 	// Loop all map objects to get the used hover templates
 	for(var i in oMapObjects) {
@@ -435,32 +434,33 @@ function getHoverTemplates() {
 	}
 	
 	// Build string for bulk fetching the templates
-	for(var i in oHoverTemplates) {
-		if(i !== 'Inherits') {
+	for(var i in oHoverTemplates)
+		if(i !== 'Inherits')
 			aUrlParts.push('&name[]='+i);
-			
-			// Load template css file
-			// This is needed for some old browsers which do no load css files
-			// which are included in such fetched html code
-			var oLink = document.createElement('link');
-			oLink.href = oGeneralProperties.path_templates+i+'.hover.css';
-			oLink.rel = 'stylesheet';
-			oLink.type = 'text/css';
-			document.getElementsByTagName("head")[0].appendChild(oLink);
-			oLink = null;
-		}
-	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverTemplate',
-	                                  aUrlParts, oWorkerProperties.worker_request_max_length, true);
+	var aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverTemplate',
+	                                      aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oHoverTemplates
 	if(aTemplateObjects.length > 0)
 		for(var i = 0, len = aTemplateObjects.length; i < len; i++) {
 			oHoverTemplates[aTemplateObjects[i].name] = aTemplateObjects[i].code;
 			oHoverTemplatesChild[aTemplateObjects[i].name] = getHoverTemplateChildCode(aTemplateObjects[i].code);
+			
+			// Load css file is one is available
+			if(isset(aTemplateObjects[i].css_file)) {
+				// This is needed for some old browsers which do no load css files
+				// which are included in such fetched html code
+				var oLink = document.createElement('link');
+				oLink.href = aTemplateObjects[i].css_file
+				oLink.rel = 'stylesheet';
+				oLink.type = 'text/css';
+				document.getElementsByTagName("head")[0].appendChild(oLink);
+				oLink = null;
+			}
 		}
+	aTemplateObjects = null;
 }
 
 /**
@@ -472,7 +472,6 @@ function getHoverTemplates() {
  */
 function getContextTemplates() {
 	var aUrlParts = [];
-	var aTemplateObjects;
 	
 	// Loop all map objects to get the used templates
 	for(var i in oMapObjects)
@@ -486,29 +485,32 @@ function getContextTemplates() {
 			oContextTemplates[oMapObjects[i].conf.context_template] = '';
 	
 	// Build string for bulk fetching the templates
-	for(var sName in oContextTemplates) {
-		if(sName !== 'Inherits') {
+	for(var sName in oContextTemplates)
+		if(sName !== 'Inherits')
 			aUrlParts.push('&name[]='+sName);
-			
-			// Load template css file
-			var oLink = document.createElement('link');
-			oLink.href = oGeneralProperties.path_templates+sName+'.context.css';
-			oLink.rel = 'stylesheet';
-			oLink.type = 'text/css';
-			document.getElementsByTagName("head")[0].appendChild(oLink);
-			oLink = null;
-		}
-	}
 	
 	// Get the needed templates via bulk request
-	aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getContextTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
+	var aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getContextTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
 	
 	// Set the code to global object oContextTemplates
 	if(aTemplateObjects.length > 0) {
 		for(var i = 0, len = aTemplateObjects.length; i < len; i++) {
 			oContextTemplates[aTemplateObjects[i].name] = aTemplateObjects[i].code;
+			
+			// Load css file is one is available
+			if(isset(aTemplateObjects[i].css_file)) {
+				// This is needed for some old browsers which do no load css files
+				// which are included in such fetched html code
+				var oLink = document.createElement('link');
+				oLink.href = aTemplateObjects[i].css_file
+				oLink.rel = 'stylesheet';
+				oLink.type = 'text/css';
+				document.getElementsByTagName("head")[0].appendChild(oLink);
+				oLink = null;
+			}
 		}
 	}
+	aTemplateObjects = null;
 }
 
 /**

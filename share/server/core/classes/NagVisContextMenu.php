@@ -47,8 +47,8 @@ class NagVisContextMenu {
 		$this->OBJPAGE = $OBJ;
 		$this->templateName = $templateName;
 		
-		$this->pathHtmlBase = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
-		$this->pathTemplateFile = $this->CORE->getMainCfg()->getValue('paths','templates').$this->templateName.'.context.html';
+		$this->pathHtmlBase     = $this->CORE->getMainCfg()->getValue('paths', 'htmlbase');
+		$this->pathTemplateFile = $this->CORE->getMainCfg()->getPath('templates', $this->templateName.'.context.html');
 		
 		$this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, $this->CORE->getMainCfg()->getValue('paths','var').'context-'.$this->templateName.'-'.$this->CORE->getLang()->getCurrentLanguage().'.cache');
 		
@@ -125,7 +125,7 @@ class NagVisContextMenu {
 		}
 		
 		if(strpos($this->code,'[html_templates]') !== FALSE) {
-			$this->code = str_replace('[html_templates]',$this->CORE->getMainCfg()->getValue('paths','htmltemplates'),$this->code);
+			$this->code = str_replace('[html_templates]',$this->CORE->getMainCfg()->getPath('templates', 'html'),$this->code);
 		}
 		
 		if(strpos($this->code,'[html_template_images]') !== FALSE) {
@@ -167,6 +167,10 @@ class NagVisContextMenu {
 	 */
 	private function checkTemplateExists($printErr) {
 		return GlobalCore::getInstance()->checkExisting($this->pathTemplateFile, $printErr);
+	}
+
+	public function getCssFile() {
+		return $this->CORE->getMainCfg()->getPath('templates', $this->templateName.'.context.css', 'html');
 	}
 }
 ?>

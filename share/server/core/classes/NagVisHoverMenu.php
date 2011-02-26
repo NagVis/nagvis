@@ -48,8 +48,8 @@ class NagVisHoverMenu {
 		
 		$this->templateName = $templateName;
 		
-		$this->pathHtmlBase = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
-		$this->pathTemplateFile = $this->CORE->getMainCfg()->getValue('paths','templates').$this->templateName.'.hover.html';
+		$this->pathHtmlBase     = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
+		$this->pathTemplateFile = $this->CORE->getMainCfg()->getPath('templates', $this->templateName.'.hover.html');
 		
 		$this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, $this->CORE->getMainCfg()->getValue('paths','var').'hover-'.$this->templateName.'-'.$this->CORE->getLang()->getCurrentLanguage().'.cache');
 		
@@ -176,7 +176,7 @@ class NagVisHoverMenu {
 		}
 		
 		if(strpos($this->code,'[html_templates]') !== FALSE) {
-			$this->code = str_replace('[html_templates]',$this->CORE->getMainCfg()->getValue('paths','htmltemplates'),$this->code);
+			$this->code = str_replace('[html_templates]',$this->CORE->getMainCfg()->getPath('templates', '', ''),$this->code);
 		}
 		
 		if(strpos($this->code,'[html_template_images]') !== FALSE) {
@@ -218,6 +218,10 @@ class NagVisHoverMenu {
 	 */
 	private function checkTemplateExists($printErr) {
 		return GlobalCore::getInstance()->checkExisting($this->pathTemplateFile, $printErr);
+	}
+
+	public function getCssFile() {
+		return $this->CORE->getMainCfg()->getPath('templates', $this->templateName.'.hover.css', 'html');
 	}
 }
 ?>

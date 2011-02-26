@@ -110,8 +110,9 @@ class CoreModGeneral extends CoreModule {
 			else
 				$OBJ = new NagVisContextMenu($this->CORE, $sName);
 
-			$arrReturn[] = Array('name' => $sName,
-			                     'code' => str_replace("\r\n", "", str_replace("\n", "", $OBJ->__toString())));
+			$arrReturn[] = Array('name'     => $sName,
+			                     'css_file' => $OBJ->getCssFile(),
+			                     'code'     => str_replace("\r\n", "", str_replace("\n", "", $OBJ->__toString())));
 		}
 		
 		return json_encode($arrReturn);
