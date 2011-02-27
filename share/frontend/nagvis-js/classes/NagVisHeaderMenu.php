@@ -273,7 +273,7 @@ class NagVisHeaderMenu {
 		
 		// Replace paths and language macros
 		$aReturn = Array('pathBase' => $this->pathHtmlBase,
-			'currentUri'         => $this->UHANDLER->getRequestUri(), 
+			'currentUri'         => preg_replace('/[&?]lang=[a-z]{2}_[A-Z]{2}/', '', $this->UHANDLER->getRequestUri()),
 			'pathImages'         => $this->CORE->getMainCfg()->getValue('paths','htmlimages'), 
 			'pathHeaderJs'       => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates', $this->templateName.'.header.js'), 
 			'pathTemplates'      => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'), 
