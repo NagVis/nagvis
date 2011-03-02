@@ -1032,7 +1032,10 @@ var NagVisStatefulObject = NagVisObject.extend({
 
 		// Make relative when oParent set and not already relative
 		if(isset(oParent))
-			jsObj.makeRelativeCoords(oParent, anchorId);
+			if(oParent !== false)
+				jsObj.makeRelativeCoords(oParent, anchorId);
+			else
+				jsObj.makeAbsoluteCoords(anchorId);
 
 		saveObjectAfterAnchorAction(obj);
 

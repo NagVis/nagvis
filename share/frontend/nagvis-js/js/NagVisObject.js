@@ -442,6 +442,44 @@ var NagVisObject = Base.extend({
 		return l;
 	},
 
+	// Transform the current coords to absolute coords when relative
+	makeAbsoluteCoords: function(num) {
+		var x = num === -1 ? this.conf.x : this.conf.x.split(',')[num];
+		var y = num === -1 ? this.conf.y : this.conf.y.split(',')[num];
+
+		// Skip when already absolute
+		if(!isRelativeCoord(x) && !isRelativeCoord(y))
+			return;
+
+		// Get parent object ids
+		var xParent = this.getCoordParent(this.conf.x, num);
+		var yParent = this.getCoordParent(this.conf.y, num);
+
+		if(xParent == yParent) {
+			getMapObjByDomObjId(xParent).delChild(this);
+		} else {
+			getMapObjByDomObjId(xParent).delChild(this);
+			getMapObjByDomObjId(yParent).delChild(this);
+		}
+
+		// FIXME: Maybe the parent object is also a line. Then -1 is not correct
+		//        But it is not coded to attach relative objects to lines. So it is no big
+		//        deal to leave this as it is.
+		if(num === -1) {
+			this.conf.x = this.parseCoord(this.conf.x, 'x');
+			this.conf.y = this.parseCoord(this.conf.y, 'y');
+		} else {
+			var old  = this.conf.x.split(',');
+			old[num] = this.parseCoord(this.conf.x, 'x');
+			this.conf.x = old.join(',');
+
+			old  = this.conf.y.split(',');
+			old[num] = this.parseCoord(this.conf.y, 'y');
+			this.conf.y = old.join(',');
+			old = null;
+		}
+	},
+
 	// Transform the current coords to relative
 	// coords to the given object
 	makeRelativeCoords: function(oParent, num) {

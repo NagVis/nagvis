@@ -1237,6 +1237,9 @@ function dragStop(event, handler) {
 		oParent.highlight(false);
 	}
 
+	if(event.shiftKey)
+		oParent = false;
+
 	handler(draggingObject, oParent);
 	
 	oParent = null;
