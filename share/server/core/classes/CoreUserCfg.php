@@ -33,8 +33,9 @@ class CoreUserCfg {
 
 	// Optional list of value types to be fixed
 	private $types = Array(
-	  'sidebar' => 'i',
-	  'header'  => 'b',
+	  'sidebar'  => 'i',
+	  'header'   => 'b',
+	  'eventlog' => 'b',
 	);
 
 	/**

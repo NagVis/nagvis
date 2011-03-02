@@ -35,9 +35,12 @@ var oSeverity = {
 	'error':    1
 };
 
-function eventlogToggle() {
+function eventlogToggle(store) {
 	var oLog = document.getElementById('eventlog');
 	var oLogControl = document.getElementById('eventlogControl');
+
+	if(store === true)
+		storeUserOption('eventlog', oLog.style.display == 'none');
 	
 	if(oLog.style.display != 'none') {
 		oLog.style.display = 'none';
@@ -78,7 +81,7 @@ function eventlogInitialize() {
 	};
 	
 	oEventlogControl.onclick = function() {
-		eventlogToggle();
+		eventlogToggle(true);
 	};
 	
 	doc.body.appendChild(oEventlog);
@@ -87,8 +90,9 @@ function eventlogInitialize() {
 	oEventlogControl = null;
 	
 	// Hide eventlog when configured
-	if(oPageProperties.event_log_hidden == 1)
-		eventlogToggle();
+	if((typeof(oUserProperties.eventlog) !== 'undefined' && oUserProperties.eventlog === false)
+	   || oPageProperties.event_log_hidden == 1)
+		eventlogToggle(false);
 	
 	_eventlog = oEventlog;
 	oEventlog = null;

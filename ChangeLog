@@ -4,6 +4,7 @@ Core
     * Added user/role profile config files located in nagvis/etc/profiles/(user|role).profile
       The profile files can contain user/role specific options like languages and so on
     * The language of a user is stored in the profile file now
+    * The eventlog hide state is stored in the profile file now and used when the eventlog is enabled for a map
     * Added new options {file_group} and {file_mode} to global section of nagvis.ini.php.
       These options are used whenever a file is written by NagVis
     * Livestatus backend: Better error handling when writing to livestatus socket
