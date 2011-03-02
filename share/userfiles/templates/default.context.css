@@ -26,16 +26,16 @@
  */
 
 div.context {
-	position: absolute;
-	overflow: visible;
-	margin:0;
-	padding:0;
-	
-	width: 160px;
-	
-	background-color: #a4a4a4;
-	
-	font-size: 11px;
+  position: absolute;
+  overflow: visible;
+  margin:0;
+  padding:0;
+  
+  width: 160px;
+  
+  background-color: #a4a4a4;
+  
+  font-size: 11px;
 }
 
 div.context ul {
@@ -45,30 +45,30 @@ div.context ul {
 }
 
 div.context ul li {
-	background-color: #F5F5F5;
+  background-color: #EAF0F2;
   list-style-type: none;
   margin: 1px;
   position: relative;
-  color: #a4a4a4;
-	padding: 2px;
+  color: #43B3CF;
+  padding: 2px;
 }
 
 div.context ul li:hover {
-  background-color: #eeeeee;
-  color: #a4a4a4;
+  background-color: #D9E1E4;
+  color: #779D2A;
 }
 
 div.context ul li a { 
-	color: #a4a4a4; 
-	display: block; 
-	width: 100%; 
-	text-decoration: none;
+  color: #43B3CF; 
+  display: block; 
+  width: 100%;
+  text-decoration: none;
 }
 
 div.context ul li a:hover { 
-	color: #a4a4a4; 
+  color: #779D2A;
 }
 
 div.context ul li:hover > a { 
-	color: #a4a4a4;
+  color: #779D2A;
 }
