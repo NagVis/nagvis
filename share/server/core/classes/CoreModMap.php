@@ -618,7 +618,7 @@ class CoreModMap extends CoreModule {
 			$bValid = false;
 		if($bValid && !$FHANDLER->match('type', MATCH_OBJECTTYPE))
 			$bValid = false;
-		if($bValid && !$FHANDLER->match('id', MATCH_INTEGER))
+		if($bValid && !$FHANDLER->match('id', MATCH_OBJECTID))
 			$bValid = false;
 		
 		// Check if the map exists

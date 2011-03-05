@@ -19,7 +19,6 @@ Neue Idee:
 Relative Koordinaten:
   - Beim Löschen von Objekten prüfen, ob andere Objekte auf dieses Objekt verweisen
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
-  - Wie von relativen zu absoluten Koordinaten umschalten?
 
 Linien (Auch für neue Automap wichtig!):
  - Pfeilspitzen konfigurierbar machen
