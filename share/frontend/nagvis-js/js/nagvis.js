@@ -1139,7 +1139,7 @@ function dragObject(event) {
 	var newTop  = posy - dragObjectOffset[0] - getHeaderHeight();
 	var newLeft = posx - dragObjectOffset[1];
 
-  draggingObject.style.position = 'absolute';
+	draggingObject.style.position = 'absolute';
 	draggingObject.style.top  = newTop + 'px';
 	draggingObject.style.left = newLeft + 'px';
 	draggingObject.x = newLeft;
@@ -1239,6 +1239,10 @@ function dragStop(event, handler) {
 
 	if(event.shiftKey)
 		oParent = false;
+
+	// Unhighlight all parents when relative
+	for(var objectId in getMapObjByDomObjId(draggingObject.id.split('-')[0]).getParentObjectIds())
+	    getMapObjByDomObjId(objectId).highlight(false);
 
 	handler(draggingObject, oParent);
 	

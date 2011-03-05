@@ -985,7 +985,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 	 * Important: This is called from an event handler
 	 * the 'this.' keyword can not be used here.
 	 */
-  moveObject: function(obj) {
+	moveObject: function(obj) {
 		var arr        = obj.id.split('-');
 		var objId      = arr[0];
 		var anchorType = arr[1];
@@ -999,14 +999,24 @@ var NagVisStatefulObject = NagVisObject.extend({
 			newPos = getMidOfAnchor(obj);
 
 			// Get current positions and replace only the current one
-		  var anchorId   = arr[2];
+			var anchorId   = arr[2];
 			newPos = [ jsObj.calcNewCoord(newPos[0], 'x', anchorId),
 			           jsObj.calcNewCoord(newPos[1], 'y', anchorId) ];
-		  anchorId   = null;
+
+			var parents = jsObj.getParentObjectIds(anchorId);
+
+			anchorId   = null;
 		} else {
 			newPos = [ jsObj.calcNewCoord(obj.x - obj.objOffsetX, 'x'),
 			           jsObj.calcNewCoord(obj.y - obj.objOffsetY, 'y') ];
+
+			var parents = jsObj.getParentObjectIds();
 		}
+		
+		// Highlight parents when relative
+		for (var objectId in parents)
+		    getMapObjByDomObjId(objectId).highlight(true);
+		parents = null;
 
 		jsObj.conf.x = newPos[0];
 		jsObj.conf.y = newPos[1];

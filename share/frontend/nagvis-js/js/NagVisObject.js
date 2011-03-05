@@ -590,9 +590,14 @@ var NagVisObject = Base.extend({
 	 *
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
-	getParentObjectIds: function() {
+	getParentObjectIds: function(num) {
 		var parentIds = {};
-		var coords = (this.conf.x + ',' + this.conf.y).split(',');
+
+		if(isset(num))
+		    var coords = (this.conf['x'].split(',')[num] + ',' + this.conf['y'].split(',')[num]).split(',');
+		else
+		    var coords = (this.conf.x + ',' + this.conf.y).split(',');
+
 		for(var i = 0, len = coords.length; i < len; i++)
 			if(isRelativeCoord(coords[i]))
 				if(coords[i].search('%') !== -1)
