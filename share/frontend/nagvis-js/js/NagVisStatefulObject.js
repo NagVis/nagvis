@@ -1016,8 +1016,12 @@ var NagVisStatefulObject = NagVisObject.extend({
 		}
 		
 		// Highlight parents when relative
-		for (var objectId in parents)
-		    getMapObjByDomObjId(objectId).highlight(true);
+		for (var objectId in parents) {
+		    var p = getMapObjByDomObjId(objectId);
+		    if(p) 
+			p.highlight(true);
+		    p = null;
+		}
 		parents = null;
 
 		jsObj.conf.x = newPos[0];
