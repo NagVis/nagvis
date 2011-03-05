@@ -2149,9 +2149,9 @@ class GlobalMapCfg {
 	 */
 	public function addElement($type, $properties, $perm = false, $id = null) {
 		if($id === null)
-			$id = $this->genObjId(count($this->mapConfig));
+			$id = $this->genObjId(count($this->mapConfig) + 1);
 
-		$this->mapConfig[$id] = $properties;
+		$this->mapConfig[$id]              = $properties;
 		$this->mapConfig[$id]['object_id'] = $id;
 		$this->mapConfig[$id]['type']      = $type;
 		if($perm)
