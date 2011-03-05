@@ -982,6 +982,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 	},
 
 	/**
+	 * Handler for the move event
+	 *
 	 * Important: This is called from an event handler
 	 * the 'this.' keyword can not be used here.
 	 */
@@ -1030,6 +1032,12 @@ var NagVisStatefulObject = NagVisObject.extend({
 		viewType   = null;
 	},
 
+	/**
+	 * Handler for the drop event
+	 *
+	 * Important: This is called from an event handler
+	 * the 'this.' keyword can not be used here.
+	 */
 	saveObject: function(obj, oParent) {
 		var arr        = obj.id.split('-');
 		var objId      = arr[0];

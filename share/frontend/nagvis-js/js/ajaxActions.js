@@ -36,7 +36,7 @@ function saveObjectAfterAnchorAction(oAnchor) {
 	var objId      = arr[0];
 	var anchorType = arr[1];
 	var anchorId   = arr[2];
-  arr = null;
+	arr = null;
 	var urlPart    = '';
 
 	if(anchorType === 'drag')
@@ -68,4 +68,10 @@ function saveObjectAttr(objId, attr) {
 	
 	getAsyncRequest(oGeneralProperties.path_server + '?mod='+mod+'&act=modifyObject&'+mapParam+'='
 	                + escapeUrlValues(oPageProperties.map_name) + '&id=' + escapeUrlValues(objId) + urlPart);
+}
+
+function saveObjectRemove(objId) {
+	getAsyncRequest(oGeneralProperties.path_server + '?mod=Map&act=deleteObject&map='
+	                + escapeUrlValues(oPageProperties.map_name) + '&id=' + escapeUrlValues(objId));
+
 }

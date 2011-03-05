@@ -1599,7 +1599,19 @@ class GlobalMapCfg {
 						$id = 0;
 					else
 						$id = isset($obj['object_id']) ? $obj['object_id'] : '_'.$iObjId;
-					$this->mapConfig[$id] = $obj;
+
+					// It might happen that there is a duplicate object on the map
+					// This generates a new object_id for the later objects
+					if(isset($this->mapConfig[$id])) {
+					    $new = $id;
+					    while(isset($this->mapConfig[$new]))
+					        $new = $this->genObjId($new . time());
+					    $obj['object_id']      = $new;
+					    $this->mapConfig[$new] = $obj;
+					    $this->storeDeleteElement('_'.$iObjId, $this->formatElement($new));
+					} else {
+					    $this->mapConfig[$id] = $obj;
+					}
 
 					$sObjType = '';
 					
@@ -1815,14 +1827,14 @@ class GlobalMapCfg {
 				$todo = true;
 
 			// Remove duplicates by generating new IDs for the later objects
-			if(isset($alreadySeen[$id]))
+			if(isset($alreadySeen[$id])) {
 				$todo = true;
+			}
 
 			if($todo) {
 				$new = $this->genObjId($id);
-				$a = $id;
 				while(isset($this->mapConfig[$new]))
-					$new = $this->genObjId($a++);
+					$new = $this->genObjId($id . time());
 
 				$this->mapConfig[$id]['object_id'] = $new;
 				$this->mapConfig[$new] = $this->mapConfig[$id];
@@ -2149,7 +2161,7 @@ class GlobalMapCfg {
 	 */
 	public function addElement($type, $properties, $perm = false, $id = null) {
 		if($id === null)
-			$id = $this->genObjId(count($this->mapConfig) + 1);
+			$id = $this->genObjId((count($this->mapConfig) + 1) . time());
 
 		$this->mapConfig[$id]              = $properties;
 		$this->mapConfig[$id]['object_id'] = $id;
@@ -2228,7 +2240,7 @@ class GlobalMapCfg {
 	public function storeUpdateElement($id) {
 		$type = $this->mapConfig[$id]['type'];
 
-		if($id == 0)
+		if($id === 0)
 			list($inObj, $start, $end) = $this->getObjectLinesByNum(0);
 		else
 			list($inObj, $start, $end) = $this->getObjectLinesById($id);

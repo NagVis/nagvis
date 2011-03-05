@@ -461,20 +461,22 @@ var NagVisObject = Base.extend({
 			getMapObjByDomObjId(xParent).delChild(this);
 			getMapObjByDomObjId(yParent).delChild(this);
 		}
+		xParent = null;
+		yParent = null;
 
 		// FIXME: Maybe the parent object is also a line. Then -1 is not correct
 		//        But it is not coded to attach relative objects to lines. So it is no big
 		//        deal to leave this as it is.
 		if(num === -1) {
-			this.conf.x = this.parseCoord(this.conf.x, 'x');
-			this.conf.y = this.parseCoord(this.conf.y, 'y');
+			this.conf.x = this.parseCoord(x, 'x');
+			this.conf.y = this.parseCoord(y, 'y');
 		} else {
 			var old  = this.conf.x.split(',');
-			old[num] = this.parseCoord(this.conf.x, 'x');
+			old[num] = this.parseCoord(x, 'x');
 			this.conf.x = old.join(',');
 
 			old  = this.conf.y.split(',');
-			old[num] = this.parseCoord(this.conf.y, 'y');
+			old[num] = this.parseCoord(y, 'y');
 			this.conf.y = old.join(',');
 			old = null;
 		}
@@ -610,6 +612,20 @@ var NagVisObject = Base.extend({
 	},
 
 	/**
+	 * Returns the coord indexes which use a specific parent object_id
+	 */
+	getRelativeCoordsUsingParent: function(parentId) {
+	    var matches = {};
+	    for(var i = 0, len = this.conf.x.split(',').length; i < len; i++) {
+		if(this.getCoordParent(this.conf.x, i) === parentId && !isset(matches[i]))
+		    matches[i] = true;
+		else if(this.getCoordParent(this.conf.y, i) === parentId && !isset(matches[i]))
+		    matches[i] = true;
+	    }
+	    return matches;
+	},
+
+	/**
 	 * This is used to add a child item to the object. Child items are
 	 * gathered automatically by the frontend. Child positions depend
 	 * on the related parent position on the map -> relative positioning.
@@ -625,6 +641,31 @@ var NagVisObject = Base.extend({
 	delChild: function(obj) {
 		this.childs.splice(this.childs.indexOf(obj), 1);
 		obj = null;
+	},
+
+	/**
+	 * This method removes all attached map objects and make their coordinates
+	 * absolute.
+	 *
+	 * Find the coords which have a relative coord and are using
+	 * this object id as parent object. Then make these coordinates
+	 * absolute using child.makeAbsoluteCoords(num).
+	 * After that the change must be sent to the core using saveObject...
+	 */
+	detachChilds: function() {
+	    for(var i = this.childs.length - 1; i >= 0; i--) {
+		var nums = this.childs[i].getRelativeCoordsUsingParent(this.conf.object_id);
+		var obj = this.childs[i];
+
+		for(var num in nums) {
+		    obj.makeAbsoluteCoords(num);
+		}
+
+		saveObjectAttr(obj.conf.object_id, {'x': obj.conf.x, 'y': obj.conf.y });
+
+		obj  = null;
+		nums = null;
+	    }
 	},
 
 	highlight: function(show) {}

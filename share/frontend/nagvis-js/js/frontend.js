@@ -831,6 +831,17 @@ function toggleMapObjectLock(objectId) {
 }
 
 /**
+ * Removes an element from the map
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function removeMapObject(objectId) {
+    getMapObjByDomObjId(objectId).detachChilds();
+    getMapObjByDomObjId(objectId).remove();
+    saveObjectRemove(objectId);
+}
+
+/**
  * Toggles the mode of all map objects: editable or not
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>

@@ -239,6 +239,8 @@ class WuiMap extends GlobalMap {
 			if(strpos($val, '%') !== false) {
 				// Object id with offset -> calculate
 				list($parentId, $offset) = explode('%', $val);
+				if(!isset($this->objects[$parentId]))
+				    return 0;
 				$parentCoord = $this->parseCoord($this->objects[$parentId][$dir], $dir);
 				return $parentCoord + (int) $offset;
 			} else {

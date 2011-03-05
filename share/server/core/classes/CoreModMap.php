@@ -587,6 +587,9 @@ class CoreModMap extends CoreModule {
 		try {
 			$MAPCFG->readMapConfig();
 		} catch(MapCfgInvalid $e) {}
+
+		if(!$MAPCFG->objExists($a['id']))
+		    new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object does not exist.'));
 		
 		// first delete element from array
 		$MAPCFG->deleteElement($a['id'], true);
@@ -608,15 +611,11 @@ class CoreModMap extends CoreModule {
 		// Check for needed params
 		if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
 			$bValid = false;
-		if($bValid && !$FHANDLER->isSetAndNotEmpty('type'))
-			$bValid = false;
 		if($bValid && !$FHANDLER->isSetAndNotEmpty('id'))
 			$bValid = false;
 		
 		// All fields: Regex check
 		if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
-			$bValid = false;
-		if($bValid && !$FHANDLER->match('type', MATCH_OBJECTTYPE))
 			$bValid = false;
 		if($bValid && !$FHANDLER->match('id', MATCH_OBJECTID))
 			$bValid = false;
@@ -632,7 +631,6 @@ class CoreModMap extends CoreModule {
 		if($bValid === true) {
 			// Return the data
 			return Array('map' => $FHANDLER->get('map'),
-			             'type' => $FHANDLER->get('type'),
 			             'id' => $FHANDLER->get('id'));
 		} else {
 			return false;
@@ -644,6 +642,9 @@ class CoreModMap extends CoreModule {
 		try {
 			$MAPCFG->readMapConfig();
 		} catch(MapCfgInvalid $e) {}
+
+		if(!$MAPCFG->objExists($a['id']))
+		    new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object does not exist.'));
 		
 		// set options in the array
 		foreach($a['opts'] AS $key => $val) {
@@ -697,8 +698,8 @@ class CoreModMap extends CoreModule {
 		unset($aOpts['map']);
 		unset($aOpts['ref']);
 		unset($aOpts['id']);
-		unset($aOpts['timestamp']);
-		
+		unset($aOpts['lang']);
+
 		// Also remove all "helper fields" which begin with a _
 		foreach($aOpts AS $key => $val) {
 			if(strpos($key, '_') === 0) {
@@ -709,11 +710,10 @@ class CoreModMap extends CoreModule {
 		// Store response data
 		if($bValid === true) {
 			// Return the data
-			return Array('map' => $FHANDLER->get('map'),
-			             'type' => $FHANDLER->get('type'),
-			             'id' => $FHANDLER->get('id'),
+			return Array('map'     => $FHANDLER->get('map'),
+			             'id'      => $FHANDLER->get('id'),
 			             'refresh' => $FHANDLER->get('ref'),
-			             'opts' => $aOpts);
+			             'opts'    => $aOpts);
 		} else {
 			return false;
 		}
