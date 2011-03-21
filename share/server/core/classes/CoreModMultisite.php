@@ -88,20 +88,20 @@ class CoreModMultisite extends CoreModule {
 				$map['configErrorMsg'] = $e->getMessage();
 			}
 			
-			if($MAPCFG->getValue('global',0 , 'show_in_lists') != 1)
+			if($MAPCFG->getValue('global', 0, 'show_in_lists') != 1 || $MAPCFG->getValue('global', 0, 'show_in_multisite') != 1)
 				continue;
 			
 			$MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND, GET_STATE, !IS_VIEW);
 			
 			// Apply default configuration to object
 			$objConf = $MAPCFG->getTypeDefaults('global');
-			$objConf['type'] = 'map';
-			$objConf['map_name'] = $MAPCFG->getName();
-			$objConf['object_id'] = $object_id;
+			$objConf['type']              = 'map';
+			$objConf['map_name']          = $MAPCFG->getName();
+			$objConf['object_id']         = $object_id;
 			// Enable the hover menu in all cases - maybe make it configurable
-			$objConf['hover_menu'] = 1;
+			$objConf['hover_menu']        = 1;
 			$objConf['hover_childs_show'] = 1;
-			$objConf['hover_template'] = 'default';
+			$objConf['hover_template']    = 'default';
 			unset($objConf['alias']);
 			
 			$MAP->MAPOBJ->setConfiguration($objConf);
