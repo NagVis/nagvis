@@ -231,11 +231,12 @@ class NagVisHeaderMenu {
 		$this->aMacros['permittedEdit'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted($this->aMacros['mod'], 'edit', $this->UHANDLER->get('show'));
 
 		// Permissions for the option menu
-		$this->aMacros['permittedEditMainCfg'] = $this->AUTHORISATION->isPermitted('MainCfg', 'edit', '*');
-		$this->aMacros['permittedManageShapes'] = $this->AUTHORISATION->isPermitted('ManageShapes', 'manage', '*');
+		$this->aMacros['permittedSearch']            = $this->AUTHORISATION->isPermitted('Search', 'view', '*');
+		$this->aMacros['permittedEditMainCfg']       = $this->AUTHORISATION->isPermitted('MainCfg', 'edit', '*');
+		$this->aMacros['permittedManageShapes']      = $this->AUTHORISATION->isPermitted('ManageShapes', 'manage', '*');
 		$this->aMacros['permittedManageBackgrounds'] = $this->AUTHORISATION->isPermitted('ManageBackgrounds', 'manage', '*');
 		$this->aMacros['permittedManageBackgrounds'] = $this->AUTHORISATION->isPermitted('ManageBackgrounds', 'manage', '*');
-		$this->aMacros['permittedManageMaps'] = $this->AUTHORISATION->isPermitted('Map', 'add', '*') && $this->AUTHORISATION->isPermitted('Map', 'edit', '*');
+		$this->aMacros['permittedManageMaps']        = $this->AUTHORISATION->isPermitted('Map', 'add', '*') && $this->AUTHORISATION->isPermitted('Map', 'edit', '*');
 		
 		$this->aMacros['currentUser'] = $this->CORE->getAuthentication()->getUser();
 		

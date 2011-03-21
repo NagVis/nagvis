@@ -16,17 +16,17 @@
 				<ul>
 					{if $permittedOverview}
 					<li><a href="{$pathBase}/frontend/nagvis-js/index.php">{$langOverview}</a></li>
-					<li class="spacer"><hr /></li>
 					{/if}
 					{if count($maps) > 0}
+					<li class="spacer"><hr /></li>
 					{foreach $maps map}<li>
 						{if $map.configError == true}<a class="left error" href="#">{$map.mapAlias}</a>
 						{else}<a class="left" href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a> {/if}
 						{if $map.permittedEdit}<a class="right" href="{$pathBase}/frontend/wui/index.php?mod=Map&amp;act=edit&amp;show={$map.mapName}{$map.urlParams}">Edit</a>{else}<a class="right">&nbsp;</a>{/if}
 					</li>{/foreach}
-					<li class="spacer"><hr /></li>
 					{/if}
 					{if count($automaps) > 0}
+					<li class="spacer"><hr /></li>
 					{foreach $automaps map}
 						<li>{if isset($map) && $map.configError == True}
 							<a class="error" href="#">{$map.mapAlias}</a>
@@ -34,9 +34,9 @@
 							<a href="{$pathBase}/frontend/nagvis-js/index.php?mod=AutoMap&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a>
 						{/if}</li>
 					{/foreach}
-					<li class="spacer"><hr /></li>
 					{/if}
 					{if $permittedEditAnyMap || $permittedEditMainCfg || $permittedManageBackgrounds || $permittedManageMaps || $permittedManageShapes}
+					<li class="spacer"><hr /></li>
 					<li><a href="{$pathBase}/frontend/wui/index.php" class="underline">{$langWui}</a></li>
 					{else}
 					<li class="spacer underline"></li>
@@ -45,13 +45,13 @@
 			</dd>
 		</dl>
 	</li>
-	{if $mod == 'Map' || $mod == 'AutoMap' || $bRotation == true}
+	{if ($mod == 'Map' && ($permittedEdit == true && $act != 'edit' || $permittedView == true && $act != 'view')) || $mod == 'AutoMap' || $bRotation == true || $permittedSearch}
 	<li>
 		<dl class="dropdown">
 			<dt id="action-ddheader" onmouseover="ddMenu('action',1)" onmouseout="ddMenu('action',-1)">{$langActions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>
 			<dd id="action-ddcontent" onmouseover="cancelHide('action')" onmouseout="ddMenu('action',-1)">
 				<ul>
-					{if $mod == 'Map' || $mod == 'AutoMap'}
+					{if ($mod == 'Map' || $mod == 'AutoMap') && $permittedSearch}
 					<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=Search&act=view', '{$langSearch}')">{$langSearch}</a></li>
 					{/if}
 					{if $mod == 'AutoMap' && $permittedEdit == true}
