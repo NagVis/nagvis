@@ -650,7 +650,7 @@ class CoreModMap extends CoreModule {
 		foreach($a['opts'] AS $key => $val) {
 			$MAPCFG->setValue($a['id'], $key, $val);
 		}
-		
+
 		// write element to file
 		$MAPCFG->storeUpdateElement($a['id']);
 		

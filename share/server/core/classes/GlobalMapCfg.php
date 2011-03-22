@@ -2244,7 +2244,7 @@ class GlobalMapCfg {
 	public function storeUpdateElement($id) {
 		$type = $this->mapConfig[$id]['type'];
 
-		if($id === 0)
+		if($id == 0)
 			list($inObj, $start, $end) = $this->getObjectLinesByNum(0);
 		else
 			list($inObj, $start, $end) = $this->getObjectLinesById($id);
