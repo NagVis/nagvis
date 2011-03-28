@@ -2281,14 +2281,13 @@ class GlobalMapCfg {
 					continue;
 
 				$lineNum = $i;
-
-				if(is_array($val))
-					$val = implode(',', $val);
-
-				if($val !== '')
-					$newLine = $key.'='.$val."\n";
-				break;
 			}
+
+			if(is_array($val))
+			    $val = implode(',', $val);
+
+			if($val !== '')
+			    $newLine = $key.'='.$val."\n";
 
 			if($lineNum !== null && $newLine !== '')
 				// if a parameter was found in file and value is not empty, replace line
@@ -2298,9 +2297,9 @@ class GlobalMapCfg {
 				array_splice($f, $lineNum, 1);
 			elseif($lineNum === null && $newLine !== '')
 				// if a parameter is was not found in array and a value is not empty, create line
-				array_splice($f, $end, Array($f[$end], $newLine));
+				array_splice($f, $end, 1, Array($newLine, $f[$end]));
 		}
-				
+		
 		$this->writeConfig($f);
 		return true;
 	}

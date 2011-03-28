@@ -645,7 +645,7 @@ class CoreModMap extends CoreModule {
 
 		if(!$MAPCFG->objExists($a['id']))
 		    new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object does not exist.'));
-		
+
 		// set options in the array
 		foreach($a['opts'] AS $key => $val) {
 			$MAPCFG->setValue($a['id'], $key, $val);
