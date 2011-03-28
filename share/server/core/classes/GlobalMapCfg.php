@@ -773,11 +773,21 @@ class GlobalMapCfg {
 						'match' => MATCH_WEATHER_COLORS,
 						'depends_on' => 'view_type',
 						'depends_value' => 'line'),
-					'gadget_url' => Array('must' => 0,
-						'match' => MATCH_STRING_URL,
-						'field_type' => 'dropdown',
-						'depends_on' => 'view_type',
-						'depends_value' => 'gadget'),
+					'gadget_url' => Array(
+					        'must'          => 0,
+						'match'         => MATCH_STRING_URL,
+						'field_type'    => 'dropdown',
+						'depends_on'    => 'view_type',
+						'depends_value' => 'gadget'
+					),
+					'gadget_type' => Array(
+					        'must'          => 0,
+						'match'         => MATCH_GADGET_TYPE,
+						'field_type'    => 'dropdown',
+						'depends_on'    => 'view_type',
+						'depends_value' => 'gadget',
+						'default'       => 'img'
+					),
 					'gadget_scale' => Array('must' => 0,
 						'default' => 100,
 						'match' => MATCH_INTEGER,
@@ -2244,7 +2254,7 @@ class GlobalMapCfg {
 	public function storeUpdateElement($id) {
 		$type = $this->mapConfig[$id]['type'];
 
-		if($id == 0)
+		if(is_numeric($id) && $id == 0)
 			list($inObj, $start, $end) = $this->getObjectLinesByNum(0);
 		else
 			list($inObj, $start, $end) = $this->getObjectLinesById($id);
