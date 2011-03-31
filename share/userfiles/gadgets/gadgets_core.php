@@ -157,17 +157,23 @@ function parsePerfdata($sPerfdata) {
  * @author      Lars Michelsen <lars@vertical-visions.de>
  */
 function errorBox($msg) {
-	$img = imagecreate(400,40);
-	
-	$bgColor = imagecolorallocate($img, 255, 255, 255);
-	imagefill($img, 0, 0, $bgColor);
-	
-	$fontColor = imagecolorallocate($img, 10, 36, 106);
-	imagestring($img, 2, 8, 8, $msg, $fontColor);
-	
-	imagepng($img);
-	imagedestroy($img);
+    global $_MODE;
+    if(isset($_MODE) && $_MODE === 'html') {
+        echo '<strong>'.$msg.'</strong>';
 	exit;
+    } else {
+	$img = imagecreate(400,40);
+    	
+    	$bgColor = imagecolorallocate($img, 255, 255, 255);
+    	imagefill($img, 0, 0, $bgColor);
+    	
+    	$fontColor = imagecolorallocate($img, 10, 36, 106);
+    	imagestring($img, 2, 8, 8, $msg, $fontColor);
+    	
+    	imagepng($img);
+    	imagedestroy($img);
+    	exit;
+    }
 }
 
 /* Now read the parameters */

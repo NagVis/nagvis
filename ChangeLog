@@ -29,6 +29,10 @@ Core
 	usage of the local/ structure in OMD
   * Bugfix: Fixed section merging in main config when using more than one config file
   * Using configured permissions on uploaded files (backgrounds, shapes, maps) now
+  * Gadgets: Added gadget_type option which can now be img/html. The value
+  defaults to img which is the default behaviour for all existing gadgets. The
+  html mode assumes that the gadget does not render images as classic gadgets
+  but renders HTML code
 
 Automap
   * Made automap coord parsing regex resistent against html entities in the URL

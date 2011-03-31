@@ -69,33 +69,38 @@ var NagVisService = NagVisStatefulObject.extend({
 		          + '&perfdata=' + this.conf.perfdata.replace(/\&quot\;|\&\#145\;/g,'%22')
 		          + sGadgetOpts;
 		
-		var oIcon = document.createElement('img');
-		oIcon.setAttribute('id', this.conf.object_id+'-icon');
-		oIcon.src = this.conf.gadget_url + sParams;
-		oIcon.alt = this.conf.type+'-'+alt;
+		if(this.conf.gadget_type === 'img') {
+		    var oGadget = document.createElement('img');
+		    oGadget.src = this.conf.gadget_url + sParams;
+		    oGadget.alt = this.conf.type + '-' + alt;
+		} else {
+		    var oGadget = document.createElement('div');
+		    oGadget.innerHTML = getSyncUrl(this.conf.gadget_url + sParams);
+		}
+		oGadget.setAttribute('id', this.conf.object_id + '-icon');
 		
 		var oIconDiv = document.createElement('div');
-		oIconDiv.setAttribute('id', this.conf.object_id+'-icondiv');
+		oIconDiv.setAttribute('id', this.conf.object_id + '-icondiv');
 		oIconDiv.setAttribute('class', 'icon');
 		oIconDiv.setAttribute('className', 'icon');
 		oIconDiv.style.position = 'absolute';
-		oIconDiv.style.top = this.conf.y+'px';
-		oIconDiv.style.left = this.conf.x+'px';
-		oIconDiv.style.zIndex = this.conf.z;
+		oIconDiv.style.top      = this.conf.y + 'px';
+		oIconDiv.style.left     = this.conf.x + 'px';
+		oIconDiv.style.zIndex   = this.conf.z;
 		
 		// Parse link only when set
 		if(this.conf.url && this.conf.url !== '') {
 			var oIconLink = document.createElement('a');
 			oIconLink.href = this.conf.url;
 			oIconLink.target = this.conf.url_target;
-			oIconLink.appendChild(oIcon);
-			oIcon = null;
+			oIconLink.appendChild(oGadget);
+			oGadget = null;
 			
 			oIconDiv.appendChild(oIconLink);
 			oIconLink = null;
 		} else {
-			oIconDiv.appendChild(oIcon);
-			oIcon = null;
+			oIconDiv.appendChild(oGadget);
+			oGadget = null;
 		}
 		
 		return oIconDiv;

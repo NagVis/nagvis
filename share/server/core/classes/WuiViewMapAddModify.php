@@ -254,7 +254,11 @@ class WuiViewMapAddModify {
 						
 						case 'line_type':
 
-							$options = Array(Array('label' => '------><------', 'value' => '10'), Array('label' => '-------------->', 'value'=>'11'), Array('label' => '---------------', 'value'=>'12'), Array('label' => '--%--><--%--', 'value' =>'13'), Array('label' => '--%+BW-><-%+BW--', 'value'=>'14'));
+							$options = Array(Array('label' => '------><------',   'value' => '10'),
+							                 Array('label' => '-------------->',  'value' => '11'),
+									 Array('label' => '---------------',  'value' => '12'),
+									 Array('label' => '--%--><--%--',     'value' => '13'),
+									 Array('label' => '--%+BW-><-%+BW--', 'value' => '14'));
 							$selected = $this->MAPCFG->getValue($this->aOpts['id'], $propname, TRUE);
 						break;
 						
@@ -299,6 +303,12 @@ class WuiViewMapAddModify {
 						case 'gadget_url':
 							$options = $this->CORE->getAvailableGadgets();
 							$selected = $this->MAPCFG->getValue($this->aOpts['id'],$propname,TRUE);
+						break;
+						
+						case 'gadget_type':
+							$options = Array(Array('label' => 'Image', 'value' => 'img'),
+							                 Array('label' => 'HTML',  'value' => 'html'));
+							$selected = $this->MAPCFG->getValue($this->aOpts['id'], $propname, TRUE);
 						break;
 						
 						case 'view_type':

@@ -70,6 +70,7 @@ define('MATCH_VIEW_TYPE', '/^(?:icon|line)$/i');
 define('MATCH_VIEW_TYPE_SERVICE', '/^(?:icon|line|gadget)$/i');
 define('MATCH_VIEW_TYPE_SERVICE_EMPTY', '/^(?:icon|line|gadget)*$/i');
 define('MATCH_GET_OBJECT_TYPE', '/^(state|complete|summary)$/');
+define('MATCH_GADGET_TYPE', '/^(?:img|html)$/i');
 define('MATCH_OBJECT_TYPES', '/^(host|service|hostgroup|servicegroup|map|automap)$/');
 define('MATCH_AUTOMAP_RENDER_MODE', '/^(directed|undirected|radial|circular|undirected2)?$/');
 define('MATCH_LINE_TYPE', '/^(10|11|12|13|14)?$/');

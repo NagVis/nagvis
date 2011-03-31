@@ -326,6 +326,19 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 }
 
 /**
+ * This function simply loads a remote url and returns the responseText 1:1
+ * without any special error handling
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function getSyncUrl(url) {
+    var oReq = initXMLHttpClient();
+    oReq.open('GET', url, false);                             
+    oReq.send(null);
+    return oReq.responseText;                                         
+}
+
+/**
  * Prevent reaching too long urls, split the update to several 
  * requests. Just start the request and clean the string strUrl
  * Plus fire the rest of the request on the last iteration

@@ -89,7 +89,7 @@ div.welcome a:hover {color:#779D2A}
 .icon {
 	position : absolute;
 	border : 0;
-	font-size: 5px;
+	font-size: 12pt;
 	z-index : 1;
 }
 
