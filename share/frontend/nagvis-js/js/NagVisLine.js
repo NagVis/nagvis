@@ -54,9 +54,11 @@ var NagVisLine = NagVisStatelessObject.extend({
 		
 		// Append child to map and save reference in parsedObject
 		var oMap = document.getElementById('map');
-		this.parsedObject = oMap.appendChild(oContainerDiv);
+		if(oMap) {
+		    this.parsedObject = oMap.appendChild(oContainerDiv);
+		    oMap = null;
+		}
 		oContainerDiv = null;
-		oMap = null;
 		
 		this.drawLine();
 	},
