@@ -668,5 +668,35 @@ var NagVisObject = Base.extend({
 	    }
 	},
 
+	/**
+	 * Entry point for repositioning objects in NagVis frontend
+	 * Handles whole redrawing of the object while moving
+	 *
+	 * Author: Lars Michelsen <lars@vertical-visions.de>
+	 */
+	reposition: function() {
+		if(this.conf.view_type === 'line' || this.conf.type === 'line')
+			this.drawLine();
+		else
+			this.moveIcon();
+
+		// Move the objects label when enabled
+		if(this.conf.label_show && this.conf.label_show == '1')
+			this.moveLabel();
+
+		// Move child objects
+		for(var i = 0, l = this.childs.length; i < l; i++)
+			this.childs[i].reposition();
+
+		// redraw the controls
+		if(!this.bIsLocked) {
+			if(typeof(this.removeControls) == 'function')
+			    this.removeControls();
+			if(typeof(this.parseControls) == 'function')
+			    this.parseControls();
+		}
+	},
+
 	highlight: function(show) {}
+
 });

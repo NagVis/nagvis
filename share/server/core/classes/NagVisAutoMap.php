@@ -426,8 +426,8 @@ class NagVisAutoMap extends GlobalMap {
 
 			$LINE = new NagVisLine($this->CORE);
 			$LINE->setObjectId($objIds[$lineKey]);
-			$LINE->setMapCoords(Array('x' => ($S->getX() + $sWidth  / 2) . ',' . ($E->getX() + $eWidth  / 2),
-			                          'y' => ($S->getY() + $sHeight / 2) . ',' . ($E->getY() + $eHeight / 2)));
+			$LINE->setMapCoords(Array('x' => $objIds[$start] . "%+" . ($sWidth  / 2) . ',' . $objIds[$end] . "%+" . ($eWidth  / 2),
+			                          'y' => $objIds[$start] . "%+" . ($sHeight / 2) . ',' . $objIds[$end] . "%+" . ($eHeight / 2)));
 			$LINE->setConfiguration($aConf);
 			$lines[] = $LINE;
 		}
@@ -573,7 +573,7 @@ class NagVisAutoMap extends GlobalMap {
 			}
 		}
 		unset($validOpts['hover_timeout']);
-		
+
 		$ret = "define global {\n";
 		foreach($validOpts AS $key => $val) {
 			$ret .= '  '.$key.'='.$val."\n";

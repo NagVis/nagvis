@@ -106,8 +106,8 @@ var NagVisLine = NagVisStatelessObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	drawLine: function() {
-		var x = this.conf.x.split(',');
-		var y = this.conf.y.split(',');
+		var x = this.parseCoords(this.conf.x, 'x');
+		var y = this.parseCoords(this.conf.y, 'y');
 		
 		var width = this.conf.line_width;
 		

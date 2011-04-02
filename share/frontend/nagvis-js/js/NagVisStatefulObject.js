@@ -962,27 +962,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 		oControls = null;
 	},
 
-	reposition: function() {
-		if(this.conf.view_type === 'line')
-			this.drawLine();
-		else
-			this.moveIcon();
-
-		// Move the objects label when enabled
-		if(this.conf.label_show && this.conf.label_show == '1')
-			this.moveLabel();
-
-		// Move child objects
-		for(var i = 0, l = this.childs.length; i < l; i++)
-			this.childs[i].reposition();
-
-		// redraw the controls
-		if(!this.bIsLocked) {
-			this.removeControls();
-			this.parseControls();
-		}
-	},
-
 	/**
 	 * Handler for the move event
 	 *
