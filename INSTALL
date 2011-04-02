@@ -1,10 +1,10 @@
 ==============================================================================
-NagVis 1.5 Quick Installation Instructions
+NagVis 1.6 Quick Installation Instructions
 ==============================================================================
-Author: Andreas Husch, Lars Michelsen
-Document Version: 0.6
-Date: 2008-08-18
-Applies to: NagVis 1.5
+Author:            Andreas Husch, Lars Michelsen
+Document Version:  0.7
+Date:              2011-04-02
+Applies to:        NagVis 1.4 - 1.6
 ==============================================================================
 
 1. Download NagVis
@@ -18,8 +18,8 @@ Get NagVis. The latest release can be found at www.nagvis.org.
 Unpack the archive to a temporary place (for example /tmp). And change to that
 directory
 
-> tar xvzf nagvis-1.5*.tar.gz /tmp
-> cd /tmp/nagvis-1.5*
+> tar xvzf nagvis-1.6*.tar.gz /tmp
+> cd /tmp/nagvis-1.6*
 
 3. Make installer executable
 --------------------
@@ -44,7 +44,7 @@ installation of NagVis. If you experience any problems please let us know.
 
 You can remove the sources after installation.
 
-> rm -rf /tmp/nagvis-1.5*
+> rm -rf /tmp/nagvis-1.6*
 
 6. Additional information
 --------------------
