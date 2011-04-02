@@ -297,7 +297,9 @@ var NagVisStatefulObject = NagVisObject.extend({
 			// Remove context menu
 			// Needs to be removed after unsetting the eventhandlers
 			if(oContext) {
-				this.parsedObject.removeChild(oContext);
+				try {
+				    this.parsedObject.removeChild(oContext);
+				} catch(e) {}
 				oContext = null;
 			}
 			
