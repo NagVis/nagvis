@@ -2297,7 +2297,7 @@ class GlobalMapCfg {
 				array_splice($f, $lineNum, 1);
 			elseif($lineNum === null && $newLine !== '')
 				// if a parameter is was not found in array and a value is not empty, create line
-				array_splice($f, $end, 1, Array($newLine, $f[$end]));
+				array_splice($f, $end - 1, 1, Array($newLine, $f[$end - 1]));
 		}
 		
 		$this->writeConfig($f);
