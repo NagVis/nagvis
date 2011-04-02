@@ -1241,8 +1241,11 @@ function dragStop(event, handler) {
 		oParent = false;
 
 	// Unhighlight all parents when relative
-	for(var objectId in getMapObjByDomObjId(draggingObject.id.split('-')[0]).getParentObjectIds())
-	    getMapObjByDomObjId(objectId).highlight(false);
+	// This condition is a quick fix to make the dragging code work again in the WUI. Once
+	// the WUI is dropped in the future this can be removed
+	if(draggingObject.id.indexOf('-') > -1)
+	    for(var objectId in getMapObjByDomObjId(draggingObject.id.split('-')[0]).getParentObjectIds())
+		getMapObjByDomObjId(objectId).highlight(false);
 
 	handler(draggingObject, oParent);
 	
