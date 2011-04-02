@@ -158,6 +158,10 @@ class WuiMap extends GlobalMap {
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	function fixIcon(&$obj) {
+		if($obj['type'] == 'line' || (isset($obj['view_type']) && $obj['view_type'] == 'line')) {
+		    $obj['icon'] = '20x20.gif';
+		}
+
 		$obj = $this->getIconPaths($obj);
 
 		if($obj['type'] == 'line') {
@@ -280,8 +284,6 @@ class WuiMap extends GlobalMap {
 			}
 
 			$style = 'style="position:absolute;left:'.$x.'px;top:'.$y.'px"';
-			
-			$obj['icon'] = '20x20.gif';
 		} else
 			$style = '';
 		
