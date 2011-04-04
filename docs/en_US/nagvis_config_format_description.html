@@ -42,7 +42,7 @@
             <a href="#rotation">rotation_*</a><br />
             Rotation pool definitions</li>
         <li>
-            <a href="#states">states</a> <font color="#ff0000">(New in 1.5)</font><br />
+            <a href="#states">states</a><br />
             Options which affect the handling and appearance of the different states</li>
         </ul>
         
@@ -55,13 +55,13 @@
         <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
         </tr>
         <tr>
-        <td>audit_log</td><td>1</td><td>Enable/Disable logging of security related user actions in Nagvis. For example user logins and logouts are logged in var/nagvis-audit.log. (<font color="#ff0000">New in 1.5</font>)</td>
+        <td>audit_log</td><td>1</td><td>Enable/Disable logging of security related user actions in Nagvis. For example user logins and logouts are logged in var/nagvis-audit.log.</td>
         </tr>
         <tr>
-        <td>authmodule</td><td>CoreAuthModSQLite</td><td>Defines the authentication module to use. By default NagVis uses the built-in SQLite authentication module. On delivery there is no other authentication module available. It is possible to add own authentication modules for supporting other authentication mechanism. For details have a look at the <a href="auth_modules.html">authentication module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
+        <td>authmodule</td><td>CoreAuthModSQLite</td><td>Defines the authentication module to use. By default NagVis uses the built-in SQLite authentication module. On delivery there is no other authentication module available. It is possible to add own authentication modules for supporting other authentication mechanism. For details have a look at the <a href="auth_modules.html">authentication module</a> documentation.</td>
         </tr>
         <tr>
-        <td>authorisationmodule</td><td>CoreAuthorisationModSQLite</td><td>Defines the authorisation module to use. By default NagVis uses the built-in SQLite authorisation module. On delivery there is no other authorisation module available. It is possible to add own authorisation modules for supporting other authorisation mechanism. For details have a look at the <a href="authorisation_modules.html">authorisation module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
+        <td>authorisationmodule</td><td>CoreAuthorisationModSQLite</td><td>Defines the authorisation module to use. By default NagVis uses the built-in SQLite authorisation module. On delivery there is no other authorisation module available. It is possible to add own authorisation modules for supporting other authorisation mechanism. For details have a look at the <a href="authorisation_modules.html">authorisation module</a> documentation.</td>
         </tr>
         <tr>
         <td>dateformat</td><td> Y-m-d H:i:s </td><td> The format of date and time shown in NagVis. Available options like in <a href="http://www.php.net/date" target="_blank">date</a> function of php</td>
@@ -75,48 +75,48 @@
         - <i>session</i>: When the user selects a language it is stored in the current session<br />
         - <i>browser</i>: NagVis tries to detect the user language by the browser agent<br />
         - <i>config</i>: The installation default language<br />
-        The order you set the options determines how NagVis uses the different mechanisms. (<font color="#ff0000">New in 1.5</font>)</td>
+        The order you set the options determines how NagVis uses the different mechanisms.</td>
         </tr>
         <tr>
-        <td>language_available</td><td>de_DE,en_US,es_ES,fr_FR,pt_BR</td><td>You may want to give your users a limited number of languages to choose from. You can control the behaviour without deleting the language files from your NagVis installation. If this value is left empty NagVis will fallback to all configured in languages. If you like to add a new language to your NagVis installation you need to add it to the list here. (<font color="#ff0000">New in 1.5</font>)</td>
+        <td>language_available</td><td>de_DE,en_US,es_ES,fr_FR,pt_BR</td><td>You may want to give your users a limited number of languages to choose from. You can control the behaviour without deleting the language files from your NagVis installation. If this value is left empty NagVis will fallback to all configured in languages. If you like to add a new language to your NagVis installation you need to add it to the list here.</td>
         </tr>
         <tr>
         <td>language</td><td>en_US</td><td>Select default language to use in NagVis. There are several translations delivered by default: en_US (English), de_DE (German), fr_FR (French) and pt_BR (Brazilian Portuguese; since 1.4.4). Since NagVis 1.4 you have to select the languages in a new format (&quot;en_US&quot; instead of &quot;english&quot;) </td>
         </tr>
         <tr>
-        <td>logonmodule</td><td>FrontendLogonDialog</td><td>Defines the logon module to use. By default NagVis uses the HTML logon dialog for requesting authentication information from the user. On delivery there is no other logon module available. It is possible to add own logon modules for serving other dialogs. For details take a look at the <a href="logon_modules.html">logon module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
+        <td>logonmodule</td><td>FrontendLogonDialog</td><td>Defines the logon module to use. By default NagVis uses the HTML logon dialog for requesting authentication information from the user. On delivery there is no other logon module available. It is possible to add own logon modules for serving other dialogs. For details take a look at the <a href="logon_modules.html">logon module</a> documentation.</td>
         </tr>
         <tr>
-        <td>logonenvvar</td><td>REMOTE_USER</td><td>Defines the environment variable to be used for fetching the authenticated user from the webservers environment. This option is only used with the logon modules LogonEnv and LogonMixed. (<font color="#ff0000">New in 1.5</font>)</td>
+        <td>logonenvvar</td><td>REMOTE_USER</td><td>Defines the environment variable to be used for fetching the authenticated user from the webservers environment. This option is only used with the logon modules LogonEnv and LogonMixed.</td>
         </tr>
         <tr>
-        <td>logonenvcreateuser</td><td>1</td><td>Tells the LogonEnv/LogonMixed module to create a user account for each unknown user which opens the NagVis pages. This option is only used with the logon modules LogonEnv and LogonMixed. (<font color="#ff0000">New in 1.5</font>)</td>
+        <td>logonenvcreateuser</td><td>1</td><td>Tells the LogonEnv/LogonMixed module to create a user account for each unknown user which opens the NagVis pages. This option is only used with the logon modules LogonEnv and LogonMixed.</td>
         </tr>
         <tr>
-        <td>logonenvcreaterole</td><td>Guests</td><td>Tells the LogonEnv/LogonMixed module to create the user accounts with the given role associated. This option is only used with the logon modules LogonEnv and LogonMixed. (<font color="#ff0000">New in 1.5</font>)</td>
+        <td>logonenvcreaterole</td><td>Guests</td><td>Tells the LogonEnv/LogonMixed module to create the user accounts with the given role associated. This option is only used with the logon modules LogonEnv and LogonMixed.</td>
         </tr>
         <tr>
         <td>refreshtime</td><td>60</td><td>Refresh time of maps or reloading the next map in map rotation</td>
         </tr>
         <tr>
-        <td>sesscookiedomain</td><td>auto-detect</td><td>You may need to control for which domain NagVis will store the session cookie. By default NagVis tries to auto detect this option value by using the webservers environment variables. This should work in most environments but may be changed e.g. when using url rewriting. <font color="#ff0000">(New in 1.5)</font></td>
+        <td>sesscookiedomain</td><td>auto-detect</td><td>You may need to control for which domain NagVis will store the session cookie. By default NagVis tries to auto detect this option value by using the webservers environment variables. This should work in most environments but may be changed e.g. when using url rewriting.</td>
         </tr>
         <tr>
-        <td>sesscookiepath</td><td>auto-detected</td><td>You may need to control the path on which the cookie will be set. By default NagVis uses the paths/htmlbase value for setting the cookie. This should work in most environments but may be changed e.g. when using url rewriting. <font color="#ff0000">(New in 1.5)</font></td>
+        <td>sesscookiepath</td><td>auto-detected</td><td>You may need to control the path on which the cookie will be set. By default NagVis uses the paths/htmlbase value for setting the cookie. This should work in most environments but may be changed e.g. when using url rewriting.</td>
         </tr>
         <tr>
-        <td>sesscookieduration</td><td>86400</td><td>Lifetime of the NagVis session cookie in seconds. The default value is set to 24 hours. The value the NagVis session cookie contains will be renewed on every page visit. If a session is idle for more time than configured here it will become invalid. <font color="#ff0000">(New in 1.5)</font></td>
+        <td>sesscookieduration</td><td>86400</td><td>Lifetime of the NagVis session cookie in seconds. The default value is set to 24 hours. The value the NagVis session cookie contains will be renewed on every page visit. If a session is idle for more time than configured here it will become invalid.</td>
         </tr>
         <tr>
-        <td>startmodule</td><td>overview</td><td>The default module to show when none is given by the user <font color="#ff0000">(New in 1.5)</font></td>
+        <td>startmodule</td><td>overview</td><td>The default module to show when none is given by the user</td>
         </tr>
         <tr>
-        <td>startaction</td><td>view</td><td>The default action to do when none is given by the user <font color="#ff0000">(New in 1.5)</font></td>
+        <td>startaction</td><td>view</td><td>The default action to do when none is given by the user</td>
         </tr>
         <td>startshow</td><td></td>
         <td>
             The startshow parameter is only used by some views at the moment. 
-            It is used by the Map and the AutoMap modules. <font color="#ff0000">(New in 1.5.2)</font></td>
+            It is used by the Map and the AutoMap modules.</td>
     </tr>
         </table>
         
@@ -196,7 +196,7 @@
         <td> headertemplate </td><td> default </td><td> Default <a href="header_templates.html">header template</a> </td>
         </tr>
         <tr>
-        <td> headerfade </td><td> 1 </td><td>Enable/Disable the fade effect of the submenus in the header menu (When the used header menu supports that option). <font color="#ff0000">(New in 1.5.2)</font></td>
+        <td> headerfade </td><td> 1 </td><td>Enable/Disable the fade effect of the submenus in the header menu (When the used header menu supports that option).</td>
         </tr>
         <tr>
         <td> hovermenu </td><td> 1 </td><td> Enable/Disable the hover menu </td>
@@ -238,7 +238,7 @@
         <td> showinmultisite </td><td> 1 </td><td> Show the maps in multisite snapin </td>
         </tr>
         <tr>
-        <td>stylesheet</td><td></td><td>Filename of the custom stylesheet to use on the maps (The file needs to be located in the share/nagvis/styles directory) <font color="#ff0000">(New in 1.5)</font></td>
+        <td>stylesheet</td><td></td><td>Filename of the custom stylesheet to use on the maps (The file needs to be located in the share/nagvis/styles directory)</td>
         </tr>
         <tr>
         <td> urltarget </td><td> _self </td><td> Target of the Icon link, this option adapts <code>&lt;a target=""></code> (_self is same window) </td>
@@ -296,13 +296,13 @@
         <td> headertemplate </td><td> default </td><td> Default <a href="header_templates.html">header template</a> </td>
         </tr>
         <tr>
-            <td>showautomaps</td><td> 1 </td><td>Enable/Disable the listing of automaps <font color="#ff0000">(New in 1.5)</font></td>
+            <td>showautomaps</td><td> 1 </td><td>Enable/Disable the listing of automaps</td>
         </tr>
         <tr>
-            <td>showmaps</td><td> 1 </td><td>Enable/Disable the listing of maps <font color="#ff0000">(New in 1.5)</font></td>
+            <td>showmaps</td><td> 1 </td><td>Enable/Disable the listing of maps</td>
         </tr>
         <tr>
-            <td>showmapthumbs</td><td> 0 </td><td>Enable/Disable the listing of map thumbnails <font color="#ff0000">(New in 1.5)</font></td>
+            <td>showmapthumbs</td><td> 0 </td><td>Enable/Disable the listing of map thumbnails</td>
         </tr>
         <tr>
         <td> showrotations </td><td> 1 </td><td>Enable/Disable the listing of defined rotations</td>
@@ -345,19 +345,19 @@
         <td>autoupdatefreq</td><td> 25 </td><td> In this interval the map gets backuped by the WUI. </td>
         </tr>
         <tr>
-        <td>grid_show</td><td>0</td><td>Enable/Disable a grid to make the alignment of objects easier in the WUI. Objects are aligned to the upper left corner after moving. <font color="#ff0000">(New in 1.5)</font></td>
+        <td>grid_show</td><td>0</td><td>Enable/Disable a grid to make the alignment of objects easier in the WUI. Objects are aligned to the upper left corner after moving.</td>
         </tr>
         <tr>
-        <td>grid_color</td><td>#F7F7F7</td><td>The color of the grid lines. <font color="#ff0000">(New in 1.5)</font></td>
+        <td>grid_color</td><td>#F7F7F7</td><td>The color of the grid lines.</td>
         </tr>
         <tr>
-        <td>grid_steps</td><td>32</td><td>Scale of the grid in px. <font color="#ff0000">(New in 1.5)</font></td>
+        <td>grid_steps</td><td>32</td><td>Scale of the grid in px.</td>
         </tr>
         <tr>
-        <td>headermenu</td><td>1</td><td>Enable/Disable the header menu in the WUI. <font color="#ff0000">(New in 1.5)</font></td>
+        <td>headermenu</td><td>1</td><td>Enable/Disable the header menu in the WUI.</td>
         </tr>
         <tr>
-        <td>headertemplate</td><td>default</td><td>Default <a href="header_templates.html">header template</a> to use in the WUI <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>headertemplate</td><td>default</td><td>Default <a href="header_templates.html">header template</a> to use in the WUI.</td>
         </tr>
         <tr>
         <td> maplocktime </td><td> 5 </td><td> Time in minutes a map is locked by an editing user. </td>
@@ -427,7 +427,7 @@ socket="unix:/usr/local/nagios/var/rw/live"
             <td>First custom variable which is available in the context and hover menus.
             With this option different custom URLs can be added to the context/hover
             menus based on the backend used. Might be interesting when adding links to
-            different Nagios instances <font color="#ff0000">(New in 1.5)</font>.</td>
+            different Nagios instances.</td>
         </tr>
         <tr>
             <td>custom_2</td><td></td><td>Second custom variable. Same as above.</td>
@@ -458,12 +458,12 @@ interval=15</pre>
         <td> 
             <p>Comma separated list of maps to rotate in this pool. You can also add external URLs surrounded by [ and ] (e.g. maps="demo1,[http://localhost/test.php]". The URL has to be reachable and accessible by the server which NagVis is running on.</p>
             <p> You can add labels in the following format &lt;label&gt;:&lt;map&gt; and &lt;label&gt;:&lt;[url]&gt;. The labels are displayed in the rotation list.</p>
-            <p><font color="#ff0000">New in 1.5:</font> It is also possible to add automaps to rotations. Simply add an @ sign before the automap name to add an automap to the rotation.</p>
+            <p> It is also possible to add automaps to rotations. Simply add an @ sign before the automap name to add an automap to the rotation.</p>
         </td>
         </tr>
         </table>
         
-        <a name="states"></a><h3>states <font color="#ff0000">(New in 1.5)</font></h3>
+        <a name="states"></a><h3>states</h3>
         <p>Options which affect the handling and appearance of the different states in the NagVis installation.</p>
         
         <p>These settings define the state handling behaviour. Mainly it is possible to configure which state will

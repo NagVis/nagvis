@@ -29,55 +29,55 @@
         <td>{$currentLanguage} (was [current_language])</td><td>String representing the current language (For example en_US). This is needed for link to documentation.</td>
         </tr>
         <tr>
-        <td>{$currentUser}</td><td>Name of the current user <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$currentUser}</td><td>Name of the current user.</td>
         </tr>
         <tr>
-        <td>{$mod}</td><td>The current Module (Map, AutoMap, Overview, Welcome, ...) <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$mod}</td><td>The current Module (Map, AutoMap, Overview, Welcome, ...).</td>
         </tr>
         <tr>
-        <td>{$act}</td><td>The current Action (view, edit, ...) <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$act}</td><td>The current Action (view, edit, ...).</td>
         </tr>
         <tr>
-        <td>{$bEnableFade}</td><td>Tells the hover menu to use fading menus or quickly opening slide menus <font color="#ff0000">(New in 1.5.2)</font>.</td>
+        <td>{$bEnableFade}</td><td>Tells the hover menu to use fading menus or quickly opening slide menus.</td>
         </tr>
         <tr>
-        <td>{$bRotation}</td><td>Is true when currently viewing a rotation. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$bRotation}</td><td>Is true when currently viewing a rotation. Otherwise it is False..</td>
         </tr>
         <tr>
-        <td>{$permittedOverview}</td><td>Is true when the user is permitted to access the overview page. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$permittedOverview}</td><td>Is true when the user is permitted to access the overview page. Otherwise it is False..</td>
         </tr>
         <tr>
-        <td>{$permittedEdit}</td><td>Is true when the user is permitted to edit the current map. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$permittedEdit}</td><td>Is true when the user is permitted to edit the current map. Otherwise it is False..</td>
         </tr>
         <tr>
-        <td>{$permittedEditAnyMap}</td><td>Is true when the user is allowed to edit at least one map. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$permittedEditAnyMap}</td><td>Is true when the user is allowed to edit at least one map. Otherwise it is False..</td>
         </tr>
         <tr>
-        <td>{$permittedChangePassword}</td><td>Is true when the user is permitted to change the own password. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$permittedChangePassword}</td><td>Is true when the user is permitted to change the own password. Otherwise it is False..</td>
         </tr>
         <tr>
-        <td>{$permittedEditMainCfg}</td><td>Is true when the user is permitted to edit the main configuration file. Otherwise it is False. <font color="#ff0000">(New in 1.5.3)</font>.</td>
+        <td>{$permittedEditMainCfg}</td><td>Is true when the user is permitted to edit the main configuration file. Otherwise it is False..</td>
         </tr>
         <tr>
-        <td>{$permittedManageBackgrounds}</td><td>Is true when the user is permitted to manage backgrounds. Otherwise it is False. <font color="#ff0000">(New in 1.5.3)</font>.</td>
+        <td>{$permittedManageBackgrounds}</td><td>Is true when the user is permitted to manage backgrounds. Otherwise it is False..</td>
         </tr>
         <tr>
-        <td>{$permittedManageMaps}</td><td>Is true when the user is permitted to manage maps. Otherwise it is False. <font color="#ff0000">(New in 1.5.3)</font>.</td>
+        <td>{$permittedManageMaps}</td><td>Is true when the user is permitted to manage maps. Otherwise it is False..</td>
         </tr>
         <tr>
-        <td>{$permittedManageShapes}</td><td>Is true when the user is permitted to manage shapes. Otherwise it is False. <font color="#ff0000">(New in 1.5.3)</font>.</td>
+        <td>{$permittedManageShapes}</td><td>Is true when the user is permitted to manage shapes. Otherwise it is False..</td>
         </tr>
         <tr>
-        <td>{$permittedUserMgmt}</td><td>Is true when the user is permitted to manage user accounts. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$permittedUserMgmt}</td><td>Is true when the user is permitted to manage user accounts. Otherwise it is False..</td>
         </tr>
         <tr>
-        <td>{$permittedRoleMgmt}</td><td>Is true when the user is permitted to manage roles. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$permittedRoleMgmt}</td><td>Is true when the user is permitted to manage roles. Otherwise it is False..</td>
         </tr>
         <tr>
-        <td>{$permittedLogout}</td><td>Is true when the user is permitted to log out. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$permittedLogout}</td><td>Is true when the user is permitted to log out. Otherwise it is False..</td>
         </tr>
         <tr>
-        <td>{$supportedChangePassword}</td><td>Is true when the current auth module supports changing passwords. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$supportedChangePassword}</td><td>Is true when the current auth module supports changing passwords. Otherwise it is False..</td>
         </tr>
         <tr>
             <td valign="top"> {foreach $maps map} <br>{$map.mapName}<br>{/foreach}</td>
@@ -96,13 +96,13 @@
         </tr>
         <tr>
             <td valign="top">{if $viewType == 'Map' || $viewType == 'Automap'}</td>
-            <td>To be more flexible in the templates we added some sort of if statements. These can be used as in native PHP. For an example have a look at <code>share/userfiles/templates/pages/default.header.html</code>. <font color="#ff0000">(New in 1.5)</font>.</td>
+            <td>To be more flexible in the templates we added some sort of if statements. These can be used as in native PHP. For an example have a look at <code>share/userfiles/templates/pages/default.header.html</code>..</td>
         </tr>
         <tr>
         <td>{$pathBase} (was [html_base])</td><td> URL to HTML-Base (/nagvis) </td>
         </tr>
         <tr>
-        <td>{$pathImages} (was [html_images])</td><td> URL to HTML-Images (/nagvis/images) <font color="#ff0000">(New in 1.5)</font></td>
+        <td>{$pathImages} (was [html_images])</td><td> URL to HTML-Images (/nagvis/images)</td>
         </tr>
         <tr>
         <td>{$pathHeaderJs}</td><td> Path to header specific javascript file <font color="#ff0000">(New in 1.6)</font></td>
@@ -144,37 +144,37 @@
         <td>{$langRotationStop} (was [lang_rotation_stop])</td><td> Label for stopping the map rotation </td>
         </tr>
         <tr>
-        <td>{$langSearch}</td><td> Label for searching an object on the map <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$langSearch}</td><td> Label for searching an object on the map.</td>
         </tr>
         <tr>
-        <td>{$langToggleGrid}</td><td> Label for enabling/disabling the grid <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$langToggleGrid}</td><td> Label for enabling/disabling the grid.</td>
         </tr>
         <tr>
-        <td>{$langActions}</td><td>Label for choosing the available actions <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$langActions}</td><td>Label for choosing the available actions.</td>
         </tr>
         <tr>
-        <td>{$langWui}</td><td>Label for the WUI <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$langWui}</td><td>Label for the WUI.</td>
         </tr>
         <tr>
-        <td>{$langUser}</td><td>Label for the user <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$langUser}</td><td>Label for the user.</td>
         </tr>
         <tr>
-        <td>{$langLoggedIn}</td><td>Label for "Logged in as" <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$langLoggedIn}</td><td>Label for "Logged in as".</td>
         </tr>
         <tr>
-        <td>{$langChangePassword}</td><td>Label for changing the user&apos;s password <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$langChangePassword}</td><td>Label for changing the user&apos;s password.</td>
         </tr>
         <tr>
-        <td>{$langUserMgmt}</td><td>Label for managing users <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$langUserMgmt}</td><td>Label for managing users.</td>
         </tr>
         <tr>
-        <td>{$langManageRoles}</td><td>Label for managing user roles <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$langManageRoles}</td><td>Label for managing user roles.</td>
         </tr>
         <tr>
-        <td>{$langLogout}</td><td>Label for logging out <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$langLogout}</td><td>Label for logging out.</td>
         </tr>
         <tr>
-        <td>{$langChooseLanguage}</td><td>Label for choosing the user&apos;s language <font color="#ff0000">(New in 1.5)</font>.</td>
+        <td>{$langChooseLanguage}</td><td>Label for choosing the user&apos;s language.</td>
         </tr>
     </body>
 </table>
