@@ -2,95 +2,95 @@
 <html>
  <head>
   <title>Gadgets</title>
-		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
  </head>
  <body>
-		<h1>Gadgets</h1>
-		
-		<h2>Allgemeine Informationen</h2>
-		<p>"Gadgets" sind kleine Programme, die Bilder aus Informationen erzeugen, die von NagVis
-		geliefert werden. Die Hauptidee besteht darin, die Performance-Daten von Nagios an diese
-		Programme zu liefern, um daraus nette Grafiken oder schicke Tachos, Thermometer oder
-		&auml;hnliches zu machen.<br/>
-		<code>share/userfiles/gadgets</code> enth&auml;lt einige Beispiele, andere finden Sie unter <a href="exchange.nagvis.org/exchange/Gadgets/">Nagvis Exchange</a><sup>[1]</sup>.</p>
-		<p>Die Gadgets k&ouml;nnen in jeder Sprache geschrieben werden, die von Ihrem Webserver
-		interpretiert wird, wie z.B. PHP, Perl, ...</p>
-		<p>Gadgets werden nur f&uuml;r Services unterst&uuml;tzt. Ein Objekt kann in ein Gadget
-		verwandelt werden, indem Sie view_type=&quot;gadget&quot; und eine g&uuml;ltige gadget_url
-		setzen.</p>
-		<p>NagVis unterst&uuml;tzt Gadgets ab Version 1.4<sup>[1]</sup>.</p>
-		
-		<img src="../general/img/nagvis-1.4-gadget-label-hover.png" alt="NagVis 1.4 std_speedometer gadget with label and hover menu" /><br />
-		<p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.4 std_speedometer-Gadget auf einer Test-Map mit aktiviertem Label.</p>
-		
-		<h2>Parameter</h2>
-		<p>Die Gadgets bekommen ihre Informationen durch einen HTTP-Get-Aufruf von NagVis (wenn Sie <code>share/userfiles/gadgets/gadget_core.php</code> einbinden, werden zwei Arrays gef&uuml;llt. Mehr Informationen finden Sie in der (englischen) Beschreibung dort).</p>
-		<p>Die folgenden Parameter werden an die Gadgets geliefert:</p>
-		
-		<table style="width:100%">
-			<tr>
-				<th width="200">Parameter</th>
-				<th width="150">Beispielwert</th>
-				<th>Beschreibung</th>
-				<th>Variable</th>
-			</tr>
-			<tr>
-				<td>name1</td>
-				<td>localhost</td>
-				<td>Der Name des Hosts</td>
-				<td>$aOpts['name1']</td>
-			</tr>
-			<tr>
-				<td>name2</td>
-				<td>Current Load</td>
-				<td>Die Service-Beschreibung des Objekts</td>
-				<td>$aOpts['name2']</td>
-			</tr>
-			<tr>
-				<td>scale</td>
-				<td>100</td>
-				<td>Die Gr&ouml;&szlig;e des Gadgets (in Prozent)</td>
-				<td>$aOpts['scale']</td>
-			</tr>
-			<tr>
-				<td>state</td>
-				<td>OK</td>
-				<td>Die Zeichenkette, die den aktuellen Status beschreibt (OK, WARNING, CRITICAL, UNKNOWN)</td>
-				<td>$aOpts['state']</td>
-			</tr>
-			<tr>
-				<td>stateType</td>
-				<td>HARD</td>
-				<td>Der Typ des aktuelles Status. Kann HARD oder SOFT sein</td>
-				<td>$aOpts['stateType']</td>
-			</tr>
-			<tr>
-				<td>ack</td>
-				<td>0</td>
-				<td>Wird auf 1 gesetzt, wenn der Status des entsprechenden Objekts best&auml;tigt wurde (<font color="#ff0000">Neu in 1.5.4</font>)</td>
-				<td>$aOpts['ack']</td>
-			</tr>
-			<tr>
-				<td>downtime</td>
-				<td>0</td>
-				<td>Wird auf 1 gesetzt, wenn sich das entsprechende Objekt in einer Ausfallzeit (Downtime) befindet (<font color="#ff0000">Neu in 1.5.4</font>)</td>
-				<td>$aOpts['downtime']</td>
-			</tr>
-			<tr>
-				<td>perfdata</td>
-				<td>load1=0.960;5.000;10.000;0; load5=0.570;4.000;6.000;0; load15=0.540;3.000;4.000;0;</td>
-				<td>Die aktuellen Performance-Daten, die von Nagios geliefert werden. 
-					Es ist wichtig, g&uuml;ltige Performance-Daten zu haben!</td>
-				<td>$aPerfdata[&lt;index&gt][&lt;tag&gt;]</td>
-			</tr>
-		</table>
-		
-		<p>Ein g&uuml;ltiger HTTP-get zum std_speedometer.php sieht wie folgt aus:</p>
-		<code>std_speedometer.php?name1=localhost&amp;name2=Current%20Load&amp;state=OK&amp;stateType=HARD&amp;perfdata=load1=0.450;5.000;10.000;0;%20load5=0.260;4.000;6.000;0;%20load15=0.750;3.000;4.000;0;</code>
+        <h1>Gadgets</h1>
+        
+        <h2>Allgemeine Informationen</h2>
+        <p>"Gadgets" sind kleine Programme, die Bilder aus Informationen erzeugen, die von NagVis
+        geliefert werden. Die Hauptidee besteht darin, die Performance-Daten von Nagios an diese
+        Programme zu liefern, um daraus nette Grafiken oder schicke Tachos, Thermometer oder
+        &auml;hnliches zu machen.<br/>
+        <code>share/userfiles/gadgets</code> enth&auml;lt einige Beispiele, andere finden Sie unter <a href="exchange.nagvis.org/exchange/Gadgets/">Nagvis Exchange</a><sup>[1]</sup>.</p>
+        <p>Die Gadgets k&ouml;nnen in jeder Sprache geschrieben werden, die von Ihrem Webserver
+        interpretiert wird, wie z.B. PHP, Perl, ...</p>
+        <p>Gadgets werden nur f&uuml;r Services unterst&uuml;tzt. Ein Objekt kann in ein Gadget
+        verwandelt werden, indem Sie view_type=&quot;gadget&quot; und eine g&uuml;ltige gadget_url
+        setzen.</p>
+        <p>NagVis unterst&uuml;tzt Gadgets ab Version 1.4<sup>[1]</sup>.</p>
+        
+        <img src="../general/img/nagvis-1.4-gadget-label-hover.png" alt="NagVis 1.4 std_speedometer gadget with label and hover menu" /><br />
+        <p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.4 std_speedometer-Gadget auf einer Test-Map mit aktiviertem Label.</p>
+        
+        <h2>Parameter</h2>
+        <p>Die Gadgets bekommen ihre Informationen durch einen HTTP-Get-Aufruf von NagVis (wenn Sie <code>share/userfiles/gadgets/gadget_core.php</code> einbinden, werden zwei Arrays gef&uuml;llt. Mehr Informationen finden Sie in der (englischen) Beschreibung dort).</p>
+        <p>Die folgenden Parameter werden an die Gadgets geliefert:</p>
+        
+        <table style="width:100%">
+            <tr>
+                <th width="200">Parameter</th>
+                <th width="150">Beispielwert</th>
+                <th>Beschreibung</th>
+                <th>Variable</th>
+            </tr>
+            <tr>
+                <td>name1</td>
+                <td>localhost</td>
+                <td>Der Name des Hosts</td>
+                <td>$aOpts['name1']</td>
+            </tr>
+            <tr>
+                <td>name2</td>
+                <td>Current Load</td>
+                <td>Die Service-Beschreibung des Objekts</td>
+                <td>$aOpts['name2']</td>
+            </tr>
+            <tr>
+                <td>scale</td>
+                <td>100</td>
+                <td>Die Gr&ouml;&szlig;e des Gadgets (in Prozent)</td>
+                <td>$aOpts['scale']</td>
+            </tr>
+            <tr>
+                <td>state</td>
+                <td>OK</td>
+                <td>Die Zeichenkette, die den aktuellen Status beschreibt (OK, WARNING, CRITICAL, UNKNOWN)</td>
+                <td>$aOpts['state']</td>
+            </tr>
+            <tr>
+                <td>stateType</td>
+                <td>HARD</td>
+                <td>Der Typ des aktuelles Status. Kann HARD oder SOFT sein</td>
+                <td>$aOpts['stateType']</td>
+            </tr>
+            <tr>
+                <td>ack</td>
+                <td>0</td>
+                <td>Wird auf 1 gesetzt, wenn der Status des entsprechenden Objekts best&auml;tigt wurde (<font color="#ff0000">Neu in 1.5.4</font>)</td>
+                <td>$aOpts['ack']</td>
+            </tr>
+            <tr>
+                <td>downtime</td>
+                <td>0</td>
+                <td>Wird auf 1 gesetzt, wenn sich das entsprechende Objekt in einer Ausfallzeit (Downtime) befindet (<font color="#ff0000">Neu in 1.5.4</font>)</td>
+                <td>$aOpts['downtime']</td>
+            </tr>
+            <tr>
+                <td>perfdata</td>
+                <td>load1=0.960;5.000;10.000;0; load5=0.570;4.000;6.000;0; load15=0.540;3.000;4.000;0;</td>
+                <td>Die aktuellen Performance-Daten, die von Nagios geliefert werden. 
+                    Es ist wichtig, g&uuml;ltige Performance-Daten zu haben!</td>
+                <td>$aPerfdata[&lt;index&gt][&lt;tag&gt;]</td>
+            </tr>
+        </table>
+        
+        <p>Ein g&uuml;ltiger HTTP-get zum std_speedometer.php sieht wie folgt aus:</p>
+        <code>std_speedometer.php?name1=localhost&amp;name2=Current%20Load&amp;state=OK&amp;stateType=HARD&amp;perfdata=load1=0.450;5.000;10.000;0;%20load5=0.260;4.000;6.000;0;%20load15=0.750;3.000;4.000;0;</code>
 
-		<h2>wie ist es zu konfigurieren?</h2>
-		<p>Bitte pr&uuml;fen Sie die Parameter <code>view_type</code>, <code>gadget_url</code> und <code>gadget_opts</code> des Service-Objekts in der <a href="map_config_format_description.html#service">Formatbeschreibung der Map-Konfiguration</a>.
-		Hier eine Beispiel-Definition in Ihrer Map-Datei:</p>
+        <h2>wie ist es zu konfigurieren?</h2>
+        <p>Bitte pr&uuml;fen Sie die Parameter <code>view_type</code>, <code>gadget_url</code> und <code>gadget_opts</code> des Service-Objekts in der <a href="map_config_format_description.html#service">Formatbeschreibung der Map-Konfiguration</a>.
+        Hier eine Beispiel-Definition in Ihrer Map-Datei:</p>
       <pre>define service {
    host_name=localhost
    service_description=root-volume
@@ -103,12 +103,12 @@
    // gadget_opts=columns=3 label=1    // gadget dependent
 }</pre></p>
 
-		<h2>wie man ein eigenes Gadget anlegt</h2>
-		<p>Mit Hilfe des Codes in gadgets_core.php werden zwei Arrays gef&uuml;llt. $aPerfdata enth&auml;lt die Performance-Daten. $aOpts enth&auml;lt die Optionen, die in gadget_opts gesetzt werden.</p>
-		<p>Das Einfachste ist, einen Blick auf std_speedometer zu werfen und die Kernbestandteile von dort anzupassen.</p>
-		<p>Sie sollten einen Beispiel-Performance-Daten-String in den Gadget-Code einf&uuml;gen, indem Sie die Variable $sDummyPerfdata nutzen.
-			Dies erlaubt es, das Gadget mit Dummy-Daten in der WUI anzuzeigen. Es ist viel einfacher, die Maps zu erstellen,
-			wenn die Gadgets dort angezeigt werden. <b>Wichtig:</b> die Variable muss gesetzt werden, bevor gadgets_core.php &uuml;ber den include-Befehl geladen wird.</p>
+        <h2>wie man ein eigenes Gadget anlegt</h2>
+        <p>Mit Hilfe des Codes in gadgets_core.php werden zwei Arrays gef&uuml;llt. $aPerfdata enth&auml;lt die Performance-Daten. $aOpts enth&auml;lt die Optionen, die in gadget_opts gesetzt werden.</p>
+        <p>Das Einfachste ist, einen Blick auf std_speedometer zu werfen und die Kernbestandteile von dort anzupassen.</p>
+        <p>Sie sollten einen Beispiel-Performance-Daten-String in den Gadget-Code einf&uuml;gen, indem Sie die Variable $sDummyPerfdata nutzen.
+            Dies erlaubt es, das Gadget mit Dummy-Daten in der WUI anzuzeigen. Es ist viel einfacher, die Maps zu erstellen,
+            wenn die Gadgets dort angezeigt werden. <b>Wichtig:</b> die Variable muss gesetzt werden, bevor gadgets_core.php &uuml;ber den include-Befehl geladen wird.</p>
 
       <p>Ein zweites Beispiel finden Sie in std_speedometer2.php. Im Gegensatz zu std_speedometer unterst&uuml;tzt es auch check_multi-Ausgaben. Verschiedene Optionen beeinflussen das Verhalten des Gadgets:
       <table>
@@ -137,5 +137,5 @@
       <p><b>Anmerkung:</b> Dieses Gadget benutzt einen TrueType-Font, dessen Position und Name hartkodiert ist (Variablen <i>$fontDir</i> und <i>$fontName</i>). Wird die Datei nicht gefunden, dann wird ein eingebauter Font benutzt.
          Der Wert von $fontDir wechselt zwischen den Distributionen. Falls der Font nicht korrekt skaliert, dann pr&uuml;fen Sie bitte die Einstellung (sie ist korrekt f&uuml;r OpenSuSE, andere Einstellungen sind auskommentiert).</p>
         <sup>[1]</sup> Die Verzeichnisstruktur hat sich zwischen NagVis 1.4.x und NagVis 1.5 ge&auml;ndert. Gadgets wurden in <code>nagvis/nagvis/gadgets</code> abgelegt und werden nun in <code>share/userfiles/gadgets</code> gespeichert. Gadgets von NagVis Exchange benutzen m&ouml;glicherweise die alte Struktur, so dass Sie die Dateien ggf. an die neue Stelle kopieren m&uuml;ssen (z.B. <code>cp -pr &lt;Quelle&gt;/nagvis/nagvis/gadgets/&lt;Gadget&gt; &lt;Ziel&gt;/share/userfiles/gadgets/</code>).
-	</body>
+    </body>
 </html>

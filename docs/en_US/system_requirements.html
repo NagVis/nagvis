@@ -2,68 +2,68 @@
 <html>
   <head>
     <title>System requirements</title>
-		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
   </head>
-	<body>
-		<h1>System requirements</h1>
-		<h2>Nagios (installed, configured, running)</h2>
-		<p>You need an installed, configured and running Nagios to get NagVis working. You can get Nagios from the <a href="http://www.nagios.org/" target="_blank">official Nagios Homepage</a>.</p>
-		
-		<h2>MKLivestatus (installed, added to Nagios)</h2>
-		<p>Since NagVis 1.5 we switched the default backend to MKLivestatus since
-			it is much faster, lightweight and more stable than the NDO. And last but
-			not least it is easy to handle and to install. You don't need any database
-			to get MKLivestatus running.</p>
-		<p>MKLivestatus is an Event Broker Module for Nagios which serves a unix socket
-			where third party addons like NagVis can connect to for gathering live status
-			information in a very fast way.</p>
-		<p>You can get MKLivestatus from the <a href="http://www.mathias-kettner.de/checkmk_livestatus.html" target="_blank">official MKLivestatus Homepage</a>.</p>
-		
-		<h2>Webserver with PHP support</h2>
-		<p>NagVis is a web based application realised in Javascript and PHP. You need a webserver with PHP support to run NagVis. We recommend the usage of <a href="http://www.apache.org/" target="_blank">Apache Webserver</a> with <a href="http://www.apache.net/" target="_blank">mod_php</a>.</p>
-		
-		<p>The minimum version requirement of PHP is 5.0.0.</p>
-		
-		<h2>PHP modules needed</h2>
-		<p>Besides the base php packet you need the following modules in your PHP installation. The names of the modules may vary between distributions:</p>
-		<ul>
-		<li>php5-gd</li>
-		<li>php5-gettext</li>
-		<li>php5-mbstring</li>
-		<li>php5-session</li>
-		<li>php5-json (Builtin since PHP 5.2)</li>
-		<li>php5-pdo and pdo-sqlite (New in 1.5, for default Authentication/Authorisation module)</li>
-		</ul>
-		<p>Note: Maybe some of these functions are compiled in your php.</p>
+    <body>
+        <h1>System requirements</h1>
+        <h2>Nagios (installed, configured, running)</h2>
+        <p>You need an installed, configured and running Nagios to get NagVis working. You can get Nagios from the <a href="http://www.nagios.org/" target="_blank">official Nagios Homepage</a>.</p>
+        
+        <h2>MKLivestatus (installed, added to Nagios)</h2>
+        <p>Since NagVis 1.5 we switched the default backend to MKLivestatus since
+            it is much faster, lightweight and more stable than the NDO. And last but
+            not least it is easy to handle and to install. You don't need any database
+            to get MKLivestatus running.</p>
+        <p>MKLivestatus is an Event Broker Module for Nagios which serves a unix socket
+            where third party addons like NagVis can connect to for gathering live status
+            information in a very fast way.</p>
+        <p>You can get MKLivestatus from the <a href="http://www.mathias-kettner.de/checkmk_livestatus.html" target="_blank">official MKLivestatus Homepage</a>.</p>
+        
+        <h2>Webserver with PHP support</h2>
+        <p>NagVis is a web based application realised in Javascript and PHP. You need a webserver with PHP support to run NagVis. We recommend the usage of <a href="http://www.apache.org/" target="_blank">Apache Webserver</a> with <a href="http://www.apache.net/" target="_blank">mod_php</a>.</p>
+        
+        <p>The minimum version requirement of PHP is 5.0.0.</p>
+        
+        <h2>PHP modules needed</h2>
+        <p>Besides the base php packet you need the following modules in your PHP installation. The names of the modules may vary between distributions:</p>
+        <ul>
+        <li>php5-gd</li>
+        <li>php5-gettext</li>
+        <li>php5-mbstring</li>
+        <li>php5-session</li>
+        <li>php5-json (Builtin since PHP 5.2)</li>
+        <li>php5-pdo and pdo-sqlite (New in 1.5, for default Authentication/Authorisation module)</li>
+        </ul>
+        <p>Note: Maybe some of these functions are compiled in your php.</p>
 
-		<h3>Special requirements by backends</h3>
-		<p>The backends connect to external datasources and often need some special modules.
-			Here is a list of the needed modules for the different backends. You only need to meet
-			the requirements of the backends you use.</p>
-		
-		<strong>mklivestatus</strong>
-		<ul>
-		<li>php-net-socket (Debian) / php5-sockets (SLES)</li>
-		</ul>
-		
-		<strong>ndomy</strong>
-		<ul>
-		<li>php5-mysql</li>
-		</ul>
-		
-		<strong>merlinmy</strong>
-		<ul>
-		<li>php5-mysql</li>
-		</ul>
-		
-		<strong>ndo2fs</strong>
-		<ul>
-		<li>php5-xml (might be builtin)</li>
-		</ul>
-		
-		<h2>Graphviz for the automap</h2>
-		<p>The <a href="automap.html">Automap</a> is based on Graphviz. You need it when you like to use the automap feature. We recommend the use of Graphviz version >= 2.14 (Earlier versions (with lower version numbers) have some problems with truecolor rendering).</p>
-		<p>Graphviz is available in some distributions. When you can not use a precompiled distribution package, you can get Graphviz from the <a href="http://www.graphviz.org/" target="_blank">official Graphviz Homepage</a> for compiling it on your own.</p>
-		<p>You will also need more packages like gd, libpng, freetype, ... but if you get graphviz compiled and/or installed it should work.</p>
-	</body>
+        <h3>Special requirements by backends</h3>
+        <p>The backends connect to external datasources and often need some special modules.
+            Here is a list of the needed modules for the different backends. You only need to meet
+            the requirements of the backends you use.</p>
+        
+        <strong>mklivestatus</strong>
+        <ul>
+        <li>php-net-socket (Debian) / php5-sockets (SLES)</li>
+        </ul>
+        
+        <strong>ndomy</strong>
+        <ul>
+        <li>php5-mysql</li>
+        </ul>
+        
+        <strong>merlinmy</strong>
+        <ul>
+        <li>php5-mysql</li>
+        </ul>
+        
+        <strong>ndo2fs</strong>
+        <ul>
+        <li>php5-xml (might be builtin)</li>
+        </ul>
+        
+        <h2>Graphviz for the automap</h2>
+        <p>The <a href="automap.html">Automap</a> is based on Graphviz. You need it when you like to use the automap feature. We recommend the use of Graphviz version >= 2.14 (Earlier versions (with lower version numbers) have some problems with truecolor rendering).</p>
+        <p>Graphviz is available in some distributions. When you can not use a precompiled distribution package, you can get Graphviz from the <a href="http://www.graphviz.org/" target="_blank">official Graphviz Homepage</a> for compiling it on your own.</p>
+        <p>You will also need more packages like gd, libpng, freetype, ... but if you get graphviz compiled and/or installed it should work.</p>
+    </body>
 </html>

@@ -2,48 +2,48 @@
 <html>
   <head>
     <title>Update instructions</title>
-		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
   </head>  
   <body>
-		<h1>Update instructions</h1>
-		
-		First rule: Always make a backup before updating an existing installation.
-		
-		There are several cases for updating:
-		<ol>
-		<li> Upgrading from a very old major version (1.1x, 1.2x, 1.3x)</li>
-		<li> Upgrading from the last major version (1.4x)</li>
-		<li> Updating the sub version (1.5x to 1.5x)</li>
-		</ol>
-		
-		<h2>Upgrading from 1.3x or lower</h2>
-		
-		<p>There have been many changes to the internal structure of NagVis and the configuration values.<br />
-		The recommended way for upgrading to the latest NagVis version is to set up the new version as new
+        <h1>Update instructions</h1>
+        
+        First rule: Always make a backup before updating an existing installation.
+        
+        There are several cases for updating:
+        <ol>
+        <li> Upgrading from a very old major version (1.1x, 1.2x, 1.3x)</li>
+        <li> Upgrading from the last major version (1.4x)</li>
+        <li> Updating the sub version (1.5x to 1.5x)</li>
+        </ol>
+        
+        <h2>Upgrading from 1.3x or lower</h2>
+        
+        <p>There have been many changes to the internal structure of NagVis and the configuration values.<br />
+        The recommended way for upgrading to the latest NagVis version is to set up the new version as new
     installation and migrate your maps/icons/configurations/... manually.</p>
-		
-		<p>You should take a look at the following places:</p>
-		
-		<ul>
-		<li> Maps (etc/maps)<br />
-		Just copy all map configuration files</li>
-		<li> Background-Images (nagvis/images/maps)<br />
-		Just copy all map background images</li>
-		<li> Iconsets (nagvis/images/iconsets)<br />
-		Just copy everything which is not named "std_*"</li>
-		<li> Shapes (nagvis/images/shapes)<br />
-		Just copy everything</li>
-		<li> Templates (nagvis/templates/hover and nagvis/templates/header)<br />
-		Just copy all your custom templates. <font style="color:#ff0000">Be aware:</font> Don't replace the default templates.<br />Maybe you need to update your pre 1.3 templates to 1.3 version. For more information take a look at the <a href="http://www.nagvis.org/download/templates" target="_blank">template download</a> page.</li>
-		<li> Template-Images (nagvis/images/templates/hover and nagvis/images/templates/header)<br />
-		Just copy everything</li>
-		<li> Main configuration (etc/nagvis.inc.php)<br />
-		You should <font style="color:#ff0000">not</font> copy that file. The best way is to  copy the sample configuration of the new NagVis version to etc/nagvis.inc.php and merge the settings of your old installation manually to that file</li>
-		</ul>
-		
-		<h2>Updating from NagVis 1.4x</h2>
-		
-		<p>From NagVis 1.4x to NagVis 1.5x we changed a lot in the directory structure.
+        
+        <p>You should take a look at the following places:</p>
+        
+        <ul>
+        <li> Maps (etc/maps)<br />
+        Just copy all map configuration files</li>
+        <li> Background-Images (nagvis/images/maps)<br />
+        Just copy all map background images</li>
+        <li> Iconsets (nagvis/images/iconsets)<br />
+        Just copy everything which is not named "std_*"</li>
+        <li> Shapes (nagvis/images/shapes)<br />
+        Just copy everything</li>
+        <li> Templates (nagvis/templates/hover and nagvis/templates/header)<br />
+        Just copy all your custom templates. <font style="color:#ff0000">Be aware:</font> Don't replace the default templates.<br />Maybe you need to update your pre 1.3 templates to 1.3 version. For more information take a look at the <a href="http://www.nagvis.org/download/templates" target="_blank">template download</a> page.</li>
+        <li> Template-Images (nagvis/images/templates/hover and nagvis/images/templates/header)<br />
+        Just copy everything</li>
+        <li> Main configuration (etc/nagvis.inc.php)<br />
+        You should <font style="color:#ff0000">not</font> copy that file. The best way is to  copy the sample configuration of the new NagVis version to etc/nagvis.inc.php and merge the settings of your old installation manually to that file</li>
+        </ul>
+        
+        <h2>Updating from NagVis 1.4x</h2>
+        
+        <p>From NagVis 1.4x to NagVis 1.5x we changed a lot in the directory structure.
     But in the newest NagVis version there is an installer script included for installing
     NagVis. This script can also upgrade NagVis 1.4x versions and update 1.5x versions
     to the latest 1.5x release.<br />
@@ -65,5 +65,5 @@
    <p>Once you made some experience in updating NagVis 1.4x to 1.5 manually please let us know
    so that we can extend this documentation.</p>
 
-	</body>
+    </body>
 </html>

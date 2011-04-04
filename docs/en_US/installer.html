@@ -2,40 +2,40 @@
 <html>
   <head>
     <title>NagVis Installer</title>
-		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
   </head>
   <body>
-		<h1>NagVis Installer</h1>
-		<p>There is a new installer in NagVis 1.4. This installer was created to make the progress
-			 of installing or updating NagVis easier. The installer is a bash script which asks for
-			 all information needed for installing or updating NagVis.</p>
-		<p>It is also possible to set all options via command line parameters for running the installer
-			 in quiet mode..</p>
+        <h1>NagVis Installer</h1>
+        <p>There is a new installer in NagVis 1.4. This installer was created to make the progress
+             of installing or updating NagVis easier. The installer is a bash script which asks for
+             all information needed for installing or updating NagVis.</p>
+        <p>It is also possible to set all options via command line parameters for running the installer
+             in quiet mode..</p>
 
-		<h2>Using the installer</h2>
-		
-		<h3>Download NagVis</h3>
-		<p>Get NagVis. The latest release can be found at <a href="http://www.nagvis.org/" target="_blank">nagvis.org</a>.</p>
-		
-		<h3>Unpack NagVis</h3>
-		<p>Unpack the archive to a temporary place (For example /tmp). And change to that directory</p>
-		<pre>tar xvzf nagvis-1.5*.tar.gz /tmp
+        <h2>Using the installer</h2>
+        
+        <h3>Download NagVis</h3>
+        <p>Get NagVis. The latest release can be found at <a href="http://www.nagvis.org/" target="_blank">nagvis.org</a>.</p>
+        
+        <h3>Unpack NagVis</h3>
+        <p>Unpack the archive to a temporary place (For example /tmp). And change to that directory</p>
+        <pre>tar xvzf nagvis-1.5*.tar.gz /tmp
 cd /tmp/nagvis-1.5*</pre>
-		
-		<h3>Make installer executable</h3>
-		<p>The installer is located in the root directory of the NagVis package. The installer has to be made executable before you can use it.</p>
-		<pre>chmod +x install.sh</pre>
-		
-		<h3>Run installer</h3>
-		<p>Now you can run the installer.</p>
-		<pre>./install.sh</pre>
-		<p>Following the instructions of the installer should copy the necessary files to the correct places. Please keep in mind that you have to edit the config file nagvis.ini.php. If you experience any problems please let us know.</p>
-		
-		<h3>Cleanup</h3>
-		<p>You can remove the sources after installation.</p>
-		<pre>rm -rf /tmp/nagvis-1.5*</pre>
-		
-		<h2>Command line parameters</h2>
-		<p>For details about the command line parameters call the installer with the "-h" option.</p>
-	</body>
+        
+        <h3>Make installer executable</h3>
+        <p>The installer is located in the root directory of the NagVis package. The installer has to be made executable before you can use it.</p>
+        <pre>chmod +x install.sh</pre>
+        
+        <h3>Run installer</h3>
+        <p>Now you can run the installer.</p>
+        <pre>./install.sh</pre>
+        <p>Following the instructions of the installer should copy the necessary files to the correct places. Please keep in mind that you have to edit the config file nagvis.ini.php. If you experience any problems please let us know.</p>
+        
+        <h3>Cleanup</h3>
+        <p>You can remove the sources after installation.</p>
+        <pre>rm -rf /tmp/nagvis-1.5*</pre>
+        
+        <h2>Command line parameters</h2>
+        <p>For details about the command line parameters call the installer with the "-h" option.</p>
+    </body>
 </html>

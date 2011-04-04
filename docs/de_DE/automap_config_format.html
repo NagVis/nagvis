@@ -2,11 +2,11 @@
 <html>
   <head>
     <title>Automap-Konfiguration</title>
-		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
   </head>
   <body>
-		<h1>Automap-Konfiguration</h1>
-	</body>
+        <h1>Automap-Konfiguration</h1>
+    </body>
 </html>
 
 
@@ -14,28 +14,28 @@
 <html>
  <head>
   <title>Map configuration format description</title>
-		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
  </head>
  <body>
-		<h1>Beschreibung des Automap-Konfigurationsformats</h1>
-		
-		<h2>Allgemeine Information</h2>
-		<p>Das NagVis-Automap-Konfigurationsformat gleicht dem <a href="map_config_format_description.html">Map-Konfiguration</a>sformat mit kleinen Unterschieden bei den verf&uuml;gbaren Parametern.</p>
-		
-		<h2>Objekttypen</h2>
-		<ul>
-			<li><a href="#global">Global</a></li>
-		</ul>
-		
-		<h2>Beschreibung der Objekttypen</h2>
-		
-		<a name="global"></a><h3> Global </h3>
-		<p>Die erste Definition in jeder Konfigurationsdatei sollte vom speziellen Typ "global" sein. Optionen in diesem Paragraph gelten f&uuml;r die gesamte Map und werden auf andere Typen vererbt, die nachfolgend definiert werden.</p>
-		<p>Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen:</p>
-		<pre>define global {
+        <h1>Beschreibung des Automap-Konfigurationsformats</h1>
+        
+        <h2>Allgemeine Information</h2>
+        <p>Das NagVis-Automap-Konfigurationsformat gleicht dem <a href="map_config_format_description.html">Map-Konfiguration</a>sformat mit kleinen Unterschieden bei den verf&uuml;gbaren Parametern.</p>
+        
+        <h2>Objekttypen</h2>
+        <ul>
+            <li><a href="#global">Global</a></li>
+        </ul>
+        
+        <h2>Beschreibung der Objekttypen</h2>
+        
+        <a name="global"></a><h3> Global </h3>
+        <p>Die erste Definition in jeder Konfigurationsdatei sollte vom speziellen Typ "global" sein. Optionen in diesem Paragraph gelten f&uuml;r die gesamte Map und werden auf andere Typen vererbt, die nachfolgend definiert werden.</p>
+        <p>Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen:</p>
+        <pre>define global {
   map_image=lan.png
 }</pre>
-		
+        
 <table border=0>
 <tr>
 <th>Wert</th><th>Default</th><th>Beschreibung</th></tr>

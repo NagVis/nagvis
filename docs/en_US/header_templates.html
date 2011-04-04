@@ -2,180 +2,180 @@
 <html>
   <head>
     <title>Header Templates</title>
-		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
   </head>
   <body>
-		<h1>Header Templates</h1>
-		<h2>Introduction</h2>
-		
-		Header templates are html files with some macros in it. These files can be used as header menu in the maps. The header templates are located at <code>share/userfiles/templates/pages/*.header.html</code> relative to the nagvis root directory. The templates are named like this: <code>*.header.html</code>.<br>
-		
-		<font color="#ff0000">Since NagVis 1.5 the template format has been changed to be more flexible. Therefore all templates need to be recoded to be NagVis 1.5 compatible.</font>
-		
-		<h2>Macros</h2>
-		The following macros are available in the header templates:
-		
-		<table style="width:100%">
-		<tr>
-		<th>Macro</th><th>Description</th>
-		</tr>
-		<tr>
-		<td>{$currentMap} (was [current_map])</td><td>Name of the current map (e.g. demo,demo2)</td>
-		</tr>
-		<tr>
-		<td>{$currentMapAlias} (was [current_map_alias])</td><td>Alias of the current map</td>
-		</tr>
-		<tr>
-		<td>{$currentLanguage} (was [current_language])</td><td>String representing the current language (For example en_US). This is needed for link to documentation.</td>
-		</tr>
-		<tr>
-		<td>{$currentUser}</td><td>Name of the current user <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$mod}</td><td>The current Module (Map, AutoMap, Overview, Welcome, ...) <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$act}</td><td>The current Action (view, edit, ...) <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$bEnableFade}</td><td>Tells the hover menu to use fading menus or quickly opening slide menus <font color="#ff0000">(New in 1.5.2)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$bRotation}</td><td>Is true when currently viewing a rotation. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$permittedOverview}</td><td>Is true when the user is permitted to access the overview page. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$permittedEdit}</td><td>Is true when the user is permitted to edit the current map. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$permittedEditAnyMap}</td><td>Is true when the user is allowed to edit at least one map. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$permittedChangePassword}</td><td>Is true when the user is permitted to change the own password. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$permittedEditMainCfg}</td><td>Is true when the user is permitted to edit the main configuration file. Otherwise it is False. <font color="#ff0000">(New in 1.5.3)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$permittedManageBackgrounds}</td><td>Is true when the user is permitted to manage backgrounds. Otherwise it is False. <font color="#ff0000">(New in 1.5.3)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$permittedManageMaps}</td><td>Is true when the user is permitted to manage maps. Otherwise it is False. <font color="#ff0000">(New in 1.5.3)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$permittedManageShapes}</td><td>Is true when the user is permitted to manage shapes. Otherwise it is False. <font color="#ff0000">(New in 1.5.3)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$permittedUserMgmt}</td><td>Is true when the user is permitted to manage user accounts. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$permittedRoleMgmt}</td><td>Is true when the user is permitted to manage roles. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$permittedLogout}</td><td>Is true when the user is permitted to log out. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$supportedChangePassword}</td><td>Is true when the current auth module supports changing passwords. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-			<td valign="top"> {foreach $maps map} <br>{$map.mapName}<br>{/foreach}</td>
-			<td>A list of all maps defined in NagVis. The code between <code>{foreach $maps map}</code> and <code>{/foreach}</code>
-					is repeated for each map. For an example have a look at <code>share/userfiles/templates/pages/default.header.html</code>.
-					<br /><br />Within the BEGIN/END-Tags the following macros are available:
-					<br />* <i>{$map.mapName} (Was [map_name])</i>: Name of the map
-					<br />* <i>{$map.mapAlias} (Was [map_alias])</i>: Alias of the map
-					<br />* <i>{$map.urlParams}</i>: Special parameters to hand over to the NagVis frontend like search strings.
-					<br />* <i>{$map.permittedEdit}</i>: Is the user permitted to edit this map?
-			</td>
-		</tr>
-		<tr>
-			<td valign="top">{foreach $langs lang}<br>{$lang.language}<br>{/foreach}</td>
-			<td>A list of all languages available to the users in NagVis. The code between <code>{foreach $langs lang}</code> and <code>{/foreach}</code> is repeated for each language. For an example have a look at <code>share/userfiles/templates/pages/default.header.html</code>.<br><br>Within the BEGIN/END-Tags the following macros are available: <br>* <i>{$lang.language}</i>: Internal name of the language<br>* <i>{$lang.classUnderline}</i>: Underline the language<br>* <i>{$lang.langLanguageLocated}</i>: Located name of the language.</td>
-		</tr>
-		<tr>
-			<td valign="top">{if $viewType == 'Map' || $viewType == 'Automap'}</td>
-			<td>To be more flexible in the templates we added some sort of if statements. These can be used as in native PHP. For an example have a look at <code>share/userfiles/templates/pages/default.header.html</code>. <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$pathBase} (was [html_base])</td><td> URL to HTML-Base (/nagvis) </td>
-		</tr>
-		<tr>
-		<td>{$pathImages} (was [html_images])</td><td> URL to HTML-Images (/nagvis/images) <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td>{$pathHeaderJs}</td><td> Path to header specific javascript file <font color="#ff0000">(New in 1.6)</font></td>
-		</tr>
-		<tr>
-		<td>{$pathTemplates} (was [html_templates])</td><td> Path to header templates (/nagvis/userfiles/templates) </td>
-		</tr>
-		<tr>
-		<td>{$pathTemplateImages} (was [html_template_images])</td><td> Path to header template images (/nagvis/userfiles/images/templates) </td>
-		</tr>
-		<tr>
-		<td>{$langOpen} (was [lang_select_map])</td><td>Label for opening new views</td>
-		</tr>
-		<tr>
-		<td>{$langEditMap} (was [lang_edit_map])</td><td> Label for edit map link </td>
-		</tr>
-		<tr>
-		<td>{$langNeedHelp} (was [lang_need_help])</td><td> Label for help selection </td>
-		</tr>
-		<tr>
-		<td>{$langOnlineDoc} (was [lang_online_doc])</td><td> Label for link to online documentation </td>
-		</tr>
-		<tr>
-		<td>{$langForum} (was [lang_forum])</td><td> Label for link to NagVis forum  </td>
-		</tr>
-		<tr>
-		<td>{$langSupportInfo} (was [lang_support_info])</td><td> Label for link to support information </td>
-		</tr>
-		<tr>
-		<td>{$langOverview} (was [lang_overview])</td><td> Label for overview string </td>
-		</tr>
-		<tr>
-		<td>{$langInstance} (was [lang_instance])</td><td> Label for the instance string</td>
-		</tr>
-		<tr>
-		<td>{$langRotationStart} (was [lang_rotation_start])</td><td> Label for starting the map rotation </td>
-		</tr>
-		<tr>
-		<td>{$langRotationStop} (was [lang_rotation_stop])</td><td> Label for stopping the map rotation </td>
-		</tr>
-		<tr>
-		<td>{$langSearch}</td><td> Label for searching an object on the map <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$langToggleGrid}</td><td> Label for enabling/disabling the grid <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$langActions}</td><td>Label for choosing the available actions <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$langWui}</td><td>Label for the WUI <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$langUser}</td><td>Label for the user <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$langLoggedIn}</td><td>Label for "Logged in as" <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$langChangePassword}</td><td>Label for changing the user&apos;s password <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$langUserMgmt}</td><td>Label for managing users <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$langManageRoles}</td><td>Label for managing user roles <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$langLogout}</td><td>Label for logging out <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>{$langChooseLanguage}</td><td>Label for choosing the user&apos;s language <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-	</body>
+        <h1>Header Templates</h1>
+        <h2>Introduction</h2>
+        
+        Header templates are html files with some macros in it. These files can be used as header menu in the maps. The header templates are located at <code>share/userfiles/templates/pages/*.header.html</code> relative to the nagvis root directory. The templates are named like this: <code>*.header.html</code>.<br>
+        
+        <font color="#ff0000">Since NagVis 1.5 the template format has been changed to be more flexible. Therefore all templates need to be recoded to be NagVis 1.5 compatible.</font>
+        
+        <h2>Macros</h2>
+        The following macros are available in the header templates:
+        
+        <table style="width:100%">
+        <tr>
+        <th>Macro</th><th>Description</th>
+        </tr>
+        <tr>
+        <td>{$currentMap} (was [current_map])</td><td>Name of the current map (e.g. demo,demo2)</td>
+        </tr>
+        <tr>
+        <td>{$currentMapAlias} (was [current_map_alias])</td><td>Alias of the current map</td>
+        </tr>
+        <tr>
+        <td>{$currentLanguage} (was [current_language])</td><td>String representing the current language (For example en_US). This is needed for link to documentation.</td>
+        </tr>
+        <tr>
+        <td>{$currentUser}</td><td>Name of the current user <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$mod}</td><td>The current Module (Map, AutoMap, Overview, Welcome, ...) <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$act}</td><td>The current Action (view, edit, ...) <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$bEnableFade}</td><td>Tells the hover menu to use fading menus or quickly opening slide menus <font color="#ff0000">(New in 1.5.2)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$bRotation}</td><td>Is true when currently viewing a rotation. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$permittedOverview}</td><td>Is true when the user is permitted to access the overview page. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$permittedEdit}</td><td>Is true when the user is permitted to edit the current map. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$permittedEditAnyMap}</td><td>Is true when the user is allowed to edit at least one map. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$permittedChangePassword}</td><td>Is true when the user is permitted to change the own password. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$permittedEditMainCfg}</td><td>Is true when the user is permitted to edit the main configuration file. Otherwise it is False. <font color="#ff0000">(New in 1.5.3)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$permittedManageBackgrounds}</td><td>Is true when the user is permitted to manage backgrounds. Otherwise it is False. <font color="#ff0000">(New in 1.5.3)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$permittedManageMaps}</td><td>Is true when the user is permitted to manage maps. Otherwise it is False. <font color="#ff0000">(New in 1.5.3)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$permittedManageShapes}</td><td>Is true when the user is permitted to manage shapes. Otherwise it is False. <font color="#ff0000">(New in 1.5.3)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$permittedUserMgmt}</td><td>Is true when the user is permitted to manage user accounts. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$permittedRoleMgmt}</td><td>Is true when the user is permitted to manage roles. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$permittedLogout}</td><td>Is true when the user is permitted to log out. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$supportedChangePassword}</td><td>Is true when the current auth module supports changing passwords. Otherwise it is False. <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+            <td valign="top"> {foreach $maps map} <br>{$map.mapName}<br>{/foreach}</td>
+            <td>A list of all maps defined in NagVis. The code between <code>{foreach $maps map}</code> and <code>{/foreach}</code>
+                    is repeated for each map. For an example have a look at <code>share/userfiles/templates/pages/default.header.html</code>.
+                    <br /><br />Within the BEGIN/END-Tags the following macros are available:
+                    <br />* <i>{$map.mapName} (Was [map_name])</i>: Name of the map
+                    <br />* <i>{$map.mapAlias} (Was [map_alias])</i>: Alias of the map
+                    <br />* <i>{$map.urlParams}</i>: Special parameters to hand over to the NagVis frontend like search strings.
+                    <br />* <i>{$map.permittedEdit}</i>: Is the user permitted to edit this map?
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">{foreach $langs lang}<br>{$lang.language}<br>{/foreach}</td>
+            <td>A list of all languages available to the users in NagVis. The code between <code>{foreach $langs lang}</code> and <code>{/foreach}</code> is repeated for each language. For an example have a look at <code>share/userfiles/templates/pages/default.header.html</code>.<br><br>Within the BEGIN/END-Tags the following macros are available: <br>* <i>{$lang.language}</i>: Internal name of the language<br>* <i>{$lang.classUnderline}</i>: Underline the language<br>* <i>{$lang.langLanguageLocated}</i>: Located name of the language.</td>
+        </tr>
+        <tr>
+            <td valign="top">{if $viewType == 'Map' || $viewType == 'Automap'}</td>
+            <td>To be more flexible in the templates we added some sort of if statements. These can be used as in native PHP. For an example have a look at <code>share/userfiles/templates/pages/default.header.html</code>. <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$pathBase} (was [html_base])</td><td> URL to HTML-Base (/nagvis) </td>
+        </tr>
+        <tr>
+        <td>{$pathImages} (was [html_images])</td><td> URL to HTML-Images (/nagvis/images) <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td>{$pathHeaderJs}</td><td> Path to header specific javascript file <font color="#ff0000">(New in 1.6)</font></td>
+        </tr>
+        <tr>
+        <td>{$pathTemplates} (was [html_templates])</td><td> Path to header templates (/nagvis/userfiles/templates) </td>
+        </tr>
+        <tr>
+        <td>{$pathTemplateImages} (was [html_template_images])</td><td> Path to header template images (/nagvis/userfiles/images/templates) </td>
+        </tr>
+        <tr>
+        <td>{$langOpen} (was [lang_select_map])</td><td>Label for opening new views</td>
+        </tr>
+        <tr>
+        <td>{$langEditMap} (was [lang_edit_map])</td><td> Label for edit map link </td>
+        </tr>
+        <tr>
+        <td>{$langNeedHelp} (was [lang_need_help])</td><td> Label for help selection </td>
+        </tr>
+        <tr>
+        <td>{$langOnlineDoc} (was [lang_online_doc])</td><td> Label for link to online documentation </td>
+        </tr>
+        <tr>
+        <td>{$langForum} (was [lang_forum])</td><td> Label for link to NagVis forum  </td>
+        </tr>
+        <tr>
+        <td>{$langSupportInfo} (was [lang_support_info])</td><td> Label for link to support information </td>
+        </tr>
+        <tr>
+        <td>{$langOverview} (was [lang_overview])</td><td> Label for overview string </td>
+        </tr>
+        <tr>
+        <td>{$langInstance} (was [lang_instance])</td><td> Label for the instance string</td>
+        </tr>
+        <tr>
+        <td>{$langRotationStart} (was [lang_rotation_start])</td><td> Label for starting the map rotation </td>
+        </tr>
+        <tr>
+        <td>{$langRotationStop} (was [lang_rotation_stop])</td><td> Label for stopping the map rotation </td>
+        </tr>
+        <tr>
+        <td>{$langSearch}</td><td> Label for searching an object on the map <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$langToggleGrid}</td><td> Label for enabling/disabling the grid <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$langActions}</td><td>Label for choosing the available actions <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$langWui}</td><td>Label for the WUI <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$langUser}</td><td>Label for the user <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$langLoggedIn}</td><td>Label for "Logged in as" <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$langChangePassword}</td><td>Label for changing the user&apos;s password <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$langUserMgmt}</td><td>Label for managing users <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$langManageRoles}</td><td>Label for managing user roles <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$langLogout}</td><td>Label for logging out <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>{$langChooseLanguage}</td><td>Label for choosing the user&apos;s language <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+    </body>
 </table>
 </html>

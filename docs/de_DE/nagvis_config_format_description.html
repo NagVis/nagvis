@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>nagvis_config_format_description</title>
-		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
 <!--[if IE]>
 <style type="text/css"> 
 /* place css fixes for all versions of IE in this conditional comment */
@@ -25,38 +25,38 @@ Es gibt eine Datei <code>etc/nagvis.ini.php-sample</code> mit Beispiel-Konfigura
 <a name="Ueberblick"></a>
 <h2>&Uuml;berblick</h2>
 
-		<ul>
-		<li><a href=#global>global</a>
-		<br>allgemeine Optionen, die die gesamte NagVis-Installation beeinflussen
-		</li>
-		<li><a href=#paths>paths</a>
-		<br>Pfaddefinitionen
-		</li>
-		<li><a href=#defaults>defaults</a>
-		<br>Standardwerte, die an die Maps und ihre Objekte vererbt werden
-		</li>
-		<li><a href=#index>index</a>
-		<br>Optionen, um die &Uuml;bersichtsseite f&uuml;r NagVis zu konfigurieren
-		</li>
-		<li><a href=#automap>automap</a>
-		<br>Optionen f&uuml;r die Automap
-		</li>
-		<li><a href=#wui>wui</a>
-		<br>Optionen f&uuml;r die WUI
-		</li>
-		<li><a href=#worker>worker</a>
-		<br>Optionen f&uuml;r den Worker</li>
-		</li>
-		<li><a href=#backend>backend_*</a>
-		<br>Backend-Definitionen
-		</li>
-		<li><a href=#rotation>rotation_*</a>
-		<br>Rotationspool-Definitionen
-		</li>
-		<li><a href=#states>states</a> (<font color="red">neu in 1.5</font>)
-		<br>Optionen, die die Behandlung und das Aussehen der verschiedenen Zust&auml;nde beeinflussen
-		</li>
-		</ul>		
+        <ul>
+        <li><a href=#global>global</a>
+        <br>allgemeine Optionen, die die gesamte NagVis-Installation beeinflussen
+        </li>
+        <li><a href=#paths>paths</a>
+        <br>Pfaddefinitionen
+        </li>
+        <li><a href=#defaults>defaults</a>
+        <br>Standardwerte, die an die Maps und ihre Objekte vererbt werden
+        </li>
+        <li><a href=#index>index</a>
+        <br>Optionen, um die &Uuml;bersichtsseite f&uuml;r NagVis zu konfigurieren
+        </li>
+        <li><a href=#automap>automap</a>
+        <br>Optionen f&uuml;r die Automap
+        </li>
+        <li><a href=#wui>wui</a>
+        <br>Optionen f&uuml;r die WUI
+        </li>
+        <li><a href=#worker>worker</a>
+        <br>Optionen f&uuml;r den Worker</li>
+        </li>
+        <li><a href=#backend>backend_*</a>
+        <br>Backend-Definitionen
+        </li>
+        <li><a href=#rotation>rotation_*</a>
+        <br>Rotationspool-Definitionen
+        </li>
+        <li><a href=#states>states</a> (<font color="red">neu in 1.5</font>)
+        <br>Optionen, die die Behandlung und das Aussehen der verschiedenen Zust&auml;nde beeinflussen
+        </li>
+        </ul>        
 
 <h2>Beschreibung der Abschnitte im Detail</h2>
 
@@ -280,31 +280,31 @@ hoverchildslimit=10
 <td>urltarget</td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster)</td>
 </tr>
 <tr>
-	<td>hosturl</td><td>[htmlcgi]/status.cgi?host=[host_name]</td><td>Die Default-URL, die bei einem Links-Klicks des Benutzers auf ein Host-Objekt benutzt wird. Verf&uuml;gbare Makros: [htmlcgi], [htmlbase], [host_name], [backend_id]</td>
+    <td>hosturl</td><td>[htmlcgi]/status.cgi?host=[host_name]</td><td>Die Default-URL, die bei einem Links-Klicks des Benutzers auf ein Host-Objekt benutzt wird. Verf&uuml;gbare Makros: [htmlcgi], [htmlbase], [host_name], [backend_id]</td>
 </tr>
 <tr>
-	<td>hostgroupurl</td>
-	<td>[htmlcgi]/status.cgi?hostgroup=[hostgroup_name]</td>
-	<td>Die Default-URL, die bei einem Links-Klicks des Benutzers auf ein Hostgruppen-Objekt benutzt wird.
-	Verf&uuml;gbare Makros: [htmlcgi], [htmlbase], [hostgroup_name], [backend_id]</td>
+    <td>hostgroupurl</td>
+    <td>[htmlcgi]/status.cgi?hostgroup=[hostgroup_name]</td>
+    <td>Die Default-URL, die bei einem Links-Klicks des Benutzers auf ein Hostgruppen-Objekt benutzt wird.
+    Verf&uuml;gbare Makros: [htmlcgi], [htmlbase], [hostgroup_name], [backend_id]</td>
 </tr>
 <tr>
-	<td>serviceurl</td>
-	<td>[htmlcgi]/extinfo.cgi?type=2&host=[host_name]&service=[service_description]</td>
-	<td>Die Default-URL, die bei einem Links-Klicks des Benutzers auf ein Service-Objekt benutzt wird.
-	Verf&uuml;gbare Makros: [htmlcgi], [htmlbase], [host_name], [service_description], [backend_id]</td>
+    <td>serviceurl</td>
+    <td>[htmlcgi]/extinfo.cgi?type=2&host=[host_name]&service=[service_description]</td>
+    <td>Die Default-URL, die bei einem Links-Klicks des Benutzers auf ein Service-Objekt benutzt wird.
+    Verf&uuml;gbare Makros: [htmlcgi], [htmlbase], [host_name], [service_description], [backend_id]</td>
 </tr>
 <tr>
-	<td>servicegroupurl</td>
-	<td>[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]</td>
-	<td>Die Default-URL, die bei einem Links-Klicks des Benutzers auf ein Servicegruppen-Objekt benutzt wird.
-	Verf&uuml;gbare Makros: [htmlcgi], [htmlbase], [servicegroup_name], [backend_id]</td>
+    <td>servicegroupurl</td>
+    <td>[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]</td>
+    <td>Die Default-URL, die bei einem Links-Klicks des Benutzers auf ein Servicegruppen-Objekt benutzt wird.
+    Verf&uuml;gbare Makros: [htmlcgi], [htmlbase], [servicegroup_name], [backend_id]</td>
 </tr>
 <tr>
-	<td>mapurl</td>
-	<td>[htmlbase]/index.php?mod=Map&act=view&show=[map_name]</td>
-	<td>Die Default-URL, die bei einem Links-Klicks des Benutzers auf ein Map-Objekt benutzt wird.
-	Verf&uuml;gbare Makros: [htmlcgi], [htmlbase], [map_name]</td>
+    <td>mapurl</td>
+    <td>[htmlbase]/index.php?mod=Map&act=view&show=[map_name]</td>
+    <td>Die Default-URL, die bei einem Links-Klicks des Benutzers auf ein Map-Objekt benutzt wird.
+    Verf&uuml;gbare Makros: [htmlcgi], [htmlbase], [map_name]</td>
 </tr>
 </table>
 
@@ -489,9 +489,9 @@ interval=15</pre>
 <tr>
 <td>maps</td><td> </td>
 <td>
-	kommaseparierte Liste von Maps in diesem Pool, die zu rotieren sind. Sie k&ouml;nnen auch externe URLs durch [ ] klammern (z.B. maps="demo1,[http://localhost/test.php]". Die URL muss von dem Server erreichbar sein, auf dem NagVis l&auml;uft.<br><br> 
-	Sie k&ouml;nnen Label im folgenden Format hinzuf&uuml;gen: &lt;label&gt;:&lt;map&gt; und &lt;label&gt;:&lt;[url]&gt;. Die Label werden in der Rotationsliste angezeigt.<br><br>
-	<font color="#ff0000">Neu in 1.5:</font> Es ist au&szlig;erdem m&ouml;glich, Automaps zu Rotationen hinzuzuf&uuml;gen. Setzen Sie einfach ein "@"-Zeichen vor den Name der Automap, um sie der Rotation hinzuzuf&uuml;gen.
+    kommaseparierte Liste von Maps in diesem Pool, die zu rotieren sind. Sie k&ouml;nnen auch externe URLs durch [ ] klammern (z.B. maps="demo1,[http://localhost/test.php]". Die URL muss von dem Server erreichbar sein, auf dem NagVis l&auml;uft.<br><br> 
+    Sie k&ouml;nnen Label im folgenden Format hinzuf&uuml;gen: &lt;label&gt;:&lt;map&gt; und &lt;label&gt;:&lt;[url]&gt;. Die Label werden in der Rotationsliste angezeigt.<br><br>
+    <font color="#ff0000">Neu in 1.5:</font> Es ist au&szlig;erdem m&ouml;glich, Automaps zu Rotationen hinzuzuf&uuml;gen. Setzen Sie einfach ein "@"-Zeichen vor den Name der Automap, um sie der Rotation hinzuzuf&uuml;gen.
 </td>
 </tr>
 </table>
@@ -529,40 +529,40 @@ interval=15</pre>
 <p>
 Diese Einstellungen definieren das Verhalten der Zust&auml;nde im Frontend.
 <ul>
-	<li><b>*_bgcolor:</b> Die bgcolor-Option wird als Hintergrundfarbe bei Eventhandlern benutzt.</li>
-	<li><b>*_color:</b> Sie k&ouml;nnen die Vordergrundfarben konfigurieren, die u.a. als Linienfarben und der Hervorhebung von Eventhandlern benutzt werden.</li>
-	<li><b>*_sound:</b> Die Sound-Dateien werden bei &Auml;nderungen in den genannten Zustand abgespielt (muss MP3-Format sein).</li>
+    <li><b>*_bgcolor:</b> Die bgcolor-Option wird als Hintergrundfarbe bei Eventhandlern benutzt.</li>
+    <li><b>*_color:</b> Sie k&ouml;nnen die Vordergrundfarben konfigurieren, die u.a. als Linienfarben und der Hervorhebung von Eventhandlern benutzt werden.</li>
+    <li><b>*_sound:</b> Die Sound-Dateien werden bei &Auml;nderungen in den genannten Zustand abgespielt (muss MP3-Format sein).</li>
 </ul>
 
 <table>
-	<tr><th style="width:200px">Wert</th><th style="width:150px">Default</th></tr>
-	<tr><td>unreachable_bgcolor</td><td>#F1811B</td></tr>
-	<tr><td>unreachable_color</td><td>#F1811B</td></tr>
-	<tr><td>unreachable_sound</td><td>std_unreachable.mp3</td></tr>
-	<tr><td>down_bgcolor</td><td>#FF0000</td></tr>
-	<tr><td>down_color</td><td>#FF0000</td></tr>
-	<tr><td>down_sound</td><td>std_down.mp3</td></tr>
-	<tr><td>critical_bgcolor</td><td>#FF0000</td></tr>
-	<tr><td>critical_color</td><td>#FF0000</td></tr>
-	<tr><td>critical_sound</td><td>std_critical.mp3</td></tr>
-	<tr><td>warning_bgcolor</td><td>#FFFF00</td></tr>
-	<tr><td>warning_color</td><td>#FFFF00</td></tr>
-	<tr><td>warning_sound</td><td>std_warning.mp3</td></tr>
-	<tr><td>unknown_bgcolor</td><td>#FFCC66</td></tr>
-	<tr><td>unknown_color</td><td>#FFCC66</td></tr>
-	<tr><td>unknown_sound</td><td></td></tr>
-	<tr><td>error_bgcolor</td><td>#0000FF</td></tr>
-	<tr><td>error_color</td><td>#0000FF</td></tr>
-	<tr><td>error_sound</td><td></td></tr>
-	<tr><td>ok_bgcolor</td><td>#00FF00</td></tr>
-	<tr><td>ok_color</td><td>#00FF00</td></tr>
-	<tr><td>ok</td><td></td></tr>
-	<tr><td>up_bgcolor</td><td>#00FF00</td></tr>
-	<tr><td>up_color</td><td>#00FF00</td></tr>
-	<tr><td>up_sound</td><td></td></tr>
-	<tr><td>pending_bgcolor</td><td>#C0C0C0</td></tr>
-	<tr><td>pending_color</td><td>#C0C0C0</td></tr>
-	<tr><td>pending_sound</td><td></td></tr>
+    <tr><th style="width:200px">Wert</th><th style="width:150px">Default</th></tr>
+    <tr><td>unreachable_bgcolor</td><td>#F1811B</td></tr>
+    <tr><td>unreachable_color</td><td>#F1811B</td></tr>
+    <tr><td>unreachable_sound</td><td>std_unreachable.mp3</td></tr>
+    <tr><td>down_bgcolor</td><td>#FF0000</td></tr>
+    <tr><td>down_color</td><td>#FF0000</td></tr>
+    <tr><td>down_sound</td><td>std_down.mp3</td></tr>
+    <tr><td>critical_bgcolor</td><td>#FF0000</td></tr>
+    <tr><td>critical_color</td><td>#FF0000</td></tr>
+    <tr><td>critical_sound</td><td>std_critical.mp3</td></tr>
+    <tr><td>warning_bgcolor</td><td>#FFFF00</td></tr>
+    <tr><td>warning_color</td><td>#FFFF00</td></tr>
+    <tr><td>warning_sound</td><td>std_warning.mp3</td></tr>
+    <tr><td>unknown_bgcolor</td><td>#FFCC66</td></tr>
+    <tr><td>unknown_color</td><td>#FFCC66</td></tr>
+    <tr><td>unknown_sound</td><td></td></tr>
+    <tr><td>error_bgcolor</td><td>#0000FF</td></tr>
+    <tr><td>error_color</td><td>#0000FF</td></tr>
+    <tr><td>error_sound</td><td></td></tr>
+    <tr><td>ok_bgcolor</td><td>#00FF00</td></tr>
+    <tr><td>ok_color</td><td>#00FF00</td></tr>
+    <tr><td>ok</td><td></td></tr>
+    <tr><td>up_bgcolor</td><td>#00FF00</td></tr>
+    <tr><td>up_color</td><td>#00FF00</td></tr>
+    <tr><td>up_sound</td><td></td></tr>
+    <tr><td>pending_bgcolor</td><td>#C0C0C0</td></tr>
+    <tr><td>pending_color</td><td>#C0C0C0</td></tr>
+    <tr><td>pending_sound</td><td></td></tr>
 </table>
 
 </html>

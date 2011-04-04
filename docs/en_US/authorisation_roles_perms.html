@@ -1,103 +1,103 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
-	<title>Roles / Permissions</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+    <title>Roles / Permissions</title>
 </head>
 <body>
-	<h1>Permission Management</h1>
-	<p>Since release 1.5 NagVis contains a very detailed permission management.
-		 It is a role based concept where users can be assigned to one or several
-		 roles while the roles have permissions assigned.</p>
-	<p>The permissions of the different roles of a user are summarised and
-		 control the actions the user is able to perform.</p>
-	
-	<h1>Roles</h1>
-	<h2>Default Roles</h2>
-	<p>In a fresh installation there are four roles defined:</p>
-	<ul>
-		<li>Administrators: Full permissions throughout the whole installation</li>
-		<li>Managers: Read and write access to all maps, automaps and rotations.
-			 Allowed to create new maps, automaps and rotations.</li>
-		<li>Users (read-only): Read access to all maps, automaps and rotations throughout
-			 the installation</li>
-		<li>Guests: Read access to all demo maps, automaps and rotations</li>
-	</ul>
-	<p>These default roles should be sufficient in the beginning. You may delete these
-		 users and roles but please be aware NOT to delete the last administrative
-		 user and role.</p>
-	
-	<h2>Customising the Roles</h2>
-	<p>It is possible to create new roles for customising the permissions of
-		 users and groups of users.</p>
-	<p>For example it is easy to create a role for all SAP administrators which
-		 then can only access the SAP related maps.</p>
-	
-	<h1>Permissions</h1>
-	<p>The permissions are hardcoded in NagVis. A single permission consists of three
-		elements:</p>
-	<ul>
-		<li><i>Module:</i> The related module (Map, Automap, Rotation, ...)</li>
-		<li><i>Action:</i> The related action (view, edit, delete, ...)</li>
-		<li><i>Object:</i> The related object (A particular user, map, ...)</li>
-	</ul>
+    <h1>Permission Management</h1>
+    <p>Since release 1.5 NagVis contains a very detailed permission management.
+         It is a role based concept where users can be assigned to one or several
+         roles while the roles have permissions assigned.</p>
+    <p>The permissions of the different roles of a user are summarised and
+         control the actions the user is able to perform.</p>
+    
+    <h1>Roles</h1>
+    <h2>Default Roles</h2>
+    <p>In a fresh installation there are four roles defined:</p>
+    <ul>
+        <li>Administrators: Full permissions throughout the whole installation</li>
+        <li>Managers: Read and write access to all maps, automaps and rotations.
+             Allowed to create new maps, automaps and rotations.</li>
+        <li>Users (read-only): Read access to all maps, automaps and rotations throughout
+             the installation</li>
+        <li>Guests: Read access to all demo maps, automaps and rotations</li>
+    </ul>
+    <p>These default roles should be sufficient in the beginning. You may delete these
+         users and roles but please be aware NOT to delete the last administrative
+         user and role.</p>
+    
+    <h2>Customising the Roles</h2>
+    <p>It is possible to create new roles for customising the permissions of
+         users and groups of users.</p>
+    <p>For example it is easy to create a role for all SAP administrators which
+         then can only access the SAP related maps.</p>
+    
+    <h1>Permissions</h1>
+    <p>The permissions are hardcoded in NagVis. A single permission consists of three
+        elements:</p>
+    <ul>
+        <li><i>Module:</i> The related module (Map, Automap, Rotation, ...)</li>
+        <li><i>Action:</i> The related action (view, edit, delete, ...)</li>
+        <li><i>Object:</i> The related object (A particular user, map, ...)</li>
+    </ul>
 
-	<p>Each of those three elements can be set by a dedicated name or alternatively by a
-		wildcard &quot;*&quot; which then matches all modules, actions or objects.</p>
+    <p>Each of those three elements can be set by a dedicated name or alternatively by a
+        wildcard &quot;*&quot; which then matches all modules, actions or objects.</p>
 
-	<p>Here is a list of all available permissions in NagVis:</p>
-	<table>
-		<tr><th>Module</th><th>Action</th><th>Object</th><th>Description</th></tr>
-		<tr>
-			<td>*</td><td>*</td><td>*</td><td>Grants full access to NagVis. No other permissions are needed.</td>
-		</tr><tr>
-			<td>Auth</td><td>logout</td><td>*</td><td>Allows a user to logout from NagVis.</td>
-		</tr><tr>
-			<td>AutoMap</td><td>add</td><td>*</td><td>Create a new automap.</td>
-		</tr><tr>
-			<td>AutoMap</td><td>delete</td><td>*</td><td>Delete all automaps.</td>
-		</tr><tr>
-			<td>AutoMap</td><td>edit</td><td>*</td><td>Edit all automaps.</td>
-		</tr><tr>
-			<td>AutoMap</td><td>view</td><td>*</td><td>View all automaps.</td>
-		</tr><tr>
-			<td>AutoMap</td><td>delete</td><td>&lt;Name&gt;</td><td>Delete a specific automap.</td>
-		</tr><tr>
-			<td>AutoMap</td><td>edit</td><td>&lt;Name&gt;</td><td>Edit a specific automap.</td>
-		</tr><tr>
-			<td>AutoMap</td><td>view</td><td>&lt;Name&gt;</td><td>View a specific automap.</td>
-		</tr><tr>
-			<td>ChangePassword</td><td>change</td><td>*</td><td>Allows a user to change one's own password.</td>
-		</tr><tr>
-			<td>General</td><td>*</td><td>*</td><td></td>
-		</tr><tr>
-			<td>MainCfg</td><td>edit</td><td>*</td><td></td>
-		</tr><tr>
-			<td>Map</td><td>add</td><td>*</td><td></td>
-		</tr><tr>
-			<td>Map</td><td>delete</td><td>*</td><td></td>
-		</tr><tr>
-			<td>Map</td><td>edit</td><td>*</td><td></td>
-		</tr><tr>
-			<td>Map</td><td>view</td><td>*</td><td></td>
-		</tr><tr>
-			<td>Map</td><td>delete</td><td>&lt;Name&gt;</td><td>Delete a specific map.</td>
-		</tr><tr>
-			<td>Map</td><td>edit</td><td>&lt;Name&gt;</td><td>Edit a specific map.</td>
-		</tr><tr>
-			<td>Map</td><td>view</td><td>&lt;Name&gt;</td><td>View a specific map.</td>
-		</tr><tr>
-			<td>Overview</td><td>view</td><td>*</td><td></td>
-		</tr><tr>
-			<td>RoleMgmt</td><td>manage</td><td>*</td><td></td>
-		</tr><tr>
-			<td>Rotation</td><td>view</td><td>*</td><td></td>
-		</tr><tr>
-			<td>Rotation</td><td>view</td><td>&lt;Name&gt;</td><td>View a specific rotation.</td>
-		</tr><tr>
-			<td>Search</td><td>view</td><td>*</td><td>Search objects on maps and automaps.</td>
-		</tr><tr>
-			<td>UserMgmt</td><td>manage</td><td>*</td><td></td>
-		</tr>
+    <p>Here is a list of all available permissions in NagVis:</p>
+    <table>
+        <tr><th>Module</th><th>Action</th><th>Object</th><th>Description</th></tr>
+        <tr>
+            <td>*</td><td>*</td><td>*</td><td>Grants full access to NagVis. No other permissions are needed.</td>
+        </tr><tr>
+            <td>Auth</td><td>logout</td><td>*</td><td>Allows a user to logout from NagVis.</td>
+        </tr><tr>
+            <td>AutoMap</td><td>add</td><td>*</td><td>Create a new automap.</td>
+        </tr><tr>
+            <td>AutoMap</td><td>delete</td><td>*</td><td>Delete all automaps.</td>
+        </tr><tr>
+            <td>AutoMap</td><td>edit</td><td>*</td><td>Edit all automaps.</td>
+        </tr><tr>
+            <td>AutoMap</td><td>view</td><td>*</td><td>View all automaps.</td>
+        </tr><tr>
+            <td>AutoMap</td><td>delete</td><td>&lt;Name&gt;</td><td>Delete a specific automap.</td>
+        </tr><tr>
+            <td>AutoMap</td><td>edit</td><td>&lt;Name&gt;</td><td>Edit a specific automap.</td>
+        </tr><tr>
+            <td>AutoMap</td><td>view</td><td>&lt;Name&gt;</td><td>View a specific automap.</td>
+        </tr><tr>
+            <td>ChangePassword</td><td>change</td><td>*</td><td>Allows a user to change one's own password.</td>
+        </tr><tr>
+            <td>General</td><td>*</td><td>*</td><td></td>
+        </tr><tr>
+            <td>MainCfg</td><td>edit</td><td>*</td><td></td>
+        </tr><tr>
+            <td>Map</td><td>add</td><td>*</td><td></td>
+        </tr><tr>
+            <td>Map</td><td>delete</td><td>*</td><td></td>
+        </tr><tr>
+            <td>Map</td><td>edit</td><td>*</td><td></td>
+        </tr><tr>
+            <td>Map</td><td>view</td><td>*</td><td></td>
+        </tr><tr>
+            <td>Map</td><td>delete</td><td>&lt;Name&gt;</td><td>Delete a specific map.</td>
+        </tr><tr>
+            <td>Map</td><td>edit</td><td>&lt;Name&gt;</td><td>Edit a specific map.</td>
+        </tr><tr>
+            <td>Map</td><td>view</td><td>&lt;Name&gt;</td><td>View a specific map.</td>
+        </tr><tr>
+            <td>Overview</td><td>view</td><td>*</td><td></td>
+        </tr><tr>
+            <td>RoleMgmt</td><td>manage</td><td>*</td><td></td>
+        </tr><tr>
+            <td>Rotation</td><td>view</td><td>*</td><td></td>
+        </tr><tr>
+            <td>Rotation</td><td>view</td><td>&lt;Name&gt;</td><td>View a specific rotation.</td>
+        </tr><tr>
+            <td>Search</td><td>view</td><td>*</td><td>Search objects on maps and automaps.</td>
+        </tr><tr>
+            <td>UserMgmt</td><td>manage</td><td>*</td><td></td>
+        </tr>
 </body>
 </html>

@@ -2,110 +2,110 @@
 <html>
   <head>
     <title>Context Templates</title>
-		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
   </head>
-	<body>
-		<h1>Context Templates</h1>
-		<h2>Introduction</h2>
-		<p>Context templates are html files with some macros in them. These files can be used as context menus (right click menus) for the objects on the maps.</p>
-		<p>The context templates are located in <code>share/userfiles/templates/</code> relative to the nagvis root directory. The templates are named like this: <code>&lt;name&gt;.context.html</code>. It is possible to add a css file to the template, the name has to be: <code>&lt;name&gt;.context.css</code>.</p> 
-		<p>There are some so called macros available in context menus of all object types and some which are only available for some special objects. All standard macros are listed below.</p>
-		
-		<h2> General </h2>
-		<p>The following macros are available in hover menus of all object types:</p>
-		
-		<table style="width:100%">
-		<tr>
-		<th width="250"> Macro </th><th> Description </th>
-		</tr>
-		<tr>
-		<th colspan="2"> General </th>
-		</tr>
-		<tr>
-		<td>[obj_id]</td><td>ID of object in JavaScript. Needed to locate the object specific parts e.g. to schedule a manual update of the state information.</td>
-		</tr>
-		<tr>
-		<td>[name]</td><td>Name of the object (Hostname, Hostgroupname, Servicegroupname, Mapname,...)</td>
-		</tr>
-		<tr>
-		<td>[backend_id]</td><td>Represents the backend_id of the used backend for this object <font color="#ff0000">(New in 1.5.2)</font>.</td>
-		</tr>
-		<tr>
-		<td>[custom_1]</td><td>Represents the first custom macro which can be defined per backend. Might be useful to set backend individual URLs <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td>[custom_2]</td><td>Second custom macro. Same as above.</td>
-		</tr>
-		<tr>
-		<td>[custom_3]</td><td>Third custom macro. Same as above.</td>
-		</tr>
-		<tr>
-		<td>[map_name]</td><td>Name of the current map/automap <font color="#ff0000">(New in 1.5.2)</font>.</td>
-		</tr>
-		<tr>
-		<th colspan="2"> Language macros </th>
-		</tr>
-		<tr>
-		<td>[lang_refresh_status]</td><td>Label for refreshing the status of the object in frontend.</td>
-		</tr>
-		<tr>
-		<td>[lang_schedule_downtime]</td><td>Label for scheduling a downtime in Nagios.</td>
-		</tr>
-		<tr>
-		<td>[lang_reschedule_next_check]</td><td>Label for re-scheduling the next check of the object in Nagios.</td>
-		</tr>
-		<tr>
-		<td>[lang_connect_by_ssh]</td><td>Label for connecting a host by ssh.</td>
-		</tr>
-		<tr>
-		<th colspan="2"> Paths </th>
-		</tr>
-		<tr>
-		<td>[html_base]</td><td>Absolute URL to HTML-Base (Default: /nagvis)</td>
-		</tr>
-		<tr>
-		<td>[html_cgi]</td><td>Absolute URL to the Nagios CGIs. Using object specific value. Depends on the used backend. If no backend specific value set the default value will be used. (Default: /nagios/cgi-bin)</td>
-		</tr>
-		<tr>
-		<td>[html_templates]</td><td> Path to context templates directory (Default: /nagvis/userfiles/templates)</td>
-		</tr>
-		<tr>
-		<td>[html_template_images]</td><td> Path to context template images directory (Default: /nagvis/userfiles/images/templates)</td>
-		</tr>
-		</table>
-		
-		<h2> Special macros </h2>
-		<p>There are macros for context templates of a specified type. These macros should be surrounded by section macros. The section macros define that the included code will be removed if the hover template is not parsed for this type.</p>
-		
-		<p>For example a section macro for host macros looks like this:</p>
-		<pre>&lt;!-- BEGIN host -->.+?&lt;!-- END host --></pre>
-		
-		<p>Below you can find a full list of the special macros.</p>
-		<h3>Host objects</h3>
-		<table style="width:100%">
-		<tr>
-		<th width="250">Macro</th><th>Description</th>
-		</tr>
-		<tr><td>[address]</td><td>Address of the host configured in Nagios</td></tr>
-		<tr><td>[pnp_hostname]</td><td>Hostname with replaced blanks for links to PNP (<font color="#ff0000">New in 1.5</font>)</td></tr>
-		</table>
+    <body>
+        <h1>Context Templates</h1>
+        <h2>Introduction</h2>
+        <p>Context templates are html files with some macros in them. These files can be used as context menus (right click menus) for the objects on the maps.</p>
+        <p>The context templates are located in <code>share/userfiles/templates/</code> relative to the nagvis root directory. The templates are named like this: <code>&lt;name&gt;.context.html</code>. It is possible to add a css file to the template, the name has to be: <code>&lt;name&gt;.context.css</code>.</p> 
+        <p>There are some so called macros available in context menus of all object types and some which are only available for some special objects. All standard macros are listed below.</p>
+        
+        <h2> General </h2>
+        <p>The following macros are available in hover menus of all object types:</p>
+        
+        <table style="width:100%">
+        <tr>
+        <th width="250"> Macro </th><th> Description </th>
+        </tr>
+        <tr>
+        <th colspan="2"> General </th>
+        </tr>
+        <tr>
+        <td>[obj_id]</td><td>ID of object in JavaScript. Needed to locate the object specific parts e.g. to schedule a manual update of the state information.</td>
+        </tr>
+        <tr>
+        <td>[name]</td><td>Name of the object (Hostname, Hostgroupname, Servicegroupname, Mapname,...)</td>
+        </tr>
+        <tr>
+        <td>[backend_id]</td><td>Represents the backend_id of the used backend for this object <font color="#ff0000">(New in 1.5.2)</font>.</td>
+        </tr>
+        <tr>
+        <td>[custom_1]</td><td>Represents the first custom macro which can be defined per backend. Might be useful to set backend individual URLs <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td>[custom_2]</td><td>Second custom macro. Same as above.</td>
+        </tr>
+        <tr>
+        <td>[custom_3]</td><td>Third custom macro. Same as above.</td>
+        </tr>
+        <tr>
+        <td>[map_name]</td><td>Name of the current map/automap <font color="#ff0000">(New in 1.5.2)</font>.</td>
+        </tr>
+        <tr>
+        <th colspan="2"> Language macros </th>
+        </tr>
+        <tr>
+        <td>[lang_refresh_status]</td><td>Label for refreshing the status of the object in frontend.</td>
+        </tr>
+        <tr>
+        <td>[lang_schedule_downtime]</td><td>Label for scheduling a downtime in Nagios.</td>
+        </tr>
+        <tr>
+        <td>[lang_reschedule_next_check]</td><td>Label for re-scheduling the next check of the object in Nagios.</td>
+        </tr>
+        <tr>
+        <td>[lang_connect_by_ssh]</td><td>Label for connecting a host by ssh.</td>
+        </tr>
+        <tr>
+        <th colspan="2"> Paths </th>
+        </tr>
+        <tr>
+        <td>[html_base]</td><td>Absolute URL to HTML-Base (Default: /nagvis)</td>
+        </tr>
+        <tr>
+        <td>[html_cgi]</td><td>Absolute URL to the Nagios CGIs. Using object specific value. Depends on the used backend. If no backend specific value set the default value will be used. (Default: /nagios/cgi-bin)</td>
+        </tr>
+        <tr>
+        <td>[html_templates]</td><td> Path to context templates directory (Default: /nagvis/userfiles/templates)</td>
+        </tr>
+        <tr>
+        <td>[html_template_images]</td><td> Path to context template images directory (Default: /nagvis/userfiles/images/templates)</td>
+        </tr>
+        </table>
+        
+        <h2> Special macros </h2>
+        <p>There are macros for context templates of a specified type. These macros should be surrounded by section macros. The section macros define that the included code will be removed if the hover template is not parsed for this type.</p>
+        
+        <p>For example a section macro for host macros looks like this:</p>
+        <pre>&lt;!-- BEGIN host -->.+?&lt;!-- END host --></pre>
+        
+        <p>Below you can find a full list of the special macros.</p>
+        <h3>Host objects</h3>
+        <table style="width:100%">
+        <tr>
+        <th width="250">Macro</th><th>Description</th>
+        </tr>
+        <tr><td>[address]</td><td>Address of the host configured in Nagios</td></tr>
+        <tr><td>[pnp_hostname]</td><td>Hostname with replaced blanks for links to PNP (<font color="#ff0000">New in 1.5</font>)</td></tr>
+        </table>
 
-		<h3>Service objects</h3>
-		<table style="width:100%">
-		<tr>
-		<th width="250">Macro</th><th>Description</th>
-		</tr>
-		<tr><td>[service_description]</td><td>Service description in Nagios</td></tr>
-		<tr><td>[pnp_service_description]</td><td>Service description with replaced blanks for links to PNP (<font color="#ff0000">New in 1.5</font>)</td></tr>
+        <h3>Service objects</h3>
+        <table style="width:100%">
+        <tr>
+        <th width="250">Macro</th><th>Description</th>
+        </tr>
+        <tr><td>[service_description]</td><td>Service description in Nagios</td></tr>
+        <tr><td>[pnp_service_description]</td><td>Service description with replaced blanks for links to PNP (<font color="#ff0000">New in 1.5</font>)</td></tr>
 
-		</table>
-		<h3>Host- and Servicegroup objects</h3>
-		The section macros <code>&lt;!-- BEGIN hostgroup --></code> and <code>&lt;!-- BEGIN servicegroup --></code>
+        </table>
+        <h3>Host- and Servicegroup objects</h3>
+        The section macros <code>&lt;!-- BEGIN hostgroup --></code> and <code>&lt;!-- BEGIN servicegroup --></code>
     exist to make special template code for hostgroup and servicegroup contextmenus possible. Both don't bring any
     special object specific macros with them (<font color="#ff0000">New in 1.5.2</font>).
 
-		<h3>Other section macros</h3>
-		<p>There are some other special section macros. For example to show parts of the template only for line objects:</p>
-	  <code>&lt;!-- BEGIN line -->This is only shown on line objects&lt;!-- BEGIN servicegroup --></code>
-	</body>
+        <h3>Other section macros</h3>
+        <p>There are some other special section macros. For example to show parts of the template only for line objects:</p>
+      <code>&lt;!-- BEGIN line -->This is only shown on line objects&lt;!-- BEGIN servicegroup --></code>
+    </body>
 </html>

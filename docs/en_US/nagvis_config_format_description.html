@@ -2,553 +2,553 @@
 <html>
   <head>
     <title>Main configuration format description</title>
-		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
   </head>  
-		<h1>Main configuration format description</h1>
-		<h2> General Information </h2>
-		<p>The Main Configuration file is designed in plain text "ini"-like format.
-		There are sections which are marked by the surrounding brackets [] and variables which have an assigned value. The variables have to be in the correct section so you have to ensure to have uncommented the section too.
-		Semicolons (<code>;</code>) are used to mark comments. Sections and variables with a leading semicolon are commented out and won't be recognised by NagVis.</p>
-		<p>In a fresh NagVis installation there is no file with the default configuration. The default configuration is stored in the PHP-Code of NagVis. If there is a file <code>etc/nagvis.ini.php</code> which has stored configuration information it will override the default configurations.
-		There is a file <code>etc/nagvis.ini.php-sample</code> with sample configuration values. All values are commented out.</p>
-		
-		<h2>Section overview</h2>
-		<ul>
-		<li>
-			<a href="#global">global</a><br />
-			General options which affect the whole NagVis installation</li>
-		<li>
-			<a href="#paths">paths</a><br />
-			Path definitions</li>
-		<li>
-			<a href="#defaults">defaults</a><br />
-			Default values which are inherited to the maps and its objects</li>
-		<li>
-			<a href="#index">index</a><br />
-			Options to configure the Overview page of NagVis </li>
-		<li>
-			<a href="#automap">automap</a><br />
-			Options for the Automap</li>
-		<li>
-			<a href="#wui">wui</a><br />
-			Options for the WUI</li>
-		<li>
-			<a href="#worker">worker</a><br />
-			Options for the Worker </li>
-		<li>
-			<a href="#backend">backend_*</a><br />
-			Backend definitions</li>
-		<li>
-			<a href="#rotation">rotation_*</a><br />
-			Rotation pool definitions</li>
-		<li>
-			<a href="#states">states</a> <font color="#ff0000">(New in 1.5)</font><br />
-			Options which affect the handling and appearance of the different states</li>
-		</ul>
-		
-		<h2>Description of the sections in detail</h2>
-		<a name="global"></a><h3>global</h3>
-		<p>All values which are used througout NagVis are stored in the global section.</p>
+        <h1>Main configuration format description</h1>
+        <h2> General Information </h2>
+        <p>The Main Configuration file is designed in plain text "ini"-like format.
+        There are sections which are marked by the surrounding brackets [] and variables which have an assigned value. The variables have to be in the correct section so you have to ensure to have uncommented the section too.
+        Semicolons (<code>;</code>) are used to mark comments. Sections and variables with a leading semicolon are commented out and won't be recognised by NagVis.</p>
+        <p>In a fresh NagVis installation there is no file with the default configuration. The default configuration is stored in the PHP-Code of NagVis. If there is a file <code>etc/nagvis.ini.php</code> which has stored configuration information it will override the default configurations.
+        There is a file <code>etc/nagvis.ini.php-sample</code> with sample configuration values. All values are commented out.</p>
+        
+        <h2>Section overview</h2>
+        <ul>
+        <li>
+            <a href="#global">global</a><br />
+            General options which affect the whole NagVis installation</li>
+        <li>
+            <a href="#paths">paths</a><br />
+            Path definitions</li>
+        <li>
+            <a href="#defaults">defaults</a><br />
+            Default values which are inherited to the maps and its objects</li>
+        <li>
+            <a href="#index">index</a><br />
+            Options to configure the Overview page of NagVis </li>
+        <li>
+            <a href="#automap">automap</a><br />
+            Options for the Automap</li>
+        <li>
+            <a href="#wui">wui</a><br />
+            Options for the WUI</li>
+        <li>
+            <a href="#worker">worker</a><br />
+            Options for the Worker </li>
+        <li>
+            <a href="#backend">backend_*</a><br />
+            Backend definitions</li>
+        <li>
+            <a href="#rotation">rotation_*</a><br />
+            Rotation pool definitions</li>
+        <li>
+            <a href="#states">states</a> <font color="#ff0000">(New in 1.5)</font><br />
+            Options which affect the handling and appearance of the different states</li>
+        </ul>
+        
+        <h2>Description of the sections in detail</h2>
+        <a name="global"></a><h3>global</h3>
+        <p>All values which are used througout NagVis are stored in the global section.</p>
 
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		<td>audit_log</td><td>1</td><td>Enable/Disable logging of security related user actions in Nagvis. For example user logins and logouts are logged in var/nagvis-audit.log. (<font color="#ff0000">New in 1.5</font>)</td>
-		</tr>
-		<tr>
-		<td>authmodule</td><td>CoreAuthModSQLite</td><td>Defines the authentication module to use. By default NagVis uses the built-in SQLite authentication module. On delivery there is no other authentication module available. It is possible to add own authentication modules for supporting other authentication mechanism. For details have a look at the <a href="auth_modules.html">authentication module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
-		</tr>
-		<tr>
-		<td>authorisationmodule</td><td>CoreAuthorisationModSQLite</td><td>Defines the authorisation module to use. By default NagVis uses the built-in SQLite authorisation module. On delivery there is no other authorisation module available. It is possible to add own authorisation modules for supporting other authorisation mechanism. For details have a look at the <a href="authorisation_modules.html">authorisation module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
-		</tr>
-		<tr>
-		<td>dateformat</td><td> Y-m-d H:i:s </td><td> The format of date and time shown in NagVis. Available options like in <a href="http://www.php.net/date" target="_blank">date</a> function of php</td>
-		</tr>
-		<tr>
-		<td><strike>displayheader</strike></td><td><strike>1</strike></td><td><strike>Show header menu in maps</strike>. <font color="#ff0000">(Deprecated in 1.4. Moved as option &quot;headermenu&quot; to default and index section.)</font></td>
-		</tr>
-		<tr>
-		<td>language_detection</td><td>user,session,browser,config</td><td>This controls how NagVis tries to detect the language of the user to translate NagVis. NagVis knows several mechanisms to detect the language:<br />
-		- <i>user</i>: Explict user selected language<br />
-		- <i>session</i>: When the user selects a language it is stored in the current session<br />
-		- <i>browser</i>: NagVis tries to detect the user language by the browser agent<br />
-		- <i>config</i>: The installation default language<br />
-		The order you set the options determines how NagVis uses the different mechanisms. (<font color="#ff0000">New in 1.5</font>)</td>
-		</tr>
-		<tr>
-		<td>language_available</td><td>de_DE,en_US,es_ES,fr_FR,pt_BR</td><td>You may want to give your users a limited number of languages to choose from. You can control the behaviour without deleting the language files from your NagVis installation. If this value is left empty NagVis will fallback to all configured in languages. If you like to add a new language to your NagVis installation you need to add it to the list here. (<font color="#ff0000">New in 1.5</font>)</td>
-		</tr>
-		<tr>
-		<td>language</td><td>en_US</td><td>Select default language to use in NagVis. There are several translations delivered by default: en_US (English), de_DE (German), fr_FR (French) and pt_BR (Brazilian Portuguese; since 1.4.4). Since NagVis 1.4 you have to select the languages in a new format (&quot;en_US&quot; instead of &quot;english&quot;) </td>
-		</tr>
-		<tr>
-		<td>logonmodule</td><td>FrontendLogonDialog</td><td>Defines the logon module to use. By default NagVis uses the HTML logon dialog for requesting authentication information from the user. On delivery there is no other logon module available. It is possible to add own logon modules for serving other dialogs. For details take a look at the <a href="logon_modules.html">logon module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
-		</tr>
-		<tr>
-		<td>logonenvvar</td><td>REMOTE_USER</td><td>Defines the environment variable to be used for fetching the authenticated user from the webservers environment. This option is only used with the logon modules LogonEnv and LogonMixed. (<font color="#ff0000">New in 1.5</font>)</td>
-		</tr>
-		<tr>
-		<td>logonenvcreateuser</td><td>1</td><td>Tells the LogonEnv/LogonMixed module to create a user account for each unknown user which opens the NagVis pages. This option is only used with the logon modules LogonEnv and LogonMixed. (<font color="#ff0000">New in 1.5</font>)</td>
-		</tr>
-		<tr>
-		<td>logonenvcreaterole</td><td>Guests</td><td>Tells the LogonEnv/LogonMixed module to create the user accounts with the given role associated. This option is only used with the logon modules LogonEnv and LogonMixed. (<font color="#ff0000">New in 1.5</font>)</td>
-		</tr>
-		<tr>
-		<td>refreshtime</td><td>60</td><td>Refresh time of maps or reloading the next map in map rotation</td>
-		</tr>
-		<tr>
-		<td>sesscookiedomain</td><td>auto-detect</td><td>You may need to control for which domain NagVis will store the session cookie. By default NagVis tries to auto detect this option value by using the webservers environment variables. This should work in most environments but may be changed e.g. when using url rewriting. <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td>sesscookiepath</td><td>auto-detected</td><td>You may need to control the path on which the cookie will be set. By default NagVis uses the paths/htmlbase value for setting the cookie. This should work in most environments but may be changed e.g. when using url rewriting. <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td>sesscookieduration</td><td>86400</td><td>Lifetime of the NagVis session cookie in seconds. The default value is set to 24 hours. The value the NagVis session cookie contains will be renewed on every page visit. If a session is idle for more time than configured here it will become invalid. <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td>startmodule</td><td>overview</td><td>The default module to show when none is given by the user <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td>startaction</td><td>view</td><td>The default action to do when none is given by the user <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<td>startshow</td><td></td>
-		<td>
-			The startshow parameter is only used by some views at the moment. 
-			It is used by the Map and the AutoMap modules. <font color="#ff0000">(New in 1.5.2)</font></td>
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+        <td>audit_log</td><td>1</td><td>Enable/Disable logging of security related user actions in Nagvis. For example user logins and logouts are logged in var/nagvis-audit.log. (<font color="#ff0000">New in 1.5</font>)</td>
+        </tr>
+        <tr>
+        <td>authmodule</td><td>CoreAuthModSQLite</td><td>Defines the authentication module to use. By default NagVis uses the built-in SQLite authentication module. On delivery there is no other authentication module available. It is possible to add own authentication modules for supporting other authentication mechanism. For details have a look at the <a href="auth_modules.html">authentication module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
+        </tr>
+        <tr>
+        <td>authorisationmodule</td><td>CoreAuthorisationModSQLite</td><td>Defines the authorisation module to use. By default NagVis uses the built-in SQLite authorisation module. On delivery there is no other authorisation module available. It is possible to add own authorisation modules for supporting other authorisation mechanism. For details have a look at the <a href="authorisation_modules.html">authorisation module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
+        </tr>
+        <tr>
+        <td>dateformat</td><td> Y-m-d H:i:s </td><td> The format of date and time shown in NagVis. Available options like in <a href="http://www.php.net/date" target="_blank">date</a> function of php</td>
+        </tr>
+        <tr>
+        <td><strike>displayheader</strike></td><td><strike>1</strike></td><td><strike>Show header menu in maps</strike>. <font color="#ff0000">(Deprecated in 1.4. Moved as option &quot;headermenu&quot; to default and index section.)</font></td>
+        </tr>
+        <tr>
+        <td>language_detection</td><td>user,session,browser,config</td><td>This controls how NagVis tries to detect the language of the user to translate NagVis. NagVis knows several mechanisms to detect the language:<br />
+        - <i>user</i>: Explict user selected language<br />
+        - <i>session</i>: When the user selects a language it is stored in the current session<br />
+        - <i>browser</i>: NagVis tries to detect the user language by the browser agent<br />
+        - <i>config</i>: The installation default language<br />
+        The order you set the options determines how NagVis uses the different mechanisms. (<font color="#ff0000">New in 1.5</font>)</td>
+        </tr>
+        <tr>
+        <td>language_available</td><td>de_DE,en_US,es_ES,fr_FR,pt_BR</td><td>You may want to give your users a limited number of languages to choose from. You can control the behaviour without deleting the language files from your NagVis installation. If this value is left empty NagVis will fallback to all configured in languages. If you like to add a new language to your NagVis installation you need to add it to the list here. (<font color="#ff0000">New in 1.5</font>)</td>
+        </tr>
+        <tr>
+        <td>language</td><td>en_US</td><td>Select default language to use in NagVis. There are several translations delivered by default: en_US (English), de_DE (German), fr_FR (French) and pt_BR (Brazilian Portuguese; since 1.4.4). Since NagVis 1.4 you have to select the languages in a new format (&quot;en_US&quot; instead of &quot;english&quot;) </td>
+        </tr>
+        <tr>
+        <td>logonmodule</td><td>FrontendLogonDialog</td><td>Defines the logon module to use. By default NagVis uses the HTML logon dialog for requesting authentication information from the user. On delivery there is no other logon module available. It is possible to add own logon modules for serving other dialogs. For details take a look at the <a href="logon_modules.html">logon module</a> documentation. (<font color="#ff0000">New in 1.5</font>)</td>
+        </tr>
+        <tr>
+        <td>logonenvvar</td><td>REMOTE_USER</td><td>Defines the environment variable to be used for fetching the authenticated user from the webservers environment. This option is only used with the logon modules LogonEnv and LogonMixed. (<font color="#ff0000">New in 1.5</font>)</td>
+        </tr>
+        <tr>
+        <td>logonenvcreateuser</td><td>1</td><td>Tells the LogonEnv/LogonMixed module to create a user account for each unknown user which opens the NagVis pages. This option is only used with the logon modules LogonEnv and LogonMixed. (<font color="#ff0000">New in 1.5</font>)</td>
+        </tr>
+        <tr>
+        <td>logonenvcreaterole</td><td>Guests</td><td>Tells the LogonEnv/LogonMixed module to create the user accounts with the given role associated. This option is only used with the logon modules LogonEnv and LogonMixed. (<font color="#ff0000">New in 1.5</font>)</td>
+        </tr>
+        <tr>
+        <td>refreshtime</td><td>60</td><td>Refresh time of maps or reloading the next map in map rotation</td>
+        </tr>
+        <tr>
+        <td>sesscookiedomain</td><td>auto-detect</td><td>You may need to control for which domain NagVis will store the session cookie. By default NagVis tries to auto detect this option value by using the webservers environment variables. This should work in most environments but may be changed e.g. when using url rewriting. <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td>sesscookiepath</td><td>auto-detected</td><td>You may need to control the path on which the cookie will be set. By default NagVis uses the paths/htmlbase value for setting the cookie. This should work in most environments but may be changed e.g. when using url rewriting. <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td>sesscookieduration</td><td>86400</td><td>Lifetime of the NagVis session cookie in seconds. The default value is set to 24 hours. The value the NagVis session cookie contains will be renewed on every page visit. If a session is idle for more time than configured here it will become invalid. <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td>startmodule</td><td>overview</td><td>The default module to show when none is given by the user <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td>startaction</td><td>view</td><td>The default action to do when none is given by the user <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <td>startshow</td><td></td>
+        <td>
+            The startshow parameter is only used by some views at the moment. 
+            It is used by the Map and the AutoMap modules. <font color="#ff0000">(New in 1.5.2)</font></td>
     </tr>
-		</table>
-		
-		<a name="paths"></a><h3> paths </h3>
-		In this section all necessary path variables are defined.
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		<td> base </td><td> <code>/usr/local/nagvis/share/</code> </td><td> Absolute physical NagVis path </td>
-		</tr>
-		<tr>
-		<td> htmlbase </td><td> <code>/nagvis</code> </td><td> Absolute html NagVis path </td>
-		</tr>
-		<tr>
-		<td> htmlcgi </td><td> <code>/nagvis/cgi-bin</code> </td><td> Absolute html NagVis cgi path </td>
-		</tr>
-		</table>
-		
-		<a name="defaults"></a><h3> defaults </h3>
-		Default values which are applied to the maps you use. If there is no value set in the map or an element on the map the default value is used.
+        </table>
+        
+        <a name="paths"></a><h3> paths </h3>
+        In this section all necessary path variables are defined.
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+        <td> base </td><td> <code>/usr/local/nagvis/share/</code> </td><td> Absolute physical NagVis path </td>
+        </tr>
+        <tr>
+        <td> htmlbase </td><td> <code>/nagvis</code> </td><td> Absolute html NagVis path </td>
+        </tr>
+        <tr>
+        <td> htmlcgi </td><td> <code>/nagvis/cgi-bin</code> </td><td> Absolute html NagVis cgi path </td>
+        </tr>
+        </table>
+        
+        <a name="defaults"></a><h3> defaults </h3>
+        Default values which are applied to the maps you use. If there is no value set in the map or an element on the map the default value is used.
 
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		<td> backend </td><td> live_1 </td><td> Default backend (ID of the backend - copy the text from which <code>&lt;backend-id></code> stands for in <code>[backend_&lt;backend-id>]</code> ) </td>
-		</tr>
-		<tr>
-		<td>backgroundcolor</td><td>transparent</td><td>Default background color of maps </td>
-		</tr>
-		<tr>
-		<td>contextmenu</td><td>0</td><td>Enable/Disable the context menu on your map objects. </td>
-		</tr>
-		<tr>
-		<td>contexttemplate</td><td>default</td><td>Default <a href="context_templates.html">context template</a>. </td>
-		</tr>
-		<tr>
-		<td> eventbackground </td><td> 0 </td><td> Enable/Disable changing background color on state changes (Configured color is shown when summary state is PENDING, OK or UP)  </td>
-		</tr>
-		<tr>
-		<td> eventhighlight </td><td> 1 </td><td> Enable/Disable highlighting of the state changing object by adding a flashing border  </td>
-		</tr>
-		<tr>
-		<td> eventhighlightduration </td><td> 10000 </td><td> Duration of the highlighting in miliseconds </td>
-		</tr>
-		<tr>
-		<td> eventhighlightinterval </td><td> 500 </td><td> Interval of the highlighting in miliseconds </td>
-		</tr>
-		<tr>
-		<td> eventlog </td><td> 0 </td><td> Enable/Disable the eventlog in the new javascript frontend. The eventlog keeps track of important actions and information  </td>
-		</tr>
-		<tr>
-		<td> eventloglevel </td><td> info </td><td> Loglevel of the eventlog (Available: debug, info, warning, critical)  </td>
-		</tr>
-		<tr>
-		<td>eventlogevents</td><td>24</td><td>Number of events in the eventlog scrollback</td>
-		</tr>
-		<tr>
-		<td>eventlogheight</td><td>100</td><td>Height of the javascript eventlog in px </td>
-		</tr>
-		<tr>
-		<td>eventloghidden</td><td>1</td><td>Hide/Show the eventlog on map loading </td>
-		</tr>
-		<tr>
-		<td>eventscroll</td><td> 1 </td><td> Enable/Disable scrolling to the icon which changed the state when the icon is out of the visible scope  </td>
-		</tr>
-		<tr>
-		<td> eventsound </td><td> 1 </td><td> Enable/Disable sound signals on state changes  </td>
-		</tr>
-		<tr>
-		<td> headermenu </td><td> 1 </td><td> Enable/Disable the header menu </td>
-		</tr>
-		<tr>
-		<td> headertemplate </td><td> default </td><td> Default <a href="header_templates.html">header template</a> </td>
-		</tr>
-		<tr>
-		<td> headerfade </td><td> 1 </td><td>Enable/Disable the fade effect of the submenus in the header menu (When the used header menu supports that option). <font color="#ff0000">(New in 1.5.2)</font></td>
-		</tr>
-		<tr>
-		<td> hovermenu </td><td> 1 </td><td> Enable/Disable the hover menu </td>
-		</tr>
-		<tr>
-		<td> hovertemplate </td><td> default </td><td> Default <a href="hover_templates.html">hover template</a> </td>
-		</tr>
-		<tr>
-		<td> <strike>hovertimeout</strike> </td><td> <strike>5</strike> </td><td> <strike>Default hover menu ajax request timeout in seconds</strike> <font color="#ff0000">(Deprecated in 1.4)</font></td>
-		</tr>
-		<tr>
-		<td> hoverdelay </td><td> 0 </td><td> Delay of hover menu appearance in seconds </td>
-		</tr>
-		<tr>
-		<td> hoverchildsshow </td><td> 1 </td><td> Enable/Disable the child objects in hover menu</td>
-		</tr>
-		<tr>
-		<td> hoverchildslimit </td><td> 10 </td><td> Limit hover child objects to this maximum value</td>
-		</tr>
-		<tr>
-		<td> hoverchildsorder </td><td> asc </td><td> Order of the child objects (Available: asc/desc)</td>
-		</tr>
-		<tr>
-		<td> hoverchildssort </td><td> a </td><td> Sort method of the child objects (Available: "s": State, "a": Alphabet )</td>
-		</tr>
-		<tr>
-		<td> icons </td><td> std_medium </td><td> Default iconset </td>
-		</tr>
-		<tr>
-		<td> onlyhardstates </td><td> 0 </td><td> Recognize only hard states (not soft) </td>
-		</tr>
-		<tr>
-		<td> recognizeservices </td><td> 1 </td><td> Recognize service states in host/hostgroup objects </td>
-		</tr>
-		<tr>
-		<td> showinlists </td><td> 1 </td><td> Show the maps in lists (dropdowns,index page,...) </td>
-		</tr>
-		<tr>
-		<td> showinmultisite </td><td> 1 </td><td> Show the maps in multisite snapin </td>
-		</tr>
-		<tr>
-		<td>stylesheet</td><td></td><td>Filename of the custom stylesheet to use on the maps (The file needs to be located in the share/nagvis/styles directory) <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td> urltarget </td><td> _self </td><td> Target of the Icon link, this option adapts <code>&lt;a target=""></code> (_self is same window) </td>
-		</tr>
-		<tr>
-			<td>hosturl</td>
-			<td>[htmlcgi]/status.cgi?host=[host_name]</td>
-			<td>The default url to follow when a user left-clicks on an host object. Available Macros: [htmlcgi], [htmlbase], [host_name], [backend_id]</td>
-		</tr>
-		<tr>
-			<td>hostgroupurl</td>
-	    <td>[htmlcgi]/status.cgi?hostgroup=[hostgroup_name]</td>
-  	  <td>The default url to follow when a user left-clicks on an hostgroup object.
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+        <td> backend </td><td> live_1 </td><td> Default backend (ID of the backend - copy the text from which <code>&lt;backend-id></code> stands for in <code>[backend_&lt;backend-id>]</code> ) </td>
+        </tr>
+        <tr>
+        <td>backgroundcolor</td><td>transparent</td><td>Default background color of maps </td>
+        </tr>
+        <tr>
+        <td>contextmenu</td><td>0</td><td>Enable/Disable the context menu on your map objects. </td>
+        </tr>
+        <tr>
+        <td>contexttemplate</td><td>default</td><td>Default <a href="context_templates.html">context template</a>. </td>
+        </tr>
+        <tr>
+        <td> eventbackground </td><td> 0 </td><td> Enable/Disable changing background color on state changes (Configured color is shown when summary state is PENDING, OK or UP)  </td>
+        </tr>
+        <tr>
+        <td> eventhighlight </td><td> 1 </td><td> Enable/Disable highlighting of the state changing object by adding a flashing border  </td>
+        </tr>
+        <tr>
+        <td> eventhighlightduration </td><td> 10000 </td><td> Duration of the highlighting in miliseconds </td>
+        </tr>
+        <tr>
+        <td> eventhighlightinterval </td><td> 500 </td><td> Interval of the highlighting in miliseconds </td>
+        </tr>
+        <tr>
+        <td> eventlog </td><td> 0 </td><td> Enable/Disable the eventlog in the new javascript frontend. The eventlog keeps track of important actions and information  </td>
+        </tr>
+        <tr>
+        <td> eventloglevel </td><td> info </td><td> Loglevel of the eventlog (Available: debug, info, warning, critical)  </td>
+        </tr>
+        <tr>
+        <td>eventlogevents</td><td>24</td><td>Number of events in the eventlog scrollback</td>
+        </tr>
+        <tr>
+        <td>eventlogheight</td><td>100</td><td>Height of the javascript eventlog in px </td>
+        </tr>
+        <tr>
+        <td>eventloghidden</td><td>1</td><td>Hide/Show the eventlog on map loading </td>
+        </tr>
+        <tr>
+        <td>eventscroll</td><td> 1 </td><td> Enable/Disable scrolling to the icon which changed the state when the icon is out of the visible scope  </td>
+        </tr>
+        <tr>
+        <td> eventsound </td><td> 1 </td><td> Enable/Disable sound signals on state changes  </td>
+        </tr>
+        <tr>
+        <td> headermenu </td><td> 1 </td><td> Enable/Disable the header menu </td>
+        </tr>
+        <tr>
+        <td> headertemplate </td><td> default </td><td> Default <a href="header_templates.html">header template</a> </td>
+        </tr>
+        <tr>
+        <td> headerfade </td><td> 1 </td><td>Enable/Disable the fade effect of the submenus in the header menu (When the used header menu supports that option). <font color="#ff0000">(New in 1.5.2)</font></td>
+        </tr>
+        <tr>
+        <td> hovermenu </td><td> 1 </td><td> Enable/Disable the hover menu </td>
+        </tr>
+        <tr>
+        <td> hovertemplate </td><td> default </td><td> Default <a href="hover_templates.html">hover template</a> </td>
+        </tr>
+        <tr>
+        <td> <strike>hovertimeout</strike> </td><td> <strike>5</strike> </td><td> <strike>Default hover menu ajax request timeout in seconds</strike> <font color="#ff0000">(Deprecated in 1.4)</font></td>
+        </tr>
+        <tr>
+        <td> hoverdelay </td><td> 0 </td><td> Delay of hover menu appearance in seconds </td>
+        </tr>
+        <tr>
+        <td> hoverchildsshow </td><td> 1 </td><td> Enable/Disable the child objects in hover menu</td>
+        </tr>
+        <tr>
+        <td> hoverchildslimit </td><td> 10 </td><td> Limit hover child objects to this maximum value</td>
+        </tr>
+        <tr>
+        <td> hoverchildsorder </td><td> asc </td><td> Order of the child objects (Available: asc/desc)</td>
+        </tr>
+        <tr>
+        <td> hoverchildssort </td><td> a </td><td> Sort method of the child objects (Available: "s": State, "a": Alphabet )</td>
+        </tr>
+        <tr>
+        <td> icons </td><td> std_medium </td><td> Default iconset </td>
+        </tr>
+        <tr>
+        <td> onlyhardstates </td><td> 0 </td><td> Recognize only hard states (not soft) </td>
+        </tr>
+        <tr>
+        <td> recognizeservices </td><td> 1 </td><td> Recognize service states in host/hostgroup objects </td>
+        </tr>
+        <tr>
+        <td> showinlists </td><td> 1 </td><td> Show the maps in lists (dropdowns,index page,...) </td>
+        </tr>
+        <tr>
+        <td> showinmultisite </td><td> 1 </td><td> Show the maps in multisite snapin </td>
+        </tr>
+        <tr>
+        <td>stylesheet</td><td></td><td>Filename of the custom stylesheet to use on the maps (The file needs to be located in the share/nagvis/styles directory) <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td> urltarget </td><td> _self </td><td> Target of the Icon link, this option adapts <code>&lt;a target=""></code> (_self is same window) </td>
+        </tr>
+        <tr>
+            <td>hosturl</td>
+            <td>[htmlcgi]/status.cgi?host=[host_name]</td>
+            <td>The default url to follow when a user left-clicks on an host object. Available Macros: [htmlcgi], [htmlbase], [host_name], [backend_id]</td>
+        </tr>
+        <tr>
+            <td>hostgroupurl</td>
+        <td>[htmlcgi]/status.cgi?hostgroup=[hostgroup_name]</td>
+        <td>The default url to follow when a user left-clicks on an hostgroup object.
           Available Macros: [htmlcgi], [htmlbase], [hostgroup_name], [backend_id]</td>
-		</tr>
-		<tr>
-			<td>serviceurl</td>
-	    <td>[htmlcgi]/extinfo.cgi?type=2&host=[host_name]&service=[service_description]</td>
-  	  <td>The default url to follow when a user left-clicks on an service object.
+        </tr>
+        <tr>
+            <td>serviceurl</td>
+        <td>[htmlcgi]/extinfo.cgi?type=2&host=[host_name]&service=[service_description]</td>
+        <td>The default url to follow when a user left-clicks on an service object.
           Available Macros: [htmlcgi], [htmlbase], [host_name], [service_description], [backend_id]</td>
-		</tr>
-		<tr>
-			<td>servicegroupurl</td>
-	    <td>[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]</td>
-  	  <td>The default url to follow when a user left-clicks on an servicegroup object.
+        </tr>
+        <tr>
+            <td>servicegroupurl</td>
+        <td>[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]</td>
+        <td>The default url to follow when a user left-clicks on an servicegroup object.
           Available Macros: [htmlcgi], [htmlbase], [servicegroup_name], [backend_id]</td>
-		</tr>
-		<tr>
-			<td>mapurl</td>
-	    <td>[htmlbase]/index.php?mod=Map&act=view&show=[map_name]</td>
-  	  <td>The default url to follow when a user left-clicks on an map object.
+        </tr>
+        <tr>
+            <td>mapurl</td>
+        <td>[htmlbase]/index.php?mod=Map&act=view&show=[map_name]</td>
+        <td>The default url to follow when a user left-clicks on an map object.
           Available Macros: [htmlcgi], [htmlbase], [map_name]</td>
-		</tr>
-		</table>
-		
-		<a name="index"></a>
-		<h3> index </h3>
-		Options to configure the Overview page of NagVis 
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-			<td>backgroundcolor</td>
-			<td>#fff</td>
-			<td>Configure the background color of the overview page</td>
-		</tr>
-		<tr>
-		<td> cellsperrow </td><td> 4 </td><td> Maps per row in map listing </td>
-		</tr>
-		<tr>
-		<td> headermenu </td><td> 1 </td><td> Enable/Disable the header menu</td>
-		</tr>
-		<tr>
-		<td> headertemplate </td><td> default </td><td> Default <a href="header_templates.html">header template</a> </td>
-		</tr>
-		<tr>
-			<td>showautomaps</td><td> 1 </td><td>Enable/Disable the listing of automaps <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-			<td>showmaps</td><td> 1 </td><td>Enable/Disable the listing of maps <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-			<td>showmapthumbs</td><td> 0 </td><td>Enable/Disable the listing of map thumbnails <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td> showrotations </td><td> 1 </td><td>Enable/Disable the listing of defined rotations</td>
-		</tr>
-		</table>
-		
-		<a name="automap"></a>
-		<h3> automap </h3>
-		Sets the automap options.
-		
-		<table style="width:100%">
-			<tr>
-			<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-			</tr>
-			<tr>
-			<td> defaultparams </td><td> &amp;maxLayers=2 </td><td> These are the parameters for the automap views and links in the lists (map index page, dropdown menus in header) </td>
-			</tr>
-			<tr>
-			<td> defaultroot </td><td> localhost </td><td> Default value for the root object. For details see <a href="automap.html">Automap documentation</a> </td>
-			</tr>
-			<tr>
-			<td> graphvizpath </td><td> /usr/local/bin </td><td> If the graphviz binaries (dot,neato,twopi,...) could not be found in the PATH the path has to be set here </td>
-			</tr>
-			<tr>
-			<td> showinlists </td><td> 1 </td><td> Enable/Disable the automap in map lists (map index page, dropdown menus in header) </td>
-			</tr>
-		</table>
-		
-		<a name="wui"></a>
-		<h3> wui </h3>
-		These are the options for the WUI.
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		<td><strike>allowedforconfig</strike></td><td><strike>EVERYONE</strike></td><td><trike>Users who are allowed to change the NagVis configuration (comma separated list) or EVERYONE</strike> (<font color="#ff0000">Deprecated in 1.5</font>) </td>
-		</tr>
-		<tr>
-		<td>autoupdatefreq</td><td> 25 </td><td> In this interval the map gets backuped by the WUI. </td>
-		</tr>
-		<tr>
-		<td>grid_show</td><td>0</td><td>Enable/Disable a grid to make the alignment of objects easier in the WUI. Objects are aligned to the upper left corner after moving. <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td>grid_color</td><td>#F7F7F7</td><td>The color of the grid lines. <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td>grid_steps</td><td>32</td><td>Scale of the grid in px. <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td>headermenu</td><td>1</td><td>Enable/Disable the header menu in the WUI. <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td>headertemplate</td><td>default</td><td>Default <a href="header_templates.html">header template</a> to use in the WUI <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-		<td> maplocktime </td><td> 5 </td><td> Time in minutes a map is locked by an editing user. </td>
-		</tr>
-		</table>
-		
-		<a name="worker"></a>
-		<h3> worker </h3>
-		Options for the new worker in the javascript frontend of NagVis. 
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		<td> interval </td><td> 5 </td><td> The interval in seconds in which the worker will check for objects which need to be updated. </td>
-		</tr>
-		<tr>
-		<td> requestmaxparams</td><td>0</td><td>The maximum number of parameters used in ajax http requests Some intrusion detection/prevention systems have a problem with too many parameters in the url. Give 0 for no limit.</td>
-		</tr>
-		<tr>
-		<td> requestmaxlength</td><td>1900</td><td>The maxium length of http request urls during ajax http requests. Some intrusion detection/prevention systems have a problem with too long queries.</td>
-		</tr>
-		<tr>
-		<td> updateobjectstates </td><td> 15 </td><td> The retention time of the states in seconds in the frontend. The state information will be refreshed after this time is over on next worker interval. </td>
-		</tr>
-		</table>
-		
-		<a name="backend"></a><h3> backend_* </h3>
-		<p>The backend sections to define the backends are all named <code>[backend_&lt;backend-id>]</code>.
-		In the example the <code>backend_id</code> is <code>live_1</code>.</p>
-		
-		<p>Depending on the value in backendtype the valid values for the backends
-			have to be set. In this example it is the MKLivestatus backend.</p>
-		
+        </tr>
+        </table>
+        
+        <a name="index"></a>
+        <h3> index </h3>
+        Options to configure the Overview page of NagVis 
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+            <td>backgroundcolor</td>
+            <td>#fff</td>
+            <td>Configure the background color of the overview page</td>
+        </tr>
+        <tr>
+        <td> cellsperrow </td><td> 4 </td><td> Maps per row in map listing </td>
+        </tr>
+        <tr>
+        <td> headermenu </td><td> 1 </td><td> Enable/Disable the header menu</td>
+        </tr>
+        <tr>
+        <td> headertemplate </td><td> default </td><td> Default <a href="header_templates.html">header template</a> </td>
+        </tr>
+        <tr>
+            <td>showautomaps</td><td> 1 </td><td>Enable/Disable the listing of automaps <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+            <td>showmaps</td><td> 1 </td><td>Enable/Disable the listing of maps <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+            <td>showmapthumbs</td><td> 0 </td><td>Enable/Disable the listing of map thumbnails <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td> showrotations </td><td> 1 </td><td>Enable/Disable the listing of defined rotations</td>
+        </tr>
+        </table>
+        
+        <a name="automap"></a>
+        <h3> automap </h3>
+        Sets the automap options.
+        
+        <table style="width:100%">
+            <tr>
+            <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+            </tr>
+            <tr>
+            <td> defaultparams </td><td> &amp;maxLayers=2 </td><td> These are the parameters for the automap views and links in the lists (map index page, dropdown menus in header) </td>
+            </tr>
+            <tr>
+            <td> defaultroot </td><td> localhost </td><td> Default value for the root object. For details see <a href="automap.html">Automap documentation</a> </td>
+            </tr>
+            <tr>
+            <td> graphvizpath </td><td> /usr/local/bin </td><td> If the graphviz binaries (dot,neato,twopi,...) could not be found in the PATH the path has to be set here </td>
+            </tr>
+            <tr>
+            <td> showinlists </td><td> 1 </td><td> Enable/Disable the automap in map lists (map index page, dropdown menus in header) </td>
+            </tr>
+        </table>
+        
+        <a name="wui"></a>
+        <h3> wui </h3>
+        These are the options for the WUI.
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+        <td><strike>allowedforconfig</strike></td><td><strike>EVERYONE</strike></td><td><trike>Users who are allowed to change the NagVis configuration (comma separated list) or EVERYONE</strike> (<font color="#ff0000">Deprecated in 1.5</font>) </td>
+        </tr>
+        <tr>
+        <td>autoupdatefreq</td><td> 25 </td><td> In this interval the map gets backuped by the WUI. </td>
+        </tr>
+        <tr>
+        <td>grid_show</td><td>0</td><td>Enable/Disable a grid to make the alignment of objects easier in the WUI. Objects are aligned to the upper left corner after moving. <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td>grid_color</td><td>#F7F7F7</td><td>The color of the grid lines. <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td>grid_steps</td><td>32</td><td>Scale of the grid in px. <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td>headermenu</td><td>1</td><td>Enable/Disable the header menu in the WUI. <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td>headertemplate</td><td>default</td><td>Default <a href="header_templates.html">header template</a> to use in the WUI <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+        <td> maplocktime </td><td> 5 </td><td> Time in minutes a map is locked by an editing user. </td>
+        </tr>
+        </table>
+        
+        <a name="worker"></a>
+        <h3> worker </h3>
+        Options for the new worker in the javascript frontend of NagVis. 
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+        <td> interval </td><td> 5 </td><td> The interval in seconds in which the worker will check for objects which need to be updated. </td>
+        </tr>
+        <tr>
+        <td> requestmaxparams</td><td>0</td><td>The maximum number of parameters used in ajax http requests Some intrusion detection/prevention systems have a problem with too many parameters in the url. Give 0 for no limit.</td>
+        </tr>
+        <tr>
+        <td> requestmaxlength</td><td>1900</td><td>The maxium length of http request urls during ajax http requests. Some intrusion detection/prevention systems have a problem with too long queries.</td>
+        </tr>
+        <tr>
+        <td> updateobjectstates </td><td> 15 </td><td> The retention time of the states in seconds in the frontend. The state information will be refreshed after this time is over on next worker interval. </td>
+        </tr>
+        </table>
+        
+        <a name="backend"></a><h3> backend_* </h3>
+        <p>The backend sections to define the backends are all named <code>[backend_&lt;backend-id>]</code>.
+        In the example the <code>backend_id</code> is <code>live_1</code>.</p>
+        
+        <p>Depending on the value in backendtype the valid values for the backends
+            have to be set. In this example it is the MKLivestatus backend.</p>
+        
 <pre>[backend_live_1]
 backendtype="mklivestatus"
 htmlcgi="/nagios/cgi-bin"
 ; the following options depend on the selected backendtype, in this case it is MKLivestatus
 socket="unix:/usr/local/nagios/var/rw/live"
 </pre>
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		<td> backendtype </td><td>mklivestatus</td><td> type of backend - MUST be set </td>
-		</tr>
-		<tr>
-			<td>statushost</td><td>&nbsp;</td>
-			<td><p>The status host can be used to prevent annoying timeouts when a backend is not
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+        <td> backendtype </td><td>mklivestatus</td><td> type of backend - MUST be set </td>
+        </tr>
+        <tr>
+            <td>statushost</td><td>&nbsp;</td>
+            <td><p>The status host can be used to prevent annoying timeouts when a backend is not
              reachable. This is only useful in multi backend setups.</p>
-       		<p>It works as follows: The assumption is that there is a "local" backend which
-       			 monitors the host of the "remote" backend. When the remote backend host is
-       			 reported as UP the backend is queried as normal.</p>
-       		<p>When the remote backend host is reported as "DOWN" or "UNREACHABLE" NagVis won't
-       			 try to connect to the backend anymore until the backend host gets available again.</p>
-					<p>The statushost needs to be given in the following format: &quot;&lt;backend_id>:&lt;hostname>&quot;
+               <p>It works as follows: The assumption is that there is a "local" backend which
+                    monitors the host of the "remote" backend. When the remote backend host is
+                    reported as UP the backend is queried as normal.</p>
+               <p>When the remote backend host is reported as "DOWN" or "UNREACHABLE" NagVis won't
+                    try to connect to the backend anymore until the backend host gets available again.</p>
+                    <p>The statushost needs to be given in the following format: &quot;&lt;backend_id>:&lt;hostname>&quot;
               -> e.g. &quot;live_2:nagios&quot;</p>
-					<p>The host needs to be in another backend than the current one to work correctly.</p>
-			</td>
-		</tr>
-		<tr>
-		<td> htmlcgi </td><td> /nagios/cgi-bin </td><td> Path to the cgi-bin directory of this backend (interesting for multiple backends) </td>
-		</tr>
-		<tr>
-			<td>custom_1</td><td></td>
-			<td>First custom variable which is available in the context and hover menus.
-			With this option different custom URLs can be added to the context/hover
-			menus based on the backend used. Might be interesting when adding links to
-			different Nagios instances <font color="#ff0000">(New in 1.5)</font>.</td>
-		</tr>
-		<tr>
-			<td>custom_2</td><td></td><td>Second custom variable. Same as above.</td>
-		</tr>
-		<tr>
-			<td>custom_3</td><td></td><td>Third custom variable. Same as above.</td>
-		</tr>
-		</table>
-		<p>For the backendtype specific options see the <a href="backends.html">backends documentation</a>.</p>
-		
-		<a name="rotation"></a>
-		<h3> rotation_* </h3>
-		Defines several map rotation pools. In this example the browser switches between the maps demo and demo2 every 15 seconds. The rotation is enabled by url: index.php?rotation=<rotation-id> in this case the rotation id is: "demo"
-		
+                    <p>The host needs to be in another backend than the current one to work correctly.</p>
+            </td>
+        </tr>
+        <tr>
+        <td> htmlcgi </td><td> /nagios/cgi-bin </td><td> Path to the cgi-bin directory of this backend (interesting for multiple backends) </td>
+        </tr>
+        <tr>
+            <td>custom_1</td><td></td>
+            <td>First custom variable which is available in the context and hover menus.
+            With this option different custom URLs can be added to the context/hover
+            menus based on the backend used. Might be interesting when adding links to
+            different Nagios instances <font color="#ff0000">(New in 1.5)</font>.</td>
+        </tr>
+        <tr>
+            <td>custom_2</td><td></td><td>Second custom variable. Same as above.</td>
+        </tr>
+        <tr>
+            <td>custom_3</td><td></td><td>Third custom variable. Same as above.</td>
+        </tr>
+        </table>
+        <p>For the backendtype specific options see the <a href="backends.html">backends documentation</a>.</p>
+        
+        <a name="rotation"></a>
+        <h3> rotation_* </h3>
+        Defines several map rotation pools. In this example the browser switches between the maps demo and demo2 every 15 seconds. The rotation is enabled by url: index.php?rotation=<rotation-id> in this case the rotation id is: "demo"
+        
 <pre>[rotation_demo]
 maps="demo,demo2"
 interval=15</pre>
 
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		<td> interval </td><td> 15 </td><td> Map rotation interval in seconds </td>
-		</tr>
-		<tr>
-		<td> maps </td><td> </td>
-		<td> 
-			<p>Comma separated list of maps to rotate in this pool. You can also add external URLs surrounded by [ and ] (e.g. maps="demo1,[http://localhost/test.php]". The URL has to be reachable and accessible by the server which NagVis is running on.</p>
-			<p> You can add labels in the following format &lt;label&gt;:&lt;map&gt; and &lt;label&gt;:&lt;[url]&gt;. The labels are displayed in the rotation list.</p>
-			<p><font color="#ff0000">New in 1.5:</font> It is also possible to add automaps to rotations. Simply add an @ sign before the automap name to add an automap to the rotation.</p>
-		</td>
-		</tr>
-		</table>
-		
-		<a name="states"></a><h3>states <font color="#ff0000">(New in 1.5)</font></h3>
-		<p>Options which affect the handling and appearance of the different states in the NagVis installation.</p>
-		
-		<p>These settings define the state handling behaviour. Mainly it is possible to configure which state will
-			cover another state changing these values. The state with the highest value will become the &quot;summary state&quot; for an object. 
-			For example a critical state (5) will cover a warning state (4).
-			Another example: An acknowledged critical state (2) will not cover a warning state (4).</p>
-		
-		<table>
-		<tr><th style="width:200px">Value</th><th style="width:150px">Default</th></tr>
-		<tr><td>unreachable</td><td>8</td></tr>
-		<tr><td>unreachable_ack</td><td>5</td></tr>
-		<tr><td>unreachable_downtime</td><td>5</td></tr>
-		<tr><td>down</td><td>7</td></tr>
-		<tr><td>down_ack</td><td>5</td></tr>
-		<tr><td>down_downtime</td><td>5</td></tr>
-		<tr><td>critical</td><td>7</td></tr>
-		<tr><td>critical_ack</td><td>5</td></tr>
-		<tr><td>critical_downtime</td><td>5</td></tr>
-		<tr><td>warning</td><td>6</td></tr>
-		<tr><td>warning_ack</td><td>4</td></tr>
-		<tr><td>warning_downtime</td><td>4</td></tr>
-		<tr><td>unknown</td><td>3</td></tr>
-		<tr><td>unknown_ack</td><td>2</td></tr>
-		<tr><td>unknown_downtime</td><td>2</td></tr>
-		<tr><td>error</td><td>3</td></tr>
-		<tr><td>error_ack</td><td>2</td></tr>
-		<tr><td>error_downtime</td><td>2</td></tr>
-		<tr><td>ok</td><td>1</td></tr>
-		<tr><td>up</td><td>1</td></tr>
-		<tr><td>unchecked <font color="#ff0000">(New in 1.6)</font></td><td>0</td></tr>
-		<tr><td>pending</td><td>0</td></tr>
-		</table>
-		
-		<p>This settings define the behaviour of states in the frontend.</p>
-		<ul>
-			<li><b>*_bgcolor:</b> The bgcolor option is used in the background color changing eventhandler.</li>
-			<li><b>*_color:</b> You can configure the foreground colors which are used for example as line colors and also in the highlight eventhandler.</li>
-			<li><b>*_sound:</b> The sound file is being played on changes to the mentioned state (Needs to be MP3 format).</li>
-		</ul>
-		
-		<table>
-		<tr><th style="width:200px">Value</th><th style="width:150px">Default</th></tr>
-		<tr><td>unreachable_bgcolor</td><td>#F1811B</td></tr>
-		<tr><td>unreachable_color</td><td>#F1811B</td></tr>
-		<tr><td>unreachable_ack_bgcolor</td><td></td></tr>
-		<tr><td>unreachable_downtime_bgcolor</td><td></td></tr>
-		<tr><td>unreachable_sound</td><td>std_unreachable.mp3</td></tr>
-		<tr><td>down_bgcolor</td><td>#FF0000</td></tr>
-		<tr><td>down_color</td><td>#FF0000</td></tr>
-		<tr><td>down_ack_bgcolor</td><td></td></tr>
-		<tr><td>down_downtime_bgcolor</td><td></td></tr>
-		<tr><td>down_sound</td><td>std_down.mp3</td></tr>
-		<tr><td>critical_bgcolor</td><td>#FF0000</td></tr>
-		<tr><td>critical_color</td><td>#FF0000</td></tr>
-		<tr><td>critical_ack_bgcolor</td><td></td></tr>
-		<tr><td>critical_downtime_bgcolor</td><td></td></tr>
-		<tr><td>critical_sound</td><td>std_critical.mp3</td></tr>
-		<tr><td>warning_bgcolor</td><td>#FFFF00</td></tr>
-		<tr><td>warning_color</td><td>#FFFF00</td></tr>
-		<tr><td>warning_ack_bgcolor</td><td></td></tr>
-		<tr><td>warning_downtime_bgcolor</td><td></td></tr>
-		<tr><td>warning_sound</td><td>std_warning.mp3</td></tr>
-		<tr><td>unknown_bgcolor</td><td>#FFCC66</td></tr>
-		<tr><td>unknown_color</td><td>#FFCC66</td></tr>
-		<tr><td>unknown_ack_bgcolor</td><td></td></tr>
-		<tr><td>unknown_downtime_bgcolor</td><td></td></tr>
-		<tr><td>unknown_sound</td><td></td></tr>
-		<tr><td>error_bgcolor</td><td>#0000FF</td></tr>
-		<tr><td>error_color</td><td>#0000FF</td></tr>
-		<tr><td>error_ack_bgcolor</td><td></td></tr>
-		<tr><td>error_downtime_bgcolor</td><td></td></tr>
-		<tr><td>error_sound</td><td></td></tr>
-		<tr><td>ok_bgcolor</td><td>#00FF00</td></tr>
-		<tr><td>ok_color</td><td>#00FF00</td></tr>
-		<tr><td>ok</td><td></td></tr>
-		<tr><td>up_bgcolor</td><td>#00FF00</td></tr>
-		<tr><td>up_color</td><td>#00FF00</td></tr>
-		<tr><td>up_sound</td><td></td></tr>
-		<tr><td>unchecked_bgcolor<font color="#ff0000">(New in 1.6)</font></td><td>#C0C0C0</td></tr>
-		<tr><td>unchecked_color<font color="#ff0000">(New in 1.6)</font></td><td>#C0C0C0</td></tr>
-		<tr><td>unchecked_sound<font color="#ff0000">(New in 1.6)</font></td><td></td></tr>
-		<tr><td>pending_bgcolor</td><td>#C0C0C0</td></tr>
-		<tr><td>pending_color</td><td>#C0C0C0</td></tr>
-		<tr><td>pending_sound</td><td></td></tr>
-		</table>
-		
-	</body>
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+        <td> interval </td><td> 15 </td><td> Map rotation interval in seconds </td>
+        </tr>
+        <tr>
+        <td> maps </td><td> </td>
+        <td> 
+            <p>Comma separated list of maps to rotate in this pool. You can also add external URLs surrounded by [ and ] (e.g. maps="demo1,[http://localhost/test.php]". The URL has to be reachable and accessible by the server which NagVis is running on.</p>
+            <p> You can add labels in the following format &lt;label&gt;:&lt;map&gt; and &lt;label&gt;:&lt;[url]&gt;. The labels are displayed in the rotation list.</p>
+            <p><font color="#ff0000">New in 1.5:</font> It is also possible to add automaps to rotations. Simply add an @ sign before the automap name to add an automap to the rotation.</p>
+        </td>
+        </tr>
+        </table>
+        
+        <a name="states"></a><h3>states <font color="#ff0000">(New in 1.5)</font></h3>
+        <p>Options which affect the handling and appearance of the different states in the NagVis installation.</p>
+        
+        <p>These settings define the state handling behaviour. Mainly it is possible to configure which state will
+            cover another state changing these values. The state with the highest value will become the &quot;summary state&quot; for an object. 
+            For example a critical state (5) will cover a warning state (4).
+            Another example: An acknowledged critical state (2) will not cover a warning state (4).</p>
+        
+        <table>
+        <tr><th style="width:200px">Value</th><th style="width:150px">Default</th></tr>
+        <tr><td>unreachable</td><td>8</td></tr>
+        <tr><td>unreachable_ack</td><td>5</td></tr>
+        <tr><td>unreachable_downtime</td><td>5</td></tr>
+        <tr><td>down</td><td>7</td></tr>
+        <tr><td>down_ack</td><td>5</td></tr>
+        <tr><td>down_downtime</td><td>5</td></tr>
+        <tr><td>critical</td><td>7</td></tr>
+        <tr><td>critical_ack</td><td>5</td></tr>
+        <tr><td>critical_downtime</td><td>5</td></tr>
+        <tr><td>warning</td><td>6</td></tr>
+        <tr><td>warning_ack</td><td>4</td></tr>
+        <tr><td>warning_downtime</td><td>4</td></tr>
+        <tr><td>unknown</td><td>3</td></tr>
+        <tr><td>unknown_ack</td><td>2</td></tr>
+        <tr><td>unknown_downtime</td><td>2</td></tr>
+        <tr><td>error</td><td>3</td></tr>
+        <tr><td>error_ack</td><td>2</td></tr>
+        <tr><td>error_downtime</td><td>2</td></tr>
+        <tr><td>ok</td><td>1</td></tr>
+        <tr><td>up</td><td>1</td></tr>
+        <tr><td>unchecked <font color="#ff0000">(New in 1.6)</font></td><td>0</td></tr>
+        <tr><td>pending</td><td>0</td></tr>
+        </table>
+        
+        <p>This settings define the behaviour of states in the frontend.</p>
+        <ul>
+            <li><b>*_bgcolor:</b> The bgcolor option is used in the background color changing eventhandler.</li>
+            <li><b>*_color:</b> You can configure the foreground colors which are used for example as line colors and also in the highlight eventhandler.</li>
+            <li><b>*_sound:</b> The sound file is being played on changes to the mentioned state (Needs to be MP3 format).</li>
+        </ul>
+        
+        <table>
+        <tr><th style="width:200px">Value</th><th style="width:150px">Default</th></tr>
+        <tr><td>unreachable_bgcolor</td><td>#F1811B</td></tr>
+        <tr><td>unreachable_color</td><td>#F1811B</td></tr>
+        <tr><td>unreachable_ack_bgcolor</td><td></td></tr>
+        <tr><td>unreachable_downtime_bgcolor</td><td></td></tr>
+        <tr><td>unreachable_sound</td><td>std_unreachable.mp3</td></tr>
+        <tr><td>down_bgcolor</td><td>#FF0000</td></tr>
+        <tr><td>down_color</td><td>#FF0000</td></tr>
+        <tr><td>down_ack_bgcolor</td><td></td></tr>
+        <tr><td>down_downtime_bgcolor</td><td></td></tr>
+        <tr><td>down_sound</td><td>std_down.mp3</td></tr>
+        <tr><td>critical_bgcolor</td><td>#FF0000</td></tr>
+        <tr><td>critical_color</td><td>#FF0000</td></tr>
+        <tr><td>critical_ack_bgcolor</td><td></td></tr>
+        <tr><td>critical_downtime_bgcolor</td><td></td></tr>
+        <tr><td>critical_sound</td><td>std_critical.mp3</td></tr>
+        <tr><td>warning_bgcolor</td><td>#FFFF00</td></tr>
+        <tr><td>warning_color</td><td>#FFFF00</td></tr>
+        <tr><td>warning_ack_bgcolor</td><td></td></tr>
+        <tr><td>warning_downtime_bgcolor</td><td></td></tr>
+        <tr><td>warning_sound</td><td>std_warning.mp3</td></tr>
+        <tr><td>unknown_bgcolor</td><td>#FFCC66</td></tr>
+        <tr><td>unknown_color</td><td>#FFCC66</td></tr>
+        <tr><td>unknown_ack_bgcolor</td><td></td></tr>
+        <tr><td>unknown_downtime_bgcolor</td><td></td></tr>
+        <tr><td>unknown_sound</td><td></td></tr>
+        <tr><td>error_bgcolor</td><td>#0000FF</td></tr>
+        <tr><td>error_color</td><td>#0000FF</td></tr>
+        <tr><td>error_ack_bgcolor</td><td></td></tr>
+        <tr><td>error_downtime_bgcolor</td><td></td></tr>
+        <tr><td>error_sound</td><td></td></tr>
+        <tr><td>ok_bgcolor</td><td>#00FF00</td></tr>
+        <tr><td>ok_color</td><td>#00FF00</td></tr>
+        <tr><td>ok</td><td></td></tr>
+        <tr><td>up_bgcolor</td><td>#00FF00</td></tr>
+        <tr><td>up_color</td><td>#00FF00</td></tr>
+        <tr><td>up_sound</td><td></td></tr>
+        <tr><td>unchecked_bgcolor<font color="#ff0000">(New in 1.6)</font></td><td>#C0C0C0</td></tr>
+        <tr><td>unchecked_color<font color="#ff0000">(New in 1.6)</font></td><td>#C0C0C0</td></tr>
+        <tr><td>unchecked_sound<font color="#ff0000">(New in 1.6)</font></td><td></td></tr>
+        <tr><td>pending_bgcolor</td><td>#C0C0C0</td></tr>
+        <tr><td>pending_color</td><td>#C0C0C0</td></tr>
+        <tr><td>pending_sound</td><td></td></tr>
+        </table>
+        
+    </body>
 </html>

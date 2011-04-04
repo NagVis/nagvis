@@ -2,349 +2,349 @@
 <html>
  <head>
   <title>Map configuration format description</title>
-		<link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
  </head>
  <body>
-		<h1>Map configuration format description</h1>
-		
-		<h2>General Information</h2>
-		<p>The NagVis configuration file format is very similiar to the format used by <a href="http://www.nagios.org">Nagios</a>(TM).</p>
-		<p>Configuration statements start with the keyword "define" followed by a type field and a left curly bracket ({). Every following line defines variable-value pairs, separated by a ( = ) until a right curly bracket (}) is found.</p>
-		<p>Hashes (#) are used to mark comments, note that a comment line <i>MUST</i> start with a hash not with other chars like whitespaces!</p>
-		
-		<h2>Object types</h2>
-		<ul>
-		<li><a href="#global">Global</a></li>
-		<li><a href="#host">Host</a></li>
-		<li><a href="#service">Service</a></li>
-		<li><a href="#hostgroup">Hostgroup</a></li>
-		<li><a href="#servicegroup">Servicegroup</a></li>
-		<li><a href="#map">Map</a></li>
-		<li><a href="#textbox">Textbox</a></li>
-		<li><a href="#shape">Shape</a></li>
-		<li><a href="#line">Line</a> (<font color="#ff0000">New in 1.5</font>)</li>
-		<li><a href="#template">Template</a></li>
-		</ul>
-		
-		<h2>Description of the object types</h2>
-		
-		<a name="global"></a><h3> Global </h3>
-		<p>The first definition in every config file should be of the special type "global". Options which are defined at this paragraph are valid for the whole map and are getting inherited to other types defined later.</p>
-		<p>Example with all options which have to be set:</p>
-		<pre>define global {
+        <h1>Map configuration format description</h1>
+        
+        <h2>General Information</h2>
+        <p>The NagVis configuration file format is very similiar to the format used by <a href="http://www.nagios.org">Nagios</a>(TM).</p>
+        <p>Configuration statements start with the keyword "define" followed by a type field and a left curly bracket ({). Every following line defines variable-value pairs, separated by a ( = ) until a right curly bracket (}) is found.</p>
+        <p>Hashes (#) are used to mark comments, note that a comment line <i>MUST</i> start with a hash not with other chars like whitespaces!</p>
+        
+        <h2>Object types</h2>
+        <ul>
+        <li><a href="#global">Global</a></li>
+        <li><a href="#host">Host</a></li>
+        <li><a href="#service">Service</a></li>
+        <li><a href="#hostgroup">Hostgroup</a></li>
+        <li><a href="#servicegroup">Servicegroup</a></li>
+        <li><a href="#map">Map</a></li>
+        <li><a href="#textbox">Textbox</a></li>
+        <li><a href="#shape">Shape</a></li>
+        <li><a href="#line">Line</a> (<font color="#ff0000">New in 1.5</font>)</li>
+        <li><a href="#template">Template</a></li>
+        </ul>
+        
+        <h2>Description of the object types</h2>
+        
+        <a name="global"></a><h3> Global </h3>
+        <p>The first definition in every config file should be of the special type "global". Options which are defined at this paragraph are valid for the whole map and are getting inherited to other types defined later.</p>
+        <p>Example with all options which have to be set:</p>
+        <pre>define global {
  map_image=lan.png
 }</pre>
-		
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		<td> <strike>allowed_for_config</strike> </td><td> </td><td> <strike>Comma separated list of Nagios users who are allowed to edit this map. Can be "EVERYONE" for no permission check.</strike> (<font color="#ff0000">Deprecated in 1.5</font>) </td>
-		</tr>
-		<tr>
-		<td><strike>allowed_user</strike></td><td></td><td><strike>Comma separated list of Nagios users who are allowed to view this map. Can be "EVERYONE" for no permission check.</strike> (<font color="#ff0000">Deprecated in 1.5</font>)</td>
-		</tr>
-		<tr>
-			<td>map_image</td>
-			<td></td>
-			<td>
-				<p>The name of the map image displayed in the background of the NagVis map, for example a Visio (TM) drawing.</p>
-				<p>The value can even be &quot;none&quot; or empty for no background image.</p>
-				<p><font color="#ff0000">New in 1.5:</font> It is also possible to add URLs here. The URL has to be surrounded by [ and ].</p>
-			</td>
-		</tr>
-		<tr>
-		<td> alias </td><td> map name </td><td> The alias is the label for each map. If it is defined it is shown everywhere in NagVis frontend and WUI </td>
-		</tr>
-		<tr>
-		<td> backend_id </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend defined as "defaultbackend" at the <a href="nagvis_config_format_description.html">Main Configuration file</a> is used.</td>
-		</tr>
-		<tr>
-		<td> background_color </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Background color of this map. If this is not set backgroundcolor from Main Configuration file is taken. </td>
-		</tr>
-		<tr>
-		<td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu on your map objects. </td>
-		</tr>
-		<tr>
-		<td>context_template</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">context template</a> to be used on this map </td>
-		</tr>
-		<tr>
-		<td>event_background</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable changing background color on state changes (Configured color is shown when summary state is PENDING, OK or UP). </td>
-		</tr>
-		<tr>
-		<td>event_highlight</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable highlighting of the state changing object by adding a flashing border. </td>
-		</tr>
-		<tr>
-		<td>event_highlight_duration</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Set the highlight duration in milliseconds </td>
-		</tr>
-		<tr>
-		<td>event_highlight_interval</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Set the highlight interval in milliseconds </td>
-		</tr>
-		<tr>
-		<td>event_log</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable the eventlog in the new javascript frontend. The eventlog keeps track of important actions and information. </td>
-		</tr>
-		<tr>
-		<td>event_log_level</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Loglevel of the eventlog (Available: debug, info, warning, critical). </td>
-		</tr>
-		<tr>
-		<td>event_log_events</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Number of events in the eventlog scrollback</td>
-		</tr>
-		<tr>
-		<td>event_log_height</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Height of the javascript eventlog in px </td>
-		</tr>
-		<tr>
-		<td>event_log_hidden</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Hide/Show the eventlog on map loading </td>
-		</tr>
-		<tr>
-		<td>event_scroll</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable scrolling to the icon which changed the state when the icon is out of the visible scope. </td>
-		</tr>
-		<tr>
-		<td>event_sound</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable sound signals on state changes. </td>
-		</tr>
-		<tr>
-		<td>grid_show</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable a grid to make the alignment of objects easier in the WUI. Objects are aligned to the upper left corner after moving. <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td>grid_color</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>The color of the grid lines. <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td>grid_steps</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Scale of the grid in px. <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td> header_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the header menu </td>
-		</tr>
-		<tr>
-		<td> header_template </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> <a href="header_templates.html">header template</a> to be used on ths map </td>
-		</tr>
-		<tr>
-		<td> header_fade </td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable the fade effect of the submenus in the header menu (When the used header menu supports that option). <font color="#ff0000">(New in 1.5.2)</font></td>
-		</tr>
-		<tr>
-		<td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
-		</tr>
-		<tr>
-		<td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
-		</tr>
-		<tr>
-		<td> hover_template </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Default <a href="hover_templates.html">hover template</a> to be used on this map </td>
-		</tr>
-		<tr>
-		<td> <strike>hover_timeout</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Default hover menu ajax request timeout in seconds</strike> <font color="#ff0000">(Deprecated in 1.4)</font></td>
-		</tr>
-		<tr>
-		<td> hover_childs_show </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable displaying child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_limit </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Number of maximum children to be displayed. Set to -1 to disable the limit.</td>
-		</tr>
-		<tr>
-		<td> hover_childs_order </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Order direction of child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_sort </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sort method of child objects </td>
-		</tr>
-		<tr>
-		<td> iconset </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Iconset to use as default for all objects placed on the map. Can be overwritten on a per object base. <br>In the example "std_small" is used which means an OK state will be displayed using "std_small_<i>ok</i>.png", a CRITICAL state will be displayed by using "std_small_<i>critical</i>.png" and so on. </td>
-		</tr>
-		<tr>
-		<td> in_maintenance </td><td> 0 </td><td> Enable/Disable the maintenance mode of this map. If a map is in maintenance mode only a message gets displayed instead of the map. </td>
-		</tr>
-		<tr>
-		<td> label_show </td><td> 0 </td><td> Enable/Disable labels for the maps objects </td>
-		</tr>
-		<tr>
-		<td> label_x </td><td> -20 </td><td> Default x-position of the labels in px (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
-		</tr>
-		<tr>
-		<td> label_y </td><td> +20 </td><td> Default y-position of the labels in px (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
-		</tr>
-		<tr>
-		<td> label_width </td><td> auto </td><td> Default width of the labels in px </td>
-		</tr>
-		<tr>
-		<td> label_background </td><td> transparent </td><td> Default background color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;.</td>
-		</tr>
-		<tr>
-		<td> label_border </td><td> #000000 </td><td> Default border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;.</td>
-		</tr>
-		<tr>
-		<td>label_style</td><td></td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code> <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
+        
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+        <td> <strike>allowed_for_config</strike> </td><td> </td><td> <strike>Comma separated list of Nagios users who are allowed to edit this map. Can be "EVERYONE" for no permission check.</strike> (<font color="#ff0000">Deprecated in 1.5</font>) </td>
+        </tr>
+        <tr>
+        <td><strike>allowed_user</strike></td><td></td><td><strike>Comma separated list of Nagios users who are allowed to view this map. Can be "EVERYONE" for no permission check.</strike> (<font color="#ff0000">Deprecated in 1.5</font>)</td>
+        </tr>
+        <tr>
+            <td>map_image</td>
+            <td></td>
+            <td>
+                <p>The name of the map image displayed in the background of the NagVis map, for example a Visio (TM) drawing.</p>
+                <p>The value can even be &quot;none&quot; or empty for no background image.</p>
+                <p><font color="#ff0000">New in 1.5:</font> It is also possible to add URLs here. The URL has to be surrounded by [ and ].</p>
+            </td>
+        </tr>
+        <tr>
+        <td> alias </td><td> map name </td><td> The alias is the label for each map. If it is defined it is shown everywhere in NagVis frontend and WUI </td>
+        </tr>
+        <tr>
+        <td> backend_id </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend defined as "defaultbackend" at the <a href="nagvis_config_format_description.html">Main Configuration file</a> is used.</td>
+        </tr>
+        <tr>
+        <td> background_color </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Background color of this map. If this is not set backgroundcolor from Main Configuration file is taken. </td>
+        </tr>
+        <tr>
+        <td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu on your map objects. </td>
+        </tr>
+        <tr>
+        <td>context_template</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">context template</a> to be used on this map </td>
+        </tr>
+        <tr>
+        <td>event_background</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable changing background color on state changes (Configured color is shown when summary state is PENDING, OK or UP). </td>
+        </tr>
+        <tr>
+        <td>event_highlight</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable highlighting of the state changing object by adding a flashing border. </td>
+        </tr>
+        <tr>
+        <td>event_highlight_duration</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Set the highlight duration in milliseconds </td>
+        </tr>
+        <tr>
+        <td>event_highlight_interval</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Set the highlight interval in milliseconds </td>
+        </tr>
+        <tr>
+        <td>event_log</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable the eventlog in the new javascript frontend. The eventlog keeps track of important actions and information. </td>
+        </tr>
+        <tr>
+        <td>event_log_level</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Loglevel of the eventlog (Available: debug, info, warning, critical). </td>
+        </tr>
+        <tr>
+        <td>event_log_events</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Number of events in the eventlog scrollback</td>
+        </tr>
+        <tr>
+        <td>event_log_height</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Height of the javascript eventlog in px </td>
+        </tr>
+        <tr>
+        <td>event_log_hidden</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Hide/Show the eventlog on map loading </td>
+        </tr>
+        <tr>
+        <td>event_scroll</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable scrolling to the icon which changed the state when the icon is out of the visible scope. </td>
+        </tr>
+        <tr>
+        <td>event_sound</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable sound signals on state changes. </td>
+        </tr>
+        <tr>
+        <td>grid_show</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable a grid to make the alignment of objects easier in the WUI. Objects are aligned to the upper left corner after moving. <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td>grid_color</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>The color of the grid lines. <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td>grid_steps</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Scale of the grid in px. <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td> header_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the header menu </td>
+        </tr>
+        <tr>
+        <td> header_template </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> <a href="header_templates.html">header template</a> to be used on ths map </td>
+        </tr>
+        <tr>
+        <td> header_fade </td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable the fade effect of the submenus in the header menu (When the used header menu supports that option). <font color="#ff0000">(New in 1.5.2)</font></td>
+        </tr>
+        <tr>
+        <td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
+        </tr>
+        <tr>
+        <td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
+        </tr>
+        <tr>
+        <td> hover_template </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Default <a href="hover_templates.html">hover template</a> to be used on this map </td>
+        </tr>
+        <tr>
+        <td> <strike>hover_timeout</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Default hover menu ajax request timeout in seconds</strike> <font color="#ff0000">(Deprecated in 1.4)</font></td>
+        </tr>
+        <tr>
+        <td> hover_childs_show </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable displaying child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_limit </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Number of maximum children to be displayed. Set to -1 to disable the limit.</td>
+        </tr>
+        <tr>
+        <td> hover_childs_order </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Order direction of child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_sort </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sort method of child objects </td>
+        </tr>
+        <tr>
+        <td> iconset </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Iconset to use as default for all objects placed on the map. Can be overwritten on a per object base. <br>In the example "std_small" is used which means an OK state will be displayed using "std_small_<i>ok</i>.png", a CRITICAL state will be displayed by using "std_small_<i>critical</i>.png" and so on. </td>
+        </tr>
+        <tr>
+        <td> in_maintenance </td><td> 0 </td><td> Enable/Disable the maintenance mode of this map. If a map is in maintenance mode only a message gets displayed instead of the map. </td>
+        </tr>
+        <tr>
+        <td> label_show </td><td> 0 </td><td> Enable/Disable labels for the maps objects </td>
+        </tr>
+        <tr>
+        <td> label_x </td><td> -20 </td><td> Default x-position of the labels in px (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
+        </tr>
+        <tr>
+        <td> label_y </td><td> +20 </td><td> Default y-position of the labels in px (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
+        </tr>
+        <tr>
+        <td> label_width </td><td> auto </td><td> Default width of the labels in px </td>
+        </tr>
+        <tr>
+        <td> label_background </td><td> transparent </td><td> Default background color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;.</td>
+        </tr>
+        <tr>
+        <td> label_border </td><td> #000000 </td><td> Default border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;.</td>
+        </tr>
+        <tr>
+        <td>label_style</td><td></td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code> <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
 
-		<tr>
-		<td> line_type </td><td></td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
-		</tr>
-		<tr>
-		<td>line_arrow</td><td>forward</td>
-		<td>This defines the arrows at the end of the line. At the moment this
+        <tr>
+        <td> line_type </td><td></td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
+        </tr>
+        <tr>
+        <td>line_arrow</td><td>forward</td>
+        <td>This defines the arrows at the end of the line. At the moment this
         attribute is only being used for the lines between hosts on the automap. Possible values: forward, back, both, none (<font color="#ff0000">New in 1.5.2</font>).</td>
-		</tr>
-		<tr>
-		<td>line_width</td><td>3</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
-		</tr>
-		
-		<tr>
-		<td>only_hard_states</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
-		</tr>
-		<tr>
-		<tr>
-		<td>parent_map</td><td></td><td>The parent map of this map. This option is only used in the menu visualisations of the header menu and sidebar <font color="#ff0000">(New in 1.6)</font></td>
-		</tr>
-		<tr>
-		<td> recognize_services </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sets whether the states of the services on hosts, hostgroup objects should be recognised. If this is not given in the config it's set to 1. </td>
-		</tr>
-		<tr>
-		<td> show_in_lists </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Show the maps in lists (dropdowns, index page, ...) </td>
-		</tr>
-		<tr>
-		<td> show_in_multisite</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Show the maps in multisite snapin</td>
-		</tr>
-		<tr>
-		<td>stylesheet</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Filename of the custom stylesheet to use on the maps (The file needs to be located in the share/nagvis/styles directory) <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window) </td>
-		</tr>
-		<tr>
-		<td> <strike>usegdlibs</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Activates the usage of GD-Libs on this map (lines can only be used if GD-Libs are activated)</strike> <font color="#ff0000">(Deprecated in 1.4)</font> </td>
-		</tr>
-		</table>
-		
-		<a name="host"></a><h3> Host </h3>
-		<p>Example with all options which have to be set (note that options already defined in the global section are optional):</p>
-		<pre>define host {
+        </tr>
+        <tr>
+        <td>line_width</td><td>3</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
+        </tr>
+        
+        <tr>
+        <td>only_hard_states</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
+        </tr>
+        <tr>
+        <tr>
+        <td>parent_map</td><td></td><td>The parent map of this map. This option is only used in the menu visualisations of the header menu and sidebar <font color="#ff0000">(New in 1.6)</font></td>
+        </tr>
+        <tr>
+        <td> recognize_services </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sets whether the states of the services on hosts, hostgroup objects should be recognised. If this is not given in the config it's set to 1. </td>
+        </tr>
+        <tr>
+        <td> show_in_lists </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Show the maps in lists (dropdowns, index page, ...) </td>
+        </tr>
+        <tr>
+        <td> show_in_multisite</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Show the maps in multisite snapin</td>
+        </tr>
+        <tr>
+        <td>stylesheet</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Filename of the custom stylesheet to use on the maps (The file needs to be located in the share/nagvis/styles directory) <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window) </td>
+        </tr>
+        <tr>
+        <td> <strike>usegdlibs</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Activates the usage of GD-Libs on this map (lines can only be used if GD-Libs are activated)</strike> <font color="#ff0000">(Deprecated in 1.4)</font> </td>
+        </tr>
+        </table>
+        
+        <a name="host"></a><h3> Host </h3>
+        <p>Example with all options which have to be set (note that options already defined in the global section are optional):</p>
+        <pre>define host {
  host_name=localhost
  x=100
  y=200
 }</pre>
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		  <td><b>object_id</b></td><td></td>
-		  <td>Unique identifier of the object on the current map. Each object
-		      on the map needs to have an object_id. The object_id is build of
-		      alphanumeric sings of any length. When no object_id is given NagVis
-		      will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
-		</tr>
-		<tr>
-		<td> <b>host_name</b> </td><td> </td><td> Name of the host as defined in Nagios </td>
-		</tr>
-		<tr>
-		<td><b>x</b></td><td></td>
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Unique identifier of the object on the current map. Each object
+              on the map needs to have an object_id. The object_id is build of
+              alphanumeric sings of any length. When no object_id is given NagVis
+              will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
+        </tr>
+        <tr>
+        <td> <b>host_name</b> </td><td> </td><td> Name of the host as defined in Nagios </td>
+        </tr>
+        <tr>
+        <td><b>x</b></td><td></td>
     <td>X axis coordinate(s).
-			  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
-		</tr>
-		<tr>
-		<td><b>y</b></td><td></td>
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+        <td><b>y</b></td><td></td>
     <td>Y axis coordinate(s).
-			  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
-		</tr>
-		<tr>
-		<td> backend_id </td><td> inherited (<a href="#global">global</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken. </td>
-		</tr>
-		<tr>
-		<td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
-		</tr>
-		<tr>
-		<td>context_template</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td><a href="context_templates.html">Context template</a> for this object. </td>
-		</tr>
-		<tr>
-		<td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
-		</tr>
-		<tr>
-		<td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
-		</tr>
-		<tr>
-		<td> hover_template </td><td> inherited (<a href="#global">global</a>) </td><td> <a href="hover_templates.html">Hover template</a> for this object </td>
-		</tr>
-		<tr>
-		<td> <strike>hover_timeout</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Hover menu ajax request timeout in seconds for this object</strike> </td>
-		</tr>
-		<tr>
-		<td> hover_url </td><td> </td><td> URL which should be displayed in hover menu instead of standard information. There are some macros available:<br />
-			<b>[host_name]</b>: This macro stands for the object name.
-		</td>
-		</tr>
-		<tr>
-		<td> hover_childs_show </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable displaying child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_sort </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sort method of child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_order </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Order direction of child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_limit </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Maximum number of children to be displayed. Set to -1 to disable the limit.</td>
-		</tr>
-		<tr>
-		<td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
-		</tr>
-		<tr>
-		<td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
-		</tr>
-		<tr>
-		<td> label_text </td><td> [name] </td><td> Text of the label. Available macros: [name], [alias], [output] </td>
-		</tr>
-		<tr>
-		<td> label_x </td><td> inherited (<a href="#global">global</a>) </td><td> Label X-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
-		</tr>
-		<tr>
-		<td> label_y </td><td> inherited (<a href="#global">global</a>) </td><td> Label Y-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
-		</tr>
-		<tr>
-		<td> label_width </td><td> inherited (<a href="#global">global</a>) </td><td> Width of the label in px </td>
-		</tr>
-		<tr>
-		<td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background color of the label. The color should be given in hexcode. Can also be &quot;transparent&quot;.</td>
-		</tr>
-		<tr>
-		<td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
-		</tr>
-		<tr>
-		<td>label_style</td><td>inherited (<a href="#global">global</a>)</td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code> <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+        <td> backend_id </td><td> inherited (<a href="#global">global</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken. </td>
+        </tr>
+        <tr>
+        <td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
+        </tr>
+        <tr>
+        <td>context_template</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td><a href="context_templates.html">Context template</a> for this object. </td>
+        </tr>
+        <tr>
+        <td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
+        </tr>
+        <tr>
+        <td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
+        </tr>
+        <tr>
+        <td> hover_template </td><td> inherited (<a href="#global">global</a>) </td><td> <a href="hover_templates.html">Hover template</a> for this object </td>
+        </tr>
+        <tr>
+        <td> <strike>hover_timeout</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Hover menu ajax request timeout in seconds for this object</strike> </td>
+        </tr>
+        <tr>
+        <td> hover_url </td><td> </td><td> URL which should be displayed in hover menu instead of standard information. There are some macros available:<br />
+            <b>[host_name]</b>: This macro stands for the object name.
+        </td>
+        </tr>
+        <tr>
+        <td> hover_childs_show </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable displaying child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_sort </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sort method of child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_order </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Order direction of child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_limit </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Maximum number of children to be displayed. Set to -1 to disable the limit.</td>
+        </tr>
+        <tr>
+        <td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
+        </tr>
+        <tr>
+        <td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
+        </tr>
+        <tr>
+        <td> label_text </td><td> [name] </td><td> Text of the label. Available macros: [name], [alias], [output] </td>
+        </tr>
+        <tr>
+        <td> label_x </td><td> inherited (<a href="#global">global</a>) </td><td> Label X-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
+        </tr>
+        <tr>
+        <td> label_y </td><td> inherited (<a href="#global">global</a>) </td><td> Label Y-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
+        </tr>
+        <tr>
+        <td> label_width </td><td> inherited (<a href="#global">global</a>) </td><td> Width of the label in px </td>
+        </tr>
+        <tr>
+        <td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background color of the label. The color should be given in hexcode. Can also be &quot;transparent&quot;.</td>
+        </tr>
+        <tr>
+        <td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        </tr>
+        <tr>
+        <td>label_style</td><td>inherited (<a href="#global">global</a>)</td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code> <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
 
-		<tr>
-		<td> line_type </td><td>inherited (<a href="#global">global</a>)</td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
-		</tr>
-		<tr>
-		<td>line_arrow</td><td>inherited (<a href="#global">global</a>)</td>
-		<td>This defines the arrows at the end of the line. At the moment this
+        <tr>
+        <td> line_type </td><td>inherited (<a href="#global">global</a>)</td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
+        </tr>
+        <tr>
+        <td>line_arrow</td><td>inherited (<a href="#global">global</a>)</td>
+        <td>This defines the arrows at the end of the line. At the moment this
         attribute is only being used for the lines between hosts on the automap. Possible values: forward, back, both, none (<font color="#ff0000">New in 1.5.2</font>).</td>
-		</tr>
-		<tr>
-		<td>line_width</td><td>inherited (<a href="#global">global</a>)</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
-		</tr>
+        </tr>
+        <tr>
+        <td>line_width</td><td>inherited (<a href="#global">global</a>)</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
+        </tr>
 
-		<tr>
-		<td> only_hard_states </td><td> inherited (<a href="#global">global</a>) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
-		</tr>
-		<tr>
-		<td> recognize_services </td><td> inherited (<a href="#global">global</a>) </td><td> Defines if the services of the host affect the displayed state. If set to "1" a critical service on the host will result in a host state display as critical too. If set to "0" only the Nagios Host State (UP or DOWN) will be used and the services of the host will be ignored. </td>
-		</tr>
-		<tr>
-		<td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
-		</tr>
-		<tr>
-		<td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window). Macro [name] is available. </td>
-		</tr>
-		<tr>
-		<td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">template objects</a> </td>
-		</tr>
-		<tr>
-		<td> view_type </td><td> icon </td><td> This option defines the type of view for this object. Possible values are: "icon" or "line". Before NagVis 1.4 you could change the view of an object by setting the line_type. Since NagVis 1.4 you need to set the view_type for changing icons to lines.  </td>
-		</tr>
-		<tr>
-		<td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
-		</tr>
-		</table>
-		
-		<a name="service"></a><h3> Service </h3>
-		<p>Example with all options which have to be set (note that option already defined in the global section are optional):</p>
+        <tr>
+        <td> only_hard_states </td><td> inherited (<a href="#global">global</a>) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
+        </tr>
+        <tr>
+        <td> recognize_services </td><td> inherited (<a href="#global">global</a>) </td><td> Defines if the services of the host affect the displayed state. If set to "1" a critical service on the host will result in a host state display as critical too. If set to "0" only the Nagios Host State (UP or DOWN) will be used and the services of the host will be ignored. </td>
+        </tr>
+        <tr>
+        <td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
+        </tr>
+        <tr>
+        <td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window). Macro [name] is available. </td>
+        </tr>
+        <tr>
+        <td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">template objects</a> </td>
+        </tr>
+        <tr>
+        <td> view_type </td><td> icon </td><td> This option defines the type of view for this object. Possible values are: "icon" or "line". Before NagVis 1.4 you could change the view of an object by setting the line_type. Since NagVis 1.4 you need to set the view_type for changing icons to lines.  </td>
+        </tr>
+        <tr>
+        <td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
+        </tr>
+        </table>
+        
+        <a name="service"></a><h3> Service </h3>
+        <p>Example with all options which have to be set (note that option already defined in the global section are optional):</p>
 <pre>define service {
  host_name=localhost
  service_description=ping
@@ -352,768 +352,768 @@
  x=100
  y=200
 }</pre>
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		  <td><b>object_id</b></td><td></td>
-		  <td>Unique identifier of the object on the current map. Each object
-		      on the map needs to have an object_id. The object_id is build of
-		      alphanumeric sings of any length. When no object_id is given NagVis
-		      will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
-		</tr>
-		<tr>
-		<td> <b>host_name</b> </td><td> </td><td> Name of the host as defined in Nagios </td>
-		</tr>
-		<tr>
-		<td> <b>service_description</b> </td><td> </td><td> Name of the service as defined in Nagios </td>
-		</tr>
-		<tr>
-		<td> <b>x</b> </td><td> </td>
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Unique identifier of the object on the current map. Each object
+              on the map needs to have an object_id. The object_id is build of
+              alphanumeric sings of any length. When no object_id is given NagVis
+              will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
+        </tr>
+        <tr>
+        <td> <b>host_name</b> </td><td> </td><td> Name of the host as defined in Nagios </td>
+        </tr>
+        <tr>
+        <td> <b>service_description</b> </td><td> </td><td> Name of the service as defined in Nagios </td>
+        </tr>
+        <tr>
+        <td> <b>x</b> </td><td> </td>
     <td>X axis coordinate(s).
-			  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
-		</tr>
-		<tr>
-		<td> <b>y</b> </td><td> </td>
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+        <td> <b>y</b> </td><td> </td>
     <td>Y axis coordinate(s).
-			  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
-		</tr>
-		<tr>
-		<td> backend_id </td><td> inherited (<a href="#global">global</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken. </td>
-		</tr>
-		<tr>
-		<td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
-		</tr>
-		<tr>
-		<td>context_template</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td><a href="context_templates.html">Context template</a> for this object. </td>
-		</tr>
-		<tr>
-		<td> gadget_url </td><td></td><td> The value can be a gadget script in gadget path (<code>nagvis/gadgets</code>) e.g. &quot;std_speedometer.php&quot; or a full URI to a gadget like script surrounded by brackets e.g. &quot;[http://127.0.0.1/nagvis/gadgets/std_speedometer.php]&quot;. For details about gadgets see <a href="gadgets.html">here</a>. This option is only recognised when view_type=&quot;gadget&quot; is set.  </td>
-		</tr>
-		<tr>
-		<td> gadget_scale </td><td>100</td><td> The scale of the gadget. Default scale is 100 (percent). The gadgets should be able to be resized by this parameter  </td>
-		</tr>
-		<tr>
-		<td> gadget_opts </td><td></td><td> Optional gadget specific params. The contents can be freely defined for each gadget. The value is processed as GET param &quot;opts&quot;. We recommend to use a var/val format like this: key1=val1,key2=val2. Then you can easily split this string to an array in the gadget.  </td>
-		</tr>
-		<tr>
-		<td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
-		</tr>
-		<tr>
-		<td> hover_template </td><td> inherited (<a href="#global">global</a>) </td><td> <a href="hover_templates.html">Hover template</a> for this object </td>
-		</tr>
-		<tr>
-		<td> <strike>hover_timeout</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Hover menu ajax request timeout in seconds for this object</strike> </td>
-		</tr>
-		<tr>
-		<td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
-		</tr>
-		<tr>
-		<td> hover_url </td><td> </td><td> URL which should be displayed in hover menu instead of standard information. There are some macros available:<br />
-			<b>[host_name]</b>: This macro stands for the object name.<br />
-			<b>[service_description]</b>: This macro stands for the service description and will only be replaced in service objects.</td>
-		</tr>
-		<tr>
-		<td> hover_childs_show </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable displaying child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_sort </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sort method of child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_order </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Order direction of child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_limit </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Maximum number of children to be displayed. Set to -1 to disable the limit. </td>
-		</tr>
-		<tr>
-		<td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
-		</tr>
-		<tr>
-		<td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
-		</tr>
-		<tr>
-		<td> label_text </td><td> [name] [service_description] </td><td> Text of the label. Available macros: [name], [alias], [service_description], [output] </td>
-		</tr>
-		<tr>
-		<td> label_x </td><td> inherited (<a href="#global">global</a>) </td><td> Label X-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
-		</tr>
-		<tr>
-		<td> label_y </td><td> inherited (<a href="#global">global</a>) </td><td> Label Y-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
-		</tr>
-		<tr>
-		<td> label_width </td><td> inherited (<a href="#global">global</a>) </td><td> Width of the label in px </td>
-		</tr>
-		<tr>
-		<td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background color of the label. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
-		</tr>
-		<tr>
-		<td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
-		</tr>
-		<tr>
-		<td>label_style</td><td>inherited (<a href="#global">global</a>)</td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code> <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+        <td> backend_id </td><td> inherited (<a href="#global">global</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken. </td>
+        </tr>
+        <tr>
+        <td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
+        </tr>
+        <tr>
+        <td>context_template</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td><a href="context_templates.html">Context template</a> for this object. </td>
+        </tr>
+        <tr>
+        <td> gadget_url </td><td></td><td> The value can be a gadget script in gadget path (<code>nagvis/gadgets</code>) e.g. &quot;std_speedometer.php&quot; or a full URI to a gadget like script surrounded by brackets e.g. &quot;[http://127.0.0.1/nagvis/gadgets/std_speedometer.php]&quot;. For details about gadgets see <a href="gadgets.html">here</a>. This option is only recognised when view_type=&quot;gadget&quot; is set.  </td>
+        </tr>
+        <tr>
+        <td> gadget_scale </td><td>100</td><td> The scale of the gadget. Default scale is 100 (percent). The gadgets should be able to be resized by this parameter  </td>
+        </tr>
+        <tr>
+        <td> gadget_opts </td><td></td><td> Optional gadget specific params. The contents can be freely defined for each gadget. The value is processed as GET param &quot;opts&quot;. We recommend to use a var/val format like this: key1=val1,key2=val2. Then you can easily split this string to an array in the gadget.  </td>
+        </tr>
+        <tr>
+        <td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
+        </tr>
+        <tr>
+        <td> hover_template </td><td> inherited (<a href="#global">global</a>) </td><td> <a href="hover_templates.html">Hover template</a> for this object </td>
+        </tr>
+        <tr>
+        <td> <strike>hover_timeout</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Hover menu ajax request timeout in seconds for this object</strike> </td>
+        </tr>
+        <tr>
+        <td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
+        </tr>
+        <tr>
+        <td> hover_url </td><td> </td><td> URL which should be displayed in hover menu instead of standard information. There are some macros available:<br />
+            <b>[host_name]</b>: This macro stands for the object name.<br />
+            <b>[service_description]</b>: This macro stands for the service description and will only be replaced in service objects.</td>
+        </tr>
+        <tr>
+        <td> hover_childs_show </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable displaying child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_sort </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sort method of child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_order </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Order direction of child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_limit </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Maximum number of children to be displayed. Set to -1 to disable the limit. </td>
+        </tr>
+        <tr>
+        <td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
+        </tr>
+        <tr>
+        <td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
+        </tr>
+        <tr>
+        <td> label_text </td><td> [name] [service_description] </td><td> Text of the label. Available macros: [name], [alias], [service_description], [output] </td>
+        </tr>
+        <tr>
+        <td> label_x </td><td> inherited (<a href="#global">global</a>) </td><td> Label X-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
+        </tr>
+        <tr>
+        <td> label_y </td><td> inherited (<a href="#global">global</a>) </td><td> Label Y-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
+        </tr>
+        <tr>
+        <td> label_width </td><td> inherited (<a href="#global">global</a>) </td><td> Width of the label in px </td>
+        </tr>
+        <tr>
+        <td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background color of the label. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        </tr>
+        <tr>
+        <td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        </tr>
+        <tr>
+        <td>label_style</td><td>inherited (<a href="#global">global</a>)</td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code> <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
 
-		<tr>
-		<td> line_type </td><td>inherited (<a href="#global">global</a>)</td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
-		</tr>
-		<tr>
-		<td>line_arrow</td><td>inherited (<a href="#global">global</a>)</td>
-		<td>This defines the arrows at the end of the line. At the moment this
+        <tr>
+        <td> line_type </td><td>inherited (<a href="#global">global</a>)</td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
+        </tr>
+        <tr>
+        <td>line_arrow</td><td>inherited (<a href="#global">global</a>)</td>
+        <td>This defines the arrows at the end of the line. At the moment this
         attribute is only being used for the lines between hosts on the automap. Possible values: forward, back, both, none (<font color="#ff0000">New in 1.5.2</font>).</td>
-		</tr>
-		<tr>
-		<td>line_width</td><td>inherited (<a href="#global">global</a>)</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
-		</tr>
-		<td>line_cut</td>
+        </tr>
+        <tr>
+        <td>line_width</td><td>inherited (<a href="#global">global</a>)</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
+        </tr>
+        <td>line_cut</td>
     <td>0.5</td>
     <td>Lines with two parts have the cut in the middle of the line. This equates to a line cut value of &quot;0.5&quot;.
         It is possible to relocate the cut by changing this value. Valid values are 0.0 to 1.0.
         (<font color="#ff0000">New in 1.5.2</font>)
     </td>
-		</tr>
-		<tr>
-		<td>line_label_pos_in</td>
+        </tr>
+        <tr>
+        <td>line_label_pos_in</td>
     <td>0.5</td>
     <td>Weathermap lines have their labels in the middle of the line by default. This equates to a value of &quot;0.5&quot;.
         It is possible to relocate the cut by changing this value. Valid values are 0.0 to 1.0.
         (<font color="#ff0000">New in 1.5.2</font>)
     </td>
-		</tr>
-		<tr>
-		<td>line_label_pos_out</td>
+        </tr>
+        <tr>
+        <td>line_label_pos_out</td>
     <td>0.5</td>
     <td>Weathermap lines have their labels in the middle of the line by default. This equates to a value of &quot;0.5&quot;.
         It is possible to relocate the cut by changing this value. Valid values are 0.0 to 1.0.
         (<font color="#ff0000">New in 1.5.2</font>)
     </td>
-		</tr>
-		<tr>
-		<td> only_hard_states </td><td> inherited (global) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
-		</tr>
-		<tr>
-		<td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
-		</tr>
-		<tr>
-		<td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window). Available macros: [name], [service_description], </td>
-		</tr>
-		<tr>
-		<td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">template objects</a></td>
-		</tr>
-		<tr>
-		<td> view_type </td><td> icon </td><td> This option defines the type of view for this object. Possible values are: "icon" or "line". Before NagVis 1.4 you could change the view of an object by setting the line_type. Since NagVis 1.4 you need to set the view_type for changing icons to lines.  </td>
-		</tr>
-		<tr>
-		<td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
-		</tr>
-		</table>
-		
-		<a name="hostgroup"></a><h3> Hostgroup </h3>
-		<p>Example with all options which have to be set (note that options already defined in the global section are optional):</p>
+        </tr>
+        <tr>
+        <td> only_hard_states </td><td> inherited (global) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
+        </tr>
+        <tr>
+        <td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
+        </tr>
+        <tr>
+        <td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window). Available macros: [name], [service_description], </td>
+        </tr>
+        <tr>
+        <td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">template objects</a></td>
+        </tr>
+        <tr>
+        <td> view_type </td><td> icon </td><td> This option defines the type of view for this object. Possible values are: "icon" or "line". Before NagVis 1.4 you could change the view of an object by setting the line_type. Since NagVis 1.4 you need to set the view_type for changing icons to lines.  </td>
+        </tr>
+        <tr>
+        <td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
+        </tr>
+        </table>
+        
+        <a name="hostgroup"></a><h3> Hostgroup </h3>
+        <p>Example with all options which have to be set (note that options already defined in the global section are optional):</p>
 <pre>define hostgroup {
  hostgroup_name=servers
  x=100
  y=200
 }</pre>
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		  <td><b>object_id</b></td><td></td>
-		  <td>Unique identifier of the object on the current map. Each object
-		      on the map needs to have an object_id. The object_id is build of
-		      alphanumeric sings of any length. When no object_id is given NagVis
-		      will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
-		</tr>
-		<tr>
-		<td> <b>hostgroup_name</b> </td><td> </td><td> Name of the hostgroup as defined in Nagios </td>
-		</tr>
-		<tr>
-		<td><b>x</b></td><td></td>
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Unique identifier of the object on the current map. Each object
+              on the map needs to have an object_id. The object_id is build of
+              alphanumeric sings of any length. When no object_id is given NagVis
+              will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
+        </tr>
+        <tr>
+        <td> <b>hostgroup_name</b> </td><td> </td><td> Name of the hostgroup as defined in Nagios </td>
+        </tr>
+        <tr>
+        <td><b>x</b></td><td></td>
     <td>X axis coordinate(s).
-			  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
-		</tr>
-		<tr>
-		<td><b>y</b></td><td></td>
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+        <td><b>y</b></td><td></td>
     <td>Y axis coordinate(s).
-			  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
-		</tr>
-		<tr>
-		<td> backend_id </td><td> inherited (<a href="#global">global</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken. </td>
-		</tr>
-		<tr>
-		<td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
-		</tr>
-		<tr>
-		<td>context_template</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td><a href="context_templates.html">Context template</a> for this object. </td>
-		</tr>
-		<tr>
-		<td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
-		</tr>
-		<tr>
-		<td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
-		</tr>
-		<tr>
-		<td> hover_template </td><td> inherited (<a href="#global">global</a>) </td><td> <a href="hover_templates.html">Hover template</a> for this object </td>
-		</tr>
-		<tr>
-		<td> <strike>hover_timeout</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Hover menu ajax request timeout in seconds for this object</strike> </td>
-		</tr>
-		<tr>
-		<td> hover_url </td><td> </td><td> URL which should be displayed in hover menu instead of standard information. There are some macros available:<br />
-			<b>[hostgroup_name]</b>: This macro stands for the object name.</td>
-		</tr>
-		<tr>
-		<td> hover_childs_show </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable displaying child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_sort </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sort method of child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_order </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Order direction of child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_limit </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Maximum number of children to be displayed. Set to -1 to disable the limit. </td>
-		</tr>
-		<tr>
-		<td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
-		</tr>
-		<tr>
-		<td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
-		</tr>
-		<tr>
-		<td> label_text </td><td> [name] </td><td> Text of the label. Available macros: [name], [alias], [output] </td>
-		</tr>
-		<tr>
-		<td> label_x </td><td> inherited (<a href="#global">global</a>) </td><td> Label X-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
-		</tr>
-		<tr>
-		<td> label_y </td><td> inherited (<a href="#global">global</a>) </td><td> Label Y-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
-		</tr>
-		<tr>
-		<td> label_width </td><td> inherited (<a href="#global">global</a>) </td><td> Width of the label in px </td>
-		</tr>
-		<tr>
-		<td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background color of the label. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
-		</tr>
-		<tr>
-		<td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
-		</tr>
-		<tr>
-		<td>label_style</td><td>inherited (<a href="#global">global</a>)</td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code> <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+        <td> backend_id </td><td> inherited (<a href="#global">global</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken. </td>
+        </tr>
+        <tr>
+        <td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
+        </tr>
+        <tr>
+        <td>context_template</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td><a href="context_templates.html">Context template</a> for this object. </td>
+        </tr>
+        <tr>
+        <td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
+        </tr>
+        <tr>
+        <td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
+        </tr>
+        <tr>
+        <td> hover_template </td><td> inherited (<a href="#global">global</a>) </td><td> <a href="hover_templates.html">Hover template</a> for this object </td>
+        </tr>
+        <tr>
+        <td> <strike>hover_timeout</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Hover menu ajax request timeout in seconds for this object</strike> </td>
+        </tr>
+        <tr>
+        <td> hover_url </td><td> </td><td> URL which should be displayed in hover menu instead of standard information. There are some macros available:<br />
+            <b>[hostgroup_name]</b>: This macro stands for the object name.</td>
+        </tr>
+        <tr>
+        <td> hover_childs_show </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable displaying child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_sort </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sort method of child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_order </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Order direction of child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_limit </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Maximum number of children to be displayed. Set to -1 to disable the limit. </td>
+        </tr>
+        <tr>
+        <td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
+        </tr>
+        <tr>
+        <td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
+        </tr>
+        <tr>
+        <td> label_text </td><td> [name] </td><td> Text of the label. Available macros: [name], [alias], [output] </td>
+        </tr>
+        <tr>
+        <td> label_x </td><td> inherited (<a href="#global">global</a>) </td><td> Label X-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
+        </tr>
+        <tr>
+        <td> label_y </td><td> inherited (<a href="#global">global</a>) </td><td> Label Y-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
+        </tr>
+        <tr>
+        <td> label_width </td><td> inherited (<a href="#global">global</a>) </td><td> Width of the label in px </td>
+        </tr>
+        <tr>
+        <td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background color of the label. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        </tr>
+        <tr>
+        <td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        </tr>
+        <tr>
+        <td>label_style</td><td>inherited (<a href="#global">global</a>)</td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code> <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
 
-		<tr>
-		<td> line_type </td><td>inherited (<a href="#global">global</a>)</td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
-		</tr>
-		<tr>
-		<td>line_arrow</td><td>inherited (<a href="#global">global</a>)</td>
-		<td>This defines the arrows at the end of the line. At the moment this
+        <tr>
+        <td> line_type </td><td>inherited (<a href="#global">global</a>)</td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
+        </tr>
+        <tr>
+        <td>line_arrow</td><td>inherited (<a href="#global">global</a>)</td>
+        <td>This defines the arrows at the end of the line. At the moment this
         attribute is only being used for the lines between hosts on the automap. Possible values: forward, back, both, none (<font color="#ff0000">New in 1.5.2</font>).</td>
-		</tr>
-		<tr>
-		<td>line_width</td><td>inherited (<a href="#global">global</a>)</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
-		</tr>
+        </tr>
+        <tr>
+        <td>line_width</td><td>inherited (<a href="#global">global</a>)</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
+        </tr>
 
-		<tr>
-		<td> recognize_services </td><td> inherited (<a href="#global">global</a>) </td><td> Defines if the services of the hosts affect the displayed state. If set to "1" a critical service on one of the host will result in a hostgroup state display as critical too. If set to "0" only the Nagios Host State (UP or DOWN) will be used and the services of the hosts will be ignored. </td>
-		</tr>
-		<tr>
-		<td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
-		</tr>
-		<tr>
-		<td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window). Available macros: [name]</td>
-		</tr>
-		<tr>
-		<td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">template objects</a></td>
-		</tr>
-		<tr>
-		<td> view_type </td><td> icon </td><td> This option defines the type of view for this object. Possible values are: "icon" or "line". Before NagVis 1.4 you could change the view of an object by setting the line_type. Since NagVis 1.4 you need to set the view_type for changing icons to lines.  </td>
-		</tr>
-		<tr>
-		<td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
-		</tr>
-		</table>
-		
-		<a name="servicegroup"></a><h3> Servicegroup </h3>
-		<p>Example with all options which have to be set (note that options already defined in the global section are optional):</p>
+        <tr>
+        <td> recognize_services </td><td> inherited (<a href="#global">global</a>) </td><td> Defines if the services of the hosts affect the displayed state. If set to "1" a critical service on one of the host will result in a hostgroup state display as critical too. If set to "0" only the Nagios Host State (UP or DOWN) will be used and the services of the hosts will be ignored. </td>
+        </tr>
+        <tr>
+        <td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
+        </tr>
+        <tr>
+        <td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window). Available macros: [name]</td>
+        </tr>
+        <tr>
+        <td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">template objects</a></td>
+        </tr>
+        <tr>
+        <td> view_type </td><td> icon </td><td> This option defines the type of view for this object. Possible values are: "icon" or "line". Before NagVis 1.4 you could change the view of an object by setting the line_type. Since NagVis 1.4 you need to set the view_type for changing icons to lines.  </td>
+        </tr>
+        <tr>
+        <td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
+        </tr>
+        </table>
+        
+        <a name="servicegroup"></a><h3> Servicegroup </h3>
+        <p>Example with all options which have to be set (note that options already defined in the global section are optional):</p>
 <pre>define servicegroup {
  servicegroup_name=servicegroup1
  x=100
  y=200
 }</pre>
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		  <td><b>object_id</b></td><td></td>
-		  <td>Unique identifier of the object on the current map. Each object
-		      on the map needs to have an object_id. The object_id is build of
-		      alphanumeric sings of any length. When no object_id is given NagVis
-		      will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
-		</tr>
-		<tr>
-		<td> <b>servicegroup_name</b> </td><td> </td><td> Name of the servicegroup as defined in Nagios. </td>
-		</tr>
-		<tr>
-		<td><b>x</b></td><td></td>
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Unique identifier of the object on the current map. Each object
+              on the map needs to have an object_id. The object_id is build of
+              alphanumeric sings of any length. When no object_id is given NagVis
+              will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
+        </tr>
+        <tr>
+        <td> <b>servicegroup_name</b> </td><td> </td><td> Name of the servicegroup as defined in Nagios. </td>
+        </tr>
+        <tr>
+        <td><b>x</b></td><td></td>
     <td>X axis coordinate(s).
-			  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
-		</tr>
-		<tr>
-		<td><b>y</b></td><td></td>
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+        <td><b>y</b></td><td></td>
     <td>Y axis coordinate(s).
-			  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
-		</tr>
-		<tr>
-		<td> backend_id </td><td> inherited (<a href="#global">global</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken. </td>
-		</tr>
-		<tr>
-		<td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
-		</tr>
-		<tr>
-		<td>context_template</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td><a href="context_templates.html">Context template</a> for this object. </td>
-		</tr>
-		<tr>
-		<td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
-		</tr>
-		<tr>
-		<td> hover_url </td><td> </td><td> URL which should be displayed in hover menu instead of standard information. There are some macros available:<br />
-			<b>[servicegroup_name]</b>: This macro stands for the object name.</td>
-		</tr>
-		<tr>
-		<td> hover_template </td><td> inherited (<a href="#global">global</a>) </td><td> <a href="hover_templates.html">Hover template</a> for this object </td>
-		</tr>
-		<tr>
-		<td> <strike>hover_timeout</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Hover menu ajax request timeout in seconds for this object</strike> </td>
-		</tr>
-		<tr>
-		<td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
-		</tr>
-		<tr>
-		<td> hover_childs_show </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable displaying child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_sort </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sort method of child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_order </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Order direction of child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_limit </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Number of maximum children to be displayed. Set to -1 to disable the limit. </td>
-		</tr>
-		<tr>
-		<td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
-		</tr>
-		<tr>
-		<td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
-		</tr>
-		<tr>
-		<td> label_text </td><td> [name] </td><td> Text of the label. Available macros: [name], [alias], [output] </td>
-		</tr>
-		<tr>
-		<td> label_x </td><td> inherited (<a href="#global">global</a>) </td><td> Label X-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
-		</tr>
-		<tr>
-		<td> label_y </td><td> inherited (<a href="#global">global</a>) </td><td> Label Y-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
-		</tr>
-		<tr>
-		<td> label_width </td><td> inherited (<a href="#global">global</a>) </td><td> Width of the label in px </td>
-		</tr>
-		<tr>
-		<td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background color of the label. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
-		</tr>
-		<tr>
-		<td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
-		</tr>
-		<tr>
-		<td>label_style</td><td>inherited (<a href="#global">global</a>)</td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code> <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+        <td> backend_id </td><td> inherited (<a href="#global">global</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken. </td>
+        </tr>
+        <tr>
+        <td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
+        </tr>
+        <tr>
+        <td>context_template</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td><a href="context_templates.html">Context template</a> for this object. </td>
+        </tr>
+        <tr>
+        <td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
+        </tr>
+        <tr>
+        <td> hover_url </td><td> </td><td> URL which should be displayed in hover menu instead of standard information. There are some macros available:<br />
+            <b>[servicegroup_name]</b>: This macro stands for the object name.</td>
+        </tr>
+        <tr>
+        <td> hover_template </td><td> inherited (<a href="#global">global</a>) </td><td> <a href="hover_templates.html">Hover template</a> for this object </td>
+        </tr>
+        <tr>
+        <td> <strike>hover_timeout</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Hover menu ajax request timeout in seconds for this object</strike> </td>
+        </tr>
+        <tr>
+        <td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
+        </tr>
+        <tr>
+        <td> hover_childs_show </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable displaying child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_sort </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sort method of child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_order </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Order direction of child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_limit </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Number of maximum children to be displayed. Set to -1 to disable the limit. </td>
+        </tr>
+        <tr>
+        <td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
+        </tr>
+        <tr>
+        <td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
+        </tr>
+        <tr>
+        <td> label_text </td><td> [name] </td><td> Text of the label. Available macros: [name], [alias], [output] </td>
+        </tr>
+        <tr>
+        <td> label_x </td><td> inherited (<a href="#global">global</a>) </td><td> Label X-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
+        </tr>
+        <tr>
+        <td> label_y </td><td> inherited (<a href="#global">global</a>) </td><td> Label Y-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
+        </tr>
+        <tr>
+        <td> label_width </td><td> inherited (<a href="#global">global</a>) </td><td> Width of the label in px </td>
+        </tr>
+        <tr>
+        <td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background color of the label. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        </tr>
+        <tr>
+        <td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        </tr>
+        <tr>
+        <td>label_style</td><td>inherited (<a href="#global">global</a>)</td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code> <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
 
-		<tr>
-		<td> line_type </td><td>inherited (<a href="#global">global</a>)</td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
-		</tr>
-		<tr>
-		<td>line_arrow</td><td>inherited (<a href="#global">global</a>)</td>
-		<td>This defines the arrows at the end of the line. At the moment this
+        <tr>
+        <td> line_type </td><td>inherited (<a href="#global">global</a>)</td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
+        </tr>
+        <tr>
+        <td>line_arrow</td><td>inherited (<a href="#global">global</a>)</td>
+        <td>This defines the arrows at the end of the line. At the moment this
         attribute is only being used for the lines between hosts on the automap. Possible values: forward, back, both, none (<font color="#ff0000">New in 1.5.2</font>).</td>
-		</tr>
-		<tr>
-		<td>line_width</td><td>inherited (<a href="#global">global</a>)</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
-		</tr>
+        </tr>
+        <tr>
+        <td>line_width</td><td>inherited (<a href="#global">global</a>)</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
+        </tr>
 
-		<tr>
-		<td> only_hard_states </td><td> inherited (<a href="#global">global</a>) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
-		</tr>
-		<tr>
-		<td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
-		</tr>
-		<tr>
-		<td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window). Available macros: [name] </td>
-		</tr>
-		<tr>
-		<td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">template objects</a></td>
-		</tr>
-		<tr>
-		<td> view_type </td><td> icon </td><td> This option defines the type of view for this object. Possible values are: "icon" or "line". Before NagVis 1.4 you could change the view of an object by setting the line_type. Since NagVis 1.4 you need to set the view_type for changing icons to lines.  </td>
-		</tr>
-		<tr>
-		<td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
-		</tr>
-		</table>
-		
-		<a name="map"></a><h3> Map </h3>
-		<p>Example with all options which have to be set (note that options already defined in the global section are optional):</p>
+        <tr>
+        <td> only_hard_states </td><td> inherited (<a href="#global">global</a>) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
+        </tr>
+        <tr>
+        <td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
+        </tr>
+        <tr>
+        <td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window). Available macros: [name] </td>
+        </tr>
+        <tr>
+        <td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">template objects</a></td>
+        </tr>
+        <tr>
+        <td> view_type </td><td> icon </td><td> This option defines the type of view for this object. Possible values are: "icon" or "line". Before NagVis 1.4 you could change the view of an object by setting the line_type. Since NagVis 1.4 you need to set the view_type for changing icons to lines.  </td>
+        </tr>
+        <tr>
+        <td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
+        </tr>
+        </table>
+        
+        <a name="map"></a><h3> Map </h3>
+        <p>Example with all options which have to be set (note that options already defined in the global section are optional):</p>
 <pre>define map {
  map_name=webserver
  x=77
  y=156
 }</pre>
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		  <td><b>object_id</b></td><td></td>
-		  <td>Unique identifier of the object on the current map. Each object
-		      on the map needs to have an object_id. The object_id is build of
-		      alphanumeric sings of any length. When no object_id is given NagVis
-		      will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
-		</tr>
-		<tr>
-		<td> <b>map_name</b> </td><td> </td><td> Name of the NagVis map cfg file (without .cfg extension) </td>
-		</tr>
-		<tr>
-		<td><b>x</b></td><td></td>
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Unique identifier of the object on the current map. Each object
+              on the map needs to have an object_id. The object_id is build of
+              alphanumeric sings of any length. When no object_id is given NagVis
+              will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
+        </tr>
+        <tr>
+        <td> <b>map_name</b> </td><td> </td><td> Name of the NagVis map cfg file (without .cfg extension) </td>
+        </tr>
+        <tr>
+        <td><b>x</b></td><td></td>
     <td>X axis coordinate(s).
-			  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
-		</tr>
-		<tr>
-		<td><b>y</b></td><td></td>
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+        <td><b>y</b></td><td></td>
     <td>Y axis coordinate(s).
-			  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
-		</tr>
-		<tr>
-		<td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
-		</tr>
-		<tr>
-		<td>context_template</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td><a href="context_templates.html">Context template</a> for this object. </td>
-		</tr>
-		<tr>
-		<td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
-		</tr>
-		<tr>
-		<td> hover_url </td><td> </td><td> URL which should be displayed in hover menu instead of standard information. There are some macros available:<br />
-			<b>[map_name]</b>: This macro stands for the object name.</td>
-		</tr>
-		<tr>
-		<td> hover_template </td><td> inherited (<a href="#global">global</a>) </td><td> <a href="hover_templates.html">Hover template</a> for this object </td>
-		</tr>
-		<tr>
-		<td> <strike>hover_timeout</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Hover menu ajax request timeout in seconds for this object</strike> </td>
-		</tr>
-		<tr>
-		<td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
-		</tr>
-		<tr>
-		<td> hover_childs_show </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable displaying child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_sort </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sort method of child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_order </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Order direction of child objects </td>
-		</tr>
-		<tr>
-		<td> hover_childs_limit </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Number of maximum children to be displayed. Set to -1 to disable the limit. </td>
-		</tr>
-		<tr>
-		<td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
-		</tr>
-		<tr>
-		<td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
-		</tr>
-		<tr>
-		<td> label_text </td><td> [name] </td><td> Text of the label. Available macros: [name], [alias], [output] </td>
-		</tr>
-		<tr>
-		<td> label_x </td><td> inherited (<a href="#global">global</a>) </td><td> Label X-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
-		</tr>
-		<tr>
-		<td> label_y </td><td> inherited (<a href="#global">global</a>) </td><td> Label Y-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
-		</tr>
-		<tr>
-		<td> label_width </td><td> inherited (<a href="#global">global</a>) </td><td> Width of the label in px </td>
-		</tr>
-		<tr>
-		<td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background color of the label. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
-		</tr>
-		<tr>
-		<td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
-		</tr>
-		<tr>
-		<td>label_style</td><td>inherited (<a href="#global">global</a>)</td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code> <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+        <td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
+        </tr>
+        <tr>
+        <td>context_template</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td><a href="context_templates.html">Context template</a> for this object. </td>
+        </tr>
+        <tr>
+        <td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
+        </tr>
+        <tr>
+        <td> hover_url </td><td> </td><td> URL which should be displayed in hover menu instead of standard information. There are some macros available:<br />
+            <b>[map_name]</b>: This macro stands for the object name.</td>
+        </tr>
+        <tr>
+        <td> hover_template </td><td> inherited (<a href="#global">global</a>) </td><td> <a href="hover_templates.html">Hover template</a> for this object </td>
+        </tr>
+        <tr>
+        <td> <strike>hover_timeout</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Hover menu ajax request timeout in seconds for this object</strike> </td>
+        </tr>
+        <tr>
+        <td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
+        </tr>
+        <tr>
+        <td> hover_childs_show </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable displaying child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_sort </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sort method of child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_order </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Order direction of child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_limit </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Number of maximum children to be displayed. Set to -1 to disable the limit. </td>
+        </tr>
+        <tr>
+        <td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
+        </tr>
+        <tr>
+        <td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
+        </tr>
+        <tr>
+        <td> label_text </td><td> [name] </td><td> Text of the label. Available macros: [name], [alias], [output] </td>
+        </tr>
+        <tr>
+        <td> label_x </td><td> inherited (<a href="#global">global</a>) </td><td> Label X-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
+        </tr>
+        <tr>
+        <td> label_y </td><td> inherited (<a href="#global">global</a>) </td><td> Label Y-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
+        </tr>
+        <tr>
+        <td> label_width </td><td> inherited (<a href="#global">global</a>) </td><td> Width of the label in px </td>
+        </tr>
+        <tr>
+        <td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background color of the label. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        </tr>
+        <tr>
+        <td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        </tr>
+        <tr>
+        <td>label_style</td><td>inherited (<a href="#global">global</a>)</td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code> <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
 
-		<tr>
-		<td> line_type </td><td>inherited (<a href="#global">global</a>)</td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
-		</tr>
-		<tr>
-		<td>line_arrow</td><td>inherited (<a href="#global">global</a>)</td>
-		<td>This defines the arrows at the end of the line. At the moment this
+        <tr>
+        <td> line_type </td><td>inherited (<a href="#global">global</a>)</td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
+        </tr>
+        <tr>
+        <td>line_arrow</td><td>inherited (<a href="#global">global</a>)</td>
+        <td>This defines the arrows at the end of the line. At the moment this
         attribute is only being used for the lines between hosts on the automap. Possible values: forward, back, both, none (<font color="#ff0000">New in 1.5.2</font>).</td>
-		</tr>
-		<tr>
-		<td>line_width</td><td>inherited (<a href="#global">global</a>)</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
-		</tr>
+        </tr>
+        <tr>
+        <td>line_width</td><td>inherited (<a href="#global">global</a>)</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
+        </tr>
 
-		<tr>
-		<td> only_hard_states </td><td> inherited (<a href="#global">global</a>) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
-		</tr>
-		<tr>
-		<td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
-		</tr>
-		<tr>
-		<td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window). Available macros: [name] </td>
-		</tr>
-		<tr>
-		<td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">template objects</a></td>
-		</tr>
-		<tr>
-		<td> view_type </td><td> icon </td><td> This option defines the type of view for this object. Possible values are: "icon" or "line". Before NagVis 1.4 you could change the view of an object by setting the line_type. Since NagVis 1.4 you need to set the view_type for changing icons to lines.  </td>
-		</tr>
-		<tr>
-		<td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
-		</tr>
-		</table>
-		
-		<a name="textbox"></a><h3> Textbox </h3>
-		<p>Example with all possible options:</p>
+        <tr>
+        <td> only_hard_states </td><td> inherited (<a href="#global">global</a>) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
+        </tr>
+        <tr>
+        <td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
+        </tr>
+        <tr>
+        <td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window). Available macros: [name] </td>
+        </tr>
+        <tr>
+        <td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">template objects</a></td>
+        </tr>
+        <tr>
+        <td> view_type </td><td> icon </td><td> This option defines the type of view for this object. Possible values are: "icon" or "line". Before NagVis 1.4 you could change the view of an object by setting the line_type. Since NagVis 1.4 you need to set the view_type for changing icons to lines.  </td>
+        </tr>
+        <tr>
+        <td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
+        </tr>
+        </table>
+        
+        <a name="textbox"></a><h3> Textbox </h3>
+        <p>Example with all possible options:</p>
 <pre>define textbox {
   text="This is an informational text which can be placed anywhere on the map, HTML can also be used for formatting purposes"
  x=200
  y=100
  w=200
 }</pre>
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		  <td><b>object_id</b></td><td></td>
-		  <td>Unique identifier of the object on the current map. Each object
-		      on the map needs to have an object_id. The object_id is build of
-		      alphanumeric sings of any length. When no object_id is given NagVis
-		      will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
-		</tr>
-		<tr>
-		<td> <b>text</b> </td><td> </td><td> Your own text, HTML is possible. There are some macros:<br />
-		<b>[refresh_counter]:</b> Shows the time until the next reload/rotate dynamically<br />
-		<b>[worker_last_run]:</b> Shows the time of the last worker run</td>
-		</tr>
-		<tr>
-		<td> <b>w</b> </td><td> </td><td> Width of the textbox in px (pixels). Set to "auto" for auto scaling. </td>
-		</tr>
-		<tr>
-		<td> <b>x</b> </td><td> </td>
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Unique identifier of the object on the current map. Each object
+              on the map needs to have an object_id. The object_id is build of
+              alphanumeric sings of any length. When no object_id is given NagVis
+              will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
+        </tr>
+        <tr>
+        <td> <b>text</b> </td><td> </td><td> Your own text, HTML is possible. There are some macros:<br />
+        <b>[refresh_counter]:</b> Shows the time until the next reload/rotate dynamically<br />
+        <b>[worker_last_run]:</b> Shows the time of the last worker run</td>
+        </tr>
+        <tr>
+        <td> <b>w</b> </td><td> </td><td> Width of the textbox in px (pixels). Set to "auto" for auto scaling. </td>
+        </tr>
+        <tr>
+        <td> <b>x</b> </td><td> </td>
     <td>X axis coordinate(s).
-			  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
-		</tr>
-		<tr>
-		<td> <b>y</b> </td><td> </td>
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+        <td> <b>y</b> </td><td> </td>
     <td>Y axis coordinate(s).
-			  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
-		</tr>
-		<tr>
-		<td> background_color </td><td> #C0C0C0 </td><td> Background color of the textbox. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
-		</tr>
-		<tr>
-		<td> border_color </td><td> #000000 </td><td> Background color of the textbox. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
-		</tr>
-		<tr>
-		<td>h</td><td>auto</td><td>Height of the textbox in px (pixels). Set to "auto" for auto scaling. <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td>style</td><td></td><td>Custom styling for the text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code> <font color="#ff0000">(New in 1.5)</font></td>
-		</tr>
-		<tr>
-		<td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">Template</a> </td>
-		</tr>
-		<tr>
-		<td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
-		</tr>
-		</table>
-		
-		<a name="shape"></a><h3> Shape </h3>
-		<p>Basicaly shapes are simple images which can be moved and positioned on the map. The shapes are meant to be layout elements. The shapes were added to give the users the option to create less static maps.</p>
-		
-		<p>Example with all values which have to be set:</p>
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+        <td> background_color </td><td> #C0C0C0 </td><td> Background color of the textbox. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        </tr>
+        <tr>
+        <td> border_color </td><td> #000000 </td><td> Background color of the textbox. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        </tr>
+        <tr>
+        <td>h</td><td>auto</td><td>Height of the textbox in px (pixels). Set to "auto" for auto scaling. <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td>style</td><td></td><td>Custom styling for the text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code> <font color="#ff0000">(New in 1.5)</font></td>
+        </tr>
+        <tr>
+        <td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">Template</a> </td>
+        </tr>
+        <tr>
+        <td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
+        </tr>
+        </table>
+        
+        <a name="shape"></a><h3> Shape </h3>
+        <p>Basicaly shapes are simple images which can be moved and positioned on the map. The shapes are meant to be layout elements. The shapes were added to give the users the option to create less static maps.</p>
+        
+        <p>Example with all values which have to be set:</p>
 <pre>define shape {
  icon="test"
  x=200
  y=100
 }</pre>
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		  <td><b>object_id</b></td><td></td>
-		  <td>Unique identifier of the object on the current map. Each object
-		      on the map needs to have an object_id. The object_id is build of
-		      alphanumeric sings of any length. When no object_id is given NagVis
-		      will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
-		</tr>
-		<tr>
-		  <td><b>icon</b></td>
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Unique identifier of the object on the current map. Each object
+              on the map needs to have an object_id. The object_id is build of
+              alphanumeric sings of any length. When no object_id is given NagVis
+              will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
+        </tr>
+        <tr>
+          <td><b>icon</b></td>
       <td></td>
       <td> Filename of the shape. Shapes have to be located in the shape directory (default: <code>nagvis/images/shapes</code>).
            It is also possible to add URLs here. The URL has to be surrounded by [ and ].
       </td>
-		</tr>
-		<tr>
-		<td> <b>x</b> </td><td> </td>
+        </tr>
+        <tr>
+        <td> <b>x</b> </td><td> </td>
     <td>X axis coordinate(s).
-			  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
-		</tr>
-		<tr>
-		<td> <b>y</b> </td><td> </td>
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+        <td> <b>y</b> </td><td> </td>
     <td>Y axis coordinate(s).
-			  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
-		</tr>
-		<tr>
-		<td> enable_refresh </td><td> 0 </td><td> This option activates the shape for regular updates in the frontend. This is only needed for dynamic shape images which change once in a while.  </td>
-		</tr>
-		
-		<tr>
-		<td> hover_menu </td><td> 0 </td><td> Enable/Disable the hover menu </td>
-		</tr>
-		<tr>
-		<td> hover_url </td><td> </td><td> URL which should be displayed when hovering over the image. By default there is no action on hover. </td>
-		</tr>
-		<tr>
-		<td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
-		</tr>
-		<tr>
-		<td> url </td><td> </td><td> URL where the Icon should link to. By default there is no link. The value can be empty to disable the link.</td>
-		</tr>
-		<tr>
-		<td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window) </td>
-		</tr>
-		<tr>
-		<td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">Template</a> </td>
-		</tr>
-		<tr>
-		<td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
-		</tr>
-		</table>
-		
-		<a name="line"></a><h3>Line (<font color="#ff0000">New in 1.5</font>)</h3>
-		<p>The line is a stateless layout element to connect elements and visualize stateless connections between other objects. The objecttype has been created to make the design less static.</p>
-		<p>Example with all values which have to be set:</p>
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+        <td> enable_refresh </td><td> 0 </td><td> This option activates the shape for regular updates in the frontend. This is only needed for dynamic shape images which change once in a while.  </td>
+        </tr>
+        
+        <tr>
+        <td> hover_menu </td><td> 0 </td><td> Enable/Disable the hover menu </td>
+        </tr>
+        <tr>
+        <td> hover_url </td><td> </td><td> URL which should be displayed when hovering over the image. By default there is no action on hover. </td>
+        </tr>
+        <tr>
+        <td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
+        </tr>
+        <tr>
+        <td> url </td><td> </td><td> URL where the Icon should link to. By default there is no link. The value can be empty to disable the link.</td>
+        </tr>
+        <tr>
+        <td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window) </td>
+        </tr>
+        <tr>
+        <td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">Template</a> </td>
+        </tr>
+        <tr>
+        <td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
+        </tr>
+        </table>
+        
+        <a name="line"></a><h3>Line (<font color="#ff0000">New in 1.5</font>)</h3>
+        <p>The line is a stateless layout element to connect elements and visualize stateless connections between other objects. The objecttype has been created to make the design less static.</p>
+        <p>Example with all values which have to be set:</p>
 <pre>define line {
-	line_type=1
-	x=200
-	y=100
+    line_type=1
+    x=200
+    y=100
 }</pre>
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		  <td><b>object_id</b></td><td></td>
-		  <td>Unique identifier of the object on the current map. Each object
-		      on the map needs to have an object_id. The object_id is build of
-		      alphanumeric sings of any length. When no object_id is given NagVis
-		      will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
-		</tr>
-		<tr>
-		<td><b>line_type</b></td><td></td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
-		</tr>
-		<tr>
-		<td><b>x</b></td><td></td>
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Unique identifier of the object on the current map. Each object
+              on the map needs to have an object_id. The object_id is build of
+              alphanumeric sings of any length. When no object_id is given NagVis
+              will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
+        </tr>
+        <tr>
+        <td><b>line_type</b></td><td></td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow. (<font color="#ff0000">New in 1.5</font>)</td>
+        </tr>
+        <tr>
+        <td><b>x</b></td><td></td>
     <td>X axis coordinate(s).
-			  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
-		</tr>
-		<tr>
-		<td><b>y</b></td><td></td>
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+        <td><b>y</b></td><td></td>
     <td>Y axis coordinate(s).
-			  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
-		</tr>
-		
-		<tr>
-		<td>line_arrow</td><td>inherited (<a href="#global">global</a>)</td>
-		<td>This defines the arrows at the end of the line. At the moment this
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        
+        <tr>
+        <td>line_arrow</td><td>inherited (<a href="#global">global</a>)</td>
+        <td>This defines the arrows at the end of the line. At the moment this
         attribute is only being used for the lines between hosts on the automap. Possible values: forward, back, both, none (<font color="#ff0000">New in 1.5.2</font>).</td>
-		</tr>
-		<tr>
-		<td>line_width</td><td>3</td><td>The width of the line in pixels.</td>
-		</tr>
-		<tr>
-		<td>line_color</td><td>#ffffff</td><td>The fill color of the line in hex form. Can also be &quot;transparent&quot;.</td>
-		</tr>
-		<tr>
-		<td>line_color_border</td><td>#000000</td><td>The border color of the line in hex form. Can also be &quot;transparent&quot;.</td>
-		</tr>
-		<tr>
-		<td> hover_menu </td><td> 0 </td><td> Enable/Disable the hover menu </td>
-		</tr>
-		<tr>
-		<td> hover_url </td><td> </td><td> URL which should be displayed when hovering over the image. By default there is no action on hover. </td>
-		</tr>
-		<tr>
-		<td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
-		</tr>
-		<tr>
-		<td> url </td><td> </td><td> URL where the Icon should link to. By default there is no link. The value can be empty to disable the link.</td>
-		</tr>
-		<tr>
-		<td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window) </td>
-		</tr>
-		<tr>
-		<td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">Template</a> </td>
-		</tr>
-		<tr>
-		<td>z</td><td>1</td><td>The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
-		</tr>
-		</table>
-		
-		<a name="template"></a><h3> Template </h3>
-		<p>In NagVis 1.2 there is a new object type named <code>template</code>. With this object you have the ability to define all values except the <code>must-have-attributes</code> in one object for many others. You can set all attributes to the value you need and inherit them with the <code>use</code> attribute to each object.</p>
-		<p>At the moment the <code>template</code> objects have to be defined directly in the files, the WUI doesn't support it. Maybe it'll be added in following versions.</p>
-		<p>Example with all values which have to be set:</p>
+        </tr>
+        <tr>
+        <td>line_width</td><td>3</td><td>The width of the line in pixels.</td>
+        </tr>
+        <tr>
+        <td>line_color</td><td>#ffffff</td><td>The fill color of the line in hex form. Can also be &quot;transparent&quot;.</td>
+        </tr>
+        <tr>
+        <td>line_color_border</td><td>#000000</td><td>The border color of the line in hex form. Can also be &quot;transparent&quot;.</td>
+        </tr>
+        <tr>
+        <td> hover_menu </td><td> 0 </td><td> Enable/Disable the hover menu </td>
+        </tr>
+        <tr>
+        <td> hover_url </td><td> </td><td> URL which should be displayed when hovering over the image. By default there is no action on hover. </td>
+        </tr>
+        <tr>
+        <td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
+        </tr>
+        <tr>
+        <td> url </td><td> </td><td> URL where the Icon should link to. By default there is no link. The value can be empty to disable the link.</td>
+        </tr>
+        <tr>
+        <td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window) </td>
+        </tr>
+        <tr>
+        <td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">Template</a> </td>
+        </tr>
+        <tr>
+        <td>z</td><td>1</td><td>The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
+        </tr>
+        </table>
+        
+        <a name="template"></a><h3> Template </h3>
+        <p>In NagVis 1.2 there is a new object type named <code>template</code>. With this object you have the ability to define all values except the <code>must-have-attributes</code> in one object for many others. You can set all attributes to the value you need and inherit them with the <code>use</code> attribute to each object.</p>
+        <p>At the moment the <code>template</code> objects have to be defined directly in the files, the WUI doesn't support it. Maybe it'll be added in following versions.</p>
+        <p>Example with all values which have to be set:</p>
 <pre>define template {
  name=generic-template
 }</pre>
-		<table style="width:100%">
-		<tr>
-		<th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
-		</tr>
-		<tr>
-		<td> <b>name</b> </td><td> </td><td> Template name (simple string without space - has to be unique within the map) </td>
-		</tr>
-		<tr>
-		<td> ... </td><td> </td><td> All values which are available in the objects which inherit this template </td>
-		</tr>
-		</table>
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+        <td> <b>name</b> </td><td> </td><td> Template name (simple string without space - has to be unique within the map) </td>
+        </tr>
+        <tr>
+        <td> ... </td><td> </td><td> All values which are available in the objects which inherit this template </td>
+        </tr>
+        </table>
 
-		<a name="types"><a><h2>Variable Types</h2>
-		<p>This chapter explains the different variable types used in the map configuration file.</p>
+        <a name="types"><a><h2>Variable Types</h2>
+        <p>This chapter explains the different variable types used in the map configuration file.</p>
 
-		<a name="coordinate"></a><h3>Coordinates</h3>
-		<p>The objects on the NagVis maps are positioned using coordinates. By default each coordinate is
-		a single integer which defines the offset from the upper left corner of the map in px (Pixels).<br />
-		The example below is a host object which is positioned 100px from the left and 100px from the top of
-		the map:</p>
+        <a name="coordinate"></a><h3>Coordinates</h3>
+        <p>The objects on the NagVis maps are positioned using coordinates. By default each coordinate is
+        a single integer which defines the offset from the upper left corner of the map in px (Pixels).<br />
+        The example below is a host object which is positioned 100px from the left and 100px from the top of
+        the map:</p>
     <pre>define host {
  object_id=41790e
  host_name=localhost
  x=100
  y=100
 }</pre>
-		<p>It is possible to define multiple coordinates for one object. This is needed for drawing lines on the maps. One example of a line which starts at 100/100 and ends at 200/200:</p>
+        <p>It is possible to define multiple coordinates for one object. This is needed for drawing lines on the maps. One example of a line which starts at 100/100 and ends at 200/200:</p>
     <pre>define service {
  object_id=1dd76b
  host_name=localhost
@@ -1124,14 +1124,14 @@
  y=110,200
 }</pre>
     <p>When lines have one part (e.g. <i>---&gt;</i>) there must be two coords set.
-		When using lines with two (e.g. <i>---&gt;&lt;---</i>) parts it is possible to set two coordinates for
+        When using lines with two (e.g. <i>---&gt;&lt;---</i>) parts it is possible to set two coordinates for
     direct lines or three coordinates to reposition the middle of the line to a custom place.</p>
 
-		<p>Since NagVis 1.6 it is possible to position objects depending on other objects. A relationship between
-		two objects is defined from the &quot;childs&quot; view. This means the configuration needs to be done in
-		the object which belongs to another object.<br />
-		To define a relationship the coordinate is not given as integer anymore. Instead of the px offset the <i>object_id</i> of the parent object is used to define a relative position.</p>
-		<p>We adapt the examples above and give the start of the line a relative position to the host object:</p>
+        <p>Since NagVis 1.6 it is possible to position objects depending on other objects. A relationship between
+        two objects is defined from the &quot;childs&quot; view. This means the configuration needs to be done in
+        the object which belongs to another object.<br />
+        To define a relationship the coordinate is not given as integer anymore. Instead of the px offset the <i>object_id</i> of the parent object is used to define a relative position.</p>
+        <p>We adapt the examples above and give the start of the line a relative position to the host object:</p>
     <pre>define host {
  object_id=41790e
  host_name=localhost
@@ -1148,14 +1148,14 @@ define service {
  x=41790e,200
  y=41790e,200
 }</pre>
-	<p>With the configuration above the beginning of the line is attached to the host object and moved every time
+    <p>With the configuration above the beginning of the line is attached to the host object and moved every time
   the host object is moved.</p>
-	<p>The above example does not result in exactly the same positions as the first example.
-	The line beginning in the first example is 10px more to the left and 10px more to the bottom.
-	To get that fixed it is possible to define an optional offset to the parent object.</p>
-	<p>Set the following coordinates to configure an offset of 10px in both directions:</p>
- 	<pre>x=41790e%+10,200
+    <p>The above example does not result in exactly the same positions as the first example.
+    The line beginning in the first example is 10px more to the left and 10px more to the bottom.
+    To get that fixed it is possible to define an optional offset to the parent object.</p>
+    <p>Set the following coordinates to configure an offset of 10px in both directions:</p>
+     <pre>x=41790e%+10,200
  y=41790e%+10,200</pre>
   <p>It is also possible to set a negative offset by switching the plus (+) sign with a minus (-) sign.</p>
-	</body>
+    </body>
 </html>
