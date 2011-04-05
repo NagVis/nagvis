@@ -62,9 +62,12 @@ Fehlerbehandlung:
 
 - Verarbeitung ohne Javascript, kompletter Dialog wird neu generiert
 
+*** Shortcuts einbauen ***
 
+Gerade der Edit-Modus im normalen Frontend sollte Hotkeys haben. Diese sollten
+nach Möglichkeit nicht mit Hotkeys von FF/IE kollidieren.
 
-Fehlerbehandlung:
+*** Fehlerbehandlung ***
   Ajax Schnittstelle umbauen: Kleines Protokoll einbauen, mit Header inkl. Fehlercodes etc.
   und man muss nicht bei jeder Anfrage immer die Feld-Namen mitsenden (-> weniger Overhead).
 
