@@ -1012,9 +1012,23 @@ var NagVisStatefulObject = NagVisObject.extend({
 			this.parseControlDrag(i, x[i], y[i], - size / 2, - size / 2, size);
 			makeDragable([this.conf.object_id+'-drag-'+i], this.saveObject, this.moveObject);
 		}
+
+		this.parseControlDelete(x.length, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'),
+		                         15, -15, 10);
+
 		size = null;
 		x = null;
 		y = null;
+	},
+
+	getLineMid: function(coord, dir) {
+	    var c = coord.split(',');
+	    if(c.length == 2)
+		return middle(this.parseCoords(coord, dir)[0],
+		              this.parseCoords(coord, dir)[1],
+			      this.conf.line_cut);
+	    else
+		return coord[1];
 	},
 
 	removeControls: function() {
