@@ -982,6 +982,56 @@ var NagVisStatefulObject = NagVisObject.extend({
 		ctl = null;
 	},
 
+	/**
+	 * Adds the modify button to the controls including
+	 * all eventhandlers
+	 *
+	 * Author: Lars Michelsen <lm@larsmichelsen.com>
+	 */
+	parseControlModify: function (num, objX, objY, offX, offY, size) {
+		var ctl= document.createElement('div');
+		ctl.setAttribute('id',         this.conf.object_id+'-modify-' + num);
+		ctl.setAttribute('class',     'control modify' + size);
+		ctl.setAttribute('className', 'control mdoify' + size);
+		ctl.style.zIndex   = parseInt(this.conf.z)+1;
+		ctl.style.width    = size + 'px';
+		ctl.style.height   = size + 'px';
+		ctl.style.left     = (objX + offX) + 'px';
+		ctl.style.top      = (objY + offY) + 'px';
+		ctl.objOffsetX     = offX;
+		ctl.objOffsetY     = offY;
+
+		ctl.onclick = function() {
+		    // In the event handler this points to the ctl object
+		    var arr   = this.id.split('-');
+		    var objId = arr[0];
+		    var obj = getMapObjByDomObjId(objId);
+
+		    showFrontendDialog(oGeneralProperties.path_server
+		                       +'?mod=Map&act=addModify&do=modify&show='
+				       +escapeUrlValues(oPageProperties.map_name)
+				       +'&type='+escapeUrlValues(obj.conf.type)
+				       +'&id=' + escapeUrlValues(objId), 'Modify Object');
+
+		    obj   = null;
+		    objId = null;
+		    arr   = null;
+
+		    document.body.style.cursor = 'auto';
+		};
+
+		ctl.onmouseover = function() {
+		    document.body.style.cursor = 'pointer';
+		};
+
+		ctl.onmouseout = function() {
+		    document.body.style.cursor = 'auto';
+		};
+
+		this.addControl(ctl);
+		ctl = null;
+	},
+
 	getObjWidth: function () {
 		return parseInt(document.getElementById(this.conf.object_id + '-icondiv').clientWidth);
 	},
@@ -995,6 +1045,9 @@ var NagVisStatefulObject = NagVisObject.extend({
 		var size = 10;
 		this.parseControlDrag(0, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
 		                         this.getObjWidth() + 5, - size / 2, size);
+		this.parseControlModify(2, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
+		                         this.getObjWidth() + 20, - size / 2, size);
+
 		this.parseControlDelete(1, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
 		                         this.getObjWidth() + 5, - size / 2 + 14, size);
 		size = null;

@@ -27,54 +27,6 @@
 
 var bFormIsValid = true;
 
-function printObjects(aObjects, oOpt) {
-	var type = oOpt.type;
-	var field = oOpt.field;
-	var selected = oOpt.selected;
-	var bSelected = false;
-	
-	var oField = document.getElementById(field);
-	
-	if(oField.nodeName == "SELECT") {
-		// delete old options
-		for(var i = oField.length; i >= 0; i--)
-			oField.options[i] = null;
-		
-		if(aObjects && aObjects.length > 0) {
-			// fill with new options
-			for(i = 0; i < aObjects.length; i++) {
-				var oName = '';
-				var bSelect = false;
-				var bSelectDefault = false;
-				
-				if(type == "service")
-					oName = aObjects[i].name2;
-				else
-					oName = aObjects[i].name1;
-				
-				if(selected != '' && oName == selected) {
-					bSelectDefault = true;
-					bSelect = true;
-					bSelected = true;
-				}
-				
-				oField.options[i] = new Option(oName, oName, bSelectDefault, bSelect);
-			}
-		}
-		
-		// Give the users the option give manual input
-		oField.options[oField.options.length] = new Option(lang['manualInput'], lang['manualInput'], false, false);
-	}
-	
-	// Fallback to input field when configured value could not be selected or
-	// the list is empty
-	if((selected != '' && !bSelected) || !aObjects || aObjects.length == 0) {
-		toggleFieldType(oOpt.field, lang['manualInput']);
-		document.getElementById(oOpt.field).value = lang['manualInput'];
-		document.getElementById('_inp_'+oOpt.field).value = selected;
-	}
-}
-
 // function that checks the object is valid : all the properties marked with a * (required) have a value
 // if the object is valid it writes the list of its properties/values in an invisible field, which will be passed when the form is submitted
 function validateMapCfgForm() {

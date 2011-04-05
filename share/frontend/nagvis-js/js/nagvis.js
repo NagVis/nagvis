@@ -1160,7 +1160,11 @@ function dragObject(event) {
 	if(event.ctrlKey) {
 		for(var i in oMapObjects)
 			oMapObjects[i].highlight(false);
-		getNearestObject(draggingObject.id, newLeft, newTop).highlight(true);
+		var o = getNearestObject(draggingObject.id, newLeft, newTop)
+		if(o) {
+		    o.highlight(true);
+		    o = null;
+		}
 	}
 
 	// Call the dragging handler when one is ste
@@ -1492,5 +1496,76 @@ function validateValue(sName, sValue, sRegex) {
 	} else {
 		alert(printLang(lang['wrongValueFormatOption'],'ATTRIBUTE~'+sName));
 		return false;
+	}
+}
+
+function getObjects(backend_id, type, field, selected, name1) {
+	var oOpt = Object();
+	oOpt.field = field;
+	oOpt.selected = selected;
+	oOpt.type = type;
+
+	if(backend_id === lang['manualInput'])
+		return true;
+
+	if(type === 'service'
+	   && (typeof name1 === 'undefined' || name1 == ''
+	       || name1 === lang['manualInput'])) {
+		return true;
+	}
+
+	if(typeof name1 === 'undefined')
+		name1 = ''
+	
+	printObjects(getSyncRequest(oGeneralProperties.path_server
+	                            +'?mod=Map&act=getObjects&backendid='+backend_id
+	                            +'&backendid='+backend_id+'&type='+type+'&name1='+name1), oOpt);
+}
+
+function printObjects(aObjects, oOpt) {
+	var type = oOpt.type;
+	var field = oOpt.field;
+	var selected = oOpt.selected;
+	var bSelected = false;
+	
+	var oField = document.getElementById(field);
+	
+	if(oField.nodeName == "SELECT") {
+		// delete old options
+		for(var i = oField.length; i >= 0; i--)
+			oField.options[i] = null;
+		
+		if(aObjects && aObjects.length > 0) {
+			// fill with new options
+			for(i = 0; i < aObjects.length; i++) {
+				var oName = '';
+				var bSelect = false;
+				var bSelectDefault = false;
+				
+				if(type == "service")
+					oName = aObjects[i].name2;
+				else
+					oName = aObjects[i].name1;
+				
+				if(selected != '' && oName == selected) {
+					bSelectDefault = true;
+					bSelect = true;
+					bSelected = true;
+				}
+				
+				oField.options[i] = new Option(oName, oName, bSelectDefault, bSelect);
+			}
+		}
+		
+		// Give the users the option give manual input
+		oField.options[oField.options.length] = new Option(lang['manualInput'], lang['manualInput'], false, false);
+	}
+	
+	// Fallback to input field when configured value could not be selected or
+	// the list is empty
+	if((selected != '' && !bSelected) || !aObjects || aObjects.length == 0) {
+		toggleFieldType(oOpt.field, lang['manualInput']);
+		document.getElementById(oOpt.field).value = lang['manualInput'];
+		document.getElementById('_inp_'+oOpt.field).value = selected;
 	}
 }
