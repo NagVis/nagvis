@@ -7,7 +7,7 @@
 	<li><a href="#" onClick="toggleLineMidLock('[obj_id]'); contextHide();">[lang_toggle_line_mid]</a></li>
 	<!-- END line_two_parts -->
 	<!-- END line -->
-	<li><a href="#" onClick="if(confirm('[lang_confirm_delete]')){removeMapObject('[obj_id]');} contextHide();">Remove object</a></li>
+	<li><a href="#" onClick="showFrontendDialog('[html_base]/server/core/ajax_handler.php?mod=Map&act=addModify&do=modify&show=[map_name]&type=[type]&id=[obj_id]', 'Modify Object - [name]');contextHide();">Modify</a></li>
 	<!-- END not_automap -->
 	<!-- BEGIN host -->
 	<li class="spacer"></li>

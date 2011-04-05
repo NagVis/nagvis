@@ -120,65 +120,6 @@ class WuiCore extends GlobalCore {
 		
 		return json_encode($aArr);
 	}
-
-	/**
-	 * Parses the needed language strings to javascript
-	 *
-	 * @return  String    JSON encoded array
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getJsLang() {
-		$lang = Array(
-			'clickMapToSetPoints' => $this->getLang()->getText('clickMapToSetPoints'),
-			'confirmDelete' => $this->getLang()->getText('confirmDelete'),
-			'confirmRestore' => $this->getLang()->getText('confirmRestore'),
-			'wrongValueFormat' => $this->getLang()->getText('wrongValueFormat'),
-			'wrongValueFormatMap' => $this->getLang()->getText('wrongValueFormatMap'),
-			'wrongValueFormatOption' => $this->getLang()->getText('wrongValueFormatOption'),
-			'unableToWorkWithMap' => $this->getLang()->getText('unableToWorkWithMap'),
-			'mustValueNotSet' => $this->getLang()->getText('mustValueNotSet'),
-			'chosenLineTypeNotValid' => $this->getLang()->getText('chosenLineTypeNotValid'),
-			'onlyLineOrIcon' => $this->getLang()->getText('onlyLineOrIcon'),
-			'not2coordsX' => $this->getLang()->getText('not2coords','COORD~X'),
-			'not2coordsY' => $this->getLang()->getText('not2coords','COORD~Y'),
-			'only1or2coordsX' => $this->getLang()->getText('only1or2coords','COORD~X'),
-			'only1or2coordsY' => $this->getLang()->getText('only1or2coords','COORD~Y'),
-			'viewTypeWrong' => $this->getLang()->getText('viewTypeWrong'),
-			'lineTypeNotSet' => $this->getLang()->getText('lineTypeNotSet'),
-			'loopInMapRecursion' => $this->getLang()->getText('loopInMapRecursion'),
-			'mapObjectWillShowSummaryState' => $this->getLang()->getText('mapObjectWillShowSummaryState'),
-			'firstMustChoosePngImage' => $this->getLang()->getText('firstMustChoosePngImage'),
-			'noSpaceAllowedInName' => $this->getLang()->getText('Spaces are not allowed in file names.'),
-			'mustChooseValidImageFormat' => $this->getLang()->getText('mustChooseValidImageFormat'),
-			'foundNoBackgroundToDelete' => $this->getLang()->getText('foundNoBackgroundToDelete'),
-			'confirmBackgroundDeletion' => $this->getLang()->getText('confirmBackgroundDeletion'),
-			'unableToDeleteBackground' => $this->getLang()->getText('unableToDeleteBackground'),
-			'mustValueNotSet1' => $this->getLang()->getText('mustValueNotSet1'),
-			'foundNoShapeToDelete' => $this->getLang()->getText('foundNoShapeToDelete'),
-			'shapeInUse' => $this->getLang()->getText('shapeInUse'),
-			'confirmShapeDeletion' => $this->getLang()->getText('confirmShapeDeletion'),
-			'unableToDeleteShape' => $this->getLang()->getText('unableToDeleteShape'),
-			'chooseMapName' => $this->getLang()->getText('chooseMapName'),
-			'minOneUserAccess' => $this->getLang()->getText('minOneUserAccess'),
-			'noMapToRename' => $this->getLang()->getText('noMapToRename'),
-			'noNewNameGiven' => $this->getLang()->getText('noNewNameGiven'),
-			'mapAlreadyExists' => $this->getLang()->getText('mapAlreadyExists'),
-			'foundNoMapToDelete' => $this->getLang()->getText('foundNoMapToDelete'),
-			'foundNoMapToExport' => $this->getLang()->getText('foundNoMapToExport'),
-			'foundNoMapToImport' => $this->getLang()->getText('foundNoMapToImport'),
-			'notCfgFile' => $this->getLang()->getText('notCfgFile'),
-			'confirmNewMap' => $this->getLang()->getText('confirmNewMap'),
-			'confirmMapRename' => $this->getLang()->getText('confirmMapRename'),
-			'confirmMapDeletion' => $this->getLang()->getText('confirmMapDeletion'),
-			'unableToDeleteMap' => $this->getLang()->getText('unableToDeleteMap'),
-			'noPermissions' => $this->getLang()->getText('noPermissions'),
-			'minOneUserWriteAccess' => $this->getLang()->getText('minOneUserWriteAccess'),
-			'noSpaceAllowed' => $this->getLang()->getText('noSpaceAllowed'),
-			'properties' => $this->getLang()->getText('properties'),
-			'manualInput' => $this->getLang()->getText('manualInput'));
-		
-		return json_encode($lang);
-	}
 	
 	/**
 	 * Parses the validation regex of the main configuration values to javascript

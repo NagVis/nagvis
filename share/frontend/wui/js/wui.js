@@ -143,30 +143,6 @@ function gridToggle() {
 	oResult = null;
 }
 
-/**
- * validateValue(oField)
- *
- * This function checks a string for valid format. The check is done by the
- * given regex.
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function validateValue(sName, sValue, sRegex) {
-	// Remove PHP delimiters
-	sRegex = sRegex.replace(/^\//, "");
-	sRegex = sRegex.replace(/\/[iugm]*$/, "");
-	
-	// Match the current value
-	var regex = new RegExp(sRegex, "i");
-	var match = regex.exec(sValue);
-	if(sValue == '' || match != null) {
-		return true;
-	} else {
-		alert(printLang(lang['wrongValueFormatOption'],'ATTRIBUTE~'+sName));
-		return false;
-	}
-}
-
 // functions used to track the mouse movements, when the user is adding an object. Draw a line a rectangle following the mouse
 // when the user has defined enough points we open the "add object" window
 function get_click(newtype,nbclicks,action) {
@@ -549,45 +525,6 @@ function formSubmit(formId, target, bReloadPage) {
 }
 
 /**
- * toggleDefaultOption
- *
- * This function checks the value of the field to reset it to the default value
- * which is stored in a "helper field". The default value is inserted when there
- * is no option given in the current object.
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function toggleDefaultOption(sName, bOverrideCurrentValue) {
-	var oField = document.getElementById(sName);
-	var oFieldDefault = document.getElementById('_'+sName);
-	
-	if(typeof bOverrideCurrentValue === 'undefined') {
-		bOverrideCurrentValue = false;
-	}
-	
-	if(oField && oFieldDefault) {
-		// Set option only when the field is emtpy and the default value has a value
-		// Added override flag to ignore the current value
-		if((bOverrideCurrentValue === true || (bOverrideCurrentValue === false && oField.value === '')) && oFieldDefault.value !== '') {
-			// Set value to default value
-			oField.value = oFieldDefault.value;
-			
-			// Visualize the default value
-			oField.style.color = '#B0A8B8';
-		} else if(oField.value != oFieldDefault.value) {
-			// Reset the visualisation
-			oField.style.color = '';
-		} else if(oField.value == oFieldDefault.value) {
-			// Visualize the default value
-			oField.style.color = '#B0A8B8';
-		}
-	}
-	
-	oFieldDefault = null;
-	oField = null;
-}
-
-/**
  * validateMainConfigFieldValue(oField)
  *
  * This function checks a config field value for valid format. The check is done
@@ -598,106 +535,6 @@ function toggleDefaultOption(sName, bOverrideCurrentValue) {
 function validateMainConfigFieldValue(oField) {
 	var sName = oField.name.split('_');
 	return validateValue(sName, oField.value, validMainConfig[sName[0]][sName[1]].match);
-}
-
-/**
- * toggleDependingFields
- *
- * This function shows/hides the fields which depend on the changed field
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function toggleDependingFields(formName, name, value) {
-	var aFields = document.getElementById(formName).elements;
-	
-	for(var i = 0, len = aFields.length; i < len; i++) {
-		// Filter helper fields
-		if(aFields[i].name.charAt(0) !== '_') {
-			if(aFields[i].type != 'hidden' && aFields[i].type != 'submit') {
-				// Handle different structures of main cfg and map cfg editing
-				var oConfig, sMasterName, sTypeName, sOptName, sFieldName;
-				if(formName == 'edit_config') {
-					sMasterName = name.replace(sTypeName+'_', '');
-					sTypeName = aFields[i].name.split('_')[0];
-					sOptName = aFields[i].name.replace(sTypeName+'_', '');
-					sFieldName = aFields[i].name;
-					oConfig = validMainConfig;
-				} else {
-					sMasterName = name;
-					sTypeName = document.getElementById(formName).type.value;
-					sOptName = aFields[i].name;
-					oConfig = validMapConfig;
-				}
-				
-				var sFieldName = aFields[i].name;
-				
-				// Show option fields when parent field value is equal and hide when 
-				// parent field value differs
-				if(oConfig[sTypeName] && oConfig[sTypeName][sOptName]['depends_on'] === sMasterName
-					 && oConfig[sTypeName][sOptName]['depends_value'] != value) {
-					
-					document.getElementById(sFieldName).parentNode.parentNode.style.display = 'none';
-					document.getElementById(sFieldName).value = '';
-				} else if(oConfig[sTypeName] && oConfig[sTypeName][sOptName]['depends_on'] === sMasterName
-					 && oConfig[sTypeName][sOptName]['depends_value'] == value) {
-					
-					document.getElementById(sFieldName).parentNode.parentNode.style.display = '';
-					
-					// Toggle the value of the field. If empty or just switched the function will
-					// try to display the default value
-					toggleDefaultOption(sFieldName);
-				}
-				if(!oConfig[sTypeName])
-					alert('No data for type: '+sTypeName);
-			}
-		}
-	}
-	
-	aFields = null;
-}
-
-/**
- * toggleFieldType
- *
- * Changes the field type from select to input and vice versa
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function toggleFieldType(sName, sValue) {
-	var bReturn = false;
-	var sBaseName;
-	var bInputHelper = false;
-	
-	if(sName.indexOf('_inp_') !== -1) {
-		sBaseName = sName.replace('_inp_', '');
-		bInputHelper = true;
-	} else {
-		sBaseName = sName;
-	}
-	
-	// Check if the field should be changed
-	// this is toggled on
-	// a) Select field set to "Manual Input..." or
-	// b) Input helper field set to ""
-	if((bInputHelper == false && sValue === lang['manualInput']) || (bInputHelper === true && sValue == '')) {
-		var oSelectField = document.getElementById(sBaseName);
-		var oInputField = document.getElementById('_inp_' + sBaseName);
-		
-		if(bInputHelper == false) {
-			oSelectField.parentNode.parentNode.style.display = 'none';
-			oInputField.parentNode.parentNode.style.display = '';
-		} else {
-			oSelectField.parentNode.parentNode.style.display = '';
-			oInputField.parentNode.parentNode.style.display = 'none';
-		}
-		
-		oInputField = null;
-		oSelectField = null;
-		
-		bReturn = true;
-	}
-	
-	return bReturn;
 }
 
 /**

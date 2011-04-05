@@ -53,6 +53,7 @@ class WuiMap extends GlobalMap {
 	 *
 	 * @return  String    JSON encoded array
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
+	 * FIXME: DEPRECATED: Check if still used
 	 */
 	public function getJsValidMapConfig() {
 		return json_encode($this->MAPCFG->getValidConfig());

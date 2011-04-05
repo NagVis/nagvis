@@ -38,9 +38,13 @@ function saveObjectAfterAnchorAction(oAnchor) {
 	var anchorId   = arr[2];
 	arr = null;
 	var urlPart    = '';
+	var action     = 'modifyObject';
 
-	if(anchorType === 'drag')
+	if(anchorType === 'drag') {
 		urlPart = handleDragResult(objId, anchorId);
+	} else if(anchorType === 'delete') {
+		action  = 'deleteObject';
+	}
 	
 	var mod = 'Map';
 	var mapParam = 'map';
@@ -49,7 +53,7 @@ function saveObjectAfterAnchorAction(oAnchor) {
 		mapParam = 'show';
 	}
 
-	getAsyncRequest(oGeneralProperties.path_server + '?mod='+mod+'&act=modifyObject&'+mapParam+'='
+	getAsyncRequest(oGeneralProperties.path_server + '?mod='+mod+'&act=' + action + '&' + mapParam + '='
 	                + escapeUrlValues(oPageProperties.map_name)
 	                + '&id=' + escapeUrlValues(objId) + urlPart);
 }

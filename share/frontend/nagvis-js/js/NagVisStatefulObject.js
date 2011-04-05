@@ -900,6 +900,13 @@ var NagVisStatefulObject = NagVisObject.extend({
 			this.parseIconControls();
 	},
 
+	addControl: function (obj) {
+		// Add to DOM
+		document.getElementById(this.conf.object_id+'-controls').appendChild(obj);
+		// Add to controls list
+		this.objControls.push(obj);
+	},
+
 	parseControlDrag: function (num, objX, objY, offX, offY, size) {
 		var drag = document.createElement('div');
 		drag.setAttribute('id',         this.conf.object_id+'-drag-' + num);
@@ -913,11 +920,66 @@ var NagVisStatefulObject = NagVisObject.extend({
 		drag.objOffsetX     = offX;
 		drag.objOffsetY     = offY;
 
-		// Add to DOM
-		document.getElementById(this.conf.object_id+'-controls').appendChild(drag);
-		// Add to controls list
-		this.objControls.push(drag);
+		drag.onmouseover = function() {
+		    document.body.style.cursor = 'move';
+		};
+
+		drag.onmouseout = function() {
+		    document.body.style.cursor = 'auto';
+		};
+
+		this.addControl(drag);
 		drag = null;
+	},
+
+	/**
+	 * Adds the delete button to the controls including
+	 * all eventhandlers
+	 *
+	 * Author: Lars Michelsen <lm@larsmichelsen.com>
+	 */
+	parseControlDelete: function (num, objX, objY, offX, offY, size) {
+		var ctl= document.createElement('div');
+		ctl.setAttribute('id',         this.conf.object_id+'-delete-' + num);
+		ctl.setAttribute('class',     'control delete' + size);
+		ctl.setAttribute('className', 'control delete' + size);
+		ctl.style.zIndex   = parseInt(this.conf.z)+1;
+		ctl.style.width    = size + 'px';
+		ctl.style.height   = size + 'px';
+		ctl.style.left     = (objX + offX) + 'px';
+		ctl.style.top      = (objY + offY) + 'px';
+		ctl.objOffsetX     = offX;
+		ctl.objOffsetY     = offY;
+
+		ctl.onclick = function() {
+		    // In the event handler this points to the ctl object
+		    var arr   = this.id.split('-');
+		    var objId = arr[0];
+		    var obj = getMapObjByDomObjId(objId);
+
+		    // FIXME: Multilanguage
+		    if(!confirm('Really delete the object?'))
+			return;
+
+		    obj.saveObject(this, null);
+		    obj.remove();
+		    obj   = null;
+		    objId = null;
+		    arr   = null;
+
+		    document.body.style.cursor = 'auto';
+		};
+
+		ctl.onmouseover = function() {
+		    document.body.style.cursor = 'pointer';
+		};
+
+		ctl.onmouseout = function() {
+		    document.body.style.cursor = 'auto';
+		};
+
+		this.addControl(ctl);
+		ctl = null;
 	},
 
 	getObjWidth: function () {
@@ -933,6 +995,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 		var size = 10;
 		this.parseControlDrag(0, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
 		                         this.getObjWidth() + 5, - size / 2, size);
+		this.parseControlDelete(1, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
+		                         this.getObjWidth() + 5, - size / 2 + 14, size);
 		size = null;
 
 		// Simply make it dragable. Maybe will be extended in the future...

@@ -170,6 +170,7 @@ var NagVisObject = Base.extend({
 		
 		var oMacros = {
 			'obj_id':      this.conf.object_id,
+			'type':        this.conf.type,
 			'name':        this.conf.name,
 			'address':     this.conf.address,
 			'html_cgi':    this.conf.htmlcgi,

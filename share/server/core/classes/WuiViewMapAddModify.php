@@ -83,14 +83,14 @@ class WuiViewMapAddModify {
 			'id'           => $this->aOpts['id'],
 			'map'          => $this->aOpts['show'],
 			'formContents' => $this->getFields().$this->fillFields(),
-			'langSave'     => $this->CORE->getLang()->getText('save')
+			'langSave'     => $this->CORE->getLang()->getText('save'),
+			'validMapCfg'  => json_encode($this->MAPCFG->getValidConfig()),
+			'lang'         => $this->CORE->getJsLang(),
 		);
 		
 		// Build page based on the template file and the data array
 		return $TMPLSYS->get($TMPL->getTmplFile('default', 'wuiMapAddModify'), $aData);
 	}
-	
-	
 	
 	/**
 	 * Fills the fields of the form with values

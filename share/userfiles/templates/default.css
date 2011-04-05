@@ -144,6 +144,11 @@ div.control.drag20 {
 	background: url('../images/templates/default.control_drag_20.gif');
 }
 
+div.control.delete10 {
+	background: url('../images/templates/default.control_delete.png');
+}
+
+
 /* Style on info pages (index.php?info, index.php) */
 div.infopage {
 	position:relative;

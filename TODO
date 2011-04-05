@@ -39,6 +39,31 @@ Pro Objekt "Custom Vars" für Context- und Hover-Menus einbauen. Diese werden da
 u.U. sogar in separaten Queries an das Backend abgefragt und in Hover- und Context-Menus
 als spezielle Macros angeboten.
 
+*** Add/Modify Redesign ***
+
+Aufrufe:
+1. Neues Objekt - x/y Koordinaten als Parameter
+  - Parameter: type, x, y
+2. Objekt klonen - Aktuell konfigurierte Parameter + Objekt-ID generieren
+  - Parameter: type, x, y, ...
+3. Objekt bearbeiten - Aktuell konfigurierte Parameter
+  - object_id
+
+Feld-Eigenschaften:
+- Default Werte grau zeigen, solange bis ein anderer Wert gewählt wird
+- Wenn Wert auf Default zurückgesetzt wird, wieder ausgrauen
+- Zwischen Dropdown und Textfeld umschalten können
+- Butten zum Zurücksetzen eines Wertes auf Default einbauen
+- Abhängige Felder je nach Wert zeigen/verstecken
+
+Fehlerbehandlung:
+- Direkt im Dialog: Feldbezogene Fehler direkt unter den Feldern anzeigen
+- Generelle Fehler als Popup/über Formular anzeigen
+
+- Verarbeitung ohne Javascript, kompletter Dialog wird neu generiert
+
+
+
 Fehlerbehandlung:
   Ajax Schnittstelle umbauen: Kleines Protokoll einbauen, mit Header inkl. Fehlercodes etc.
   und man muss nicht bei jeder Anfrage immer die Feld-Namen mitsenden (-> weniger Overhead).
