@@ -22,6 +22,7 @@ anzuzeigenden Elementen.
 <br>
 NagVis behandelt die Objekte und definiert eine Konfiguration f&uuml;r <a href="http://www.graphviz.org/">Graphviz</a>. Das Map-Bild und der HTML-Code f&uuml;r die Links werden von GraphViz erzeugt und an NagVis weitergeleitet.
 <br>
+<a name="voraussetzungen"></a>
 <h2>Voraussetzungen</h2>
 <ul>
 <li><a href="http://www.graphviz.org">GraphViz</a> &gt;= 2.14 f&uuml;r die Automap (niedrigere Versionen haben Probleme mit Truecolor-Unterst&uuml;tzung beim Rendering).
@@ -29,6 +30,9 @@ Sie ben&ouml;tigen weitere Pakete wie gd, libpng und freetype, ... aber wenn Sie
 </li>
 <li>
 Sie m&uuml;ssen Abh&auml;ngigkeiten zwischen den einzelnen Hosts definieren. Hinweise finden Sie u.a. <a href="http://www.nagios-wiki.de/nagios/doku3/networkreachability">hier</a>
+</li>
+<li>
+Definieren Sie in der Direktive "defaultroot=..." im [automap]-Abschnitt in <code>nagvis.ini.php</code> den Namen des &Uuml;berwachungsrechners (oder eines anderen Rechners, der als Anfangspunkt dienen soll. Stellen Sie sicher, dass Sie den Namen benutzen, der in der host_name-Direktive in der Host-Definition verwendet wird. In den meisten realen Umgebungen wird dieser Rechner <i>nicht</i> "localhost" hei&szlig;en ;-).
 </li>
 </ul>
 
