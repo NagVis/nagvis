@@ -74,7 +74,7 @@ HTML_SAMPLE="etc/apache2-nagvis.conf-sample"
 # Default nagios web conf
 HTML_CONF="nagvis.conf"
 # Saving current timestamp for backup when updating
-DATE=`date +%s`
+DATE=`perl -e 'print time(); print "\n"'`
 # Web path to the NagVis base directory
 HTML_PATH=""
 # Path to webserver conf
@@ -253,7 +253,7 @@ check_nagios_path() {
 }
 
 check_web_user() {
-	if [ "`getent passwd | cut -d':' -f1 | grep \"^$WEB_USER\"`" = "$WEB_USER" ]; then
+	if [ "`getent passwd $WEB_USER | cut -d':' -f1`" = "$WEB_USER" ]; then
 		return 0
 	else
 		echo "|  Error: User $WEB_USER not found."
@@ -262,7 +262,7 @@ check_web_user() {
 }
 
 check_web_group() {
-	if [ "`getent group | cut -d':' -f1 | grep \"^$WEB_GROUP\"`" = "$WEB_GROUP" ]; then
+	if [ "`getent group $WEB_GROUP | cut -d':' -f1`" = "$WEB_GROUP" ]; then
 		return 0
 	else
 		echo "|  Error: Group $WEB_GROUP not found."
@@ -369,8 +369,18 @@ log() {
 # Will overwrite the NAGIOS_PATH when found some Nagios running
 detect_nagios_path() {
 	IFS=$'\n'
-	for N_PROC in `ps ax -o pid,ppid,user,command | grep 'bin/$SOURCE' | grep -v grep`; do
-		IFS=" "
+	init_id=1
+	os_type=`uname -s`
+	case $os_type in
+		SunOS) # In Solaris Zone, there's no init process (id = 1) but zsched (random id)
+		init_id=$(ps -ef | grep " zsched$" | grep -v grep  | awk '{ print $2 }' | head -1)
+		;;
+	esac
+	for N_PROC in `
+		case $os_type in
+			SunOS) /bin/ps -ef -o pid,ppid,user,args ;;
+			*) ps ax -o pid,ppid,user,command ;;
+		esac | grep "bin/$SOURCE" | grep -v grep`; do
 		#  2138     1 nagios   /d/nagvis-dev/nagios/bin/nagios -d /d/nagvis-dev/nagios/etc/nagios.cfg
 		N_PID=`expr "$N_PROC" : ' *\([0-9]*\)'`
 		N_PPID=`expr "$N_PROC" : ' *[0-9]* *\([0-9]*\)'`
@@ -378,7 +388,7 @@ detect_nagios_path() {
 		N_CMD=`expr "$N_PROC" : ' *[0-9]* *[0-9]* *[^ ]* *\(.*\)'`
 		
 		echo "$N_CMD" | grep -i " -d" >/dev/null
-		if [[ $? -eq 0 && $N_PPID -eq 1 ]]; then
+		if [[ $? -eq 0 && $N_PPID -eq $init_id ]]; then
 			N_BIN=${N_CMD%% *}
 			NAGIOS_PATH=${N_BIN%%/bin/$SOURCE}
 			NAGIOS_PATH=${NAGIOS_PATH%/}
@@ -567,6 +577,8 @@ check_graphviz_version() {
 		GRAPHVIZ_VER=`$PKG -l "graphviz" | grep "graphviz" | grep ii | awk -F' ' '{ print $3 }' | sed "s/-.*$//" | cut -d"." -f1,2`
 	elif [ "${PKG##/*/}" = "rpm" ]; then
 		GRAPHVIZ_VER=`$PKG -qa "graphviz" | sed "s/graphviz-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
+	elif [ "${PKG##/*/}" = "pkginfo" ]; then
+		GRAPHVIZ_VER=`$PKG -l SMCgviz | grep VERSION | awk '{ print $2 }'`
 	else
 		GRAPHVIZ_VER=`$PKG list installed "graphviz" | grep "installed" | awk -F' ' '{ print $2 }' | sed "s/-.*$//" | cut -d"." -f1,2`
 	fi
@@ -735,7 +747,9 @@ copy_dir_xpath() {
   [ -n "$LINE" ] && DONE=`log "$LINE" done` 
   # Get files and directories to copy. This takes only the elements in the
   # given directory.
-  FILES=`find $NAGVIS_PATH_BACKUP/$2 -mindepth 1 -maxdepth 1`
+  # FILES=`find $NAGVIS_PATH_BACKUP/$2 -mindepth 1 -maxdepth 1`
+  FILES=`find $NAGVIS_PATH_BACKUP/$1/* -prune 2> /dev/null`
+
 
   # Maybe exclude some files
   if [ "$1" != "" ]; then
@@ -764,7 +778,8 @@ copy() {
 	if [ -d "$NAGVIS_PATH_BACKUP/$2" -a ! -d "$3" ]; then
 		# Get files and directories to copy. This takes only the elements in the
 		# given directory.
-		FILES=`find $NAGVIS_PATH_BACKUP/$2 -mindepth 1 -maxdepth 1`
+		FILES=`find $NAGVIS_PATH_BACKUP/$2/* -prune`
+
 
 		# Maybe exclude some files
 		if [ "$1" != "" ]; then
@@ -1046,6 +1061,15 @@ if [ $FORCE -eq 1 ]; then
 	fi
 fi
 
+find_bin()
+{
+	bin=$1
+	case `uname -s` in
+		SunOS) which $bin | grep -v "^no $bin in" ;;
+		*) which $bin 2> /dev/null ;;
+	esac
+}
+
 {
 # Print welcome message
 welcome
@@ -1065,13 +1089,15 @@ if [ -z $WHICH ]; then
 	log "'which' not found (maybe package missing). Aborting..."
 	exit 1
 fi
-PKG=`which rpm 2>/dev/null`
-[ -u $PKG ] && PKG=`which dpkg 2>/dev/null`
-[ -u $PKG ] && PKG=`which yum 2>/dev/null`
-if [ -u $PKG ]; then
-	log "No packet manager (rpm/dpkg/yum) found. Aborting..."
+PKG=`find_bin rpm`
+[ -z "$PKG" ] && PKG=`find_bin dpkg`
+[ -z "$PKG" ] && PKG=`find_bin yum`
+[ -z "$PKG" ] && PKG=`find_bin pkginfo`
+if [ -z "$PKG" ]; then
+	log "No packet manager (rpm/dpkg/yum/pkginfo) found. Aborting..."
 	exit 1
 fi
+
 log "Using packet manager $PKG" $PKG
 SED=`which sed` 
 
@@ -1621,7 +1647,7 @@ fi
 text
 
 line "Setting permissions..." "+"
-chown $WEB_USER:$WEB_GROUP $NAGVIS_PATH -R
+chown -R $WEB_USER:$WEB_GROUP $NAGVIS_PATH
 [ -f "$NAGVIS_PATH/$NAGVIS_CONF-sample" ]&&set_perm 664 "$NAGVIS_PATH/$NAGVIS_CONF-sample"
 set_perm 775 "$NAGVIS_PATH/etc"
 set_perm 775 "$NAGVIS_PATH/etc/maps"

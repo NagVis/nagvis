@@ -1,7 +1,7 @@
 1.5.8
 
 Core
-  * Bugfix: Fixed wrong spelled var in general module action processing code
+  * Bugfix: Fixed misspelled var in general module action processing code
   * Bugfix: Fixed validation of style/label style attributes: Allowing # chars now
 
 Frontend
@@ -14,6 +14,9 @@ WUI
   * Bugfix: Fixed hostname filled in service dropdown menu when editing a
     service object
   * Bugfix: Fixed dragging relative labels of line objects in WUI
+
+Installer
+  * Changes for Solaris / Thanks to Yannig Perre
 
 1.5.7
 
