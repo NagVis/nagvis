@@ -177,6 +177,8 @@
 ;recognizeservices=1
 ; show map in lists (dropdowns, index page, ...)
 ;showinlists=1
+; show map in multisite snapin
+;showinmultisite=1
 ; Name of the custom stylesheet to use on the maps (The file needs to be located
 ; in the share/nagvis/styles directory)
 ;stylesheet=""

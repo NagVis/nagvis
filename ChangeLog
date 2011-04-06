@@ -1,3 +1,12 @@
+1.5.9
+
+Core
+  * Added show_in_multisite option to map global sections to hide maps from
+  the multisite snapin
+
+Frontend
+  * Hiding search button when not permitted to
+
 1.5.8
 
 Core
