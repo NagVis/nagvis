@@ -301,7 +301,7 @@ class NagVisHeaderMenu {
 			'langService' => $this->CORE->getLang()->getText('service'),
 			'langHostgroup' => $this->CORE->getLang()->getText('hostgroup'),
 			'langServicegroup' => $this->CORE->getLang()->getText('servicegroup'),
-			'langMap' => $this->CORE->getLang()->getText('map'),
+			'langMapEdit' => $this->CORE->getLang()->getText('Edit Map'),
 			'langMaps' => $this->CORE->getLang()->getText('Maps'),
 			'langAutomaps' => $this->CORE->getLang()->getText('Automaps'),
 			'langTextbox' => $this->CORE->getLang()->getText('textbox'),

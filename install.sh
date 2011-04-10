@@ -901,6 +901,7 @@ cmp_js() {
 	>$OUT
 	cmp ExtStacktrace.js
 	cmp nagvis.js
+	cmp edit.js
 	cmp popupWindow.js
 	cmp ExtBase.js
 	cmp frontendMessage.js

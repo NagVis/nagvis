@@ -77,10 +77,10 @@
 		</dl>
 	</li>
 	{/if}
-	{if $mod == 'Map' && $act == 'edit' && $permittedEdit == true}
+	{if $mod == 'Map' && $permittedEdit == true}
 	<li>
 		<dl class="dropdown">
-			<dt id="map-ddheader" onmouseover="ddMenu('map',1)" onmouseout="ddMenu('map',-1)">{$langMap} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>
+			<dt id="map-ddheader" onmouseover="ddMenu('map',1)" onmouseout="ddMenu('map',-1)">{$langMapEdit} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>
 			<dd id="map-ddcontent" onmouseover="cancelHide('map')" onmouseout="ddMenu('map',-1)">
 				<ul>
 					<li><a href="javascript:gridToggle()">{$langToggleGrid}</a></li>
@@ -97,31 +97,31 @@
 		<dl class="dropdown subdropdown">
 			<dd id="map-addicon-ddcontent" onmouseover="cancelHide('map-addicon');cancelHide('map')" onmouseout="ddMenu('map-addicon',-1,1);ddMenu('map',-1)">
 				<ul>
-					<li><a class="topline topline" href="javascript:get_click('host',1,'add');ddMenuHide(['map-addicon','map']);">{$langHost}</a></li>
-					<li><a class="topline" href="javascript:get_click('service',1,'add');ddMenuHide(['map-addicon','map']);">{$langService}</a></li>
-					<li><a class="topline" href="javascript:get_click('hostgroup',1,'add');ddMenuHide(['map-addicon','map']);">{$langHostgroup}</a></li>
-					<li><a class="topline" href="javascript:get_click('servicegroup',1,'add');ddMenuHide(['map-addicon','map']);">{$langServicegroup}</a></li>
-					<li><a class="topline underline" href="javascript:get_click('map',1,'add');ddMenuHide(['map-addicon','map']);">{$langMap}</a></li>
+					<li><a class="topline topline" href="javascript:addObject('host', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langHost}</a></li>
+					<li><a class="topline" href="javascript:addObject('service', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langService}</a></li>
+					<li><a class="topline" href="javascript:addObject('hostgroup', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langHostgroup}</a></li>
+					<li><a class="topline" href="javascript:addObject('servicegroup', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langServicegroup}</a></li>
+					<li><a class="topline underline" href="javascript:addObject('map', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langMap}</a></li>
 				</ul>
 			</dd>
 		</dl>
 		<dl class="dropdown subdropdown">
 			<dd id="map-addline-ddcontent" onmouseover="cancelHide('map-addline');cancelHide('map')" onmouseout="ddMenu('map-addline',-1,1);ddMenu('map',-1)">
 				<ul>
-					<li><a class="topline topline" href="javascript:get_click('host',2,'add');ddMenuHide(['map-addline','map']);">{$langHost}</a></li>
-					<li><a class="topline" href="javascript:get_click('service',2,'add');ddMenuHide(['map-addline','map']);">{$langService}</a></li>
-					<li><a class="topline" href="javascript:get_click('hostgroup',2,'add');ddMenuHide(['map-addline','map']);">{$langHostgroup}</a></li>
-					<li><a class="topline" href="javascript:get_click('servicegroup',2,'add');ddMenuHide(['map-addline','map']);">{$langServicegroup}</a></li>
-					<li><a class="topline underline" href="javascript:get_click('map',2,'add');ddMenuHide(['map-addline','map']);">{$langMap}</a></li>
+					<li><a class="topline topline" href="javascript:addObject('host', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langHost}</a></li>
+					<li><a class="topline" href="javascript:addObject('service', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langService}</a></li>
+					<li><a class="topline" href="javascript:addObject('hostgroup', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langHostgroup}</a></li>
+					<li><a class="topline" href="javascript:addObject('servicegroup', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langServicegroup}</a></li>
+					<li><a class="topline underline" href="javascript:addObject('map', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langMap}</a></li>
 				</ul>
 			</dd>
 		</dl>
 		<dl class="dropdown subdropdown">
 			<dd id="map-addspecial-ddcontent" onmouseover="cancelHide('map-addspecial');cancelHide('map')" onmouseout="ddMenu('map-addspecial',-1,1);ddMenu('map',-1)">
 				<ul>
-					<li><a class="topline topline" href="javascript:get_click('shape',1,'add');ddMenuHide(['map-addspecial','map']);">{$langShape}</a></li>
-					<li><a class="topline" href="javascript:get_click('textbox',2,'add');ddMenuHide(['map-addspecial','map']);">{$langTextbox}</a></li>
-					<li><a class="topline underline" href="javascript:get_click('line',2,'add');ddMenuHide(['map-addspecial','map']);">{$langStateless} {$langLine}</a></li>
+					<li><a class="topline topline" href="javascript:addObject('shape', 'icon', 1, 'add');ddMenuHide(['map-addspecial','map']);">{$langShape}</a></li>
+					<li><a class="topline" href="javascript:addObject('textbox', 'icon', 2, 'add');ddMenuHide(['map-addspecial','map']);">{$langTextbox}</a></li>
+					<li><a class="topline underline" href="javascript:addObject('line', 'line', 2, 'add');ddMenuHide(['map-addspecial','map']);">{$langStateless} {$langLine}</a></li>
 				</ul>
 			</dd>
 		</dl>

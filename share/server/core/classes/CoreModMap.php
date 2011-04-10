@@ -192,13 +192,17 @@ class CoreModMap extends CoreModule {
 					               'type'     => MATCH_OBJECTTYPE,
 					               'id'       => MATCH_OBJECTID_EMPTY,
 					               'viewType' => MATCH_VIEW_TYPE_SERVICE_EMPTY,
-					               'coords'   => MATCH_STRING_NO_SPACE_EMPTY,
+					               'x'        => MATCH_COORDS_MULTI,
+					               'y'        => MATCH_COORDS_MULTI,
 					               'clone'    => MATCH_OBJECTID_EMPTY);
 					$aVals = $this->getCustomOptions($aOpts);
 					
 					// Initialize unset optional attributes
-					if(!isset($aVals['coords'])) {
-						$aVals['coords'] = '';
+					if(!isset($aVals['x'])) {
+						$aVals['x'] = '';
+					}
+					if(!isset($aVals['y'])) {
+						$aVals['y'] = '';
 					}
 					
 					if(!isset($aVals['id'])) {

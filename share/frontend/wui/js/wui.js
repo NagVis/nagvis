@@ -56,93 +56,6 @@ if (window.addEventListener) {
   };
 }
 
-/**
- * Parses a grind to make the alignment of the icons easier
- *
- * @author  Lars Michelsen <lars@vertical-visions.de>
- */
-function gridParse() {
-	// Only show when user configured to see a grid
-	if(oViewProperties.grid_show === 1) {
-		// Create grid container and append to map
-		var oMap = document.getElementById('mymap');
-		var oGrid = document.createElement('div');
-		oGrid.setAttribute('id', 'grid');
-		oMap.appendChild(oGrid);
-		oGrid = null;
-		oMap = null;
-		
-		// Add an options: grid_show, grid_steps, grid_color
-		var grid = new jsGraphics('grid');
-		grid.setColor(oViewProperties.grid_color);
-		grid.setStroke(1);
-		
-		var gridStep = oViewProperties.grid_steps;
-		
-		// Start
-		var gridYStart = 0;
-		var gridXStart = 0;
-		
-		// End: Get screen height, width
-		var gridYEnd = pageHeight() - getHeaderHeight();
-		var gridXEnd = pageWidth();
-		
-		// Draw vertical lines
-		for(var gridX = gridStep; gridX < gridXEnd; gridX = gridX + gridStep) {
-			grid.drawLine(gridX, gridYStart, gridX, gridYEnd);
-		}
-		// Draw horizontal lines
-		for(var gridY = gridStep; gridY < gridYEnd; gridY = gridY + gridStep) {
-			grid.drawLine(gridXStart, gridY, gridXEnd, gridY);
-		}
-		
-		grid.paint();
-		
-		gridXEnd = null
-		gridYEnd = null;
-		gridXStart = null;
-		gridYStart = null;
-		gridStep = null;
-		grid = null;
-	}
-}
-
-/**
- * Toggle the grid state in the current view and sends
- * current setting to server component for persistance
- *
- * @author  Lars Michelsen <lars@vertical-visions.de>
- */
-function gridToggle() {
-	// Toggle the grid state
-	if(oViewProperties.grid_show === 1) {
-		oViewProperties.grid_show = 0;
-		
-		// Remove from view
-		var oMap = document.getElementById('mymap');
-		var oGrid = document.getElementById('grid');
-		oMap.removeChild(oGrid);
-		oGrid = null;
-		oMap = null;
-	} else {
-		oViewProperties.grid_show = 1;
-		
-		// Add to view
-		gridParse();
-	}
-	
-	// Send current option to server component
-	var url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='+mapname+'&type=global&id=0&grid_show='+oViewProperties.grid_show;
-	
-	// Sync ajax request
-	var oResult = getSyncRequest(url);
-	if(oResult && oResult.status != 'OK') {
-		alert(oResult.message);
-	}
-	
-	oResult = null;
-}
-
 // functions used to track the mouse movements, when the user is adding an object. Draw a line a rectangle following the mouse
 // when the user has defined enough points we open the "add object" window
 function get_click(newtype,nbclicks,action) {
@@ -334,6 +247,7 @@ function saveObjectAfterResize(oObj) {
 	oResult = null;
 }
 
+// Moved to frontend
 function coordsToGrid(x, y) {
 	var gridMoveX = x - (x % oViewProperties.grid_steps);
 	var gridMoveY = y - (y % oViewProperties.grid_steps);

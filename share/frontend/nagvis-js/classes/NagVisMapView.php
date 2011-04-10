@@ -110,8 +110,14 @@ class NagVisMapView {
 	 */
 	private function parseViewProperties() {
 		$arr = Array();
+
+		$MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
+		$MAPCFG->readMapConfig(ONLY_GLOBAL);
 		
 		$arr['search'] = $this->search;
+		$arr['grid_show']                = intval($MAPCFG->getValue(0, 'grid_show'));
+		$arr['grid_color']               = $MAPCFG->getValue(0, 'grid_color');
+		$arr['grid_steps']               = intval($MAPCFG->getValue(0, 'grid_steps'));
 		
 		// View specific hover modifier set
 		if($this->aViewOpts['enableHover'] !== false) {
