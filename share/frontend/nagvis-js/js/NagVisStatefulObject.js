@@ -1162,7 +1162,13 @@ var NagVisStatefulObject = NagVisObject.extend({
 		var jsObj      = getMapObjByDomObjId(objId);
 
 		if(viewType !== 'line')
-			anchorId = -1
+			anchorId = -1;
+
+		// Honor the enabled grid and reposition the object after dropping
+		if(oViewProperties.grid_show === 1) {
+		    [ jsObj.conf.x, jsObj.conf.y ] = coordsToGrid(jsObj.conf.x, jsObj.conf.y);
+		    jsObj.reposition();
+		}
 
 		// Make relative when oParent set and not already relative
 		if(isset(oParent))
