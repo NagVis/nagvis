@@ -1,30 +1,26 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
- <head>
-  <title>Gadgets</title>
+    <head>
+        <title>Gadgets</title>
         <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
- </head>
- <body>
+    </head>
+    <body>
         <h1>Gadgets</h1>
         
         <h2>Allgemeine Informationen</h2>
-        <p>"Gadgets" sind kleine Programme, die Bilder aus Informationen erzeugen, die von NagVis
-        geliefert werden. Die Hauptidee besteht darin, die Performance-Daten von Nagios an diese
-        Programme zu liefern, um daraus nette Grafiken oder schicke Tachos, Thermometer oder
-        &auml;hnliches zu machen.<br/>
+        <p>"Gadgets" sind kleine Programme, die Bilder aus Informationen erzeugen, die von NagVis geliefert werden.
+            Die Hauptidee besteht darin, die Performance-Daten von Nagios an diese Programme zu liefern, um daraus nette Grafiken oder schicke Tachos, Thermometer oder &auml;hnliches zu machen.<br/>
         <code>share/userfiles/gadgets</code> enth&auml;lt einige Beispiele, andere finden Sie unter <a href="exchange.nagvis.org/exchange/Gadgets/">Nagvis Exchange</a><sup>[1]</sup>.</p>
-        <p>Die Gadgets k&ouml;nnen in jeder Sprache geschrieben werden, die von Ihrem Webserver
-        interpretiert wird, wie z.B. PHP, Perl, ...</p>
-        <p>Gadgets werden nur f&uuml;r Services unterst&uuml;tzt. Ein Objekt kann in ein Gadget
-        verwandelt werden, indem Sie view_type=&quot;gadget&quot; und eine g&uuml;ltige gadget_url
-        setzen.</p>
+        <p>Die Gadgets k&ouml;nnen in jeder Sprache geschrieben werden, die von Ihrem Webserver interpretiert wird, wie z.B. PHP, Perl, ...</p>
+        <p>Gadgets werden nur f&uuml;r Services unterst&uuml;tzt. Ein Objekt kann in ein Gadget verwandelt werden, indem Sie view_type=&quot;gadget&quot; und eine g&uuml;ltige gadget_url setzen.</p>
         <p>NagVis unterst&uuml;tzt Gadgets ab Version 1.4<sup>[1]</sup>.</p>
         
         <img src="../general/img/nagvis-1.4-gadget-label-hover.png" alt="NagVis 1.4 std_speedometer gadget with label and hover menu" /><br />
         <p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.4 std_speedometer-Gadget auf einer Test-Map mit aktiviertem Label.</p>
         
         <h2>Parameter</h2>
-        <p>Die Gadgets bekommen ihre Informationen durch einen HTTP-Get-Aufruf von NagVis (wenn Sie <code>share/userfiles/gadgets/gadget_core.php</code> einbinden, werden zwei Arrays gef&uuml;llt. Mehr Informationen finden Sie in der (englischen) Beschreibung dort).</p>
+        <p>Die Gadgets bekommen ihre Informationen durch einen HTTP-Get-Aufruf von NagVis (wenn Sie <code>share/userfiles/gadgets/gadget_core.php</code> einbinden, werden zwei Arrays gef&uuml;llt.
+            Mehr Informationen finden Sie in der (englischen) Beschreibung dort).</p>
         <p>Die folgenden Parameter werden an die Gadgets geliefert:</p>
         
         <table style="width:100%">
@@ -112,11 +108,21 @@
 
       <p>Ein zweites Beispiel finden Sie in std_speedometer2.php. Im Gegensatz zu std_speedometer unterst&uuml;tzt es auch check_multi-Ausgaben. Verschiedene Optionen beeinflussen das Verhalten des Gadgets:
       <table>
-         <tr><th>Parameter</th><th>Beispielwert</th><th>Beschreibung</th></tr>
-         <tr><td>label</td><td>1</td><td>1 = Anzeige von Host-Name / Service-Beschreibung in der linken oberen Ecke des Graphen; 0 = Informationen nicht anzeigen (Default)</td></tr>
-         <tr><td>current</td><td>1</td><td>1 = Anzeige des aktuellen Performance-Daten-Wertes (Default); 0 = Informationen nicht anzeigen</td></tr>
-         <tr><td>columns</td><td>5</td><td>Graphen k&ouml;nnen in Spalten angezeigt werden. Die Zahl der Zeilen wird anhand der maximalen Anzahl von Performance-Daten-Elementen ermittelt. Default ist 3</td></tr>
-         <tr><td>string</td><td>pct</td><td>Das Performance-Daten-Label muss die Zeichenkette enthalten, damit der Graph angezeigt wird. Im Falle von check_multi-Ausgaben wird nur der letzte Teil untersucht. Default ist eine leere Zeichenkette</td></tr>
+          <tr>
+              <th>Parameter</th><th>Beispielwert</th><th>Beschreibung</th>
+          </tr>
+          <tr>
+              <td>label</td><td>1</td><td>1 = Anzeige von Host-Name / Service-Beschreibung in der linken oberen Ecke des Graphen; 0 = Informationen nicht anzeigen (Default)</td>
+          </tr>
+          <tr>
+              <td>current</td><td>1</td><td>1 = Anzeige des aktuellen Performance-Daten-Wertes (Default); 0 = Informationen nicht anzeigen</td>
+          </tr>
+          <tr>
+              <td>columns</td><td>5</td><td>Graphen k&ouml;nnen in Spalten angezeigt werden. Die Zahl der Zeilen wird anhand der maximalen Anzahl von Performance-Daten-Elementen ermittelt. Default ist 3</td>
+          </tr>
+          <tr>
+              <td>string</td><td>pct</td><td>Das Performance-Daten-Label muss die Zeichenkette enthalten, damit der Graph angezeigt wird. Im Falle von check_multi-Ausgaben wird nur der letzte Teil untersucht. Default ist eine leere Zeichenkette</td>
+          </tr>
       </table>
       <img src="../general/img/std_speedo2.png" alt="NagVis 1.5 std_speedometer2-Gadget" /><br />
       <p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.5 std_speedometer2-Gadget im normalen, warnenden und kritischen Zustand</p>
@@ -125,17 +131,32 @@
          Der Status ist <i>nicht</i> der Zustand des Service! Das liegt daran, dass die Daten ggf. mehrere Datenreihen enthalten.
          In vielen F&auml;llen sind nicht alle Datenreihen eines Service WARNING oder CRITICAL, so dass Sie sonst falsche Alarme bekommen w&uuml;rden (<font color="#ff0000">neu in 1.5.7 oder git neuer als 2010.12.12</font>).</p>
       <table>
-         <tr><th>Parameter</th><th>Beispielwert</th><th>Beschreibung</th></tr>
-         <tr><td>label</td><td>1</td><td>1 = Anzeige von Host-Name / Service-Beschreibung im letzten Viertel des Graphen (Default); 0 = Informationen nicht anzeigen</td></tr>
-         <tr><td>current</td><td>1</td><td>1 = Anzeigen der aktuellen Performance-Daten (Default); 0 = Informationen nicht anzeigen</td></tr>
-         <tr><td>columns</td><td>5</td><td>Graphen k&ouml;nnen in Spalten angezeigt werden. Die Zahl der Zeilen wird anhand der maximalen Anzahl von Performance-Daten-Elementen ermittelt. Default ist 3</td></tr>
-         <tr><td>string</td><td>pct</td><td>Das Performance-Daten-Label muss die Zeichenkette enthalten, damit der Graph angezeigt wird. Im Falle von check_multi-Ausgaben wird nur der letzte Teil untersucht. Default ist eine leere Zeichenkette</td></tr>
-         <tr><td>threshold</td><td>value</td><td>Legt fest, ob die WARNING- und CRITICAL-Schwellwerte in Prozent (Default) oder als Zahlenwert angezeigt werden</td></tr>
+         <tr>
+              <th>Parameter</th><th>Beispielwert</th><th>Beschreibung</th></tr>
+         <tr>
+              <td>label</td><td>1</td><td>1 = Anzeige von Host-Name / Service-Beschreibung im letzten Viertel des Graphen (Default); 0 = Informationen nicht anzeigen</td>
+         </tr>
+         <tr>
+              <td>current</td><td>1</td><td>1 = Anzeigen der aktuellen Performance-Daten (Default); 0 = Informationen nicht anzeigen</td>
+         </tr>
+         <tr>
+              <td>columns</td><td>5</td><td>Graphen k&ouml;nnen in Spalten angezeigt werden. Die Zahl der Zeilen wird anhand der maximalen Anzahl von Performance-Daten-Elementen ermittelt. Default ist 3</td>
+         </tr>
+         <tr>
+              <td>string</td><td>pct</td><td>Das Performance-Daten-Label muss die Zeichenkette enthalten, damit der Graph angezeigt wird. Im Falle von check_multi-Ausgaben wird nur der letzte Teil untersucht. Default ist eine leere Zeichenkette</td>
+         </tr>
+         <tr>
+              <td>threshold</td><td>value</td><td>Legt fest, ob die WARNING- und CRITICAL-Schwellwerte in Prozent (Default) oder als Zahlenwert angezeigt werden</td>
+         </tr>
       </table>
       <img src="../general/img/std_bar.png" alt="NagVis 1.5 std_bar-Gadget"/><br/>
       <p style="font-size:0.8em;margin-top:0;">&nbsp;NagVis 1.5 std_bar-Gadget im normalen, warnenden und kritischen Zustand</p>
-      <p><b>Anmerkung:</b> Dieses Gadget benutzt einen TrueType-Font, dessen Position und Name hartkodiert ist (Variablen <i>$fontDir</i> und <i>$fontName</i>). Wird die Datei nicht gefunden, dann wird ein eingebauter Font benutzt.
-         Der Wert von $fontDir wechselt zwischen den Distributionen. Falls der Font nicht korrekt skaliert, dann pr&uuml;fen Sie bitte die Einstellung (sie ist korrekt f&uuml;r OpenSuSE, andere Einstellungen sind auskommentiert).</p>
-        <sup>[1]</sup> Die Verzeichnisstruktur hat sich zwischen NagVis 1.4.x und NagVis 1.5 ge&auml;ndert. Gadgets wurden in <code>nagvis/nagvis/gadgets</code> abgelegt und werden nun in <code>share/userfiles/gadgets</code> gespeichert. Gadgets von NagVis Exchange benutzen m&ouml;glicherweise die alte Struktur, so dass Sie die Dateien ggf. an die neue Stelle kopieren m&uuml;ssen (z.B. <code>cp -pr &lt;Quelle&gt;/nagvis/nagvis/gadgets/&lt;Gadget&gt; &lt;Ziel&gt;/share/userfiles/gadgets/</code>).
+      <p><b>Anmerkung:</b> Dieses Gadget benutzt einen TrueType-Font, dessen Position und Name hartkodiert ist (Variablen <i>$fontDir</i> und <i>$fontName</i>).
+          Wird die Datei nicht gefunden, dann wird ein eingebauter Font benutzt.
+          Der Wert von $fontDir wechselt zwischen den Distributionen.
+          Falls der Font nicht korrekt skaliert, dann pr&uuml;fen Sie bitte die Einstellung (sie ist korrekt f&uuml;r OpenSuSE, andere Einstellungen sind auskommentiert).</p>
+        <sup>[1]</sup> Die Verzeichnisstruktur hat sich zwischen NagVis 1.4.x und NagVis 1.5 ge&auml;ndert.
+          Gadgets wurden in <code>nagvis/nagvis/gadgets</code> abgelegt und werden nun in <code>share/userfiles/gadgets</code> gespeichert.
+          Gadgets von NagVis Exchange benutzen m&ouml;glicherweise die alte Struktur, so dass Sie die Dateien ggf. an die neue Stelle kopieren m&uuml;ssen (z.B. <code>cp -pr &lt;Quelle&gt;/nagvis/nagvis/gadgets/&lt;Gadget&gt; &lt;Ziel&gt;/share/userfiles/gadgets/</code>).
     </body>
 </html>

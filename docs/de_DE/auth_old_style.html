@@ -1,21 +1,25 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
-    <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
-    <title>Authentifizierung / Autorisierung</title>
-</head>
-<body>
-    <h1>&quot;Alte&quot; Authentifizierung</h1>
-<p>In den Versionen vor 1.5 k&uuml;mmerte sich NagVis nicht viel um die Authentifizierung und Autorisierung. In den meisten Umgebungen nutzte es die Authentifizierung von Nagios. Dies war ein Nebeneffekt, da NagVis im Verzeichnis <code>nagios/share</code> platziert war.</p>
-<p>Mit NagVis 1.5 wurde das Default-Installationsverzeichnis in ein eigenes Basisverzeichnis verschoben. Dieser Schritt erforderte einen neuen Authentifizierungs- und Autorisierungsmechanismus. Das Hauptaugenmerk dieses Konzeptes liegt auf Modularit&auml;t und Flexibilit&auml;t.</p>
-<p>Wenn Sie wirklich die Authentifizierung von Nagios nutzen m&ouml;chten, dann k&ouml;nnen Sie das LogonMixed- (default) oder das LogonEnv-Modul nutzen, um eine zuverl&auml;ssige Authentifizierung einzusetzen.
-Der einzige Unterschied besteht darin, dass das LogonMixed-Modul den HTML-LogonDialog nutzt, wenn kein Benutzer vom Web-Server &uuml;bergeben wird, w&auml;hrend LogonEnv einfach nur eine "Zugriff verweigert"-Meldung anzeigt.</p>
-<p>Um dies zu erreichen, setzen Sie einfach die folgenden Optionen im <code>[global]</code>-Abschnitt der NagVis-Hauptkonfigurationsdatei:</p>
-<pre>logonmodule="LogonEnv"
-logonenvvar="REMOTE_USER"
-logonenvcreateuser="1"</pre>
-<p>Diese Zeilen weisen NagVis an, das LogonEnv-Modul zu nutzen, das den authentifizierten Benutzer aus einer Umgebungsvariablen ausliest.
- Der zweite Parameter teilt dem LogonEnv-Modul mit, welche Variable f&uuml;r das Auslesen benutzt werden soll.
- Die dritte Variable bewirkt, dass unbekannte Benutzer in der NagVis-AA-Datenbank angelegt werden sollen.</p>
-</body>
+    <head>
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+        <title>Authentifizierung / Autorisierung</title>
+    </head>
+    <body>
+        <h1>&quot;Alte&quot; Authentifizierung</h1>
+        <p>In den Versionen vor 1.5 k&uuml;mmerte sich NagVis nicht viel um die Authentifizierung und Autorisierung.
+            In den meisten Umgebungen nutzte es die Authentifizierung von Nagios.
+            Dies war ein Nebeneffekt, da NagVis im Verzeichnis <code>nagios/share</code> platziert war.</p>
+        <p>Mit NagVis 1.5 wurde das Default-Installationsverzeichnis in ein eigenes Basisverzeichnis verschoben.
+            Dieser Schritt erforderte einen neuen Authentifizierungs- und Autorisierungsmechanismus.
+            Das Hauptaugenmerk dieses Konzeptes liegt auf Modularit&auml;t und Flexibilit&auml;t.</p>
+        <p>Wenn Sie wirklich die Authentifizierung von Nagios nutzen m&ouml;chten, dann k&ouml;nnen Sie das LogonMixed- (default) oder das LogonEnv-Modul nutzen, um eine zuverl&auml;ssige Authentifizierung einzusetzen.
+        Der einzige Unterschied besteht darin, dass das LogonMixed-Modul den HTML-LogonDialog nutzt, wenn kein Benutzer vom Web-Server &uuml;bergeben wird, w&auml;hrend LogonEnv einfach nur eine "Zugriff verweigert"-Meldung anzeigt.</p>
+        <p>Um dies zu erreichen, setzen Sie einfach die folgenden Optionen im <code>[global]</code>-Abschnitt der NagVis-Hauptkonfigurationsdatei:</p>
+        <pre>logonmodule="LogonEnv"
+        logonenvvar="REMOTE_USER"
+        logonenvcreateuser="1"</pre>
+        <p>Diese Zeilen weisen NagVis an, das LogonEnv-Modul zu nutzen, das den authentifizierten Benutzer aus einer Umgebungsvariablen ausliest.
+         Der zweite Parameter teilt dem LogonEnv-Modul mit, welche Variable f&uuml;r das Auslesen benutzt werden soll.
+         Die dritte Variable bewirkt, dass unbekannte Benutzer in der NagVis-AA-Datenbank angelegt werden sollen.</p>
+    </body>
 </html>

@@ -1,22 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
-  <head>
-    <title>Automap-Konfiguration</title>
+    <head>
+        <title>Beschreibung des Automap-Konfigurationsformats</title>
         <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
-  </head>
-  <body>
-        <h1>Automap-Konfiguration</h1>
-    </body>
-</html>
-
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
- <head>
-  <title>Map configuration format description</title>
-        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
- </head>
- <body>
+    </head>
+    <body>
         <h1>Beschreibung des Automap-Konfigurationsformats</h1>
         
         <h2>Allgemeine Information</h2>
@@ -26,162 +14,164 @@
         <ul>
             <li><a href="#global">Global</a></li>
         </ul>
-        
+
         <h2>Beschreibung der Objekttypen</h2>
-        
+
         <a name="global"></a><h3> Global </h3>
-        <p>Die erste Definition in jeder Konfigurationsdatei sollte vom speziellen Typ "global" sein. Optionen in diesem Paragraph gelten f&uuml;r die gesamte Map und werden auf andere Typen vererbt, die nachfolgend definiert werden.</p>
+        <p>Die erste Definition in jeder Konfigurationsdatei sollte vom speziellen Typ "global" sein.
+            Optionen in diesem Paragraph gelten f&uuml;r die gesamte Map und werden auf andere Typen vererbt, die nachfolgend definiert werden.</p>
         <p>Beispiel mit allen Optionen, die gesetzt werden m&uuml;ssen:</p>
         <pre>define global {
-  map_image=lan.png
-}</pre>
-        
-<table border=0>
-<tr>
-<th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
-<tr>
-</tr>
-<tr>
-<td>alias</td><td>Map-Name</td><td>Der Alias ist das Label f&uuml;r jede Map. Wenn definiert, wird es &uuml;berall im NagVis-Frontend und WUI angezeigt</td>
-</tr>
-<tr>
-<td>backend_id</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Die in der Hauptkonfigurationsdatei definierte Backend-ID, die angibt, wo NagVis nach Objektzust&auml;nden suchen soll. Wenn dieser Parameter nicht angegeben wird, wird das in der <a href=nagvis_config_format_description.html>Hauptkonfigurationsdatei</a> unter "defaultbackend" angegebene Backend benutzt.</td>
-</tr>
-<tr>
-<td>background_color</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Hintergrundfarbe dieser Map. Falls dieser Wert nicht gesetzt wird, wird die Hintergrundfarbe aus der Hauptkonfigurationsdatei genommen. </td>
-</tr>
-<tr>
-<td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten.</td>
-</tr>
-<tr>
-<td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll</td>
-</tr>
-<tr>
-<td>default_params</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>zu benutzende Default-Parameter, wenn keine per URL &uuml;bergeben wurden. Das Format ist wie bei dem URL, z.B. <code>&amp;childLayers=2</code>. G&uuml;ltige Optionen finden Sie <a href="automap">hier</a>.</td>
-</tr>
-<tr>
-<td>event_background</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren der sich &auml;ndernden Hintergrundfarbe bei Status&auml;nderungen (die konfigurierte Farbe wird angezeigt, wenn der Gesamtstatus PENDING, OK oder UP ist).</td>
-</tr>
-<tr>
-<td>event_highlight</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren der Hervorhebung des sich &auml;ndernden Objekts durch eine blinkende Umrandung.</td>
-</tr>
-<tr>
-<td>event_highlight_duration</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Setzt die Dauer der Hervorhebung in Millisekunden.</td>
-</tr>
-<tr>
-<td>event_highlight_interval</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Setzt die Dauer des Hervorhebungs-Intervalls in Millisekunden.</td>
-</tr>
-<tr>
-<td>event_log</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren des Eventlogs im neuen JavaScript-Backend. Das Eventlog protokolliert wichtige Aktionen und Informationen. </td>
-</tr>
-<tr>
-<td>event_log_level</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Loglevel des Eventlogs (verf&uuml;gbar: debug, info, warning, critical).</td>
-</tr>
-<tr>
-<td>event_log_height</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>H&ouml;he des JavaScript-Eventlogs in Pixeln.</font></td>
-</tr>
-<tr>
-<td>event_log_hidden</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Verstecken/zeigen des JavaScript-Eventlogs w&auml;hrend des Map-Ladens.</font></td>
-</tr>
-<tr>
-<td>event_scroll</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren des Fokussierens auf das Icon, das den Zustand ver&auml;ndert hat, wenn dieses au&szlig;erhalb des sichtbaren Bereichs ist.</td>
-</tr>
-<tr>
-<td>event_sound</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren von Sound-Signalen bei Status&auml;nderungen.</font></td>
-</tr>
-<!--
-<tr>
-<td>grid_color</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Die Farbe der Rasterlinien</td>
-</tr>
-<tr>
-<td>grid_show</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren von Rasterlinien zur Ausrichtung von Objekten im WUI. Objekte werden an der linken, oberen Ecke ausgerichtet</td>
-</tr>
-<tr>
-<td>grid_steps</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Abstand der Rasterlinien</td>
-</tr>
--->
-<tr>
-<td>header_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren des Header-Men&uuml;s </td>
-</tr>
-<tr>
-<td>header_template</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td><a href=header_templates.html#header/templates>header template</a> f&uuml;r diese Map </td>
-</tr>
-<tr>
-<td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
-</tr>
-<tr>
-<td>hover_delay</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Verz&ouml;gerung der Anzeige des Hover-Menus in Sekunden </td>
-</tr>
-<tr>
-<td>hover_template</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Default <a href=hover_templates.html#hover/templates>hover template</a> f&uuml;r diese Map </td>
-</tr>
-<tr>
-<td>hover_childs_limit</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>max. Anzahl von Child-Objekten </td>
-</tr>
-<tr>
-<td>hover_childs_order</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Reihenfolge von Child-Objekten ("asc"=aufsteigend, "desc"=absteigend) </td>
-</tr>
-<tr>
-<td>hover_childs_show</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Anzeigen von Child-Objekten in Hover-Men&uuml;s </td>
-</tr>
-<tr>
-<td>hover_childs_sort</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Sortierreihenfolge von Child-Objekten ("s"=Status, "a"=Alphabet) </td>
-</tr>
-<tr>
-<td>iconset</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Iconset, das als Standard f&uuml;r alle auf der Map platzierten Objekte benutzt werden soll. Kann f&uuml;r jedes Objekt &uuml;berschrieben werden.<br> Im Beispiel wird "std_small" benutzt, was bedeutet, dass ein OK-Zustand das Icon "std_small_<i>ok</i>.png", benutzt, ein CRITICAL-Zustand "std_small_<i>critical</i>.png" usw. </td>
-</tr>
-<tr>
-<td>in_maintenance</td><td>0</td><td>aktiviert/deaktiviert den Wartungsmodus. Wenn eine Map im Wartungsmodus ist, wird statt der Map lediglich ein Hinweis angezeigt</td>
-</tr>
-<tr>
-<td>label_show</td><td>0</td><td>Labelanzeige f&uuml;r die Map-Objekte aktivieren/deaktivieren </td>
-</tr>
-<tr>
-<td>label_x</td><td>-20</td><td>x-Position der Label in Pixeln (mit Vorzeichen +/- relativ zur linken, oberen Ecke der Icons, sonst absolute Position) </td>
-</tr>
-<tr>
-<td>label_y</td><td>+20</td><td>y-Position der Label in Pixeln (mit Vorzeichen +/- relativ zur linken, oberen Ecke der Icons, sonst absolute Position) </td>
-</tr>
-<tr>
-<td>label_width </td><td>auto </td><td>Default-Breite der Label in Pixeln </td>
-</tr>
-<tr>
-<td>label_background</td><td>transparent</td><td>Default-Hintergrundfarbe der Label. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td></td>
-</tr>
-<tr>
-<td>label_border</td><td>#000000</td><td>Default-Rahmenfarbe der Label. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
-</tr>
-<tr>
-<td>label_style</td><td></td><td>Benutzerdefiniertes Aussehen des Label-Textes im Format von HTML-Style-Attributen, z.B. <code>font-family:sans;font-weight:bold;</code>.</td>
-</tr>
-<tr>
-<td>line_arrow</td><td>forward</td>
-<td>Dies definiert die Pfeile am Linienende. Bisher wird dieses Attribut nur f&uuml;r die Linien zwischen Hosts in der Automap benutzt.
-M&ouml;gliche Werte: forward, back, both, none.</td>
-</tr>
-<tr>
-<td> line_type </td><td></td>
-<td>Gibt den Linientyp an, wenn view_type=line. G&uuml;ltige Werte sind:<br /> &quot;11&quot; f&uuml;r Linien mit einem Pfeil am Linienende.<br /> &quot;10&quot; f&uuml;r Linien mit zwei Pfeilen, die in der Linienmitte aufeinander zeigen.<br /> &quot;12&quot; f&uuml;r Linien ohne Pfeil(e).</td>
-</tr>
-<tr>
-<td>line_width</td><td>3</td>
-<td>Dies definiert die Linienbreite in px, wenn dieses Objekt als Linie angezeigt wird.</td>
-</tr>
-<tr>
-<td>only_hard_states</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
-</tr>
-<tr>
-<td>recognize_services</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Definiert, ob die Services des Hosts den angezeigten Status beeinflussen. Wenn auf "1" gesetzt, wird ein Service im Status CRITICAL auch den HOST als CRITICAL anzeigen. Wenn auf "0" gesetzt, wird nur der Host-Zustand (UP oder DOWN) angezeigt und der Status der Services ignoriert. Ist dieser Wert nicht in der Konfiguration angegeben, wird er auf 1 gesetzt. </td>
-</tr>
-<tr>
-<td>show_in_lists</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Map-Anzeige in Listenformat (Dropdowns, Indexseite, ...) </td>
-</tr>
-<tr>
-<td>stylesheet</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Dateiname des benutzerdefinierten Stylesheets zur Verwendung in den Maps. Die Datei muss im share/nagvis/style-Verzeichnis abgelegt sein.</td>
-</tr>
-<tr>
-<td>url_target </td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster) </td>
-</tr>
-</table>
-
+    map_image=lan.png
+    }</pre>
+                
+        <table border=0>
+            <tr>
+                <th>Wert</th><th>Default</th><th>Beschreibung</th>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+                <td>alias</td><td>Map-Name</td><td>Der Alias ist das Label f&uuml;r jede Map. Wenn definiert, wird es &uuml;berall im NagVis-Frontend und WUI angezeigt</td>
+            </tr>
+            <tr>
+                <td>backend_id</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Die in der Hauptkonfigurationsdatei definierte Backend-ID, die angibt, wo NagVis nach Objektzust&auml;nden suchen soll. Wenn dieser Parameter nicht angegeben wird, wird das in der <a href=nagvis_config_format_description.html>Hauptkonfigurationsdatei</a> unter "defaultbackend" angegebene Backend benutzt.</td>
+            </tr>
+            <tr>
+                <td>background_color</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Hintergrundfarbe dieser Map. Falls dieser Wert nicht gesetzt wird, wird die Hintergrundfarbe aus der Hauptkonfigurationsdatei genommen. </td>
+            </tr>
+            <tr>
+                <td>context_menu</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Aktivieren/deaktivieren des Kontext-Men&uuml;s auf Ihren Map-Objekten.</td>
+            </tr>
+            <tr>
+                <td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll</td>
+            </tr>
+            <tr>
+                <td>default_params</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>zu benutzende Default-Parameter, wenn keine per URL &uuml;bergeben wurden. Das Format ist wie bei dem URL, z.B. <code>&amp;childLayers=2</code>. G&uuml;ltige Optionen finden Sie <a href="automap">hier</a>.</td>
+            </tr>
+            <tr>
+                <td>event_background</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren der sich &auml;ndernden Hintergrundfarbe bei Status&auml;nderungen (die konfigurierte Farbe wird angezeigt, wenn der Gesamtstatus PENDING, OK oder UP ist).</td>
+            </tr>
+            <tr>
+                <td>event_highlight</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren der Hervorhebung des sich &auml;ndernden Objekts durch eine blinkende Umrandung.</td>
+            </tr>
+            <tr>
+                <td>event_highlight_duration</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Setzt die Dauer der Hervorhebung in Millisekunden.</td>
+            </tr>
+            <tr>
+                <td>event_highlight_interval</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Setzt die Dauer des Hervorhebungs-Intervalls in Millisekunden.</td>
+            </tr>
+            <tr>
+                <td>event_log</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren des Eventlogs im neuen JavaScript-Backend. Das Eventlog protokolliert wichtige Aktionen und Informationen. </td>
+            </tr>
+            <tr>
+                <td>event_log_level</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Loglevel des Eventlogs (verf&uuml;gbar: debug, info, warning, critical).</td>
+            </tr>
+            <tr>
+                <td>event_log_height</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>H&ouml;he des JavaScript-Eventlogs in Pixeln.</font></td>
+            </tr>
+            <tr>
+                <td>event_log_hidden</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Verstecken/zeigen des JavaScript-Eventlogs w&auml;hrend des Map-Ladens.</font></td>
+            </tr>
+            <tr>
+                <td>event_scroll</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren des Fokussierens auf das Icon, das den Zustand ver&auml;ndert hat, wenn dieses au&szlig;erhalb des sichtbaren Bereichs ist.</td>
+            </tr>
+            <tr>
+                <td>event_sound</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren von Sound-Signalen bei Status&auml;nderungen.</font></td>
+            </tr>
+            <!--
+            <tr>
+                <td>grid_color</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Die Farbe der Rasterlinien</td>
+            </tr>
+            <tr>
+                <td>grid_show</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren von Rasterlinien zur Ausrichtung von Objekten im WUI. Objekte werden an der linken, oberen Ecke ausgerichtet</td>
+            </tr>
+            <tr>
+                <td>grid_steps</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Abstand der Rasterlinien</td>
+            </tr>
+            -->
+            <tr>
+                <td>header_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren des Header-Men&uuml;s </td>
+            </tr>
+            <tr>
+                <td>header_template</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td><a href=header_templates.html#header/templates>header template</a> f&uuml;r diese Map </td>
+            </tr>
+            <tr>
+                <td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
+            </tr>
+            <tr>
+                <td>hover_delay</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Verz&ouml;gerung der Anzeige des Hover-Menus in Sekunden </td>
+            </tr>
+            <tr>
+                <td>hover_template</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Default <a href=hover_templates.html#hover/templates>hover template</a> f&uuml;r diese Map </td>
+            </tr>
+            <tr>
+                <td>hover_childs_limit</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>max. Anzahl von Child-Objekten </td>
+            </tr>
+            <tr>
+                <td>hover_childs_order</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Reihenfolge von Child-Objekten ("asc"=aufsteigend, "desc"=absteigend) </td>
+            </tr>
+            <tr>
+                <td>hover_childs_show</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Anzeigen von Child-Objekten in Hover-Men&uuml;s </td>
+            </tr>
+            <tr>
+                <td>hover_childs_sort</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Sortierreihenfolge von Child-Objekten ("s"=Status, "a"=Alphabet) </td>
+            </tr>
+            <tr>
+                <td>iconset</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Iconset, das als Standard f&uuml;r alle auf der Map platzierten Objekte benutzt werden soll. Kann f&uuml;r jedes Objekt &uuml;berschrieben werden.<br> Im Beispiel wird "std_small" benutzt, was bedeutet, dass ein OK-Zustand das Icon "std_small_<i>ok</i>.png", benutzt, ein CRITICAL-Zustand "std_small_<i>critical</i>.png" usw. </td>
+            </tr>
+            <tr>
+                <td>in_maintenance</td><td>0</td><td>aktiviert/deaktiviert den Wartungsmodus. Wenn eine Map im Wartungsmodus ist, wird statt der Map lediglich ein Hinweis angezeigt</td>
+            </tr>
+            <tr>
+                <td>label_show</td><td>0</td><td>Labelanzeige f&uuml;r die Map-Objekte aktivieren/deaktivieren </td>
+            </tr>
+            <tr>
+                <td>label_x</td><td>-20</td><td>x-Position der Label in Pixeln (mit Vorzeichen +/- relativ zur linken, oberen Ecke der Icons, sonst absolute Position) </td>
+            </tr>
+            <tr>
+                <td>label_y</td><td>+20</td><td>y-Position der Label in Pixeln (mit Vorzeichen +/- relativ zur linken, oberen Ecke der Icons, sonst absolute Position) </td>
+            </tr>
+            <tr>
+                <td>label_width </td><td>auto </td><td>Default-Breite der Label in Pixeln </td>
+            </tr>
+            <tr>
+                <td>label_background</td><td>transparent</td><td>Default-Hintergrundfarbe der Label. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td></td>
+            </tr>
+            <tr>
+                <td>label_border</td><td>#000000</td><td>Default-Rahmenfarbe der Label. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
+            </tr>
+            <tr>
+                <td>label_style</td><td></td><td>Benutzerdefiniertes Aussehen des Label-Textes im Format von HTML-Style-Attributen, z.B. <code>font-family:sans;font-weight:bold;</code>.</td>
+            </tr>
+            <tr>
+                <td>line_arrow</td><td>forward</td>
+                <td>Dies definiert die Pfeile am Linienende. Bisher wird dieses Attribut nur f&uuml;r die Linien zwischen Hosts in der Automap benutzt.
+            M&ouml;gliche Werte: forward, back, both, none.</td>
+            </tr>
+            <tr>
+                <td> line_type </td><td></td>
+                <td>Gibt den Linientyp an, wenn view_type=line. G&uuml;ltige Werte sind:<br /> &quot;11&quot; f&uuml;r Linien mit einem Pfeil am Linienende.<br /> &quot;10&quot; f&uuml;r Linien mit zwei Pfeilen, die in der Linienmitte aufeinander zeigen.<br /> &quot;12&quot; f&uuml;r Linien ohne Pfeil(e).</td>
+            </tr>
+            <tr>
+                <td>line_width</td><td>3</td>
+                <td>Dies definiert die Linienbreite in px, wenn dieses Objekt als Linie angezeigt wird.</td>
+            </tr>
+            <tr>
+                <td>only_hard_states</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
+            </tr>
+            <tr>
+                <td>recognize_services</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Definiert, ob die Services des Hosts den angezeigten Status beeinflussen. Wenn auf "1" gesetzt, wird ein Service im Status CRITICAL auch den HOST als CRITICAL anzeigen. Wenn auf "0" gesetzt, wird nur der Host-Zustand (UP oder DOWN) angezeigt und der Status der Services ignoriert. Ist dieser Wert nicht in der Konfiguration angegeben, wird er auf 1 gesetzt. </td>
+            </tr>
+            <tr>
+                <td>show_in_lists</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Map-Anzeige in Listenformat (Dropdowns, Indexseite, ...) </td>
+            </tr>
+            <tr>
+            <td>stylesheet</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Dateiname des benutzerdefinierten Stylesheets zur Verwendung in den Maps. Die Datei muss im share/nagvis/style-Verzeichnis abgelegt sein.</td>
+            </tr>
+            <tr>
+                <td>url_target </td><td>_self</td><td>Ziel des Icon-Links, diese Option passt &lt;a target=""> an (_self ist das gleiche Fenster) </td>
+            </tr>
+        </table>
+    </body>
 </html>
