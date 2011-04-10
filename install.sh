@@ -3,7 +3,7 @@
 #
 # install.sh - Installs/Updates NagVis
 #
-# Copyright (c) 2004-2010 NagVis Project (Contact: info@nagvis.org)
+# Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
 #
 # Development:
 #  Wolfgang Nieder
@@ -30,7 +30,7 @@
 ###############################################################################
 
 # Installer version
-INSTALLER_VERSION="0.2.16"
+INSTALLER_VERSION="0.2.17"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -748,7 +748,7 @@ copy_dir_xpath() {
   # Get files and directories to copy. This takes only the elements in the
   # given directory.
   # FILES=`find $NAGVIS_PATH_BACKUP/$2 -mindepth 1 -maxdepth 1`
-  FILES=`find $NAGVIS_PATH_BACKUP/$1/* -prune 2> /dev/null`
+  FILES=`find $NAGVIS_PATH_BACKUP/$2/* -prune 2> /dev/null`
 
 
   # Maybe exclude some files
@@ -763,6 +763,7 @@ copy_dir_xpath() {
 }
 
 copy() {
+	IFS=" "$'\n'
 	DONE=""
 	
 	# DEBUG: [ -n "$LINE" ] && line "$LINE"
@@ -778,8 +779,7 @@ copy() {
 	if [ -d "$NAGVIS_PATH_BACKUP/$2" -a ! -d "$3" ]; then
 		# Get files and directories to copy. This takes only the elements in the
 		# given directory.
-		FILES=`find $NAGVIS_PATH_BACKUP/$2/* -prune`
-
+		FILES=`find $NAGVIS_PATH_BACKUP/$2/* -prune 2> /dev/null`
 
 		# Maybe exclude some files
 		if [ "$1" != "" ]; then
