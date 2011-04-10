@@ -340,9 +340,6 @@ function addClick(e) {
     //
     // If this is reached all object coords have been collected
     //
-
-    if(addFollow)
-	addShape.clear();
     
     if(document.body)
 	document.body.style.cursor = 'default';
@@ -682,12 +679,10 @@ function gridParse() {
 	// Only show when user configured to see a grid
 	if(oViewProperties.grid_show === 1) {
 		// Create grid container and append to map
-		var oMap = document.getElementById('map');
 		var oGrid = document.createElement('div');
 		oGrid.setAttribute('id', 'grid');
-		oMap.appendChild(oGrid);
+		document.getElementById('map').appendChild(oGrid);
 		oGrid = null;
-		oMap = null;
 		
 		// Add an options: grid_show, grid_steps, grid_color
 		var grid = new jsGraphics('grid');
