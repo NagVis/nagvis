@@ -3,6 +3,9 @@ This is a small file for storing quick thoughts about new features and needed ch
 
 - Backends:
  - Zusätzlich beliebige Variablen vom Backend holen lassen
+   Pro Objekt "Custom Vars" für Context- und Hover-Menus einbauen. Diese werden dann pro Objekt
+   u.U. sogar in separaten Queries an das Backend abgefragt und in Hover- und Context-Menus
+   als spezielle Macros angeboten.
 
 Installer:
  - Der Installer muss beim Update darauf achten, dass die alten [paths] Variablen aus
@@ -34,10 +37,6 @@ variieren. Normale Linien haben zwei Koordinaten, Linien mit zwei Enden können
 drei Koordinaten haben.
 
 Lock/Unlock Aktionen fuer normale Icons/Gadgets/Textboxen implementieren.
-
-Pro Objekt "Custom Vars" für Context- und Hover-Menus einbauen. Diese werden dann pro Objekt
-u.U. sogar in separaten Queries an das Backend abgefragt und in Hover- und Context-Menus
-als spezielle Macros angeboten.
 
 *** Add/Modify Redesign ***
 
@@ -78,6 +77,8 @@ Exception/Error log bauen:
   PHP Fehler loggen
 	Eventuell sogar Javascript fehler loggen
 
+- Grid in normales Frontend einbauen
+- Grid beim Bewegen in normalem Frontend berücksichtigen
 
 - Dokumentation:
   - Neue Editier-Möglichkeiten in der normalen GUI
