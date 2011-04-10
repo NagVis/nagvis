@@ -1,62 +1,67 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-    <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
-    <title>&Uuml;ber</title>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+        <title>&Uuml;ber</title>
 <!--[if IE]>
-<style type="text/css"> 
-/* place css fixes for all versions of IE in this conditional comment */
-.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
-.page #mainContent { zoom: 1; padding-top: 15px; }
-/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
-</style>
+    <style type="text/css">
+        /* place css fixes for all versions of IE in this conditional comment */
+        .page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+        .page #mainContent { zoom: 1; padding-top: 15px; }
+        /* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+    </style>
 <![endif]-->
-</head>
-<body>
-    <h1>&Uuml;ber</h1>
-    <a name=whatis></a>
-    <h2>Was ist NagVis?</h2>
+    </head>
+    <body>
+        <h1>&Uuml;ber</h1>
+        <a name=whatis></a>
+        <h2>Was ist NagVis?</h2>
         <p>NagVis ist ein Visualisierungs-Addon f&uuml;r das bekannte Netzwerk-Management-System Nagios&reg; (bzw. Icinga, das ein Fork von Nagios ist).</p>
         <p>NagVis kann benutzt werden, um Nagios-Daten zu visualisieren, d.h. IT-Prozesse wie ein Mail-System oder eine Netzwerkinfrastruktur darzustellen.
             Durch die Benutzung von Daten, die von einem Backend zur Verf&uuml;gung gestellt werden, kann NagVis die Objekte auf den Maps in regelm&auml;&szlig;igen Intervallen aktualisieren.
             Diese Maps erm&ouml;glichen es, die Objekte auf verschiedene Arten zu arrangieren:
             <ul>
-            <li>physikalisch (z.B. alle Hosts in einem Rack/Raum/Bereich)</li>
-            <li>logisch (z.B. alle Applikations-Server)</li>
-            <li>geographisch (z.B. alle Hosts in einem Land)</li>
-            <li>Gesch&auml;ftsprozesse (z.B. alle Hosts/Services, die in einen Prozess involviert sind)</li>
+                <li>physikalisch (z.B. alle Hosts in einem Rack/Raum/Bereich)</li>
+                <li>logisch (z.B. alle Applikations-Server)</li>
+                <li>geographisch (z.B. alle Hosts in einem Land)</li>
+                <li>Gesch&auml;ftsprozesse (z.B. alle Hosts/Services, die in einen Prozess involviert sind)</li>
             </ul>
         </p>
-    <a name="howworks"></a>
-    <h2>Wie arbeitet NagVis?</h2>
+        <a name="howworks"></a>
+        <h2>Wie arbeitet NagVis?</h2>
         <p>NagVis ist ein Pr&auml;sentationswerkzeug f&uuml;r die Informationen, die von Nagios gesammelt und mit Hilfe eines Backends zur Verf&uuml;gung gestellt werden.
         <p>Die unterst&uuml;tzten Backends sind:</p>
         <ul>
-        <li><a href="http://mathias-kettner.de/checkmk_livestatus.html">mklivestatus</a> (Default seit NagVis 1.5)</li>
-        <li><a href="http://www.nagios.org/download/addons">NDOUtils</a> / IDOUtils (erfordert MySQL)</li>
-        <li><a href="http://www.op5.org/community/projects/merlin">merlin</a> (erfordert MySQL)</li>
-        <li><a href="http://www.pnp4nagios.org/ndo2fs/start">ndo2fs</a></li>
+            <li><a href="http://mathias-kettner.de/checkmk_livestatus.html">mklivestatus</a> (Default seit NagVis 1.5)</li>
+            <li><a href="http://www.nagios.org/download/addons">NDOUtils</a> / IDOUtils (erfordert MySQL)</li>
+            <li><a href="http://www.op5.org/community/projects/merlin">merlin</a> (erfordert MySQL)</li>
+            <li><a href="http://www.pnp4nagios.org/ndo2fs/start">ndo2fs</a></li>
         </ul>
         Das Backend bekommt die Informationen vom Nagios-Prozess (mklivestatus bzw. ndo2fs) oder von einer Datenbank (NDOUtils/IDOUtils, merlin).
-        <p>Sie k&ouml;nnen alle Nagios-Objekte (Hosts, Services, Hostgroups, Servicegroups) zu so genannten Maps hinzuf&uuml;gen. Jede Map kann durch ihre eigene 
-        <a href="map_config_format_description.html">Konfigurationsdatei</a> konfiguiert werden. Sie k&ouml;nnen diese Konfigurationsdateien mit Ihrem bevorzugten
-        Texteditor oder mit Hilfe des Web-Konfigurations-Tool namens WUI anpassen. Au&szlig;erdem k&ouml;nnen Sie einige spezielle NagVis-Objekts zu den Maps hinzuf&uuml;gen.
-        Diese Objekte sind "Shapes", "Textboxen" und Referenzobjekte f&uuml;r andere Maps.</p>
-        <p>Jedes der Objekte auf Ihren Maps kann nach Ihren Bed&uuml;rfnissen angepasst werden. Es gibt z.B. Verweise auf das Nagios-Frontend f&uuml;r jedes Objekt,
-        das ein Nagios-Objekt repr&auml;sentiert. Sie k&ouml;nnen diese Verweise einfach anpassen. <br>Es gibt ein Hover-Men&uuml;, das per Default aktiviert ist.
-        Das Hover-Men&uuml; zeigt detaillierte Informationen f&uuml;r jedes Objekt. Hover-Men&uuml;s k&ouml;nnen einfach ge&auml;ndert werden, indem die 
-        <a href="hover_templates.html">Templates</a> angepasst werden. Sie k&ouml;nnen auch das Hover-Men&uuml; deaktivieren.<br>
-        Per Default werden die Zust&auml;nde von Objekten als Icons auf der Map angezeigt. Sie k&ouml;nnen diese Icons durch <a href="extending/iconsets.html">Iconsets</a> von der 
-        NagVis-Homepage oder durch eigene ersetzen. Die Zust&auml;nde von Objekten k&ouml;nnen auch als Linien oder als <a href="gadgets.html">Gadgets</a> angezeigt werden.</p>
-        <p>Neben den normalen Maps gibt es die <a href="automap.html">Automap</a>. Sie wird automatisch auf Basis der Nagios-Konfiguration generiert. Zur Nutzung der 
-        Automap m&uuml;ssen Sie die "Parent"-Abh&auml;ngigkeiten in Nagios nutzen. Die Automap erzeugt ein Hintergrundbild basierend auf der Konfiguration, den
-        Layout-Parametern und den Parent-Abh&auml;ngigkeiten.<br>
+        <p>Sie k&ouml;nnen alle Nagios-Objekte (Hosts, Services, Hostgroups, Servicegroups) zu so genannten Maps hinzuf&uuml;gen.
+            Jede Map kann durch ihre eigene <a href="map_config_format_description.html">Konfigurationsdatei</a> konfiguiert werden.
+	         Sie k&ouml;nnen diese Konfigurationsdateien mit Ihrem bevorzugten Texteditor oder mit Hilfe des Web-Konfigurations-Tool namens WUI anpassen.
+            Au&szlig;erdem k&ouml;nnen Sie einige spezielle NagVis-Objekts zu den Maps hinzuf&uuml;gen.
+            Diese Objekte sind "Shapes", "Textboxen" und Referenzobjekte f&uuml;r andere Maps.</p>
+        <p>Jedes der Objekte auf Ihren Maps kann nach Ihren Bed&uuml;rfnissen angepasst werden.
+            Es gibt z.B. Verweise auf das Nagios-Frontend f&uuml;r jedes Objekt, das ein Nagios-Objekt repr&auml;sentiert.
+            Sie k&ouml;nnen diese Verweise einfach anpassen. <br>Es gibt ein Hover-Men&uuml;, das per Default aktiviert ist.
+            Das Hover-Men&uuml; zeigt detaillierte Informationen f&uuml;r jedes Objekt.
+            Hover-Men&uuml;s k&ouml;nnen einfach ge&auml;ndert werden, indem die <a href="hover_templates.html">Templates</a> angepasst werden.
+            Sie k&ouml;nnen auch das Hover-Men&uuml; deaktivieren.<br>
+            Per Default werden die Zust&auml;nde von Objekten als Icons auf der Map angezeigt.
+            Sie k&ouml;nnen diese Icons durch <a href="extending/iconsets.html">Iconsets</a> von der NagVis-Homepage oder durch eigene ersetzen.
+            Die Zust&auml;nde von Objekten k&ouml;nnen auch als Linien oder als <a href="gadgets.html">Gadgets</a> angezeigt werden.</p>
+        <p>Neben den normalen Maps gibt es die <a href="automap.html">Automap</a>.
+            Sie wird automatisch auf Basis der Nagios-Konfiguration generiert.
+            Zur Nutzung der Automap m&uuml;ssen Sie die "Parent"-Abh&auml;ngigkeiten in Nagios nutzen.
+            Die Automap erzeugt ein Hintergrundbild basierend auf der Konfiguration, den Layout-Parametern und den Parent-Abh&auml;ngigkeiten.<br>
         Ab NagVis 1.5 k&ouml;nnen Sie auch mehrere Automaps definieren.</p>
-    <a name=licensing></a>
-    <h2>Lizenzierung</h2>
+        <a name=licensing></a>
+        <h2>Lizenzierung</h2>
         <p>NagVis ist freie Software. Sie k&ouml;nnen es unter den Bedingungen der GNU General Public License Version 2 verteilen und/oder modifizieren, die von der Free Software Foundation ver&ouml;ffentlicht wurden.</p>
         <p>NagVis wird in der Hoffnung verteilt, dass es n&uuml;tzlich ist, aber OHNE JEGLICHE GARANTIE, auch ohne die implizite Garantie der VERMARKTBARKEIT oder der TAUGLICHKEIT F&uuml;R EINEN BESTIMMTEN ZWECK.
         Genauere Details finden Sie in der GNU General Public License.</p>
-</body>
+    </body>
 </html>

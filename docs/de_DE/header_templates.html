@@ -1,182 +1,187 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
-  <head>
-    <title>header_templates</title>
+    <head>
+    <title>Header-Templates</title>
         <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
 <!--[if IE]>
-<style type="text/css"> 
-/* place css fixes for all versions of IE in this conditional comment */
-.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
-.page #mainContent { zoom: 1; padding-top: 15px; }
-/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
-</style>
+    <style type="text/css"> 
+    /* place css fixes for all versions of IE in this conditional comment */
+        .page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+        .page #mainContent { zoom: 1; padding-top: 15px; }
+    /* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+    </style>
 <![endif]-->
-  </head>  
-<h1>Header-Templates</h1>
-</a name=Header-Templates>
-<h2>Einleitung</h2>
-Header-Templates sind HTML-Dateien, die einige Makros enthalten. Diese Dateien k&ouml;nnen als Header-Men&uuml; in den Maps benutzt werden. Die Header-Templates sind im Verzeichnis <code>nagvis/etc/templates/header/</code> relativ zum NagVis-Root-Verzeichnis abgelegt. Die Template sind wie folgt benannt: <code>tmpl.*.html</code>.<br>
-<font color="#ff0000">ACHTUNG:</code> Seit NagVis 1.5 hat sich das Format der Templates ge&auml;ndert, um flexibler sein zu k&ouml;nnen. Das bedeutet, dass bei einer Umstellung von einer &auml;lteren Version alle Templates angepasst werden m&uuml;ssen.</font>
-<br>
- 
-<h2>Makros</h2>
-<p>Die folgenden Makros sind in den Header-Men&uuml;s verf&uuml;gbar:</p>
-<table border=0>
-<tr>
-<th>Makro</th><th>Beschreibung</th>
-</tr>
-<tr>
-<td>{currentMap} (war [current_map])</td><td>Name der aktuellen Map (z.B. demo,demo2) </td>
-</tr>
-<tr>
-<td>{currentMapAlias} (war [current_map_alias])</td><td>Alias der aktuellen Map </td>
-</tr>
-<tr>
-<td>{currentLanguage} (war [current_language])</td><td>Zeichenkette, die die aktuell eingestellte Sprache enth&auml;lt (z.B. de_DE). Dies wird f&uuml;r den Verweis auf die Dokumentation ben&ouml;tigt. </td>
-</tr>
-<tr>
-<td>{$currentUser}</td><td>Name des aktuellen Benutzers.</td>
-</tr>
-<tr>
-<td>{$mod}</td><td>Das aktuelle Modul (Map, AutoMap, Overview, Welcome, ...).</td>
-</tr>
-<tr>
-<td>{$act}</td><td>Die aktuelle Aktion (view, edit, ...).</td>
-</tr>
-<tr>
-<td>{$bEnableFade}</td><td>Bewirkt bei Hover-Men&uuml;s sich schnell &ouml;ffnende oder langsam abblendende Men&uuml;s.</td>
-</tr>
-<tr>
-<td>{$bRotation}</td><td>Ist "true" wenn gerade eine Rotation betrachtet wird, sonst "false"..</td>
-</tr>
-<tr>
-<td>{$permittedOverview}</td><td>Ist "true", wenn der Benutzer f&uuml;r die &Uuml;bersichtsseite berechtigt ist, sonst "false"..</td>
-</tr>
-<tr>
-<td>{$permittedEdit}</td><td>Ist "true", wenn der Benutzer die aktuelle Map editieren darf, sonst "false"..</td>
-</tr>
-<tr>
-<td>{$permittedEditAnyMap}</td><td>Ist "true",wenn der Benutzer mindestens eine Map editieren darf, sonst "false"..</td>
-</tr>
-<tr>
-<td>{$permittedChangePassword}</td><td>Ist "true", wenn der Benutzer berechtigt ist, sein eigenes Passwort zu &auml;ndern, sonst "false"..</td>
-</tr>
-<tr>
-<td>{$permittedEditMainCfg}</td><td>Ist "true", wenn der Benutzer berechtigt ist, die Hauptkonfigurationsdatei zu &auml;ndern, sonst "false"..</td>
-</tr>
-<tr>
-<td>{$permittedManageBackgrounds}</td><td>Ist "true", wenn der Benutzer berechtigt ist, Hintergr&uuml;nde zu verwalten, sonst "false"..</td>
-</tr>
-<tr>
-<td>{$permittedManageMaps}</td><td>Ist "true", wenn der Benutzer berechtigt ist, Maps zu verwalten, sonst "false"..</td>
-</tr>
-<tr>
-<td>{$permittedManageShapes}</td><td>Ist "true", wenn der Benutzer berechtigt ist, Shapes zu verwalten, sonst "false"..</td>
-</tr>
-<tr>
-<td>{$permittedUserMgmt}</td><td>Ist "true", wenn der Benutzer berechtigt ist, Benutzerkonten zu verwalten, sonst "false"..</td>
-</tr>
-<tr>
-<td>{$permittedRoleMgmt}</td><td>Ist "true", wenn der Benutzer berechtigt ist, Benutzerrollen zu verwalten, sonst "false"..</td>
-</tr>
-<tr>
-<td>{$permittedLogout}</td><td>Ist "true", wenn der Benutzer berechtigt ist, sich abzumelden, sonst "false"..</td>
-</tr>
-<tr>
-<td>{$supportedChangePassword}</td><td>Ist "true", wenn das aktuelle Authentifizierungsmodul das &Auml;ndern von Passw&ouml;rtern unterst&uuml;tzt, sich abzumelden, sonst "false"..</td>
-</tr>
-<tr>
-<td valign="top"> {foreach $maps map} <br>{$map.mapName}<br>{/foreach}</td>
-<td>Eine Liste aller Maps, die in NagVis definiert sind. Der Code zwischen <code>{foreach $maps map}</code> und <code>{/foreach}</code>
-wird f&uuml;r jede Map ausgef&uuml;hrt. Ein Beispiel finden Sie in <code>share/userfiles/templates/pages/default.header.html</code>.
-<br /><br />Innerhalb der BEGIN/END-Tags sind die folgenden Makros verf&uuml;gbar:
-<br />* <i>{$map.mapName} (war [map_name])</i>: Name der Map
-<br />* <i>{$map.mapAlias} (war [map_alias])</i>: Alias der Map
-<br />* <i>{$map.urlParams}</i>: Spezielle Parameter, die an das NagVis-Frontend &uuml;bergeben werden.
-<br />* <i>{$map.permittedEdit}</i>: Ist der Benutzer zur &Auml;nderung dieser Map berechtigt?
-</td>
-</tr>
-<tr>
-<td valign="top">{foreach $langs lang}<br>{$lang.language}<br>{/foreach}</td>
-<td>Eine Liste aller Sprachen, die f&uuml;r die Benutzer verf&uuml;gbar sind. Der Code zwischen <code>{foreach $langs lang}</code> und <code>{/foreach}</code> wird f&uuml;r jede Sprache ausgef&uuml;hrt. Ein Beispiel finden Sie in <code>share/userfiles/templates/pages/default.header.html</code>.<br><br>Innerhalb der BEGIN/END-Tags sind die folgenden Makros verf&uuml;gbar: <br>* <i>{$lang.language}</i>: Interner Name der Sprache<br>* <i>{$lang.classUnderline}</i>: Unterstreichen der Sprache<br>* <i>{$lang.langLanguageLocated}</i>: Gefundener Name der Sprache.</td>
-</tr>
-<tr>
-<td valign="top">{if $viewType == 'Map' || $viewType == 'Automap'}</td>
-<td>Um in den Templates flexibler zu sein, haben wir eine Art von "if"-Statement hinzugef&uuml;gt. Es kann wie in PHP benutzt werden. Ein Beispiel finden Sie in <code>share/userfiles/templates/pages/default.header.html</code>..</td>
-</tr>
-<tr>
-<td>{$pathBase} (war [html_base])</td><td>URL zur HTML-Basis (/nagvis) </td>
-</tr>
-<tr>
-<td>{$pathImages} (war [html_images])</td><td>URL zu den HTML-Images (/nagvis/images) </td>
-</tr>
-<tr>
-<td>{$pathTemplates} (war [html_templates])</td><td>Pfad zu den Header-Templates (/nagvis/userfiles/templates)</td>
-</tr>
-<tr>
-<td>{$pathTemplateImages} (war [html_template_images])</td><td>Pfad zu den Header-Template-Images (/nagvis/userfiles/images/templates)</td>
-</tr>
-<tr>
-<td>{$langOpen} (war [lang_select_map])</td><td>Label f&uuml;r das &Ouml;ffnen neuer Ansichten </td>
-</tr>
-<tr>
-<td>{$langEditMap} (war [lang_edit_map])</td><td>Label zum Editieren einer Map</td>
-</tr>
-<tr>
-<td>{$langNeedHelp} (war [lang_need_help])</td><td>Label f&uuml;r Hilfe-Auswahl </td>
-</tr>
-<tr>
-<td>{$langOnlineDoc} (war [lang_online_doc])</td><td>Label f&uuml;r den Link zur Online-Dokumentation </td>
-</tr>
-<tr>
-<td>{$langForum} (war [lang_forum])</td><td>Label f&uuml;r den Link zum NagVis-Forum </td>
-</tr>
-<tr>
-<td>{$langSupportInfo} (war [lang_support_info])</td><td>Label f&uuml;r den Link zu Support-Informationen </td>
-</tr>
-<tr>
-<td>{$langOverview} (war [lang_overview])</td><td>Label f&uuml;r &Uuml;berblick</td>
-</tr>
-<tr>
-<td>{$langInstance} (war [lang_instance])</td><td>Label f&uuml;r den Instanznamen </td>
-</tr>
-<tr>
-<td>{$langRotationStart} (war [lang_rotation_start])</td><td>Label zum Starten der Map-Rotation </td>
-</tr>
-<tr>
-<td>{$langRotationStop} (war [lang_rotation_stop])</td><td>Label zum Stoppen der Map-Rotation</td>
-</tr>
-<tr>
-<td>{$langSearch}</td><td>Label f&uuml;r das Suchen von Objekten auf der Map.</td>
-</tr>
-<tr>
-<td>{$langToggleGrid}</td><td>Label f&uuml;r das De/Aktivieren des Rasters.</td>
-</tr>
-<tr>
-<td>{$langActions}</td><td>Label f&uuml;r die Auswahl verf&uuml;gbarer Aktionen.</td>
-</tr>
-<tr>
-<td>{$langWui}</td><td>Label f&uuml;r die WUI.</td>
-</tr>
-<tr>
-<td>{$langUser}</td><td>Label f&uuml;r den Benutzer.</td>
-</tr>
-<tr>
-<td>{$langLoggedIn}</td><td>Label f&uuml;r "Logged in as".</td>
-</tr>
-<tr>
-<td>{$langChangePassword}</td><td>Label f&uuml;r das &Auml;ndern des Benutzer-Passworts.</td>
-</tr>
-<tr>
-<td>{$langUserMgmt}</td><td>Label f&uuml;r die Verwaltung der Benutzer.</td>
-</tr>
-<tr>
-<td>{$langManageRoles}</td><td>Label f&uuml;r die Verwaltung der Rollen.</td>
-</tr>
-<tr>
-<td>{$langLogout}</td><td>Label f&uuml;r das Abmelden des Benutzers.</td>
-</tr>
-<tr>
-<td>{$langChooseLanguage}</td><td>Label f&uuml;r die Auswahl der Benutzer-Sprache.</td>
-</tr>
+    </head>  
+    <h1>Header-Templates</h1>
+    </a name=Header-Templates>
+    <h2>Einleitung</h2>
+    Header-Templates sind HTML-Dateien, die einige Makros enthalten.
+    Diese Dateien k&ouml;nnen als Header-Men&uuml; in den Maps benutzt werden.
+    Die Header-Templates sind im Verzeichnis <code>nagvis/etc/templates/header/</code> relativ zum NagVis-Root-Verzeichnis abgelegt.
+    Die Template sind wie folgt benannt: <code>tmpl.*.html</code>.<br>
+    <font color="#ff0000">ACHTUNG:</code> Seit NagVis 1.5 hat sich das Format der Templates ge&auml;ndert, um flexibler sein zu k&ouml;nnen.
+    Das bedeutet, dass bei einer Umstellung von einer &auml;lteren Version alle Templates angepasst werden m&uuml;ssen.</font>
+    <br>
+     
+    <h2>Makros</h2>
+    <p>Die folgenden Makros sind in den Header-Men&uuml;s verf&uuml;gbar:</p>
+    <table border=0>
+        <tr>
+            <th>Makro</th><th>Beschreibung</th>
+        </tr>
+        <tr>
+            <td>{currentMap} (war [current_map])</td><td>Name der aktuellen Map (z.B. demo,demo2) </td>
+        </tr>
+        <tr>
+            <td>{currentMapAlias} (war [current_map_alias])</td><td>Alias der aktuellen Map </td>
+        </tr>
+        <tr>
+            <td>{currentLanguage} (war [current_language])</td><td>Zeichenkette, die die aktuell eingestellte Sprache enth&auml;lt (z.B. de_DE). Dies wird f&uuml;r den Verweis auf die Dokumentation ben&ouml;tigt. </td>
+        </tr>
+        <tr>
+            <td>{$currentUser}</td><td>Name des aktuellen Benutzers.</td>
+        </tr>
+        <tr>
+            <td>{$mod}</td><td>Das aktuelle Modul (Map, AutoMap, Overview, Welcome, ...).</td>
+        </tr>
+        <tr>
+            <td>{$act}</td><td>Die aktuelle Aktion (view, edit, ...).</td>
+        </tr>
+        <tr>
+            <td>{$bEnableFade}</td><td>Bewirkt bei Hover-Men&uuml;s sich schnell &ouml;ffnende oder langsam abblendende Men&uuml;s.</td>
+        </tr>
+        <tr>
+            <td>{$bRotation}</td><td>Ist "true" wenn gerade eine Rotation betrachtet wird, sonst "false"..</td>
+        </tr>
+        <tr>
+            <td>{$permittedOverview}</td><td>Ist "true", wenn der Benutzer f&uuml;r die &Uuml;bersichtsseite berechtigt ist, sonst "false"..</td>
+        </tr>
+        <tr>
+            <td>{$permittedEdit}</td><td>Ist "true", wenn der Benutzer die aktuelle Map editieren darf, sonst "false"..</td>
+        </tr>
+        <tr>
+            <td>{$permittedEditAnyMap}</td><td>Ist "true",wenn der Benutzer mindestens eine Map editieren darf, sonst "false"..</td>
+        </tr>
+        <tr>
+            <td>{$permittedChangePassword}</td><td>Ist "true", wenn der Benutzer berechtigt ist, sein eigenes Passwort zu &auml;ndern, sonst "false"..</td>
+        </tr>
+        <tr>
+            <td>{$permittedEditMainCfg}</td><td>Ist "true", wenn der Benutzer berechtigt ist, die Hauptkonfigurationsdatei zu &auml;ndern, sonst "false"..</td>
+        </tr>
+        <tr>
+            <td>{$permittedManageBackgrounds}</td><td>Ist "true", wenn der Benutzer berechtigt ist, Hintergr&uuml;nde zu verwalten, sonst "false"..</td>
+        </tr>
+        <tr>
+            <td>{$permittedManageMaps}</td><td>Ist "true", wenn der Benutzer berechtigt ist, Maps zu verwalten, sonst "false"..</td>
+        </tr>
+        <tr>
+            <td>{$permittedManageShapes}</td><td>Ist "true", wenn der Benutzer berechtigt ist, Shapes zu verwalten, sonst "false"..</td>
+        </tr>
+        <tr>
+            <td>{$permittedUserMgmt}</td><td>Ist "true", wenn der Benutzer berechtigt ist, Benutzerkonten zu verwalten, sonst "false"..</td>
+        </tr>
+        <tr>
+            <td>{$permittedRoleMgmt}</td><td>Ist "true", wenn der Benutzer berechtigt ist, Benutzerrollen zu verwalten, sonst "false"..</td>
+        </tr>
+        <tr>
+            <td>{$permittedLogout}</td><td>Ist "true", wenn der Benutzer berechtigt ist, sich abzumelden, sonst "false"..</td>
+        </tr>
+        <tr>
+            <td>{$supportedChangePassword}</td><td>Ist "true", wenn das aktuelle Authentifizierungsmodul das &Auml;ndern von Passw&ouml;rtern unterst&uuml;tzt, sich abzumelden, sonst "false"..</td>
+        </tr>
+        <tr>
+            <td valign="top"> {foreach $maps map} <br>{$map.mapName}<br>{/foreach}</td>
+            <td>Eine Liste aller Maps, die in NagVis definiert sind. Der Code zwischen <code>{foreach $maps map}</code> und <code>{/foreach}</code>
+        wird f&uuml;r jede Map ausgef&uuml;hrt. Ein Beispiel finden Sie in <code>share/userfiles/templates/pages/default.header.html</code>.
+        <br /><br />Innerhalb der BEGIN/END-Tags sind die folgenden Makros verf&uuml;gbar:
+        <br />* <i>{$map.mapName} (war [map_name])</i>: Name der Map
+        <br />* <i>{$map.mapAlias} (war [map_alias])</i>: Alias der Map
+        <br />* <i>{$map.urlParams}</i>: Spezielle Parameter, die an das NagVis-Frontend &uuml;bergeben werden.
+        <br />* <i>{$map.permittedEdit}</i>: Ist der Benutzer zur &Auml;nderung dieser Map berechtigt?
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">{foreach $langs lang}<br>{$lang.language}<br>{/foreach}</td>
+            <td>Eine Liste aller Sprachen, die f&uuml;r die Benutzer verf&uuml;gbar sind. Der Code zwischen <code>{foreach $langs lang}</code> und <code>{/foreach}</code> wird f&uuml;r jede Sprache ausgef&uuml;hrt. Ein Beispiel finden Sie in <code>share/userfiles/templates/pages/default.header.html</code>.<br><br>Innerhalb der BEGIN/END-Tags sind die folgenden Makros verf&uuml;gbar: <br>* <i>{$lang.language}</i>: Interner Name der Sprache<br>* <i>{$lang.classUnderline}</i>: Unterstreichen der Sprache<br>* <i>{$lang.langLanguageLocated}</i>: Gefundener Name der Sprache.</td>
+        </tr>
+        <tr>
+            <td valign="top">{if $viewType == 'Map' || $viewType == 'Automap'}</td>
+            <td>Um in den Templates flexibler zu sein, haben wir eine Art von "if"-Statement hinzugef&uuml;gt. Es kann wie in PHP benutzt werden. Ein Beispiel finden Sie in <code>share/userfiles/templates/pages/default.header.html</code>..</td>
+        </tr>
+        <tr>
+            <td>{$pathBase} (war [html_base])</td><td>URL zur HTML-Basis (/nagvis) </td>
+        </tr>
+        <tr>
+            <td>{$pathImages} (war [html_images])</td><td>URL zu den HTML-Images (/nagvis/images) </td>
+        </tr>
+        <tr>
+            <td>{$pathTemplates} (war [html_templates])</td><td>Pfad zu den Header-Templates (/nagvis/userfiles/templates)</td>
+        </tr>
+        <tr>
+            <td>{$pathTemplateImages} (war [html_template_images])</td><td>Pfad zu den Header-Template-Images (/nagvis/userfiles/images/templates)</td>
+        </tr>
+        <tr>
+            <td>{$langOpen} (war [lang_select_map])</td><td>Label f&uuml;r das &Ouml;ffnen neuer Ansichten </td>
+        </tr>
+        <tr>
+            <td>{$langEditMap} (war [lang_edit_map])</td><td>Label zum Editieren einer Map</td>
+        </tr>
+        <tr>
+            <td>{$langNeedHelp} (war [lang_need_help])</td><td>Label f&uuml;r Hilfe-Auswahl </td>
+        </tr>
+        <tr>
+            <td>{$langOnlineDoc} (war [lang_online_doc])</td><td>Label f&uuml;r den Link zur Online-Dokumentation </td>
+        </tr>
+        <tr>
+            <td>{$langForum} (war [lang_forum])</td><td>Label f&uuml;r den Link zum NagVis-Forum </td>
+        </tr>
+        <tr>
+            <td>{$langSupportInfo} (war [lang_support_info])</td><td>Label f&uuml;r den Link zu Support-Informationen </td>
+        </tr>
+        <tr>
+            <td>{$langOverview} (war [lang_overview])</td><td>Label f&uuml;r &Uuml;berblick</td>
+        </tr>
+        <tr>
+            <td>{$langInstance} (war [lang_instance])</td><td>Label f&uuml;r den Instanznamen </td>
+        </tr>
+        <tr>
+            <td>{$langRotationStart} (war [lang_rotation_start])</td><td>Label zum Starten der Map-Rotation </td>
+        </tr>
+        <tr>
+            <td>{$langRotationStop} (war [lang_rotation_stop])</td><td>Label zum Stoppen der Map-Rotation</td>
+        </tr>
+        <tr>
+            <td>{$langSearch}</td><td>Label f&uuml;r das Suchen von Objekten auf der Map.</td>
+        </tr>
+        <tr>
+            <td>{$langToggleGrid}</td><td>Label f&uuml;r das De/Aktivieren des Rasters.</td>
+        </tr>
+        <tr>
+            <td>{$langActions}</td><td>Label f&uuml;r die Auswahl verf&uuml;gbarer Aktionen.</td>
+        </tr>
+        <tr>
+            <td>{$langWui}</td><td>Label f&uuml;r die WUI.</td>
+        </tr>
+        <tr>
+            <td>{$langUser}</td><td>Label f&uuml;r den Benutzer.</td>
+        </tr>
+        <tr>
+            <td>{$langLoggedIn}</td><td>Label f&uuml;r "Logged in as".</td>
+        </tr>
+        <tr>
+            <td>{$langChangePassword}</td><td>Label f&uuml;r das &Auml;ndern des Benutzer-Passworts.</td>
+        </tr>
+        <tr>
+            <td>{$langUserMgmt}</td><td>Label f&uuml;r die Verwaltung der Benutzer.</td>
+        </tr>
+        <tr>
+            <td>{$langManageRoles}</td><td>Label f&uuml;r die Verwaltung der Rollen.</td>
+        </tr>
+        <tr>
+            <td>{$langLogout}</td><td>Label f&uuml;r das Abmelden des Benutzers.</td>
+        </tr>
+        <tr>
+            <td>{$langChooseLanguage}</td><td>Label f&uuml;r die Auswahl der Benutzer-Sprache.</td>
+        </tr>
+    </table>
 </html>

@@ -1,66 +1,72 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
-  <head>
-    <title>system_requirements</title>
+    <head>
+        <title>system_requirements</title>
         <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
 <!--[if IE]>
-<style type="text/css"> 
-/* place css fixes for all versions of IE in this conditional comment */
-.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
-.page #mainContent { zoom: 1; padding-top: 15px; }
-/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
-</style>
+        <style type="text/css"> 
+        /* place css fixes for all versions of IE in this conditional comment */
+            .page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+            .page #mainContent { zoom: 1; padding-top: 15px; }
+        /* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+        </style>
 <![endif]-->
-  </head>  
-<h1>Systemvoraussetzungen</h1>
-
-<h2>Nagios (installiert, konfiguriert, lauff&auml;hig)</h2>
-<p>Sie ben&ouml;tigen ein installiertes, konfiguriertes und lauff&auml;higes Nagios, damit NagVis funktioniert.
-Nagios bekommen Sie auf der <a href=http://www.nagios.org>offiziellen Nagios Homepage</a>, Schnellstart-Installationsanleitungen finden Sie u.a. <a href=http://www.nagios-wiki.de/nagios/doku3/quickstart>hier</a>.</p>
-
-<h2>MKLivestatus (installiert, konfiguriert, lauff&auml;hig)</h2>
-<p>Seit NagVis 1.5 ist MKLivestatus das Default-Backend, weil es viel schneller, leichtgewichtiger und stabiler als NDO ist. Au&szlig;erdem ist es einfacher zu handhaben und zu installieren. Sie ben&ouml;tigen keine Datenbank f&uuml;r MKLivestatus.</p>
-<p>MKLivestatus ist ein Eventbroker-Modul f&uuml;r Nagios, das einen Unix-Socket versorgt, mit dem sich Addons wie NagVis verbinden k&ouml;nnen, um aktuelle Statusinformationen abzufragen.</p>
-<p>MKLivestatus bekommen Sie auf der <a href=http://www.mathias-kettner.de/checkmk_livestatus.html>offiziellen MKLivestatus-Homepage</a>.
-
-<h2>Webserver mit PHP-Unterst&uuml;tzung</h2>
-NagVis ist eine webbasierte Applikation, die in JavaScript und PHP realisiert ist. Sie ben&ouml;tigen daher einen Web-Server mit PHP-Unterst&uuml;tzung.
-Wir empfehlen den Einsatz des <a href="http://www.apache.org/" target="_blank">Apache-Webservers</a> mit <a href="http://www.apache.net/" target="_blank">mod_php</a>.</p>
-
-Die minimale PHP-Version ist 5.0.0
-<h2>ben&ouml;tigte PHP-Module</h2>
-<p>Neben dem PHP-Basis-Paket ben&ouml;tigen Sie noch die folgenden Module. Die Namen sind teilweise anh&auml;ngig von der Distribution:</p>
-<ul>
-<li>php5-gd</li>
-<li>php5-gettext</li>
-<li>php5-mbstring</li>
-<li>php5-session</li>
-<li>php5-json (integriert seit PHP 5.2)</li>
-<li>php5-pdo und pdo-sqlite (seit 1.5 f&uuml;r Authentifizierung/Autorisierung)</li>
-</ul>
-Anmerkung: m&ouml;glicherweise sind einige dieser Funktionen bereits in Ihrer PHP-Version enthalten.
-
-<h3>Spezielle Voraussetzungen f&uuml;r einzelne Backends</h3>
-<p>Die Backends verbinden sich mit externen Datenquellen und ben&ouml;tigen oftmals spezielle Module. Hier ist eine Liste f&uuml;r verschiedene Backends.</p>
-<strong>mklivestatus</strong>
-<ul>
-<li>php-net-socket (Debian) / php5-sockets (SLES)</li> 
-</ul>
-<strong>ndomy</strong>
-<ul>
-<li>php5-mysql</li> 
-</ul>
-<strong>merlinmy</strong>
-<ul>
-<li>php5-mysql</li> 
-</ul>
-<strong>ndo2fs</strong>
-<ul>
-<li>php5-xml (evtl. bereits &quot;builtin&quot;)</li> 
-</ul>
-<h2>Graphviz f&uuml;r die Automap-Funktionalit&auml;t</h2>
-<p>Die <a href="automap.html">Automap</a> basiert auf GraphViz. Sie brauchen es, wenn Sie das Automap-Feature nutzen m&ouml;chten. Wir empfehlen GraphViz >= 2.14 f&uuml;r die Automap (&auml;ltere Versionen (mit niedrigeren Versionsnummern) haben Probleme mit Truecolor-Rendering).</p>
-<p>GraphViz ist in einigen Distributionen enthalten. Wenn Sie kein vorgefertigtes Paket benutzen k&ouml;nnen, bekommen Sie GraphViz auf der <a href=http://www.graphviz.org>offiziellen GraphViz-Homepage</a>, und k&ouml;nnen es selbst kompilieren.</p>
-<p>Sie ben&ouml;tigen weitere Packages wie gd, libpng, freetyp, ... aber wenn Sie Graphviz kompiliert/installiert haben, sollte es funktionieren.</p>
-
+    </head>  
+    <h1>Systemvoraussetzungen</h1>
+    
+    <h2>Nagios/Icinga (installiert, konfiguriert, lauff&auml;hig)</h2>
+    <p>Sie ben&ouml;tigen ein installiertes, konfiguriertes und lauff&auml;higes Nagios/Icinga, damit NagVis funktioniert.</br>
+        Nagios bekommen Sie auf der <a href=http://www.nagios.org>offiziellen Nagios Homepage</a>, Schnellstart-Installationsanleitungen finden Sie u.a. <a href=http://www.nagios-wiki.de/nagios/doku3/quickstart>hier</a>.</br>
+        Icinga bekommen Sie auf der <a href=http://www.icinga.org>offiziellen Icinga Homepage</a>, Schnellstart-Installationsanleitungen finden Sie u.a. <a href=http://www.icinga.org.de/latest/de/quickstart.html>hier</a>.</p>
+    
+    <h2>MKLivestatus (installiert, konfiguriert, lauff&auml;hig)</h2>
+    <p>Seit NagVis 1.5 ist MKLivestatus das Default-Backend, weil es viel schneller, leichtgewichtiger und stabiler als NDO ist.
+        Au&szlig;erdem ist es einfacher zu handhaben und zu installieren. Sie ben&ouml;tigen keine Datenbank f&uuml;r MKLivestatus.</p>
+    <p>MKLivestatus ist ein Eventbroker-Modul f&uuml;r Nagios, das einen Unix-Socket versorgt, mit dem sich Addons wie NagVis verbinden k&ouml;nnen, um aktuelle Statusinformationen abzufragen.</p>
+    <p>MKLivestatus bekommen Sie auf der <a href=http://www.mathias-kettner.de/checkmk_livestatus.html>offiziellen MKLivestatus-Homepage</a>.
+    
+    <h2>Webserver mit PHP-Unterst&uuml;tzung</h2>
+    NagVis ist eine webbasierte Applikation, die in JavaScript und PHP realisiert ist.
+    Sie ben&ouml;tigen daher einen Web-Server mit PHP-Unterst&uuml;tzung.
+    Wir empfehlen den Einsatz des <a href="http://www.apache.org/" target="_blank">Apache-Webservers</a> mit <a href="http://www.apache.net/" target="_blank">mod_php</a>.</p>
+    
+    Die minimale PHP-Version ist 5.0.0
+    <h2>ben&ouml;tigte PHP-Module</h2>
+    <p>Neben dem PHP-Basis-Paket ben&ouml;tigen Sie noch die folgenden Module. Die Namen sind teilweise anh&auml;ngig von der Distribution:</p>
+    <ul>
+        <li>php5-gd</li>
+        <li>php5-gettext</li>
+        <li>php5-mbstring</li>
+        <li>php5-session</li>
+        <li>php5-json (integriert seit PHP 5.2)</li>
+        <li>php5-pdo und pdo-sqlite (seit 1.5 f&uuml;r Authentifizierung/Autorisierung)</li>
+    </ul>
+    Anmerkung: m&ouml;glicherweise sind einige dieser Funktionen bereits in Ihrer PHP-Version enthalten.
+    
+    <h3>Spezielle Voraussetzungen f&uuml;r einzelne Backends</h3>
+    <p>Die Backends verbinden sich mit externen Datenquellen und ben&ouml;tigen oftmals spezielle Module. Hier ist eine Liste f&uuml;r verschiedene Backends.</p>
+    <strong>mklivestatus</strong>
+    <ul>
+        <li>php-net-socket (Debian) / php5-sockets (SLES)</li> 
+    </ul>
+    <strong>ndomy</strong>
+    <ul>
+        <li>php5-mysql</li> 
+    </ul>
+    <strong>merlinmy</strong>
+    <ul>
+        <li>php5-mysql</li> 
+    </ul>
+    <strong>ndo2fs</strong>
+    <ul>
+        <li>php5-xml (evtl. bereits &quot;builtin&quot;)</li> 
+    </ul>
+    <h2>Graphviz f&uuml;r die Automap-Funktionalit&auml;t</h2>
+    <p>Die <a href="automap.html">Automap</a> basiert auf GraphViz.
+        Sie brauchen es, wenn Sie das Automap-Feature nutzen m&ouml;chten.
+        Wir empfehlen GraphViz >= 2.14 f&uuml;r die Automap (&auml;ltere Versionen (mit niedrigeren Versionsnummern) haben Probleme mit Truecolor-Rendering).</p>
+    <p>GraphViz ist in einigen Distributionen enthalten.
+        Wenn Sie kein vorgefertigtes Paket benutzen k&ouml;nnen, bekommen Sie GraphViz auf der <a href=http://www.graphviz.org>offiziellen GraphViz-Homepage</a>, und k&ouml;nnen es selbst kompilieren.</p>
+    <p>Sie ben&ouml;tigen weitere Packages wie gd, libpng, freetyp, ... aber wenn Sie Graphviz kompiliert/installiert haben, sollte es funktionieren.</p>
+    
 </html>

@@ -1,20 +1,28 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
-    <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
-    <title>Authentifizierung / Autorisierung</title>
-</head>
-<body>
-    <h1>Authentifizierung / Autorisierung (AA)</h1>
-<p>In den Versionen vor 1.5 k&uuml;mmerte sich NagVis nicht viel um Authentifizierung und Autorisierung. In den meisten Umgebungen nutzte es die Authentifizierung von Nagios. Das war ein Nebeneffekt, da NagVis im <code>nagios/share</code>-Verzeichnis platziert war.
-<p>Mit NagVis 1.5 wurde das Default-Installationsverzeichnis in ein eigenes Basisverzeichnis verschoben. Dieser Schritt erforderte einen neuen Authentifizierungs- und Autorisierungsmechanismus. Das Hauptaugenmerk dieses Konzeptes liegt auf Modularit&auml;t und Flexibilit&auml;t.</p>
-<h2>Modularit&auml;t</h2>
-<p>Das AA wurde in drei Module aufgeteilt: LogonDialogs, Authentifizierung, Autorisierung. Jedes einzelne Modul kann ge&auml;ndert werden, ohne die anderen zu beeintr&auml;chtigen.</p>
-<h2>Default-Module</h2>
-<p>Per Default nutzt NagVis einen gemischten Logon-Request-Modus f&uuml;r die Anmeldung und eine SQLite-Datenbank f&uuml;r die Speicherung von Benutzern, Passw&ouml;rtern und Berechtigungen. Daf&uuml;r verwendet NagVis das LogonMixed-Modul, das im Hintergrund auf 
- LogonEnv und LogonDialog zugreift. Das LogonMixed-Modul versucht, den Benutzernamen &uuml;ber das Web-Server-Environment zu ermitteln.
- Das bedeutet, dass NagVis der Web-Server-Authentifizierung vertraut, wenn eine benutzt wird. Falls keine verwendet wird, zeigt es den LogonDialog an, um interaktives Login durch den HTML-Logon-Dialog zu erm&ouml;glichen.</p>
-<h2>Andere Module</h2>
-<p>Bei der Auslieferung gibt es nur die o.g. Authentifizierungs- und Autorisierungsmodule. Durch die modulare Struktur sollte es einfach sein, LDAP-, MySQL- und dateibasierende Authentifizierungs- und Autorisierungsmechanismen zu erstellen.</p>
-</body>
+    <head>
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+        <title>Authentifizierung / Autorisierung</title>
+    </head>
+    <body>
+        <h1>Authentifizierung / Autorisierung (AA)</h1>
+        <p>In den Versionen vor 1.5 k&uuml;mmerte sich NagVis nicht viel um Authentifizierung und Autorisierung.
+            In den meisten Umgebungen nutzte es die Authentifizierung von Nagios.
+            Das war ein Nebeneffekt, da NagVis im <code>nagios/share</code>-Verzeichnis platziert war.
+        <p>Mit NagVis 1.5 wurde das Default-Installationsverzeichnis in ein eigenes Basisverzeichnis verschoben.
+            Dieser Schritt erforderte einen neuen Authentifizierungs- und Autorisierungsmechanismus.
+            Das Hauptaugenmerk dieses Konzeptes liegt auf Modularit&auml;t und Flexibilit&auml;t.</p>
+        <h2>Modularit&auml;t</h2>
+        <p>Das AA wurde in drei Module aufgeteilt: LogonDialogs, Authentifizierung, Autorisierung.
+            Jedes einzelne Modul kann ge&auml;ndert werden, ohne die anderen zu beeintr&auml;chtigen.</p>
+        <h2>Default-Module</h2>
+        <p>Per Default nutzt NagVis einen gemischten Logon-Request-Modus f&uuml;r die Anmeldung und eine SQLite-Datenbank f&uuml;r die Speicherung von Benutzern, Passw&ouml;rtern und Berechtigungen.
+            Daf&uuml;r verwendet NagVis das LogonMixed-Modul, das im Hintergrund auf LogonEnv und LogonDialog zugreift.
+            Das LogonMixed-Modul versucht, den Benutzernamen &uuml;ber das Web-Server-Environment zu ermitteln.
+            Das bedeutet, dass NagVis der Web-Server-Authentifizierung vertraut, wenn eine benutzt wird.
+            Falls keine verwendet wird, zeigt es den LogonDialog an, um interaktives Login durch den HTML-Logon-Dialog zu erm&ouml;glichen.</p>
+        <h2>Andere Module</h2>
+        <p>Bei der Auslieferung gibt es nur die o.g. Authentifizierungs- und Autorisierungsmodule.
+            Durch die modulare Struktur sollte es einfach sein, LDAP-, MySQL- und dateibasierende Authentifizierungs- und Autorisierungsmechanismen zu erstellen.</p>
+    </body>
 </html>

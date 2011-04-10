@@ -1,69 +1,71 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
-  <head>
-    <title>user_interface</title>
+    <head>
+    <title>User-Interface</title>
         <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
 <!--[if IE]>
-<style type="text/css"> 
-/* place css fixes for all versions of IE in this conditional comment */
-.page #sidebar1, .page #sidebar2 { padding-top: 30px; }
-.page #mainContent { zoom: 1; padding-top: 15px; }
-/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
-</style>
+        <style type="text/css"> 
+        /* place css fixes for all versions of IE in this conditional comment */
+            .page #sidebar1, .page #sidebar2 { padding-top: 30px; }
+            .page #mainContent { zoom: 1; padding-top: 15px; }
+        /* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+        </style>
 <![endif]-->
-  </head>  
-<h1>User-Interface </h1>
-Diese Seite soll die unterschiedlichen Ansichten des NagVis-User-Interfaces
-beschreiben. Die Pfade sind relativ zum NagVis-root-Verzeichnis.<br><br>
-Mit NagVis 1.5 wurde das URL-Schema ver&auml;ndert. Falls Ihre alten URLs weiterhin in NagVis 1.5 funktionieren sollen, dann k&ouml;nnen Sie die mod_rewrite-Konfiguration in der mitgelieferten Beispiel-Webserver-Konfiguration nutzen.<br><br>
-
-<table border=0 width=100%>
-<tr>
-<th>URL</th><th>Beschreibung</th>
-</tr>
-<tr>
-<th colspan=2>NagVis Frontend</th>
-</tr>
-<tr>
-<td>index.php</td><td>Dies ist eine Weiterleitung zu nagvis/index.php (NagVis-Frontend)</td>
-</tr>
-<tr>
-<td>nagvis/frontend/nagvis-js/index.php</td><td>Dies ist der Map-Index, die Hauptseite von NagVis. Auf der Hauptseite sind alle Maps aufgef&uuml;hrt, f&uuml;r die der Benutzer berechtigt ist. Sie k&ouml;nnen eine Map ausschlie&szlig;en, indem Sie die show_in_lists-Option auf 0 setzen.</td>
-</tr>
-<tr>
-<td>nagvis/frontend/nagvis-js/index.php?mod=Map&show=&lt;name></td><td>Dies ist die klassische Map-Ansicht. In diesem Modus wird die angegebene Map angezeigt und mit Hilfe von Ajax-Aufrufen an den NagVis-Core aktualisiert.<p>Die folgenden Parameter sind verf&uuml;gbar:</p>
-<table>
-<tr><td>search=&lt;regex&gt;</td><td>Suchen nach einem Map-Objekt w&auml;hrend des Ladevorgangs. Gefundene Objekte werden hervorgehoben.</td></tr>
-<tr><td>rotation=&lt;name&gt;</td><td>Rotieren der Objekte im angegebenen Rotations-Pool, wenn die Map Bestandteil des Pools ist.</td></tr>
-<tr><td>enableHeader=1/0</td><td>Aktivieren/Deaktivieren des Header-Men&uuml;s, unabh&auml;ngig von der Konfigurationseinstellung</td></tr>
-<tr><td>enableHover=1/0</td><td>Aktivieren/Deaktivieren des Hover-Men&uuml;s, unabh&auml;ngig von der Konfigurationseinstellung</td></tr>
-<tr><td>enableContext=1/0</td><td>Aktivieren/Deaktivieren des Context-Men&uuml;s, unabh&auml;ngig von der Konfigurationseinstellung</td></tr>
-</table>
-</td>
-</tr>
-<tr>
-<td>nagvis/frontend/nagvis-js/index.php?mod=Automap&show=&lt;name&gt;</td><td>Dies ist die Automap-Ansicht. In dieser Ansicht wird die angegebene NagVis-Map angezeigt. Der Inhalt wird automatisch mit Hilfe von Ajax-Aufrufen an den NagVis-Core aktualisiert.<p>
-Die verf&uuml;gbaren Parameter finden Sie auf der <a href="automap.html">Automap</a>-Seite.</td>
-</tr><tr>
-<td>nagvis/frontend/nagvis-js/index.php?info</td><td>Dies ist eine Seite mit Support-Informationen, die Sie mitliefern k&ouml;nnen, wenn Sie Probleme mit NagVis haben.</td>
-</tr>
-<tr>
-<th colspan=2>Rotationen</th>
-</tr>
-<tr>
-<td>nagvis/frontend/nagvis-js/index.php?rotation=&lt;name></td><td>Dies ist der Map-Rotationsmodus. In diesem Modus wird die erste angegebene Map angezeigt (Rotation muss in der Hauptkonfigurationsdatei definiert werden). Nach einem definierten Intervall wird die n&auml;chste angegebene Map geladen usf.</td>
-</tr>
-<tr>
-<td>nagvis/frontend/nagvis-js/index.php?rotation=&lt;name>&amp;rotate=0</td><td>Dies ist der Rotationsmodus. Die Rotation wird durch den angegebenen Wert gestoppt. In diesem Modus werden die Maps automatisch aktualisiert. Es kann sinnvoll sein, eine Rotation zu stoppen, wenn Sie etwas Interessantes auf der Map gefunden haben. Die Rotation wird aktiviert, wenn Sie den Wert auf 1 setzen oder den Rotationswert l&ouml;schen.</td>
-</tr>
-<tr>
-<th colspan=2>WUI (NagVis-Konfiguration)</th>
-</tr>
-<tr>
-<td>config.php</td><td>Dies ist eine Weiterleitung zu wui/index.php (Konfigurations-Interface)</td>
-</tr>
-<tr>
-<td>wui/index.php</td><td>Dies ist die Willkommen-Seite des NagVis-Konfigurations-Interfaces (WUI). Rechtsklicken Sie auf dem Hintergrund-Bild, um das WUI-Men&uuml; zu &ouml;ffnen.</td>
-</tr>
-</table>
+    </head>  
+    <h1>User-Interface </h1>
+    Diese Seite soll die unterschiedlichen Ansichten des NagVis-User-Interfaces beschreiben.
+    Die Pfade sind relativ zum NagVis-root-Verzeichnis.<br><br>
+    Mit NagVis 1.5 wurde das URL-Schema ver&auml;ndert.
+    Falls Ihre alten URLs weiterhin in NagVis 1.6 funktionieren sollen, dann k&ouml;nnen Sie die mod_rewrite-Konfiguration in der mitgelieferten Beispiel-Webserver-Konfiguration nutzen.<br><br>
+    
+    <table border=0 width=100%>
+        <tr>
+            <th>URL</th><th>Beschreibung</th>
+        </tr>
+        <tr>
+            <th colspan=2>NagVis Frontend</th>
+        </tr>
+        <tr>
+            <td>index.php</td><td>Dies ist eine Weiterleitung zu nagvis/index.php (NagVis-Frontend)</td>
+        </tr>
+        <tr>
+            <td>nagvis/frontend/nagvis-js/index.php</td><td>Dies ist der Map-Index, die Hauptseite von NagVis. Auf der Hauptseite sind alle Maps aufgef&uuml;hrt, f&uuml;r die der Benutzer berechtigt ist. Sie k&ouml;nnen eine Map ausschlie&szlig;en, indem Sie die show_in_lists-Option auf 0 setzen.</td>
+        </tr>
+        <tr>
+            <td>nagvis/frontend/nagvis-js/index.php?mod=Map&show=&lt;name></td><td>Dies ist die klassische Map-Ansicht. In diesem Modus wird die angegebene Map angezeigt und mit Hilfe von Ajax-Aufrufen an den NagVis-Core aktualisiert.<p>Die folgenden Parameter sind verf&uuml;gbar:</p>
+                <table>
+                    <tr><td>search=&lt;regex&gt;</td><td>Suchen nach einem Map-Objekt w&auml;hrend des Ladevorgangs. Gefundene Objekte werden hervorgehoben.</td></tr>
+                    <tr><td>rotation=&lt;name&gt;</td><td>Rotieren der Objekte im angegebenen Rotations-Pool, wenn die Map Bestandteil des Pools ist.</td></tr>
+                    <tr><td>enableHeader=1/0</td><td>Aktivieren/Deaktivieren des Header-Men&uuml;s, unabh&auml;ngig von der Konfigurationseinstellung</td></tr>
+                    <tr><td>enableHover=1/0</td><td>Aktivieren/Deaktivieren des Hover-Men&uuml;s, unabh&auml;ngig von der Konfigurationseinstellung</td></tr>
+                    <tr><td>enableContext=1/0</td><td>Aktivieren/Deaktivieren des Context-Men&uuml;s, unabh&auml;ngig von der Konfigurationseinstellung</td></tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>nagvis/frontend/nagvis-js/index.php?mod=Automap&show=&lt;name&gt;</td><td>Dies ist die Automap-Ansicht. In dieser Ansicht wird die angegebene NagVis-Map angezeigt. Der Inhalt wird automatisch mit Hilfe von Ajax-Aufrufen an den NagVis-Core aktualisiert.<p>
+                Die verf&uuml;gbaren Parameter finden Sie auf der <a href="automap.html">Automap</a>-Seite.</td>
+        </tr>
+        <tr>
+            <td>nagvis/frontend/nagvis-js/index.php?info</td><td>Dies ist eine Seite mit Support-Informationen, die Sie mitliefern k&ouml;nnen, wenn Sie Probleme mit NagVis haben.</td>
+        </tr>
+        <tr>
+            <th colspan=2>Rotationen</th>
+        </tr>
+        <tr>
+            <td>nagvis/frontend/nagvis-js/index.php?rotation=&lt;name></td><td>Dies ist der Map-Rotationsmodus. In diesem Modus wird die erste angegebene Map angezeigt (Rotation muss in der Hauptkonfigurationsdatei definiert werden). Nach einem definierten Intervall wird die n&auml;chste angegebene Map geladen usf.</td>
+        </tr>
+        <tr>
+            <td>nagvis/frontend/nagvis-js/index.php?rotation=&lt;name>&amp;rotate=0</td><td>Dies ist der Rotationsmodus. Die Rotation wird durch den angegebenen Wert gestoppt. In diesem Modus werden die Maps automatisch aktualisiert. Es kann sinnvoll sein, eine Rotation zu stoppen, wenn Sie etwas Interessantes auf der Map gefunden haben. Die Rotation wird aktiviert, wenn Sie den Wert auf 1 setzen oder den Rotationswert l&ouml;schen.</td>
+        </tr>
+        <tr>
+            <th colspan=2>WUI (NagVis-Konfiguration)</th>
+        </tr>
+        <tr>
+            <td>config.php</td><td>Dies ist eine Weiterleitung zu wui/index.php (Konfigurations-Interface)</td>
+        </tr>
+        <tr>
+            <td>wui/index.php</td><td>Dies ist die Willkommen-Seite des NagVis-Konfigurations-Interfaces (WUI). Rechtsklicken Sie auf dem Hintergrund-Bild, um das WUI-Men&uuml; zu &ouml;ffnen.</td>
+        </tr>
+    </table>
 </html>
