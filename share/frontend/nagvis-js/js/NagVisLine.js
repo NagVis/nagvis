@@ -61,6 +61,10 @@ var NagVisLine = NagVisStatelessObject.extend({
 		oContainerDiv = null;
 		
 		this.drawLine();
+
+		// Enable the controls when the object is not locked
+		if(!this.bIsLocked)
+			this.parseControls();
 	},
 	
 	/**
@@ -124,6 +128,20 @@ var NagVisLine = NagVisStatelessObject.extend({
 									 this.conf.z, width, colorFill, colorBorder,
 									 ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')),
 									 (this.conf.line_label_show && this.conf.line_label_show === '1'));
+	},
+	
+	remove: function () {
+		if(!this.parsedObject)
+		    return
+
+		var oMap = document.getElementById('map');
+		if(oMap)
+		    oMap.removeChild(this.parsedObject);
+		
+		// Remove object reference
+		this.parsedObject = null;
+		
+		oMap = null;
 	},
 	
 	parseHoverMenu: function () {

@@ -764,7 +764,17 @@ function gridToggle() {
  * Alligns the current coordinates to the current grid
  */
 function coordsToGrid(x, y) {
-	var gridMoveX = x - (x % oViewProperties.grid_steps);
-	var gridMoveY = y - (y % oViewProperties.grid_steps);
-	return [ gridMoveX, gridMoveY ];
+    if(x.indexOf(',') !== -1) {
+        x = x.split(',');
+        y = y.split(',');
+        for(var i = 0; i < x.length; i++) {
+            x[i] = x[i] - (x[i] % oViewProperties.grid_steps);
+            y[i] = y[i] - (y[i] % oViewProperties.grid_steps);
+        }
+        return [ x.join(','), y.join(',') ];
+    } else {
+        var gridMoveX = x - (x % oViewProperties.grid_steps);
+        var gridMoveY = y - (y % oViewProperties.grid_steps);
+        return [ gridMoveX, gridMoveY ];
+    }
 }

@@ -698,6 +698,288 @@ var NagVisObject = Base.extend({
 		}
 	},
 
-	highlight: function(show) {}
+	/*** CONTROL FUNCTIONS ***/
 
+	parseControls: function () {
+		// Ensure the controls container exists
+		var oControls = document.getElementById(this.conf.object_id+'-controls');
+		if(!oControls) {
+			oControls = document.createElement('div');
+			oControls.setAttribute('id', this.conf.object_id+'-controls');
+			this.parsedObject.appendChild(oControls);
+		}
+		oControls = null;
+		
+		if(this.conf.view_type === 'line' || this.conf.type === 'line')
+			this.parseLineControls();
+		else if(this.conf.view_type === 'icon')
+			this.parseIconControls();
+	},
+
+	addControl: function (obj) {
+		// Add to DOM
+		document.getElementById(this.conf.object_id+'-controls').appendChild(obj);
+		// Add to controls list
+		this.objControls.push(obj);
+	},
+
+	parseLineControls: function () {
+		var x = this.parseCoords(this.conf.x, 'x');
+		var y = this.parseCoords(this.conf.y, 'y');
+
+		var size = 20;
+		for(var i = 0, l = x.length; i < l; i++) {
+			this.parseControlDrag(i, x[i], y[i], - size / 2, - size / 2, size);
+			makeDragable([this.conf.object_id+'-drag-'+i], this.saveObject, this.moveObject);
+		}
+
+		this.parseControlDelete(x.length, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'),
+		                        15, -15, 10);
+		this.parseControlModify(x.length+1, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'),
+		                        30, -15, 10);
+
+		size = null;
+		x = null;
+		y = null;
+	},
+
+	getLineMid: function(coord, dir) {
+	    var c = coord.split(',');
+	    if(c.length == 2)
+		return middle(this.parseCoords(coord, dir)[0],
+		              this.parseCoords(coord, dir)[1],
+			      this.conf.line_cut);
+	    else
+		return coord[1];
+	},
+
+	removeControls: function() {
+		var oControls = document.getElementById(this.conf.object_id+'-controls');
+		if(oControls)
+			for(var i = oControls.childNodes.length; i > 0; i--)
+				oControls.removeChild(oControls.childNodes[0]);
+		this.objControls = [];
+		oControls = null;
+	},
+
+	parseControlDrag: function (num, objX, objY, offX, offY, size) {
+		var drag = document.createElement('div');
+		drag.setAttribute('id',         this.conf.object_id+'-drag-' + num);
+		drag.setAttribute('class',     'control drag' + size);
+		drag.setAttribute('className', 'control drag' + size);
+		drag.style.zIndex   = parseInt(this.conf.z)+1;
+		drag.style.width    = size + 'px';
+		drag.style.height   = size + 'px';
+		drag.style.left     = (objX + offX) + 'px';
+		drag.style.top      = (objY + offY) + 'px';
+		drag.objOffsetX     = offX;
+		drag.objOffsetY     = offY;
+
+		drag.onmouseover = function() {
+		    document.body.style.cursor = 'move';
+		};
+
+		drag.onmouseout = function() {
+		    document.body.style.cursor = 'auto';
+		};
+
+		this.addControl(drag);
+		drag = null;
+	},
+
+	/**
+	 * Adds the delete button to the controls including
+	 * all eventhandlers
+	 *
+	 * Author: Lars Michelsen <lm@larsmichelsen.com>
+	 */
+	parseControlDelete: function (num, objX, objY, offX, offY, size) {
+		var ctl= document.createElement('div');
+		ctl.setAttribute('id',         this.conf.object_id+'-delete-' + num);
+		ctl.setAttribute('class',     'control delete' + size);
+		ctl.setAttribute('className', 'control delete' + size);
+		ctl.style.zIndex   = parseInt(this.conf.z)+1;
+		ctl.style.width    = size + 'px';
+		ctl.style.height   = size + 'px';
+		ctl.style.left     = (objX + offX) + 'px';
+		ctl.style.top      = (objY + offY) + 'px';
+		ctl.objOffsetX     = offX;
+		ctl.objOffsetY     = offY;
+
+		ctl.onclick = function() {
+		    // In the event handler this points to the ctl object
+		    var arr   = this.id.split('-');
+		    var objId = arr[0];
+		    var obj = getMapObjByDomObjId(objId);
+
+		    // FIXME: Multilanguage
+		    if(!confirm('Really delete the object?'))
+			return;
+
+		    obj.saveObject(this, null);
+		    obj.remove();
+		    obj   = null;
+		    objId = null;
+		    arr   = null;
+
+		    document.body.style.cursor = 'auto';
+		};
+
+		ctl.onmouseover = function() {
+		    document.body.style.cursor = 'pointer';
+		};
+
+		ctl.onmouseout = function() {
+		    document.body.style.cursor = 'auto';
+		};
+
+		this.addControl(ctl);
+		ctl = null;
+	},
+
+	/**
+	 * Adds the modify button to the controls including
+	 * all eventhandlers
+	 *
+	 * Author: Lars Michelsen <lm@larsmichelsen.com>
+	 */
+	parseControlModify: function (num, objX, objY, offX, offY, size) {
+		var ctl= document.createElement('div');
+		ctl.setAttribute('id',         this.conf.object_id+'-modify-' + num);
+		ctl.setAttribute('class',     'control modify' + size);
+		ctl.setAttribute('className', 'control mdoify' + size);
+		ctl.style.zIndex   = parseInt(this.conf.z)+1;
+		ctl.style.width    = size + 'px';
+		ctl.style.height   = size + 'px';
+		ctl.style.left     = (objX + offX) + 'px';
+		ctl.style.top      = (objY + offY) + 'px';
+		ctl.objOffsetX     = offX;
+		ctl.objOffsetY     = offY;
+
+		ctl.onclick = function() {
+		    // In the event handler this points to the ctl object
+		    var arr   = this.id.split('-');
+		    var objId = arr[0];
+		    var obj = getMapObjByDomObjId(objId);
+
+		    showFrontendDialog(oGeneralProperties.path_server
+		                       +'?mod=Map&act=addModify&do=modify&show='
+				       +escapeUrlValues(oPageProperties.map_name)
+				       +'&type='+escapeUrlValues(obj.conf.type)
+				       +'&id=' + escapeUrlValues(objId), 'Modify Object');
+
+		    obj   = null;
+		    objId = null;
+		    arr   = null;
+
+		    document.body.style.cursor = 'auto';
+		};
+
+		ctl.onmouseover = function() {
+		    document.body.style.cursor = 'pointer';
+		};
+
+		ctl.onmouseout = function() {
+		    document.body.style.cursor = 'auto';
+		};
+
+		this.addControl(ctl);
+		ctl = null;
+	},
+
+
+	/**
+	 * Handler for the move event
+	 *
+	 * Important: This is called from an event handler
+	 * the 'this.' keyword can not be used here.
+	 */
+	moveObject: function(obj) {
+		var arr        = obj.id.split('-');
+		var objId      = arr[0];
+		var anchorType = arr[1];
+
+		var newPos;
+		var viewType = getDomObjViewType(objId);
+
+		var jsObj = getMapObjByDomObjId(objId);
+
+		if(viewType === 'line') {
+			newPos = getMidOfAnchor(obj);
+
+			// Get current positions and replace only the current one
+			var anchorId   = arr[2];
+			newPos = [ jsObj.calcNewCoord(newPos[0], 'x', anchorId),
+			           jsObj.calcNewCoord(newPos[1], 'y', anchorId) ];
+
+			var parents = jsObj.getParentObjectIds(anchorId);
+
+			anchorId   = null;
+		} else {
+			newPos = [ jsObj.calcNewCoord(obj.x - obj.objOffsetX, 'x'),
+			           jsObj.calcNewCoord(obj.y - obj.objOffsetY, 'y') ];
+
+			var parents = jsObj.getParentObjectIds();
+		}
+		
+		// Highlight parents when relative
+		for (var objectId in parents) {
+		    var p = getMapObjByDomObjId(objectId);
+		    if(p) 
+			p.highlight(true);
+		    p = null;
+		}
+		parents = null;
+
+		jsObj.conf.x = newPos[0];
+		jsObj.conf.y = newPos[1];
+
+		jsObj.reposition();
+
+		jsObj      = null;	
+		objId      = null;
+		anchorType = null;
+		newPos     = null;
+		viewType   = null;
+	},
+
+	/**
+	 * Handler for the drop event
+	 *
+	 * Important: This is called from an event handler
+	 * the 'this.' keyword can not be used here.
+	 */
+	saveObject: function(obj, oParent) {
+		var arr        = obj.id.split('-');
+		var objId      = arr[0];
+		var anchorId   = arr[2];
+		var viewType   = getDomObjViewType(objId);
+		var jsObj      = getMapObjByDomObjId(objId);
+
+		if(viewType !== 'line')
+			anchorId = -1;
+
+		// Honor the enabled grid and reposition the object after dropping
+		if(oViewProperties.grid_show === 1) {
+		    [ jsObj.conf.x, jsObj.conf.y ] = coordsToGrid(jsObj.conf.x, jsObj.conf.y);
+		    jsObj.reposition();
+		}
+
+		// Make relative when oParent set and not already relative
+		if(isset(oParent))
+			if(oParent !== false)
+				jsObj.makeRelativeCoords(oParent, anchorId);
+			else
+				jsObj.makeAbsoluteCoords(anchorId);
+
+		saveObjectAfterAnchorAction(obj);
+
+		arr      = null;
+		objId    = null;
+		anchorId = null;
+		jsObj    = null;
+	},
+
+
+	highlight: function(show) {}
 });
