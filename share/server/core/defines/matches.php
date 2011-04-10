@@ -40,6 +40,7 @@ define('MATCH_GADGET_OPT', '/^[0-9a-z\s\:\+\[\]\(\)\_\.\,\-\&\?\!\#\@\=\/\\\%]+$
 define('MATCH_STRING_STYLE', '/^[0-9a-z\:\;\-\+\%\#]*$/i');
 define('MATCH_COORDS',       '/^(?:(?:[0-9]+)|([a-z0-9]+(?:%[+-][0-9]+)?))$/');
 define('MATCH_COORDS_MULTI', '/^(?:(?:(?:[0-9]+)|([a-z0-9]+(?:%[+-][0-9]+)?))[\.\,]?)+$/');
+define('MATCH_COORDS_MULTI_EMPTY', '/^(?:(?:(?:[0-9]+)|([a-z0-9]+(?:%[+-][0-9]+)?))[\.\,]?)*$/');
 
 define('MATCH_INTEGER', '/^[0-9]+$/');
 define('MATCH_INTEGER_EMPTY', '/^[0-9]*$/');

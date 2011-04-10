@@ -192,8 +192,8 @@ class CoreModMap extends CoreModule {
 					               'type'     => MATCH_OBJECTTYPE,
 					               'id'       => MATCH_OBJECTID_EMPTY,
 					               'viewType' => MATCH_VIEW_TYPE_SERVICE_EMPTY,
-					               'x'        => MATCH_COORDS_MULTI,
-					               'y'        => MATCH_COORDS_MULTI,
+					               'x'        => MATCH_COORDS_MULTI_EMPTY,
+					               'y'        => MATCH_COORDS_MULTI_EMPTY,
 					               'clone'    => MATCH_OBJECTID_EMPTY);
 					$aVals = $this->getCustomOptions($aOpts);
 					

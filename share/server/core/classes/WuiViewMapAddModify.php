@@ -104,25 +104,6 @@ class WuiViewMapAddModify {
 		$ret = '<script type="Text/Javascript">';
 		
 		switch($this->aOpts['do']) {
-			case 'modify':
-				if($this->aOpts['coords'] != '') {
-					$myval = $this->aOpts['id'];
-					$val_coords = explode(',', $this->aOpts['coords']);
-					if ($this->aOpts['type'] == 'textbox') {
-						$objwidth  = $val_coords[2] - $val_coords[0];
-						$objheight = $val_coords[3] - $val_coords[1];
-						$ret .= 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].'\';';
-						$ret .= 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].'\';';
-						$ret .= 'document.addmodify.elements[\'w\'].value=\''.$objwidth.'\';';
-						$ret .= 'document.addmodify.elements[\'h\'].value=\''.$objheight.'\';';
-						$ret .= 'toggleDefaultOption(\'w\');';
-					} else {
-						$ret .= 'document.addmodify.elements[\'x\'].value=\''.$val_coords[0].','.$val_coords[2].'\';';
-						$ret .= 'document.addmodify.elements[\'y\'].value=\''.$val_coords[1].','.$val_coords[3].'\';';
-					}
-				}
-			break;
-			
 			case 'add':
 				if(isset($this->aOpts['clone']) && $this->aOpts['clone'] != '') {
 					// Get the options of the object to clone from map
