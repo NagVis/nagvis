@@ -48,21 +48,21 @@ var NagVisTextbox = NagVisStatelessObject.extend({
 		// Create container div
 		oContainerDiv = document.createElement('div');
 		oContainerDiv.setAttribute('id', this.conf.object_id);
-		
-		// Parse object depending on line or normal icon
-		var oTextbox = this.parseTextbox();
-		oContainerDiv.appendChild(oTextbox);
-		oTextbox = null;
+		oContainerDiv.appendChild(this.parseTextbox());
 		
 		// When this is an update, remove the object first
 		this.remove();
 		
 		var oMap = document.getElementById('map');
-    if(oMap) {
+		if(oMap) {
  			this.parsedObject = oMap.appendChild(oContainerDiv);
 			oMap = null;
 		}
 		oContainerDiv = null;
+
+		// Enable the controls when the object is not locked
+		if(!this.bIsLocked)
+			this.parseControls();
 	},
 	
 	/**
@@ -82,6 +82,37 @@ var NagVisTextbox = NagVisStatelessObject.extend({
 	 * @author	Lars Michelsen <lars@vertical-visions.de>
 	 */
 	parseTextbox: function () {
-		return drawNagVisTextbox(this.conf.object_id+'label', 'box', this.conf.background_color, this.conf.border_color, this.conf.x, this.conf.y, this.conf.z, this.conf.w, this.conf.h, this.conf.text, this.conf.style);
+		return drawNagVisTextbox(this.conf.object_id+'-label', 'box',
+		                            this.conf.background_color, this.conf.border_color,
+					    this.conf.x, this.conf.y, this.conf.z, this.conf.w,
+					    this.conf.h, this.conf.text, this.conf.style);
+	},
+
+	parseBoxControls: function () {
+	    var oBox = document.getElementById(this.conf.object_id+'-label');
+	    oBox.setAttribute('class',     'box resizeMe');
+	    oBox.setAttribute('className', 'box resizeMe');
+	    oBox = null;
+
+	    this.parseControlDrag(0,   this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),  5, -15, 10);
+	    this.parseControlDelete(1, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'), 20, -15, 10);
+	    this.parseControlModify(2, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'), 35, -15, 10);
+
+	    // Simply make it dragable. Maybe will be extended in the future...
+	    makeDragable([this.conf.object_id+'-drag-0'], this.saveObject, this.moveObject);
+	},
+
+	removeBoxControls: function () {
+	    var oBox = document.getElementById(this.conf.object_id+'-label');
+	    oBox.setAttribute('class',     'box');
+	    oBox.setAttribute('className', 'box');
+	    oBox = null;
+	},
+
+	moveBox: function () {
+	    var container = document.getElementById(this.conf.object_id + '-label');
+	    container.style.top  = this.parseCoord(this.conf.y, 'y') + 'px';
+	    container.style.left = this.parseCoord(this.conf.x, 'x') + 'px';
+	    container = null;
 	}
 });

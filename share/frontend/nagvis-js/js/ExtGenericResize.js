@@ -36,7 +36,7 @@
 // absolute positioned) and add the class="resizeMe" to it.            //
 /////////////////////////////////////////////////////////////////////////
 
-var theobject = null; //This gets a value as soon as a resize start
+var resizeObj = null; //This gets a value as soon as a resize start
 
 function resizeObject() {
 	this.el        = null; //pointer to the object
@@ -93,7 +93,7 @@ function doDown(event) {
 	var el = getReal(target, "className", "resizeMe");
 	
 	if(el == null || el.id == '') {
-		theobject = null;
+		resizeObj = null;
 		return;
 	}
 	
@@ -105,34 +105,44 @@ function doDown(event) {
 		draggingEnabled = false;
 		draggingObject = null;
 		
-		theobject = new resizeObject();
+		resizeObj = new resizeObject();
 			
-		theobject.el = el;
-		theobject.dir = dir;
+		resizeObj.el = el;
+		resizeObj.dir = dir;
 	
-		theobject.grabx = event.clientX;
-		theobject.graby = event.clientY;
-		theobject.width = el.offsetWidth;
-		theobject.height = el.offsetHeight;
-		theobject.left = el.offsetLeft;
-		theobject.top = el.offsetTop;
+		resizeObj.grabx = event.clientX;
+		resizeObj.graby = event.clientY;
+		resizeObj.width = el.offsetWidth;
+		resizeObj.height = el.offsetHeight;
+		resizeObj.left = el.offsetLeft;
+		resizeObj.top = el.offsetTop;
 	
 		event.returnValue = false;
 		event.cancelBubble = true;
 	}
 }
 
-function doUp() {
-	if(theobject != null) {
+function doUp(event) {
+	// IE is evil and doesn't pass the event object
+	if (event === null || typeof event === 'undefined') {
+		event = window.event;
+	}
+
+	if(resizeObj != null) {
 		// Re-enable dragging
 		draggingEnabled = true;
 		draggingObject = null;
 		
 		// Send new size to backend
-		saveObjectAfterResize(theobject.el);
+		saveObjectAfterResize(resizeObj.el);
 		
-		theobject = null;
+		resizeObj = null;
+
+		event.returnValue = false;
+		event.cancelBubble = true;
 	}
+
+	return false;
 }
 
 function doMove(event) {
@@ -167,26 +177,27 @@ function doMove(event) {
 	}
 	
 	//Dragging starts here
-	if(theobject != null) {
-		if(theobject.dir.indexOf("e") != -1)
-			theobject.el.style.width = Math.max(xMin, theobject.width + event.clientX - theobject.grabx) + "px";
+	if(resizeObj != null) {
+		if(resizeObj.dir.indexOf("e") != -1)
+			resizeObj.el.style.width = Math.max(xMin, resizeObj.width + event.clientX - resizeObj.grabx) + "px";
 	
-		if(theobject.dir.indexOf("s") != -1) {
-			theobject.el.style.height = Math.max(yMin, theobject.height + event.clientY - theobject.graby) + "px";
+		if(resizeObj.dir.indexOf("s") != -1) {
+			resizeObj.el.style.height = Math.max(yMin, resizeObj.height + event.clientY - resizeObj.graby) + "px";
 		}
 
-		if(theobject.dir.indexOf("w") != -1) {
-			theobject.el.style.left = Math.min(theobject.left + event.clientX - theobject.grabx, theobject.left + theobject.width - xMin) + "px";
-			theobject.el.style.width = Math.max(xMin, theobject.width - event.clientX + theobject.grabx) + "px";
+		if(resizeObj.dir.indexOf("w") != -1) {
+			resizeObj.el.style.left = Math.min(resizeObj.left + event.clientX - resizeObj.grabx, resizeObj.left + resizeObj.width - xMin) + "px";
+			resizeObj.el.style.width = Math.max(xMin, resizeObj.width - event.clientX + resizeObj.grabx) + "px";
 		}
-		if(theobject.dir.indexOf("n") != -1) {
-			theobject.el.style.top = Math.min(theobject.top + event.clientY - theobject.graby, theobject.top + theobject.height - yMin) + "px";
-			theobject.el.style.height = Math.max(yMin, theobject.height - event.clientY + theobject.graby) + "px";
+		if(resizeObj.dir.indexOf("n") != -1) {
+			resizeObj.el.style.top = Math.min(resizeObj.top + event.clientY - resizeObj.graby, resizeObj.top + resizeObj.height - yMin) + "px";
+			resizeObj.el.style.height = Math.max(yMin, resizeObj.height - event.clientY + resizeObj.graby) + "px";
 		}
 		
 		event.returnValue = false;
 		event.cancelBubble = true;
 	}
+	return false;
 }
 
 
@@ -201,3 +212,7 @@ function getReal(el, type, value) {
 	}
 	return el;
 }
+
+addEvent(document, "mousedown", doDown);
+addEvent(document, "mouseup",   doUp);
+addEvent(document, "mousemove", doMove);

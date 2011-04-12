@@ -26,6 +26,32 @@ function handleDragResult(objId, anchorId) {
 	return urlParts;
 }
 
+function saveObjectAfterResize(oObj) {
+	var objId = oObj.id.split('-')[0];
+	var objX = pxToInt(oObj.style.left);
+	var objY = pxToInt(oObj.style.top);
+	var objW = parseInt(oObj.style.width);
+	var objH = parseInt(oObj.style.height);
+
+	// Reposition in frontend
+	var obj = getMapObjByDomObjId(objId);
+	obj.conf.x = objX;
+	obj.conf.y = objY;
+	obj.conf.w = objW;
+	obj.conf.h = objH;
+	obj.reposition();
+
+	if(!isInt(objX) || !isInt(objY) || !isInt(objW) || !isInt(objH)) {
+		alert('ERROR: Invalid coords ('+objX+'/'+objY+'/'+objW+'/'+objH+'). Terminating.');
+		return false;
+	}
+	
+	var urlPart = '&x='+objX+'&y='+objY+'&w='+objW+'&h='+objH;
+	getAsyncRequest(oGeneralProperties.path_server + '?mod=Map&act=modifyObject'
+	                +'&map=' + escapeUrlValues(oPageProperties.map_name)
+	                + '&id=' + escapeUrlValues(objId) + urlPart);
+}
+
 /**
  * Whenever an anchor action is performed this method should be called
  * once to send the changes to the server and make the changes permanent.

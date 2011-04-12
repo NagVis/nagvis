@@ -887,81 +887,81 @@ function hideStatusMessage() {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, text, customStyle) {
-		var oLabelDiv = document.getElementById(id);
-		if(!oLabelDiv) {
-			oLabelDiv = document.createElement('div');
-			oLabelDiv.setAttribute('id', id);
-		}
-		oLabelDiv.setAttribute('class', className);
-		oLabelDiv.setAttribute('className', className);
-		oLabelDiv.style.background = bgColor;
-		oLabelDiv.style.borderColor = borderColor;
-		
-		oLabelDiv.style.position = 'absolute';
-		oLabelDiv.style.left = x + 'px';
-		oLabelDiv.style.top = y + 'px';
-		
-		if(w && w !== '' && w !== 'auto')
-			oLabelDiv.style.width = w+'px';
-		
-		if(h && h !== '' && h !== 'auto')
-			oLabelDiv.style.height = h+'px';
-		
-		oLabelDiv.style.zIndex = parseInt(z) + 1;
-		oLabelDiv.style.overflow = 'visible';
-		
-		/**
-		 * IE workaround: The transparent for the color is not enough. The border
-		 * has really to be hidden.
-		 */
-		if(borderColor == 'transparent')
-			oLabelDiv.style.borderStyle = 'none';
-		else
-			oLabelDiv.style.borderStyle = 'solid';
-		
-		// Create span for text and add label text
-		var oLabelSpan = null;
-		if(oLabelDiv.childNodes.length == 0)
-			oLabelSpan = document.createElement('span');
-		else
-			oLabelSpan = oLabelDiv.childNodes[0];
-		
-		// Setting custom style if someone wants the textbox to be
-		// styled.
-		//
-		// The problem here is that the custom style is given as content of the
-		// HTML style attribute. But that can not be applied easily using plain
-		// JS. So parse the string and apply the options manually.
-		if(customStyle && customStyle !== '') {
-			// Split up the coustom style string to apply the attributes
-			var aStyle = customStyle.split(';');
-			for(var i in aStyle) {
-				var aOpt = aStyle[i].split(':');
+	var oLabelDiv = document.getElementById(id);
+	if(!oLabelDiv) {
+		oLabelDiv = document.createElement('div');
+		oLabelDiv.setAttribute('id', id);
+	}
+	oLabelDiv.setAttribute('class', className);
+	oLabelDiv.setAttribute('className', className);
+	oLabelDiv.style.background = bgColor;
+	oLabelDiv.style.borderColor = borderColor;
+	
+	oLabelDiv.style.position = 'absolute';
+	oLabelDiv.style.left = x + 'px';
+	oLabelDiv.style.top = y + 'px';
+	
+	if(w && w !== '' && w !== 'auto')
+		oLabelDiv.style.width = w+'px';
+	
+	if(h && h !== '' && h !== 'auto')
+		oLabelDiv.style.height = h+'px';
+	
+	oLabelDiv.style.zIndex = parseInt(z) + 1;
+	oLabelDiv.style.overflow = 'visible';
+	
+	/**
+	 * IE workaround: The transparent for the color is not enough. The border
+	 * has really to be hidden.
+	 */
+	if(borderColor == 'transparent')
+		oLabelDiv.style.borderStyle = 'none';
+	else
+		oLabelDiv.style.borderStyle = 'solid';
+	
+	// Create span for text and add label text
+	var oLabelSpan = null;
+	if(oLabelDiv.childNodes.length == 0)
+		oLabelSpan = document.createElement('span');
+	else
+		oLabelSpan = oLabelDiv.childNodes[0];
+	
+	// Setting custom style if someone wants the textbox to be
+	// styled.
+	//
+	// The problem here is that the custom style is given as content of the
+	// HTML style attribute. But that can not be applied easily using plain
+	// JS. So parse the string and apply the options manually.
+	if(customStyle && customStyle !== '') {
+		// Split up the coustom style string to apply the attributes
+		var aStyle = customStyle.split(';');
+		for(var i in aStyle) {
+			var aOpt = aStyle[i].split(':');
+			
+			if(aOpt[0] && aOpt[0] != '' && aOpt[1] && aOpt[1] != '') {
+				var sKey = aOpt[0].replace(/(-[a-zA-Z])/g, '$1');
 				
-				if(aOpt[0] && aOpt[0] != '' && aOpt[1] && aOpt[1] != '') {
-					var sKey = aOpt[0].replace(/(-[a-zA-Z])/g, '$1');
-					
-					var regex = /(-[a-zA-Z])/;
-					var result = regex.exec(aOpt[0]);
-					
-					if(result !== null) {
-						for (var i = 1; i < result.length; i++) {
-							var fixed = result[i].replace('-', '').toUpperCase();
-							sKey = sKey.replace(result[i], fixed);
-						}
+				var regex = /(-[a-zA-Z])/;
+				var result = regex.exec(aOpt[0]);
+				
+				if(result !== null) {
+					for (var i = 1; i < result.length; i++) {
+						var fixed = result[i].replace('-', '').toUpperCase();
+						sKey = sKey.replace(result[i], fixed);
 					}
-					
-					oLabelSpan.style[sKey] = aOpt[1];
 				}
+				
+				oLabelSpan.style[sKey] = aOpt[1];
 			}
 		}
-		
-		oLabelSpan.innerHTML = text;
-		
-		oLabelDiv.appendChild(oLabelSpan);
-		oLabelSpan = null;
-		
-		return oLabelDiv;
+	}
+	
+	oLabelSpan.innerHTML = text;
+	
+	oLabelDiv.appendChild(oLabelSpan);
+	oLabelSpan = null;
+	
+	return oLabelDiv;
 }
 
 /**

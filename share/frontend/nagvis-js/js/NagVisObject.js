@@ -678,6 +678,8 @@ var NagVisObject = Base.extend({
 	reposition: function() {
 		if(this.conf.view_type === 'line' || this.conf.type === 'line')
 			this.drawLine();
+		else if(this.conf.type === 'textbox')
+			this.moveBox();
 		else
 			this.moveIcon();
 
@@ -714,6 +716,8 @@ var NagVisObject = Base.extend({
 			this.parseLineControls();
 		else if(this.conf.view_type === 'icon')
 			this.parseIconControls();
+		else if(this.conf.type === 'textbox')
+			this.parseBoxControls();
 	},
 
 	addControl: function (obj) {
@@ -760,6 +764,9 @@ var NagVisObject = Base.extend({
 				oControls.removeChild(oControls.childNodes[0]);
 		this.objControls = [];
 		oControls = null;
+
+		if(this.conf.type === 'textbox')
+		    this.removeBoxControls();
 	},
 
 	parseControlDrag: function (num, objX, objY, offX, offY, size) {
