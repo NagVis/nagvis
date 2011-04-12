@@ -764,6 +764,8 @@ function gridToggle() {
  * Alligns the current coordinates to the current grid
  */
 function coordsToGrid(x, y) {
+    x = "" + x;
+    y = "" + y;
     if(x.indexOf(',') !== -1) {
         x = x.split(',');
         y = y.split(',');
@@ -773,6 +775,8 @@ function coordsToGrid(x, y) {
         }
         return [ x.join(','), y.join(',') ];
     } else {
+        x = +x;
+        y = +y;
         var gridMoveX = x - (x % oViewProperties.grid_steps);
         var gridMoveY = y - (y % oViewProperties.grid_steps);
         return [ gridMoveX, gridMoveY ];
