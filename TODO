@@ -77,8 +77,10 @@ Exception/Error log bauen:
   PHP Fehler loggen
 	Eventuell sogar Javascript fehler loggen
 
-- Grid in normales Frontend einbauen
-- Grid beim Bewegen in normalem Frontend berücksichtigen
+- Wenn Mitte von Linien frei positioniert ist, dann sind Controlls irgendwo am Rand
+- Textboxen müssen wieder via Javascript editierbar sein
+- Shapes verschieben/löschen/bearbeiten
+- "Options" Menu aus WUI übernehmen
 
 - Dokumentation:
   - Neue Editier-Möglichkeiten in der normalen GUI
