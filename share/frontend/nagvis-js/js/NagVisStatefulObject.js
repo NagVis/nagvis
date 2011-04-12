@@ -820,18 +820,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 	},
 
 	/**
-	 * Moves the icon to it's location as described by this js object
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	moveIcon: function () {
-		var container = document.getElementById(this.conf.object_id + '-icondiv');
-		container.style.top  = this.parseCoord(this.conf.y, 'y') + 'px';
-		container.style.left = this.parseCoord(this.conf.x, 'x') + 'px';
-		container = null;
-	},
-
-	/**
 	 * Moves the label of the object
 	 *
 	 * @author	Lars Michelsen <lars@vertical-visions.de>

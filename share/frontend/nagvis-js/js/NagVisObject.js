@@ -670,6 +670,18 @@ var NagVisObject = Base.extend({
 	},
 
 	/**
+	 * Moves the icon to it's location as described by this js object
+	 *
+	 * @author	Lars Michelsen <lars@vertical-visions.de>
+	 */
+	moveIcon: function () {
+		var container = document.getElementById(this.conf.object_id + '-icondiv');
+		container.style.top  = this.parseCoord(this.conf.y, 'y') + 'px';
+		container.style.left = this.parseCoord(this.conf.x, 'x') + 'px';
+		container = null;
+	},
+
+	/**
 	 * Entry point for repositioning objects in NagVis frontend
 	 * Handles whole redrawing of the object while moving
 	 *
@@ -718,6 +730,8 @@ var NagVisObject = Base.extend({
 			this.parseIconControls();
 		else if(this.conf.type === 'textbox')
 			this.parseBoxControls();
+		else if(this.conf.type === 'shape')
+			this.parseShapeControls();
 	},
 
 	addControl: function (obj) {

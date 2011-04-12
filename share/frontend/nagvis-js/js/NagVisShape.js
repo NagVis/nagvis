@@ -46,10 +46,7 @@ var NagVisShape = NagVisStatelessObject.extend({
 		// Create container div
 		oContainerDiv = document.createElement('div');
 		oContainerDiv.setAttribute('id', this.conf.object_id);
-		
-		var oShape = this.parseShape();
-		oContainerDiv.appendChild(oShape);
-		oShape = null;
+		oContainerDiv.appendChild(this.parseShape());
 		
 		// When this is an update, remove the object first
 		this.remove();
@@ -61,6 +58,10 @@ var NagVisShape = NagVisStatelessObject.extend({
 		}
 		
 		oContainerDiv = null;
+
+		// Enable the controls when the object is not locked
+		if(!this.bIsLocked)
+			this.parseControls();
 	},
 	
 	/**
@@ -71,6 +72,7 @@ var NagVisShape = NagVisStatelessObject.extend({
 	 */
 	parseShape: function () {
 		var oIconDiv = document.createElement('div');
+		oIconDiv.setAttribute('id', this.conf.object_id+'-icondiv');
 		oIconDiv.setAttribute('class', 'icon');
 		oIconDiv.setAttribute('className', 'icon');
 		oIconDiv.style.top = this.conf.y+'px';
@@ -113,5 +115,14 @@ var NagVisShape = NagVisStatelessObject.extend({
 	
 	parseHoverMenu: function () {
 		this.getHoverMenu(this.conf.object_id+'-icon');
+	},
+
+	parseShapeControls: function () {
+	    this.parseControlDrag(0,   this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),  5, -15, 10);
+	    this.parseControlDelete(1, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'), 20, -15, 10);
+	    this.parseControlModify(2, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'), 35, -15, 10);
+
+	    // Simply make it dragable. Maybe will be extended in the future...
+	    makeDragable([this.conf.object_id+'-drag-0'], this.saveObject, this.moveObject);
 	}
 });
