@@ -33,6 +33,8 @@ Core
   defaults to img which is the default behaviour for all existing gadgets. The
   html mode assumes that the gadget does not render images as classic gadgets
   but renders HTML code
+  * Changed redirect scripts index.php/config.php to ignore hosts/ports/proto
+    just care about the paths - should be more robust
 
 Automap
   * Made automap coord parsing regex resistent against html entities in the URL
