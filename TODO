@@ -77,7 +77,6 @@ Exception/Error log bauen:
   PHP Fehler loggen
 	Eventuell sogar Javascript fehler loggen
 
-- Wenn Mitte von Linien frei positioniert ist, dann sind Controlls irgendwo am Rand
 - Textboxen müssen wieder via Javascript editierbar sein
 - Shapes verschieben/löschen/bearbeiten
 - "Options" Menu aus WUI übernehmen
