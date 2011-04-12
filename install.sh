@@ -942,7 +942,8 @@ cmp_js() {
 	cmp NagVisLine.js
 	cmp NagVisTextbox.js
 	cmp NagVisRotation.js
-	cmp wz_jsgraphics.js
+	cmp ExtWzJsGraphics.js
+	cmp ExtGenericResize.js
 }
 
 cmp_js_wui() {
@@ -958,8 +959,6 @@ cmp_js_wui() {
 	cmp ManageMaps.js
 	cmp ManageShapes.js
 	cmp MapManageTmpl.js
-	cmp wz_jsgraphics.js
-	cmp ExtGenericResize.js
 }
 
 # Main program starting
