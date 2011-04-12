@@ -750,7 +750,7 @@ var NagVisObject = Base.extend({
 		              this.parseCoords(coord, dir)[1],
 			      this.conf.line_cut);
 	    else
-		return coord[1];
+		return this.parseCoords(coord, dir)[1];
 	},
 
 	removeControls: function() {
