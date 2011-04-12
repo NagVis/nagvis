@@ -213,8 +213,6 @@ div.infopage a:hover {
 	color: #789D2B;
 	text-decoration: none;
 	opacity: .5;
-	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-	filter:alpha(opacity=50);
 }
 
 /**
@@ -231,8 +229,6 @@ div.infopage a:hover {
   right: 200px;
   z-index: 5000;
   opacity: 0.85;
-  /* IE */
-  filter: alpha(opacity=85);
 }
 
 #statusMessage div {

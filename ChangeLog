@@ -68,3 +68,4 @@ Frontend
   * Added buttons to show/hide the header menu (state saved per user)
   * Added new option: event_log_events to define the number of events in the eventlog scrollback
   * Bugfix: Fixed php error when using custom css files in maps
+  * Bugfix: Fixed css notices in firefox caused by invalid statements (transparency in IE)

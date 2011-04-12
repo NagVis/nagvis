@@ -50,6 +50,8 @@ var iNow = Date.parse(new Date());
 // Define some state options
 var oStates = {};
 
+var isIE  = navigator.appVersion.indexOf("MSIE") != -1;
+
 function date(format, timestamp) {
     // http://kevin.vanzonneveld.net
     // +   original by: Carlos R. L. Rodrigues (http://www.jsfromhell.com)
@@ -840,6 +842,8 @@ function displayStatusMessage(msg, type, hold) {
 	if(!oMessage) {
 		oMessage = document.createElement('div');
 		oMessage.setAttribute('id', 'statusMessage');
+		if(isIE)
+		    oMessage.style.filter = 'alpha(opacity=85)';
 		
 		document.body.appendChild(oMessage);
 	}

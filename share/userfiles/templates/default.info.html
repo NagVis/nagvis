@@ -2,7 +2,15 @@
 <html>
 	<head>
 		<title>{$pageTitle}</title>
-		<link rel="stylesheet" type="text/css" href="{$htmlTemplates}default.css">
+		<link rel="stylesheet" type="text/css" href="{$htmlTemplates}default.css" />
+		<!--[if IE]>
+		<style type=”text/css”>
+		div.infopage a:hover {
+		-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+		filter:alpha(opacity=50);
+		}
+		</style>
+		<![endif]-->
 		<link rel="shortcut icon" href="{$htmlBase}/frontend/nagvis-js/images/internal/favicon.png" />
 	</head>
 	<body class="main">

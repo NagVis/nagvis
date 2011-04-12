@@ -145,7 +145,8 @@ function ddSlide(c,d){
 	}
 	c.style.height = currh + (dist * d) + 'px';
 	c.style.opacity = currh / c.maxh;
-	c.style.filter = 'alpha(opacity=' + (currh * 100 / c.maxh) + ')';
+	if(isIE)
+	    c.style.filter = 'alpha(opacity=' + (currh * 100 / c.maxh) + ')';
 	if((currh < 2 && d != 1) || (currh > (c.maxh - 2) && d == 1)){
 		clearInterval(c.timer);
 	}
@@ -153,7 +154,8 @@ function ddSlide(c,d){
 	// Finish hiding (above calculation do not work properly cause dist may become 0)
 	if(dist == 0 && d != 1) {
 		c.style.opacity = 0;
-		c.style.filter = 'alpha(opacity=0)';
+		if(isIE)
+		    c.style.filter = 'alpha(opacity=0)';
 		c.style.height = '0px';
 		clearInterval(c.timer);
 	}
