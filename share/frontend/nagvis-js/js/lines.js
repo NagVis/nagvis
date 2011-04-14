@@ -85,8 +85,8 @@ function drawPolygonBasedObject(objectId, num, xCoord, yCoord, z, colorFill, col
 		oCanvas.style.position = 'absolute';
 		oCanvas.style.left = xMin+"px";
 		oCanvas.style.top = yMin+"px";
-		oCanvas.width = Math.round(xMax-xMin);
-		oCanvas.height = Math.round(yMax-yMin);
+		oCanvas.width = Math.round(xMax-xMin) + 'px';
+		oCanvas.height = Math.round(yMax-yMin) + 'px';
 		oCanvas.style.zIndex = z;
 		
 		var ctx = oCanvas.getContext('2d');
@@ -154,8 +154,8 @@ function drawLinkArea(objectId, num, lx, ly, z) {
 	oImg.style.position = 'absolute';
 	oImg.style.left = (lx-10)+"px";
 	oImg.style.top = (ly-10)+"px";
-	oImg.style.width = 20;
-	oImg.style.height = 20;
+	oImg.style.width = 20 + 'px';
+	oImg.style.height = 20 + 'px';
 	oImg.style.zIndex = parseInt(z)+1;
 	
 	if(oLinkContainer)
