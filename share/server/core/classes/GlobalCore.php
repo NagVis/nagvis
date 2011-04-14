@@ -611,5 +611,55 @@ class GlobalCore {
 		
 		return json_encode($lang);
 	}
+	
+	/**
+	 * Loads and parses permissions of all maps in js array
+	 *
+	 * @return  String  JSON encoded array
+	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+	 * FIXME: Only used by ex WUI components - check if needed!
+	 */
+	function getMapOptions() {
+		$aArr = Array();
+		foreach($this->getAvailableMaps() AS $map) {
+			$aOpts = Array();
+			
+			$MAPCFG1 = new GlobalMapCfg($this, $map);
+			try {
+				$MAPCFG1->readMapConfig();
+			} catch(MapCfgInvalid $e) {
+				$aOpts['configError'] = true;
+				$aOpts['configErrorMsg'] = $e->getMessage();
+			}
+			
+			$aOpts['mapName'] = $map;
+			
+			// map alias
+			$aOpts['mapAlias'] = $MAPCFG1->getValue(0, 'alias');
+			
+			// used image
+			$aOpts['mapImage'] = $MAPCFG1->getValue(0, 'map_image');
+			
+			// linked maps
+			$aOpts['linkedMaps'] = Array();
+			foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
+				if(isset($obj['map_name'])) {
+					$aOpts['linkedMaps'][] = $obj['map_name'];
+				}
+			}
+
+			// used shapes
+			$aOpts['usedShapes'] = Array();
+			foreach($MAPCFG1->getDefinitions('shape') AS $key => $obj) {
+				if(isset($obj['icon'])) {
+					$aOpts['usedShapes'][] = $obj['icon'];
+				}
+			}
+			
+			$aArr[] = $aOpts;
+		}
+		
+		return json_encode($aArr);
+	}
 }
 ?>

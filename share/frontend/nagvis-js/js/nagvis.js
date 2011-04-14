@@ -44,6 +44,7 @@ var regexCache = {};
 var lang = {};
 var validMapConfig = {};
 var validMainConfig = {};
+var mapOptions = {};
 
 // Initialize and define some other basic vars
 var iNow = Date.parse(new Date());
