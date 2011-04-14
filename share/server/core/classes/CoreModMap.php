@@ -120,8 +120,8 @@ class CoreModMap extends CoreModule {
 				case 'doAdd':
 					$this->handleResponse('handleResponseAdd', 'doAdd',
 						                    $this->CORE->getLang()->getText('The map has been created.'),
-																$this->CORE->getLang()->getText('The map could not be created.'),
-																1, $this->htmlBase.'/frontend/wui/index.php?mod=Map&act=edit&show='.$_POST['map']);
+					                            $this->CORE->getLang()->getText('The map could not be created.'),
+					                            1, $this->htmlBase.'/frontend/wui/index.php?mod=Map&act=edit&show='.$_POST['map']);
 				break;
 				case 'doRename':
 					// if renamed map is open, redirect to new name
@@ -899,6 +899,7 @@ class CoreModMap extends CoreModule {
 			return false;
 		
 		$MAPCFG->addElement('global', $a, true);
+		return true;
 	}
 	
 	protected function handleResponseAdd() {
