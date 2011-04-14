@@ -159,6 +159,7 @@ class GlobalBackground {
 	* @author	Lars Michelsen <lars@vertical-visions.de>
 	*/
 	function createImage($color, $width, $height) {
+		$this->path = $this->CORE->getMainCfg()->getPath('sys', '', 'backgrounds') . '/' . $this->image;
 		if(!$this->checkFileExists(0)) {
 			if($this->checkFolderWriteable(1)) {
 				$image = imagecreatetruecolor($width, $height);
