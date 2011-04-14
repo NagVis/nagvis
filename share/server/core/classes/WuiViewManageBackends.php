@@ -65,7 +65,9 @@ class WuiViewManageBackends {
 			'defaultBackend'        => $this->CORE->getMainCfg()->getValue('defaults', 'backend', true),
 			'definedBackends'       => array_merge(Array('' => ''), $this->CORE->getDefinedBackends()),
 			'availableBackends'     => array_merge(Array('' => ''), $this->CORE->getAvailableBackends()),
-			'backendAttributes'     => $this->CORE->getMainCfg()->getValidObjectType('backend')
+			'backendAttributes'     => $this->CORE->getMainCfg()->getValidObjectType('backend'),
+			'validMainCfg'          => json_encode($this->CORE->getMainCfg()->getValidConfig()),
+			'lang'                  => $this->CORE->getJsLang(),
 		);
 		
 		// Build page based on the template file and the data array
