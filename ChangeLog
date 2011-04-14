@@ -7,6 +7,9 @@ Core
 Frontend
   * Hiding search button when not permitted to
 
+WUI
+  * Bugfix: Fixed problem in default-backend change form handler
+
 1.5.8
 
 Core
