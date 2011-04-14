@@ -35,12 +35,7 @@
 						{/if}</li>
 					{/foreach}
 					{/if}
-					{if $permittedEditAnyMap || $permittedEditMainCfg || $permittedManageBackgrounds || $permittedManageMaps || $permittedManageShapes}
-					<li class="spacer"><hr /></li>
-					<li><a href="{$pathBase}/frontend/wui/index.php" class="underline">{$langWui}</a></li>
-					{else}
 					<li class="spacer underline"></li>
-					{/if}
 				</ul>
 			</dd>
 		</dl>
@@ -64,14 +59,7 @@
 					{if $mod == 'AutoMap' && $permittedEdit == true}
 					<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&act=automapToMap&show=dialog', '{$langAutomapToMap}')">{$langAutomapToMap}</a></li>
 					{/if}
-					{if $mod == 'Map' && $permittedEdit == true && $act != 'edit'}
-					<li><a href="javascript:toggleAllMapObjectsLock();ddMenu('action',-1)">{$langLockUnlockAll}</a></li>
-					<li><a href="{$pathBase}/frontend/wui/index.php?mod=Map&amp;act=edit&amp;show={$currentMap}" class="underline">{$langEditMap}</a></li>
-					{elseif $mod == 'Map' && $permittedView == true && $act != 'view'}
-					<li><a href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$currentMap}" class="underline">{$langViewMap}</a></li>
-					{else}
 					<li class="spacer underline"></li>
-					{/if}
 				</ul>
 			</dd>
 		</dl>
@@ -83,6 +71,8 @@
 			<dt id="map-ddheader" onmouseover="ddMenu('map',1)" onmouseout="ddMenu('map',-1)">{$langMapEdit} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>
 			<dd id="map-ddcontent" onmouseover="cancelHide('map')" onmouseout="ddMenu('map',-1)">
 				<ul>
+					<li><a href="javascript:toggleAllMapObjectsLock();ddMenu('action',-1)">{$langLockUnlockAll}</a></li>
+					<li class="spacer"><hr /></li>
 					<li><a href="javascript:gridToggle()">{$langToggleGrid}</a></li>
 					<li class="spacer"><hr /></li>
 					<li><a class="submenu-link" id="map-addicon-ddheader" href="#" onmouseover="ddMenu('map-addicon',1,1)" onmouseout="ddMenu('map-addicon',-1)">{$langMapAddIcon}</a></li>
@@ -207,7 +197,6 @@
 	<li class="closed"><a class="title" href="#" onclick="sidebarToggleSubtree(this)">{$langAutomaps}</a>
 		<ul style="display:none;">{sideMaps $automaps $pathBase "AutoMap"}</ul>
 	</li>
-	{if $permittedEditAnyMap}<li class="spacertop"><a href="{$pathBase}/frontend/wui/index.php" class="underline">{$langWui}</a></li>{/if}
 </ul>
 </div>
 <div id="headerspacer"></div>
