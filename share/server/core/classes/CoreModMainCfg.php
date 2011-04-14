@@ -139,7 +139,7 @@ class CoreModMainCfg extends CoreModule {
 	protected function handleResponseBackendDefault() {
 		$FHANDLER = new CoreRequestHandler($_POST);
 		$this->verifyValuesSet($FHANDLER, Array('defaultbackend'));
-		return Array('defaultbackend' => $FHANDLER->get('map_new_name'));
+		return Array('defaultbackend' => $FHANDLER->get('defaultbackend'));
 	}
 	
 	protected function doEdit($a) {
