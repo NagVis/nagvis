@@ -73,24 +73,6 @@ function get_click(newtype,nbclicks,action) {
 	document.onclick = get_click_pos;
 }
 
-function printLang(sLang,sReplace) {
-	if(typeof sLang === 'undefined')
-		return '';
-	
-	sLang = sLang.replace(/<(\/|)(i|b)>/ig,'');
-	
-	// sReplace maybe optional
-	if(typeof sReplace != "undefined") {
-		aReplace = sReplace.split(",")
-		for(var i = 0; i < aReplace.length; i++) {
-			var aReplaceSplit = aReplace[i].split("~");
-			sLang = sLang.replace("["+aReplaceSplit[0]+"]",aReplaceSplit[1]);
-		}
-	}
-	
-	return sLang;
-}
-
 function track_mouse(e) {
 	if(follow_mouse) {
 		var event;
@@ -436,19 +418,6 @@ function formSubmit(formId, target, bReloadPage) {
 	if(bReloadPage === true) {
 		document.location.href='./index.php?mod=Map&act=edit&show='+mapname;
 	}
-}
-
-/**
- * validateMainConfigFieldValue(oField)
- *
- * This function checks a config field value for valid format. The check is done
- * by the match regex from validMapConfig array.
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function validateMainConfigFieldValue(oField) {
-	var sName = oField.name.split('_');
-	return validateValue(sName, oField.value, validMainConfig[sName[0]][sName[1]].match);
 }
 
 /**

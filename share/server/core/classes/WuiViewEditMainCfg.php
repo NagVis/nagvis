@@ -54,9 +54,11 @@ class WuiViewEditMainCfg {
 		$TMPLSYS = $TMPL->getTmplSys();
 		
 		$aData = Array(
-			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+			'htmlBase'     => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
 			'formContents' => $this->getFields(),
-			'langSave' => $this->CORE->getLang()->getText('save')
+			'langSave'     => $this->CORE->getLang()->getText('save'),
+			'validMainCfg' => json_encode($this->CORE->getMainCfg()->getValidConfig()),
+			'lang'         => $this->CORE->getJsLang(),
 		);
 		
 		// Build page based on the template file and the data array
@@ -164,7 +166,7 @@ class WuiViewEditMainCfg {
 									break;
 								}
 								
-								$ret .= '<select id="'.$cat.'_'.$propname.'" name="'.$cat.'_'.$propname.'" onBlur="validateMainConfigFieldValue(this)">';
+								$ret .= '<select id="'.$cat.'_'.$propname.'" name="'.$cat.'_'.$propname.'" onBlur="validateMainConfigFieldValue(this, 0)">';
 								$ret .= '<option value=""></option>';
 								
 								foreach($arrOpts AS $val) {
@@ -180,7 +182,7 @@ class WuiViewEditMainCfg {
 								$ret .= '<script>document.edit_config.elements[\''.$cat.'_'.$propname.'\'].value = \''.$val2.'\';</script>';
 							break;
 							case 'boolean':
-								$ret .= '<select id="'.$cat.'_'.$propname.'" name="'.$cat.'_'.$propname.'" onBlur="validateMainConfigFieldValue(this)">';
+								$ret .= '<select id="'.$cat.'_'.$propname.'" name="'.$cat.'_'.$propname.'" onBlur="validateMainConfigFieldValue(this, 0)">';
 								$ret .= '<option value=""></option>';
 								$ret .= '<option value="1">'.$this->CORE->getLang()->getText('yes').'</option>';
 								$ret .= '<option value="0">'.$this->CORE->getLang()->getText('no').'</option>';
@@ -193,7 +195,7 @@ class WuiViewEditMainCfg {
 									$val2 = implode(',', $val2);
 								}
 								
-								$ret .= '<input id="'.$cat.'_'.$propname.'" type="text" name="'.$cat.'_'.$propname.'" value="'.$val2.'" onBlur="validateMainConfigFieldValue(this)" />';
+								$ret .= '<input id="'.$cat.'_'.$propname.'" type="text" name="'.$cat.'_'.$propname.'" value="'.$val2.'" onBlur="validateMainConfigFieldValue(this, 0)" />';
 								
 								if(isset($prop['locked']) && $prop['locked'] == 1) {
 									$ret .= "<script>document.edit_config.elements['".$cat."_".$propname."'].disabled=true;</script>";
@@ -202,7 +204,7 @@ class WuiViewEditMainCfg {
 						}
 						
 						// Initially toggle the depending fields
-						$ret .= '<script>validateMainConfigFieldValue(document.getElementById("'.$cat.'_'.$propname.'"));</script>';
+						$ret .= '<script>validateMainConfigFieldValue(document.getElementById("'.$cat.'_'.$propname.'"), 1);</script>';
 					
 						$ret .= '</td>';
 						$ret .= '</tr>';

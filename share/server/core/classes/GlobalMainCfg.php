@@ -1760,17 +1760,17 @@ class GlobalMainCfg {
 		
 		$cfgFile = $this->configFiles[count($this->configFiles)-1];
 		if(!$handle = fopen($cfgFile, 'w+')) {
-			new GlobalMessage('ERROR', WuiCore::getInstance()->getLang()->getText('mainCfgNotWriteable'), WuiCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
+			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('mainCfgNotWriteable'), GlobalCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
 			return FALSE;
 		}
 		
 		if(!fwrite($handle, $content)) {
-			new GlobalMessage('ERROR', WuiCore::getInstance()->getLang()->getText('mainCfgCouldNotWriteMainConfigFile'), WuiCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
+			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('mainCfgCouldNotWriteMainConfigFile'), GlobalCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
 			return FALSE;
 		}
 		
 		fclose($handle);
-		$this->CORE->setPerms($cfgFile);
+		GlobalCore::getInstance()->setPerms($cfgFile);
 
 		return TRUE;
 	}

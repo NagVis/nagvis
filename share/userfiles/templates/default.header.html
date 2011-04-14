@@ -127,7 +127,7 @@
 		</dl>
 	</li>
 	{/if}
-	{if (($mod == 'Map' && $act == 'edit') || ($mod == 'Welcome' && $act == 'view')) && ($permittedEditMainCfg || $permittedManageBackgrounds || $permittedManageMaps || $permittedManageShapes)}
+	{if $permittedEditMainCfg || $permittedManageBackgrounds || $permittedManageMaps || $permittedManageShapes}
 	<li>
 		<dl class="dropdown">
 			<dt id="wui-ddheader" onmouseover="ddMenu('wui',1)" onmouseout="ddMenu('wui',-1)">{$langOptions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>

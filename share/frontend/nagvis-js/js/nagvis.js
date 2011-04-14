@@ -43,6 +43,7 @@ var regexCache = {};
 // Used for editing
 var lang = {};
 var validMapConfig = {};
+var validMainConfig = {};
 
 // Initialize and define some other basic vars
 var iNow = Date.parse(new Date());

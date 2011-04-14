@@ -782,3 +782,71 @@ function coordsToGrid(x, y) {
         return [ gridMoveX, gridMoveY ];
     }
 }
+
+/**
+ * validateMainConfigFieldValue(oField)
+ *
+ * This function checks a config field value for valid format. The check is done
+ * by the match regex from validMainConfig array.
+ *
+ * @author	Lars Michelsen <lars@vertical-visions.de>
+ */
+function validateMainConfigFieldValue(oField, init) {
+	var sName;
+	var bInputHelper = false;
+	var bChanged;
+
+	if(!oField)
+		return false;
+	
+	if(oField.name.indexOf('_inp_') !== -1) {
+		sName = oField.name.replace('_inp_', '');
+		bInputHelper = true;
+	} else {
+		sName = oField.name;
+	}
+	
+	// Check if "manual input" was selected in this field. If so: change the field
+	// type from select to input
+	bChanged = toggleFieldType(oField.name, oField.value);
+	
+	// Toggle the value of the field. If empty or just switched the function will
+	// try to display the default value
+	toggleDefaultOption(sName, bChanged);
+	
+	// Check if some fields depend on this. If so: Add a javacript 
+	// event handler function to toggle these fields
+	toggleDependingFields("edit_config", sName, oField.value);
+	
+	// Only validate when field type not changed
+	if(!bChanged) {
+		// Only validate when not initial parsing
+		if(!init) {
+        		var aName = sName.split('_');
+                        var sSec  = aName.shift();
+			return validateValue(sName, oField.value, validMainConfig[sSec][aName.join('_')].match);
+		} else {
+			return true;
+		}
+	} else {
+		return false;
+	}
+}
+
+function printLang(sLang,sReplace) {
+	if(typeof sLang === 'undefined')
+		return '';
+	
+	sLang = sLang.replace(/<(\/|)(i|b)>/ig,'');
+	
+	// sReplace maybe optional
+	if(typeof sReplace != "undefined") {
+		aReplace = sReplace.split(",")
+		for(var i = 0; i < aReplace.length; i++) {
+			var aReplaceSplit = aReplace[i].split("~");
+			sLang = sLang.replace("["+aReplaceSplit[0]+"]",aReplaceSplit[1]);
+		}
+	}
+	
+	return sLang;
+}
