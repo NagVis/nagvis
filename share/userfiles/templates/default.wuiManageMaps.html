@@ -1,4 +1,4 @@
-<script type="text/javascript" src="{$htmlBase}/frontend/wui/js/ManageMaps.js"></script>
+<script type="text/javascript" src="{$htmlBase}/frontend/nagvis-js/js/ManageMaps.js"></script>
 <form name="map_create" id="map_create" method="POST" action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=Map&amp;act=doAdd', 'map_create');" onsubmit="return check_create_map();">
 	<table name="mytable" class="mytable" id="table_map_create">
 		<tr>
@@ -33,7 +33,7 @@
 
 <form name="map_rename" id="map_rename" method="POST" action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=Map&amp;act=doRename', 'map_rename');" onsubmit="return check_map_rename();">
 	<input type="hidden" name="map_current" value="" />
-	<script>document.map_rename.map_current.value = mapname;</script>
+	<script>document.map_rename.map_current.value = oPageProperties.map_name;</script>
 	<table name="mytable" class="mytable" id="table_map_rename">
 		<tr>
 			<th class="cat" colspan="2"><h2>{$langRenameMap}</h2></th>
@@ -59,7 +59,7 @@
 
 <form name="map_delete" id="map_delete" method="POST" action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=Map&amp;act=doDelete', 'map_delete');" onsubmit="return check_map_delete();">
 	<input type="hidden" name="map_current" value="" />
-	<script>document.map_delete.map_current.value = mapname;</script>
+	<script>document.map_delete.map_current.value = oPageProperties.map_name;</script>
 	<table name="mytable" class="mytable" id="table_map_delete">
 		<tr><th class="cat" colspan="2"><h2>{$langDeleteMap}</h2></th></tr>
 		<tr><td class="tdlabel">{$langChooseMap}</td><td class="tdfield">

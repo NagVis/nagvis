@@ -946,21 +946,6 @@ cmp_js() {
 	cmp ExtGenericResize.js
 }
 
-cmp_js_wui() {
-	cd $NAGVIS_PATH/share/frontend/wui/js/
-	OUT=WuiCompressed.js
-	>$OUT
-	cmp wui.js
-	cmp ajax.js
-	cmp addmodify.js
-	cmp EditMainCfg.js
-	cmp ManageBackgrounds.js
-	cmp ManageBackends.js
-	cmp ManageMaps.js
-	cmp ManageShapes.js
-	cmp MapManageTmpl.js
-}
-
 # Main program starting
 ###############################################################################
 
@@ -1383,7 +1368,6 @@ makedir "$NAGVIS_PATH/etc/profiles"
 copy "" "LICENCE README" "$NAGVIS_PATH"
 copy "" "docs" "$NAGVIS_PATH/share"
 cmp_js
-cmp_js_wui
 
 # Remove demo maps if desired
 if [ "$IGNORE_DEMO" != "" ]; then

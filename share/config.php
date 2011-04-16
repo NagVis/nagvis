@@ -22,5 +22,5 @@
  *
  *****************************************************************************/
  
-header("Location: " . rtrim(dirname($_SERVER['PHP_SELF']), '/\\') . "/frontend/wui/index.php".(($_SERVER["QUERY_STRING"] != '') ? '?':'').$_SERVER["QUERY_STRING"]);
+header("Location: " . rtrim(dirname($_SERVER['PHP_SELF']), '/\\') . "/frontend/nagvis-js/index.php".(($_SERVER["QUERY_STRING"] != '') ? '?':'').$_SERVER["QUERY_STRING"]);
 ?>
