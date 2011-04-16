@@ -44,7 +44,7 @@ function getMapNameByPath(mapPath) {
 
 function checkMapExists(mapName,mapOptions) {
 	for(var i=0;i<mapOptions.length;i++) {
-		if(mapOptions[i].mapName == mapName) {
+		if(mapOptions[i].mapName == oPageProperties.map_name) {
 			return true;
 		}
 	}
