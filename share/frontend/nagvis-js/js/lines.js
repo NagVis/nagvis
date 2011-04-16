@@ -85,11 +85,12 @@ function drawPolygonBasedObject(objectId, num, xCoord, yCoord, z, colorFill, col
 		oCanvas.style.position = 'absolute';
 		oCanvas.style.left = xMin+"px";
 		oCanvas.style.top = yMin+"px";
-		oCanvas.width = Math.round(xMax-xMin) + 'px';
-		oCanvas.height = Math.round(yMax-yMin) + 'px';
+		oCanvas.width = Math.round(xMax-xMin);
+		oCanvas.height = Math.round(yMax-yMin);
 		oCanvas.style.zIndex = z;
 		
 		var ctx = oCanvas.getContext('2d');
+		ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
 		
 		ctx.fillStyle = colorFill;
 		ctx.beginPath();
@@ -101,13 +102,15 @@ function drawPolygonBasedObject(objectId, num, xCoord, yCoord, z, colorFill, col
 		}
 		
 		ctx.fill();
-		
-		var oLineContainer = document.getElementById(objectId+'-line');
-		if(oLineContainer)
-			oLineContainer.appendChild(oCanvas);
 		ctx = null;
+		
+		if(!isset(oCanvas.parentNode)) {
+		    var oLineContainer = document.getElementById(objectId+'-line');
+		    if(oLineContainer)
+			oLineContainer.appendChild(oCanvas);
+		    oLineContainer = null;
+		}
 		oCanvas = null;
-		oLineContainer = null;
 	} else {
 		// Fallback to old line style
 		var oLine = new jsGraphics(document.getElementById(objectId+'-line'));
