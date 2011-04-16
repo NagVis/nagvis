@@ -1,7 +1,5 @@
-<script type="text/javascript">
-validMainConfig = {$validMainCfg};
-lang = {$lang};
-</script>
+<input type="hidden" /><!-- The template must not start with a script tag. This would be ignored by IE //-->
+<script type="text/javascript">validMainConfig = {$validMainCfg}; lang = {$lang};</script>
 <form name="edit_config" id="edit_config"  action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=MainCfg&amp;act=doEdit', 'edit_config');" enctype="" >
 <table name="mytable" class="mytable" id="table_edit_config" style="width:300px;float:left;">
 {$formContents}

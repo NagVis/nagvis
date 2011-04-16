@@ -480,28 +480,32 @@ if (window.addEventListener) {
  */
 function toggleDependingFields(formName, name, value) {
 	var aFields = document.getElementById(formName).elements;
-	
+
+	var oConfig;
+	if(formName == 'edit_config')
+	    oConfig = validMainConfig;
+	else
+	    oConfig = validMapConfig;
+
 	for(var i = 0, len = aFields.length; i < len; i++) {
 		// Filter helper fields
 		if(aFields[i].name.charAt(0) !== '_') {
 			if(aFields[i].type != 'hidden' && aFields[i].type != 'submit') {
 				// Handle different structures of main cfg and map cfg editing
-				var oConfig, sMasterName, sTypeName, sOptName, sFieldName;
+				var sMasterName, sTypeName, sOptName, sFieldName;
 				if(formName == 'edit_config') {
 					sMasterName = name.replace(sTypeName+'_', '');
 					sTypeName = aFields[i].name.split('_')[0];
 					sOptName = aFields[i].name.replace(sTypeName+'_', '');
 					sFieldName = aFields[i].name;
-					oConfig = validMainConfig;
 				} else {
 					sMasterName = name;
 					sTypeName = document.getElementById(formName).type.value;
 					sOptName = aFields[i].name;
-					oConfig = validMapConfig;
 				}
 				
 				var sFieldName = aFields[i].name;
-				
+
 				// Show option fields when parent field value is equal and hide when 
 				// parent field value differs
 				if(oConfig[sTypeName] && oConfig[sTypeName][sOptName]['depends_on'] === sMasterName
@@ -517,13 +521,15 @@ function toggleDependingFields(formName, name, value) {
 					// Toggle the value of the field. If empty or just switched the function will
 					// try to display the default value
 					toggleDefaultOption(sFieldName);
-				}
-				if(!oConfig[sTypeName])
+				} else if(!oConfig[sTypeName]) {
 					alert('No data for type: '+sTypeName);
+				}
+
 			}
 		}
 	}
 	
+	oConfig = null;
 	aFields = null;
 }
 
