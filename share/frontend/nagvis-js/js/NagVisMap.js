@@ -55,6 +55,13 @@ var NagVisMap = NagVisStatefulObject.extend({
 		oTd.setAttribute('className', this.conf.overview_class);
 		oTd.style.width = '200px';
 		oTd.style.margin = '0';
+
+		// needed for IE. It seems as the IE does not really know what to do
+		// with the link definied below ... strange one
+		var url = this.conf.overview_url;
+		oTd.onclick = function() { 
+			location.href = url;
+		};
 		
 		// Only show map thumb when configured
 		if(oPageProperties.showmapthumbs == 1)

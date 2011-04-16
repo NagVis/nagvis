@@ -27,8 +27,6 @@
 
 var NagVisRotation = NagVisStatelessObject.extend({
 	constructor: function(oConf) {
-		// Call parent constructor
-		//this.Inherits(NagVisStatefulObject, oConf);
 		this.base(oConf);
 	},
 	
