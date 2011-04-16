@@ -719,7 +719,7 @@ function updateObjects(aMapObjectInformations, sType) {
 		if(!oMapObjects[objectId].stateChanged() && oMapObjects[objectId].outputOrPerfdataChanged()) {
 			// Reparse object to map (only for maps!)
 			// No else for overview here, senseless!
-      if(sType === 'map') {
+			if(sType === 'map') {
 				oMapObjects[objectId].parse();
 			} else if(sType === 'automap') {
 				oMapObjects[objectId].parseAutomap();

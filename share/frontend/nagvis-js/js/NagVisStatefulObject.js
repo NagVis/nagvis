@@ -293,14 +293,21 @@ var NagVisStatefulObject = NagVisObject.extend({
 				oObj = null;
 			}
 
-			var oContext = doc.getElementById(this.conf.object_id+'-context');
-			// Remove context menu
+			// Remove context and hover menus
 			// Needs to be removed after unsetting the eventhandlers
+			var oContext = doc.getElementById(this.conf.object_id+'-context');
 			if(oContext) {
 				try {
 				    this.parsedObject.removeChild(oContext);
 				} catch(e) {}
 				oContext = null;
+			}
+			var oHover = doc.getElementById(this.conf.object_id+'-hover');
+			if(oHover) {
+				try {
+				    this.parsedObject.removeChild(oHover);
+				} catch(e) {}
+				oHover = null;
 			}
 			
 			// Remove object from DOM
