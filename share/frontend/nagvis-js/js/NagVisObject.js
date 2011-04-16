@@ -52,6 +52,23 @@ var NagVisObject = Base.extend({
 		
 		// Load view specific config modifiers (Normaly triggered by url params)
 		this.loadViewOpts();
+
+		// Load lock options
+		this.loadLocked();
+	},
+
+
+	/**
+	 * PRIVATE loadLocked
+	 * Loads the lock state of an object from the user properties
+	 */
+	loadLocked: function() {
+	    if(!oUserProperties.hasOwnProperty('unlocked-' + oPageProperties.map_name))
+		return;
+
+	    var unlocked = oUserProperties['unlocked-' + oPageProperties.map_name].split(',');
+	    this.bIsLocked = unlocked.indexOf(this.conf.object_id) === -1 && unlocked.indexOf('*') === -1;
+	    unlocked = null;
 	},
 	
 	/**
@@ -369,10 +386,25 @@ var NagVisObject = Base.extend({
 		else
 			this.bIsLocked = !this.bIsLocked;
 
-		if(this.toggleObjControls())
+		if(this.toggleObjControls()) {
+			if(!isset(lock)) {
+			    if(oUserProperties.hasOwnProperty('unlocked-' + oPageProperties.map_name))
+				var unlocked = oUserProperties['unlocked-' + oPageProperties.map_name].split(',');
+			    else
+				var unlocked = [];
+
+			    if(this.bIsLocked)
+			        unlocked.splice(unlocked.indexOf(this.conf.object_id), 1);
+			    else
+			        unlocked.push(this.conf.object_id);
+			    storeUserOption('unlocked-' + oPageProperties.map_name, unlocked.join(','));
+			    unlocked = null;
+			}
+
 			return this.bIsLocked ? -1 : 1;
-		else
+		} else {
 			return 0;
+		}
 	},
 
 	/**

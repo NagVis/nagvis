@@ -32,10 +32,6 @@ Linien (Auch für neue Automap wichtig!):
    - Farbe (?)
  - Offset zum Ziel
 
-WUI: Bei Typ-Wechsel einer Linie in der WUI muss die Anzahl der Koordinaten
-variieren. Normale Linien haben zwei Koordinaten, Linien mit zwei Enden können
-drei Koordinaten haben.
-
 *** Add/Modify Redesign ***
 
 Aufrufe:
@@ -70,12 +66,11 @@ nach Möglichkeit nicht mit Hotkeys von FF/IE kollidieren.
 
   Bessere Fehlerbehandlung z.B. auf Übersichtsseite, wenn Antwort kein gültiges JS ist.
 
-
 Exception/Error log bauen:
   PHP Fehler loggen
 	Eventuell sogar Javascript fehler loggen
 
-- Dokumentation:
+*** Dokumentation ***
   - Neue Editier-Möglichkeiten in der normalen GUI
   - Mittleren Teil der Linien festmachen oder positionieren
   - Relative Koordinaten

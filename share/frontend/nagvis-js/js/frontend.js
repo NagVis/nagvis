@@ -817,19 +817,6 @@ function getMapObjByDomObjId(id) {
 	}
 }
 
-function toggleLineMidLock(objectId) {
-	getMapObjByDomObjId(objectId).toggleLineMidLock();
-}
-
-/**
- * Toggles the mode of the object: editable or not
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function toggleMapObjectLock(objectId) {
-	iNumUnlocked += getMapObjByDomObjId(objectId).toggleLock();
-}
-
 /**
  * Removes an element from the map
  *
@@ -839,20 +826,6 @@ function removeMapObject(objectId) {
     getMapObjByDomObjId(objectId).detachChilds();
     getMapObjByDomObjId(objectId).remove();
     saveObjectRemove(objectId);
-}
-
-/**
- * Toggles the mode of all map objects: editable or not
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function toggleAllMapObjectsLock() {
-	var unlock = false;
-	if(iNumUnlocked > 0)
-		unlock = true;
-		
-	for(var i in oMapObjects)
-		iNumUnlocked += oMapObjects[i].toggleLock(unlock);
 }
 
 /**

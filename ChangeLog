@@ -46,6 +46,8 @@ Backend: Livestatus
     available
 
 Frontend
+  * Completely removed the WUI and merged the functionality into the regular frontend.
+    You can now "lock/unlock" all objects for editing using the "Edit Map" menu.
   * Added new sidebar for better navigation. It can be opened by clicking on
     the "Open" label in the header menu. The state of the sidebar and the
     single nodes is stored in user specific profile files
