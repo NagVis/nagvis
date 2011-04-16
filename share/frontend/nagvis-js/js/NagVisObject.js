@@ -526,15 +526,25 @@ var NagVisObject = Base.extend({
 
 		if(isRelativeCoord(x) && isRelativeCoord(y)) {
 			// Skip this when already relative to the same object
-		  if(xParent == oParent.conf.object_id
+			if(xParent == oParent.conf.object_id
 			  && yParent == oParent.conf.object_id)
 				return;
 
 			// If this object was attached to another parent before, remove the attachment
-			if(xParent != oParent.conf.object_id)
-				getMapObjByDomObjId(xParent).delChild(this);
-			if(yParent != oParent.conf.object_id)
-				getMapObjByDomObjId(yParent).delChild(this);
+			if(xParent != oParent.conf.object_id) {
+				var o = getMapObjByDomObjId(xParent);
+				if(o) {
+				    o.delChild(this);
+				    o = null;
+				}
+			}
+			if(yParent != oParent.conf.object_id) {
+				var o = getMapObjByDomObjId(yParent);
+				if(o) {
+				    o.delChild(this);
+				    o = null;
+				}
+			}
 		}
 
 		// Add this object to the new parent
@@ -1014,7 +1024,19 @@ var NagVisObject = Base.extend({
 
 		// Honor the enabled grid and reposition the object after dropping
 		if(oViewProperties.grid_show === 1) {
-		    [ jsObj.conf.x, jsObj.conf.y ] = coordsToGrid(jsObj.conf.x, jsObj.conf.y);
+		    if(viewType === 'line') {
+			var pos = coordsToGrid(jsObj.parseCoords(jsObj.conf.x, 'x')[anchorId],
+			                       jsObj.parseCoords(jsObj.conf.y, 'y')[anchorId]);
+			jsObj.conf.x = jsObj.calcNewCoord(pos[0], 'x', anchorId);
+			jsObj.conf.y = jsObj.calcNewCoord(pos[1], 'y', anchorId);
+			pos = null;
+		    } else {
+			var pos = coordsToGrid(jsObj.parseCoord(jsObj.conf.x, 'x'),
+			                       jsObj.parseCoord(jsObj.conf.y, 'y'));
+			jsObj.conf.x = jsObj.calcNewCoord(pos[0], 'x');
+			jsObj.conf.y = jsObj.calcNewCoord(pos[1], 'y');
+			pos = null;
+		    }
 		    jsObj.reposition();
 		}
 

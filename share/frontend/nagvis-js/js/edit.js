@@ -353,11 +353,11 @@ function addClick(e) {
     if(!adding())
 	return;
 
-    var x, y;
-    [ x, y ] = getEventMousePos(e);
-    addX.push(x);
-    addY.push(y);
+    var pos = getEventMousePos(e);
+    addX.push(pos[0]);
+    addY.push(pos[1]);
     addNumLeft -= 1;
+    pos = null;
     
     // Draw a line to illustrate the progress of drawing the current line
     if(addViewType === 'line' || addObjType === 'textbox') {
@@ -424,14 +424,14 @@ function addFollowing(e) {
     if(!addFollow)
 	return;
 
-    [ x, y ] = getEventMousePos(e);
+    var pos = getEventMousePos(e);
 
     addShape.clear();
 
     if(addViewType === 'line')
-	addShape.drawLine(addX[0], addY[0], x, y);
+	addShape.drawLine(addX[0], addY[0], pos[0], pos[1]);
     else
-	addShape.drawRect(addX[0], addY[0], (x - addX[0]), (y - addY[0]));
+	addShape.drawRect(addX[0], addY[0], (pos[0] - addX[0]), (pos[1] - addY[0]));
 
     addShape.paint();
 }

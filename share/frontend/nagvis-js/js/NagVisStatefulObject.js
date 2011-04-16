@@ -313,6 +313,9 @@ var NagVisStatefulObject = NagVisObject.extend({
 			// Remove object from DOM
 			oMap.removeChild(this.parsedObject);
 			
+			if(!this.bIsLocked)
+			    this.removeControls();
+			
 			// Remove object reference
 			this.parsedObject = null;
 			
@@ -888,7 +891,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 	},
 
 	parseIconControls: function () {
-		this.getObjWidth();
 		var size = 10;
 		this.parseControlDrag(0, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
 		                         this.getObjWidth() + 5, - size / 2, size);
