@@ -1049,6 +1049,9 @@ var NagVisObject = Base.extend({
 
 		saveObjectAfterAnchorAction(obj);
 
+		// Remove the dragging hand after dropping
+		document.body.style.cursor = 'auto';
+
 		arr      = null;
 		objId    = null;
 		anchorId = null;
