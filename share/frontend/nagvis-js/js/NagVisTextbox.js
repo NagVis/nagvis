@@ -84,7 +84,7 @@ var NagVisTextbox = NagVisStatelessObject.extend({
 	parseTextbox: function () {
 		return drawNagVisTextbox(this.conf.object_id+'-label', 'box',
 		                            this.conf.background_color, this.conf.border_color,
-					    this.conf.x, this.conf.y, this.conf.z, this.conf.w,
+					    this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'), this.conf.z, this.conf.w,
 					    this.conf.h, this.conf.text, this.conf.style);
 	},
 
