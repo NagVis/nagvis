@@ -513,6 +513,9 @@ td#popupWindowContent fieldset.form label {
 	margin-right: 20px;
 }
 
+td#popupWindowContent a {color:#43B3CF;text-decoration:none;}
+td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
+
 /* Header styling */
 .header {
 	color: #43B3CF;
