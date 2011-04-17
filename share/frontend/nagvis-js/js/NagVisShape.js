@@ -75,8 +75,8 @@ var NagVisShape = NagVisStatelessObject.extend({
 		oIconDiv.setAttribute('id', this.conf.object_id+'-icondiv');
 		oIconDiv.setAttribute('class', 'icon');
 		oIconDiv.setAttribute('className', 'icon');
-		oIconDiv.style.top = this.conf.y+'px';
-		oIconDiv.style.left = this.conf.x+'px';
+		oIconDiv.style.top    = this.parseCoord(this.conf.y, 'y') + 'px';
+		oIconDiv.style.left   = this.parseCoord(this.conf.x, 'x') + 'px';
 		oIconDiv.style.zIndex = this.conf.z;
 		
 		var oIcon = document.createElement('img');
