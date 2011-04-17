@@ -277,6 +277,8 @@ class NagVisObject {
 						NagVisService::$langType  = $this->CORE->getLang()->getText('service');
 						NagVisService::$langSelf  = $this->CORE->getLang()->getText('servicename');
 					}
+					if(NagVisHost::$langType === null)
+						NagVisHost::$langSelf = $this->CORE->getLang()->getText('hostname');
 					
 					$arr['lang_obj_type']    = NagVisService::$langType;
 					$arr['lang_name']        = NagVisHost::$langSelf;
