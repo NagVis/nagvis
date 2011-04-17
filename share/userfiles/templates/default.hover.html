@@ -1,13 +1,12 @@
 <table class="hover_table">
 	<tr><th colspan="2">[lang_obj_type] ([lang_last_status_refresh]: [last_status_refresh])</th></tr>
-	<tr><td class="label"><label>[lang_name]</label></td><td>[obj_name]</td></tr>
+	<tr><td class="label"><label>[lang_name]</label></td><td>[obj_name][obj_alias_braces]</td></tr>
 	<!-- BEGIN service -->
 	<tr><td class="label"><label>[lang_service_description]</label></td><td>[service_description]</td></tr>
 	<!-- END service -->
-	<tr><td class="label"><label>[lang_alias]</label></td><td>[obj_alias]</td></tr>
 	<!-- BEGIN host -->
 	<tr><td class="spacer" colspan="2"></td></tr>
-	<tr><td class="label[obj_state]"><label>[lang_state]</label></td><td class="state[obj_state]">[obj_state] ([obj_state_type])[obj_in_downtime][obj_acknowledged] ([lang_state_type] - [obj_current_check_attempt]/[obj_max_check_attempts])</td></tr>
+	<tr><td class="label[obj_state]"><label>[lang_state]</label></td><td class="state[obj_state]">[obj_state] [obj_in_downtime][obj_acknowledged] ([obj_state_type] - [obj_current_check_attempt]/[obj_max_check_attempts])</td></tr>
 	<tr><td class="label"><label>[lang_output]</label></td><td>[obj_output]</td></tr>
 	<tr><td class="label"><label>[lang_last_check]</label></td><td>[obj_last_check]</td></tr>
 	<tr><td class="label"><label>[lang_next_check]</label></td><td>[obj_next_check]</td></tr>

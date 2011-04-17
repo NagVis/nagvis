@@ -204,10 +204,13 @@ function replaceHoverTemplateStaticMacros(oObj, sTemplateCode) {
 	// service_description
 	oMacros.obj_name = oObj.conf.name;
 	
-	if(oObj.conf.alias && oObj.conf.alias !== '')
-		oMacros.obj_alias = oObj.conf.alias;
-	else
-		oMacros.obj_alias = '';
+	if(oObj.conf.alias && oObj.conf.alias !== '') {
+		oMacros.obj_alias        = oObj.conf.alias;
+		oMacros.obj_alias_braces = ' (' +oObj.conf.alias + ')';
+	} else {
+		oMacros.obj_alias        = '';
+		oMacros.obj_alias_braces = '';
+	}
 	
 	if(oObj.conf.display_name && oObj.conf.display_name !== '')
 		oMacros.obj_display_name = oObj.conf.display_name;
