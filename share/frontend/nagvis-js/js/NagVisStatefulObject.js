@@ -222,8 +222,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 			this.replaceMacros();
 		}
 
-		alert(printStackTrace().join('\n'));
-		
 		// When this is an update, remove the object first
 		this.remove();
 		
