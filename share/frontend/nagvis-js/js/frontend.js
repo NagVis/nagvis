@@ -1611,11 +1611,8 @@ function parseMap(iMapCfgAge, type, mapName) {
 				if(!oMapObjects[a].bIsLocked)
 				    iNumUnlocked -= 1;
 				
-				// Set to null in array
-				oMapObjects[a] = null;
-				
-				// Remove element from map objects array
-				oMapObjects.splice(a,1);
+				// Remove element from object container
+				delete oMapObjects[a];
 			} else {
 				a++;
 			}
