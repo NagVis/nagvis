@@ -424,19 +424,23 @@ function getHoverTemplates() {
 	
 	// Loop all map objects to get the used hover templates
 	for(var i in oMapObjects) {
-		// Ignore objects which
+		// Ignore templates of objects which
 		// a) have a disabled hover menu
 		// b) do not use hover_url
-		if(oMapObjects[i].conf.hover_menu
-		   && oMapObjects[i].conf.hover_menu == '1'
-			 && (!oMapObjects[i].conf.hover_url || oMapObjects[i].conf.hover_url === ''))
+		// c) templates are already fetched
+		if(isset(oMapObjects[i].conf.hover_menu) && oMapObjects[i].conf.hover_menu == '1'
+		   && (!oMapObjects[i].conf.hover_url || oMapObjects[i].conf.hover_url === '')
+		   && (!isset(oHoverTemplates[oMapObjects[i].conf.hover_template]) || oHoverTemplates[oMapObjects[i].conf.hover_template] === ''))
 			oHoverTemplates[oMapObjects[i].conf.hover_template] = '';
 	}
 	
 	// Build string for bulk fetching the templates
 	for(var i in oHoverTemplates)
-		if(i !== 'Inherits')
+		if(i !== 'Inherits' && oHoverTemplates[i] === '')
 			aUrlParts.push('&name[]='+i);
+
+	if(aUrlParts.length == 0)
+	    return;
 	
 	// Get the needed templates via bulk request
 	var aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverTemplate',
@@ -475,19 +479,22 @@ function getContextTemplates() {
 	
 	// Loop all map objects to get the used templates
 	for(var i in oMapObjects)
-		// Ignore objects which
+		// Ignore templates of objects which
 		// a) have a disabled menu
+		// b) template is already known
 		// FIXME: conf.context_menu has inconsistent types (with and without quotes)
 		//        fix this and  === can be used here
-		if(oMapObjects[i].conf.context_menu
-		   && oMapObjects[i].conf.context_menu == 1
-			 && oContextTemplates[oMapObjects[i].conf.context_template] !== '')
+		if(isset(oMapObjects[i].conf.context_menu) && oMapObjects[i].conf.context_menu == 1
+		   && (!isset(oContextTemplates[oMapObjects[i].conf.context_template]) || oContextTemplates[oMapObjects[i].conf.context_template] === ''))
 			oContextTemplates[oMapObjects[i].conf.context_template] = '';
 	
 	// Build string for bulk fetching the templates
 	for(var sName in oContextTemplates)
-		if(sName !== 'Inherits')
+		if(sName !== 'Inherits' && oContextTemplates[sName] === '')
 			aUrlParts.push('&name[]='+sName);
+
+	if(aUrlParts.length === 0)
+	    return;
 	
 	// Get the needed templates via bulk request
 	var aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getContextTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
