@@ -47,14 +47,14 @@ function toggleMapObjectLock(objectId) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function toggleAllMapObjectsLock() {
-	var unlock = false;
+	var lock = false;
 	if(iNumUnlocked > 0)
-		unlock = true;
+		lock = true;
 		
 	for(var i in oMapObjects)
-		iNumUnlocked += oMapObjects[i].toggleLock(unlock);
+		iNumUnlocked += oMapObjects[i].toggleLock(lock);
 
-	if(!unlock)
+	if(!lock)
 	    storeUserOption('unlocked-' + oPageProperties.map_name, '*');
 	else
 	    storeUserOption('unlocked-' + oPageProperties.map_name, '');

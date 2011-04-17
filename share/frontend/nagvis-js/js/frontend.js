@@ -830,8 +830,12 @@ function getMapObjByDomObjId(id) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function removeMapObject(objectId) {
-    getMapObjByDomObjId(objectId).detachChilds();
-    getMapObjByDomObjId(objectId).remove();
+    var obj = getMapObjByDomObjId(objectId);
+    obj.detachChilds();
+    obj.remove();
+    if(!obj.bIsLocked)
+	iNumUnlocked -= 1;
+    obj = null;
     saveObjectRemove(objectId);
 }
 
@@ -1007,10 +1011,14 @@ function setMapObjects(aMapObjectConf) {
 				alert('Error: Unknown object type');
 			break;
 		}
+
+		// Save the number of unlocked objects
+		if(!oObj.bIsLocked)
+		    iNumUnlocked += 1;
 		
 		// Save object to map objects array
 		if(oObj !== null)
-			oMapObjects[oObj.conf.object_id] = oObj;
+		    oMapObjects[oObj.conf.object_id] = oObj;
 		oObj = null;
 	}
 
@@ -1551,7 +1559,7 @@ function getUrlProperties(sUrl) {
  */
 function automapParse(mapName) {
 	return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=parseAutomap&show='
-									       + escapeUrlValues(mapName)+getAutomapParams())
+	                      + escapeUrlValues(mapName)+getAutomapParams())
 }
 
 /**
@@ -1586,8 +1594,8 @@ function parseMap(iMapCfgAge, type, mapName) {
 	var oObjects;
 	if(type === 'automap')
 		oObjects = getSyncRequest(oGeneralProperties.path_server
-									                  + '?mod=AutoMap&act=getAutomapObjects&show='
-																		+ mapName+getAutomapParams());
+		                          + '?mod=AutoMap&act=getAutomapObjects&show='
+		                          + mapName+getAutomapParams());
 	else
 		oObjects = getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapObjects&show='+mapName);
 	
@@ -1599,6 +1607,9 @@ function parseMap(iMapCfgAge, type, mapName) {
 			if(oMapObjects[a] && typeof oMapObjects[a].remove === 'function') {
 				// Remove parsed object from map
 				oMapObjects[a].remove();
+
+				if(!oMapObjects[a].bIsLocked)
+				    iNumUnlocked -= 1;
 				
 				// Set to null in array
 				oMapObjects[a] = null;
@@ -1876,8 +1887,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
 	
 	if(sType === 'map') {
 		// Check for changed map configuration
-		if(oCurrentFileAges
-       && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name)) {
+		if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name)) {
 			if(iNumUnlocked > 0) {
 				eventlog("worker", "info", "Map config updated. "+iNumUnlocked+" objects unlocked - not reloading.");
 			} else {

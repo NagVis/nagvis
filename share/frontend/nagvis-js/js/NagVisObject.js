@@ -377,14 +377,19 @@ var NagVisObject = Base.extend({
 
 	/**
 	 * Locks/Unlocks the object and fires dependent actions
+	 * It returns +1,-1 or 0 depending on the final state of the object
 	 *
 	 * @author  Lars Michelsen <lars@vertical-visions.de>
 	 */
 	toggleLock: function(lock) {
+		var equal = false;
+		if(isset(lock) && lock === this.bIsLocked)
+		    equal = true;
+
 		if(isset(lock))
-			this.bIsLocked = lock;
+		    this.bIsLocked = lock;
 		else
-			this.bIsLocked = !this.bIsLocked;
+		    this.bIsLocked = !this.bIsLocked;
 
 		if(this.toggleObjControls()) {
 			if(!isset(lock)) {
@@ -401,7 +406,10 @@ var NagVisObject = Base.extend({
 			    unlocked = null;
 			}
 
-			return this.bIsLocked ? -1 : 1;
+			if(equal === true)
+			    return 0;
+			else
+			    return this.bIsLocked ? -1 : 1;
 		} else {
 			return 0;
 		}

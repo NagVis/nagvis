@@ -34,27 +34,32 @@ var NagVisStatelessObject = NagVisObject.extend({
 	},
 	
 	remove: function () {
-		if(this.parsedObject) {
-			// Remove event listeners
-			var oObj;
-			oObj = document.getElementById(this.conf.object_id);
-			if(oObj) {
-				oObj.onmousedown = null;
-				oObj.oncontextmenu = null;
-				oObj.onmouseover = null;
-				oObj.onmouseout = null;
-				oObj = null;
-			}
-			
-			// Remove object from DOM
-			var oMap = document.getElementById('map');
-			if(oMap) {
-				oMap.removeChild(this.parsedObject);
-				oMap = null;
-			}
-			
-			// Remove object reference
-			this.parsedObject = null;
+		if(!this.parsedObject)
+		    return;
+
+		// Remove event listeners
+		var oObj;
+		oObj = document.getElementById(this.conf.object_id);
+		if(oObj) {
+			oObj.onmousedown = null;
+			oObj.oncontextmenu = null;
+			oObj.onmouseover = null;
+			oObj.onmouseout = null;
+			oObj = null;
 		}
+
+		// Remove all controls
+		if(!this.bIsLocked)
+		    this.removeControls();
+		
+		// Remove object from DOM
+		var oMap = document.getElementById('map');
+		if(oMap) {
+			oMap.removeChild(this.parsedObject);
+			oMap = null;
+		}
+
+		// Remove object reference
+		this.parsedObject = null;
 	}
 });

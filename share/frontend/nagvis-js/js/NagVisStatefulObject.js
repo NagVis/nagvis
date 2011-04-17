@@ -269,59 +269,82 @@ var NagVisStatefulObject = NagVisObject.extend({
 	},
 	
 	remove: function () {
-		if(this.parsedObject) {
-			var doc = document;
-			var oMap = doc.getElementById('map');
-			if(!oMap) {
-				doc = null;
-				return;
-			}
+		// Parsed object is the container with the id "<object_id>"
+		if(!this.parsedObject)
+		    return;
 
-			var oObj;
-			if(this.conf.view_type && this.conf.view_type === 'line') {
-				oObj = doc.getElementById(this.conf.object_id+'-linediv');
-			} else {
-				oObj = doc.getElementById(this.conf.object_id+'-icon');
-			}
-			
-			if(oObj) {
-				// Remove event listeners
-				oObj.onmousedown = null;
-				oObj.oncontextmenu = null;
-				oObj.onmouseover = null;
-				oObj.onmouseout = null;
-				oObj = null;
-			}
-
-			// Remove context and hover menus
-			// Needs to be removed after unsetting the eventhandlers
-			var oContext = doc.getElementById(this.conf.object_id+'-context');
-			if(oContext) {
-				try {
-				    this.parsedObject.removeChild(oContext);
-				} catch(e) {}
-				oContext = null;
-			}
-			var oHover = doc.getElementById(this.conf.object_id+'-hover');
-			if(oHover) {
-				try {
-				    this.parsedObject.removeChild(oHover);
-				} catch(e) {}
-				oHover = null;
-			}
-			
-			// Remove object from DOM
-			oMap.removeChild(this.parsedObject);
-			
-			if(!this.bIsLocked)
-			    this.removeControls();
-			
-			// Remove object reference
-			this.parsedObject = null;
-			
-			oMap = null;
+		var doc = document;
+		var oMap = doc.getElementById('map');
+		if(!oMap) {
 			doc = null;
+			return;
 		}
+
+		//
+		// Remove all event handlers
+		//
+		var oObj;
+		// In case of lines the *-linelink div holds the event handlers
+		if(isset(this.conf.view_type) && this.conf.view_type === 'line')
+			oObj = doc.getElementById(this.conf.object_id+'-linelink');
+		else
+			oObj = doc.getElementById(this.conf.object_id+'-icon');
+		
+		if(oObj) {
+			// Remove event listeners
+			oObj.onmousedown    = null;
+			oObj.oncontextmenu  = null;
+			oObj.onmouseover    = null;
+			oObj.onmouseout     = null;
+			oObj = null;
+		}
+
+		// Remove context, hover menus and the labels
+		// Needs to be removed after unsetting the eventhandlers
+		var oContext = doc.getElementById(this.conf.object_id+'-context');
+		if(oContext) {
+			try {
+			    this.parsedObject.removeChild(oContext);
+			} catch(e) {}
+			oContext = null;
+		}
+		var oHover = doc.getElementById(this.conf.object_id+'-hover');
+		if(oHover) {
+			try {
+			    this.parsedObject.removeChild(oHover);
+			} catch(e) {}
+			oHover = null;
+		}
+		var oLabel = doc.getElementById(this.conf.object_id+'-label');
+		if(oLabel) {
+			try {
+			    this.parsedObject.removeChild(oLabel);
+			} catch(e) {}
+			oLabel = null;
+		}
+
+		// Remove icons
+		if(isset(this.conf.view_type) && this.conf.view_type === 'line') {
+			var linediv = doc.getElementById(this.conf.object_id+'-linediv');
+			linediv.removeChild(doc.getElementById(this.conf.object_id+'-line'));
+			linediv.removeChild(doc.getElementById(this.conf.object_id+'-linelink'));
+			this.parsedObject.removeChild(linediv);
+		} else {
+			this.parsedObject.removeChild(doc.getElementById(this.conf.object_id+'-icondiv'));
+		}
+		
+		// Remove all controls
+		if(!this.bIsLocked)
+		    this.removeControls();
+		
+		// Remove object from DOM
+		oMap.removeChild(this.parsedObject);
+		
+		// Remove object reference
+		this.parsedObject = null;
+		
+		oMap = null;
+		doc = null;
 	},
 	
 	/**
@@ -500,7 +523,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		// Get the fill color depending on the object state
 		switch (this.conf.summary_state) {
-	    case 'UNREACHABLE':
+			case 'UNREACHABLE':
 			case 'DOWN':
 			case 'CRITICAL':
 			case 'WARNING':
@@ -514,7 +537,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 			default:
 				colorFill = '#FFCC66';
 			break;
-	  }
+		}
 
 		// Adjust fill color based on perfdata for weathermap lines
 		if(this.conf.line_type == 13 || this.conf.line_type == 14) {
@@ -570,7 +593,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 				// The assumption is that there are perfdata values 'in' and 'out' with byte rates
 				// and maximum values given to be able to calculate the percentage usage
 				if(setPerfdata[0][2] === null || setPerfdata[0][2] === ''
-           || setPerfdata[1][2] === null || setPerfdata[1][2] === '') {
+				   || setPerfdata[1][2] === null || setPerfdata[1][2] === '') {
 					setPerfdata = this.calculateUsage(setPerfdata);
 				}
 
