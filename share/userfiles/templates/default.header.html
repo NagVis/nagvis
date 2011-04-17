@@ -70,9 +70,9 @@
 			<dt id="map-ddheader" onmouseover="ddMenu('map',1)" onmouseout="ddMenu('map',-1)">{$langMapEdit} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>
 			<dd id="map-ddcontent" onmouseover="cancelHide('map')" onmouseout="ddMenu('map',-1)">
 				<ul>
-					<li><a href="javascript:toggleAllMapObjectsLock();ddMenu('action',-1)">{$langLockUnlockAll}</a></li>
+					<li><a href="javascript:toggleAllMapObjectsLock();ddMenu('map',-1)">{$langLockUnlockAll}</a></li>
 					<li class="spacer"><hr /></li>
-					<li><a href="javascript:gridToggle()">{$langToggleGrid}</a></li>
+					<li><a href="javascript:gridToggle();ddMenu('map',-1)">{$langToggleGrid}</a></li>
 					<li class="spacer"><hr /></li>
 					<li><a class="submenu-link" id="map-addicon-ddheader" href="#" onmouseover="ddMenu('map-addicon',1,1)" onmouseout="ddMenu('map-addicon',-1)">{$langMapAddIcon}</a></li>
 					<li><a class="submenu-link" id="map-addline-ddheader" href="#" onmouseover="ddMenu('map-addline',1,1)" onmouseout="ddMenu('map-addline',-1)">{$langMapAddLine}</a></li>
