@@ -198,7 +198,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 			oLabel = null;
 		}
     
-    // Append child to map and save reference in parsedObject
+		// Append child to map and save reference in parsedObject
 		var oMap = doc.getElementById('map');
 		if(oMap) {
 			this.parsedObject = oMap.appendChild(oContainerDiv);

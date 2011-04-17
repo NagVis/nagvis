@@ -1602,22 +1602,23 @@ function parseMap(iMapCfgAge, type, mapName) {
 	// Only perform the reparsing actions when all information are there
 	if(oPageProperties && oObjects) {
 		// Remove all old objects
-		var a = 0;
-		do {
-			if(oMapObjects[a] && typeof oMapObjects[a].remove === 'function') {
+		var keys = Object.keys(oMapObjects);
+		for(var i = 0, len = keys.length; i < len; i++) {
+		    var obj = oMapObjects[keys[i]];
+			if(obj && typeof obj.remove === 'function') {
 				// Remove parsed object from map
-				oMapObjects[a].remove();
+				obj.remove();
 
-				if(!oMapObjects[a].bIsLocked)
+				if(!obj.bIsLocked)
 				    iNumUnlocked -= 1;
 				
+				obj = null;
+				
 				// Remove element from object container
-				delete oMapObjects[a];
-			} else {
-				a++;
+				delete oMapObjects[keys[i]];
 			}
-		} while(oLength(oMapObjects) > a);
-		a = null;
+		}
+		keys = null;
 		
 		// Update timestamp for map configuration (No reparsing next time)
 		oFileAges[mapName] = iMapCfgAge;
