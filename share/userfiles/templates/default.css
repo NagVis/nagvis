@@ -133,7 +133,7 @@ a.linelink {
 /* control styles */
 div.control {
   position: absolute;
-  border: 1px #ff0000 dotted;
+  border: 1px #D7E2E5 dotted;
 }
 
 div.control.drag10 {
