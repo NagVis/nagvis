@@ -3,6 +3,9 @@
 Core
   * Added show_in_multisite option to map global sections to hide maps from
   the multisite snapin
+  * Bugfix: Changed index.php/config.php redirect scripts to ignore proto and
+  host addresses to be able to handle https frontend and http backend
+  processing when using mod_proxy
 
 Frontend
   * Hiding search button when not permitted to
