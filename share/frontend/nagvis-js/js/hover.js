@@ -92,11 +92,16 @@ function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
 			}
 		}
 		
+	}
+
+	if(childsHtmlCode != ''){
 		var regex = new RegExp('<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->');
-		sTemplateCode = sTemplateCode.replace(regex, childsHtmlCode);
-		regex = null;
+	}else{
+		var regex = new RegExp('<!--\\sBEGIN\\schilds\\s-->.+?<!--\\sEND\\schilds\\s-->');
 	}
 	
+	sTemplateCode = sTemplateCode.replace(regex, childsHtmlCode);
+	regex = null;
 	childsHtmlCode = null;
 	rowHtmlCode = null;
 	
@@ -169,9 +174,7 @@ function replaceHoverTemplateDynamicMacros(replaceChild, oObj, sTemplateCode) {
 	
 	// Replace child macros
 	// FIXME: Check if this can be moved to static hover template macro replacements
-	if(replaceChild != '1' && oObj.conf.hover_childs_show
-		 && oObj.conf.hover_childs_show == '1'
-		 && typeof oObj.conf.num_members != 'undefined' && oObj.conf.num_members > 0)
+	if(replaceChild != '1' && oObj.conf.hover_childs_show && oObj.conf.hover_childs_show == '1' )
 		sTemplateCode = replaceHoverTemplateChildMacros(oObj, sTemplateCode);
 	
 	// Loop and replace all normal macros
@@ -279,8 +282,7 @@ function replaceHoverTemplateStaticMacros(replaceChild, oObj, sTemplateCode) {
 		oSectionMacros.servicegroupChild = '<!--\\sBEGIN\\sservicegroup_child\\s-->.+?<!--\\sEND\\sservicegroup_child\\s-->';
 	
 	// Replace child section when unwanted
-	if((oObj.conf.hover_childs_show && oObj.conf.hover_childs_show != '1')
-	   || typeof oObj.conf.num_members == 'undefined' || oObj.conf.num_members == 0)
+	if(oObj.conf.hover_childs_show && oObj.conf.hover_childs_show != '1')
 		oSectionMacros.childs = '<!--\\sBEGIN\\schilds\\s-->.+?<!--\\sEND\\schilds\\s-->';
 	
 	// Replace child macros
