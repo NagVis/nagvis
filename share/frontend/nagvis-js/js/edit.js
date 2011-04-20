@@ -343,8 +343,12 @@ function getEventMousePos(e) {
     posy -= getHeaderHeight();
 
     // When a grid is enabled align the dragged object in the nearest grid
-    if(oViewProperties.grid_show === 1)
-	[ posx, posy ] = coordsToGrid(posx, posy);
+    if(oViewProperties.grid_show === 1) {
+	var a = coordsToGrid(posx, posy);
+	posx = a[0];
+	posy = a[1];
+	a = null;
+    }
 
     return [ posx, posy ];
 }
