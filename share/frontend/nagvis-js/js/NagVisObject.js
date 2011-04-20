@@ -499,20 +499,20 @@ var NagVisObject = Base.extend({
 		if(xParent == yParent) {
 			var o = getMapObjByDomObjId(xParent);
 			// Don't remove when another coord is a child of this object
-			if(o && Object.keys(this.getRelativeCoordsUsingParent(xParent)).length == 1) {
+			if(o && getKeys(this.getRelativeCoordsUsingParent(xParent)).length == 1) {
 			    o.delChild(this);
 			    o = null
 			}
 		} else {
 			var o = getMapObjByDomObjId(xParent);
 			// Don't remove when another coord is a child of this object
-			if(o && Object.keys(this.getRelativeCoordsUsingParent(xParent)).length == 1) {
+			if(o && getKeys(this.getRelativeCoordsUsingParent(xParent)).length == 1) {
 			    o.delChild(this);
 			    o = null
 			}
 			var o = getMapObjByDomObjId(yParent);
 			// Don't remove when another coord is a child of this object
-			if(o && Object.keys(this.getRelativeCoordsUsingParent(yParent)).length == 1) {
+			if(o && getKeys(this.getRelativeCoordsUsingParent(yParent)).length == 1) {
 			    o.delChild(this);
 			    o = null
 			}

@@ -1619,7 +1619,7 @@ function parseMap(iMapCfgAge, type, mapName) {
 	// Only perform the reparsing actions when all information are there
 	if(oPageProperties && oObjects) {
 		// Remove all old objects
-		var keys = Object.keys(oMapObjects);
+		var keys = getKeys(oMapObjects);
 		for(var i = 0, len = keys.length; i < len; i++) {
 		    var obj = oMapObjects[keys[i]];
 			if(obj && typeof obj.remove === 'function') {
