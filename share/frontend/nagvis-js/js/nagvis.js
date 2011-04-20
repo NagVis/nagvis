@@ -713,6 +713,7 @@ function isFirefox() {
  * http://simon.incutio.com/archive/2004/05/26/addLoadEvent
  *
  * Hope the use here in NagVis is ok for license reasons. If not please contact me.
+ * Slightly extended for NagVis
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
@@ -731,8 +732,12 @@ addDOMLoadEvent = (function(){
             clearInterval(load_timer);
 
             // execute each function in the stack in the order they were added
+	    //
+	    // LM: This small timeout seems to be needed for chrome to have the
+	    // clientWidth attribute calculated which is needed by the controls
+	    // of the map objects.
             while (exec = load_events.shift())
-                exec();
+                setTimeout(exec, 50);
 
             if (script) script.onreadystatechange = '';
         };
@@ -742,7 +747,7 @@ addDOMLoadEvent = (function(){
         if (done) return func();
 
         if (!load_events[0]) {
-            // for Mozilla/Opera9
+            // for Mozilla/Opera9/Chrome
             if (document.addEventListener)
                 document.addEventListener("DOMContentLoaded", init, false);
 
@@ -759,7 +764,7 @@ addDOMLoadEvent = (function(){
             @*/
 
             // for Safari
-            if (/WebKit/i.test(navigator.userAgent)) { // sniff
+            if (/KHTML|WebKit|iCab/i.test(navigator.userAgent)) { // sniff
                 load_timer = setInterval(function() {
                     if (/loaded|complete/.test(document.readyState))
                         init(); // call the onload handler
