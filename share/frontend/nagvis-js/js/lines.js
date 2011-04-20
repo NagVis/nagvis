@@ -112,12 +112,20 @@ function drawPolygonBasedObject(objectId, num, xCoord, yCoord, z, colorFill, col
 		}
 		oCanvas = null;
 	} else {
+		var oLine = document.getElementById(objectId+'-line');
+
+		// When redrawing while e.g. moving remove old parts first
+		if(oLine.hasChildNodes())
+		    while(oLine.childNodes.length >= 1)
+			oLine.removeChild(oLine.firstChild);
+
 		// Fallback to old line style
-		var oLine = new jsGraphics(document.getElementById(objectId+'-line'));
-		oLine.setColor(colorFill);
-		oLine.fillPolygon(xCoord, yCoord);
-		oLine.paint();
+		var oL = new jsGraphics(oLine);
+		oL.setColor(colorFill);
+		oL.fillPolygon(xCoord, yCoord);
+		oL.paint();
 		
+		oL    = null;
 		oLine = null;
 	}
 	
