@@ -824,6 +824,23 @@ function getMapObjByDomObjId(id) {
 	}
 }
 
+function updateNumUnlocked(num) {
+    iNumUnlocked += num;
+    if(iNumUnlocked == 0) {
+	var o = document.getElementById('editIndicator');
+	if(o) {
+	    o.style.display = 'none';
+	    o = null;
+	}
+    } else {
+	var o = document.getElementById('editIndicator');
+	if(o) {
+	    o.style.display = '';
+	    o = null;
+	}
+    }
+}
+
 /**
  * Removes an element from the map
  *
@@ -834,7 +851,7 @@ function removeMapObject(objectId) {
     obj.detachChilds();
     obj.remove();
     if(!obj.bIsLocked)
-	iNumUnlocked -= 1;
+	updateNumUnlocked(-1);
     obj = null;
     saveObjectRemove(objectId);
 }
@@ -1014,7 +1031,7 @@ function setMapObjects(aMapObjectConf) {
 
 		// Save the number of unlocked objects
 		if(!oObj.bIsLocked)
-		    iNumUnlocked += 1;
+		    updateNumUnlocked(1);
 		
 		// Save object to map objects array
 		if(oObj !== null)
@@ -1610,7 +1627,7 @@ function parseMap(iMapCfgAge, type, mapName) {
 				obj.remove();
 
 				if(!obj.bIsLocked)
-				    iNumUnlocked -= 1;
+				    updateNumUnlocked(-1);
 				
 				obj = null;
 				

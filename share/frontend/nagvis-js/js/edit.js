@@ -38,7 +38,7 @@ function toggleLineMidLock(objectId) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function toggleMapObjectLock(objectId) {
-	iNumUnlocked += getMapObjByDomObjId(objectId).toggleLock();
+	updateNumUnlocked(getMapObjByDomObjId(objectId).toggleLock());
 }
 
 /**
@@ -52,7 +52,7 @@ function toggleAllMapObjectsLock() {
 		lock = true;
 		
 	for(var i in oMapObjects)
-		iNumUnlocked += oMapObjects[i].toggleLock(lock);
+		updateNumUnlocked(oMapObjects[i].toggleLock(lock));
 
 	if(!lock)
 	    storeUserOption('unlocked-' + oPageProperties.map_name, '*');
