@@ -137,19 +137,19 @@ div.control {
 }
 
 div.control.drag10 {
-	background: url('../images/templates/default.control_drag.gif');
+	background-image: url('../images/templates/default.control_drag.gif');
 }
 
 div.control.drag20 {
-	background: url('../images/templates/default.control_drag_20.gif');
+	background-image: url('../images/templates/default.control_drag_20.gif');
 }
 
 div.control.delete10 {
-	background: url('../images/templates/default.control_delete.png');
+	background-image: url('../images/templates/default.control_delete.gif');
 }
 
 div.control.modify10 {
-	background: url('../images/templates/default.control_modify.png');
+	background-image: url('../images/templates/default.control_modify.gif');
 }
 
 

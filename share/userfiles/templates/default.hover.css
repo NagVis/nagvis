@@ -27,7 +27,7 @@
 
 div.hover {position:absolute;margin:0;padding:0;font-size:10px;z-index:1000}
 div.hover > table {border-collapse:collapse;margin:0;padding:0}
-div.hover > table td, div.hover > table th {border:1px #FBFDFD solid;padding:2px;font-size:9px;background-color:#EAF0F2}
+div.hover > table td, div.hover > table th {border:1px #FBFDFD solid;padding:2px;font-size:9px;background-color:#EAF0F2;color:#000}
 div.hover > table th {text-align:center;background-color:#D7E2E5}
 div.hover > table td.spacer {height:3px;background-color:#D7E2E5}
 div.hover > table td.label {text-align:center;background-color:#D7E2E5}
@@ -40,8 +40,8 @@ div.hover > table td.labelERROR {background-color:#D7E2E5}
 div.hover > table td.labelUNKNOWN {background-color:#D7E2E5}
 div.hover > table label {font-weight:bold}
 div.hover > table td.statePENDING {}
-div.hover > table td.stateOK, div.hover > table td.stateUP {background-color:#00CC00}
-div.hover > table td.stateWARNING {background-color:#FFFF00}
-div.hover > table td.stateCRITICAL, div.hover > table td.stateDOWN, div.hover > table td.stateUNREACHABLE {background-color:#F83838}
-div.hover > table td.stateERROR {background-color:#66CCFF}
-div.hover > table td.stateUNKNOWN {background-color:#FFFF99}
+div.hover > table td.stateOK, div.hover > table td.stateUP {background-color:#00CC00;color:#fff}
+div.hover > table td.stateWARNING {background-color:#FFFF00;color:#000}
+div.hover > table td.stateCRITICAL, div.hover > table td.stateDOWN, div.hover > table td.stateUNREACHABLE {background-color:#F83838;color:#fff}
+div.hover > table td.stateERROR {background-color:#66CCFF;color:#fff}
+div.hover > table td.stateUNKNOWN {background-color:#FFFF99;color:#000}

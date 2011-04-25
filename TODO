@@ -32,6 +32,11 @@ Linien (Auch für neue Automap wichtig!):
    - Farbe (?)
  - Offset zum Ziel
 
+*** Kleinkram ***
+
+- JS Links im Header-Menu funktionieren im IE nicht
+- Header-Menus sind IE manchmal zu breit (Füllen den Schirm voll aus)
+
 *** Add/Modify Redesign ***
 
 Aufrufe:
