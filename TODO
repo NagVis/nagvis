@@ -34,7 +34,7 @@ Linien (Auch für neue Automap wichtig!):
 
 *** Kleinkram ***
 
-- JS Links im Header-Menu funktionieren im IE nicht
+- Submit Form im IE, z.B. von add/modify funktioniert nicht
 - Header-Menus sind IE manchmal zu breit (Füllen den Schirm voll aus)
 
 *** Add/Modify Redesign ***

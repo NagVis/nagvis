@@ -46,17 +46,17 @@
 			<dd id="action-ddcontent" onmouseover="cancelHide('action')" onmouseout="ddMenu('action',-1)">
 				<ul>
 					{if ($mod == 'Map' || $mod == 'AutoMap') && $permittedSearch}
-					<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=Search&act=view', '{$langSearch}')">{$langSearch}</a></li>
+					<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Search&act=view', '{$langSearch}')">{$langSearch}</a></li>
 					{/if}
 					{if $mod == 'AutoMap' && $permittedEdit == true}
-					<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&act=modifyParams&show={$currentMap}'+getAutomapParams(), '{$langModifyAutomapParams}')">{$langModifyAutomapParams}</a></li>
+					<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&act=modifyParams&show={$currentMap}'+getAutomapParams(), '{$langModifyAutomapParams}')">{$langModifyAutomapParams}</a></li>
 					{/if}
 					{if $bRotation == true}
-					<li id="rotationStart" style="display:none"><a href="javascript:switchRotation()">{$langRotationStart}</a></li>
-					<li id="rotationStop" style="display:inline"><a href="javascript:switchRotation()">{$langRotationStop}</a></li>
+					<li id="rotationStart" style="display:none"><a onclick="#" href="switchRotation()">{$langRotationStart}</a></li>
+					<li id="rotationStop" style="display:inline"><a onclick="#" href="switchRotation()">{$langRotationStop}</a></li>
 					{/if}
 					{if $mod == 'AutoMap' && $permittedEdit == true}
-					<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&act=automapToMap&show=dialog', '{$langAutomapToMap}')">{$langAutomapToMap}</a></li>
+					<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&act=automapToMap&show=dialog', '{$langAutomapToMap}')">{$langAutomapToMap}</a></li>
 					{/if}
 					<li class="spacer underline"></li>
 				</ul>
@@ -70,9 +70,9 @@
 			<dt id="map-ddheader" onmouseover="ddMenu('map',1)" onmouseout="ddMenu('map',-1)">{$langMapEdit} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></dt>
 			<dd id="map-ddcontent" onmouseover="cancelHide('map')" onmouseout="ddMenu('map',-1)">
 				<ul>
-					<li><a href="javascript:toggleAllMapObjectsLock();ddMenu('map',-1)">{$langLockUnlockAll}</a></li>
+					<li><a href="#" onclick="toggleAllMapObjectsLock();ddMenu('map',-1)">{$langLockUnlockAll}</a></li>
 					<li class="spacer"><hr /></li>
-					<li><a href="javascript:gridToggle();ddMenu('map',-1)">{$langToggleGrid}</a></li>
+					<li><a href="#" onclick="gridToggle();ddMenu('map',-1)">{$langToggleGrid}</a></li>
 					<li class="spacer"><hr /></li>
 					<li><a class="submenu-link" id="map-addicon-ddheader" href="#" onmouseover="ddMenu('map-addicon',1,1)" onmouseout="ddMenu('map-addicon',-1)">{$langMapAddIcon}</a></li>
 					<li><a class="submenu-link" id="map-addline-ddheader" href="#" onmouseover="ddMenu('map-addline',1,1)" onmouseout="ddMenu('map-addline',-1)">{$langMapAddLine}</a></li>
@@ -86,31 +86,31 @@
 		<dl class="dropdown subdropdown">
 			<dd id="map-addicon-ddcontent" onmouseover="cancelHide('map-addicon');cancelHide('map')" onmouseout="ddMenu('map-addicon',-1,1);ddMenu('map',-1)">
 				<ul>
-					<li><a class="topline topline" href="javascript:addObject('host', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langHost}</a></li>
-					<li><a class="topline" href="javascript:addObject('service', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langService}</a></li>
-					<li><a class="topline" href="javascript:addObject('hostgroup', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langHostgroup}</a></li>
-					<li><a class="topline" href="javascript:addObject('servicegroup', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langServicegroup}</a></li>
-					<li><a class="topline underline" href="javascript:addObject('map', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langMap}</a></li>
+					<li><a class="topline topline" href="#" onclick="addObject(event, 'host', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);return false;">{$langHost}</a></li>
+					<li><a class="topline" href="#" onclick="addObject(event, 'service', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langService}</a></li>
+					<li><a class="topline" href="#" onclick="addObject(event, 'hostgroup', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langHostgroup}</a></li>
+					<li><a class="topline" href="#" onclick="addObject(event, 'servicegroup', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langServicegroup}</a></li>
+					<li><a class="topline underline" href="#" onclick="addObject(event, 'map', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langMap}</a></li>
 				</ul>
 			</dd>
 		</dl>
 		<dl class="dropdown subdropdown">
 			<dd id="map-addline-ddcontent" onmouseover="cancelHide('map-addline');cancelHide('map')" onmouseout="ddMenu('map-addline',-1,1);ddMenu('map',-1)">
 				<ul>
-					<li><a class="topline topline" href="javascript:addObject('host', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langHost}</a></li>
-					<li><a class="topline" href="javascript:addObject('service', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langService}</a></li>
-					<li><a class="topline" href="javascript:addObject('hostgroup', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langHostgroup}</a></li>
-					<li><a class="topline" href="javascript:addObject('servicegroup', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langServicegroup}</a></li>
-					<li><a class="topline underline" href="javascript:addObject('map', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langMap}</a></li>
+					<li><a class="topline topline" href="#" onclick="addObject(event, 'host', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langHost}</a></li>
+					<li><a class="topline" href="#" onclick="addObject(event, 'service', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langService}</a></li>
+					<li><a class="topline" href="#" onclick="addObject(event, 'hostgroup', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langHostgroup}</a></li>
+					<li><a class="topline" href="#" onclick="addObject(event, 'servicegroup', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langServicegroup}</a></li>
+					<li><a class="topline underline" href="#" onclick="addObject(event, 'map', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langMap}</a></li>
 				</ul>
 			</dd>
 		</dl>
 		<dl class="dropdown subdropdown">
 			<dd id="map-addspecial-ddcontent" onmouseover="cancelHide('map-addspecial');cancelHide('map')" onmouseout="ddMenu('map-addspecial',-1,1);ddMenu('map',-1)">
 				<ul>
-					<li><a class="topline topline" href="javascript:addObject('shape', 'icon', 1, 'add');ddMenuHide(['map-addspecial','map']);">{$langShape}</a></li>
-					<li><a class="topline" href="javascript:addObject('textbox', 'icon', 2, 'add');ddMenuHide(['map-addspecial','map']);">{$langTextbox}</a></li>
-					<li><a class="topline underline" href="javascript:addObject('line', 'line', 2, 'add');ddMenuHide(['map-addspecial','map']);">{$langStateless} {$langLine}</a></li>
+					<li><a class="topline topline" href="#" onclick="addObject(event, 'shape', 'icon', 1, 'add');ddMenuHide(['map-addspecial','map']);">{$langShape}</a></li>
+					<li><a class="topline" href="#" onclick="addObject(event, 'textbox', 'icon', 2, 'add');ddMenuHide(['map-addspecial','map']);">{$langTextbox}</a></li>
+					<li><a class="topline underline" href="#" onclick="addObject(event, 'line', 'line', 2, 'add');ddMenuHide(['map-addspecial','map']);">{$langStateless} {$langLine}</a></li>
 				</ul>
 			</dd>
 		</dl>
@@ -145,11 +145,11 @@
 		  <dd id="user-ddcontent" onmouseover="cancelHide('user')" onmouseout="ddMenu('user',-1)">
 		    <ul>
 		    	<li><a href="#">{$langLoggedIn}: {$currentUser}</a></li>
-		    	{if $supportedChangePassword && $permittedChangePassword}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=ChangePassword&act=view', '{$langChangePassword}');">{$langChangePassword}</a></li>{/if}
-		    	{if $permittedUserMgmt}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=UserMgmt&act=view', '{$langUserMgmt}');">{$langUserMgmt}</a></li>{/if}
-		    	{if $permittedRoleMgmt}<li><a href="javascript:showFrontendDialog(oGeneralProperties.path_server+'?mod=RoleMgmt&act=view', '{$langManageRoles}', 500);">{$langManageRoles}</a></li>{/if}
-					{if $permittedLogout}<li><a href="#" onclick="getSyncRequest('{$pathBase}/server/core/ajax_handler.php?mod=Auth&amp;act=logout');return false;">{$langLogout}</a></li>{/if}
-					<li class="spacer underline"></li>
+		    	{if $supportedChangePassword && $permittedChangePassword}<li><a href="#" onlick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ChangePassword&act=view', '{$langChangePassword}');">{$langChangePassword}</a></li>{/if}
+		    	{if $permittedUserMgmt}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=UserMgmt&act=view', '{$langUserMgmt}');">{$langUserMgmt}</a></li>{/if}
+		    	{if $permittedRoleMgmt}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=RoleMgmt&act=view', '{$langManageRoles}', 500);">{$langManageRoles}</a></li>{/if}
+		        {if $permittedLogout}<li><a href="#" onclick="getSyncRequest('{$pathBase}/server/core/ajax_handler.php?mod=Auth&amp;act=logout');return false;">{$langLogout}</a></li>{/if}
+		        <li class="spacer underline"></li>
 		    </ul>
 		  </dd>
 		</dl>

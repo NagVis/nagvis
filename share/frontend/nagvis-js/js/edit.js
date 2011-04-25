@@ -316,7 +316,9 @@ var addObjType  = null,
 /**
  * Is called once to start the object creation
  */
-function addObject(objType, viewType, numLeft, action) {
+function addObject(e, objType, viewType, numLeft, action) {
+    var event = !e ? window.event : e;
+
     addObjType  = objType;
     addViewType = viewType;
     addNumLeft  = numLeft;
@@ -324,6 +326,11 @@ function addObject(objType, viewType, numLeft, action) {
     
     if(document.body)
 	document.body.style.cursor = 'crosshair';
+	
+    if(event.stopPropagation)
+	event.stopPropagation();
+    event.cancelBubble = true;
+    return false;
 }
 
 function getEventMousePos(e) {
