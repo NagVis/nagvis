@@ -785,7 +785,8 @@ var NagVisObject = Base.extend({
 		if(!oControls) {
 			oControls = document.createElement('div');
 			oControls.setAttribute('id', this.conf.object_id+'-controls');
-			this.parsedObject.appendChild(oControls);
+			if(this.parsedObject)
+			    this.parsedObject.appendChild(oControls);
 		}
 		oControls = null;
 		
