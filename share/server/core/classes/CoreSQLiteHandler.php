@@ -254,7 +254,7 @@ class CoreSQLiteHandler {
 
 		$this->createVersionTable();
 		
-		$this->DB->query('INSERT INTO users (userId, name, password) VALUES (1, \'nagiosadmin\', \'7f09c620da83db16ef9b69abfb8edd6b849d2d2b\')');
+		$this->DB->query('INSERT INTO users (userId, name, password) VALUES (1, \'admin\', \'868103841a2244768b2dbead5dbea2b533940e20\')');
 		$this->DB->query('INSERT INTO users (userId, name, password) VALUES (2, \'guest\', \'7f09c620da83db16ef9b69abfb8edd6b849d2d2b\')');
 		$this->DB->query('INSERT INTO roles (roleId, name) VALUES (1, \'Administrators\')');
 		$this->DB->query('INSERT INTO roles (roleId, name) VALUES (2, \'Users (read-only)\')');
@@ -332,7 +332,7 @@ class CoreSQLiteHandler {
 		
 		$data = $this->fetchAssoc($this->DB->query('SELECT roleId FROM roles WHERE name=\'Administrators\''));
 		 
-		// Role assignment: nagiosadmin => Administrators
+		// Role assignment: admin => Administrators
 		$this->DB->query('INSERT INTO users2roles (userId, roleId) VALUES (1, '.$data['roleId'].')');
 		
 		// Access assignment: Administrators => * * *

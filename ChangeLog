@@ -1,17 +1,19 @@
 1.6a1
 
 Core
-    * Added user/role profile config files located in nagvis/etc/profiles/(user|role).profile
-      The profile files can contain user/role specific options like languages and so on
-    * The language of a user is stored in the profile file now
-    * The eventlog hide state is stored in the profile file now and used when the eventlog is enabled for a map
-    * Added new options {file_group} and {file_mode} to global section of nagvis.ini.php.
-      These options are used whenever a file is written by NagVis
-    * Livestatus backend: Better error handling when writing to livestatus socket
-    * Lines can have three coords now to reposition the middle of lines having
-      two arrows
-    * Better handling for map config errors on overview page and map links -
-      no whole screen errors anymore
+  * Default admin credentials for inital auth databases are now: User: admin Password: admin
+    Admin credentials in existing auth databases are not changed.
+  * Added user/role profile config files located in nagvis/etc/profiles/(user|role).profile
+    The profile files can contain user/role specific options like languages and so on
+  * The language of a user is stored in the profile file now
+  * The eventlog hide state is stored in the profile file now and used when the eventlog is enabled for a map
+  * Added new options {file_group} and {file_mode} to global section of nagvis.ini.php.
+    These options are used whenever a file is written by NagVis
+  * Livestatus backend: Better error handling when writing to livestatus socket
+  * Lines can have three coords now to reposition the middle of lines having
+    two arrows
+  * Better handling for map config errors on overview page and map links -
+    no whole screen errors anymore
   * The check_command parameter is available in NagVis now. NDO and
     MKLivestatus backends fetch this info from the datasources now
   * Hostgroup and Servicegroup aliases work again now. It might be neccessary
@@ -26,7 +28,7 @@ Core
   * Cleaned up session auth code (Moved session module code to auth handler)
   * Bugfix: The installer overwrites the default iconset files on upgrade as expected
   * Added mechanism to search userfiles in independent structures. This allows
-	usage of the local/ structure in OMD
+    usage of the local/ structure in OMD
   * Bugfix: Fixed section merging in main config when using more than one config file
   * Using configured permissions on uploaded files (backgrounds, shapes, maps) now
   * Gadgets: Added gadget_type option which can now be img/html. The value
@@ -67,6 +69,7 @@ Frontend
   * Made background color in frontend configurable now
   * The header menu has a minimal width now to prevent broken header menu on small screens
   * The header menu is now positioned to be shown on the screen all the time
+  * Recoded the header menu submenu code (simplified the HTML and JS code)
   * Added buttons to show/hide the header menu (state saved per user)
   * Added new option: event_log_events to define the number of events in the eventlog scrollback
   * Bugfix: Fixed php error when using custom css files in maps

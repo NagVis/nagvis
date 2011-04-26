@@ -1713,8 +1713,8 @@ text "|   Its location is: $NAGVIS_PATH/$NAGVIS_CONF" "|"
 text "| - Configure NagVis via browser" "|"
 text "|   <http://localhost${HTML_PATH}/config.php>" "|"
 text "| - Initial admin credentials:" "|"
-text "|     Username: nagiosadmin" "|"
-text "|     Password: nagiosadmin" "|"
+text "|     Username: admin" "|"
+text "|     Password: admin" "|"
 line
 } 2>&1 | tee $LOG
 
