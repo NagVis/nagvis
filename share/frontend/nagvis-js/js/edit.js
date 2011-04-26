@@ -478,12 +478,12 @@ if (window.addEventListener) {
   document.documentElement.onmousemove  = function(e) {
     dragObject(e);
     addFollowing(e);
-    return false;
+    return true;
   };
 
   document.documentElement.onclick = function(e) {
     addClick(e);
-    return false;
+    return true;
   };
 }
 
