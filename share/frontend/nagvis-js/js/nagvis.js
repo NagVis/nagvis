@@ -20,7 +20,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
@@ -95,7 +95,7 @@ function date(format, timestamp) {
     // *     returns 2: 'September 2, 2003, 2:26 am'
     // *     example 3: date('Y W o', 1062462400);
     // *     returns 3: '2003 36 2003'
-    // *     example 4: x = date('Y m d', (new Date()).getTime()/1000); 
+    // *     example 4: x = date('Y m d', (new Date()).getTime()/1000);
     // *     example 4: (x+'').length == 10 // 2009 01 09
     // *     returns 4: true
     // *     example 5: date('W', 1104534000);
@@ -127,7 +127,7 @@ function date(format, timestamp) {
             1: "st",
             2: "nd",
             3: "rd",
-            21: "st", 
+            21: "st",
             22: "nd",
             23: "rd",
             31: "st"
@@ -324,15 +324,15 @@ function date(format, timestamp) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function updateWorkerCounter() {
-	var oWorkerCounter = document.getElementById('workerLastRunCounter');
-	// write the time to refresh to header counter
-	if(oWorkerCounter) {
-		if(oWorkerProperties.last_run) {
-			oWorkerCounter.innerHTML = date(oGeneralProperties.date_format, oWorkerProperties.last_run/1000);
-		}
-	}
-	oWorkerCounter = null;
-	return true;
+    var oWorkerCounter = document.getElementById('workerLastRunCounter');
+    // write the time to refresh to header counter
+    if(oWorkerCounter) {
+        if(oWorkerProperties.last_run) {
+            oWorkerCounter.innerHTML = date(oGeneralProperties.date_format, oWorkerProperties.last_run/1000);
+        }
+    }
+    oWorkerCounter = null;
+    return true;
 }
 
 /**
@@ -341,16 +341,16 @@ function updateWorkerCounter() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function rotatePage() {
-	if(oRotationProperties.nextStepUrl !== '') {
-		if(oRotationProperties.rotationEnabled == true) {
-			window.open(oRotationProperties.nextStepUrl, "_self");
-			return true;
-		}
-	} else {
-		window.location.reload(true);
-		return true;
-	}
-	return false;
+    if(oRotationProperties.nextStepUrl !== '') {
+        if(oRotationProperties.rotationEnabled == true) {
+            window.open(oRotationProperties.nextStepUrl, "_self");
+            return true;
+        }
+    } else {
+        window.location.reload(true);
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -360,31 +360,31 @@ function rotatePage() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function rotationCountdown() {
-	// Only proceed with counting when rotation is enabled and the next step time 
-	// has a proper value
-	if(oRotationProperties.rotationEnabled && oRotationProperties.rotationEnabled == true && oRotationProperties.nextStepTime && oRotationProperties.nextStepTime !== '') {
-		// Countdown one second
-		oRotationProperties.nextStepTime -= 1;
-		
-		if(oRotationProperties.nextStepTime <= 0) {
-			return rotatePage();
-		} else {
-			var oRefCountHead = document.getElementById('refreshCounterHead');
-			// write the time to refresh to header counter
-			if(oRefCountHead) {
-				oRefCountHead.innerHTML = oRotationProperties.nextStepTime;
-				oRefCountHead = null;
-			}
-			
-			var oRefCount = document.getElementById('refreshCounter');
-			// write the time to refresh to the normal counter
-			if(oRefCount) {
-				oRefCount.innerHTML = oRotationProperties.nextStepTime;
-				oRefCount = null;
-			}
-		}
-	}
-	return false;
+    // Only proceed with counting when rotation is enabled and the next step time
+    // has a proper value
+    if(oRotationProperties.rotationEnabled && oRotationProperties.rotationEnabled == true && oRotationProperties.nextStepTime && oRotationProperties.nextStepTime !== '') {
+        // Countdown one second
+        oRotationProperties.nextStepTime -= 1;
+
+        if(oRotationProperties.nextStepTime <= 0) {
+            return rotatePage();
+        } else {
+            var oRefCountHead = document.getElementById('refreshCounterHead');
+            // write the time to refresh to header counter
+            if(oRefCountHead) {
+                oRefCountHead.innerHTML = oRotationProperties.nextStepTime;
+                oRefCountHead = null;
+            }
+
+            var oRefCount = document.getElementById('refreshCounter');
+            // write the time to refresh to the normal counter
+            if(oRefCount) {
+                oRefCount.innerHTML = oRotationProperties.nextStepTime;
+                oRefCount = null;
+            }
+        }
+    }
+    return false;
 }
 
 /**
@@ -393,15 +393,15 @@ function rotationCountdown() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getUrlParam(name) {
-	var name2 = name.replace('[', '\\[').replace(']', '\\]');
-	var regexS = "[\\?&]"+name2+"=([^&#]*)";
-	var regex = new RegExp( regexS );
-	var results = regex.exec(window.location);
-	if(results === null) {
-		return '';
-	} else {
-		return results[1];
-	}
+    var name2 = name.replace('[', '\\[').replace(']', '\\]');
+    var regexS = "[\\?&]"+name2+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec(window.location);
+    if(results === null) {
+        return '';
+    } else {
+        return results[1];
+    }
 }
 
 /**
@@ -410,13 +410,13 @@ function getUrlParam(name) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function setRotationLabel() {
-	if(oRotationProperties.rotationEnabled == true) {
-		document.getElementById('rotationStart').style.display = 'none';
-		document.getElementById('rotationStop').style.display = 'inline';
-	} else {
-		document.getElementById('rotationStart').style.display = 'inline';
-		document.getElementById('rotationStop').style.display = 'none';
-	}
+    if(oRotationProperties.rotationEnabled == true) {
+        document.getElementById('rotationStart').style.display = 'none';
+        document.getElementById('rotationStop').style.display = 'inline';
+    } else {
+        document.getElementById('rotationStart').style.display = 'inline';
+        document.getElementById('rotationStop').style.display = 'none';
+    }
 }
 
 /**
@@ -425,27 +425,27 @@ function setRotationLabel() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function switchRotation() {
-	if(oRotationProperties.rotationEnabled == true) {
-		oRotationProperties.rotationEnabled = false;
-		
-		setRotationLabel();
-	} else {
-		oRotationProperties.rotationEnabled = true;
-		
-		setRotationLabel();
-	}
+    if(oRotationProperties.rotationEnabled == true) {
+        oRotationProperties.rotationEnabled = false;
+
+        setRotationLabel();
+    } else {
+        oRotationProperties.rotationEnabled = true;
+
+        setRotationLabel();
+    }
 }
 
 function getCurrentTime() {
-	var oDate = new Date();
-	var sHours = oDate.getHours();
-	sHours = (( sHours < 10) ? "0"+sHours : sHours);
-	var sMinutes = oDate.getMinutes();
-	sMinutes = (( sMinutes < 10) ? "0"+sMinutes : sMinutes);
-	var sSeconds = oDate.getSeconds();
-	sSeconds = (( sSeconds < 10) ? "0"+sSeconds : sSeconds);
-	
-	return sHours+":"+sMinutes+":"+sSeconds;
+    var oDate = new Date();
+    var sHours = oDate.getHours();
+    sHours = (( sHours < 10) ? "0"+sHours : sHours);
+    var sMinutes = oDate.getMinutes();
+    sMinutes = (( sMinutes < 10) ? "0"+sMinutes : sMinutes);
+    var sSeconds = oDate.getSeconds();
+    sSeconds = (( sSeconds < 10) ? "0"+sSeconds : sSeconds);
+
+    return sHours+":"+sMinutes+":"+sSeconds;
 }
 
 function getRandomLowerCaseLetter() {
@@ -453,88 +453,88 @@ function getRandomLowerCaseLetter() {
 }
 
 function getRandom(min, max) {
-	if( min > max ) {
-		return -1;
-	}
-	
-	if( min == max ) {
-		return min;
-	}
-	
-	return min + parseInt(Math.random() * (max-min+1), 0);
+    if( min > max ) {
+        return -1;
+    }
+
+    if( min == max ) {
+        return min;
+    }
+
+    return min + parseInt(Math.random() * (max-min+1), 0);
 }
 
 function cloneObject(what) {
-	var o;
-	var i;
-	
-	if(what instanceof Array) {
-		o = [];
-	} else {
-		o = {};
-	}
-	
-	for (i in what) {
-		if (typeof what[i] == 'object') {
-			if(i != 'parsedObject') {
-				o[i] = cloneObject(what[i]);
-			}
-		} else {
-			o[i] = what[i];
-		}
-	}
-	
-	return o;
+    var o;
+    var i;
+
+    if(what instanceof Array) {
+        o = [];
+    } else {
+        o = {};
+    }
+
+    for (i in what) {
+        if (typeof what[i] == 'object') {
+            if(i != 'parsedObject') {
+                o[i] = cloneObject(what[i]);
+            }
+        } else {
+            o[i] = what[i];
+        }
+    }
+
+    return o;
 }
 
 function pageWidth() {
-	var w;
-	
-	if(window.innerWidth !== null  && typeof window.innerWidth !== 'undefined') { 
-		w = window.innerWidth;
-	} else if(document.documentElement && document.documentElement.clientWidth) {
-		w = document.documentElement.clientWidth;
-	} else if(document.body !== null) {
-		w = document.body.clientWidth;
-	} else {
-		w = null;
-	}
-	
-	return w;
+    var w;
+
+    if(window.innerWidth !== null  && typeof window.innerWidth !== 'undefined') {
+        w = window.innerWidth;
+    } else if(document.documentElement && document.documentElement.clientWidth) {
+        w = document.documentElement.clientWidth;
+    } else if(document.body !== null) {
+        w = document.body.clientWidth;
+    } else {
+        w = null;
+    }
+
+    return w;
 }
 
 function pageHeight() {
-	var h;
-	
-	if(window.innerHeight !== null && typeof window.innerHeight !== 'undefined') {
-		h = window.innerHeight;
-	} else if(document.documentElement && document.documentElement.clientHeight) {
-		h = document.documentElement.clientHeight;
-	} else if(document.body !== null) {
-		h = document.body.clientHeight;
-	} else {
-		h = null;
-	}
-	
-	return h;
+    var h;
+
+    if(window.innerHeight !== null && typeof window.innerHeight !== 'undefined') {
+        h = window.innerHeight;
+    } else if(document.documentElement && document.documentElement.clientHeight) {
+        h = document.documentElement.clientHeight;
+    } else if(document.body !== null) {
+        h = document.body.clientHeight;
+    } else {
+        h = null;
+    }
+
+    return h;
 }
 
 function getScrollTop() {
-	if (typeof window.pageYOffset !== 'undefined') 
-		return window.pageYOffset;
-	else if (typeof document.compatMode !== 'undefined' && document.compatMode !== 'BackCompat')
-		return document.documentElement.scrollTop;
-	else if (typeof document.body !== 'undefined')
-		return document.body.scrollTop;
+    if (typeof window.pageYOffset !== 'undefined')
+        return window.pageYOffset;
+    else if (typeof document.compatMode !== 'undefined' && document.compatMode !== 'BackCompat')
+        return document.documentElement.scrollTop;
+    else if (typeof document.body !== 'undefined')
+        return document.body.scrollTop;
 }
 
 function getScrollLeft() {
-	if (typeof window.pageXOffset !== 'undefined') 
-		return window.pageXOffset;
-	else if (typeof document.compatMode != 'undefined' && document.compatMode !== 'BackCompat')
-		return document.documentElement.scrollLeft;
-	else if (typeof document.body !== 'undefined')
-		return document.body.scrollLeft;
+    if (typeof window.pageXOffset !== 'undefined')
+        return window.pageXOffset;
+    else if (typeof document.compatMode != 'undefined' && document.compatMode !== 'BackCompat')
+        return document.documentElement.scrollLeft;
+    else if (typeof document.body !== 'undefined')
+        return document.body.scrollLeft;
 }
 
 
@@ -544,62 +544,62 @@ function getScrollLeft() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function scrollSlow(iTargetX, iTargetY, iSpeed) {
-	var currentScrollTop = getScrollTop();
-	var currentScrollLeft = getScrollLeft();
-	var iMapOffsetTop;
-	var scrollTop;
-	var scrollLeft;
-	var iWidth;
-	var iHeight;
-	
-	var iStep = 2;
-	
-	// Get offset of the map div
-	var oMap = document.getElementById('map');
-	if(oMap && oMap.offsetTop) {
-		iMapOffsetTop = oMap.offsetTop;
-	} else {
-		iMapOffsetTop = 0;
-	}
-	oMap = null;
-	
-	// Get measure of the screen
-	iWidth = pageWidth();
-	iHeight = pageHeight() - iMapOffsetTop;
-		
-	if(iTargetY <= (currentScrollTop+iHeight)  && iTargetY >= currentScrollTop) {
-		// Target is in current view
-		scrollTop = 0;
-	} else if(iTargetY < currentScrollTop) {
-		// Target is above current view
-		scrollTop = -iStep;
-	} else if(iTargetY > currentScrollTop) {
-		// Target is below current view
-		scrollTop = iStep;
-	}
-	
-	if(iTargetX <= (currentScrollLeft+iWidth) && iTargetX >= currentScrollLeft) {
-		// Target is in current view
-		scrollLeft = 0;
-	} else if(iTargetX < currentScrollLeft) {
-		// Target is left from current view
-		scrollLeft = -iStep;
-	} else if(iTargetX > currentScrollLeft) {
-		// Target is right from current view
-		scrollLeft = iStep;
-	} else {
-		scrollLeft = 0;
-	}
-	
-	eventlog("scroll", "debug", currentScrollLeft+" to "+iTargetX+" = "+scrollLeft+", "+currentScrollTop+" to "+iTargetY+" = "+scrollTop);
-	
-	if(scrollTop !== 0 || scrollLeft !== 0) {
-		window.scrollBy(scrollLeft, scrollTop);
-		
-		setTimeout(function() { scrollSlow(iTargetX, iTargetY, iSpeed); }, iSpeed);
-	} else {
-		eventlog("scroll", "debug", 'No need to scroll: '+currentScrollLeft+' - '+iTargetX+', '+currentScrollTop+' - '+iTargetY);
-	}
+    var currentScrollTop = getScrollTop();
+    var currentScrollLeft = getScrollLeft();
+    var iMapOffsetTop;
+    var scrollTop;
+    var scrollLeft;
+    var iWidth;
+    var iHeight;
+
+    var iStep = 2;
+
+    // Get offset of the map div
+    var oMap = document.getElementById('map');
+    if(oMap && oMap.offsetTop) {
+        iMapOffsetTop = oMap.offsetTop;
+    } else {
+        iMapOffsetTop = 0;
+    }
+    oMap = null;
+
+    // Get measure of the screen
+    iWidth = pageWidth();
+    iHeight = pageHeight() - iMapOffsetTop;
+
+    if(iTargetY <= (currentScrollTop+iHeight)  && iTargetY >= currentScrollTop) {
+        // Target is in current view
+        scrollTop = 0;
+    } else if(iTargetY < currentScrollTop) {
+        // Target is above current view
+        scrollTop = -iStep;
+    } else if(iTargetY > currentScrollTop) {
+        // Target is below current view
+        scrollTop = iStep;
+    }
+
+    if(iTargetX <= (currentScrollLeft+iWidth) && iTargetX >= currentScrollLeft) {
+        // Target is in current view
+        scrollLeft = 0;
+    } else if(iTargetX < currentScrollLeft) {
+        // Target is left from current view
+        scrollLeft = -iStep;
+    } else if(iTargetX > currentScrollLeft) {
+        // Target is right from current view
+        scrollLeft = iStep;
+    } else {
+        scrollLeft = 0;
+    }
+
+    eventlog("scroll", "debug", currentScrollLeft+" to "+iTargetX+" = "+scrollLeft+", "+currentScrollTop+" to "+iTargetY+" = "+scrollTop);
+
+    if(scrollTop !== 0 || scrollLeft !== 0) {
+        window.scrollBy(scrollLeft, scrollTop);
+
+        setTimeout(function() { scrollSlow(iTargetX, iTargetY, iSpeed); }, iSpeed);
+    } else {
+        eventlog("scroll", "debug", 'No need to scroll: '+currentScrollLeft+' - '+iTargetX+', '+currentScrollTop+' - '+iTargetY);
+    }
 }
 
 /**
@@ -610,41 +610,41 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function escapeUrlValues(sStr) {
-	if(typeof sStr === undefined || sStr === null || sStr === '') {
-		return sStr;
-	}
-	
-	sStr = new String(sStr);
-	
-	if(sStr.search('\\+') !== -1) {
-		sStr = sStr.replace(/\+/g, '%2B');
-	}
-	
-	if(sStr.search('&') !== -1) {
-		sStr = sStr.replace(/&/g, '%26');
-	}
-	
-	if(sStr.search('#') !== -1) {
-		sStr = sStr.replace(/#/g, '%23');
-	}
-	
-	if(sStr.search(':') !== -1) {
-		sStr = sStr.replace(/:/g, '%3A');
-	}
-	
-	if(sStr.search(' ') !== -1) {
-		sStr = sStr.replace(/ /g, '%20');
-	}
-	
-	if(sStr.search('=') !== -1) {
-		sStr = sStr.replace(/=/g, '%3D');
-	}
-	
-	if(sStr.search('\\?') !== -1) {
-		sStr = sStr.replace(/\?/g, '%3F');
-	}
-	
-	return sStr;
+    if(typeof sStr === undefined || sStr === null || sStr === '') {
+        return sStr;
+    }
+
+    sStr = new String(sStr);
+
+    if(sStr.search('\\+') !== -1) {
+        sStr = sStr.replace(/\+/g, '%2B');
+    }
+
+    if(sStr.search('&') !== -1) {
+        sStr = sStr.replace(/&/g, '%26');
+    }
+
+    if(sStr.search('#') !== -1) {
+        sStr = sStr.replace(/#/g, '%23');
+    }
+
+    if(sStr.search(':') !== -1) {
+        sStr = sStr.replace(/:/g, '%3A');
+    }
+
+    if(sStr.search(' ') !== -1) {
+        sStr = sStr.replace(/ /g, '%20');
+    }
+
+    if(sStr.search('=') !== -1) {
+        sStr = sStr.replace(/=/g, '%3D');
+    }
+
+    if(sStr.search('\\?') !== -1) {
+        sStr = sStr.replace(/\?/g, '%3F');
+    }
+
+    return sStr;
 }
 
 /**
@@ -654,28 +654,28 @@ function escapeUrlValues(sStr) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function oDump(object, depth, max){
-	depth = depth || 0;
-	max = max || 2;
-	
-	if (depth > max) {
-		return false;
-	}
-	
-	var indent = "";
-	for (var i = 0; i < depth; i++) {
-		indent += "  ";
-	}
-	
-	var output = "";  
-	for (var key in object) {
-		output += "\n" + indent + key + ": ";
-		switch (typeof object[key]) {
-			case "object": output += oDump(object[key], depth + 1, max); break;
-			case "function": output += "function"; break;
-			default: output += object[key]; break;        
-		}
-	}
-	return output;
+    depth = depth || 0;
+    max = max || 2;
+
+    if (depth > max) {
+        return false;
+    }
+
+    var indent = "";
+    for (var i = 0; i < depth; i++) {
+        indent += "  ";
+    }
+
+    var output = "";
+    for (var key in object) {
+        output += "\n" + indent + key + ": ";
+        switch (typeof object[key]) {
+            case "object": output += oDump(object[key], depth + 1, max); break;
+            case "function": output += "function"; break;
+            default: output += object[key]; break;
+        }
+    }
+    return output;
 }
 
 /**
@@ -683,10 +683,10 @@ function oDump(object, depth, max){
  * FIXME: There must be a better way!
  */
 function oLength(object) {
-	var c = 0;
-	for(var key in object)
-		c++;
-	return c;
+    var c = 0;
+    for(var key in object)
+        c++;
+    return c;
 }
 
 /**
@@ -732,10 +732,10 @@ addDOMLoadEvent = (function(){
             clearInterval(load_timer);
 
             // execute each function in the stack in the order they were added
-	    //
-	    // LM: This small timeout seems to be needed for chrome to have the
-	    // clientWidth attribute calculated which is needed by the controls
-	    // of the map objects.
+        //
+        // LM: This small timeout seems to be needed for chrome to have the
+        // clientWidth attribute calculated which is needed by the controls
+        // of the map objects.
             while (exec = load_events.shift())
                 setTimeout(exec, 50);
 
@@ -791,29 +791,29 @@ addDOMLoadEvent = (function(){
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function handleJSError(sMsg, sUrl, iLine) {
-	if(!isset(sUrl))
+    if(!isset(sUrl))
   	var sUrl = '<Empty URL>';
-	// Log to javascript eventlog
-	eventlog("js-error", "critical", "JS-Error occured: " + sMsg + " " + sUrl + " (" + iLine + ")");
-	
-	// Show error box
-	var oMsg = {};
-	oMsg.type = 'CRITICAL';
-	oMsg.message = "Javascript error occured:\n " + sMsg + " "
-	               + sUrl + " (" + iLine + ")<br /><br /><code>- Stacktrace - <br />"
-	               + printStackTrace().join("<br />") + '</code>';
-	oMsg.title = "Javascript error";
-	
-	// Handle application message/error
-	frontendMessage(oMsg);
-	oMsg = null;
-	
-	return false;
+    // Log to javascript eventlog
+    eventlog("js-error", "critical", "JS-Error occured: " + sMsg + " " + sUrl + " (" + iLine + ")");
+
+    // Show error box
+    var oMsg = {};
+    oMsg.type = 'CRITICAL';
+    oMsg.message = "Javascript error occured:\n " + sMsg + " "
+                   + sUrl + " (" + iLine + ")<br /><br /><code>- Stacktrace - <br />"
+                   + printStackTrace().join("<br />") + '</code>';
+    oMsg.title = "Javascript error";
+
+    // Handle application message/error
+    frontendMessage(oMsg);
+    oMsg = null;
+
+    return false;
 }
 
 // Enable javascript error handler
 try {
-	window.onerror = handleJSError;
+    window.onerror = handleJSError;
 } catch(er) {}
 
 /**
@@ -826,11 +826,11 @@ function addEvent(obj, type, fn) {
       obj.addEventListener(type, fn, false);
    } else if (obj.attachEvent) {
       obj["e"+type+fn] = fn;
-      
+
       obj[type+fn] = function() {
       	obj["e"+type+fn](window.event);
       }
-      
+
       obj.attachEvent("on"+type, obj[type+fn]);
    }
 }
@@ -841,54 +841,54 @@ function addEvent(obj, type, fn) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function displayStatusMessage(msg, type, hold) {
-	var iMessageTime = 5000;
-	
-	var oMessage = document.getElementById('statusMessage');
-	
-	// Initialize when not yet done
-	if(!oMessage) {
-		oMessage = document.createElement('div');
-		oMessage.setAttribute('id', 'statusMessage');
-		if(isIE)
-		    oMessage.style.filter = 'alpha(opacity=85)';
-		
-		document.body.appendChild(oMessage);
-	}
-	
-	// When there is another timer clear it
-	if(oStatusMessageTimer) {
-		clearTimeout(oStatusMessageTimer);
-	}
-	
-	var cont = msg;
-	if (type) {
-		cont = '<div class="'+type+'">'+cont+'</div>';
-	}
-	
-	oMessage.innerHTML = cont;
-	oMessage.style.display = 'block';
-	
-	if (type != 'loading') {
-		oMessage.onmousedown = function() { hideStatusMessage(); return true; };
-	}
-	
-	if (!hold) {
-		oStatusMessageTimer = window.setTimeout(function() { hideStatusMessage(); }, iMessageTime);
-	}
-	
-	oMessage = null;
+    var iMessageTime = 5000;
+
+    var oMessage = document.getElementById('statusMessage');
+
+    // Initialize when not yet done
+    if(!oMessage) {
+        oMessage = document.createElement('div');
+        oMessage.setAttribute('id', 'statusMessage');
+        if(isIE)
+            oMessage.style.filter = 'alpha(opacity=85)';
+
+        document.body.appendChild(oMessage);
+    }
+
+    // When there is another timer clear it
+    if(oStatusMessageTimer) {
+        clearTimeout(oStatusMessageTimer);
+    }
+
+    var cont = msg;
+    if (type) {
+        cont = '<div class="'+type+'">'+cont+'</div>';
+    }
+
+    oMessage.innerHTML = cont;
+    oMessage.style.display = 'block';
+
+    if (type != 'loading') {
+        oMessage.onmousedown = function() { hideStatusMessage(); return true; };
+    }
+
+    if (!hold) {
+        oStatusMessageTimer = window.setTimeout(function() { hideStatusMessage(); }, iMessageTime);
+    }
+
+    oMessage = null;
 }
 
 
 // make a message row disapear
 function hideStatusMessage() {
-	var oMessage = document.getElementById('statusMessage');
-	
-	// Only hide when initialized
-	if(oMessage) {
-		oMessage.style.display = 'none';
-		oMessage.onmousedown = null;
-	}
+    var oMessage = document.getElementById('statusMessage');
+
+    // Only hide when initialized
+    if(oMessage) {
+        oMessage.style.display = 'none';
+        oMessage.onmousedown = null;
+    }
 }
 
 /**
@@ -898,85 +898,85 @@ function hideStatusMessage() {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, text, customStyle) {
-	var oLabelDiv = document.getElementById(id);
-	if(!oLabelDiv) {
-		oLabelDiv = document.createElement('div');
-		oLabelDiv.setAttribute('id', id);
-	}
-	oLabelDiv.setAttribute('class', className);
-	oLabelDiv.setAttribute('className', className);
-	oLabelDiv.style.background = bgColor;
-	oLabelDiv.style.borderColor = borderColor;
-	
-	oLabelDiv.style.position = 'absolute';
-	oLabelDiv.style.left = x + 'px';
-	oLabelDiv.style.top = y + 'px';
-	
-	if(w && w !== '' && w !== 'auto')
-		oLabelDiv.style.width = w+'px';
-	
-	if(h && h !== '' && h !== 'auto')
-		oLabelDiv.style.height = h+'px';
-	
-	oLabelDiv.style.zIndex = parseInt(z) + 1;
-	oLabelDiv.style.overflow = 'visible';
-	
-	/**
-	 * IE workaround: The transparent for the color is not enough. The border
-	 * has really to be hidden.
-	 */
-	if(borderColor == 'transparent')
-		oLabelDiv.style.borderStyle = 'none';
-	else
-		oLabelDiv.style.borderStyle = 'solid';
-	
-	// Create span for text and add label text
-	var oLabelSpan = null;
-	if(oLabelDiv.childNodes.length == 0)
-		oLabelSpan = document.createElement('span');
-	else
-		oLabelSpan = oLabelDiv.childNodes[0];
-	
-	// Setting custom style if someone wants the textbox to be
-	// styled.
-	//
-	// The problem here is that the custom style is given as content of the
-	// HTML style attribute. But that can not be applied easily using plain
-	// JS. So parse the string and apply the options manually.
-	if(customStyle && customStyle !== '') {
-		// Split up the coustom style string to apply the attributes
-		var aStyle = customStyle.split(';');
-		for(var i in aStyle) {
-			if(typeof(aStyle[i]) !== 'string')
-			    continue;
-			var aOpt = aStyle[i].split(':');
-			
-			if(aOpt[0] && aOpt[0] != '' && aOpt[1] && aOpt[1] != '') {
-				var sKey = aOpt[0].replace(/(-[a-zA-Z])/g, '$1');
-				
-				var regex = /(-[a-zA-Z])/;
-				var result = regex.exec(aOpt[0]);
-				
-				if(result !== null) {
-					for (var i = 1; i < result.length; i++) {
-						var fixed = result[i].replace('-', '').toUpperCase();
-						sKey = sKey.replace(result[i], fixed);
-					}
-				}
-				
-				oLabelSpan.style[sKey] = aOpt[1];
-			}
-			aOpt = null;
-		}
-		aStyle = null;
-	}
-	
-	oLabelSpan.innerHTML = text;
-	
-	oLabelDiv.appendChild(oLabelSpan);
-	oLabelSpan = null;
-	
-	return oLabelDiv;
+    var oLabelDiv = document.getElementById(id);
+    if(!oLabelDiv) {
+        oLabelDiv = document.createElement('div');
+        oLabelDiv.setAttribute('id', id);
+    }
+    oLabelDiv.setAttribute('class', className);
+    oLabelDiv.setAttribute('className', className);
+    oLabelDiv.style.background = bgColor;
+    oLabelDiv.style.borderColor = borderColor;
+
+    oLabelDiv.style.position = 'absolute';
+    oLabelDiv.style.left = x + 'px';
+    oLabelDiv.style.top = y + 'px';
+
+    if(w && w !== '' && w !== 'auto')
+        oLabelDiv.style.width = w+'px';
+
+    if(h && h !== '' && h !== 'auto')
+        oLabelDiv.style.height = h+'px';
+
+    oLabelDiv.style.zIndex = parseInt(z) + 1;
+    oLabelDiv.style.overflow = 'visible';
+
+    /**
+     * IE workaround: The transparent for the color is not enough. The border
+     * has really to be hidden.
+     */
+    if(borderColor == 'transparent')
+        oLabelDiv.style.borderStyle = 'none';
+    else
+        oLabelDiv.style.borderStyle = 'solid';
+
+    // Create span for text and add label text
+    var oLabelSpan = null;
+    if(oLabelDiv.childNodes.length == 0)
+        oLabelSpan = document.createElement('span');
+    else
+        oLabelSpan = oLabelDiv.childNodes[0];
+
+    // Setting custom style if someone wants the textbox to be
+    // styled.
+    //
+    // The problem here is that the custom style is given as content of the
+    // HTML style attribute. But that can not be applied easily using plain
+    // JS. So parse the string and apply the options manually.
+    if(customStyle && customStyle !== '') {
+        // Split up the coustom style string to apply the attributes
+        var aStyle = customStyle.split(';');
+        for(var i in aStyle) {
+            if(typeof(aStyle[i]) !== 'string')
+                continue;
+            var aOpt = aStyle[i].split(':');
+
+            if(aOpt[0] && aOpt[0] != '' && aOpt[1] && aOpt[1] != '') {
+                var sKey = aOpt[0].replace(/(-[a-zA-Z])/g, '$1');
+
+                var regex = /(-[a-zA-Z])/;
+                var result = regex.exec(aOpt[0]);
+
+                if(result !== null) {
+                    for (var i = 1; i < result.length; i++) {
+                        var fixed = result[i].replace('-', '').toUpperCase();
+                        sKey = sKey.replace(result[i], fixed);
+                    }
+                }
+
+                oLabelSpan.style[sKey] = aOpt[1];
+            }
+            aOpt = null;
+        }
+        aStyle = null;
+    }
+
+    oLabelSpan.innerHTML = text;
+
+    oLabelDiv.appendChild(oLabelSpan);
+    oLabelSpan = null;
+
+    return oLabelDiv;
 }
 
 /**
@@ -986,19 +986,19 @@ function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, t
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function lightenColor(code, rD, gD, bD) {
-	var r = parseInt(code.substring(1, 3), 16);
-	var g = parseInt(code.substring(3, 5), 16);
-	var b = parseInt(code.substring(5, 7), 16);
-	
-	r += rD;  if (r > 255) r = 255;  if (r < 0) r = 0;
-	g += gD;  if (g > 255) g = 255;  if (g < 0) g = 0;
-	b += bD;  if (b > 255) b = 255;  if (b < 0) b = 0;
-	
-	code  = r.length < 2 ? "0"+r.toString(16) : r.toString(16);
-	code += g.length < 2 ? "0"+g.toString(16) : g.toString(16);
-	code += b.length < 2 ? "0"+b.toString(16) : b.toString(16);
-	
-	return "#" + code.toUpperCase();
+    var r = parseInt(code.substring(1, 3), 16);
+    var g = parseInt(code.substring(3, 5), 16);
+    var b = parseInt(code.substring(5, 7), 16);
+
+    r += rD;  if (r > 255) r = 255;  if (r < 0) r = 0;
+    g += gD;  if (g > 255) g = 255;  if (g < 0) g = 0;
+    b += bD;  if (b > 255) b = 255;  if (b < 0) b = 0;
+
+    code  = r.length < 2 ? "0"+r.toString(16) : r.toString(16);
+    code += g.length < 2 ? "0"+g.toString(16) : g.toString(16);
+    code += b.length < 2 ? "0"+b.toString(16) : b.toString(16);
+
+    return "#" + code.toUpperCase();
 }
 
 /**
@@ -1007,16 +1007,16 @@ function lightenColor(code, rD, gD, bD) {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function getRegEx(n, exp, mod) {
-	if(typeof(regexCache[n]) !== 'undefined')
-		return regexCache[n];
-	else
-		if(mod !== undefined) {
-			regexCache[n+'-'+mod] = new RegExp(exp, mod);
-			return regexCache[n+'-'+mod];
-		} else {
-			regexCache[n] = new RegExp(exp);
-			return regexCache[n];
-		}
+    if(typeof(regexCache[n]) !== 'undefined')
+        return regexCache[n];
+    else
+        if(mod !== undefined) {
+            regexCache[n+'-'+mod] = new RegExp(exp, mod);
+            return regexCache[n+'-'+mod];
+        } else {
+            regexCache[n] = new RegExp(exp);
+            return regexCache[n];
+        }
 }
 
 /**
@@ -1025,12 +1025,12 @@ function getRegEx(n, exp, mod) {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function storeUserOption(key, value) {
-	// Set in current page
-	oUserProperties[key] = value;
+    // Set in current page
+    oUserProperties[key] = value;
 
-	// And send to server
-	var url = oGeneralProperties.path_server + '?mod=User&act=setOption&opts['+escapeUrlValues(key)+']=' + escapeUrlValues(value);
-	getAsyncRequest(url, false, undefined, undefined);
+    // And send to server
+    var url = oGeneralProperties.path_server + '?mod=User&act=setOption&opts['+escapeUrlValues(key)+']=' + escapeUrlValues(value);
+    getAsyncRequest(url, false, undefined, undefined);
 }
 
 /**
@@ -1039,7 +1039,7 @@ function storeUserOption(key, value) {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function isset(v) {
-	return typeof(v) !== 'undefined' && v !== null;
+    return typeof(v) !== 'undefined' && v !== null;
 }
 
 /**
@@ -1057,7 +1057,7 @@ function isInt(v) {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function pxToInt(v) {
-	return parseInt(v.replace('px', ''));
+    return parseInt(v.replace('px', ''));
 }
 
 function isRelativeCoord(v) {
@@ -1067,7 +1067,7 @@ function isRelativeCoord(v) {
 function getKeys(o) {
     var a = [];
     for(var key in o)
-	a.push(key);
+    a.push(key);
     return a;
 }
 
@@ -1124,14 +1124,14 @@ if (!Array.prototype.indexOf) {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function scaleView() {
-	var header       = document.getElementById('header');
-	var headerSpacer = document.getElementById('headerspacer');
-	if(header) {
-		header.style.width = pageWidth() + 'px';
-		if(headerSpacer) {
-			headerSpacer.style.height = header.clientHeight + 'px';
-			headerSpacer = null;
-		}
-		header = null;
-	}
+    var header       = document.getElementById('header');
+    var headerSpacer = document.getElementById('headerspacer');
+    if(header) {
+        header.style.width = pageWidth() + 'px';
+        if(headerSpacer) {
+            headerSpacer.style.height = header.clientHeight + 'px';
+            headerSpacer = null;
+        }
+        header = null;
+    }
 }

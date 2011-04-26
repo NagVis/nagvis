@@ -22,13 +22,13 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class FrontendRequestHandler extends CoreRequestHandler {
-	public function __construct($aOptions) {
-		parent::__construct($aOptions);
-	}
+    public function __construct($aOptions) {
+        parent::__construct($aOptions);
+    }
 }
 ?>

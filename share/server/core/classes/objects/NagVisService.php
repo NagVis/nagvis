@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * NagVisService.php - Class of a Service in NagVis with all necessary 
+ * NagVisService.php - Class of a Service in NagVis with all necessary
  *                  information which belong to the object handling in NagVis
  *
  * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
@@ -22,50 +22,50 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisService extends NagiosService {
-	protected $gadget_url;
-	
-	protected static $langType = null;
-	protected static $langSelf = null;
-	
-	/**
-	 * Class constructor
-	 *
-	 * @param		Object 		Object of class GlobalMainCfg
-	 * @param		Object 		Object of class CoreBackendMgmt
-	 * @param		Object 		Object of class GlobalLanguage
-	 * @param		Integer 		ID of queried backend
-	 * @param		String		Name of the host
-	 * @param		String		Service description
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($CORE, $BACKEND, $backend_id, $hostName, $serviceDescription) {
-		$this->type = 'service';
-		$this->iconset = 'std_medium';
-		
-		parent::__construct($CORE, $BACKEND, $backend_id, $hostName, $serviceDescription);
-	}
-	
-	# End public methods
-	# #########################################################################
-	
-	/**
-	 * PROTECTED parseGadgetUrl()
-	 *
-	 * Sets the path of gadget_url. The method adds htmlgadgets path when relative
-	 * path or will remove [] when full url given
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	protected function parseGadgetUrl() {
-		if(preg_match('/^\[(.*)\]$/',$this->gadget_url,$match) > 0)
-			$this->gadget_url = $match[1];
-		else
-			$this->gadget_url = $this->CORE->getMainCfg()->getPath('html', 'global', 'gadgets', $this->gadget_url);
-	}
+    protected $gadget_url;
+
+    protected static $langType = null;
+    protected static $langSelf = null;
+
+    /**
+     * Class constructor
+     *
+     * @param		Object 		Object of class GlobalMainCfg
+     * @param		Object 		Object of class CoreBackendMgmt
+     * @param		Object 		Object of class GlobalLanguage
+     * @param		Integer 		ID of queried backend
+     * @param		String		Name of the host
+     * @param		String		Service description
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct($CORE, $BACKEND, $backend_id, $hostName, $serviceDescription) {
+        $this->type = 'service';
+        $this->iconset = 'std_medium';
+
+        parent::__construct($CORE, $BACKEND, $backend_id, $hostName, $serviceDescription);
+    }
+
+    # End public methods
+    # #########################################################################
+
+    /**
+     * PROTECTED parseGadgetUrl()
+     *
+     * Sets the path of gadget_url. The method adds htmlgadgets path when relative
+     * path or will remove [] when full url given
+     *
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    protected function parseGadgetUrl() {
+        if(preg_match('/^\[(.*)\]$/',$this->gadget_url,$match) > 0)
+            $this->gadget_url = $match[1];
+        else
+            $this->gadget_url = $this->CORE->getMainCfg()->getPath('html', 'global', 'gadgets', $this->gadget_url);
+    }
 }
 ?>

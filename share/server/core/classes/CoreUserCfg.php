@@ -21,105 +21,105 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreUserCfg {
-	private $CORE;
-	private $AUTHENTICATION;
-	private $AUTHORISATION;
-	private $profilesDir;
+    private $CORE;
+    private $AUTHENTICATION;
+    private $AUTHORISATION;
+    private $profilesDir;
 
-	// Optional list of value types to be fixed
-	private $types = Array(
-	  'sidebar'  => 'i',
-	  'header'   => 'b',
-	  'eventlog' => 'b',
-	);
+    // Optional list of value types to be fixed
+    private $types = Array(
+      'sidebar'  => 'i',
+      'header'   => 'b',
+      'eventlog' => 'b',
+    );
 
-	/**
-	 * Class Constructor
-	 *
-	 * @param	String			$name		Name of the map
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct() {
-		$this->CORE = GlobalCore::getInstance();
-		$this->AUTHENTICATION = $this->CORE->getAuthentication();
-		$this->AUTHORISATION  = $this->CORE->getAuthorization();
+    /**
+     * Class Constructor
+     *
+     * @param	String			$name		Name of the map
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct() {
+        $this->CORE = GlobalCore::getInstance();
+        $this->AUTHENTICATION = $this->CORE->getAuthentication();
+        $this->AUTHORISATION  = $this->CORE->getAuthorization();
 
-		$this->profilesDir = $this->CORE->getMainCfg()->getValue('paths', 'profiles');
-	}
+        $this->profilesDir = $this->CORE->getMainCfg()->getValue('paths', 'profiles');
+    }
 
-	public function doGet($onlyUserCfg = false) {
-		$opts = Array();
-		if(!isset($this->AUTHENTICATION) || !$this->AUTHENTICATION->isAuthenticated() || !isset($this->AUTHORISATION))
-			return $opts;
+    public function doGet($onlyUserCfg = false) {
+        $opts = Array();
+        if(!isset($this->AUTHENTICATION) || !$this->AUTHENTICATION->isAuthenticated() || !isset($this->AUTHORISATION))
+            return $opts;
 
-		if(!file_exists($this->profilesDir))
-			return $opts;
+        if(!file_exists($this->profilesDir))
+            return $opts;
 
-		// Fetch all profile files to load
-		$files = Array();
-		if(!$onlyUserCfg)
-			foreach($this->AUTHORISATION->getUserRoles($this->AUTHENTICATION->getUserId()) AS $role)
-				$files[] = $role['name'].'.profile';
-		$files[] = $this->AUTHENTICATION->getUser().'.profile';
+        // Fetch all profile files to load
+        $files = Array();
+        if(!$onlyUserCfg)
+            foreach($this->AUTHORISATION->getUserRoles($this->AUTHENTICATION->getUserId()) AS $role)
+                $files[] = $role['name'].'.profile';
+        $files[] = $this->AUTHENTICATION->getUser().'.profile';
 
-		// Read all configurations and append to the option array
-		foreach($files AS $file) {
-			$f = $this->profilesDir.'/'.$file;
-			if(!file_exists($f))
-				continue;
-			
-			$a = json_decode(file_get_contents($f), true);
-			if(!is_array($a))
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Invalid data in "[FILE]".', Array('FILE' => $f)));
+        // Read all configurations and append to the option array
+        foreach($files AS $file) {
+            $f = $this->profilesDir.'/'.$file;
+            if(!file_exists($f))
+                continue;
 
-			$opts = array_merge($opts, $a);
-		}
+            $a = json_decode(file_get_contents($f), true);
+            if(!is_array($a))
+                new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Invalid data in "[FILE]".', Array('FILE' => $f)));
 
-		return $opts;
-	}
+            $opts = array_merge($opts, $a);
+        }
 
-	public function doGetAsJson($onlyUserCfg = false) {
-		return json_encode($this->doGet($onlyUserCfg));
-	}
+        return $opts;
+    }
 
-	public function doSet($opts) {
-		$file = $this->profilesDir.'/'.$this->AUTHENTICATION->getUser().'.profile';
+    public function doGetAsJson($onlyUserCfg = false) {
+        return json_encode($this->doGet($onlyUserCfg));
+    }
 
-		if(!$this->CORE->checkExisting(dirname($file), true) || !$this->CORE->checkWriteable(dirname($file), true))
-			return false;
+    public function doSet($opts) {
+        $file = $this->profilesDir.'/'.$this->AUTHENTICATION->getUser().'.profile';
 
-		$cfg = $this->doGet(true);
+        if(!$this->CORE->checkExisting(dirname($file), true) || !$this->CORE->checkWriteable(dirname($file), true))
+            return false;
 
-		foreach($opts AS $key => $value) {
-			if(isset($this->types[$key]))
-				$value = $this->fixType($value, $this->types[$key]);
-			$cfg[$key] = $value;
-		}
+        $cfg = $this->doGet(true);
 
-		$ret = file_put_contents($file, json_encode($cfg)) !== false;
-		$this->CORE->setPerms($file);
-		return $ret;
-	}
+        foreach($opts AS $key => $value) {
+            if(isset($this->types[$key]))
+                $value = $this->fixType($value, $this->types[$key]);
+            $cfg[$key] = $value;
+        }
 
-	public function getValue($key, $default = null) {
-		$opts = $this->doGet();
-		return isset($opts[$key]) ? $opts[$key] : $default;
-	}
+        $ret = file_put_contents($file, json_encode($cfg)) !== false;
+        $this->CORE->setPerms($file);
+        return $ret;
+    }
 
-	private function fixType($val, $type) {
-		if($type == 'i')
-			return (int) $val;
-		elseif($type == 'b') {
-			if($val == '1' || $val === 'true')
-				return true;
-			else
-				return false;
-		} else
-			return $val;
-	}
+    public function getValue($key, $default = null) {
+        $opts = $this->doGet();
+        return isset($opts[$key]) ? $opts[$key] : $default;
+    }
+
+    private function fixType($val, $type) {
+        if($type == 'i')
+            return (int) $val;
+        elseif($type == 'b') {
+            if($val == '1' || $val === 'true')
+                return true;
+            else
+                return false;
+        } else
+            return $val;
+    }
 }

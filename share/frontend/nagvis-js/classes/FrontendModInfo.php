@@ -21,38 +21,38 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class FrontendModInfo extends FrontendModule {
-	
-	public function __construct($CORE) {
-		$this->sName = 'Info';
-		$this->CORE = $CORE;
-		
-		$this->aActions = Array('view' => !REQUIRES_AUTHORISATION);
-		
-		$this->FHANDLER = new FrontendRequestHandler($_POST);
-	}
-	
-	public function handleAction() {
-		$sReturn = '';
-		
-		if($this->offersAction($this->sAction)) {
-			switch($this->sAction) {
-				case 'view':
-					$sReturn = $this->displayDialog();
-				break;
-			}
-		}
-		
-		return $sReturn;
-	}
-	
-	private function displayDialog() {
-		$VIEW = new NagVisInfoView($this->CORE);
-		return $VIEW->parse();
-	}
+
+    public function __construct($CORE) {
+        $this->sName = 'Info';
+        $this->CORE = $CORE;
+
+        $this->aActions = Array('view' => !REQUIRES_AUTHORISATION);
+
+        $this->FHANDLER = new FrontendRequestHandler($_POST);
+    }
+
+    public function handleAction() {
+        $sReturn = '';
+
+        if($this->offersAction($this->sAction)) {
+            switch($this->sAction) {
+                case 'view':
+                    $sReturn = $this->displayDialog();
+                break;
+            }
+        }
+
+        return $sReturn;
+    }
+
+    private function displayDialog() {
+        $VIEW = new NagVisInfoView($this->CORE);
+        return $VIEW->parse();
+    }
 }
 ?>

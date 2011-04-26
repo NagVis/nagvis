@@ -21,58 +21,58 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiViewManageBackgrounds {
-	private $CORE;
-	private $AUTHENTICATION;
-	private $AUTHORISATION;
-	
-	/**
-	 * Class Constructor
-	 *
-	 * @param 	GlobalCore 	$CORE
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct(CoreAuthHandler $AUTHENTICATION, CoreAuthorisationHandler $AUTHORISATION) {
-		$this->CORE = GlobalCore::getInstance();
-		$this->AUTHENTICATION = $AUTHENTICATION;
-		$this->AUTHORISATION = $AUTHORISATION;
-	}
-	
-	/**
-	 * Parses the information in html format
-	 *
-	 * @return	String 	String with Html Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parse() {
-		// Initialize template system
-		$TMPL = New CoreTemplateSystem($this->CORE);
-		$TMPLSYS = $TMPL->getTmplSys();
-		
-		$aData = Array(
-			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-			'langCreateBackground' => $this->CORE->getLang()->getText('createBackground'),
-			'langBackgroundName' => $this->CORE->getLang()->getText('backgroundName'),
-			'langBackgroundColor' => $this->CORE->getLang()->getText('backgroundColor'),
-			'langBackgroundWidth' => $this->CORE->getLang()->getText('backgroundWidth'),
-			'langBackgroundHeight' => $this->CORE->getLang()->getText('backgroundHeight'),
-			'langCreate' => $this->CORE->getLang()->getText('create'),
-			'langUploadBackground' => $this->CORE->getLang()->getText('uploadBackground'),
-			'langChooseImage' => $this->CORE->getLang()->getText('chooseImage'),
-			'langUpload' => $this->CORE->getLang()->getText('upload'),
-			'langDeleteBackground' => $this->CORE->getLang()->getText('deleteBackground'),
-			'langDelete' => $this->CORE->getLang()->getText('delete'),
-			'images' => $this->CORE->getAvailableBackgroundImages(),
-			'lang'       => $this->CORE->getJsLang(),
-			'mapOptions' => $this->CORE->getMapOptions(),
-		);
-		
-		// Build page based on the template file and the data array
-		return $TMPLSYS->get($TMPL->getTmplFile('default', 'wuiManageBackgrounds'), $aData);
-	}
+    private $CORE;
+    private $AUTHENTICATION;
+    private $AUTHORISATION;
+
+    /**
+     * Class Constructor
+     *
+     * @param 	GlobalCore 	$CORE
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct(CoreAuthHandler $AUTHENTICATION, CoreAuthorisationHandler $AUTHORISATION) {
+        $this->CORE = GlobalCore::getInstance();
+        $this->AUTHENTICATION = $AUTHENTICATION;
+        $this->AUTHORISATION = $AUTHORISATION;
+    }
+
+    /**
+     * Parses the information in html format
+     *
+     * @return	String 	String with Html Code
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function parse() {
+        // Initialize template system
+        $TMPL = New CoreTemplateSystem($this->CORE);
+        $TMPLSYS = $TMPL->getTmplSys();
+
+        $aData = Array(
+            'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+            'langCreateBackground' => $this->CORE->getLang()->getText('createBackground'),
+            'langBackgroundName' => $this->CORE->getLang()->getText('backgroundName'),
+            'langBackgroundColor' => $this->CORE->getLang()->getText('backgroundColor'),
+            'langBackgroundWidth' => $this->CORE->getLang()->getText('backgroundWidth'),
+            'langBackgroundHeight' => $this->CORE->getLang()->getText('backgroundHeight'),
+            'langCreate' => $this->CORE->getLang()->getText('create'),
+            'langUploadBackground' => $this->CORE->getLang()->getText('uploadBackground'),
+            'langChooseImage' => $this->CORE->getLang()->getText('chooseImage'),
+            'langUpload' => $this->CORE->getLang()->getText('upload'),
+            'langDeleteBackground' => $this->CORE->getLang()->getText('deleteBackground'),
+            'langDelete' => $this->CORE->getLang()->getText('delete'),
+            'images' => $this->CORE->getAvailableBackgroundImages(),
+            'lang'       => $this->CORE->getJsLang(),
+            'mapOptions' => $this->CORE->getMapOptions(),
+        );
+
+        // Build page based on the template file and the data array
+        return $TMPLSYS->get($TMPL->getTmplFile('default', 'wuiManageBackgrounds'), $aData);
+    }
 }
 ?>

@@ -22,81 +22,81 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisIndexView {
-	private $CORE = null;
-	
-	private $sSubtitle = '';
-	private $sCustomStylesheet = '';
-	private $sHeaderMenu = '';
-	private $sContent = '';
-	
-	/**
-	 * Class Constructor
-	 *
-	 * @param    GlobalCore      $CORE
-	 * @param    String          $NAME
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct(GlobalCore $CORE) {
-		$this->CORE = $CORE;
-	}
+    private $CORE = null;
 
-	public function setSubtitle($s) {
-		$this->sSubtitle = ' &rsaquo; ' . $s;
-	}
+    private $sSubtitle = '';
+    private $sCustomStylesheet = '';
+    private $sHeaderMenu = '';
+    private $sContent = '';
 
-	public function setCustomStylesheet($s) {
-		$this->sCustomStylesheet = $s;
-	}
+    /**
+     * Class Constructor
+     *
+     * @param    GlobalCore      $CORE
+     * @param    String          $NAME
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct(GlobalCore $CORE) {
+        $this->CORE = $CORE;
+    }
 
-	public function setHeaderMenu($s) {
-		$this->sHeaderMenu = $s;
-	}
+    public function setSubtitle($s) {
+        $this->sSubtitle = ' &rsaquo; ' . $s;
+    }
 
-	public function setContent($s) {
-		$this->sContent = $s;
-	}
-	
-	/**
-	 * Parses the map and the objects for the nagvis-js frontend
-	 *
-	 * @return	String 	String with JS Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parse() {
-		// Initialize template system
-		$TMPL = New FrontendTemplateSystem($this->CORE);
-		$TMPLSYS = $TMPL->getTmplSys();
-		
-		$aData = Array(
-			'pageTitle'        => $this->CORE->getMainCfg()->getValue('internal', 'title') . $this->sSubtitle,
-			'htmlBase'         => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-			'htmlJs'           => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
-			'htmlCss'          => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
-			'htmlTemplates'    => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'), 
-			'bUseCompressedJs' => $this->checkJsCompressed(),
-			'customStylesheet' => $this->sCustomStylesheet,
-			'headerMenu'       => $this->sHeaderMenu,
-			'content'          => $this->sContent
-		);
-		
-		// Build page based on the template file and the data array
+    public function setCustomStylesheet($s) {
+        $this->sCustomStylesheet = $s;
+    }
+
+    public function setHeaderMenu($s) {
+        $this->sHeaderMenu = $s;
+    }
+
+    public function setContent($s) {
+        $this->sContent = $s;
+    }
+
+    /**
+     * Parses the map and the objects for the nagvis-js frontend
+     *
+     * @return	String 	String with JS Code
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function parse() {
+        // Initialize template system
+        $TMPL = New FrontendTemplateSystem($this->CORE);
+        $TMPLSYS = $TMPL->getTmplSys();
+
+        $aData = Array(
+            'pageTitle'        => $this->CORE->getMainCfg()->getValue('internal', 'title') . $this->sSubtitle,
+            'htmlBase'         => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+            'htmlJs'           => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
+            'htmlCss'          => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
+            'htmlTemplates'    => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'),
+            'bUseCompressedJs' => $this->checkJsCompressed(),
+            'customStylesheet' => $this->sCustomStylesheet,
+            'headerMenu'       => $this->sHeaderMenu,
+            'content'          => $this->sContent
+        );
+
+        // Build page based on the template file and the data array
     // FIXME: Make template set configurable
-		return $TMPLSYS->get($TMPL->getTmplFile('default', 'index'), $aData);
-	}
-	
-	/**
-	 * Checks if the compressed javascript file exists
-	 *
-	 * @return	Boolean
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function checkJsCompressed() {
-		return file_exists($this->CORE->getMainCfg()->getValue('paths', 'js').'NagVisCompressed.js');
-	}
+        return $TMPLSYS->get($TMPL->getTmplFile('default', 'index'), $aData);
+    }
+
+    /**
+     * Checks if the compressed javascript file exists
+     *
+     * @return	Boolean
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function checkJsCompressed() {
+        return file_exists($this->CORE->getMainCfg()->getValue('paths', 'js').'NagVisCompressed.js');
+    }
 }
 ?>

@@ -26,215 +26,215 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreAuthModSQLite extends CoreAuthModule {
-	private $CORE;
-	private $USERCFG;
-	
-	private $iUserId = -1;
-	private $sUsername = '';
-	private $sPassword = '';
-	private $sPasswordnew = '';
-	private $sPasswordHash = '';
-	
-	public function __construct(GlobalCore $CORE) {
-		$this->CORE = $CORE;
-	
-		parent::$aFeatures = Array(
-			// General functions for authentication
-			'passCredentials' => true,
-			'getCredentials' => true,
-			'isAuthenticated' => true,
-			'getUser' => true,
-			'getUserId' => true,
-			
-			// Changing passwords
-			'passNewPassword' => true,
-			'changePassword'  => true,
-			'resetPassword'   => true,
-			
-			// Managing users
-			'createUser' => true,
-		);
-		
-		$this->DB = new CoreSQLiteHandler();
-		
-		// Open sqlite database
-		if(!$this->DB->open($this->CORE->getMainCfg()->getValue('paths', 'cfg').'auth.db')) {
-			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Unable to open auth database ([DB])',
+    private $CORE;
+    private $USERCFG;
+
+    private $iUserId = -1;
+    private $sUsername = '';
+    private $sPassword = '';
+    private $sPasswordnew = '';
+    private $sPasswordHash = '';
+
+    public function __construct(GlobalCore $CORE) {
+        $this->CORE = $CORE;
+
+        parent::$aFeatures = Array(
+            // General functions for authentication
+            'passCredentials' => true,
+            'getCredentials' => true,
+            'isAuthenticated' => true,
+            'getUser' => true,
+            'getUserId' => true,
+
+            // Changing passwords
+            'passNewPassword' => true,
+            'changePassword'  => true,
+            'resetPassword'   => true,
+
+            // Managing users
+            'createUser' => true,
+        );
+
+        $this->DB = new CoreSQLiteHandler();
+
+        // Open sqlite database
+        if(!$this->DB->open($this->CORE->getMainCfg()->getValue('paths', 'cfg').'auth.db')) {
+            new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Unable to open auth database ([DB])',
                                       Array('DB' => $this->CORE->getMainCfg()->getValue('paths', 'cfg').'auth.db')));
-		} else {
-			// Create initial db scheme if needed
-			if(!$this->DB->tableExist('users')) {
-				$this->DB->createInitialDb();
-			} else {
-				// Maybe an update is needed
-				$this->DB->updateDb();
-			}
-		}
-	}
-	
-	public function getAllUsers() {
-		$aPerms = Array();
-		
-		// Get all the roles of the user
-	  $RES = $this->DB->query('SELECT userId, name FROM users ORDER BY name');
-	  while($data = $this->DB->fetchAssoc($RES)) {
-	  	$aPerms[] = $data;
-	  }
-	  
-	  return $aPerms;
-	}
-	
-	public function checkUserExists($name) {
-		return $this->DB->count('SELECT COUNT(*) AS num FROM users WHERE name='.$this->DB->escape($name));
-	}
-	
-	private function checkUserAuth($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
-		if($bTrustUsername === AUTH_NOT_TRUST_USERNAME) {
-			$query = 'SELECT userId FROM users WHERE name='.$this->DB->escape($this->sUsername).' AND password='.$this->DB->escape($this->sPasswordHash);
-		} else {
-			$query = 'SELECT userId FROM users WHERE name='.$this->DB->escape($this->sUsername);
-		}
-		
-		$ret = $this->DB->fetchAssoc($this->DB->query($query));
-		
-		return intval($ret['userId']);
-	}
-	
-	private function updatePassword($uid, $pw) {
-		if(!$this->DB->isWriteable())
-			return false;
-		$this->DB->query('UPDATE users SET password='.$this->DB->escape($pw).' WHERE userId='.$this->DB->escape($uid));
-	}
-	
-	private function addUser($user, $hash) {
-		if(!$this->DB->isWriteable())
-			return false;
-		$this->DB->query('INSERT INTO users (name,password) VALUES ('.$this->DB->escape($user).','.$this->DB->escape($hash).')');
-	}
-	
-	public function passCredentials($aData) {
-		if(isset($aData['user'])) {
-			$this->sUsername = $aData['user'];
-		}
-		if(isset($aData['password'])) {
-			$this->sPassword = $aData['password'];
-			
-			// Remove the password hash when setting a new password
-			$this->sPasswordHash = '';
-		}
-		if(isset($aData['passwordHash'])) {
-			$this->sPasswordHash = $aData['passwordHash'];
-		}
-	}
-	
-	public function passNewPassword($aData) {
-		if(isset($aData['user'])) {
-			$this->sUsername = $aData['user'];
-		}
-		if(isset($aData['password'])) {
-			$this->sPassword = $aData['password'];
-			
-			// Remove the password hash when setting a new password
-			$this->sPasswordHash = '';
-		}
-		if(isset($aData['passwordNew'])) {
-			$this->sPasswordNew = $aData['passwordNew'];
-		}
-	}
-	
-	public function getCredentials() {
-		return Array('user' => $this->sUsername,
-		             'passwordHash' => $this->sPasswordHash,
-		             'userId' => $this->iUserId);
-	}
-	
-	public function createUser($user, $password) {
-		$bReturn = false;
-		
-		// Compose the password hash
-		$hash = $this->createHash($password);
-		
-		// Create user
-		$this->addUser($user, $hash);
-		
-		// Check result
-		if($this->checkUserExists($user)) {
-			$bReturn = true;
-		} else {
-			$bReturn = false;
-		}
-		
-		return $bReturn;
-	}
+        } else {
+            // Create initial db scheme if needed
+            if(!$this->DB->tableExist('users')) {
+                $this->DB->createInitialDb();
+            } else {
+                // Maybe an update is needed
+                $this->DB->updateDb();
+            }
+        }
+    }
 
-	public function resetPassword($uid, $pw) {
-		// FIXME: To be coded
-		$this->updatePassword($uid, $this->createHash($pw));
-		return true;
-	}
-	
-	public function changePassword() {
-		$bReturn = false;
-		
-		// Check the authentication with the old password
-		if($this->isAuthenticated()) {
-			// Set new password to current one
-			$this->sPassword = $this->sPasswordNew;
-			
-			// Compose the new password hash
-			$this->sPasswordHash = $this->createHash($this->sPassword);
-			
-			// Update password
-			$this->updatePassword($this->iUserId, $this->sPasswordHash);
-			
-			$bReturn = true;
-		} else {
-			$bReturn = false;
-		}
-		
-		return $bReturn;
-	}
-	
-	public function isAuthenticated($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
-		$bReturn = false;
+    public function getAllUsers() {
+        $aPerms = Array();
 
-		// Only handle known users
-		if($this->sUsername !== '' && $this->checkUserExists($this->sUsername)) {
-			
-			// Try to calculate the passowrd hash only when no hash is known at
-			// this time. For example when the user just entered the password
-			// for logging in. If the user is already logged in and this is just
-			// a session check don't try to rehash the password.
-			if($bTrustUsername === AUTH_NOT_TRUST_USERNAME && $this->sPasswordHash === '') {
-				// Compose the password hash for comparing with the stored hash
-				$this->sPasswordHash = $this->createHash($this->sPassword);
-			}
-			
-			// Check the password hash
-			$userId = $this->checkUserAuth($bTrustUsername);
-			if($userId > 0) {
-				$this->iUserId = $userId;
-				$bReturn = true;
-			} else {
-				$bReturn = false;
-			}
-		} else {
-			$bReturn = false;
-		}
-		
-		return $bReturn;
-	}
-	
-	public function getUser() {
-		return $this->sUsername;
-	}
-	
-	public function getUserId() {
-		return $this->iUserId;
-	}
-	
-	private function createHash($password) {
-		return sha1(AUTH_PASSWORD_SALT.$password);
-	}
+        // Get all the roles of the user
+      $RES = $this->DB->query('SELECT userId, name FROM users ORDER BY name');
+      while($data = $this->DB->fetchAssoc($RES)) {
+      	$aPerms[] = $data;
+      }
+
+      return $aPerms;
+    }
+
+    public function checkUserExists($name) {
+        return $this->DB->count('SELECT COUNT(*) AS num FROM users WHERE name='.$this->DB->escape($name));
+    }
+
+    private function checkUserAuth($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
+        if($bTrustUsername === AUTH_NOT_TRUST_USERNAME) {
+            $query = 'SELECT userId FROM users WHERE name='.$this->DB->escape($this->sUsername).' AND password='.$this->DB->escape($this->sPasswordHash);
+        } else {
+            $query = 'SELECT userId FROM users WHERE name='.$this->DB->escape($this->sUsername);
+        }
+
+        $ret = $this->DB->fetchAssoc($this->DB->query($query));
+
+        return intval($ret['userId']);
+    }
+
+    private function updatePassword($uid, $pw) {
+        if(!$this->DB->isWriteable())
+            return false;
+        $this->DB->query('UPDATE users SET password='.$this->DB->escape($pw).' WHERE userId='.$this->DB->escape($uid));
+    }
+
+    private function addUser($user, $hash) {
+        if(!$this->DB->isWriteable())
+            return false;
+        $this->DB->query('INSERT INTO users (name,password) VALUES ('.$this->DB->escape($user).','.$this->DB->escape($hash).')');
+    }
+
+    public function passCredentials($aData) {
+        if(isset($aData['user'])) {
+            $this->sUsername = $aData['user'];
+        }
+        if(isset($aData['password'])) {
+            $this->sPassword = $aData['password'];
+
+            // Remove the password hash when setting a new password
+            $this->sPasswordHash = '';
+        }
+        if(isset($aData['passwordHash'])) {
+            $this->sPasswordHash = $aData['passwordHash'];
+        }
+    }
+
+    public function passNewPassword($aData) {
+        if(isset($aData['user'])) {
+            $this->sUsername = $aData['user'];
+        }
+        if(isset($aData['password'])) {
+            $this->sPassword = $aData['password'];
+
+            // Remove the password hash when setting a new password
+            $this->sPasswordHash = '';
+        }
+        if(isset($aData['passwordNew'])) {
+            $this->sPasswordNew = $aData['passwordNew'];
+        }
+    }
+
+    public function getCredentials() {
+        return Array('user' => $this->sUsername,
+                     'passwordHash' => $this->sPasswordHash,
+                     'userId' => $this->iUserId);
+    }
+
+    public function createUser($user, $password) {
+        $bReturn = false;
+
+        // Compose the password hash
+        $hash = $this->createHash($password);
+
+        // Create user
+        $this->addUser($user, $hash);
+
+        // Check result
+        if($this->checkUserExists($user)) {
+            $bReturn = true;
+        } else {
+            $bReturn = false;
+        }
+
+        return $bReturn;
+    }
+
+    public function resetPassword($uid, $pw) {
+        // FIXME: To be coded
+        $this->updatePassword($uid, $this->createHash($pw));
+        return true;
+    }
+
+    public function changePassword() {
+        $bReturn = false;
+
+        // Check the authentication with the old password
+        if($this->isAuthenticated()) {
+            // Set new password to current one
+            $this->sPassword = $this->sPasswordNew;
+
+            // Compose the new password hash
+            $this->sPasswordHash = $this->createHash($this->sPassword);
+
+            // Update password
+            $this->updatePassword($this->iUserId, $this->sPasswordHash);
+
+            $bReturn = true;
+        } else {
+            $bReturn = false;
+        }
+
+        return $bReturn;
+    }
+
+    public function isAuthenticated($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
+        $bReturn = false;
+
+        // Only handle known users
+        if($this->sUsername !== '' && $this->checkUserExists($this->sUsername)) {
+
+            // Try to calculate the passowrd hash only when no hash is known at
+            // this time. For example when the user just entered the password
+            // for logging in. If the user is already logged in and this is just
+            // a session check don't try to rehash the password.
+            if($bTrustUsername === AUTH_NOT_TRUST_USERNAME && $this->sPasswordHash === '') {
+                // Compose the password hash for comparing with the stored hash
+                $this->sPasswordHash = $this->createHash($this->sPassword);
+            }
+
+            // Check the password hash
+            $userId = $this->checkUserAuth($bTrustUsername);
+            if($userId > 0) {
+                $this->iUserId = $userId;
+                $bReturn = true;
+            } else {
+                $bReturn = false;
+            }
+        } else {
+            $bReturn = false;
+        }
+
+        return $bReturn;
+    }
+
+    public function getUser() {
+        return $this->sUsername;
+    }
+
+    public function getUserId() {
+        return $this->iUserId;
+    }
+
+    private function createHash($password) {
+        return sha1(AUTH_PASSWORD_SALT.$password);
+    }
 }
 ?>

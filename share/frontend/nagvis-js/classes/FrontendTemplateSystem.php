@@ -21,32 +21,32 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class FrontendTemplateSystem {
-	private $TMPL;
-	private $CORE;
-	
-	public function __construct($CORE) {
-		$this->CORE = $CORE;
-		
-		// Load Dwoo. It is used as external library
-		require_once($this->CORE->getMainCfg()->getValue('paths','base')
-		             .HTDOCS_DIR.'/frontend/nagvis-js/ext/dwoo-1.1.0/dwooAutoload.php');
+    private $TMPL;
+    private $CORE;
 
-		$this->TMPL = new Dwoo($this->CORE->getMainCfg()->getValue('paths','var')
-		                       .'tmpl/compile', $this->CORE->getMainCfg()->getValue('paths','var').'tmpl/cache');
-	}
-	
-	public function getTmplSys() {
-		return $this->TMPL;
-	}
-	
-	public function getTmplFile($sTheme, $sTmpl) {
-		return new Dwoo_Template_File($this->CORE->getMainCfg()->getPath('sys', '', 'templates', $sTheme.'.'.$sTmpl.'.html'));
-	}
+    public function __construct($CORE) {
+        $this->CORE = $CORE;
+
+        // Load Dwoo. It is used as external library
+        require_once($this->CORE->getMainCfg()->getValue('paths','base')
+                     .HTDOCS_DIR.'/frontend/nagvis-js/ext/dwoo-1.1.0/dwooAutoload.php');
+
+        $this->TMPL = new Dwoo($this->CORE->getMainCfg()->getValue('paths','var')
+                               .'tmpl/compile', $this->CORE->getMainCfg()->getValue('paths','var').'tmpl/cache');
+    }
+
+    public function getTmplSys() {
+        return $this->TMPL;
+    }
+
+    public function getTmplFile($sTheme, $sTmpl) {
+        return new Dwoo_Template_File($this->CORE->getMainCfg()->getPath('sys', '', 'templates', $sTheme.'.'.$sTmpl.'.html'));
+    }
 }
 
 ?>

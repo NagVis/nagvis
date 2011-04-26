@@ -22,48 +22,48 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class FrontendModLogonMixed extends FrontendModule {
-	protected $CORE;
-	
-	public function __construct($CORE) {
-		$this->sName = 'LogonMixed';
-		$this->CORE = $CORE;
-		
-		$this->aActions = Array('view' => 0);
-	}
-	
-	public function handleAction() {
-		$sReturn = '';
-		
-		if($this->offersAction($this->sAction)) {
-			switch($this->sAction) {
-				case 'view':
-					// Register own module handler to handle both logon modules
-					$MHANDLER = new FrontendModuleHandler($this->CORE);
-					$MHANDLER->regModule('LogonEnv');
-					$MHANDLER->regModule('LogonDialog');
-					
-					$MODULE = $MHANDLER->loadModule('LogonEnv');
-					$MODULE->beQuiet();
-					$MODULE->setAction('view');
+    protected $CORE;
 
-					// Try to auth using the environment auth
-					if($MODULE->handleAction() === false) {
-						// Otherwise print the logon dialog
-						$MODULE =  $MHANDLER->loadModule('LogonDialog');
-						$MODULE->setAction('view');
-						$sReturn = $MODULE->handleAction();
-					}
-				break;
-			}
-		}
-		
-		return $sReturn;
-	}
+    public function __construct($CORE) {
+        $this->sName = 'LogonMixed';
+        $this->CORE = $CORE;
+
+        $this->aActions = Array('view' => 0);
+    }
+
+    public function handleAction() {
+        $sReturn = '';
+
+        if($this->offersAction($this->sAction)) {
+            switch($this->sAction) {
+                case 'view':
+                    // Register own module handler to handle both logon modules
+                    $MHANDLER = new FrontendModuleHandler($this->CORE);
+                    $MHANDLER->regModule('LogonEnv');
+                    $MHANDLER->regModule('LogonDialog');
+
+                    $MODULE = $MHANDLER->loadModule('LogonEnv');
+                    $MODULE->beQuiet();
+                    $MODULE->setAction('view');
+
+                    // Try to auth using the environment auth
+                    if($MODULE->handleAction() === false) {
+                        // Otherwise print the logon dialog
+                        $MODULE =  $MHANDLER->loadModule('LogonDialog');
+                        $MODULE->setAction('view');
+                        $sReturn = $MODULE->handleAction();
+                    }
+                break;
+            }
+        }
+
+        return $sReturn;
+    }
 }
 
 ?>

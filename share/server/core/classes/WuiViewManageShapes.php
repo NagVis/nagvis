@@ -21,50 +21,50 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiViewManageShapes {
-	private $CORE;
-	private $AUTHENTICATION;
-	private $AUTHORISATION;
-	
-	/**
-	 * Class Constructor
-	 *
-	 * @param 	GlobalCore 	$CORE
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct(CoreAuthHandler $AUTHENTICATION, CoreAuthorisationHandler $AUTHORISATION) {
-		$this->CORE = GlobalCore::getInstance();
-		$this->AUTHENTICATION = $AUTHENTICATION;
-		$this->AUTHORISATION = $AUTHORISATION;
-	}
-	
-	/**
-	 * Parses the information in html format
-	 *
-	 * @return	String 	String with Html Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parse() {
-		// Initialize template system
-		$TMPL = New CoreTemplateSystem($this->CORE);
-		$TMPLSYS = $TMPL->getTmplSys();
-		
-		$aData = Array(
-			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-			'langUploadShape' => $this->CORE->getLang()->getText('uploadShape'),
-			'langChoosePngImage' => $this->CORE->getLang()->getText('chooseImage'),
-			'langUpload' => $this->CORE->getLang()->getText('upload'),
-			'langDeleteShape' => $this->CORE->getLang()->getText('deleteShape'),
-			'langDelete' => $this->CORE->getLang()->getText('delete'),
-			'shapes' => $this->CORE->getAvailableShapes(),
-		);
-		
-		// Build page based on the template file and the data array
-		return $TMPLSYS->get($TMPL->getTmplFile('default', 'wuiManageShapes'), $aData);
-	}
+    private $CORE;
+    private $AUTHENTICATION;
+    private $AUTHORISATION;
+
+    /**
+     * Class Constructor
+     *
+     * @param 	GlobalCore 	$CORE
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct(CoreAuthHandler $AUTHENTICATION, CoreAuthorisationHandler $AUTHORISATION) {
+        $this->CORE = GlobalCore::getInstance();
+        $this->AUTHENTICATION = $AUTHENTICATION;
+        $this->AUTHORISATION = $AUTHORISATION;
+    }
+
+    /**
+     * Parses the information in html format
+     *
+     * @return	String 	String with Html Code
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function parse() {
+        // Initialize template system
+        $TMPL = New CoreTemplateSystem($this->CORE);
+        $TMPLSYS = $TMPL->getTmplSys();
+
+        $aData = Array(
+            'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+            'langUploadShape' => $this->CORE->getLang()->getText('uploadShape'),
+            'langChoosePngImage' => $this->CORE->getLang()->getText('chooseImage'),
+            'langUpload' => $this->CORE->getLang()->getText('upload'),
+            'langDeleteShape' => $this->CORE->getLang()->getText('deleteShape'),
+            'langDelete' => $this->CORE->getLang()->getText('delete'),
+            'shapes' => $this->CORE->getAvailableShapes(),
+        );
+
+        // Build page based on the template file and the data array
+        return $TMPLSYS->get($TMPL->getTmplFile('default', 'wuiManageShapes'), $aData);
+    }
 }
 ?>

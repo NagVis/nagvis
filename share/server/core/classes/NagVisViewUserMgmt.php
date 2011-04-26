@@ -21,44 +21,44 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisViewUserMgmt {
-	private $CORE;
-	private $AUTHENTICATION;
-	private $AUTHORISATION;
-	
-	/**
-	 * Class Constructor
-	 *
-	 * @param 	GlobalCore 	$CORE
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct(CoreAuthHandler $AUTHENTICATION, CoreAuthorisationHandler $AUTHORISATION) {
-		$this->CORE = GlobalCore::getInstance();
-		$this->AUTHENTICATION = $AUTHENTICATION;
-		$this->AUTHORISATION = $AUTHORISATION;
-	}
-	
-	/**
-	 * Parses the information in html format
-	 *
-	 * @return	String 	String with Html Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parse() {
-		// Initialize template system
-		$TMPL = New CoreTemplateSystem($this->CORE);
-		$TMPLSYS = $TMPL->getTmplSys();
-		
-		$aData = Array(
-			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-			'formTargetAdd' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doAdd',
-			'formTargetEdit' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doEdit',
-			'formTargetDelete' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doDelete',
-			'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
+    private $CORE;
+    private $AUTHENTICATION;
+    private $AUTHORISATION;
+
+    /**
+     * Class Constructor
+     *
+     * @param 	GlobalCore 	$CORE
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct(CoreAuthHandler $AUTHENTICATION, CoreAuthorisationHandler $AUTHORISATION) {
+        $this->CORE = GlobalCore::getInstance();
+        $this->AUTHENTICATION = $AUTHENTICATION;
+        $this->AUTHORISATION = $AUTHORISATION;
+    }
+
+    /**
+     * Parses the information in html format
+     *
+     * @return	String 	String with Html Code
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function parse() {
+        // Initialize template system
+        $TMPL = New CoreTemplateSystem($this->CORE);
+        $TMPLSYS = $TMPL->getTmplSys();
+
+        $aData = Array(
+            'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+            'formTargetAdd' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doAdd',
+            'formTargetEdit' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doEdit',
+            'formTargetDelete' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doDelete',
+            'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
       'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
       'maxUsernameLength' => AUTH_MAX_USERNAME_LENGTH,
       'langUsername' => $this->CORE->getLang()->getText('Username'),
@@ -75,12 +75,12 @@ class NagVisViewUserMgmt {
       'langAdd' => $this->CORE->getLang()->getText('Add'),
       'langRemove' => $this->CORE->getLang()->getText('Remove'),
       'roles' => $this->AUTHORISATION->getAllRoles(),
-		  'langUserPwReset' => $this->CORE->getLang()->getText('Reset Password'),
-		  'formTargetPwReset' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doPwReset',
-		);
-		
-		// Build page based on the template file and the data array
-		return $TMPLSYS->get($TMPL->getTmplFile('default', 'userMgmt'), $aData);
-	}
+          'langUserPwReset' => $this->CORE->getLang()->getText('Reset Password'),
+          'formTargetPwReset' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doPwReset',
+        );
+
+        // Build page based on the template file and the data array
+        return $TMPLSYS->get($TMPL->getTmplFile('default', 'userMgmt'), $aData);
+    }
 }
 ?>

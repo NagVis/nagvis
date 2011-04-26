@@ -21,42 +21,42 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisViewAutomapToMap {
-	private $CORE;
-	
-	/**
-	 * Class Constructor
-	 *
-	 * @param 	GlobalCore 	$CORE
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($CORE) {
-		$this->CORE = $CORE;
-	}
-	
-	/**
-	 * Parses the information in html format
-	 *
-	 * @return	String 	String with Html Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parse() {
-		// Initialize template system
-		$TMPL = New CoreTemplateSystem($this->CORE);
-		$TMPLSYS = $TMPL->getTmplSys();
-		
-		$aData = Array(
-			 'formTarget' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=AutoMap&amp;act=parseMapCfg&amp',
-			'langNewName' => $this->CORE->getLang()->getText('Store as Map'),
-			'langSave' => $this->CORE->getLang()->getText('save'),
-		);
-		
-		// Build page based on the template file and the data array
-		return $TMPLSYS->get($TMPL->getTmplFile('default', 'automapToMap'), $aData);
-	}
+    private $CORE;
+
+    /**
+     * Class Constructor
+     *
+     * @param 	GlobalCore 	$CORE
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct($CORE) {
+        $this->CORE = $CORE;
+    }
+
+    /**
+     * Parses the information in html format
+     *
+     * @return	String 	String with Html Code
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function parse() {
+        // Initialize template system
+        $TMPL = New CoreTemplateSystem($this->CORE);
+        $TMPLSYS = $TMPL->getTmplSys();
+
+        $aData = Array(
+             'formTarget' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=AutoMap&amp;act=parseMapCfg&amp',
+            'langNewName' => $this->CORE->getLang()->getText('Store as Map'),
+            'langSave' => $this->CORE->getLang()->getText('save'),
+        );
+
+        // Build page based on the template file and the data array
+        return $TMPLSYS->get($TMPL->getTmplFile('default', 'automapToMap'), $aData);
+    }
 }
 ?>

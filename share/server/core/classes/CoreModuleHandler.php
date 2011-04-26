@@ -26,64 +26,64 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreModuleHandler {
-	protected $CORE;
-	protected $aRegistered;
-	protected $sPrefix;
-	
-	public function __construct($CORE = null) {
-	  if($CORE === null)
-			$this->CORE = GlobalCore::getInstance();
-		else
-			$this->CORE = $CORE;
-		
-		$this->aRegistered = Array();
-		$this->sPrefix = 'CoreMod';
-	}
-	
-	/**
-	 * Loads an instance of the given module. The module needs to be registered
-	 * before loading.
-	 *
-	 * @param  String  Name of the module to load
-	 * @author Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function loadModule($sModule) {
-		// Check if module class is registered
-		if(isset($this->aRegistered[$this->sPrefix.$sModule]) && $this->aRegistered[$this->sPrefix.$sModule] === 'active') {
-			$className = $this->sPrefix.$sModule;
-			
-			// create instance of module
-			$MOD = new $className($this->CORE);
-			
-			// return instance
-			return $MOD;
-		} else {
-			// Error handling
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The given module is not registered'));
-			return null;
-		}
-	}
-	
-	/**
-	 * Registers a module by its name. After registering it is available
-	 * to be loaded.
-	 *
-	 * @param  String  Name of the module to register
-	 * @author Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function regModule($sModule) {
-		// Check if module class exists
+    protected $CORE;
+    protected $aRegistered;
+    protected $sPrefix;
+
+    public function __construct($CORE = null) {
+      if($CORE === null)
+            $this->CORE = GlobalCore::getInstance();
+        else
+            $this->CORE = $CORE;
+
+        $this->aRegistered = Array();
+        $this->sPrefix = 'CoreMod';
+    }
+
+    /**
+     * Loads an instance of the given module. The module needs to be registered
+     * before loading.
+     *
+     * @param  String  Name of the module to load
+     * @author Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function loadModule($sModule) {
+        // Check if module class is registered
+        if(isset($this->aRegistered[$this->sPrefix.$sModule]) && $this->aRegistered[$this->sPrefix.$sModule] === 'active') {
+            $className = $this->sPrefix.$sModule;
+
+            // create instance of module
+            $MOD = new $className($this->CORE);
+
+            // return instance
+            return $MOD;
+        } else {
+            // Error handling
+            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The given module is not registered'));
+            return null;
+        }
+    }
+
+    /**
+     * Registers a module by its name. After registering it is available
+     * to be loaded.
+     *
+     * @param  String  Name of the module to register
+     * @author Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function regModule($sModule) {
+        // Check if module class exists
     if(class_exists($this->sPrefix.$sModule)) {
-			// Register the module at the module handler
-			$this->aRegistered[$this->sPrefix.$sModule] = 'active';
-			
-			return true;
-		} else {
-			// Error handling
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The module class does not exist'));
-			return false;
-		}
-	}
+            // Register the module at the module handler
+            $this->aRegistered[$this->sPrefix.$sModule] = 'active';
+
+            return true;
+        } else {
+            // Error handling
+            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The module class does not exist'));
+            return false;
+        }
+    }
 }
 
 ?>

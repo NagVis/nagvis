@@ -26,47 +26,47 @@
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreModUser extends CoreModule {
-	protected $CORE;
-	protected $FHANDLER;
-	protected $SHANDLER;
-	
-	public function __construct($CORE) {
-		$this->sName = 'User';
-		$this->CORE = $CORE;
-		
-		$this->aActions = Array(
-			'getOptions' => REQUIRES_AUTHORISATION,
-			'setOption'  => REQUIRES_AUTHORISATION,
-		);
-	}
-	
-	public function handleAction() {
-		$sReturn = '';
-		
-		if($this->offersAction($this->sAction)) {
-			switch($this->sAction) {
-				case 'getOptions':
-					$CFG = new CoreUserCfg();
-					$sReturn = json_encode($CFG->doGet());
-				break;
-				case 'setOption':
-					$this->handleResponse('handleResponseSet', 'doSet');
-				break;
-			}
-		}
-		
-		return $sReturn;
-	}
+    protected $CORE;
+    protected $FHANDLER;
+    protected $SHANDLER;
 
-	protected function doSet($a) {
-		$CFG = new CoreUserCfg();
-		return $CFG->doSet($a['opts']);
-	}
+    public function __construct($CORE) {
+        $this->sName = 'User';
+        $this->CORE = $CORE;
 
-	protected function handleResponseSet() {
-		$FHANDLER = new CoreRequestHandler($_GET);
-		$this->verifyValuesSet($FHANDLER, Array('opts'));
-		return Array('opts' => $FHANDLER->get('opts'));
-	}
+        $this->aActions = Array(
+            'getOptions' => REQUIRES_AUTHORISATION,
+            'setOption'  => REQUIRES_AUTHORISATION,
+        );
+    }
+
+    public function handleAction() {
+        $sReturn = '';
+
+        if($this->offersAction($this->sAction)) {
+            switch($this->sAction) {
+                case 'getOptions':
+                    $CFG = new CoreUserCfg();
+                    $sReturn = json_encode($CFG->doGet());
+                break;
+                case 'setOption':
+                    $this->handleResponse('handleResponseSet', 'doSet');
+                break;
+            }
+        }
+
+        return $sReturn;
+    }
+
+    protected function doSet($a) {
+        $CFG = new CoreUserCfg();
+        return $CFG->doSet($a['opts']);
+    }
+
+    protected function handleResponseSet() {
+        $FHANDLER = new CoreRequestHandler($_GET);
+        $this->verifyValuesSet($FHANDLER, Array('opts'));
+        return Array('opts' => $FHANDLER->get('opts'));
+    }
 }
 ?>

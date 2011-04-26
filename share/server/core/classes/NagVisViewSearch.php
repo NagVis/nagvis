@@ -21,40 +21,40 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisViewSearch {
-	private $CORE;
-	
-	/**
-	 * Class Constructor
-	 *
-	 * @param 	GlobalCore 	$CORE
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($CORE) {
-		$this->CORE = $CORE;
-	}
-	
-	/**
-	 * Parses the information in html format
-	 *
-	 * @return	String 	String with Html Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parse() {
-		// Initialize template system
-		$TMPL = New CoreTemplateSystem($this->CORE);
-		$TMPLSYS = $TMPL->getTmplSys();
-		
-		$aData = Array(
-			'langSearch' => $this->CORE->getLang()->getText('Search')
-		);
-		
-		// Build page based on the template file and the data array
-		return $TMPLSYS->get($TMPL->getTmplFile('default', 'search'), $aData);
-	}
+    private $CORE;
+
+    /**
+     * Class Constructor
+     *
+     * @param 	GlobalCore 	$CORE
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct($CORE) {
+        $this->CORE = $CORE;
+    }
+
+    /**
+     * Parses the information in html format
+     *
+     * @return	String 	String with Html Code
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function parse() {
+        // Initialize template system
+        $TMPL = New CoreTemplateSystem($this->CORE);
+        $TMPLSYS = $TMPL->getTmplSys();
+
+        $aData = Array(
+            'langSearch' => $this->CORE->getLang()->getText('Search')
+        );
+
+        // Build page based on the template file and the data array
+        return $TMPLSYS->get($TMPL->getTmplFile('default', 'search'), $aData);
+    }
 }
 ?>

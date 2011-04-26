@@ -21,93 +21,93 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisHoverUrl {
-	private $CORE;
-	
-	private $url;
-	private $code;
-	
-	/**
-	 * Class Constructor
-	 *
-	 * @param 	GlobalCore 	$CORE
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($CORE, $url) {
-		$this->CORE = $CORE;
-		$this->url = $url;
-    
+    private $CORE;
+
+    private $url;
+    private $code;
+
+    /**
+     * Class Constructor
+     *
+     * @param 	GlobalCore 	$CORE
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct($CORE, $url) {
+        $this->CORE = $CORE;
+        $this->url = $url;
+
     $this->code = '';
-		
-		// Read the contents of the template file
-		$this->readHoverUrl();
-		$this->cleanCode();
-	}
-  
+
+        // Read the contents of the template file
+        $this->readHoverUrl();
+        $this->cleanCode();
+    }
+
   /**
-	 * PUBLIC __toString()
-	 *
-	 * "Magic method" returns the contents of the hover url
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
+     * PUBLIC __toString()
+     *
+     * "Magic method" returns the contents of the hover url
+     *
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
   public function __toString() {
     return $this->code;
   }
-  
-  /**
-	 * PRIVATE readHoverUrl()
-	 *
-	 * Reads the given hover url form an object and forms it to a readable format for the hover box
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function readHoverUrl() {
-		/* Context is supported in php >= 5.0
-		* This could be usefull someday...
-		* $http_opts = array(
-		*      'http'=>array(
-		*      'method'=>"GET",
-		*      'header'=>"Accept-language: en\r\n" .
-		*                "Authorization: Basic ".base64_encode("user:pw"),
-		*      'request_fulluri'=>true  ,
-		*      'proxy'=>"tcp://proxy.url.de"
-		*   )
-		* );
-		* $context = stream_context_create($http_opts);
-		* $content = file_get_contents($obj['hover_url'],FALSE,$context);
-		*/
-		
-		// Only allow urls not paths for security reasons
-		// Reported here: http://news.gmane.org/find-root.php?message_id=%3cf60c42280909021938s7f36c0edhd66d3e9156a5d081%40mail.gmail.com%3e
-		$aUrl = parse_url($this->url);
-		if(!isset($aUrl['scheme']) || $aUrl['scheme'] == '') {
-			echo new GlobalMessage('ERROR', $this->CORE->getLang()->getText('problemReadingUrl', 'URL~'.$this->url.',MSG~Not allowed url'), null, 'error');
-			exit(1);
-		}
 
-    
-		if(!$content = file_get_contents($this->url)) {
-			new GlobalMessage('WARNING', $this->CORE->getLang()->getText('couldNotGetHoverUrl', 'URL~'.$this->url));
-		}
-    
+  /**
+     * PRIVATE readHoverUrl()
+     *
+     * Reads the given hover url form an object and forms it to a readable format for the hover box
+     *
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function readHoverUrl() {
+        /* Context is supported in php >= 5.0
+        * This could be usefull someday...
+        * $http_opts = array(
+        *      'http'=>array(
+        *      'method'=>"GET",
+        *      'header'=>"Accept-language: en\r\n" .
+        *                "Authorization: Basic ".base64_encode("user:pw"),
+        *      'request_fulluri'=>true  ,
+        *      'proxy'=>"tcp://proxy.url.de"
+        *   )
+        * );
+        * $context = stream_context_create($http_opts);
+        * $content = file_get_contents($obj['hover_url'],FALSE,$context);
+        */
+
+        // Only allow urls not paths for security reasons
+        // Reported here: http://news.gmane.org/find-root.php?message_id=%3cf60c42280909021938s7f36c0edhd66d3e9156a5d081%40mail.gmail.com%3e
+        $aUrl = parse_url($this->url);
+        if(!isset($aUrl['scheme']) || $aUrl['scheme'] == '') {
+            echo new GlobalMessage('ERROR', $this->CORE->getLang()->getText('problemReadingUrl', 'URL~'.$this->url.',MSG~Not allowed url'), null, 'error');
+            exit(1);
+        }
+
+
+        if(!$content = file_get_contents($this->url)) {
+            new GlobalMessage('WARNING', $this->CORE->getLang()->getText('couldNotGetHoverUrl', 'URL~'.$this->url));
+        }
+
     $this->code = $content;
-	}
-	
-  
-	/**
-	 * PRIVATE cleanCode()
-	 *
-	 * Replace unwanted things from the code
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
+    }
+
+
+    /**
+     * PRIVATE cleanCode()
+     *
+     * Replace unwanted things from the code
+     *
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
   private function cleanCode() {
-		$this->code = str_replace('"','\\\'',str_replace('\'','\\\'',str_replace("\t",'',str_replace("\n",'',str_replace("\r\n",'',$this->code)))));
+        $this->code = str_replace('"','\\\'',str_replace('\'','\\\'',str_replace("\t",'',str_replace("\n",'',str_replace("\r\n",'',$this->code)))));
   }
 }
 ?>

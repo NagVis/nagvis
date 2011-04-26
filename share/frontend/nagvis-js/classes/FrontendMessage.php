@@ -52,98 +52,98 @@
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 class FrontendMessage {
-	// Contains path to the html base
-	private $pathHtmlBase;
+    // Contains path to the html base
+    private $pathHtmlBase;
 
-	//This variables contains information which will be used to build the message box
-	private $type;
-	private $message;
-	private $title;
-	private $reloadTime = null;
-	private $reloadUrl = null;
+    //This variables contains information which will be used to build the message box
+    private $type;
+    private $message;
+    private $title;
+    private $reloadTime = null;
+    private $reloadUrl = null;
 
-	/**
-	 * The contructor checks the type and builds the message box
-	 *
-	 * @param   strind	$type
-	 * @param   string	$message
-	 * @param   string	$pathHtmlBase
-	 * @param   string	$title
-	 * @access  public
-	 * @author  Michael Luebben <michael_luebben@web.de>
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($type, $message, $pathHtmlBase, $title) {
-		$this->type = $type;
-		$this->message = $message;
-		$this->pathHtmlBase = $pathHtmlBase;
-		$this->title = $title;
-	}
-	
-	/**
-	 * Sets the redirect/reload information for the message box
-	 *
-	 * @access  public
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function reload($time, $url) {
-		$this->reloadTime = $time;
-		$this->reloadUrl = $url;
-	}
-	
-	/**
-	 * Build a message box for the user in HTML format
-	 *
-	 * @return  String    Returns the html code of this message
-	 * @access  private
-	 * @author  Michael Luebben <michael_luebben@web.de>
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function buildMessage() {
-		$content = '';
-		
-		// Have to reload or redirect?
-		if($this->reloadTime !== null) {
-			if($this->reloadUrl === null) {
-				$content .= '<meta http-equiv="refresh" content="'.$this->reloadTime.'">'."\n";
-			} else {
-				$content .= '<meta http-equiv="refresh" content="'.$this->reloadTime.'; URL='.$this->reloadUrl.'">'."\n";
-			}
-		}
-		
-		$content .= '<link rel="stylesheet" type="text/css" href="'.$this->pathHtmlBase.'/userfiles/templates/default.css" />'."\n";
-		$content .= '<div id="messageBoxDiv">'."\n";
-		$content .= '   <table id="messageBox" class="'.$this->type.'" height="100%" width="100%" cellpadding="0" cellspacing="0">'."\n";
-		$content .= '      <tr>'."\n";
-		$content .= '         <td class="'.$this->type.'" colspan="3" height="16">'."\n";
-		$content .= '      </tr>'."\n";
-		$content .= '      <tr height="32">'."\n";
-		$content .= '         <th class="'.$this->type.'" align="center" width="60">'."\n";
-		$content .= '           <img src="'.$this->pathHtmlBase.'/frontend/nagvis-js/images/internal/msg_'.$this->type.'.png"/>'."\n";
-		$content .= '         </th>'."\n";
-		$content .= '         <th class="'.$this->type.'">'.$this->title.'</td>'."\n";
-		$content .= '         <th class="'.$this->type.'" align="center" width="60">'."\n";
-		$content .= '           <img src="'.$this->pathHtmlBase.'/frontend/nagvis-js/images/internal/msg_'.$this->type.'.png"/>'."\n";
-		$content .= '         </th>'."\n";
-		$content .= '       </tr>'."\n";
-		$content .= '       <tr>'."\n";
-		$content .= '         <td class="'.$this->type.'" colspan="3" style="padding-top:16px;">'.$this->message.'</td>'."\n";
-		$content .= '       </tr>'."\n";
-		$content .= '   </table>'."\n";
-		$content .= '</div>'."\n";
-		
-		return $content;
-	}
+    /**
+     * The contructor checks the type and builds the message box
+     *
+     * @param   strind	$type
+     * @param   string	$message
+     * @param   string	$pathHtmlBase
+     * @param   string	$title
+     * @access  public
+     * @author  Michael Luebben <michael_luebben@web.de>
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct($type, $message, $pathHtmlBase, $title) {
+        $this->type = $type;
+        $this->message = $message;
+        $this->pathHtmlBase = $pathHtmlBase;
+        $this->title = $title;
+    }
 
-	/**
-	 * Print the message box
-	 *
-	 * return   String  HTML Code
-	 * @access  private
-	 * @author  Michael Luebben <michael_luebben@web.de>
-	 */
-	public function __toString () {
-		return $this->buildMessage();
-	}
+    /**
+     * Sets the redirect/reload information for the message box
+     *
+     * @access  public
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function reload($time, $url) {
+        $this->reloadTime = $time;
+        $this->reloadUrl = $url;
+    }
+
+    /**
+     * Build a message box for the user in HTML format
+     *
+     * @return  String    Returns the html code of this message
+     * @access  private
+     * @author  Michael Luebben <michael_luebben@web.de>
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function buildMessage() {
+        $content = '';
+
+        // Have to reload or redirect?
+        if($this->reloadTime !== null) {
+            if($this->reloadUrl === null) {
+                $content .= '<meta http-equiv="refresh" content="'.$this->reloadTime.'">'."\n";
+            } else {
+                $content .= '<meta http-equiv="refresh" content="'.$this->reloadTime.'; URL='.$this->reloadUrl.'">'."\n";
+            }
+        }
+
+        $content .= '<link rel="stylesheet" type="text/css" href="'.$this->pathHtmlBase.'/userfiles/templates/default.css" />'."\n";
+        $content .= '<div id="messageBoxDiv">'."\n";
+        $content .= '   <table id="messageBox" class="'.$this->type.'" height="100%" width="100%" cellpadding="0" cellspacing="0">'."\n";
+        $content .= '      <tr>'."\n";
+        $content .= '         <td class="'.$this->type.'" colspan="3" height="16">'."\n";
+        $content .= '      </tr>'."\n";
+        $content .= '      <tr height="32">'."\n";
+        $content .= '         <th class="'.$this->type.'" align="center" width="60">'."\n";
+        $content .= '           <img src="'.$this->pathHtmlBase.'/frontend/nagvis-js/images/internal/msg_'.$this->type.'.png"/>'."\n";
+        $content .= '         </th>'."\n";
+        $content .= '         <th class="'.$this->type.'">'.$this->title.'</td>'."\n";
+        $content .= '         <th class="'.$this->type.'" align="center" width="60">'."\n";
+        $content .= '           <img src="'.$this->pathHtmlBase.'/frontend/nagvis-js/images/internal/msg_'.$this->type.'.png"/>'."\n";
+        $content .= '         </th>'."\n";
+        $content .= '       </tr>'."\n";
+        $content .= '       <tr>'."\n";
+        $content .= '         <td class="'.$this->type.'" colspan="3" style="padding-top:16px;">'.$this->message.'</td>'."\n";
+        $content .= '       </tr>'."\n";
+        $content .= '   </table>'."\n";
+        $content .= '</div>'."\n";
+
+        return $content;
+    }
+
+    /**
+     * Print the message box
+     *
+     * return   String  HTML Code
+     * @access  private
+     * @author  Michael Luebben <michael_luebben@web.de>
+     */
+    public function __toString () {
+        return $this->buildMessage();
+    }
 }
 ?>

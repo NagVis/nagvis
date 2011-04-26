@@ -23,60 +23,60 @@
  *****************************************************************************/
 
 class CoreRequestHandler {
-	private $aOpts;
-	
-	public function __construct($aOptions) {
-		$this->aOpts = $aOptions;
-	}
-	
-	public function getKeys() {
-		return array_keys($this->aOpts);
-	}
-	
-	public function get($sKey) {
-		if(isset($this->aOpts[$sKey]))
-			return $this->aOpts[$sKey];
-		else
-			return null;
-	}
-	
-	public function isLongerThan($sKey, $iLen) {
-		return strlen($this->aOpts[$sKey]) > $iLen;
-	}
+    private $aOpts;
 
-	public function match($sKey, $regex) {
-		if(!isset($this->aOpts[$sKey]))
-			return false;
-		
-		// If this is an array validate the single values. When one of the values
-		// is invalid return false.
-		if(is_array($this->aOpts[$sKey])) {
-			foreach($this->aOpts[$sKey] AS $val)
-				if(!preg_match($regex, $val))
-					return false;
-			return true;
-		} else {
-			return preg_match($regex, $this->aOpts[$sKey]);
-		}
-	}
-	
-	public function isSetAndNotEmpty($sKey) {
-		return (isset($this->aOpts[$sKey]) && $this->aOpts[$sKey] != '');
-	}
-	
-	public static function getReferer($default) {
-		if(isset($_SERVER['HTTP_REFERER']))
+    public function __construct($aOptions) {
+        $this->aOpts = $aOptions;
+    }
+
+    public function getKeys() {
+        return array_keys($this->aOpts);
+    }
+
+    public function get($sKey) {
+        if(isset($this->aOpts[$sKey]))
+            return $this->aOpts[$sKey];
+        else
+            return null;
+    }
+
+    public function isLongerThan($sKey, $iLen) {
+        return strlen($this->aOpts[$sKey]) > $iLen;
+    }
+
+    public function match($sKey, $regex) {
+        if(!isset($this->aOpts[$sKey]))
+            return false;
+
+        // If this is an array validate the single values. When one of the values
+        // is invalid return false.
+        if(is_array($this->aOpts[$sKey])) {
+            foreach($this->aOpts[$sKey] AS $val)
+                if(!preg_match($regex, $val))
+                    return false;
+            return true;
+        } else {
+            return preg_match($regex, $this->aOpts[$sKey]);
+        }
+    }
+
+    public function isSetAndNotEmpty($sKey) {
+        return (isset($this->aOpts[$sKey]) && $this->aOpts[$sKey] != '');
+    }
+
+    public static function getReferer($default) {
+        if(isset($_SERVER['HTTP_REFERER']))
       return $_SERVER['HTTP_REFERER'];
     else
-			return $default;
-	}
-	
-	public static function getRequestUri($default) {
-		if(isset($_SERVER['REQUEST_URI']))
+            return $default;
+    }
+
+    public static function getRequestUri($default) {
+        if(isset($_SERVER['REQUEST_URI']))
       return $_SERVER['REQUEST_URI'];
     else
-			return $default;
-	}
+            return $default;
+    }
 }
 
 ?>

@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * NagVisHostgroup.php - Class of a Hostgroup in NagVis with all necessary 
+ * NagVisHostgroup.php - Class of a Hostgroup in NagVis with all necessary
  *                  information which belong to the object handling in NagVis
  *
  * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
@@ -22,32 +22,32 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisHostgroup extends NagiosHostgroup {
-	protected static $langType = null;
-	protected static $langSelf = null;
-	protected static $langChild = null;
-	
-	/**
-	 * Class constructor
-	 *
-	 * @param		Object 		Object of class GlobalMainCfg
-	 * @param		Object 		Object of class CoreBackendMgmt
-	 * @param		Object 		Object of class GlobalLanguage
-	 * @param		Integer 		ID of queried backend
-	 * @param		String		Name of the hostgroup
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($CORE, $BACKEND, $backend_id, $hostgroupName) {
-		$this->type = 'hostgroup';
-		$this->iconset = 'std_medium';
-		parent::__construct($CORE, $BACKEND, $backend_id, $hostgroupName);
-	}
-	
-	# End public methods
-	# #########################################################################
+    protected static $langType = null;
+    protected static $langSelf = null;
+    protected static $langChild = null;
+
+    /**
+     * Class constructor
+     *
+     * @param		Object 		Object of class GlobalMainCfg
+     * @param		Object 		Object of class CoreBackendMgmt
+     * @param		Object 		Object of class GlobalLanguage
+     * @param		Integer 		ID of queried backend
+     * @param		String		Name of the hostgroup
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct($CORE, $BACKEND, $backend_id, $hostgroupName) {
+        $this->type = 'hostgroup';
+        $this->iconset = 'std_medium';
+        parent::__construct($CORE, $BACKEND, $backend_id, $hostgroupName);
+    }
+
+    # End public methods
+    # #########################################################################
 }
 ?>

@@ -20,99 +20,99 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
 var NagVisTextbox = NagVisStatelessObject.extend({
-	// Initialize
-	constructor: function(oConf) {
-		// Call parent constructor
-		this.base(oConf);
-	},
-	
-	/**
-	 * PUBLIC parse()
-	 *
-	 * Parses the object
-	 *
-	 * @return	String		HTML code of the object
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	parse: function() {
-		var oContainerDiv;
-		
-		this.replaceMacros();
-		
-		// Create container div
-		oContainerDiv = document.createElement('div');
-		oContainerDiv.setAttribute('id', this.conf.object_id);
-		oContainerDiv.appendChild(this.parseTextbox());
-		
-		// When this is an update, remove the object first
-		this.remove();
-		
-		var oMap = document.getElementById('map');
-		if(oMap) {
+    // Initialize
+    constructor: function(oConf) {
+        // Call parent constructor
+        this.base(oConf);
+    },
+
+    /**
+     * PUBLIC parse()
+     *
+     * Parses the object
+     *
+     * @return	String		HTML code of the object
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    parse: function() {
+        var oContainerDiv;
+
+        this.replaceMacros();
+
+        // Create container div
+        oContainerDiv = document.createElement('div');
+        oContainerDiv.setAttribute('id', this.conf.object_id);
+        oContainerDiv.appendChild(this.parseTextbox());
+
+        // When this is an update, remove the object first
+        this.remove();
+
+        var oMap = document.getElementById('map');
+        if(oMap) {
  			this.parsedObject = oMap.appendChild(oContainerDiv);
-			oMap = null;
-		}
-		oContainerDiv = null;
+            oMap = null;
+        }
+        oContainerDiv = null;
 
-		// Enable the controls when the object is not locked
-		if(!this.bIsLocked)
-			this.parseControls();
-	},
-	
-	/**
-	 * Replaces macros of urls and hover_urls
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	replaceMacros: function () {
-		this.conf.text = this.conf.text.replace('[refresh_counter]', '<font id="refreshCounter"></font>');
-		this.conf.text = this.conf.text.replace('[worker_last_run]', '<font id="workerLastRunCounter"></font>');
-	},
-	
-	/**
-	 * Create a Comment-Textbox
-	 *
-	 * @return	String	String with HTML Code
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	parseTextbox: function () {
-		return drawNagVisTextbox(this.conf.object_id+'-label', 'box',
-		                            this.conf.background_color, this.conf.border_color,
-					    this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'), this.conf.z, this.conf.w,
-					    this.conf.h, this.conf.text, this.conf.style);
-	},
+        // Enable the controls when the object is not locked
+        if(!this.bIsLocked)
+            this.parseControls();
+    },
 
-	parseBoxControls: function () {
-	    var oBox = document.getElementById(this.conf.object_id+'-label');
-	    oBox.setAttribute('class',     'box resizeMe');
-	    oBox.setAttribute('className', 'box resizeMe');
-	    oBox = null;
+    /**
+     * Replaces macros of urls and hover_urls
+     *
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    replaceMacros: function () {
+        this.conf.text = this.conf.text.replace('[refresh_counter]', '<font id="refreshCounter"></font>');
+        this.conf.text = this.conf.text.replace('[worker_last_run]', '<font id="workerLastRunCounter"></font>');
+    },
 
-	    this.parseControlDrag(0,   this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),  5, -15, 10);
-	    this.parseControlDelete(1, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'), 20, -15, 10);
-	    this.parseControlModify(2, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'), 35, -15, 10);
+    /**
+     * Create a Comment-Textbox
+     *
+     * @return	String	String with HTML Code
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    parseTextbox: function () {
+        return drawNagVisTextbox(this.conf.object_id+'-label', 'box',
+                                    this.conf.background_color, this.conf.border_color,
+                        this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'), this.conf.z, this.conf.w,
+                        this.conf.h, this.conf.text, this.conf.style);
+    },
 
-	    // Simply make it dragable. Maybe will be extended in the future...
-	    makeDragable([this.conf.object_id+'-drag-0'], this.saveObject, this.moveObject);
-	},
+    parseBoxControls: function () {
+        var oBox = document.getElementById(this.conf.object_id+'-label');
+        oBox.setAttribute('class',     'box resizeMe');
+        oBox.setAttribute('className', 'box resizeMe');
+        oBox = null;
 
-	removeBoxControls: function () {
-	    var oBox = document.getElementById(this.conf.object_id+'-label');
-	    oBox.setAttribute('class',     'box');
-	    oBox.setAttribute('className', 'box');
-	    oBox = null;
-	},
+        this.parseControlDrag(0,   this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),  5, -15, 10);
+        this.parseControlDelete(1, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'), 20, -15, 10);
+        this.parseControlModify(2, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'), 35, -15, 10);
 
-	moveBox: function () {
-	    var container = document.getElementById(this.conf.object_id + '-label');
-	    container.style.top  = this.parseCoord(this.conf.y, 'y') + 'px';
-	    container.style.left = this.parseCoord(this.conf.x, 'x') + 'px';
-	    container = null;
-	}
+        // Simply make it dragable. Maybe will be extended in the future...
+        makeDragable([this.conf.object_id+'-drag-0'], this.saveObject, this.moveObject);
+    },
+
+    removeBoxControls: function () {
+        var oBox = document.getElementById(this.conf.object_id+'-label');
+        oBox.setAttribute('class',     'box');
+        oBox.setAttribute('className', 'box');
+        oBox = null;
+    },
+
+    moveBox: function () {
+        var container = document.getElementById(this.conf.object_id + '-label');
+        container.style.top  = this.parseCoord(this.conf.y, 'y') + 'px';
+        container.style.left = this.parseCoord(this.conf.x, 'x') + 'px';
+        container = null;
+    }
 });

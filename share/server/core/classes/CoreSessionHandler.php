@@ -29,82 +29,82 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreSessionHandler {
-		
-	public function __construct() {
-		$sDomain   = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookiedomain');
-		$sPath     = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookiepath');
-		$iDuration = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookieduration');
-		
-		// Set the session name (used in params/cookie names)
-		session_name(SESSION_NAME);
-		
-		// Only add the domain when it is no simple hostname
-		// This can be easily detected searching for a dot
-		if(strpos($sDomain, '.') === false)
-			$sDomain = null;
-		
-		// Set custom params for the session cookie
-		session_set_cookie_params(0, $sPath, $sDomain);
 
-		// Start a session for the user when not started yet
-		if(!isset($_SESSION)) {
-			try {
-				session_start();
-			} catch(ErrorException $e) {
-				// Catch and suppress session cleanup errors. This is a problem
-				// especially on current debian/ubuntu:
-				//   PHP error in ajax request handler: Error: (8) session_start():
-				//   ps_files_cleanup_dir: opendir(/var/lib/php5) failed: Permission denied (13)
-				if(strpos($e->getMessage(), 'ps_files_cleanup_dir') === false)
-					throw $e;
-			}
-			
-			// Store the creation time of the session
-			if(!$this->issetAndNotEmpty('sessionExpires'))
-				$this->set('sessionExpires', time()+$iDuration);
-		}
-		
-		// Reset the expiration time of the session cookie
-		if(isset($_COOKIE[SESSION_NAME])) {
-			// Don't reset the expiration time on every page load - only reset when
-			// the half of the expiration time has passed
-			if(time() >= $this->get('sessionExpires') - ($iDuration/2)) {
-				$exp = time() + $iDuration;
-				setcookie(SESSION_NAME, $_COOKIE[SESSION_NAME], $exp, $sPath, $sDomain);
-				
-				// Store the update time of the session cookie
-				$this->set('sessionExpires', $exp);
-			}
-		}
-	}
-	
-	public function isSetAndNotEmpty($sKey) {
-		return isset($_SESSION[$sKey]) && $_SESSION[$sKey] != '';
-	}
-	
-	public function get($sKey) {
-		if(isset($_SESSION[$sKey])) {
-			return $_SESSION[$sKey];
-		} else {
-			return false;
-		}
-	}
-	
-	public function set($sKey, $sVal) {
-		if(isset($_SESSION[$sKey])) {
-			$sOld = $_SESSION[$sKey];
-		} else {
-			$sOld = false;
-		}
-		
-		if($sVal == false) {
-			unset($_SESSION[$sKey]);
-		} else {
-			$_SESSION[$sKey] = $sVal;
-		}
-		
-		return $sOld;
-	}
+    public function __construct() {
+        $sDomain   = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookiedomain');
+        $sPath     = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookiepath');
+        $iDuration = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookieduration');
+
+        // Set the session name (used in params/cookie names)
+        session_name(SESSION_NAME);
+
+        // Only add the domain when it is no simple hostname
+        // This can be easily detected searching for a dot
+        if(strpos($sDomain, '.') === false)
+            $sDomain = null;
+
+        // Set custom params for the session cookie
+        session_set_cookie_params(0, $sPath, $sDomain);
+
+        // Start a session for the user when not started yet
+        if(!isset($_SESSION)) {
+            try {
+                session_start();
+            } catch(ErrorException $e) {
+                // Catch and suppress session cleanup errors. This is a problem
+                // especially on current debian/ubuntu:
+                //   PHP error in ajax request handler: Error: (8) session_start():
+                //   ps_files_cleanup_dir: opendir(/var/lib/php5) failed: Permission denied (13)
+                if(strpos($e->getMessage(), 'ps_files_cleanup_dir') === false)
+                    throw $e;
+            }
+
+            // Store the creation time of the session
+            if(!$this->issetAndNotEmpty('sessionExpires'))
+                $this->set('sessionExpires', time()+$iDuration);
+        }
+
+        // Reset the expiration time of the session cookie
+        if(isset($_COOKIE[SESSION_NAME])) {
+            // Don't reset the expiration time on every page load - only reset when
+            // the half of the expiration time has passed
+            if(time() >= $this->get('sessionExpires') - ($iDuration/2)) {
+                $exp = time() + $iDuration;
+                setcookie(SESSION_NAME, $_COOKIE[SESSION_NAME], $exp, $sPath, $sDomain);
+
+                // Store the update time of the session cookie
+                $this->set('sessionExpires', $exp);
+            }
+        }
+    }
+
+    public function isSetAndNotEmpty($sKey) {
+        return isset($_SESSION[$sKey]) && $_SESSION[$sKey] != '';
+    }
+
+    public function get($sKey) {
+        if(isset($_SESSION[$sKey])) {
+            return $_SESSION[$sKey];
+        } else {
+            return false;
+        }
+    }
+
+    public function set($sKey, $sVal) {
+        if(isset($_SESSION[$sKey])) {
+            $sOld = $_SESSION[$sKey];
+        } else {
+            $sOld = false;
+        }
+
+        if($sVal == false) {
+            unset($_SESSION[$sKey]);
+        } else {
+            $_SESSION[$sKey] = $sVal;
+        }
+
+        return $sOld;
+    }
 }
 
 ?>

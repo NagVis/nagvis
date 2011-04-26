@@ -23,39 +23,39 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisStatelessObject extends NagVisObject {
-	// "Global" Configuration variables for all stateless objects
-	protected $label_show;
-	
-	protected static $iconPath      = null;
-	protected static $iconPathLocal = null;
-	
-	/**
-	 * Class constructor
-	 *
-	 * @param		Object 		Object of class GlobalMainCfg
-	 * @param		Object 		Object of class GlobalLanguage
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($CORE) {
-		parent::__construct($CORE);
-	}
-	
-	/**
-	 * PUBLIC parseJson()
-	 *
-	 * Parses the object in json format
-	 *
-	 * @return	String  JSON code of the object
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parseJson() {
-		// Get all information of the object (configuration, state, ...)
-		return parent::parseJson();
-	}
+    // "Global" Configuration variables for all stateless objects
+    protected $label_show;
+
+    protected static $iconPath      = null;
+    protected static $iconPathLocal = null;
+
+    /**
+     * Class constructor
+     *
+     * @param		Object 		Object of class GlobalMainCfg
+     * @param		Object 		Object of class GlobalLanguage
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct($CORE) {
+        parent::__construct($CORE);
+    }
+
+    /**
+     * PUBLIC parseJson()
+     *
+     * Parses the object in json format
+     *
+     * @return	String  JSON code of the object
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function parseJson() {
+        // Get all information of the object (configuration, state, ...)
+        return parent::parseJson();
+    }
 }
 ?>

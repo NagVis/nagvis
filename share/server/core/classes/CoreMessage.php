@@ -50,68 +50,68 @@
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreMessage {
-	// Contains path to the html base
-	private $pathHtmlBase;
+    // Contains path to the html base
+    private $pathHtmlBase;
 
-	//This variables contains information which will be used to build the message box
-	private $type;
-	private $message;
-	private $title;
-	private $reloadTime = null;
-	private $reloadUrl = null;
+    //This variables contains information which will be used to build the message box
+    private $type;
+    private $message;
+    private $title;
+    private $reloadTime = null;
+    private $reloadUrl = null;
 
-	/**
-	 * The contructor checks the type and builds the message box
-	 *
-	 * @param   strind	$type
-	 * @param   string	$message
-	 * @param   string	$pathHtmlBase
-	 * @param   string	$title
-	 * @access  public
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($type, $message, $pathHtmlBase, $title) {
-		$this->type = $type;
-		$this->message = $message;
-		$this->pathHtmlBase = $pathHtmlBase;
-		$this->title = $title;
-	}
-	
-	/**
-	 * Sets the redirect/reload information for the message box
-	 *
-	 * @access  public
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function reload($time, $url) {
-		$this->reloadTime = $time;
-		$this->reloadUrl = $url;
-	}
-	
-	/**
-	 * Build a message for the user for ajax frontend 
-	 *
-	 * @access  private
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function buildMessage() {
-		$aMessage = Array('type' => $this->type,
-		                  'message' => $this->message, 
-		                  'title' => $this->title,
-		                  'reloadTime' => $this->reloadTime,
-		                  'reloadUrl' => $this->reloadUrl);
-		return 'NagVisError:'.json_encode($aMessage);
-	}
+    /**
+     * The contructor checks the type and builds the message box
+     *
+     * @param   strind	$type
+     * @param   string	$message
+     * @param   string	$pathHtmlBase
+     * @param   string	$title
+     * @access  public
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct($type, $message, $pathHtmlBase, $title) {
+        $this->type = $type;
+        $this->message = $message;
+        $this->pathHtmlBase = $pathHtmlBase;
+        $this->title = $title;
+    }
 
-	/**
-	 * Print the message box
-	 *
-	 * return   String  HTML Code
-	 * @access  private
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __toString () {
-		return $this->buildMessage();
-	}
+    /**
+     * Sets the redirect/reload information for the message box
+     *
+     * @access  public
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function reload($time, $url) {
+        $this->reloadTime = $time;
+        $this->reloadUrl = $url;
+    }
+
+    /**
+     * Build a message for the user for ajax frontend
+     *
+     * @access  private
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function buildMessage() {
+        $aMessage = Array('type' => $this->type,
+                          'message' => $this->message,
+                          'title' => $this->title,
+                          'reloadTime' => $this->reloadTime,
+                          'reloadUrl' => $this->reloadUrl);
+        return 'NagVisError:'.json_encode($aMessage);
+    }
+
+    /**
+     * Print the message box
+     *
+     * return   String  HTML Code
+     * @access  private
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __toString () {
+        return $this->buildMessage();
+    }
 }
 ?>

@@ -21,49 +21,49 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
 var NagVisStatelessObject = NagVisObject.extend({
-	// Initialize
-	constructor: function(oConf) {
-		// Call parent constructor
-		this.base(oConf);
-	},
-	
-	/**
-	 * Is called to remove the rendered object
-	 * This must not remove the object from the JS lists
-	 */
-	remove: function () {
-		if(!this.parsedObject)
-		    return;
+    // Initialize
+    constructor: function(oConf) {
+        // Call parent constructor
+        this.base(oConf);
+    },
 
-		// Remove event listeners
-		var oObj;
-		oObj = document.getElementById(this.conf.object_id);
-		if(oObj) {
-			oObj.onmousedown = null;
-			oObj.oncontextmenu = null;
-			oObj.onmouseover = null;
-			oObj.onmouseout = null;
-			oObj = null;
-		}
+    /**
+     * Is called to remove the rendered object
+     * This must not remove the object from the JS lists
+     */
+    remove: function () {
+        if(!this.parsedObject)
+            return;
 
-		// Remove all controls
-		if(!this.bIsLocked)
-		    this.removeControls();
-		
-		// Remove object from DOM
-		var oMap = document.getElementById('map');
-		if(oMap) {
-			oMap.removeChild(this.parsedObject);
-			oMap = null;
-		}
+        // Remove event listeners
+        var oObj;
+        oObj = document.getElementById(this.conf.object_id);
+        if(oObj) {
+            oObj.onmousedown = null;
+            oObj.oncontextmenu = null;
+            oObj.onmouseover = null;
+            oObj.onmouseout = null;
+            oObj = null;
+        }
 
-		// Remove object reference
-		this.parsedObject = null;
-	}
+        // Remove all controls
+        if(!this.bIsLocked)
+            this.removeControls();
+
+        // Remove object from DOM
+        var oMap = document.getElementById('map');
+        if(oMap) {
+            oMap.removeChild(this.parsedObject);
+            oMap = null;
+        }
+
+        // Remove object reference
+        this.parsedObject = null;
+    }
 });

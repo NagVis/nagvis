@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * NagiosHostgroup.php - Class of a Hostgroup in Nagios with all necessary 
+ * NagiosHostgroup.php - Class of a Hostgroup in Nagios with all necessary
  *                  information
  *
  * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
@@ -22,222 +22,222 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagiosHostgroup extends NagVisStatefulObject {
-	protected $hostgroup_name;
-	protected $alias;
-	protected $display_name;
-	protected $address;
-	
-	protected $in_downtime;
-	
-	protected $members;
-	
-	/**
-	 * Class constructor
-	 *
-	 * @param		Object 		Object of class GlobalMainCfg
-	 * @param		Object 		Object of class CoreBackendMgmt
-	 * @param		Object 		Object of class GlobalLanguage
-	 * @param		Integer 		ID of queried backend
-	 * @param		String		Name of the hostgroup
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($CORE, $BACKEND, $backend_id, $hostgroupName) {
-		$this->backend_id = $backend_id;
-		$this->hostgroup_name = $hostgroupName;
-		
-		$this->members = Array();
-		
-		parent::__construct($CORE, $BACKEND);
-	}
-	
-	/**
-	 * PUBLIC queueState()
-	 *
-	 * Queues the state fetching to the backend.
-	 *
-	 * @param   Boolean  Unused flag here
-	 * @param   Boolean  Optional flag to disable fetching of member status
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function queueState($_unused = true, $bFetchMemberState = true) {
-		$queries = Array('hostgroupMemberState' => true);
-		
-		if($this->hover_menu == 1
-		   && $this->hover_childs_show == 1
-		   && $bFetchMemberState)
-			$queries['hostgroupMemberDetails'] = true;
-		
-		$this->BACKEND->queue($queries, $this);
-	}
-	
-	/**
-	 * PUBLIC applyState()
-	 *
-	 * Applies the fetched state
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function applyState() {
-		if($this->problem_msg) {
-			$this->summary_state = 'ERROR';
-			$this->summary_output = $this->problem_msg;
-			$this->members = Array();
-			return;
-		}
+    protected $hostgroup_name;
+    protected $alias;
+    protected $display_name;
+    protected $address;
 
-		if($this->hasMembers()) {
-			foreach($this->members AS $MOBJ) {
-				$MOBJ->applyState();
-			}
-		}
-		
-		// Use state summaries when some are available to
-		// calculate summary state and output
-		if($this->aStateCounts !== null) {
-			// Calculate summary state and output
-			$this->fetchSummaryStateFromCounts();
-			$this->fetchSummaryOutputFromCounts();
-		} else {
-			$this->fetchSummaryState();
-			$this->fetchSummaryOutput();
-		}
-		
-		$this->state = $this->summary_state;
-	}
-	
-	/**
-	 * PUBLIC getNumMembers()
-	 *
-	 * Returns the number of member objects
-	 *
-	 * @return	Integer		Number of members
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getNumMembers() {
-		return count($this->members);
-	}
-	
-	/**
-	 * PUBLIC getMembers()
-	 *
-	 * Returns the member objects
-	 *
-	 * @return	Array		Member objects
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getMembers() {
-		return $this->members;
-	}
-	
-	/**
-	 * PUBLIC hasMembers()
-	 *
-	 * Simple check if the hostgroup has at least one member
-	 *
-	 * @return Boolean	Yes, No
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function hasMembers() {
-		return isset($this->members[0]);
-	}
-	
-	# End public methods
-	# #########################################################################
-	
-	/**
-	 * PRIVATE fetchSummaryOutputFromCounts()
-	 *
-	 * Fetches the summary output from the object state counts
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function fetchSummaryOutputFromCounts() {
-		$arrHostStates = Array();
-		$arrServiceStates = Array();
-		
-		// Loop all major states
-		$iSumCount = 0;
-		foreach($this->aStateCounts AS $sState => $aSubstates) {
-			// Loop all substates (normal,ack,downtime,...)
-			foreach($aSubstates AS $sSubState => $iCount) {
-				// Found some objects with this state+substate
-				if($iCount > 0) {
-					// Count all child objects
-					$iSumCount += $iCount;
-					
-					if($sState === 'UP' || $sState === 'DOWN' || $sState === 'UNREACHABLE' || $sState === 'UNCHECKED') {
-						if(!isset($arrHostStates[$sState])) {
-							$arrHostStates[$sState] = $iCount;
-						} else {
-							$arrHostStates[$sState] += $iCount;
-						}
-					} else {
-						if(!isset($arrServiceStates[$sState])) {
-							$arrServiceStates[$sState] = $iCount;
-						} else {
-							$arrServiceStates[$sState] += $iCount;
-						}
-					}
-				}
-			}
-		}
-		
-		// Fallback for hostgroups without members
-		if($iSumCount == 0) {
-			$this->summary_output = $this->CORE->getLang()->getText('The hostgroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
-			                                                                            Array('GROUP' => $this->getName(),
-			                                                                                  'BACKEND' => $this->backend_id));
-		} else {
-			// FIXME: Recode mergeSummaryOutput method
-			$this->mergeSummaryOutput($arrHostStates, $this->CORE->getLang()->getText('hosts'));
-			if($this->recognize_services) {
-				$this->summary_output .= "<br />";
-				$this->mergeSummaryOutput($arrServiceStates, $this->CORE->getLang()->getText('services'));
-			}
-		}
-	}
-	
-	/**
-	 * PRIVATE fetchSummaryState()
-	 *
-	 * Fetches the summary state from all members recursive
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function fetchSummaryState() {
-		// Get summary state from member objects
-		if($this->hasMembers())
-			$this->wrapChildState($this->members);
-		else
-			$this->summary_state = 'ERROR';
-	}
-	
-	/**
-	 * PRIVATE fetchSummaryOutput()
-	 *
-	 * Fetches the summary output from all members
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function fetchSummaryOutput() {
-		if($this->hasMembers()) {
-			$arrStates = Array('CRITICAL' => 0, 'DOWN'    => 0, 'WARNING'   => 0,
-			                   'UNKNOWN'  => 0, 'UP'      => 0, 'OK'        => 0,
-			                   'ERROR'    => 0, 'PENDING' => 0, 'UNCHECKED' => 0);
-			
-			// Get summary state of this and child objects
-			foreach($this->members AS &$MEMBER) {
-				$arrStates[$MEMBER->getSummaryState()]++;
-			}
-			
-			$this->mergeSummaryOutput($arrStates, $this->CORE->getLang()->getText('hosts'));
-		} else {
-			$this->summary_output = $this->CORE->getLang()->getText('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
-		}
-	}
+    protected $in_downtime;
+
+    protected $members;
+
+    /**
+     * Class constructor
+     *
+     * @param		Object 		Object of class GlobalMainCfg
+     * @param		Object 		Object of class CoreBackendMgmt
+     * @param		Object 		Object of class GlobalLanguage
+     * @param		Integer 		ID of queried backend
+     * @param		String		Name of the hostgroup
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct($CORE, $BACKEND, $backend_id, $hostgroupName) {
+        $this->backend_id = $backend_id;
+        $this->hostgroup_name = $hostgroupName;
+
+        $this->members = Array();
+
+        parent::__construct($CORE, $BACKEND);
+    }
+
+    /**
+     * PUBLIC queueState()
+     *
+     * Queues the state fetching to the backend.
+     *
+     * @param   Boolean  Unused flag here
+     * @param   Boolean  Optional flag to disable fetching of member status
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function queueState($_unused = true, $bFetchMemberState = true) {
+        $queries = Array('hostgroupMemberState' => true);
+
+        if($this->hover_menu == 1
+           && $this->hover_childs_show == 1
+           && $bFetchMemberState)
+            $queries['hostgroupMemberDetails'] = true;
+
+        $this->BACKEND->queue($queries, $this);
+    }
+
+    /**
+     * PUBLIC applyState()
+     *
+     * Applies the fetched state
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function applyState() {
+        if($this->problem_msg) {
+            $this->summary_state = 'ERROR';
+            $this->summary_output = $this->problem_msg;
+            $this->members = Array();
+            return;
+        }
+
+        if($this->hasMembers()) {
+            foreach($this->members AS $MOBJ) {
+                $MOBJ->applyState();
+            }
+        }
+
+        // Use state summaries when some are available to
+        // calculate summary state and output
+        if($this->aStateCounts !== null) {
+            // Calculate summary state and output
+            $this->fetchSummaryStateFromCounts();
+            $this->fetchSummaryOutputFromCounts();
+        } else {
+            $this->fetchSummaryState();
+            $this->fetchSummaryOutput();
+        }
+
+        $this->state = $this->summary_state;
+    }
+
+    /**
+     * PUBLIC getNumMembers()
+     *
+     * Returns the number of member objects
+     *
+     * @return	Integer		Number of members
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function getNumMembers() {
+        return count($this->members);
+    }
+
+    /**
+     * PUBLIC getMembers()
+     *
+     * Returns the member objects
+     *
+     * @return	Array		Member objects
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function getMembers() {
+        return $this->members;
+    }
+
+    /**
+     * PUBLIC hasMembers()
+     *
+     * Simple check if the hostgroup has at least one member
+     *
+     * @return Boolean	Yes, No
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function hasMembers() {
+        return isset($this->members[0]);
+    }
+
+    # End public methods
+    # #########################################################################
+
+    /**
+     * PRIVATE fetchSummaryOutputFromCounts()
+     *
+     * Fetches the summary output from the object state counts
+     *
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function fetchSummaryOutputFromCounts() {
+        $arrHostStates = Array();
+        $arrServiceStates = Array();
+
+        // Loop all major states
+        $iSumCount = 0;
+        foreach($this->aStateCounts AS $sState => $aSubstates) {
+            // Loop all substates (normal,ack,downtime,...)
+            foreach($aSubstates AS $sSubState => $iCount) {
+                // Found some objects with this state+substate
+                if($iCount > 0) {
+                    // Count all child objects
+                    $iSumCount += $iCount;
+
+                    if($sState === 'UP' || $sState === 'DOWN' || $sState === 'UNREACHABLE' || $sState === 'UNCHECKED') {
+                        if(!isset($arrHostStates[$sState])) {
+                            $arrHostStates[$sState] = $iCount;
+                        } else {
+                            $arrHostStates[$sState] += $iCount;
+                        }
+                    } else {
+                        if(!isset($arrServiceStates[$sState])) {
+                            $arrServiceStates[$sState] = $iCount;
+                        } else {
+                            $arrServiceStates[$sState] += $iCount;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Fallback for hostgroups without members
+        if($iSumCount == 0) {
+            $this->summary_output = $this->CORE->getLang()->getText('The hostgroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
+                                                                                        Array('GROUP' => $this->getName(),
+                                                                                              'BACKEND' => $this->backend_id));
+        } else {
+            // FIXME: Recode mergeSummaryOutput method
+            $this->mergeSummaryOutput($arrHostStates, $this->CORE->getLang()->getText('hosts'));
+            if($this->recognize_services) {
+                $this->summary_output .= "<br />";
+                $this->mergeSummaryOutput($arrServiceStates, $this->CORE->getLang()->getText('services'));
+            }
+        }
+    }
+
+    /**
+     * PRIVATE fetchSummaryState()
+     *
+     * Fetches the summary state from all members recursive
+     *
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function fetchSummaryState() {
+        // Get summary state from member objects
+        if($this->hasMembers())
+            $this->wrapChildState($this->members);
+        else
+            $this->summary_state = 'ERROR';
+    }
+
+    /**
+     * PRIVATE fetchSummaryOutput()
+     *
+     * Fetches the summary output from all members
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function fetchSummaryOutput() {
+        if($this->hasMembers()) {
+            $arrStates = Array('CRITICAL' => 0, 'DOWN'    => 0, 'WARNING'   => 0,
+                               'UNKNOWN'  => 0, 'UP'      => 0, 'OK'        => 0,
+                               'ERROR'    => 0, 'PENDING' => 0, 'UNCHECKED' => 0);
+
+            // Get summary state of this and child objects
+            foreach($this->members AS &$MEMBER) {
+                $arrStates[$MEMBER->getSummaryState()]++;
+            }
+
+            $this->mergeSummaryOutput($arrStates, $this->CORE->getLang()->getText('hosts'));
+        } else {
+            $this->summary_output = $this->CORE->getLang()->getText('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
+        }
+    }
 }
 ?>

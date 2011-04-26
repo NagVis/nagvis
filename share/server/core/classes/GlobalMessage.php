@@ -30,78 +30,78 @@
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalMessage {
-	// This array contains allowed types of message boxes
-	private $allowedTypes = array(
-	  'error',
-	  'down',
-	  'critical',
-	  'up',
-	  'ok',
-	  'warning',
-	  'unknown',
-	  'unreachable',
-	  'note',
-	  'permission');
-	
-	/**
-	 * Class constructor
-	 *
-	 * @param   strind	$type
-	 * @param   string	$message
-	 * @param   string	$pathHtmlBase
-	 * @param   string	$title
-	 * @param   string  $sRedirect
-	 * @access  public
-	 * @author  Michael Luebben <michael_luebben@web.de>
+    // This array contains allowed types of message boxes
+    private $allowedTypes = array(
+      'error',
+      'down',
+      'critical',
+      'up',
+      'ok',
+      'warning',
+      'unknown',
+      'unreachable',
+      'note',
+      'permission');
+
+    /**
+     * Class constructor
+     *
+     * @param   strind	$type
+     * @param   string	$message
+     * @param   string	$pathHtmlBase
+     * @param   string	$title
+     * @param   string  $sRedirect
+     * @access  public
+     * @author  Michael Luebben <michael_luebben@web.de>
  	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($type, $message, $pathHtmlBase = NULL, $title = NULL, $iReloadTime = null, $sReloadUrl = null) {
-		// Gather htmlBase path if not provided by method calls
-		if($pathHtmlBase === NULL) {
-			$pathHtmlBase = GlobalCore::getInstance()->getMainCfg()->getValue('paths', 'htmlbase');
-		}
-		
-		if($title === NULL) {
-			$title = $type;
-		}
-		
-		// Remap old types
-		if($type == 'info-stop') {
-			$type = 'note';
-		}
-		
-		// Check if type allowed else build error box
-		if(!in_array($type, $this->allowedTypes)) {
-			$this->title = GlobalCore::getInstance()->getLang()->getText('Unknown message type');
-			$this->message = GlobalCore::getInstance()->getLang()->getText('The given message type [TYPE] is not known', Array('TYPE' => $type));
-		}
-		
-		// Got all information, now build the message
-		// Build an ajax compatible message or a message in HTML format depending on
-		// page which is being called
-		if(CONST_AJAX) {
-			$MSG = new CoreMessage(strtolower($type), $message, $pathHtmlBase, $title);
-			
-			// Maybe need to reload/redirect
-			if($iReloadTime !== null) {
-				$MSG->reload($iReloadTime, $sReloadUrl);
-			}
-			
-			print($MSG);
-		} else {
-			$MSG = new FrontendMessage(strtolower($type), $message, $pathHtmlBase, $title);
-			
-			// Maybe need to reload/redirect
-			if($iReloadTime !== null) {
-				$MSG->reload($iReloadTime, $sReloadUrl);
-			}
-			
-			print($MSG);
-		}
-		
-		if($type == 'ERROR' || $type == 'INFO-STOP') {
-			exit(1);
-		}
-	}
+     */
+    public function __construct($type, $message, $pathHtmlBase = NULL, $title = NULL, $iReloadTime = null, $sReloadUrl = null) {
+        // Gather htmlBase path if not provided by method calls
+        if($pathHtmlBase === NULL) {
+            $pathHtmlBase = GlobalCore::getInstance()->getMainCfg()->getValue('paths', 'htmlbase');
+        }
+
+        if($title === NULL) {
+            $title = $type;
+        }
+
+        // Remap old types
+        if($type == 'info-stop') {
+            $type = 'note';
+        }
+
+        // Check if type allowed else build error box
+        if(!in_array($type, $this->allowedTypes)) {
+            $this->title = GlobalCore::getInstance()->getLang()->getText('Unknown message type');
+            $this->message = GlobalCore::getInstance()->getLang()->getText('The given message type [TYPE] is not known', Array('TYPE' => $type));
+        }
+
+        // Got all information, now build the message
+        // Build an ajax compatible message or a message in HTML format depending on
+        // page which is being called
+        if(CONST_AJAX) {
+            $MSG = new CoreMessage(strtolower($type), $message, $pathHtmlBase, $title);
+
+            // Maybe need to reload/redirect
+            if($iReloadTime !== null) {
+                $MSG->reload($iReloadTime, $sReloadUrl);
+            }
+
+            print($MSG);
+        } else {
+            $MSG = new FrontendMessage(strtolower($type), $message, $pathHtmlBase, $title);
+
+            // Maybe need to reload/redirect
+            if($iReloadTime !== null) {
+                $MSG->reload($iReloadTime, $sReloadUrl);
+            }
+
+            print($MSG);
+        }
+
+        if($type == 'ERROR' || $type == 'INFO-STOP') {
+            exit(1);
+        }
+    }
 }
 ?>

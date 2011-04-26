@@ -21,16 +21,16 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class FrontendModuleHandler extends CoreModuleHandler {
-	public function __construct() {
-		parent::__construct();
-		
-		$this->sPrefix = 'FrontendMod';
-	}
+    public function __construct() {
+        parent::__construct();
+
+        $this->sPrefix = 'FrontendMod';
+    }
 }
 
 ?>

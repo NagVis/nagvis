@@ -21,1788 +21,1788 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalMainCfg {
-	private $useCache = true;
-	private $CACHE;
-	
-	protected $config = Array();
-	protected $runtimeConfig = Array();
-	protected $stateWeight;
-	
-	protected $configFiles;
-	
-	protected $validConfig;
-	
-	/**
-	 * Class Constructor
-	 *
-	 * @param	Array $configFile    List of paths to configuration files
-	 * @author Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($configFiles) {
-		$this->validConfig = Array(
-			'global' => Array(
-				'audit_log' => Array('must' => 1,
-					'editable' => 1,
-					'default' => true,
-					'match' => MATCH_BOOLEAN),
-				'authmodule' => Array('must' => 1,
-					'editable' => 1,
-					'default' => 'CoreAuthModSQLite',
-					'match' => MATCH_STRING),
-				'authorisationmodule' => Array('must' => 1,
-					'editable' => 1,
-					'default' => 'CoreAuthorisationModSQLite',
-					'match' => MATCH_STRING),
-				'dateformat' => Array('must' => 1,
-					'editable' => 1,
-					'default' => 'Y-m-d H:i:s',
-					'match' => MATCH_STRING),
-				'displayheader' => Array('must' => 1,
-					'editable' => 1,
-					'deprecated' => 1,
-					'default' => '1',
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'file_group' => Array('must' => 0,
-					'default' => '',
-					'match' => MATCH_STRING),
-				'file_mode' => Array('must' => 1,
-					'default' => 660,
-					'match' => MATCH_INTEGER_EMPTY),
-				'language_detection' => Array('must' => 1,
-					'editable' => 1,
-					'array' => true,
-					'default' => Array('user', 'session', 'browser', 'config'),
-					'match' => MATCH_STRING_NO_SPACE),
-				'language_available' => Array('must' => 1,
-					'editable' => 1,
-					'array' => true,
-					'default' => Array('de_DE', 'en_US', 'es_ES', 'fr_FR', 'pt_BR'),
-					'match' => MATCH_STRING_NO_SPACE),
-				'language' => Array('must' => 1,
-					'editable' => 1,
-					'default' => 'en_US',
-					'field_type' => 'dropdown',
-					'match' => MATCH_LANGUAGE_EMPTY),
-				'logonmodule' => Array('must' => 1,
-					'editable' => 1,
-					'default' => 'LogonMixed',
-					'match' => MATCH_STRING),
-				'logonenvvar' => Array('must' => 1,
-					'editable' => 1,
-					'default' => 'REMOTE_USER',
-					'depends_on' => 'logonmodule',
-					'depends_value' => 'LogonEnv',
-					'match' => MATCH_STRING),
-				'logonenvcreateuser' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '1',
-					'field_type' => 'boolean',
-					'depends_on' => 'logonmodule',
-					'depends_value' => 'LogonEnv',
-					'match' => MATCH_BOOLEAN),
-				'logonenvcreaterole' => Array('must' => 1,
-					'editable' => 1,
-					'default' => 'Guests',
-					'depends_on' => 'logonmodule',
-					'depends_value' => 'LogonEnv',
-					'match' => MATCH_STRING),
-				'refreshtime' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '60',
-					'match' => MATCH_INTEGER),
-				//FIXME: auto detect
-				'sesscookiedomain' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_STRING),
-				'sesscookiepath' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_STRING),
-				'sesscookieduration' => Array('must' => 1,
-					'editable'    => 1,
-					'default'     => '86400',
-					'match'       => MATCH_STRING),
-				'startmodule' => Array('must' => 1,
-					'editable'    => 1,
-					'default'     => 'Overview',
-					'match'       => MATCH_STRING),
-				'startaction' => Array('must' => 1,
-					'editable'    => 1,
-					'default'     => 'view',
-					'match'       => MATCH_STRING),
-				'startshow'   => Array('must' => 0,
-					'editable'    => 1,
-					'default'     => '',
-					'match'       => MATCH_STRING_EMPTY)),
-			'defaults' => Array(
-				'backend' => Array('must' => 0,
-					'editable' => 0,
-					'default' => 'live_1',
-					'field_type' => 'dropdown',
-					'match' => MATCH_STRING_NO_SPACE),
-				'backgroundcolor' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 'transparent',
-					'match' => MATCH_COLOR),
-				'contextmenu' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 1,
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'contexttemplate' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 'default',
-					'depends_on' => 'contextmenu',
-					'depends_value' => 1,
-					'match' => MATCH_STRING_NO_SPACE),
-				'stylesheet' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_STRING_NO_SPACE),
-				'eventbackground' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '0',
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'eventhighlight' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '1',
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'eventhighlightinterval' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '500',
-					'depends_on' => 'eventhighlight',
-					'depends_value' => 1,
-					'match' => MATCH_INTEGER),
-				'eventhighlightduration' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '10000',
-					'depends_on' => 'eventhighlight',
-					'depends_value' => 1,
-					'match' => MATCH_INTEGER),
-				'eventlog' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '0',
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'eventloglevel' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 'info',
-					'depends_on' => 'eventlog',
-					'depends_value' => 1,
-					'match' => MATCH_STRING_NO_SPACE),
-				'eventlogheight' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '100',
-					'depends_on' => 'eventlog',
-					'depends_value' => 1,
-					'match' => MATCH_INTEGER),
-				'eventlogevents' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '24',
-					'depends_on' => 'eventlog',
-					'depends_value' => 1,
-					'match' => MATCH_INTEGER),
-				'eventloghidden' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 1,
-					'depends_on' => 'eventlog',
-					'depends_value' => 1,
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'eventscroll' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '1',
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'eventsound' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '1',
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'headermenu' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '1',
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'headertemplate' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 'default',
-					'depends_on' => 'headermenu',
-					'depends_value' => 1,
-					'match' => MATCH_STRING_NO_SPACE),
-				'headerfade' => Array(
-				        'must'          => 0,
-					'editable'      => 1,
-					'default'       => 0,
-					'depends_on'    => 'headermenu',
-					'depends_value' => 1,
-					'match'         => MATCH_BOOLEAN
-				),
-				'hovermenu' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '1',
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'hovertemplate' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 'default',
-					'depends_on' => 'hovermenu',
-					'depends_value' => 1,
-					'match' => MATCH_STRING_NO_SPACE),
-				'hovertimeout' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '5',
-					'deprecated' => 1,
-					'match' => MATCH_INTEGER),
-				'hoverdelay' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '0',
-					'depends_on' => 'hovermenu',
-					'depends_value' => 1,
-					'match' => MATCH_INTEGER),
-				'hoverchildsshow' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '1',
-					'depends_on' => 'hovermenu',
-					'depends_value' => 1,
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'hoverchildslimit' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '10',
-					'depends_on' => 'hovermenu',
-					'depends_value' => 1,
-					'match' => MATCH_INTEGER_PRESIGN),
-				'hoverchildsorder' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 'asc',
-					'depends_on' => 'hovermenu',
-					'depends_value' => 1,
-					'match' => MATCH_ORDER),
-				'hoverchildssort' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 's',
-					'depends_on' => 'hovermenu',
-					'depends_value' => 1,
-					'match' => MATCH_STRING_NO_SPACE),
-				'icons' => Array('must' => 1,
-					'editable' => 1,
-					'default' => 'std_medium',
-					'field_type' => 'dropdown',
-					'match' => MATCH_STRING_NO_SPACE),
-				'onlyhardstates' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 0,
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'recognizeservices' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 1,
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'showinlists' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 1,
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'showinmultisite' => Array('must' => 0,
-					'editable'                => 1,
-					'default'                 => 1,
-					'field_type'              => 'boolean',
-					'match'                   => MATCH_BOOLEAN),
-				'urltarget' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '_self',
-					'match' => MATCH_STRING_NO_SPACE),
-				'mapurl' => Array('must' => 0,
-					'default' => '[htmlbase]/index.php?mod=Map&act=view&show=[map_name]',
-					'match' => MATCH_STRING_URL_EMPTY),
-				'hosturl' => Array('must' => 0,
-					'default' => '[htmlcgi]/status.cgi?host=[host_name]',
-					'match' => MATCH_STRING_URL_EMPTY),
-				'hostgroupurl' => Array('must' => 0,
-					'default' => '[htmlcgi]/status.cgi?hostgroup=[hostgroup_name]',
-					'match' => MATCH_STRING_URL_EMPTY),
-				'serviceurl' => Array('must' => 0,
-					'default' => '[htmlcgi]/extinfo.cgi?type=2&host=[host_name]&service=[service_description]',
-					'match' => MATCH_STRING_URL_EMPTY),
-				'servicegroupurl' => Array('must' => 0,
-					'default' => '[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]&style=detail',
-					'match' => MATCH_STRING_URL_EMPTY),
-			),
-			'wui' => Array(
-				'allowedforconfig' => Array(
-					'must' => 0,
-					'editable' => 1,
-					'deprecated' => 1,
-					'default' => Array('EVERYONE'),
-					'match' => MATCH_STRING),
-				'autoupdatefreq' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '25',
-					'field_type' => 'dropdown',
-					'match' => MATCH_INTEGER),
-				'headermenu' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '1',
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'headertemplate' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 'default',
-					'depends_on' => 'headermenu',
-					'depends_value' => 1,
-					'field_type' => 'dropdown',
-					'match' => MATCH_STRING_NO_SPACE),
-				'maplocktime' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '5',
-					'match' => MATCH_INTEGER),
-				'grid_show' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 0,
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'grid_color' => Array('must' => 0,
-					'editable' => 1,
-					'depends_on' => 'grid_show',
-					'depends_value' => 1,
-					'default' => '#D5DCEF',
-					'match' => MATCH_COLOR),
-				'grid_steps' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 32,
-					'depends_on' => 'grid_show',
-					'depends_value' => 1,
-					'match' => MATCH_INTEGER)),
-			'paths' => Array(
-				'base' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_STRING_PATH),
-				'local_base' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_STRING_PATH),
-				'cfg' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'icons' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'images' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'js' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'wuijs' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'shapes' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'language' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'class' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'var' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'sharedvar' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'mapcfg' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'profiles' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'automapcfg' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'gadgets' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'templates' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'htmlbase' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '/nagvis',
-					'match' => MATCH_STRING_PATH),
-				'local_htmlbase' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '/nagvis',
-					'match' => MATCH_STRING_PATH),
-				'htmlcgi' => Array('must' => 1,
-					'editable' => 1,
-					'field_type' => 'hidden',
-					'default' => '/nagios/cgi-bin',
-					'match' => MATCH_STRING_URL),
-				'htmlcss' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'htmlimages' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '/',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'htmljs' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'htmlwuijs' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'sounds' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'templateimages' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH),
-				'htmlsharedvar' => Array('must' => 0,
-					'editable' => 0,
-					'default' => '',
-					'field_type' => 'hidden',
-					'match' => MATCH_STRING_PATH)),
-			'backend' => Array(
-				'backendtype' => Array('must' => 1,
-					'editable' => 0,
-					'default' => '',
-					'match' => MATCH_STRING_NO_SPACE),
-				'backendid' => Array('must' => 1,
-					'editable' => 0,
-					'default' => '',
-					'match' => MATCH_STRING_NO_SPACE),
-				'statushost' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_STRING_NO_SPACE_EMPTY),
-				'htmlcgi' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_STRING_URL),
-				'custom_1' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_STRING_URL_EMPTY),
-				'custom_2' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_STRING_URL_EMPTY),
-				'custom_3' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_STRING_URL_EMPTY),
-				'options' => Array()),
-			'rotation' => Array(
-				'rotationid' => Array('must' => 1,
-					'editable' => 1,
-					'default' => 'demo',
-					'match' =>MATCH_STRING_NO_SPACE),
-				'interval' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_INTEGER),
-				'maps' => Array('must' => 1,
-					'editable' => 1,
-					'default' => 'demo,demo2',
-					'match' => MATCH_STRING)),
-			'automap' => Array(
-				'defaultparams' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '&childLayers=2',
-					'match' => MATCH_STRING_URL),
-				'defaultroot' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 'localhost',
-					'match' => MATCH_STRING_NO_SPACE_EMPTY),
-				'graphvizpath' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '/usr/local/bin/',
-					'match' => MATCH_STRING_PATH),
-				'showinlists' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '1',
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN)
-				),
-			'index' => Array(
-				'cellsperrow' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '4',
-					'match' => MATCH_INTEGER),
-				'headermenu' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '1',
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'headertemplate' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 'default',
-					'depends_on' => 'headermenu',
-					'depends_value' => 1,
-					'match' => MATCH_STRING_NO_SPACE),
-				'showautomaps' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 1,
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'showmaps' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 1,
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'showgeomap' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 0,
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'showmapthumbs' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 0,
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'showrotations' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 1,
-					'field_type' => 'boolean',
-					'match' => MATCH_BOOLEAN),
-				'backgroundcolor' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '#ffffff',
-					'match' => MATCH_COLOR)),
-			'worker' => Array(
-				'interval' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '10',
-					'match' => MATCH_INTEGER),
-				'updateobjectstates' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '30',
-					'match' => MATCH_INTEGER),
-				'requestmaxparams' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 0,
-					'match' => MATCH_INTEGER),
-				'requestmaxlength' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 1900,
-					'match' => MATCH_INTEGER)),
-			'states' => Array(
-				'unreachable' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '10',
-					'match' => MATCH_INTEGER),
-				'unreachable_ack' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '6',
-					'match' => MATCH_INTEGER),
-				'unreachable_ack_bgcolor' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_COLOR),
-				'unreachable_downtime' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '6',
-					'match' => MATCH_INTEGER),
-				'unreachable_downtime_bgcolor' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_COLOR),
-				'unreachable_bgcolor' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#F1811B',
-					'match' => MATCH_COLOR),
-				'unreachable_color' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#F1811B',
-					'match' => MATCH_COLOR),
-				'unreachable_sound' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 'std_unreachable.mp3',
-					'match' => MATCH_MP3_FILE),
-				'down' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '9',
-					'match' => MATCH_INTEGER),
-				'down_ack' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '6',
-					'match' => MATCH_INTEGER),
-				'down_ack_bgcolor' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_COLOR),
-				'down_downtime' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '6',
-					'match' => MATCH_INTEGER),
-				'down_downtime_bgcolor' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_COLOR),
-				'down_bgcolor' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#FF0000',
-					'match' => MATCH_COLOR),
-				'down_color' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#FF0000',
-					'match' => MATCH_COLOR),
-				'down_sound' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 'std_down.mp3',
-					'match' => MATCH_MP3_FILE),
-				'critical' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '8',
-					'match' => MATCH_INTEGER),
-				'critical_ack' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '6',
-					'match' => MATCH_INTEGER),
-				'critical_ack_bgcolor' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_COLOR),
-				'critical_downtime' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '6',
-					'match' => MATCH_INTEGER),
-				'critical_downtime_bgcolor' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_COLOR),
-				'critical_bgcolor' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#FF0000',
-					'match' => MATCH_COLOR),
-				'critical_color' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#FF0000',
-					'match' => MATCH_COLOR),
-				'critical_sound' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 'std_critical.mp3',
-					'match' => MATCH_MP3_FILE),
-				'warning' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '7',
-					'match' => MATCH_INTEGER),
-				'warning_ack' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '5',
-					'match' => MATCH_INTEGER),
-				'warning_ack_bgcolor' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_COLOR),
-				'warning_downtime' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '5',
-					'match' => MATCH_INTEGER),
-				'warning_downtime_bgcolor' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_COLOR),
-				'warning_bgcolor' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#FFFF00',
-					'match' => MATCH_COLOR),
-				'warning_color' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#FFFF00',
-					'match' => MATCH_COLOR),
-				'warning_sound' => Array('must' => 0,
-					'editable' => 1,
-					'default' => 'std_warning.mp3',
-					'match' => MATCH_MP3_FILE),
-				'unknown' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '4',
-					'match' => MATCH_INTEGER),
-				'unknown_ack' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '3',
-					'match' => MATCH_INTEGER),
-				'unknown_ack_bgcolor' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_COLOR),
-				'unknown_downtime' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '3',
-					'match' => MATCH_INTEGER),
-				'unknown_downtime_bgcolor' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_COLOR),
-				'unknown_bgcolor' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#FFCC66',
-					'match' => MATCH_COLOR),
-				'unknown_color' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#FFCC66',
-					'match' => MATCH_COLOR),
-				'unknown_sound' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_MP3_FILE),
-				'error' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '4',
-					'match' => MATCH_INTEGER),
-				'error_ack' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '3',
-					'match' => MATCH_INTEGER),
-				'error_ack_bgcolor' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_COLOR),
-				'error_downtime' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '3',
-					'match' => MATCH_INTEGER),
-				'error_downtime_bgcolor' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_COLOR),
-				'error_bgcolor' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#0000FF',
-					'match' => MATCH_COLOR),
-				'error_color' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#0000FF',
-					'match' => MATCH_COLOR),
-				'error_sound' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_MP3_FILE),
-				'up' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '2',
-					'match' => MATCH_INTEGER),
-				'up_downtime' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '2',
-					'match' => MATCH_INTEGER),
-				'up_bgcolor' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#00FF00',
-					'match' => MATCH_COLOR),
-				'up_color' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#00FF00',
-					'match' => MATCH_COLOR),
-				'up_sound' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_MP3_FILE),
-				'ok' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '1',
-					'match' => MATCH_INTEGER),
-				'ok_downtime' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '1',
-					'match' => MATCH_INTEGER),
-				'ok_bgcolor' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#00FF00',
-					'match' => MATCH_COLOR),
-				'ok_color' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#00FF00',
-					'match' => MATCH_COLOR),
-				'ok_sound' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_MP3_FILE),
-				'pending' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '0',
-					'match' => MATCH_INTEGER),
-				'pending_downtime' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '0',
-					'match' => MATCH_INTEGER),
-				'pending_bgcolor' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#C0C0C0',
-					'match' => MATCH_COLOR),
-				'pending_color' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#C0C0C0',
-					'match' => MATCH_COLOR),
-				'pending_sound' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_MP3_FILE),
-				'unchecked' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '0',
-					'match' => MATCH_INTEGER),
-				'unchecked_downtime' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '0',
-					'match' => MATCH_INTEGER),
-				'unchecked_bgcolor' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#C0C0C0',
-					'match' => MATCH_COLOR),
-				'unchecked_color' => Array('must' => 1,
-					'editable' => 1,
-					'default' => '#C0C0C0',
-					'match' => MATCH_COLOR),
-				'unchecked_sound' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_MP3_FILE)
-			),
-			'auth_mysql' => Array(
-				'dbhost' => Array('must' => 1,
-					'editable' => 1,
-					'default' => 'localhost',
-					'match' => MATCH_STRING_NO_SPACE),
-				'dbport' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '3306',
-					'match' => MATCH_INTEGER),
-				'dbname' => Array('must' => 1,
-					'editable' => 1,
-					'default' => 'nagvis-auth',
-					'match' => MATCH_STRING_NO_SPACE),
-				'dbuser' => Array('must' => 1,
-					'editable' => 1,
-					'default' => 'root',
-					'match' => MATCH_STRING_NO_SPACE),
-				'dbpass' => Array('must' => 0,
-					'editable' => 1,
-					'default' => '',
-					'match' => MATCH_STRING_EMPTY),
-			),
-			'internal' => Array(
-				'version' => Array('must' => 1,
-					'editable' => 0,
-					'default' => CONST_VERSION,
-					'locked' => 1,
-					'match' => MATCH_STRING_NO_SPACE),
-				'title' => Array('must' => 1,
-					'editable' => 0,
-					'default' => 'NagVis ' . CONST_VERSION,
-					'locked' => 1,
-					'match' => MATCH_STRING)
-			)
-		);
-		
-		// Detect the cookie domain to use
-		$this->setCookieDomainByEnv();
-		
-		// Try to get the base path via $_SERVER['SCRIPT_FILENAME']
-		$this->validConfig['paths']['base']['default'] = $this->getBasePath();
-		$this->setPathsByBase($this->getValue('paths','base'), $this->getValue('paths','htmlbase'));
-		
-		// Define the main configuration files
-		$this->configFiles = $configFiles;
-	}
+    private $useCache = true;
+    private $CACHE;
 
-	/**
-	 * Get the newest of the given configuration files. This is needed to test if
-	 * the cache file is up-to-date or needs to be renewed
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function getNewestFile() {
-		$age = -1;
-		$newestFile = '';
-		foreach($this->configFiles AS $configFile) {
-			if(!GlobalCore::getInstance()->checkExisting($configFile, false) || !GlobalCore::getInstance()->checkReadable($configFile, false))
-				continue;
-			
-			$configAge = filemtime($configFile);
-			if($age === -1) {
-				$age = $configAge;
-				$newestFile = $configFile;
-			} elseif($configAge > $age) {
-				$age = $configAge;
-        $newestFile = $configFile;
-			}
-		}
-		
-		return $newestFile;
-	}
-	
-	public function init() {
-		// Get the valid configuration definitions from the available backends
-		$this->getBackendValidConf();
+    protected $config = Array();
+    protected $runtimeConfig = Array();
+    protected $stateWeight;
 
-		// Get the path and age of the newest config file
-		$newestFile = $this->getNewestFile();
+    protected $configFiles;
 
-		// Use the newest file as indicator for using the cache or not
-		$this->CACHE = new GlobalFileCache(GlobalCore::getInstance(), $newestFile, CONST_MAINCFG_CACHE.'-'.CONST_VERSION.'-cache');
-  	if($this->CACHE->isCached(false) === -1) {
-			// The cache is too old. Load all config files
-			foreach($this->configFiles AS $configFile) {
-				// Only proceed when the configuration file exists and is readable
-				if(!GlobalCore::getInstance()->checkExisting($configFile, true) || !GlobalCore::getInstance()->checkReadable($configFile, true))
-					return false;
-				$this->readConfig($configFile, true);
-			}
-			$this->CACHE->writeCache($this->config, true);
-		} else {
-			// Use the cache!
-			$this->config = $this->CACHE->getCache();
-		}
+    protected $validConfig;
 
-		// Update the cache time
-		$this->useCache = $this->CACHE->isCached(false);
-
-		// Parse the state weight array
-		$this->parseStateWeight();
-		
-		// want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
-		$this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
-		
-		// set default value
-		$this->validConfig['rotation']['interval']['default'] = $this->getValue('global','refreshtime');
-		$this->validConfig['backend']['htmlcgi']['default'] = $this->getValue('paths','htmlcgi');
-	}
-	
-	/**
-	 * Gets the cookie domain from the webservers environment and sets the 
-	 * session cookie domain to this value
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function setCookieDomainByEnv() {
-		if(isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME'] !== '') {
-			$this->validConfig['global']['sesscookiedomain']['default'] = $_SERVER['SERVER_NAME'];
-		}
-	}
-	
-	/**
-	 * Gets the valid configuration definitions from the available backends. The
-	 * definitions were moved to the backends so it is easier to create new
-	 * backends without any need to modify the main configuration
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function getBackendValidConf() {
-		// Get the configuration options from the backends
-		$aBackends = GlobalCore::getInstance()->getAvailableBackends();
-		
-		foreach($aBackends AS $backend) {
-			$class = 'GlobalBackend'.$backend;
-			
-			// FIXME: Does not work in PHP 5.2 (http://bugs.php.net/bug.php?id=31318)
-			//$this->validConfig['backend']['options'][$backend] = $class->getValidConfig();
-			// I'd prefer to use the above but for the moment I use the fix below
-			
-			if (is_callable(array($class, 'getValidConfig'))) {
-				$this->validConfig['backend']['options'][$backend] = call_user_func(Array('GlobalBackend'.$backend, 'getValidConfig'));
-				//$this->validConfig['backend']['options'][$backend] = call_user_func('GlobalBackend'.$backend.'::getValidConfig');
-			}
-		}
-	}
-	
-	/**
-	 * Gets the base path 
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function setPathsByBase($base, $htmlBase) {
-		$this->validConfig['paths']['cfg']['default']                = $base.'etc/';
-		$this->validConfig['paths']['mapcfg']['default']             = $base.'etc/maps/';
-		$this->validConfig['paths']['automapcfg']['default']         = $base.'etc/automaps/';
-		$this->validConfig['paths']['profiles']['default']           = $base.'etc/profiles';
-		
-		$this->validConfig['paths']['var']['default']                = $base.'var/';
-		$this->validConfig['paths']['sharedvar']['default']          = $base.HTDOCS_DIR.'/var/';
-		$this->validConfig['paths']['htmlsharedvar']['default']      = $htmlBase.'/var/';
-		
-		$this->validConfig['paths']['language']['default']           = $base.HTDOCS_DIR.'/frontend/nagvis-js/locale';
-		$this->validConfig['paths']['class']['default']              = $base.HTDOCS_DIR.'/server/core/classes/';
-
-		$this->validConfig['paths']['htmlcss']['default']            = $htmlBase.'/frontend/nagvis-js/css/';
-		
-		$this->validConfig['paths']['js']['default']                 = $base.HTDOCS_DIR.'/frontend/nagvis-js/js/';
-		$this->validConfig['paths']['htmljs']['default']             = $htmlBase.'/frontend/nagvis-js/js/';
-		
-		$this->validConfig['paths']['wuijs']['default']              = $base.HTDOCS_DIR.'/frontend/wui/js/';
-		$this->validConfig['paths']['htmlwuijs']['default']          = $htmlBase.'/frontend/wui/js/';
-		
-		$this->validConfig['paths']['images']['default']             = $base.HTDOCS_DIR.'/frontend/nagvis-js/images/';
-		$this->validConfig['paths']['htmlimages']['default']         = $htmlBase.'/frontend/nagvis-js/images/';
-		
-		$this->validConfig['paths']['templates']['default']          = 'userfiles/templates/';
-		$this->validConfig['paths']['styles']['default']             = 'userfiles/styles/';
-		$this->validConfig['paths']['gadgets']['default']            = 'userfiles/gadgets/';
-		$this->validConfig['paths']['backgrounds']['default']        = 'userfiles/images/maps/';
-		$this->validConfig['paths']['icons']['default']              = 'userfiles/images/iconsets/';
-		$this->validConfig['paths']['shapes']['default']             = 'userfiles/images/shapes/';
-		$this->validConfig['paths']['sounds']['default']             = 'userfiles/sounds/';
-
-		$this->validConfig['paths']['templateimages']['default']     = 'userfiles/images/templates/';
-		
-		// This option directly relies on the configured htmlBase by default
-		$this->validConfig['global']['sesscookiepath']['default']    = $htmlBase;
-	}
-	
-	/**
-	 * Gets the base path 
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 * @author	Roman Kyrylych <rkyrylych@op5.com>
-	 */
-	private function getBasePath() {
-		// Go 3 levels up from nagvis/share/nagvis to nagvis base path
-		return realpath(dirname($_SERVER['SCRIPT_FILENAME']) . '/../../..') . '/';
-		// Note: the method below causes problems when <docroot>/nagvis is a symlink to <nagvis-base>/share
-		// return realpath(dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME'])))).'/';
-	}
-	
-	/**
-	 * Reads the specified config file
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function readConfig($configFile, $printErr=1) {
-		$numComments = 0;
-		$sec = '';
-		
-		// read thx config file line by line in array $file
-		$file = file($configFile);
-		
-		// Count the lines before the loop (only counts once)
-		$countLines = count($file);
-		
-		// loop trough array
-		for ($i = 0; $i < $countLines; $i++) {
-			// cut spaces from beginning and end
-			$line = trim($file[$i]);
-			
-			// don't read empty lines
-			if(isset($line) && $line != '') {
-				// get first char of actual line
-				$firstChar = substr($line,0,1);
-				
-				// check what's in this line
-				if($firstChar == ';') {
-					// comment...
-					$key = 'comment_'.($numComments++);
-					$val = trim($line);
-					
-					if(isset($sec) && $sec != '') {
-						$this->config[$sec][$key] = $val;
-					} else {
-						$this->config[$key] = $val;
-					}
-				} elseif ((substr($line, 0, 1) == '[') && (substr($line, -1, 1)) == ']') {
-					// section
-					$sec = strtolower(trim(substr($line, 1, strlen($line)-2)));
-					
-					// write to array
-					if(!isset($this->config[$sec])) {
-						if(preg_match('/^backend_/i', $sec)) {
-							$this->config[$sec] = Array();
-							$this->config[$sec]['backendid'] = str_replace('backend_','',$sec);
-						} elseif(preg_match('/^rotation_/i', $sec)) {
-							$this->config[$sec] = Array();
-							$this->config[$sec]['rotationid'] = str_replace('rotation_','',$sec);
-						} else {
-							$this->config[$sec] = Array();
-						}
-					}
-				} else {
-					// parameter...
-					
-					// separate string in an array
-					$arr = explode('=',$line);
-					// read key from array and delete it
-					$key = strtolower(trim($arr[0]));
-					unset($arr[0]);
-					// build string from rest of array
-					$val = trim(implode('=', $arr));
-					
-					// remove " at beginning and at the end of the string
-					if ((substr($val,0,1) == '"') && (substr($val,-1,1)=='"')) {
-						$val = substr($val,1,strlen($val)-2);
-					}
-					
-					// Special options (Arrays)
-					if(isset($this->validConfig[$sec][$key]['array']) && $this->validConfig[$sec][$key]['array'] === true) {
-						$val = $this->stringToArray($val);
-					} elseif(preg_match('/^rotation_/i', $sec) && $key == 'maps') {
-						// Explode comma separated list to array
-						$val = explode(',', $val);
-						
-						// Check if an element has a label defined
-						foreach($val AS $id => $element) {
-							if(preg_match("/^([^\[.]+:)?(\[(.+)\]|(.+))$/", $element, $arrRet)) {
-								$label = '';
-								$map = '';
-								$automap = '';
-								
-								// When no label is set, set map or url as label
-								if($arrRet[1] != '') {
-									$label = substr($arrRet[1],0,-1);
-								} else {
-									if($arrRet[3] != '') {
-										$label = $arrRet[3];
-									} else {
-										$label = $arrRet[4];
-									}
-								}
-								
-								if(isset($arrRet[4]) && $arrRet[4] != '') {
-									// Remove leading/trailing spaces
-									$map = $arrRet[4];
-								}
-
-								// Remove surrounding spaces
-								$label = trim($label);
-								$map = trim($map);
-								
-								// Check if the map is an automap
-								if(substr($map, 0, 1) === '@') {
-									$automap = substr($map, 1);
-									$map = '';
-								}
-								
-								// Save the extracted information to an array
-								$val[$id] = Array('label' => $label, 'map' => $map, 'automap' => $automap, 'url' => $arrRet[3], 'target' => '');
-							}
-						}
-					}
-					
-					// write in config array
-					if(isset($sec))
-						$this->config[$sec][$key] = $val;
-					else
-						$this->config[$key] = $val;
-				}
-			} else {
-				$sec = '';
-				$this->config['comment_'.($numComments++)] = '';
-			}
-		}
-		
-		return $this->checkMainConfigIsValid(1);
-	}
-	
-	/**
-	 * Checks if the main config file is valid
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function checkMainConfigIsValid($printErr) {
-		// check given objects and attributes
-		foreach($this->config AS $type => &$vars) {
-			if(!preg_match('/^comment_/',$type)) {
-				if(isset($this->validConfig[$type]) || preg_match('/^(backend|rotation)_/', $type)) {
-					// loop validConfig for checking: => missing "must" atributes
-					if(preg_match('/^backend_/', $type)) {
-						if(isset($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]) 
-							 && is_array($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])) {
-							$arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
-						} else {
-							$arrValidConfig = $this->validConfig['backend'];
-						}
-					} elseif(preg_match('/^rotation_/', $type)) {
-						$arrValidConfig = $this->validConfig['rotation'];
-					} else {
-						$arrValidConfig = $this->validConfig[$type];
-					}
-					foreach($arrValidConfig AS $key => &$val) {
-						if((isset($val['must']) && $val['must'] == '1')) {
-							// value is "must"
-							if($this->getValue($type,$key) == '') {
-								// a "must" value is missing or empty
-								new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The needed attribute [ATTRIBUTE] is missing in section [TYPE] in main configuration file. Please take a look at the documentation.', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
-								return FALSE;
-							}
-						}
-					}
-					
-					// loop given elements for checking: => all given attributes valid
-					foreach($vars AS $key => $val) {
-						if(!preg_match('/^comment_/', $key)) {
-							if(preg_match('/^backend_/', $type)) {
-								if(isset($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]) 
-									 && is_array($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])) {
-									$arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
-								} else {
-									$arrValidConfig = $this->validConfig['backend'];
-								}
-							} elseif(preg_match('/^rotation_/', $type)) {
-								$arrValidConfig = $this->validConfig['rotation'];
-							} else {
-								$arrValidConfig = $this->validConfig[$type];
-							}
-							
-							if(!isset($arrValidConfig[$key])) {
-								// unknown attribute
-								if($printErr) {
-									new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Unknown value [ATTRIBUTE] used in section [TYPE] in main configuration file.', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
-								}
-								return FALSE;
-							} elseif(isset($arrValidConfig[$key]['deprecated']) && $arrValidConfig[$key]['deprecated'] == 1) {
-								// deprecated option
-								if($printErr) {
-									new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file is deprecated. Please take a look at the documentation for updating your configuration.', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
-								}
-								return FALSE;
-							} else {
-								// Workaround to get the configured string back
-								if(preg_match('/^rotation_/', $type) && $key == 'maps') {
-									foreach($val AS $intId => $arrStep) {
-										if(isset($arrStep['label']) && $arrStep['label'] != '') {
-											$label = $arrStep['label'].':';
-										}
-										
-										$val[$intId] = $label.$arrStep['url'].$arrStep['map'];
-									}
-								}
-								
-								if(isset($val) && is_array($val)) {
-									$val = implode(',',$val);
-								}
-								
-								// valid attribute, now check for value format
-								if(!preg_match($arrValidConfig[$key]['match'],$val)) {
-									// wrong format
-									if($printErr) {
-										new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file does not match the correct format. Please review your configuration.', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
-									}
-									return FALSE;
-								}
-								
-								// Check if the configured backend is defined in main configuration file
-								if($type == 'defaults' && $key == 'backend' && !isset($this->config['backend_'.$val])) {
-									if($printErr) {
-										new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('backendNotDefined', Array('BACKENDID' => $val)));
-									}
-									return FALSE;
-								}
-							}
-						}
-					}	
-				} else {
-					// unknown type
-					if($printErr) {
-						new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The section [TYPE] is not supported in main configuration. Please take a look at the documentation.', 'TYPE~'.$type));
-					}
-					return FALSE;
-				}
-			}
-		}
-		return TRUE;
-	}
-	
-	/**
-	 * Returns the last modification time of the configuration file
-	 *
-	 * @return	Integer	Unix Timestamp
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getConfigFileAge() {
-		$newest = 0;
-		foreach($this->configFiles AS $configFile) {
-			$age = filemtime($configFile);
-			$newest = ($age > $newest ? $age : $newest);
-		}
-		return $newest;
-	}
-	
-	/**
-	 * Public Adaptor for the isCached method of CACHE object
-	 *
-	 * @return  Boolean  Result
-	 * @return  Integer  Unix timestamp of cache creation time or -1 when not cached
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function isCached() {
-		return $this->useCache;
-	}
-	
-	/**
-	 * Sets a config setting
-	 *
-	 * @param	String	$sec	Section
-	 * @param	String	$var	Variable
-	 * @param	String	$val	Value
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function setValue($sec, $var, $val) {
-		if(isset($this->config[$sec][$var]) && $val == '') {
-			// Value is empty and there is an entry in the config array
-			unset($this->config[$sec][$var]);
-		} elseif(!isset($this->config[$sec][$var]) && $val == '') {
-			// Value is empty and there is nothing in config array yet
-		} else {
-			// Value is set
-			if(isset($this->validConfig[$sec][$var]['array']) && $this->validConfig[$sec][$var]['array'] == true && !is_array($val)) {
-				$val = $this->stringToArray($val);
-			}
-			
-			$this->config[$sec][$var] = $val;
-		}
-		return TRUE;
-	}
-
-	public function getPath($type, $loc, $var, $relfile = '') {
-		$lb = $this->getValue('paths', 'local_base', True) . HTDOCS_DIR;
-		$b  = $this->getValue('paths', 'base') . HTDOCS_DIR;
-
-		$lh = $this->getValue('paths', 'local_htmlbase', True);
-		$h  = $this->getValue('paths', 'htmlbase');
-
-		// Get the relative path
-		if(isset($this->config['paths']) && isset($this->config['paths'][$var]))
-			$relpath = $this->config['paths'][$var];
-		else
-			$relpath = $this->validConfig['paths'][$var]['default'];
-
-		// Compute the full system paths
-		$l_file = $lb !== FALSE && $lb !== '' ? $lb . '/' . $relpath . $relfile : null;
-		$file   = $b . '/' . $relpath . $relfile;
-
-		// Decide which path to return
-		// When $loc is set to local it returns the local path
-		// When $loc is set to global it returns the global path
-		// When $loc is empty it checks if the local one exist and returns this when
-		// existing. Otherwise it returns the global one when existing. When the global
-		// is also not existant it returns an empty string
-		if($loc === 'local' || ($loc === '' && $l_file && file_exists($l_file)))
-			return $type == 'sys' ? $l_file : $lh . '/' . $relpath . $relfile;
-		elseif($loc === 'global' || ($loc === '' && file_exists($file)))
-			return $type == 'sys' ? $file : $h . '/' . $relpath . $relfile;
-		else
-			return '';
-	}
-	
-	/**
-	 * Gets a config setting
-	 *
-	 * @param	String	$sec	Section
-	 * @param	String	$var	Variable
-	 * @param   Bool	$ignoreDefault Don't read default value
-	 * @return	String	$val	Value
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 * FIXME: Needs to be simplified
-	 */
-	public function getValue($sec, $var, $ignoreDefault=FALSE) {
-		// if nothing is set in the config file, use the default value
-		// (Removed "&& is_array($this->config[$sec]) due to performance issues)
-		if(isset($this->config[$sec]) && isset($this->config[$sec][$var])) {
-			return $this->config[$sec][$var];
-		} elseif(!$ignoreDefault) {
-			// Speed up this method by first checking for major sections and only if 
-			// they don't match try to match the backend_ and rotation_ sections
-			if($sec == 'global' || $sec == 'defaults' || $sec == 'paths') {
-				return $this->validConfig[$sec][$var]['default'];
-			} elseif(strpos($sec, 'backend_') === 0) {
-				
-				// Choose the backend type (Configured one or the system default)
-				$backendType = '';
-				if(isset($this->config[$sec]['backendtype']) && $this->config[$sec]['backendtype'] !== '') {
-					$backendType = $this->config[$sec]['backendtype'];
-				} else {
-					$backendType = $this->validConfig['backend']['backendtype']['default'];
-				}
-				
-				// This value could be emtpy - so only check if it is set
-				if(isset($this->validConfig['backend']['options'][$backendType][$var]['default'])) {
-					return $this->validConfig['backend']['options'][$backendType][$var]['default'];
-				} else {
-					// This value could be emtpy - so only check if it is set
-					if(isset($this->validConfig['backend'][$var]['default'])) {
-						return $this->validConfig['backend'][$var]['default'];
-					}
-				}
-			} elseif(strpos($sec, 'rotation_') === 0) {
-				if(isset($this->config[$sec]) && is_array($this->config[$sec])) {
-					return $this->validConfig['rotation'][$var]['default'];
-				} else {
-					return FALSE;
-				}
-			} else {
-				return $this->validConfig[$sec][$var]['default'];
-			}
-		} else {
-			return FALSE;
-		}
-	}
-	
-	/**
-	 * A getter to provide all section names of main configuration
-	 *
-	 * @return  Array  List of all sections as values
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getSections() {
-		$aRet = Array();
-		foreach($this->config AS $key => $var) {
-			$aRet[] = $key;
-		}
-		return $aRet;
-	}
-	
-	/**
-	 * Sets a runtime config value
-	 *
-	 * @param	String	$var	Variable
-	 * @param	String	$val	Value
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function setRuntimeValue($var, $val) {
-		$this->runtimeConfig[$var] = $val;
-		return TRUE;
-	}
-	
-	/**
-	 * Gets a runtime config value
-	 *
-	 * @param	String	$var	Variable
-	 * @return	String	$val	Value
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getRuntimeValue($var) {
-		return isset($this->runtimeConfig[$var]) ? $this->runtimeConfig[$var] : '';
-	}
-	
-	/**
-	 * Parses general settings
-	 *
-	 * @return	String 	JSON Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parseGeneralProperties() {
-		return json_encode(Array(
-		  'date_format'    => $this->getValue('global', 'dateformat'),
-		  'path_base'      => $this->getValue('paths','htmlbase'),
-		  'path_cgi'       => $this->getValue('paths','htmlcgi'),
-		  'path_sounds'    => $this->getPath('html', 'global', 'sounds'),
-		  'path_iconsets'  => $this->getPath('html', 'global', 'icons'),
-		  'path_shapes'    => $this->getPath('html', 'global', 'shapes'),
-		  'path_images'    => $this->getValue('paths','htmlimages'),
-		  'path_server'    => $this->getValue('paths','htmlbase').'/server/core/ajax_handler.php',
-		  'internal_title' => $this->getValue('internal', 'title')
-		));
-	}
-	
-	/**
-	 * Parses the settings for the javascript worker
-	 *
-	 * @return	String 	JSON Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parseWorkerProperties() {
-		return json_encode(Array(
-			'worker_interval'             => $this->getValue('worker', 'interval'),
-			'worker_update_object_states' => $this->getValue('worker', 'updateobjectstates'),
-			'worker_request_max_params'   => $this->getValue('worker', 'requestmaxparams'),
-			'worker_request_max_length'   => $this->getValue('worker', 'requestmaxlength')
-		));
-	}
-
-	/**$
-	 * Parses the state weight configuration array
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function parseStateWeight() {
-		$arr = Array();
-
-		foreach($this->validConfig['states'] AS $lowState => $aVal) {
-			$key = explode('_', $lowState);
-			
-			// First create array when not exists
-			if(!isset($arr[strtoupper($key[0])])) {
-				$arr[strtoupper($key[0])] = Array();
-			}
-			
-			if(isset($key[1]) && isset($key[2])) {
-				$arr[strtoupper($key[0])][$key[1].'_'.$key[2]] = $this->getValue('states', $lowState);
-			} elseif(isset($key[1])) {
-				// ack/downtime
-				$arr[strtoupper($key[0])][$key[1]] = $this->getValue('states', $lowState);
-			} else {
-				$arr[strtoupper($key[0])]['normal'] = $this->getValue('states', $lowState);
-			}
-		}
-
-		$this->stateWeight = $arr;
-	}
-	
-	/**
-	 * Returns an array with the state weight configuration
-	 *
-	 * @return  Array
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getStateWeight() {
-		return $this->stateWeight;
-	}
-	
-	/**
-	 * FIXME: Below you will find all WUI specific function. All need to be reviewed
-	 */
-	
-	/**
-	 * Gets all information about an object type
-	 *
-	 * @param   String  Type to get the information for
-	 * @return  Array   The validConfig array
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getValidObjectType($type) {
-		return $this->validConfig[$type];
-	}
-	
-	/**
-	 * Gets the valid configuration array
-	 *
-	 * @return	Array The validConfig array
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getValidConfig() {
-		return $this->validConfig;
-	}
-	
-	/**
-	 * Gets the configuration array
-	 *
-	 * @return	Array The validConfig array
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function getConfig() {
-		return $this->config;
-	}
-	
-	/**
-	 * Sets a config section in the config array
-	 *
-	 * @param	String	$sec	Section
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function setSection($sec) {
-		// Try to append new backends after already defined
-		if(preg_match('/^backend_/', $sec)) { 
-		    $lastBackendIndex = 0;
-		    $i = 0;
-		    // Loop all sections to find the last defined backend
-		    foreach($this->config AS $type => $vars) {
-		        // If the current section is a backend
-						if(preg_match('/^backend_/', $type)) { 
-		            $lastBackendIndex = $i;
-		        }
-		        $i++;
-		    }
-		    
-		    if($lastBackendIndex != 0) {
-		        // Append the new section after the already defined
-		        $slicedBefore = array_slice($this->config, 0, ($lastBackendIndex + 1));
-		        $slicedAfter = array_slice($this->config, ($lastBackendIndex + 1));
-		        $tmp[$sec] = Array();
-		        $this->config = array_merge($slicedBefore,$tmp,$slicedAfter);
-		    } else {
-		        // If no defined backend found, add it to the EOF
-		        $this->config[$sec] = Array();
-		    }
-	    } else {
-	        $this->config[$sec] = Array();
-	    }
-		
-		return TRUE;
-	}
-	
-	/**
-	 * Deletes a config section in the config array
-	 *
-	 * @param	String	$sec	Section
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
+    /**
+     * Class Constructor
+     *
+     * @param	Array $configFile    List of paths to configuration files
+     * @author Lars Michelsen <lars@vertical-visions.de>
      */
-	function delSection($sec) {
-		$this->config[$sec] = '';
-		unset($this->config[$sec]);
-		
-		return TRUE;
-	}
-	
-	/**
-	 * Writes the config file completly from array $this->configFile
-	 *
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function writeConfig() {
-		// Check for config file write permissions
-		if(!$this->checkNagVisConfigWriteable(1))
-			return false;
+    public function __construct($configFiles) {
+        $this->validConfig = Array(
+            'global' => Array(
+                'audit_log' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => true,
+                    'match' => MATCH_BOOLEAN),
+                'authmodule' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => 'CoreAuthModSQLite',
+                    'match' => MATCH_STRING),
+                'authorisationmodule' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => 'CoreAuthorisationModSQLite',
+                    'match' => MATCH_STRING),
+                'dateformat' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => 'Y-m-d H:i:s',
+                    'match' => MATCH_STRING),
+                'displayheader' => Array('must' => 1,
+                    'editable' => 1,
+                    'deprecated' => 1,
+                    'default' => '1',
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'file_group' => Array('must' => 0,
+                    'default' => '',
+                    'match' => MATCH_STRING),
+                'file_mode' => Array('must' => 1,
+                    'default' => 660,
+                    'match' => MATCH_INTEGER_EMPTY),
+                'language_detection' => Array('must' => 1,
+                    'editable' => 1,
+                    'array' => true,
+                    'default' => Array('user', 'session', 'browser', 'config'),
+                    'match' => MATCH_STRING_NO_SPACE),
+                'language_available' => Array('must' => 1,
+                    'editable' => 1,
+                    'array' => true,
+                    'default' => Array('de_DE', 'en_US', 'es_ES', 'fr_FR', 'pt_BR'),
+                    'match' => MATCH_STRING_NO_SPACE),
+                'language' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => 'en_US',
+                    'field_type' => 'dropdown',
+                    'match' => MATCH_LANGUAGE_EMPTY),
+                'logonmodule' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => 'LogonMixed',
+                    'match' => MATCH_STRING),
+                'logonenvvar' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => 'REMOTE_USER',
+                    'depends_on' => 'logonmodule',
+                    'depends_value' => 'LogonEnv',
+                    'match' => MATCH_STRING),
+                'logonenvcreateuser' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '1',
+                    'field_type' => 'boolean',
+                    'depends_on' => 'logonmodule',
+                    'depends_value' => 'LogonEnv',
+                    'match' => MATCH_BOOLEAN),
+                'logonenvcreaterole' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => 'Guests',
+                    'depends_on' => 'logonmodule',
+                    'depends_value' => 'LogonEnv',
+                    'match' => MATCH_STRING),
+                'refreshtime' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '60',
+                    'match' => MATCH_INTEGER),
+                //FIXME: auto detect
+                'sesscookiedomain' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_STRING),
+                'sesscookiepath' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_STRING),
+                'sesscookieduration' => Array('must' => 1,
+                    'editable'    => 1,
+                    'default'     => '86400',
+                    'match'       => MATCH_STRING),
+                'startmodule' => Array('must' => 1,
+                    'editable'    => 1,
+                    'default'     => 'Overview',
+                    'match'       => MATCH_STRING),
+                'startaction' => Array('must' => 1,
+                    'editable'    => 1,
+                    'default'     => 'view',
+                    'match'       => MATCH_STRING),
+                'startshow'   => Array('must' => 0,
+                    'editable'    => 1,
+                    'default'     => '',
+                    'match'       => MATCH_STRING_EMPTY)),
+            'defaults' => Array(
+                'backend' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => 'live_1',
+                    'field_type' => 'dropdown',
+                    'match' => MATCH_STRING_NO_SPACE),
+                'backgroundcolor' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 'transparent',
+                    'match' => MATCH_COLOR),
+                'contextmenu' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 1,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'contexttemplate' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 'default',
+                    'depends_on' => 'contextmenu',
+                    'depends_value' => 1,
+                    'match' => MATCH_STRING_NO_SPACE),
+                'stylesheet' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_STRING_NO_SPACE),
+                'eventbackground' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '0',
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'eventhighlight' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '1',
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'eventhighlightinterval' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '500',
+                    'depends_on' => 'eventhighlight',
+                    'depends_value' => 1,
+                    'match' => MATCH_INTEGER),
+                'eventhighlightduration' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '10000',
+                    'depends_on' => 'eventhighlight',
+                    'depends_value' => 1,
+                    'match' => MATCH_INTEGER),
+                'eventlog' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '0',
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'eventloglevel' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 'info',
+                    'depends_on' => 'eventlog',
+                    'depends_value' => 1,
+                    'match' => MATCH_STRING_NO_SPACE),
+                'eventlogheight' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '100',
+                    'depends_on' => 'eventlog',
+                    'depends_value' => 1,
+                    'match' => MATCH_INTEGER),
+                'eventlogevents' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '24',
+                    'depends_on' => 'eventlog',
+                    'depends_value' => 1,
+                    'match' => MATCH_INTEGER),
+                'eventloghidden' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 1,
+                    'depends_on' => 'eventlog',
+                    'depends_value' => 1,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'eventscroll' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '1',
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'eventsound' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '1',
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'headermenu' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '1',
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'headertemplate' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 'default',
+                    'depends_on' => 'headermenu',
+                    'depends_value' => 1,
+                    'match' => MATCH_STRING_NO_SPACE),
+                'headerfade' => Array(
+                        'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => 0,
+                    'depends_on'    => 'headermenu',
+                    'depends_value' => 1,
+                    'match'         => MATCH_BOOLEAN
+                ),
+                'hovermenu' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '1',
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'hovertemplate' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 'default',
+                    'depends_on' => 'hovermenu',
+                    'depends_value' => 1,
+                    'match' => MATCH_STRING_NO_SPACE),
+                'hovertimeout' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '5',
+                    'deprecated' => 1,
+                    'match' => MATCH_INTEGER),
+                'hoverdelay' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '0',
+                    'depends_on' => 'hovermenu',
+                    'depends_value' => 1,
+                    'match' => MATCH_INTEGER),
+                'hoverchildsshow' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '1',
+                    'depends_on' => 'hovermenu',
+                    'depends_value' => 1,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'hoverchildslimit' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '10',
+                    'depends_on' => 'hovermenu',
+                    'depends_value' => 1,
+                    'match' => MATCH_INTEGER_PRESIGN),
+                'hoverchildsorder' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 'asc',
+                    'depends_on' => 'hovermenu',
+                    'depends_value' => 1,
+                    'match' => MATCH_ORDER),
+                'hoverchildssort' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 's',
+                    'depends_on' => 'hovermenu',
+                    'depends_value' => 1,
+                    'match' => MATCH_STRING_NO_SPACE),
+                'icons' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => 'std_medium',
+                    'field_type' => 'dropdown',
+                    'match' => MATCH_STRING_NO_SPACE),
+                'onlyhardstates' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 0,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'recognizeservices' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 1,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'showinlists' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 1,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'showinmultisite' => Array('must' => 0,
+                    'editable'                => 1,
+                    'default'                 => 1,
+                    'field_type'              => 'boolean',
+                    'match'                   => MATCH_BOOLEAN),
+                'urltarget' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '_self',
+                    'match' => MATCH_STRING_NO_SPACE),
+                'mapurl' => Array('must' => 0,
+                    'default' => '[htmlbase]/index.php?mod=Map&act=view&show=[map_name]',
+                    'match' => MATCH_STRING_URL_EMPTY),
+                'hosturl' => Array('must' => 0,
+                    'default' => '[htmlcgi]/status.cgi?host=[host_name]',
+                    'match' => MATCH_STRING_URL_EMPTY),
+                'hostgroupurl' => Array('must' => 0,
+                    'default' => '[htmlcgi]/status.cgi?hostgroup=[hostgroup_name]',
+                    'match' => MATCH_STRING_URL_EMPTY),
+                'serviceurl' => Array('must' => 0,
+                    'default' => '[htmlcgi]/extinfo.cgi?type=2&host=[host_name]&service=[service_description]',
+                    'match' => MATCH_STRING_URL_EMPTY),
+                'servicegroupurl' => Array('must' => 0,
+                    'default' => '[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]&style=detail',
+                    'match' => MATCH_STRING_URL_EMPTY),
+            ),
+            'wui' => Array(
+                'allowedforconfig' => Array(
+                    'must' => 0,
+                    'editable' => 1,
+                    'deprecated' => 1,
+                    'default' => Array('EVERYONE'),
+                    'match' => MATCH_STRING),
+                'autoupdatefreq' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '25',
+                    'field_type' => 'dropdown',
+                    'match' => MATCH_INTEGER),
+                'headermenu' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '1',
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'headertemplate' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 'default',
+                    'depends_on' => 'headermenu',
+                    'depends_value' => 1,
+                    'field_type' => 'dropdown',
+                    'match' => MATCH_STRING_NO_SPACE),
+                'maplocktime' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '5',
+                    'match' => MATCH_INTEGER),
+                'grid_show' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 0,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'grid_color' => Array('must' => 0,
+                    'editable' => 1,
+                    'depends_on' => 'grid_show',
+                    'depends_value' => 1,
+                    'default' => '#D5DCEF',
+                    'match' => MATCH_COLOR),
+                'grid_steps' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 32,
+                    'depends_on' => 'grid_show',
+                    'depends_value' => 1,
+                    'match' => MATCH_INTEGER)),
+            'paths' => Array(
+                'base' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_STRING_PATH),
+                'local_base' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_STRING_PATH),
+                'cfg' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'icons' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'images' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'js' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'wuijs' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'shapes' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'language' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'class' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'var' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'sharedvar' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'mapcfg' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'profiles' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'automapcfg' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'gadgets' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'templates' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'htmlbase' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '/nagvis',
+                    'match' => MATCH_STRING_PATH),
+                'local_htmlbase' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '/nagvis',
+                    'match' => MATCH_STRING_PATH),
+                'htmlcgi' => Array('must' => 1,
+                    'editable' => 1,
+                    'field_type' => 'hidden',
+                    'default' => '/nagios/cgi-bin',
+                    'match' => MATCH_STRING_URL),
+                'htmlcss' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'htmlimages' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '/',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'htmljs' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'htmlwuijs' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'sounds' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'templateimages' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
+                'htmlsharedvar' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH)),
+            'backend' => Array(
+                'backendtype' => Array('must' => 1,
+                    'editable' => 0,
+                    'default' => '',
+                    'match' => MATCH_STRING_NO_SPACE),
+                'backendid' => Array('must' => 1,
+                    'editable' => 0,
+                    'default' => '',
+                    'match' => MATCH_STRING_NO_SPACE),
+                'statushost' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_STRING_NO_SPACE_EMPTY),
+                'htmlcgi' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_STRING_URL),
+                'custom_1' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_STRING_URL_EMPTY),
+                'custom_2' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_STRING_URL_EMPTY),
+                'custom_3' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_STRING_URL_EMPTY),
+                'options' => Array()),
+            'rotation' => Array(
+                'rotationid' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => 'demo',
+                    'match' =>MATCH_STRING_NO_SPACE),
+                'interval' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_INTEGER),
+                'maps' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => 'demo,demo2',
+                    'match' => MATCH_STRING)),
+            'automap' => Array(
+                'defaultparams' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '&childLayers=2',
+                    'match' => MATCH_STRING_URL),
+                'defaultroot' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 'localhost',
+                    'match' => MATCH_STRING_NO_SPACE_EMPTY),
+                'graphvizpath' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '/usr/local/bin/',
+                    'match' => MATCH_STRING_PATH),
+                'showinlists' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '1',
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN)
+                ),
+            'index' => Array(
+                'cellsperrow' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '4',
+                    'match' => MATCH_INTEGER),
+                'headermenu' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '1',
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'headertemplate' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 'default',
+                    'depends_on' => 'headermenu',
+                    'depends_value' => 1,
+                    'match' => MATCH_STRING_NO_SPACE),
+                'showautomaps' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 1,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'showmaps' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 1,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'showgeomap' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 0,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'showmapthumbs' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 0,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'showrotations' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 1,
+                    'field_type' => 'boolean',
+                    'match' => MATCH_BOOLEAN),
+                'backgroundcolor' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '#ffffff',
+                    'match' => MATCH_COLOR)),
+            'worker' => Array(
+                'interval' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '10',
+                    'match' => MATCH_INTEGER),
+                'updateobjectstates' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '30',
+                    'match' => MATCH_INTEGER),
+                'requestmaxparams' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 0,
+                    'match' => MATCH_INTEGER),
+                'requestmaxlength' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 1900,
+                    'match' => MATCH_INTEGER)),
+            'states' => Array(
+                'unreachable' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '10',
+                    'match' => MATCH_INTEGER),
+                'unreachable_ack' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '6',
+                    'match' => MATCH_INTEGER),
+                'unreachable_ack_bgcolor' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_COLOR),
+                'unreachable_downtime' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '6',
+                    'match' => MATCH_INTEGER),
+                'unreachable_downtime_bgcolor' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_COLOR),
+                'unreachable_bgcolor' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#F1811B',
+                    'match' => MATCH_COLOR),
+                'unreachable_color' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#F1811B',
+                    'match' => MATCH_COLOR),
+                'unreachable_sound' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 'std_unreachable.mp3',
+                    'match' => MATCH_MP3_FILE),
+                'down' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '9',
+                    'match' => MATCH_INTEGER),
+                'down_ack' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '6',
+                    'match' => MATCH_INTEGER),
+                'down_ack_bgcolor' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_COLOR),
+                'down_downtime' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '6',
+                    'match' => MATCH_INTEGER),
+                'down_downtime_bgcolor' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_COLOR),
+                'down_bgcolor' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#FF0000',
+                    'match' => MATCH_COLOR),
+                'down_color' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#FF0000',
+                    'match' => MATCH_COLOR),
+                'down_sound' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 'std_down.mp3',
+                    'match' => MATCH_MP3_FILE),
+                'critical' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '8',
+                    'match' => MATCH_INTEGER),
+                'critical_ack' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '6',
+                    'match' => MATCH_INTEGER),
+                'critical_ack_bgcolor' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_COLOR),
+                'critical_downtime' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '6',
+                    'match' => MATCH_INTEGER),
+                'critical_downtime_bgcolor' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_COLOR),
+                'critical_bgcolor' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#FF0000',
+                    'match' => MATCH_COLOR),
+                'critical_color' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#FF0000',
+                    'match' => MATCH_COLOR),
+                'critical_sound' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 'std_critical.mp3',
+                    'match' => MATCH_MP3_FILE),
+                'warning' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '7',
+                    'match' => MATCH_INTEGER),
+                'warning_ack' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '5',
+                    'match' => MATCH_INTEGER),
+                'warning_ack_bgcolor' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_COLOR),
+                'warning_downtime' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '5',
+                    'match' => MATCH_INTEGER),
+                'warning_downtime_bgcolor' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_COLOR),
+                'warning_bgcolor' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#FFFF00',
+                    'match' => MATCH_COLOR),
+                'warning_color' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#FFFF00',
+                    'match' => MATCH_COLOR),
+                'warning_sound' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => 'std_warning.mp3',
+                    'match' => MATCH_MP3_FILE),
+                'unknown' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '4',
+                    'match' => MATCH_INTEGER),
+                'unknown_ack' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '3',
+                    'match' => MATCH_INTEGER),
+                'unknown_ack_bgcolor' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_COLOR),
+                'unknown_downtime' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '3',
+                    'match' => MATCH_INTEGER),
+                'unknown_downtime_bgcolor' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_COLOR),
+                'unknown_bgcolor' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#FFCC66',
+                    'match' => MATCH_COLOR),
+                'unknown_color' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#FFCC66',
+                    'match' => MATCH_COLOR),
+                'unknown_sound' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_MP3_FILE),
+                'error' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '4',
+                    'match' => MATCH_INTEGER),
+                'error_ack' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '3',
+                    'match' => MATCH_INTEGER),
+                'error_ack_bgcolor' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_COLOR),
+                'error_downtime' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '3',
+                    'match' => MATCH_INTEGER),
+                'error_downtime_bgcolor' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_COLOR),
+                'error_bgcolor' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#0000FF',
+                    'match' => MATCH_COLOR),
+                'error_color' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#0000FF',
+                    'match' => MATCH_COLOR),
+                'error_sound' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_MP3_FILE),
+                'up' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '2',
+                    'match' => MATCH_INTEGER),
+                'up_downtime' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '2',
+                    'match' => MATCH_INTEGER),
+                'up_bgcolor' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#00FF00',
+                    'match' => MATCH_COLOR),
+                'up_color' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#00FF00',
+                    'match' => MATCH_COLOR),
+                'up_sound' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_MP3_FILE),
+                'ok' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '1',
+                    'match' => MATCH_INTEGER),
+                'ok_downtime' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '1',
+                    'match' => MATCH_INTEGER),
+                'ok_bgcolor' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#00FF00',
+                    'match' => MATCH_COLOR),
+                'ok_color' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#00FF00',
+                    'match' => MATCH_COLOR),
+                'ok_sound' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_MP3_FILE),
+                'pending' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '0',
+                    'match' => MATCH_INTEGER),
+                'pending_downtime' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '0',
+                    'match' => MATCH_INTEGER),
+                'pending_bgcolor' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#C0C0C0',
+                    'match' => MATCH_COLOR),
+                'pending_color' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#C0C0C0',
+                    'match' => MATCH_COLOR),
+                'pending_sound' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_MP3_FILE),
+                'unchecked' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '0',
+                    'match' => MATCH_INTEGER),
+                'unchecked_downtime' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '0',
+                    'match' => MATCH_INTEGER),
+                'unchecked_bgcolor' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#C0C0C0',
+                    'match' => MATCH_COLOR),
+                'unchecked_color' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => '#C0C0C0',
+                    'match' => MATCH_COLOR),
+                'unchecked_sound' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_MP3_FILE)
+            ),
+            'auth_mysql' => Array(
+                'dbhost' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => 'localhost',
+                    'match' => MATCH_STRING_NO_SPACE),
+                'dbport' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '3306',
+                    'match' => MATCH_INTEGER),
+                'dbname' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => 'nagvis-auth',
+                    'match' => MATCH_STRING_NO_SPACE),
+                'dbuser' => Array('must' => 1,
+                    'editable' => 1,
+                    'default' => 'root',
+                    'match' => MATCH_STRING_NO_SPACE),
+                'dbpass' => Array('must' => 0,
+                    'editable' => 1,
+                    'default' => '',
+                    'match' => MATCH_STRING_EMPTY),
+            ),
+            'internal' => Array(
+                'version' => Array('must' => 1,
+                    'editable' => 0,
+                    'default' => CONST_VERSION,
+                    'locked' => 1,
+                    'match' => MATCH_STRING_NO_SPACE),
+                'title' => Array('must' => 1,
+                    'editable' => 0,
+                    'default' => 'NagVis ' . CONST_VERSION,
+                    'locked' => 1,
+                    'match' => MATCH_STRING)
+            )
+        );
 
-		$content = '';
-		foreach($this->config as $key => $item) {
-			if(is_array($item)) {
-				$content .= '['.$key.']'."\n";
-				foreach ($item as $key2 => $item2) {
-					if(substr($key2,0,8) == 'comment_') {
-						$content .= $item2."\n";
-					} else {
-						if(is_numeric($item2) || is_bool($item2)) {
-							$content .= $key2."=".$item2."\n";
-						} else {
-							if(is_array($item2) && preg_match('/^rotation_/i', $key) && $key2 == 'maps') {
-								$val = '';
-								// Check if an element has a label defined
-								foreach($item2 AS $intId => $arrStep) {
-									$seperator = ',';
-									$label = '';
-									$step = '';
-									
-									if($intId == 0)
-										$seperator = '';
-									
-									if(isset($arrStep['map']) && $arrStep['map'] != '')
-										$step = $arrStep['map'];
-									else
-										$step = '['.$arrStep['url'].']';
-									
-									if(isset($arrStep['label']) && $arrStep['label'] != '' && $arrStep['label'] != $step)
-										$label = $arrStep['label'].':';
-									
-									// Save the extracted information to an array
-									$val .= $seperator.$label.$step;
-								}
-								
-								$item2 = $val;
-							}
-							
-							// Don't write the backendid/rotationid attributes (Are internal)
-							if($key2 !== 'backendid' && $key2 !== 'rotationid') {
-								if(isset($this->validConfig[$key][$key2]['array']) && $this->validConfig[$key][$key2]['array'] === true)
-									$item2 = implode(',', $item2);
-								
-								$content .= $key2.'="'.$item2.'"'."\n";
-							}
-						}
-					}
-				}
-			} elseif(substr($key,0,8) == 'comment_')
-				$content .= $item."\n";
-		}
-		
-		$cfgFile = $this->configFiles[count($this->configFiles)-1];
-		if(!$handle = fopen($cfgFile, 'w+')) {
-			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('mainCfgNotWriteable'), GlobalCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
-			return FALSE;
-		}
-		
-		if(!fwrite($handle, $content)) {
-			new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('mainCfgCouldNotWriteMainConfigFile'), GlobalCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
-			return FALSE;
-		}
-		
-		fclose($handle);
-		GlobalCore::getInstance()->setPerms($cfgFile);
+        // Detect the cookie domain to use
+        $this->setCookieDomainByEnv();
 
-		return TRUE;
-	}
-	
-	/**
-	 * Checks for writeable config file
-	 *
-	 * @param	Boolean $printErr
-	 * @return	Boolean	Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	function checkNagVisConfigWriteable($printErr) {
-		return GlobalCore::getInstance()->checkWriteable($this->configFiles[count($this->configFiles)-1], $printErr);
-	}
+        // Try to get the base path via $_SERVER['SCRIPT_FILENAME']
+        $this->validConfig['paths']['base']['default'] = $this->getBasePath();
+        $this->setPathsByBase($this->getValue('paths','base'), $this->getValue('paths','htmlbase'));
 
-	/**
+        // Define the main configuration files
+        $this->configFiles = $configFiles;
+    }
+
+    /**
+     * Get the newest of the given configuration files. This is needed to test if
+     * the cache file is up-to-date or needs to be renewed
+     *
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function getNewestFile() {
+        $age = -1;
+        $newestFile = '';
+        foreach($this->configFiles AS $configFile) {
+            if(!GlobalCore::getInstance()->checkExisting($configFile, false) || !GlobalCore::getInstance()->checkReadable($configFile, false))
+                continue;
+
+            $configAge = filemtime($configFile);
+            if($age === -1) {
+                $age = $configAge;
+                $newestFile = $configFile;
+            } elseif($configAge > $age) {
+                $age = $configAge;
+        $newestFile = $configFile;
+            }
+        }
+
+        return $newestFile;
+    }
+
+    public function init() {
+        // Get the valid configuration definitions from the available backends
+        $this->getBackendValidConf();
+
+        // Get the path and age of the newest config file
+        $newestFile = $this->getNewestFile();
+
+        // Use the newest file as indicator for using the cache or not
+        $this->CACHE = new GlobalFileCache(GlobalCore::getInstance(), $newestFile, CONST_MAINCFG_CACHE.'-'.CONST_VERSION.'-cache');
+  	if($this->CACHE->isCached(false) === -1) {
+            // The cache is too old. Load all config files
+            foreach($this->configFiles AS $configFile) {
+                // Only proceed when the configuration file exists and is readable
+                if(!GlobalCore::getInstance()->checkExisting($configFile, true) || !GlobalCore::getInstance()->checkReadable($configFile, true))
+                    return false;
+                $this->readConfig($configFile, true);
+            }
+            $this->CACHE->writeCache($this->config, true);
+        } else {
+            // Use the cache!
+            $this->config = $this->CACHE->getCache();
+        }
+
+        // Update the cache time
+        $this->useCache = $this->CACHE->isCached(false);
+
+        // Parse the state weight array
+        $this->parseStateWeight();
+
+        // want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
+        $this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
+
+        // set default value
+        $this->validConfig['rotation']['interval']['default'] = $this->getValue('global','refreshtime');
+        $this->validConfig['backend']['htmlcgi']['default'] = $this->getValue('paths','htmlcgi');
+    }
+
+    /**
+     * Gets the cookie domain from the webservers environment and sets the
+     * session cookie domain to this value
+     *
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function setCookieDomainByEnv() {
+        if(isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME'] !== '') {
+            $this->validConfig['global']['sesscookiedomain']['default'] = $_SERVER['SERVER_NAME'];
+        }
+    }
+
+    /**
+     * Gets the valid configuration definitions from the available backends. The
+     * definitions were moved to the backends so it is easier to create new
+     * backends without any need to modify the main configuration
+     *
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function getBackendValidConf() {
+        // Get the configuration options from the backends
+        $aBackends = GlobalCore::getInstance()->getAvailableBackends();
+
+        foreach($aBackends AS $backend) {
+            $class = 'GlobalBackend'.$backend;
+
+            // FIXME: Does not work in PHP 5.2 (http://bugs.php.net/bug.php?id=31318)
+            //$this->validConfig['backend']['options'][$backend] = $class->getValidConfig();
+            // I'd prefer to use the above but for the moment I use the fix below
+
+            if (is_callable(array($class, 'getValidConfig'))) {
+                $this->validConfig['backend']['options'][$backend] = call_user_func(Array('GlobalBackend'.$backend, 'getValidConfig'));
+                //$this->validConfig['backend']['options'][$backend] = call_user_func('GlobalBackend'.$backend.'::getValidConfig');
+            }
+        }
+    }
+
+    /**
+     * Gets the base path
+     *
+     * @param	Boolean $printErr
+     * @return	Boolean	Is Successful?
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function setPathsByBase($base, $htmlBase) {
+        $this->validConfig['paths']['cfg']['default']                = $base.'etc/';
+        $this->validConfig['paths']['mapcfg']['default']             = $base.'etc/maps/';
+        $this->validConfig['paths']['automapcfg']['default']         = $base.'etc/automaps/';
+        $this->validConfig['paths']['profiles']['default']           = $base.'etc/profiles';
+
+        $this->validConfig['paths']['var']['default']                = $base.'var/';
+        $this->validConfig['paths']['sharedvar']['default']          = $base.HTDOCS_DIR.'/var/';
+        $this->validConfig['paths']['htmlsharedvar']['default']      = $htmlBase.'/var/';
+
+        $this->validConfig['paths']['language']['default']           = $base.HTDOCS_DIR.'/frontend/nagvis-js/locale';
+        $this->validConfig['paths']['class']['default']              = $base.HTDOCS_DIR.'/server/core/classes/';
+
+        $this->validConfig['paths']['htmlcss']['default']            = $htmlBase.'/frontend/nagvis-js/css/';
+
+        $this->validConfig['paths']['js']['default']                 = $base.HTDOCS_DIR.'/frontend/nagvis-js/js/';
+        $this->validConfig['paths']['htmljs']['default']             = $htmlBase.'/frontend/nagvis-js/js/';
+
+        $this->validConfig['paths']['wuijs']['default']              = $base.HTDOCS_DIR.'/frontend/wui/js/';
+        $this->validConfig['paths']['htmlwuijs']['default']          = $htmlBase.'/frontend/wui/js/';
+
+        $this->validConfig['paths']['images']['default']             = $base.HTDOCS_DIR.'/frontend/nagvis-js/images/';
+        $this->validConfig['paths']['htmlimages']['default']         = $htmlBase.'/frontend/nagvis-js/images/';
+
+        $this->validConfig['paths']['templates']['default']          = 'userfiles/templates/';
+        $this->validConfig['paths']['styles']['default']             = 'userfiles/styles/';
+        $this->validConfig['paths']['gadgets']['default']            = 'userfiles/gadgets/';
+        $this->validConfig['paths']['backgrounds']['default']        = 'userfiles/images/maps/';
+        $this->validConfig['paths']['icons']['default']              = 'userfiles/images/iconsets/';
+        $this->validConfig['paths']['shapes']['default']             = 'userfiles/images/shapes/';
+        $this->validConfig['paths']['sounds']['default']             = 'userfiles/sounds/';
+
+        $this->validConfig['paths']['templateimages']['default']     = 'userfiles/images/templates/';
+
+        // This option directly relies on the configured htmlBase by default
+        $this->validConfig['global']['sesscookiepath']['default']    = $htmlBase;
+    }
+
+    /**
+     * Gets the base path
+     *
+     * @param	Boolean $printErr
+     * @return	Boolean	Is Successful?
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Roman Kyrylych <rkyrylych@op5.com>
+     */
+    private function getBasePath() {
+        // Go 3 levels up from nagvis/share/nagvis to nagvis base path
+        return realpath(dirname($_SERVER['SCRIPT_FILENAME']) . '/../../..') . '/';
+        // Note: the method below causes problems when <docroot>/nagvis is a symlink to <nagvis-base>/share
+        // return realpath(dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME'])))).'/';
+    }
+
+    /**
+     * Reads the specified config file
+     *
+     * @param	Boolean $printErr
+     * @return	Boolean	Is Successful?
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function readConfig($configFile, $printErr=1) {
+        $numComments = 0;
+        $sec = '';
+
+        // read thx config file line by line in array $file
+        $file = file($configFile);
+
+        // Count the lines before the loop (only counts once)
+        $countLines = count($file);
+
+        // loop trough array
+        for ($i = 0; $i < $countLines; $i++) {
+            // cut spaces from beginning and end
+            $line = trim($file[$i]);
+
+            // don't read empty lines
+            if(isset($line) && $line != '') {
+                // get first char of actual line
+                $firstChar = substr($line,0,1);
+
+                // check what's in this line
+                if($firstChar == ';') {
+                    // comment...
+                    $key = 'comment_'.($numComments++);
+                    $val = trim($line);
+
+                    if(isset($sec) && $sec != '') {
+                        $this->config[$sec][$key] = $val;
+                    } else {
+                        $this->config[$key] = $val;
+                    }
+                } elseif ((substr($line, 0, 1) == '[') && (substr($line, -1, 1)) == ']') {
+                    // section
+                    $sec = strtolower(trim(substr($line, 1, strlen($line)-2)));
+
+                    // write to array
+                    if(!isset($this->config[$sec])) {
+                        if(preg_match('/^backend_/i', $sec)) {
+                            $this->config[$sec] = Array();
+                            $this->config[$sec]['backendid'] = str_replace('backend_','',$sec);
+                        } elseif(preg_match('/^rotation_/i', $sec)) {
+                            $this->config[$sec] = Array();
+                            $this->config[$sec]['rotationid'] = str_replace('rotation_','',$sec);
+                        } else {
+                            $this->config[$sec] = Array();
+                        }
+                    }
+                } else {
+                    // parameter...
+
+                    // separate string in an array
+                    $arr = explode('=',$line);
+                    // read key from array and delete it
+                    $key = strtolower(trim($arr[0]));
+                    unset($arr[0]);
+                    // build string from rest of array
+                    $val = trim(implode('=', $arr));
+
+                    // remove " at beginning and at the end of the string
+                    if ((substr($val,0,1) == '"') && (substr($val,-1,1)=='"')) {
+                        $val = substr($val,1,strlen($val)-2);
+                    }
+
+                    // Special options (Arrays)
+                    if(isset($this->validConfig[$sec][$key]['array']) && $this->validConfig[$sec][$key]['array'] === true) {
+                        $val = $this->stringToArray($val);
+                    } elseif(preg_match('/^rotation_/i', $sec) && $key == 'maps') {
+                        // Explode comma separated list to array
+                        $val = explode(',', $val);
+
+                        // Check if an element has a label defined
+                        foreach($val AS $id => $element) {
+                            if(preg_match("/^([^\[.]+:)?(\[(.+)\]|(.+))$/", $element, $arrRet)) {
+                                $label = '';
+                                $map = '';
+                                $automap = '';
+
+                                // When no label is set, set map or url as label
+                                if($arrRet[1] != '') {
+                                    $label = substr($arrRet[1],0,-1);
+                                } else {
+                                    if($arrRet[3] != '') {
+                                        $label = $arrRet[3];
+                                    } else {
+                                        $label = $arrRet[4];
+                                    }
+                                }
+
+                                if(isset($arrRet[4]) && $arrRet[4] != '') {
+                                    // Remove leading/trailing spaces
+                                    $map = $arrRet[4];
+                                }
+
+                                // Remove surrounding spaces
+                                $label = trim($label);
+                                $map = trim($map);
+
+                                // Check if the map is an automap
+                                if(substr($map, 0, 1) === '@') {
+                                    $automap = substr($map, 1);
+                                    $map = '';
+                                }
+
+                                // Save the extracted information to an array
+                                $val[$id] = Array('label' => $label, 'map' => $map, 'automap' => $automap, 'url' => $arrRet[3], 'target' => '');
+                            }
+                        }
+                    }
+
+                    // write in config array
+                    if(isset($sec))
+                        $this->config[$sec][$key] = $val;
+                    else
+                        $this->config[$key] = $val;
+                }
+            } else {
+                $sec = '';
+                $this->config['comment_'.($numComments++)] = '';
+            }
+        }
+
+        return $this->checkMainConfigIsValid(1);
+    }
+
+    /**
+     * Checks if the main config file is valid
+     *
+     * @param	Boolean $printErr
+     * @return	Boolean	Is Successful?
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function checkMainConfigIsValid($printErr) {
+        // check given objects and attributes
+        foreach($this->config AS $type => &$vars) {
+            if(!preg_match('/^comment_/',$type)) {
+                if(isset($this->validConfig[$type]) || preg_match('/^(backend|rotation)_/', $type)) {
+                    // loop validConfig for checking: => missing "must" atributes
+                    if(preg_match('/^backend_/', $type)) {
+                        if(isset($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])
+                             && is_array($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])) {
+                            $arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
+                        } else {
+                            $arrValidConfig = $this->validConfig['backend'];
+                        }
+                    } elseif(preg_match('/^rotation_/', $type)) {
+                        $arrValidConfig = $this->validConfig['rotation'];
+                    } else {
+                        $arrValidConfig = $this->validConfig[$type];
+                    }
+                    foreach($arrValidConfig AS $key => &$val) {
+                        if((isset($val['must']) && $val['must'] == '1')) {
+                            // value is "must"
+                            if($this->getValue($type,$key) == '') {
+                                // a "must" value is missing or empty
+                                new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The needed attribute [ATTRIBUTE] is missing in section [TYPE] in main configuration file. Please take a look at the documentation.', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
+                                return FALSE;
+                            }
+                        }
+                    }
+
+                    // loop given elements for checking: => all given attributes valid
+                    foreach($vars AS $key => $val) {
+                        if(!preg_match('/^comment_/', $key)) {
+                            if(preg_match('/^backend_/', $type)) {
+                                if(isset($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])
+                                     && is_array($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])) {
+                                    $arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
+                                } else {
+                                    $arrValidConfig = $this->validConfig['backend'];
+                                }
+                            } elseif(preg_match('/^rotation_/', $type)) {
+                                $arrValidConfig = $this->validConfig['rotation'];
+                            } else {
+                                $arrValidConfig = $this->validConfig[$type];
+                            }
+
+                            if(!isset($arrValidConfig[$key])) {
+                                // unknown attribute
+                                if($printErr) {
+                                    new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Unknown value [ATTRIBUTE] used in section [TYPE] in main configuration file.', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
+                                }
+                                return FALSE;
+                            } elseif(isset($arrValidConfig[$key]['deprecated']) && $arrValidConfig[$key]['deprecated'] == 1) {
+                                // deprecated option
+                                if($printErr) {
+                                    new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file is deprecated. Please take a look at the documentation for updating your configuration.', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
+                                }
+                                return FALSE;
+                            } else {
+                                // Workaround to get the configured string back
+                                if(preg_match('/^rotation_/', $type) && $key == 'maps') {
+                                    foreach($val AS $intId => $arrStep) {
+                                        if(isset($arrStep['label']) && $arrStep['label'] != '') {
+                                            $label = $arrStep['label'].':';
+                                        }
+
+                                        $val[$intId] = $label.$arrStep['url'].$arrStep['map'];
+                                    }
+                                }
+
+                                if(isset($val) && is_array($val)) {
+                                    $val = implode(',',$val);
+                                }
+
+                                // valid attribute, now check for value format
+                                if(!preg_match($arrValidConfig[$key]['match'],$val)) {
+                                    // wrong format
+                                    if($printErr) {
+                                        new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file does not match the correct format. Please review your configuration.', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
+                                    }
+                                    return FALSE;
+                                }
+
+                                // Check if the configured backend is defined in main configuration file
+                                if($type == 'defaults' && $key == 'backend' && !isset($this->config['backend_'.$val])) {
+                                    if($printErr) {
+                                        new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('backendNotDefined', Array('BACKENDID' => $val)));
+                                    }
+                                    return FALSE;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    // unknown type
+                    if($printErr) {
+                        new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The section [TYPE] is not supported in main configuration. Please take a look at the documentation.', 'TYPE~'.$type));
+                    }
+                    return FALSE;
+                }
+            }
+        }
+        return TRUE;
+    }
+
+    /**
+     * Returns the last modification time of the configuration file
+     *
+     * @return	Integer	Unix Timestamp
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function getConfigFileAge() {
+        $newest = 0;
+        foreach($this->configFiles AS $configFile) {
+            $age = filemtime($configFile);
+            $newest = ($age > $newest ? $age : $newest);
+        }
+        return $newest;
+    }
+
+    /**
+     * Public Adaptor for the isCached method of CACHE object
+     *
+     * @return  Boolean  Result
+     * @return  Integer  Unix timestamp of cache creation time or -1 when not cached
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function isCached() {
+        return $this->useCache;
+    }
+
+    /**
+     * Sets a config setting
+     *
+     * @param	String	$sec	Section
+     * @param	String	$var	Variable
+     * @param	String	$val	Value
+     * @return	Boolean	Is Successful?
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function setValue($sec, $var, $val) {
+        if(isset($this->config[$sec][$var]) && $val == '') {
+            // Value is empty and there is an entry in the config array
+            unset($this->config[$sec][$var]);
+        } elseif(!isset($this->config[$sec][$var]) && $val == '') {
+            // Value is empty and there is nothing in config array yet
+        } else {
+            // Value is set
+            if(isset($this->validConfig[$sec][$var]['array']) && $this->validConfig[$sec][$var]['array'] == true && !is_array($val)) {
+                $val = $this->stringToArray($val);
+            }
+
+            $this->config[$sec][$var] = $val;
+        }
+        return TRUE;
+    }
+
+    public function getPath($type, $loc, $var, $relfile = '') {
+        $lb = $this->getValue('paths', 'local_base', True) . HTDOCS_DIR;
+        $b  = $this->getValue('paths', 'base') . HTDOCS_DIR;
+
+        $lh = $this->getValue('paths', 'local_htmlbase', True);
+        $h  = $this->getValue('paths', 'htmlbase');
+
+        // Get the relative path
+        if(isset($this->config['paths']) && isset($this->config['paths'][$var]))
+            $relpath = $this->config['paths'][$var];
+        else
+            $relpath = $this->validConfig['paths'][$var]['default'];
+
+        // Compute the full system paths
+        $l_file = $lb !== FALSE && $lb !== '' ? $lb . '/' . $relpath . $relfile : null;
+        $file   = $b . '/' . $relpath . $relfile;
+
+        // Decide which path to return
+        // When $loc is set to local it returns the local path
+        // When $loc is set to global it returns the global path
+        // When $loc is empty it checks if the local one exist and returns this when
+        // existing. Otherwise it returns the global one when existing. When the global
+        // is also not existant it returns an empty string
+        if($loc === 'local' || ($loc === '' && $l_file && file_exists($l_file)))
+            return $type == 'sys' ? $l_file : $lh . '/' . $relpath . $relfile;
+        elseif($loc === 'global' || ($loc === '' && file_exists($file)))
+            return $type == 'sys' ? $file : $h . '/' . $relpath . $relfile;
+        else
+            return '';
+    }
+
+    /**
+     * Gets a config setting
+     *
+     * @param	String	$sec	Section
+     * @param	String	$var	Variable
+     * @param   Bool	$ignoreDefault Don't read default value
+     * @return	String	$val	Value
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * FIXME: Needs to be simplified
+     */
+    public function getValue($sec, $var, $ignoreDefault=FALSE) {
+        // if nothing is set in the config file, use the default value
+        // (Removed "&& is_array($this->config[$sec]) due to performance issues)
+        if(isset($this->config[$sec]) && isset($this->config[$sec][$var])) {
+            return $this->config[$sec][$var];
+        } elseif(!$ignoreDefault) {
+            // Speed up this method by first checking for major sections and only if
+            // they don't match try to match the backend_ and rotation_ sections
+            if($sec == 'global' || $sec == 'defaults' || $sec == 'paths') {
+                return $this->validConfig[$sec][$var]['default'];
+            } elseif(strpos($sec, 'backend_') === 0) {
+
+                // Choose the backend type (Configured one or the system default)
+                $backendType = '';
+                if(isset($this->config[$sec]['backendtype']) && $this->config[$sec]['backendtype'] !== '') {
+                    $backendType = $this->config[$sec]['backendtype'];
+                } else {
+                    $backendType = $this->validConfig['backend']['backendtype']['default'];
+                }
+
+                // This value could be emtpy - so only check if it is set
+                if(isset($this->validConfig['backend']['options'][$backendType][$var]['default'])) {
+                    return $this->validConfig['backend']['options'][$backendType][$var]['default'];
+                } else {
+                    // This value could be emtpy - so only check if it is set
+                    if(isset($this->validConfig['backend'][$var]['default'])) {
+                        return $this->validConfig['backend'][$var]['default'];
+                    }
+                }
+            } elseif(strpos($sec, 'rotation_') === 0) {
+                if(isset($this->config[$sec]) && is_array($this->config[$sec])) {
+                    return $this->validConfig['rotation'][$var]['default'];
+                } else {
+                    return FALSE;
+                }
+            } else {
+                return $this->validConfig[$sec][$var]['default'];
+            }
+        } else {
+            return FALSE;
+        }
+    }
+
+    /**
+     * A getter to provide all section names of main configuration
+     *
+     * @return  Array  List of all sections as values
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function getSections() {
+        $aRet = Array();
+        foreach($this->config AS $key => $var) {
+            $aRet[] = $key;
+        }
+        return $aRet;
+    }
+
+    /**
+     * Sets a runtime config value
+     *
+     * @param	String	$var	Variable
+     * @param	String	$val	Value
+     * @return	Boolean	Is Successful?
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function setRuntimeValue($var, $val) {
+        $this->runtimeConfig[$var] = $val;
+        return TRUE;
+    }
+
+    /**
+     * Gets a runtime config value
+     *
+     * @param	String	$var	Variable
+     * @return	String	$val	Value
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function getRuntimeValue($var) {
+        return isset($this->runtimeConfig[$var]) ? $this->runtimeConfig[$var] : '';
+    }
+
+    /**
+     * Parses general settings
+     *
+     * @return	String 	JSON Code
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function parseGeneralProperties() {
+        return json_encode(Array(
+          'date_format'    => $this->getValue('global', 'dateformat'),
+          'path_base'      => $this->getValue('paths','htmlbase'),
+          'path_cgi'       => $this->getValue('paths','htmlcgi'),
+          'path_sounds'    => $this->getPath('html', 'global', 'sounds'),
+          'path_iconsets'  => $this->getPath('html', 'global', 'icons'),
+          'path_shapes'    => $this->getPath('html', 'global', 'shapes'),
+          'path_images'    => $this->getValue('paths','htmlimages'),
+          'path_server'    => $this->getValue('paths','htmlbase').'/server/core/ajax_handler.php',
+          'internal_title' => $this->getValue('internal', 'title')
+        ));
+    }
+
+    /**
+     * Parses the settings for the javascript worker
+     *
+     * @return	String 	JSON Code
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function parseWorkerProperties() {
+        return json_encode(Array(
+            'worker_interval'             => $this->getValue('worker', 'interval'),
+            'worker_update_object_states' => $this->getValue('worker', 'updateobjectstates'),
+            'worker_request_max_params'   => $this->getValue('worker', 'requestmaxparams'),
+            'worker_request_max_length'   => $this->getValue('worker', 'requestmaxlength')
+        ));
+    }
+
+    /**$
+     * Parses the state weight configuration array
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function parseStateWeight() {
+        $arr = Array();
+
+        foreach($this->validConfig['states'] AS $lowState => $aVal) {
+            $key = explode('_', $lowState);
+
+            // First create array when not exists
+            if(!isset($arr[strtoupper($key[0])])) {
+                $arr[strtoupper($key[0])] = Array();
+            }
+
+            if(isset($key[1]) && isset($key[2])) {
+                $arr[strtoupper($key[0])][$key[1].'_'.$key[2]] = $this->getValue('states', $lowState);
+            } elseif(isset($key[1])) {
+                // ack/downtime
+                $arr[strtoupper($key[0])][$key[1]] = $this->getValue('states', $lowState);
+            } else {
+                $arr[strtoupper($key[0])]['normal'] = $this->getValue('states', $lowState);
+            }
+        }
+
+        $this->stateWeight = $arr;
+    }
+
+    /**
+     * Returns an array with the state weight configuration
+     *
+     * @return  Array
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function getStateWeight() {
+        return $this->stateWeight;
+    }
+
+    /**
+     * FIXME: Below you will find all WUI specific function. All need to be reviewed
+     */
+
+    /**
+     * Gets all information about an object type
+     *
+     * @param   String  Type to get the information for
+     * @return  Array   The validConfig array
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    function getValidObjectType($type) {
+        return $this->validConfig[$type];
+    }
+
+    /**
+     * Gets the valid configuration array
+     *
+     * @return	Array The validConfig array
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    function getValidConfig() {
+        return $this->validConfig;
+    }
+
+    /**
+     * Gets the configuration array
+     *
+     * @return	Array The validConfig array
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    function getConfig() {
+        return $this->config;
+    }
+
+    /**
+     * Sets a config section in the config array
+     *
+     * @param	String	$sec	Section
+     * @return	Boolean	Is Successful?
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    function setSection($sec) {
+        // Try to append new backends after already defined
+        if(preg_match('/^backend_/', $sec)) {
+            $lastBackendIndex = 0;
+            $i = 0;
+            // Loop all sections to find the last defined backend
+            foreach($this->config AS $type => $vars) {
+                // If the current section is a backend
+                        if(preg_match('/^backend_/', $type)) {
+                    $lastBackendIndex = $i;
+                }
+                $i++;
+            }
+
+            if($lastBackendIndex != 0) {
+                // Append the new section after the already defined
+                $slicedBefore = array_slice($this->config, 0, ($lastBackendIndex + 1));
+                $slicedAfter = array_slice($this->config, ($lastBackendIndex + 1));
+                $tmp[$sec] = Array();
+                $this->config = array_merge($slicedBefore,$tmp,$slicedAfter);
+            } else {
+                // If no defined backend found, add it to the EOF
+                $this->config[$sec] = Array();
+            }
+        } else {
+            $this->config[$sec] = Array();
+        }
+
+        return TRUE;
+    }
+
+    /**
+     * Deletes a config section in the config array
+     *
+     * @param	String	$sec	Section
+     * @return	Boolean	Is Successful?
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    function delSection($sec) {
+        $this->config[$sec] = '';
+        unset($this->config[$sec]);
+
+        return TRUE;
+    }
+
+    /**
+     * Writes the config file completly from array $this->configFile
+     *
+     * @return	Boolean	Is Successful?
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    function writeConfig() {
+        // Check for config file write permissions
+        if(!$this->checkNagVisConfigWriteable(1))
+            return false;
+
+        $content = '';
+        foreach($this->config as $key => $item) {
+            if(is_array($item)) {
+                $content .= '['.$key.']'."\n";
+                foreach ($item as $key2 => $item2) {
+                    if(substr($key2,0,8) == 'comment_') {
+                        $content .= $item2."\n";
+                    } else {
+                        if(is_numeric($item2) || is_bool($item2)) {
+                            $content .= $key2."=".$item2."\n";
+                        } else {
+                            if(is_array($item2) && preg_match('/^rotation_/i', $key) && $key2 == 'maps') {
+                                $val = '';
+                                // Check if an element has a label defined
+                                foreach($item2 AS $intId => $arrStep) {
+                                    $seperator = ',';
+                                    $label = '';
+                                    $step = '';
+
+                                    if($intId == 0)
+                                        $seperator = '';
+
+                                    if(isset($arrStep['map']) && $arrStep['map'] != '')
+                                        $step = $arrStep['map'];
+                                    else
+                                        $step = '['.$arrStep['url'].']';
+
+                                    if(isset($arrStep['label']) && $arrStep['label'] != '' && $arrStep['label'] != $step)
+                                        $label = $arrStep['label'].':';
+
+                                    // Save the extracted information to an array
+                                    $val .= $seperator.$label.$step;
+                                }
+
+                                $item2 = $val;
+                            }
+
+                            // Don't write the backendid/rotationid attributes (Are internal)
+                            if($key2 !== 'backendid' && $key2 !== 'rotationid') {
+                                if(isset($this->validConfig[$key][$key2]['array']) && $this->validConfig[$key][$key2]['array'] === true)
+                                    $item2 = implode(',', $item2);
+
+                                $content .= $key2.'="'.$item2.'"'."\n";
+                            }
+                        }
+                    }
+                }
+            } elseif(substr($key,0,8) == 'comment_')
+                $content .= $item."\n";
+        }
+
+        $cfgFile = $this->configFiles[count($this->configFiles)-1];
+        if(!$handle = fopen($cfgFile, 'w+')) {
+            new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('mainCfgNotWriteable'), GlobalCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
+            return FALSE;
+        }
+
+        if(!fwrite($handle, $content)) {
+            new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('mainCfgCouldNotWriteMainConfigFile'), GlobalCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
+            return FALSE;
+        }
+
+        fclose($handle);
+        GlobalCore::getInstance()->setPerms($cfgFile);
+
+        return TRUE;
+    }
+
+    /**
+     * Checks for writeable config file
+     *
+     * @param	Boolean $printErr
+     * @return	Boolean	Is Successful?
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    function checkNagVisConfigWriteable($printErr) {
+        return GlobalCore::getInstance()->checkWriteable($this->configFiles[count($this->configFiles)-1], $printErr);
+    }
+
+    /**
    * Transforms a string option to an array with trimmed values
    *
    * @param  String  Comma separated value
    * @return Array   Exploded Array
    */
-	private function stringToArray($val) {
-		// Explode comma separated list to array
-		$val = explode(',', $val);
-		
-		// Trim surrounding spaces on each element
-		foreach($val AS $trimKey => $trimVal)
-			$val[$trimKey] = trim($trimVal);
+    private function stringToArray($val) {
+        // Explode comma separated list to array
+        $val = explode(',', $val);
 
-		return $val;
-	}
+        // Trim surrounding spaces on each element
+        foreach($val AS $trimKey => $trimVal)
+            $val[$trimKey] = trim($trimVal);
+
+        return $val;
+    }
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * NagVisTextbox.php - Class of a text object in NagVis with all necessary 
+ * NagVisTextbox.php - Class of a text object in NagVis with all necessary
  *                  information which belong to the object handling in NagVis
  *
  * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
@@ -22,48 +22,48 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisTextbox extends NagVisStatelessObject {
-	/**
-	 * Class constructor
-	 *
-	 * @param		Object 		Object of class GlobalMainCfg
-	 * @param		Object 		Object of class CoreBackendMgmt
-	 * @param		Object 		Object of class GlobalLanguage
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($CORE) {
-		$this->type = 'textbox';
-		parent::__construct($CORE);
-	}
-	
-	/**
-	 * PUBLIC parseJson()
-	 *
-	 * Parses the object in json format
-	 *
-	 * @return	String		JSON code of the object
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parseJson() {
-		return parent::parseJson();
-	}
-	
-	/**
-	 * PUBLIC fetchIcon()
-	 *
-	 * Just a dummy here (Textbox won't need an icon)
-	 *
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function fetchIcon() {
-		// Nothing to do here, icon is set in constructor
-	}
-	
-	# End public methods
-	# #########################################################################
+    /**
+     * Class constructor
+     *
+     * @param		Object 		Object of class GlobalMainCfg
+     * @param		Object 		Object of class CoreBackendMgmt
+     * @param		Object 		Object of class GlobalLanguage
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct($CORE) {
+        $this->type = 'textbox';
+        parent::__construct($CORE);
+    }
+
+    /**
+     * PUBLIC parseJson()
+     *
+     * Parses the object in json format
+     *
+     * @return	String		JSON code of the object
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function parseJson() {
+        return parent::parseJson();
+    }
+
+    /**
+     * PUBLIC fetchIcon()
+     *
+     * Just a dummy here (Textbox won't need an icon)
+     *
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function fetchIcon() {
+        // Nothing to do here, icon is set in constructor
+    }
+
+    # End public methods
+    # #########################################################################
 }
 ?>

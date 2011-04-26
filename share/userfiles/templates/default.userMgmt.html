@@ -1,215 +1,214 @@
 <br>
 <script type="text/javascript">
 selectAllOpts = function (field) \{
-	var oTarget = document.getElementById(field);
-	
-	for(var i = 0; i < oTarget.options.length; i++) \{
-		oTarget.options[i].selected = true;
-	}
-	
-	var oTarget = null;
+    var oTarget = document.getElementById(field);
+
+    for(var i = 0; i < oTarget.options.length; i++) \{
+        oTarget.options[i].selected = true;
+    }
+
+    var oTarget = null;
 }
-	
+
 roleModify = function (bAdd) \{
-	var oTarget = null;
-	var oSource = null;
-	
-	if(bAdd) \{
-		oSource = document.getElementById('rolesAvailable');
-		oTarget = document.getElementById('rolesSelected');
-	} else \{
-		oSource = document.getElementById('rolesSelected');
-		oTarget = document.getElementById('rolesAvailable');
-	}
-	
-	// Quit when no source selected
-	if(oSource.selectedIndex == -1) {
-		return false;
-	}
-	
-	// Save strings
-	var optName = oSource.options[oSource.selectedIndex].text;
-	var optValue = oSource.options[oSource.selectedIndex].value;
-	
-	// Remove from source
-	oSource.options[oSource.selectedIndex] = null;
-	
-	// Add to target
-	oTarget.options[oTarget.options.length] = new Option(optName, optValue, false, false);
-	
-	oRolesSelected = null;
-	oRolesAvailable = null;
+    var oTarget = null;
+    var oSource = null;
+
+    if(bAdd) \{
+        oSource = document.getElementById('rolesAvailable');
+        oTarget = document.getElementById('rolesSelected');
+    } else \{
+        oSource = document.getElementById('rolesSelected');
+        oTarget = document.getElementById('rolesAvailable');
+    }
+
+    // Quit when no source selected
+    if(oSource.selectedIndex == -1) {
+        return false;
+    }
+
+    // Save strings
+    var optName = oSource.options[oSource.selectedIndex].text;
+    var optValue = oSource.options[oSource.selectedIndex].value;
+
+    // Remove from source
+    oSource.options[oSource.selectedIndex] = null;
+
+    // Add to target
+    oTarget.options[oTarget.options.length] = new Option(optName, optValue, false, false);
+
+    oRolesSelected = null;
+    oRolesAvailable = null;
 }
 
 getUserRoles = function (id) \{
-	// Exit when id empty
-	if(id == '') {
-		return false;
-	}
-	
-	// Get user roles via ajax query
-	var aRoles = getSyncRequest(oGeneralProperties.path_server+'?mod=UserMgmt&act=getUserRoles&userId='+id, false, false);
-	var aAvailableRoles = getSyncRequest(oGeneralProperties.path_server+'?mod=UserMgmt&act=getAllRoles', false, false);
-	
-	var oRolesAvailable = document.getElementById('rolesAvailable');
-	var oRolesSelected = document.getElementById('rolesSelected');
-	
-	// Clear available roles
-	for(var i = oRolesAvailable.options.length - 1; i >= 0; i--) \{
-		oRolesAvailable.options[i] = null;
-	}
-	
-	// Add all roles to selected roles
-	for(i = 0; i < aAvailableRoles.length; i++) \{
-		oRolesAvailable.options[i] = new Option(aAvailableRoles[i].name, aAvailableRoles[i].roleId, false, false);
-	}
-	
-	// Clear selected roles
-	for(var i = oRolesSelected.options.length - 1; i >= 0; i--) \{
-		oRolesSelected.options[i] = null;
-	}
-	
-	// Add user roles to selected roles
-	for(i = 0; i < aRoles.length; i++) \{
-		oRolesSelected.options[i] = new Option(aRoles[i].name, aRoles[i].roleId, false, false);
-	}
-	
-	// Remove selected roles from available roles
-	for(i = oRolesAvailable.options.length - 1; i >= 0; i--) \{
-		
-		// Loop all selected roles
-		for(var a = 0; a < aRoles.length; a++) \{
-			if(oRolesAvailable.options[i].text == aRoles[a].name) \{
-				oRolesAvailable.options[i] = null;
-			}
-		}
-	}
-	
-	oRolesSelected = null;
-	oRolesAvailable = null;
-	aRoles = null;
-}	
+    // Exit when id empty
+    if(id == '') {
+        return false;
+    }
+
+    // Get user roles via ajax query
+    var aRoles = getSyncRequest(oGeneralProperties.path_server+'?mod=UserMgmt&act=getUserRoles&userId='+id, false, false);
+    var aAvailableRoles = getSyncRequest(oGeneralProperties.path_server+'?mod=UserMgmt&act=getAllRoles', false, false);
+
+    var oRolesAvailable = document.getElementById('rolesAvailable');
+    var oRolesSelected = document.getElementById('rolesSelected');
+
+    // Clear available roles
+    for(var i = oRolesAvailable.options.length - 1; i >= 0; i--) \{
+        oRolesAvailable.options[i] = null;
+    }
+
+    // Add all roles to selected roles
+    for(i = 0; i < aAvailableRoles.length; i++) \{
+        oRolesAvailable.options[i] = new Option(aAvailableRoles[i].name, aAvailableRoles[i].roleId, false, false);
+    }
+
+    // Clear selected roles
+    for(var i = oRolesSelected.options.length - 1; i >= 0; i--) \{
+        oRolesSelected.options[i] = null;
+    }
+
+    // Add user roles to selected roles
+    for(i = 0; i < aRoles.length; i++) \{
+        oRolesSelected.options[i] = new Option(aRoles[i].name, aRoles[i].roleId, false, false);
+    }
+
+    // Remove selected roles from available roles
+    for(i = oRolesAvailable.options.length - 1; i >= 0; i--) \{
+
+        // Loop all selected roles
+        for(var a = 0; a < aRoles.length; a++) \{
+            if(oRolesAvailable.options[i].text == aRoles[a].name) \{
+                oRolesAvailable.options[i] = null;
+            }
+        }
+    }
+
+    oRolesSelected = null;
+    oRolesAvailable = null;
+    aRoles = null;
+}
 </script>
 
 <div id="userAdd">
 <fieldset class="form">
-	<legend>{$langUserAdd}</legend>
-	<form name="userAdd" id="userAddForm" action="#" onsubmit="submitFrontendForm('{$formTargetAdd}', 'userAddForm', true);return false" method="post">
-		<table>
-			<tr>
-				<td><label for="username">{$langUsername}:</label></td>
-				<td><input type="text" name="username" id="username" class="input" value="" size="{$maxUsernameLength}" tabindex="10" /></td>
-			</tr>
-			<tr>
-				<td><label for="password1">{$langPassword1}:</td>
-			<td><input type="password" name="password1" id="password1" class="input" value="" size="{$maxPasswordLength}" tabindex="20" /></td>
-			</tr>
-			<tr>
-				<td><label for="password2">{$langPassword2}:</td>
-				<td><input type="password" name="password2" id="password2" class="input" value="" size="{$maxPasswordLength}" tabindex="30" /></td>
-			</tr>
-			<tr>
-				<td colspan="2"><input type="submit" name="submit" id="submit" value="{$langUserAdd}" tabindex="40" /></td>
-			</tr>
-		</table>
-	</form>
+    <legend>{$langUserAdd}</legend>
+    <form name="userAdd" id="userAddForm" action="#" onsubmit="submitFrontendForm('{$formTargetAdd}', 'userAddForm', true);return false" method="post">
+        <table>
+            <tr>
+                <td><label for="username">{$langUsername}:</label></td>
+                <td><input type="text" name="username" id="username" class="input" value="" size="{$maxUsernameLength}" tabindex="10" /></td>
+            </tr>
+            <tr>
+                <td><label for="password1">{$langPassword1}:</td>
+            <td><input type="password" name="password1" id="password1" class="input" value="" size="{$maxPasswordLength}" tabindex="20" /></td>
+            </tr>
+            <tr>
+                <td><label for="password2">{$langPassword2}:</td>
+                <td><input type="password" name="password2" id="password2" class="input" value="" size="{$maxPasswordLength}" tabindex="30" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" name="submit" id="submit" value="{$langUserAdd}" tabindex="40" /></td>
+            </tr>
+        </table>
+    </form>
 </fieldset>
 </div>
 
 <div id="manageUsers">
 <fieldset class="form">
-	<legend>{$langUserModify}</legend>
-	<form name="userEdit" id="userEditForm" action="#" onsubmit="selectAllOpts('rolesSelected');submitFrontendForm('{$formTargetEdit}', 'userEditForm', true);return false" method="post">
-		<p>
-			<label>{$langSelectUser}<br />
-			<select type="text" name="userId" id="userId" class="select" tabindex="50" onchange="getUserRoles(this.options[this.selectedIndex].value);" />
-				<option value="" selected="selected"></option>
-				{foreach $users user}<option value="{$user.userId}">{$user.name}</option>{/foreach}
-			</select>
-			</label>
-		</p>
-		<p>
-			<label>{$langManageRoles}<br />
-			<table>
-				<tr>
-					<th style="width:50%">{$langRolesAvailable}</th>
-					<th></th>
-					<th style="width:50%">{$langRolesSelected}</th>
-				</tr>
-				<tr>
-					<td>
-						<select style="width:100%" name="rolesAvailable" id="rolesAvailable" class="select" tabindex="60" size="5" multiple />
-						</select>
-					</td>
-					<td style="vertical-align:middle">
-					<input type="button" name="add" onclick="roleModify(true)" value="&gt;" tabindex="70" /><br />
-					<input type="button" name="remove" onclick="roleModify()" value="&lt;" tabindex="80" /></a>
-					</td>
-					<td>
-						<select style="width:100%" name="rolesSelected" id="rolesSelected" class="select" tabindex="90" size="5" multiple />
-						</select>
-					</td>
-				</tr>
-			</table>
-			</label>
-		</p>
-		<p class="submit">
-			<input type="submit" name="submit" id="submit" value="{$langUserModify}" tabindex="100" />
-		</p>
-	</form>
+    <legend>{$langUserModify}</legend>
+    <form name="userEdit" id="userEditForm" action="#" onsubmit="selectAllOpts('rolesSelected');submitFrontendForm('{$formTargetEdit}', 'userEditForm', true);return false" method="post">
+        <p>
+            <label>{$langSelectUser}<br />
+            <select type="text" name="userId" id="userId" class="select" tabindex="50" onchange="getUserRoles(this.options[this.selectedIndex].value);" />
+                <option value="" selected="selected"></option>
+                {foreach $users user}<option value="{$user.userId}">{$user.name}</option>{/foreach}
+            </select>
+            </label>
+        </p>
+        <p>
+            <label>{$langManageRoles}<br />
+            <table>
+                <tr>
+                    <th style="width:50%">{$langRolesAvailable}</th>
+                    <th></th>
+                    <th style="width:50%">{$langRolesSelected}</th>
+                </tr>
+                <tr>
+                    <td>
+                        <select style="width:100%" name="rolesAvailable" id="rolesAvailable" class="select" tabindex="60" size="5" multiple />
+                        </select>
+                    </td>
+                    <td style="vertical-align:middle">
+                    <input type="button" name="add" onclick="roleModify(true)" value="&gt;" tabindex="70" /><br />
+                    <input type="button" name="remove" onclick="roleModify()" value="&lt;" tabindex="80" /></a>
+                    </td>
+                    <td>
+                        <select style="width:100%" name="rolesSelected" id="rolesSelected" class="select" tabindex="90" size="5" multiple />
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            </label>
+        </p>
+        <p class="submit">
+            <input type="submit" name="submit" id="submit" value="{$langUserModify}" tabindex="100" />
+        </p>
+    </form>
 </fieldset>
 </div>
 
 <div id="deleteUsers">
 <fieldset class="form">
-	<legend>{$langUserDelete}</legend>
-	<form name="userDelete" id="userDeleteForm" action="#" onsubmit="submitFrontendForm('{$formTargetDelete}', 'userDeleteForm', true);return false" method="post">
-		<table>
-			<tr>
-				<td><label for="username">{$langUsername}:</label></td>
-				<td>
-					<select type="text" name="userId" id="userId" class="select" tabindex="110" />
-						<option value="" selected="selected"></option>
-						{foreach $users user}<option value="{$user.userId}">{$user.name}</option>{/foreach}
-					</select>
-				</td>
-				<td><input type="submit" name="submit" id="submit" value="{$langUserDelete}" tabindex="120" /></td>
-			</tr>
-		</table>
-	</form>
+    <legend>{$langUserDelete}</legend>
+    <form name="userDelete" id="userDeleteForm" action="#" onsubmit="submitFrontendForm('{$formTargetDelete}', 'userDeleteForm', true);return false" method="post">
+        <table>
+            <tr>
+                <td><label for="username">{$langUsername}:</label></td>
+                <td>
+                    <select type="text" name="userId" id="userId" class="select" tabindex="110" />
+                        <option value="" selected="selected"></option>
+                        {foreach $users user}<option value="{$user.userId}">{$user.name}</option>{/foreach}
+                    </select>
+                </td>
+                <td><input type="submit" name="submit" id="submit" value="{$langUserDelete}" tabindex="120" /></td>
+            </tr>
+        </table>
+    </form>
 </fieldset>
 </div>
 
 <div id="userPwReset">
 <fieldset class="form">
-	<legend>{$langUserPwReset}</legend>
-	<form name="userPwReset" id="userPwResetForm" action="#" onsubmit="submitFrontendForm('{$formTargetPwReset}', 'userPwResetForm', true);return false" method="post">
-		<table>
-			<tr><td style="vertical-align:top">
-				<label>{$langSelectUser}<br />
-				<select type="text" name="userId" id="userId" class="select" tabindex="130" />
-					<option value="" selected="selected"></option>
-					{foreach $users user}<option value="{$user.userId}">{$user.name}</option>{/foreach}
-				</select>
-				</label>
-			</td>
-			<td>
-				<table>
-					<tr>
-						<td><label for="password1">{$langPassword1}:</td>
-						<td><input type="password" name="password1" id="password1" class="input" value="" size="{$maxPasswordLength}" tabindex="140" /></td>
-					</tr>
-					<tr>
-						<td><label for="password2">{$langPassword2}:</td>
-						<td><input type="password" name="password2" id="password2" class="input" value="" size="{$maxPasswordLength}" tabindex="150" /></td>
-					</tr>
-					<tr>
-						<td colspan="2"><input type="submit" name="submit" id="submit" value="{$langUserPwReset}" tabindex="160" /></td>
-					</tr>
-				</table>
-			</td></tr>
-		</table>
-	</form>
+    <legend>{$langUserPwReset}</legend>
+    <form name="userPwReset" id="userPwResetForm" action="#" onsubmit="submitFrontendForm('{$formTargetPwReset}', 'userPwResetForm', true);return false" method="post">
+        <table>
+            <tr><td style="vertical-align:top">
+                <label>{$langSelectUser}<br />
+                <select type="text" name="userId" id="userId" class="select" tabindex="130" />
+                    <option value="" selected="selected"></option>
+                    {foreach $users user}<option value="{$user.userId}">{$user.name}</option>{/foreach}
+                </select>
+                </label>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <td><label for="password1">{$langPassword1}:</td>
+                        <td><input type="password" name="password1" id="password1" class="input" value="" size="{$maxPasswordLength}" tabindex="140" /></td>
+                    </tr>
+                    <tr>
+                        <td><label for="password2">{$langPassword2}:</td>
+                        <td><input type="password" name="password2" id="password2" class="input" value="" size="{$maxPasswordLength}" tabindex="150" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><input type="submit" name="submit" id="submit" value="{$langUserPwReset}" tabindex="160" /></td>
+                    </tr>
+                </table>
+            </td></tr>
+        </table>
+    </form>
 </fieldset>
 </div>
-

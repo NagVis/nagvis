@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * NagVisServicegroup.js - This class handles the visualisation of 
+ * NagVisServicegroup.js - This class handles the visualisation of
  *                         servicegroup objects
  *
  * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
@@ -21,16 +21,16 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
 var NagVisServicegroup = NagVisStatefulObject.extend({
-	constructor: function(oConf) {
-		// Call parent constructor
-		this.base(oConf);
-		
-		this.getMembers();
-	}
+    constructor: function(oConf) {
+        // Call parent constructor
+        this.base(oConf);
+
+        this.getMembers();
+    }
 });

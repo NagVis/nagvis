@@ -26,223 +26,223 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 abstract class CoreModule {
-	protected $CORE = null;
-	protected $AUTHENTICATION = null;
-	protected $AUTHORISATION = null;
-	protected $UHANDLER = null;
-	
-	protected $aActions = Array();
-	protected $aObjects = Array();
-	protected $sName = '';
-	protected $sAction = '';
-	protected $sObject = null;
-	
-	public function passAuth($AUTHENTICATION, $AUTHORISATION) {
-		$this->AUTHENTICATION = $AUTHENTICATION;
-		$this->AUTHORISATION = $AUTHORISATION;
-	}
-	
-	/**
-	 * Tells if the module offers the requested action
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function offersAction($sAction) {
-		return isset($this->aActions[$sAction]);
-	}
-	
-	/**
-	 * Stores the requested action in the module
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function setAction($sAction) {
-		if(!$this->offersAction($sAction))
-			return false;
+    protected $CORE = null;
+    protected $AUTHENTICATION = null;
+    protected $AUTHORISATION = null;
+    protected $UHANDLER = null;
 
-		$this->sAction = $sAction;
-		return true;
-	}
-	
-	/**
-	 * Tells wether the requested action requires the users autorisation
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function actionRequiresAuthorisation() {
-		return isset($this->aActions[$this->sAction]) && $this->aActions[$this->sAction] !== !REQUIRES_AUTHORISATION;
-	}
-	
-	/**
-	 * Tells wether the requested object is available
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function offersObject($sObject) {
-		return isset($this->aObjects[$sObject]);
-	}
-	
-	/**
-	 * Stores the requested object name in the module
-	 * when it is supported
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function setObject($sObject) {
-		if(!$this->offersObject($sObject)) {
-			// Set sObject to an empty string. This tells the isPermitted() check that
-			// this module uses object based authorisation checks. In that case it
-			// won't pass the object authorisation check.
-			$this->sObject = '';
-			return false;
-		}
+    protected $aActions = Array();
+    protected $aObjects = Array();
+    protected $sName = '';
+    protected $sAction = '';
+    protected $sObject = null;
 
-		$this->sObject = $sObject;
-		return true;
-	}
-	
-	/**
-	 *  Returns the object string
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getObject() {
-		return $this->sObject;
-	}
+    public function passAuth($AUTHENTICATION, $AUTHORISATION) {
+        $this->AUTHENTICATION = $AUTHENTICATION;
+        $this->AUTHORISATION = $AUTHORISATION;
+    }
 
-	/**
-	 * Checks if the user is permitted to perform the requested action
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function isPermitted() {
-		$authorized = true;
-		if(!isset($this->AUTHORISATION))
-			$authorized = false;
+    /**
+     * Tells if the module offers the requested action
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function offersAction($sAction) {
+        return isset($this->aActions[$sAction]);
+    }
 
-		// Maybe the requested action is summarized by some other
-		$action = !is_bool($this->aActions[$this->sAction]) ? $this->aActions[$this->sAction] : $this->sAction;
+    /**
+     * Stores the requested action in the module
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function setAction($sAction) {
+        if(!$this->offersAction($sAction))
+            return false;
 
-		if(!$this->AUTHORISATION->isPermitted($this->sName, $action, $this->sObject))
-			$authorized = false;
+        $this->sAction = $sAction;
+        return true;
+    }
 
-		if(!$authorized)
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You are not permitted to access this page ([PAGE]).',
-			                                                           Array('PAGE' => $this->sName.'/'.$action.'/'.$this->sObject)),
-			                                                           null, $this->CORE->getLang()->getText('Access denied'));
-	}
-	
-	/**
-	 * Initializes the URI handler object
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	protected function initUriHandler() {
-		$this->UHANDLER = new CoreUriHandler($this->CORE);
-	}
-	
-	/**
-	 * Reads a list of custom variables from the request
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	protected function getCustomOptions($aKeys, $aDefaults = Array()) {
-		// Initialize on first call
-		if($this->UHANDLER === null)
-			$this->initUriHandler();
-		
-		// Load the specific params to the UriHandler
-		$this->UHANDLER->parseModSpecificUri($aKeys, $aDefaults);
-		
-		// Now get those params
-		$aReturn = Array();
-		foreach($aKeys AS $key => $val)
-			$aReturn[$key] = $this->UHANDLER->get($key);
-		
-		return $aReturn;
-	}
+    /**
+     * Tells wether the requested action requires the users autorisation
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function actionRequiresAuthorisation() {
+        return isset($this->aActions[$this->sAction]) && $this->aActions[$this->sAction] !== !REQUIRES_AUTHORISATION;
+    }
 
-	/**
-	 * Is a dummy at this place. Some special modules like
-	 * CoreModMap have no general way of fetching the called
-	 * "object" because the value might come in different vars
-	 * when using different actions. So these special modules
-	 * can implement that by overriding this method.
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function initObject() {}
-	
-	/**
-	 * This method needs to be implemented by each module
-	 * to handle the user called action
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	abstract public function handleAction();
+    /**
+     * Tells wether the requested object is available
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function offersObject($sObject) {
+        return isset($this->aObjects[$sObject]);
+    }
 
-	/**
-	 * Helper function to handle default form responses
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	protected function handleResponse($validationHandler, $action, $successMsg = null,
-		                                $failMessage = null, $reload = null, $redirectUrl = null) {
-		$aReturn = $this->{$validationHandler}();
+    /**
+     * Stores the requested object name in the module
+     * when it is supported
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function setObject($sObject) {
+        if(!$this->offersObject($sObject)) {
+            // Set sObject to an empty string. This tells the isPermitted() check that
+            // this module uses object based authorisation checks. In that case it
+            // won't pass the object authorisation check.
+            $this->sObject = '';
+            return false;
+        }
 
-		$type = 'NOTE';
-		$msg = null;
-		if($aReturn !== false) {
-			$ret = $this->{$action}($aReturn);
-			if($ret && $successMsg) {
-				$msg = $successMsg;
-			} elseif(!$ret && $failMessage) {
-				$type = 'ERROR';
-				$msg = $failMessage;
-			}
-		} else {
-			$type = 'ERROR';
-			$msg = $this->CORE->getLang()->getText('You entered invalid information.');
-		}
+        $this->sObject = $sObject;
+        return true;
+    }
 
-		if($msg)
-			new GlobalMessage($type, $msg, null, null, $reload, $redirectUrl);
-		else
-			return $ret;
-	}
+    /**
+     *  Returns the object string
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function getObject() {
+        return $this->sObject;
+    }
 
-	/**
-	 * Checks if the listed values are set. Otherwise it raises and error message
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	protected function verifyValuesSet($HANDLER, $list) {
-		// Check if the array is assoc. When it isn't re-format it.
-		if(array_keys($list) === range(0, count($list) - 1)) {
-			$assoc = Array();
-			foreach($list AS $value)
-				$assoc[$value] = true;
-			$list = $assoc;
-		}
+    /**
+     * Checks if the user is permitted to perform the requested action
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function isPermitted() {
+        $authorized = true;
+        if(!isset($this->AUTHORISATION))
+            $authorized = false;
 
-		foreach($list AS $key => $value)
-			if(!$HANDLER->isSetAndNotEmpty($key))
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mustValueNotSet1',
-			                                                      Array('ATTRIBUTE' => $key)));
-	}
+        // Maybe the requested action is summarized by some other
+        $action = !is_bool($this->aActions[$this->sAction]) ? $this->aActions[$this->sAction] : $this->sAction;
 
-	/**
-	 * Checks if the listes values match the given patterns. Otherwise it raises
-	 * an error message.
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	protected function verifyValuesMatch($HANDLER, $list) {
-		foreach($list AS $key => $pattern)
-			if($pattern && !$HANDLER->match($key, $pattern))
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The value of option "[ATTRIBUTE]" does not match the valid format.',
-			                                                      Array('ATTRIBUTE' => $key)));
-				
-	}
+        if(!$this->AUTHORISATION->isPermitted($this->sName, $action, $this->sObject))
+            $authorized = false;
+
+        if(!$authorized)
+            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You are not permitted to access this page ([PAGE]).',
+                                                                       Array('PAGE' => $this->sName.'/'.$action.'/'.$this->sObject)),
+                                                                       null, $this->CORE->getLang()->getText('Access denied'));
+    }
+
+    /**
+     * Initializes the URI handler object
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    protected function initUriHandler() {
+        $this->UHANDLER = new CoreUriHandler($this->CORE);
+    }
+
+    /**
+     * Reads a list of custom variables from the request
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    protected function getCustomOptions($aKeys, $aDefaults = Array()) {
+        // Initialize on first call
+        if($this->UHANDLER === null)
+            $this->initUriHandler();
+
+        // Load the specific params to the UriHandler
+        $this->UHANDLER->parseModSpecificUri($aKeys, $aDefaults);
+
+        // Now get those params
+        $aReturn = Array();
+        foreach($aKeys AS $key => $val)
+            $aReturn[$key] = $this->UHANDLER->get($key);
+
+        return $aReturn;
+    }
+
+    /**
+     * Is a dummy at this place. Some special modules like
+     * CoreModMap have no general way of fetching the called
+     * "object" because the value might come in different vars
+     * when using different actions. So these special modules
+     * can implement that by overriding this method.
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function initObject() {}
+
+    /**
+     * This method needs to be implemented by each module
+     * to handle the user called action
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    abstract public function handleAction();
+
+    /**
+     * Helper function to handle default form responses
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    protected function handleResponse($validationHandler, $action, $successMsg = null,
+                                        $failMessage = null, $reload = null, $redirectUrl = null) {
+        $aReturn = $this->{$validationHandler}();
+
+        $type = 'NOTE';
+        $msg = null;
+        if($aReturn !== false) {
+            $ret = $this->{$action}($aReturn);
+            if($ret && $successMsg) {
+                $msg = $successMsg;
+            } elseif(!$ret && $failMessage) {
+                $type = 'ERROR';
+                $msg = $failMessage;
+            }
+        } else {
+            $type = 'ERROR';
+            $msg = $this->CORE->getLang()->getText('You entered invalid information.');
+        }
+
+        if($msg)
+            new GlobalMessage($type, $msg, null, null, $reload, $redirectUrl);
+        else
+            return $ret;
+    }
+
+    /**
+     * Checks if the listed values are set. Otherwise it raises and error message
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    protected function verifyValuesSet($HANDLER, $list) {
+        // Check if the array is assoc. When it isn't re-format it.
+        if(array_keys($list) === range(0, count($list) - 1)) {
+            $assoc = Array();
+            foreach($list AS $value)
+                $assoc[$value] = true;
+            $list = $assoc;
+        }
+
+        foreach($list AS $key => $value)
+            if(!$HANDLER->isSetAndNotEmpty($key))
+                new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mustValueNotSet1',
+                                                                  Array('ATTRIBUTE' => $key)));
+    }
+
+    /**
+     * Checks if the listes values match the given patterns. Otherwise it raises
+     * an error message.
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    protected function verifyValuesMatch($HANDLER, $list) {
+        foreach($list AS $key => $pattern)
+            if($pattern && !$HANDLER->match($key, $pattern))
+                new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The value of option "[ATTRIBUTE]" does not match the valid format.',
+                                                                  Array('ATTRIBUTE' => $key)));
+
+    }
 }
 ?>

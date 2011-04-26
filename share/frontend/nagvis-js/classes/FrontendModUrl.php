@@ -21,84 +21,84 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class FrontendModUrl extends FrontendModule {
-	private $url = '';
-	private $rotation = '';
-	private $rotationStep = '';
-	
-	public function __construct(GlobalCore $CORE) {
-		$this->CORE = $CORE;
+    private $url = '';
+    private $rotation = '';
+    private $rotationStep = '';
 
-		// Parse the view specific options
-		$aOpts = Array('show' => MATCH_STRING_URL,
-		               'rotation' => MATCH_ROTATION_NAME_EMPTY,
-		               'rotationStep' => MATCH_INTEGER_EMPTY);
-		
-		$aVals = $this->getCustomOptions($aOpts);
-		$this->url = $aVals['show'];
-		$this->rotation = $aVals['rotation'];
-		$this->rotationStep = $aVals['rotationStep'];
-		
-		// Register valid actions
-		$this->aActions = Array(
-			'view' => REQUIRES_AUTHORISATION
-		);
-	}
-	
-	public function handleAction() {
-		$sReturn = '';
-		
-		if($this->offersAction($this->sAction)) {
-			switch($this->sAction) {
-				case 'view':
-					// Show the view dialog to the user
-					$sReturn = $this->showViewDialog();
-				break;
-			}
-		}
-		
-		return $sReturn;
-	}
-	
-	private function showViewDialog() {
-		// Only show when map name given
-		if(!isset($this->url) || $this->url == '') {
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('No url given.'));
-			exit(1);
-		}
-		
-		// Build index template
-		$INDEX = new NagVisIndexView($this->CORE);
-		
-		// Need to parse the header menu?
-		if($this->CORE->getMainCfg()->getValue('index','headermenu')) {
-			// Parse the header menu
+    public function __construct(GlobalCore $CORE) {
+        $this->CORE = $CORE;
+
+        // Parse the view specific options
+        $aOpts = Array('show' => MATCH_STRING_URL,
+                       'rotation' => MATCH_ROTATION_NAME_EMPTY,
+                       'rotationStep' => MATCH_INTEGER_EMPTY);
+
+        $aVals = $this->getCustomOptions($aOpts);
+        $this->url = $aVals['show'];
+        $this->rotation = $aVals['rotation'];
+        $this->rotationStep = $aVals['rotationStep'];
+
+        // Register valid actions
+        $this->aActions = Array(
+            'view' => REQUIRES_AUTHORISATION
+        );
+    }
+
+    public function handleAction() {
+        $sReturn = '';
+
+        if($this->offersAction($this->sAction)) {
+            switch($this->sAction) {
+                case 'view':
+                    // Show the view dialog to the user
+                    $sReturn = $this->showViewDialog();
+                break;
+            }
+        }
+
+        return $sReturn;
+    }
+
+    private function showViewDialog() {
+        // Only show when map name given
+        if(!isset($this->url) || $this->url == '') {
+            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('No url given.'));
+            exit(1);
+        }
+
+        // Build index template
+        $INDEX = new NagVisIndexView($this->CORE);
+
+        // Need to parse the header menu?
+        if($this->CORE->getMainCfg()->getValue('index','headermenu')) {
+            // Parse the header menu
       $HEADER = new NagVisHeaderMenu($this->CORE, $this->AUTHORISATION, $this->UHANDLER, $this->CORE->getMainCfg()->getValue('index', 'headertemplate'));
-      
+
       // Put rotation information to header menu
       if($this->rotation != '') {
       	$HEADER->setRotationEnabled();
       }
-      
-			$INDEX->setHeaderMenu($HEADER->__toString());
+
+            $INDEX->setHeaderMenu($HEADER->__toString());
     }
-		
-		// Initialize map view
-		$this->VIEW = new NagVisUrlView($this->CORE, $this->url);
-    
-		// Maybe it is needed to handle the requested rotation
-		if($this->rotation != '') {
-			$ROTATION = new FrontendRotation($this->CORE, $this->rotation);
-			$ROTATION->setStep('url', $this->url, $this->rotationStep);
-			$this->VIEW->setRotation($ROTATION->getRotationProperties());
-		}
+
+        // Initialize map view
+        $this->VIEW = new NagVisUrlView($this->CORE, $this->url);
+
+        // Maybe it is needed to handle the requested rotation
+        if($this->rotation != '') {
+            $ROTATION = new FrontendRotation($this->CORE, $this->rotation);
+            $ROTATION->setStep('url', $this->url, $this->rotationStep);
+            $this->VIEW->setRotation($ROTATION->getRotationProperties());
+        }
 
     $INDEX->setContent($this->VIEW->parse());
-		return $INDEX->parse();
-	}
+        return $INDEX->parse();
+    }
 }
 ?>

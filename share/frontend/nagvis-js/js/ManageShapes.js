@@ -20,46 +20,46 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
- 
+
 // checks that the file the user wants to upload has the .png extension
 function checkPngGifOrJpg(imageName) {
-	var type = imageName.substring(imageName.length-3,imageName.length).toLowerCase();
-	return type == 'png' || type == 'jpg' || type == 'gif';
+    var type = imageName.substring(imageName.length-3,imageName.length).toLowerCase();
+    return type == 'png' || type == 'jpg' || type == 'gif';
 }
 
 var usedInMap = "";
 function checkShapeInUse(shapeName,mapOptions) {
-	for(var i=0;i<mapOptions.length;i++) {
-		for(var a = 0; a < mapOptions[i].usedShapes.length; a++) {
-			if(mapOptions[i].usedShapes[a] == shapeName) {
-				return true;
-			}
-		}
-		usedInMap =mapOptions[i].mapName;
-	}
-	
-	return false;
+    for(var i=0;i<mapOptions.length;i++) {
+        for(var a = 0; a < mapOptions[i].usedShapes.length; a++) {
+            if(mapOptions[i].usedShapes[a] == shapeName) {
+                return true;
+            }
+        }
+        usedInMap =mapOptions[i].mapName;
+    }
+
+    return false;
 }
 
 function check_image_add() {
   if(document.shape_add.image_file.value.length == 0) {
-		alert(printLang(lang['firstMustChoosePngImage'],''));
-		return false;
-	}
-	
-	if(!checkPngGifOrJpg(document.shape_add.image_file.value)) {
-		alert(printLang(lang['mustChooseValidImageFormat'],''));
-		return false;
-	}
+        alert(printLang(lang['firstMustChoosePngImage'],''));
+        return false;
+    }
+
+    if(!checkPngGifOrJpg(document.shape_add.image_file.value)) {
+        alert(printLang(lang['mustChooseValidImageFormat'],''));
+        return false;
+    }
 
   if(document.shape_add.image_file.value.indexOf(" ") != -1) {
-		alert(printLang(lang['noSpaceAllowedInName'],''));
-		return false;
-	}
+        alert(printLang(lang['noSpaceAllowedInName'],''));
+        return false;
+    }
 }
 
 function check_image_delete() {
@@ -68,14 +68,14 @@ function check_image_delete() {
         return false;
     }
 
-		if(checkShapeInUse(document.shape_delete.image.value, mapOptions)) {
-			alert(printLang(lang['shapeInUse'],'MAP~'+usedInMap));
-			return false;
-		}
-    
+        if(checkShapeInUse(document.shape_delete.image.value, mapOptions)) {
+            alert(printLang(lang['shapeInUse'],'MAP~'+usedInMap));
+            return false;
+        }
+
     if(confirm(printLang(lang['confirmShapeDeletion'],'')) === false) {
         return false;
     }
-    
+
     return true;
 }

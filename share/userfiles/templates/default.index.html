@@ -1,49 +1,49 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
 <head>
-	<link rel="shortcut icon" href="{$htmlBase}/frontend/nagvis-js/images/internal/favicon.png" />
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-	<title>{$pageTitle}</title>
-	<meta name="viewport" content="width=480; initial-scale=0.6666; maximum-scale=1.0; minimum-scale=0.6666" />
-	
-	{if $bUseCompressedJs}
-	<script type="text/javascript" src="{$htmlJs}NagVisCompressed.js"></script>
-	{else}
-	<script type="text/javascript" src="{$htmlJs}ExtStacktrace.js"></script>
-	<script type="text/javascript" src="{$htmlJs}nagvis.js"></script>
-	<script type="text/javascript" src="{$htmlJs}edit.js"></script>
-	<script type="text/javascript" src="{$htmlJs}popupWindow.js"></script>
-	<script type="text/javascript" src="{$htmlJs}ExtBase.js"></script>
-	<script type="text/javascript" src="{$htmlJs}frontendMessage.js"></script>
-	<script type="text/javascript" src="{$htmlJs}frontendEventlog.js"></script>
-	<script type="text/javascript" src="{$htmlJs}frontendHover.js"></script>
-	<script type="text/javascript" src="{$htmlJs}hover.js"></script>
-	<script type="text/javascript" src="{$htmlJs}frontendContext.js"></script>
-	<script type="text/javascript" src="{$htmlJs}ajax.js"></script>
-	<script type="text/javascript" src="{$htmlJs}ajaxActions.js"></script>
-	<script type="text/javascript" src="{$htmlJs}dynfavicon.js"></script>
-	<script type="text/javascript" src="{$htmlJs}lines.js"></script>
-	<script type="text/javascript" src="{$htmlJs}NagVisObject.js"></script>
-	<script type="text/javascript" src="{$htmlJs}NagVisStatefulObject.js"></script>
-	<script type="text/javascript" src="{$htmlJs}NagVisStatelessObject.js"></script>
-	<script type="text/javascript" src="{$htmlJs}NagVisHost.js"></script>
-	<script type="text/javascript" src="{$htmlJs}NagVisService.js"></script>
-	<script type="text/javascript" src="{$htmlJs}NagVisHostgroup.js"></script>
-	<script type="text/javascript" src="{$htmlJs}NagVisServicegroup.js"></script>
-	<script type="text/javascript" src="{$htmlJs}NagVisMap.js"></script>
-	<script type="text/javascript" src="{$htmlJs}NagVisShape.js"></script>
-	<script type="text/javascript" src="{$htmlJs}NagVisLine.js"></script>
-	<script type="text/javascript" src="{$htmlJs}NagVisTextbox.js"></script>
-	<script type="text/javascript" src="{$htmlJs}NagVisRotation.js"></script>
-	<script type="text/javascript" src="{$htmlJs}frontend.js"></script>
-	<script type="text/javascript" src="{$htmlJs}ExtWzJsGraphics.js"></script>
-	<script type="text/javascript" src="{$htmlJs}ExtGenericResize.js"></script>
-	{/if}
-	<link rel="stylesheet" type="text/css" href="{$htmlTemplates}default.css" />
-	<link rel="stylesheet" type="text/css" href="{$htmlCss}frontendEventlog.css" />
-	{if $customStylesheet != ""}
-	<link rel="stylesheet" type="text/css" href="{$customStylesheet}" />
-	{/if}
+    <link rel="shortcut icon" href="{$htmlBase}/frontend/nagvis-js/images/internal/favicon.png" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>{$pageTitle}</title>
+    <meta name="viewport" content="width=480; initial-scale=0.6666; maximum-scale=1.0; minimum-scale=0.6666" />
+
+    {if $bUseCompressedJs}
+    <script type="text/javascript" src="{$htmlJs}NagVisCompressed.js"></script>
+    {else}
+    <script type="text/javascript" src="{$htmlJs}ExtStacktrace.js"></script>
+    <script type="text/javascript" src="{$htmlJs}nagvis.js"></script>
+    <script type="text/javascript" src="{$htmlJs}edit.js"></script>
+    <script type="text/javascript" src="{$htmlJs}popupWindow.js"></script>
+    <script type="text/javascript" src="{$htmlJs}ExtBase.js"></script>
+    <script type="text/javascript" src="{$htmlJs}frontendMessage.js"></script>
+    <script type="text/javascript" src="{$htmlJs}frontendEventlog.js"></script>
+    <script type="text/javascript" src="{$htmlJs}frontendHover.js"></script>
+    <script type="text/javascript" src="{$htmlJs}hover.js"></script>
+    <script type="text/javascript" src="{$htmlJs}frontendContext.js"></script>
+    <script type="text/javascript" src="{$htmlJs}ajax.js"></script>
+    <script type="text/javascript" src="{$htmlJs}ajaxActions.js"></script>
+    <script type="text/javascript" src="{$htmlJs}dynfavicon.js"></script>
+    <script type="text/javascript" src="{$htmlJs}lines.js"></script>
+    <script type="text/javascript" src="{$htmlJs}NagVisObject.js"></script>
+    <script type="text/javascript" src="{$htmlJs}NagVisStatefulObject.js"></script>
+    <script type="text/javascript" src="{$htmlJs}NagVisStatelessObject.js"></script>
+    <script type="text/javascript" src="{$htmlJs}NagVisHost.js"></script>
+    <script type="text/javascript" src="{$htmlJs}NagVisService.js"></script>
+    <script type="text/javascript" src="{$htmlJs}NagVisHostgroup.js"></script>
+    <script type="text/javascript" src="{$htmlJs}NagVisServicegroup.js"></script>
+    <script type="text/javascript" src="{$htmlJs}NagVisMap.js"></script>
+    <script type="text/javascript" src="{$htmlJs}NagVisShape.js"></script>
+    <script type="text/javascript" src="{$htmlJs}NagVisLine.js"></script>
+    <script type="text/javascript" src="{$htmlJs}NagVisTextbox.js"></script>
+    <script type="text/javascript" src="{$htmlJs}NagVisRotation.js"></script>
+    <script type="text/javascript" src="{$htmlJs}frontend.js"></script>
+    <script type="text/javascript" src="{$htmlJs}ExtWzJsGraphics.js"></script>
+    <script type="text/javascript" src="{$htmlJs}ExtGenericResize.js"></script>
+    {/if}
+    <link rel="stylesheet" type="text/css" href="{$htmlTemplates}default.css" />
+    <link rel="stylesheet" type="text/css" href="{$htmlCss}frontendEventlog.css" />
+    {if $customStylesheet != ""}
+    <link rel="stylesheet" type="text/css" href="{$customStylesheet}" />
+    {/if}
 </head>
 <body class="main">
 

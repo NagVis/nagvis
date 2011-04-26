@@ -20,19 +20,19 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 body, table, th, td {
-	margin: 0;
-	padding: 0;
-	
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	text-decoration: none;
-	
-	color: black;
-	font-size: 12pt;
+    margin: 0;
+    padding: 0;
+
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    text-decoration: none;
+
+    color: black;
+    font-size: 12pt;
 }
 
 html, body {height:100%}
@@ -60,46 +60,46 @@ div.welcome a:hover {color:#779D2A}
 
 /* Message-Box */
 .messageBox {
-	width: 600px;
-	border: 0px;
-	background-color:  #CCCCCC;
+    width: 600px;
+    border: 0px;
+    background-color:  #CCCCCC;
 }
 
 .messageBox th {
-	height: 22px;
-	
-	background-color: #CCCCCC;
-	
-	font-size: 15pt;
-	font-weight: bold;
-	text-align: center;
+    height: 22px;
+
+    background-color: #CCCCCC;
+
+    font-size: 15pt;
+    font-weight: bold;
+    text-align: center;
 }
-	
+
 .messageBox td {
-	height: 200px;
-	
-	background-color: #EEEEEE;
-	
-	font-size: 12pt;
-	font-weight: bold; 
-	text-align: center;
+    height: 200px;
+
+    background-color: #EEEEEE;
+
+    font-size: 12pt;
+    font-weight: bold;
+    text-align: center;
 }
 
 /* icons */
 .icon {
-	position : absolute;
-	border : 0;
-	font-size: 12pt;
-	z-index : 1;
+    position : absolute;
+    border : 0;
+    font-size: 12pt;
+    z-index : 1;
 }
 
 /* lines */
 .line {
-	position : absolute;
-	z-index : 1;
-	border-style : dotted;
-	border-width : 1px;
-	border-color : black;
+    position : absolute;
+    z-index : 1;
+    border-style : dotted;
+    border-width : 1px;
+    border-color : black;
 }
 
 a.linelink {
@@ -108,26 +108,26 @@ a.linelink {
 
 /* textbox (object on map) */
 .box {
-	position : absolute;
-	z-index : 1;
-	border: 1px #000 solid;
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	padding: 2px;
-	/* tried to solve the off-screen text wrap. This fixes the problem but
-	 * results no no linebreak at all: white-space:nowrap; */
+    position : absolute;
+    z-index : 1;
+    border: 1px #000 solid;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    padding: 2px;
+    /* tried to solve the off-screen text wrap. This fixes the problem but
+     * results no no linebreak at all: white-space:nowrap; */
 }
 
 /* labels for the objects on the maps */
 .object_label {
-	position : absolute;
-	z-index : 1;
-	border: 1px #000 solid;
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	padding: 2px;
-	/* tried to solve the off-screen text wrap. This fixes the problem but
-	 * results no no linebreak at all: white-space:nowrap; */
+    position : absolute;
+    z-index : 1;
+    border: 1px #000 solid;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    padding: 2px;
+    /* tried to solve the off-screen text wrap. This fixes the problem but
+     * results no no linebreak at all: white-space:nowrap; */
 }
 
 /* control styles */
@@ -137,82 +137,82 @@ div.control {
 }
 
 div.control.drag10 {
-	background-image: url('../images/templates/default.control_drag.gif');
+    background-image: url('../images/templates/default.control_drag.gif');
 }
 
 div.control.drag20 {
-	background-image: url('../images/templates/default.control_drag_20.gif');
+    background-image: url('../images/templates/default.control_drag_20.gif');
 }
 
 div.control.delete10 {
-	background-image: url('../images/templates/default.control_delete.gif');
+    background-image: url('../images/templates/default.control_delete.gif');
 }
 
 div.control.modify10 {
-	background-image: url('../images/templates/default.control_modify.gif');
+    background-image: url('../images/templates/default.control_modify.gif');
 }
 
 
 
 /* Style on info pages (index.php?info, index.php) */
 div.infopage {
-	position:relative;
+    position:relative;
 }
 
 div.infopage > table {
-	margin: auto;
-	margin-top: 25px;
-	margin-bottom: 25px;
-	
-	width: 800px;
-	
-	background-color: #eee;
-	border-collapse:collapse;
+    margin: auto;
+    margin-top: 25px;
+    margin-bottom: 25px;
+
+    width: 800px;
+
+    background-color: #eee;
+    border-collapse:collapse;
 }
 
 div.infopage > table td, div.infopage > table th {
-	border: 1px #a4a4a4 solid;
-	padding: 4px;
-	
-	font-size: 11px;
-	color: #43B3CF;
-	vertical-align: top;
+    border: 1px #a4a4a4 solid;
+    padding: 4px;
+
+    font-size: 11px;
+    color: #43B3CF;
+    vertical-align: top;
 }
 
 div.infopage > table th {
-	text-align: center;
-	background-color: #eee;
+    text-align: center;
+    background-color: #eee;
 }
 
 div.infopage > table th.head {
-	font-size: 20px;
+    font-size: 20px;
 }
 
 div.infopage h2 {
-	font-size: 12px;
-	color: #43B3CF;
-	margin-top: 2px;
-	margin-bottom: 2px;
-	margin-left: 2px;
+    font-size: 12px;
+    color: #43B3CF;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-left: 2px;
 }
 
 div.infopage > table td.disabled h2  {
-	color: #a4a4a4;
+    color: #a4a4a4;
 }
 
 div.infopage > table td.error h2  {
-	color: #ff0000;
+    color: #ff0000;
 }
 
 div.infopage a {
-	color: #a4a4a4;
-	text-decoration: none;
+    color: #a4a4a4;
+    text-decoration: none;
 }
 
 div.infopage a:hover {
-	color: #789D2B;
-	text-decoration: none;
-	opacity: .5;
+    color: #789D2B;
+    text-decoration: none;
+    opacity: .5;
 }
 
 /**
@@ -269,107 +269,107 @@ div.infopage a:hover {
  *  Message box
  *
  */
- 
+
 #messageBoxDiv {
-	position: absolute;
+    position: absolute;
   left: 50%;
   top: 50%;
-	
-	margin-left: -297px;
-	margin-top: -125px;
 
-	width:594px;
-	height:250px;
-	
-	/*margin:20 auto;*/
-	z-index: 1000;
+    margin-left: -297px;
+    margin-top: -125px;
+
+    width:594px;
+    height:250px;
+
+    /*margin:20 auto;*/
+    z-index: 1000;
 }
 
 #messageBoxDiv table.error, #messageBoxDiv table.critical, #messageBoxDiv table.down {
-	border:1px solid #F00;
+    border:1px solid #F00;
 }
 
 #messageBoxDiv table.error, #messageBoxDiv table.critical, #messageBoxDiv table.down {
-	border:1px solid #F00;
+    border:1px solid #F00;
 }
 
 #messageBoxDiv table.warning {
-	border:1px solid #FF0;
+    border:1px solid #FF0;
 }
 
 #messageBoxDiv table.unknown, #messageBoxDiv table.permission, #messageBoxDiv table.unreachable {
-	border:1px solid #FF9900;
+    border:1px solid #FF9900;
 }
 
 #messageBoxDiv table.ok, #messageBoxDiv table.up {
-	border:1px solid #00B233;
+    border:1px solid #00B233;
 }
 
 #messageBoxDiv table.note {
-	border:1px solid #00F;
+    border:1px solid #00F;
 }
 
 /* Style for the header area */
 
 #messageBoxDiv th {
-	font-style: italic;
-	text-align: center;
-	font-weight: bold;
-	color: black;
-	font-size: 26pt;
+    font-style: italic;
+    text-align: center;
+    font-weight: bold;
+    color: black;
+    font-size: 26pt;
 }
 
 #messageBoxDiv th.error, #messageBoxDiv th.critical, #messageBoxDiv th.down {
-	background-color: #FF6666;
+    background-color: #FF6666;
 }
 
 #messageBoxDiv th.warning {
-	background-color: #FFFF66;
+    background-color: #FFFF66;
 }
 
 #messageBoxDiv th.unknown, #messageBoxDiv th.permission, #messageBoxDiv th.unreachable {
-	background-color: #FFB200;
+    background-color: #FFB200;
 }
 
 #messageBoxDiv th.ok, #messageBoxDiv th.up {
-	background-color: #99FF66;
+    background-color: #99FF66;
 }
 
 #messageBoxDiv th.note {
-	background-color: #99CCFF;
+    background-color: #99CCFF;
 }
 
 /* Style for the message area */
 
 #messageBoxDiv td {
-	text-align: center;
-	vertical-align: middle;
-	font-size: 16pt;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 16pt;
 }
 
 #messageBoxDiv td.error, #messageBoxDiv td.critical, #messageBoxDiv td.down {
-	background-color: #FFB2B2;
+    background-color: #FFB2B2;
 }
 
 #messageBoxDiv td.warning {
-	background-color: #FFFFCC;
+    background-color: #FFFFCC;
 }
 
 #messageBoxDiv td.ok, #messageBoxDiv td.up {
-	background-color: #CCFF99;
+    background-color: #CCFF99;
 }
 
 #messageBoxDiv td.unknown, #messageBoxDiv td.permission, #messageBoxDiv td.unreachable {
-	background-color: #FFE566;
+    background-color: #FFE566;
 }
 
 #messageBoxDiv td.note {
-	background-color: #CCE5FF;
+    background-color: #CCE5FF;
 }
 
 #messageBoxDiv code {
-	text-align: left;
-	font-size: 10px;
+    text-align: left;
+    font-size: 10px;
 }
 
 /*
@@ -377,86 +377,86 @@ div.infopage a:hover {
  */
 
 div#popupWindow {
-	z-index: 2000;
+    z-index: 2000;
 }
 
 /* Popup window master table */
 table#popupWindowMaster {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	border-collapse: separate;
-	
-	margin-left: 8px;
-	padding: 6px 16px 16px 16px;
-	font-weight: normal;
-	-moz-border-radius: 11px;
-	-khtml-border-radius: 11px;
-	-webkit-border-radius: 11px;
-	border-radius: 5px;
-	background: #fff;
-	border: 1px solid #e5e5e5;
-	-moz-box-shadow: rgba(200,200,200,1) 0 4px 18px;
-	-webkit-box-shadow: rgba(200,200,200,1) 0 4px 18px;
-	-khtml-box-shadow: rgba(200,200,200,1) 0 4px 18px;
-	box-shadow: rgba(200,200,200,1) 0 4px 18px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-collapse: separate;
+
+    margin-left: 8px;
+    padding: 6px 16px 16px 16px;
+    font-weight: normal;
+    -moz-border-radius: 11px;
+    -khtml-border-radius: 11px;
+    -webkit-border-radius: 11px;
+    border-radius: 5px;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    -moz-box-shadow: rgba(200,200,200,1) 0 4px 18px;
+    -webkit-box-shadow: rgba(200,200,200,1) 0 4px 18px;
+    -khtml-box-shadow: rgba(200,200,200,1) 0 4px 18px;
+    box-shadow: rgba(200,200,200,1) 0 4px 18px;
 }
 
-table#popupWindowMaster tr th, 
+table#popupWindowMaster tr th,
 table#popupWindowMaster tr td {
-	background-color: transparent;
-	border: 0;
-	
-	font-size: 10px;
-	color: #43B3CF;
+    background-color: transparent;
+    border: 0;
+
+    font-size: 10px;
+    color: #43B3CF;
 }
 
 /* Title bar */
 table#popupWindowMaster tbody tr th#dragbar {
-	text-align: left;
-	font-size: 14px;
-	cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
 }
 
 /* Close button */
 table#popupWindowMaster tbody tr th.control {
-	padding: 0;
-	margin: 0;
-	width: 19px;
-	font-size: 16px;
-	text-align: center;
-	color: #43B3CF;
-	font-weight: bold;
-	text-decoration: none;
-	cursor: pointer;
-	border: 1px solid #43B3CF;
+    padding: 0;
+    margin: 0;
+    width: 19px;
+    font-size: 16px;
+    text-align: center;
+    color: #43B3CF;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid #43B3CF;
 }
 
 /* Content styling */
 td#popupWindowContent {
-	padding-top: 5px;	
+    padding-top: 5px;
 }
 
 td#popupWindowContent table.mytable {
-	width: 100%;
-	padding: 0;
-	margin: 0;
-	border-collapse:collapse;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border-collapse:collapse;
 }
 
-td#popupWindowContent table.mytable tr th, 
+td#popupWindowContent table.mytable tr th,
 td#popupWindowContent table.mytable tr td {
-	font-size: 10px;
-	color: #314455;
+    font-size: 10px;
+    color: #314455;
 }
 
 td#popupWindowContent label {
-	color: #777;
-	font-size: 13px;
+    color: #777;
+    font-size: 13px;
 }
 
 td#popupWindowContent p {
-	margin-bottom: 12px;
+    margin-bottom: 12px;
 }
 
 td#popupWindowContent table.mytable {border-collapse:collapse;margin-top: 0px;padding: 1px;}
@@ -490,27 +490,27 @@ td#popupWindowContent .submit {
 
 /* Popup window forms */
 
-td#popupWindowContent fieldset {  
-	margin: 1.5em 0 0 0;  
-	padding: 5px;
-	width: 100%;
-	border: 1px solid #BFBAB0;  
-	background-color: #F2EFE9;
+td#popupWindowContent fieldset {
+    margin: 1.5em 0 0 0;
+    padding: 5px;
+    width: 100%;
+    border: 1px solid #BFBAB0;
+    background-color: #F2EFE9;
 }
 
-td#popupWindowContent legend {  
-	margin-left: 1em;
-	font-size: 1em;
-	font-weight: bold;
+td#popupWindowContent legend {
+    margin-left: 1em;
+    font-size: 1em;
+    font-weight: bold;
 }
 
 td#popupWindowContent fieldset.form table {
-	width: 100%;
+    width: 100%;
 }
 
 td#popupWindowContent fieldset.form label {
-	font-weight: bold;
-	margin-right: 20px;
+    font-weight: bold;
+    margin-right: 20px;
 }
 
 td#popupWindowContent a {color:#43B3CF;text-decoration:none;}
@@ -518,59 +518,59 @@ td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 
 /* Header styling */
 .header {
-	color: #43B3CF;
-	font-size: 0.6em;
-	height: 31px;
-	width: 100%;
-	background-image: url('../images/templates/default.header.png');
+    color: #43B3CF;
+    font-size: 0.6em;
+    height: 31px;
+    width: 100%;
+    background-image: url('../images/templates/default.header.png');
 }
 
 #headershow {
-	display: none;
-	width: 9px;
-	min-width: 9px;
-	background-image: none;
+    display: none;
+    width: 9px;
+    min-width: 9px;
+    background-image: none;
 }
 
 .header ul.head {
-	margin: 0;
-	padding: 0;
-	
-	background-color: #F5F5F5;
-	background: url('../images/templates/default.header.png');
-	
-	height: 31px;
-	
-	float:left; 
-	
-	list-style:none;
+    margin: 0;
+    padding: 0;
+
+    background-color: #F5F5F5;
+    background: url('../images/templates/default.header.png');
+
+    height: 31px;
+
+    float:left;
+
+    list-style:none;
 }
 
 .header ul.right {float:right}
 
 .header ul.head li {
-	margin: 0;
-	padding: 0;
-	
-	height: 100%;
-	
-	float: left;
+    margin: 0;
+    padding: 0;
+
+    height: 100%;
+
+    float: left;
 }
 
 .header ul.head li.logo {
-	padding-left: 5px;
-	padding-right: 5px;
-	margin-top: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-top: 2px;
 }
 
 .header ul.head li.logo a, .header ul.head li.logo a:active, .header ul.head li.logo a:visited {
-	margin: 0;
-	padding: 0;
-	width: 100%;
-	height: 100%;
-	
-	display: block;
-	text-decoration: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+
+    display: block;
+    text-decoration: none;
 }
 
 #editIndicator span {margin:0;padding:0;width:100%;height:31px;padding-left:8px;padding-right:8px;line-height:31px;font-weight:bold;width:90px;color:#ff0000}

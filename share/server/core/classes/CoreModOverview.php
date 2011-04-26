@@ -26,52 +26,52 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreModOverview extends CoreModule {
-	private $BACKEND = null;
-	private $OVERVIEW = null;
-	
-	public function __construct(GlobalCore $CORE) {
-		$this->sName = 'Overview';
-		$this->CORE = $CORE;
-		
-		$this->aActions = Array(
-			'getOverviewProperties' => 'view',
-			'getOverviewMaps'       => 'view',
-			'getOverviewAutomaps'   => 'view',
-			'getOverviewRotations'  => 'view',
-			'getObjectStates'       => 'view',
-		);
-	}
-	
-	public function handleAction() {
-		$sReturn = '';
-		
-		if($this->offersAction($this->sAction)) {
-			$this->BACKEND = new CoreBackendMgmt($this->CORE);
-			$this->OVERVIEW = new GlobalIndexPage($this->CORE, $this->BACKEND, $this->AUTHORISATION);
-			
-			switch($this->sAction) {
-				case 'getOverviewProperties':
-					$sReturn = $this->OVERVIEW->parseIndexPropertiesJson();
-				break;
-				case 'getOverviewMaps':
-					$sReturn = $this->OVERVIEW->parseMapsJson('map');
-				break;
-				case 'getOverviewAutomaps':
-					$sReturn = $this->OVERVIEW->parseMapsJson('automap');
-				break;
-				case 'getOverviewRotations':
-					$sReturn = $this->OVERVIEW->parseRotationsJson();
-				break;
-				case 'getObjectStates':
-					$aOpts = Array('i'  => MATCH_STRING_NO_SPACE);
-					$aVals = $this->getCustomOptions($aOpts);
+    private $BACKEND = null;
+    private $OVERVIEW = null;
 
-					$sReturn = $this->OVERVIEW->parseMapsJson('list', ONLY_STATE, $aVals['i']);
-				break;
-			}
-		}
-		
-		return $sReturn;
-	}
+    public function __construct(GlobalCore $CORE) {
+        $this->sName = 'Overview';
+        $this->CORE = $CORE;
+
+        $this->aActions = Array(
+            'getOverviewProperties' => 'view',
+            'getOverviewMaps'       => 'view',
+            'getOverviewAutomaps'   => 'view',
+            'getOverviewRotations'  => 'view',
+            'getObjectStates'       => 'view',
+        );
+    }
+
+    public function handleAction() {
+        $sReturn = '';
+
+        if($this->offersAction($this->sAction)) {
+            $this->BACKEND = new CoreBackendMgmt($this->CORE);
+            $this->OVERVIEW = new GlobalIndexPage($this->CORE, $this->BACKEND, $this->AUTHORISATION);
+
+            switch($this->sAction) {
+                case 'getOverviewProperties':
+                    $sReturn = $this->OVERVIEW->parseIndexPropertiesJson();
+                break;
+                case 'getOverviewMaps':
+                    $sReturn = $this->OVERVIEW->parseMapsJson('map');
+                break;
+                case 'getOverviewAutomaps':
+                    $sReturn = $this->OVERVIEW->parseMapsJson('automap');
+                break;
+                case 'getOverviewRotations':
+                    $sReturn = $this->OVERVIEW->parseRotationsJson();
+                break;
+                case 'getObjectStates':
+                    $aOpts = Array('i'  => MATCH_STRING_NO_SPACE);
+                    $aVals = $this->getCustomOptions($aOpts);
+
+                    $sReturn = $this->OVERVIEW->parseMapsJson('list', ONLY_STATE, $aVals['i']);
+                break;
+            }
+        }
+
+        return $sReturn;
+    }
 }
 ?>

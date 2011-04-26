@@ -21,55 +21,55 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisLoginView {
-	private $CORE;
-	
-	/**
-	 * Class Constructor
-	 *
-	 * @param 	GlobalCore 	$CORE
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($CORE) {
-		$this->CORE = $CORE;
-	}
-	
-	/**
-	 * Parses the information in html format
-	 *
-	 * @return	String 	String with Html Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parse() {
-		// Initialize template system
-		$TMPL = New FrontendTemplateSystem($this->CORE);
-		$TMPLSYS = $TMPL->getTmplSys();
-		
-		$aData = Array(
-			'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
-			'pageTitle' => $this->CORE->getMainCfg()->getValue('internal', 'title') . ' &rsaquo; Log In',
-			'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-			'htmlJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
-			'htmlCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
-			'formTarget' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase') . '/server/core/ajax_handler.php?mod=Auth&amp;act=login',
-			'htmlTemplates' => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'),
-			'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
+    private $CORE;
+
+    /**
+     * Class Constructor
+     *
+     * @param 	GlobalCore 	$CORE
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct($CORE) {
+        $this->CORE = $CORE;
+    }
+
+    /**
+     * Parses the information in html format
+     *
+     * @return	String 	String with Html Code
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function parse() {
+        // Initialize template system
+        $TMPL = New FrontendTemplateSystem($this->CORE);
+        $TMPLSYS = $TMPL->getTmplSys();
+
+        $aData = Array(
+            'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
+            'pageTitle' => $this->CORE->getMainCfg()->getValue('internal', 'title') . ' &rsaquo; Log In',
+            'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+            'htmlJs' => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
+            'htmlCss' => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
+            'formTarget' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase') . '/server/core/ajax_handler.php?mod=Auth&amp;act=login',
+            'htmlTemplates' => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'),
+            'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
       'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
       'maxUsernameLength' => AUTH_MAX_USERNAME_LENGTH,
       'langName' => $this->CORE->getLang()->getText('Name'),
       'langPassword' => $this->CORE->getLang()->getText('Password'),
       'langLogin' => $this->CORE->getLang()->getText('Login'),
-			'langTitleCookiesDisabled' => $this->CORE->getLang()->getText('Cookies disabled'),
-			'langTextCookiesDisabled' => $this->CORE->getLang()->getText('NagVis is unable to set a cookie in your browser. Please enable cookies for at least the NagVis host.'),
-		);
-		
-		// Build page based on the template file and the data array
+            'langTitleCookiesDisabled' => $this->CORE->getLang()->getText('Cookies disabled'),
+            'langTextCookiesDisabled' => $this->CORE->getLang()->getText('NagVis is unable to set a cookie in your browser. Please enable cookies for at least the NagVis host.'),
+        );
+
+        // Build page based on the template file and the data array
     // FIXME: Make template set configurable
-		return $TMPLSYS->get($TMPL->getTmplFile('default', 'login'), $aData);
-	}
+        return $TMPLSYS->get($TMPL->getTmplFile('default', 'login'), $aData);
+    }
 }
 ?>

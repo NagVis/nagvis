@@ -26,115 +26,115 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreModManageBackgrounds extends CoreModule {
-	private $name = null;
-	
-	public function __construct(GlobalCore $CORE) {
-		$this->sName = 'ManageBackgrounds';
-		$this->CORE = $CORE;
-		
-		// Register valid actions
-		$this->aActions = Array(
-			// WUI specific actions
-			'view'     => 'manage',
-			'doCreate' => 'manage',
-			'doUpload' => 'manage',
-			'doDelete' => 'manage',
-		);
-	}
-	
-	public function handleAction() {
-		$sReturn = '';
-		
-		if($this->offersAction($this->sAction)) {
-			switch($this->sAction) {
-				case 'view':
-					$VIEW = new WuiViewManageBackgrounds($this->AUTHENTICATION, $this->AUTHORISATION);
-					$sReturn = json_encode(Array('code' => $VIEW->parse()));
-				break;
-				case 'doCreate':
-					$this->handleResponse('handleResponseCreate', 'doCreate',
-						                    $this->CORE->getLang()->getText('The background has been created.'),
-																$this->CORE->getLang()->getText('The background could not be created.'),
-					                      1);
-				break;
-				case 'doDelete':
-					$this->handleResponse('handleResponseDelete', 'doDelete',
-						                    $this->CORE->getLang()->getText('The background has been deleted.'),
-																$this->CORE->getLang()->getText('The background could not be deleted.'),
-					                      1);
-				break;
-				case 'doUpload':
-					if($this->handleResponse('handleResponseDoUpload', 'doUpload'))
-						header('Location:'.$_SERVER['HTTP_REFERER']);
-				break;
-			}
-		}
-		
-		return $sReturn;
-	}
+    private $name = null;
 
-	protected function handleResponseDoUpload() {
-		$FHANDLER = new CoreRequestHandler($_FILES);
-		$this->verifyValuesSet($FHANDLER, Array('image_file'));
-		return Array('image_file' => $FHANDLER->get('image_file'));
-	}
+    public function __construct(GlobalCore $CORE) {
+        $this->sName = 'ManageBackgrounds';
+        $this->CORE = $CORE;
 
-	protected function doUpload($a) {
-		if(!is_uploaded_file($a['image_file']['tmp_name']))
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The file could not be uploaded (Error: [ERROR]).',
+        // Register valid actions
+        $this->aActions = Array(
+            // WUI specific actions
+            'view'     => 'manage',
+            'doCreate' => 'manage',
+            'doUpload' => 'manage',
+            'doDelete' => 'manage',
+        );
+    }
+
+    public function handleAction() {
+        $sReturn = '';
+
+        if($this->offersAction($this->sAction)) {
+            switch($this->sAction) {
+                case 'view':
+                    $VIEW = new WuiViewManageBackgrounds($this->AUTHENTICATION, $this->AUTHORISATION);
+                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
+                break;
+                case 'doCreate':
+                    $this->handleResponse('handleResponseCreate', 'doCreate',
+                                            $this->CORE->getLang()->getText('The background has been created.'),
+                                                                $this->CORE->getLang()->getText('The background could not be created.'),
+                                          1);
+                break;
+                case 'doDelete':
+                    $this->handleResponse('handleResponseDelete', 'doDelete',
+                                            $this->CORE->getLang()->getText('The background has been deleted.'),
+                                                                $this->CORE->getLang()->getText('The background could not be deleted.'),
+                                          1);
+                break;
+                case 'doUpload':
+                    if($this->handleResponse('handleResponseDoUpload', 'doUpload'))
+                        header('Location:'.$_SERVER['HTTP_REFERER']);
+                break;
+            }
+        }
+
+        return $sReturn;
+    }
+
+    protected function handleResponseDoUpload() {
+        $FHANDLER = new CoreRequestHandler($_FILES);
+        $this->verifyValuesSet($FHANDLER, Array('image_file'));
+        return Array('image_file' => $FHANDLER->get('image_file'));
+    }
+
+    protected function doUpload($a) {
+        if(!is_uploaded_file($a['image_file']['tmp_name']))
+            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The file could not be uploaded (Error: [ERROR]).',
               Array('ERROR' => $a['image_file']['error'].': '.$this->CORE->getUploadErrorMsg($a['image_file']['error']))));
-	
-		$fileName = $a['image_file']['name'];
 
-		if(!preg_match(MATCH_PNG_GIF_JPG_FILE, $fileName))
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The uploaded file is no image (png,jpg,gif) file or contains unwanted chars.'));
+        $fileName = $a['image_file']['name'];
 
-		$filePath = $this->CORE->getMainCfg()->getPath('sys', '', 'backgrounds').$fileName;
-		return move_uploaded_file($a['image_file']['tmp_name'], $filePath) && $this->CORE->setPerms($filePath);
-	}
-	
-	protected function doDelete($a) {
-		$BACKGROUND = new GlobalBackground($this->CORE, $a['image']);
-		$BACKGROUND->deleteImage();
-		
-		return true;
-	}
-	
-	protected function handleResponseDelete() {
-		$FHANDLER = new CoreRequestHandler($_POST);
-		$this->verifyValuesSet($FHANDLER,   Array('map_image'));
-		$this->verifyValuesMatch($FHANDLER, Array('map_image' => MATCH_PNG_GIF_JPG_FILE));
+        if(!preg_match(MATCH_PNG_GIF_JPG_FILE, $fileName))
+            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The uploaded file is no image (png,jpg,gif) file or contains unwanted chars.'));
 
-		if(!in_array($FHANDLER->get('map_image'), $this->CORE->getAvailableBackgroundImages()))
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The background does not exist.'));
-		
-		return Array('image' => $FHANDLER->get('map_image'));
-	}
-	
-	protected function doCreate($a) {
-		$BACKGROUND = new GlobalBackground($this->CORE, $a['name'].'.png');
-		$BACKGROUND->createImage($a['color'], $a['width'], $a['height']);
-		
-		return true;
-	}
-	
-	protected function handleResponseCreate() {
-		$FHANDLER = new CoreRequestHandler($_POST);
-		$attr = Array('image_name'   => MATCH_BACKGROUND_NAME,
-		              'image_color'  => MATCH_COLOR,
-									'image_width'  => MATCH_INTEGER,
-		              'image_height' => MATCH_INTEGER);
-		$this->verifyValuesSet($FHANDLER,   $attr);
-		$this->verifyValuesMatch($FHANDLER, $attr);
-		
-		// Check if the background exists
-		if(in_array($FHANDLER->get('image_name').'.png', $this->CORE->getAvailableBackgroundImages()))
-			new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The background does already exist.'));
-		
-		return Array('name'   => $FHANDLER->get('image_name'),
-	               'color'  => $FHANDLER->get('image_color'),
-		             'width'  => $FHANDLER->get('image_width'),
-		             'height' => $FHANDLER->get('image_height'));
-	}
+        $filePath = $this->CORE->getMainCfg()->getPath('sys', '', 'backgrounds').$fileName;
+        return move_uploaded_file($a['image_file']['tmp_name'], $filePath) && $this->CORE->setPerms($filePath);
+    }
+
+    protected function doDelete($a) {
+        $BACKGROUND = new GlobalBackground($this->CORE, $a['image']);
+        $BACKGROUND->deleteImage();
+
+        return true;
+    }
+
+    protected function handleResponseDelete() {
+        $FHANDLER = new CoreRequestHandler($_POST);
+        $this->verifyValuesSet($FHANDLER,   Array('map_image'));
+        $this->verifyValuesMatch($FHANDLER, Array('map_image' => MATCH_PNG_GIF_JPG_FILE));
+
+        if(!in_array($FHANDLER->get('map_image'), $this->CORE->getAvailableBackgroundImages()))
+            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The background does not exist.'));
+
+        return Array('image' => $FHANDLER->get('map_image'));
+    }
+
+    protected function doCreate($a) {
+        $BACKGROUND = new GlobalBackground($this->CORE, $a['name'].'.png');
+        $BACKGROUND->createImage($a['color'], $a['width'], $a['height']);
+
+        return true;
+    }
+
+    protected function handleResponseCreate() {
+        $FHANDLER = new CoreRequestHandler($_POST);
+        $attr = Array('image_name'   => MATCH_BACKGROUND_NAME,
+                      'image_color'  => MATCH_COLOR,
+                                    'image_width'  => MATCH_INTEGER,
+                      'image_height' => MATCH_INTEGER);
+        $this->verifyValuesSet($FHANDLER,   $attr);
+        $this->verifyValuesMatch($FHANDLER, $attr);
+
+        // Check if the background exists
+        if(in_array($FHANDLER->get('image_name').'.png', $this->CORE->getAvailableBackgroundImages()))
+            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The background does already exist.'));
+
+        return Array('name'   => $FHANDLER->get('image_name'),
+                   'color'  => $FHANDLER->get('image_color'),
+                     'width'  => $FHANDLER->get('image_width'),
+                     'height' => $FHANDLER->get('image_height'));
+    }
 }
 ?>

@@ -22,154 +22,154 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisAutomapCfg extends GlobalMapCfg {
-	private $defaultConf = null;
+    private $defaultConf = null;
 
-	private $objIds = Array();
-	private $objIdFile;
+    private $objIds = Array();
+    private $objIdFile;
 
-	/**
-	 * Class Constructor
-	 *
-	 * @param	GlobalCore      $CORE
-	 * @param	String			$name		Name of the map
-	 * @author	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($CORE, $name) {
-		// Fix the automap name (backward compatible to old automap=1)
-		if(isset($name) && $name === '1') {
-			$this->name = '__automap';
-		} else {
-			$this->name	= $name;
-		}
+    /**
+     * Class Constructor
+     *
+     * @param	GlobalCore      $CORE
+     * @param	String			$name		Name of the map
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct($CORE, $name) {
+        // Fix the automap name (backward compatible to old automap=1)
+        if(isset($name) && $name === '1') {
+            $this->name = '__automap';
+        } else {
+            $this->name	= $name;
+        }
 
-		$this->objIdFile = $CORE->getMainCfg()->getValue('paths', 'var').'automap.hostids';
-		
-		// Start of the parent constructor
-		parent::__construct($CORE, $this->name);
+        $this->objIdFile = $CORE->getMainCfg()->getValue('paths', 'var').'automap.hostids';
 
-		// Modify must values -> coords don't need to be set
-		parent::$validConfig['host']['x']['must'] = 0;
-		parent::$validConfig['host']['y']['must'] = 0;
-		
-		$this->type = 'automap';
-		
-		// Override the default map configuration path with automap path
-		$this->setConfigFile($CORE->getMainCfg()->getValue('paths', 'automapcfg').$this->name.'.cfg');
-		
-		// Re-initialize the cache
-		$this->initCache();
-	}
+        // Start of the parent constructor
+        parent::__construct($CORE, $this->name);
 
-	/**
-	 * Gets the configuration of the objects using the global configuration
-	 *
-	 * @param   Strin   Optional: Name of the object to get the config for
-	 * @return	Array		Object configuration
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function &getObjectConfiguration() {
-		// Load the settings once and then remove the dummy host from host list
-		if(!$this->defaultConf) {
-			$this->defaultConf = Array();
+        // Modify must values -> coords don't need to be set
+        parent::$validConfig['host']['x']['must'] = 0;
+        parent::$validConfig['host']['y']['must'] = 0;
 
-			$keys = array_keys($this->getMapObjects());
-			if(isset($keys[1]))
-				$objectId = $keys[1];
-			else
-				return $this->defaultConf;
-			
-			/*
-			 * Get object default configuration from configuration file
-			 */
-			foreach($this->getValidTypeKeys('host') AS $key) {
-				if($key != 'type'
-					 && $key != 'backend_id'
-					 && $key != 'host_name'
-					 && $key != 'object_id'
-					 && $key != 'x'
-					 && $key != 'y'
-					 && $key != 'line_width') {
-					$this->defaultConf[$key] = $this->getValue($objectId, $key);
-				}
-			}
+        $this->type = 'automap';
 
-			$this->deleteElement($objectId);
-		}
-		
-		return $this->defaultConf;
-	}
+        // Override the default map configuration path with automap path
+        $this->setConfigFile($CORE->getMainCfg()->getValue('paths', 'automapcfg').$this->name.'.cfg');
 
-	public function storeAddElement($unused) { }
-	public function storeDeleteElement($unused, $unused1 = null) { }
+        // Re-initialize the cache
+        $this->initCache();
+    }
 
-	public function genObjIdAutomap($s) {
-		return $this->genObjId($s);
-	}
+    /**
+     * Gets the configuration of the objects using the global configuration
+     *
+     * @param   Strin   Optional: Name of the object to get the config for
+     * @return	Array		Object configuration
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function &getObjectConfiguration() {
+        // Load the settings once and then remove the dummy host from host list
+        if(!$this->defaultConf) {
+            $this->defaultConf = Array();
 
-	public function filterMapObjects($a) {
-		if(isset($this->mapConfig[2])) {
-			$global = $this->mapConfig[0];
-			$dummy  = $this->mapConfig[1];
-			parent::filterMapObjects($a);
-			$this->mapConfig = array_merge(Array($global, $dummy), $this->mapConfig);
-		}
-	}
+            $keys = array_keys($this->getMapObjects());
+            if(isset($keys[1]))
+                $objectId = $keys[1];
+            else
+                return $this->defaultConf;
 
-	/**
-	 * Transforms a list of automap object_ids to hostnames using the object_id
-	 * translation file. Unknown object_ids are skipped
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function objIdsToNames($ids) {
-		$names = Array();
-		$map = $this->loadObjIds();
-		foreach($ids AS $id) {
-			$name = array_search($id, $map);
-			if($name !== FALSE)
-				$names[] = $name;
-		}
-		return $names;
-	}
+            /*
+             * Get object default configuration from configuration file
+             */
+            foreach($this->getValidTypeKeys('host') AS $key) {
+                if($key != 'type'
+                     && $key != 'backend_id'
+                     && $key != 'host_name'
+                     && $key != 'object_id'
+                     && $key != 'x'
+                     && $key != 'y'
+                     && $key != 'line_width') {
+                    $this->defaultConf[$key] = $this->getValue($objectId, $key);
+                }
+            }
 
-	/**
-	 * Transforms an object_id to the hostname
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function objIdToName($id) {
-		return array_search($id, $this->loadObjIds());
-	}
+            $this->deleteElement($objectId);
+        }
 
-	/**
-	 * Loads the hostname to object_id mapping table from the central file
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function loadObjIds() {
-		if(!isset($this->objIds[0]))
-			if(GlobalCore::getInstance()->checkExisting($this->objIdFile, false))
-				$this->objIds = json_decode(file_get_contents($this->objIdFile), true);
-			else
-				$this->objIds = Array();
+        return $this->defaultConf;
+    }
 
-		return $this->objIds;
-	}
+    public function storeAddElement($unused) { }
+    public function storeDeleteElement($unused, $unused1 = null) { }
 
-	/**
-	 * Saves the given hostname to object_id mapping table in the central file
-	 *
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function storeObjIds($a) {
-		$this->objIds = $a;
+    public function genObjIdAutomap($s) {
+        return $this->genObjId($s);
+    }
 
-		return file_put_contents($this->objIdFile, json_encode($a)) !== false;
-	}
+    public function filterMapObjects($a) {
+        if(isset($this->mapConfig[2])) {
+            $global = $this->mapConfig[0];
+            $dummy  = $this->mapConfig[1];
+            parent::filterMapObjects($a);
+            $this->mapConfig = array_merge(Array($global, $dummy), $this->mapConfig);
+        }
+    }
+
+    /**
+     * Transforms a list of automap object_ids to hostnames using the object_id
+     * translation file. Unknown object_ids are skipped
+     *
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function objIdsToNames($ids) {
+        $names = Array();
+        $map = $this->loadObjIds();
+        foreach($ids AS $id) {
+            $name = array_search($id, $map);
+            if($name !== FALSE)
+                $names[] = $name;
+        }
+        return $names;
+    }
+
+    /**
+     * Transforms an object_id to the hostname
+     *
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function objIdToName($id) {
+        return array_search($id, $this->loadObjIds());
+    }
+
+    /**
+     * Loads the hostname to object_id mapping table from the central file
+     *
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function loadObjIds() {
+        if(!isset($this->objIds[0]))
+            if(GlobalCore::getInstance()->checkExisting($this->objIdFile, false))
+                $this->objIds = json_decode(file_get_contents($this->objIdFile), true);
+            else
+                $this->objIds = Array();
+
+        return $this->objIds;
+    }
+
+    /**
+     * Saves the given hostname to object_id mapping table in the central file
+     *
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function storeObjIds($a) {
+        $this->objIds = $a;
+
+        return file_put_contents($this->objIdFile, json_encode($a)) !== false;
+    }
 }
 ?>

@@ -21,68 +21,68 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisUrlView {
-	private $CORE = null;
-	private $url = '';
-	private $content = '';
-	private $aRotation = Array();
-	
-	/**
-	 * Class Constructor
-	 *
-	 * @param    GlobalCore      $CORE
-	 * @param    String          $NAME
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct(GlobalCore $CORE, $url) {
-		$this->CORE = $CORE;
-		$this->url = $url;
-	}
+    private $CORE = null;
+    private $url = '';
+    private $content = '';
+    private $aRotation = Array();
 
-	/**
-	 * Set the page content
-	 *
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function setContent($s) {
-		$this->content = $s;
-	}
-	
-	/**
-	 * Set the rotation properties if the user wants a rotation
-	 *
-	 * @param   Array    
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function setRotation($a) {
-		$this->aRotation = $a;
-	}
-	
-	/**
-	 * Parses the url and the objects for the nagvis-js frontend
-	 *
-	 * @return	String 	String with JS Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parse() {
-		// Initialize template system
-		$TMPL = New FrontendTemplateSystem($this->CORE);
-		$TMPLSYS = $TMPL->getTmplSys();
-		
-		$aData = Array(
-				'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
-				'workerProperties' => $this->CORE->getMainCfg()->parseWorkerProperties(),
-				'rotationProperties' => json_encode($this->aRotation),
-				'url' => $this->url
-			);
+    /**
+     * Class Constructor
+     *
+     * @param    GlobalCore      $CORE
+     * @param    String          $NAME
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct(GlobalCore $CORE, $url) {
+        $this->CORE = $CORE;
+        $this->url = $url;
+    }
+
+    /**
+     * Set the page content
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function setContent($s) {
+        $this->content = $s;
+    }
+
+    /**
+     * Set the rotation properties if the user wants a rotation
+     *
+     * @param   Array
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function setRotation($a) {
+        $this->aRotation = $a;
+    }
+
+    /**
+     * Parses the url and the objects for the nagvis-js frontend
+     *
+     * @return	String 	String with JS Code
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function parse() {
+        // Initialize template system
+        $TMPL = New FrontendTemplateSystem($this->CORE);
+        $TMPLSYS = $TMPL->getTmplSys();
+
+        $aData = Array(
+                'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
+                'workerProperties' => $this->CORE->getMainCfg()->parseWorkerProperties(),
+                'rotationProperties' => json_encode($this->aRotation),
+                'url' => $this->url
+            );
 
     // Build page based on the template file and the data array
     // FIXME: Make template set configurable
     return $TMPLSYS->get($TMPL->getTmplFile('default', 'url'), $aData);
-	}
+    }
 }
 ?>

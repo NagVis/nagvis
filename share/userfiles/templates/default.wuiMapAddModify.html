@@ -6,10 +6,10 @@ lang = {$lang};
 <script type="text/javascript" src="{$htmlBase}/frontend/nagvis-js/js/editAddModify.js"></script>
 <form name="addmodify" id="addmodify"  action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=Map&amp;act={$action}&amp;ref=1', 'addmodify');" onsubmit="return validateMapCfgForm()" enctype="" >
 <table name="mytable" class="mytable" id="table_addmodify">
-	<input type="hidden" id="type" name="type" value="{$type}" />
-	<input type="hidden" id="id" name="id" value="{$id}" />
-	<input type="hidden" id="map" name="map" value="{$map}" />
+    <input type="hidden" id="type" name="type" value="{$type}" />
+    <input type="hidden" id="id" name="id" value="{$id}" />
+    <input type="hidden" id="map" name="map" value="{$map}" />
 {$formContents}
-	<tr><td class="tdlabel" colspan="2" align="center"><input class="submit" type="submit" name="submit" id="commit" value="Save" /></td></tr>
+    <tr><td class="tdlabel" colspan="2" align="center"><input class="submit" type="submit" name="submit" id="commit" value="Save" /></td></tr>
 </table>
 </form>

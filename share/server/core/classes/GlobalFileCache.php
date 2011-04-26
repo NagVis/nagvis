@@ -21,164 +21,164 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalFileCache {
-	private $CORE;
-	private $file;
-	private $cacheFile;
-	
-	private $fileAge;
-	private $cacheFileAge;
-	
-	/**
-	 * Class Constructor
-	 *
-	 * @param 	Object  Object of GlobalCore
-	 * @param 	String  File to check
-	 * @param   String  Path to cache file
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($CORE, $file, $cacheFile) {
-		$this->CORE = $CORE;
-		$this->file = $file;
-		$this->cacheFile = $cacheFile;
-		
-		if($this->checkFileExists(0)) {
-			$this->fileAge = filemtime($this->file);
-		}
-		
-		if($this->checkCacheFileExists(0)) {
-			$this->cacheFileAge = filemtime($this->cacheFile);
-		}
-	}
-	
-	/**
-	 * Reads the cached things from cache and returns them
-	 *
-	 * @return	Cached things
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function getCache() {
-		return unserialize(file_get_contents($this->cacheFile));
-	}
-	
-	/**
-	 * Writes the things to cache
-	 *
-	 * @param   Things which should be written to cache
-	 * @param   Boolean $printErr
-	 * @return  Boolean	Is Successful?
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function writeCache($contents, $printErr=1) {
-		// Perform file writeable check only when cache file exists
-		// When no cache file exists check if file can be created in directory
-		if((!$this->checkCacheFileExists(0) && $this->checkCacheFolderWriteable($printErr)) || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))) {
-			if(($fp = fopen($this->cacheFile, 'w+')) === FALSE){
-				if($printErr == 1) {
-					new GlobalMessage('ERROR', $this->CORE->getLang()->getText('cacheFileNotWriteable','FILE~'.$this->cacheFile), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
-				}
-				return FALSE;
-			}
-			
-			fwrite($fp, serialize($contents));
-			fclose($fp);
+    private $CORE;
+    private $file;
+    private $cacheFile;
 
-			$this->CORE->setPerms($this->cacheFile);
-			
-			return TRUE;
-		} else {
-			return FALSE;
-		}
-	}
-	
-	/**
-	 * Checks if the file has been cached
-	 *
-	 * @param   Boolean  $printErr
-	 * @return  Integer  Unix timestamp of cache creation time or -1 when not cached
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function isCached($printErr = false) {
-		// Checks
-		// a) Cache file exists
-		// b) Cache file older than regular file
-		if($this->checkCacheFileExists($printErr) 
-			&& $this->getFileAge() <= $this->getCacheFileAge()) {
-			return $this->getCacheFileAge();
-		} else {
-			if($printErr) {
-				new GlobalMessage('ERROR', $this->CORE->getLang()->getText('fileNotCached', 'FILE~'.$this->file.',CACHEFILE~'.$this->cacheFile), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
-			}
-			return -1;
-		}
-	}
-	
-	/**
-	 * Checks for writeable cache folder
-	 *
-	 * @param   Boolean  $printErr
-	 * @return  Boolean  Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function checkCacheFolderWriteable($printErr) {
-		return GlobalCore::getInstance()->checkWriteable(dirname($this->cacheFile), $printErr);
-	}
-	
-	/**
-	 * Checks for writeable cache file
-	 *
-	 * @param   Boolean  $printErr
-	 * @return  Boolean  Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function checkCacheFileWriteable($printErr) {
-		return GlobalCore::getInstance()->checkWriteable($this->cacheFile, $printErr);
-	}
-	
-	/**
-	 * Checks for existing cache file
-	 *
-	 * @param   Boolean  $printErr
-	 * @return  Boolean  Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function checkCacheFileExists($printErr) {
-		return GlobalCore::getInstance()->checkExisting($this->cacheFile, $printErr);
-	}
-	
-	/**
-	 * Checks for existing file
-	 *
-	 * @param   Boolean  $printErr
-	 * @return  Boolean  Is Successful?
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function checkFileExists($printErr) {
-		return GlobalCore::getInstance()->checkExisting($this->file, $printErr);
-	}
-	
-	/**
-	 * Returns the last modification time of the template file
-	 *
-	 * @return  Integer  Unix Timestamp
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function getFileAge() {
-		return $this->fileAge;
-	}
-	
-	/**
-	 * Returns the last modification time of the cache file
-	 *
-	 * @return  Integer  Unix Timestamp
-	 * @author  Lars Michelsen <lars@vertical-visions.de>
-	 */
-	private function getCacheFileAge() {
-		return $this->cacheFileAge;
-	}
+    private $fileAge;
+    private $cacheFileAge;
+
+    /**
+     * Class Constructor
+     *
+     * @param 	Object  Object of GlobalCore
+     * @param 	String  File to check
+     * @param   String  Path to cache file
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct($CORE, $file, $cacheFile) {
+        $this->CORE = $CORE;
+        $this->file = $file;
+        $this->cacheFile = $cacheFile;
+
+        if($this->checkFileExists(0)) {
+            $this->fileAge = filemtime($this->file);
+        }
+
+        if($this->checkCacheFileExists(0)) {
+            $this->cacheFileAge = filemtime($this->cacheFile);
+        }
+    }
+
+    /**
+     * Reads the cached things from cache and returns them
+     *
+     * @return	Cached things
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function getCache() {
+        return unserialize(file_get_contents($this->cacheFile));
+    }
+
+    /**
+     * Writes the things to cache
+     *
+     * @param   Things which should be written to cache
+     * @param   Boolean $printErr
+     * @return  Boolean	Is Successful?
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function writeCache($contents, $printErr=1) {
+        // Perform file writeable check only when cache file exists
+        // When no cache file exists check if file can be created in directory
+        if((!$this->checkCacheFileExists(0) && $this->checkCacheFolderWriteable($printErr)) || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))) {
+            if(($fp = fopen($this->cacheFile, 'w+')) === FALSE){
+                if($printErr == 1) {
+                    new GlobalMessage('ERROR', $this->CORE->getLang()->getText('cacheFileNotWriteable','FILE~'.$this->cacheFile), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
+                }
+                return FALSE;
+            }
+
+            fwrite($fp, serialize($contents));
+            fclose($fp);
+
+            $this->CORE->setPerms($this->cacheFile);
+
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+
+    /**
+     * Checks if the file has been cached
+     *
+     * @param   Boolean  $printErr
+     * @return  Integer  Unix timestamp of cache creation time or -1 when not cached
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function isCached($printErr = false) {
+        // Checks
+        // a) Cache file exists
+        // b) Cache file older than regular file
+        if($this->checkCacheFileExists($printErr)
+            && $this->getFileAge() <= $this->getCacheFileAge()) {
+            return $this->getCacheFileAge();
+        } else {
+            if($printErr) {
+                new GlobalMessage('ERROR', $this->CORE->getLang()->getText('fileNotCached', 'FILE~'.$this->file.',CACHEFILE~'.$this->cacheFile), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
+            }
+            return -1;
+        }
+    }
+
+    /**
+     * Checks for writeable cache folder
+     *
+     * @param   Boolean  $printErr
+     * @return  Boolean  Is Successful?
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function checkCacheFolderWriteable($printErr) {
+        return GlobalCore::getInstance()->checkWriteable(dirname($this->cacheFile), $printErr);
+    }
+
+    /**
+     * Checks for writeable cache file
+     *
+     * @param   Boolean  $printErr
+     * @return  Boolean  Is Successful?
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function checkCacheFileWriteable($printErr) {
+        return GlobalCore::getInstance()->checkWriteable($this->cacheFile, $printErr);
+    }
+
+    /**
+     * Checks for existing cache file
+     *
+     * @param   Boolean  $printErr
+     * @return  Boolean  Is Successful?
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function checkCacheFileExists($printErr) {
+        return GlobalCore::getInstance()->checkExisting($this->cacheFile, $printErr);
+    }
+
+    /**
+     * Checks for existing file
+     *
+     * @param   Boolean  $printErr
+     * @return  Boolean  Is Successful?
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function checkFileExists($printErr) {
+        return GlobalCore::getInstance()->checkExisting($this->file, $printErr);
+    }
+
+    /**
+     * Returns the last modification time of the template file
+     *
+     * @return  Integer  Unix Timestamp
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function getFileAge() {
+        return $this->fileAge;
+    }
+
+    /**
+     * Returns the last modification time of the cache file
+     *
+     * @return  Integer  Unix Timestamp
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function getCacheFileAge() {
+        return $this->cacheFileAge;
+    }
 }
 ?>

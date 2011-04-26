@@ -21,45 +21,45 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisOverviewView {
-	private $CORE;
-	
-	/**
-	 * Class Constructor
-	 *
-	 * @param 	GlobalCore 	$CORE
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($CORE) {
-		$this->CORE = $CORE;
-	}
-	
-	/**
-	 * Parses the information for json
-	 *
-	 * @return	String 	String with Html Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parse() {
-		// Initialize template system
-		$TMPL    = new FrontendTemplateSystem($this->CORE);
-		$TMPLSYS = $TMPL->getTmplSys();
-		$USERCFG = new CoreUserCfg();
+    private $CORE;
 
-		$aData = Array(
-			'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
-			'workerProperties'  => $this->CORE->getMainCfg()->parseWorkerProperties(),
-			'stateProperties'   => json_encode($this->CORE->getMainCfg()->getStateWeight()),
-			'userProperties'    => $USERCFG->doGetAsJson(),
-		);
+    /**
+     * Class Constructor
+     *
+     * @param 	GlobalCore 	$CORE
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct($CORE) {
+        $this->CORE = $CORE;
+    }
 
-		// Build page based on the template file and the data array
+    /**
+     * Parses the information for json
+     *
+     * @return	String 	String with Html Code
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function parse() {
+        // Initialize template system
+        $TMPL    = new FrontendTemplateSystem($this->CORE);
+        $TMPLSYS = $TMPL->getTmplSys();
+        $USERCFG = new CoreUserCfg();
+
+        $aData = Array(
+            'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
+            'workerProperties'  => $this->CORE->getMainCfg()->parseWorkerProperties(),
+            'stateProperties'   => json_encode($this->CORE->getMainCfg()->getStateWeight()),
+            'userProperties'    => $USERCFG->doGetAsJson(),
+        );
+
+        // Build page based on the template file and the data array
     // FIXME: Make template set configurable
-		return $TMPLSYS->get($TMPL->getTmplFile('default', 'overview'), $aData);
-	}
+        return $TMPLSYS->get($TMPL->getTmplFile('default', 'overview'), $aData);
+    }
 }
 ?>

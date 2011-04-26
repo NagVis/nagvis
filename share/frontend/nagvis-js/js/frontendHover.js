@@ -20,7 +20,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
@@ -36,7 +36,7 @@ var _hoverTimer = null;
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function hoverOpen() {
-	return _openHoverMenus.length > 0;
+    return _openHoverMenus.length > 0;
 }
 
 /**
@@ -45,161 +45,161 @@ function hoverOpen() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function hoverHide() {
-	// Loop all open context menus
-	while(_openHoverMenus.length > 0) {
-		_openHoverMenus[0].style.display = 'none';
-		_openHoverMenus[0] = null;
-		_openHoverMenus.splice(0,1);
-	}
+    // Loop all open context menus
+    while(_openHoverMenus.length > 0) {
+        _openHoverMenus[0].style.display = 'none';
+        _openHoverMenus[0] = null;
+        _openHoverMenus.splice(0,1);
+    }
 
-	// Remove the hover timer
-	if(_hoverTimer !== null) {
-		clearTimeout(_hoverTimer);
-		_hoverTimer = null;
-	}
-	
-	// Change cursor to auto when hiding hover menu
-	document.body.style.cursor = 'auto';
+    // Remove the hover timer
+    if(_hoverTimer !== null) {
+        clearTimeout(_hoverTimer);
+        _hoverTimer = null;
+    }
+
+    // Change cursor to auto when hiding hover menu
+    document.body.style.cursor = 'auto';
 }
 
 function hoverShow(x, y, id) {
-	// Hide all other hover menus
-	hoverHide();
+    // Hide all other hover menus
+    hoverHide();
 
-	var hoverSpacer = 5;
-	var minWidth = 400;
+    var hoverSpacer = 5;
+    var minWidth = 400;
 
-	// document.body.scrollTop does not work in IE
-	var scrollTop = document.body.scrollTop ? document.body.scrollTop :
-	document.documentElement.scrollTop;
-	var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft :
-	document.documentElement.scrollLeft;
+    // document.body.scrollTop does not work in IE
+    var scrollTop = document.body.scrollTop ? document.body.scrollTop :
+    document.documentElement.scrollTop;
+    var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft :
+    document.documentElement.scrollLeft;
 
-	var hoverMenu = document.getElementById(id+'-hover');
+    var hoverMenu = document.getElementById(id+'-hover');
 
-	// Maybe there is no hover menu defined for one object?
-	if(hoverMenu === null) {
-		eventlog('hover', 'error', 'Found no hover menu wit the id "'+id+'-hover"');
-		return false;
-	}
-	
-	// Change cursor to "hand" when displaying hover menu
-	document.body.style.cursor = 'pointer';
+    // Maybe there is no hover menu defined for one object?
+    if(hoverMenu === null) {
+        eventlog('hover', 'error', 'Found no hover menu wit the id "'+id+'-hover"');
+        return false;
+    }
 
-	// hide the menu first to avoid an "up-then-over" visual effect
-	hoverMenu.style.display = 'none';
-	hoverMenu.style.left = x + scrollLeft + hoverSpacer - getSidebarWidth() + 'px';
-	hoverMenu.style.top = y + scrollTop + hoverSpacer - getHeaderHeight() + 'px';
-	hoverMenu.style.width = 'auto';
-	hoverMenu.style.display = '';
+    // Change cursor to "hand" when displaying hover menu
+    document.body.style.cursor = 'pointer';
 
-	// Set the width but leave some border at the screens edge
-	if(hoverMenu.clientWidth - hoverSpacer > minWidth)
-		hoverMenu.style.width = hoverMenu.clientWidth - hoverSpacer + 'px';
-	else
-		hoverMenu.style.width = minWidth + 'px';
+    // hide the menu first to avoid an "up-then-over" visual effect
+    hoverMenu.style.display = 'none';
+    hoverMenu.style.left = x + scrollLeft + hoverSpacer - getSidebarWidth() + 'px';
+    hoverMenu.style.top = y + scrollTop + hoverSpacer - getHeaderHeight() + 'px';
+    hoverMenu.style.width = 'auto';
+    hoverMenu.style.display = '';
 
-	/**
-	 * Check if the menu is "in screen" or too large.
-	 * If there is some need for resize/reposition:
-	 *  - Try to resize the hover menu at least to the minimum size
-	 *  - If that is not possible try to reposition the hover menu
-	 */
+    // Set the width but leave some border at the screens edge
+    if(hoverMenu.clientWidth - hoverSpacer > minWidth)
+        hoverMenu.style.width = hoverMenu.clientWidth - hoverSpacer + 'px';
+    else
+        hoverMenu.style.width = minWidth + 'px';
 
-	var hoverLeft = parseInt(hoverMenu.style.left.replace('px', ''));
-	var screenWidth = pageWidth();
-	var hoverPosAndSizeOk = true;
-	if(!hoverMenuInScreen(hoverMenu, hoverSpacer)) {
-		hoverPosAndSizeOk = false;
-		if(tryResize(hoverMenu, hoverSpacer, minWidth))
-			hoverPosAndSizeOk = true;
-	}
+    /**
+     * Check if the menu is "in screen" or too large.
+     * If there is some need for resize/reposition:
+     *  - Try to resize the hover menu at least to the minimum size
+     *  - If that is not possible try to reposition the hover menu
+     */
 
-	// Resizing was not enough so try to reposition the menu now
-	if(!hoverPosAndSizeOk) {
-		// First reposition by real size or by min width
-		if(hoverMenu.clientWidth < minWidth)
-			hoverMenu.style.left = (x - minWidth - hoverSpacer) + 'px';
-		else
-			hoverMenu.style.left = (x - hoverMenu.clientWidth - hoverSpacer) + 'px';
+    var hoverLeft = parseInt(hoverMenu.style.left.replace('px', ''));
+    var screenWidth = pageWidth();
+    var hoverPosAndSizeOk = true;
+    if(!hoverMenuInScreen(hoverMenu, hoverSpacer)) {
+        hoverPosAndSizeOk = false;
+        if(tryResize(hoverMenu, hoverSpacer, minWidth))
+            hoverPosAndSizeOk = true;
+    }
 
-		if(hoverMenuInScreen(hoverMenu, hoverSpacer)) {
-			hoverPosAndSizeOk = true;
-		} else {
-			// Still not ok. Now try to resize on the right down side of the icon
-			if(tryResize(hoverMenu, hoverSpacer, minWidth, true)) {
-				hoverPosAndSizeOk = true;
-			}	
-		}
-	}
+    // Resizing was not enough so try to reposition the menu now
+    if(!hoverPosAndSizeOk) {
+        // First reposition by real size or by min width
+        if(hoverMenu.clientWidth < minWidth)
+            hoverMenu.style.left = (x - minWidth - hoverSpacer) + 'px';
+        else
+            hoverMenu.style.left = (x - hoverMenu.clientWidth - hoverSpacer) + 'px';
 
-	// And if the hover menu is still not on the screen move it to the left edge
-	// and fill the whole screen width
-	if(!hoverMenuInScreen(hoverMenu, hoverSpacer)) {
-		hoverMenu.style.left = hoverSpacer + scrollLeft + 'px';
-		hoverMenu.style.width = pageWidth() - (2*hoverSpacer) + 'px';
-	}
+        if(hoverMenuInScreen(hoverMenu, hoverSpacer)) {
+            hoverPosAndSizeOk = true;
+        } else {
+            // Still not ok. Now try to resize on the right down side of the icon
+            if(tryResize(hoverMenu, hoverSpacer, minWidth, true)) {
+                hoverPosAndSizeOk = true;
+            }
+        }
+    }
 
-	var hoverTop = parseInt(hoverMenu.style.top.replace('px', ''));
-	// Only move the menu to the top when the new top will not be
-	// out of sight
-	if(hoverTop + hoverMenu.clientHeight > pageHeight() && hoverTop - hoverMenu.clientHeight >= 0)
-		hoverMenu.style.top = hoverTop - hoverMenu.clientHeight - hoverSpacer + 'px';
-	hoverTop = null;
+    // And if the hover menu is still not on the screen move it to the left edge
+    // and fill the whole screen width
+    if(!hoverMenuInScreen(hoverMenu, hoverSpacer)) {
+        hoverMenu.style.left = hoverSpacer + scrollLeft + 'px';
+        hoverMenu.style.width = pageWidth() - (2*hoverSpacer) + 'px';
+    }
 
-	// Append to visible menus array
-	_openHoverMenus.push(hoverMenu);
+    var hoverTop = parseInt(hoverMenu.style.top.replace('px', ''));
+    // Only move the menu to the top when the new top will not be
+    // out of sight
+    if(hoverTop + hoverMenu.clientHeight > pageHeight() && hoverTop - hoverMenu.clientHeight >= 0)
+        hoverMenu.style.top = hoverTop - hoverMenu.clientHeight - hoverSpacer + 'px';
+    hoverTop = null;
 
-	hoverMenu = null;
-	return false;
+    // Append to visible menus array
+    _openHoverMenus.push(hoverMenu);
+
+    hoverMenu = null;
+    return false;
 }
 
 function hoverMenuInScreen(hoverMenu, hoverSpacer) {
-	var hoverLeft = parseInt(hoverMenu.style.left.replace('px', ''));
-	var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft :
-	document.documentElement.scrollLeft;
+    var hoverLeft = parseInt(hoverMenu.style.left.replace('px', ''));
+    var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft :
+    document.documentElement.scrollLeft;
 
-	if(hoverLeft + hoverMenu.clientWidth >= pageWidth() - scrollLeft)
-		return false;
+    if(hoverLeft + hoverMenu.clientWidth >= pageWidth() - scrollLeft)
+        return false;
 
-	if(hoverLeft - hoverSpacer < 0)
-		return false;
+    if(hoverLeft - hoverSpacer < 0)
+        return false;
 
-	scrollLeft = null;
-	hoverLeft = null;
-	hoverMenu = null;
-	return true;
+    scrollLeft = null;
+    hoverLeft = null;
+    hoverMenu = null;
+    return true;
 }
 
 function tryResize(hoverMenu, hoverSpacer, minWidth, rightSide) {
-	if(!isset(rightSide))
-		var reposition = false;
+    if(!isset(rightSide))
+        var reposition = false;
 
-	var hoverLeft = parseInt(hoverMenu.style.left.replace('px', ''));
+    var hoverLeft = parseInt(hoverMenu.style.left.replace('px', ''));
 
-	if(rightSide)
-		var overhead = hoverLeft + hoverMenu.clientWidth + hoverSpacer - pageWidth();
-	else
-		var overhead = hoverLeft;
-	var widthAfterResize = hoverMenu.clientWidth - overhead;
+    if(rightSide)
+        var overhead = hoverLeft + hoverMenu.clientWidth + hoverSpacer - pageWidth();
+    else
+        var overhead = hoverLeft;
+    var widthAfterResize = hoverMenu.clientWidth - overhead;
 
-	// If width is larger than minWidth resize it
-	if(widthAfterResize > minWidth) {
-		hoverMenu.style.width = widthAfterResize + 'px';
+    // If width is larger than minWidth resize it
+    if(widthAfterResize > minWidth) {
+        hoverMenu.style.width = widthAfterResize + 'px';
 
-		if(rightSide) {
-			if(overhead < 0)
-				overhead *= -1
-			hoverMenu.style.left = (hoverLeft + overhead) + 'px';
-		}
+        if(rightSide) {
+            if(overhead < 0)
+                overhead *= -1
+            hoverMenu.style.left = (hoverLeft + overhead) + 'px';
+        }
 
-		return true;
-	} else {
-		return false;
-	}
-	hoverLeft = null;
-	overhead = null;
-	widthAfterResize = null;
+        return true;
+    } else {
+        return false;
+    }
+    hoverLeft = null;
+    overhead = null;
+    widthAfterResize = null;
   hoverMenu = null;
-	reposition = null;
+    reposition = null;
 }

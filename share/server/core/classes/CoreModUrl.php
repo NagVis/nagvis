@@ -26,47 +26,47 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreModUrl extends CoreModule {
-	private $url = null;
-	
-	public function __construct(GlobalCore $CORE) {
-		$this->CORE = $CORE;
-		
-		$aOpts = Array('show' => MATCH_STRING_URL);
-		$aVals = $this->getCustomOptions($aOpts);
-		$this->url = $aVals['show'];
-		
-		// Register valid actions
-		$this->aActions = Array(
-			'getContents' => REQUIRES_AUTHORISATION,
-			'getProperties' => REQUIRES_AUTHORISATION
-		);
-	}
-	
-	public function handleAction() {
-		$sReturn = '';
-		
-		if($this->offersAction($this->sAction)) {
-			switch($this->sAction) {
-				case 'getContents':
-					$sReturn = $this->getContents();
-				break;
-				case 'getProperties':
-					$sReturn = $this->getProperties();
-				break;
-			}
-		}
-		
-		return $sReturn;
-	}
-	
-	private function getContents() {
-		$URL = new NagVisUrl($this->CORE, $this->url);
-		return json_encode(Array('content' => $URL->getContents()));
-	}
-	
-	private function getProperties() {
-		$URL = new NagVisUrl($this->CORE, $this->url);
-		return $URL->parsePropertiesJson();
-	}
+    private $url = null;
+
+    public function __construct(GlobalCore $CORE) {
+        $this->CORE = $CORE;
+
+        $aOpts = Array('show' => MATCH_STRING_URL);
+        $aVals = $this->getCustomOptions($aOpts);
+        $this->url = $aVals['show'];
+
+        // Register valid actions
+        $this->aActions = Array(
+            'getContents' => REQUIRES_AUTHORISATION,
+            'getProperties' => REQUIRES_AUTHORISATION
+        );
+    }
+
+    public function handleAction() {
+        $sReturn = '';
+
+        if($this->offersAction($this->sAction)) {
+            switch($this->sAction) {
+                case 'getContents':
+                    $sReturn = $this->getContents();
+                break;
+                case 'getProperties':
+                    $sReturn = $this->getProperties();
+                break;
+            }
+        }
+
+        return $sReturn;
+    }
+
+    private function getContents() {
+        $URL = new NagVisUrl($this->CORE, $this->url);
+        return json_encode(Array('content' => $URL->getContents()));
+    }
+
+    private function getProperties() {
+        $URL = new NagVisUrl($this->CORE, $this->url);
+        return $URL->parsePropertiesJson();
+    }
 }
 ?>

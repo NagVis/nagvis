@@ -1,33 +1,33 @@
 <table class="hover_table">
-	<tr><th colspan="2">[lang_obj_type] ([lang_last_status_refresh]: [last_status_refresh])</th></tr>
-	<tr><td class="label"><label>[lang_name]</label></td><td>[obj_name][obj_alias_braces]</td></tr>
-	<!-- BEGIN service -->
-	<tr><td class="label"><label>[lang_service_description]</label></td><td>[service_description]</td></tr>
-	<!-- END service -->
-	<!-- BEGIN host -->
-	<tr><td class="label label[obj_state]"><label>[lang_state]</label></td><td class="state[obj_state]">[obj_state] [obj_in_downtime][obj_acknowledged] ([obj_state_type] - [obj_current_check_attempt]/[obj_max_check_attempts])</td></tr>
-	<tr><td class="label"><label>[lang_output]</label></td><td>[obj_output]</td></tr>
-	<tr><td class="label"><label>[lang_last_check]</label></td><td>[obj_last_check]</td></tr>
-	<tr><td class="label"><label>[lang_next_check]</label></td><td>[obj_next_check]</td></tr>
-	<tr><td class="label"><label>[lang_last_state_change]</label></td><td>[obj_last_state_change]</td></tr>
-	<!-- END host -->
-	<tr><td class="label label[obj_summary_state]"><label>[lang_summary_state]</label></td><td class="state[obj_summary_state]">[obj_summary_state] [obj_summary_in_downtime][obj_summary_acknowledged]</td></tr>
-	<tr><td class="label"><label>[lang_summary_output]</label></td><td>[obj_summary_output]</td></tr>
-	<!-- BEGIN service -->
-	<tr><td class="label"><label>[lang_last_check]</label></td><td>[obj_last_check]</td></tr>
-	<tr><td class="label"><label>[lang_next_check]</label></td><td>[obj_next_check]</td></tr>
-	<tr><td class="label"><label>[lang_last_state_change]</label></td><td>[obj_last_state_change]</td></tr>
-	<!-- END service -->
-	<!-- BEGIN childs -->
-	<tr><td colspan="2" class=child>
-		<table class=childs width="100%">
-			<tr>
-			<!-- BEGIN servicegroup --><td class="label"><label>[lang_child_name1]</label></td><!-- END servicegroup --><td class="label"><label>[lang_child_name]</label></td><td class="label"><label>[lang_state]</label></td><td class="label"><label>[lang_output]</label></td>
-			</tr>
-			<!-- BEGIN loop_child -->
-			<tr><!-- BEGIN servicegroup_child --><td>[obj_name1]</td><!-- END servicegroup_child --><td>[obj_name]</td><td class="state[obj_summary_state]">[obj_summary_state][obj_summary_in_downtime][obj_summary_acknowledged]</td><td>[obj_summary_output]</td></tr>
-			<!-- END loop_child -->
-		</table>
-	</td></tr>
-	<!-- END childs -->
+    <tr><th colspan="2">[lang_obj_type] ([lang_last_status_refresh]: [last_status_refresh])</th></tr>
+    <tr><td class="label"><label>[lang_name]</label></td><td>[obj_name][obj_alias_braces]</td></tr>
+    <!-- BEGIN service -->
+    <tr><td class="label"><label>[lang_service_description]</label></td><td>[service_description]</td></tr>
+    <!-- END service -->
+    <!-- BEGIN host -->
+    <tr><td class="label label[obj_state]"><label>[lang_state]</label></td><td class="state[obj_state]">[obj_state] [obj_in_downtime][obj_acknowledged] ([obj_state_type] - [obj_current_check_attempt]/[obj_max_check_attempts])</td></tr>
+    <tr><td class="label"><label>[lang_output]</label></td><td>[obj_output]</td></tr>
+    <tr><td class="label"><label>[lang_last_check]</label></td><td>[obj_last_check]</td></tr>
+    <tr><td class="label"><label>[lang_next_check]</label></td><td>[obj_next_check]</td></tr>
+    <tr><td class="label"><label>[lang_last_state_change]</label></td><td>[obj_last_state_change]</td></tr>
+    <!-- END host -->
+    <tr><td class="label label[obj_summary_state]"><label>[lang_summary_state]</label></td><td class="state[obj_summary_state]">[obj_summary_state] [obj_summary_in_downtime][obj_summary_acknowledged]</td></tr>
+    <tr><td class="label"><label>[lang_summary_output]</label></td><td>[obj_summary_output]</td></tr>
+    <!-- BEGIN service -->
+    <tr><td class="label"><label>[lang_last_check]</label></td><td>[obj_last_check]</td></tr>
+    <tr><td class="label"><label>[lang_next_check]</label></td><td>[obj_next_check]</td></tr>
+    <tr><td class="label"><label>[lang_last_state_change]</label></td><td>[obj_last_state_change]</td></tr>
+    <!-- END service -->
+    <!-- BEGIN childs -->
+    <tr><td colspan="2" class=child>
+        <table class=childs width="100%">
+            <tr>
+            <!-- BEGIN servicegroup --><td class="label"><label>[lang_child_name1]</label></td><!-- END servicegroup --><td class="label"><label>[lang_child_name]</label></td><td class="label"><label>[lang_state]</label></td><td class="label"><label>[lang_output]</label></td>
+            </tr>
+            <!-- BEGIN loop_child -->
+            <tr><!-- BEGIN servicegroup_child --><td>[obj_name1]</td><!-- END servicegroup_child --><td>[obj_name]</td><td class="state[obj_summary_state]">[obj_summary_state][obj_summary_in_downtime][obj_summary_acknowledged]</td><td>[obj_summary_output]</td></tr>
+            <!-- END loop_child -->
+        </table>
+    </td></tr>
+    <!-- END childs -->
 </table>

@@ -22,75 +22,75 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisViewAutomapModifyParams {
-	private $CORE;
-	private $aOpts;
-	private $renderModes = Array('', 'directed', 'undirected',
-	                             'radial', 'circular', 'undirected2');
-	
-	/**
-	 * Class Constructor
-	 *
-	 * @param 	GlobalCore 	$CORE
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function __construct($CORE, $aOpts) {
-		$this->CORE = $CORE;
+    private $CORE;
+    private $aOpts;
+    private $renderModes = Array('', 'directed', 'undirected',
+                                 'radial', 'circular', 'undirected2');
 
-		$this->aOpts = $aOpts;
+    /**
+     * Class Constructor
+     *
+     * @param 	GlobalCore 	$CORE
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function __construct($CORE, $aOpts) {
+        $this->CORE = $CORE;
 
-		$this->gatherParams();
-	}
+        $this->aOpts = $aOpts;
 
-	private function gatherParams() {
-		if(isset($this->aOpts['automap']) && $this->aOpts['automap'] != '') {
-			// Initialize backend handler
-			$BACKEND = new CoreBackendMgmt($this->CORE);
-		
-			$MAPCFG = new NagVisAutomapCfg($this->CORE, $this->aOpts['automap']);
-			$MAPCFG->readMapConfig();
-		
-			$MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->aOpts, IS_VIEW);
+        $this->gatherParams();
+    }
 
-			$this->aOpts = $MAP->getOptions();
+    private function gatherParams() {
+        if(isset($this->aOpts['automap']) && $this->aOpts['automap'] != '') {
+            // Initialize backend handler
+            $BACKEND = new CoreBackendMgmt($this->CORE);
 
-			// Skip unwanted params
-			unset($this->aOpts['maxLayers']);
-			unset($this->aOpts['perm']);
-		}
-	}
-	
-	/**
-	 * Parses the information in html format
-	 *
-	 * @return	String 	String with Html Code
-	 * @author 	Lars Michelsen <lars@vertical-visions.de>
-	 */
-	public function parse() {
-		// Initialize template system
-		$TMPL = New CoreTemplateSystem($this->CORE);
-		$TMPLSYS = $TMPL->getTmplSys();
+            $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->aOpts['automap']);
+            $MAPCFG->readMapConfig();
 
-		$aData = Array(
-			'htmlBase'    => $this->CORE->getMainCfg()->getValue('paths','htmlbase'),
-			'automapName' => $this->aOpts['automap'],
-			'opts'        => $this->aOpts,
-			'optValues'   => Array('renderMode' => $this->renderModes,
-			                       // FIXME: root => List of hosts in the backend
-			                       'show'       => $this->CORE->getAvailableAutomaps(),
-			                       'backend'    => $this->CORE->getDefinedBackends()
-			                      ),
-			'langApply'       => $this->CORE->getLang()->getText('Apply'),
-			'langPermanent'   => $this->CORE->getLang()->getText('Make Permanent'),
-			'permAutomapEdit' => $this->CORE->getAuthorization()->isPermitted('AutoMap', 'edit', $this->aOpts['automap']),
-		);
-		
-		// Build page based on the template file and the data array
-		return $TMPLSYS->get($TMPL->getTmplFile('default', 'automapModifyParams'), $aData);
-	}
+            $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->aOpts, IS_VIEW);
+
+            $this->aOpts = $MAP->getOptions();
+
+            // Skip unwanted params
+            unset($this->aOpts['maxLayers']);
+            unset($this->aOpts['perm']);
+        }
+    }
+
+    /**
+     * Parses the information in html format
+     *
+     * @return	String 	String with Html Code
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function parse() {
+        // Initialize template system
+        $TMPL = New CoreTemplateSystem($this->CORE);
+        $TMPLSYS = $TMPL->getTmplSys();
+
+        $aData = Array(
+            'htmlBase'    => $this->CORE->getMainCfg()->getValue('paths','htmlbase'),
+            'automapName' => $this->aOpts['automap'],
+            'opts'        => $this->aOpts,
+            'optValues'   => Array('renderMode' => $this->renderModes,
+                                   // FIXME: root => List of hosts in the backend
+                                   'show'       => $this->CORE->getAvailableAutomaps(),
+                                   'backend'    => $this->CORE->getDefinedBackends()
+                                  ),
+            'langApply'       => $this->CORE->getLang()->getText('Apply'),
+            'langPermanent'   => $this->CORE->getLang()->getText('Make Permanent'),
+            'permAutomapEdit' => $this->CORE->getAuthorization()->isPermitted('AutoMap', 'edit', $this->aOpts['automap']),
+        );
+
+        // Build page based on the template file and the data array
+        return $TMPLSYS->get($TMPL->getTmplFile('default', 'automapModifyParams'), $aData);
+    }
 }
 ?>
