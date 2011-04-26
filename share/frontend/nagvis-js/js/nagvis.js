@@ -947,6 +947,8 @@ function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, t
 		// Split up the coustom style string to apply the attributes
 		var aStyle = customStyle.split(';');
 		for(var i in aStyle) {
+			if(typeof(aStyle[i]) !== 'string')
+			    continue;
 			var aOpt = aStyle[i].split(':');
 			
 			if(aOpt[0] && aOpt[0] != '' && aOpt[1] && aOpt[1] != '') {
@@ -964,7 +966,9 @@ function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, t
 				
 				oLabelSpan.style[sKey] = aOpt[1];
 			}
+			aOpt = null;
 		}
+		aStyle = null;
 	}
 	
 	oLabelSpan.innerHTML = text;
