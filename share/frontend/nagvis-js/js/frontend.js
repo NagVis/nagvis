@@ -863,7 +863,7 @@ function removeMapObject(objectId) {
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function refreshMapObject(objectId) {
+function refreshMapObject(event, objectId) {
 	var oObj = getMapObjByDomObjId(objectId);
 	
 	var name = oObj.conf.name;
@@ -912,6 +912,12 @@ function refreshMapObject(objectId) {
 	if(oPageProperties.view_type !== 'overview' && bStateChanged)
 		updateMapBasics();
 	bStateChanged = null;
+
+	var event = !event ? window.event : event;
+	if(event.stopPropagation)
+	    event.stopPropagation();
+	event.cancelBubble = true;
+	return false
 }
 
 

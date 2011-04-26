@@ -28,8 +28,14 @@
 /**
  * Changes the handling of the line middle for lines with two parts
  */
-function toggleLineMidLock(objectId) {
-	getMapObjByDomObjId(objectId).toggleLineMidLock();
+function toggleLineMidLock(event, objectId) {
+    getMapObjByDomObjId(objectId).toggleLineMidLock();
+	
+    var event = !event ? window.event : event;
+    if(event.stopPropagation)
+	event.stopPropagation();
+    event.cancelBubble = true;
+    return false;
 }
 
 /**
@@ -37,8 +43,14 @@ function toggleLineMidLock(objectId) {
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function toggleMapObjectLock(objectId) {
-	updateNumUnlocked(getMapObjByDomObjId(objectId).toggleLock());
+function toggleMapObjectLock(event, objectId) {
+    updateNumUnlocked(getMapObjByDomObjId(objectId).toggleLock());
+	
+    var event = !event ? window.event : event;
+    if(event.stopPropagation)
+	event.stopPropagation();
+    event.cancelBubble = true;
+    return false;
 }
 
 /**
@@ -317,8 +329,6 @@ var addObjType  = null,
  * Is called once to start the object creation
  */
 function addObject(e, objType, viewType, numLeft, action) {
-    var event = !e ? window.event : e;
-
     addObjType  = objType;
     addViewType = viewType;
     addNumLeft  = numLeft;
@@ -327,6 +337,7 @@ function addObject(e, objType, viewType, numLeft, action) {
     if(document.body)
 	document.body.style.cursor = 'crosshair';
 	
+    var event = !e ? window.event : e;
     if(event.stopPropagation)
 	event.stopPropagation();
     event.cancelBubble = true;
