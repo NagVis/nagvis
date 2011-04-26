@@ -905,6 +905,11 @@ var NagVisObject = Base.extend({
 
 		    obj.saveObject(this, null);
 		    obj.remove();
+
+		    // Remove object from JS
+		    updateNumUnlocked(-1);
+		    delete oMapObjects[objId];
+
 		    obj   = null;
 		    objId = null;
 		    arr   = null;

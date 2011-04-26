@@ -268,6 +268,10 @@ var NagVisStatefulObject = NagVisObject.extend({
 			this.parseControls();
 	},
 	
+	/**
+	 * Is called to remove the rendered object
+	 * This must not remove the object from the JS lists
+	 */
 	remove: function () {
 		// Parsed object is the container with the id "<object_id>"
 		if(!this.parsedObject)
@@ -339,10 +343,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		// Remove object from DOM
 		oMap.removeChild(this.parsedObject);
-
-		// Remove object from JS
-		updateNumUnlocked(-1);
-		delete oMapObjects[this.conf.object_id];
 		
 		// Remove object reference
 		this.parsedObject = null;

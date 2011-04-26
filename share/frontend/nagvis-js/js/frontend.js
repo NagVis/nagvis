@@ -735,7 +735,7 @@ function updateObjects(aMapObjectInformations, sType) {
 		}
 		
 		// Detect state changes and do some actions
-		if(oMapObjects && oMapObjects[objectId].stateChanged()) {
+		if(isset(oMapObjects) && oMapObjects[objectId].stateChanged()) {
 			
 			/* Internal handling */
 			

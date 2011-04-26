@@ -33,6 +33,10 @@ var NagVisStatelessObject = NagVisObject.extend({
 		this.base(oConf);
 	},
 	
+	/**
+	 * Is called to remove the rendered object
+	 * This must not remove the object from the JS lists
+	 */
 	remove: function () {
 		if(!this.parsedObject)
 		    return;
@@ -58,10 +62,6 @@ var NagVisStatelessObject = NagVisObject.extend({
 			oMap.removeChild(this.parsedObject);
 			oMap = null;
 		}
-
-		// Remove object from JS
-		updateNumUnlocked(-1);
-		delete oMapObjects[this.conf.object_id];
 
 		// Remove object reference
 		this.parsedObject = null;
