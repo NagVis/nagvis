@@ -59,6 +59,10 @@ var NagVisStatelessObject = NagVisObject.extend({
 			oMap = null;
 		}
 
+		// Remove object from JS
+		updateNumUnlocked(-1);
+		delete oMapObjects[this.conf.object_id];
+
 		// Remove object reference
 		this.parsedObject = null;
 	}

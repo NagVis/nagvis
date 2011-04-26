@@ -339,6 +339,10 @@ var NagVisStatefulObject = NagVisObject.extend({
 		
 		// Remove object from DOM
 		oMap.removeChild(this.parsedObject);
+
+		// Remove object from JS
+		updateNumUnlocked(-1);
+		delete oMapObjects[this.conf.object_id];
 		
 		// Remove object reference
 		this.parsedObject = null;
