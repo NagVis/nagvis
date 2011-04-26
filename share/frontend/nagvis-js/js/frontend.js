@@ -723,7 +723,8 @@ function updateObjects(aMapObjectInformations, sType) {
 		// Some objects need to be reloaded even when no state changed (perfdata or 
 		// output could have changed since last update). Basically this is only
 		// needed for gadgets and/or labels with [output] or [perfdata] macros
-		if(!oMapObjects[objectId].stateChanged() && oMapObjects[objectId].outputOrPerfdataChanged()) {
+		if((sType === 'map' || sType === 'automap')
+		   && !oMapObjects[objectId].stateChanged() && oMapObjects[objectId].outputOrPerfdataChanged()) {
 			// Reparse object to map (only for maps!)
 			// No else for overview here, senseless!
 			if(sType === 'map') {
