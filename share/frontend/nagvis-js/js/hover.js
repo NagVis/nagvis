@@ -34,6 +34,7 @@
 function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
     var mapName = '';
     var childsHtmlCode = '';
+    var regex = '';
 
     if(typeof(oPageProperties) != 'undefined' && oPageProperties != null)
         mapName = oPageProperties.map_name;
@@ -68,12 +69,15 @@ function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
                 childsHtmlCode += replaceHoverTemplateMacrosChild(oMember, rowHtmlCode);
             }
         }
-
-        var regex = getRegEx('loopChild', "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
-        sTemplateCode = sTemplateCode.replace(regex, childsHtmlCode);
-        regex = null;
     }
 
+    if(childsHtmlCode != '')
+        regex = getRegEx('loopChild', "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
+    else
+        regex = getRegEx('loopChildEmpty', '<!--\\sBEGIN\\schilds\\s-->.+?<!--\\sEND\\schilds\\s-->');
+
+    sTemplateCode = sTemplateCode.replace(regex, childsHtmlCode);
+    regex = null;
     childsHtmlCode = null;
     rowHtmlCode = null;
 
@@ -173,8 +177,7 @@ function replaceHoverTemplateDynamicMacros(oObj) {
     }
 
     // Replace child macros
-    if(oObj.conf.hover_childs_show && oObj.conf.hover_childs_show == '1'
-         && typeof oObj.conf.num_members != 'undefined' && oObj.conf.num_members > 0)
+    if(oObj.conf.hover_childs_show && oObj.conf.hover_childs_show == '1')
         sTemplateCode = replaceHoverTemplateChildMacros(oObj, sTemplateCode);
 
     // Replace all normal macros
@@ -270,8 +273,7 @@ function replaceHoverTemplateStaticMacros(oObj, sTemplateCode) {
         oSectionMacros.map = '<!--\\sBEGIN\\smap\\s-->.+?<!--\\sEND\\smap\\s-->';
 
     // Replace child section when unwanted
-    if((oObj.conf.hover_childs_show && oObj.conf.hover_childs_show != '1')
-     	 || !isset(oObj.conf.num_members) || oObj.conf.num_members == 0)
+    if(oObj.conf.hover_childs_show && oObj.conf.hover_childs_show != '1')
         oSectionMacros.childs = '<!--\\sBEGIN\\schilds\\s-->.+?<!--\\sEND\\schilds\\s-->';
 
     // Loop and replace all unwanted section macros

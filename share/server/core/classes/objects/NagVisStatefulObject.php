@@ -548,7 +548,7 @@ class NagVisStatefulObject extends NagVisObject {
 
         // Enable/Disable fetching children
         $arr['members'] = Array();
-        if($bFetchChilds && $this->hasMembers())
+        if($bFetchChilds && method_exists($this, 'getMembers'))
             foreach($this->getSortedObjectMembers() AS $OBJ)
                 $arr['members'][] = $OBJ->fetchObjectAsChild();
 
