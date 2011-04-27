@@ -1,3 +1,9 @@
+1.5.10
+
+Frontend:
+  * Bugfix: Fixed problem with hover childs not being displayed and old childs
+    being cached (Thanks to Thomas Casteleyn for reporting/fixing)
+
 1.5.9
 
 Core
