@@ -152,7 +152,9 @@ div.control.modify10 {
     background-image: url('../images/templates/default.control_modify.gif');
 }
 
-
+div.control.togglemid10 {
+    background-image: url('../images/templates/default.control_togglemid.gif');
+}
 
 /* Style on info pages (index.php?info, index.php) */
 div.infopage {

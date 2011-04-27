@@ -813,7 +813,11 @@ var NagVisObject = Base.extend({
 
         var size = 20;
         for(var i = 0, l = x.length; i < l; i++) {
-            this.parseControlDrag(i, x[i], y[i], - size / 2, - size / 2, size);
+	    // Line middle drag coord needs to be smaller
+	    if(l > 2 && i == 1) 
+		this.parseControlDrag(i, x[i], y[i], - 5, -5, 10);
+	    else
+		this.parseControlDrag(i, x[i], y[i], - size / 2, - size / 2, size);
             makeDragable([this.conf.object_id+'-drag-'+i], this.saveObject, this.moveObject);
         }
 
@@ -821,6 +825,9 @@ var NagVisObject = Base.extend({
                                 15, -15, 10);
         this.parseControlModify(x.length+1, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'),
                                 30, -15, 10);
+
+        if(this.conf.view_type === 'line' && (this.conf.line_type == 10 || this.conf.line_type == 13 || this.conf.line_type == 14))
+	    this.parseControlToggleLineMid(x.length+2, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'), 15, 0, 10);
 
         size = null;
         x = null;
@@ -850,28 +857,30 @@ var NagVisObject = Base.extend({
     },
 
     parseControlDrag: function (num, objX, objY, offX, offY, size) {
-        var drag = document.createElement('div');
-        drag.setAttribute('id',         this.conf.object_id+'-drag-' + num);
-        drag.setAttribute('class',     'control drag' + size);
-        drag.setAttribute('className', 'control drag' + size);
-        drag.style.zIndex   = parseInt(this.conf.z)+1;
-        drag.style.width    = size + 'px';
-        drag.style.height   = size + 'px';
-        drag.style.left     = (objX + offX) + 'px';
-        drag.style.top      = (objY + offY) + 'px';
-        drag.objOffsetX     = offX;
-        drag.objOffsetY     = offY;
+        var ctl = document.createElement('div');
+        ctl.setAttribute('id',         this.conf.object_id+'-drag-' + num);
+        ctl.setAttribute('class',     'control drag' + size);
+        ctl.setAttribute('className', 'control drag' + size);
+	// FIXME: Multilanguage
+	ctl.title          = 'Move object';
+        ctl.style.zIndex   = parseInt(this.conf.z)+1;
+        ctl.style.width    = size + 'px';
+        ctl.style.height   = size + 'px';
+        ctl.style.left     = (objX + offX) + 'px';
+        ctl.style.top      = (objY + offY) + 'px';
+        ctl.objOffsetX     = offX;
+        ctl.objOffsetY     = offY;
 
-        drag.onmouseover = function() {
+        ctl.onmouseover = function() {
             document.body.style.cursor = 'move';
         };
 
-        drag.onmouseout = function() {
+        ctl.onmouseout = function() {
             document.body.style.cursor = 'auto';
         };
 
-        this.addControl(drag);
-        drag = null;
+        this.addControl(ctl);
+        ctl = null;
     },
 
     /**
@@ -885,6 +894,8 @@ var NagVisObject = Base.extend({
         ctl.setAttribute('id',         this.conf.object_id+'-delete-' + num);
         ctl.setAttribute('class',     'control delete' + size);
         ctl.setAttribute('className', 'control delete' + size);
+	// FIXME: Multilanguage
+	ctl.title          = 'Delete object';
         ctl.style.zIndex   = parseInt(this.conf.z)+1;
         ctl.style.width    = size + 'px';
         ctl.style.height   = size + 'px';
@@ -901,7 +912,7 @@ var NagVisObject = Base.extend({
 
             // FIXME: Multilanguage
             if(!confirm('Really delete the object?'))
-            return;
+                return;
 
             obj.saveObject(this, null);
             obj.remove();
@@ -940,6 +951,8 @@ var NagVisObject = Base.extend({
         ctl.setAttribute('id',         this.conf.object_id+'-modify-' + num);
         ctl.setAttribute('class',     'control modify' + size);
         ctl.setAttribute('className', 'control mdoify' + size);
+	// FIXME: Multilanguage
+	ctl.title          = 'Modify object';
         ctl.style.zIndex   = parseInt(this.conf.z)+1;
         ctl.style.width    = size + 'px';
         ctl.style.height   = size + 'px';
@@ -979,6 +992,53 @@ var NagVisObject = Base.extend({
         ctl = null;
     },
 
+
+    /**
+     * Adds the modify button to the controls including
+     * all eventhandlers
+     *
+     * Author: Lars Michelsen <lm@larsmichelsen.com>
+     */
+    parseControlToggleLineMid: function (num, objX, objY, offX, offY, size) {
+        var ctl= document.createElement('div');
+        ctl.setAttribute('id',         this.conf.object_id+'-togglemid-' + num);
+        ctl.setAttribute('class',     'control togglemid' + size);
+        ctl.setAttribute('className', 'control togglemid' + size);
+	// FIXME: Multilanguage
+	ctl.title          = 'Lock/Unlock line middle';
+        ctl.style.zIndex   = parseInt(this.conf.z)+1;
+        ctl.style.width    = size + 'px';
+        ctl.style.height   = size + 'px';
+        ctl.style.left     = (objX + offX) + 'px';
+        ctl.style.top      = (objY + offY) + 'px';
+        ctl.objOffsetX     = offX;
+        ctl.objOffsetY     = offY;
+
+        ctl.onclick = function(event) {
+            // In the event handler this points to the ctl object
+            var arr   = this.id.split('-');
+            var objId = arr[0];
+
+	    toggleLineMidLock(event, objId);
+	    contextHide();
+
+            objId = null;
+            arr   = null;
+
+            document.body.style.cursor = 'auto';
+        };
+
+        ctl.onmouseover = function() {
+            document.body.style.cursor = 'pointer';
+        };
+
+        ctl.onmouseout = function() {
+            document.body.style.cursor = 'auto';
+        };
+
+        this.addControl(ctl);
+        ctl = null;
+    },
 
     /**
      * Handler for the move event
