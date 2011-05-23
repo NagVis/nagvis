@@ -1,4 +1,4 @@
-1.6a1
+1.6b1
 
 Core
   * Default admin credentials for inital auth databases are now: User: admin Password: admin
