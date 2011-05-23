@@ -792,7 +792,7 @@ var NagVisObject = Base.extend({
 
         if(this.conf.view_type === 'line' || this.conf.type === 'line')
             this.parseLineControls();
-        else if(this.conf.view_type === 'icon')
+        else if(this.conf.view_type === 'icon' || this.conf.view_type === 'gadget')
             this.parseIconControls();
         else if(this.conf.type === 'textbox')
             this.parseBoxControls();
