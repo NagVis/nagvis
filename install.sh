@@ -123,7 +123,7 @@ General Parameters:
   -O <PATH>     Path to the old NagVis base directory to update from.
                 You only need to set this if it is different than the new NagVis base
                 directory given in "-p". This may be useful when updating from 1.4
-                to 1.5 where the paths to NagVis changed.
+                to 1.6 where the paths to NagVis changed.
                 Default value: $NAGVIS_PATH
   -W <PATH>     Web path to the NagVis base directory
                 Default: $HTML_PATH 
@@ -1580,7 +1580,7 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" -a "$INSTA
 	text "| Handling changed/removed options" "|"
 	line
 
-	# Only perform the actions below for NagVis 1.5.x installations
+	# Only perform the actions below for NagVis 1.5.x or newer installations
 	if [ $NAGVIS_TAG -ge 01050000 ]; then
 		DONE=`log "Removing allowedforconfig option from main config..." done`
 		sed -i '/^allowedforconfig=/d' $NAGVIS_PATH/etc/nagvis.ini.php
@@ -1701,7 +1701,7 @@ text "| For later update/upgrade you may use this command to have a faster updat
 text "| $CALL"
 text
 if [ "$INSTALLER_ACTION" = "update" ] && [ $NAGVIS_TAG_OLD -lt 01050000 ]; then
-text "| 1.4 to 1.5x upgrade: The map permissions have ben reset. Old permissions" "|"
+text "| 1.4 to 1.6x upgrade: The map permissions have ben reset. Old permissions" "|"
 text "| have been backed up in nagvis/etc/auth-backup file. You need to migrate" "|"
 text "| these permissions manually using using the new user/role management GUI." "|"
 text
