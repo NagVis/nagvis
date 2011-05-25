@@ -29,11 +29,19 @@ echo "|                                                                    |"
 echo "| When installed in local/ path NagVis will use the config and user  |"
 echo "| files of the site.                                                 |"
 echo "|                                                                    |"
-echo "| ONLY RECOMMENDED FOR TESTING                                       |"
+echo "| RECOMMENDED ONLY FOR TESTING                                       |"
 echo "+--------------------------------------------------------------------+"
 
 if [ -z "$OMD_SITE" ] || [ -z "$OMD_ROOT" ]; then
-    echo "ERROR: You are not within an OMD site. Check out http://omdistro.org/ for easy installable and manageable Nagios."
+    echo "ERROR: You are not running this inside an OMD site."
+    echo "       Check out http://omdistro.org/ for easy installable and manageable Nagios."
+    exit 1
+fi
+
+echo -n "Do you really want to continue? [y] "
+read OPT
+if [ ! -z "$OPT" ] &&  [ $OPT != "y" ]; then
+    echo "Terminated by user."
     exit 1
 fi
 
