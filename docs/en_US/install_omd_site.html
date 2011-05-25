@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Install Nagvis into OMD site</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+  </head>
+  <body>
+        <h1>Install Nagvis into OMD site</h1>
+	<p>Since 1.6b2 it is possible to install NagVis into the <code>local/</code> path of OMD
+	sites. <font color='red'>Please note:</font> This is only recommended for testing purposes
+	e.g. if you like to test brand new features of new NagVis versions which are not already
+	included in OMD. We do not recommend using this for productional installations except
+	you do really know what you are doing.</p>
+
+        <h2>Using the omd site installer</h2>
+
+	<h3>Log in to your OMD site</h3>
+	<p>In most cases this is done by doing 
+	<pre>su - &lt;sitename></pre>
+	</p>
+        
+        <h3>Download NagVis</h3>
+        <p>Get the current NagVis package. 
+	   The latest release can be found at 
+	   <a href="http://www.nagvis.org/" target="_blank">nagvis.org</a>.</p>
+        
+        <h3>Unpack NagVis</h3>
+        <p>Unpack the archive to a temporary place (For example /tmp). And change to that directory</p>
+        <pre>tar xvzf nagvis-1.6*.tar.gz /tmp
+cd /tmp/nagvis-1.6*</pre>
+        
+        <h3>Make installer executable</h3>
+        <p>The OMD site installer is located in the root directory of the NagVis package.
+	   The installer has to be made executable before you can use it.</p>
+        <pre>chmod +x omd_install.sh</pre>
+        
+        <h3>Execute the installer</h3>
+        <p>Now you can execute the installer script.</p>
+        <pre>./omd_install.sh</pre>
+        <p>Confirm the question with <code>y</code> and wait for the script to complete. It should finish
+	quickly.</p>
+
+        <h3>Cleanup</h3>
+        <p>You can remove the sources after installation.</p>
+        <pre>rm -rf /tmp/nagvis-1.6*</pre>
+
+	<h3>Use it ...</h3>
+	<p>Now you should be able to use the new version opening it in the browser with the url
+	<pre>http://&lt;hostname>/&lt;sitename>/nagvis</pre></p>
+    </body>
+</html>
