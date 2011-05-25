@@ -1,5 +1,9 @@
 1.6b2
 
+Core
+  * Added omd_install.sh to install NagVis to the local/ path of OMD sites
+    (ONLY FOR TESTING!!!)
+
 Frontend
   * Bugfix: Added missing controls to services which are displayed as gadgets
 
