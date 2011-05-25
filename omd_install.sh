@@ -195,6 +195,8 @@ patch -s $OMD_ROOT/local/share/nagvis/htdocs/server/core/defines/global.php <<EO
  define('CONST_NEEDED_PHP_VERSION', '5.0');
 EOF
 
+omd reload apache
+
 echo "            ...done."
 
 exit 0
