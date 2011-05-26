@@ -519,7 +519,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
             problem_has_been_acknowledged,
             statusmap_image,
             UNIX_TIMESTAMP(last_check) AS last_check, UNIX_TIMESTAMP(next_check) AS next_check,
-            hs.state_type, hs.current_check_attempt, hs.max_check_attempts, hs.check_command
+            hs.state_type, hs.current_check_attempt, hs.max_check_attempts, hs.check_command,
             UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end,
             dh.author_name AS downtime_author, dh.comment_data AS downtime_data
         FROM

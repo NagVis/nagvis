@@ -3,6 +3,7 @@
 Core
   * Added omd_install.sh to install NagVis to the local/ path of OMD sites
     (ONLY FOR TESTING!!!)
+  * Bugfix: NDO Backend: Fixed wrong SQL syntax in getHostState function
 
 Frontend
   * Bugfix: Added missing controls to services which are displayed as gadgets
