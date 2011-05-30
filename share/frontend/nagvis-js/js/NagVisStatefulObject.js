@@ -881,17 +881,24 @@ var NagVisStatefulObject = NagVisObject.extend({
 
         // If there is a presign it should be relative to the objects x/y
         if(this.conf.label_x && this.conf.label_x.toString().match(/^(?:\+|\-)/))
-            x = this.parseCoord(this.conf.x, 'x') + parseFloat(this.conf.label_x);
+            x = this.parseCoord(this.parseLabelCoord(this.conf.x), 'x') + parseFloat(this.conf.label_x);
         if(this.conf.label_y && this.conf.label_y.toString().match(/^(?:\+|\-)/))
-            y = this.parseCoord(this.conf.y, 'y') + parseFloat(this.conf.label_y);
+            y = this.parseCoord(this.parseLabelCoord(this.conf.y), 'y') + parseFloat(this.conf.label_y);
 
         // If no x/y coords set, fallback to object x/y
         if(!this.conf.label_x || this.conf.label_x === '' || this.conf.label_x === '0')
-            x = this.parseCoord(this.conf.x, 'x');
+            x = this.parseCoord(this.parseLabelCoord(this.conf.x), 'x');
         if(!this.conf.label_y || this.conf.label_y === '' || this.conf.label_y === '0')
-            y = this.parseCoord(this.conf.y, 'y');
+            y = this.parseCoord(this.parseLabelCoord(this.conf.y), 'y');
 
         return [ x, y ];
+    },
+
+    parseLabelCoord: function (val) {
+        var k = val.indexOf(",");
+        if (k > 0)
+	    return val.substring(0, k);
+        return val;
     },
 
     /**
