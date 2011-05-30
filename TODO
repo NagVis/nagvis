@@ -3,6 +3,7 @@ This is a small file for storing quick thoughts about new features and needed ch
 
 Bugs:
   - Labels können nicht verschoben werden
+  - Favicon kennt Substatus (Downtime/Ack) nicht
 
 - Backends:
  - Zusätzlich beliebige Variablen vom Backend holen lassen
