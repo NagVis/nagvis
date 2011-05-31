@@ -11,6 +11,7 @@ Frontend
   * Bugfix: Added missing controls to services which are displayed as gadgets
   * Bugfix: Fixed parsing of label_type=14 lines (Thanks to Laurent Lebatard)
   * Bugfix: Label positioning in case of weathermap lines (Thanks to Laurent Lebatard)
+  * Bugfix: Fixed empty warning popups in map management dialogs
 
 1.6b1
 

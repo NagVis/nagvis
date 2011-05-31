@@ -1,3 +1,7 @@
+<input type="hidden" /><!-- The template must not start with a script tag. This would be ignored by IE //-->
+<script type="text/javascript">
+lang = {$lang};
+</script>
 <script type="text/javascript" src="{$htmlBase}/frontend/nagvis-js/js/ManageMaps.js"></script>
 <form name="map_create" id="map_create" method="POST" action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=Map&amp;act=doAdd', 'map_create');" onsubmit="return check_create_map();">
     <table name="mytable" class="mytable" id="table_map_create">

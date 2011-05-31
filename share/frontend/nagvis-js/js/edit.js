@@ -896,7 +896,7 @@ function validateMainConfigFieldValue(oField, init) {
     }
 }
 
-function printLang(sLang,sReplace) {
+function printLang(sLang, sReplace) {
     if(typeof sLang === 'undefined')
         return '';
 
@@ -904,7 +904,7 @@ function printLang(sLang,sReplace) {
 
     // sReplace maybe optional
     if(typeof sReplace != "undefined") {
-        aReplace = sReplace.split(",")
+        aReplace = sReplace.split(",");
         for(var i = 0; i < aReplace.length; i++) {
             var aReplaceSplit = aReplace[i].split("~");
             sLang = sLang.replace("["+aReplaceSplit[0]+"]",aReplaceSplit[1]);

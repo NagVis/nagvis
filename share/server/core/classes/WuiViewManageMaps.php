@@ -74,6 +74,7 @@ class WuiViewManageMaps {
             'availableBackgrounds'  => $this->CORE->getAvailableBackgroundImages(),
             'availableIconsets'     => $this->CORE->getAvailableIconsets(),
             'availableMaps'         => $this->CORE->getAvailableMaps(),
+	    'lang'                  => $this->CORE->getJsLang(),
         );
 
         // Build page based on the template file and the data array

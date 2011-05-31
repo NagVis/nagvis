@@ -68,12 +68,12 @@ function check_create_map() {
         return false;
     }
     if (document.map_create.map.value.split(" ").length > 1) {
-        alert(printLang(lang['noSpaceAllowed'],''));
+        alert(printLang(lang['noSpaceAllowed'],'')) 
         return false;
     }
     for(var i=0;i<document.map_rename.map.length;i++) {
         if(document.map_rename.map.options[i].value == document.map_create.map.value) {
-            alert(printLang(lang['mapAlreadyExists'],''));
+            alert(printLang(lang['mapAlreadyExists'], 'MAPNAME~' + document.map_create.map.value));
             return false;
         }
     }
@@ -99,7 +99,7 @@ function check_map_rename() {
 
     for(var i=0;i<document.map_rename.map.length;i++) {
         if(document.map_rename.map.options[i].value == document.map_rename.map_new_name.value) {
-            alert(printLang(lang['mapAlreadyExists'],''));
+            alert(printLang(lang['mapAlreadyExists'], 'MAPNAME~' + document.map_rename.map_new_name.value));
             return false;
         }
     }
@@ -135,7 +135,7 @@ function check_map_import() {
 
     // check if a map with this name already exists
     if(checkMapExists(getMapNameByPath(document.map_import.map_file.value), mapOptions)) {
-        alert(printLang(lang['mapAlreadyExists'],'MAPNAME~'+getMapNameByPath(document.map_import.map_file.value)));
+        alert(printLang(lang['mapAlreadyExists'], 'MAPNAME~'+getMapNameByPath(document.map_import.map_file.value)));
         return false;
     }
 
