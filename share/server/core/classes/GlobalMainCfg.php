@@ -417,6 +417,7 @@ class GlobalMainCfg {
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'hidden',
+                    'deprecated' => 1,
                     'match' => MATCH_STRING_PATH),
                 'shapes' => Array('must' => 0,
                     'editable' => 0,
@@ -500,6 +501,7 @@ class GlobalMainCfg {
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'hidden',
+                    'deprecated' => 1,
                     'match' => MATCH_STRING_PATH),
                 'sounds' => Array('must' => 0,
                     'editable' => 0,
@@ -1085,9 +1087,6 @@ class GlobalMainCfg {
 
         $this->validConfig['paths']['js']['default']                 = $base.HTDOCS_DIR.'/frontend/nagvis-js/js/';
         $this->validConfig['paths']['htmljs']['default']             = $htmlBase.'/frontend/nagvis-js/js/';
-
-        $this->validConfig['paths']['wuijs']['default']              = $base.HTDOCS_DIR.'/frontend/wui/js/';
-        $this->validConfig['paths']['htmlwuijs']['default']          = $htmlBase.'/frontend/wui/js/';
 
         $this->validConfig['paths']['images']['default']             = $base.HTDOCS_DIR.'/frontend/nagvis-js/images/';
         $this->validConfig['paths']['htmlimages']['default']         = $htmlBase.'/frontend/nagvis-js/images/';
