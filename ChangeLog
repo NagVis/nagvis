@@ -3,7 +3,9 @@
 Core
   * Added omd_install.sh to install NagVis to the local/ path of OMD sites
     (ONLY FOR TESTING!!!)
+  * Main Config: [paths] "wuijs" and "htmlwuijs" are now deprecated
   * Bugfix: NDO Backend: Fixed wrong SQL syntax in getHostState function
+  * Bugfix: Fixed redirects after map add/rename/delete
 
 Frontend
   * Bugfix: Added missing controls to services which are displayed as gadgets

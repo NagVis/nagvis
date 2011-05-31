@@ -121,7 +121,7 @@ class CoreModMap extends CoreModule {
                     $this->handleResponse('handleResponseAdd', 'doAdd',
                                             $this->CORE->getLang()->getText('The map has been created.'),
                                                 $this->CORE->getLang()->getText('The map could not be created.'),
-                                                1, $this->htmlBase.'/frontend/wui/index.php?mod=Map&act=edit&show='.$_POST['map']);
+                                                1, $this->htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$_POST['map']);
                 break;
                 case 'doRename':
                     // if renamed map is open, redirect to new name
@@ -136,7 +136,7 @@ class CoreModMap extends CoreModule {
                     $this->handleResponse('handleResponseRename', 'doRename',
                                             $this->CORE->getLang()->getText('The map has been renamed.'),
                                                                 $this->CORE->getLang()->getText('The map could not be renamed.'),
-                                                                1, $this->htmlBase.'/frontend/wui/index.php?mod=Map&act=edit&show='.$map);
+                                                                1, $this->htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$map);
                 break;
                 case 'doDelete':
                     // if deleted map is open, redirect to WUI main page
@@ -144,9 +144,9 @@ class CoreModMap extends CoreModule {
                     $current = $FHANDLER->get('map_current');
                     $map     = $FHANDLER->get('map');
                     if($current == 'undefined' || $current == '' || $current == $map)
-                        $url = $this->htmlBase.'/frontend/wui/index.php';
+                        $url = $this->htmlBase.'/frontend/nagvis-js/index.php';
                     else
-                        $url = $this->htmlBase.'/frontend/wui/index.php?mod=Map&act=edit&show='.$current;
+                        $url = $this->htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$current;
 
                     $this->handleResponse('handleResponseDelete', 'doDelete',
                                             $this->CORE->getLang()->getText('The map has been deleted.'),

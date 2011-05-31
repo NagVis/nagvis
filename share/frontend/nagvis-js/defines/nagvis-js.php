@@ -33,6 +33,5 @@
 set_include_path(
 	get_include_path()
 	.PATH_SEPARATOR.'../../frontend/nagvis-js/classes/'
-	.PATH_SEPARATOR.'../../frontend/wui/includes/classes/'
 );
 ?>
