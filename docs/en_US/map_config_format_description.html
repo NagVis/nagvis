@@ -183,6 +183,9 @@
         <tr>
         <td>line_width</td><td>3</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
         </tr>
+        <tr>
+        <td>line_weather_colors</td><td>10:#8c00ff,25:#2020ff,40:#00c0ff,55:#00f000,70:#f0f000,85:#ffc000,100:#ff0000</td><td>This defines the colors of weathermap colors in the different percentage levels. For example above 10% load it will be colored #8c00ff. <font color="#ff0000">(New in 1.6)</font></td>
+        </tr>
         
         <tr>
         <td>only_hard_states</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
@@ -466,27 +469,27 @@
         <td>line_width</td><td>inherited (<a href="#global">global</a>)</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
         </tr>
         <td>line_cut</td>
-    <td>0.5</td>
-    <td>Lines with two parts have the cut in the middle of the line. This equates to a line cut value of &quot;0.5&quot;.
+        <td>0.5</td>
+        <td>Lines with two parts have the cut in the middle of the line. This equates to a line cut value of &quot;0.5&quot;.
         It is possible to relocate the cut by changing this value. Valid values are 0.0 to 1.0.
-       
-    </td>
+        </td>
         </tr>
         <tr>
         <td>line_label_pos_in</td>
-    <td>0.5</td>
-    <td>Weathermap lines have their labels in the middle of the line by default. This equates to a value of &quot;0.5&quot;.
+        <td>0.5</td>
+        <td>Weathermap lines have their labels in the middle of the line by default. This equates to a value of &quot;0.5&quot;.
         It is possible to relocate the cut by changing this value. Valid values are 0.0 to 1.0.
-       
-    </td>
+        </td>
         </tr>
         <tr>
         <td>line_label_pos_out</td>
-    <td>0.5</td>
-    <td>Weathermap lines have their labels in the middle of the line by default. This equates to a value of &quot;0.5&quot;.
+        <td>0.5</td>
+        <td>Weathermap lines have their labels in the middle of the line by default. This equates to a value of &quot;0.5&quot;.
         It is possible to relocate the cut by changing this value. Valid values are 0.0 to 1.0.
-       
-    </td>
+        </td>
+        </tr>
+        <tr>
+        <td>line_weather_colors</td><td>inherited (<a href="#global">global</a>)</td><td>This defines the colors of weathermap colors in the different percentage levels. For example above 10% load it will be colored #8c00ff. <font color="#ff0000">(New in 1.6)</font></td>
         </tr>
         <tr>
         <td> only_hard_states </td><td> inherited (global) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>

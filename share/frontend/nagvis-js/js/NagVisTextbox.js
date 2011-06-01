@@ -55,7 +55,7 @@ var NagVisTextbox = NagVisStatelessObject.extend({
 
         var oMap = document.getElementById('map');
         if(oMap) {
- 			this.parsedObject = oMap.appendChild(oContainerDiv);
+            this.parsedObject = oMap.appendChild(oContainerDiv);
             oMap = null;
         }
         oContainerDiv = null;
