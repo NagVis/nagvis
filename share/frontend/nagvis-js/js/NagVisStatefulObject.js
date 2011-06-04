@@ -895,10 +895,10 @@ var NagVisStatefulObject = NagVisObject.extend({
     },
 
     parseLabelCoord: function (val) {
-        var k = val.indexOf(",");
-        if (k > 0)
+	var k = val.toString().indexOf(",");
+	if (k > 0)
 	    return val.substring(0, k);
-        return val;
+	return val;
     },
 
     /**
