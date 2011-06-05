@@ -105,7 +105,11 @@ function makeDragable(objects, dragStopHandler, dragMoveHandler) {
         return false;
 
     for(var i = 0; i < len; i++) {
-        var o = document.getElementById(objects[i]);
+	if(typeof(objects[i]) === 'object')
+	    var o = objects[i];
+	else
+            var o = document.getElementById(objects[i]);
+
         if(o) {
             addEvent(o, "mousedown", function(e) { dragStart(e, dragMoveHandler); });
             addEvent(o, "mouseup",   function(e) { dragStop(e,  dragStopHandler); });
@@ -143,10 +147,10 @@ function dragStart(event, dragHandler) {
     draggingObject.x = draggingObject.offsetLeft;
     draggingObject.y = draggingObject.offsetTop;
 
-  // Save relative offset of the mouse
-  dragObjectOffset   = [ posy - draggingObject.offsetTop - getHeaderHeight(),
-                         posx - draggingObject.offsetLeft ];
-  dragObjectStartPos = [ draggingObject.offsetTop, draggingObject.offsetLeft ];
+    // Save relative offset of the mouse
+    dragObjectOffset   = [ posy - draggingObject.offsetTop - getHeaderHeight(),
+                           posx - draggingObject.offsetLeft ];
+    dragObjectStartPos = [ draggingObject.offsetTop, draggingObject.offsetLeft ];
 
     // Assign the handler which is called during object movements
     dragObjectHandler = dragHandler;

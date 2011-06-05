@@ -392,6 +392,9 @@ var NagVisObject = Base.extend({
             this.bIsLocked = !this.bIsLocked;
 
         if(this.toggleObjControls()) {
+	    if(typeof(this.toggleLabelLock) == 'function')
+		this.toggleLabelLock();
+
             if(!isset(lock)) {
                 if(oUserProperties.hasOwnProperty('unlocked-' + oPageProperties.map_name))
                 var unlocked = oUserProperties['unlocked-' + oPageProperties.map_name].split(',');

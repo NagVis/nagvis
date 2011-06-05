@@ -264,8 +264,10 @@ var NagVisStatefulObject = NagVisObject.extend({
             this.drawLine();
 
         // Enable the controls when the object is not locked
-        if(!this.bIsLocked)
+        if(!this.bIsLocked) {
             this.parseControls();
+	    this.unlockLabel();
+	}
     },
 
     /**
@@ -857,7 +859,7 @@ var NagVisStatefulObject = NagVisObject.extend({
     },
 
     /**
-     * Moves the label of the object
+     * Moves the label of the object after the objec thas been dragged
      *
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
@@ -868,6 +870,60 @@ var NagVisStatefulObject = NagVisObject.extend({
         label.style.left = coords[0] + 'px';
         coords = null;
         label  = null;
+    },
+
+    /**
+     * Handles drag events of the label
+     *
+     * This needs to calculate the offset of the current position to the first position,
+     * then create a new coord (relative/absolue) and save them in label_x/y attributes
+     *
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    dragLabel: function(obj) {
+        var arr        = obj.id.split('-');
+        var objId      = arr[0];
+        var anchorType = arr[1];
+
+        var viewType = getDomObjViewType(objId);
+
+        var jsObj = getMapObjByDomObjId(objId);
+
+        jsObj.conf.label_x = jsObj.calcNewLabelCoord(jsObj.conf.label_x, jsObj.conf.x, obj.x);
+        jsObj.conf.label_y = jsObj.calcNewLabelCoord(jsObj.conf.label_y, jsObj.conf.y, obj.y);
+
+        jsObj      = null;
+        objId      = null;
+        anchorType = null;
+        viewType   = null;
+    },
+
+    /**
+     * Calculates relative/absolute coords depending on the current configured type
+     */
+    calcNewLabelCoord: function (labelCoord, coord, newCoord) {
+	if(labelCoord.toString().match(/^(?:\+|\-)/)) {
+	    var ret = newCoord - coord;
+	    if(ret >= 0)
+	        return '+' + ret;
+	    return ret;
+	} else
+	    return newCoord;
+    },
+
+    /**
+     * Handler for the drop event
+     *
+     * Important: This is called from an event handler
+     * the 'this.' keyword can not be used here.
+     */
+    saveLabel: function(obj, oParent) {
+        var arr        = obj.id.split('-');
+        var objId      = arr[0];
+        var jsObj      = getMapObjByDomObjId(objId);
+        saveObjectAttr(objId, { 'label_x': jsObj.conf.label_x, 'label_y': jsObj.conf.label_y});
+	jsObj = null;
+	arr   = null;
     },
 
     /**
@@ -914,6 +970,39 @@ var NagVisStatefulObject = NagVisObject.extend({
                                  coords[0], coords[1], this.conf.z,
                                  this.conf.label_width, '', this.replaceLabelTextDynamicMacros(),
                                  this.conf.label_style);
+    },
+
+    unlockLabel: function () {
+	var o = document.getElementById(this.conf.object_id + '-label');
+	if(!o)
+	    return;
+	o.onmouseover = function() {
+            document.body.style.cursor = 'move';
+        };
+        o.onmouseout = function() {
+            document.body.style.cursor = 'auto';
+        };
+
+	makeDragable([o], this.saveLabel, this.dragLabel);
+	o = null;
+    },
+
+    lockLabel: function () {
+	var o = document.getElementById(this.conf.object_id + '-label');
+	if(!o)
+	    return;
+	// Clone the node to remove all attached event handlers
+	var n = o.cloneNode(true);
+	o.parentNode.replaceChild(n, o);
+	o = null;
+	n = null;
+    },
+
+    toggleLabelLock: function () {
+	if(this.bIsLocked)
+	    this.lockLabel();
+	else
+	    this.unlockLabel();
     },
 
     getObjWidth: function () {
