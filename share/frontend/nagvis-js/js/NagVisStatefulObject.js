@@ -647,11 +647,11 @@ var NagVisStatefulObject = NagVisObject.extend({
      */
     getColorFill: function(perc) {
         var ranges = this.conf.line_weather_colors.split(',');
+        // 0 contains the percentage until this color is used
+        // 1 contains the color to be used
         for(var i = 0; i < ranges.length; i++) {
-            // 0 contains the percentage until this color is used
-            // 1 contains the color to be used
             var parts = ranges[i].split(':');
-            if(perc <= parts[0])
+            if(parseInt(perc) <= parts[0])
                 return parts[1];
             parts = null;
         }

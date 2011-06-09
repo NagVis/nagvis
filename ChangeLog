@@ -9,10 +9,12 @@ Core
 
 Frontend
   * Labels of objects can now be moved again; The edit mode is affected by the objects lock/unlock state
+  * Labels of lines with line_type=14 have more offset now to look better when using horizontal lines
   * Bugfix: Added missing controls to services which are displayed as gadgets
   * Bugfix: Fixed parsing of label_type=14 lines (Thanks to Laurent Lebatard)
   * Bugfix: Label positioning in case of weathermap lines (Thanks to Laurent Lebatard)
   * Bugfix: Fixed empty warning popups in map management dialogs
+  * Bugfix: Fixed color selection of weathermap lines (Thanks to Laurent Lebatard)
 
 1.6b1
 
