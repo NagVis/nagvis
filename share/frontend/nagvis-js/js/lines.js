@@ -141,7 +141,7 @@ function drawLabel(objectId, num, lineType, lx, ly, z, perfdataA, perfdataB) {
         if(oLinkContainer)
             oLinkContainer.appendChild(drawNagVisTextbox(objectId+'-link'+num, 'box', '#ffffff', '#000000', (lx-labelShift), (ly-10), z, 'auto', 'auto', '<b>' + perfdataA + '</b>'));
     } else if(lineType == '14') {
-        var label = drawNagVisTextbox(objectId+'-link'+num, 'box', '#ffffff', '#000000', (lx-labelShift), (ly-20), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
+        var label = drawNagVisTextbox(objectId+'-link'+num, 'box', '#ffffff', '#000000', (lx-labelShift), (ly-30), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
         if(oLinkContainer)
             oLinkContainer.appendChild(label);
         labelShift = getLabelShift(perfdataB);
