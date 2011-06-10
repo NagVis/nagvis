@@ -5,6 +5,7 @@ Core
     (ONLY FOR TESTING!!!)
   * Main Config: [paths] "wuijs" and "htmlwuijs" are now deprecated
   * Bugfix: NDO Backend: Fixed wrong SQL syntax in getHostState function
+  * Bugfix: NDO Backend: Fixed wrong hard state handling
   * Bugfix: Fixed redirects after map add/rename/delete
 
 Frontend
