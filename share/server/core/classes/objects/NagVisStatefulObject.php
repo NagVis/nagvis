@@ -817,7 +817,7 @@ class NagVisStatefulObject extends NagVisObject {
             foreach($this->aStateCounts AS $sState => $aSubstates) {
                 // Loop all substates (normal,ack,downtime,...)
                 foreach($aSubstates AS $sSubState => $iCount) {
-                    if($iCount === 0)
+                    if($iCount == 0)
                         continue;
 
                     // Count all child objects
