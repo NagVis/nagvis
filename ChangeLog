@@ -8,6 +8,7 @@ Core
   * Bugfix: NDO Backend: Fixed wrong hard state handling
   * Bugfix: Fixed redirects after map add/rename/delete
   * Bugfix: Fixed false CRITICAL states when using NDO Backend (Thanks to Oliver Graf)
+  * Bugfix: Automap: Fixed parent calculation in automap (Thanks to Oliver Graf)
 
 Frontend
   * Labels of objects can now be moved again; The edit mode is affected by the objects lock/unlock state

@@ -455,7 +455,7 @@ class NagiosHost extends NagVisStatefulObject {
         }
         foreach($aParents AS $parentName) {
             // If the host is in ignoreHosts, don't recognize it
-            if(count($ignoreHosts) == 0 || !in_array($childName, $ignoreHosts)) {
+            if(count($ignoreHosts) == 0 || !in_array($parentName, $ignoreHosts)) {
                 /*
                  * Check if the host is already on the map (If it's not done, the
                  * objects with more than one parent will be printed several times on the
