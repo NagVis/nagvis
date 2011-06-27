@@ -815,26 +815,26 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 'details' => Array('alias' => $data['alias']),
                 'counts' => Array(
                     'UNCHECKED' => Array(
-                        'normal' => $data['pending'],
+                        'normal' => intval($data['pending']),
                     ),
                     'OK' => Array(
-                        'normal' => $data['ok'],
-                        'downtime' => $data['ok_downtime'],
+                        'normal'   => intval($data['ok']),
+                        'downtime' => intval($data['ok_downtime']),
                     ),
                     'WARNING' => Array(
-                        'normal' => $data['warning'],
-                        'ack' => $data['warning_ack'],
-                        'downtime' => $data['warning_downtime'],
+                        'normal'   => intval($data['warning']),
+                        'ack'      => intval($data['warning_ack']),
+                        'downtime' => intval($data['warning_downtime']),
                     ),
                     'CRITICAL' => Array(
-                        'normal' => $data['critical'],
-                        'ack' => $data['critical_ack'],
-                        'downtime' => $data['critical_downtime'],
+                        'normal'   => intval($data['critical']),
+                        'ack'      => intval($data['critical_ack']),
+                        'downtime' => intval($data['critical_downtime']),
                     ),
                     'UNKNOWN' => Array(
-                        'normal' => $data['unknown'],
-                        'ack' => $data['unknown_ack'],
-                        'downtime' => $data['unknown_downtime'],
+                        'normal'   => intval($data['unknown']),
+                        'ack'      => intval($data['unknown_ack']),
+                        'downtime' => intval($data['unknown_downtime']),
                     ),
                 )
             );
@@ -887,21 +887,21 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 'details' => Array('alias' => $data['alias']),
                 'counts' => Array(
                     'UNCHECKED' => Array(
-                        'normal'    => $data['unchecked'],
+                        'normal'    => intval($data['unchecked']),
                     ),
                     'UP' => Array(
-                        'normal'    => $data['up'],
-                        'downtime'  => $data['up_downtime'],
+                        'normal'    => intval($data['up']),
+                        'downtime'  => intval($data['up_downtime']),
                     ),
                     'DOWN' => Array(
-                        'normal'    => $data['down'],
-                        'ack'       => $data['down_ack'],
-                        'downtime'  => $data['down_downtime'],
+                        'normal'    => intval($data['down']),
+                        'ack'       => intval($data['down_ack']),
+                        'downtime'  => intval($data['down_downtime']),
                     ),
                     'UNREACHABLE' => Array(
-                        'normal'    => $data['unreachable'],
-                        'ack'       => $data['unreachable_ack'],
-                        'downtime'  => $data['unreachable_downtime'],
+                        'normal'    => intval($data['unreachable']),
+                        'ack'       => intval($data['unreachable_ack']),
+                        'downtime'  => intval($data['unreachable_downtime']),
                     ),
                 ),
             );
@@ -949,18 +949,18 @@ class GlobalBackendndomy implements GlobalBackendInterface {
             GROUP BY o.object_id');
 
         while($data = mysql_fetch_assoc($QUERYHANDLE)) {
-            $arrReturn[$data['name1']]['counts']['PENDING']['normal'] = $data['pending'];
-            $arrReturn[$data['name1']]['counts']['OK']['normal'] = $data['ok'];
-            $arrReturn[$data['name1']]['counts']['OK']['downtime'] = $data['ok_downtime'];
-            $arrReturn[$data['name1']]['counts']['WARNING']['normal'] = $data['warning'];
-            $arrReturn[$data['name1']]['counts']['WARNING']['ack'] = $data['warning_ack'];
-            $arrReturn[$data['name1']]['counts']['WARNING']['downtime'] = $data['warning_downtime'];
-            $arrReturn[$data['name1']]['counts']['CRITICAL']['normal'] = $data['critical'];
-            $arrReturn[$data['name1']]['counts']['CRITICAL']['ack'] = $data['critical_ack'];
-            $arrReturn[$data['name1']]['counts']['CRITICAL']['downtime'] = $data['critical_downtime'];
-            $arrReturn[$data['name1']]['counts']['UNKNOWN']['normal'] = $data['unknown'];
-            $arrReturn[$data['name1']]['counts']['UNKNOWN']['ack'] = $data['unknown_ack'];
-            $arrReturn[$data['name1']]['counts']['UNKNOWN']['downtime'] = $data['unknown_downtime'];
+            $arrReturn[$data['name1']]['counts']['PENDING']['normal']    = intval($data['pending']);
+            $arrReturn[$data['name1']]['counts']['OK']['normal']         = intval($data['ok']);
+            $arrReturn[$data['name1']]['counts']['OK']['downtime']       = intval($data['ok_downtime']);
+            $arrReturn[$data['name1']]['counts']['WARNING']['normal']    = intval($data['warning']);
+            $arrReturn[$data['name1']]['counts']['WARNING']['ack']       = intval($data['warning_ack']);
+            $arrReturn[$data['name1']]['counts']['WARNING']['downtime']  = intval($data['warning_downtime']);
+            $arrReturn[$data['name1']]['counts']['CRITICAL']['normal']   = intval($data['critical']);
+            $arrReturn[$data['name1']]['counts']['CRITICAL']['ack']      = intval($data['critical_ack']);
+            $arrReturn[$data['name1']]['counts']['CRITICAL']['downtime'] = intval($data['critical_downtime']);
+            $arrReturn[$data['name1']]['counts']['UNKNOWN']['normal']    = intval($data['unknown']);
+            $arrReturn[$data['name1']]['counts']['UNKNOWN']['ack']       = intval($data['unknown_ack']);
+            $arrReturn[$data['name1']]['counts']['UNKNOWN']['downtime']  = intval($data['unknown_downtime']);
         }
 
         // Free memory
@@ -1013,26 +1013,26 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 'details' => Array('alias' => $data['alias']),
                 'counts' => Array(
                     'PENDING' => Array(
-                        'normal' => $data['pending'],
+                        'normal'   => intval($data['pending']),
                     ),
                     'OK' => Array(
-                        'normal' => $data['ok'],
-                        'downtime' => $data['ok_downtime'],
+                        'normal'   => intval($data['ok']),
+                        'downtime' => intval($data['ok_downtime']),
                     ),
                     'WARNING' => Array(
-                        'normal' => $data['warning'],
-                        'ack' => $data['warning_ack'],
-                        'downtime' => $data['warning_downtime'],
+                        'normal'   => intval($data['warning']),
+                        'ack'      => intval($data['warning_ack']),
+                        'downtime' => intval($data['warning_downtime']),
                     ),
                     'CRITICAL' => Array(
-                        'normal' => $data['critical'],
-                        'ack' => $data['critical_ack'],
-                        'downtime' => $data['critical_downtime'],
+                        'normal'   => intval($data['critical']),
+                        'ack'      => intval($data['critical_ack']),
+                        'downtime' => intval($data['critical_downtime']),
                     ),
                     'UNKNOWN' => Array(
-                        'normal' => $data['unknown'],
-                        'ack' => $data['unknown_ack'],
-                        'downtime' => $data['unknown_downtime'],
+                        'normal'   => intval($data['unknown']),
+                        'ack'      => intval($data['unknown_ack']),
+                        'downtime' => intval($data['unknown_downtime']),
                     ),
                 ),
             );

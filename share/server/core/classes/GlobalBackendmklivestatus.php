@@ -824,26 +824,26 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     'details' => Array('alias' => $e[1]),
                     'counts' => Array(
                         'PENDING' => Array(
-                            'normal' => $e[2],
+                            'normal'   => intval($e[2]),
                         ),
                         'OK' => Array(
-                            'normal' => $e[3],
-                            'downtime' => $e[4],
+                            'normal'   => intval($e[3]),
+                            'downtime' => intval($e[4]),
                         ),
                         'WARNING' => Array(
-                            'normal' => $e[5],
-                            'ack' => $e[6],
-                            'downtime' => $e[7],
+                            'normal'   => intval($e[5]),
+                            'ack'      => intval($e[6]),
+                            'downtime' => intval($e[7]),
                         ),
                         'CRITICAL' => Array(
-                            'normal' => $e[8],
-                            'ack' => $e[9],
-                            'downtime' => $e[10],
+                            'normal'   => intval($e[8]),
+                            'ack'      => intval($e[9]),
+                            'downtime' => intval($e[10]),
                         ),
                         'UNKNOWN' => Array(
-                            'normal' => $e[11],
-                            'ack' => $e[12],
-                            'downtime' => $e[13],
+                            'normal'   => intval($e[11]),
+                            'ack'      => intval($e[12]),
+                            'downtime' => intval($e[13]),
                         ),
                     )
                 );
@@ -932,21 +932,21 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     'details' => Array('alias' => $e[1]),
                     'counts' => Array(
                         'UNCHECKED' => Array(
-                            'normal'    => $e[2],
+                            'normal'    => intval($e[2]),
                         ),
                         'UP' => Array(
-                            'normal'    => $e[3],
-                            'downtime'  => $e[4],
+                            'normal'    => intval($e[3]),
+                            'downtime'  => intval($e[4]),
                         ),
                         'DOWN' => Array(
-                            'normal'    => $e[5],
-                            'ack'       => $e[6],
-                            'downtime'  => $e[7],
+                            'normal'    => intval($e[5]),
+                            'ack'       => intval($e[6]),
+                            'downtime'  => intval($e[7]),
                         ),
                         'UNREACHABLE' => Array(
-                            'normal'    => $e[8],
-                            'ack'       => $e[9],
-                            'downtime'  => $e[10],
+                            'normal'    => intval($e[8]),
+                            'ack'       => intval($e[9]),
+                            'downtime'  => intval($e[10]),
                         ),
                     )
                 );
@@ -1042,18 +1042,18 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         if(is_array($l) && count($l) > 0) {
             foreach($l as $e) {
-                $arrReturn[$e[0]]['counts']['PENDING']['normal']    = $e[1];
-                $arrReturn[$e[0]]['counts']['OK']['normal']         = $e[2];
-                $arrReturn[$e[0]]['counts']['OK']['downtime']       = $e[3];
-                $arrReturn[$e[0]]['counts']['WARNING']['normal']    = $e[4];
-                $arrReturn[$e[0]]['counts']['WARNING']['ack']       = $e[5];
-                $arrReturn[$e[0]]['counts']['WARNING']['downtime']  = $e[6];
-                $arrReturn[$e[0]]['counts']['CRITICAL']['normal']   = $e[7];
-                $arrReturn[$e[0]]['counts']['CRITICAL']['ack']      = $e[8];
-                $arrReturn[$e[0]]['counts']['CRITICAL']['downtime'] = $e[9];
-                $arrReturn[$e[0]]['counts']['UNKNOWN']['normal']    = $e[10];
-                $arrReturn[$e[0]]['counts']['UNKNOWN']['ack']       = $e[11];
-                $arrReturn[$e[0]]['counts']['UNKNOWN']['downtime']  = $e[12];
+                $arrReturn[$e[0]]['counts']['PENDING']['normal']    = intval($e[1]);
+                $arrReturn[$e[0]]['counts']['OK']['normal']         = intval($e[2]);
+                $arrReturn[$e[0]]['counts']['OK']['downtime']       = intval($e[3]);
+                $arrReturn[$e[0]]['counts']['WARNING']['normal']    = intval($e[4]);
+                $arrReturn[$e[0]]['counts']['WARNING']['ack']       = intval($e[5]);
+                $arrReturn[$e[0]]['counts']['WARNING']['downtime']  = intval($e[6]);
+                $arrReturn[$e[0]]['counts']['CRITICAL']['normal']   = intval($e[7]);
+                $arrReturn[$e[0]]['counts']['CRITICAL']['ack']      = intval($e[8]);
+                $arrReturn[$e[0]]['counts']['CRITICAL']['downtime'] = intval($e[9]);
+                $arrReturn[$e[0]]['counts']['UNKNOWN']['normal']    = intval($e[10]);
+                $arrReturn[$e[0]]['counts']['UNKNOWN']['ack']       = intval($e[11]);
+                $arrReturn[$e[0]]['counts']['UNKNOWN']['downtime']  = intval($e[12]);
             }
         }
 
@@ -1172,26 +1172,26 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     'details' => Array('alias' => $e[1]),
                     'counts' => Array(
                         'PENDING' => Array(
-                            'normal'    => $e[2],
+                            'normal'    => intval($e[2]),
                         ),
                         'OK' => Array(
-                            'normal'    => $e[3],
-                            'downtime'  => $e[4],
+                            'normal'    => intval($e[3]),
+                            'downtime'  => intval($e[4]),
                         ),
                         'WARNING' => Array(
-                            'normal'    => $e[5],
-                            'ack'       => $e[6],
-                            'downtime'  => $e[7],
+                            'normal'    => intval($e[5]),
+                            'ack'       => intval($e[6]),
+                            'downtime'  => intval($e[7]),
                         ),
                         'CRITICAL' => Array(
-                            'normal'    => $e[8],
-                            'ack'       => $e[9],
-                            'downtime'  => $e[10],
+                            'normal'    => intval($e[8]),
+                            'ack'       => intval($e[9]),
+                            'downtime'  => intval($e[10]),
                         ),
                         'UNKNOWN' => Array(
-                            'normal'    => $e[11],
-                            'ack'       => $e[12],
-                            'downtime'  => $e[13],
+                            'normal'    => intval($e[11]),
+                            'ack'       => intval($e[12]),
+                            'downtime'  => intval($e[13]),
                         ),
                     )
                 );

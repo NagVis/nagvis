@@ -4,9 +4,11 @@ Core
   * Added omd_install.sh to install NagVis to the local/ path of OMD sites
     (ONLY FOR TESTING!!!)
   * Main Config: [paths] "wuijs" and "htmlwuijs" are now deprecated
+  * Bugfix: MKivestatus backend does correct type casting to integers for stats now
   * Bugfix: NDO Backend: Fixed wrong SQL syntax in getHostState function
   * Bugfix: NDO Backend: Fixed wrong hard state handling
   * Bugfix: Fixed redirects after map add/rename/delete
+  * Bugfix: NDO backend does correct type casting to integers for stats now (Thanks to Oliver Graf)
   * Bugfix: Fixed false CRITICAL states when using NDO Backend (Thanks to Oliver Graf)
   * Bugfix: Automap: Fixed parent calculation in automap (Thanks to Oliver Graf)
 
