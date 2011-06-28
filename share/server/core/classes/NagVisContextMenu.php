@@ -135,6 +135,10 @@ class NagVisContextMenu {
         if(strpos($this->code,'[html_template_images]') !== FALSE) {
             $this->code = str_replace('[html_template_images]', $this->CORE->getMainCfg()->getPath('html', 'global', 'templateimages'), $this->code);
         }
+
+        if(strpos($this->code,'[lang_make_root]') !== FALSE) {
+            $this->code = str_replace('[lang_make_root]', $this->CORE->getLang()->getText('Make root'), $this->code);
+        }
     }
 
     /**

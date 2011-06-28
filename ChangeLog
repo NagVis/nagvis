@@ -10,7 +10,11 @@ Core
   * Bugfix: Fixed redirects after map add/rename/delete
   * Bugfix: NDO backend does correct type casting to integers for stats now (Thanks to Oliver Graf)
   * Bugfix: Fixed false CRITICAL states when using NDO Backend (Thanks to Oliver Graf)
-  * Bugfix: Automap: Fixed parent calculation in automap (Thanks to Oliver Graf)
+
+* Automap
+  * Added new context menu action "make root" to automap nodes to change the
+    root of the automap on-the-fly (Thanks to Oliver Graf)
+  * Bugfix: Fixed parent calculation in automap (Thanks to Oliver Graf)
 
 Frontend
   * Labels of objects can now be moved again; The edit mode is affected by the objects lock/unlock state
