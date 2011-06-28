@@ -221,6 +221,7 @@ var NagVisObject = Base.extend({
             if(this.conf.name === getUrlParam('root'))
 		oSectionMacros.automap_not_root = '<!--\\sBEGIN\\sautomap_not_root\\s-->.+?<!--\\sEND\\sautomap_not_root\\s-->';
         } else {
+	    oSectionMacros.automap_not_root = '<!--\\sBEGIN\\sautomap_not_root\\s-->.+?<!--\\sEND\\sautomap_not_root\\s-->';
             oSectionMacros.automap = '<!--\\sBEGIN\\sautomap\\s-->.+?<!--\\sEND\\sautomap\\s-->';
         }
         if(this.conf.view_type !== 'line')
