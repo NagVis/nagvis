@@ -400,9 +400,10 @@ class NagVisAutoMap extends GlobalMap {
         $lines = Array();
         // FIXME: Handle line style!
         $aConf = Array(
+	    'z'          => 90,
             'line_type'  => '11',
             'line_color' => '#000',
-            'line_width' => 1
+            'line_width' => 1,
         );
 
         $objIds = $this->MAPCFG->loadObjIds();
