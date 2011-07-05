@@ -58,6 +58,11 @@ class GlobalMainCfg {
                     'editable' => 1,
                     'default' => 'CoreAuthorisationModSQLite',
                     'match' => MATCH_STRING),
+                'controls_size' => Array(
+		    'must'     => 1,
+                    'editable' => 1,
+                    'default'  => 10,
+                    'match'    => MATCH_INTEGER),
                 'dateformat' => Array('must' => 1,
                     'editable' => 1,
                     'default' => 'Y-m-d H:i:s',
@@ -1547,6 +1552,7 @@ class GlobalMainCfg {
      */
     public function parseGeneralProperties() {
         return json_encode(Array(
+          'controls_size'  => intval($this->getValue('global', 'controls_size')),
           'date_format'    => $this->getValue('global', 'dateformat'),
           'path_base'      => $this->getValue('paths','htmlbase'),
           'path_cgi'       => $this->getValue('paths','htmlcgi'),
@@ -1555,7 +1561,7 @@ class GlobalMainCfg {
           'path_shapes'    => $this->getPath('html', 'global', 'shapes'),
           'path_images'    => $this->getValue('paths','htmlimages'),
           'path_server'    => $this->getValue('paths','htmlbase').'/server/core/ajax_handler.php',
-          'internal_title' => $this->getValue('internal', 'title')
+          'internal_title' => $this->getValue('internal', 'title'),
         ));
     }
 

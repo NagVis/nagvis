@@ -134,25 +134,26 @@ a.linelink {
 div.control {
   position: absolute;
   border: 1px #D7E2E5 dotted;
+  /* scale background of controls - hope this works for the important browsers */
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
-div.control.drag10 {
+div.control.drag {
     background-image: url('../images/templates/default.control_drag.gif');
 }
 
-div.control.drag20 {
-    background-image: url('../images/templates/default.control_drag_20.gif');
-}
-
-div.control.delete10 {
+div.control.delete {
     background-image: url('../images/templates/default.control_delete.gif');
 }
 
-div.control.modify10 {
+div.control.modify {
     background-image: url('../images/templates/default.control_modify.gif');
 }
 
-div.control.togglemid10 {
+div.control.togglemid {
     background-image: url('../images/templates/default.control_togglemid.gif');
 }
 

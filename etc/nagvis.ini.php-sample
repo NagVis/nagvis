@@ -33,6 +33,10 @@
 ; documentation.
 ;authorisationmodule="CoreAuthorisationModSQLite"
 ;
+; Sets the size of the controls in unlocked (edit) mode of the frontend. This 
+; defaults to a value of 10 which makes each control be sized to 10px * 10px.
+;controls_size=10
+;
 ; Dateformat of the time/dates shown in nagvis (For valid format see PHP docs)
 ;dateformat="Y-m-d H:i:s"
 ;

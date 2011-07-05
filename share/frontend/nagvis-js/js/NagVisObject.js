@@ -828,24 +828,28 @@ var NagVisObject = Base.extend({
         var x = this.parseCoords(this.conf.x, 'x');
         var y = this.parseCoords(this.conf.y, 'y');
 
-        var size = 20;
+        var size = oGeneralProperties['controls_size'];
+	var lineEndSize = size;
+	if(size < 20)
+	    lineEndSize = 20;
         for(var i = 0, l = x.length; i < l; i++) {
 	    // Line middle drag coord needs to be smaller
 	    if(l > 2 && i == 1) 
-		this.parseControlDrag(i, x[i], y[i], - 5, -5, 10);
-	    else
 		this.parseControlDrag(i, x[i], y[i], - size / 2, - size / 2, size);
+	    else
+		this.parseControlDrag(i, x[i], y[i], - lineEndSize / 2, - lineEndSize / 2, lineEndSize);
             makeDragable([this.conf.object_id+'-drag-'+i], this.saveObject, this.moveObject);
         }
 
         this.parseControlDelete(x.length, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'),
-                                15, -15, 10);
+                                20 - size / 2, -size - size / 2, size);
         this.parseControlModify(x.length+1, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'),
-                                30, -15, 10);
+                                20 + size + 5 - size / 2, -size - size / 2, size);
 
         if(this.conf.view_type === 'line' && (this.conf.line_type == 10 || this.conf.line_type == 13 || this.conf.line_type == 14))
-	    this.parseControlToggleLineMid(x.length+2, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'), 15, 0, 10);
+	    this.parseControlToggleLineMid(x.length+2, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'), 20 - size / 2, -size / 2 + 5, size);
 
+        lineEndSize = null;
         size = null;
         x = null;
         y = null;
@@ -876,8 +880,8 @@ var NagVisObject = Base.extend({
     parseControlDrag: function (num, objX, objY, offX, offY, size) {
         var ctl = document.createElement('div');
         ctl.setAttribute('id',         this.conf.object_id+'-drag-' + num);
-        ctl.setAttribute('class',     'control drag' + size);
-        ctl.setAttribute('className', 'control drag' + size);
+        ctl.setAttribute('class',     'control drag');
+        ctl.setAttribute('className', 'control drag');
 	// FIXME: Multilanguage
 	ctl.title          = 'Move object';
         ctl.style.zIndex   = parseInt(this.conf.z)+1;
@@ -909,8 +913,8 @@ var NagVisObject = Base.extend({
     parseControlDelete: function (num, objX, objY, offX, offY, size) {
         var ctl= document.createElement('div');
         ctl.setAttribute('id',         this.conf.object_id+'-delete-' + num);
-        ctl.setAttribute('class',     'control delete' + size);
-        ctl.setAttribute('className', 'control delete' + size);
+        ctl.setAttribute('class',     'control delete');
+        ctl.setAttribute('className', 'control delete');
 	// FIXME: Multilanguage
 	ctl.title          = 'Delete object';
         ctl.style.zIndex   = parseInt(this.conf.z)+1;
@@ -966,8 +970,8 @@ var NagVisObject = Base.extend({
     parseControlModify: function (num, objX, objY, offX, offY, size) {
         var ctl= document.createElement('div');
         ctl.setAttribute('id',         this.conf.object_id+'-modify-' + num);
-        ctl.setAttribute('class',     'control modify' + size);
-        ctl.setAttribute('className', 'control mdoify' + size);
+        ctl.setAttribute('class',     'control modify');
+        ctl.setAttribute('className', 'control mdoify');
 	// FIXME: Multilanguage
 	ctl.title          = 'Modify object';
         ctl.style.zIndex   = parseInt(this.conf.z)+1;
@@ -1019,8 +1023,8 @@ var NagVisObject = Base.extend({
     parseControlToggleLineMid: function (num, objX, objY, offX, offY, size) {
         var ctl= document.createElement('div');
         ctl.setAttribute('id',         this.conf.object_id+'-togglemid-' + num);
-        ctl.setAttribute('class',     'control togglemid' + size);
-        ctl.setAttribute('className', 'control togglemid' + size);
+        ctl.setAttribute('class',     'control togglemid');
+        ctl.setAttribute('className', 'control togglemid');
 	// FIXME: Multilanguage
 	ctl.title          = 'Lock/Unlock line middle';
         ctl.style.zIndex   = parseInt(this.conf.z)+1;
