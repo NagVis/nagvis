@@ -15,10 +15,12 @@ Core
   * Added new context menu action "make root" to automap nodes to change the
     root of the automap on-the-fly (Thanks to Oliver Graf)
   * Bugfix: Fixed parent calculation in automap (Thanks to Oliver Graf)
+  * Bugfix: Automap could not be used in IE due to javascript error
 
 Frontend
   * Labels of objects can now be moved again; The edit mode is affected by the objects lock/unlock state
   * Labels of lines with line_type=14 have more offset now to look better when using horizontal lines
+  * While objects are unlocked the hover menus are disabled
   * Bugfix: Added missing controls to services which are displayed as gadgets
   * Bugfix: Fixed parsing of label_type=14 lines (Thanks to Laurent Lebatard)
   * Bugfix: Label positioning in case of weathermap lines (Thanks to Laurent Lebatard)

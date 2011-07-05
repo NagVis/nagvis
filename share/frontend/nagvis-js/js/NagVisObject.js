@@ -343,6 +343,10 @@ var NagVisObject = Base.extend({
                 oObj.onmousemove = function(e) { var id = objId; var iH = iHoverDelay; displayHoverMenu(e, id, iH); id = null; iH = null; };
                 oObj.onmouseout = function() { hoverHide(); };
             }
+
+	    // Disable the hover menu by object lock when unlocked
+	    if(typeof(this.toggleHoverMenu) == 'function')
+		this.toggleHoverMenu(this.bIsLocked);
         }
 
         justCreated = null;
@@ -402,11 +406,14 @@ var NagVisObject = Base.extend({
 	    if(typeof(this.toggleLabelLock) == 'function')
 		this.toggleLabelLock();
 
+	    if(typeof(this.toggleHoverMenu) == 'function')
+		this.toggleHoverMenu(this.bIsLocked);
+
             if(!isset(lock)) {
                 if(oUserProperties.hasOwnProperty('unlocked-' + oPageProperties.map_name))
-                var unlocked = oUserProperties['unlocked-' + oPageProperties.map_name].split(',');
+                    var unlocked = oUserProperties['unlocked-' + oPageProperties.map_name].split(',');
                 else
-                var unlocked = [];
+	            var unlocked = [];
 
                 if(this.bIsLocked)
                     unlocked.splice(unlocked.indexOf(this.conf.object_id), 1);

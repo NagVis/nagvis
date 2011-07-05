@@ -370,6 +370,36 @@ var NagVisStatefulObject = NagVisObject.extend({
     },
 
     /**
+     * PUBLIC toggleHoverMenu()
+     *
+     * This enables/disables the hover menu temporary. e.g. in unlocked
+     * mode the hover menu shal be suppressed.
+     *
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    toggleHoverMenu: function(enable) {
+        if(this.conf.view_type && this.conf.view_type === 'line')
+	    var objId = this.conf.object_id+'-linelink';
+        else
+	    var objId = this.conf.object_id+'-icon';
+
+	var o = document.getElementById(objId);
+	if(o) {
+	    if(enable && isset(o.disabled_onmousemove)) {
+		o.onmousemove = o.disabled_onmousemove;
+		o.onmouseout  = o.disabled_onmouseout;
+		o.disabled_onmousemove = null;
+		o.disabled_onmouseout  = null;
+	    } else if(!enable) {
+		o.disabled_onmousemove = o.onmousemove;
+		o.disabled_onmouseout  = o.onmouseout;
+		o.onmousemove = null;
+		o.onmouseout  = null;
+	    }
+	}
+    },
+
+    /**
      * PUBLIC parseContextMenu()
      *
      * Parses the context menu. Don't add this functionality to the normal icon
@@ -380,13 +410,11 @@ var NagVisStatefulObject = NagVisObject.extend({
      */
     parseContextMenu: function () {
     // Add a context menu to the object when enabled
-    if(this.conf.context_menu && this.conf.context_menu == '1') {
-      if(this.conf.view_type && this.conf.view_type == 'line') {
-        this.getContextMenu(this.conf.object_id+'-linelink');
-      } else {
-        this.getContextMenu(this.conf.object_id+'-icon');
-            }
-    }
+    if(this.conf.context_menu && this.conf.context_menu == '1')
+	if(this.conf.view_type && this.conf.view_type == 'line')
+	    this.getContextMenu(this.conf.object_id+'-linelink');
+	else
+	    this.getContextMenu(this.conf.object_id+'-icon');
     },
 
     /**

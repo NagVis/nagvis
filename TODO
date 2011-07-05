@@ -1,6 +1,8 @@
 This is a small file for storing quick thoughts about new features and needed changes:
 ===============================================================================
 
+- Doku Link im Header darf nur auf Sprachen zeigen, die auch existieren
+
 - Backends:
  - Zusätzlich beliebige Variablen vom Backend holen lassen
    Pro Objekt "Custom Vars" für Context- und Hover-Menus einbauen. Diese werden dann pro Objekt
