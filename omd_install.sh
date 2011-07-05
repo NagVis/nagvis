@@ -141,17 +141,12 @@ Alias /$OMD_SITE/nagvis "$OMD_ROOT/local/share/nagvis/htdocs"
     RewriteCond %{REQUEST_URI} ^/$OMD_SITE/nagvis(/index\.php|/|)(\?.*|)$
     RewriteRule ^(index\.php|)(\?.*|)$ /$OMD_SITE/nagvis/frontend/nagvis-js/$1$2 [R=301,L]
     RewriteCond %{REQUEST_URI} ^/$OMD_SITE/nagvis/config\.php.*$
-    RewriteRule ^config\.php(.*) /$OMD_SITE/nagvis/frontend/wui/$1 [R=301,L]
+    RewriteRule ^config\.php(.*)(\?.*|)$ /$OMD_SITE/nagvis/frontend/nagvis-js/$1$2 [R=301,L]
 
     # Redirect old regular map links
-    RewriteCond %{REQUEST_URI} ^/$OMD_SITE/nagvis/frontend/nagvis-js
+    RewriteCond %{REQUEST_URI} ^/$OMD_SITE/nagvis/frontend/(nagvis-js|wui)
     RewriteCond %{QUERY_STRING} map=(.*)
     RewriteRule ^(.*)$ /$OMD_SITE/nagvis/frontend/nagvis-js/index.php?mod=Map&act=view&show=%1 [R=301,L]
-
-    # Redirect old wui map links
-    RewriteCond %{REQUEST_URI} ^/$OMD_SITE/nagvis/frontend/wui
-    RewriteCond %{QUERY_STRING} map=(.*)
-    RewriteRule ^(.*)$ /$OMD_SITE/nagvis/frontend/wui/index.php?mod=Map&act=edit&show=%1 [R=301,L]
 
     # Redirect old rotation calls
     RewriteCond %{REQUEST_URI} ^/$OMD_SITE/nagvis/frontend/nagvis-js

@@ -2,6 +2,7 @@ This is a small file for storing quick thoughts about new features and needed ch
 ===============================================================================
 
 - Doku Link im Header darf nur auf Sprachen zeigen, die auch existieren
+- Größe der Controls soll konfigurierbar sein. Dazu reicht eine Option in der Hauptkonfiguration
 
 - Backends:
  - Zusätzlich beliebige Variablen vom Backend holen lassen
@@ -12,6 +13,7 @@ This is a small file for storing quick thoughts about new features and needed ch
 Installer:
  - Der Installer muss beim Update darauf achten, dass die alten [paths] Variablen aus
    der nagvis.ini.php entfernt werden.
+ - Der Installer muss beim Update autoupdatefreq, headermenu, headertemplate aus [wui] Sektion entfernen
 
 Neue Idee:
 - Map Aufbau gliedert sich in 2 Phasen

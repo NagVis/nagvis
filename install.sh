@@ -1586,6 +1586,10 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" -a "$INSTA
 		sed -i '/^allowedforconfig=/d' $NAGVIS_PATH/etc/nagvis.ini.php
 		chk_rc "| Error" "$DONE"
 
+		DONE=`log "Removing autoupdatefreq option from main config..." done`
+		sed -i '/^autoupdatefreq=/d' $NAGVIS_PATH/etc/nagvis.ini.php
+		chk_rc "| Error" "$DONE"
+
 		# Remove base and htmlbase path from cross path updated main
 		# configuration file
 		if [ "$NAGVIS_PATH_OLD" != "$NAGVIS_PATH" ]; then

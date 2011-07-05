@@ -86,20 +86,12 @@ chmod 664 /usr/local/nagvis/var/tmpl/cache/*</pre>
         It's possible to set even lower permissions on the files but for most setups the example should be fine. 
         Only change them if you know what you are doing!
         
-        <h2> STEP 7: The graphical config tool (WUI) </h2>
-        NagVis has an included web based config tool called WUI. If you want to use it use your browser to open the page:
-        <pre>http://&lt;nagiosserver>/&lt;path-to-nagvis>/frontend/wui/index.php</pre>
-        (i.e. http://localhost/nagvis/frontend/index.php).<br>
-        Hint: If you have some script or popup blockers, disable them for the WUI.<p>
-        
-        When you see the NagVis image, right click on it, then a context menu should open and now you can configure NagVis and create maps with the WUI.<p>
-        
-        <img src="../general/img/medium_nagvis-1.0-wui-preview.png" title="Just open the URL to the Config Tool in a Browser and use your right mouse button">
-        
-        <p><font style="color:red">The Config Tool DOES NOT display the current Nagios states of objects configured. It's only for configuring! To "use" your configured maps afterwards see STEP 8!</font></p>
-        
-        If this doesn't work for you or if you don't want to use the WUI, you can simply edit the map config files in the <code>etc/maps/</code> directory with your favourite text editor.
-        For valid formats and values have a look at <a href="map_config_format_description.html">Map Config Format Description</a>.
+        <h2> STEP 7: Configure the maps </h2>
+	<p>There are two ways configuring NagVis. First is the web based configuration using the regular frontend. Take a look
+	at the header menu for options. To modify existing map objects you need to unlock the object you like to edit.</p>
+
+        <p>The secod way is to edit the configuration files directly using a text editor of your choice. The map config files are located in <code>etc/maps/</code>.
+        For valid formats and values have a look at <a href="map_config_format_description.html">Map Config Format Description</a>.</p>
         
         <h2> STEP 8: View the maps </h2>
         You should now be able to view your defined maps in your browser:
