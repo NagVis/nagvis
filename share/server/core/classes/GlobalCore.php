@@ -210,6 +210,16 @@ class GlobalCore {
     }
 
     /**
+     * Returns languages of all available documentations
+     *
+     * @return	Array list
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function getAvailableDocs() {
+        return self::listDirectory(self::getMainCfg()->getValue('paths', 'doc'), MATCH_DOC_DIR);
+    }
+
+    /**
      * Reads all available backends
      *
      * @return	Array Html
@@ -386,28 +396,28 @@ class GlobalCore {
     private function listDirectory($dir, $allowRegex = null, $ignoreList = null, $allowPartRegex = null, $returnPart = null, $setKey = null, $printErr = true) {
         $files = Array();
 
-    if($returnPart === null)
+        if($returnPart === null)
             $returnPart = 1;
-    if($setKey === null)
+        if($setKey === null)
             $setKey = false;
 
-    if(!self::checkExisting($dir, $printErr))
+        if(!self::checkExisting($dir, $printErr))
             return $files;
 
         if($handle = opendir($dir)) {
- 			while (false !== ($file = readdir($handle))) {
+            while (false !== ($file = readdir($handle))) {
                 if($allowRegex && !preg_match($allowRegex, $file, $arrRet))
                     continue;
                 if($ignoreList && isset($ignoreList[$file]))
                     continue;
-        if($allowPartRegex && !preg_match($allowPartRegex, $arrRet[1]))
+                if($allowPartRegex && !preg_match($allowPartRegex, $arrRet[1]))
                     continue;
 
                 if($setKey)
                     $files[$arrRet[$returnPart]] = $arrRet[$returnPart];
                 else
                     $files[] = $arrRet[$returnPart];
-      }
+            }
 
             if($files)
                 natcasesort($files);

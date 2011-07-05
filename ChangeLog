@@ -22,6 +22,7 @@ Frontend
   * Labels of lines with line_type=14 have more offset now to look better when using horizontal lines
   * While objects are unlocked the hover menus are disabled
   * Controls are now resizable using the config option controls_size in [global] section in nagvis.ini.php
+  * Documentation link in header menu only points to available docs. Fallback is en_US
   * Bugfix: Added missing controls to services which are displayed as gadgets
   * Bugfix: Fixed parsing of label_type=14 lines (Thanks to Laurent Lebatard)
   * Bugfix: Label positioning in case of weathermap lines (Thanks to Laurent Lebatard)

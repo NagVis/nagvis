@@ -263,6 +263,21 @@ class NagVisHeaderMenu {
     }
 
     /**
+     * Checks if a documentation is available for the current language.
+     * It either returns the language tag for the current language when a
+     * documentation exists or en_US as fallback when no docs exist
+     *
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    private function getDocLanguage() {
+	$lang = $this->CORE->getLang()->getCurrentLanguage();
+        if(in_array($lang, $this->CORE->getAvailableDocs()))
+	    return $lang;
+	else
+	    return 'en_US';
+    }
+
+    /**
      * PRIVATE getStaticMacros()
      *
      * Get all static macros for the template code
@@ -282,7 +297,8 @@ class NagVisHeaderMenu {
             'langSearch'         => $this->CORE->getLang()->getText('Search'),
             'langUserMgmt'       => $this->CORE->getLang()->getText('Manage Users'),
             'langManageRoles'    => $this->CORE->getLang()->getText('Manage Roles'),
-            'currentLanguage' => $this->CORE->getLang()->getCurrentLanguage(),
+            'currentLanguage'    => $this->CORE->getLang()->getCurrentLanguage(),
+	    'docLanguage'        => $this->getDocLanguage(),
             'langChooseLanguage' => $this->CORE->getLang()->getText('Choose Language'),
             'langUser' => $this->CORE->getLang()->getText('User menu'),
             'langActions' => $this->CORE->getLang()->getText('Actions'),
