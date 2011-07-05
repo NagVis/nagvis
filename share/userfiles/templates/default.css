@@ -133,7 +133,7 @@ a.linelink {
 /* control styles */
 div.control {
   position: absolute;
-  border: 1px #D7E2E5 dotted;
+  border: 1px #C0C0C0 dotted;
   /* scale background of controls - hope this works for the important browsers */
   -webkit-background-size: cover;
   -moz-background-size: cover;
