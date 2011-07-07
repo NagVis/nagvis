@@ -54,6 +54,12 @@ var oStates = {};
 
 var isIE  = navigator.appVersion.indexOf("MSIE") != -1;
 
+// This is a dummy fucntion which is overwritten by the definition in
+// the header template when it is enabled.
+function getSidebarWidth() {
+    return 0;
+}
+
 function date(format, timestamp) {
     // http://kevin.vanzonneveld.net
     // +   original by: Carlos R. L. Rodrigues (http://www.jsfromhell.com)

@@ -175,7 +175,27 @@ class CoreMySQLHandler {
         // Now perform the update for pre 1.5.4
         if($dbVersion < 1050400)
             $this->updateDb1050400();
+
+        // Now perform the update for pre 1.6b2
+        if($dbVersion < 1060022)
+            $this->updateDb1060022();
     }
+
+    private function updateDb1060022() {
+	// Create permissions for User/setOption
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'User\', \'setOption\', \'*\')');
+
+        // Assign the new permission to the managers, users, guests
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\' or name=\'Guests\'');
+        while($data = $this->fetchAssoc($RES))
+            $this->addRolePerm($data['roleId'], 'User', 'setOption', '*');
+
+        // Only apply the new version when this is the real release or newer
+        // (While development the version string remains on the old value)
+        if(GlobalCore::getInstance()->versionToTag(CONST_VERSION) >= 1060022)
+            $this->updateDbVersion();
+    }
+
 
     private function updateDb1050400() {
         // Create permissions for the multisite webservice

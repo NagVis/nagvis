@@ -10,6 +10,8 @@ Core
   * Bugfix: Fixed redirects after map add/rename/delete
   * Bugfix: NDO backend does correct type casting to integers for stats now (Thanks to Oliver Graf)
   * Bugfix: Fixed false CRITICAL states when using NDO Backend (Thanks to Oliver Graf)
+  * Bugfix: Added missing permissions for User/setOption
+  * Bugfix: Fixed javascript error "getSidebarWidth() not definied" when header menu is disable by config
 
 * Automap
   * Added new context menu action "make root" to automap nodes to change the
