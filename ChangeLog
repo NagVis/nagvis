@@ -1,3 +1,10 @@
+1.6b3
+Automap
+  * Improved coordinate parsing regex to match graphviz output of more versions
+  * Commented out __dummy__ host in sample automap config to prevent
+    confusions with the automaps host urls
+
+
 1.6b2
 
 Core
@@ -13,7 +20,7 @@ Core
   * Bugfix: Added missing permissions for User/setOption
   * Bugfix: Fixed javascript error "getSidebarWidth() not definied" when header menu is disable by config
 
-* Automap
+Automap
   * Added new context menu action "make root" to automap nodes to change the
     root of the automap on-the-fly (Thanks to Oliver Graf)
   * Bugfix: Fixed parent calculation in automap (Thanks to Oliver Graf)

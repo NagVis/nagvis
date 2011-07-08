@@ -78,10 +78,12 @@ class NagVisAutomapCfg extends GlobalMapCfg {
             $this->defaultConf = Array();
 
             $keys = array_keys($this->getMapObjects());
+            // Use either the __dummy__ host or the global section for gathering
+            // the default configuration
             if(isset($keys[1]))
                 $objectId = $keys[1];
             else
-                return $this->defaultConf;
+                $objectId = 0;
 
             /*
              * Get object default configuration from configuration file
