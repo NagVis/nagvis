@@ -1,4 +1,8 @@
 1.6b3
+
+Core
+  * omd_install: Installing missing doc/ dir now; Cleaning cache files on install
+
 Automap
   * Improved coordinate parsing regex to match graphviz output of more versions
   * Commented out __dummy__ host in sample automap config to prevent

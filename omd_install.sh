@@ -58,6 +58,7 @@ fi
 
 mkdir -p $OMD_ROOT/local/share/nagvis/htdocs
 cp -r share/* $OMD_ROOT/local/share/nagvis/htdocs
+cp -r docs $OMD_ROOT/local/share/nagvis/htdocs/
 
 # Update "old" (1.5) userfiles dir
 if [ -d $OMD_ROOT/var/nagvis/userfiles ]; then
@@ -189,6 +190,9 @@ patch -s $OMD_ROOT/local/share/nagvis/htdocs/server/core/defines/global.php <<EO
  // Needed minimal PHP version
  define('CONST_NEEDED_PHP_VERSION', '5.0');
 EOF
+
+# Cleanup temporary files
+find $OMD_ROOT/tmp/nagvis -type f -exec rm {} \;
 
 omd reload apache
 
