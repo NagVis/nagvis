@@ -1163,14 +1163,16 @@ class GlobalMainCfg {
 					$sec = strtolower(trim(substr($line, 1, strlen($line)-2)));
 					
 					// write to array
-					if(preg_match('/^backend_/i', $sec)) {
-						$this->config[$sec] = Array();
-						$this->config[$sec]['backendid'] = str_replace('backend_','',$sec);
-					} elseif(preg_match('/^rotation_/i', $sec)) {
-						$this->config[$sec] = Array();
-						$this->config[$sec]['rotationid'] = str_replace('rotation_','',$sec);
-					} else {
-						$this->config[$sec] = Array();
+					if(!isset($this->config[$sec])) {
+						if(preg_match('/^backend_/i', $sec)) {
+							$this->config[$sec] = Array();
+							$this->config[$sec]['backendid'] = str_replace('backend_','',$sec);
+						} elseif(preg_match('/^rotation_/i', $sec)) {
+							$this->config[$sec] = Array();
+							$this->config[$sec]['rotationid'] = str_replace('rotation_','',$sec);
+						} else {
+							$this->config[$sec] = Array();
+						}
 					}
 				} else {
 					// parameter...

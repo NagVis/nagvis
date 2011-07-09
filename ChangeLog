@@ -1,5 +1,8 @@
 1.5.10
 
+Core:
+  * Bugfix: Supporting additive sections in both main configuration files
+
 Frontend:
   * Bugfix: Fixed problem with hover childs not being displayed and old childs
     being cached (Thanks to Thomas Casteleyn for reporting/fixing)
