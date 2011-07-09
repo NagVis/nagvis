@@ -56,6 +56,7 @@ if [ ! -d $OMD_ROOT/local/share/nagvis/htdocs/userfiles ]; then
     cp -r $OMD_ROOT/var/nagvis/userfiles/* $OMD_ROOT/local/share/nagvis/htdocs/userfiles
 fi
 
+mkdir -p $OMD_ROOT/var/nagvis/profiles
 mkdir -p $OMD_ROOT/local/share/nagvis/htdocs
 cp -r share/* $OMD_ROOT/local/share/nagvis/htdocs
 cp -r docs $OMD_ROOT/local/share/nagvis/htdocs/
