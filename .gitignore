@@ -1,5 +1,6 @@
 # Exclude misc files
 *.bak
+*.tar.gz
 *~
 .metadata
 uifx/.settings
