@@ -1,5 +1,8 @@
 1.6b3
 
+Frontend
+  * Bugfix: Fixed background image positioning with enabled sidebar and small screens
+
 Core
   * omd_install: Installing missing doc/ dir now; Cleaning cache files on install
 

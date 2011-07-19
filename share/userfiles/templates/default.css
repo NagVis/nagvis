@@ -85,6 +85,12 @@ div.welcome a:hover {color:#779D2A}
     text-align: center;
 }
 
+/* Background images */
+#backgroundImage {
+    position: absolute;
+    z-index: 0;
+}
+
 /* icons */
 .icon {
     position : absolute;

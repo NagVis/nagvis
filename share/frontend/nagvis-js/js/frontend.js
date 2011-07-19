@@ -939,7 +939,6 @@ function setMapBackgroundImage(sImage) {
         } else {
             var oImage = document.createElement('img');
             oImage.id = 'backgroundImage';
-            oImage.style.zIndex = 0;
             document.body.appendChild(oImage);
         }
 
