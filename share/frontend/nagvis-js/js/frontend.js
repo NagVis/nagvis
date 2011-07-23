@@ -42,6 +42,7 @@ var bBlockUpdates = false;
 // map config files
 var iNumUnlocked = false;
 var cacheHeaderHeight = null;
+var workerTimeoutID   = null;
 
 /**
  * Checks if a view is in maintenance mode and shows a message if
@@ -1903,6 +1904,9 @@ function workerUpdate(iCount, sType, sIdentifier) {
     if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
         // FIXME: Not handled by ajax frontend, reload the page
         eventlog("worker", "info", "Main configuration file was updated. Need to reload the page");
+        // Clear the scheduling timeout to prevent problems with FF4 bugs
+        if(workerTimeoutID)
+            window.clearTimeout(workerTimeoutID);
         window.location.reload(true);
     }
 
@@ -2107,7 +2111,7 @@ function runWorker(iCount, sType, sIdentifier) {
     }
 
     // Sleep until next worker run (1 Second)
-    window.setTimeout(function() { runWorker((iCount+1), sType); }, 1000);
+    workerTimeoutID = window.setTimeout(function() { runWorker((iCount+1), sType); }, 1000);
 
     // Pro forma return
     return true;
