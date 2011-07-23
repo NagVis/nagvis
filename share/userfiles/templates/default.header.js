@@ -70,11 +70,13 @@ function headerToggle(store) {
 // Hide the given menus instant
 function ddMenuHide(aIds) {
     var h;
-    var c;
     for(var i = 0; i < aIds.length; i++) {
         h = document.getElementById(aIds[i] + '-ddheader');
-        c = document.getElementById(aIds[i] + '-ddcontent');
 
+        // Not imediately hide the hover menu. It might happen
+        // that the user opens a submenu. To prevent strange
+        // effects the timer is used to hide the menu after
+        // some time if no submenu was opened within this time.
         clearTimeout(h.timer);
         var id = aIds[i];
         h.timer = window.setTimeout(function () {
@@ -82,7 +84,6 @@ function ddMenuHide(aIds) {
         }, 50);
     }
 
-    c = null;
     h = null;
     return false;
 }
@@ -103,11 +104,10 @@ function ddMenu(id, d, reposition){
     }
 
     //clearInterval(c.timer);
-    if(d == 1) {
+    if(d == 1)
         c.style.display = 'block';
-    } else {
+    else
         c.style.display = 'none';
-    }
     return false;
 }
 
