@@ -114,7 +114,7 @@ function ajaxError(e) {
     eventlog("ajax", "critical", "Problem while ajax transaction");
     eventlog("ajax", "debug", e.toString());
 
-    frontendMessage({'type': 'CRITICAL', 'title': 'Ajax transaction error', 'message': 'Problem while ajax transaction. Is the NagVis host reachable?'});
+    frontendMessage({'type': 'CRITICAL', 'title': 'Ajax transaction error', 'message': 'Problem while ajax transaction. Is the NagVis host reachable?'}, 0, 'ajaxError');
 }
 
 function phpError(text) {
@@ -122,7 +122,7 @@ function phpError(text) {
 }
 
 function jsonError(text) {
-    frontendMessage({'type': 'CRITICAL', 'title': 'Syntax error', 'message': text});
+    frontendMessage({'type': 'CRITICAL', 'title': 'Syntax error', 'message': text}, 0, 'jsonError');
 }
 
 /**
@@ -163,6 +163,7 @@ function getAsyncRequest(sUrl, bCacheable, callback, callbackParams) {
         oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
         oRequest.onreadystatechange = function() {
             if(oRequest.readyState == 4) {
+                frontendMessageRemove('ajaxError');
                 if(oRequest.responseText.replace(/\s+/g, '').length === 0) {
                     if(bCacheable)
                         updateQueryCache(sUrl, iNow, '');
@@ -175,16 +176,11 @@ function getAsyncRequest(sUrl, bCacheable, callback, callbackParams) {
                     } else if(responseText.match(/^NagVisError:/)) {
                         frontendMessage(eval('( '+responseText.replace(/^NagVisError:/, '')+')'));
                     } else {
-            var oResponse = null;
-                        try {
-                            oResponse = eval('( '+responseText+')')
+                        // Handle responses of json objects - including eval and wron response
+                        // error handling and clearing
+                        var oResponse = handleJsonResponse(sUrl, responseText)
 
-                            if(bCacheable)
-                                updateQueryCache(sUrl, iNow, responseText);
-                        } catch(e) {
-                            jsonError("Exception: " + e.description + "\nTime: " + iNow + "\nURL: " + sUrl + "\nResponse: " + responseText);
-                        }
-            if(oResponse)
+                        if(oResponse)
                             callback(oResponse, callbackParams);
                         oResponse = null;
                     }
@@ -241,7 +237,9 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 
         // Prevent using invalid code in cache
         if(responseText !== '') {
-            sResponse = eval('( '+responseText+')');
+            // Handle responses of json objects - including eval and wron response
+            // error handling and clearing
+            sResponse = handleJsonResponse(sUrl, responseText)
         } else {
             // Remove the invalid code from cache
             cleanupQueryCache(sUrl);
@@ -261,6 +259,7 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 
             try {
                 oRequest.send(null);
+                frontendMessageRemove('ajaxError');
             } catch(e) {
                 ajaxError(e);
                 bCacheable = false;
@@ -294,18 +293,9 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
                     // Clear the response
                     sResponse = '';
                 } else {
-                    // Handle invalid response (No JSON format)
-                    try {
-                        sResponse = eval('( '+responseText+')');
-                    } catch(e) {
-                        jsonError("Invalid json response:\nTime:" + timestamp + "\nURL: " + sUrl + "\nResponse: " + responseText);
-                        sResponse = '';
-                    }
-
-                    if(typeof(sResponse) !== 'object') {
-                        jsonError("Invalid json response:\nTime:" + timestamp + "\nURL: " + sUrl + "\nResponse: " + responseText);
-                        sResponse = '';
-                    }
+                    // Handle responses of json objects - including eval and wron response
+                    // error handling and clearing
+                    sResponse = handleJsonResponse(sUrl, responseText)
 
                     if(sResponse !== null && bCacheable) {
                         // Cache that answer (only when no error/warning/...)
@@ -323,6 +313,22 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
         oRequest = null;
     }
     return sResponse;
+}
+
+function handleJsonResponse(sUrl, responseText) {
+    try {
+        sResponse = eval('( '+responseText+')');
+        frontendMessageRemove('jsonError');
+        return sResponse;
+    } catch(e) {
+        jsonError("Invalid json response:\nTime:" + iNow + "\nURL: " + sUrl + "\nResponse: " + responseText);
+        return '';
+    }
+
+    if(typeof(sResponse) !== 'object') {
+        jsonError("Invalid json response:\nTime:" + iNow + "\nURL: " + sUrl + "\nResponse: " + responseText);
+        return '';
+    }
 }
 
 /**
@@ -404,6 +410,7 @@ function postSyncRequest(sUrl, sParams) {
 
         try {
             oRequest.send(sParams);
+            frontendMessageRemove('ajaxError');
         } catch(e) {
             ajaxError(e);
         }

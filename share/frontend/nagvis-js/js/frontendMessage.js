@@ -25,6 +25,8 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
+var frontendMessages = {};
+
 function frontendMessageActive() {
     if(document.getElementById('messageBoxDiv')) {
         return true;
@@ -39,7 +41,18 @@ function frontendMessageHide() {
     }
 }
 
-function frontendMessage(oMessage, iTimeout) {
+function frontendMessagePresent(key) {
+    return isset(frontendMessages[key]);
+}
+
+function frontendMessageRemove(key) {
+    if(frontendMessagePresent(key)) {
+        document.body.removeChild(frontendMessages[key]);
+        delete frontendMessages[key];
+    }
+}
+
+function frontendMessage(oMessage, iTimeout, key) {
     var oContainerDiv;
     var oTable;
     var oTbody;
@@ -50,17 +63,28 @@ function frontendMessage(oMessage, iTimeout) {
     var sBoxType = oMessage.type.toLowerCase();
     var sTitle = '';
 
-    if(typeof oMessage.title !== 'undefined') {
+    if(typeof oMessage.title !== 'undefined')
         sTitle = oMessage.title;
-    }
+
+    // Skip processing when message with same key already shown
+    if(isset(key) && frontendMessagePresent(key))
+        return;
 
     // Set a close timeout when called to do so
-    if(typeof iTimeout !== 'undefined') {
+    if(typeof iTimeout !== 'undefined' && iTimeout !== 0) {
         window.setTimeout(function() { frontendMessageHide(); }, iTimeout*1000);
     }
 
     oContainerDiv = document.createElement('div');
     oContainerDiv.setAttribute('id', 'messageBoxDiv');
+
+    // An optional key can be defined to create this message.
+    // This key can later be used to
+    // a) Remove this message again
+    // b) Don't open the same message twice
+    if(isset(key)) {
+        frontendMessages[key] = oContainerDiv;
+    }
 
     oTable = document.createElement('table');
     oTable.setAttribute('id', 'messageBox');
