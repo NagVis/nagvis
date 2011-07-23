@@ -2,6 +2,8 @@
 
 Frontend
   * Bugfix: Fixed background image positioning with enabled sidebar and small screens
+  * Bugfix: Fixed coloring of two part lines in IE
+  * Bugfix: Fixed drawing of second part in two part lines in IE
 
 Core
   * omd_install: Installing missing doc/ dir now; Cleaning cache files on install

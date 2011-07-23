@@ -106,27 +106,36 @@ function drawPolygonBasedObject(objectId, num, xCoord, yCoord, z, colorFill, col
 
         if(!isset(oCanvas.parentNode)) {
             var oLineContainer = document.getElementById(objectId+'-line');
-            if(oLineContainer)
-            oLineContainer.appendChild(oCanvas);
-            oLineContainer = null;
+            if(oLineContainer) {
+                oLineContainer.appendChild(oCanvas);
+                oLineContainer = null;
+            }
         }
         oCanvas = null;
     } else {
         var oLine = document.getElementById(objectId+'-line');
 
         // When redrawing while e.g. moving remove old parts first
-        if(oLine.hasChildNodes())
-            while(oLine.childNodes.length >= 1)
-            oLine.removeChild(oLine.firstChild);
-
+        // But only remove the elements of the current line part
+        var oContainer;
+        if(oLine.hasChildNodes() && oLine.childNodes.length > num - 1) {
+            oContainer = oLine.childNodes[num - 1];
+            while(oContainer.hasChildNodes() && oContainer.childNodes.length >= 1)
+                oContainer.removeChild(oContainer.firstChild);
+        } else {
+            oContainer = document.createElement('div');
+            oLine.appendChild(oContainer);
+        }
+        
         // Fallback to old line style
-        var oL = new jsGraphics(oLine);
+        var oL = new jsGraphics(oContainer);
         oL.setColor(colorFill);
         oL.fillPolygon(xCoord, yCoord);
         oL.paint();
 
-        oL    = null;
-        oLine = null;
+        oL         = null;
+        oContainer = null;
+        oLine      = null;
     }
 
     oCanvas = null;

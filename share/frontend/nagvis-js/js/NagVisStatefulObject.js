@@ -545,8 +545,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 
         var width = this.conf.line_width;
 
-        var colorFill = '';
-        var colorFill2 = '';
+        var colorFill   = '';
+        var colorFill2  = '';
         var colorBorder = '#000000';
 
         var setPerfdata = [];
@@ -575,7 +575,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 
         // Adjust fill color based on perfdata for weathermap lines
         if(this.conf.line_type == 13 || this.conf.line_type == 14) {
-            colorFill = '#000000';
+            colorFill  = '#000000';
             colorFill2 = '#000000';
 
             // Convert perfdata to structured array
@@ -643,7 +643,7 @@ var NagVisStatefulObject = NagVisObject.extend({
                 if(setPerfdata[1][2] !== null && setPerfdata[1][2] == '%' && setPerfdata [1][1] !== null && setPerfdata[1][1] >= 0 && setPerfdata[1][1] <= 100)
                     colorFill2 = this.getColorFill(setPerfdata[1][1]);
                 else {
-                    colorFill = '#000000';
+                    colorFill2 = '#000000';
                     this.perfdataError('Second', setPerfdata[1][1], this.conf.name, this.conf.service_description);
                 }
             }
