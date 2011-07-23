@@ -466,7 +466,7 @@ function addFollowing(e) {
  * Register events
  *************************************************/
 
-// First firefox and the IE
+// First firefox and then the IE
 if (window.addEventListener) {
   window.addEventListener("mousemove", function(e) {
     dragObject(e);
@@ -482,12 +482,12 @@ if (window.addEventListener) {
   document.documentElement.onmousemove  = function(e) {
     dragObject(e);
     addFollowing(e);
-    return true;
+    return false;
   };
 
   document.documentElement.onclick = function(e) {
     addClick(e);
-    return true;
+    return false;
   };
 }
 
