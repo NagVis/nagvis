@@ -69,21 +69,8 @@ function headerToggle(store) {
 
 // Hide the given menus instant
 function ddMenuHide(aIds) {
-    var h;
-    var c;
-    for(var i = 0; i < aIds.length; i++) {
-        h = document.getElementById(aIds[i] + '-ddheader');
-        c = document.getElementById(aIds[i] + '-ddcontent');
-
-        clearTimeout(h.timer);
-        var id = aIds[i];
-        h.timer = window.setTimeout(function () {
-            document.getElementById(id + '-ddcontent').style.display = "none";
-        }, 50);
-    }
-
-    c = null;
-    h = null;
+    for(var i = 0; i < aIds.length; i++)
+        document.getElementById(aIds[i]+ '-ddcontent').style.display = "none";
     return false;
 }
 
@@ -91,8 +78,6 @@ function ddMenuHide(aIds) {
 function ddMenu(id, d, reposition){
     var h = document.getElementById(id + '-ddheader');
     var c = document.getElementById(id + '-ddcontent');
-
-    clearTimeout(h.timer);
 
     // Reposition by trigger object when some given (used on submenus)
     if(typeof reposition !== 'undefined' && d == 1) {
@@ -102,12 +87,13 @@ function ddMenu(id, d, reposition){
         c.style.top = h.offsetTop + "px";
     }
 
-    //clearInterval(c.timer);
-    if(d == 1) {
+    if(d == 1)
         c.style.display = 'block';
-    } else {
+    else
         c.style.display = 'none';
-    }
+
+    c = null;
+    h = null;
     return false;
 }
 
