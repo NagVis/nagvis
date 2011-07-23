@@ -168,7 +168,7 @@ class GlobalIndexPage {
             }
         }
 
-        if($mapType == 'map') {
+        if($type == 'map') {
             $this->BACKEND->execute();
 
             foreach($aObjs AS $aObj) {

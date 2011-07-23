@@ -5,6 +5,7 @@ Frontend
   * Bugfix: Fixed coloring of two part lines in IE
   * Bugfix: Fixed drawing of second part in two part lines in IE
   * Bugfix: Preventing text selections while dragging objects in IE
+  * Bugfix: Fixed undefied var error when having no maps and displaying the overview page
 
 Core
   * omd_install: Installing missing doc/ dir now; Cleaning cache files on install
