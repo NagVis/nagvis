@@ -20,10 +20,11 @@ Neue Idee:
     - Map-Konfiguration
     - Funktion liefert Datenkostrukt zurück (wird zu Map-Konfiguration gemerged)
     - Es könnte auch ein Include auf irgendeine Datei sein
-    - Die Funktion wird nur beim Parsen der Map Konfiguration geladen; Die Daten kommen mit in den Map-Cache
-    - Die Funktion kann dann z.B. externe Datenbanken/Livestatus oder so anzapfen um von dort automatisch Objekte zu holen
+      - Die Funktion wird nur beim Parsen der Map Konfiguration geladen; Die Daten kommen mit in den Map-Cache
+      - Frage hier: Wie wird der Map-Cache ungültig gemacht?
+      - Die Funktion kann dann z.B. externe Datenbanken/Livestatus oder so anzapfen um von dort automatisch Objekte zu holen
     - Das Konstrukt kann auch Objekte mit Eigenschaften enthalen, diese könnten dann von der Map Konfiguration überschrieben werden (?)
-2. Welche Eigenschaften haben die Objekte?
+  2. Welche Eigenschaften haben die Objekte?
 
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
@@ -44,6 +45,22 @@ Aufrufe:
   - Parameter: type, x, y, ...
 3. Objekt bearbeiten - Aktuell konfigurierte Parameter
   - object_id
+
+Felder:
+  Jedes Feld besteht aus der Instanz einer Klasse. Diese Klasse steuert
+  die Darstellung, Validierung usw. dieses Feldes.
+
+  Methoden:
+  - default()
+    Gibt den Default-Wert dieses Feldes zurück.
+  - render()
+    HTML-Code zur Eingabe des Wertes. Nicht die ganze Tabellen-Zeile, nur
+    die Formular-Felder.
+  - validate()
+    Funktionen zur validierung eines gültigen Wertes.
+  - dependsOn()
+    Gibt den Schlüssel einer anderen Option und den Wert zurück, von dem diese
+    Option abhängt. Nur wenn der Wert stimmt, wird das Formularfeld angezeigt.
 
 Feld-Eigenschaften:
 - Default Werte grau zeigen, solange bis ein anderer Wert gewählt wird
