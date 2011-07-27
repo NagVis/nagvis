@@ -401,7 +401,7 @@ class GlobalCore {
         if($setKey === null)
             $setKey = false;
 
-        if(!self::checkExisting($dir, $printErr))
+        if(!self::checkExisting($dir, $printErr) || !self::checkReadable($dir, $printErr))
             return $files;
 
         if($handle = opendir($dir)) {

@@ -11,6 +11,8 @@ Frontend
 
 Core
   * omd_install: Installing missing doc/ dir now; Cleaning cache files on install
+  * Checking read permissions before reading directory contents
+  * Bugfix: Added backgrounds/styles [paths] options to main cfg definitions
 
 Automap
   * Improved coordinate parsing regex to match graphviz output of more versions

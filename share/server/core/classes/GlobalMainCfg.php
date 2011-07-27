@@ -477,6 +477,18 @@ class GlobalMainCfg {
                     'default' => '',
                     'field_type' => 'hidden',
                     'match' => MATCH_STRING_PATH),
+                'styles' => Array(
+                    'must'       => 0,
+                    'editable'   => 0,
+                    'default'    => '',
+                    'field_type' => 'hidden',
+                    'match'      => MATCH_STRING_PATH),
+                'backgrounds' => Array(
+                    'must'       => 0,
+                    'editable'   => 0,
+                    'default'    => '',
+                    'field_type' => 'hidden',
+                    'match'      => MATCH_STRING_PATH),
                 'templates' => Array('must' => 0,
                     'editable' => 0,
                     'default' => '',
