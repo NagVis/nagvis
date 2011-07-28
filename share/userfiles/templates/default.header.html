@@ -41,8 +41,8 @@
             <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&act=modifyParams&show={$currentMap}'+getAutomapParams(), '{$langModifyAutomapParams}')">{$langModifyAutomapParams}</a></li>
             {/if}
             {if $bRotation == true}
-            <li id="rotationStart" style="display:none"><a onclick="#" href="switchRotation()">{$langRotationStart}</a></li>
-            <li id="rotationStop" style="display:inline"><a onclick="#" href="switchRotation()">{$langRotationStop}</a></li>
+            <li id="rotationStart" style="display:none"><a href="#" onclick="switchRotation()">{$langRotationStart}</a></li>
+            <li id="rotationStop" style="display:inline"><a href="#" onclick="switchRotation()">{$langRotationStop}</a></li>
             {/if}
             {if $mod == 'AutoMap' && $permittedEdit == true}
             <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&act=automapToMap&show=dialog', '{$langAutomapToMap}')">{$langAutomapToMap}</a></li>

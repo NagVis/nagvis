@@ -8,7 +8,7 @@ Frontend
   * Bugfix: Fixed drawing of second part in two part lines in IE
   * Bugfix: Preventing text selections while dragging objects in IE
   * Bugfix: Fixed undefied var error when having no maps and displaying the overview page
-
+  * Bugfix: Fixed problem with rotation links in header menu with IE8
 Core
   * omd_install: Installing missing doc/ dir now; Cleaning cache files on install
   * Checking read permissions before reading directory contents

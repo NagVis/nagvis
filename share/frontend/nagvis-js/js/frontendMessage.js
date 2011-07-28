@@ -75,6 +75,10 @@ function frontendMessage(oMessage, iTimeout, key) {
         window.setTimeout(function() { frontendMessageHide(); }, iTimeout*1000);
     }
 
+    var imgPath = '/nagvis/frontend/nagvis-js/images/';
+    if(isset(oGeneralProperties) && isset(oGeneralProperties.path_images))
+        imgPath = oGeneralProperties.path_images
+
     oContainerDiv = document.createElement('div');
     oContainerDiv.setAttribute('id', 'messageBoxDiv');
 
@@ -133,7 +137,7 @@ function frontendMessage(oMessage, iTimeout, key) {
     oCell.style.width = '60px';
 
     oImg = document.createElement('img');
-    oImg.src = oGeneralProperties.path_images+'internal/msg_'+sBoxType+'.png';
+    oImg.src = imgPath + 'internal/msg_' + sBoxType + '.png';
 
     oCell.appendChild(oImg);
     oImg = null;
@@ -155,7 +159,7 @@ function frontendMessage(oMessage, iTimeout, key) {
     oCell.style.width = '60px';
 
     oImg = document.createElement('img');
-    oImg.src = oGeneralProperties.path_images+'internal/msg_'+sBoxType+'.png';
+    oImg.src = imgPath + 'internal/msg_' + sBoxType + '.png';
 
     oCell.appendChild(oImg);
     oImg = null;
