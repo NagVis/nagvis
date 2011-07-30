@@ -2,6 +2,9 @@
 
 Core:
   * Bugfix: Supporting additive sections in both main configuration files
+  * Bugfix: Fixed comment line mixup in main config when using multiple config files
+  * Bugfix: Not storing config options from other config files like the OMD
+  site config in nagvis.ini.php anymore
 
 Frontend:
   * Bugfix: Fixed problem with hover childs not being displayed and old childs

@@ -30,6 +30,7 @@ class GlobalMainCfg {
 	private $CACHE;
 	
 	protected $config = Array();
+	protected $preUserConfig = null;
 	protected $runtimeConfig = Array();
 	protected $stateWeight;
 	
@@ -989,18 +990,22 @@ class GlobalMainCfg {
 
 		// Use the newest file as indicator for using the cache or not
 		$this->CACHE = new GlobalFileCache(GlobalCore::getInstance(), $newestFile, CONST_MAINCFG_CACHE.'-'.CONST_VERSION.'-cache');
-  	if($this->CACHE->isCached(false) === -1) {
+		$this->PUCACHE = new GlobalFileCache(GlobalCore::getInstance(), $newestFile, CONST_MAINCFG_CACHE.'-pre-user-'.CONST_VERSION.'-cache');
+		if($this->CACHE->isCached(false) === -1) {
 			// The cache is too old. Load all config files
 			foreach($this->configFiles AS $configFile) {
 				// Only proceed when the configuration file exists and is readable
 				if(!GlobalCore::getInstance()->checkExisting($configFile, true) || !GlobalCore::getInstance()->checkReadable($configFile, true))
 					return false;
-				$this->readConfig($configFile, true);
+				$this->readConfig($configFile, true, $configFile == end($this->configFiles));
 			}
 			$this->CACHE->writeCache($this->config, true);
+			if($this->preUserConfig !== null)
+				$this->PUCACHE->writeCache($this->preUserConfig, true);
 		} else {
 			// Use the cache!
 			$this->config = $this->CACHE->getCache();
+			$this->preUserConfig = $this->PUCACHE->getCache();
 		}
 
 		// Update the cache time
@@ -1127,7 +1132,7 @@ class GlobalMainCfg {
 	 * @return	Boolean	Is Successful?
 	 * @author 	Lars Michelsen <lars@vertical-visions.de>
 	 */
-	private function readConfig($configFile, $printErr=1) {
+	private function readConfig($configFile, $printErr=1, $isUserMainCfg = False) {
 		$numComments = 0;
 		$sec = '';
 		
@@ -1136,6 +1141,15 @@ class GlobalMainCfg {
 		
 		// Count the lines before the loop (only counts once)
 		$countLines = count($file);
+
+                // Separate the options from the site configuration and add it later
+                // when the user did not define anything different.
+                // This is needed to keep the lines of the maincfg file in correct order
+                $tmpConfig = null;
+                if($isUserMainCfg) {
+                    $this->preUserConfig = $this->config;
+                    $this->config = Array();
+                }
 		
 		// loop trough array
 		for ($i = 0; $i < $countLines; $i++) {
@@ -1150,13 +1164,15 @@ class GlobalMainCfg {
 				// check what's in this line
 				if($firstChar == ';') {
 					// comment...
-					$key = 'comment_'.($numComments++);
-					$val = trim($line);
-					
-					if(isset($sec) && $sec != '') {
-						$this->config[$sec][$key] = $val;
-					} else {
-						$this->config[$key] = $val;
+					if($isUserMainCfg) {
+					    $key = 'comment_'.($numComments++);
+					    $val = trim($line);
+					    
+					    if(isset($sec) && $sec != '') {
+					    	$this->config[$sec][$key] = $val;
+					    } else {
+					    	$this->config[$key] = $val;
+					    }
 					}
 				} elseif ((substr($line, 0, 1) == '[') && (substr($line, -1, 1)) == ']') {
 					// section
@@ -1244,10 +1260,23 @@ class GlobalMainCfg {
 				}
 			} else {
 				$sec = '';
-				$this->config['comment_'.($numComments++)] = '';
+				if($isUserMainCfg)
+				    $this->config['comment_'.($numComments++)] = '';
 			}
 		}
-		
+
+                // Reapply the separated config
+                if($isUserMainCfg && $this->preUserConfig !== null) {
+                    foreach($this->preUserConfig AS $sec => $opts) {
+                        foreach($opts AS $opt => $val) {
+                            if(!isset($this->config[$sec]))
+                                $this->config[$sec] = $opts;
+                            elseif(!isset($this->config[$sec][$opt]))
+                                $this->config[$sec][$opt] = $val;
+                        }
+                    }
+                }
+
 		return $this->checkMainConfigIsValid(1);
 	}
 	
@@ -1692,6 +1721,13 @@ class GlobalMainCfg {
 							$content .= $item2."\n";
 						} else {
 							if(is_numeric($item2) || is_bool($item2)) {
+								// Don't apply config options which are set to the same
+								// value in the pre user config files
+								if($this->preUserConfig !== null
+								   && isset($this->preUserConfig[$key])
+								   && isset($this->preUserConfig[$key][$key2])
+								   && $item2 == $this->preUserConfig[$key][$key2])
+								    continue; 
 								$content .= $key2."=".$item2."\n";
 							} else {
 								if(is_array($item2) && preg_match('/^rotation_/i', $key) && $key2 == 'maps') {
@@ -1725,6 +1761,13 @@ class GlobalMainCfg {
 								
 								// Don't write the backendid/rotationid attributes (Are internal)
 								if($key2 !== 'backendid' && $key2 !== 'rotationid') {
+									// Don't apply config options which are set to the same
+									// value in the pre user config files
+									if($this->preUserConfig !== null
+									   && isset($this->preUserConfig[$key])
+									   && isset($this->preUserConfig[$key][$key2])
+									   && $item2 == $this->preUserConfig[$key][$key2])
+									    continue; 
 									if(isset($this->validConfig[$key][$key2]['array']) && $this->validConfig[$key][$key2]['array'] === true) {
 										$item2 = implode(',', $item2);
 									}
