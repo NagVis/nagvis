@@ -11,6 +11,7 @@ Frontend
   * Bugfix: Fixed undefied var error when having no maps and displaying the overview page
   * Bugfix: Fixed problem with rotation links in header menu with IE8
   * Bugfix: A lot of links were not working in IE caused by a broken event handler
+  * Bugfix: Preventing JS errors when dragging objects out of screen
 
 Core
   * omd_install: Installing missing doc/ dir now; Cleaning cache files on install

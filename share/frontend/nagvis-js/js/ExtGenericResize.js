@@ -164,6 +164,8 @@ function doMove(event) {
     yMin = 8;
 
     el = getReal(target, "className", "resizeMe");
+    if(!isset(el.className))
+        return;   
 
     if(el.className.indexOf("resizeMe") !== -1) {
         var str = getDirection(event, el);
@@ -204,10 +206,12 @@ function doMove(event) {
 function getReal(el, type, value) {
     temp = el;
     while(isset(temp) && temp != null && temp.tagName != "BODY") {
-        if(eval("temp." + type).indexOf(value) !== -1) {
+        var o = eval("temp." + type);
+        if(isset(o) && o.indexOf(value) !== -1) {
             el = temp;
             return el;
         }
+        o = null;
         temp = temp.parentElement;
     }
     return el;
