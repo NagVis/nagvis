@@ -487,7 +487,8 @@ if (window.addEventListener) {
 
   document.documentElement.onclick = function(e) {
     addClick(e);
-    return false;
+    // Never return false here! This would prevent open links in IE
+    return true;
   };
 }
 

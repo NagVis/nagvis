@@ -35,17 +35,17 @@
         <span id="action-ddheader">{$langActions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         <ul id="action-ddcontent">
             {if ($mod == 'Map' || $mod == 'AutoMap') && $permittedSearch}
-            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Search&act=view', '{$langSearch}')">{$langSearch}</a></li>
+            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Search&amp;act=view', '{$langSearch}')">{$langSearch}</a></li>
             {/if}
             {if $mod == 'AutoMap' && $permittedEdit == true}
-            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&act=modifyParams&show={$currentMap}'+getAutomapParams(), '{$langModifyAutomapParams}')">{$langModifyAutomapParams}</a></li>
+            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&amp;act=modifyParams&amp;show={$currentMap}'+getAutomapParams(), '{$langModifyAutomapParams}')">{$langModifyAutomapParams}</a></li>
             {/if}
             {if $bRotation == true}
             <li id="rotationStart" style="display:none"><a href="#" onclick="switchRotation()">{$langRotationStart}</a></li>
             <li id="rotationStop" style="display:inline"><a href="#" onclick="switchRotation()">{$langRotationStop}</a></li>
             {/if}
             {if $mod == 'AutoMap' && $permittedEdit == true}
-            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&act=automapToMap&show=dialog', '{$langAutomapToMap}')">{$langAutomapToMap}</a></li>
+            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&amp;act=automapToMap&amp;show=dialog', '{$langAutomapToMap}')">{$langAutomapToMap}</a></li>
             {/if}
             <li class="spacer underline"></li>
         </ul>
@@ -88,8 +88,8 @@
                 </ul>
             </li>
             <li class="spacer"><hr /></li>
-            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&act=manageTmpl&show={$currentMap}', '{$langMapManageTmpl}', 300)">{$langMapManageTmpl}</a></li>
-            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&act=addModify&do=modify&show={$currentMap}&type=global&id=0', '{$langMapOptions}');" class="underline">{$langMapOptions}</a></li>
+            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=manageTmpl&amp;show={$currentMap}', '{$langMapManageTmpl}', 300)">{$langMapManageTmpl}</a></li>
+            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=addModify&amp;do=modify&amp;show={$currentMap}&amp;type=global&amp;id=0', '{$langMapOptions}');" class="underline">{$langMapOptions}</a></li>
         </ul>
     </li>
     {/if}
@@ -97,12 +97,12 @@
     <li onmouseover="ddMenu('wui',1)" onmouseout="ddMenuHide(['wui'])" class="dropdown">
         <span id="wui-ddheader">{$langOptions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         <ul id="wui-ddcontent">
-            {if $permittedEditMainCfg}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=MainCfg&act=edit', '{$langWuiConfiguration}', 970)">{$langWuiConfiguration}</a></li>
+            {if $permittedEditMainCfg}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=MainCfg&amp;act=edit', '{$langWuiConfiguration}', 970)">{$langWuiConfiguration}</a></li>
             <li class="spacer"><hr /></li>
-            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=MainCfg&act=manageBackends', '{$langMgmtBackends}');">{$langMgmtBackends}</a></li>{/if}
-            {if $permittedManageBackgrounds}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ManageBackgrounds&act=view', '{$langMgmtBackgrounds}');">{$langMgmtBackgrounds}</a></li>{/if}
-            {if $permittedManageMaps}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&act=manage', '{$langMgmtMaps}');">{$langMgmtMaps}</a></li>{/if}
-            {if $permittedManageShapes}<li><a class="underline" href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ManageShapes&act=view', '{$langMgmtShapes}');">{$langMgmtShapes}</a></li>{/if}
+            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=MainCfg&amp;act=manageBackends', '{$langMgmtBackends}');">{$langMgmtBackends}</a></li>{/if}
+            {if $permittedManageBackgrounds}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ManageBackgrounds&amp;act=view', '{$langMgmtBackgrounds}');">{$langMgmtBackgrounds}</a></li>{/if}
+            {if $permittedManageMaps}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=manage', '{$langMgmtMaps}');">{$langMgmtMaps}</a></li>{/if}
+            {if $permittedManageShapes}<li><a class="underline" href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ManageShapes&amp;act=view', '{$langMgmtShapes}');">{$langMgmtShapes}</a></li>{/if}
         </ul>
     </li>
     {/if}
@@ -116,9 +116,9 @@
         <span id="user-ddheader">{$langUser}<img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         <ul id="user-ddcontent">
         	<li><a href="#">{$langLoggedIn}: {$currentUser}</a></li>
-        	{if $supportedChangePassword && $permittedChangePassword}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ChangePassword&act=view', '{$langChangePassword}');">{$langChangePassword}</a></li>{/if}
-        	{if $permittedUserMgmt}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=UserMgmt&act=view', '{$langUserMgmt}');">{$langUserMgmt}</a></li>{/if}
-        	{if $permittedRoleMgmt}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=RoleMgmt&act=view', '{$langManageRoles}', 500);">{$langManageRoles}</a></li>{/if}
+        	{if $supportedChangePassword && $permittedChangePassword}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ChangePassword&amp;act=view', '{$langChangePassword}');">{$langChangePassword}</a></li>{/if}
+        	{if $permittedUserMgmt}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=UserMgmt&amp;act=view', '{$langUserMgmt}');">{$langUserMgmt}</a></li>{/if}
+        	{if $permittedRoleMgmt}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=RoleMgmt&amp;act=view', '{$langManageRoles}', 500);">{$langManageRoles}</a></li>{/if}
             {if $permittedLogout}<li><a href="#" onclick="getSyncRequest('{$pathBase}/server/core/ajax_handler.php?mod=Auth&amp;act=logout');return false;">{$langLogout}</a></li>{/if}
             <li class="spacer underline"></li>
         </ul>
@@ -126,7 +126,7 @@
     <li onmouseover="ddMenu('language',1)" onmouseout="ddMenuHide(['language'])" class="dropdown">
         <span id="language-ddheader">{$langChooseLanguage} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         <ul id="language-ddcontent">
-            {foreach $langs lang}<li><a href="{$currentUri}{if strpos($currentUri,'?') !== false}&amp;{else}?{/if}lang={$lang.language}">{$lang.langLanguageLocated}</a></li>{/foreach}
+            {foreach $langs lang}<li><a href="{str_replace('&', '&amp;', $currentUri)}{if strpos($currentUri,'?') !== false}&amp;{else}?{/if}lang={$lang.language}">{$lang.langLanguageLocated}</a></li>{/foreach}
           	<li class="spacer underline"></li>
         </ul>
     </li>
