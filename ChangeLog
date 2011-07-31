@@ -16,6 +16,8 @@ Frontend
 Core
   * omd_install: Installing missing doc/ dir now; Cleaning cache files on install
   * Checking read permissions before reading directory contents
+  * Main Config: [paths] "gadget, icon, shape, map" internal options are now
+    deprecated and have been renamed to "gadgets, icons, shapes, backgrounds".
   * Bugfix: Added backgrounds/styles [paths] options to main cfg definitions
   * Bugfix: Fixed comment line mixup in main config when using multiple
     config files
