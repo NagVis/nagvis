@@ -183,7 +183,7 @@ class CoreMySQLHandler {
 
     private function updateDb1060022() {
 	// Create permissions for User/setOption
-        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'User\', \'setOption\', \'*\')');
+        $this->query('INSERT INTO perms (`mod`, `act`, `obj`) VALUES (\'User\', \'setOption\', \'*\')');
 
         // Assign the new permission to the managers, users, guests
         $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\' or name=\'Guests\'');
