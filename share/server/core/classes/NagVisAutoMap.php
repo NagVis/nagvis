@@ -221,11 +221,11 @@ class NagVisAutoMap extends GlobalMap {
             $this->BACKEND->execute();
             $this->filterGroupObject->applyState();
 
-            $this->filterChildObjectTreeByGroup();
+            $this->filterObjectTreeByGroup('childs');
 
             // Filter the parent object tree too when enabled
             if(isset($this->parentLayers) && $this->parentLayers != 0) {
-                $this->filterParentObjectTreeByGroup();
+                $this->filterObjectTreeByGroup('parents');
             }
         }
 
@@ -241,12 +241,11 @@ class NagVisAutoMap extends GlobalMap {
         $this->MAPOBJ->applyState();
 
         if($this->filterByState != '') {
-            $this->filterChildObjectTreeByState();
+            $this->filterObjectTreeByState('childs');
 
             // Filter the parent object tree too when enabled
-            if(isset($this->parentLayers) && $this->parentLayers != 0) {
-                $this->filterParentObjectTreeByState();
-            }
+            if(isset($this->parentLayers) && $this->parentLayers != 0)
+                $this->filterObjectTreeByState('parents');
 
             $this->MAPOBJ->clearMembers();
             $this->MAPOBJ->objectTreeToMapObjects($this->rootObject);
@@ -735,7 +734,11 @@ class NagVisAutoMap extends GlobalMap {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function getChildObjectTree() {
-        $this->rootObject->fetchChilds($this->childLayers, $this->MAPCFG->getObjectConfiguration(), $this->ignoreHosts, $this->arrHostnames, $this->arrMapObjects);
+        $this->rootObject->fetchChilds($this->childLayers,
+                                       $this->MAPCFG->getObjectConfiguration(),
+                                       $this->ignoreHosts,
+                                       $this->arrHostnames,
+                                       $this->arrMapObjects);
     }
 
     /**
@@ -746,83 +749,55 @@ class NagVisAutoMap extends GlobalMap {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function getParentObjectTree() {
-        $this->rootObject->fetchParents($this->parentLayers, $this->MAPCFG->getObjectConfiguration(), $this->ignoreHosts, $this->arrHostnames, $this->arrMapObjects);
+        $this->rootObject->fetchParents($this->parentLayers,
+                                        $this->MAPCFG->getObjectConfiguration(),
+                                        $this->ignoreHosts,
+                                        $this->arrHostnames,
+                                        $this->arrMapObjects);
     }
 
     /**
-     * PRIVATE filterParentObjectTreeByState()
+     * PRIVATE filterObjectTreeByState()
      *
-     * Filter the parent object tree by state. Only showing objects which
+     * Filter the given object tree by state. Only showing objects which
      * have some problem.
      *
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-    private function filterParentObjectTreeByState() {
-        $nonProblemHosts = Array();
-
-        $stateWeight = $this->CORE->getMainCfg()->getStateWeight();
+    private function filterObjectTreeByState($direction) {
+        $problemHosts = Array();
+        $stateWeight  = $this->CORE->getMainCfg()->getStateWeight();
 
         foreach($this->arrMapObjects AS $OBJ) {
-            if($stateWeight[$OBJ->getSummaryState()] > $stateWeight['OK']) {
-                $nonProblemHosts[] = $OBJ->getName();
+            if(isset($stateWeight[$OBJ->getSummaryState()])
+               && $stateWeight[$OBJ->getSummaryState()][$OBJ->getSummarySubState()] > $stateWeight['UP']['normal']) {
+                $problemHosts[] = $OBJ->getName();
             }
         }
 
-        $this->rootObject->filterParents($nonProblemHosts);
+        if($direction == 'childs')
+            $this->rootObject->filterChilds($problemHosts);
+        elseif($direction == 'parents')
+            $this->rootObject->filterParents($problemHosts);
     }
 
     /**
-     * PRIVATE filterChildObjectTreeByState()
+     * PRIVATE filterObjectTreeByGroup()
      *
-     * Filter the child object tree by state. Only showing objects which
-     * have some problem.
-     *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    private function filterChildObjectTreeByState() {
-        $nonProblemHosts = Array();
-
-        $stateWeight = $this->CORE->getMainCfg()->getStateWeight();
-
-        foreach($this->arrMapObjects AS $OBJ) {
-            if($stateWeight[$OBJ->getSummaryState()] > $stateWeight['OK']) {
-                $nonProblemHosts[] = $OBJ->getName();
-            }
-        }
-
-        $this->rootObject->filterChilds($nonProblemHosts);
-    }
-
-    /**
-     * PRIVATE filterParentObjectTreeByGroup()
-     *
-     * Filter the parent object tree using the given filter group
+     * Filter the object tree using the given filter group
      *
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-    private function filterParentObjectTreeByGroup() {
+    private function filterObjectTreeByGroup($direction) {
         $hostgroupMembers = Array();
         foreach($this->filterGroupObject->getMembers() AS $OBJ1) {
             $hostgroupMembers[] = $OBJ1->getName();
         }
 
-        $this->rootObject->filterParents($hostgroupMembers);
-    }
-
-    /**
-     * PRIVATE filterChildObjectTreeByGroup()
-     *
-     * Filter the child object tree using the given filter group
-     *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    private function filterChildObjectTreeByGroup() {
-        $hostgroupMembers = Array();
-        foreach($this->filterGroupObject->getMembers() AS $OBJ1) {
-            $hostgroupMembers[] = $OBJ1->getName();
-        }
-
-        $this->rootObject->filterChilds($hostgroupMembers);
+        if($direction == 'childs')
+            $this->rootObject->filterChilds($hostgroupMembers);
+        elseif($direction == 'parents')
+            $this->rootObject->filterParents($hostgroupMembers);
     }
 
     /**

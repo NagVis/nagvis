@@ -569,19 +569,8 @@ class NagVisObject {
 
         // Handle normal/ack/downtime states
 
-        $stubState1 = 'normal';
-        if($OBJ1->summary_problem_has_been_acknowledged == 1 && isset(NagVisObject::$stateWeight[$state1]['ack'])) {
-            $stubState1 = 'ack';
-        } elseif($OBJ1->summary_in_downtime == 1 && isset(NagVisObject::$stateWeight[$state1]['downtime'])) {
-            $stubState1 = 'downtime';
-        }
-
-        $stubState2 = 'normal';
-        if($OBJ2->summary_problem_has_been_acknowledged == 1 && isset(NagVisObject::$stateWeight[$state2]['ack'])) {
-            $stubState2 = 'ack';
-        } elseif($OBJ2->summary_in_downtime == 1 && isset(NagVisObject::$stateWeight[$state2]['downtime'])) {
-            $stubState2 = 'downtime';
-        }
+        $stubState1 = $OBJ1->getSummarySubState();
+        $stubState2 = $OBJ2->getSummarySubState();
 
         if(NagVisObject::$stateWeight[$state1][$stubState1] == NagVisObject::$stateWeight[$state2][$stubState2]) {
             return 0;

@@ -29,8 +29,14 @@
 class NagVisViewAutomapModifyParams {
     private $CORE;
     private $aOpts;
-    private $renderModes = Array('', 'directed', 'undirected',
-                                 'radial', 'circular', 'undirected2');
+    private $renderModes = Array(
+        '',
+        'directed',
+        'undirected',
+        'radial',
+        'circular',
+        'undirected2'
+    );
 
     /**
      * Class Constructor
@@ -79,10 +85,12 @@ class NagVisViewAutomapModifyParams {
             'htmlBase'    => $this->CORE->getMainCfg()->getValue('paths','htmlbase'),
             'automapName' => $this->aOpts['automap'],
             'opts'        => $this->aOpts,
-            'optValues'   => Array('renderMode' => $this->renderModes,
-                                   // FIXME: root => List of hosts in the backend
-                                   'show'       => $this->CORE->getAvailableAutomaps(),
-                                   'backend'    => $this->CORE->getDefinedBackends()
+            'optValues'   => Array('renderMode'    => $this->renderModes,
+                                   // FIXME: root        => List of hosts in the backend
+                                   // FIXME: filterGroup => Lists of hostgroups in the backend
+                                   'show'          => $this->CORE->getAvailableAutomaps(),
+                                   'backend'       => $this->CORE->getDefinedBackends(),
+                                   'filterByState' => Array('0', '1'),
                                   ),
             'langApply'       => $this->CORE->getLang()->getText('Apply'),
             'langPermanent'   => $this->CORE->getLang()->getText('Make Permanent'),

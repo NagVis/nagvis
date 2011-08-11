@@ -3,6 +3,8 @@ This is a small file for storing quick thoughts about new features and needed ch
 
 Probleme:
 
+-------------------------------------------------------------------------------
+
 - Backends:
  - Zusätzlich beliebige Variablen vom Backend holen lassen
    Pro Objekt "Custom Vars" für Context- und Hover-Menus einbauen. Diese werden dann pro Objekt
@@ -14,8 +16,22 @@ Installer:
    der nagvis.ini.php entfernt werden.
  - Der Installer muss beim Update autoupdatefreq, headermenu, headertemplate aus [wui] Sektion entfernen
 
-Neue Idee:
-- Map Aufbau gliedert sich in 2 Phasen
+Child-Objekte Filtern:
+  - Zwei Möglichkeiten
+    a) Für tatsächliche Verarbeitung (Status Ermittlung + Child Anzeige)
+    b) Nur für Status Ermittlung
+  - Neues Attribut einführen, welches die Definition enthält um Childs zu filtern
+  - Namen könnte exclude_childs sein bzw. exclude_child_states
+  - Es können alle Childs gefiltert werden, bei Maps von allen Typen
+  - Gematcht wird auf den Namen des Childs bzw. bei Services auf den Service-Namen
+  - Als Wert könnten Reguläre Ausdrücke genutzt werden, z.B. exclude_childs="/^Uptime$/"
+  - Man kann mehrere Pattern angeben. Sobald ein Pattern zutrifft, wird übersprungen
+  - Mehrere Patterns werden durch ; Zeichen getrennt, z.B. exclude_childs="/^Uptime$/;/^PING$/"
+  - Offene Frage: Geht das überhaupt mit den State Counts?
+    - Eventuell müssen die Pattern so gebaut werden, dass die Backeds die verstehen
+
+Redesign Map Aufbau:
+  Map Aufbau gliedert sich in 2 Phasen
   1. Was kommt auf die Map? Mögliche Quellen:
     - Map-Konfiguration
     - Funktion liefert Datenkostrukt zurück (wird zu Map-Konfiguration gemerged)
@@ -64,10 +80,11 @@ Felder:
 
 Feld-Eigenschaften:
 - Default Werte grau zeigen, solange bis ein anderer Wert gewählt wird
+  - Woher kommt der Wert?
 - Wenn Wert auf Default zurückgesetzt wird, wieder ausgrauen
 - Zwischen Dropdown und Textfeld umschalten können
-- Butten zum Zurücksetzen eines Wertes auf Default einbauen
-- Abhängige Felder je nach Wert zeigen/verstecken
+- Button zum Zurücksetzen eines Wertes auf Default einbauen
+- Abhängige Felder je nach Wert eines oder mehrerer Felder zeigen/verstecken
 
 Fehlerbehandlung:
 - Direkt im Dialog: Feldbezogene Fehler direkt unter den Feldern anzeigen
