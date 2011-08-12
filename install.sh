@@ -29,8 +29,6 @@
 # Some initialisations
 ###############################################################################
 
-# Installer version
-INSTALLER_VERSION="0.2.17"
 # Default action
 INSTALLER_ACTION="install"
 # Be quiet? (Enable/Disable confirmations)
@@ -58,6 +56,7 @@ NAGVIS_PATH_OLD_PARAM_SET=0
 GRAPHVIZ_PATH="/usr/local/bin"
 # Version of NagVis to be installed
 NAGVIS_VER=$(cat share/server/core/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }')
+INSTALLER_VERSION=$NAGVIS_VER
 # Version of old NagVis (will be detected if update)
 NAGVIS_VER_OLD=""
 # Relative path to the NagVis configuration file
@@ -71,7 +70,7 @@ HTML_SAMPLE="etc/apache2-nagvis.conf-sample"
 # Default nagios web conf
 HTML_CONF="nagvis.conf"
 # Saving current timestamp for backup when updating
-DATE=`perl -e 'print time(); print "\n"'`
+DATE=$(date +%Y-%m-%d_%H:%M:%S)
 # Web path to the NagVis base directory
 HTML_PATH=""
 # Path to webserver conf
@@ -98,8 +97,17 @@ GREP_INCOMPLETE=0
 
 # format version string
 fmt_version() {
-   LNG=${2:-8}
-	echo `perl -e '$v = $ARGV[0]; $v =~ s/a/.0.0/i; $v =~ s/b/.0.2/i; $v =~ s/rc/.0.4/i; @f = split (/\./,$v); for (0..$#f) { $z .= sprintf "%02d", $f[$_]; }; print substr($z."0"x$ARGV[1],0,$ARGV[1]);' $1 $LNG` 
+    V=${1//a/.0.0}
+    V=${V//b/.0.2}
+    V=${V//rc/.0.4}
+    NV=""
+    for S in "${V//./ }"; do
+        NV="$NV$(printf %02d $S)"
+    done
+    while [ ${#NV} -lt 8 ]; do
+        NV=${NV}0
+    done
+    echo $NV
 }
 
 # Print usage
@@ -114,8 +122,6 @@ General Parameters:
   -s <SOURCE>   Data source, defaults to Nagios, may be Icinga
   -n <PATH>     Path to Nagios/Icinga base directory (\$BASE)
                 Default value: $NAGIOS_PATH
-  -B <BINARY>   Full path to the Nagios/Icinga binary
-                Default value: \$BASE/bin/nagios
   -b <PATH>     Path to graphviz binaries ($NEED_GV_MOD)
                 Default value: $GRAPHVIZ_PATH
   -p <PATH>     Path to NagVis base directory to install to
@@ -133,6 +139,8 @@ General Parameters:
 
   -i <BACKENDs> Comma separated list of backends to use:
                   Available backends: mklivestatus, ndo2db, ido2db, merlinmy
+
+  -B <BINARY>   Full path to the Nagios/Icinga binary (DEPRECATED and UNUSED!)
 
 Backend specific parameters:
 
@@ -477,7 +485,7 @@ check_backend() {
 	echo $NAGVIS_BACKEND | grep -i "NDO2DB" >/dev/null
 	if [ $? -eq 0 ]; then
 		# Check ndo2db binary with version suffix
-		[ -z "$NDO_MOD" ]&&NDO_MOD="$NAGIOS_PATH/bin/ndo2db-${NAGVER}x"
+		[ -z "$NDO_MOD" ]&&NDO_MOD="$NAGIOS_PATH/bin/ndo2db-3x"
 		NDO=`$NDO_MOD --version 2>/dev/null | grep -i "^NDO2DB"`
 
 		# Check ndo2db binary without version suffix
@@ -984,7 +992,7 @@ if [ $# -gt 0 ]; then
 				NAGIOS_PATH=${OPTARG%/}
 			;;
 			B)
-				NAGIOS_BIN=$OPTARG
+				# Deprecated since 1.6x
 			;;
 			m)
 				NDO_MOD=$OPTARG
@@ -1086,8 +1094,6 @@ text "| Starting installation of NagVis $NAGVIS_VER" "|"
 line ""
 [ -f /etc/issue ]&&OS=`grep -v "^\s*$" /etc/issue | sed 's/\\\.*//' | head -1` 
 [ -n "$OS" ]&&text "| OS  : $OS" "|"
-PERL=`perl -e 'print $];'` 
-[ -n "$PERL" ]&&text "| Perl: $PERL" "|"
 text
 line "Checking for tools" "+"
 WHICH=`whereis which | awk '{print $2}'` 
@@ -1167,21 +1173,6 @@ line "Checking prerequisites" "+"
 # Set Nagios binary when not set yet
 [ -f "$NAGIOS_PATH/bin/icinga" ]&&SOURCE=icinga
 [ -f "$NAGIOS_PATH/bin/nagios" ]&&SOURCE=nagios
-[ -z "$NAGIOS_BIN" -a -f "$NAGIOS_PATH/bin/$SOURCE" ]&&NAGIOS_BIN="$NAGIOS_PATH/bin/$SOURCE"
-
-# Check Nagios version
-if [ -z $NAGIOS_BIN ]; then
-	log "$SOURCE binary"
-elif [ -x $NAGIOS_BIN ]; then
-	NAGIOS=`$NAGIOS_BIN --version | grep -i "^$SOURCE " | head -1 2>&1`
-	log "$NAGIOS" $NAGIOS
-elif [ -f $NAGIOS_BIN ]; then
-	log "$SOURCE binary" "no_ex"
-fi
-CALL="$CALL -B $NAGIOS_BIN"
-
-NAGVER=`echo $NAGIOS | sed 's/^.* //' | cut -c1,1`
-[ "$SOURCE" = "icinga" ]&&NAGVER=3
 
 if [ $FORCE -eq 0 ]; then
 	# Check PHP Version

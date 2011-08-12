@@ -1,10 +1,12 @@
 1.6b4
 
-Frontend
-  * Bugfix: Fixed several umlauts in edit mode warning messages
-
 Core
   * Bugfix: Fixed SQL syntax error in MySQL auth backend
+  * Removed option "-B" from installer, it is not needed anymore
+  * Several code cleanups
+
+Frontend
+  * Bugfix: Fixed several umlauts in edit mode warning messages
 
 Automap
   * Bugfix: Made the problem automap work again
