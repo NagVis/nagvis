@@ -42,6 +42,7 @@ class CoreModMap extends CoreModule {
             'manage'            => REQUIRES_AUTHORISATION,
             'doAdd'             => 'add',
             'doRename'          => 'edit',
+            'checkLinked'       => 'edit',
             'doDelete'          => 'edit',
             'doExportMap'       => 'edit',
             'doImportMap'       => 'edit',
@@ -73,6 +74,7 @@ class CoreModMap extends CoreModule {
             case 'manageTmpl':
             case 'getTmplOpts':
             case 'addModify':
+            case 'checkLinked':
                 $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME));
                 $this->name = $aVals['show'];
             break;
@@ -137,6 +139,9 @@ class CoreModMap extends CoreModule {
                                             $this->CORE->getLang()->getText('The map has been renamed.'),
                                                                 $this->CORE->getLang()->getText('The map could not be renamed.'),
                                                                 1, $this->htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$map);
+                break;
+                case 'checkLinked':
+                    $sReturn = json_encode($this->checkLinked($this->name));
                 break;
                 case 'doDelete':
                     // if deleted map is open, redirect to WUI main page
@@ -581,6 +586,29 @@ class CoreModMap extends CoreModule {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Creates a list of mapnames which link to the given map
+     */
+    protected function checkLinked($checkMap) {
+        #$this->name
+        $linking = Array();
+        foreach($this->CORE->getAvailableMaps() AS $map) {
+            $MAPCFG1 = new GlobalMapCfg($this->CORE, $map);
+            try {
+                $MAPCFG1->readMapConfig();
+            } catch(MapCfgInvalid $e) {
+                continue;
+            }
+
+            foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
+                if(isset($obj['map_name']) && $obj['map_name'] == $this->name) {
+                    $linking[] = $MAPCFG1->getName();
+                }
+            }
+        }
+        return $linking;
     }
 
     protected function doDeleteObject($a) {

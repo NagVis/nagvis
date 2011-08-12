@@ -42,24 +42,13 @@ function getMapNameByPath(mapPath) {
     return mapName.substring(0,mapName.length-4);
 }
 
-function checkMapExists(mapName,mapOptions) {
-    for(var i=0;i<mapOptions.length;i++) {
-        if(mapOptions[i].mapName == oPageProperties.map_name) {
-            return true;
-        }
+function checkMapLinked(mapName) {
+    var linking = getSyncRequest(oGeneralProperties.path_server + 
+                                 '?mod=Map&act=checkLinked&show=' + escapeUrlValues(mapName));
+    if(isset(linking) && linking.length > 0) {
+        return linking.join(', ');
     }
-}
-
-function checkMapLinked(mapName,mapOptions) {
-    for(var i=0;i<mapOptions.length;i++) {
-        for(var a = 0; a < mapOptions[i].linkedMaps.length; a++) {
-            if(mapOptions[i].linkedMaps[a] == mapName) {
-                return mapOptions[i].mapName;
-            }
-        }
-    }
-
-    return "";
+    return '';
 }
 
 function check_create_map() {
@@ -133,12 +122,6 @@ function check_map_import() {
         return false;
     }
 
-    // check if a map with this name already exists
-    if(checkMapExists(getMapNameByPath(document.map_import.map_file.value), mapOptions)) {
-        alert(printLang(lang['mapAlreadyExists'], 'MAPNAME~'+getMapNameByPath(document.map_import.map_file.value)));
-        return false;
-    }
-
     return true;
 }
 
@@ -148,7 +131,7 @@ function check_map_delete() {
         return false;
     }
 
-    var mapWithLink = checkMapLinked(document.map_delete.map.value, mapOptions)
+    var mapWithLink = checkMapLinked(document.map_delete.map.value);
     if(mapWithLink != "") {
         alert(printLang(lang['unableToDeleteMap'],'PARENTMAP~'+mapWithLink+',MAP~'+document.map_delete.map.value));
         return false;

@@ -25,39 +25,13 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-// checks that the file the user wants to upload has the .png extension
-function checkPng(imageName) {
-    if(imageName.substring(imageName.length-3,imageName.length).toLowerCase() != 'png') {
-        return false;
-    } else {
-        return true;
-    }
-}
-
-function checkJpg(imageName) {
-    if(imageName.substring(imageName.length-3,imageName.length).toLowerCase() != 'jpg') {
-        return false;
-    } else {
-        return true;
-    }
-}
-
-function checkGif(imageName) {
-    if(imageName.substring(imageName.length-3,imageName.length).toLowerCase() != 'gif') {
-        return false;
-    } else {
-        return true;
-    }
-}
-
-function checkImageUsed(imageName,mapOptions) {
-    for(var i=0, len = mapOptions.length; i< len; i++) {
-        if(mapOptions[i].mapImage == imageName) {
-            return mapOptions[i].mapName;
-        }
-    }
-
-    return "";
+function checkImageUsed(imageName) {
+    var using = getSyncRequest(oGeneralProperties.path_server
+                               + '?mod=ManageBackgrounds&act=checkUsed&image='
+                               + escapeUrlValues(imageName));
+    if(isset(using) && using.length > 0)
+        return using.join(', ');
+    return '';
 }
 
 function check_image_create() {
@@ -92,7 +66,7 @@ function check_image_add() {
         return false;
     }
 
-    if(!checkPng(document.new_image.image_file.value) && !checkJpg(document.new_image.image_file.value) && !checkGif(document.new_image.image_file.value)) {
+    if(!checkPngGifOrJpg(document.new_image.image_file.value)) {
         alert(printLang(lang['mustChooseValidImageFormat'],''));
         return false;
     }
@@ -107,7 +81,7 @@ function check_image_delete() {
         return false;
     }
 
-    var imageUsedBy = checkImageUsed(document.image_delete.map_image.value, mapOptions);
+    var imageUsedBy = checkImageUsed(document.image_delete.map_image.value);
     if(imageUsedBy !== "") {
         alert(printLang(lang['unableToDeleteBackground'],'MAP~'+imageUsedBy+',IMAGENAME~'+document.image_delete.map_image.value));
         return false;

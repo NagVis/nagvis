@@ -1,4 +1,7 @@
 <input type="hidden" /><!-- The template must not start with a script tag. This would be ignored by IE //-->
+<script type="text/javascript">
+lang = {$lang};
+</script>
 <script type="text/javascript" src="{$htmlBase}/frontend/nagvis-js/js/ManageShapes.js"></script>
 
 <form name="shape_add" id="shape_add" method="POST" action="{$htmlBase}/server/core/ajax_handler.php?mod=ManageShapes&amp;act=doUpload" enctype="multipart/form-data" onsubmit="return check_image_add();">

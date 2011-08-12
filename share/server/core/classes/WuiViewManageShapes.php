@@ -54,13 +54,14 @@ class WuiViewManageShapes {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-            'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-            'langUploadShape' => $this->CORE->getLang()->getText('uploadShape'),
+            'htmlBase'           => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+            'langUploadShape'    => $this->CORE->getLang()->getText('uploadShape'),
             'langChoosePngImage' => $this->CORE->getLang()->getText('chooseImage'),
-            'langUpload' => $this->CORE->getLang()->getText('upload'),
-            'langDeleteShape' => $this->CORE->getLang()->getText('deleteShape'),
-            'langDelete' => $this->CORE->getLang()->getText('delete'),
-            'shapes' => $this->CORE->getAvailableShapes(),
+            'langUpload'         => $this->CORE->getLang()->getText('upload'),
+            'langDeleteShape'    => $this->CORE->getLang()->getText('deleteShape'),
+            'langDelete'         => $this->CORE->getLang()->getText('delete'),
+            'shapes'             => $this->CORE->getAvailableShapes(),
+            'lang'               => $this->CORE->getJsLang(),
         );
 
         // Build page based on the template file and the data array

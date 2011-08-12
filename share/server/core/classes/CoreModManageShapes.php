@@ -35,9 +35,10 @@ class CoreModManageShapes extends CoreModule {
         // Register valid actions
         $this->aActions = Array(
             // WUI specific actions
-            'view'     => 'manage',
-            'doUpload' => 'manage',
-            'doDelete' => 'manage',
+            'view'      => 'manage',
+            'checkUsed' => 'manage',
+            'doUpload'  => 'manage',
+            'doDelete'  => 'manage',
         );
     }
 
@@ -46,6 +47,9 @@ class CoreModManageShapes extends CoreModule {
 
         if($this->offersAction($this->sAction)) {
             switch($this->sAction) {
+                case 'checkUsed':
+                    $sReturn = json_encode($this->checkUsed());
+                break;
                 case 'view':
                     $VIEW = new WuiViewManageShapes($this->AUTHENTICATION, $this->AUTHORISATION);
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
@@ -104,6 +108,31 @@ class CoreModManageShapes extends CoreModule {
             new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The shape does not exist.'));
 
         return Array('image' => $FHANDLER->get('image'));
+    }
+
+    protected function checkUsed() {
+        $FHANDLER = new CoreRequestHandler($_GET);
+        $attr = Array('image' => MATCH_PNG_GIF_JPG_FILE);
+        $this->verifyValuesSet($FHANDLER,   $attr);
+        $this->verifyValuesMatch($FHANDLER, $attr);
+        $image = $FHANDLER->get('image');
+
+        $using = Array();
+        foreach($this->CORE->getAvailableMaps() AS $map) {
+            $MAPCFG1 = new GlobalMapCfg($this->CORE, $map);
+            try {
+                $MAPCFG1->readMapConfig();
+            } catch(MapCfgInvalid $e) {
+                continue;
+            }
+
+            foreach($MAPCFG1->getDefinitions('shape') AS $key => $obj) {
+                if(isset($obj['icon']) && $obj['icon'] == $image) {
+                    $using[] = $MAPCFG1->getName();
+                }
+            }
+        }
+        return $using;
     }
 }
 ?>

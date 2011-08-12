@@ -68,7 +68,6 @@ class WuiViewManageBackgrounds {
             'langDelete' => $this->CORE->getLang()->getText('delete'),
             'images' => $this->CORE->getAvailableBackgroundImages(),
             'lang'       => $this->CORE->getJsLang(),
-            'mapOptions' => $this->CORE->getMapOptions(),
         );
 
         // Build page based on the template file and the data array

@@ -35,10 +35,11 @@ class CoreModManageBackgrounds extends CoreModule {
         // Register valid actions
         $this->aActions = Array(
             // WUI specific actions
-            'view'     => 'manage',
-            'doCreate' => 'manage',
-            'doUpload' => 'manage',
-            'doDelete' => 'manage',
+            'view'      => 'manage',
+            'checkUsed' => 'manage',
+            'doCreate'  => 'manage',
+            'doUpload'  => 'manage',
+            'doDelete'  => 'manage',
         );
     }
 
@@ -47,6 +48,9 @@ class CoreModManageBackgrounds extends CoreModule {
 
         if($this->offersAction($this->sAction)) {
             switch($this->sAction) {
+                case 'checkUsed':
+                    $sReturn = json_encode($this->checkUsed());
+                break;
                 case 'view':
                     $VIEW = new WuiViewManageBackgrounds($this->AUTHENTICATION, $this->AUTHORISATION);
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
@@ -135,6 +139,29 @@ class CoreModManageBackgrounds extends CoreModule {
                    'color'  => $FHANDLER->get('image_color'),
                      'width'  => $FHANDLER->get('image_width'),
                      'height' => $FHANDLER->get('image_height'));
+    }
+
+    protected function checkUsed() {
+        $FHANDLER = new CoreRequestHandler($_GET);
+        $attr = Array('image' => MATCH_PNG_GIF_JPG_FILE);
+        $this->verifyValuesSet($FHANDLER,   $attr);
+        $this->verifyValuesMatch($FHANDLER, $attr);
+        $image = $FHANDLER->get('image');
+
+        $using = Array();
+        foreach($this->CORE->getAvailableMaps() AS $map) {
+            $MAPCFG1 = new GlobalMapCfg($this->CORE, $map);
+            try {
+                $MAPCFG1->readMapConfig(ONLY_GLOBAL);
+            } catch(MapCfgInvalid $e) {
+                continue;
+            }
+
+            $bg = $MAPCFG1->getValue(0, 'map_image');
+            if(isset($bg) && $bg == $image)
+                $using[] = $MAPCFG1->getName();
+        }
+        return $using;
     }
 }
 ?>

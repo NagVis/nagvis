@@ -918,3 +918,9 @@ function printLang(sLang, sReplace) {
 
     return sLang;
 }
+
+// checks that the file the user wants to upload has a valid extension
+function checkPngGifOrJpg(imageName) {
+    var type = imageName.substring(imageName.length-3,imageName.length).toLowerCase();
+    return type == 'png' || type == 'jpg' || type == 'gif';
+}

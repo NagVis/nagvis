@@ -25,24 +25,13 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-// checks that the file the user wants to upload has the .png extension
-function checkPngGifOrJpg(imageName) {
-    var type = imageName.substring(imageName.length-3,imageName.length).toLowerCase();
-    return type == 'png' || type == 'jpg' || type == 'gif';
-}
-
-var usedInMap = "";
-function checkShapeInUse(shapeName,mapOptions) {
-    for(var i=0;i<mapOptions.length;i++) {
-        for(var a = 0; a < mapOptions[i].usedShapes.length; a++) {
-            if(mapOptions[i].usedShapes[a] == shapeName) {
-                return true;
-            }
-        }
-        usedInMap =mapOptions[i].mapName;
-    }
-
-    return false;
+function checkShapeInUse(imageName) {
+    var using = getSyncRequest(oGeneralProperties.path_server
+                               + '?mod=ManageShapes&act=checkUsed&image='
+                               + escapeUrlValues(imageName));
+    if(isset(using) && using.length > 0)
+        return using.join(', ');
+    return '';
 }
 
 function check_image_add() {
@@ -68,10 +57,11 @@ function check_image_delete() {
         return false;
     }
 
-        if(checkShapeInUse(document.shape_delete.image.value, mapOptions)) {
-            alert(printLang(lang['shapeInUse'],'MAP~'+usedInMap));
-            return false;
-        }
+    var using = checkShapeInUse(document.shape_delete.image.value);
+    if(using != '') {
+        alert(printLang(lang['shapeInUse'], 'MAP~' + using));
+        return false;
+    }
 
     if(confirm(printLang(lang['confirmShapeDeletion'],'')) === false) {
         return false;
