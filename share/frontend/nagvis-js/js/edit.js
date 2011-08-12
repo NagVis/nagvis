@@ -905,7 +905,9 @@ function printLang(sLang, sReplace) {
     if(typeof sLang === 'undefined')
         return '';
 
-    sLang = sLang.replace(/<(\/|)(i|b)>/ig,'');
+    sLang = sLang.replace(/<(\/|)(i|b)>/ig, '');
+    sLang = sLang.replace('&auml;', 'ä').replace('&uuml;', 'ü');
+    sLang = sLang.replace('&ouml;', 'ö').replace('&szlig;', '');
 
     // sReplace maybe optional
     if(typeof sReplace != "undefined") {

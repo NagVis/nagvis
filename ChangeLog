@@ -1,5 +1,8 @@
 1.6b4
 
+Frontend
+  * Bugfix: Fixed several umlauts in edit mode warning messages
+
 Core
   * Bugfix: Fixed SQL syntax error in MySQL auth backend
 
