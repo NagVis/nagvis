@@ -244,16 +244,15 @@
 
 ; Options for the WUI
 [wui]
-; Users which are allowed to change the NagVis configuration (comma separated list)
-;allowedforconfig=EVERYONE
-; auto update frequency
-;autoupdatefreq=25
-; enable/disable header menu in the WUI
-;headermenu="1"
-; header template to use in the WUI
-;headertemplate="default"
-; map lock time (minutes)
+; map lock time (minutes). When a user edits a map other users trying to edit
+; the map are warned about this fact.
 ;maplocktime=5
+; Show/hide the grid
+;grid_show=0
+; The color of the grid lines
+;grid_color="#D5DCEF"
+; The space between the single grid lines in pixels
+;grid_steps=32
 
 ; Options for the new Javascript worker
 [worker]
