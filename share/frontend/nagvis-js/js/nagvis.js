@@ -1139,4 +1139,11 @@ function scaleView() {
         }
         header = null;
     }
+
+    // The sidebar should fill the whole screen all the time
+    var sidebar = document.getElementById('sidebar');
+    if(sidebar && sidebarOpen()) {
+        sidebar.style.height = (pageHeight() + getScrollTop()) + 'px';
+    }
+    sidebar = null;
 }

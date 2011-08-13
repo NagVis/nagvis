@@ -7,6 +7,7 @@ Core
 
 Frontend
   * Bugfix: Fixed several umlauts in edit mode warning messages
+  * Bugfix: Fixed 100% sidebar height
 
 Automap
   * Bugfix: Made the problem automap work again

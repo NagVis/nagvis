@@ -35,7 +35,7 @@ body, table, th, td {
     font-size: 12pt;
 }
 
-html, body {height:100%}
+html,body{height:100%;}
 
 table {width:100%}
 div {margin:0;padding:0}
@@ -602,7 +602,7 @@ td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 .subdropdown .underline {border-bottom:1px solid #a4a4a4}
 
 /* Styling for the sidebar */
-#sidebar {position:relative;top:0;left:0;float:left;height:100%;width:200px;z-index:99;display:none;background-color:#eaf0f2;text-decoration:none;font-size:0.6em;padding-top:10px;border-right:1px solid #a4a4a4;padding-top:32px;}
+#sidebar {position:relative;top:0;left:0;float:left;min-height:100%;width:200px;z-index:99;display:none;background-color:#eaf0f2;text-decoration:none;font-size:0.6em;padding-top:10px;border-right:1px solid #a4a4a4;padding-top:32px;}
 #sidebar ul {margin:0;padding:0;display:block;list-style:none}
 #sidebar li {margin:0;padding:0;line-height:25px;}
 #sidebar li.spacerbottom {border-bottom:1px dotted #a4a4a4}
