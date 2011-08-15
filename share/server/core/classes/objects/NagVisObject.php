@@ -569,8 +569,8 @@ class NagVisObject {
 
         // Handle normal/ack/downtime states
 
-        $stubState1 = $OBJ1->getSummarySubState();
-        $stubState2 = $OBJ2->getSummarySubState();
+        $stubState1 = $OBJ1->getSubState(SUMMARY_STATE);
+        $stubState2 = $OBJ2->getSubState(SUMMARY_STATE);
 
         if(NagVisObject::$stateWeight[$state1][$stubState1] == NagVisObject::$stateWeight[$state2][$stubState2]) {
             return 0;

@@ -108,6 +108,7 @@ define('IS_VIEW', true);
 define('ONLY_GLOBAL', true);
 define('GET_CHILDS', true);
 define('SET_KEYS', true);
+define('SUMMARY_STATE', true);
 
 // Maximum length for usernames/passwords
 define('AUTH_MAX_PASSWORD_LENGTH', 30);

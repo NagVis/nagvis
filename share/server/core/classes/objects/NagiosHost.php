@@ -571,22 +571,13 @@ class NagiosHost extends NagVisStatefulObject {
     private function addHostStateToStateCounts() {
         $sState = $this->state;
 
-        if(NagVisObject::$stateWeight === null)
-            NagVisObject::$stateWeight = $this->CORE->getMainCfg()->getStateWeight();
-
-        $sType = 'normal';
-        if($this->problem_has_been_acknowledged == 1 && isset(NagVisObject::$stateWeight[$sState]['ack'])) {
-            $sType = 'ack';
-        } elseif($this->in_downtime == 1 && isset(NagVisObject::$stateWeight[$sState]['downtime'])) {
-            $sType = 'downtime';
-        }
-
+        $sSubState = $this->getSubState();
         if(!isset($this->aStateCounts[$sState]))
-            $this->aStateCounts[$sState] = Array($sType => 1);
-        elseif(!isset($this->aStateCounts[$sState][$sType]))
-            $this->aStateCounts[$sState][$sType] = 1;
+            $this->aStateCounts[$sState] = Array($sSubState => 1);
+        elseif(!isset($this->aStateCounts[$sState][$sSubState]))
+            $this->aStateCounts[$sState][$sSubState] = 1;
         else
-            $this->aStateCounts[$sState][$sType] += 1;
+            $this->aStateCounts[$sState][$sSubState] += 1;
     }
 
     /**
@@ -660,7 +651,7 @@ class NagiosHost extends NagVisStatefulObject {
             if($this->hasMembers()) {
                 $arrStates = Array('CRITICAL' => 0, 'DOWN'    => 0, 'WARNING'   => 0,
                                    'UNKNOWN'  => 0, 'UP'      => 0, 'OK'        => 0,
-                                                     'ERROR'    => 0, 'PENDING' => 0, 'UNCHECKED' => 0);
+                                   'ERROR'    => 0, 'PENDING' => 0, 'UNCHECKED' => 0);
 
                 foreach($this->members AS &$SERVICE) {
                     $arrStates[$SERVICE->getSummaryState()]++;

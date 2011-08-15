@@ -326,13 +326,18 @@ class NagVisStatefulObject extends NagVisObject {
     /**
      * Returns the current sub-state of the object
      */
-    public function getSummarySubState() {
-        if($this->summary_problem_has_been_acknowledged == 1)
-            return  'ack';
-        elseif($this->summary_in_downtime == 1)
-            return 'downtime';
+    public function getSubState($summary = false) {
+        if($summary)
+            if($this->summary_problem_has_been_acknowledged == 1)
+                return  'ack';
+            elseif($this->summary_in_downtime == 1)
+                return 'downtime';
         else
-            return 'normal';
+            if($this->problem_has_been_acknowledged == 1)
+                return  'ack';
+            elseif($this->in_downtime == 1)
+                return 'downtime';
+        return 'normal';
     }
 
     /**
@@ -808,10 +813,10 @@ class NagVisStatefulObject extends NagVisObject {
             $currWeight = null;
         } else {
             if(isset(NagVisObject::$stateWeight[$this->summary_state])) {
-                $currWeight = NagVisObject::$stateWeight[$this->summary_state][$this->getSummarySubState()];
+                $currWeight = NagVisObject::$stateWeight[$this->summary_state][$this->getSubState(SUMMARY_STATE)];
             } else {
                 // Error handling: Invalid state
-                new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE].', Array('STATE' => $this->summary_state, 'SUBSTATE' => $this->getSummarySubState(), 'TYPE' => $this->getType())));
+                new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE].', Array('STATE' => $this->summary_state, 'SUBSTATE' => $this->getSubState(SUMMARY_STATE), 'TYPE' => $this->getType())));
             }
         }
 
@@ -907,7 +912,7 @@ class NagVisStatefulObject extends NagVisObject {
         // Initialize empty or with current object state
         $currentStateWeight = null;
         if($this->summary_state != '')
-            $currentStateWeight = NagVisObject::$stateWeight[$this->summary_state][$this->getSummarySubState()];
+            $currentStateWeight = NagVisObject::$stateWeight[$this->summary_state][$this->getSubState(SUMMARY_STATE)];
 
         // Loop all object to gather the worst state and set it as summary
         // state of the current object

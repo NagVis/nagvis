@@ -496,7 +496,10 @@ class NagVisMapObj extends NagVisStatefulObject {
      */
     private function fetchSummaryOutput() {
         if($this->hasObjects() && $this->hasStatefulObjects()) {
-            $arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0,'DOWN' => 0,'WARNING' => 0,'UNKNOWN' => 0,'UP' => 0,'OK' => 0,'ERROR' => 0,'ACK' => 0,'PENDING' => 0);
+            $arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0, 'DOWN' => 0,
+                               'WARNING'     => 0, 'UNKNOWN'  => 0, 'UP'   => 0,
+                               'OK'          => 0, 'ERROR'    => 0, 'ACK'  => 0,
+                               'PENDING'     => 0);
 
             foreach($this->getStateRelevantMembers() AS $OBJ)
                 if(isset($arrStates[$OBJ->summary_state]))
@@ -518,7 +521,8 @@ class NagVisMapObj extends NagVisStatefulObject {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function isPermitted($OBJ) {
-        if($this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Map', 'view', $OBJ->getName()))
+        if($this->CORE->getAuthorization() !== null
+           && $this->CORE->getAuthorization()->isPermitted('Map', 'view', $OBJ->getName()))
             return true;
         else {
             $OBJ->summary_state = 'UNKNOWN';

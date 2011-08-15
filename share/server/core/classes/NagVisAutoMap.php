@@ -770,7 +770,7 @@ class NagVisAutoMap extends GlobalMap {
 
         foreach($this->arrMapObjects AS $OBJ) {
             if(isset($stateWeight[$OBJ->getSummaryState()])
-               && $stateWeight[$OBJ->getSummaryState()][$OBJ->getSummarySubState()] > $stateWeight['UP']['normal']) {
+               && $stateWeight[$OBJ->getSummaryState()][$OBJ->getSubState(SUMMARY_STATE)] > $stateWeight['UP']['normal']) {
                 $problemHosts[] = $OBJ->getName();
             }
         }
