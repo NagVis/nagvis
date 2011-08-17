@@ -42,20 +42,20 @@
  *
  * Datastructure:
  * 
- * $aPerfparse as 2-dimensional array where index ranges from 0 to n-1,
+ * $aPerfdata as 2-dimensional array where index ranges from 0 to n-1,
  * depending on how many perfdata values are provided by the service
  * 
- * aPerfparse[index]['label']         -   label of the perfdata
- *                  ['value']         -   actual perfdata
- *                  ['uom']           -   unit of measurement (might be NULL)
- *                  ['warning']       -   warning threshold (if over)
- *                  ['warning_min']   -   warning threshold (if below)
- *                  ['warning_max']   -   warning threshold (if above)
- *                  ['critical']      -   critical threshold (might be NULL)
- *                  ['critical_min']  -   critical threshold (if below)
- *                  ['critical_max']  -   critical threshold (if above)
- *                  ['min']           -   minimum possible value (might be NULL)
- *                  ['max']           -   maximum possible value (might be NULL)
+ * aPerfdata[index]['label']         -   label of the perfdata
+ *                 ['value']         -   actual perfdata
+ *                 ['uom']           -   unit of measurement (might be NULL)
+ *                 ['warning']       -   warning threshold (if over)
+ *                 ['warning_min']   -   warning threshold (if below)
+ *                 ['warning_max']   -   warning threshold (if above)
+ *                 ['critical']      -   critical threshold (might be NULL)
+ *                 ['critical_min']  -   critical threshold (if below)
+ *                 ['critical_max']  -   critical threshold (if above)
+ *                 ['min']           -   minimum possible value (might be NULL)
+ *                 ['max']           -   maximum possible value (might be NULL)
  *
  * 
  * $aOpts as array of the parameters passed to the gadget

@@ -8,6 +8,7 @@ Core
 Frontend
   * Bugfix: Fixed several umlauts in edit mode warning messages
   * Bugfix: Fixed 100% sidebar height
+  * Bugfix: Fixed initial positioning of relative positioned gadgets
 
 Automap
   * Bugfix: Made the problem automap work again
