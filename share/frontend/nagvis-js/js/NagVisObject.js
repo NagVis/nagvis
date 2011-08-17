@@ -60,11 +60,20 @@ var NagVisObject = Base.extend({
 
     /**
      * PRIVATE loadLocked
-     * Loads the lock state of an object from the user properties
+     * Loads the lock state of an object from the user properties.
+     *
+     * Another way to unlock the object is the optional view property
+     * "edit_mode". In this case all map objects are unlocked but this
+     * state is not saved to the user properties.
      */
     loadLocked: function() {
         if(!oUserProperties.hasOwnProperty('unlocked-' + oPageProperties.map_name))
-        return;
+            return;
+
+        if(oViewProperties.hasOwnProperty('edit_mode') && oViewProperties['edit_mode'] === true) {
+            this.bIsLocked = false;
+            return;
+        }
 
         var unlocked = oUserProperties['unlocked-' + oPageProperties.map_name].split(',');
         this.bIsLocked = unlocked.indexOf(this.conf.object_id) === -1 && unlocked.indexOf('*') === -1;
@@ -409,7 +418,8 @@ var NagVisObject = Base.extend({
 	    if(typeof(this.toggleHoverMenu) == 'function')
 		this.toggleHoverMenu(this.bIsLocked);
 
-            if(!isset(lock)) {
+            // Only save the user option when not using the edit_mode
+            if(!isset(lock) && (!oViewProperties.hasOwnProperty('edit_mode') || oViewProperties['edit_mode'] !== true)) {
                 if(oUserProperties.hasOwnProperty('unlocked-' + oPageProperties.map_name))
                     var unlocked = oUserProperties['unlocked-' + oPageProperties.map_name].split(',');
                 else

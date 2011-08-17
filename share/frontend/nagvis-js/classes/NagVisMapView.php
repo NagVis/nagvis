@@ -26,11 +26,12 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisMapView {
-    private $CORE = null;
-    private $name = '';
-    private $search = '';
+    private $CORE      = null;
+    private $name      = '';
+    private $search    = '';
     private $aRotation = Array();
     private $aViewOpts = Array();
+    private $editMode  = false;
 
     /**
      * Class Constructor
@@ -74,6 +75,10 @@ class NagVisMapView {
         $this->aViewOpts = $a;
     }
 
+    public function setEditMode() {
+        $this->editMode = true;
+    }
+
     /**
      * Parses the map and the objects for the nagvis-js frontend
      *
@@ -87,18 +92,18 @@ class NagVisMapView {
         $USERCFG = new CoreUserCfg();
 
         $aData = Array(
-                'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
-                'workerProperties' => $this->CORE->getMainCfg()->parseWorkerProperties(),
-                'rotationProperties' => json_encode($this->aRotation),
-                'viewProperties' => $this->parseViewProperties(),
-                'stateProperties' => json_encode($this->CORE->getMainCfg()->getStateWeight()),
-                'userProperties' => $USERCFG->doGetAsJson(),
-                'mapName' => $this->name
-            );
+            'generalProperties'  => $this->CORE->getMainCfg()->parseGeneralProperties(),
+            'workerProperties'   => $this->CORE->getMainCfg()->parseWorkerProperties(),
+            'rotationProperties' => json_encode($this->aRotation),
+            'viewProperties'     => $this->parseViewProperties(),
+            'stateProperties'    => json_encode($this->CORE->getMainCfg()->getStateWeight()),
+            'userProperties'     => $USERCFG->doGetAsJson(),
+            'mapName'            => $this->name
+        );
 
-    // Build page based on the template file and the data array
-    // FIXME: Make template set configurable
-    return $TMPLSYS->get($TMPL->getTmplFile('default', 'map'), $aData);
+        // Build page based on the template file and the data array
+        // FIXME: Make template set configurable
+        return $TMPLSYS->get($TMPL->getTmplFile('default', 'map'), $aData);
     }
 
     /**
@@ -114,10 +119,11 @@ class NagVisMapView {
         $MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
         $MAPCFG->readMapConfig(ONLY_GLOBAL);
 
-        $arr['search'] = $this->search;
-        $arr['grid_show']                = intval($MAPCFG->getValue(0, 'grid_show'));
-        $arr['grid_color']               = $MAPCFG->getValue(0, 'grid_color');
-        $arr['grid_steps']               = intval($MAPCFG->getValue(0, 'grid_steps'));
+        $arr['search']     = $this->search;
+        $arr['edit_mode']  = $this->editMode;
+        $arr['grid_show']  = intval($MAPCFG->getValue(0, 'grid_show'));
+        $arr['grid_color'] = $MAPCFG->getValue(0, 'grid_color');
+        $arr['grid_steps'] = intval($MAPCFG->getValue(0, 'grid_steps'));
 
         // View specific hover modifier set
         if($this->aViewOpts['enableHover'] !== false) {
