@@ -258,6 +258,9 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     private function mysqlQuery($query) {
+        $fh = fopen('/tmp/ndomy', 'a');
+        fwrite($fh, $query."\n\n");
+        fclose($fh);
         $QUERYHANDLE = mysql_query($query, $this->CONN) or die(mysql_error());
         return $QUERYHANDLE;
     }
@@ -409,11 +412,12 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * @param   Array     List of objects to query
      * @param   Array     List of filters to apply
      * @param   String    Table to use for filtering
-   * @param   Boolean   Split the filter by options
+     * @param   Boolean   Split the filter by options
      * @return  String    Parsed filters
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    private function parseFilter($objects, $filters, $table) {
+    private function parseFilter($objects, $filters, $table, $childTable, $isMemberQuery = false,
+                                           $isCountQuery = false, $isHostQuery = true) {
         $aFilters = Array();
         foreach($objects AS $OBJS) {
             $objFilters = Array();
@@ -442,11 +446,37 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                         if($filter['op'] == '>=')
                             $filter['op'] = '=';
 
-                        $objFilters[] = ' '.$table.'.'.$filter['key'].$filter['op']." binary '".$val."' ";
+                        $objFilters[] = ' '.$table.'.'.$filter['key']." ".$filter['op']." binary '".$val."' ";
                     break;
                     default:
                         throw new BackendConnectionProblem('Invalid filter key ('.$filter['key'].')');
                     break;
+                }
+            }
+
+            // Are there child exclude filters defined for this object?\
+            // The objTupe is the type of the objects to query the data for
+            if($isMemberQuery && $OBJS[0]->hasExcludeFilters($isCountQuery)) {
+                $filter = $OBJS[0]->getExcludeFilter($isCountQuery);
+                $objType = $OBJS[0]->getType();
+
+                if($objType == 'host') {
+                    $parts = explode('~~', $filter);
+                    if(!isset($parts[1]))
+                        $objFilters[] = " ".$childTable.".name2 NOT REGEXP BINARY \"".$filter."\"";
+
+                } elseif($objType == 'hostgroup' && $isHostQuery) {
+                    $parts = explode('~~', $filter);
+                    if(!isset($parts[1]))
+                        $objFilters[] = " ".$childTable.".name1 NOT REGEXP BINARY \"".$parts[0]."\"";
+
+                } elseif(($objType == 'hostgroup' && !$isHostQuery) || $objType == 'servicegroup') {
+                    $parts = explode('~~', $filter);
+                    if(isset($parts[1]))
+                        $objFilters[] = " NOT (".$childTable.".name1 REGEXP BINARY \"".$parts[0]."\" "
+                                       ." AND ".$childTable.".name2 REGEXP BINARY \"".$parts[1]."\")";
+                    else
+                        $objFilters[] = " ".$childTable.".name1 NOT REGEXP BINARY \"".$parts[0]."\"";
                 }
             }
 
@@ -498,13 +528,13 @@ class GlobalBackendndomy implements GlobalBackendInterface {
     }
 
     /**
-     * PUBLIC getHostStateOld()
+     * PUBLIC getHostState()
      *
      * Returns the Nagios state and additional information for the requested host
      *
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function getHostState($objects, $options, $filters) {
+    public function getHostState($objects, $options, $filters, $isMemberQuery = false) {
         $arrReturn = Array();
 
         $QUERYHANDLE = $this->mysqlQuery('SELECT
@@ -532,7 +562,8 @@ class GlobalBackendndomy implements GlobalBackendInterface {
             '.$this->dbPrefix.'scheduleddowntime AS dh
             ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
         WHERE
-            (o.objecttype_id=1 AND ('.$this->parseFilter($objects, $filters, 'o').') AND o.instance_id='.$this->dbInstanceId.')
+            (o.objecttype_id=1 AND ('.$this->parseFilter($objects, $filters, 'o', 'o', $isMemberQuery, false, HOST_QUERY).')
+             AND o.instance_id='.$this->dbInstanceId.')
             AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=o.object_id)');
 
         while($data = mysql_fetch_assoc($QUERYHANDLE)) {
@@ -627,7 +658,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      *
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function getServiceState($objects, $options, $filters) {
+    public function getServiceState($objects, $options, $filters, $isMemberQuery = false) {
         $arrReturn = Array();
 
         $QUERYHANDLE = $this->mysqlQuery('SELECT
@@ -654,7 +685,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 '.$this->dbPrefix.'scheduleddowntime AS dh
                 ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
             WHERE
-                (o.objecttype_id=2 AND ('.$this->parseFilter($objects, $filters, 'o').'))
+                (o.objecttype_id=2 AND ('.$this->parseFilter($objects, $filters, 'o', 'o', $isMemberQuery, false, !HOST_QUERY).'))
                 AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id)
                 AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=s.host_object_id)
                 ');
@@ -803,7 +834,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 '.$this->dbPrefix.'servicestatus AS ss
                 ON ss.service_object_id=o.object_id
             WHERE
-                (o.objecttype_id=2 AND ('.$this->parseFilter($objects, $filters, 'o').'))
+                (o.objecttype_id=2 AND ('.$this->parseFilter($objects, $filters, 'o', 'o', MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY).'))
                 AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id)
                 AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=s.host_object_id)
                 AND (hs.host_object_id=h.host_object_id)
@@ -875,7 +906,8 @@ class GlobalBackendndomy implements GlobalBackendInterface {
          '.$this->dbPrefix.'hoststatus AS hs
             ON hs.host_object_id=o2.object_id
             WHERE
-                (o.objecttype_id=3 AND ('.$this->parseFilter($objects, $filters, 'o', false).') AND o.instance_id='.$this->dbInstanceId.')
+                (o.objecttype_id=3 AND ('.$this->parseFilter($objects, $filters, 'o', 'o2', MEMBER_QUERY, COUNT_QUERY, HOST_QUERY).')
+                 AND o.instance_id='.$this->dbInstanceId.')
                 AND (hg.config_type='.$this->objConfigType.' AND hg.instance_id='.$this->dbInstanceId.' AND hg.hostgroup_object_id=o.object_id)
                 AND hgm.hostgroup_id=hg.hostgroup_id
                 AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id)
@@ -941,7 +973,8 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 '.$this->dbPrefix.'servicestatus AS ss
                 ON ss.service_object_id=o2.object_id
             WHERE
-                (o.objecttype_id=3 AND ('.$this->parseFilter($objects, $filters, 'o', false).') AND o.instance_id='.$this->dbInstanceId.')
+                (o.objecttype_id=3 AND ('.$this->parseFilter($objects, $filters, 'o', 'o2', MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY).')
+                 AND o.instance_id='.$this->dbInstanceId.')
                 AND (hg.config_type='.$this->objConfigType.' AND hg.instance_id='.$this->dbInstanceId.' AND hg.hostgroup_object_id=o.object_id)
                 AND hgm.hostgroup_id=hg.hostgroup_id
                 AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.host_object_id=hgm.host_object_id)
@@ -1000,7 +1033,8 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 '.$this->dbPrefix.'servicestatus AS ss
                 ON ss.service_object_id=o2.object_id
             WHERE
-                (o.objecttype_id=4 AND ('.$this->parseFilter($objects, $filters, 'o', false).') AND o.instance_id='.$this->dbInstanceId.')
+                (o.objecttype_id=4 AND ('.$this->parseFilter($objects, $filters, 'o', 'o2', MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY).')
+                 AND o.instance_id='.$this->dbInstanceId.')
                 AND (sg.config_type='.$this->objConfigType.' AND sg.instance_id='.$this->dbInstanceId.' AND sg.servicegroup_object_id=o.object_id)
                 AND sgm.servicegroup_id=sg.servicegroup_id
                 AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=sgm.service_object_id)

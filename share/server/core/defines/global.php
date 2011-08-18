@@ -109,6 +109,9 @@ define('ONLY_GLOBAL', true);
 define('GET_CHILDS', true);
 define('SET_KEYS', true);
 define('SUMMARY_STATE', true);
+define('COUNT_QUERY', true);
+define('MEMBER_QUERY', true);
+define('HOST_QUERY', true);
 
 // Maximum length for usernames/passwords
 define('AUTH_MAX_PASSWORD_LENGTH', 30);

@@ -119,7 +119,7 @@ class NagiosHost extends NagVisStatefulObject {
         $queries = Array();
 
         if($bFetchObjectState)
-            $queries['hostState']	= true;
+            $queries['hostState'] = true;
 
         if($this->recognize_services)
             $queries['hostMemberState'] = true;

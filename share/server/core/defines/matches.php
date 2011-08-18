@@ -26,6 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 define('MATCH_ALL', '/^.*$/i');
+define('MATCH_REGEX', '/^.*$/i');
 
 // These regex allow unicode matching
 define('MATCH_STRING', '/^[0-9a-zа-яё\s\:\+\[\]\(\)\_\.\,\-\?\!\#\@\=\/\\\]+$/iu');

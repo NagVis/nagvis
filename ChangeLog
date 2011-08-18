@@ -4,6 +4,9 @@ Core
   * Bugfix: Fixed SQL syntax error in MySQL auth backend
   * Removed option "-B" from installer, it is not needed anymore
   * Several code cleanups
+  * Added exclude_members and exclude_member_states options to stateful
+  objects for excluding specific member objects completely or only during summary
+  state calculations.
 
 Frontend
   * Readded the "edit" action to the maps module. In this mode all object are

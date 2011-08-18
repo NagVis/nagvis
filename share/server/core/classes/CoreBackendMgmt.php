@@ -31,6 +31,14 @@ class CoreBackendMgmt {
     private $aInitialized = Array();
     private $aQueue = Array();
     private $aError = Array();
+    private $countQueries = Array(
+        'serviceState' => '',
+        'hostState' => '',
+        'hostMemberState' => '',
+        'hostgroupMemberState' => '',
+        'servicegroupMemberState' => ''
+    );
+
 
     /**
      * Constructor
@@ -87,13 +95,31 @@ class CoreBackendMgmt {
             // Options is a mask which tells the backend how to handle this object
             $options = $this->parseOptions($OBJ);
 
-            // Only query the backend once per object+options
-            // If the object is several times queued add it to the object list
-            if(!isset($this->aQueue[$backendId][$query][$options][$name]))
-                $this->aQueue[$backendId][$query][$options][$name] = Array($OBJ);
+            // Each object can have individual filter options. For example the
+            // member filters
+            $objFilters = $this->parseObjFilters($query, $OBJ);
+
+            // Only query the backend once per object+options+filter
+            // If the object is queued several times with the same options+filters
+            // add it to the list of objects. The backend result will be added to
+            // all objects in that list later
+            if(!isset($this->aQueue[$backendId][$query][$options][$objFilters]))
+                $this->aQueue[$backendId][$query][$options][$objFilters] = Array($name => Array($OBJ));
+            elseif(!isset($this->aQueue[$backendId][$query][$options][$objFilters][$name]))
+                $this->aQueue[$backendId][$query][$options][$objFilters][$name] = Array($OBJ);
             else
-                $this->aQueue[$backendId][$query][$options][$name][] = $OBJ;
+                $this->aQueue[$backendId][$query][$options][$objFilters][$name][] = $OBJ;
         }
+    }
+
+    private function parseObjFilters($query, $OBJ) {
+        $isMemberQuery = $query != 'serviceState' && $query != 'hostState';
+        $isCountQuery = isset($this->countQueries[$query]);
+
+        if(!$isMemberQuery || !$OBJ->hasExcludeFilters($isCountQuery))
+            return '';
+
+        return $OBJ->getExcludeFilterKey($isCountQuery).'~~'.$OBJ->getExcludeFilter($isCountQuery);
     }
 
     private function parseOptions($OBJ) {
@@ -131,25 +157,27 @@ class CoreBackendMgmt {
         foreach($this->aQueue AS $backendId => $types) {
             // Loop all different query types
             foreach($types AS $type => $options) {
-                // Now loop th different options (Splitting by only_hard_state options etc.)
-                foreach($options AS $option => $aObjs) {
-                    switch($type) {
-                        case 'serviceState':
-                        case 'hostState':
-                        case 'hostMemberState':
-                        case 'hostgroupMemberState':
-                        case 'servicegroupMemberState':
-                            $this->fetchStateCounts($backendId, $type, $option, $aObjs);
-                        break;
-                        case 'hostMemberDetails':
-                            $this->fetchHostMemberDetails($backendId, $option, $aObjs);
-                        break;
-                        case 'hostgroupMemberDetails':
-                            $this->fetchHostgroupMemberDetails($backendId, $option, $aObjs);
-                        break;
-                        case 'servicegroupMemberDetails':
-                            $this->fetchServicegroupMemberDetails($backendId, $option, $aObjs);
-                        break;
+                // Now loop the different options (Splitting by only_hard_state options etc.)
+                foreach($options AS $option => $filters) {
+                    foreach($filters AS $filter => $aObjs) {
+                        switch($type) {
+                            case 'serviceState':
+                            case 'hostState':
+                            case 'hostMemberState':
+                            case 'hostgroupMemberState':
+                            case 'servicegroupMemberState':
+                                $this->fetchStateCounts($backendId, $type, $option, $aObjs);
+                            break;
+                            case 'hostMemberDetails':
+                                $this->fetchHostMemberDetails($backendId, $option, $aObjs);
+                            break;
+                            case 'hostgroupMemberDetails':
+                                $this->fetchHostgroupMemberDetails($backendId, $option, $aObjs);
+                            break;
+                            case 'servicegroupMemberDetails':
+                                $this->fetchServicegroupMemberDetails($backendId, $option, $aObjs);
+                            break;
+                        }
                     }
                 }
             }
@@ -177,11 +205,11 @@ class CoreBackendMgmt {
                 // Fist get the host states for all the hostgroup members
                 try {
                     $filters = Array(Array('key' => 'service_groups', 'op' => '>=', 'val' => 'name'));
-                    $aServices = $this->getBackend($backendId)->getServiceState(Array($OBJ->getName() => Array($OBJ)), $options, $filters);
+                    $aServices = $this->getBackend($backendId)->getServiceState(Array($OBJ->getName() => Array($OBJ)), $options, $filters, MEMBER_QUERY);
                 } catch(BackendException $e) {
                     $aServices = Array();
                     $OBJ->setBackendProblem($this->CORE->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]',
-                  																						Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())));
+                                                                   Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())));
                 }
 
                 // Regular member adding loop
@@ -230,11 +258,11 @@ class CoreBackendMgmt {
                 // First get the host states for all the hostgroup members
                 try {
                     $filters = Array(Array('key' => 'host_groups', 'op' => '>=', 'val' => 'name'));
-                    $aHosts = $this->getBackend($backendId)->getHostState(Array($OBJ->getName() => Array($OBJ)), $options, $filters);
+                    $aHosts = $this->getBackend($backendId)->getHostState(Array($OBJ->getName() => Array($OBJ)), $options, $filters, MEMBER_QUERY);
                 } catch(BackendException $e) {
                     $aHosts = Array();
                     $OBJ->setBackendProblem($this->CORE->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]',
-                  																						Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())));
+                                                                  Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())));
                 }
 
                 // Now fetch the service state counts for all hostgroup members
@@ -242,7 +270,8 @@ class CoreBackendMgmt {
                 if($OBJ->getRecognizeServices()) {
                     try {
                         $filters = Array(Array('key' => 'host_groups', 'op' => '>=', 'val' => 'name'));
-                        $aServiceStateCounts = $this->getBackend($backendId)->getHostStateCounts(Array($OBJ->getName() => Array($OBJ)), $options, $filters);
+                        $aServiceStateCounts = $this->getBackend($backendId)->getHostStateCounts(
+                                           Array($OBJ->getName() => Array($OBJ)), $options, $filters);
                     } catch(BackendException $e) {}
                 }
 
@@ -288,9 +317,9 @@ class CoreBackendMgmt {
                 break;
                 case 'serviceState':
                     $filters = Array(
-                                            Array('key' => 'host_name', 'op' => '=', 'val' => 'name'),
-                                            Array('key' => 'service_description', 'op' => '=', 'service_description')
-                                        );
+                        Array('key' => 'host_name', 'op' => '=', 'val' => 'name'),
+                        Array('key' => 'service_description', 'op' => '=', 'service_description')
+                    );
                     $aResult = $this->getBackend($backendId)->getServiceState($aObjs, $options, $filters);
                 break;
                 case 'hostState':
@@ -332,7 +361,7 @@ class CoreBackendMgmt {
     private function fetchHostMemberDetails($backendId, $options, $aObjs) {
         try {
             $filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
-            $aMembers = $this->getBackend($backendId)->getServiceState($aObjs, $options, $filters);
+            $aMembers = $this->getBackend($backendId)->getServiceState($aObjs, $options, $filters, MEMBER_QUERY);
         } catch(BackendException $e) {
             $aMembers = Array();
         }

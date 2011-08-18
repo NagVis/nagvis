@@ -67,12 +67,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         // Run preflight checks
         if($this->socketType == 'unix' && !$this->checkSocketExists()) {
             throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Unable to connect to livestatus socket. The socket [SOCKET] in backend [BACKENDID] does not exist. Maybe Nagios is not running or restarting.',
-                                                                                                              Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
+                         Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
         }
 
         if(!function_exists('fsockopen')) {
-                        throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('The PHP function fsockopen is not available. Needed by backend [BACKENDID].',
-                                                                                                                          Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
+            throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('The PHP function fsockopen is not available. Needed by backend [BACKENDID].',
+                               Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
         }
 
         return true;
@@ -118,7 +118,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             $this->socketAddress = $address;
             $this->socketPort = $port;
         } else {
-            throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Unknown socket type given in backend [BACKENDID]', Array('BACKENDID' => $this->backendId)));
+            throw new BackendConnectionProblem(
+              GlobalCore::getInstance()->getLang()->getText('Unknown socket type given in backend [BACKENDID]',
+                Array('BACKENDID' => $this->backendId)));
         }
     }
 
@@ -209,6 +211,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             //$this->verifyLivestatusVersion();
         }
 
+        //$fh = fopen('/tmp/live', 'a');
+        //fwrite($fh, $query."\n\n");
+        //fclose($fh);
+
         // Query to get a json formated array back
         // Use KeepAlive with fixed16 header
         $query .= "OutputFormat:json\nKeepAlive: on\nResponseHeader: fixed16\n\n";
@@ -254,6 +260,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
                                                                                       Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => $read)));
         }
+
+        //$fh = fopen('/tmp/live', 'a');
+        //fwrite($fh, $read."\n\n");
+        //fclose($fh);
 
         // Decode the json response
         $obj = json_decode(utf8_encode($read));
@@ -418,7 +428,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @return  String    Parsed filters
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    private function parseFilter($objects, $filters) {
+    private function parseFilter($objects, $filters, $isMemberQuery = false,
+                                 $isCountQuery = false, $isHostQuery = true) {
         $aFilters = Array();
         foreach($objects AS $OBJS) {
             $objFilters = Array();
@@ -445,6 +456,33 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     break;
                 }
             }
+            
+            // Are there child exclude filters defined for this object?
+            // The objType is the type of the objects to query the data for
+            if($isMemberQuery && $OBJS[0]->hasExcludeFilters($isCountQuery)) {
+                $filter = $OBJS[0]->getExcludeFilter($isCountQuery);
+                $objType = $OBJS[0]->getType();
+
+                if($objType == 'host') {
+                    $parts = explode('~~', $filter);
+                    if(!isset($parts[1]))
+                        $objFilters[] = 'Filter: service_description !~~ '.$filter."\n";
+
+                } elseif($objType == 'hostgroup' && $isHostQuery) {
+                    $parts = explode('~~', $filter);
+                    if(!isset($parts[1]))
+                        $objFilters[] = 'Filter: host_name !~~ '.$parts[0]."\n";
+
+                } elseif(($objType == 'hostgroup' && !$isHostQuery) || $objType == 'servicegroup') {
+                    $parts = explode('~~', $filter);
+                    if(isset($parts[1]))
+                        $objFilters[] = 'Filter: host_name ~~ '.$parts[0]."\n"
+                                       .'Filter: service_description ~~ '.$parts[1]."\n"
+                                       ."Negate:\n";
+                    else
+                        $objFilters[] = 'Filter: host_name !~~ '.$parts[0]."\n";
+                }
+            }
 
             // the object specific filters all need to match
             $count = count($objFilters);
@@ -469,15 +507,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     /**
      * PUBLIC getHostState()
      *
-     * Queries the livestatus socket for the state of a host
+     * Queries the livestatus socket for the state of one or several hosts
      *
      * @param   Array     List of objects to query
      * @param   Array     List of filters to apply
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    public function getHostState($objects, $options, $filters) {
-        $objFilter = $this->parseFilter($objects, $filters);
+    public function getHostState($objects, $options, $filters, $isMemberQuery = false) {
+        $objFilter = $this->parseFilter($objects, $filters, $isMemberQuery, false, HOST_QUERY);
 
         if($options & 1)
             $stateAttr = 'hard_state';
@@ -587,8 +625,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    public function getServiceState($objects, $options, $filters) {
-        $objFilter = $this->parseFilter($objects, $filters);
+    public function getServiceState($objects, $options, $filters, $isMemberQuery = false) {
+        $objFilter = $this->parseFilter($objects, $filters, $isMemberQuery, false, !HOST_QUERY);
 
         if($options & 1)
             $stateAttr = 'last_hard_state';
@@ -727,7 +765,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     public function getHostStateCounts($objects, $options, $filters) {
-        $objFilter = $this->parseFilter($objects, $filters);
+        $objFilter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
 
         if($options & 1)
             $stateAttr = 'last_hard_state';
@@ -867,7 +905,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     public function getHostgroupStateCounts($objects, $options, $filters) {
-        $objFilter = $this->parseFilter($objects, $filters);
+        $objFilter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, HOST_QUERY);
 
         if($options & 1)
             $stateAttr = 'hard_state';
@@ -952,6 +990,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 );
             }
         }
+
+        $objFilter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
 
         // If recognize_services are disabled don't fetch service information
         if($options & 2)
@@ -1074,7 +1114,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     public function getServicegroupStateCounts($objects, $options, $filters) {
-        $objFilter = $this->parseFilter($objects, $filters);
+        $objFilter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
 
         if($options & 1)
             $stateAttr = 'last_hard_state';

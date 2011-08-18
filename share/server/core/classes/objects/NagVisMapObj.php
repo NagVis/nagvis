@@ -340,6 +340,31 @@ class NagVisMapObj extends NagVisStatefulObject {
     }
 
     /**
+     * Cares about excluding members of map objects. The other objects excludes
+     * are handled by the backends, not in the NagVis code.
+     */
+    private function excludeMapObject($OBJ) {
+        // at the moment only handle the complete exclusion
+        $filter  = $this->getExcludeFilter(!COUNT_QUERY);
+        $objType = $OBJ->getType();
+        $parts   = explode('~~', $filter);
+
+        // Never exclude stateless objects
+        if($objType == 'textbox' || $objType == 'shape' || $objType == 'line')
+            return false;
+    
+        if(isset($parts[1]) && $objType == 'service'
+           && preg_match('/'.$parts[0].'/', $OBJ->getName())
+           && preg_match('/'.$parts[1].'/', $OBJ->getServiceDescription()))
+            return true;
+
+        if(!isset($parts[1]) && preg_match('/'.$parts[0].'/', $OBJ->getName()))
+            return true;
+
+        return false;
+    }
+
+    /**
      * Gets all objects of the map
      *
      * @author	Thomas Casteleyn <thomas.casteleyn@super-visions.com>
@@ -454,6 +479,10 @@ class NagVisMapObj extends NagVisStatefulObject {
 
             // Apply default configuration to object
             $OBJ->setConfiguration($objConf);
+
+            // Skip object by exclude filter?
+            if($this->hasExcludeFilters(!COUNT_QUERY) && $this->excludeMapObject($OBJ))
+                continue;
 
             // Write member to object array
             $this->members[] = $OBJ;

@@ -509,6 +509,39 @@ class NagVisStatefulObject extends NagVisObject {
         }
     }
 
+    public function hasExcludeFilters($isCount) {
+        // When this is a count use both options exclude_members and
+        // exclude_member_states
+        if($isCount)
+            return (isset($this->exclude_members) && $this->exclude_members !== '')
+                   || (isset($this->exclude_member_states) && $this->exclude_member_states !== '');
+        else
+            return isset($this->exclude_members) && $this->exclude_members !== '';
+    }
+
+    public function getExcludeFilter($isCount) {
+        // When this is a count use the exclude_member_states over the 
+        // exclude_member_states
+        $key = $this->getExcludeFilterKey($isCount);
+        if($key == 'exclude_member_states')
+            return $this->exclude_member_states;
+        if($key == 'exclude_members')
+            return $this->exclude_members;
+        else
+            return '';
+    }
+
+    public function getExcludeFilterKey($isCount) {
+        // When this is a count use the exclude_member_states over the 
+        // exclude_member_states
+        if($isCount && $this->exclude_member_states !== '')
+            return 'exclude_member_states';
+        elseif($this->exclude_members !== '')
+            return 'exclude_members';
+        else
+            return '';
+    }
+
     /**
      * PUBLIC getMaxCheckAttempts()
      *

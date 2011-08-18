@@ -157,6 +157,17 @@ class GlobalMapCfg {
                         'match' => MATCH_BOOLEAN,
                         'field_type' => 'boolean'),
 
+                    'exclude_members' => Array(
+                        'must'       => 0,
+                        'default'    => '',
+                        'match'      => MATCH_REGEX,
+                    ),
+                    'exclude_member_states' => Array(
+                        'must'       => 0,
+                        'default'    => '',
+                        'match'      => MATCH_REGEX,
+                    ),
+
                     'grid_show' => Array('must' => 0,
                         'default' => intval($this->CORE->getMainCfg()->getValue('wui', 'grid_show')),
                         'match' => MATCH_BOOLEAN,
@@ -409,6 +420,17 @@ class GlobalMapCfg {
                         'depends_on' => 'context_menu',
                         'depends_value' => '1'),
 
+                    'exclude_members' => Array(
+                        'must'       => 0,
+                        'default'    => '',
+                        'match'      => MATCH_REGEX,
+                    ),
+                    'exclude_member_states' => Array(
+                        'must'       => 0,
+                        'default'    => '',
+                        'match'      => MATCH_REGEX,
+                    ),
+
                     'hover_menu' => Array('must' => 0,
                         'match' => MATCH_BOOLEAN,
                         'field_type' => 'boolean'),
@@ -585,6 +607,17 @@ class GlobalMapCfg {
                         'field_type' => 'dropdown',
                         'depends_on' => 'context_menu',
                         'depends_value' => '1'),
+
+                    'exclude_members' => Array(
+                        'must'       => 0,
+                        'default'    => '',
+                        'match'      => MATCH_REGEX,
+                    ),
+                    'exclude_member_states' => Array(
+                        'must'       => 0,
+                        'default'    => '',
+                        'match'      => MATCH_REGEX,
+                    ),
 
                     'hover_menu' => Array('must' => 0,
                         'match' => MATCH_BOOLEAN,
@@ -982,6 +1015,17 @@ class GlobalMapCfg {
                         'depends_on' => 'context_menu',
                         'depends_value' => '1'),
 
+                    'exclude_members' => Array(
+                        'must'       => 0,
+                        'default'    => '',
+                        'match'      => MATCH_REGEX,
+                    ),
+                    'exclude_member_states' => Array(
+                        'must'       => 0,
+                        'default'    => '',
+                        'match'      => MATCH_REGEX,
+                    ),
+
                     'hover_menu' => Array('must' => 0,
                         'match' => MATCH_BOOLEAN,
                         'field_type' => 'boolean'),
@@ -1150,6 +1194,17 @@ class GlobalMapCfg {
                         'field_type' => 'dropdown',
                         'depends_on' => 'context_menu',
                         'depends_value' => '1'),
+
+                    'exclude_members' => Array(
+                        'must'       => 0,
+                        'default'    => '',
+                        'match'      => MATCH_REGEX,
+                    ),
+                    'exclude_member_states' => Array(
+                        'must'       => 0,
+                        'default'    => '',
+                        'match'      => MATCH_REGEX,
+                    ),
 
                     'hover_menu' => Array('must' => 0,
                         'match' => MATCH_BOOLEAN,
@@ -1431,6 +1486,8 @@ class GlobalMapCfg {
             'only_hard_states',
             'backend_id',
             'iconset',
+            'exclude_members',
+            'exclude_member_states',
             'line_type',
             'line_width',
             'line_arrow',
