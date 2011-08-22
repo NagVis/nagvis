@@ -3,6 +3,10 @@ This is a small file for storing quick thoughts about new features and needed ch
 
 Probleme:
 
+- Loop in relativen Koordinaten erkennen und verhindern
+  - In WUI Fehler anzeigen
+  - Beim Config Parsen Fehlermeldung erzeugen
+
 -------------------------------------------------------------------------------
 
 - Backends:
@@ -33,12 +37,23 @@ Redesign Map Aufbau:
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
 
-Linien (Auch für neue Automap wichtig!):
+*** Cleanups ***
+
+- ajax_handler und functions/index.php zusammenführen
+- CoreUriHandler() nur an einer Stelle initialisieren
+- Main Config Zugriff über kürzere Aufrufe. Beispiel: $CORE->cfg('', '');
+- Language Zugriff über kürzere Aufrufe. Beispiel: $CORE->_('')
+- Weathermap Linien Perfdata Berechnungen nach check_command aufräumen
+- MapCfg Config Array aufräumen
+
+
+*** Linien (Auch für neue Automap wichtig!) ***
  - Pfeilspitzen konfigurierbar machen
    - Größe
    - Stil
    - Farbe (?)
  - Offset zum Ziel
+
 
 *** Add/Modify Redesign ***
 
@@ -78,12 +93,20 @@ Fehlerbehandlung:
 - Direkt im Dialog: Feldbezogene Fehler direkt unter den Feldern anzeigen
 - Generelle Fehler als Popup/über Formular anzeigen
 
-- Verarbeitung ohne Javascript, kompletter Dialog wird neu generiert
+- Validierung/Verarbeitung ohne Javascript, kompletter Dialog wird neu generiert
+  - Beim Abschicken des Formulars (submitFrontendForm()) den Dialog nicht schließen
+    ajax_handler.php?mod=Map&act=addModify&do=modify
+    -> zeigt das Formular, muss auch die Daten verarbeiten und dann das Ergebnis malen
+  - Das Formular wird abgeschickt und verarbeitet
+    -> Im Fehlerfall wird die Antwort in den Dialog gemalt, wobei der vorherige Inhalt überschrieben wird
+    -> Bei Erfolg wird der Dialog geschlossen, es wird kurz eine Erfolgsmeldung gezeigt
+
 
 *** Shortcuts einbauen ***
 
 Gerade der Edit-Modus im normalen Frontend sollte Hotkeys haben. Diese sollten
 nach Möglichkeit nicht mit Hotkeys von FF/IE kollidieren.
+
 
 *** Fehlerbehandlung ***
   Ajax Schnittstelle umbauen: Kleines Protokoll einbauen, mit Header inkl. Fehlercodes etc.
@@ -95,11 +118,14 @@ Exception/Error log bauen:
   PHP Fehler loggen
 	Eventuell sogar Javascript fehler loggen
 
+
 *** Dokumentation ***
   - Neue Editier-Möglichkeiten in der normalen GUI
   - Mittleren Teil der Linien festmachen oder positionieren
   - Relative Koordinaten
   - Relative Koordinaten via Ctrl setzen und via Shift lösen
+  - Backend Schnittstelle
+
 
 ===============================================================================
 # ERLEDIGT
