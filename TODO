@@ -16,42 +16,13 @@ Installer:
    Leider ist das nicht ganz so einfach, wie bei den anderen Attributen, da in anderen Sektionen
    diese Optionen noch erlaubt sind.
 
-Child-Objekte Filtern:
-  - Zwei Möglichkeiten
-    a) Für tatsächliche Verarbeitung (Status Ermittlung + Child Anzeige)
-    b) Nur für Status Ermittlung
-  - Neues Attribut einführen, welches die Definition enthält um Childs zu filtern
-  - Namen könnte exclude_members sein bzw. exclude_member_states
-  - Es können alle Childs gefiltert werden, bei Maps von allen Typen
-  - Gematcht wird auf den Namen des Childs bzw. bei Services auf den Service-Namen
-  - Als Wert könnten Case Insensitive Reguläre Ausdrücke genutzt werden, z.B. exclude_childs="^Uptime$"
-  - Wenn ein Match auf mehrere Elemente nötig ist, z.B. bei Services (Hostname und Service Description),
-    dann werden zwei Reguläre Ausdrücke formuliert, welche durch "~~" getrennt werden.
-    So können auch in Hostgruppen individuelle Services eines Hosts ausgeklammert werden.
-    Beispiel: exclude_childs="^localhost$~~^CPU load$" zum Ausklammern eines bestimmten Dienstes.
-  - Notizen:
-    - CoreBackendMgmt->queue() fasst gleiche Anfragen zu einer Liste zusammen, um die Anzahl
-      der Backend Queries zu reduzieren. z.B. werden Anfragen vom gleichen Typ und mit gleichen
-      Optionen (hardstates, ...) zusammengefasst.
-      Diese werden zusammen mit den objekttyp spezifischen Filtern an das Backend weitergegeben
-      um die richtigen Daten zu holen.
-      Als weiteres Kriterium kommen nun die Objekt individuellen Filter dazu. Diese müssen beim
-      CoreBackendMgmt->queue() auch dazu führen, dass Objekte mit unterschiedlichen Filtern
-      einzeln abgefragt werden.
-      Der Grund ist, dass im Backend eine einzige Anfrage mit einem globalen Filter für alle
-      angefragten Objekte ausgelöst wird.
-  - Todo:
-    - Livestatus Problem mit verknüpften Negierungen?
-    - Map Childs Filtern
-  - Verworfen/Zurückgestellt:
-    - Man kann mehrere Pattern angeben. Sobald ein Pattern zutrifft, wird übersprungen
-    - Mehrere Patterns werden durch ; Zeichen getrennt, z.B. exclude_childs="/^Uptime$/;/^PING$/"
-
 Redesign Map Aufbau:
   Map Aufbau gliedert sich in 2 Phasen
   1. Was kommt auf die Map? Mögliche Quellen:
     - Map-Konfiguration
     - Funktion liefert Datenkostrukt zurück (wird zu Map-Konfiguration gemerged)
+      - Nagios Parents (Automap)
+      - Externe DB
     - Es könnte auch ein Include auf irgendeine Datei sein
       - Die Funktion wird nur beim Parsen der Map Konfiguration geladen; Die Daten kommen mit in den Map-Cache
       - Frage hier: Wie wird der Map-Cache ungültig gemacht?
@@ -130,3 +101,34 @@ Exception/Error log bauen:
   - Relative Koordinaten
   - Relative Koordinaten via Ctrl setzen und via Shift lösen
 
+===============================================================================
+# ERLEDIGT
+===============================================================================
+
+Child-Objekte Filtern:
+  - Zwei Möglichkeiten
+    a) Für tatsächliche Verarbeitung (Status Ermittlung + Child Anzeige)
+    b) Nur für Status Ermittlung
+  - Neues Attribut einführen, welches die Definition enthält um Childs zu filtern
+  - Namen könnte exclude_members sein bzw. exclude_member_states
+  - Es können alle Childs gefiltert werden, bei Maps von allen Typen
+  - Gematcht wird auf den Namen des Childs bzw. bei Services auf den Service-Namen
+  - Als Wert könnten Case Insensitive Reguläre Ausdrücke genutzt werden, z.B. exclude_childs="^Uptime$"
+  - Wenn ein Match auf mehrere Elemente nötig ist, z.B. bei Services (Hostname und Service Description),
+    dann werden zwei Reguläre Ausdrücke formuliert, welche durch "~~" getrennt werden.
+    So können auch in Hostgruppen individuelle Services eines Hosts ausgeklammert werden.
+    Beispiel: exclude_childs="^localhost$~~^CPU load$" zum Ausklammern eines bestimmten Dienstes.
+  - Notizen:
+    - CoreBackendMgmt->queue() fasst gleiche Anfragen zu einer Liste zusammen, um die Anzahl
+      der Backend Queries zu reduzieren. z.B. werden Anfragen vom gleichen Typ und mit gleichen
+      Optionen (hardstates, ...) zusammengefasst.
+      Diese werden zusammen mit den objekttyp spezifischen Filtern an das Backend weitergegeben
+      um die richtigen Daten zu holen.
+      Als weiteres Kriterium kommen nun die Objekt individuellen Filter dazu. Diese müssen beim
+      CoreBackendMgmt->queue() auch dazu führen, dass Objekte mit unterschiedlichen Filtern
+      einzeln abgefragt werden.
+      Der Grund ist, dass im Backend eine einzige Anfrage mit einem globalen Filter für alle
+      angefragten Objekte ausgelöst wird.
+  - Verworfen/Zurückgestellt:
+    - Man kann mehrere Pattern angeben. Sobald ein Pattern zutrifft, wird übersprungen
+    - Mehrere Patterns werden durch ; Zeichen getrennt, z.B. exclude_childs="/^Uptime$/;/^PING$/"
