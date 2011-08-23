@@ -270,9 +270,8 @@ class NagVisHeaderMenu {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     private function getDocLanguage() {
-	$lang = $this->CORE->getLang()->getCurrentLanguage();
-        if(in_array($lang, $this->CORE->getAvailableDocs()))
-	    return $lang;
+        if(in_array(curLang(), $this->CORE->getAvailableDocs()))
+	    return curLang();
 	else
 	    return 'en_US';
     }
@@ -297,7 +296,7 @@ class NagVisHeaderMenu {
             'langSearch'         => l('Search'),
             'langUserMgmt'       => l('Manage Users'),
             'langManageRoles'    => l('Manage Roles'),
-            'currentLanguage'    => $this->CORE->getLang()->getCurrentLanguage(),
+            'currentLanguage'    => curLang(),
 	    'docLanguage'        => $this->getDocLanguage(),
             'langChooseLanguage' => l('Choose Language'),
             'langUser' => l('User menu'),

@@ -30,4 +30,9 @@ function l($txt, $vars = null) {
     return $_LANG->getText($txt, $vars);
 }
 
+function curLang() {
+    global $_LANG;
+    return $_LANG->getCurrentLanguage();
+}
+
 ?>

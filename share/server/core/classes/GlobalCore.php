@@ -70,16 +70,6 @@ class GlobalCore {
     }
 
     /**
-     * Getter function to initialize LANG
-     *
-     * @author Lars Michelsen <lars@vertical-visions.de>
-     */
-    public static function getLang() {
-        global $_LANG;
-        return $_LANG;
-    }
-
-    /**
      * Setter for AA
      *
      * @author Lars Michelsen <lars@vertical-visions.de>
