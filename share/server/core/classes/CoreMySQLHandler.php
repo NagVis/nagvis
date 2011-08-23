@@ -54,9 +54,9 @@ class CoreMySQLHandler {
         $this->DB = mysql_connect($host.':'.$port, $user, $pw);
 
         if(!$this->DB) {
-            new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('errorConnectingMySQL',
-                                       Array('BACKENDID' => 'MySQLHandler','MYSQLERR' => mysql_error())));
-            return false;
+            throw new NagVisException(l('errorConnectingMySQL',
+                                       Array('BACKENDID' => 'MySQLHandler',
+                                             'MYSQLERR'  => mysql_error())));
         }
 
         $returnCode = mysql_select_db($db, $this->DB);
@@ -65,9 +65,9 @@ class CoreMySQLHandler {
         error_reporting($oldLevel);
 
         if(!$returnCode){
-            new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('errorSelectingDb',
-                         Array('BACKENDID' => 'MySQLHandler', 'MYSQLERR' => mysql_error($this->CONN))));
-            return false;
+            throw new NagVisException(l('errorSelectingDb',
+                         Array('BACKENDID' => 'MySQLHandler',
+                               'MYSQLERR'  => mysql_error($this->CONN))));
         } else {
             return true;
         }
@@ -101,7 +101,7 @@ class CoreMySQLHandler {
     private function checkMySQLSupport($printErr = 1) {
         if(!extension_loaded('mysql')) {
             if($printErr === 1) {
-                new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Your PHP installation does not support mysql. Please check if you installed the PHP module.'));
+                throw new NagVisException(l('Your PHP installation does not support mysql. Please check if you installed the PHP module.'));
             }
             return false;
         } else {

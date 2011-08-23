@@ -79,7 +79,7 @@ class CoreModLogonEnv extends CoreModule {
                                     }
                                 } else {
                                     if($this->bVerbose) {
-                                        new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to authenticate user. User does not exist.'));
+                                        throw new NagVisException(l('Unable to authenticate user. User does not exist.'));
                                     }
                                     return false;
                                 }
@@ -104,14 +104,16 @@ class CoreModLogonEnv extends CoreModule {
                                 // Invalid credentials
                                 // FIXME: Count tries and maybe block somehow
                                 if($this->bVerbose) {
-                                    new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid credentials.'), null, $this->CORE->getLang()->getText('Authentication failed'), 10, CoreRequestHandler::getReferer(''));
+                                    new GlobalMessage('ERROR', l('You entered invalid credentials.'),
+                                                      null, l('Authentication failed'), 10, CoreRequestHandler::getReferer(''));
                                 }
 
                                 return false;
                             }
                         } else {
                             if($this->bVerbose) {
-                                new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to authenticate user. The environment variable [VAR] is not set or empty.', Array('VAR' => htmlentities($sEnvVar))));
+                                throw new NagVisException(l('Unable to authenticate user. The environment variable [VAR] is not set or empty.',
+                                                            Array('VAR' => htmlentities($sEnvVar))));
                             }
 
                             return false;

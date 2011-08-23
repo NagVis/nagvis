@@ -61,7 +61,7 @@ class CoreModAuth extends CoreModule {
                             if($this->AUTHENTICATION->isAuthenticated()) {
                                 // Display success with link and refresh in 5 seconds to called page
                                 // When referer is empty redirect to overview page
-                                new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You have been authenticated. You will be redirected.'),
+                                new GlobalMessage('NOTE', l('You have been authenticated. You will be redirected.'),
                                                    null, null, 1, CoreRequestHandler::getReferer($this->CORE->getMainCfg()->getValue('paths', 'htmlbase')));
                             } else {
                                 // Invalid credentials
@@ -79,10 +79,10 @@ class CoreModAuth extends CoreModule {
                 break;
                 case 'logout':
                     if($this->AUTHENTICATION->logout())
-                        new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You have been logged out. You will be redirected.'),
+                        new GlobalMessage('NOTE', l('You have been logged out. You will be redirected.'),
                                           null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
                     else
-                        new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to log you out. Maybe it is not supported by your authentication module.'),
+                        new GlobalMessage('ERROR', l('Unable to log you out. Maybe it is not supported by your authentication module.'),
                                           null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
                 break;
             }
@@ -115,14 +115,14 @@ class CoreModAuth extends CoreModule {
     }
 
     public function msgAlreadyLoggedIn() {
-        new GlobalMessage('NOTE', $this->CORE->getLang()->getText('You are already logged in. You will be redirected.'),
+        new GlobalMessage('NOTE', l('You are already logged in. You will be redirected.'),
                           null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
         return '';
     }
 
     public function msgInvalidCredentials() {
-        new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid credentials.'),
-                          null, $this->CORE->getLang()->getText('Authentication failed'), 1, CoreRequestHandler::getReferer(''));
+        new GlobalMessage('ERROR', l('You entered invalid credentials.'),
+                          null, l('Authentication failed'), 1, CoreRequestHandler::getReferer(''));
         return '';
     }
 }

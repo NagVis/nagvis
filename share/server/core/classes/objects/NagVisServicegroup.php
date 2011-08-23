@@ -32,16 +32,6 @@ class NagVisServicegroup extends NagiosServicegroup {
     protected static $langChild = null;
     protected static $langChild1 = null;
 
-    /**
-     * Class constructor
-     *
-     * @param		Object 		Object of class GlobalMainCfg
-     * @param		Object 		Object of class CoreBackendMgmt
-     * @param		Object 		Object of class GlobalLanguage
-     * @param		Integer 		ID of queried backend
-     * @param		String		Name of the servicegroup
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
     public function __construct($CORE, $BACKEND, $backend_id, $servicegroupName) {
         $this->type = 'servicegroup';
         $this->iconset = 'std_medium';

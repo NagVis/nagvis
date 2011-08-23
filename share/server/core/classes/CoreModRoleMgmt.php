@@ -68,15 +68,13 @@ class CoreModRoleMgmt extends CoreModule {
                     if($aReturn !== false) {
                         // Try to apply
                         if($this->AUTHORISATION->createRole($aReturn['name'])) {
-                            new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The role has been created.'));
+                            new GlobalMessage('NOTE', l('The role has been created.'));
                             $sReturn = '';
                         } else {
-                            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The user could not be created.'));
-                            $sReturn = '';
+                            throw new NagVisException(l('The user could not be created.'));
                         }
                     } else {
-                        new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-                        $sReturn = '';
+                        throw new NagVisException(l('You entered invalid information.'));
                     }
                 break;
                 case 'doEdit':
@@ -84,15 +82,14 @@ class CoreModRoleMgmt extends CoreModule {
 
                     if($aReturn !== false) {
                         if($this->AUTHORISATION->updateRolePerms($aReturn['roleId'], $aReturn['perms'])) {
-                            new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The permissions for this role have been updated.'));
+                            new GlobalMessage('NOTE', l('The permissions for this role have been updated.'));
                             $sReturn = '';
                         } else {
-                            new GlobalMessage('NOTE', $this->CORE->getLang()->getText('Problem while updating role permissions.'));
+                            new GlobalMessage('NOTE', l('Problem while updating role permissions.'));
                             $sReturn = '';
                         }
                     } else {
-                        new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-                        $sReturn = '';
+                        throw new NagVisException(l('You entered invalid information.'));
                     }
                 break;
                 case 'doDelete':
@@ -100,15 +97,14 @@ class CoreModRoleMgmt extends CoreModule {
 
                     if($aReturn !== false) {
                         if($this->AUTHORISATION->deleteRole($aReturn['roleId'])) {
-                            new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The role has been deleted.'));
+                            new GlobalMessage('NOTE', l('The role has been deleted.'));
                             $sReturn = '';
                         } else {
-                            new GlobalMessage('NOTE', $this->CORE->getLang()->getText('Problem while deleting the role.'));
+                            new GlobalMessage('NOTE', l('Problem while deleting the role.'));
                             $sReturn = '';
                         }
                     } else {
-                        new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-                        $sReturn = '';
+                        throw new NagVisException(l('You entered invalid information.'));
                     }
                 break;
             }
@@ -193,10 +189,8 @@ class CoreModRoleMgmt extends CoreModule {
             $bValid = false;
 
         // Check if the role already exists
-        if($bValid && $this->AUTHORISATION->checkRoleExists($this->FHANDLER->get('name'))) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The rolename is invalid or does already exist.'));
-            $bValid = false;
-        }
+        if($bValid && $this->AUTHORISATION->checkRoleExists($this->FHANDLER->get('name')))
+            throw new NagVisException(l('The rolename is invalid or does already exist.'));
 
         //@todo Escape vars?
 

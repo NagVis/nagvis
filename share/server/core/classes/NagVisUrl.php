@@ -59,14 +59,16 @@ class NagVisUrl {
         // Reported here: http://news.gmane.org/find-root.php?message_id=%3cf60c42280909021938s7f36c0edhd66d3e9156a5d081%40mail.gmail.com%3e
         $aUrl = parse_url($this->strUrl);
         if(!isset($aUrl['scheme']) || $aUrl['scheme'] == '') {
-            echo new GlobalMessage('ERROR', $this->CORE->getLang()->getText('problemReadingUrl', Array('URL' => htmlentities($this->strUrl), 'MSG' => 'Not allowed url')), null, 'error');
+            throw new NagVisException(l('problemReadingUrl', Array('URL' => htmlentities($this->strUrl),
+                                                                   'MSG' => 'Not allowed url')));
             exit(1);
         }
 
         if(false == ($this->strContents = file_get_contents($this->strUrl))) {
             $aError = error_get_last();
 
-            echo new GlobalMessage('ERROR', $this->CORE->getLang()->getText('problemReadingUrl', Array('URL' => htmlentities($this->strUrl), 'MSG' => $aError['message'])), null, 'error');
+            throw new NagVisException(l('problemReadingUrl', Array('URL' => htmlentities($this->strUrl),
+                                                                   'MSG' => $aError['message'])));
         }
 
         // set the old level of reporting back

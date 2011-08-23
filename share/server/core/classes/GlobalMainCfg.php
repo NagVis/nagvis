@@ -1337,7 +1337,8 @@ class GlobalMainCfg {
                             // value is "must"
                             if($this->getValue($type,$key) == '') {
                                 // a "must" value is missing or empty
-                                new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The needed attribute [ATTRIBUTE] is missing in section [TYPE] in main configuration file. Please take a look at the documentation.', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
+                                throw new NagVisException(l('The needed attribute [ATTRIBUTE] is missing in section [TYPE] in main configuration file. Please take a look at the documentation.',
+                                                            Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
                                 return FALSE;
                             }
                         }
@@ -1362,13 +1363,15 @@ class GlobalMainCfg {
                             if(!isset($arrValidConfig[$key])) {
                                 // unknown attribute
                                 if($printErr) {
-                                    new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Unknown value [ATTRIBUTE] used in section [TYPE] in main configuration file.', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
+                                    throw new NagVisException(l('Unknown value [ATTRIBUTE] used in section [TYPE] in main configuration file.',
+                                                                Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
                                 }
                                 return FALSE;
                             } elseif(isset($arrValidConfig[$key]['deprecated']) && $arrValidConfig[$key]['deprecated'] == 1) {
                                 // deprecated option
                                 if($printErr) {
-                                    new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file is deprecated. Please take a look at the documentation for updating your configuration.', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
+                                    throw new NagVisException(l('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file is deprecated. Please take a look at the documentation for updating your configuration.',
+                                                                Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
                                 }
                                 return FALSE;
                             } else {
@@ -1391,7 +1394,8 @@ class GlobalMainCfg {
                                 if(!preg_match($arrValidConfig[$key]['match'],$val)) {
                                     // wrong format
                                     if($printErr) {
-                                        new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file does not match the correct format. Please review your configuration.', Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
+                                        throw new NagVisException(l('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file does not match the correct format. Please review your configuration.',
+                                                                    Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
                                     }
                                     return FALSE;
                                 }
@@ -1399,7 +1403,7 @@ class GlobalMainCfg {
                                 // Check if the configured backend is defined in main configuration file
                                 if($type == 'defaults' && $key == 'backend' && !isset($this->config['backend_'.$val])) {
                                     if($printErr) {
-                                        new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('backendNotDefined', Array('BACKENDID' => $val)));
+                                        throw new NagVisException(l('backendNotDefined', Array('BACKENDID' => $val)));
                                     }
                                     return FALSE;
                                 }
@@ -1409,7 +1413,8 @@ class GlobalMainCfg {
                 } else {
                     // unknown type
                     if($printErr) {
-                        new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('The section [TYPE] is not supported in main configuration. Please take a look at the documentation.', 'TYPE~'.$type));
+                        throw new NagVisException(l('The section [TYPE] is not supported in main configuration. Please take a look at the documentation.',
+                                                    Array('TYPE' => $type)));
                     }
                     return FALSE;
                 }
@@ -1831,15 +1836,11 @@ class GlobalMainCfg {
         }
 
         $cfgFile = $this->configFiles[count($this->configFiles)-1];
-        if(!$handle = fopen($cfgFile, 'w+')) {
-            new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('mainCfgNotWriteable'), GlobalCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
-            return FALSE;
-        }
+        if(!$handle = fopen($cfgFile, 'w+'))
+            throw new NagVisException(l('mainCfgNotWriteable'));
 
-        if(!fwrite($handle, $content)) {
-            new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('mainCfgCouldNotWriteMainConfigFile'), GlobalCore::getInstance()->getMainCfg()->getValue('paths','htmlbase'));
-            return FALSE;
-        }
+        if(!fwrite($handle, $content))
+            throw new NagVisException(l('mainCfgCouldNotWriteMainConfigFile'));
 
         fclose($handle);
         GlobalCore::getInstance()->setPerms($cfgFile);

@@ -36,16 +36,6 @@ class NagiosServicegroup extends NagVisStatefulObject {
 
     protected $members;
 
-    /**
-     * Class constructor
-     *
-     * @param		Object 		Object of class GlobalMainCfg
-     * @param		Object 		Object of class CoreBackendMgmt
-     * @param		Object 		Object of class GlobalLanguage
-     * @param		Integer 		ID of queried backend
-     * @param		String		Name of the servicegroup
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
     public function __construct($CORE, $BACKEND, $backend_id, $servicegroupName) {
         $this->backend_id = $backend_id;
         $this->servicegroup_name = $servicegroupName;
@@ -194,11 +184,11 @@ class NagiosServicegroup extends NagVisStatefulObject {
         }
 
         // FIXME: Recode mergeSummaryOutput method
-        $this->mergeSummaryOutput($arrServiceStates, $this->CORE->getLang()->getText('services'));
+        $this->mergeSummaryOutput($arrServiceStates, l('services'));
 
         // Fallback for hostgroups without members
         if($iSumCount == 0) {
-            $this->summary_output = $this->CORE->getLang()->getText('The servicegroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
+            $this->summary_output = l('The servicegroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
                                                                                         Array('GROUP' => $this->getName(),
                                                                                               'BACKEND' => $this->backend_id));
         }
@@ -222,9 +212,9 @@ class NagiosServicegroup extends NagVisStatefulObject {
                 $arrStates[$MEMBER->getSummaryState()]++;
             }
 
-            $this->mergeSummaryOutput($arrStates, $this->CORE->getLang()->getText('services'));
+            $this->mergeSummaryOutput($arrStates, l('services'));
         } else {
-            $this->summary_output = $this->CORE->getLang()->getText('serviceGroupNotFoundInDB','SERVICEGROUP~'.$this->servicegroup_name);
+            $this->summary_output = l('serviceGroupNotFoundInDB','SERVICEGROUP~'.$this->servicegroup_name);
         }
     }
 }

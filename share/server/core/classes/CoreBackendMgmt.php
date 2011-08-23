@@ -208,7 +208,7 @@ class CoreBackendMgmt {
                     $aServices = $this->getBackend($backendId)->getServiceState(Array($OBJ->getName() => Array($OBJ)), $options, $filters, MEMBER_QUERY);
                 } catch(BackendException $e) {
                     $aServices = Array();
-                    $OBJ->setBackendProblem($this->CORE->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]',
+                    $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
                                                                    Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())));
                 }
 
@@ -261,7 +261,7 @@ class CoreBackendMgmt {
                     $aHosts = $this->getBackend($backendId)->getHostState(Array($OBJ->getName() => Array($OBJ)), $options, $filters, MEMBER_QUERY);
                 } catch(BackendException $e) {
                     $aHosts = Array();
-                    $OBJ->setBackendProblem($this->CORE->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]',
+                    $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
                                                                   Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())));
                 }
 
@@ -354,7 +354,7 @@ class CoreBackendMgmt {
                         if(isset($msg))
                             $OBJ->setBackendProblem($msg);
                         else
-                            $OBJ->setBackendProblem($this->CORE->getLang()->getText('The object "[OBJ]" does not exist ([TYPE]).',
+                            $OBJ->setBackendProblem(l('The object "[OBJ]" does not exist ([TYPE]).',
                                                              Array('OBJ' => $name, 'TYPE' => $type)));
     }
 
@@ -390,9 +390,8 @@ class CoreBackendMgmt {
     private function loadBackends() {
         $aBackends = $this->CORE->getDefinedBackends();
 
-        if(!count($aBackends)) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('noBackendDefined'));
-        }
+        if(!count($aBackends))
+            throw new NagVisException(l('noBackendDefined'));
     }
 
     /**
@@ -407,7 +406,8 @@ class CoreBackendMgmt {
             return true;
 
         if($printErr == 1)
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backendNotExists','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype')));
+            throw new NagVisException(l('backendNotExists', Array('BACKENDID'   => $backendId,
+                                                                  'BACKENDTYPE' => $this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype'))));
         return false;
     }
 
@@ -421,7 +421,7 @@ class CoreBackendMgmt {
         list($statusBackend, $statusHost) = explode(':', $statusHost, 2);
 
         if($statusBackend == $backendId)
-            $this->aError[$backendId] = new BackendConnectionProblem($this->CORE->getLang()->getText('Configuration Error: The statusHost ([STATUSHOST]) is in same backend as the one to check.', Array('STATUSHOST' => $statusHost)));
+            $this->aError[$backendId] = new BackendConnectionProblem(l('Configuration Error: The statusHost ([STATUSHOST]) is in same backend as the one to check.', Array('STATUSHOST' => $statusHost)));
 
         try {
             $filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
@@ -457,7 +457,7 @@ class CoreBackendMgmt {
              */
       $statusHost = $this->CORE->getMainCfg()->getValue('backend_' . $backendId, 'statushost');
       if($statusHost != '' && !$this->backendAlive($backendId, $statusHost)) {
-                $this->aError[$backendId] = new BackendConnectionProblem($this->CORE->getLang()->getText('The backend is reported as dead by the statusHost ([STATUSHOST]).', Array('STATUSHOST' => $statusHost)));
+                $this->aError[$backendId] = new BackendConnectionProblem(l('The backend is reported as dead by the statusHost ([STATUSHOST]).', Array('STATUSHOST' => $statusHost)));
                 return false;
             }
 
@@ -491,7 +491,8 @@ class CoreBackendMgmt {
             return true;
         } else {
             if($printErr == 1) {
-                new GlobalMessage('ERROR', $this->CORE->getLang()->getText('backendNotInitialized','BACKENDID~'.$backendId.',BACKENDTYPE~'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype')));
+                throw new NagVisException(l('backendNotInitialized', Array('BACKENDID' => $backendId,
+                    'BACKENDTYPE' => $this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype'))));
             }
             return false;
         }
@@ -510,7 +511,10 @@ class CoreBackendMgmt {
             return true;
         } else {
             if($printErr == 1) {
-                new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend.', Array('FEATURE' => htmlentities($feature), 'BACKENDID' => $backendId, 'BACKENDTYPE' => $this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype'))));
+                throw new NagVisException(l('The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend.',
+                                          Array('FEATURE'     => htmlentities($feature),
+                                                'BACKENDID'   => $backendId,
+                                                'BACKENDTYPE' => $this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype'))));
             }
             return false;
         }

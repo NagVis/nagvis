@@ -32,17 +32,6 @@ class NagVisService extends NagiosService {
     protected static $langType = null;
     protected static $langSelf = null;
 
-    /**
-     * Class constructor
-     *
-     * @param		Object 		Object of class GlobalMainCfg
-     * @param		Object 		Object of class CoreBackendMgmt
-     * @param		Object 		Object of class GlobalLanguage
-     * @param		Integer 		ID of queried backend
-     * @param		String		Name of the host
-     * @param		String		Service description
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
     public function __construct($CORE, $BACKEND, $backend_id, $hostName, $serviceDescription) {
         $this->type = 'service';
         $this->iconset = 'std_medium';

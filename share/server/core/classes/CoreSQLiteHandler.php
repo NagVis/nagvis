@@ -90,12 +90,12 @@ class CoreSQLiteHandler {
     private function checkSQLiteSupport($printErr = 1) {
         if(!class_exists('PDO')) {
             if($printErr === 1) {
-                new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Your PHP installation does not support PDO. Please check if you installed the PHP module.'));
+                throw new NagVisException(l('Your PHP installation does not support PDO. Please check if you installed the PHP module.'));
             }
             return false;
         } elseif(!in_array('sqlite', PDO::getAvailableDrivers())) {
             if($printErr === 1) {
-                new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Your PHP installation does not support PDO SQLite (3.x). Please check if you installed the PHP module.'));
+                throw new NagVisException(l('Your PHP installation does not support PDO SQLite (3.x). Please check if you installed the PHP module.'));
             }
             return false;
         } else {

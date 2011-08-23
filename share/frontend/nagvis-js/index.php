@@ -38,25 +38,30 @@ require('../../server/core/functions/autoload.php');
 require('../../server/core/functions/debug.php');
 require('../../server/core/functions/oldPhpVersionFixes.php');
 require('../../server/core/functions/nagvisErrorHandler.php');
+require('../../server/core/functions/i18n.php');
 require('../../server/core/classes/CoreExceptions.php');
 
 // This defines whether the GlobalMessage prints HTML or ajax error messages
 define('CONST_AJAX' , FALSE);
 
-$CORE     = GlobalCore::getInstance();
-$MHANDLER = new FrontendModuleHandler();
-$_name    = 'nagvis-js';
-$_modules = Array(
-    'Info',
-    'Map',
-    'Url',
-    'AutoMap',
-    'Overview',
-    'Rotation',
-    $CORE->getMainCfg()->getValue('global', 'logonmodule')
-);
-
-require('../../server/core/functions/index.php');
-exit(0);
+try {
+    $CORE     = GlobalCore::getInstance();
+    $MHANDLER = new FrontendModuleHandler();
+    $_name    = 'nagvis-js';
+    $_modules = Array(
+        'Info',
+        'Map',
+        'Url',
+        'AutoMap',
+        'Overview',
+        'Rotation',
+        $CORE->getMainCfg()->getValue('global', 'logonmodule')
+    );
+    
+    require('../../server/core/functions/index.php');
+    exit(0);
+} catch(NagVisException $e) {
+	new GlobalMessage('ERROR', $e->getMessage());
+}
 
 ?>

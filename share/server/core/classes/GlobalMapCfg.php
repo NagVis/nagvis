@@ -1700,14 +1700,14 @@ class GlobalMapCfg {
                 if(strpos($file[$l], 'define') !== FALSE) {
                     $sObjType = substr($file[$l], 7, (strpos($file[$l], '{', 8) - 8));
                     if(!isset($sObjType) || !isset(self::$validConfig[$sObjType])) {
-                        new GlobalMessage('ERROR', $this->CORE->getLang()->getText('unknownObject',
-                                                   Array('TYPE' => $sObjType, 'MAPNAME' => $this->name)));
-                        return FALSE;
+                        throw new NagVisException(l('unknownObject',
+                                                    Array('TYPE'    => $sObjType,
+                                                          'MAPNAME' => $this->name)));
                     }
 
                     // This is a new definition and it's a valid one
                     $obj = Array(
-                      'type'      => $sObjType,
+                      'type' => $sObjType,
                     );
 
                     continue;
@@ -1716,10 +1716,8 @@ class GlobalMapCfg {
                 // This is another attribute. But it is only ok to proceed here when
                 // there is an open object
                 if($sObjType === '') {
-                    new GlobalMessage('ERROR',
-                                                        $this->CORE->getLang()->getText('Attribute definition out of object. In map [MAPNAME] at line #[LINE].',
-                                                        Array('MAPNAME' => $this->name, 'LINE' => $l+1)));
-                    return FALSE;
+                    throw new NagVisException(l('Attribute definition out of object. In map [MAPNAME] at line #[LINE].',
+                                              Array('MAPNAME' => $this->name, 'LINE' => $l+1)));
                 }
 
                 $iDelimPos = strpos($file[$l], '=');
@@ -1942,7 +1940,7 @@ class GlobalMapCfg {
             foreach(self::$validConfig[$type] AS $key => $val) {
                 if(isset($val['must']) && $val['must'] == '1') {
                     if(!isset($element[$key]) || $element[$key] == '') {
-                        throw new $exception($this->CORE->getLang()->getText('mapCfgMustValueNotSet',
+                        throw new $exception(l('mapCfgMustValueNotSet',
                                              Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key,
                                                                        'TYPE'    => $type,       'ID'        => $id)));
                     }
@@ -1957,10 +1955,10 @@ class GlobalMapCfg {
                 // check for valid attributes
                 if(!isset(self::$validConfig[$type][$key])) {
                     // unknown attribute
-                    throw new $exception($this->CORE->getLang()->getText('unknownAttribute', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type)));
+                    throw new $exception(l('unknownAttribute', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type)));
                 } elseif(isset(self::$validConfig[$type][$key]['deprecated']) && self::$validConfig[$type][$key]['deprecated'] == 1) {
                     // deprecated option
-                    throw new $exception($this->CORE->getLang()->getText('mapDeprecatedOption', Array('MAP' => $this->getName(), 'ATTRIBUTE' => $key, 'TYPE' => $type)));
+                    throw new $exception(l('mapDeprecatedOption', Array('MAP' => $this->getName(), 'ATTRIBUTE' => $key, 'TYPE' => $type)));
                 } else {
                     // The object has a match regex, it can be checked
                     if(isset(self::$validConfig[$type][$key]['match'])) {
@@ -1971,7 +1969,7 @@ class GlobalMapCfg {
                             foreach($val AS $key2 => $val2) {
                                 if(!preg_match(self::$validConfig[$type][$key]['match'], $val2)) {
                                     // wrong format
-                                    throw new $exception($this->CORE->getLang()->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
+                                    throw new $exception(l('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
                                 }
                             }
                         } else {
@@ -1979,14 +1977,14 @@ class GlobalMapCfg {
 
                             if(!preg_match(self::$validConfig[$type][$key]['match'],$val)) {
                                 // Wrong format
-                                throw new $exception($this->CORE->getLang()->getText('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
+                                throw new $exception(l('wrongValueFormatMap', Array('MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key)));
                             }
                         }
                     }
 
                     // Check if the configured backend is defined in main configuration file
                     if($key == 'backend_id' && !in_array($val, $this->CORE->getDefinedBackends())) {
-                        throw new $exception($this->CORE->getLang()->getText('backendNotDefined', Array('BACKENDID' => $val)));
+                        throw new $exception(l('backendNotDefined', Array('BACKENDID' => $val)));
                     }
                 }
             }
@@ -2536,8 +2534,8 @@ class GlobalMapCfg {
                 return TRUE;
             } else {
                 if($printErr)
-                    new GlobalMessage('ERROR', $this->CORE->getLang()->getText('couldNotDeleteMapCfg', Array('MAPPATH' => $this->configFile)));
-                return FALSE;
+                    throw new NagVisException(l('couldNotDeleteMapCfg',
+                                              Array('MAPPATH' => $this->configFile)));
             }
         } else {
             return FALSE;
@@ -2570,7 +2568,7 @@ class GlobalMapCfg {
                 // message the user that there is a lock by another user,
                 // the user can decide wether he want's to override it or not
                 if($printErr == 1)
-                    print '<script>if(!confirm(\''.str_replace("\n", "\\n", $this->CORE->getLang()->getText('mapLocked',
+                    print '<script>if(!confirm(\''.str_replace("\n", "\\n", l('mapLocked',
                                     Array('MAP' =>  $this->name,       'TIME' => date('d.m.Y H:i', $lockdata['time']),
                                                 'USER' => $lockdata['user'], 'IP' =>   $lockdata['ip']))).'\', \'\')) { history.back(); }</script>';
                 return TRUE;

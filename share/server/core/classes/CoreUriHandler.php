@@ -103,7 +103,8 @@ class CoreUriHandler {
             if($bValid) {
                 $this->aOpts[$key] = $_GET[$key];
             } else {
-                new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The parameter "[key]" does not match the valid value format', Array('key' => htmlentities($key))));
+                throw new NagVisException(l('The parameter "[key]" does not match the valid value format',
+                                            Array('key' => htmlentities($key))));
             }
         }
     }
@@ -139,9 +140,8 @@ class CoreUriHandler {
             if(!preg_match(MATCH_URI_PART, $val))
                 $bValid = false;
 
-        // If one param is invalid send the user to 404 page
         if($bValid === false)
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The given url is not valid'));
+            throw new NagVisException(l('The given url is not valid'));
     }
 
     public function isSetAndNotEmpty($sKey) {

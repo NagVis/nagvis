@@ -119,12 +119,12 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 
             // Check that Nagios reports itself as running
             if ($nagiosstate['is_currently_running'] != 1) {
-                throw new BackendConnectionProblem($this->CORE->getLang()->getText('nagiosNotRunning', Array('BACKENDID' =>$this->backendId)));
+                throw new BackendConnectionProblem(l('nagiosNotRunning', Array('BACKENDID' =>$this->backendId)));
             }
 
             // Be suspicious and check that the data at the db is not older that "maxTimeWithoutUpdate" too
             if($_SERVER['REQUEST_TIME'] - $nagiosstate['status_update_time'] > $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
-                throw new BackendConnectionProblem($this->CORE->getLang()->getText('nagiosDataNotUpToDate', Array('BACKENDID' => $this->backendId, 'TIMEWITHOUTUPDATE' => $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'maxtimewithoutupdate'))));
+                throw new BackendConnectionProblem(l('nagiosDataNotUpToDate', Array('BACKENDID' => $this->backendId, 'TIMEWITHOUTUPDATE' => $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'maxtimewithoutupdate'))));
             }
 
             /**
@@ -163,7 +163,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      */
     private function checkTablesExists() {
         if(mysql_num_rows($this->mysqlQuery('SHOW TABLES LIKE \''.$this->dbPrefix.'programstatus\'')) == 0) {
-            throw new BackendConnectionProblem($this->CORE->getLang()->getText('noTablesExists', Array('BACKENDID' => $this->backendId, 'PREFIX' => $this->dbPrefix)));
+            throw new BackendConnectionProblem(l('noTablesExists', Array('BACKENDID' => $this->backendId, 'PREFIX' => $this->dbPrefix)));
             return FALSE;
         } else {
             return TRUE;
@@ -185,7 +185,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         $this->CONN = mysql_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
 
         if(!$this->CONN){
-            throw new BackendConnectionProblem($this->CORE->getLang()->getText('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysql_error())));
+            throw new BackendConnectionProblem(l('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysql_error())));
             return FALSE;
         }
 
@@ -195,7 +195,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         error_reporting($oldLevel);
 
         if(!$returnCode){
-            throw new BackendConnectionProblem($this->CORE->getLang()->getText('errorSelectingDb', Array('BACKENDID' => $this->backendId, 'MYSQLERR' => mysql_error($this->CONN))));
+            throw new BackendConnectionProblem(l('errorSelectingDb', Array('BACKENDID' => $this->backendId, 'MYSQLERR' => mysql_error($this->CONN))));
             return FALSE;
         } else {
             return TRUE;
@@ -213,7 +213,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
     private function checkMysqlSupport() {
         // Check availability of PHP MySQL
         if (!extension_loaded('mysql')) {
-            throw new BackendConnectionProblem($this->CORE->getLang()->getText('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
+            throw new BackendConnectionProblem(l('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
             return FALSE;
         } else {
             return TRUE;
@@ -238,10 +238,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
             $intInstanceId = $ret['instance_id'];
         } elseif(mysql_num_rows($QUERYHANDLE) == 0) {
             // ERROR: Instance name not valid
-            throw new BackendConnectionProblem($this->CORE->getLang()->getText('backendInstanceNameNotValid', Array('BACKENDID' => $this->backendId, 'NAME' => $this->dbInstanceName)));
+            throw new BackendConnectionProblem(l('backendInstanceNameNotValid', Array('BACKENDID' => $this->backendId, 'NAME' => $this->dbInstanceName)));
         } else {
             // ERROR: Given Instance name is not unique
-            throw new BackendConnectionProblem($this->CORE->getLang()->getText('backendInstanceNameNotUniq', Array('BACKENDID' => $this->backendId, 'NAME' => $this->dbInstanceName)));
+            throw new BackendConnectionProblem(l('backendInstanceNameNotUniq', Array('BACKENDID' => $this->backendId, 'NAME' => $this->dbInstanceName)));
         }
 
         // Free memory
@@ -610,7 +610,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 
             if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
                 $arrTmpReturn['state'] = 'UNCHECKED';
-                $arrTmpReturn['output'] = $this->CORE->getLang()->getText('hostIsPending', Array('HOST' => $data['name1']));
+                $arrTmpReturn['output'] = l('hostIsPending', Array('HOST' => $data['name1']));
             } elseif($data['current_state'] == '0') {
                 // Host is UP
                 $arrTmpReturn['state'] = 'UP';
@@ -742,7 +742,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 
             if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
                 $arrTmpReturn['state'] = 'PENDING';
-                $arrTmpReturn['output'] = $this->CORE->getLang()->getText('serviceNotChecked', Array('SERVICE' => $data['name2']));
+                $arrTmpReturn['output'] = l('serviceNotChecked', Array('SERVICE' => $data['name2']));
             } elseif($data['current_state'] == '0') {
                 // Host is UP
                 $arrTmpReturn['state'] = 'OK';

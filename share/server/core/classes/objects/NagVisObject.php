@@ -54,14 +54,6 @@ class NagVisObject {
     protected static $stateWeight = null;
     private static $arrDenyKeys = null;
 
-    /**
-     * Class constructor
-     *
-     * @param		Object 		Object of class GlobalMainCfg
-     * @param		Object 		Object of class CoreBackendMgmt
-     * @param		Object 		Object of class GlobalLanguage
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
     public function __construct($CORE) {
         $this->CORE = $CORE;
 
@@ -263,9 +255,9 @@ class NagVisObject {
             switch($this->type) {
                 case 'host':
                     if(NagVisHost::$langType === null) {
-                        NagVisHost::$langType  = $this->CORE->getLang()->getText('host');
-                        NagVisHost::$langSelf  = $this->CORE->getLang()->getText('hostname');
-                        NagVisHost::$langChild = $this->CORE->getLang()->getText('servicename');
+                        NagVisHost::$langType  = l('host');
+                        NagVisHost::$langSelf  = l('hostname');
+                        NagVisHost::$langChild = l('servicename');
                     }
 
                     $arr['lang_obj_type']    = NagVisHost::$langType;
@@ -274,20 +266,20 @@ class NagVisObject {
                 break;
                 case 'service':
                     if(NagVisService::$langType === null) {
-                        NagVisService::$langType  = $this->CORE->getLang()->getText('service');
-                        NagVisService::$langSelf  = $this->CORE->getLang()->getText('servicename');
+                        NagVisService::$langType  = l('service');
+                        NagVisService::$langSelf  = l('servicename');
                     }
                     if(NagVisHost::$langType === null)
-                        NagVisHost::$langSelf = $this->CORE->getLang()->getText('hostname');
+                        NagVisHost::$langSelf = l('hostname');
 
                     $arr['lang_obj_type']    = NagVisService::$langType;
                     $arr['lang_name']        = NagVisHost::$langSelf;
                 break;
                 case 'hostgroup':
                     if(NagVisHostgroup::$langType === null) {
-                        NagVisHostgroup::$langType  = $this->CORE->getLang()->getText('hostgroup');
-                        NagVisHostgroup::$langSelf  = $this->CORE->getLang()->getText('hostgroupname');
-                        NagVisHostgroup::$langChild = $this->CORE->getLang()->getText('hostname');
+                        NagVisHostgroup::$langType  = l('hostgroup');
+                        NagVisHostgroup::$langSelf  = l('hostgroupname');
+                        NagVisHostgroup::$langChild = l('hostname');
                     }
 
                     $arr['lang_obj_type']    = NagVisHostgroup::$langType;
@@ -296,10 +288,10 @@ class NagVisObject {
                 break;
                 case 'servicegroup':
                     if(NagVisServicegroup::$langType === null) {
-                        NagVisServicegroup::$langType   = $this->CORE->getLang()->getText('servicegroup');
-                        NagVisServicegroup::$langSelf   = $this->CORE->getLang()->getText('servicegroupname');
-                        NagVisServicegroup::$langChild  = $this->CORE->getLang()->getText('servicename');
-                        NagVisServicegroup::$langChild1 = $this->CORE->getLang()->getText('hostname');
+                        NagVisServicegroup::$langType   = l('servicegroup');
+                        NagVisServicegroup::$langSelf   = l('servicegroupname');
+                        NagVisServicegroup::$langChild  = l('servicename');
+                        NagVisServicegroup::$langChild1 = l('hostname');
                     }
 
                     $arr['lang_obj_type']     = NagVisServicegroup::$langType;
@@ -309,9 +301,9 @@ class NagVisObject {
                 break;
                 case 'map':
                     if(NagVisMapObj::$langType === null) {
-                        NagVisMapObj::$langType   = $this->CORE->getLang()->getText('map');
-                        NagVisMapObj::$langSelf   = $this->CORE->getLang()->getText('mapname');
-                        NagVisMapObj::$langChild  = $this->CORE->getLang()->getText('objectname');
+                        NagVisMapObj::$langType   = l('map');
+                        NagVisMapObj::$langSelf   = l('mapname');
+                        NagVisMapObj::$langChild  = l('objectname');
                     }
 
                     $arr['lang_obj_type']    = NagVisMapObj::$langType;

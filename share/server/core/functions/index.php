@@ -71,8 +71,7 @@ foreach($_modules AS $mod)
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
 if($MODULE == null)
-	new GlobalMessage('ERROR', $CORE->getLang()->getText('The module [MOD] is not known',
-	                                 Array('MOD' => htmlentities($UHANDLER->get('mod')))));
+    throw new NagVisException(l('The module [MOD] is not known', Array('MOD' => htmlentities($UHANDLER->get('mod')))));
 $MODULE->passAuth($AUTH, $AUTHORISATION);
 $MODULE->setAction($UHANDLER->get('act'));
 $MODULE->initObject();
@@ -110,7 +109,7 @@ if($MODULE !== false && $MODULE->offersAction($UHANDLER->get('act'))) {
 	$sContent = $MODULE->handleAction();
 } else {
 	// Create instance of msg module
-	new GlobalMessage('ERROR', $CORE->getLang()->getText('The given action is not valid'));
+	throw new NagVisException(l('The given action is not valid'));
 }
 
 echo $sContent;

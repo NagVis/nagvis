@@ -31,8 +31,6 @@ class NagVisShape extends NagVisStatelessObject {
      * Class constructor
      *
      * @param		Object 		Object of class GlobalMainCfg
-     * @param		Object 		Object of class CoreBackendMgmt
-     * @param		Object 		Object of class GlobalLanguage
      * @param		String	 	Image of the shape
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */

@@ -141,8 +141,8 @@ class GlobalIndexPage {
                 $map['overview_class']  = '';
             } else {
                 $map['overview_class']  = 'disabled';
-                $map['overview_url']    = 'javascript:alert(\''.$this->CORE->getLang()->getText('The map is in maintenance mode. Please be patient.').'\');';
-                $map['summary_output']  = $this->CORE->getLang()->getText('The map is in maintenance mode. Please be patient.');
+                $map['overview_url']    = 'javascript:alert(\''.l('The map is in maintenance mode. Please be patient.').'\');';
+                $map['summary_output']  = l('The map is in maintenance mode. Please be patient.');
 
                 $MAP->MAPOBJ->clearMembers();
                 $MAP->MAPOBJ->setSummaryState('UNKNOWN');
@@ -209,7 +209,7 @@ class GlobalIndexPage {
         $map['num_members']     = 0;
         $map['overview_class']  = 'error';
         $map['overview_url']    = 'javascript:alert(\''.$msg.'\');';
-        $map['summary_output']  = $this->CORE->getLang()->getText('Map Configuration Error: [ERR]', Array('ERR' => $msg));
+        $map['summary_output']  = l('Map Configuration Error: [ERR]', Array('ERR' => $msg));
         return $map;
     }
 
@@ -319,9 +319,9 @@ class GlobalIndexPage {
         $arr['favicon_image']      = $this->CORE->getMainCfg()->getValue('paths', 'htmlimages').'internal/favicon.png';
         $arr['background_color']   = $this->CORE->getMainCfg()->getValue('index','backgroundcolor');
 
-        $arr['lang_mapIndex']      = $this->CORE->getLang()->getText('mapIndex');
-        $arr['lang_automapIndex']  = $this->CORE->getLang()->getText('Automap Index');
-        $arr['lang_rotationPools'] = $this->CORE->getLang()->getText('rotationPools');
+        $arr['lang_mapIndex']      = l('mapIndex');
+        $arr['lang_automapIndex']  = l('Automap Index');
+        $arr['lang_rotationPools'] = l('rotationPools');
 
         $arr['event_log']          = (int) $this->CORE->getMainCfg()->getValue('defaults', 'eventlog');
         $arr['event_log_level']    = $this->CORE->getMainCfg()->getValue('defaults', 'eventloglevel');
@@ -382,7 +382,7 @@ class GlobalIndexPage {
                     $strFileType = 'png';
                 break;
                 default:
-                    new GlobalMessage('ERROR', $this->CORE->getLang()->getText('onlyPngOrJpgImages'));
+                    throw new NagVisException(l('onlyPngOrJpgImages'));
                 break;
             }
 
@@ -445,7 +445,7 @@ class GlobalIndexPage {
                     imagepng($thumb, $thumbPath);
                 break;
                 default:
-                    new GlobalMessage('ERROR', $this->CORE->getLang()->getText('onlyPngOrJpgImages'));
+                    throw new NagVisException(l('onlyPngOrJpgImages'));
                 break;
             }
 
@@ -464,14 +464,7 @@ class GlobalIndexPage {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function checkImageExists($imgPath, $printErr) {
-        if(file_exists($imgPath)) {
-            return TRUE;
-        } else {
-            if($printErr == 1) {
-                new GlobalMessage('WARNING', $this->CORE->getLang()->getText('imageNotExists','FILE~'.$imgPath));
-            }
-            return FALSE;
-        }
+        return $this->CORE->checkExisting($imgPath, $printErr);
     }
 }
 ?>

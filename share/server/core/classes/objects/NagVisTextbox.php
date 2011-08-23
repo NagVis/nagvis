@@ -27,14 +27,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisTextbox extends NagVisStatelessObject {
-    /**
-     * Class constructor
-     *
-     * @param		Object 		Object of class GlobalMainCfg
-     * @param		Object 		Object of class CoreBackendMgmt
-     * @param		Object 		Object of class GlobalLanguage
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+
     public function __construct($CORE) {
         $this->type = 'textbox';
         parent::__construct($CORE);

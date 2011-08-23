@@ -56,16 +56,6 @@ class NagVisMapObj extends NagVisStatefulObject {
     // This controlls wether this is MapObj is used as view or as object on a map
     protected $isView;
 
-    /**
-     * Class constructor
-     *
-     * @param		Object 		Object of class GlobalMainCfg
-     * @param		Object 		Object of class CoreBackendMgmt
-     * @param		Object 		Object of class GlobalLanguage
-     * @param		Object		Object of class NagVisMapCfg
-     * @param		Boolean   Flag to tell the class if this is a map object or view
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
     public function __construct($CORE, $BACKEND, $MAPCFG, $bIsView = IS_VIEW) {
         $this->MAPCFG = $MAPCFG;
 
@@ -333,7 +323,7 @@ class NagVisMapObj extends NagVisStatefulObject {
     public function checkMaintenance($printErr) {
         if($this->MAPCFG->getValue(0, 'in_maintenance')) {
             if($printErr)
-                new GlobalMessage('INFO-STOP', $this->CORE->getLang()->getText('mapInMaintenance', 'MAP~'.$this->getName()));
+                new GlobalMessage('INFO-STOP', l('mapInMaintenance', 'MAP~'.$this->getName()));
             return false;
         }
         return true;
@@ -412,7 +402,7 @@ class NagVisMapObj extends NagVisStatefulObject {
                         try {
                             $SUBMAPCFG->readMapConfig();
                         } catch(MapCfgInvalid $e) {
-                            $mapCfgInvalid = $this->CORE->getLang()->getText('Map Configuration Error: [ERR]', Array('ERR' => $e->getMessage()));
+                            $mapCfgInvalid = l('Map Configuration Error: [ERR]', Array('ERR' => $e->getMessage()));
                         }
                     }
 
@@ -426,7 +416,7 @@ class NagVisMapObj extends NagVisStatefulObject {
                         $OBJ->setProblem($mapCfgInvalid);
 
                     if(!$SUBMAPCFG->checkMapConfigExists(0))
-                        $OBJ->setProblem($this->CORE->getLang()->getText('mapCfgNotExists', 'MAP~'.$objConf['map_name']));
+                        $OBJ->setProblem(l('mapCfgNotExists', 'MAP~'.$objConf['map_name']));
 
                     /**
                     * When the current map object is a summary object skip the map
@@ -472,8 +462,9 @@ class NagVisMapObj extends NagVisStatefulObject {
                     $OBJ = new NagVisLine($this->CORE);
                 break;
                 default:
-                    new GlobalMessage('ERROR', $this->CORE->getLang()->getText('unknownObject', 'TYPE~'.$type.',MAPNAME~'.$this->getName()));
-                    $OBJ = null;
+                    throw new NagVisException(l('unknownObject',
+                                              Array('TYPE'    => $type,
+                                                    'MAPNAME' => $this->getName())));
                 break;
             }
 
@@ -534,9 +525,9 @@ class NagVisMapObj extends NagVisStatefulObject {
                 if(isset($arrStates[$OBJ->summary_state]))
                     $arrStates[$OBJ->summary_state]++;
 
-            $this->mergeSummaryOutput($arrStates, $this->CORE->getLang()->getText('objects'));
+            $this->mergeSummaryOutput($arrStates, l('objects'));
         } else {
-            $this->summary_output = $this->CORE->getLang()->getText('mapIsEmpty','MAP~'.$this->getName());
+            $this->summary_output = l('mapIsEmpty','MAP~'.$this->getName());
         }
     }
 
@@ -555,7 +546,7 @@ class NagVisMapObj extends NagVisStatefulObject {
             return true;
         else {
             $OBJ->summary_state = 'UNKNOWN';
-            $OBJ->summary_output = $this->CORE->getLang()->getText('noReadPermissions');
+            $OBJ->summary_output = l('noReadPermissions');
 
             return false;
         }

@@ -31,6 +31,7 @@ require('../../server/core/functions/autoload.php');
 require('../../server/core/functions/debug.php');
 require('../../server/core/functions/oldPhpVersionFixes.php');
 require('../../server/core/functions/nagvisErrorHandler.php');
+require('../../server/core/functions/i18n.php');
 require('../../server/core/classes/CoreExceptions.php');
 
 if (PROFILE) profilingStart();
@@ -107,8 +108,8 @@ try {
 	// Load the module
 	$MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
 	if($MODULE == null) {
-		new GlobalMessage('ERROR', $CORE->getLang()->getText('The module [MOD] is not known',
-		                                      Array('MOD' => htmlentities($UHANDLER->get('mod')))));
+		throw new NagVisException(l('The module [MOD] is not known',
+		                          Array('MOD' => htmlentities($UHANDLER->get('mod')))));
 	}
 	$MODULE->passAuth($AUTH, $AUTHORISATION);
 	$MODULE->setAction($UHANDLER->get('act'));
@@ -136,11 +137,9 @@ try {
 		$MODULE->setAction('view');
 
 		// Try to auth using the environment auth
-		if($MODULE->handleAction() === false) {
-			// When not authenticated show error message
-			new GlobalMessage('ERROR', $CORE->getLang()->getText('You are not authenticated'),
-	                                      null, $CORE->getLang()->getText('Access denied'));
-		}
+		// When not authenticated show error message
+		if($MODULE->handleAction() === false)
+			throw new NagVisException(l('You are not authenticated'), null, l('Access denied'));
 	}
 
 	/*
@@ -156,7 +155,7 @@ try {
 		// Handle the given action in the module
 		$sContent = $MODULE->handleAction();
 	} else {
-		throw new NagVisException($CORE->getLang()->getText('The given action is not valid'));
+		throw new NagVisException(l('The given action is not valid'));
 	}
 } catch(NagVisException $e) {
 	new GlobalMessage('ERROR', $e->getMessage());

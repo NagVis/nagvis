@@ -27,15 +27,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisLine extends NagVisStatelessObject {
-    /**
-     * Class constructor
-     *
-     * @param		Object 		Object of class GlobalMainCfg
-     * @param		Object 		Object of class CoreBackendMgmt
-     * @param		Object 		Object of class GlobalLanguage
-     * @param		String	 	Image of the shape
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+
     public function __construct($CORE) {
         $this->type = 'line';
         parent::__construct($CORE);

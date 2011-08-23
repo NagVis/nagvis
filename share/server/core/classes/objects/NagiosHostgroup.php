@@ -36,16 +36,6 @@ class NagiosHostgroup extends NagVisStatefulObject {
 
     protected $members;
 
-    /**
-     * Class constructor
-     *
-     * @param		Object 		Object of class GlobalMainCfg
-     * @param		Object 		Object of class CoreBackendMgmt
-     * @param		Object 		Object of class GlobalLanguage
-     * @param		Integer 		ID of queried backend
-     * @param		String		Name of the hostgroup
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
     public function __construct($CORE, $BACKEND, $backend_id, $hostgroupName) {
         $this->backend_id = $backend_id;
         $this->hostgroup_name = $hostgroupName;
@@ -189,15 +179,15 @@ class NagiosHostgroup extends NagVisStatefulObject {
 
         // Fallback for hostgroups without members
         if($iSumCount == 0) {
-            $this->summary_output = $this->CORE->getLang()->getText('The hostgroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
+            $this->summary_output = l('The hostgroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
                                                                                         Array('GROUP' => $this->getName(),
                                                                                               'BACKEND' => $this->backend_id));
         } else {
             // FIXME: Recode mergeSummaryOutput method
-            $this->mergeSummaryOutput($arrHostStates, $this->CORE->getLang()->getText('hosts'));
+            $this->mergeSummaryOutput($arrHostStates, l('hosts'));
             if($this->recognize_services) {
                 $this->summary_output .= "<br />";
-                $this->mergeSummaryOutput($arrServiceStates, $this->CORE->getLang()->getText('services'));
+                $this->mergeSummaryOutput($arrServiceStates, l('services'));
             }
         }
     }
@@ -234,9 +224,9 @@ class NagiosHostgroup extends NagVisStatefulObject {
                 $arrStates[$MEMBER->getSummaryState()]++;
             }
 
-            $this->mergeSummaryOutput($arrStates, $this->CORE->getLang()->getText('hosts'));
+            $this->mergeSummaryOutput($arrStates, l('hosts'));
         } else {
-            $this->summary_output = $this->CORE->getLang()->getText('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
+            $this->summary_output = l('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
         }
     }
 }

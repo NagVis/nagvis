@@ -75,12 +75,8 @@ class GlobalCore {
      * @author Lars Michelsen <lars@vertical-visions.de>
      */
     public static function getLang() {
-        if(self::$LANG === null) {
-            // Initialize language when not set yet
-            self::$LANG = new GlobalLanguage();
-        }
-
-        return self::$LANG;
+        global $_LANG;
+        return $_LANG;
     }
 
     /**
@@ -135,10 +131,9 @@ class GlobalCore {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function checkGd($printErr) {
-    if(!extension_loaded('gd')) {
-        if($printErr) {
-            new GlobalMessage('WARNING', self::getLang()->getText('gdLibNotFound'));
-        }
+        if(!extension_loaded('gd')) {
+            if($printErr)
+                new GlobalMessage('WARNING', l('gdLibNotFound'));
             return FALSE;
         } else {
             return TRUE;
@@ -316,7 +311,7 @@ class GlobalCore {
 
         // Catch error when iconset filetype could not be fetched
         if($type === '')
-            new GlobalMessage('ERROR', self::getLang()->getText('iconsetFiletypeUnknown', Array('ICONSET' => $iconset)));
+            throw new NagVisException(l('iconsetFiletypeUnknown', Array('ICONSET' => $iconset)));
 
         $this->iconsetTypeCache[$iconset] = $type;
         return $type;
@@ -434,7 +429,7 @@ class GlobalCore {
             return true;
 
         if($printErr)
-            new GlobalMessage('ERROR', self::getLang()->getText('The path "[PATH]" does not exist.', Array('PATH' => $path)));
+            throw new NagVisException(l('The path "[PATH]" does not exist.', Array('PATH' => $path)));
 
         return false;
     }
@@ -444,7 +439,7 @@ class GlobalCore {
             return true;
 
         if($printErr)
-            new GlobalMessage('ERROR', self::getLang()->getText('The path "[PATH]" is not readable.', Array('PATH' => $path)));
+            throw new NagVisException(l('The path "[PATH]" is not readable.', Array('PATH' => $path)));
 
         return false;
     }
@@ -453,7 +448,7 @@ class GlobalCore {
             return true;
 
         if($printErr)
-            new GlobalMessage('ERROR', self::getLang()->getText('The path "[PATH]" is not writeable.', Array('PATH' => $path)));
+            throw new NagVisException(l('The path "[PATH]" is not writeable.', Array('PATH' => $path)));
 
         return false;
     }
@@ -548,16 +543,15 @@ class GlobalCore {
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     public function getUploadErrorMsg($id) {
-        $LANG = self::getLang();
         switch($id) {
-            case 1:  return $LANG->getText('File is too large (PHP limit)');
-            case 2:  return $LANG->getText('File is too large (FORM limit)');
-            case 3:  return $LANG->getText('Upload incomplete');
-            case 4:  return $LANG->getText('No file uploaded');
-            case 6:  return $LANG->getText('Missing a temporary folder');
-            case 7:  return $LANG->getText('Failed to write file to disk');
-            case 8:  return $LANG->getText('File upload stopped by extension');
-            default: return $LANG->getText('Unhandled error');
+            case 1:  return l('File is too large (PHP limit)');
+            case 2:  return l('File is too large (FORM limit)');
+            case 3:  return l('Upload incomplete');
+            case 4:  return l('No file uploaded');
+            case 6:  return l('Missing a temporary folder');
+            case 7:  return l('Failed to write file to disk');
+            case 8:  return l('File upload stopped by extension');
+            default: return l('Unhandled error');
         }
     }
 
@@ -571,53 +565,53 @@ class GlobalCore {
      */
     public function getJsLang() {
         $lang = Array(
-            'clickMapToSetPoints' => $this->getLang()->getText('clickMapToSetPoints'),
-            'confirmDelete' => $this->getLang()->getText('confirmDelete'),
-            'confirmRestore' => $this->getLang()->getText('confirmRestore'),
-            'wrongValueFormat' => $this->getLang()->getText('wrongValueFormat'),
-            'wrongValueFormatMap' => $this->getLang()->getText('wrongValueFormatMap'),
-            'wrongValueFormatOption' => $this->getLang()->getText('wrongValueFormatOption'),
-            'unableToWorkWithMap' => $this->getLang()->getText('unableToWorkWithMap'),
-            'mustValueNotSet' => $this->getLang()->getText('mustValueNotSet'),
-            'chosenLineTypeNotValid' => $this->getLang()->getText('chosenLineTypeNotValid'),
-            'onlyLineOrIcon' => $this->getLang()->getText('onlyLineOrIcon'),
-            'not2coordsX' => $this->getLang()->getText('not2coords','COORD~X'),
-            'not2coordsY' => $this->getLang()->getText('not2coords','COORD~Y'),
-            'only1or2coordsX' => $this->getLang()->getText('only1or2coords','COORD~X'),
-            'only1or2coordsY' => $this->getLang()->getText('only1or2coords','COORD~Y'),
-            'viewTypeWrong' => $this->getLang()->getText('viewTypeWrong'),
-            'lineTypeNotSet' => $this->getLang()->getText('lineTypeNotSet'),
-            'loopInMapRecursion' => $this->getLang()->getText('loopInMapRecursion'),
-            'mapObjectWillShowSummaryState' => $this->getLang()->getText('mapObjectWillShowSummaryState'),
-            'firstMustChoosePngImage' => $this->getLang()->getText('firstMustChoosePngImage'),
-            'noSpaceAllowedInName' => $this->getLang()->getText('Spaces are not allowed in file names.'),
-            'mustChooseValidImageFormat' => $this->getLang()->getText('mustChooseValidImageFormat'),
-            'foundNoBackgroundToDelete' => $this->getLang()->getText('foundNoBackgroundToDelete'),
-            'confirmBackgroundDeletion' => $this->getLang()->getText('confirmBackgroundDeletion'),
-            'unableToDeleteBackground' => $this->getLang()->getText('unableToDeleteBackground'),
-            'mustValueNotSet1' => $this->getLang()->getText('mustValueNotSet1'),
-            'foundNoShapeToDelete' => $this->getLang()->getText('foundNoShapeToDelete'),
-            'shapeInUse' => $this->getLang()->getText('shapeInUse'),
-            'confirmShapeDeletion' => $this->getLang()->getText('confirmShapeDeletion'),
-            'unableToDeleteShape' => $this->getLang()->getText('unableToDeleteShape'),
-            'chooseMapName' => $this->getLang()->getText('chooseMapName'),
-            'minOneUserAccess' => $this->getLang()->getText('minOneUserAccess'),
-            'noMapToRename' => $this->getLang()->getText('noMapToRename'),
-            'noNewNameGiven' => $this->getLang()->getText('noNewNameGiven'),
-            'mapAlreadyExists' => $this->getLang()->getText('mapAlreadyExists'),
-            'foundNoMapToDelete' => $this->getLang()->getText('foundNoMapToDelete'),
-            'foundNoMapToExport' => $this->getLang()->getText('foundNoMapToExport'),
-            'foundNoMapToImport' => $this->getLang()->getText('foundNoMapToImport'),
-            'notCfgFile' => $this->getLang()->getText('notCfgFile'),
-            'confirmNewMap' => $this->getLang()->getText('confirmNewMap'),
-            'confirmMapRename' => $this->getLang()->getText('confirmMapRename'),
-            'confirmMapDeletion' => $this->getLang()->getText('confirmMapDeletion'),
-            'unableToDeleteMap' => $this->getLang()->getText('unableToDeleteMap'),
-            'noPermissions' => $this->getLang()->getText('noPermissions'),
-            'minOneUserWriteAccess' => $this->getLang()->getText('minOneUserWriteAccess'),
-            'noSpaceAllowed' => $this->getLang()->getText('noSpaceAllowed'),
-            'properties' => $this->getLang()->getText('properties'),
-            'manualInput' => $this->getLang()->getText('manualInput'));
+            'clickMapToSetPoints'           => l('clickMapToSetPoints'),
+            'confirmDelete'                 => l('confirmDelete'),
+            'confirmRestore'                => l('confirmRestore'),
+            'wrongValueFormat'              => l('wrongValueFormat'),
+            'wrongValueFormatMap'           => l('wrongValueFormatMap'),
+            'wrongValueFormatOption'        => l('wrongValueFormatOption'),
+            'unableToWorkWithMap'           => l('unableToWorkWithMap'),
+            'mustValueNotSet'               => l('mustValueNotSet'),
+            'chosenLineTypeNotValid'        => l('chosenLineTypeNotValid'),
+            'onlyLineOrIcon'                => l('onlyLineOrIcon'),
+            'not2coordsX'                   => l('not2coords', 'COORD~X'),
+            'not2coordsY'                   => l('not2coords', 'COORD~Y'),
+            'only1or2coordsX'               => l('only1or2coords', 'COORD~X'),
+            'only1or2coordsY'               => l('only1or2coords', 'COORD~Y'),
+            'viewTypeWrong'                 => l('viewTypeWrong'),
+            'lineTypeNotSet'                => l('lineTypeNotSet'),
+            'loopInMapRecursion'            => l('loopInMapRecursion'),
+            'mapObjectWillShowSummaryState' => l('mapObjectWillShowSummaryState'),
+            'firstMustChoosePngImage'       => l('firstMustChoosePngImage'),
+            'noSpaceAllowedInName'          => l('Spaces are not allowed in file names.'),
+            'mustChooseValidImageFormat'    => l('mustChooseValidImageFormat'),
+            'foundNoBackgroundToDelete'     => l('foundNoBackgroundToDelete'),
+            'confirmBackgroundDeletion'     => l('confirmBackgroundDeletion'),
+            'unableToDeleteBackground'      => l('unableToDeleteBackground'),
+            'mustValueNotSet1'              => l('mustValueNotSet1'),
+            'foundNoShapeToDelete'          => l('foundNoShapeToDelete'),
+            'shapeInUse'                    => l('shapeInUse'),
+            'confirmShapeDeletion'          => l('confirmShapeDeletion'),
+            'unableToDeleteShape'           => l('unableToDeleteShape'),
+            'chooseMapName'                 => l('chooseMapName'),
+            'minOneUserAccess'              => l('minOneUserAccess'),
+            'noMapToRename'                 => l('noMapToRename'),
+            'noNewNameGiven'                => l('noNewNameGiven'),
+            'mapAlreadyExists'              => l('mapAlreadyExists'),
+            'foundNoMapToDelete'            => l('foundNoMapToDelete'),
+            'foundNoMapToExport'            => l('foundNoMapToExport'),
+            'foundNoMapToImport'            => l('foundNoMapToImport'),
+            'notCfgFile'                    => l('notCfgFile'),
+            'confirmNewMap'                 => l('confirmNewMap'),
+            'confirmMapRename'              => l('confirmMapRename'),
+            'confirmMapDeletion'            => l('confirmMapDeletion'),
+            'unableToDeleteMap'             => l('unableToDeleteMap'),
+            'noPermissions'                 => l('noPermissions'),
+            'minOneUserWriteAccess'         => l('minOneUserWriteAccess'),
+            'noSpaceAllowed'                => l('noSpaceAllowed'),
+            'properties'                    => l('properties'),
+            'manualInput'                   => l('manualInput'));
 
         return json_encode($lang);
     }

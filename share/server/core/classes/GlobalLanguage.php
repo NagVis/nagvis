@@ -45,7 +45,7 @@ class GlobalLanguage {
         $this->textDomain = $textDomain;
 
         if($this->CORE->getMainCfg() !== null) {
-            $this->USERCFG= new CoreUserCfg();
+            $this->USERCFG = new CoreUserCfg();
         }
 
         $this->sCurrentLanguage = $this->gatherCurrentLanguage();
@@ -118,7 +118,9 @@ class GlobalLanguage {
                     break;
 
                     default:
-                        new GlobalMessage('ERROR', $this->getText('Invalid mode [MODE] in language_detection option.', Array('MODE' => $sMethod)));
+                        throw new NagVisException(
+                            $this->getText('Invalid mode [MODE] in language_detection option.',
+                                          Array('MODE' => $sMethod)));
                     break;
                 }
             }
@@ -224,11 +226,14 @@ class GlobalLanguage {
         // Checks two things:
         // a) The language availabilty in the filesyste,
         // b) Listed language in global/language_available config option
-        if(in_array($sLang, $this->CORE->getAvailableLanguages()) && ($ignoreConf == true || ($ignoreConf == false && in_array($sLang, $this->CORE->getMainCfg()->getValue('global', 'language_available'))))) {
+        if(in_array($sLang, $this->CORE->getAvailableLanguages())
+           && ($ignoreConf == true
+               || ($ignoreConf == false
+                   && in_array($sLang, $this->CORE->getMainCfg()->getValue('global', 'language_available'))))) {
             return TRUE;
         } else {
             if($printErr) {
-                new GlobalMessage('ERROR', $this->getText('languageNotFound', Array('LANG' => $sLang)));
+                throw new NagVisException($this->getText('languageNotFound', Array('LANG' => $sLang)));
             }
             return FALSE;
         }

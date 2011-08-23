@@ -31,16 +31,6 @@ class NagVisHost extends NagiosHost {
     protected static $langSelf = null;
     protected static $langChild = null;
 
-    /**
-     * Class constructor
-     *
-     * @param		Object 		Object of class GlobalMainCfg
-     * @param		Object 		Object of class CoreBackendMgmt
-     * @param		Object 		Object of class GlobalLanguage
-     * @param		Integer 		ID of queried backend
-     * @param		String		Name of the host
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
     public function __construct($CORE, $BACKEND, $backend_id, $hostName) {
         $this->type = 'host';
         $this->iconset = 'std_medium';

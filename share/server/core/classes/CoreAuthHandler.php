@@ -63,7 +63,7 @@ class CoreAuthHandler {
             $this->bVerifyAuth = true;
             $this->MOD->passCredentials($aData);
         } else {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Data has an invalid format'));
+            throw new NagVisException(l('Data has an invalid format'));
         }
     }
 
@@ -74,7 +74,7 @@ class CoreAuthHandler {
         if($aData !== false) {
             $this->MOD->passNewPassword($aData);
         } else {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Data has an invalid format'));
+            throw new NagVisException(l('Data has an invalid format'));
         }
     }
 

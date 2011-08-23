@@ -57,14 +57,14 @@ class CoreModManageBackgrounds extends CoreModule {
                 break;
                 case 'doCreate':
                     $this->handleResponse('handleResponseCreate', 'doCreate',
-                                            $this->CORE->getLang()->getText('The background has been created.'),
-                                                                $this->CORE->getLang()->getText('The background could not be created.'),
+                                            l('The background has been created.'),
+                                                                l('The background could not be created.'),
                                           1);
                 break;
                 case 'doDelete':
                     $this->handleResponse('handleResponseDelete', 'doDelete',
-                                            $this->CORE->getLang()->getText('The background has been deleted.'),
-                                                                $this->CORE->getLang()->getText('The background could not be deleted.'),
+                                            l('The background has been deleted.'),
+                                                                l('The background could not be deleted.'),
                                           1);
                 break;
                 case 'doUpload':
@@ -85,13 +85,13 @@ class CoreModManageBackgrounds extends CoreModule {
 
     protected function doUpload($a) {
         if(!is_uploaded_file($a['image_file']['tmp_name']))
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The file could not be uploaded (Error: [ERROR]).',
+            throw new NagVisException(l('The file could not be uploaded (Error: [ERROR]).',
               Array('ERROR' => $a['image_file']['error'].': '.$this->CORE->getUploadErrorMsg($a['image_file']['error']))));
 
         $fileName = $a['image_file']['name'];
 
         if(!preg_match(MATCH_PNG_GIF_JPG_FILE, $fileName))
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The uploaded file is no image (png,jpg,gif) file or contains unwanted chars.'));
+            throw new NagVisException(l('The uploaded file is no image (png,jpg,gif) file or contains unwanted chars.'));
 
         $filePath = $this->CORE->getMainCfg()->getPath('sys', '', 'backgrounds').$fileName;
         return move_uploaded_file($a['image_file']['tmp_name'], $filePath) && $this->CORE->setPerms($filePath);
@@ -110,7 +110,7 @@ class CoreModManageBackgrounds extends CoreModule {
         $this->verifyValuesMatch($FHANDLER, Array('map_image' => MATCH_PNG_GIF_JPG_FILE));
 
         if(!in_array($FHANDLER->get('map_image'), $this->CORE->getAvailableBackgroundImages()))
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The background does not exist.'));
+            throw new NagVisException(l('The background does not exist.'));
 
         return Array('image' => $FHANDLER->get('map_image'));
     }
@@ -133,7 +133,7 @@ class CoreModManageBackgrounds extends CoreModule {
 
         // Check if the background exists
         if(in_array($FHANDLER->get('image_name').'.png', $this->CORE->getAvailableBackgroundImages()))
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The background does already exist.'));
+            throw new NagVisException(l('The background does already exist.'));
 
         return Array('name'   => $FHANDLER->get('image_name'),
                    'color'  => $FHANDLER->get('image_color'),

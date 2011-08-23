@@ -51,8 +51,8 @@ class NagVisViewAutomapToMap {
 
         $aData = Array(
              'formTarget' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=AutoMap&amp;act=parseMapCfg&amp',
-            'langNewName' => $this->CORE->getLang()->getText('Store as Map'),
-            'langSave' => $this->CORE->getLang()->getText('save'),
+            'langNewName' => l('Store as Map'),
+            'langSave' => l('save'),
         );
 
         // Build page based on the template file and the data array

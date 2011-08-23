@@ -83,7 +83,7 @@ class WuiViewMapAddModify {
             'id'           => $this->aOpts['id'],
             'map'          => $this->aOpts['show'],
             'formContents' => $this->getFields().$this->fillFields(),
-            'langSave'     => $this->CORE->getLang()->getText('save'),
+            'langSave'     => l('save'),
             'validMapCfg'  => json_encode($this->MAPCFG->getValidConfig()),
             'lang'         => $this->CORE->getJsLang(),
         );
@@ -245,12 +245,12 @@ class WuiViewMapAddModify {
                         break;
 
                         case 'hover_childs_order':
-                            $options = Array(Array('label' => $this->CORE->getLang()->getText('Ascending'), 'value'=>'asc'), Array('label' => $this->CORE->getLang()->getText('Descending'), 'value' => 'desc'));
+                            $options = Array(Array('label' => l('Ascending'), 'value'=>'asc'), Array('label' => l('Descending'), 'value' => 'desc'));
                             $selected = $this->MAPCFG->getValue($this->aOpts['id'],$propname,TRUE);
                         break;
 
                         case 'hover_childs_sort':
-                            $options = Array(Array('label' => $this->CORE->getLang()->getText('Alphabetically'), 'value'=>'a'), Array('label' => $this->CORE->getLang()->getText('State'), 'value' => 's'));
+                            $options = Array(Array('label' => l('Alphabetically'), 'value'=>'a'), Array('label' => l('State'), 'value' => 's'));
                             $selected = $this->MAPCFG->getValue($this->aOpts['id'],$propname,TRUE);
                         break;
 
@@ -366,7 +366,7 @@ class WuiViewMapAddModify {
                     // Print this when it is still a dropdown
                     if($fieldType == 'dropdown') {
                         // Give the users the option give manual input
-                        $options[] = $this->CORE->getLang()->getText('manualInput');
+                        $options[] = l('manualInput');
 
                         $ret .= $FORM->getSelectLine($propname, $propname, $options, $selected, $prop['must'], $onChange, '', $style, $class);
 
@@ -382,8 +382,8 @@ class WuiViewMapAddModify {
                     if(isset($selected) && $selected != '') {
                         $ret .= '<script type="text/javascript">';
                         if($toggleFieldType) {
-                            $ret .= 'var bChanged = toggleFieldType("'.$propname.'", "'.$this->CORE->getLang()->getText('manualInput').'");';
-                            $ret .= 'document.getElementById("'.$propname.'").value = "'.$this->CORE->getLang()->getText('manualInput').'";';
+                            $ret .= 'var bChanged = toggleFieldType("'.$propname.'", "'.l('manualInput').'");';
+                            $ret .= 'document.getElementById("'.$propname.'").value = "'.l('manualInput').'";';
                             $ret .= 'toggleDefaultOption("'.$propname.'", bChanged);';
                         }
                         $ret .= 'toggleDependingFields("addmodify", "'.$propname.'", "'.$selected.'");';
@@ -399,8 +399,8 @@ class WuiViewMapAddModify {
                     }
 
                     $options = Array(
-                        Array('label' => $this->CORE->getLang()->getText('yes'), 'value' => '1'),
-                        Array('label' => $this->CORE->getLang()->getText('no'), 'value' => '0')
+                        Array('label' => l('yes'), 'value' => '1'),
+                        Array('label' => l('no'), 'value' => '0')
                     );
 
                     $ret .= $FORM->getSelectLine($propname, $propname, $options, $value, $prop['must'], 'validateMapConfigFieldValue(this)', '', $style, $class);

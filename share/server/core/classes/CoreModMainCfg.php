@@ -57,8 +57,8 @@ class CoreModMainCfg extends CoreModule {
                 break;
                 case 'doEdit':
                     $this->handleResponse('handleResponseEdit', 'doEdit',
-                                            $this->CORE->getLang()->getText('The main configuration has been updated.'),
-                                                                $this->CORE->getLang()->getText('The main configuration could not be updated.'),
+                                            l('The main configuration has been updated.'),
+                                                                l('The main configuration could not be updated.'),
                                                                 1);
                 break;
 
@@ -71,26 +71,26 @@ class CoreModMainCfg extends CoreModule {
                 break;
                 case 'doBackendDefault':
                     $this->handleResponse('handleResponseBackendDefault', $this->sAction,
-                                            $this->CORE->getLang()->getText('The default backend has been changed.'),
-                                                                $this->CORE->getLang()->getText('The default backend could not be changed.'),
+                                            l('The default backend has been changed.'),
+                                                                l('The default backend could not be changed.'),
                                                                 1);
                 break;
                 case 'doBackendAdd':
                     $this->handleResponse('handleResponseBackendAdd', $this->sAction,
-                                            $this->CORE->getLang()->getText('The new backend has been added.'),
-                                                                $this->CORE->getLang()->getText('The new backend could not be added.'),
+                                            l('The new backend has been added.'),
+                                                                l('The new backend could not be added.'),
                                                                 1);
                 break;
                 case 'doBackendEdit':
                     $this->handleResponse('handleResponseBackendEdit', $this->sAction,
-                                            $this->CORE->getLang()->getText('The changes have been saved.'),
-                                                                $this->CORE->getLang()->getText('Problem while saving the changes.'),
+                                            l('The changes have been saved.'),
+                                                                l('Problem while saving the changes.'),
                                                                 1);
                 break;
                 case 'doBackendDel':
                     $this->handleResponse('handleResponseBackendDel', $this->sAction,
-                                            $this->CORE->getLang()->getText('The backend has been deleted.'),
-                                                                $this->CORE->getLang()->getText('The backend could bot be deleted.'),
+                                            l('The backend has been deleted.'),
+                                                                l('The backend could bot be deleted.'),
                                                                 1);
                 break;
             }

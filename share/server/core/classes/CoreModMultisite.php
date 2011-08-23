@@ -109,7 +109,7 @@ class CoreModMultisite extends CoreModule {
             if(isset($map['configError'])) {
                 $map['overview_class']  = 'error';
                 $map['overview_url']    = 'javascript:alert(\''.$map['configErrorMsg'].'\');';
-                $map['summary_output']  = $this->CORE->getLang()->getText('Map Configuration Error: '.$map['configErrorMsg']);
+                $map['summary_output']  = l('Map Configuration Error: '.$map['configErrorMsg']);
 
                 $MAP->MAPOBJ->clearMembers();
                 $MAP->MAPOBJ->setSummaryState('ERROR');
@@ -122,8 +122,8 @@ class CoreModMultisite extends CoreModule {
                 $map['summary_output']  = $MAP->MAPOBJ->getSummaryOutput();
             } else {
                 $map['overview_class']  = 'disabled';
-                $map['overview_url']    = 'javascript:alert(\''.$this->CORE->getLang()->getText('mapInMaintenance').'\');';
-                $map['summary_output']  = $this->CORE->getLang()->getText('mapInMaintenance');
+                $map['overview_url']    = 'javascript:alert(\''.l('mapInMaintenance').'\');';
+                $map['summary_output']  = l('mapInMaintenance');
 
                 $MAP->MAPOBJ->clearMembers();
                 $MAP->MAPOBJ->setSummaryState('UNKNOWN');

@@ -65,14 +65,6 @@ class NagVisStatefulObject extends NagVisObject {
 
     protected $aStateCounts = null;
 
-    /**
-     * Class constructor
-     *
-     * @param		Object 		Object of class GlobalMainCfg
-     * @param		Object 		Object of class CoreBackendMgmt
-     * @param		Object 		Object of class GlobalLanguage
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
     public function __construct($CORE, $BACKEND) {
         $this->BACKEND = $BACKEND;
         $this->GRAPHIC = '';
@@ -815,7 +807,7 @@ class NagVisStatefulObject extends NagVisObject {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setBackendProblem($s) {
-        $this->problem_msg = GlobalCore::getInstance()->getLang()->getText('Problem (Backend: [BACKENDID]): [MSG]',
+        $this->problem_msg = l('Problem (Backend: [BACKENDID]): [MSG]',
                                                                       Array('BACKENDID' => $this->backend_id, 'MSG' => $s));
     }
 
@@ -827,7 +819,7 @@ class NagVisStatefulObject extends NagVisObject {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setProblem($s) {
-        $this->problem_msg = GlobalCore::getInstance()->getLang()->getText('Problem: [MSG]', Array('MSG' => $s));
+        $this->problem_msg = l('Problem: [MSG]', Array('MSG' => $s));
     }
 
     /**
@@ -848,8 +840,10 @@ class NagVisStatefulObject extends NagVisObject {
             if(isset(NagVisObject::$stateWeight[$this->summary_state])) {
                 $currWeight = NagVisObject::$stateWeight[$this->summary_state][$this->getSubState(SUMMARY_STATE)];
             } else {
-                // Error handling: Invalid state
-                new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE].', Array('STATE' => $this->summary_state, 'SUBSTATE' => $this->getSubState(SUMMARY_STATE), 'TYPE' => $this->getType())));
+                throw new NagVisException(l('Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE].',
+                                            Array('STATE'    => $this->summary_state,
+                                                  'SUBSTATE' => $this->getSubState(SUMMARY_STATE),
+                                                  'TYPE'     => $this->getType())));
             }
         }
 
@@ -892,8 +886,11 @@ class NagVisStatefulObject extends NagVisObject {
                             }
                         }
                     } else {
-                        //Error handling: Invalid state+substate
-                        new GlobalMessage('ERROR', GlobalCore::getInstance()->getLang()->getText('Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME].', Array('STATE' => $sState, 'SUBSTATE' => $sSubState, 'TYPE' => $this->getType(), 'NAME' => $this->getName())));
+                        throw new NagVisException(l('Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME].',
+                                                    Array('STATE'    => $sState,
+                                                          'SUBSTATE' => $sSubState,
+                                                          'TYPE'     => $this->getType(),
+                                                          'NAME'     => $this->getName())));
                     }
                 }
             }
@@ -914,7 +911,7 @@ class NagVisStatefulObject extends NagVisObject {
      */
     protected function mergeSummaryOutput($arrStates, $objLabel) {
         if(NagVisStatefulObject::$langChildStates === null)
-            NagVisStatefulObject::$langChildStates = $this->CORE->getLang()->getText('childStatesAre');
+            NagVisStatefulObject::$langChildStates = l('childStatesAre');
 
         $this->summary_output .= NagVisStatefulObject::$langChildStates.' ';
         foreach($arrStates AS $state => $num)

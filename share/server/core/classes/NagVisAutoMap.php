@@ -63,15 +63,6 @@ class NagVisAutoMap extends GlobalMap {
     private $graphvizPath;
     private $noBinaryFound;
 
-    /**
-     * Automap constructor
-     *
-     * @param		MAINCFG		Object of NagVisMainCfg
-     * @param		LANG			Object of GlobalLanguage
-     * @param		BACKEND		Object of CoreBackendMgmt
-     * @return	String 		Graphviz configuration
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
     public function __construct($CORE, $MAPCFG, $BACKEND, $prop, $bIsView = IS_VIEW) {
         $this->BACKEND = $BACKEND;
 
@@ -360,7 +351,7 @@ class NagVisAutoMap extends GlobalMap {
                     $binary = 'fdp';
                 break;
                 default:
-                    new GlobalMessage('ERROR', $this->CORE->getLang()->getText('unknownRenderMode','MODE~'.$this->renderMode));
+                    throw new NagVisException(l('unknownRenderMode', Array('MODE' => $this->renderMode)));
                 break;
             }
 
@@ -380,8 +371,7 @@ class NagVisAutoMap extends GlobalMap {
             exec($cmd, $arrMapCode, $returnCode);
 
             if($returnCode !== 0)
-                new GlobalMessage('ERROR',
-                       $this->CORE->getLang()->getText('Graphviz call failed ([CODE]): [OUTPUT]<br /><br >Command was: "[CMD]"',
+                throw new NagVisException(l('Graphviz call failed ([CODE]): [OUTPUT]<br /><br >Command was: "[CMD]"',
                        Array('CODE' => $returnCode, 'OUTPUT' => implode("\n",$arrMapCode), 'CMD' => $cmd)));
 
             $this->mapCode = implode("\n", $arrMapCode);
@@ -598,7 +588,7 @@ class NagVisAutoMap extends GlobalMap {
     public function toClassicMap($name) {
         if(count($this->CORE->getAvailableMaps('/^'.$name.'.cfg$/')) > 0) {
             if(!$this->CORE->getAuthorization()->isPermitted('Map', 'edit', $name)) {
-                new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to export the automap. A map with this name already exists.'));
+                throw new NagVisException(l('Unable to export the automap. A map with this name already exists.'));
             }
         }
 
@@ -665,11 +655,6 @@ class NagVisAutoMap extends GlobalMap {
             $printErr = 1;
         }
 
-        // The GD-Libs are used by graphviz
-    // Graphviz does not use the php5-gd which is checked by the
-    // following call
-        //$this->CORE->checkGd($printErr);
-
         $this->CORE->checkVarFolderWriteable($printErr);
 
         // Check all possibly used binaries of graphviz
@@ -709,8 +694,7 @@ class NagVisAutoMap extends GlobalMap {
 
         if(!$bFound) {
             if($printErr)
-                new GlobalMessage('ERROR', $this->CORE->getLang()->getText('graphvizBinaryNotFound',
-                                  Array('NAME' => $binary,
+                throw new NagVisException(l('graphvizBinaryNotFound', Array('NAME' => $binary,
                                         'PATHS' => $_SERVER['PATH'].':'.$this->CORE->getMainCfg()->getvalue('automap','graphvizpath'))));
             return false;
         } else
@@ -828,7 +812,7 @@ class NagVisAutoMap extends GlobalMap {
 
         // Could not get root host for the automap
         if(!isset($defaultRoot) || $defaultRoot == '') {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('couldNotGetRootHostname'));
+            throw new NagVisException(l('couldNotGetRootHostname'));
         } else {
             return $defaultRoot;
         }

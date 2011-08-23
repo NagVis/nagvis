@@ -50,7 +50,7 @@ class NagVisViewSearch {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-            'langSearch' => $this->CORE->getLang()->getText('Search')
+            'langSearch' => l('Search')
         );
 
         // Build page based on the template file and the data array

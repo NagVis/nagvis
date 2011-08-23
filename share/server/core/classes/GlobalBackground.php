@@ -183,7 +183,8 @@ class GlobalBackground {
             }
         } else {
             if($printErr) {
-                new GlobalMessage('ERROR', $this->CORE->getLang()->getText('imageAlreadyExists','IMAGE~'.$this->path));
+                throw new NagVisException(l('imageAlreadyExists',
+                                            Array('IMAGE' => $this->path)));
             }
             return FALSE;
         }
@@ -202,7 +203,8 @@ class GlobalBackground {
                 return TRUE;
             } else {
                 if($printErr) {
-                    new GlobalMessage('ERROR', $this->CORE->getLang()->getText('couldNotDeleteMapImage','IMGPATH~'.$this->path));
+                    throw new NagVisException(l('couldNotDeleteMapImage',
+                                                Array('IMGPATH' => $this->path)));
                 }
                 return FALSE;
             }

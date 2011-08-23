@@ -58,7 +58,7 @@ class NagVisInfoView {
         $userPerms = $AUTHORISATION->parsePermissions();
 
         $aData = Array(
-            'pageTitle'      => $this->CORE->getMainCfg()->getValue('internal', 'title') . ' &rsaquo; '.$this->CORE->getLang()->getText('supportInfo'),
+            'pageTitle'      => $this->CORE->getMainCfg()->getValue('internal', 'title') . ' &rsaquo; '.l('supportInfo'),
             'htmlBase'       => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
             'htmlTemplates'  => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'),
             'nagvisVersion'  => CONST_VERSION,

@@ -1,8 +1,8 @@
 <?php
 /*****************************************************************************
  *
- * NagVisHostgroup.php - Class of a Hostgroup in NagVis with all necessary
- *                  information which belong to the object handling in NagVis
+ * i18n.php - Instantiates the internationalization in NagVis and registers
+ *            the global l() method to translate strings in NagVis
  *
  * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
  *
@@ -23,21 +23,11 @@
  *
  *****************************************************************************/
 
-/**
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-class NagVisHostgroup extends NagiosHostgroup {
-    protected static $langType = null;
-    protected static $langSelf = null;
-    protected static $langChild = null;
+$_LANG = new GlobalLanguage();
 
-    public function __construct($CORE, $BACKEND, $backend_id, $hostgroupName) {
-        $this->type = 'hostgroup';
-        $this->iconset = 'std_medium';
-        parent::__construct($CORE, $BACKEND, $backend_id, $hostgroupName);
-    }
-
-    # End public methods
-    # #########################################################################
+function l($txt, $vars = null) {
+    global $_LANG;
+    return $_LANG->getText($txt, $vars);
 }
+
 ?>

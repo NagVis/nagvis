@@ -108,11 +108,11 @@ class CoreModAutoMap extends CoreModule {
                     $success = null;
                     if(isset($aReturn['refresh']) && $aReturn['refresh'] == 1) {
                         $refresh = 1;
-                        $success = $this->CORE->getLang()->getText('The object has been modified.');
+                        $success = l('The object has been modified.');
                     }
                     $sReturn = $this->handleResponse('handleResponseModifyObject', 'doModifyObject',
                                             $success,
-                                                                $this->CORE->getLang()->getText('The object could not be modified.'),
+                                                                l('The object could not be modified.'),
                                                                 $refresh);
                 break;
             }
@@ -139,7 +139,7 @@ class CoreModAutoMap extends CoreModule {
 
         // delete map lock
         if(!$MAPCFG->deleteMapLock())
-            new GlobalMessage('ERROR', $CORE->getLang()->getText('mapLockNotDeleted'));
+            throw new NagVisException(l('mapLockNotDeleted'));
 
         return json_encode(Array('status' => 'OK', 'message' => ''));
     }
@@ -154,7 +154,7 @@ class CoreModAutoMap extends CoreModule {
 
         // Check if the map exists
         if(count($this->CORE->getAvailableAutoMaps('/^'.$FHANDLER->get('show').'$/')) <= 0)
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
+            throw new NagVisException(l('The map does not exist.'));
 
         $aOpts = $aResponse;
         // Remove the parameters which are not options of the object
@@ -196,16 +196,16 @@ class CoreModAutoMap extends CoreModule {
 
                 if($MAP->toClassicMap($target)) {
                     new GlobalMessage('NOTE',
-                                                        $this->CORE->getLang()->getText('The map has been created.'),
-                                                        null,
-                                                        null,
-                                                        1,
-                                                        $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/frontend/nagvis-js/index.php?mod=Map&show='.$target);
+                                      l('The map has been created.'),
+                                      null,
+                                      null,
+                                      1,
+                                      $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/frontend/nagvis-js/index.php?mod=Map&show='.$target);
                 }  else {
-                    new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to create map configuration file.'));
+                    throw new NagVisException(l('Unable to create map configuration file.'));
                 }
             } else {
-                new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Invalid target option given.'));
+                throw new NagVisException(l('Invalid target option given.'));
             }
         }
     }

@@ -79,7 +79,7 @@ class GlobalFileCache {
         if((!$this->checkCacheFileExists(0) && $this->checkCacheFolderWriteable($printErr)) || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))) {
             if(($fp = fopen($this->cacheFile, 'w+')) === FALSE){
                 if($printErr == 1) {
-                    new GlobalMessage('ERROR', $this->CORE->getLang()->getText('cacheFileNotWriteable','FILE~'.$this->cacheFile), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
+                    throw new NagVisException(l('cacheFileNotWriteable', Array('FILE' => $this->cacheFile)));
                 }
                 return FALSE;
             }
@@ -111,7 +111,9 @@ class GlobalFileCache {
             return $this->getCacheFileAge();
         } else {
             if($printErr) {
-                new GlobalMessage('ERROR', $this->CORE->getLang()->getText('fileNotCached', 'FILE~'.$this->file.',CACHEFILE~'.$this->cacheFile), $this->CORE->getMainCfg()->getValue('paths','htmlbase'));
+                throw new NagVisException(l('fileNotCached',
+                                          Array('FILE' => $this->file,
+                                                'CACHEFILE' => $this->cacheFile)));
             }
             return -1;
         }

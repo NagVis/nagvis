@@ -92,8 +92,8 @@ class CoreModMap extends CoreModule {
                 if($FHANDLER->match('map', MATCH_MAP_NAME))
                     $this->name = $FHANDLER->get('map');
                 else
-                    new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Invalid query. The parameter [NAME] is missing or has an invalid format.',
-                                                                               Array('NAME' => 'map')));
+                    throw new NagVisException(l('Invalid query. The parameter [NAME] is missing or has an invalid format.',
+                                                Array('NAME' => 'map')));
             break;
         }
 
@@ -121,8 +121,8 @@ class CoreModMap extends CoreModule {
                 break;
                 case 'doAdd':
                     $this->handleResponse('handleResponseAdd', 'doAdd',
-                                            $this->CORE->getLang()->getText('The map has been created.'),
-                                                $this->CORE->getLang()->getText('The map could not be created.'),
+                                            l('The map has been created.'),
+                                                l('The map could not be created.'),
                                                 1, $this->htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$_POST['map']);
                 break;
                 case 'doRename':
@@ -136,8 +136,8 @@ class CoreModMap extends CoreModule {
                         $map = $current;
 
                     $this->handleResponse('handleResponseRename', 'doRename',
-                                            $this->CORE->getLang()->getText('The map has been renamed.'),
-                                                                $this->CORE->getLang()->getText('The map could not be renamed.'),
+                                            l('The map has been renamed.'),
+                                                                l('The map could not be renamed.'),
                                                                 1, $this->htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$map);
                 break;
                 case 'checkLinked':
@@ -154,14 +154,14 @@ class CoreModMap extends CoreModule {
                         $url = $this->htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$current;
 
                     $this->handleResponse('handleResponseDelete', 'doDelete',
-                                            $this->CORE->getLang()->getText('The map has been deleted.'),
-                                                                $this->CORE->getLang()->getText('The map could not be deleted.'),
+                                            l('The map has been deleted.'),
+                                                                l('The map could not be deleted.'),
                                                               1, $url);
                 break;
                 case 'createObject':
                     $this->handleResponse('handleResponseCreateObject', 'doCreateObject',
-                                            $this->CORE->getLang()->getText('The object has been added.'),
-                                                                $this->CORE->getLang()->getText('The object could not be added.'),
+                                            l('The object has been added.'),
+                                                                l('The object could not be added.'),
                                           1);
                 break;
                 case 'modifyObject':
@@ -169,11 +169,11 @@ class CoreModMap extends CoreModule {
                     $success = null;
                     if(isset($_GET['ref']) && $_GET['ref'] == 1) {
                         $refresh = 1;
-                        $success = $this->CORE->getLang()->getText('The object has been modified.');
+                        $success = l('The object has been modified.');
                     }
                     $sReturn = $this->handleResponse('handleResponseModifyObject', 'doModifyObject',
                                             $success,
-                                                                $this->CORE->getLang()->getText('The object could not be modified.'),
+                                                                l('The object could not be modified.'),
                                                                 $refresh);
                 break;
                 case 'deleteObject':
@@ -183,12 +183,10 @@ class CoreModMap extends CoreModule {
                         if($this->doDeleteObject($aReturn)) {
                             $sReturn = json_encode(Array('status' => 'OK', 'message' => ''));
                         } else {
-                            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object could not be deleted.'));
-                            $sReturn = '';
+                            throw new NagVisException(l('The object could not be deleted.'));
                         }
                     } else {
-                        new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-                        $sReturn = '';
+                        throw new NagVisException(l('You entered invalid information.'));
                     }
                 break;
                 case 'addModify':
@@ -252,26 +250,26 @@ class CoreModMap extends CoreModule {
                 break;
                 case 'doTmplAdd':
                     $this->handleResponse('handleResponseDoTmplAdd', 'doTmplAdd',
-                                            $this->CORE->getLang()->getText('The object has been added.'),
-                                                                $this->CORE->getLang()->getText('The object could not be added.'),
+                                            l('The object has been added.'),
+                                                                l('The object could not be added.'),
                                                                 1);
                 break;
                 case 'doTmplModify':
                     $this->handleResponse('handleResponseDoTmplModify', 'doTmplModify',
-                                            $this->CORE->getLang()->getText('The object has been modified.'),
-                                                                $this->CORE->getLang()->getText('The object could not be modified.'),
+                                            l('The object has been modified.'),
+                                                                l('The object could not be modified.'),
                                                                 1);
                 break;
                 case 'doTmplDelete':
                     $this->handleResponse('handleResponseDoTmplDelete', 'doTmplDelete',
-                                            $this->CORE->getLang()->getText('The template has been deleted.'),
-                                                                $this->CORE->getLang()->getText('The template could not be deleted.'),
+                                            l('The template has been deleted.'),
+                                                                l('The template could not be deleted.'),
                                                                 1);
                 break;
                 case 'doExportMap':
                     $this->handleResponse('handleResponseDoExportMap', 'doExportMap',
-                                            $this->CORE->getLang()->getText('The map configuration has been exported.'),
-                                                                $this->CORE->getLang()->getText('The map configuration could not be exported.'));
+                                            l('The map configuration has been exported.'),
+                                                                l('The map configuration could not be exported.'));
                 break;
                 case 'doImportMap':
                     if($this->handleResponse('handleResponseDoImportMap', 'doImportMap'))
@@ -294,13 +292,13 @@ class CoreModMap extends CoreModule {
 
     protected function doImportMap($a) {
         if(!is_uploaded_file($a['map_file']['tmp_name']))
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The file could not be uploaded (Error: [ERROR]).',
+            throw new NagVisException(l('The file could not be uploaded (Error: [ERROR]).',
               Array('ERROR' => $a['map_file']['error'].': '.$this->CORE->getUploadErrorMsg($a['map_file']['error']))));
 
         $mapName = $a['map_file']['name'];
 
         if(!preg_match(MATCH_CFG_FILE, $mapName))
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The uploaded file is no map configuration file.'));
+            throw new NagVisException(l('The uploaded file is no map configuration file.'));
 
         $filePath = $this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$mapName;
         return move_uploaded_file($a['map_file']['tmp_name'], $filePath) && $this->CORE->setPerms($filePath);
@@ -336,9 +334,8 @@ class CoreModMap extends CoreModule {
             $BACKEND->checkBackendExists($a['backendid'], true);
             $BACKEND->checkBackendFeature($a['backendid'], 'getObjects', true);
         } catch(BackendConnectionProblem $e) {
-            new GlobalMessage('ERROR', $CORE->getLang()->getText('Connection Problem (Backend: [BACKENDID]): [MSG]',
-                  																						Array('BACKENDID' => $a['backendid'], 'MSG' => $e->getMessage())));
-            exit();
+            throw new NagVisException(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
+                                      Array('BACKENDID' => $a['backendid'], 'MSG' => $e->getMessage())));
         }
 
         $name1 = ($a['type'] === 'service' ? $a['name1'] : '');
@@ -380,7 +377,7 @@ class CoreModMap extends CoreModule {
 
         // delete map lock
         if(!$MAPCFG->deleteMapLock()) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapLockNotDeleted'));
+            throw new NagVisException(l('mapLockNotDeleted'));
         }
 
         return true;
@@ -404,19 +401,15 @@ class CoreModMap extends CoreModule {
         if($bValid && !$FHANDLER->match('name', MATCH_STRING_NO_SPACE))
             $bValid = false;
 
-        // Check if the map exists
-        if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
-
-            $bValid = false;
-        }
+        if($bValid)
+            $this->verifyMapExists($FHANDLER->get('map'));
 
         // Check if the template already exists
         // Read map config but don't resolve templates and don't use the cache
         $MAPCFG = new GlobalMapCfg($this->CORE, $FHANDLER->get('map'));
         $MAPCFG->readMapConfig(0, false, false);
         if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) <= 0) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('A template with this name does not exist.'));
+            throw new NagVisException(l('A template with this name does not exist.'));
 
             $bValid = false;
         }
@@ -459,7 +452,7 @@ class CoreModMap extends CoreModule {
 
         // delete map lock
         if(!$MAPCFG->deleteMapLock()) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapLockNotDeleted'));
+            throw new NagVisException(l('mapLockNotDeleted'));
         }
 
         return true;
@@ -483,22 +476,15 @@ class CoreModMap extends CoreModule {
         if($bValid && !$FHANDLER->match('name', MATCH_STRING_NO_SPACE))
             $bValid = false;
 
-        // Check if the map exists
-        if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
-
-            $bValid = false;
-        }
+        if($bValid)
+            $this->verifyMapExists($FHANDLER->get('map'));
 
         // Check if the template already exists
         // Read map config but don't resolve templates and don't use the cache
         $MAPCFG = new GlobalMapCfg($this->CORE, $FHANDLER->get('map'));
         $MAPCFG->readMapConfig(0, false, false);
-        if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) <= 0) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The template does not exist.'));
-
-            $bValid = false;
-        }
+        if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) <= 0)
+            throw new NagVisException(l('The template does not exist.'));
         $MAPCFG = null;
 
         // Store response data
@@ -519,9 +505,8 @@ class CoreModMap extends CoreModule {
         $MAPCFG->addElement('template', $a['opts'], true);
 
         // delete map lock
-        if(!$MAPCFG->deleteMapLock()) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapLockNotDeleted'));
-        }
+        if(!$MAPCFG->deleteMapLock())
+            throw new NagVisException(l('mapLockNotDeleted'));
 
         return true;
     }
@@ -544,22 +529,15 @@ class CoreModMap extends CoreModule {
         if($bValid && !$FHANDLER->match('name', MATCH_STRING_NO_SPACE))
             $bValid = false;
 
-        // Check if the map exists
-        if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
-
-            $bValid = false;
-        }
+        if($bValid)
+            $this->verifyMapExists($FHANDLER->get('map'));
 
         // Check if the template already exists
         // Read map config but don't resolve templates and don't use the cache
         $MAPCFG = new GlobalMapCfg($this->CORE, $FHANDLER->get('map'));
         $MAPCFG->readMapConfig(0, false, false);
-        if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) > 0) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('A template with this name already exists.'));
-
-            $bValid = false;
-        }
+        if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) > 0)
+            throw new NagVisException(l('A template with this name already exists.'));
         $MAPCFG = null;
 
         // FIXME: Recode to FHANDLER
@@ -621,15 +599,14 @@ class CoreModMap extends CoreModule {
         } catch(MapCfgInvalid $e) {}
 
         if(!$MAPCFG->objExists($a['id']))
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object does not exist.'));
+            throw new NagVisException(l('The object does not exist.'));
 
         // first delete element from array
         $MAPCFG->deleteElement($a['id'], true);
 
         // delete map lock
-        if(!$MAPCFG->deleteMapLock()) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapLockNotDeleted'));
-        }
+        if(!$MAPCFG->deleteMapLock())
+            throw new NagVisException(l('mapLockNotDeleted'));
 
         return true;
     }
@@ -652,12 +629,8 @@ class CoreModMap extends CoreModule {
         if($bValid && !$FHANDLER->match('id', MATCH_OBJECTID))
             $bValid = false;
 
-        // Check if the map exists
-        if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
-
-            $bValid = false;
-        }
+        if($bValid)
+            $this->verifyMapExists($FHANDLER->get('map'));
 
         // Store response data
         if($bValid === true) {
@@ -676,7 +649,7 @@ class CoreModMap extends CoreModule {
         } catch(MapCfgInvalid $e) {}
 
         if(!$MAPCFG->objExists($a['id']))
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The object does not exist.'));
+            throw new NagVisException(l('The object does not exist.'));
 
         // set options in the array
         foreach($a['opts'] AS $key => $val) {
@@ -688,7 +661,7 @@ class CoreModMap extends CoreModule {
 
         // delete map lock
         if(!$MAPCFG->deleteMapLock()) {
-            new GlobalMessage('ERROR', $CORE->getLang()->getText('mapLockNotDeleted'));
+            throw new NagVisException(l('mapLockNotDeleted'));
         }
 
         return json_encode(Array('status' => 'OK', 'message' => ''));
@@ -715,12 +688,8 @@ class CoreModMap extends CoreModule {
         if($bValid && $FHANDLER->isSetAndNotEmpty('id') && !$FHANDLER->match('id', MATCH_OBJECTID))
             $bValid = false;
 
-        // Check if the map exists
-        if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
-
-            $bValid = false;
-        }
+        if($bValid)
+            $this->verifyMapExists($FHANDLER->get('map'));
 
         // FIXME: Recode to FHANDLER
         $aOpts = $aResponse;
@@ -760,7 +729,7 @@ class CoreModMap extends CoreModule {
 
         // delete map lock
         if(!$MAPCFG->deleteMapLock()) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mapLockNotDeleted'));
+            throw new NagVisException(l('mapLockNotDeleted'));
         }
 
         return true;
@@ -784,12 +753,8 @@ class CoreModMap extends CoreModule {
         if($bValid && !$FHANDLER->match('type', MATCH_OBJECTTYPE))
             $bValid = false;
 
-        // Check if the map exists
-        if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
-
-            $bValid = false;
-        }
+        if($bValid)
+            $this->verifyMapExists($FHANDLER->get('map'));
 
         // FIXME: Recode to FHANDLER
         $aOpts = $_POST;
@@ -839,12 +804,8 @@ class CoreModMap extends CoreModule {
         if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
             $bValid = false;
 
-        // Check if the map exists
-        if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) <= 0) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The map does not exist.'));
-
-            $bValid = false;
-        }
+        if($bValid)
+            $this->verifyMapExists($FHANDLER->get('map'));
 
         // Store response data
         if($bValid === true) {
@@ -903,11 +864,8 @@ class CoreModMap extends CoreModule {
             $bValid = false;
 
         // Check if the new map already exists
-        if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map_new_name').'$/')) > 0) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The new mapname does already exist.'));
-
-            $bValid = false;
-        }
+        if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map_new_name').'$/')) > 0)
+            throw new NagVisException(l('The new mapname does already exist.'));
 
         // Store response data
         if($bValid === true) {
@@ -948,12 +906,8 @@ class CoreModMap extends CoreModule {
         if($bValid && $FHANDLER->isSetAndNotEmpty('map_image') && !$FHANDLER->match('map_image', MATCH_PNG_GIF_JPG_FILE_OR_URL_NONE))
             $bValid = false;
 
-        // Check if the map already exists
-        if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map').'$/')) > 0) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The mapname does already exist.'));
-
-            $bValid = false;
-        }
+        if($bValid)
+            $this->verifyMapExists($FHANDLER->get('map'));
 
         // Store response data
         if($bValid === true) {
@@ -1024,6 +978,12 @@ class CoreModMap extends CoreModule {
 
         $MAP = new NagVisMap($this->CORE, $MAPCFG, $BACKEND, GET_STATE, IS_VIEW);
         return $MAP->parseObjectsJson($aVals['ty']);
+    }
+
+    // Check if the map exists
+    private function verifyMapExists($map) {
+        if(count($this->CORE->getAvailableMaps('/^'.$map.'$/')) <= 0)
+            throw new NagVisException(l('The map does not exist.'));
     }
 }
 ?>

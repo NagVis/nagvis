@@ -108,7 +108,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
      */
     private function checkTablesExists() {
         if(mysql_num_rows($this->mysqlQuery("SHOW TABLES LIKE 'program_status'")) == 0) {
-            throw new BackendConnectionProblem($this->CORE->getLang()->getText('noTablesExists', Array('BACKENDID' => $this->backendId, 'PREFIX' => '')));
+            throw new BackendConnectionProblem(l('noTablesExists', Array('BACKENDID' => $this->backendId, 'PREFIX' => '')));
         }
     }
 
@@ -127,7 +127,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
         $this->CONN = mysql_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
 
         if(!$this->CONN){
-            throw BackendConnectionProblem($this->CORE->getLang()->getText('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysql_error())));
+            throw BackendConnectionProblem(l('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysql_error())));
         }
 
         $returnCode = mysql_select_db($this->dbName, $this->CONN);
@@ -136,7 +136,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
         error_reporting($oldLevel);
 
         if(!$returnCode){
-            throw BackendConnectionProblem($this->CORE->getLang()->getText('errorSelectingDb', Array('BACKENDID' => $this->backendId, 'MYSQLERR' => mysql_error($this->CONN))));
+            throw BackendConnectionProblem(l('errorSelectingDb', Array('BACKENDID' => $this->backendId, 'MYSQLERR' => mysql_error($this->CONN))));
         }
     }
 
@@ -151,7 +151,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
     private function checkMysqlSupport() {
         // Check availability of PHP MySQL
         if (!extension_loaded('mysql')) {
-            throw BackendConnectionProblem($this->CORE->getLang()->getText('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
+            throw BackendConnectionProblem(l('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
         }
     }
 
@@ -326,7 +326,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 
             if(mysql_num_rows($QUERYHANDLE) == 0) {
                 $arrReturn['state'] = 'ERROR';
-                $arrReturn['output'] = $this->CORE->getLang()->getText('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
+                $arrReturn['output'] = l('hostNotFoundInDB', Array('BACKENDID' => $this->backendId, 'HOST' => $hostName));
             } else {
                 $data = mysql_fetch_array($QUERYHANDLE);
 
@@ -375,7 +375,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 
                 if($data['current_state'] == '') {
                     $arrReturn['state'] = 'UNCHECKED';
-                    $arrReturn['output'] = $this->CORE->getLang()->getText('hostIsPending', Array('HOST' => $hostName));
+                    $arrReturn['output'] = l('hostIsPending', Array('HOST' => $hostName));
                 } elseif($data['current_state'] == '0') {
                     // Host is UP
                     $arrReturn['state'] = 'UP';
@@ -456,7 +456,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
             if(mysql_num_rows($QUERYHANDLE) == 0) {
                 if(isset($serviceName) && $serviceName != '') {
                     $arrReturn['state'] = 'ERROR';
-                    $arrReturn['output'] = $this->CORE->getLang()->getText('serviceNotFoundInDB', Array('BACKENDID' => $this->backendId, 'SERVICE' => $serviceName, 'HOST' => $hostName));
+                    $arrReturn['output'] = l('serviceNotFoundInDB', Array('BACKENDID' => $this->backendId, 'SERVICE' => $serviceName, 'HOST' => $hostName));
                 } else {
                     // If the method should fetch all services of the host and does not find
                     // any services for this host, don't return anything => The message
@@ -508,7 +508,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
 
                     if($data['current_state'] == '') {
                         $arrTmpReturn['state'] = 'PENDING';
-                        $arrTmpReturn['output'] = $this->CORE->getLang()->getText('serviceNotChecked', Array('SERVICE' => $data['name2']));
+                        $arrTmpReturn['output'] = l('serviceNotChecked', Array('SERVICE' => $data['name2']));
                     } elseif($data['current_state'] == '0') {
                         // Host is UP
                         $arrTmpReturn['state'] = 'OK';

@@ -92,8 +92,8 @@ class NagVisViewAutomapModifyParams {
                                    'backend'       => $this->CORE->getDefinedBackends(),
                                    'filterByState' => Array('0', '1'),
                                   ),
-            'langApply'       => $this->CORE->getLang()->getText('Apply'),
-            'langPermanent'   => $this->CORE->getLang()->getText('Make Permanent'),
+            'langApply'       => l('Apply'),
+            'langPermanent'   => l('Make Permanent'),
             'permAutomapEdit' => $this->CORE->getAuthorization()->isPermitted('AutoMap', 'edit', $this->aOpts['automap']),
         );
 

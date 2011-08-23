@@ -56,7 +56,7 @@ class WuiViewEditMainCfg {
         $aData = Array(
             'htmlBase'     => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
             'formContents' => $this->getFields(),
-            'langSave'     => $this->CORE->getLang()->getText('save'),
+            'langSave'     => l('save'),
             'validMainCfg' => json_encode($this->CORE->getMainCfg()->getValidConfig()),
             'lang'         => $this->CORE->getJsLang(),
         );
@@ -132,11 +132,11 @@ class WuiViewEditMainCfg {
                         $ret .= '<tr'.$class.$style.'>';
                         $ret .= '<td class="tdlabel">'.$propname.'</td>';
 
-                        if(preg_match('/^TranslationNotFound:/', $this->CORE->getLang()->getText($propname)) > 0) {
+                        if(preg_match('/^TranslationNotFound:/', l($propname)) > 0) {
                             $ret .= '<td class="tdfield"></td>';
                         } else {
                             $ret .= '<td class="tdfield">';
-                            $ret .= "<img style=\"cursor:help\" src=\"./images/help_icon.png\" onclick=\"javascript:alert('".$this->CORE->getLang()->getText($propname)." (".$this->CORE->getLang()->getText('defaultValue').": ".$arr[$propname]['default'].")')\" />";
+                            $ret .= "<img style=\"cursor:help\" src=\"./images/help_icon.png\" onclick=\"javascript:alert('".l($propname)." (".l('defaultValue').": ".$arr[$propname]['default'].")')\" />";
                             $ret .= '</td>';
                         }
 
@@ -157,7 +157,7 @@ class WuiViewEditMainCfg {
                                         $arrOpts = $this->CORE->getAvailableHeaderTemplates();
                                     break;
                                     case 'autoupdatefreq':
-                                        $arrOpts = Array(Array('value'=>'0','label'=>$this->CORE->getLang()->getText('disabled')),
+                                        $arrOpts = Array(Array('value'=>'0','label'=>l('disabled')),
                                                          Array('value'=>'2','label'=>'2'),
                                                          Array('value'=>'5','label'=>'5'),
                                                          Array('value'=>'10','label'=>'10'),
@@ -184,8 +184,8 @@ class WuiViewEditMainCfg {
                             case 'boolean':
                                 $ret .= '<select id="'.$cat.'_'.$propname.'" name="'.$cat.'_'.$propname.'" onBlur="validateMainConfigFieldValue(this, 0)">';
                                 $ret .= '<option value=""></option>';
-                                $ret .= '<option value="1">'.$this->CORE->getLang()->getText('yes').'</option>';
-                                $ret .= '<option value="0">'.$this->CORE->getLang()->getText('no').'</option>';
+                                $ret .= '<option value="1">'.l('yes').'</option>';
+                                $ret .= '<option value="0">'.l('no').'</option>';
                                 $ret .= '</select>';
 
                                 $ret .= '<script>document.edit_config.elements[\''.$cat.'_'.$propname.'\'].value = \''.$val2.'\';</script>';

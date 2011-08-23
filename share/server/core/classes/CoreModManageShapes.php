@@ -56,8 +56,8 @@ class CoreModManageShapes extends CoreModule {
                 break;
                 case 'doDelete':
                     $this->handleResponse('handleResponseDelete', 'doDelete',
-                                            $this->CORE->getLang()->getText('The shape has been deleted.'),
-                                                                $this->CORE->getLang()->getText('The shape could not be deleted.'),
+                                            l('The shape has been deleted.'),
+                                                                l('The shape could not be deleted.'),
                                           1);
                 break;
                 case 'doUpload':
@@ -78,13 +78,13 @@ class CoreModManageShapes extends CoreModule {
 
     protected function doUpload($a) {
         if(!is_uploaded_file($a['image_file']['tmp_name']))
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The file could not be uploaded (Error: [ERROR]).',
+            throw new NagVisException(l('The file could not be uploaded (Error: [ERROR]).',
               Array('ERROR' => $a['image_file']['error'].': '.$this->CORE->getUploadErrorMsg($a['image_file']['error']))));
 
         $fileName = $a['image_file']['name'];
 
         if(!preg_match(MATCH_PNG_GIF_JPG_FILE, $fileName))
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The uploaded file is no image (png,jpg,gif) file or contains unwanted chars.'));
+            throw new NagVisException(l('The uploaded file is no image (png,jpg,gif) file or contains unwanted chars.'));
 
         $filePath = $this->CORE->getMainCfg()->getPath('sys', '', 'shapes').$fileName;
         return move_uploaded_file($a['image_file']['tmp_name'], $filePath) && $this->CORE->setPerms($filePath);
@@ -105,7 +105,7 @@ class CoreModManageShapes extends CoreModule {
         $this->verifyValuesMatch($FHANDLER, $attr);
 
         if(!in_array($FHANDLER->get('image'), $this->CORE->getAvailableShapes()))
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The shape does not exist.'));
+            throw new NagVisException(l('The shape does not exist.'));
 
         return Array('image' => $FHANDLER->get('image'));
     }

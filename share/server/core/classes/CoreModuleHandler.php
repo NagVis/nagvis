@@ -58,9 +58,7 @@ class CoreModuleHandler {
             // return instance
             return $MOD;
         } else {
-            // Error handling
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The given module is not registered'));
-            return null;
+            throw new NagVisException(l('The given module is not registered'));
         }
     }
 
@@ -73,15 +71,12 @@ class CoreModuleHandler {
      */
     public function regModule($sModule) {
         // Check if module class exists
-    if(class_exists($this->sPrefix.$sModule)) {
+        if(class_exists($this->sPrefix.$sModule)) {
             // Register the module at the module handler
             $this->aRegistered[$this->sPrefix.$sModule] = 'active';
-
             return true;
         } else {
-            // Error handling
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The module class does not exist'));
-            return false;
+            throw new NagVisException(l('The module class does not exist'));
         }
     }
 }

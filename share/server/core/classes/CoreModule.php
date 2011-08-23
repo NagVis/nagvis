@@ -127,9 +127,9 @@ abstract class CoreModule {
             $authorized = false;
 
         if(!$authorized)
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You are not permitted to access this page ([PAGE]).',
-                                                                       Array('PAGE' => $this->sName.'/'.$action.'/'.$this->sObject)),
-                                                                       null, $this->CORE->getLang()->getText('Access denied'));
+            throw new NagVisException(l('You are not permitted to access this page ([PAGE]).',
+                                        Array('PAGE' => $this->sName.'/'.$action.'/'.$this->sObject)),
+                                        null, l('Access denied'));
     }
 
     /**
@@ -202,7 +202,7 @@ abstract class CoreModule {
             }
         } else {
             $type = 'ERROR';
-            $msg = $this->CORE->getLang()->getText('You entered invalid information.');
+            $msg = l('You entered invalid information.');
         }
 
         if($msg)
@@ -227,8 +227,7 @@ abstract class CoreModule {
 
         foreach($list AS $key => $value)
             if(!$HANDLER->isSetAndNotEmpty($key))
-                new GlobalMessage('ERROR', $this->CORE->getLang()->getText('mustValueNotSet1',
-                                                                  Array('ATTRIBUTE' => $key)));
+                throw new UserInputError(l('mustValueNotSet1', Array('ATTRIBUTE' => $key)));
     }
 
     /**
@@ -240,8 +239,8 @@ abstract class CoreModule {
     protected function verifyValuesMatch($HANDLER, $list) {
         foreach($list AS $key => $pattern)
             if($pattern && !$HANDLER->match($key, $pattern))
-                new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The value of option "[ATTRIBUTE]" does not match the valid format.',
-                                                                  Array('ATTRIBUTE' => $key)));
+                throw new UserInputError(l('The value of option "[ATTRIBUTE]" does not match the valid format.',
+                                           Array('ATTRIBUTE' => $key)));
 
     }
 }

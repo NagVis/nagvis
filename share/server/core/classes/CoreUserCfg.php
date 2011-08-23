@@ -75,7 +75,7 @@ class CoreUserCfg {
 
             $a = json_decode(file_get_contents($f), true);
             if(!is_array($a))
-                new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Invalid data in "[FILE]".', Array('FILE' => $f)));
+                throw new NagVisException(l('Invalid data in "[FILE]".', Array('FILE' => $f)));
 
             $opts = array_merge($opts, $a);
         }

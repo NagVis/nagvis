@@ -106,25 +106,25 @@ class NagVisHeaderMenu {
             // Get translated language name
             switch($lang) {
                 case 'en_US':
-                    $languageLocated = $this->CORE->getLang()->getText('en_US');
+                    $languageLocated = l('en_US');
                 break;
                 case 'de_DE':
-                    $languageLocated = $this->CORE->getLang()->getText('de_DE');
+                    $languageLocated = l('de_DE');
                 break;
                 case 'es_ES':
-                    $languageLocated = $this->CORE->getLang()->getText('es_ES');
+                    $languageLocated = l('es_ES');
                 break;
                 case 'fr_FR':
-                    $languageLocated = $this->CORE->getLang()->getText('fr_FR');
+                    $languageLocated = l('fr_FR');
                 break;
                 case 'pt_BR':
-                    $languageLocated = $this->CORE->getLang()->getText('pt_BR');
+                    $languageLocated = l('pt_BR');
                 break;
                 case 'ru_RU':
-                    $languageLocated = $this->CORE->getLang()->getText('ru_RU');
+                    $languageLocated = l('ru_RU');
                 break;
                 default:
-                    $languageLocated = $this->CORE->getLang()->getText($lang);
+                    $languageLocated = l($lang);
                 break;
             }
 
@@ -294,55 +294,55 @@ class NagVisHeaderMenu {
             'pathHeaderJs'       => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates', $this->templateName.'.header.js'),
             'pathTemplates'      => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'),
             'pathTemplateImages' => $this->CORE->getMainCfg()->getPath('html', 'global', 'templateimages'),
-            'langSearch'         => $this->CORE->getLang()->getText('Search'),
-            'langUserMgmt'       => $this->CORE->getLang()->getText('Manage Users'),
-            'langManageRoles'    => $this->CORE->getLang()->getText('Manage Roles'),
+            'langSearch'         => l('Search'),
+            'langUserMgmt'       => l('Manage Users'),
+            'langManageRoles'    => l('Manage Roles'),
             'currentLanguage'    => $this->CORE->getLang()->getCurrentLanguage(),
 	    'docLanguage'        => $this->getDocLanguage(),
-            'langChooseLanguage' => $this->CORE->getLang()->getText('Choose Language'),
-            'langUser' => $this->CORE->getLang()->getText('User menu'),
-            'langActions' => $this->CORE->getLang()->getText('Actions'),
-            'langLoggedIn' => $this->CORE->getLang()->getText('Logged in'),
-            'langChangePassword' => $this->CORE->getLang()->getText('Change password'),
-            'langOpen' => $this->CORE->getLang()->getText('Open'),
-            'langMap' => $this->CORE->getLang()->getText('Map'),
-            'langMapOptions' => $this->CORE->getLang()->getText('Map Options'),
-            'langMapManageTmpl' => $this->CORE->getLang()->getText('Manage Templates'),
-            'langMapAddIcon' => $this->CORE->getLang()->getText('Add Icon'),
-            'langMapAddLine' => $this->CORE->getLang()->getText('Add Line'),
-            'langLine' => $this->CORE->getLang()->getText('Line'),
-            'langMapAddSpecial' => $this->CORE->getLang()->getText('Add Special'),
-            'langHost' => $this->CORE->getLang()->getText('host'),
-            'langService' => $this->CORE->getLang()->getText('service'),
-            'langHostgroup' => $this->CORE->getLang()->getText('hostgroup'),
-            'langServicegroup' => $this->CORE->getLang()->getText('servicegroup'),
-            'langMapEdit' => $this->CORE->getLang()->getText('Edit Map'),
-            'langMaps' => $this->CORE->getLang()->getText('Maps'),
-            'langAutomaps' => $this->CORE->getLang()->getText('Automaps'),
-            'langTextbox' => $this->CORE->getLang()->getText('textbox'),
-            'langShape' => $this->CORE->getLang()->getText('shape'),
-            'langStateless' => $this->CORE->getLang()->getText('Stateless'),
-            'langSpecial' => $this->CORE->getLang()->getText('special'),
-            'langLockUnlockAll' => $this->CORE->getLang()->getText('Lock/Unlock all'),
-            'langViewMap' => $this->CORE->getLang()->getText('View current map'),
-            'langOptions' => $this->CORE->getLang()->getText('Options'),
-            'langWuiConfiguration' => $this->CORE->getLang()->getText('General Configuration'),
-            'langMgmtBackends' => $this->CORE->getLang()->getText('Manage Backends'),
-            'langMgmtBackgrounds' => $this->CORE->getLang()->getText('Manage Backgrounds'),
-            'langMgmtMaps' => $this->CORE->getLang()->getText('Manage Maps'),
-            'langMgmtShapes' => $this->CORE->getLang()->getText('Manage Shapes'),
-            'langNeedHelp' => $this->CORE->getLang()->getText('needHelp'),
-            'langOnlineDoc' => $this->CORE->getLang()->getText('onlineDoc'),
-            'langForum' => $this->CORE->getLang()->getText('forum'),
-            'langSupportInfo' => $this->CORE->getLang()->getText('supportInfo'),
-            'langOverview' => $this->CORE->getLang()->getText('overview'),
-            'langInstance' => $this->CORE->getLang()->getText('instance'),
-            'langLogout' => $this->CORE->getLang()->getText('Logout'),
-            'langRotationStart' => $this->CORE->getLang()->getText('rotationStart'),
-            'langRotationStop' => $this->CORE->getLang()->getText('rotationStop'),
-            'langToggleGrid' => $this->CORE->getLang()->getText('Show/Hide Grid'),
-            'langAutomapToMap' => $this->CORE->getLang()->getText('Export to Map'),
-            'langModifyAutomapParams' => $this->CORE->getLang()->getText('Modify Automap view'),
+            'langChooseLanguage' => l('Choose Language'),
+            'langUser' => l('User menu'),
+            'langActions' => l('Actions'),
+            'langLoggedIn' => l('Logged in'),
+            'langChangePassword' => l('Change password'),
+            'langOpen' => l('Open'),
+            'langMap' => l('Map'),
+            'langMapOptions' => l('Map Options'),
+            'langMapManageTmpl' => l('Manage Templates'),
+            'langMapAddIcon' => l('Add Icon'),
+            'langMapAddLine' => l('Add Line'),
+            'langLine' => l('Line'),
+            'langMapAddSpecial' => l('Add Special'),
+            'langHost' => l('host'),
+            'langService' => l('service'),
+            'langHostgroup' => l('hostgroup'),
+            'langServicegroup' => l('servicegroup'),
+            'langMapEdit' => l('Edit Map'),
+            'langMaps' => l('Maps'),
+            'langAutomaps' => l('Automaps'),
+            'langTextbox' => l('textbox'),
+            'langShape' => l('shape'),
+            'langStateless' => l('Stateless'),
+            'langSpecial' => l('special'),
+            'langLockUnlockAll' => l('Lock/Unlock all'),
+            'langViewMap' => l('View current map'),
+            'langOptions' => l('Options'),
+            'langWuiConfiguration' => l('General Configuration'),
+            'langMgmtBackends' => l('Manage Backends'),
+            'langMgmtBackgrounds' => l('Manage Backgrounds'),
+            'langMgmtMaps' => l('Manage Maps'),
+            'langMgmtShapes' => l('Manage Shapes'),
+            'langNeedHelp' => l('needHelp'),
+            'langOnlineDoc' => l('onlineDoc'),
+            'langForum' => l('forum'),
+            'langSupportInfo' => l('supportInfo'),
+            'langOverview' => l('overview'),
+            'langInstance' => l('instance'),
+            'langLogout' => l('Logout'),
+            'langRotationStart' => l('rotationStart'),
+            'langRotationStop' => l('rotationStop'),
+            'langToggleGrid' => l('Show/Hide Grid'),
+            'langAutomapToMap' => l('Export to Map'),
+            'langModifyAutomapParams' => l('Modify Automap view'),
             // Supported by backend and not using trusted auth
             'supportedChangePassword' => $this->CORE->getAuthentication()->checkFeature('changePassword') && !$this->CORE->getAuthentication()->authedTrusted(),
             'permittedUserMgmt' => $this->AUTHORISATION->isPermitted('UserMgmt', 'manage'),

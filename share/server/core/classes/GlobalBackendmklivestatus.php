@@ -66,12 +66,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         // Run preflight checks
         if($this->socketType == 'unix' && !$this->checkSocketExists()) {
-            throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Unable to connect to livestatus socket. The socket [SOCKET] in backend [BACKENDID] does not exist. Maybe Nagios is not running or restarting.',
+            throw new BackendConnectionProblem(l('Unable to connect to livestatus socket. The socket [SOCKET] in backend [BACKENDID] does not exist. Maybe Nagios is not running or restarting.',
                          Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
         }
 
         if(!function_exists('fsockopen')) {
-            throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('The PHP function fsockopen is not available. Needed by backend [BACKENDID].',
+            throw new BackendConnectionProblem(l('The PHP function fsockopen is not available. Needed by backend [BACKENDID].',
                                Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
         }
 
@@ -119,7 +119,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             $this->socketPort = $port;
         } else {
             throw new BackendConnectionProblem(
-              GlobalCore::getInstance()->getLang()->getText('Unknown socket type given in backend [BACKENDID]',
+              l('Unknown socket type given in backend [BACKENDID]',
                 Array('BACKENDID' => $this->backendId)));
         }
     }
@@ -173,7 +173,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         if(!$this->SOCKET) {
             $socketError = $errstr;
             $this->SOCKET = null;
-            throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]',
+            throw new BackendConnectionProblem(l('Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]',
                                                                 Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => $socketError)));
         }
     }
@@ -187,7 +187,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $version = (int) str_replace('rc', '2', $version);
         if($version < 1010903) {
             throw new BackendConnectionProblem(
-               GlobalCore::getInstance()->getLang()->getText('The livestatus version [VERSION] used in backend [BACKENDID] is too old. Please update.',
+               l('The livestatus version [VERSION] used in backend [BACKENDID] is too old. Please update.',
                                                                                     Array('BACKENDID' => $this->backendId, 'VERSION' => $result[0])));
         }
     }*/
@@ -224,11 +224,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         error_reporting($oldLevel);
 
         if($write=== false)
-            throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
+            throw new BackendConnectionProblem(l('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
                                                     Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => 'Error while sending query to socket.')));
 
         if($write !== strlen($query))
-            throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
+            throw new BackendConnectionProblem(l('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
                                                       Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => 'Connection terminated.')));
 
 
@@ -237,7 +237,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         // Catch problem while reading
         if($read === false)
-            throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
+            throw new BackendConnectionProblem(l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
                                                       Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => 'Error while reading socket (header)')));
 
         // Extract status code
@@ -251,13 +251,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         // Catch problem while reading
         if($read === false) {
-            throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
+            throw new BackendConnectionProblem(l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
                                                      Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => 'Error while reading socket (content)')));
         }
 
         // Catch errors (Like HTTP 200 is OK)
         if($status != "200") {
-            throw new BackendConnectionProblem(GlobalCore::getInstance()->getLang()->getText('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
+            throw new BackendConnectionProblem(l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
                                                                                       Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath, 'MSG' => $read)));
         }
 
@@ -274,7 +274,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         // json_decode returns null on syntax problems
         if($obj === null) {
-            throw new BackendInvalidResponse(GlobalCore::getInstance()->getLang()->getText('The response has an invalid format in backend [BACKENDID].',
+            throw new BackendInvalidResponse(l('The response has an invalid format in backend [BACKENDID].',
                                                                                                                                     Array('BACKENDID' => $this->backendId)));
         } else {
             // Return the response object
@@ -545,7 +545,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 if($e[17] == 0 || $state === '') {
                     $arrReturn[$e[18]] = Array(
                         'state'  => 'UNCHECKED',
-                        'output' => GlobalCore::getInstance()->getLang()->getText('hostIsPending', Array('HOST' => $e[18]))
+                        'output' => l('hostIsPending', Array('HOST' => $e[18]))
                     );
                     continue;
                 }
@@ -664,7 +664,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 // $e[2]:  state
                 if($e[19] == 0 || $e[2] === '') {
                     $arrTmpReturn['state'] = 'PENDING';
-                    $arrTmpReturn['output'] = GlobalCore::getInstance()->getLang()->getText('serviceNotChecked', Array('SERVICE' => $e[0]));
+                    $arrTmpReturn['output'] = l('serviceNotChecked', Array('SERVICE' => $e[0]));
                 } else {
                     $state = $e[2];
 
@@ -854,7 +854,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             // livestatus previous 1.1.9i3 answers without host_alias - these users should update.
             if(!isset($l[0][13]))
                 throw new BackendInvalidResponse(
-                    GlobalCore::getInstance()->getLang()->getText('Livestatus version used in backend [BACKENDID] is too old. Please update.',
+                    l('Livestatus version used in backend [BACKENDID] is too old. Please update.',
                                                                         Array('BACKENDID' => $this->backendId)));
 
             foreach($l as $e) {
@@ -963,7 +963,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             // livestatus previous 1.1.9i3 answers without hostgroup_alias - these users should update.
             if(!isset($l[0][10]))
                 throw new BackendInvalidResponse(
-                    GlobalCore::getInstance()->getLang()->getText('Livestatus version used in backend [BACKENDID] is too old. Please update.',
+                    l('Livestatus version used in backend [BACKENDID] is too old. Please update.',
                                                                         Array('BACKENDID' => $this->backendId)));
             foreach($l as $e) {
                 $arrReturn[$e[0]] = Array(
@@ -1205,7 +1205,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             // livestatus previous 1.1.9i3 answers without servicegroup_alias - these users should update.
             if(!isset($l[0][13]))
                 throw new BackendInvalidResponse(
-                    GlobalCore::getInstance()->getLang()->getText('Livestatus version used in backend [BACKENDID] is too old. Please update.',
+                    l('Livestatus version used in backend [BACKENDID] is too old. Please update.',
                                                                         Array('BACKENDID' => $this->backendId)));
             foreach($l as $e) {
                 $arrReturn[$e[0]] = Array(

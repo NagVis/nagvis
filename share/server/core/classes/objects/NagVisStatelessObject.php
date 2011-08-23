@@ -34,13 +34,6 @@ class NagVisStatelessObject extends NagVisObject {
     protected static $iconPath      = null;
     protected static $iconPathLocal = null;
 
-    /**
-     * Class constructor
-     *
-     * @param		Object 		Object of class GlobalMainCfg
-     * @param		Object 		Object of class GlobalLanguage
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
     public function __construct($CORE) {
         parent::__construct($CORE);
     }

@@ -54,10 +54,10 @@ class NagVisViewChangePassword {
             'formTarget' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=ChangePassword&amp;act=change',
             'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
       'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
-      'langOldPassword' => $this->CORE->getLang()->getText('Old password'),
-      'langNewPassword1' => $this->CORE->getLang()->getText('New password'),
-      'langNewPassword2' => $this->CORE->getLang()->getText('New password confirmation'),
-      'langChangePassword' => $this->CORE->getLang()->getText('Change password')
+      'langOldPassword' => l('Old password'),
+      'langNewPassword1' => l('New password'),
+      'langNewPassword2' => l('New password confirmation'),
+      'langChangePassword' => l('Change password')
         );
 
         // Build page based on the template file and the data array

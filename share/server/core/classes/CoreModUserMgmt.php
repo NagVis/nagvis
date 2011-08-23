@@ -63,7 +63,7 @@ class CoreModUserMgmt extends CoreModule {
                     if($aReturn !== false) {
                         // Try to apply the changes
                         if($this->AUTHENTICATION->createUser($aReturn['user'], $aReturn['password'])) {
-                            new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The user has been created.'));
+                            new GlobalMessage('NOTE', l('The user has been created.'));
                             $sReturn = '';
                         } else {
                             // Invalid credentials
@@ -90,15 +90,14 @@ class CoreModUserMgmt extends CoreModule {
 
                     if($aReturn !== false) {
                         if($this->AUTHORISATION->updateUserRoles($aReturn['userId'], $aReturn['roles'])) {
-                            new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The roles for this user have been updated.'));
+                            new GlobalMessage('NOTE', l('The roles for this user have been updated.'));
                             $sReturn = '';
                         } else {
-                            new GlobalMessage('NOTE', $this->CORE->getLang()->getText('Problem while updating user roles.'));
+                            new GlobalMessage('NOTE', l('Problem while updating user roles.'));
                             $sReturn = '';
                         }
                     } else {
-                        new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-                        $sReturn = '';
+                        throw new NagVisException(l('You entered invalid information.'));
                     }
                 break;
                 case 'doDelete':
@@ -106,21 +105,20 @@ class CoreModUserMgmt extends CoreModule {
 
                     if($aReturn !== false) {
                         if($this->AUTHORISATION->deleteUser($aReturn['userId'])) {
-                            new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The user has been deleted.'));
+                            new GlobalMessage('NOTE', l('The user has been deleted.'));
                             $sReturn = '';
                         } else {
-                            new GlobalMessage('NOTE', $this->CORE->getLang()->getText('Problem while deleting user.'));
+                            new GlobalMessage('NOTE', l('Problem while deleting user.'));
                             $sReturn = '';
                         }
                     } else {
-                        new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-                        $sReturn = '';
+                        throw new NagVisException(l('You entered invalid information.'));
                     }
                 break;
                 case 'doPwReset':
                     $this->handleResponse('handleResponseDoPwReset', 'doPwReset',
-                                            $this->CORE->getLang()->getText('The password has been reset.'),
-                                                                $this->CORE->getLang()->getText('The password could not be reset.'));
+                                            l('The password has been reset.'),
+                                                                l('The password could not be reset.'));
                 break;
             }
         }
@@ -151,17 +149,12 @@ class CoreModUserMgmt extends CoreModule {
             $bValid = false;
 
         // Check if new passwords are equal
-        if($bValid && $this->FHANDLER->get('password1') !== $this->FHANDLER->get('password2')) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The two passwords are not equal.'));
-            $bValid = false;
-        }
+        if($bValid && $this->FHANDLER->get('password1') !== $this->FHANDLER->get('password2'))
+            throw new NagVisException(l('The two passwords are not equal.'));
 
         // Don't change own users password
-        if($this->AUTHENTICATION->getUserId() == $FHANDLER->get('userId')) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to reset the password for your own user.'));
-
-            $bValid = false;
-        }
+        if($this->AUTHENTICATION->getUserId() == $FHANDLER->get('userId'))
+            throw new NagVisException(l('Unable to reset the password for your own user.'));
 
         // Store response data
         if($bValid === true)
@@ -188,11 +181,8 @@ class CoreModUserMgmt extends CoreModule {
         $userId = intval($this->FHANDLER->get('userId'));
 
         // Don't delete own user
-        if($this->AUTHENTICATION->getUserId() == $userId) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('Unable to delete your own user.'));
-
-            $bValid = false;
-        }
+        if($this->AUTHENTICATION->getUserId() == $userId)
+            throw new NagVisException(l('Unable to delete your own user.'));
 
         // Store response data
         if($bValid === true)
@@ -252,16 +242,12 @@ class CoreModUserMgmt extends CoreModule {
             $bValid = false;
 
         // Check if the user already exists
-        if($bValid && $this->AUTHENTICATION->checkUserExists($this->FHANDLER->get('username'))) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The username is invalid or does already exist.'));
-            $bValid = false;
-        }
+        if($bValid && $this->AUTHENTICATION->checkUserExists($this->FHANDLER->get('username')))
+            throw new NagVisException(l('The username is invalid or does already exist.'));
 
         // Check if new passwords are equal
-        if($bValid && $this->FHANDLER->get('password1') !== $this->FHANDLER->get('password2')) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The two passwords are not equal.'));
-            $bValid = false;
-        }
+        if($bValid && $this->FHANDLER->get('password1') !== $this->FHANDLER->get('password2'))
+            throw new NagVisException(l('The two passwords are not equal.'));
 
         //@todo Escape vars?
 
@@ -274,13 +260,11 @@ class CoreModUserMgmt extends CoreModule {
     }
 
     public function msgInputNotValid() {
-        new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-        return '';
+        throw new NagVisException(l('You entered invalid information.'));
     }
 
     public function msgUserNotCreated() {
-        new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The user could not be created.'));
-        return '';
+        throw new NagVisException(l('The user could not be created.'));
     }
 }
 

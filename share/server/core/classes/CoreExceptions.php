@@ -36,3 +36,5 @@ class BackendInvalidResponse extends BackendException {}
 
 class MapCfgInvalid extends NagVisException {}
 class MapCfgInvalidObject extends MapCfgInvalid {}
+
+class UserInputError extends NagVisException {}

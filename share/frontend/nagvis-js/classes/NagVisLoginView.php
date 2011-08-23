@@ -60,11 +60,11 @@ class NagVisLoginView {
             'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
       'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
       'maxUsernameLength' => AUTH_MAX_USERNAME_LENGTH,
-      'langName' => $this->CORE->getLang()->getText('Name'),
-      'langPassword' => $this->CORE->getLang()->getText('Password'),
-      'langLogin' => $this->CORE->getLang()->getText('Login'),
-            'langTitleCookiesDisabled' => $this->CORE->getLang()->getText('Cookies disabled'),
-            'langTextCookiesDisabled' => $this->CORE->getLang()->getText('NagVis is unable to set a cookie in your browser. Please enable cookies for at least the NagVis host.'),
+      'langName' => l('Name'),
+      'langPassword' => l('Password'),
+      'langLogin' => l('Login'),
+            'langTitleCookiesDisabled' => l('Cookies disabled'),
+            'langTextCookiesDisabled' => l('NagVis is unable to set a cookie in your browser. Please enable cookies for at least the NagVis host.'),
         );
 
         // Build page based on the template file and the data array

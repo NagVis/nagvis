@@ -75,7 +75,7 @@ class CoreModChangePassword extends CoreModule {
 
                             // Try to apply the changes
                             if($this->AUTHENTICATION->changePassword()) {
-                                new GlobalMessage('NOTE', $this->CORE->getLang()->getText('The password has been changed.'));
+                                new GlobalMessage('NOTE', l('The password has been changed.'));
                                 $sReturn = '';
                             } else {
                                 // Invalid credentials
@@ -116,18 +116,12 @@ class CoreModChangePassword extends CoreModule {
             $bValid = false;
 
         // Check if new passwords are equal
-        if($bValid && $this->FHANDLER->get('passwordNew1') !== $this->FHANDLER->get('passwordNew2')) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The two new passwords are not equal.'));
-
-            $bValid = false;
-        }
+        if($bValid && $this->FHANDLER->get('passwordNew1') !== $this->FHANDLER->get('passwordNew2'))
+            throw new NagVisException(l('The two new passwords are not equal.'));
 
         // Check if old and new passwords are equal
-        if($bValid && $this->FHANDLER->get('passwordOld') === $this->FHANDLER->get('passwordNew1')) {
-            new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The new and old passwords are equal. Won\'t change anything.'));
-
-            $bValid = false;
-        }
+        if($bValid && $this->FHANDLER->get('passwordOld') === $this->FHANDLER->get('passwordNew1'))
+            throw new NagVisException(l('The new and old passwords are equal. Won\'t change anything.'));
 
         //@todo Escape vars?
 
@@ -141,13 +135,11 @@ class CoreModChangePassword extends CoreModule {
     }
 
     public function msgInputNotValid() {
-        new GlobalMessage('ERROR', $this->CORE->getLang()->getText('You entered invalid information.'));
-        return '';
+        throw new NagVisException(l('You entered invalid information.'));
     }
 
     public function msgPasswordNotChanged() {
-        new GlobalMessage('ERROR', $this->CORE->getLang()->getText('The password could not be changed.'));
-        return '';
+        throw new NagVisException(l('The password could not be changed.'));
     }
 }
 ?>

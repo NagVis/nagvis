@@ -99,30 +99,30 @@ class NagVisContextMenu {
     private function replaceStaticMacros() {
         // Replace the static macros (language, paths)
         if(strpos($this->code,'[lang_confirm_delete]') !== FALSE) {
-            $this->code = str_replace('[lang_confirm_delete]', $this->CORE->getLang()->getText('confirmDelete'), $this->code);
+            $this->code = str_replace('[lang_confirm_delete]', l('confirmDelete'), $this->code);
         }
 
         if(strpos($this->code,'[lang_connect_by_ssh]') !== FALSE) {
-            $this->code = str_replace('[lang_connect_by_ssh]',$this->CORE->getLang()->getText('contextConnectBySsh'),$this->code);
+            $this->code = str_replace('[lang_connect_by_ssh]',l('contextConnectBySsh'),$this->code);
         }
 
         if(strpos($this->code,'[lang_refresh_status]') !== FALSE) {
-            $this->code = str_replace('[lang_refresh_status]',$this->CORE->getLang()->getText('contextRefreshStatus'),$this->code);
+            $this->code = str_replace('[lang_refresh_status]',l('contextRefreshStatus'),$this->code);
         }
 
         if(strpos($this->code,'[lang_reschedule_next_check]') !== FALSE) {
-            $this->code = str_replace('[lang_reschedule_next_check]',$this->CORE->getLang()->getText('contextRescheduleNextCheck'),$this->code);
+            $this->code = str_replace('[lang_reschedule_next_check]',l('contextRescheduleNextCheck'),$this->code);
         }
 
         if(strpos($this->code,'[lang_schedule_downtime]') !== FALSE) {
-            $this->code = str_replace('[lang_schedule_downtime]',$this->CORE->getLang()->getText('contextScheduleDowntime'),$this->code);
+            $this->code = str_replace('[lang_schedule_downtime]',l('contextScheduleDowntime'),$this->code);
         }
 
         if(strpos($this->code,'[lang_toggle_lock]') !== FALSE)
-            $this->code = str_replace('[lang_toggle_lock]', $this->CORE->getLang()->getText('Lock/Unlock'), $this->code);
+            $this->code = str_replace('[lang_toggle_lock]', l('Lock/Unlock'), $this->code);
 
         if(strpos($this->code,'[lang_toggle_line_mid]') !== FALSE)
-            $this->code = str_replace('[lang_toggle_line_mid]', $this->CORE->getLang()->getText('Lock/Unlock line middle'), $this->code);
+            $this->code = str_replace('[lang_toggle_line_mid]', l('Lock/Unlock line middle'), $this->code);
 
         if(strpos($this->code,'[html_base]') !== FALSE) {
             $this->code = str_replace('[html_base]',$this->CORE->getMainCfg()->getValue('paths','htmlbase'),$this->code);
@@ -137,7 +137,7 @@ class NagVisContextMenu {
         }
 
         if(strpos($this->code,'[lang_make_root]') !== FALSE) {
-            $this->code = str_replace('[lang_make_root]', $this->CORE->getLang()->getText('Make root'), $this->code);
+            $this->code = str_replace('[lang_make_root]', l('Make root'), $this->code);
         }
     }
 
