@@ -68,7 +68,7 @@ class CoreModRoleMgmt extends CoreModule {
                     if($aReturn !== false) {
                         // Try to apply
                         if($this->AUTHORISATION->createRole($aReturn['name'])) {
-                            new GlobalMessage('NOTE', l('The role has been created.'));
+                            throw new Success(l('The role has been created.'));
                             $sReturn = '';
                         } else {
                             throw new NagVisException(l('The user could not be created.'));
@@ -82,10 +82,10 @@ class CoreModRoleMgmt extends CoreModule {
 
                     if($aReturn !== false) {
                         if($this->AUTHORISATION->updateRolePerms($aReturn['roleId'], $aReturn['perms'])) {
-                            new GlobalMessage('NOTE', l('The permissions for this role have been updated.'));
+                            throw new Success(l('The permissions for this role have been updated.'));
                             $sReturn = '';
                         } else {
-                            new GlobalMessage('NOTE', l('Problem while updating role permissions.'));
+                            throw new Success(l('Problem while updating role permissions.'));
                             $sReturn = '';
                         }
                     } else {
@@ -97,10 +97,10 @@ class CoreModRoleMgmt extends CoreModule {
 
                     if($aReturn !== false) {
                         if($this->AUTHORISATION->deleteRole($aReturn['roleId'])) {
-                            new GlobalMessage('NOTE', l('The role has been deleted.'));
+                            throw new Success(l('The role has been deleted.'));
                             $sReturn = '';
                         } else {
-                            new GlobalMessage('NOTE', l('Problem while deleting the role.'));
+                            throw new Success(l('Problem while deleting the role.'));
                             $sReturn = '';
                         }
                     } else {

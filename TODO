@@ -39,7 +39,6 @@ Relative Koordinaten:
 
 *** Cleanups ***
 
-- ajax_handler und functions/index.php zusammenführen
 - CoreUriHandler() nur an einer Stelle initialisieren
 - Main Config Zugriff über kürzere Aufrufe. Beispiel: $CORE->cfg('', '');
 - Weathermap Linien Perfdata Berechnungen nach check_command aufräumen

@@ -7,6 +7,8 @@ Core
   * Added exclude_members and exclude_member_states options to stateful
   objects for excluding specific member objects completely or only during summary
   state calculations.
+  * Cleanup: Consolidated code of main handlers ajax_handler and frontend index
+  * Cleanup: Recoded message class calls to exceptions
 
 Frontend
   * Readded the "edit" action to the maps module. In this mode all object are

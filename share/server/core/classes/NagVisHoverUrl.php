@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author    Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisHoverUrl {
     private $CORE;
@@ -34,37 +34,36 @@ class NagVisHoverUrl {
     /**
      * Class Constructor
      *
-     * @param 	GlobalCore 	$CORE
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @param     GlobalCore     $CORE
+     * @author     Lars Michelsen <lars@vertical-visions.de>
      */
     public function __construct($CORE, $url) {
         $this->CORE = $CORE;
         $this->url = $url;
-
-    $this->code = '';
+        $this->code = '';
 
         // Read the contents of the template file
         $this->readHoverUrl();
         $this->cleanCode();
     }
 
-  /**
+    /**
      * PUBLIC __toString()
      *
      * "Magic method" returns the contents of the hover url
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author    Lars Michelsen <lars@vertical-visions.de>
      */
-  public function __toString() {
-    return $this->code;
-  }
+    public function __toString() {
+        return $this->code;
+    }
 
-  /**
+    /**
      * PRIVATE readHoverUrl()
      *
      * Reads the given hover url form an object and forms it to a readable format for the hover box
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author    Lars Michelsen <lars@vertical-visions.de>
      */
     private function readHoverUrl() {
         /* Context is supported in php >= 5.0
@@ -91,10 +90,10 @@ class NagVisHoverUrl {
 
 
         if(!$content = file_get_contents($this->url)) {
-            new GlobalMessage('WARNING', l('couldNotGetHoverUrl', 'URL~'.$this->url));
+            throw new NagVisException(l('couldNotGetHoverUrl', Array('URL' => $this->url)));
         }
 
-    $this->code = $content;
+        $this->code = $content;
     }
 
 
@@ -103,10 +102,10 @@ class NagVisHoverUrl {
      *
      * Replace unwanted things from the code
      *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author     Lars Michelsen <lars@vertical-visions.de>
      */
-  private function cleanCode() {
+    private function cleanCode() {
         $this->code = str_replace('"','\\\'',str_replace('\'','\\\'',str_replace("\t",'',str_replace("\n",'',str_replace("\r\n",'',$this->code)))));
-  }
+    }
 }
 ?>

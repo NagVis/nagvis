@@ -128,8 +128,7 @@ abstract class CoreModule {
 
         if(!$authorized)
             throw new NagVisException(l('You are not permitted to access this page ([PAGE]).',
-                                        Array('PAGE' => $this->sName.'/'.$action.'/'.$this->sObject)),
-                                        null, l('Access denied'));
+                                        Array('PAGE' => $this->sName.'/'.$action.'/'.$this->sObject)));
     }
 
     /**
@@ -190,23 +189,25 @@ abstract class CoreModule {
                                         $failMessage = null, $reload = null, $redirectUrl = null) {
         $aReturn = $this->{$validationHandler}();
 
-        $type = 'NOTE';
+        $type = 'ok';
         $msg = null;
         if($aReturn !== false) {
             $ret = $this->{$action}($aReturn);
             if($ret && $successMsg) {
                 $msg = $successMsg;
             } elseif(!$ret && $failMessage) {
-                $type = 'ERROR';
+                $type = 'error';
                 $msg = $failMessage;
             }
         } else {
-            $type = 'ERROR';
+            $type = 'error';
             $msg = l('You entered invalid information.');
         }
 
-        if($msg)
-            new GlobalMessage($type, $msg, null, null, $reload, $redirectUrl);
+        if($msg && $type == 'error')
+            throw new NagVisException($msg, null, $reload, $redirectUrl);
+        elseif($msg && $type == 'ok')
+            throw new Success($msg, null, $reload, $redirectUrl);
         else
             return $ret;
     }

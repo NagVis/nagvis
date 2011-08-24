@@ -21,10 +21,6 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  ******************************************************************************/
- 
-/**
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
 
 // Include global defines
 require('../../server/core/defines/global.php');
@@ -41,7 +37,8 @@ require('../../server/core/functions/nagvisErrorHandler.php');
 require('../../server/core/functions/i18n.php');
 require('../../server/core/classes/CoreExceptions.php');
 
-// This defines whether the GlobalMessage prints HTML or ajax error messages
+if (PROFILE) profilingStart();
+
 define('CONST_AJAX' , FALSE);
 
 try {
@@ -61,7 +58,7 @@ try {
     require('../../server/core/functions/index.php');
     exit(0);
 } catch(NagVisException $e) {
-	new GlobalMessage('ERROR', $e->getMessage());
+    new FrontendMessage($e->getMessage());
 }
 
 ?>

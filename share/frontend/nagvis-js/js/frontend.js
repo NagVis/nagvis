@@ -99,7 +99,7 @@ function submitFrontendForm(sUrl, sFormId, bReloadOnSuccess) {
     var oResult = postSyncRequest(sUrl, getFormParams(sFormId));
 
     if(oResult && oResult.type) {
-        if(oResult.type === 'note' && bReloadOnSuccess) {
+        if(oResult.type === 'ok' && bReloadOnSuccess) {
             if(typeof popupWindowRefresh == 'function') {
                 popupWindowRefresh();
             }

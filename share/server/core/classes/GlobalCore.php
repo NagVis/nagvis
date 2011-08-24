@@ -123,7 +123,7 @@ class GlobalCore {
     public function checkGd($printErr) {
         if(!extension_loaded('gd')) {
             if($printErr)
-                new GlobalMessage('WARNING', l('gdLibNotFound'));
+                throw new NagVisException(l('gdLibNotFound'));
             return FALSE;
         } else {
             return TRUE;

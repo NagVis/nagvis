@@ -104,8 +104,10 @@ class CoreModLogonEnv extends CoreModule {
                                 // Invalid credentials
                                 // FIXME: Count tries and maybe block somehow
                                 if($this->bVerbose) {
-                                    new GlobalMessage('ERROR', l('You entered invalid credentials.'),
-                                                      null, l('Authentication failed'), 10, CoreRequestHandler::getReferer(''));
+                                    throw new NagVisException(l('You entered invalid credentials.'),
+                                                              l('Authentication failed'),
+                                                              10,
+                                                              CoreRequestHandler::getReferer(''));
                                 }
 
                                 return false;

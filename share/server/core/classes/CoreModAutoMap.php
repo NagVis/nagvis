@@ -195,9 +195,7 @@ class CoreModAutoMap extends CoreModule {
                 $target = $FHANDLER->get('target');
 
                 if($MAP->toClassicMap($target)) {
-                    new GlobalMessage('NOTE',
-                                      l('The map has been created.'),
-                                      null,
+                    throw new Success(l('The map has been created.'),
                                       null,
                                       1,
                                       $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/frontend/nagvis-js/index.php?mod=Map&show='.$target);

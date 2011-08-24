@@ -63,8 +63,7 @@ class CoreModUserMgmt extends CoreModule {
                     if($aReturn !== false) {
                         // Try to apply the changes
                         if($this->AUTHENTICATION->createUser($aReturn['user'], $aReturn['password'])) {
-                            new GlobalMessage('NOTE', l('The user has been created.'));
-                            $sReturn = '';
+                            throw new Success(l('The user has been created.'));
                         } else {
                             // Invalid credentials
                             $sReturn = $this->msgUserNotCreated();
@@ -90,11 +89,9 @@ class CoreModUserMgmt extends CoreModule {
 
                     if($aReturn !== false) {
                         if($this->AUTHORISATION->updateUserRoles($aReturn['userId'], $aReturn['roles'])) {
-                            new GlobalMessage('NOTE', l('The roles for this user have been updated.'));
-                            $sReturn = '';
+                            throw new Success(l('The roles for this user have been updated.'));
                         } else {
-                            new GlobalMessage('NOTE', l('Problem while updating user roles.'));
-                            $sReturn = '';
+                            throw new NagVisException(l('Problem while updating user roles.'));
                         }
                     } else {
                         throw new NagVisException(l('You entered invalid information.'));
@@ -105,11 +102,9 @@ class CoreModUserMgmt extends CoreModule {
 
                     if($aReturn !== false) {
                         if($this->AUTHORISATION->deleteUser($aReturn['userId'])) {
-                            new GlobalMessage('NOTE', l('The user has been deleted.'));
-                            $sReturn = '';
+                            throw new Success(l('The user has been deleted.'));
                         } else {
-                            new GlobalMessage('NOTE', l('Problem while deleting user.'));
-                            $sReturn = '';
+                            throw new NagVisException(l('Problem while deleting user.'));
                         }
                     } else {
                         throw new NagVisException(l('You entered invalid information.'));

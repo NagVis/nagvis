@@ -61,8 +61,9 @@ class CoreModAuth extends CoreModule {
                             if($this->AUTHENTICATION->isAuthenticated()) {
                                 // Display success with link and refresh in 5 seconds to called page
                                 // When referer is empty redirect to overview page
-                                new GlobalMessage('NOTE', l('You have been authenticated. You will be redirected.'),
-                                                   null, null, 1, CoreRequestHandler::getReferer($this->CORE->getMainCfg()->getValue('paths', 'htmlbase')));
+                                throw new Success(l('You have been authenticated. You will be redirected.'),
+                                                  l('Authenticated'),
+                                                  1, CoreRequestHandler::getReferer($this->CORE->getMainCfg()->getValue('paths', 'htmlbase')));
                             } else {
                                 // Invalid credentials
                                 // FIXME: Count tries and maybe block somehow
@@ -79,11 +80,12 @@ class CoreModAuth extends CoreModule {
                 break;
                 case 'logout':
                     if($this->AUTHENTICATION->logout())
-                        new GlobalMessage('NOTE', l('You have been logged out. You will be redirected.'),
-                                          null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
+                        throw new Success(l('You have been logged out. You will be redirected.'),
+                                          l('Logged out'),
+                                          1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
                     else
-                        new GlobalMessage('ERROR', l('Unable to log you out. Maybe it is not supported by your authentication module.'),
-                                          null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
+                        throw new NagVisException(l('Unable to log you out. Maybe it is not supported by your authentication module.'),
+                                          null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
                 break;
             }
         }
@@ -109,20 +111,21 @@ class CoreModAuth extends CoreModule {
         // Store response data
         if($bValid)
           return Array('user'     => $this->FHANDLER->get('username'),
-                         'password' => $this->FHANDLER->get('password'));
+                       'password' => $this->FHANDLER->get('password'));
         else
             return false;
     }
 
     public function msgAlreadyLoggedIn() {
-        new GlobalMessage('NOTE', l('You are already logged in. You will be redirected.'),
-                          null, null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
+        throw new NagVisException(l('You are already logged in. You will be redirected.'),
+                          null, 1, $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
         return '';
     }
 
     public function msgInvalidCredentials() {
-        new GlobalMessage('ERROR', l('You entered invalid credentials.'),
-                          null, l('Authentication failed'), 1, CoreRequestHandler::getReferer(''));
+        throw new NagVisException(l('You entered invalid credentials.'),
+                                  l('Authentication failed'),
+                                  1, CoreRequestHandler::getReferer(''));
         return '';
     }
 }

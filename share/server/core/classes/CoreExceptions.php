@@ -26,7 +26,46 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-class NagVisException extends Exception {}
+class NagVisException extends Exception {
+    function __construct($msg, $title = null, $time = null, $url = null) {
+        if($title === null)
+            $title = l('ERROR');
+
+        $this->e = Array(
+            'message' => $msg,
+            'title'   => $title,
+            'type'    => 'error',
+        );
+
+        if($time !== null)
+            $this->e['reloadTime'] = $time;
+        if($url !== null)
+            $this->e['reloadUrl'] = $url;
+    }
+
+    function __toString() {
+        return 'NagVisError:'.json_encode($this->e);
+    }
+}
+
+class MapInMaintenance extends NagVisException {
+    function __construct($map) {
+        $this->e = Array(
+            'type'    => 'info',
+            'message' => l('mapInMaintenance', Array('MAP' => $map)),
+            'title'   => l('INFO'),
+        );
+    }
+}
+
+class Success extends NagVisException {
+    function __construct($msg, $title = null, $time = null, $url = null) {
+        parent::__construct($msg, $title, $time, $url);
+        $this->e['type'] = 'ok';
+        if($this->e['title'] == l('ERROR'))
+            $this->e['title'] = l('OK');
+    }
+}
 
 class CoreAuthModNoSupport extends NagVisException {}
 
@@ -38,3 +77,5 @@ class MapCfgInvalid extends NagVisException {}
 class MapCfgInvalidObject extends MapCfgInvalid {}
 
 class UserInputError extends NagVisException {}
+
+class InputErrorRedirect extends NagVisException {}

@@ -42,7 +42,7 @@ class CoreAuthorisationModMySQL extends CoreAuthorisationModule {
                                                 $this->CORE->getMainCfg()->getValue('auth_mysql', 'dbname'),
                                                 $this->CORE->getMainCfg()->getValue('auth_mysql', 'dbuser'),
                                                 $this->CORE->getMainCfg()->getValue('auth_mysql', 'dbpass'))) {
-            new GlobalMessage('ERROR', l('Unable to open auth database'));
+            throw new NagVisException(l('Unable to open auth database'));
         } else {
             // Create initial db scheme if needed
             if(!$this->DB->tableExist('users')) {

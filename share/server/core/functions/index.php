@@ -50,11 +50,11 @@ $AUTH = new CoreAuthHandler($CORE, $SHANDLER,
 */
 
 if($AUTH->isAuthenticated()) {
-	$AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH,
-	                    $CORE->getMainCfg()->getValue('global', 'authorisationmodule'));
-	$AUTHORISATION->parsePermissions();
+    $AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH,
+                        $CORE->getMainCfg()->getValue('global', 'authorisationmodule'));
+    $AUTHORISATION->parsePermissions();
 } else
-	$AUTHORISATION = null;
+    $AUTHORISATION = null;
 
 // Make the AA information available to whole NagVis for permission checks
 $CORE->setAA($AUTH, $AUTHORISATION);
@@ -66,7 +66,7 @@ $CORE->setAA($AUTH, $AUTHORISATION);
 // Register valid modules
 // Unregistered modules can not be accessed
 foreach($_modules AS $mod)
-	$MHANDLER->regModule($mod);
+    $MHANDLER->regModule($mod);
 
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
@@ -83,16 +83,29 @@ $MODULE->initObject();
 
 // Only proceed with authenticated users
 if($UHANDLER->get('mod') != $CORE->getMainCfg()->getValue('global', 'logonmodule')
-   && $AUTH->isAuthenticated()) {
-	// Only check modules which should have authorisation checks
-	// This are all modules excluded some core things
-	// Check if the user is permited to access this (module, action, object)
-	if($MODULE->actionRequiresAuthorisation())
-		$MODULE->isPermitted();
+   && ($AUTH->isAuthenticated() || (CONST_AJAX && $UHANDLER->get('mod') == 'Auth'))) {
+    // Only check modules which should have authorisation checks
+    // This are all modules excluded some core things
+    // Check if the user is permited to access this (module, action, object)
+    if($MODULE->actionRequiresAuthorisation())
+        $MODULE->isPermitted();
+} elseif(CONST_AJAX) {
+    // At the moment the login at ajax_handler is only possible via env auth.
+    // Should be enough for the moment
+    $MHANDLER = new CoreModuleHandler($CORE);
+    $MHANDLER->regModule('LogonEnv');
+    $MODULE = $MHANDLER->loadModule('LogonEnv');
+    $MODULE->beQuiet();
+    $MODULE->setAction('view');
+    
+    // Try to auth using the environment auth
+    // When not authenticated show error message
+    if($MODULE->handleAction() === false)
+        throw new NagVisException(l('You are not authenticated'), null, l('Access denied'));
 } else {
-	// When not authenticated redirect to logon dialog
-	$MODULE = $MHANDLER->loadModule($CORE->getMainCfg()->getValue('global', 'logonmodule'));
-	$UHANDLER->set('act', 'view');
+    // When not authenticated redirect to logon dialog
+    $MODULE = $MHANDLER->loadModule($CORE->getMainCfg()->getValue('global', 'logonmodule'));
+    $UHANDLER->set('act', 'view');
 }
 
 /*
@@ -103,18 +116,18 @@ if($UHANDLER->get('mod') != $CORE->getMainCfg()->getValue('global', 'logonmodule
 // Handle regular action when everything is ok
 // When no matching module or action is found show the 404 error
 if($MODULE !== false && $MODULE->offersAction($UHANDLER->get('act'))) {
-	$MODULE->setAction($UHANDLER->get('act'));
+    $MODULE->setAction($UHANDLER->get('act'));
 
-	// Handle the given action in the module
-	$sContent = $MODULE->handleAction();
+    // Handle the given action in the module
+    $sContent = $MODULE->handleAction();
 } else {
-	// Create instance of msg module
-	throw new NagVisException(l('The given action is not valid'));
+    // Create instance of msg module
+    throw new NagVisException(l('The given action is not valid'));
 }
 
 echo $sContent;
 if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
-if (PROFILE) profilingFinalize($_page.'-'.$UHANDLER->get('mod').'-'.$UHANDLER->get('act'));
+if (PROFILE) profilingFinalize($_name.'-'.$UHANDLER->get('mod').'-'.$UHANDLER->get('act'));
 
 exit(0);
 
