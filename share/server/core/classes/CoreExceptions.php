@@ -44,7 +44,7 @@ class NagVisException extends Exception {
     }
 
     function __toString() {
-        return 'NagVisError:'.json_encode($this->e);
+        return json_encode($this->e);
     }
 }
 

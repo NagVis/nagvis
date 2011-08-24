@@ -65,7 +65,7 @@ try {
 } catch(NagVisException $e) {
     echo $e;
 } catch(Exception $e) {
-    echo 'NagVisError:'.json_encode(Array(
+    echo json_encode(Array(
         'type'    => 'error',
         'message' => $e->getMessage(),
         'title'   => l('ERROR - Unexpected exception'),

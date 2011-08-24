@@ -173,12 +173,10 @@ function getAsyncRequest(sUrl, bCacheable, callback, callbackParams) {
                     // Error handling for the AJAX methods
                     if(responseText.match(/^Notice:|^Warning:|^Error:|^Parse error:/)) {
                         phpError(responseText);
-                    } else if(responseText.match(/^NagVisError:/)) {
-                        frontendMessage(eval('( '+responseText.replace(/^NagVisError:/, '')+')'));
                     } else {
                         // Handle responses of json objects - including eval and wron response
                         // error handling and clearing
-                        var oResponse = handleJsonResponse(sUrl, responseText)
+                        var oResponse = handleJsonResponse(sUrl, responseText);
 
                         if(oResponse)
                             callback(oResponse, callbackParams);
@@ -239,7 +237,7 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
         if(responseText !== '') {
             // Handle responses of json objects - including eval and wron response
             // error handling and clearing
-            sResponse = handleJsonResponse(sUrl, responseText)
+            sResponse = handleJsonResponse(sUrl, responseText);
         } else {
             // Remove the invalid code from cache
             cleanupQueryCache(sUrl);
@@ -281,23 +279,12 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
                 // Error handling for the AJAX methods
                 if(responseText.match(/^Notice:|^Warning:|^Error:|^Parse error:/)) {
                     phpError(responseText);
-                } else if(responseText.match(/^NagVisError:/)) {
-                    responseText = responseText.replace(/^NagVisError:/, '');
-                    var oMsg = eval('( '+responseText+')');
-
-                    // Handle application message/error
-                    // FIXME: Param2: 30 and the message will be shown for maximum 30 seconds
-                    frontendMessage(oMsg);
-                    oMsg = null;
-
-                    // Clear the response
-                    sResponse = '';
                 } else {
                     // Handle responses of json objects - including eval and wron response
                     // error handling and clearing
                     sResponse = handleJsonResponse(sUrl, responseText)
 
-                    if(sResponse !== null && bCacheable) {
+                    if(sResponse !== '' && bCacheable) {
                         // Cache that answer (only when no error/warning/...)
                         updateQueryCache(url, timestamp, responseText);
                     }
@@ -317,17 +304,22 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 
 function handleJsonResponse(sUrl, responseText) {
     try {
-        sResponse = eval('( '+responseText+')');
+        oResponse = eval('( '+responseText+')');
         frontendMessageRemove('jsonError');
-        return sResponse;
     } catch(e) {
         jsonError("Invalid json response:\nTime:" + iNow + "\nURL: " + sUrl + "\nResponse: " + responseText);
         return '';
     }
 
-    if(typeof(sResponse) !== 'object') {
+    if(typeof(oResponse) !== 'object') {
         jsonError("Invalid json response:\nTime:" + iNow + "\nURL: " + sUrl + "\nResponse: " + responseText);
         return '';
+    } else {
+        if(isset(oResponse.type) && isset(oResponse.message)) {
+            frontendMessage(oResponse);
+            return '';
+        }
+        return oResponse;
     }
 }
 
@@ -427,9 +419,6 @@ function postSyncRequest(sUrl, sParams) {
                 oResponse.type = 'CRITICAL';
                 oResponse.message = "PHP error in ajax request handler:\n"+responseText;
                 oResponse.title = "PHP error";
-            } else if(responseText.match(/^NagVisError:/)) {
-                responseText = responseText.replace(/^NagVisError:/, '');
-                oResponse = eval('( '+responseText+')');
             } else {
                 // Handle invalid response (No JSON format)
                 try {

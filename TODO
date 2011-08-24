@@ -43,6 +43,7 @@ Relative Koordinaten:
 - Main Config Zugriff über kürzere Aufrufe. Beispiel: $CORE->cfg('', '');
 - Weathermap Linien Perfdata Berechnungen nach check_command aufräumen
 - MapCfg Config Array aufräumen
+- ajax Funktionen aufräumen/konsolidieren
 
 
 *** Linien (Auch für neue Automap wichtig!) ***
