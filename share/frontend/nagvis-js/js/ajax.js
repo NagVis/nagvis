@@ -114,15 +114,22 @@ function ajaxError(e) {
     eventlog("ajax", "critical", "Problem while ajax transaction");
     eventlog("ajax", "debug", e.toString());
 
-    frontendMessage({'type': 'CRITICAL', 'title': 'Ajax transaction error', 'message': 'Problem while ajax transaction. Is the NagVis host reachable?'}, 0, 'ajaxError');
+    frontendMessage({'type': 'CRITICAL',
+                     'title': 'Ajax transaction error',
+                     'message': 'Problem while ajax transaction. Is the NagVis host reachable?'},
+                    0, 'ajaxError');
 }
 
 function phpError(text) {
-    frontendMessage({'type': 'CRITICAL', 'title': 'PHP error', 'message': "PHP error in ajax request handler:\n" + text});
+    frontendMessage({'type': 'CRITICAL',
+                     'title': 'PHP error',
+                     'message': "PHP error in ajax request handler:\n" + text});
 }
 
 function jsonError(text) {
-    frontendMessage({'type': 'CRITICAL', 'title': 'Syntax error', 'message': text}, 0, 'jsonError');
+    frontendMessage({'type': 'CRITICAL',
+                     'title': 'Syntax error',
+                     'message': text}, 0, 'jsonError');
 }
 
 /**
@@ -146,7 +153,9 @@ function getAsyncRequest(sUrl, bCacheable, callback, callbackParams) {
     sUrl = sUrl.replace("+", "%2B");
 
     // use cache if last request is less than 30 seconds (30,000 milliseconds) ago
-    if(bCacheable && typeof(ajaxQueryCache[sUrl]) !== 'undefined' && iNow - ajaxQueryCache[sUrl].timestamp <= ajaxQueryCacheLifetime) {
+    if(bCacheable
+       && typeof(ajaxQueryCache[sUrl]) !== 'undefined'
+       && iNow - ajaxQueryCache[sUrl].timestamp <= ajaxQueryCacheLifetime) {
         // Prevent using invalid code in cache
         eventlog("ajax", "debug", "Using cached query");
         if(ajaxQueryCache[sUrl].response !== '')
@@ -229,7 +238,9 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
     sUrl = sUrl.replace("+", "%2B");
 
     // use cache if last request is less than 30 seconds (30,000 milliseconds) ago
-    if(bCacheable && typeof(ajaxQueryCache[sUrl]) !== 'undefined' && iNow - ajaxQueryCache[sUrl].timestamp <= ajaxQueryCacheLifetime) {
+    if(bCacheable
+       && typeof(ajaxQueryCache[sUrl]) !== 'undefined'
+       && iNow - ajaxQueryCache[sUrl].timestamp <= ajaxQueryCacheLifetime) {
         eventlog("ajax", "debug", "Using cached query");
         responseText = ajaxQueryCache[sUrl].response;
 
