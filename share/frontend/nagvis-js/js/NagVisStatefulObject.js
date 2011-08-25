@@ -354,6 +354,16 @@ var NagVisStatefulObject = NagVisObject.extend({
     },
 
     /**
+     * Returns the object ID of the object
+     */
+    getJsObjId: function() {
+        if(this.conf.view_type && this.conf.view_type === 'line')
+            return this.conf.object_id+'-linelink';
+        else
+            return this.conf.object_id+'-icon';
+    },
+
+    /**
      * PUBLIC parseHoverMenu()
      *
      * Parses the hover menu. Don't add this functionality to the normal icon
@@ -363,39 +373,42 @@ var NagVisStatefulObject = NagVisObject.extend({
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     parseHoverMenu: function () {
-        if(this.conf.view_type && this.conf.view_type === 'line')
-            this.getHoverMenu(this.conf.object_id+'-linelink');
-        else
-            this.getHoverMenu(this.conf.object_id+'-icon');
+        this.getHoverMenu(this.getJsObjId());
     },
 
     /**
-     * PUBLIC toggleHoverMenu()
+     * PUBLIC toggleObjectActions()
      *
-     * This enables/disables the hover menu temporary. e.g. in unlocked
-     * mode the hover menu shal be suppressed.
+     * This enables/disables the hover menu and the icon link
+     * temporary. e.g. in unlocked mode the hover menu shal be suppressed.
      *
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-    toggleHoverMenu: function(enable) {
-        if(this.conf.view_type && this.conf.view_type === 'line')
-	    var objId = this.conf.object_id+'-linelink';
-        else
-	    var objId = this.conf.object_id+'-icon';
-
-	var o = document.getElementById(objId);
+    toggleObjectActions: function(enable) {
+	var o = document.getElementById(this.getJsObjId());
 	if(o) {
 	    if(enable && isset(o.disabled_onmousemove)) {
+                // Hover-menu
 		o.onmousemove = o.disabled_onmousemove;
 		o.onmouseout  = o.disabled_onmouseout;
 		o.disabled_onmousemove = null;
 		o.disabled_onmouseout  = null;
+
+                // Link (Left mouse action)
+                if(o.parentNode.tagName == 'A')
+                    o.parentNode.onclick = null;
 	    } else if(!enable) {
+                // Hover-menu
 		o.disabled_onmousemove = o.onmousemove;
 		o.disabled_onmouseout  = o.onmouseout;
 		o.onmousemove = null;
 		o.onmouseout  = null;
+
+                // Link (Left mouse action)
+                if(o.parentNode.tagName == 'A')
+                    o.parentNode.onclick = function() {return false};
 	    }
+            o = null;
 	}
     },
 
@@ -517,7 +530,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 
         // Parse hover/link area only when needed. This is only the container
         // The real area or labels are added later
-        if((this.conf.url && this.conf.url !== '' && this.conf.url !== '#') || (this.conf.hover_menu && this.conf.hover_menu !== '')) {
+        if((this.conf.url && this.conf.url !== '' && this.conf.url !== '#')
+           || (this.conf.hover_menu && this.conf.hover_menu !== '')) {
             var oLink = doc.createElement('a');
             oLink.setAttribute('id', this.conf.object_id+'-linelink');
             oLink.setAttribute('class', 'linelink');

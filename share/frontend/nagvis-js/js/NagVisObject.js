@@ -354,8 +354,8 @@ var NagVisObject = Base.extend({
             }
 
 	    // Disable the hover menu by object lock when unlocked
-	    if(typeof(this.toggleHoverMenu) == 'function')
-		this.toggleHoverMenu(this.bIsLocked);
+	    if(typeof(this.toggleObjectActions) == 'function')
+		this.toggleObjectActions(this.bIsLocked);
         }
 
         justCreated = null;
@@ -415,8 +415,8 @@ var NagVisObject = Base.extend({
 	    if(typeof(this.toggleLabelLock) == 'function')
 		this.toggleLabelLock();
 
-	    if(typeof(this.toggleHoverMenu) == 'function')
-		this.toggleHoverMenu(this.bIsLocked);
+	    if(typeof(this.toggleObjectActions) == 'function')
+		this.toggleObjectActions(this.bIsLocked);
 
             // Only save the user option when not using the edit_mode
             if(!isset(lock) && (!oViewProperties.hasOwnProperty('edit_mode') || oViewProperties['edit_mode'] !== true)) {
