@@ -2,6 +2,8 @@
 
 Core
   * Bugfix: Fixed SQL syntax error in MySQL auth backend
+  * Bugfix: Fixed login problems in opera (Not setting auth cookie when
+    using ip addresses as host address
   * Removed option "-B" from installer, it is not needed anymore
   * Added exclude_members and exclude_member_states options to stateful
   objects for excluding specific member objects completely or only during summary

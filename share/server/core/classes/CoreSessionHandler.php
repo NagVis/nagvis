@@ -43,6 +43,11 @@ class CoreSessionHandler {
         if(strpos($sDomain, '.') === false)
             $sDomain = null;
 
+        // Opera has problems with ip addresses in domains. So skip them
+        if(strpos($_SERVER['HTTP_USER_AGENT'], 'opera') !== false
+           && preg_match('/\d.\d+.\d+.\d+/', $sDomain))
+            $sDomain = null;
+
         // Set custom params for the session cookie
         session_set_cookie_params(0, $sPath, $sDomain);
 
