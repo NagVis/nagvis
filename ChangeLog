@@ -16,6 +16,8 @@ Frontend
   * Bugfix: Fixed several umlauts in edit mode warning messages
   * Bugfix: Fixed 100% sidebar height
   * Bugfix: Fixed initial positioning of relative positioned gadgets
+  * Bugfix: Fixed backendid showing up in host_name field of add/modify dialog
+    in some rare cases
 
 Automap
   * Bugfix: Made the problem automap work again
