@@ -31,7 +31,7 @@ class CoreModMap extends CoreModule {
     public function __construct(GlobalCore $CORE) {
         $this->sName = 'Map';
         $this->CORE = $CORE;
-        $this->htmlBase = $this->CORE->getMainCfg()->getValue('paths', 'htmlbase');
+        $this->htmlBase = cfg('paths', 'htmlbase');
 
         // Register valid actions
         $this->aActions = Array(
@@ -300,7 +300,7 @@ class CoreModMap extends CoreModule {
         if(!preg_match(MATCH_CFG_FILE, $mapName))
             throw new NagVisException(l('The uploaded file is no map configuration file.'));
 
-        $filePath = $this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$mapName;
+        $filePath = cfg('paths', 'mapcfg').$mapName;
         return move_uploaded_file($a['map_file']['tmp_name'], $filePath) && $this->CORE->setPerms($filePath);
     }
 
@@ -837,8 +837,8 @@ class CoreModMap extends CoreModule {
         }
 
         // rename config file
-        rename($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$a['map'].'.cfg',
-               $this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$a['map_new_name'].'.cfg');
+        rename(cfg('paths', 'mapcfg').$a['map'].'.cfg',
+               cfg('paths', 'mapcfg').$a['map_new_name'].'.cfg');
 
         return true;
     }
@@ -930,8 +930,8 @@ class CoreModMap extends CoreModule {
         $arr['alias']                    = $MAPCFG->getValue(0, 'alias');
         $arr['background_image']         = $MAPCFG->BACKGROUND->getFile();
         $arr['background_color']         = $MAPCFG->getValue(0, 'background_color');
-        $arr['favicon_image']            = $this->CORE->getMainCfg()->getValue('paths', 'htmlimages').'internal/favicon.png';
-        $arr['page_title']               = $MAPCFG->getValue(0, 'alias').' ([SUMMARY_STATE]) :: '.$this->CORE->getMainCfg()->getValue('internal', 'title');
+        $arr['favicon_image']            = cfg('paths', 'htmlimages').'internal/favicon.png';
+        $arr['page_title']               = $MAPCFG->getValue(0, 'alias').' ([SUMMARY_STATE]) :: '.cfg('internal', 'title');
         $arr['event_background']         = $MAPCFG->getValue(0, 'event_background');
         $arr['event_highlight']          = $MAPCFG->getValue(0, 'event_highlight');
         $arr['event_highlight_interval'] = $MAPCFG->getValue(0, 'event_highlight_interval');

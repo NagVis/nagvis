@@ -41,6 +41,8 @@ class NagVisException extends Exception {
             $this->e['reloadTime'] = $time;
         if($url !== null)
             $this->e['reloadUrl'] = $url;
+
+        parent::__construct($msg);
     }
 
     function __toString() {

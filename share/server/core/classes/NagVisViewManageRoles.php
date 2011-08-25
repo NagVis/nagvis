@@ -52,11 +52,11 @@ class NagVisViewManageRoles {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-            'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-            'formTargetAdd' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=RoleMgmt&amp;act=doAdd',
-            'formTargetEdit' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=RoleMgmt&amp;act=doEdit',
-            'formTargetDelete' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=RoleMgmt&amp;act=doDelete',
-            'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
+            'htmlBase' => cfg('paths', 'htmlbase'),
+            'formTargetAdd' => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=RoleMgmt&amp;act=doAdd',
+            'formTargetEdit' => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=RoleMgmt&amp;act=doEdit',
+            'formTargetDelete' => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=RoleMgmt&amp;act=doDelete',
+            'htmlImages' => cfg('paths', 'htmlimages'),
       'maxRolenameLength' => AUTH_MAX_PASSWORD_LENGTH,
       'langRoleAdd' => l('Create Role'),
       'langRoleName' => l('Role Name'),

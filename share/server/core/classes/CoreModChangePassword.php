@@ -85,7 +85,7 @@ class CoreModChangePassword extends CoreModule {
                         }
                     } else {
                         // When the user is not authenticated redirect to start page (overview)
-                        Header('Location:'.$this->CORE->getMainCfg()->getValue('paths', 'htmlbase'));
+                        Header('Location:'.cfg('paths', 'htmlbase'));
                     }
                 break;
             }

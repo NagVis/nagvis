@@ -141,9 +141,9 @@ class CoreAuthHandler {
     }
 
     private function verifyAuth($bTrustUsername) {
-        if((bool) $this->CORE->getMainCfg()->getValue('global', 'audit_log') === true)
-            $ALOG = new CoreLog($this->CORE->getMainCfg()->getValue('paths', 'var').'nagvis-audit.log',
-                              $this->CORE->getMainCfg()->getValue('global', 'dateformat'));
+        if((bool) cfg('global', 'audit_log') === true)
+            $ALOG = new CoreLog(cfg('paths', 'var').'nagvis-audit.log',
+                              cfg('global', 'dateformat'));
         else
             $ALOG = null;
 
@@ -213,9 +213,9 @@ class CoreAuthHandler {
         if(!$this->logoutSupported())
             return false;
 
-        if((bool) $this->CORE->getMainCfg()->getValue('global', 'audit_log') === true) {
-            $ALOG = new CoreLog($this->CORE->getMainCfg()->getValue('paths', 'var').'nagvis-audit.log',
-                              $this->CORE->getMainCfg()->getValue('global', 'dateformat'));
+        if((bool) cfg('global', 'audit_log') === true) {
+            $ALOG = new CoreLog(cfg('paths', 'var').'nagvis-audit.log',
+                              cfg('global', 'dateformat'));
             $ALOG->l('User logged out ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
         }
 

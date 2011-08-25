@@ -166,9 +166,9 @@ class CoreRotation {
      */
     private function gatherStepInterval() {
         if($this->sPoolName !== '') {
-            $this->intInterval = $this->CORE->getMainCfg()->getValue('rotation_'.$this->sPoolName, 'interval');
+            $this->intInterval = cfg('rotation_'.$this->sPoolName, 'interval');
         } else {
-            $this->intInterval = $this->CORE->getMainCfg()->getValue('rotation', 'interval');
+            $this->intInterval = cfg('rotation', 'interval');
         }
     }
 
@@ -178,7 +178,7 @@ class CoreRotation {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     private function createStepUrls() {
-        $htmlBase = $this->CORE->getMainCfg()->getValue('paths', 'htmlbase');
+        $htmlBase = cfg('paths', 'htmlbase');
         foreach($this->arrSteps AS $intId => $arrStep) {
             if(isset($arrStep['url']) && $arrStep['url'] != '') {
                 $this->arrSteps[$intId]['target'] = $htmlBase.'/frontend/nagvis-js/index.php?mod=Url&act=view&show='.$arrStep['url'].'&rotation='.$this->sPoolName.'&rotationStep='.$intId;
@@ -196,7 +196,7 @@ class CoreRotation {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     private function gatherSteps() {
-        $this->arrSteps = $this->CORE->getMainCfg()->getValue('rotation_'.$this->sPoolName, 'maps');
+        $this->arrSteps = cfg('rotation_'.$this->sPoolName, 'maps');
     }
 
     /**

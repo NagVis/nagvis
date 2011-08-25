@@ -31,9 +31,9 @@
 class CoreSessionHandler {
 
     public function __construct() {
-        $sDomain   = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookiedomain');
-        $sPath     = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookiepath');
-        $iDuration = GlobalCore::getInstance()->getMainCfg()->getValue('global', 'sesscookieduration');
+        $sDomain   = cfg('global', 'sesscookiedomain');
+        $sPath     = cfg('global', 'sesscookiepath');
+        $iDuration = cfg('global', 'sesscookieduration');
 
         // Set the session name (used in params/cookie names)
         session_name(SESSION_NAME);

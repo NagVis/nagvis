@@ -77,7 +77,7 @@ class WuiViewMapAddModify {
         }
 
         $aData = Array(
-            'htmlBase'     => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+            'htmlBase'     => cfg('paths', 'htmlbase'),
             'action'       => $action,
             'type'         => $this->aOpts['type'],
             'id'           => $this->aOpts['id'],

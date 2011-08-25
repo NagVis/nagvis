@@ -36,8 +36,8 @@ class NagVisShape extends NagVisStatelessObject {
      */
     public function __construct($CORE, $icon) {
         if(parent::$iconPath === null) {
-            parent::$iconPath      = $CORE->getMainCfg()->getValue('sys',  'global', 'shapes');
-            parent::$iconPathLocal = $CORE->getMainCfg()->getValue('sys',  'local',  'shapes');
+            parent::$iconPath      = cfg('sys',  'global', 'shapes');
+            parent::$iconPathLocal = cfg('sys',  'local',  'shapes');
         }
 
         $this->icon = $icon;

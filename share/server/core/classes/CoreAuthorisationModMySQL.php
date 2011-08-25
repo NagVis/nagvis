@@ -37,11 +37,11 @@ class CoreAuthorisationModMySQL extends CoreAuthorisationModule {
         $this->DB = new CoreMySQLHandler();
 
         // Open the MySQL database
-        if(!$this->DB->open($this->CORE->getMainCfg()->getValue('auth_mysql', 'dbhost'),
-                                                $this->CORE->getMainCfg()->getValue('auth_mysql', 'dbport'),
-                                                $this->CORE->getMainCfg()->getValue('auth_mysql', 'dbname'),
-                                                $this->CORE->getMainCfg()->getValue('auth_mysql', 'dbuser'),
-                                                $this->CORE->getMainCfg()->getValue('auth_mysql', 'dbpass'))) {
+        if(!$this->DB->open(cfg('auth_mysql', 'dbhost'),
+                                                cfg('auth_mysql', 'dbport'),
+                                                cfg('auth_mysql', 'dbname'),
+                                                cfg('auth_mysql', 'dbuser'),
+                                                cfg('auth_mysql', 'dbpass'))) {
             throw new NagVisException(l('Unable to open auth database'));
         } else {
             // Create initial db scheme if needed

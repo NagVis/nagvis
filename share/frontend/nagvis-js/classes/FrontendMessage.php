@@ -34,7 +34,7 @@ class FrontendMessage {
 
         $this->title        = 'ERROR';
         $this->type         = 'error';
-        $this->pathHtmlBase = GlobalCore::getInstance()->getMainCfg()->getValue('paths', 'htmlbase');
+        $this->pathHtmlBase = cfg('paths', 'htmlbase');
     }
 
     /**

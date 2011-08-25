@@ -50,7 +50,7 @@ class NagVisViewAutomapToMap {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-             'formTarget' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=AutoMap&amp;act=parseMapCfg&amp',
+             'formTarget' => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=AutoMap&amp;act=parseMapCfg&amp',
             'langNewName' => l('Store as Map'),
             'langSave' => l('save'),
         );

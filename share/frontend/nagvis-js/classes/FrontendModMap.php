@@ -49,7 +49,7 @@ class FrontendModMap extends FrontendModule {
         );
 
         // There might be a default map when none is given
-        $aDefaults = Array('show' => $this->CORE->getMainCfg()->getValue('global', 'startshow'));
+        $aDefaults = Array('show' => cfg('global', 'startshow'));
 
         // getCustomOptions fetches and validates the values
         $aVals = $this->getCustomOptions($aOpts, $aDefaults);

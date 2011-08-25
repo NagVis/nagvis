@@ -62,7 +62,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $this->backendId = $backendId;
 
         // Parse the socket params
-        $this->parseSocket(GlobalCore::getInstance()->getMainCfg()->getValue('backend_'.$backendId, 'socket'));
+        $this->parseSocket(cfg('backend_'.$backendId, 'socket'));
 
         // Run preflight checks
         if($this->socketType == 'unix' && !$this->checkSocketExists()) {

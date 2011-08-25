@@ -75,8 +75,8 @@ class NagVisHost extends NagiosHost {
         $strReturn .= $this->getType().'_'.$this->getObjectId().' [ ';
         $strReturn .= 'label="", ';
         $strReturn .= 'URL="'.str_replace(array('[htmlcgi]', '[host_name]'),
-            array($this->CORE->getMainCfg()->getValue('backend_'.$this->backend_id, 'htmlcgi'), $name),
-            $this->CORE->getMainCfg()->getValue('defaults', 'hosturl')).'", ';
+            array(cfg('backend_'.$this->backend_id, 'htmlcgi'), $name),
+            cfg('defaults', 'hosturl')).'", ';
         $strReturn .= 'target="'.$this->url_target.'", ';
         $strReturn .= 'tooltip="'.$this->getType().'_'.$this->getObjectId().'",';
 

@@ -360,13 +360,13 @@ class NagVisAutoMap extends GlobalMap {
              * result in commands too long with big maps. So write the config to a file
              * and let it be read by graphviz binary.
              */
-            $dotFile = $this->CORE->getMainCfg()->getValue('paths', 'var').$this->name.'.dot';
+            $dotFile = cfg('paths', 'var').$this->name.'.dot';
             file_put_contents($dotFile, $this->parseGraphvizConfig());
             $this->CORE->setPerms($dotFile);
 
             // Parse map
             $cmd = $this->graphvizPath.$binary
-                   .' -Tcmapx '.$this->CORE->getMainCfg()->getValue('paths', 'var').$this->name.'.dot 2>&1';
+                   .' -Tcmapx '.cfg('paths', 'var').$this->name.'.dot 2>&1';
 
             exec($cmd, $arrMapCode, $returnCode);
 
@@ -597,7 +597,7 @@ class NagVisAutoMap extends GlobalMap {
         $this->createObjectConnectors();
 
         // Store map configuration
-        file_put_contents($this->CORE->getMainCfg()->getValue('paths', 'mapcfg').$name.'.cfg',
+        file_put_contents(cfg('paths', 'mapcfg').$name.'.cfg',
                       $this->parseObjectsMapCfg($name));
 
         return true;
@@ -681,7 +681,7 @@ class NagVisAutoMap extends GlobalMap {
          * configured path. Prefer the configured path.
          */
         $bFound = false;
-        foreach(Array($this->CORE->getMainCfg()->getValue('automap','graphvizpath').$binary, $binary) AS $path) {
+        foreach(Array(cfg('automap','graphvizpath').$binary, $binary) AS $path) {
             // Check if dot can be found in path (If it is there $returnCode is 0, if not it is 1)
             exec('which '.$path.' 2>/dev/null', $arrReturn, $exitCode);
 
@@ -796,7 +796,7 @@ class NagVisAutoMap extends GlobalMap {
          * when the root cannot be fetched via backend it reads the default
          * value for the defaultroot
          */
-        $defaultRoot = $this->CORE->getMainCfg()->getValue('automap','defaultroot', TRUE);
+        $defaultRoot = cfg('automap','defaultroot', TRUE);
         if(!isset($defaultRoot) || $defaultRoot == '') {
             try {
                 $hostsWithoutParent = $this->BACKEND->getBackend($this->backend_id)->getHostNamesWithNoParent();
@@ -807,7 +807,7 @@ class NagVisAutoMap extends GlobalMap {
         }
 
         if(!isset($defaultRoot) || $defaultRoot == '') {
-            $defaultRoot = $this->CORE->getMainCfg()->getValue('automap','defaultroot');
+            $defaultRoot = cfg('automap','defaultroot');
         }
 
         // Could not get root host for the automap

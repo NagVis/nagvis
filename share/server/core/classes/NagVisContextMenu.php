@@ -47,11 +47,11 @@ class NagVisContextMenu {
         $this->OBJPAGE = $OBJ;
         $this->templateName = $templateName;
 
-        $this->pathHtmlBase     = $this->CORE->getMainCfg()->getValue('paths', 'htmlbase');
+        $this->pathHtmlBase     = cfg('paths', 'htmlbase');
         $this->pathTemplateFile = $this->CORE->getMainCfg()->getPath('sys', '', 'templates', $this->templateName.'.context.html');
 
         $this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile,
-                                           $this->CORE->getMainCfg()->getValue('paths','var').'context-'.$this->templateName.'-'.curLang().'.cache');
+                                           cfg('paths','var').'context-'.$this->templateName.'-'.curLang().'.cache');
 
         // Only use cache when there is
         // a) Some valid cache file
@@ -126,7 +126,7 @@ class NagVisContextMenu {
             $this->code = str_replace('[lang_toggle_line_mid]', l('Lock/Unlock line middle'), $this->code);
 
         if(strpos($this->code,'[html_base]') !== FALSE) {
-            $this->code = str_replace('[html_base]',$this->CORE->getMainCfg()->getValue('paths','htmlbase'),$this->code);
+            $this->code = str_replace('[html_base]',cfg('paths','htmlbase'),$this->code);
         }
 
         if(strpos($this->code,'[html_templates]') !== FALSE) {

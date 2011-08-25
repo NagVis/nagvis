@@ -52,7 +52,7 @@ class CoreModLogonEnv extends CoreModule {
                     if(!isset($this->AUTHENTICATION) || !$this->AUTHENTICATION->isAuthenticated()) {
 
                         // Get environment variable to use
-                        $sEnvVar = $this->CORE->getMainCfg()->getValue('global', 'logonenvvar');
+                        $sEnvVar = cfg('global', 'logonenvvar');
 
                         // Check if the variable exists and is not empty
                         if(isset($_SERVER[$sEnvVar]) && $_SERVER[$sEnvVar] !== '') {
@@ -63,7 +63,7 @@ class CoreModLogonEnv extends CoreModule {
 
                             // Check if the user exists
                             if(!$this->AUTHENTICATION->checkUserExists($sUser)) {
-                                $bCreateUser = $this->CORE->getMainCfg()->getValue('global', 'logonenvcreateuser');
+                                $bCreateUser = cfg('global', 'logonenvcreateuser');
                                 if(settype($bCreateUser, 'boolean')) {
                                     // Create user when not existing yet
                                     // Important to add a random password here. When someone
@@ -71,9 +71,9 @@ class CoreModLogonEnv extends CoreModule {
                                     // would be possible to logon with a hardcoded password
                                     $this->AUTHENTICATION->createUser($sUser, (time() * rand(1, 10)));
 
-                                    $role = $this->CORE->getMainCfg()->getValue('global', 'logonenvcreaterole');
+                                    $role = cfg('global', 'logonenvcreaterole');
                                     if($role !== '') {
-                                        $AUTHORISATION = new CoreAuthorisationHandler($this->CORE, $this->AUTHENTICATION, $this->CORE->getMainCfg()->getValue('global', 'authorisationmodule'));
+                                        $AUTHORISATION = new CoreAuthorisationHandler($this->CORE, $this->AUTHENTICATION, cfg('global', 'authorisationmodule'));
                                         $AUTHORISATION->parsePermissions();
                                         $AUTHORISATION->updateUserRoles($AUTHORISATION->getUserId($sUser), Array($AUTHORISATION->getRoleId($role)));
                                     }
@@ -99,7 +99,7 @@ class CoreModLogonEnv extends CoreModule {
                             // Try to authenticate the user
                             if($this->AUTHENTICATION->isAuthenticated(AUTH_TRUST_USERNAME)) {
                                 // Redirect without message to the user
-                                header('Location:'.CoreRequestHandler::getRequestUri($this->CORE->getMainCfg()->getValue('paths', 'htmlbase')));
+                                header('Location:'.CoreRequestHandler::getRequestUri(cfg('paths', 'htmlbase')));
                             } else {
                                 // Invalid credentials
                                 // FIXME: Count tries and maybe block somehow
@@ -122,7 +122,7 @@ class CoreModLogonEnv extends CoreModule {
                         }
                     } else {
                         // When the user is already authenticated redirect to start page (overview)
-                        header('Location:'.CoreRequestHandler::getRequestUri($this->CORE->getMainCfg()->getValue('paths', 'htmlbase')));
+                        header('Location:'.CoreRequestHandler::getRequestUri(cfg('paths', 'htmlbase')));
                     }
                 break;
             }

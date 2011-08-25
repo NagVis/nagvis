@@ -98,13 +98,13 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         $this->serviceCache = Array();
         $this->hostAckCache = Array();
 
-        $this->dbName = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbname');
-        $this->dbUser = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbuser');
-        $this->dbPass = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbpass');
-        $this->dbHost = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbhost');
-        $this->dbPort = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbport');
-        $this->dbPrefix = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbprefix');
-        $this->dbInstanceName = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbinstancename');
+        $this->dbName = cfg('backend_'.$backendId, 'dbname');
+        $this->dbUser = cfg('backend_'.$backendId, 'dbuser');
+        $this->dbPass = cfg('backend_'.$backendId, 'dbpass');
+        $this->dbHost = cfg('backend_'.$backendId, 'dbhost');
+        $this->dbPort = cfg('backend_'.$backendId, 'dbport');
+        $this->dbPrefix = cfg('backend_'.$backendId, 'dbprefix');
+        $this->dbInstanceName = cfg('backend_'.$backendId, 'dbinstancename');
 
         if($this->checkMysqlSupport() && $this->connectDB() && $this->checkTablesExists()) {
             // Set the instanceId
@@ -123,8 +123,8 @@ class GlobalBackendndomy implements GlobalBackendInterface {
             }
 
             // Be suspicious and check that the data at the db is not older that "maxTimeWithoutUpdate" too
-            if($_SERVER['REQUEST_TIME'] - $nagiosstate['status_update_time'] > $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'maxtimewithoutupdate')) {
-                throw new BackendConnectionProblem(l('nagiosDataNotUpToDate', Array('BACKENDID' => $this->backendId, 'TIMEWITHOUTUPDATE' => $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'maxtimewithoutupdate'))));
+            if($_SERVER['REQUEST_TIME'] - $nagiosstate['status_update_time'] > cfg('backend_'.$backendId, 'maxtimewithoutupdate')) {
+                throw new BackendConnectionProblem(l('nagiosDataNotUpToDate', Array('BACKENDID' => $this->backendId, 'TIMEWITHOUTUPDATE' => cfg('backend_'.$backendId, 'maxtimewithoutupdate'))));
             }
 
             /**

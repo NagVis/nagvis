@@ -82,7 +82,7 @@ class NagVisViewAutomapModifyParams {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-            'htmlBase'    => $this->CORE->getMainCfg()->getValue('paths','htmlbase'),
+            'htmlBase'    => cfg('paths','htmlbase'),
             'automapName' => $this->aOpts['automap'],
             'opts'        => $this->aOpts,
             'optValues'   => Array('renderMode'    => $this->renderModes,

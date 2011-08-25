@@ -64,7 +64,7 @@ class GlobalLanguage {
         putenv('LANG='.$this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
         T_setlocale(LC_MESSAGES, $this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
 
-        T_bindtextdomain($this->textDomain, $this->CORE->getMainCfg()->getValue('paths', 'language'));
+        T_bindtextdomain($this->textDomain, cfg('paths', 'language'));
         T_bind_textdomain_codeset($this->textDomain, $this->sCurrentEncoding);
 
         T_textdomain($this->textDomain);
@@ -87,7 +87,7 @@ class GlobalLanguage {
      */
     private function gatherCurrentLanguage() {
         $sReturn = '';
-        $aMethods = $this->CORE->getMainCfg()->getValue('global', 'language_detection');
+        $aMethods = cfg('global', 'language_detection');
 
         foreach($aMethods AS $sMethod) {
             if($sReturn == '') {
@@ -114,7 +114,7 @@ class GlobalLanguage {
                     break;
                     case 'config':
                         // Read default language from configuration
-                        $sReturn = $this->CORE->getMainCfg()->getValue('global', 'language');
+                        $sReturn = cfg('global', 'language');
                     break;
 
                     default:
@@ -229,7 +229,7 @@ class GlobalLanguage {
         if(in_array($sLang, $this->CORE->getAvailableLanguages())
            && ($ignoreConf == true
                || ($ignoreConf == false
-                   && in_array($sLang, $this->CORE->getMainCfg()->getValue('global', 'language_available'))))) {
+                   && in_array($sLang, cfg('global', 'language_available'))))) {
             return TRUE;
         } else {
             if($printErr) {
@@ -257,7 +257,7 @@ class GlobalLanguage {
         $ret = $this->getTextOfId($id);
 
         if($replace !== null) {
-            $ret = $this->getReplacedString($ret, $replace);
+            $ret = self::getReplacedString($ret, $replace);
         }
 
         // When the translated string is equal to the requested id and some macros
@@ -300,7 +300,7 @@ class GlobalLanguage {
      * @return  String        String Replaced language string
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    private function getReplacedString($sLang, $replace) {
+    static public function getReplacedString($sLang, $replace) {
         if(!is_array($replace)) {
             $aReplace = explode(',', $replace);
             for($i = 0, $size = count($aReplace); $i < $size; $i++) {

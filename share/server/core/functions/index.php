@@ -41,8 +41,7 @@ $SHANDLER = new CoreSessionHandler();
  * Authentication: Try to authenticate the user
  */
 
-$AUTH = new CoreAuthHandler($CORE, $SHANDLER,
-                   $CORE->getMainCfg()->getValue('global','authmodule'));
+$AUTH = new CoreAuthHandler($CORE, $SHANDLER, cfg('global','authmodule'));
 
 /*
 * Authorisation 1: Collect and save the permissions when the user is logged in
@@ -50,8 +49,7 @@ $AUTH = new CoreAuthHandler($CORE, $SHANDLER,
 */
 
 if($AUTH->isAuthenticated()) {
-    $AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH,
-                        $CORE->getMainCfg()->getValue('global', 'authorisationmodule'));
+    $AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH, cfg('global', 'authorisationmodule'));
     $AUTHORISATION->parsePermissions();
 } else
     $AUTHORISATION = null;
@@ -82,7 +80,7 @@ $MODULE->initObject();
 */
 
 // Only proceed with authenticated users
-if($UHANDLER->get('mod') != $CORE->getMainCfg()->getValue('global', 'logonmodule')
+if($UHANDLER->get('mod') != cfg('global', 'logonmodule')
    && ($AUTH->isAuthenticated() || (CONST_AJAX && $UHANDLER->get('mod') == 'Auth'))) {
     // Only check modules which should have authorisation checks
     // This are all modules excluded some core things
@@ -104,7 +102,7 @@ if($UHANDLER->get('mod') != $CORE->getMainCfg()->getValue('global', 'logonmodule
         throw new NagVisException(l('You are not authenticated'), null, l('Access denied'));
 } else {
     // When not authenticated redirect to logon dialog
-    $MODULE = $MHANDLER->loadModule($CORE->getMainCfg()->getValue('global', 'logonmodule'));
+    $MODULE = $MHANDLER->loadModule(cfg('global', 'logonmodule'));
     $UHANDLER->set('act', 'view');
 }
 

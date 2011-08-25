@@ -1413,8 +1413,9 @@ class GlobalMainCfg {
                 } else {
                     // unknown type
                     if($printErr) {
-                        throw new NagVisException(l('The section [TYPE] is not supported in main configuration. Please take a look at the documentation.',
-                                                    Array('TYPE' => $type)));
+                        throw new NagVisException(
+                            l('The section [TYPE] is not supported in main configuration. Please take a look at the documentation.',
+                              Array('TYPE' => $type)));
                     }
                     return FALSE;
                 }

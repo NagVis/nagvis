@@ -54,7 +54,7 @@ class WuiViewManageShapes {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-            'htmlBase'           => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+            'htmlBase'           => cfg('paths', 'htmlbase'),
             'langUploadShape'    => l('uploadShape'),
             'langChoosePngImage' => l('chooseImage'),
             'langUpload'         => l('upload'),

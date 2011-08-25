@@ -50,9 +50,9 @@ class NagVisViewChangePassword {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-            'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-            'formTarget' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=ChangePassword&amp;act=change',
-            'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
+            'htmlBase' => cfg('paths', 'htmlbase'),
+            'formTarget' => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=ChangePassword&amp;act=change',
+            'htmlImages' => cfg('paths', 'htmlimages'),
       'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
       'langOldPassword' => l('Old password'),
       'langNewPassword1' => l('New password'),

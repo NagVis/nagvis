@@ -33,15 +33,15 @@ require('defines/nagvis-js.php');
 require('../../server/core/functions/autoload.php');
 require('../../server/core/functions/debug.php');
 require('../../server/core/functions/oldPhpVersionFixes.php');
-require('../../server/core/functions/nagvisErrorHandler.php');
-require('../../server/core/functions/i18n.php');
 require('../../server/core/classes/CoreExceptions.php');
+require('../../server/core/functions/nagvisErrorHandler.php');
 
 if (PROFILE) profilingStart();
 
 define('CONST_AJAX' , FALSE);
 
 try {
+    require('../../server/core/functions/core.php');
     $CORE     = GlobalCore::getInstance();
     $MHANDLER = new FrontendModuleHandler();
     $_name    = 'nagvis-js';
@@ -52,13 +52,13 @@ try {
         'AutoMap',
         'Overview',
         'Rotation',
-        $CORE->getMainCfg()->getValue('global', 'logonmodule')
+        cfg('global', 'logonmodule'),
     );
     
     require('../../server/core/functions/index.php');
     exit(0);
 } catch(NagVisException $e) {
-    new FrontendMessage($e->getMessage());
+    echo new FrontendMessage($e->getMessage());
 }
 
 ?>

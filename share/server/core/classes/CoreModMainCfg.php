@@ -119,11 +119,11 @@ class CoreModMainCfg extends CoreModule {
 
     protected function getBackendOptions($a) {
             $aRet = Array();
-            $backendType = $this->CORE->getMainCfg()->getValue('backend_'.$a['backendid'], 'backendtype');
+            $backendType = cfg('backend_'.$a['backendid'], 'backendtype');
 
             foreach($this->getBackendAttributes($backendType) AS $key => $aOpt)
-                if($this->CORE->getMainCfg()->getValue('backend_'.$a['backendid'], $key, true) !== false)
-                    $aRet[$key] = $this->CORE->getMainCfg()->getValue('backend_'.$a['backendid'], $key, true);
+                if(cfg('backend_'.$a['backendid'], $key, true) !== false)
+                    $aRet[$key] = cfg('backend_'.$a['backendid'], $key, true);
                 else
                     $aRet[$key] = '';
 

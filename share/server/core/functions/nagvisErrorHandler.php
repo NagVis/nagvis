@@ -44,8 +44,10 @@ function nagvisException($OBJ) {
             echo "Error: (".$OBJ->getCode().") ".$OBJ->getMessage()
                 ." (".$OBJ->getFile().":".$OBJ->getLine().")<br /><br />\n ";
             echo "<code>".str_replace("\n", "<br />\n", $OBJ->getTraceAsString())."</code>";
+        } elseif(get_class($OBJ) == 'NagVisException') {
+            echo $OBJ;
         } else {
-            echo "Error: ".$OBJ->getMessage();
+            echo "Error (".get_class($OBJ)."): ".$OBJ->getMessage();
         }
 
         die();

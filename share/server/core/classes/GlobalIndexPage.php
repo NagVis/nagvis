@@ -45,7 +45,7 @@ class GlobalIndexPage {
         $this->BACKEND = $BACKEND;
         $this->AUTHORISATION = $AUTHORISATION;
 
-        $this->htmlBase = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
+        $this->htmlBase = cfg('paths','htmlbase');
     }
 
     /**
@@ -60,7 +60,7 @@ class GlobalIndexPage {
      */
     public function parseMapsJson($type, $what = COMPLETE, $objects = Array()) {
         // initial parsing mode: Skip processing when this type of object should not be shown
-        if($type != 'list' && !$this->CORE->getMainCfg()->getValue('index', 'show'.$type.'s') == 1)
+        if($type != 'list' && !cfg('index', 'show'.$type.'s') == 1)
             return json_encode(Array());
 
         if($type == 'list')
@@ -81,7 +81,7 @@ class GlobalIndexPage {
                 list($mapType, $mapName) = $a;
 
                 // list mode: Skip processing when this type of object should not be shown
-                if(!$this->CORE->getMainCfg()->getValue('index', 'show'.$mapType.'s') == 1)
+                if(!cfg('index', 'show'.$mapType.'s') == 1)
                     continue;
             } else {
                 $mapType = $type;
@@ -151,7 +151,7 @@ class GlobalIndexPage {
 
             // If this is the automap display the last rendered image
             if($mapType == 'automap') {
-                if($this->CORE->getMainCfg()->getValue('index','showmapthumbs') == 1)
+                if(cfg('index','showmapthumbs') == 1)
                     $map['overview_image'] = $this->renderAutomapThumb($MAP);
 
                 $MAP->MAPOBJ->fetchIcon();
@@ -161,7 +161,7 @@ class GlobalIndexPage {
                 else
                     $aMaps[] = array_merge($MAP->MAPOBJ->parseJson(), $map);
             } else {
-                if($this->CORE->getMainCfg()->getValue('index','showmapthumbs') == 1)
+                if(cfg('index','showmapthumbs') == 1)
                     $map['overview_image'] = $this->renderMapThumb($MAPCFG);
 
                 $aObjs[] = Array($MAP->MAPOBJ, $map);
@@ -225,8 +225,8 @@ class GlobalIndexPage {
             return $MAPCFG->BACKGROUND->getFile();
 
         $sThumbFile     = $MAPCFG->getName() . '-thumb.' . $this->getFileType($imgPath);
-        $sThumbPath     = $this->CORE->getMainCfg()->getValue('paths', 'sharedvar') . $sThumbFile;
-        $sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths', 'htmlsharedvar') . $sThumbFile;
+        $sThumbPath     = cfg('paths', 'sharedvar') . $sThumbFile;
+        $sThumbPathHtml = cfg('paths', 'htmlsharedvar') . $sThumbFile;
 
         // Only create a new thumb when there is no cached one
         $FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
@@ -238,7 +238,7 @@ class GlobalIndexPage {
 
     private function renderAutomapThumb($MAP) {
         $mapName = $MAP->MAPOBJ->getName();
-        $imgPath = $this->CORE->getMainCfg()->getValue('paths', 'sharedvar') . $mapName . '.png';
+        $imgPath = cfg('paths', 'sharedvar') . $mapName . '.png';
 
         // If there is no automap image on first load of the index page,
         // render the image
@@ -251,11 +251,11 @@ class GlobalIndexPage {
 
         // Use large image when no gd is available
         if(!$this->CORE->checkGd(0))
-            return $this->CORE->getMainCfg()->getValue('paths', 'htmlsharedvar') . $mapName . '.png';
+            return cfg('paths', 'htmlsharedvar') . $mapName . '.png';
 
         $sThumbFile     = $mapName.'-thumb.png';
-        $sThumbPath     = $this->CORE->getMainCfg()->getValue('paths','sharedvar').$sThumbFile;
-        $sThumbPathHtml = $this->CORE->getMainCfg()->getValue('paths','htmlsharedvar').$sThumbFile;
+        $sThumbPath     = cfg('paths','sharedvar').$sThumbFile;
+        $sThumbPathHtml = cfg('paths','htmlsharedvar').$sThumbFile;
 
         // Only create a new thumb when there is no cached one
         $FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
@@ -273,7 +273,7 @@ class GlobalIndexPage {
      */
     public function parseRotationsJson() {
         // Only display the rotation list when enabled
-        if($this->CORE->getMainCfg()->getValue('index','showrotations') != 1)
+        if(cfg('index','showrotations') != 1)
             return json_encode(Array());
 
         $aRotations = Array();
@@ -308,26 +308,26 @@ class GlobalIndexPage {
     public function parseIndexPropertiesJson() {
         $arr = Array();
 
-        $arr['cellsperrow']        = (int) $this->CORE->getMainCfg()->getValue('index', 'cellsperrow');
-        $arr['showautomaps']       = (int) $this->CORE->getMainCfg()->getValue('index', 'showautomaps');
-        $arr['showmaps']           = (int) $this->CORE->getMainCfg()->getValue('index', 'showmaps');
-        $arr['showgeomap']         = (int) $this->CORE->getMainCfg()->getValue('index', 'showgeomap');
-        $arr['showmapthumbs']      = (int) $this->CORE->getMainCfg()->getValue('index', 'showmapthumbs');
-        $arr['showrotations']      = (int) $this->CORE->getMainCfg()->getValue('index', 'showrotations');
+        $arr['cellsperrow']        = (int) cfg('index', 'cellsperrow');
+        $arr['showautomaps']       = (int) cfg('index', 'showautomaps');
+        $arr['showmaps']           = (int) cfg('index', 'showmaps');
+        $arr['showgeomap']         = (int) cfg('index', 'showgeomap');
+        $arr['showmapthumbs']      = (int) cfg('index', 'showmapthumbs');
+        $arr['showrotations']      = (int) cfg('index', 'showrotations');
 
-        $arr['page_title']         = $this->CORE->getMainCfg()->getValue('internal', 'title');
-        $arr['favicon_image']      = $this->CORE->getMainCfg()->getValue('paths', 'htmlimages').'internal/favicon.png';
-        $arr['background_color']   = $this->CORE->getMainCfg()->getValue('index','backgroundcolor');
+        $arr['page_title']         = cfg('internal', 'title');
+        $arr['favicon_image']      = cfg('paths', 'htmlimages').'internal/favicon.png';
+        $arr['background_color']   = cfg('index','backgroundcolor');
 
         $arr['lang_mapIndex']      = l('mapIndex');
         $arr['lang_automapIndex']  = l('Automap Index');
         $arr['lang_rotationPools'] = l('rotationPools');
 
-        $arr['event_log']          = (int) $this->CORE->getMainCfg()->getValue('defaults', 'eventlog');
-        $arr['event_log_level']    = $this->CORE->getMainCfg()->getValue('defaults', 'eventloglevel');
-        $arr['event_log_events']   = (int) $this->CORE->getMainCfg()->getValue('defaults', 'eventlogevents');
-        $arr['event_log_height']   = (int) $this->CORE->getMainCfg()->getValue('defaults', 'eventlogheight');
-        $arr['event_log_hidden']   = (int) $this->CORE->getMainCfg()->getValue('defaults', 'eventloghidden');
+        $arr['event_log']          = (int) cfg('defaults', 'eventlog');
+        $arr['event_log_level']    = cfg('defaults', 'eventloglevel');
+        $arr['event_log_events']   = (int) cfg('defaults', 'eventlogevents');
+        $arr['event_log_height']   = (int) cfg('defaults', 'eventlogheight');
+        $arr['event_log_hidden']   = (int) cfg('defaults', 'eventloghidden');
 
         return json_encode($arr);
     }

@@ -54,11 +54,11 @@ class NagVisViewUserMgmt {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-            'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-            'formTargetAdd' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doAdd',
-            'formTargetEdit' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doEdit',
-            'formTargetDelete' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doDelete',
-            'htmlImages' => $this->CORE->getMainCfg()->getValue('paths', 'htmlimages'),
+            'htmlBase' => cfg('paths', 'htmlbase'),
+            'formTargetAdd' => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doAdd',
+            'formTargetEdit' => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doEdit',
+            'formTargetDelete' => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doDelete',
+            'htmlImages' => cfg('paths', 'htmlimages'),
       'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
       'maxUsernameLength' => AUTH_MAX_USERNAME_LENGTH,
       'langUsername' => l('Username'),
@@ -76,7 +76,7 @@ class NagVisViewUserMgmt {
       'langRemove' => l('Remove'),
       'roles' => $this->AUTHORISATION->getAllRoles(),
           'langUserPwReset' => l('Reset Password'),
-          'formTargetPwReset' => $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doPwReset',
+          'formTargetPwReset' => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doPwReset',
         );
 
         // Build page based on the template file and the data array

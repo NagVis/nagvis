@@ -112,7 +112,7 @@ class CoreUriHandler {
     private function parseUri() {
         // Maybe for later use when using nice urls
         // Cleanup some bad things from the URI
-        //$sRequest = str_replace($this->CORE->getMainCfg()->getValue('paths','htmlbase'), '', $this->sRequestUri);
+        //$sRequest = str_replace(cfg('paths','htmlbase'), '', $this->sRequestUri);
         // Remove the first slash and then explode by slashes
         //$this->aOpts = explode('/', substr($sRequest,1));
 
@@ -125,11 +125,11 @@ class CoreUriHandler {
     private function setDefaults() {
         // Handle default options when no module given
         if(!$this->isSetAndNotEmpty('mod'))
-            $this->aOpts['mod'] = $this->CORE->getMainCfg()->getValue('global', 'startmodule');
+            $this->aOpts['mod'] = cfg('global', 'startmodule');
 
         // Handle default options when no action given
         if(!$this->isSetAndNotEmpty('act'))
-            $this->aOpts['act'] = $this->CORE->getMainCfg()->getValue('global', 'startaction');
+            $this->aOpts['act'] = cfg('global', 'startaction');
     }
 
     private function validate() {

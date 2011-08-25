@@ -33,11 +33,11 @@ class FrontendTemplateSystem {
         $this->CORE = $CORE;
 
         // Load Dwoo. It is used as external library
-        require_once($this->CORE->getMainCfg()->getValue('paths','base')
+        require_once(cfg('paths','base')
                      .HTDOCS_DIR.'/frontend/nagvis-js/ext/dwoo-1.1.0/dwooAutoload.php');
 
-        $this->TMPL = new Dwoo($this->CORE->getMainCfg()->getValue('paths','var')
-                               .'tmpl/compile', $this->CORE->getMainCfg()->getValue('paths','var').'tmpl/cache');
+        $this->TMPL = new Dwoo(cfg('paths','var')
+                               .'tmpl/compile', cfg('paths','var').'tmpl/cache');
     }
 
     public function getTmplSys() {

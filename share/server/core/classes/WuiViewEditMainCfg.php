@@ -54,7 +54,7 @@ class WuiViewEditMainCfg {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-            'htmlBase'     => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+            'htmlBase'     => cfg('paths', 'htmlbase'),
             'formContents' => $this->getFields(),
             'langSave'     => l('save'),
             'validMainCfg' => json_encode($this->CORE->getMainCfg()->getValidConfig()),
@@ -99,17 +99,17 @@ class WuiViewEditMainCfg {
                     // Don't show anything for hidden options
                     if($fieldType !== 'hidden') {
                         // Only get the really set value
-                        $val2 = $this->CORE->getMainCfg()->getValue($cat, $propname, true);
+                        $val2 = cfg($cat, $propname, true);
 
                         // Check if depends_on and depends_value are defined and if the value
                         // is equal. If not equal hide the field
                         if(isset($prop['depends_on']) && isset($prop['depends_value'])
-                            && $this->CORE->getMainCfg()->getValue($cat, $prop['depends_on'], false) != $prop['depends_value']) {
+                            && cfg($cat, $prop['depends_on'], false) != $prop['depends_value']) {
 
                             $class = ' class="child-row"';
                             $style = ' style="display:none;"';
                         } elseif(isset($prop['depends_on']) && isset($prop['depends_value'])
-                            && $this->CORE->getMainCfg()->getValue($cat, $prop['depends_on'], false) == $prop['depends_value']) {
+                            && cfg($cat, $prop['depends_on'], false) == $prop['depends_value']) {
 
                             //$style .= 'display:;';
                             $class = ' class="child-row"';
@@ -117,7 +117,7 @@ class WuiViewEditMainCfg {
 
                         // Create a "helper" field which contains the real applied value
                         if($val2 === false) {
-                            $defaultValue = $this->CORE->getMainCfg()->getValue($cat, $propname, false);
+                            $defaultValue = cfg($cat, $propname, false);
 
                             if(is_array($defaultValue)) {
                                 $defaultValue = implode(',', $defaultValue);

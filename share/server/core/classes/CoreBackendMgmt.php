@@ -402,12 +402,12 @@ class CoreBackendMgmt {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function checkBackendExists($backendId, $printErr) {
-        if($this->CORE->checkExisting($this->CORE->getMainCfg()->getValue('paths','class').'GlobalBackend'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype').'.php', false))
+        if($this->CORE->checkExisting(cfg('paths','class').'GlobalBackend'.cfg('backend_'.$backendId,'backendtype').'.php', false))
             return true;
 
         if($printErr == 1)
             throw new NagVisException(l('backendNotExists', Array('BACKENDID'   => $backendId,
-                                                                  'BACKENDTYPE' => $this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype'))));
+                                                                  'BACKENDTYPE' => cfg('backend_'.$backendId,'backendtype'))));
         return false;
     }
 
@@ -455,14 +455,14 @@ class CoreBackendMgmt {
              * When the remote backend host is reported as "DOWN" or "UNREACHABLE" NagVis won't
              * try to connect to the backend anymore until the backend host gets available again.
              */
-      $statusHost = $this->CORE->getMainCfg()->getValue('backend_' . $backendId, 'statushost');
+      $statusHost = cfg('backend_' . $backendId, 'statushost');
       if($statusHost != '' && !$this->backendAlive($backendId, $statusHost)) {
                 $this->aError[$backendId] = new BackendConnectionProblem(l('The backend is reported as dead by the statusHost ([STATUSHOST]).', Array('STATUSHOST' => $statusHost)));
                 return false;
             }
 
             try {
-                $backendClass = 'GlobalBackend' . $this->CORE->getMainCfg()->getValue('backend_' . $backendId, 'backendtype');
+                $backendClass = 'GlobalBackend' . cfg('backend_' . $backendId, 'backendtype');
                 $this->BACKENDS[$backendId] = new $backendClass($this->CORE, $backendId);
 
                 // Mark backend as initialized
@@ -492,7 +492,7 @@ class CoreBackendMgmt {
         } else {
             if($printErr == 1) {
                 throw new NagVisException(l('backendNotInitialized', Array('BACKENDID' => $backendId,
-                    'BACKENDTYPE' => $this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype'))));
+                    'BACKENDTYPE' => cfg('backend_'.$backendId,'backendtype'))));
             }
             return false;
         }
@@ -506,7 +506,7 @@ class CoreBackendMgmt {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function checkBackendFeature($backendId, $feature, $printErr = 1) {
-        $backendClass = 'GlobalBackend'.$this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype');
+        $backendClass = 'GlobalBackend'.cfg('backend_'.$backendId,'backendtype');
         if(method_exists($backendClass, $feature)) {
             return true;
         } else {
@@ -514,7 +514,7 @@ class CoreBackendMgmt {
                 throw new NagVisException(l('The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend.',
                                           Array('FEATURE'     => htmlentities($feature),
                                                 'BACKENDID'   => $backendId,
-                                                'BACKENDTYPE' => $this->CORE->getMainCfg()->getValue('backend_'.$backendId,'backendtype'))));
+                                                'BACKENDTYPE' => cfg('backend_'.$backendId,'backendtype'))));
             }
             return false;
         }

@@ -54,7 +54,7 @@ class WuiViewManageBackgrounds {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-            'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+            'htmlBase' => cfg('paths', 'htmlbase'),
             'langCreateBackground' => l('createBackground'),
             'langBackgroundName' => l('backgroundName'),
             'langBackgroundColor' => l('backgroundColor'),

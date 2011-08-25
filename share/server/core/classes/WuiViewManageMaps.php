@@ -54,7 +54,7 @@ class WuiViewManageMaps {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-            'htmlBase'              => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+            'htmlBase'              => cfg('paths', 'htmlbase'),
             'langCreateMap'         => l('createMap'),
             'langCreate'            => l('create'),
             'langRenameMap'         => l('renameMap'),

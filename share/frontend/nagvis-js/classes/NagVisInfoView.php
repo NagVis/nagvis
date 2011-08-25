@@ -58,8 +58,8 @@ class NagVisInfoView {
         $userPerms = $AUTHORISATION->parsePermissions();
 
         $aData = Array(
-            'pageTitle'      => $this->CORE->getMainCfg()->getValue('internal', 'title') . ' &rsaquo; '.l('supportInfo'),
-            'htmlBase'       => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+            'pageTitle'      => cfg('internal', 'title') . ' &rsaquo; '.l('supportInfo'),
+            'htmlBase'       => cfg('paths', 'htmlbase'),
             'htmlTemplates'  => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'),
             'nagvisVersion'  => CONST_VERSION,
             'phpVersion'     => PHP_VERSION,
@@ -76,11 +76,11 @@ class NagVisInfoView {
             'phpLoadedExtensions' => implode(", ",get_loaded_extensions()),
             'userAgent' => $_SERVER['HTTP_USER_AGENT'],
             // Auth details
-            'logonModule' => $this->CORE->getMainCfg()->getValue('global', 'logonmodule'),
-            'logonEnvVar' => $this->CORE->getMainCfg()->getValue('global', 'logonenvvar'),
-            'logonEnvVal' => (isset($_SERVER[$this->CORE->getMainCfg()->getValue('global', 'logonenvvar')]) ? $_SERVER[$this->CORE->getMainCfg()->getValue('global', 'logonenvvar')] : ''),
-            'logonEnvCreateUser' => $this->CORE->getMainCfg()->getValue('global', 'logonenvcreateuser'),
-            'logonEnvCreateRole' => $this->CORE->getMainCfg()->getValue('global', 'logonenvcreaterole'),
+            'logonModule' => cfg('global', 'logonmodule'),
+            'logonEnvVar' => cfg('global', 'logonenvvar'),
+            'logonEnvVal' => (isset($_SERVER[cfg('global', 'logonenvvar')]) ? $_SERVER[cfg('global', 'logonenvvar')] : ''),
+            'logonEnvCreateUser' => cfg('global', 'logonenvcreateuser'),
+            'logonEnvCreateRole' => cfg('global', 'logonenvcreaterole'),
             'loggedIn'           => $userName.' ('.$userId.')',
             'userRoles'          => json_encode($userRoles),
             'userPerms'          => json_encode($userPerms),

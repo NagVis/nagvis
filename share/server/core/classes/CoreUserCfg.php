@@ -49,7 +49,7 @@ class CoreUserCfg {
         $this->AUTHENTICATION = $this->CORE->getAuthentication();
         $this->AUTHORISATION  = $this->CORE->getAuthorization();
 
-        $this->profilesDir = $this->CORE->getMainCfg()->getValue('paths', 'profiles');
+        $this->profilesDir = cfg('paths', 'profiles');
     }
 
     public function doGet($onlyUserCfg = false) {

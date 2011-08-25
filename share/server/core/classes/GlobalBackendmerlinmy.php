@@ -86,11 +86,11 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
         $this->serviceCache = Array();
         $this->hostAckCache = Array();
 
-        $this->dbName = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbname');
-        $this->dbUser = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbuser');
-        $this->dbPass = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbpass');
-        $this->dbHost = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbhost');
-        $this->dbPort = $this->CORE->getMainCfg()->getValue('backend_'.$backendId, 'dbport');
+        $this->dbName = cfg('backend_'.$backendId, 'dbname');
+        $this->dbUser = cfg('backend_'.$backendId, 'dbuser');
+        $this->dbPass = cfg('backend_'.$backendId, 'dbpass');
+        $this->dbHost = cfg('backend_'.$backendId, 'dbhost');
+        $this->dbPort = cfg('backend_'.$backendId, 'dbport');
 
         $this->checkMysqlSupport();
         $this->connectDB();

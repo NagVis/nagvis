@@ -52,7 +52,7 @@ class CoreModMultisite extends CoreModule {
                 $TMPLSYS = $TMPL->getTmplSys();
 
                 $aData = Array(
-                    'htmlBase'  => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+                    'htmlBase'  => cfg('paths', 'htmlbase'),
                     'maps'      => $this->getMaps(),
                 );
 
@@ -117,7 +117,7 @@ class CoreModMultisite extends CoreModule {
             } elseif($MAP->MAPOBJ->checkMaintenance(0)) {
                 $MAP->MAPOBJ->fetchIcon();
 
-                $map['overview_url']    = $this->CORE->getMainCfg()->getValue('paths', 'htmlbase').'/index.php?mod=Map&act=view&show='.$mapName;
+                $map['overview_url']    = cfg('paths', 'htmlbase').'/index.php?mod=Map&act=view&show='.$mapName;
                 $map['overview_class']  = '';
                 $map['summary_output']  = $MAP->MAPOBJ->getSummaryOutput();
             } else {

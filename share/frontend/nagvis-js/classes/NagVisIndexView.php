@@ -73,10 +73,10 @@ class NagVisIndexView {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-            'pageTitle'        => $this->CORE->getMainCfg()->getValue('internal', 'title') . $this->sSubtitle,
-            'htmlBase'         => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
-            'htmlJs'           => $this->CORE->getMainCfg()->getValue('paths', 'htmljs'),
-            'htmlCss'          => $this->CORE->getMainCfg()->getValue('paths', 'htmlcss'),
+            'pageTitle'        => cfg('internal', 'title') . $this->sSubtitle,
+            'htmlBase'         => cfg('paths', 'htmlbase'),
+            'htmlJs'           => cfg('paths', 'htmljs'),
+            'htmlCss'          => cfg('paths', 'htmlcss'),
             'htmlTemplates'    => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'),
             'bUseCompressedJs' => $this->checkJsCompressed(),
             'customStylesheet' => $this->sCustomStylesheet,
@@ -96,7 +96,7 @@ class NagVisIndexView {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function checkJsCompressed() {
-        return file_exists($this->CORE->getMainCfg()->getValue('paths', 'js').'NagVisCompressed.js');
+        return file_exists(cfg('paths', 'js').'NagVisCompressed.js');
     }
 }
 ?>

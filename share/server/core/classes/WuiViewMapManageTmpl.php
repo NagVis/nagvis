@@ -69,7 +69,7 @@ class WuiViewMapManageTmpl {
         $MAPCFG->readMapConfig(0, false, false);
 
         $aData = Array(
-            'htmlBase' => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+            'htmlBase' => cfg('paths', 'htmlbase'),
             'map' => $this->aOpts['show'],
             'langTmplAdd' => l('Create Template'),
             'langTmplName' => l('Name'),

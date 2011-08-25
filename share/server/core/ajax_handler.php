@@ -30,15 +30,15 @@ require('../../server/core/defines/matches.php');
 require('../../server/core/functions/autoload.php');
 require('../../server/core/functions/debug.php');
 require('../../server/core/functions/oldPhpVersionFixes.php');
-require('../../server/core/functions/nagvisErrorHandler.php');
-require('../../server/core/functions/i18n.php');
 require('../../server/core/classes/CoreExceptions.php');
+require('../../server/core/functions/nagvisErrorHandler.php');
 
 if (PROFILE) profilingStart();
 
 define('CONST_AJAX' , TRUE);
 
 try {
+    require('../../server/core/functions/core.php');
     $CORE     = GlobalCore::getInstance();
     $MHANDLER = new CoreModuleHandler();
     $_name    = 'core';

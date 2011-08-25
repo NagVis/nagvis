@@ -48,10 +48,10 @@ class NagVisHoverMenu {
 
         $this->templateName = $templateName;
 
-        $this->pathHtmlBase     = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
+        $this->pathHtmlBase     = cfg('paths','htmlbase');
         $this->pathTemplateFile = $this->CORE->getMainCfg()->getPath('sys', '', 'templates', $this->templateName.'.hover.html');
 
-        $this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, $this->CORE->getMainCfg()->getValue('paths','var').'hover-'.$this->templateName.'-'.curLang().'.cache');
+        $this->CACHE = new GlobalFileCache($this->CORE, $this->pathTemplateFile, cfg('paths','var').'hover-'.$this->templateName.'-'.curLang().'.cache');
 
         // Only use cache when there is
         // a) Some valid cache file
@@ -172,7 +172,7 @@ class NagVisHoverMenu {
         }
 
         if(strpos($this->code,'[html_base]') !== FALSE) {
-            $this->code = str_replace('[html_base]',$this->CORE->getMainCfg()->getValue('paths','htmlbase'),$this->code);
+            $this->code = str_replace('[html_base]',cfg('paths','htmlbase'),$this->code);
         }
 
         if(strpos($this->code,'[html_templates]') !== FALSE) {

@@ -54,7 +54,7 @@ class WuiViewManageBackends {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-            'htmlBase'              => $this->CORE->getMainCfg()->getValue('paths', 'htmlbase'),
+            'htmlBase'              => cfg('paths', 'htmlbase'),
             'langSetDefaultBackend' => l('defaultBackend'),
             'langDefaultBackend'    => l('setDefaultBackend'),
             'langSave'              => l('save'),
@@ -62,7 +62,7 @@ class WuiViewManageBackends {
             'langAddBackend'        => l('addBackend'),
             'langEditBackend'       => l('editBackend'),
             'langDelBackend'        => l('delBackend'),
-            'defaultBackend'        => $this->CORE->getMainCfg()->getValue('defaults', 'backend', true),
+            'defaultBackend'        => cfg('defaults', 'backend', true),
             'definedBackends'       => array_merge(Array('' => ''), $this->CORE->getDefinedBackends()),
             'availableBackends'     => array_merge(Array('' => ''), $this->CORE->getAvailableBackends()),
             'backendAttributes'     => $this->CORE->getMainCfg()->getValidObjectType('backend'),

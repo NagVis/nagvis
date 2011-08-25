@@ -198,7 +198,7 @@ class CoreModAutoMap extends CoreModule {
                     throw new Success(l('The map has been created.'),
                                       null,
                                       1,
-                                      $this->CORE->getMainCfg()->getValue('paths','htmlbase').'/frontend/nagvis-js/index.php?mod=Map&show='.$target);
+                                      cfg('paths','htmlbase').'/frontend/nagvis-js/index.php?mod=Map&show='.$target);
                 }  else {
                     throw new NagVisException(l('Unable to create map configuration file.'));
                 }
@@ -218,8 +218,8 @@ class CoreModAutoMap extends CoreModule {
         $arr['map_image']                = $MAPCFG->getValue(0, 'map_image');
         $arr['background_usemap']        = '#automap';
         $arr['background_color']         = $MAPCFG->getValue(0, 'background_color');
-        $arr['favicon_image']            = $this->CORE->getMainCfg()->getValue('paths', 'htmlimages').'internal/favicon.png';
-        $arr['page_title']               = $MAPCFG->getValue(0, 'alias').' ([SUMMARY_STATE]) :: '.$this->CORE->getMainCfg()->getValue('internal', 'title');
+        $arr['favicon_image']            = cfg('paths', 'htmlimages').'internal/favicon.png';
+        $arr['page_title']               = $MAPCFG->getValue(0, 'alias').' ([SUMMARY_STATE]) :: '.cfg('internal', 'title');
         $arr['event_background']         = $MAPCFG->getValue(0, 'event_background');
         $arr['event_highlight']          = $MAPCFG->getValue(0, 'event_highlight');
         $arr['event_highlight_interval'] = $MAPCFG->getValue(0, 'event_highlight_interval');

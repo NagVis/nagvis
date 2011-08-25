@@ -53,7 +53,7 @@ class NagVisHeaderMenu {
         $this->OBJ = $OBJ;
         $this->templateName = $templateName;
 
-        $this->pathHtmlBase = $this->CORE->getMainCfg()->getValue('paths','htmlbase');
+        $this->pathHtmlBase = cfg('paths','htmlbase');
         $this->pathTemplateFile = $this->CORE->getMainCfg()->getPath('sys', '', 'templates', $this->templateName.'.header.html');
 
         // Initialize template system
@@ -255,7 +255,7 @@ class NagVisHeaderMenu {
         }
 
         // Initialize the enable fade option. Is overridden by the current map or left as is
-        $this->aMacros['bEnableFade'] = $this->CORE->getMainCfg()->getValue('defaults', 'headerfade');
+        $this->aMacros['bEnableFade'] = cfg('defaults', 'headerfade');
 
         list($this->aMacros['maps'], $this->aMacros['permittedEditAnyMap']) = $this->getMapList('maps', $this->CORE->getAvailableMaps());
         list($this->aMacros['automaps'], $_not_used) = $this->getMapList('automaps', $this->CORE->getAvailableAutomaps());
@@ -289,7 +289,7 @@ class NagVisHeaderMenu {
         // Replace paths and language macros
         $aReturn = Array('pathBase' => $this->pathHtmlBase,
             'currentUri'         => preg_replace('/[&?]lang=[a-z]{2}_[A-Z]{2}/', '', $this->UHANDLER->getRequestUri()),
-            'pathImages'         => $this->CORE->getMainCfg()->getValue('paths','htmlimages'),
+            'pathImages'         => cfg('paths','htmlimages'),
             'pathHeaderJs'       => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates', $this->templateName.'.header.js'),
             'pathTemplates'      => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'),
             'pathTemplateImages' => $this->CORE->getMainCfg()->getPath('html', 'global', 'templateimages'),
