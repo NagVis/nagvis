@@ -1,0 +1,43 @@
+#!/bin/bash
+
+SITE=${1-lancom}
+
+cd /d1/nagvis
+
+#
+# Install to /usr/local/nagvis
+#
+sudo ./install.sh -a y -q -r -F -c y \
+             -W /nagvis -n /usr/local/nagios \
+             -i mklivestatus -p /usr/local/nagvis \
+             -u www-data -g www-data \
+             -w /etc/apache2/conf.d \
+             -l unix:/omd/sites/muc/tmp/run/live
+sudo rm -f /etc/apache2/conf.d/nagvis.conf.*
+
+#
+# Install to omd site local/
+#
+sudo su - $SITE -c "[ ! -d /omd/sites/$SITE/nvsrc ] && mkdir /omd/sites/$SITE/nvsrc ; \
+rsync --filter='- .git' -av /d1/nagvis/ /omd/sites/$SITE/nvsrc/ ; \
+cd /omd/sites/$SITE/nvsrc/ ; \
+yes y | ./omd_install.sh"
+
+#
+# Install to OMD default version
+#
+
+#sudo rsync -av /d1/nagvis/share/frontend/ /opt/omd/versions/default/share/nagvis/htdocs/frontend/
+#[ -f /opt/omd/versions/default/share/nagvis/htdocs/frontend/nagvis-js/js/NagVisCompressed.js ] \
+#  && sudo rm /opt/omd/versions/default/share/nagvis/htdocs/frontend/nagvis-js/js/NagVisCompressed.js
+#[ -f /opt/omd/versions/default/share/nagvis/htdocs/frontend/wui/js/WuiCompressed.js ] \
+#  && sudo rm /opt/omd/versions/default/share/nagvis/htdocs/frontend/wui/js/WuiCompressed.js
+#sudo rsync -av /d1/nagvis/share/server/core/ajax_handler.php /opt/omd/versions/default/share/nagvis/htdocs/server/core/ajax_handler.php
+#sudo rsync -av /d1/nagvis/share/server/core/classes/ /opt/omd/versions/default/share/nagvis/htdocs/server/core/classes/
+#sudo rsync -av /d1/nagvis/share/server/core/functions/ /opt/omd/versions/default/share/nagvis/htdocs/server/core/functions/
+#sudo rsync -av /d1/nagvis/share/server/core/defines/matches.php /opt/omd/versions/default/share/nagvis/htdocs/server/core/defines/
+##sudo rsync -av /d1/nagvis/share/userfiles/ /opt/omd/versions/default/skel/var/nagvis/userfiles/
+##sudo rsync -av /d1/nagvis/share/userfiles/ /opt/omd/sites/muc/var/nagvis/userfiles/
+#sudo rsync -av /d1/nagvis/share/userfiles/ /omd/sites/muc/share/nagvis/htdocs/userfiles/
+
+exit 0
