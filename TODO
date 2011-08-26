@@ -3,6 +3,10 @@ This is a small file for storing quick thoughts about new features and needed ch
 
 Probleme:
 
+- Control-Positionen sind falsch, wenn Objektgrößen sich ändern
+  - z.B. bei Gadgets mit unterschiedlichen größen, oder auch bei normalen
+    Icons, wenn diese sich gerade laden und vorher der alt="" Text gezeigt wird
+  - Eventuell onresize oder so registrieren
 - Loop in relativen Koordinaten erkennen und verhindern
   - In WUI Fehler anzeigen
   - Beim Config Parsen Fehlermeldung erzeugen
@@ -42,6 +46,8 @@ Relative Koordinaten:
 - Weathermap Linien Perfdata Berechnungen nach check_command aufräumen
 - MapCfg Config Array aufräumen
 - ajax Funktionen aufräumen/konsolidieren
+- .gitignore Dateien nicht mit installieren
+- OMD Tests
 
 
 *** Linien (Auch für neue Automap wichtig!) ***

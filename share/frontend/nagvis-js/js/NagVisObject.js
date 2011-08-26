@@ -670,10 +670,10 @@ var NagVisObject = Base.extend({
         oldVal = null;
 
         if(num === -1) {
-            return val;
+            return Math.round(val);
         } else {
             var old  = this.conf[dir].split(',');
-            old[num] = val;
+            old[num] = Math.round(val);
             return old.join(',');
         }
     },
