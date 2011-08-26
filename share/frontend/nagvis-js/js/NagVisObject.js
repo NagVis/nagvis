@@ -796,15 +796,18 @@ var NagVisObject = Base.extend({
             this.childs[i].reposition();
 
         // redraw the controls
-        if(!this.bIsLocked) {
-            if(typeof(this.removeControls) == 'function')
-                this.removeControls();
-            if(typeof(this.parseControls) == 'function')
-                this.parseControls();
-        }
+        if(!this.bIsLocked)
+            this.redrawControls();
     },
 
     /*** CONTROL FUNCTIONS ***/
+
+    redrawControls: function () {
+        if(typeof(this.removeControls) == 'function')
+            this.removeControls();
+        if(typeof(this.parseControls) == 'function')
+            this.parseControls();
+    },
 
     parseControls: function () {
         // Ensure the controls container exists

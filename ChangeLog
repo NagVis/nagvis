@@ -22,6 +22,7 @@ Frontend
   * Bugfix: Fixed backendid showing up in host_name field of add/modify dialog
     in some rare cases
   * Bugfix: Object positions can never be floats (always integers)
+  * Bugfix: Fixed wrong positions of controls during page load (at least in firefox)
 
 Automap
   * Bugfix: Made the problem automap work again

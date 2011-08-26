@@ -187,9 +187,7 @@ var NagVisStatefulObject = NagVisObject.extend({
         oContainerDiv.setAttribute('id', this.conf.object_id);
 
         // Parse icon on automap
-        var oIcon = this.parseAutomapIcon();
-        oContainerDiv.appendChild(oIcon);
-        oIcon = null;
+        oContainerDiv.appendChild(this.parseIcon());
 
         // Parse label when configured
         if(this.conf.label_show && this.conf.label_show == '1') {
@@ -302,6 +300,7 @@ var NagVisStatefulObject = NagVisObject.extend({
             oObj.oncontextmenu  = null;
             oObj.onmouseover    = null;
             oObj.onmouseout     = null;
+            oObj.onload         = null;
             oObj = null;
         }
 
@@ -799,57 +798,6 @@ var NagVisStatefulObject = NagVisObject.extend({
     },
 
     /**
-     * PUBLIC parseAutomapIcon()
-     *
-     * Parses the HTML-Code of an automap icon
-     *
-     * @return	String		String with Html Code
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    parseAutomapIcon: function () {
-        var alt = '';
-
-        if(this.type == 'service') {
-            alt = this.conf.name+'-'+this.conf.service_description;
-        } else {
-            alt = this.conf.name;
-        }
-
-        var doc = document;
-        var oIcon = doc.createElement('img');
-        oIcon.setAttribute('id', this.conf.object_id+'-icon');
-        oIcon.src = oGeneralProperties.path_iconsets + this.conf.icon;
-        oIcon.alt = this.conf.type + '-' + alt;
-
-        var oIconDiv = doc.createElement('div');
-        oIconDiv.setAttribute('id', this.conf.object_id+'-icondiv');
-        oIconDiv.setAttribute('class', 'icon');
-        oIconDiv.setAttribute('className', 'icon');
-        oIconDiv.style.position = 'absolute';
-        oIconDiv.style.top    = this.parseCoord(this.conf.y, 'y') + 'px';
-        oIconDiv.style.left   = this.parseCoord(this.conf.x, 'x') + 'px';
-        oIconDiv.style.zIndex = this.conf.z;
-
-        // Parse link only when set
-        if(this.conf.url && this.conf.url !== '' && this.conf.url !== '#') {
-            var oIconLink = doc.createElement('a');
-            oIconLink.href = this.conf.url;
-            oIconLink.target = this.conf.url_target;
-            oIconLink.appendChild(oIcon);
-            oIcon = null;
-
-            oIconDiv.appendChild(oIconLink);
-            oIconLink = null;
-        } else {
-            oIconDiv.appendChild(oIcon);
-            oIcon = null;
-        }
-
-        doc = null;
-        return oIconDiv;
-    },
-
-    /**
      * PUBLIC parseIcon()
      *
      * Parses the HTML-Code of an icon
@@ -869,6 +817,21 @@ var NagVisStatefulObject = NagVisObject.extend({
         var doc = document;
         var oIcon = doc.createElement('img');
         oIcon.setAttribute('id', this.conf.object_id+'-icon');
+
+        // Register controls reposition handler to handle resizes during
+        // loading the image (from alt="" text to the real image
+        oIcon.onload = function() {
+            // In the event handler "this" points to the image object
+            var arr   = this.id.split('-');
+            var objId = arr[0];
+            var obj = getMapObjByDomObjId(objId);
+	    if(!obj.bIsLocked)
+                obj.redrawControls();
+            obj = null;
+            objId = null;
+            arr = null;
+        };
+
         oIcon.src = oGeneralProperties.path_iconsets + this.conf.icon;
         oIcon.alt = this.conf.type + '-' + alt;
 
@@ -1112,10 +1075,8 @@ var NagVisStatefulObject = NagVisObject.extend({
         saveObjectAttr(this.conf.object_id, { 'x': this.conf.x, 'y': this.conf.y});
 
         // redraw the controls
-        if(!this.bIsLocked) {
-            this.removeControls();
-            this.parseControls();
-        }
+        if(!this.bIsLocked)
+            this.redrawControls();
 
         // redraw the line
         this.drawLine();
