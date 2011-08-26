@@ -23,6 +23,8 @@ Frontend
     in some rare cases
   * Bugfix: Object positions can never be floats (always integers)
   * Bugfix: Fixed wrong positions of controls during page load (at least in firefox)
+  * Bugfix: Registering drag stop event globally to prevent dragging problems
+    on slower clients
 
 Automap
   * Bugfix: Made the problem automap work again

@@ -112,7 +112,10 @@ function makeDragable(objects, dragStopHandler, dragMoveHandler) {
 
         if(o) {
             addEvent(o, "mousedown", function(e) { dragStart(e, dragMoveHandler); });
-            addEvent(o, "mouseup",   function(e) { dragStop(e,  dragStopHandler); });
+            // The drag stop event is registered globally on the whole document to prevent
+            // problems with too fast mouse movement which might lead to lag the dragging
+            // object behind the mouse and make it impossible to stop dragging.
+            addEvent(document, "mouseup", function(e) { dragStop(e,  dragStopHandler); });
             o = null;
         }
     }
