@@ -44,9 +44,7 @@ class GlobalLanguage {
 
         $this->textDomain = $textDomain;
 
-        if($this->CORE->getMainCfg() !== null) {
-            $this->USERCFG = new CoreUserCfg();
-        }
+        $this->USERCFG = new CoreUserCfg();
 
         $this->sCurrentLanguage = $this->gatherCurrentLanguage();
 
