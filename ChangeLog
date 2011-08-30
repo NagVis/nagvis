@@ -11,6 +11,7 @@ Core
   * Several code cleanups
   * Cleanup: Consolidated code of main handlers ajax_handler and frontend index
   * Cleanup: Recoded message class calls to exceptions
+  * omd_install.sh can now be called from other directories
 
 Frontend
   * Readded the "edit" action to the maps module. In this mode all object are
