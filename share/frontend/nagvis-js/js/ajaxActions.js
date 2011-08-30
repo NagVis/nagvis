@@ -66,10 +66,12 @@ function saveObjectAfterAnchorAction(oAnchor) {
     var urlPart    = '';
     var action     = 'modifyObject';
 
-    if(anchorType === 'drag') {
+    if(anchorType === 'drag' || anchorType === 'icondiv' || anchorType === 'label') {
         urlPart = handleDragResult(objId, anchorId);
     } else if(anchorType === 'delete') {
         action  = 'deleteObject';
+    } else {
+        alert('Unhandled action object: ' + anchorType);
     }
 
     var mod = 'Map';

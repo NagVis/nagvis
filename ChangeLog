@@ -17,6 +17,8 @@ Frontend
   * Readded the "edit" action to the maps module. In this mode all object are
     automatically unlocked and changes to the lock state are not persisted
   * Also disabling the object left click actions in unlocked mode
+  * Icon/Gadget/Shape/Textbox dragging is done by dragging the real icons
+  again, like it was in WUI before. The drag controls for these objects has been removed.
   * Bugfix: Fixed several umlauts in edit mode warning messages
   * Bugfix: Fixed 100% sidebar height
   * Bugfix: Fixed initial positioning of relative positioned gadgets

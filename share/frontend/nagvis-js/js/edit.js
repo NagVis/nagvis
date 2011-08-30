@@ -81,6 +81,7 @@ var dragObjectPos = null;
 var dragObjectStartPos = null;
 var dragObjectChilds = {};
 var dragObjectHandler = null;
+var dragStopHandlers = {};
 
 function getTarget(event) {
     var target = event.target ? event.target : event.srcElement;
@@ -110,12 +111,15 @@ function makeDragable(objects, dragStopHandler, dragMoveHandler) {
 	else
             var o = document.getElementById(objects[i]);
 
+        // Register the drag stop handler
+        dragStopHandlers[o.id] = dragStopHandler;
+
         if(o) {
             addEvent(o, "mousedown", function(e) { dragStart(e, dragMoveHandler); });
             // The drag stop event is registered globally on the whole document to prevent
             // problems with too fast mouse movement which might lead to lag the dragging
             // object behind the mouse and make it impossible to stop dragging.
-            addEvent(document, "mouseup", function(e) { dragStop(e,  dragStopHandler); });
+            addEvent(document, "mouseup", function(e) { dragStop(e); });
             o = null;
         }
     }
@@ -271,7 +275,7 @@ function moveRelativeObject(parentId, parentTop, parentLeft) {
     sLabelName = null;
 }
 
-function dragStop(event, handler) {
+function dragStop(event) {
     if(draggingObject === null || !draggingEnabled
        || typeof draggingObject.y == 'undefined' || typeof draggingObject.x == 'undefined')
         return;
@@ -300,14 +304,15 @@ function dragStop(event, handler) {
     if(event.shiftKey)
         oParent = false;
 
+    // FIXME: Really unneeded?
     // Unhighlight all parents when relative
     // This condition is a quick fix to make the dragging code work again in the WUI. Once
     // the WUI is dropped in the future this can be removed
-    if(draggingObject.id.indexOf('-') > -1)
-        for(var objectId in getMapObjByDomObjId(draggingObject.id.split('-')[0]).getParentObjectIds())
-        getMapObjByDomObjId(objectId).highlight(false);
+    //if(draggingObject.id.indexOf('-') > -1)
+    //    for(var objectId in getMapObjByDomObjId(draggingObject.id.split('-')[0]).getParentObjectIds())
+    //    getMapObjByDomObjId(objectId).highlight(false);
 
-    handler(draggingObject, oParent);
+    dragStopHandlers[draggingObject.id](draggingObject, oParent);
 
     oParent = null;
     dragObjectHandler = null;

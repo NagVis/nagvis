@@ -1083,7 +1083,8 @@ var NagVisObject = Base.extend({
     moveObject: function(obj) {
         var arr        = obj.id.split('-');
         var objId      = arr[0];
-        var anchorType = arr[1];
+        if(arr.length > 1)
+            var anchorType = arr[1];
 
         var newPos;
         var viewType = getDomObjViewType(objId);
@@ -1102,8 +1103,13 @@ var NagVisObject = Base.extend({
 
             anchorId   = null;
         } else {
-            newPos = [ jsObj.calcNewCoord(obj.x - obj.objOffsetX, 'x'),
-                       jsObj.calcNewCoord(obj.y - obj.objOffsetY, 'y') ];
+            // In case of an anchor there is an offset to the real object.
+            // Handle this offset in the coordinate calculation for the obj
+            var offsetX = isset(obj.objOffsetX) ? obj.objOffsetX : 0;
+            var offsetY = isset(obj.objOffsetY) ? obj.objOffsetY : 0;
+
+            newPos = [ jsObj.calcNewCoord(obj.x - offsetX, 'x'),
+                       jsObj.calcNewCoord(obj.y - offsetY, 'y') ];
 
             var parents = jsObj.getParentObjectIds();
         }
@@ -1138,7 +1144,8 @@ var NagVisObject = Base.extend({
     saveObject: function(obj, oParent) {
         var arr        = obj.id.split('-');
         var objId      = arr[0];
-        var anchorId   = arr[2];
+        if(arr.length > 2)
+            var anchorId = arr[2];
         var viewType   = getDomObjViewType(objId);
         var jsObj      = getMapObjByDomObjId(objId);
 

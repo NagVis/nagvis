@@ -1020,17 +1020,15 @@ var NagVisStatefulObject = NagVisObject.extend({
 
     parseIconControls: function () {
         var size = oGeneralProperties['controls_size'];
-        this.parseControlDrag(0, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
+        this.parseControlModify(1, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
                                  this.getObjWidth() + 5, - size / 2, size);
-        this.parseControlModify(2, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
-                                 this.getObjWidth() + 5 + size + 5, - size / 2, size);
 
-        this.parseControlDelete(1, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
+        this.parseControlDelete(0, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
                                  this.getObjWidth() + 5, - size / 2 + 5 + size, size);
         size = null;
 
         // Simply make it dragable. Maybe will be extended in the future...
-        makeDragable([this.conf.object_id+'-drag-0'], this.saveObject, this.moveObject);
+        makeDragable([this.conf.object_id+'-icondiv'], this.saveObject, this.moveObject);
     },
 
 

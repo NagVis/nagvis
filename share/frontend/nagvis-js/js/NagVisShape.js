@@ -119,12 +119,15 @@ var NagVisShape = NagVisStatelessObject.extend({
 
     parseShapeControls: function () {
         var size = oGeneralProperties['controls_size'];
-        this.parseControlDrag(0,   this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'), 5,             -15, size);
-        this.parseControlDelete(1, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'), 10 + size,     -15, size);
-        this.parseControlModify(2, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'), 15 + size * 2, -15, size);
+        this.parseControlDelete(0, this.parseCoord(this.conf.x, 'x'),
+                                   this.parseCoord(this.conf.y, 'y'),
+                                   5, -15, size);
+        this.parseControlModify(1, this.parseCoord(this.conf.x, 'x'),
+                                   this.parseCoord(this.conf.y, 'y'),
+                                   10 + size, -15, size);
         size = null;
 
         // Simply make it dragable. Maybe will be extended in the future...
-        makeDragable([this.conf.object_id+'-drag-0'], this.saveObject, this.moveObject);
+        makeDragable([this.conf.object_id+'-icondiv'], this.saveObject, this.moveObject);
     }
 });
