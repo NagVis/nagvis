@@ -57,6 +57,9 @@ if($AUTH->isAuthenticated()) {
 // Make the AA information available to whole NagVis for permission checks
 $CORE->setAA($AUTH, $AUTHORISATION);
 
+// Re-set the language to handle the user individual language
+$_LANG->setLanguage(HANDLE_USERCFG);
+
 /*
 * Module handling 1: Choose modules
 */

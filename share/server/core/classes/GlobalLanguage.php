@@ -44,23 +44,13 @@ class GlobalLanguage {
 
         $this->textDomain = $textDomain;
 
-        $this->USERCFG = new CoreUserCfg();
-
-        $this->sCurrentLanguage = $this->gatherCurrentLanguage();
-
         // Append encoding (UTF8)
         $this->sCurrentEncoding = 'UTF-8';
 
         // Check for gettext extension
         require_once('../../server/core/ext/php-gettext-1.0.9/gettext.inc');
 
-        // Check if choosen language is available
-        $this->checkLanguageAvailable($this->sCurrentLanguage, true, true);
-
-        // Set the language to us
-        putenv('LC_ALL='.$this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
-        putenv('LANG='.$this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
-        T_setlocale(LC_MESSAGES, $this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
+        $this->setLanguage();
 
         T_bindtextdomain($this->textDomain, cfg('paths', 'language'));
         T_bind_textdomain_codeset($this->textDomain, $this->sCurrentEncoding);
@@ -78,6 +68,25 @@ class GlobalLanguage {
     }
 
     /**
+     * Sets the language to be used for future localized strings
+     * while processing the current page.
+     */
+    public function setLanguage($handleUserCfg = false) {
+        if($handleUserCfg)
+            $this->USERCFG = new CoreUserCfg();
+
+        $this->sCurrentLanguage = $this->gatherCurrentLanguage();
+
+        // Check if choosen language is available
+        $this->checkLanguageAvailable($this->sCurrentLanguage, true, true);
+
+        // Set the language to us
+        putenv('LC_ALL='.$this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
+        putenv('LANG='.$this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
+        T_setlocale(LC_MESSAGES, $this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
+    }
+
+    /**
      * Reads the language to use in NagVis
      *
      * @return  String
@@ -92,7 +101,8 @@ class GlobalLanguage {
                 switch($sMethod) {
                     case 'session':
                         // Read the user choice from user options
-                        $sReturn = $this->USERCFG->getValue('language', '');
+                        if($this->USERCFG !== null)
+                            $sReturn = $this->USERCFG->getValue('language', '');
                     break;
                     case 'browser':
                         // Read the prefered language from the users browser
@@ -107,8 +117,10 @@ class GlobalLanguage {
                         $sReturn = $this->getUserLanguage();
 
                         // Save language to user config when user set one
-                        if($sReturn != '' && $sReturn != $this->USERCFG->getValue('language', ''))
-                 			$this->USERCFG->doSet(Array('language' => $sReturn));
+                        if($sReturn != ''
+                           && $this->USERCFG !== null
+                           && $sReturn != $this->USERCFG->getValue('language', ''))
+                            $this->USERCFG->doSet(Array('language' => $sReturn));
                     break;
                     case 'config':
                         // Read default language from configuration
