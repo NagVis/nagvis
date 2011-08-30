@@ -45,6 +45,8 @@ if [ ! -z "$OPT" ] &&  [ $OPT != "y" ]; then
     exit 1
 fi
 
+CWD="$(cd "$(dirname "$0")" && pwd)"
+
 echo "Installing..."
 
 # 1.5 had the userfiles dir in $OMD_ROOT/var/nagvis/userfiles
@@ -58,12 +60,12 @@ fi
 
 mkdir -p $OMD_ROOT/var/nagvis/profiles
 mkdir -p $OMD_ROOT/local/share/nagvis/htdocs
-cp -r share/* $OMD_ROOT/local/share/nagvis/htdocs
-cp -r docs $OMD_ROOT/local/share/nagvis/htdocs/
+cp -r $CWD/share/* $OMD_ROOT/local/share/nagvis/htdocs
+cp -r $CWD/docs $OMD_ROOT/local/share/nagvis/htdocs/
 
 # Update "old" (1.5) userfiles dir
 if [ -d $OMD_ROOT/var/nagvis/userfiles ]; then
-    cp -r share/userfiles/* $OMD_ROOT/var/nagvis/userfiles
+    cp -r $CWD/share/userfiles/* $OMD_ROOT/var/nagvis/userfiles
 fi
 
 # Backup the nagvis-omd.ini.php on first time using omd_install.sh
@@ -140,15 +142,16 @@ Alias /$OMD_SITE/nagvis "$OMD_ROOT/local/share/nagvis/htdocs"
     # Use mod_rewrite for old url redirection even if there are php files which
     # redirect the queries itselfs. In some cases the mod_rewrite redirect
     # is better than the php redirect.
-    RewriteCond %{REQUEST_URI} ^/$OMD_SITE/nagvis(/index\.php|/|)(\?.*|)$
+    RewriteCond %{REQUEST_URI} ^/$OMD_SITE/nagvis(/config\.php|/index\.php|/|)(\?.*|)$
     RewriteRule ^(index\.php|)(\?.*|)$ /$OMD_SITE/nagvis/frontend/nagvis-js/$1$2 [R=301,L]
-    RewriteCond %{REQUEST_URI} ^/$OMD_SITE/nagvis/config\.php.*$
-    RewriteRule ^config\.php(.*)(\?.*|)$ /$OMD_SITE/nagvis/frontend/nagvis-js/$1$2 [R=301,L]
 
     # Redirect old regular map links
     RewriteCond %{REQUEST_URI} ^/$OMD_SITE/nagvis/frontend/(nagvis-js|wui)
     RewriteCond %{QUERY_STRING} map=(.*)
     RewriteRule ^(.*)$ /$OMD_SITE/nagvis/frontend/nagvis-js/index.php?mod=Map&act=view&show=%1 [R=301,L]
+    # Without map= param
+    RewriteCond %{REQUEST_URI} ^/$OMD_SITE/nagvis/frontend(/wui)?/?(index.php)?$
+    RewriteRule ^(.*)$ /$OMD_SITE/nagvis/frontend/nagvis-js/index.php [R=301,L]
 
     # Redirect old rotation calls
     RewriteCond %{REQUEST_URI} ^/$OMD_SITE/nagvis/frontend/nagvis-js
