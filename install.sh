@@ -836,7 +836,8 @@ copy() {
         fi
     else
         if [ -d "$3" ]; then
-            cp -pr $2 $3
+            #cp -pr $2 $3
+            rsync -a -f "- .gitignore" $2 $3
             chk_rc "|  Error copying $2 to $3" "$DONE"
         fi
     fi
@@ -1353,7 +1354,7 @@ makedir "$NAGVIS_PATH/var/tmpl/compile"
 makedir "$NAGVIS_PATH/share/var"
 # Copy all desired files
 LINE="Copying files to $NAGVIS_PATH..."
-copy "" "share" "$NAGVIS_PATH"
+copy "\.gitignore$" "share" "$NAGVIS_PATH"
 copy "" "etc" "$NAGVIS_PATH"
 makedir "$NAGVIS_PATH/etc/profiles"
 copy "" "LICENCE README" "$NAGVIS_PATH"
@@ -1525,7 +1526,7 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
         copy "" "$AUTH_BACKUP" "auth backup file"
 
         LINE="Restoring custom stylesheets..."
-        copy "" "$USERFILES_DIR/styles" "stylesheets"
+        copy "\.gitignore$" "$USERFILES_DIR/styles" "stylesheets"
     else
         # This is a cross version update. For example from 1.4x to 1.5x
         LINE="Restoring main configuration file..."
