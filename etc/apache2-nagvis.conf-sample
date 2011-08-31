@@ -2,9 +2,9 @@
 #
 # #############################################################################
 
-Alias @NAGVIS_WEB@ "@NAGVIS_PATH@/share"
+Alias @NAGVIS_WEB@ "@NAGVIS_PATH@"
 
-<Directory "@NAGVIS_PATH@/share">
+<Directory "@NAGVIS_PATH@">
   Options FollowSymLinks
   AllowOverride None
   Order allow,deny
