@@ -83,11 +83,16 @@ var dragObjectChilds = {};
 var dragObjectHandler = null;
 var dragStopHandlers = {};
 
-function getTarget(event) {
+function getTarget(event, ignoreType) {
+    if(typeof(ignoreType) === 'undefined')
+        var ignoreType = null;
+
     var target = event.target ? event.target : event.srcElement;
-    while(target && target.tagName != 'DIV') {
+    while(target && (target.tagName != 'DIV' 
+          || typeof(target.id) === 'undefined'
+          || (ignoreType !== null && (target.id.split('-')[1] === ignoreType)))) {
         target = target.parentNode;
-  }
+    }
     return target;
 }
 
@@ -130,7 +135,7 @@ function dragStart(event, dragHandler) {
     if(!event)
         event = window.event;
 
-    var target = getTarget(event);
+    var target = getTarget(event, 'icon');
     var button = getButton(event);
 
     // Skip calls when already dragging or other button than left mouse
@@ -304,13 +309,9 @@ function dragStop(event) {
     if(event.shiftKey)
         oParent = false;
 
-    // FIXME: Really unneeded?
-    // Unhighlight all parents when relative
-    // This condition is a quick fix to make the dragging code work again in the WUI. Once
-    // the WUI is dropped in the future this can be removed
-    //if(draggingObject.id.indexOf('-') > -1)
-    //    for(var objectId in getMapObjByDomObjId(draggingObject.id.split('-')[0]).getParentObjectIds())
-    //    getMapObjByDomObjId(objectId).highlight(false);
+    // Unhilight parent objects
+    for(var objectId in getMapObjByDomObjId(draggingObject.id.split('-')[0]).getParentObjectIds())
+        getMapObjByDomObjId(objectId).highlight(false);
 
     dragStopHandlers[draggingObject.id](draggingObject, oParent);
 

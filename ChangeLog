@@ -23,6 +23,7 @@ Frontend
   * Bugfix: Fixed several umlauts in edit mode warning messages
   * Bugfix: Fixed 100% sidebar height
   * Bugfix: Fixed initial positioning of relative positioned gadgets
+  * Bugfix: Fixed dragging handling of relative positioned gadgets
   * Bugfix: Fixed backendid showing up in host_name field of add/modify dialog
     in some rare cases
   * Bugfix: Object positions can never be floats (always integers)

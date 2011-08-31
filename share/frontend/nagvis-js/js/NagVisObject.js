@@ -666,11 +666,13 @@ var NagVisObject = Base.extend({
             if(refObj)
                 val = this.getRelCoords(refObj, val, dir, -1);
             objectId = null;
+        } else if(num === -1) {
+            val = Math.round(val);
         }
         oldVal = null;
 
         if(num === -1) {
-            return Math.round(val);
+            return val;
         } else {
             var old  = this.conf[dir].split(',');
             old[num] = Math.round(val);
