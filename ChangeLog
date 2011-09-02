@@ -34,6 +34,7 @@ Frontend
     on slower clients
   * Bugfix: Fixed javascript error "Error: attempt to run compile-and-go script on a cleared scope"
     after changed main configuration file in FF4
+  * Bugfix: Fixed hanging controls/labels when dragging objects out of screen
 
 Automap
   * Bugfix: Made the problem automap work again

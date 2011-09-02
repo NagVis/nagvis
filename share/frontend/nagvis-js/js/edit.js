@@ -228,7 +228,7 @@ function dragObject(event) {
         }
     }
 
-    // Call the dragging handler when one is ste
+    // Call the dragging handler when one is set
     if(dragObjectHandler)
         dragObjectHandler(draggingObject);
     oParent = null;
@@ -271,7 +271,7 @@ function moveRelativeObject(parentId, parentTop, parentLeft) {
     if(typeof dragObjectChilds[sLabelName] !== 'undefined') {
         var oLabel = document.getElementById(sLabelName);
         if(oLabel) {
-  		oLabel.style.position = 'absolute';
+            oLabel.style.position = 'absolute';
             oLabel.style.top  = (dragObjectChilds[sLabelName][0] + parentTop) + 'px';
             oLabel.style.left = (dragObjectChilds[sLabelName][1] + parentLeft) + 'px';
             oLabel = null;
@@ -289,7 +289,15 @@ function dragStop(event) {
     if(draggingObject.y < 0 || draggingObject.x < 0) {
         draggingObject.style.top  = dragObjectStartPos[0] + 'px';
         draggingObject.style.left = dragObjectStartPos[1] + 'px';
-        moveRelativeObject(draggingObject.id, dragObjectStartPos[0], dragObjectStartPos[1])
+        draggingObject.x = dragObjectStartPos[1];
+        draggingObject.y = dragObjectStartPos[0];
+
+        moveRelativeObject(draggingObject.id, dragObjectStartPos[0], dragObjectStartPos[1]);
+
+        // Call the dragging handler when one is set
+        if(dragObjectHandler)
+            dragObjectHandler(draggingObject);
+
         draggingObject = null;
         return;
     }
