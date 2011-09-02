@@ -14,6 +14,7 @@ Core
   * Cleanup: Recoded message class calls to exceptions
   * omd_install.sh can now be called from other directories
   * Allowing more unicode signs in e.g. map aliases
+  * Added new icon *_unreachable icon to represent the UNREACHABLE host state
 
 Frontend
   * Readded the "edit" action to the maps module. In this mode all object are

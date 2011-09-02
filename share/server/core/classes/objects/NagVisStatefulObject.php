@@ -655,10 +655,6 @@ class NagVisStatefulObject extends NagVisObject {
                     } elseif($this->getSummaryInDowntime() == 1) {
                         $icon = $this->iconset.'_'.$sPre.'downtime.'.$fileType;
                     } else {
-                        // Handle unreachable state with down icon
-                        if($stateLow == 'unreachable') {
-                            $stateLow = 'down';
-                        }
                         $icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
                     }
                 break;
