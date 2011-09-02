@@ -1908,6 +1908,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
         if(workerTimeoutID)
             window.clearTimeout(workerTimeoutID);
         window.location.reload(true);
+        return;
     }
 
     if(sType === 'map') {

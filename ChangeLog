@@ -32,6 +32,8 @@ Frontend
   * Bugfix: Fixed wrong positions of controls during page load (at least in firefox)
   * Bugfix: Registering drag stop event globally to prevent dragging problems
     on slower clients
+  * Bugfix: Fixed javascript error "Error: attempt to run compile-and-go script on a cleared scope"
+    after changed main configuration file in FF4
 
 Automap
   * Bugfix: Made the problem automap work again
