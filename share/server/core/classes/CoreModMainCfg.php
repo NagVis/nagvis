@@ -208,8 +208,8 @@ class CoreModMainCfg extends CoreModule {
     protected function doBackendEdit($a) {
         // Loop all aviable options for this backend and set them when some is given in the response
         foreach($this->getBackendAttributes($a['backendtype']) AS $key => $arr)
-            if(isset($a['opts'][$key]) && $a['opts'][$key] != '')
-                $this->CORE->getMainCfg()->setValue('backend_'.$a['opts']['backendid'],$key,$a['opts'][$key]);
+            if(isset($a['opts'][$key]))
+                $this->CORE->getMainCfg()->setValue('backend_'.$a['opts']['backendid'], $key, $a['opts'][$key]);
 
         // Write the changes to the main configuration
         $this->CORE->getMainCfg()->writeConfig();
