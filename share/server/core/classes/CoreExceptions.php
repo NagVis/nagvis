@@ -81,3 +81,13 @@ class MapCfgInvalidObject extends MapCfgInvalid {}
 class UserInputError extends NagVisException {}
 
 class InputErrorRedirect extends NagVisException {}
+
+// This exception is used to handle PHP errors
+class NagVisErrorException extends ErrorException {
+    function __toString() {
+        return "Error: (".$this->getCode().") ".$this->getMessage()
+             . " (".$this->getFile().":".$this->getLine().")<br /><br />\n"
+             . "<code>".str_replace("\n", "<br />\n", $this->getTraceAsString())."</code>";
+
+    }
+}
