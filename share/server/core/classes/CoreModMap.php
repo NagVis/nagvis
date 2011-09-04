@@ -863,9 +863,8 @@ class CoreModMap extends CoreModule {
         if($bValid && $FHANDLER->isSetAndNotEmpty('map_current') && !$FHANDLER->match('map_current', MATCH_MAP_NAME))
             $bValid = false;
 
-        // Check if the new map already exists
-        if($bValid && count($this->CORE->getAvailableMaps('/^'.$FHANDLER->get('map_new_name').'$/')) > 0)
-            throw new NagVisException(l('The new mapname does already exist.'));
+        if($bValid)
+            $this->verifyMapExists($FHANDLER->get('map_new_name'), true);
 
         // Store response data
         if($bValid === true) {
@@ -907,7 +906,7 @@ class CoreModMap extends CoreModule {
             $bValid = false;
 
         if($bValid)
-            $this->verifyMapExists($FHANDLER->get('map'));
+            $this->verifyMapExists($FHANDLER->get('map'), true);
 
         // Store response data
         if($bValid === true) {
@@ -981,9 +980,16 @@ class CoreModMap extends CoreModule {
     }
 
     // Check if the map exists
-    private function verifyMapExists($map) {
-        if(count($this->CORE->getAvailableMaps('/^'.$map.'$/')) <= 0)
-            throw new NagVisException(l('The map does not exist.'));
+    private function verifyMapExists($map, $negate = false) {
+        if(!$negate) {
+            if(count($this->CORE->getAvailableMaps('/^'.$map.'$/')) <= 0) {
+                throw new NagVisException(l('The map does not exist.'));
+            }
+        } else {
+            if(count($this->CORE->getAvailableMaps('/^'.$map.'$/')) > 0) {
+                throw new NagVisException(l('The map does already exist.'));
+            }
+        }
     }
 }
 ?>
