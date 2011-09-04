@@ -64,6 +64,12 @@ try {
     exit(0);
 } catch(NagVisException $e) {
     echo $e;
+} catch(NagVisErrorException $e) {
+    echo json_encode(Array(
+        'type'    => 'error',
+        'message' => "".$e,
+        'title'   => l('PHP ERROR'),
+    ));
 } catch(Exception $e) {
     echo json_encode(Array(
         'type'    => 'error',
