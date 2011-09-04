@@ -37,6 +37,7 @@ Frontend
   * Bugfix: Fixed javascript error "Error: attempt to run compile-and-go script on a cleared scope"
     after changed main configuration file in FF4
   * Bugfix: Fixed hanging controls/labels when dragging objects out of screen
+  * Bugfix: It is now possible to unset backend attributes using the "Edit backend" dialog
 
 Automap
   * Bugfix: Made the problem automap work again
