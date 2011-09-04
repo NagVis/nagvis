@@ -29,22 +29,11 @@
  *
  * @author     Lars Michelsen <lars@vertical-visions.de>
  */
-function ajaxError($errno, $errstr = '', $file = '', $line = '') {
-    // Use current error_reporting settings to skip unwanted errors
-    if(!(error_reporting() & $errno))
-        return false;
-    
-    echo "Error: (".$errno.") ".$errstr. " (".$file.":".$line.")";
-    die();
-}
 
 function nagvisException($OBJ) {
     try {
-        if(get_class($OBJ) == 'ErrorException') {
-            echo "Error: (".$OBJ->getCode().") ".$OBJ->getMessage()
-                ." (".$OBJ->getFile().":".$OBJ->getLine().")<br /><br />\n ";
-            echo "<code>".str_replace("\n", "<br />\n", $OBJ->getTraceAsString())."</code>";
-        } elseif(get_class($OBJ) == 'NagVisException') {
+        if(get_class($OBJ) == 'NagVisException'
+           || get_class($OBJ) == 'NagVisErrorException') {
             echo $OBJ;
         } else {
             echo "Error (".get_class($OBJ)."): ".$OBJ->getMessage();
@@ -62,7 +51,7 @@ function nagvisExceptionErrorHandler($errno, $errstr, $errfile, $errline ) {
     if(!(error_reporting() & $errno))
         return false;
     
-    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+    throw new NagVisErrorException($errstr, 0, $errno, $errfile, $errline);
 }
 set_error_handler("nagvisExceptionErrorHandler");
 

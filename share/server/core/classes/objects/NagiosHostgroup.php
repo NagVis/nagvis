@@ -90,11 +90,20 @@ class NagiosHostgroup extends NagVisStatefulObject {
         // calculate summary state and output
         if($this->aStateCounts !== null) {
             // Calculate summary state and output
-            $this->fetchSummaryStateFromCounts();
-            $this->fetchSummaryOutputFromCounts();
+
+            // Only create summary from childs when not set yet (e.g by backend)
+            if($this->summary_state === '')
+                $this->fetchSummaryStateFromCounts();
+
+            // Only create summary from childs when not set yet (e.g by backend)
+            if($this->summary_output === '')
+                $this->fetchSummaryOutputFromCounts();
         } else {
-            $this->fetchSummaryState();
-            $this->fetchSummaryOutput();
+            if($this->summary_state === '')
+                $this->fetchSummaryState();
+
+            if($this->summary_output === '')
+                $this->fetchSummaryOutput();
         }
 
         $this->state = $this->summary_state;

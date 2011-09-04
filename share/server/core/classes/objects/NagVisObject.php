@@ -466,24 +466,20 @@ class NagVisObject {
         return $ret;
     }
 
-    # End public methods
-    # #########################################################################
-
     /**
-     * PROTECTED getUrl()
-     *
+     * PUBLIC getUrl()
      * Returns the url for the object link
-     *
-     * @return	String	URL
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-    protected function getUrl() {
+    public function getUrl() {
         if(isset($this->url)) {
             return $this->url;
         } else {
             return '';
         }
     }
+
+    # End public methods
+    # #########################################################################
 
     /**
      * PROTECTED getUrlTarget()
