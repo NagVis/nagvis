@@ -198,6 +198,7 @@ var NagVisObject = Base.extend({
             'obj_id':      this.conf.object_id,
             'type':        this.conf.type,
             'name':        this.conf.name,
+            'alias':       this.conf.alias,
             'address':     this.conf.address,
             'html_cgi':    this.conf.htmlcgi,
             'backend_id':  this.conf.backend_id,
