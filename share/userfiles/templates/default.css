@@ -588,6 +588,11 @@ td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 .dropdown img {vertical-align:middle;margin-left:10px}
 .dropdown ul {margin:0;padding:0;list-style:none;width:205px;z-index:100;position:absolute;top:31px;display:none}
 .dropdown li {margin:0;padding:0}
+.dropdown li.lvl2 a{padding-left:10px;width:188px}
+.dropdown li.lvl3 a{padding-left:20px;width:178px}
+.dropdown li.lvl4 a{padding-left:30px;width:168px}
+.dropdown li.lvl5 a{padding-left:40px;width:158px}
+.dropdown li.lvl5 a{padding-left:50px;width:148px}
 .dropdown a, .dropdown a:active, .dropdown a:visited, .dropdown li.spacer, .dropdown dl.subdropdown dt {display:block;width:193px;background:#eaf0f2;margin:0;color:#43B3CF;text-decoration:none;border-left:1px solid #a4a4a4;border-right:1px solid #a4a4a4;padding:5px;z-index:100}
 .dropdown a.left, .dropdown a.left:active, .dropdown a.left:visited {float:left;width:152px;border-right:0}
 .dropdown a.right, .dropdown a.right:active, .dropdown a.right:visited {float:right;width:30px;border-left:1px solid #43B3CF}
@@ -610,9 +615,9 @@ td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 #sidebar li a {display:block;padding-left:20px;width:180px;color:#43B3CF;text-decoration:none;}
 #sidebar li.lvl2 a{padding-left:30px;width:170px}
 #sidebar li.lvl3 a{padding-left:40px;width:160px}
-#sidebar li.lvl3 a{padding-left:50px;width:150px}
-#sidebar li.lvl4 a{padding-left:60px;width:140px}
-#sidebar li.lvl5 a{padding-left:70px;width:130px}
+#sidebar li.lvl4 a{padding-left:50px;width:150px}
+#sidebar li.lvl5 a{padding-left:60px;width:140px}
+#sidebar li.lvl6 a{padding-left:70px;width:130px}
 #sidebar li.open a.title {background: url('../images/templates/default.folder_open.gif') no-repeat left #eaf0f2;}
 #sidebar li.closed a.title {background: url('../images/templates/default.folder_closed.gif') no-repeat left #eaf0f2;}
 #sidebar li a:hover {background-color:#d9e1e4;color:#779D2A}

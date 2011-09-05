@@ -6,26 +6,28 @@
     <li class="logo"><a href="http://www.nagvis.org/"><img src="{$pathImages}/internal/logo_96x25.png" alt="NagVis" /></a></li>
     <li onmouseover="!sidebarOpen() ? ddMenu('views',1) : void(0)" onmouseout="ddMenuHide(['views'])" class="dropdown">
         <span id="views-ddheader" onclick="toggleSidebar(true);ddMenuHide(['views'])">{$langOpen} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
+        {template headMaps maps pathBase type indent=1}
+        {foreach $maps map}
+            <li class="lvl{$indent}">
+            {if $map.configError == true}<a class="error" href="#">{$map.mapAlias}</a>
+            {else}<a href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a> {/if}
+            </li>
+            {if $map.childs}
+                {headMaps $map.childs $pathBase $type $indent+1}
+            {/if}
+        {/foreach}
+        {/template}
         <ul id="views-ddcontent">
             {if $permittedOverview}
-            <li><a href="{$pathBase}/frontend/nagvis-js/index.php">{$langOverview}</a></li>
+              <li><a href="{$pathBase}/frontend/nagvis-js/index.php">{$langOverview}</a></li>
             {/if}
             {if count($maps) > 0}
-            <li class="spacer"><hr /></li>
-            {foreach $maps map}<li>
-                {if $map.configError == true}<a class="left error" href="#">{$map.mapAlias}</a>
-                {else}<a href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a> {/if}
-            </li>{/foreach}
+              <li class="spacer"><hr /></li>
+              {headMaps $maps $pathBase "Map"}
             {/if}
             {if count($automaps) > 0}
-            <li class="spacer"><hr /></li>
-            {foreach $automaps map}
-                <li>{if isset($map) && $map.configError == True}
-                    <a class="error" href="#">{$map.mapAlias}</a>
-                {else}
-                    <a href="{$pathBase}/frontend/nagvis-js/index.php?mod=AutoMap&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a>
-                {/if}</li>
-            {/foreach}
+              <li class="spacer"><hr /></li>
+              {headMaps $automaps $pathBase "Map"}
             {/if}
             <li class="spacer underline"></li>
         </ul>
