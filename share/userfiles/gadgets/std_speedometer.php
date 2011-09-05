@@ -96,9 +96,9 @@ if(intval($max) == 0 || $max == '')
 // Calculate degrees of value, warn, critical
 //================
 
-$p = 180 / $max * $value;
-$warnp = -180 + (180 / $max * $warn);
-$critp = -180 + (180 / $max * $crit);
+$p = 180 / ( $max + $min ) * $value;
+$warnp = -180 + (180 / ( $max - $min ) * ( $warn - $min ) );
+$critp = -180 + (180 / ( $max - $min ) * ( $crit - $min ) );
 
 // If the critp is bigger than -1 it can not be rendered by the php functions.
 // Set it to -1 for having at least a small critical area drawn
@@ -176,7 +176,7 @@ imagefilledarc($img, ($centerx-$diffx), ($centery+$diffy), ($outerdia+10), ($out
 // Speedometer labels
 
 imageline($img, ($centerx-$outerdia/2-5), ($centery+1), ($centerx+$outerdia/2+5), ($centery+1), $oBlack);
-imagestring($img, 1, ($centerx-$outerdia/2-15), ($centery-6), 0, $oBlack);
+imagestring($img, 1, ($centerx-$outerdia/2-15), ($centery-6), $min , $oBlack); 
 imagestring($img, 1, ($centerx+$outerdia/2+8), ($centery-6), $max, $oBlack);
 
 $count = 1;
@@ -188,7 +188,7 @@ for($degrees=45; $degrees<180; $degrees = $degrees+45) {
 	$bediffx1=cos (deg2rad(-$degrees+360))*(($outerdia-10)/2);
 	
 	imageline($img, ($centerx-$bediffx), ($centery+$bediffy),($centerx-$bediffx1), ($centery+$bediffy1), $oBlack);
-	imagestring($img , 1 ,($centerx-$bediffx+$iOffsetX-8), ($centery+$bediffy-10) , ($max/4*$count) , $oBlack);
+	imagestring($img , 1 ,($centerx-$bediffx+$iOffsetX-8), ($centery+$bediffy-10) , (($max-$min)/4*$count+$min) , $oBlack); 
 	
 	$count = $count+1;
 	$iOffsetX = $iOffsetX + 10;
