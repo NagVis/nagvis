@@ -47,7 +47,10 @@
  ******************************************************************************/
 $sDummyPerfdata = 'config=20%;80;90;0;100';
 
-// This is needed to tell the gadgets_core to use HTML error messages
+/**
+ * Needs to be configured to tell gadgets_core.php how to handle the outputs
+ * e.g. in case of error messages. This defaults to 'img'.
+ */
 $_MODE          = 'html';
 
 // Load gadget core functions
