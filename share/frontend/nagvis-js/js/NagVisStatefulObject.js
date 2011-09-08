@@ -265,6 +265,9 @@ var NagVisStatefulObject = NagVisObject.extend({
         if(!this.bIsLocked) {
             this.parseControls();
 	    this.unlockLabel();
+
+	    if(typeof(this.toggleObjectActions) == 'function')
+                this.toggleObjectActions(this.bIsLocked);
 	}
     },
 
@@ -999,6 +1002,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 	// Clone the node to remove all attached event handlers
 	var n = o.cloneNode(true);
 	o.parentNode.replaceChild(n, o);
+	makeUndragable([o]);
 	o = null;
 	n = null;
     },

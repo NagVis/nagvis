@@ -840,6 +840,17 @@ function addEvent(obj, type, fn) {
    }
 }
 
+// Same as above but inverse. Removes registered events
+function removeEvent(obj, type, fn) {
+    if(obj.removeEventListener) {
+        obj.removeEventListener(type, fn, false);
+    } else if (obj.detachEvent) {
+        obj.detachEvent("on"+type, obj[type+fn]);
+        delete obj["e"+type+fn];
+        delete obj[type+fn];
+    }
+}
+
 /**
  * Displays a system status message
  *

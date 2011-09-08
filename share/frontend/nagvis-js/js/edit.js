@@ -80,8 +80,8 @@ var dragObjectOffset = null;
 var dragObjectPos = null;
 var dragObjectStartPos = null;
 var dragObjectChilds = {};
-var dragObjectHandler = null;
 var dragStopHandlers = {};
+var dragMoveHandlers = {};
 
 function getTarget(event, ignoreType) {
     if(typeof(ignoreType) === 'undefined')
@@ -105,6 +105,30 @@ function getButton(event) {
         return (event.which < 2) ? "LEFT" : ((event.which == 2) ? "MIDDLE" : "RIGHT");
 }
 
+function makeUndragable(objects) {
+    var len = objects.length;
+    if(len == 0)
+        return false;
+
+    for(var i = 0; i < len; i++) {
+	if(typeof(objects[i]) === 'object')
+	    var o = objects[i];
+	else
+            var o = document.getElementById(objects[i]);
+
+        if(o)  {
+            // Remove the handlers
+            delete dragStopHandlers[o.id];
+            delete dragMoveHandlers[o.id];
+
+            removeEvent(o, 'mousedown', dragStart);
+            removeEvent(o, 'mouseup',   dragStop);
+
+            o = null;
+        }
+    }
+}
+
 function makeDragable(objects, dragStopHandler, dragMoveHandler) {
     var len = objects.length;
     if(len == 0)
@@ -116,22 +140,23 @@ function makeDragable(objects, dragStopHandler, dragMoveHandler) {
 	else
             var o = document.getElementById(objects[i]);
 
-        // Register the drag stop handler
-        dragStopHandlers[o.id] = dragStopHandler;
-
         if(o) {
-            addEvent(o, "mousedown", function(e) { dragStart(e, dragMoveHandler); });
+            // Register the handlers
+            dragStopHandlers[o.id] = dragStopHandler;
+            dragMoveHandlers[o.id] = dragMoveHandler;
+
+            addEvent(o, "mousedown", dragStart);
             // The drag stop event is registered globally on the whole document to prevent
             // problems with too fast mouse movement which might lead to lag the dragging
             // object behind the mouse and make it impossible to stop dragging.
-            addEvent(document, "mouseup", function(e) { dragStop(e); });
+            addEvent(document, "mouseup", dragStop);
             o = null;
         }
     }
     len = null;
 }
 
-function dragStart(event, dragHandler) {
+function dragStart(event) {
     if(!event)
         event = window.event;
 
@@ -163,9 +188,6 @@ function dragStart(event, dragHandler) {
     dragObjectOffset   = [ posy - draggingObject.offsetTop - getHeaderHeight(),
                            posx - draggingObject.offsetLeft ];
     dragObjectStartPos = [ draggingObject.offsetTop, draggingObject.offsetLeft ];
-
-    // Assign the handler which is called during object movements
-    dragObjectHandler = dragHandler;
 
     // Save diff coords of relative objects
     var sLabelName = target.id.replace('box_', 'rel_label_');
@@ -229,8 +251,8 @@ function dragObject(event) {
     }
 
     // Call the dragging handler when one is set
-    if(dragObjectHandler)
-        dragObjectHandler(draggingObject);
+    if(dragMoveHandlers[draggingObject.id])
+        dragMoveHandlers[draggingObject.id](draggingObject);
     oParent = null;
 }
 
@@ -295,8 +317,8 @@ function dragStop(event) {
         moveRelativeObject(draggingObject.id, dragObjectStartPos[0], dragObjectStartPos[1]);
 
         // Call the dragging handler when one is set
-        if(dragObjectHandler)
-            dragObjectHandler(draggingObject);
+        if(dragMoveHandlers[draggingObject.id])
+            dragMoveHandlers[draggingObject.id](draggingObject);
 
         draggingObject = null;
         return;
@@ -324,7 +346,6 @@ function dragStop(event) {
     dragStopHandlers[draggingObject.id](draggingObject, oParent);
 
     oParent = null;
-    dragObjectHandler = null;
     draggingObject    = null;
 }
 

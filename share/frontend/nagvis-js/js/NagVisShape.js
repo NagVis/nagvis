@@ -60,8 +60,10 @@ var NagVisShape = NagVisStatelessObject.extend({
         oContainerDiv = null;
 
         // Enable the controls when the object is not locked
-        if(!this.bIsLocked)
+        if(!this.bIsLocked) {
             this.parseControls();
+            this.toggleObjectActions(this.bIsLocked);
+        }
     },
 
     /**
@@ -129,5 +131,30 @@ var NagVisShape = NagVisStatelessObject.extend({
 
         // Simply make it dragable. Maybe will be extended in the future...
         makeDragable([this.conf.object_id+'-icondiv'], this.saveObject, this.moveObject);
+    },
+
+    /**
+     * PUBLIC toggleObjectActions()
+     *
+     * This enables/disables the icon link temporary. e.g. in unlocked
+     * mode the hover menu shal be suppressed.
+     *
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    toggleObjectActions: function(enable) {
+	var o = document.getElementById(this.conf.object_id+'-icon');
+	if(o) {
+	    if(enable) {
+                // Link (Left mouse action)
+                if(o.parentNode.tagName == 'A')
+                    o.parentNode.onclick = null;
+	    } else if(!enable) {
+                // Link (Left mouse action)
+                if(o.parentNode.tagName == 'A')
+                    o.parentNode.onclick = function() {return false};
+	    }
+            o = null;
+            o = null;
+        }
     }
 });

@@ -63,8 +63,10 @@ var NagVisLine = NagVisStatelessObject.extend({
         this.drawLine();
 
         // Enable the controls when the object is not locked
-        if(!this.bIsLocked)
+        if(!this.bIsLocked) {
             this.parseControls();
+            this.toggleObjectActions(this.bIsLocked);
+        }
     },
 
     /**

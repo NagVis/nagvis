@@ -354,9 +354,11 @@ var NagVisObject = Base.extend({
                 oObj.onmouseout = function() { hoverHide(); };
             }
 
-	    // Disable the hover menu by object lock when unlocked
+            // Is already done during map rendering before. But the hover menu
+            // is rendered after the map rendering and can not be disabled during
+            // map rendering. So simply repeat that action here
 	    if(typeof(this.toggleObjectActions) == 'function')
-		this.toggleObjectActions(this.bIsLocked);
+                this.toggleObjectActions(this.bIsLocked);
         }
 
         justCreated = null;
@@ -889,8 +891,12 @@ var NagVisObject = Base.extend({
         this.objControls = [];
         oControls = null;
 
-        if(this.conf.type === 'textbox')
+        if(this.conf.type === 'textbox') {
             this.removeBoxControls();
+            makeUndragable([this.conf.object_id+'-label']);
+        } else {
+            makeUndragable([this.conf.object_id+'-icondiv']);
+        }
     },
 
     parseControlDrag: function (num, objX, objY, offX, offY, size) {
