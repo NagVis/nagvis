@@ -226,6 +226,7 @@ class WuiViewMapAddModify {
 
                         case 'map_image':
                             $options = $this->CORE->getAvailableBackgroundImages();
+                            array_unshift($options, 'none');
                             $selected = $this->MAPCFG->getValue($this->aOpts['id'], $propname, TRUE);
                         break;
 

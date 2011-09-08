@@ -38,6 +38,8 @@ Frontend
     after changed main configuration file in FF4
   * Bugfix: Fixed hanging controls/labels when dragging objects out of screen
   * Bugfix: It is now possible to unset backend attributes using the "Edit backend" dialog
+  * Bugfix: It is now possible to choose none as map_image in map options to
+    disable the background image
 
 Automap
   * Bugfix: Made the problem automap work again
