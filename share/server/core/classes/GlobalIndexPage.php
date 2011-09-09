@@ -182,6 +182,7 @@ class GlobalIndexPage {
             }
         }
 
+        usort($aMaps, Array('GlobalCore', 'cmpAlias'));
         return json_encode($aMaps);
     }
 

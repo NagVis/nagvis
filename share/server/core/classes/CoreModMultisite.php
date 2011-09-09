@@ -144,13 +144,8 @@ class CoreModMultisite extends CoreModule {
             $aMaps[] = $aObj[0]->getObjectInformation();
         }
 
-        usort($aMaps, Array('CoreModMultisite', 'cmpAlias'));
+        usort($aMaps, Array('GlobalCore', 'cmpAlias'));
         return $aMaps;
-    }
-
-    // Sort array of map arrays by alias
-    static function cmpAlias($a, $b) {
-        return strnatcmp($a['alias'], $b['alias']);
     }
 }
 ?>

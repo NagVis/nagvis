@@ -597,5 +597,10 @@ class GlobalCore {
 
         return json_encode($lang);
     }
+
+    // Sort array of map arrays by alias
+    static function cmpAlias($a, $b) {
+        return strnatcmp($a['alias'], $b['alias']);
+    }
 }
 ?>
