@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+ <head>
+  <title>MKLivestatus NagVis backend</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+ </head>
+ <body>
+        <h1>MKLivestatus backend</h1>
+        <p>MKLivestatus is a very simple and smart Nagios eventbroker module. Livestatus
+             is concepted and tuned to reduce disk, memory and cpu loads caused by live-data
+             processing on the Nagios system. Just as NDO, Livestatus makes use of the Nagios
+             Event Broker API and loads a binary module into the Nagios process. But other
+             than the NDO, Livestatus does not actively write out data e.g. to the disk.
+             Instead, it opens a socket for external applications to connect to and fetch
+             the current status information from Nagios. For details about the new data
+             access provider take a look at the <a href="http://www.mathias-kettner.de/checkmk_livestatus.html#H1:How to access Nagios status data" target="_blank">official documentation</a>.</p>
+        <p>Since the first NagVis 1.5 release the mklivestatus backend is included on
+             delivery. It performs much better than all other existing backends and
+             comes with less overhead than other backends. No additional database is
+             needed to make this backend work.</p>
+        
+        <table style="width:100%">
+        <tr>
+            <th width="200">Value</th><th width="150">Default</th><th>Description</th>
+        </tr>
+        <tr>
+        <td>socket</td><td>unix:/usr/local/nagios/var/rw/live</td><td><p>The socket to connect to can be a local unix socket and a tcp socket. You have to define the type at the beginning of the string. Set &quot;unix:&quot; for unix sockets and &quot;tcp:&quot; for tcp sockets.</p> <p>In case of the unix socket you need to put the path of the livestatus unix socket to connect to.</p> <p>When using a tcp socket you have to enter a hostaddress and a tcp port using the following scheme: &lthost>:&lt;port>. The host address can be an IP-Address or a FQDN.</p></td>
+        </tr>
+        </table>
+        <p>There are also some general parameters. You can read about them in <a href="nagvis_config_format_description.html#backend">main configuration format description</a>.</p>
+    </body>
+</html>

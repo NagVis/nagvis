@@ -41,6 +41,14 @@ Frontend
   * Bugfix: It is now possible to unset backend attributes using the "Edit backend" dialog
   * Bugfix: It is now possible to choose none as map_image in map options to
     disable the background image
+  * Bugfix: std_speedometer.php fixed min/max handling (Thanks to foxkilo)
+  * Readded the "edit" action to the maps module. In this mode all object are
+    automatically unlocked and changes to the lock state are not persisted
+  * Also disabling the object left click actions in unlocked mode
+  * Icon/Gadget/Shape/Textbox dragging is done by dragging the real icons
+  again, like it was in WUI before. The drag controls for these objects has been removed.
+  * Added [alias] macro to context menus
+  * Header menu handles map parent/child relations correctly
 
 Automap
   * Bugfix: Made the problem automap work again

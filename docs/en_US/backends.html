@@ -15,96 +15,28 @@
              single backends and the other layers.</p>
         
         <h2>Default backend</h2>
-        <p>At the moment there are four backends delivered with the NagVis core
-             packages: the mklivestatus, ndomy, ndo2fs, merlinmy backend. All backend
-             configuration parameters are described in detail below.</p>
+        <p>At the moment there are a few backends delivered with the NagVis core
+             packages: the most importants are the mklivestatus and ndomy backends. All backend
+             configuration parameters are described in detail on their own pages.</p>
         
         <p>The ndomy backend has been the default backend from NagVis 1.0 to NagVis 1.5.
              It fetches Nagios information from the NDO MySQL database. Since NagVis 1.5
              the default backend has been switched to MKLivestatus backend.</p>
         
         <h2>Backend types</h2>
-        
-        <h3>mklivestatus backend</h3>
-        <p>MKLivestatus is a very simple and smart Nagios eventbroker module. Livestatus
-             is concepted and tuned to reduce disk, memory and cpu loads caused by live-data
-             processing on the Nagios system. Just as NDO, Livestatus makes use of the Nagios
-             Event Broker API and loads a binary module into the Nagios process. But other
-             than the NDO, Livestatus does not actively write out data e.g. to the disk.
-             Instead, it opens a socket for external applications to connect to and fetch
-             the current status information from Nagios. For details about the new data
-             access provider take a look at the <a href="http://www.mathias-kettner.de/checkmk_livestatus.html#H1:How to access Nagios status data" target="_blank">official documentation</a>.</p>
-        <p>Since the first NagVis 1.5 release the mklivestatus backend is included on
-             delivery. It performs much better than all other existing backends and
-             comes with less overhead than other backends. No additional database is
-             needed to make this backend work.</p>
-        
-        <table style="width:100%">
-        <tr>
-            <th width="200">Value</th><th width="150">Default</th><th>Description</th>
-        </tr>
-        <tr>
-        <td>socket</td><td>unix:/usr/local/nagios/var/rw/live</td><td><p>The socket to connect to can be a local unix socket and a tcp socket. You have to define the type at the beginning of the string. Set &quot;unix:&quot; for unix sockets and &quot;tcp:&quot; for tcp sockets.</p> <p>In case of the unix socket you need to put the path of the livestatus unix socket to connect to.</p> <p>When using a tcp socket you have to enter a hostaddress and a tcp port using the following scheme: &lthost>:&lt;port>. The host address can be an IP-Address or a FQDN.</p></td>
-        </tr>
-        </table>
-        <p>There are also some general parameters. You can read about them in <a href="nagvis_config_format_description.html#backend">main configuration format description</a>.</p>
-        
-        <h3>ndo2db MySQL backend (ndomy)</h3>
-        <p>The ndo2db MySQL backend, in short ndomy backend, is used to fetch Nagios information like status and configuration data via a MySQL database. The Nagios addon called ndoutils stores all information which are present in a running Nagios in an MySQL database. This database is being queried by the NagVis ndomy backend.</p>
-        <p>You can use the following parameters to configure a ndomy backend:</p>
-        
-        <table style="width:100%">
-        <tr>
-        <th width="200">Value</th><th width="150">Default</th><th>Description</th>
-        </tr>
-        <tr>
-        <td>dbhost</td><td>localhost</td><td>Hostname of the NDO Database</td>
-        </tr>
-        <tr>
-        <td>dbport</td><td>3306</td><td>Port of the NDO Database</td>
-        </tr>
-        <tr>
-        <td>dbname</td><td>db_nagios</td><td>Name of the NDO Database</td>
-        </tr>
-        <tr>
-        <td>dbuser</td><td>root</td><td>Username for Database Access (only needs read permissions)</td>
-        </tr>
-        <tr>
-        <td>dbpass</td><td>root</td><td>Password for Database Access (only needs read permissions)</td>
-        </tr>
-        <tr>
-        <td>dbprefix</td><td> nagios_ </td><td>Prefix of the tables in NDO Database (like defined in ndo2db.cfg)</td>
-        </tr>
-        <tr>
-        <td>dbinstancename</td><td> default </td><td>Name of the Nagios instance in NDO Database (like defined in ndomod.cfg)</td>
-        </tr>
-        <tr>
-        <td>maxtimewithoutupdate</td><td>180</td><td>Maximum delay in seconds after last update in NDO. NagVis will report Nagios is not running if the delay is reached</td>
-        </tr>
-        </table>
-        <p>There are also some general parameters. You can read about them in <a href="nagvis_config_format_description.html#backend">main configuration format description</a>.</p>
-        
-        <h3>ndo2fs backend</h3>
-        <table style="width:100%">
-        <tr>
-        <th width="200">Value</th><th width="150">Default</th><th>Description</th>
-        </tr>
-        <tr>
-        <td>path</td><td>/usr/local/ndo2fs/var</td><td>Path to the ndo2fs var directory. The files in this directory should be ndo2fs.pid, VOLATILE and PERSISTENT.</td>
-        </tr>
-        <tr>
-        <td>instancename</td><td>default</td><td>Name of the backend instance.</td>
-        </tr>
-        <tr>
-        <td>maxtimewithoutupdate</td><td>180</td><td>Maximum delay in seconds after last update in NDO. NagVis will report Nagios is not running if the delay is reached</td>
-        </tr>
-        </table>
-        <p>There are also some general parameters. You can read about them in <a href="nagvis_config_format_description.html#backend">main configuration format description</a>.</p>
-        
-        <h3>Other backend types</h3>
-        <p>FIXME: Hint to other backends (Create own, 3rd party backends, ...).</p>
+
+        <ul>
+            <li><a href=backend_mklivestatus.html>MKLivestatus</a></li>
+            <li><a href=backend_ndomy.html>NDOMy</a></li>
+            <li>MerlinMy</li>
+        </ul>
         
         <h2>Configuring backends</h2>
-        <p>The backends are defined in the main configuration file. See <a href="nagvis_config_format_description.html#backend">main configuration format description</a> on how to define backends.</p>
+        <p>The backends are defined in the main configuration file. See 
+           <a href="nagvis_config_format_description.html#backend">main configuration format description</a> 
+           on how to define backends.</p>
+
+        <h3>Other backend types</h3>
+        <p>FIXME: Hint to other backends (Create own, 3rd party backends, ...).</p>
     </body>
 </html>

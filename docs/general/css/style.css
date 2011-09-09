@@ -62,3 +62,7 @@ table th, table td {
 table th {
 	border: 1px solid gray;
 }
+
+dl, dd {
+    margin-left: 20px;
+}
