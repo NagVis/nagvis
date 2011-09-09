@@ -17,6 +17,8 @@ Core
   * Added new icon *_unreachable icon to represent the UNREACHABLE host state
   * Backends can now override the NagVis summary_output/summary_state algorithms
     to provide their own custom information
+  * Added NagiosBP backend to connect directly to NagiosBP using the JSON API
+    Thanks to Bacher Systems (bacher.at) for providing this backend.
 
 Frontend
   * Readded the "edit" action to the maps module. In this mode all object are

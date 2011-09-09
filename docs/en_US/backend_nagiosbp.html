@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+ <head>
+  <title>NagVis NagiosBP Backend</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+ </head>
+ <body>
+    <h1>NagiosBP Backend</h1>
+    <p>The NagiosBP backend is used to connect NagVis directly with the
+       <a href="http://bp-addon.monitoringexchange.org/">Nagios Business Process addons</a>
+       which are used to build business process aggregations out of Nagios status information.</p>
+
+    <h2>The NagiosBP API</h2>
+    <p>NagiosBP offers a webservice which is called by HTTP GET requests and
+       responds with JSON objects. The documentation for this JSON API can be
+       found <a href="http://bp-addon.monitoringexchange.org/doc/API-DOC">here</a>.<p>
+
+    <h2>Representation in NagVis</h2>
+    <p>This backend is a special one compared to the other backends which handle Nagios status
+       information 1:1. This backend mainly handles business processes but also Nagios service
+       stat information. As result of this fact the backend needs to perform some sort of
+       translation to create nagios like objects from the business processes.</p>
+    <p>During design of this backend it turned out that the business processes should be mapped
+       to servicegroup objects. Out of this decision we have two results:
+       <ul>
+           <li>Each business process results in one servicegroup</li>
+           <li>The backend only provides servicegroup objects (The other objects need to be 
+               pulled directly from Nagios using the other backends)</li>
+       </ul>
+    </p>
+    <p>Another special property of the NagiosBP backend is the fact that NagVis
+       must not calculate the summary (aggregated) states using it's own algorithms.
+       Instead of this the NagiosBP backend sets the states/outputs of the NagiosBP
+       servicegroups using the state information provided by NagiosBP.</p>
+
+    <p>The servicegroup links (left click on icon) are automatically set by the NagiosBP
+       backend to point to the NagiosBP GUI, except when the <code>url</code> parameter
+       of the servicegroup is configured to point to another map 
+       (e.g. <code>[htmlbase]/index.php?mod=Map&amp;act=view&amp;show=bp-webshop-details</code>).</p>
+
+    <h2>Configuration</h2>
+
+    <p>You can use the following parameters to configure the NagiosBP backend:</p>
+    
+    <table style="width:100%">
+    <tr>
+    <th width="200">Value</th><th width="150">Default</th><th>Description</th>
+    </tr>
+    <tr>
+        <td><strong>base_url</strong></td>
+        <td>http://localhost/nagios/cgi-bin/nagios-bp.cgi</td>
+        <td>The full URL to the <code>nagios-bp.cgi</code> script which is part of NagiosBP.
+            It serves the AJAX API which the backend connects to. This URL must be reachable
+            from the host NagVis is running on.</td>
+    </tr>
+    <tr>
+        <td>auth_user</td>
+        <td></td>
+        <td>Optional user to use for using as basic auth user to access the <code>base_url</code>.</td>
+    </tr>
+    <tr>
+        <td>auth_pass</td>
+        <td></td>
+        <td>Optional password to use for using as basic auth password to access the <code>base_url</code>.</td>
+    </tr>
+    </table>
+    <p>There are also some general backend parameters. You can read about them in 
+       <a href="nagvis_config_format_description.html#backend">main configuration format description</a>.</p>
+</body>
+</html>
