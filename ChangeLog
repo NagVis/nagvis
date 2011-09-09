@@ -24,6 +24,7 @@ Frontend
   * Also disabling the object left click actions in unlocked mode
   * Icon/Gadget/Shape/Textbox dragging is done by dragging the real icons
   again, like it was in WUI before. The drag controls for these objects has been removed.
+  * Sorting maps in multisite snapin by aliases
   * Bugfix: Fixed several umlauts in edit mode warning messages
   * Bugfix: Fixed 100% sidebar height
   * Bugfix: Fixed initial positioning of relative positioned gadgets
