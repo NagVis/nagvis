@@ -34,7 +34,7 @@ class GlobalMapCfg {
     protected $name;
     protected $type = 'map';
     protected $mapConfig = Array();
-  protected $typeDefaults = Array();
+    protected $typeDefaults = Array();
 
     private $configFile = '';
     private $configFileContents = null;
@@ -47,14 +47,10 @@ class GlobalMapCfg {
 
     /**
      * Class Constructor
-     *
-     * @param	GlobalCore	$CORE
-     * @param	String			$name		Name of the map
-     * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function __construct($CORE, $name='') {
+    public function __construct($CORE, $name = '') {
         $this->CORE = $CORE;
-        $this->name	= $name;
+        $this->name = $name;
 
         if(self::$validConfig == null) {
             self::$validConfig = Array(
