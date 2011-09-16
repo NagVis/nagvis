@@ -7,8 +7,6 @@ Probleme:
   - In WUI Fehler anzeigen
   - Beim Config Parsen Fehlermeldung erzeugen
 - Sidebar Folder auf/zu klappbar
-- Umlaute in Sidebar (Map Alias) führen zu Fehlern
-- Dragable bleibt nach Lock
 
 -------------------------------------------------------------------------------
 
@@ -60,6 +58,27 @@ Relative Koordinaten:
    - Farbe (?)
  - Offset zum Ziel
 
+*** Map Config Redesign ***
+
+Pro Objekttyp können beliebige Variablen zugewiesen werden. Diese werden für den
+Objekttyp registriert und sind unabhängig von den Definitionen der Variablen selbst.
+Bei der Zuweisung handelt es sich um eine einfache Auflistung von Variablen-Namen. Wobei
+es optional möglich ist für die Variable des Objekttyps einen anderen Namen zuzuweisen.
+
+Die Variablen selbst werden an zentraler Stelle registriert. Jede Option wird als ein
+Eintrag in einem Array registriert. Der Schlüssel ist der Name der Variable. Ein Array
+stellt diese Variable dar. Folgende mögliche Schlüssel sind zu befüllen:
+
+  must       - Muss in jedem Fall gesetzt sein (egal ob vererbt oder nicht).
+  match      - Regex zum validieren des Wertes
+  default    - Vererbter Wert / Default Wert
+
+Folgende optionale Attribute können gesetzt werden:
+
+  deprecated    - Wenn veraltet und nicht berücksichtigt.
+  field_type    - Wenn abweichend von 'text'.
+  depends_on    - Name der "parent" Variable zum Anzeigen im Add/Modify Dialog
+  depends_value - Wert der "parent" Variable
 
 *** Add/Modify Redesign ***
 
@@ -67,7 +86,7 @@ Aufrufe:
 1. Neues Objekt - x/y Koordinaten als Parameter
   - Parameter: type, x, y
 2. Objekt klonen - Aktuell konfigurierte Parameter + Objekt-ID generieren
-  - Parameter: type, x, y, ...
+  - Parameter: object_id
 3. Objekt bearbeiten - Aktuell konfigurierte Parameter
   - object_id
 
@@ -82,18 +101,24 @@ Felder:
     HTML-Code zur Eingabe des Wertes. Nicht die ganze Tabellen-Zeile, nur
     die Formular-Felder.
   - validate()
-    Funktionen zur validierung eines gültigen Wertes.
+    Funktionen zur Validierung eines gültigen Wertes. Gibt "true" zurück, wenn
+    der Wert gültig ist. Schmeißt eine FieldInputError Exception, wenn nicht gültig.
   - dependsOn()
     Gibt den Schlüssel einer anderen Option und den Wert zurück, von dem diese
     Option abhängt. Nur wenn der Wert stimmt, wird das Formularfeld angezeigt.
 
 Feld-Eigenschaften:
 - Default Werte grau zeigen, solange bis ein anderer Wert gewählt wird
-  - Woher kommt der Wert?
-- Wenn Wert auf Default zurückgesetzt wird, wieder ausgrauen
+  Außerdem anzeigen, woher der Wert geerbt wird. Es sind folgende Ebenen denkbar:
+  1. Template (Name zeigen)
+  2. Global Bereich der Map
+  3. Main Configuration
+  4. Hart codiert
+- Wenn Wert auf den vererbten Wert gesetzt wird, wieder ausgrauen
 - Zwischen Dropdown und Textfeld umschalten können
 - Button zum Zurücksetzen eines Wertes auf Default einbauen
 - Abhängige Felder je nach Wert eines oder mehrerer Felder zeigen/verstecken
+- Leere Variablen müssen auch gesetzt werden können
 
 Fehlerbehandlung:
 - Direkt im Dialog: Feldbezogene Fehler direkt unter den Feldern anzeigen
