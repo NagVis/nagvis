@@ -58,28 +58,6 @@ Relative Koordinaten:
    - Farbe (?)
  - Offset zum Ziel
 
-*** Map Config Redesign ***
-
-Pro Objekttyp können beliebige Variablen zugewiesen werden. Diese werden für den
-Objekttyp registriert und sind unabhängig von den Definitionen der Variablen selbst.
-Bei der Zuweisung handelt es sich um eine einfache Auflistung von Variablen-Namen. Wobei
-es optional möglich ist für die Variable des Objekttyps einen anderen Namen zuzuweisen.
-
-Die Variablen selbst werden an zentraler Stelle registriert. Jede Option wird als ein
-Eintrag in einem Array registriert. Der Schlüssel ist der Name der Variable. Ein Array
-stellt diese Variable dar. Folgende mögliche Schlüssel sind zu befüllen:
-
-  must       - Muss in jedem Fall gesetzt sein (egal ob vererbt oder nicht).
-  match      - Regex zum validieren des Wertes
-  default    - Vererbter Wert / Default Wert
-
-Folgende optionale Attribute können gesetzt werden:
-
-  deprecated    - Wenn veraltet und nicht berücksichtigt.
-  field_type    - Wenn abweichend von 'text'.
-  depends_on    - Name der "parent" Variable zum Anzeigen im Add/Modify Dialog
-  depends_value - Wert der "parent" Variable
-
 *** Add/Modify Redesign ***
 
 Aufrufe:
@@ -162,7 +140,8 @@ Exception/Error log bauen:
 # ERLEDIGT
 ===============================================================================
 
-Child-Objekte Filtern:
+*** Child-Objekte Filtern ***
+
   - Zwei Möglichkeiten
     a) Für tatsächliche Verarbeitung (Status Ermittlung + Child Anzeige)
     b) Nur für Status Ermittlung
@@ -189,3 +168,40 @@ Child-Objekte Filtern:
   - Verworfen/Zurückgestellt:
     - Man kann mehrere Pattern angeben. Sobald ein Pattern zutrifft, wird übersprungen
     - Mehrere Patterns werden durch ; Zeichen getrennt, z.B. exclude_childs="/^Uptime$/;/^PING$/"
+
+
+*** Map Config Redesign ***
+
+Pro Objekttyp können beliebige Variablen zugewiesen werden. Diese werden für den
+Objekttyp registriert und sind unabhängig von den Definitionen der Variablen selbst.
+Bei der Zuweisung handelt es sich um eine einfache Auflistung von Variablen-Namen.
+
+    Definition von Variablen
+
+Die Variablen selbst werden an zentraler Stelle registriert. Jede Option wird als ein
+Eintrag in einem Array registriert. Der Schlüssel ist der Name der Variable. Ein Array
+stellt diese Variable dar. Folgende mögliche Schlüssel sind zu befüllen:
+
+  must       - Muss in jedem Fall gesetzt sein (egal ob vererbt oder nicht).
+  match      - Regex zum validieren des Wertes
+  default    - Vererbter Wert / Default Wert
+
+Folgende optionale Attribute können gesetzt werden:
+
+  deprecated    - Wenn veraltet und nicht berücksichtigt.
+  field_type    - Wenn abweichend von 'text'.
+  depends_on    - Name der "parent" Variable zum Anzeigen im Add/Modify Dialog
+  depends_value - Wert der "parent" Variable
+  list          - Funktionsname zum Erstellen eines Arrays, der für die Dropdown-Felder
+                  die Liste der möglichen Werte zurückliefert.
+
+Es wird das Array $mapConfigVars gefüllt. Die Definitionen werden in Dateien in
+share/server/core/mapcfg/*.php abgelegt. Darin können nicht nur Definitionen erstellt
+werden, sondern auch Funktionen zum Füllen eventueller Listen registriert werden.
+
+    Zuweisung von Variablen
+
+Die Zuweisung von Variablen zu den Objekttypen geschieht über das $mapConfigVarMap Array.
+Das Array ernhält die Objekttypen als Schlüssel und darunter jeweils ein Array mit den
+möglichen Variablen als Schlüssel und "null" oder den Typ spezifischen Namen als Wert.
+

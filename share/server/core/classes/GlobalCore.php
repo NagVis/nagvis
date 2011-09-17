@@ -370,7 +370,7 @@ class GlobalCore {
      * @return	Array   Sorted list of file names/parts in this directory
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-    private function listDirectory($dir, $allowRegex = null, $ignoreList = null, $allowPartRegex = null, $returnPart = null, $setKey = null, $printErr = true) {
+    public function listDirectory($dir, $allowRegex = null, $ignoreList = null, $allowPartRegex = null, $returnPart = null, $setKey = null, $printErr = true) {
         $files = Array();
 
         if($returnPart === null)

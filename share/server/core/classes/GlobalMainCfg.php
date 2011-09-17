@@ -443,6 +443,11 @@ class GlobalMainCfg {
                     'default' => '',
                     'field_type' => 'hidden',
                     'match' => MATCH_STRING_PATH),
+                'server' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
                 'doc' => Array('must' => 0,
                     'editable' => 0,
                     'default' => '',
@@ -1112,6 +1117,7 @@ class GlobalMainCfg {
 
         $this->validConfig['paths']['language']['default']           = $base.HTDOCS_DIR.'/frontend/nagvis-js/locale';
         $this->validConfig['paths']['class']['default']              = $base.HTDOCS_DIR.'/server/core/classes/';
+        $this->validConfig['paths']['server']['default']              = $base.HTDOCS_DIR.'/server/core';
         $this->validConfig['paths']['doc']['default']                = $base.HTDOCS_DIR.'/docs';
 
         $this->validConfig['paths']['htmlcss']['default']            = $htmlBase.'/frontend/nagvis-js/css/';
