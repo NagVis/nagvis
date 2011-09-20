@@ -118,6 +118,27 @@ function submitFrontendForm(sUrl, sFormId, bReloadOnSuccess) {
 }
 
 /**
+ * submitFrontendForm2()
+ *
+ * Submits a form in the frontend using ajax without reloading the page.
+ * And simply reprints the response in the currently open window
+ *
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function submitFrontendForm2(sUrl, sFormId) {
+    var oResult = postSyncRequest(sUrl, getFormParams(sFormId));
+    if(oResult && oResult.type) {
+        // In case of an error show message and close the window
+        frontendMessage(oResult);
+        if(typeof popupWindowClose == 'function')
+            popupWindowClose();
+    } else {
+        popupWindowPutContent(oResult);
+    }
+    oResult = null;
+}
+
+/**
  * showFrontendDialog()
  *
  * Show a dialog to the user

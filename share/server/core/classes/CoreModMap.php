@@ -57,8 +57,6 @@ class CoreModMap extends CoreModule {
             'doTmplAdd'         => 'edit',
             'doTmplModify'      => 'edit',
             'doTmplDelete'      => 'edit',
-
-            'getObjects'        => 'edit',
         );
 
         // Register valid objects
@@ -158,24 +156,6 @@ class CoreModMap extends CoreModule {
                                                                 l('The map could not be deleted.'),
                                                               1, $url);
                 break;
-                case 'createObject':
-                    $this->handleResponse('handleResponseCreateObject', 'doCreateObject',
-                                            l('The object has been added.'),
-                                                                l('The object could not be added.'),
-                                          1);
-                break;
-                case 'modifyObject':
-                    $refresh = null;
-                    $success = null;
-                    if(isset($_GET['ref']) && $_GET['ref'] == 1) {
-                        $refresh = 1;
-                        $success = l('The object has been modified.');
-                    }
-                    $sReturn = $this->handleResponse('handleResponseModifyObject', 'doModifyObject',
-                                            $success,
-                                                                l('The object could not be modified.'),
-                                                                $refresh);
-                break;
                 case 'deleteObject':
                     $aReturn = $this->handleResponseDeleteObject();
 
@@ -190,39 +170,26 @@ class CoreModMap extends CoreModule {
                     }
                 break;
                 case 'addModify':
-                    $aOpts = Array('show'     => MATCH_MAP_NAME,
-                                   'do'       => MATCH_WUI_ADDMODIFY_DO,
-                                   'type'     => MATCH_OBJECTTYPE,
-                                   'id'       => MATCH_OBJECTID_EMPTY,
-                                   'viewType' => MATCH_VIEW_TYPE_SERVICE_EMPTY,
-                                   'x'        => MATCH_COORDS_MULTI_EMPTY,
-                                   'y'        => MATCH_COORDS_MULTI_EMPTY,
-                                   'clone'    => MATCH_OBJECTID_EMPTY);
+                    $aOpts = Array('show'      => MATCH_MAP_NAME,
+                                   'clone_id'  => MATCH_OBJECTID_EMPTY,
+                                   'submit'    => MATCH_STRING_EMPTY);
                     $aVals = $this->getCustomOptions($aOpts);
+                    $attrs = $this->filterMapAttrs($this->getAllOptions($aOpts));
 
-                    // Initialize unset optional attributes
-                    if(!isset($aVals['x'])) {
-                        $aVals['x'] = '';
-                    }
-                    if(!isset($aVals['y'])) {
-                        $aVals['y'] = '';
-                    }
+                    $VIEW = new WuiViewMapAddModify($aVals['show']);
+                    $VIEW->setAttrs($attrs);
 
-                    if(!isset($aVals['id'])) {
-                        $aVals['id'] = '';
-                    }
-
-                    if(!isset($aVals['viewType'])) {
-                        $aVals['viewType'] = '';
+                    $err     = null;
+                    $success = null;
+                    if(isset($aVals['submit']) && $aVals['submit'] != '') {
+                        try {
+                            $success = $this->handleAddModify($aVals['show'], $attrs);
+                        } catch(FieldInputError $e) {
+                            $err = $e;
+                        }
                     }
 
-                    if(!isset($aVals['clone'])) {
-                        $aVals['clone'] = '';
-                    }
-
-                    $VIEW = new WuiViewMapAddModify($this->AUTHENTICATION, $this->AUTHORISATION);
-                    $VIEW->setOpts($aVals);
-                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
+                    $sReturn = json_encode(Array('code' => $VIEW->parse($err, $success)));
                 break;
                 case 'manageTmpl':
                     $aOpts = Array('show' => MATCH_MAP_NAME);
@@ -275,13 +242,95 @@ class CoreModMap extends CoreModule {
                     if($this->handleResponse('handleResponseDoImportMap', 'doImportMap'))
                         header('Location:'.$_SERVER['HTTP_REFERER']);
                 break;
-                case 'getObjects':
-                    $sReturn = $this->handleResponse('handleResponseGetObjects', 'getObjects');
-                break;
             }
         }
 
         return $sReturn;
+    }
+
+    // Filter the attributes using the helper fields
+    // Each attribute can have the toggle_* field set. If present
+    // use it's value to filter out the attributes
+    private function filterMapAttrs($attrs) {
+        $ret = Array();
+        foreach($attrs AS $attr => $val) {
+            if(substr($attr, 0, 7) == 'toggle_' || $attr == '_t' || $attr == 'lang')
+                continue;
+            if(isset($attrs['toggle_'.$attr]) && $attrs['toggle_'.$attr] !== 'on')
+                continue;
+            $ret[$attr] = $val;
+        }
+        return $ret;
+    }
+
+    // Validate and process addModify form submissions
+    protected function handleAddModify($map, $attrs) {
+        $this->verifyMapExists($map);
+        $MAPCFG = new GlobalMapCfg($this->CORE, $map);
+
+        try {
+            $MAPCFG->readMapConfig();
+        } catch(MapCfgInvalid $e) {}
+
+        // Modification/Creation?
+        // 'type' is set when creating new objects. Otherwise only the object_id is known
+        if(isset($attrs['type']) && $attrs['type'] != '') {
+            // Create the new object
+
+            $type  = $attrs['type'];
+
+            $this->validateAttributes($MAPCFG->getValidObjectType($type), $attrs);
+
+            // append a new object definition to the map configuration
+            $MAPCFG->addElement($type, $attrs, true);
+
+            $successMsg = l('The [TYPE] has been added. Reloading in 2 seconds.',
+                                                            Array('TYPE' => $type));
+        } else {
+            // Modify an existing object
+
+            $type  = $MAPCFG->getValue($attrs['object_id'], 'type');
+            $objId = $attrs['object_id'];
+
+            if(!$MAPCFG->objExists($objId))
+                throw new NagVisException(l('The object does not exist.'));
+
+            $this->validateAttributes($MAPCFG->getValidObjectType($type), $attrs);
+
+            // Update the map configuration   
+            $MAPCFG->updateElement($objId, $attrs, true);
+
+            $successMsg = l('The [TYPE] has been modified. Reloading in 2 seconds.',
+                                                               Array('TYPE' => $type));
+        }
+
+        // delete map lock
+        if(!$MAPCFG->deleteMapLock())
+            throw new NagVisException(l('mapLockNotDeleted'));
+
+        return $successMsg;
+    }
+
+    private function validateAttributes($attrDefs, $attrs) {
+        // Are some must values missing?
+        foreach($attrDefs as $propname => $prop) {
+            if(isset($prop['must']) && $prop['must'] == '1'
+               && (!isset($attrs[$propname]) || $attrs[$propname] == ''))
+                throw new FieldInputError($propname, l('The attribute needs to be set.'));
+        }
+
+        // FIXME: Are all given attrs valid ones?
+        foreach($attrs AS $key => $val) {
+            if(!isset($attrDefs[$key]))
+                throw new FieldInputError($key, l('The attribute is unknown.'));
+            if(isset($attrDefs[$key]['deprecated']) && $attrDefs[$key]['deprecated'] === true)
+                throw new FieldInputError($key, l('The attribute is deprecated.'));
+
+            // The object has a match regex, it can be checked
+            if(isset($attrDefs[$key]['match']) && !preg_match($attrDefs[$key]['match'], $val))
+                throw new FieldInputError($key, l('The attribute has the wrong format (Regex: [MATCH]).',
+                    Array('MATCH' => $attrDefs[$key]['match'])));
+        }
     }
 
     protected function handleResponseDoImportMap() {
@@ -312,54 +361,6 @@ class CoreModMap extends CoreModule {
     protected function doExportMap($a) {
         $MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
         return $MAPCFG->exportMap();
-    }
-
-    protected function handleResponseGetObjects() {
-        $FHANDLER = new CoreRequestHandler($_GET);
-
-        $this->verifyValuesSet($FHANDLER, Array('backendid', 'type'));
-        if($FHANDLER->get('type') == 'service')
-            $this->verifyValuesSet($FHANDLER, Array('name1'));
-
-        return Array('backendid' => $FHANDLER->get('backendid'),
-                     'type'      => $FHANDLER->get('type'),
-                     'name1'     => $FHANDLER->get('name1'));
-    }
-
-    protected function getObjects($a) {
-        // Initialize the backend
-        $BACKEND = new CoreBackendMgmt($this->CORE);
-
-        try {
-            $BACKEND->checkBackendExists($a['backendid'], true);
-            $BACKEND->checkBackendFeature($a['backendid'], 'getObjects', true);
-        } catch(BackendConnectionProblem $e) {
-            throw new NagVisException(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
-                                      Array('BACKENDID' => $a['backendid'], 'MSG' => $e->getMessage())));
-        }
-
-        $name1 = ($a['type'] === 'service' ? $a['name1'] : '');
-        $type  = $a['type'];
-
-        // Initialize an empty list
-        if($a['type'] !== 'service')
-            $aRet = Array(Array('name1' => ''));
-        else
-            $aRet = Array(Array('name1' => '', 'name2' => ''));
-
-        // Read all objects of the requested type from the backend
-        try {
-            $objs = $BACKEND->getBackend($a['backendid'])->getObjects($type, $name1, '');
-            foreach($objs AS $obj) {
-                if($a['type'] !== 'service')
-                    $aRet[] = Array('name1' => $obj['name1']);
-                else
-                    $aRet[] = Array('name1' => $obj['name1'],
-                                    'name2' => $obj['name2']);
-            }
-        } catch(BackendConnectionProblem $e) {}
-
-        return json_encode($aRet);
     }
 
     protected function doTmplModify($a) {
@@ -637,144 +638,6 @@ class CoreModMap extends CoreModule {
             // Return the data
             return Array('map' => $FHANDLER->get('map'),
                          'id' => $FHANDLER->get('id'));
-        } else {
-            return false;
-        }
-    }
-
-    protected function doModifyObject($a) {
-        $MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
-        try {
-            $MAPCFG->readMapConfig();
-        } catch(MapCfgInvalid $e) {}
-
-        if(!$MAPCFG->objExists($a['id']))
-            throw new NagVisException(l('The object does not exist.'));
-
-        // set options in the array
-        foreach($a['opts'] AS $key => $val) {
-            $MAPCFG->setValue($a['id'], $key, $val);
-        }
-
-        // write element to file
-        $MAPCFG->storeUpdateElement($a['id']);
-
-        // delete map lock
-        if(!$MAPCFG->deleteMapLock()) {
-            throw new NagVisException(l('mapLockNotDeleted'));
-        }
-
-        return json_encode(Array('status' => 'OK', 'message' => ''));
-    }
-
-    protected function handleResponseModifyObject() {
-        $bValid = true;
-        // Validate the response
-
-        // Need to listen to POST and GET
-        $aResponse = array_merge($_GET, $_POST);
-        // FIXME: Maybe change all to POST
-        $FHANDLER = new CoreRequestHandler($aResponse);
-
-        // Check for needed params
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
-            $bValid = false;
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('id'))
-            $bValid = false;
-
-        // All fields: Regex check
-        if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
-            $bValid = false;
-        if($bValid && $FHANDLER->isSetAndNotEmpty('id') && !$FHANDLER->match('id', MATCH_OBJECTID))
-            $bValid = false;
-
-        if($bValid)
-            $this->verifyMapExists($FHANDLER->get('map'));
-
-        // FIXME: Recode to FHANDLER
-        $aOpts = $aResponse;
-        // Remove the parameters which are not options of the object
-        unset($aOpts['act']);
-        unset($aOpts['mod']);
-        unset($aOpts['map']);
-        unset($aOpts['ref']);
-        unset($aOpts['id']);
-        unset($aOpts['lang']);
-
-        // Also remove all "helper fields" which begin with a _
-        foreach($aOpts AS $key => $val) {
-            if(strpos($key, '_') === 0) {
-                unset($aOpts[$key]);
-            }
-        }
-
-        // Store response data
-        if($bValid === true) {
-            // Return the data
-            return Array('map'     => $FHANDLER->get('map'),
-                         'id'      => $FHANDLER->get('id'),
-                         'refresh' => $FHANDLER->get('ref'),
-                         'opts'    => $aOpts);
-        } else {
-            return false;
-        }
-    }
-
-    protected function doCreateObject($a) {
-        $MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
-        $MAPCFG->readMapConfig();
-
-        // append a new object definition to the map configuration
-        $MAPCFG->addElement($a['type'], $a['opts'], true);
-
-        // delete map lock
-        if(!$MAPCFG->deleteMapLock()) {
-            throw new NagVisException(l('mapLockNotDeleted'));
-        }
-
-        return true;
-    }
-
-    protected function handleResponseCreateObject() {
-        $bValid = true;
-        // Validate the response
-
-        $FHANDLER = new CoreRequestHandler($_POST);
-
-        // Check for needed params
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
-            $bValid = false;
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('type'))
-            $bValid = false;
-
-        // All fields: Regex check
-        if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
-            $bValid = false;
-        if($bValid && !$FHANDLER->match('type', MATCH_OBJECTTYPE))
-            $bValid = false;
-
-        if($bValid)
-            $this->verifyMapExists($FHANDLER->get('map'));
-
-        // FIXME: Recode to FHANDLER
-        $aOpts = $_POST;
-        // Remove the parameters which are not options of the object
-        unset($aOpts['map']);
-        unset($aOpts['type']);
-
-        // Also remove all "helper fields" which begin with a _
-        foreach($aOpts AS $key => $val) {
-            if(strpos($key, '_') === 0) {
-                unset($aOpts[$key]);
-            }
-        }
-
-        // Store response data
-        if($bValid === true) {
-            // Return the data
-            return Array('map' => $FHANDLER->get('map'),
-                         'type' => $FHANDLER->get('type'),
-                         'opts' => $aOpts);
         } else {
             return false;
         }

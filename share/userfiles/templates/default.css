@@ -497,6 +497,35 @@ td#popupWindowContent .submit {
   vertical-align: middle;
 }
 
+td#popupWindowContent table.mytable tr.must td {
+    font-weight: bold;
+}
+
+td#popupWindowContent table.mytable tr td.err div {
+    padding: 3px;
+    margin: 0 0 0 20%;
+    width: 80%;
+    border: 1px solid #ff0000;
+    background-color: #ffdddd;
+    color: #000000;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+td#popupWindowContent div.success {
+    padding: 5px 8px;
+    margin: 10px;
+    border: 1px solid #00ff00;
+    background-color: #ddffdd;
+    color: #000000;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
 /* Popup window forms */
 
 td#popupWindowContent fieldset {

@@ -12,16 +12,93 @@ function listIconsets($CORE) {
 
 function listLineTypes($CORE) {
     return Array(
-        Array('label' => '------><------',   'value' => '10'),
-        Array('label' => '-------------->',  'value' => '11'),
-        Array('label' => '---------------',  'value' => '12'),
-        Array('label' => '--%--><--%--',     'value' => '13'),
-        Array('label' => '--%+BW-><-%+BW--', 'value' => '14'),
+        '10' => '------><------',
+        '11' => '-------------->',
+        '12' => '---------------',
+        '13' => '--%--><--%--',
+        '14' => '--%+BW-><-%+BW--',
+    );
+}
+
+function listHoverChildSorters() {
+    return Array(
+        'a' => l('Alphabetically'),
+        's' => l('State'),
+    );
+}
+
+function listHoverChildOrders() {
+    return Array(
+        'asc'  => l('Ascending'),
+        'desc' => l('Descending'),
     );
 }
 
 function listHoverTemplates($CORE) {
-    return $this->CORE->getAvailableHoverTemplates();
+    return $CORE->getAvailableHoverTemplates();
+}
+
+function listContextTemplates($CORE) {
+    return $CORE->getAvailableContextTemplates();
+}
+
+function listViewTypesService($CORE) {
+    return Array('icon', 'line', 'gadget');
+}
+
+function listViewTypes($CORE) {
+    return Array('icon', 'line');
+}
+
+function getObjectNames($type, $CORE, $MAPCFG, $objId) {
+    $backendId = $MAPCFG->getValue($objId, 'backend_id');
+
+    // Initialize the backend
+    $BACKEND = new CoreBackendMgmt($CORE);
+    $BACKEND->checkBackendExists($backendId, true);
+    $BACKEND->checkBackendFeature($backendId, 'getObjects', true);
+
+    $name1 = ($type === 'service' ? $MAPCFG->getValue($objId, 'host_name') : '');
+
+    // Read all objects of the requested type from the backend
+    $aRet = Array('');
+    $objs = $BACKEND->getBackend($backendId)->getObjects($type, $name1, '');
+    foreach($objs AS $obj) {
+        if($type !== 'service')
+            $aRet[] = $obj['name1'];
+        else
+            $aRet[] = $obj['name2'];
+    }
+
+    return $aRet;
+}
+
+function listHostNames($CORE, $MAPCFG, $objId) {
+    return getObjectNames('host', $CORE, $MAPCFG, $objId);
+}
+
+function listHostgroupNames($CORE, $MAPCFG, $objId) {
+    return getObjectNames('hostgroup', $CORE, $MAPCFG, $objId);
+}
+
+function listServiceNames($CORE, $MAPCFG, $objId) {
+    return getObjectNames('service', $CORE, $MAPCFG, $objId);
+}
+
+function listServicegroupNames($CORE, $MAPCFG, $objId) {
+    return getObjectNames('servicegroup', $CORE, $MAPCFG, $objId);
+}
+
+function listTemplateNames($CORE) {
+    return Array();
+}
+
+function listShapes($CORE) {
+    return $CORE->getAvailableShapes();
+}
+
+function listBackendIds($CORE) {
+    return $CORE->getDefinedBackends();
 }
 
 $mapConfigVars = Array(
@@ -37,12 +114,12 @@ $mapConfigVars = Array(
     ),
     'allowed_for_config' => Array(
         'must' => 0,
-        'deprecated' => 1,
+        'deprecated' => true,
         'match' => MATCH_STRING,
     ),
     'allowed_user' => Array(
         'must' => 0,
-        'deprecated' => 1,
+        'deprecated' => true,
         'match' => MATCH_STRING,
     ),
     'map_image' => Array(
@@ -56,10 +133,12 @@ $mapConfigVars = Array(
         'default' => '',
         'match' => MATCH_STRING),
     'backend_id' => Array(
-        'must' => 0,
-        'default' => cfg('defaults', 'backend'),
-        'match' => MATCH_STRING_NO_SPACE,
-        'field_type' => 'dropdown'),
+        'must'       => 0,
+        'default'    => cfg('defaults', 'backend'),
+        'match'      => MATCH_STRING_NO_SPACE,
+        'field_type' => 'dropdown',
+        'list'       => 'listBackendIds',
+    ),
     'background_color' => Array(
         'must' => 0,
         'default' => cfg('defaults', 'backgroundcolor'),
@@ -80,12 +159,14 @@ $mapConfigVars = Array(
         'match' => MATCH_BOOLEAN,
         'field_type' => 'boolean'),
     'context_template' => Array(
-        'must' => 0,
-        'default' => cfg('defaults', 'contexttemplate'),
-        'match' => MATCH_STRING_NO_SPACE,
-        'field_type' => 'dropdown',
-        'depends_on' => 'context_menu',
-        'depends_value' => '1'),
+        'must'          => 0,
+        'default'       => cfg('defaults', 'contexttemplate'),
+        'match'         => MATCH_STRING_NO_SPACE,
+        'field_type'    => 'dropdown',
+        'depends_on'    => 'context_menu',
+        'depends_value' => '1',
+        'list'          => 'listContextTemplates',
+    ),
 
     'event_background' => Array(
         'must' => 0,
@@ -224,7 +305,7 @@ $mapConfigVars = Array(
      ),
     'hover_timeout' => Array(
         'must' => 0,
-        'deprecated' => '1',
+        'deprecated' => true,
         'default' => cfg('defaults', 'hovertimeout'),
         'match' => MATCH_INTEGER,
         'depends_on' => 'hover_menu',
@@ -250,19 +331,23 @@ $mapConfigVars = Array(
         'depends_on' => 'hover_menu',
         'depends_value' => '1'),
     'hover_childs_order' => Array(
-        'must' => 0,
-        'default' => cfg('defaults', 'hoverchildsorder'),
-        'match' => MATCH_ORDER,
-        'field_type' => 'dropdown',
-        'depends_on' => 'hover_menu',
-        'depends_value' => '1'),
+        'must'          => 0,
+        'default'       => cfg('defaults', 'hoverchildsorder'),
+        'match'         => MATCH_ORDER,
+        'field_type'    => 'dropdown',
+        'depends_on'    => 'hover_menu',
+        'depends_value' => '1',
+        'list'          => 'listHoverChildOrders',
+    ),
     'hover_childs_sort' => Array(
-        'must' => 0,
-        'default' => cfg('defaults', 'hoverchildssort'),
-        'match' => MATCH_STRING_NO_SPACE,
-        'field_type' => 'dropdown',
-        'depends_on' => 'hover_menu',
-        'depends_value' => '1'),
+        'must'          => 0,
+        'default'       => cfg('defaults', 'hoverchildssort'),
+        'match'         => MATCH_STRING_NO_SPACE,
+        'field_type'    => 'dropdown',
+        'depends_on'    => 'hover_menu',
+        'depends_value' => '1',
+        'list'          => 'listHoverChildSorters',
+    ),
 
     'iconset' => Array(
         'must'       => 0,
@@ -303,21 +388,22 @@ $mapConfigVars = Array(
         'default'       => '0.5',
         'match'         => MATCH_FLOAT,
         'depends_on'    => 'view_type',
-        'depends_value' => 'line'),
+        'depends_value' => 'line',
+    ),
     'line_label_show' => Array(
         'must'          => 0,
         'default'       => '1',
         'match'         => MATCH_BOOLEAN,
         'field_type'    => 'boolean',
         'depends_on'    => 'view_type',
-        'depends_value' => 'line'
+        'depends_value' => 'line',
     ),
     'line_label_pos_in' => Array(
         'must'          => 0,
         'default'       => '0.5',
         'match'         => MATCH_FLOAT,
         'depends_on'    => 'view_type',
-        'depends_value' => 'line'
+        'depends_value' => 'line',
     ),
     'line_label_pos_out' => Array(
         'must'          => 0,
@@ -340,16 +426,18 @@ $mapConfigVars = Array(
         'depends_value' => 'line'),
 
     'in_maintenance' => Array(
-        'must' => 0,
-        'default' => '0',
-        'match' => MATCH_BOOLEAN,
-        'field_type' => 'boolean'),
+        'must'       => 0,
+        'default'    => '0',
+        'match'      => MATCH_BOOLEAN,
+        'field_type' => 'boolean',
+    ),
 
     'label_show' => Array(
-        'must' => 0,
-        'default' => '0',
-        'match' => MATCH_BOOLEAN,
-        'field_type' => 'boolean'),
+        'must'       => 0,
+        'default'    => '0',
+        'match'      => MATCH_BOOLEAN,
+        'field_type' => 'boolean',
+    ),
     'label_text' => Array(
         'must' => 0,
         'default' => '[name]',
@@ -436,10 +524,11 @@ $mapConfigVars = Array(
         'match' => MATCH_INTEGER
     ),
     'view_type' => Array(
-        'must' => 0,
-        'default' => 'icon',
-        'match' => MATCH_VIEW_TYPE,
-        'field_type' => 'dropdown'
+        'must'          => 0,
+        'default'       => 'icon',
+        'match'         => MATCH_VIEW_TYPE,
+        'field_type'    => 'dropdown',
+        'list'          => 'listViewTypes',
     ),
     'url' => Array(
         'must' => 0,
@@ -454,9 +543,10 @@ $mapConfigVars = Array(
     // HOST SPECIFIC OPTIONS
 
     'host_name' => Array(
-         'must' => 1,
-         'match' => MATCH_STRING,
-         'field_type' => 'dropdown'
+        'must' => 1,
+        'match' => MATCH_STRING,
+        'field_type' => 'dropdown',
+        'list' => 'listHostNames',
     ),
     'host_url' => Array(
         'must'    => 0,
@@ -469,7 +559,8 @@ $mapConfigVars = Array(
     'hostgroup_name' => Array(
         'must' => 1,
         'match' => MATCH_STRING,
-        'field_type' => 'dropdown'
+        'field_type' => 'dropdown',
+        'list' => 'listHostgroupNames',
     ),
     'hostgroup_url' => Array(
         'must' => 0,
@@ -483,6 +574,7 @@ $mapConfigVars = Array(
         'must'       => 1,
         'match'      => MATCH_STRING,
         'field_type' => 'dropdown',
+        'list'       => 'listServiceNames',
     ),
     'service_url' => Array(
         'must' => 0,
@@ -490,10 +582,11 @@ $mapConfigVars = Array(
         'match'  => MATCH_STRING_URL_EMPTY,
     ),
     'service_view_type' => Array(
-        'must' => 0,
-        'default' => 'icon',
-        'match' => MATCH_VIEW_TYPE_SERVICE,
-        'field_type' => 'dropdown'
+        'must'          => 0,
+        'default'       => 'icon',
+        'match'         => MATCH_VIEW_TYPE_SERVICE,
+        'field_type'    => 'dropdown',
+        'list'          => 'listViewTypesService',
     ),
     'gadget_url' => Array(
         'must'          => 0,
@@ -526,9 +619,10 @@ $mapConfigVars = Array(
     // SERVICEGROUP SPECIFIC OPTIONS
 
     'servicegroup_name' => Array(
-        'must' => 1,
-        'match' => MATCH_STRING,
+        'must'       => 1,
+        'match'      => MATCH_STRING,
         'field_type' => 'dropdown',
+        'list'       => 'listServicegroupNames',
     ),
     'servicegroup_url' => Array(
         'must'    => 0,
@@ -539,9 +633,10 @@ $mapConfigVars = Array(
     // MAP SPECIFIC OPTIONS
 
     'map_name' => Array(
-        'must' => 1,
-        'match' => MATCH_STRING_NO_SPACE,
+        'must'       => 1,
+        'match'      => MATCH_STRING_NO_SPACE,
         'field_type' => 'dropdown',
+        'list'       => 'listMapNames',
     ),
     'map_url' => Array(
         'must' => 0,
@@ -578,9 +673,10 @@ $mapConfigVars = Array(
     // SHAPE SPECIFIC OPTIONS
 
     'icon' => Array(
-        'must' => 1,
-        'match' => MATCH_PNG_GIF_JPG_FILE_OR_URL,
+        'must'       => 1,
+        'match'      => MATCH_PNG_GIF_JPG_FILE_OR_URL,
         'field_type' => 'dropdown',
+        'list'       => 'listShapes',
     ),
     'enable_refresh' => Array(
         'must' => 0,
@@ -592,8 +688,9 @@ $mapConfigVars = Array(
     // TEMPLATE SPECIFIC OPTIONS
 
     'name' => Array(
-        'must' => 1,
+        'must'  => 1,
         'match' => MATCH_STRING_NO_SPACE,
+        'list'  => 'listTemplateNames',
     ),
 );
 

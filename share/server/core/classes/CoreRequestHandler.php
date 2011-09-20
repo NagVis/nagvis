@@ -64,17 +64,27 @@ class CoreRequestHandler {
         return (isset($this->aOpts[$sKey]) && $this->aOpts[$sKey] != '');
     }
 
+    public function getAll($exclude = Array()) {
+        $ret = Array();
+        foreach($this->aOpts AS $key => $val) {
+            if(!isset($exclude[$key])) {
+                $ret[$key] = $val;
+            }
+        }
+        return $ret;
+    }
+
     public static function getReferer($default) {
         if(isset($_SERVER['HTTP_REFERER']))
-      return $_SERVER['HTTP_REFERER'];
-    else
+            return $_SERVER['HTTP_REFERER'];
+        else
             return $default;
     }
 
     public static function getRequestUri($default) {
         if(isset($_SERVER['REQUEST_URI']))
-      return $_SERVER['REQUEST_URI'];
-    else
+            return $_SERVER['REQUEST_URI'];
+        else
             return $default;
     }
 }

@@ -1,15 +1,15 @@
-<input type="hidden" /><!-- The template must not start with a script tag. This would be ignored by IE //-->
+<form name="addmodify" id="addmodify"  action="javascript:submitFrontendForm2('{$htmlBase}/server/core/ajax_handler.php?mod=Map&amp;act=addModify&amp;show={$show}&submit=1', 'addmodify');" enctype="">
+{if $successMsg != ''}<div class=success>{$successMsg}</div>
 <script type="text/javascript">
-validMapConfig = {$validMapCfg};
-lang = {$lang};
-</script>
-<script type="text/javascript" src="{$htmlBase}/frontend/nagvis-js/js/editAddModify.js"></script>
-<form name="addmodify" id="addmodify"  action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=Map&amp;act={$action}&amp;ref=1', 'addmodify');" onsubmit="return validateMapCfgForm()" enctype="" >
+window.setTimeout(function() \{ window.location.reload(); }, 2000);
+</script>{/if}
 <table name="mytable" class="mytable" id="table_addmodify">
-    <input type="hidden" id="type" name="type" value="{$type}" />
-    <input type="hidden" id="id" name="id" value="{$id}" />
-    <input type="hidden" id="map" name="map" value="{$map}" />
+    {foreach $attrs key value}<input type="hidden" id="{$key}" name="{$key}" value="{$value}" />{/foreach}
 {$formContents}
-    <tr><td class="tdlabel" colspan="2" align="center"><input class="submit" type="submit" name="submit" id="commit" value="Save" /></td></tr>
+    <tr>
+        <td class="tdlabel" colspan="3" align="center">
+            <input class="submit" type="submit" name="submit" id="commit" value="{$langSave}" />
+        </td>
+    </tr>
 </table>
 </form>

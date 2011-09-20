@@ -97,6 +97,11 @@ Feld-Eigenschaften:
 - Button zum Zurücksetzen eines Wertes auf Default einbauen
 - Abhängige Felder je nach Wert eines oder mehrerer Felder zeigen/verstecken
 - Leere Variablen müssen auch gesetzt werden können
+- Wenn Dropdown wegen Exception nicht befüllt werden kann, diese abfangen und dann anstatt des Feldes
+  die Fehlermeldung anzeigen
+- Wenn bei Dropdowns ein Wert gesetzt ist, der nicht in den Listen vorhanden ist,
+  dann keine Dropdown-Liste anzeigen.
+- Nicht mehr gesetzte Attribute entfernen
 
 Fehlerbehandlung:
 - Direkt im Dialog: Feldbezogene Fehler direkt unter den Feldern anzeigen
@@ -110,6 +115,10 @@ Fehlerbehandlung:
     -> Im Fehlerfall wird die Antwort in den Dialog gemalt, wobei der vorherige Inhalt überschrieben wird
     -> Bei Erfolg wird der Dialog geschlossen, es wird kurz eine Erfolgsmeldung gezeigt
 
+Noch offen:
+  - Abhängige Felder umsetzen
+  - Variablen nach int/boolean casten, wenn sinnvoll
+  - Manuell Werte setzen, z.b. gadget_url optional als volle URL angeben
 
 *** Shortcuts einbauen ***
 

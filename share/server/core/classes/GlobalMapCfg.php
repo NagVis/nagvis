@@ -599,7 +599,7 @@ class GlobalMapCfg {
                 if(!isset(self::$validConfig[$type][$key])) {
                     // unknown attribute
                     throw new $exception(l('unknownAttribute', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type)));
-                } elseif(isset(self::$validConfig[$type][$key]['deprecated']) && self::$validConfig[$type][$key]['deprecated'] == 1) {
+                } elseif(isset(self::$validConfig[$type][$key]['deprecated']) && self::$validConfig[$type][$key]['deprecated'] === true) {
                     // deprecated option
                     throw new $exception(l('mapDeprecatedOption', Array('MAP' => $this->getName(), 'ATTRIBUTE' => $key, 'TYPE' => $type)));
                 } else {
@@ -645,7 +645,7 @@ class GlobalMapCfg {
     public function getValidTypeKeys($sType) {
         $aRet = Array();
         foreach(self::$validConfig[$sType] AS $key => $arr) {
-            if(!isset($arr['deprecated']) || $arr['deprecated'] != 1) {
+            if(!isset($arr['deprecated']) || $arr['deprecated'] !== true) {
                 $aRet[] = $key;
             }
         }
@@ -690,6 +690,12 @@ class GlobalMapCfg {
             if($elem['type'] === $type)
                 $arr[$id] = $elem;
         return $arr;
+    }
+
+    public function getMapObject($objId) {
+        if(!isset($this->mapConfig[$objId]))
+            return null;
+        return $this->mapConfig[$objId];
     }
 
     public function getMapObjects() {
@@ -944,6 +950,24 @@ class GlobalMapCfg {
     }
 
     /**
+     * Updates an existing map object with the given attributes.
+     * Existing attribtes are changed and new ones are set.
+     */
+    public function updateElement($id, $properties, $perm = false) {
+        if(!isset($this->mapConfig[$id]))
+            return false;
+
+        $type = $this->mapConfig[$id]['type'];
+
+        $this->mapConfig[$id]              = $properties;
+        $this->mapConfig[$id]['type']      = $type;
+        $this->mapConfig[$id]['object_id'] = $id;
+
+        if($perm)
+            $this->storeUpdateElement($id);
+    }
+
+    /**
      * Updates an element in the configuration file with the
      * current object config
      *
@@ -961,6 +985,15 @@ class GlobalMapCfg {
             return false;
 
         $f = $this->getConfig();
+
+        // Loop all object lines from file to remove all parameters which can not be
+        // found in the current array anymore
+        for($i = $start + 1; $i < $end - 1; $i++) {
+            $entry = explode('=', $f[$i], 2);
+            $key = trim($entry[0]);
+            if(!isset($this->mapConfig[$id][$key]))
+                array_splice($f, $i, 1);
+        }
 
         // Loop all parameters from array
         foreach($this->mapConfig[$id] AS $key => $val) {
@@ -990,10 +1023,11 @@ class GlobalMapCfg {
             if($lineNum !== null && $newLine !== '')
                 // if a parameter was found in file and value is not empty, replace line
                 $f[$lineNum] = $newLine;
-            elseif($lineNum !== null && $newLine === '')
+            elseif($lineNum !== null && $newLine === '') {
                 // if a paremter is not in array or a value is empty, delete the line in the file
+                // FIXME: Never reached here? But should be handled by separate loop above
                 array_splice($f, $lineNum, 1);
-            elseif($lineNum === null && $newLine !== '')
+            } elseif($lineNum === null && $newLine !== '')
                 // if a parameter is was not found in array and a value is not empty, create line
                 array_splice($f, $end - 1, 1, Array($newLine, $f[$end - 1]));
         }
@@ -1121,6 +1155,17 @@ class GlobalMapCfg {
      */
     public function getValidConfig() {
         return self::$validConfig;
+    }
+
+    /**
+     * Returns the name of the list function for the given map config option
+     */
+    public function getListFunc($type, $var) {
+        if(isset(self::$validConfig[$type][$var]['list']))
+            return self::$validConfig[$type][$var]['list'];
+        else
+            throw new NagVisException(l('No "list" function registered for option "[OPT]" of type "[TYPE]"',
+                                                                       Array('OPT' => $var, 'TYPE' => $type)));
     }
 
     /**

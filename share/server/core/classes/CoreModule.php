@@ -30,6 +30,7 @@ abstract class CoreModule {
     protected $AUTHENTICATION = null;
     protected $AUTHORISATION = null;
     protected $UHANDLER = null;
+    protected $FHANDLER = null;
 
     protected $aActions = Array();
     protected $aObjects = Array();
@@ -138,6 +139,18 @@ abstract class CoreModule {
      */
     protected function initUriHandler() {
         $this->UHANDLER = new CoreUriHandler($this->CORE);
+    }
+
+    /**
+     * Returns all _GET+_POST vars. Supports optional array of attributes to
+     * exclude where the keys are the var names. Always excludes mod/act params
+     */
+    protected function getAllOptions($exclude = Array()) {
+        if(!isset($this->FHANDLER))
+            $this->FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
+        $exclude['mod'] = true;
+        $exclude['act'] = true;
+        return $this->FHANDLER->getAll($exclude);
     }
 
     /**

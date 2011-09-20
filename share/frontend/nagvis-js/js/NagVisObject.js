@@ -1011,10 +1011,9 @@ var NagVisObject = Base.extend({
             var obj = getMapObjByDomObjId(objId);
 
             showFrontendDialog(oGeneralProperties.path_server
-                               +'?mod=Map&act=addModify&do=modify&show='
-                       +escapeUrlValues(oPageProperties.map_name)
-                       +'&type='+escapeUrlValues(obj.conf.type)
-                       +'&id=' + escapeUrlValues(objId), 'Modify Object');
+                       + '?mod=Map&act=addModify&show='
+                       + escapeUrlValues(oPageProperties.map_name)
+                       + '&object_id=' + escapeUrlValues(objId), 'Modify Object');
 
             obj   = null;
             objId = null;

@@ -17,6 +17,7 @@ Core
   * Added new icon *_unreachable icon to represent the UNREACHABLE host state
   * Backends can now override the NagVis summary_output/summary_state algorithms
     to provide their own custom information
+  * Internal cleanup in map configuration attribute definitions
 
 Frontend
   * Readded the "edit" action to the maps module. In this mode all object are
@@ -49,6 +50,7 @@ Frontend
   again, like it was in WUI before. The drag controls for these objects has been removed.
   * Added [alias] macro to context menus
   * Header menu handles map parent/child relations correctly
+  * Recoded the add/modify dialog to add/edit map objects
 
 Automap
   * Bugfix: Made the problem automap work again
