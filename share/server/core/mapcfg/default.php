@@ -361,14 +361,17 @@ $mapConfigVars = Array(
     ),
 
     'iconset' => Array(
-        'must'       => 0,
-        'default'    => cfg('defaults', 'icons'),
-        'match'      => MATCH_STRING_NO_SPACE,
-        'field_type' => 'dropdown',
-        'list'       => 'listIconsets',
+        'must'          => 0,
+        'default'       => cfg('defaults', 'icons'),
+        'match'         => MATCH_STRING_NO_SPACE,
+        'field_type'    => 'dropdown',
+        'depends_on'    => 'view_type',
+        'depends_value' => 'icon',
+        'list'          => 'listIconsets',
     ),
     'line_type' => Array(
         'must'          => 0,
+        'default'       => '11',
         'match'         => MATCH_LINE_TYPE,
         'field_type'    => 'dropdown',
         'depends_on'    => 'view_type',
