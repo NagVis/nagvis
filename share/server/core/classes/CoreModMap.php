@@ -156,6 +156,10 @@ class CoreModMap extends CoreModule {
                                                                 l('The map could not be deleted.'),
                                                               1, $url);
                 break;
+                case 'modifyObject':
+                    $sReturn = $this->handleResponse('handleResponseModifyObject', 'doModifyObject',
+                                                     null, l('The object could not be modified.'));
+                break;
                 case 'deleteObject':
                     $aReturn = $this->handleResponseDeleteObject();
 
@@ -681,6 +685,84 @@ class CoreModMap extends CoreModule {
         if($bValid === true) {
             // Return the data
             return Array('map' => $FHANDLER->get('map'));
+        } else {
+            return false;
+        }
+    }
+
+    protected function doModifyObject($a) {
+        $MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
+        try {
+            $MAPCFG->readMapConfig();
+        } catch(MapCfgInvalid $e) {}
+
+        if(!$MAPCFG->objExists($a['id']))
+            throw new NagVisException(l('The object does not exist.'));
+
+        // set options in the array
+        foreach($a['opts'] AS $key => $val) {
+            $MAPCFG->setValue($a['id'], $key, $val);
+        }
+
+        // write element to file
+        $MAPCFG->storeUpdateElement($a['id']);
+
+        // delete map lock
+        if(!$MAPCFG->deleteMapLock()) {
+            throw new NagVisException(l('mapLockNotDeleted'));
+        }
+
+        return json_encode(Array('status' => 'OK', 'message' => ''));
+    }
+
+    protected function handleResponseModifyObject() {
+        $bValid = true;
+        // Validate the response
+
+        // Need to listen to POST and GET
+        $aResponse = array_merge($_GET, $_POST);
+        // FIXME: Maybe change all to POST
+        $FHANDLER = new CoreRequestHandler($aResponse);
+
+        // Check for needed params
+        if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
+            $bValid = false;
+        if($bValid && !$FHANDLER->isSetAndNotEmpty('id'))
+            $bValid = false;
+
+        // All fields: Regex check
+        if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
+            $bValid = false;
+        if($bValid && $FHANDLER->isSetAndNotEmpty('id') && !$FHANDLER->match('id', MATCH_OBJECTID))
+            $bValid = false;
+
+        if($bValid)
+            $this->verifyMapExists($FHANDLER->get('map'));
+
+        // FIXME: Recode to FHANDLER
+        $aOpts = $aResponse;
+        // Remove the parameters which are not options of the object
+        unset($aOpts['act']);
+        unset($aOpts['mod']);
+        unset($aOpts['map']);
+        unset($aOpts['ref']);
+        unset($aOpts['id']);
+        unset($aOpts['lang']);
+
+        // Also remove all "helper fields" which begin with a _
+        foreach($aOpts AS $key => $val) {
+            if(strpos($key, '_') === 0) {
+                unset($aOpts[$key]);
+            }
+        }
+
+        // Store response data
+        if($bValid === true) {
+            // Return the data
+            return Array('map'     => $FHANDLER->get('map'),
+                         'id'      => $FHANDLER->get('id'),
+                         'refresh' => $FHANDLER->get('ref'),
+                         'opts'    => $aOpts);
         } else {
             return false;
         }
