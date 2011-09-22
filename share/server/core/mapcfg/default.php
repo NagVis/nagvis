@@ -323,10 +323,11 @@ $mapConfigVars = Array(
         'depends_value' => '1'
     ),
     'hover_url' => Array(
-        'must' => 0,
-        'match' => MATCH_STRING_URL,
-        'depends_on' => 'hover_menu',
-        'depends_value' => '1'
+        'must'          => 0,
+        'match'         => MATCH_STRING_URL,
+        'depends_on'    => 'hover_menu',
+        'depends_value' => '1',
+        'default'       => '',
     ),
     'hover_childs_show' => Array(
         'must' => 0,
@@ -1040,7 +1041,6 @@ $mapConfigVarMap['shape'] = Array(
     'z' => null,
     'enable_refresh' => null,
     'hover_menu' => null,
-    'hover_template' => null,
     'hover_url' => null,
     'hover_delay' => null,
     'url' => null,
