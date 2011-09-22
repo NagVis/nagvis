@@ -13,7 +13,16 @@ Probleme:
 - NagVis Multisite Snapin optional als Baum
 
 - Redesign main configuration:
-  - Momentan können zwei Konfigurationsdateien
+  Momentan können zwei Konfigurationsdateien benutzt werden. Besser wäre ein conf.d
+  Verzeichnis zu haben um die Konfiguration, zumindest optional, modularer aufbauen
+  zu können.
+  Dabei ist zu beachten, dass die Sektionen Dateiübergreifend gemergt werden können
+  müssen.
+  Außerdem ist es wichtig, dass man die Datei weiterhin über die Weboberfläche
+  editieren kann. Das könnte man so lösen, dass man nur eine spezielle Datei via
+  Weboberfläche editierbar macht. Da müsste man beim rendern des Dialogs eben nur die
+  Konfigurationdateien, die vor der Web-Datei kommen, laden und die daraus resultierenden
+  Werte als Default-Wert annehmen.
 
 - Backends:
  - Zusätzlich beliebige Variablen vom Backend holen lassen
@@ -43,13 +52,6 @@ Redesign Map Aufbau:
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
 
-*** Cleanups ***
-
-- Weathermap Linien Perfdata Berechnungen nach check_command aufräumen
-- MapCfg Config Array aufräumen
-- ajax Funktionen aufräumen/konsolidieren
-- OMD Tests
-
 
 *** Linien (Auch für neue Automap wichtig!) ***
  - Pfeilspitzen konfigurierbar machen
@@ -58,9 +60,14 @@ Relative Koordinaten:
    - Farbe (?)
  - Offset zum Ziel
 
+
 *** Cleanups ***
   - Variablen nach int/boolean casten, wenn sinnvoll
   - Objekte klonen wieder implementieren
+  - Weathermap Linien Perfdata Berechnungen nach check_command aufräumen
+  - ajax Funktionen aufräumen/konsolidieren
+  - OMD Tests
+
 
 *** Shortcuts einbauen ***
 
