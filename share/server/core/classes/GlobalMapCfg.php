@@ -636,6 +636,16 @@ class GlobalMapCfg {
     }
 
     /**
+     * Finds out if an attribute has dependant attributes
+     */
+    public function hasDependants($type, $attr) {
+        foreach(self::$validConfig[$type] AS $arr)
+            if(isset($arr['depends_on']) && $arr['depends_on'] == $attr)
+                return true;
+        return false;
+    }
+
+    /**
      * Gets valid keys for a specific object type
      *
      * @param   String  Specific object type
@@ -981,6 +991,10 @@ class GlobalMapCfg {
         else
             list($inObj, $start, $end) = $this->getObjectLinesById($id);
 
+        // Remove object head/foot
+        $start += 1;
+        $end   -= 1;
+
         if(!$inObj)
             return false;
 
@@ -988,7 +1002,7 @@ class GlobalMapCfg {
 
         // Loop all object lines from file to remove all parameters which can not be
         // found in the current array anymore
-        for($i = $start + 1; $i < $end - 1; $i++) {
+        for($i = $start; $i < $end; $i++) {
             $entry = explode('=', $f[$i], 2);
             $key = trim($entry[0]);
             if(!isset($this->mapConfig[$id][$key]))
@@ -1028,8 +1042,8 @@ class GlobalMapCfg {
                 // FIXME: Never reached here? But should be handled by separate loop above
                 array_splice($f, $lineNum, 1);
             } elseif($lineNum === null && $newLine !== '')
-                // if a parameter is was not found in array and a value is not empty, create line
-                array_splice($f, $end - 1, 1, Array($newLine, $f[$end - 1]));
+                // if a parameter was not found in array and a value is not empty, create line
+                array_splice($f, $end, 0, Array($newLine));
         }
 
         $this->writeConfig($f);

@@ -170,18 +170,25 @@ class CoreModMap extends CoreModule {
                     }
                 break;
                 case 'addModify':
-                    $aOpts = Array('show'      => MATCH_MAP_NAME,
-                                   'clone_id'  => MATCH_OBJECTID_EMPTY,
-                                   'submit'    => MATCH_STRING_EMPTY);
-                    $aVals = $this->getCustomOptions($aOpts);
+                    $aOpts = Array(
+                        'show'     => MATCH_MAP_NAME,
+                        'clone_id' => MATCH_OBJECTID_EMPTY,
+                        'submit'   => MATCH_STRING_EMPTY,
+                        'update'   => MATCH_INTEGER_EMPTY,
+                    );
+                    $aVals = $this->getCustomOptions($aOpts, Array(), true);
                     $attrs = $this->filterMapAttrs($this->getAllOptions($aOpts));
 
                     $VIEW = new WuiViewMapAddModify($aVals['show']);
                     $VIEW->setAttrs($attrs);
+                    
+                    // This tells the follwing handling when the page only needs to be repainted
+                    $update = isset($aVals['update']) && $aVals['update'] == '1';
 
                     $err     = null;
                     $success = null;
-                    if(isset($aVals['submit']) && $aVals['submit'] != '') {
+                    // Don't handle submit actions when the 'update' POST attribute is set
+                    if(isset($aVals['submit']) && $aVals['submit'] != '' && !$update) {
                         try {
                             $success = $this->handleAddModify($aVals['show'], $attrs);
                         } catch(FieldInputError $e) {
@@ -189,7 +196,7 @@ class CoreModMap extends CoreModule {
                         }
                     }
 
-                    $sReturn = json_encode(Array('code' => $VIEW->parse($err, $success)));
+                    $sReturn = json_encode(Array('code' => $VIEW->parse($update, $err, $success)));
                 break;
                 case 'manageTmpl':
                     $aOpts = Array('show' => MATCH_MAP_NAME);
@@ -254,7 +261,7 @@ class CoreModMap extends CoreModule {
     private function filterMapAttrs($attrs) {
         $ret = Array();
         foreach($attrs AS $attr => $val) {
-            if(substr($attr, 0, 7) == 'toggle_' || $attr == '_t' || $attr == 'lang')
+            if(substr($attr, 0, 7) == 'toggle_' || $attr == '_t' || $attr == 'lang' || $attr == 'update')
                 continue;
             if(isset($attrs['toggle_'.$attr]) && $attrs['toggle_'.$attr] !== 'on')
                 continue;

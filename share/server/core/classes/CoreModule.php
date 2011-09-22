@@ -158,7 +158,19 @@ abstract class CoreModule {
      *
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    protected function getCustomOptions($aKeys, $aDefaults = Array()) {
+    protected function getCustomOptions($aKeys, $aDefaults = Array(), $mixed = false) {
+        if($mixed) {
+            if(!isset($this->FHANDLER))
+                $this->FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
+
+            $aReturn = Array();
+            foreach($aKeys AS $key => $val)
+                if($this->FHANDLER->match($key, $val))
+                    $aReturn[$key] = $this->FHANDLER->get($key);
+
+            return $aReturn;
+        }
+
         // Initialize on first call
         if($this->UHANDLER === null)
             $this->initUriHandler();

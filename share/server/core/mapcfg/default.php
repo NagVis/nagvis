@@ -537,6 +537,7 @@ $mapConfigVars = Array(
     ),
     'use' => Array(
         'must' => 0,
+        'default' => '',
         'match' => MATCH_STRING_NO_SPACE,
     ),
 

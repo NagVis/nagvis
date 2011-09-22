@@ -116,9 +116,10 @@ Fehlerbehandlung:
     -> Bei Erfolg wird der Dialog geschlossen, es wird kurz eine Erfolgsmeldung gezeigt
 
 Noch offen:
-  - Abhängige Felder umsetzen
-  - Variablen nach int/boolean casten, wenn sinnvoll
+  - Optional: Variablen nach int/boolean casten, wenn sinnvoll
   - Manuell Werte setzen, z.b. gadget_url optional als volle URL angeben
+  - modifyObject wird noch für move code gebraucht - wieder hinzufügen
+  - Objekte klonen wieder implementieren
 
 *** Shortcuts einbauen ***
 

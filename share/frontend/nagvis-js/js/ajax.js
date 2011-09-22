@@ -485,17 +485,12 @@ function getFormParams(formId) {
             }
             oFieldDefault = null;
 
-            if(aFields[i].type == "hidden") {
+            if(aFields[i].type == "hidden"
+               || aFields[i].type == "file"
+               || aFields[i].type == "text"
+               || aFields[i].type == "password"
+               || aFields[i].type == "submit")
                 sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
-            }
-
-            if(aFields[i].type == "file") {
-                sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
-            }
-
-            if(aFields[i].type == "text" || aFields[i].type == "password") {
-                sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
-            }
 
             if(aFields[i].type == "checkbox") {
                 if(aFields[i].checked) {

@@ -26,10 +26,11 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiViewMapAddModify {
-    private $MAPCFG = null;
-    private $attrs  = null;
-    private $map    = null;
-    private $errors = Array();
+    private $MAPCFG      = null;
+    private $attrs       = null;
+    private $hiddenAttrs = null;
+    private $map         = null;
+    private $errors      = Array();
 
     /**
      * Class Constructor
@@ -58,6 +59,9 @@ class WuiViewMapAddModify {
      */
     public function setAttrs($a) {
         $this->attrs = $a;
+        // The hidden attrs list is cleared by the attrs showd up in the form during getFields() call
+        $this->hiddenAttrs = $a;
+        $this->hiddenAttrs['update'] = '';
     }
 
     /**
@@ -66,7 +70,7 @@ class WuiViewMapAddModify {
      * @return	String 	String with Html Code
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function parse($err, $success) {
+    public function parse($update, $err, $success) {
         // Initialize template system
         $TMPL = New CoreTemplateSystem($this->CORE);
         $TMPLSYS = $TMPL->getTmplSys();
@@ -78,8 +82,8 @@ class WuiViewMapAddModify {
             'htmlBase'     => cfg('paths', 'htmlbase'),
             'show'         => $this->map,
             'successMsg'   => ($success !== null) ? $success : '',
-            'formContents' => $this->getFields(),
-            'attrs'        => $this->attrs,
+            'formContents' => $this->getFields($update),
+            'attrs'        => $this->hiddenAttrs,
             'langSave'     => l('save'),
         );
 
@@ -87,10 +91,30 @@ class WuiViewMapAddModify {
         return $TMPLSYS->get($TMPL->getTmplFile('default', 'wuiMapAddModify'), $aData);
     }
 
+    private function getAttr($typeDefaults, $update, $objId, $attr, $must) {
+        $val = '';
+        $inherited = false;
+        // Use url given values when there is some and remove it from the attr list.
+        // The url values left will be added as hidden attributes to the form later
+        if(isset($this->attrs[$attr])) {
+            $val = $this->attrs[$attr];
+        } elseif(!$update && isset($this->attrs['object_id'])
+                 && $this->MAPCFG->getValue($this->attrs['object_id'], $attr, true) !== false) {
+            // Get the value set in this object if there is some set
+            //  But don't try this when running in "update" mode
+            $val = $this->MAPCFG->getValue($this->attrs['object_id'], $attr, true);
+        } elseif(!$must && isset($typeDefaults[$attr])) {
+            // Get the inherited value - but only for non-must attributes
+            $val = $typeDefaults[$attr];
+            $inherited = true;
+        }
+        return Array($inherited, $val);
+    }
+
     /**
      * Renders the input fields of the add/modify form
      */
-    function getFields() {
+    function getFields($update) {
         $ret = '';
 
         // 'type' is set when creating new objects. Otherwise only the object_id is known
@@ -102,8 +126,11 @@ class WuiViewMapAddModify {
             $objId = $this->attrs['object_id'];
         }
 
+        $typeDefaults = $this->MAPCFG->getTypeDefaults($type);
+        $typeDef      = $this->MAPCFG->getValidObjectType($type);
+
         // loop all valid properties for that object type
-        foreach($this->MAPCFG->getValidObjectType($type) as $propname => $prop) {
+        foreach($typeDef as $propname => $prop) {
             // Set field type to show
             $fieldType = 'text';
             if(isset($prop['field_type']))
@@ -111,44 +138,48 @@ class WuiViewMapAddModify {
 
             // do nothing with hidden or deprecated attributes
             if($fieldType == 'hidden' || (isset($prop['deprecated']) && $prop['deprecated'] === true))
-                continue
+                continue;
 
-            $value = '';
-            $inherited = false;
-            // Use url given values when there is some and remove it from the attr list.
-            // The url values left will be added as hidden attributes to the form later
-            if(isset($this->attrs[$propname])) {
-                $value = $this->attrs[$propname];
-            } elseif(isset($this->attrs['object_id'])
-                     && $this->MAPCFG->getValue($this->attrs['object_id'], $propname, true) !== false) {
-                // Get the value set in this object if there is some set
-                $value = $this->MAPCFG->getValue($this->attrs['object_id'], $propname, true);
-            } elseif(!$prop['must']) {
-                // Get the inherited value - but only for non-must attributes
-                $value     = $this->MAPCFG->getValue($objId, $propname, false);
-                $inherited = true;
-            }
-            unset($this->attrs[$propname]);
+            list($inherited, $value) = $this->getAttr($typeDefaults, $update, $objId, $propname, $prop['must']);
+            unset($this->hiddenAttrs[$propname]);
 
+            $rowHide    = '';
             $rowClasses = Array();
+
+            // Check if depends_on and depends_value are defined and if the value
+            // is equal. If not equal hide the field
+            if(isset($prop['depends_on']) && isset($prop['depends_value'])) {
+                array_push($rowClasses, 'child-row');
+                
+                list($depInherited, $depValue) = $this->getAttr($typeDefaults, $update, $objId, $prop['depends_on'], $typeDef[$prop['depends_on']]['must']);
+                if($depValue != $prop['depends_value'])
+                    $rowHide = ' style="display:none"';
+            }
+
+            // Highlight the must attributes
             if($prop['must'])
                 array_push($rowClasses, 'must');
 
-            $ret .= '<tr class="'.implode(' ', $rowClasses).'"><td class=tdlabel>'.$propname.'</td><td class=tdfield>';
+            $ret .= '<tr class="'.implode(' ', $rowClasses).'"'.$rowHide.'><td class=tdlabel>'.$propname.'</td><td class=tdfield>';
+
+            $onChange = '';
+            // Submit the form when an attribute which has dependant attributes is changed
+            if($this->MAPCFG->hasDependants($type, $propname))
+                $onChange = 'document.getElementById(\'update\').value=\'1\';document.getElementById(\'commit\').click();';
             
             // Add a checkbox to toggle the usage of an attribute. But only add it for non-must
             // attributes.
             if(!$prop['must']) {
                 $checked = '';
-                if(!$inherited)
+                if($inherited === false)
                     $checked = ' checked'; 
-                $ret .= '<input type="checkbox" name="toggle_'.$propname.'"'.$checked.' onclick="toggle_option(\''.$propname.'\')" value=on />';
+                $ret .= '<input type="checkbox" name="toggle_'.$propname.'"'.$checked.' onclick="toggle_option(\''.$propname.'\');'.$onChange.'" value=on />';
             }
             
             $ret .= '</td><td class=tdfield>';
 
             // Display as text if inherited, otherwise display the input fields
-            if(!$inherited) {
+            if($inherited === false) {
                 $hideTxt   = ' style="display:none"';
                 $hideField = '';
             } else {
@@ -158,7 +189,10 @@ class WuiViewMapAddModify {
             
             // Prepare translation of value to a nice display string in case of
             // e.g. boolean fields
-            $valueTxt = $value;
+            if(isset($typeDefaults[$propname]))
+                $valueTxt = $typeDefaults[$propname];
+            else
+                $valueTxt = '';
 
             switch($fieldType) {
                 case 'boolean':
@@ -166,16 +200,16 @@ class WuiViewMapAddModify {
                         '1' => l('yes'),
                         '0' => l('no'),
                     );
-                    $valueTxt = $options[$value];
+                    $valueTxt = $options[$valueTxt];
                     // FIXME: !isset($options[$value]) -> fallback to input field
-                    $ret .= $this->selectField($propname, $options, $value, $hideField);
+                    $ret .= $this->selectField($propname, $options, $value, $hideField, $onChange);
                 break;
                 case 'dropdown':
                     // If var is backend_id or var is host_name in service objects submit the form
-                    // to update the depdant lists
-                    $onChange = '';
-                    if($propname == 'backend_id' || ($type == 'service' && $propname == 'host_name'))
-                        $onChange = 'document.getElementById(\'commit\').click();';
+                    // to update the depdant lists.
+                    if($onChange == '' && ($propname == 'backend_id'
+                       || ($type == 'service' && $propname == 'host_name')))
+                        $onChange = 'document.getElementById(\'update\').value=\'1\';document.getElementById(\'commit\').click();';
 
                     $func = $this->MAPCFG->getListFunc($type, $propname);
                     // Handle case that e.g. host_names can not be fetched from backend by
@@ -186,8 +220,8 @@ class WuiViewMapAddModify {
                         // When this is an associative array use labels instead of real values
                         // Change other arrays to associative ones for easier handling afterwards
                         if(!isset($options[0])) {
-                            if(isset($options[$value]))
-                                $valueTxt = $options[$value];
+                            if(isset($options[$valueTxt]))
+                                $valueTxt = $options[$valueTxt];
                         } else {
                             // Change the format to assoc array with null values
                             $new = Array();
