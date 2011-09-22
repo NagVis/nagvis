@@ -58,66 +58,8 @@ Relative Koordinaten:
    - Farbe (?)
  - Offset zum Ziel
 
-*** Add/Modify Redesign ***
-
-Aufrufe:
-1. Neues Objekt - x/y Koordinaten als Parameter
-  - Parameter: type, x, y
-2. Objekt klonen - Aktuell konfigurierte Parameter + Objekt-ID generieren
-  - Parameter: object_id
-3. Objekt bearbeiten - Aktuell konfigurierte Parameter
-  - object_id
-
-Felder:
-  Jedes Feld besteht aus der Instanz einer Klasse. Diese Klasse steuert
-  die Darstellung, Validierung usw. dieses Feldes.
-
-  Methoden:
-  - default()
-    Gibt den Default-Wert dieses Feldes zurück.
-  - render()
-    HTML-Code zur Eingabe des Wertes. Nicht die ganze Tabellen-Zeile, nur
-    die Formular-Felder.
-  - validate()
-    Funktionen zur Validierung eines gültigen Wertes. Gibt "true" zurück, wenn
-    der Wert gültig ist. Schmeißt eine FieldInputError Exception, wenn nicht gültig.
-  - dependsOn()
-    Gibt den Schlüssel einer anderen Option und den Wert zurück, von dem diese
-    Option abhängt. Nur wenn der Wert stimmt, wird das Formularfeld angezeigt.
-
-Feld-Eigenschaften:
-- Default Werte grau zeigen, solange bis ein anderer Wert gewählt wird
-  Außerdem anzeigen, woher der Wert geerbt wird. Es sind folgende Ebenen denkbar:
-  1. Template (Name zeigen)
-  2. Global Bereich der Map
-  3. Main Configuration
-  4. Hart codiert
-- Wenn Wert auf den vererbten Wert gesetzt wird, wieder ausgrauen
-- Zwischen Dropdown und Textfeld umschalten können
-- Button zum Zurücksetzen eines Wertes auf Default einbauen
-- Abhängige Felder je nach Wert eines oder mehrerer Felder zeigen/verstecken
-- Leere Variablen müssen auch gesetzt werden können
-- Wenn Dropdown wegen Exception nicht befüllt werden kann, diese abfangen und dann anstatt des Feldes
-  die Fehlermeldung anzeigen
-- Wenn bei Dropdowns ein Wert gesetzt ist, der nicht in den Listen vorhanden ist,
-  dann keine Dropdown-Liste anzeigen.
-- Nicht mehr gesetzte Attribute entfernen
-
-Fehlerbehandlung:
-- Direkt im Dialog: Feldbezogene Fehler direkt unter den Feldern anzeigen
-- Generelle Fehler als Popup/über Formular anzeigen
-
-- Validierung/Verarbeitung ohne Javascript, kompletter Dialog wird neu generiert
-  - Beim Abschicken des Formulars (submitFrontendForm()) den Dialog nicht schließen
-    ajax_handler.php?mod=Map&act=addModify&do=modify
-    -> zeigt das Formular, muss auch die Daten verarbeiten und dann das Ergebnis malen
-  - Das Formular wird abgeschickt und verarbeitet
-    -> Im Fehlerfall wird die Antwort in den Dialog gemalt, wobei der vorherige Inhalt überschrieben wird
-    -> Bei Erfolg wird der Dialog geschlossen, es wird kurz eine Erfolgsmeldung gezeigt
-
-Noch offen:
-  - Optional: Variablen nach int/boolean casten, wenn sinnvoll
-  - Manuell Werte setzen, z.b. gadget_url optional als volle URL angeben
+*** Cleanups ***
+  - Variablen nach int/boolean casten, wenn sinnvoll
   - Objekte klonen wieder implementieren
 
 *** Shortcuts einbauen ***
@@ -214,3 +156,51 @@ Die Zuweisung von Variablen zu den Objekttypen geschieht über das $mapConfigVar
 Das Array ernhält die Objekttypen als Schlüssel und darunter jeweils ein Array mit den
 möglichen Variablen als Schlüssel und "null" oder den Typ spezifischen Namen als Wert.
 
+
+*** Add/Modify Redesign ***
+
+Aufrufe:
+1. Neues Objekt - x/y Koordinaten als Parameter
+  - Parameter: type, x, y
+2. Objekt klonen - Aktuell konfigurierte Parameter + Objekt-ID generieren
+  - Parameter: object_id
+3. Objekt bearbeiten - Aktuell konfigurierte Parameter
+  - object_id
+
+=> Es können beliebige Variablen via POST/GET übergeben werden. Hierbei muss zwischen
+   den Standard-Variablen für das Modul, die Action etc. und den Attributen unterschieden
+   werden.
+
+   1. Default Variablen werden außenvor gelassen und am Anfang der "Action" verarbeitet und
+      gefiltert
+   2. Alle Attribute des Objekt-Typs werden versucht aus den Variablen auszulesen.
+   3. Die übrigen Variablen werden als Hidden-Felder zum Formular hinzugefügt und so
+      durchgeschleust.
+
+Feld-Eigenschaften:
+- Vor jedem Wert ein Kästchen anzeigen, mit welchem dieses Attribut aktiviert wird
+  - Bei nicht angehaktem Kästchen wird der Wert geerbt.
+  - Die Checkbox wird bei Pflichtfeldern nicht angezeigt.
+- Je nach Attribut-Typ verschiedene Felder anzeigen (Text, Select, ...)
+- Abhängige Felder je nach Wert eines anderen Feldes zeigen/verstecken
+- Leere Variablen müssen auch gesetzt werden können
+- Wenn Dropdown wegen Exception nicht befüllt werden kann, diese abfangen und
+  dann anstatt des Feldes die Fehlermeldung anzeigen
+- Wenn bei Dropdowns ein Wert gesetzt ist, der nicht in den Listen vorhanden ist,
+  dann keine Dropdown-Liste anzeigen.
+
+Fehlerbehandlung:
+- Direkt im Dialog: Feldbezogene Fehler direkt unter den Feldern anzeigen
+- Generelle Fehler/Meldungen als über Formular anzeigen
+
+- Validierung/Verarbeitung ohne Javascript, kompletter Dialog wird neu generiert
+  - Beim Abschicken des Formulars den Dialog nicht schließen
+  - Der Dialog muss neu generiert werden, wenn
+    a) Der Wert von Feldern mit Abhängigkeiten geändert wird
+    b) Ein Feld mit Abhängkgeiten von Geerbt auf Konfiguriert geändert wird
+  - Das Formular wird abgeschickt und verarbeitet
+    -> Im Fehlerfall wird die Antwort in den Dialog gemalt,
+       wobei der vorherige Inhalt überschrieben wird
+    -> Bei Erfolg wird der Dialog nach X Sekunden geschlossen,
+       es wird kurz eine Erfolgsmeldung gezeigt. Aktuell muss dann die
+       Seite neu geladen werden

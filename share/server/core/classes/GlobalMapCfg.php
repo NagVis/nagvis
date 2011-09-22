@@ -1031,8 +1031,7 @@ class GlobalMapCfg {
             if(is_array($val))
                 $val = implode(',', $val);
 
-            if($val !== '')
-                $newLine = $key.'='.$val."\n";
+            $newLine = $key.'='.$val."\n";
 
             if($lineNum !== null && $newLine !== '')
                 // if a parameter was found in file and value is not empty, replace line

@@ -34,6 +34,17 @@ function listHoverChildOrders() {
     );
 }
 
+function listGadgetTypes() {
+    return Array(
+        'img'  => l('Image'),
+        'html' => l('HTML Code'),
+    );
+}
+
+function listGadgets($CORE) {
+    return $CORE->getAvailableGadgets();
+}
+
 function listHoverTemplates($CORE) {
     return $CORE->getAvailableHoverTemplates();
 }
@@ -595,6 +606,8 @@ $mapConfigVars = Array(
         'field_type'    => 'dropdown',
         'depends_on'    => 'view_type',
         'depends_value' => 'gadget',
+        'default'       => '',
+        'list'          => 'listGadgets',
     ),
     'gadget_type' => Array(
         'must'          => 0,
@@ -603,6 +616,7 @@ $mapConfigVars = Array(
         'depends_on'    => 'view_type',
         'depends_value' => 'gadget',
         'default'       => 'img',
+        'list'          => 'listGadgetTypes',
     ),
     'gadget_scale' => Array('must' => 0,
         'default' => 100,
