@@ -650,3 +650,49 @@ td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 #sidebar li.open a.title {background: url('../images/templates/default.folder_open.gif') no-repeat left #eaf0f2;}
 #sidebar li.closed a.title {background: url('../images/templates/default.folder_closed.gif') no-repeat left #eaf0f2;}
 #sidebar li a:hover {background-color:#d9e1e4;color:#779D2A}
+
+/*
+ * Frontend eventlog styling
+ */
+
+#eventlog {
+	position: fixed;
+	bottom: 0px;
+	right: 20px;
+	z-index: 1000;
+	
+	width: 400px;
+	height: 70px;
+	
+	background-color: #d0d0d0;
+	border: 1px solid #000000;
+	border-bottom: 0;
+	
+	opacity:0.4;
+	/*filter:alpha(opacity=40);*/
+	
+	padding: 2px;
+	
+	font-size: 9px;
+}
+
+#eventlogControl {
+	position: fixed;
+	bottom: 75px;
+	right: 20px;
+	z-index: 1001;
+	
+	width: 10px;
+	height: 10px;
+	
+	background-color: #d0d0d0;
+	border: 1px solid #000000;
+	border-bottom: 0;
+	
+	opacity:0.4;
+	/*filter:alpha(opacity=40);*/
+	
+	padding: 2px;
+	
+	font-size: 9px;
+}

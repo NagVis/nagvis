@@ -51,6 +51,7 @@ Frontend
   * Added [alias] macro to context menus
   * Header menu handles map parent/child relations correctly
   * Recoded the add/modify dialog to add/edit map objects
+  * Merged frontendEventlog.css into template css file
 
 Automap
   * Bugfix: Made the problem automap work again
