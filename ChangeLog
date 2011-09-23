@@ -20,12 +20,6 @@ Core
   * Internal cleanup in map configuration attribute definitions
 
 Frontend
-  * Readded the "edit" action to the maps module. In this mode all object are
-    automatically unlocked and changes to the lock state are not persisted
-  * Also disabling the object left click actions in unlocked mode
-  * Icon/Gadget/Shape/Textbox dragging is done by dragging the real icons
-  again, like it was in WUI before. The drag controls for these objects has been removed.
-  * Sorting maps on overview page and in multisite snapin by aliases
   * Bugfix: Fixed several umlauts in edit mode warning messages
   * Bugfix: Fixed 100% sidebar height
   * Bugfix: Fixed initial positioning of relative positioned gadgets
@@ -45,6 +39,12 @@ Frontend
   * Bugfix: std_speedometer.php fixed min/max handling (Thanks to foxkilo)
   * Bugfix: Fixed broken URL handling in e.g. rotation pools
   * Bugfix: Fixed styling of maps with config errors in sidebar
+  * Readded the "edit" action to the maps module. In this mode all object are
+    automatically unlocked and changes to the lock state are not persisted
+  * Also disabling the object left click actions in unlocked mode
+  * Icon/Gadget/Shape/Textbox dragging is done by dragging the real icons
+  again, like it was in WUI before. The drag controls for these objects has been removed.
+  * Sorting maps on overview page and in multisite snapin by aliases
   * Readded the "edit" action to the maps module. In this mode all object are
     automatically unlocked and changes to the lock state are not persisted
   * Also disabling the object left click actions in unlocked mode
