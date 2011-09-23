@@ -32,7 +32,7 @@
 function headerDraw() {
     scaleView();
 
-    if(!oUserProperties)
+    if(typeof(oUserProperties) === 'undefined')
         return;
 
     if(typeof(oUserProperties.header) !== 'undefined' && oUserProperties.header === false)
@@ -161,7 +161,7 @@ function getSidebarWidth() {
 // Cares about the initial drawing of the sidebar on page load
 // Loads the sidebar visibility state from the server
 function sidebarDraw() {
-    if(!oUserProperties)
+    if(typeof(oUserProperties) === 'undefined')
         return;
 
     if(typeof(oUserProperties.sidebar) !== 'undefined' && oUserProperties.sidebar === 1)

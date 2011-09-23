@@ -43,6 +43,7 @@ Frontend
   * Bugfix: It is now possible to choose none as map_image in map options to
     disable the background image
   * Bugfix: std_speedometer.php fixed min/max handling (Thanks to foxkilo)
+  * Bugfix: Fixed broken URL handling in e.g. rotation pools
   * Readded the "edit" action to the maps module. In this mode all object are
     automatically unlocked and changes to the lock state are not persisted
   * Also disabling the object left click actions in unlocked mode

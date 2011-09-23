@@ -1712,6 +1712,25 @@ function parseMap(iMapCfgAge, type, mapName) {
 }
 
 /**
+ * Fetches the contents of the given url and prints it on the current page
+ *
+ * @param   String   The url to fetch
+ * @author  Lars Michelsen <lars@vertical-visions.de>
+ */
+function parseUrl(sUrl) {
+    // Fetch contents from server
+    var oUrlContents = getSyncRequest(oGeneralProperties.path_server
+                       + '?mod=Url&act=getContents&show='
+                       + escapeUrlValues(sUrl));
+
+    if(typeof oUrlContents !== 'undefined' && oUrlContents.content) {
+        // Replace the current contents with the new url
+        var urlContainer = document.getElementById('url');
+        urlContainer.innerHTML = oUrlContents.content;
+    }
+}
+
+/**
  * workerInitialize()
  *
  * Does the initial parsing of the pages
