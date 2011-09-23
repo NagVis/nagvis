@@ -990,7 +990,6 @@ class GlobalMapCfg {
             list($inObj, $start, $end) = $this->getObjectLinesByNum(0);
         else
             list($inObj, $start, $end) = $this->getObjectLinesById($id);
-
         // Remove object head/foot
         $start += 1;
         $end   -= 1;
@@ -1002,11 +1001,13 @@ class GlobalMapCfg {
 
         // Loop all object lines from file to remove all parameters which can not be
         // found in the current array anymore
-        for($i = $start; $i < $end; $i++) {
+        for($i = $end; $i >= $start; $i--) {
             $entry = explode('=', $f[$i], 2);
             $key = trim($entry[0]);
-            if(!isset($this->mapConfig[$id][$key]))
+            if(!isset($this->mapConfig[$id][$key])) {
                 array_splice($f, $i, 1);
+                $end -= 1;
+            }
         }
 
         // Loop all parameters from array
@@ -1018,7 +1019,7 @@ class GlobalMapCfg {
                 continue;
 
             // Search for the param in the map config
-            for($i = $start; $i < $end; $i++) {
+            for($i = $start; $i <= $end; $i++) {
                 $entry = explode('=', $f[$i], 2);
 
                 // Skip non matching keys
@@ -1033,16 +1034,14 @@ class GlobalMapCfg {
 
             $newLine = $key.'='.$val."\n";
 
-            if($lineNum !== null && $newLine !== '')
+            if($lineNum !== null && $newLine !== '') {
                 // if a parameter was found in file and value is not empty, replace line
                 $f[$lineNum] = $newLine;
-            elseif($lineNum !== null && $newLine === '') {
-                // if a paremter is not in array or a value is empty, delete the line in the file
-                // FIXME: Never reached here? But should be handled by separate loop above
-                array_splice($f, $lineNum, 1);
-            } elseif($lineNum === null && $newLine !== '')
+            } elseif($lineNum === null && $newLine !== '') {
                 // if a parameter was not found in array and a value is not empty, create line
-                array_splice($f, $end, 0, Array($newLine));
+                array_splice($f, $end + 1, 0, Array($newLine));
+                $end += 1;
+            }
         }
 
         $this->writeConfig($f);
