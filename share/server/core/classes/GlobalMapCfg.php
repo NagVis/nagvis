@@ -1001,7 +1001,7 @@ class GlobalMapCfg {
 
         // Loop all object lines from file to remove all parameters which can not be
         // found in the current array anymore
-        for($i = $end; $i >= $start; $i--) {
+        for($i = $end - 1; $i >= $start; $i--) {
             $entry = explode('=', $f[$i], 2);
             $key = trim($entry[0]);
             if(!isset($this->mapConfig[$id][$key])) {
@@ -1039,7 +1039,7 @@ class GlobalMapCfg {
                 $f[$lineNum] = $newLine;
             } elseif($lineNum === null && $newLine !== '') {
                 // if a parameter was not found in array and a value is not empty, create line
-                array_splice($f, $end + 1, 0, Array($newLine));
+                array_splice($f, $end, 1, Array($newLine, $f[$end]));
                 $end += 1;
             }
         }
