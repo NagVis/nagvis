@@ -215,7 +215,7 @@ class WuiViewMapAddModify {
                     // Handle case that e.g. host_names can not be fetched from backend by
                     // showing error text instead of fields
                     try {
-                        $options = $func($this->CORE, $this->MAPCFG, $objId);
+                        $options = $func($this->CORE, $this->MAPCFG, $objId, $this->attrs);
 
                         // When this is an associative array use labels instead of real values
                         // Change other arrays to associative ones for easier handling afterwards
@@ -255,9 +255,18 @@ class WuiViewMapAddModify {
 
             $ret .= '</td></tr>';
 
-            if(isset($this->errors[$propname]))
+            if(isset($this->errors[$propname])) {
                 foreach($this->errors[$propname] AS $err)
                     $ret .= '<tr><td colspan=3 class=err><div>' . $err . '</div></td></tr>';
+                unset($this->errors[$propname]);
+            }
+        }
+
+        // Errors left?
+        if(count($this->errors) > 0) {
+            foreach($this->errors AS $attr => $errors)
+            foreach($errors AS $err)
+                $ret .= '<tr><td colspan=3 class=err><div>'.$attr.': ' . $err . '</div></td></tr>';
         }
 
         return $ret;

@@ -61,18 +61,30 @@ function listViewTypes($CORE) {
     return Array('icon', 'line');
 }
 
-function getObjectNames($type, $CORE, $MAPCFG, $objId) {
-    $backendId = $MAPCFG->getValue($objId, 'backend_id');
+function getObjectNames($type, $CORE, $MAPCFG, $objId, $attrs) {
+    if(isset($attrs['backend_id']) && $attrs['backend_id'] != '')
+        $backendId = $attrs['backend_id'];
+    else
+        $backendId = $MAPCFG->getValue($objId, 'backend_id');
 
     // Initialize the backend
     $BACKEND = new CoreBackendMgmt($CORE);
     $BACKEND->checkBackendExists($backendId, true);
     $BACKEND->checkBackendFeature($backendId, 'getObjects', true);
 
-    $name1 = ($type === 'service' ? $MAPCFG->getValue($objId, 'host_name') : '');
+    $name1 = '';
+    if($type === 'service') {
+        if(isset($attrs['host_name']) && $attrs['host_name'] != '')
+            $name1 = $attrs['host_name'];
+        else
+            $name1 = $MAPCFG->getValue($objId, 'host_name');
+
+        if($name1 == '')
+            return Array();
+    }
 
     // Read all objects of the requested type from the backend
-    $aRet = Array('');
+    $aRet = Array();
     $objs = $BACKEND->getBackend($backendId)->getObjects($type, $name1, '');
     foreach($objs AS $obj) {
         if($type !== 'service')
@@ -84,20 +96,20 @@ function getObjectNames($type, $CORE, $MAPCFG, $objId) {
     return $aRet;
 }
 
-function listHostNames($CORE, $MAPCFG, $objId) {
-    return getObjectNames('host', $CORE, $MAPCFG, $objId);
+function listHostNames($CORE, $MAPCFG, $objId, $attrs) {
+    return getObjectNames('host', $CORE, $MAPCFG, $objId, $attrs);
 }
 
-function listHostgroupNames($CORE, $MAPCFG, $objId) {
-    return getObjectNames('hostgroup', $CORE, $MAPCFG, $objId);
+function listHostgroupNames($CORE, $MAPCFG, $objId, $attrs) {
+    return getObjectNames('hostgroup', $CORE, $MAPCFG, $objId, $attrs);
 }
 
-function listServiceNames($CORE, $MAPCFG, $objId) {
-    return getObjectNames('service', $CORE, $MAPCFG, $objId);
+function listServiceNames($CORE, $MAPCFG, $objId, $attrs) {
+    return getObjectNames('service', $CORE, $MAPCFG, $objId, $attrs);
 }
 
-function listServicegroupNames($CORE, $MAPCFG, $objId) {
-    return getObjectNames('servicegroup', $CORE, $MAPCFG, $objId);
+function listServicegroupNames($CORE, $MAPCFG, $objId, $attrs) {
+    return getObjectNames('servicegroup', $CORE, $MAPCFG, $objId, $attrs);
 }
 
 function listTemplateNames($CORE) {

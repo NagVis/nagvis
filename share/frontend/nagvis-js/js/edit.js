@@ -377,11 +377,11 @@ function addObject(e, objType, viewType, numLeft, action) {
     addAction   = action;
 
     if(document.body)
-    document.body.style.cursor = 'crosshair';
+        document.body.style.cursor = 'crosshair';
 
     var event = !e ? window.event : e;
     if(event.stopPropagation)
-    event.stopPropagation();
+        event.stopPropagation();
     event.cancelBubble = true;
     return false;
 }
@@ -390,11 +390,11 @@ function getEventMousePos(e) {
     var event = !e ? window.event : e;
 
     if (event.pageX || event.pageY) {
-    posx = event.pageX;
-    posy = event.pageY;
+        posx = event.pageX;
+        posy = event.pageY;
     } else if (event.clientX || event.clientY) {
-    posx = event.clientX;
-    posy = event.clientY;
+        posx = event.clientX;
+        posy = event.clientY;
     }
 
     // FIXME: Check the clicked area. Only handle clicks on the map!
@@ -404,10 +404,10 @@ function getEventMousePos(e) {
 
     // When a grid is enabled align the dragged object in the nearest grid
     if(oViewProperties.grid_show === 1) {
-    var a = coordsToGrid(posx, posy);
-    posx = a[0];
-    posy = a[1];
-    a = null;
+        var a = coordsToGrid(posx, posy);
+        posx = a[0];
+        posy = a[1];
+        a = null;
     }
 
     return [ posx, posy ];
@@ -415,7 +415,7 @@ function getEventMousePos(e) {
 
 function addClick(e) {
     if(!adding())
-    return;
+        return;
 
     var pos = getEventMousePos(e);
     addX.push(pos[0]);
@@ -425,46 +425,38 @@ function addClick(e) {
 
     // Draw a line to illustrate the progress of drawing the current line
     if(addViewType === 'line' || addObjType === 'textbox') {
-    addShape = new jsGraphics('map');
+        addShape = new jsGraphics('map');
 
-    addShape.setColor('#06B606');
-    addShape.setStroke(1);
+        addShape.setColor('#06B606');
+        addShape.setStroke(1);
 
-    addFollow = true;
+        addFollow = true;
     }
 
     if(addNumLeft > 0)
-    return;
+        return;
 
     //
     // If this is reached all object coords have been collected
     //
 
     if(document.body)
-    document.body.style.cursor = 'default';
+        document.body.style.cursor = 'default';
 
     var sUrl = '';
-    if(addAction == 'add' || addAction == 'clone') {
-    sUrl = oGeneralProperties.path_server + '?mod=Map&act=addModify&do=add'
-           + '&show=' + oPageProperties.map_name
-           + '&type=' + addObjType
-           + '&x=' + addX.join(',')
-           + '&y=' + addY.join(',')
-           + '&viewType=' + addViewType;
+    if(addAction == 'add' || addAction == 'clone')
+        sUrl = oGeneralProperties.path_server + '?mod=Map&act=addModify'
+               + '&show=' + oPageProperties.map_name
+               + '&type=' + addObjType
+               + '&x=' + addX.join(',')
+               + '&y=' + addY.join(',')
+               + '&view_type=' + addViewType;
 
     if(addAction == 'clone' && objid !== -1)
-        sUrl += '&clone='+objid;
-    } else if(addAction == 'modify' && objid !== -1) {
-    sUrl = oGeneralProperties.path_server+'?mod=Map&act=addModify&do=modify'
-           + '&show=' + oPageProperties.map_name
-           + '&type=' + addObjType
-           + '&id=' + objid
-           + '&x=' + addX.join(',')
-           + '&y=' + addY.join(',');
-    }
+        sUrl += '&clone_id='+objid;
 
     if(sUrl === '')
-    return false;
+        return false;
 
     // FIXME: Language string
     showFrontendDialog(sUrl, 'Properties');
