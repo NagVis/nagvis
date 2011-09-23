@@ -995,7 +995,6 @@
   text="This is an informational text which can be placed anywhere on the map, HTML can also be used for formatting purposes"
  x=200
  y=100
- w=200
 }</pre>
         <table style="width:100%">
         <tr>
@@ -1014,9 +1013,6 @@
         <b>[worker_last_run]:</b> Shows the time of the last worker run</td>
         </tr>
         <tr>
-        <td> <b>w</b> </td><td> </td><td> Width of the textbox in px (pixels). Set to "auto" for auto scaling. </td>
-        </tr>
-        <tr>
         <td> <b>x</b> </td><td> </td>
     <td>X axis coordinate(s).
               Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
@@ -1027,13 +1023,16 @@
               Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
         </tr>
         <tr>
+        <td>w</td><td>auto</td><td>Width of the textbox in px (pixels). Set to "auto" for auto scaling. </td>
+        </tr>
+        <tr>
+        <td>h</td><td>auto</td><td>Height of the textbox in px (pixels). Set to "auto" for auto scaling.</td>
+        </tr>
+        <tr>
         <td> background_color </td><td> #C0C0C0 </td><td> Background color of the textbox. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
         </tr>
         <tr>
         <td> border_color </td><td> #000000 </td><td> Background color of the textbox. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
-        </tr>
-        <tr>
-        <td>h</td><td>auto</td><td>Height of the textbox in px (pixels). Set to "auto" for auto scaling.</td>
         </tr>
         <tr>
         <td>style</td><td></td><td>Custom styling for the text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code></td>

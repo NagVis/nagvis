@@ -708,13 +708,14 @@ $mapConfigVars = Array(
         'match' => MATCH_STRING_STYLE,
     ),
     'h' => Array(
-        'must' => 0,
+        'must'    => 0,
         'default' => 'auto',
-        'match' => MATCH_TEXTBOX_HEIGHT,
+        'match'   => MATCH_TEXTBOX_HEIGHT,
     ),
     'w' => Array(
-        'must' => 1,
-        'match' => MATCH_TEXTBOX_WIDTH,
+        'must'    => 0,
+        'default' => 'auto',
+        'match'   => MATCH_TEXTBOX_WIDTH,
     ),
 
     // SHAPE SPECIFIC OPTIONS
@@ -1052,12 +1053,12 @@ $mapConfigVarMap['textbox'] = Array(
     'x' => null,
     'y' => null,
     'z' => null,
+    'w' => null,
+    'h' => null,
     'background_color' => null,
     'border_color' => null,
     'style' => null,
     'use' => null,
-    'h' => null,
-    'w' => null,
 );
 
 $mapConfigVarMap['shape'] = Array(
