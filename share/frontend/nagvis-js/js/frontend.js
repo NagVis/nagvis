@@ -1736,10 +1736,6 @@ function workerInitialize(iCount, sType, sIdentifier) {
         // Loading a simple map
         eventlog("worker", "debug", "Parsing map: " + sIdentifier);
 
-        // Load the file ages of the important configuration files
-        eventlog("worker", "debug", "Loading the file ages");
-        oFileAges = getCfgFileAges(sType, sIdentifier);
-
         // Parse the map
         if(parseMap(oFileAges[sIdentifier], sType, sIdentifier) === false)
             eventlog("worker", "error", "Problem while parsing the map on page load");
@@ -1757,10 +1753,6 @@ function workerInitialize(iCount, sType, sIdentifier) {
 
         eventlog("worker", "debug", "Parsing overview page");
         parseOverviewPage();
-
-        // Load the file ages of the important configuration files
-        eventlog("worker", "debug", "Loading the file ages");
-        oFileAges = getCfgFileAges();
 
         eventlog("worker", "debug", "Parsing maps");
         parseOverviewMaps(getOverviewMaps());
@@ -1803,14 +1795,9 @@ function workerInitialize(iCount, sType, sIdentifier) {
 
         // Load the file ages of the important configuration files
         eventlog("worker", "debug", "Loading the file ages");
-        oFileAges = getCfgFileAges();
     } else if(sType == 'automap') {
         // Loading a simple map
         eventlog("worker", "debug", "Parsing automap: " + sIdentifier);
-
-        // Load the file ages of the important configuration files
-        eventlog("worker", "debug", "Loading the file ages");
-        oFileAges = getCfgFileAges(sType, sIdentifier);
 
         // Parse the map
         if(parseMap(oFileAges[sIdentifier], sType, sIdentifier) === false)

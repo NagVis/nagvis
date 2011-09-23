@@ -93,16 +93,22 @@ class NagVisAutoMapView {
         $TMPLSYS = $TMPL->getTmplSys();
         $USERCFG = new CoreUserCfg();
 
+        $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
+
         $aData = Array(
-                'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
-                'workerProperties' => $this->CORE->getMainCfg()->parseWorkerProperties(),
+                'generalProperties'  => $this->CORE->getMainCfg()->parseGeneralProperties(),
+                'workerProperties'   => $this->CORE->getMainCfg()->parseWorkerProperties(),
                 'rotationProperties' => json_encode($this->aRotation),
-                'viewProperties' => $this->parseViewProperties(),
-                'stateProperties' => json_encode($this->CORE->getMainCfg()->getStateWeight()),
-                'userProperties' => $USERCFG->doGetAsJson(),
-                'mapName' => $this->name,
-                'automap' => $this->content,
-                'automapParams' => json_encode($this->aParams)
+                'viewProperties'     => $this->parseViewProperties(),
+                'stateProperties'    => json_encode($this->CORE->getMainCfg()->getStateWeight()),
+                'userProperties'     => $USERCFG->doGetAsJson(),
+                'mapName'            => $this->name,
+                'automap'            => $this->content,
+                'automapParams'      => json_encode($this->aParams),
+                'fileAges'           => json_encode(Array(
+                    'mainCfg'   => $this->CORE->getMainCfg()->getConfigFileAge(),
+                    $this->name => $MAPCFG->getFileModificationTime(),
+                )),
             );
 
     // Build page based on the template file and the data array

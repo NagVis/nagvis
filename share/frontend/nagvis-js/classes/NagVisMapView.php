@@ -27,6 +27,7 @@
  */
 class NagVisMapView {
     private $CORE      = null;
+    private $MAPCFG    = null;
     private $name      = '';
     private $search    = '';
     private $aRotation = Array();
@@ -91,6 +92,9 @@ class NagVisMapView {
         $TMPLSYS = $TMPL->getTmplSys();
         $USERCFG = new CoreUserCfg();
 
+        $this->MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
+        $this->MAPCFG->readMapConfig(ONLY_GLOBAL);
+
         $aData = Array(
             'generalProperties'  => $this->CORE->getMainCfg()->parseGeneralProperties(),
             'workerProperties'   => $this->CORE->getMainCfg()->parseWorkerProperties(),
@@ -98,7 +102,11 @@ class NagVisMapView {
             'viewProperties'     => $this->parseViewProperties(),
             'stateProperties'    => json_encode($this->CORE->getMainCfg()->getStateWeight()),
             'userProperties'     => $USERCFG->doGetAsJson(),
-            'mapName'            => $this->name
+            'mapName'            => $this->name,
+            'fileAges'           => json_encode(Array(
+                'mainCfg'   => $this->CORE->getMainCfg()->getConfigFileAge(),
+                $this->name => $this->MAPCFG->getFileModificationTime(),
+            )),
         );
 
         // Build page based on the template file and the data array
@@ -116,14 +124,11 @@ class NagVisMapView {
     private function parseViewProperties() {
         $arr = Array();
 
-        $MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
-        $MAPCFG->readMapConfig(ONLY_GLOBAL);
-
         $arr['search']     = $this->search;
         $arr['edit_mode']  = $this->editMode;
-        $arr['grid_show']  = intval($MAPCFG->getValue(0, 'grid_show'));
-        $arr['grid_color'] = $MAPCFG->getValue(0, 'grid_color');
-        $arr['grid_steps'] = intval($MAPCFG->getValue(0, 'grid_steps'));
+        $arr['grid_show']  = intval($this->MAPCFG->getValue(0, 'grid_show'));
+        $arr['grid_color'] = $this->MAPCFG->getValue(0, 'grid_color');
+        $arr['grid_steps'] = intval($this->MAPCFG->getValue(0, 'grid_steps'));
 
         // View specific hover modifier set
         if($this->aViewOpts['enableHover'] !== false) {

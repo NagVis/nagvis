@@ -55,6 +55,9 @@ class NagVisOverviewView {
             'workerProperties'  => $this->CORE->getMainCfg()->parseWorkerProperties(),
             'stateProperties'   => json_encode($this->CORE->getMainCfg()->getStateWeight()),
             'userProperties'    => $USERCFG->doGetAsJson(),
+            'fileAges'          => json_encode(Array(
+                'mainCfg'   => $this->CORE->getMainCfg()->getConfigFileAge(),
+            )),
         );
 
         // Build page based on the template file and the data array

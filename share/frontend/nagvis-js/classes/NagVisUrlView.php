@@ -74,10 +74,13 @@ class NagVisUrlView {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-                'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
-                'workerProperties' => $this->CORE->getMainCfg()->parseWorkerProperties(),
+                'generalProperties'  => $this->CORE->getMainCfg()->parseGeneralProperties(),
+                'workerProperties'   => $this->CORE->getMainCfg()->parseWorkerProperties(),
                 'rotationProperties' => json_encode($this->aRotation),
-                'url' => $this->url
+                'url'                => $this->url,
+                'fileAges'           => json_encode(Array(
+                    'mainCfg'   => $this->CORE->getMainCfg()->getConfigFileAge(),
+                )),
             );
 
     // Build page based on the template file and the data array

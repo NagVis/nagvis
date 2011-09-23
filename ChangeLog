@@ -52,6 +52,7 @@ Frontend
   * Header menu handles map parent/child relations correctly
   * Recoded the add/modify dialog to add/edit map objects
   * Merged frontendEventlog.css into template css file
+  * Reduced HTTP requests during initial page loading
 
 Automap
   * Bugfix: Made the problem automap work again
