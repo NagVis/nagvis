@@ -452,6 +452,7 @@ function getHoverTemplates() {
         // c) templates are already fetched
         if(isset(oMapObjects[i].conf.hover_menu) && oMapObjects[i].conf.hover_menu == '1'
            && (!oMapObjects[i].conf.hover_url || oMapObjects[i].conf.hover_url === '')
+           && isset(oMapObjects[i].conf.hover_template)
            && (!isset(oHoverTemplates[oMapObjects[i].conf.hover_template]) || oHoverTemplates[oMapObjects[i].conf.hover_template] === ''))
             oHoverTemplates[oMapObjects[i].conf.hover_template] = '';
     }

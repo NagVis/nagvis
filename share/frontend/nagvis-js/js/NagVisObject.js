@@ -291,7 +291,7 @@ var NagVisObject = Base.extend({
             return;
 
         var objId = this.conf.object_id;
-        var sTemplateCode;
+        var sTemplateCode = '';
         var iHoverDelay = this.conf.hover_delay;
 
         // Parse the configured URL or get the hover menu
@@ -306,7 +306,8 @@ var NagVisObject = Base.extend({
                 this.getHoverTemplateCode();
 
             // Replace dynamic (state dependent) macros
-            sTemplateCode = replaceHoverTemplateDynamicMacros(this);
+            if(isset(this.conf.hover_template))
+                sTemplateCode = replaceHoverTemplateDynamicMacros(this);
         }
 
         var doc = document;
@@ -395,7 +396,8 @@ var NagVisObject = Base.extend({
     getHoverTemplateCode: function() {
         // Asign the template code and replace only the static macros
         // These are typicaly configured static configued values from nagios
-        this.hover_template_code = replaceHoverTemplateStaticMacros(this, oHoverTemplates[this.conf.hover_template]);
+        if(isset(this.conf.hover_template))
+            this.hover_template_code = replaceHoverTemplateStaticMacros(this, oHoverTemplates[this.conf.hover_template]);
     },
 
     /**
