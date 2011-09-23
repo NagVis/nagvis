@@ -650,6 +650,7 @@ td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 #sidebar li.open a.title {background: url('../images/templates/default.folder_open.gif') no-repeat left #eaf0f2;}
 #sidebar li.closed a.title {background: url('../images/templates/default.folder_closed.gif') no-repeat left #eaf0f2;}
 #sidebar li a:hover {background-color:#d9e1e4;color:#779D2A}
+#sidebar a.error, #sidebar a.error:active, #sidebar a.error:visited {color:#ff0000}
 
 /*
  * Frontend eventlog styling
