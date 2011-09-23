@@ -1,5 +1,21 @@
 <?php
 
+function listMapNames($CORE) {
+    global $AUTHORISATION;
+    $list = Array();
+    $automaps = $CORE->getAvailableAutomaps();
+    foreach($automaps AS $key => $val)
+        if($AUTHORISATION->isPermitted('AutoMap', 'view', $val))
+            $list[$key] = $val;
+
+    $maps = $CORE->getAvailableMaps();
+    foreach($maps AS $key => $val)
+        if($AUTHORISATION->isPermitted('Map', 'view', $val))
+            $list[$key] = $val;
+
+    return $list;
+}
+
 function listMapImages($CORE) {
     $options = $CORE->getAvailableBackgroundImages();
     array_unshift($options, 'none');
