@@ -450,7 +450,9 @@ function addClick(e) {
                + '&type=' + addObjType
                + '&x=' + addX.join(',')
                + '&y=' + addY.join(',')
-               + '&view_type=' + addViewType;
+
+    if(addViewType != 'icon')
+        sUrl += '&view_type=' + addViewType;
 
     if(addAction == 'clone' && objid !== -1)
         sUrl += '&clone_id='+objid;
