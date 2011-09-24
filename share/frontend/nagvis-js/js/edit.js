@@ -746,6 +746,27 @@ function gridParse() {
         gridStep = null;
         grid = null;
     }
+
+    addEvent(window, "resize", gridRedraw);
+}
+
+function gridRemove() {
+    var oMap = document.getElementById('map');
+    if(oMap) {
+        var oGrid = document.getElementById('grid')
+        if(oGrid) {
+            oMap.removeChild(oGrid);
+            oGrid = null;
+        }
+        oMap = null;
+    }
+
+    removeEvent(window, "resize", gridRedraw);
+}
+
+function gridRedraw() {
+    gridRemove();
+    gridParse();
 }
 
 /**
@@ -758,21 +779,9 @@ function gridToggle() {
     // Toggle the grid state
     if(oViewProperties.grid_show === 1) {
         oViewProperties.grid_show = 0;
-
-        // Remove from view
-        var oMap = document.getElementById('map');
-        if(oMap) {
-            var oGrid = document.getElementById('grid')
-            if(oGrid) {
-            oMap.removeChild(oGrid);
-            oGrid = null;
-            }
-            oMap = null;
-        }
+        gridRemove();
     } else {
         oViewProperties.grid_show = 1;
-
-        // Add to view
         gridParse();
     }
 

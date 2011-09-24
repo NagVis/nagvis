@@ -851,17 +851,17 @@ function getMapObjByDomObjId(id) {
 function updateNumUnlocked(num) {
     iNumUnlocked += num;
     if(iNumUnlocked == 0) {
-    var o = document.getElementById('editIndicator');
-    if(o) {
-        o.style.display = 'none';
-        o = null;
-    }
+        var o = document.getElementById('editIndicator');
+        if(o) {
+            o.style.display = 'none';
+            o = null;
+        }
     } else {
-    var o = document.getElementById('editIndicator');
-    if(o) {
-        o.style.display = '';
-        o = null;
-    }
+        var o = document.getElementById('editIndicator');
+        if(o) {
+            o.style.display = '';
+            o = null;
+        }
     }
 }
 
@@ -875,7 +875,7 @@ function removeMapObject(objectId) {
     obj.detachChilds();
     obj.remove();
     if(!obj.bIsLocked)
-    updateNumUnlocked(-1);
+        updateNumUnlocked(-1);
     obj = null;
     saveObjectRemove(objectId);
 }

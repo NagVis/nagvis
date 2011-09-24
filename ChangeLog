@@ -55,6 +55,7 @@ Frontend
   * Recoded the add/modify dialog to add/edit map objects
   * Merged frontendEventlog.css into template css file
   * Reduced HTTP requests during initial page loading
+  * Updating the editing grid when resizing the browser window
 
 Automap
   * Bugfix: Made the problem automap work again
