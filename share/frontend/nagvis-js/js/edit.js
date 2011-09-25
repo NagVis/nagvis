@@ -443,19 +443,27 @@ function addClick(e) {
     if(document.body)
         document.body.style.cursor = 'default';
 
+    if(addObjType == 'textbox') {
+        var w = addX.pop();
+        var h = addY.pop();
+    }
+
     var sUrl = '';
     if(addAction == 'add' || addAction == 'clone')
         sUrl = oGeneralProperties.path_server + '?mod=Map&act=addModify'
                + '&show=' + oPageProperties.map_name
                + '&type=' + addObjType
                + '&x=' + addX.join(',')
-               + '&y=' + addY.join(',')
+               + '&y=' + addY.join(',');
 
     if(addViewType != 'icon')
         sUrl += '&view_type=' + addViewType;
 
     if(addAction == 'clone' && objid !== -1)
         sUrl += '&clone_id='+objid;
+
+    if(addObjType == 'textbox')
+        sUrl += '&w=' + (w - addX[0]) + '&h=' + (h - addY[0]);
 
     if(sUrl === '')
         return false;
@@ -487,9 +495,9 @@ function addFollowing(e) {
     addShape.clear();
 
     if(addViewType === 'line')
-    addShape.drawLine(addX[0], addY[0], pos[0], pos[1]);
+        addShape.drawLine(addX[0], addY[0], pos[0] - getSidebarWidth(), pos[1]);
     else
-    addShape.drawRect(addX[0], addY[0], (pos[0] - addX[0]), (pos[1] - addY[0]));
+        addShape.drawRect(addX[0], addY[0], (pos[0] - getSidebarWidth() - addX[0]), (pos[1] - addY[0]));
 
     addShape.paint();
 }
