@@ -1198,6 +1198,51 @@ var NagVisObject = Base.extend({
         jsObj    = null;
     },
 
+    /**
+     * Returns the object ID of the object
+     */
+    getJsObjId: function() {
+        if(this.conf.view_type && this.conf.view_type === 'line')
+            return this.conf.object_id+'-linelink';
+        else
+            return this.conf.object_id+'-icon';
+    },
+
+    /**
+     * PUBLIC toggleObjectActions()
+     *
+     * This enables/disables the hover menu and the icon link
+     * temporary. e.g. in unlocked mode the hover menu shal be suppressed.
+     *
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    toggleObjectActions: function(enable) {
+	var o = document.getElementById(this.getJsObjId());
+	if(o) {
+	    if(enable && isset(o.disabled_onmousemove)) {
+                // Hover-menu
+		o.onmousemove = o.disabled_onmousemove;
+		o.onmouseout  = o.disabled_onmouseout;
+		o.disabled_onmousemove = null;
+		o.disabled_onmouseout  = null;
+
+                // Link (Left mouse action)
+                if(o.parentNode.tagName == 'A')
+                    o.parentNode.onclick = null;
+	    } else if(!enable) {
+                // Hover-menu
+		o.disabled_onmousemove = o.onmousemove;
+		o.disabled_onmouseout  = o.onmouseout;
+		o.onmousemove = null;
+		o.onmouseout  = null;
+
+                // Link (Left mouse action)
+                if(o.parentNode.tagName == 'A')
+                    o.parentNode.onclick = function() {return false};
+	    }
+            o = null;
+	}
+    },
 
     highlight: function(show) {}
 });

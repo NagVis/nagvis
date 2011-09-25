@@ -137,11 +137,17 @@ class WuiViewMapAddModify {
                 $fieldType = $prop['field_type'];
 
             // do nothing with hidden or deprecated attributes
-            if($fieldType == 'hidden' || (isset($prop['deprecated']) && $prop['deprecated'] === true))
+            if($propname === 'object_id'
+               || (isset($prop['deprecated']) && $prop['deprecated'] === true))
                 continue;
 
             list($inherited, $value) = $this->getAttr($typeDefaults, $update, $objId, $propname, $prop['must']);
             unset($this->hiddenAttrs[$propname]);
+
+            if($fieldType === 'hidden') {
+                $ret .= '<input id="'.$propname.'" type="hidden" name="'.$propname.'" value="'.$value.'" />';
+                continue;
+            }
 
             $rowHide    = '';
             $rowClasses = Array();
