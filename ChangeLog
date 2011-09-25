@@ -39,6 +39,7 @@ Frontend
   * Bugfix: std_speedometer.php fixed min/max handling (Thanks to foxkilo)
   * Bugfix: Fixed broken URL handling in e.g. rotation pools
   * Bugfix: Fixed styling of maps with config errors in sidebar
+  * Bugfix: Fixed X coords when adding new objects with opened sidebar menu
   * Readded the "edit" action to the maps module. In this mode all object are
     automatically unlocked and changes to the lock state are not persisted
   * Also disabling the object left click actions in unlocked mode

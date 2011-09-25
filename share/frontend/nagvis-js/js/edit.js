@@ -418,7 +418,7 @@ function addClick(e) {
         return;
 
     var pos = getEventMousePos(e);
-    addX.push(pos[0]);
+    addX.push(pos[0] - getSidebarWidth());
     addY.push(pos[1]);
     addNumLeft -= 1;
     pos = null;
