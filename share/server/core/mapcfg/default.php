@@ -417,14 +417,18 @@ $mapConfigVars = Array(
         'depends_on' => 'view_type',
         'depends_value' => 'line'),
     'line_color' => Array(
-        'must' => 0,
-        'default' => '#ffffff',
-        'match' => MATCH_COLOR
+        'must'          => 0,
+        'default'       => '#ffffff',
+        'match'         => MATCH_COLOR,
+        'depends_on'    => 'view_type',
+        'depends_value' => 'line',
     ),
     'line_color_border' => Array(
-        'must' => 0,
-        'default' => '#000000',
-        'match' => MATCH_COLOR
+        'must'          => 0,
+        'default'       => '#000000',
+        'match'         => MATCH_COLOR,
+        'depends_on'    => 'view_type',
+        'depends_value' => 'line',
     ),
     'line_cut' => Array(
         'must'          => 0,
@@ -740,6 +744,15 @@ $mapConfigVars = Array(
         'match' => MATCH_STRING_NO_SPACE,
         'list'  => 'listTemplateNames',
     ),
+    
+    // STATELESS LINE SPECIFIC OPTIONS
+    
+    'view_type_line' => Array(
+        'must'          => 1,
+        'default'       => 'line',
+        'match'         => MATCH_VIEW_TYPE,
+        'field_type'    => 'hidden',
+    ),
 );
 
 //
@@ -1032,6 +1045,7 @@ $mapConfigVarMap['line'] = Array(
     'x' => null,
     'y' => null,
     'z' => null,
+    'view_type_line' => 'view_type',
     'line_type' => null,
     'line_cut' => null,
     'line_width' => null,

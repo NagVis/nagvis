@@ -270,7 +270,7 @@ function getNearestObject(id, x, y) {
             continue;
 
         // FIXME: Also handle lines
-        if(obj.conf.view_type !== 'icon')
+        if(obj.conf.view_type !== 'icon' || obj.conf.type == 'line')
             continue;
 
         var objX = obj.parseCoord(obj.conf.x, 'x');
@@ -424,7 +424,7 @@ function addClick(e) {
     pos = null;
 
     // Draw a line to illustrate the progress of drawing the current line
-    if(addViewType === 'line' || addObjType === 'textbox') {
+    if(addViewType === 'line' || addObjType === 'textbox' || addObjType === 'line') {
         addShape = new jsGraphics('map');
 
         addShape.setColor('#06B606');
@@ -456,7 +456,7 @@ function addClick(e) {
                + '&x=' + addX.join(',')
                + '&y=' + addY.join(',');
 
-    if(addViewType != 'icon')
+    if(addViewType != 'icon' && addViewType != '')
         sUrl += '&view_type=' + addViewType;
 
     if(addAction == 'clone' && objid !== -1)
@@ -494,7 +494,7 @@ function addFollowing(e) {
 
     addShape.clear();
 
-    if(addViewType === 'line')
+    if(addViewType === 'line' || addObjType === 'line')
         addShape.drawLine(addX[0], addY[0], pos[0] - getSidebarWidth(), pos[1]);
     else
         addShape.drawRect(addX[0], addY[0], (pos[0] - getSidebarWidth() - addX[0]), (pos[1] - addY[0]));
