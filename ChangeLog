@@ -1,3 +1,10 @@
+1.6rc2
+
+Core
+
+  * Added NagiosBP backend to connect directly to NagiosBP using the JSON API
+    Thanks to Bacher Systems (bacher.at) for providing this backend.
+
 1.6rc1
 
 Core
