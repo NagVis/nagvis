@@ -143,7 +143,7 @@ Alias /$OMD_SITE/nagvis "$OMD_ROOT/local/share/nagvis/htdocs"
     # redirect the queries itselfs. In some cases the mod_rewrite redirect
     # is better than the php redirect.
     RewriteCond %{REQUEST_URI} ^/$OMD_SITE/nagvis(/config\.php|/index\.php|/|)(\?.*|)$
-    RewriteRule ^(index\.php|)(\?.*|)$ /$OMD_SITE/nagvis/frontend/nagvis-js/$1$2 [R=301,L]
+    RewriteRule ^(index\.php|)(\?.*|)$ /$OMD_SITE/nagvis/frontend/nagvis-js/\$1\$2 [R=301,L]
 
     # Redirect old regular map links
     RewriteCond %{REQUEST_URI} ^/$OMD_SITE/nagvis/frontend/(nagvis-js|wui)
