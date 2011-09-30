@@ -122,8 +122,7 @@ class GlobalMainCfg {
                     'editable' => 1,
                     'default' => '60',
                     'match' => MATCH_INTEGER),
-                //FIXME: auto detect
-                'sesscookiedomain' => Array('must' => 1,
+                'sesscookiedomain' => Array('must' => 0,
                     'editable' => 1,
                     'default' => '',
                     'match' => MATCH_STRING),
@@ -984,7 +983,7 @@ class GlobalMainCfg {
         );
 
         // Detect the cookie domain to use
-        $this->setCookieDomainByEnv();
+        //$this->setCookieDomainByEnv();
 
         // Try to get the base path via $_SERVER['SCRIPT_FILENAME']
         $this->validConfig['paths']['base']['default'] = $this->getBasePath();
