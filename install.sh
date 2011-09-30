@@ -789,58 +789,31 @@ copy_dir_xpath() {
   fi
 }
 
+restore() {
+    copy $NAGVIS_PATH_BACKUP/$1 $NAGVIS_PATH/$1 "$2" "$3"
+}
+
 copy() {
-    IFS=" "$'\n'
     DONE=""
     
     # DEBUG: [ -n "$LINE" ] && line "$LINE"
     [ -n "$LINE" ] && DONE=`log "$LINE" done` 
-    
-    # Copy single file
-    if [ -f "$NAGVIS_PATH_BACKUP/$2" ]; then
-        cp -p $NAGVIS_PATH_BACKUP/$2 $NAGVIS_PATH/$2
-        chk_rc "|  Error copying file $3" "$DONE"
-    fi
-    
-    # Copy old directory contents to new directory
-    if [ -d "$NAGVIS_PATH_BACKUP/$2" -a ! -d "$3" ]; then
-        # Get files and directories to copy. This takes only the elements in the
-        # given directory.
-        # FILES=`find $NAGVIS_PATH_BACKUP/$2 -mindepth 1 -maxdepth 1`
-        FILES=`find $NAGVIS_PATH_BACKUP/$2/* -prune 2> /dev/null`
+    [ -z "$3" ] && WHAT=$1 || WHAT=$3
 
-        # Maybe exclude some files
-        if [ "$1" != "" ]; then
-            FILES=`echo "$FILES" | grep -vE $1`
-        fi
-        
-        if [ "$FILES" != "" ]; then
-            cp -pr `echo "$FILES" | xargs` $NAGVIS_PATH/$2
-            chk_rc "|  Error copying $3" "$DONE"
-        fi
+    # When trying to copy a file/dir which does not exist just skip it
+    if [[ "$1" != */ && ! -e "$1" ]]; then
+        return
     fi
     
-    # Copy directory to directory
-    if [ -d "$3" -a "$2" = '*' ]; then
-        # Get files to copy
-        FILES=`ls -1`
-
-        # Maybe exclude some files
-        if [ "$1" != "" ]; then
-            FILES=`echo "$FILES" | grep -vE $1`
-        fi
-        
-        if [ "$FILES" != "" ]; then
-            cp -pr `echo "$FILES" | xargs` $3
-            chk_rc "|  Error copying $2 to $3" "$DONE"
-        fi
-    else
-        if [ -d "$3" ]; then
-            #cp -pr $2 $3
-            rsync -a -f "- .gitignore" $2 $3
-            chk_rc "|  Error copying $2 to $3" "$DONE"
-        fi
+    FILTER=
+    if [ "$4" != "" ]; then
+        for F in $4; do
+            FILTER=$FILTER\ --exclude\ $F
+        done
     fi
+
+    rsync -aq -f "- .gitignore" $FILTER $1 $2
+    chk_rc "|  Error copying $WHAT" "$DONE"
     
     LINE=""
     DONE=""
@@ -1354,11 +1327,12 @@ makedir "$NAGVIS_PATH/var/tmpl/compile"
 makedir "$NAGVIS_PATH/share/var"
 # Copy all desired files
 LINE="Copying files to $NAGVIS_PATH..."
-copy "\.gitignore$" "share" "$NAGVIS_PATH"
-copy "" "etc" "$NAGVIS_PATH"
+copy "share" "$NAGVIS_PATH"
+copy "etc" "$NAGVIS_PATH"
 makedir "$NAGVIS_PATH/etc/profiles"
-copy "" "LICENCE README" "$NAGVIS_PATH"
-copy "" "docs" "$NAGVIS_PATH/share"
+copy "README" "$NAGVIS_PATH"
+copy "LICENCE" "$NAGVIS_PATH"
+copy "docs" "$NAGVIS_PATH/share/docs"
 cmp_js
 
 # Remove demo maps if desired
@@ -1488,49 +1462,49 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 
     if [ $NAGVIS_TAG_OLD -ge 01050000 ]; then
         LINE="Restoring main configuration file(s)..."
-        copy "" "$NAGVIS_CONF" "main configuration file"
-        copy "" "etc/nagvis-site.ini.php" "site main configuration file"
+        restore "$NAGVIS_CONF" "main configuration file" ""
+        restore "etc/nagvis-site.ini.php" "site main configuration file" ""
     
         LINE="Restoring custom map configuration files..."
-        copy "\/(demo\.cfg|demo2\.cfg|demo-server\.cfg|demo-map\.cfg)$" "etc/maps" "map configuration files"
+        restore "etc/maps/" "map configuration files" "/*demo*.cfg"
     
         LINE="Restoring custom automap configuration files..."
-        copy "\/(__automap\.cfg)$" "etc/automaps" "automap configuration files"
+        restore "etc/automaps/" "automap configuration files" "/__automap.cfg"
     
         LINE="Restoring user configuration files..."
-        copy "" "etc/profiles" "user configuration files"
+        restore "etc/profiles/" "user configuration files" ""
     
         LINE="Restoring custom map images..."
-        copy "\/nagvis-demo\.png$" "$USERFILES_DIR/images/maps" "map image files"
+        restore "$USERFILES_DIR/images/maps/" "map image files" "/*demo*.png"
     
         LINE="Restoring custom gadget images..."
-        copy "" "$USERFILES_DIR/images/gadgets" "gadget image files"
+        restore "$USERFILES_DIR/images/gadgets/" "gadget image files" ""
     
         LINE="Restoring custom iconsets..."
-        copy "\/(20x20\.png|std_(big|medium|small)_.+\.png|demo_.+\.png)$" "$USERFILES_DIR/images/iconsets" "iconset files"
+        restore "$USERFILES_DIR/images/iconsets/" "iconset files" "/20x20.png /std_*_*.png /demo_*.png"
     
         LINE="Restoring custom shapes..."
-        copy "" "$USERFILES_DIR/images/shapes" "shapes"
+        restore "$USERFILES_DIR/images/shapes/" "shapes" ""
         
         LINE="Restoring custom templates..."
-        copy "\/default\..+$" "$USERFILES_DIR/templates" "templates"
+        restore "$USERFILES_DIR/templates/" "templates" "/default.*"
         
         LINE="Restoring custom template images..."
-        copy "\/default.+$" "$USERFILES_DIR/images/templates" "template images"
+        restore "$USERFILES_DIR/images/templates/" "template images" "/default.*"
 
         LINE="Restoring custom gadgets..."
-        copy "\/(gadgets_core\.php|std_.+\.php)$" "$USERFILES_DIR/gadgets" "gadgets"
+        restore "$USERFILES_DIR/gadgets/" "gadgets" "/gadgets_core.php /std_*.php"
         
         LINE="Restoring auth database file..."
-        copy "" "$NAGVIS_AUTH_DB" "auth database file"
-        copy "" "$AUTH_BACKUP" "auth backup file"
+        restore "$NAGVIS_AUTH_DB" "auth database file" ""
+        restore "$AUTH_BACKUP" "auth backup file" ""
 
         LINE="Restoring custom stylesheets..."
-        copy "\.gitignore$" "$USERFILES_DIR/styles" "stylesheets"
+        restore "$USERFILES_DIR/styles/" "stylesheets" ""
     else
         # This is a cross version update. For example from 1.4x to 1.5x
         LINE="Restoring main configuration file..."
-        copy "" "$NAGVIS_CONF" "main configuration file"
+        restore "$NAGVIS_CONF" "main configuration file" ""
     
         LINE="Restoring custom map configuration files..."
         copy_dir_xpath "\/(__automap\.cfg|demo\.cfg|demo2\.cfg|demo-server\.cfg|demo-map\.cfg)$" "etc/maps" "etc/maps" "map configuration files"
