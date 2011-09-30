@@ -2,6 +2,7 @@
 
 Core
   * Bugfix: Fixed HTTP redirects in installations using omd_install.sh
+  * Bugfix: Removed session cookie domain by default
   * Added NagiosBP backend to connect directly to NagiosBP using the JSON API
     Thanks to Bacher Systems (bacher.at) for providing this backend.
 
