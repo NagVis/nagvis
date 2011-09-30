@@ -33,7 +33,7 @@ Alias @NAGVIS_WEB@ "@NAGVIS_PATH@"
     # redirect the queries itselfs. In some cases the mod_rewrite redirect
     # is better than the php redirect.
     RewriteCond %{REQUEST_URI} ^@NAGVIS_WEB@(/config\.php|/index\.php|/|)(\?.*|)$
-    RewriteRule ^(index\.php|)(\?.*|)$ @NAGVIS_WEB@/frontend/nagvis-js/$1$2 [R=301,L]
+    RewriteRule ^(.*)$ @NAGVIS_WEB@/frontend/nagvis-js/%1%2 [R=301,L]
     
     # Redirect old regular map links
     RewriteCond %{REQUEST_URI} ^@NAGVIS_WEB@/frontend/(wui|nagvis-js)
