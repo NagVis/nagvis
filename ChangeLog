@@ -7,6 +7,9 @@ Core
   * Added NagiosBP backend to connect directly to NagiosBP using the JSON API
     Thanks to Bacher Systems (bacher.at) for providing this backend.
 
+Frontend
+  * Bugfix: Added missing list code for header templates (map global section editing)
+
 1.6rc1
 
 Core

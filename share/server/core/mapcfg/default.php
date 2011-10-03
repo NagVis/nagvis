@@ -61,6 +61,10 @@ function listGadgets($CORE) {
     return $CORE->getAvailableGadgets();
 }
 
+function listHeaderTemplates($CORE) {
+    return $CORE->getAvailableHeaderTemplates();
+}
+
 function listHoverTemplates($CORE) {
     return $CORE->getAvailableHoverTemplates();
 }
@@ -313,7 +317,8 @@ $mapConfigVars = Array(
         'match'          => MATCH_STRING_NO_SPACE,
         'field_type'     => 'dropdown',
         'depends_on'     => 'header_menu',
-        'depends_value'  => '1'),
+        'depends_value'  => '1',
+        'list'           => 'listHeaderTemplates'),
     'header_fade' => Array(
         'must' => 0,
         'default'        => cfg('defaults', 'headerfade'),
