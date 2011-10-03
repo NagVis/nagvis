@@ -154,7 +154,10 @@ class WuiViewMapAddModify {
 
             // Check if depends_on and depends_value are defined and if the value
             // is equal. If not equal hide the field
-            if(isset($prop['depends_on']) && isset($prop['depends_value'])) {
+            // Don't hide dependent fields where the dependant is not set
+            if(isset($prop['depends_on'])
+               && isset($prop['depends_value'])
+               && isset($typeDef[$prop['depends_on']])) {
                 array_push($rowClasses, 'child-row');
                 
                 list($depInherited, $depValue) = $this->getAttr($typeDefaults, $update, $objId, $prop['depends_on'], $typeDef[$prop['depends_on']]['must']);
