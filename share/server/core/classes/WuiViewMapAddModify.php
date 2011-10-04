@@ -117,13 +117,13 @@ class WuiViewMapAddModify {
     function getFields($update) {
         $ret = '';
 
-        // 'type' is set when creating new objects. Otherwise only the object_id is known
-        if(isset($this->attrs['type']) && $this->attrs['type'] != '') {
-            $type  = $this->attrs['type'];
-            $objId = 0;
-        } else {
+        // 'object_id' is only set when modifying existing objects
+        if(isset($this->attrs['object_id']) && $this->attrs['object_id'] != '') {
             $type  = $this->MAPCFG->getValue($this->attrs['object_id'], 'type');
             $objId = $this->attrs['object_id'];
+        } else {
+            $type  = $this->attrs['type'];
+            $objId = 0;
         }
 
         $typeDefaults = $this->MAPCFG->getTypeDefaults($type);

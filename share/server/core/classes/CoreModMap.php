@@ -284,20 +284,9 @@ class CoreModMap extends CoreModule {
         } catch(MapCfgInvalid $e) {}
 
         // Modification/Creation?
-        // 'type' is set when creating new objects. Otherwise only the object_id is known
-        if(isset($attrs['type']) && $attrs['type'] != '') {
-            // Create the new object
-
-            $type  = $attrs['type'];
-
-            $this->validateAttributes($MAPCFG->getValidObjectType($type), $attrs);
-
-            // append a new object definition to the map configuration
-            $MAPCFG->addElement($type, $attrs, true);
-
-            $successMsg = l('The [TYPE] has been added. Reloading in 2 seconds.',
-                                                            Array('TYPE' => $type));
-        } else {
+        // The object_id is known on modification. When it is not known 'type' is set
+        // to create new objects
+        if(isset($attrs['object_id']) && $attrs['object_id'] != '') {
             // Modify an existing object
 
             $type  = $MAPCFG->getValue($attrs['object_id'], 'type');
@@ -313,6 +302,18 @@ class CoreModMap extends CoreModule {
 
             $successMsg = l('The [TYPE] has been modified. Reloading in 2 seconds.',
                                                                Array('TYPE' => $type));
+        } else {
+            // Create the new object
+
+            $type  = $attrs['type'];
+
+            $this->validateAttributes($MAPCFG->getValidObjectType($type), $attrs);
+
+            // append a new object definition to the map configuration
+            $MAPCFG->addElement($type, $attrs, true);
+
+            $successMsg = l('The [TYPE] has been added. Reloading in 2 seconds.',
+                                                            Array('TYPE' => $type));
         }
 
         // delete map lock

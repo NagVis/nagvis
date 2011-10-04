@@ -10,6 +10,7 @@ Core
 Frontend
   * Bugfix: Added missing list code for header templates (map global section editing)
   * Bugfix: Don't hide dependent fiels where the master attribute is not available
+  * Bugfix: Fixed map global section editing
 
 1.6rc1
 
