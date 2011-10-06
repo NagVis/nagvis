@@ -308,6 +308,9 @@ class CoreSQLiteHandler {
         // Access controll: Automap module levels for automap "__automap"
         $this->createAutoMapPermissions('__automap');
 
+        // Access controll: Change user options
+        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'User\', \'setOption\', \'*\')');
+
         // Access controll: Change own password
         $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ChangePassword\', \'change\', \'*\')');
 
@@ -367,6 +370,9 @@ class CoreSQLiteHandler {
         // Permit all actions in General module
         $this->addRolePerm($data['roleId'], 'General', '*', '*');
 
+        // Access assignment: Managers => Allowed to update user options
+        $this->addRolePerm($data['roleId'], 'User', 'setOption', '*');
+
         // Access assignment: Managers => Allowed to edit/delete all maps
         $this->addRolePerm($data['roleId'], 'Map', 'manage', '*');
         $this->addRolePerm($data['roleId'], 'Map', 'delete', '*');
@@ -419,6 +425,9 @@ class CoreSQLiteHandler {
         // Permit all actions in General module
         $this->addRolePerm($data['roleId'], 'General', '*', '*');
 
+        // Access assignment: Users => Allowed to update user options
+        $this->addRolePerm($data['roleId'], 'User', 'setOption', '*');
+
         // Access assignment: Users => Allowed to view the overview
         $this->addRolePerm($data['roleId'], 'Overview', 'view', '*');
 
@@ -454,6 +463,9 @@ class CoreSQLiteHandler {
 
         // Permit all actions in General module
         $this->addRolePerm($data['roleId'], 'General', '*', '*');
+
+        // Access assignment: Guests => Allowed to update user options
+        $this->addRolePerm($data['roleId'], 'User', 'setOption', '*');
 
         // Access assignment: Guests => Allowed to view the overview
         $this->addRolePerm($data['roleId'], 'Overview', 'view', '*');
