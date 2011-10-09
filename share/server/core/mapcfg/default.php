@@ -998,7 +998,7 @@ $mapConfigVarMap['servicegroup'] = Array(
     'label_border' => null,
     'label_style' => null,
     'only_hard_states' => null,
-    'servicegroup_url' => null,
+    'servicegroup_url' => 'url',
     'url_target' => null,
     'use' => null,
 );
@@ -1039,7 +1039,7 @@ $mapConfigVarMap['map'] = Array(
     'label_border' => null,
     'label_style' => null,
     'only_hard_states' => null,
-    'map_url' => null,
+    'map_url' => 'url',
     'url_target' => null,
     'use' => null,
 );
