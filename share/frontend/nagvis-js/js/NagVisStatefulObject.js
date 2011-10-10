@@ -319,6 +319,11 @@ var NagVisStatefulObject = NagVisObject.extend({
         var oHover = doc.getElementById(this.conf.object_id+'-hover');
         if(oHover) {
             try {
+                // Preserve the hover coords when the hover menu is open at the moment
+                if(!this.hoverMenuOpened()) {
+                    this.hoverX = null;
+                    this.hoverY = null;
+                }
                 this.parsedObject.removeChild(oHover);
             } catch(e) {}
             oHover = null;
@@ -366,6 +371,11 @@ var NagVisStatefulObject = NagVisObject.extend({
      */
     parseHoverMenu: function () {
         this.getHoverMenu(this.getJsObjId());
+
+        // Display the hover menu when it was open before re-rendering
+        if(this.hoverMenuOpened() && this.hoverX !== null) {
+            hoverShow(this.hoverX, this.hoverY, this.conf.object_id);
+        }
     },
 
     /**

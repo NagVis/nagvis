@@ -14,6 +14,8 @@ Frontend
   * Bugfix: Don't hide dependent fiels where the master attribute is not available
   * Bugfix: Fixed map global section editing
   * Bugfix: IE8 fixing event registration (javascript errors on page loading)
+  * Updating map object information while having the hover menu open does not close 
+    open hover menus anymore
 
 1.6rc1
 

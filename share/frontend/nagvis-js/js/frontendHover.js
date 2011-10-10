@@ -25,8 +25,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 
-// replace the system context menu?
-var _showHover = false;
 var _openHoverMenus = [];
 var _hoverTimer = null;
 
@@ -40,12 +38,12 @@ function hoverOpen() {
 }
 
 /**
- * Hides all open context menus
+ * Hides all open hover menus
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function hoverHide() {
-    // Loop all open context menus
+    // Loop all open hover menus
     while(_openHoverMenus.length > 0) {
         _openHoverMenus[0].style.display = 'none';
         _openHoverMenus[0] = null;
@@ -69,6 +67,10 @@ function hoverShow(x, y, id) {
     var hoverSpacer = 5;
     var minWidth = 400;
 
+    var obj = getMapObjByDomObjId(id);
+    obj.hoverX = x;
+    obj.hoverY = y;
+
     // document.body.scrollTop does not work in IE
     var scrollTop = document.body.scrollTop ? document.body.scrollTop :
     document.documentElement.scrollTop;
@@ -79,7 +81,7 @@ function hoverShow(x, y, id) {
 
     // Maybe there is no hover menu defined for one object?
     if(hoverMenu === null) {
-        eventlog('hover', 'error', 'Found no hover menu wit the id "'+id+'-hover"');
+        eventlog('hover', 'error', 'Found no hover menu with the id "'+id+'-hover"');
         return false;
     }
 

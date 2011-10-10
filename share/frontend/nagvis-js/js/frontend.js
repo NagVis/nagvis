@@ -707,9 +707,7 @@ function updateMapBasics() {
 }
 
 /**
- * updateObjects()
- *
- * Bulk update objects
+ * Bulk update map objects using the given object information
  *
  * @param   Array    Array of objects with new information
  * @param   String   Type of the page

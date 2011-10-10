@@ -37,6 +37,9 @@ var NagVisObject = Base.extend({
     bIsLocked:             true,
     objControls:           null,
     childs:                null,
+    // Current position of the active hover menu
+    hoverX:                null,
+    hoverY:                null,
 
     constructor: function(oConf) {
         // Initialize
@@ -276,6 +279,20 @@ var NagVisObject = Base.extend({
      */
     getContextTemplateCode: function() {
         this.context_template_code = oContextTemplates[this.conf.context_template];
+    },
+
+    /**
+     * Returns true when the hover menu is displayed at the moment
+     */
+    hoverMenuOpened: function() {
+        var hoverMenu = document.getElementById(this.conf.object_id + '-hover');
+        if(hoverMenu) {
+            if(hoverMenu.style.display !== 'none') {
+                return true;
+            }
+            hoverMenu = null;
+        }
+        return false;
     },
 
     /**
