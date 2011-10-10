@@ -42,7 +42,7 @@ function hoverOpen() {
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function hoverHide() {
+function hoverHide(id) {
     // Loop all open hover menus
     while(_openHoverMenus.length > 0) {
         _openHoverMenus[0].style.display = 'none';
@@ -58,11 +58,18 @@ function hoverHide() {
 
     // Change cursor to auto when hiding hover menu
     document.body.style.cursor = 'auto';
+
+    var obj = getMapObjByDomObjId(id);
+    if(obj) {
+        obj.hoverX = null;
+        obj.hoverY = null;
+        obj = null;
+    }
 }
 
 function hoverShow(x, y, id) {
     // Hide all other hover menus
-    hoverHide();
+    hoverHide(id);
 
     var hoverSpacer = 5;
     var minWidth = 400;
@@ -70,6 +77,7 @@ function hoverShow(x, y, id) {
     var obj = getMapObjByDomObjId(id);
     obj.hoverX = x;
     obj.hoverY = y;
+    obj = null;
 
     // document.body.scrollTop does not work in IE
     var scrollTop = document.body.scrollTop ? document.body.scrollTop :

@@ -282,15 +282,15 @@ var NagVisObject = Base.extend({
     },
 
     /**
-     * Returns true when the hover menu is displayed at the moment
+     * Returns true when the given menu is displayed at the moment
      */
-    hoverMenuOpened: function() {
-        var hoverMenu = document.getElementById(this.conf.object_id + '-hover');
-        if(hoverMenu) {
-            if(hoverMenu.style.display !== 'none') {
+    menuOpened: function(ty) {
+        var menu = document.getElementById(this.conf.object_id + '-' + ty);
+        if(menu) {
+            if(menu.style.display !== 'none') {
                 return true;
             }
-            hoverMenu = null;
+            menu = null;
         }
         return false;
     },
@@ -369,7 +369,7 @@ var NagVisObject = Base.extend({
             // Add eventhandlers for hover menu
             if(oObj) {
                 oObj.onmousemove = function(e) { var id = objId; var iH = iHoverDelay; displayHoverMenu(e, id, iH); id = null; iH = null; };
-                oObj.onmouseout = function() { hoverHide(); };
+                oObj.onmouseout = function(e) { var id = objId; hoverHide(id); id = null; };
             }
 
             // Is already done during map rendering before. But the hover menu
