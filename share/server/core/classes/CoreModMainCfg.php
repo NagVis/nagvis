@@ -145,7 +145,8 @@ class CoreModMainCfg extends CoreModule {
     protected function doEdit($a) {
         foreach($a['opts'] AS $key => $val) {
             $key = explode('_', $key, 2);
-            $this->CORE->getMainCfg()->setValue($key[0], $key[1], $val);
+            if(sizeof($key) == 2) 
+                $this->CORE->getMainCfg()->setValue($key[0], $key[1], $val);
         }
 
         // Write the changes to the main configuration file
