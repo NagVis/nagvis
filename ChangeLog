@@ -1,4 +1,7 @@
 1.6rc3
+Installer
+  * Bugfix: Installing offline docs correctly again
+
 Frontend
   * Bugfix: Fixed problem when editing the main configuration file
 
