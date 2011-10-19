@@ -1,4 +1,8 @@
 1.6rc3
+Core
+  * Bugfix: Fixed problem in summary state detection of downtime (resulted
+    e.g. in wrong icons)
+
 Installer
   * Bugfix: Installing offline docs correctly again
 

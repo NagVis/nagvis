@@ -319,16 +319,17 @@ class NagVisStatefulObject extends NagVisObject {
      * Returns the current sub-state of the object
      */
     public function getSubState($summary = false) {
-        if($summary)
+        if($summary) {
             if($this->summary_problem_has_been_acknowledged == 1)
                 return  'ack';
             elseif($this->summary_in_downtime == 1)
                 return 'downtime';
-        else
+        } else {
             if($this->problem_has_been_acknowledged == 1)
                 return  'ack';
             elseif($this->in_downtime == 1)
                 return 'downtime';
+        }
         return 'normal';
     }
 
