@@ -80,7 +80,7 @@ class GlobalMapCfg {
         $path = cfg('paths', 'server') . '/mapcfg';
         $files = $this->CORE->listDirectory($path, MATCH_PHP_FILE);
         foreach($files AS $f) {
-            include_once($path . '/' . $f);
+            include_once(realpath($path . '/' . $f));
         }
 
         // Now register the variables for the objec types
