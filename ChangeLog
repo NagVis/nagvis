@@ -6,6 +6,9 @@ Core
   * Bugfix: Fixed problem with some PHP 5.1.2 installations while reading the
     map configuration files
 
+Automap
+  * Improved coord parsing code to make it graphviz-2.6-22.2 compatible
+
 1.6rc3
 Core
   * Bugfix: Fixed problem in summary state detection of downtime (resulted
