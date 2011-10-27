@@ -3,6 +3,8 @@ Core
   * Bugfix: Fixed inclusion problem of default settings in some rare cases
   * Added workaround for the annoying PHP warning which occurs on some systems:
     It is not safe to rely on the system's timezone settings
+  * Bugfix: Fixed problem with some PHP 5.1.2 installations while reading the
+    map configuration files
 
 1.6rc3
 Core
