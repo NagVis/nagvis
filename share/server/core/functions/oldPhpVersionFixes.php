@@ -41,6 +41,18 @@ if(!function_exists('date_default_timezone_set')) {
 	}
 }
 
+// To prevent the annoying and in most cases useless message:
+//
+// Error: (0) date() [function.date]: It is not safe to rely on the system's
+// timezone settings. You are *required* to use the date.timezone setting or
+// the date_default_timezone_set() function. In case you used any of those
+// methods and you are still getting this warning, you most likely misspelled
+// the timezone identifier. We selected 'Europe/Berlin' for 'CEST/2.0/DST' instead
+//
+// Workaround the problem by setting the systems timezone as PHP default
+// timezone. Don't let PHP know about that hack - it would cry again ;-).
+if(function_exists("date_default_timezone_get"))
+    date_default_timezone_set(@date_default_timezone_get());
 
 /**
  * Implements handling of PHP to JSON conversion for NagVis
