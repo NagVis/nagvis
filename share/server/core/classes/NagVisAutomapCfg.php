@@ -100,7 +100,9 @@ class NagVisAutomapCfg extends GlobalMapCfg {
                 }
             }
 
-            $this->deleteElement($objectId);
+            // Delete the dummy object when it has been used
+            if($objectId != 0)            
+                $this->deleteElement($objectId);
         }
 
         return $this->defaultConf;

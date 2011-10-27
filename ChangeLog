@@ -8,6 +8,7 @@ Core
 
 Automap
   * Improved coord parsing code to make it graphviz-2.6-22.2 compatible
+  * Bugfix: Fixed automap alias on overview page and in lists
 
 1.6rc3
 Core
