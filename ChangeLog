@@ -6,6 +6,10 @@ Core
   * Bugfix: Fixed problem with some PHP 5.1.2 installations while reading the
     map configuration files
 
+Frontend
+  * Bugfix: Fixed object link follow after moving object in edit mode when using IE<8
+  * Bugfix: Fixed javascript several onload javascript errors when using IE<8
+
 Automap
   * Improved coord parsing code to make it graphviz-2.6-22.2 compatible
   * Bugfix: Fixed automap alias on overview page and in lists

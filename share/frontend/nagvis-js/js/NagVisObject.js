@@ -855,10 +855,15 @@ var NagVisObject = Base.extend({
     },
 
     addControl: function (obj) {
-        // Add to DOM
-        document.getElementById(this.conf.object_id+'-controls').appendChild(obj);
-        // Add to controls list
-        this.objControls.push(obj);
+        var o = document.getElementById(this.conf.object_id+'-controls');
+        if(o) {
+            // Add to DOM
+            o.appendChild(obj);
+            o = null;
+
+            // Add to controls list
+            this.objControls.push(obj);
+        }
     },
 
     parseLineControls: function () {
@@ -1255,7 +1260,13 @@ var NagVisObject = Base.extend({
 
                 // Link (Left mouse action)
                 if(o.parentNode.tagName == 'A')
-                    o.parentNode.onclick = function() {return false};
+                    o.parentNode.onclick = function(event) {
+                        var event = !event ? window.event : event;
+                        if(event.stopPropagation)
+                            event.stopPropagation();
+                        event.cancelBubble = true;
+                        return false;
+                    };
 	    }
             o = null;
 	}

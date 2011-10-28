@@ -974,11 +974,19 @@ var NagVisStatefulObject = NagVisObject.extend({
     },
 
     getObjWidth: function () {
-        return parseInt(document.getElementById(this.conf.object_id + '-icondiv').clientWidth);
+        var o = document.getElementById(this.conf.object_id + '-icondiv');
+        if(o && o.clientWidth)
+            return parseInt(o.clientWidth);
+        else
+            return 0;
     },
 
     getObjHeight: function () {
-        return parseInt(document.getElementById(this.conf.object_id + '-icondiv').clientHeight);
+        var o = document.getElementById(this.conf.object_id + '-icondiv');
+        if(o && o.clientHeight)
+            return parseInt(o.clientHeight);
+        else
+            return 0;
     },
 
     parseIconControls: function () {
