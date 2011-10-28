@@ -169,7 +169,7 @@ class WuiViewMapAddModify {
             if($prop['must'])
                 array_push($rowClasses, 'must');
 
-            $ret .= '<tr class="'.implode(' ', $rowClasses).'"'.$rowHide.'><td class=tdlabel>'.$propname.'</td><td class=tdfield width=22>';
+            $ret .= '<tr class="'.implode(' ', $rowClasses).'"'.$rowHide.'><td class=tdlabel>'.$propname.'</td><td class=tdbox>';
 
             $onChange = '';
             // Submit the form when an attribute which has dependant attributes is changed
