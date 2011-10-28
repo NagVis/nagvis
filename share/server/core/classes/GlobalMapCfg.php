@@ -281,9 +281,9 @@ class GlobalMapCfg {
             // problems with PHP 5.1.2 while testing with e.g. SLES10SP1. So added that workaround
             // here.
             if(version_compare(PHP_VERSION, '5.1.2', '==')) {
-                $cfgFile = file($this->configFile);
+                $file = file($this->configFile);
             } else { 
-                $cfgFile = file($this->configFile, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
+                $file = file($this->configFile, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
             }
 
             // Create an array for these options
