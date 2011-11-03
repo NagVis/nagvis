@@ -1060,6 +1060,13 @@ function isInt(v) {
 }
 
 /**
+ * Checks if a variable is a float
+ */
+function isFloat(v) {
+  return parseFloat(v) == v && !isNaN(v);
+}
+
+/**
  * Helper to parse px values from dom to numbers
  *
  * @author  Lars Michelsen <lars@vertical-visions.de>
@@ -1069,7 +1076,7 @@ function pxToInt(v) {
 }
 
 function isRelativeCoord(v) {
-  return !isInt(v) || v.length === 6;
+  return (!isInt(v) && !isFloat(v)) || v.length === 6;
 }
 
 function getKeys(o) {

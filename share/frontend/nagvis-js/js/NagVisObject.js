@@ -728,7 +728,10 @@ var NagVisObject = Base.extend({
             return val;
         } else {
             var old  = this.conf[dir].split(',');
-            old[num] = val;
+            if(isRelativeCoord(val))
+                old[num] = val;
+            else
+                old[num] = Math.round(val);
             return old.join(',');
         }
     },
