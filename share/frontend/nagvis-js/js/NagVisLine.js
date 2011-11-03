@@ -92,17 +92,7 @@ var NagVisLine = NagVisStatelessObject.extend({
         oLineDiv = null;
 
         // Parse hover/link area only when needed
-        if((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')) {
-            var oLink = document.createElement('a');
-            oLink.setAttribute('id', this.conf.object_id+'-linelink');
-            oLink.setAttribute('class', 'linelink');
-            oLink.setAttribute('className', 'linelink');
-            oLink.href = this.conf.url;
-            oLink.target = this.conf.url_target;
-
-            oContainerDiv.appendChild(oLink);
-            oLink = null;
-        }
+        this.parseLineHoverArea(oContainerDiv);
 
         return oContainerDiv;
     },
@@ -127,9 +117,9 @@ var NagVisLine = NagVisStatelessObject.extend({
 
         // Parse the line object
         drawNagVisLine(this.conf.object_id, this.conf.line_type, cuts, x, y,
-                                     this.conf.z, width, colorFill, colorBorder,
-                                     ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')),
-                                     (this.conf.line_label_show && this.conf.line_label_show === '1'));
+                       this.conf.z, width, colorFill, null, null, colorBorder,
+                       this.needsLineHoverArea(),
+                       (this.conf.line_label_show && this.conf.line_label_show === '1'));
     },
 
     remove: function () {

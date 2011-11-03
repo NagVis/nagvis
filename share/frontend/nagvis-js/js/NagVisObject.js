@@ -93,11 +93,11 @@ var NagVisObject = Base.extend({
     loadViewOpts: function() {
         // View specific hover modifier set. Will override the map configured option
         if(oViewProperties && oViewProperties.enableHover && oViewProperties.enableHover != '')
-            this.conf.hover_menu = '0';
+            this.conf.hover_menu = oViewProperties.enableHover;
 
-        // View specific hover modifier set. Will override the map configured option
-        if(oViewProperties && oViewProperties.enableHover && oViewProperties.enableHover != '')
-            this.conf.context_menu = '0';
+        // View specific context modifier set. Will override the map configured option
+        if(oViewProperties && oViewProperties.enableContext && oViewProperties.enableContext != '')
+            this.conf.context_menu = oViewProperties.enableContext;
     },
 
     /**
@@ -123,63 +123,82 @@ var NagVisObject = Base.extend({
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     getContextMenu: function (sObjId) {
-        // Only enable context menu when configured
-        if(this.conf.context_menu && this.conf.context_menu == '1') {
-            // Writes template code to "this.context_template_code"
-            this.getContextTemplateCode();
+        // Writes template code to "this.context_template_code"
+        this.getContextTemplateCode();
 
-            // Replace object specific macros
-            this.replaceContextTemplateMacros();
+        // Replace object specific macros
+        this.replaceContextTemplateMacros();
 
-            var doc = document;
-            var oObj = doc.getElementById(sObjId);
-            var oContainer = doc.getElementById(this.conf.object_id);
+        var doc = document;
+        var oObj = doc.getElementById(sObjId);
+        var oContainer = doc.getElementById(this.conf.object_id);
 
-            if(oObj == null) {
-                eventlog("NagVisObject", "critical", "Could not get context menu object (ID:"+sObjId+")");
-                return false;
-            }
-
-            if(oContainer == null) {
-                eventlog("NagVisObject", "critical", "Could not get context menu container (ID:"+this.conf.object_id+")");
-                oObj = null;
-                return false;
-            }
-
-            // Only create a new div when the context menu does not exist
-            var contextMenu = doc.getElementById(this.conf.object_id+'-context');
-            var justAdded = false;
-            if(!contextMenu) {
-                // Create context menu div
-                var contextMenu = doc.createElement('div');
-                contextMenu.setAttribute('id', this.conf.object_id+'-context');
-                contextMenu.setAttribute('class', 'context');
-                contextMenu.setAttribute('className', 'context');
-                contextMenu.style.zIndex = '1000';
-                contextMenu.style.display = 'none';
-                contextMenu.style.position = 'absolute';
-                contextMenu.style.overflow = 'visible';
-                justAdded = true;
-            }
-
-            // Append template code to context menu div
-            contextMenu.innerHTML = this.context_template_code;
-
-            if(justAdded) {
-                // Append context menu div to object container
-                oContainer.appendChild(contextMenu);
-
-                // Add eventhandlers for context menu
-                oObj.onmousedown = contextMouseDown;
-                oObj.oncontextmenu = contextShow;
-            }
-
-            contextMenu = null;
-            oContainer = null;
-            oObj = null;
-            doc = null;
+        if(oObj == null) {
+            eventlog("NagVisObject", "critical", "Could not get context menu object (ID:"+sObjId+")");
+            return false;
         }
-  },
+
+        if(oContainer == null) {
+            eventlog("NagVisObject", "critical", "Could not get context menu container (ID:"+this.conf.object_id+")");
+            oObj = null;
+            return false;
+        }
+
+        // Only create a new div when the context menu does not exist
+        var contextMenu = doc.getElementById(this.conf.object_id+'-context');
+        var justAdded = false;
+        if(!contextMenu) {
+            // Create context menu div
+            var contextMenu = doc.createElement('div');
+            contextMenu.setAttribute('id', this.conf.object_id+'-context');
+            contextMenu.setAttribute('class', 'context');
+            contextMenu.setAttribute('className', 'context');
+            contextMenu.style.zIndex = '1000';
+            contextMenu.style.display = 'none';
+            contextMenu.style.position = 'absolute';
+            contextMenu.style.overflow = 'visible';
+            justAdded = true;
+        }
+
+        // Append template code to context menu div
+        contextMenu.innerHTML = this.context_template_code;
+
+        if(justAdded) {
+            // Append context menu div to object container
+            oContainer.appendChild(contextMenu);
+
+            // Add eventhandlers for context menu
+            oObj.onmousedown = contextMouseDown;
+            oObj.oncontextmenu = contextShow;
+        }
+
+        contextMenu = null;
+        oContainer = null;
+        oObj = null;
+        doc = null;
+    },
+
+    /**
+     * PUBLIC parseContextMenu()
+     *
+     * Parses the context menu. Don't add this functionality to the normal icon
+     * parsing
+     *
+     * @return	String		HTML code of the object
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    parseContextMenu: function () {
+        // Add a context menu to the object when enabled or when the object is unlocked
+        if((this.conf.context_menu && this.conf.context_menu == '1') || !this.bIsLocked) {
+            if(this.conf.view_type && this.conf.view_type == 'line') {
+                this.getContextMenu(this.conf.object_id+'-linelink');
+            } else if(this.conf.type == 'textbox') {
+                this.getContextMenu(this.conf.object_id);
+            } else {
+                this.getContextMenu(this.conf.object_id+'-icon');
+            }
+        }
+    },
 
     /**
      * replaceContextTemplateMacros()
@@ -227,6 +246,15 @@ var NagVisObject = Base.extend({
             oMacros.pnp_hostname = this.conf.name.replace(/\s/g,'%20');
         else
             oSectionMacros.host = '<!--\\sBEGIN\\shost\\s-->.+?<!--\\sEND\\shost\\s-->';
+
+        if(this.conf.type === 'line' || this.conf.type == 'shape' || this.conf.type == 'textbox')
+            oSectionMacros.stateful = '<!--\\sBEGIN\\sstateful\\s-->.+?<!--\\sEND\\sstateful\\s-->';
+
+        // Remove unlocked section for locked objects
+        if(this.bIsLocked)
+            oSectionMacros.unlocked = '<!--\\sBEGIN\\sunlocked\\s-->.+?<!--\\sEND\\sunlocked\\s-->';
+        else
+            oSectionMacros.locked = '<!--\\sBEGIN\\slocked\\s-->.+?<!--\\sEND\\slocked\\s-->';
 
         if(oPageProperties.view_type === 'automap') {
             oSectionMacros.not_automap = '<!--\\sBEGIN\\snot_automap\\s-->.+?<!--\\sEND\\snot_automap\\s-->';
@@ -432,6 +460,9 @@ var NagVisObject = Base.extend({
             this.bIsLocked = lock;
         else
             this.bIsLocked = !this.bIsLocked;
+
+        // Re-render the context menu
+        this.parseContextMenu();
 
         if(this.toggleObjControls()) {
 	    if(typeof(this.toggleLabelLock) == 'function')
@@ -866,6 +897,79 @@ var NagVisObject = Base.extend({
         }
     },
 
+    /**
+     * Toggles the position of the line middle. The mid of the line
+     * can either be the 2nd of three line coords or is automaticaly
+     * the middle between two line coords.
+     */
+    toggleLineMidLock: function() {
+        // What is the current state?
+        var x = this.conf.x.split(',');
+        var y = this.conf.y.split(',')
+
+        if(this.conf.line_type != 10 && this.conf.line_type != 13 && this.conf.line_type != 14) {
+            alert('Not available for this line. Only lines with 2 line parts have a middle coordinate.');
+            return;
+        }
+
+        if(x.length == 2) {
+            // The line has 2 coords configured
+            // - Calculate and add the 3rd coord as 2nd
+            // - Add a drag control for the 2nd coord
+            this.conf.x = [
+                x[0],
+              middle(this.parseCoords(this.conf.x, 'x')[0], this.parseCoords(this.conf.x, 'x')[1], this.conf.line_cut),
+              x[1],
+            ].join(',');
+            this.conf.y = [
+                y[0],
+                middle(this.parseCoords(this.conf.y, 'y')[0], this.parseCoords(this.conf.y, 'y')[1], this.conf.line_cut),
+                y[1],
+            ].join(',');
+        } else {
+            // The line has 3 coords configured
+            // - Remove the 2nd coord
+            // - Remove the drag control for the 2nd coord
+            this.conf.x = [ x[0], x[2] ].join(',');
+            this.conf.y = [ y[0], y[2] ].join(',');
+        }
+
+        // send to server
+        saveObjectAttr(this.conf.object_id, { 'x': this.conf.x, 'y': this.conf.y});
+
+        // redraw the controls
+        if(!this.bIsLocked)
+            this.redrawControls();
+
+        // redraw the line
+        this.drawLine();
+    },
+
+
+    needsLineHoverArea: function() {
+        return (this.conf.url && this.conf.url !== '' && this.conf.url !== '#')
+            || (this.conf.hover_menu && this.conf.hover_menu !== '')
+            || (this.conf.context_menu && this.conf.context_menu !== '')
+            || !this.bIsLocked;
+    },
+
+    parseLineHoverArea: function(oContainer) {
+        // Parse hover/link area only when needed. This is only the container
+        // The real area or labels are added later
+        if(this.needsLineHoverArea()) {
+            var oLink = document.createElement('a');
+            oLink.setAttribute('id', this.conf.object_id+'-linelink');
+            oLink.setAttribute('class', 'linelink');
+            oLink.setAttribute('className', 'linelink');
+            oLink.href = this.conf.url;
+            oLink.target = this.conf.url_target;
+
+            oContainer.appendChild(oLink);
+            oLink = null;
+        }
+        oContainer = null;
+    },
+
     parseLineControls: function () {
         var x = this.parseCoords(this.conf.x, 'x');
         var y = this.parseCoords(this.conf.y, 'y');
@@ -883,10 +987,10 @@ var NagVisObject = Base.extend({
             makeDragable([this.conf.object_id+'-drag-'+i], this.saveObject, this.moveObject);
         }
 
-        this.parseControlDelete(x.length, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'),
-                                20 - size / 2, -size - size / 2, size);
-        this.parseControlModify(x.length+1, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'),
-                                20 + size + 5 - size / 2, -size - size / 2, size);
+        //this.parseControlDelete(x.length, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'),
+        //                        20 - size / 2, -size - size / 2, size);
+        //this.parseControlModify(x.length+1, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'),
+        //                        20 + size + 5 - size / 2, -size - size / 2, size);
 
         if(this.conf.view_type === 'line' && (this.conf.line_type == 10 || this.conf.line_type == 13 || this.conf.line_type == 14))
 	    this.parseControlToggleLineMid(x.length+2, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'), 20 - size / 2, -size / 2 + 5, size);

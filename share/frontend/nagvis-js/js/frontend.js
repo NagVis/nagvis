@@ -554,7 +554,8 @@ function getContextTemplates() {
  */
 function parseContextMenus() {
     for(var i in oMapObjects)
-        if(oMapObjects[i].conf.context_menu && oMapObjects[i].conf.context_menu != '0')
+        if((oMapObjects[i].conf.context_menu && oMapObjects[i].conf.context_menu != '0')
+           || !oMapObjects[i].bIsLocked)
             oMapObjects[i].parseContextMenu();
 }
 
@@ -865,17 +866,34 @@ function updateNumUnlocked(num) {
 
 /**
  * Removes an element from the map
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function removeMapObject(objectId) {
+function removeMapObject(objectId, msg) {
+    if(msg != '' && !confirm(msg))
+        return;
+
     var obj = getMapObjByDomObjId(objectId);
+
     obj.detachChilds();
+    saveObjectRemove(objectId);
     obj.remove();
+
     if(!obj.bIsLocked)
         updateNumUnlocked(-1);
+
     obj = null;
-    saveObjectRemove(objectId);
+
+    delete oMapObjects[objectId];
+}
+
+/**
+ * Shows the add/modify frontend dialog for the given object
+ */
+function showAddModifyDialog(mapname, objectId) {
+    showFrontendDialog(oGeneralProperties.path_server
+                       + '?mod=Map&act=addModify&show='
+                       + escapeUrlValues(mapname)
+                       + '&object_id=' + escapeUrlValues(objectId), 'Modify Object');
+
 }
 
 /**

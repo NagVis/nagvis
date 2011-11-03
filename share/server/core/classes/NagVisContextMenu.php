@@ -119,8 +119,20 @@ class NagVisContextMenu {
             $this->code = str_replace('[lang_schedule_downtime]',l('contextScheduleDowntime'),$this->code);
         }
 
-        if(strpos($this->code,'[lang_toggle_lock]') !== FALSE)
-            $this->code = str_replace('[lang_toggle_lock]', l('Lock/Unlock'), $this->code);
+        if(strpos($this->code,'[lang_lock]') !== FALSE)
+            $this->code = str_replace('[lang_lock]', l('Lock'), $this->code);
+
+        if(strpos($this->code,'[lang_unlock]') !== FALSE)
+            $this->code = str_replace('[lang_unlock]', l('Unlock'), $this->code);
+
+        if(strpos($this->code,'[lang_modify]') !== FALSE)
+            $this->code = str_replace('[lang_modify]', l('Modify object'), $this->code);
+
+        if(strpos($this->code,'[lang_delete]') !== FALSE)
+            $this->code = str_replace('[lang_delete]', l('Delete object'), $this->code);
+
+        if(strpos($this->code,'[lang_delete_confirm]') !== FALSE)
+            $this->code = str_replace('[lang_delete_confirm]', l('Really delete the object?'), $this->code);
 
         if(strpos($this->code,'[lang_toggle_line_mid]') !== FALSE)
             $this->code = str_replace('[lang_toggle_line_mid]', l('Lock/Unlock line middle'), $this->code);

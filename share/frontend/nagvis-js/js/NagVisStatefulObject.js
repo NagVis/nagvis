@@ -374,24 +374,6 @@ var NagVisStatefulObject = NagVisObject.extend({
     },
 
     /**
-     * PUBLIC parseContextMenu()
-     *
-     * Parses the context menu. Don't add this functionality to the normal icon
-     * parsing
-     *
-     * @return	String		HTML code of the object
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    parseContextMenu: function () {
-    // Add a context menu to the object when enabled
-    if(this.conf.context_menu && this.conf.context_menu == '1')
-	if(this.conf.view_type && this.conf.view_type == 'line')
-	    this.getContextMenu(this.conf.object_id+'-linelink');
-	else
-	    this.getContextMenu(this.conf.object_id+'-icon');
-    },
-
-    /**
      * Replaces macros of urls and hover_urls
      *
      * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -489,20 +471,7 @@ var NagVisStatefulObject = NagVisObject.extend({
         oContainerDiv.appendChild(oLineDiv);
         oLineDiv = null;
 
-        // Parse hover/link area only when needed. This is only the container
-        // The real area or labels are added later
-        if((this.conf.url && this.conf.url !== '' && this.conf.url !== '#')
-           || (this.conf.hover_menu && this.conf.hover_menu !== '')) {
-            var oLink = doc.createElement('a');
-            oLink.setAttribute('id', this.conf.object_id+'-linelink');
-            oLink.setAttribute('class', 'linelink');
-            oLink.setAttribute('className', 'linelink');
-            oLink.href = this.conf.url;
-            oLink.target = this.conf.url_target;
-
-            oContainerDiv.appendChild(oLink);
-            oLink = null;
-        }
+        this.parseLineHoverArea(oContainerDiv);
 
         doc = null;
         return oContainerDiv;
@@ -636,8 +605,8 @@ var NagVisStatefulObject = NagVisObject.extend({
         // Parse the line object
         drawNagVisLine(this.conf.object_id, this.conf.line_type, cuts, x, y,
                        this.conf.z, width, colorFill, colorFill2, setPerfdata, colorBorder,
-                       ((this.conf.url && this.conf.url !== '') || (this.conf.hover_menu && this.conf.hover_menu !== '')),
-                                     (this.conf.line_label_show && this.conf.line_label_show === '1'));
+                       this.needsLineHoverArea(),
+                       (this.conf.line_label_show && this.conf.line_label_show === '1'));
     },
 
     /**
@@ -787,7 +756,7 @@ var NagVisStatefulObject = NagVisObject.extend({
             var arr   = this.id.split('-');
             var objId = arr[0];
             var obj = getMapObjByDomObjId(objId);
-	    if(!obj.bIsLocked)
+            if(!obj.bIsLocked)
                 obj.redrawControls();
             obj = null;
             objId = null;
@@ -990,65 +959,17 @@ var NagVisStatefulObject = NagVisObject.extend({
     },
 
     parseIconControls: function () {
-        var size = oGeneralProperties['controls_size'];
-        this.parseControlModify(1, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
-                                 this.getObjWidth() + 5, - size / 2, size);
+        // No controls on icons anymore
+        //var size = oGeneralProperties['controls_size'];
+        //this.parseControlModify(1, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
+        //                         this.getObjWidth() + 5, - size / 2, size);
 
-        this.parseControlDelete(0, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
-                                 this.getObjWidth() + 5, - size / 2 + 5 + size, size);
-        size = null;
+        //this.parseControlDelete(0, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
+        //                         this.getObjWidth() + 5, - size / 2 + 5 + size, size);
+        //size = null;
 
         // Simply make it dragable. Maybe will be extended in the future...
         makeDragable([this.conf.object_id+'-icondiv'], this.saveObject, this.moveObject);
-    },
-
-
-    /**
-     * Toggles the position of the line middle. The mid of the line
-     * can either be the 2nd of three line coords or is automaticaly
-     * the middle between two line coords.
-     */
-    toggleLineMidLock: function() {
-        // What is the current state?
-        var x = this.conf.x.split(',');
-        var y = this.conf.y.split(',')
-
-        if(this.conf.line_type != 10 && this.conf.line_type != 13 && this.conf.line_type != 14) {
-            alert('Not available for this line. Only lines with 2 line parts have a middle coordinate.');
-            return;
-        }
-
-        if(x.length == 2) {
-            // The line has 2 coords configured
-            // - Calculate and add the 3rd coord as 2nd
-            // - Add a drag control for the 2nd coord
-            this.conf.x = [
-                x[0],
-              middle(this.parseCoords(this.conf.x, 'x')[0], this.parseCoords(this.conf.x, 'x')[1], this.conf.line_cut),
-              x[1],
-            ].join(',');
-            this.conf.y = [
-                y[0],
-                middle(this.parseCoords(this.conf.y, 'y')[0], this.parseCoords(this.conf.y, 'y')[1], this.conf.line_cut),
-                y[1],
-            ].join(',');
-        } else {
-            // The line has 3 coords configured
-            // - Remove the 2nd coord
-            // - Remove the drag control for the 2nd coord
-            this.conf.x = [ x[0], x[2] ].join(',');
-            this.conf.y = [ y[0], y[2] ].join(',');
-        }
-
-        // send to server
-        saveObjectAttr(this.conf.object_id, { 'x': this.conf.x, 'y': this.conf.y});
-
-        // redraw the controls
-        if(!this.bIsLocked)
-            this.redrawControls();
-
-        // redraw the line
-        this.drawLine();
     },
 
     highlight: function(show) {

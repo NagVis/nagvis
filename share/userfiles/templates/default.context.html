@@ -2,15 +2,29 @@
     <!-- BEGIN automap_not_root -->
     <li><a href="index.php?mod=AutoMap&act=view&show=[map_name]&root=[name]">[lang_make_root]</a></li>
     <!-- END automap_not_root -->
+
+    <!-- BEGIN stateful -->
     <li><a href="#" onClick="refreshMapObject(event, '[obj_id]'); contextHide();return false">[lang_refresh_status]</a></li>
+    <li class="spacer"></li>
+    <!-- END stateful -->
+
     <!-- BEGIN not_automap -->
-    <li><a href="#" onClick="toggleMapObjectLock(event, '[obj_id]'); contextHide();return false">[lang_toggle_lock]</a></li>
+    <!-- BEGIN locked -->
+    <li><a href="#" onClick="toggleMapObjectLock(event, '[obj_id]'); contextHide();return false">[lang_unlock]</a></li>
+    <!-- END locked -->
+    <!-- BEGIN unlocked -->
+    <li><a href="#" onClick="toggleMapObjectLock(event, '[obj_id]'); contextHide();return false">[lang_lock]</a></li>
+    <li><a href="#" onClick="showAddModifyDialog('[map_name]', '[obj_id]');contextHide();return false">[lang_modify]</a></li>
+    <li><a href="#" onClick="removeMapObject('[obj_id]', '[lang_delete_confirm]');contextHide();return false">[lang_delete]</a></li>
+    <!-- END unlocked -->
     <!-- END not_automap -->
+
     <!-- BEGIN host -->
     <li class="spacer"></li>
     <li><a href="[html_cgi]/cmd.cgi?cmd_typ=55&host=[name]" target="_blank">[lang_schedule_downtime]</a></li>
     <li><a href="[html_cgi]/cmd.cgi?cmd_typ=96&host=[name]&force_check" target="_blank">[lang_reschedule_next_check]</a></li>
     <!-- END host -->
+
     <!-- BEGIN service -->
     <li class="spacer"></li>
     <li><a href="[html_cgi]/cmd.cgi?cmd_typ=56&host=[name]&service=[service_description]" target="_blank">[lang_schedule_downtime]</a></li>
