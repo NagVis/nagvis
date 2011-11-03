@@ -13,6 +13,7 @@ Frontend
   * Bugfix: Fixed object link follow after moving object in edit mode when using IE<8
   * Bugfix: Fixed javascript several onload javascript errors when using IE<8
   * Bugfix: Fixed add/modify dialog styling in IE/Chrome
+  * Bugfix: Fixed dragging relative positioned lines
 
 Automap
   * Improved coord parsing code to make it graphviz-2.6-22.2 compatible

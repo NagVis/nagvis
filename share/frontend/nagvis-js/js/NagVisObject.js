@@ -728,7 +728,7 @@ var NagVisObject = Base.extend({
             return val;
         } else {
             var old  = this.conf[dir].split(',');
-            old[num] = Math.round(val);
+            old[num] = val;
             return old.join(',');
         }
     },
