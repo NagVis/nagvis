@@ -922,3 +922,12 @@ function toggle_option(name) {
         field = null;
     }
 }
+
+function togglePicker(id) {
+    var o = document.getElementById(id);
+    if(jscolor.picker && jscolor.picker.owner == o.color)
+        o.color.hidePicker();
+    else
+        o.color.showPicker();
+    o = null;
+}

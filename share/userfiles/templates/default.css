@@ -490,9 +490,23 @@ td#popupWindowContent table.mytable tr.child-row td.tdlabel {padding-left: 20px;
 td#popupWindowContent table.mytable td.tdlabel {padding-left: 10px;width: 140px;}
 td#popupWindowContent table.mytable td.tdbox {width: 30px;}
 td#popupWindowContent table.mytable td.tdfield {width: 170px;}
-td#popupWindowContent table.mytable tr td.tdfield input, td#popupWindowContent table.mytable tr td.tdfield select {font-size: 10px;background-color: #E4EEF6;border: 1px solid #284279;width:170px;}
-td#popupWindowContent table.mytable tr td.tdfield span {word-wrap: break-word;}
-
+td#popupWindowContent table.mytable tr td.tdfield input,
+td#popupWindowContent table.mytable tr td.tdfield select {
+    font-size: 10px;
+    background-color: #E4EEF6;
+    border: 1px solid #284279;
+    width:170px;
+}
+td#popupWindowContent table.mytable tr td.tdfield span {
+    word-wrap: break-word;
+}
+td#popupWindowContent table.mytable tr td.tdfield div.picker input {
+    width:151px;
+    margin-right:2px;
+}
+td#popupWindowContent table.mytable tr td.tdfield div.picker img {
+    vertical-align: middle;
+}
 
 td#popupWindowContent .submit {
   font-weight: bold;

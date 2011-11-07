@@ -10,6 +10,7 @@ Core
 Frontend
   * Recoded editing features to be available via context menu of the icons.
     Removed object controls for moving/editing objects
+  * Added a colorpicker for the color selection fileds in add/modify dialog
   * Bugfix: Fixed handling of enableHover/enableContext URL options
   * Bugfix: Fixed object link follow after moving object in edit mode when using IE<8
   * Bugfix: Fixed javascript several onload javascript errors when using IE<8

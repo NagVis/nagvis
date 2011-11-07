@@ -39,6 +39,7 @@
     <script type="text/javascript" src="{$htmlJs}frontend.js"></script>
     <script type="text/javascript" src="{$htmlJs}ExtWzJsGraphics.js"></script>
     <script type="text/javascript" src="{$htmlJs}ExtGenericResize.js"></script>
+    <script type="text/javascript" src="{$htmlJs}ExtJSColor.js"></script>
     {/if}
     <link rel="stylesheet" type="text/css" href="{$htmlTemplates}default.css" />
     {if $customStylesheet != ""}
@@ -47,8 +48,11 @@
 </head>
 <body class="main">
 
-<!-- FIXME: Start rotation properties -->
-<script type="text/javascript">oRotationProperties = \{"rotationEnabled":0,"nextStepUrl":"","nextStepTime":""};</script>
+<!-- Start rotation properties -->
+<script type="text/javascript">
+oRotationProperties = \{"rotationEnabled":0,"nextStepUrl":"","nextStepTime":""};
+jscolor.dir = '{$htmlBase}/frontend/nagvis-js/images/jscolor/';
+</script>
 
 <!-- Start header menu -->
 {$headerMenu}

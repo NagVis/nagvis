@@ -255,6 +255,9 @@ class WuiViewMapAddModify {
                         $ret .= $this->inputField($propname, $value, $hideField);
                     }
                 break;
+                case 'color':
+                    $ret .= $this->colorSelect($propname, $value, $hideField);
+                break;
                 case 'text':
                     $ret .= $this->inputField($propname, $value, $hideField);
                 break;
@@ -281,8 +284,21 @@ class WuiViewMapAddModify {
         return $ret;
     }
 
-    private function inputField($name, $value, $hideField) {
-        return '<input id="'.$name.'" type="text" name="'.$name.'" value="'.$value.'"'.$hideField.' />';
+    private function colorSelect($propname, $value, $hideField) {
+        return '<div id="'.$propname.'" class=picker'.$hideField.'>'
+              .$this->inputField($propname, $value, '', $propname . '_inp')
+              .'<a href="javascript:void(0);" onClick="togglePicker(\''.$propname.'_inp\');">'
+              .'<img src="'.cfg('paths', 'htmlimages').'internal/picker.png" alt="'.l('Color select').'" />'
+              .'</a></div>'
+              .'<script>var o = document.getElementById("'.$propname.'_inp");'
+              .'o.color = new jscolor.color(o, {pickerOnfocus:false,adjust:false,hash:true});'
+              .'o = null;</script>';
+    }
+
+    private function inputField($name, $value, $hideField, $id = null) {
+        if($id === null)
+            $id = $name;
+        return '<input id="'.$id.'" type="text" name="'.$name.'" value="'.$value.'"'.$hideField.' />';
     }
 
     private function selectField($name, $arr, $value, $hideField, $onChange='') {

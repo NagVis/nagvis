@@ -926,6 +926,7 @@ cmp_js() {
     cmp NagVisRotation.js
     cmp ExtWzJsGraphics.js
     cmp ExtGenericResize.js
+    cmp ExtJSColor.js
 }
 
 # Main program starting
