@@ -5,6 +5,7 @@ Core
     It is not safe to rely on the system's timezone settings
   * Bugfix: Fixed problem with some PHP 5.1.2 installations while reading the
     map configuration files
+  * Switched mod_rewrite redirects of index pages to php redirect scripts
 
 Frontend
   * Recoded editing features to be available via context menu of the icons.
