@@ -528,21 +528,17 @@ function getFormParams(formId) {
                 sel = aFields[i].selectedIndex;
             }
 
-            if(typeof lang !== 'undefined' && (sel != -1 && aFields[i].options[aFields[i].selectedIndex].value === lang['manualInput'])) {
-                sReturn += aFields[i].name + "=" + escapeUrlValues(document.getElementById('_inp_'+aFields[i].name).value) + "&";
+            // Can't use the selectedIndex when using select fields with multiple
+            if(!aFields[i].multiple || aFields[i].multiple !== true) {
+                // Maybe nothing is selected
+                if(sel != -1) {
+                    sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].options[sel].value) + "&";
+                }
             } else {
-                // Can't use the selectedIndex when using select fields with multiple
-                if(!aFields[i].multiple || aFields[i].multiple !== true) {
-                    // Maybe nothing is selected
-                    if(sel != -1) {
-                        sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].options[sel].value) + "&";
-                    }
-                } else {
-                    for(var a = 0; a < aFields[i].options.length; a++) {
-                        // Only add selected ones
-                        if(aFields[i].options[a].selected == true) {
-                            sReturn += aFields[i].name + "[]=" + escapeUrlValues(aFields[i].options[a].value) + "&";
-                        }
+                for(var a = 0; a < aFields[i].options.length; a++) {
+                    // Only add selected ones
+                    if(aFields[i].options[a].selected == true) {
+                        sReturn += aFields[i].name + "[]=" + escapeUrlValues(aFields[i].options[a].value) + "&";
                     }
                 }
             }

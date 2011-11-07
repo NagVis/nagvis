@@ -621,9 +621,8 @@ function toggleFieldType(sName, sValue) {
 
     // Check if the field should be changed
     // this is toggled on
-    // a) Select field set to "Manual Input..." or
-    // b) Input helper field set to ""
-    if((bInputHelper == false && sValue === lang['manualInput']) || (bInputHelper === true && sValue == '')) {
+    // - Input helper field set to ""
+    if(bInputHelper === true && sValue == '') {
         var oSelectField = document.getElementById(sBaseName);
         var oInputField = document.getElementById('_inp_' + sBaseName);
 

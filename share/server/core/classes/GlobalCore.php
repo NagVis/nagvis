@@ -543,28 +543,15 @@ class GlobalCore {
      *
      * @return  String    JSON encoded array
      * @author  Lars Michelsen <lars@vertical-visions.de>
-     * FIXME: DEPRECATED? Check if still needed!
+     * FIXME: Remove this when the edit dialogs are rewritten to
+     * a validation within the PHP code and do not need the js
+     * validation anymore.
      */
     public function getJsLang() {
         $lang = Array(
-            'clickMapToSetPoints'           => l('clickMapToSetPoints'),
-            'confirmDelete'                 => l('confirmDelete'),
-            'confirmRestore'                => l('confirmRestore'),
             'wrongValueFormat'              => l('wrongValueFormat'),
-            'wrongValueFormatMap'           => l('wrongValueFormatMap'),
             'wrongValueFormatOption'        => l('wrongValueFormatOption'),
-            'unableToWorkWithMap'           => l('unableToWorkWithMap'),
             'mustValueNotSet'               => l('mustValueNotSet'),
-            'chosenLineTypeNotValid'        => l('chosenLineTypeNotValid'),
-            'onlyLineOrIcon'                => l('onlyLineOrIcon'),
-            'not2coordsX'                   => l('not2coords', 'COORD~X'),
-            'not2coordsY'                   => l('not2coords', 'COORD~Y'),
-            'only1or2coordsX'               => l('only1or2coords', 'COORD~X'),
-            'only1or2coordsY'               => l('only1or2coords', 'COORD~Y'),
-            'viewTypeWrong'                 => l('viewTypeWrong'),
-            'lineTypeNotSet'                => l('lineTypeNotSet'),
-            'loopInMapRecursion'            => l('loopInMapRecursion'),
-            'mapObjectWillShowSummaryState' => l('mapObjectWillShowSummaryState'),
             'firstMustChoosePngImage'       => l('firstMustChoosePngImage'),
             'noSpaceAllowedInName'          => l('Spaces are not allowed in file names.'),
             'mustChooseValidImageFormat'    => l('mustChooseValidImageFormat'),
@@ -593,7 +580,7 @@ class GlobalCore {
             'minOneUserWriteAccess'         => l('minOneUserWriteAccess'),
             'noSpaceAllowed'                => l('noSpaceAllowed'),
             'properties'                    => l('properties'),
-            'manualInput'                   => l('manualInput'));
+        );
 
         return json_encode($lang);
     }
