@@ -66,23 +66,23 @@ define('DEBUGLEVEL', 6);
 // Path to the debug file
 define('DEBUGFILE', '../../../var/nagvis-debug.log');
 
-// It is possible to define a second main configuration file
-// to pre-define some options in a file the user may not be
-// able to modify.
+// It is possible to define a conf.d directory for splitting the main
+// configuration in several files. Only the values defined in the CONST_MAINCFG
+// file are editable via the web GUI.
 //
 // The parameters are applied in this direction:
 // 1. hardcoded
-// 2. CONST_MAINCFG_SITE
+// 2. CONST_MAINCFG_DIR
 // 3. CONST_MAINCFG
 //
 // The last value wins.
 //
 // Path to the main configuration file
 define('CONST_MAINCFG', '../../../etc/nagvis.ini.php');
-define('CONST_MAINCFG_CACHE', '../../../var/nagvis.ini.php');
+define('CONST_MAINCFG_CACHE', '../../../var/nagvis-conf');
 
-// Path to "site" main configuration file
-//define('CONST_MAINCFG_SITE', '../../../etc/nagvis-site.ini.php');
+// Path to the main configuration conf.d directory
+define('CONST_MAINCFG_DIR', '../../../etc/conf.d');
 
 // The directory below the NagVis root which is shared by the webserver
 define('HTDOCS_DIR', 'share');

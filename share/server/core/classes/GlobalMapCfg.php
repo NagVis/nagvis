@@ -205,8 +205,8 @@ class GlobalMapCfg {
      */
     protected function initCache() {
         if($this->cacheFile !== '') {
-            $this->CACHE = new GlobalFileCache($this->CORE, $this->configFile, $this->cacheFile);
-            $this->DCACHE = new GlobalFileCache($this->CORE, $this->configFile, $this->defaultsCacheFile);
+            $this->CACHE = new GlobalFileCache($this->configFile, $this->cacheFile);
+            $this->DCACHE = new GlobalFileCache($this->configFile, $this->defaultsCacheFile);
         }
     }
 

@@ -230,7 +230,7 @@ class GlobalIndexPage {
         $sThumbPathHtml = cfg('paths', 'htmlsharedvar') . $sThumbFile;
 
         // Only create a new thumb when there is no cached one
-        $FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
+        $FCACHE = new GlobalFileCache($imgPath, $sThumbPath);
         if($FCACHE->isCached() === -1)
             $image = $this->createThumbnail($imgPath, $sThumbPath);
 
@@ -259,7 +259,7 @@ class GlobalIndexPage {
         $sThumbPathHtml = cfg('paths','htmlsharedvar').$sThumbFile;
 
         // Only create a new thumb when there is no cached one
-        $FCACHE = new GlobalFileCache($this->CORE, $imgPath, $sThumbPath);
+        $FCACHE = new GlobalFileCache($imgPath, $sThumbPath);
         if($FCACHE->isCached() === -1)
             $image = $this->createThumbnail($imgPath, $sThumbPath);
 

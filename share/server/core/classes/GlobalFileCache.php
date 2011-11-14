@@ -26,8 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalFileCache {
-    private $CORE;
-    private $file;
+    private $files;
     private $cacheFile;
 
     private $fileAge;
@@ -36,23 +35,49 @@ class GlobalFileCache {
     /**
      * Class Constructor
      *
-     * @param 	Object  Object of GlobalCore
      * @param 	String  File to check
      * @param   String  Path to cache file
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function __construct($CORE, $file, $cacheFile) {
-        $this->CORE = $CORE;
-        $this->file = $file;
+    public function __construct($files, $cacheFile) {
+        if(is_string($files)) {
+            $this->files = Array($files);
+        } else {
+            $this->files = $files;
+        }
+
         $this->cacheFile = $cacheFile;
 
-        if($this->checkFileExists(0)) {
-            $this->fileAge = filemtime($this->file);
-        }
+        $this->fileAge = $this->getNewestFile();
 
         if($this->checkCacheFileExists(0)) {
             $this->cacheFileAge = filemtime($this->cacheFile);
         }
+    }
+
+    /**
+     * Get the newest of the given files. This is needed to test if
+     * the cache file is up-to-date or needs to be renewed
+     */
+    private function getNewestFile() {
+        $age = -1;
+        $newestFile = '';
+        foreach($this->files AS $file) {
+            if(!GlobalCore::getInstance()->checkExisting($file, false)
+               || !GlobalCore::getInstance()->checkReadable($file, false))
+                continue;
+
+            $thisAge = filemtime($file);
+            if($age === -1) {
+                $age = $thisAge;
+                $newestFile = $file;
+            } elseif($thisAge > $age) {
+                $age = $thisAge;
+                $newestFile = $file;
+            }
+        }
+
+        return $newestFile;
     }
 
     /**
@@ -76,7 +101,9 @@ class GlobalFileCache {
     public function writeCache($contents, $printErr=1) {
         // Perform file writeable check only when cache file exists
         // When no cache file exists check if file can be created in directory
-        if((!$this->checkCacheFileExists(0) && $this->checkCacheFolderWriteable($printErr)) || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))) {
+        if((!$this->checkCacheFileExists(0)
+            && $this->checkCacheFolderWriteable($printErr))
+           || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))) {
             if(($fp = fopen($this->cacheFile, 'w+')) === FALSE){
                 if($printErr == 1) {
                     throw new NagVisException(l('cacheFileNotWriteable', Array('FILE' => $this->cacheFile)));
@@ -87,7 +114,7 @@ class GlobalFileCache {
             fwrite($fp, serialize($contents));
             fclose($fp);
 
-            $this->CORE->setPerms($this->cacheFile);
+            GlobalCore::getInstance()->setPerms($this->cacheFile);
 
             return TRUE;
         } else {
@@ -150,17 +177,6 @@ class GlobalFileCache {
      */
     private function checkCacheFileExists($printErr) {
         return GlobalCore::getInstance()->checkExisting($this->cacheFile, $printErr);
-    }
-
-    /**
-     * Checks for existing file
-     *
-     * @param   Boolean  $printErr
-     * @return  Boolean  Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    private function checkFileExists($printErr) {
-        return GlobalCore::getInstance()->checkExisting($this->file, $printErr);
     }
 
     /**

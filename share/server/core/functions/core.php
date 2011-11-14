@@ -34,10 +34,7 @@
 
 // ----------------------------------------------------------------------------
 
-if(defined('CONST_MAINCFG_SITE'))
-    $_MAINCFG = new GlobalMainCfg(Array(CONST_MAINCFG_SITE, CONST_MAINCFG));
-else
-    $_MAINCFG = new GlobalMainCfg(Array(CONST_MAINCFG));
+$_MAINCFG = new GlobalMainCfg();
 $_MAINCFG->init();
 
 /**

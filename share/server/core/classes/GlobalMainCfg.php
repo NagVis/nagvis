@@ -44,7 +44,7 @@ class GlobalMainCfg {
      * @param	Array $configFile    List of paths to configuration files
      * @author Lars Michelsen <lars@vertical-visions.de>
      */
-    public function __construct($configFiles) {
+    public function __construct() {
         $this->validConfig = Array(
             'global' => Array(
                 'audit_log' => Array('must' => 1,
@@ -990,50 +990,42 @@ class GlobalMainCfg {
         $this->setPathsByBase($this->getValue('paths','base'), $this->getValue('paths','htmlbase'));
 
         // Define the main configuration files
-        $this->configFiles = $configFiles;
+        $this->configFiles = $this->getConfigFiles();
     }
 
     /**
-     * Get the newest of the given configuration files. This is needed to test if
-     * the cache file is up-to-date or needs to be renewed
-     *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * Returns an array of all config files to be used by NagVis.
+     * The paths are given as paths.
      */
-    private function getNewestFile() {
-        $age = -1;
-        $newestFile = '';
-        foreach($this->configFiles AS $configFile) {
-            if(!GlobalCore::getInstance()->checkExisting($configFile, false) || !GlobalCore::getInstance()->checkReadable($configFile, false))
-                continue;
-
-            $configAge = filemtime($configFile);
-            if($age === -1) {
-                $age = $configAge;
-                $newestFile = $configFile;
-            } elseif($configAge > $age) {
-                $age = $configAge;
-        $newestFile = $configFile;
-            }
+    private function getConfigFiles() {
+        // Get all files from the conf.d directory
+        $files = GlobalCore::getInstance()->listDirectory(CONST_MAINCFG_DIR, MATCH_MAINCFG_FILE, null, null, 0, null, false);
+        foreach($files AS $key => $filename) {
+            $files[$key] = CONST_MAINCFG_DIR . '/' . $filename;
         }
 
-        return $newestFile;
+        // Add the user controlled config file
+        $files[] = CONST_MAINCFG;
+
+        return $files;
     }
 
     public function init() {
         // Get the valid configuration definitions from the available backends
         $this->getBackendValidConf();
 
-        // Get the path and age of the newest config file
-        $newestFile = $this->getNewestFile();
-
         // Use the newest file as indicator for using the cache or not
-        $this->CACHE = new GlobalFileCache(GlobalCore::getInstance(), $newestFile, CONST_MAINCFG_CACHE.'-'.CONST_VERSION.'-cache');
-        $this->PUCACHE = new GlobalFileCache(GlobalCore::getInstance(), $newestFile, CONST_MAINCFG_CACHE.'-pre-user-'.CONST_VERSION.'-cache');
-  	if($this->CACHE->isCached(false) === -1) {
+        $this->CACHE = new GlobalFileCache(CONST_MAINCFG, CONST_MAINCFG_CACHE.'-'.CONST_VERSION.'-cache');
+        $this->PUCACHE = new GlobalFileCache(array_slice($this->configFiles, 0, count($this->configFiles) - 1),
+                                             CONST_MAINCFG_CACHE.'-pre-user-'.CONST_VERSION.'-cache');
+
+  	if($this->CACHE->isCached(false) === -1
+           || $this->PUCACHE->isCached(false) === -1) {
             // The cache is too old. Load all config files
             foreach($this->configFiles AS $configFile) {
                 // Only proceed when the configuration file exists and is readable
-                if(!GlobalCore::getInstance()->checkExisting($configFile, true) || !GlobalCore::getInstance()->checkReadable($configFile, true))
+                if(!GlobalCore::getInstance()->checkExisting($configFile, true)
+                   || !GlobalCore::getInstance()->checkReadable($configFile, true))
                     return false;
                 $this->readConfig($configFile, true, $configFile == end($this->configFiles));
             }

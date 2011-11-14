@@ -63,6 +63,7 @@ define('MATCH_LANGUAGE_FILE', '/^([^\.].*)/');
 define('MATCH_ICONSET', '/^(.+)_ok.(png|gif|jpg)$/');
 define('MATCH_BACKEND_FILE', '/^GlobalBackend([^MI].+)\.php$/');
 define('MATCH_DOC_DIR', '/^([a-z]{2}_[A-Z]{2})/');
+define('MATCH_MAINCFG_FILE', '/^.+\.ini\.php$/i');
 
 define('MATCH_MAP_NAME', '/^[0-9A-Za-z_\-]+$/');
 define('MATCH_MAP_NAME_EMPTY', '/^[0-9A-Za-z_\-]*$/');

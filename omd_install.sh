@@ -68,13 +68,20 @@ if [ -d $OMD_ROOT/var/nagvis/userfiles ]; then
     cp -r $CWD/share/userfiles/* $OMD_ROOT/var/nagvis/userfiles
 fi
 
+# Handle the old and new omd specific config file paths
+if [ -d $OMD_ROOT/etc/nagvis/conf.d ]; then
+    OMD_CFG=$OMD_ROOT/etc/nagvis/conf.d/omd.ini.php
+else
+    OMD_CFG=$OMD_ROOT/etc/nagvis/nagvis-omd.ini.php
+fi
+
 # Backup the nagvis-omd.ini.php on first time using omd_install.sh
-if ! grep omd_install.sh $OMD_ROOT/etc/nagvis/nagvis-omd.ini.php >/dev/null 2>&1; then
-    cp $OMD_ROOT/etc/nagvis/nagvis-omd.ini.php $OMD_ROOT/etc/nagvis/nagvis-omd.ini.php.bak
+if ! grep omd_install.sh $OMD_CFG >/dev/null 2>&1; then
+    cp $OMD_CFG $OMD_CFG.bak
 fi
 
 # Update omd specific nagvis.ini.php file
-cat > $OMD_ROOT/etc/nagvis/nagvis-omd.ini.php <<EOF
+cat > $OMD_CFG <<EOF
 ; <?php return 1; ?>
 ; -----------------------------------------------------------------
 ; Don't touch this file. It is under control of OMD. Modifying this
@@ -149,6 +156,7 @@ Alias /$OMD_SITE/nagvis "$OMD_ROOT/local/share/nagvis/htdocs"
     RewriteCond %{REQUEST_URI} ^/$OMD_SITE/nagvis/frontend/(nagvis-js|wui)
     RewriteCond %{QUERY_STRING} map=(.*)
     RewriteRule ^(.*)$ /$OMD_SITE/nagvis/frontend/nagvis-js/index.php?mod=Map&act=view&show=%1 [R=301,L]
+
     # Without map= param
     RewriteCond %{REQUEST_URI} ^/$OMD_SITE/nagvis/frontend(/wui)?/?(index.php)?$
     RewriteRule ^(.*)$ /$OMD_SITE/nagvis/frontend/nagvis-js/index.php [R=301,L]
@@ -179,18 +187,18 @@ patch -s $OMD_ROOT/local/share/nagvis/htdocs/server/core/defines/global.php <<EO
  //
  // Path to the main configuration file
 -define('CONST_MAINCFG', '../../../etc/nagvis.ini.php');
--define('CONST_MAINCFG_CACHE', '../../../var/nagvis.ini.php');
+-define('CONST_MAINCFG_CACHE', '../../../var/nagvis-conf');
 +define('CONST_MAINCFG', join(array_slice(explode('/' ,dirname(\$_SERVER["SCRIPT_FILENAME"])), 0, -6), '/').'/etc/nagvis/nagvis.ini.php');
-+define('CONST_MAINCFG_CACHE', join(array_slice(explode('/' ,dirname(\$_SERVER["SCRIPT_FILENAME"])), 0, -6), '/').'/tmp/nagvis/nagvis.ini.php');
-
- // Path to "site" main configuration file
--//define('CONST_MAINCFG_SITE', '../../../etc/nagvis-site.ini.php');
-+define('CONST_MAINCFG_SITE', join(array_slice(explode('/' ,dirname(\$_SERVER["SCRIPT_FILENAME"])), 0, -6), '/').'/etc/nagvis/nagvis-omd.ini.php');
-
++define('CONST_MAINCFG_CACHE', join(array_slice(explode('/' ,dirname(\$_SERVER["SCRIPT_FILENAME"])), 0, -6), '/').'/tmp/nagvis/nagvis-conf');
+ 
+ // Path to the main configuration conf.d directory
+-define('CONST_MAINCFG_DIR', '../../../etc/conf.d');
++define('CONST_MAINCFG_DIR', join(array_slice(explode('/' ,dirname(\$_SERVER["SCRIPT_FILENAME"])), 0, -6), '/').'/etc/nagvis/conf.d');
+ 
  // The directory below the NagVis root which is shared by the webserver
 -define('HTDOCS_DIR', 'share');
 +define('HTDOCS_DIR', 'htdocs');
-
+ 
  // Needed minimal PHP version
  define('CONST_NEEDED_PHP_VERSION', '5.0');
 EOF

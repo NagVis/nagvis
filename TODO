@@ -15,14 +15,40 @@ Probleme:
 - Redesign main configuration:
   Momentan können zwei Konfigurationsdateien benutzt werden. Besser wäre ein conf.d
   Verzeichnis zu haben um die Konfiguration, zumindest optional, modularer aufbauen
-  zu können.
+  zu können. Aus diesem Verzeichnis werden die Dateien in alphabetischer Reihenfolge
+  geladen.
+
   Dabei ist zu beachten, dass die Sektionen Dateiübergreifend gemergt werden können
   müssen.
+
   Außerdem ist es wichtig, dass man die Datei weiterhin über die Weboberfläche
   editieren kann. Das könnte man so lösen, dass man nur eine spezielle Datei via
   Weboberfläche editierbar macht. Da müsste man beim rendern des Dialogs eben nur die
   Konfigurationdateien, die vor der Web-Datei kommen, laden und die daraus resultierenden
   Werte als Default-Wert annehmen.
+
+  Dabei ist wichtig, dass die Optionen, die der Nutzer über die Webgui editiert nur in
+  die eine Datei geschrieben werden, die durch die Webgui kontrolliert wird.
+
+  Reihenfolge:
+
+  conf.d/
+  nagvis.ini.php
+
+  Das conf.d Verzeichnis ist optional. Es muss nicht existieren.
+
+  Die Sektionen müssen gemergt werden können. Das betrifft alle Sektionen, sowohl Backends,
+  als auch die Standard-Sektionen.
+
+  Backends, die in den conf.d/ Verzeichnissen angelegt werden, können nicht per Webgui editiert
+  werden (?). Eventuell kann man das dort irgendwie hervorheben.
+
+  Aktuell gibt es einen Config Parser Cache. Dieser ist dateibasiert programmiert. Es gibt pro
+  Konfigurationsdatei einen eigenen Cache. Bei der Aufteilung in ein conf.d/ Verzeichnis würde
+  es ausreichen einen einzigen Cache für die Gesamte Konfiguration zu halten. Wenn eine Datei
+  neuer ist, als dieser globale Cache, dann werden alle Dateien neu eingelesen.
+  Die Klasse GlobalFileCache müsste optional eine Liste von Dateien mitbekommen können. Die
+  Klasse regelt das Handling mehrerer Dateien dann transparent.
 
 - Backends:
  - Zusätzlich beliebige Variablen vom Backend holen lassen
