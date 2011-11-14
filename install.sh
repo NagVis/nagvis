@@ -1330,6 +1330,7 @@ makedir "$NAGVIS_PATH/share/var"
 LINE="Copying files to $NAGVIS_PATH..."
 copy "share" "$NAGVIS_PATH"
 copy "etc" "$NAGVIS_PATH"
+makedir "$NAGVIS_PATH/etc/conf.d"
 makedir "$NAGVIS_PATH/etc/profiles"
 copy "README" "$NAGVIS_PATH"
 copy "LICENCE" "$NAGVIS_PATH"
@@ -1474,6 +1475,11 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
     
         LINE="Restoring user configuration files..."
         restore "etc/profiles/" "user configuration files" ""
+
+        if [ -d $NAGVIS_PATH_BACKUP/etc/conf.d ]; then
+            LINE="Restoring conf.d/ configuration files..."
+            restore "etc/conf.d/" "conf.d configuration files" ""
+        fi
     
         LINE="Restoring custom map images..."
         restore "$USERFILES_DIR/images/maps/" "map image files" "/*demo*.png"
