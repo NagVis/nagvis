@@ -1720,7 +1720,7 @@ class GlobalMainCfg {
             // Loop all sections to find the last defined backend
             foreach($this->config AS $type => $vars) {
                 // If the current section is a backend
-                        if(preg_match('/^backend_/', $type)) {
+                if(preg_match('/^backend_/', $type)) {
                     $lastBackendIndex = $i;
                 }
                 $i++;
