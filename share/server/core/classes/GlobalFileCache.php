@@ -48,7 +48,7 @@ class GlobalFileCache {
 
         $this->cacheFile = $cacheFile;
 
-        $this->fileAge = $this->getNewestFile();
+        $this->fileAge = $this->getNewestFileAge();
 
         if($this->checkCacheFileExists(0)) {
             $this->cacheFileAge = filemtime($this->cacheFile);
@@ -59,7 +59,7 @@ class GlobalFileCache {
      * Get the newest of the given files. This is needed to test if
      * the cache file is up-to-date or needs to be renewed
      */
-    private function getNewestFile() {
+    private function getNewestFileAge() {
         $age = -1;
         $newestFile = '';
         foreach($this->files AS $file) {
@@ -77,7 +77,7 @@ class GlobalFileCache {
             }
         }
 
-        return $newestFile;
+        return $age;
     }
 
     /**
