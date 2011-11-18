@@ -990,14 +990,18 @@ class GlobalMainCfg {
         $this->setPathsByBase($this->getValue('paths','base'), $this->getValue('paths','htmlbase'));
 
         // Define the main configuration files
-        $this->configFiles = $this->getConfigFiles();
+        $this->setConfigFiles($this->getConfigFiles());
+    }
+
+    public function setConfigFiles($arr) {
+        $this->configFiles = $arr;
     }
 
     /**
      * Returns an array of all config files to be used by NagVis.
      * The paths are given as paths.
      */
-    private function getConfigFiles() {
+    public function getConfigFiles() {
         // Get all files from the conf.d directory
         $files = GlobalCore::getInstance()->listDirectory(CONST_MAINCFG_DIR, MATCH_MAINCFG_FILE, null, null, 0, null, false);
         foreach($files AS $key => $filename) {
@@ -1010,14 +1014,14 @@ class GlobalMainCfg {
         return $files;
     }
 
-    public function init() {
+    public function init($cacheSuffix = '') {
         // Get the valid configuration definitions from the available backends
         $this->getBackendValidConf();
 
         // Use the newest file as indicator for using the cache or not
-        $this->CACHE = new GlobalFileCache(CONST_MAINCFG, CONST_MAINCFG_CACHE.'-'.CONST_VERSION.'-cache');
+        $this->CACHE = new GlobalFileCache(CONST_MAINCFG, CONST_MAINCFG_CACHE.'-'.CONST_VERSION.'-cache'.$cacheSuffix);
         $this->PUCACHE = new GlobalFileCache(array_slice($this->configFiles, 0, count($this->configFiles) - 1),
-                                             CONST_MAINCFG_CACHE.'-pre-user-'.CONST_VERSION.'-cache');
+                                             CONST_MAINCFG_CACHE.'-pre-user-'.CONST_VERSION.'-cache'.$cacheSuffix);
 
   	if($this->CACHE->isCached(false) === -1
            || $this->PUCACHE->isCached(false) === -1) {

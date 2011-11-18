@@ -101,6 +101,7 @@ define('DONT_GET_OBJECT_STATE', false);
 define('DONT_GET_SINGLE_MEMBER_STATES', false);
 define('GET_SINGLE_MEMBER_STATES', true);
 define('HANDLE_USERCFG', true);
+define('ONLY_USERCFG', true);
 
 define('ONLY_STATE', true);
 define('COMPLETE', false);

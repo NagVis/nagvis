@@ -131,8 +131,8 @@ class CoreModMainCfg extends CoreModule {
     }
 
     protected function doBackendDefault($a) {
-            $this->CORE->getMainCfg()->setValue('defaults', 'backend', $a['defaultbackend']);
-            $this->CORE->getMainCfg()->writeConfig();
+            $this->CORE->getUserMainCfg()->setValue('defaults', 'backend', $a['defaultbackend']);
+            $this->CORE->getUserMainCfg()->writeConfig();
             return true;
     }
 
@@ -146,11 +146,11 @@ class CoreModMainCfg extends CoreModule {
         foreach($a['opts'] AS $key => $val) {
             $key = explode('_', $key, 2);
             if(sizeof($key) == 2) 
-                $this->CORE->getMainCfg()->setValue($key[0], $key[1], $val);
+                $this->CORE->getUserMainCfg()->setValue($key[0], $key[1], $val);
         }
 
         // Write the changes to the main configuration file
-        $this->CORE->getMainCfg()->writeConfig();
+        $this->CORE->getUserMainCfg()->writeConfig();
 
         return true;
     }
@@ -184,17 +184,17 @@ class CoreModMainCfg extends CoreModule {
         // If there is at least one option set...
         if($bFoundOption) {
             // Set standard values
-            $this->CORE->getMainCfg()->setSection('backend_'.$a['backendid']);
-            $this->CORE->getMainCfg()->setValue('backend_'.$a['backendid'], 'backendtype', $a['backendtype']);
+            $this->CORE->getUserMainCfg()->setSection('backend_'.$a['backendid']);
+            $this->CORE->getUserMainCfg()->setValue('backend_'.$a['backendid'], 'backendtype', $a['backendtype']);
 
             // Set all options
             foreach($aOpt AS $key => $val) {
-                $this->CORE->getMainCfg()->setValue('backend_'.$a['backendid'], $key, $val);
+                $this->CORE->getUserMainCfg()->setValue('backend_'.$a['backendid'], $key, $val);
             }
         }
 
         // Write the changes to the main configuration
-        $this->CORE->getMainCfg()->writeConfig();
+        $this->CORE->getUserMainCfg()->writeConfig();
         return true;
     }
 
@@ -210,10 +210,10 @@ class CoreModMainCfg extends CoreModule {
         // Loop all aviable options for this backend and set them when some is given in the response
         foreach($this->getBackendAttributes($a['backendtype']) AS $key => $arr)
             if(isset($a['opts'][$key]))
-                $this->CORE->getMainCfg()->setValue('backend_'.$a['opts']['backendid'], $key, $a['opts'][$key]);
+                $this->CORE->getUserMainCfg()->setValue('backend_'.$a['opts']['backendid'], $key, $a['opts'][$key]);
 
         // Write the changes to the main configuration
-        $this->CORE->getMainCfg()->writeConfig();
+        $this->CORE->getUserMainCfg()->writeConfig();
         return true;
     }
 
@@ -224,8 +224,8 @@ class CoreModMainCfg extends CoreModule {
     }
 
     protected function doBackendDel($a) {
-        $this->CORE->getMainCfg()->delSection('backend_'.$a['backendid']);
-        $this->CORE->getMainCfg()->writeConfig();
+        $this->CORE->getUserMainCfg()->delSection('backend_'.$a['backendid']);
+        $this->CORE->getUserMainCfg()->writeConfig();
         return true;
     }
 }

@@ -62,6 +62,21 @@ class GlobalCore {
     }
 
     /**
+     * Getter function to initialize the user maincfg instance
+     * Only needed in some rare cases when only the values from
+     * the user (web) controllable nagvis.ini.php file are needed
+     */
+    public static function getUserMainCfg() {
+        global $_UMAINCFG;
+        if(!isset($_UMAINCFG)) {
+            $_UMAINCFG = new GlobalMainCfg();
+            $_UMAINCFG->setConfigFiles(Array(CONST_MAINCFG));
+            $_UMAINCFG->init('-user-only');
+        }
+        return $_UMAINCFG;
+    }
+
+    /**
      * Setter for AA
      *
      * @author Lars Michelsen <lars@vertical-visions.de>
@@ -128,11 +143,16 @@ class GlobalCore {
      * @return	Array Backend-IDs
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function getDefinedBackends() {
+    public function getDefinedBackends($onlyUserCfg = false) {
+        if($onlyUserCfg) {
+            $MAINCFG = self::getUserMainCfg();
+        } else {
+            $MAINCFG = self::getMainCfg();
+        }
         $ret = Array();
-        foreach(self::getMainCfg()->getSections() AS $name) {
+        foreach($MAINCFG->getSections() AS $name) {
             if(preg_match('/^backend_/i', $name)) {
-                $ret[] = self::getMainCfg()->getValue($name, 'backendid');
+                $ret[] = $MAINCFG->getValue($name, 'backendid');
             }
         }
 
