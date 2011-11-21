@@ -87,6 +87,30 @@ Einige weitere Gedankenfetzen:
     - Das Konstrukt kann auch Objekte mit Eigenschaften enthalen, diese könnten dann von der Map Konfiguration überschrieben werden (?)
   2. Welche Eigenschaften haben die Objekte?
 
+*** Installer renovieren ***
+
+Der erste Punkt: Die Nutzer Einstellungen für eine Installation sollen gespeichert werden.
+Das kann z.B. in einer Datei im Home-Verzeichnis gespeichert werden. Der Pfad zu dieser
+Datei könnte beispielsweise auch über eine Umgebungsvariable oder einen Parameter verändert
+werden. Dann braucht man auch nicht mehr versuchen eine mögliche Kommandozeile für den
+nächsten Lauf zusammen zu bauen.
+
+Bei den Default-Einstellungen für die einzelnen Optionen gibt es folgende Möglichkeiten:
+
+1. Hart codierte Defaults
+2. Aufrufparameter
+3. In einem vorherigen Lauf eingegebene Optionen
+4. Automatisch ermittelte Optionen
+
+Alle Abfragen genau prüfen, ob diese wirklich abgefragt werden müssen.
+Beim Update eventuell einige Abfrage weglassen. Wie z.B. die Konfiguration der Backends.
+
+Beim automatischen Ermitteln von Pfaden/Nutzern könnte man auch alternativen anbieten, wenn
+mehrere Nagios Prozesse gefunden werden.
+
+Eventuell auf Python umstellen. Das macht die ganze Programmierung um einiges einfacher und
+das ganze Zeug auch wartbarer.
+
 *** Shortcuts einbauen ***
 
 Gerade der Edit-Modus im normalen Frontend sollte Hotkeys haben. Diese sollten

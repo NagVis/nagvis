@@ -1,6 +1,8 @@
 1.6
 Core
   * Implented conf.d/ directory to have an optional modular main configuration
+  * Improved the installer a bit: Better directory detections; Less questions
+    during update
 
 1.6rc4
 Core

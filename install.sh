@@ -414,6 +414,14 @@ detect_livestatus_socket() {
  
 # Check Backend module prerequisites
 check_backend() {
+    # Ask to configure the backends during update
+    if [ $INSTALLER_ACTION = "update" ]; then
+        confirm "Do you want to update the backend configuration?" "n"
+        if [ "$ANS" = "N" ]; then
+            return
+        fi
+    fi
+
     BACKENDS=""
     text "| Checking Backends. (Available: $NAGVIS_BACKENDS)" "|"
     if [ $INSTALLER_QUIET -ne 1 ]; then
@@ -1076,8 +1084,8 @@ if [ -z $WHICH ]; then
     log "'which' not found (maybe package missing). Aborting..."
     exit 1
 fi
-PKG=`find_bin rpm`
-[ -z "$PKG" ] && PKG=`find_bin dpkg`
+PKG=`find_bin dpkg`
+[ -z "$PKG" ] && PKG=`find_bin rpm`
 [ -z "$PKG" ] && PKG=`find_bin yum`
 [ -z "$PKG" ] && PKG=`find_bin pkginfo`
 if [ -z "$PKG" ]; then
@@ -1120,7 +1128,7 @@ if [ $FORCE -eq 0 ]; then
     # Maybe the user wants to update from NagVis 1.4x. The paths
     # have changed there. So try to get the old nagvis dir in nagios/share
     # path. When there is some, ask the user to update that installation.
-    if [ -d ${NAGIOS_PATH%/}/share/nagvis -a "$NAGVIS_PATH" != "${NAGIOS_PATH%/}/share/nagvis" ]; then
+    if [ ! -d "$NAGVIS_PATH_OLD" -a -d ${NAGIOS_PATH%/}/share/nagvis -a "$NAGVIS_PATH" != "${NAGIOS_PATH%/}/share/nagvis" ]; then
         # Found nagvis in nagios/share and this run wants to install NagVis somewhere else
         NAGVIS_PATH_OLD="${NAGIOS_PATH%/}/share/nagvis"
 
@@ -1140,6 +1148,12 @@ if [ $FORCE -eq 0 ]; then
         fi
         CALL="$CALL -O $NAGVIS_PATH_OLD"
     fi
+    
+fi
+
+# When the old directory exists this is an update run
+if [ -d "$NAGVIS_PATH_OLD" ]; then
+    INSTALLER_ACTION="update"
 fi
 
 text
@@ -1212,8 +1226,6 @@ text
 line "Checking for existing NagVis" "+"
 
 if [ -d $NAGVIS_PATH_OLD ]; then
-    INSTALLER_ACTION="update"
-    
     if [ -e $NAGVIS_PATH_OLD/nagvis/includes/defines/global.php ]; then
         NAGVIS_VER_OLD=`cat $NAGVIS_PATH_OLD/nagvis/includes/defines/global.php | grep CONST_VERSION | awk -F"'" '{ print $4 }'`
     elif [ -e $NAGVIS_PATH_OLD/share/nagvis/includes/defines/global.php ]; then
@@ -1474,7 +1486,9 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
         restore "etc/automaps/" "automap configuration files" "/__automap.cfg"
     
         LINE="Restoring user configuration files..."
-        restore "etc/profiles/" "user configuration files" ""
+        if [ -d $NAGVIS_PATH_BACKUP/etc/profiles ]; then
+            restore "etc/profiles/" "user configuration files" ""
+        fi
 
         if [ -d $NAGVIS_PATH_BACKUP/etc/conf.d ]; then
             LINE="Restoring conf.d/ configuration files..."
