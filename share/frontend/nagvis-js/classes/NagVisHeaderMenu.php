@@ -200,9 +200,13 @@ class NagVisHeaderMenu {
     }
 
     private function mapListToTree($maps, $childMaps) {
-        foreach(array_keys($maps) AS $freeParent)
-            if(isset($childMaps[$freeParent]))
+        foreach($maps AS $map) {
+            $freeParent = $map['mapName'];
+            if(isset($childMaps[$freeParent])) {
                 $maps[$freeParent]['childs'] = $this->mapListToTree($childMaps[$freeParent], $childMaps);
+            }
+        }
+        usort($maps, Array('GlobalCore', 'cmpMapAlias'));
         return $maps;
     }
 

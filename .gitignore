@@ -23,6 +23,7 @@ etc/maps/*.cfg
 # Exclude all maps except the default automap
 etc/automaps/*.cfg
 !etc/automaps/__automap.cfg
+!etc/automaps/demo*.cfg
 
 # Exclude all background images except the default
 share/nagvis/images/maps/*.png

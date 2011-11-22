@@ -1014,7 +1014,7 @@ if [ $# -gt 0 ]; then
                 NAGVIS_BACKEND=$OPTARG
             ;;
             o)
-                IGNORE_DEMO="demo*cfg demo*png"
+                IGNORE_DEMO="demo*cfg demo*png demo*ini.php"
             ;;
             q)
                 INSTALLER_QUIET=1
@@ -1505,7 +1505,7 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
         restore "$USERFILES_DIR/images/iconsets/" "iconset files" "/20x20.png /std_*_*.png /demo_*.png"
     
         LINE="Restoring custom shapes..."
-        restore "$USERFILES_DIR/images/shapes/" "shapes" ""
+        restore "$USERFILES_DIR/images/shapes/" "shapes" "*demo*png"
         
         LINE="Restoring custom templates..."
         restore "$USERFILES_DIR/templates/" "templates" "/default.*"

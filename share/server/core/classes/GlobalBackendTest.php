@@ -29,6 +29,20 @@ class GlobalBackendTest implements GlobalBackendInterface {
     private $CORE = null;
     private $backendId = '';
 
+    // These are the backend local configuration options
+    private static $validConfig = Array(
+        'generate_mapcfg' => Array(
+          'must'       => 1,
+          'editable'   => 1,
+          'default'    => 0,
+          'field_type' => 'boolean',
+          'match'      => MATCH_BOOLEAN
+        )
+    );
+
+    private $parents = Array();
+    private $childs  = Array();
+
     private $obj = Array(
         'host' => Array(),
         'service' => Array(),
@@ -71,12 +85,12 @@ class GlobalBackendTest implements GlobalBackendInterface {
     public function __construct($CORE, $backendId) {
         $this->CORE = $CORE;
         $this->backendId = $backendId;
-        //$this->now = time();
-        $this->now = 1288565304;
+        $this->now = time();
         $this->genObj();
 
-        if(isset($_POST['new']) || !file_exists('/usr/local/nagvis/etc/maps/test-gen.cfg')) {
-            $this->genMapCfg('/usr/local/nagvis/etc/maps/test-gen.cfg');
+        if(cfg('backend_'.$backendId, 'generate_mapcfg')
+           && (isset($_POST['new']) || !file_exists(cfg('paths', 'mapcfg') . 'test-gen.cfg'))) {
+            $this->genMapCfg(cfg('paths', 'mapcfg') . 'test-gen.cfg');
         }
 
         return true;
@@ -115,7 +129,9 @@ class GlobalBackendTest implements GlobalBackendInterface {
         return $host;
     }
 
-    private function service($name1, $name2, $state, $stateType = 'hard', $substate = 'normal') {
+    private function service($name1, $name2, $state, $stateType = 'hard', $substate = 'normal', $output = null, $perfdata = '') {
+        if($output === null)
+            $output = 'output '.$name2;
         $s = Array(
                   'name'                          => $name1,
                   'service_description'           => $name2,
@@ -125,7 +141,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                   'in_downtime'                   => 0,
                   'alias'                         => 'alias '.$name2,
                   'address'                       => 'localhost',
-                  'output'                        => 'output '.$name2,
+                  'output'                        => $output,
                   'notes'                         => '',
                   'last_check'                    => $this->now-60,
                   'next_check'                    => $this->now+60,
@@ -134,7 +150,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                   'max_check_attempts'            => 3,
                   'last_state_change'             => $this->now-60,
                   'last_hard_state_change'        => $this->now-60,
-                  'perfdata'                      => '',
+                  'perfdata'                      => $perfdata,
                 );
         if($substate == 'downtime') {
             $s['in_downtime']     = 1;
@@ -161,6 +177,96 @@ class GlobalBackendTest implements GlobalBackendInterface {
     }
 
     private function genObj() {
+        /**
+         * Generate objects for demo maps
+         */
+        $this->obj['host']['muc-gw1']         = $this->host('muc-gw1',      'UP',   'hard', 'normal');
+        $wan = $this->service('muc-gw1', 'Interface WAN', 'CRITICAL', 'hard', 'normal');
+        $wan['perfdata'] = 'in=98.13%;85;98 out=12.12%;85;98';
+        $wan['output']   = 'In: 98.13%, Out: 12.12%';
+        $this->obj['service']['muc-gw1']      = Array($wan);
+
+        $this->obj['host']['muc-srv1']        = $this->host('muc-srv1',     'UP',   'hard', 'normal');
+        $this->obj['service']['muc-srv1']     = Array(
+            $this->service('muc-srv1', 'CPU load',       'OK', 'hard', 'normal', 'OK - 15min Load 0.05 at 2 CPUs', 'load1=0.2;2;5;0; load5=0.24;2;5;0; load15=0.17;2;5;0;'),
+            $this->service('muc-srv1', 'Memory used',    'OK', 'hard', 'normal',
+                           'OK - 0.79 GB RAM+SWAP used (this is 20.9% of RAM size)',
+                           'ramused=807MB;;;0;3858 swapused=0MB;;;0;1909 memused=807MB;5787;7716;0;5768'),
+            $this->service('muc-srv1', 'Interface eth0', 'OK', 'hard', 'normal',
+                           'OK - [2] (up) 100MBit/s, in: 0.00B/s(0.0%), out: 0.00B/s(0.0%)',
+                           'in=0;;;0;12500000 inucast=0;;;; innucast=0;;;; indisc=0;;;; inerr=0;0.01;0.1;; out=0;;;0;12500000 outucast=0;;;; outnucast=0;;;; outdisc=0;;;; outerr=0;0.01;0.1;; outqlen=0;;;;'),
+            $this->service('muc-srv1', 'fs_/',           'OK', 'hard', 'normal', 'OK',
+                           'OK - 73.3% used (84.71 of 115.5 GB), (levels at 80.0/90.0%), trend: +3.84MB / 24 hours',
+                           '/=86747.1757812MB;94641;106472;0;118302.46875'),
+            $this->service('muc-srv1', 'fs_/home',       'OK', 'hard', 'normal', 'OK',
+                           'OK - 75.2% used (22.21 of 29.5 GB), (levels at 80.0/90.0%), trend: -27.68KB / 24 hours',
+                           '/usr=22746.109375MB;24190;27213;0;30237.746094'),
+            $this->service('muc-srv1', 'NTP Time',       'OK', 'hard', 'normal', 'OK',
+                           'OK - stratum 2, offset 0.02 ms, jitter 0.01 ms'),
+        );
+
+        $this->obj['host']['muc-srv2']        = $this->host('muc-srv2',     'UP',   'hard', 'normal');
+        $this->obj['service']['muc-srv2']     = Array(
+            $this->service('muc-srv2', 'CPU load',       'OK', 'hard', 'normal', 'OK - 15min Load 1.00 at 2 CPUs', 'load1=1.6;2;5;0; load5=1.2;2;5;0; load15=1.00;2;5;0;'),
+        );
+
+        $this->obj['host']['muc-printer1']    = $this->host('muc-printer1', 'DOWN', 'hard', 'normal');
+        $this->obj['service']['muc-printer1'] = Array();
+        $this->obj['host']['muc-printer2']    = $this->host('muc-printer2', 'DOWN', 'hard', 'downtime');
+        $this->obj['service']['muc-printer2'] = Array();
+        $this->obj['hostgroup']['muc']        = $this->hostgroup('muc', Array('muc-gw1', 'muc-srv1', 'muc-srv2', 'muc-printer1', 'muc-printer2'));
+
+        $this->obj['host']['ham-gw1']         = $this->host('ham-gw1',      'UP',   'hard', 'normal');
+        $wan = $this->service('ham-gw1', 'Interface WAN', 'OK', 'hard', 'normal');
+        $wan['perfdata'] = 'in=77.24%;85;98 out=32.89%;85;98';
+        $wan['output']   = 'In: 77.24%, Out: 32.89%';
+        $this->obj['service']['ham-gw1']      = Array($wan);
+
+        $this->obj['host']['ham-srv1']        = $this->host('ham-srv1',     'UP',   'hard', 'normal');
+        $this->obj['service']['ham-srv1']     = Array(
+            $this->service('ham-srv1', 'CPU load',       'OK', 'hard', 'normal', 'OK - 15min Load 1.00 at 2 CPUs', 'load1=1.6;2;5;0; load5=1.2;2;5;0; load15=1.00;2;5;0;'),
+        );
+        $this->obj['host']['ham-srv2']        = $this->host('ham-srv2',     'WARNING', 'hard', 'ack');
+        $this->obj['service']['ham-srv2']     = Array(
+            $this->service('ham-srv2', 'CPU load',       'OK', 'hard', 'normal', 'OK - 15min Load 3.00 at 4 CPUs', 'load1=5.0;10;20;0; load5=4.2;5;8;0; load15=3.0;3.5;4;0;'),
+        );
+        $this->obj['host']['ham-printer1']    = $this->host('ham-printer1', 'UP', 'hard', 'normal');
+        $this->obj['service']['ham-printer1'] = Array();
+        $this->obj['hostgroup']['ham']        = $this->hostgroup('ham', Array('ham-gw1', 'ham-srv1', 'ham-srv2', 'ham-printer1'));
+
+        $this->obj['host']['cgn-gw1']         = $this->host('cgn-gw1',      'UP',   'hard', 'normal');
+        $wan = $this->service('cgn-gw1', 'Interface WAN', 'OK', 'hard', 'normal');
+        $wan['perfdata'] = 'in=19.34%;85;98 out=0.89%;85;98';
+        $wan['output']   = 'In: 19.34%, Out: 0.89%';
+        $this->obj['service']['cgn-gw1']      = Array($wan);
+
+        $this->obj['host']['cgn-srv1']        = $this->host('cgn-srv1',     'UP',   'hard', 'normal');
+        $this->obj['service']['cgn-srv1']     = Array();
+        $this->obj['host']['cgn-srv2']        = $this->host('cgn-srv2',     'WARNING', 'hard', 'ack');
+        $this->obj['service']['cgn-srv2']     = Array();
+        $this->obj['host']['cgn-srv3']        = $this->host('cgn-srv3',     'UP', 'hard', 'normal');
+        $this->obj['service']['cgn-srv3']     = Array();
+        $this->obj['hostgroup']['cgn']        = $this->hostgroup('cgn', Array('cgn-gw1', 'cgn-srv1', 'cgn-srv2', 'cgn-srv3'));
+
+        $this->obj['servicegroup']['load']    = $this->servicegroup('load', Array(Array('muc-srv1', 'CPU load'), Array('ham-srv1', 'CPU load'), Array('ham-srv2', 'CPU load')));
+
+        $this->childs = Array(
+            'muc-srv2' => Array('muc-srv1', 'muc-gw1'),
+            'muc-gw1'  => Array('ham-gw1', 'cgn-gw1'),
+            'cgn-gw1'  => Array('cgn-srv1', 'cgn-srv2', 'cgn-srv3'),
+            'ham-gw1'  => Array('ham-srv1', 'ham-srv2', 'ham-printer1'),
+        );
+
+        foreach($this->parents AS $parent => $childs) {
+            foreach($childs AS $child) {
+                if(!isset($this->parents[$child])) {
+                    $this->parents[$child] = Array($parent);
+                } else {
+                    $this->parents[$child][] = $parent;
+                }
+            }
+        }
+
         /**
          * a) HOSTS without services of all states/substates
          */
@@ -645,45 +751,22 @@ class GlobalBackendTest implements GlobalBackendInterface {
         return $aReturn;
     }
 
-    /**
-     * PUBLIC getHostNamesWithNoParent()
-     *
-     * Queries the livestatus socket for all hosts without parent
-     *
-     * @return  Array    List of hostnames which have no parent
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
-     */
     public function getHostNamesWithNoParent() {
-        return $this->queryLivestatusSingleColumn("GET hosts\nColumns: name\nFilter: parents =\n");
+        return Array('muc-srv2');
     }
 
-    /**
-     * PUBLIC getDirectChildNamesByHostName()
-     *
-     * Queries the livestatus socket for all direct childs of a host
-     *
-     * @param   String   Hostname
-     * @return  Array    List of hostnames
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
-     */
     public function getDirectChildNamesByHostName($hostName) {
-        return $this->queryLivestatusList("GET hosts\nColumns: childs\nFilter: name = ".$hostName."\n");
+        if(isset($this->childs[$hostName]))
+            return $this->childs[$hostName];
+        else
+            return Array();
     }
 
-    /*
-     * PUBLIC getDirectParentNamesByHostName()
-     *
-     * Queries the livestatus socket for all direct parents of a host
-     *
-     * @param   String   Hostname
-     * @return  Array    List of hostnames
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
-     */
     public function getDirectParentNamesByHostName($hostName) {
-        return $this->queryLivestatusList("GET hosts\nColumns: parents\nFilter: name = ".$hostName."\n");
+        if(isset($this->parents[$hostName]))
+            return $this->parents[$hostName];
+        else
+            return Array();
     }
 }
 ?>

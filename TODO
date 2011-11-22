@@ -9,6 +9,9 @@ Relative Koordinaten:
     - In WUI Fehler anzeigen
     - Beim Config Parsen Fehlermeldung erzeugen
 - Sidebar Folder auf/zu klappbar
+- label_text Default bei Services soll auf [service_description] stehen
+- default_params wird bei allen maps hinzugefügt
+- Objekt klonen neu implementieren
 
 -------------------------------------------------------------------------------
 

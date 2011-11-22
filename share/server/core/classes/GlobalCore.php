@@ -609,5 +609,10 @@ class GlobalCore {
     static function cmpAlias($a, $b) {
         return strnatcmp($a['alias'], $b['alias']);
     }
+
+    // Sort array of map arrays by alias used for header menu
+    static function cmpMapAlias($a, $b) {
+        return strnatcmp($a['mapAlias'], $b['mapAlias']);
+    }
 }
 ?>
