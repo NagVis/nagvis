@@ -19,7 +19,7 @@ sudo rm -f /etc/apache2/conf.d/nagvis.conf.*
 # Install to omd site local/
 #
 sudo su - $SITE -c "[ ! -d /omd/sites/$SITE/nvsrc ] && mkdir /omd/sites/$SITE/nvsrc ; \
-rsync --filter='- .git' -av /d1/nagvis/ /omd/sites/$SITE/nvsrc/ ; \
+rsync --filter='- .git' --filter='- .*.swp' -av /d1/nagvis/ /omd/sites/$SITE/nvsrc/ ; \
 cd /omd/sites/$SITE/nvsrc/ ; \
 yes y | ./omd_install.sh"
 
