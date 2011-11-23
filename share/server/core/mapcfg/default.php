@@ -496,11 +496,12 @@ $mapConfigVars = Array(
         'field_type' => 'boolean',
     ),
     'label_text' => Array(
-        'must' => 0,
-        'default' => '[name]',
-        'match' => MATCH_ALL,
-        'depends_on' => 'label_show',
-        'depends_value' => '1'),
+        'must'          => 0,
+        'default'       => '[name]',
+        'match'         => MATCH_ALL,
+        'depends_on'    => 'label_show',
+        'depends_value' => '1'
+    ),
     'label_x' => Array(
         'must' => 0,
         'default' => '-20',
@@ -635,6 +636,13 @@ $mapConfigVars = Array(
         'match'      => MATCH_STRING,
         'field_type' => 'dropdown',
         'list'       => 'listServiceNames',
+    ),
+    'service_label_text' => Array(
+        'must'          => 0,
+        'default'       => '[service_description]',
+        'match'         => MATCH_ALL,
+        'depends_on'    => 'label_show',
+        'depends_value' => '1'
     ),
     'service_url' => Array(
         'must' => 0,
@@ -956,7 +964,7 @@ $mapConfigVarMap['service'] = Array(
     'hover_childs_order' => null,
     'hover_childs_limit' => null,
     'label_show' => null,
-    'label_text' => null,
+    'service_label_text' => 'label_text',
     'label_x' => null,
     'label_y' => null,
     'label_width' => null,

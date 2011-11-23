@@ -5,6 +5,7 @@ Core
     during update
   * Removed all old demo maps and created new ones using an the internal test
     backend to be able to show a bit more details.
+  * Using [service_description] as default value for label_text attribute
 
 Frontend
   * Sorting maps by alias in header menu now

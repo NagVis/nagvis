@@ -167,7 +167,7 @@ class GlobalMapCfg {
             }
 
             // Handle exceptions for services
-            if($sVar != 'recognize_services') {
+            if($sVar != 'recognize_services' && $sVar != 'label_text') {
                 $this->typeDefaults['service'][$sVar] = $sTmp;
             }
 

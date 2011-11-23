@@ -11,8 +11,6 @@ Relative Koordinaten:
 - Sidebar Folder auf/zu klappbar
 - label_text Default bei Services soll auf [service_description] stehen
 - Objekt klonen neu implementieren
-- 660 bei neuen Dateien
-  - Eventuell auch eine Standard umask setzen
 
 -------------------------------------------------------------------------------
 
