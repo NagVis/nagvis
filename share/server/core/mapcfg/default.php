@@ -189,9 +189,10 @@ $mapConfigVars = Array(
         'match'      => MATCH_COLOR),
     'default_params' => Array(
         'must'       => 0,
-        'default'    => cfg('automap', 'defaultparams'),
-        'match'      => MATCH_STRING_URL,
-        'field_type' => 'hidden'),
+        'default'    => '',
+        'match'      => MATCH_STRING_URL_EMPTY,
+        'field_type' => 'hidden',
+    ),
     'parent_map' => Array(
         'must'       => 0,
         'default'    => '',

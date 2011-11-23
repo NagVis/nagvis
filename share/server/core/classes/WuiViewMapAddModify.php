@@ -144,8 +144,11 @@ class WuiViewMapAddModify {
             list($inherited, $value) = $this->getAttr($typeDefaults, $update, $objId, $propname, $prop['must']);
             unset($this->hiddenAttrs[$propname]);
 
+            // Only add the fields of type hidden which have values
             if($fieldType === 'hidden') {
-                $ret .= '<input id="'.$propname.'" type="hidden" name="'.$propname.'" value="'.$value.'" />';
+                if($value != '') {
+                    $ret .= '<input id="'.$propname.'" type="hidden" name="'.$propname.'" value="'.$value.'" />';
+                }
                 continue;
             }
 

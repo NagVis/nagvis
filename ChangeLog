@@ -8,6 +8,8 @@ Core
 
 Frontend
   * Sorting maps by alias in header menu now
+  * Bugfix: Not adding default_params parameter to all maps after editing the
+    global map configuration using the web frontend
 
 1.6rc4
 Core
