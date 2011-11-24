@@ -9,10 +9,10 @@ Relative Koordinaten:
     - In WUI Fehler anzeigen
     - Beim Config Parsen Fehlermeldung erzeugen
 - Sidebar Folder auf/zu klappbar
-- Objekt klonen neu implementieren
 - In Sidebar/Dropdown die aktuelle Map highlighten
 - Abgebrochene Linie wieder aus Ansicht entfernen
 - line_weather_color umbrechen wenn als Text dargestellt
+- line_label_y_offset wird noch nicht sauber berechnet
 
 -------------------------------------------------------------------------------
 

@@ -837,7 +837,7 @@ class CoreModMap extends CoreModule {
         if(!$MAPCFG->createMapConfig())
             return false;
 
-        $MAPCFG->addElement('global', $a, true);
+        $MAPCFG->addElement('global', $a, true, 0);
         return true;
     }
 

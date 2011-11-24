@@ -19,6 +19,8 @@ Frontend
   * iconset option is now optional when creating maps using the GUI
   * Reimplemented the "clone object" functionality in edit mode
   * Only show the edit links in context menu when permitted to edit the map
+  * Bugfix: Don't enable map_image when not set when editing the global
+    sections of maps
 
 1.6rc4
 Core

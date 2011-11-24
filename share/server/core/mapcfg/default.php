@@ -146,27 +146,28 @@ function listBackendIds($CORE) {
 
 $mapConfigVars = Array(
     'type' => Array(
-        'must' => 0,
-        'match' => MATCH_OBJECTTYPE,
+        'must'       => 0,
+        'match'      => MATCH_OBJECTTYPE,
         'field_type' => 'hidden',
     ),
     'object_id' => Array(
-        'must' => 0,
-        'match' => MATCH_OBJECTID,
+        'must'       => 0,
+        'match'      => MATCH_OBJECTID,
         'field_type' => 'hidden',
     ),
     'allowed_for_config' => Array(
-        'must' => 0,
+        'must'       => 0,
         'deprecated' => true,
-        'match' => MATCH_STRING,
+        'match'      => MATCH_STRING,
     ),
     'allowed_user' => Array(
-        'must' => 0,
+        'must'       => 0,
         'deprecated' => true,
-        'match' => MATCH_STRING,
+        'match'      => MATCH_STRING,
     ),
     'map_image' => Array(
         'must'       => 0,
+        'default'    => '',
         'match'      => MATCH_PNG_GIF_JPG_FILE_OR_URL_NONE,
         'field_type' => 'dropdown',
         'list'       => 'listMapImages',
