@@ -281,6 +281,16 @@ class WuiViewMapAddModify {
                     $ret .= $this->inputField($propname, $value, $hideField);
                 break;
             }
+            
+            // Try to split too long values in chunks
+            // At the moment the only way is to try to add a space after each ",".
+            // The browsers do break automatically at & and spaces - so no need to
+            // do anything there. Seems to be enough for now
+            if(strlen($valueTxt) > 36 && strpos($valueTxt, ' ') === false) {
+                if(strpos($valueTxt, ',') !== false) {
+                    $valueTxt = str_replace(',', ', ', $valueTxt);
+                }
+            }
 
             $ret .= '<span id="_txt_'.$propname.'"'.$hideTxt.'>'.$valueTxt.'</span>';
 

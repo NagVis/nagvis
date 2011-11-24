@@ -14,13 +14,14 @@ Core
 
 Frontend
   * Sorting maps by alias in header menu now
-  * Bugfix: Not adding default_params parameter to all maps after editing the
-    global map configuration using the web frontend
   * Added map name dropdown to parent_map option when editing global map
     configuration
   * iconset option is now optional when creating maps using the GUI
   * Reimplemented the "clone object" functionality in edit mode
   * Only show the edit links in context menu when permitted to edit the map
+  * long text values with no spaces do not stretch the add/modify dialog anymore
+  * Bugfix: Not adding default_params parameter to all maps after editing the
+    global map configuration using the web frontend
   * Bugfix: Don't enable map_image when not set when editing the global
     sections of maps
   * Bugfix: Removing just dragged new lines before opening the add/modify dialog
