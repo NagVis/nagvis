@@ -14,6 +14,7 @@ lang = {$lang};
         <tr>
             <td class="tdlabel">{$langMapIconset}</td><td class="tdfield">
                 <select name="map_iconset">
+                    <option value="" selected="selected"></option>
                     {foreach $availableIconsets name}<option value="{$name}">{$name}</option>{/foreach}
                 </select>
             </td>
@@ -22,7 +23,7 @@ lang = {$lang};
         <tr>
             <td class="tdlabel">{$langBackground}</td><td class="tdfield">
                 <select name="map_image">
-                    <option value="" selected></option>
+                    <option value="" selected="selected"></option>
                     {foreach $availableBackgrounds name}<option value="{$name}">{$name}</option>{/foreach}
                 </select>
             </td>

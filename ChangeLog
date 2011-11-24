@@ -14,6 +14,7 @@ Frontend
     global map configuration using the web frontend
   * Added map name dropdown to parent_map option when editing global map
     configuration
+  * iconset option is now optional when creating maps using the GUI
 
 1.6rc4
 Core
