@@ -119,7 +119,8 @@ var NagVisLine = NagVisStatelessObject.extend({
         drawNagVisLine(this.conf.object_id, this.conf.line_type, cuts, x, y,
                        this.conf.z, width, colorFill, null, null, colorBorder,
                        this.needsLineHoverArea(),
-                       (this.conf.line_label_show && this.conf.line_label_show === '1'));
+                       (this.conf.line_label_show && this.conf.line_label_show === '1'),
+                       this.conf.line_label_y_offset);
     },
 
     remove: function () {

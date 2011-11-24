@@ -7,6 +7,8 @@ Core
     backend to be able to show a bit more details.
   * Using [service_description] as default value for label_text attribute
   * Using z=5 for textboxes and z=1 for shapes again as default values
+  * Added new config option line_label_y_offset to configure the label offset
+    used in weathermap lines which show percentage and absolute bandwidth labels
 
 Frontend
   * Sorting maps by alias in header menu now

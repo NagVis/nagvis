@@ -472,6 +472,13 @@ $mapConfigVars = Array(
         'depends_on'    => 'view_type',
         'depends_value' => 'line'
     ),
+    'line_label_y_offset' => Array(
+        'must'          => 0,
+        'default'       => 2,
+        'match'         => MATCH_INTEGER,
+        'depends_on'    => 'view_type',
+        'depends_value' => 'line',
+    ),
     'line_width' => Array(
         'must' => 0,
         'default' => '3',
@@ -959,6 +966,7 @@ $mapConfigVarMap['service'] = Array(
     'line_label_show' => null,
     'line_label_pos_in' => null,
     'line_label_pos_out' => null,
+    'line_label_y_offset' => null,
     'line_width' => null,
     'line_weather_colors' => null,
     'gadget_url' => null,

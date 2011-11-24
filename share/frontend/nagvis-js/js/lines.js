@@ -141,20 +141,23 @@ function drawPolygonBasedObject(objectId, num, xCoord, yCoord, z, colorFill, col
     oCanvas = null;
 }
 
-function drawLabel(objectId, num, lineType, lx, ly, z, perfdataA, perfdataB) {
+function drawLabel(objectId, num, lineType, lx, ly, z, perfdataA, perfdataB, yOffset) {
     var oLinkContainer = document.getElementById(objectId+'-linelink');
 
     labelShift = getLabelShift(perfdataA);
 
+    // Maybe use function to detect the real height in future
+    var labelHeight = 22;
+
     if(lineType == '13') {
         if(oLinkContainer)
-            oLinkContainer.appendChild(drawNagVisTextbox(objectId+'-link'+num, 'box', '#ffffff', '#000000', (lx-labelShift), (ly-10), z, 'auto', 'auto', '<b>' + perfdataA + '</b>'));
+            oLinkContainer.appendChild(drawNagVisTextbox(objectId+'-link'+num, 'box', '#ffffff', '#000000', (lx-labelShift), (ly - labelHeight / 2), z, 'auto', 'auto', '<b>' + perfdataA + '</b>'));
     } else if(lineType == '14') {
-        var label = drawNagVisTextbox(objectId+'-link'+num, 'box', '#ffffff', '#000000', (lx-labelShift), (ly-30), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
+        var label = drawNagVisTextbox(objectId+'-link'+num, 'box', '#ffffff', '#000000', (lx-labelShift), (ly - labelHeight - yOffset), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
         if(oLinkContainer)
             oLinkContainer.appendChild(label);
         labelShift = getLabelShift(perfdataB);
-        label = drawNagVisTextbox(objectId+'-link'+(num+1), 'box', '#ffffff', '#000000', (lx-labelShift), (ly+10), z, 'auto', 'auto', '<b>' + perfdataB + '</b>');
+        label = drawNagVisTextbox(objectId+'-link'+(num+1), 'box', '#ffffff', '#000000', (lx-labelShift), (ly + yOffset), z, 'auto', 'auto', '<b>' + perfdataB + '</b>');
         if(oLinkContainer)
             oLinkContainer.appendChild(label);
         label = null;
@@ -244,7 +247,7 @@ function drawSimpleLine(objectId, num, x1, y1, x2, y2, z, w, colorFill, colorBor
 }
 
 // This function is being called by NagVis for drawing the lines
-function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, colorFill2, perfdata, colorBorder, bLinkArea, bLabelShow) {
+function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, colorFill2, perfdata, colorBorder, bLinkArea, bLabelShow, yOffset) {
     // Convert all coords to int
     for(var i = 0; i < x.length; i++) {
         x[i] = parseInt(x[i], 10);
@@ -333,6 +336,10 @@ function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, col
                 var xMid = x[1];
                 var yMid = y[1];
             }
+
+            // Take the configured line width into account
+            yOffset = yOffset + width / 2;
+
             // perfdataA contains the percentage info
             // perfdataB contains the bandwith info
             if(isset(perfdata[0]) && isset(perfdata[0][1]) && isset(perfdata[0][2]))
@@ -340,7 +347,7 @@ function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, col
             if(isset(perfdata[2]) && isset(perfdata[2][1]) && isset(perfdata[2][2]))
                 perfdataB = perfdata[2][1] + perfdata[2][2];
             drawArrow(objectId, 1, xStart, yStart, xMid, yMid, z, width, colorFill, colorBorder);
-            drawLinkOrLabel(objectId, 1, lineType, middle(xStart, xMid, cutOut), middle(yStart, yMid, cutOut), z, perfdataA, perfdataB, bLinkArea, bLabelShow);
+            drawLinkOrLabel(objectId, 1, lineType, middle(xStart, xMid, cutOut), middle(yStart, yMid, cutOut), z, perfdataA, perfdataB, bLinkArea, bLabelShow, yOffset);
 
             if(isset(perfdata[1]) && isset(perfdata[1][1]) && isset(perfdata[1][2]))
                 perfdataA = perfdata[1][1] + perfdata[1][2];
@@ -348,7 +355,7 @@ function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, col
                 perfdataB = perfdata[3][1] + perfdata[3][2];
 	    // Needs to be num = 3 because drawLinkOrLabel() call above consumes two ids
             drawArrow(objectId, 3, xEnd, yEnd, xMid, yMid, z, width, colorFill2, colorBorder);
-            drawLinkOrLabel(objectId, 3, lineType, middle(xEnd, xMid, cutIn), middle(yEnd, yMid, cutIn), z, perfdataA, perfdataB, bLinkArea, bLabelShow);
+            drawLinkOrLabel(objectId, 3, lineType, middle(xEnd, xMid, cutIn), middle(yEnd, yMid, cutIn), z, perfdataA, perfdataB, bLinkArea, bLabelShow, yOffset);
         break;
         default:
             // Unknown
@@ -356,11 +363,11 @@ function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, col
     }
 }
 
-function drawLinkOrLabel(objectId, num, lineType, x, y, z, perfdataA, perfdataB, bLinkArea, bLabelShow) {
+function drawLinkOrLabel(objectId, num, lineType, x, y, z, perfdataA, perfdataB, bLinkArea, bLabelShow, yOffset) {
     // First try to create the labels (For weathermap lines only atm) and if none
     // should be shown try to create link a link area for the line.
     if(bLabelShow && (lineType == 13 || lineType == 14))
-        drawLabel(objectId, num, lineType, x, y, z, perfdataA, perfdataB);
+        drawLabel(objectId, num, lineType, x, y, z, perfdataA, perfdataB, yOffset);
     else if(bLinkArea)
         drawLinkArea(objectId, num, x, y, z);
 }
