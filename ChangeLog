@@ -6,6 +6,7 @@ Core
   * Removed all old demo maps and created new ones using an the internal test
     backend to be able to show a bit more details.
   * Using [service_description] as default value for label_text attribute
+  * Using z=5 for textboxes and z=1 for shapes again as default values
 
 Frontend
   * Sorting maps by alias in header menu now

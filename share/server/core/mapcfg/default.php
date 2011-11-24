@@ -742,6 +742,11 @@ $mapConfigVars = Array(
         'default' => 'auto',
         'match'   => MATCH_TEXTBOX_WIDTH,
     ),
+    'textbox_z' => Array(
+        'must'    => 0,
+        'default' => 5,
+        'match'   => MATCH_INTEGER
+    ),
 
     // SHAPE SPECIFIC OPTIONS
 
@@ -752,10 +757,15 @@ $mapConfigVars = Array(
         'list'       => 'listShapes',
     ),
     'enable_refresh' => Array(
-        'must' => 0,
-        'default' => 0,
-        'match' => MATCH_BOOLEAN,
+        'must'       => 0,
+        'default'    => 0,
+        'match'      => MATCH_BOOLEAN,
         'field_type' => 'boolean',
+    ),
+    'shape_z' => Array(
+        'must'       => 0,
+        'default'    => 1,
+        'match'      => MATCH_INTEGER
     ),
 
     // TEMPLATE SPECIFIC OPTIONS
@@ -1089,7 +1099,7 @@ $mapConfigVarMap['textbox'] = Array(
     'text' => null,
     'x' => null,
     'y' => null,
-    'z' => null,
+    'textbox_z' => 'z',
     'w' => null,
     'h' => null,
     'background_color' => null,
@@ -1106,7 +1116,7 @@ $mapConfigVarMap['shape'] = Array(
     'icon' => null,
     'x' => null,
     'y' => null,
-    'z' => null,
+    'shape_z' => 'z',
     'context_menu' => null,
     'context_template' => null,
     'enable_refresh' => null,
