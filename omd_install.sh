@@ -69,13 +69,16 @@ if [ -d $OMD_ROOT/var/nagvis/userfiles ]; then
 fi
 
 # Handle the old and new omd specific config file paths
-if [ -d $OMD_ROOT/etc/nagvis/conf.d ]; then
-    OMD_CFG=$OMD_ROOT/etc/nagvis/conf.d/omd.ini.php
-else
-    OMD_CFG=$OMD_ROOT/etc/nagvis/nagvis-omd.ini.php
+OMD_CFG=$OMD_ROOT/etc/nagvis/conf.d/omd.ini.php
+if [ ! -d $OMD_ROOT/etc/nagvis/conf.d ]; then
+    mkdir $OMD_ROOT/etc/nagvis/conf.d
+    if [ -f $OMD_ROOT/etc/nagvis/nagvis-omd.ini.php ]; then
+        mv $OMD_ROOT/etc/nagvis/nagvis-omd.ini.php $OMD_ROOT/etc/nagvis/conf.d/omd.ini.php
+        ln -s $OMD_ROOT/etc/nagvis/conf.d/omd.ini.php $OMD_ROOT/etc/nagvis/nagvis-omd.ini.php
+    fi
 fi
 
-# Backup the nagvis-omd.ini.php on first time using omd_install.sh
+# Backup the omd.ini.php on first time using omd_install.sh
 if ! grep omd_install.sh $OMD_CFG >/dev/null 2>&1; then
     cp $OMD_CFG $OMD_CFG.bak
 fi

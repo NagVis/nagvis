@@ -1,6 +1,7 @@
 1.6
 Core
   * Implented conf.d/ directory to have an optional modular main configuration
+  * omd_install.sh deals now correctly with new conf.d directory
   * Improved the installer a bit: Better directory detections; Less questions
     during update
   * Removed all old demo maps and created new ones using an the internal test
