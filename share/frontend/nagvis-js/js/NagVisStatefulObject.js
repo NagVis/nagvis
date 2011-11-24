@@ -607,7 +607,7 @@ var NagVisStatefulObject = NagVisObject.extend({
                        this.conf.z, width, colorFill, colorFill2, setPerfdata, colorBorder,
                        this.needsLineHoverArea(),
                        (this.conf.line_label_show && this.conf.line_label_show === '1'),
-                       this.conf.line_label_y_offset);
+                       parseInt(this.conf.line_label_y_offset));
     },
 
     /**

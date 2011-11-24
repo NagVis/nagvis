@@ -338,7 +338,7 @@ function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, col
             }
 
             // Take the configured line width into account
-            yOffset = yOffset + width / 2;
+            yOffset = yOffset + parseInt(width / 2);
 
             // perfdataA contains the percentage info
             // perfdataB contains the bandwith info
