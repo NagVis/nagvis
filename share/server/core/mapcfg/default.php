@@ -196,7 +196,10 @@ $mapConfigVars = Array(
     'parent_map' => Array(
         'must'       => 0,
         'default'    => '',
-        'match'      => MATCH_MAP_NAME_EMPTY),
+        'match'      => MATCH_MAP_NAME_EMPTY,
+        'field_type' => 'dropdown',
+        'list'       => 'listMapNames',
+    ),
 
     'context_menu' => Array(
         'must' => 0,
