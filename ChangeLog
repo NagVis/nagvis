@@ -23,6 +23,7 @@ Frontend
   * Only show the edit links in context menu when permitted to edit the map
   * Bugfix: Don't enable map_image when not set when editing the global
     sections of maps
+  * Bugfix: Removing just dragged new lines before opening the add/modify dialog
 
 1.6rc4
 Core

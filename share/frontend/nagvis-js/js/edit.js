@@ -436,8 +436,10 @@ function addClick(e) {
     pos = null;
 
     // Draw a line to illustrate the progress of drawing the current line
-    if(addViewType === 'line' || addObjType === 'textbox' || addObjType === 'line') {
+    if((addViewType === 'line' || addObjType === 'textbox' || addObjType === 'line')
+       && addShape === null) {
         addShape = new jsGraphics('map');
+        addShape.cnv.setAttribute('id', 'drawing');
 
         addShape.setColor('#06B606');
         addShape.setStroke(1);
@@ -479,6 +481,12 @@ function addClick(e) {
 
     if(sUrl === '')
         return false;
+
+    // remove the drawing area. Once reached this it is not needed anymore
+    if(addShape !== null) {
+        addShape.clear();
+        document.getElementById('map').removeChild(addShape.cnv);
+    }
 
     // FIXME: Language string
     showFrontendDialog(sUrl, 'Properties');
