@@ -109,6 +109,29 @@
 
         <h3>Other section macros</h3>
         <p>There are some other special section macros. For example to show parts of the template only for line objects:</p>
-      <code>&lt;!-- BEGIN line -->This is only shown on line objects&lt;!-- BEGIN servicegroup --></code>
+        <code>&lt;!-- BEGIN line -->This is only shown on line objects&lt;!-- BEGIN servicegroup --></code>
+        <table style="width:100%">
+        <tr>
+          <th width="200">Section</th><th>Description</th>
+        </tr>
+        <tr>
+          <td>line</td><td>Only show this for line objects.</td>
+        </tr>
+        <tr>
+          <td>stateful</td><td>Only show this for stateful objects.</td>
+        </tr>
+        <tr>
+          <td>not_automap</td><td>Only show this for non automap views (regular maps).</td>
+        </tr>
+        <tr>
+          <td>locked</td><td>Only show for locked objects.</td>
+        </tr>
+        <tr>
+          <td>unlocked</td><td>Only show for unlocked objects.</td>
+        </tr>
+        <tr>
+          <td>permitted_edit</td><td>Only show when the user is able to edit the map.</td>
+        </tr>
+        </table>
     </body>
 </html>

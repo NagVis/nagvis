@@ -124,11 +124,12 @@ class NagVisMapView {
     private function parseViewProperties() {
         $arr = Array();
 
-        $arr['search']     = $this->search;
-        $arr['edit_mode']  = $this->editMode;
-        $arr['grid_show']  = intval($this->MAPCFG->getValue(0, 'grid_show'));
-        $arr['grid_color'] = $this->MAPCFG->getValue(0, 'grid_color');
-        $arr['grid_steps'] = intval($this->MAPCFG->getValue(0, 'grid_steps'));
+        $arr['search']         = $this->search;
+        $arr['edit_mode']      = $this->editMode;
+        $arr['grid_show']      = intval($this->MAPCFG->getValue(0, 'grid_show'));
+        $arr['grid_color']     = $this->MAPCFG->getValue(0, 'grid_color');
+        $arr['grid_steps']     = intval($this->MAPCFG->getValue(0, 'grid_steps'));
+        $arr['permitted_edit'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Map', 'edit', $this->name);
 
         // View specific hover modifier set
         if($this->aViewOpts['enableHover'] !== false) {

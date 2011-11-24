@@ -17,6 +17,8 @@ Frontend
   * Added map name dropdown to parent_map option when editing global map
     configuration
   * iconset option is now optional when creating maps using the GUI
+  * Reimplemented the "clone object" functionality in edit mode
+  * Only show the edit links in context menu when permitted to edit the map
 
 1.6rc4
 Core

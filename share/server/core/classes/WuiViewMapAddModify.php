@@ -31,6 +31,7 @@ class WuiViewMapAddModify {
     private $hiddenAttrs = null;
     private $map         = null;
     private $errors      = Array();
+    private $cloneId     = null;
 
     /**
      * Class Constructor
@@ -70,13 +71,16 @@ class WuiViewMapAddModify {
      * @return	String 	String with Html Code
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function parse($update, $err, $success) {
+    public function parse($update, $err, $success, $cloneId = null) {
         // Initialize template system
         $TMPL = New CoreTemplateSystem($this->CORE);
         $TMPLSYS = $TMPL->getTmplSys();
 
         if($err !== null)
             $this->setError($err);
+
+        if($cloneId != null)
+            $this->cloneId = $cloneId;
 
         $aData = Array(
             'htmlBase'     => cfg('paths', 'htmlbase'),
@@ -91,18 +95,26 @@ class WuiViewMapAddModify {
         return $TMPLSYS->get($TMPL->getTmplFile('default', 'wuiMapAddModify'), $aData);
     }
 
-    private function getAttr($typeDefaults, $update, $objId, $attr, $must) {
+    private function getAttr($typeDefaults, $update, $attr, $must) {
         $val = '';
         $inherited = false;
         // Use url given values when there is some and remove it from the attr list.
         // The url values left will be added as hidden attributes to the form later
         if(isset($this->attrs[$attr])) {
             $val = $this->attrs[$attr];
+
         } elseif(!$update && isset($this->attrs['object_id'])
                  && $this->MAPCFG->getValue($this->attrs['object_id'], $attr, true) !== false) {
             // Get the value set in this object if there is some set
-            //  But don't try this when running in "update" mode
+            // But don't try this when running in "update" mode
             $val = $this->MAPCFG->getValue($this->attrs['object_id'], $attr, true);
+
+        } elseif(!$update && $this->cloneId !== null
+                 && $this->MAPCFG->getValue($this->cloneId, $attr, true) !== false) {
+            // Get the value set in the object to be cloned if there is some set
+            // But don't try this when running in "update" mode
+            $val = $this->MAPCFG->getValue($this->cloneId, $attr, true);
+
         } elseif(!$must && isset($typeDefaults[$attr])) {
             // Get the inherited value - but only for non-must attributes
             $val = $typeDefaults[$attr];
@@ -117,11 +129,12 @@ class WuiViewMapAddModify {
     function getFields($update) {
         $ret = '';
 
-        // 'object_id' is only set when modifying existing objects
         if(isset($this->attrs['object_id']) && $this->attrs['object_id'] != '') {
+            // 'object_id' is only set when modifying existing objects
             $type  = $this->MAPCFG->getValue($this->attrs['object_id'], 'type');
             $objId = $this->attrs['object_id'];
         } else {
+            // Creating/Cloning new object. The type is set by URL
             $type  = $this->attrs['type'];
             $objId = 0;
         }
@@ -141,7 +154,7 @@ class WuiViewMapAddModify {
                || (isset($prop['deprecated']) && $prop['deprecated'] === true))
                 continue;
 
-            list($inherited, $value) = $this->getAttr($typeDefaults, $update, $objId, $propname, $prop['must']);
+            list($inherited, $value) = $this->getAttr($typeDefaults, $update, $propname, $prop['must']);
             unset($this->hiddenAttrs[$propname]);
 
             // Only add the fields of type hidden which have values
@@ -163,7 +176,7 @@ class WuiViewMapAddModify {
                && isset($typeDef[$prop['depends_on']])) {
                 array_push($rowClasses, 'child-row');
                 
-                list($depInherited, $depValue) = $this->getAttr($typeDefaults, $update, $objId, $prop['depends_on'], $typeDef[$prop['depends_on']]['must']);
+                list($depInherited, $depValue) = $this->getAttr($typeDefaults, $update, $prop['depends_on'], $typeDef[$prop['depends_on']]['must']);
                 if($depValue != $prop['depends_value'])
                     $rowHide = ' style="display:none"';
             }
@@ -227,7 +240,10 @@ class WuiViewMapAddModify {
                     // Handle case that e.g. host_names can not be fetched from backend by
                     // showing error text instead of fields
                     try {
-                        $options = $func($this->CORE, $this->MAPCFG, $objId, $this->attrs);
+                        if($this->cloneId !== null)
+                            $options = $func($this->CORE, $this->MAPCFG, $this->cloneId, $this->attrs);
+                        else
+                            $options = $func($this->CORE, $this->MAPCFG, $objId, $this->attrs);
 
                         // When this is an associative array use labels instead of real values
                         // Change other arrays to associative ones for easier handling afterwards

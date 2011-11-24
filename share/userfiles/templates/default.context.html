@@ -5,10 +5,12 @@
 
     <!-- BEGIN stateful -->
     <li><a href="#" onClick="refreshMapObject(event, '[obj_id]'); contextHide();return false">[lang_refresh_status]</a></li>
-    <li class="spacer"></li>
     <!-- END stateful -->
 
     <!-- BEGIN not_automap -->
+    <!-- BEGIN permitted_edit -->
+    <li class="spacer"></li>
+    <li><a href="#" onClick="cloneObject(event, '[obj_id]');contextHide();return false">[lang_clone]</a></li>
     <!-- BEGIN locked -->
     <li><a href="#" onClick="toggleMapObjectLock(event, '[obj_id]'); contextHide();return false">[lang_unlock]</a></li>
     <!-- END locked -->
@@ -17,6 +19,7 @@
     <li><a href="#" onClick="showAddModifyDialog('[map_name]', '[obj_id]');contextHide();return false">[lang_modify]</a></li>
     <li><a href="#" onClick="removeMapObject('[obj_id]', '[lang_delete_confirm]');contextHide();return false">[lang_delete]</a></li>
     <!-- END unlocked -->
+    <!-- END permitted_edit -->
     <!-- END not_automap -->
 
     <!-- BEGIN host -->

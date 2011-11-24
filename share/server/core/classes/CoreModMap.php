@@ -188,6 +188,7 @@ class CoreModMap extends CoreModule {
                     
                     // This tells the follwing handling when the page only needs to be repainted
                     $update = isset($aVals['update']) && $aVals['update'] == '1';
+                    $cloneId = isset($aVals['clone_id']) ? $aVals['clone_id'] : null;
 
                     $err     = null;
                     $success = null;
@@ -200,7 +201,7 @@ class CoreModMap extends CoreModule {
                         }
                     }
 
-                    $sReturn = json_encode(Array('code' => $VIEW->parse($update, $err, $success)));
+                    $sReturn = json_encode(Array('code' => $VIEW->parse($update, $err, $success, $cloneId)));
                 break;
                 case 'manageTmpl':
                     $aOpts = Array('show' => MATCH_MAP_NAME);

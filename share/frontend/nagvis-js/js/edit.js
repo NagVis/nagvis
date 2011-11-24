@@ -365,7 +365,19 @@ var addObjType  = null,
     addX        = [],
     addY        = [],
     addFollow   = false,
-    addShape    = null;
+    addShape    = null,
+    cloneId     = null;
+
+function cloneObject(e, objId) {
+    cloneId = objId;
+    var obj = getMapObjByDomObjId(objId);
+
+    var numClicks = 1;
+    if(obj.conf.view_type == 'textbox' || obj.conf.view_type == 'line' || obj.type == 'line')
+        numClicks = 2;
+
+    return addObject(e, obj.conf.type, obj.conf.view_type, numClicks, 'clone');
+}
 
 /**
  * Is called once to start the object creation
@@ -459,8 +471,8 @@ function addClick(e) {
     if(addViewType != 'icon' && addViewType != '')
         sUrl += '&view_type=' + addViewType;
 
-    if(addAction == 'clone' && objid !== -1)
-        sUrl += '&clone_id='+objid;
+    if(addAction == 'clone' && cloneId !== null)
+        sUrl += '&clone_id=' + cloneId;
 
     if(addObjType == 'textbox')
         sUrl += '&w=' + (w - addX[0]) + '&h=' + (h - addY[0]);
