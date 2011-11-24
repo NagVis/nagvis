@@ -10,7 +10,6 @@ Relative Koordinaten:
     - Beim Config Parsen Fehlermeldung erzeugen
 - Sidebar Folder auf/zu klappbar
 - In Sidebar/Dropdown die aktuelle Map highlighten
-- line_weather_color umbrechen wenn als Text dargestellt
 - line_label_y_offset wird noch nicht sauber berechnet
 
 -------------------------------------------------------------------------------

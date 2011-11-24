@@ -147,17 +147,17 @@ function drawLabel(objectId, num, lineType, lx, ly, z, perfdataA, perfdataB, yOf
     labelShift = getLabelShift(perfdataA);
 
     // Maybe use function to detect the real height in future
-    var labelHeight = 22;
+    var labelHeight = 21;
 
     if(lineType == '13') {
         if(oLinkContainer)
-            oLinkContainer.appendChild(drawNagVisTextbox(objectId+'-link'+num, 'box', '#ffffff', '#000000', (lx-labelShift), (ly - labelHeight / 2), z, 'auto', 'auto', '<b>' + perfdataA + '</b>'));
+            oLinkContainer.appendChild(drawNagVisTextbox(objectId+'-link'+num, 'box', '#ffffff', '#000000', (lx-labelShift), parseInt(ly - labelHeight / 2), z, 'auto', 'auto', '<b>' + perfdataA + '</b>'));
     } else if(lineType == '14') {
-        var label = drawNagVisTextbox(objectId+'-link'+num, 'box', '#ffffff', '#000000', (lx-labelShift), (ly - labelHeight - yOffset), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
+        var label = drawNagVisTextbox(objectId+'-link'+num, 'box', '#ffffff', '#000000', (lx-labelShift), parseInt(ly - labelHeight - yOffset), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
         if(oLinkContainer)
             oLinkContainer.appendChild(label);
         labelShift = getLabelShift(perfdataB);
-        label = drawNagVisTextbox(objectId+'-link'+(num+1), 'box', '#ffffff', '#000000', (lx-labelShift), (ly + yOffset), z, 'auto', 'auto', '<b>' + perfdataB + '</b>');
+        label = drawNagVisTextbox(objectId+'-link'+(num+1), 'box', '#ffffff', '#000000', (lx-labelShift), parseInt(ly + yOffset), z, 'auto', 'auto', '<b>' + perfdataB + '</b>');
         if(oLinkContainer)
             oLinkContainer.appendChild(label);
         label = null;
@@ -338,7 +338,7 @@ function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, col
             }
 
             // Take the configured line width into account
-            yOffset = yOffset + parseInt(width / 2);
+            yOffset = yOffset + width;
 
             // perfdataA contains the percentage info
             // perfdataB contains the bandwith info
