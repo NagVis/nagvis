@@ -879,7 +879,7 @@ class GlobalMapCfg {
             $keys = array_keys($this->mapConfig[$id]);
 
         foreach($keys AS $key)
-            if($key !== 'type' && isset($this->mapConfig[$id][$key]) && $this->mapConfig[$id][$key] != '')
+            if($key !== 'type' && isset($this->mapConfig[$id][$key]) && $this->mapConfig[$id][$key] !== '')
                 $a[] = $key.'='.$this->mapConfig[$id][$key]."\n";
 
         $a[] = "}\n";

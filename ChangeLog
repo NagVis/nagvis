@@ -9,6 +9,7 @@ Core
   * Using z=5 for textboxes and z=1 for shapes again as default values
   * Added new config option line_label_y_offset to configure the label offset
     used in weathermap lines which show percentage and absolute bandwidth labels
+  * Bugfix: Correctly adding object_id=0 to global section when creating maps
 
 Frontend
   * Sorting maps by alias in header menu now
