@@ -10,6 +10,7 @@ Core
   * Using z=5 for textboxes and z=1 for shapes again as default values
   * Added new config option line_label_y_offset to configure the label offset
     used in weathermap lines which show percentage and absolute bandwidth labels
+  * Added new LogonMultisite module to use the new Check_MK multisite auth cookie
   * Bugfix: Correctly adding object_id=0 to global section when creating maps
 
 Frontend

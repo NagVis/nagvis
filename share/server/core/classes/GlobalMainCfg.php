@@ -99,6 +99,7 @@ class GlobalMainCfg {
                     'editable' => 1,
                     'default' => 'LogonMixed',
                     'match' => MATCH_STRING),
+
                 'logonenvvar' => Array('must' => 1,
                     'editable' => 1,
                     'default' => 'REMOTE_USER',
@@ -118,6 +119,40 @@ class GlobalMainCfg {
                     'depends_on' => 'logonmodule',
                     'depends_value' => 'LogonEnv',
                     'match' => MATCH_STRING),
+
+                'logon_multisite_htpasswd' => Array(
+                    'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => '',
+                    'depends_on'    => 'logonmodule',
+                    'depends_value' => 'LogonMultisite',
+                    'match'         => MATCH_STRING_PATH,
+                ),
+                'logon_multisite_secret' => Array(
+                    'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => '',
+                    'depends_on'    => 'logonmodule',
+                    'depends_value' => 'LogonMultisite',
+                    'match'         => MATCH_STRING_PATH,
+                ),
+                'logon_multisite_createuser' => Array(
+                    'must'          => 1,
+                    'editable'      => 1,
+                    'default'       => '1',
+                    'field_type'    => 'boolean',
+                    'depends_on'    => 'logonmodule',
+                    'depends_value' => 'LogonMultisite',
+                    'match'         => MATCH_BOOLEAN),
+                'logon_multisite_createrole' => Array(
+                    'must'          => 1,
+                    'editable'      => 1,
+                    'default'       => 'Guests',
+                    'depends_on'    => 'logonmodule',
+                    'depends_value' => 'LogonMultisite',
+                    'match'         => MATCH_STRING
+                ),
+
                 'refreshtime' => Array('must' => 1,
                     'editable' => 1,
                     'default' => '60',

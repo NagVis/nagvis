@@ -153,6 +153,16 @@ class CoreAuthHandler {
         if($bAlreadyAuthed && $this->SESS->get('logonModule') != $this->sModuleName)
             $this->logout();
 
+        // When the user authenticated with the multisite logon module log the user
+        // out if the auth_* cookie does not exist anymore. The cookie name has been
+        // stored in the session var multisiteLogonCookie
+        // This is a bad hacky place for this but I see no other good solution atm
+        if($bAlreadyAuthed && $this->SESS->isSetAndNotEmpty('multisiteLogonCookie')
+           && !isset($_COOKIE[$this->SESS->get('multisiteLogonCookie')])) {
+            $this->logout(true);
+            return false;
+        }
+
         // When the user authenticated in trust mode read it here and override
         // the value handed over with the function call.
         // The isAuthentication() function will then only check if the user exists.
@@ -209,8 +219,8 @@ class CoreAuthHandler {
         return !$this->authedTrusted();
     }
 
-    public function logout() {
-        if(!$this->logoutSupported())
+    public function logout($enforce = false) {
+        if(!$enforce && !$this->logoutSupported())
             return false;
 
         if((bool) cfg('global', 'audit_log') === true) {
@@ -220,9 +230,9 @@ class CoreAuthHandler {
         }
 
         // Remove the login information
-        $this->SESS->set('authCredentials', false);
-        $this->SESS->set('userPermissions', false);
-        $this->SESS->set('logonModule',     false);
+        $this->SESS->set('authCredentials',      false);
+        $this->SESS->set('userPermissions',      false);
+        $this->SESS->set('logonModule',          false);
 
         return true;
     }
