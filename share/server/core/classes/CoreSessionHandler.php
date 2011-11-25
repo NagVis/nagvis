@@ -110,6 +110,10 @@ class CoreSessionHandler {
 
         return $sOld;
     }
+
+    public function del($key) {
+        unset($_SESSION[$key]);
+    }
 }
 
 ?>
