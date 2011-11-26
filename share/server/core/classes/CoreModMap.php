@@ -775,18 +775,22 @@ class CoreModMap extends CoreModule {
 
         // loop all map configs to replace mapname in all map configs
         foreach($this->CORE->getAvailableMaps() as $mapName) {
-            $MAPCFG1 = new GlobalMapCfg($this->CORE, $mapName);
-            $MAPCFG1->readMapConfig();
+            try {
+                $MAPCFG1 = new GlobalMapCfg($this->CORE, $mapName);
+                $MAPCFG1->readMapConfig();
 
-            $i = 0;
-            // loop definitions of type map
-            foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
-                // check if old map name is linked...
-                if($obj['map_name'] == $a['map']) {
-                    $MAPCFG1->setValue('map', $i, 'map_name', $a['map_new_name']);
-                    $MAPCFG1->writeElement('map',$i);
+                $i = 0;
+                // loop definitions of type map
+                foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
+                    // check if old map name is linked...
+                    if($obj['map_name'] == $a['map']) {
+                        $MAPCFG1->setValue('map', $i, 'map_name', $a['map_new_name']);
+                        $MAPCFG1->writeElement('map',$i);
+                    }
+                    $i++;
                 }
-                $i++;
+            } catch(Exception $e) {
+                // Do nothing. Siletly pass config errors here...
             }
         }
 

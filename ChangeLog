@@ -28,6 +28,7 @@ Frontend
   * Bugfix: Don't enable map_image when not set when editing the global
     sections of maps
   * Bugfix: Removing just dragged new lines before opening the add/modify dialog
+  * Bugfix: Not terminating map rename when one map contains a syntax error
 
 1.6rc4
 Core
