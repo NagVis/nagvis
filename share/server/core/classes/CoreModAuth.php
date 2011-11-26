@@ -39,47 +39,16 @@ class CoreModAuth extends CoreModule {
         $this->FHANDLER = new CoreRequestHandler($_POST);
     }
 
-    public function handleAction() {
-        $sReturn = '';
+    public function check($printErr) {
 
+    }
+
+    public function handleAction() {
+        global $AUTH;
         if($this->offersAction($this->sAction)) {
             switch($this->sAction) {
-                case 'login':
-                    // Check if user is already authenticated
-                    if(!isset($this->AUTHENTICATION) || !$this->AUTHENTICATION->isAuthenticated()) {
-                        $aReturn = $this->handleResponseAuth();
-
-                        if($aReturn !== false) {
-                            // Reset the authentication check. Without this the cached result
-                            // would prevent the authentication check with the given credentials
-                            $this->AUTHENTICATION->resetAuthCheck();
-
-                            // Set credentials to authenticate
-                            $this->AUTHENTICATION->passCredentials($aReturn);
-
-                            // Try to authenticate the user
-                            if($this->AUTHENTICATION->isAuthenticated()) {
-                                // Display success with link and refresh in 5 seconds to called page
-                                // When referer is empty redirect to overview page
-                                throw new Success(l('You have been authenticated. You will be redirected.'),
-                                                  l('Authenticated'),
-                                                  1, CoreRequestHandler::getReferer(cfg('paths', 'htmlbase')));
-                            } else {
-                                // Invalid credentials
-                                // FIXME: Count tries and maybe block somehow
-                                $sReturn = $this->msgInvalidCredentials();
-                            }
-                        } else {
-                            // FIXME: Count tries and maybe block somehow
-                            $sReturn = $this->msgInvalidCredentials();
-                        }
-                    } else {
-                        // When the user is already authenticated redirect to start page (overview)
-                        $sReturn = $this->msgAlreadyLoggedIn();
-                    }
-                break;
                 case 'logout':
-                    if($this->AUTHENTICATION->logout())
+                    if($AUTH->logout())
                         throw new Success(l('You have been logged out. You will be redirected.'),
                                           l('Logged out'),
                                           1, cfg('paths', 'htmlbase'));
@@ -89,8 +58,6 @@ class CoreModAuth extends CoreModule {
                 break;
             }
         }
-
-        return $sReturn;
     }
 
     private function handleResponseAuth() {

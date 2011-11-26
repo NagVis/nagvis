@@ -1,8 +1,8 @@
 <?php
 /*****************************************************************************
  *
- * FrontendModLogonMultiste.php - Module for handling logins by the cookie
- *                                authentication mechanism of multisite
+ * CoreLogonMixed.php - Module for handling mixed logins. Uses LogonEnv
+ *                             as default and LogonDialog as fallback.
  *
  * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
  *
@@ -23,5 +23,18 @@
  *
  *****************************************************************************/
 
-class FrontendModLogonMultisite extends CoreModLogonMultisite {}
+class CoreLogonMixed {
+    public function check() {
+        // Try to auth using the environment auth
+        $ENV= new CoreLogonEnv();
+        if($ENV->check(false) === true) {
+            return true;
+        }
+
+        // Check if there were some auth data submitted
+        $DIALOG = new CoreLogonDialogHandler();
+        return $DIALOG->check(false);
+    }
+}
+
 ?>

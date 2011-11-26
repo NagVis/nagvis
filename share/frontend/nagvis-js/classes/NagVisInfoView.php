@@ -46,14 +46,14 @@ class NagVisInfoView {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parse() {
+        global $AUTH;
         // Initialize template system
         $TMPL = New FrontendTemplateSystem($this->CORE);
         $TMPLSYS = $TMPL->getTmplSys();
 
-        $AUTHENTICATION = $this->CORE->getAuthentication();
         $AUTHORISATION  = $this->CORE->getAuthorization();
-        $userName = $AUTHENTICATION->getUser();
-        $userId = $AUTHENTICATION->getUserId();
+        $userName  = $AUTH->getUser();
+        $userId    = $AUTH->getUserId();
         $userRoles = $AUTHORISATION->getUserRoles($userId);
         $userPerms = $AUTHORISATION->parsePermissions();
 
@@ -84,12 +84,13 @@ class NagVisInfoView {
             'loggedIn'           => $userName.' ('.$userId.')',
             'userRoles'          => json_encode($userRoles),
             'userPerms'          => json_encode($userPerms),
-            'userAuthModule'     => $AUTHENTICATION->getLogonModule(),
-            'userAuthTrusted'    => ($AUTHENTICATION->authedTrusted() ? "yes" : "no"),
+            'userAuthModule'     => $AUTH->getAuthModule(),
+            'userLogonModule'    => $AUTH->getLogonModule(),
+            'userAuthTrusted'    => ($AUTH->authedTrusted() ? "yes" : "no"),
         );
 
         // Build page based on the template file and the data array
-    // FIXME: Make template set configurable
+        // FIXME: Make template set configurable
         return $TMPLSYS->get($TMPL->getTmplFile('default', 'info'), $aData);
     }
 }

@@ -36,13 +36,14 @@ class CoreModSearch extends CoreModule {
     }
 
     public function handleAction() {
+        global $AUTH;
         $sReturn = '';
 
         if($this->offersAction($this->sAction)) {
             switch($this->sAction) {
                 case 'view':
                     // Check if user is already authenticated
-                    if(isset($this->AUTHENTICATION) && $this->AUTHENTICATION->isAuthenticated()) {
+                    if($AUTH->isAuthenticated()) {
                         $VIEW = new NagVisViewSearch($this->CORE);
                         $sReturn = json_encode(Array('code' => $VIEW->parse()));
                     } else {

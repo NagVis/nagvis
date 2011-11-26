@@ -46,6 +46,7 @@ class CoreModUserMgmt extends CoreModule {
     }
 
     public function handleAction() {
+        global $AUTH, $AUTHORISATION;
         $sReturn = '';
 
         if($this->offersAction($this->sAction)) {
@@ -54,7 +55,7 @@ class CoreModUserMgmt extends CoreModule {
                 // be in CoreModule cause it is fetched via ajax. The error messages
                 // would be printed in HTML format in nagvis-js frontend.
                 case 'view':
-                    $VIEW = new NagVisViewUserMgmt($this->AUTHENTICATION, $this->AUTHORISATION);
+                    $VIEW = new NagVisViewUserMgmt();
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'doAdd':
@@ -62,7 +63,7 @@ class CoreModUserMgmt extends CoreModule {
 
                     if($aReturn !== false) {
                         // Try to apply the changes
-                        if($this->AUTHENTICATION->createUser($aReturn['user'], $aReturn['password'])) {
+                        if($AUTH->createUser($aReturn['user'], $aReturn['password'])) {
                             throw new Success(l('The user has been created.'));
                         } else {
                             // Invalid credentials
@@ -78,17 +79,17 @@ class CoreModUserMgmt extends CoreModule {
                     $userId = $aVals['userId'];
 
                     // Get current user roles
-                    $sReturn = json_encode($this->AUTHORISATION->getUserRoles($userId));
+                    $sReturn = json_encode($AUTHORISATION->getUserRoles($userId));
                 break;
                 case 'getAllRoles':
                     // Get current permissions of role
-                    $sReturn = json_encode($this->AUTHORISATION->getAllRoles());
+                    $sReturn = json_encode($AUTHORISATION->getAllRoles());
                 break;
                 case 'doEdit':
                     $aReturn = $this->handleResponseEdit();
 
                     if($aReturn !== false) {
-                        if($this->AUTHORISATION->updateUserRoles($aReturn['userId'], $aReturn['roles'])) {
+                        if($AUTHORISATION->updateUserRoles($aReturn['userId'], $aReturn['roles'])) {
                             throw new Success(l('The roles for this user have been updated.'));
                         } else {
                             throw new NagVisException(l('Problem while updating user roles.'));
@@ -101,7 +102,7 @@ class CoreModUserMgmt extends CoreModule {
                     $aReturn = $this->handleResponseDelete();
 
                     if($aReturn !== false) {
-                        if($this->AUTHORISATION->deleteUser($aReturn['userId'])) {
+                        if($AUTHORISATION->deleteUser($aReturn['userId'])) {
                             throw new Success(l('The user has been deleted.'));
                         } else {
                             throw new NagVisException(l('Problem while deleting user.'));
@@ -122,12 +123,14 @@ class CoreModUserMgmt extends CoreModule {
     }
 
     protected function doPwReset($a) {
-        if($this->AUTHENTICATION->authedTrusted())
+        global $AUTH;
+        if($AUTH->authedTrusted())
             return false;
-        return $this->AUTHENTICATION->resetPassword($a['userId'], $a['password1']);
+        return $AUTH->resetPassword($a['userId'], $a['password1']);
     }
 
     protected function handleResponseDoPwReset() {
+        global $AUTH;
         $bValid = true;
 
         $FHANDLER = new CoreRequestHandler($_POST);
@@ -148,7 +151,7 @@ class CoreModUserMgmt extends CoreModule {
             throw new NagVisException(l('The two passwords are not equal.'));
 
         // Don't change own users password
-        if($this->AUTHENTICATION->getUserId() == $FHANDLER->get('userId'))
+        if($AUTH->getUserId() == $FHANDLER->get('userId'))
             throw new NagVisException(l('Unable to reset the password for your own user.'));
 
         // Store response data
@@ -161,6 +164,7 @@ class CoreModUserMgmt extends CoreModule {
     }
 
     private function handleResponseDelete() {
+        global $AUTH;
         $bValid = true;
         // Validate the response
 
@@ -176,7 +180,7 @@ class CoreModUserMgmt extends CoreModule {
         $userId = intval($this->FHANDLER->get('userId'));
 
         // Don't delete own user
-        if($this->AUTHENTICATION->getUserId() == $userId)
+        if($AUTH->getUserId() == $userId)
             throw new NagVisException(l('Unable to delete your own user.'));
 
         // Store response data
@@ -213,6 +217,7 @@ class CoreModUserMgmt extends CoreModule {
     }
 
     private function handleResponseAdd() {
+        global $AUTH;
         $bValid = true;
         // Validate the response
 
@@ -237,7 +242,7 @@ class CoreModUserMgmt extends CoreModule {
             $bValid = false;
 
         // Check if the user already exists
-        if($bValid && $this->AUTHENTICATION->checkUserExists($this->FHANDLER->get('username')))
+        if($bValid && $AUTH->checkUserExists($this->FHANDLER->get('username')))
             throw new NagVisException(l('The username is invalid or does already exist.'));
 
         // Check if new passwords are equal

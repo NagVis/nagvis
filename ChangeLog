@@ -11,6 +11,8 @@ Core
   * Added new config option line_label_y_offset to configure the label offset
     used in weathermap lines which show percentage and absolute bandwidth labels
   * Added new LogonMultisite module to use the new Check_MK multisite auth cookie
+  * Recoded logon and authentication module interface
+  * Several code cleanups
   * Bugfix: Correctly adding object_id=0 to global section when creating maps
 
 Frontend

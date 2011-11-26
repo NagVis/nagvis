@@ -42,6 +42,7 @@ class CoreModChangePassword extends CoreModule {
     }
 
     public function handleAction() {
+        global $AUTH;
         $sReturn = '';
 
         if($this->offersAction($this->sAction)) {
@@ -52,7 +53,7 @@ class CoreModChangePassword extends CoreModule {
                 case 'view':
                     // Check if user is already authenticated
                     // Change password must be denied when using trusted mode
-                    if(isset($this->AUTHENTICATION) && $this->AUTHENTICATION->isAuthenticated() && !$this->AUTHENTICATION->authedTrusted()) {
+                    if($AUTH->isAuthenticated() && !$AUTH->authedTrusted()) {
                         $VIEW = new NagVisViewChangePassword($this->CORE);
                         $sReturn = json_encode(Array('code' => $VIEW->parse()));
                     } else {
@@ -62,19 +63,15 @@ class CoreModChangePassword extends CoreModule {
                 case 'change':
                     // Check if user is already authenticated
                     // Change password must be denied when using trusted mode
-                    if(isset($this->AUTHENTICATION) && $this->AUTHENTICATION->isAuthenticated() && !$this->AUTHENTICATION->authedTrusted()) {
+                    if($AUTH->isAuthenticated() && !$AUTH->authedTrusted()) {
                         $aReturn = $this->handleResponseChangePassword();
 
                         if($aReturn !== false) {
-                            // Reset the authentication check. Without this the cached result
-                            // would prevent the authentication check with the given credentials
-                            $this->AUTHENTICATION->resetAuthCheck();
-
                             // Set new passwords in authentication module
-                            $this->AUTHENTICATION->passNewPassword($aReturn);
+                            $AUTH->passNewPassword($aReturn);
 
                             // Try to apply the changes
-                            if($this->AUTHENTICATION->changePassword()) {
+                            if($AUTH->changePassword()) {
                                 throw new Success(l('The password has been changed.'));
                             } else {
                                 // Invalid credentials
@@ -95,6 +92,7 @@ class CoreModChangePassword extends CoreModule {
     }
 
     private function handleResponseChangePassword() {
+        global $AUTH;
         $bValid = true;
         // Validate the response
 
@@ -126,7 +124,7 @@ class CoreModChangePassword extends CoreModule {
 
       // Store response data
       if($bValid === true)
-          return Array('user'        => $this->AUTHENTICATION->getUser(),
+          return Array('user'        => $AUTH->getUser(),
                        'password'    => $this->FHANDLER->get('passwordOld'),
                        'passwordNew' => $this->FHANDLER->get('passwordNew1'));
         else

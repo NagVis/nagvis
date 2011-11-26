@@ -32,17 +32,18 @@ class FrontendModLogonDialog extends FrontendModule {
         $this->sName = 'LogonDialog';
         $this->CORE = $CORE;
 
-        $this->aActions = Array('view' => 0);
+        $this->aActions = Array('view' => !REQUIRES_AUTHORISATION);
     }
 
     public function handleAction() {
+        global $AUTH;
         $sReturn = '';
 
         if($this->offersAction($this->sAction)) {
             switch($this->sAction) {
                 case 'view':
                     // Check if user is already authenticated
-                    if(!isset($this->AUTHENTICATION) || !$this->AUTHENTICATION->isAuthenticated()) {
+                    if(!$AUTH->isAuthenticated()) {
                         $VIEW = new NagVisLoginView($this->CORE);
                         $sReturn = $VIEW->parse();
                     } else {

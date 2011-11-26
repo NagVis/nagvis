@@ -26,22 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiViewManageMaps {
-    private $CORE;
-    private $AUTHENTICATION;
-    private $AUTHORISATION;
-
-    /**
-     * Class Constructor
-     *
-     * @param 	GlobalCore 	$CORE
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function __construct(CoreAuthHandler $AUTHENTICATION, CoreAuthorisationHandler $AUTHORISATION) {
-        $this->CORE = GlobalCore::getInstance();
-        $this->AUTHENTICATION = $AUTHENTICATION;
-        $this->AUTHORISATION = $AUTHORISATION;
-    }
-
     /**
      * Parses the information in html format
      *
@@ -49,8 +33,10 @@ class WuiViewManageMaps {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parse() {
+        global $CORE;
+
         // Initialize template system
-        $TMPL = New CoreTemplateSystem($this->CORE);
+        $TMPL = new CoreTemplateSystem($CORE);
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
@@ -71,10 +57,10 @@ class WuiViewManageMaps {
             'langMapName'           => l('mapName'),
             'langMapIconset'        => l('mapIconset'),
             'langBackground'        => l('background'),
-            'availableBackgrounds'  => $this->CORE->getAvailableBackgroundImages(),
-            'availableIconsets'     => $this->CORE->getAvailableIconsets(),
-            'availableMaps'         => $this->CORE->getAvailableMaps(),
-	    'lang'                  => $this->CORE->getJsLang(),
+            'availableBackgrounds'  => $CORE->getAvailableBackgroundImages(),
+            'availableIconsets'     => $CORE->getAvailableIconsets(),
+            'availableMaps'         => $CORE->getAvailableMaps(),
+	    'lang'                  => $CORE->getJsLang(),
         );
 
         // Build page based on the template file and the data array

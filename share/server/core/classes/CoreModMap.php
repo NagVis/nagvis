@@ -114,7 +114,7 @@ class CoreModMap extends CoreModule {
                     $sReturn = $this->getObjectStates();
                 break;
                 case 'manage':
-                    $VIEW = new WuiViewManageMaps($this->AUTHENTICATION, $this->AUTHORISATION);
+                    $VIEW = new WuiViewManageMaps();
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'doAdd':
@@ -207,7 +207,7 @@ class CoreModMap extends CoreModule {
                     $aOpts = Array('show' => MATCH_MAP_NAME);
                     $aVals = $this->getCustomOptions($aOpts);
 
-                    $VIEW = new WuiViewMapManageTmpl($this->AUTHENTICATION, $this->AUTHORISATION);
+                    $VIEW = new WuiViewMapManageTmpl();
                     $VIEW->setOpts($aVals);
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;

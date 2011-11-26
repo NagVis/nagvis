@@ -28,8 +28,6 @@
 class GlobalIndexPage {
     private $CORE;
     private $BACKEND;
-    private $AUTHORISATION = null;
-
     private $htmlBase;
 
 
@@ -40,11 +38,10 @@ class GlobalIndexPage {
      * @param 	CoreBackendMgmt	$BACKEND
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function __construct(GlobalCore $CORE, CoreBackendMgmt $BACKEND, CoreAuthorisationHandler $AUTHORISATION) {
+    public function __construct() {
+        global $CORE;
         $this->CORE = $CORE;
-        $this->BACKEND = $BACKEND;
-        $this->AUTHORISATION = $AUTHORISATION;
-
+        $this->BACKEND = new CoreBackendMgmt($CORE);
         $this->htmlBase = cfg('paths','htmlbase');
     }
 
@@ -59,6 +56,7 @@ class GlobalIndexPage {
      * FIXME: More cleanups, compacting and extraction of single parts
      */
     public function parseMapsJson($type, $what = COMPLETE, $objects = Array()) {
+        global $AUTHORISATION;
         // initial parsing mode: Skip processing when this type of object should not be shown
         if($type != 'list' && !cfg('index', 'show'.$type.'s') == 1)
             return json_encode(Array());
@@ -89,10 +87,10 @@ class GlobalIndexPage {
 
             // Check if the user is permitted to view this
             if($mapType == 'automap') {
-                if(!$this->AUTHORISATION->isPermitted('AutoMap', 'view', $mapName))
+                if(!$AUTHORISATION->isPermitted('AutoMap', 'view', $mapName))
                     continue;
             } else {
-                if(!$this->AUTHORISATION->isPermitted('Map', 'view', $mapName))
+                if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName))
                     continue;
             }
 
@@ -273,6 +271,7 @@ class GlobalIndexPage {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parseRotationsJson() {
+        global $AUTHORISATION;
         // Only display the rotation list when enabled
         if(cfg('index','showrotations') != 1)
             return json_encode(Array());
@@ -280,7 +279,7 @@ class GlobalIndexPage {
         $aRotations = Array();
         foreach($this->CORE->getDefinedRotationPools() AS $poolName) {
             // Check if the user is permitted to view this rotation
-            if(!$this->AUTHORISATION->isPermitted('Rotation', 'view', $poolName))
+            if(!$AUTHORISATION->isPermitted('Rotation', 'view', $poolName))
                 continue;
 
             $ROTATION = new CoreRotation($this->CORE, $poolName);

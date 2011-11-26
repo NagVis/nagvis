@@ -55,20 +55,20 @@ class NagVisLoginView {
             'htmlBase' => cfg('paths', 'htmlbase'),
             'htmlJs' => cfg('paths', 'htmljs'),
             'htmlCss' => cfg('paths', 'htmlcss'),
-            'formTarget' => cfg('paths', 'htmlbase') . '/server/core/ajax_handler.php?mod=Auth&amp;act=login',
+            'formTarget' => CoreRequestHandler::getReferer(cfg('paths', 'htmlbase')),
             'htmlTemplates' => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'),
             'htmlImages' => cfg('paths', 'htmlimages'),
-      'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
-      'maxUsernameLength' => AUTH_MAX_USERNAME_LENGTH,
-      'langName' => l('Name'),
-      'langPassword' => l('Password'),
-      'langLogin' => l('Login'),
+            'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
+            'maxUsernameLength' => AUTH_MAX_USERNAME_LENGTH,
+            'langName' => l('Name'),
+            'langPassword' => l('Password'),
+            'langLogin' => l('Login'),
             'langTitleCookiesDisabled' => l('Cookies disabled'),
             'langTextCookiesDisabled' => l('NagVis is unable to set a cookie in your browser. Please enable cookies for at least the NagVis host.'),
         );
 
         // Build page based on the template file and the data array
-    // FIXME: Make template set configurable
+        // FIXME: Make template set configurable
         return $TMPLSYS->get($TMPL->getTmplFile('default', 'login'), $aData);
     }
 }

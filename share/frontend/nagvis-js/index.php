@@ -52,7 +52,7 @@ try {
         'AutoMap',
         'Overview',
         'Rotation',
-        cfg('global', 'logonmodule'),
+        'LogonDialog',
     );
     
     require('../../server/core/functions/index.php');

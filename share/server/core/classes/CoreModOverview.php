@@ -26,9 +26,6 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreModOverview extends CoreModule {
-    private $BACKEND = null;
-    private $OVERVIEW = null;
-
     public function __construct(GlobalCore $CORE) {
         $this->sName = 'Overview';
         $this->CORE = $CORE;
@@ -46,27 +43,26 @@ class CoreModOverview extends CoreModule {
         $sReturn = '';
 
         if($this->offersAction($this->sAction)) {
-            $this->BACKEND = new CoreBackendMgmt($this->CORE);
-            $this->OVERVIEW = new GlobalIndexPage($this->CORE, $this->BACKEND, $this->AUTHORISATION);
+            $OVERVIEW = new GlobalIndexPage();
 
             switch($this->sAction) {
                 case 'getOverviewProperties':
-                    $sReturn = $this->OVERVIEW->parseIndexPropertiesJson();
+                    $sReturn = $OVERVIEW->parseIndexPropertiesJson();
                 break;
                 case 'getOverviewMaps':
-                    $sReturn = $this->OVERVIEW->parseMapsJson('map');
+                    $sReturn = $OVERVIEW->parseMapsJson('map');
                 break;
                 case 'getOverviewAutomaps':
-                    $sReturn = $this->OVERVIEW->parseMapsJson('automap');
+                    $sReturn = $OVERVIEW->parseMapsJson('automap');
                 break;
                 case 'getOverviewRotations':
-                    $sReturn = $this->OVERVIEW->parseRotationsJson();
+                    $sReturn = $OVERVIEW->parseRotationsJson();
                 break;
                 case 'getObjectStates':
                     $aOpts = Array('i'  => MATCH_STRING_NO_SPACE);
                     $aVals = $this->getCustomOptions($aOpts);
 
-                    $sReturn = $this->OVERVIEW->parseMapsJson('list', ONLY_STATE, $aVals['i']);
+                    $sReturn = $OVERVIEW->parseMapsJson('list', ONLY_STATE, $aVals['i']);
                 break;
             }
         }

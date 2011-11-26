@@ -26,22 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiViewMapManageTmpl {
-    private $CORE;
-    private $AUTHENTICATION;
-    private $AUTHORISATION;
     private $aOpts = null;
-
-    /**
-     * Class Constructor
-     *
-     * @param 	GlobalCore 	$CORE
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function __construct(CoreAuthHandler $AUTHENTICATION, CoreAuthorisationHandler $AUTHORISATION) {
-        $this->CORE = GlobalCore::getInstance();
-        $this->AUTHENTICATION = $AUTHENTICATION;
-        $this->AUTHORISATION = $AUTHORISATION;
-    }
 
     /**
      * Setter for the options array
@@ -60,12 +45,14 @@ class WuiViewMapManageTmpl {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parse() {
+        global $CORE;
+
         // Initialize template system
-        $TMPL = New CoreTemplateSystem($this->CORE);
+        $TMPL = new CoreTemplateSystem($CORE);
         $TMPLSYS = $TMPL->getTmplSys();
 
         // Read map configig but don't resolve tempaltes
-        $MAPCFG = new GlobalMapCfg($this->CORE, $this->aOpts['show']);
+        $MAPCFG = new GlobalMapCfg($CORE, $this->aOpts['show']);
         $MAPCFG->readMapConfig(0, false, false);
 
         $aData = Array(

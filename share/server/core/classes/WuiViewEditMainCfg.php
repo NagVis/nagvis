@@ -26,22 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiViewEditMainCfg {
-    private $CORE;
-    private $AUTHENTICATION;
-    private $AUTHORISATION;
-
-    /**
-     * Class Constructor
-     *
-     * @param 	GlobalCore 	$CORE
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function __construct(CoreAuthHandler $AUTHENTICATION, CoreAuthorisationHandler $AUTHORISATION) {
-        $this->CORE = GlobalCore::getInstance();
-        $this->AUTHENTICATION = $AUTHENTICATION;
-        $this->AUTHORISATION = $AUTHORISATION;
-    }
-
     /**
      * Parses the information in html format
      *
@@ -49,16 +33,18 @@ class WuiViewEditMainCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parse() {
+        global $CORE;
+
         // Initialize template system
-        $TMPL = New CoreTemplateSystem($this->CORE);
+        $TMPL = New CoreTemplateSystem($CORE);
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
             'htmlBase'     => cfg('paths', 'htmlbase'),
             'formContents' => $this->getFields(),
             'langSave'     => l('save'),
-            'validMainCfg' => json_encode($this->CORE->getMainCfg()->getValidConfig()),
-            'lang'         => $this->CORE->getJsLang(),
+            'validMainCfg' => json_encode($CORE->getMainCfg()->getValidConfig()),
+            'lang'         => $CORE->getJsLang(),
         );
 
         // Build page based on the template file and the data array
@@ -73,10 +59,11 @@ class WuiViewEditMainCfg {
      * FIXME: Recode to have all the HTML code in the template
      */
     function getFields() {
+        global $CORE;
         $ret = '';
 
         $i = 1;
-        foreach($this->CORE->getMainCfg()->getValidConfig() AS $cat => $arr) {
+        foreach($CORE->getMainCfg()->getValidConfig() AS $cat => $arr) {
             // don't display backend,rotation and internal options
             if(!preg_match("/^(backend|internal|rotation|auth)/i", $cat)) {
                 $ret .= '<tr><th class="cat" colspan="3"><h2>'.$cat.'</h2></th></tr>';
@@ -145,16 +132,16 @@ class WuiViewEditMainCfg {
                             case 'dropdown':
                                 switch($propname) {
                                     case 'language':
-                                        $arrOpts = $this->CORE->getAvailableLanguages();
+                                        $arrOpts = $CORE->getAvailableLanguages();
                                     break;
                                     case 'backend':
-                                        $arrOpts = $this->CORE->getDefinedBackends();
+                                        $arrOpts = $CORE->getDefinedBackends();
                                     break;
                                     case 'icons':
-                                        $arrOpts = $this->CORE->getAvailableIconsets();
+                                        $arrOpts = $CORE->getAvailableIconsets();
                                     break;
                                     case 'headertemplate':
-                                        $arrOpts = $this->CORE->getAvailableHeaderTemplates();
+                                        $arrOpts = $CORE->getAvailableHeaderTemplates();
                                     break;
                                     case 'autoupdatefreq':
                                         $arrOpts = Array(Array('value'=>'0','label'=>l('disabled')),

@@ -92,65 +92,66 @@ class FrontendModMap extends FrontendModule {
     }
 
     private function showViewDialog() {
-    // Initialize map configuration
-    $MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
-    // Read the map configuration file (Only global section!)
-    $MAPCFG->readMapConfig(ONLY_GLOBAL);
+        global $AUTHORISATION;
+        // Initialize map configuration
+        $MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
+        // Read the map configuration file (Only global section!)
+        $MAPCFG->readMapConfig(ONLY_GLOBAL);
 
-    // Build index template
-    $INDEX = new NagVisIndexView($this->CORE);
+        // Build index template
+        $INDEX = new NagVisIndexView($this->CORE);
 
-    // Need to load the custom stylesheet?
-    $customStylesheet = $MAPCFG->getValue(0, 'stylesheet');
-    if($customStylesheet !== '')
-        $INDEX->setCustomStylesheet($this->CORE->getMainCfg()->getPath('html', 'global', 'styles', $customStylesheet));
+        // Need to load the custom stylesheet?
+        $customStylesheet = $MAPCFG->getValue(0, 'stylesheet');
+        if($customStylesheet !== '')
+            $INDEX->setCustomStylesheet($this->CORE->getMainCfg()->getPath('html', 'global', 'styles', $customStylesheet));
 
-    // Header menu enabled/disabled by url?
-    if($this->viewOpts['enableHeader'] !== false && $this->viewOpts['enableHeader']) {
-        $showHeader = true;
-    } elseif($this->viewOpts['enableHeader'] !== false && !$this->viewOpts['enableHeader']) {
-        $showHeader = false;
-    } else {
-        $showHeader = $MAPCFG->getValue(0 ,'header_menu');
-    }
+        // Header menu enabled/disabled by url?
+        if($this->viewOpts['enableHeader'] !== false && $this->viewOpts['enableHeader']) {
+            $showHeader = true;
+        } elseif($this->viewOpts['enableHeader'] !== false && !$this->viewOpts['enableHeader']) {
+            $showHeader = false;
+        } else {
+            $showHeader = $MAPCFG->getValue(0 ,'header_menu');
+        }
 
-    // Need to parse the header menu by config or url value?
-    if($showHeader) {
-        // Parse the header menu
-        $HEADER = new NagVisHeaderMenu($this->CORE, $this->AUTHORISATION, $this->UHANDLER, $MAPCFG->getValue(0 ,'header_template'), $MAPCFG);
+        // Need to parse the header menu by config or url value?
+        if($showHeader) {
+            // Parse the header menu
+            $HEADER = new NagVisHeaderMenu($this->CORE, $this->UHANDLER, $MAPCFG->getValue(0 ,'header_template'), $MAPCFG);
 
-        // Put rotation information to header menu
+            // Put rotation information to header menu
+            if($this->rotation != '') {
+            	$HEADER->setRotationEnabled();
+            }
+
+            $INDEX->setHeaderMenu($HEADER->__toString());
+        }
+
+        // Initialize map view
+        $this->VIEW = new NagVisMapView($this->CORE, $this->name);
+
+        // The user is searching for an object
+        $this->VIEW->setSearch($this->search);
+
+        // Set view modificators (Hover, Context toggle)
+        $this->VIEW->setViewOpts($this->viewOpts);
+
+        // Enable edit mode for all objects
+        if($this->sAction == 'edit')
+            $this->VIEW->setEditMode();
+
+        // Maybe it is needed to handle the requested rotation
         if($this->rotation != '') {
-        	$HEADER->setRotationEnabled();
+            // Only allow the rotation if the user is permitted to use it
+            if($AUTHORISATION->isPermitted('Rotation', 'view', $this->rotation)) {
+                $ROTATION = new FrontendRotation($this->CORE, $this->rotation);
+                $ROTATION->setStep('map', $this->name, $this->rotationStep);
+                $this->VIEW->setRotation($ROTATION->getRotationProperties());
+            }
         }
 
-        $INDEX->setHeaderMenu($HEADER->__toString());
-    }
-
-    // Initialize map view
-    $this->VIEW = new NagVisMapView($this->CORE, $this->name);
-
-    // The user is searching for an object
-    $this->VIEW->setSearch($this->search);
-
-    // Set view modificators (Hover, Context toggle)
-    $this->VIEW->setViewOpts($this->viewOpts);
-
-    // Enable edit mode for all objects
-    if($this->sAction == 'edit')
-        $this->VIEW->setEditMode();
-
-    // Maybe it is needed to handle the requested rotation
-    if($this->rotation != '') {
-        // Only allow the rotation if the user is permitted to use it
-        if($this->AUTHORISATION->isPermitted('Rotation', 'view', $this->rotation)) {
-            $ROTATION = new FrontendRotation($this->CORE, $this->rotation);
-            $ROTATION->setStep('map', $this->name, $this->rotationStep);
-            $this->VIEW->setRotation($ROTATION->getRotationProperties());
-        }
-    }
-
-    $INDEX->setContent($this->VIEW->parse());
+        $INDEX->setContent($this->VIEW->parse());
         return $INDEX->parse();
     }
 }

@@ -26,22 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiViewManageBackgrounds {
-    private $CORE;
-    private $AUTHENTICATION;
-    private $AUTHORISATION;
-
-    /**
-     * Class Constructor
-     *
-     * @param 	GlobalCore 	$CORE
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function __construct(CoreAuthHandler $AUTHENTICATION, CoreAuthorisationHandler $AUTHORISATION) {
-        $this->CORE = GlobalCore::getInstance();
-        $this->AUTHENTICATION = $AUTHENTICATION;
-        $this->AUTHORISATION = $AUTHORISATION;
-    }
-
     /**
      * Parses the information in html format
      *
@@ -49,8 +33,9 @@ class WuiViewManageBackgrounds {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parse() {
+        global $CORE;
         // Initialize template system
-        $TMPL = New CoreTemplateSystem($this->CORE);
+        $TMPL = New CoreTemplateSystem($CORE);
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
@@ -66,8 +51,8 @@ class WuiViewManageBackgrounds {
             'langUpload' => l('upload'),
             'langDeleteBackground' => l('deleteBackground'),
             'langDelete' => l('delete'),
-            'images' => $this->CORE->getAvailableBackgroundImages(),
-            'lang'       => $this->CORE->getJsLang(),
+            'images' => $CORE->getAvailableBackgroundImages(),
+            'lang'       => $CORE->getJsLang(),
         );
 
         // Build page based on the template file and the data array

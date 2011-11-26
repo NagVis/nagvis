@@ -26,7 +26,6 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreAuthModMySQL extends CoreAuthModule {
-    private $CORE;
     private $USERCFG;
 
     private $iUserId = -1;
@@ -35,9 +34,7 @@ class CoreAuthModMySQL extends CoreAuthModule {
     private $sPasswordnew = '';
     private $sPasswordHash = '';
 
-    public function __construct(GlobalCore $CORE) {
-        $this->CORE = $CORE;
-
+    public function __construct() {
         parent::$aFeatures = Array(
             // General functions for authentication
             'passCredentials' => true,

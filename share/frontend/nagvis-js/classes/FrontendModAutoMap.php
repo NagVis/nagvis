@@ -119,16 +119,18 @@ class FrontendModAutoMap extends FrontendModule {
     }
 
     private function showViewDialog() {
+        global $AUTHORISATION;
+
         // Initialize backend(s)
         $BACKEND = new CoreBackendMgmt($this->CORE);
 
-    // Initialize map configuration
-    $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
-    // Read the map configuration file
-    $MAPCFG->readMapConfig();
+        // Initialize map configuration
+        $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
+        // Read the map configuration file
+        $MAPCFG->readMapConfig();
 
         // When 'perm' is set save the default_params
-        if($this->opts['perm'] === '1' && $this->AUTHORISATION->isPermitted('AutoMap', 'edit', $this->name))
+        if($this->opts['perm'] === '1' && $AUTHORISATION->isPermitted('AutoMap', 'edit', $this->name))
             $this->saveDefaultParams($MAPCFG);
         unset($this->opts['perm']);
 
@@ -152,7 +154,7 @@ class FrontendModAutoMap extends FrontendModule {
         // Need to parse the header menu?
         if($showHeader) {
             // Parse the header menu
-            $HEADER = new NagVisHeaderMenu($this->CORE, $this->AUTHORISATION, $this->UHANDLER, $MAPCFG->getValue(0, 'header_template'), $MAPCFG);
+            $HEADER = new NagVisHeaderMenu($this->CORE, $this->UHANDLER, $MAPCFG->getValue(0, 'header_template'), $MAPCFG);
 
             // Put rotation information to header menu
             if($this->rotation != '') {
@@ -176,7 +178,7 @@ class FrontendModAutoMap extends FrontendModule {
         // Maybe it is needed to handle the requested rotation
         if($this->rotation != '') {
             // Only allow the rotation if the user is permitted to use it
-            if($this->AUTHORISATION->isPermitted('Rotation', 'view', $this->rotation)) {
+            if($AUTHORISATION->isPermitted('Rotation', 'view', $this->rotation)) {
                 $ROTATION = new FrontendRotation($this->CORE, $this->rotation);
                 $ROTATION->setStep('automap', $this->name, $this->rotationStep);
                 $this->VIEW->setRotation($ROTATION->getRotationProperties());

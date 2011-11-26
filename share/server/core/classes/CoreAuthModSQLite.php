@@ -26,7 +26,6 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreAuthModSQLite extends CoreAuthModule {
-    private $CORE;
     private $USERCFG;
 
     private $iUserId = -1;
@@ -35,9 +34,7 @@ class CoreAuthModSQLite extends CoreAuthModule {
     private $sPasswordnew = '';
     private $sPasswordHash = '';
 
-    public function __construct(GlobalCore $CORE) {
-        $this->CORE = $CORE;
-
+    public function __construct() {
         parent::$aFeatures = Array(
             // General functions for authentication
             'passCredentials' => true,
@@ -174,55 +171,44 @@ class CoreAuthModSQLite extends CoreAuthModule {
     }
 
     public function changePassword() {
-        $bReturn = false;
-
         // Check the authentication with the old password
-        if($this->isAuthenticated()) {
-            // Set new password to current one
-            $this->sPassword = $this->sPasswordNew;
+        if(!$this->isAuthenticated())
+            return false;
 
-            // Compose the new password hash
-            $this->sPasswordHash = $this->createHash($this->sPassword);
+        // Set new password to current one
+        $this->sPassword = $this->sPasswordNew;
 
-            // Update password
-            $this->updatePassword($this->iUserId, $this->sPasswordHash);
+        // Compose the new password hash
+        $this->sPasswordHash = $this->createHash($this->sPassword);
 
-            $bReturn = true;
-        } else {
-            $bReturn = false;
-        }
+        // Update password
+        $this->updatePassword($this->iUserId, $this->sPasswordHash);
 
-        return $bReturn;
+        return true;
     }
 
     public function isAuthenticated($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
-        $bReturn = false;
-
         // Only handle known users
-        if($this->sUsername !== '' && $this->checkUserExists($this->sUsername)) {
+        if($this->sUsername === '' || !$this->checkUserExists($this->sUsername))
+            return false;
 
-            // Try to calculate the passowrd hash only when no hash is known at
-            // this time. For example when the user just entered the password
-            // for logging in. If the user is already logged in and this is just
-            // a session check don't try to rehash the password.
-            if($bTrustUsername === AUTH_NOT_TRUST_USERNAME && $this->sPasswordHash === '') {
-                // Compose the password hash for comparing with the stored hash
-                $this->sPasswordHash = $this->createHash($this->sPassword);
-            }
-
-            // Check the password hash
-            $userId = $this->checkUserAuth($bTrustUsername);
-            if($userId > 0) {
-                $this->iUserId = $userId;
-                $bReturn = true;
-            } else {
-                $bReturn = false;
-            }
-        } else {
-            $bReturn = false;
+        // Try to calculate the passowrd hash only when no hash is known at
+        // this time. For example when the user just entered the password
+        // for logging in. If the user is already logged in and this is just
+        // a session check don't try to rehash the password.
+        if($bTrustUsername === AUTH_NOT_TRUST_USERNAME && $this->sPasswordHash === '') {
+            // Compose the password hash for comparing with the stored hash
+            $this->sPasswordHash = $this->createHash($this->sPassword);
         }
 
-        return $bReturn;
+        // Check the password hash
+        $userId = $this->checkUserAuth($bTrustUsername);
+        if($userId > 0) {
+            $this->iUserId = $userId;
+            return true;
+        }
+
+        return false;
     }
 
     public function getUser() {

@@ -41,7 +41,25 @@ $SHANDLER = new CoreSessionHandler();
  * Authentication: Try to authenticate the user
  */
 
-$AUTH = new CoreAuthHandler($CORE, $SHANDLER, cfg('global','authmodule'));
+$AUTH = new CoreAuthHandler();
+
+// Session: Logged in?
+// -> Get credentials from session and check auth
+if(!($AUTH->sessionAuthPresent() && $AUTH->isAuthenticatedSession())) {
+    // ...otherwise try to auth the user
+    // Logon Module?
+    // -> Received data to check the auth? Then check auth!
+    // -> Save to session if logon module told to do so!
+    $logonModule = 'Core' . cfg('global', 'logonmodule');
+    $logonModule = $logonModule == 'CoreLogonDialog' ? 'CoreLogonDialogHandler' : $logonModule;
+    $MODULE = new $logonModule($CORE);
+    $ret = $MODULE->check();
+    // Maybe handle other module now
+    if(is_array($ret)) {
+        $UHANDLER->set('mod', $ret[0]);
+        $UHANDLER->set('act', $ret[1]);
+    }
+}
 
 /*
 * Authorisation 1: Collect and save the permissions when the user is logged in
@@ -49,7 +67,7 @@ $AUTH = new CoreAuthHandler($CORE, $SHANDLER, cfg('global','authmodule'));
 */
 
 if($AUTH->isAuthenticated()) {
-    $AUTHORISATION = new CoreAuthorisationHandler($CORE, $AUTH, cfg('global', 'authorisationmodule'));
+    $AUTHORISATION = new CoreAuthorisationHandler();
     $AUTHORISATION->parsePermissions();
 } else
     $AUTHORISATION = null;
@@ -72,8 +90,8 @@ foreach($_modules AS $mod)
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
 if($MODULE == null)
-    throw new NagVisException(l('The module [MOD] is not known', Array('MOD' => htmlentities($UHANDLER->get('mod')))));
-$MODULE->passAuth($AUTH, $AUTHORISATION);
+    throw new NagVisException(l('The module [MOD] is not known',
+                             Array('MOD' => htmlentities($UHANDLER->get('mod')))));
 $MODULE->setAction($UHANDLER->get('act'));
 $MODULE->initObject();
 
@@ -82,32 +100,10 @@ $MODULE->initObject();
 *                  If not redirect to Msg/401 (Unauthorized) page
 */
 
-// Only proceed with authenticated users
-if($UHANDLER->get('mod') != cfg('global', 'logonmodule')
-   && ($AUTH->isAuthenticated() || (CONST_AJAX && $UHANDLER->get('mod') == 'Auth'))) {
-    // Only check modules which should have authorisation checks
-    // This are all modules excluded some core things
-    // Check if the user is permited to access this (module, action, object)
-    if($MODULE->actionRequiresAuthorisation())
-        $MODULE->isPermitted();
-} elseif(CONST_AJAX) {
-    // At the moment the login at ajax_handler is only possible via env auth.
-    // Should be enough for the moment
-    $MHANDLER = new CoreModuleHandler($CORE);
-    $MHANDLER->regModule('LogonEnv');
-    $MODULE = $MHANDLER->loadModule('LogonEnv');
-    $MODULE->beQuiet();
-    $MODULE->setAction('view');
-    
-    // Try to auth using the environment auth
-    // When not authenticated show error message
-    if($MODULE->handleAction() === false)
-        throw new NagVisException(l('You are not authenticated'), null, l('Access denied'));
-} else {
-    // When not authenticated redirect to logon dialog
-    $MODULE = $MHANDLER->loadModule(cfg('global', 'logonmodule'));
-    $UHANDLER->set('act', 'view');
-}
+// Only check the permissions for modules which require an authorization.
+// For example the info page and the login page don't need a special authorization
+if($MODULE->actionRequiresAuthorisation())
+    $MODULE->isPermitted();
 
 /*
 * Module handling 2: Render the modules when permitted

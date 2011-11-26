@@ -27,8 +27,6 @@
  */
 class CoreUserCfg {
     private $CORE;
-    private $AUTHENTICATION;
-    private $AUTHORISATION;
     private $profilesDir;
 
     // Optional list of value types to be fixed
@@ -46,15 +44,13 @@ class CoreUserCfg {
      */
     public function __construct() {
         $this->CORE = GlobalCore::getInstance();
-        $this->AUTHENTICATION = $this->CORE->getAuthentication();
-        $this->AUTHORISATION  = $this->CORE->getAuthorization();
-
         $this->profilesDir = cfg('paths', 'profiles');
     }
 
     public function doGet($onlyUserCfg = false) {
+        global $AUTH, $AUTHORISATION;
         $opts = Array();
-        if(!isset($this->AUTHENTICATION) || !$this->AUTHENTICATION->isAuthenticated() || !isset($this->AUTHORISATION))
+        if(!$AUTH->isAuthenticated())
             return $opts;
 
         if(!file_exists($this->profilesDir))
@@ -63,9 +59,9 @@ class CoreUserCfg {
         // Fetch all profile files to load
         $files = Array();
         if(!$onlyUserCfg)
-            foreach($this->AUTHORISATION->getUserRoles($this->AUTHENTICATION->getUserId()) AS $role)
+            foreach($AUTHORISATION->getUserRoles($AUTH->getUserId()) AS $role)
                 $files[] = $role['name'].'.profile';
-        $files[] = $this->AUTHENTICATION->getUser().'.profile';
+        $files[] = $AUTH->getUser().'.profile';
 
         // Read all configurations and append to the option array
         foreach($files AS $file) {
@@ -88,7 +84,8 @@ class CoreUserCfg {
     }
 
     public function doSet($opts) {
-        $file = $this->profilesDir.'/'.$this->AUTHENTICATION->getUser().'.profile';
+        global $AUTH;
+        $file = $this->profilesDir.'/'.$AUTH->getUser().'.profile';
 
         if(!$this->CORE->checkExisting(dirname($file), true) || !$this->CORE->checkWriteable(dirname($file), true))
             return false;

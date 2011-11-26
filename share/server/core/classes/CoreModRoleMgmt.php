@@ -43,6 +43,7 @@ class CoreModRoleMgmt extends CoreModule {
     }
 
     public function handleAction() {
+        global $AUTHORISATION;
         $sReturn = '';
 
         if($this->offersAction($this->sAction)) {
@@ -51,7 +52,7 @@ class CoreModRoleMgmt extends CoreModule {
                 // be in CoreModule cause it is fetched via ajax. The error messages
                 // would be printed in HTML format in nagvis-js frontend.
                 case 'view':
-                    $VIEW = new NagVisViewManageRoles($this->AUTHORISATION);
+                    $VIEW = new NagVisViewManageRoles();
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'getRolePerms':
@@ -60,14 +61,14 @@ class CoreModRoleMgmt extends CoreModule {
                     $roleId = $aVals['roleId'];
 
                     // Get current permissions of role
-                    $sReturn = json_encode($this->AUTHORISATION->getRolePerms($roleId));
+                    $sReturn = json_encode($AUTHORISATION->getRolePerms($roleId));
                 break;
                 case 'doAdd':
                     $aReturn = $this->handleResponseAdd();
 
                     if($aReturn !== false) {
                         // Try to apply
-                        if($this->AUTHORISATION->createRole($aReturn['name'])) {
+                        if($AUTHORISATION->createRole($aReturn['name'])) {
                             throw new Success(l('The role has been created.'));
                             $sReturn = '';
                         } else {
@@ -81,7 +82,7 @@ class CoreModRoleMgmt extends CoreModule {
                     $aReturn = $this->handleResponseEdit();
 
                     if($aReturn !== false) {
-                        if($this->AUTHORISATION->updateRolePerms($aReturn['roleId'], $aReturn['perms'])) {
+                        if($AUTHORISATION->updateRolePerms($aReturn['roleId'], $aReturn['perms'])) {
                             throw new Success(l('The permissions for this role have been updated.'));
                             $sReturn = '';
                         } else {
@@ -96,7 +97,7 @@ class CoreModRoleMgmt extends CoreModule {
                     $aReturn = $this->handleResponseDelete();
 
                     if($aReturn !== false) {
-                        if($this->AUTHORISATION->deleteRole($aReturn['roleId'])) {
+                        if($AUTHORISATION->deleteRole($aReturn['roleId'])) {
                             throw new Success(l('The role has been deleted.'));
                             $sReturn = '';
                         } else {
@@ -174,6 +175,7 @@ class CoreModRoleMgmt extends CoreModule {
     }
 
     private function handleResponseAdd() {
+        global $AUTHORISATION;
         $bValid = true;
 
         // Check for needed params
@@ -189,7 +191,7 @@ class CoreModRoleMgmt extends CoreModule {
             $bValid = false;
 
         // Check if the role already exists
-        if($bValid && $this->AUTHORISATION->checkRoleExists($this->FHANDLER->get('name')))
+        if($bValid && $AUTHORISATION->checkRoleExists($this->FHANDLER->get('name')))
             throw new NagVisException(l('The rolename is invalid or does already exist.'));
 
         //@todo Escape vars?

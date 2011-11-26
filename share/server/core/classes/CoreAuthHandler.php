@@ -32,20 +32,19 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreAuthHandler {
-    private $CORE;
     private $SESS;
     private $MOD;
 
     private $sModuleName;
-    private $bIsAuthenticated = null;
-    private $bVerifyAuth      = false;
+    private $trustUsername  = false;
+    private $logoutPossible = true;
 
-    public function __construct(GlobalCore $CORE, CoreSessionHandler $SESS, $sModule) {
-        $this->CORE = $CORE;
-        $this->SESS = $SESS;
+    public function __construct() {
+        global $SHANDLER;
+        $this->SESS = $SHANDLER;
 
-        $this->sModuleName = $sModule;
-        $this->MOD = new $sModule($CORE);
+        $this->sModuleName = cfg('global','authmodule');
+        $this->MOD = new $this->sModuleName();
     }
 
     public function checkFeature($name) {
@@ -58,13 +57,7 @@ class CoreAuthHandler {
     }
 
     public function passCredentials($aData) {
-        // Some simple validations
-        if($aData !== false) {
-            $this->bVerifyAuth = true;
-            $this->MOD->passCredentials($aData);
-        } else {
-            throw new NagVisException(l('Data has an invalid format'));
-        }
+        $this->MOD->passCredentials($aData);
     }
 
     public function passNewPassword($aData) {
@@ -108,15 +101,6 @@ class CoreAuthHandler {
         return $this->MOD->createUser($username, $password);
     }
 
-    // Did the user authenticate using trusted auth?
-    public function authedTrusted() {
-        return $this->SESS->isSetAndNotEmpty('authTrusted');
-    }
-
-    public function getLogonModule() {
-        return $this->SESS->get('logonModule');
-    }
-
     public function changePassword() {
         // FIXME: First check if the auth module supports this mechanism
 
@@ -136,90 +120,55 @@ class CoreAuthHandler {
         return $this->MOD->resetPassword($uid, $pw);
     }
 
-    public function resetAuthCheck() {
-        $this->bIsAuthenticated = null;
+    // Did the user authenticate using trusted auth?
+    public function authedTrusted() {
+        return $this->trustUsername;
     }
 
-    private function verifyAuth($bTrustUsername) {
+    public function getLogonModule() {
+        return $this->SESS->get('logonModule');
+    }
+
+    public function getAuthModule() {
+        return $this->SESS->get('authModule');
+    }
+
+    public function isAuthenticated() {
         if((bool) cfg('global', 'audit_log') === true)
             $ALOG = new CoreLog(cfg('paths', 'var').'nagvis-audit.log',
                               cfg('global', 'dateformat'));
         else
             $ALOG = null;
 
-        $bAlreadyAuthed = $this->SESS->isSetAndNotEmpty('authCredentials');
-
-        // Remove logins which were performed with different logon modules
-        if($bAlreadyAuthed && $this->SESS->get('logonModule') != $this->sModuleName)
-            $this->logout();
+        //$bAlreadyAuthed = $this->SESS->isSetAndNotEmpty('authCredentials');
 
         // When the user authenticated with the multisite logon module log the user
         // out if the auth_* cookie does not exist anymore. The cookie name has been
         // stored in the session var multisiteLogonCookie
         // This is a bad hacky place for this but I see no other good solution atm
-        if($bAlreadyAuthed && $this->SESS->isSetAndNotEmpty('multisiteLogonCookie')) {
+        /*if($bAlreadyAuthed && $this->SESS->isSetAndNotEmpty('multisiteLogonCookie')) {
             $cookieName = $this->SESS->get('multisiteLogonCookie');
             if(!$cookieName || !isset($_COOKIE[$cookieName])) {
                 $this->logout(true);
                 return false;
             }
-        }
-
-        // When the user authenticated in trust mode read it here and override
-        // the value handed over with the function call.
-        // The isAuthenticated() function will then only check if the user exists.
-        if($this->authedTrusted())
-            $bTrustUsername = AUTH_TRUST_USERNAME;
-
+        }*/
 
         // Ask the module
-        $isAuthenticated = $this->MOD->isAuthenticated($bTrustUsername);
+        $isAuthenticated = $this->MOD->isAuthenticated($this->trustUsername);
 
-        // Save success to session (only if this is no session auth)
-        if($isAuthenticated === true) {
-            $this->SESS->set('logonModule',     $this->sModuleName);
-            $this->SESS->set('authCredentials', $this->getCredentials());
-
-            // Save that the user authenticated in trust mode
-            if($bTrustUsername === AUTH_TRUST_USERNAME)
-                $this->SESS->set('authTrusted', AUTH_TRUST_USERNAME);
-
-            if($ALOG !== null && !$bAlreadyAuthed)
+        if($ALOG !== null) {
+            if($isAuthenticated)
                 $ALOG->l('User logged in ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
+            else
+                $ALOG->l('User login failed ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
         }
-
-        if($ALOG !== null && $isAuthenticated === false)
-            $ALOG->l('User login failed ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
-
-        // Remove some maybe old data when not authenticated
-        if($isAuthenticated === false && $this->SESS->isSetAndNotEmpty('authCredentials'))
-            $this->logout();
 
         return $isAuthenticated;
     }
 
-    public function isAuthenticated($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
-        // Use auth cache if available
-        if($this->bIsAuthenticated !== null)
-            return $this->bIsAuthenticated;
-
-        // No auth request, so fetch information from SESSION
-        if($this->bVerifyAuth === false) {
-            $aCredentials = $this->SESS->get('authCredentials');
-
-            if($aCredentials === null)
-                return false;
-            else
-                $this->MOD->passCredentials($aCredentials);
-        }
-
-        // The user loggs in with this call
-        $this->bIsAuthenticated = $this->verifyAuth($bTrustUsername);
-        return $this->bIsAuthenticated;
-    }
-
     public function logoutSupported() {
-        return !$this->authedTrusted();
+        return $this->logoutPossible;
     }
 
     public function logout($enforce = false) {
@@ -233,13 +182,49 @@ class CoreAuthHandler {
         }
 
         // Remove the login information
-        $this->SESS->set('authCredentials',      false);
-        $this->SESS->set('userPermissions',      false);
-        $this->SESS->set('logonModule',          false);
-        $this->SESS->del('multisiteLogonCookie');
+        $this->SESS->del('logonModule');
+        $this->SESS->del('authModule');
+        $this->SESS->del('authCredentials');
         $this->SESS->del('authTrusted');
+        $this->SESS->del('userPermissions');
+        //$this->SESS->del('multisiteLogonCookie');
 
         return true;
+    }
+
+    public function isAuthenticatedSession() {
+        // Remove logins which were performed with different logon/auth modules
+        if($this->SESS->get('logonModule') != cfg('global', 'logonmodule')
+           || $this->SESS->get('authModule') != $this->sModuleName) {
+            $this->logout(true);
+            return false;
+        }
+
+        $this->passCredentials($this->SESS->get('authCredentials'));
+        $this->setTrustUsername($this->SESS->get('authTrusted'));
+        $this->setLogoutPossible($this->SESS->get('authLogoutPossible'));
+
+        return $this->isAuthenticated();
+    }
+
+    public function sessionAuthPresent() {
+        return $this->SESS->issetAndNotEmpty('authCredentials');
+    }
+
+    public function storeInSession() {
+        $this->SESS->set('logonModule',        cfg('global', 'logonmodule'));
+        $this->SESS->set('authModule',         $this->sModuleName);
+        $this->SESS->set('authCredentials',    $this->getCredentials());
+        $this->SESS->set('authTrusted',        $this->trustUsername);
+        $this->SESS->set('authLogoutPossible', $this->logoutPossible);
+    }
+
+    public function setTrustUsername($flag) {
+        $this->trustUsername = $flag;
+    }
+
+    public function setLogoutPossible($flag) {
+        $this->logoutPossible = $flag;
     }
 }
 ?>

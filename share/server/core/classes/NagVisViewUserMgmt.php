@@ -26,22 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisViewUserMgmt {
-    private $CORE;
-    private $AUTHENTICATION;
-    private $AUTHORISATION;
-
-    /**
-     * Class Constructor
-     *
-     * @param 	GlobalCore 	$CORE
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function __construct(CoreAuthHandler $AUTHENTICATION, CoreAuthorisationHandler $AUTHORISATION) {
-        $this->CORE = GlobalCore::getInstance();
-        $this->AUTHENTICATION = $AUTHENTICATION;
-        $this->AUTHORISATION = $AUTHORISATION;
-    }
-
     /**
      * Parses the information in html format
      *
@@ -49,8 +33,9 @@ class NagVisViewUserMgmt {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parse() {
+        global $CORE, $AUTHORISATION, $AUTH;
         // Initialize template system
-        $TMPL = New CoreTemplateSystem($this->CORE);
+        $TMPL = New CoreTemplateSystem($CORE);
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
@@ -68,13 +53,13 @@ class NagVisViewUserMgmt {
       'langUserModify' => l('Modify User'),
       'langUserDelete' => l('Delete User'),
       'langSelectUser' => l('Select User'),
-      'users' => $this->AUTHENTICATION->getAllUsers(),
+      'users' => $AUTH->getAllUsers(),
       'langManageRoles' => l('Modify Roles'),
       'langRolesAvailable' => l('Available Roles'),
       'langRolesSelected' => l('Selected Roles'),
       'langAdd' => l('Add'),
       'langRemove' => l('Remove'),
-      'roles' => $this->AUTHORISATION->getAllRoles(),
+      'roles' => $AUTHORISATION->getAllRoles(),
           'langUserPwReset' => l('Reset Password'),
           'formTargetPwReset' => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=UserMgmt&act=doPwReset',
         );

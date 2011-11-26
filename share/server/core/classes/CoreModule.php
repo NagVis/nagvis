@@ -27,8 +27,6 @@
  */
 abstract class CoreModule {
     protected $CORE = null;
-    protected $AUTHENTICATION = null;
-    protected $AUTHORISATION = null;
     protected $UHANDLER = null;
     protected $FHANDLER = null;
 
@@ -37,11 +35,6 @@ abstract class CoreModule {
     protected $sName = '';
     protected $sAction = '';
     protected $sObject = null;
-
-    public function passAuth($AUTHENTICATION, $AUTHORISATION) {
-        $this->AUTHENTICATION = $AUTHENTICATION;
-        $this->AUTHORISATION = $AUTHORISATION;
-    }
 
     /**
      * Tells if the module offers the requested action
@@ -117,14 +110,15 @@ abstract class CoreModule {
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     public function isPermitted() {
+        global $AUTHORISATION;
         $authorized = true;
-        if(!isset($this->AUTHORISATION))
+        if(!isset($AUTHORISATION) || $AUTHORISATION === null)
             $authorized = false;
 
         // Maybe the requested action is summarized by some other
         $action = !is_bool($this->aActions[$this->sAction]) ? $this->aActions[$this->sAction] : $this->sAction;
 
-        if(!$this->AUTHORISATION->isPermitted($this->sName, $action, $this->sObject))
+        if(!$AUTHORISATION->isPermitted($this->sName, $action, $this->sObject))
             $authorized = false;
 
         if(!$authorized)

@@ -51,7 +51,7 @@ class CoreModManageShapes extends CoreModule {
                     $sReturn = json_encode($this->checkUsed());
                 break;
                 case 'view':
-                    $VIEW = new WuiViewManageShapes($this->AUTHENTICATION, $this->AUTHORISATION);
+                    $VIEW = new WuiViewManageShapes();
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'doDelete':

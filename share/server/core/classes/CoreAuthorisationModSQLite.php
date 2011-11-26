@@ -26,14 +26,9 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
-    private $AUTHENTICATION = null;
-    private $CORE = null;
     private $DB = null;
 
-    public function __construct(GlobalCore $CORE, CoreAuthHandler $AUTHENTICATION) {
-        $this->AUTHENTICATION = $AUTHENTICATION;
-        $this->CORE = $CORE;
-
+    public function __construct() {
         $this->DB = new CoreSQLiteHandler();
 
         // Open sqlite database
@@ -215,9 +210,10 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
     }
 
     public function parsePermissions() {
+        global $AUTH;
         $aPerms = Array();
 
-        $sUsername = $this->AUTHENTICATION->getUser();
+        $sUsername = $AUTH->getUser();
 
         // Only handle known users
         $userId = $this->getUserId($sUsername);

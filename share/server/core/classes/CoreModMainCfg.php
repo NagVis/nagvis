@@ -52,7 +52,7 @@ class CoreModMainCfg extends CoreModule {
         if($this->offersAction($this->sAction)) {
             switch($this->sAction) {
                 case 'edit':
-                    $VIEW = new WuiViewEditMainCfg($this->AUTHENTICATION, $this->AUTHORISATION);
+                    $VIEW = new WuiViewEditMainCfg();
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'doEdit':
@@ -63,7 +63,7 @@ class CoreModMainCfg extends CoreModule {
                 break;
 
                 case 'manageBackends':
-                    $VIEW = new WuiViewManageBackends($this->AUTHENTICATION, $this->AUTHORISATION);
+                    $VIEW = new WuiViewManageBackends();
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'getBackendOptions':

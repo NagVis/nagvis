@@ -293,3 +293,46 @@ Fehlerbehandlung:
     -> Bei Erfolg wird der Dialog nach X Sekunden geschlossen,
        es wird kurz eine Erfolgsmeldung gezeigt. Aktuell muss dann die
        Seite neu geladen werden
+
+*** Auth redesign ***
+
+Das Ganze ist zu kompliziert! Es gibt im Grunde 2 Schritte. Wobei der erste
+Schritt optional ist.
+
+1. Logindaten abfragen
+   - Formular anbieten
+2. Logindaten einsammeln
+   - $_POST, $_COOKIE, $_SERVER['REMOTE_USER'], ...
+3. Dann das Ganze an AUTH übermitteln
+4. Optional: In Session speichern, wenn das Logon Modul das anfordert
+
+LogonMixed:
+
+1. REMOTE_USER gesetz?
+   -> nehmen und trusted auth machen (Nur Nutzer vorhanden prüfen)
+   -> Direkt angeforderte Seite malen
+   -> Nicht in Session speichern
+2. Wenn nicht, dann Login-Seite direkt malen (keine Weiterleitung)
+3. Formular wird abgeschickt
+   -> Daten prüfen
+      -> ok: direkt die angeforderte Seite malen
+        -> In Session speichern
+      -> nok: Wieder die Login-Seite malen
+
+LogonDialog:
+
+1. Login Dialog zeigen
+2. Formular wird abgeschickt
+   -> Daten prüfen
+      -> ok: direkt die angeforderte Seite malen
+        -> Nicht in Session speichern
+      -> nok: Wieder die Login-Seite malen
+
+LogonMultisite
+
+1. Cookie da?
+2. Cookie prüfen
+   -> ok: direkt die angeforderte Seite malen
+     -> Nicht in Session speichern
+   -> nok: Zur Loginseite umleiten (inkl. _origin)
+

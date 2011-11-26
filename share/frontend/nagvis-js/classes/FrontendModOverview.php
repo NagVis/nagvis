@@ -67,7 +67,7 @@ class FrontendModOverview extends FrontendModule {
         // Need to parse the header menu?
         if(cfg('index','headermenu')) {
             // Parse the header menu
-            $HEADER = new NagVisHeaderMenu($this->CORE, $this->AUTHORISATION, $this->UHANDLER,
+            $HEADER = new NagVisHeaderMenu($this->CORE, $this->UHANDLER,
                                            cfg('index', 'headertemplate'));
 
             // Put rotation information to header menu

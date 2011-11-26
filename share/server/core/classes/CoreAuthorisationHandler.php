@@ -32,9 +32,7 @@ class CoreAuthorisationHandler {
     private $sModuleName = '';
     private $aPermissions = Array();
 
-    private $CORE;
     private $MOD;
-    private $AUTHENTICATION;
 
     // FIXME: This is not really used anymore. It is only needed to hide the "hidden"
     // permissions from the user. Those hidden permissions are not used anymore. So
@@ -105,12 +103,9 @@ class CoreAuthorisationHandler {
             'doDelete' => 'manage',
         ));
 
-    public function __construct(GlobalCore $CORE, CoreAuthHandler $AUTH, $sModule) {
-        $this->sModuleName = $sModule;
-
-        $this->CORE = $CORE;
-        $this->AUTHENTICATION = $AUTH;
-        $this->MOD = new $sModule($this->CORE, $AUTH);
+    public function __construct() {
+        $this->sModuleName = cfg('global', 'authorisationmodule');
+        $this->MOD = new $this->sModuleName();
     }
 
     public function createPermission($mod, $name) {
@@ -119,10 +114,6 @@ class CoreAuthorisationHandler {
 
     public function deletePermission($mod, $name) {
         return $this->MOD->deletePermission($mod, $name);
-    }
-
-    public function getAuthentication() {
-        return $this->AUTHENTICATION;
     }
 
     public function getModule() {

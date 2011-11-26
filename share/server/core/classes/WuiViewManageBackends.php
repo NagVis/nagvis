@@ -26,22 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class WuiViewManageBackends {
-    private $CORE;
-    private $AUTHENTICATION;
-    private $AUTHORISATION;
-
-    /**
-     * Class Constructor
-     *
-     * @param 	GlobalCore 	$CORE
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function __construct(CoreAuthHandler $AUTHENTICATION, CoreAuthorisationHandler $AUTHORISATION) {
-        $this->CORE = GlobalCore::getInstance();
-        $this->AUTHENTICATION = $AUTHENTICATION;
-        $this->AUTHORISATION = $AUTHORISATION;
-    }
-
     /**
      * Parses the information in html format
      *
@@ -49,8 +33,10 @@ class WuiViewManageBackends {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parse() {
+        global $CORE;
+
         // Initialize template system
-        $TMPL = New CoreTemplateSystem($this->CORE);
+        $TMPL = New CoreTemplateSystem($CORE);
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
@@ -63,11 +49,11 @@ class WuiViewManageBackends {
             'langEditBackend'       => l('editBackend'),
             'langDelBackend'        => l('delBackend'),
             'defaultBackend'        => cfg('defaults', 'backend', true),
-            'definedBackends'       => array_merge(Array('' => ''), $this->CORE->getDefinedBackends(ONLY_USERCFG)),
-            'availableBackends'     => array_merge(Array('' => ''), $this->CORE->getAvailableBackends()),
-            'backendAttributes'     => $this->CORE->getMainCfg()->getValidObjectType('backend'),
-            'validMainCfg'          => json_encode($this->CORE->getMainCfg()->getValidConfig()),
-            'lang'                  => $this->CORE->getJsLang(),
+            'definedBackends'       => array_merge(Array('' => ''), $CORE->getDefinedBackends(ONLY_USERCFG)),
+            'availableBackends'     => array_merge(Array('' => ''), $CORE->getAvailableBackends()),
+            'backendAttributes'     => $CORE->getMainCfg()->getValidObjectType('backend'),
+            'validMainCfg'          => json_encode($CORE->getMainCfg()->getValidConfig()),
+            'lang'                  => $CORE->getJsLang(),
         );
 
         // Build page based on the template file and the data array

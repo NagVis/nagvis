@@ -26,20 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisViewManageRoles {
-    private $CORE;
-    private $AUTHORISATION;
-
-    /**
-     * Class Constructor
-     *
-     * @param 	GlobalCore 	$CORE
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function __construct(CoreAuthorisationHandler $AUTHORISATION) {
-        $this->CORE = GlobalCore::getInstance();
-        $this->AUTHORISATION = $AUTHORISATION;
-    }
-
     /**
      * Parses the information in html format
      *
@@ -47,8 +33,9 @@ class NagVisViewManageRoles {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parse() {
+        global $CORE, $AUTHORISATION;
         // Initialize template system
-        $TMPL = New CoreTemplateSystem($this->CORE);
+        $TMPL = New CoreTemplateSystem($CORE);
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
@@ -57,19 +44,19 @@ class NagVisViewManageRoles {
             'formTargetEdit' => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=RoleMgmt&amp;act=doEdit',
             'formTargetDelete' => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=RoleMgmt&amp;act=doDelete',
             'htmlImages' => cfg('paths', 'htmlimages'),
-      'maxRolenameLength' => AUTH_MAX_PASSWORD_LENGTH,
-      'langRoleAdd' => l('Create Role'),
-      'langRoleName' => l('Role Name'),
-      'langSelectRole' => l('Select Role'),
-      'langSetPermissions' => l('Set Permissions'),
-      'langModule' => l('Module'),
-      'langAction' => l('Action'),
-      'langObject' => l('Object'),
-      'langPermitted' => l('Permitted'),
-      'langRoleModify' => l('Modify Role'),
-      'langRoleDelete' => l('Delete Role'),
-      'roles' => $this->AUTHORISATION->getAllRoles(),
-      'perms' => $this->AUTHORISATION->getAllVisiblePerms()
+            'maxRolenameLength' => AUTH_MAX_PASSWORD_LENGTH,
+            'langRoleAdd' => l('Create Role'),
+            'langRoleName' => l('Role Name'),
+            'langSelectRole' => l('Select Role'),
+            'langSetPermissions' => l('Set Permissions'),
+            'langModule' => l('Module'),
+            'langAction' => l('Action'),
+            'langObject' => l('Object'),
+            'langPermitted' => l('Permitted'),
+            'langRoleModify' => l('Modify Role'),
+            'langRoleDelete' => l('Delete Role'),
+            'roles' => $AUTHORISATION->getAllRoles(),
+            'perms' => $AUTHORISATION->getAllVisiblePerms()
         );
 
         // Build page based on the template file and the data array

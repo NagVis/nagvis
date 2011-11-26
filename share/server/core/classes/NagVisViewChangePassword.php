@@ -53,11 +53,11 @@ class NagVisViewChangePassword {
             'htmlBase' => cfg('paths', 'htmlbase'),
             'formTarget' => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=ChangePassword&amp;act=change',
             'htmlImages' => cfg('paths', 'htmlimages'),
-      'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
-      'langOldPassword' => l('Old password'),
-      'langNewPassword1' => l('New password'),
-      'langNewPassword2' => l('New password confirmation'),
-      'langChangePassword' => l('Change password')
+            'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
+            'langOldPassword' => l('Old password'),
+            'langNewPassword1' => l('New password'),
+            'langNewPassword2' => l('New password confirmation'),
+            'langChangePassword' => l('Change password')
         );
 
         // Build page based on the template file and the data array

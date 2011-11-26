@@ -27,7 +27,6 @@
  */
 class NagVisHeaderMenu {
     private $CORE;
-    private $AUTHORISATION;
     private $UHANDLER;
     private $OBJ;
     private $TMPL;
@@ -46,9 +45,8 @@ class NagVisHeaderMenu {
      * @param 	GlobalCore 	$CORE
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function __construct($CORE, CoreAuthorisationHandler $AUTHORISATION, CoreUriHandler $UHANDLER, $templateName, $OBJ = null) {
+    public function __construct($CORE, CoreUriHandler $UHANDLER, $templateName, $OBJ = null) {
         $this->CORE = $CORE;
-        $this->AUTHORISATION = $AUTHORISATION;
         $this->UHANDLER = $UHANDLER;
         $this->OBJ = $OBJ;
         $this->templateName = $templateName;
@@ -140,6 +138,7 @@ class NagVisHeaderMenu {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function getMapList($type, $maps) {
+        global $AUTHORISATION;
         $permEditAnyMap = false;
         $aMaps = Array();
         $childMaps = Array();
@@ -161,9 +160,8 @@ class NagVisHeaderMenu {
                 continue;
 
             // Only proceed permited objects
-            if($this->CORE->getAuthorization() === null
-               || (($type == 'maps' && !$this->CORE->getAuthorization()->isPermitted('Map', 'view', $mapName))
-                     || ($type == 'automaps' && !$this->CORE->getAuthorization()->isPermitted('AutoMap', 'view', $mapName))))
+            if(($type == 'maps' && !$AUTHORISATION->isPermitted('Map', 'view', $mapName))
+               || ($type == 'automaps' && !$AUTHORISATION->isPermitted('AutoMap', 'view', $mapName)))
                 continue;
 
             $map['mapName'] = $MAPCFG1->getName();
@@ -171,7 +169,7 @@ class NagVisHeaderMenu {
             $map['childs'] = Array();
             if($type == 'maps') {
                 $map['urlParams'] = '';
-                $map['permittedEdit'] = $this->CORE->getAuthorization()->isPermitted('Map', 'edit', $mapName);
+                $map['permittedEdit'] = $AUTHORISATION->isPermitted('Map', 'edit', $mapName);
 
                 $permEditAnyMap |= $map['permittedEdit'];
             } else
@@ -218,6 +216,7 @@ class NagVisHeaderMenu {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     private function getMacros() {
+        global $AUTH, $AUTHORISATION;
         // First get all static macros
         $this->aMacros = $this->getStaticMacros();
 
@@ -228,26 +227,26 @@ class NagVisHeaderMenu {
         // In rotation?
         $this->aMacros['bRotation'] = $this->bRotation;
 
-        $this->aMacros['permittedOverview'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Overview', 'view', '*');
+        $this->aMacros['permittedOverview'] = $AUTHORISATION->isPermitted('Overview', 'view', '*');
 
         // Check if the user is permitted to edit the current map/automap
-        $this->aMacros['permittedView'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted($this->aMacros['mod'], 'view', $this->UHANDLER->get('show'));
-        $this->aMacros['permittedEdit'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted($this->aMacros['mod'], 'edit', $this->UHANDLER->get('show'));
+        $this->aMacros['permittedView'] = $AUTHORISATION->isPermitted($this->aMacros['mod'], 'view', $this->UHANDLER->get('show'));
+        $this->aMacros['permittedEdit'] = $AUTHORISATION->isPermitted($this->aMacros['mod'], 'edit', $this->UHANDLER->get('show'));
 
         // Permissions for the option menu
-        $this->aMacros['permittedSearch']            = $this->AUTHORISATION->isPermitted('Search', 'view', '*');
-        $this->aMacros['permittedEditMainCfg']       = $this->AUTHORISATION->isPermitted('MainCfg', 'edit', '*');
-        $this->aMacros['permittedManageShapes']      = $this->AUTHORISATION->isPermitted('ManageShapes', 'manage', '*');
-        $this->aMacros['permittedManageBackgrounds'] = $this->AUTHORISATION->isPermitted('ManageBackgrounds', 'manage', '*');
-        $this->aMacros['permittedManageBackgrounds'] = $this->AUTHORISATION->isPermitted('ManageBackgrounds', 'manage', '*');
-        $this->aMacros['permittedManageMaps']        = $this->AUTHORISATION->isPermitted('Map', 'add', '*') && $this->AUTHORISATION->isPermitted('Map', 'edit', '*');
+        $this->aMacros['permittedSearch']            = $AUTHORISATION->isPermitted('Search', 'view', '*');
+        $this->aMacros['permittedEditMainCfg']       = $AUTHORISATION->isPermitted('MainCfg', 'edit', '*');
+        $this->aMacros['permittedManageShapes']      = $AUTHORISATION->isPermitted('ManageShapes', 'manage', '*');
+        $this->aMacros['permittedManageBackgrounds'] = $AUTHORISATION->isPermitted('ManageBackgrounds', 'manage', '*');
+        $this->aMacros['permittedManageBackgrounds'] = $AUTHORISATION->isPermitted('ManageBackgrounds', 'manage', '*');
+        $this->aMacros['permittedManageMaps']        = $AUTHORISATION->isPermitted('Map', 'add', '*') && $AUTHORISATION->isPermitted('Map', 'edit', '*');
 
-        $this->aMacros['currentUser'] = $this->CORE->getAuthentication()->getUser();
+        $this->aMacros['currentUser'] = $AUTH->getUser();
 
-        $this->aMacros['permittedChangePassword'] = $this->AUTHORISATION->isPermitted('ChangePassword', 'change', '*');
+        $this->aMacros['permittedChangePassword'] = $AUTHORISATION->isPermitted('ChangePassword', 'change', '*');
 
-        $this->aMacros['permittedLogout'] = $this->CORE->getAuthentication()->logoutSupported()
-                                        & $this->AUTHORISATION->isPermitted('Auth', 'logout', '*');
+        $this->aMacros['permittedLogout'] = $AUTH->logoutSupported()
+                                        & $AUTHORISATION->isPermitted('Auth', 'logout', '*');
 
         // Replace some special macros
         if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap')) {
@@ -288,7 +287,7 @@ class NagVisHeaderMenu {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     private function getStaticMacros() {
-        $SHANDLER = new CoreSessionHandler();
+        global $SHANDLER, $AUTH, $AUTHORISATION;
 
         // Replace paths and language macros
         $aReturn = Array('pathBase' => $this->pathHtmlBase,
@@ -347,9 +346,9 @@ class NagVisHeaderMenu {
             'langAutomapToMap' => l('Export to Map'),
             'langModifyAutomapParams' => l('Modify Automap view'),
             // Supported by backend and not using trusted auth
-            'supportedChangePassword' => $this->CORE->getAuthentication()->checkFeature('changePassword') && !$this->CORE->getAuthentication()->authedTrusted(),
-            'permittedUserMgmt' => $this->AUTHORISATION->isPermitted('UserMgmt', 'manage'),
-            'permittedRoleMgmt' => $this->AUTHORISATION->isPermitted('RoleMgmt', 'manage'));
+            'supportedChangePassword' => $AUTH->checkFeature('changePassword') && !$AUTH->authedTrusted(),
+            'permittedUserMgmt' => $AUTHORISATION->isPermitted('UserMgmt', 'manage'),
+            'permittedRoleMgmt' => $AUTHORISATION->isPermitted('RoleMgmt', 'manage'));
 
         return $aReturn;
     }
