@@ -29,13 +29,13 @@ class CoreLogonMultisite extends CoreLogonModule {
 
     public function __construct() {
         $this->htpasswdPath = cfg('global', 'logon_multisite_htpasswd');
+        $this->secretPath   = cfg('global', 'logon_multisite_secret');
+
         if(!file_exists($this->htpasswdPath)) {
             throw new NagVisException(l('LogonMultisite: The htpasswd file &quot;[PATH]&quot; does not exist.',
                           array('PATH' => $this->htpasswdPath)));
         }
-
-        $this->secretPath   = cfg('global', 'logon_multisite_secret');
-        if(!file_exists($this->htpasswdPath)) {
+        if(!file_exists($this->secretPath)) {
             throw new NagVisException(l('LogonMultisite: The auth secret file &quot;[PATH]&quot; does not exist.',
                           array('PATH' => $this->secretPath)));
         }
@@ -85,6 +85,8 @@ class CoreLogonMultisite extends CoreLogonModule {
     }
 
     private function checkAuth() {
+        // Loop all cookies trying to fetch a valid authentication
+        // cookie for this installation
         foreach(array_keys($_COOKIE) AS $cookieName) {
             if(substr($cookieName, 0, 5) != 'auth_') {
                 continue;
