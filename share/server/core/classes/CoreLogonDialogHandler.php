@@ -27,25 +27,32 @@ class CoreLogonDialogHandler {
     public function check($printErr = true) {
         global $AUTH;
 
-        $data = $this->handleResponseAuth();
-        if($data !== false) {
-            // Set credentials to authenticate
-            $AUTH->setTrustUsername(false);
-            $AUTH->setLogoutPossible(true);
-            $AUTH->passCredentials($data);
+        $err = null;
+        try {
+            $data = $this->handleResponseAuth();
+            if($data !== null) {
+                // Set credentials to authenticate
+                $AUTH->setTrustUsername(false);
+                $AUTH->setLogoutPossible(true);
+                $AUTH->passCredentials($data);
 
-            // Try to authenticate the user
-            $result = $AUTH->isAuthenticated();
-            if($result === true) {
-                // Success: Store in session
-                $AUTH->storeInSession();
-                return true;
+                // Try to authenticate the user
+                $result = $AUTH->isAuthenticated();
+                if($result === true) {
+                    // Success: Store in session
+                    $AUTH->storeInSession();
+                    return true;
+                } else {
+                    throw new FieldInputError(null, l('Authentication failed.'));
+                }
             }
+        } catch(FieldInputError $e) {
+            $err = $e;
         }
 
         // Failed!
         if(!CONST_AJAX) {
-            return array('LogonDialog', 'view');
+            return array('LogonDialog', 'view', $err);
         } else {
             throw new NagVisException(l('You are not authenticated'), null, l('Access denied'));
         }
@@ -57,14 +64,16 @@ class CoreLogonDialogHandler {
 
         $FHANDLER = new CoreRequestHandler($_POST);
 
-        if(!$FHANDLER->match('username', MATCH_USER_NAME))
-            return false;
-        if(!$FHANDLER->issetAndNotEmpty('password'))
-            return false;
-        if($FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH))
-            return false;
-        if($FHANDLER->isLongerThan('password', AUTH_MAX_PASSWORD_LENGTH))
-            return false;
+        if(!$FHANDLER->issetAndNotEmpty('username') && !$FHANDLER->issetAndNotEmpty('password'))
+            return null;
+
+        if(!$FHANDLER->match('username', MATCH_USER_NAME)
+           || $FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH))
+            throw new FieldInputError('username', l('Invalid username.'));
+
+        if(!$FHANDLER->issetAndNotEmpty('password')
+           || $FHANDLER->isLongerThan('password', AUTH_MAX_PASSWORD_LENGTH))
+            throw new FieldInputError('password', l('Invalid password.'));
 
         return Array('user'     => $FHANDLER->get('username'),
                      'password' => $FHANDLER->get('password'));

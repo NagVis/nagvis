@@ -58,6 +58,7 @@ if(!($AUTH->sessionAuthPresent() && $AUTH->isAuthenticatedSession())) {
     if(is_array($ret)) {
         $UHANDLER->set('mod', $ret[0]);
         $UHANDLER->set('act', $ret[1]);
+        $LOGIN_MSG = $ret[2];
     }
 }
 

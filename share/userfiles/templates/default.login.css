@@ -22,6 +22,15 @@ form {
 
 form .forgetmenot { font-weight: normal; float: left; margin-bottom: 0; }
 
+#login form .msg {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+#login form .msg strong {
+    color: #ff0000;
+}
+
 #login form .submit input {
     font-family: "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif;
     padding: 3px 10px;

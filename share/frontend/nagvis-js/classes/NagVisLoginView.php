@@ -45,6 +45,7 @@ class NagVisLoginView {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parse() {
+        global $LOGIN_MSG;
         // Initialize template system
         $TMPL = New FrontendTemplateSystem($this->CORE);
         $TMPLSYS = $TMPL->getTmplSys();
@@ -72,6 +73,7 @@ class NagVisLoginView {
             'langLogin' => l('Login'),
             'langTitleCookiesDisabled' => l('Cookies disabled'),
             'langTextCookiesDisabled' => l('NagVis is unable to set a cookie in your browser. Please enable cookies for at least the NagVis host.'),
+            'loginMsg' => isset($LOGIN_MSG)  && $LOGIN_MSG !== null ? $LOGIN_MSG->msg : '',
         );
 
         // Build page based on the template file and the data array

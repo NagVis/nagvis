@@ -35,6 +35,9 @@
 <h1><a href="#" title="{$pageTitle}" style="background-image:url({$htmlImages}internal/logo.png)">{$pageTitle}</a></h1>
 
 <form name="loginform" id="loginform" action="{$formTarget}" method="post">
+    {if $loginMsg != ''}<p class="msg">
+    <strong>Error:</strong> {$loginMsg}
+    </p>{/if}
     <p>
         <label>{$langName}<br />
         <input type="text" name="username" id="user_login" class="input" value="" size="{$maxUsernameLength}" tabindex="10" /></label>
