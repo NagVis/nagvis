@@ -55,7 +55,7 @@
             </td>
         </tr>
         <tr>
-        <td> alias </td><td> map name </td><td> The alias is the label for each map. If it is defined it is shown everywhere in NagVis frontend and WUI </td>
+        <td> alias </td><td> map name </td><td> The alias is the label for each map. If it is defined it is shown everywhere in NagVis frontend.</td>
         </tr>
         <tr>
         <td> backend_id </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend defined as "defaultbackend" at the <a href="nagvis_config_format_description.html">Main Configuration file</a> is used.</td>
@@ -118,7 +118,10 @@
         </tr>
 
         <tr>
-        <td>grid_show</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable a grid to make the alignment of objects easier in the WUI. Objects are aligned to the upper left corner after moving.</td>
+            <td>grid_show</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+            <td>Enable/Disable a grid to make the alignment of objects easier in edit mode.
+            Objects are aligned to the upper left corner after moving.</td>
         </tr>
         <tr>
         <td>grid_color</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>The color of the grid lines.</td>
@@ -1187,8 +1190,10 @@
         </table>
         
         <a name="template"></a><h3> Template </h3>
-        <p>In NagVis 1.2 there is a new object type named <code>template</code>. With this object you have the ability to define all values except the <code>must-have-attributes</code> in one object for many others. You can set all attributes to the value you need and inherit them with the <code>use</code> attribute to each object.</p>
-        <p>At the moment the <code>template</code> objects have to be defined directly in the files, the WUI doesn't support it. Maybe it'll be added in following versions.</p>
+        <p>With this object you have the ability to define all values except the
+        <code>must-have-attributes</code> in one object for many others. You can
+        set all attributes to the value you need and inherit them with the
+        <code>use</code> attribute to each object.</p>
         <p>Example with all values which have to be set:</p>
 <pre>define template {
  name=generic-template

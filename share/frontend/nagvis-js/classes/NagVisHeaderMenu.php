@@ -328,7 +328,7 @@ class NagVisHeaderMenu {
             'langLockUnlockAll' => l('Lock/Unlock all'),
             'langViewMap' => l('View current map'),
             'langOptions' => l('Options'),
-            'langWuiConfiguration' => l('General Configuration'),
+            'langEditMainCfg' => l('General Configuration'),
             'langMgmtBackends' => l('Manage Backends'),
             'langMgmtBackgrounds' => l('Manage Backgrounds'),
             'langMgmtMaps' => l('Manage Maps'),

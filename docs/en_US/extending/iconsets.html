@@ -7,7 +7,12 @@
     <body>
         <h1>Add own Iconsets</h1>
         <h2>Example</h2>
-        <p>Your boss is coming in and telling you that a technician needs a map with more than 250 hosts clearly laid out. You think: &ldquo;Hey, that&rsquo;s not possible, with a full description for every host!&rdquo; The font in the background image is not the problem, but the std_small-iconset from NagVis is too big for such a request.</p>
+        <p>Your boss is coming in and telling you that a technician needs a
+        map with more than 250 hosts clearly laid out. You think:
+        &ldquo;Hey, that&rsquo;s not possible, with a full description for
+        every host!&rdquo; The font in the background image is not the 
+        problem, but the std_small-iconset from NagVis is too big for such
+        a request.</p>
         <h3>Solution</h3>
         <p>Build your own iconset.</p>
         <h2>What is an iconset?</h2>
@@ -77,9 +82,13 @@
                 </tbody>
         </table>
         <br>
-        NagVis checks for the <code>&lt;set&gt;_ok.png</code> image to list the iconsets, meaning there has to be a <code>&lt;set&gt;_ok.png</code> image to have a complete iconset which can be choosen in WUI.</p>
+        NagVis checks for the <code>&lt;set&gt;_ok.png</code> image to list the iconsets,
+        means there has to be at least a <code>&lt;set&gt;_ok.png</code> image to have a
+        choosable iconset.</p>
         <h2>Which programme should I use to create an iconset?</h2>
-        <p>Almost every graphic art software has the ability to build PNG-files. In this example Photoshop is used to create a smaller version of the std_small iconset called std_mini.</p>
+        <p>Almost every graphic art software has the ability to build PNG-files. In this
+        example Photoshop is used to create a smaller version of the std_small iconset
+        called std_mini.</p>
         <table>
                 <tbody>
                         <tr>
@@ -102,9 +111,11 @@
                 </tbody>
         </table>
         <h2>Implementing the iconset</h2>
-        <p>To implement the set in your NagVis installation, copy all files to the iconset folder. In version 0.9.x it is <code>nagvis/iconsets</code>, since version 1.x it is <code>nagvis/nagvis/images/iconsets</code>.</p>
+        <p>To implement the set in your NagVis installation, copy all files to
+         the iconset folder (<code>share/userfiles/images/iconsets</code>).</p>
         <h2>The test</h2>
-        <p>Open one of your maps and add a new host-icon. You should now be able to select std_mini as iconset.</p>
+        <p>Open one of your maps and add a new host-icon. You should now be
+        able to select std_mini as iconset.</p>
         <br>
     </body>
 </html>

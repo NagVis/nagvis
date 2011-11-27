@@ -74,6 +74,29 @@ Konfiguration eher hinderlich. Man könnte gleich ein PHP Datenkonstrukt erzeuge
 Bei solchen dynamischen Konfigurationen muss man nur dem JS Frontend irgendwie mitteilen,
 wenn es Änderungen gibt.
 
+Es gibt im Grunde drei Ansätze um das ganze zu vereinfachen:
+
+1. Der einfache Ansatz: Einfach ein leichter zu parsendes Format zulassen. z.B. ein
+JSON Objekte. Dieses Objekt kann in den meißten Sprachen einfach aus einem Objekt
+erzeugt werden.
+Das würde das Parsen und wieder Einlesen von Konfigurationen durch externe "Generatoren"
+vereinfachen.
+
+2. Eine Alternative zum Generatoren-Ansatz: Man könnte auch einfach die Mechanismen zum
+Generieren der Map-Konfiguration in die Map Definitionen verlagern. Dazu braucht man Dateien,
+in denen man "frei" programmieren kann. Das läuft auf PHP-Dateien hinaus, die am Ende
+eine Variable mit der Map-Konfiguration füllen. In dem Script kann dann alles erdenkliche
+gemacht werden.
+
+Probleme hierbei:
+  - Immer die Daten abfragen, oder einen/den Cache benutzen?
+  - Wenn Cache: Wie bekommt man mit, dass die Config neu generiert werden muss?
+  - Wie bekommt das JS frontend mit, dass sich etwas geändert hat?
+
+3. Es gibt einen neuen Mechanismus der Daten erzeugt, zu denen die normale Map Konfiguration
+gemergt wird. Dieser Mechanismus generiert eine Konfiguration, erstellt z.B. Hosts Objekte.
+Die normale Map-Konfiguration kann dann noch Änderungen/Ergänzungen vornehmen.
+
 Einige weitere Gedankenfetzen:
   Map Aufbau gliedert sich in 2 Phasen
   1. Was kommt auf die Map? Mögliche Quellen:
@@ -116,7 +139,6 @@ das ganze Zeug auch wartbarer.
 
 Gerade der Edit-Modus im normalen Frontend sollte Hotkeys haben. Diese sollten
 nach Möglichkeit nicht mit Hotkeys von FF/IE kollidieren.
-
 
 *** Fehlerbehandlung ***
   Ajax Schnittstelle umbauen: Kleines Protokoll einbauen, mit Header inkl. Fehlercodes etc.
