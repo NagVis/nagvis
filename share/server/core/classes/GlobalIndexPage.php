@@ -287,13 +287,13 @@ class GlobalIndexPage {
             $aSteps = Array();
             for($i = 0; $i < $iNum; $i++) {
                 $aSteps[] = Array('name' => $ROTATION->getStepLabelById($i),
-                                                    'url'  => $ROTATION->getStepUrlById($i));
+                                  'url'  => $ROTATION->getStepUrlById($i));
             }
 
             $aRotations[] = Array('name'      => $poolName,
-                                                        'url'       => $ROTATION->getStepUrlById(0),
-                                                        'num_steps' => $ROTATION->getNumSteps(),
-                                                        'steps'     => $aSteps);
+                                  'url'       => $ROTATION->getStepUrlById(0),
+                                  'num_steps' => $ROTATION->getNumSteps(),
+                                  'steps'     => $aSteps);
         }
 
         return json_encode($aRotations);
