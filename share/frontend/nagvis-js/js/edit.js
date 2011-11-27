@@ -401,6 +401,21 @@ function addObject(e, objType, viewType, numLeft, action) {
 function getEventMousePos(e) {
     var event = !e ? window.event : e;
 
+    // Only accept "left" mouse clicks
+    if(getButton(event) != 'LEFT')
+        return;
+
+    // Ignore clicks on the header menu
+    if(event.target) {
+        var target = event.target;
+        while(target) {
+            if(target.id && target.id == 'header') {
+                return;
+            }
+            target = target.parentNode;
+        }
+    }
+
     if (event.pageX || event.pageY) {
         posx = event.pageX;
         posy = event.pageY;
@@ -408,8 +423,6 @@ function getEventMousePos(e) {
         posx = event.clientX;
         posy = event.clientY;
     }
-
-    // FIXME: Check the clicked area. Only handle clicks on the map!
 
     // Substract height of header menu here
     posy -= getHeaderHeight();

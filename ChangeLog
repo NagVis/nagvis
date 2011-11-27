@@ -24,6 +24,8 @@ Frontend
   * Reimplemented the "clone object" functionality in edit mode
   * Only show the edit links in context menu when permitted to edit the map
   * long text values with no spaces do not stretch the add/modify dialog anymore
+  * Ignoring right clicks and clicks on the header menu when currently adding
+    an object to the map
   * Bugfix: Not adding default_params parameter to all maps after editing the
     global map configuration using the web frontend
   * Bugfix: Don't enable map_image when not set when editing the global

@@ -685,7 +685,6 @@ function oDump(object, depth, max){
 
 /**
  * This counts the elements in an object
- * FIXME: There must be a better way!
  */
 function oLength(object) {
     var c = 0;
