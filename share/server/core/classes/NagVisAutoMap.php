@@ -114,13 +114,6 @@ class NagVisAutoMap extends GlobalMap {
             $prop['root'] = $this->getRootHostName();
 
         /**
-         * This is for compatibility to old the old parent layer limitation
-         * FIXME: May be removed in 1.6
-         */
-        if(isset($prop['maxLayers']) && $prop['maxLayers'] != '')
-            $prop['childLayers'] = $prop['maxLayers'];
-
-        /**
          * This sets how many child layers should be displayed. Default value is -1,
          * this means no limitation.
          */

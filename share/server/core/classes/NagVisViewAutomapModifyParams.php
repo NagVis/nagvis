@@ -65,7 +65,6 @@ class NagVisViewAutomapModifyParams {
             $this->aOpts = $MAP->getOptions();
 
             // Skip unwanted params
-            unset($this->aOpts['maxLayers']);
             unset($this->aOpts['perm']);
         }
     }

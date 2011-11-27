@@ -30,6 +30,9 @@ Frontend
   * Bugfix: Removing just dragged new lines before opening the add/modify dialog
   * Bugfix: Not terminating map rename when one map contains a syntax error
 
+Automap
+  * Finally removed the deprecated option maxLayers. Use childLayers instead.
+
 1.6rc4
 Core
   * Bugfix: Fixed inclusion problem of default settings in some rare cases

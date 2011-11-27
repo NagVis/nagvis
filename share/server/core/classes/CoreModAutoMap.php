@@ -37,7 +37,6 @@ class CoreModAutoMap extends CoreModule {
         $this->aOpts = Array('show' => MATCH_MAP_NAME,
                        'backend' => MATCH_STRING_NO_SPACE_EMPTY,
                        'root' => MATCH_STRING_NO_SPACE_EMPTY,
-                       'maxLayers' => MATCH_INTEGER_PRESIGN_EMPTY,
                        'childLayers' => MATCH_INTEGER_PRESIGN_EMPTY,
                        'parentLayers' => MATCH_INTEGER_PRESIGN_EMPTY,
                        'renderMode' => MATCH_AUTOMAP_RENDER_MODE,
