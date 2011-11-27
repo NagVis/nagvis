@@ -11,6 +11,9 @@ Relative Koordinaten:
 - Sidebar Folder auf/zu klappbar
 - In Sidebar/Dropdown die aktuelle Map highlighten
 
+- Erster AJAX request geht schief (You are not authenticated)
+- omdadmin Passwort ist offensichtlich nicht omd
+
 -------------------------------------------------------------------------------
 
 - NagVis Multisite Snapin optional als Baum

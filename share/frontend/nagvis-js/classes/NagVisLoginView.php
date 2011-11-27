@@ -49,13 +49,20 @@ class NagVisLoginView {
         $TMPL = New FrontendTemplateSystem($this->CORE);
         $TMPLSYS = $TMPL->getTmplSys();
 
+        $defaultTarget = cfg('paths', 'htmlbase')
+                         .'/frontend/nagvis-js/index.php?Mod='
+                         .cfg('global', 'startmodule')
+                         .'&act='.cfg('global', 'startaction')
+                         .'&show='.cfg('global', 'startshow');
+        $target = CoreRequestHandler::getReferer($defaultTarget);
+
         $aData = Array(
             'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
             'pageTitle' => cfg('internal', 'title') . ' &rsaquo; Log In',
             'htmlBase' => cfg('paths', 'htmlbase'),
             'htmlJs' => cfg('paths', 'htmljs'),
             'htmlCss' => cfg('paths', 'htmlcss'),
-            'formTarget' => CoreRequestHandler::getReferer(cfg('paths', 'htmlbase')),
+            'formTarget' => $target,
             'htmlTemplates' => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'),
             'htmlImages' => cfg('paths', 'htmlimages'),
             'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,

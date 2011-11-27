@@ -187,6 +187,7 @@ class CoreAuthHandler {
         $this->SESS->del('authCredentials');
         $this->SESS->del('authTrusted');
         $this->SESS->del('userPermissions');
+        $this->SESS->del('authLogoutPossible');
         //$this->SESS->del('multisiteLogonCookie');
 
         return true;
@@ -196,9 +197,13 @@ class CoreAuthHandler {
         // Remove logins which were performed with different logon/auth modules
         if($this->SESS->get('logonModule') != cfg('global', 'logonmodule')
            || $this->SESS->get('authModule') != $this->sModuleName) {
+            debug('removing different logon/auth module data');
             $this->logout(true);
             return false;
         }
+
+        debug($_SERVER['REQUEST_URI']);
+        debug(json_encode($_SESSION));
 
         $this->passCredentials($this->SESS->get('authCredentials'));
         $this->setTrustUsername($this->SESS->get('authTrusted'));

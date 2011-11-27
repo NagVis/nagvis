@@ -136,7 +136,7 @@ class CoreModUserMgmt extends CoreModule {
         $FHANDLER = new CoreRequestHandler($_POST);
         $attr = Array('userId'     => MATCH_INTEGER,
                       'password1'  => MATCH_STRING,
-                                    'password2'  => MATCH_STRING);
+                      'password2'  => MATCH_STRING);
         $this->verifyValuesSet($FHANDLER,   $attr);
         $this->verifyValuesMatch($FHANDLER, $attr);
 
