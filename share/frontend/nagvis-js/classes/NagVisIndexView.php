@@ -85,8 +85,7 @@ class NagVisIndexView {
         );
 
         // Build page based on the template file and the data array
-    // FIXME: Make template set configurable
-        return $TMPLSYS->get($TMPL->getTmplFile('default', 'index'), $aData);
+        return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'index'), $aData);
     }
 
     /**

@@ -56,7 +56,7 @@ class NagVisViewAutomapToMap {
         );
 
         // Build page based on the template file and the data array
-        return $TMPLSYS->get($TMPL->getTmplFile('default', 'automapToMap'), $aData);
+        return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'automapToMap'), $aData);
     }
 }
 ?>

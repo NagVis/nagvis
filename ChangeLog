@@ -13,6 +13,7 @@ Core
   * Added new LogonMultisite module to use the new Check_MK multisite auth cookie
   * Recoded logon and authentication module interface
   * Several code cleanups
+  * Made view templates configurable (defaults / view_template)
   * Bugfix: Correctly adding object_id=0 to global section when creating maps
 
 Frontend

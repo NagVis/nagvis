@@ -378,6 +378,11 @@ class GlobalMainCfg {
                 'servicegroupurl' => Array('must' => 0,
                     'default' => '[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]&style=detail',
                     'match' => MATCH_STRING_URL_EMPTY),
+                'view_template' => Array(
+                    'must'     => 0,
+                    'editable' => 1,
+                    'default'  => 'default',
+                    'match'    => MATCH_STRING_NO_SPACE),
             ),
             'wui' => Array(
                 'allowedforconfig' => Array(
