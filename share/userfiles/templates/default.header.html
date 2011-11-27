@@ -147,7 +147,7 @@
 {template sideMaps maps pathBase type indent=1}
 {foreach $maps map}
     {if $map.configError == true}<li class="lvl{$indent}"><a class="error">{$map.mapAlias}</a></li>
-    {else}<li class="lvl{$indent}"><a class="left" href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a></li>{/if}
+    {else}<li class="lvl{$indent}"><a href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a></li>{/if}
     {if $map.childs}
         {sideMaps $map.childs $pathBase $type $indent+1}
     {/if}
