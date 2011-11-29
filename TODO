@@ -61,7 +61,34 @@ komplett neu geladen. Der bessere Weg wäre, wenn das Frontend irgendwie die Dif
 zwischen der aktuell geladenen Konfiguration und der aktuellen Konfigurationsdatei
 ermitteln könnte und dann anhand dessen einzelne Objekte hinzufügt/aktualisiert/entfernt.
 
-*** Programmierte Map Konfiguration ***
+Fälle:
+
+1. Neues Objekt
+   - Neues Objekt in oMapObjecs erzeugen
+   - Neues Objekt malen .parse()
+2. Gelöschtes Objekt
+   - Objekt von Map entfernen .remove()
+   - Objekt aus oMapObjects entfernen
+3. Geändertes Objekt
+   - Objekt .conf aktualisieren
+   - Objekt von Map entfernen .remove()
+   - Objekt neu malen .parse()
+4. Geänderte Hauptkonfiguration
+5. Geändertes Global-Objekt
+   - mapProperties neu laded
+     - setMapBasics()
+     - setMapBackgroundImage()
+     - FIXME: Was wird noch aus den mapProperties abgeleitet?
+   - .conf bei allen Objekten aktualisieren
+   - Objekte von Map entfernen .remove()
+   - Objekte neu malen .parse()
+
+So. Und wie erkennen wir das nun? Wie wäre es bei einer geänderten Konfiguration
+einfach die aktuellen mapObjects laden (getMapObjects) und dann die Differenz zum
+aktuell geladenen oMapObjects Objekt ermitteln? So kann man dann im JS frontend genau
+ermitteln welche Dinge sich geändert haben.
+
+*** Dynamische Map Konfiguration ***
 
 Das Format der Map Konfiguration ist in erster Linie dazu da Anfängern die Arbeit mit
 den Konfig-Dateien zu erleichtern. Mit PHP Dateien hat es in der Vergangenheit immer
@@ -71,33 +98,120 @@ Nun gibt es aber einige Anwendungsfälle, in denen man anstatt eine Map Konfigur
 parsen lieber eine dynamische Konfiguration erzeugen möchte. In dem Fall ist die Map
 Konfiguration eher hinderlich. Man könnte gleich ein PHP Datenkonstrukt erzeugen.
 
+Beispielsweise auch bei den Automaps wäre dieses Vorgehen denkbar. Dann könnte man die
+Objekte via Backend ermitteln, mit graphviz positionieren und eventuell noch durch
+eine manuelle Konfiguration wieder modifizieren.
+
+Vielleicht könnte man dann in Zukunft die Sonderbehandlungen für Automaps entfernen und
+daraus wieder ganz normale Maps machen.
+Vielleicht kann man in dem Zuge auch realisieren, dass man gewisse Objekte auf der Automap
+manuell positioniert und die anderen Objekte dann mit graphviz positionieren lässt.
+
+Am Beispiel der Automap lässt sich erahnen, dass man pro Map u.U. mehrere dynamische
+Datenquellen anzapfen möchte. Man müsste also pro Map definieren können welche dynamischen
+Komponenten man in welcher Reihenfolge nutzen können möchte.
+
+Was muss an die Dynamischen Datenquellen übergeben werden, was kommt zurück? In der Klasse
+GlobalMapCfg gibt es zwei Arrays, die aus der Map-Konfiguration befüllt werden:
+
+1. mapConfig: Dieses assoziative Array enthält für jedes Map Objekt ein weiteres Array,
+   wobei die Objekt-ID als Schlüssel benutzt wird. Das Array des Objektes enthält pro
+   Konfigurations-Variable jeweils ein Schlüssel-Wert Paar.
+
+2. typeDefaults: Dieses Array enthält für jeden Objekt-Typ ein weiteres Array, in dem die
+   Default Werte für die einzelnen Objekt-Typen aufgelistet sind. Diese Angaben speisen
+   sich aus der Global-Sektion der Map und diese erhält Default-Optionen wiederrum aus
+   der Hauptkonfiguration.
+
+Man könnte die dynamischen Datenquellen auf die Manipulation von Objekten beschränken.
+Dementsprechend würden diese nur das mapConfig Array betreffen.
+
+Eine dynamische Komponente kann z.B. eine Funktion sein, die die aktuelle Map-Konfiguration
+als assoziativen Array übergeben bekommt und eine aktualisierte Version von diesem Array
+zurückgeben kann. Darüber hinaus sollte man der Funktion auch noch den Namen der aktuellen
+Map und eine Möglichkeit zum Backend-Zugriff geben.
+
 Bei solchen dynamischen Konfigurationen muss man nur dem JS Frontend irgendwie mitteilen,
-wenn es Änderungen gibt.
+wenn es Änderungen gibt. Vielleicht wäre eine Möglichkeit die Map auf Basis von Zeit als
+Dirty zu betrachten. Oder aber man prüft Serverseitig in festgelegten Intervallen, ob
+die endgültige Map-Konfiguration sich geändert hat.
+Eine Alternative wäre, dass in jeder *.php Datei einer Map auch eine changed() Funktion
+deklariert werden muss. Diese gibt einen Unix Timestamp aus, welcher darüber Auskunft gibt,
+ob die Map neu geladen werden muss.
+Diese Funktion wird aufgerufen, wenn das JS frontend den configChanged Poll schickt. Die
+bisherige Methode zur Prüfung der mtime der *.cfg Datei wird um den Zeitstempel der
+changed() Funktion ergänzt. Die Funktion bekommt die angefragte Zeit als Parameter übergeben.
+So kann man auch berechnen, dass eine Map alle X Minuten/Stunden/Tage neu geladen werden muss.
 
-Es gibt im Grunde drei Ansätze um das ganze zu vereinfachen:
+Wie könnte das alles aussehen?
 
-1. Der einfache Ansatz: Einfach ein leichter zu parsendes Format zulassen. z.B. ein
-JSON Objekte. Dieses Objekt kann in den meißten Sprachen einfach aus einem Objekt
-erzeugt werden.
-Das würde das Parsen und wieder Einlesen von Konfigurationen durch externe "Generatoren"
-vereinfachen.
+Es gibt ganz normale Map-Konfigurationen, in denen die Global-Sektion und andere Objekte
+definiert werden können. Diese können auch über die GUI editiert werden. Als vorgelagerten 
+Mechanismus kann jede Map optional auch über eine eigene *.php Datei dynamisiert werden.
+Diese PHP-Datei muss mindestens eine render() Funktion deklarieren, welche einen mapConfig
+Array zurückgibt. Dieses Array wird dann als Basis für die Definitionen aus der normalen
+Map-Konfiguration genutzt.
 
-2. Eine Alternative zum Generatoren-Ansatz: Man könnte auch einfach die Mechanismen zum
-Generieren der Map-Konfiguration in die Map Definitionen verlagern. Dazu braucht man Dateien,
-in denen man "frei" programmieren kann. Das läuft auf PHP-Dateien hinaus, die am Ende
-eine Variable mit der Map-Konfiguration füllen. In dem Script kann dann alles erdenkliche
-gemacht werden.
+Die map spezifischen *.php Dateien liegen in share/userfiles/mappers/<mapname>.php.
 
-Probleme hierbei:
-  - Immer die Daten abfragen, oder einen/den Cache benutzen?
-  - Wenn Cache: Wie bekommt man mit, dass die Config neu generiert werden muss?
-  - Wie bekommt das JS frontend mit, dass sich etwas geändert hat?
+Was gehen muss:
+- Man muss der Render-Funktion Parameter mitgeben können, z.B. aus der Global-Sektion
+  der Map Konfiguration.
+- Außerdem wäre es noch nett, wenn man auch schon die Objekte der Map Konfiguration
+  zur Verfügung hätte. Ja wie jetzt? Ich denke die Map Konfiguration kommt später drauf?
+  z.B. als Initial-Koordinaten für die Automap wäre es interessant die Koordinaten von
+  bestimmten Objekten vorzugeben.
 
-3. Es gibt einen neuen Mechanismus der Daten erzeugt, zu denen die normale Map Konfiguration
-gemergt wird. Dieser Mechanismus generiert eine Konfiguration, erstellt z.B. Hosts Objekte.
-Die normale Map-Konfiguration kann dann noch Änderungen/Ergänzungen vornehmen.
+---------------------------------------------
+
+define global {
+  source=fetch_parents(root,levels),dynamic_coords
+}
+
+---------------------------------------------
+<?php
+
+function changed($last_update_time) {
+    // Hier kann man nun entweder irgendwo nachfragen, z.B. beim Nagios die Restart-Time
+    // Oder man rechnet eine relative Zeit aus, ...
+    return $unixTimestamp;
+}
+
+function render($global, ...) {
+    $mapConfig = array();
+    $mapConfig = fetch_parents($mapConfig, $global['root'], $global['maxLayers']);
+    $mapConfig = dynamic_coords($mapConfig);
+    return $mapConfig;
+}
+
+?>
+---------------------------------------------
 
 Einige weitere Gedankenfetzen:
+
+  Es gibt im Grunde drei Ansätze um das ganze zu vereinfachen:
+  
+  1. Der einfache Ansatz: Einfach ein leichter zu parsendes Format zulassen. z.B. ein
+  JSON Objekte. Dieses Objekt kann in den meißten Sprachen einfach aus einem Objekt
+  erzeugt werden.
+  Das würde das Parsen und wieder Einlesen von Konfigurationen durch externe "Generatoren"
+  vereinfachen.
+  
+  2. Eine Alternative zum Generatoren-Ansatz: Man könnte auch einfach die Mechanismen zum
+  Generieren der Map-Konfiguration in die Map Definitionen verlagern. Dazu braucht man Dateien,
+  in denen man "frei" programmieren kann. Das läuft auf PHP-Dateien hinaus, die am Ende
+  eine Variable mit der Map-Konfiguration füllen. In dem Script kann dann alles erdenkliche
+  gemacht werden.
+  
+  Probleme hierbei:
+  - Immer die Daten abfragen, oder einen/den Cache benutzen?
+    - Wenn Cache: Wie bekommt man mit, dass die Config neu generiert werden muss?
+    - Wie bekommt das JS frontend mit, dass sich etwas geändert hat?
+  
+  3. Es gibt einen neuen Mechanismus der Daten erzeugt, zu denen die normale Map Konfiguration
+  gemergt wird. Dieser Mechanismus generiert eine Konfiguration, erstellt z.B. Hosts Objekte.
+  Die normale Map-Konfiguration kann dann noch Änderungen/Ergänzungen vornehmen.
+
   Map Aufbau gliedert sich in 2 Phasen
   1. Was kommt auf die Map? Mögliche Quellen:
     - Map-Konfiguration
@@ -105,11 +219,13 @@ Einige weitere Gedankenfetzen:
       - Nagios Parents (Automap)
       - Externe DB
     - Es könnte auch ein Include auf irgendeine Datei sein
-      - Die Funktion wird nur beim Parsen der Map Konfiguration geladen; Die Daten kommen mit in den Map-Cache
+      - Die Funktion wird nur beim Parsen der Map Konfiguration geladen;
+        Die Daten kommen mit in den Map-Cache
       - Frage hier: Wie wird der Map-Cache ungültig gemacht?
-      - Die Funktion kann dann z.B. externe Datenbanken/Livestatus oder so anzapfen um von dort automatisch Objekte zu holen
-    - Das Konstrukt kann auch Objekte mit Eigenschaften enthalen, diese könnten dann von der Map Konfiguration überschrieben werden (?)
-  2. Welche Eigenschaften haben die Objekte?
+      - Die Funktion kann dann z.B. externe Datenbanken/Livestatus oder so anzapfen um
+        von dort automatisch Objekte zu holen
+    - Das Konstrukt kann auch Objekte mit Eigenschaften enthalen, diese könnten dann
+      von der Map Konfiguration überschrieben werden (?)
 
 *** Installer renovieren ***
 

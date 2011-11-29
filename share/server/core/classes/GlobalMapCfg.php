@@ -70,6 +70,12 @@ class GlobalMapCfg {
         $this->initCache();
     }
 
+    /**
+     * Loads the valid configuration definitions from the mapcfg files.
+     * Those files define the options which are available for the different
+     * object types. The Infos fetched from these files contain all data about
+     * the options like variable format, validation regexes and so on.
+     */
     private function fetchValidConfig() {
         self::$validConfig = Array();
         // Holds all registered config vars
