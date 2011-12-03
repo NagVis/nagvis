@@ -62,7 +62,7 @@ class GlobalMapCfg {
             $this->setConfigFile(cfg('paths', 'mapcfg').$name.'.cfg');
 
         if($this->cacheFile === '') {
-            $this->cacheFile = cfg('paths','var').$name.'.cfg-'.CONST_VERSION.'-cache';
+            $this->cacheFile = cfg('paths','var').$this->type.'-'.$name.'.cfg-'.CONST_VERSION.'-cache';
             $this->defaultsCacheFile = $this->cacheFile.'-defs';
         }
 

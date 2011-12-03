@@ -48,6 +48,7 @@ class NagVisAutomapCfg extends GlobalMapCfg {
         }
 
         $this->objIdFile = cfg('paths', 'var').'automap.hostids';
+        $this->type = 'automap';
 
         // Start of the parent constructor
         parent::__construct($CORE, $this->name);
@@ -55,8 +56,6 @@ class NagVisAutomapCfg extends GlobalMapCfg {
         // Modify must values -> coords don't need to be set
         parent::$validConfig['host']['x']['must'] = 0;
         parent::$validConfig['host']['y']['must'] = 0;
-
-        $this->type = 'automap';
 
         // Override the default map configuration path with automap path
         $this->setConfigFile(cfg('paths', 'automapcfg').$this->name.'.cfg');

@@ -15,6 +15,8 @@ Core
   * Several code cleanups
   * Made view templates configurable (defaults / view_template)
   * Bugfix: Correctly adding object_id=0 to global section when creating maps
+  * Bugfix: Adding map/automap type to cache files to prevent confilcts with
+    equal map and automap names
 
 Frontend
   * Sorting maps by alias in header menu now
