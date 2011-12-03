@@ -1480,10 +1480,10 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
         restore "etc/nagvis-site.ini.php" "site main configuration file" ""
     
         LINE="Restoring custom map configuration files..."
-        restore "etc/maps/" "map configuration files" "/*demo*.cfg"
+        restore "etc/maps/" "map configuration files" "/demo*.cfg"
     
         LINE="Restoring custom automap configuration files..."
-        restore "etc/automaps/" "automap configuration files" "/__automap.cfg"
+        restore "etc/automaps/" "automap configuration files" "/demo*.cfg"
     
         LINE="Restoring user configuration files..."
         if [ -d $NAGVIS_PATH_BACKUP/etc/profiles ]; then
@@ -1496,7 +1496,7 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
         fi
     
         LINE="Restoring custom map images..."
-        restore "$USERFILES_DIR/images/maps/" "map image files" "/*demo*.png"
+        restore "$USERFILES_DIR/images/maps/" "map image files" "/demo*.png"
     
         LINE="Restoring custom gadget images..."
         restore "$USERFILES_DIR/images/gadgets/" "gadget image files" ""
