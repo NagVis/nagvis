@@ -15,10 +15,10 @@
         <h2>Konfigurationsdateien</h2>
         <p>NagVis basiert auf verschiedenen Konfigurationsdateien.
             Die <a href="nagvis_config_format_description.html" target="_blank">Hauptkonfiguration</a>sdatei enth&auml;lt grundlegende und globale Konfigurationsoptionen.
-            Die Map-spezifischen Konfigurationsoptionen werden in den <a href="map_config_format_description.html" target="_blank">Map-Konfiguration</a>sdateien abgelegt.
-            Ein spezieller Typ von Maps sind die Automaps, die in einem eigenen Konfigurationsverzeichnis gespeichert werden.
+            Die Map-spezifischen Konfigurationsoptionen werden in <code>etc/maps/</code>in den <a href="map_config_format_description.html" target="_blank">Map-Konfiguration</a>sdateien abgelegt.
+            Ein spezieller Typ von Maps sind die Automaps, die in einem eigenen Konfigurationsverzeichnis (<code>etc/automaps/</code>) gespeichert werden.
             Die <a href="automap_config_format.html" target="_blank">Automap-Konfiguration</a>sdateien benutzen die gleiche Syntax wie die Map-Konfigurationsdateien, haben aber mehr Optionen.</p>
-        <p>Die gesamte NagVis-Konfiguration kann mit Hilfe des webbasierten Konfigurationsprogramms namens WUI ge&auml;ndert werden.</p>
+        <p>Die gesamte NagVis-Konfiguration kann mit Hilfe des webbasierten Konfigurationsprogramms ge&auml;ndert werden.</p>
         <h2>Authentifizierung/Autorisierung</h2>
         <p>Als Standard benutzt NagVis eine interne Benutzer- und Berechtigungsdatenbank (SQLite) f&uuml;r Authentifizierung und Autorisierung.
             NagVis besitzt ein rollenbasiertes Berechtigungssystem. Nach der Installation sind zwei Default-Benutzer definiert:</p>
@@ -34,5 +34,26 @@
         </ul>
         <p>Diese Default-Benutzer und Rollen sollten f&uuml;r den Anfang ausreichen.
             Sie k&ouml;nnen diese Benutzer und Rollen l&ouml;schen, aber passen Sie auf, dass Sie nicht den letzten administrativen Benutzer l&ouml;schen.</p>
+
+        <a name="troubleshooting"><h2>Fehlersuche</h2></a>
+        <p>w&auml;hrend der Installation</p>
+        <ul>
+            <li>Der Installer beschwert sich &uuml;ber fehlende Voraussetzungen/Module.<p>Bitte stellen Sie sicher, dass Sie eine aktuelle PHP-Version benutzen, dass alle f&uuml;r NagVis und das Backend ben&ouml;tigten Module vorhanden sind und dass GraphViz bereits installiert ist. Einige PHP-Module sind ggf. im Basis-Paket enthalten (bitte benutzen Sie "php -m" zur Pr&uuml;fung).</p><p>Bitte pr&uuml;fen Sie <code>install.log</code> auf Fehler.</li>
+        </ul>
+        <p>Nach der Installation</p>
+        <ul>
+            <li>Sie erhalten lediglich eine leere Seite beim Zugriff auf die Hauptseite.<p>Bitte pr&uuml;fen Sie die Apache-Logs auf "permission denied"-Meldungen. Es ist ziemlich wahrscheinlich, dass SElinux aktiviert ist. Bitte deaktivieren Sie es (setenforce 0) oder erlauben Sie NagVis den Zugriff auf die Dateien.</li>
+            <li>Nach dem Hinzuf&uuml;gen von Objekten zu einer Map wird diese nicht mehr angezeigt.<p>Bitte pr&uuml;fen Sie die Apache-Logs auf "memory limit exceeded"-Meldungen. Es ist ziemlich wahrscheinlich, dass die memory-Einstellungen in der php.ini erh&ouml;ht werden m&uuml;ssen. Starten Sie Ihren Web-Server nach der &Auml;nderung neu.</p>
+        </ul>
+        <p>Bitte werfen Sie au&szlig;erdem einen Blick auf die <a href="http://www.nagvis.org/doc">doc section</a> der offiziellen Website ("FAQ" und "Often reported errors"). Falls das nicht hilft, dann lesen Sie weiter.</p>
+        <a name="help"><p>HILFE</p></a>
+        <p>M&ouml;glicherweise suchen Sie Hilfe auf der <a href="http://www.nagvis.org">offiziellen NagVis-Website</a> oder benutzen das <a href="http://www.monitoring-portal.org">Monitoring-Portal</a>, das auch ein Board f&uuml;r NagVis-Fragen anbietet.</p>
+        <p>Bitte liefern Sie in jedem Fall WENIGSTENS Informationen &uuml;ber</p>
+        <ul>
+            <li>das Betriebssystem (Distribution, Version)</li>
+            <li>die NagVis-Version (inkl., ob Sie NagVis &uuml;ber ein Paket aus der Distribution oder aus den Sourcen installiert haben)</li>
+            <li><code>grep "^[^;|^$]" &lt;config-Datei&gt;</code> (falls Sie ein Problem mit der Konfiguration haben). Ersetzen Sie "&lt;config-Datei&gt;" durch den Namen der Datei, in der Sie einen Fehler vermuten</li>
+            <li>Apache-Meldungen (error log)</li>
+        </lu>
     </body>
 </html>

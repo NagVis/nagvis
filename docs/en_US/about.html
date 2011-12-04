@@ -26,11 +26,11 @@
         <p>The supported backends are:</p>
         <ul>
         <li><a href="http://mathias-kettner.de/checkmk_livestatus.html">mklivestatus</a> (default since NagVis 1.5)</li>
-        <li><a href="http://www.nagios.org/download/addons">NDOUtils</a> / IDOUtils (requires MySQL)</li>
+        <li><a href="http://www.nagios.org/download/addons">NDOUtils</a> / <a href="http://docs.icinga.org/latest/en/ch12">IDOUtils</a> (requires MySQL)</li>
         <li><a href="http://www.op5.org/community/projects/merlin">merlin</a> (requires MySQL)</li>
         </ul>
         The backend gets the information from the Nagios process (mklivestatus) or from a database (NDOUtils/IDOUtils, merlin).
-        <p>You can add all objects from Nagios (Host, Services, Hostgroups, Servicegroups) on so called maps. Each map can be configured through its own
+        <p>You can place all objects from Nagios (Host, Services, Hostgroups, Servicegroups) on so called maps. Each map can be configured through its own
         <a href="map_config_format_description.html">configuration file</a>. You can edit the configuration files directly by using your favourite text editor 
         or the web configuration mechanisms. Furthermore you can add some special NagVis objects to the maps. These objects are shapes, textboxes and 
         reference objects for other maps.</p>
@@ -40,14 +40,15 @@
         for each object. Hover menus can easily be modified by changing the <a href="hover_templates.html">templates</a> for them. You can also disable the hover menu.<br> 
         By default the state of the objects is displayed using icons on the map. You can change these icons by adding <a href="extending/iconsets.html">iconsets</a> from the NagVis 
         homepage or create your own. The state of the objects can also be displayed as lines or as <a href="gadgets.html">gadgets</a>.</p>
-        <p>In addition to the normal maps there is an <a href="automap.html">automap</a>. The automap is generated automatically based on the Nagios configuration. To use the automap 
-        you have to set up the parent relationships in Nagios. The automap generates a background image based on the configuration, the layout parameters and the parent 
-        relationships.<br>
+        <p>In addition to the normal maps there is an <a href="automap.html">automap</a>.
+        Depending on the setting of the directive <a href="automap.html">"filterByState"</a> it displays all objects or only the ones in a non-OK-state including the way from the root object to the non-OK-objects.<br>
+        The automap is generated automatically based on the Nagios configuration. To use the automap you have to set up the <a href="http://nagios.sourceforge.net/docs/nagioscore/3/en/networkreachability.html">parent relationships</a> in Nagios.
+        The automap generates a background image based on the configuration, the layout parameters and the parent relationships.<br>
 Since NagVis 1.5 you can define multiple automaps.</p>
 
     <a name="licensing"></a>
     <h2>Licensing</h2>
-        <p>NagVis is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2 as published by the Free Software Foundation.</p>
+        <p>NagVis is free software; you can redistribute it and/or modify it under the terms of the <a href="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU General Public License version 2</a> as published by the <a href="www.fsf.org">Free Software Foundation</a>.</p>
         <p>NagVis is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 </body>
 </html>

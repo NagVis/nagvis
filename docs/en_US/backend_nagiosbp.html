@@ -18,8 +18,8 @@
     <h2>Representation in NagVis</h2>
     <p>This backend is a special one compared to the other backends which handle Nagios status
        information 1:1. This backend mainly handles business processes but also Nagios service
-       stat information. As result of this fact the backend needs to perform some sort of
-       translation to create nagios like objects from the business processes.</p>
+       state information. As result of this fact the backend needs to perform some sort of
+       translation to create Nagios-like objects from the business processes.</p>
     <p>During design of this backend it turned out that the business processes should be mapped
        to servicegroup objects. Out of this decision we have two results:
        <ul>
@@ -29,7 +29,7 @@
        </ul>
     </p>
     <p>Another special property of the NagiosBP backend is the fact that NagVis
-       must not calculate the summary (aggregated) states using it's own algorithms.
+       must not calculate the summary (aggregated) states using its own algorithms.
        Instead of this the NagiosBP backend sets the states/outputs of the NagiosBP
        servicegroups using the state information provided by NagiosBP.</p>
 
@@ -50,7 +50,7 @@
         <td><strong>base_url</strong></td>
         <td>http://localhost/nagios/cgi-bin/nagios-bp.cgi</td>
         <td>The full URL to the <code>nagios-bp.cgi</code> script which is part of NagiosBP.
-            It serves the AJAX API which the backend connects to. This URL must be reachable
+            It serves the AJAX-API which the backend connects to. This URL must be reachable
             from the host NagVis is running on.</td>
     </tr>
     <tr>
