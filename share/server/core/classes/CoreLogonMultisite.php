@@ -106,7 +106,7 @@ class CoreLogonMultisite extends CoreLogonModule {
         $username = $this->checkAuth();
         if($username === '') {
             // FIXME: Get the real path to multisite
-            header('Location:../../../check_mk/login.py?_origin=' . $_SERVER['REQUEST_URI']);
+            header('Location:../../../check_mk/login.py?_origtarget=' . $_SERVER['REQUEST_URI']);
             return false;
         }
 
