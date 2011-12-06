@@ -9,9 +9,9 @@
         <h2>Einleitung</h2>
         <p>Kontext-Templates sind HTML-Dateien, die u.a. Makros enthalten.
             Dieses Dateien k&ouml;nnen als Kontextmen&uuml;s ("Rechtsklick"-Men&uuml;s) f&uuml;r die Objekte auf der Map benutzt werden.</p>
-        <p>Die Kontextmen&uuml;s befinden sich in <code>nagvis/templates/context/</code> relativ zum NagVis-Root-Verzeichnis.
-            Die Templates sind wie folgt benannt: <code>tmpl.&lt;name&gt;.html</code>.
-            Es ist m&ouml;glich, eine CSS-Datei zum Template hinzuzuf&uuml;gen, der Name lautet dann: <code>tmpl.&lt;name&gt;.css</code>.</p> 
+        <p>Die Kontextmen&uuml;s befinden sich in <code>share/userfiles/templates/</code> relativ zum NagVis-Root-Verzeichnis.
+            Die Templates sind wie folgt benannt: <code>&lt;name&gt;.context.html</code>.
+            Es ist m&ouml;glich, eine CSS-Datei zum Template hinzuzuf&uuml;gen, der Name lautet dann: <code>&lt;name&gt;.context.css</code>.</p> 
         <p>Es gibt einige sogenannte Makros in Kontextmen&uuml;s, die f&uuml;r alle Objekte verf&uuml;gbar sind, und einige, die nur f&uuml;r spezielle Makros gelten. Alle Standardmakros sind nachfolgend aufgef&uuml;hrt.</p>
         
         <h2> Allgemeines </h2>
@@ -26,6 +26,9 @@
             </tr>
             <tr>
                 <td>[obj_id]</td><td>ID des Objekts in JavaScript. Wird ben&ouml;tigt, um die objektspezifischen Teile zu lokalisieren, z.B. f&uuml;r eine manuelle Aktualisierung einer Statusinformation.</td>
+            </tr>
+            <tr>
+                <td>[type]</td><td>Typ des Objekts</td>
             </tr>
             <tr>
                 <td>[name]</td><td>Name des Objekts (Hostname, Hostgroupname, Servicegroupname, Mapname,...)</td>
@@ -92,22 +95,50 @@
                 <th width="250">Makro</th><th>Beschreibung</th>
             </tr>
             <tr><td>[address]</td><td>Adresse des in Nagios konfigurierten Hosts</td></tr>
-            <tr><td>[pnp_hostname]</td><td>Hostname f&uuml;r Links nach PNP (Leerzeichen ersetzt,</td></tr>
+            <tr><td>[pnp_hostname]</td><td>Hostname f&uuml;r Links zu PNP (Leerzeichen ersetzt)</td></tr>
         </table>
 
         <h3>Service-Objekte</h3>
         <table style="width:100%">
             <tr>
-                <th>Makro</th><th>Beschreibung</th>
+                <th width="250">Makro</th><th>Beschreibung</th>
             </tr>
             <tr>
                 <td>[service_description]</td><td>Service-Beschreibung in Nagios</td>
             </tr>
+            <tr><td>[pnp_service_description]</td><td>Service-Beschreibung f&uuml;r Links zu PNP (Leerzeichen ersetzt)</td></tr>
         </table>
 
         <h3>Host- und Servicegroup-Objekte</h3>
         Die Abschnittsmakros <code>&lt;!-- BEGIN hostgroup --></code> und <code>&lt;!-- BEGIN servicegroup --></code>
         existieren, um speziellen Template-Code f&uuml;r Hostgroup- und Servicegroup-Kontextmen&uuml;s zu erm&ouml;glichen.
         Beide bringen keine speziellen objektspezifischen Makros mit sich.
+
+        <h3>Andere Abschnittsmakros</h3>
+        <p>Es gibt einige andere spezielle Abschnittsmakros. Um bspw. Teile des Templates nur f&uuml;r Line-Objekts zu zeigen:</p>
+        <code>&lt;!-- BEGIN line -->This is only shown on line objects&lt;!-- BEGIN servicegroup --></code>
+        <table style="width:100%">
+        <tr>
+          <th width="200">Abschnitt</th><th>Beschreibung</th>
+        </tr>
+        <tr>
+          <td>line</td><td>Dies nur f&uuml;r Line-Objekte zeigen.</td>
+        </tr>
+        <tr>
+          <td>stateful</td><td>Dies nur f&uuml;r "stateful"-Objekte zeigen.</td>
+        </tr>
+        <tr>
+          <td>not_automap</td><td>Dies nur f&uuml;r nicht-Automap-Ansichten zeigen (regul&auml;re Maps).</td>
+        </tr>
+        <tr>
+          <td>locked</td><td>Dies nur f&uuml;r gesperrte Objekte zeigen.</td>
+        </tr>
+        <tr>
+          <td>unlocked</td><td>Dies nur f&uuml;r nicht gesperrte Objekte zeigen.</td>
+        </tr>
+        <tr>
+          <td>permitted_edit</td><td>Nur zeigen, wenn der Benutzer die Map editieren darf.</td>
+        </tr>
+        </table>
     </body>
 </html>

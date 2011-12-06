@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+ <head>
+  <title>NagVis NagiosBP-Backend</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+ </head>
+ <body>
+    <h1>NagiosBP-Backend</h1>
+    <p>Das NagiosBP-Backend wird benutzt, NagVis direkt mit den 
+       <a href="http://bp-addon.monitoringexchange.org/">Nagios Business Process-Addons</a>
+       zu verbinden, die verwendet werden, um aus den Nagios-Statusinformationen
+       Gesch&auml;ftsprozessaggregationen zu erstellen.</p>
+
+    <h2>Die NagiosBP-API</h2>
+    <p>NagiosBP bietet einen Web-Service, der durch HTTP-Get-Anfragen aufgerufen wird und mit JSON-Objekten antwortet.
+       Die Dokumentation dieser JSON-API finden Sie <a href="http://bp-addon.monitoringexchange.org/doc/API-DOC">hier</a>.<p>
+
+    <h2>Darstellung in NagVis</h2>
+    <p>Dieses Backend ist besonders verglichen mit den anderen Backends, die Nagios-Statusinformationen
+       1:1 behandeln. Dieses Backend verarbeitet haupts&auml;chlich Gesch&auml;ftsprozesse, aber auch
+       Nagios-Zustandsinformationen. Als Ergebnis dieser Tatsache muss das Backend eine Art von
+       &Uuml;bersetzung durchf&uuml;hren, um aus den Gesch&auml;ftsprozessen Nagios-&auml;hnliche
+       Objekte zu erzeugen.</p>
+    <p>W&auml;hrend der Entwicklung dieses Backends stellte sich heraus, dass die Gesch&auml;ftsprozesse
+       auf Servicegruppen-Objekte abgebildet werden sollten. Daraus ergeben sich zwei Dinge: 
+       <ul>
+           <li>Jeder Gesch&auml;ftsprozess resultiert in einer Servicegruppe</li>
+           <li>Das Backend liefert nur Servicegruppen-Objekte (die anderen Objekte m&uuml;ssen mit den anderen
+               Backends direkt von Nagios geholt werden)</li>
+       </ul>
+    </p>
+    <p>Eine andere besondere Eigenschaft des NagiosBP-Backends besteht darin, dass NagVis nicht die
+       Gesamt- (aggregierten) Zust&auml;nde mit eigenen Algorithmen berechnen muss.
+       Statt dessen setzt das NagiosBP-Backend die Zust&auml;nde/Ausgaben der NagiosBP-Servicegruppen
+       mit Hilfe der von NagiosBP gelieferten Zustandsinformationen.</p>
+
+    <p>Die Servicegroup-Verweise (Links-Klick auf Icon) werden automatisch durch das NagiosBP-Backend gesetzt,
+       um auf die NagiosBP-GUI zu zeigen, au&szlig;er wenn der <code>url</code>-Parameter der Servicegruppe
+       konfiguriert ist, um auf eine andere Map zu zeigen
+       (z.B. <code>[htmlbase]/index.php?mod=Map&amp;act=view&amp;show=bp-webshop-details</code>).</p>
+
+    <h2>Konfiguration</h2>
+
+    <p>Sie k&ouml;nnen die folgenden Parameter benutzen, um das NagiosBP-Addon zu konfigurieren:</p>
+    
+    <table style="width:100%">
+    <tr>
+    <th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
+    </tr>
+    <tr>
+        <td><strong>base_url</strong></td>
+        <td>http://localhost/nagios/cgi-bin/nagios-bp.cgi</td>
+        <td>Die vollst&auml;ndige URL zum <code>nagios-bp.cgi</code>-Script, das Teil von NagiosBP ist.
+            Es bedient die AJAX-API, mit der sich das Backend verbindet. Diese URL muss von dem Host
+            erreichbar sein, auf dem NagVis l&auml;uft.</td>
+    </tr>
+    <tr>
+        <td>auth_user</td>
+        <td></td>
+        <td>Optionaler Benutzer, der als Basic-Authentifizierungs-Benutzer benutzt werden soll, um auf die <code>base_url</code> zuzugreifen.</td>
+    </tr>
+    <tr>
+        <td>auth_pass</td>
+        <td></td>
+        <td>Optionales Passwort, das als Basic-Authentifizierungs-Passwort benutzt werden soll, um auf die <code>base_url</code> zuzugreifen.</td>
+    </tr>
+    </table>
+    <p>Es gibt auch einige allgemeine Parameter. Sie finden sie in der
+       <a href="nagvis_config_format_description.html#backend">Formatbeschreibung der Hauptkonfigurationsdatei</a>.</p>
+</body>
+</html>
