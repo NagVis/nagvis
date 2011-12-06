@@ -1,3 +1,7 @@
+1.6.1
+Core
+  * LogonDialog: Changed _origin parameter to _origtarget to support current multisite
+
 1.6
 Core
   * Implented conf.d/ directory to have an optional modular main configuration
