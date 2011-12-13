@@ -1657,9 +1657,9 @@ function parseMap(iMapCfgAge, type, mapName) {
     if(type === 'automap')
         oObjects = getSyncRequest(oGeneralProperties.path_server
                                   + '?mod=AutoMap&act=getAutomapObjects&show='
-                                  + mapName+getAutomapParams());
+                                  + mapName+getAutomapParams(), false);
     else
-        oObjects = getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapObjects&show='+mapName);
+        oObjects = getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapObjects&show='+mapName, false);
 
     // Only perform the reparsing actions when all information are there
     if(oPageProperties && oObjects) {

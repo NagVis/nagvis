@@ -2,6 +2,10 @@
 Core
   * LogonDialog: Changed _origin parameter to _origtarget to support current multisite
 
+Frontend
+  * Ajax call for redrawing map objects is not cacheable anymore (prevent strange
+    hopping of icons after unlock -> edit -> lock in some cases.
+
 1.6
 Core
   * Implented conf.d/ directory to have an optional modular main configuration
