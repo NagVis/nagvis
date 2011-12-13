@@ -35,8 +35,8 @@
         <li><a href=#template>template</a></li>
     </ul>
     
-    <a name=global></a>
     <h2>Beschreibung der Objekttypen</h2>
+    <a name=global></a>
     <h3>global</h3>
     Die erste Definition in jeder Konfigurationsdatei sollte vom Typ "global" sein.
     Optionen in diesem Abschnitt gelten f&uuml;r die gesamte Map und werden an andere Typen vererbt, die sp&auml;ter definiert werden. <br><br>
@@ -81,6 +81,12 @@
             <td>event_highlight</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren der Hervorhebung des sich &auml;ndernden Objekts durch eine blinkende Umrandung.</td>
         </tr>
         <tr>
+        <td>event_highlight_duration</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Setzen der Hervorhebungsdauer in Millisekunden </td>
+        </tr>
+        <tr>
+        <td>event_highlight_interval</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Setzen des Hervorhebungsinterall in Millisekunden </td>
+        </tr>
+        <tr>
             <td>event_log</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren des Eventlogs im neuen JavaScript-Backend. Das Eventlog protokolliert wichtige Aktionen und Informationen. </td>
         </tr>
         <tr>
@@ -99,34 +105,33 @@
             <td>event_sound</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren von Sound-Signalen bei Status&auml;nderungen.</font></td>
         </tr>
         <tr>
-            <td>grid_color</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Die Farbe der Rasterlinien</td>
+        <td>exclude_members</td><td></td>
+        <td><p>Es ist m&ouml;glich, member-Objekte komplett auszuschlie&szlig;en, w&auml;hrend die Objektinformationen vom Backend geholt werden.
+            Die gefilterten Elemente werden nirgendwo in diesem Objekt auftauchen.</p><p>Details zur Filter-Syntax finden Sie bei der 
+            <a href="#exclude">exclude regex-Definition</a>. <font color="#ff0000">(Neu in 1.6b4)</font></p></td>
         </tr>
         <tr>
-            <td>grid_show</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren von Rasterlinien zur Ausrichtung von Objekten im WUI. Objekte werden an der linken, oberen Ecke ausgerichtet</td>
+        <td>exclude_member_states</td><td></td>
+        <td><p>Es ist m&ouml;glich, ein oder mehrere member-Zust&auml;nde w&auml;hrend der Ermittlung des Gesamtzustands von Objekten auszuschlie&szlig;en. Die gefilterten Elemente werden in der member-Liste auftauchen, aber nicht f&uuml;r Gesamtstatusberechnungen benutzt.</p>
+            <p>Details zur Filter-Syntax finden Sie bei der <a href="#exclude">exclude regex-Definition</a>. <font color="#ff0000">(Neu in 1.6b4)</font></p></td>
         </tr>
-        <tr>
-            <td>grid_steps</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Abstand der Rasterlinien</td>
-        </tr>
-        <tr>
-            <td>header_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren des Header-Men&uuml;s </td>
-        </tr>
-        <tr>
-            <td>header_template</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td><a href=header_templates.html#header/templates>header template</a> f&uuml;r diese Map </td>
-        </tr>
+    <tr>
+	 <td>grid_color</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Die Farbe der Rasterlinien</td>
+</tr>
+<tr>
+	 <td>grid_show</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Aktivieren/deaktivieren von Rasterlinien zur Ausrichtung von Objekten im WUI. Objekte werden an der linken, oberen Ecke ausgerichtet</td>
+</tr>
+<tr>
+	 <td>grid_steps</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Abstand der Rasterlinien</td>
+</tr>
         <tr>
             <td> header_fade </td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren des Abblendeffekts in den Untermen&uuml;s des Header-Men&uuml;s (wenn das verwendete Header-Men&uuml; diese Option unterst&uuml;tzt).</td>
         </tr>
-        <tr>
-            <td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
-        </tr>
-        <tr>
-            <td>hover_delay</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Verz&ouml;gerung der Anzeige des Hover-Menus in Sekunden </td>
-        </tr>
-        <tr>
-            <td>hover_template</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Default <a href=hover_templates.html#hover/templates>hover template</a> f&uuml;r diese Map </td>
-        </tr>
-        <tr>
-            <td><strike>hover_timeout</strike></td><td><strike>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</strike></td><td><strike>Default-Timeout (in Sekunden) bei Ajax-Abfragen in Hover-Men&uuml;s</strike> <font color=#ff0000>(veraltet ab 1.4)</font> </td>
+<tr>
+	 <td>header_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren des Header-Men&uuml;s </td>
+</tr>
+<tr>
+	 <td>header_template</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td><a href=header_templates.html#header/templates>header template</a> f&uuml;r diese Map </td>
         </tr>
         <tr>
             <td>hover_childs_limit</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>max. Anzahl von Child-Objekten </td>
@@ -139,6 +144,18 @@
         </tr>
         <tr>
             <td>hover_childs_sort</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Sortierreihenfolge von Child-Objekten ("s"=Status, "a"=Alphabet) </td>
+        </tr>
+        <tr>
+            <td>hover_delay</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Verz&ouml;gerung der Anzeige des Hover-Menus in Sekunden </td>
+        </tr>
+        <tr>
+            <td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
+        </tr>
+        <tr>
+            <td>hover_template</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Default <a href=hover_templates.html#hover/templates>hover template</a> f&uuml;r diese Map </td>
+        </tr>
+        <tr>
+            <td><strike>hover_timeout</strike></td><td><strike>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</strike></td><td><strike>Default-Timeout (in Sekunden) bei Ajax-Abfragen in Hover-Men&uuml;s</strike> <font color=#ff0000>(veraltet ab 1.4)</font> </td>
         </tr>
         <tr>
             <td>iconset</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Iconset, das als Standard f&uuml;r alle auf der Map platzierten Objekte benutzt werden soll. Kann f&uuml;r jedes Objekt &uuml;berschrieben werden.<br> Im Beispiel wird "std_small" benutzt, was bedeutet, dass ein OK-Zustand das Icon "std_small_<i>ok</i>.png", benutzt, ein CRITICAL-Zustand "std_small_<i>critical</i>.png" usw. </td>
@@ -181,6 +198,9 @@
             <td>Dies definiert die Linienbreite in px, wenn dieses Objekt als Linie angezeigt wird.</td>
         </tr>
         <tr>
+        <td>line_weather_colors</td><td>10:#8c00ff,25:#2020ff,40:#00c0ff,55:#00f000,70:#f0f000,85:#ffc000,100:#ff0000</td><td>Dies definiert die Farben von Wetterkarten-Farben in den unterschiedlichen Prozentstufen. &Uuml;ber 10% wird z.B. #8c00ff als Farbe benutzt. <font color="#ff0000">(Neu in 1.6)</font></td>
+        </tr>
+        <tr>
             <td>only_hard_states</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
         </tr>
         <tr>
@@ -191,6 +211,9 @@
         </tr>
         <tr>
             <td>show_in_lists</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Map-Anzeige in Listenformat (Dropdowns, Indexseite, ...) </td>
+        </tr>
+        <tr>
+        <td> show_in_multisite</td><td> vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Zeigen der Maps im Multisite-Snapin</td>
         </tr>
         <tr>
             <td>stylesheet</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>Dateiname des benutzerdefinierten Stylesheets zur Verwendung in den Maps. Die Datei muss im share/nagvis/style-Verzeichnis abgelegt sein.</td>
@@ -216,6 +239,10 @@
         <tr>
             <th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
         <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Eindeutiger Bezeichner des Objekts auf der aktuellen Map. Jedes Objekt der Map ben&ouml;tigt eine object_id. Die object_id besteht aus alphanumerischen Zeichen beliebiger L&auml;nge. Wenn keine object_id angegeben ist, wird NagVis f&uuml;r das Objekt eine erzeugen <font color="#ff0000">(neu in 1.6)</font></td>
+        </tr>
+        <tr>
             <td><b>host_name</b></td><td> </td><td>Name des Hosts wie in Nagios definiert </td>
         </tr>
         <tr>
@@ -232,6 +259,17 @@
         </tr>
         <tr>
             <td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll</td>
+        </tr>
+        <tr>
+        <td>exclude_members</td><td></td>
+        <td><p>Es ist m&ouml;glich, member-Objekte komplett auszuschlie&szlig;en, w&auml;hrend die Objektinformationen vom Backend geholt werden.
+            Die gefilterten Elemente werden nirgendwo in diesem Objekt auftauchen.</p><p>Details zur Filter-Syntax finden Sie bei der 
+            <a href="#exclude">exclude regex-Definition</a>. <font color="#ff0000">(Neu in 1.6b4)</font></p></td>
+        </tr>
+        <tr>
+        <td>exclude_member_states</td><td></td>
+        <td><p>Es ist m&ouml;glich, ein oder mehrere member-Zust&auml;nde w&auml;hrend der Ermittlung des Gesamtzustands von Objekten auszuschlie&szlig;en. Die gefilterten Elemente werden in der member-Liste auftauchen, aber nicht f&uuml;r Gesamtstatusberechnungen benutzt.</p>
+            <p>Details zur Filter-Syntax finden Sie bei der <a href="#exclude">exclude regex-Definition</a>. <font color="#ff0000">(Neu in 1.6b4)</font></p></td>
         </tr>
         <tr>
             <td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
@@ -337,6 +375,10 @@
         <tr>
             <th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
         <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Eindeutiger Bezeichner des Objekts auf der aktuellen Map. Jedes Objekt der Map ben&ouml;tigt eine object_id. Die object_id besteht aus alphanumerischen Zeichen beliebiger L&auml;nge. Wenn keine object_id angegeben ist, wird NagVis f&uuml;r das Objekt eine erzeugen <font color="#ff0000">(neu in 1.6)</font></td>
+        </tr>
+        <tr>
             <td><b>host_name</b></td><td> </td><td>Name des Hosts wie in Nagios definiert </td>
         </tr>
         <tr>
@@ -356,6 +398,17 @@
         </tr>
         <tr>
             <td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll</td>
+        </tr>
+        <tr>
+        <td>exclude_members</td><td></td>
+        <td><p>Es ist m&ouml;glich, member-Objekte komplett auszuschlie&szlig;en, w&auml;hrend die Objektinformationen vom Backend geholt werden.
+            Die gefilterten Elemente werden nirgendwo in diesem Objekt auftauchen.</p><p>Details zur Filter-Syntax finden Sie bei der 
+            <a href="#exclude">exclude regex-Definition</a>. <font color="#ff0000">(Neu in 1.6b4)</font></p></td>
+        </tr>
+        <tr>
+        <td>exclude_member_states</td><td></td>
+        <td><p>Es ist m&ouml;glich, ein oder mehrere member-Zust&auml;nde w&auml;hrend der Ermittlung des Gesamtzustands von Objekten auszuschlie&szlig;en. Die gefilterten Elemente werden in der member-Liste auftauchen, aber nicht f&uuml;r Gesamtstatusberechnungen benutzt.</p>
+            <p>Details zur Filter-Syntax finden Sie bei der <a href="#exclude">exclude regex-Definition</a>. <font color="#ff0000">(Neu in 1.6b4)</font></p></td>
         </tr>
         <tr>
             <td>gadget_url</td><td></td><td>Der Wert kann ein Gadget-Script im Gadget-Verzeichnis (<code>nagvis/gadgets</code>) sein, z.B. &quot;std_speedometer.php&quot; oder eine in Klammern gesetzte komplette URI auf ein Gadget-Script, z.B. &quot;[http://127.0.0.1/nagvis/gadgets/std_speedometer.php]&quot;. Details zu Gadgets finden Sie <a href="gadgets.html">hier</a>. Diese Option wird nur erkannt, wenn view_type=&quot;gadget&quot; gesetzt ist.</td>
@@ -435,6 +488,29 @@
         </td>
         </tr>
         <tr>
+        <td>line_label_pos_in</td>
+        <td>0.5</td>
+        <td>Bei Wetterkarten-Linien sind die Bezeichnungen normalerweise in der Mitte der Linie. Dies entspricht einem Wert von &quot;0.5&quot;.
+        Es ist m&ouml;glich, die Platzierung durch diesen Werte zu verschieben. G&uuml;ltige Werte liegen zwischen 0.0 to 1.0.
+        </td>
+        </tr>
+        <tr>
+        <td>line_label_pos_out</td>
+        <td>0.5</td>
+        <td>Bei Wetterkarten-Linien sind die Bezeichnungen normalerweise in der Mitte der Linie. Dies entspricht einem Wert von &quot;0.5&quot;.
+        Es ist m&ouml;glich, die Platzierung durch diesen Werte zu verschieben. G&uuml;ltige Werte liegen zwischen 0.0 to 1.0.
+        </td>
+        </tr>
+        <tr>
+        <td>line_label_y_offset</td>
+        <td>2</td>
+        <td>Diese Option definiert den Abstand der Bezeichnungen zur Linie beim Rendern von Wetterkarten-Linien, die Prozent- und absolute Bandbreitendaten anzeigen. <font color="#ff0000">(Neu in 1.6)</font>
+        </td>
+        </tr>
+        <tr>
+        <td>line_weather_colors</td><td>vererbt (<a href=#global>global</a>)</td><td>Dies definiert die Farben von Wetterkarten-Farben in den unterschiedlichen Prozentstufen. &Uuml;ber 10% wird z.B. #8c00ff als Farbe benutzt. <font color="#ff0000">(Neu in 1.6)</font></td>
+        </tr>
+        <tr>
             <td>line_type</td><td>vererbt (<a href=#global>global</a>)</td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile</td>
         </tr>
         <tr>
@@ -473,6 +549,10 @@
         <tr>
             <th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
         <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Eindeutiger Bezeichner des Objekts auf der aktuellen Map. Jedes Objekt der Map ben&ouml;tigt eine object_id. Die object_id besteht aus alphanumerischen Zeichen beliebiger L&auml;nge. Wenn keine object_id angegeben ist, wird NagVis f&uuml;r das Objekt eine erzeugen <font color="#ff0000">(neu in 1.6)</font></td>
+        </tr>
+        <tr>
             <td><b>hostgroup_name</b></td><td> </td><td>Name der Hostgroup wie in Nagios definiert </td>
         </tr>
         <tr>
@@ -489,6 +569,17 @@
         </tr>
         <tr>
             <td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll</td>
+        </tr>
+        <tr>
+        <td>exclude_members</td><td></td>
+        <td><p>Es ist m&ouml;glich, member-Objekte komplett auszuschlie&szlig;en, w&auml;hrend die Objektinformationen vom Backend geholt werden.
+            Die gefilterten Elemente werden nirgendwo in diesem Objekt auftauchen.</p><p>Details zur Filter-Syntax finden Sie bei der 
+            <a href="#exclude">exclude regex-Definition</a>. <font color="#ff0000">(Neu in 1.6b4)</font></p></td>
+        </tr>
+        <tr>
+        <td>exclude_member_states</td><td></td>
+        <td><p>Es ist m&ouml;glich, ein oder mehrere member-Zust&auml;nde w&auml;hrend der Ermittlung des Gesamtzustands von Objekten auszuschlie&szlig;en. Die gefilterten Elemente werden in der member-Liste auftauchen, aber nicht f&uuml;r Gesamtstatusberechnungen benutzt.</p>
+            <p>Details zur Filter-Syntax finden Sie bei der <a href="#exclude">exclude regex-Definition</a>. <font color="#ff0000">(Neu in 1.6b4)</font></p></td>
         </tr>
         <tr>
             <td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
@@ -557,9 +648,6 @@
             <td>line_width </td><td>vererbt (<a href=#global>global</a>)</td><td> Dies definiert die Breite der Linie, wenn dieses Objekt als Linie angezeigt wird. </td>
         </tr>
         <tr>
-            <td>only_hard_states</td><td>vererbt (<a href=#global>global</a>) </td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
-        </tr>
-        <tr>
             <td>recognize_services</td><td>vererbt (<a href=#global>global</a>) </td><td>Definiert, ob die Services des Hosts den angezeigten Status beeinflussen. Wenn auf "1" gesetzt, wird ein Service im Status CRITICAL auch den HOST als CRITICAL anzeigen. Wenn auf "0" gesetzt, wird nur der Host-Zustand (UP oder DOWN) angezeigt und der Status der Services ignoriert. Ist dieser Wert nicht in der Konfiguration angegeben, wird er auf 1 gesetzt. </td>
         </tr>
         <tr>
@@ -592,6 +680,10 @@
         <tr>
             <th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
         <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Eindeutiger Bezeichner des Objekts auf der aktuellen Map. Jedes Objekt der Map ben&ouml;tigt eine object_id. Die object_id besteht aus alphanumerischen Zeichen beliebiger L&auml;nge. Wenn keine object_id angegeben ist, wird NagVis f&uuml;r das Objekt eine erzeugen <font color="#ff0000">(neu in 1.6)</font></td>
+        </tr>
+        <tr>
             <td><b>servicegroup_name</b></td><td> </td><td>Name der Servicegroup wie in Nagios definiert. </td>
         </tr>
         <tr>
@@ -608,6 +700,17 @@
         </tr>
         <tr>
             <td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll</td>
+        </tr>
+        <tr>
+        <td>exclude_members</td><td></td>
+        <td><p>Es ist m&ouml;glich, member-Objekte komplett auszuschlie&szlig;en, w&auml;hrend die Objektinformationen vom Backend geholt werden.
+            Die gefilterten Elemente werden nirgendwo in diesem Objekt auftauchen.</p><p>Details zur Filter-Syntax finden Sie bei der 
+            <a href="#exclude">exclude regex-Definition</a>. <font color="#ff0000">(Neu in 1.6b4)</font></p></td>
+        </tr>
+        <tr>
+        <td>exclude_member_states</td><td></td>
+        <td><p>Es ist m&ouml;glich, ein oder mehrere member-Zust&auml;nde w&auml;hrend der Ermittlung des Gesamtzustands von Objekten auszuschlie&szlig;en. Die gefilterten Elemente werden in der member-Liste auftauchen, aber nicht f&uuml;r Gesamtstatusberechnungen benutzt.</p>
+            <p>Details zur Filter-Syntax finden Sie bei der <a href="#exclude">exclude regex-Definition</a>. <font color="#ff0000">(Neu in 1.6b4)</font></p></td>
         </tr>
         <tr>
             <td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
@@ -679,9 +782,6 @@
             <td>only_hard_states</td><td>vererbt (<a href=#global>global</a>) </td><td>Gibt an, ob Soft-Zust&auml;nde ignoriert werden sollen. Default ist 0.</td>
         </tr>
         <tr>
-            <td>recognize_services</td><td>vererbt (<a href=#global>global</a>) </td><td>Definiert, ob die Services des Hosts den angezeigten Status beeinflussen. Wenn auf "1" gesetzt, wird ein Service im Status CRITICAL auch den HOST als CRITICAL anzeigen. Wenn auf "0" gesetzt, wird nur der Host-Zustand (UP oder DOWN) angezeigt und der Status der Services ignoriert. Ist dieser Wert nicht in der Konfiguration angegeben, wird er auf 1 gesetzt. </td>
-        </tr>
-        <tr>
             <td>url</td><td> </td><td>URL, auf den das Icon verweisen soll. Default ist ein Verweis auf die Nagios-CGIs. Verf&uuml;gbare Makros: [servicegroup_name], [htmlcgi] und [htmlbase]. Der Wert kann leer sein, um den Link zu deaktivieren.</td>
         </tr>
         <tr>
@@ -711,6 +811,10 @@
         <tr>
             <th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
         <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Eindeutiger Bezeichner des Objekts auf der aktuellen Map. Jedes Objekt der Map ben&ouml;tigt eine object_id. Die object_id besteht aus alphanumerischen Zeichen beliebiger L&auml;nge. Wenn keine object_id angegeben ist, wird NagVis f&uuml;r das Objekt eine erzeugen <font color="#ff0000">(neu in 1.6)</font></td>
+        </tr>
+        <tr>
             <td><b>map_name</b></td><td> </td><td>Name der Map-Konfigurationsdatei (ohne .cfg-Erweiterung) </td>
         </tr>
         <tr>
@@ -724,6 +828,17 @@
         </tr>
         <tr>
             <td>context_template</td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">Context-Template</a>, das auf dieser Map benutzt werden soll</td>
+        </tr>
+        <tr>
+        <td>exclude_members</td><td></td>
+        <td><p>Es ist m&ouml;glich, member-Objekte komplett auszuschlie&szlig;en, w&auml;hrend die Objektinformationen vom Backend geholt werden.
+            Die gefilterten Elemente werden nirgendwo in diesem Objekt auftauchen.</p><p>Details zur Filter-Syntax finden Sie bei der 
+            <a href="#exclude">exclude regex-Definition</a>. <font color="#ff0000">(Neu in 1.6b4)</font></p></td>
+        </tr>
+        <tr>
+        <td>exclude_member_states</td><td></td>
+        <td><p>Es ist m&ouml;glich, ein oder mehrere member-Zust&auml;nde w&auml;hrend der Ermittlung des Gesamtzustands von Objekten auszuschlie&szlig;en. Die gefilterten Elemente werden in der member-Liste auftauchen, aber nicht f&uuml;r Gesamtstatusberechnungen benutzt.</p>
+            <p>Details zur Filter-Syntax finden Sie bei der <a href="#exclude">exclude regex-Definition</a>. <font color="#ff0000">(Neu in 1.6b4)</font></p></td>
         </tr>
         <tr>
             <td>hover_menu</td><td>vererbt (<a href=nagvis_config_format_description.html>nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren von Hover-Men&uuml;s </td>
@@ -825,12 +940,13 @@
         <tr>
             <th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
         <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Eindeutiger Bezeichner des Objekts auf der aktuellen Map. Jedes Objekt der Map ben&ouml;tigt eine object_id. Die object_id besteht aus alphanumerischen Zeichen beliebiger L&auml;nge. Wenn keine object_id angegeben ist, wird NagVis f&uuml;r das Objekt eine erzeugen <font color="#ff0000">(neu in 1.6)</font></td>
+        </tr>
+        <tr>
             <td><b>text</b></td><td> </td><td>Ihr eigener Text, HTML ist m&ouml;glich. Es gibt die Makros <br>
             <b>[refresh_counter]</b>: zeigt die Zeit bis zur n&auml;chsten Aktualisierung/Rotation <br>
             <b>[worker_last_run]</b>: zeigt die Zeit des letzten "Worker-Runs"</td>
-        </tr>
-        <tr>
-            <td><b>w</b></td><td> </td><td>Breite der Textbox </td>
         </tr>
         <tr>
             <td><b>x</b></td><td> </td><td>X-Koordinate </td>
@@ -839,13 +955,16 @@
             <td><b>y</b></td><td> </td><td>Y-Koordinate</td>
         </tr>
         <tr>
+            <td>w</td><td>auto</td><td>Breite der Textbox in px (Pixeln). &quot;auto&quot; bedeutet automatische Skalierung</td>
+        </tr>
+        <tr>
+            <td>h</td><td>auto</td><td>H&ouml;he der Textbox in px (Pixeln). &quot;auto&quot; bedeutet automatische Skalierung</td>
+        </tr>
+        <tr>
             <td>background_color</td><td>#C0C0C0</td><td>Hintergrundfarbe der Textbox. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
         </tr>
         <tr>
             <td>border_color</td><td>#000000</td><td>Rahmenfarbe der Textbox. Die Farbe sollte als Hexcode angegeben werden, kann aber auch &quot;transparent&quot; sein.</td>
-        </tr>
-        <tr>
-            <td>h</td><td>auto</td><td>H&ouml;he der Textbox in px (Pixeln). &quot;auto&quot; bedeutet automatische Skalierung</td>
         </tr>
         <tr>
             <td>style</td><td>#000000</td><td>Benutzerdefiniertes Aussehen des Textes im Format von HTML-Style-Attributen, z.B. <code>font-family:sans;font-weight:bold;</code>.</td>
@@ -871,6 +990,10 @@
     <table border=0>
         <tr>
             <th>Wert</th><th>Default</th><th>Beschreibung</th>
+        </tr>
+        <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Eindeutiger Bezeichner des Objekts auf der aktuellen Map. Jedes Objekt der Map ben&ouml;tigt eine object_id. Die object_id besteht aus alphanumerischen Zeichen beliebiger L&auml;nge. Wenn keine object_id angegeben ist, wird NagVis f&uuml;r das Objekt eine erzeugen <font color="#ff0000">(neu in 1.6)</font></td>
         </tr>
         <tr>
             <td><b>Icon</b></td><td> </td><td>Dateiname des Shapes. Shapes m&uuml;ssen im shape-Verzeichnis abgelegt werden (Default: <code>nagvis/images/shapes</code>) </td>
@@ -920,6 +1043,10 @@
     <table width=100% border=0>
         <tr>
             <th>Wert</th><th>Default</th><th>Beschreibung</th></tr>
+        <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Eindeutiger Bezeichner des Objekts auf der aktuellen Map. Jedes Objekt der Map ben&ouml;tigt eine object_id. Die object_id besteht aus alphanumerischen Zeichen beliebiger L&auml;nge. Wenn keine object_id angegeben ist, wird NagVis f&uuml;r das Objekt eine erzeugen <font color="#ff0000">(neu in 1.6)</font></td>
+        </tr>
         <tr>
             <td><b>line_type</b></td><td> </td><td>Gibt den Typ der Linie an, wenn view_type=line ist. G&uuml;ltige Werte sind<br>&quot;11&quot; f&uuml;r Linien mit einem Pfeil an jedem Ende<br>&quot;10&quot; f&uuml;r Linien mit zwei Pfeilen in der Mitte der Linie, die aufeinander zeigen<br>&quot;12&quot; f&uuml;r Linien ohne Pfeile</td>
         </tr>

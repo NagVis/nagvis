@@ -8,7 +8,7 @@
         <h1>Header Templates</h1>
         <h2>Introduction</h2>
         
-        Header templates are html files with some macros in it. These files can be used as header menu in the maps. The header templates are located at <code>share/userfiles/templates/pages/*.header.html</code> relative to the nagvis root directory. The templates are named like this: <code>*.header.html</code>.<br>
+        Header templates are html files with some macros in it. These files can be used as header menu in the maps. The header templates are located at <code>share/userfiles/templates/pages/</code> relative to the nagvis root directory. The templates are named like this: <code>*.header.html</code>.<br>
         
         <font color="#ff0000">Since NagVis 1.5 the template format has been changed to be more flexible. Therefore all templates need to be recoded to be NagVis 1.5 compatible.</font>
         
@@ -96,7 +96,7 @@
         </tr>
         <tr>
             <td valign="top">{if $viewType == 'Map' || $viewType == 'Automap'}</td>
-            <td>To be more flexible in the templates we added some sort of if statements. These can be used as in native PHP. For an example have a look at <code>share/userfiles/templates/pages/default.header.html</code>..</td>
+            <td>To be more flexible in the templates we added some sort of if statements. These can be used as in native PHP. For an example have a look at <code>share/userfiles/templates/pages/default.header.html</code>.</td>
         </tr>
         <tr>
         <td>{$pathBase} (was [html_base])</td><td> URL to HTML-Base (/nagvis) </td>

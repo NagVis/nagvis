@@ -20,7 +20,7 @@
         <pre>tar xvzf nagvis-1.6.x.tar.gz</pre>
         
         <h2> STEP 3: Move the unpacked NagVis directory </h2>
-        <p>Place the NagVis directory tree somewhere on your system. For most case
+        <p>Place the NagVis directory tree somewhere on your system. For most cases
     <code>/usr/local/nagvis</code> is the best place.</p>
         <pre>mv nagvis /usr/local/nagvis</pre>
     
@@ -44,14 +44,14 @@ var
         <pre>cp etc/nagvis.ini.php-sample etc/nagvis.ini.php</pre>
         Now you can edit this file with your favourite text editor - I use vi:
         <pre>vi etc/nagvis.ini.php</pre>
-        Most lines in the fresh copied <code>nagvis.ini.php</code> are commented out.
+        Most lines in the fresh copied <code>nagvis.ini.php</code> are commented out (starting with a semicolon).
         If you want to set different settings, you can simply uncomment the line and change its value.
         
         For information about the possible values have a look at <a href="nagvis_config_format_description.html">Main Config Format Description</a>.
         
         <h2> STEP 5: Configure webserver</h2>
-        <p>Since NagVis 1.5 it is necessary to configure the webserver to be able
-    to use NagVis. You will find a sample configuration file in <code>etc/apache2-nagvis.conf-sample</code>.
+        <p>Since NagVis 1.5 it is necessary to configure the webserver to be able to use NagVis.
+        You will find a sample configuration file in <code>etc/apache2-nagvis.conf-sample</code>.
 
         <p>Simply copy the file to the <code>conf.d</code> directory of your webserver. For example this is <code>/etc/apache2/conf.d</code.</p>
         <pre>cp etc/apache2-nagvis.conf-sample /etc/apache2/conf.d/apache2-nagvis.conf</pre>
@@ -87,10 +87,10 @@ chmod 664 /usr/local/nagvis/var/tmpl/cache/*</pre>
         Only change them if you know what you are doing!
         
         <h2> STEP 7: Configure the maps </h2>
-	<p>There are two ways configuring NagVis. First is the web based configuration using the regular frontend. Take a look
+	<p>There are two ways configuring NagVis. The first one is the web based configuration using the NagVis frontend (<code>http://&lt;nagiosserver&gt;/&lt;path-to-NagVis&gt;/</code>). Take a look
 	at the header menu for options. To modify existing map objects you need to unlock the object you like to edit.</p>
 
-        <p>The secod way is to edit the configuration files directly using a text editor of your choice. The map config files are located in <code>etc/maps/</code>.
+        <p>The second way is to edit the configuration files directly using a text editor of your choice. The map config files are located at <code>etc/maps/</code>.
         For valid formats and values have a look at <a href="map_config_format_description.html">Map Config Format Description</a>.</p>
         
         <h2> STEP 8: View the maps </h2>

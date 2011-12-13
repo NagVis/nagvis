@@ -14,89 +14,20 @@
             Innerhalb von NagVis gibt es einige Komponenten, um diese Backends zu verwalten und sie dienen als "Kleber" zwischen den einzelnen Backends und den anderen Schichten.</p>
         
         <h2>Default-Backend</h2>
-        <p>Zur Zeit werden mit dem NagVis-Kern vier Backends ausgeliefert: das mklivestatus, ndomy, ndo2fs und merlinmy Backend.
+        <p>Zur Zeit werden mit dem NagVis-Kern drei Backends ausgeliefert: das mklivestatus, ndomy und merlinmy Backend.
             Alle Backends werden im Folgenden genauer beschrieben.<br />
             Das ndomy-Backend ist das Default-Backend von NagVis 1.0 bis NagVis 1.4.x.
             Es holt Nagios-Informationen aus der NDO-MySQL-Datenbank.
             Seit NagVis 1.5 ist MKLivestatus das Default-Backend.</p>
         
         <h2>Backend-Typen</h2>
-        
-        <h3>mklivestatus-Backend</h3>
-        <p>MKLivestatus ist ein einfaches und elegantes Nagios Eventbroker Modul.
-            Livestatus ist konzipiert, um Disk-I/O, Speicher- und CPU-Last, welcher durch die Verarbeitung von aktuellen Statusinformationen verursacht wird, zu reduzieren.
-            Genau wie die NDO-Datenbank setzt Livestatus auf die Event-Broker-API von Nagios auf und l&auml;dt ein bin&auml;res Modul in den Nagios-Kern.
-            Anders als bei NDO werden keine Daten aktiv in eine Datenbank oder &Auml;hnliches kopiert.
-            Die Daten werden &uuml;ber einen UNIX-Socket nur bereitgestellt, wenn sie auch angefragt werden.
-            Details &uuml;ber diese neue Datenquelle sind in der <a href="http://www.mathias-kettner.de/checkmk_livestatus.html#H1:How to access Nagios status data" target="_blank">offiziellen Dokumentation</a> zu finden.</p>
-        <p>Seit NagVis 1.4.5 ist das MKLivestatus-Backend in NagVis enthalten.
-            Es ist wesentlich performanter als alle bisherigen Backends und kommt mit weniger Overhead aus.
-            Es wird keine weitere Datenbank ben&ouml;tigt.</p>
-        
-        <table style="width:100%">
-            <tr>
-                <th width="200">Value</th><th width="150">Default</th><th>Description</th>
-            </tr>
-            <tr>
-                <td>socket</td><td>unix:/usr/local/nagios/var/rw/live</td><td><p>Der Socket, auf dem MKLivestatus h&ouml;rt. Es kann ein lokaler UNIX-Socket, oder ein TCP-Socket sein. Am Anfang des Wertes muss der Typ des Sockets bestimmt werden, dies kann &quot;unix:&quot; f&uuml;r UNIX-Sockets oder &quot;tcp:&quot; f&uuml;r TCP-Sockets sein.</p> <p>Im Falle eines UNIX-Sockets muss nach dem Doppelpunkt der Pfad zum Socket angegeben werden.</p> <p>Wenn ein TCP-Socket genutzt wird, muss nach dem Doppelpunkt die Hostadresse und im Anschluss, von einem Doppelpunkt getrennt, der Port angegeben werden: &lt;host&gt;:&lt;port&gt;. Die Hostadresse kann sowohl eine IP-Adresse, als auch ein DNS-Name sein.</p></td>
-            </tr>
-        </table>
-        <p>Es gibt au&szlig;erdem einige globale Backend-Parameter, diese k&ouml;nnen in der <a href="nagvis_config_format_description.html#backend">Dokumentation der Hauptkonfiguration</a> nachgelesen werden.</p>
-        
-        <h3>ndo2db-MySQL-Backend (ndomy)</h3>
-        <p>Das ndo2db-MySQL-Backend, kurz ndomy-Backend, wird benutzt, um Nagios-Informationen wie Status- und Konfigurationsdaten aus einer MySQL-Datenbank zu holen.
-            Ein Nagios-Addon namens ndoutils speichert alle Informationen, die bei einem laufenden Nagios anfallen, in einer MySQL-Datenbank. Diese Datenbank wird &uuml;ber das NagVis-ndomy-Backend abgefragt.</p>
-        <p>Sie k&ouml;nnen die folgenden Parameter benutzen, um ein ndomy-Backend zu konfigurieren:</p>
-        
-        <table style="width:100%">
-            <tr>
-                <th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
-            </tr>
-            <tr>
-                <td>dbhost</td><td>localhost</td><td>Hostname der NDO-Datenbank</td>
-            </tr>
-            <tr>
-                <td>dbport</td><td>3306</td><td>Port der NDO-Datenbank</td>
-            </tr>
-            <tr>
-                <td>dbname</td><td>db_nagios</td><td>Name der NDO-Datenbank</td>
-            </tr>
-            <tr>
-                <td>dbuser</td><td>root</td><td>Benutzername f&uuml;r den Datenbankzugriff (Leseberechtigung ist ausreichend)</td>
-            </tr>
-            <tr>
-                <td>dbpass</td><td>root</td><td>Passwort f&uuml;r den Datenbankzugriff (Leseberechtigung ist ausreichend)</td>
-            </tr>
-            <tr>
-                <td>dbprefix</td><td> nagios_ </td><td>Pr&auml;fix der Tabellen in der NDO-Datenbank (wie in der ndo2db.cfg definiert)</td>
-            </tr>
-            <tr>
-                <td>dbinstancename</td><td> default </td><td>Name der Nagios-Instanz in der NDO-Datenbank (wie in der ndomod.cfg definiert)</td>
-            </tr>
-            <tr>
-                <td>maxtimewithoutupdate</td><td>180</td><td>Maximale Zeit in Sekunden nach der letzten Aktualisierung in NDO. NagVis wird melden, dass Nagios nicht l&auml;uft, wenn diese Zeit &uuml;berschritten ist</td>
-            </tr>
-        </table>
-        <p>Es gibt auch einige allgemeine Parameter.
-            Sie finden sie in der <a href="nagvis_config_format_description.html#backend">Formatbeschreibung der Hauptkonfigurationsdatei</a>.</p>
-        
-        <h3>ndo2fs-Backend</h3>
-        <table style="width:100%">
-        <tr>
-        <th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
-        </tr>
-        <tr>
-        <td>path</td><td>/usr/local/ndo2fs/var</td><td>Pfad zum ndo2fs-var-Verzeichnis. Die Dateien in diesem Verzeichnis sollten ndo2fs.pid, VOLATILE und PERSISTENT sein.</td>
-        </tr>
-        <tr>
-        <td>instancename</td><td>default</td><td>Name der Backend-Instanz.</td>
-        </tr>
-        <tr>
-        <td>maxtimewithoutupdate</td><td>180</td><td>Maximale Zeit in Sekunden nach der letzten Aktualisierung in NDO. NagVis wird melden, dass Nagios nicht l&auml;uft, wenn diese Zeit &uuml;berschritten ist</td>
-        </tr>
-        </table>
-        <p>Es gibt auch einige allgemeine Parameter. Sie finden sie in der <a href="nagvis_config_format_description.html#backend">Formatbeschreibung der Hauptkonfigurationsdatei</a>.</p>
-        
+        <ul>
+            <li><a href=backend_mklivestatus.html>MKLivestatus</a></li>
+            <li><a href=backend_ndomy.html>NDOMy</a></li>
+            <li><a href=backend_nagiosbp.html>NagiosBP</a></li>
+            <li>MerlinMy</li>
+        </ul>
+
         <h2>Konfigurieren von Backends</h2>
         <p>Die Backends werden in der Hauptkonfigurationsdatei definiert.
             Schauen Sie in die <a href="nagvis_config_format_description.html#backend">Formatbeschreibung der Hauptkonfigurationsdatei</a>, wie Backends definiert werden.</p>

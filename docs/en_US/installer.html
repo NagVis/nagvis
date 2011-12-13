@@ -18,7 +18,7 @@
         <p>Get NagVis. The latest release can be found at <a href="http://www.nagvis.org/" target="_blank">nagvis.org</a>.</p>
         
         <h3>Unpack NagVis</h3>
-        <p>Unpack the archive to a temporary place (For example /tmp). And change to that directory</p>
+        <p>Unpack the archive to a temporary place (for example /tmp) and change to that directory</p>
         <pre>tar xvzf nagvis-1.6*.tar.gz /tmp
 cd /tmp/nagvis-1.6*</pre>
         
@@ -29,7 +29,9 @@ cd /tmp/nagvis-1.6*</pre>
         <h3>Run installer</h3>
         <p>Now you can run the installer.</p>
         <pre>./install.sh</pre>
-        <p>Following the instructions of the installer should copy the necessary files to the correct places. Please keep in mind that you have to edit the config file nagvis.ini.php. If you experience any problems please let us know.</p>
+        <p>Using Icinga you should add "-s icinga".</p>
+        <pre>./install.sh -s icinga</pre>
+        <p>Following the instructions of the installer it should copy the necessary files to the correct places. Please keep in mind that you have to edit the config file <code>nagvis.ini.php</code>. If you experience any problems please let us know.</p>
         
         <h3>Cleanup</h3>
         <p>You can remove the sources after installation.</p>

@@ -17,8 +17,8 @@
     <h2>Einleitung</h2>
     Hover-Templates sind HTML-Dateien, die einige Makros enthalten.
     Diese Dateien k&ouml;nnen als Hover-Men&uuml;s in den Maps benutzt werden.
-    Die Hover-Templates sind im Verzeichnis <code>nagvis/etc/templates/hover/</code> relativ zum NagVis-Root-Verzeichnis zu finden.
-    Die Templates sind wie folgt benannt: <code>tmpl.*.html</code><br>
+    Die Hover-Templates sind im Verzeichnis <code>share/userfiles/templates/</code> relativ zum NagVis-Root-Verzeichnis zu finden.
+    Die Templates sind wie folgt benannt: <code>*.hover.html</code><br>
     Es gibt Makros, die in Hover-Men&uuml;s aller Objekttypen verf&uuml;gbar sind und bestimmte, die nur bei speziellen Objekten verf&uuml;gbar sind.
     Alle Standard-Makros finden Sie nachfolgend.
     </pre>
@@ -28,7 +28,7 @@
     <p>Die folgenden Makros sind in allen Objekttypen verf&uuml;gbar:</p>
     <table border=0 width=100%>
         <tr>
-            <th>Makro</th><th>Beschreibung</th>
+            <th width="250">Makro</th><th>Beschreibung</th>
         </tr>
         <tr>
             <th colspan=2>Allgemeines</th>
@@ -145,15 +145,13 @@
     Diese Makros sollten von Abschnittsmakros umgeben werden.
     Die Abschnittsmakros definieren, dass der angegebene Code entfernt wird, wenn das Hover-Template nicht dem angebenen Typ entspricht.
         
-    Ein Abschnittsmakros f&uuml;r Host-Makros k&ouml;nnte bspw. so aussehen:
-        
-    <pre>&lt;!-- BEGIN host -->.+?&lt;!-- END host --></pre>
+    Ein Abschnittsmakros f&uuml;r Host-Makros k&ouml;nnte bspw. so aussehen: <code>&lt;!-- BEGIN host -->.+?&lt;!-- END host --></code><br><br>
         
     Nachfolgend finden Sie eine vollst&auml;ndige Liste der Spezialmakros
-    <h3>alle besonderen Map-Objekte</h3>
+    <h3>Alle au&szlig;er Map-Objekten</h3>
     <table border=0 width=100%>
         <tr>
-            <th>Makro</th><th>Beschreibung</th>
+            <th width="250">Makro</th><th>Beschreibung</th>
         </tr>
         <tr>
             <td>[obj_backendid]</td><td>die Backend-id des Backend-Objekts (backend_&lt;*>)
@@ -165,7 +163,7 @@
     <h3>Host-/Service-Objekte</h3>
     <table border=0 width=100%>
         <tr>
-            <th>Makro</th><th>Beschreibung</th>
+            <th width="250">Makro</th><th>Beschreibung</th>
         </tr>
         <tr>
             <td>[obj_address]</td><td>Die Adresse des Host-Objekts.</td>
@@ -202,7 +200,7 @@
     <h3>Service-Objekte</h3>
     <table border=0 width=100%>
         <tr>
-            <th>Makro</th><th>Beschreibung</th>
+            <th width="250">Makro</th><th>Beschreibung</th>
         </tr>
         <tr>
             <td>[service_description]</td><td>Service-Beschreibung in Nagios</td>
@@ -218,7 +216,7 @@
     <h3>Host-Objekte</h3>
     <table border=0 width=100%>
         <tr>
-            <th>Makro</th><th>Beschreibung</th>
+            <th width="250">Makro</th><th>Beschreibung</th>
         </tr>
         <tr>
             <td>[pnp_hostname]</td><td>Hostname PNP (Leerzeichen ersetzt durch Unterstrich)</td>
@@ -229,7 +227,7 @@
     Es gibt ein sehr spezielles Makro f&uuml;r abh&auml;ngige Services einer Servicegroup, das Auswahlmakro <code>&lt;!-- BEGIN servicegroup_child --&gt;&lt;!-- END servicegroup_child --&gt;</code>.
     <table border=0 width=100%>
         <tr>
-            <th>Makro</th><th>Beschreibung</th>
+            <th width="250">Makro</th><th>Beschreibung</th>
         </tr>
         <tr>
             <td>[lang_child_name1]</td><td>Label des Hostnamens des abh. Service</td>

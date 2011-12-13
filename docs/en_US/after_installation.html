@@ -10,7 +10,9 @@
         <p>NagVis contains several demo maps on initial installation. There is also a rotation defined to give you an example of the features of NagVis. Certainly Nagvis has a lot more features than we can show you with this demo configurations. So you should read the documentation and be creative.</p>
         <p>If you are familiar with NagVis you can delete these demonstration maps and rotation without problems.</p>
         <h2>Configuration Files</h2>
-        <p>NagVis is based on several configuration files. The <a href="nagvis_config_format_description.html" target="_blank">main configuration</a> file stores the basic and global configuration options. The map specific configuration options are stored in <a href="map_config_format_description.html" target="_blank">map configuration</a> files. A special type of maps are the automaps, the automaps have an own configuration file directory. The <a href="automap_config_format.html" target="_blank">automap configuration</a> files use the same syntax as the map configuration files but have some more options.</p>
+        <p>NagVis is based on several configuration files. The <a href="nagvis_config_format_description.html" target="_blank">main configuration</a> file stores the basic and global configuration options.
+        The map specific configuration options are stored in <a href="map_config_format_description.html" target="_blank">map configuration</a> files located in <code>etc/maps</code>.
+        A special type of maps are the automaps which have a configuration file directory of their own (<code>etc/automaps</code>). The <a href="automap_config_format.html" target="_blank">automap configuration</a> files use the same syntax as the map configuration files but have some additional options.</p>
         <p>The whole NagVis configuration can be changed using the web based configuration dialogs.</p>
         <h2>Authentication/Authorisation</h2>
         <p>By default NagVis uses an internal user and permission database (SQLite) for handling authentication and authorisation. Nagvis uses a role based permission system. After installation there are two default users defined:</p>
@@ -25,6 +27,26 @@
             <li>Guests: Read access to all demo maps, automaps and rotations</li>
         </ul>
         <p>These default users and roles should be ok for beginning. You may delete these users and roles but please be aware not to delete the last administrative user.</p>
-        <h2></h2>
+
+        <a name="troubleshooting"><h2>Troubleshooting</h2></a>
+        <p>During installation</p>
+        <ul>
+            <li>The installer complains about missing prerequisites/modules.<p>Please be sure that you have a current PHP version, that all required modules are installed for NagVis and the backend you want to use and that GraphViz is already there. Some PHP modules might already be included in the base package (please use "php -m" to check).</p><p>Please check <code>install.log</code> for errors.</li>
+        </ul>
+        <p>After installation</p>
+        <ul>
+            <li>You only get a blank page while trying to access the main page.<p>Please check the Apache logs for "permission denied" messages. It is most likely that SElinux is active. Please disable it (setenforce 0) or allow NagVis to access the files.</li>
+            <li>After adding objects to a map it isn&apos;t displayed any more.<p>Please check the Apache logs for "memory limit exceeded" messages. It is most likely that the memory settings in php.ini have to be increased. Please restart your WebServer afterwards.</p> 
+        </ul>
+        <p>Please take a look at the <a href="http://www.nagvis.org/doc">doc section</a> of the official website (namely "FAQ" and "Often reported errors") as well. If this doesn&apos;t help then read on.</p>
+        <a name="help"><p>HELP</p></a>
+        <p>You might seek help at the <a href="http://www.nagvis.org">official NagVis website</a> or use the <a href="http://www.monitoring-portal.org">monitoring portal</a> which offers a board for NagVis questions.</p>
+        <p>In any case please provide at LEAST information about</p>
+        <ul>
+            <li>the operating system (distribution, version)</li>
+            <li>the NagVis version (including if installed from os provided package or source)</li>
+            <li><code>grep "^[^;|^$]" &lt;config file&gt;</code> (if you have a configuration related issue). Replace "&lt;config file&gt;" by the name of the config file which might be in error</li>
+            <li>Apache log messages (error log)</li>
+        </lu>
     </body>
 </html>

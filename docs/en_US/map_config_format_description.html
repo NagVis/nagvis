@@ -8,8 +8,8 @@
         <h1>Map configuration format description</h1>
         
         <h2>General Information</h2>
-        <p>The NagVis configuration file format is very similiar to the format used by <a href="http://www.nagios.org">Nagios</a>(TM).</p>
-        <p>Configuration statements start with the keyword "define" followed by a type field and a left curly bracket ({). Every following line defines variable-value pairs, separated by a ( = ) until a right curly bracket (}) is found.</p>
+        <p>The NagVis configuration file format is very similiar to the format used by <a href="http://www.nagios.org">Nagios</a>&reg;.</p>
+        <p>Configuration statements start with the keyword "define" followed by a type field and a left curly bracket ({). Every following line defines variable-value pairs, separated by an equal sign (=) until a right curly bracket (}) is found.</p>
         <p>Hashes (#) are used to mark comments, note that a comment line <i>MUST</i> start with a hash not with other chars like whitespaces!</p>
         
         <h2>Object types</h2>
@@ -61,7 +61,7 @@
         <td> backend_id </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend defined as "defaultbackend" at the <a href="nagvis_config_format_description.html">Main Configuration file</a> is used.</td>
         </tr>
         <tr>
-        <td> background_color </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Background color of this map. If this is not set backgroundcolor from Main Configuration file is taken. </td>
+        <td> background_color </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Background colour of this map. If this is not set backgroundcolor from Main Configuration file is taken. </td>
         </tr>
         <tr>
         <td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu on your map objects. </td>
@@ -70,7 +70,7 @@
         <td>context_template</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Default <a href="context_templates.html">context template</a> to be used on this map </td>
         </tr>
         <tr>
-        <td>event_background</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable changing background color on state changes (Configured color is shown when summary state is PENDING, OK or UP). </td>
+        <td>event_background</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable changing background colour on state changes (configured colour is shown when summary state is PENDING, OK or UP). </td>
         </tr>
         <tr>
         <td>event_highlight</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable highlighting of the state changing object by adding a flashing border. </td>
@@ -116,7 +116,9 @@
             <p>For details about the filter syntax have a
             look at the <a href="#exclude">exclude regex definition</a>. <font color="#ff0000">(New in 1.6b4)</font></p></td>
         </tr>
-
+        <tr>
+        <td>grid_color</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>The colour of the grid lines.</td>
+        </tr>
         <tr>
             <td>grid_show</td>
             <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
@@ -124,10 +126,10 @@
             Objects are aligned to the upper left corner after moving.</td>
         </tr>
         <tr>
-        <td>grid_color</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>The color of the grid lines.</td>
+        <td>grid_steps</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Scale of the grid in px.</td>
         </tr>
         <tr>
-        <td>grid_steps</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Scale of the grid in px.</td>
+        <td> header_fade </td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable the fade effect of the submenus in the header menu (When the used header menu supports that option).</td>
         </tr>
         <tr>
         <td> header_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the header menu </td>
@@ -136,31 +138,28 @@
         <td> header_template </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> <a href="header_templates.html">header template</a> to be used on ths map </td>
         </tr>
         <tr>
-        <td> header_fade </td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>Enable/Disable the fade effect of the submenus in the header menu (When the used header menu supports that option).</td>
-        </tr>
-        <tr>
-        <td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
-        </tr>
-        <tr>
-        <td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
-        </tr>
-        <tr>
-        <td> hover_template </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Default <a href="hover_templates.html">hover template</a> to be used on this map </td>
-        </tr>
-        <tr>
-        <td> <strike>hover_timeout</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Default hover menu ajax request timeout in seconds</strike> <font color="#ff0000">(Deprecated in 1.4)</font></td>
-        </tr>
-        <tr>
-        <td> hover_childs_show </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable displaying child objects </td>
-        </tr>
-        <tr>
         <td> hover_childs_limit </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Number of maximum children to be displayed. Set to -1 to disable the limit.</td>
         </tr>
         <tr>
         <td> hover_childs_order </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Order direction of child objects </td>
         </tr>
         <tr>
+        <td> hover_childs_show </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable displaying child objects </td>
+        </tr>
+        <tr>
         <td> hover_childs_sort </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sort method of child objects </td>
+        </tr>
+        <tr>
+        <td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
+        </tr>
+        <tr>
+        <td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
+        </tr>
+        <tr>
+        <td> hover_template </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Default <a href="hover_templates.html">hover template</a> to be used on this map </td>
+        </tr>
+        <tr>
+        <td> <strike>hover_timeout</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Default hover menu ajax request timeout in seconds</strike> <font color="#ff0000">(Deprecated in 1.4)</font></td>
         </tr>
         <tr>
         <td> iconset </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Iconset to use as default for all objects placed on the map. Can be overwritten on a per object base. <br>In the example "std_small" is used which means an OK state will be displayed using "std_small_<i>ok</i>.png", a CRITICAL state will be displayed by using "std_small_<i>critical</i>.png" and so on. </td>
@@ -181,28 +180,28 @@
         <td> label_width </td><td> auto </td><td> Default width of the labels in px </td>
         </tr>
         <tr>
-        <td> label_background </td><td> transparent </td><td> Default background color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;.</td>
+        <td> label_background </td><td> transparent </td><td> Default background colour of the labels. The colour should be given in hexcode. Can also be &quot;transparent&quot;.</td>
         </tr>
         <tr>
-        <td> label_border </td><td> #000000 </td><td> Default border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;.</td>
+        <td> label_border </td><td> #000000 </td><td> Default border colour of the labels. The colour should be given in hexcode. Can also be &quot;transparent&quot;.</td>
         </tr>
         <tr>
         <td>label_style</td><td></td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code></td>
         </tr>
 
         <tr>
-        <td> line_type </td><td></td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow.</td>
-        </tr>
-        <tr>
         <td>line_arrow</td><td>forward</td>
         <td>This defines the arrows at the end of the line. At the moment this
         attribute is only being used for the lines between hosts on the automap. Possible values: forward, back, both, none.</td>
         </tr>
         <tr>
+        <td> line_type </td><td></td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow.</td>
+        </tr>
+        <tr>
         <td>line_width</td><td>3</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
         </tr>
         <tr>
-        <td>line_weather_colors</td><td>10:#8c00ff,25:#2020ff,40:#00c0ff,55:#00f000,70:#f0f000,85:#ffc000,100:#ff0000</td><td>This defines the colors of weathermap colors in the different percentage levels. For example above 10% load it will be colored #8c00ff. <font color="#ff0000">(New in 1.6)</font></td>
+        <td>line_weather_colors</td><td>10:#8c00ff,25:#2020ff,40:#00c0ff,55:#00f000,70:#f0f000,85:#ffc000,100:#ff0000</td><td>This defines the colours of weathermap colours in the different percentage levels. For example above 10% load it will be coloured #8c00ff. <font color="#ff0000">(New in 1.6)</font></td>
         </tr>
         
         <tr>
@@ -246,8 +245,8 @@
         <tr>
           <td><b>object_id</b></td><td></td>
           <td>Unique identifier of the object on the current map. Each object
-              on the map needs to have an object_id. The object_id is build of
-              alphanumeric sings of any length. When no object_id is given NagVis
+              on the map needs to have an object_id. The object_id is built of
+              alphanumeric signs of any length. When no object_id is given NagVis
               will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
         </tr>
         <tr>
@@ -335,10 +334,10 @@
         <td> label_width </td><td> inherited (<a href="#global">global</a>) </td><td> Width of the label in px </td>
         </tr>
         <tr>
-        <td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background color of the label. The color should be given in hexcode. Can also be &quot;transparent&quot;.</td>
+        <td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background colour of the label. The colour should be given in hexcode. Can also be &quot;transparent&quot;.</td>
         </tr>
         <tr>
-        <td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        <td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border colour of the labels. The colour should be given in hexcode. Can also be &quot;transparent&quot;. </td>
         </tr>
         <tr>
         <td>label_style</td><td>inherited (<a href="#global">global</a>)</td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code></td>
@@ -395,8 +394,8 @@
         <tr>
           <td><b>object_id</b></td><td></td>
           <td>Unique identifier of the object on the current map. Each object
-              on the map needs to have an object_id. The object_id is build of
-              alphanumeric sings of any length. When no object_id is given NagVis
+              on the map needs to have an object_id. The object_id is built of
+              alphanumeric signs of any length. When no object_id is given NagVis
               will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
         </tr>
         <tr>
@@ -503,10 +502,10 @@
         <td> label_width </td><td> inherited (<a href="#global">global</a>) </td><td> Width of the label in px </td>
         </tr>
         <tr>
-        <td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background color of the label. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        <td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background colour of the label. The colour should be given in hexcode. Can also be &quot;transparent&quot;. </td>
         </tr>
         <tr>
-        <td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        <td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border colour of the labels. The colour should be given in hexcode. Can also be &quot;transparent&quot;. </td>
         </tr>
         <tr>
         <td>label_style</td><td>inherited (<a href="#global">global</a>)</td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code></td>
@@ -551,10 +550,10 @@
         </td>
         </tr>
         <tr>
-        <td>line_weather_colors</td><td>inherited (<a href="#global">global</a>)</td><td>This defines the colors of weathermap colors in the different percentage levels. For example above 10% load it will be colored #8c00ff. <font color="#ff0000">(New in 1.6)</font></td>
+        <td>line_weather_colors</td><td>inherited (<a href="#global">global</a>)</td><td>This defines the colours of weathermap colours in the different percentage levels. For example above 10% load it will be coloured #8c00ff. <font color="#ff0000">(New in 1.6)</font></td>
         </tr>
         <tr>
-        <td> only_hard_states </td><td> inherited (global) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
+        <td> only_hard_states </td><td> inherited (<a href="#global">global</a>)</td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
         </tr>
         <tr>
         <td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
@@ -587,8 +586,8 @@
         <tr>
           <td><b>object_id</b></td><td></td>
           <td>Unique identifier of the object on the current map. Each object
-              on the map needs to have an object_id. The object_id is build of
-              alphanumeric sings of any length. When no object_id is given NagVis
+              on the map needs to have an object_id. The object_id is built of
+              alphanumeric signs of any length. When no object_id is given NagVis
               will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
         </tr>
         <tr>
@@ -675,10 +674,10 @@
         <td> label_width </td><td> inherited (<a href="#global">global</a>) </td><td> Width of the label in px </td>
         </tr>
         <tr>
-        <td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background color of the label. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        <td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background colour of the label. The colour should be given in hexcode. Can also be &quot;transparent&quot;. </td>
         </tr>
         <tr>
-        <td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        <td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border colour of the labels. The colour should be given in hexcode. Can also be &quot;transparent&quot;. </td>
         </tr>
         <tr>
         <td>label_style</td><td>inherited (<a href="#global">global</a>)</td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code></td>
@@ -730,8 +729,8 @@
         <tr>
           <td><b>object_id</b></td><td></td>
           <td>Unique identifier of the object on the current map. Each object
-              on the map needs to have an object_id. The object_id is build of
-              alphanumeric sings of any length. When no object_id is given NagVis
+              on the map needs to have an object_id. The object_id is built of
+              alphanumeric signs of any length. When no object_id is given NagVis
               will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
         </tr>
         <tr>
@@ -818,10 +817,10 @@
         <td> label_width </td><td> inherited (<a href="#global">global</a>) </td><td> Width of the label in px </td>
         </tr>
         <tr>
-        <td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background color of the label. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        <td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background colour of the label. The colour should be given in hexcode. Can also be &quot;transparent&quot;. </td>
         </tr>
         <tr>
-        <td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        <td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border colour of the labels. The colour should be given in hexcode. Can also be &quot;transparent&quot;. </td>
         </tr>
         <tr>
         <td>label_style</td><td>inherited (<a href="#global">global</a>)</td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code></td>
@@ -873,8 +872,8 @@
         <tr>
           <td><b>object_id</b></td><td></td>
           <td>Unique identifier of the object on the current map. Each object
-              on the map needs to have an object_id. The object_id is build of
-              alphanumeric sings of any length. When no object_id is given NagVis
+              on the map needs to have an object_id. The object_id is built of
+              alphanumeric signs of any length. When no object_id is given NagVis
               will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
         </tr>
         <tr>
@@ -958,10 +957,10 @@
         <td> label_width </td><td> inherited (<a href="#global">global</a>) </td><td> Width of the label in px </td>
         </tr>
         <tr>
-        <td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background color of the label. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        <td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background colour of the label. The colour should be given in hexcode. Can also be &quot;transparent&quot;. </td>
         </tr>
         <tr>
-        <td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border color of the labels. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        <td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border colour of the labels. The colour should be given in hexcode. Can also be &quot;transparent&quot;. </td>
         </tr>
         <tr>
         <td>label_style</td><td>inherited (<a href="#global">global</a>)</td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code></td>
@@ -1013,8 +1012,8 @@
         <tr>
           <td><b>object_id</b></td><td></td>
           <td>Unique identifier of the object on the current map. Each object
-              on the map needs to have an object_id. The object_id is build of
-              alphanumeric sings of any length. When no object_id is given NagVis
+              on the map needs to have an object_id. The object_id is built of
+              alphanumeric signs of any length. When no object_id is given NagVis
               will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
         </tr>
         <tr>
@@ -1039,10 +1038,10 @@
         <td>h</td><td>auto</td><td>Height of the textbox in px (pixels). Set to "auto" for auto scaling.</td>
         </tr>
         <tr>
-        <td> background_color </td><td> #C0C0C0 </td><td> Background color of the textbox. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        <td> background_color </td><td> #C0C0C0 </td><td> Background colour of the textbox. The colour should be given in hexcode. Can also be &quot;transparent&quot;. </td>
         </tr>
         <tr>
-        <td> border_color </td><td> #000000 </td><td> Background color of the textbox. The color should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        <td> border_color </td><td> #000000 </td><td> Background colour of the textbox. The colour should be given in hexcode. Can also be &quot;transparent&quot;. </td>
         </tr>
         <tr>
         <td>style</td><td></td><td>Custom styling for the text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code></td>
@@ -1071,8 +1070,8 @@
         <tr>
           <td><b>object_id</b></td><td></td>
           <td>Unique identifier of the object on the current map. Each object
-              on the map needs to have an object_id. The object_id is build of
-              alphanumeric sings of any length. When no object_id is given NagVis
+              on the map needs to have an object_id. The object_id is built of
+              alphanumeric signs of any length. When no object_id is given NagVis
               will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
         </tr>
         <tr>
@@ -1134,8 +1133,8 @@
         <tr>
           <td><b>object_id</b></td><td></td>
           <td>Unique identifier of the object on the current map. Each object
-              on the map needs to have an object_id. The object_id is build of
-              alphanumeric sings of any length. When no object_id is given NagVis
+              on the map needs to have an object_id. The object_id is built of
+              alphanumeric signs of any length. When no object_id is given NagVis
               will generate one for the object. <font color="#ff0000">(New in 1.6)</font></td>
         </tr>
         <tr>
@@ -1161,10 +1160,10 @@
         <td>line_width</td><td>3</td><td>The width of the line in pixels.</td>
         </tr>
         <tr>
-        <td>line_color</td><td>#ffffff</td><td>The fill color of the line in hex form. Can also be &quot;transparent&quot;.</td>
+        <td>line_color</td><td>#ffffff</td><td>The fill colour of the line in hex form. Can also be &quot;transparent&quot;.</td>
         </tr>
         <tr>
-        <td>line_color_border</td><td>#000000</td><td>The border color of the line in hex form. Can also be &quot;transparent&quot;.</td>
+        <td>line_color_border</td><td>#000000</td><td>The border colour of the line in hex form. Can also be &quot;transparent&quot;.</td>
         </tr>
         <tr>
         <td> hover_menu </td><td> 0 </td><td> Enable/Disable the hover menu </td>

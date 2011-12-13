@@ -17,8 +17,8 @@
     <h2>Einleitung</h2>
     Header-Templates sind HTML-Dateien, die einige Makros enthalten.
     Diese Dateien k&ouml;nnen als Header-Men&uuml; in den Maps benutzt werden.
-    Die Header-Templates sind im Verzeichnis <code>nagvis/etc/templates/header/</code> relativ zum NagVis-Root-Verzeichnis abgelegt.
-    Die Template sind wie folgt benannt: <code>tmpl.*.html</code>.<br>
+    Die Header-Templates sind im Verzeichnis <code>share/userfiles/templates/pages/</code> relativ zum NagVis-Root-Verzeichnis abgelegt.
+    Die Template sind wie folgt benannt: <code>*.header.html</code>.<br>
     <font color="#ff0000">ACHTUNG:</code> Seit NagVis 1.5 hat sich das Format der Templates ge&auml;ndert, um flexibler sein zu k&ouml;nnen.
     Das bedeutet, dass bei einer Umstellung von einer &auml;lteren Version alle Templates angepasst werden m&uuml;ssen.</font>
     <br>
@@ -115,6 +115,9 @@
             <td>{$pathImages} (war [html_images])</td><td>URL zu den HTML-Images (/nagvis/images) </td>
         </tr>
         <tr>
+        <td>{$pathHeaderJs}</td><td> Pfad zur Header-spezifischen JavaScript-Datei <font color="#ff0000">(neu in 1.6)</font></td>
+        </tr>
+        <tr>
             <td>{$pathTemplates} (war [html_templates])</td><td>Pfad zu den Header-Templates (/nagvis/userfiles/templates)</td>
         </tr>
         <tr>
@@ -158,9 +161,6 @@
         </tr>
         <tr>
             <td>{$langActions}</td><td>Label f&uuml;r die Auswahl verf&uuml;gbarer Aktionen.</td>
-        </tr>
-        <tr>
-            <td>{$langWui}</td><td>Label f&uuml;r die WUI.</td>
         </tr>
         <tr>
             <td>{$langUser}</td><td>Label f&uuml;r den Benutzer.</td>

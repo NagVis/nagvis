@@ -64,7 +64,7 @@
         <td>authorisationmodule</td><td>CoreAuthorisationModSQLite</td><td>Defines the authorisation module to use. By default NagVis uses the built-in SQLite authorisation module. On delivery there is no other authorisation module available. It is possible to add own authorisation modules for supporting other authorisation mechanism. For details have a look at the <a href="authorisation_modules.html">authorisation module</a> documentation.</td>
         </tr>
         <tr>
-          <td>controls_size <font color="#ff0000">(New in 1.6)</font></td>
+          <td>controls_size <font color="#ff0000">(new in 1.6)</font></td>
 	  <td>10</td>
 	  <td>The size (in pixels) of object controls in unlocked (edit) mode in the frontend.
               Object controls are for example the modify, delete and move icons.</td>
@@ -76,18 +76,18 @@
         <td><strike>displayheader</strike></td><td><strike>1</strike></td><td><strike>Show header menu in maps</strike>. <font color="#ff0000">(Deprecated in 1.4. Moved as option &quot;headermenu&quot; to default and index section.)</font></td>
         </tr>
         <tr>
+        <td>language</td><td>en_US</td><td>Select default language to use in NagVis. There are several translations delivered by default: en_US (English), de_DE (German), fr_FR (French) and pt_BR (Brazilian Portuguese; since 1.4.4). Since NagVis 1.4 you have to select the languages in a new format (&quot;en_US&quot; instead of &quot;english&quot;) </td>
+        </tr>
+        <tr>
+        <td>language_available</td><td>de_DE,en_US,es_ES,fr_FR,pt_BR</td><td>You may want to give your users a limited number of languages to choose from. You can control the behaviour without deleting the language files from your NagVis installation. If this value is left empty NagVis will fallback to all configured in languages. If you like to add a new language to your NagVis installation you need to add it to the list here.</td>
+        </tr>
+        <tr>
         <td>language_detection</td><td>user,session,browser,config</td><td>This controls how NagVis tries to detect the language of the user to translate NagVis. NagVis knows several mechanisms to detect the language:<br />
         - <i>user</i>: Explict user selected language<br />
         - <i>session</i>: When the user selects a language it is stored in the current session<br />
         - <i>browser</i>: NagVis tries to detect the user language by the browser agent<br />
         - <i>config</i>: The installation default language<br />
         The order you set the options determines how NagVis uses the different mechanisms.</td>
-        </tr>
-        <tr>
-        <td>language_available</td><td>de_DE,en_US,es_ES,fr_FR,pt_BR</td><td>You may want to give your users a limited number of languages to choose from. You can control the behaviour without deleting the language files from your NagVis installation. If this value is left empty NagVis will fallback to all configured in languages. If you like to add a new language to your NagVis installation you need to add it to the list here.</td>
-        </tr>
-        <tr>
-        <td>language</td><td>en_US</td><td>Select default language to use in NagVis. There are several translations delivered by default: en_US (English), de_DE (German), fr_FR (French) and pt_BR (Brazilian Portuguese; since 1.4.4). Since NagVis 1.4 you have to select the languages in a new format (&quot;en_US&quot; instead of &quot;english&quot;) </td>
         </tr>
         <tr>
         <td>logonmodule</td>
@@ -178,11 +178,12 @@
         <tr>
         <td>startaction</td><td>view</td><td>The default action to do when none is given by the user</td>
         </tr>
+        <tr>
         <td>startshow</td><td></td>
         <td>
             The startshow parameter is only used by some views at the moment. 
             It is used by the Map and the AutoMap modules.</td>
-    </tr>
+        </tr>
         </table>
         
         <a name="paths"></a><h3> paths </h3>
@@ -213,7 +214,7 @@
         <td> backend </td><td> live_1 </td><td> Default backend (ID of the backend - copy the text from which <code>&lt;backend-id></code> stands for in <code>[backend_&lt;backend-id>]</code> ) </td>
         </tr>
         <tr>
-        <td>backgroundcolor</td><td>transparent</td><td>Default background color of maps </td>
+        <td>backgroundcolor</td><td>transparent</td><td>Default background colour of maps </td>
         </tr>
         <tr>
         <td>contextmenu</td><td>0</td><td>Enable/Disable the context menu on your map objects. </td>
@@ -222,7 +223,7 @@
         <td>contexttemplate</td><td>default</td><td>Default <a href="context_templates.html">context template</a>. </td>
         </tr>
         <tr>
-        <td> eventbackground </td><td> 0 </td><td> Enable/Disable changing background color on state changes (Configured color is shown when summary state is PENDING, OK or UP)  </td>
+        <td> eventbackground </td><td> 0 </td><td> Enable/Disable changing background colour on state changes (configured colour is shown when summary state is PENDING, OK or UP)  </td>
         </tr>
         <tr>
         <td> eventhighlight </td><td> 1 </td><td> Enable/Disable highlighting of the state changing object by adding a flashing border  </td>
@@ -237,10 +238,10 @@
         <td> eventlog </td><td> 0 </td><td> Enable/Disable the eventlog in the new javascript frontend. The eventlog keeps track of important actions and information  </td>
         </tr>
         <tr>
-        <td> eventloglevel </td><td> info </td><td> Loglevel of the eventlog (Available: debug, info, warning, critical)  </td>
+        <td>eventlogevents</td><td>24</td><td>Number of events in the eventlog scrollback</td>
         </tr>
         <tr>
-        <td>eventlogevents</td><td>24</td><td>Number of events in the eventlog scrollback</td>
+        <td> eventloglevel </td><td> info </td><td> Loglevel of the eventlog (Available: debug, info, warning, critical)  </td>
         </tr>
         <tr>
         <td>eventlogheight</td><td>100</td><td>Height of the javascript eventlog in px </td>
@@ -255,13 +256,28 @@
         <td> eventsound </td><td> 1 </td><td> Enable/Disable sound signals on state changes  </td>
         </tr>
         <tr>
+        <td> headerfade </td><td> 0 </td><td>Enable/Disable the fade effect of the submenus in the header menu (When the used header menu supports that option).</td>
+        </tr>
+        <tr>
         <td> headermenu </td><td> 1 </td><td> Enable/Disable the header menu </td>
         </tr>
         <tr>
         <td> headertemplate </td><td> default </td><td> Default <a href="header_templates.html">header template</a> </td>
         </tr>
         <tr>
-        <td> headerfade </td><td> 0 </td><td>Enable/Disable the fade effect of the submenus in the header menu (When the used header menu supports that option).</td>
+        <td> hoverchildslimit </td><td> 10 </td><td> Limit hover child objects to this maximum value</td>
+        </tr>
+        <tr>
+        <td> hoverchildsorder </td><td> asc </td><td> Order of the child objects (Available: asc/desc)</td>
+        </tr>
+        <tr>
+        <td> hoverchildsshow </td><td> 1 </td><td> Enable/Disable the child objects in hover menu</td>
+        </tr>
+        <tr>
+        <td> hoverchildssort </td><td> a </td><td> Sort method of the child objects (Available: "s": State, "a": Alphabet )</td>
+        </tr>
+        <tr>
+        <td> hoverdelay </td><td> 0 </td><td> Delay of hover menu appearance in seconds </td>
         </tr>
         <tr>
         <td> hovermenu </td><td> 1 </td><td> Enable/Disable the hover menu </td>
@@ -271,21 +287,6 @@
         </tr>
         <tr>
         <td> <strike>hovertimeout</strike> </td><td> <strike>5</strike> </td><td> <strike>Default hover menu ajax request timeout in seconds</strike> <font color="#ff0000">(Deprecated in 1.4)</font></td>
-        </tr>
-        <tr>
-        <td> hoverdelay </td><td> 0 </td><td> Delay of hover menu appearance in seconds </td>
-        </tr>
-        <tr>
-        <td> hoverchildsshow </td><td> 1 </td><td> Enable/Disable the child objects in hover menu</td>
-        </tr>
-        <tr>
-        <td> hoverchildslimit </td><td> 10 </td><td> Limit hover child objects to this maximum value</td>
-        </tr>
-        <tr>
-        <td> hoverchildsorder </td><td> asc </td><td> Order of the child objects (Available: asc/desc)</td>
-        </tr>
-        <tr>
-        <td> hoverchildssort </td><td> a </td><td> Sort method of the child objects (Available: "s": State, "a": Alphabet )</td>
         </tr>
         <tr>
         <td> icons </td><td> std_medium </td><td> Default iconset </td>
@@ -354,7 +355,7 @@
         <tr>
             <td>backgroundcolor</td>
             <td>#fff</td>
-            <td>Configure the background color of the overview page</td>
+            <td>Configure the background colour of the overview page</td>
         </tr>
         <tr>
         <td> cellsperrow </td><td> 4 </td><td> Maps per row in map listing </td>
@@ -415,7 +416,7 @@
         <td>grid_show</td><td>0</td><td>Enable/Disable a grid to make the alignment of objects easier in the WUI. Objects are aligned to the upper left corner after moving.</td>
         </tr>
         <tr>
-        <td>grid_color</td><td>#F7F7F7</td><td>The color of the grid lines.</td>
+        <td>grid_color</td><td>#F7F7F7</td><td>The colour of the grid lines.</td>
         </tr>
         <tr>
         <td>grid_steps</td><td>32</td><td>Scale of the grid in px.</td>
@@ -526,7 +527,7 @@ interval=15</pre>
         <td> 
             <p>Comma separated list of maps to rotate in this pool. You can also add external URLs surrounded by [ and ] (e.g. maps="demo1,[http://localhost/test.php]". The URL has to be reachable and accessible by the server which NagVis is running on.</p>
             <p> You can add labels in the following format &lt;label&gt;:&lt;map&gt; and &lt;label&gt;:&lt;[url]&gt;. The labels are displayed in the rotation list.</p>
-            <p> It is also possible to add automaps to rotations. Simply add an @ sign before the automap name to add an automap to the rotation.</p>
+            <p> It is also possible to add automaps to rotations. Simply prepend the automap name with an @ sign to add an automap to the rotation.</p>
         </td>
         </tr>
         </table>
@@ -561,19 +562,19 @@ interval=15</pre>
         <tr><td>error_downtime</td><td>2</td></tr>
         <tr><td>ok</td><td>1</td></tr>
         <tr><td>up</td><td>1</td></tr>
-        <tr><td>unchecked <font color="#ff0000">(New in 1.6)</font></td><td>0</td></tr>
+        <tr><td>unchecked <font color="#ff0000">(new in 1.6)</font></td><td>0</td></tr>
         <tr><td>pending</td><td>0</td></tr>
         </table>
         
         <p>This settings define the behaviour of states in the frontend.</p>
         <ul>
-            <li><b>*_bgcolor:</b> The bgcolor option is used in the background color changing eventhandler.</li>
+            <li><b>*_bgcolor:</b> The bgcolor option is used in the background colour changing eventhandler.</li>
             <li><b>*_color:</b> You can configure the foreground colors which are used for example as line colors and also in the highlight eventhandler.</li>
             <li><b>*_sound:</b> The sound file is being played on changes to the mentioned state (Needs to be MP3 format).</li>
         </ul>
         
         <table>
-        <tr><th style="width:200px">Value</th><th style="width:150px">Default</th></tr>
+        <tr><th style="width:270px">Value</th><th style="width:150px">Default</th></tr>
         <tr><td>unreachable_bgcolor</td><td>#F1811B</td></tr>
         <tr><td>unreachable_color</td><td>#F1811B</td></tr>
         <tr><td>unreachable_ack_bgcolor</td><td></td></tr>
@@ -610,9 +611,9 @@ interval=15</pre>
         <tr><td>up_bgcolor</td><td>#00FF00</td></tr>
         <tr><td>up_color</td><td>#00FF00</td></tr>
         <tr><td>up_sound</td><td></td></tr>
-        <tr><td>unchecked_bgcolor<font color="#ff0000">(New in 1.6)</font></td><td>#C0C0C0</td></tr>
-        <tr><td>unchecked_color<font color="#ff0000">(New in 1.6)</font></td><td>#C0C0C0</td></tr>
-        <tr><td>unchecked_sound<font color="#ff0000">(New in 1.6)</font></td><td></td></tr>
+        <tr><td>unchecked_bgcolor <font color="#ff0000">(new in 1.6)</font></td><td>#C0C0C0</td></tr>
+        <tr><td>unchecked_color <font color="#ff0000">(new in 1.6)</font></td><td>#C0C0C0</td></tr>
+        <tr><td>unchecked_sound <font color="#ff0000">(new in 1.6)</font></td><td></td></tr>
         <tr><td>pending_bgcolor</td><td>#C0C0C0</td></tr>
         <tr><td>pending_color</td><td>#C0C0C0</td></tr>
         <tr><td>pending_sound</td><td></td></tr>

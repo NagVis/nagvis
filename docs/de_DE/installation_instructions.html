@@ -92,18 +92,12 @@
     Ver&auml;ndern Sie die Werte nur dann, wenn Sie wissen, was Sie tun! <br>
     
     <a name=SCHRITT_7></a>
-    <h2>SCHRITT 7: das grafische Konfigurations-Tool (WUI)</h2>
-    NagVis besitzt ein eingebautes webbasiertes Konfigurations-Tool namens WUI.
-    Wenn Sie es einsetzen wollen, benutzen Sie folgenden URL in Ihrem Browser, um die Seite zu &ouml;ffnen: <br>
-    <pre>http://&lt;nagiosserver>/&lt;path-to-nagvis>/frontend/wui/index.php</pre>(z.B. http://localhost/nagvis/frontend/index.php).<br>
-    Hinweis: wenn Sie Script- oder Popup-Blocker einsetzen, dann deaktivieren Sie diese vor der Nutzung der WUI. <br>
-    <br>Wenn Sie das NagVis-Bild sehen, klicken Sie rechts und es sollte sich ein Kontext-Menu &ouml;ffnen, mit dem Sie &uuml;ber die WUI NagVis konfigurieren und Maps anlegen k&ouml;nnen. <br>
-    <p><img src="../general/img/medium_nagvis-1.0-wui-preview.png" /></p>
-    <p><font style="color:red">Das Konfigurations-Tool zeigt NICHT die aktuellen Zust&auml;nde der konfigurierten Nagios-Objekte.
-        Es dient lediglich zur Konfiguration! Um Ihre Maps nachher benutzen zu k&ouml;nnen, schauen Sie unter SCHRITT 8!</font></p>
-    Wenn das bei Ihnen nicht funktioniert oder wenn Sie die WUI nicht benutzen m&ouml;chten, dann editieren Sie einfach die Map-Konfigurationsdateien im <code>etc/maps/</code>-Verzeichnis mit Ihrem bevorzugten Text-Editor. <br>
-    Informationen zu g&uuml;ltigen Formaten und Werten finden Sie in der <a href="map_config_format_description.html">Formatbeschreibung der Map-Konfigurationsdatei</a>. <br>
-    
+    <h2>SCHRITT 7: konfigurieren Sie die Maps</h2>
+    <p>Es gibt zwei Wege, NagVis zu konfigurieren. Der erste ist die web-basierte Konfiguration mit Hilfe des NagVis-Frontends (<code>http://&lt;nagiosserver&gt;/&lt;Pfad-zu-NagVis&gt;/</code>). Schauen Sie sich die Optionen des Header-Men&uuml;s an. Zum Editieren von Map-Objekten m&uuml;ssen Sie das Objekt entsperren, das Sie bearbeiten m&ouml;chten.</p>
+
+        <p>Beim zweiten Weg bearbeiten Sie direkt die Konfigurationsdateien mit dem Text-Editor Ihrer Wahl. Die Map-Konfigurationsdateien befinden sich in <code>etc/maps/</code>.
+        G&uuml;ltige Formate und Werte finden Sie unter <a href="map_config_format_description.html">Map Config Format Description</a>.</p>
+
     <a name=SCHRITT_8></a>
     <h2>SCHRITT 8: betrachten Sie die Maps</h2>
     Sie sollten nun in der Lage sein, Ihre definierten Maps in Ihrem Browser anzusehen: <br>

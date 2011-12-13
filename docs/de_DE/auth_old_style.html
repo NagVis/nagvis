@@ -16,8 +16,8 @@
         Der einzige Unterschied besteht darin, dass das LogonMixed-Modul den HTML-LogonDialog nutzt, wenn kein Benutzer vom Web-Server &uuml;bergeben wird, w&auml;hrend LogonEnv einfach nur eine "Zugriff verweigert"-Meldung anzeigt.</p>
         <p>Um dies zu erreichen, setzen Sie einfach die folgenden Optionen im <code>[global]</code>-Abschnitt der NagVis-Hauptkonfigurationsdatei:</p>
         <pre>logonmodule="LogonEnv"
-        logonenvvar="REMOTE_USER"
-        logonenvcreateuser="1"</pre>
+logonenvvar="REMOTE_USER"
+logonenvcreateuser="1"</pre>
         <p>Diese Zeilen weisen NagVis an, das LogonEnv-Modul zu nutzen, das den authentifizierten Benutzer aus einer Umgebungsvariablen ausliest.
          Der zweite Parameter teilt dem LogonEnv-Modul mit, welche Variable f&uuml;r das Auslesen benutzt werden soll.
          Die dritte Variable bewirkt, dass unbekannte Benutzer in der NagVis-AA-Datenbank angelegt werden sollen.</p>

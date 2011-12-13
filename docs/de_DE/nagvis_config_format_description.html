@@ -87,6 +87,12 @@
             <td>authorisationmodule</td><td>CoreAuthorisationModSQLite</td><td>Definiert das zu benutzende Autorisierungsmodul. Per Default benutzt NagVis das eingebaute SQLite-Autorisierungsmodul. Bei der Auslieferung ist kein anderes Autorisierungsmodul verf&uuml;gbar. Es ist m&ouml;glich, andere Autorisierungsmodule hinzuzuf&uuml;gen, um andere Autorisierungsmechanismen zu unterst&uuml;tzen. Weitere Einzelheiten finden Sie in der <a href="authorisation_modules">Autorisierungsmodul</a>-Dokumentation</td><td> 
         </tr>
         <tr>
+          <td>controls_size <font color="#ff0000">(neu in 1.6)</font></td>
+          <td>10</td>
+          <td>Die Gr&ouml;&szlig;e (in Pixeln) von Objekt-Kontrollelementen in entsperrten (Edit)-Modus im Frontend.
+              Objekt-Kontrollelemente sind z.B. die "modify"-, "delete"- und "move"-Icons.</td>
+        </tr>
+        <tr>
             <td>dateformat</td><td>Y-m-d H:i:s</td><td>Das in NagVis benutzte Format f&uuml;r Datum- und Zeit. Verf&uuml;gbare Optionen wie bei der <a href="http://www.php.net/date">date()</a>-Funktion von php     </td><td> 
         </tr>
         <tr>
@@ -108,7 +114,21 @@
             </td>
         </tr>
         <tr>
-            <td>logonmodule</td><td>LogonDialog</td><td>Definiert das zu benutzende Logon-Modul. Per Default benutzt NagVis den HTML-Logon-Dialog zur Abfrage von Authentifizierungsinformationen. Bei Auslieferung gibt es kein anderes Logon-Modul. Es ist m&ouml;glich, andere Logon-Module hinzuzuf&uuml;gen. Weitere Einzelheiten finden Sie in der <a href="logon_modules">logon-Modul</a>-Dokumentation.</td>
+            <td>logonmodule</td><td>LogonMixed</td><td>Definiert das zu benutzende Logon-Modul. Per Default benutzt NagVis das Mixed-Auth-Modul, das dem Benutzernamen vertraut, der per REMOTE_USER oder dem HTML-Logon-Dialog zur Abfrage von Authentifizierungsinformationen &uuml;bergeben wurde, falls REMOTE_USER nicht gesetzt ist.
+            <p>Bei der Auslieferung sind die folgenden Module verf&uuml;gbar:</p>
+
+            <p><i>LogonMixed</i>: Das gemischte Logon-Modul benutzt das LogonEnv-Modul als Standard und das LogonDialog-Modul als Ausweichl&ouml;sung, falls LogonEnv keinen Benutzernamen zur&uuml;ckliefert. Das sollte den Anforderungen in den meisten Umgebungen gen&uuml;gen.</p>
+
+            <p><i>LogonDialog</i>: Dies ist ein HTML-Anmeldedialog, um die Authentifizierungsinformationen abzufragen.</p>
+
+            <p><i>LogonEnv</i>: Es ist m&ouml;glich, einen vollst&auml;ndig zu "trauendem" Authentifizierungsmechanismus wie in den Vorg&auml;ngerversionen von NagVis zu realisieren. Auf diese Weise wird der Benutzer nicht wirklich authentifiziert.
+            NagVis vertraut dem gelieferten Benutzernamen implizit. NagVis benutzt die konfigurierte Umgebungsvariable, um den Benutzer zu identifizieren. Sie k&ouml;nnen Ihrem Webserver verschiedene Authentifizierungsmechanismen hinzuf&uuml;gen, angefangen mit der Basic-Authentifizierung, die von Nagios genutzt wird (.htaccess) bis hin zu Single-Sign-On-Umgebungen.<br> 
+            Setzen Sie einfach logonmodule auf "LogonEnv", setzen Sie die als Benutzername zu verwendende Umgebungsvariable auf die Option logonenvvar und teilen Sie dem Authentifizierungsmodul mit, dass Benutzer in der Datenbank neu anzulegen sind, wenn der gelieferte Benutzer noch nicht vorhanden ist. Die Option logonenvcreaterole weist das Authentifizierungsmodul an, den neuen Benutzer einer Rolle zuzuweisen. Setzen Sie die Option auf einen leeren String, um dieses Verhalten auszuschalten.</p>
+   
+            <p><i>LogonMultisite</i>: Dieses Modul benutzt die Authentifizierung von auth_*-Cookies, die von Check_MK-Multisite geliefert werden, wenn die Cookie-basierte Authentifizierung verwendet wird.</p>
+
+            <p>Es ist m&ouml;glich, eigene Logon-Module hinzuzuf&uuml;gen, um andere Dialoge zu bedienen. Weitere Informantionen finden Sie in der <a href="logon_modules.html">logon module</a>-Dokumentation.</p></td>
+
         </tr>
         <tr>
             <td>logonenvvar</td><td>REMOTE_USER</td><td>Definiert die Umgebungsvariable, die f&uuml;r das Holen des authentifizierten Benutzers aus der Webserver-Umgebung benutzt werden soll. Diese Option wird nur f&uuml;r die Logon-Module LogonEnv und LogonMixed verwendet.</td>
@@ -118,6 +138,26 @@
         </tr>
         <tr>
             <td>logonenvcreaterole</td><td>Guests</td><td>Veranlasst das LogonEnv/LogonMixedModul, die Benutzerkonten mit der angegebenen Rolle anzulegen. Diese Option wird nur f&uuml;r die Logon-Module LogonEnv und LogonMixed verwendet.</td>
+        </tr>
+        <tr>
+            <td>logon_multisite_htpasswd</td>
+            <td></td>
+            <td>Der Pfad zur htpasswd-Datei, die von Multisite benutzt wird (wird nur vom LogonMultisite-Modul verwendet).</td>
+        </tr>
+        <tr>
+            <td>logon_multisite_secret</td>
+            <td></td>
+            <td>Der Pfad zur auth-secret-Datei, die von Multisite benutzt wird (wird nur vom LogonMultisite-Modul verwendet).</td>
+        </tr>
+        <tr>
+            <td>logon_multisite_createuser</td>
+            <td>1</td>
+            <td>Gleich wie die &quot;logonenvcreateuser&quot;-Option (wird nur vom LogonMultisite-Modul verwendet).</td>
+        </tr>
+        <tr>
+            <td>logon_multisite_createrole</td>
+            <td>Guest</td>
+            <td>Gleich wie die &quot;logonenvcreaterole&quot;-Option (wird nur vom LogonMultisite-Modul verwendet).</td>
         </tr>
         <tr>
             <td>refreshtime</td><td>60</td><td>Aktualisierungsintervall in Maps bzw. laden der n&auml;chsten Map bei Map-Rotation</td>
@@ -136,6 +176,12 @@
         </tr>
         <tr>
             <td>startaction</td><td>view</td><td>Die Default-Aktion, wenn vom Benutzer keine angegeben wird.</td>
+        </tr>
+        <tr>
+        <td>startshow</td><td></td>
+        <td>
+            Der startshow-Parameter wird zur Zeit nur von einigen Views benutzt.
+            Er wird von den Map- und AutoMap-Modulen verwendet.</td>
         </tr>
     </table>
     
@@ -217,6 +263,9 @@
             <td> eventlog     </td><td> 0 </td><td> aktivieren (1) bzw. deaktivieren (0) des Ereignisprotokolls im neuen JavaScript-Frontend. Das Ereignisprotokoll enth&auml;lt wichtige Aktionen und Informationen</td>
         </tr>
         <tr>
+            <td>eventlogevents</td><td>24</td><td>Anzahl von Ereignissen im Ereignisprotokoll-Rückblick</td>
+        </tr>
+        <tr>
             <td> eventloglevel     </td><td> info </td><td> Loglevel des Ereignisprotokolls (verf&uuml;gbar: debug, info, warning, critical)</td>
         </tr>
         <tr>
@@ -232,7 +281,7 @@
             <td> eventsound     </td><td> 1 </td><td> aktivieren (1) bzw. deaktivieren (0) von Sound-Signalen bei Status&auml;nderungen</td>
         </tr>
         <tr>
-            <td> headerfade     </td><td>vererbt (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>aktivieren/deaktivieren des Abblendeffekts in den Untermen&uuml;s des Header-Men&uuml;s (wenn das verwendete Header-Men&uuml; diese Option unterst&uuml;tzt).</td>
+            <td> headerfade     </td><td> 0 </td><td>aktivieren/deaktivieren des Abblendeffekts in den Untermen&uuml;s des Header-Men&uuml;s (wenn das verwendete Header-Men&uuml; diese Option unterst&uuml;tzt).</td>
         </tr>
         <tr>
             <td>headermenu</td><td>1</td><td>aktivieren (1) bzw. deaktivieren (0) des Headermen&uuml;s</a></td>
@@ -277,6 +326,9 @@
             <td>showinlists</td><td>1</td><td>Anzeigen von Maps in Listen (Dropdowns, Index-Seite, ...)</td>
         </tr>
         <tr>
+        <td> showinmultisite </td><td> 1 </td><td> Anzeigen der Maps im Multisite-Snapin</td>
+        </tr>
+        <tr>
             <td>stylesheet</td><td></td><td>Dateiname des benutzerdefinierten Stylesheets, das in den Maps verwendet werden soll. Die Datei muss im share/nagvis/styles-Verzeichnis abgelegt werden.</td>
         </tr>
         <tr>
@@ -308,6 +360,11 @@
             <td>[htmlbase]/index.php?mod=Map&act=view&show=[map_name]</td>
             <td>Die Default-URL, die bei einem Links-Klicks des Benutzers auf ein Map-Objekt benutzt wird.
         Verf&uuml;gbare Makros: [htmlcgi], [htmlbase], [map_name]</td>
+        </tr>
+        <tr>
+            <td>view_template</td>
+            <td>default</td>
+            <td>In den verschiedenen Views zu benutzendes Template.</td>
         </tr>
         </table>
     
@@ -386,10 +443,7 @@
             <th width="200">Wert</th><th width="150">Default</th><th>Beschreibung</th>
         </tr>
         <tr>
-            <td><strike>allowedforconfig</strike></td><td><strike>EVERYONE</strike></td><td>Benutzer, die die NagVis-Konfiguration &auml;ndern d&uuml;rfen (kommaseparierte Liste) oder EVERYONE (<font color="red">veraltet ab 1.5</font>)</td>
-        </tr>
-        <tr>
-            <td>autoupdatefreq</td><td>25</td><td>In diesem Intervall wird die Map von der WUI gesichert.</td>
+            <td><strike>autoupdatefreq</strike></td><td>25</td><td>In diesem Intervall wird die Map von der WUI gesichert (<font color="red">veraltet ab 1.6</font>).</td>
         </tr>
         <tr>
             <td>grid_color</td><td>#f7f7f7</td><td>Die Farbe der Rasterlinien.</td>
@@ -401,10 +455,10 @@
             <td>grid_steps</td><td>32</td><td>Gr&ouml;&szlig;e des Rasters in Pixeln.</td>
         </tr>
         <tr>
-            <td>headermenu</td><td>1</td><td>Aktivieren (1) bzw. deaktivieren (0) des Header-Men&uuml;s im WUI.</td>
+            <td><strike>headermenu</strike></td><td>1</td><td>Aktivieren (1) bzw. deaktivieren (0) des Header-Men&uuml;s im WUI (<font color="red">veraltet ab 1.6</font>).</td>
         </tr>
         <tr>
-            <td>headertemplate</td><td>default</td><td>zu benutzendes Standard-<a href="header_templates">Header-Template</a> im WUI.</td>
+            <td><strike>headertemplate</strike></td><td>default</td><td>zu benutzendes Standard-<a href="header_templates">Header-Template</a> im WUI (<font color="red">veraltet ab 1.5</font>).</td>
         </tr>
         <tr>
             <td>maplocktime</td><td>5</td><td>Zeit in Minuten, die eine Map von einem editierenden Benutzer blockiert wird.</td>
@@ -473,6 +527,7 @@
             <td>custom_3</td><td></td><td>Dritte benutzerdefinierte Variable (s.o).<td>
         </tr>
     </table>
+    <p>Die Backend-spezifischen Optionen finden Sie in der <a href="backends.html">Backend-Dokumentation</a>.</p>
     
     <a name="rotation"></a>
     <h3>rotation_*</h3>
@@ -503,7 +558,7 @@
     <h3>states</h3>
     <p>Optionen, die die Behandlung und das Aussehen der verschiedenen Zust&auml;nde in der NagVis-Installation beeinflussen.</p>
     <p>Diese Einstellungen definieren das Verhalten der Zustandsbehandlung. Haupts&auml;chlich ist es m&ouml;glich zu konfigurieren, welcher Zustand einen anderen "&uuml;berdeckt". Ein kritischer Zustand (5) wird eine Warnung (4) &uuml;berdecken, ein best&auml;tigter kritischer Zustand (2) wird nicht eine Warnung (4) &uuml;berdecken.</p>
-    
+
     <table>
         <tr> <th style="width:200px">Wert</th><th style="width:150px">Default</th></tr>
         <tr> <td>unreachable</td><td>8</td>     </tr>
@@ -525,7 +580,8 @@
         <tr> <td>error_ack</td><td>2</td>     </tr>
         <tr> <td>error_downtime</td><td>2</td>     </tr>
         <tr> <td>ok</td><td>1</td>     </tr>
-        <tr> <td>up</td><td>1</td>     </tr>
+        <tr> <td>up</td><td>1</td>     </tr>    
+        <tr><td>unchecked <font color="#ff0000">(neu in 1.6)</font></td><td>0</td></tr>
         <tr> <td>pending</td><td>0</td>     </tr>
     </table>
     
@@ -537,24 +593,36 @@
     </ul>
     
     <table>
-        <tr><th style="width:200px">Wert</th><th style="width:150px">Default</th></tr>
+        <tr><th style="width:270px">Value</th><th style="width:150px">Default</th></tr>
         <tr><td>unreachable_bgcolor</td><td>#F1811B</td></tr>
         <tr><td>unreachable_color</td><td>#F1811B</td></tr>
+        <tr><td>unreachable_ack_bgcolor</td><td></td></tr>
+        <tr><td>unreachable_downtime_bgcolor</td><td></td></tr>
         <tr><td>unreachable_sound</td><td>std_unreachable.mp3</td></tr>
         <tr><td>down_bgcolor</td><td>#FF0000</td></tr>
         <tr><td>down_color</td><td>#FF0000</td></tr>
+        <tr><td>down_ack_bgcolor</td><td></td></tr>
+        <tr><td>down_downtime_bgcolor</td><td></td></tr>
         <tr><td>down_sound</td><td>std_down.mp3</td></tr>
         <tr><td>critical_bgcolor</td><td>#FF0000</td></tr>
         <tr><td>critical_color</td><td>#FF0000</td></tr>
+        <tr><td>critical_ack_bgcolor</td><td></td></tr>
+        <tr><td>critical_downtime_bgcolor</td><td></td></tr>
         <tr><td>critical_sound</td><td>std_critical.mp3</td></tr>
         <tr><td>warning_bgcolor</td><td>#FFFF00</td></tr>
         <tr><td>warning_color</td><td>#FFFF00</td></tr>
+        <tr><td>warning_ack_bgcolor</td><td></td></tr>
+        <tr><td>warning_downtime_bgcolor</td><td></td></tr>
         <tr><td>warning_sound</td><td>std_warning.mp3</td></tr>
         <tr><td>unknown_bgcolor</td><td>#FFCC66</td></tr>
         <tr><td>unknown_color</td><td>#FFCC66</td></tr>
+        <tr><td>unknown_ack_bgcolor</td><td></td></tr>
+        <tr><td>unknown_downtime_bgcolor</td><td></td></tr>
         <tr><td>unknown_sound</td><td></td></tr>
         <tr><td>error_bgcolor</td><td>#0000FF</td></tr>
         <tr><td>error_color</td><td>#0000FF</td></tr>
+        <tr><td>error_ack_bgcolor</td><td></td></tr>
+        <tr><td>error_downtime_bgcolor</td><td></td></tr>
         <tr><td>error_sound</td><td></td></tr>
         <tr><td>ok_bgcolor</td><td>#00FF00</td></tr>
         <tr><td>ok_color</td><td>#00FF00</td></tr>
@@ -562,9 +630,12 @@
         <tr><td>up_bgcolor</td><td>#00FF00</td></tr>
         <tr><td>up_color</td><td>#00FF00</td></tr>
         <tr><td>up_sound</td><td></td></tr>
+        <tr><td>unchecked_bgcolor <font color="#ff0000">(neu in 1.6)</font></td><td>#C0C0C0</td></tr>
+        <tr><td>unchecked_color <font color="#ff0000">(neu in 1.6)</font></td><td>#C0C0C0</td></tr>
+        <tr><td>unchecked_sound <font color="#ff0000">(neu in 1.6)</font></td><td></td></tr>
         <tr><td>pending_bgcolor</td><td>#C0C0C0</td></tr>
         <tr><td>pending_color</td><td>#C0C0C0</td></tr>
         <tr><td>pending_sound</td><td></td></tr>
-    </table>
+        </table>
     
 </html>
