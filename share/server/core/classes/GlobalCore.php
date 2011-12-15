@@ -530,6 +530,12 @@ class GlobalCore {
     public function versionToTag($s) {
         $s = str_replace('a', '.0.0', str_replace('b', '.0.2', str_replace('rc', '.0.4', $s)));
         $parts = explode('.', $s);
+        if(count($parts) == 2) {
+            // e.g. 1.6   -> 106060
+            // e.g. 1.5   -> 105060
+            array_push($parts, '0');
+            array_push($parts, '60');
+        }
         $tag = '';
         foreach($parts AS $part)
             $tag .= sprintf("%02s", $part);

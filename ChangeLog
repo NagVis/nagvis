@@ -1,6 +1,7 @@
 1.6.1
 Core
   * LogonDialog: Changed _origin parameter to _origtarget to support current multisite
+  * Bugfix: Fixed version number format for stable versions like (1.6)
 
 Frontend
   * Ajax call for redrawing map objects is not cacheable anymore (prevent strange

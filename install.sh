@@ -100,6 +100,9 @@ fmt_version() {
     V=${1//a/.0.0}
     V=${V//b/.0.2}
     V=${V//rc/.0.4}
+    if [ ${#V} -eq 3 ]; then
+        V=${V}.0.60
+    fi
     NV=""
     for S in "${V//./ }"; do
         NV="$NV$(printf %02d $S)"
