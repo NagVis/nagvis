@@ -5,6 +5,7 @@ Core
 Frontend
   * Ajax call for redrawing map objects is not cacheable anymore (prevent strange
     hopping of icons after unlock -> edit -> lock in some cases.
+  * Context menu: Small spacer row styling (preventing hover effect)
 
 1.6
 Core

@@ -58,6 +58,16 @@ div.context ul li:hover {
   color: #779D2A;
 }
 
+div.context ul li.spacer {
+  padding: 1px;
+  margin: 1px;
+}
+
+div.context ul li.spacer:hover {
+  background-color: #EAF0F2;
+  color: #43B3CF;
+}
+
 div.context ul li a {
   color: #43B3CF;
   display: block;
