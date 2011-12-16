@@ -57,6 +57,14 @@ class NagVisLoginView {
                          .'&show='.cfg('global', 'startshow');
         $target = CoreRequestHandler::getReferer($defaultTarget);
 
+        // Add the language to the target url when the user requested a specific language
+        if(isset($_GET['lang']) && strpos($target, 'lang=') === false) {
+            if(strpos($target, '?') === false)
+                $target .= '?lang='.$_GET['lang'];
+            else
+                $target .= '&lang='.$_GET['lang'];
+        }
+
         $aData = Array(
             'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
             'pageTitle' => cfg('internal', 'title') . ' &rsaquo; Log In',
