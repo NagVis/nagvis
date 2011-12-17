@@ -13,6 +13,8 @@ Relative Koordinaten:
 
 -------------------------------------------------------------------------------
 
+- SQLite/MySQL Handling/Update abstrahieren und wesentliche Dinge an zentraler Stelle definieren
+
 - NagVis Multisite Snapin optional als Baum
 
 - Backends:
