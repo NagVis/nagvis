@@ -179,6 +179,33 @@ class CoreMySQLHandler {
         // Now perform the update for pre 1.6b2
         if($dbVersion < 1060022)
             $this->updateDb1060022();
+
+        // Now perform the update for pre 1.6.1
+        if($dbVersion < 1060100)
+            $this->updateDb1060100();
+    }
+
+    private function updateDb1060100() {
+        // Access controll: Map module levels for the demo maps
+        foreach(GlobalCore::getInstance()->demoMaps AS $map) {
+            $this->createMapPermissions($map);
+        }
+
+        // Access controll: Automap module levels for demo automaps
+        foreach(GlobalCore::getInstance()->demoAutomaps AS $automap) {
+            $this->createAutoMapPermissions($automap);
+        }
+
+        $data = $this->fetchAssoc($this->query('SELECT roleId FROM roles WHERE name=\'Guests\''));
+        // Access assignment: Guests => Allowed to view the demo maps
+        foreach(GlobalCore::getInstance()->demoMaps AS $map) {
+            $this->addRolePerm($data['roleId'], 'Map', 'view', $map);
+        }
+
+        // Access assignment: Guests => Allowed to view the demo automaps
+        foreach(GlobalCore::getInstance()->demoAutomaps AS $automap) {
+            $this->addRolePerm($data['roleId'], 'AutoMap', 'view', $automap);
+        }
     }
 
     private function updateDb1060022() {
@@ -268,23 +295,18 @@ class CoreMySQLHandler {
         // Access controll: Access to all General actions
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'General\', \'*\', \'*\')');
 
-        // Access controll: Map module levels for map "demo"
-        $this->createMapPermissions('demo');
-
-        // Access controll: Map module levels for map "demo2"
-        $this->createMapPermissions('demo2');
-
-        // Access controll: Map module levels for map "demo-map"
-        $this->createMapPermissions('demo-map');
-
-        // Access controll: Map module levels for map "demo-server"
-        $this->createMapPermissions('demo-server');
+        // Access controll: Map module levels for demo maps
+        foreach(GlobalCore::getInstance()->demoMaps AS $map) {
+            $this->createMapPermissions($map);
+        }
 
         // Access controll: Rotation module levels for rotation "demo"
         $this->createRotationPermissions('demo');
 
-        // Access controll: Automap module levels for automap "__automap"
-        $this->createAutoMapPermissions('__automap');
+        // Access controll: Automap module levels for demo automaps
+        foreach(GlobalCore::getInstance()->demoAutomaps AS $automap) {
+            $this->createAutoMapPermissions($automap);
+        }
 
         // Access controll: Change own password
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ChangePassword\', \'change\', \'*\')');
@@ -436,17 +458,18 @@ class CoreMySQLHandler {
         // Access assignment: Guests => Allowed to view the overview
         $this->addRolePerm($data['roleId'], 'Overview', 'view', '*');
 
-        // Access assignment: Guests => Allowed to view the demo, demo2, demo-map and demo-servers map
-        $this->addRolePerm($data['roleId'], 'Map', 'view', 'demo');
-        $this->addRolePerm($data['roleId'], 'Map', 'view', 'demo2');
-        $this->addRolePerm($data['roleId'], 'Map', 'view', 'demo-map');
-        $this->addRolePerm($data['roleId'], 'Map', 'view', 'demo-server');
+        // Access assignment: Guests => Allowed to view the demo maps
+        foreach(GlobalCore::getInstance()->demoMaps AS $map) {
+            $this->addRolePerm($data['roleId'], 'Map', 'view', $map);
+        }
 
         // Access assignment: Guests => Allowed to view the demo rotation
         $this->addRolePerm($data['roleId'], 'Rotation', 'view', 'demo');
 
-        // Access assignment: Guests => Allowed to view the __automap automap
-        $this->addRolePerm($data['roleId'], 'AutoMap', 'view', '__automap');
+        // Access assignment: Guests => Allowed to view the demo automaps
+        foreach(GlobalCore::getInstance()->demoAutomaps AS $automap) {
+            $this->addRolePerm($data['roleId'], 'AutoMap', 'view', $automap);
+        }
 
         // Access assignment: Guests => Allowed to change their passwords
         $this->addRolePerm($data['roleId'], 'ChangePassword', 'change', '*');

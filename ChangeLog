@@ -1,10 +1,12 @@
 1.6.1
 Core
   * LogonDialog: Changed _origin parameter to _origtarget to support current multisite
-  * Bugfix: Fixed version number format for stable versions like (1.6)
   * Added nagvis-make-admin helper script to assign the Administrators role to the
     given user using the command line. This script might help when the admin lost
     its permissions.
+  * NagVis creates now "omdadmin" user in OMD environments when creating new auth.db files
+  * Bugfix: Added missing default permissions for guest role (viewing demo maps)
+  * Bugfix: Fixed version number format for stable versions like (1.6)
     
 Frontend
   * Ajax call for redrawing map objects is not cacheable anymore (prevent strange

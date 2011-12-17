@@ -36,6 +36,10 @@ class GlobalCore {
     private static $instance = null;
     protected $iconsetTypeCache = Array();
 
+
+    public $demoMaps = Array('demo-germany', 'demo-ham-racks', 'demo-load', 'demo-muc-srv1', 'demo-overview');
+    public $demoAutomaps = Array('__automap', 'demo-overview');
+
     /**
      * Deny construct
      *
@@ -619,6 +623,14 @@ class GlobalCore {
     // Sort array of map arrays by alias used for header menu
     static function cmpMapAlias($a, $b) {
         return strnatcmp($a['mapAlias'], $b['mapAlias']);
+    }
+
+    public function omdSite() {
+        if(substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
+            $site_parts = array_slice(explode('/' ,dirname($_SERVER["SCRIPT_FILENAME"])), 0, -3);
+            return $site_parts[count($site_parts) - 1];
+        }
+        return null;
     }
 }
 ?>
