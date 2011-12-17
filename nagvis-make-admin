@@ -1,0 +1,75 @@
+#!/bin/bash
+###############################################################################
+#
+# nagvis-make-admin.sh - This script assigns the Administrators role to the
+#                        given user.
+#
+# Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
+#
+# Development:
+#  Lars Michelsen <lars@vertical-visions.de>
+#
+# License:
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+###############################################################################
+
+if [ ! -f auth.db ]; then
+    echo "auth.db not found. Please make sure you execute this script in the etc/ directory of NagVis."
+    exit 1
+fi
+
+if ! which sqlite3 >/dev/null 2>&1; then
+    echo "Unable to find the sqlite3 binary in PATH. You need to install it to use this script."
+    exit 1
+fi
+
+USER=$1
+
+if [ -z "$USER" ]; then
+    echo "No username given. Please specify the username of an existing user as argument."
+    exit 1
+fi
+
+USER_ID=$(sqlite3 auth.db "SELECT userId FROM users WHERE name='$USER';")
+
+if [ -z "$USER_ID" ]; then
+    echo "User does not exist in sqlite database."
+    exit 1
+fi
+
+RID=$(sqlite3 auth.db "SELECT roleId FROM roles WHERE name='Administrators';")
+
+if [ -z "$RID" ]; then
+    echo "Could not find the Administrators roles. Did you remove it?"
+    exit 1
+fi
+
+echo $USER_ID
+echo $RID
+
+if [ $(sqlite3 auth.db "SELECT count(*) FROM users2roles WHERE userId=$USER_ID and roleId=$RID") = "1" ]; then
+    echo "The user $USER is already Administrator. Nothing to do."
+    exit 0
+fi
+
+echo -n "Adding Administrators role to user $USER..."
+if sqlite3 auth.db "INSERT INTO users2roles (userId, roleId) VALUES ($USER_ID, $RID)"; then
+    echo "done."
+    exit 0
+else
+    echo "ERROR!"
+    exit 1
+fi
