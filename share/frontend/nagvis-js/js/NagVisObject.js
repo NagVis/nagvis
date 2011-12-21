@@ -476,10 +476,9 @@ var NagVisObject = Base.extend({
 
             // Only save the user option when not using the edit_mode
             if(!isset(lock) && (!oViewProperties.hasOwnProperty('edit_mode') || oViewProperties['edit_mode'] !== true)) {
+                var unlocked = [];
                 if(oUserProperties.hasOwnProperty('unlocked-' + oPageProperties.map_name))
-                    var unlocked = oUserProperties['unlocked-' + oPageProperties.map_name].split(',');
-                else
-	            var unlocked = [];
+                    unlocked = oUserProperties['unlocked-' + oPageProperties.map_name].split(',');
 
                 if(this.bIsLocked)
                     unlocked.splice(unlocked.indexOf(this.conf.object_id), 1);
