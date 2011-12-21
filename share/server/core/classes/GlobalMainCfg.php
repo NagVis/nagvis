@@ -715,7 +715,7 @@ class GlobalMainCfg {
             'states' => Array(
                 'unreachable' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '10',
+                    'default' => '9',
                     'match' => MATCH_INTEGER),
                 'unreachable_ack' => Array('must' => 1,
                     'editable' => 1,
@@ -747,7 +747,7 @@ class GlobalMainCfg {
                     'match' => MATCH_MP3_FILE),
                 'down' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '9',
+                    'default' => '10',
                     'match' => MATCH_INTEGER),
                 'down_ack' => Array('must' => 1,
                     'editable' => 1,

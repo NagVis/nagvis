@@ -28,6 +28,18 @@ Installer:
    Leider ist das nicht ganz so einfach, wie bei den anderen Attributen, da in anderen Sektionen
    diese Optionen noch erlaubt sind.
 
+*** NagVis Featureitis ***
+
+- Plattform zum Vorschlagen von Features
+  - Pro Features können Kosten angeben werden
+  - Öffentlich sind Prozentzahlen sichtbar wieviel von einem Feature schon finanziert ist
+- Features können von anonymen und eingeloggten Nutzern vorgeschlagen werden
+  - Bei anonymen Nutzern muss moderiert werden
+  - Für neue Features werden Mails generiert
+- Ein/Mehrere "Supporter" können sich mit Beträgen zu den einzelnen Features melden
+  - Per Default werden nur die Anzahl der Supporter angezeigt
+  - Ein Supporter kann optional seinen Namen und seinen Betrag öffentlich machen
+
 *** Linien (Auch für neue Automap wichtig!) ***
  - Pfeilspitzen konfigurierbar machen
    - Größe

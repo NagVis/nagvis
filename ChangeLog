@@ -1,3 +1,8 @@
+1.6.2
+Core
+  * Switched CRITICAL and UNREACHABLE state weights. CRITICAL now overlaps the
+    UNREACHABLE states
+
 1.6.1
 Core
   * LogonDialog: Changed _origin parameter to _origtarget to support current multisite

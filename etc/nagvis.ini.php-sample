@@ -390,12 +390,12 @@ interval=15
 ; These options are being used when calculating the summary state of the map 
 ; objects. The default values should fit most needs.
 ;
-;unreachable=10
-;unreachable_ack=6
-;unreachable_downtime=6
-;down=9
+;down=10
 ;down_ack=6
 ;down_downtime=6
+;unreachable=9
+;unreachable_ack=6
+;unreachable_downtime=6
 ;critical=8
 ;critical_ack=6
 ;critical_downtime=6
