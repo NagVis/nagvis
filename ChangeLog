@@ -2,6 +2,7 @@
 Core
   * Switched CRITICAL and UNREACHABLE state weights. CRITICAL now overlaps the
     UNREACHABLE states
+  * Bugfix: Fixed problem with form based login when opened via link from another webpage
 
 1.6.1
 Core

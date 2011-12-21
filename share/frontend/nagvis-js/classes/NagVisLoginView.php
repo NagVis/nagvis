@@ -50,19 +50,15 @@ class NagVisLoginView {
         $TMPL = New FrontendTemplateSystem($this->CORE);
         $TMPLSYS = $TMPL->getTmplSys();
 
-        $defaultTarget = cfg('paths', 'htmlbase')
-                         .'/frontend/nagvis-js/index.php?Mod='
-                         .cfg('global', 'startmodule')
-                         .'&act='.cfg('global', 'startaction')
-                         .'&show='.cfg('global', 'startshow');
-        $target = CoreRequestHandler::getReferer($defaultTarget);
+        $target = CoreRequestHandler::getRequestUri('');
 
         // Add the language to the target url when the user requested a specific language
-        if(isset($_GET['lang']) && strpos($target, 'lang=') === false) {
-            if(strpos($target, '?') === false)
+        if(isset($_GET['lang']) && $_GET['lang'] != '' && strpos($target, 'lang=') === false) {
+            if(strpos($target, '?') === false) {
                 $target .= '?lang='.$_GET['lang'];
-            else
+            } else {
                 $target .= '&lang='.$_GET['lang'];
+            }
         }
 
         $aData = Array(
