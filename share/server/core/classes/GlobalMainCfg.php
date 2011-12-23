@@ -55,10 +55,21 @@ class GlobalMainCfg {
                     'editable' => 1,
                     'default' => 'CoreAuthModSQLite',
                     'match' => MATCH_STRING),
+
                 'authorisationmodule' => Array('must' => 1,
                     'editable' => 1,
                     'default' => 'CoreAuthorisationModSQLite',
                     'match' => MATCH_STRING),
+
+                'authorisation_multisite_file' => Array(
+                    'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => '',
+                    'depends_on'    => 'authorisationmodule',
+                    'depends_value' => 'CoreAuthorisationModMultisite',
+                    'match'         => MATCH_STRING_PATH,
+                ),
+
                 'controls_size' => Array(
 		    'must'     => 1,
                     'editable' => 1,

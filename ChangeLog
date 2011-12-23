@@ -2,6 +2,8 @@
 Core
   * Switched CRITICAL and UNREACHABLE state weights. CRITICAL now overlaps the
     UNREACHABLE states
+  * Changed multisite authorization module to new WATO auth export API (Needs
+    at least Check_MK 1.1.13i2)
   * Bugfix: Fixed problem with form based login when opened via link from another webpage
 
 1.6.1

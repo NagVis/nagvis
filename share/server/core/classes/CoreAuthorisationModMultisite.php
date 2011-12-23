@@ -28,7 +28,10 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
     private $permissions;
 
     public function __construct() {
-        $this->file = cfg('paths', 'cfg').'auth.multisite';
+        $this->file = cfg('global', 'authorisation_multisite_file');
+
+        if($this->file == '')
+            throw new NagVisException(l('No auth file configured. Please specify the option authorisation_multisite_file in main configuration'));
 
         if(!file_exists($this->file))
             throw new NagVisException(l('Unable to open auth file ([FILE]).',
@@ -37,14 +40,58 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
         $this->readFile();
     }
 
-    private function readFile() {
-        $s = file_get_contents($this->file);
-        $obj = json_decode(utf8_encode($s), true);
-        if($obj === null)
-            throw new NagVisException(l('Unable to parse data from auth file ([FILE]).',
-                                                          Array('FILE' => $this->file)));
+    private function getFolderMapName($folderPath) {
+        return str_replace('/', '_', $folderPath);
+    }
 
-        $this->permissions = $obj;
+    private function getPermissions($username) {
+        # Add implicit permissions. These are basic permissions
+        # which are needed for most users.
+        $perms =  array(
+            array('Overview',  'view',               '*'),
+            array('General',   'getContextTemplate', '*'),
+            array('General',   'getHoverTemplate',   '*'),
+            array('General',   'getCfgFileAges',     '*'),
+            array('User',      'setOption',          '*'),
+            array('Multisite', 'getMaps',            '*'),
+        );
+
+        $nagvis_permissions = array(
+            array('*', '*', '*'),
+            array('Map', 'view', '*'),
+            array('Map', 'edit', '*'),
+            array('Map', 'delete', '*'),
+        );
+
+        # Loop the multisite NagVis related permissions and add them
+        foreach($nagvis_permissions AS $p) {
+            if(may($username, 'nagvis.'.implode('_', $p))) {
+                $perms[] = $p;
+            }    
+        }
+
+        # WATO folder related permissions
+        foreach(get_folder_permissions($username) AS $folder_path => $p) {
+            if($p['read']) {
+                $perms[] = array('Map', 'view', $this->getFolderMapName($folder_path));
+            }
+            if($p['write']) {
+                $perms[] = array('Map', 'edit', $this->getFolderMapName($folder_path));
+            }
+        }
+
+        return $perms;
+    }
+
+    private function readFile() {
+        require_once($this->file);
+        $this->permissions = array();
+        foreach(all_users() AS $username => $user) {
+            $this->permissions[$username] = array(
+                'permissions' => $this->getPermissions($username),
+                'language'    => $user['language'],
+            );
+        }
     }
 
     public function getUserRoles($userId) {
