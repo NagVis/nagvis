@@ -1,3 +1,7 @@
+1.6.3
+Frontend
+  * Bugfix: Preventing loops in relative coords
+
 1.6.2
 Core
   * Switched CRITICAL and UNREACHABLE state weights. CRITICAL now overlaps the

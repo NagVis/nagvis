@@ -5,9 +5,6 @@ Probleme:
 
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
-  - Loop in relativen Koordinaten erkennen und verhindern
-    - In WUI Fehler anzeigen
-    - Beim Config Parsen Fehlermeldung erzeugen
 - Sidebar Folder auf/zu klappbar
 - In Sidebar/Dropdown die aktuelle Map highlighten
 

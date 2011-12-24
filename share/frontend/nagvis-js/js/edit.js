@@ -156,6 +156,9 @@ function makeDragable(objects, dragStopHandler, dragMoveHandler) {
     len = null;
 }
 
+/**
+ * This function is called once an object is picked for dragging
+ */
 function dragStart(event) {
     if(!event)
         event = window.event;
@@ -207,6 +210,9 @@ function dragStart(event) {
     return true;
 }
 
+/**
+ * This function is called repeated while the object is being dragged
+ */
 function dragObject(event) {
     if(!event)
         event = window.event;
@@ -241,9 +247,12 @@ function dragObject(event) {
     // when dropping the object the currently moved object will be positioned
     // relative to this object.
     if(event.ctrlKey) {
+        // Unhighlight all other objects
         for(var i in oMapObjects)
             oMapObjects[i].highlight(false);
-        var o = getNearestObject(draggingObject.id, newLeft, newTop)
+
+        // Find the nearest object to the current position and highlight it
+        var o = getNearestObject(draggingObject, newLeft, newTop)
         if(o) {
             o.highlight(true);
             o = null;
@@ -256,7 +265,12 @@ function dragObject(event) {
     oParent = null;
 }
 
-function getNearestObject(id, x, y) {
+/**
+ * Is called to find the nearest object to the given position. This must
+ * check if there is a direct or indirect reference to the current object
+ * in order to prevent relative coordinate loops.
+ */
+function getNearestObject(draggingObject, x, y) {
     var nearest = null;
     var min     = null;
     var dist;
@@ -266,7 +280,7 @@ function getNearestObject(id, x, y) {
         obj = oMapObjects[i];
 
         // Skip own object
-        if(id.split('-')[0] == obj.conf.object_id)
+        if(draggingObject.id.split('-')[0] == obj.conf.object_id)
             continue;
 
         // FIXME: Also handle lines
@@ -277,6 +291,10 @@ function getNearestObject(id, x, y) {
         var objY = obj.parseCoord(obj.conf.y, 'y');
         dist = Math.sqrt(((objX - x) * (objX - x)) + ((objY - y) * (objY - y)));
         if(min === null || dist < min) {
+            // Got a nearer one. Ok. But does it have a reference to us?
+            if(coordsReferTo(obj, draggingObject.id.split('-')[0])) {
+                continue;
+            }
             min     = dist;
             nearest = obj;
         }
@@ -286,6 +304,33 @@ function getNearestObject(id, x, y) {
     min     = null;
     dist    = null;
     return nearest;
+}
+
+/**
+ * This function checks wether or not the source object coords refert to
+ * the target object directly or indirectly
+ */
+function coordsReferTo(obj, target_object_id) {
+    eventlog("edit", "info", "Parent: " + obj.conf.object_id);
+    if (obj.conf.object_id == target_object_id) {
+        return true;
+    }
+    
+    if (isRelativeCoord(obj.conf.x)) {
+        var xParent = getMapObjByDomObjId(obj.getCoordParent(obj.conf.x, -1));
+        if(coordsReferTo(xParent, target_object_id)) {
+            return true;
+        }
+    }
+
+    if (isRelativeCoord(obj.conf.y)) {
+        var yParent = getMapObjByDomObjId(obj.getCoordParent(obj.conf.y, -1));
+        if(coordsReferTo(yParent, target_object_id)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 function moveRelativeObject(parentId, parentTop, parentLeft) {
@@ -332,7 +377,7 @@ function dragStop(event) {
 
     var oParent = null;
     if(event.ctrlKey) {
-        var oParent = getNearestObject(draggingObject.id, draggingObject.x, draggingObject.y)
+        var oParent = getNearestObject(draggingObject, draggingObject.x, draggingObject.y)
         oParent.highlight(false);
     }
 
