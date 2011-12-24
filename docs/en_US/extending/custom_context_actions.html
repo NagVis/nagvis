@@ -58,7 +58,7 @@ context_template=default-ssh</pre>
         
         <h3>4. Configure your client to handle ssh:// uris</h3>
         
-        In this case I configure firefox on Ubuntu Linux. This may differ on your system.
+        In this case I configure firefox (&lt; 3.5) on Ubuntu Linux. This may differ on your system.
         
         Open <code>about:config</code> in your firefox. Add some new options:
         
@@ -77,7 +77,14 @@ Value: true</pre>
         <pre>Name: network.protocol-handler.warn-external.ssh
 Type: Boolean
 Value: false</pre>
-        
+
+        <h3>4a. Firefox &gt; 3.5</h3>
+        <p>If you are using Firefox 3.5 or above you only need to set the following options:</p>
+        <pre>String:
+network.protocol-handler.app.ssh = /usr/local/bin/ssh-connect-handler
+Boolean:
+network.protocol-handler.expose.ssh = false</pre>
+
         <h3>5. Create a handler script</h3>
         
         Create the script at the given script path. In my case it is <code>/usr/local/bin/ssh-connect-handler</code>.
@@ -88,6 +95,14 @@ xterm -e ssh ${1#ssh:\/\/*}</pre>
         You need to make this script executable.
         
         <pre>chmod +x /usr/local/bin/ssh-connect-handler</pre>
+
+        <h3>5a. gnome-terminal + root-login</h3>
+        <p>If you need explicit root login and like to use root login this might be a better script for you:</p>
+        <pre>#!/bin/bash
+#
+# /usr/local/bin/ssh-connect-handler
+
+gnome-terminal --geometry=78x10 -e "ssh root@${1#ssh:\/\/*}"</pre>
         
         <h3>6. Test handler script</h3>
         
