@@ -311,7 +311,6 @@ function getNearestObject(draggingObject, x, y) {
  * the target object directly or indirectly
  */
 function coordsReferTo(obj, target_object_id) {
-    eventlog("edit", "info", "Parent: " + obj.conf.object_id);
     if (obj.conf.object_id == target_object_id) {
         return true;
     }
