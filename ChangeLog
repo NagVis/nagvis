@@ -1,6 +1,8 @@
 1.6.3
 Frontend
   * Bugfix: Preventing loops in relative coords
+  * Bugfix: Preventing JS error when trying to position objects relative but
+  no target object can be found
 
 1.6.2
 Core

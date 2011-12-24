@@ -376,8 +376,9 @@ function dragStop(event) {
 
     var oParent = null;
     if(event.ctrlKey) {
-        var oParent = getNearestObject(draggingObject, draggingObject.x, draggingObject.y)
-        oParent.highlight(false);
+        var oParent = getNearestObject(draggingObject, draggingObject.x, draggingObject.y);
+        if(oParent)
+            oParent.highlight(false);
     }
 
     if(event.shiftKey)
