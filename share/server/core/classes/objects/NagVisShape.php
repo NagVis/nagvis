@@ -42,6 +42,7 @@ class NagVisShape extends NagVisStatelessObject {
 
         $this->icon = $icon;
         $this->type = 'shape';
+
         parent::__construct($CORE);
     }
 
@@ -54,6 +55,9 @@ class NagVisShape extends NagVisStatelessObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parseJson() {
+        // Checks wether the shape exists or not
+        $this->fetchIcon();
+
         return parent::parseJson();
     }
 
@@ -73,12 +77,18 @@ class NagVisShape extends NagVisStatelessObject {
     /**
      * PUBLIC fetchIcon()
      *
-     * Just a dummy here (Shape won't need an icon)
+     * Is executed to detect missing shape images. Is not doing anything
+     * when the shape image is an URL.
      *
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function fetchIcon() {
-        // Nothing to do here, icon is set in constructor
+        if($this->icon[0] != '[') {
+            if(!file_exists(parent::$iconPath . $this->icon)
+               && !file_exists(parent::$iconPathLocal . $this->icon)) {
+                $this->icon = 'std_dummy.png';
+            }
+        }
     }
 
     # End public methods

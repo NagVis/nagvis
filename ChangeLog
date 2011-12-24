@@ -1,5 +1,6 @@
 1.6.3
 Frontend
+  * Showing dummy shape image when configured shape does not exist
   * Bugfix: Preventing loops in relative coords
   * Bugfix: Preventing JS error when trying to position objects relative but
   no target object can be found
