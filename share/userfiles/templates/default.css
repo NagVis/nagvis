@@ -497,6 +497,9 @@ td#popupWindowContent table.mytable tr td.tdfield select {
     border: 1px solid #284279;
     width:170px;
 }
+td#popupWindowContent table.mytable tr td.tdfield input.upload {
+    width:210px;
+}
 td#popupWindowContent table.mytable tr td.tdfield span {
     word-wrap: break-word;
 }

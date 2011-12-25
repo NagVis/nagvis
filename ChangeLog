@@ -4,6 +4,7 @@ Frontend
   * Bugfix: Preventing loops in relative coords
   * Bugfix: Preventing JS error when trying to position objects relative but
   no target object can be found
+  * Bugfix: Fixed file upload input field styling issues (at least in Firefox)
 
 1.6.2
 Core
