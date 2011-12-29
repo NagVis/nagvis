@@ -5,6 +5,7 @@ Frontend
   * Bugfix: Preventing JS error when trying to position objects relative but
   no target object can be found
   * Bugfix: Fixed file upload input field styling issues (at least in Firefox)
+  * Bugfix: Removed backendtype fields from "Manage Backends" dialog forms
 
 1.6.2
 Core

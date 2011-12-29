@@ -46,7 +46,6 @@ lang = {$lang};
                 </select>
             </td>
         </tr>
-        <!-- oh, it's time for a red wine - tasty :-) -->
         <tr>
             <td class="tdlabel" colspan="2" align="center">
                 <input class="submit" type="submit" name="submit" value="{$langSave}" />
@@ -56,6 +55,7 @@ lang = {$lang};
 </form>
 
 <form name="backend_edit" id="backend_edit" method="POST" action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=MainCfg&amp;act=doBackendEdit', 'backend_edit');" onsubmit="return check_backend_edit();">
+    <input type="hidden" name="backendtype" value="" />
     <table name="mytable" class="mytable" id="table_backend_edit">
         <tr><th class="cat" colspan="2"><h2>{$langEditBackend}</h2></th></tr>
         <tr>

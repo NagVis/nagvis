@@ -71,8 +71,11 @@ function updateBackendOptions(sBackendType, backendId, sFormId) {
 
     // Get backend type from configued values when not set via function call
     // This occurs when editing backends cause only backendid is given
-    if(backendType === '')
+    if(backendType === '') {
         backendType = oValues['backendtype'];
+        // Also set the value in the form
+        document.backend_edit.backendtype.value = backendType;
+    }
 
     // Fallback to default backendtype when nothing set here
     if(backendType === '')
@@ -83,9 +86,10 @@ function updateBackendOptions(sBackendType, backendId, sFormId) {
     oOptions = validMainConfig['backend']['options'][backendType];
     for(var sKey in validMainConfig['backend']) {
         // Exclude: backendid, backendtype, options
-        if(sKey !== 'backendid' && (sBackendType === '' || (sBackendType !== '' && sKey !== 'backendtype')) && sKey !== 'options') {
-            oOptions[sKey] = validMainConfig['backend'][sKey];
-        }
+        if(sKey === 'backendid' || sKey === 'backendtype' || sKey === 'options')
+            continue;
+
+        oOptions[sKey] = validMainConfig['backend'][sKey];
     }
 
     for(var sKey in oOptions) {

@@ -200,9 +200,9 @@ class CoreModMainCfg extends CoreModule {
 
     protected function handleResponseBackendEdit() {
         $FHANDLER = new CoreRequestHandler($_POST);
-        $this->verifyValuesSet($FHANDLER, Array('backendid', 'backendtype'));
+        $this->verifyValuesSet($FHANDLER, Array('backendid'));
         return Array('backendid'   => $FHANDLER->get('backendid'),
-                     'backendtype' => $FHANDLER->get('backendtype'),
+                     'backendtype' => $this->CORE->getUserMainCfg()->getValue('backend_'.$FHANDLER->get('backendid'), 'backendtype'),
                      'opts'        => $_POST);
     }
 
