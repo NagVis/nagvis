@@ -7,7 +7,21 @@ lang = {$lang};
     <table name="mytable" class="mytable" id="table_create_image">
         <tr><th class="cat" colspan="2"><h2>{$langCreateBackground}</h2></th></tr>
         <tr><td class="tdlabel" style="color:red;">{$langBackgroundName}</td><td class="tdfield"><input type="text" name="image_name" value="" onBlur="" /></td></tr>
-        <tr><td class="tdlabel" style="color:red;">{$langBackgroundColor}</td><td class="tdfield"><input type="text" name="image_color" value="#" onBlur="" /></td></tr>
+        <tr>
+          <td class="tdlabel" style="color:red;">{$langBackgroundColor}</td>
+          <td class="tdfield">
+            <div id="image_color_container" class="picker">
+            <input type="text" id="image_color" name="image_color" value="#" style="width:148px" />
+            <a href="javascript:void(0);" onClick="togglePicker('image_color');">
+            <img src="{$htmlImages}/internal/picker.png" alt="{$langColorSelect}" />
+            </a></div>
+            <script type="text/javascript">
+            var o = document.getElementById('image_color');
+            o.color = new jscolor.color(o, \{pickerOnfocus:false,adjust:false,hash:true});
+            o = null;
+            </script>
+            </td>
+        </tr>
         <tr><td class="tdlabel" style="color:red;">{$langBackgroundWidth}</td><td class="tdfield"><input type="text" name="image_width" value="" onBlur="" /></td></tr>
         <tr><td class="tdlabel" style="color:red;">{$langBackgroundHeight}</td><td class="tdfield"><input type="text" name="image_height" value="" onBlur="" /></td></tr>
         <tr><td class="tdlabel" colspan="2" align="center"><input class="submit" type="submit" name="submit" value="{$langCreate}" /></td></tr>

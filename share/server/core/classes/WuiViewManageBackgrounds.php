@@ -39,20 +39,22 @@ class WuiViewManageBackgrounds {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-            'htmlBase' => cfg('paths', 'htmlbase'),
+            'htmlBase'             => cfg('paths', 'htmlbase'),
+            'htmlImages'           => cfg('paths', 'htmlimages'),
             'langCreateBackground' => l('createBackground'),
-            'langBackgroundName' => l('backgroundName'),
-            'langBackgroundColor' => l('backgroundColor'),
-            'langBackgroundWidth' => l('backgroundWidth'),
+            'langBackgroundName'   => l('backgroundName'),
+            'langBackgroundColor'  => l('backgroundColor'),
+            'langColorSelect'      => l('Color select'), 
+            'langBackgroundWidth'  => l('backgroundWidth'),
             'langBackgroundHeight' => l('backgroundHeight'),
-            'langCreate' => l('create'),
+            'langCreate'           => l('create'),
             'langUploadBackground' => l('uploadBackground'),
-            'langChooseImage' => l('chooseImage'),
-            'langUpload' => l('upload'),
+            'langChooseImage'      => l('chooseImage'),
+            'langUpload'           => l('upload'),
             'langDeleteBackground' => l('deleteBackground'),
-            'langDelete' => l('delete'),
-            'images' => $CORE->getAvailableBackgroundImages(),
-            'lang'       => $CORE->getJsLang(),
+            'langDelete'           => l('delete'),
+            'images'               => $CORE->getAvailableBackgroundImages(),
+            'lang'                 => $CORE->getJsLang(),
         );
 
         // Build page based on the template file and the data array

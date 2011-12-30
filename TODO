@@ -2,6 +2,7 @@ This is a small file for storing quick thoughts about new features and needed ch
 ===============================================================================
 
 Probleme:
+- Warnings anzeigen, wenn Funktionen aus oldPhpVersionFixes.php angezogen werden
 
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
