@@ -11,6 +11,9 @@ Frontend
   * Bugfix: Fixed file upload input field styling issues (at least in Firefox)
   * Bugfix: Removed backendtype fields from "Manage Backends" dialog forms
 
+Automap
+  * Bugfix: Added missing view_type=line parameter to automap exported maps
+
 1.6.2
 Core
   * Switched CRITICAL and UNREACHABLE state weights. CRITICAL now overlaps the

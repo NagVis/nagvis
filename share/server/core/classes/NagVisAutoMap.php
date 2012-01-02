@@ -382,8 +382,9 @@ class NagVisAutoMap extends GlobalMap {
         $lines = Array();
         // FIXME: Handle line style!
         $aConf = Array(
-	    'z'          => 90,
+            'view_type'  => 'line',
             'line_type'  => '11',
+	    'z'          => 90,
             'line_color' => '#000',
             'line_width' => 1,
         );
