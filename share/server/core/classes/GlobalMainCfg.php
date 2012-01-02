@@ -1254,7 +1254,7 @@ class GlobalMainCfg {
                     }
                 } elseif ((substr($line, 0, 1) == '[') && (substr($line, -1, 1)) == ']') {
                     // section
-                    $sec = strtolower(trim(substr($line, 1, strlen($line)-2)));
+                    $sec = trim(substr($line, 1, strlen($line)-2));
 
                     // write to array
                     if(!isset($this->config[$sec])) {
@@ -1272,7 +1272,7 @@ class GlobalMainCfg {
                     // parameter...
 
                     // separate string in an array
-                    $arr = explode('=',$line);
+                    $arr = explode('=', $line);
                     // read key from array and delete it
                     $key = strtolower(trim($arr[0]));
                     unset($arr[0]);

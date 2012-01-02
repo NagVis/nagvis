@@ -1,4 +1,7 @@
 1.6.3
+Core
+  * Bugfix: Made upper/lower case rotation_id/backend_id definitions possible
+
 Frontend
   * Showing dummy shape image when configured shape does not exist
   * Added the color picker to background image creation form
