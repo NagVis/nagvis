@@ -13,6 +13,8 @@ Frontend
 
 Automap
   * Bugfix: Added missing view_type=line parameter to automap exported maps
+  * Bugfix: filterByState was always enabled after modifying the automap
+            parameters via web form
 
 1.6.2
 Core

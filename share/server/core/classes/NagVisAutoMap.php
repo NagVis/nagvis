@@ -136,7 +136,7 @@ class NagVisAutoMap extends GlobalMap {
             $prop['ignoreHosts'] = '';
         if(!isset($prop['filterGroup']) || $prop['filterGroup'] == '')
             $prop['filterGroup'] = '';
-        if(!isset($prop['filterByState']) || $prop['filterByState'] == '')
+        if(!isset($prop['filterByState']) || $prop['filterByState'] == '0')
             $prop['filterByState'] = '';
 
         if(isset($prop['filterByIds']))
