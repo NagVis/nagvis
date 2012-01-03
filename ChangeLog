@@ -1,6 +1,7 @@
 1.6.3
 Core
   * Bugfix: Made upper/lower case rotation_id/backend_id definitions possible
+  * Added ; and | to allowed signs for urls
 
 Frontend
   * Showing dummy shape image when configured shape does not exist
