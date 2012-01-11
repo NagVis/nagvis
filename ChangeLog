@@ -2,6 +2,7 @@
 Core
   * Bugfix: Made upper/lower case rotation_id/backend_id definitions possible
   * Added ; and | to allowed signs for urls
+  * Undefined backend in single objects doos not prevent whole map loading anymore
 
 Frontend
   * Showing dummy shape image when configured shape does not exist

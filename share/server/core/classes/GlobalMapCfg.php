@@ -640,7 +640,8 @@ class GlobalMapCfg {
                     }
 
                     // Check if the configured backend is defined in main configuration file
-                    if($key == 'backend_id' && !in_array($val, $this->CORE->getDefinedBackends())) {
+                    // Raise such an exception only when error is found in global section
+                    if($type == 'global' && $key == 'backend_id' && !in_array($val, $this->CORE->getDefinedBackends())) {
                         throw new $exception(l('backendNotDefined', Array('BACKENDID' => $val)));
                     }
                 }

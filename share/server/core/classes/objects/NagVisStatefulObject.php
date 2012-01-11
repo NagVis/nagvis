@@ -805,7 +805,7 @@ class NagVisStatefulObject extends NagVisObject {
      */
     public function setBackendProblem($s) {
         $this->problem_msg = l('Problem (Backend: [BACKENDID]): [MSG]',
-                                                                      Array('BACKENDID' => $this->backend_id, 'MSG' => $s));
+                               Array('BACKENDID' => $this->backend_id, 'MSG' => $s));
     }
 
     /**

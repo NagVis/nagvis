@@ -444,36 +444,37 @@ class CoreBackendMgmt {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function initializeBackend($backendId) {
-        if($this->checkBackendExists($backendId, true)) {
-            /**
-             * The status host can be used to prevent annoying timeouts when a backend is not
-             * reachable. This is only useful in multi backend setups.
-             *
-             * It works as follows: The assumption is that there is a "local" backend which
-             * monitors the host of the "remote" backend. When the remote backend host is
-             * reported as UP the backend is queried as normal.
-             * When the remote backend host is reported as "DOWN" or "UNREACHABLE" NagVis won't
-             * try to connect to the backend anymore until the backend host gets available again.
-             */
-      $statusHost = cfg('backend_' . $backendId, 'statushost');
-      if($statusHost != '' && !$this->backendAlive($backendId, $statusHost)) {
-                $this->aError[$backendId] = new BackendConnectionProblem(l('The backend is reported as dead by the statusHost ([STATUSHOST]).', Array('STATUSHOST' => $statusHost)));
-                return false;
-            }
+        if(!$this->checkBackendExists($backendId, false)) {
+            $this->aError[$backendId] = new BackendConnectionProblem(l('backendNotDefined',
+                                            Array('BACKENDID'   => $backendId)));
+            return false;
+        }
+        /**
+         * The status host can be used to prevent annoying timeouts when a backend is not
+         * reachable. This is only useful in multi backend setups.
+         *
+         * It works as follows: The assumption is that there is a "local" backend which
+         * monitors the host of the "remote" backend. When the remote backend host is
+         * reported as UP the backend is queried as normal.
+         * When the remote backend host is reported as "DOWN" or "UNREACHABLE" NagVis won't
+         * try to connect to the backend anymore until the backend host gets available again.
+         */
+        $statusHost = cfg('backend_' . $backendId, 'statushost');
+        if($statusHost != '' && !$this->backendAlive($backendId, $statusHost)) {
+            $this->aError[$backendId] = new BackendConnectionProblem(l('The backend is reported as dead by the statusHost ([STATUSHOST]).', Array('STATUSHOST' => $statusHost)));
+            return false;
+        }
 
-            try {
-                $backendClass = 'GlobalBackend' . cfg('backend_' . $backendId, 'backendtype');
-                $this->BACKENDS[$backendId] = new $backendClass($this->CORE, $backendId);
+        try {
+            $backendClass = 'GlobalBackend' . cfg('backend_' . $backendId, 'backendtype');
+            $this->BACKENDS[$backendId] = new $backendClass($this->CORE, $backendId);
 
-                // Mark backend as initialized
-                $this->aInitialized[$backendId] = true;
+            // Mark backend as initialized
+            $this->aInitialized[$backendId] = true;
 
-                return true;
-            } catch(BackendException $e) {
-                $this->aError[$backendId] = $e;
-                return false;
-            }
-        } else {
+            return true;
+        } catch(BackendException $e) {
+            $this->aError[$backendId] = $e;
             return false;
         }
     }
