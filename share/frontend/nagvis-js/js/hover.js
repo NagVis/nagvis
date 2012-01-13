@@ -322,16 +322,21 @@ function replaceHoverTemplateStaticMacros(oObj, sTemplateCode) {
 }
 
 function displayHoverMenu(event, objId, iHoverDelay) {
-    // IE is evil and doesn't pass the event object
-    if(!isset(event))
-        event = window.event;
+    if(!event) {
+        alert('ERROR: The event object is not defined.');
+        return;
+    }
+    if(!objId) {
+        alert('ERROR: The object id is not defined.');
+        return;
+    }
 
     // Only show up hover menu when no context menu is opened
     // and only handle the events when no timer is in schedule at the moment to
     // prevent strange movement effects when the timer has finished
     if(!dragging() && !contextOpen() && _hoverTimer === null) {
         if(iHoverDelay && iHoverDelay != "0" && !hoverOpen())
-            _hoverTimer = setTimeout('hoverShow('+event.clientX+', '+event.clientY+', '+objId+')', parseInt(iHoverDelay)*1000);
+            _hoverTimer = setTimeout('hoverShow('+event.clientX+', '+event.clientY+', "'+objId+'")', parseInt(iHoverDelay)*1000);
         else
             hoverShow(event.clientX, event.clientY, objId);
     }

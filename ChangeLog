@@ -12,6 +12,7 @@ Frontend
   no target object can be found
   * Bugfix: Fixed file upload input field styling issues (at least in Firefox)
   * Bugfix: Removed backendtype fields from "Manage Backends" dialog forms
+  * Bugfix: Fixed problem with the hover menu when using the hover_delay parameter
 
 Automap
   * Bugfix: Added missing view_type=line parameter to automap exported maps

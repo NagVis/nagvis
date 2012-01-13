@@ -399,7 +399,15 @@ var NagVisObject = Base.extend({
 
             // Add eventhandlers for hover menu
             if(oObj) {
-                oObj.onmousemove = function(e) { var id = objId; var iH = iHoverDelay; displayHoverMenu(e, id, iH); id = null; iH = null; };
+                oObj.onmousemove = function(event) {
+                    // IE is evil and doesn't pass the event object
+                    if(!isset(event))
+                        event = window.event;
+                    var id = objId;
+                    var iH = iHoverDelay;
+                    displayHoverMenu(event, id, iH);
+                    id = null; iH = null; event = null;
+                };
                 oObj.onmouseout = function(e) { var id = objId; hoverHide(id); id = null; };
             }
 
