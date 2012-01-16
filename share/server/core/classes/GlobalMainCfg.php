@@ -33,6 +33,7 @@ class GlobalMainCfg {
     protected $preUserConfig = null;
     protected $runtimeConfig = Array();
     protected $stateWeight;
+    protected $onlyUserConfig = false;
 
     protected $configFiles;
 
@@ -1065,7 +1066,8 @@ class GlobalMainCfg {
         return $files;
     }
 
-    public function init($cacheSuffix = '') {
+    public function init($onlyUserConfig = false, $cacheSuffix = '') {
+        $this->onlyUserConfig = $onlyUserConfig;
         // Get the valid configuration definitions from the available backends
         $this->getBackendValidConf();
 
@@ -1453,7 +1455,7 @@ class GlobalMainCfg {
                                 }
 
                                 // Check if the configured backend is defined in main configuration file
-                                if($type == 'defaults' && $key == 'backend' && !isset($this->config['backend_'.$val])) {
+                                if(!$this->onlyUserConfig && $type == 'defaults' && $key == 'backend' && !isset($this->config['backend_'.$val])) {
                                     if($printErr) {
                                         throw new NagVisException(l('backendNotDefined', Array('BACKENDID' => $val)));
                                     }

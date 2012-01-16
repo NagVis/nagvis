@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SITE=${1-lancom}
+[ -z $SITE ] && SITE=lancom
 
 cd /d1/nagvis
 

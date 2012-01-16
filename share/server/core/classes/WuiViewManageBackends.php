@@ -39,6 +39,9 @@ class WuiViewManageBackends {
         $TMPL = New CoreTemplateSystem($CORE);
         $TMPLSYS = $TMPL->getTmplSys();
 
+        $editableBackends = array_merge(Array('' => ''), $CORE->getDefinedBackends(ONLY_USERCFG));
+        $definedBackends  = array_merge(Array('' => ''), $CORE->getDefinedBackends());
+
         $aData = Array(
             'htmlBase'              => cfg('paths', 'htmlbase'),
             'langSetDefaultBackend' => l('defaultBackend'),
@@ -48,8 +51,12 @@ class WuiViewManageBackends {
             'langAddBackend'        => l('addBackend'),
             'langEditBackend'       => l('editBackend'),
             'langDelBackend'        => l('delBackend'),
+            'langSomeNotEditable'   => l('Some backends are not editable by using the web gui. They can only be '
+                                        .'configured by modifying the file in the NagVis conf.d directory.'),
             'defaultBackend'        => cfg('defaults', 'backend', true),
-            'definedBackends'       => array_merge(Array('' => ''), $CORE->getDefinedBackends(ONLY_USERCFG)),
+            'definedBackends'       => $definedBackends,
+            'editableBackends'      => $editableBackends,
+            'someNotEditable'       => $editableBackends != $definedBackends,
             'availableBackends'     => array_merge(Array('' => ''), $CORE->getAvailableBackends()),
             'backendAttributes'     => $CORE->getMainCfg()->getValidObjectType('backend'),
             'validMainCfg'          => json_encode($CORE->getMainCfg()->getValidConfig()),

@@ -75,7 +75,7 @@ class GlobalCore {
         if(!isset($_UMAINCFG)) {
             $_UMAINCFG = new GlobalMainCfg();
             $_UMAINCFG->setConfigFiles(Array(CONST_MAINCFG));
-            $_UMAINCFG->init('-user-only');
+            $_UMAINCFG->init(True, '-user-only');
         }
         return $_UMAINCFG;
     }

@@ -57,9 +57,9 @@ class CoreModMainCfg extends CoreModule {
                 break;
                 case 'doEdit':
                     $this->handleResponse('handleResponseEdit', 'doEdit',
-                                            l('The main configuration has been updated.'),
-                                                                l('The main configuration could not be updated.'),
-                                                                1);
+                                          l('The main configuration has been updated.'),
+                                          l('The main configuration could not be updated.'),
+                                          1);
                 break;
 
                 case 'manageBackends':

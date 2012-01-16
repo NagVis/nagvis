@@ -7,9 +7,12 @@ Core
 Frontend
   * Showing dummy shape image when configured shape does not exist
   * Added the color picker to background image creation form
+  * Bugfix: Non user-configured (-> conf.d) backends can be configured as
+            default backends using the web GUI; Non user-configurex: Non
+            can not be edited using the web GUI
   * Bugfix: Preventing loops in relative coords
   * Bugfix: Preventing JS error when trying to position objects relative but
-  no target object can be found
+            no target object can be found
   * Bugfix: Fixed file upload input field styling issues (at least in Firefox)
   * Bugfix: Removed backendtype fields from "Manage Backends" dialog forms
   * Bugfix: Fixed problem with the hover menu when using the hover_delay parameter

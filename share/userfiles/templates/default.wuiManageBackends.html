@@ -29,6 +29,8 @@ lang = {$lang};
     </table>
 </form>
 
+{if $someNotEditable}<p>{$langSomeNotEditable}</p>{/if}
+
 <form name="backend_add" id="backend_add" method="POST" action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=MainCfg&amp;act=doBackendAdd', 'backend_add');" onsubmit="return check_backend_add();">
     <table name="mytable" class="mytable" id="table_backend_add">
         <tr>
@@ -62,7 +64,7 @@ lang = {$lang};
             <td class="tdlabel" style="color:red;">backendid</td>
             <td class="tdfield">
                 <select name="backendid" onChange="updateBackendOptions('', this.value, 'backend_edit');">
-                    {foreach $definedBackends backendId}<option value="{$backendId}">{$backendId}</option>{/foreach}
+                    {foreach $editableBackends backendId}<option value="{$backendId}">{$backendId}</option>{/foreach}
                 </select>
             </td>
         </tr>
@@ -81,7 +83,7 @@ lang = {$lang};
             <td class="tdlabel" style="color:red;">backendid</td>
             <td class="tdfield">
                 <select name="backendid">
-                    {foreach $definedBackends backendId}<option value="{$backendId}">{$backendId}</option>{/foreach}
+                    {foreach $editableBackends backendId}<option value="{$backendId}">{$backendId}</option>{/foreach}
                 </select>
             </td>
         </tr>
