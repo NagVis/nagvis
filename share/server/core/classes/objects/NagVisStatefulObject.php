@@ -819,6 +819,10 @@ class NagVisStatefulObject extends NagVisObject {
         $this->problem_msg = l('Problem: [MSG]', Array('MSG' => $s));
     }
 
+    public function hasProblem() {
+        return $this->problem_msg !== null;
+    }
+
     /**
      * PROTECTED fetchSummaryStateFromCounts()
      *

@@ -499,7 +499,8 @@ class NagVisMapObj extends NagVisStatefulObject {
                 if($sType == 'map' && $OBJ->isLoopingBacklink)
                     continue;
 
-                $OBJ->fetchMapObjects($arrMapNames, $depth+1);
+                if(!$OBJ->hasProblem())
+                    $OBJ->fetchMapObjects($arrMapNames, $depth+1);
             }
         }
     }
