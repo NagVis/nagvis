@@ -5,6 +5,7 @@ Core
   * Undefined backend in single objects does not prevent whole map loading anymore
   * Overview page: Better handling of invalid map configuration files
   * Multisite auth: Redirecting to login page when auth.secret does not exist
+  * Made default gadgets aware of OMD default and local path handling
 
 Frontend
   * Showing dummy shape image when configured shape does not exist

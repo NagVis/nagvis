@@ -53,8 +53,16 @@ $sDummyPerfdata = 'config=20%;80;90;0;100';
  */
 $_MODE          = 'html';
 
-// Load gadget core functions
-require('./gadgets_core.php');
+// Include the gadgets core. Also handle OMD default and local paths
+if(substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
+    $core = dirname($_SERVER["SCRIPT_FILENAME"]) . '/gadgets_core.php';
+    if(file_exists($core))
+        require($core);
+    else
+        require(str_replace('local/share/', 'share/', $core));
+} else {
+    require('./gadgets_core.php');
+}
 
 /*******************************************************************************
  * Start gadget main code
