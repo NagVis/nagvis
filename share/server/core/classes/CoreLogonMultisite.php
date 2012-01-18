@@ -36,8 +36,9 @@ class CoreLogonMultisite extends CoreLogonModule {
                           array('PATH' => $this->htpasswdPath)));
         }
         if(!file_exists($this->secretPath)) {
-            throw new NagVisException(l('LogonMultisite: The auth secret file &quot;[PATH]&quot; does not exist.',
-                          array('PATH' => $this->secretPath)));
+            $this->redirectToLogin();
+            //throw new NagVisException(l('LogonMultisite: The auth secret file &quot;[PATH]&quot; does not exist.',
+            //              array('PATH' => $this->secretPath)));
         }
     }
 
@@ -100,13 +101,17 @@ class CoreLogonMultisite extends CoreLogonModule {
         return '';
     }
 
+    private function redirectToLogin() {
+        // FIXME: Get the real path to multisite
+        header('Location:../../../check_mk/login.py?_origtarget=' . $_SERVER['REQUEST_URI']);
+    }
+
     public function check($printErr = true) {
         global $AUTH, $CORE;
 
         $username = $this->checkAuth();
         if($username === '') {
-            // FIXME: Get the real path to multisite
-            header('Location:../../../check_mk/login.py?_origtarget=' . $_SERVER['REQUEST_URI']);
+            $this->redirectToLogin();
             return false;
         }
 
