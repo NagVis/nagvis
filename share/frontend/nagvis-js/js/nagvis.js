@@ -1075,13 +1075,13 @@ function pxToInt(v) {
 }
 
 function isRelativeCoord(v) {
-  return (!isInt(v) && !isFloat(v)) || v.length === 6;
+    return (!isInt(v) && !isFloat(v)) || v.length === 6;
 }
 
 function getKeys(o) {
     var a = [];
     for(var key in o)
-    a.push(key);
+        a.push(key);
     return a;
 }
 

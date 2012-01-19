@@ -21,6 +21,7 @@ Frontend
   * Bugfix: Fixed problem with the hover menu when using the hover_delay parameter
 
 Automap
+  * Handling centron style host links during automap parsing (host_name=)
   * Bugfix: Added missing view_type=line parameter to automap exported maps
   * Bugfix: filterByState was always enabled after modifying the automap
             parameters via web form

@@ -465,6 +465,9 @@ class NagVisAutoMap extends GlobalMap {
          * And there might also be a space after the coords parameter
          * <area shape="rect" href="/test1/check_mk/view.py?view_name=host&amp;site=&amp;host=test" target="_self" title="host_a94a8f" alt="" coords="5,5,21,21" />
          *
+         * Aaaaand also handle centreon param host_name:
+         * <area shape="rect" id="node1" href="/centreon/main.php?p=201&amp;o=hd&amp;host_name=localhost" target="_self" title="host_334389" alt="" coords="4,4,20,20"/>
+         *
          * Coord description:
          * For a rectangle, you map the top left and bottom right corners. All
          * coordinates are listed as x,y (over,up). So, for upper left corner
@@ -479,7 +482,7 @@ class NagVisAutoMap extends GlobalMap {
             $sLine = str_replace('&#45;', '-', $sLine);
             // Extract the area objects
             // Only parsing rect/polys at the moment
-            if(preg_match('/^<area\sshape="(rect|poly)"\s(id="[^"]+"\s)?href=".+[?&;]host=([^"]+)"(?:\starget="[a-zA-Z-_]*")?\stitle="[^"]+"\salt=""\scoords="([^"]+)"\s?\/>$/i', $sLine, $aMatches)) {
+            if(preg_match('/^<area\sshape="(rect|poly)"\s(id="[^"]+"\s)?href=".+[?&;](?:host|host_name)=([^"]+)"(?:\starget="[a-zA-Z-_]*")?\stitle="[^"]+"\salt=""\scoords="([^"]+)"\s?\/>$/i', $sLine, $aMatches)) {
                 if(isset($aMatches[1]) && isset($aMatches[2]) && isset($aMatches[3]) && isset($aMatches[4])) {
                     $type = $aMatches[1];
                     $name1 = str_replace('&#45;', '-', trim($aMatches[3]));
