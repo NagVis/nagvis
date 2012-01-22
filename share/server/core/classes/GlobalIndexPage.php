@@ -201,6 +201,8 @@ class GlobalIndexPage {
 
     private function mapError($type, $name, $msg) {
         $map = $this->getMapAndAutomapDefaultOpts($type, $name, $name);
+        $map['name']            = $map['map_name'];
+        unset($map['map_name']);
         $map['state']           = 'ERROR';
         $map['summary_state']   = 'ERROR';
         $map['icon']            = 'std_medium_error.png';
