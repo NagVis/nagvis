@@ -607,9 +607,10 @@ $mapConfigVars = Array(
         'match' => MATCH_STRING_URL_EMPTY,
     ),
     'use' => Array(
-        'must' => 0,
-        'default' => '',
-        'match' => MATCH_STRING_NO_SPACE,
+        'must'    => 0,
+        'default' => array(),
+        'array'   => True,
+        'match'   => MATCH_STRING_NO_SPACE,
     ),
 
     // HOST SPECIFIC OPTIONS

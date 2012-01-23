@@ -154,6 +154,8 @@ class WuiViewMapAddModify {
                || (isset($prop['deprecated']) && $prop['deprecated'] === true))
                 continue;
 
+            $isArrayValue = isset($prop['array']) && $prop['array'];
+
             list($inherited, $value) = $this->getAttr($typeDefaults, $update, $propname, $prop['must']);
             unset($this->hiddenAttrs[$propname]);
 
@@ -218,6 +220,13 @@ class WuiViewMapAddModify {
                 $valueTxt = $typeDefaults[$propname];
             else
                 $valueTxt = '';
+
+            if(isset($prop['array']) && $prop['array']) {
+                if(is_array($valueTxt))
+                    $valueTxt = implode(',', $valueTxt);
+                if(is_array($value))
+                    $value    = implode(',', $value);
+            }
 
             switch($fieldType) {
                 case 'boolean':

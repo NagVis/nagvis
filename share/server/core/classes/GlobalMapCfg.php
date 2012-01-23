@@ -394,8 +394,7 @@ class GlobalMapCfg {
             $this->gatherTypeDefaults($onlyGlobal);
 
             if($onlyGlobal == 0) {
-                // FIXME
-                if(isset($this->mapConfig['template']) && $resolveTemplates == true) {
+                if($resolveTemplates == true) {
                     // Merge the objects with the linked templates
                     $this->mergeTemplates();
                 }
@@ -471,21 +470,23 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function mergeTemplates() {
-        // Loop all objects of that type
+        // Loop all objects
         foreach($this->mapConfig AS $id => $element) {
             // Except global and templates (makes no sense)
-            if($type == 'global')
+            if($id == '0')
                 continue;
 
             // Check for "use" value
             if(isset($element['use']) && is_array($element['use'])) {
                 // loop all given templates
                 foreach($element['use'] AS $templateName) {
-                    $id = $this->getTemplateIdByName($templateName);
+                    $tmpl_id = $this->getTemplateIdByName($templateName);
+                    if($tmpl_id === false)
+                        continue;
 
-                    if(isset($this->mapConfig[$id]) && is_array($this->mapConfig[$id])) {
+                    if(isset($this->mapConfig[$tmpl_id]) && is_array($this->mapConfig[$tmpl_id])) {
                         // merge object array with template object array (except type and name attribute)
-                        $tmpArray = $this->mapConfig[$id];
+                        $tmpArray = $this->mapConfig[$tmpl_id];
                         unset($tmpArray['type']);
                         unset($tmpArray['name']);
                         unset($tmpArray['object_id']);
@@ -496,8 +497,9 @@ class GlobalMapCfg {
         }
 
         // Everything is merged: The templates are not relevant anymore
-        // FIXME
-        //unset($this->mapConfig['template']);
+        foreach($this->getDefinitions('template') AS $id => $template) {
+            unset($this->mapConfig[$id]);
+        }
     }
 
     /**
@@ -797,6 +799,12 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function setValue($id, $key, $value) {
+        $prop = $this->getValidObjectType($this->mapConfig[$id]['type']);
+        if(isset($prop['array']) && $prop['array']) {
+            $value = explode(',', $value);
+        }
+        echo $value;
+
         $this->mapConfig[$id][$key] = $value;
         return TRUE;
     }
