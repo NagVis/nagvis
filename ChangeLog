@@ -2,6 +2,7 @@
 Core
   * Made template objects work again. Added doc note which does not recommend
     usage of templates and the webbased editor at the same time.
+  * FIX: Fixed wrong computed shape urls which broke all shapes
 
 1.6.3
 Core

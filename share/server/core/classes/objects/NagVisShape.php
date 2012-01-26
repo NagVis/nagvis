@@ -35,9 +35,9 @@ class NagVisShape extends NagVisStatelessObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function __construct($CORE, $icon) {
-        if(parent::$iconPath === null) {
-            parent::$iconPath      = cfg('sys',  'global', 'shapes');
-            parent::$iconPathLocal = cfg('sys',  'local',  'shapes');
+        if(self::$iconPath === null) {
+            self::$iconPath      = $CORE->getMainCfg()->getPath('sys',  'global', 'shapes');
+            self::$iconPathLocal = $CORE->getMainCfg()->getPath('sys',  'local', 'shapes');
         }
 
         $this->icon = $icon;
@@ -84,8 +84,8 @@ class NagVisShape extends NagVisStatelessObject {
      */
     public function fetchIcon() {
         if($this->icon[0] != '[') {
-            if(!file_exists(parent::$iconPath . $this->icon)
-               && !file_exists(parent::$iconPathLocal . $this->icon)) {
+            if(!file_exists(self::$iconPath . $this->icon)
+               && !file_exists(self::$iconPathLocal . $this->icon)) {
                 $this->icon = 'std_dummy.png';
             }
         }
