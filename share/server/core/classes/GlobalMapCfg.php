@@ -803,7 +803,6 @@ class GlobalMapCfg {
         if(isset($prop['array']) && $prop['array']) {
             $value = explode(',', $value);
         }
-        echo $value;
 
         $this->mapConfig[$id][$key] = $value;
         return TRUE;
