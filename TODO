@@ -9,6 +9,12 @@ Relative Koordinaten:
 - Sidebar Folder auf/zu klappbar
 - In Sidebar/Dropdown die aktuelle Map highlighten
 
+- Zeige Rotations in Sidebar
+- Während die Index Seite lädt
+  - Header Menu sollte funktionieren während die Index Seite lädt
+  - Einzelne Maps sollten schon aufbauen
+
+
 -------------------------------------------------------------------------------
 
 - SQLite/MySQL Handling/Update abstrahieren und wesentliche Dinge an zentraler Stelle definieren
