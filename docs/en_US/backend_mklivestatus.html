@@ -24,7 +24,17 @@
             <th width="200">Value</th><th width="150">Default</th><th>Description</th>
         </tr>
         <tr>
-        <td>socket</td><td>unix:/usr/local/nagios/var/rw/live</td><td><p>The socket to connect to can be a local unix socket or a tcp socket. You have to define the type at the beginning of the string. Set &quot;unix:&quot; for unix sockets or &quot;tcp:&quot; for tcp sockets.</p> <p>In case of the unix socket you need to put the path of the livestatus unix socket to connect to.</p> <p>When using a tcp socket you have to enter a hostaddress and a tcp port using the following scheme: &lt;host>:&lt;port>. The host address can be an IP-address or an FQDN.</p></td>
+            <td>socket</td>
+            <td>unix:/usr/local/nagios/var/rw/live</td>
+            <td><p>The socket to connect to can be a local unix socket or a tcp socket. You have to define the type at the beginning of the string. Set &quot;unix:&quot; for unix sockets or &quot;tcp:&quot; for tcp sockets.</p> <p>In case of the unix socket you need to put the path of the livestatus unix socket to connect to.</p> <p>When using a tcp socket you have to enter a hostaddress and a tcp port using the following scheme: &lt;host>:&lt;port>. The host address can be an IP-address or an FQDN.</p></td>
+        </tr><tr>
+            <td>timeout</td>
+            <td>5</td>
+            <td>
+                <font color="#f00">New in 1.6.4</font>: This option controls the connect timeout of the livestatus socket.
+                This is just a fallback. To prevent timeouts when accessing remote sites you really should configure a statushost for the backend.
+                For details take a look at the general backend parameters documented in the <a href="nagvis_config_format_description.html#backend">backend section</a>
+                of the main configuration format description.</a></td>
         </tr>
         </table>
         <p>There are also some general parameters. You can read about them in <a href="nagvis_config_format_description.html#backend">main configuration format description</a>.</p>

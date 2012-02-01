@@ -2,6 +2,9 @@
 Core
   * Made template objects work again. Added doc note which does not recommend
     usage of templates and the webbased editor at the same time.
+  * Livestatus Backend: Added 'timeout' parameter to be able to configure the
+    socket timeout while connecting to the livestatus socket
+  * Livestatus Backend: Only try to connect to livestatus once per page load
   * FIX: Fixed wrong computed shape urls which broke all shapes
 
 1.6.3

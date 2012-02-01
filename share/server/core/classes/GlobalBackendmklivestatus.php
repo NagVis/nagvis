@@ -37,6 +37,7 @@
 class GlobalBackendmklivestatus implements GlobalBackendInterface {
     private $backendId = '';
 
+    private $CONNECT_EXC = null;
     private $SOCKET = null;
     private $socketType = '';
     private $socketPath = '';
@@ -45,10 +46,19 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
     // These are the backend local configuration options
     private static $validConfig = Array(
-        'socket' => Array('must' => 1,
-          'editable' => 1,
-          'default' => 'unix:/usr/local/nagios/var/rw/live',
-          'match' => MATCH_SOCKET));
+        'socket' => Array(
+          'must'      => 1,
+          'editable'  => 1,
+          'default'   => 'unix:/usr/local/nagios/var/rw/live',
+          'match'     => MATCH_SOCKET,
+        ),
+        'timeout' => Array(
+          'must'      => 1,
+          'editable'  => 1,
+          'default'   => 5,
+          'match'     => MATCH_INTEGER,
+        ),
+    );
 
     /**
      * PUBLIC class constructor
@@ -156,27 +166,33 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     private function connectSocket() {
+        // Only try to connect once per page. Re-raise the connection exception on
+        // later tries to connect
+        if($this->CONNECT_EXC != null)
+            throw $this->CONNECT_EXC;
+
         // Connect to the socket
         // don't want to see the connection error messages - want to handle the
         // errors later with an own error message
         // FIXME: Maybe use pfsockopen in the future to use persistent connections
         if($this->socketType === 'unix') {
             $oldLevel = error_reporting(0);
-            $this->SOCKET = fsockopen('unix://'.$this->socketPath, NULL, $errno, $errstr);
+            $this->SOCKET = fsockopen('unix://'.$this->socketPath, NULL, $errno, $errstr, (float) cfg('backend_'.$this->backendId, 'timeout'));
             error_reporting($oldLevel);
         } elseif($this->socketType === 'tcp') {
             $oldLevel = error_reporting(0);
-            $this->SOCKET = fsockopen($this->socketAddress, $this->socketPort, $errno, $errstr);
+            $this->SOCKET = fsockopen($this->socketAddress, $this->socketPort, $errno, $errstr, (float) cfg('backend_'.$this->backendId, 'timeout'));
             error_reporting($oldLevel);
         }
 
         if(!$this->SOCKET) {
-            $socketError = $errstr;
             $this->SOCKET = null;
-            throw new BackendConnectionProblem(l('Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]',
+            $this->CONNECT_EXC = new BackendConnectionProblem(
+                                     l('Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]',
                                                Array('BACKENDID' => $this->backendId,
                                                      'SOCKET'    => $this->socketPath,
-                                                     'MSG'       => $socketError)));
+                                                     'MSG'       => $errstr)));
+            throw $this->CONNECT_EXC;
         }
     }
 
