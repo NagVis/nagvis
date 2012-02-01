@@ -69,8 +69,8 @@ function profilingStart() {
 }
 
 function profilingFinalize($pre) {
-	include_once "/var/www/xhprof_lib/utils/xhprof_lib.php";
-	include_once "/var/www/xhprof_lib/utils/xhprof_runs.php";
+	include_once "/usr/share/php5-xhprof/xhprof_lib/utils/xhprof_lib.php";
+	include_once "/usr/share/php5-xhprof/xhprof_lib/utils/xhprof_runs.php";
 
 	$xhprof_runs = new XHProfRuns_Default();
 	$xhprof_runs->save_run(xhprof_disable(), 'nagvis-'.$pre);
