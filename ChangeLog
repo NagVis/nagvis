@@ -7,6 +7,9 @@ Core
   * Livestatus Backend: Only try to connect to livestatus once per page load
   * FIX: Fixed wrong computed shape urls which broke all shapes
 
+Frontend
+  * Weathermap line color definitions support usage values above 100% and below 0%
+
 1.6.3
 Core
   * Bugfix: Made upper/lower case rotation_id/backend_id definitions possible

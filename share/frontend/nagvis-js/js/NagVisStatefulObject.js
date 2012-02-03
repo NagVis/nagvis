@@ -576,17 +576,17 @@ var NagVisStatefulObject = NagVisObject.extend({
                 }
 
                 // Get colorFill #1 (in)
-                if(setPerfdata[0][2] !== null && setPerfdata[0][2] == '%' && setPerfdata[0][1] !== null && setPerfdata[0][1] >= 0 && setPerfdata[0][1] <= 100)
+                if(setPerfdata[0][2] !== null && setPerfdata[0][2] == '%' && setPerfdata[0][1] !== null) {
                     colorFill = this.getColorFill(setPerfdata[0][1]);
-                else {
+                } else {
                     colorFill = '#000000';
                     this.perfdataError('First', setPerfdata[0][1], this.conf.name, this.conf.service_description);
                 }
 
                 // Get colorFill #2 (out)
-                if(setPerfdata[1][2] !== null && setPerfdata[1][2] == '%' && setPerfdata [1][1] !== null && setPerfdata[1][1] >= 0 && setPerfdata[1][1] <= 100)
+                if(setPerfdata[1][2] !== null && setPerfdata[1][2] == '%' && setPerfdata [1][1] !== null) {
                     colorFill2 = this.getColorFill(setPerfdata[1][1]);
-                else {
+                } else {
                     colorFill2 = '#000000';
                     this.perfdataError('Second', setPerfdata[1][1], this.conf.name, this.conf.service_description);
                 }
@@ -620,10 +620,12 @@ var NagVisStatefulObject = NagVisObject.extend({
      */
     getColorFill: function(perc) {
         var ranges = this.conf.line_weather_colors.split(',');
+        alert(this.conf.line_weather_colors);
         // 0 contains the percentage until this color is used
         // 1 contains the color to be used
         for(var i = 0; i < ranges.length; i++) {
             var parts = ranges[i].split(':');
+            alert(parseInt(perc) + ' ' + parts[0]);
             if(parseInt(perc) <= parts[0])
                 return parts[1];
             parts = null;
