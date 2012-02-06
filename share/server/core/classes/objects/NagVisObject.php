@@ -58,7 +58,7 @@ class NagVisObject {
         $this->CORE = $CORE;
 
         // Initialize object_id (Should be overriden later)
-        $this->object_id = rand(0, 1000);
+        //$this->object_id = rand(0, 1000);
 
         $this->conf = Array();
     }

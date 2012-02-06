@@ -296,6 +296,19 @@ class GlobalCore {
     }
 
     /**
+     * Reads all available sources
+     *
+     * @return	Array hover templates
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function getAvailableSources() {
+        return array_merge(
+          self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'sources'), MATCH_PHP_FILE),
+          self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'sources'), MATCH_PHP_FILE, null, null, null, null, false)
+        );
+    }
+
+    /**
      * Returns the filetype of an iconset
      *
      * @param   String  Iconset name

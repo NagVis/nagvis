@@ -47,6 +47,11 @@ function cfg($sec, $key, $ignoreDefaults = false) {
     return $_MAINCFG->getValue($sec, $key, $ignoreDefaults);
 }
 
+function path($type, $loc, $var, $relfile = '') {
+    global $_MAINCFG;
+    return $_MAINCFG->getPath($type, $loc, $var, $relfile);
+}
+
 // ----------------------------------------------------------------------------
 
 $_LANG = new GlobalLanguage();

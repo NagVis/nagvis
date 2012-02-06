@@ -458,6 +458,11 @@ class GlobalMainCfg {
                     'default' => '',
                     'field_type' => 'hidden',
                     'match' => MATCH_STRING_PATH),
+                'sources' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
                 'icons' => Array('must' => 0,
                     'editable' => 0,
                     'default' => '',
@@ -1165,7 +1170,7 @@ class GlobalMainCfg {
 
         $this->validConfig['paths']['language']['default']           = $base.HTDOCS_DIR.'/frontend/nagvis-js/locale';
         $this->validConfig['paths']['class']['default']              = $base.HTDOCS_DIR.'/server/core/classes/';
-        $this->validConfig['paths']['server']['default']              = $base.HTDOCS_DIR.'/server/core';
+        $this->validConfig['paths']['server']['default']             = $base.HTDOCS_DIR.'/server/core';
         $this->validConfig['paths']['doc']['default']                = $base.HTDOCS_DIR.'/docs';
 
         $this->validConfig['paths']['htmlcss']['default']            = $htmlBase.'/frontend/nagvis-js/css/';
@@ -1183,6 +1188,7 @@ class GlobalMainCfg {
         $this->validConfig['paths']['icons']['default']              = 'userfiles/images/iconsets/';
         $this->validConfig['paths']['shapes']['default']             = 'userfiles/images/shapes/';
         $this->validConfig['paths']['sounds']['default']             = 'userfiles/sounds/';
+        $this->validConfig['paths']['sources']['default']            = 'server/core/sources';
 
         $this->validConfig['paths']['templateimages']['default']     = 'userfiles/images/templates/';
 

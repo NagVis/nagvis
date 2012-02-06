@@ -45,6 +45,9 @@ class GlobalMapCfg {
     // Array for config validation
     protected static $validConfig = null;
 
+    // Array for holding the registered map sources
+    protected static $mapSources = null;
+
     /**
      * Class Constructor
      */
@@ -54,6 +57,9 @@ class GlobalMapCfg {
 
         if(self::$validConfig == null)
             $this->fetchValidConfig();
+
+        if(self::$mapSources == null)
+            $this->fetchMapSources();
 
         $this->mapLockPath = cfg('paths', 'mapcfg').$this->name.'.lock';
 
@@ -266,181 +272,246 @@ class GlobalMapCfg {
         if($onlyGlobal == 0
            && $useCache === true
            && $this->CACHE->isCached() !== -1
-             && $this->CORE->getMainCfg()->isCached() !== -1
-             && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
+           && $this->CORE->getMainCfg()->isCached() !== -1
+           && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
             $this->mapConfig = $this->CACHE->getCache();
-            $this->typeDefaults = $this->DCACHE->getCache();
-            // Cache objects are not needed anymore
-            $this->CACHE = null;
-            $this->DCACHE = null;
+
+            // Also check if the sources report as changed. This has to be done after
+            // fetching the mapConfig from cache to have the list of needed sources.
+            if($this->sourcesChanged($this->CACHE->getCacheFileAge())) {
+                // clear the map config again
+                $this->mapConfig = array();
+
+            } else {
+                $this->typeDefaults = $this->DCACHE->getCache();
+                // Cache objects are not needed anymore
+                $this->CACHE = null;
+                $this->DCACHE = null;
+
+                $this->BACKGROUND = $this->getBackground();
+
+                // YAY! Got cached data.
+                return TRUE;
+            }
+        }
+
+        //
+        // Got no cached data. Now parse the map config.
+        //
+
+        if(!$this->checkMapConfigExists(TRUE) || !$this->checkMapConfigReadable(TRUE))
+            return false;
+
+        // Read file in array (Don't read empty lines and ignore new line chars)
+        //$file = file($this->configFile, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
+        // Calling file() with "FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES" caused strange
+        // problems with PHP 5.1.2 while testing with e.g. SLES10SP1. So added that workaround
+        // here.
+        if(version_compare(PHP_VERSION, '5.1.2', '==')) {
+            $file = file($this->configFile);
+        } else { 
+            $file = file($this->configFile, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
+        }
+
+        // Create an array for these options
+        $createArray = Array('use' => 1, 'sources' => 1);
+
+        // Don't read these keys
+        $ignoreKeys = Array('type' => 0);
+
+        $l = 0;
+
+        // These variables set which object is currently being filled
+        $sObjType = '';
+        $iObjId = 0;
+        $obj = Array();
+
+        // Loop each line
+        $iNumLines = count($file);
+        $unknownObject = null;
+        for($l = 0; $l < $iNumLines; $l++) {
+            // Remove spaces, newlines, tabs, etc. (http://de.php.net/rtrim)
+            $file[$l] = rtrim($file[$l]);
+
+            // Don't recognize empty lines
+            if($file[$l] == '')
+                continue;
+
+            // Don't recognize comments and empty lines, do nothing with ending delimiters
+            $sFirstChar = substr(ltrim($file[$l]), 0, 1);
+            if($sFirstChar == ';' || $sFirstChar == '#')
+                continue;
+
+            // This is an object ending. Reset the object type and skip to next line
+            if($sFirstChar == '}') {
+                if($obj['type'] === 'global')
+                    $id = 0;
+                else
+                    $id = isset($obj['object_id']) ? $obj['object_id'] : '_'.$iObjId;
+
+                // It might happen that there is a duplicate object on the map
+                // This generates a new object_id for the later objects
+                if(isset($this->mapConfig[$id])) {
+                    $new = $id;
+                    while(isset($this->mapConfig[$new]))
+                        $new = $this->genObjId($new . time());
+                    $obj['object_id']      = $new;
+                    $this->mapConfig[$new] = $obj;
+                    $this->storeDeleteElement('_'.$iObjId, $this->formatElement($new));
+                } else {
+                    $this->mapConfig[$id] = $obj;
+                }
+
+                $sObjType = '';
+
+                // Increase the map object id to identify the object on the map
+                $iObjId++;
+
+                // If only the global section should be read break the loop after the global section
+                if($onlyGlobal == 1 && isset($this->mapConfig[0]))
+                    break;
+                else
+                    continue;
+            }
+
+            // Determine if this is a new object definition
+            if(strpos($file[$l], 'define') !== FALSE) {
+                $sObjType = substr($file[$l], 7, (strpos($file[$l], '{', 8) - 8));
+                if(!isset($sObjType) || !isset(self::$validConfig[$sObjType])) {
+                    throw new NagVisException(l('unknownObject',
+                                                Array('TYPE'    => $sObjType,
+                                                      'MAPNAME' => $this->name)));
+                }
+
+                // This is a new definition and it's a valid one
+                $obj = Array(
+                  'type' => $sObjType,
+                );
+
+                continue;
+            }
+
+            // This is another attribute. But it is only ok to proceed here when
+            // there is an open object
+            if($sObjType === '') {
+                throw new NagVisException(l('Attribute definition out of object. In map [MAPNAME] at line #[LINE].',
+                                          Array('MAPNAME' => $this->name, 'LINE' => $l+1)));
+            }
+
+            $iDelimPos = strpos($file[$l], '=');
+            $sKey = trim(substr($file[$l],0,$iDelimPos));
+            $sValue = trim(substr($file[$l],($iDelimPos+1)));
+
+            if(isset($ignoreKeys[$sKey]))
+                continue;
+
+            if(isset($createArray[$sKey]))
+                $obj[$sKey] = explode(',', $sValue);
+            else
+                $obj[$sKey] = $sValue;
+        }
+
+        // Gather the default values for the object types
+        $this->gatherTypeDefaults($onlyGlobal);
+
+        if($onlyGlobal == 0) {
+            if($resolveTemplates == true) {
+                // Merge the objects with the linked templates
+                $this->mergeTemplates();
+            }
+        }
+
+        // unknown object type found on map
+        if($unknownObject)
+            throw new MapCfgInvalid($unknownObject);
+
+        try {
+            $this->checkMapConfigIsValid();
+        } catch(MapCfgInvalid $e) {
+            $this->BACKGROUND = $this->getBackground();
+            throw $e;
+        }
+
+        if($onlyGlobal == 0) {
+            // Check object id attribute and if there is none generate a new unique
+            // object_id on the map for the object
+            $this->verifyObjectIds();
+
+            // Central entry point to handle the map sources
+            // Do it after the object_id verification but before caching
+            if(isset($this->mapConfig[0]['sources'])) {
+                $this->processSources();
+            }
 
             $this->BACKGROUND = $this->getBackground();
 
-            return TRUE;
+            // Build cache
+            if($useCache === true) {
+                $this->CACHE->writeCache($this->mapConfig, 1);
+                $this->DCACHE->writeCache($this->typeDefaults, 1);
+                // Cache objects are not needed anymore
+                $this->CACHE = null;
+                $this->DCACHE = null;
+            }
+
+            // The automap also uses this method, so handle the different type
+            if($this->type === 'automap') {
+                $mod = 'AutoMap';
+            } else {
+                $mod = 'Map';
+            }
+
+            // Trigger the autorization backend to create new permissions when needed
+            $AUTHORIZATION = $this->CORE->getAuthorization();
+            if($AUTHORIZATION !== null) {
+                $this->CORE->getAuthorization()->createPermission($mod, $this->getName());
+            }
         } else {
-            if(!$this->checkMapConfigExists(TRUE) || !$this->checkMapConfigReadable(TRUE))
-                return false;
+            $this->BACKGROUND = $this->getBackground();
+        }
 
-            // Read file in array (Don't read empty lines and ignore new line chars)
-            //$file = file($this->configFile, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
-            // Calling file() with "FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES" caused strange
-            // problems with PHP 5.1.2 while testing with e.g. SLES10SP1. So added that workaround
-            // here.
-            if(version_compare(PHP_VERSION, '5.1.2', '==')) {
-                $file = file($this->configFile);
-            } else { 
-                $file = file($this->configFile, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
+        return TRUE;
+    }
+
+    /**
+     * Performs the initial map source loading
+     */
+    private function fetchMapSources() {
+        foreach($this->CORE->getAvailableSources() AS $source_file) {
+            if(file_exists(path('sys', 'local', 'sources'))) {
+                include_once(path('sys', 'local', 'sources') . '/'. $source_file);
+            } else {
+                include_once(path('sys', 'global', 'sources') . '/'. $source_file);
             }
+        }
+    }
 
-            // Create an array for these options
-            $createArray = Array('use' => 1);
+    /**
+     * Returns true on the first source which reports it has changed.
+     */
+    private function sourcesChanged($compareTime) {
+        if(!isset($this->mapConfig[0]['sources']))
+            return false;
 
-            // Don't read these keys
-            $ignoreKeys = Array('type' => 0);
+        foreach($this->mapConfig[0]['sources'] AS $source) {
+            $func = 'changed_'.$source;
+            if($func($compareTime))
+                return true;
+        }
+        return false;
+    }
 
-            $l = 0;
-
-            // These variables set which object is currently being filled
-            $sObjType = '';
-            $iObjId = 0;
-            $obj = Array();
-
-            // Loop each line
-            $iNumLines = count($file);
-            $unknownObject = null;
-            for($l = 0; $l < $iNumLines; $l++) {
-                // Remove spaces, newlines, tabs, etc. (http://de.php.net/rtrim)
-                $file[$l] = rtrim($file[$l]);
-
-                // Don't recognize empty lines
-                if($file[$l] == '')
-                    continue;
-
-                // Don't recognize comments and empty lines, do nothing with ending delimiters
-                $sFirstChar = substr(ltrim($file[$l]), 0, 1);
-                if($sFirstChar == ';' || $sFirstChar == '#')
-                    continue;
-
-                // This is an object ending. Reset the object type and skip to next line
-                if($sFirstChar == '}') {
-                    if($obj['type'] === 'global')
-                        $id = 0;
-                    else
-                        $id = isset($obj['object_id']) ? $obj['object_id'] : '_'.$iObjId;
-
-                    // It might happen that there is a duplicate object on the map
-                    // This generates a new object_id for the later objects
-                    if(isset($this->mapConfig[$id])) {
-                        $new = $id;
-                        while(isset($this->mapConfig[$new]))
-                            $new = $this->genObjId($new . time());
-                        $obj['object_id']      = $new;
-                        $this->mapConfig[$new] = $obj;
-                        $this->storeDeleteElement('_'.$iObjId, $this->formatElement($new));
-                    } else {
-                        $this->mapConfig[$id] = $obj;
-                    }
-
-                    $sObjType = '';
-
-                    // Increase the map object id to identify the object on the map
-                    $iObjId++;
-
-                    // If only the global section should be read break the loop after the global section
-                    if($onlyGlobal == 1 && isset($this->mapConfig[0]))
-                        break;
-                    else
-                        continue;
-                }
-
-                // Determine if this is a new object definition
-                if(strpos($file[$l], 'define') !== FALSE) {
-                    $sObjType = substr($file[$l], 7, (strpos($file[$l], '{', 8) - 8));
-                    if(!isset($sObjType) || !isset(self::$validConfig[$sObjType])) {
-                        throw new NagVisException(l('unknownObject',
-                                                    Array('TYPE'    => $sObjType,
-                                                          'MAPNAME' => $this->name)));
-                    }
-
-                    // This is a new definition and it's a valid one
-                    $obj = Array(
-                      'type' => $sObjType,
-                    );
-
-                    continue;
-                }
-
-                // This is another attribute. But it is only ok to proceed here when
-                // there is an open object
-                if($sObjType === '') {
-                    throw new NagVisException(l('Attribute definition out of object. In map [MAPNAME] at line #[LINE].',
-                                              Array('MAPNAME' => $this->name, 'LINE' => $l+1)));
-                }
-
-                $iDelimPos = strpos($file[$l], '=');
-                $sKey = trim(substr($file[$l],0,$iDelimPos));
-                $sValue = trim(substr($file[$l],($iDelimPos+1)));
-
-                if(isset($ignoreKeys[$sKey]))
-                    continue;
-
-                if(isset($createArray[$sKey]))
-                    $obj[$sKey] = explode(',', $sValue);
-                else
-                    $obj[$sKey] = $sValue;
-            }
-
-            // Gather the default values for the object types
-            $this->gatherTypeDefaults($onlyGlobal);
-
-            if($onlyGlobal == 0) {
-                if($resolveTemplates == true) {
-                    // Merge the objects with the linked templates
-                    $this->mergeTemplates();
-                }
-            }
-
-            // unknown object type found on map
-            if($unknownObject)
-                throw new MapCfgInvalid($unknownObject);
-
-            try {
-                $this->checkMapConfigIsValid();
-                $this->BACKGROUND = $this->getBackground();
-            } catch(MapCfgInvalid $e) {
-                $this->BACKGROUND = $this->getBackground();
-                throw $e;
-            }
-
-            if($onlyGlobal == 0) {
-                // Check object id attribute and if there is none generate a new unique
-                // object_id on the map for the object
-                $this->verifyObjectIds();
-
-                // Build cache
-                if($useCache === true) {
-                    $this->CACHE->writeCache($this->mapConfig, 1);
-                    $this->DCACHE->writeCache($this->typeDefaults, 1);
-                    // Cache objects are not needed anymore
-                    $this->CACHE = null;
-                    $this->DCACHE = null;
-                }
-
-                // The automap also uses this method, so handle the different type
-                if($this->type === 'automap') {
-                    $mod = 'AutoMap';
-                } else {
-                    $mod = 'Map';
-                }
-
-                // Trigger the autorization backend to create new permissions when needed
-                $AUTHORIZATION = $this->CORE->getAuthorization();
-                if($AUTHORIZATION !== null) {
-                    $this->CORE->getAuthorization()->createPermission($mod, $this->getName());
-                }
-            }
-
-            return TRUE;
+    /**
+     * A source can modify the map configuration *before* the map gets
+     * written to the cache and is uses for further processing. Such a source
+     * is a key which points to a "process" and a "changed" function which can
+     * 1. modify the map config and 2. tell the cache to be invalidated and the
+     * map processing to reload the map config.
+     */
+    private function processSources() {
+        foreach($this->mapConfig[0]['sources'] AS $source) {
+            $func = 'process_'.$source;
+            $func($this->mapConfig);
         }
     }
 
@@ -1016,8 +1087,13 @@ class GlobalMapCfg {
         $start += 1;
         $end   -= 1;
 
-        if(!$inObj)
-            return false;
+        if(!$inObj) {
+            // It might happen that the object can not be found in the current map config.
+            // For example if the map object has been created bya "source". The object
+            // needs to be persisted even if the object does not exist in the map config.
+            // Before 1.6.4 this simply returned false to refuse persisting non existants.
+            return $this->storeAddElement($id);
+        }
 
         $f = $this->getConfig();
 

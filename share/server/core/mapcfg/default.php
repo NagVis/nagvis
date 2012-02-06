@@ -175,7 +175,13 @@ $mapConfigVars = Array(
     'alias' => Array(
         'must'       => 0,
         'default'    => '',
-        'match'      => MATCH_STRING),
+        'match'      => MATCH_STRING
+    ),
+    'sources' => Array(
+        'must'       => 0,
+        'default'    => '',
+        'match'      => MATCH_STRING
+    ),
     'backend_id' => Array(
         'must'       => 0,
         'default'    => cfg('defaults', 'backend'),
@@ -805,6 +811,7 @@ $mapConfigVars = Array(
 $mapConfigVarMap['global'] = Array(
     'type' => null,
     'object_id' => null,
+    'sources' => null,
     'allowed_for_config' => null,
     'allowed_user' => null,
     'map_image' => null,

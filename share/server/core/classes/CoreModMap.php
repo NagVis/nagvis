@@ -305,7 +305,6 @@ class CoreModMap extends CoreModule {
                                                                Array('TYPE' => $type));
         } else {
             // Create the new object
-
             $type  = $attrs['type'];
 
             $this->validateAttributes($MAPCFG->getValidObjectType($type), $attrs);
