@@ -436,7 +436,9 @@ class GlobalMapCfg {
             // Check object id attribute and if there is none generate a new unique
             // object_id on the map for the object
             $this->verifyObjectIds();
+        }
 
+        if($onlyGlobal == 0 || $_GET['act'] == 'getMapProperties') {
             // Central entry point to handle the map sources
             // Do it after the object_id verification but before caching
             if(isset($this->mapConfig[0]['sources'])) {
@@ -444,7 +446,9 @@ class GlobalMapCfg {
             }
 
             $this->BACKGROUND = $this->getBackground();
+        }
 
+        if($onlyGlobal == 0) {
             // Build cache
             if($useCache === true) {
                 $this->CACHE->writeCache($this->mapConfig, 1);

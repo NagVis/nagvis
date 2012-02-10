@@ -38,6 +38,7 @@ class CoreModMap extends CoreModule {
             'getMapProperties'  => 'view',
             'getMapObjects'     => 'view',
             'getObjectStates'   => 'view',
+            'modifyParams'      => 'edit',
             // WUI specific actions
             'manage'            => REQUIRES_AUTHORISATION,
             'doAdd'             => 'add',
@@ -115,6 +116,10 @@ class CoreModMap extends CoreModule {
                 break;
                 case 'manage':
                     $VIEW = new WuiViewManageMaps();
+                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
+                break;
+                case 'modifyParams':
+                    $VIEW = new NagVisViewMapModifyParams();
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'doAdd':

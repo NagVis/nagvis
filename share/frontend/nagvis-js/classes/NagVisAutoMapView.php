@@ -52,12 +52,9 @@ class NagVisAutoMapView {
     }
 
     /**
-     * Set the automap url params
-     *
-     * @param   Array
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * Set the url params
      */
-    public function setAutomapParams($a) {
+    public function setParams($a) {
         $this->aParams = $a;
     }
 
@@ -104,7 +101,6 @@ class NagVisAutoMapView {
                 'userProperties'     => $USERCFG->doGetAsJson(),
                 'mapName'            => $this->name,
                 'automap'            => $this->content,
-                'automapParams'      => json_encode($this->aParams),
                 'fileAges'           => json_encode(Array(
                     'mainCfg'   => $this->CORE->getMainCfg()->getConfigFileAge(),
                     $this->name => $MAPCFG->getFileModificationTime(),
@@ -139,6 +135,8 @@ class NagVisAutoMapView {
         if($this->aViewOpts['enableContext'] !== false) {
             $arr['enableContext'] = $this->aViewOpts['enableContext'];
         }
+
+        $arr['params'] = $this->aParams;
 
         return json_encode($arr);
     }

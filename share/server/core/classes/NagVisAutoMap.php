@@ -530,6 +530,12 @@ class NagVisAutoMap extends GlobalMap {
         foreach($this->MAPOBJ->getMembers() AS $OBJ) {
             if(isset($aObjCoords[$OBJ->getName()])) {
                 $OBJ->setMapCoords($aObjCoords[$OBJ->getName()]);
+            } else {
+                $f = cfg('paths', 'var').$this->name.'.imagemap';
+                file_put_contents($f, $this->mapCode);
+                throw new NagVisException(l('Got no coordinates for the host "[H]". This might be a parsing issue. '
+                                            .'Please report this problem to the NagVis team. Include the contents '
+                                            .'of the file [F] in the bug report.', array('H' => $OBJ->getName(), 'F' => $f)));
             }
         }
     }

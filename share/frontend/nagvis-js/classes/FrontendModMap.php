@@ -31,6 +31,7 @@ class FrontendModMap extends FrontendModule {
     private $rotation = '';
     private $rotationStep = '';
 
+    private $opts;
     private $viewOpts = Array();
 
     public function __construct(GlobalCore $CORE) {
@@ -61,6 +62,18 @@ class FrontendModMap extends FrontendModule {
         $this->viewOpts['enableHeader']  = $aVals['enableHeader'];
         $this->viewOpts['enableContext'] = $aVals['enableContext'];
         $this->viewOpts['enableHover']   = $aVals['enableHover'];
+
+        // Add all GET parameters which are not handled here to the view params
+        $this->opts = $_GET;
+        unset($this->opts['mod']);
+        unset($this->opts['act']);
+        unset($this->opts['show']);
+        unset($this->opts['search']);
+        unset($this->opts['rotation']);
+        unset($this->opts['rotationStep']);
+        unset($this->opts['enableHeader']);
+        unset($this->opts['enableContext']);
+        unset($this->opts['enableHover']);
 
         // Register valid actions
         $this->aActions = Array(
@@ -130,6 +143,7 @@ class FrontendModMap extends FrontendModule {
 
         // Initialize map view
         $this->VIEW = new NagVisMapView($this->CORE, $this->name);
+        $this->VIEW->setParams($this->opts);
 
         // The user is searching for an object
         $this->VIEW->setSearch($this->search);

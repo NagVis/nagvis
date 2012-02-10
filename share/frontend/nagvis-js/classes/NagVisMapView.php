@@ -33,6 +33,7 @@ class NagVisMapView {
     private $aRotation = Array();
     private $aViewOpts = Array();
     private $editMode  = false;
+    private $aParams   = Array();
 
     /**
      * Class Constructor
@@ -64,6 +65,13 @@ class NagVisMapView {
      */
     public function setRotation($a) {
         $this->aRotation = $a;
+    }
+
+    /**
+     * Set the url params
+     */
+    public function setParams($a) {
+        $this->aParams = $a;
     }
 
     /**
@@ -139,6 +147,8 @@ class NagVisMapView {
         if($this->aViewOpts['enableContext'] !== false) {
             $arr['enableContext'] = $this->aViewOpts['enableContext'];
         }
+
+        $arr['params'] = $this->aParams;
 
         return json_encode($arr);
     }

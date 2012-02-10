@@ -74,6 +74,7 @@ class FrontendModAutoMap extends FrontendModule {
         unset($aVals['show']);
         unset($aVals['search']);
         unset($aVals['rotation']);
+        unset($aVals['rotationStep']);
         unset($aVals['enableHeader']);
         unset($aVals['enableContext']);
         unset($aVals['enableHover']);
@@ -172,7 +173,7 @@ class FrontendModAutoMap extends FrontendModule {
         // Render the automap
         $AUTOMAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);
         $this->VIEW->setContent($AUTOMAP->parseMap());
-        $this->VIEW->setAutomapParams($this->opts);
+        $this->VIEW->setParams($this->opts);
 
         // Maybe it is needed to handle the requested rotation
         if($this->rotation != '') {

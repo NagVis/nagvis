@@ -33,7 +33,6 @@ var oHoverTemplates = {};
 var oHoverTemplatesChild = {};
 var oHoverUrls = {};
 var oContextTemplates = {};
-var oAutomapParams = {};
 // This is turned to true when the map is currently reparsing (e.g. due to
 // a changed map config file). This blocks object updates.
 var bBlockUpdates = false;
@@ -669,10 +668,8 @@ function setPageTitle(sTitle) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function updateMapBasics() {
-    var sAutomapParams = '';
     var mod = 'Map';
     if(oPageProperties.view_type === 'automap') {
-        sAutomapParams = getAutomapParams();
         mod = 'AutoMap';
     }
 
@@ -680,8 +677,7 @@ function updateMapBasics() {
     oMapSummaryObj = new NagVisMap(getSyncRequest(oGeneralProperties.path_server
                                    + '?mod=' + mod + '&act=getObjectStates&ty=summary&show='
                                                                  + escapeUrlValues(oPageProperties.map_name)
-                                                                 + sAutomapParams, false)[0]);
-    sAutomapParams = null;
+                                                                 + getViewParams(), false)[0]);
 
     // FIXME: Add method to refetch oMapSummaryObj when it is null
     // Be tolerant - check if oMapSummaryObj is null or anything unexpected
@@ -918,10 +914,11 @@ function refreshMapObject(event, objectId) {
     if(oPageProperties.view_type === 'map') {
         sMod = 'Map';
         sMapPart = '&show='+escapeUrlValues(map);
+        sAddPart = getViewParams();
     } else if(oPageProperties.view_type === 'automap') {
         sMod = 'AutoMap';
         sMapPart = '&show='+escapeUrlValues(map);
-        sAddPart = getAutomapParams();
+        sAddPart = getViewParams();
     } else if(oPageProperties.view_type === 'overview') {
         sMod = 'Overview';
         sMapPart = '';
@@ -1564,18 +1561,21 @@ function getOverviewRotations() {
 }
 
 /**
- * getAutomapParams()
+ * getViewParams()
  *
- * Parses the url params from the oAutomapParams object
+ * Parses the url params for the current view to be used in urls
  *
  * @return  String    URL part with params and values
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function getAutomapParams() {
+function getViewParams() {
+    if(!isset(oViewProperties['params']))
+        return '';
+
     var sParams = '';
-    for(var param in oAutomapParams) {
-        if(oAutomapParams[param] != '') {
-            sParams += '&' + param + '=' + escapeUrlValues(oAutomapParams[param]);
+    for(var param in oViewProperties['params']) {
+        if(oViewProperties['params'][param] != '') {
+            sParams += '&' + param + '=' + escapeUrlValues(oViewProperties['params'][param]);
         }
     }
     return sParams;
@@ -1592,10 +1592,10 @@ function getAutomapParams() {
 function getMapProperties(type, mapName) {
     if(type === 'automap')
         return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getAutomapProperties&show='
-                            + escapeUrlValues(mapName)+getAutomapParams())
+                            + escapeUrlValues(mapName)+getViewParams())
     else
         return getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapProperties&show='
-                              + escapeUrlValues(mapName))
+                              + escapeUrlValues(mapName)+getViewParams())
 }
 
 /**
@@ -1621,7 +1621,7 @@ function getUrlProperties(sUrl) {
  */
 function automapParse(mapName) {
     return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=parseAutomap&show='
-                          + escapeUrlValues(mapName)+getAutomapParams())
+                          + escapeUrlValues(mapName)+getViewParams())
 }
 
 /**
@@ -1657,9 +1657,11 @@ function parseMap(iMapCfgAge, type, mapName) {
     if(type === 'automap')
         oObjects = getSyncRequest(oGeneralProperties.path_server
                                   + '?mod=AutoMap&act=getAutomapObjects&show='
-                                  + mapName+getAutomapParams(), false);
+                                  + mapName+getViewParams(), false);
     else
-        oObjects = getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapObjects&show='+mapName, false);
+        oObjects = getSyncRequest(oGeneralProperties.path_server
+                                  + '?mod=Map&act=getMapObjects&show='
+                                  + mapName+getViewParams(), false);
 
     // Only perform the reparsing actions when all information are there
     if(oPageProperties && oObjects) {
@@ -1987,7 +1989,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
 
         // Get the updated objects via bulk request
         getBulkRequest(oGeneralProperties.path_server+'?mod=Map&act=getObjectStates&show='
-                        + oPageProperties.map_name+'&ty=state',
+                        + oPageProperties.map_name+'&ty=state'+getViewParams(),
                    getUrlParts(arrObj), oWorkerProperties.worker_request_max_length,
                                      false, handleUpdate, [ sType ]);
 
@@ -2043,7 +2045,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
 
         // Get the updated objectsupdateMapObjects via bulk request
         getBulkRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getObjectStates&show='+
-                   escapeUrlValues(oPageProperties.map_name)+'&ty=state'+getAutomapParams(),
+                   escapeUrlValues(oPageProperties.map_name)+'&ty=state'+getViewParams(),
                    getUrlParts(getObjectsToUpdate()),
                                      oWorkerProperties.worker_request_max_length, false, handleUpdate, [ sType ]);
     } else if(sType === 'url') {

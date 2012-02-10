@@ -96,7 +96,7 @@ class CoreModAutoMap extends CoreModule {
                 break;
                 case 'automapToMap':
                     $VIEW = new NagVisViewAutomapToMap($this->CORE);
-          $sReturn = json_encode(Array('code' => $VIEW->parse()));
+                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'modifyParams':
                     $VIEW = new NagVisViewAutomapModifyParams($this->CORE, $this->opts);

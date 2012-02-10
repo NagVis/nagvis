@@ -81,8 +81,10 @@ class NagVisViewAutomapModifyParams {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
+            'type'        => 'map',
+            'mod'         => 'AutoMap',
             'htmlBase'    => cfg('paths','htmlbase'),
-            'automapName' => $this->aOpts['automap'],
+            'mapName'     => $this->aOpts['automap'],
             'opts'        => $this->aOpts,
             'optValues'   => Array('renderMode'    => $this->renderModes,
                                    // FIXME: root        => List of hosts in the backend
