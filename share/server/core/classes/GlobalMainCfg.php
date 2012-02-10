@@ -394,7 +394,15 @@ class GlobalMainCfg {
                     'must'     => 0,
                     'editable' => 1,
                     'default'  => 'default',
-                    'match'    => MATCH_STRING_NO_SPACE),
+                    'match'    => MATCH_STRING_NO_SPACE
+                ),
+                'label_show' => Array(
+                    'must'       => 0,
+                    'editable'   => 1,
+                    'default'    => '0',
+                    'match'      => MATCH_BOOLEAN, 
+                    'field_type' => 'boolean',
+                ),
             ),
             'wui' => Array(
                 'allowedforconfig' => Array(
