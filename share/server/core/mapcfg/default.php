@@ -503,6 +503,7 @@ $mapConfigVars = Array(
     'label_show' => Array(
         'must'       => 0,
         'default'    => '0',
+        'default'    => cfg('defaults', 'label_show'),
         'match'      => MATCH_BOOLEAN,
         'field_type' => 'boolean',
     ),

@@ -6,6 +6,8 @@ Core
     socket timeout while connecting to the livestatus socket
   * Livestatus Backend: Only try to connect to livestatus once per page load
   * FIX: Fixed wrong computed shape urls which broke all shapes
+  * The label_show parameter can now be configured for the whole installation
+    in the [defaults] section of the main configuration
 
 Frontend
   * Weathermap line color definitions support usage values above 100% and below 0%
