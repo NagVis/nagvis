@@ -1563,7 +1563,9 @@ function getOverviewRotations() {
 /**
  * getViewParams()
  *
- * Parses the url params for the current view to be used in urls
+ * Parses the url params for the current view to be used in urls.
+ * Adds the width/height parameter if not set yet. It will add the
+ * size of the map div area. The width/height values are not used by all views.
  *
  * @return  String    URL part with params and values
  * @author	Lars Michelsen <lars@vertical-visions.de>
@@ -1578,6 +1580,14 @@ function getViewParams() {
             sParams += '&' + param + '=' + escapeUrlValues(oViewProperties['params'][param]);
         }
     }
+
+    if(!isset(oViewProperties['params']['width'])) {
+        sParams += '&width=' + escapeUrlValues(pageWidth());
+    }
+    if(!isset(oViewProperties['params']['height'])) {
+        sParams += '&height=' + escapeUrlValues(pageHeight() - getHeaderHeight());
+    }
+
     return sParams;
 }
 
@@ -1959,12 +1969,12 @@ function workerUpdate(iCount, sType, sIdentifier) {
 
     if(sType === 'map') {
         // Check for changed map configuration
-        if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name)) {
+        if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[sIdentifier], sIdentifier)) {
             if(iNumUnlocked > 0) {
                 eventlog("worker", "info", "Map config updated. "+iNumUnlocked+" objects unlocked - not reloading.");
             } else {
                 eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
-                if(parseMap(oCurrentFileAges[oPageProperties.map_name], sType, oPageProperties.map_name) === false)
+                if(parseMap(oCurrentFileAges[sIdentifier], sType, sIdentifier) === false)
                     eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
             }
         }
@@ -1974,7 +1984,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
         if(oLength(oMapObjects) === 0) {
             eventlog("worker", "info", "Map is empty. Strange. Re-fetching objects");
 
-            if(parseMap(oCurrentFileAges[oPageProperties.map_name], sType, oPageProperties.map_name) === false)
+            if(parseMap(oCurrentFileAges[sIdentifier], sType, sIdentifier) === false)
                 eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
         }
 
@@ -2125,11 +2135,6 @@ function workerUpdate(iCount, sType, sIdentifier) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function runWorker(iCount, sType, sIdentifier) {
-    // The identifier is only used on first load when page properties is not
-    // present
-    if(typeof(sIdentifier) === 'undefined')
-        sIdentifier = '';
-
     // If the iterator is 0 it is the first run of the worker. Its only task is
     // to render the page
     if(iCount === 0) {
@@ -2158,7 +2163,7 @@ function runWorker(iCount, sType, sIdentifier) {
     }
 
     // Sleep until next worker run (1 Second)
-    workerTimeoutID = window.setTimeout(function() { runWorker((iCount+1), sType); }, 1000);
+    workerTimeoutID = window.setTimeout(function() { runWorker((iCount+1), sType, sIdentifier); }, 1000);
 
     // Pro forma return
     return true;
