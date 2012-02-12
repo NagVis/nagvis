@@ -61,9 +61,7 @@ class NagVisViewModifyParams {
 
     public function addOpts($arr) {
         foreach($arr AS $key => $val) {
-            if(!isset($this->opts[$key])) {
-                $this->opts[$key] = $val;
-            }
+            $this->opts[$key] = $val;
         }
     }
 
@@ -82,7 +80,7 @@ class NagVisViewModifyParams {
 
         $aData = Array(
 	    'mod'         => $_GET['mod'],
-            'act'         => $_GET['act'],
+            'act'         => 'view',
             'show'        => $_GET['show'],
             'htmlBase'    => cfg('paths', 'htmlbase'),
             'opts'        => $this->opts,
