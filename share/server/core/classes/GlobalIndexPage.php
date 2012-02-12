@@ -117,6 +117,9 @@ class GlobalIndexPage {
             } catch(MapCfgInvalid $e) {
                 $aMaps[] = $this->mapError($mapType, $mapName, $e->getMessage());
                 continue;
+            } catch(NagVisException $e) {
+                $aMaps[] = $this->mapError($mapType, $mapName, $e->getMessage());
+                continue;
             }
 
             if($mapType == 'automap')

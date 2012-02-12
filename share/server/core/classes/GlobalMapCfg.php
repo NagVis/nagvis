@@ -438,7 +438,7 @@ class GlobalMapCfg {
             $this->verifyObjectIds();
         }
 
-        if($onlyGlobal == 0 || $_GET['act'] == 'getMapProperties') {
+        if($onlyGlobal == 0 || (isset($_GET['act']) && $_GET['act'] == 'getMapProperties')) {
             // Central entry point to handle the map sources
             // Do it after the object_id verification but before caching
             if(isset($this->mapConfig[0]['sources'])) {
