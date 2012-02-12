@@ -910,13 +910,10 @@ class CoreModMap extends CoreModule {
     }
 
     private function getMapObjects() {
-        // Initialize backends
-        $BACKEND = new CoreBackendMgmt($this->CORE);
-
         $MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
         $MAPCFG->readMapConfig();
 
-        $MAP = new NagVisMap($this->CORE, $MAPCFG, $BACKEND, GET_STATE, IS_VIEW);
+        $MAP = new NagVisMap($this->CORE, $MAPCFG, GET_STATE, IS_VIEW);
         return $MAP->parseObjectsJson();
     }
 
@@ -924,9 +921,6 @@ class CoreModMap extends CoreModule {
         $aOpts = Array('ty' => MATCH_GET_OBJECT_TYPE,
                        'i'  => MATCH_STRING_NO_SPACE_EMPTY);
         $aVals = $this->getCustomOptions($aOpts);
-
-        // Initialize backends
-        $BACKEND = new CoreBackendMgmt($this->CORE);
 
         // Initialize map configuration (Needed in getMapObjConf)
         $MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
@@ -937,7 +931,7 @@ class CoreModMap extends CoreModule {
         if($aVals['i'] != '')
             $MAPCFG->filterMapObjects($aVals['i']);
 
-        $MAP = new NagVisMap($this->CORE, $MAPCFG, $BACKEND, GET_STATE, IS_VIEW);
+        $MAP = new NagVisMap($this->CORE, $MAPCFG, GET_STATE, IS_VIEW);
         return $MAP->parseObjectsJson($aVals['ty']);
     }
 

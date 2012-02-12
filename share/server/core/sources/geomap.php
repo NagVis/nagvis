@@ -18,7 +18,7 @@ function geomap_get_locations() {
     return $locations;
 }
 
-function process_geomap(&$mapConfig) {
+function process_geomap($mapName, &$mapConfig) {
     // This source does not directly honor the existing map configs. It saves
     // the existing config to use it later for modifying some object parameters.
     // The existing map config must not create new objects. The truth about the
@@ -86,7 +86,7 @@ function process_geomap(&$mapConfig) {
     $icon_w  = 6;
     $icon_h  = 6;
 
-    $params = array($min_long, $max_lat, $max_long, $min_lat, $width, $height, $type); //, $zoom);
+    $params = array($mapName, $min_long, $max_lat, $max_long, $min_lat, $width, $height, $type); //, $zoom);
     $image_name  = 'geomap-'.implode('-', $params).'.png';
     $image_path  = path('sys', '', 'backgrounds').'/'.$image_name;
     $data_path   = cfg('paths', 'var').$image_name.'.data';
@@ -124,7 +124,6 @@ function process_geomap(&$mapConfig) {
     $img_top   = (float) $parts[1];
     $img_right = (float) $parts[2];
     $img_down  = (float) $parts[3];
-    // FIXME: Save this to a tempfile
 
     $long_diff = $img_right - $img_left;
     $lat_diff  = $img_top   - $img_down;

@@ -515,7 +515,7 @@ class GlobalMapCfg {
     private function processSources() {
         foreach($this->mapConfig[0]['sources'] AS $source) {
             $func = 'process_'.$source;
-            $func($this->mapConfig);
+            $func($this->name, $this->mapConfig);
         }
     }
 

@@ -177,13 +177,10 @@ class CoreModAutoMap extends CoreModule {
     }
 
     private function parseAutomap() {
-        // Initialize backends
-        $BACKEND = new CoreBackendMgmt($this->CORE);
-
         $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
         $MAPCFG->readMapConfig();
 
-        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);
+        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->opts, IS_VIEW);
 
         if($this->sAction == 'parseAutomap') {
             $MAP->renderMap();
@@ -235,13 +232,10 @@ class CoreModAutoMap extends CoreModule {
     }
 
     private function getAutomapObjects() {
-        // Initialize backends
-        $BACKEND = new CoreBackendMgmt($this->CORE);
-
         $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
         $MAPCFG->readMapConfig();
 
-        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);
+        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->opts, IS_VIEW);
 
         // Read position from graphviz and set it on the objects
         $MAP->setMapObjectPositions();
@@ -257,9 +251,6 @@ class CoreModAutoMap extends CoreModule {
                        'i'  => MATCH_STRING_NO_SPACE_EMPTY);
         $aVals = $this->getCustomOptions($aOpts);
 
-        // Initialize backends
-        $BACKEND = new CoreBackendMgmt($this->CORE);
-
         // Read the map configuration file
         $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
         $MAPCFG->readMapConfig();
@@ -273,7 +264,7 @@ class CoreModAutoMap extends CoreModule {
             $this->opts['filterByIds'] = $aVals['i'];
         }
 
-        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);
+        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->opts, IS_VIEW);
         $MAPOBJ = $MAP->MAPOBJ;
         return $MAP->parseObjectsJson($aVals['ty']);
     }

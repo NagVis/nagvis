@@ -63,8 +63,9 @@ class NagVisAutoMap extends GlobalMap {
     private $graphvizPath;
     private $noBinaryFound;
 
-    public function __construct($CORE, $MAPCFG, $BACKEND, $prop, $bIsView = IS_VIEW) {
-        $this->BACKEND = $BACKEND;
+    public function __construct($CORE, $MAPCFG, $prop, $bIsView = IS_VIEW) {
+        global $_BACKEND;
+        $this->BACKEND = $_BACKEND;
 
         $this->arrHostnames = Array();
         $this->arrMapObjects = Array();

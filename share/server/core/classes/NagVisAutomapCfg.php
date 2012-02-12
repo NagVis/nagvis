@@ -70,6 +70,7 @@ class NagVisAutomapCfg extends GlobalMapCfg {
      * @param   Strin   Optional: Name of the object to get the config for
      * @return	Array		Object configuration
      * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * FIXME: Can be removed if automap has moved to new source mapcfg mechanism
      */
     public function &getObjectConfiguration() {
         // Load the settings once and then remove the dummy host from host list

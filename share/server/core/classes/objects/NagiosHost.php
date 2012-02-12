@@ -171,15 +171,15 @@ class NagiosHost extends NagVisStatefulObject {
      *
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function fetchParents($maxLayers = -1, &$objConf = Array(), &$ignoreHosts = Array(), &$arrHostnames, &$arrMapObjects) {
+    public function fetchParents($maxLayers = -1, &$objConf = Array(), &$ignoreHosts = Array(), &$arrMapObjects) {
         // Stop recursion when the number of layers counted down
         if($maxLayers != 0) {
             if(!$this->fetchedParentObjects) {
-                $this->fetchDirectParentObjects($objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
+                $this->fetchDirectParentObjects($objConf, $ignoreHosts, $arrMapObjects);
             }
 
             foreach($this->parentObjects AS $OBJ) {
-                $OBJ->fetchParents($maxLayers-1, $objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
+                $OBJ->fetchParents($maxLayers-1, $objConf, $ignoreHosts, $arrMapObjects);
             }
         }
     }
@@ -246,11 +246,11 @@ class NagiosHost extends NagVisStatefulObject {
      *
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function fetchChilds($maxLayers=-1, &$objConf=Array(), &$ignoreHosts=Array(), &$arrHostnames, &$arrMapObjects) {
+    public function fetchChilds($maxLayers=-1, &$objConf=Array(), &$ignoreHosts=Array(), &$arrMapObjects) {
         // Stop recursion when the number of layers counted down
         if($maxLayers != 0) {
             if(!$this->fetchedChildObjects) {
-                $this->fetchDirectChildObjects($objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
+                $this->fetchDirectChildObjects($objConf, $ignoreHosts, $arrMapObjects);
             }
 
             /**
@@ -258,7 +258,7 @@ class NagiosHost extends NagVisStatefulObject {
                 */
             if($maxLayers < 0 || $maxLayers > 0) {
                 foreach($this->childObjects AS $OBJ) {
-                    $OBJ->fetchChilds($maxLayers-1, $objConf, $ignoreHosts, $arrHostnames, $arrMapObjects);
+                    $OBJ->fetchChilds($maxLayers-1, $objConf, $ignoreHosts, $arrMapObjects);
                 }
             }
         }
@@ -446,7 +446,7 @@ class NagiosHost extends NagVisStatefulObject {
      *
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-    private function fetchDirectParentObjects(&$objConf, &$ignoreHosts=Array(), &$arrHostnames, &$arrMapObjects) {
+    private function fetchDirectParentObjects(&$objConf, &$ignoreHosts=Array(), &$arrMapObjects) {
         try {
             $aParents = $this->BACKEND->getBackend($this->backend_id)->getDirectParentNamesByHostName($this->getName());
         } catch(BackendException $e) {
@@ -460,7 +460,7 @@ class NagiosHost extends NagVisStatefulObject {
                  * objects with more than one parent will be printed several times on the
                  * map, especially the links to child objects will be too many.
                  */
-                if(!in_array($parentName, $arrHostnames)){
+                if(!isset($arrMapObjects[$parentName])) {
                     $OBJ = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $parentName);
                     $OBJ->setConfiguration($objConf);
                     $OBJ->fetchIcon();
@@ -470,10 +470,6 @@ class NagiosHost extends NagVisStatefulObject {
 
                     // Append the object to the arrMapObjects array
                     $arrMapObjects[$OBJ->getName()] = $OBJ;
-
-                    // Add the name of this host to the array with hostnames which are
-                    // already on the map
-                    $arrHostnames[] = $OBJ->getName();
                 } else {
                     // Add reference of already existing host object to the
                     // child objects array
@@ -498,7 +494,7 @@ class NagiosHost extends NagVisStatefulObject {
      *
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-    private function fetchDirectChildObjects(&$objConf, &$ignoreHosts=Array(), &$arrHostnames, &$arrMapObjects) {
+    private function fetchDirectChildObjects(&$objConf, &$ignoreHosts=Array(), &$arrMapObjects) {
         try {
             $aChilds = $this->BACKEND->getBackend($this->backend_id)->getDirectChildNamesByHostName($this->getName());
         } catch(BackendException $e) {
@@ -512,7 +508,7 @@ class NagiosHost extends NagVisStatefulObject {
                  * objects with more than one parent will be printed several times on the
                  * map, especially the links to child objects will be too many.
                  */
-                if(!in_array($childName, $arrHostnames)){
+                if(!isset($arrMapObjects[$childName])) {
                     $OBJ = new NagVisHost($this->CORE, $this->BACKEND, $this->backend_id, $childName);
                     $OBJ->setConfiguration($objConf);
                     $OBJ->fetchIcon();
@@ -522,10 +518,6 @@ class NagiosHost extends NagVisStatefulObject {
 
                     // Append the object to the arrMapObjects array
                     $arrMapObjects[$OBJ->getName()] = $OBJ;
-
-                    // Add the name of this host to the array with hostnames which are
-                    // already on the map
-                    $arrHostnames[] = $OBJ->getName();
                 } else {
                     // Add reference of already existing host object to the
                     // child objects array

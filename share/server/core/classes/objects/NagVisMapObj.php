@@ -407,7 +407,7 @@ class NagVisMapObj extends NagVisStatefulObject {
                     }
 
                     if($this->CORE->checkMapIsAutomap($objConf['map_name'])) {
-                        $MAP = new NagVisAutoMap($this->CORE, $SUBMAPCFG, $this->BACKEND, Array(), !IS_VIEW);
+                        $MAP = new NagVisAutoMap($this->CORE, $SUBMAPCFG, Array(), !IS_VIEW);
                         $OBJ = $MAP->MAPOBJ;
                     } else
                         $OBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $SUBMAPCFG, !IS_VIEW);

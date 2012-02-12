@@ -88,7 +88,7 @@ function getObjectNames($type, $CORE, $MAPCFG, $objId, $attrs) {
         $backendId = $MAPCFG->getValue($objId, 'backend_id');
 
     // Initialize the backend
-    $BACKEND = new CoreBackendMgmt($CORE);
+    $BACKEND = new CoreBackendMgmt();
     $BACKEND->checkBackendExists($backendId, true);
     $BACKEND->checkBackendFeature($backendId, 'getObjects', true);
 

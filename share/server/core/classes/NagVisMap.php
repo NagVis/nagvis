@@ -26,7 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisMap extends GlobalMap {
-    private $BACKEND;
     public $MAPOBJ;
 
     /**
@@ -34,21 +33,19 @@ class NagVisMap extends GlobalMap {
      *
      * @param 	GlobalMainCfg 	$MAINCFG
      * @param 	GlobalMapCfg 	$MAPCFG
-     * @param 	GlobalBackend 	$BACKEND
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function __construct($CORE, $MAPCFG, $BACKEND = null, $getState = GET_STATE, $bIsView = IS_VIEW) {
+    public function __construct($CORE, $MAPCFG, $getState = GET_STATE, $bIsView = IS_VIEW) {
+        global $_BACKEND;
         parent::__construct($CORE, $MAPCFG);
 
-        $this->BACKEND = $BACKEND;
-
         if($getState === true) {
-            $this->MAPOBJ = new NagVisMapObj($CORE, $BACKEND, $MAPCFG, $bIsView);
+            $this->MAPOBJ = new NagVisMapObj($CORE, $_BACKEND, $MAPCFG, $bIsView);
             $this->MAPOBJ->fetchMapObjects();
 
             if($bIsView === true) {
                 $this->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
-                $this->BACKEND->execute();
+                $_BACKEND->execute();
                 $this->MAPOBJ->applyState();
             } else {
                 $this->MAPOBJ->queueState(GET_STATE, DONT_GET_SINGLE_MEMBER_STATES);

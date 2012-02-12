@@ -27,7 +27,6 @@
  */
 class GlobalIndexPage {
     private $CORE;
-    private $BACKEND;
     private $htmlBase;
 
 
@@ -35,13 +34,11 @@ class GlobalIndexPage {
      * Class Constructor
      *
      * @param 	GlobalCore 	$CORE
-     * @param 	CoreBackendMgmt	$BACKEND
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function __construct() {
         global $CORE;
         $this->CORE = $CORE;
-        $this->BACKEND = new CoreBackendMgmt($CORE);
         $this->htmlBase = cfg('paths','htmlbase');
     }
 
@@ -56,7 +53,7 @@ class GlobalIndexPage {
      * FIXME: More cleanups, compacting and extraction of single parts
      */
     public function parseMapsJson($type, $what = COMPLETE, $objects = Array()) {
-        global $AUTHORISATION;
+        global $AUTHORISATION, $_BACKEND;
         // initial parsing mode: Skip processing when this type of object should not be shown
         if($type != 'list' && !cfg('index', 'show'.$type.'s') == 1)
             return json_encode(Array());
@@ -124,9 +121,9 @@ class GlobalIndexPage {
 
             if($mapType == 'automap')
                 // Only set overview specific automap params here. The default_params are added in the NagVisAutomap cnstructor
-                $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->BACKEND, Array('automap' => $mapName, 'preview' => 1), !IS_VIEW);
+                $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, Array('automap' => $mapName, 'preview' => 1), !IS_VIEW);
             else
-                $MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND, GET_STATE, !IS_VIEW);
+                $MAP = new NagVisMap($this->CORE, $MAPCFG, GET_STATE, !IS_VIEW);
 
             // Apply default configuration to object
             $objConf = array_merge($objConf, $this->getMapAndAutomapDefaultOpts($mapType, $mapName, $MAPCFG->getAlias()));
@@ -170,7 +167,7 @@ class GlobalIndexPage {
         }
 
         if($type == 'map') {
-            $this->BACKEND->execute();
+            $_BACKEND->execute();
 
             foreach($aObjs AS $aObj) {
                 $aObj[0]->applyState();

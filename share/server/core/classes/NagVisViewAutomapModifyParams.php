@@ -54,13 +54,10 @@ class NagVisViewAutomapModifyParams {
 
     private function gatherParams() {
         if(isset($this->aOpts['automap']) && $this->aOpts['automap'] != '') {
-            // Initialize backend handler
-            $BACKEND = new CoreBackendMgmt($this->CORE);
-
             $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->aOpts['automap']);
             $MAPCFG->readMapConfig();
 
-            $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->aOpts, IS_VIEW);
+            $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->aOpts, IS_VIEW);
 
             $this->aOpts = $MAP->getOptions();
 

@@ -121,9 +121,6 @@ class FrontendModAutoMap extends FrontendModule {
     private function showViewDialog() {
         global $AUTHORISATION;
 
-        // Initialize backend(s)
-        $BACKEND = new CoreBackendMgmt($this->CORE);
-
         // Initialize map configuration
         $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
         // Read the map configuration file
@@ -171,7 +168,7 @@ class FrontendModAutoMap extends FrontendModule {
         $this->VIEW->setViewOpts($this->viewOpts);
 
         // Render the automap
-        $AUTOMAP = new NagVisAutoMap($this->CORE, $MAPCFG, $BACKEND, $this->opts, IS_VIEW);
+        $AUTOMAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->opts, IS_VIEW);
         $this->VIEW->setContent($AUTOMAP->parseMap());
         $this->VIEW->setParams($this->opts);
 

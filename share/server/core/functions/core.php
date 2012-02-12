@@ -76,4 +76,12 @@ function curLang() {
     return $_LANG->getCurrentLanguage();
 }
 
+// ----------------------------------------------------------------------------
+
+/**
+ * Initialize the backend management for all pages. But don't open backend
+ * connections. This is only done when the pages request data from any backend
+ */
+$_BACKEND = new CoreBackendMgmt();
+
 ?>
