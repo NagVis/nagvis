@@ -86,8 +86,7 @@ class NagVisViewModifyParams {
             'show'        => $_GET['show'],
             'htmlBase'    => cfg('paths', 'htmlbase'),
             'opts'        => $this->opts,
-            'optValues'   => Array(
-            ),
+            'optValues'   => $this->optValues,
             'langApply'       => l('Apply'),
             'langPermanent'   => l('Make Permanent'),
             'permAutomapEdit' => $CORE->getAuthorization()->isPermitted($_GET['mod'], 'edit', $_GET['show']),

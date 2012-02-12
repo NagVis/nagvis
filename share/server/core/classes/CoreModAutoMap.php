@@ -99,7 +99,19 @@ class CoreModAutoMap extends CoreModule {
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'modifyParams':
-                    $VIEW = new NagVisViewModifyParams($this->CORE, $this->opts);
+                    $VIEW = new NagVisViewModifyParams($this->CORE);
+
+                    if(isset($this->name) && $this->name != '') {
+                        $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
+                        $MAPCFG->readMapConfig();
+
+                        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->opts, IS_VIEW);
+
+                        $opts = $MAP->getOptions();
+                        unset($opts['perm']);
+                        $VIEW->addOpts($opts);
+                    }
+
                     $VIEW->setValues(Array(
                         'renderMode'    => Array(
                             '',
@@ -115,6 +127,7 @@ class CoreModAutoMap extends CoreModule {
                         'backend'       => $this->CORE->getDefinedBackends(),
                         'filterByState' => Array('0', '1'),
                     ));
+
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'modifyObject':
