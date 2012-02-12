@@ -728,7 +728,6 @@ class NagVisAutoMap extends GlobalMap {
         $this->rootObject->fetchChilds($this->childLayers,
                                        $this->MAPCFG->getObjectConfiguration(),
                                        $this->ignoreHosts,
-                                       $this->arrHostnames,
                                        $this->arrMapObjects);
     }
 
@@ -743,7 +742,6 @@ class NagVisAutoMap extends GlobalMap {
         $this->rootObject->fetchParents($this->parentLayers,
                                         $this->MAPCFG->getObjectConfiguration(),
                                         $this->ignoreHosts,
-                                        $this->arrHostnames,
                                         $this->arrMapObjects);
     }
 
