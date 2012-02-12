@@ -20,10 +20,50 @@ function geomap_get_locations() {
 
 function geomap_get_contents($url) {
     try {
-        return file_get_contents($url);
+        $opts = array(
+            'http' => array(
+                // FIXME: Configurable
+                'timeout' => 5,
+                //'proxy' => 'tcp://127.0.0.1:8080',
+                //'request_fulluri' => true
+            )
+        );
+        $context = stream_context_create($opts);
+
+        return file_get_contents($url, false, $context);
     } catch(Exception $e) {
         throw new NagVisException(l('Unable to fetch URL "[U]" ([E]).', Array('U' => $url, 'E' => $e)));
     }
+}
+
+function geomap_params() {
+    $p = array();
+
+    if(isset($_GET['width'])) {
+        $p['width'] = $_GET['width'];
+    } else {
+        $p['width']  = 1700;
+    }
+
+    if(isset($_GET['height'])) {
+        $p['height'] = $_GET['height'];
+    } else {
+        $p['height'] = 860;
+    }
+
+    //if(isset($_GET['zoom'])) {
+    //    $zoom = $_GET['zoom'];
+    //} else {
+    //    $zoom = 8;
+    //}
+
+    if(isset($_GET['type'])) {
+        $p['type'] = $_GET['type'];
+    } else {
+        $p['type'] = 'osmarender';
+    }
+
+    return $p;
 }
 
 function process_geomap($mapName, &$mapConfig) {
@@ -63,46 +103,24 @@ function process_geomap($mapName, &$mapConfig) {
     //echo $min_lat . ' - ' . $max_lat. ' - '. $mid_lat.'\n';
     //echo $min_long . ' - ' . $max_long. ' - ' . $mid_long;
 
-    // FIXME: Need the map name
-    // FIXME: Screen resolution?
-    if(isset($_GET['width'])) {
-        $width = $_GET['width'];
-    } else {
-        $width  = 1700;
-    }
-
-    if(isset($_GET['height'])) {
-        $height = $_GET['height'];
-    } else {
-        $height = 860;
-    }
-
-    //if(isset($_GET['zoom'])) {
-    //    $zoom = $_GET['zoom'];
-    //} else {
-    //    $zoom = 8;
-    //}
-
-    if(isset($_GET['type'])) {
-        $type = $_GET['type'];
-    } else {
-        $type = 'osmarender';
-    }
+    $params = geomap_params();
 
     // FIXME: Iconset - gather automatically?
     $iconset = 'std_dot';
     $icon_w  = 6;
     $icon_h  = 6;
 
-    $params = array($min_long, $max_lat, $max_long, $min_lat, $width, $height, $type); //, $zoom);
-    $image_name  = 'geomap-'.implode('-', $params).'.png';
+    $p = array($min_long, $max_lat, $max_long, $min_lat, $params['width'],
+               $params['height'], $params['type']); //, $zoom);
+    $image_name  = 'geomap-'.implode('-', $p).'.png';
     $image_path  = path('sys', '', 'backgrounds').'/'.$image_name;
     $data_path   = cfg('paths', 'var').$image_name.'.data';
 
     // Using this API: http://pafciu17.dev.openstreetmap.org/
     $url = 'http://dev.openstreetmap.org/~pafciu17/'
           .'?module=map&bbox='.$min_long.','.$max_lat.','.$max_long.','.$min_lat
-          .'&width='.$width.'&height='.$height.'&type='.$type; //&zoom='.$zoom;
+          .'&width='.$params['width'].'&height='.$params['height']
+          .'&type='.$params['type']; //&zoom='.$zoom;
           //.'&points='.$min_long.','.$max_lat.';'.$max_long.','.$min_lat;
     //file_put_contents('/tmp/123', $url);
 
@@ -120,8 +138,12 @@ function process_geomap($mapName, &$mapConfig) {
         // the border of the image. But this makes calculation of the x/y coords
         // problematic. I found a parameter which tells us the long/lat coordinates
         // of the image bounds.
-        // 
-        $contents = geomap_get_contents($url . '&bboxReturnFormat=csv');
+        // http://pafciu17.dev.openstreetmap.org/?module=map&bbox=6.66748,53.7278,14.5533,51.05&width=1500&height=557&type=osmarender&bboxReturnFormat=csv
+        // 2.373046875,54.239550531562,18.8525390625,50.499452103968
+        $data_url = $url . '&bboxReturnFormat=csv';
+        $contents = geomap_get_contents($data_url);
+        if(!preg_match('/^[0-9]+\.?[0-9]*,[0-9]+\.?[0-9]*,[0-9]+\.?[0-9]*,[0-9]+\.?[0-9]*$/i', $contents))
+            throw new NagVisException(l('Got invalid data from "[U]"', array('U' => $data_url)));
         file_put_contents($data_path, $contents);
         // FIXME: Write x/y factors to the file
         $parts = explode(',', $contents);
@@ -137,22 +159,20 @@ function process_geomap($mapName, &$mapConfig) {
     $long_diff = $img_right - $img_left;
     $lat_diff  = $img_top   - $img_down;
 
-    $long_para = $width / $long_diff;
-    $lat_para  = $height / $lat_diff;
+    $long_para = $params['width'] / $long_diff;
+    $lat_para  = $params['height'] / $lat_diff;
     
-    $mapConfig[0] = array(
-        'type'      => 'global',
-        'map_image' => $image_name,
-        'iconset'   => $iconset,
-    );
+    $mapConfig[0] = $savedConfig[0];
+    $mapConfig[0]['map_image'] = $image_name;
+    $mapConfig[0]['iconset']   = $iconset;
 
     // Now add the objects to the map
     foreach($locations AS $loc) {
         // Calculate the lat (y) coords
-        $y = $height - ($lat_para * ($loc['lat'] - $img_down)) - ($icon_h / 2);
+        $y = $params['height'] - ($lat_para * ($loc['lat'] - $img_down)) - ($icon_h / 2);
         
         // Calculate the long (x) coords
-        $x = $long_para * ($loc['long'] - $img_left) - ($icon_w / 2);
+        $x = ($long_para * ($loc['long'] - $img_left)) - ($icon_w / 2);
 
         $mapConfig[$loc['name']] = array(
             'type'      => 'host',
@@ -167,8 +187,17 @@ function process_geomap($mapName, &$mapConfig) {
 }
 
 function changed_geomap($compare_time) {
-    // This has changed when the source file is newer than the compare time
+    // FIXME:
+    return true;
+    // It has changed when
+
+    // a) the source file is newer than the compare time
     $t = filemtime('/tmp/edklatlng.csv');
+
+    // b) the params are different
+    // FIXME:
+    //$params = geomap_params();
+
     return $t > $compare_time;
 }
 
