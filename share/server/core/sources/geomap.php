@@ -18,6 +18,14 @@ function geomap_get_locations() {
     return $locations;
 }
 
+function geomap_get_contents($url) {
+    try {
+        return file_get_contents($url);
+    } catch(Exception $e) {
+        throw new NagVisException(l('Unable to fetch URL "[U]" ([E]).', Array('U' => $url, 'E' => $e)));
+    }
+}
+
 function process_geomap($mapName, &$mapConfig) {
     // This source does not directly honor the existing map configs. It saves
     // the existing config to use it later for modifying some object parameters.
@@ -86,7 +94,7 @@ function process_geomap($mapName, &$mapConfig) {
     $icon_w  = 6;
     $icon_h  = 6;
 
-    $params = array($mapName, $min_long, $max_lat, $max_long, $min_lat, $width, $height, $type); //, $zoom);
+    $params = array($min_long, $max_lat, $max_long, $min_lat, $width, $height, $type); //, $zoom);
     $image_name  = 'geomap-'.implode('-', $params).'.png';
     $image_path  = path('sys', '', 'backgrounds').'/'.$image_name;
     $data_path   = cfg('paths', 'var').$image_name.'.data';
@@ -101,7 +109,7 @@ function process_geomap($mapName, &$mapConfig) {
     // Fetch the background image when needed
     if(!file_exists($image_path)) {
         // Allow/enable proxy
-        $contents = file_get_contents($url);
+        $contents = geomap_get_contents($url);
         file_put_contents($image_path, $contents);
     }
 
@@ -112,7 +120,9 @@ function process_geomap($mapName, &$mapConfig) {
         // the border of the image. But this makes calculation of the x/y coords
         // problematic. I found a parameter which tells us the long/lat coordinates
         // of the image bounds.
-        $contents = file_get_contents($url . '&bboxReturnFormat=csv');
+        // 
+        //$contents = geomap_get_contents($url . '&bboxReturnFormat=csv');
+        $contents = '6.66748,53.7278,14.5533,51.05';
         file_put_contents($data_path, $contents);
         // FIXME: Write x/y factors to the file
         $parts = explode(',', $contents);

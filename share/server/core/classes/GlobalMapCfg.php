@@ -517,6 +517,9 @@ class GlobalMapCfg {
             $func = 'process_'.$source;
             $func($this->name, $this->mapConfig);
         }
+
+        // Call process filter implicit if not already done
+        process_filter($this->name, $this->mapConfig, false);
     }
 
     /**
