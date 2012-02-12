@@ -121,8 +121,7 @@ function process_geomap($mapName, &$mapConfig) {
         // problematic. I found a parameter which tells us the long/lat coordinates
         // of the image bounds.
         // 
-        //$contents = geomap_get_contents($url . '&bboxReturnFormat=csv');
-        $contents = '6.66748,53.7278,14.5533,51.05';
+        $contents = geomap_get_contents($url . '&bboxReturnFormat=csv');
         file_put_contents($data_path, $contents);
         // FIXME: Write x/y factors to the file
         $parts = explode(',', $contents);

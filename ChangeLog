@@ -12,6 +12,7 @@ Core
 
 Frontend
   * Weathermap line color definitions support usage values above 100% and below 0%
+  * Bugfix: Always remove the last frontend error message when clicking "close"
 
 1.6.3
 Core
