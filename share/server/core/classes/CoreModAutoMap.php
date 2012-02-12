@@ -99,7 +99,22 @@ class CoreModAutoMap extends CoreModule {
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'modifyParams':
-                    $VIEW = new NagVisViewAutomapModifyParams($this->CORE, $this->opts);
+                    $VIEW = new NagVisViewModifyParams($this->CORE, $this->opts);
+                    $VIEW->setValues(Array(
+                        'renderMode'    => Array(
+                            '',
+                            'directed',
+                            'undirected',
+                            'radial',
+                            'circular',
+                            'undirected2'
+                        ),
+                        // FIXME: root        => List of hosts in the backend
+                        // FIXME: filterGroup => Lists of hostgroups in the backend
+                        'show'          => $this->CORE->getAvailableAutomaps(),
+                        'backend'       => $this->CORE->getDefinedBackends(),
+                        'filterByState' => Array('0', '1'),
+                    ));
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'modifyObject':

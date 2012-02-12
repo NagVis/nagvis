@@ -119,7 +119,7 @@ class CoreModMap extends CoreModule {
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'modifyParams':
-                    $VIEW = new NagVisViewMapModifyParams();
+                    $VIEW = new NagVisViewModifyParams();
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'doAdd':

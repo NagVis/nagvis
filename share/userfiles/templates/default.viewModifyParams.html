@@ -1,8 +1,8 @@
-<div id="{$type}ModifyParams">
-<form name="{$type}ModifyParams" id="{$type}ModifyParams" action="index.php?mod=AutoMap&act=view&show={$mapName}" method="get">
+<div id="viewModifyParams">
+<form name="viewModifyParams" id="viewModifyParams" method="get">
     <input type="hidden" name="mod" value="{$mod}" />
-    <input type="hidden" name="act" value="view" />
-    <input type="hidden" name="show" value="{$mapName}" />
+    <input type="hidden" name="act" value="{$act}" />
+    <input type="hidden" name="show" value="{$show}" />
     <table><tbody>
     {foreach $opts opt cur}
         {if $opt != 'automap' && $opt != 'preview'}

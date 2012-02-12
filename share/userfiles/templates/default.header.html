@@ -40,10 +40,10 @@
             <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Search&amp;act=view', '{$langSearch}')">{$langSearch}</a></li>
             {/if}
             {if $mod == 'AutoMap' && $permittedEdit == true}
-            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&amp;act=modifyParams&amp;show={$currentMap}'+getViewParams(), '{$langModifyAutomapParams}')">{$langModifyAutomapParams}</a></li>
+            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&amp;act=modifyParams&amp;show={$currentMap}'+getViewParams(), '{$langModifyParams}')">{$langModifyParams}</a></li>
             {/if}
             {if $mod == 'Map' && $permittedEdit == true}
-            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=modifyParams&amp;show={$currentMap}'+getViewParams(), '{$langModifyAutomapParams}')">{$langModifyAutomapParams}</a></li>
+            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=modifyParams&amp;show={$currentMap}'+getViewParams(), '{$langModifyParams}')">{$langModifyParams}</a></li>
             {/if}
             {if $bRotation == true}
             <li id="rotationStart" style="display:none"><a href="#" onclick="switchRotation()">{$langRotationStart}</a></li>

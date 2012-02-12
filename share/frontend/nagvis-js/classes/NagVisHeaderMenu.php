@@ -344,7 +344,7 @@ class NagVisHeaderMenu {
             'langRotationStop' => l('rotationStop'),
             'langToggleGrid' => l('Show/Hide Grid'),
             'langAutomapToMap' => l('Export to Map'),
-            'langModifyAutomapParams' => l('Modify Automap view'),
+            'langModifyParams' => l('Modify view'),
             // Supported by backend and not using trusted auth
             'supportedChangePassword' => $AUTH->checkFeature('changePassword') && !$AUTH->authedTrusted(),
             'permittedUserMgmt' => $AUTHORISATION->isPermitted('UserMgmt', 'manage'),

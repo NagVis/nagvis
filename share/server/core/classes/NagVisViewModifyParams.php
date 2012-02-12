@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * NagVisViewMapModifyParams.php - Class for rendering the modify params
+ * NagVisViewModifyParams.php - Class for rendering the modify params
  *                                 dialog
  *
  * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
@@ -26,7 +26,7 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class NagVisViewMapModifyParams {
+class NagVisViewModifyParams {
     private $opts = array();
 
     /**
@@ -46,6 +46,25 @@ class NagVisViewMapModifyParams {
         unset($this->opts['enableHeader']);
         unset($this->opts['enableContext']);
         unset($this->opts['enableHover']);
+        unset($this->opts['_t']);
+        if(!isset($this->opts['width']))
+            $this->opts['width'] = '';
+        if(!isset($this->opts['height']))
+            $this->opts['height'] = '';
+
+        $this->optValues = array();
+    }
+
+    public function setValues($arr) {
+        $this->optValues = $arr;
+    }
+
+    public function addOpts($arr) {
+        foreach($arr AS $key => $val) {
+            if(!isset($this->opts[$key])) {
+                $this->opts[$key] = $val;
+            }
+        }
     }
 
     /**
@@ -61,29 +80,21 @@ class NagVisViewMapModifyParams {
         $TMPL = New CoreTemplateSystem($CORE);
         $TMPLSYS = $TMPL->getTmplSys();
 
-        $map_name = $_GET['show'];
-
         $aData = Array(
-	    'type'        => 'map',
-	    'mod'         => 'Map',
+	    'mod'         => $_GET['mod'],
+            'act'         => $_GET['act'],
+            'show'        => $_GET['show'],
             'htmlBase'    => cfg('paths', 'htmlbase'),
-            'mapName'     => $map_name,
             'opts'        => $this->opts,
             'optValues'   => Array(
-                'renderMode'    => $this->renderModes,
-                // FIXME: root        => List of hosts in the backend
-                // FIXME: filterGroup => Lists of hostgroups in the backend
-                'show'          => $CORE->getAvailableAutomaps(),
-                'backend'       => $CORE->getDefinedBackends(),
-                'filterByState' => Array('0', '1'),
             ),
             'langApply'       => l('Apply'),
             'langPermanent'   => l('Make Permanent'),
-            'permAutomapEdit' => $CORE->getAuthorization()->isPermitted('Map', 'edit', $map_name),
+            'permAutomapEdit' => $CORE->getAuthorization()->isPermitted($_GET['mod'], 'edit', $_GET['show']),
         );
 
         // Build page based on the template file and the data array
-        return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'automapModifyParams'), $aData);
+        return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'viewModifyParams'), $aData);
     }
 }
 ?>

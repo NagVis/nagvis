@@ -29,14 +29,6 @@
 class NagVisViewAutomapModifyParams {
     private $CORE;
     private $aOpts;
-    private $renderModes = Array(
-        '',
-        'directed',
-        'undirected',
-        'radial',
-        'circular',
-        'undirected2'
-    );
 
     /**
      * Class Constructor

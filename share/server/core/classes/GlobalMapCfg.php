@@ -515,6 +515,9 @@ class GlobalMapCfg {
     private function processSources() {
         foreach($this->mapConfig[0]['sources'] AS $source) {
             $func = 'process_'.$source;
+            if(!function_exists($func))
+                throw new NagVisException(l('Requested source "[S]" does not exist',
+                                                                array('S' => $source)));
             $func($this->name, $this->mapConfig);
         }
 
