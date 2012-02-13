@@ -482,7 +482,7 @@ class GlobalMapCfg {
     /**
      * Returns an assiziative array of all parameters with values for all sources
      */
-    private function getSourceParams() {
+    public function getSourceParams() {
         if(!isset($this->mapConfig[0]['sources']))
             return array();
         

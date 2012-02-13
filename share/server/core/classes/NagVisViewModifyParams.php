@@ -47,6 +47,7 @@ class NagVisViewModifyParams {
         unset($this->opts['enableContext']);
         unset($this->opts['enableHover']);
         unset($this->opts['_t']);
+        unset($this->opts['submit']);
         if(!isset($this->opts['width']))
             $this->opts['width'] = '';
         if(!isset($this->opts['height']))

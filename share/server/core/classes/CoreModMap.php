@@ -73,6 +73,7 @@ class CoreModMap extends CoreModule {
             case 'manageTmpl':
             case 'getTmplOpts':
             case 'addModify':
+            case 'modifyParams':
             case 'checkLinked':
                 $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME));
                 $this->name = $aVals['show'];
@@ -120,6 +121,16 @@ class CoreModMap extends CoreModule {
                 break;
                 case 'modifyParams':
                     $VIEW = new NagVisViewModifyParams();
+
+                    // Add source parameters
+                    $MAPCFG = new GlobalMapCfg($this->CORE, $this->name);
+                    $MAPCFG->readMapConfig(ONLY_GLOBAL);
+                    if($MAPCFG->getValue(0, 'sources') != '') {
+                        $params = $MAPCFG->getSourceParams();
+                        $VIEW->addOpts($params);
+                        // FIXME: Mögliche Werte z.b. bei geomap "type" setzen $VIEW->setValues()
+                    }
+
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'doAdd':

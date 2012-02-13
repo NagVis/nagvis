@@ -50,29 +50,10 @@ function geomap_get_contents($url) {
 function params_geomap() {
     $p = array();
 
-    if(isset($_GET['width'])) {
-        $p['width'] = $_GET['width'];
-    } else {
-        $p['width']  = 1700;
-    }
-
-    if(isset($_GET['height'])) {
-        $p['height'] = $_GET['height'];
-    } else {
-        $p['height'] = 860;
-    }
-
-    //if(isset($_GET['zoom'])) {
-    //    $zoom = $_GET['zoom'];
-    //} else {
-    //    $zoom = 8;
-    //}
-
-    if(isset($_GET['type'])) {
-        $p['type'] = $_GET['type'];
-    } else {
-        $p['type'] = 'osmarender';
-    }
+    $p['width']  = isset($_GET['width'])  ? $_GET['width']  : 1700;
+    $p['height'] = isset($_GET['height']) ? $_GET['height'] : 860;
+    $p['zoom']   = isset($_GET['zoom'])   ? $_GET['zoom']   : '';
+    $p['type']   = isset($_GET['type'])   ? $_GET['type']   : 'osmarender';
 
     return $p;
 }
@@ -135,8 +116,10 @@ function process_geomap($mapName, &$map_config) {
     $url = 'http://dev.openstreetmap.org/~pafciu17/'
           .'?module=map&bbox='.$min_long.','.$max_lat.','.$max_long.','.$min_lat
           .'&width='.$params['width'].'&height='.$params['height']
-          .'&type='.$params['type']; //&zoom='.$zoom;
+          .'&type='.$params['type'];
           //.'&points='.$min_long.','.$max_lat.';'.$max_long.','.$min_lat;
+    if($params['zoom'] != '')
+        $url .= '&zoom='.$params['zoom'];
     //file_put_contents('/tmp/123', $url);
 
     // Fetch the background image when needed
