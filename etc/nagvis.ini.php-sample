@@ -47,6 +47,17 @@
 ;file_group=""
 ;file_mode="660"
 ;
+; In some cases NagVis needs to open connections to the internet. The cases are:
+; - The new geomap needs access to openstreetmap webservices to be able to fetch
+;   mapping information
+; Most company networks don't allow direct HTTP access to the internet. The most
+; networks require the users to use proxy servers for outbound HTTP requests.
+; The proxy url to be used in NagVis can be configured here. One possible value
+; is "tcp://127.0.0.1:8080".
+;http_proxy=""
+; Set the timeout (in seconds) for outbound HTTP requests
+;http_timeout=5
+;
 ; Defines which translations of NagVis are available to the users
 ;language_available="de_DE,en_US,es_ES,fr_FR,pt_BR"
 ; Language detection steps to use. Available:

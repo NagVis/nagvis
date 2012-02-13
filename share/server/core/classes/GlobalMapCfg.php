@@ -275,24 +275,18 @@ class GlobalMapCfg {
            && $this->CORE->getMainCfg()->isCached() !== -1
            && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
             $this->mapConfig = $this->CACHE->getCache();
+            $this->typeDefaults = $this->DCACHE->getCache();
+            // Cache objects are not needed anymore
+            $this->CACHE = null;
+            $this->DCACHE = null;
 
-            // Also check if the sources report as changed. This has to be done after
-            // fetching the mapConfig from cache to have the list of needed sources.
-            if($this->sourcesChanged($this->CACHE->getCacheFileAge())) {
-                // clear the map config again
-                $this->mapConfig = array();
+            // Now process the information from the sources
+            $this->processSources();
 
-            } else {
-                $this->typeDefaults = $this->DCACHE->getCache();
-                // Cache objects are not needed anymore
-                $this->CACHE = null;
-                $this->DCACHE = null;
+            $this->BACKGROUND = $this->getBackground();
 
-                $this->BACKGROUND = $this->getBackground();
-
-                // YAY! Got cached data.
-                return TRUE;
-            }
+            // YAY! Got cached data.
+            return TRUE;
         }
 
         //
@@ -436,19 +430,7 @@ class GlobalMapCfg {
             // Check object id attribute and if there is none generate a new unique
             // object_id on the map for the object
             $this->verifyObjectIds();
-        }
 
-        if($onlyGlobal == 0 || (isset($_GET['act']) && $_GET['act'] == 'getMapProperties')) {
-            // Central entry point to handle the map sources
-            // Do it after the object_id verification but before caching
-            if(isset($this->mapConfig[0]['sources'])) {
-                $this->processSources();
-            }
-
-            $this->BACKGROUND = $this->getBackground();
-        }
-
-        if($onlyGlobal == 0) {
             // Build cache
             if($useCache === true) {
                 $this->CACHE->writeCache($this->mapConfig, 1);
@@ -470,9 +452,12 @@ class GlobalMapCfg {
             if($AUTHORIZATION !== null) {
                 $this->CORE->getAuthorization()->createPermission($mod, $this->getName());
             }
-        } else {
-            $this->BACKGROUND = $this->getBackground();
+
+            // Now process the data from the sources
+            $this->processSources();
         }
+
+        $this->BACKGROUND = $this->getBackground();
 
         return TRUE;
     }
@@ -491,6 +476,21 @@ class GlobalMapCfg {
     }
 
     /**
+     * Returns an assiziative array of all parameters with values for all sources
+     */
+    private function getSourceParams() {
+        if(!isset($this->mapConfig[0]['sources']))
+            return array();
+        
+        $params = array();
+        foreach($this->mapConfig[0]['sources'] AS $source) {
+            $func = 'params_'.$source;
+            $params = array_merge($params, $func());
+        }
+        return $params;
+    }
+
+    /**
      * Returns true on the first source which reports it has changed.
      */
     private function sourcesChanged($compareTime) {
@@ -506,13 +506,33 @@ class GlobalMapCfg {
     }
 
     /**
-     * A source can modify the map configuration *before* the map gets
-     * written to the cache and is uses for further processing. Such a source
-     * is a key which points to a "process" and a "changed" function which can
-     * 1. modify the map config and 2. tell the cache to be invalidated and the
-     * map processing to reload the map config.
+     * A source can modify the map configuration before it is used for further processing.
+     * Such a source is a key which points to a "process", "params" and "changed" function
+     * which can
+     *  1. modify the map config array
+     *  2. gather all the parameters used in this source
+     *  3. tell the source processing that the data used in this source has changed and the
+     *     source needs processed again
      */
     private function processSources() {
+        if(!isset($this->mapConfig[0]['sources']))
+            return;
+
+        // 1.  Check if there is a cache file for a query with this params
+        $params = $this->getSourceParams();
+        $param_values = implode('_', array_values($params));
+        $cacheFile = cfg('paths','var').'source-'.$this->name.'.cfg-'.$param_values.'-'.CONST_VERSION.'.cache';
+        $CACHE = new GlobalFileCache(array(), $cacheFile);
+
+        // 2.  Check if the cache file exists
+        // 2a. Check if the cache file is newer than the latest changed source
+        if($CACHE->isCached() !== -1 && !$this->sourcesChanged($CACHE->getCacheFileAge())) {
+            // 3a. Use the cache
+            $this->mapConfig = $CACHE->getCache();
+            return;
+        }
+
+        // 3b. Process all the sources
         foreach($this->mapConfig[0]['sources'] AS $source) {
             $func = 'process_'.$source;
             if(!function_exists($func))
@@ -523,6 +543,11 @@ class GlobalMapCfg {
 
         // Call process filter implicit if not already done
         process_filter($this->name, $this->mapConfig, false);
+
+        // Write cache
+        $CACHE->writeCache($this->mapConfig, 1);
+
+        // FIXME: Invalidate/remove cache files on changed configurations
     }
 
     /**

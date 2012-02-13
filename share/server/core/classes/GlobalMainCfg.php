@@ -92,6 +92,18 @@ class GlobalMainCfg {
                 'file_mode' => Array('must' => 1,
                     'default' => 660,
                     'match' => MATCH_INTEGER_EMPTY),
+
+                'http_proxy' => array(
+                    'must'    => 0,
+                    'default' => null,
+                    'match'   => MATCH_STRING_URL,
+                ),
+                'http_timeout' => array(
+                    'must'    => 1,
+                    'default' => 5,
+                    'match'   => MATCH_INTEGER,
+                ),
+
                 'language_detection' => Array('must' => 1,
                     'editable' => 1,
                     'array' => true,

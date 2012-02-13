@@ -1,11 +1,17 @@
 <?php
 
+global $geomap_source_file;
+$geomap_source_file = '/d1/nagvis/edklatlng.csv';
+
 function geomap_get_locations() {
+    global $geomap_source_file;
+
     $locations = array();
-    // FIXME: File config?
-    $f = '/tmp/edklatlng.csv';
+    $f = $geomap_source_file;
+
     if(!file_exists($f))
         throw new NagVisException(l('Locations file "[F]" does not exist.', Array('F' => $f)));
+
     foreach(file($f) AS $line) {
         $parts = explode(';', $line);
         $locations[] = array(
@@ -15,6 +21,7 @@ function geomap_get_locations() {
             'long'  => (float) $parts[3],
         );
     }
+
     return $locations;
 }
 
@@ -22,12 +29,16 @@ function geomap_get_contents($url) {
     try {
         $opts = array(
             'http' => array(
-                // FIXME: Configurable
-                'timeout' => 5,
-                //'proxy' => 'tcp://127.0.0.1:8080',
-                //'request_fulluri' => true
+                'timeout' => cfg('global', 'http_timeout'),
             )
         );
+
+        $proxy = cfg('global', 'http_proxy');
+        if($proxy !== null) {
+            $opts['http']['proxy'] = $proxy;
+            $opts['http']['request_fulluri'] = true;
+        }
+        
         $context = stream_context_create($opts);
 
         return file_get_contents($url, false, $context);
@@ -36,7 +47,7 @@ function geomap_get_contents($url) {
     }
 }
 
-function geomap_params() {
+function params_geomap() {
     $p = array();
 
     if(isset($_GET['width'])) {
@@ -103,7 +114,7 @@ function process_geomap($mapName, &$mapConfig) {
     //echo $min_lat . ' - ' . $max_lat. ' - '. $mid_lat.'\n';
     //echo $min_long . ' - ' . $max_long. ' - ' . $mid_long;
 
-    $params = geomap_params();
+    $params = params_geomap();
 
     // FIXME: Iconset - gather automatically?
     $iconset = 'std_dot';
@@ -186,18 +197,12 @@ function process_geomap($mapName, &$mapConfig) {
     }
 }
 
+/**
+ * Report as changed when the source file is newer than the compare_time
+ */
 function changed_geomap($compare_time) {
-    // FIXME:
-    return true;
-    // It has changed when
-
-    // a) the source file is newer than the compare time
-    $t = filemtime('/tmp/edklatlng.csv');
-
-    // b) the params are different
-    // FIXME:
-    //$params = geomap_params();
-
+    global $geomap_source_file;
+    $t = filemtime($geomap_source_file);
     return $t > $compare_time;
 }
 
