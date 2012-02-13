@@ -276,12 +276,13 @@ class GlobalMapCfg {
            && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
             $this->mapConfig = $this->CACHE->getCache();
             $this->typeDefaults = $this->DCACHE->getCache();
-            // Cache objects are not needed anymore
-            $this->CACHE = null;
-            $this->DCACHE = null;
 
             // Now process the information from the sources
             $this->processSources();
+
+            // Cache objects are not needed anymore
+            $this->CACHE = null;
+            $this->DCACHE = null;
 
             $this->BACKGROUND = $this->getBackground();
 
@@ -435,9 +436,6 @@ class GlobalMapCfg {
             if($useCache === true) {
                 $this->CACHE->writeCache($this->mapConfig, 1);
                 $this->DCACHE->writeCache($this->typeDefaults, 1);
-                // Cache objects are not needed anymore
-                $this->CACHE = null;
-                $this->DCACHE = null;
             }
 
             // The automap also uses this method, so handle the different type
@@ -452,10 +450,16 @@ class GlobalMapCfg {
             if($AUTHORIZATION !== null) {
                 $this->CORE->getAuthorization()->createPermission($mod, $this->getName());
             }
+        }
 
+        if($onlyGlobal == 0 || (isset($_GET['act']) && $_GET['act'] == 'getMapProperties')) {
             // Now process the data from the sources
             $this->processSources();
         }
+
+        // Cache objects are not needed anymore
+        $this->CACHE = null;
+        $this->DCACHE = null;
 
         $this->BACKGROUND = $this->getBackground();
 
@@ -485,7 +489,8 @@ class GlobalMapCfg {
         $params = array();
         foreach($this->mapConfig[0]['sources'] AS $source) {
             $func = 'params_'.$source;
-            $params = array_merge($params, $func());
+            if(function_exists($func))
+                $params = array_merge($params, $func());
         }
         return $params;
     }
@@ -515,6 +520,7 @@ class GlobalMapCfg {
      *     source needs processed again
      */
     private function processSources() {
+        global $_MAINCFG;
         if(!isset($this->mapConfig[0]['sources']))
             return;
 
@@ -524,9 +530,14 @@ class GlobalMapCfg {
         $cacheFile = cfg('paths','var').'source-'.$this->name.'.cfg-'.$param_values.'-'.CONST_VERSION.'.cache';
         $CACHE = new GlobalFileCache(array(), $cacheFile);
 
-        // 2.  Check if the cache file exists
-        // 2a. Check if the cache file is newer than the latest changed source
-        if($CACHE->isCached() !== -1 && !$this->sourcesChanged($CACHE->getCacheFileAge())) {
+        // 2a. Check if the cache file exists
+        // 2b. Check if the cache file is newer than the latest changed source
+        $cache_sources = $CACHE->isCached();
+        $cache_map     = $this->CACHE->isCached();
+        $cache_maincfg = $_MAINCFG->isCached();
+        if($cache_sources != -1 && $cache_map != -1 && $cache_maincfg != -1
+           && $cache_sources >= $cache_maincfg && $cache_sources >= $cache_map
+           && !$this->sourcesChanged($cache_sources)) {
             // 3a. Use the cache
             $this->mapConfig = $CACHE->getCache();
             return;

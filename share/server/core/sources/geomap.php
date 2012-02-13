@@ -77,13 +77,22 @@ function params_geomap() {
     return $p;
 }
 
-function process_geomap($mapName, &$mapConfig) {
+function geomap_files($params) {
+    $image_name  = 'geomap-'.implode('_', array_values($params)).'.png';
+    return array(
+        $image_name,
+        path('sys', '', 'backgrounds').'/'.$image_name,
+        cfg('paths', 'var').$image_name.'.data',
+    );
+}
+
+function process_geomap($mapName, &$map_config) {
     // This source does not directly honor the existing map configs. It saves
     // the existing config to use it later for modifying some object parameters.
     // The existing map config must not create new objects. The truth about the
     // existing objects comes only from this source.
-    $savedConfig = $mapConfig;
-    $mapConfig = array();
+    $saved_config = $map_config;
+    $map_config = array();
 
     // Load the list of locations
     $locations = geomap_get_locations();
@@ -114,18 +123,13 @@ function process_geomap($mapName, &$mapConfig) {
     //echo $min_lat . ' - ' . $max_lat. ' - '. $mid_lat.'\n';
     //echo $min_long . ' - ' . $max_long. ' - ' . $mid_long;
 
-    $params = params_geomap();
-
     // FIXME: Iconset - gather automatically?
     $iconset = 'std_dot';
     $icon_w  = 6;
     $icon_h  = 6;
 
-    $p = array($min_long, $max_lat, $max_long, $min_lat, $params['width'],
-               $params['height'], $params['type']); //, $zoom);
-    $image_name  = 'geomap-'.implode('-', $p).'.png';
-    $image_path  = path('sys', '', 'backgrounds').'/'.$image_name;
-    $data_path   = cfg('paths', 'var').$image_name.'.data';
+    $params = params_geomap();
+    list($image_name, $image_path, $data_path) = geomap_files($params);
 
     // Using this API: http://pafciu17.dev.openstreetmap.org/
     $url = 'http://dev.openstreetmap.org/~pafciu17/'
@@ -156,7 +160,6 @@ function process_geomap($mapName, &$mapConfig) {
         if(!preg_match('/^[0-9]+\.?[0-9]*,[0-9]+\.?[0-9]*,[0-9]+\.?[0-9]*,[0-9]+\.?[0-9]*$/i', $contents))
             throw new NagVisException(l('Got invalid data from "[U]"', array('U' => $data_url)));
         file_put_contents($data_path, $contents);
-        // FIXME: Write x/y factors to the file
         $parts = explode(',', $contents);
     } else {
         $parts = explode(',', file_get_contents($data_path));
@@ -173,9 +176,9 @@ function process_geomap($mapName, &$mapConfig) {
     $long_para = $params['width'] / $long_diff;
     $lat_para  = $params['height'] / $lat_diff;
     
-    $mapConfig[0] = $savedConfig[0];
-    $mapConfig[0]['map_image'] = $image_name;
-    $mapConfig[0]['iconset']   = $iconset;
+    $map_config[0] = $saved_config[0];
+    $map_config[0]['map_image'] = $image_name;
+    $map_config[0]['iconset']   = $iconset;
 
     // Now add the objects to the map
     foreach($locations AS $loc) {
@@ -185,7 +188,7 @@ function process_geomap($mapName, &$mapConfig) {
         // Calculate the long (x) coords
         $x = ($long_para * ($loc['long'] - $img_left)) - ($icon_w / 2);
 
-        $mapConfig[$loc['name']] = array(
+        $map_config[$loc['name']] = array(
             'type'      => 'host',
             'host_name' => $loc['name'],
             'iconset'   => $iconset,
@@ -199,9 +202,17 @@ function process_geomap($mapName, &$mapConfig) {
 
 /**
  * Report as changed when the source file is newer than the compare_time
+ * or when either the image file or the data file do not exist
  */
 function changed_geomap($compare_time) {
     global $geomap_source_file;
+
+    $params = params_geomap();
+
+    list($image_name, $image_path, $data_path) = geomap_files($params);
+    if(!file_exists($image_path) || !file_exists($data_path))
+        return true;
+
     $t = filemtime($geomap_source_file);
     return $t > $compare_time;
 }
