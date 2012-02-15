@@ -82,15 +82,15 @@ function listViewTypes($CORE) {
 }
 
 function getObjectNames($type, $CORE, $MAPCFG, $objId, $attrs) {
+    global $_BACKEND;
     if(isset($attrs['backend_id']) && $attrs['backend_id'] != '')
         $backendId = $attrs['backend_id'];
     else
         $backendId = $MAPCFG->getValue($objId, 'backend_id');
 
     // Initialize the backend
-    $BACKEND = new CoreBackendMgmt();
-    $BACKEND->checkBackendExists($backendId, true);
-    $BACKEND->checkBackendFeature($backendId, 'getObjects', true);
+    $_BACKEND->checkBackendExists($backendId, true);
+    $_BACKEND->checkBackendFeature($backendId, 'getObjects', true);
 
     $name1 = '';
     if($type === 'service') {
@@ -105,7 +105,7 @@ function getObjectNames($type, $CORE, $MAPCFG, $objId, $attrs) {
 
     // Read all objects of the requested type from the backend
     $aRet = Array();
-    $objs = $BACKEND->getBackend($backendId)->getObjects($type, $name1, '');
+    $objs = $_BACKEND->getBackend($backendId)->getObjects($type, $name1, '');
     foreach($objs AS $obj) {
         if($type !== 'service')
             $aRet[] = $obj['name1'];

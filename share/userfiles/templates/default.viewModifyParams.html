@@ -9,11 +9,11 @@
             <tr><td>{$opt}</td><td>
             {if isset($optValues[$opt])}
                 <select name="{$opt}">
-                {foreach $optValues[$opt] val}
-                    {if $val == $cur}
-                        <option value="{$val}" selected="selected">{$val}</option>
+                {foreach $optValues[$opt] key val}
+                    {if $key == $cur}
+                        <option value="{$key}" selected="selected">{$val}</option>
                     {else}
-                        <option value="{$val}">{$val}</option>
+                        <option value="{$key}">{$val}</option>
                     {/if}
                 {/foreach}
                 </select>

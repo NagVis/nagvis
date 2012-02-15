@@ -55,15 +55,24 @@ function list_geomap_types() {
     );
 }
 
+global $viewParams;
+if(!isset($viewParams))
+    $viewParams = array();
 $viewParams = array_merge($viewParams, array(
     'type' => array(
+        'must'    => true,
         'default' => 'osmarender',
         'list'    => 'list_geomap_types',
     ),
     'backend_id' => array(
+        'must'    => false,
         'default' => '',
         'list'    => 'listBackendIds',
-    )
+    ),
+    'iconset' => array(
+        'default' => 'std_dot',
+        'list'    => 'listIconsets',
+    ),
 ));
 
 function params_geomap($MAPCFG, $map_config) {
@@ -71,10 +80,11 @@ function params_geomap($MAPCFG, $map_config) {
     $p = array();
 
     $p['backend_id'] = isset($_GET['backend_id']) ? $_GET['backend_id'] : $MAPCFG->getValue(0, 'backend_id');
-    $p['width']  = isset($_GET['width'])          ? $_GET['width']      : 1700;
-    $p['height'] = isset($_GET['height'])         ? $_GET['height']     : 860;
-    $p['zoom']   = isset($_GET['zoom'])           ? $_GET['zoom']       : '';
-    $p['type']   = isset($_GET['type'])           ? $_GET['type']       : $viewParams['type']['default'];
+    $p['width']      = isset($_GET['width'])      ? $_GET['width']      : 1700;
+    $p['height']     = isset($_GET['height'])     ? $_GET['height']     : 860;
+    $p['zoom']       = isset($_GET['zoom'])       ? $_GET['zoom']       : '';
+    $p['type']       = isset($_GET['type'])       ? $_GET['type']       : $viewParams['type']['default'];
+    $p['iconset']    = isset($_GET['iconset'])    ? $_GET['iconset']    : $viewParams['iconset']['default'];
 
     return $p;
 }
@@ -99,8 +109,11 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     // Load the list of locations
     $locations = geomap_get_locations();
 
-    // FIXME: Iconset - gather automatically?
-    $iconset = 'std_dot';
+    $params = params_geomap($MAPCFG, $map_config);
+    list($image_name, $image_path, $data_path) = geomap_files($params);
+
+    $iconset = $params['iconset'];
+    // FIXME: Iconset size - gather automatically?
     $icon_w  = 6;
     $icon_h  = 6;
 
@@ -121,6 +134,10 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     // Now apply the filters. Though the map can be scaled by the filtered hosts
     process_filter($MAPCFG, $map_name, $map_config);
 
+    // Terminate empty views
+    if(count($map_config) == 0)
+        throw new NagVisException(l('Got empty map after filtering. Terminate rendering geomap.'));
+
     // Now detect the upper and lower bounds of the locations to display
     // Left/upper and right/bottom
     // north/south
@@ -132,7 +149,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     foreach($map_config AS $obj) {
         if($obj['lat'] < $min_lat)
             $min_lat = $obj['lat'];
-        elseif($obj['lat'] > $max_lat)
+        if($obj['lat'] > $max_lat)
             $max_lat = $obj['lat'];
 
         if($obj['long'] < $min_long)
@@ -141,14 +158,13 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
             $max_long = $obj['long'];
     }
 
+    // FIXME: Too small min/max? What is the minimum bbox size?
+
     $mid_lat  = $min_lat  + ($max_lat - $min_lat) / 2;
     $mid_long = $min_long + ($max_long - $min_long) / 2;
 
     //echo $min_lat . ' - ' . $max_lat. ' - '. $mid_lat.'\n';
     //echo $min_long . ' - ' . $max_long. ' - ' . $mid_long;
-
-    $params = params_geomap($MAPCFG, $map_config);
-    list($image_name, $image_path, $data_path) = geomap_files($params);
 
     // Using this API: http://pafciu17.dev.openstreetmap.org/
     $url = 'http://dev.openstreetmap.org/~pafciu17/'

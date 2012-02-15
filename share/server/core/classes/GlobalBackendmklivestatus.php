@@ -1311,7 +1311,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     }
 
     public function getHostNamesInHostgroup($name) {
-        return $this->queryLivestatusSingleColumn("GET hostgroups\nColumns: members\nFilter: name = ".$name."\n");
+        $r = $this->queryLivestatusSingleColumn("GET hostgroups\nColumns: members\nFilter: name = ".$name."\n");
+        return $r[0];
     }
 }
 ?>

@@ -491,7 +491,24 @@ class GlobalMapCfg {
             if(isset(self::$viewParams[$param])) {
                 $func = self::$viewParams[$param]['list'];
                 try {
-                    $values[$param] = $func($this->CORE, $this, 0, array());
+                    $vals = $func($this->CORE, $this, 0, array());
+
+                    // When this is an associative array use labels instead of real values
+                    // Change other arrays to associative ones for easier handling afterwards
+                    if(isset($vals[0])) {
+                        // Change the format to assoc array with null values
+                        $new = Array();
+                        foreach($vals AS $val)
+                            $new[$val] = $val;
+                        $vals = $new;
+                    }
+
+                    if(isset(self::$viewParams[$param]['must'])
+                       && self::$viewParams[$param]['must'] == false) {
+                        $values[$param] = array_merge(array('' => ''), $vals);
+                    } else {
+                        $values[$param] = $vals;
+                    }
                 } catch(BackendConnectionProblem $e) {
                     // FIXME: Show error message?
                     $values[$param] = array();

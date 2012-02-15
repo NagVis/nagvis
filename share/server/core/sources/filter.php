@@ -10,20 +10,36 @@
  * executed earlier by one or several sources.
  */
 
+global $filter_processed;
 $filter_processed = false;
 
+global $viewParams;
+if(!isset($viewParams))
+    $viewParams = array();
 $viewParams = array_merge($viewParams, array(
     'filterGroup' => array(
+        'must'    => false,
         'default' => '',
         'list'    => 'listHostgroupNames',
     )
 ));
 
-function filter_hostgroup(&$map_config, $params) {
-    if($params['filterGroup'] == '')
+function filter_hostgroup(&$map_config, $p) {
+    if($p['filterGroup'] == '')
         return;
 
-    // FIXME: To be coded
+    // Initialize the backend
+    global $_BACKEND;
+    $_BACKEND->checkBackendExists($p['backend_id'], true);
+    $_BACKEND->checkBackendFeature($p['backend_id'], 'getHostNamesInHostgroup', true);
+
+    $hosts = $_BACKEND->getBackend($p['backend_id'])->getHostNamesInHostgroup($p['filterGroup']);
+
+    // Remove all hosts not found in the hostgroup
+    $hosts = array_flip($hosts);
+    foreach($map_config AS $object_id => $obj)
+        if(isset($obj['host_name']) && !isset($hosts[$obj['host_name']]))
+            unset($map_config[$object_id]);
 }
 
 function params_filter($MAPCFG, &$map_config) {
