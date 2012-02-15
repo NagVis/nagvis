@@ -47,6 +47,7 @@ class GlobalMapCfg {
 
     // Array for holding the registered map sources
     protected static $mapSources = null;
+    protected static $viewParams = null;
 
     /**
      * Class Constructor
@@ -470,6 +471,7 @@ class GlobalMapCfg {
      * Performs the initial map source loading
      */
     private function fetchMapSources() {
+        $viewParams = array();
         foreach($this->CORE->getAvailableSources() AS $source_file) {
             if(file_exists(path('sys', 'local', 'sources'))) {
                 include_once(path('sys', 'local', 'sources') . '/'. $source_file);
@@ -477,6 +479,21 @@ class GlobalMapCfg {
                 include_once(path('sys', 'global', 'sources') . '/'. $source_file);
             }
         }
+        self::$viewParams = $viewParams;
+    }
+
+    /**
+     * Returns possible options for the source params to make them selectable by lists
+     */
+    public function getSourceParamValues($params) {
+        $values = array();
+        foreach($params AS $param) {
+            if(isset(self::$viewParams[$param])) {
+                $func = self::$viewParams[$param]['list'];
+                $values[$param] = $func($this->CORE);
+            }
+        }
+        return $values;
     }
 
     /**
@@ -490,7 +507,7 @@ class GlobalMapCfg {
         foreach($this->mapConfig[0]['sources'] AS $source) {
             $func = 'params_'.$source;
             if(function_exists($func))
-                $params = array_merge($params, $func());
+                $params = array_merge($params, $func($this, $this->mapConfig));
         }
         return $params;
     }
@@ -504,7 +521,7 @@ class GlobalMapCfg {
 
         foreach($this->mapConfig[0]['sources'] AS $source) {
             $func = 'changed_'.$source;
-            if($func($compareTime))
+            if($func($this, $compareTime))
                 return true;
         }
         return false;
@@ -549,11 +566,11 @@ class GlobalMapCfg {
             if(!function_exists($func))
                 throw new NagVisException(l('Requested source "[S]" does not exist',
                                                                 array('S' => $source)));
-            $func($this->name, $this->mapConfig);
+            $func($this, $this->name, $this->mapConfig);
         }
 
         // Call process filter implicit if not already done
-        process_filter($this->name, $this->mapConfig, false);
+        process_filter($this, $this->name, $this->mapConfig, false);
 
         // Write cache
         $CACHE->writeCache($this->mapConfig, 1);

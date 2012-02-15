@@ -12,6 +12,27 @@
 
 $filter_processed = false;
 
+function list_hostgroups() {
+    global $_BACKEND;
+    try {
+        $aRet = Array();
+        $objs = $_BACKEND->getBackend($_GET[''])->getObjects('hostgroup');
+        foreach($objs AS $obj) {
+            $aRet[] = $obj['name1'];
+        }
+        return $aRet;
+    } catch(BackendConnectionProblem $e) {
+        return array();
+    }
+}
+
+$viewParams = array_merge($viewParams, array(
+    'filterGroup' => array(
+        'default' => '',
+        'list'    => 'list_hostgroups',
+    )
+));
+
 function filter_hostgroup($map_config) {
     if(!isset($_GET['filterGroup']) || $_GET['filterGroup'] == '')
         return;
@@ -21,7 +42,7 @@ function filter_hostgroup($map_config) {
     // FIXME: To be coded
 }
 
-function process_filter($map_name, &$map_config, $explicit = true) {
+function process_filter($MAPCFG, $map_name, &$map_config, $explicit = true) {
     global $filter_processed;
     // Skip implicit calls if already processed explicit
     if(!$explicit && $filter_processed)

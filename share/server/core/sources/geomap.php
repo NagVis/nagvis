@@ -47,13 +47,33 @@ function geomap_get_contents($url) {
     }
 }
 
-function params_geomap() {
+function list_geomap_types() {
+    return array(
+        'osmarender' => 'Osmarender',
+        'mapnik'     => 'Mapnik',
+        'cycle '     => 'Cycle',
+    );
+}
+
+$viewParams = array_merge($viewParams, array(
+    'type' => array(
+        'default' => 'osmarender',
+        'list'    => 'list_geomap_types',
+    ),
+    'backend_id' => array(
+        'default' => '',
+        'list'    => 'listBackendIds',
+    )
+));
+
+function params_geomap($MAPCFG, $map_config) {
     $p = array();
 
-    $p['width']  = isset($_GET['width'])  ? $_GET['width']  : 1700;
-    $p['height'] = isset($_GET['height']) ? $_GET['height'] : 860;
-    $p['zoom']   = isset($_GET['zoom'])   ? $_GET['zoom']   : '';
-    $p['type']   = isset($_GET['type'])   ? $_GET['type']   : 'osmarender';
+    $p['backend_id'] = isset($_GET['backend_id']) ? $_GET['backend_id'] : $MAPCFG->getValue(0, 'backend_id');
+    $p['width']  = isset($_GET['width'])          ? $_GET['width']      : 1700;
+    $p['height'] = isset($_GET['height'])         ? $_GET['height']     : 860;
+    $p['zoom']   = isset($_GET['zoom'])           ? $_GET['zoom']       : '';
+    $p['type']   = isset($_GET['type'])           ? $_GET['type']       : $viewParams['type']['default'];
 
     return $p;
 }
@@ -67,7 +87,7 @@ function geomap_files($params) {
     );
 }
 
-function process_geomap($mapName, &$map_config) {
+function process_geomap($MAPCFG, $map_name, &$map_config) {
     // This source does not directly honor the existing map configs. It saves
     // the existing config to use it later for modifying some object parameters.
     // The existing map config must not create new objects. The truth about the
@@ -78,6 +98,28 @@ function process_geomap($mapName, &$map_config) {
     // Load the list of locations
     $locations = geomap_get_locations();
 
+    // FIXME: Iconset - gather automatically?
+    $iconset = 'std_dot';
+    $icon_w  = 6;
+    $icon_h  = 6;
+
+    // Now add the objects to the map
+    foreach($locations AS $loc) {
+        $map_config[$loc['name']] = array(
+            'type'      => 'host',
+            'host_name' => $loc['name'],
+            'iconset'   => $iconset,
+            'object_id' => $loc['name'],
+            'alias'     => $loc['alias'],
+            'lat'       => $loc['lat'],
+            'long'      => $loc['long'],
+        );
+    }
+    unset($locations);
+
+    // Now apply the filters. Though the map can be scaled by the filtered hosts
+    process_filter($MAPCFG, $map_name, $map_config);
+
     // Now detect the upper and lower bounds of the locations to display
     // Left/upper and right/bottom
     // north/south
@@ -86,16 +128,16 @@ function process_geomap($mapName, &$map_config) {
     // east/west
     $min_long = 180;
     $max_long = -180;
-    foreach($locations AS $loc) {
-        if($loc['lat'] < $min_lat)
-            $min_lat = $loc['lat'];
-        elseif($loc['lat'] > $max_lat)
-            $max_lat = $loc['lat'];
+    foreach($map_config AS $obj) {
+        if($obj['lat'] < $min_lat)
+            $min_lat = $obj['lat'];
+        elseif($obj['lat'] > $max_lat)
+            $max_lat = $obj['lat'];
 
-        if($loc['long'] < $min_long)
-            $min_long = $loc['long'];
-        if($loc['long'] > $max_long)
-            $max_long = $loc['long'];
+        if($obj['long'] < $min_long)
+            $min_long = $obj['long'];
+        if($obj['long'] > $max_long)
+            $max_long = $obj['long'];
     }
 
     $mid_lat  = $min_lat  + ($max_lat - $min_lat) / 2;
@@ -104,12 +146,7 @@ function process_geomap($mapName, &$map_config) {
     //echo $min_lat . ' - ' . $max_lat. ' - '. $mid_lat.'\n';
     //echo $min_long . ' - ' . $max_long. ' - ' . $mid_long;
 
-    // FIXME: Iconset - gather automatically?
-    $iconset = 'std_dot';
-    $icon_w  = 6;
-    $icon_h  = 6;
-
-    $params = params_geomap();
+    $params = params_geomap($MAPCFG, $map_config);
     list($image_name, $image_path, $data_path) = geomap_files($params);
 
     // Using this API: http://pafciu17.dev.openstreetmap.org/
@@ -163,23 +200,18 @@ function process_geomap($mapName, &$map_config) {
     $map_config[0]['map_image'] = $image_name;
     $map_config[0]['iconset']   = $iconset;
 
-    // Now add the objects to the map
-    foreach($locations AS $loc) {
+    // Now add the coordinates to the map objects
+    foreach($map_config AS $obj) {
+        if(!isset($obj['object_id']))
+            continue;
+
         // Calculate the lat (y) coords
-        $y = $params['height'] - ($lat_para * ($loc['lat'] - $img_down)) - ($icon_h / 2);
+        $obj['y'] = $params['height'] - ($lat_para * ($obj['lat'] - $img_down)) - ($icon_h / 2);
         
         // Calculate the long (x) coords
-        $x = ($long_para * ($loc['long'] - $img_left)) - ($icon_w / 2);
-
-        $map_config[$loc['name']] = array(
-            'type'      => 'host',
-            'host_name' => $loc['name'],
-            'iconset'   => $iconset,
-            'object_id' => $loc['name'],
-            'alias'     => $loc['alias'],
-            'x'         => $x,
-            'y'         => $y,
-        );
+        $obj['x'] = ($long_para * ($obj['long'] - $img_left)) - ($icon_w / 2);
+        unset($obj['lat']);
+        unset($obj['long']);
     }
 }
 
@@ -187,10 +219,10 @@ function process_geomap($mapName, &$map_config) {
  * Report as changed when the source file is newer than the compare_time
  * or when either the image file or the data file do not exist
  */
-function changed_geomap($compare_time) {
+function changed_geomap($MAPCFG, $compare_time) {
     global $geomap_source_file;
 
-    $params = params_geomap();
+    $params = params_geomap($MAPCFG, array());
 
     list($image_name, $image_path, $data_path) = geomap_files($params);
     if(!file_exists($image_path) || !file_exists($data_path))

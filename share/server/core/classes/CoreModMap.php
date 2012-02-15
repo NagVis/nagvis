@@ -128,7 +128,9 @@ class CoreModMap extends CoreModule {
                     if($MAPCFG->getValue(0, 'sources') != '') {
                         $params = $MAPCFG->getSourceParams();
                         $VIEW->addOpts($params);
-                        // FIXME: Mögliche Werte z.b. bei geomap "type" setzen $VIEW->setValues()
+                        
+                        // Mögliche Werte z.b. bei geomap "type" setzen $VIEW->setValues()
+                        $VIEW->setValues($MAPCFG->getSourceParamValues(array_keys($params)));
                     }
 
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
