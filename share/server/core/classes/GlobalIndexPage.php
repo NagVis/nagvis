@@ -42,6 +42,89 @@ class GlobalIndexPage {
         $this->htmlBase = cfg('paths','htmlbase');
     }
 
+    private function parseMapJson($mapType, $mapName, $what) {
+        global $AUTHORISATION;
+        // Check if the user is permitted to view this
+        if($mapType == 'automap') {
+            if(!$AUTHORISATION->isPermitted('AutoMap', 'view', $mapName))
+                return null;
+        } else {
+            if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName))
+                return null;
+        }
+
+        $map = Array();
+
+        if($mapType == 'automap')
+            $MAPCFG = new NagVisAutomapCfg($this->CORE, $mapName);
+        else
+            $MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
+
+        if(!$MAPCFG->checkMapConfigExists(false)) {
+            return array('map', $this->mapError($mapType, $mapName, 'Map configuration file does not exist.'));
+        }
+
+        try {
+            $MAPCFG->readMapConfig();
+
+            // Only perform this check with a valid config
+            if($MAPCFG->getValue(0, 'show_in_lists') != 1)
+                return null;
+
+            $objConf = $MAPCFG->getTypeDefaults('global');
+        } catch(MapCfgInvalid $e) {
+            return array('map', $this->mapError($mapType, $mapName, $e->getMessage()));
+        } catch(NagVisException $e) {
+            return array('map', $this->mapError($mapType, $mapName, $e->getMessage()));
+        }
+
+        if($mapType == 'automap')
+            // Only set overview specific automap params here. The default_params are added in the NagVisAutomap cnstructor
+            $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, Array('automap' => $mapName, 'preview' => 1), !IS_VIEW);
+        else
+            $MAP = new NagVisMap($this->CORE, $MAPCFG, GET_STATE, !IS_VIEW);
+
+        // Apply default configuration to object
+        $objConf = array_merge($objConf, $this->getMapAndAutomapDefaultOpts($mapType, $mapName, $MAPCFG->getAlias()));
+
+        $MAP->MAPOBJ->setConfiguration($objConf);
+
+        if($MAP->MAPOBJ->checkMaintenance(0)) {
+            if($mapType == 'automap')
+                $map['overview_url']    = $this->htmlBase.'/index.php?mod=AutoMap&act=view&show='.$mapName.$MAPCFG->getValue(0, 'default_params');
+            else
+                $map['overview_url']    = $this->htmlBase.'/index.php?mod=Map&act=view&show='.$mapName;
+
+            $map['overview_class']  = '';
+        } else {
+            $map['overview_class']  = 'disabled';
+            $map['overview_url']    = 'javascript:alert(\''.l('The map is in maintenance mode. Please be patient.').'\');';
+            $map['summary_output']  = l('The map is in maintenance mode. Please be patient.');
+
+            $MAP->MAPOBJ->clearMembers();
+            $MAP->MAPOBJ->setSummaryState('UNKNOWN');
+            $MAP->MAPOBJ->fetchIcon();
+        }
+
+        // If this is the automap display the last rendered image
+        if($mapType == 'automap') {
+            if(cfg('index','showmapthumbs') == 1)
+                $map['overview_image'] = $this->renderAutomapThumb($MAP);
+
+            $MAP->MAPOBJ->fetchIcon();
+
+            if($what === ONLY_STATE)
+                return array('map', array_merge($MAP->MAPOBJ->getObjectStateInformations(), $map));
+            else
+                return array('map', array_merge($MAP->MAPOBJ->parseJson(), $map));
+        } else {
+            if(cfg('index','showmapthumbs') == 1)
+                $map['overview_image'] = $this->renderMapThumb($MAPCFG);
+
+            return array('obj', array($MAP->MAPOBJ, $map));
+        }
+    }
+
     /**
      * Parses the maps and automaps for the overview page. It is called twice on
      * initial page load explicit for maps and automaps.
@@ -53,7 +136,7 @@ class GlobalIndexPage {
      * FIXME: More cleanups, compacting and extraction of single parts
      */
     public function parseMapsJson($type, $what = COMPLETE, $objects = Array()) {
-        global $AUTHORISATION, $_BACKEND;
+        global $_BACKEND;
         // initial parsing mode: Skip processing when this type of object should not be shown
         if($type != 'list' && !cfg('index', 'show'.$type.'s') == 1)
             return json_encode(Array());
@@ -82,88 +165,20 @@ class GlobalIndexPage {
                 $mapType = $type;
             }
 
-            // Check if the user is permitted to view this
-            if($mapType == 'automap') {
-                if(!$AUTHORISATION->isPermitted('AutoMap', 'view', $mapName))
-                    continue;
-            } else {
-                if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName))
-                    continue;
-            }
-
-            $map = Array();
-
-            if($mapType == 'automap')
-                $MAPCFG = new NagVisAutomapCfg($this->CORE, $mapName);
-            else
-                $MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
-
-            if(!$MAPCFG->checkMapConfigExists(false)) {
-                $aMaps[] = $this->mapError($mapType, $mapName, 'Map configuration file does not exist.');
-                continue;
-            }
-
             try {
-                $MAPCFG->readMapConfig();
-
-                // Only perform this check with a valid config
-                if($MAPCFG->getValue(0, 'show_in_lists') != 1)
+                $ret = $this->parseMapJson($mapType, $mapName, $what);
+                if($ret === null)
                     continue;
-
-                $objConf = $MAPCFG->getTypeDefaults('global');
-            } catch(MapCfgInvalid $e) {
-                $aMaps[] = $this->mapError($mapType, $mapName, $e->getMessage());
-                continue;
-            } catch(NagVisException $e) {
+                list($ty, $obj) = $ret;
+            } catch(Exception $e) {
                 $aMaps[] = $this->mapError($mapType, $mapName, $e->getMessage());
                 continue;
             }
 
-            if($mapType == 'automap')
-                // Only set overview specific automap params here. The default_params are added in the NagVisAutomap cnstructor
-                $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, Array('automap' => $mapName, 'preview' => 1), !IS_VIEW);
+            if($ty == 'map')
+                $aMaps[] = $obj;
             else
-                $MAP = new NagVisMap($this->CORE, $MAPCFG, GET_STATE, !IS_VIEW);
-
-            // Apply default configuration to object
-            $objConf = array_merge($objConf, $this->getMapAndAutomapDefaultOpts($mapType, $mapName, $MAPCFG->getAlias()));
-
-            $MAP->MAPOBJ->setConfiguration($objConf);
-
-            if($MAP->MAPOBJ->checkMaintenance(0)) {
-                if($mapType == 'automap')
-                    $map['overview_url']    = $this->htmlBase.'/index.php?mod=AutoMap&act=view&show='.$mapName.$MAPCFG->getValue(0, 'default_params');
-                else
-                    $map['overview_url']    = $this->htmlBase.'/index.php?mod=Map&act=view&show='.$mapName;
-
-                $map['overview_class']  = '';
-            } else {
-                $map['overview_class']  = 'disabled';
-                $map['overview_url']    = 'javascript:alert(\''.l('The map is in maintenance mode. Please be patient.').'\');';
-                $map['summary_output']  = l('The map is in maintenance mode. Please be patient.');
-
-                $MAP->MAPOBJ->clearMembers();
-                $MAP->MAPOBJ->setSummaryState('UNKNOWN');
-                $MAP->MAPOBJ->fetchIcon();
-            }
-
-            // If this is the automap display the last rendered image
-            if($mapType == 'automap') {
-                if(cfg('index','showmapthumbs') == 1)
-                    $map['overview_image'] = $this->renderAutomapThumb($MAP);
-
-                $MAP->MAPOBJ->fetchIcon();
-
-                if($what === ONLY_STATE)
-                    $aMaps[] = array_merge($MAP->MAPOBJ->getObjectStateInformations(), $map);
-                else
-                    $aMaps[] = array_merge($MAP->MAPOBJ->parseJson(), $map);
-            } else {
-                if(cfg('index','showmapthumbs') == 1)
-                    $map['overview_image'] = $this->renderMapThumb($MAPCFG);
-
-                $aObjs[] = Array($MAP->MAPOBJ, $map);
-            }
+                $aObjs[] = $obj;
         }
 
         if($type == 'map') {
@@ -180,7 +195,10 @@ class GlobalIndexPage {
             }
         }
 
-        usort($aMaps, Array('GlobalCore', 'cmpAlias'));
+        if($type != 'list') {
+            usort($aMaps, Array('GlobalCore', 'cmpAlias'));
+        }
+
         return json_encode($aMaps);
     }
 
@@ -210,7 +228,7 @@ class GlobalIndexPage {
         $map['num_members']     = 0;
         $map['overview_class']  = 'error';
         $map['overview_url']    = 'javascript:alert(\''.$msg.'\');';
-        $map['summary_output']  = l('Map Configuration Error: [ERR]', Array('ERR' => $msg));
+        $map['summary_output']  = l('Map Error: [ERR]', Array('ERR' => $msg));
         return $map;
     }
 

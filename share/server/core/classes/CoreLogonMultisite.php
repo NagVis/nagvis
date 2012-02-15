@@ -94,7 +94,11 @@ class CoreLogonMultisite extends CoreLogonModule {
             }
             try {
                 $name = $this->checkAuthCookie($cookieName);
+
+                session_start();
                 $_SESSION['multisiteLogonCookie'] = $cookieName;
+                session_write_close();
+
                 return $name;
             } catch(Exception $e) {}
         }

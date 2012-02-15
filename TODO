@@ -3,7 +3,6 @@ This is a small file for storing quick thoughts about new features and needed ch
 
 Probleme:
   - Warnings anzeigen, wenn Funktionen aus oldPhpVersionFixes.php angezogen werden
-  - Zu viele audit_log Meldungn (Bei jedem HTTP-Request?)
 
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
@@ -34,18 +33,6 @@ Installer:
  - Der Installer sollte beim Update headermenu, headertemplate aus [wui] Sektion entfernen.
    Leider ist das nicht ganz so einfach, wie bei den anderen Attributen, da in anderen Sektionen
    diese Optionen noch erlaubt sind.
-
-*** NagVis Featureitis ***
-
-- Plattform zum Vorschlagen von Features
-  - Pro Features können Kosten angeben werden
-  - Öffentlich sind Prozentzahlen sichtbar wieviel von einem Feature schon finanziert ist
-- Features können von anonymen und eingeloggten Nutzern vorgeschlagen werden
-  - Bei anonymen Nutzern muss moderiert werden
-  - Für neue Features werden Mails generiert
-- Ein/Mehrere "Supporter" können sich mit Beträgen zu den einzelnen Features melden
-  - Per Default werden nur die Anzahl der Supporter angezeigt
-  - Ein Supporter kann optional seinen Namen und seinen Betrag öffentlich machen
 
 *** Linien (Auch für neue Automap wichtig!) ***
  - Pfeilspitzen konfigurierbar machen
@@ -495,3 +482,52 @@ LogonMultisite
      -> Nicht in Session speichern
    -> nok: Zur Loginseite umleiten (inkl. _origin)
 
+
+*** NagVis Featureitis ***
+
+- Plattform zum Vorschlagen von Features
+  - Pro Features können Kosten angeben werden
+  - Öffentlich sind Prozentzahlen sichtbar wieviel von einem Feature schon finanziert ist
+- Features können von anonymen und eingeloggten Nutzern vorgeschlagen werden
+  - Bei anonymen Nutzern muss moderiert werden
+  - Für neue Features werden Mails generiert
+- Ein/Mehrere "Supporter" können sich mit Beträgen zu den einzelnen Features melden
+  - Per Default werden nur die Anzahl der Supporter angezeigt
+  - Ein Supporter kann optional seinen Namen und seinen Betrag öffentlich machen
+
+*** Synchrone Ajax Aufrufe minimieren ***
+
+Wenn ein synchroner Ajax Call läuft, dann kann die Webseite währenddessen nicht benutzt werden.
+Das geht ziemlich auf die Usability.
+
+ - Synchrone Aufrufe ermitteln
+ - Code umstellen auf Asynchronen Aufruf mit Callback
+ - Verhindern dass sich eine Queue von hängenden/zu lang laufenden Ajax Calls aufbaut?
+   - Calls mit Timeouts versehen
+
+  - parseMap() handler:
+        eventlog("worker", "info", "Finished parsing " + sType);
+        eventlog("worker", "error", "Problem while parsing the " + sType + " on page load");
+
+  - Updates nur machen wenn initiales Parsen erledigt ist
+
+  - getObjectStates bekommt Zeiten der Konfigurationsdateien vom Frontend mit
+    - Wenn die Dateien neuer sind, dann wird das dem Frontend gemeldet
+    - Die angefragten Daten werden nicht mehr verarbeitet
+    - Parameter: f -> liste von Dateien
+    - Wert: f[]=<typ>,<identifier>,<zeit>
+    - Wert: f[]=maincfg,,0123456789&f[]=map,name,0123456789
+
+*** locking php sessions ***
+
+- PHP Session schließen sobald möglich
+  Das verhindert blockierende HTTP Requests
+
+  SESS->storeInSession()
+  CoreLogonDialogHandler->check()
+
+  SESS->changePassword()
+  CoreModChangePassword->handleAction()
+
+  SESS->logout()
+  CoreLogonMultisite->checkAuth()

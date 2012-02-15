@@ -931,9 +931,19 @@ class CoreModMap extends CoreModule {
     }
 
     private function getObjectStates() {
-        $aOpts = Array('ty' => MATCH_GET_OBJECT_TYPE,
-                       'i'  => MATCH_STRING_NO_SPACE_EMPTY);
+        $aOpts = Array(
+            'ty' => MATCH_GET_OBJECT_TYPE,
+            'i'  => MATCH_STRING_NO_SPACE_EMPTY,
+            'f'  => MATCH_STRING_NO_SPACE_EMPTY
+        );
         $aVals = $this->getCustomOptions($aOpts);
+    
+        // Is this request asked to check file ages?
+        if(isset($aVals['f']) && isset($aVals['f'][0])) {
+            $result = $this->checkFilesChanged($aVals['f']);
+            if($result !== null)
+                return $result;
+        }
 
         // Initialize map configuration (Needed in getMapObjConf)
         $MAPCFG = new NagVisMapCfg($this->CORE, $this->name);

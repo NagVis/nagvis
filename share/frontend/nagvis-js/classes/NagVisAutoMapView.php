@@ -102,7 +102,7 @@ class NagVisAutoMapView {
                 'mapName'            => $this->name,
                 'automap'            => $this->content,
                 'fileAges'           => json_encode(Array(
-                    'mainCfg'   => $this->CORE->getMainCfg()->getConfigFileAge(),
+                    'maincfg'   => $this->CORE->getMainCfg()->getConfigFileAge(),
                     $this->name => $MAPCFG->getFileModificationTime(),
                 )),
             );

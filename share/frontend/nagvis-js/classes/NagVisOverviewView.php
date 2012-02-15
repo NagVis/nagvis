@@ -56,7 +56,7 @@ class NagVisOverviewView {
             'stateProperties'   => json_encode($this->CORE->getMainCfg()->getStateWeight()),
             'userProperties'    => $USERCFG->doGetAsJson(),
             'fileAges'          => json_encode(Array(
-                'mainCfg'   => $this->CORE->getMainCfg()->getConfigFileAge(),
+                'maincfg' => $this->CORE->getMainCfg()->getConfigFileAge(),
             )),
         );
 

@@ -108,8 +108,11 @@ class CoreAuthHandler {
         $bChanged = $this->MOD->changePassword();
 
         // Save success to session
-        if($bChanged === true)
+        if($bChanged === true) {
+            $this->SESS->aquire();
             $this->SESS->set('authCredentials', $this->getCredentials());
+            $this->SESS->commit();
+        }
 
         return $bChanged;
     }
@@ -182,6 +185,7 @@ class CoreAuthHandler {
         }
 
         // Remove the login information
+        $this->SESS->aquire();
         $this->SESS->del('logonModule');
         $this->SESS->del('authModule');
         $this->SESS->del('authCredentials');
@@ -189,6 +193,7 @@ class CoreAuthHandler {
         $this->SESS->del('userPermissions');
         $this->SESS->del('authLogoutPossible');
         //$this->SESS->del('multisiteLogonCookie');
+        $this->SESS->commit();
 
         return true;
     }
@@ -202,8 +207,8 @@ class CoreAuthHandler {
             return false;
         }
 
-        debug($_SERVER['REQUEST_URI']);
-        debug(json_encode($_SESSION));
+        //debug($_SERVER['REQUEST_URI']);
+        //debug(json_encode($_SESSION));
 
         $this->passCredentials($this->SESS->get('authCredentials'));
         $this->setTrustUsername($this->SESS->get('authTrusted'));
@@ -217,11 +222,13 @@ class CoreAuthHandler {
     }
 
     public function storeInSession() {
+        $this->SESS->aquire();
         $this->SESS->set('logonModule',        cfg('global', 'logonmodule'));
         $this->SESS->set('authModule',         $this->sModuleName);
         $this->SESS->set('authCredentials',    $this->getCredentials());
         $this->SESS->set('authTrusted',        $this->trustUsername);
         $this->SESS->set('authLogoutPossible', $this->logoutPossible);
+        $this->SESS->commit();
     }
 
     public function setTrustUsername($flag) {

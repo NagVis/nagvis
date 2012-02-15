@@ -112,7 +112,7 @@ class NagVisMapView {
             'userProperties'     => $USERCFG->doGetAsJson(),
             'mapName'            => $this->name,
             'fileAges'           => json_encode(Array(
-                'mainCfg'   => $this->CORE->getMainCfg()->getConfigFileAge(),
+                'maincfg'   => $this->CORE->getMainCfg()->getConfigFileAge(),
                 $this->name => $this->MAPCFG->getFileModificationTime(),
             )),
         );

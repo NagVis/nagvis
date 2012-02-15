@@ -275,9 +275,19 @@ class CoreModAutoMap extends CoreModule {
     private function getObjectStates() {
         $arrReturn = Array();
 
-        $aOpts = Array('ty' => MATCH_GET_OBJECT_TYPE,
-                       'i'  => MATCH_STRING_NO_SPACE_EMPTY);
+        $aOpts = Array(
+            'ty' => MATCH_GET_OBJECT_TYPE,
+            'i'  => MATCH_STRING_NO_SPACE_EMPTY,
+            'f'  => MATCH_STRING_NO_SPACE_EMPTY,
+        );
         $aVals = $this->getCustomOptions($aOpts);
+
+        // Is this request asked to check file ages?
+        if(isset($aVals['f']) && isset($aVals['f'][0])) {
+            $result = $this->checkFilesChanged($aVals['f']);
+            if($result !== null)
+                return $result;
+        }
 
         // Read the map configuration file
         $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);

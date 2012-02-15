@@ -67,6 +67,7 @@ $viewParams = array_merge($viewParams, array(
 ));
 
 function params_geomap($MAPCFG, $map_config) {
+    global $viewParams;
     $p = array();
 
     $p['backend_id'] = isset($_GET['backend_id']) ? $_GET['backend_id'] : $MAPCFG->getValue(0, 'backend_id');

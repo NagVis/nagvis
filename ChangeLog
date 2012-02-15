@@ -11,10 +11,15 @@ Core
     in the [defaults] section of the main configuration
   * The audit.log is disabled by default now (can be enabled using the
     audit_log parameter in [global] section)
+  * Bugfix: Fixed problem with not real asynchronous ajax calls caused by
+    locking PHP sessions
 
 Frontend
   * Weathermap line color definitions support usage values above 100% and below 0%
   * Better error handling during coord parsing
+  * Reduced ajax calls during regular map updating
+  * Switched ajax calls during view rendering to be asynchronous (Prevents
+    locked up browsers during ajax calls)
   * Bugfix: Always remove the last frontend error message when clicking "close"
 
 1.6.3

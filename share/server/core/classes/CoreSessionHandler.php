@@ -55,6 +55,9 @@ class CoreSessionHandler {
         if(!isset($_SESSION)) {
             try {
                 session_start();
+                // Write/close to release the lock aquired by session_start().
+                // Each write to the session needs to perform session_start() again
+                session_write_close();
             } catch(ErrorException $e) {
                 // Catch and suppress session cleanup errors. This is a problem
                 // especially on current debian/ubuntu:
@@ -113,6 +116,14 @@ class CoreSessionHandler {
 
     public function del($key) {
         unset($_SESSION[$key]);
+    }
+
+    public function aquire() {
+        session_start();
+    }
+
+    public function commit() {
+        session_write_close();
     }
 }
 

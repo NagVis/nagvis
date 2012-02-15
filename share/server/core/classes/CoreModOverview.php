@@ -59,8 +59,18 @@ class CoreModOverview extends CoreModule {
                     $sReturn = $OVERVIEW->parseRotationsJson();
                 break;
                 case 'getObjectStates':
-                    $aOpts = Array('i'  => MATCH_STRING_NO_SPACE);
+                    $aOpts = Array(
+                        'i' => MATCH_STRING_NO_SPACE,
+                        'f' => MATCH_STRING_NO_SPACE_EMPTY,
+                    );
                     $aVals = $this->getCustomOptions($aOpts);
+
+                    // Is this request asked to check file ages?
+                    if(isset($aVals['f']) && isset($aVals['f'][0])) {
+                        $result = $this->checkFilesChanged($aVals['f']);
+                        if($result !== null)
+                            return $result;
+                    }
 
                     $sReturn = $OVERVIEW->parseMapsJson('list', ONLY_STATE, $aVals['i']);
                 break;

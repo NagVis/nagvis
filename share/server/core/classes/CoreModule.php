@@ -263,5 +263,56 @@ abstract class CoreModule {
                                            Array('ATTRIBUTE' => $key)));
 
     }
+
+    /**
+     * Is called with an array of files and timestamps to check if the file ages
+     * have changed since these timestamps.
+     *
+     * Returns null when nothing changed or a structure of the changed objects
+     */
+    protected function checkFilesChanged($files) {
+        global $AUTHORISATION;
+        $changed = array();
+
+        foreach($files AS $file) {
+            $parts = explode(',', $file);
+            // Skip invalid requested files
+            if(count($parts) != 3)
+                continue;
+            list($ty, $name, $age) = $parts;
+
+            // Try to fetch the current age of the requested file
+            $cur_age = null;
+            if($ty == 'maincfg') {
+                $cur_age = $this->CORE->getMainCfg()->getConfigFileAge();
+
+            } elseif($ty == 'map') {
+                if($AUTHORISATION->isPermitted('Map', 'view', $name)) {
+                    $MAPCFG  = new NagVisMapCfg($this->CORE, $name);
+                    $cur_age = $MAPCFG->getFileModificationTime();
+                }
+
+            } elseif($ty == 'automap') {
+                if($AUTHORISATION->isPermitted('AutoMap', 'view', $name)) {
+                    $MAPCFG  = new NagVisAutomapCfg($this->CORE, $name);
+                    $cur_age = $MAPCFG->getFileModificationTime();
+                }
+
+            }
+
+            // Check if the file has changed; Reply with the changed timestamps
+            if($cur_age !== null && $cur_age > $age) {
+                $changed[$name] = $cur_age;
+            }
+        }
+
+        if($changed)
+            return json_encode(array(
+                'status' => 'CHANGED',
+                'data'   => $changed,
+            ));
+        else
+            return null;
+    }
 }
 ?>
