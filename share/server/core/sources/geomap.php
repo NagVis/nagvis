@@ -194,7 +194,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
         // 2.373046875,54.239550531562,18.8525390625,50.499452103968
         $data_url = $url . '&bboxReturnFormat=csv';
         $contents = geomap_get_contents($data_url);
-        if(!preg_match('/^[0-9]+\.?[0-9]*,[0-9]+\.?[0-9]*,[0-9]+\.?[0-9]*,[0-9]+\.?[0-9]*$/i', $contents))
+        if(!preg_match('/^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/i', $contents))
             throw new NagVisException(l('Got invalid data from "[U]"', array('U' => $data_url)));
         file_put_contents($data_path, $contents);
         $parts = explode(',', $contents);
