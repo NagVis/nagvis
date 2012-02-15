@@ -569,6 +569,8 @@ class GlobalMapCfg {
 
         // 1.  Check if there is a cache file for a query with this params
         $params = $this->getSourceParams();
+        if(isset($params['source_file']))
+            unset($params['source_file']);
         $param_values = implode('_', array_values($params));
         $cacheFile = cfg('paths','var').'source-'.$this->name.'.cfg-'.$param_values.'-'.CONST_VERSION.'.cache';
         $CACHE = new GlobalFileCache(array(), $cacheFile);

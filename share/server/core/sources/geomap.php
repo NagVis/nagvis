@@ -1,16 +1,14 @@
 <?php
 
-global $geomap_source_file;
-$geomap_source_file = '/d1/nagvis/edklatlng.csv';
-
-function geomap_get_locations() {
-    global $geomap_source_file;
-
+function geomap_get_locations($p) {
     $locations = array();
-    $f = $geomap_source_file;
+    $f = $p['source_file'];
+
+    if($f == '')
+        throw new NagVisException(l('No location source file given. Terminate rendering geomap.'));
 
     if(!file_exists($f))
-        throw new NagVisException(l('Locations file "[F]" does not exist.', Array('F' => $f)));
+        throw new NagVisException(l('Location source file "[F]" does not exist.', Array('F' => $f)));
 
     foreach(file($f) AS $line) {
         $parts = explode(';', $line);
@@ -55,6 +53,12 @@ function list_geomap_types() {
     );
 }
 
+function list_geomap_source_files() {
+    return array(
+        '/d1/nagvis/edklatlng.csv',
+    );
+}
+
 global $viewParams;
 if(!isset($viewParams))
     $viewParams = array();
@@ -73,23 +77,41 @@ $viewParams = array_merge($viewParams, array(
         'default' => 'std_dot',
         'list'    => 'listIconsets',
     ),
+    'source_file' => array(
+        'default' => '',
+        'list'    => 'list_geomap_source_files',
+    ),
 ));
 
 function params_geomap($MAPCFG, $map_config) {
     global $viewParams;
     $p = array();
 
-    $p['backend_id'] = isset($_GET['backend_id']) ? $_GET['backend_id'] : $MAPCFG->getValue(0, 'backend_id');
-    $p['width']      = isset($_GET['width'])      ? $_GET['width']      : 1700;
-    $p['height']     = isset($_GET['height'])     ? $_GET['height']     : 860;
-    $p['zoom']       = isset($_GET['zoom'])       ? $_GET['zoom']       : '';
-    $p['type']       = isset($_GET['type'])       ? $_GET['type']       : $viewParams['type']['default'];
-    $p['iconset']    = isset($_GET['iconset'])    ? $_GET['iconset']    : $viewParams['iconset']['default'];
+    $p['backend_id']  = isset($_GET['backend_id'])  ? $_GET['backend_id']  : $MAPCFG->getValue(0, 'backend_id');
+    $p['width']       = isset($_GET['width'])       ? $_GET['width']       : 1700;
+    $p['height']      = isset($_GET['height'])      ? $_GET['height']      : 860;
+    $p['zoom']        = isset($_GET['zoom'])        ? $_GET['zoom']        : '';
+    $p['type']        = isset($_GET['type'])        ? $_GET['type']        : $viewParams['type']['default'];
+    $p['iconset']     = isset($_GET['iconset'])     ? $_GET['iconset']     : $viewParams['iconset']['default'];
+    $p['source_file'] = isset($_GET['source_file']) ? $_GET['source_file'] : $viewParams['source_file']['default'];
+
+    // Fetch option array from defaultparams string (extract variable names and values)
+    // But don't introduce new vars here. And don't override _GET vars
+    $def_params = explode('&', $MAPCFG->getValue(0, 'default_params'));
+    unset($def_params[0]);
+
+    foreach($def_params AS $set) {
+        $arrSet = explode('=', $set);
+        if(isset($p[$arrSet[0]]) && !isset($_GET[$arrSet[0]]))
+            $p[$arrSet[0]] = $arrSet[1];
+    }
 
     return $p;
 }
 
 function geomap_files($params) {
+    if(isset($params['source_file']))
+        unset($params['source_file']);
     $image_name  = 'geomap-'.implode('_', array_values($params)).'.png';
     return array(
         $image_name,
@@ -106,11 +128,11 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     $saved_config = $map_config;
     $map_config = array();
 
-    // Load the list of locations
-    $locations = geomap_get_locations();
-
     $params = params_geomap($MAPCFG, $map_config);
     list($image_name, $image_path, $data_path) = geomap_files($params);
+
+    // Load the list of locations
+    $locations = geomap_get_locations($params);
 
     $iconset = $params['iconset'];
     // FIXME: Iconset size - gather automatically?
@@ -237,15 +259,13 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
  * or when either the image file or the data file do not exist
  */
 function changed_geomap($MAPCFG, $compare_time) {
-    global $geomap_source_file;
-
     $params = params_geomap($MAPCFG, array());
 
     list($image_name, $image_path, $data_path) = geomap_files($params);
     if(!file_exists($image_path) || !file_exists($data_path))
         return true;
 
-    $t = filemtime($geomap_source_file);
+    $t = filemtime($params['source_file']);
     return $t > $compare_time;
 }
 
