@@ -1075,7 +1075,7 @@ function pxToInt(v) {
 }
 
 function isRelativeCoord(v) {
-    return (!isInt(v) && !isFloat(v)) || v.length === 6;
+    return isset(v) && ((!isInt(v) && !isFloat(v)) || v.length === 6);
 }
 
 function getKeys(o) {
