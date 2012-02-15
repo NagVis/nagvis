@@ -1526,10 +1526,12 @@ function getViewParams() {
     }
 
     if(!isset(oViewProperties['params']['width'])) {
-        sParams += '&width=' + escapeUrlValues(pageWidth());
+        oViewProperties['params']['width'] = pageWidth();
+        sParams += '&width=' + escapeUrlValues(oViewProperties['params']['width']);
     }
     if(!isset(oViewProperties['params']['height'])) {
-        sParams += '&height=' + escapeUrlValues(pageHeight() - getHeaderHeight());
+        oViewProperties['params']['height'] = pageHeight() - getHeaderHeight();
+        sParams += '&height=' + escapeUrlValues(oViewProperties['params']['height']);
     }
 
     return sParams;
