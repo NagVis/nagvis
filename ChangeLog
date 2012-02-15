@@ -13,6 +13,7 @@ Core
     audit_log parameter in [global] section)
   * Bugfix: Fixed problem with not real asynchronous ajax calls caused by
     locking PHP sessions
+  * Bugfix: Fixed update of states on overview page
 
 Frontend
   * Weathermap line color definitions support usage values above 100% and below 0%

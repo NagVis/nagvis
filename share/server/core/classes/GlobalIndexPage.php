@@ -42,7 +42,7 @@ class GlobalIndexPage {
         $this->htmlBase = cfg('paths','htmlbase');
     }
 
-    private function parseMapJson($mapType, $mapName, $what) {
+    private function parseMapJson($objectId, $mapType, $mapName, $what) {
         global $AUTHORISATION;
         // Check if the user is permitted to view this
         if($mapType == 'automap') {
@@ -53,7 +53,7 @@ class GlobalIndexPage {
                 return null;
         }
 
-        $map = Array();
+        $map = Array('object_id' => $objectId);
 
         if($mapType == 'automap')
             $MAPCFG = new NagVisAutomapCfg($this->CORE, $mapName);
@@ -61,7 +61,7 @@ class GlobalIndexPage {
             $MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
 
         if(!$MAPCFG->checkMapConfigExists(false)) {
-            return array('map', $this->mapError($mapType, $mapName, 'Map configuration file does not exist.'));
+            return array('automap', $this->mapError($mapType, $mapName, 'Map configuration file does not exist.'));
         }
 
         try {
@@ -73,9 +73,9 @@ class GlobalIndexPage {
 
             $objConf = $MAPCFG->getTypeDefaults('global');
         } catch(MapCfgInvalid $e) {
-            return array('map', $this->mapError($mapType, $mapName, $e->getMessage()));
+            return array('automap', $this->mapError($mapType, $mapName, $e->getMessage()));
         } catch(NagVisException $e) {
-            return array('map', $this->mapError($mapType, $mapName, $e->getMessage()));
+            return array('automap', $this->mapError($mapType, $mapName, $e->getMessage()));
         }
 
         if($mapType == 'automap')
@@ -114,9 +114,9 @@ class GlobalIndexPage {
             $MAP->MAPOBJ->fetchIcon();
 
             if($what === ONLY_STATE)
-                return array('map', array_merge($MAP->MAPOBJ->getObjectStateInformations(), $map));
+                return array('automap', array_merge($MAP->MAPOBJ->getObjectStateInformations(), $map));
             else
-                return array('map', array_merge($MAP->MAPOBJ->parseJson(), $map));
+                return array('automap', array_merge($MAP->MAPOBJ->parseJson(), $map));
         } else {
             if(cfg('index','showmapthumbs') == 1)
                 $map['overview_image'] = $this->renderMapThumb($MAPCFG);
@@ -138,7 +138,7 @@ class GlobalIndexPage {
     public function parseMapsJson($type, $what = COMPLETE, $objects = Array()) {
         global $_BACKEND;
         // initial parsing mode: Skip processing when this type of object should not be shown
-        if($type != 'list' && !cfg('index', 'show'.$type.'s') == 1)
+        if($type != 'list' && cfg('index', 'show'.$type.'s') != 1)
             return json_encode(Array());
 
         if($type == 'list')
@@ -150,23 +150,25 @@ class GlobalIndexPage {
 
         $aMaps = Array();
         $aObjs = Array();
-        foreach($mapList AS $mapName) {
+        foreach($mapList AS $objectId) {
             if($type == 'list') {
-                $a = explode('-', $mapName, 2);
+                $a = explode('-', $objectId, 2);
                 if(!isset($a[1]))
                     continue;
 
                 list($mapType, $mapName) = $a;
 
                 // list mode: Skip processing when this type of object should not be shown
-                if(!cfg('index', 'show'.$mapType.'s') == 1)
+                if(cfg('index', 'show'.$mapType.'s') != 1)
                     continue;
             } else {
-                $mapType = $type;
+                $mapName  = $objectId;
+                $mapType  = $type;
+                $objectId = $type . '-' . $mapName;
             }
 
             try {
-                $ret = $this->parseMapJson($mapType, $mapName, $what);
+                $ret = $this->parseMapJson($objectId, $mapType, $mapName, $what);
                 if($ret === null)
                     continue;
                 list($ty, $obj) = $ret;
@@ -175,13 +177,14 @@ class GlobalIndexPage {
                 continue;
             }
 
-            if($ty == 'map')
+            // Automap objects are already finished. No further processing needed.
+            if($ty == 'automap')
                 $aMaps[] = $obj;
             else
                 $aObjs[] = $obj;
         }
 
-        if($type == 'map') {
+        if($type != 'automap') {
             $_BACKEND->execute();
 
             foreach($aObjs AS $aObj) {

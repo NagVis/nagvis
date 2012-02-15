@@ -1930,18 +1930,20 @@ function workerUpdate(iCount, sType, sIdentifier) {
 
     if(sType === 'map' || sType === 'automap' || sType === 'overview') {
         var mod = 'Map';
+        var show = '&show=' + oPageProperties.map_name;
         if(sType === 'automap') {
             mod = 'AutoMap';
         } else if(sType === 'overview') {
             mod = 'Overview';
+            show = '';
         }
 
         // Get objects which need an update
         var arrObj = getObjectsToUpdate();
 
         // Get the updated objects via bulk request
-        getBulkRequest(oGeneralProperties.path_server+'?mod=' + mod + '&act=getObjectStates&show='
-                       + oPageProperties.map_name+'&ty=state'+getViewParams()+getFileAgeParams(),
+        getBulkRequest(oGeneralProperties.path_server+'?mod=' + mod + '&act=getObjectStates'
+                       + show +'&ty=state'+getViewParams()+getFileAgeParams(),
                        getUrlParts(arrObj), oWorkerProperties.worker_request_max_length,
                        false, handleUpdate, [ sType ]);
 
