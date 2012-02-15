@@ -12,34 +12,27 @@
 
 $filter_processed = false;
 
-function list_hostgroups() {
-    global $_BACKEND;
-    try {
-        $aRet = Array();
-        $objs = $_BACKEND->getBackend($_GET[''])->getObjects('hostgroup');
-        foreach($objs AS $obj) {
-            $aRet[] = $obj['name1'];
-        }
-        return $aRet;
-    } catch(BackendConnectionProblem $e) {
-        return array();
-    }
-}
-
 $viewParams = array_merge($viewParams, array(
     'filterGroup' => array(
         'default' => '',
-        'list'    => 'list_hostgroups',
+        'list'    => 'listHostgroupNames',
     )
 ));
 
-function filter_hostgroup($map_config) {
-    if(!isset($_GET['filterGroup']) || $_GET['filterGroup'] == '')
+function filter_hostgroup(&$map_config, $params) {
+    if($params['filterGroup'] == '')
         return;
 
-    //$filter_group = $_GET['filterGroup'];
-    //$_BACKEND->getBackend($map_config[0]['backend_id']);
     // FIXME: To be coded
+}
+
+function params_filter($MAPCFG, &$map_config) {
+    $p = array();
+
+    $p['backend_id'] = isset($_GET['backend_id']) ? $_GET['backend_id'] : $MAPCFG->getValue(0, 'backend_id');
+    $p['filterGroup'] = isset($_GET['filterGroup']) ? $_GET['filterGroup'] : '';
+    
+    return $p;
 }
 
 function process_filter($MAPCFG, $map_name, &$map_config, $explicit = true) {
@@ -49,7 +42,9 @@ function process_filter($MAPCFG, $map_name, &$map_config, $explicit = true) {
         return;
     $filter_processed = true;
 
-    filter_hostgroup($map_config);
+    $params = params_filter($MAPCFG, $map_config);
+
+    filter_hostgroup($map_config, $params);
 }
 
 ?>

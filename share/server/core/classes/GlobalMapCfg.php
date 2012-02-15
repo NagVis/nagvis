@@ -490,7 +490,12 @@ class GlobalMapCfg {
         foreach($params AS $param) {
             if(isset(self::$viewParams[$param])) {
                 $func = self::$viewParams[$param]['list'];
-                $values[$param] = $func($this->CORE);
+                try {
+                    $values[$param] = $func($this->CORE, $this, 0, array());
+                } catch(BackendConnectionProblem $e) {
+                    // FIXME: Show error message?
+                    $values[$param] = array();
+                }
             }
         }
         return $values;
@@ -509,6 +514,10 @@ class GlobalMapCfg {
             if(function_exists($func))
                 $params = array_merge($params, $func($this, $this->mapConfig));
         }
+
+        // Always add the filter params
+        $params = array_merge($params, params_filter($this, $this->mapConfig));
+
         return $params;
     }
 

@@ -201,8 +201,8 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     $map_config[0]['iconset']   = $iconset;
 
     // Now add the coordinates to the map objects
-    foreach($map_config AS $obj) {
-        if(!isset($obj['object_id']))
+    foreach($map_config AS &$obj) {
+        if(!isset($obj['lat']))
             continue;
 
         // Calculate the lat (y) coords
