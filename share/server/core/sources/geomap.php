@@ -41,7 +41,10 @@ function geomap_get_contents($url) {
 
         return file_get_contents($url, false, $context);
     } catch(Exception $e) {
-        throw new NagVisException(l('Unable to fetch URL "[U]" ([E]).', Array('U' => $url, 'E' => $e)));
+        throw new NagVisException(l('Unable to fetch URL "[U]".<br/><br />The geomap needs to be able to fetch '
+                                   .'some data from the internet via webservice API. Please take a look '
+                                   .'at the docs for more details.<br /><br /><small>[E]</small>',
+                                    Array('U' => $url, 'E' => $e)));
     }
 }
 

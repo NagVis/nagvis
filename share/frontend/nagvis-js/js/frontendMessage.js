@@ -175,7 +175,7 @@ function frontendMessage(oMessage, iTimeout, key) {
     oCell.setAttribute('class', sBoxType);
     oCell.setAttribute('className', sBoxType);
     oCell.colSpan = '3';
-    oCell.style.paddingTop = '16px';
+    oCell.style.padding = '16px';
     oCell.style.height = '202px';
     oCell.innerHTML = oMessage.message
 
