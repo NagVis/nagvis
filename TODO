@@ -3,10 +3,9 @@ This is a small file for storing quick thoughts about new features and needed ch
 
 Probleme:
   - Warnings anzeigen, wenn Funktionen aus oldPhpVersionFixes.php angezogen werden
-  - Geomap: bbox Limit?
   - Geomap: Javascript map as frontend?
   - Geomap: Max. resolution (limit of OSM/API?)
-  - Geomap: Make source file configurable
+  - Geomap: bbox Limit?
   - View params: "Make permanent"
   - Geomap: Dokumentation!
 

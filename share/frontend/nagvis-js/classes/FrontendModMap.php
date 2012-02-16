@@ -46,7 +46,8 @@ class FrontendModMap extends FrontendModule {
             'rotationStep'  => MATCH_INTEGER_EMPTY,
             'enableHeader'  => MATCH_BOOLEAN_EMPTY,
             'enableContext' => MATCH_BOOLEAN_EMPTY,
-            'enableHover'   => MATCH_BOOLEAN_EMPTY
+            'enableHover'   => MATCH_BOOLEAN_EMPTY,
+            'perm'          => MATCH_BOOLEAN_EMPTY,
         );
 
         // There might be a default map when none is given
@@ -110,6 +111,10 @@ class FrontendModMap extends FrontendModule {
         $MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
         // Read the map configuration file (Only global section!)
         $MAPCFG->readMapConfig(ONLY_GLOBAL);
+
+        // When 'perm' is set save the default_params
+        if($this->opts['perm'] === '1' && $AUTHORISATION->isPermitted('Map', 'edit', $this->name))
+            $this->saveDefaultParams($MAPCFG, $this->opts);
 
         // Build index template
         $INDEX = new NagVisIndexView($this->CORE);

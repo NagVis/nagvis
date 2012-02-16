@@ -314,5 +314,18 @@ abstract class CoreModule {
         else
             return null;
     }
+
+    /**
+     * Stores the given options as default params in the map config
+     */
+    protected function saveDefaultParams($MAPCFG, &$params) {
+        $s = '';
+        foreach($params AS $key => $val)
+            if($key !== 'perm')
+                $s .= '&'.$key.'='.$val;
+
+        $MAPCFG->setValue(0, 'default_params', $s);
+        $MAPCFG->storeUpdateElement(0);
+    }
 }
 ?>

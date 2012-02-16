@@ -38,24 +38,26 @@ class FrontendModAutoMap extends FrontendModule {
         $this->CORE = $CORE;
 
         // Parse the view specific options
-        $aOpts = Array('show' => MATCH_MAP_NAME,
-                       'search' => MATCH_STRING_NO_SPACE_EMPTY,
-                       'backend' => MATCH_STRING_NO_SPACE_EMPTY,
-                       'root' => MATCH_STRING_NO_SPACE_EMPTY,
-                       'childLayers' => MATCH_INTEGER_PRESIGN_EMPTY,
-                       'parentLayers' => MATCH_INTEGER_PRESIGN_EMPTY,
-                       'renderMode' => MATCH_AUTOMAP_RENDER_MODE,
-                       'width' => MATCH_INTEGER_EMPTY,
-                       'height' => MATCH_INTEGER_EMPTY,
-                       'ignoreHosts' => MATCH_STRING_NO_SPACE_EMPTY,
-                       'filterGroup' => MATCH_STRING_EMPTY,
-                       'filterByState' => MATCH_STRING_NO_SPACE_EMPTY,
-                       'rotation' => MATCH_ROTATION_NAME_EMPTY,
-                       'rotationStep' => MATCH_INTEGER_EMPTY,
-                       'enableHeader' => MATCH_BOOLEAN_EMPTY,
-                       'enableContext' => MATCH_BOOLEAN_EMPTY,
-                       'enableHover' => MATCH_BOOLEAN_EMPTY,
-                       'perm'          => MATCH_BOOLEAN_EMPTY);
+        $aOpts = Array(
+            'show' => MATCH_MAP_NAME,
+            'search' => MATCH_STRING_NO_SPACE_EMPTY,
+            'backend' => MATCH_STRING_NO_SPACE_EMPTY,
+            'root' => MATCH_STRING_NO_SPACE_EMPTY,
+            'childLayers' => MATCH_INTEGER_PRESIGN_EMPTY,
+            'parentLayers' => MATCH_INTEGER_PRESIGN_EMPTY,
+            'renderMode' => MATCH_AUTOMAP_RENDER_MODE,
+            'width' => MATCH_INTEGER_EMPTY,
+            'height' => MATCH_INTEGER_EMPTY,
+            'ignoreHosts' => MATCH_STRING_NO_SPACE_EMPTY,
+            'filterGroup' => MATCH_STRING_EMPTY,
+            'filterByState' => MATCH_STRING_NO_SPACE_EMPTY,
+            'rotation' => MATCH_ROTATION_NAME_EMPTY,
+            'rotationStep' => MATCH_INTEGER_EMPTY,
+            'enableHeader' => MATCH_BOOLEAN_EMPTY,
+            'enableContext' => MATCH_BOOLEAN_EMPTY,
+            'enableHover' => MATCH_BOOLEAN_EMPTY,
+            'perm'          => MATCH_BOOLEAN_EMPTY,
+        );
 
         // There might be a default map when none is given
         $aDefaults = Array('show' => cfg('global', 'startshow'));
@@ -108,16 +110,6 @@ class FrontendModAutoMap extends FrontendModule {
         return $sReturn;
     }
 
-    private function saveDefaultParams($MAPCFG) {
-        $s = '';
-        foreach($this->opts AS $key => $val)
-            if($key !== 'perm')
-                $s .= '&'.$key.'='.$val;
-
-        $MAPCFG->setValue(0, 'default_params', $s);
-        $MAPCFG->storeUpdateElement(0);
-    }
-
     private function showViewDialog() {
         global $AUTHORISATION;
 
@@ -128,8 +120,7 @@ class FrontendModAutoMap extends FrontendModule {
 
         // When 'perm' is set save the default_params
         if($this->opts['perm'] === '1' && $AUTHORISATION->isPermitted('AutoMap', 'edit', $this->name))
-            $this->saveDefaultParams($MAPCFG);
-        unset($this->opts['perm']);
+            $this->saveDefaultParams($MAPCFG, $this->opts);
 
         // Build index template
         $INDEX = new NagVisIndexView($this->CORE);

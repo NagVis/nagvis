@@ -64,7 +64,7 @@ if(!isset($viewParams))
     $viewParams = array();
 $viewParams = array_merge($viewParams, array(
     'type' => array(
-        'must'    => true,
+        'must'    => false,
         'default' => 'osmarender',
         'list'    => 'list_geomap_types',
     ),
@@ -74,6 +74,7 @@ $viewParams = array_merge($viewParams, array(
         'list'    => 'listBackendIds',
     ),
     'iconset' => array(
+        'must'    => false,
         'default' => 'std_dot',
         'list'    => 'listIconsets',
     ),
@@ -110,9 +111,10 @@ function params_geomap($MAPCFG, $map_config) {
 }
 
 function geomap_files($params) {
-    if(isset($params['source_file']))
-        unset($params['source_file']);
-    $image_name  = 'geomap-'.implode('_', array_values($params)).'.png';
+    $use_params = $params;
+    if(isset($use_params['source_file']))
+        unset($use_params['source_file']);
+    $image_name  = 'geomap-'.implode('_', array_values($use_params)).'.png';
     return array(
         $image_name,
         path('sys', '', 'backgrounds').'/'.$image_name,
@@ -121,18 +123,18 @@ function geomap_files($params) {
 }
 
 function process_geomap($MAPCFG, $map_name, &$map_config) {
+    $params = params_geomap($MAPCFG, $map_config);
+    list($image_name, $image_path, $data_path) = geomap_files($params);
+
+    // Load the list of locations
+    $locations = geomap_get_locations($params);
+
     // This source does not directly honor the existing map configs. It saves
     // the existing config to use it later for modifying some object parameters.
     // The existing map config must not create new objects. The truth about the
     // existing objects comes only from this source.
     $saved_config = $map_config;
     $map_config = array();
-
-    $params = params_geomap($MAPCFG, $map_config);
-    list($image_name, $image_path, $data_path) = geomap_files($params);
-
-    // Load the list of locations
-    $locations = geomap_get_locations($params);
 
     $iconset = $params['iconset'];
     // FIXME: Iconset size - gather automatically?
