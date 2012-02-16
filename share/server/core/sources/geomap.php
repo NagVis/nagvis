@@ -73,7 +73,6 @@ $viewParams = array_merge($viewParams, array(
     ),
     'iconset' => array(
         'must'    => false,
-        'default' => 'std_dot',
         'list'    => 'listIconsets',
     ),
     'source_file' => array(
@@ -91,7 +90,7 @@ function params_geomap($MAPCFG, $map_config) {
     $p['height']      = isset($_GET['height'])      ? $_GET['height']      : 860;
     $p['zoom']        = isset($_GET['zoom'])        ? $_GET['zoom']        : '';
     $p['type']        = isset($_GET['type'])        ? $_GET['type']        : $viewParams['type']['default'];
-    $p['iconset']     = isset($_GET['iconset'])     ? $_GET['iconset']     : $viewParams['iconset']['default'];
+    $p['iconset']     = isset($_GET['iconset'])     ? $_GET['iconset']     : $MAPCFG->getValue(0, 'iconset');
     $p['source_file'] = isset($_GET['source_file']) ? $_GET['source_file'] : $viewParams['source_file']['default'];
 
     // Fetch option array from defaultparams string (extract variable names and values)
@@ -120,6 +119,19 @@ function geomap_files($params) {
     );
 }
 
+function geomap_iconset_size($iconset) {
+    global $CORE;
+    $fileType = $CORE->getIconsetFiletype($iconset);
+    $iconPath      = path('sys',  'global', 'icons').'/'.$iconset.'_ok.'.$fileType;
+    $iconPathLocal = path('sys',  'local',  'icons').'/'.$iconset.'_ok.'.$fileType;
+    if(file_exists($iconPathLocal))
+        return getimagesize($iconPathLocal);
+    elseif(file_exists($iconPath))
+        return getimagesize($iconPath);
+    else
+        return array(0, 0);
+}
+
 function process_geomap($MAPCFG, $map_name, &$map_config) {
     $params = params_geomap($MAPCFG, $map_config);
     $params = array_merge(params_filter($MAPCFG, $map_config), $params);
@@ -136,9 +148,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     $map_config = array();
 
     $iconset = $params['iconset'];
-    // FIXME: Iconset size - gather automatically?
-    $icon_w  = 6;
-    $icon_h  = 6;
+    list($icon_w, $icon_h) = geomap_iconset_size($iconset);
 
     // Now add the objects to the map
     foreach($locations AS $loc) {

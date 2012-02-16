@@ -116,6 +116,16 @@ class FrontendModMap extends FrontendModule {
         if($this->opts['perm'] === '1' && $AUTHORISATION->isPermitted('Map', 'edit', $this->name))
             $this->saveDefaultParams($MAPCFG, $this->opts);
 
+        // Fetch option array from defaultparams string (extract variable names and values)
+        // But don't introduce new vars here. And don't override _GET vars
+        $def_params = explode('&', $MAPCFG->getValue(0, 'default_params'));
+        unset($def_params[0]);
+        foreach($def_params AS $set) {
+            $arrSet = explode('=', $set);
+            if(!isset($_GET[$arrSet[0]]))
+                $this->opts[$arrSet[0]] = $arrSet[1];
+        }
+
         // Build index template
         $INDEX = new NagVisIndexView($this->CORE);
 

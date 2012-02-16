@@ -10,6 +10,10 @@ Probleme:
   - View params: automap renderMode
   - Geomap: Dokumentation!
   - Geomap: Demo
+  - Parameter Handling mit default_params etc. aufräumen
+    - Funktion die sowohl in sourcen, als auch in den Frontend/Core Modulen aufgerufen werden kann
+    - Muss die Codierten Parameter, default_params und _GET Parameter verarbeiten
+    - Braucht MAPCFG Objekt um die vererbten Parameter zu holen
 
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
