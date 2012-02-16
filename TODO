@@ -14,6 +14,7 @@ Probleme:
     - Funktion die sowohl in sourcen, als auch in den Frontend/Core Modulen aufgerufen werden kann
     - Muss die Codierten Parameter, default_params und _GET Parameter verarbeiten
     - Braucht MAPCFG Objekt um die vererbten Parameter zu holen
+    - Verlinkte Geomaps: Statt _GET Parameter die default_params nehmen
 
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
