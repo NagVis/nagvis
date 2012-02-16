@@ -7,6 +7,7 @@ Probleme:
   - Geomap: Max. resolution (limit of OSM/API?)
   - Geomap: bbox Limit?
   - View params: "Make permanent"
+  - View params: automap renderMode
   - Geomap: Dokumentation!
 
 Relative Koordinaten:
