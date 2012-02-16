@@ -546,6 +546,13 @@ class GlobalMainCfg {
                     'default' => '',
                     'field_type' => 'hidden',
                     'match' => MATCH_STRING_PATH),
+                'geomap' => Array(
+                    'must'       => 0,
+                    'editable'   => 0,
+                    'default'    => '',
+                    'field_type' => 'hidden',
+                    'match'      => MATCH_STRING_PATH,
+                ),
                 'profiles' => Array('must' => 0,
                     'editable' => 0,
                     'default' => '',
