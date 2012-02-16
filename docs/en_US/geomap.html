@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>NagVis Geomap</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+  </head>
+    <body>
+        <h1>NagVis Geomap</h1>
+        <h2>Introduction</h2>
+        <p>The NagVis Geomap was introduced in NagVis 1.4.6. It has been developed to get well rendered
+        and scaled overview maps without much work.</p>
+        <p>The geomap renders several hosts on a <a href="">Open Street Map</a> powered map which is used
+        as background image.</p>
+        <p>For the current geomap all you need is a CSV file which tells NagVis the hosts to render and
+        the geo coordinates where the hosts should be positioned at.</p>
+
+        <h2>Prerequisites</h2>
+        <p>There is no special software needed on the NagVis host. But there is one special requirement. To
+        be able to use this feature, NagVis needs to be able to access the host <code>dev.openstreetmap.org</code>
+        via port 80. NagVis uses a simple HTTP based API to get the map image and the coordinates of that image.</p>
+        <p>In most cases the NagVis host does not have direct internet access. You can configure the <code>http_proxy</code>
+        option in the <code>[global]</code> section of your NagVis main configuration to tell NagVis to use
+         a proxy such requests.</p>
+        
+        <h2>The first call</h2>
+        <p>NagVis comes with a demo geomap called "demo-geomap". If your NagVis is configured correctly
+        you should see a map of germany with two nodes. One node is showing the host "ham-srv1" in Hamburg.
+        The other host "muc-srv1" is located in Munich.</p>
+
+        <p>The geomap is defined using the regular map configuration file "demo-geomap.cfg". The contents
+        look like this:</p>
+        
+        <pre>global {
+    sources=geomap
+    default_params=&source_file=demo-locations&width=800&height=600
+    alias=Demo: 4 Geomap
+    parent_map=demo-overview
+    iconset=std_medium
+    backend_id=demo
+}</pre>
+
+        <p>The <code>sources=geomap</code> line tells the map to use the geomap source for altering the
+        map configuration. The <code>source_file=demo-locations</code> definition tells the geomap source
+        to use the file <code>demo-locations.csv</code> located in the <code>etc/geomap</code> directory.</p>
+
+        <p>The <code>demo-locations.csv</code> file contains the following two lines:</p>
+
+        <code>ham-srv1;Hamburg Server 1;53.556866;9.994622
+muc-srv1;Munich Server1;48.1448353;11.5580067</code>
+
+        <p>Each line defines one host to be added to the map. The columns are separated by <code>;</code> signs.
+        The first colmn contains the host-name, the second an optional alias, the third the LAT coordinate and
+        the fourth then LONG coordinate.</p>
+        
+        <h2>Configuring geomaps</h2>
+        <p>There are no special map attributes for the geomaps. The geomap source uses view parameters for
+        configuration. For details take a look at the modify view dialog which can be opened using the header
+        menu "Actions -> Modify view".</p>
+    </body>
+</html>
