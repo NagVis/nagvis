@@ -1488,6 +1488,9 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
         LINE="Restoring custom automap configuration files..."
         restore "etc/automaps/" "automap configuration files" "/demo*.cfg"
     
+        LINE="Restoring custom geomap source files..."
+        restore "etc/geomap/" "geomap source files" "/demo*.csv"
+    
         LINE="Restoring user configuration files..."
         if [ -d $NAGVIS_PATH_BACKUP/etc/profiles ]; then
             restore "etc/profiles/" "user configuration files" ""

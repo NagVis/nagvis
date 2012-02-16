@@ -85,6 +85,7 @@ define('MATCH_ROLE_NAME', '/^[0-9A-Za-z_\-\.\@\s]+$/');
 define('MATCH_URI_PART', '/^[a-zA-Z0-9\-_]*$/');
 
 define('MATCH_CFG_FILE', '/^(.+)\.cfg$/i');
+define('MATCH_CSV_FILE', '/^(.+)\.csv$/i');
 define('MATCH_MP3_FILE', '/^(.+)\.mp3$/i');
 define('MATCH_HEADER_TEMPLATE_FILE', '/^(.+)\.header\.html$/i');
 define('MATCH_HOVER_TEMPLATE_FILE', '/^(.+)\.hover\.html$/i');

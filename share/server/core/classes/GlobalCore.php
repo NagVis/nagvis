@@ -348,6 +348,13 @@ class GlobalCore {
     }
 
     /**
+     * Reads all source files for the geomap in the specified path
+     */
+    public function getAvailableGeomapSourceFiles($strMatch = null, $setKey = null) {
+        return self::listDirectory(self::getMainCfg()->getValue('paths', 'geomap'), MATCH_CSV_FILE, null, $strMatch, null, $setKey);
+    }
+
+    /**
      * Reads all maps in mapcfg path
      *
      * @param   String  Regex to match the map name

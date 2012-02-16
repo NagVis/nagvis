@@ -1183,6 +1183,7 @@ class GlobalMainCfg {
     private function setPathsByBase($base, $htmlBase) {
         $this->validConfig['paths']['cfg']['default']                = $base.'etc/';
         $this->validConfig['paths']['mapcfg']['default']             = $base.'etc/maps/';
+        $this->validConfig['paths']['geomap']['default']             = $base.'etc/geomap';
         $this->validConfig['paths']['automapcfg']['default']         = $base.'etc/automaps/';
         $this->validConfig['paths']['profiles']['default']           = $base.'etc/profiles';
 

@@ -2,7 +2,7 @@
 
 function geomap_get_locations($p) {
     $locations = array();
-    $f = $p['source_file'];
+    $f = cfg('paths', 'geomap') . '/' . $p['source_file'] . '.csv';
 
     if($f == '')
         throw new NagVisException(l('No location source file given. Terminate rendering geomap.'));
@@ -53,10 +53,8 @@ function list_geomap_types() {
     );
 }
 
-function list_geomap_source_files() {
-    return array(
-        '/d1/nagvis/edklatlng.csv',
-    );
+function list_geomap_source_files($CORE) {
+    return $CORE->getAvailableGeomapSourceFiles();
 }
 
 global $viewParams;
@@ -267,7 +265,7 @@ function changed_geomap($MAPCFG, $compare_time) {
     if(!file_exists($image_path) || !file_exists($data_path))
         return true;
 
-    $t = filemtime($params['source_file']);
+    $t = filemtime(cfg('paths', 'geomap') . '/' . $params['source_file'] . '.csv');
     return $t > $compare_time;
 }
 
