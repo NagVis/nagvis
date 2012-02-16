@@ -51,14 +51,15 @@ function params_filter($MAPCFG, &$map_config) {
     return $p;
 }
 
-function process_filter($MAPCFG, $map_name, &$map_config, $explicit = true) {
+function process_filter($MAPCFG, $map_name, &$map_config, $params = null) {
     global $filter_processed;
     // Skip implicit calls if already processed explicit
-    if(!$explicit && $filter_processed)
+    if($params === null && $filter_processed)
         return;
     $filter_processed = true;
 
-    $params = params_filter($MAPCFG, $map_config);
+    if($params === null)
+        $params = params_filter($MAPCFG, $map_config);
 
     filter_hostgroup($map_config, $params);
 }

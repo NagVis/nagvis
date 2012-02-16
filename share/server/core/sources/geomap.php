@@ -122,6 +122,7 @@ function geomap_files($params) {
 
 function process_geomap($MAPCFG, $map_name, &$map_config) {
     $params = params_geomap($MAPCFG, $map_config);
+    $params = array_merge(params_filter($MAPCFG, $map_config), $params);
     list($image_name, $image_path, $data_path) = geomap_files($params);
 
     // Load the list of locations
@@ -154,7 +155,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     unset($locations);
 
     // Now apply the filters. Though the map can be scaled by the filtered hosts
-    process_filter($MAPCFG, $map_name, $map_config);
+    process_filter($MAPCFG, $map_name, $map_config, $params);
 
     // Terminate empty views
     if(count($map_config) == 0)

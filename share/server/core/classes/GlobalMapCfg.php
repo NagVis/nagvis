@@ -598,7 +598,7 @@ class GlobalMapCfg {
         }
 
         // Call process filter implicit if not already done
-        process_filter($this, $this->name, $this->mapConfig, false);
+        process_filter($this, $this->name, $this->mapConfig);
 
         // Write cache
         $CACHE->writeCache($this->mapConfig, 1);
