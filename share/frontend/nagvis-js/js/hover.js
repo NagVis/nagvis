@@ -131,7 +131,7 @@ function replaceHoverTemplateDynamicMacros(oObj) {
     if(isset(oPageProperties) && (oPageProperties.view_type === 'map' || oPageProperties.view_type === 'automap'))
         oMacros.map_name = oPageProperties.map_name;
 
-    oMacros.last_status_refresh = date(oGeneralProperties.date_format, oObj.lastUpdate/1000);
+    oMacros.last_status_refresh = date(oGeneralProperties.date_format, oObj.lastUpdate);
 
     oMacros.obj_state = oObj.conf.state;
     oMacros.obj_summary_state = oObj.conf.summary_state;

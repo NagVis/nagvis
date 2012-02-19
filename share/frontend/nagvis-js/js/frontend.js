@@ -278,7 +278,7 @@ function getObjectsToUpdate() {
 
     // Assign all object which need an update indexes to return Array
     for(var i in oMapObjects)
-        if(oMapObjects[i].lastUpdate <= (iNow-(oWorkerProperties.worker_update_object_states*1000)))
+        if(oMapObjects[i].lastUpdate <= iNow - oWorkerProperties.worker_update_object_states)
             // Do not update shapes where enable_refresh=0
             if(oMapObjects[i].conf.type !== 'shape'
                || (oMapObjects[i].conf.type === 'shape'
@@ -2010,7 +2010,7 @@ function runWorker(iCount, sType, sIdentifier) {
          * Do these actions every run (every second) excepting the first run
          */
 
-        iNow = Date.parse(new Date());
+        var iNow = String(Date.parse(new Date())).substr(0, 10);
 
         // Countdown the rotation counter
         // Not handled by ajax frontend. Reload the page with the new url

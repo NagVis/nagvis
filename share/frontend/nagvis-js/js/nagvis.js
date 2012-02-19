@@ -46,7 +46,7 @@ var validMapConfig = {};
 var validMainConfig = {};
 
 // Initialize and define some other basic vars
-var iNow = Date.parse(new Date());
+var iNow = String(Date.parse(new Date())).substr(0, 10);
 
 // Define some state options
 var oStates = {};
@@ -333,7 +333,7 @@ function updateWorkerCounter() {
     // write the time to refresh to header counter
     if(oWorkerCounter) {
         if(oWorkerProperties.last_run) {
-            oWorkerCounter.innerHTML = date(oGeneralProperties.date_format, oWorkerProperties.last_run/1000);
+            oWorkerCounter.innerHTML = date(oGeneralProperties.date_format, oWorkerProperties.last_run);
         }
     }
     oWorkerCounter = null;
