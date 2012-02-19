@@ -225,10 +225,10 @@ class NagVisObject {
 
         // When the childs don't need to be fetched this object is a child
         // itselfs. So much less information are needed. Progress them here
-    // If someone wants more information in hover menu children, this is
+        // If someone wants more information in hover menu children, this is
         // the place to change.
         if(!$bFetchChilds)
-      return $this->fetchObjectAsChild();
+            return $this->fetchObjectAsChild();
 
         // Need to remove some options which are not relevant
         // FIXME: Would be much better to name the needed vars explicit
@@ -242,10 +242,12 @@ class NagVisObject {
             );
 
         foreach($this AS $key => $val)
-            if(!isset(self::$arrDenyKeys[$key]))
+            if(!isset(self::$arrDenyKeys[$key]) && $val !== null)
                 $arr[$key] = $val;
 
-        $arr['num_members'] = $this->numMembers();
+        $num_members = $this->numMembers();
+        if($num_members !== null)
+            $arr['num_members'] = $this->numMembers();
 
         /**
          * FIXME: Find another place for that! This is a bad place for language strings!

@@ -28,6 +28,7 @@ Frontend
   * Reduced ajax calls during regular map updating
   * Switched ajax calls during view rendering to be asynchronous (Prevents
     locked up browsers during ajax calls)
+  * Suppressing transfer of non set attributes during ajax calls
   * Bugfix: Always remove the last frontend error message when clicking "close"
 
 1.6.3
