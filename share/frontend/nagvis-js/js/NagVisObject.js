@@ -960,8 +960,7 @@ var NagVisObject = Base.extend({
 
     needsContextMenu: function () {
         return this.conf.context_menu && this.conf.context_menu !== '' && this.conf.context_menu !== '0'
-            && this.conf.context_template && this.conf.context_template !== ''
-            && !this.bIsLocked;
+            && this.conf.context_template && this.conf.context_template !== '';
     },
 
     needsHoverMenu: function() {
