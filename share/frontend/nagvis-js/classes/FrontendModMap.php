@@ -30,9 +30,7 @@ class FrontendModMap extends FrontendModule {
     private $search = '';
     private $rotation = '';
     private $rotationStep = '';
-
-    private $opts;
-    private $viewOpts = Array();
+    private $perm = '';
 
     public function __construct(GlobalCore $CORE) {
         $this->sName = 'Map';
@@ -44,9 +42,6 @@ class FrontendModMap extends FrontendModule {
             'search'        => MATCH_STRING_NO_SPACE_EMPTY,
             'rotation'      => MATCH_ROTATION_NAME_EMPTY,
             'rotationStep'  => MATCH_INTEGER_EMPTY,
-            'enableHeader'  => MATCH_BOOLEAN_EMPTY,
-            'enableContext' => MATCH_BOOLEAN_EMPTY,
-            'enableHover'   => MATCH_BOOLEAN_EMPTY,
             'perm'          => MATCH_BOOLEAN_EMPTY,
         );
 
@@ -59,22 +54,7 @@ class FrontendModMap extends FrontendModule {
         $this->search       = $aVals['search'];
         $this->rotation     = $aVals['rotation'];
         $this->rotationStep = $aVals['rotationStep'];
-
-        $this->viewOpts['enableHeader']  = $aVals['enableHeader'];
-        $this->viewOpts['enableContext'] = $aVals['enableContext'];
-        $this->viewOpts['enableHover']   = $aVals['enableHover'];
-
-        // Add all GET parameters which are not handled here to the view params
-        $this->opts = $_GET;
-        unset($this->opts['mod']);
-        unset($this->opts['act']);
-        unset($this->opts['show']);
-        unset($this->opts['search']);
-        unset($this->opts['rotation']);
-        unset($this->opts['rotationStep']);
-        unset($this->opts['enableHeader']);
-        unset($this->opts['enableContext']);
-        unset($this->opts['enableHover']);
+        $this->perm         = $aVals['perm'];
 
         // Register valid actions
         $this->aActions = Array(
@@ -113,18 +93,11 @@ class FrontendModMap extends FrontendModule {
         $MAPCFG->readMapConfig(ONLY_GLOBAL);
 
         // When 'perm' is set save the default_params
-        if($this->opts['perm'] === '1' && $AUTHORISATION->isPermitted('Map', 'edit', $this->name))
-            $this->saveDefaultParams($MAPCFG, $this->opts);
+        if($this->perm == '1' && $AUTHORISATION->isPermitted('Map', 'edit', $this->name))
+            $MAPCFG->storeParams();
 
-        // Fetch option array from defaultparams string (extract variable names and values)
-        // But don't introduce new vars here. And don't override _GET vars
-        $def_params = explode('&', $MAPCFG->getValue(0, 'default_params'));
-        unset($def_params[0]);
-        foreach($def_params AS $set) {
-            $arrSet = explode('=', $set);
-            if(!isset($_GET[$arrSet[0]]))
-                $this->opts[$arrSet[0]] = $arrSet[1];
-        }
+        // Get all source parameters
+        $opts = $MAPCFG->getSourceParams();
 
         // Build index template
         $INDEX = new NagVisIndexView($this->CORE);
@@ -134,17 +107,8 @@ class FrontendModMap extends FrontendModule {
         if($customStylesheet !== '')
             $INDEX->setCustomStylesheet($this->CORE->getMainCfg()->getPath('html', 'global', 'styles', $customStylesheet));
 
-        // Header menu enabled/disabled by url?
-        if($this->viewOpts['enableHeader'] !== false && $this->viewOpts['enableHeader']) {
-            $showHeader = true;
-        } elseif($this->viewOpts['enableHeader'] !== false && !$this->viewOpts['enableHeader']) {
-            $showHeader = false;
-        } else {
-            $showHeader = $MAPCFG->getValue(0 ,'header_menu');
-        }
-
         // Need to parse the header menu by config or url value?
-        if($showHeader) {
+        if($opts['header_menu']) {
             // Parse the header menu
             $HEADER = new NagVisHeaderMenu($this->CORE, $this->UHANDLER, $MAPCFG->getValue(0 ,'header_template'), $MAPCFG);
 
@@ -158,13 +122,10 @@ class FrontendModMap extends FrontendModule {
 
         // Initialize map view
         $this->VIEW = new NagVisMapView($this->CORE, $this->name);
-        $this->VIEW->setParams($this->opts);
+        $this->VIEW->setParams($opts);
 
         // The user is searching for an object
         $this->VIEW->setSearch($this->search);
-
-        // Set view modificators (Hover, Context toggle)
-        $this->VIEW->setViewOpts($this->viewOpts);
 
         // Enable edit mode for all objects
         if($this->sAction == 'edit')

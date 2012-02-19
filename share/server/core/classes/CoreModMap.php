@@ -125,21 +125,18 @@ class CoreModMap extends CoreModule {
                     // Add source parameters
                     $MAPCFG = new GlobalMapCfg($this->CORE, $this->name);
                     $MAPCFG->readMapConfig(ONLY_GLOBAL);
-                    if($MAPCFG->getValue(0, 'sources') != '') {
-                        $params = $MAPCFG->getSourceParams();
-                        $VIEW->addOpts($params);
-                        
-                        // Mögliche Werte z.b. bei geomap "type" setzen $VIEW->setValues()
-                        $VIEW->setValues($MAPCFG->getSourceParamValues(array_keys($params)));
-                    }
+
+                    $params = $MAPCFG->getSourceParams();
+                    $VIEW->addOpts($params);
+                    $VIEW->setValues($MAPCFG->getSourceParamChoices(array_keys($params)));
 
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'doAdd':
                     $this->handleResponse('handleResponseAdd', 'doAdd',
-                                            l('The map has been created.'),
-                                                l('The map could not be created.'),
-                                                1, $this->htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$_POST['map']);
+                                          l('The map has been created.'),
+                                          l('The map could not be created.'),
+                                          1, $this->htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$_POST['map']);
                 break;
                 case 'doRename':
                     // if renamed map is open, redirect to new name
@@ -152,9 +149,9 @@ class CoreModMap extends CoreModule {
                         $map = $current;
 
                     $this->handleResponse('handleResponseRename', 'doRename',
-                                            l('The map has been renamed.'),
-                                                                l('The map could not be renamed.'),
-                                                                1, $this->htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$map);
+                                          l('The map has been renamed.'),
+                                          l('The map could not be renamed.'),
+                                          1, $this->htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$map);
                 break;
                 case 'checkLinked':
                     $sReturn = json_encode($this->checkLinked($this->name));
@@ -170,9 +167,9 @@ class CoreModMap extends CoreModule {
                         $url = $this->htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$current;
 
                     $this->handleResponse('handleResponseDelete', 'doDelete',
-                                            l('The map has been deleted.'),
-                                                                l('The map could not be deleted.'),
-                                                              1, $url);
+                                          l('The map has been deleted.'),
+                                          l('The map could not be deleted.'),
+                                          1, $url);
                 break;
                 case 'modifyObject':
                     $sReturn = $this->handleResponse('handleResponseModifyObject', 'doModifyObject',

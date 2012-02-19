@@ -3,19 +3,21 @@ This is a small file for storing quick thoughts about new features and needed ch
 
 Probleme:
   - Warnings anzeigen, wenn Funktionen aus oldPhpVersionFixes.php angezogen werden
+
+Zu tun:
   - Geomap: Javascript map as frontend?
   - Geomap: Max. resolution (limit of OSM/API?)
   - Geomap: bbox Limit?
-  - View params: "Make permanent"
-  - View params: automap renderMode
-  - Geomap: Dokumentation!
-  - Geomap: Demo
-  - Parameter Handling mit default_params etc. aufräumen
-    - Funktion die sowohl in sourcen, als auch in den Frontend/Core Modulen aufgerufen werden kann
-    - Muss die Codierten Parameter, default_params und _GET Parameter verarbeiten
-    - Braucht MAPCFG Objekt um die vererbten Parameter zu holen
-    - Verlinkte Geomaps: Statt _GET Parameter die default_params nehmen
-  - Geomap: Nagios custom macro
+  - Automap zu source umbauen
+  - Option zum persistieren der Optionen für einen selbst
+  - Boolean Feld in modify View Ansicht
+  - Modify View Parameter sortieren (Nach Namen)
+  - Remove default_params - deprecate the option
+  - Doku:
+    - Standard View Parameter
+    - View Parameter für geomap
+    - View Parameter für automap
+    - Alte zu neuen Automap Parametern
 
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
@@ -544,3 +546,21 @@ Das geht ziemlich auf die Usability.
 
   SESS->logout()
   CoreLogonMultisite->checkAuth()
+
+*** View Parameter ***
+
+- Aktuell kann man bei den Views eigene Parameter vorsehen, die die Werte aus z.b. _GET Variablen beziehen
+- Die Idee ist im Grunde, dass der Nutzer an der aktuellen Ansicht zur Laufzeit Dinge ändern kann
+- Die Default Werte für diese Parameter ziehen sich zum Teil aus der Option default_params der Global Sektion
+- Es gibt also folgende Quellen für die Werte der View Parameter:
+  - Maincfg (Default Wert)
+  - Mapcfg  (Default Wert)
+  - Hart-Codierter Default Wert
+  - default_param in Global Sektion
+  - _GET Parameter
+
+- Wäre es nicht toll wenn man alle Global-Optionen via URL anpassen könnte?
+- Die möglichen Optionen werden durch die Map Global Optionen und die Optionen aus den Sourcen definiert
+- Die Verarbeitung findet in der MapCfg Klasse statt, so dass die einzelnen Module sich da nicht drum kümmern müssen
+- Jede Source kann selbst !neue! Optionen registrieren
+- Zusätzlich kann jede Source festlegen welche Parameter für diese Source modifizierbar sein sollen

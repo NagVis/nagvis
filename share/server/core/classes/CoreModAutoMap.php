@@ -27,34 +27,10 @@
  */
 class CoreModAutoMap extends CoreModule {
     private $name = null;
-    private $aOpts = null;
-    private $opts = null;
 
     public function __construct(GlobalCore $CORE) {
         $this->sName = 'AutoMap';
         $this->CORE = $CORE;
-
-        $this->aOpts = Array('show' => MATCH_MAP_NAME,
-                       'backend' => MATCH_STRING_NO_SPACE_EMPTY,
-                       'root' => MATCH_STRING_NO_SPACE_EMPTY,
-                       'childLayers' => MATCH_INTEGER_PRESIGN_EMPTY,
-                       'parentLayers' => MATCH_INTEGER_PRESIGN_EMPTY,
-                       'renderMode' => MATCH_AUTOMAP_RENDER_MODE,
-                       'width' => MATCH_INTEGER_EMPTY,
-                       'height' => MATCH_INTEGER_EMPTY,
-                       'ignoreHosts' => MATCH_STRING_NO_SPACE_EMPTY,
-                       'filterGroup' => MATCH_STRING_EMPTY,
-                       'filterByState' => MATCH_STRING_NO_SPACE_EMPTY);
-
-        $aVals = $this->getCustomOptions($this->aOpts);
-        $this->name = $aVals['show'];
-        unset($aVals['show']);
-        $this->opts = $aVals;
-
-        // Save the automap name to use
-        $this->opts['automap'] = $this->name;
-        // Save the preview mode (Enables/Disables printing of errors)
-        $this->opts['preview'] = 0;
 
         // Register valid actions
         $this->aActions = Array(
@@ -68,6 +44,15 @@ class CoreModAutoMap extends CoreModule {
 
             'modifyObject'         => 'edit',
         );
+
+        // Parse the view specific options
+        $aOpts = Array(
+            'show' => MATCH_MAP_NAME,
+        );
+
+        // getCustomOptions fetches and validates the values
+        $aVals = $this->getCustomOptions($aOpts);
+        $this->name = $aVals['show'];
 
         // Register valid objects
         $this->aObjects = $this->CORE->getAvailableAutomaps(null, SET_KEYS);
@@ -104,29 +89,12 @@ class CoreModAutoMap extends CoreModule {
                     if(isset($this->name) && $this->name != '') {
                         $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
                         $MAPCFG->readMapConfig();
-
-                        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->opts, IS_VIEW);
-
-                        $opts = $MAP->getOptions();
-                        unset($opts['perm']);
-                        $VIEW->addOpts($opts);
+                        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, false, IS_VIEW);
                     }
 
-                    $VIEW->setValues(Array(
-                        'renderMode'    => Array(
-                            '',
-                            'directed',
-                            'undirected',
-                            'radial',
-                            'circular',
-                            'undirected2'
-                        ),
-                        // FIXME: root        => List of hosts in the backend
-                        // FIXME: filterGroup => Lists of hostgroups in the backend
-                        'show'          => $this->CORE->getAvailableAutomaps(),
-                        'backend'       => $this->CORE->getDefinedBackends(),
-                        'filterByState' => Array('0', '1'),
-                    ));
+                    $opts = $MAPCFG->getSourceParams();
+                    $VIEW->addOpts($opts);
+                    $VIEW->setValues($MAPCFG->getSourceParamChoices(array_keys($opts)));
 
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
@@ -208,7 +176,7 @@ class CoreModAutoMap extends CoreModule {
         $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
         $MAPCFG->readMapConfig();
 
-        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->opts, IS_VIEW);
+        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, false, IS_VIEW);
 
         if($this->sAction == 'parseAutomap') {
             $MAP->renderMap();
@@ -263,7 +231,7 @@ class CoreModAutoMap extends CoreModule {
         $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
         $MAPCFG->readMapConfig();
 
-        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->opts, IS_VIEW);
+        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, false, IS_VIEW);
 
         // Read position from graphviz and set it on the objects
         $MAP->setMapObjectPositions();
@@ -299,10 +267,10 @@ class CoreModAutoMap extends CoreModule {
             $MAPCFG->filterMapObjects($aVals['i']);
 
             // Filter by explicit list of host object ids
-            $this->opts['filterByIds'] = $aVals['i'];
+            $_GET['filter_by_ids'] = $aVals['i'];
         }
 
-        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, $this->opts, IS_VIEW);
+        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, false, IS_VIEW);
         $MAPOBJ = $MAP->MAPOBJ;
         return $MAP->parseObjectsJson($aVals['ty']);
     }

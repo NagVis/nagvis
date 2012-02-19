@@ -13,19 +13,28 @@
 global $filter_processed;
 $filter_processed = false;
 
+// options to be modyfiable by the user(url)
 global $viewParams;
-if(!isset($viewParams))
-    $viewParams = array();
-$viewParams = array_merge($viewParams, array(
-    'filterGroup' => array(
-        'must'    => false,
-        'default' => '',
-        'list'    => 'listHostgroupNames',
+$viewParams = array(
+    '*' => array(
+        'filter_group',
     )
-));
+);
+
+// Config variables to be registered for this source
+global $configVars;
+$configVars = array(
+    'filter_group' => array(
+        'must'       => false,
+        'default'    => '',
+        'match'      => MATCH_STRING_EMPTY,
+        'field_type' => 'dropdown',
+        'list'       => 'listHostgroupNames',
+    )
+);
 
 function filter_hostgroup(&$map_config, $p) {
-    if($p['filterGroup'] == '')
+    if(!isset($p['filter_group']) || $p['filter_group'] == '')
         return;
 
     // Initialize the backend
@@ -33,22 +42,13 @@ function filter_hostgroup(&$map_config, $p) {
     $_BACKEND->checkBackendExists($p['backend_id'], true);
     $_BACKEND->checkBackendFeature($p['backend_id'], 'getHostNamesInHostgroup', true);
 
-    $hosts = $_BACKEND->getBackend($p['backend_id'])->getHostNamesInHostgroup($p['filterGroup']);
+    $hosts = $_BACKEND->getBackend($p['backend_id'])->getHostNamesInHostgroup($p['filter_group']);
 
     // Remove all hosts not found in the hostgroup
     $hosts = array_flip($hosts);
     foreach($map_config AS $object_id => $obj)
         if(isset($obj['host_name']) && !isset($hosts[$obj['host_name']]))
             unset($map_config[$object_id]);
-}
-
-function params_filter($MAPCFG, &$map_config) {
-    $p = array();
-
-    $p['backend_id'] = isset($_GET['backend_id']) ? $_GET['backend_id'] : $MAPCFG->getValue(0, 'backend_id');
-    $p['filterGroup'] = isset($_GET['filterGroup']) ? $_GET['filterGroup'] : '';
-    
-    return $p;
 }
 
 function process_filter($MAPCFG, $map_name, &$map_config, $params = null) {
@@ -59,7 +59,7 @@ function process_filter($MAPCFG, $map_name, &$map_config, $params = null) {
     $filter_processed = true;
 
     if($params === null)
-        $params = params_filter($MAPCFG, $map_config);
+        $params = $MAPCFG->getSourceParams();
 
     filter_hostgroup($map_config, $params);
 }

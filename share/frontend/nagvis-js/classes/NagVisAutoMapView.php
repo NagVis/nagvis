@@ -30,10 +30,10 @@ class NagVisAutoMapView {
     private $CORE = null;
 
     private $name = '';
+    private $search = '';
     private $content = '';
     private $aRotation = Array();
     private $aParams = Array();
-    private $aViewOpts = Array();
 
     /**
      * Class Constructor
@@ -49,6 +49,16 @@ class NagVisAutoMapView {
 
     public function setContent($s) {
         $this->content = $s;
+    }
+
+    /**
+     * Set the search value if the user searches for an object
+     *
+     * @param   String    Search string
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function setSearch($s) {
+        $this->search = $s;
     }
 
     /**
@@ -69,16 +79,6 @@ class NagVisAutoMapView {
     }
 
     /**
-     * Set the view modificator options
-     *
-     * @param   Array
-     * @author  Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function setViewOpts($a) {
-        $this->aViewOpts = $a;
-    }
-
-    /**
      * Parses the map and the objects for the nagvis-js frontend
      *
      * @return	String 	String with JS Code
@@ -91,12 +91,19 @@ class NagVisAutoMapView {
         $USERCFG = new CoreUserCfg();
 
         $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
+        $MAPCFG->readMapConfig();
 
         $aData = Array(
                 'generalProperties'  => $this->CORE->getMainCfg()->parseGeneralProperties(),
                 'workerProperties'   => $this->CORE->getMainCfg()->parseWorkerProperties(),
                 'rotationProperties' => json_encode($this->aRotation),
-                'viewProperties'     => $this->parseViewProperties(),
+                'viewProperties'     => json_encode(array(
+                    'search'        => $this->search,
+                    'enableHover'   => $this->aParams['hover_menu'],
+                    'enableContext' => $this->aParams['context_menu'],
+                    // only take the user supplied coords
+                    'params'        => $MAPCFG->getSourceParams(true),
+                )),
                 'stateProperties'    => json_encode($this->CORE->getMainCfg()->getStateWeight()),
                 'userProperties'     => $USERCFG->doGetAsJson(),
                 'mapName'            => $this->name,
@@ -109,36 +116,6 @@ class NagVisAutoMapView {
 
     // Build page based on the template file and the data array
     return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'automap'), $aData);
-    }
-
-    /**
-     * Parses the view specific properties. In most cases this will be user
-     * defined values which maybe given by url or session
-     *
-     * @return  String  JSON array
-     * @author  Lars Michelsen <lars@vertical-visions.de>
-     */
-    private function parseViewProperties() {
-        $arr = Array();
-
-        // View specific search set
-        if($this->aViewOpts['enableHover'] !== false) {
-            $arr['search'] = $this->aViewOpts['search'];
-        }
-
-        // View specific hover modifier set
-        if($this->aViewOpts['enableHover'] !== false) {
-            $arr['enableHover'] = $this->aViewOpts['enableHover'];
-        }
-
-        // View specific context modifier set
-        if($this->aViewOpts['enableContext'] !== false) {
-            $arr['enableContext'] = $this->aViewOpts['enableContext'];
-        }
-
-        $arr['params'] = $this->aParams;
-
-        return json_encode($arr);
     }
 }
 ?>

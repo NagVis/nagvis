@@ -60,55 +60,39 @@ function list_geomap_source_files($CORE) {
     return $CORE->getAvailableGeomapSourceFiles();
 }
 
+// options to be modyfiable by the user(url)
 global $viewParams;
-if(!isset($viewParams))
-    $viewParams = array();
-$viewParams = array_merge($viewParams, array(
-    'type' => array(
-        'must'    => false,
-        'default' => 'osmarender',
-        'list'    => 'list_geomap_types',
-    ),
-    'backend_id' => array(
-        'must'    => false,
-        'default' => '',
-        'list'    => 'listBackendIds',
-    ),
-    'iconset' => array(
-        'must'    => false,
-        'list'    => 'listIconsets',
+$viewParams = array(
+    'geomap' => array(
+        'zoom',
+        'geomap_type',
+        'source_file',
+    )
+);
+
+// Config variables to be registered for this source
+global $configVars;
+$configVars = array(
+    'geomap_type' => array(
+        'must'       => false,
+        'default'    => 'osmarender',
+        'match'      => '/^(osmarender|mapnik|cycle)$/i',
+        'field_type' => 'dropdown',
+        'list'       => 'list_geomap_types',
     ),
     'source_file' => array(
-        'default' => '',
-        'list'    => 'list_geomap_source_files',
+        'must'       => false,
+        'default'    => '',
+        'match'      => MATCH_STRING_EMPTY,
+        'field_type' => 'dropdown',
+        'list'       => 'list_geomap_source_files',
     ),
-));
-
-function params_geomap($MAPCFG, $map_config) {
-    global $viewParams;
-    $p = array();
-
-    $p['backend_id']  = isset($_GET['backend_id'])  ? $_GET['backend_id']  : $MAPCFG->getValue(0, 'backend_id');
-    $p['width']       = isset($_GET['width'])       ? $_GET['width']       : 1700;
-    $p['height']      = isset($_GET['height'])      ? $_GET['height']      : 860;
-    $p['zoom']        = isset($_GET['zoom'])        ? $_GET['zoom']        : '';
-    $p['type']        = isset($_GET['type'])        ? $_GET['type']        : $viewParams['type']['default'];
-    $p['iconset']     = isset($_GET['iconset'])     ? $_GET['iconset']     : $MAPCFG->getValue(0, 'iconset');
-    $p['source_file'] = isset($_GET['source_file']) ? $_GET['source_file'] : $viewParams['source_file']['default'];
-
-    // Fetch option array from defaultparams string (extract variable names and values)
-    // But don't introduce new vars here. And don't override _GET vars
-    $def_params = explode('&', $MAPCFG->getValue(0, 'default_params'));
-    unset($def_params[0]);
-
-    foreach($def_params AS $set) {
-        $arrSet = explode('=', $set);
-        if(isset($p[$arrSet[0]]) && !isset($_GET[$arrSet[0]]))
-            $p[$arrSet[0]] = $arrSet[1];
-    }
-
-    return $p;
-}
+    'zoom' => array(
+        'must'       => false,
+        'default'    => '',
+        'match'      => MATCH_INTEGER_EMPTY,
+    ),
+);
 
 function geomap_files($params) {
     $use_params = $params;
@@ -136,8 +120,7 @@ function geomap_iconset_size($iconset) {
 }
 
 function process_geomap($MAPCFG, $map_name, &$map_config) {
-    $params = params_geomap($MAPCFG, $map_config);
-    $params = array_merge(params_filter($MAPCFG, $map_config), $params);
+    $params = $MAPCFG->getSourceParams();
     list($image_name, $image_path, $data_path) = geomap_files($params);
 
     // Load the list of locations
@@ -206,7 +189,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     $url = 'http://dev.openstreetmap.org/~pafciu17/'
           .'?module=map&bbox='.$min_long.','.$max_lat.','.$max_long.','.$min_lat
           .'&width='.$params['width'].'&height='.$params['height']
-          .'&type='.$params['type'];
+          .'&type='.$params['geomap_type'];
           //.'&points='.$min_long.','.$max_lat.';'.$max_long.','.$min_lat;
     if($params['zoom'] != '')
         $url .= '&zoom='.$params['zoom'];
@@ -273,7 +256,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
  * or when either the image file or the data file do not exist
  */
 function changed_geomap($MAPCFG, $compare_time) {
-    $params = params_geomap($MAPCFG, array());
+    $params = $MAPCFG->getSourceParams();
 
     list($image_name, $image_path, $data_path) = geomap_files($params);
     if(!file_exists($image_path) || !file_exists($data_path))

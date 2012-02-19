@@ -28,6 +28,7 @@
  */
 class NagVisViewModifyParams {
     private $opts = array();
+    private $optValues = array();
 
     /**
      * Class Constructor
@@ -35,26 +36,7 @@ class NagVisViewModifyParams {
      * @param 	GlobalCore 	$CORE
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function __construct() {
-	$this->opts = $_GET;
-        unset($this->opts['mod']);
-        unset($this->opts['act']);
-        unset($this->opts['show']);
-        unset($this->opts['search']);
-        unset($this->opts['rotation']);
-        unset($this->opts['rotationStep']);
-        unset($this->opts['enableHeader']);
-        unset($this->opts['enableContext']);
-        unset($this->opts['enableHover']);
-        unset($this->opts['_t']);
-        unset($this->opts['submit']);
-        if(!isset($this->opts['width']))
-            $this->opts['width'] = '';
-        if(!isset($this->opts['height']))
-            $this->opts['height'] = '';
-
-        $this->optValues = array();
-    }
+    public function __construct() {}
 
     public function setValues($arr) {
         $this->optValues = $arr;
@@ -80,15 +62,15 @@ class NagVisViewModifyParams {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-	    'mod'         => $_GET['mod'],
-            'act'         => 'view',
-            'show'        => $_GET['show'],
-            'htmlBase'    => cfg('paths', 'htmlbase'),
-            'opts'        => $this->opts,
-            'optValues'   => $this->optValues,
-            'langApply'       => l('Apply'),
-            'langPermanent'   => l('Make Permanent'),
-            'permAutomapEdit' => $CORE->getAuthorization()->isPermitted($_GET['mod'], 'edit', $_GET['show']),
+	    'mod'           => $_GET['mod'],
+            'act'           => 'view',
+            'show'          => $_GET['show'],
+            'htmlBase'      => cfg('paths', 'htmlbase'),
+            'opts'          => $this->opts,
+            'optValues'     => $this->optValues,
+            'langApply'     => l('Apply'),
+            'langPermanent' => l('Make Permanent'),
+            'permEdit'      => $CORE->getAuthorization()->isPermitted($_GET['mod'], 'edit', $_GET['show']),
         );
 
         // Build page based on the template file and the data array

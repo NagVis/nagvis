@@ -53,6 +53,8 @@ class NagVisAutomapCfg extends GlobalMapCfg {
         // Start of the parent constructor
         parent::__construct($CORE, $this->name);
 
+        parent::$validConfig['global']['sources']['default'] = array('automap');
+
         // Modify must values -> coords don't need to be set
         parent::$validConfig['host']['x']['must'] = 0;
         parent::$validConfig['host']['y']['must'] = 0;

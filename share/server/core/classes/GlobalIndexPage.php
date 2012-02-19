@@ -80,7 +80,7 @@ class GlobalIndexPage {
 
         if($mapType == 'automap')
             // Only set overview specific automap params here. The default_params are added in the NagVisAutomap cnstructor
-            $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, Array('automap' => $mapName, 'preview' => 1), !IS_VIEW);
+            $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, true, !IS_VIEW);
         else
             $MAP = new NagVisMap($this->CORE, $MAPCFG, GET_STATE, !IS_VIEW);
 

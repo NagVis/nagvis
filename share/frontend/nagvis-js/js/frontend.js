@@ -455,6 +455,7 @@ function getContextTemplates() {
         // FIXME: conf.context_menu has inconsistent types (with and without quotes)
         //        fix this and  === can be used here
         if(isset(oMapObjects[i].conf.context_menu) && oMapObjects[i].conf.context_menu == 1
+           && isset(oMapObjects[i].conf.context_template)
            && (!isset(oContextTemplates[oMapObjects[i].conf.context_template]) || oContextTemplates[oMapObjects[i].conf.context_template] === ''))
             oContextTemplates[oMapObjects[i].conf.context_template] = '';
 

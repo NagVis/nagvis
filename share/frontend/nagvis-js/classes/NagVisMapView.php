@@ -31,7 +31,6 @@ class NagVisMapView {
     private $name      = '';
     private $search    = '';
     private $aRotation = Array();
-    private $aViewOpts = Array();
     private $editMode  = false;
     private $aParams   = Array();
 
@@ -72,16 +71,6 @@ class NagVisMapView {
      */
     public function setParams($a) {
         $this->aParams = $a;
-    }
-
-    /**
-     * Set the view modificator options
-     *
-     * @param   Array
-     * @author  Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function setViewOpts($a) {
-        $this->aViewOpts = $a;
     }
 
     public function setEditMode() {
@@ -138,17 +127,12 @@ class NagVisMapView {
         $arr['grid_steps']     = intval($this->MAPCFG->getValue(0, 'grid_steps'));
         $arr['permitted_edit'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Map', 'edit', $this->name);
 
-        // View specific hover modifier set
-        if($this->aViewOpts['enableHover'] !== false) {
-            $arr['enableHover'] = $this->aViewOpts['enableHover'];
-        }
+        // View specific modifier set
+        $arr['enableHover']   = $this->aParams['hover_menu'];
+        $arr['enableContext'] = $this->aParams['context_menu'];
 
-        // View specific context modifier set
-        if($this->aViewOpts['enableContext'] !== false) {
-            $arr['enableContext'] = $this->aViewOpts['enableContext'];
-        }
-
-        $arr['params'] = $this->aParams;
+        // only take the user supplied coords
+        $arr['params'] = $this->MAPCFG->getSourceParams(true);
 
         return json_encode($arr);
     }

@@ -46,8 +46,7 @@ class GlobalMapCfg {
     protected static $validConfig = null;
 
     // Array for holding the registered map sources
-    protected static $mapSources = null;
-    protected static $viewParams = null;
+    protected static $viewParams = array();
 
     /**
      * Class Constructor
@@ -59,7 +58,7 @@ class GlobalMapCfg {
         if(self::$validConfig == null)
             $this->fetchValidConfig();
 
-        if(self::$mapSources == null)
+        if(self::$viewParams == null)
             $this->fetchMapSources();
 
         $this->mapLockPath = cfg('paths', 'mapcfg').$this->name.'.lock';
@@ -152,7 +151,6 @@ class GlobalMapCfg {
             'context_template',
             'hover_menu',
             'hover_template',
-            'hover_timeout',
             'hover_delay',
             'hover_url',
             'label_show',
@@ -471,25 +469,40 @@ class GlobalMapCfg {
      * Performs the initial map source loading
      */
     private function fetchMapSources() {
-        $viewParams = array();
         foreach($this->CORE->getAvailableSources() AS $source_file) {
+            $viewParams = array();
+            $configVars = array();
+
             if(file_exists(path('sys', 'local', 'sources'))) {
                 include_once(path('sys', 'local', 'sources') . '/'. $source_file);
             } else {
                 include_once(path('sys', 'global', 'sources') . '/'. $source_file);
             }
+
+            // Add the view params of that source to the list of parameters
+            foreach($viewParams AS $source => $val) {
+                if(isset(self::$viewParams[$source]))
+                    self::$viewParams[$source] = array_merge(self::$viewParams[$source], $val);
+                else
+                    self::$viewParams[$source] = $val;
+            }
+
+            // Also feed the valid config array to get the options from the sources
+            foreach($configVars AS $key => $val) {
+                self::$validConfig['global'][$key] = $val;
+            }
         }
-        self::$viewParams = $viewParams;
     }
 
     /**
      * Returns possible options for the source params to make them selectable by lists
      */
-    public function getSourceParamValues($params) {
+    public function getSourceParamChoices($params) {
         $values = array();
+        $validConfig = self::$validConfig['global'];
         foreach($params AS $param) {
-            if(isset(self::$viewParams[$param])) {
-                $func = self::$viewParams[$param]['list'];
+            if(isset($validConfig[$param]) && isset($validConfig[$param]['list'])) {
+                $func = $validConfig[$param]['list'];
                 try {
                     $vals = $func($this->CORE, $this, 0, array());
 
@@ -503,8 +516,7 @@ class GlobalMapCfg {
                         $vals = $new;
                     }
 
-                    if(isset(self::$viewParams[$param]['must'])
-                       && self::$viewParams[$param]['must'] == false) {
+                    if(isset($validConfig[$param]['must']) && $validConfig[$param]['must'] == false) {
                         $values[$param] = array_merge(array('' => ''), $vals);
                     } else {
                         $values[$param] = $vals;
@@ -520,32 +532,63 @@ class GlobalMapCfg {
 
     /**
      * Returns an assiziative array of all parameters with values for all sources
+     * used on the current map
      */
-    public function getSourceParams() {
-        if(!isset($this->mapConfig[0]['sources']))
-            return array();
-        
-        $params = array();
-        foreach($this->mapConfig[0]['sources'] AS $source) {
-            $func = 'params_'.$source;
-            if(function_exists($func))
-                $params = array_merge($params, $func($this, $this->mapConfig));
+    public function getSourceParams($only_user_supplied = false, $only_customized = false) {
+        // First get a flat list of all parameters of all sources
+
+        if(isset(self::$viewParams['*']))
+            $keys = self::$viewParams['*'];
+        else
+            $keys = array();
+
+        $sources = $this->getValue(0, 'sources');
+        if($sources) {
+            foreach($sources AS $source) {
+                $keys = array_merge($keys, self::$viewParams[$source]);
+            }
         }
 
-        // Always add the filter params
-        $params = array_merge($params, params_filter($this, $this->mapConfig));
+        // Now get the values. First try to fetch the value by _GET parameter (if allowed)
+        // Otherwise use the value from mapcfg or default coded value
+        $params = array();
+        foreach($keys AS $key) {
+            if(isset($_GET[$key])) {
+                if($only_customized && $_GET[$key] != $this->getValue(0, $key)) {
+                    // Only get options which differ from the defaults
+                    $params[$key] = $_GET[$key];
+                } else {
+                    $params[$key] = $_GET[$key];
+                }
+            } elseif(!$only_user_supplied) {
+                $params[$key] = $this->getValue(0, $key);
+            }
+        }
 
         return $params;
+    }
+
+    /**
+     * Stores the user given options as parameters in the map configuration when
+     * the user requested this.
+     */
+    public function storeParams() {
+        // FIXME: Only make permanent for current user. Make it optinally
+        // permanent for all users by a second flag
+        foreach($this->getSourceParams(true) AS $param => $value)
+            $this->setValue(0, $param, $value);
+        $this->storeUpdateElement(0);
     }
 
     /**
      * Returns true on the first source which reports it has changed.
      */
     private function sourcesChanged($compareTime) {
-        if(!isset($this->mapConfig[0]['sources']))
+        $sources = $this->getValue(0, 'sources');
+        if(!$sources)
             return false;
 
-        foreach($this->mapConfig[0]['sources'] AS $source) {
+        foreach($sources AS $source) {
             $func = 'changed_'.$source;
             if($func($this, $compareTime))
                 return true;
@@ -564,11 +607,13 @@ class GlobalMapCfg {
      */
     private function processSources() {
         global $_MAINCFG;
-        if(!isset($this->mapConfig[0]['sources']))
+        $sources = $this->getValue(0, 'sources');
+        if(!$sources)
             return;
 
         // 1.  Check if there is a cache file for a query with this params
         $params = $this->getSourceParams();
+        // FIXME: Add a flag to exclude options from cache file naming
         if(isset($params['source_file']))
             unset($params['source_file']);
         $param_values = implode('_', array_values($params));
@@ -589,7 +634,7 @@ class GlobalMapCfg {
         }
 
         // 3b. Process all the sources
-        foreach($this->mapConfig[0]['sources'] AS $source) {
+        foreach($sources AS $source) {
             $func = 'process_'.$source;
             if(!function_exists($func))
                 throw new NagVisException(l('Requested source "[S]" does not exist',
@@ -763,7 +808,7 @@ class GlobalMapCfg {
                     if(!isset($element[$key]) || $element[$key] == '') {
                         throw new $exception(l('mapCfgMustValueNotSet',
                                              Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key,
-                                                                       'TYPE'    => $type,       'ID'        => $id)));
+                                                   'TYPE'    => $type,       'ID'        => $id)));
                     }
                 }
             }
