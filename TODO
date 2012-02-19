@@ -12,7 +12,6 @@ Zu tun:
   - Option zum persistieren der Optionen für einen selbst
   - Boolean Feld in modify View Ansicht
   - Modify View Parameter sortieren (Nach Namen)
-  - Remove default_params - deprecate the option
   - Doku:
     - Standard View Parameter
     - View Parameter für geomap

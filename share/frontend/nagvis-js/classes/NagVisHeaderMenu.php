@@ -168,12 +168,10 @@ class NagVisHeaderMenu {
             $map['mapAlias'] = $MAPCFG1->getValue(0, 'alias');
             $map['childs'] = Array();
             if($type == 'maps') {
-                $map['urlParams'] = '';
                 $map['permittedEdit'] = $AUTHORISATION->isPermitted('Map', 'edit', $mapName);
 
                 $permEditAnyMap |= $map['permittedEdit'];
-            } else
-                $map['urlParams'] = str_replace('&', '&amp;', $MAPCFG1->getValue(0, 'default_params'));
+            }
 
             // auto select current map and apply map specific optins to the header menu
             if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName()) {

@@ -79,7 +79,7 @@ class GlobalIndexPage {
         }
 
         if($mapType == 'automap')
-            // Only set overview specific automap params here. The default_params are added in the NagVisAutomap cnstructor
+            // Only set overview specific automap params here
             $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, true, !IS_VIEW);
         else
             $MAP = new NagVisMap($this->CORE, $MAPCFG, GET_STATE, !IS_VIEW);
@@ -91,7 +91,7 @@ class GlobalIndexPage {
 
         if($MAP->MAPOBJ->checkMaintenance(0)) {
             if($mapType == 'automap')
-                $map['overview_url']    = $this->htmlBase.'/index.php?mod=AutoMap&act=view&show='.$mapName.$MAPCFG->getValue(0, 'default_params');
+                $map['overview_url']    = $this->htmlBase.'/index.php?mod=AutoMap&act=view&show='.$mapName;
             else
                 $map['overview_url']    = $this->htmlBase.'/index.php?mod=Map&act=view&show='.$mapName;
 

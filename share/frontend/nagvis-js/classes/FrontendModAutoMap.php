@@ -111,7 +111,7 @@ class FrontendModAutoMap extends FrontendModule {
         $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
         $MAPCFG->readMapConfig();
 
-        // When 'perm' is set save the default_params
+        // When 'perm' is set save the user set options
         if($this->perm == '1' && $AUTHORISATION->isPermitted('AutoMap', 'edit', $this->name))
             $MAPCFG->storeParams();
 

@@ -187,6 +187,7 @@ $mapConfigVars = Array(
     'default_params' => Array(
         'must'       => 0,
         'default'    => '',
+        'deprecated' => true,
         'match'      => MATCH_STRING_URL_EMPTY,
         'field_type' => 'hidden',
     ),
