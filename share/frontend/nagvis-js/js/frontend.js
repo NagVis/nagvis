@@ -282,8 +282,8 @@ function getObjectsToUpdate() {
             // Do not update shapes where enable_refresh=0
             if(oMapObjects[i].conf.type !== 'shape'
                || (oMapObjects[i].conf.type === 'shape'
-                     && oMapObjects[i].conf.enable_refresh
-                         && oMapObjects[i].conf.enable_refresh == '1'))
+                   && oMapObjects[i].conf.enable_refresh
+                   && oMapObjects[i].conf.enable_refresh == '1'))
                 arrReturn.push(i);
 
     // Now spread the objects in the available timeslots
@@ -327,8 +327,9 @@ function getHoverUrls() {
     // Loop all map objects to get the urls which need to be fetched
     for(var i in oMapObjects) {
         if(oMapObjects[i].conf.hover_menu && oMapObjects[i].conf.hover_menu == 1
-           && oMapObjects[i].conf.hover_url && oMapObjects[i].conf.hover_url !== '')
+           && oMapObjects[i].conf.hover_url && oMapObjects[i].conf.hover_url !== '') {
             oHoverUrls[oMapObjects[i].conf.hover_url] = '';
+        }
     }
 
     // Build string for bulk fetching the templates
@@ -357,7 +358,7 @@ function getHoverUrls() {
  */
 function parseHoverMenus() {
     for(var i in oMapObjects)
-        if(oMapObjects[i].conf.hover_menu && oMapObjects[i].conf.hover_menu !== '0')
+        if(oMapObjects[i].needsHoverMenu())
             oMapObjects[i].parseHoverMenu();
 }
 
@@ -400,8 +401,9 @@ function getHoverTemplates() {
         if(isset(oMapObjects[i].conf.hover_menu) && oMapObjects[i].conf.hover_menu == '1'
            && (!oMapObjects[i].conf.hover_url || oMapObjects[i].conf.hover_url === '')
            && isset(oMapObjects[i].conf.hover_template)
-           && (!isset(oHoverTemplates[oMapObjects[i].conf.hover_template]) || oHoverTemplates[oMapObjects[i].conf.hover_template] === ''))
+           && (!isset(oHoverTemplates[oMapObjects[i].conf.hover_template]) || oHoverTemplates[oMapObjects[i].conf.hover_template] === '')) {
             oHoverTemplates[oMapObjects[i].conf.hover_template] = '';
+        }
     }
 
     // Build string for bulk fetching the templates
@@ -502,8 +504,7 @@ function getContextTemplates() {
  */
 function parseContextMenus() {
     for(var i in oMapObjects)
-        if((oMapObjects[i].conf.context_menu && oMapObjects[i].conf.context_menu != '0')
-           || !oMapObjects[i].bIsLocked)
+        if(oMapObjects[i].needsContextMenu())
             oMapObjects[i].parseContextMenu();
 }
 

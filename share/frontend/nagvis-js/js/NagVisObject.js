@@ -958,12 +958,20 @@ var NagVisObject = Base.extend({
         this.drawLine();
     },
 
+    needsContextMenu: function () {
+        return this.conf.context_menu && this.conf.context_menu !== '' && this.conf.context_menu !== '0'
+            && this.conf.context_template && this.conf.context_template !== ''
+            && !this.bIsLocked;
+    },
+
+    needsHoverMenu: function() {
+        return this.conf.hover_menu && this.conf.hover_menu !== ''
+            && ((this.conf.url && this.conf.url !== '' && this.conf.url !== '#')
+                || (this.conf.hover_template && this.conf.hover_template !== ''))
+    },
 
     needsLineHoverArea: function() {
-        return (this.conf.url && this.conf.url !== '' && this.conf.url !== '#')
-            || (this.conf.hover_menu && this.conf.hover_menu !== '')
-            || (this.conf.context_menu && this.conf.context_menu !== '')
-            || !this.bIsLocked;
+        return this.needsHoverMenu() || this.needsContextMenu() || !this.bIsLocked;
     },
 
     parseLineHoverArea: function(oContainer) {
