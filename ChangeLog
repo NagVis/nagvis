@@ -15,6 +15,13 @@ Core
     locking PHP sessions
   * Bugfix: Fixed update of states on overview page
 
+Automap
+  * Added new parameter "margin" to control the offset of the automap to the
+    edge of the map
+  * Recoded all automap parameters. All camel case options have been changed
+    to underscore separated vars (e.g. childLayers -> child_layers). These
+    options are now available in the global section of the automaps.
+
 Frontend
   * Weathermap line color definitions support usage values above 100% and below 0%
   * Better error handling during coord parsing

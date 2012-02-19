@@ -13,6 +13,7 @@ $viewParams = array(
         'child_layers',
         'parent_layers',
         'ignore_hosts',
+        'margin',
     ),
 );
 
@@ -91,6 +92,12 @@ $configVars = array(
         'must'       => false,
         'default'    => '',
         'match'      => MATCH_STRING_NO_SPACE_EMPTY,
+    ),
+
+    'margin' => array(
+        'must'       => false,
+        'default'    => '0.3',
+        'match'      => MATCH_FLOAT_EMPTY,
     ),
 );
 

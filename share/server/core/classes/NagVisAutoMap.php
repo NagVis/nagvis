@@ -34,15 +34,15 @@ class NagVisAutoMap extends GlobalMap {
     private $name;
     private $backend_id;
     private $root;
-    private $childLayers;
-    private $parentLayers;
+    private $child_layers;
+    private $parent_layers;
     private $width;
     private $height;
-    private $renderMode;
-    private $ignoreHosts;
-    private $filterGroup;
-    private $filterByState;
-    private $filterByIds = null;
+    private $render_mode;
+    private $ignore_hosts;
+    private $filter_group;
+    private $filter_by_state;
+    private $filter_by_ids = null;
 
     private $rootObject;
     private $arrMapObjects;
@@ -83,16 +83,14 @@ class NagVisAutoMap extends GlobalMap {
 
         $prop = $MAPCFG->getSourceParams();
 
-        $this->backend_id    = $prop['backend_id'];
-        $this->filterByIds   = $prop['filter_by_ids'];
-        $this->childLayers   = $prop['child_layers'];
-        $this->parentLayers  = $prop['parent_layers'];
-        $this->ignoreHosts   = explode(',', $prop['ignore_hosts']);
-        $this->renderMode    = $prop['render_mode'];
-        $this->width         = $prop['width'];
-        $this->height        = $prop['height'];
-        $this->filterGroup   = $prop['filter_group'];
-        $this->filterByState = $prop['filter_by_state'];
+        // Now set all the properties as object attributes
+        foreach($prop AS $key => $val) {
+            if($key == 'ignore_hosts') {
+                $this->{$key} = explode(',', $prop['ignore_hosts']);
+            } else {
+                $this->{$key} = $val;
+            }
+        }
 
         /**
          * This is the name of the root host, user can set this via URL. If no
@@ -111,7 +109,7 @@ class NagVisAutoMap extends GlobalMap {
         $this->getChildObjectTree();
 
         // Get all parent object information from backend when needed
-        if(isset($this->parentLayers) && $this->parentLayers != 0) {
+        if(isset($this->parent_layers) && $this->parent_layers != 0) {
             // If some parent layers are requested: It should be checked if the used
             // backend supports this
             if($this->BACKEND->checkBackendFeature($this->backend_id, 'getDirectParentNamesByHostName')) {
@@ -123,12 +121,12 @@ class NagVisAutoMap extends GlobalMap {
          * On automap updates not all objects are updated at once. Filter
          * the child tree by the given list of host object ids.
          */
-        if($this->filterByIds) {
-            $names = $this->MAPCFG->objIdsToNames($this->filterByIds);
+        if($this->filter_by_ids) {
+            $names = $this->MAPCFG->objIdsToNames($this->filter_by_ids);
             $this->rootObject->filterChilds($names);
 
             // Filter the parent object tree too when enabled
-            if(isset($this->parentLayers) && $this->parentLayers != 0)
+            if(isset($this->parent_layers) && $this->parent_layers != 0)
                 $this->rootObject->filterParents($names);
         }
 
@@ -147,8 +145,8 @@ class NagVisAutoMap extends GlobalMap {
          * too. Those hosts will be added by default but this can be disabled by
          * config option. This sort of hosts should be visualized in another way.
          */
-        if($this->filterGroup != '') {
-            $this->filterGroupObject = new NagVisHostgroup($this->CORE, $this->BACKEND, $this->backend_id, $this->filterGroup);
+        if($this->filter_group != '') {
+            $this->filterGroupObject = new NagVisHostgroup($this->CORE, $this->BACKEND, $this->backend_id, $this->filter_group);
             $this->filterGroupObject->setConfiguration(Array('hover_menu' => 1, 'hover_childs_show' => 1));
             $this->filterGroupObject->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
             $this->BACKEND->execute();
@@ -157,7 +155,7 @@ class NagVisAutoMap extends GlobalMap {
             $this->filterObjectTreeByGroup('childs');
 
             // Filter the parent object tree too when enabled
-            if(isset($this->parentLayers) && $this->parentLayers != 0) {
+            if(isset($this->parent_layers) && $this->parent_layers != 0) {
                 $this->filterObjectTreeByGroup('parents');
             }
         }
@@ -173,11 +171,11 @@ class NagVisAutoMap extends GlobalMap {
         $this->BACKEND->execute();
         $this->MAPOBJ->applyState();
 
-        if($this->filterByState != '') {
+        if($this->filter_by_state != '') {
             $this->filterObjectTreeByState('childs');
 
             // Filter the parent object tree too when enabled
-            if(isset($this->parentLayers) && $this->parentLayers != 0)
+            if(isset($this->parent_layers) && $this->parent_layers != 0)
                 $this->filterObjectTreeByState('parents');
 
             $this->MAPOBJ->clearMembers();
@@ -202,11 +200,12 @@ class NagVisAutoMap extends GlobalMap {
         $str .= 'dpi="72", ';
         //ratio: expand, auto, fill, compress
         $str .= 'ratio="fill", ';
+        $str .= 'margin='.$this->margin.', ';
         //$str .= 'bgcolor="'.$this->MAPCFG->getValue(0, 'background_color').'", ';
         $str .= 'root="'.$this->rootObject->getType().'_'.$this->rootObject->getObjectId().'", ';
 
         /* Directed (dot) only */
-        if($this->renderMode == 'directed') {
+        if($this->render_mode == 'directed') {
             $str .= 'nodesep="0", ';
             //rankdir: LR,
             //$str .= 'rankdir="LR", ';
@@ -216,17 +215,17 @@ class NagVisAutoMap extends GlobalMap {
         }
 
         /* Directed (dot) and radial (twopi) only */
-        if($this->renderMode == 'directed' || $this->renderMode == 'radial') {
+        if($this->render_mode == 'directed' || $this->render_mode == 'radial') {
             $str .= 'ranksep="0.8", ';
         }
 
         /* Only for circular (circo) mode */
-        if($this->renderMode == 'circular') {
+        if($this->render_mode == 'circular') {
             //$str .= 'mindist="1.0", ';
         }
 
         /* All but directed (dot) */
-        if($this->renderMode != 'directed') {
+        if($this->render_mode != 'directed') {
             //overlap: true,false,scale,scalexy,ortho,orthoxy,orthoyx,compress,ipsep,vpsc
             //$str .= 'overlap="ipsep", ';
         }
@@ -276,7 +275,7 @@ class NagVisAutoMap extends GlobalMap {
              *  circo - filter for circular layout of graphs
              *  fdp - filter for drawing undirected graphs
              */
-            switch($this->renderMode) {
+            switch($this->render_mode) {
                 case 'directed':
                     $binary = 'dot';
                 break;
@@ -293,7 +292,7 @@ class NagVisAutoMap extends GlobalMap {
                     $binary = 'fdp';
                 break;
                 default:
-                    throw new NagVisException(l('unknownRenderMode', Array('MODE' => $this->renderMode)));
+                    throw new NagVisException(l('unknownrender_mode', Array('MODE' => $this->render_mode)));
                 break;
             }
 
@@ -672,9 +671,9 @@ class NagVisAutoMap extends GlobalMap {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function getChildObjectTree() {
-        $this->rootObject->fetchChilds($this->childLayers,
+        $this->rootObject->fetchChilds($this->child_layers,
                                        $this->MAPCFG->getObjectConfiguration(),
-                                       $this->ignoreHosts,
+                                       $this->ignore_hosts,
                                        $this->arrMapObjects);
     }
 
@@ -686,9 +685,9 @@ class NagVisAutoMap extends GlobalMap {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function getParentObjectTree() {
-        $this->rootObject->fetchParents($this->parentLayers,
+        $this->rootObject->fetchParents($this->parent_layers,
                                         $this->MAPCFG->getObjectConfiguration(),
-                                        $this->ignoreHosts,
+                                        $this->ignore_hosts,
                                         $this->arrMapObjects);
     }
 

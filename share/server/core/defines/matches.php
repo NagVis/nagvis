@@ -46,6 +46,7 @@ define('MATCH_COORDS_MULTI_EMPTY', '/^(?:(?:(?:[0-9]+)|([a-z0-9]+(?:%[+-][0-9]+)
 define('MATCH_INTEGER', '/^[0-9]+$/');
 define('MATCH_INTEGER_EMPTY', '/^[0-9]*$/');
 define('MATCH_FLOAT', '/^[0-9]+[\.\,]*[0-9]*$/');
+define('MATCH_FLOAT_EMPTY', '/^([0-9]+[\.\,]?[0-9]*)*$/');
 define('MATCH_BOOLEAN', '/^(?:1|0)$/i');
 define('MATCH_BOOLEAN_EMPTY', '/^(?:1|0)*$/i');
 
