@@ -43,7 +43,7 @@
             <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&amp;act=modifyParams&amp;show={$currentMap}'+getViewParams(), '{$langModifyParams}')">{$langModifyParams}</a></li>
             {/if}
             {if $mod == 'Map' && $permittedEdit == true}
-            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=modifyParams&amp;show={$currentMap}'+getViewParams(), '{$langModifyParams}')">{$langModifyParams}</a></li>
+            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=addModify&amp;show={$currentMap}&amp;object_id=0&mode=view_params'+getViewParams(), '{$langModifyParams}');" class="underline">{$langModifyParams}</a></li>
             {/if}
             {if $bRotation == true}
             <li id="rotationStart" style="display:none"><a href="#" onclick="switchRotation()">{$langRotationStart}</a></li>

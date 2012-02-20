@@ -92,10 +92,6 @@ class FrontendModMap extends FrontendModule {
         // Read the map configuration file (Only global section!)
         $MAPCFG->readMapConfig(ONLY_GLOBAL);
 
-        // When 'perm' is set save the user set options
-        if($this->perm == '1' && $AUTHORISATION->isPermitted('Map', 'edit', $this->name))
-            $MAPCFG->storeParams();
-
         // Get all source parameters
         $opts = $MAPCFG->getSourceParams();
 

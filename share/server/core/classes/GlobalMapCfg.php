@@ -530,6 +530,29 @@ class GlobalMapCfg {
         return $values;
     }
 
+    public function getSourceParamDefs($params) {
+        $defs = array();
+        foreach($params as $param) {
+            $defs[$param] = self::$validConfig['global'][$param];
+        }
+        return $defs;
+    }
+
+    public function getSourceParam($key, $only_user_supplied = false, $only_customized = false) {
+        if(isset($_GET[$key])) {
+            if($only_customized && $_GET[$key] != $this->getValue(0, $key)) {
+                // Only get options which differ from the defaults
+                return $_GET[$key];
+            } else {
+                return $_GET[$key];
+            }
+        } elseif(!$only_user_supplied) {
+            return $this->getValue(0, $key);
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Returns an assiziative array of all parameters with values for all sources
      * used on the current map
@@ -553,16 +576,9 @@ class GlobalMapCfg {
         // Otherwise use the value from mapcfg or default coded value
         $params = array();
         foreach($keys AS $key) {
-            if(isset($_GET[$key])) {
-                if($only_customized && $_GET[$key] != $this->getValue(0, $key)) {
-                    // Only get options which differ from the defaults
-                    $params[$key] = $_GET[$key];
-                } else {
-                    $params[$key] = $_GET[$key];
-                }
-            } elseif(!$only_user_supplied) {
-                $params[$key] = $this->getValue(0, $key);
-            }
+            $val = $this->getSourceParam($key, $only_user_supplied, $only_customized);
+            if($val !== null)
+                $params[$key] = $val;
         }
 
         return $params;

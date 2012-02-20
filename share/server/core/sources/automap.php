@@ -6,7 +6,6 @@ $viewParams = array(
     'automap' => array(
         'root',
         'render_mode',
-        'show',
         'backend_id',
         'filter_by_state',
         'filter_by_ids',
@@ -44,13 +43,6 @@ $configVars = array(
         'match'      => MATCH_AUTOMAP_RENDER_MODE,
         'field_type' => 'dropdown',
         'list'       => 'list_automap_render_modes',
-    ),
-    'show' => array(
-        'must'       => false,
-        'default'    => '',
-        'match'      => MATCH_STRING_EMPTY,
-        'field_type' => 'dropdown',
-        'list'       => 'list_automaps',
     ),
     'root' => array(
         'must'       => false,

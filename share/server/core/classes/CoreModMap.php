@@ -119,19 +119,6 @@ class CoreModMap extends CoreModule {
                     $VIEW = new WuiViewManageMaps();
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
-                case 'modifyParams':
-                    $VIEW = new NagVisViewModifyParams();
-
-                    // Add source parameters
-                    $MAPCFG = new GlobalMapCfg($this->CORE, $this->name);
-                    $MAPCFG->readMapConfig(ONLY_GLOBAL);
-
-                    $params = $MAPCFG->getSourceParams();
-                    $VIEW->addOpts($params);
-                    $VIEW->setValues($MAPCFG->getSourceParamChoices(array_keys($params)));
-
-                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
-                break;
                 case 'doAdd':
                     $this->handleResponse('handleResponseAdd', 'doAdd',
                                           l('The map has been created.'),
@@ -194,14 +181,23 @@ class CoreModMap extends CoreModule {
                         'clone_id' => MATCH_OBJECTID_EMPTY,
                         'submit'   => MATCH_STRING_EMPTY,
                         'update'   => MATCH_INTEGER_EMPTY,
+                        'mode'     => MATCH_STRING_EMPTY,
+                        'perm'     => MATCH_BOOLEAN_EMPTY,
                     );
                     $aVals = $this->getCustomOptions($aOpts, Array(), true);
                     $attrs = $this->filterMapAttrs($this->getAllOptions($aOpts));
 
-                    $VIEW = new WuiViewMapAddModify($aVals['show']);
+                    // mode is set to view_params if only the "view parameters" dialog is handled in this request.
+                    // This dialog has less options and is primary saved for the user and not for all users in the
+                    // map configuration
+                    $mode = isset($aVals['mode']) ? $aVals['mode'] : null;
+                    // Tells the handleAddModify handler to store the options permanent
+                    $perm = isset($aVals['perm']) ? $aVals['perm'] : null;
+
+                    $VIEW = new WuiViewMapAddModify($aVals['show'], $mode);
                     $VIEW->setAttrs($attrs);
-                    
-                    // This tells the follwing handling when the page only needs to be repainted
+
+                    // This tells the following handling when the page only needs to be repainted
                     $update = isset($aVals['update']) && $aVals['update'] == '1';
                     $cloneId = isset($aVals['clone_id']) ? $aVals['clone_id'] : null;
 
@@ -209,8 +205,9 @@ class CoreModMap extends CoreModule {
                     $success = null;
                     // Don't handle submit actions when the 'update' POST attribute is set
                     if(isset($aVals['submit']) && $aVals['submit'] != '' && !$update) {
+                        // The form has been submitted.
                         try {
-                            $success = $this->handleAddModify($aVals['show'], $attrs);
+                            $success = $this->handleAddModify($mode, $perm, $aVals['show'], $attrs);
                         } catch(FieldInputError $e) {
                             $err = $e;
                         }
@@ -291,7 +288,7 @@ class CoreModMap extends CoreModule {
     }
 
     // Validate and process addModify form submissions
-    protected function handleAddModify($map, $attrs) {
+    protected function handleAddModify($mode, $perm, $map, $attrs) {
         $this->verifyMapExists($map);
         $MAPCFG = new GlobalMapCfg($this->CORE, $map);
 
@@ -308,6 +305,18 @@ class CoreModMap extends CoreModule {
             $type  = $MAPCFG->getValue($attrs['object_id'], 'type');
             $objId = $attrs['object_id'];
 
+            // The handler has been called in "view_params" mode. In this case the user has
+            // less options and the options to
+            // 1. modify these parameters only for the current open view
+            // 2. Save the changes for himselfs (FIXME)
+            // 3. Save the changes to the map config (-> Use default code below)
+            if($mode == 'view_params' && $perm != '1') {
+                // This is the 1. case -> redirect the user to a well formated url
+                $params = $attrs;
+                unset($params['object_id']);
+                return array(0, $params, '');
+            }
+
             if(!$MAPCFG->objExists($objId))
                 throw new NagVisException(l('The object does not exist.'));
 
@@ -316,8 +325,8 @@ class CoreModMap extends CoreModule {
             // Update the map configuration   
             $MAPCFG->updateElement($objId, $attrs, true);
 
-            $successMsg = l('The [TYPE] has been modified. Reloading in 2 seconds.',
-                                                               Array('TYPE' => $type));
+            $successMsg = array(2, '', l('The [TYPE] has been modified. Reloading in 2 seconds.',
+                                                               Array('TYPE' => $type)));
         } else {
             // Create the new object
             $type  = $attrs['type'];
@@ -327,8 +336,8 @@ class CoreModMap extends CoreModule {
             // append a new object definition to the map configuration
             $MAPCFG->addElement($type, $attrs, true);
 
-            $successMsg = l('The [TYPE] has been added. Reloading in 2 seconds.',
-                                                            Array('TYPE' => $type));
+            $successMsg = array(2, '', l('The [TYPE] has been added. Reloading in 2 seconds.',
+                                                            Array('TYPE' => $type)));
         }
 
         // delete map lock

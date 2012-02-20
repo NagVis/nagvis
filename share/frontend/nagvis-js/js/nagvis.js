@@ -410,6 +410,33 @@ function getUrlParam(name) {
 }
 
 /**
+ * Function creates a new cleaned up URL
+ * - Can add/overwrite parameters
+ */
+function makeuri(addvars) {
+    var tmp = window.location.href.split('?');
+    var base = tmp[0];
+    tmp = tmp[1].split('#');
+    tmp = tmp[0].split('&');
+    var len = tmp.length;
+    var params = [];
+    var pair = null;
+
+    // Skip unwanted parmas
+    for(var i = 0; i < tmp.length; i++) {
+        pair = tmp[i].split('=');
+        params.push(tmp[i]);
+    }
+
+    // Add new params
+    for (var key in addvars) {
+        params.push(key + '=' + addvars[key]);
+    }
+
+    return base + '?' + params.join('&')
+}
+
+/**
  * Function to set the rotation switch label dynamicaly
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>
