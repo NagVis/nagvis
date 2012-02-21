@@ -258,9 +258,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     private function mysqlQuery($query) {
-        $fh = fopen('/tmp/ndomy', 'a');
-        fwrite($fh, $query."\n\n");
-        fclose($fh);
+        // Can be used for debugging queries
+        //$fh = fopen('/tmp/ndomy', 'a');
+        //fwrite($fh, $query."\n\n");
+        //fclose($fh);
         $QUERYHANDLE = mysql_query($query, $this->CONN) or die(mysql_error());
         return $QUERYHANDLE;
     }

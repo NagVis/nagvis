@@ -10,6 +10,7 @@ Core
     in the [defaults] section of the main configuration
   * The audit.log is disabled by default now (can be enabled using the
     audit_log parameter in [global] section)
+  * NDO Backend: Removed query debug outputs
 
 Frontend
   * Weathermap line color definitions support usage values above 100% and below 0%
