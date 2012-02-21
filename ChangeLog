@@ -14,6 +14,7 @@ Core
   * Bugfix: Fixed problem with not real asynchronous ajax calls caused by
     locking PHP sessions
   * Bugfix: Fixed update of states on overview page
+  * NDO Backend: Removed query debug outputs
 
 Automap
   * Added new parameter "margin" to control the offset of the automap to the

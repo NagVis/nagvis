@@ -49,7 +49,7 @@ class GlobalMainCfg {
         $this->validConfig = Array(
             'global' => Array(
                 'audit_log' => Array(
-                    'must'     => 1,
+                    'must'     => 0,
                     'editable' => 1,
                     'default'  => 0,
                     'match'    => MATCH_BOOLEAN
