@@ -43,7 +43,7 @@ img {border:0}
 
 /* Global DIVs */
 .main {margin:0;padding:0;background-color:white;color:black}
-.header {position:fixed;top:0;left:0;padding:0;z-index:100;min-width:920px;}
+.header {position:fixed;top:0;left:0;padding:0;z-index:100;min-width:1000px;}
 .headerspacer {width:100%}
 .map {position:relative;top:0;left:0;z-index:98}
 

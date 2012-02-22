@@ -307,9 +307,6 @@ class GlobalMapCfg {
             $file = file($this->configFile, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
         }
 
-        // Create an array for these options
-        $createArray = Array('use' => 1, 'sources' => 1);
-
         // Don't read these keys
         $ignoreKeys = Array('type' => 0);
 
@@ -399,7 +396,9 @@ class GlobalMapCfg {
             if(isset($ignoreKeys[$sKey]))
                 continue;
 
-            if(isset($createArray[$sKey]))
+            if(isset(self::$validConfig[$sObjType])
+               && isset(self::$validConfig[$sObjType][$sKey])
+               && isset(self::$validConfig[$sObjType][$sKey]['array']))
                 $obj[$sKey] = explode(',', $sValue);
             else
                 $obj[$sKey] = $sValue;

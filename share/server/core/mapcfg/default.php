@@ -170,6 +170,7 @@ $mapConfigVars = Array(
     'sources' => Array(
         'must'       => 0,
         'default'    => '',
+        'array'      => True,
         'match'      => MATCH_STRING
     ),
     'backend_id' => Array(

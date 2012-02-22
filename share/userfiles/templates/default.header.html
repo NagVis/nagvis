@@ -94,7 +94,7 @@
             </li>
             <li class="spacer"><hr /></li>
             <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=manageTmpl&amp;show={$currentMap}', '{$langMapManageTmpl}', 300)">{$langMapManageTmpl}</a></li>
-            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=addModify&amp;show={$currentMap}&amp;object_id=0', '{$langMapOptions}');" class="underline">{$langMapOptions}</a></li>
+            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=addModify&amp;show={$currentMap}&amp;object_id=0'+getViewParams(), '{$langMapOptions}');" class="underline">{$langMapOptions}</a></li>
         </ul>
     </li>
     {/if}
