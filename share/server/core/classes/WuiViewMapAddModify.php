@@ -162,8 +162,25 @@ class WuiViewMapAddModify {
         }
 
         $typeDefaults = $this->MAPCFG->getTypeDefaults($type);
-        if($this->mode == 'view_params' && $objId == 0) {
-            $typeDef = $this->MAPCFG->getSourceParamDefs(array_keys($this->MAPCFG->getSourceParams()));
+
+        if($objId == 0) {
+            // Special handling for the global section:
+            // It might allow some source parameters (but not all).
+            // Another speciality ist that the dialog can be opened in "view_params" mode
+            // where only the view params shal be shown.
+            $source_params = $this->MAPCFG->getSourceParams();
+            if($this->mode == 'view_params') {
+                $typeDef = $this->MAPCFG->getSourceParamDefs(array_keys($source_params));
+            } else {
+                $typeDef = $this->MAPCFG->getValidObjectType($type);
+
+                // Filter the typedef list. Only show the valid source params
+                foreach($typeDef as $propname => $prop) {
+                    if(!isset($source_params[$propname]) && isset($prop['source_param'])) {
+                        unset($typeDef[$propname]);
+                    }
+                }
+            }
         } else {
             $typeDef = $this->MAPCFG->getValidObjectType($type);
         }

@@ -490,6 +490,8 @@ class GlobalMapCfg {
             // Also feed the valid config array to get the options from the sources
             foreach($configVars AS $key => $val) {
                 self::$validConfig['global'][$key] = $val;
+                // Mark this option as source parameter. Save the source file in the value
+                self::$validConfig['global'][$key]['source_param'] = $source_file;
             }
         }
     }

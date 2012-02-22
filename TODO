@@ -5,12 +5,10 @@ Probleme:
   - Warnings anzeigen, wenn Funktionen aus oldPhpVersionFixes.php angezogen werden
 
 Zu tun:
-  - Geomap: Javascript map as frontend?
   - Geomap: Max. resolution (limit of OSM/API?)
   - Geomap: bbox Limit?
   - Automap zu source umbauen
     - Alten "modifyParams" Dialog aus Automap entfernen
-  - In "addModify Dialog" nur Optionen für die Map/Sourcen anzeigen
   - Option zum persistieren der Optionen für einen selbst
   - Doku:
     - Standard View Parameter
@@ -30,6 +28,9 @@ Relative Koordinaten:
 
 
 -------------------------------------------------------------------------------
+
+Geomap
+  - Javascript map as frontend?
 
 - Weathermap Line Parser pro Check-Kommando behandeln - Das sollte den Code wesentlich sauberer machen
 
