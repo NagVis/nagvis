@@ -41,19 +41,19 @@
             <td>show</td><td></td><td>The name of the automap. Since NagVis 1.5 different automap configuration files can be defined. The automap to view needs to be set here.</td>
         </tr>
         <tr>
-            <td>backend</td><td> default backend </td><td> The backend-id of the backend to fetch the objects from. For details see the [backend_*] section in the <a href="nagvis_config_format_description.html">Main Config Format Description</a> </td>
+            <td>backend_id <strike>backend</strike></td><td> default backend </td><td> The backend-id of the backend to fetch the objects from. For details see the [backend_*] section in the <a href="nagvis_config_format_description.html">Main Config Format Description</a> </td>
         </tr>
         <tr>
             <td>root</td><td> see <a href="#root/object/definition">root object definition</a> </td><td> This is the name of the root object. It is not essential to set the host here. There are some more ways to tell the root object. For details see the <a href="#root/object/definition">root object definition</a> chapter on this page. </td>
         </tr>
         <tr>
-            <td>childLayers</td><td>2</td><td>Maximum layers of child hosts to be displayed.</td>
+            <td>child_layers <strike>childLayers</strike></td><td>2</td><td>Maximum layers of child hosts to be displayed.</td>
         </tr>
         <tr>
-            <td>parentLayers</td><td>0</td><td>Maximum layers of parent hosts to be displayed.</td>
+            <td>parent_layers <strike>parentLayers</strike></td><td>0</td><td>Maximum layers of parent hosts to be displayed.</td>
         </tr>
         <tr>
-            <td>renderMode</td><td> undirected </td><td> Set the render mode of the map. For details see <a href="#available/render/modes">available render modes</a> </td>
+            <td>render_mode <strike>renderMode</strike></td><td> undirected </td><td> Set the render mode of the map. For details see <a href="#available/render/modes">available render modes</a> </td>
         </tr>
         <tr>
             <td>width</td><td> 1024 </td><td> width of the automap in pixels </td>
@@ -62,13 +62,13 @@
             <td>height</td><td> 786 </td><td> height of the automap in pixels </td>
         </tr>
         <tr>
-            <td>ignoreHosts</td><td> none </td><td> comma separated list of hosts (including children) not to display </td>
+            <td>ignore_hosts <strike>ignoreHosts</strike></td><td> none </td><td> comma separated list of hosts (including children) not to display </td>
         </tr>
         <tr>
-            <td>filterByState</td><td>none</td><td>Set to 1 to enable the &quot;problem automap&quot; mode. When it is set to 1 it will filter all branches out which have only OK/UP hosts. This will result in a "problem automap" which only shows up a tree where each branch has at least one problem.</td>
+            <td>filter_by_state <strike>filterByState</strike></td><td>none</td><td>Set to 1 to enable the &quot;problem automap&quot; mode. When it is set to 1 it will filter all branches out which have only OK/UP hosts. This will result in a "problem automap" which only shows up a tree where each branch has at least one problem.</td>
         </tr>
         <tr>
-            <td>filterGroup</td><td>none</td><td>Provide a hostgroup name. Only hosts in this hostgroup will be shown on the map.</td>
+            <td>filter_group <strike>filterGroup</strike></td><td>none</td><td>Provide a hostgroup name. Only hosts in this hostgroup will be shown on the map.</td>
         </tr>
         <tr>
             <td>search</td><td>none</td><td>Search for a map object on map load. Matching objects will be highlighted.</td>
@@ -77,13 +77,16 @@
             <td>rotation</td><td>none</td><td>Rotate in the given rotation pool when the map is a step in the pool.</td>
         </tr>
         <tr>
-            <td>enableHeader</td><td>none</td><td>Enable/Disable the header menu. To be given as integer (1/0). Overrides the configuration.</td>
+            <td>header_menu <strike>enableHeader</strike></td><td>none</td><td>Enable/Disable the header menu. To be given as integer (1/0). Overrides the configuration.</td>
         </tr>
         <tr>
-            <td>enableHover</td><td>none</td><td>Enable/Disable the hover menus. To be given as integer (1/0). Overrides the configuration.</td>
+            <td>hover_menu <strike>enableHover</strike></td><td>none</td><td>Enable/Disable the hover menus. To be given as integer (1/0). Overrides the configuration.</td>
         </tr>
         <tr>
-            <td>enableContext</td><td>none</td><td>Enable/Disable the context menus. To be given as integer (1/0). Overrides the configuration.</td>
+            <td>context_menu <strike>enableContext</strike></td><td>none</td><td>Enable/Disable the context menus. To be given as integer (1/0). Overrides the configuration.</td>
+        </tr>
+        <tr>
+            <td>margin</td><td>50</td><td>Sets the free space border of the automap graph on all sides. Has to be given in pixels.</td>
         </tr>
         </table>
         

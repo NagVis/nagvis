@@ -88,7 +88,7 @@ $configVars = array(
 
     'margin' => array(
         'must'       => false,
-        'default'    => '0.3',
+        'default'    => '50',
         'match'      => MATCH_FLOAT_EMPTY,
     ),
 );
