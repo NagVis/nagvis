@@ -540,12 +540,13 @@ class GlobalMapCfg {
     }
 
     public function getSourceParam($key, $only_user_supplied = false, $only_customized = false) {
-        if(isset($_GET[$key])) {
-            if($only_customized && $_GET[$key] != $this->getValue(0, $key)) {
+        // Allow _GET or _POST (_POST is needed for add/modify dialog submission)
+        if(isset($_REQUEST[$key])) {
+            if($only_customized && $_REQUEST[$key] != $this->getValue(0, $key)) {
                 // Only get options which differ from the defaults
-                return $_GET[$key];
+                return $_REQUEST[$key];
             } else {
-                return $_GET[$key];
+                return $_REQUEST[$key];
             }
         } elseif(!$only_user_supplied) {
             return $this->getValue(0, $key);

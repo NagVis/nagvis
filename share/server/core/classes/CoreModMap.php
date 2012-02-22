@@ -323,7 +323,16 @@ class CoreModMap extends CoreModule {
             $this->validateAttributes($MAPCFG->getValidObjectType($type), $attrs);
 
             // Update the map configuration   
-            $MAPCFG->updateElement($objId, $attrs, true);
+            if($mode == 'view_params') {
+                // Only modify/add the given attributes. Don't remove any
+                // set options in the array
+                foreach($attrs as $key => $val)
+                    $MAPCFG->setValue($attrs['object_id'], $key, $val);
+                $MAPCFG->storeUpdateElement($attrs['object_id']);
+            } else {
+                // add/modify case: Rewrite whole object with the given attributes
+                $MAPCFG->updateElement($objId, $attrs, true);
+            }
 
             $successMsg = array(2, '', l('The [TYPE] has been modified. Reloading in 2 seconds.',
                                                                Array('TYPE' => $type)));
