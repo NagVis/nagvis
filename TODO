@@ -4,6 +4,7 @@ This is a small file for storing quick thoughts about new features and needed ch
 Probleme:
   - Warnings anzeigen, wenn Funktionen aus oldPhpVersionFixes.php angezogen werden
   - Zu viele audit_log Meldungn (Bei jedem HTTP-Request?)
+  - Shapes Clonen: view_type existiert nicht
 
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
