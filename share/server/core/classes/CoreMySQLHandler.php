@@ -67,7 +67,7 @@ class CoreMySQLHandler {
         if(!$returnCode){
             throw new NagVisException(l('errorSelectingDb',
                          Array('BACKENDID' => 'MySQLHandler',
-                               'MYSQLERR'  => mysql_error($this->CONN))));
+                               'MYSQLERR'  => mysql_error($this->DB))));
         } else {
             return true;
         }

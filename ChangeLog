@@ -1,4 +1,7 @@
 1.6.5
+Core
+  * Bugfix: Fixed wrong variable in MySQL connect error handler
+
 Frontend
   * Bugfix: Fixed cloning shape objects (view_type error message)
 
