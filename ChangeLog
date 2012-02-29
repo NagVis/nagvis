@@ -1,3 +1,10 @@
+1.6.5
+Core
+  * Bugfix: Fixed wrong variable in MySQL connect error handler
+
+Frontend
+  * Bugfix: Fixed cloning shape objects (view_type error message)
+
 1.6.4
 Core
   * Made template objects work again. Added doc note which does not recommend
@@ -5,7 +12,7 @@ Core
   * Livestatus Backend: Added 'timeout' parameter to be able to configure the
     socket timeout while connecting to the livestatus socket
   * Livestatus Backend: Only try to connect to livestatus once per page load
-  * FIX: Fixed wrong computed shape urls which broke all shapes
+  * Bugfix: Fixed wrong computed shape urls which broke all shapes
   * Added new iconset std_dot
   * The label_show parameter can now be configured for the whole installation
     in the [defaults] section of the main configuration

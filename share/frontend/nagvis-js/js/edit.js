@@ -528,7 +528,7 @@ function addClick(e) {
                + '&x=' + addX.join(',')
                + '&y=' + addY.join(',');
 
-    if(addViewType != 'icon' && addViewType != '')
+    if(addObjType != 'shape' && addViewType != 'icon' && addViewType != '')
         sUrl += '&view_type=' + addViewType;
 
     if(addAction == 'clone' && cloneId !== null)
