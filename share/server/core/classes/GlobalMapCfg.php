@@ -757,7 +757,7 @@ class GlobalMapCfg {
      * @return  String  The object ID
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-    protected function genObjId($s) {
+    public function genObjId($s) {
         return substr(sha1($s), 0, 6);
     }
 

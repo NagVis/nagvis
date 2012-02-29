@@ -31,4 +31,17 @@ $configVars = array(
     ),
 );
 
+function iconset_size($iconset) {
+    global $CORE;
+    $fileType = $CORE->getIconsetFiletype($iconset);
+    $iconPath      = path('sys',  'global', 'icons').'/'.$iconset.'_ok.'.$fileType;
+    $iconPathLocal = path('sys',  'local',  'icons').'/'.$iconset.'_ok.'.$fileType;
+    if(file_exists($iconPathLocal))
+        return getimagesize($iconPathLocal);
+    elseif(file_exists($iconPath))
+        return getimagesize($iconPath);
+    else
+        return array(0, 0);
+}
+
 ?>

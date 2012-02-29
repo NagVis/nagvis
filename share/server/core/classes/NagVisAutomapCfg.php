@@ -113,10 +113,6 @@ class NagVisAutomapCfg extends GlobalMapCfg {
     public function storeAddElement($unused) { }
     public function storeDeleteElement($unused, $unused1 = null) { }
 
-    public function genObjIdAutomap($s) {
-        return $this->genObjId($s);
-    }
-
     public function filterMapObjects($a) {
         if(isset($this->mapConfig[2])) {
             $global = $this->mapConfig[0];
@@ -124,58 +120,6 @@ class NagVisAutomapCfg extends GlobalMapCfg {
             parent::filterMapObjects($a);
             $this->mapConfig = array_merge(Array($global, $dummy), $this->mapConfig);
         }
-    }
-
-    /**
-     * Transforms a list of automap object_ids to hostnames using the object_id
-     * translation file. Unknown object_ids are skipped
-     *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function objIdsToNames($ids) {
-        $names = Array();
-        $map = $this->loadObjIds();
-        foreach($ids AS $id) {
-            $name = array_search($id, $map);
-            if($name !== FALSE)
-                $names[] = $name;
-        }
-        return $names;
-    }
-
-    /**
-     * Transforms an object_id to the hostname
-     *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function objIdToName($id) {
-        return array_search($id, $this->loadObjIds());
-    }
-
-    /**
-     * Loads the hostname to object_id mapping table from the central file
-     *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function loadObjIds() {
-        if(!isset($this->objIds[0]))
-            if(GlobalCore::getInstance()->checkExisting($this->objIdFile, false))
-                $this->objIds = json_decode(file_get_contents($this->objIdFile), true);
-            else
-                $this->objIds = Array();
-
-        return $this->objIds;
-    }
-
-    /**
-     * Saves the given hostname to object_id mapping table in the central file
-     *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function storeObjIds($a) {
-        $this->objIds = $a;
-
-        return file_put_contents($this->objIdFile, json_encode($a)) !== false;
     }
 }
 ?>

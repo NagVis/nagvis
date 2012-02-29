@@ -372,12 +372,8 @@ class NagVisAutoMap extends GlobalMap {
     }
 
     /**
-     * PUBLIC setMapObjectPositions()
-     *
      * Reads the rendered positions from the map code and
      * sets it to the map objects
-     *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function setMapObjectPositions() {
         // Render the map image and save it, also generate link coords etc.

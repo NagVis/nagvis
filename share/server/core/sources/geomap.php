@@ -106,19 +106,6 @@ function geomap_files($params) {
     );
 }
 
-function geomap_iconset_size($iconset) {
-    global $CORE;
-    $fileType = $CORE->getIconsetFiletype($iconset);
-    $iconPath      = path('sys',  'global', 'icons').'/'.$iconset.'_ok.'.$fileType;
-    $iconPathLocal = path('sys',  'local',  'icons').'/'.$iconset.'_ok.'.$fileType;
-    if(file_exists($iconPathLocal))
-        return getimagesize($iconPathLocal);
-    elseif(file_exists($iconPath))
-        return getimagesize($iconPath);
-    else
-        return array(0, 0);
-}
-
 function process_geomap($MAPCFG, $map_name, &$map_config) {
     $params = $MAPCFG->getSourceParams();
     list($image_name, $image_path, $data_path) = geomap_files($params);
@@ -134,7 +121,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     $map_config = array();
 
     $iconset = $params['iconset'];
-    list($icon_w, $icon_h) = geomap_iconset_size($iconset);
+    list($icon_w, $icon_h) = iconset_size($iconset);
 
     // Now add the objects to the map
     foreach($locations AS $loc) {

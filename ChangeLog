@@ -24,6 +24,8 @@ Automap
     options are now available in the global section of the automaps.
   * Removed default_params option from global sections. Use the regular
     options in global section to define default options.
+  * The option of adding a __dummy__ host to the automap configurations has
+    been removed. It is not supported anymore.
 
 Frontend
   * Weathermap line color definitions support usage values above 100% and below 0%
