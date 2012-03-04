@@ -8,6 +8,7 @@ Zu tun:
   - Automap zu source umbauen
     - Alten "modifyParams" Dialog aus Automap entfernen
     - filter_by_state neu implementieren (Und evtl. auch für alle Ansichten)
+    - .width/.height rausfiltern
   - Option zum persistieren der Optionen für einen selbst
   - Geomap:
     - Max. resolution (limit of OSM/API?)
