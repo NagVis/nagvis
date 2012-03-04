@@ -183,6 +183,25 @@ class CoreMySQLHandler {
         // Now perform the update for pre 1.6.1
         if($dbVersion < 1060100)
             $this->updateDb1060100();
+
+        // Now perform the update for pre 1.6.5
+        if($dbVersion < 1060500)
+            $this->updateDb1060500();
+    }
+
+    private function updateDb1060500() {
+	// Create permissions for Url/view/*
+        $this->query('INSERT INTO perms (`mod`, `act`, `obj`) VALUES (\'Url\', \'view\', \'*\')');
+        
+        // Assign the new permission to the managers, users, guests
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\' or name=\'Guests\'');
+        while($data = $this->fetchAssoc($RES))
+            $this->addRolePerm($data['roleId'], 'Url', 'view', '*');
+
+        // Only apply the new version when this is the real release or newer
+        // (While development the version string remains on the old value)
+        if(GlobalCore::getInstance()->versionToTag(CONST_VERSION) >= 1060500)
+            $this->updateDbVersion();
     }
 
     private function updateDb1060100() {
@@ -206,6 +225,11 @@ class CoreMySQLHandler {
         foreach(GlobalCore::getInstance()->demoAutomaps AS $automap) {
             $this->addRolePerm($data['roleId'], 'AutoMap', 'view', $automap);
         }
+
+        // Only apply the new version when this is the real release or newer
+        // (While development the version string remains on the old value)
+        if(GlobalCore::getInstance()->versionToTag(CONST_VERSION) >= 1060100)
+            $this->updateDbVersion();
     }
 
     private function updateDb1060022() {

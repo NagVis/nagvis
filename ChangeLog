@@ -1,6 +1,9 @@
 1.6.5
 Core
   * Bugfix: Fixed wrong variable in MySQL connect error handler
+  * Bugfix: Fixed bug in 1.6.1 auth db update scripts
+  * Bugfix: Added missing permission for the Url module which is used when
+            having URLs in rotations
 
 Frontend
   * Bugfix: Fixed cloning shape objects (view_type error message)
