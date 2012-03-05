@@ -91,6 +91,10 @@ var NagVisObject = Base.extend({
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     loadViewOpts: function() {
+        // Do not load the view options for stateless lines
+        if(this.conf.type == 'line')
+            return;
+
         // View specific hover modifier set. Will override the map configured option
         if(oViewProperties && oViewProperties.enableHover && oViewProperties.enableHover != '')
             this.conf.hover_menu = oViewProperties.enableHover;
@@ -189,7 +193,7 @@ var NagVisObject = Base.extend({
      */
     parseContextMenu: function () {
         // Add a context menu to the object when enabled or when the object is unlocked
-        if((this.conf.context_menu && this.conf.context_menu == '1') || !this.bIsLocked) {
+        if(this.needsContextMenu()) {
             if(this.conf.view_type && this.conf.view_type == 'line') {
                 this.getContextMenu(this.conf.object_id+'-linelink');
             } else if(this.conf.type == 'textbox') {
@@ -959,18 +963,21 @@ var NagVisObject = Base.extend({
     },
 
     needsContextMenu: function () {
-        return this.conf.context_menu && this.conf.context_menu !== '' && this.conf.context_menu !== '0'
-            && this.conf.context_template && this.conf.context_template !== '';
+        return (this.conf.context_menu && this.conf.context_menu !== '' && this.conf.context_menu !== '0'
+            && this.conf.context_template && this.conf.context_template !== '') || !this.bIsLocked;
     },
 
     needsHoverMenu: function() {
-        return this.conf.hover_menu && this.conf.hover_menu !== ''
-            && ((this.conf.url && this.conf.url !== '' && this.conf.url !== '#')
-                || (this.conf.hover_template && this.conf.hover_template !== ''))
+        return this.conf.hover_menu && this.conf.hover_menu !== '' && this.conf.hover_menu !== '0'
+            && this.conf.hover_template && this.conf.hover_template !== ''
+    },
+
+    needsLink: function() {
+        return this.conf.url && this.conf.url !== '' && this.conf.url !== '#';
     },
 
     needsLineHoverArea: function() {
-        return this.needsHoverMenu() || this.needsContextMenu() || !this.bIsLocked;
+        return this.needsHoverMenu() || this.needsContextMenu() || this.needsLink() || !this.bIsLocked;
     },
 
     parseLineHoverArea: function(oContainer) {

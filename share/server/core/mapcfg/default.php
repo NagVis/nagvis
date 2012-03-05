@@ -201,10 +201,11 @@ $mapConfigVars = Array(
     ),
 
     'context_menu' => Array(
-        'must' => 0,
-        'default' => cfg('defaults', 'contextmenu'),
-        'match' => MATCH_BOOLEAN,
-        'field_type' => 'boolean'),
+        'must'       => 0,
+        'default'    => cfg('defaults', 'contextmenu'),
+        'match'      => MATCH_BOOLEAN,
+        'field_type' => 'boolean',
+    ),
     'context_template' => Array(
         'must'          => 0,
         'default'       => cfg('defaults', 'contexttemplate'),
@@ -789,6 +790,12 @@ $mapConfigVars = Array(
     ),
 );
 
+// STATELESS LINE SPECIFIC OPTIONS
+$mapConfigVars['context_menu_line'] = $mapConfigVars['context_menu'];
+$mapConfigVars['context_menu_line']['default'] = '0';
+$mapConfigVars['hover_menu_line'] = $mapConfigVars['hover_menu'];
+$mapConfigVars['hover_menu_line']['default'] = '0';
+
 //
 // map configuration variable registration
 //
@@ -1079,9 +1086,9 @@ $mapConfigVarMap['line'] = Array(
     'line_width' => null,
     'line_color' => null,
     'line_color_border' => null,
-    'context_menu' => null,
+    'context_menu_line' => 'context_menu',
     'context_template' => null,
-    'hover_menu' => null,
+    'hover_menu_line' => 'hover_menu',
     'hover_template' => null,
     'hover_url' => null,
     'hover_delay' => null,
