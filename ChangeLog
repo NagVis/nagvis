@@ -7,6 +7,7 @@ Core
 
 Frontend
   * Bugfix: Fixed cloning shape objects (view_type error message)
+  * Bugfix: Stateless lines - only showing the hover area when it is needed
 
 1.6.4
 Core
