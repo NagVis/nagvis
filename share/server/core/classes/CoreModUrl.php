@@ -37,8 +37,8 @@ class CoreModUrl extends CoreModule {
 
         // Register valid actions
         $this->aActions = Array(
-            'getContents' => REQUIRES_AUTHORISATION,
-            'getProperties' => REQUIRES_AUTHORISATION
+            'getContents'   => 'view',
+            'getProperties' => 'view',
         );
     }
 

@@ -161,7 +161,14 @@ class CoreMySQLHandler {
     }
 
     private function addRolePerm($roleId, $mod, $act, $obj) {
-        $this->query('INSERT INTO roles2perms (roleId, permId) VALUES ('.$roleId.', (SELECT permId FROM perms WHERE `mod`=\''.$mod.'\' AND `act`=\''.$act.'\' AND obj=\''.$obj.'\'))');
+        // Only create when not existing
+        if($this->count('SELECT `roleId` FROM roles2perms WHERE `roleId`='.$roleId.' AND `permId`=(SELECT permId FROM perms WHERE `mod`=\''.$mod.'\' AND `act`=\''.$act.'\' AND obj=\''.$obj.'\')') <= 0) {
+            $this->query('INSERT INTO roles2perms (roleId, permId) VALUES ('.$roleId.', (SELECT permId FROM perms WHERE `mod`=\''.$mod.'\' AND `act`=\''.$act.'\' AND obj=\''.$obj.'\'))');
+        }
+    }
+
+    public function createPerm($mod, $act, $obj) {
+        $this->query('INSERT IGNORE INTO perms (`mod`, `act`, `obj`) VALUES (\''.$mod.'\', \''.$act.'\', \''.$obj.'\')');
     }
 
     public function updateDb() {
@@ -183,6 +190,25 @@ class CoreMySQLHandler {
         // Now perform the update for pre 1.6.1
         if($dbVersion < 1060100)
             $this->updateDb1060100();
+
+        // Now perform the update for pre 1.6.5
+        if($dbVersion < 1060500)
+            $this->updateDb1060500();
+    }
+
+    private function updateDb1060500() {
+	// Create permissions for Url/view/*
+        $this->createPerm('Url', 'view', '*');
+        
+        // Assign the new permission to the managers, users, guests
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\' or name=\'Guests\'');
+        while($data = $this->fetchAssoc($RES))
+            $this->addRolePerm($data['roleId'], 'Url', 'view', '*');
+
+        // Only apply the new version when this is the real release or newer
+        // (While development the version string remains on the old value)
+        if(GlobalCore::getInstance()->versionToTag(CONST_VERSION) >= 1060500)
+            $this->updateDbVersion();
     }
 
     private function updateDb1060100() {
@@ -206,11 +232,16 @@ class CoreMySQLHandler {
         foreach(GlobalCore::getInstance()->demoAutomaps AS $automap) {
             $this->addRolePerm($data['roleId'], 'AutoMap', 'view', $automap);
         }
+
+        // Only apply the new version when this is the real release or newer
+        // (While development the version string remains on the old value)
+        if(GlobalCore::getInstance()->versionToTag(CONST_VERSION) >= 1060100)
+            $this->updateDbVersion();
     }
 
     private function updateDb1060022() {
 	// Create permissions for User/setOption
-        $this->query('INSERT INTO perms (`mod`, `act`, `obj`) VALUES (\'User\', \'setOption\', \'*\')');
+        $this->createPerm('User', 'setOption', '*');
 
         // Assign the new permission to the managers, users, guests
         $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\' or name=\'Guests\'');
@@ -226,7 +257,7 @@ class CoreMySQLHandler {
 
     private function updateDb1050400() {
         // Create permissions for the multisite webservice
-        $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Multisite\', \'getMaps\', \'*\')');
+        $this->createPerm('Multisite', 'getMaps', '*');
 
         // Assign the new permission to the managers
         $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\' or name=\'Guests\'');
@@ -242,9 +273,9 @@ class CoreMySQLHandler {
 
     private function updateDb1050300() {
         // Create permissions for WUI management pages
-        $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'manage\', \'*\')');
-        $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'manage\', \'*\')');
-        $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'manage\', \'*\')');
+        $this->createPerm('ManageBackgrounds', 'manage', '*');
+        $this->createPerm('ManageShapes',      'manage', '*');
+        $this->createPerm('Map',               'manage', '*');
 
         // Assign the new permission to the managers
         $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\'');
