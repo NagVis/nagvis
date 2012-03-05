@@ -436,17 +436,10 @@ class GlobalMapCfg {
                 $this->DCACHE->writeCache($this->typeDefaults, 1);
             }
 
-            // The automap also uses this method, so handle the different type
-            if($this->type === 'automap') {
-                $mod = 'AutoMap';
-            } else {
-                $mod = 'Map';
-            }
-
             // Trigger the autorization backend to create new permissions when needed
             $AUTHORIZATION = $this->CORE->getAuthorization();
             if($AUTHORIZATION !== null) {
-                $this->CORE->getAuthorization()->createPermission($mod, $this->getName());
+                $this->CORE->getAuthorization()->createPermission('Map', $this->getName());
             }
         }
 

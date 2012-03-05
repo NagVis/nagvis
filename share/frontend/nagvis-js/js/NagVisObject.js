@@ -234,7 +234,7 @@ var NagVisObject = Base.extend({
         };
 
       if(typeof(oPageProperties) != 'undefined' && oPageProperties != null
-           && (oPageProperties.view_type === 'map' || oPageProperties.view_type === 'automap'))
+           && oPageProperties.view_type === 'map')
             oMacros.map_name = oPageProperties.map_name;
 
         if(this.conf.type === 'service') {
@@ -263,7 +263,7 @@ var NagVisObject = Base.extend({
         if(!oViewProperties || !oViewProperties.permitted_edit)
             oSectionMacros.permitted_edit = '<!--\\sBEGIN\\spermitted_edit\\s-->.+?<!--\\sEND\\spermitted_edit\\s-->';
 
-        if(oPageProperties.view_type === 'automap') {
+        if(usesSource('automap')) {
             oSectionMacros.not_automap = '<!--\\sBEGIN\\snot_automap\\s-->.+?<!--\\sEND\\snot_automap\\s-->';
 	    // Skip the root change link for the root host
             if(this.conf.name === getUrlParam('root'))

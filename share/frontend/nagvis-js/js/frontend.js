@@ -312,8 +312,6 @@ function getFileAgeParams(viewType, mapName) {
     var addParams = '';
     if(viewType === 'map')
         addParams = '&f[]=map,' + mapName + ',' + oFileAges[mapName];
-    if(viewType === 'automap')
-        addParams = '&f[]=automap,' + mapName + ',' + oFileAges[mapName];
     return '&f[]=maincfg,maincfg,' + oFileAges['maincfg'] + addParams;
 }
 
@@ -618,14 +616,9 @@ function setPageTitle(sTitle) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function updateMapBasics() {
-    var mod = 'Map';
-    if(oPageProperties.view_type === 'automap') {
-        mod = 'AutoMap';
-    }
-
     // Get new map state from core
     oMapSummaryObj = new NagVisMap(getSyncRequest(oGeneralProperties.path_server
-                                   + '?mod=' + mod + '&act=getObjectStates&ty=summary&show='
+                                   + '?mod=Map&act=getObjectStates&ty=summary&show='
                                    + escapeUrlValues(oPageProperties.map_name)
                                    + getViewParams(), false)[0]);
 
@@ -649,8 +642,9 @@ function updateMapBasics() {
         setPageBackgroundColor(getBackgroundColor(oMapSummaryObj.conf));
 
     // Update background image for automap
-    if(oPageProperties.view_type === 'automap')
-        setMapBackgroundImage(oPageProperties.background_image+iNow);
+    // FIXME: Maybe update for regular maps?
+    //if(oPageProperties.view_type === 'automap')
+    //    setMapBackgroundImage(oPageProperties.background_image+iNow);
 }
 
 /**
@@ -691,15 +685,10 @@ function updateObjects(aMapObjectInformations, sType) {
         // Some objects need to be reloaded even when no state changed (perfdata or
         // output could have changed since last update). Basically this is only
         // needed for gadgets and/or labels with [output] or [perfdata] macros
-        if((sType === 'map' || sType === 'automap')
-           && !oMapObjects[objectId].stateChanged() && oMapObjects[objectId].outputOrPerfdataChanged()) {
-            // Reparse object to map (only for maps!)
-            // No else for overview here, senseless!
-            if(sType === 'map') {
-                oMapObjects[objectId].parse();
-            } else if(sType === 'automap') {
-                oMapObjects[objectId].parseAutomap();
-            }
+        if(sType === 'map'
+           && !oMapObjects[objectId].stateChanged()
+           && oMapObjects[objectId].outputOrPerfdataChanged()) {
+            oMapObjects[objectId].parse();
         }
 
         // Detect state changes and do some actions
@@ -719,8 +708,6 @@ function updateObjects(aMapObjectInformations, sType) {
             // Reparse object to map
             if(sType === 'map') {
                 oMapObjects[objectId].parse();
-            } else if(sType === 'automap') {
-                oMapObjects[objectId].parseAutomap();
             } else if(sType === 'overview') {
                 // Reparsing the object on index page.
                 // replaceChild seems not to work in all cases so workaround it
@@ -863,10 +850,6 @@ function refreshMapObject(event, objectId) {
     var sAddPart = '';
     if(oPageProperties.view_type === 'map') {
         sMod = 'Map';
-        sMapPart = '&show='+escapeUrlValues(map);
-        sAddPart = getViewParams();
-    } else if(oPageProperties.view_type === 'automap') {
-        sMod = 'AutoMap';
         sMapPart = '&show='+escapeUrlValues(map);
         sAddPart = getViewParams();
     } else if(oPageProperties.view_type === 'overview') {
@@ -1042,11 +1025,6 @@ function setMapObjects(aMapObjectConf) {
         // Parse object to map
         if(oPageProperties.view_type === 'map') {
             oMapObjects[i].parse();
-        } else if(oPageProperties.view_type === 'automap') {
-            if(oMapObjects[i].conf.type === 'host')
-                oMapObjects[i].parseAutomap();
-            else
-                oMapObjects[i].parse();
         }
 
         // Store object dependencies
@@ -1173,9 +1151,8 @@ function flashIcon(objectId, iDuration, iInterval){
 function parseOverviewPage() {
     var oContainer = document.getElementById('overview');
 
-    // Render maps, automaps, geomaps and the rotations when enabled
+    // Render maps, geomaps and the rotations when enabled
     var types = [ [ oPageProperties.showmaps,      'overviewMaps',      oPageProperties.lang_mapIndex ],
-                  [ oPageProperties.showautomaps,  'overviewAutomaps',  oPageProperties.lang_automapIndex],
                   [ oPageProperties.showgeomap,    'overviewGeomap',    'Geomap' ],
                   [ oPageProperties.showrotations, 'overviewRotations', oPageProperties.lang_rotationPools ] ];
     for(var i = 0; i < types.length; i++) {
@@ -1280,76 +1257,6 @@ function parseOverviewMaps(aMapsConf) {
     }
 
     eventlog("worker", "debug", "parseOverviewMaps: End setting maps");
-    getAndParseTemplates();
-}
-
-/**
- * parseOverviewAutomaps()
- *
- * Does initial parsing of automaps on the overview page
- *
- * @param   Array    Array of objects to parse to the page
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function parseOverviewAutomaps(aMapsConf) {
-    eventlog("worker", "debug", "parseOverviewAutomaps: Start setting automaps");
-
-    // Exit this function on invalid call
-    if(aMapsConf === null)  {
-        eventlog("worker", "warning", "parseOverviewAutomaps: Invalid call - maybe broken ajax response");
-        return false;
-    }
-
-    // Render the maps when enabled
-    if(oPageProperties.showautomaps === 1) {
-        if(aMapsConf.length == 0) {
-            document.getElementById('overviewAutomaps').parentNode.style.display = 'none';
-            return false;
-        }
-
-        var oTable = document.getElementById('overviewAutomaps');
-        var oTr = document.createElement('tr');
-
-        for(var i = 0, len = aMapsConf.length; i < len; i++) {
-            var oObj;
-
-            oObj = new NagVisMap(aMapsConf[i]);
-
-            if(oObj !== null) {
-                // Save object to map objects array
-                oMapObjects[oObj.conf.object_id] = oObj;
-
-                // Parse child and save reference in parsedObject
-                oObj.parsedObject = oTr.appendChild(oObj.parseOverview());
-            }
-
-            if((i+1) % oPageProperties.cellsperrow === 0) {
-                oTable.appendChild(oTr);
-                oTr = null;
-                oTr = document.createElement('tr');
-            }
-
-            oObj = null;
-        }
-
-        // Fill table with empty cells if there are not enough maps to get the last
-        // row filled
-        if(i % oPageProperties.cellsperrow !== 0) {
-            for(var a = 0; a < (oPageProperties.cellsperrow - (i % oPageProperties.cellsperrow)); a++) {
-                var oTd = document.createElement('td');
-                oTr.appendChild(oTd);
-                oTd = null;
-            }
-        }
-
-        // Append last row
-        oTable.appendChild(oTr);
-        oTr = null;
-
-        oTable = null;
-    }
-
-    eventlog("worker", "debug", "parseOverviewAutomaps: End setting automaps");
     getAndParseTemplates();
 }
 
@@ -1487,14 +1394,6 @@ function getOverviewMaps() {
 }
 
 /**
- * Fetches all automaps to be shown on the overview page
- */
-function getOverviewAutomaps() {
-    getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getOverviewAutomaps' + getViewParams(), 
-                    false, parseOverviewAutomaps);
-}
-
-/**
  * getOverviewRotations()
  *
  * Fetches all rotations to be shown on the overview page
@@ -1548,12 +1447,8 @@ function getViewParams() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getMapProperties(type, mapName) {
-    if(type === 'automap')
-        return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getAutomapProperties&show='
-                            + escapeUrlValues(mapName)+getViewParams())
-    else
-        return getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapProperties&show='
-                              + escapeUrlValues(mapName)+getViewParams())
+    return getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapProperties&show='
+                          + escapeUrlValues(mapName)+getViewParams())
 }
 
 /**
@@ -1569,17 +1464,14 @@ function getUrlProperties(sUrl) {
                                            + escapeUrlValues(sUrl))
 }
 
-/**
- * automapParse()
- *
- * Parses the automap background image
- *
- * @return  Boolean  Success?
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function automapParse(mapName) {
-    return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=parseAutomap&show='
-                          + escapeUrlValues(mapName)+getViewParams())
+// Returns true if the current view is
+// a) a map
+// b) uses the given source
+function usesSource(source) {
+    return oPageProperties
+        && oPageProperties.view_type == 'map'
+        && oPageProperties.sources
+        && oPageProperties.sources.indexOf(source) !== -1;
 }
 
 /**
@@ -1611,14 +1503,9 @@ function parseMap(iMapCfgAge, type, mapName) {
     }
     wasInMaintenance = null;
 
-    if(type === 'automap')
-        getAsyncRequest(oGeneralProperties.path_server
-                        + '?mod=AutoMap&act=getAutomapObjects&show='
-                        + mapName+getViewParams(), false, parseMapHandler, [iMapCfgAge, type, mapName]);
-    else
-        getAsyncRequest(oGeneralProperties.path_server
-                        + '?mod=Map&act=getMapObjects&show='
-                        + mapName+getViewParams(), false, parseMapHandler, [iMapCfgAge, type, mapName]);
+    getAsyncRequest(oGeneralProperties.path_server
+                    + '?mod=Map&act=getMapObjects&show='
+                    + mapName+getViewParams(), false, parseMapHandler, [iMapCfgAge, type, mapName]);
 }
 
 function parseMapHandler(oObjects, params) {
@@ -1715,7 +1602,7 @@ function workerInitialize(iCount, sType, sIdentifier) {
     eventlog("worker", "debug", "Loading the state properties");
 
     // Handle the page rendering
-    if(sType == 'map' || sType == 'automap') {
+    if(sType == 'map') {
         eventlog("worker", "debug", "Parsing " + sType + ": " + sIdentifier);
         parseMap(oFileAges[sIdentifier], sType, sIdentifier);
 
@@ -1733,7 +1620,6 @@ function workerInitialize(iCount, sType, sIdentifier) {
         parseOverviewPage();
 
         getOverviewMaps();
-        getOverviewAutomaps();
 
         eventlog("worker", "debug", "Parsing geomap");
         parseOverviewGeomap();
@@ -1817,11 +1703,12 @@ function handleUpdate(o, aParams) {
                 return;
 
             } else {
-                if(sType === 'automap') {
-                    // Render new background image and dot file, update background image
-                    automapParse(oPageProperties.map_name);
-                    setMapBackgroundImage(oPageProperties.background_image+iNow);
-                }
+                // FIXME: Maybe rerender map background images?
+                //if(sType === 'automap') {
+                //    // Render new background image and dot file, update background image
+                //    automapParse(oPageProperties.map_name);
+                //    setMapBackgroundImage(oPageProperties.background_image+iNow);
+                //}
 
                 if(iNumUnlocked > 0) {
                     eventlog("worker", "info", "Map config updated. "+iNumUnlocked+" objects unlocked - not reloading.");
@@ -1838,18 +1725,18 @@ function handleUpdate(o, aParams) {
     // Try to fetch them continously
     if(oLength(oMapObjects) === 0) {
         if(sType == 'overview') {
-            eventlog("worker", "info", "No automaps/maps found, reparsing...");
+            eventlog("worker", "info", "No maps found, reparsing...");
             getOverviewMaps();
-            getOverviewAutomaps();
             return;
 
         } else {
             eventlog("worker", "info", "Map is empty. Strange. Re-fetching objects");
-            if(sType === 'automap') {
-                // Render new background image and dot file, update background image
-                automapParse(oPageProperties.map_name);
-                setMapBackgroundImage(oPageProperties.background_image+iNow);
-            }
+            // FIXME: Maybe rerender map background images?
+            //if(sType === 'automap') {
+            //    // Render new background image and dot file, update background image
+            //    automapParse(oPageProperties.map_name);
+            //    setMapBackgroundImage(oPageProperties.background_image+iNow);
+            //}
             parseMap(oFileAges[oPageProperties.map_name], sType, oPageProperties.map_name);
             return;
         }
@@ -1863,7 +1750,7 @@ function handleUpdate(o, aParams) {
         bStateChanged = updateObjects(o, sType);
 
     // When some state changed on the map update the title and favicon
-    if((sType == 'map' || sType == 'automap') && bStateChanged)
+    if(sType == 'map' && bStateChanged)
         updateMapBasics();
 
     // FIXME: Add page basics (title, favicon, ...) update code for overview page
@@ -1930,12 +1817,10 @@ function workerUpdate(iCount, sType, sIdentifier) {
     // Log normal worker step
     eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
 
-    if(sType === 'map' || sType === 'automap' || sType === 'overview') {
+    if(sType === 'map' || sType === 'overview') {
         var mod = 'Map';
         var show = '&show=' + oPageProperties.map_name;
-        if(sType === 'automap') {
-            mod = 'AutoMap';
-        } else if(sType === 'overview') {
+        if(sType === 'overview') {
             mod = 'Overview';
             show = '';
         }

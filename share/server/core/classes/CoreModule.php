@@ -291,13 +291,6 @@ abstract class CoreModule {
                     $MAPCFG  = new NagVisMapCfg($this->CORE, $name);
                     $cur_age = $MAPCFG->getFileModificationTime();
                 }
-
-            } elseif($ty == 'automap') {
-                if($AUTHORISATION->isPermitted('AutoMap', 'view', $name)) {
-                    $MAPCFG  = new NagVisAutomapCfg($this->CORE, $name);
-                    $cur_age = $MAPCFG->getFileModificationTime();
-                }
-
             }
 
             // Check if the file has changed; Reply with the changed timestamps

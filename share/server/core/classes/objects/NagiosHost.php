@@ -50,9 +50,6 @@ class NagiosHost extends NagVisStatefulObject {
     protected $downtime_data;
 
     protected $members;
-    // An automap connector is a host which is not part of the automap selection
-    // but needed as 'bridge' between two hosts which are part of the automap
-    protected $automapConnector = false;
 
     protected static $langHostStateIs = null;
     protected static $langServices = null;

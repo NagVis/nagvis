@@ -1,8 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * NagVisViewModifyParams.php - Class for rendering the modify params
- *                                 dialog
+ * NagVisViewToStaticMap.php - Class for rendering the "to static map" dialog
  *
  * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
  *
@@ -26,9 +25,8 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class NagVisViewModifyParams {
-    private $opts = array();
-    private $optValues = array();
+class NagVisViewToStaticMap {
+    private $CORE;
 
     /**
      * Class Constructor
@@ -36,16 +34,8 @@ class NagVisViewModifyParams {
      * @param 	GlobalCore 	$CORE
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function __construct() {}
-
-    public function setValues($arr) {
-        $this->optValues = $arr;
-    }
-
-    public function addOpts($arr) {
-        foreach($arr AS $key => $val) {
-            $this->opts[$key] = $val;
-        }
+    public function __construct($CORE) {
+        $this->CORE = $CORE;
     }
 
     /**
@@ -55,26 +45,18 @@ class NagVisViewModifyParams {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parse() {
-        $CORE = GlobalCore::getInstance();
-
         // Initialize template system
-        $TMPL = New CoreTemplateSystem($CORE);
+        $TMPL = New CoreTemplateSystem($this->CORE);
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-	    'mod'           => $_GET['mod'],
-            'act'           => 'view',
-            'show'          => $_GET['show'],
-            'htmlBase'      => cfg('paths', 'htmlbase'),
-            'opts'          => $this->opts,
-            'optValues'     => $this->optValues,
-            'langApply'     => l('Apply'),
-            'langPermanent' => l('Make Permanent'),
-            'permEdit'      => $CORE->getAuthorization()->isPermitted($_GET['mod'], 'edit', $_GET['show']),
+            'formTarget'  => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=Map&amp;act=toStaticMap&amp',
+            'langNewName' => l('Store as Map'),
+            'langSave'    => l('save'),
         );
 
         // Build page based on the template file and the data array
-        return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'viewModifyParams'), $aData);
+        return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'toStaticMap'), $aData);
     }
 }
 ?>

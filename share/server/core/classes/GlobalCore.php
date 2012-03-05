@@ -37,8 +37,15 @@ class GlobalCore {
     protected $iconsetTypeCache = Array();
 
 
-    public $demoMaps = Array('demo-germany', 'demo-ham-racks', 'demo-load', 'demo-muc-srv1', 'demo-overview');
-    public $demoAutomaps = Array('__automap', 'demo-overview');
+    public $demoMaps = Array(
+        'demo-germany',
+        'demo-ham-racks',
+        'demo-load',
+        'demo-muc-srv1',
+        'demo-overview',
+        'demo-geomap',
+        'demo-automap',
+    );
 
     /**
      * Deny construct
@@ -337,17 +344,6 @@ class GlobalCore {
     }
 
     /**
-     * Reads all automaps in automapcfg path
-     *
-     * @param   String  Regex to match the map name
-     * @return	Array   Array of maps
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function getAvailableAutomaps($strMatch = null, $setKey = null) {
-        return self::listDirectory(self::getMainCfg()->getValue('paths', 'automapcfg'), MATCH_CFG_FILE, null, $strMatch, null, $setKey);
-    }
-
-    /**
      * Reads all source files for the geomap in the specified path
      */
     public function getAvailableGeomapSourceFiles($strMatch = null, $setKey = null) {
@@ -389,18 +385,6 @@ class GlobalCore {
             self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'gadgets'), MATCH_PHP_FILE, Array('gadgets_core.php' => true), null, null, null, true),
             self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'gadgets'), MATCH_PHP_FILE, Array('gadgets_core.php' => true), null, null, null, false)
         );
-    }
-
-    /**
-     * This method checks if the given map is a automap
-     * This is quite hackish but have no better option at the moment
-     *
-     * @param   String      Name of the map
-     * @return	Boolean		Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function checkMapIsAutomap($sMap) {
-        return in_array($sMap, $this->getAvailableAutomaps());
     }
 
     /**

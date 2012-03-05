@@ -561,6 +561,7 @@ class GlobalMainCfg {
                 'automapcfg' => Array('must' => 0,
                     'editable' => 0,
                     'default' => '',
+                    'deprecated' => 1,
                     'field_type' => 'hidden',
                     'match' => MATCH_STRING_PATH),
                 'gadgets' => Array('must' => 0,
@@ -694,6 +695,7 @@ class GlobalMainCfg {
                     'editable' => 1,
                     'default' => '1',
                     'field_type' => 'boolean',
+                    'deprecated' => 1,
                     'match' => MATCH_BOOLEAN)
                 ),
             'index' => Array(
@@ -716,6 +718,7 @@ class GlobalMainCfg {
                     'editable' => 1,
                     'default' => 1,
                     'field_type' => 'boolean',
+                    'deprecated' => 1,
                     'match' => MATCH_BOOLEAN),
                 'showmaps' => Array('must' => 0,
                     'editable' => 1,
@@ -1191,7 +1194,6 @@ class GlobalMainCfg {
         $this->validConfig['paths']['cfg']['default']                = $base.'etc/';
         $this->validConfig['paths']['mapcfg']['default']             = $base.'etc/maps/';
         $this->validConfig['paths']['geomap']['default']             = $base.'etc/geomap';
-        $this->validConfig['paths']['automapcfg']['default']         = $base.'etc/automaps/';
         $this->validConfig['paths']['profiles']['default']           = $base.'etc/profiles';
 
         $this->validConfig['paths']['var']['default']                = $base.'var/';
@@ -1334,7 +1336,6 @@ class GlobalMainCfg {
                             if(preg_match("/^([^\[.]+:)?(\[(.+)\]|(.+))$/", $element, $arrRet)) {
                                 $label = '';
                                 $map = '';
-                                $automap = '';
 
                                 // When no label is set, set map or url as label
                                 if($arrRet[1] != '') {
@@ -1356,14 +1357,8 @@ class GlobalMainCfg {
                                 $label = trim($label);
                                 $map = trim($map);
 
-                                // Check if the map is an automap
-                                if(substr($map, 0, 1) === '@') {
-                                    $automap = substr($map, 1);
-                                    $map = '';
-                                }
-
                                 // Save the extracted information to an array
-                                $val[$id] = Array('label' => $label, 'map' => $map, 'automap' => $automap, 'url' => $arrRet[3], 'target' => '');
+                                $val[$id] = Array('label' => $label, 'map' => $map, 'url' => $arrRet[3], 'target' => '');
                             }
                         }
                     }

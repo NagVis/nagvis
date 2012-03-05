@@ -91,11 +91,6 @@ class FrontendModRotation extends FrontendModule {
             case 'url':
                 header('Location: ' . $ROTATION->getCurrentStepUrl());
             break;
-            case 'automap':
-                // FIXME: Automaps in rotations
-                echo 'Error: Automaps in rotations are not implemented yet';
-                exit(0);
-            break;
         }
     }
 }

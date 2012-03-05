@@ -38,7 +38,6 @@ class CoreModMap extends CoreModule {
             'getMapProperties'  => 'view',
             'getMapObjects'     => 'view',
             'getObjectStates'   => 'view',
-            'modifyParams'      => 'edit',
             // WUI specific actions
             'manage'            => REQUIRES_AUTHORISATION,
             'doAdd'             => 'add',
@@ -52,6 +51,7 @@ class CoreModMap extends CoreModule {
             'modifyObject'      => 'edit',
             'createObject'      => 'edit',
             'deleteObject'      => 'edit',
+            'toStaticMap'       => 'edit',
 
             'manageTmpl'        => 'edit',
             'getTmplOpts'       => 'edit',
@@ -73,8 +73,8 @@ class CoreModMap extends CoreModule {
             case 'manageTmpl':
             case 'getTmplOpts':
             case 'addModify':
-            case 'modifyParams':
             case 'checkLinked':
+            case 'toStaticMap':
                 $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME));
                 $this->name = $aVals['show'];
             break;
@@ -266,11 +266,54 @@ class CoreModMap extends CoreModule {
                     if($this->handleResponse('handleResponseDoImportMap', 'doImportMap'))
                         header('Location:'.$_SERVER['HTTP_REFERER']);
                 break;
+                case 'toStaticMap':
+                    if(isset($_POST['target'])) {
+                        // Is called on form submission
+                        $this->toStaticMap();
+                    } else {
+                        $VIEW = new NagVisViewtoStaticMap($this->CORE);
+                        $sReturn = json_encode(Array('code' => $VIEW->parse()));
+                    }
+                break;
             }
         }
 
         return $sReturn;
     }
+
+    /**
+     * Converts maps using sources to static maps
+     * FIXME: Not implemented yet
+     */
+    private function toStaticMap() {
+        throw new NagVisException(l('Needs to be migrated.'));
+//        $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
+//        $MAPCFG->readMapConfig();
+//
+//        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, false, IS_VIEW);
+//
+//        if($this->sAction == 'parseAutomap') {
+//            $MAP->renderMap();
+//            return json_encode(true);
+//        } else {
+//            $FHANDLER = new CoreRequestHandler($_POST);
+//            if($FHANDLER->match('target', MATCH_MAP_NAME)) {
+//                $target = $FHANDLER->get('target');
+//
+//                if($MAP->toClassicMap($target)) {
+//                    throw new Success(l('The map has been created.'),
+//                                      null,
+//                                      1,
+//                                      cfg('paths','htmlbase').'/frontend/nagvis-js/index.php?mod=Map&show='.$target);
+//                }  else {
+//                    throw new NagVisException(l('Unable to create map configuration file.'));
+//                }
+//            } else {
+//                throw new NagVisException(l('Invalid target option given.'));
+//            }
+//        }
+    }
+
 
     // Filter the attributes using the helper fields
     // Each attribute can have the toggle_* field set. If present
@@ -933,6 +976,7 @@ class CoreModMap extends CoreModule {
         $arr['event_scroll']             = $MAPCFG->getValue(0, 'event_scroll');
         $arr['event_sound']              = $MAPCFG->getValue(0, 'event_sound');
         $arr['in_maintenance']           = $MAPCFG->getValue(0, 'in_maintenance');
+        $arr['sources']                  = $MAPCFG->getValue(0, 'sources');
 
         return json_encode($arr);
     }

@@ -33,7 +33,6 @@ class CoreModOverview extends CoreModule {
         $this->aActions = Array(
             'getOverviewProperties' => 'view',
             'getOverviewMaps'       => 'view',
-            'getOverviewAutomaps'   => 'view',
             'getOverviewRotations'  => 'view',
             'getObjectStates'       => 'view',
         );
@@ -51,9 +50,6 @@ class CoreModOverview extends CoreModule {
                 break;
                 case 'getOverviewMaps':
                     $sReturn = $OVERVIEW->parseMapsJson('map');
-                break;
-                case 'getOverviewAutomaps':
-                    $sReturn = $OVERVIEW->parseMapsJson('automap');
                 break;
                 case 'getOverviewRotations':
                     $sReturn = $OVERVIEW->parseRotationsJson();

@@ -25,22 +25,15 @@
               <li class="spacer"><hr /></li>
               {headMaps $maps $pathBase "Map"}
             {/if}
-            {if count($automaps) > 0}
-              <li class="spacer"><hr /></li>
-              {headMaps $automaps $pathBase "AutoMap"}
-            {/if}
             <li class="spacer underline"></li>
         </ul>
     </li>
-    {if ($mod == 'Map' && ($permittedEdit == true && $act != 'edit' || $permittedView == true && $act != 'view')) || $mod == 'AutoMap' || $bRotation == true || $permittedSearch}
+    {if ($mod == 'Map' && ($permittedEdit == true && $act != 'edit' || $permittedView == true && $act != 'view')) || $bRotation == true || $permittedSearch}
     <li onmouseover="ddMenu('action',1)" onmouseout="ddMenuHide(['action'])" class="dropdown">
         <span id="action-ddheader">{$langActions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         <ul id="action-ddcontent">
-            {if ($mod == 'Map' || $mod == 'AutoMap') && $permittedSearch}
+            {if $mod == 'Map' && $permittedSearch}
             <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Search&amp;act=view', '{$langSearch}')">{$langSearch}</a></li>
-            {/if}
-            {if $mod == 'AutoMap' && $permittedEdit == true}
-            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&amp;act=modifyParams&amp;show={$currentMap}'+getViewParams(), '{$langModifyParams}')">{$langModifyParams}</a></li>
             {/if}
             {if $mod == 'Map' && $permittedEdit == true}
             <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=addModify&amp;show={$currentMap}&amp;object_id=0&mode=view_params'+getViewParams(), '{$langModifyParams}');" class="underline">{$langModifyParams}</a></li>
@@ -49,8 +42,8 @@
             <li id="rotationStart" style="display:none"><a href="#" onclick="switchRotation()">{$langRotationStart}</a></li>
             <li id="rotationStop" style="display:inline"><a href="#" onclick="switchRotation()">{$langRotationStop}</a></li>
             {/if}
-            {if $mod == 'AutoMap' && $permittedEdit == true}
-            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&amp;act=automapToMap&amp;show=dialog', '{$langAutomapToMap}')">{$langAutomapToMap}</a></li>
+            {if $mod == 'Map' && $usesSources && $permittedEdit == true}
+            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=toStaticMap&amp;show=dialog', '{$langToStaticMap}')">{$langToStaticMap}</a></li>
             {/if}
             <li class="spacer underline"></li>
         </ul>
@@ -161,9 +154,6 @@
     {if $permittedOverview}<li class="spacerbottom"><a href="{$pathBase}/frontend/nagvis-js/index.php">{$langOverview}</a></li>{/if}
     <li class="closed"><a class="title" href="#" onclick="sidebarToggleSubtree(this)">{$langMaps}</a>
         <ul style="display:none;">{sideMaps $maps $pathBase "Map"}</ul>
-    </li>
-    <li class="closed"><a class="title" href="#" onclick="sidebarToggleSubtree(this)">{$langAutomaps}</a>
-        <ul style="display:none;">{sideMaps $automaps $pathBase "AutoMap"}</ul>
     </li>
 </ul>
 </div>
