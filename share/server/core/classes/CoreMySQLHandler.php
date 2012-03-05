@@ -161,7 +161,14 @@ class CoreMySQLHandler {
     }
 
     private function addRolePerm($roleId, $mod, $act, $obj) {
-        $this->query('INSERT INTO roles2perms (roleId, permId) VALUES ('.$roleId.', (SELECT permId FROM perms WHERE `mod`=\''.$mod.'\' AND `act`=\''.$act.'\' AND obj=\''.$obj.'\'))');
+        // Only create when not existing
+        if($this->count('SELECT `roleId` FROM roles2perms WHERE `roleId`='.$roleId.' AND `permId`=(SELECT permId FROM perms WHERE `mod`=\''.$mod.'\' AND `act`=\''.$act.'\' AND obj=\''.$obj.'\')') <= 0) {
+            $this->query('INSERT INTO roles2perms (roleId, permId) VALUES ('.$roleId.', (SELECT permId FROM perms WHERE `mod`=\''.$mod.'\' AND `act`=\''.$act.'\' AND obj=\''.$obj.'\'))');
+        }
+    }
+
+    public function createPerm($mod, $act, $obj) {
+        $this->query('INSERT IGNORE INTO perms (`mod`, `act`, `obj`) VALUES (\''.$mod.'\', \''.$act.'\', \''.$obj.'\')');
     }
 
     public function updateDb() {
@@ -191,7 +198,7 @@ class CoreMySQLHandler {
 
     private function updateDb1060500() {
 	// Create permissions for Url/view/*
-        $this->query('INSERT INTO perms (`mod`, `act`, `obj`) VALUES (\'Url\', \'view\', \'*\')');
+        $this->createPerm('Url', 'view', '*');
         
         // Assign the new permission to the managers, users, guests
         $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\' or name=\'Guests\'');
@@ -234,7 +241,7 @@ class CoreMySQLHandler {
 
     private function updateDb1060022() {
 	// Create permissions for User/setOption
-        $this->query('INSERT INTO perms (`mod`, `act`, `obj`) VALUES (\'User\', \'setOption\', \'*\')');
+        $this->createPerm('User', 'setOption', '*');
 
         // Assign the new permission to the managers, users, guests
         $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\' or name=\'Guests\'');
@@ -250,7 +257,7 @@ class CoreMySQLHandler {
 
     private function updateDb1050400() {
         // Create permissions for the multisite webservice
-        $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Multisite\', \'getMaps\', \'*\')');
+        $this->createPerm('Multisite', 'getMaps', '*');
 
         // Assign the new permission to the managers
         $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\' or name=\'Guests\'');
@@ -266,9 +273,9 @@ class CoreMySQLHandler {
 
     private function updateDb1050300() {
         // Create permissions for WUI management pages
-        $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'manage\', \'*\')');
-        $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'manage\', \'*\')');
-        $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'manage\', \'*\')');
+        $this->createPerm('ManageBackgrounds', 'manage', '*');
+        $this->createPerm('ManageShapes',      'manage', '*');
+        $this->createPerm('Map',               'manage', '*');
 
         // Assign the new permission to the managers
         $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\'');
