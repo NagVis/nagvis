@@ -390,23 +390,6 @@ function automap_tree_to_map_config($MAPCFG, &$params, &$saved_config, &$map_con
     }
 }
 
-//function honor_user_defined_coords($saved_config, $map_config) {
-//    //// Now restore the user defined coordinates
-//    $i = 0;
-//    foreach($saved_config AS $object_id => $object) {
-//        // Only handle map objects which do exist on the automap
-//        // (do not create new object by the user config)
-//        // And only use the x/y attributes
-//        if($object_id != 0 && isset($map_config[$object_id])
-//           && isset($map_config[$object_id]['x'])
-//           && isset($map_config[$object_id]['y'])) {
-//            $map_config[$object_id]['x'] = $object['x'];
-//            $map_config[$object_id]['y'] = $object['y'];
-//        }
-//    }
-//}
-
-// FIXME: At the moment use old mechanism. Need to be recoded
 function process_automap($MAPCFG, $map_name, &$map_config) {
     // Load the automap config parameters
     $params = automap_load_params($MAPCFG);
@@ -434,12 +417,16 @@ function process_automap($MAPCFG, $map_name, &$map_config) {
     // Transform the tree to a flat map config for regular map rendering
     automap_tree_to_map_config($MAPCFG, $params, $saved_config, $map_config, $tree);
 
-    // Now apply eventually user defined coords
-    //honor_user_defined_coords($saved_config, $map_config);
-
     // Now use graphviz to calculate the coordinates of the objects
     // (where no manual coords have been set)
     process_automap_pos($MAPCFG, $map_name, $map_config, $tree, $params);
+
+    // Remove "." leaded attributes
+    // FIXME: Maybe move this to general "sources" processing
+    foreach($map_config as $object_id => $conf)
+        foreach(array_keys($conf) as $key)
+            if($key[0] == '.')
+                unset($map_config[$object_id][$key]);
 }
 
 function changed_automap($MAPCFG, $compare_time) {
