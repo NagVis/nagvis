@@ -13,7 +13,6 @@ Zu tun:
       - Werden die korrekt übernommen?
       - margin abziehen?
     - Export To Map umziehen
-  - Option zum persistieren der Optionen für einen selbst
   - Geomap:
     - Max. resolution (limit of OSM/API?)
     - bbox Limit?
@@ -25,6 +24,9 @@ Zu tun:
     - Alte zu neuen Automap Parametern
     - Automap Migration
     - Source API dokumentieren
+
+Nice2have:
+  - Option zum persistieren der Optionen für einen selbst
 
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
