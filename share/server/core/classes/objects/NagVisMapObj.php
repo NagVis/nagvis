@@ -119,7 +119,7 @@ class NagVisMapObj extends NagVisStatefulObject {
      * @return  Array Array with map objects
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    public function getStateRelevantMembers() {
+    public function getStateRelevantMembers($excludeMemberStates = false) {
         $a = Array();
 
         // Loop all members
@@ -138,10 +138,17 @@ class NagVisMapObj extends NagVisStatefulObject {
                 continue;
 
             /**
-                * All maps which produce a loop by linking back to earlier maps
-                * need to be skipped here.
-                */
+             * All maps which produce a loop by linking back to earlier maps
+             * need to be skipped here.
+             */
             if($sType == 'map' && $OBJ->isLoopingBacklink)
+                continue;
+
+            /**
+             * Exclude map objects based on "exclude_member_states" option
+             */
+            if($excludeMemberStates && $this->hasExcludeFilters(COUNT_QUERY)
+               && $this->excludeMapObject($OBJ, COUNT_QUERY))
                 continue;
 
             // Add relevant objects to array
@@ -333,9 +340,9 @@ class NagVisMapObj extends NagVisStatefulObject {
      * Cares about excluding members of map objects. The other objects excludes
      * are handled by the backends, not in the NagVis code.
      */
-    private function excludeMapObject($OBJ) {
+    private function excludeMapObject($OBJ, $isCount) {
         // at the moment only handle the complete exclusion
-        $filter  = $this->getExcludeFilter(!COUNT_QUERY);
+        $filter  = $this->getExcludeFilter($isCount);
         $objType = $OBJ->getType();
         $parts   = explode('~~', $filter);
 
@@ -471,8 +478,8 @@ class NagVisMapObj extends NagVisStatefulObject {
             // Apply default configuration to object
             $OBJ->setConfiguration($objConf);
 
-            // Skip object by exclude filter?
-            if($this->hasExcludeFilters(!COUNT_QUERY) && $this->excludeMapObject($OBJ))
+            // Skip object by exclude filter? => Totally exclude (exclude_members)
+            if($this->hasExcludeFilters(!COUNT_QUERY) && $this->excludeMapObject($OBJ, !COUNT_QUERY))
                 continue;
 
             // Write member to object array
@@ -522,7 +529,7 @@ class NagVisMapObj extends NagVisStatefulObject {
                                'OK'          => 0, 'ERROR'    => 0, 'ACK'  => 0,
                                'PENDING'     => 0);
 
-            foreach($this->getStateRelevantMembers() AS $OBJ)
+            foreach($this->getStateRelevantMembers(true) AS $OBJ)
                 if(isset($arrStates[$OBJ->summary_state]))
                     $arrStates[$OBJ->summary_state]++;
 
@@ -563,7 +570,7 @@ class NagVisMapObj extends NagVisStatefulObject {
     private function fetchSummaryState() {
         // Get summary state of this object from single objects
         if($this->hasObjects() && $this->hasStatefulObjects())
-            $this->wrapChildState($this->getStateRelevantMembers());
+            $this->wrapChildState($this->getStateRelevantMembers(true));
         else
             $this->summary_state = 'UNKNOWN';
     }
