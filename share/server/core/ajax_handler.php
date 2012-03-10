@@ -46,7 +46,6 @@ try {
         'General',
         'Overview',
         'Map',
-        'AutoMap',
         'Url',
         'ChangePassword',
         'Auth',

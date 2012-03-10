@@ -479,16 +479,6 @@ class CoreMySQLHandler {
             $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'createObject\', '.$this->escape($name).')');
             $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'deleteObject\', '.$this->escape($name).')');
             $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'addModify\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'getAutomapProperties\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'getAutomapObjects\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'getObjectStates\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'parseAutomap\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'doEdit\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'doDelete\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'doRename\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'modifyObject\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'createObject\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'deleteObject\', '.$this->escape($name).')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'view\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'doCreate\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'doUpload\', \'*\')');
@@ -499,7 +489,6 @@ class CoreMySQLHandler {
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Overview\', \'getOverviewRotations\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Overview\', \'getOverviewProperties\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Overview\', \'getOverviewMaps\', \'*\')');
-        $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Overview\', \'getOverviewAutomaps\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ChangePassword\', \'view\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'UserMgmt\', \'view\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'UserMgmt\', \'getUserRoles\', \'*\')');
@@ -520,7 +509,6 @@ class CoreMySQLHandler {
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'doUpload\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'doDelete\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'doAdd\', \'*\')');
-        $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'doAdd\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'MainCfg\', \'doEdit\', \'*\')');
 */
 ?>

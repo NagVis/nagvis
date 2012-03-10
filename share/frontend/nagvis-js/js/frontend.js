@@ -1415,9 +1415,16 @@ function getOverviewRotations() {
  * @return  String    URL part with params and values
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function getViewParams() {
+function getViewParams(update) {
     if(!isset(oViewProperties) || !isset(oViewProperties['params']))
         return '';
+
+    // Udate the params before processing url
+    if(isset(update)) {
+        for(var param in update) {
+            oViewProperties['params'][param] = update[param];
+        }
+    }
 
     var sParams = '';
     for(var param in oViewProperties['params']) {
