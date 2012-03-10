@@ -15,8 +15,9 @@ Relative Koordinaten:
   - Header Menu sollte funktionieren während die Index Seite lädt
   - Einzelne Maps sollten schon aufbauen
 
-
 -------------------------------------------------------------------------------
+
+- Make stateless lines or other single part lines splittable
 
 - Weathermap Line Parser pro Check-Kommando behandeln - Das sollte den Code wesentlich sauberer machen
 
