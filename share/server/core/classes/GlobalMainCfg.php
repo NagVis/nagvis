@@ -405,6 +405,12 @@ class GlobalMainCfg {
                     'match'      => MATCH_BOOLEAN, 
                     'field_type' => 'boolean',
                 ),
+                'line_weather_colors' => Array(
+                    'must'       => 0,
+                    'editable'   => 1,
+                    'default'    => '10:#8c00ff,25:#2020ff,40:#00c0ff,55:#00f000,70:#f0f000,85:#ffc000,100:#ff0000',
+                    'match'      => MATCH_WEATHER_COLORS,
+                ),
             ),
             'wui' => Array(
                 'allowedforconfig' => Array(
