@@ -143,8 +143,6 @@ General Parameters:
   -i <BACKENDs> Comma separated list of backends to use:
                   Available backends: mklivestatus, ndo2db, ido2db, merlinmy
 
-  -B <BINARY>   Full path to the Nagios/Icinga binary (DEPRECATED and UNUSED!)
-
 Backend specific parameters:
 
   ndo2db, ido2db:
@@ -972,13 +970,10 @@ HTML_PATH="/nagvis"
 
 # Process command line options
 if [ $# -gt 0 ]; then
-    while getopts "p:n:B:m:l:w:W:u:b:g:c:i:s:O:a:ohqvFr" options $OPTS; do
+    while getopts "p:n:m:l:w:W:u:b:g:c:i:s:O:a:ohqvFr" options $OPTS; do
         case $options in
             n)
                 NAGIOS_PATH=${OPTARG%/}
-            ;;
-            B)
-                # Deprecated since 1.6x
             ;;
             m)
                 NDO_MOD=$OPTARG
