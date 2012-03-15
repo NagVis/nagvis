@@ -119,8 +119,6 @@ function toggleSidebar(store) {
     var sidebar = document.getElementById('sidebar');
     var content = document.getElementById('map');
     if(content == null)
-        content = document.getElementById('automap');
-    if(content == null)
         content = document.getElementById('overview');
     // If there is still no content don't execute the main code. So the sidebar
     // will not be available in undefined views like the WUI
@@ -178,11 +176,16 @@ function sidebarDraw() {
     var openNodes = oUserProperties.sidebarOpenNodes.split(',');
     var nodes = document.getElementById('sidebar').getElementsByTagName('ul');
     for(var i = 0, len = openNodes.length; i < len; i++) {
-        var node = nodes[openNodes[i]];
-        node.style.display = 'block';
-        node.parentNode.setAttribute('class', 'open');
-        node.parentNode.setAttribute('className', 'open');
-        node = null;
+        if(isset(nodes[openNodes[i]])) {
+            var node = nodes[openNodes[i]];
+            node.style.display = 'block';
+            node.parentNode.setAttribute('class', 'open');
+            node.parentNode.setAttribute('className', 'open');
+            node = null;
+        } else {
+            // The "open node" does not exist (anymore)
+            // FIXME: Remove from stored open nodes
+        }
     }
 }
 

@@ -46,7 +46,7 @@ var validMapConfig = {};
 var validMainConfig = {};
 
 // Initialize and define some other basic vars
-var iNow = Date.parse(new Date());
+var iNow = String(Date.parse(new Date())).substr(0, 10);
 
 // Define some state options
 var oStates = {};
@@ -333,7 +333,7 @@ function updateWorkerCounter() {
     // write the time to refresh to header counter
     if(oWorkerCounter) {
         if(oWorkerProperties.last_run) {
-            oWorkerCounter.innerHTML = date(oGeneralProperties.date_format, oWorkerProperties.last_run/1000);
+            oWorkerCounter.innerHTML = date(oGeneralProperties.date_format, oWorkerProperties.last_run);
         }
     }
     oWorkerCounter = null;
@@ -407,6 +407,33 @@ function getUrlParam(name) {
     } else {
         return results[1];
     }
+}
+
+/**
+ * Function creates a new cleaned up URL
+ * - Can add/overwrite parameters
+ */
+function makeuri(addvars) {
+    var tmp = window.location.href.split('?');
+    var base = tmp[0];
+    tmp = tmp[1].split('#');
+    tmp = tmp[0].split('&');
+    var len = tmp.length;
+    var params = [];
+    var pair = null;
+
+    // Skip unwanted parmas
+    for(var i = 0; i < tmp.length; i++) {
+        pair = tmp[i].split('=');
+        params.push(tmp[i]);
+    }
+
+    // Add new params
+    for (var key in addvars) {
+        params.push(key + '=' + addvars[key]);
+    }
+
+    return base + '?' + params.join('&')
 }
 
 /**

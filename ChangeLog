@@ -1,3 +1,14 @@
+1.7.0
+Core
+  * Introducing the "map source" feature. Take a look at the docs for details
+  * Implemented geomaps using the new "map source" feature based on an Open
+    Street Map static map API
+  * Removed the special map type "automap". The automaps have been replaced by
+    regular maps which use the "automap" source.
+    Migration Notes: We do not migrate the automap config files automatically.
+    if you like to have them migrated please move the files from etc/automaps
+    to etc/maps and add the parameter 'source="automap"' to the global section.
+
 1.6.5
 Core
   * Added line_weather_colors option to nagvis.ini.php [defaults] section
@@ -19,15 +30,35 @@ Core
     socket timeout while connecting to the livestatus socket
   * Livestatus Backend: Only try to connect to livestatus once per page load
   * Bugfix: Fixed wrong computed shape urls which broke all shapes
+  * Added new iconset std_dot
   * The label_show parameter can now be configured for the whole installation
     in the [defaults] section of the main configuration
   * The audit.log is disabled by default now (can be enabled using the
     audit_log parameter in [global] section)
+  * Bugfix: Fixed problem with not real asynchronous ajax calls caused by
+    locking PHP sessions
+  * Bugfix: Fixed update of states on overview page
   * NDO Backend: Removed query debug outputs
+
+Automap
+  * Added new parameter "margin" to control the offset of the automap to the
+    edge of the map
+  * Recoded all automap parameters. All camel case options have been changed
+    to underscore separated vars (e.g. childLayers -> child_layers). These
+    options are now available in the global section of the automaps.
+  * Removed default_params option from global sections. Use the regular
+    options in global section to define default options.
+  * The option of adding a __dummy__ host to the automap configurations has
+    been removed. It is not supported anymore.
 
 Frontend
   * Weathermap line color definitions support usage values above 100% and below 0%
   * Better error handling during coord parsing
+  * Reduced ajax calls during regular map updating
+  * Switched ajax calls during view rendering to be asynchronous (Prevents
+    locked up browsers during ajax calls)
+  * Suppressing transfer of non set attributes during ajax calls
+  * Bugfix: Always remove the last frontend error message when clicking "close"
 
 1.6.3
 Core

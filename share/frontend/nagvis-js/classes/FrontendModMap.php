@@ -30,8 +30,7 @@ class FrontendModMap extends FrontendModule {
     private $search = '';
     private $rotation = '';
     private $rotationStep = '';
-
-    private $viewOpts = Array();
+    private $perm = '';
 
     public function __construct(GlobalCore $CORE) {
         $this->sName = 'Map';
@@ -43,9 +42,7 @@ class FrontendModMap extends FrontendModule {
             'search'        => MATCH_STRING_NO_SPACE_EMPTY,
             'rotation'      => MATCH_ROTATION_NAME_EMPTY,
             'rotationStep'  => MATCH_INTEGER_EMPTY,
-            'enableHeader'  => MATCH_BOOLEAN_EMPTY,
-            'enableContext' => MATCH_BOOLEAN_EMPTY,
-            'enableHover'   => MATCH_BOOLEAN_EMPTY
+            'perm'          => MATCH_BOOLEAN_EMPTY,
         );
 
         // There might be a default map when none is given
@@ -57,10 +54,7 @@ class FrontendModMap extends FrontendModule {
         $this->search       = $aVals['search'];
         $this->rotation     = $aVals['rotation'];
         $this->rotationStep = $aVals['rotationStep'];
-
-        $this->viewOpts['enableHeader']  = $aVals['enableHeader'];
-        $this->viewOpts['enableContext'] = $aVals['enableContext'];
-        $this->viewOpts['enableHover']   = $aVals['enableHover'];
+        $this->perm         = $aVals['perm'];
 
         // Register valid actions
         $this->aActions = Array(
@@ -98,6 +92,9 @@ class FrontendModMap extends FrontendModule {
         // Read the map configuration file (Only global section!)
         $MAPCFG->readMapConfig(ONLY_GLOBAL);
 
+        // Get all source parameters
+        $opts = $MAPCFG->getSourceParams();
+
         // Build index template
         $INDEX = new NagVisIndexView($this->CORE);
 
@@ -106,17 +103,8 @@ class FrontendModMap extends FrontendModule {
         if($customStylesheet !== '')
             $INDEX->setCustomStylesheet($this->CORE->getMainCfg()->getPath('html', 'global', 'styles', $customStylesheet));
 
-        // Header menu enabled/disabled by url?
-        if($this->viewOpts['enableHeader'] !== false && $this->viewOpts['enableHeader']) {
-            $showHeader = true;
-        } elseif($this->viewOpts['enableHeader'] !== false && !$this->viewOpts['enableHeader']) {
-            $showHeader = false;
-        } else {
-            $showHeader = $MAPCFG->getValue(0 ,'header_menu');
-        }
-
         // Need to parse the header menu by config or url value?
-        if($showHeader) {
+        if($opts['header_menu']) {
             // Parse the header menu
             $HEADER = new NagVisHeaderMenu($this->CORE, $this->UHANDLER, $MAPCFG->getValue(0 ,'header_template'), $MAPCFG);
 
@@ -130,12 +118,10 @@ class FrontendModMap extends FrontendModule {
 
         // Initialize map view
         $this->VIEW = new NagVisMapView($this->CORE, $this->name);
+        $this->VIEW->setParams($opts);
 
         // The user is searching for an object
         $this->VIEW->setSearch($this->search);
-
-        // Set view modificators (Hover, Context toggle)
-        $this->VIEW->setViewOpts($this->viewOpts);
 
         // Enable edit mode for all objects
         if($this->sAction == 'edit')

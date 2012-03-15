@@ -3,11 +3,6 @@
 function listMapNames($CORE) {
     global $AUTHORISATION;
     $list = Array();
-    $automaps = $CORE->getAvailableAutomaps();
-    foreach($automaps AS $key => $val)
-        if($AUTHORISATION->isPermitted('AutoMap', 'view', $val))
-            $list[$key] = $val;
-
     $maps = $CORE->getAvailableMaps();
     foreach($maps AS $key => $val)
         if($AUTHORISATION->isPermitted('Map', 'view', $val))
@@ -82,15 +77,15 @@ function listViewTypes($CORE) {
 }
 
 function getObjectNames($type, $CORE, $MAPCFG, $objId, $attrs) {
+    global $_BACKEND;
     if(isset($attrs['backend_id']) && $attrs['backend_id'] != '')
         $backendId = $attrs['backend_id'];
     else
         $backendId = $MAPCFG->getValue($objId, 'backend_id');
 
     // Initialize the backend
-    $BACKEND = new CoreBackendMgmt($CORE);
-    $BACKEND->checkBackendExists($backendId, true);
-    $BACKEND->checkBackendFeature($backendId, 'getObjects', true);
+    $_BACKEND->checkBackendExists($backendId, true);
+    $_BACKEND->checkBackendFeature($backendId, 'getObjects', true);
 
     $name1 = '';
     if($type === 'service') {
@@ -105,7 +100,7 @@ function getObjectNames($type, $CORE, $MAPCFG, $objId, $attrs) {
 
     // Read all objects of the requested type from the backend
     $aRet = Array();
-    $objs = $BACKEND->getBackend($backendId)->getObjects($type, $name1, '');
+    $objs = $_BACKEND->getBackend($backendId)->getObjects($type, $name1, '');
     foreach($objs AS $obj) {
         if($type !== 'service')
             $aRet[] = $obj['name1'];
@@ -155,16 +150,6 @@ $mapConfigVars = Array(
         'match'      => MATCH_OBJECTID,
         'field_type' => 'hidden',
     ),
-    'allowed_for_config' => Array(
-        'must'       => 0,
-        'deprecated' => true,
-        'match'      => MATCH_STRING,
-    ),
-    'allowed_user' => Array(
-        'must'       => 0,
-        'deprecated' => true,
-        'match'      => MATCH_STRING,
-    ),
     'map_image' => Array(
         'must'       => 0,
         'default'    => '',
@@ -175,7 +160,14 @@ $mapConfigVars = Array(
     'alias' => Array(
         'must'       => 0,
         'default'    => '',
-        'match'      => MATCH_STRING),
+        'match'      => MATCH_STRING
+    ),
+    'sources' => Array(
+        'must'       => 0,
+        'default'    => '',
+        'array'      => True,
+        'match'      => MATCH_STRING
+    ),
     'backend_id' => Array(
         'must'       => 0,
         'default'    => cfg('defaults', 'backend'),
@@ -191,6 +183,7 @@ $mapConfigVars = Array(
     'default_params' => Array(
         'must'       => 0,
         'default'    => '',
+        'deprecated' => true,
         'match'      => MATCH_STRING_URL_EMPTY,
         'field_type' => 'hidden',
     ),
@@ -355,14 +348,6 @@ $mapConfigVars = Array(
         'depends_value' => '1',
         'list'          => 'listHoverTemplates',
      ),
-    'hover_timeout' => Array(
-        'must' => 0,
-        'deprecated' => true,
-        'default' => cfg('defaults', 'hovertimeout'),
-        'match' => MATCH_INTEGER,
-        'depends_on' => 'hover_menu',
-        'depends_value' => '1'
-    ),
     'hover_url' => Array(
         'must'          => 0,
         'match'         => MATCH_STRING_URL,
@@ -813,8 +798,7 @@ $mapConfigVars['hover_menu_line']['default'] = '0';
 $mapConfigVarMap['global'] = Array(
     'type' => null,
     'object_id' => null,
-    'allowed_for_config' => null,
-    'allowed_user' => null,
+    'sources' => null,
     'map_image' => null,
     'alias' => null,
     'backend_id' => null,
@@ -845,7 +829,6 @@ $mapConfigVarMap['global'] = Array(
     'hover_menu' => null,
     'hover_delay' => null,
     'hover_template' => null,
-    'hover_timeout' => null,
     'hover_childs_show' => null,
     'hover_childs_limit' => null,
     'hover_childs_order' => null,
@@ -895,7 +878,6 @@ $mapConfigVarMap['host'] = Array(
     'hover_menu' => null,
     'hover_delay' => null,
     'hover_template' => null,
-    'hover_timeout' => null,
     'hover_url' => null,
     'hover_childs_show' => null,
     'hover_childs_sort' => null,
@@ -938,7 +920,6 @@ $mapConfigVarMap['hostgroup'] = Array(
     'hover_menu' => null,
     'hover_delay' => null,
     'hover_template' => null,
-    'hover_timeout' => null,
     'hover_url' => null,
     'hover_childs_show' => null,
     'hover_childs_sort' => null,
@@ -987,7 +968,6 @@ $mapConfigVarMap['service'] = Array(
     'context_template' => null,
     'hover_menu' => null,
     'hover_template' => null,
-    'hover_timeout' => null,
     'hover_delay' => null,
     'hover_url' => null,
     'hover_childs_show' => null,
@@ -1030,7 +1010,6 @@ $mapConfigVarMap['servicegroup'] = Array(
     'hover_menu' => null,
     'hover_delay' => null,
     'hover_template' => null,
-    'hover_timeout' => null,
     'hover_url' => null,
     'hover_childs_show' => null,
     'hover_childs_sort' => null,
@@ -1070,7 +1049,6 @@ $mapConfigVarMap['map'] = Array(
     'exclude_member_states' => null,
     'hover_menu' => null,
     'hover_template' => null,
-    'hover_timeout' => null,
     'hover_delay' => null,
     'hover_url' => null,
     'hover_childs_show' => null,

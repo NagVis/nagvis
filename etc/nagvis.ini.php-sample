@@ -47,6 +47,17 @@
 ;file_group=""
 ;file_mode="660"
 ;
+; In some cases NagVis needs to open connections to the internet. The cases are:
+; - The new geomap needs access to openstreetmap webservices to be able to fetch
+;   mapping information
+; Most company networks don't allow direct HTTP access to the internet. The most
+; networks require the users to use proxy servers for outbound HTTP requests.
+; The proxy url to be used in NagVis can be configured here. One possible value
+; is "tcp://127.0.0.1:8080".
+;http_proxy=""
+; Set the timeout (in seconds) for outbound HTTP requests
+;http_timeout=5
+;
 ; Defines which translations of NagVis are available to the users
 ;language_available="de_DE,en_US,es_ES,fr_FR,pt_BR"
 ; Language detection steps to use. Available:
@@ -124,7 +135,7 @@
 ;startmodule="Overview"
 ;startaction="view"
 ; The startshow parameter is only used by some views at the moment. It is used
-; by the Map and the AutoMap modules.
+; by the Map module.
 ;startshow=""
 
 ; Path definitions
@@ -235,8 +246,6 @@
 ;headermenu="1"
 ; header template
 ;headertemplate="default"
-; Enable/Disable automap listing
-;showautomaps=1
 ; Enable/Disable map listing
 ;showmaps=1
 ; Enable/Disable geomap listing
@@ -256,8 +265,6 @@
 ;defaultroot=""
 ; Path to the graphviz binaries (dot,neato,...); Only needed if not in ENV PATH
 ;graphvizpath="/usr/bin/"
-; Show the automap in the lists (Map index and dropdown menu in header)
-;showinlists=1
 
 ; Options for the WUI
 [wui]
@@ -377,9 +384,8 @@ backendtype="merlinmy"
 ; These steps are rotated. The single steps may have optional prefixes like "Demo2:"
 ; which are used as display text on the index pages rotation list.
 ; You may also add external URLs as steps. Simply enclose the url using []
-; instead of the map name. It is also possible to add automaps to rotations,
-; add an @ sign before the automap name to add an automap to the rotation.
-maps="demo-germany,demo-ham-racks,demo-load,demo-muc-srv1"
+; instead of the map name.
+maps="demo-germany,demo-ham-racks,demo-load,demo-muc-srv1,demo-geomap,demo-automap"
 ; rotation interval (seconds)
 interval=15
 

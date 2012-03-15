@@ -30,14 +30,16 @@ class WuiViewMapAddModify {
     private $attrs       = null;
     private $hiddenAttrs = null;
     private $map         = null;
+    private $mode        = null;
     private $errors      = Array();
     private $cloneId     = null;
 
     /**
      * Class Constructor
      */
-    public function __construct($map) {
+    public function __construct($map, $mode) {
         $this->map  = $map;
+        $this->mode = $mode;
         $this->CORE = GlobalCore::getInstance();
 
         $this->MAPCFG = new GlobalMapCfg($this->CORE, $map);
@@ -63,6 +65,10 @@ class WuiViewMapAddModify {
         // The hidden attrs list is cleared by the attrs showd up in the form during getFields() call
         $this->hiddenAttrs = $a;
         $this->hiddenAttrs['update'] = '';
+
+        // Add information about the mode
+        if($this->mode !== null)
+            $this->hiddenAttrs['mode'] = $this->mode;
     }
 
     /**
@@ -83,12 +89,19 @@ class WuiViewMapAddModify {
             $this->cloneId = $cloneId;
 
         $aData = Array(
-            'htmlBase'     => cfg('paths', 'htmlbase'),
-            'show'         => $this->map,
-            'successMsg'   => ($success !== null) ? $success : '',
-            'formContents' => $this->getFields($update),
-            'attrs'        => $this->hiddenAttrs,
-            'langSave'     => l('save'),
+            'htmlBase'      => cfg('paths', 'htmlbase'),
+            'show'          => $this->map,
+            // Seconds timeout to the reload/redirect
+            'reloadTime'    => ($success !== null) ? $success[0] : 0,
+            // Optional: Parameters to add/modify during reload
+            'addParams'     => ($success !== null) ? json_encode($success[1]) : '',
+            // The result message of the dialog
+            'successMsg'    => ($success !== null) ? $success[2] : '',
+            'formContents'  => $this->getFields($update),
+            'attrs'         => $this->hiddenAttrs,
+            'mode'          => $this->mode,
+            'langSave'      => l('save'),
+            'langPermanent' => l('Make Permanent'),
         );
 
         // Build page based on the template file and the data array
@@ -102,6 +115,15 @@ class WuiViewMapAddModify {
         // The url values left will be added as hidden attributes to the form later
         if(isset($this->attrs[$attr])) {
             $val = $this->attrs[$attr];
+
+        } elseif(!$update && isset($this->attrs['object_id']) && $this->attrs['object_id'] == 0
+                 && $this->MAPCFG->getSourceParam($attr, true, true) !== null) {
+            // Get the value set by url if there is some set
+            // But don't try this when running in "update" mode
+            //
+            // In case of global sections handle the source parameters which might affect
+            // the shown values
+            $val = $this->MAPCFG->getSourceParam($attr, true, true);
 
         } elseif(!$update && isset($this->attrs['object_id'])
                  && $this->MAPCFG->getValue($this->attrs['object_id'], $attr, true) !== false) {
@@ -140,7 +162,28 @@ class WuiViewMapAddModify {
         }
 
         $typeDefaults = $this->MAPCFG->getTypeDefaults($type);
-        $typeDef      = $this->MAPCFG->getValidObjectType($type);
+
+        if($objId == 0) {
+            // Special handling for the global section:
+            // It might allow some source parameters (but not all).
+            // Another speciality ist that the dialog can be opened in "view_params" mode
+            // where only the view params shal be shown.
+            $source_params = $this->MAPCFG->getSourceParams();
+            if($this->mode == 'view_params') {
+                $typeDef = $this->MAPCFG->getSourceParamDefs(array_keys($source_params));
+            } else {
+                $typeDef = $this->MAPCFG->getValidObjectType($type);
+
+                // Filter the typedef list. Only show the valid source params
+                foreach($typeDef as $propname => $prop) {
+                    if(!isset($source_params[$propname]) && isset($prop['source_param'])) {
+                        unset($typeDef[$propname]);
+                    }
+                }
+            }
+        } else {
+            $typeDef = $this->MAPCFG->getValidObjectType($type);
+        }
 
         // loop all valid properties for that object type
         foreach($typeDef as $propname => $prop) {

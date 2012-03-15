@@ -46,6 +46,7 @@ define('MATCH_COORDS_MULTI_EMPTY', '/^(?:(?:(?:[0-9]+)|([a-z0-9]+(?:%[+-][0-9]+)
 define('MATCH_INTEGER', '/^[0-9]+$/');
 define('MATCH_INTEGER_EMPTY', '/^[0-9]*$/');
 define('MATCH_FLOAT', '/^[0-9]+[\.\,]*[0-9]*$/');
+define('MATCH_FLOAT_EMPTY', '/^([0-9]+[\.\,]?[0-9]*)*$/');
 define('MATCH_BOOLEAN', '/^(?:1|0)$/i');
 define('MATCH_BOOLEAN_EMPTY', '/^(?:1|0)*$/i');
 
@@ -57,7 +58,7 @@ define('MATCH_PNGFILE', '/^([^\s]+)\.png$/i');
 define('MATCH_PNG_GIF_JPG_FILE', '/^([^\s]+)\.(png|gif|jpg)$/i');
 define('MATCH_PNG_GIF_JPG_FILE_OR_URL_NONE', '/^((.+)\.(png|gif|jpg)|\[[0-9a-z\s\:\+\[\]\(\)\=\%\?\&\_\.\-\#\@\=\/\\\]+\]|none)$/i');
 define('MATCH_PNG_GIF_JPG_FILE_OR_URL', '/^((.+)\.(png|gif|jpg)|\[[0-9a-z\s\:\+\[\]\(\)\=\%\?\&\_\.\-\#\@\=\/\\\]+\])$/i');
-define('MATCH_ROTATION_STEP_TYPES_EMPTY', '/^(?:map|automap|url)?$/');
+define('MATCH_ROTATION_STEP_TYPES_EMPTY', '/^(?:map|url)?$/');
 define('MATCH_LANGUAGE_EMPTY', '/^[a-zA-Z0-9\-_]*$/');
 define('MATCH_LANGUAGE_FILE', '/^([^\.].*)/');
 define('MATCH_ICONSET', '/^(.+)_ok.(png|gif|jpg)$/');
@@ -75,7 +76,7 @@ define('MATCH_VIEW_TYPE_SERVICE', '/^(?:icon|line|gadget)$/i');
 define('MATCH_VIEW_TYPE_SERVICE_EMPTY', '/^(?:icon|line|gadget)*$/i');
 define('MATCH_GET_OBJECT_TYPE', '/^(state|complete|summary)$/');
 define('MATCH_GADGET_TYPE', '/^(?:img|html)$/i');
-define('MATCH_OBJECT_TYPES', '/^(host|service|hostgroup|servicegroup|map|automap)$/');
+define('MATCH_OBJECT_TYPES', '/^(host|service|hostgroup|servicegroup|map)$/');
 define('MATCH_AUTOMAP_RENDER_MODE', '/^(directed|undirected|radial|circular|undirected2)?$/');
 define('MATCH_LINE_TYPE', '/^(10|11|12|13|14)?$/');
 define('MATCH_LINE_ARROW', '/^(none|forward|back|both)?$/');
@@ -85,6 +86,7 @@ define('MATCH_ROLE_NAME', '/^[0-9A-Za-z_\-\.\@\s]+$/');
 define('MATCH_URI_PART', '/^[a-zA-Z0-9\-_]*$/');
 
 define('MATCH_CFG_FILE', '/^(.+)\.cfg$/i');
+define('MATCH_CSV_FILE', '/^(.+)\.csv$/i');
 define('MATCH_MP3_FILE', '/^(.+)\.mp3$/i');
 define('MATCH_HEADER_TEMPLATE_FILE', '/^(.+)\.header\.html$/i');
 define('MATCH_HOVER_TEMPLATE_FILE', '/^(.+)\.hover\.html$/i');

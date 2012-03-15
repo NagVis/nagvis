@@ -48,8 +48,8 @@ class CoreBackendMgmt {
      * @param   config  $MAINCFG
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    public function __construct($CORE) {
-        $this->CORE = $CORE;
+    public function __construct() {
+        $this->CORE = GlobalCore::getInstance();
 
         $this->loadBackends();
 

@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * NagVisViewAutomapToMap.php - Class for rendering the automap to map dialog
+ * NagVisViewToStaticMap.php - Class for rendering the "to static map" dialog
  *
  * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
  *
@@ -25,7 +25,7 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class NagVisViewAutomapToMap {
+class NagVisViewToStaticMap {
     private $CORE;
 
     /**
@@ -50,13 +50,13 @@ class NagVisViewAutomapToMap {
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-             'formTarget' => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=AutoMap&amp;act=parseMapCfg&amp',
+            'formTarget'  => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=Map&amp;act=toStaticMap&amp',
             'langNewName' => l('Store as Map'),
-            'langSave' => l('save'),
+            'langSave'    => l('save'),
         );
 
         // Build page based on the template file and the data array
-        return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'automapToMap'), $aData);
+        return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'toStaticMap'), $aData);
     }
 }
 ?>

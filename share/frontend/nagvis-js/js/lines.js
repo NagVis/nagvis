@@ -168,6 +168,8 @@ function drawLabel(objectId, num, lineType, lx, ly, z, perfdataA, perfdataB, yOf
 
 function drawLinkArea(objectId, num, lx, ly, z) {
     var oLinkContainer = document.getElementById(objectId+'-linelink');
+    if(!oLinkContainer)
+        return;
 
     var oImg = document.getElementById(objectId+'-link'+num);
     if(!oImg)
@@ -181,8 +183,7 @@ function drawLinkArea(objectId, num, lx, ly, z) {
     oImg.style.height = 20 + 'px';
     oImg.style.zIndex = parseInt(z)+1;
 
-    if(oLinkContainer)
-        oLinkContainer.appendChild(oImg);
+    oLinkContainer.appendChild(oImg);
     oImg = null;
 
     oLinkContainer = null;
@@ -368,7 +369,7 @@ function drawLinkOrLabel(objectId, num, lineType, x, y, z, perfdataA, perfdataB,
     // should be shown try to create link a link area for the line.
     if(bLabelShow && (lineType == 13 || lineType == 14))
         drawLabel(objectId, num, lineType, x, y, z, perfdataA, perfdataB, yOffset);
-    else if(bLinkArea)
+    else
         drawLinkArea(objectId, num, x, y, z);
 }
 

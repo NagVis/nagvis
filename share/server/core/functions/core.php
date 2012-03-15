@@ -47,6 +47,11 @@ function cfg($sec, $key, $ignoreDefaults = false) {
     return $_MAINCFG->getValue($sec, $key, $ignoreDefaults);
 }
 
+function path($type, $loc, $var, $relfile = '') {
+    global $_MAINCFG;
+    return $_MAINCFG->getPath($type, $loc, $var, $relfile);
+}
+
 // ----------------------------------------------------------------------------
 
 $_LANG = new GlobalLanguage();
@@ -70,5 +75,13 @@ function curLang() {
     global $_LANG;
     return $_LANG->getCurrentLanguage();
 }
+
+// ----------------------------------------------------------------------------
+
+/**
+ * Initialize the backend management for all pages. But don't open backend
+ * connections. This is only done when the pages request data from any backend
+ */
+$_BACKEND = new CoreBackendMgmt();
 
 ?>

@@ -79,7 +79,7 @@ class NagVisUrlView {
                 'rotationProperties' => json_encode($this->aRotation),
                 'url'                => $this->url,
                 'fileAges'           => json_encode(Array(
-                    'mainCfg'   => $this->CORE->getMainCfg()->getConfigFileAge(),
+                    'maincfg' => $this->CORE->getMainCfg()->getConfigFileAge(),
                 )),
             );
 

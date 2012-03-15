@@ -26,8 +26,6 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreModMultisite extends CoreModule {
-    private $BACKEND = null;
-
     public function __construct(GlobalCore $CORE) {
         $this->sName = 'Multisite';
         $this->CORE = $CORE;
@@ -38,12 +36,11 @@ class CoreModMultisite extends CoreModule {
     }
 
     public function handleAction() {
+        global $_BACKEND;
         $sReturn = '';
 
         if(!$this->offersAction($this->sAction))
             return '';
-
-        $this->BACKEND = new CoreBackendMgmt($this->CORE);
 
         switch($this->sAction) {
             case 'getMaps':
@@ -92,7 +89,7 @@ class CoreModMultisite extends CoreModule {
             if($MAPCFG->getValue(0, 'show_in_lists') != 1 || $MAPCFG->getValue(0, 'show_in_multisite') != 1)
                 continue;
 
-            $MAP = new NagVisMap($this->CORE, $MAPCFG, $this->BACKEND, GET_STATE, !IS_VIEW);
+            $MAP = new NagVisMap($this->CORE, $MAPCFG, GET_STATE, !IS_VIEW);
 
             // Apply default configuration to object
             $objConf = $MAPCFG->getTypeDefaults('global');
@@ -135,7 +132,7 @@ class CoreModMultisite extends CoreModule {
             $aObjs[] = Array($MAP->MAPOBJ, $map);
         }
 
-        $this->BACKEND->execute();
+        $_BACKEND->execute();
 
         $aMaps = Array();
         foreach($aObjs AS $aObj) {

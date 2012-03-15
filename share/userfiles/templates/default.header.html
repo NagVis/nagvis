@@ -10,7 +10,7 @@
         {foreach $maps map}
             <li class="lvl{$indent}">
             {if $map.configError == true}<a class="error" href="#">{$map.mapAlias}</a>
-            {else}<a href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a> {/if}
+            {else}<a href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}">{$map.mapAlias}</a> {/if}
             </li>
             {if $map.childs}
                 {headMaps $map.childs $pathBase $type $indent+1}
@@ -25,29 +25,25 @@
               <li class="spacer"><hr /></li>
               {headMaps $maps $pathBase "Map"}
             {/if}
-            {if count($automaps) > 0}
-              <li class="spacer"><hr /></li>
-              {headMaps $automaps $pathBase "AutoMap"}
-            {/if}
             <li class="spacer underline"></li>
         </ul>
     </li>
-    {if ($mod == 'Map' && ($permittedEdit == true && $act != 'edit' || $permittedView == true && $act != 'view')) || $mod == 'AutoMap' || $bRotation == true || $permittedSearch}
+    {if ($mod == 'Map' && ($permittedEdit == true && $act != 'edit' || $permittedView == true && $act != 'view')) || $bRotation == true || $permittedSearch}
     <li onmouseover="ddMenu('action',1)" onmouseout="ddMenuHide(['action'])" class="dropdown">
         <span id="action-ddheader">{$langActions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         <ul id="action-ddcontent">
-            {if ($mod == 'Map' || $mod == 'AutoMap') && $permittedSearch}
+            {if $mod == 'Map' && $permittedSearch}
             <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Search&amp;act=view', '{$langSearch}')">{$langSearch}</a></li>
             {/if}
-            {if $mod == 'AutoMap' && $permittedEdit == true}
-            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&amp;act=modifyParams&amp;show={$currentMap}'+getAutomapParams(), '{$langModifyAutomapParams}')">{$langModifyAutomapParams}</a></li>
+            {if $mod == 'Map' && $permittedEdit == true}
+            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=addModify&amp;show={$currentMap}&amp;object_id=0&mode=view_params'+getViewParams(), '{$langModifyParams}');" class="underline">{$langModifyParams}</a></li>
             {/if}
             {if $bRotation == true}
             <li id="rotationStart" style="display:none"><a href="#" onclick="switchRotation()">{$langRotationStart}</a></li>
             <li id="rotationStop" style="display:inline"><a href="#" onclick="switchRotation()">{$langRotationStop}</a></li>
             {/if}
-            {if $mod == 'AutoMap' && $permittedEdit == true}
-            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=AutoMap&amp;act=automapToMap&amp;show=dialog', '{$langAutomapToMap}')">{$langAutomapToMap}</a></li>
+            {if $mod == 'Map' && $usesSources && $permittedEdit == true}
+            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=toStaticMap&amp;show=dialog', '{$langToStaticMap}')">{$langToStaticMap}</a></li>
             {/if}
             <li class="spacer underline"></li>
         </ul>
@@ -91,7 +87,7 @@
             </li>
             <li class="spacer"><hr /></li>
             <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=manageTmpl&amp;show={$currentMap}', '{$langMapManageTmpl}', 300)">{$langMapManageTmpl}</a></li>
-            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=addModify&amp;show={$currentMap}&amp;object_id=0', '{$langMapOptions}');" class="underline">{$langMapOptions}</a></li>
+            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=addModify&amp;show={$currentMap}&amp;object_id=0'+getViewParams(), '{$langMapOptions}');" class="underline">{$langMapOptions}</a></li>
         </ul>
     </li>
     {/if}
@@ -147,7 +143,7 @@
 {template sideMaps maps pathBase type indent=1}
 {foreach $maps map}
     {if $map.configError == true}<li class="lvl{$indent}"><a class="error">{$map.mapAlias}</a></li>
-    {else}<li class="lvl{$indent}"><a href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}{$map.urlParams}">{$map.mapAlias}</a></li>{/if}
+    {else}<li class="lvl{$indent}"><a href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}">{$map.mapAlias}</a></li>{/if}
     {if $map.childs}
         {sideMaps $map.childs $pathBase $type $indent+1}
     {/if}
@@ -158,9 +154,6 @@
     {if $permittedOverview}<li class="spacerbottom"><a href="{$pathBase}/frontend/nagvis-js/index.php">{$langOverview}</a></li>{/if}
     <li class="closed"><a class="title" href="#" onclick="sidebarToggleSubtree(this)">{$langMaps}</a>
         <ul style="display:none;">{sideMaps $maps $pathBase "Map"}</ul>
-    </li>
-    <li class="closed"><a class="title" href="#" onclick="sidebarToggleSubtree(this)">{$langAutomaps}</a>
-        <ul style="display:none;">{sideMaps $automaps $pathBase "AutoMap"}</ul>
     </li>
 </ul>
 </div>

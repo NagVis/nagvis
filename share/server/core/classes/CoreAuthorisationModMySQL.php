@@ -56,7 +56,6 @@ class CoreAuthorisationModMySQL extends CoreAuthorisationModule {
 
         switch($mod) {
             case 'Map':
-            case 'AutoMap':
             case 'Rotation':
                 return $this->DB->deletePermissions($mod, $name);
             default:
@@ -73,8 +72,6 @@ class CoreAuthorisationModMySQL extends CoreAuthorisationModule {
         switch($mod) {
             case 'Map':
                 return $this->DB->createMapPermissions($name);
-            case 'AutoMap':
-                return $this->DB->createAutoMapPermissions($name);
             case 'Rotation':
                 return $this->DB->createRotationPermissions($name);
             default:

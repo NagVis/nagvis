@@ -165,48 +165,6 @@ var NagVisStatefulObject = NagVisObject.extend({
     },
 
     /**
-     * PUBLIC parseAutomap()
-     *
-     * Parses the object on the automap
-     *
-     * @return	String		HTML code of the object
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    parseAutomap: function () {
-        if(!this.parsedObject) {
-            // Only replace the macros on first parse
-            this.replaceMacros();
-        }
-
-        // When this is an update, remove the object first
-        this.remove();
-
-        // Create container div
-        var doc = document;
-        var oContainerDiv = doc.createElement('div');
-        oContainerDiv.setAttribute('id', this.conf.object_id);
-
-        // Parse icon on automap
-        oContainerDiv.appendChild(this.parseIcon());
-
-        // Parse label when configured
-        if(this.conf.label_show && this.conf.label_show == '1') {
-            var oLabel = this.parseLabel();
-            oContainerDiv.appendChild(oLabel);
-            oLabel = null;
-        }
-
-        // Append child to map and save reference in parsedObject
-        var oMap = doc.getElementById('map');
-        if(oMap) {
-            this.parsedObject = oMap.appendChild(oContainerDiv);
-            oMap = null;
-        }
-        oContainerDiv = null;
-        doc = null
-    },
-
-    /**
      * PUBLIC parse()
      *
      * Parses the object

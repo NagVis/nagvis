@@ -94,6 +94,18 @@ class GlobalMainCfg {
                 'file_mode' => Array('must' => 1,
                     'default' => 660,
                     'match' => MATCH_INTEGER_EMPTY),
+
+                'http_proxy' => array(
+                    'must'    => 0,
+                    'default' => null,
+                    'match'   => MATCH_STRING_URL,
+                ),
+                'http_timeout' => array(
+                    'must'    => 1,
+                    'default' => 5,
+                    'match'   => MATCH_INTEGER,
+                ),
+
                 'language_detection' => Array('must' => 1,
                     'editable' => 1,
                     'array' => true,
@@ -474,6 +486,11 @@ class GlobalMainCfg {
                     'default' => '',
                     'field_type' => 'hidden',
                     'match' => MATCH_STRING_PATH),
+                'sources' => Array('must' => 0,
+                    'editable' => 0,
+                    'default' => '',
+                    'field_type' => 'hidden',
+                    'match' => MATCH_STRING_PATH),
                 'icons' => Array('must' => 0,
                     'editable' => 0,
                     'default' => '',
@@ -535,6 +552,13 @@ class GlobalMainCfg {
                     'default' => '',
                     'field_type' => 'hidden',
                     'match' => MATCH_STRING_PATH),
+                'geomap' => Array(
+                    'must'       => 0,
+                    'editable'   => 0,
+                    'default'    => '',
+                    'field_type' => 'hidden',
+                    'match'      => MATCH_STRING_PATH,
+                ),
                 'profiles' => Array('must' => 0,
                     'editable' => 0,
                     'default' => '',
@@ -543,6 +567,7 @@ class GlobalMainCfg {
                 'automapcfg' => Array('must' => 0,
                     'editable' => 0,
                     'default' => '',
+                    'deprecated' => 1,
                     'field_type' => 'hidden',
                     'match' => MATCH_STRING_PATH),
                 'gadgets' => Array('must' => 0,
@@ -676,6 +701,7 @@ class GlobalMainCfg {
                     'editable' => 1,
                     'default' => '1',
                     'field_type' => 'boolean',
+                    'deprecated' => 1,
                     'match' => MATCH_BOOLEAN)
                 ),
             'index' => Array(
@@ -698,6 +724,7 @@ class GlobalMainCfg {
                     'editable' => 1,
                     'default' => 1,
                     'field_type' => 'boolean',
+                    'deprecated' => 1,
                     'match' => MATCH_BOOLEAN),
                 'showmaps' => Array('must' => 0,
                     'editable' => 1,
@@ -1172,7 +1199,7 @@ class GlobalMainCfg {
     private function setPathsByBase($base, $htmlBase) {
         $this->validConfig['paths']['cfg']['default']                = $base.'etc/';
         $this->validConfig['paths']['mapcfg']['default']             = $base.'etc/maps/';
-        $this->validConfig['paths']['automapcfg']['default']         = $base.'etc/automaps/';
+        $this->validConfig['paths']['geomap']['default']             = $base.'etc/geomap';
         $this->validConfig['paths']['profiles']['default']           = $base.'etc/profiles';
 
         $this->validConfig['paths']['var']['default']                = $base.'var/';
@@ -1181,7 +1208,7 @@ class GlobalMainCfg {
 
         $this->validConfig['paths']['language']['default']           = $base.HTDOCS_DIR.'/frontend/nagvis-js/locale';
         $this->validConfig['paths']['class']['default']              = $base.HTDOCS_DIR.'/server/core/classes/';
-        $this->validConfig['paths']['server']['default']              = $base.HTDOCS_DIR.'/server/core';
+        $this->validConfig['paths']['server']['default']             = $base.HTDOCS_DIR.'/server/core';
         $this->validConfig['paths']['doc']['default']                = $base.HTDOCS_DIR.'/docs';
 
         $this->validConfig['paths']['htmlcss']['default']            = $htmlBase.'/frontend/nagvis-js/css/';
@@ -1199,6 +1226,7 @@ class GlobalMainCfg {
         $this->validConfig['paths']['icons']['default']              = 'userfiles/images/iconsets/';
         $this->validConfig['paths']['shapes']['default']             = 'userfiles/images/shapes/';
         $this->validConfig['paths']['sounds']['default']             = 'userfiles/sounds/';
+        $this->validConfig['paths']['sources']['default']            = 'server/core/sources';
 
         $this->validConfig['paths']['templateimages']['default']     = 'userfiles/images/templates/';
 
@@ -1314,7 +1342,6 @@ class GlobalMainCfg {
                             if(preg_match("/^([^\[.]+:)?(\[(.+)\]|(.+))$/", $element, $arrRet)) {
                                 $label = '';
                                 $map = '';
-                                $automap = '';
 
                                 // When no label is set, set map or url as label
                                 if($arrRet[1] != '') {
@@ -1336,14 +1363,8 @@ class GlobalMainCfg {
                                 $label = trim($label);
                                 $map = trim($map);
 
-                                // Check if the map is an automap
-                                if(substr($map, 0, 1) === '@') {
-                                    $automap = substr($map, 1);
-                                    $map = '';
-                                }
-
                                 // Save the extracted information to an array
-                                $val[$id] = Array('label' => $label, 'map' => $map, 'automap' => $automap, 'url' => $arrRet[3], 'target' => '');
+                                $val[$id] = Array('label' => $label, 'map' => $map, 'url' => $arrRet[3], 'target' => '');
                             }
                         }
                     }

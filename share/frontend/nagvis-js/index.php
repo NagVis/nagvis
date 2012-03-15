@@ -49,7 +49,6 @@ try {
         'Info',
         'Map',
         'Url',
-        'AutoMap',
         'Overview',
         'Rotation',
         'LogonDialog',

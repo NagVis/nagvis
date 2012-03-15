@@ -32,7 +32,6 @@ class CoreModGeneral extends CoreModule {
         $this->CORE = $CORE;
 
         $this->aActions = Array(
-            'getCfgFileAges'     => REQUIRES_AUTHORISATION,
             'getHoverTemplate'   => REQUIRES_AUTHORISATION,
             'getContextTemplate' => REQUIRES_AUTHORISATION,
             'getHoverUrl'        => REQUIRES_AUTHORISATION,
@@ -44,9 +43,6 @@ class CoreModGeneral extends CoreModule {
 
         if($this->offersAction($this->sAction)) {
             switch($this->sAction) {
-                case 'getCfgFileAges':
-                    $sReturn = $this->getCfgFileAges();
-                break;
                 case 'getHoverTemplate':
                     $sReturn = $this->getTemplate('hover');
                 break;
@@ -60,42 +56,6 @@ class CoreModGeneral extends CoreModule {
         }
 
         return $sReturn;
-    }
-
-    private function getCfgFileAges() {
-        $aReturn = Array();
-
-        // Parse view specific uri params
-        $aKeys = Array('f'  => MATCH_STRING_NO_SPACE, 'm'  => MATCH_MAP_NAME_EMPTY,
-                       'am' => MATCH_MAP_NAME_EMPTY);
-        $aOpts = $this->getCustomOptions($aKeys);
-
-        if(isset($aOpts['f']) && is_array($aOpts['f'])) {
-            foreach($aOpts['f'] AS $sFile) {
-                if($sFile == 'mainCfg') {
-                    $aReturn['mainCfg'] = $this->CORE->getMainCfg()->getConfigFileAge();
-                }
-            }
-        }
-
-        // Loop maps and automaps
-        foreach(Array('m' => 'Map', 'am' => 'AutoMap') AS $t => $p) {
-            if(isset($aOpts[$t]) && is_array($aOpts[$t])) {
-                foreach($aOpts[$t] AS $sMap) {
-                    if($this->CORE->getAuthorization() === null || !$this->CORE->getAuthorization()->isPermitted($p, 'view', $sMap))
-                        continue;
-
-                    if($t == 'm')
-                        $MAPCFG = new NagVisMapCfg($this->CORE, $sMap);
-                    else
-                        $MAPCFG = new NagVisAutomapCfg($this->CORE, $sMap);
-
-                    $aReturn[$sMap] = $MAPCFG->getFileModificationTime();
-                }
-            }
-        }
-
-        return json_encode($aReturn);
     }
 
     private function getTemplate($type) {

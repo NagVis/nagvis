@@ -33,7 +33,6 @@ var oHoverTemplates = {};
 var oHoverTemplatesChild = {};
 var oHoverUrls = {};
 var oContextTemplates = {};
-var oAutomapParams = {};
 // This is turned to true when the map is currently reparsing (e.g. due to
 // a changed map config file). This blocks object updates.
 var bBlockUpdates = false;
@@ -279,12 +278,12 @@ function getObjectsToUpdate() {
 
     // Assign all object which need an update indexes to return Array
     for(var i in oMapObjects)
-        if(oMapObjects[i].lastUpdate <= (iNow-(oWorkerProperties.worker_update_object_states*1000)))
+        if(oMapObjects[i].lastUpdate <= iNow - oWorkerProperties.worker_update_object_states)
             // Do not update shapes where enable_refresh=0
             if(oMapObjects[i].conf.type !== 'shape'
                || (oMapObjects[i].conf.type === 'shape'
-                     && oMapObjects[i].conf.enable_refresh
-                         && oMapObjects[i].conf.enable_refresh == '1'))
+                   && oMapObjects[i].conf.enable_refresh
+                   && oMapObjects[i].conf.enable_refresh == '1'))
                 arrReturn.push(i);
 
     // Now spread the objects in the available timeslots
@@ -304,85 +303,31 @@ function getObjectsToUpdate() {
     return arrReturn;
 }
 
-/**
- * getCfgFileAges()
- *
- * Bulk get file ages of important files
- * The request is being cached to prevent too often updates. The worker asks
- * every 5 seconds by default - this is too much for a config check.
- *
- * @return  Boolean
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getCfgFileAges(viewType, mapName) {
+function getFileAgeParams(viewType, mapName) {
     if(!isset(viewType))
         var viewType = oPageProperties.view_type;
     if(!isset(mapName))
         var mapName = oPageProperties.map_name;
 
-    var result = null;
+    var addParams = '';
     if(viewType === 'map')
-        result = getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getCfgFileAges&f[]=mainCfg&m[]='+escapeUrlValues(mapName), true);
-    else if(viewType === 'automap')
-        result = getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getCfgFileAges&f[]=mainCfg&am[]='+escapeUrlValues(mapName), true);
-    else
-        result = getSyncRequest(oGeneralProperties.path_server+'?mod=General&act=getCfgFileAges&f[]=mainCfg', true);
-
-    viewType = null;
-    if(isset(result))
-        return result;
-    else
-        return {};
+        addParams = '&f[]=map,' + mapName + ',' + oFileAges[mapName];
+    return '&f[]=maincfg,maincfg,' + oFileAges['maincfg'] + addParams;
 }
 
 /**
- * checkMainCfgChanged()
- *
- * Detects if the main configuration file has changed since last load
- *
- * @return  Boolean
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function checkMainCfgChanged(iCurrentAge) {
-    eventlog("worker", "debug", "MainCfg Current: "+date(oGeneralProperties.date_format, iCurrentAge)+" In Use: "+date(oGeneralProperties.date_format, oFileAges.mainCfg));
-    return oFileAges.mainCfg != iCurrentAge;
-}
-
-/**
- * checkMapCfgChanged()
- *
- * Detects if the map configuration file has changed since last load
- *
- * @return  Boolean
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function checkMapCfgChanged(iCurrentAge, mapName) {
-    eventlog("worker", "debug", "MapCfg " + mapName +
-                     " Current: " + date(oGeneralProperties.date_format, iCurrentAge) +
-                     " Cached: " + date(oGeneralProperties.date_format, oFileAges.map_config));
-
-    return oFileAges[mapName] != iCurrentAge;
-}
-
-/**
- * setMapHoverUrls()
- *
  * Gets the code for needed hover templates and saves it for later use in icons
- *
- * @param   Object   Object with basic page properties
- * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function setMapHoverUrls() {
+function getHoverUrls() {
     var aUrlParts = [];
     var aTemplateObjects;
 
-    // Loop all map objects to get the used hover templates
+    // Loop all map objects to get the urls which need to be fetched
     for(var i in oMapObjects) {
-        // Ignore objects which
-        // a) have a disabled hover menu
-        // b) do use hover_url
-        if(oMapObjects[i].conf.hover_menu && oMapObjects[i].conf.hover_menu == 1 && oMapObjects[i].conf.hover_url && oMapObjects[i].conf.hover_url !== '')
+        if(oMapObjects[i].conf.hover_menu && oMapObjects[i].conf.hover_menu == 1
+           && oMapObjects[i].conf.hover_url && oMapObjects[i].conf.hover_url !== '') {
             oHoverUrls[oMapObjects[i].conf.hover_url] = '';
+        }
     }
 
     // Build string for bulk fetching the templates
@@ -391,9 +336,10 @@ function setMapHoverUrls() {
             aUrlParts.push('&url[]='+escapeUrlValues(i));
 
     // Get the needed templates via bulk request
-    aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverUrl', aUrlParts, oWorkerProperties.worker_request_max_length, true);
+    aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverUrl',
+                                      aUrlParts, oWorkerProperties.worker_request_max_length, true);
 
-    // Set the code to global object oHoverTemplates
+    // Set the code to global object oHoverUrls
     if(aTemplateObjects.length > 0)
         for(var i = 0, len = aTemplateObjects.length; i < len; i++)
             oHoverUrls[aTemplateObjects[i].url] = aTemplateObjects[i].code;
@@ -410,7 +356,7 @@ function setMapHoverUrls() {
  */
 function parseHoverMenus() {
     for(var i in oMapObjects)
-        if(oMapObjects[i].conf.hover_menu && oMapObjects[i].conf.hover_menu !== '0')
+        if(oMapObjects[i].needsHoverMenu())
             oMapObjects[i].parseHoverMenu();
 }
 
@@ -453,8 +399,9 @@ function getHoverTemplates() {
         if(isset(oMapObjects[i].conf.hover_menu) && oMapObjects[i].conf.hover_menu == '1'
            && (!oMapObjects[i].conf.hover_url || oMapObjects[i].conf.hover_url === '')
            && isset(oMapObjects[i].conf.hover_template)
-           && (!isset(oHoverTemplates[oMapObjects[i].conf.hover_template]) || oHoverTemplates[oMapObjects[i].conf.hover_template] === ''))
+           && (!isset(oHoverTemplates[oMapObjects[i].conf.hover_template]) || oHoverTemplates[oMapObjects[i].conf.hover_template] === '')) {
             oHoverTemplates[oMapObjects[i].conf.hover_template] = '';
+        }
     }
 
     // Build string for bulk fetching the templates
@@ -503,11 +450,10 @@ function getContextTemplates() {
     // Loop all map objects to get the used templates
     for(var i in oMapObjects)
         // Ignore templates of objects which
-        // a) have a disabled menu
         // b) template is already known
         // FIXME: conf.context_menu has inconsistent types (with and without quotes)
         //        fix this and  === can be used here
-        if(isset(oMapObjects[i].conf.context_menu) && oMapObjects[i].conf.context_menu == 1
+        if(isset(oMapObjects[i].conf.context_template)
            && (!isset(oContextTemplates[oMapObjects[i].conf.context_template]) || oContextTemplates[oMapObjects[i].conf.context_template] === ''))
             oContextTemplates[oMapObjects[i].conf.context_template] = '';
 
@@ -554,8 +500,7 @@ function getContextTemplates() {
  */
 function parseContextMenus() {
     for(var i in oMapObjects)
-        if((oMapObjects[i].conf.context_menu && oMapObjects[i].conf.context_menu != '0')
-           || !oMapObjects[i].bIsLocked)
+        if(oMapObjects[i].needsContextMenu())
             oMapObjects[i].parseContextMenu();
 }
 
@@ -669,19 +614,11 @@ function setPageTitle(sTitle) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function updateMapBasics() {
-    var sAutomapParams = '';
-    var mod = 'Map';
-    if(oPageProperties.view_type === 'automap') {
-        sAutomapParams = getAutomapParams();
-        mod = 'AutoMap';
-    }
-
     // Get new map state from core
     oMapSummaryObj = new NagVisMap(getSyncRequest(oGeneralProperties.path_server
-                                   + '?mod=' + mod + '&act=getObjectStates&ty=summary&show='
-                                                                 + escapeUrlValues(oPageProperties.map_name)
-                                                                 + sAutomapParams, false)[0]);
-    sAutomapParams = null;
+                                   + '?mod=Map&act=getObjectStates&ty=summary&show='
+                                   + escapeUrlValues(oPageProperties.map_name)
+                                   + getViewParams(), false)[0]);
 
     // FIXME: Add method to refetch oMapSummaryObj when it is null
     // Be tolerant - check if oMapSummaryObj is null or anything unexpected
@@ -703,8 +640,9 @@ function updateMapBasics() {
         setPageBackgroundColor(getBackgroundColor(oMapSummaryObj.conf));
 
     // Update background image for automap
-    if(oPageProperties.view_type === 'automap')
-        setMapBackgroundImage(oPageProperties.background_image+iNow);
+    // FIXME: Maybe update for regular maps?
+    //if(oPageProperties.view_type === 'automap')
+    //    setMapBackgroundImage(oPageProperties.background_image+iNow);
 }
 
 /**
@@ -745,15 +683,10 @@ function updateObjects(aMapObjectInformations, sType) {
         // Some objects need to be reloaded even when no state changed (perfdata or
         // output could have changed since last update). Basically this is only
         // needed for gadgets and/or labels with [output] or [perfdata] macros
-        if((sType === 'map' || sType === 'automap')
-           && !oMapObjects[objectId].stateChanged() && oMapObjects[objectId].outputOrPerfdataChanged()) {
-            // Reparse object to map (only for maps!)
-            // No else for overview here, senseless!
-            if(sType === 'map') {
-                oMapObjects[objectId].parse();
-            } else if(sType === 'automap') {
-                oMapObjects[objectId].parseAutomap();
-            }
+        if(sType === 'map'
+           && !oMapObjects[objectId].stateChanged()
+           && oMapObjects[objectId].outputOrPerfdataChanged()) {
+            oMapObjects[objectId].parse();
         }
 
         // Detect state changes and do some actions
@@ -773,8 +706,6 @@ function updateObjects(aMapObjectInformations, sType) {
             // Reparse object to map
             if(sType === 'map') {
                 oMapObjects[objectId].parse();
-            } else if(sType === 'automap') {
-                oMapObjects[objectId].parseAutomap();
             } else if(sType === 'overview') {
                 // Reparsing the object on index page.
                 // replaceChild seems not to work in all cases so workaround it
@@ -918,24 +849,18 @@ function refreshMapObject(event, objectId) {
     if(oPageProperties.view_type === 'map') {
         sMod = 'Map';
         sMapPart = '&show='+escapeUrlValues(map);
-    } else if(oPageProperties.view_type === 'automap') {
-        sMod = 'AutoMap';
-        sMapPart = '&show='+escapeUrlValues(map);
-        sAddPart = getAutomapParams();
+        sAddPart = getViewParams();
     } else if(oPageProperties.view_type === 'overview') {
         sMod = 'Overview';
         sMapPart = '';
     }
 
-    // Create request string
-    var sUrlPart = '&i[]=' + escapeUrlValues(obj_id);
+    // Start the ajax request to update this single object
+    getAsyncRequest(oGeneralProperties.path_server+'?mod='
+                    + escapeUrlValues(sMod) + '&act=getObjectStates'
+                    + sMapPart + '&ty=state&i[]=' + escapeUrlValues(obj_id) + sAddPart, false,
+                    getObjectStatesCallback);
 
-    // Get the updated objectsupdateMapObjects via bulk request
-    var o = getSyncRequest(oGeneralProperties.path_server+'?mod='
-                          + escapeUrlValues(sMod) + '&act=getObjectStates'
-                          + sMapPart + '&ty=state' + sUrlPart + sAddPart, false);
-
-    sUrlPart = null;
     sMod = null;
     sMapPart = null;
     map = null;
@@ -943,21 +868,26 @@ function refreshMapObject(event, objectId) {
     obj_id = null;
     name = null;
 
-    var bStateChanged = false;
-    if(isset(o) && o.length > 0)
-        bStateChanged = updateObjects(o, oPageProperties.view_type);
-    o = null;
-
-    // Don't update basics on the overview page
-    if(oPageProperties.view_type !== 'overview' && bStateChanged)
-        updateMapBasics();
-    bStateChanged = null;
-
     var event = !event ? window.event : event;
     if(event.stopPropagation)
         event.stopPropagation();
     event.cancelBubble = true;
     return false
+}
+
+/**
+ * Handles object state request answers received from the server
+ */
+function getObjectStatesCallback(oResponse) {
+    var bStateChanged = false;
+    if(isset(oResponse) && oResponse.length > 0)
+        bStateChanged = updateObjects(oResponse, oPageProperties.view_type);
+    oResponse = null;
+
+    // Don't update basics on the overview page
+    if(oPageProperties.view_type !== 'overview' && bStateChanged)
+        updateMapBasics();
+    bStateChanged = null;
 }
 
 
@@ -1093,11 +1023,6 @@ function setMapObjects(aMapObjectConf) {
         // Parse object to map
         if(oPageProperties.view_type === 'map') {
             oMapObjects[i].parse();
-        } else if(oPageProperties.view_type === 'automap') {
-            if(oMapObjects[i].conf.type === 'host')
-                oMapObjects[i].parseAutomap();
-            else
-                oMapObjects[i].parse();
         }
 
         // Store object dependencies
@@ -1224,11 +1149,10 @@ function flashIcon(objectId, iDuration, iInterval){
 function parseOverviewPage() {
     var oContainer = document.getElementById('overview');
 
-    // Render maps, automaps, geomaps and the rotations when enabled
+    // Render maps, geomaps and the rotations when enabled
     var types = [ [ oPageProperties.showmaps,      'overviewMaps',      oPageProperties.lang_mapIndex ],
-                    [ oPageProperties.showautomaps,  'overviewAutomaps',  oPageProperties.lang_automapIndex],
-                              [ oPageProperties.showgeomap,    'overviewGeomap',    'Geomap' ],
-                              [ oPageProperties.showrotations, 'overviewRotations', oPageProperties.lang_rotationPools ] ];
+                  [ oPageProperties.showgeomap,    'overviewGeomap',    'Geomap' ],
+                  [ oPageProperties.showrotations, 'overviewRotations', oPageProperties.lang_rotationPools ] ];
     for(var i = 0; i < types.length; i++) {
         if(types[i][0] === 1) {
             var oTable = document.createElement('table');
@@ -1331,75 +1255,7 @@ function parseOverviewMaps(aMapsConf) {
     }
 
     eventlog("worker", "debug", "parseOverviewMaps: End setting maps");
-}
-
-/**
- * parseOverviewAutomaps()
- *
- * Does initial parsing of automaps on the overview page
- *
- * @param   Array    Array of objects to parse to the page
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function parseOverviewAutomaps(aMapsConf) {
-    eventlog("worker", "debug", "parseOverviewAutomaps: Start setting automaps");
-
-    // Exit this function on invalid call
-    if(aMapsConf === null)  {
-        eventlog("worker", "warning", "parseOverviewAutomaps: Invalid call - maybe broken ajax response");
-        return false;
-    }
-
-    // Render the maps when enabled
-    if(oPageProperties.showautomaps === 1) {
-        if(aMapsConf.length == 0) {
-            document.getElementById('overviewAutomaps').parentNode.style.display = 'none';
-            return false;
-        }
-
-        var oTable = document.getElementById('overviewAutomaps');
-        var oTr = document.createElement('tr');
-
-        for(var i = 0, len = aMapsConf.length; i < len; i++) {
-            var oObj;
-
-            oObj = new NagVisMap(aMapsConf[i]);
-
-            if(oObj !== null) {
-                // Save object to map objects array
-                oMapObjects[oObj.conf.object_id] = oObj;
-
-                // Parse child and save reference in parsedObject
-                oObj.parsedObject = oTr.appendChild(oObj.parseOverview());
-            }
-
-            if((i+1) % oPageProperties.cellsperrow === 0) {
-                oTable.appendChild(oTr);
-                oTr = null;
-                oTr = document.createElement('tr');
-            }
-
-            oObj = null;
-        }
-
-        // Fill table with empty cells if there are not enough maps to get the last
-        // row filled
-        if(i % oPageProperties.cellsperrow !== 0) {
-            for(var a = 0; a < (oPageProperties.cellsperrow - (i % oPageProperties.cellsperrow)); a++) {
-                var oTd = document.createElement('td');
-                oTr.appendChild(oTd);
-                oTd = null;
-            }
-        }
-
-        // Append last row
-        oTable.appendChild(oTr);
-        oTr = null;
-
-        oTable = null;
-    }
-
-    eventlog("worker", "debug", "parseOverviewAutomaps: End setting automaps");
+    getAndParseTemplates();
 }
 
 /**
@@ -1528,27 +1384,11 @@ function getOverviewProperties(mapName) {
 }
 
 /**
- * getOverviewMaps()
- *
  * Fetches all maps to be shown on the overview page
- *
- * @return  Array of maps
- * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getOverviewMaps() {
-    return getSyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getOverviewMaps')
-}
-
-/**
- * getOverviewAutomaps()
- *
- * Fetches all automaps to be shown on the overview page
- *
- * @return  Array of maps
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getOverviewAutomaps() {
-    return getSyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getOverviewAutomaps')
+    getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getOverviewMaps' + getViewParams(), 
+                    false, parseOverviewMaps);
 }
 
 /**
@@ -1564,20 +1404,42 @@ function getOverviewRotations() {
 }
 
 /**
- * getAutomapParams()
+ * getViewParams()
  *
- * Parses the url params from the oAutomapParams object
+ * Parses the url params for the current view to be used in urls.
+ * Adds the width/height parameter if not set yet. It will add the
+ * size of the map div area. The width/height values are not used by all views.
  *
  * @return  String    URL part with params and values
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function getAutomapParams() {
-    var sParams = '';
-    for(var param in oAutomapParams) {
-        if(oAutomapParams[param] != '') {
-            sParams += '&' + param + '=' + escapeUrlValues(oAutomapParams[param]);
+function getViewParams(update) {
+    if(!isset(oViewProperties) || !isset(oViewProperties['params']))
+        return '';
+
+    // Udate the params before processing url
+    if(isset(update)) {
+        for(var param in update) {
+            oViewProperties['params'][param] = update[param];
         }
     }
+
+    var sParams = '';
+    for(var param in oViewProperties['params']) {
+        if(oViewProperties['params'][param] != '') {
+            sParams += '&' + param + '=' + escapeUrlValues(oViewProperties['params'][param]);
+        }
+    }
+
+    if(!isset(oViewProperties['params']['width'])) {
+        oViewProperties['params']['width'] = pageWidth();
+        sParams += '&width=' + escapeUrlValues(oViewProperties['params']['width']);
+    }
+    if(!isset(oViewProperties['params']['height'])) {
+        oViewProperties['params']['height'] = pageHeight() - getHeaderHeight();
+        sParams += '&height=' + escapeUrlValues(oViewProperties['params']['height']);
+    }
+
     return sParams;
 }
 
@@ -1590,12 +1452,8 @@ function getAutomapParams() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getMapProperties(type, mapName) {
-    if(type === 'automap')
-        return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getAutomapProperties&show='
-                            + escapeUrlValues(mapName)+getAutomapParams())
-    else
-        return getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapProperties&show='
-                              + escapeUrlValues(mapName))
+    return getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapProperties&show='
+                          + escapeUrlValues(mapName)+getViewParams())
 }
 
 /**
@@ -1611,17 +1469,14 @@ function getUrlProperties(sUrl) {
                                            + escapeUrlValues(sUrl))
 }
 
-/**
- * automapParse()
- *
- * Parses the automap background image
- *
- * @return  Boolean  Success?
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function automapParse(mapName) {
-    return getSyncRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=parseAutomap&show='
-                          + escapeUrlValues(mapName)+getAutomapParams())
+// Returns true if the current view is
+// a) a map
+// b) uses the given source
+function usesSource(source) {
+    return oPageProperties
+        && oPageProperties.view_type == 'map'
+        && oPageProperties.sources
+        && oPageProperties.sources.indexOf(source) !== -1;
 }
 
 /**
@@ -1653,79 +1508,63 @@ function parseMap(iMapCfgAge, type, mapName) {
     }
     wasInMaintenance = null;
 
-    var oObjects;
-    if(type === 'automap')
-        oObjects = getSyncRequest(oGeneralProperties.path_server
-                                  + '?mod=AutoMap&act=getAutomapObjects&show='
-                                  + mapName+getAutomapParams(), false);
-    else
-        oObjects = getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapObjects&show='+mapName, false);
+    getAsyncRequest(oGeneralProperties.path_server
+                    + '?mod=Map&act=getMapObjects&show='
+                    + mapName+getViewParams(), false, parseMapHandler, [iMapCfgAge, type, mapName]);
+}
 
+function parseMapHandler(oObjects, params) {
     // Only perform the reparsing actions when all information are there
-    if(oPageProperties && oObjects) {
-        // Remove all old objects
-        var keys = getKeys(oMapObjects);
-        for(var i = 0, len = keys.length; i < len; i++) {
-            var obj = oMapObjects[keys[i]];
-            if(obj && typeof obj.remove === 'function') {
-                // Remove parsed object from map
-                obj.remove();
-
-                if(!obj.bIsLocked)
-                    updateNumUnlocked(-1);
-
-                obj = null;
-
-                // Remove element from object container
-                delete oMapObjects[keys[i]];
-            }
-        }
-        keys = null;
-
-        // Update timestamp for map configuration (No reparsing next time)
-        oFileAges[mapName] = iMapCfgAge;
-
-        // Set map objects
-        eventlog("worker", "info", "Parsing "+type+" objects");
-        setMapObjects(oObjects);
-
-        // Set map basics
-        // Needs to be called after the summary state of the map is known
-        setMapBasics(oPageProperties);
-
-        // Bulk get all hover templates which are needed on the map
-        eventlog("worker", "info", "Fetching hover templates and hover urls");
-        getHoverTemplates();
-        setMapHoverUrls();
-
-        // Assign the hover templates to the objects and parse them
-        eventlog("worker", "info", "Parse hover menus");
-        parseHoverMenus();
-
-        // Bulk get all context templates which are needed on the map
-        eventlog("worker", "info", "Fetching context templates");
-        getContextTemplates();
-
-        // Assign the context templates to the objects and parse them
-        eventlog("worker", "info", "Parse context menus");
-        parseContextMenus();
-
-        // When user searches for an object highlight it
-        eventlog("worker", "info", "Searching for matching object(s)");
-        if(oViewProperties && oViewProperties.search && oViewProperties.search != '')
-            searchObjects(oViewProperties.search);
-
-        bReturn = true;
-    } else {
-        bReturn = false;
+    if(!oPageProperties || !oObjects) {
+        return;
     }
+
+    var iMapCfgAge = params[0];
+    var type       = params[1];
+    var mapName    = params[2];
+
+    // Remove all old objects
+    var keys = getKeys(oMapObjects);
+    for(var i = 0, len = keys.length; i < len; i++) {
+        var obj = oMapObjects[keys[i]];
+        if(obj && typeof obj.remove === 'function') {
+            // Remove parsed object from map
+            obj.remove();
+
+            if(!obj.bIsLocked)
+                updateNumUnlocked(-1);
+
+            obj = null;
+
+            // Remove element from object container
+            delete oMapObjects[keys[i]];
+        }
+    }
+    keys = null;
+
+    // Update timestamp for map configuration (No reparsing next time)
+    oFileAges[mapName] = iMapCfgAge;
+
+    // Set map objects
+    eventlog("worker", "info", "Parsing "+type+" objects");
+    setMapObjects(oObjects);
+
+    // Set map basics
+    // Needs to be called after the summary state of the map is known
+    setMapBasics(oPageProperties);
+
+    // Load all templates
+    getAndParseTemplates();
+
+    // When user searches for an object highlight it
+    eventlog("worker", "info", "Searching for matching object(s)");
+    if(oViewProperties && oViewProperties.search && oViewProperties.search != '')
+        searchObjects(oViewProperties.search);
 
     oObjects = null;
 
     // Updates are allowed again
     bBlockUpdates = false;
-
-    return bReturn;
 }
 
 /**
@@ -1769,14 +1608,9 @@ function workerInitialize(iCount, sType, sIdentifier) {
 
     // Handle the page rendering
     if(sType == 'map') {
-        // Loading a simple map
-        eventlog("worker", "debug", "Parsing map: " + sIdentifier);
+        eventlog("worker", "debug", "Parsing " + sType + ": " + sIdentifier);
+        parseMap(oFileAges[sIdentifier], sType, sIdentifier);
 
-        // Parse the map
-        if(parseMap(oFileAges[sIdentifier], sType, sIdentifier) === false)
-            eventlog("worker", "error", "Problem while parsing the map on page load");
-
-        eventlog("worker", "info", "Finished parsing map");
     } else if(sType === 'overview') {
         // Load the overview properties
         eventlog("worker", "debug", "Loading the overview properties");
@@ -1790,33 +1624,13 @@ function workerInitialize(iCount, sType, sIdentifier) {
         eventlog("worker", "debug", "Parsing overview page");
         parseOverviewPage();
 
-        eventlog("worker", "debug", "Parsing maps");
-        parseOverviewMaps(getOverviewMaps());
-
-        eventlog("worker", "debug", "Parsing automaps");
-        parseOverviewAutomaps(getOverviewAutomaps());
+        getOverviewMaps();
 
         eventlog("worker", "debug", "Parsing geomap");
         parseOverviewGeomap();
 
         eventlog("worker", "debug", "Parsing rotations");
         parseOverviewRotations(getOverviewRotations());
-
-        // Bulk get all hover templates which are needed on the overview page
-        eventlog("worker", "debug", "Fetching hover templates");
-        getHoverTemplates();
-
-        // Assign the hover templates to the objects and parse them
-        eventlog("worker", "debug", "Parse hover menus");
-        parseHoverMenus();
-
-        // Bulk get all context templates which are needed on the overview page
-        eventlog("worker", "debug", "Fetching context templates");
-        getContextTemplates();
-
-        // Assign the context templates to the objects and parse them
-        eventlog("worker", "debug", "Parse context menus");
-        parseContextMenus();
 
         eventlog("worker", "info", "Finished parsing overview");
     } else if(sType === 'url') {
@@ -1831,21 +1645,31 @@ function workerInitialize(iCount, sType, sIdentifier) {
 
         // Load the file ages of the important configuration files
         eventlog("worker", "debug", "Loading the file ages");
-    } else if(sType == 'automap') {
-        // Loading a simple map
-        eventlog("worker", "debug", "Parsing automap: " + sIdentifier);
-
-        // Parse the map
-        if(parseMap(oFileAges[sIdentifier], sType, sIdentifier) === false)
-            eventlog("worker", "error", "Problem while parsing the automap on page load");
-
-        eventlog("worker", "info", "Finished parsing automap");
     } else {
         eventlog("worker", "error", "Unknown view type: "+sType);
     }
 
     // Close the status message window
     hideStatusMessage();
+}
+
+function getAndParseTemplates() {
+    // Bulk get all hover templates which are needed on the overview page
+    eventlog("worker", "debug", "Fetching hover templates and urls");
+    getHoverTemplates();
+    getHoverUrls();
+
+    // Assign the hover templates to the objects and parse them
+    eventlog("worker", "debug", "Parse hover menus");
+    parseHoverMenus();
+
+    // Bulk get all context templates which are needed on the overview page
+    eventlog("worker", "debug", "Fetching context templates");
+    getContextTemplates();
+
+    // Assign the context templates to the objects and parse them
+    eventlog("worker", "debug", "Parse context menus");
+    parseContextMenus();
 }
 
 /**
@@ -1869,11 +1693,69 @@ function handleUpdate(o, aParams) {
         return false;
     }
 
+    // Procees the "config changed" responses
+    if(isset(o['status']) && o['status'] == 'CHANGED') {
+        var oChanged = o['data'];
+        
+        for(var key in oChanged) {
+            if(key == 'maincfg') {
+                // FIXME: Not handled by ajax frontend, reload the page
+                eventlog("worker", "info", "Main configuration file was updated. Need to reload the page");
+                // Clear the scheduling timeout to prevent problems with FF4 bugs
+                if(workerTimeoutID)
+                    window.clearTimeout(workerTimeoutID);
+                window.location.reload(true);
+                return;
+
+            } else {
+                // FIXME: Maybe rerender map background images?
+                //if(sType === 'automap') {
+                //    // Render new background image and dot file, update background image
+                //    automapParse(oPageProperties.map_name);
+                //    setMapBackgroundImage(oPageProperties.background_image+iNow);
+                //}
+
+                if(iNumUnlocked > 0) {
+                    eventlog("worker", "info", "Map config updated. "+iNumUnlocked+" objects unlocked - not reloading.");
+                } else {
+                    eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
+                    parseMap(oChanged[key], sType, oPageProperties.map_name);
+                    return;
+                }
+            }
+        }
+    }
+
+    // I don't think empty maps make any sense. So when no objects are present:
+    // Try to fetch them continously
+    if(oLength(oMapObjects) === 0) {
+        if(sType == 'overview') {
+            eventlog("worker", "info", "No maps found, reparsing...");
+            getOverviewMaps();
+            return;
+
+        } else {
+            eventlog("worker", "info", "Map is empty. Strange. Re-fetching objects");
+            // FIXME: Maybe rerender map background images?
+            //if(sType === 'automap') {
+            //    // Render new background image and dot file, update background image
+            //    automapParse(oPageProperties.map_name);
+            //    setMapBackgroundImage(oPageProperties.background_image+iNow);
+            //}
+            parseMap(oFileAges[oPageProperties.map_name], sType, oPageProperties.map_name);
+            return;
+        }
+    }
+
+    /*
+     * Now proceed with real actions when everything is OK
+     */
+
     if(o.length > 0)
         bStateChanged = updateObjects(o, sType);
 
     // When some state changed on the map update the title and favicon
-    if((sType == 'map' || sType == 'automap') && bStateChanged)
+    if(sType == 'map' && bStateChanged)
         updateMapBasics();
 
     // FIXME: Add page basics (title, favicon, ...) update code for overview page
@@ -1940,153 +1822,40 @@ function workerUpdate(iCount, sType, sIdentifier) {
     // Log normal worker step
     eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
 
-    // Get the file ages of important files
-    eventlog("worker", "debug", "Loading the file ages");
-    var oCurrentFileAges = getCfgFileAges();
-
-    // Check for changed main configuration
-    if(oCurrentFileAges && checkMainCfgChanged(oCurrentFileAges.mainCfg)) {
-        // FIXME: Not handled by ajax frontend, reload the page
-        eventlog("worker", "info", "Main configuration file was updated. Need to reload the page");
-        // Clear the scheduling timeout to prevent problems with FF4 bugs
-        if(workerTimeoutID)
-            window.clearTimeout(workerTimeoutID);
-        window.location.reload(true);
-        return;
-    }
-
-    if(sType === 'map') {
-        // Check for changed map configuration
-        if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name)) {
-            if(iNumUnlocked > 0) {
-                eventlog("worker", "info", "Map config updated. "+iNumUnlocked+" objects unlocked - not reloading.");
-            } else {
-                eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
-                if(parseMap(oCurrentFileAges[oPageProperties.map_name], sType, oPageProperties.map_name) === false)
-                    eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
-            }
+    if(sType === 'map' || sType === 'overview') {
+        var mod = 'Map';
+        var show = '&show=' + oPageProperties.map_name;
+        if(sType === 'overview') {
+            mod = 'Overview';
+            show = '';
         }
-
-        // I don't think empty maps make any sense. So when no objects are present:
-        // Try to fetch them continously
-        if(oLength(oMapObjects) === 0) {
-            eventlog("worker", "info", "Map is empty. Strange. Re-fetching objects");
-
-            if(parseMap(oCurrentFileAges[oPageProperties.map_name], sType, oPageProperties.map_name) === false)
-                eventlog("worker", "error", "Problem while reparsing the map after new map configuration");
-        }
-
-        oCurrentFileAges = null;
-
-        /*
-         * Now proceed with real actions when everything is OK
-         */
 
         // Get objects which need an update
         var arrObj = getObjectsToUpdate();
 
         // Get the updated objects via bulk request
-        getBulkRequest(oGeneralProperties.path_server+'?mod=Map&act=getObjectStates&show='
-                        + oPageProperties.map_name+'&ty=state',
-                   getUrlParts(arrObj), oWorkerProperties.worker_request_max_length,
-                                     false, handleUpdate, [ sType ]);
+        getBulkRequest(oGeneralProperties.path_server+'?mod=' + mod + '&act=getObjectStates'
+                       + show +'&ty=state'+getViewParams()+getFileAgeParams(),
+                       getUrlParts(arrObj), oWorkerProperties.worker_request_max_length,
+                       false, handleUpdate, [ sType ]);
 
-        // Shapes which need to be updated need a special handling
-        var aShapesToUpdate = [];
-        for(var i = 0, len = arrObj.length; i < len; i++)
-            if(oMapObjects[arrObj[i]].conf.type === 'shape')
-                aShapesToUpdate.push(arrObj[i]);
+        if(sType === 'map') {
+            // Shapes which need to be updated need a special handling
+            var aShapesToUpdate = [];
+            for(var i = 0, len = arrObj.length; i < len; i++)
+                if(oMapObjects[arrObj[i]].conf.type === 'shape')
+                    aShapesToUpdate.push(arrObj[i]);
 
-        // Update shapes when needed
-        if(aShapesToUpdate.length > 0)
-            updateShapes(aShapesToUpdate);
-        aShapesToUpdate = null;
-    } else if(sType === 'automap') {
-
-        // Check for changed map configuration
-        if(oCurrentFileAges && checkMapCfgChanged(oCurrentFileAges[oPageProperties.map_name], oPageProperties.map_name)) {
-            // Render new background image and dot file
-            automapParse(oPageProperties.map_name);
-
-            // Update background image for automap
-            if(oPageProperties.view_type === 'automap')
-                setMapBackgroundImage(oPageProperties.background_image+iNow);
-
-            // Reparse the automap on changed map configuration
-            eventlog("worker", "info", "Automap configuration file was updated. Reparsing the map.");
-            if(parseMap(oCurrentFileAges[oPageProperties.map_name], sType, oPageProperties.map_name) === false)
-                eventlog("worker", "error", "Problem while reparsing the automap after new configuration");
+            // Update shapes when needed
+            if(aShapesToUpdate.length > 0)
+                updateShapes(aShapesToUpdate);
+            aShapesToUpdate = null;
         }
 
-        // I don't think empty maps make sense. So when no objects are present:
-        // Try to fetch them continously
-        if(oLength(oMapObjects) === 0) {
-            eventlog("worker", "info", "Automap is empty. Strange. Re-fetching objects");
-
-            // Render new background image and dot file
-            automapParse(oPageProperties.map_name);
-
-            // Update background image for automap
-            setMapBackgroundImage(oPageProperties.background_image+iNow);
-
-            // Reparse the automap on changed map configuration
-            eventlog("worker", "info", "Reparsing the map.");
-            if(parseMap(oCurrentFileAges[oPageProperties.map_name], sType, oPageProperties.map_name) === false)
-                eventlog("worker", "error", "Problem while reparsing the automap");
-        }
-
-        oCurrentFileAges = null;
-
-        /*
-         * Now proceed with real actions when everything is OK
-         */
-
-        // Get the updated objectsupdateMapObjects via bulk request
-        getBulkRequest(oGeneralProperties.path_server+'?mod=AutoMap&act=getObjectStates&show='+
-                   escapeUrlValues(oPageProperties.map_name)+'&ty=state'+getAutomapParams(),
-                   getUrlParts(getObjectsToUpdate()),
-                                     oWorkerProperties.worker_request_max_length, false, handleUpdate, [ sType ]);
     } else if(sType === 'url') {
-
         // Fetches the contents from the server and prints it to the page
         eventlog("worker", "debug", "Reparsing url page");
         parseUrl(oPageProperties.url);
-
-    } else if(sType === 'overview') {
-
-        //FIXME: Map configuration(s) changed?
-
-        // When no automaps/maps present: Try to fetch them continously
-        if(oLength(oMapObjects) === 0) {
-            eventlog("worker", "debug", "No automaps/maps found, reparsing...");
-            parseOverviewMaps(getOverviewMaps());
-            parseOverviewAutomaps(getOverviewAutomaps());
-
-            // Bulk get all hover templates which are needed on the overview page
-            eventlog("worker", "debug", "Fetching hover templates");
-            getHoverTemplates();
-
-            // Assign the hover templates to the objects and parse them
-            eventlog("worker", "debug", "Parse hover menus");
-            parseHoverMenus();
-
-            // Bulk get all context templates which are needed on the overview page
-            eventlog("worker", "oMapObjects", "Fetching context templates");
-            getContextTemplates();
-
-            // Assign the context templates to the objects and parse them
-            eventlog("worker", "info", "Parse context menus");
-            parseContextMenus();
-        }
-
-        /*
-         * Now proceed with real actions when everything is OK
-         */
-
-        // Get the updated objectsupdateMapObjects via bulk request
-        getBulkRequest(oGeneralProperties.path_server+'?mod=Overview&act=getObjectStates&ty=state',
-                       getUrlParts(getObjectsToUpdate()),
-                                     oWorkerProperties.worker_request_max_length, false, handleUpdate, [ sType ]);
     }
 
     // Update lastWorkerRun
@@ -2123,11 +1892,6 @@ function workerUpdate(iCount, sType, sIdentifier) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function runWorker(iCount, sType, sIdentifier) {
-    // The identifier is only used on first load when page properties is not
-    // present
-    if(typeof(sIdentifier) === 'undefined')
-        sIdentifier = '';
-
     // If the iterator is 0 it is the first run of the worker. Its only task is
     // to render the page
     if(iCount === 0) {
@@ -2137,7 +1901,7 @@ function runWorker(iCount, sType, sIdentifier) {
          * Do these actions every run (every second) excepting the first run
          */
 
-        iNow = Date.parse(new Date());
+        var iNow = String(Date.parse(new Date())).substr(0, 10);
 
         // Countdown the rotation counter
         // Not handled by ajax frontend. Reload the page with the new url
@@ -2156,7 +1920,7 @@ function runWorker(iCount, sType, sIdentifier) {
     }
 
     // Sleep until next worker run (1 Second)
-    workerTimeoutID = window.setTimeout(function() { runWorker((iCount+1), sType); }, 1000);
+    workerTimeoutID = window.setTimeout(function() { runWorker((iCount+1), sType, sIdentifier); }, 1000);
 
     // Pro forma return
     return true;

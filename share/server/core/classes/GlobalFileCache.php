@@ -30,7 +30,7 @@ class GlobalFileCache {
     private $cacheFile;
 
     private $fileAge;
-    private $cacheFileAge;
+    private $cacheFileAge = null;
 
     /**
      * Class Constructor
@@ -195,7 +195,7 @@ class GlobalFileCache {
      * @return  Integer  Unix Timestamp
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    private function getCacheFileAge() {
+    public function getCacheFileAge() {
         return $this->cacheFileAge;
     }
 }

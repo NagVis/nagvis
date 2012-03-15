@@ -26,19 +26,17 @@
  */
 
 var frontendMessages = {};
+// This is used to track all open messages (even the ones without keys)
+var frontendMessageList = [];
 
 function frontendMessageActive() {
-    if(document.getElementById('messageBoxDiv')) {
-        return true;
-    } else {
-        return false;
-    }
+    return frontendMessageList.length > 0;
 }
 
+// Always hide the last message
 function frontendMessageHide() {
-    if(frontendMessageActive()) {
-        document.body.removeChild(document.getElementById('messageBoxDiv'));
-    }
+    if(frontendMessageActive())
+        document.body.removeChild(frontendMessageList.pop());
 }
 
 function frontendMessagePresent(key) {
@@ -89,6 +87,8 @@ function frontendMessage(oMessage, iTimeout, key) {
     if(isset(key)) {
         frontendMessages[key] = oContainerDiv;
     }
+
+    frontendMessageList.push(oContainerDiv);
 
     oTable = document.createElement('table');
     oTable.setAttribute('id', 'messageBox');
@@ -175,7 +175,7 @@ function frontendMessage(oMessage, iTimeout, key) {
     oCell.setAttribute('class', sBoxType);
     oCell.setAttribute('className', sBoxType);
     oCell.colSpan = '3';
-    oCell.style.paddingTop = '16px';
+    oCell.style.padding = '16px';
     oCell.style.height = '202px';
     oCell.innerHTML = oMessage.message
 

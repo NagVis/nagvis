@@ -132,7 +132,7 @@ class NagVisHeaderMenu {
     }
 
     /**
-     * Returns a list of maps/automaps for the header menus macro list
+     * Returns a list of maps for the header menus macro list
      *
      * return   Array
      * @author 	Lars Michelsen <lars@vertical-visions.de>
@@ -145,10 +145,7 @@ class NagVisHeaderMenu {
         foreach($maps AS $mapName) {
             $map = Array();
 
-            if($type == 'maps')
-                $MAPCFG1 = new NagVisMapCfg($this->CORE, $mapName);
-            else
-                $MAPCFG1 = new NagVisAutomapCfg($this->CORE, $mapName);
+            $MAPCFG1 = new NagVisMapCfg($this->CORE, $mapName);
             try {
                 $MAPCFG1->readMapConfig(ONLY_GLOBAL);
             } catch(MapCfgInvalid $e) {
@@ -160,23 +157,20 @@ class NagVisHeaderMenu {
                 continue;
 
             // Only proceed permited objects
-            if(($type == 'maps' && !$AUTHORISATION->isPermitted('Map', 'view', $mapName))
-               || ($type == 'automaps' && !$AUTHORISATION->isPermitted('AutoMap', 'view', $mapName)))
+            if($type == 'maps' && !$AUTHORISATION->isPermitted('Map', 'view', $mapName))
                 continue;
 
             $map['mapName'] = $MAPCFG1->getName();
             $map['mapAlias'] = $MAPCFG1->getValue(0, 'alias');
             $map['childs'] = Array();
             if($type == 'maps') {
-                $map['urlParams'] = '';
                 $map['permittedEdit'] = $AUTHORISATION->isPermitted('Map', 'edit', $mapName);
 
                 $permEditAnyMap |= $map['permittedEdit'];
-            } else
-                $map['urlParams'] = str_replace('&', '&amp;', $MAPCFG1->getValue(0, 'default_params'));
+            }
 
             // auto select current map and apply map specific optins to the header menu
-            if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap') && $mapName == $this->OBJ->getName()) {
+            if($this->OBJ !== null && $this->aMacros['mod'] == 'Map' && $mapName == $this->OBJ->getName()) {
                 $map['selected'] = True;
 
                 // Override header fade option with map config
@@ -229,7 +223,7 @@ class NagVisHeaderMenu {
 
         $this->aMacros['permittedOverview'] = $AUTHORISATION->isPermitted('Overview', 'view', '*');
 
-        // Check if the user is permitted to edit the current map/automap
+        // Check if the user is permitted to edit the current map
         $this->aMacros['permittedView'] = $AUTHORISATION->isPermitted($this->aMacros['mod'], 'view', $this->UHANDLER->get('show'));
         $this->aMacros['permittedEdit'] = $AUTHORISATION->isPermitted($this->aMacros['mod'], 'edit', $this->UHANDLER->get('show'));
 
@@ -249,19 +243,20 @@ class NagVisHeaderMenu {
                                         & $AUTHORISATION->isPermitted('Auth', 'logout', '*');
 
         // Replace some special macros
-        if($this->OBJ !== null && ($this->aMacros['mod'] == 'Map' || $this->aMacros['mod'] == 'AutoMap')) {
+        if($this->OBJ !== null && $this->aMacros['mod'] == 'Map') {
             $this->aMacros['currentMap'] = $this->OBJ->getName();
             $this->aMacros['currentMapAlias'] = $this->OBJ->getValue(0, 'alias');
+            $this->aMacros['usesSources'] = count($this->OBJ->getValue(0, 'sources')) > 0;
         } else {
             $this->aMacros['currentMap'] = '';
             $this->aMacros['currentMapAlias'] = '';
+            $this->aMacros['usesSources'] = false;
         }
 
         // Initialize the enable fade option. Is overridden by the current map or left as is
         $this->aMacros['bEnableFade'] = cfg('defaults', 'headerfade');
 
         list($this->aMacros['maps'], $this->aMacros['permittedEditAnyMap']) = $this->getMapList('maps', $this->CORE->getAvailableMaps());
-        list($this->aMacros['automaps'], $_not_used) = $this->getMapList('automaps', $this->CORE->getAvailableAutomaps());
         $this->aMacros['langs'] = $this->getLangList();
     }
 
@@ -320,7 +315,6 @@ class NagVisHeaderMenu {
             'langServicegroup' => l('servicegroup'),
             'langMapEdit' => l('Edit Map'),
             'langMaps' => l('Maps'),
-            'langAutomaps' => l('Automaps'),
             'langTextbox' => l('textbox'),
             'langShape' => l('shape'),
             'langStateless' => l('Stateless'),
@@ -343,8 +337,8 @@ class NagVisHeaderMenu {
             'langRotationStart' => l('rotationStart'),
             'langRotationStop' => l('rotationStop'),
             'langToggleGrid' => l('Show/Hide Grid'),
-            'langAutomapToMap' => l('Export to Map'),
-            'langModifyAutomapParams' => l('Modify Automap view'),
+            'langToStaticMap' => l('Export to static map'),
+            'langModifyParams' => l('Modify view'),
             // Supported by backend and not using trusted auth
             'supportedChangePassword' => $AUTH->checkFeature('changePassword') && !$AUTH->authedTrusted(),
             'permittedUserMgmt' => $AUTHORISATION->isPermitted('UserMgmt', 'manage'),

@@ -134,20 +134,6 @@ class CoreMySQLHandler {
         return true;
     }
 
-    public function createAutoMapPermissions($name) {
-        // Only create when not existing
-        if($this->count('SELECT `mod` FROM perms WHERE `mod`=\'AutoMap\' AND `act`=\'view\' AND obj='.$this->escape($name)) <= 0) {
-            if(DEBUG&&DEBUGLEVEL&2) debug('MySQLHandler: create permissions for automap '.$name);
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'view\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'edit\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'delete\', '.$this->escape($name).')');
-        } else {
-            if(DEBUG&&DEBUGLEVEL&2) debug('MySQLHandler: won\'t create permissions for automap '.$name);
-        }
-
-        return true;
-    }
-
     public function createRotationPermissions($name) {
         // Only create when not existing
         if($this->count('SELECT `mod` FROM perms WHERE `mod`=\'Rotation\' AND `act`=\'view\' AND obj='.$this->escape($name)) <= 0) {
@@ -217,20 +203,10 @@ class CoreMySQLHandler {
             $this->createMapPermissions($map);
         }
 
-        // Access controll: Automap module levels for demo automaps
-        foreach(GlobalCore::getInstance()->demoAutomaps AS $automap) {
-            $this->createAutoMapPermissions($automap);
-        }
-
         $data = $this->fetchAssoc($this->query('SELECT roleId FROM roles WHERE name=\'Guests\''));
         // Access assignment: Guests => Allowed to view the demo maps
         foreach(GlobalCore::getInstance()->demoMaps AS $map) {
             $this->addRolePerm($data['roleId'], 'Map', 'view', $map);
-        }
-
-        // Access assignment: Guests => Allowed to view the demo automaps
-        foreach(GlobalCore::getInstance()->demoAutomaps AS $automap) {
-            $this->addRolePerm($data['roleId'], 'AutoMap', 'view', $automap);
         }
 
         // Only apply the new version when this is the real release or newer
@@ -334,11 +310,6 @@ class CoreMySQLHandler {
         // Access controll: Rotation module levels for rotation "demo"
         $this->createRotationPermissions('demo');
 
-        // Access controll: Automap module levels for demo automaps
-        foreach(GlobalCore::getInstance()->demoAutomaps AS $automap) {
-            $this->createAutoMapPermissions($automap);
-        }
-
         // Access controll: Change own password
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ChangePassword\', \'change\', \'*\')');
 
@@ -354,9 +325,6 @@ class CoreMySQLHandler {
         // Access controll: Summary permissions for viewing/editing/deleting all maps
         $this->createMapPermissions('*');
 
-        // Access controll: Summary permissions for viewing/editing/deleting all automaps
-        $this->createAutoMapPermissions('*');
-
         // Access controll: Rotation module levels for viewing all rotations
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Rotation\', \'view\', \'*\')');
 
@@ -370,10 +338,9 @@ class CoreMySQLHandler {
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'manage\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'manage\', \'*\')');
 
-        // Access controll: Edit/Delete maps and automaps
+        // Access controll: Edit/Delete maps
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'manage\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'add\', \'*\')');
-        $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'add\', \'*\')');
 
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'MainCfg\', \'edit\', \'*\')');
 
@@ -406,13 +373,6 @@ class CoreMySQLHandler {
         // Access assignment: Managers => Allowed to create maps
         $this->addRolePerm($data['roleId'], 'Map', 'add', '*');
 
-        // Access assignment: Managers => Allowed to edit/delete all automaps
-        $this->addRolePerm($data['roleId'], 'AutoMap', 'delete', '*');
-        $this->addRolePerm($data['roleId'], 'AutoMap', 'edit', '*');
-
-        // Access assignment: Managers => Allowed to create automaps
-        $this->addRolePerm($data['roleId'], 'AutoMap', 'add', '*');
-
         // Access assignment: Managers => Allowed to manage backgrounds and shapes
         $this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'manage', '*');
         $this->addRolePerm($data['roleId'], 'ManageShapes', 'manage', '*');
@@ -425,9 +385,6 @@ class CoreMySQLHandler {
 
         // Access assignment: Managers => Allowed to view all rotations
         $this->addRolePerm($data['roleId'], 'Rotation', 'view', '*');
-
-        // Access assignment: Managers => Allowed to view all automaps
-        $this->addRolePerm($data['roleId'], 'AutoMap', 'view', '*');
 
         // Access assignment: Managers => Allowed to change their passwords
         $this->addRolePerm($data['roleId'], 'ChangePassword', 'change', '*');
@@ -458,9 +415,6 @@ class CoreMySQLHandler {
 
         // Access assignment: Users => Allowed to view all rotations
         $this->addRolePerm($data['roleId'], 'Rotation', 'view', '*');
-
-        // Access assignment: Users => Allowed to view all automaps
-        $this->addRolePerm($data['roleId'], 'AutoMap', 'view', '*');
 
         // Access assignment: Users => Allowed to change their passwords
         $this->addRolePerm($data['roleId'], 'ChangePassword', 'change', '*');
@@ -497,11 +451,6 @@ class CoreMySQLHandler {
         // Access assignment: Guests => Allowed to view the demo rotation
         $this->addRolePerm($data['roleId'], 'Rotation', 'view', 'demo');
 
-        // Access assignment: Guests => Allowed to view the demo automaps
-        foreach(GlobalCore::getInstance()->demoAutomaps AS $automap) {
-            $this->addRolePerm($data['roleId'], 'AutoMap', 'view', $automap);
-        }
-
         // Access assignment: Guests => Allowed to change their passwords
         $this->addRolePerm($data['roleId'], 'ChangePassword', 'change', '*');
 
@@ -530,16 +479,6 @@ class CoreMySQLHandler {
             $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'createObject\', '.$this->escape($name).')');
             $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'deleteObject\', '.$this->escape($name).')');
             $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'addModify\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'getAutomapProperties\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'getAutomapObjects\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'getObjectStates\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'parseAutomap\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'doEdit\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'doDelete\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'doRename\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'modifyObject\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'createObject\', '.$this->escape($name).')');
-            $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'deleteObject\', '.$this->escape($name).')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'view\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'doCreate\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageBackgrounds\', \'doUpload\', \'*\')');
@@ -550,7 +489,6 @@ class CoreMySQLHandler {
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Overview\', \'getOverviewRotations\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Overview\', \'getOverviewProperties\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Overview\', \'getOverviewMaps\', \'*\')');
-        $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Overview\', \'getOverviewAutomaps\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ChangePassword\', \'view\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'UserMgmt\', \'view\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'UserMgmt\', \'getUserRoles\', \'*\')');
@@ -571,7 +509,6 @@ class CoreMySQLHandler {
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'doUpload\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'doDelete\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'doAdd\', \'*\')');
-        $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'AutoMap\', \'doAdd\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'MainCfg\', \'doEdit\', \'*\')');
 */
 ?>

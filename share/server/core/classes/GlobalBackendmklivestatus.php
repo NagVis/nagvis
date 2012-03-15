@@ -1309,5 +1309,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     public function getDirectParentNamesByHostName($hostName) {
         return $this->queryLivestatusList("GET hosts\nColumns: parents\nFilter: name = ".$hostName."\n");
     }
+
+    public function getHostNamesInHostgroup($name) {
+        $r = $this->queryLivestatusSingleColumn("GET hostgroups\nColumns: members\nFilter: name = ".$name."\n");
+        return $r[0];
+    }
 }
 ?>

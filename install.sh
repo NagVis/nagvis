@@ -1485,8 +1485,8 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
         LINE="Restoring custom map configuration files..."
         restore "etc/maps/" "map configuration files" "/demo*.cfg"
     
-        LINE="Restoring custom automap configuration files..."
-        restore "etc/automaps/" "automap configuration files" "/demo*.cfg"
+        LINE="Restoring custom geomap source files..."
+        restore "etc/geomap/" "geomap source files" "/demo*.csv"
     
         LINE="Restoring user configuration files..."
         if [ -d $NAGVIS_PATH_BACKUP/etc/profiles ]; then
@@ -1531,7 +1531,7 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
         restore "$NAGVIS_CONF" "main configuration file" ""
     
         LINE="Restoring custom map configuration files..."
-        copy_dir_xpath "\/(__automap\.cfg|demo\.cfg|demo2\.cfg|demo-server\.cfg|demo-map\.cfg)$" "etc/maps" "etc/maps" "map configuration files"
+        copy_dir_xpath "\/(demo\.cfg|demo2\.cfg|demo-server\.cfg|demo-map\.cfg)$" "etc/maps" "etc/maps" "map configuration files"
     
         LINE="Restoring custom map images..."
         copy_dir_xpath "\/nagvis-demo\.png$" "nagvis/images/maps" "$USERFILES_DIR/images/maps" "map image files"
@@ -1627,16 +1627,6 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" -a "$INSTA
         sed -i '/^allowed_user=/d' $NAGVIS_PATH/etc/maps/*.cfg
         chk_rc "| Error" "$DONE"
 
-        DONE=`log "Removing allowed_for_config from automap configs..." done`
-        grep -r '^allowed_for_config=' $NAGVIS_PATH/etc/automaps/*.cfg >> $NAGVIS_PATH/$AUTH_BACKUP
-        sed -i '/^allowed_for_config=/d' $NAGVIS_PATH/etc/automaps/*.cfg
-        chk_rc "| Error" "$DONE"
-
-        DONE=`log "Removing allowed_user from automap configs..." done`
-        grep -r '^allowed_user=' $NAGVIS_PATH/etc/automaps/*.cfg >> $NAGVIS_PATH/$AUTH_BACKUP
-        sed -i '/^allowed_user=/d' $NAGVIS_PATH/etc/automaps/*.cfg
-        chk_rc "| Error" "$DONE"
-
         DONE=`log "Removing hover_timeout from map configs..." done`
         sed -i '/^hover_timeout=/d' $NAGVIS_PATH/etc/maps/*.cfg
         chk_rc "| Error" "$DONE"
@@ -1671,8 +1661,8 @@ chown -R $WEB_USER:$WEB_GROUP $NAGVIS_PATH
 set_perm 775 "$NAGVIS_PATH/etc"
 set_perm 775 "$NAGVIS_PATH/etc/maps"
 set_perm 664 "$NAGVIS_PATH/etc/maps/*"
-set_perm 775 "$NAGVIS_PATH/etc/automaps"
-set_perm 664 "$NAGVIS_PATH/etc/automaps/*"
+set_perm 775 "$NAGVIS_PATH/etc/geomap"
+set_perm 664 "$NAGVIS_PATH/etc/geomap/*"
 set_perm 775 "$NAGVIS_PATH/etc/profiles"
 set_perm 664 "$NAGVIS_PATH/etc/profiles/*"
 set_perm 775 "$NAGVIS_PATH/share/userfiles/images/maps"
