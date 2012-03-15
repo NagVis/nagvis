@@ -22,10 +22,10 @@ Zu tun:
     - View Parameter für automap
     - Alte zu neuen Automap Parametern
     - Automap Migration
-    - Source API dokumentieren
 
 Nice2have:
   - Option zum persistieren der Optionen für einen selbst
+  - Doku: Source API dokumentieren
 
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
@@ -33,10 +33,6 @@ Relative Koordinaten:
 - In Sidebar/Dropdown die aktuelle Map highlighten
 
 - Zeige Rotations in Sidebar
-- Während die Index Seite lädt
-  - Header Menu sollte funktionieren während die Index Seite lädt
-  - Einzelne Maps sollten schon aufbauen
-
 
 -------------------------------------------------------------------------------
 
