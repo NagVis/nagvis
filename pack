@@ -1,8 +1,12 @@
 #!/bin/bash
 case "$1" in
-    1.6|trunk)
-        V=1.6
+    1.7|master)
+        V=1.7
         BRANCH=master
+    ;;
+    1.6)
+        V=1.6
+        BRANCH=nagvis-1.6
     ;;
     1.5)
         V=1.5
