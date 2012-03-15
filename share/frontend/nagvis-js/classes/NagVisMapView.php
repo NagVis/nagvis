@@ -127,10 +127,6 @@ class NagVisMapView {
         $arr['grid_steps']     = intval($this->MAPCFG->getValue(0, 'grid_steps'));
         $arr['permitted_edit'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Map', 'edit', $this->name);
 
-        // View specific modifier set
-        $arr['enableHover']   = $this->aParams['hover_menu'];
-        $arr['enableContext'] = $this->aParams['context_menu'];
-
         // only take the user supplied coords
         $arr['params'] = $this->MAPCFG->getSourceParams(true);
 

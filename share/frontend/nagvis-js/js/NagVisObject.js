@@ -53,9 +53,6 @@ var NagVisObject = Base.extend({
         if(this.conf.object_id == null)
             this.conf.object_id = getRandomLowerCaseLetter() + getRandom(1, 99999);
 
-        // Load view specific config modifiers (Normaly triggered by url params)
-        this.loadViewOpts();
-
         // Load lock options
         this.loadLocked();
     },
@@ -81,27 +78,6 @@ var NagVisObject = Base.extend({
         var unlocked = oUserProperties['unlocked-' + oPageProperties.map_name].split(',');
         this.bIsLocked = unlocked.indexOf(this.conf.object_id) === -1 && unlocked.indexOf('*') === -1;
         unlocked = null;
-    },
-
-    /**
-     * PUBLIC loadViewOpts
-     *
-     * Loads view specific options. Basically this options are triggered by url params
-     *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    loadViewOpts: function() {
-        // Do not load the view options for stateless lines
-        if(this.conf.type == 'line')
-            return;
-
-        // View specific hover modifier set. Will override the map configured option
-        if(oViewProperties && oViewProperties.enableHover && oViewProperties.enableHover != '')
-            this.conf.hover_menu = oViewProperties.enableHover;
-
-        // View specific context modifier set. Will override the map configured option
-        if(oViewProperties && oViewProperties.enableContext && oViewProperties.enableContext != '')
-            this.conf.context_menu = oViewProperties.enableContext;
     },
 
     /**
@@ -476,10 +452,13 @@ var NagVisObject = Base.extend({
         else
             this.bIsLocked = !this.bIsLocked;
 
+        if(this.conf.view_type === 'line' || this.conf.type === 'line')
+            this.parseLineHoverArea(document.getElementById(this.conf.object_id+'-linediv'));
         // Re-render the context menu
         this.parseContextMenu();
 
         if(this.toggleObjControls()) {
+
 	    if(typeof(this.toggleLabelLock) == 'function')
 		this.toggleLabelLock();
 
@@ -981,9 +960,10 @@ var NagVisObject = Base.extend({
     },
 
     parseLineHoverArea: function(oContainer) {
-        // Parse hover/link area only when needed. This is only the container
+        // This is only the container for the hover/label elements
         // The real area or labels are added later
-        if(this.needsLineHoverArea()) {
+        var oLink = document.getElementById(this.conf.object_id+'-linelink');
+        if(!oLink) {
             var oLink = document.createElement('a');
             oLink.setAttribute('id', this.conf.object_id+'-linelink');
             oLink.setAttribute('class', 'linelink');
@@ -992,9 +972,25 @@ var NagVisObject = Base.extend({
             oLink.target = this.conf.url_target;
 
             oContainer.appendChild(oLink);
-            oLink = null;
         }
+
+        // Hide if not needed, show if needed
+        if(!this.needsLineHoverArea()) {
+            oLink.style.display = 'none';
+        } else {
+            oLink.style.display = 'block';
+        }
+
+        oLink = null;
         oContainer = null;
+    },
+
+    removeLineHoverArea: function() {
+        if(!this.needsLineHoverArea()) {
+            var area = document.getElementById(this.conf.object_id+'-linelink');
+            area.style.display = 'none';
+            area = null;
+        }
     },
 
     parseLineControls: function () {
@@ -1052,6 +1048,9 @@ var NagVisObject = Base.extend({
         } else {
             makeUndragable([this.conf.object_id+'-icondiv']);
         }
+        
+        if(this.conf.view_type === 'line' || this.conf.type === 'line')
+            this.removeLineHoverArea();
     },
 
     parseControlDrag: function (num, objX, objY, offX, offY, size) {

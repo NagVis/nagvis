@@ -450,12 +450,10 @@ function getContextTemplates() {
     // Loop all map objects to get the used templates
     for(var i in oMapObjects)
         // Ignore templates of objects which
-        // a) have a disabled menu
         // b) template is already known
         // FIXME: conf.context_menu has inconsistent types (with and without quotes)
         //        fix this and  === can be used here
-        if(isset(oMapObjects[i].conf.context_menu) && oMapObjects[i].conf.context_menu == 1
-           && isset(oMapObjects[i].conf.context_template)
+        if(isset(oMapObjects[i].conf.context_template)
            && (!isset(oContextTemplates[oMapObjects[i].conf.context_template]) || oContextTemplates[oMapObjects[i].conf.context_template] === ''))
             oContextTemplates[oMapObjects[i].conf.context_template] = '';
 
