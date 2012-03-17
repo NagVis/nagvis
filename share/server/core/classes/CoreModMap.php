@@ -271,7 +271,7 @@ class CoreModMap extends CoreModule {
                         // Is called on form submission
                         $this->toStaticMap();
                     } else {
-                        $VIEW = new NagVisViewtoStaticMap($this->CORE);
+                        $VIEW = new NagVisViewToStaticMap($this->CORE);
                         $sReturn = json_encode(Array('code' => $VIEW->parse()));
                     }
                 break;
@@ -283,35 +283,39 @@ class CoreModMap extends CoreModule {
 
     /**
      * Converts maps using sources to static maps
-     * FIXME: Not implemented yet
      */
     private function toStaticMap() {
-        throw new NagVisException(l('Needs to be migrated.'));
-//        $MAPCFG = new NagVisAutomapCfg($this->CORE, $this->name);
-//        $MAPCFG->readMapConfig();
-//
-//        $MAP = new NagVisAutoMap($this->CORE, $MAPCFG, false, IS_VIEW);
-//
-//        if($this->sAction == 'parseAutomap') {
-//            $MAP->renderMap();
-//            return json_encode(true);
-//        } else {
-//            $FHANDLER = new CoreRequestHandler($_POST);
-//            if($FHANDLER->match('target', MATCH_MAP_NAME)) {
-//                $target = $FHANDLER->get('target');
-//
-//                if($MAP->toClassicMap($target)) {
-//                    throw new Success(l('The map has been created.'),
-//                                      null,
-//                                      1,
-//                                      cfg('paths','htmlbase').'/frontend/nagvis-js/index.php?mod=Map&show='.$target);
-//                }  else {
-//                    throw new NagVisException(l('Unable to create map configuration file.'));
-//                }
-//            } else {
-//                throw new NagVisException(l('Invalid target option given.'));
-//            }
-//        }
+        $FHANDLER = new CoreRequestHandler($_POST);
+        if(!$FHANDLER->match('target', MATCH_MAP_NAME)) {
+            throw new NagVisException(l('Invalid target option given.'));
+        }
+
+        $target = $FHANDLER->get('target');
+        // "true" negates the check
+        $this->verifyMapExists($target, true);
+
+        // Read the old config
+        $this->verifyMapExists($this->name);
+        $MAPCFG = new GlobalMapCfg($this->CORE, $this->name);
+        $MAPCFG->readMapConfig();
+
+        // Create a new map config
+        $NEW = new GlobalMapCfg($this->CORE, $target);
+        $NEW->createMapConfig();
+        foreach($MAPCFG->getMapObjects() AS $object_id => $cfg) {
+            // Remove "sources" from the global section. Cause this makes the maps dynamic
+            if($cfg['type'] == 'global') {
+                unset($cfg['sources']);
+            }
+            $NEW->addElement($cfg['type'], $cfg, $perm = true, $object_id);
+        }
+
+        throw new Success(
+            l('The map has been created.'),
+            null,
+            1,
+            cfg('paths','htmlbase').'/frontend/nagvis-js/index.php?mod=Map&show='.$target
+        );
     }
 
 

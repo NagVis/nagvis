@@ -1112,7 +1112,10 @@ class GlobalMapCfg {
 
         foreach($keys AS $key)
             if($key !== 'type' && isset($this->mapConfig[$id][$key]) && $this->mapConfig[$id][$key] !== '')
-                $a[] = $key.'='.$this->mapConfig[$id][$key]."\n";
+                if(is_array($this->mapConfig[$id][$key]))
+                    $a[] = $key.'='.implode(',', $this->mapConfig[$id][$key])."\n";
+                else
+                    $a[] = $key.'='.$this->mapConfig[$id][$key]."\n";
 
         $a[] = "}\n";
         $a[] = "\n";

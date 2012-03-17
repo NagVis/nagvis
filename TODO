@@ -11,7 +11,6 @@ Zu tun:
       - Speichern testen (Nur nötigste Attribute schreiben)
       - Werden die korrekt übernommen?
       - margin abziehen?
-    - Export To Map umziehen
   - Geomap:
     - Max. resolution (limit of OSM/API?)
     - bbox Limit?
