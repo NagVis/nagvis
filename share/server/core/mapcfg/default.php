@@ -164,7 +164,7 @@ $mapConfigVars = Array(
     ),
     'sources' => Array(
         'must'       => 0,
-        'default'    => '',
+        'default'    => array(),
         'array'      => True,
         'match'      => MATCH_STRING
     ),
