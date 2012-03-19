@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <title>NagVis Maps</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+</head>
+<body>
+  <h1>Static and dynamic maps</h1>
+  <p>The different views in in NagVis are named maps. The classic and most common type of
+  NagVis maps are the static maps. This means one creates a map configuration using the
+  web based configuration editor or using a text editor to create the map configuration.</p>
+  <p>In NagVis 1.7x a new extension has been made to the map configuration. It is still based
+  on the static map configuration apporach. But it makes it possible to extend thoses static
+  configuration parts using dynamic and programmable mechanisms.</p>
+  <p>The new thing has been named &quot;map sources&quot;. Each map can make use of one or
+  several map sources. Each of these sources can clear, replace or alter the whole map
+  configuration.</p>
+  <p>A map source is built of several PHP functions which take a standardized set of parameters
+  to do their work. The functions are completely free in what they are doing. A source can
+  read CSV files with objects and coordinates, can connect to databases to fetch information
+  or read data from external services. It is up to the developer.</p>
+
+  <h2>The map sources API</h2>
+  <p>Text files containing PHP code need to be placed in the <code>share/server/core/sources</code>
+  directory relative to the nagvis base directory. In OMD the site local files can be placed in
+  <code>local/share/nagvis/htdocs/server/core/sources</code> relative to the site base directory.</p>
+  <p>There no 1:1 relation between the files and the sources itselfs. A file can contain one source,
+  several different sources or even no sources (e.g. to define functions needed by several sources).</p>
+  <p>One map source consists of two PHP functions which must match the following specifications:</p>
+  <table>
+  <tr><th>Function name pattern</th><th>Parameters</th></tr>
+  <tr>
+      <td rowspan=3>
+        <pre>process_&lt;source-name></pre>
+        <p>This is the real source processing function. It can alter the map configuration inplace. The
+        return code of the function is not used in any way at the moment.</p>
+      </td>
+      <td><code>$MAPCFG</code> - The GlobalMapCfg PHP object</td>
+  </tr>
+  <tr>
+      <td><code>$map_name</code> - The name of the map as string</td>
+  </tr>
+  <tr>
+      <td><code>&$map_config</code> - Reference of the map config array. This array must be modified
+          to alter the map configuration.
+      </td>
+  </tr>
+  <tr>
+     <td rowspan=2>
+        <pre>changed_&lt;source-name></pre>
+        <p>This function is used to tell the map config processing of NagVis wether or not the 
+        the map configuration has to be reloaded. It must return true to tell NagVis to reload the
+        map configuration. This means also to execute the process_* function of all configured sources.</td>
+     </td>
+     <td><code>$MAPCFG</code> - The GlobalMapCfg PHP object</td>
+  </tr>
+  <tr>
+      <td><code>$compare_time</code> - The unix timestamp of the currently cached map configuration.</p>
+  </tr>
+  </table>
+
+  <p>When loading a map configuration NagVis checks wether or not the map configuration has already been
+  parsed and cached. If the map is already cached and the cache is up-to-date NagVis can use the map
+  configuration cache which can be processed much faster than parsing and validating the map configuration.</p>
+  <p>In general NagVis compares the file ages of the used config files (main configuration and map configuration
+  files) with the map configuration cache to make the decission.<p>
+  <p>When using map sources each source must tell the map config processing code wether or not the map source
+  thinks that the map configuration has to be reloaded or can use the map configuration cache. This is done
+  by the changed_* function of each source. When this function returns &quot;true&quot; this tells NagVis to
+  reload the map configuration.</p>
+  <p>Loading the map configuration means that NagVis parses the map configuration file to fill the array of
+  map objects. These information are then validated to prevent broken configurations.
+  Then all configured map sources are processed to give them the chance to alter the map configuration. </p>
+
+  <p>Each map source can define view parameters and config variables to be available in maps which make use
+  of these sources. This is an example definition of the geomap map source:</p>
+  <pre>
+// options to be modyfiable by the user(url)
+global $viewParams;
+$viewParams = array(
+    'geomap' => array(
+        'zoom',
+        'geomap_type',
+        'source_file',
+    )
+);
+
+// Config variables to be registered for this source
+global $configVars;
+$configVars = array(
+    'geomap_type' => array(
+        'must'       => false,
+        'default'    => 'osmarender',
+        'match'      => '/^(osmarender|mapnik|cycle)$/i',
+        'field_type' => 'dropdown',
+        'list'       => 'list_geomap_types',
+    ),
+    'source_file' => array(
+        'must'       => false,
+        'default'    => '',
+        'match'      => MATCH_STRING_EMPTY,
+        'field_type' => 'dropdown',
+        'list'       => 'list_geomap_source_files',
+    ),
+    'zoom' => array(
+        'must'       => false,
+        'default'    => '',
+        'match'      => MATCH_INTEGER_EMPTY,
+    ),
+);
+  </pre>
+
+  <p>These definitions lead to a) three new map configuration options for the global section of the map
+  and b) make these three URL parameters available in the URLs of the maps using this source.</p>
+
+  <h2>General map view parameters</h2>
+  <p>Since implementation of the map sources feature even regular maps without any configured sources
+  can be modified using some default view parameters. Some of the parameters are not completely new,
+  they have just been recoded to be view parameters. Here is the list of general view parameters:</p>
+  <table>
+  <tr><th>Parameter</th><th>Description</th></tr>
+  <tr>
+    <td>backend_id</td>
+    <td>
+    Changes the default backend to be used in the current map. Take a look at the map configuration
+    option for details.
+    </td>
+  </tr>
+  <tr>
+    <td>iconset</td>
+    <td>
+    Overrides the iconset configured in global section of the map. Take a look at the map configuration
+    option for details.
+    </td>
+  </tr>
+  <tr>
+    <td>width</td>
+    <td>
+    Can be used to alter the map configuration dimensions. Is not used by regular maps at the moment.
+    This option is only used by some map sources.
+    </td>
+  </tr>
+  <tr>
+    <td>height</td>
+    <td>
+    Can be used to alter the map configuration dimensions. Is not used by regular maps at the moment.
+    This option is only used by some map sources.
+    </td>
+  </tr>
+  <tr>
+    <td>header_menu</td>
+    <td>
+    Overrides the header_menu setting configured in global section of the map. Take a look at the map configuration
+    option for details.
+    </td>
+  </tr>
+  <tr>
+    <td>hover_menu</td>
+    <td>
+    Overrides the hover_menu setting configured in global section of the map. Take a look at the map configuration
+    option for details.
+    </td>
+  </tr>
+  <tr>
+    <td>context_menu</td>
+    <td>
+    Overrides the context_menu setting configured in global section of the map. Take a look at the map configuration
+    option for details.
+    </td>
+  </tr>
+  </table>
+  
+  <h2>Default map sources</h2>
+  <p>At the moment there are two map sources available in default NagVis. Descriptions about the
+  <a href=geomap.html>geomap</a> and the <a href=automap.html>automap</a> sources can be found on their
+   dedicated documentation pages.</p>
+</body>
+</table>
+</html>

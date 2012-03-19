@@ -26,7 +26,6 @@ Zu tun:
     - CSV Quelle und geomap aufteilen
 
   - Doku:
-    - Standard View Parameter
     - View Parameter für geomap
     - View Parameter für automap
     - Alte zu neuen Automap Parametern
@@ -34,7 +33,6 @@ Zu tun:
 
 Nice2have:
   - Option zum persistieren der Optionen für einen selbst
-  - Doku: Source API dokumentieren
 
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
