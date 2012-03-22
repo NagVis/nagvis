@@ -518,7 +518,7 @@ var NagVisObject = Base.extend({
      */
     parseCoord: function(val, dir) {
         if(!isRelativeCoord(val)) {
-            return parseInt(val);
+            return addZoomFactor(parseInt(val));
         } else {
             // This must be an object id. Is there an offset given?
             if(val.search('%') !== -1) {
@@ -527,14 +527,14 @@ var NagVisObject = Base.extend({
                 var offset    = parts[1];
                 var refObj    = getMapObjByDomObjId(objectId);
                 if(refObj)
-                    return parseFloat(refObj.parseCoord(refObj.conf[dir], dir)) + parseFloat(offset);
+                    return addZoomFactor(parseFloat(refObj.parseCoord(refObj.conf[dir], dir)) + parseFloat(offset));
                 else
                     return 0;
             } else {
                 // Only an object id. Get the coordinate and return it
                 var refObj = getMapObjByDomObjId(val);
                 if(refObj)
-                    return parseInt(refObj.parseCoord(refObj.conf[dir], dir));
+                    return addZoomFactor(parseInt(refObj.parseCoord(refObj.conf[dir], dir)));
                 else
                     return 0;
             }
@@ -1010,11 +1010,6 @@ var NagVisObject = Base.extend({
             makeDragable([this.conf.object_id+'-drag-'+i], this.saveObject, this.moveObject);
         }
 
-        //this.parseControlDelete(x.length, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'),
-        //                        20 - size / 2, -size - size / 2, size);
-        //this.parseControlModify(x.length+1, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'),
-        //                        20 + size + 5 - size / 2, -size - size / 2, size);
-
         if(this.conf.view_type === 'line' && (this.conf.line_type == 10 || this.conf.line_type == 13 || this.conf.line_type == 14))
 	    this.parseControlToggleLineMid(x.length+2, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'), 20 - size / 2, -size / 2 + 5, size);
 
@@ -1061,8 +1056,8 @@ var NagVisObject = Base.extend({
 	// FIXME: Multilanguage
 	ctl.title          = 'Move object';
         ctl.style.zIndex   = parseInt(this.conf.z)+1;
-        ctl.style.width    = size + 'px';
-        ctl.style.height   = size + 'px';
+        ctl.style.width    = addZoomFactor(size) + 'px';
+        ctl.style.height   = addZoomFactor(size) + 'px';
         ctl.style.left     = (objX + offX) + 'px';
         ctl.style.top      = (objY + offY) + 'px';
         ctl.objOffsetX     = offX;
@@ -1081,115 +1076,6 @@ var NagVisObject = Base.extend({
     },
 
     /**
-     * Adds the delete button to the controls including
-     * all eventhandlers
-     *
-     * Author: Lars Michelsen <lm@larsmichelsen.com>
-     */
-    parseControlDelete: function (num, objX, objY, offX, offY, size) {
-        var ctl= document.createElement('div');
-        ctl.setAttribute('id',         this.conf.object_id+'-delete-' + num);
-        ctl.setAttribute('class',     'control delete');
-        ctl.setAttribute('className', 'control delete');
-	// FIXME: Multilanguage
-	ctl.title          = 'Delete object';
-        ctl.style.zIndex   = parseInt(this.conf.z)+1;
-        ctl.style.width    = size + 'px';
-        ctl.style.height   = size + 'px';
-        ctl.style.left     = (objX + offX) + 'px';
-        ctl.style.top      = (objY + offY) + 'px';
-        ctl.objOffsetX     = offX;
-        ctl.objOffsetY     = offY;
-
-        ctl.onclick = function() {
-            // In the event handler this points to the ctl object
-            var arr   = this.id.split('-');
-            var objId = arr[0];
-            var obj = getMapObjByDomObjId(objId);
-
-            // FIXME: Multilanguage
-            if(!confirm('Really delete the object?'))
-                return;
-
-            obj.saveObject(this, null);
-            obj.remove();
-
-            // Remove object from JS
-            updateNumUnlocked(-1);
-            delete oMapObjects[objId];
-
-            obj   = null;
-            objId = null;
-            arr   = null;
-
-            document.body.style.cursor = 'auto';
-        };
-
-        ctl.onmouseover = function() {
-            document.body.style.cursor = 'pointer';
-        };
-
-        ctl.onmouseout = function() {
-            document.body.style.cursor = 'auto';
-        };
-
-        this.addControl(ctl);
-        ctl = null;
-    },
-
-    /**
-     * Adds the modify button to the controls including
-     * all eventhandlers
-     *
-     * Author: Lars Michelsen <lm@larsmichelsen.com>
-     */
-    parseControlModify: function (num, objX, objY, offX, offY, size) {
-        var ctl= document.createElement('div');
-        ctl.setAttribute('id',         this.conf.object_id+'-modify-' + num);
-        ctl.setAttribute('class',     'control modify');
-        ctl.setAttribute('className', 'control mdoify');
-	// FIXME: Multilanguage
-	ctl.title          = 'Modify object';
-        ctl.style.zIndex   = parseInt(this.conf.z)+1;
-        ctl.style.width    = size + 'px';
-        ctl.style.height   = size + 'px';
-        ctl.style.left     = (objX + offX) + 'px';
-        ctl.style.top      = (objY + offY) + 'px';
-        ctl.objOffsetX     = offX;
-        ctl.objOffsetY     = offY;
-
-        ctl.onclick = function() {
-            // In the event handler this points to the ctl object
-            var arr   = this.id.split('-');
-            var objId = arr[0];
-            var obj = getMapObjByDomObjId(objId);
-
-            showFrontendDialog(oGeneralProperties.path_server
-                       + '?mod=Map&act=addModify&show='
-                       + escapeUrlValues(oPageProperties.map_name)
-                       + '&object_id=' + escapeUrlValues(objId), 'Modify Object');
-
-            obj   = null;
-            objId = null;
-            arr   = null;
-
-            document.body.style.cursor = 'auto';
-        };
-
-        ctl.onmouseover = function() {
-            document.body.style.cursor = 'pointer';
-        };
-
-        ctl.onmouseout = function() {
-            document.body.style.cursor = 'auto';
-        };
-
-        this.addControl(ctl);
-        ctl = null;
-    },
-
-
-    /**
      * Adds the modify button to the controls including
      * all eventhandlers
      *
@@ -1203,8 +1089,8 @@ var NagVisObject = Base.extend({
 	// FIXME: Multilanguage
 	ctl.title          = 'Lock/Unlock line middle';
         ctl.style.zIndex   = parseInt(this.conf.z)+1;
-        ctl.style.width    = size + 'px';
-        ctl.style.height   = size + 'px';
+        ctl.style.width    = addZoomFactor(size) + 'px';
+        ctl.style.height   = addZoomFactor(size) + 'px';
         ctl.style.left     = (objX + offX) + 'px';
         ctl.style.top      = (objY + offY) + 'px';
         ctl.objOffsetX     = offX;

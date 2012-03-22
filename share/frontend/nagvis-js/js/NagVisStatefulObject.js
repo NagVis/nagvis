@@ -445,7 +445,7 @@ var NagVisStatefulObject = NagVisObject.extend({
         var x = this.parseCoords(this.conf.x, 'x');
         var y = this.parseCoords(this.conf.y, 'y');
 
-        var width = this.conf.line_width;
+        var width = addZoomFactor(this.conf.line_width);
 
         var colorFill   = '';
         var colorFill2  = '';
@@ -722,6 +722,8 @@ var NagVisStatefulObject = NagVisObject.extend({
             arr = null;
         };
 
+        addZoomHandler(oIcon);
+
         oIcon.src = oGeneralProperties.path_iconsets + this.conf.icon;
         oIcon.alt = this.conf.type + '-' + alt;
 
@@ -918,15 +920,6 @@ var NagVisStatefulObject = NagVisObject.extend({
     },
 
     parseIconControls: function () {
-        // No controls on icons anymore
-        //var size = oGeneralProperties['controls_size'];
-        //this.parseControlModify(1, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
-        //                         this.getObjWidth() + 5, - size / 2, size);
-
-        //this.parseControlDelete(0, this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'),
-        //                         this.getObjWidth() + 5, - size / 2 + 5 + size, size);
-        //size = null;
-
         // Simply make it dragable. Maybe will be extended in the future...
         makeDragable([this.conf.object_id+'-icondiv'], this.saveObject, this.moveObject);
     },

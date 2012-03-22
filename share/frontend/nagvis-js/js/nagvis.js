@@ -947,10 +947,10 @@ function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, t
     oLabelDiv.style.top = y + 'px';
 
     if(w && w !== '' && w !== 'auto')
-        oLabelDiv.style.width = w+'px';
+        oLabelDiv.style.width = addZoomFactor(w) + 'px';
 
     if(h && h !== '' && h !== 'auto')
-        oLabelDiv.style.height = h+'px';
+        oLabelDiv.style.height = addZoomFactor(h) + 'px';
 
     oLabelDiv.style.zIndex = parseInt(z) + 1;
     oLabelDiv.style.overflow = 'visible';
@@ -1008,8 +1008,23 @@ function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, t
     oLabelSpan.innerHTML = text;
 
     oLabelDiv.appendChild(oLabelSpan);
-    oLabelSpan = null;
 
+    // Take zoom factor into account
+    oLabelDiv.width  = addZoomFactor(oLabelDiv.width);
+    oLabelDiv.height = addZoomFactor(oLabelDiv.height);
+    var fontSize = getEffectiveStyle(oLabelSpan, 'font-size');
+    if(fontSize === null) {
+        eventlog(
+            "drawNagVisTextbox",
+            "critical",
+            "Unable to fetch font-size attribute for textbox"
+        );
+    } else {
+        var fontSize = parseInt(fontSize.replace('px', ''));
+        oLabelSpan.style.fontSize = addZoomFactor(fontSize) + 'px';
+    }
+
+    oLabelSpan = null;
     return oLabelDiv;
 }
 
@@ -1153,6 +1168,25 @@ if (!Array.prototype.indexOf) {
 
 }
 
+function getEffectiveStyle(e, attr) {
+    if(e.style[attr]) {
+        // Object local
+        return e.style[attr];
+    } else if(document.defaultView && document.defaultView.getComputedStyle) {
+        // DOM 
+        return document.defaultView.getComputedStyle(e, null).getPropertyValue(attr);
+    } else if(e.currentStyle){
+        // IE
+        var cssR = cssR.replace(/\-(\w)/g, function (strMatch, p1){
+            return p1.toUpperCase();
+        });
+        var f = e.currentStyle[cssR];
+        if(f.length > 0) {
+            return f;
+        }
+    }
+    return null;
+}
 
 /**
  * Hack to scale elements which should fill 100% of the windows viewport. The
@@ -1182,4 +1216,41 @@ function scaleView() {
         sidebar.style.height = (pageHeight() + getScrollTop()) + 'px';
     }
     sidebar = null;
+}
+
+/**
+ * Handles the zoom factor of the current view for a single integer which
+ * might be a coordinate or a dimension of an object
+ */
+function addZoomFactor(coord) {
+    var zoom = getViewParam('zoom');
+    // FIXME: How to get the default? (-> configured in global section)
+    // Also take the user stored values into account
+    if(zoom === null)
+        zoom = 100;
+    return parseInt(coord * parseInt(zoom) / 100);
+}
+
+/**
+ * Hides the object from being displayed and adds a load handler
+ * which resizes the object based on the zoom factor. The hiding
+ * at the beginning is done to prevent up-then-over effects during
+ * resizing of the objects.
+ * The '.src' attribute must be assigned afterwards
+ */
+function addZoomHandler(oImage) {
+    oImage.style.display = 'none';
+
+    addEvent(oImage, 'load', function() {
+        // This can not be added directly to the object beacause the
+        // width/height is scaled in at least firefox automatically
+        var width  = addZoomFactor(this.width);
+        var height = addZoomFactor(this.height);
+        this.width  = width;
+        this.height = height;
+        // Now really show the image
+        this.style.display = 'block';
+    });
+
+    oImage = null;
 }

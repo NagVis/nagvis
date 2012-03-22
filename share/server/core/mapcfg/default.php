@@ -76,6 +76,20 @@ function listViewTypes($CORE) {
     return Array('icon', 'line');
 }
 
+function listZoomFactors($CORE) {
+    return Array(
+        10  => ' 10%',
+        25  => ' 25%',
+        50  => ' 50%',
+        75  => ' 75%',
+        100 => '100%',
+        125 => '125%',
+        150 => '150%',
+        200 => '200%',
+    );
+}
+
+
 function getObjectNames($type, $CORE, $MAPCFG, $objId, $attrs) {
     global $_BACKEND;
     if(isset($attrs['backend_id']) && $attrs['backend_id'] != '')
@@ -600,6 +614,15 @@ $mapConfigVars = Array(
         'match'   => MATCH_STRING_NO_SPACE,
     ),
 
+    // GLOBAL SPECIFIC OPTIONS
+    'zoom' => Array(
+        'must'          => 0,
+        'default'       => 100,
+        'match'         => MATCH_INTEGER,
+        'field_type'    => 'dropdown',
+        'list'          => 'listZoomFactors',
+    ),
+
     // HOST SPECIFIC OPTIONS
 
     'host_name' => Array(
@@ -854,6 +877,7 @@ $mapConfigVarMap['global'] = Array(
     'show_in_multisite' => null,
     'stylesheet' => null,
     'url_target' => null,
+    'zoom' => null,
 );
 
 $mapConfigVarMap['host'] = Array(

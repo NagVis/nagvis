@@ -890,7 +890,6 @@ function getObjectStatesCallback(oResponse) {
     bStateChanged = null;
 }
 
-
 /**
  * setMapBackgroundImage()
  *
@@ -903,13 +902,14 @@ function setMapBackgroundImage(sImage) {
     // Only work with the background image if some is configured
     if(typeof sImage !== 'undefined' && sImage !== 'none' && sImage !== '') {
         // Use existing image or create new
-        if(document.getElementById('backgroundImage')) {
-            var oImage = document.getElementById('backgroundImage');
-        } else {
+        var oImage = document.getElementById('backgroundImage');
+        if(!oImage) {
             var oImage = document.createElement('img');
             oImage.id = 'backgroundImage';
             document.body.appendChild(oImage);
         }
+
+        addZoomHandler(oImage);
 
         oImage.src = sImage;
         oImage = null;
@@ -1441,6 +1441,13 @@ function getViewParams(update) {
     }
 
     return sParams;
+}
+
+function getViewParam(param) {
+    if(oViewProperties && isset(oViewProperties['params'])
+       && isset(oViewProperties['params'][param]))
+        return oViewProperties['params'][param];
+    return null;
 }
 
 /**
