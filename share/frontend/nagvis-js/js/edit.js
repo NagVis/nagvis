@@ -235,8 +235,8 @@ function dragObject(event) {
     draggingObject.style.position = 'absolute';
     draggingObject.style.top  = newTop + 'px';
     draggingObject.style.left = newLeft + 'px';
-    draggingObject.x = newLeft;
-    draggingObject.y = newTop;
+    draggingObject.x = rmZoomFactor(newLeft);
+    draggingObject.y = rmZoomFactor(newTop);
 
     // When this object has a relative coordinated label, then move this too
     moveRelativeObject(draggingObject.id, newTop, newLeft);
@@ -479,6 +479,10 @@ function getEventMousePos(e) {
         posy = a[1];
         a = null;
     }
+
+    // Take the zoom into account
+    posx = rmZoomFactor(posx);
+    posy = rmZoomFactor(posy);
 
     return [ posx, posy ];
 }
@@ -803,7 +807,7 @@ function gridParse() {
         grid.setColor(oViewProperties.grid_color);
         grid.setStroke(1);
 
-        var gridStep = oViewProperties.grid_steps;
+        var gridStep = addZoomFactor(oViewProperties.grid_steps);
 
         // Start
         var gridYStart = 0;

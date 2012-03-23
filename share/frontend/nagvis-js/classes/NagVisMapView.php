@@ -127,8 +127,18 @@ class NagVisMapView {
         $arr['grid_steps']     = intval($this->MAPCFG->getValue(0, 'grid_steps'));
         $arr['permitted_edit'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Map', 'edit', $this->name);
 
-        // only take the user supplied coords
-        $arr['params'] = $this->MAPCFG->getSourceParams(true);
+        // hover_menu & context_menu have to be handled separated from the others
+        // It is special for them that the object individual settings have to be
+        // treated and only the user specified source params must be applied here
+        // (no global, no hardcoded default)
+        $userParams = $this->MAPCFG->getSourceParams(true);
+        if(isset($userParams['header_menu']))
+            $arr['header_menu'] = $userParams['header_menu'];
+        if(isset($userParams['context_menu']))
+            $arr['context_menu'] = $userParams['context_menu'];
+        
+        // This sets the final source parameters
+        $arr['params'] = $this->MAPCFG->getSourceParams();
 
         return json_encode($arr);
     }

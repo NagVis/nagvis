@@ -1443,6 +1443,14 @@ function getViewParams(update) {
     return sParams;
 }
 
+/**
+ * Returns the real and final view parameter value including all sources
+ * a) hardcoded values
+ * b) global section values
+ * c) user profile values
+ * d) url values
+ * The PHP backend computes all the parameters
+ */
 function getViewParam(param) {
     if(oViewProperties && isset(oViewProperties['params'])
        && isset(oViewProperties['params'][param]))
@@ -1460,7 +1468,7 @@ function getViewParam(param) {
  */
 function getMapProperties(type, mapName) {
     return getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapProperties&show='
-                          + escapeUrlValues(mapName)+getViewParams())
+                          + escapeUrlValues(mapName)+getViewParams());
 }
 
 /**
@@ -1473,7 +1481,7 @@ function getMapProperties(type, mapName) {
  */
 function getUrlProperties(sUrl) {
     return getSyncRequest(oGeneralProperties.path_server+'?mod=Url&act=getProperties&show='
-                                           + escapeUrlValues(sUrl))
+                                           + escapeUrlValues(sUrl));
 }
 
 // Returns true if the current view is

@@ -3,6 +3,12 @@ This is a small file for storing quick thoughts about new features and needed ch
 
 Probleme:
   - Warnings anzeigen, wenn Funktionen aus oldPhpVersionFixes.php angezogen werden
+  - Bei hover_menu und context_menu dürfen nur die vom Nutzer individuell (per URL oder Profil)
+    gesetzten Optionen genutzt werden, da sonst die Einstellung in der Global Sektion immer alle
+    Objekte übertrumpfen würde. Über die Herkunft weiß das Frontend nichts mehr, es sei denn es
+    liest tatsächlich die URL aus. Das wollen wir aber nicht. 
+    loadViewOpts in share/frontend/nagvis-js/js/NagVisObject.js wieder herstellen - darf aber nur
+    die "user specific" view opts bekommen - wie?
 
 Zu tun:
   - Automap zu source umbauen
@@ -98,6 +104,9 @@ Bei der Implementierung muss auf folgende Werte geachtet werden:
 3. Beim Editieren müssen die Koordinaten zurückgerechnet werden
 4. Controls der Objekte
 5. Labels der Objekte
+6. Das Grid vom Editier-Modus
+7. Relative Koordinaten bewegen
+8. Textbox resize
 
 Zoomfaktor: Der Zoomfaktor ist per Default auf 100% gesetzt. Damit müssen keine
 Koordinaten umgerechnet werden. Nun kann man z.b. den Zoomfaktor auf 50% setzen
@@ -145,6 +154,17 @@ Offene Fragen:
   - Dann gibt es aber noch die *_menu Variablen, die auch die Werte der Objekte selbst
     berücksichtigen müssen
     -> Man soll per View Parameter die Menus deaktivieren können
+  - Der "View Params" Dialog holt seine Parameter wie folgt:
+    0. Type Defaults holen
+       $typeDefaults = $this->MAPCFG->getTypeDefaults($type);
+    1. Alle Source Params holen:
+       $source_params = $this->MAPCFG->getSourceParams();
+    2. Die Default Werte holen
+       $typeDef = $this->MAPCFG->getSourceParamDefs(array_keys($source_params));
+    3. Ersten gesetzten Wert nehmen
+       1. URL value
+       2. $MAPCFG->getSourceParam()
+  - Oder reicht: getSourceParams($only_user_supplied = false, $only_customized = false)?
 - Maße der Objekte werden verändert
   - Dementsprechend müssen auch die Objekte anders positioniert werden.
     nheight = (height * zoom / 100)

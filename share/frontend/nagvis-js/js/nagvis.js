@@ -932,10 +932,12 @@ function hideStatusMessage() {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, text, customStyle) {
+    var initRendering = false;
     var oLabelDiv = document.getElementById(id);
     if(!oLabelDiv) {
         oLabelDiv = document.createElement('div');
         oLabelDiv.setAttribute('id', id);
+        initRendering = true;
     }
     oLabelDiv.setAttribute('class', className);
     oLabelDiv.setAttribute('className', className);
@@ -1010,18 +1012,20 @@ function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, t
     oLabelDiv.appendChild(oLabelSpan);
 
     // Take zoom factor into account
-    oLabelDiv.width  = addZoomFactor(oLabelDiv.width);
-    oLabelDiv.height = addZoomFactor(oLabelDiv.height);
-    var fontSize = getEffectiveStyle(oLabelSpan, 'font-size');
-    if(fontSize === null) {
-        eventlog(
-            "drawNagVisTextbox",
-            "critical",
-            "Unable to fetch font-size attribute for textbox"
-        );
-    } else {
-        var fontSize = parseInt(fontSize.replace('px', ''));
-        oLabelSpan.style.fontSize = addZoomFactor(fontSize) + 'px';
+    if(initRendering) {
+        oLabelDiv.width  = addZoomFactor(oLabelDiv.width);
+        oLabelDiv.height = addZoomFactor(oLabelDiv.height);
+        var fontSize = getEffectiveStyle(oLabelSpan, 'font-size');
+        if(fontSize === null) {
+            eventlog(
+                "drawNagVisTextbox",
+                "critical",
+                "Unable to fetch font-size attribute for textbox"
+            );
+        } else {
+            var fontSize = parseInt(fontSize.replace('px', ''));
+            oLabelSpan.style.fontSize = addZoomFactor(fontSize) + 'px';
+        }
     }
 
     oLabelSpan = null;
@@ -1229,6 +1233,15 @@ function addZoomFactor(coord) {
     if(zoom === null)
         zoom = 100;
     return parseInt(coord * parseInt(zoom) / 100);
+}
+
+function rmZoomFactor(coord) {
+    var zoom = getViewParam('zoom');
+    // FIXME: How to get the default? (-> configured in global section)
+    // Also take the user stored values into account
+    if(zoom === null)
+        zoom = 100;
+    return parseInt(coord / parseInt(zoom) * 100);
 }
 
 /**

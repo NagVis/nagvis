@@ -937,12 +937,12 @@ var NagVisStatefulObject = NagVisObject.extend({
         this.bIsFlashing = show;
         if(show) {
             oObjIcon.style.border  = "5px solid " + sColor;
-            oObjIconDiv.style.top  = (this.conf.y - 5)+'px';
-            oObjIconDiv.style.left = (this.conf.x - 5)+'px';
+            oObjIconDiv.style.top  = (this.parseCoord(this.conf.y, 'y') - 5) + 'px';
+            oObjIconDiv.style.left = (this.parseCoord(this.conf.x, 'x') - 5) + 'px';
         } else {
             oObjIcon.style.border  = "none";
-            oObjIconDiv.style.top  = this.conf.y + 'px';
-            oObjIconDiv.style.left = this.conf.x + 'px';
+            oObjIconDiv.style.top  = this.parseCoord(this.conf.y, 'y') + 'px';
+            oObjIconDiv.style.left = this.parseCoord(this.conf.x, 'x') + 'px';
         }
 
         sColor      = null;

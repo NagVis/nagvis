@@ -28,10 +28,10 @@ function handleDragResult(objId, anchorId) {
 
 function saveObjectAfterResize(oObj) {
     var objId = oObj.id.split('-')[0];
-    var objX = pxToInt(oObj.style.left);
-    var objY = pxToInt(oObj.style.top);
-    var objW = parseInt(oObj.style.width);
-    var objH = parseInt(oObj.style.height);
+    var objX = rmZoomFactor(pxToInt(oObj.style.left));
+    var objY = rmZoomFactor(pxToInt(oObj.style.top));
+    var objW = rmZoomFactor(parseInt(oObj.style.width));
+    var objH = rmZoomFactor(parseInt(oObj.style.height));
 
     // Reposition in frontend
     var obj = getMapObjByDomObjId(objId);

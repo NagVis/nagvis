@@ -81,6 +81,27 @@ var NagVisObject = Base.extend({
     },
 
     /**
+     * PUBLIC loadViewOpts
+     *
+     * Loads view specific options. Basically this options are triggered by url params
+     *
+     * @author Lars Michelsen <lars@vertical-visions.de>
+     */
+    loadViewOpts: function() {
+        // Do not load the view options for stateless lines
+        if(this.conf.type == 'line')
+            return;
+
+        // View specific hover modifier set. Will override the map configured option
+        if(isset(oViewProperties) && isset(oViewProperties.hover_menu))
+            this.conf.hover_menu = oViewProperties.hover_menu;
+
+        // View specific context modifier set. Will override the map configured option
+        if(isset(oViewProperties) && isset(oViewProperties.context_menu))
+            this.conf.context_menu = oViewProperties.context_menu;
+    },
+
+    /**
      * PUBLIC setLastUpdate
      *
      * Sets the time of last status update of this object
@@ -516,9 +537,10 @@ var NagVisObject = Base.extend({
      *
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    parseCoord: function(val, dir) {
+    parseCoord: function(val, dir, addZoom) {
+        var coord = 0;
         if(!isRelativeCoord(val)) {
-            return addZoomFactor(parseInt(val));
+            coord = parseInt(val);
         } else {
             // This must be an object id. Is there an offset given?
             if(val.search('%') !== -1) {
@@ -527,18 +549,19 @@ var NagVisObject = Base.extend({
                 var offset    = parts[1];
                 var refObj    = getMapObjByDomObjId(objectId);
                 if(refObj)
-                    return addZoomFactor(parseFloat(refObj.parseCoord(refObj.conf[dir], dir)) + parseFloat(offset));
-                else
-                    return 0;
+                    coord = parseFloat(refObj.parseCoord(refObj.conf[dir], dir)) + parseFloat(offset);
             } else {
                 // Only an object id. Get the coordinate and return it
                 var refObj = getMapObjByDomObjId(val);
                 if(refObj)
-                    return addZoomFactor(parseInt(refObj.parseCoord(refObj.conf[dir], dir)));
-                else
-                    return 0;
+                    coord = parseInt(refObj.parseCoord(refObj.conf[dir], dir));
             }
         }
+
+        if(addZoom === undefined || addZoom === false)
+            return addZoomFactor(coord);
+        else
+            return coord;
     },
 
     /**
@@ -547,11 +570,11 @@ var NagVisObject = Base.extend({
      *
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    parseCoords: function(val, dir) {
+    parseCoords: function(val, dir, addZoom) {
         var l = val.split(',');
 
         for(var i = 0, len = l.length; i < len; i++)
-            l[i] = this.parseCoord(l[i], dir);
+            l[i] = this.parseCoord(l[i], dir, addZoom);
 
         return l;
     },
@@ -913,13 +936,13 @@ var NagVisObject = Base.extend({
             // - Calculate and add the 3rd coord as 2nd
             // - Add a drag control for the 2nd coord
             this.conf.x = [
-                x[0],
-              middle(this.parseCoords(this.conf.x, 'x')[0], this.parseCoords(this.conf.x, 'x')[1], this.conf.line_cut),
+              x[0],
+              middle(this.parseCoords(this.conf.x, 'x', false)[0], this.parseCoords(this.conf.x, 'x', false)[1], this.conf.line_cut),
               x[1],
             ].join(',');
             this.conf.y = [
                 y[0],
-                middle(this.parseCoords(this.conf.y, 'y')[0], this.parseCoords(this.conf.y, 'y')[1], this.conf.line_cut),
+                middle(this.parseCoords(this.conf.y, 'y', false)[0], this.parseCoords(this.conf.y, 'y', false)[1], this.conf.line_cut),
                 y[1],
             ].join(',');
         } else {
@@ -1022,11 +1045,11 @@ var NagVisObject = Base.extend({
     getLineMid: function(coord, dir) {
         var c = coord.split(',');
         if(c.length == 2)
-        return middle(this.parseCoords(coord, dir)[0],
-                      this.parseCoords(coord, dir)[1],
-                  this.conf.line_cut);
+            return middle(this.parseCoords(coord, dir)[0],
+                          this.parseCoords(coord, dir)[1],
+                          this.conf.line_cut);
         else
-        return this.parseCoords(coord, dir)[1];
+            return this.parseCoords(coord, dir)[1];
     },
 
     removeControls: function() {
