@@ -6,6 +6,8 @@ Core
   * Bugfix: Added missing permission for the Url module which is used when
             having URLs in rotations
   * Bugfix: Fixed exclude_member_states for map objects
+  * Bugfix: ISO-8859-1 encoded map config files are now converted to UTf-8
+    during parsing the map config file
 
 Frontend
   * Bugfix: Fixed cloning shape objects (view_type error message)
