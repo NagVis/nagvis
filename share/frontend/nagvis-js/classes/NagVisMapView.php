@@ -132,8 +132,8 @@ class NagVisMapView {
         // treated and only the user specified source params must be applied here
         // (no global, no hardcoded default)
         $userParams = $this->MAPCFG->getSourceParams(true);
-        if(isset($userParams['header_menu']))
-            $arr['header_menu'] = $userParams['header_menu'];
+        if(isset($userParams['hover_menu']))
+            $arr['hover_menu'] = $userParams['hover_menu'];
         if(isset($userParams['context_menu']))
             $arr['context_menu'] = $userParams['context_menu'];
         

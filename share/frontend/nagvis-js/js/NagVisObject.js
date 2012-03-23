@@ -55,6 +55,7 @@ var NagVisObject = Base.extend({
 
         // Load lock options
         this.loadLocked();
+        this.loadViewOpts();
     },
 
 
