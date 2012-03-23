@@ -786,8 +786,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 
         var jsObj = getMapObjByDomObjId(objId);
 
-        jsObj.conf.label_x = jsObj.calcNewLabelCoord(jsObj.conf.label_x, jsObj.conf.x, obj.x);
-        jsObj.conf.label_y = jsObj.calcNewLabelCoord(jsObj.conf.label_y, jsObj.conf.y, obj.y);
+        jsObj.conf.label_x = jsObj.calcNewLabelCoord(jsObj.conf.label_x, jsObj.parseCoord(jsObj.conf.x, 'x', false), obj.x);
+        jsObj.conf.label_y = jsObj.calcNewLabelCoord(jsObj.conf.label_y, jsObj.parseCoord(jsObj.conf.y, 'y', false), obj.y);
 
         jsObj      = null;
         objId      = null;
@@ -834,17 +834,17 @@ var NagVisStatefulObject = NagVisObject.extend({
 
         // If there is a presign it should be relative to the objects x/y
         if(this.conf.label_x && this.conf.label_x.toString().match(/^(?:\+|\-)/))
-            x = this.parseCoord(this.parseLabelCoord(this.conf.x), 'x') + parseFloat(this.conf.label_x);
+            x = this.parseCoord(this.parseLabelCoord(this.conf.x), 'x', false) + parseFloat(this.conf.label_x);
         if(this.conf.label_y && this.conf.label_y.toString().match(/^(?:\+|\-)/))
-            y = this.parseCoord(this.parseLabelCoord(this.conf.y), 'y') + parseFloat(this.conf.label_y);
+            y = this.parseCoord(this.parseLabelCoord(this.conf.y), 'y', false) + parseFloat(this.conf.label_y);
 
         // If no x/y coords set, fallback to object x/y
         if(!this.conf.label_x || this.conf.label_x === '' || this.conf.label_x === '0')
-            x = this.parseCoord(this.parseLabelCoord(this.conf.x), 'x');
+            x = this.parseCoord(this.parseLabelCoord(this.conf.x), 'x', false);
         if(!this.conf.label_y || this.conf.label_y === '' || this.conf.label_y === '0')
-            y = this.parseCoord(this.parseLabelCoord(this.conf.y), 'y');
+            y = this.parseCoord(this.parseLabelCoord(this.conf.y), 'y', false);
 
-        return [ x, y ];
+        return [ addZoomFactor(x), addZoomFactor(y) ];
     },
 
     parseLabelCoord: function (val) {

@@ -550,7 +550,7 @@ var NagVisObject = Base.extend({
                 var offset    = parts[1];
                 var refObj    = getMapObjByDomObjId(objectId);
                 if(refObj)
-                    coord = parseFloat(refObj.parseCoord(refObj.conf[dir], dir)) + parseFloat(offset);
+                    coord = parseFloat(refObj.parseCoord(refObj.conf[dir], dir, false)) + parseFloat(offset);
             } else {
                 // Only an object id. Get the coordinate and return it
                 var refObj = getMapObjByDomObjId(val);
@@ -559,7 +559,7 @@ var NagVisObject = Base.extend({
             }
         }
 
-        if(addZoom === undefined || addZoom === false)
+        if(addZoom === undefined || addZoom === true)
             return addZoomFactor(coord);
         else
             return coord;
@@ -621,15 +621,15 @@ var NagVisObject = Base.extend({
         //        But it is not coded to attach relative objects to lines. So it is no big
         //        deal to leave this as it is.
         if(num === -1) {
-            this.conf.x = this.parseCoord(x, 'x');
-            this.conf.y = this.parseCoord(y, 'y');
+            this.conf.x = this.parseCoord(x, 'x', false);
+            this.conf.y = this.parseCoord(y, 'y', false);
         } else {
             var old  = this.conf.x.split(',');
-            old[num] = this.parseCoord(x, 'x');
+            old[num] = this.parseCoord(x, 'x', false);
             this.conf.x = old.join(',');
 
             old  = this.conf.y.split(',');
-            old[num] = this.parseCoord(y, 'y');
+            old[num] = this.parseCoord(y, 'y', false);
             this.conf.y = old.join(',');
             old = null;
         }
@@ -674,11 +674,11 @@ var NagVisObject = Base.extend({
         //        But it is not coded to attach relative objects to lines. So it is no big
         //        deal to leave this as it is.
         if(num === -1) {
-            this.conf.x = this.getRelCoords(oParent, this.parseCoord(this.conf.x, 'x'), 'x', -1);
-            this.conf.y = this.getRelCoords(oParent, this.parseCoord(this.conf.y, 'y'), 'y', -1);
+            this.conf.x = this.getRelCoords(oParent, this.parseCoord(this.conf.x, 'x', false), 'x', -1);
+            this.conf.y = this.getRelCoords(oParent, this.parseCoord(this.conf.y, 'y', false), 'y', -1);
         } else {
-            var newX = this.getRelCoords(oParent, this.parseCoords(this.conf.x, 'x')[num], 'x', -1);
-            var newY = this.getRelCoords(oParent, this.parseCoords(this.conf.y, 'y')[num], 'y', -1);
+            var newX = this.getRelCoords(oParent, this.parseCoords(this.conf.x, 'x', false)[num], 'x', -1);
+            var newY = this.getRelCoords(oParent, this.parseCoords(this.conf.y, 'y', false)[num], 'y', -1);
 
             var old  = this.conf.x.split(',');
             old[num] = newX;
@@ -700,7 +700,7 @@ var NagVisObject = Base.extend({
 
     getRelCoords: function(refObj, val, dir, num) {
         var refPos = num === -1 ? refObj.conf[dir] : refObj.conf[dir].split(',')[num];
-        var offset = parseInt(val) - parseInt(refObj.parseCoord(refPos, dir));
+        var offset = parseInt(val) - parseInt(refObj.parseCoord(refPos, dir, false));
         var pre    = offset >= 0 ? '+' : '';
         val        = refObj.conf.object_id + '%' + pre + offset;
         refObj     = null;

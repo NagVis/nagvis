@@ -144,27 +144,6 @@ Implementierungsdetails:
 
 Offene Fragen:
 
-- Wenn der Zoom Faktor pro Nutzer gespeichert wird, wird dieser dann pro Map 
-  oder für alle Maps festgelegt?
-  -> Kunden Fragen
-- Wie soll die GUI (Hover, Context, Header Menu skalieren?) -> Gar nicht?
-  -> Kunden Fragen
-- Wie die "global" Option bekommen? Eventuell generell für alle View Parameter lösen.
-  - Es gibt normale Parameter die ihre Werte aus Global-Sektion -> URL-Parameter ziehen
-  - Dann gibt es aber noch die *_menu Variablen, die auch die Werte der Objekte selbst
-    berücksichtigen müssen
-    -> Man soll per View Parameter die Menus deaktivieren können
-  - Der "View Params" Dialog holt seine Parameter wie folgt:
-    0. Type Defaults holen
-       $typeDefaults = $this->MAPCFG->getTypeDefaults($type);
-    1. Alle Source Params holen:
-       $source_params = $this->MAPCFG->getSourceParams();
-    2. Die Default Werte holen
-       $typeDef = $this->MAPCFG->getSourceParamDefs(array_keys($source_params));
-    3. Ersten gesetzten Wert nehmen
-       1. URL value
-       2. $MAPCFG->getSourceParam()
-  - Oder reicht: getSourceParams($only_user_supplied = false, $only_customized = false)?
 - Maße der Objekte werden verändert
   - Dementsprechend müssen auch die Objekte anders positioniert werden.
     nheight = (height * zoom / 100)
@@ -175,6 +154,15 @@ Offene Fragen:
   - Nach dem Einrechnen des Zoomfaktors ist auch die ursprüngliche Größe
     nicht mehr bekannt
   -> Nachdenken
+
+- Wenn der Zoom Faktor pro Nutzer gespeichert wird, wird dieser dann pro Map 
+  oder für alle Maps festgelegt?
+  -> Kunden Fragen
+
+- View Parameter pro Nutzer & pro Map speichern
+
+- Wie soll die GUI (Hover, Context, Header Menu skalieren?) -> Gar nicht?
+  -> Kunden Fragen
 
 *** Icon Koordinaten zentrieren ***
 
