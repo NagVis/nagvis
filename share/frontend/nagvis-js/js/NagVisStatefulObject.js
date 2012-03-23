@@ -784,8 +784,8 @@ var NagVisStatefulObject = NagVisObject.extend({
 
         var jsObj = getMapObjByDomObjId(objId);
 
-        jsObj.conf.label_x = jsObj.calcNewLabelCoord(jsObj.conf.label_x, jsObj.conf.x, obj.x);
-        jsObj.conf.label_y = jsObj.calcNewLabelCoord(jsObj.conf.label_y, jsObj.conf.y, obj.y);
+        jsObj.conf.label_x = jsObj.calcNewLabelCoord(jsObj.conf.label_x, jsObj.parseCoord(jsObj.conf.x, 'x'), obj.x);
+        jsObj.conf.label_y = jsObj.calcNewLabelCoord(jsObj.conf.label_y, jsObj.parseCoord(jsObj.conf.y, 'y'), obj.y);
 
         jsObj      = null;
         objId      = null;
