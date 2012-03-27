@@ -102,6 +102,8 @@ class WuiViewMapAddModify {
             'mode'          => $this->mode,
             'langSave'      => l('save'),
             'langPermanent' => l('Make Permanent'),
+            'langForAll'    => l('for all users'),
+            'langForYou'    => l('for you'),
         );
 
         // Build page based on the template file and the data array

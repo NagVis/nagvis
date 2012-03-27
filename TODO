@@ -153,6 +153,8 @@ Offene Fragen:
     bekannt ist wie groß das Objekt selbst ist
   - Nach dem Einrechnen des Zoomfaktors ist auch die ursprüngliche Größe
     nicht mehr bekannt
+  - Width/Height hängt oft an einem anderen Objekt, als die Position selbst
+    Die Position hängt eher am Container
   -> Nachdenken
 
 - Wenn der Zoom Faktor pro Nutzer gespeichert wird, wird dieser dann pro Map 

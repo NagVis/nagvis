@@ -15,7 +15,10 @@ window.setTimeout(function() \{ window.location.href = makeuri({$addParams}); },
     <tr>
         <td class=tdlabel>{$langPermanent}</td>
         <td class=tdbox></td>
-        <td class=tdfield><input type="checkbox" name="perm" value="1" /></td>
+        <td class=tdfield>
+            <input type="checkbox" name="perm" value="1" />{$langForAll}<br />
+            <input type="checkbox" name="perm_user" value="1" />{$langForYou}
+        </td>
     </tr>{/if}
     <tr>
         <td class="tdlabel" colspan="3" align="center">

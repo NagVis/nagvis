@@ -535,16 +535,26 @@ class GlobalMapCfg {
     public function getSourceParam($key, $only_user_supplied = false, $only_customized = false) {
         // Allow _GET or _POST (_POST is needed for add/modify dialog submission)
         if(isset($_REQUEST[$key])) {
-            if($only_customized && $_REQUEST[$key] != $this->getValue(0, $key)) {
+            if(!$only_customized || $_REQUEST[$key] != $this->getValue(0, $key)) {
                 // Only get options which differ from the defaults
                 return $_REQUEST[$key];
             } else {
-                return $_REQUEST[$key];
+                return null;
             }
-        } elseif(!$only_user_supplied) {
-            return $this->getValue(0, $key);
         } else {
-            return null;
+            // Try to use the user profile
+            $USERCFG = new CoreUserCfg();
+            $val = $USERCFG->getValue($key);
+            if($val !== null) {
+                return $val;
+                
+            } elseif(!$only_user_supplied) {
+                // Otherwise use the map global value (if allowed)
+                return $this->getValue(0, $key);
+
+            } else {
+                return null;
+            }
         }
     }
 

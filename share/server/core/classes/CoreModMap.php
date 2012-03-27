@@ -177,12 +177,13 @@ class CoreModMap extends CoreModule {
                 break;
                 case 'addModify':
                     $aOpts = Array(
-                        'show'     => MATCH_MAP_NAME,
-                        'clone_id' => MATCH_OBJECTID_EMPTY,
-                        'submit'   => MATCH_STRING_EMPTY,
-                        'update'   => MATCH_INTEGER_EMPTY,
-                        'mode'     => MATCH_STRING_EMPTY,
-                        'perm'     => MATCH_BOOLEAN_EMPTY,
+                        'show'      => MATCH_MAP_NAME,
+                        'clone_id'  => MATCH_OBJECTID_EMPTY,
+                        'submit'    => MATCH_STRING_EMPTY,
+                        'update'    => MATCH_INTEGER_EMPTY,
+                        'mode'      => MATCH_STRING_EMPTY,
+                        'perm'      => MATCH_BOOLEAN_EMPTY,
+                        'perm_user' => MATCH_BOOLEAN_EMPTY,
                     );
                     $aVals = $this->getCustomOptions($aOpts, Array(), true);
                     $attrs = $this->filterMapAttrs($this->getAllOptions($aOpts));
@@ -192,7 +193,13 @@ class CoreModMap extends CoreModule {
                     // map configuration
                     $mode = isset($aVals['mode']) ? $aVals['mode'] : null;
                     // Tells the handleAddModify handler to store the options permanent
-                    $perm = isset($aVals['perm']) ? $aVals['perm'] : null;
+                    if(isset($aVals['perm']) && $aVals['perm'] == '1') {
+                        $perm = 1;
+                    } elseif(isset($aVals['perm_user']) && $aVals['perm_user'] == '1') {
+                        $perm = 2;
+                    } else {
+                        $perm = null;
+                    }
 
                     $VIEW = new WuiViewMapAddModify($aVals['show'], $mode);
                     $VIEW->setAttrs($attrs);
@@ -355,13 +362,25 @@ class CoreModMap extends CoreModule {
             // The handler has been called in "view_params" mode. In this case the user has
             // less options and the options to
             // 1. modify these parameters only for the current open view
-            // 2. Save the changes for himselfs (FIXME)
+            // 2. Save the changes for himselfs
             // 3. Save the changes to the map config (-> Use default code below)
-            if($mode == 'view_params' && $perm != '1') {
+            if($mode == 'view_params' && $perm != 1 && $perm != 2) {
+                echo 1;
                 // This is the 1. case -> redirect the user to a well formated url
                 $params = $attrs;
                 unset($params['object_id']);
                 return array(0, $params, '');
+            }
+
+            if($mode == 'view_params' && $perm == 2) {
+                // This is the 2. case -> saving the options only for the user
+                $USERCFG = new CoreUserCfg();
+                $params = $attrs;
+                unset($params['object_id']);
+                $USERCFG->doSet(array(
+                    'params-' . $map => $params,
+                ));
+                return array(0, '', '');
             }
 
             if(!$MAPCFG->objExists($objId))
