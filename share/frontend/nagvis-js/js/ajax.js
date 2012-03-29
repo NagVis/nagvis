@@ -171,7 +171,7 @@ function getAsyncRequest(sUrl, bCacheable, callback, callbackParams) {
         oRequest.open("GET", sUrl+"&_t="+iNow);
         oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
         oRequest.onreadystatechange = function() {
-            if(oRequest.readyState == 4) {
+            if(oRequest && oRequest.readyState == 4) {
                 frontendMessageRemove('ajaxError');
                 if(oRequest.responseText.replace(/\s+/g, '').length === 0) {
                     if(bCacheable)
