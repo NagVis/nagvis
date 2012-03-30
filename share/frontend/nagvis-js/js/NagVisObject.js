@@ -1227,17 +1227,17 @@ var NagVisObject = Base.extend({
         // Honor the enabled grid and reposition the object after dropping
         if(oViewProperties.grid_show === 1) {
             if(viewType === 'line') {
-            var pos = coordsToGrid(jsObj.parseCoords(jsObj.conf.x, 'x')[anchorId],
-                                   jsObj.parseCoords(jsObj.conf.y, 'y')[anchorId]);
-            jsObj.conf.x = jsObj.calcNewCoord(pos[0], 'x', anchorId);
-            jsObj.conf.y = jsObj.calcNewCoord(pos[1], 'y', anchorId);
-            pos = null;
+               var pos = coordsToGrid(jsObj.parseCoords(jsObj.conf.x, 'x', false)[anchorId],
+                                      jsObj.parseCoords(jsObj.conf.y, 'y', false)[anchorId]);
+               jsObj.conf.x = jsObj.calcNewCoord(pos[0], 'x', anchorId);
+               jsObj.conf.y = jsObj.calcNewCoord(pos[1], 'y', anchorId);
+               pos = null;
             } else {
-            var pos = coordsToGrid(jsObj.parseCoord(jsObj.conf.x, 'x'),
-                                   jsObj.parseCoord(jsObj.conf.y, 'y'));
-            jsObj.conf.x = jsObj.calcNewCoord(pos[0], 'x');
-            jsObj.conf.y = jsObj.calcNewCoord(pos[1], 'y');
-            pos = null;
+               var pos = coordsToGrid(jsObj.parseCoord(jsObj.conf.x, 'x', false),
+                                      jsObj.parseCoord(jsObj.conf.y, 'y', false));
+               jsObj.conf.x = jsObj.calcNewCoord(pos[0], 'x');
+               jsObj.conf.y = jsObj.calcNewCoord(pos[1], 'y');
+               pos = null;
             }
             jsObj.reposition();
         }

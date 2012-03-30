@@ -365,7 +365,6 @@ class CoreModMap extends CoreModule {
             // 2. Save the changes for himselfs
             // 3. Save the changes to the map config (-> Use default code below)
             if($mode == 'view_params' && $perm != 1 && $perm != 2) {
-                echo 1;
                 // This is the 1. case -> redirect the user to a well formated url
                 $params = $attrs;
                 unset($params['object_id']);

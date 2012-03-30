@@ -474,13 +474,15 @@ function getEventMousePos(e) {
 
     // When a grid is enabled align the dragged object in the nearest grid
     if(oViewProperties.grid_show === 1) {
-        var a = coordsToGrid(posx, posy);
-        posx = a[0];
-        posy = a[1];
-        a = null;
+        //var a = coordsToGrid(posx, posy);
+        //posx = a[0];
+        //posy = a[1];
+        //a = null;
     }
 
-    // Take the zoom into account
+    // Take the zoom into account. If the map is zoomed this function gathers
+    // coordinates where the zoom factor is included. It has to be removed for
+    // further processing.
     posx = rmZoomFactor(posx);
     posy = rmZoomFactor(posy);
 
@@ -897,15 +899,15 @@ function coordsToGrid(x, y) {
         x = x.split(',');
         y = y.split(',');
         for(var i = 0; i < x.length; i++) {
-            x[i] = x[i] - (x[i] % oViewProperties.grid_steps);
-            y[i] = y[i] - (y[i] % oViewProperties.grid_steps);
+            x[i] = x[i] - (x[i] % addZoomFactor(oViewProperties.grid_steps));
+            y[i] = y[i] - (y[i] % addZoomFactor(ooViewProperties.grid_steps));
         }
         return [ x.join(','), y.join(',') ];
     } else {
         x = +x;
         y = +y;
-        var gridMoveX = x - (x % oViewProperties.grid_steps);
-        var gridMoveY = y - (y % oViewProperties.grid_steps);
+        var gridMoveX = x - (x % addZoomFactor(oViewProperties.grid_steps));
+        var gridMoveY = y - (y % addZoomFactor(oViewProperties.grid_steps));
         return [ gridMoveX, gridMoveY ];
     }
 }
