@@ -419,21 +419,27 @@ function makeuri(addvars) {
     tmp = tmp[1].split('#');
     tmp = tmp[0].split('&');
     var len = tmp.length;
-    var params = [];
+    var params = {};
     var pair = null;
 
     // Skip unwanted parmas
     for(var i = 0; i < tmp.length; i++) {
         pair = tmp[i].split('=');
-        params.push(tmp[i]);
+        params[pair[0]] = pair[1];
     }
 
-    // Add new params
+    // Add new params to the existing params. Overwrite duplicates
     for (var key in addvars) {
-        params.push(key + '=' + addvars[key]);
+        params[key] = addvars[key];
     }
 
-    return base + '?' + params.join('&')
+    // Build list of key/value pairs
+    var aparams = [];
+    for (var key in params) {
+        aparams.push(key + '=' + params[key]);
+    }
+
+    return base + '?' + aparams.join('&')
 }
 
 /**
