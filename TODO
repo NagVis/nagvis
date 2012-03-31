@@ -3,12 +3,7 @@ This is a small file for storing quick thoughts about new features and needed ch
 
 Probleme:
   - Warnings anzeigen, wenn Funktionen aus oldPhpVersionFixes.php angezogen werden
-  - Bei hover_menu und context_menu dürfen nur die vom Nutzer individuell (per URL oder Profil)
-    gesetzten Optionen genutzt werden, da sonst die Einstellung in der Global Sektion immer alle
-    Objekte übertrumpfen würde. Über die Herkunft weiß das Frontend nichts mehr, es sei denn es
-    liest tatsächlich die URL aus. Das wollen wir aber nicht. 
-    loadViewOpts in share/frontend/nagvis-js/js/NagVisObject.js wieder herstellen - darf aber nur
-    die "user specific" view opts bekommen - wie?
+  - Sidebar auf/zu verschiebt Objekte, aber nicht den Hintergrund
 
 Zu tun:
   - Automap zu source umbauen
