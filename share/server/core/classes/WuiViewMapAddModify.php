@@ -132,6 +132,9 @@ class WuiViewMapAddModify {
             // Get the value set in this object if there is some set
             // But don't try this when running in "update" mode
             $val = $this->MAPCFG->getValue($this->attrs['object_id'], $attr, true);
+            // In view_param mode this is inherited
+            if($this->mode == 'view_params')
+                $inherited = true;
 
         } elseif(!$update && $this->cloneId !== null
                  && $this->MAPCFG->getValue($this->cloneId, $attr, true) !== false) {
@@ -239,10 +242,12 @@ class WuiViewMapAddModify {
             if($this->MAPCFG->hasDependants($type, $propname))
                 $onChange = 'document.getElementById(\'update\').value=\'1\';document.getElementById(\'commit\').click();';
             
-            // Add a checkbox to toggle the usage of an attribute. But only add it for non-must
-            // attributes.
+            // Add a checkbox to toggle the usage of an attribute. But only add it for
+            // non-must attributes.
             if(!$prop['must']) {
                 $checked = '';
+                // FIXME: In case of the view_params mode the dialog must select and show the user sele
+                //if($this->mode == 'view_params') {
                 if($inherited === false)
                     $checked = ' checked'; 
                 $ret .= '<input type="checkbox" name="toggle_'.$propname.'"'.$checked.' onclick="toggle_option(\''.$propname.'\');'.$onChange.'" value=on />';
@@ -331,6 +336,9 @@ class WuiViewMapAddModify {
                 case 'color':
                     $ret .= $this->colorSelect($propname, $value, $hideField);
                 break;
+                case 'dimension':
+                    $ret .= $this->inputDimension($propname, $value, $hideField);
+                break;
                 case 'text':
                     $ret .= $this->inputField($propname, $value, $hideField);
                 break;
@@ -376,6 +384,14 @@ class WuiViewMapAddModify {
               .'<script>var o = document.getElementById("'.$propname.'_inp");'
               .'o.color = new jscolor.color(o, {pickerOnfocus:false,adjust:false,hash:true});'
               .'o = null;</script>';
+    }
+
+    private function inputDimension($propname, $value, $hideField) {
+        return '<div id="'.$propname.'" class=picker'.$hideField.'>'
+              .$this->inputField($propname, $value, '', $propname . '_inp')
+              .'<a href="javascript:void(0);" onClick="pickWindowSize(\''.$propname.'_inp\', \''.$propname.'\');">'
+              .'<img src="'.cfg('paths', 'htmlimages').'internal/dimension.png" alt="'.l('Get current size').'" />'
+              .'</a></div>';
     }
 
     private function inputField($name, $value, $hideField, $id = null) {

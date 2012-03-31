@@ -1014,3 +1014,13 @@ function togglePicker(id) {
         o.color.showPicker();
     o = null;
 }
+
+function pickWindowSize(id, dimension) {
+    var o = document.getElementById(id);
+    if(dimension == 'width') {
+        o.value = pageWidth();
+    } else {
+        o.value = pageHeight() - getHeaderHeight();
+    }
+    o = null;
+}

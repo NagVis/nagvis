@@ -1413,31 +1413,33 @@ function getOverviewRotations() {
  * @return  String    URL part with params and values
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function getViewParams(update) {
-    if(!isset(oViewProperties) || !isset(oViewProperties['params']))
+function getViewParams(update, userParams) {
+    if(!isset(userParams))
+        userParams = false;
+
+    if(!userParams && isset(oViewProperties['params'])) {
+        var params = oViewProperties['params'];
+    } else if(isset(oViewProperties['params'])) {
+        var params = oViewProperties['user_params'];
+    } else {
+        return '';
+    }
+
+    if(!isset(params))
         return '';
 
     // Udate the params before processing url
     if(isset(update)) {
         for(var param in update) {
-            oViewProperties['params'][param] = update[param];
+            params[param] = update[param];
         }
     }
 
     var sParams = '';
-    for(var param in oViewProperties['params']) {
-        if(oViewProperties['params'][param] != '') {
-            sParams += '&' + param + '=' + escapeUrlValues(oViewProperties['params'][param]);
+    for(var param in params) {
+        if(params[param] != '') {
+            sParams += '&' + param + '=' + escapeUrlValues(params[param]);
         }
-    }
-
-    if(!isset(oViewProperties['params']['width'])) {
-        oViewProperties['params']['width'] = pageWidth();
-        sParams += '&width=' + escapeUrlValues(oViewProperties['params']['width']);
-    }
-    if(!isset(oViewProperties['params']['height'])) {
-        oViewProperties['params']['height'] = pageHeight() - getHeaderHeight();
-        sParams += '&height=' + escapeUrlValues(oViewProperties['params']['height']);
     }
 
     return sParams;
