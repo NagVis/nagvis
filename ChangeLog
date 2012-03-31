@@ -14,6 +14,9 @@ Automap
     (Thanks to Pedro)
   * Added new rankdir and overlap options (Thanks to Pedro)
 
+Frontend
+  * Improved scrolling eventhandler
+
 1.6.5
 Core
   * Added line_weather_colors option to nagvis.ini.php [defaults] section

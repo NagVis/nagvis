@@ -53,6 +53,11 @@ var oStates = {};
 
 var isIE  = navigator.appVersion.indexOf("MSIE") != -1;
 
+// These vars are used to stop earlier scrollings that mess between
+var crawlX = 0;
+var crawlY = 0;
+var crawling = 0;
+
 // This is a dummy fucntion which is overwritten by the definition in
 // the header template when it is enabled.
 function getSidebarWidth() {
@@ -584,7 +589,17 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
     var iWidth;
     var iHeight;
 
-    var iStep = 2;
+    var iStep = 10;
+
+    iTargetX = parseInt(iTargetX);
+    iTargetY = parseInt(iTargetY);
+
+    if((iTargetX !== crawlX || iTargetY !== crawlY) && crawlX !== 0 && crawlY !== 0) {
+        crawling = 1;
+    } else if(crawlX == 0 && crawlY == 0) {
+        crawlX = iTargetX;
+        crawlY = iTargetY;
+    }
 
     // Get offset of the map div
     var oMap = document.getElementById('map');
@@ -596,41 +611,49 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
     oMap = null;
 
     // Get measure of the screen
-    iWidth = pageWidth();
+    iWidth  = pageWidth();
     iHeight = pageHeight() - iMapOffsetTop;
 
-    if(iTargetY <= (currentScrollTop+iHeight)  && iTargetY >= currentScrollTop) {
+    if((iTargetY < (currentScrollTop+iHeight/2+iStep) && iTargetY >= (currentScrollTop+iHeight/2-iStep)) || (currentScrollTop<iStep && iTargetY<iHeight/2)) {
         // Target is in current view
         scrollTop = 0;
-    } else if(iTargetY < currentScrollTop) {
+    } else if(iTargetY < (currentScrollTop+iHeight/2) && currentScrollTop>iStep) {
         // Target is above current view
         scrollTop = -iStep;
-    } else if(iTargetY > currentScrollTop) {
+    } else if(iTargetY > (currentScrollTop+iHeight/2)) {
         // Target is below current view
         scrollTop = iStep;
+    } else {
+        eventlog("js-error", "critical", "JS-Error occured: iTargetY: " +iTargetY);
+        scrollTop = 0;
     }
 
-    if(iTargetX <= (currentScrollLeft+iWidth) && iTargetX >= currentScrollLeft) {
+    if((iTargetX < (currentScrollLeft+iWidth/2+iStep) && iTargetX >= (currentScrollLeft+iWidth/2-iStep)) || (currentScrollLeft<iStep && iTargetX<iWidth/2)) {
         // Target is in current view
         scrollLeft = 0;
-    } else if(iTargetX < currentScrollLeft) {
+    } else if(iTargetX < (currentScrollLeft+iWidth/2) && currentScrollLeft>iStep) {
         // Target is left from current view
         scrollLeft = -iStep;
-    } else if(iTargetX > currentScrollLeft) {
+    } else if(iTargetX > (currentScrollLeft+iWidth/2)) {
         // Target is right from current view
         scrollLeft = iStep;
     } else {
+        eventlog("js-error", "critical", "JS-Error occured: iTargetX: " +iTargetX);
         scrollLeft = 0;
     }
 
     eventlog("scroll", "debug", currentScrollLeft+" to "+iTargetX+" = "+scrollLeft+", "+currentScrollTop+" to "+iTargetY+" = "+scrollTop);
 
-    if(scrollTop !== 0 || scrollLeft !== 0) {
+    if((scrollTop !== 0 || scrollLeft !== 0) && crawling == 0) {
         window.scrollBy(scrollLeft, scrollTop);
-
-        setTimeout(function() { scrollSlow(iTargetX, iTargetY, iSpeed); }, iSpeed);
+        if (currentScrollTop !== getScrollTop() || currentScrollLeft !== getScrollLeft()) {
+            setTimeout(function() { scrollSlow(iTargetX, iTargetY, iSpeed); }, iSpeed);
+        };
     } else {
         eventlog("scroll", "debug", 'No need to scroll: '+currentScrollLeft+' - '+iTargetX+', '+currentScrollTop+' - '+iTargetY);
+        crawlX=0;
+        crawlY=0;
+        crawling=0;
     }
 }
 

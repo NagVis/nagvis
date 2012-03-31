@@ -257,7 +257,7 @@ function searchObjects(sMatch) {
         // - Scroll to object
         if(len == 1) {
             // Detach the handler
-            setTimeout('scrollSlow('+oMapObjects[objectId].conf.x+', '+oMapObjects[objectId].conf.y+', 15)', 0);
+            setTimeout('scrollSlow('+oMapObjects[objectId].conf.x+', '+oMapObjects[objectId].conf.y+', 1)', 0);
         }
 
         objectId = null;
@@ -277,7 +277,7 @@ function getObjectsToUpdate() {
     var arrReturn = [];
 
     // Assign all object which need an update indexes to return Array
-    for(var i in oMapObjects)
+    for(var i in oMapObjects) {
         if(oMapObjects[i].lastUpdate <= iNow - oWorkerProperties.worker_update_object_states)
             // Do not update shapes where enable_refresh=0
             if(oMapObjects[i].conf.type !== 'shape'
@@ -285,6 +285,7 @@ function getObjectsToUpdate() {
                    && oMapObjects[i].conf.enable_refresh
                    && oMapObjects[i].conf.enable_refresh == '1'))
                 arrReturn.push(i);
+    }
 
     // Now spread the objects in the available timeslots
     var iNumTimeslots = Math.ceil(oWorkerProperties.worker_update_object_states / oWorkerProperties.worker_interval);
@@ -741,8 +742,9 @@ function updateObjects(aMapObjectInformations, sType) {
                 }
 
                 // - Scroll to object
-                if(oPageProperties.event_scroll === '1')
-                    setTimeout(function() { scrollSlow(oMapObjects[objectId].conf.x, oMapObjects[objectId].conf.y, 15); }, 0);
+                if(oPageProperties.event_scroll === '1') {
+                    setTimeout('scrollSlow('+oMapObjects[objectId].conf.x+', '+oMapObjects[objectId].conf.y+', 1)', 0);
+                }
 
                 // - Eventlog
                 if(oMapObjects[objectId].conf.type == 'service') {
@@ -1901,7 +1903,7 @@ function runWorker(iCount, sType, sIdentifier) {
          * Do these actions every run (every second) excepting the first run
          */
 
-        var iNow = String(Date.parse(new Date())).substr(0, 10);
+        iNow = String(Date.parse(new Date())).substr(0, 10);
 
         // Countdown the rotation counter
         // Not handled by ajax frontend. Reload the page with the new url
