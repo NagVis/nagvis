@@ -13,6 +13,8 @@ $viewParams = array(
         'parent_layers',
         'ignore_hosts',
         'margin',
+        'rankdir',
+        'overlap',
     ),
 );
 
@@ -23,6 +25,31 @@ function list_automap_render_modes() {
         'radial'      => 'radial',
         'circular'    => 'circular',
         'undirected2' => 'undirected2',
+        'undirected3' => 'undirected3',
+    );
+}
+
+function list_automap_rankdirs() {
+    return Array(
+        'TB' => l('Top to bottom'),
+        'LR' => l('Left to right'),
+        'BT' => l('Bottom to top'),
+        'RL' => l('Right to left'),
+    );
+}
+
+function list_automap_overlaps() {
+    return array(
+        'true'     => l('true'),
+        'false'    => l('false'),
+        'scale'    => l('scale'),
+        'scalexy'  => l('scalexy'),
+        'ortho'    => l('ortho'),
+        'orthoxy'  => l('orthoxy'),
+        'orthoyx'  => l('orthoyx'),
+        'compress' => l('compress'),
+        'ipsep'    => l('ipsep'),
+        'vpsc'     => l('vpsc'),
     );
 }
 
@@ -90,6 +117,20 @@ $configVars = array(
         'must'       => false,
         'default'    => '50',
         'match'      => MATCH_FLOAT_EMPTY,
+    ),
+    'rankdir' => array(
+        'must'       => false,
+        'default'    => 'LR',
+        'match'      => MATCH_AUTOMAP_RANKDIR,
+        'field_type' => 'dropdown',
+        'list'       => 'list_automap_rankdirs',
+    ),
+    'overlap' => array(
+        'must'       => false,
+        'default'    => 'true',
+        'match'      => MATCH_AUTOMAP_OVERLAP,
+        'field_type' => 'dropdown',
+        'list'       => 'list_automap_overlaps',
     ),
 );
 

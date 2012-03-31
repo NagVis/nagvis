@@ -3,11 +3,16 @@ Core
   * Introducing the "map source" feature. Take a look at the docs for details
   * Implemented geomaps using the new "map source" feature based on an Open
     Street Map static map API
+
+Automap
   * Removed the special map type "automap". The automaps have been replaced by
     regular maps which use the "automap" source.
     Migration Notes: We do not migrate the automap config files automatically.
     if you like to have them migrated please move the files from etc/automaps
     to etc/maps and add the parameter 'source="automap"' to the global section.
+  * Added new render mode "undirected3" which uses the sfdp binary of graphviz
+    (Thanks to Pedro)
+  * Added new rankdir and overlap options (Thanks to Pedro)
 
 1.6.5
 Core
