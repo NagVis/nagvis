@@ -114,6 +114,7 @@ function graphviz_config(&$params, &$tree) {
     $str .= 'margin='.graphviz_px2inch($params['margin']).', ';
     //$str .= 'bgcolor="'.$this->MAPCFG->getValue(0, 'background_color').'", ';
     $str .= 'root="'.$tree['object_id'].'", ';
+    $str .= 'rankdir="'.$params['rankdir'].'", ';
 
     /* Directed (dot) only */
     if($params['render_mode'] == 'directed') {
@@ -128,6 +129,12 @@ function graphviz_config(&$params, &$tree) {
     /* Directed (dot) and radial (twopi) only */
     if($params['render_mode'] == 'directed' || $params['render_mode'] == 'radial') {
         $str .= 'ranksep="0.8", ';
+    }
+
+    /* All but directed (dot) */
+    if($params['render_mode'] != 'directed') {
+        //overlap: true,false,scale,scalexy,ortho,orthoxy,orthoyx,compress,ipsep,vpsc
+        $str .= 'overlap="'.$params['overlap'].'", ';
     }
 
     $str .= 'size="'.graphviz_px2inch($params['width']).','.graphviz_px2inch($params['height']).'"];'."\n";
@@ -183,6 +190,9 @@ function graphviz_run($map_name, &$params, $cfg) {
         break;
         case 'undirected2':
             $binary = 'fdp';
+        break;
+        case 'undirected3':
+            $binary = 'sfdp';
         break;
         default:
             throw new NagVisException(l('unknownrender_mode', Array('MODE' => $params['render_mode'])));

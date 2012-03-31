@@ -333,6 +333,11 @@ class GlobalMapCfg {
             if($sFirstChar == ';' || $sFirstChar == '#')
                 continue;
 
+            // Fix ISO-8859-1 encoding. Convert to UTF-8
+            if(mb_detect_encoding($file[$l], 'UTF-8, ISO-8859-1') == 'ISO-8859-1')
+                $file[$l] = utf8_encode($file[$l]);
+
+
             // This is an object ending. Reset the object type and skip to next line
             if($sFirstChar == '}') {
                 if($obj['type'] === 'global')

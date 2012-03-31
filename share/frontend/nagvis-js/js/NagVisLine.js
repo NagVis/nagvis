@@ -141,6 +141,6 @@ var NagVisLine = NagVisStatelessObject.extend({
     },
 
     parseHoverMenu: function () {
-        this.getHoverMenu(this.conf.object_id+'-icon');
+        this.getHoverMenu(this.conf.object_id+'-linelink');
     }
 });

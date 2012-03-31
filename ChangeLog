@@ -3,11 +3,19 @@ Core
   * Introducing the "map source" feature. Take a look at the docs for details
   * Implemented geomaps using the new "map source" feature based on an Open
     Street Map static map API
+
+Automap
   * Removed the special map type "automap". The automaps have been replaced by
     regular maps which use the "automap" source.
     Migration Notes: We do not migrate the automap config files automatically.
     if you like to have them migrated please move the files from etc/automaps
     to etc/maps and add the parameter 'source="automap"' to the global section.
+  * Added new render mode "undirected3" which uses the sfdp binary of graphviz
+    (Thanks to Pedro)
+  * Added new rankdir and overlap options (Thanks to Pedro)
+
+Frontend
+  * Improved scrolling eventhandler
 
 1.6.5
 Core
@@ -17,10 +25,16 @@ Core
   * Bugfix: Added missing permission for the Url module which is used when
             having URLs in rotations
   * Bugfix: Fixed exclude_member_states for map objects
+  * Bugfix: ISO-8859-1 encoded map config files are now converted to UTf-8
+    during parsing the map config file
 
 Frontend
+  * Made hover menus work on stateless lines (Thanks to Oliver Graf)
   * Bugfix: Fixed cloning shape objects (view_type error message)
   * Bugfix: Stateless lines - only showing the hover area when it is needed
+  * Bugfix: Fixed dragging of relative labels of relative objects
+  * Bugfix: Fixed javascript error when switching pages while an ajax call is
+    being processed
 
 1.6.4
 Core
