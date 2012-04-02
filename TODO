@@ -152,11 +152,9 @@ Offene Fragen:
     Die Position hängt eher am Container
   -> Nachdenken
 
-- Wenn der Zoom Faktor pro Nutzer gespeichert wird, wird dieser dann pro Map 
-  oder für alle Maps festgelegt?
-  -> Kunden Fragen
-
-- View Parameter pro Nutzer & pro Map speichern
+  - Wenn man beim Verändern der Höhe/Breite auch die Position verändert, dann
+    würden die Objekte vermutlich korrekt positionert werden können. Dieses
+    Offset müsste dann beim Editieren der Objekte berücksichtigt werden.
 
 - Wie soll die GUI (Hover, Context, Header Menu skalieren?) -> Gar nicht?
   -> Kunden Fragen

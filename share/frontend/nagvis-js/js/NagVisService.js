@@ -71,6 +71,7 @@ var NagVisService = NagVisStatefulObject.extend({
 
         if(this.conf.gadget_type === 'img') {
             var oGadget = document.createElement('img');
+            addZoomHandler(oGadget);
             oGadget.src = this.conf.gadget_url + sParams;
             oGadget.alt = this.conf.type + '-' + alt;
         } else {

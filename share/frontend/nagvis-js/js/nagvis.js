@@ -1257,8 +1257,6 @@ function scaleView() {
  */
 function addZoomFactor(coord) {
     var zoom = getViewParam('zoom');
-    // FIXME: How to get the default? (-> configured in global section)
-    // Also take the user stored values into account
     if(zoom === null)
         zoom = 100;
     return parseInt(coord * parseInt(zoom) / 100);
@@ -1266,8 +1264,6 @@ function addZoomFactor(coord) {
 
 function rmZoomFactor(coord) {
     var zoom = getViewParam('zoom');
-    // FIXME: How to get the default? (-> configured in global section)
-    // Also take the user stored values into account
     if(zoom === null)
         zoom = 100;
     return parseInt(coord / parseInt(zoom) * 100);
