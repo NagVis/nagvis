@@ -156,9 +156,6 @@ Offene Fragen:
     würden die Objekte vermutlich korrekt positionert werden können. Dieses
     Offset müsste dann beim Editieren der Objekte berücksichtigt werden.
 
-- Wie soll die GUI (Hover, Context, Header Menu skalieren?) -> Gar nicht?
-  -> Kunden Fragen
-
 *** Icon Koordinaten zentrieren ***
 
 Die Icon Koordinaten beziehen sich momentan auf die linke obere Ecke der Icons.
