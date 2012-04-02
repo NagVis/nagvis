@@ -549,9 +549,9 @@ class GlobalMapCfg {
         } else {
             // Try to use the user profile
             $USERCFG = new CoreUserCfg();
-            $val = $USERCFG->getValue($key);
-            if($val !== null) {
-                return $val;
+            $userParams = $USERCFG->getValue('params-' . $this->name);
+            if(isset($userParams[$key])) {
+                return $userParams[$key];
                 
             } elseif(!$only_user_supplied) {
                 // Otherwise use the map global value (if allowed)
