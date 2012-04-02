@@ -83,7 +83,6 @@ div.welcome a:hover {color:#779D2A}
 
 /* Background images */
 #backgroundImage {
-    position: absolute;
     z-index: 0;
 }
 
@@ -160,10 +159,6 @@ div.control.togglemid {
 }
 
 /* Style on info pages (index.php?info, index.php) */
-div.infopage {
-    position:relative;
-}
-
 div.infopage > table {
     margin: auto;
     margin-top: 25px;

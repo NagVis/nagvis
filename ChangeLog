@@ -15,6 +15,7 @@ Automap
   * Added new rankdir and overlap options (Thanks to Pedro)
 
 Frontend
+  * Bugfix: Fixed page/background scaling on open sidebar menu
   * Improved scrolling eventhandler
 
 1.6.5
