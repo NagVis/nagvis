@@ -15,8 +15,11 @@ Automap
   * Added new rankdir and overlap options (Thanks to Pedro)
 
 Frontend
-  * Bugfix: Fixed page/background scaling on open sidebar menu
+  * Added zoom function in frontend. It can be controlled using the view
+    option "zoom". It is possible to edit zoomed maps but recommended to edit
+    maps with zoom set to 100.
   * Improved scrolling eventhandler
+  * Bugfix: Fixed page/background scaling on open sidebar menu
 
 1.6.5
 Core
