@@ -417,28 +417,41 @@ function getUrlParam(name) {
 /**
  * Function creates a new cleaned up URL
  * - Can add/overwrite parameters
+ * - Can remove parameters by adding "null" values
  */
-function makeuri(addvars) {
+function makeuri(addparams) {
     var tmp = window.location.href.split('?');
     var base = tmp[0];
     tmp = tmp[1].split('#');
     tmp = tmp[0].split('&');
     var len = tmp.length;
-    var params = [];
+    var params = {};
     var pair = null;
 
-    // Skip unwanted parmas
     for(var i = 0; i < tmp.length; i++) {
         pair = tmp[i].split('=');
-        params.push(tmp[i]);
+
+        // Skip unwanted params
+        if(addparams[pair[0]] !== undefined && addparams[pair[0]] == null)
+            continue;
+
+        params[pair[0]] = pair[1];
     }
 
-    // Add new params
-    for (var key in addvars) {
-        params.push(key + '=' + addvars[key]);
+    // Add new params to the existing params. Overwrite duplicates
+    for (var key in addparams) {
+        if(addparams[key] != null) {
+            params[key] = addparams[key];
+        }
     }
 
-    return base + '?' + params.join('&')
+    // Build list of key/value pairs
+    var aparams = [];
+    for (var key in params) {
+        aparams.push(key + '=' + params[key]);
+    }
+
+    return base + '?' + aparams.join('&');
 }
 
 /**
@@ -955,10 +968,12 @@ function hideStatusMessage() {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, text, customStyle) {
+    var initRendering = false;
     var oLabelDiv = document.getElementById(id);
     if(!oLabelDiv) {
         oLabelDiv = document.createElement('div');
         oLabelDiv.setAttribute('id', id);
+        initRendering = true;
     }
     oLabelDiv.setAttribute('class', className);
     oLabelDiv.setAttribute('className', className);
@@ -970,10 +985,10 @@ function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, t
     oLabelDiv.style.top = y + 'px';
 
     if(w && w !== '' && w !== 'auto')
-        oLabelDiv.style.width = w+'px';
+        oLabelDiv.style.width = addZoomFactor(w) + 'px';
 
     if(h && h !== '' && h !== 'auto')
-        oLabelDiv.style.height = h+'px';
+        oLabelDiv.style.height = addZoomFactor(h) + 'px';
 
     oLabelDiv.style.zIndex = parseInt(z) + 1;
     oLabelDiv.style.overflow = 'visible';
@@ -1031,8 +1046,25 @@ function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, t
     oLabelSpan.innerHTML = text;
 
     oLabelDiv.appendChild(oLabelSpan);
-    oLabelSpan = null;
 
+    // Take zoom factor into account
+    if(initRendering) {
+        oLabelDiv.width  = addZoomFactor(oLabelDiv.width);
+        oLabelDiv.height = addZoomFactor(oLabelDiv.height);
+        var fontSize = getEffectiveStyle(oLabelSpan, 'font-size');
+        if(fontSize === null) {
+            eventlog(
+                "drawNagVisTextbox",
+                "critical",
+                "Unable to fetch font-size attribute for textbox"
+            );
+        } else {
+            var fontSize = parseInt(fontSize.replace('px', ''));
+            oLabelSpan.style.fontSize = addZoomFactor(fontSize) + 'px';
+        }
+    }
+
+    oLabelSpan = null;
     return oLabelDiv;
 }
 
@@ -1176,6 +1208,25 @@ if (!Array.prototype.indexOf) {
 
 }
 
+function getEffectiveStyle(e, attr) {
+    if(e.style[attr]) {
+        // Object local
+        return e.style[attr];
+    } else if(document.defaultView && document.defaultView.getComputedStyle) {
+        // DOM 
+        return document.defaultView.getComputedStyle(e, null).getPropertyValue(attr);
+    } else if(e.currentStyle){
+        // IE
+        var cssR = cssR.replace(/\-(\w)/g, function (strMatch, p1){
+            return p1.toUpperCase();
+        });
+        var f = e.currentStyle[cssR];
+        if(f.length > 0) {
+            return f;
+        }
+    }
+    return null;
+}
 
 /**
  * Hack to scale elements which should fill 100% of the windows viewport. The
@@ -1205,4 +1256,46 @@ function scaleView() {
         sidebar.style.height = (pageHeight() + getScrollTop()) + 'px';
     }
     sidebar = null;
+}
+
+/**
+ * Handles the zoom factor of the current view for a single integer which
+ * might be a coordinate or a dimension of an object
+ */
+function addZoomFactor(coord) {
+    var zoom = getViewParam('zoom');
+    if(zoom === null)
+        zoom = 100;
+    return parseInt(coord * parseInt(zoom) / 100);
+}
+
+function rmZoomFactor(coord) {
+    var zoom = getViewParam('zoom');
+    if(zoom === null)
+        zoom = 100;
+    return parseInt(coord / parseInt(zoom) * 100);
+}
+
+/**
+ * Hides the object from being displayed and adds a load handler
+ * which resizes the object based on the zoom factor. The hiding
+ * at the beginning is done to prevent up-then-over effects during
+ * resizing of the objects.
+ * The '.src' attribute must be assigned afterwards
+ */
+function addZoomHandler(oImage) {
+    oImage.style.display = 'none';
+
+    addEvent(oImage, 'load', function() {
+        // This can not be added directly to the object beacause the
+        // width/height is scaled in at least firefox automatically
+        var width  = addZoomFactor(this.width);
+        var height = addZoomFactor(this.height);
+        this.width  = width;
+        this.height = height;
+        // Now really show the image
+        this.style.display = 'block';
+    });
+
+    oImage = null;
 }

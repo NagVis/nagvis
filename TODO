@@ -3,6 +3,7 @@ This is a small file for storing quick thoughts about new features and needed ch
 
 Probleme:
   - Warnings anzeigen, wenn Funktionen aus oldPhpVersionFixes.php angezogen werden
+  - Sidebar auf/zu verschiebt Objekte, aber nicht den Hintergrund
 
 Zu tun:
   - Automap zu source umbauen
@@ -76,6 +77,85 @@ Installer:
   - ajax Funktionen aufräumen/konsolidieren
   - OMD Tests
 
+*** NagVis Map Zoom ***
+
+Ziel: Das Ziel ist es die NagVis Maps zoombar zu machen. Ein stufenloser Zoom
+ist nicht nötig. Es wäre ausreichend z.b. in 10er Schritten die Map zu zoomen,
+wobei die Seitenverhältnisse der Map immer beibehalten werden müssen. Es ist
+also nicht einfach möglich die Map auf eine feste Breite/Höhe zu zoomen.
+
+Nice2Have: Also Zusatzfeature kann man einen Knopf machen "fit screen size".
+Dieser errechnet im Javascript den Zoomfaktor und malt die Map mit den neuen
+Koordinaten neu.
+
+Umsetzung: Die Umsetzung muss im Frontend passieren. Also rein im Javascript.
+Vom PHP Backend werden nur die Parameter (Koordinaten, Zoomfaktor, Objekt Größe)
+zur Verfügung gestellt. Beim Rendern der Objekte werden die Koordinaten umgerechnet.
+
+Bei der Implementierung muss auf folgende Werte geachtet werden:
+
+1. Koordinaten der Objekte
+2. Maße der Objekte (Icons, Textbox (width, height), Linien-Breiten)
+3. Beim Editieren müssen die Koordinaten zurückgerechnet werden
+4. Controls der Objekte
+5. Labels der Objekte
+6. Das Grid vom Editier-Modus
+7. Relative Koordinaten bewegen
+8. Textbox resize
+
+Zoomfaktor: Der Zoomfaktor ist per Default auf 100% gesetzt. Damit müssen keine
+Koordinaten umgerechnet werden. Nun kann man z.b. den Zoomfaktor auf 50% setzen
+um weiter aus der Map raus zu zoomen. Ein Zoomfaktor von 200% zoomt damit weiter
+rein.
+
+Der Default Zoomfaktor kann als view_parameter in der Map Konfiguration vorgegeben
+werden. Wenn der Nutzer diesen Wert verändert, dann wird dieser in seinem Profil
+gespeichert. Von da an wird dieser Wert benutzt.
+
+Der Zoomfaktor kann mit zwei Knöpfen, z.b. im Headermenu (oder als Overlay auf der
+Map selbst) beeinflusst werden. Der aktuelle Zoomfaktor wird dort auch irgendwie
+dargestellt.
+
+Damit die Maps bei starkem Zoom nicht schlimm aussehen, ist es eventuell nötig
+für die Hintergründe, Icons und Shapes nötig SVG Unterstützung zu implementieren.
+Dabei muss aber bei jedem Objekt zusätzlich zum Iconset noch die Default Größe
+festglegt werden.
+
+Eventuell ist es sogar notwendig die Map Koordinaten der Objekte selbst zu
+zentrieren (Siehe Text weiter unten).
+
+Implementierungsdetails:
+
+- Im Javascript Frontend gibt es bereits die Funktion parseCoord(). Die ist
+  dazu da die Koordinaten eines Objekts auszurechnen und einen Integer zurück
+  zu geben. Diese Funktion könnte ohne Änderungen an der Funktionssignatur
+  intern den Zoomfaktor berücksichtigen.
+
+- Bei Bildern müsste man die aktuelle Breite auslesen. Dann muss man den
+  Zoomfaktor einbeziehen und die neuen Maße setzen. Das muss nach dem Laden
+  des Bildes passieren. Außerdem sollte das Bild bis zum Festlegen der
+  entgültigen Größe/Position versteckt sein. Sonst gibt es irgendwelche
+  Effekte, dass ein Bild erst groß und dann klein gemalt wird.
+
+Offene Fragen:
+
+- Maße der Objekte werden verändert
+  - Dementsprechend müssen auch die Objekte anders positioniert werden.
+    nheight = (height * zoom / 100)
+    hoffset = height - nheight
+    newx    = x + (hoffset / 2)
+  - Problem ist hier aber, dass beim Positionieren des Objektes gar nicht
+    bekannt ist wie groß das Objekt selbst ist
+  - Nach dem Einrechnen des Zoomfaktors ist auch die ursprüngliche Größe
+    nicht mehr bekannt
+  - Width/Height hängt oft an einem anderen Objekt, als die Position selbst
+    Die Position hängt eher am Container
+  -> Nachdenken
+
+  - Wenn man beim Verändern der Höhe/Breite auch die Position verändert, dann
+    würden die Objekte vermutlich korrekt positionert werden können. Dieses
+    Offset müsste dann beim Editieren der Objekte berücksichtigt werden.
+
 *** Icon Koordinaten zentrieren ***
 
 Die Icon Koordinaten beziehen sich momentan auf die linke obere Ecke der Icons.
@@ -123,145 +203,6 @@ So. Und wie erkennen wir das nun? Wie wäre es bei einer geänderten Konfigurati
 einfach die aktuellen mapObjects laden (getMapObjects) und dann die Differenz zum
 aktuell geladenen oMapObjects Objekt ermitteln? So kann man dann im JS frontend genau
 ermitteln welche Dinge sich geändert haben.
-
-*** Dynamische Map Konfiguration ***
-
-Das Format der Map Konfiguration ist in erster Linie dazu da Anfängern die Arbeit mit
-den Konfig-Dateien zu erleichtern. Mit PHP Dateien hat es in der Vergangenheit immer
-wieder Syntaxfehler etc. gegeben.
-
-Nun gibt es aber einige Anwendungsfälle, in denen man anstatt eine Map Konfiguration zu
-parsen lieber eine dynamische Konfiguration erzeugen möchte. In dem Fall ist die Map
-Konfiguration eher hinderlich. Man könnte gleich ein PHP Datenkonstrukt erzeugen.
-
-Beispielsweise auch bei den Automaps wäre dieses Vorgehen denkbar. Dann könnte man die
-Objekte via Backend ermitteln, mit graphviz positionieren und eventuell noch durch
-eine manuelle Konfiguration wieder modifizieren.
-
-Vielleicht könnte man dann in Zukunft die Sonderbehandlungen für Automaps entfernen und
-daraus wieder ganz normale Maps machen.
-Vielleicht kann man in dem Zuge auch realisieren, dass man gewisse Objekte auf der Automap
-manuell positioniert und die anderen Objekte dann mit graphviz positionieren lässt.
-
-Am Beispiel der Automap lässt sich erahnen, dass man pro Map u.U. mehrere dynamische
-Datenquellen anzapfen möchte. Man müsste also pro Map definieren können welche dynamischen
-Komponenten man in welcher Reihenfolge nutzen können möchte.
-
-Was muss an die Dynamischen Datenquellen übergeben werden, was kommt zurück? In der Klasse
-GlobalMapCfg gibt es zwei Arrays, die aus der Map-Konfiguration befüllt werden:
-
-1. mapConfig: Dieses assoziative Array enthält für jedes Map Objekt ein weiteres Array,
-   wobei die Objekt-ID als Schlüssel benutzt wird. Das Array des Objektes enthält pro
-   Konfigurations-Variable jeweils ein Schlüssel-Wert Paar.
-
-2. typeDefaults: Dieses Array enthält für jeden Objekt-Typ ein weiteres Array, in dem die
-   Default Werte für die einzelnen Objekt-Typen aufgelistet sind. Diese Angaben speisen
-   sich aus der Global-Sektion der Map und diese erhält Default-Optionen wiederrum aus
-   der Hauptkonfiguration.
-
-Man könnte die dynamischen Datenquellen auf die Manipulation von Objekten beschränken.
-Dementsprechend würden diese nur das mapConfig Array betreffen.
-
-Eine dynamische Komponente kann z.B. eine Funktion sein, die die aktuelle Map-Konfiguration
-als assoziativen Array übergeben bekommt und eine aktualisierte Version von diesem Array
-zurückgeben kann. Darüber hinaus sollte man der Funktion auch noch den Namen der aktuellen
-Map und eine Möglichkeit zum Backend-Zugriff geben.
-
-Bei solchen dynamischen Konfigurationen muss man nur dem JS Frontend irgendwie mitteilen,
-wenn es Änderungen gibt. Vielleicht wäre eine Möglichkeit die Map auf Basis von Zeit als
-Dirty zu betrachten. Oder aber man prüft Serverseitig in festgelegten Intervallen, ob
-die endgültige Map-Konfiguration sich geändert hat.
-Eine Alternative wäre, dass in jeder *.php Datei einer Map auch eine changed() Funktion
-deklariert werden muss. Diese gibt einen Unix Timestamp aus, welcher darüber Auskunft gibt,
-ob die Map neu geladen werden muss.
-Diese Funktion wird aufgerufen, wenn das JS frontend den configChanged Poll schickt. Die
-bisherige Methode zur Prüfung der mtime der *.cfg Datei wird um den Zeitstempel der
-changed() Funktion ergänzt. Die Funktion bekommt die angefragte Zeit als Parameter übergeben.
-So kann man auch berechnen, dass eine Map alle X Minuten/Stunden/Tage neu geladen werden muss.
-
-Wie könnte das alles aussehen?
-
-Es gibt ganz normale Map-Konfigurationen, in denen die Global-Sektion und andere Objekte
-definiert werden können. Diese können auch über die GUI editiert werden. Als vorgelagerten 
-Mechanismus kann jede Map optional auch über eine eigene *.php Datei dynamisiert werden.
-Diese PHP-Datei muss mindestens eine render() Funktion deklarieren, welche einen mapConfig
-Array zurückgibt. Dieses Array wird dann als Basis für die Definitionen aus der normalen
-Map-Konfiguration genutzt.
-
-Die map spezifischen *.php Dateien liegen in share/userfiles/mappers/<mapname>.php.
-
-Was gehen muss:
-- Man muss der Render-Funktion Parameter mitgeben können, z.B. aus der Global-Sektion
-  der Map Konfiguration.
-- Außerdem wäre es noch nett, wenn man auch schon die Objekte der Map Konfiguration
-  zur Verfügung hätte. Ja wie jetzt? Ich denke die Map Konfiguration kommt später drauf?
-  z.B. als Initial-Koordinaten für die Automap wäre es interessant die Koordinaten von
-  bestimmten Objekten vorzugeben.
-
----------------------------------------------
-
-define global {
-  source=fetch_parents(root,levels),dynamic_coords
-}
-
----------------------------------------------
-<?php
-
-function changed($last_update_time) {
-    // Hier kann man nun entweder irgendwo nachfragen, z.B. beim Nagios die Restart-Time
-    // Oder man rechnet eine relative Zeit aus, ...
-    return $unixTimestamp;
-}
-
-function render($global, ...) {
-    $mapConfig = array();
-    $mapConfig = fetch_parents($mapConfig, $global['root'], $global['maxLayers']);
-    $mapConfig = dynamic_coords($mapConfig);
-    return $mapConfig;
-}
-
-?>
----------------------------------------------
-
-Einige weitere Gedankenfetzen:
-
-  Es gibt im Grunde drei Ansätze um das ganze zu vereinfachen:
-  
-  1. Der einfache Ansatz: Einfach ein leichter zu parsendes Format zulassen. z.B. ein
-  JSON Objekte. Dieses Objekt kann in den meißten Sprachen einfach aus einem Objekt
-  erzeugt werden.
-  Das würde das Parsen und wieder Einlesen von Konfigurationen durch externe "Generatoren"
-  vereinfachen.
-  
-  2. Eine Alternative zum Generatoren-Ansatz: Man könnte auch einfach die Mechanismen zum
-  Generieren der Map-Konfiguration in die Map Definitionen verlagern. Dazu braucht man Dateien,
-  in denen man "frei" programmieren kann. Das läuft auf PHP-Dateien hinaus, die am Ende
-  eine Variable mit der Map-Konfiguration füllen. In dem Script kann dann alles erdenkliche
-  gemacht werden.
-  
-  Probleme hierbei:
-  - Immer die Daten abfragen, oder einen/den Cache benutzen?
-    - Wenn Cache: Wie bekommt man mit, dass die Config neu generiert werden muss?
-    - Wie bekommt das JS frontend mit, dass sich etwas geändert hat?
-  
-  3. Es gibt einen neuen Mechanismus der Daten erzeugt, zu denen die normale Map Konfiguration
-  gemergt wird. Dieser Mechanismus generiert eine Konfiguration, erstellt z.B. Hosts Objekte.
-  Die normale Map-Konfiguration kann dann noch Änderungen/Ergänzungen vornehmen.
-
-  Map Aufbau gliedert sich in 2 Phasen
-  1. Was kommt auf die Map? Mögliche Quellen:
-    - Map-Konfiguration
-    - Funktion liefert Datenkostrukt zurück (wird zu Map-Konfiguration gemerged)
-      - Nagios Parents (Automap)
-      - Externe DB
-    - Es könnte auch ein Include auf irgendeine Datei sein
-      - Die Funktion wird nur beim Parsen der Map Konfiguration geladen;
-        Die Daten kommen mit in den Map-Cache
-      - Frage hier: Wie wird der Map-Cache ungültig gemacht?
-      - Die Funktion kann dann z.B. externe Datenbanken/Livestatus oder so anzapfen um
-        von dort automatisch Objekte zu holen
-    - Das Konstrukt kann auch Objekte mit Eigenschaften enthalen, diese könnten dann
-      von der Map Konfiguration überschrieben werden (?)
 
 *** Installer renovieren ***
 
@@ -577,3 +518,143 @@ Das geht ziemlich auf die Usability.
 - Die Verarbeitung findet in der MapCfg Klasse statt, so dass die einzelnen Module sich da nicht drum kümmern müssen
 - Jede Source kann selbst !neue! Optionen registrieren
 - Zusätzlich kann jede Source festlegen welche Parameter für diese Source modifizierbar sein sollen
+
+*** Dynamische Map Konfiguration ***
+
+Das Format der Map Konfiguration ist in erster Linie dazu da Anfängern die Arbeit mit
+den Konfig-Dateien zu erleichtern. Mit PHP Dateien hat es in der Vergangenheit immer
+wieder Syntaxfehler etc. gegeben.
+
+Nun gibt es aber einige Anwendungsfälle, in denen man anstatt eine Map Konfiguration zu
+parsen lieber eine dynamische Konfiguration erzeugen möchte. In dem Fall ist die Map
+Konfiguration eher hinderlich. Man könnte gleich ein PHP Datenkonstrukt erzeugen.
+
+Beispielsweise auch bei den Automaps wäre dieses Vorgehen denkbar. Dann könnte man die
+Objekte via Backend ermitteln, mit graphviz positionieren und eventuell noch durch
+eine manuelle Konfiguration wieder modifizieren.
+
+Vielleicht könnte man dann in Zukunft die Sonderbehandlungen für Automaps entfernen und
+daraus wieder ganz normale Maps machen.
+Vielleicht kann man in dem Zuge auch realisieren, dass man gewisse Objekte auf der Automap
+manuell positioniert und die anderen Objekte dann mit graphviz positionieren lässt.
+
+Am Beispiel der Automap lässt sich erahnen, dass man pro Map u.U. mehrere dynamische
+Datenquellen anzapfen möchte. Man müsste also pro Map definieren können welche dynamischen
+Komponenten man in welcher Reihenfolge nutzen können möchte.
+
+Was muss an die Dynamischen Datenquellen übergeben werden, was kommt zurück? In der Klasse
+GlobalMapCfg gibt es zwei Arrays, die aus der Map-Konfiguration befüllt werden:
+
+1. mapConfig: Dieses assoziative Array enthält für jedes Map Objekt ein weiteres Array,
+   wobei die Objekt-ID als Schlüssel benutzt wird. Das Array des Objektes enthält pro
+   Konfigurations-Variable jeweils ein Schlüssel-Wert Paar.
+
+2. typeDefaults: Dieses Array enthält für jeden Objekt-Typ ein weiteres Array, in dem die
+   Default Werte für die einzelnen Objekt-Typen aufgelistet sind. Diese Angaben speisen
+   sich aus der Global-Sektion der Map und diese erhält Default-Optionen wiederrum aus
+   der Hauptkonfiguration.
+
+Man könnte die dynamischen Datenquellen auf die Manipulation von Objekten beschränken.
+Dementsprechend würden diese nur das mapConfig Array betreffen.
+
+Eine dynamische Komponente kann z.B. eine Funktion sein, die die aktuelle Map-Konfiguration
+als assoziativen Array übergeben bekommt und eine aktualisierte Version von diesem Array
+zurückgeben kann. Darüber hinaus sollte man der Funktion auch noch den Namen der aktuellen
+Map und eine Möglichkeit zum Backend-Zugriff geben.
+
+Bei solchen dynamischen Konfigurationen muss man nur dem JS Frontend irgendwie mitteilen,
+wenn es Änderungen gibt. Vielleicht wäre eine Möglichkeit die Map auf Basis von Zeit als
+Dirty zu betrachten. Oder aber man prüft Serverseitig in festgelegten Intervallen, ob
+die endgültige Map-Konfiguration sich geändert hat.
+Eine Alternative wäre, dass in jeder *.php Datei einer Map auch eine changed() Funktion
+deklariert werden muss. Diese gibt einen Unix Timestamp aus, welcher darüber Auskunft gibt,
+ob die Map neu geladen werden muss.
+Diese Funktion wird aufgerufen, wenn das JS frontend den configChanged Poll schickt. Die
+bisherige Methode zur Prüfung der mtime der *.cfg Datei wird um den Zeitstempel der
+changed() Funktion ergänzt. Die Funktion bekommt die angefragte Zeit als Parameter übergeben.
+So kann man auch berechnen, dass eine Map alle X Minuten/Stunden/Tage neu geladen werden muss.
+
+Wie könnte das alles aussehen?
+
+Es gibt ganz normale Map-Konfigurationen, in denen die Global-Sektion und andere Objekte
+definiert werden können. Diese können auch über die GUI editiert werden. Als vorgelagerten 
+Mechanismus kann jede Map optional auch über eine eigene *.php Datei dynamisiert werden.
+Diese PHP-Datei muss mindestens eine render() Funktion deklarieren, welche einen mapConfig
+Array zurückgibt. Dieses Array wird dann als Basis für die Definitionen aus der normalen
+Map-Konfiguration genutzt.
+
+Die map spezifischen *.php Dateien liegen in share/userfiles/mappers/<mapname>.php.
+
+Was gehen muss:
+- Man muss der Render-Funktion Parameter mitgeben können, z.B. aus der Global-Sektion
+  der Map Konfiguration.
+- Außerdem wäre es noch nett, wenn man auch schon die Objekte der Map Konfiguration
+  zur Verfügung hätte. Ja wie jetzt? Ich denke die Map Konfiguration kommt später drauf?
+  z.B. als Initial-Koordinaten für die Automap wäre es interessant die Koordinaten von
+  bestimmten Objekten vorzugeben.
+
+---------------------------------------------
+
+define global {
+  source=fetch_parents(root,levels),dynamic_coords
+}
+
+---------------------------------------------
+<?php
+
+function changed($last_update_time) {
+    // Hier kann man nun entweder irgendwo nachfragen, z.B. beim Nagios die Restart-Time
+    // Oder man rechnet eine relative Zeit aus, ...
+    return $unixTimestamp;
+}
+
+function render($global, ...) {
+    $mapConfig = array();
+    $mapConfig = fetch_parents($mapConfig, $global['root'], $global['maxLayers']);
+    $mapConfig = dynamic_coords($mapConfig);
+    return $mapConfig;
+}
+
+?>
+---------------------------------------------
+
+Einige weitere Gedankenfetzen:
+
+  Es gibt im Grunde drei Ansätze um das ganze zu vereinfachen:
+  
+  1. Der einfache Ansatz: Einfach ein leichter zu parsendes Format zulassen. z.B. ein
+  JSON Objekte. Dieses Objekt kann in den meißten Sprachen einfach aus einem Objekt
+  erzeugt werden.
+  Das würde das Parsen und wieder Einlesen von Konfigurationen durch externe "Generatoren"
+  vereinfachen.
+  
+  2. Eine Alternative zum Generatoren-Ansatz: Man könnte auch einfach die Mechanismen zum
+  Generieren der Map-Konfiguration in die Map Definitionen verlagern. Dazu braucht man Dateien,
+  in denen man "frei" programmieren kann. Das läuft auf PHP-Dateien hinaus, die am Ende
+  eine Variable mit der Map-Konfiguration füllen. In dem Script kann dann alles erdenkliche
+  gemacht werden.
+  
+  Probleme hierbei:
+  - Immer die Daten abfragen, oder einen/den Cache benutzen?
+    - Wenn Cache: Wie bekommt man mit, dass die Config neu generiert werden muss?
+    - Wie bekommt das JS frontend mit, dass sich etwas geändert hat?
+  
+  3. Es gibt einen neuen Mechanismus der Daten erzeugt, zu denen die normale Map Konfiguration
+  gemergt wird. Dieser Mechanismus generiert eine Konfiguration, erstellt z.B. Hosts Objekte.
+  Die normale Map-Konfiguration kann dann noch Änderungen/Ergänzungen vornehmen.
+
+  Map Aufbau gliedert sich in 2 Phasen
+  1. Was kommt auf die Map? Mögliche Quellen:
+    - Map-Konfiguration
+    - Funktion liefert Datenkostrukt zurück (wird zu Map-Konfiguration gemerged)
+      - Nagios Parents (Automap)
+      - Externe DB
+    - Es könnte auch ein Include auf irgendeine Datei sein
+      - Die Funktion wird nur beim Parsen der Map Konfiguration geladen;
+        Die Daten kommen mit in den Map-Cache
+      - Frage hier: Wie wird der Map-Cache ungültig gemacht?
+      - Die Funktion kann dann z.B. externe Datenbanken/Livestatus oder so anzapfen um
+        von dort automatisch Objekte zu holen
+    - Das Konstrukt kann auch Objekte mit Eigenschaften enthalen, diese könnten dann
+      von der Map Konfiguration überschrieben werden (?)
+

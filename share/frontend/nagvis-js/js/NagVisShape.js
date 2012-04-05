@@ -90,6 +90,8 @@ var NagVisShape = NagVisStatelessObject.extend({
         else
             this.conf.icon = oGeneralProperties.path_shapes + this.conf.icon;
 
+        addZoomHandler(oIcon);
+
         if(this.conf.icon.indexOf('?') !== -1) {
             oIcon.src = this.conf.icon+'&_t='+iNow;
         } else {
@@ -120,15 +122,6 @@ var NagVisShape = NagVisStatelessObject.extend({
     },
 
     parseShapeControls: function () {
-        //var size = oGeneralProperties['controls_size'];
-        //this.parseControlDelete(0, this.parseCoord(this.conf.x, 'x'),
-        //                           this.parseCoord(this.conf.y, 'y'),
-        //                           5, -15, size);
-        //this.parseControlModify(1, this.parseCoord(this.conf.x, 'x'),
-        //                           this.parseCoord(this.conf.y, 'y'),
-        //                           10 + size, -15, size);
-        //size = null;
-
         // Simply make it dragable. Maybe will be extended in the future...
         makeDragable([this.conf.object_id+'-icondiv'], this.saveObject, this.moveObject);
     },

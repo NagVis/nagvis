@@ -892,7 +892,6 @@ function getObjectStatesCallback(oResponse) {
     bStateChanged = null;
 }
 
-
 /**
  * setMapBackgroundImage()
  *
@@ -905,13 +904,14 @@ function setMapBackgroundImage(sImage) {
     // Only work with the background image if some is configured
     if(typeof sImage !== 'undefined' && sImage !== 'none' && sImage !== '') {
         // Use existing image or create new
-        if(document.getElementById('backgroundImage')) {
-            var oImage = document.getElementById('backgroundImage');
-        } else {
+        var oImage = document.getElementById('backgroundImage');
+        if(!oImage) {
             var oImage = document.createElement('img');
             oImage.id = 'backgroundImage';
             document.body.appendChild(oImage);
         }
+
+        addZoomHandler(oImage);
 
         oImage.src = sImage;
         oImage = null;
@@ -1415,34 +1415,51 @@ function getOverviewRotations() {
  * @return  String    URL part with params and values
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function getViewParams(update) {
-    if(!isset(oViewProperties) || !isset(oViewProperties['params']))
+function getViewParams(update, userParams) {
+    if(!isset(userParams))
+        userParams = false;
+
+    if(!userParams && isset(oViewProperties) && isset(oViewProperties['params'])) {
+        var params = oViewProperties['params'];
+    } else if(isset(oViewProperties) && isset(oViewProperties['params'])) {
+        var params = oViewProperties['user_params'];
+    } else {
+        return '';
+    }
+
+    if(!isset(params))
         return '';
 
     // Udate the params before processing url
     if(isset(update)) {
         for(var param in update) {
-            oViewProperties['params'][param] = update[param];
+            params[param] = update[param];
         }
     }
 
     var sParams = '';
-    for(var param in oViewProperties['params']) {
-        if(oViewProperties['params'][param] != '') {
-            sParams += '&' + param + '=' + escapeUrlValues(oViewProperties['params'][param]);
+    for(var param in params) {
+        if(params[param] != '') {
+            sParams += '&' + param + '=' + escapeUrlValues(params[param]);
         }
     }
 
-    if(!isset(oViewProperties['params']['width'])) {
-        oViewProperties['params']['width'] = pageWidth();
-        sParams += '&width=' + escapeUrlValues(oViewProperties['params']['width']);
-    }
-    if(!isset(oViewProperties['params']['height'])) {
-        oViewProperties['params']['height'] = pageHeight() - getHeaderHeight();
-        sParams += '&height=' + escapeUrlValues(oViewProperties['params']['height']);
-    }
-
     return sParams;
+}
+
+/**
+ * Returns the real and final view parameter value including all sources
+ * a) hardcoded values
+ * b) global section values
+ * c) user profile values
+ * d) url values
+ * The PHP backend computes all the parameters
+ */
+function getViewParam(param) {
+    if(oViewProperties && isset(oViewProperties['params'])
+       && isset(oViewProperties['params'][param]))
+        return oViewProperties['params'][param];
+    return null;
 }
 
 /**
@@ -1455,7 +1472,7 @@ function getViewParams(update) {
  */
 function getMapProperties(type, mapName) {
     return getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapProperties&show='
-                          + escapeUrlValues(mapName)+getViewParams())
+                          + escapeUrlValues(mapName)+getViewParams());
 }
 
 /**
@@ -1468,7 +1485,7 @@ function getMapProperties(type, mapName) {
  */
 function getUrlProperties(sUrl) {
     return getSyncRequest(oGeneralProperties.path_server+'?mod=Url&act=getProperties&show='
-                                           + escapeUrlValues(sUrl))
+                                           + escapeUrlValues(sUrl));
 }
 
 // Returns true if the current view is

@@ -110,12 +110,12 @@ function doDown(event) {
         resizeObj.el = el;
         resizeObj.dir = dir;
 
-        resizeObj.grabx = event.clientX;
-        resizeObj.graby = event.clientY;
-        resizeObj.width = el.offsetWidth;
+        resizeObj.grabx  = event.clientX;
+        resizeObj.graby  = event.clientY;
+        resizeObj.width  = el.offsetWidth;
         resizeObj.height = el.offsetHeight;
-        resizeObj.left = el.offsetLeft;
-        resizeObj.top = el.offsetTop;
+        resizeObj.left   = el.offsetLeft;
+        resizeObj.top    = el.offsetTop;
 
         event.returnValue = false;
         event.cancelBubble = true;

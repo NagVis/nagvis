@@ -64,7 +64,6 @@ function list_geomap_source_files($CORE) {
 global $viewParams;
 $viewParams = array(
     'geomap' => array(
-        'zoom',
         'geomap_type',
         'source_file',
     )
@@ -86,11 +85,6 @@ $configVars = array(
         'match'      => MATCH_STRING_EMPTY,
         'field_type' => 'dropdown',
         'list'       => 'list_geomap_source_files',
-    ),
-    'zoom' => array(
-        'must'       => false,
-        'default'    => '',
-        'match'      => MATCH_INTEGER_EMPTY,
     ),
 );
 
@@ -178,6 +172,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
           .'&width='.$params['width'].'&height='.$params['height']
           .'&type='.$params['geomap_type'];
           //.'&points='.$min_long.','.$max_lat.';'.$max_long.','.$min_lat;
+    // FIXMEL: The geomap zoom seems to be something different than the nagvis zoom
     if($params['zoom'] != '')
         $url .= '&zoom='.$params['zoom'];
     //file_put_contents('/tmp/123', $url);

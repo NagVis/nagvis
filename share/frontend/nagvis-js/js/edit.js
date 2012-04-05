@@ -235,8 +235,8 @@ function dragObject(event) {
     draggingObject.style.position = 'absolute';
     draggingObject.style.top  = newTop + 'px';
     draggingObject.style.left = newLeft + 'px';
-    draggingObject.x = newLeft;
-    draggingObject.y = newTop;
+    draggingObject.x = rmZoomFactor(newLeft);
+    draggingObject.y = rmZoomFactor(newTop);
 
     // When this object has a relative coordinated label, then move this too
     moveRelativeObject(draggingObject.id, newTop, newLeft);
@@ -474,11 +474,17 @@ function getEventMousePos(e) {
 
     // When a grid is enabled align the dragged object in the nearest grid
     if(oViewProperties.grid_show === 1) {
-        var a = coordsToGrid(posx, posy);
-        posx = a[0];
-        posy = a[1];
-        a = null;
+        //var a = coordsToGrid(posx, posy);
+        //posx = a[0];
+        //posy = a[1];
+        //a = null;
     }
+
+    // Take the zoom into account. If the map is zoomed this function gathers
+    // coordinates where the zoom factor is included. It has to be removed for
+    // further processing.
+    posx = rmZoomFactor(posx);
+    posy = rmZoomFactor(posy);
 
     return [ posx, posy ];
 }
@@ -803,7 +809,7 @@ function gridParse() {
         grid.setColor(oViewProperties.grid_color);
         grid.setStroke(1);
 
-        var gridStep = oViewProperties.grid_steps;
+        var gridStep = addZoomFactor(oViewProperties.grid_steps);
 
         // Start
         var gridYStart = 0;
@@ -893,15 +899,15 @@ function coordsToGrid(x, y) {
         x = x.split(',');
         y = y.split(',');
         for(var i = 0; i < x.length; i++) {
-            x[i] = x[i] - (x[i] % oViewProperties.grid_steps);
-            y[i] = y[i] - (y[i] % oViewProperties.grid_steps);
+            x[i] = x[i] - (x[i] % addZoomFactor(oViewProperties.grid_steps));
+            y[i] = y[i] - (y[i] % addZoomFactor(ooViewProperties.grid_steps));
         }
         return [ x.join(','), y.join(',') ];
     } else {
         x = +x;
         y = +y;
-        var gridMoveX = x - (x % oViewProperties.grid_steps);
-        var gridMoveY = y - (y % oViewProperties.grid_steps);
+        var gridMoveX = x - (x % addZoomFactor(oViewProperties.grid_steps));
+        var gridMoveY = y - (y % addZoomFactor(oViewProperties.grid_steps));
         return [ gridMoveX, gridMoveY ];
     }
 }
@@ -1006,5 +1012,15 @@ function togglePicker(id) {
         o.color.hidePicker();
     else
         o.color.showPicker();
+    o = null;
+}
+
+function pickWindowSize(id, dimension) {
+    var o = document.getElementById(id);
+    if(dimension == 'width') {
+        o.value = pageWidth();
+    } else {
+        o.value = pageHeight() - getHeaderHeight();
+    }
     o = null;
 }

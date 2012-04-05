@@ -177,22 +177,29 @@ class CoreModMap extends CoreModule {
                 break;
                 case 'addModify':
                     $aOpts = Array(
-                        'show'     => MATCH_MAP_NAME,
-                        'clone_id' => MATCH_OBJECTID_EMPTY,
-                        'submit'   => MATCH_STRING_EMPTY,
-                        'update'   => MATCH_INTEGER_EMPTY,
-                        'mode'     => MATCH_STRING_EMPTY,
-                        'perm'     => MATCH_BOOLEAN_EMPTY,
+                        'show'      => MATCH_MAP_NAME,
+                        'clone_id'  => MATCH_OBJECTID_EMPTY,
+                        'submit'    => MATCH_STRING_EMPTY,
+                        'update'    => MATCH_INTEGER_EMPTY,
+                        'mode'      => MATCH_STRING_EMPTY,
+                        'perm'      => MATCH_BOOLEAN_EMPTY,
+                        'perm_user' => MATCH_BOOLEAN_EMPTY,
                     );
                     $aVals = $this->getCustomOptions($aOpts, Array(), true);
-                    $attrs = $this->filterMapAttrs($this->getAllOptions($aOpts));
+                    list($attrs, $attrsFiltered) = $this->filterMapAttrs($this->getAllOptions($aOpts));
 
                     // mode is set to view_params if only the "view parameters" dialog is handled in this request.
                     // This dialog has less options and is primary saved for the user and not for all users in the
                     // map configuration
                     $mode = isset($aVals['mode']) ? $aVals['mode'] : null;
                     // Tells the handleAddModify handler to store the options permanent
-                    $perm = isset($aVals['perm']) ? $aVals['perm'] : null;
+                    if(isset($aVals['perm']) && $aVals['perm'] == '1') {
+                        $perm = 1;
+                    } elseif(isset($aVals['perm_user']) && $aVals['perm_user'] == '1') {
+                        $perm = 2;
+                    } else {
+                        $perm = null;
+                    }
 
                     $VIEW = new WuiViewMapAddModify($aVals['show'], $mode);
                     $VIEW->setAttrs($attrs);
@@ -207,7 +214,7 @@ class CoreModMap extends CoreModule {
                     if(isset($aVals['submit']) && $aVals['submit'] != '' && !$update) {
                         // The form has been submitted.
                         try {
-                            $success = $this->handleAddModify($mode, $perm, $aVals['show'], $attrs);
+                            $success = $this->handleAddModify($mode, $perm, $aVals['show'], $attrs, $attrsFiltered);
                         } catch(FieldInputError $e) {
                             $err = $e;
                         }
@@ -323,19 +330,23 @@ class CoreModMap extends CoreModule {
     // Each attribute can have the toggle_* field set. If present
     // use it's value to filter out the attributes
     private function filterMapAttrs($attrs) {
-        $ret = Array();
+        $ret = array();
+        $filtered = array();
         foreach($attrs AS $attr => $val) {
             if(substr($attr, 0, 7) == 'toggle_' || $attr == '_t' || $attr == 'lang' || $attr == 'update')
                 continue;
-            if(isset($attrs['toggle_'.$attr]) && $attrs['toggle_'.$attr] !== 'on')
-                continue;
-            $ret[$attr] = $val;
+
+            if(isset($attrs['toggle_'.$attr]) && $attrs['toggle_'.$attr] !== 'on') {
+                $filtered[$attr] = null;
+            } else {
+                $ret[$attr] = $val;
+            }
         }
-        return $ret;
+        return array($ret, $filtered);
     }
 
     // Validate and process addModify form submissions
-    protected function handleAddModify($mode, $perm, $map, $attrs) {
+    protected function handleAddModify($mode, $perm, $map, $attrs, $attrsFiltered) {
         $this->verifyMapExists($map);
         $MAPCFG = new GlobalMapCfg($this->CORE, $map);
 
@@ -355,13 +366,24 @@ class CoreModMap extends CoreModule {
             // The handler has been called in "view_params" mode. In this case the user has
             // less options and the options to
             // 1. modify these parameters only for the current open view
-            // 2. Save the changes for himselfs (FIXME)
+            // 2. Save the changes for himselfs
             // 3. Save the changes to the map config (-> Use default code below)
-            if($mode == 'view_params' && $perm != '1') {
+            if($mode == 'view_params' && $perm != 1 && $perm != 2) {
                 // This is the 1. case -> redirect the user to a well formated url
-                $params = $attrs;
+                $params = array_merge($attrs, $attrsFiltered);
                 unset($params['object_id']);
                 return array(0, $params, '');
+            }
+
+            if($mode == 'view_params' && $perm == 2) {
+                // This is the 2. case -> saving the options only for the user
+                $USERCFG = new CoreUserCfg();
+                $params = $attrs;
+                unset($params['object_id']);
+                $USERCFG->doSet(array(
+                    'params-' . $map => $params,
+                ));
+                return array(0, '', '');
             }
 
             if(!$MAPCFG->objExists($objId))

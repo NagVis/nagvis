@@ -13,6 +13,8 @@ $viewParams = array(
         'header_menu',
         'hover_menu',
         'context_menu',
+
+        'zoom',
     )
 );
 
@@ -22,12 +24,14 @@ $configVars = array(
     'width' => array(
         'must'       => false,
         'default'    => '',
-        'match'      => MATCH_INTEGER_EMPTY
+        'match'      => MATCH_INTEGER_EMPTY,
+        'field_type' => 'dimension',
     ),
     'height' => array(
         'must'       => false,
         'default'    => '',
-        'match'      => MATCH_INTEGER_EMPTY
+        'match'      => MATCH_INTEGER_EMPTY,
+        'field_type' => 'dimension',
     ),
 );
 

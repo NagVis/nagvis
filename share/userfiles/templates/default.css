@@ -496,7 +496,11 @@ td#popupWindowContent table.mytable tr td.tdfield span {
     word-wrap: break-word;
 }
 td#popupWindowContent table.mytable tr td.tdfield div.picker input {
-    width:151px;
+    width:150px;
+    margin-right:2px;
+}
+td#popupWindowContent table.mytable tr td.tdfield input.checkbox {
+    width: auto;
     margin-right:2px;
 }
 td#popupWindowContent table.mytable tr td.tdfield div.picker img {
