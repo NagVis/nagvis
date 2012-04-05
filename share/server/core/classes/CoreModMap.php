@@ -186,7 +186,7 @@ class CoreModMap extends CoreModule {
                         'perm_user' => MATCH_BOOLEAN_EMPTY,
                     );
                     $aVals = $this->getCustomOptions($aOpts, Array(), true);
-                    $attrs = $this->filterMapAttrs($this->getAllOptions($aOpts));
+                    list($attrs, $attrsFiltered) = $this->filterMapAttrs($this->getAllOptions($aOpts));
 
                     // mode is set to view_params if only the "view parameters" dialog is handled in this request.
                     // This dialog has less options and is primary saved for the user and not for all users in the
@@ -214,7 +214,7 @@ class CoreModMap extends CoreModule {
                     if(isset($aVals['submit']) && $aVals['submit'] != '' && !$update) {
                         // The form has been submitted.
                         try {
-                            $success = $this->handleAddModify($mode, $perm, $aVals['show'], $attrs);
+                            $success = $this->handleAddModify($mode, $perm, $aVals['show'], $attrs, $attrsFiltered);
                         } catch(FieldInputError $e) {
                             $err = $e;
                         }
@@ -330,19 +330,23 @@ class CoreModMap extends CoreModule {
     // Each attribute can have the toggle_* field set. If present
     // use it's value to filter out the attributes
     private function filterMapAttrs($attrs) {
-        $ret = Array();
+        $ret = array();
+        $filtered = array();
         foreach($attrs AS $attr => $val) {
             if(substr($attr, 0, 7) == 'toggle_' || $attr == '_t' || $attr == 'lang' || $attr == 'update')
                 continue;
-            if(isset($attrs['toggle_'.$attr]) && $attrs['toggle_'.$attr] !== 'on')
-                continue;
-            $ret[$attr] = $val;
+
+            if(isset($attrs['toggle_'.$attr]) && $attrs['toggle_'.$attr] !== 'on') {
+                $filtered[$attr] = null;
+            } else {
+                $ret[$attr] = $val;
+            }
         }
-        return $ret;
+        return array($ret, $filtered);
     }
 
     // Validate and process addModify form submissions
-    protected function handleAddModify($mode, $perm, $map, $attrs) {
+    protected function handleAddModify($mode, $perm, $map, $attrs, $attrsFiltered) {
         $this->verifyMapExists($map);
         $MAPCFG = new GlobalMapCfg($this->CORE, $map);
 
@@ -366,7 +370,7 @@ class CoreModMap extends CoreModule {
             // 3. Save the changes to the map config (-> Use default code below)
             if($mode == 'view_params' && $perm != 1 && $perm != 2) {
                 // This is the 1. case -> redirect the user to a well formated url
-                $params = $attrs;
+                $params = array_merge($attrs, $attrsFiltered);
                 unset($params['object_id']);
                 return array(0, $params, '');
             }

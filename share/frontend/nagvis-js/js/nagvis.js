@@ -417,8 +417,9 @@ function getUrlParam(name) {
 /**
  * Function creates a new cleaned up URL
  * - Can add/overwrite parameters
+ * - Can remove parameters by adding "null" values
  */
-function makeuri(addvars) {
+function makeuri(addparams) {
     var tmp = window.location.href.split('?');
     var base = tmp[0];
     tmp = tmp[1].split('#');
@@ -427,15 +428,21 @@ function makeuri(addvars) {
     var params = {};
     var pair = null;
 
-    // Skip unwanted parmas
     for(var i = 0; i < tmp.length; i++) {
         pair = tmp[i].split('=');
+
+        // Skip unwanted params
+        if(addparams[pair[0]] !== undefined && addparams[pair[0]] == null)
+            continue;
+
         params[pair[0]] = pair[1];
     }
 
     // Add new params to the existing params. Overwrite duplicates
-    for (var key in addvars) {
-        params[key] = addvars[key];
+    for (var key in addparams) {
+        if(addparams[key] != null) {
+            params[key] = addparams[key];
+        }
     }
 
     // Build list of key/value pairs
@@ -444,7 +451,7 @@ function makeuri(addvars) {
         aparams.push(key + '=' + params[key]);
     }
 
-    return base + '?' + aparams.join('&')
+    return base + '?' + aparams.join('&');
 }
 
 /**
