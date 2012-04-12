@@ -1,3 +1,7 @@
+1.6.6
+Frontend
+  * Bugfix: Fixed JS error in template object management dialog
+
 1.6.5
 Core
   * Added line_weather_colors option to nagvis.ini.php [defaults] section

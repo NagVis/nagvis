@@ -18,7 +18,11 @@ function putTmplOpts(val) {
 
     if(val !== '') {
         // fetch template options via ajax
-        var oResponse = getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getTmplOpts&show='+escapeUrlValues(mapname)+'&name='+val, false, false);
+        var oResponse = getSyncRequest(
+            oGeneralProperties.path_server + '?mod=Map&act=getTmplOpts&show='
+            + escapeUrlValues(oPageProperties.map_name)+'&name='+val,
+            false, false
+        );
 
         if(typeof oResponse !== 'undefined' && typeof oResponse.opts !== 'undefined') {
             // render form lines
