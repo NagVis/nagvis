@@ -316,8 +316,10 @@ class GlobalMapCfg {
                 if($file[$l] == '')
                     continue;
 
-                // Fix ISO-8859-1 encoding. Convert to UTF-8
-                if(mb_detect_encoding($file[$l], 'UTF-8, ISO-8859-1') == 'ISO-8859-1')
+                // Fix ISO-8859-1 encoding. Convert to UTF-8. The mbstring extension might
+                // be misssing. Simply skip this in that case.
+                if(function_exists('mb_detect_encoding')
+                   && mb_detect_encoding($file[$l], 'UTF-8, ISO-8859-1') == 'ISO-8859-1')
                     $file[$l] = utf8_encode($file[$l]);
 
                 // Don't recognize comments and empty lines, do nothing with ending delimiters
