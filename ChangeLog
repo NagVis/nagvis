@@ -25,6 +25,9 @@ Frontend
 Frontend
   * Bugfix: Fixed JS error in template object management dialog
 
+Core
+  * Bugfix: Made shortly introduced recoding of map config files optional
+
 1.6.5
 Core
   * Added line_weather_colors option to nagvis.ini.php [defaults] section
