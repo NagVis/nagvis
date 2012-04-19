@@ -99,7 +99,7 @@ define('MATCH_INTEGER_PRESIGN_EMPTY', '/^[\+\-]?[0-9]*$/');
 define('MATCH_ORDER', '/^(?:asc|desc)$/');
 define('MATCH_TEXTBOX_WIDTH', '/^([0-9]+|auto)$/');
 define('MATCH_TEXTBOX_HEIGHT', '/^([0-9]+|auto)$/');
-define('MATCH_WEATHER_COLORS', '/^(?:[0-9]{1,3}:#[0-9a-f]{6},?)+$/');
+define('MATCH_WEATHER_COLORS', '/^(?:[0-9]{1,3}(\.[0-9]{1,2})?:#[0-9a-f]{6},?)+$/');
 define('MATCH_SOCKET', '/^(unix:[a-zA-Z0-9\-_\.\/]+|tcp:[a-zA-Z0-9\-\.]+:[0-9]{1,5})$/');
 
 define('MATCH_WUI_ADDMODIFY_DO', '/^(add|modify)$/');

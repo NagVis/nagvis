@@ -582,7 +582,7 @@ var NagVisStatefulObject = NagVisObject.extend({
         // 1 contains the color to be used
         for(var i = 0; i < ranges.length; i++) {
             var parts = ranges[i].split(':');
-            if(parseInt(perc) <= parts[0])
+            if(parseFloat(perc) <= parts[0])
                 return parts[1];
             parts = null;
         }
@@ -673,7 +673,7 @@ var NagVisStatefulObject = NagVisObject.extend({
             return set;
 
         // Calculate percentages with 2 decimals and reset other options
-        return Array(set[0], Math.round((set[1]*100/set[6]*100)/100), '%', set[3], set[4], 0, 100);
+        return Array(set[0], Math.round(set[1]*100/set[6]*100)/100, '%', set[3], set[4], 0, 100);
     },
 
     /**

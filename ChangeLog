@@ -26,6 +26,8 @@ Frontend
   * Bugfix: Fixed JS error in template object management dialog
 
 Core
+  * Line weathermaps colors definition can now be set as float values
+    (Thanks to Ormi for the patch!)
   * Bugfix: Made shortly introduced recoding of map config files optional
 
 1.6.5
