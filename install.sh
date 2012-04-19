@@ -707,7 +707,7 @@ check_php_modules() {
 # Check SQLite version
 check_sqlite_version() {
     if [ "${PKG##/*/}" = "dpkg" ]; then
-        SQLITE_VER=`$PKG -l "sqlite" | grep "sqlite" | grep ii | awk -F' ' '{ print $3 }' | sed "s/-.*$//" | cut -d"." -f1,2`
+        SQLITE_VER=`$PKG -l "sqlite3" | grep "sqlite" | grep ii | awk -F' ' '{ print $3 }' | sed "s/-.*$//" | cut -d"." -f1,2`
     elif [ "${PKG##/*/}" = "rpm" ]; then
         SQLITE_VER=`$PKG -qa "sqlite" | sed "s/sqlite-//g" | sed "s/-.*$//" | cut -d"." -f1,2`
     else
