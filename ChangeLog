@@ -3,7 +3,6 @@ Core
   * Introducing the "map source" feature. Take a look at the docs for details
   * Implemented geomaps using the new "map source" feature based on an Open
     Street Map static map API
-  * Added updated french language files (Thanks to Nicolas Chancereul!)
 
 Automap
   * Removed the special map type "automap". The automaps have been replaced by
@@ -25,6 +24,7 @@ Frontend
 1.6.6
 Frontend
   * Bugfix: Fixed JS error in template object management dialog
+  * Added updated french language files (Thanks to Nicolas Chancereul!)
 
 Core
   * Installer: Fixed sqlite3 package test on debian systems
