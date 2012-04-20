@@ -1,6 +1,7 @@
 1.6.6
 Frontend
   * Bugfix: Fixed JS error in template object management dialog
+  * Added updated french language files (Thanks to Nicolas Chancereul!)
 
 Core
   * Installer: Fixed sqlite3 package test on debian systems
