@@ -21,6 +21,13 @@ Frontend
   * Improved scrolling eventhandler
   * Bugfix: Fixed page/background scaling on open sidebar menu
 
+Geomap
+  * Added parameter geomap_zoom (Geomap zoom is not given as percentage zoom
+    (http://wiki.openstreetmap.org/wiki/Zoom_levels)
+  * Added main config option geomap_server to configure the url to the mapping
+    webservice (Default is now http://geomap.nagvis.org/)
+  * Default geomap type is now Mapnik (Had problems in the past with others)
+
 1.6.6
 Frontend
   * Bugfix: Fixed JS error in template object management dialog

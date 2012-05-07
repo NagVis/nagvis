@@ -91,9 +91,17 @@ class GlobalMainCfg {
                 'file_group' => Array('must' => 0,
                     'default' => '',
                     'match' => MATCH_STRING),
-                'file_mode' => Array('must' => 1,
+                'file_mode' => Array(
+                    'must'    => 1,
                     'default' => 660,
-                    'match' => MATCH_INTEGER_EMPTY),
+                    'match'   => MATCH_INTEGER_EMPTY
+                ),
+
+                'geomap_server' => array(
+                    'must'    => 1,
+                    'default' => 'http://geomap.nagvis.org/',
+                    'match'   => MATCH_STRING_URL,
+                ),
 
                 'http_proxy' => array(
                     'must'    => 0,

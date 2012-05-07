@@ -75,6 +75,25 @@
         <tr>
         <td><strike>displayheader</strike></td><td><strike>1</strike></td><td><strike>Show header menu in maps</strike>. <font color="#ff0000">(Deprecated in 1.4. Moved as option &quot;headermenu&quot; to default and index section.)</font></td>
         </tr>
+
+        <tr>
+          <td>geomap_server <font color="#ff0000">(new in 1.7)</font></td>
+	  <td>http://geomap.nagvis.org/</td>
+	  <td>The server to use as source for the NagVis geomaps. Must implement the API which can be found <a href="http://pafciu17.dev.openstreetmap.org/">here</a></td>
+        </tr>
+
+        <tr>
+          <td>http_proxy<font color="#ff0000">(new in 1.6)</font></td>
+	  <td></td>
+	  <td>The proxy server to use for external HTTP request.</td>
+        </tr>
+
+        <tr>
+          <td>http_timeout<font color="#ff0000">(new in 1.6)</font></td>
+	  <td>10</td>
+	  <td>The timeout in seconds for external HTTP requests.</td>
+        </tr>
+
         <tr>
         <td>language</td><td>en_US</td><td>Select default language to use in NagVis. There are several translations delivered by default: en_US (English), de_DE (German), fr_FR (French) and pt_BR (Brazilian Portuguese; since 1.4.4). Since NagVis 1.4 you have to select the languages in a new format (&quot;en_US&quot; instead of &quot;english&quot;) </td>
         </tr>
