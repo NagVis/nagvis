@@ -38,6 +38,7 @@ Core
   * Line weathermaps colors definition can now be set as float values
     (Thanks to Ormi for the patch!)
   * Bugfix: Made shortly introduced recoding of map config files optional
+  * Bugfix: Fixed stuck icon update on overview page
 
 1.6.5
 Core
