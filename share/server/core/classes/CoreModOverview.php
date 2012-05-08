@@ -68,7 +68,7 @@ class CoreModOverview extends CoreModule {
                             return $result;
                     }
 
-                    $sReturn = $OVERVIEW->parseMapsJson('list', ONLY_STATE, $aVals['i']);
+                    $sReturn = $OVERVIEW->parseMapsJson('list', COMPLETE, $aVals['i']);
                 break;
             }
         }
