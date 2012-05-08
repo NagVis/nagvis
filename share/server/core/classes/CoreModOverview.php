@@ -62,7 +62,7 @@ class CoreModOverview extends CoreModule {
                     $aOpts = Array('i'  => MATCH_STRING_NO_SPACE);
                     $aVals = $this->getCustomOptions($aOpts);
 
-                    $sReturn = $OVERVIEW->parseMapsJson('list', ONLY_STATE, $aVals['i']);
+                    $sReturn = $OVERVIEW->parseMapsJson('list', COMPLETE, $aVals['i']);
                 break;
             }
         }
