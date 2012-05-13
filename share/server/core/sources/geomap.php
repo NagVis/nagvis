@@ -53,7 +53,7 @@ function list_geomap_types() {
     return array(
         'osmarender' => 'Osmarender',
         'mapnik'     => 'Mapnik',
-        'cycle '     => 'Cycle',
+        'cycle'      => 'Cycle',
     );
 }
 
@@ -204,7 +204,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
         $data_url = $url . '&bboxReturnFormat=csv';
         $contents = geomap_get_contents($data_url);
         if(!preg_match('/^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/i', $contents))
-            throw new NagVisException(l('Got invalid data from "[U]"', array('U' => $data_url)));
+            throw new NagVisException(l('Got invalid data from "[U]": "[C]"', array('U' => $data_url, 'C' => var_dump($contents))));
         file_put_contents($data_path, $contents);
         $parts = explode(',', $contents);
     } else {
