@@ -27,7 +27,8 @@ function geomap_get_contents($url) {
     try {
         $opts = array(
             'http' => array(
-                'timeout' => cfg('global', 'http_timeout'),
+                'timeout'    => cfg('global', 'http_timeout'),
+                'user_agent' => 'NagVis '.CONST_VERSION.' geomap',
             )
         );
 
