@@ -1,4 +1,4 @@
-1.7.0
+1.7b1
 Core
   * Introducing the "map source" feature. Take a look at the docs for details
   * Implemented geomaps using the new "map source" feature based on an Open
