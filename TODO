@@ -77,85 +77,6 @@ Installer:
   - ajax Funktionen aufräumen/konsolidieren
   - OMD Tests
 
-*** NagVis Map Zoom ***
-
-Ziel: Das Ziel ist es die NagVis Maps zoombar zu machen. Ein stufenloser Zoom
-ist nicht nötig. Es wäre ausreichend z.b. in 10er Schritten die Map zu zoomen,
-wobei die Seitenverhältnisse der Map immer beibehalten werden müssen. Es ist
-also nicht einfach möglich die Map auf eine feste Breite/Höhe zu zoomen.
-
-Nice2Have: Also Zusatzfeature kann man einen Knopf machen "fit screen size".
-Dieser errechnet im Javascript den Zoomfaktor und malt die Map mit den neuen
-Koordinaten neu.
-
-Umsetzung: Die Umsetzung muss im Frontend passieren. Also rein im Javascript.
-Vom PHP Backend werden nur die Parameter (Koordinaten, Zoomfaktor, Objekt Größe)
-zur Verfügung gestellt. Beim Rendern der Objekte werden die Koordinaten umgerechnet.
-
-Bei der Implementierung muss auf folgende Werte geachtet werden:
-
-1. Koordinaten der Objekte
-2. Maße der Objekte (Icons, Textbox (width, height), Linien-Breiten)
-3. Beim Editieren müssen die Koordinaten zurückgerechnet werden
-4. Controls der Objekte
-5. Labels der Objekte
-6. Das Grid vom Editier-Modus
-7. Relative Koordinaten bewegen
-8. Textbox resize
-
-Zoomfaktor: Der Zoomfaktor ist per Default auf 100% gesetzt. Damit müssen keine
-Koordinaten umgerechnet werden. Nun kann man z.b. den Zoomfaktor auf 50% setzen
-um weiter aus der Map raus zu zoomen. Ein Zoomfaktor von 200% zoomt damit weiter
-rein.
-
-Der Default Zoomfaktor kann als view_parameter in der Map Konfiguration vorgegeben
-werden. Wenn der Nutzer diesen Wert verändert, dann wird dieser in seinem Profil
-gespeichert. Von da an wird dieser Wert benutzt.
-
-Der Zoomfaktor kann mit zwei Knöpfen, z.b. im Headermenu (oder als Overlay auf der
-Map selbst) beeinflusst werden. Der aktuelle Zoomfaktor wird dort auch irgendwie
-dargestellt.
-
-Damit die Maps bei starkem Zoom nicht schlimm aussehen, ist es eventuell nötig
-für die Hintergründe, Icons und Shapes nötig SVG Unterstützung zu implementieren.
-Dabei muss aber bei jedem Objekt zusätzlich zum Iconset noch die Default Größe
-festglegt werden.
-
-Eventuell ist es sogar notwendig die Map Koordinaten der Objekte selbst zu
-zentrieren (Siehe Text weiter unten).
-
-Implementierungsdetails:
-
-- Im Javascript Frontend gibt es bereits die Funktion parseCoord(). Die ist
-  dazu da die Koordinaten eines Objekts auszurechnen und einen Integer zurück
-  zu geben. Diese Funktion könnte ohne Änderungen an der Funktionssignatur
-  intern den Zoomfaktor berücksichtigen.
-
-- Bei Bildern müsste man die aktuelle Breite auslesen. Dann muss man den
-  Zoomfaktor einbeziehen und die neuen Maße setzen. Das muss nach dem Laden
-  des Bildes passieren. Außerdem sollte das Bild bis zum Festlegen der
-  entgültigen Größe/Position versteckt sein. Sonst gibt es irgendwelche
-  Effekte, dass ein Bild erst groß und dann klein gemalt wird.
-
-Offene Fragen:
-
-- Maße der Objekte werden verändert
-  - Dementsprechend müssen auch die Objekte anders positioniert werden.
-    nheight = (height * zoom / 100)
-    hoffset = height - nheight
-    newx    = x + (hoffset / 2)
-  - Problem ist hier aber, dass beim Positionieren des Objektes gar nicht
-    bekannt ist wie groß das Objekt selbst ist
-  - Nach dem Einrechnen des Zoomfaktors ist auch die ursprüngliche Größe
-    nicht mehr bekannt
-  - Width/Height hängt oft an einem anderen Objekt, als die Position selbst
-    Die Position hängt eher am Container
-  -> Nachdenken
-
-  - Wenn man beim Verändern der Höhe/Breite auch die Position verändert, dann
-    würden die Objekte vermutlich korrekt positionert werden können. Dieses
-    Offset müsste dann beim Editieren der Objekte berücksichtigt werden.
-
 *** Icon Koordinaten zentrieren ***
 
 Die Icon Koordinaten beziehen sich momentan auf die linke obere Ecke der Icons.
@@ -255,6 +176,85 @@ Exception/Error log bauen:
 ===============================================================================
 # ERLEDIGT
 ===============================================================================
+
+*** NagVis Map Zoom ***
+
+Ziel: Das Ziel ist es die NagVis Maps zoombar zu machen. Ein stufenloser Zoom
+ist nicht nötig. Es wäre ausreichend z.b. in 10er Schritten die Map zu zoomen,
+wobei die Seitenverhältnisse der Map immer beibehalten werden müssen. Es ist
+also nicht einfach möglich die Map auf eine feste Breite/Höhe zu zoomen.
+
+Nice2Have: Also Zusatzfeature kann man einen Knopf machen "fit screen size".
+Dieser errechnet im Javascript den Zoomfaktor und malt die Map mit den neuen
+Koordinaten neu.
+
+Umsetzung: Die Umsetzung muss im Frontend passieren. Also rein im Javascript.
+Vom PHP Backend werden nur die Parameter (Koordinaten, Zoomfaktor, Objekt Größe)
+zur Verfügung gestellt. Beim Rendern der Objekte werden die Koordinaten umgerechnet.
+
+Bei der Implementierung muss auf folgende Werte geachtet werden:
+
+1. Koordinaten der Objekte
+2. Maße der Objekte (Icons, Textbox (width, height), Linien-Breiten)
+3. Beim Editieren müssen die Koordinaten zurückgerechnet werden
+4. Controls der Objekte
+5. Labels der Objekte
+6. Das Grid vom Editier-Modus
+7. Relative Koordinaten bewegen
+8. Textbox resize
+
+Zoomfaktor: Der Zoomfaktor ist per Default auf 100% gesetzt. Damit müssen keine
+Koordinaten umgerechnet werden. Nun kann man z.b. den Zoomfaktor auf 50% setzen
+um weiter aus der Map raus zu zoomen. Ein Zoomfaktor von 200% zoomt damit weiter
+rein.
+
+Der Default Zoomfaktor kann als view_parameter in der Map Konfiguration vorgegeben
+werden. Wenn der Nutzer diesen Wert verändert, dann wird dieser in seinem Profil
+gespeichert. Von da an wird dieser Wert benutzt.
+
+Der Zoomfaktor kann mit zwei Knöpfen, z.b. im Headermenu (oder als Overlay auf der
+Map selbst) beeinflusst werden. Der aktuelle Zoomfaktor wird dort auch irgendwie
+dargestellt.
+
+Damit die Maps bei starkem Zoom nicht schlimm aussehen, ist es eventuell nötig
+für die Hintergründe, Icons und Shapes nötig SVG Unterstützung zu implementieren.
+Dabei muss aber bei jedem Objekt zusätzlich zum Iconset noch die Default Größe
+festglegt werden.
+
+Eventuell ist es sogar notwendig die Map Koordinaten der Objekte selbst zu
+zentrieren (Siehe Text weiter unten).
+
+Implementierungsdetails:
+
+- Im Javascript Frontend gibt es bereits die Funktion parseCoord(). Die ist
+  dazu da die Koordinaten eines Objekts auszurechnen und einen Integer zurück
+  zu geben. Diese Funktion könnte ohne Änderungen an der Funktionssignatur
+  intern den Zoomfaktor berücksichtigen.
+
+- Bei Bildern müsste man die aktuelle Breite auslesen. Dann muss man den
+  Zoomfaktor einbeziehen und die neuen Maße setzen. Das muss nach dem Laden
+  des Bildes passieren. Außerdem sollte das Bild bis zum Festlegen der
+  entgültigen Größe/Position versteckt sein. Sonst gibt es irgendwelche
+  Effekte, dass ein Bild erst groß und dann klein gemalt wird.
+
+Offene Fragen:
+
+- Maße der Objekte werden verändert
+  - Dementsprechend müssen auch die Objekte anders positioniert werden.
+    nheight = (height * zoom / 100)
+    hoffset = height - nheight
+    newx    = x + (hoffset / 2)
+  - Problem ist hier aber, dass beim Positionieren des Objektes gar nicht
+    bekannt ist wie groß das Objekt selbst ist
+  - Nach dem Einrechnen des Zoomfaktors ist auch die ursprüngliche Größe
+    nicht mehr bekannt
+  - Width/Height hängt oft an einem anderen Objekt, als die Position selbst
+    Die Position hängt eher am Container
+  -> Nachdenken
+
+  - Wenn man beim Verändern der Höhe/Breite auch die Position verändert, dann
+    würden die Objekte vermutlich korrekt positionert werden können. Dieses
+    Offset müsste dann beim Editieren der Objekte berücksichtigt werden.
 
 *** Redesign main configuration ***
 
