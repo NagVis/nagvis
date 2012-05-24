@@ -1,3 +1,9 @@
+1.7b2
+Core
+  * Checking conf.d directory modification time to detect removed config files
+    to be able to delete the config cache in this case
+
+
 1.7b1
 Core
   * Introducing the "map source" feature. Take a look at the docs for details

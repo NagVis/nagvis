@@ -1128,7 +1128,8 @@ class GlobalMainCfg {
                                              CONST_MAINCFG_CACHE.'-pre-user-'.CONST_VERSION.'-cache'.$cacheSuffix);
 
   	if($this->CACHE->isCached(false) === -1
-           || $this->PUCACHE->isCached(false) === -1) {
+           || $this->PUCACHE->isCached(false) === -1
+           || $this->PUCACHE->getCacheFileAge() < filemtime(CONST_MAINCFG_DIR)) {
             // The cache is too old. Load all config files
             foreach($this->configFiles AS $configFile) {
                 // Only proceed when the configuration file exists and is readable

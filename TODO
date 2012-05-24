@@ -4,6 +4,7 @@ This is a small file for storing quick thoughts about new features and needed ch
 Probleme:
   - Warnings anzeigen, wenn Funktionen aus oldPhpVersionFixes.php angezogen werden
   - Sidebar auf/zu verschiebt Objekte, aber nicht den Hintergrund
+  - Bug: Wenn eine Konfigurationsdatei gelöscht wird, wird der maincfg cache nicht erneuert
 
 Zu tun:
   - Automap zu source umbauen
