@@ -3,6 +3,9 @@ Core
   * Checking conf.d directory modification time to detect removed config files
     to be able to delete the config cache in this case
 
+Frontend
+  * Bugfix: Fixed pre-selected values in map options modify dialog
+
 Installer
   * Automatically removing showautomaps option from nagvis.ini.php during update
 

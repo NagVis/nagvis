@@ -1421,7 +1421,7 @@ function getViewParams(update, userParams) {
 
     if(!userParams && isset(oViewProperties) && isset(oViewProperties['params'])) {
         var params = oViewProperties['params'];
-    } else if(isset(oViewProperties) && isset(oViewProperties['params'])) {
+    } else if(isset(oViewProperties) && isset(oViewProperties['user_params'])) {
         var params = oViewProperties['user_params'];
     } else {
         return '';
