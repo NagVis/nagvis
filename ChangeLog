@@ -3,6 +3,9 @@ Core
   * Checking conf.d directory modification time to detect removed config files
     to be able to delete the config cache in this case
 
+Installer
+  * Automatically removing showautomaps option from nagvis.ini.php during update
+
 
 1.7b1
 Core
