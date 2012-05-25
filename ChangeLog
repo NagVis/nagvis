@@ -2,6 +2,7 @@
 Core
   * Checking conf.d directory modification time to detect removed config files
     to be able to delete the config cache in this case
+  * Multisite auth: Don't redirect the browser on ajax calls
 
 Frontend
   * Bugfix: Fixed pre-selected values in map options modify dialog

@@ -106,6 +106,10 @@ class CoreLogonMultisite extends CoreLogonModule {
     }
 
     private function redirectToLogin() {
+        // Do not redirect on ajax calls. Print out errors instead
+        if(CONST_AJAX) {
+            throw new NagVisException(l('LogonMultisite: Not authenticated.'));
+        }
         // FIXME: Get the real path to multisite
         header('Location:../../../check_mk/login.py?_origtarget=' . $_SERVER['REQUEST_URI']);
     }
