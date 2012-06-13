@@ -778,7 +778,7 @@ var NagVisStatefulObject = NagVisObject.extend({
      *
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-    dragLabel: function(obj) {
+    dragLabel: function(obj, event) {
         var arr        = obj.id.split('-');
         var objId      = arr[0];
         var anchorType = arr[1];

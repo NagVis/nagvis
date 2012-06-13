@@ -1,3 +1,7 @@
+1.7b3
+Frontend
+  * Bugfix: When releasing relative coordinates the parent object is not highlighted anymore
+
 1.7b2
 Core
   * Checking conf.d directory modification time to detect removed config files

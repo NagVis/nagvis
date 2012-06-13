@@ -259,9 +259,16 @@ function dragObject(event) {
         }
     }
 
+    // Shift key
+    if(event.shiftKey) {
+        // Unhighlight all other objects
+        for(var i in oMapObjects)
+            oMapObjects[i].highlight(false);
+    }
+
     // Call the dragging handler when one is set
     if(dragMoveHandlers[draggingObject.id])
-        dragMoveHandlers[draggingObject.id](draggingObject);
+        dragMoveHandlers[draggingObject.id](draggingObject, event);
     oParent = null;
 }
 
@@ -362,7 +369,7 @@ function dragStop(event) {
 
         // Call the dragging handler when one is set
         if(dragMoveHandlers[draggingObject.id])
-            dragMoveHandlers[draggingObject.id](draggingObject);
+            dragMoveHandlers[draggingObject.id](draggingObject, event);
 
         draggingObject = null;
         return;
