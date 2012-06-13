@@ -1,8 +1,11 @@
 1.7b3
 Core
   * Bugfix: Better catching of exceptions on nested maps
+  * Suppressing debug messages in non debug mode
+
 Frontend
   * Bugfix: When releasing relative coordinates the parent object is not highlighted anymore
+  * Info page shows json_encode/json_decode capability of used PHP
 
 1.7b2
 Core

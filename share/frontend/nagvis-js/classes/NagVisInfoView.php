@@ -86,7 +86,9 @@ class NagVisInfoView {
             'userPerms'          => json_encode($userPerms),
             'userAuthModule'     => $AUTH->getAuthModule(),
             'userLogonModule'    => $AUTH->getLogonModule(),
-            'userAuthTrusted'    => ($AUTH->authedTrusted() ? "yes" : "no"),
+            'userAuthTrusted'    => ($AUTH->authedTrusted() ? l("yes") : l("no")),
+            'compatJsonEncode'   => (!COMPAT_JSON_ENCODE ? l("yes") : l("no (compat mode, may lead to performance problems)")),
+            'compatJsonDecode'   => (!COMPAT_JSON_DECODE ? l("yes") : l("no (compat mode, may lead to performance problems)")),
         );
 
         // Build page based on the template file and the data array

@@ -64,6 +64,7 @@ if(function_exists("date_default_timezone_get"))
  * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
 if (!function_exists('json_encode')) {
+        define('COMPAT_JSON_ENCODE', True);
 	function json_encode($a=false) {
 		if (is_null($a)) return 'null';
 		if ($a === false) return 'false';
@@ -97,6 +98,8 @@ if (!function_exists('json_encode')) {
 			return '{' . join(',', $result) . '}';
 		}
 	}
+} else {
+    define('COMPAT_JSON_ENCODE', False);
 }
 
 /**
@@ -110,6 +113,7 @@ if (!function_exists('json_encode')) {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 if(!function_exists('json_decode')){
+        define('COMPAT_JSON_DECODE', True);
 
 if(!class_exists('Services_JSON')) {
 	/**
@@ -923,6 +927,8 @@ if(!class_exists('Services_JSON')) {
 					return $json->decode($content);
 			}
 	}
+} else {
+        define('COMPAT_JSON_DECODE', False);
 }
 
 if(!class_exists('PEAR_Error')) {

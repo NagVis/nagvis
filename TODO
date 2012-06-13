@@ -3,7 +3,6 @@ This is a small file for storing quick thoughts about new features and needed ch
 
 Probleme:
   - Sidebar auf/zu verschiebt Objekte, aber nicht den Hintergrund
-  - Warnings anzeigen, wenn Funktionen aus oldPhpVersionFixes.php angezogen werden
 
 Zu tun:
   - Automap zu source umbauen

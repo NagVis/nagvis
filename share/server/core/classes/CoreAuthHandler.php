@@ -202,7 +202,7 @@ class CoreAuthHandler {
         // Remove logins which were performed with different logon/auth modules
         if($this->SESS->get('logonModule') != cfg('global', 'logonmodule')
            || $this->SESS->get('authModule') != $this->sModuleName) {
-            debug('removing different logon/auth module data');
+            if(DEBUG&&DEBUGLEVEL&2) debug('removing different logon/auth module data');
             $this->logout(true);
             return false;
         }
