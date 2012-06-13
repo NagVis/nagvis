@@ -404,6 +404,8 @@ class NagVisMapObj extends NagVisStatefulObject {
                             $SUBMAPCFG->readMapConfig();
                         } catch(MapCfgInvalid $e) {
                             $mapCfgInvalid = l('Map Configuration Error: [ERR]', Array('ERR' => $e->getMessage()));
+                        } catch(Exception $e) {
+                            $mapCfgInvalid = l('Problem while processing map: [ERR]', Array('ERR' => (string) $e));
                         }
                     }
 

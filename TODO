@@ -2,7 +2,6 @@ This is a small file for storing quick thoughts about new features and needed ch
 ===============================================================================
 
 Probleme:
-  - An Shapes anheften fehlt
   - Sidebar auf/zu verschiebt Objekte, aber nicht den Hintergrund
   - Warnings anzeigen, wenn Funktionen aus oldPhpVersionFixes.php angezogen werden
 
@@ -38,12 +37,20 @@ Nice2have:
 
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
+  - An Shapes anheften fehlt - Eventuell auch nicht. Was ist denn, wenn man Shapes
+    als Design Elemente nutzen möchte, die einfach im Hintergrund liegen? Eventuell
+    muss man das beim Shape konfigurierbar machen.
 - Sidebar Folder auf/zu klappbar
 - In Sidebar/Dropdown die aktuelle Map highlighten
 
+-------------------------------------------------------------------------------
+
 - Zeige Rotations in Sidebar
 
--------------------------------------------------------------------------------
+- Verzeichnis-Hierarchie unterhalb von maps/
+  - Anstatt flachem Listing einen Walk machen
+  - Map-Name enthält dann den Pfad relativ zum Maps Verzeichnis
+  - Eventuell auch auf Teile des Map Namens (Verzeichnisse) Rechte verteilen
 
 - Make stateless lines or other single part lines splittable
 

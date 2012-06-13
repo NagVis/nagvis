@@ -1,4 +1,6 @@
 1.7b3
+Core
+  * Bugfix: Better catching of exceptions on nested maps
 Frontend
   * Bugfix: When releasing relative coordinates the parent object is not highlighted anymore
 
