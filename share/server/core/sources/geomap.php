@@ -1,14 +1,16 @@
 <?php
 
+class GeomapError extends MapSourceError {}
+
 function geomap_get_locations($p) {
     $locations = array();
     $f = cfg('paths', 'geomap') . '/' . $p['source_file'] . '.csv';
 
-    if($f == '')
-        throw new NagVisException(l('No location source file given. Terminate rendering geomap.'));
+    if($p['source_file'] == '')
+        throw new GeomapError(l('No location source file given. Terminate rendering geomap.'));
 
     if(!file_exists($f))
-        throw new NagVisException(l('Location source file "[F]" does not exist.', Array('F' => $f)));
+        throw new GeomapError(l('Location source file "[F]" does not exist.', Array('F' => $f)));
 
     foreach(file($f) AS $line) {
         $parts = explode(';', $line);
@@ -42,7 +44,7 @@ function geomap_get_contents($url) {
 
         return file_get_contents($url, false, $context);
     } catch(Exception $e) {
-        throw new NagVisException(l('Unable to fetch URL "[U]".<br/><br />The geomap needs to be able to fetch '
+        throw new GeomapError(l('Unable to fetch URL "[U]".<br/><br />The geomap needs to be able to fetch '
                                    .'some data from the internet via webservice API. Please take a look '
                                    .'at the docs for more details.<br /><br /><small>[E]</small>',
                                     Array('U' => $url, 'E' => $e)));
@@ -123,6 +125,11 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
     $iconset = $params['iconset'];
     list($icon_w, $icon_h) = iconset_size($iconset);
+    
+    // Adapt the global section
+    $map_config[0] = $saved_config[0];
+    $map_config[0]['map_image'] = $image_name;
+    $map_config[0]['iconset']   = $iconset;
 
     // Now add the objects to the map
     foreach($locations AS $loc) {
@@ -143,7 +150,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
     // Terminate empty views
     if(count($map_config) == 0)
-        throw new NagVisException(l('Got empty map after filtering. Terminate rendering geomap.'));
+        throw new GeomapError(l('Got empty map after filtering. Terminate rendering geomap.'));
 
     // Now detect the upper and lower bounds of the locations to display
     // Left/upper and right/bottom
@@ -154,6 +161,9 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     $min_long = 180;
     $max_long = -180;
     foreach($map_config AS $obj) {
+        if($obj['object_id'] == 0)
+            continue;
+
         if($obj['lat'] < $min_lat)
             $min_lat = $obj['lat'];
         if($obj['lat'] > $max_lat)
@@ -208,12 +218,12 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
            ord($contents[1]) == 80 &&
            ord($contents[2]) == 78) {
             // Got an png image as answer - catch this!
-            throw new NagVisException(l('Got invalid response from "[U]". This is mostly caused by an unhandled request.',
+            throw new GeomapError(l('Got invalid response from "[U]". This is mostly caused by an unhandled request.',
                                             array('U' => $data_url)));
         }
 
         if(!preg_match('/^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/i', $contents))
-            throw new NagVisException(l('Got invalid data from "[U]": "[C]"', array('U' => $data_url, 'C' => var_dump($contents))));
+            throw new GeomapError(l('Got invalid data from "[U]": "[C]"', array('U' => $data_url, 'C' => var_dump($contents))));
 
         file_put_contents($data_path, $contents);
         $parts = explode(',', $contents);
@@ -231,10 +241,6 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
     $long_para = $params['width'] / $long_diff;
     $lat_para  = $params['height'] / $lat_diff;
-    
-    $map_config[0] = $saved_config[0];
-    $map_config[0]['map_image'] = $image_name;
-    $map_config[0]['iconset']   = $iconset;
 
     // Now add the coordinates to the map objects
     foreach($map_config AS &$obj) {

@@ -2,6 +2,7 @@
 Core
   * Bugfix: Better catching of exceptions on nested maps
   * Suppressing debug messages in non debug mode
+  * Bugfix: Map configs can be edited using the GUI even in case of source errors
 
 Frontend
   * Added rotations to sidebar

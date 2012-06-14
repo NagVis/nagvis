@@ -42,6 +42,8 @@ class GlobalMapCfg {
     protected $defaultsCacheFile = '';
     protected $mapLockPath;
 
+    protected $ignoreSourceErrors = false;
+
     // Array for config validation
     protected static $validConfig = null;
 
@@ -624,6 +626,10 @@ class GlobalMapCfg {
         return false;
     }
 
+    public function skipSourceErrors($flag = true) {
+        $this->ignoreSourceErrors = $flag;
+    }
+
     /**
      * A source can modify the map configuration before it is used for further processing.
      * Such a source is a key which points to a "process", "params" and "changed" function
@@ -667,7 +673,13 @@ class GlobalMapCfg {
             if(!function_exists($func))
                 throw new NagVisException(l('Requested source "[S]" does not exist',
                                                                 array('S' => $source)));
-            $func($this, $this->name, $this->mapConfig);
+            try {
+                $func($this, $this->name, $this->mapConfig);
+            } catch(Exception $e) {
+                if(!$this->ignoreSourceErrors) {
+                    throw $e;
+                }
+            }
         }
 
         // Call process filter implicit if not already done

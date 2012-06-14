@@ -44,6 +44,7 @@ class WuiViewMapAddModify {
 
         $this->MAPCFG = new GlobalMapCfg($this->CORE, $map);
         try {
+            $this->MAPCFG->skipSourceErrors();
             $this->MAPCFG->readMapConfig();
         } catch(MapCfgInvalid $e) {}
     }

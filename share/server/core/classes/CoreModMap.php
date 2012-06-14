@@ -351,6 +351,7 @@ class CoreModMap extends CoreModule {
         $MAPCFG = new GlobalMapCfg($this->CORE, $map);
 
         try {
+            $MAPCFG->skipSourceErrors();
             $MAPCFG->readMapConfig();
         } catch(MapCfgInvalid $e) {}
 
