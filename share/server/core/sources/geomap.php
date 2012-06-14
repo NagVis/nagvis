@@ -203,8 +203,18 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
         // 2.373046875,54.239550531562,18.8525390625,50.499452103968
         $data_url = $url . '&bboxReturnFormat=csv';
         $contents = geomap_get_contents($data_url);
+
+        if(ord($contents[0]) == 137 &&
+           ord($contents[1]) == 80 &&
+           ord($contents[2]) == 78) {
+            // Got an png image as answer - catch this!
+            throw new NagVisException(l('Got invalid response from "[U]". This is mostly caused by an unhandled request.',
+                                            array('U' => $data_url)));
+        }
+
         if(!preg_match('/^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/i', $contents))
             throw new NagVisException(l('Got invalid data from "[U]": "[C]"', array('U' => $data_url, 'C' => var_dump($contents))));
+
         file_put_contents($data_path, $contents);
         $parts = explode(',', $contents);
     } else {

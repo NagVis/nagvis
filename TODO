@@ -11,11 +11,6 @@ Offene Punkte:
       Eine Möglichkeit wäre die Objekte einfach zu verstecken, die nicht angezeigt
       werden sollen. Das würde dann zu leeren flecken auf der Map führen.
 
-  - Geomap:
-    - Max. resolution (limit of OSM/API?)
-    - bbox Limit?
-    - CSV Quelle und geomap aufteilen
-
   - Doku:
     - Alte zu neuen Automap Parametern
     - Automap Migration
@@ -32,6 +27,9 @@ Relative Koordinaten:
 - In Sidebar/Dropdown die aktuelle Map highlighten
 
 -------------------------------------------------------------------------------
+
+- Geomap:
+  - CSV Quelle und geomap aufteilen
 
 - User Defined Coords:
   - Speichern testen (Nur nötigste Attribute schreiben)
