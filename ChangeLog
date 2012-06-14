@@ -4,6 +4,7 @@ Core
   * Suppressing debug messages in non debug mode
 
 Frontend
+  * Added rotations to sidebar
   * Bugfix: When releasing relative coordinates the parent object is not highlighted anymore
   * Info page shows json_encode/json_decode capability of used PHP
 

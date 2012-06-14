@@ -253,6 +253,14 @@ class NagVisHeaderMenu {
             $this->aMacros['usesSources'] = false;
         }
 
+        // Add permitted rotations
+        $this->aMacros['rotations'] = array();
+        foreach($this->CORE->getDefinedRotationPools() AS $poolName) {
+            if($AUTHORISATION->isPermitted('Rotation', 'view', $poolName)) {
+                $this->aMacros['rotations'][] = $poolName;
+            }
+        }
+
         // Initialize the enable fade option. Is overridden by the current map or left as is
         $this->aMacros['bEnableFade'] = cfg('defaults', 'headerfade');
 
@@ -303,6 +311,7 @@ class NagVisHeaderMenu {
             'langChangePassword' => l('Change password'),
             'langOpen' => l('Open'),
             'langMap' => l('Map'),
+            'langRotations' => l('Rotations'),
             'langMapOptions' => l('Map Options'),
             'langMapManageTmpl' => l('Manage Templates'),
             'langMapAddIcon' => l('Add Icon'),

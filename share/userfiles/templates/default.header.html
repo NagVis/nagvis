@@ -155,6 +155,15 @@
     <li class="closed"><a class="title" href="#" onclick="sidebarToggleSubtree(this)">{$langMaps}</a>
         <ul style="display:none;">{sideMaps $maps $pathBase "Map"}</ul>
     </li>
+    {if count($rotations) > 0}
+    <li class="closed spacertop"><a class="title" href="#" onclick="sidebarToggleSubtree(this)">{$langRotations}</a>
+        <ul style="display:none;">
+        {foreach $rotations rotation}
+            <li class=lvl1><a href="{$pathBase}/frontend/nagvis-js/index.phpi?mod=Rotation&act=view&show={$rotation}">{$rotation}</a></li>
+        {/foreach}
+        </ul>
+    </li>
+    {/if}
 </ul>
 </div>
 <div id="headerspacer"></div>
