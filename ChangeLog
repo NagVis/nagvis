@@ -1,7 +1,8 @@
 1.7b3
 Core
+  * Allowing empty lines in main configuration sections now
+  * Bugfix: Suppressing debug messages in non debug mode
   * Bugfix: Better catching of exceptions on nested maps
-  * Suppressing debug messages in non debug mode
   * Bugfix: Map configs can be edited using the GUI even in case of source errors
 
 Frontend

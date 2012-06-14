@@ -1385,7 +1385,7 @@ class GlobalMainCfg {
                         $this->config[$key] = $val;
                 }
             } else {
-                $sec = '';
+                //$sec = '';
                 if($isUserMainCfg)
                     $this->config['comment_'.($numComments++)] = '';
             }
