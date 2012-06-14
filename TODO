@@ -1,9 +1,6 @@
 This is a small file for storing quick thoughts about new features and needed changes:
 ===============================================================================
 
-Probleme:
-  - Sidebar auf/zu verschiebt Objekte, aber nicht den Hintergrund
-
 Zu tun:
   - Automap zu source umbauen
     - filter_by_state neu implementieren (Und evtl. auch für alle Ansichten)
@@ -43,6 +40,8 @@ Relative Koordinaten:
 - In Sidebar/Dropdown die aktuelle Map highlighten
 
 -------------------------------------------------------------------------------
+
+- Header Dropdown bei zu vielen Elemenenten nach rechts verbreitern
 
 - Zeige Rotations in Sidebar
 
