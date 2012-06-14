@@ -1,7 +1,9 @@
 This is a small file for storing quick thoughts about new features and needed changes:
 ===============================================================================
 
-Zu tun:
+- Add getHostNamesInHostgroup to demo Backend
+
+Offene Punkte:
   - Automap zu source umbauen
     - filter_by_state neu implementieren (Und evtl. auch für alle Ansichten)
       Das ist ein Problem. Denn die Objekte werden ja schon positioniert, wenn der
@@ -24,7 +26,6 @@ Zu tun:
 
   - Doku:
     - View Parameter für geomap
-    - View Parameter für automap
     - Alte zu neuen Automap Parametern
     - Automap Migration
 

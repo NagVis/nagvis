@@ -31,11 +31,11 @@
         The values like iconset etc. are inherited to all objects on the map.
         
         <h2> URL Parameters </h2>
-        The automap can be called with several url parameters. Here is a list of all available options:
-        
+        The automap can be called with several url parameters. Since NagVis 1.7 these options can be put into the
+        global section of the map configuration to persist those parameters. Here is a list of the automap options:
         <table style="width:100%">
         <tr>
-            <th>parameter</th><th> default </th><th> description </th>
+            <th>Parameter</th><th>Default</th><th>Description</th>
         </tr>
         <tr>
             <td>show</td><td></td><td>The name of the automap. Since NagVis 1.5 different automap configuration files can be defined. The automap to view needs to be set here.</td>
@@ -68,10 +68,15 @@
             <td>filter_by_state <strike>filterByState</strike></td><td>none</td><td>Set to 1 to enable the &quot;problem automap&quot; mode. When it is set to 1 it will filter all branches out which have only OK/UP hosts. This will result in a "problem automap" which only shows up a tree where each branch has at least one problem.</td>
         </tr>
         <tr>
+            <td>filter_by_id</td><td></td><td>Filter out given object_ids, is mostly used internal <font color="#ff0000">(New in 1.7)</font></td>
+        <tr>
             <td>filter_group <strike>filterGroup</strike></td><td>none</td><td>Provide a hostgroup name. Only hosts in this hostgroup will be shown on the map.</td>
         </tr>
         <tr>
             <td>search</td><td>none</td><td>Search for a map object on map load. Matching objects will be highlighted.</td>
+        </tr>
+        <tr>
+            <td>rankdir</td><td>LR</td><td>Configure direction of directed automaps, can be set to TB (Top/Bottom) and LR (Left/Right)<font color="#ff0000">(New in 1.7)</font></td>
         </tr>
         <tr>
             <td>rotation</td><td>none</td><td>Rotate in the given rotation pool when the map is a step in the pool.</td>
@@ -87,6 +92,9 @@
         </tr>
         <tr>
             <td>margin</td><td>50</td><td>Sets the free space border of the automap graph on all sides. Has to be given in pixels.</td>
+        </tr>
+        <tr>
+            <td>overlap</td><td>true</td><td>Configure collision handling of objects (Take a look at the graphviz docs for explanations of the values)<font color="#ff0000">(New in 1.7)</font></td>
         </tr>
         </table>
         

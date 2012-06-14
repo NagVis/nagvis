@@ -372,7 +372,7 @@ function automap_filter_object_ids(&$allowed_ids, $obj) {
 function automap_filter_by_ids($obj, $params = null) {
     if(isset($params['filter_by_ids']) && $params['filter_by_ids'] != '') {
         $allowed_ids = explode(',', $params['filter_by_ids']);
-        print_r($allowed_ids);
+        //print_r($allowed_ids);
         automap_filter_object_ids($allowed_ids, $obj);
     }
 }
@@ -396,9 +396,9 @@ function automap_filter_by_group($obj, $params) {
     $_BACKEND->checkBackendFeature($params['backend_id'], 'getHostNamesInHostgroup', true);
     $hosts = $_BACKEND->getBackend($params['backend_id'])->getHostNamesInHostgroup($params['filter_group']);
 
-    print_r($hosts);
+    //print_r($hosts);
     $allowed_ids = automap_hostnames_to_object_ids($hosts);
-    print_r($allowed_ids);
+    //print_r($allowed_ids);
 
     automap_filter_object_ids($allowed_ids, $obj);
 }
