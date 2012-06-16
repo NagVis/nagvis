@@ -125,6 +125,7 @@ class NagVisMapView {
         $arr['grid_show']      = intval($this->MAPCFG->getValue(0, 'grid_show'));
         $arr['grid_color']     = $this->MAPCFG->getValue(0, 'grid_color');
         $arr['grid_steps']     = intval($this->MAPCFG->getValue(0, 'grid_steps'));
+        $arr['event_on_load']  = intval($this->MAPCFG->getValue(0, 'event_on_load'));
         $arr['permitted_edit'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Map', 'edit', $this->name);
 
         // hover_menu & context_menu have to be handled separated from the others

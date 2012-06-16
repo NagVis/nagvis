@@ -240,6 +240,13 @@ class GlobalMainCfg {
                     'editable' => 1,
                     'default' => '',
                     'match' => MATCH_STRING_NO_SPACE),
+                'event_on_load' => Array(
+                    'must'       => 0,
+                    'editable'   => 1,
+                    'default'    => 0,
+                    'field_type' => 'boolean',
+                    'match'      => MATCH_BOOLEAN
+                ),
                 'eventbackground' => Array('must' => 0,
                     'editable' => 1,
                     'default' => '0',

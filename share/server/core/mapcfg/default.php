@@ -225,6 +225,14 @@ $mapConfigVars = Array(
         'list'          => 'listContextTemplates',
     ),
 
+    'event_on_load' => Array(
+        'must'       => 0,
+        'editable'   => 1,
+        'default'    => cfg('defaults', 'event_on_load'),
+        'field_type' => 'boolean',
+        'match'      => MATCH_BOOLEAN,
+    ),
+
     'event_background' => Array(
         'must' => 0,
         'default' => cfg('defaults', 'eventbackground'),
@@ -830,6 +838,7 @@ $mapConfigVarMap['global'] = Array(
     'parent_map' => null,
     'context_menu' => null,
     'context_template' => null,
+    'event_on_load' => null,
     'event_background' => null,
     'event_highlight' => null,
     'event_highlight_interval' => null,

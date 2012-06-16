@@ -6,6 +6,8 @@ Core
   * Bugfix: Map configs can be edited using the GUI even in case of source errors
 
 Frontend
+  * Added new map config option (global section) event_on_load to raise frontend events
+    also on page loading
   * Added rotations to sidebar
   * Bugfix: When releasing relative coordinates the parent object is not highlighted anymore
   * Info page shows json_encode/json_decode capability of used PHP

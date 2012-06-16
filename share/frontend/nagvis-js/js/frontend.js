@@ -647,6 +647,48 @@ function updateMapBasics() {
 }
 
 /**
+ * Raise enabled frontend events for the object with the given object id
+ */
+function raiseEvents(objectId, stateChanged) {
+    // - Highlight (Flashing)
+    if(oPageProperties.event_highlight === '1') {
+        if(oMapObjects[objectId].conf.view_type && oMapObjects[objectId].conf.view_type === 'icon') {
+            // Detach the handler
+            //  Had problems with this. Could not give the index to function:
+            //  function() { flashIcon(objectId, 10); iIndex = null; }
+            setTimeout('flashIcon("'+objectId+'", '+oPageProperties.event_highlight_duration+', '+oPageProperties.event_highlight_interval+')', 0);
+        } else {
+            // FIXME: Atm only flash icons, not lines or gadgets
+        }
+    }
+
+    // - Scroll to object
+    if(oPageProperties.event_scroll === '1') {
+        setTimeout('scrollSlow('+oMapObjects[objectId].conf.x+', '+oMapObjects[objectId].conf.y+', 1)', 0);
+    }
+
+    // - Eventlog
+    if(oMapObjects[objectId].conf.type == 'service') {
+        if(stateChanged) {
+            eventlog("state-change", "info", oMapObjects[objectId].conf.type+" "+oMapObjects[objectId].conf.name+" "+oMapObjects[objectId].conf.service_description+": Old: "+oMapObjects[objectId].last_state.summary_state+"/"+oMapObjects[objectId].last_state.summary_problem_has_been_acknowledged+"/"+oMapObjects[objectId].last_state.summary_in_downtime+" New: "+oMapObjects[objectId].conf.summary_state+"/"+oMapObjects[objectId].conf.summary_problem_has_been_acknowledged+"/"+oMapObjects[objectId].conf.summary_in_downtime);
+        } else {
+            eventlog("state-log", "info", oMapObjects[objectId].conf.type+" "+oMapObjects[objectId].conf.name+" "+oMapObjects[objectId].conf.service_description+": State: "+oMapObjects[objectId].conf.summary_state+"/"+oMapObjects[objectId].conf.summary_problem_has_been_acknowledged+"/"+oMapObjects[objectId].conf.summary_in_downtime);
+        }
+    } else {
+        if(stateChanged) {
+            eventlog("state-change", "info", oMapObjects[objectId].conf.type+" "+oMapObjects[objectId].conf.name+": Old: "+oMapObjects[objectId].last_state.summary_state+"/"+oMapObjects[objectId].last_state.summary_problem_has_been_acknowledged+"/"+oMapObjects[objectId].last_state.summary_in_downtime+" New: "+oMapObjects[objectId].conf.summary_state+"/"+oMapObjects[objectId].conf.summary_problem_has_been_acknowledged+"/"+oMapObjects[objectId].conf.summary_in_downtime);
+        } else {
+            eventlog("state-log", "info", oMapObjects[objectId].conf.type+" "+oMapObjects[objectId].conf.name+": State: "+oMapObjects[objectId].conf.summary_state+"/"+oMapObjects[objectId].conf.summary_problem_has_been_acknowledged+"/"+oMapObjects[objectId].conf.summary_in_downtime);
+        }
+    }
+
+    // - Sound
+    if(oPageProperties.event_sound === '1') {
+        setTimeout('playSound("'+objectId+'", 1)', 0);
+    }
+}
+
+/**
  * Bulk update map objects using the given object information
  *
  * @param   Array    Array of objects with new information
@@ -728,35 +770,7 @@ function updateObjects(aMapObjectInformations, sType) {
 
             // Only do eventhandling when object state changed to a worse state
             if(oMapObjects[objectId].stateChangedToWorse()) {
-
-                // - Highlight (Flashing)
-                if(oPageProperties.event_highlight === '1') {
-                    if(oMapObjects[objectId].conf.view_type && oMapObjects[objectId].conf.view_type === 'icon') {
-                        // Detach the handler
-                        //  Had problems with this. Could not give the index to function:
-                        //  function() { flashIcon(objectId, 10); iIndex = null; }
-                        setTimeout('flashIcon("'+objectId+'", '+oPageProperties.event_highlight_duration+', '+oPageProperties.event_highlight_interval+')', 0);
-                    } else {
-                        // FIXME: Atm only flash icons, not lines or gadgets
-                    }
-                }
-
-                // - Scroll to object
-                if(oPageProperties.event_scroll === '1') {
-                    setTimeout('scrollSlow('+oMapObjects[objectId].conf.x+', '+oMapObjects[objectId].conf.y+', 1)', 0);
-                }
-
-                // - Eventlog
-                if(oMapObjects[objectId].conf.type == 'service') {
-                    eventlog("state-change", "info", oMapObjects[objectId].conf.type+" "+oMapObjects[objectId].conf.name+" "+oMapObjects[objectId].conf.service_description+": Old: "+oMapObjects[objectId].last_state.summary_state+"/"+oMapObjects[objectId].last_state.summary_problem_has_been_acknowledged+"/"+oMapObjects[objectId].last_state.summary_in_downtime+" New: "+oMapObjects[objectId].conf.summary_state+"/"+oMapObjects[objectId].conf.summary_problem_has_been_acknowledged+"/"+oMapObjects[objectId].conf.summary_in_downtime);
-                } else {
-                    eventlog("state-change", "info", oMapObjects[objectId].conf.type+" "+oMapObjects[objectId].conf.name+": Old: "+oMapObjects[objectId].last_state.summary_state+"/"+oMapObjects[objectId].last_state.summary_problem_has_been_acknowledged+"/"+oMapObjects[objectId].last_state.summary_in_downtime+" New: "+oMapObjects[objectId].conf.summary_state+"/"+oMapObjects[objectId].conf.summary_problem_has_been_acknowledged+"/"+oMapObjects[objectId].conf.summary_in_downtime);
-                }
-
-                // - Sound
-                if(oPageProperties.event_sound === '1') {
-                    setTimeout('playSound("'+objectId+'", 1)', 0);
-                }
+                raiseEvents(objectId, true);
             }
         }
 
@@ -1025,6 +1039,12 @@ function setMapObjects(aMapObjectConf) {
         // Parse object to map
         if(oPageProperties.view_type === 'map') {
             oMapObjects[i].parse();
+
+            // add eventhandling when enabled via event_on_load option
+            if(isset(oViewProperties.event_on_load) && oViewProperties.event_on_load == 1
+               && oMapObjects[i].hasProblematicState()) {
+                raiseEvents(oMapObjects[i].conf.object_id, false);
+            }
         }
 
         // Store object dependencies
