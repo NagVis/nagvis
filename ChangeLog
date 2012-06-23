@@ -11,8 +11,9 @@ Frontend
   * Added new options event_repeat_interval and event_repeat_duration to 
     configured repeated frontend events
   * Added rotations to sidebar
-  * Bugfix: When releasing relative coordinates the parent object is not highlighted anymore
   * Info page shows json_encode/json_decode capability of used PHP
+  * Bugfix: When releasing relative coordinates the parent object is not highlighted anymore
+  * Bugfix: Fixed bug which suppressed the hover menu on overview page in some cases
 
 1.7b2
 Core

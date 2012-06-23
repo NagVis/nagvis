@@ -68,6 +68,10 @@ var NagVisObject = Base.extend({
      * state is not saved to the user properties.
      */
     loadLocked: function() {
+        // Editing is only possible in maps
+        if(oPageProperties.view_type != 'map')
+            return;
+
         if(!oUserProperties.hasOwnProperty('unlocked-' + oPageProperties.map_name))
             return;
 
