@@ -257,7 +257,7 @@ function searchObjects(sMatch) {
         // - Scroll to object
         if(len == 1) {
             // Detach the handler
-            setTimeout('scrollSlow('+oMapObjects[objectId].conf.x+', '+oMapObjects[objectId].conf.y+', 1)', 0);
+            setTimeout('scrollSlow('+oMapObjects[objectId].parsedX()+', '+oMapObjects[objectId].parsedY()+', 1)', 0);
         }
 
         objectId = null;
@@ -647,6 +647,67 @@ function updateMapBasics() {
 }
 
 /**
+ * Initializes repeated events (if configured to do so) after first event handling
+ */
+function initRepeatedEvents(objectId) {
+    // Are the events configured to be re-raised?
+    if(isset(oViewProperties.event_repeat_interval)
+       && oViewProperties.event_repeat_interval != 0) {
+        oMapObjects[objectId].event_time_first = iNow;
+        oMapObjects[objectId].event_time_last  = iNow;
+    }
+}
+
+/**
+ * Is called by the worker function to check all objects for repeated
+ * events to be triggered independent of the state updates.
+ */
+function handleRepeatEvents() {
+    eventlog("worker", "debug", "handleRepeatEvents: Start");
+    for(var i in oMapObjects) {
+        // Trigger repeated event checking/raising for eacht stateful object which
+        // has event_time_first set (means there was an event before which is
+        // required to be repeated some time)
+        if(oMapObjects[i].has_state && oMapObjects[i].event_time_first !== null) {
+            checkRepeatEvents(i);
+        }
+    }
+    eventlog("worker", "debug", "handleRepeatEvents: End");
+}
+
+/**
+ * Checks wether or not repeated events need to be re-raised and re-raises
+ * them if the time has come
+ */
+function checkRepeatEvents(objectId) {
+    // Terminate repeated events after the state has changed to OK state
+    if(!oMapObjects[objectId].hasProblematicState()) {
+        // Terminate, reset vars
+        oMapObjects[objectId].event_time_first = null;
+        oMapObjects[objectId].event_time_last  = null;
+        return;
+    }
+
+    // Terminate repeated events after duration has been reached when
+    // a limited duration has been configured
+    if(oViewProperties.event_repeat_duration != -1 
+       && oMapObjects[objectId].event_time_first 
+          + oViewProperties.event_repeat_duration < iNow) {
+        // Terminate, reset vars
+        oMapObjects[objectId].event_time_first = null;
+        oMapObjects[objectId].event_time_last  = null;
+        return;
+    }
+    
+    // Time for next event interval?
+    if(oMapObjects[objectId].event_time_last
+       + oViewProperties.event_repeat_interval >= iNow) {
+        raiseEvents(objectId, false);
+        oMapObjects[objectId].event_time_last = iNow;
+    }
+}
+
+/**
  * Raise enabled frontend events for the object with the given object id
  */
 function raiseEvents(objectId, stateChanged) {
@@ -664,7 +725,7 @@ function raiseEvents(objectId, stateChanged) {
 
     // - Scroll to object
     if(oPageProperties.event_scroll === '1') {
-        setTimeout('scrollSlow('+oMapObjects[objectId].conf.x+', '+oMapObjects[objectId].conf.y+', 1)', 0);
+        setTimeout('scrollSlow('+oMapObjects[objectId].parsedX()+', '+oMapObjects[objectId].parsedY()+', 1)', 0);
     }
 
     // - Eventlog
@@ -771,6 +832,7 @@ function updateObjects(aMapObjectInformations, sType) {
             // Only do eventhandling when object state changed to a worse state
             if(oMapObjects[objectId].stateChangedToWorse()) {
                 raiseEvents(objectId, true);
+                initRepeatedEvents(objectId);
             }
         }
 
@@ -1042,8 +1104,10 @@ function setMapObjects(aMapObjectConf) {
 
             // add eventhandling when enabled via event_on_load option
             if(isset(oViewProperties.event_on_load) && oViewProperties.event_on_load == 1
+               && oMapObjects[i].has_state
                && oMapObjects[i].hasProblematicState()) {
                 raiseEvents(oMapObjects[i].conf.object_id, false);
+                initRepeatedEvents(oMapObjects[i].conf.object_id);
             }
         }
 
@@ -1891,6 +1955,9 @@ function workerUpdate(iCount, sType, sIdentifier) {
             aShapesToUpdate = null;
         }
 
+        // Need to re-raise repeated events?
+        handleRepeatEvents();
+
     } else if(sType === 'url') {
         // Fetches the contents from the server and prints it to the page
         eventlog("worker", "debug", "Reparsing url page");
@@ -1940,7 +2007,7 @@ function runWorker(iCount, sType, sIdentifier) {
          * Do these actions every run (every second) excepting the first run
          */
 
-        iNow = String(Date.parse(new Date())).substr(0, 10);
+        iNow = Math.floor(Date.parse(new Date()) / 1000);
 
         // Countdown the rotation counter
         // Not handled by ajax frontend. Reload the page with the new url

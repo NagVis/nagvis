@@ -232,6 +232,18 @@ $mapConfigVars = Array(
         'field_type' => 'boolean',
         'match'      => MATCH_BOOLEAN,
     ),
+    'event_repeat_interval' => Array(
+        'must'       => 0,
+        'editable'   => 1,
+        'default'    => cfg('defaults', 'event_repeat_interval'),
+        'match'      => MATCH_INTEGER,
+    ),
+    'event_repeat_duration' => Array(
+        'must'       => 0,
+        'editable'   => 1,
+        'default'    => cfg('defaults', 'event_repeat_duration'),
+        'match'      => MATCH_INTEGER_PRESIGN,
+    ),
 
     'event_background' => Array(
         'must' => 0,
@@ -839,6 +851,8 @@ $mapConfigVarMap['global'] = Array(
     'context_menu' => null,
     'context_template' => null,
     'event_on_load' => null,
+    'event_repeat_interval' => null,
+    'event_repeat_duration' => null,
     'event_background' => null,
     'event_highlight' => null,
     'event_highlight_interval' => null,

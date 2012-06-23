@@ -27,6 +27,8 @@
  */
 
 var NagVisStatelessObject = NagVisObject.extend({
+    has_state: false,
+
     // Initialize
     constructor: function(oConf) {
         // Call parent constructor

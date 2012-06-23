@@ -242,6 +242,29 @@
         <td>contexttemplate</td><td>default</td><td>Default <a href="context_templates.html">context template</a>. </td>
         </tr>
         <tr>
+            <td>event_on_load</td>
+            <td>0</td>
+            <td>Enabled/disables eventhandling on page loading. Initial problematic states will
+                raise events in frontend during page rendering.
+                (<font color="#ff0000">New in 1.7b3</font>)</td>
+        </tr>
+        <tr>
+            <td>event_repeat_interval</td>
+            <td>0</td>
+            <td>Repeat frontend events in the given interval. The interval is configured in seconds.
+                Set value to 30 to let NagVis re-raise events for problemati objects every 30 seconds.
+                Setting this value smaller than [worker] interval will have no effect.
+                (<font color="#ff0000">New in 1.7b3</font>)</td>
+        </tr>
+        <tr>
+            <td>event_repeat_duration</td>
+            <td>-1</td>
+            <td>The time in seconds to repeat alerts for a problematic ojects for as configured in
+                event_repeat_interval. This value defaults to -1, this leads to repeated events till
+                the problematic state has been fixed.
+                (<font color="#ff0000">New in 1.7b3</font>)</td>
+        </tr>
+        <tr>
         <td> eventbackground </td><td> 0 </td><td> Enable/Disable changing background colour on state changes (configured colour is shown when summary state is PENDING, OK or UP)  </td>
         </tr>
         <tr>

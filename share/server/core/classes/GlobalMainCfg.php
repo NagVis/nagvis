@@ -240,6 +240,7 @@ class GlobalMainCfg {
                     'editable' => 1,
                     'default' => '',
                     'match' => MATCH_STRING_NO_SPACE),
+
                 'event_on_load' => Array(
                     'must'       => 0,
                     'editable'   => 1,
@@ -247,6 +248,19 @@ class GlobalMainCfg {
                     'field_type' => 'boolean',
                     'match'      => MATCH_BOOLEAN
                 ),
+                'event_repeat_interval' => Array(
+                    'must'       => 0,
+                    'editable'   => 1,
+                    'default'    => 0,
+                    'match'      => MATCH_INTEGER,
+                ),
+                'event_repeat_duration' => Array(
+                    'must'       => 0,
+                    'editable'   => 1,
+                    'default'    => -1,
+                    'match'      => MATCH_INTEGER_PRESIGN,
+                ),
+
                 'eventbackground' => Array('must' => 0,
                     'editable' => 1,
                     'default' => '0',
@@ -309,6 +323,7 @@ class GlobalMainCfg {
                     'default' => '1',
                     'field_type' => 'boolean',
                     'match' => MATCH_BOOLEAN),
+
                 'headermenu' => Array('must' => 1,
                     'editable' => 1,
                     'default' => '1',

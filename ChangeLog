@@ -8,6 +8,8 @@ Core
 Frontend
   * Added new map config option (global section) event_on_load to raise frontend events
     also on page loading
+  * Added new options event_repeat_interval and event_repeat_duration to 
+    configured repeated frontend events
   * Added rotations to sidebar
   * Bugfix: When releasing relative coordinates the parent object is not highlighted anymore
   * Info page shows json_encode/json_decode capability of used PHP

@@ -46,7 +46,7 @@ var validMapConfig = {};
 var validMainConfig = {};
 
 // Initialize and define some other basic vars
-var iNow = String(Date.parse(new Date())).substr(0, 10);
+var iNow = Math.floor(Date.parse(new Date()) / 1000);
 
 // Define some state options
 var oStates = {};

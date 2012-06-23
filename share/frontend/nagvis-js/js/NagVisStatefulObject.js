@@ -26,10 +26,15 @@
  */
 
 var NagVisStatefulObject = NagVisObject.extend({
+    has_state: true,
+
     // Stores the information from last refresh (Needed for change detection)
     last_state: null,
     // Array of member objects
     members: [],
+    // Timestamps for last event handling events if repeated events are enabled
+    event_time_first: null,
+    event_time_last: null,
 
     constructor: function(oConf) {
         // Call parent constructor
@@ -165,7 +170,7 @@ var NagVisStatefulObject = NagVisObject.extend({
         }
         
         var weight = oStates[this.conf.summary_state][subState];
-        return weight > oStates['OK']['normal'];
+        return weight > oStates['UP']['normal'];
     },
 
     /**
@@ -964,5 +969,5 @@ var NagVisStatefulObject = NagVisObject.extend({
         sColor      = null;
         oObjIconDiv = null;
         oObjIcon    = null;
-    }
+    },
 });

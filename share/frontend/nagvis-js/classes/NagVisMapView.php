@@ -120,13 +120,15 @@ class NagVisMapView {
     private function parseViewProperties() {
         $arr = Array();
 
-        $arr['search']         = $this->search;
-        $arr['edit_mode']      = $this->editMode;
-        $arr['grid_show']      = intval($this->MAPCFG->getValue(0, 'grid_show'));
-        $arr['grid_color']     = $this->MAPCFG->getValue(0, 'grid_color');
-        $arr['grid_steps']     = intval($this->MAPCFG->getValue(0, 'grid_steps'));
-        $arr['event_on_load']  = intval($this->MAPCFG->getValue(0, 'event_on_load'));
-        $arr['permitted_edit'] = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Map', 'edit', $this->name);
+        $arr['search']                = $this->search;
+        $arr['edit_mode']             = $this->editMode;
+        $arr['grid_show']             = intval($this->MAPCFG->getValue(0, 'grid_show'));
+        $arr['grid_color']            = $this->MAPCFG->getValue(0, 'grid_color');
+        $arr['grid_steps']            = intval($this->MAPCFG->getValue(0, 'grid_steps'));
+        $arr['event_repeat_interval'] = intval($this->MAPCFG->getValue(0, 'event_repeat_interval'));
+        $arr['event_repeat_duration'] = intval($this->MAPCFG->getValue(0, 'event_repeat_duration'));
+        $arr['event_on_load']         = intval($this->MAPCFG->getValue(0, 'event_on_load'));
+        $arr['permitted_edit']        = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Map', 'edit', $this->name);
 
         // hover_menu & context_menu have to be handled separated from the others
         // It is special for them that the object individual settings have to be

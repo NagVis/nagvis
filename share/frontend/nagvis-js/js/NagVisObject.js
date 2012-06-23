@@ -849,6 +849,20 @@ var NagVisObject = Base.extend({
     },
 
     /**
+     * Returns the x coordinate of the object in px
+     */
+    parsedX: function() {
+        return this.parseCoords(this.conf.x, 'x');
+    },
+
+    /**
+     * Returns the y coordinate of the object in px
+     */
+    parsedY: function() {
+        return this.parseCoords(this.conf.y, 'y');
+    },
+
+    /**
      * Entry point for repositioning objects in NagVis frontend
      * Handles whole redrawing of the object while moving
      *
