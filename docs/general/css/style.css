@@ -8,9 +8,13 @@ table {
 	font-size: 1.0em;
 }
 
-a, a:visited, a:active, a:link {
+a, a:active, a:link {
 	color: #45b1cd;
 	text-decoration: none;
+}
+
+a:visited {
+        color: #45b1cd;
 }
 
 a:hover {
