@@ -162,14 +162,14 @@ var NagVisStatefulObject = NagVisObject.extend({
      * Returns true if the object is in non acked problem state
      */
     hasProblematicState: function() {
-        var subState = 'normal';
+        // In case of acked/downtimed states this is no problematic state
         if(this.conf.summary_problem_has_been_acknowledged && this.conf.summary_problem_has_been_acknowledged === 1) {
-            subState = 'ack';
+            return false;
         } else if(this.conf.summary_in_downtime && this.conf.summary_in_downtime === 1) {
-            subState = 'downtime';
+            return false;
         }
         
-        var weight = oStates[this.conf.summary_state][subState];
+        var weight = oStates[this.conf.summary_state]['normal'];
         return weight > oStates['UP']['normal'];
     },
 
