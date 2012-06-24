@@ -58,7 +58,7 @@ div.welcome a:hover {color:#779D2A}
 .messageBox {
     width: 600px;
     border: 0px;
-    background-color:  #CCCCCC;
+    background-color: #CCCCCC;
 }
 
 .messageBox th {
@@ -530,7 +530,8 @@ td#popupWindowContent table.mytable tr td.err div {
     border-radius: 5px;
 }
 
-td#popupWindowContent div.success {
+td#popupWindowContent div.success,
+td#popupWindowContent div.err {
     padding: 5px 8px;
     margin: 10px;
     border: 1px solid #00ff00;
@@ -540,6 +541,12 @@ td#popupWindowContent div.success {
     -khtml-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
+}
+
+td#popupWindowContent div.err {
+    border: 1px solid #ff0000;
+    background-color: #FFC9C9;
+    color: #000;
 }
 
 /* Popup window forms */

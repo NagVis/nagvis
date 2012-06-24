@@ -119,6 +119,9 @@ class NagVisContextMenu {
             $this->code = str_replace('[lang_schedule_downtime]',l('contextScheduleDowntime'),$this->code);
         }
 
+        if(strpos($this->code,'[lang_ack]') !== FALSE)
+            $this->code = str_replace('[lang_ack]', l('Acknowledge'), $this->code);
+
         if(strpos($this->code,'[lang_clone]') !== FALSE)
             $this->code = str_replace('[lang_clone]', l('Clone object'), $this->code);
 

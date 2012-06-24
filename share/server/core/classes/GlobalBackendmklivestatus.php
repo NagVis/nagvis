@@ -220,7 +220,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    private function queryLivestatus($query) {
+    private function queryLivestatus($query, $response = true) {
         // Only connect when no connection opened yet
         if($this->SOCKET === null) {
             $this->connectSocket();
@@ -235,7 +235,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         // Query to get a json formated array back
         // Use KeepAlive with fixed16 header
-        $query .= "OutputFormat:json\nKeepAlive: on\nResponseHeader: fixed16\n\n";
+        if($response)
+            $query .= "OutputFormat:json\nKeepAlive: on\nResponseHeader: fixed16\n\n";
         // Disable regular error reporting to suppress php error messages
         $oldLevel = error_reporting(0);
         $write = fwrite($this->SOCKET, $query);
@@ -253,6 +254,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                                                        'SOCKET'    => $this->socketPath,
                                                        'MSG'       => 'Connection terminated.')));
 
+
+        // Return here if no answer is expected
+        if(!$response)
+            return;
 
         // Read 16 bytes to get the status code and body size
         $read = $this->readSocket(16);
@@ -1313,6 +1318,26 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     public function getHostNamesInHostgroup($name) {
         $r = $this->queryLivestatusSingleColumn("GET hostgroups\nColumns: members\nFilter: name = ".$name."\n");
         return $r[0];
+    }
+
+    private function command($cmd) {
+        return $this->queryLivestatus('COMMAND ['.time().'] '.$cmd."\n", false);
+    }
+
+    /**
+     * Sends acknowledgement command to monitoring core
+     */
+    public function actionAcknowledge($what, $spec, $comment, $sticky, $notify, $persist, $user) {
+        if($what == 'host')
+            $what = 'HOST';
+        elseif($what == 'service')
+            $what = 'SVC';
+        
+        $sticky  = $sticky ? '2' : '0';
+        $notify  = $notify ? '1' : '0';
+        $persist = $notify ? '1' : '0';
+
+        $this->command('ACKNOWLEDGE_'.$what.'_PROBLEM;'.$spec.';'.$sticky.';'.$notify.';'.$persist.';'.$user.';'.$comment);
     }
 }
 ?>

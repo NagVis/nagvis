@@ -57,6 +57,7 @@ try {
         'ManageBackgrounds',
         'Multisite',
         'User',
+        'Action',
     );
 
     require('../../server/core/functions/index.php');

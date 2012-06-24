@@ -180,6 +180,25 @@ class CoreMySQLHandler {
         // Now perform the update for pre 1.6.5
         if($dbVersion < 1060500)
             $this->updateDb1060500();
+
+        // Now perform the update for pre 1.7b3
+        if($dbVersion < 1070023)
+            $this->updateDb1070023();
+    }
+
+    private function updateDb1070023() {
+	// Create permissions for Action/peform/*
+        $this->createPerm('Action', 'perform', '*');
+        
+        // Assign the new permission to the managers, users
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\'');
+        while($data = $this->fetchAssoc($RES))
+            $this->addRolePerm($data['roleId'], 'Action', 'perform', '*');
+
+        // Only apply the new version when this is the real release or newer
+        // (While development the version string remains on the old value)
+        if(GlobalCore::getInstance()->versionToTag(CONST_VERSION) >= 1070023)
+            $this->updateDbVersion();
     }
 
     private function updateDb1060500() {

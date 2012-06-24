@@ -906,6 +906,15 @@ function showAddModifyDialog(mapname, objectId) {
 }
 
 /**
+ * Shows the dialog to acknowledge host/service problems
+ */
+function showAckDialog(map_name, objectId) {
+    showFrontendDialog(oGeneralProperties.path_server
+                       + '?mod=Action&act=acknowledge&map=' + escapeUrlValues(map_name)
+                       + '&object_id=' + escapeUrlValues(objectId), 'Acknowledge Problem');
+}
+
+/**
  * refreshMapObject()
  *
  * Handles manual map object update triggered by e.g. the context menu
@@ -947,9 +956,11 @@ function refreshMapObject(event, objectId) {
     name = null;
 
     var event = !event ? window.event : event;
-    if(event.stopPropagation)
-        event.stopPropagation();
-    event.cancelBubble = true;
+    if(event) {
+        if(event.stopPropagation)
+            event.stopPropagation();
+        event.cancelBubble = true;
+    }
     return false
 }
 
