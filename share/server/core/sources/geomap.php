@@ -161,7 +161,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     $min_long = 180;
     $max_long = -180;
     foreach($map_config AS $obj) {
-        if($obj['object_id'] == 0)
+        if($obj['type'] == 'global')
             continue;
 
         if($obj['lat'] < $min_lat)
