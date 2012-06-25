@@ -1286,22 +1286,35 @@ function rmZoomFactor(coord) {
 function addZoomHandler(oImage) {
     oImage.style.display = 'none';
 
-    addEvent(oImage, 'load', function() {
+    var img = oImage;
+    addEvent(oImage, 'load', function(event) {
+        // Another IE specific thing: "this" points to the window element,
+        // not the raising object
+        if(this == window) {
+            var obj = img;
+        } else {
+            var obj = this;
+        }
+        
+        if(!obj)
+            return false;
+
         // This can not be added directly to the object beacause the
         // width/height is scaled in at least firefox automatically
-
-        // IE FAIL: Needs to be made visible during getting this.width/height
+        //
+        // IE FAIL: Needs to be made visible during getting obj.width/height
         // because IE can not tell us anything about the dimensions when
         // the object is not visible
-        this.style.display = 'block';
-        var width  = addZoomFactor(this.width);
-        var height = addZoomFactor(this.height);
-        this.style.display = 'none';
+        obj.style.display = 'block';
+        var width  = addZoomFactor(obj.width);
+        var height = addZoomFactor(obj.height);
+        obj.style.display = 'none';
 
-        this.width  = width;
-        this.height = height;
+        obj.width  = width;
+        obj.height = height;
         // Now really show the image
-        this.style.display = 'block';
+        obj.style.display = 'block';
+        obj = null;
     });
 
     oImage = null;
