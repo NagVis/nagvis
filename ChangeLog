@@ -16,6 +16,7 @@ Frontend
   * Bugfix: When releasing relative coordinates the parent object is not highlighted anymore
   * Bugfix: Fixed bug which suppressed the hover menu on overview page in some cases
   * Bugfix: Fixed some IE css warning message
+  * Bugfix: Fixed icons not being displayed in IE (version 9 in this case)
 
 1.7b2
 Core
