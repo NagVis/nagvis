@@ -27,9 +27,22 @@
  */
 class NagVisViewAck {
     private $errors = array();
+    private $MAPCFG = null;
+
+    public function __construct($MAPCFG) {
+        $this->MAPCFG = $MAPCFG;
+    }
 
     public function parse($attrs, $err, $success) {
         $s = '';
+
+        global $_BACKEND;
+        $backendId = $this->MAPCFG->getValue($attrs['object_id'], 'backend_id');
+        if(!$_BACKEND->checkBackendFeature($backendId, 'actionAcknowledge', false)) {
+            return '<div class=err>'
+             .l('The requested feature is not available for this backend. The MKLivestatus backend supports this feature.')
+             .'</div>';
+        }
         
         if($err)
             $this->errors[$err->field] = array($err->msg);

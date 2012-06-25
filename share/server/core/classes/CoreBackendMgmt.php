@@ -507,7 +507,7 @@ class CoreBackendMgmt {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function checkBackendFeature($backendId, $feature, $printErr = 1) {
-        $backendClass = 'GlobalBackend'.cfg('backend_'.$backendId,'backendtype');
+        $backendClass = 'GlobalBackend'.cfg('backend_'.$backendId, 'backendtype');
         if(method_exists($backendClass, $feature)) {
             return true;
         } else {

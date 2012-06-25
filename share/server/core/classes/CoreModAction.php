@@ -27,6 +27,7 @@
  */
 class CoreModAction extends CoreModule {
     private $name = null;
+    private $MAPCFG = null;
 
     public function __construct(GlobalCore $CORE) {
         // Register valid actions
@@ -49,21 +50,27 @@ class CoreModAction extends CoreModule {
                         'notify'    => MATCH_BOOLEAN_EMPTY,
                         'persist'   => MATCH_BOOLEAN_EMPTY,
                     );
-                    $aVals = $this->getCustomOptions($aOpts, Array(), true);
+                    $attrs = $this->getCustomOptions($aOpts, Array(), true);
 
-                    $VIEW = new NagVisViewAck();
+                    $this->verifyMapExists($attrs['map']);
+
+                    $this->MAPCFG = new GlobalMapCfg(GlobalCore::getInstance(), $attrs['map']);
+                    $this->MAPCFG->skipSourceErrors();
+                    $this->MAPCFG->readMapConfig();
+
+                    $VIEW = new NagVisViewAck($this->MAPCFG);
 
                     $err     = null;
                     $success = null;
                     if($this->submitted()) {
                         try {
-                            $success = $this->handleAck($aVals);
+                            $success = $this->handleAck($attrs);
                         } catch(FieldInputError $e) {
                             $err = $e;
                         }
                     }
 
-                    $sReturn = json_encode(Array('code' => $VIEW->parse($aVals, $err, $success)));
+                    $sReturn = json_encode(Array('code' => $VIEW->parse($attrs, $err, $success)));
                 break;
             }
         }
@@ -76,28 +83,20 @@ class CoreModAction extends CoreModule {
     }
 
     protected function handleAck($attrs) {
-        $this->verifyMapExists($attrs['map']);
-        $MAPCFG = new GlobalMapCfg(GlobalCore::getInstance(), $attrs['map']);
-
-        try {
-            $MAPCFG->skipSourceErrors();
-            $MAPCFG->readMapConfig();
-        } catch(MapCfgInvalid $e) {}
-
         if(!isset($attrs['object_id']) && $attrs['object_id'] == '')
             throw new NagVisException(l('The object_id value is missing.'));
 
         $objId = $attrs['object_id'];
 
-        if(!$MAPCFG->objExists($objId))
+        if(!$this->MAPCFG->objExists($objId))
             throw new NagVisException(l('The object does not exist.'));
 
-        $type  = $MAPCFG->getValue($objId, 'type');
+        $type  = $this->MAPCFG->getValue($objId, 'type');
 
         if($type == 'host')
-            $spec = $MAPCFG->getValue($objId, 'host_name');
+            $spec = $this->MAPCFG->getValue($objId, 'host_name');
         else
-            $spec = $MAPCFG->getValue($objId, 'host_name').';'.$MAPCFG->getValue($objId, 'service_description');
+            $spec = $this->MAPCFG->getValue($objId, 'host_name').';'.$this->MAPCFG->getValue($objId, 'service_description');
 
         if(!isset($attrs['comment']) || $attrs['comment'] == '')
             throw new FieldInputError('comment', l('The attribute needs to be set.'));
@@ -107,7 +106,8 @@ class CoreModAction extends CoreModule {
 
         // Now send the acknowledgement
         global $_BACKEND, $AUTH;
-        $BACKEND = $_BACKEND->getBackend($MAPCFG->getValue($attrs['object_id'], 'backend_id'));
+        $backendId = $this->MAPCFG->getValue($attrs['object_id'], 'backend_id');
+        $BACKEND = $_BACKEND->getBackend($backendId);
         $BACKEND->actionAcknowledge(
             $type, $spec, $attrs['comment'],
             $attrs['sticky'] == '1',
