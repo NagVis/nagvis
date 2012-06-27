@@ -132,7 +132,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     
     // Adapt the global section
     $map_config[0] = $saved_config[0];
-    $map_config[0]['map_image'] = $image_name;
+    $map_config[0]['map_image'] = $image_name.'?'.time();
     $map_config[0]['iconset']   = $iconset;
 
     // Now add the objects to the map
@@ -201,7 +201,6 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
     // Fetch the background image when needed
     if(!file_exists($image_path) || filemtime(geomap_source_file($params)) > filemtime($image_path)) {
-        error_log('(re)loading map image');
         // Allow/enable proxy
         $contents = geomap_get_contents($url);
         file_put_contents($image_path, $contents);
