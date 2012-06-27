@@ -280,6 +280,7 @@ abstract class CoreModule {
             if(count($parts) != 3)
                 continue;
             list($ty, $name, $age) = $parts;
+            $age = (int) $age;
 
             // Try to fetch the current age of the requested file
             $cur_age = null;
@@ -289,7 +290,8 @@ abstract class CoreModule {
             } elseif($ty == 'map') {
                 if($AUTHORISATION->isPermitted('Map', 'view', $name)) {
                     $MAPCFG  = new NagVisMapCfg($this->CORE, $name);
-                    $cur_age = $MAPCFG->getFileModificationTime();
+                    $MAPCFG->readMapConfig();
+                    $cur_age = $MAPCFG->getFileModificationTime($age);
                 }
             }
 
@@ -299,13 +301,14 @@ abstract class CoreModule {
             }
         }
 
-        if($changed)
+        if(count($changed) > 0) {
             return json_encode(array(
                 'status' => 'CHANGED',
                 'data'   => $changed,
             ));
-        else
+        } else {
             return null;
+        }
     }
 }
 ?>

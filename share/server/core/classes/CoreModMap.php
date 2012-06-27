@@ -1023,9 +1023,9 @@ class CoreModMap extends CoreModule {
             'f'  => MATCH_STRING_NO_SPACE_EMPTY
         );
         $aVals = $this->getCustomOptions($aOpts);
-    
+
         // Is this request asked to check file ages?
-        if(isset($aVals['f']) && isset($aVals['f'][0])) {
+        if(isset($aVals['f']) && isset($aVals['f'][0]) && $aVals['f'] != '') {
             $result = $this->checkFilesChanged($aVals['f']);
             if($result !== null)
                 return $result;

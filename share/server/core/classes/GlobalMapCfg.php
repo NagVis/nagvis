@@ -620,8 +620,9 @@ class GlobalMapCfg {
 
         foreach($sources AS $source) {
             $func = 'changed_'.$source;
-            if($func($this, $compareTime))
+            if($func($this, $compareTime)) {
                 return true;
+            }
         }
         return false;
     }
@@ -1001,8 +1002,16 @@ class GlobalMapCfg {
      * @return	Integer Unix timestamp with last modification time
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function getFileModificationTime() {
+    public function getFileModificationTime($compareTime = null) {
         if($this->checkMapConfigReadable(1)) {
+            // When the sources changed compared to the given time,
+            // return always the current time
+            if($compareTime !== null) {
+                if($this->sourcesChanged($compareTime)) {
+                    return time();
+                }
+            }
+
             $time = filemtime($this->configFile);
             return $time;
         } else {
