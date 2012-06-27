@@ -5,6 +5,7 @@ Core
   * Bugfix: Better catching of exceptions on nested maps
   * Bugfix: Map configs can be edited using the GUI even in case of source errors
   * Bugfix: Fixed re-rendering of geomaps after map source changes
+  * Bugfix: Fixed re-fetching of background image after changed geomap source file
 
 Frontend
   * Added new map config option (global section) event_on_load to raise frontend events

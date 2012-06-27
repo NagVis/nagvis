@@ -2,9 +2,13 @@
 
 class GeomapError extends MapSourceError {}
 
+function geomap_source_file($p) {
+    return cfg('paths', 'geomap') . '/' . $p['source_file'] . '.csv';
+}
+
 function geomap_get_locations($p) {
     $locations = array();
-    $f = cfg('paths', 'geomap') . '/' . $p['source_file'] . '.csv';
+    $f = geomap_source_file($p);
 
     if($p['source_file'] == '')
         throw new GeomapError(l('No location source file given. Terminate rendering geomap.'));
@@ -196,14 +200,15 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     //file_put_contents('/tmp/123', $url);
 
     // Fetch the background image when needed
-    if(!file_exists($image_path)) {
+    if(!file_exists($image_path) || filemtime(geomap_source_file($params)) > filemtime($image_path)) {
+        error_log('(re)loading map image');
         // Allow/enable proxy
         $contents = geomap_get_contents($url);
         file_put_contents($image_path, $contents);
     }
 
     // Fetch the map bounds when needed
-    if(!file_exists($data_path)) {
+    if(!file_exists($data_path) || filemtime(geomap_source_file($params)) > filemtime($data_path)) {
         // Get the lat/long of the image bounds. The api adds a border area to the
         // generated image. This is good since this makes the outer nodes not touch
         // the border of the image. But this makes calculation of the x/y coords
@@ -258,18 +263,30 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 }
 
 /**
- * Report as changed when the source file is newer than the compare_time
- * or when either the image file or the data file do not exist
+ * Report as changed when
+ * a) either the image file or the data file do not exist
+ * b) or when the source file is newer than the compare_time
+ * c) or when the image/data files are older than the source file
  */
 function changed_geomap($MAPCFG, $compare_time) {
     $params = $MAPCFG->getSourceParams();
 
     list($image_name, $image_path, $data_path) = geomap_files($params);
+
+    // a)
     if(!file_exists($image_path) || !file_exists($data_path))
         return true;
 
-    $t = filemtime(cfg('paths', 'geomap') . '/' . $params['source_file'] . '.csv');
-    return $t > $compare_time;
+    // b)
+    $t = filemtime(geomap_source_file($params));
+    if($t > $compare_time)
+        return true;
+
+    // c)
+    if($t > filemtime($image_path) || $t > filemtime($data_path))
+        return true;
+
+    return false;
 }
 
 ?>
