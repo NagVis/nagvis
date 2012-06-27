@@ -73,6 +73,7 @@ $viewParams = array(
     'geomap' => array(
         'geomap_type',
         'geomap_zoom',
+        'geomap_border',
         'source_file',
     )
 );
@@ -98,6 +99,11 @@ $configVars = array(
         'match'      => MATCH_STRING_EMPTY,
         'field_type' => 'dropdown',
         'list'       => 'list_geomap_source_files',
+    ),
+    'geomap_border' => Array(
+        'must'       => false,
+        'default'    => 0.25,
+        'match'      => MATCH_FLOAT,
     ),
 );
 
@@ -178,6 +184,12 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
         if($obj['long'] > $max_long)
             $max_long = $obj['long'];
     }
+
+    // Fix equal coordinates (Simply add some space on all sides)
+    $min_lat  -= $params['geomap_border'];
+    $max_lat  += $params['geomap_border'];
+    $min_long -= $params['geomap_border'];
+    $max_long += $params['geomap_border'];
 
     // FIXME: Too small min/max? What is the minimum bbox size?
 
