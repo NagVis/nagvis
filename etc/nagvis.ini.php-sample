@@ -158,6 +158,15 @@
 ;contextmenu=1
 ; Choose the default context template
 ;contexttemplate="default"
+; Raise frontend events for problematic objects also on page loading. Set to 1 to
+; enable this feature
+;event_on_load=0
+; Repeat frontend events in the given interval. The interval is configured in seconds.
+;event_repeat_interval=0
+; The time in seconds to repeat alerts for a problematic ojects for as configured in
+; event_repeat_interval. This value defaults to -1, this leads to repeated events
+; till the problematic state has been fixed.
+;event_repeat_duration=-1
 ; Enable/Disable changing background color on state changes (Configured color is
 ; shown when summary state is PENDING, OK or UP)
 ;eventbackground=0
