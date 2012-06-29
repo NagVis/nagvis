@@ -22,6 +22,9 @@ Frontend
   * Bugfix: Fixed icons not being displayed in IE (version 9 in this case)
   * Bugfix: Fixed rendering errors in IE (below version 9)
 
+Installer
+  * Moved javascript compress code to make it available in omd_install script
+
 1.7b2
 Core
   * Checking conf.d directory modification time to detect removed config files

@@ -47,6 +47,8 @@ fi
 
 CWD="$(cd "$(dirname "$0")" && pwd)"
 
+. $CWD/install_lib
+
 echo "Installing..."
 
 # 1.5 had the userfiles dir in $OMD_ROOT/var/nagvis/userfiles
@@ -62,6 +64,8 @@ mkdir -p $OMD_ROOT/var/nagvis/profiles
 mkdir -p $OMD_ROOT/local/share/nagvis/htdocs
 cp -r $CWD/share/* $OMD_ROOT/local/share/nagvis/htdocs
 cp -r $CWD/docs $OMD_ROOT/local/share/nagvis/htdocs/
+
+cmp_js $OMD_ROOT/local/share/nagvis/htdocs/frontend/nagvis-js/js
 
 # Update "old" (1.5) userfiles dir
 if [ -d $OMD_ROOT/var/nagvis/userfiles ]; then
