@@ -6,33 +6,33 @@
 </head>
 <body>
   <h1>Static and dynamic maps</h1>
-  <p>The different views in in NagVis are named maps. The classic and most common type of
+  <p>The different views in NagVis are named &quot;maps&quot;. The classic and most common type of
   NagVis maps are the static maps. This means one creates a map configuration using the
   web based configuration editor or using a text editor to create the map configuration.</p>
   <p>In NagVis 1.7x a new extension has been made to the map configuration. It is still based
-  on the static map configuration apporach. But it makes it possible to extend thoses static
+  on the static map configuration approach but now it possible to extend those static
   configuration parts using dynamic and programmable mechanisms.</p>
-  <p>The new thing has been named &quot;map sources&quot;. Each map can make use of one or
-  several map sources. Each of these sources can clear, replace or alter the whole map
+  <p>The new feature has been named &quot;map sources&quot;. Each map can make use of one or
+  several map sources. Each of these sources can clear, replace, or alter the whole map
   configuration.</p>
-  <p>A map source is built of several PHP functions which take a standardized set of parameters
+  <p>A map source is built of several PHP functions which take a standardised set of parameters
   to do their work. The functions are completely free in what they are doing. A source can
-  read CSV files with objects and coordinates, can connect to databases to fetch information
+  read CSV files with objects and coordinates, can connect to databases to fetch information,
   or read data from external services. It is up to the developer.</p>
 
   <h2>The map sources API</h2>
   <p>Text files containing PHP code need to be placed in the <code>share/server/core/sources</code>
-  directory relative to the nagvis base directory. In OMD the site local files can be placed in
+  directory relative to the NagVis base directory. In OMD the site local files can be placed in
   <code>local/share/nagvis/htdocs/server/core/sources</code> relative to the site base directory.</p>
-  <p>There no 1:1 relation between the files and the sources itselfs. A file can contain one source,
-  several different sources or even no sources (e.g. to define functions needed by several sources).</p>
+  <p>There no 1:1 relation between the files and the sources themselves. A file can contain one source,
+  several different sources, or even no sources (e.g. to define functions needed by several sources).</p>
   <p>One map source consists of two PHP functions which must match the following specifications:</p>
   <table>
   <tr><th>Function name pattern</th><th>Parameters</th></tr>
   <tr>
       <td rowspan=3>
         <pre>process_&lt;source-name></pre>
-        <p>This is the real source processing function. It can alter the map configuration inplace. The
+        <p>This is the real source processing function. It can alter the map configuration in place. The
         return code of the function is not used in any way at the moment.</p>
       </td>
       <td><code>$MAPCFG</code> - The GlobalMapCfg PHP object</td>
@@ -48,8 +48,8 @@
   <tr>
      <td rowspan=2>
         <pre>changed_&lt;source-name></pre>
-        <p>This function is used to tell the map config processing of NagVis wether or not the 
-        the map configuration has to be reloaded. It must return true to tell NagVis to reload the
+        <p>This function is used to tell the map config processing of NagVis whether or not the 
+        the map configuration has to be reloaded. It must return &quot;true&quot; to tell NagVis to reload the
         map configuration. This means also to execute the process_* function of all configured sources.</td>
      </td>
      <td><code>$MAPCFG</code> - The GlobalMapCfg PHP object</td>
@@ -59,23 +59,23 @@
   </tr>
   </table>
 
-  <p>When loading a map configuration NagVis checks wether or not the map configuration has already been
+  <p>When loading a map configuration NagVis checks whether or not the map configuration has already been
   parsed and cached. If the map is already cached and the cache is up-to-date NagVis can use the map
   configuration cache which can be processed much faster than parsing and validating the map configuration.</p>
   <p>In general NagVis compares the file ages of the used config files (main configuration and map configuration
-  files) with the map configuration cache to make the decission.<p>
-  <p>When using map sources each source must tell the map config processing code wether or not the map source
+  files) with the map configuration cache to make the decision.<p>
+  <p>When using map sources each source must tell the map config processing code whether or not the map source
   thinks that the map configuration has to be reloaded or can use the map configuration cache. This is done
   by the changed_* function of each source. When this function returns &quot;true&quot; this tells NagVis to
   reload the map configuration.</p>
   <p>Loading the map configuration means that NagVis parses the map configuration file to fill the array of
-  map objects. These information are then validated to prevent broken configurations.
-  Then all configured map sources are processed to give them the chance to alter the map configuration. </p>
+  map objects. Then this information is validated to prevent broken configurations.
+  Then all configured map sources are processed to provide the opportunity to alter the map configuration. </p>
 
   <p>Each map source can define view parameters and config variables to be available in maps which make use
   of these sources. This is an example definition of the geomap map source:</p>
   <pre>
-// options to be modyfiable by the user(url)
+// options to be modifiable by the user(url)
 global $viewParams;
 $viewParams = array(
     'geomap' => array(
