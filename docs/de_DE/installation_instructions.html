@@ -12,7 +12,7 @@
         </style>
 <![endif]-->
     </head>  
-    <h1>NagVis 1.6 Installationsanweisungen</h1>
+    <h1>NagVis 1.7 Installationsanweisungen</h1>
     Diese Anweisungen gelten f&uuml;r eine Neuinstallation. <br>
     Wenn Sie Ihre alte NagVis-Installation aktualisieren, raten wir dringend dazu, ein Backup Ihres NagVis-Verzeichnisses zu machen und die Konfigurationsdateien <i>manuell</i> anzupassen. <br>
     
@@ -26,13 +26,13 @@
     
     <a name=SCHRITT_2></a>
     <h2>SCHRITT 2: entpacken Sie NagVis</h2>
-    <pre>tar xvzf nagvis-1.6.x.tar.gz</pre> 
+    <pre>tar xvzf nagvis-1.7.x.tar.gz</pre> 
     
     <a name=SCHRITT_3></a>
     <h2>SCHRITT 3: verschieben Sie das entpackte NagVis-Verzeichnis</h2>
     Platzieren Sie den NagVis-Verzeichnisbaum irgendwo in Ihrem Nagios-share-Verzeichnis.
     In den meisten F&auml;llen ist <code>/usr/local/nagvis</code> die beste Wahl. <br>
-    <pre>mv nagvis-1.6.x /usr/local/nagvis</pre>
+    <pre>mv nagvis-1.7.x /usr/local/nagvis</pre>
     Sie sollten mindestens die folgenden Dateien und Verzeichnisse unter dem nagvis-Verzeichnis sehen<br>
     <pre>ls -l /usr/local/nagvis
     etc
@@ -64,7 +64,7 @@
         <pre>cp etc/apache2-nagvis.conf-sample /etc/apache2/conf.d/apache2-nagvis.conf</pre>
         Nun m&uuml;ssen Sie die Datei &ouml;ffnen und auf Ihre Anforderungen anpassen.
         Es ist wichtig, die Makros <code>@NAGVIS_WEB@</code> und <code>@NAGVIS_PATH@</code> durch die korrekten Werte zu ersetzen.<br>
-        In diesem Beispiel m&uuml;ssen Sie <code>@NAGVIS_WEB@</code> durch <code>/nagvis</code> und <code>@NAGVIS_PATH@</code> durch <code>/usr/local/nagvis/share</code> ersetzen.
+        In diesem Beispiel m&uuml;ssen Sie <code>@NAGVIS_WEB@</code> durch <code>/nagvis</code> und <code>@NAGVIS_PATH@</code> durch <code>/usr/local/nagvis/share</code> ersetzen.</p>
     <a name=SCHRITT_6></a>
     <h2>SCHRITT 6: Berechtigungen</h2>
     <font style="color:red">Dies ist sehr wichtig f&uuml;r eine funktionierende Installation.</font> <br>
