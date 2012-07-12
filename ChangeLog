@@ -1,6 +1,7 @@
 1.7b3
 Core
   * Allowing empty lines in main configuration sections now
+  * Set default http_timeout value to 10
   * Bugfix: Suppressing debug messages in non debug mode
   * Bugfix: Better catching of exceptions on nested maps
   * Bugfix: Map configs can be edited using the GUI even in case of source errors

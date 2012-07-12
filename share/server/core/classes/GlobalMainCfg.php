@@ -110,7 +110,7 @@ class GlobalMainCfg {
                 ),
                 'http_timeout' => array(
                     'must'    => 1,
-                    'default' => 5,
+                    'default' => 10,
                     'match'   => MATCH_INTEGER,
                 ),
 
