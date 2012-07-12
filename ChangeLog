@@ -23,6 +23,7 @@ Frontend
   * Bugfix: Fixed some IE css warning message
   * Bugfix: Fixed icons not being displayed in IE (version 9 in this case)
   * Bugfix: Fixed rendering errors in IE (below version 9)
+  * Bugfix: Fixed zoom function problem in Chrome
 
 Installer
   * Moved javascript compress code to make it available in omd_install script

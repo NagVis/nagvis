@@ -221,9 +221,7 @@ var NagVisStatefulObject = NagVisObject.extend({
 
         // Parse label when configured
         if(this.conf.label_show && this.conf.label_show == '1') {
-            var oLabel = this.parseLabel();
-            oContainerDiv.appendChild(oLabel);
-            oLabel = null;
+            this.parseLabel(oContainerDiv);
         }
 
         // Append child to map and save reference in parsedObject
@@ -881,13 +879,15 @@ var NagVisStatefulObject = NagVisObject.extend({
      * @return	String		HTML code of the label
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-    parseLabel: function () {
+    parseLabel: function (oContainer) {
         var coords = this.getLabelPos();
-        return drawNagVisTextbox(this.conf.object_id + '-label', 'object_label',
-                                 this.conf.label_background, this.conf.label_border,
-                                 coords[0], coords[1], this.conf.z,
-                                 this.conf.label_width, '', this.replaceLabelTextDynamicMacros(),
-                                 this.conf.label_style);
+        drawNagVisTextbox(
+            oContainer, this.conf.object_id + '-label', 'object_label',
+            this.conf.label_background, this.conf.label_border,
+            coords[0], coords[1], this.conf.z,
+            this.conf.label_width, '', this.replaceLabelTextDynamicMacros(),
+            this.conf.label_style
+        );
     },
 
     unlockLabel: function () {

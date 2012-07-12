@@ -151,16 +151,12 @@ function drawLabel(objectId, num, lineType, lx, ly, z, perfdataA, perfdataB, yOf
 
     if(lineType == '13') {
         if(oLinkContainer)
-            oLinkContainer.appendChild(drawNagVisTextbox(objectId+'-link'+num, 'box', '#ffffff', '#000000', (lx-labelShift), parseInt(ly - labelHeight / 2), z, 'auto', 'auto', '<b>' + perfdataA + '</b>'));
+            drawNagVisTextbox(oLinkContainer, objectId+'-link'+num, 'box', '#ffffff', '#000000', (lx-labelShift), parseInt(ly - labelHeight / 2), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
+
     } else if(lineType == '14') {
-        var label = drawNagVisTextbox(objectId+'-link'+num, 'box', '#ffffff', '#000000', (lx-labelShift), parseInt(ly - labelHeight - yOffset), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
-        if(oLinkContainer)
-            oLinkContainer.appendChild(label);
+        drawNagVisTextbox(oLinkContainer, objectId+'-link'+num, 'box', '#ffffff', '#000000', (lx-labelShift), parseInt(ly - labelHeight - yOffset), z, 'auto', 'auto', '<b>' + perfdataA + '</b>');
         labelShift = getLabelShift(perfdataB);
-        label = drawNagVisTextbox(objectId+'-link'+(num+1), 'box', '#ffffff', '#000000', (lx-labelShift), parseInt(ly + yOffset), z, 'auto', 'auto', '<b>' + perfdataB + '</b>');
-        if(oLinkContainer)
-            oLinkContainer.appendChild(label);
-        label = null;
+        drawNagVisTextbox(oLinkContainer, objectId+'-link'+(num+1), 'box', '#ffffff', '#000000', (lx-labelShift), parseInt(ly + yOffset), z, 'auto', 'auto', '<b>' + perfdataB + '</b>');
     }
 
     oLinkContainer = null;

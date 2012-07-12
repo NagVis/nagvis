@@ -967,7 +967,7 @@ function hideStatusMessage() {
  * @return  Object  Returns the div object of the textbox
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
-function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, text, customStyle) {
+function drawNagVisTextbox(oContainer, id, className, bgColor, borderColor, x, y, z, w, h, text, customStyle) {
     var initRendering = false;
     var oLabelDiv = document.getElementById(id);
     if(!oLabelDiv) {
@@ -1046,6 +1046,7 @@ function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, t
     oLabelSpan.innerHTML = text;
 
     oLabelDiv.appendChild(oLabelSpan);
+    oContainer.appendChild(oLabelDiv);
 
     // Take zoom factor into account
     if(initRendering) {
@@ -1065,7 +1066,7 @@ function drawNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, t
     }
 
     oLabelSpan = null;
-    return oLabelDiv;
+    oLabelDiv = null;
 }
 
 /**

@@ -48,7 +48,7 @@ var NagVisTextbox = NagVisStatelessObject.extend({
         // Create container div
         oContainerDiv = document.createElement('div');
         oContainerDiv.setAttribute('id', this.conf.object_id);
-        oContainerDiv.appendChild(this.parseTextbox());
+        this.parseTextbox(oContainerDiv);
 
         // When this is an update, remove the object first
         this.remove();
@@ -81,8 +81,9 @@ var NagVisTextbox = NagVisStatelessObject.extend({
      * @return	String	String with HTML Code
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-    parseTextbox: function () {
-        return drawNagVisTextbox(
+    parseTextbox: function (oContainer) {
+        drawNagVisTextbox(
+            oContainer,
             this.conf.object_id+'-label', 'box',
             this.conf.background_color, this.conf.border_color,
             this.parseCoord(this.conf.x, 'x'), this.parseCoord(this.conf.y, 'y'), this.conf.z, this.conf.w,
