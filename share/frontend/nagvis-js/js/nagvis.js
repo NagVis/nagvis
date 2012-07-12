@@ -1218,10 +1218,10 @@ function getEffectiveStyle(e, attr) {
         return document.defaultView.getComputedStyle(e, null).getPropertyValue(attr);
     } else if(e.currentStyle){
         // IE
-        var cssR = cssR.replace(/\-(\w)/g, function (strMatch, p1){
+        var ie_attr = attr.replace(/\-(\w)/g, function (strMatch, p1){
             return p1.toUpperCase();
         });
-        var f = e.currentStyle[cssR];
+        var f = e.currentStyle[ie_attr];
         if(f.length > 0) {
             return f;
         }
