@@ -68,7 +68,7 @@ class CoreModMultisite extends CoreModule {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function getMaps() {
-        global $AUTHORISATION;
+        global $_BACKEND, $AUTHORISATION;
         $aObjs = Array();
         foreach($this->CORE->getAvailableMaps() AS $object_id => $mapName) {
             if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName))

@@ -8,6 +8,7 @@ Core
   * Bugfix: Fixed re-rendering of geomaps after map source changes
   * Bugfix: Fixed re-fetching of background image after changed geomap source file
   * Bugfix: Geomap allows placing only one host on the geomap now (Added geomap_border option)
+  * Bugfix: Fixed PHP error in multisite snapin code
 
 Frontend
   * Added new map config option (global section) event_on_load to raise frontend events
