@@ -56,7 +56,6 @@ class WuiViewEditMainCfg {
      *
      * @return	Array Html
      * @author 	Lars Michelsen <lars@vertical-visions.de>
-     * FIXME: Recode to have all the HTML code in the template
      */
     function getFields() {
         global $CORE;
@@ -123,7 +122,9 @@ class WuiViewEditMainCfg {
                             $ret .= '<td class="tdfield"></td>';
                         } else {
                             $ret .= '<td class="tdfield">';
-                            $ret .= "<img style=\"cursor:help\" src=\"./images/help_icon.png\" onclick=\"javascript:alert('".l($propname)." (".l('defaultValue').": ".$arr[$propname]['default'].")')\" />";
+                            $default_str = is_array($arr[$propname]['default']) ? implode(',', $arr[$propname]['default']) : $arr[$propname]['default'];
+                            $ret .= "<img style=\"cursor:help\" src=\"./images/help_icon.png\" "
+                                   ."onclick=\"javascript:alert('".l($propname)." (".l('defaultValue').": ".$default_str.")')\" />";
                             $ret .= '</td>';
                         }
 
@@ -142,14 +143,6 @@ class WuiViewEditMainCfg {
                                     break;
                                     case 'headertemplate':
                                         $arrOpts = $CORE->getAvailableHeaderTemplates();
-                                    break;
-                                    case 'autoupdatefreq':
-                                        $arrOpts = Array(Array('value'=>'0','label'=>l('disabled')),
-                                                         Array('value'=>'2','label'=>'2'),
-                                                         Array('value'=>'5','label'=>'5'),
-                                                         Array('value'=>'10','label'=>'10'),
-                                                         Array('value'=>'25','label'=>'25'),
-                                                         Array('value'=>'50','label'=>'50'));
                                     break;
                                 }
 
