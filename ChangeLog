@@ -18,6 +18,8 @@ Frontend
   * Added rotations to sidebar
   * Info page shows json_encode/json_decode capability of used PHP
   * Host/Service problems can now be acknowledged from host/service context menus
+    Options dialog_ack_sticky, dialog_ack_notify, dialog_ack_persist control
+    the preselected checkboxes in this dialog
   * Bugfix: When releasing relative coordinates the parent object is not highlighted anymore
   * Bugfix: Fixed bug which suppressed the hover menu on overview page in some cases
   * Bugfix: Fixed some IE css warning message

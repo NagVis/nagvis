@@ -77,11 +77,34 @@ class GlobalMainCfg {
 		    'must'     => 1,
                     'editable' => 1,
                     'default'  => 10,
-                    'match'    => MATCH_INTEGER),
-                'dateformat' => Array('must' => 1,
+                    'match'    => MATCH_INTEGER
+                ),
+                'dateformat' => Array(
+                    'must'     => 1,
                     'editable' => 1,
-                    'default' => 'Y-m-d H:i:s',
-                    'match' => MATCH_STRING),
+                    'default'  => 'Y-m-d H:i:s',
+                    'match'    => MATCH_STRING
+                ),
+
+                'dialog_ack_sticky' => Array(
+                    'must'     => 1,
+                    'editable' => 1,
+                    'default'  => 1,
+                    'match'    => MATCH_BOOLEAN
+                ),
+                'dialog_ack_notify' => Array(
+                    'must'     => 1,
+                    'editable' => 1,
+                    'default'  => 1,
+                    'match'    => MATCH_BOOLEAN
+                ),
+                'dialog_ack_persist' => Array(
+                    'must'     => 1,
+                    'editable' => 1,
+                    'default'  => 0,
+                    'match'    => MATCH_BOOLEAN
+                ),
+
                 'displayheader' => Array('must' => 1,
                     'editable' => 1,
                     'deprecated' => 1,
@@ -1457,7 +1480,7 @@ class GlobalMainCfg {
                     foreach($arrValidConfig AS $key => &$val) {
                         if((isset($val['must']) && $val['must'] == '1')) {
                             // value is "must"
-                            if($this->getValue($type,$key) == '') {
+                            if($this->getValue($type,$key) === null) {
                                 // a "must" value is missing or empty
                                 throw new NagVisException(l('The needed attribute [ATTRIBUTE] is missing in section [TYPE] in main configuration file. Please take a look at the documentation.',
                                                             Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
@@ -1672,13 +1695,13 @@ class GlobalMainCfg {
                 if(isset($this->config[$sec]) && is_array($this->config[$sec])) {
                     return $this->validConfig['rotation'][$var]['default'];
                 } else {
-                    return FALSE;
+                    return null;
                 }
             } else {
                 return $this->validConfig[$sec][$var]['default'];
             }
         } else {
-            return FALSE;
+            return null;
         }
     }
 

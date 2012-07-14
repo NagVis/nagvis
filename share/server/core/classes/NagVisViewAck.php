@@ -59,9 +59,9 @@ class NagVisViewAck {
         $s .= $this->hidden('map', $attrs['map']);
         $s .= $this->hidden('object_id', $attrs['object_id']);
         $s .= $this->input(l('Comment'), 'comment');
-        $s .= $this->checkbox(l('Sticky'),            'sticky', true);
-        $s .= $this->checkbox(l('Send notification'), 'notify', true);
-        $s .= $this->checkbox(l('Persist comment'),   'persist');
+        $s .= $this->checkbox(l('Sticky'),            'sticky',  cfg('global', 'dialog_ack_sticky'));
+        $s .= $this->checkbox(l('Send notification'), 'notify',  cfg('global', 'dialog_ack_notify'));
+        $s .= $this->checkbox(l('Persist comment'),   'persist', cfg('global', 'dialog_ack_persist'));
         $s .= $this->submit(l('Acknowledge'));
         $s .= $this->form_end();
 
