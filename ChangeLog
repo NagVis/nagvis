@@ -2,6 +2,9 @@
 Core
   * Allowing empty lines in main configuration sections now
   * Set default http_timeout value to 10
+  * Introduced different icons for different states in downtime/ack state
+    (All iconsets need to be reworked - take a look at the docs for a list of
+     needed icons if you use custom iconsets)
   * Bugfix: Suppressing debug messages in non debug mode
   * Bugfix: Better catching of exceptions on nested maps
   * Bugfix: Map configs can be edited using the GUI even in case of source errors

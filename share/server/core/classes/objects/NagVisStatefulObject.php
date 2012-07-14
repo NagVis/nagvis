@@ -651,20 +651,22 @@ class NagVisStatefulObject extends NagVisObject {
                 case 'down':
                 case 'critical':
                 case 'warning':
-                    $sPre = '';
-                    if($stateLow == 'critical' || $stateLow == 'warning' || $stateLow == 'unknown')
-                        $sPre = 's';
-
                     if($this->getSummaryAcknowledgement() == 1) {
-                        $icon = $this->iconset.'_'.$sPre.'ack.'.$fileType;
+                        $icon = $this->iconset.'_'.$stateLow.'_ack.'.$fileType;
                     } elseif($this->getSummaryInDowntime() == 1) {
-                        $icon = $this->iconset.'_'.$sPre.'downtime.'.$fileType;
+                        $icon = $this->iconset.'_'.$stateLow.'_dt.'.$fileType;
                     } else {
                         $icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
                     }
                 break;
                 case 'up':
                 case 'ok':
+                    if($this->getSummaryInDowntime() == 1) {
+                        $icon = $this->iconset.'_'.$stateLow.'_dt.'.$fileType;
+                    } else {
+                        $icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
+                    }
+                break;
                 case 'unchecked':
                 case 'pending':
                     $icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
