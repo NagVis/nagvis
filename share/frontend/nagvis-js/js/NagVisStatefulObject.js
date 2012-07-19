@@ -219,19 +219,20 @@ var NagVisStatefulObject = NagVisObject.extend({
             break;
         }
 
-        // Parse label when configured
-        if(this.conf.label_show && this.conf.label_show == '1') {
-            this.parseLabel(oContainerDiv);
-        }
-
         // Append child to map and save reference in parsedObject
         var oMap = doc.getElementById('map');
         if(oMap) {
             this.parsedObject = oMap.appendChild(oContainerDiv);
             oMap = null;
         }
-        oContainerDiv = null;
         doc = null;
+
+        // Parse label when configured
+        if(this.conf.label_show && this.conf.label_show == '1') {
+            this.parseLabel(oContainerDiv);
+        }
+
+        oContainerDiv = null;
 
         // Now really draw the line when this is one
         if(this.conf.view_type && this.conf.view_type == 'line')
