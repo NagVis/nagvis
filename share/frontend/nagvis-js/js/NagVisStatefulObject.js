@@ -970,5 +970,5 @@ var NagVisStatefulObject = NagVisObject.extend({
         sColor      = null;
         oObjIconDiv = null;
         oObjIcon    = null;
-    },
+    }
 });
