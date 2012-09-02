@@ -2,6 +2,7 @@
 Core
   * Bugfix: Geomaps use real generated object_ids instead of hostnames for transactions
     (prevents problems with spaces in hostnames and so on)
+  * Added new weathermap line type which shows only the used bandwidth in labels
 
 1.7b3
 Core

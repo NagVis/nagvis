@@ -80,7 +80,7 @@ define('MATCH_OBJECT_TYPES', '/^(host|service|hostgroup|servicegroup|map)$/');
 define('MATCH_AUTOMAP_RENDER_MODE', '/^(directed|undirected|radial|circular|undirected2|undirected3)?$/');
 define('MATCH_AUTOMAP_RANKDIR', '/^(TB|LR|BT|RL)?$/');
 define('MATCH_AUTOMAP_OVERLAP', '/^(true|false|scale|scalexy|ortho|orthoxy|orthoyx|compress|ipsep|vpsc)?$/');
-define('MATCH_LINE_TYPE', '/^(10|11|12|13|14)?$/');
+define('MATCH_LINE_TYPE', '/^(10|11|12|13|14|15)?$/');
 define('MATCH_LINE_ARROW', '/^(none|forward|back|both)?$/');
 define('MATCH_USER_NAME', '/^[0-9A-Za-z_\-\.\@\s]+$/');
 define('MATCH_ROLE_NAME', '/^[0-9A-Za-z_\-\.\@\s]+$/');
