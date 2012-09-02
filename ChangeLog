@@ -4,6 +4,9 @@ Core
     (prevents problems with spaces in hostnames and so on)
   * Added new weathermap line type which shows only the used bandwidth in labels
 
+Frontend
+  * Bugfix: Fixed hover menu positioning in scrolled maps
+
 1.7b3
 Core
   * Allowing empty lines in main configuration sections now
