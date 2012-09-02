@@ -147,7 +147,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
             'type'      => 'host',
             'host_name' => $loc['name'],
             'iconset'   => $iconset,
-            'object_id' => $loc['name'],
+            'object_id' => $MAPCFG->genObjId($loc['name']),
             'alias'     => $loc['alias'],
             'lat'       => $loc['lat'],
             'long'      => $loc['long'],
