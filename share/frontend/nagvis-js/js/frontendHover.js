@@ -43,7 +43,6 @@ function hoverOpen() {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function hoverHide(id) {
-    return;
     // Loop all open hover menus
     while(_openHoverMenus.length > 0) {
         _openHoverMenus[0].style.display = 'none';
