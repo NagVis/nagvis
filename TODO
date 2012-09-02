@@ -15,6 +15,11 @@ Offene Punkte:
     - Alte zu neuen Automap Parametern
     - Automap Migration
 
+- Rotationen: Externe Seiten alternativ in iframe öffnen (z.B. Check_MK Views)
+- Hover-Menu Positionen
+- Geomap: Spaces in Hostnamen ("i" does not match ...)
+-
+
 Nice2have:
   - Option zum persistieren der Optionen für einen selbst
 
