@@ -9,6 +9,9 @@ Core
 Frontend
   * Bugfix: Fixed hover menu positioning in scrolled maps
 
+Automap:
+  * Bugfix: Fixed automaps object_id persisting code
+
 1.7b3
 Core
   * Allowing empty lines in main configuration sections now

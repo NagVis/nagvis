@@ -185,20 +185,17 @@ function automap_load_params($MAPCFG) {
     return $params;
 }
 
-$automap_object_id_file = cfg('paths', 'var') . 'automap.hostids';
-$automap_object_ids = null;
-$automap_object_ids_changed = false;
-
 /**
  * Transforms a list of hostnames to object_ids using the object_id
  * translation file
  */
 function automap_hostnames_to_object_ids($names) {
+    global $automap_object_ids;
+
     $ids = array();
-    $map = automap_load_object_ids();
     foreach($names AS $name) {
-        if(isset($map[$name])) {
-            $ids[] = $map[$name];
+        if(isset($automap_object_ids[$name])) {
+            $ids[] = $automap_object_ids[$name];
         } else {
             echo 'DEBUG: Missing automap objid '.$name;
         }
@@ -223,11 +220,9 @@ function automap_load_object_ids() {
 /**
  * Saves the given hostname to object_id mapping table in the central file
  */
-function automap_store_object_ids($a) {
+function automap_store_object_ids() {
     global $automap_object_id_file, $automap_object_ids;
-    $automap_object_ids = $a;
-
-    return file_put_contents($automap_object_id_file, json_encode($a)) !== false;
+    return file_put_contents($automap_object_id_file, json_encode($automap_object_ids)) !== false;
 }
 
 function automap_obj_base($MAPCFG, &$params, &$saved_config, $obj_name) {
@@ -396,10 +391,7 @@ function automap_filter_by_group($obj, $params) {
     $_BACKEND->checkBackendFeature($params['backend_id'], 'getHostNamesInHostgroup', true);
     $hosts = $_BACKEND->getBackend($params['backend_id'])->getHostNamesInHostgroup($params['filter_group']);
 
-    //print_r($hosts);
     $allowed_ids = automap_hostnames_to_object_ids($hosts);
-    //print_r($allowed_ids);
-
     automap_filter_object_ids($allowed_ids, $obj);
 }
 
@@ -432,6 +424,13 @@ function automap_tree_to_map_config($MAPCFG, &$params, &$saved_config, &$map_con
 }
 
 function process_automap($MAPCFG, $map_name, &$map_config) {
+    global $automap_object_id_file, $automap_object_ids, $automap_object_ids_changed;
+
+    // Initialize global vars
+    $automap_object_id_file = cfg('paths', 'var') . 'automap.hostids';
+    $automap_object_ids = null;
+    $automap_object_ids_changed = false;
+
     // Load the automap config parameters
     $params = automap_load_params($MAPCFG);
 
@@ -444,6 +443,12 @@ function process_automap($MAPCFG, $map_name, &$map_config) {
 
     // Get the object trees
     $tree = automap_get_object_tree($MAPCFG, $params, $saved_config);
+
+    // Store the automap object_ids after processing the tree (all relevant object_ids)
+    // have been gathered now
+    if($automap_object_ids_changed) {
+        automap_store_object_ids();
+    }
 
     /**
      * Here we have all objects within the given layers in the tree - completely unfiltered!
