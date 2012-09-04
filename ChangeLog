@@ -1,4 +1,4 @@
-1.7b4
+1.7
 Core
   * Added new weathermap line type which shows only the used bandwidth in labels
   * Bugfix: Geomaps use real generated object_ids instead of hostnames for transactions
