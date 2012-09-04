@@ -17,6 +17,7 @@ Offene Punkte:
 
 - Rotationen: Externe Seiten alternativ in iframe öffnen (z.B. Check_MK Views)
 - Hover- und Contextmenü-Macros vereinheitlichen
+- Map global editing in frontend does not work for geomaps
 
 Nice2have:
   - Option zum persistieren der Optionen für einen selbst
