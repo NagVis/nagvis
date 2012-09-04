@@ -100,7 +100,11 @@ function hoverShow(x, y, id) {
     hoverMenu.style.display = 'none';
     hoverMenu.style.left = x + scrollLeft + hoverSpacer - getSidebarWidth() + 'px';
     hoverMenu.style.top = y + scrollTop + hoverSpacer - getHeaderHeight() + 'px';
-    hoverMenu.style.width = 'auto';
+    if(isIE) {
+        hoverMenu.style.width = '0px';
+    } else {
+        hoverMenu.style.width = 'auto';
+    }
     hoverMenu.style.display = '';
 
     // Set the width but leave some border at the screens edge
@@ -151,12 +155,12 @@ function hoverShow(x, y, id) {
         hoverMenu.style.width = pageWidth() - (2*hoverSpacer) + 'px';
     }
 
-    //var hoverTop = parseInt(hoverMenu.style.top.replace('px', ''));
-    //// Only move the menu to the top when the new top will not be
-    //// out of sight
-    //if(hoverTop + hoverMenu.clientHeight > pageHeight() && hoverTop - hoverMenu.clientHeight >= 0)
-    //    hoverMenu.style.top = hoverTop - hoverMenu.clientHeight - hoverSpacer + 'px';
-    //hoverTop = null;
+    var hoverTop = parseInt(hoverMenu.style.top.replace('px', ''));
+    // Only move the menu to the top when the new top will not be
+    // out of sight
+    if(hoverTop + hoverMenu.clientHeight > pageHeight() && hoverTop - hoverMenu.clientHeight >= 0)
+        hoverMenu.style.top = hoverTop - hoverMenu.clientHeight - hoverSpacer - 5 + 'px';
+    hoverTop = null;
 
     // Append to visible menus array
     _openHoverMenus.push(hoverMenu);
@@ -186,8 +190,10 @@ function hoverMenuInScreen(hoverMenu, hoverSpacer) {
     }
 
     // There is not enough spacing at the left viewport border
-    if(hoverLeft - hoverSpacer < 0)
+    if(hoverLeft - hoverSpacer < 0) {
+        // alert('not enough spacing at left viewport border');
         return false;
+    }
 
     scrollLeft = null;
     hoverLeft = null;

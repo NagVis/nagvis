@@ -8,6 +8,7 @@ Core
 
 Frontend
   * Bugfix: Fixed hover menu positioning in scrolled maps
+  * Bugfix: Fixed hover menu positioning in IE
 
 Automap:
   * Bugfix: Fixed automaps object_id persisting code
