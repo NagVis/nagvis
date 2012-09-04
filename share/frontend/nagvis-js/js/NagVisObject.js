@@ -265,6 +265,9 @@ var NagVisObject = Base.extend({
         if(!oViewProperties || !oViewProperties.permitted_edit)
             oSectionMacros.permitted_edit = '<!--\\sBEGIN\\spermitted_edit\\s-->.+?<!--\\sEND\\spermitted_edit\\s-->';
 
+        if(!oViewProperties || !oViewProperties.permitted_perform)
+            oSectionMacros.permitted_perform = '<!--\\sBEGIN\\spermitted_perform\\s-->.+?<!--\\sEND\\spermitted_perform\\s-->';
+
         if(usesSource('automap')) {
             oSectionMacros.not_automap = '<!--\\sBEGIN\\snot_automap\\s-->.+?<!--\\sEND\\snot_automap\\s-->';
 	    // Skip the root change link for the root host

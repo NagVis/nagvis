@@ -7,6 +7,7 @@ Core
   * Bugfix: Geomap: Fixed validation problem when editin map global options
 
 Frontend
+  * Bugfix: Not showing "acknowledge" link when not permitted to perform this action
   * Bugfix: Fixed hover menu positioning in scrolled maps
   * Bugfix: Fixed hover menu positioning in IE
 

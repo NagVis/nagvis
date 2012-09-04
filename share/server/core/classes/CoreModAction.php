@@ -30,6 +30,8 @@ class CoreModAction extends CoreModule {
     private $MAPCFG = null;
 
     public function __construct(GlobalCore $CORE) {
+        $this->sName = 'Action';
+
         // Register valid actions
         $this->aActions = Array(
             'acknowledge'       => 'perform',

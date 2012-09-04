@@ -26,13 +26,17 @@
     <li class="spacer"></li>
     <li><a href="[html_cgi]/cmd.cgi?cmd_typ=55&host=[name]" target="_blank">[lang_schedule_downtime]</a></li>
     <li><a href="[html_cgi]/cmd.cgi?cmd_typ=96&host=[name]&force_check" target="_blank">[lang_reschedule_next_check]</a></li>
+    <!-- BEGIN permitted_perform -->
     <li><a href="#" onClick="showAckDialog('[map_name]', '[obj_id]');contextHide();return false">[lang_ack]</a></li>
+    <!-- END permitted_perform -->
     <!-- END host -->
 
     <!-- BEGIN service -->
     <li class="spacer"></li>
     <li><a href="[html_cgi]/cmd.cgi?cmd_typ=56&host=[name]&service=[service_description]" target="_blank">[lang_schedule_downtime]</a></li>
     <li><a href="[html_cgi]/cmd.cgi?cmd_typ=7&host=[name]&service=[service_description]&force_check" target="_blank">[lang_reschedule_next_check]</a></li>
-    <li><a href="#" onClick="showAckDialog('[map_name]', '[obj_id]');contextHide();return false">[lang_ack]</a></li>
+    <!-- BEGIN permitted_perform -->
+    <li><a href="javascript:void(0)" onClick="showAckDialog('[map_name]', '[obj_id]');contextHide();return false">[lang_ack]</a></li>
+    <!-- END permitted_perform -->
     <!-- END service -->
 </ul>
