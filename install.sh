@@ -925,7 +925,7 @@ if [ $# -gt 0 ]; then
                 NAGVIS_BACKEND=$OPTARG
             ;;
             o)
-                IGNORE_DEMO="demo*cfg demo*png demo*ini.php"
+                IGNORE_DEMO="demo*cfg demo*png demo*ini.php demo-*.csv"
             ;;
             q)
                 INSTALLER_QUIET=1
