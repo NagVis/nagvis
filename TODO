@@ -1,8 +1,6 @@
 This is a small file for storing quick thoughts about new features and needed changes:
 ===============================================================================
 
-- Add getHostNamesInHostgroup to demo Backend
-
 Offene Punkte:
   - Automap zu source umbauen
     - filter_by_state neu implementieren (Und evtl. auch für alle Ansichten)
@@ -30,8 +28,9 @@ Relative Koordinaten:
 
 - Geomap:
   - CSV Quelle und geomap aufteilen
+  - Andere Objekte in Geomaps erlauben (Dazu die Felder type, name1, name2) einführen
 
-- User Defined Coords:
+- Automap: User Defined Coords:
   - Speichern testen (Nur nötigste Attribute schreiben)
   - Werden die korrekt übernommen?
   - margin abziehen?
