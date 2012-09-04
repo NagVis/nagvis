@@ -4,6 +4,7 @@ Core
   * Bugfix: Geomaps use real generated object_ids instead of hostnames for transactions
     (prevents problems with spaces in hostnames and so on)
   * Bugfix: Allowing percentages above 999 in weathermap_line_colors option
+  * Bugfix: Geomap: Fixed validation problem when editin map global options
 
 Frontend
   * Bugfix: Fixed hover menu positioning in scrolled maps

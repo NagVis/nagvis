@@ -138,7 +138,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     
     // Adapt the global section
     $map_config[0] = $saved_config[0];
-    $map_config[0]['map_image'] = $image_name.'?'.time();
+    $map_config[0]['map_image'] = $image_name.'?'.time().'.png';
     $map_config[0]['iconset']   = $iconset;
 
     // Now add the objects to the map

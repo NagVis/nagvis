@@ -15,12 +15,7 @@ Offene Punkte:
     - Alte zu neuen Automap Parametern
     - Automap Migration
 
-- Rotationen: Externe Seiten alternativ in iframe öffnen (z.B. Check_MK Views)
-- Hover- und Contextmenü-Macros vereinheitlichen
-- Map global editing in frontend does not work for geomaps
-
-Nice2have:
-  - Option zum persistieren der Optionen für einen selbst
+-------------------------------------------------------------------------------
 
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
@@ -30,7 +25,8 @@ Relative Koordinaten:
 - Sidebar Folder auf/zu klappbar
 - In Sidebar/Dropdown die aktuelle Map highlighten
 
--------------------------------------------------------------------------------
+- Hover- und Contextmenü-Macros vereinheitlichen
+- Rotationen: Externe Seiten alternativ in iframe öffnen (z.B. Check_MK Views)
 
 - Geomap:
   - CSV Quelle und geomap aufteilen
