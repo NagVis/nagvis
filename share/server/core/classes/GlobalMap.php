@@ -81,9 +81,7 @@ class GlobalMap {
                         $arrRet[] = $OBJ->parseJson();
                     }
                 break;
-                case 'NagVisShape':
-                case 'NagVisLine':
-                case 'NagVisTextbox':
+                default: // Shape, Line, Textbox and others...
                     if($type == 'complete')
                         $arrRet[] = $OBJ->parseJson();
                 break;

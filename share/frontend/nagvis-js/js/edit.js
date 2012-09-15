@@ -425,7 +425,7 @@ function cloneObject(e, objId) {
     var obj = getMapObjByDomObjId(objId);
 
     var numClicks = 1;
-    if(obj.conf.view_type == 'textbox' || obj.conf.view_type == 'line' || obj.type == 'line')
+    if(obj.conf.type == 'textbox'|| obj.conf.type == 'container' || obj.conf.view_type == 'line' || obj.type == 'line')
         numClicks = 2;
 
     return addObject(e, obj.conf.type, obj.conf.view_type, numClicks, 'clone');
@@ -507,7 +507,7 @@ function addClick(e) {
     pos = null;
 
     // Draw a line to illustrate the progress of drawing the current line
-    if((addViewType === 'line' || addObjType === 'textbox' || addObjType === 'line')
+    if((addViewType === 'line' || addObjType === 'textbox' || addObjType === 'container' || addObjType === 'line')
        && addShape === null) {
         addShape = new jsGraphics('map');
         addShape.cnv.setAttribute('id', 'drawing');
@@ -528,7 +528,7 @@ function addClick(e) {
     if(document.body)
         document.body.style.cursor = 'default';
 
-    if(addObjType == 'textbox') {
+    if(addObjType == 'textbox' || addObjType == 'container') {
         var w = addX.pop();
         var h = addY.pop();
     }
@@ -541,13 +541,14 @@ function addClick(e) {
                + '&x=' + addX.join(',')
                + '&y=' + addY.join(',');
 
-    if(addObjType != 'shape' && addViewType != 'icon' && addViewType != '')
+    if(addObjType != 'textbox' && addObjType != 'container' 
+       && addObjType != 'shape' && addViewType != 'icon' && addViewType != '')
         sUrl += '&view_type=' + addViewType;
 
     if(addAction == 'clone' && cloneId !== null)
         sUrl += '&clone_id=' + cloneId;
 
-    if(addObjType == 'textbox')
+    if(addObjType == 'textbox' || addObjType == 'container')
         sUrl += '&w=' + (w - addX[0]) + '&h=' + (h - addY[0]);
 
     if(sUrl === '')

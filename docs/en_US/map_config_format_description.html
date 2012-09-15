@@ -24,6 +24,7 @@
         <li><a href="#shape">Shape</a></li>
         <li><a href="#line">Line</a></li>
         <li><a href="#template">Template</a></li>
+        <li><a href="#container">Container</a> (<font color="#ff0000">New in 1.7.1</font>)</li>
         </ul>
         
         <h2>Description of the object types</h2>
@@ -1021,7 +1022,7 @@
         </table>
         
         <a name="textbox"></a><h3> Textbox </h3>
-        <p>Example with all possible options:</p>
+        <p>Example with major options:</p>
 <pre>define textbox {
   text="This is an informational text which can be placed anywhere on the map, HTML can also be used for formatting purposes"
  x=200
@@ -1233,6 +1234,91 @@
         </tr>
         <tr>
         <td> ... </td><td> </td><td> All values which are available in the objects which inherit this template </td>
+        </tr>
+        </table>
+
+
+        <a name="container"></a><h3>Container (<font color="#ff0000">New in 1.7.1</font>)</h3>
+        <p>Example with major options:</p>
+<pre>define container {
+  url="std_hello.php"
+  x=200
+  y=100
+}</pre>
+        <table style="width:100%">
+        <tr>
+        <th width="200">Option</th><th width="150">Default</th><th>Description</th>
+        </tr>
+        <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Unique identifier of the object on the current map. Each object
+              on the map needs to have an object_id. The object_id is built of
+              alphanumeric signs of any length. When no object_id is given NagVis
+              will generate one for the object.</td>
+        </tr>
+        <tr>
+            <td><b>url</b></td>
+            <td></td>
+            <td><p>The URL to load the contents of the container from. This can be given as simple filename,
+                in this case script is loaded from the <code>nagvis/userfiles/script</code> directory. As
+                alternative it is possible to configure absolute paths like e.g. /path/to/my/script.php or
+                full URLs like e.g. http://127.0.0.1/my-script.php.</p>
+                <p>It is possible to add a set of parameters to the URL, it is up to the script to handle them.</p>
+            </td>
+        </tr>
+        <tr>
+            <td><b>x</b></td>
+            <td></td>
+            <td>X axis coordinate. Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+            <td><b>y</b></td>
+            <td></td>
+            <td>Y axis coordinate(s).  Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+            <td>w</td><td>auto</td><td>Width of the textbox in px (pixels). Set to "auto" for auto scaling. </td>
+        </tr>
+        <tr>
+            <td>h</td><td>auto</td><td>Height of the textbox in px (pixels). Set to "auto" for auto scaling.</td>
+        </tr>
+        <tr>
+            <td>view_type</td>
+            <td>inline</td>
+            <td>This option defines the way to render the. Possible values are: "inline" an "iframe". Inline means the
+                fetched contents are directly put in the a container object (<code>innerHTML</code>). When setting the
+                value to iframe an iframe object is created to render the given URL in this iframe.</td>
+        </tr>
+        <tr>
+            <td>enable_refresh</td>
+            <td>0</td>
+            <td>Enabling this option activates regular updates for this object while being displayed in the frontend.
+                This is only needed for contents which might change during showing the map.</td>
+        </tr>
+        <tr>
+            <td> background_color </td><td> #C0C0C0 </td><td> Background colour of the textbox. The colour should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        </tr>
+        <tr>
+            <td> border_color </td><td> #000000 </td><td> Background colour of the textbox. The colour should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        </tr>
+        <tr>
+            <td>style</td>
+            <td></td>
+            <td>Custom styling for the text. To be given like HTML style attribute contents. E.g. 
+                <code>font-family:sans;font-weight:bold;</code>. It is applied to a "span" element, the
+                container element which gets the contents of the requested url added.</td>
+        </tr>
+        <tr>
+            <td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">Template</a> </td>
+        </tr>
+        <tr>
+            <td>z</td>
+            <td>5</td>
+            <td>The z option defines the order of icons which are stacked on top of each 
+                other. The highest value will be displayed on top. The background image 
+                has the value of 0. So valid values should be above or equal 1. 
+                <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.
+            </td>
         </tr>
         </table>
 

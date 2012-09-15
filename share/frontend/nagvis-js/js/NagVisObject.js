@@ -198,7 +198,7 @@ var NagVisObject = Base.extend({
         if(this.needsContextMenu()) {
             if(this.conf.view_type && this.conf.view_type == 'line') {
                 this.getContextMenu(this.conf.object_id+'-linelink');
-            } else if(this.conf.type == 'textbox') {
+            } else if(this.conf.type == 'textbox' || this.conf.type == 'container') {
                 this.getContextMenu(this.conf.object_id);
             } else {
                 this.getContextMenu(this.conf.object_id+'-icon');
@@ -253,7 +253,8 @@ var NagVisObject = Base.extend({
         else
             oSectionMacros.host = '<!--\\sBEGIN\\shost\\s-->.+?<!--\\sEND\\shost\\s-->';
 
-        if(this.conf.type === 'line' || this.conf.type == 'shape' || this.conf.type == 'textbox')
+        if(this.conf.type === 'line' || this.conf.type == 'shape'
+           || this.conf.type == 'textbox' || this.conf.type === 'container')
             oSectionMacros.stateful = '<!--\\sBEGIN\\sstateful\\s-->.+?<!--\\sEND\\sstateful\\s-->';
 
         // Remove unlocked section for locked objects
@@ -878,7 +879,7 @@ var NagVisObject = Base.extend({
     reposition: function() {
         if(this.conf.view_type === 'line' || this.conf.type === 'line')
             this.drawLine();
-        else if(this.conf.type === 'textbox')
+        else if(this.conf.type === 'textbox' || this.conf.type === 'container')
             this.moveBox();
         else
             this.moveIcon();
@@ -920,7 +921,7 @@ var NagVisObject = Base.extend({
             this.parseLineControls();
         else if(this.conf.view_type === 'icon' || this.conf.view_type === 'gadget')
             this.parseIconControls();
-        else if(this.conf.type === 'textbox')
+        else if(this.conf.type === 'textbox' || this.conf.type === 'container')
             this.parseBoxControls();
         else if(this.conf.type === 'shape')
             this.parseShapeControls();
@@ -1082,7 +1083,7 @@ var NagVisObject = Base.extend({
         this.objControls = [];
         oControls = null;
 
-        if(this.conf.type === 'textbox') {
+        if(this.conf.type === 'textbox' || this.conf.type === 'container') {
             this.removeBoxControls();
             makeUndragable([this.conf.object_id+'-label']);
         } else {

@@ -61,10 +61,10 @@ function replaceHoverTemplateChildMacros(oObj, sTemplateCode) {
             } else {
                 // Create an end line which shows the number of hidden child items
                 var oMember = { 'conf': { 'type': 'host',
-                                                                    'name': '',
-                                                                    'summary_state': '',
-                                                                    'summary_output': (oObj.conf.num_members - oObj.conf.hover_childs_limit)+' more items...',
-                                                                    '<!--\\sBEGIN\\sservicegroup_child\\s-->.+?<!--\\sEND\\sservicegroup_child\\s-->': ''}};
+                                           'name': '',
+                                           'summary_state': '',
+                                           'summary_output': (oObj.conf.num_members - oObj.conf.hover_childs_limit)+' more items...',
+                                           '<!--\\sBEGIN\\sservicegroup_child\\s-->.+?<!--\\sEND\\sservicegroup_child\\s-->': ''}};
 
                 childsHtmlCode += replaceHoverTemplateMacrosChild(oMember, rowHtmlCode);
             }

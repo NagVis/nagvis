@@ -69,6 +69,10 @@ function listContextTemplates($CORE) {
     return $CORE->getAvailableContextTemplates();
 }
 
+function listViewTypesContainer($CORE) {
+    return Array('inline', 'iframe');
+}
+
 function listViewTypesService($CORE) {
     return Array('icon', 'line', 'gadget');
 }
@@ -628,6 +632,11 @@ $mapConfigVars = Array(
         'default' => '',
         'match' => MATCH_STRING_URL_EMPTY,
     ),
+    'url_mandatory' => Array(
+        'must' => 1,
+        'default' => '',
+        'match' => MATCH_STRING_URL,
+    ),
     'use' => Array(
         'must'    => 0,
         'default' => array(),
@@ -826,6 +835,16 @@ $mapConfigVars = Array(
         'default'       => 'line',
         'match'         => MATCH_VIEW_TYPE,
         'field_type'    => 'hidden',
+    ),
+
+    // CONTAINER SPECIFIC OPTIONS
+
+    'view_type_container' => Array(
+        'must'          => 0,
+        'default'       => 'inline',
+        'match'         => MATCH_VIEW_TYPE_CONTAINER,
+        'field_type'    => 'dropdown',
+        'list'          => 'listViewTypesContainer',
     ),
 );
 
@@ -1179,6 +1198,29 @@ $mapConfigVarMap['template'] = Array(
     'type' => null,
     'name' => null,
     'object_id' => null,
+);
+
+$mapConfigVarMap['container'] = Array(
+    'type' => null,
+    'object_id' => null,
+
+    'url_mandatory' => 'url',
+    'view_type_container' => 'view_type',
+    'enable_refresh' => null,
+
+    'x' => null,
+    'y' => null,
+    'textbox_z' => 'z',
+    'w' => null,
+    'h' => null,
+
+    'background_color' => null,
+    'border_color' => null,
+    'context_menu' => null,
+    'context_template' => null,
+
+    'style' => null,
+    'use' => null,
 );
 
 ?>

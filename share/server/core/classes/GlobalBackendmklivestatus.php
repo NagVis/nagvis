@@ -406,6 +406,25 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     }
 
     /**
+     * PUBLIC query()
+     * This is a special method which is currently unused within NagVis.
+     * It has been added as interface to the std_lq.php script.
+     */
+    public function query($type, $query) {
+        switch($type) {
+            case 'column':
+                return $this->queryLivestatusSingleColumn($query);
+            break;
+            case 'row':
+                return $this->queryLivestatusSingleRow($query);
+            break;
+            default:
+                return $this->queryLivestatus($query);
+            break;
+        }
+    }
+
+    /**
      * PUBLIC getObjects()
      *
      * Queries the livestatus socket for a list of objects

@@ -84,6 +84,7 @@ cmp_js() {
     cmp NagVisShape.js
     cmp NagVisLine.js
     cmp NagVisTextbox.js
+    cmp NagVisContainer.js
     cmp NagVisRotation.js
     cmp ExtWzJsGraphics.js
     cmp ExtGenericResize.js

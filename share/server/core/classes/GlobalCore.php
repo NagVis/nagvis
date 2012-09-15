@@ -36,6 +36,12 @@ class GlobalCore {
     private static $instance = null;
     protected $iconsetTypeCache = Array();
 
+    public $statelessObjectTypes = Array(
+        'textbox'   => true,
+        'shape'     => true,
+        'line'      => true,
+        'container' => true,
+    );
 
     public $demoMaps = Array(
         'demo-germany',

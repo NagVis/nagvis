@@ -1,3 +1,12 @@
+1.7.1
+Core
+  * Added new object type "container" to render a textbox like object which
+    fetches its contents from a configured URL. Take a look at the docs for
+    details
+
+Frontend
+  * Bugfix: Cloning of textbox objects is now possible again
+
 1.7
 Core
   * Added new weathermap line type which shows only the used bandwidth in labels

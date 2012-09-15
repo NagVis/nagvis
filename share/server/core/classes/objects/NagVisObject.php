@@ -316,7 +316,7 @@ class NagVisObject {
         }
 
         // I want only "name" in js
-        if($this->type != 'shape' && $this->type != 'textbox' && $this->type != 'line') {
+        if(!isset($this->CORE->statelessObjectTypes[$this->type])) {
             $arr['name'] = $this->getName();
 
             if($this->type == 'service') {

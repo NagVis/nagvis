@@ -325,6 +325,7 @@ class NagVisHeaderMenu {
             'langMapEdit' => l('Edit Map'),
             'langMaps' => l('Maps'),
             'langTextbox' => l('textbox'),
+            'langContainer' => l('Container'),
             'langShape' => l('shape'),
             'langStateless' => l('Stateless'),
             'langSpecial' => l('special'),

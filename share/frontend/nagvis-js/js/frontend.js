@@ -209,6 +209,7 @@ function searchObjects(sMatch) {
         // Don't search shapes/textboxes/lines
         if(obj.conf.type != 'shape'
            && obj.conf.type != 'textbox'
+           && obj.conf.type != 'container'
              && obj.conf.type != 'line') {
             bMatch = false;
             var regex = new RegExp(sMatch, 'g');
@@ -278,13 +279,14 @@ function getObjectsToUpdate() {
 
     // Assign all object which need an update indexes to return Array
     for(var i in oMapObjects) {
-        if(oMapObjects[i].lastUpdate <= iNow - oWorkerProperties.worker_update_object_states)
-            // Do not update shapes where enable_refresh=0
-            if(oMapObjects[i].conf.type !== 'shape'
-               || (oMapObjects[i].conf.type === 'shape'
-                   && oMapObjects[i].conf.enable_refresh
-                   && oMapObjects[i].conf.enable_refresh == '1'))
+        if(oMapObjects[i].lastUpdate <= iNow - oWorkerProperties.worker_update_object_states) {
+            // Do not update objects where enable_refresh=0
+            if(oMapObjects[i].conf.type !== 'shape' && oMapObjects[i].conf.type !== 'container') {
                 arrReturn.push(i);
+            } else if(oMapObjects[i].conf.enable_refresh && oMapObjects[i].conf.enable_refresh == '1') {
+                arrReturn.push(i);
+            }
+        }
     }
 
     // Now spread the objects in the available timeslots
@@ -1081,6 +1083,9 @@ function setMapObjects(aMapObjectConf) {
             case 'textbox':
                 oObj = new NagVisTextbox(aMapObjectConf[i]);
             break;
+            case 'container':
+                oObj = new NagVisContainer(aMapObjectConf[i]);
+            break;
             case 'shape':
                 oObj = new NagVisShape(aMapObjectConf[i]);
             break;
@@ -1139,17 +1144,15 @@ function setMapObjects(aMapObjectConf) {
 }
 
 /**
- * updateShapes()
+ * reloadObjects()
  *
- * Bulk refreshes shapes (Only reparsing)
+ * Bulk reload, reparse shapes and containers
  *
  * @param   Array    Array of objects to reparse
- * @return  Boolean  Returns true when some state has changed
- * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function updateShapes(aShapes) {
-    for(var i = 0, len = aShapes.length; i < len; i++) {
-        oMapObjects[aShapes[i]].parse();
+function reloadObjects(aObjs) {
+    for(var i = 0, len = aObjs.length; i < len; i++) {
+        oMapObjects[aObjs[i]].parse();
     }
 }
 
@@ -1954,16 +1957,18 @@ function workerUpdate(iCount, sType, sIdentifier) {
                        false, handleUpdate, [ sType ]);
 
         if(sType === 'map') {
-            // Shapes which need to be updated need a special handling
-            var aShapesToUpdate = [];
+            // Stateless objects which shal be refreshed (enable_refresh=1) need a special
+            // handling as they are reloaded by being reparsed.
+            var aReload = [];
             for(var i = 0, len = arrObj.length; i < len; i++)
-                if(oMapObjects[arrObj[i]].conf.type === 'shape')
-                    aShapesToUpdate.push(arrObj[i]);
+                if(oMapObjects[arrObj[i]].conf.type === 'shape'
+                   || oMapObjects[arrObj[i]].conf.type === 'container')
+                    aReload.push(arrObj[i]);
 
-            // Update shapes when needed
-            if(aShapesToUpdate.length > 0)
-                updateShapes(aShapesToUpdate);
-            aShapesToUpdate = null;
+            // Update when needed
+            if(aReload.length > 0)
+                reloadObjects(aReload);
+            aReload = null;
         }
 
         // Need to re-raise repeated events?

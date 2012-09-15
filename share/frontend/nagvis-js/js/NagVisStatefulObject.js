@@ -69,6 +69,9 @@ var NagVisStatefulObject = NagVisObject.extend({
                     case 'textbox':
                         oObj = new NagVisTextbox(oMember);
                     break;
+                    case 'container':
+                        oObj = new NagVisContainer(oMember);
+                    break;
                     case 'shape':
                         oObj = new NagVisShape(oMember);
                     break;

@@ -1426,6 +1426,11 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
 
         LINE="Restoring custom gadgets..."
         restore "$USERFILES_DIR/gadgets/" "gadgets" "/gadgets_core.php /std_*.php"
+
+        if [ -d $NAGVIS_PATH_BACKUP/$USERFILES_DIR/scripts/ ]; then
+            LINE="Restoring custom scripts..."
+            restore "$USERFILES_DIR/scripts/" "scripts" "/std_*.php"
+        fi
         
         LINE="Restoring auth database file..."
         restore "$NAGVIS_AUTH_DB" "auth database file" ""
