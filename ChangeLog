@@ -2,7 +2,7 @@
 Core
   * Added new object type "container" to render a textbox like object which
     fetches its contents from a configured URL. Take a look at the docs for
-    details
+    details. Thanks to Tiri GmbH (www.tiri.li) for providing this feature.
 
 Frontend
   * Bugfix: Cloning of textbox objects is now possible again
