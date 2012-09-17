@@ -5,6 +5,7 @@ Core
     details. Thanks to Tiri GmbH (www.tiri.li) for providing this feature.
 
 Frontend
+  * Bugfix: Fixed javascript error in state change eventhandler on e.g. automaps
   * Bugfix: Cloning of textbox objects is now possible again
 
 1.7

@@ -580,7 +580,7 @@ var NagVisObject = Base.extend({
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     parseCoords: function(val, dir, addZoom) {
-        var l = val.split(',');
+        var l = val.toString().split(',');
 
         for(var i = 0, len = l.length; i < len; i++)
             l[i] = this.parseCoord(l[i], dir, addZoom);
