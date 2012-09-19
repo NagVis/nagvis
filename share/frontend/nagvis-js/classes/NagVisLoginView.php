@@ -63,6 +63,7 @@ class NagVisLoginView {
 
         $aData = Array(
             'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
+            'locales'           => json_encode(Array()),
             'pageTitle' => cfg('internal', 'title') . ' &rsaquo; Log In',
             'htmlBase' => cfg('paths', 'htmlbase'),
             'htmlJs' => cfg('paths', 'htmljs'),

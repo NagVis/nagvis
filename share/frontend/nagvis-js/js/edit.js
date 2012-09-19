@@ -560,8 +560,7 @@ function addClick(e) {
         document.getElementById('map').removeChild(addShape.cnv);
     }
 
-    // FIXME: Language string
-    showFrontendDialog(sUrl, 'Properties');
+    showFrontendDialog(sUrl, _('Create Object'));
     sUrl = '';
 
     addObjType  = null,

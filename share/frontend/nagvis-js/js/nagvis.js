@@ -41,7 +41,6 @@ var oMapSummaryObj;
 var regexCache = {};
 
 // Used for editing
-var lang = {};
 var validMapConfig = {};
 var validMainConfig = {};
 
@@ -1319,4 +1318,44 @@ function addZoomHandler(oImage) {
     });
 
     oImage = null;
+}
+
+/**
+ * Handle localized strings. The rendered HTML pages create a object
+ * named oLocales which holds the localization strings forwarded to
+ * the javascript frontend. This takes the native strings and cares
+ * about replacing vars.
+ *
+ * replace must be an array of pairs (2 item array) where the first
+ * item ist the key (without the "[" and "]") and the second ist the
+ * value to insert into the localized string.
+ */
+function _(s, replace) {
+    if(typeof s === 'undefined')
+        return '';
+
+    // Load localized version from PHP code (if available)
+    if(isset(oLocales[s])) {
+        s = oLocales[s];
+    } else {
+        eventlog(
+            "localize",
+            "warning",
+            "String is not localizable '" + s + "'"
+        );
+    }
+
+    // Replace HTML codes
+    s = s.replace(/<(\/|)(i|b)>/ig, '');
+    s = s.replace('&auml;', 'ä').replace('&uuml;', 'ü');
+    s = s.replace('&ouml;', 'ö').replace('&szlig;', '');
+
+    // optional replace of macros
+    if(typeof replace != "undefined") {
+        for(var i = 0; i < replace.length; i++) {
+            s = s.replace("["+replace[i][0]+"]", replace[i][1]);
+        }
+    }
+
+    return s;
 }

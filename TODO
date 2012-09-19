@@ -13,6 +13,8 @@ Offene Punkte:
     - Alte zu neuen Automap Parametern
     - Automap Migration
 
+- WUI: printLang() durch neuen _() Mechnismus ersetzen
+
 -------------------------------------------------------------------------------
 
 Relative Koordinaten:

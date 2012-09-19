@@ -58,6 +58,11 @@ class NagVisOverviewView {
             'fileAges'          => json_encode(Array(
                 'maincfg' => $this->CORE->getMainCfg()->getConfigFileAge(),
             )),
+            'locales'           => json_encode(Array(
+                // FIXME: Duplicated definitions in NagVisMapView.php and NagVisOverviewView.php
+                'more items...' => l('more items...'),
+                'Create Object' => l('Create Object'),
+            )),
         );
 
         // Build page based on the template file and the data array
