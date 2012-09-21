@@ -219,18 +219,18 @@ function searchObjects(sMatch) {
             // - name1
             // - name2
 
-        if(obj.conf.type.search(regex) !== -1)
+            if(obj.conf.type.search(regex) !== -1)
                 bMatch = true;
 
-  	  if(obj.conf.name.search(regex) !== -1)
+            if(obj.conf.name.search(regex) !== -1)
                 bMatch = true;
 
             // only search the service_description on service objects
-        if(obj.conf.type === 'service'
-               && obj.conf.service_description.search(regex) !== -1)
+            if(obj.conf.type === 'service'
+                   && obj.conf.service_description.search(regex) !== -1)
                 bMatch = true;
 
-  	  regex = null;
+            regex = null;
 
             // Found some match?
             if(bMatch === true)
@@ -1226,13 +1226,15 @@ function playSound(objectId, iNumTimes){
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function flashIcon(objectId, iDuration, iInterval){
-    oMapObjects[objectId].highlight(!oMapObjects[objectId].bIsFlashing);
+    if(isset(oMapObjects[objectId])) {
+        oMapObjects[objectId].highlight(!oMapObjects[objectId].bIsFlashing);
 
-    var iDurationNew = iDuration - iInterval;
+        var iDurationNew = iDuration - iInterval;
 
-    // Flash again until timer counted down and the border is hidden
-    if(iDurationNew > 0 || (iDurationNew <= 0 && oMapObjects[objectId].bIsFlashing === true))
-        setTimeout(function() { flashIcon(objectId, iDurationNew, iInterval); }, iInterval);
+        // Flash again until timer counted down and the border is hidden
+        if(iDurationNew > 0 || (iDurationNew <= 0 && oMapObjects[objectId].bIsFlashing === true))
+            setTimeout(function() { flashIcon(objectId, iDurationNew, iInterval); }, iInterval);
+    }
 }
 
 //--- Overview -----------------------------------------------------------------

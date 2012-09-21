@@ -8,6 +8,7 @@ Frontend
   * Localized some non localized strings like "more items..." in the hover menu
   * Bugfix: Fixed javascript error in state change eventhandler on e.g. automaps
   * Bugfix: Cloning of textbox objects is now possible again
+  * Bugfix: Don't try to flash deleted map objects during eventhandling
 
 1.7
 Core
