@@ -1,3 +1,10 @@
+1.7.2
+Core:
+  * Multisite auth module: Removed deprecated permission
+
+Frontend:
+  * Bugfix: Fixed broken rotation links on overview page
+
 1.7.1
 Core
   * Added new object type "container" to render a textbox like object which

@@ -51,7 +51,6 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
             array('Overview',  'view',               '*'),
             array('General',   'getContextTemplate', '*'),
             array('General',   'getHoverTemplate',   '*'),
-            array('General',   'getCfgFileAges',     '*'),
             array('User',      'setOption',          '*'),
             array('Multisite', 'getMaps',            '*'),
         );
