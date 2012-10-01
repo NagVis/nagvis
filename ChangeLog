@@ -4,6 +4,7 @@ Core:
 
 Frontend:
   * Bugfix: Fixed broken rotation links on overview page
+  * Bugfix: Zoom code: Catching not handleable font-size declarations
 
 1.7.1
 Core

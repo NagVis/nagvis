@@ -1059,8 +1059,17 @@ function drawNagVisTextbox(oContainer, id, className, bgColor, borderColor, x, y
                 "Unable to fetch font-size attribute for textbox"
             );
         } else {
-            var fontSize = parseInt(fontSize.replace('px', ''));
-            oLabelSpan.style.fontSize = addZoomFactor(fontSize) + 'px';
+            // Only take zoom into account if the fontSize is set in px
+            if(fontSize.indexOf('px') !== -1) {
+                var fontSize = parseInt(fontSize.replace('px', ''));
+                oLabelSpan.style.fontSize = addZoomFactor(fontSize) + 'px';
+            } else {
+                eventlog(
+                    "drawNagVisTextbox",
+                    "critical",
+                    "Zoom: Can not handle this font-size declaration (" + fontSize + ")"
+                );
+            }
         }
     }
 
