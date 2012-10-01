@@ -259,15 +259,15 @@ function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
 
     // Calculate the size of the object for later auto positioning
     $size = iconset_size($obj['iconset']);
-    $obj['.width']  = $size[0];
-    $obj['.height'] = $size[1];
+    $obj['.width']      = $size[0];
+    $obj['.height']     = $size[1];
 
-    $obj['type']      = 'host';
+    $obj['type']        = 'host';
     // Header menu has z-index 100, this object's label the below+1
-    $obj['z']         = 98;
-    $obj['host_name'] = $obj_name;
-    $obj['.parents']  = array();
-    $obj['.childs']   = array();
+    $obj['z']           = 98;
+    $obj['host_name']   = $obj_name;
+    $obj['.parents']    = array();
+    $obj['.childs']     = array();
 
     return $obj;
 }
@@ -338,6 +338,7 @@ function automap_get_object_tree($MAPCFG, $params, &$saved_config) {
     // backend supports this
     if(isset($params['parent_layers']) && $params['parent_layers'] != 0) {
         global $_BACKEND;
+        
         if($_BACKEND->checkBackendFeature($params['backend_id'], 'getDirectParentNamesByHostName')) {
             automap_fetch_tree('parents', $MAPCFG, $params, $saved_config, $root_name, $params['parent_layers'], $root_obj['.parents']);
         }
@@ -346,35 +347,51 @@ function automap_get_object_tree($MAPCFG, $params, &$saved_config) {
     return $tree;
 }
 
-function automap_filter_object_ids(&$allowed_ids, $obj) {
-    //foreach($obj['.childs'] AS $child) {
-    //    
-    //}
-    //$names = automap_object_ids_to_names($params['filter_by_ids']);
-    // FIXME: Recode
-    //$root_obj->filterChilds($names);
+// allowed_ids - contains an assoziative array of object_ids to keep in the tree where 
+//               the object_ids are the keys.
+// obj         - is the base object in the tree to use as start point for filtering.
+//               This is basically the root object of the automap.
+function automap_filter_tree($allowed_ids, &$obj, $directions = null) {
+    // Is the current object allowed to remain on the map on its own?
+    $remain = isset($allowed_ids[$obj['object_id']]);
 
-    // Filter the parent object tree too when enabled
-    if(isset($params['parent_layers']) && $params['parent_layers'] != 0) {
-        $root_obj->filterParents($names);
+    if($directions == null) {
+        $directions = array('parents', 'childs');
     }
+
+    // Loop both directions
+    foreach($directions as $dir) {
+        foreach($obj['.'.$dir] AS $rel_id => &$rel) {
+            // Or does a relative allow this object to remain on the map?
+            $rel_remain = automap_filter_tree($allowed_ids, $rel, array($dir));
+
+            // If there is no reason for this relative to remain on the map, remove it here
+            if(!$rel_remain) {
+                unset($obj['.'.$dir][$rel_id]);
+            } else {
+                // If at least one rel is allowed to remain, the ancestor must stay
+                $remain = true;
+            }
+        }
+    }
+
+    return $remain;
 }
 
 /**
  * On automap updates not all objects are updated at once. Filter
  * the child tree by the given list of host object ids.
  */
-function automap_filter_by_ids($obj, $params = null) {
+function automap_filter_by_ids(&$obj, $params = null) {
     if(isset($params['filter_by_ids']) && $params['filter_by_ids'] != '') {
-        $allowed_ids = explode(',', $params['filter_by_ids']);
-        //print_r($allowed_ids);
-        automap_filter_object_ids($allowed_ids, $obj);
+        $allowed_ids = array_flip(explode(',', $params['filter_by_ids']));
+        automap_filter_tree($allowed_ids, $obj);
     }
 }
 
 /**
- * It is possible to filter the object tree by a hostgroup.
- * In this mode a list of hostnames in this group is fetched and the
+ * It is possible to filter the object tree by a hostgroup. In this mode 
+ * the list of hostnames in this group is fetched from the backend and the
  * parent/child trees are filtered using this list.
  *
  * Added later: It is possible that a host of the given group is behind a
@@ -382,7 +399,7 @@ function automap_filter_by_ids($obj, $params = null) {
  * too. Those hosts will be added by default but this can be disabled by
  * config option. This sort of hosts should be visualized in another way.
  */
-function automap_filter_by_group($obj, $params) {
+function automap_filter_by_group(&$obj, $params) {
     if(!isset($params['filter_group']) || $params['filter_group'] == '')
         return;
 
@@ -391,8 +408,8 @@ function automap_filter_by_group($obj, $params) {
     $_BACKEND->checkBackendFeature($params['backend_id'], 'getHostNamesInHostgroup', true);
     $hosts = $_BACKEND->getBackend($params['backend_id'])->getHostNamesInHostgroup($params['filter_group']);
 
-    $allowed_ids = automap_hostnames_to_object_ids($hosts);
-    automap_filter_object_ids($allowed_ids, $obj);
+    $allowed_ids = array_flip(automap_hostnames_to_object_ids($hosts));
+    automap_filter_tree($allowed_ids, $obj);
 }
 
 /**
@@ -418,7 +435,7 @@ function automap_tree_to_map_config($MAPCFG, &$params, &$saved_config, &$map_con
 
     foreach($tree['.parents'] AS $parent) {
         automap_tree_to_map_config($MAPCFG, $params, $saved_config, $map_config, $parent);
-        $line = automap_connector($MAPCFG, $params, $saved_config, $tree, $child);
+        $line = automap_connector($MAPCFG, $params, $saved_config, $tree, $parent);
         $map_config[$line['object_id']] = $line;
     }
 }

@@ -33,6 +33,14 @@ $configVars = array(
     )
 );
 
+/**
+ * This filters the current map config by a given hostgroup.
+ * All hosts not found in this group are removed from the map.
+ *
+ * In case of the automap it does filter the object tree before this
+ * place is reached. Means in case of an automap this function should
+ * not change anything.
+ */
 function filter_hostgroup(&$map_config, $p) {
     if(!isset($p['filter_group']) || $p['filter_group'] == '')
         return;
@@ -61,7 +69,7 @@ function process_filter($MAPCFG, $map_name, &$map_config, $params = null) {
     if($params === null)
         $params = $MAPCFG->getSourceParams();
 
-    filter_hostgroup($map_config, $params);
+    //filter_hostgroup($map_config, $params);
 }
 
 ?>

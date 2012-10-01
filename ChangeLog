@@ -1,6 +1,9 @@
 1.7.2
 Core:
   * Multisite auth module: Removed deprecated permission
+  * Reimplemented automaps hostgroup filter
+  * Bugfix: TestBackend - Fixed parent processing
+  * Bugfix: Fixed parent processing in automap
 
 Frontend:
   * Bugfix: Fixed broken rotation links on overview page
