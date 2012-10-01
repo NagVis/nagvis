@@ -1006,6 +1006,11 @@ fi
 log "Using packet manager $PKG" $PKG
 SED=`which sed` 
 
+if ! which rsync >/dev/null 2>&1; then
+    log "rsync is not installed. Aborting..."
+    exit 1
+fi
+
 # checking grep option as non-Linux might not support "-r"
 grep -r INSTALLER_VERSION install.sh >/dev/null 2>&1
 if [ $? -ne 0 ]; then
