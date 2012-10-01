@@ -257,7 +257,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
             'ham-gw1'  => Array('ham-srv1', 'ham-srv2', 'ham-printer1'),
         );
 
-        foreach($this->parents AS $parent => $childs) {
+        foreach($this->childs AS $parent => $childs) {
             foreach($childs AS $child) {
                 if(!isset($this->parents[$child])) {
                     $this->parents[$child] = Array($parent);
