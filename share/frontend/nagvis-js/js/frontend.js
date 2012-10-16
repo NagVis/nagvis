@@ -298,6 +298,12 @@ function getObjectsToUpdate() {
     // timeslot
     if(arrReturn.length > iNumObjectsPerTimeslot) {
         eventlog("worker", "debug", "Spreading map objects in timeslots");
+
+        // Sort the objects by age and get the oldest objects first
+        arrReturn.sort(function(id_1, id_2) {
+            return oMapObjects[id_1].lastUpdate > oMapObjects[id_2].lastUpdate;
+        });
+
         // Just remove all elements from the end of the array
         arrReturn = arrReturn.slice(0, iNumObjectsPerTimeslot);
     }
