@@ -498,7 +498,7 @@ var NagVisStatefulObject = NagVisObject.extend({
         }
 
         // Adjust fill color based on perfdata for weathermap lines
-        if(this.conf.line_type == 13 || this.conf.line_type == 14) {
+        if(this.conf.line_type == 13 || this.conf.line_type == 14 || this.conf.line_type == 15) {
             colorFill  = '#000000';
             colorFill2 = '#000000';
 
