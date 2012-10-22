@@ -1310,6 +1310,7 @@ function parseOverviewMaps(aMapsConf) {
     // Exit this function on invalid call
     if(aMapsConf === null)  {
         eventlog("worker", "warning", "parseOverviewMaps: Invalid call - maybe broken ajax response");
+        hideStatusMessage();
         return false;
     }
 
@@ -1317,6 +1318,7 @@ function parseOverviewMaps(aMapsConf) {
     if(oPageProperties.showmaps === 1) {
         if(aMapsConf.length == 0) {
             document.getElementById('overviewMaps').parentNode.style.display = 'none';
+            hideStatusMessage();
             return false;
         }
 
@@ -1364,6 +1366,10 @@ function parseOverviewMaps(aMapsConf) {
 
     eventlog("worker", "debug", "parseOverviewMaps: End setting maps");
     getAndParseTemplates();
+
+    // Hide the "Loading..." message. This is not the best place since geomaps/rotations 
+    // might not have been loaded now but in most cases this is the longest running request
+    hideStatusMessage();
 }
 
 /**
@@ -1641,6 +1647,8 @@ function parseMap(iMapCfgAge, type, mapName) {
 function parseMapHandler(oObjects, params) {
     // Only perform the reparsing actions when all information are there
     if(!oPageProperties || !oObjects) {
+        // Close the status message window ("Loading...")
+        hideStatusMessage();
         return;
     }
 
@@ -1687,6 +1695,9 @@ function parseMapHandler(oObjects, params) {
         searchObjects(oViewProperties.search);
 
     oObjects = null;
+
+    // Close the status message window ("Loading...")
+    hideStatusMessage();
 
     // Updates are allowed again
     bBlockUpdates = false;
@@ -1768,14 +1779,14 @@ function workerInitialize(iCount, sType, sIdentifier) {
         eventlog("worker", "debug", "Parsing url page");
         parseUrl(sIdentifier);
 
-        // Load the file ages of the important configuration files
-        eventlog("worker", "debug", "Loading the file ages");
+        // Hide the "loading ..." message
+        hideStatusMessage();
     } else {
         eventlog("worker", "error", "Unknown view type: "+sType);
-    }
 
-    // Close the status message window
-    hideStatusMessage();
+        // Hide the "loading ..." message
+        hideStatusMessage();
+    }
 }
 
 function getAndParseTemplates() {

@@ -14,6 +14,7 @@ Offene Punkte:
     - Automap Migration
 
 - WUI: printLang() durch neuen _() Mechnismus ersetzen
+- Overview-Seite: Bei HTTP Fehler, z.b. 500 wegen Memory-Limit, ordentlichen Fehler zeigen
 
 -------------------------------------------------------------------------------
 
