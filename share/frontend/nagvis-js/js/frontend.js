@@ -1473,15 +1473,13 @@ function parseOverviewRotations(aRotationsConf) {
             oObj = new NagVisRotation(aRotationsConf[i]);
 
             if(oObj !== null) {
-                // Save object to map objects array
-                //aRotations.push(oObj);
-
                 // Parse object to overview
                 oObj.parseOverview();
             }
         }
     } else {
         // Hide the rotations container
+        document.getElementById('overviewRotations').style.display = 'none';
     }
 
     eventlog("worker", "debug", "setOverviewObjects: End setting rotations");

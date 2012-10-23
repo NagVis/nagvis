@@ -3,6 +3,7 @@ Core:
   * Bugfix: Fixed problem in geomap exception handling
 
 Frontend:
+  * Hiding rotations table on overview page when no rotations configured
   * Bugfix: Re-added "loading..." message on page redering
 
 1.7.2
