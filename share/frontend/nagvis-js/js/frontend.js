@@ -1474,12 +1474,14 @@ function parseOverviewRotations(aRotationsConf) {
 
             if(oObj !== null) {
                 // Save object to map objects array
-                aRotations.push(oObj);
+                //aRotations.push(oObj);
 
                 // Parse object to overview
                 oObj.parseOverview();
             }
         }
+    } else {
+        // Hide the rotations container
     }
 
     eventlog("worker", "debug", "setOverviewObjects: End setting rotations");
