@@ -239,7 +239,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
         }
 
         if(!preg_match('/^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/i', $contents))
-            throw new GeomapError(l('Got invalid data from "[U]": "[C]"', array('U' => $data_url, 'C' => var_dump($contents))));
+            throw new GeomapError(l('Got invalid data from "[U]": "[C]"', array('U' => $data_url, 'C' => json_encode($contents))));
 
         file_put_contents($data_path, $contents);
         $parts = explode(',', $contents);

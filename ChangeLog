@@ -1,6 +1,7 @@
 1.7.3
 Core:
   * Bugfix: Fixed problem in geomap exception handling
+  * Bugfix: Fixed invalid json output on uncached geomap rendering
 
 Frontend:
   * Hiding rotations table on overview page when no rotations configured
