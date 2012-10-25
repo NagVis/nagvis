@@ -52,6 +52,10 @@
 ;file_group=""
 ;file_mode="660"
 ;
+; The server to use as source for the NagVis geomaps. Must implement the API which
+; can be found on http://pafciu17.dev.openstreetmap.org/
+;geomap_server="http://geomap.nagvis.org/"
+;
 ; In some cases NagVis needs to open connections to the internet. The cases are:
 ; - The new geomap needs access to openstreetmap webservices to be able to fetch
 ;   mapping information
