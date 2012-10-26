@@ -899,7 +899,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             "Stats: host_scheduled_downtime_depth > 0\n" .
             "StatsOr: 2\n" .
             "StatsAnd: 2\n" .
-            "StatsGroupBy: host_name host_alias\n");
+            "Columns: host_name host_alias\n");
 
         $arrReturn = Array();
         if(is_array($l) && count($l) > 0) {
@@ -1005,7 +1005,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             "Stats: ".$stateAttr." = 2\n" .
             "Stats: scheduled_downtime_depth > 0\n" .
             "StatsAnd: 2\n".
-            "StatsGroupBy: hostgroup_name hostgroup_alias\n");
+            "Columns: hostgroup_name hostgroup_alias\n");
 
         // If the method should fetch several objects and did not find
         // any object, don't return anything => The message
@@ -1130,7 +1130,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             "Stats: host_scheduled_downtime_depth > 0\n" .
             "StatsOr: 2\n" .
             "StatsAnd: 2\n".
-            "StatsGroupBy: hostgroup_name\n");
+            "Columns: hostgroup_name\n");
 
         if(is_array($l) && count($l) > 0) {
             foreach($l as $e) {
@@ -1247,7 +1247,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             "Stats: host_scheduled_downtime_depth > 0\n" .
             "StatsOr: 2\n" .
             "StatsAnd: 2\n".
-            "StatsGroupBy: servicegroup_name servicegroup_alias\n");
+            "Columns: servicegroup_name servicegroup_alias\n");
 
         // If the method should fetch several objects and did not find
         // any object, don't return anything => The message
