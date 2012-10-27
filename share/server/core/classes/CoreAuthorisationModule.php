@@ -29,6 +29,6 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 abstract class CoreAuthorisationModule {
-    abstract public function parsePermissions();
+    abstract public function parsePermissions($sUsername = null);
 }
 ?>

@@ -205,9 +205,8 @@ class CoreAuthorisationHandler {
         return $this->MOD->updateRolePerms($roleId, $perms);
     }
 
-    public function parsePermissions() {
-        $this->aPermissions = $this->MOD->parsePermissions();
-
+    public function parsePermissions($sUsername = null) {
+        $this->aPermissions = $this->MOD->parsePermissions($sUsername);
         return $this->aPermissions;
     }
 

@@ -193,11 +193,12 @@ class CoreAuthorisationModMySQL extends CoreAuthorisationModule {
         return $this->checkRoleExists($name);
     }
 
-    public function parsePermissions() {
+    public function parsePermissions($sUsername = null) {
         global $AUTH;
         $aPerms = Array();
 
-        $sUsername = $AUTH->getUser();
+        if($sUsername === null)
+            $sUsername = $AUTH->getUser();
 
         // Only handle known users
         $userId = $this->getUserId($sUsername);

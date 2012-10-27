@@ -48,6 +48,16 @@ class GlobalIndexPage {
         if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName))
             return null;
 
+        // If the parameter filterUser is set, filter the maps by the username
+        // given in this parameter. This is a mechanism to be authed as generic
+        // user but see the maps of another user.
+        if(isset($_GET['filterUser']) && $_GET['filterUser'] != '') {
+            $AUTHORISATION2 = new CoreAuthorisationHandler();
+            $AUTHORISATION2->parsePermissions($_GET['filterUser']);
+            if(!$AUTHORISATION2->isPermitted('Map', 'view', $mapName))
+                return null;
+        }
+
         $map = Array('object_id' => $objectId);
 
         $MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
