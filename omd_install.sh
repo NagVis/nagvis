@@ -211,7 +211,9 @@ patch -s $OMD_ROOT/local/share/nagvis/htdocs/server/core/defines/global.php <<EO
 EOF
 
 # Cleanup temporary files
-find $OMD_ROOT/tmp/nagvis -type f -exec rm {} \;
+if [ -d $OMD_ROOT/tmp/nagvis ]; then
+    find $OMD_ROOT/tmp/nagvis -type f -exec rm {} \;
+fi
 
 omd reload apache
 

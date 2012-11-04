@@ -87,7 +87,7 @@ try {
         // -> Save to session if logon module told to do so!
         $logonModule = 'Core' . cfg('global', 'logonmodule');
         $logonModule = $logonModule == 'CoreLogonDialog' ? 'CoreLogonDialogHandler' : $logonModule;
-        $MODULE = new $logonModule($CORE);
+        $MODULE = new $logonModule(GlobalCore::getInstance());
         $ret = $MODULE->check();
     }
 

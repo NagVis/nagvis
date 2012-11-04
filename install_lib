@@ -55,7 +55,6 @@ cmp() {
 
 cmp_js() {
     pushd $1 >/dev/null
-    pwd
     OUT=NagVisCompressed.js
     >$OUT
     cmp ExtStacktrace.js

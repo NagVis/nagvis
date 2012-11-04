@@ -2,6 +2,7 @@
 
 [ -z $SITE ] && SITE=lancom
 which sudo >/dev/null 2>&1 && SUDO=sudo || SUDO=
+BASE=$(pwd)
 
 #
 # Install to /usr/local/nagvis
@@ -17,8 +18,9 @@ $SUDO rm -f /etc/apache2/conf.d/nagvis.conf.*
 #
 # Install to omd site local/
 #
-$SUDO su - $SITE -c "[ ! -d /omd/sites/$SITE/nvsrc ] && mkdir /omd/sites/$SITE/nvsrc ; \
-rsync --filter='- .git' --filter='- .*.swp' -av ./ /omd/sites/$SITE/nvsrc/ ; \
+$SUDO su - $SITE -c "[ ! -d /omd/sites/$SITE/nvsrc ] && mkdir /omd/sites/$SITE/nvsrc || rm -rf /omd/sites/$SITE/nvsrc; \
+cd $BASE ; \
+rsync --filter='- .git' --filter='- .*.swp' -a ./ /omd/sites/$SITE/nvsrc/ ; \
 cd /omd/sites/$SITE/nvsrc/ ; \
 yes y | ./omd_install.sh"
 

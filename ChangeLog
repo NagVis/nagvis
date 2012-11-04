@@ -4,6 +4,7 @@ Core:
   * Bugfix: Fixed invalid json output on uncached geomap rendering
   * Livestatus-Backend: Using Columns header instead of the deprecated
     StatsGroupBy header (maybe you need to update livestatus)
+  * Minor output improvements in installer scripts
 
 Frontend:
   * Hiding rotations table on overview page when no rotations configured
