@@ -120,6 +120,12 @@ function ajaxError(e) {
                     0, 'ajaxError');
 }
 
+function httpError(text) {
+    frontendMessage({'type': 'CRITICAL',
+                     'title': 'HTTP error',
+                     'message': text});
+}
+
 function phpError(text) {
     frontendMessage({'type': 'CRITICAL',
                      'title': 'PHP error',
@@ -172,6 +178,20 @@ function getAsyncRequest(sUrl, bCacheable, callback, callbackParams) {
         oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
         oRequest.onreadystatechange = function() {
             if(oRequest && oRequest.readyState == 4) {
+                // Handle unexpected HTTP responses. Normally everything comes with code 200.
+                // If something different is received, something must be wrong. Raise a whole
+                // screen message in this case.
+                if(oRequest.status != 200) {
+                    var msg = 'HTTP-Response: ' + oRequest.status;
+                    if(oRequest.responseText != '') {
+                        msg += ' - Body: ' + oRequest.responseText;
+                    } else if(oRequest.status == 500) {
+                        msg += ' - Internal Server Error (Take a look at the apache error log for details.)'
+                    }
+                    httpError(msg);
+                    return;
+                }
+
                 frontendMessageRemove('ajaxError');
                 if(oRequest.responseText.replace(/\s+/g, '').length === 0) {
                     if(bCacheable)

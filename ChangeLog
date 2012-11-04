@@ -8,6 +8,7 @@ Core:
 
 Frontend:
   * Hiding rotations table on overview page when no rotations configured
+  * Better handling of HTTP errors in ajax transactions
   * Bugfix: Re-added "loading..." message on page redering
 
 1.7.2
