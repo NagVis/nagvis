@@ -206,7 +206,7 @@ function doMove(event) {
 function getReal(el, type, value) {
     temp = el;
     while(isset(temp) && temp != null && temp.tagName != "BODY") {
-        var o = eval("temp." + type);
+        var o = temp[type];
         if(isset(o) && o.indexOf(value) !== -1) {
             el = temp;
             return el;
