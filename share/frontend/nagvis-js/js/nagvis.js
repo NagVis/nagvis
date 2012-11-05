@@ -1267,22 +1267,65 @@ function scaleView() {
     sidebar = null;
 }
 
+var g_zoom_factor = null;
+function getZoomFactor() {
+    if(g_zoom_factor !== null)
+        return g_zoom_factor; // only compute once
+
+    var zoom = getViewParam('zoom');
+    if(zoom === null)
+        g_zoom_factor = 100;
+    else
+        g_zoom_factor = parseInt(zoom); 
+
+    return g_zoom_factor;
+}
+
+function isZoomed() {
+    return g_zoom_factor !== 100;
+}
+
 /**
  * Handles the zoom factor of the current view for a single integer which
  * might be a coordinate or a dimension of an object
  */
 function addZoomFactor(coord) {
-    var zoom = getViewParam('zoom');
-    if(zoom === null)
-        zoom = 100;
-    return parseInt(coord * parseInt(zoom) / 100);
+    return parseInt(coord * getZoomFactor() / 100);
 }
 
 function rmZoomFactor(coord) {
-    var zoom = getViewParam('zoom');
-    if(zoom === null)
-        zoom = 100;
-    return parseInt(coord / parseInt(zoom) * 100);
+    return parseInt(coord / getZoomFactor() * 100);
+}
+
+function zoomHandler(event) {
+    // Another IE specific thing: "this" points to the window element,
+    // not the raising object
+    if(this == window) {
+        var obj = img;
+    } else {
+        var obj = this;
+    }
+    
+    if(!obj)
+        return false;
+
+    // This can not be added directly to the object beacause the
+    // width/height is scaled in at least firefox automatically
+    //
+    // IE FAIL: Needs to be made visible during getting obj.width/height
+    // because IE can not tell us anything about the dimensions when
+    // the object is not visible
+    obj.style.display = 'block';
+    var width  = addZoomFactor(obj.width);
+    var height = addZoomFactor(obj.height);
+    obj.style.display = 'none';
+
+    obj.width  = width;
+    obj.height = height;
+    // Now really show the image
+    obj.style.display = 'block';
+    obj = null;
+
 }
 
 /**
@@ -1293,39 +1336,12 @@ function rmZoomFactor(coord) {
  * The '.src' attribute must be assigned afterwards
  */
 function addZoomHandler(oImage) {
+    if(!isZoomed())
+        return; // If not zoomed, no handler is needed
     oImage.style.display = 'none';
 
     var img = oImage;
-    addEvent(oImage, 'load', function(event) {
-        // Another IE specific thing: "this" points to the window element,
-        // not the raising object
-        if(this == window) {
-            var obj = img;
-        } else {
-            var obj = this;
-        }
-        
-        if(!obj)
-            return false;
-
-        // This can not be added directly to the object beacause the
-        // width/height is scaled in at least firefox automatically
-        //
-        // IE FAIL: Needs to be made visible during getting obj.width/height
-        // because IE can not tell us anything about the dimensions when
-        // the object is not visible
-        obj.style.display = 'block';
-        var width  = addZoomFactor(obj.width);
-        var height = addZoomFactor(obj.height);
-        obj.style.display = 'none';
-
-        obj.width  = width;
-        obj.height = height;
-        // Now really show the image
-        obj.style.display = 'block';
-        obj = null;
-    });
-
+    addEvent(oImage, 'load', zoomHandler);
     oImage = null;
 }
 

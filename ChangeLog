@@ -9,6 +9,8 @@ Core:
 Frontend:
   * Hiding rotations table on overview page when no rotations configured
   * Better handling of HTTP errors in ajax transactions
+  * Big performance improvment when rendering object in frontend after
+    adding the map zoom feature
   * Bugfix: Re-added "loading..." message on page redering
 
 Geomap

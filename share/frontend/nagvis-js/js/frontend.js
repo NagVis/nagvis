@@ -329,7 +329,6 @@ function getFileAgeParams(viewType, mapName) {
  */
 function getHoverUrls() {
     var aUrlParts = [];
-    var aTemplateObjects;
 
     // Loop all map objects to get the urls which need to be fetched
     for(var i in oMapObjects) {
@@ -345,13 +344,14 @@ function getHoverUrls() {
             aUrlParts.push('&url[]='+escapeUrlValues(i));
 
     // Get the needed templates via bulk request
-    aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverUrl',
-                                      aUrlParts, oWorkerProperties.worker_request_max_length, true);
+    var aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverUrl',
+                                          aUrlParts, oWorkerProperties.worker_request_max_length, true);
 
     // Set the code to global object oHoverUrls
     if(aTemplateObjects.length > 0)
         for(var i = 0, len = aTemplateObjects.length; i < len; i++)
             oHoverUrls[aTemplateObjects[i].url] = aTemplateObjects[i].code;
+    aTemplateObjects = null;
 }
 
 /**
@@ -1501,7 +1501,7 @@ function getOverviewProperties(mapName) {
  * Fetches all maps to be shown on the overview page
  */
 function getOverviewMaps() {
-    getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getOverviewMaps' + getViewParams(), 
+    getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getOverviewMaps' + getViewParams(),
                     false, parseOverviewMaps);
 }
 
