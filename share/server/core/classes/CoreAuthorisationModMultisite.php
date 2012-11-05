@@ -117,9 +117,13 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
         return false;
     }
 
-    public function parsePermissions() {
+    public function parsePermissions($sUsername = null) {
         global $AUTH;
-        $username = $AUTH->getUser();
+        if($sUsername === null) {
+            $username = $AUTH->getUser();
+        } else {
+            $username = $sUsername;
+        }
 
         if(!isset($this->permissions[$username])
            || !isset($this->permissions[$username]['permissions']))
