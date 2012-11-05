@@ -12,6 +12,7 @@ Frontend:
   * Big performance improvment when rendering object in frontend after
     adding the map zoom feature
   * Bugfix: Re-added "loading..." message on page redering
+  * Bugfix: Only show enabled grid in "edit mode"
 
 Geomap
   * Bugfix: Fixed status updates of objects on geomaps

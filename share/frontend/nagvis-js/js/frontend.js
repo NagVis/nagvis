@@ -867,17 +867,23 @@ function getMapObjByDomObjId(id) {
 function updateNumUnlocked(num) {
     iNumUnlocked += num;
     if(iNumUnlocked == 0) {
+        // Not in edit mode anymore
         var o = document.getElementById('editIndicator');
         if(o) {
             o.style.display = 'none';
             o = null;
         }
+
+        gridRemove();
     } else {
+        // In edit mode (for at least one object)
         var o = document.getElementById('editIndicator');
         if(o) {
             o.style.display = '';
             o = null;
         }
+
+        gridParse();
     }
 }
 

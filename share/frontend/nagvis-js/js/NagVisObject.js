@@ -1247,7 +1247,7 @@ var NagVisObject = Base.extend({
             anchorId = -1;
 
         // Honor the enabled grid and reposition the object after dropping
-        if(oViewProperties.grid_show === 1) {
+        if(useGrid()) {
             if(viewType === 'line') {
                var pos = coordsToGrid(jsObj.parseCoords(jsObj.conf.x, 'x', false)[anchorId],
                                       jsObj.parseCoords(jsObj.conf.y, 'y', false)[anchorId]);

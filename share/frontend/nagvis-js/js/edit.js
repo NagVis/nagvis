@@ -479,14 +479,6 @@ function getEventMousePos(e) {
     // Substract height of header menu here
     posy -= getHeaderHeight();
 
-    // When a grid is enabled align the dragged object in the nearest grid
-    if(oViewProperties.grid_show === 1) {
-        //var a = coordsToGrid(posx, posy);
-        //posx = a[0];
-        //posy = a[1];
-        //a = null;
-    }
-
     // Take the zoom into account. If the map is zoomed this function gathers
     // coordinates where the zoom factor is included. It has to be removed for
     // further processing.
@@ -797,6 +789,10 @@ function validateValue(sName, sValue, sRegex) {
     }
 }
 
+function useGrid() {
+    return oViewProperties.grid_show === 1;
+}
+
 /**
  * Parses a grind to make the alignment of the icons easier
  *
@@ -804,7 +800,7 @@ function validateValue(sName, sValue, sRegex) {
  */
 function gridParse() {
     // Only show when user configured to see a grid
-    if(oViewProperties.grid_show === 1) {
+    if(useGrid()) {
         // Create grid container and append to map
         var oGrid = document.createElement('div');
         oGrid.setAttribute('id', 'grid');
@@ -843,9 +839,9 @@ function gridParse() {
         gridYStart = null;
         gridStep = null;
         grid = null;
-    }
 
-    addEvent(window, "resize", gridRedraw);
+        addEvent(window, "resize", gridRedraw);
+    }
 }
 
 function gridRemove() {
@@ -875,7 +871,7 @@ function gridRedraw() {
  */
 function gridToggle() {
     // Toggle the grid state
-    if(oViewProperties.grid_show === 1) {
+    if(useGrid()) {
         oViewProperties.grid_show = 0;
         gridRemove();
     } else {
