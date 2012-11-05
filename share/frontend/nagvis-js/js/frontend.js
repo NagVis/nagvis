@@ -1690,9 +1690,10 @@ function parseMapHandler(oObjects, params) {
     getAndParseTemplates();
 
     // When user searches for an object highlight it
-    eventlog("worker", "info", "Searching for matching object(s)");
-    if(oViewProperties && oViewProperties.search && oViewProperties.search != '')
+    if(oViewProperties && oViewProperties.search && oViewProperties.search != '') {
+        eventlog("worker", "info", "Searching for matching object(s)");
         searchObjects(oViewProperties.search);
+    }
 
     oObjects = null;
 
