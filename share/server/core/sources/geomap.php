@@ -143,11 +143,12 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
     // Now add the objects to the map
     foreach($locations AS $loc) {
-        $map_config[$loc['name']] = array(
+        $object_id = $MAPCFG->genObjId($loc['name']);
+        $map_config[$object_id] = array(
             'type'      => 'host',
             'host_name' => $loc['name'],
             'iconset'   => $iconset,
-            'object_id' => $MAPCFG->genObjId($loc['name']),
+            'object_id' => $object_id,
             'alias'     => $loc['alias'],
             'lat'       => $loc['lat'],
             'long'      => $loc['long'],
