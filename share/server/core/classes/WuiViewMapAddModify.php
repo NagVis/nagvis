@@ -111,12 +111,14 @@ class WuiViewMapAddModify {
         return $TMPLSYS->get($TMPL->getTmplFile('default', 'wuiMapAddModify'), $aData);
     }
 
-    private function getAttr($typeDefaults, $update, $attr, $must) {
+    private function getAttr($typeDefaults, $update, $attr, $must, $only_inherited = false) {
+        // update is true during view repaint
+        // only_inherited is true when only asking for inherited value
         $val = '';
         $inherited = false;
         // Use url given values when there is some and remove it from the attr list.
         // The url values left will be added as hidden attributes to the form later
-        if(isset($this->attrs[$attr])) {
+        if(!$only_inherited && isset($this->attrs[$attr])) {
             $val = $this->attrs[$attr];
 
         } elseif(!$update && isset($this->attrs['object_id']) && $this->attrs['object_id'] == 0
@@ -128,23 +130,22 @@ class WuiViewMapAddModify {
             // the shown values
             $val = $this->MAPCFG->getSourceParam($attr, true, true);
 
-        } elseif(!$update && isset($this->attrs['object_id'])
+        } elseif(isset($this->attrs['object_id'])
                  && $this->MAPCFG->getValue($this->attrs['object_id'], $attr, true) !== false) {
             // Get the value set in this object if there is some set
-            // But don't try this when running in "update" mode
             $val = $this->MAPCFG->getValue($this->attrs['object_id'], $attr, true);
             // In view_param mode this is inherited
             if($this->mode == 'view_params')
                 $inherited = true;
 
-        } elseif(!$update && $this->cloneId !== null
+        } elseif((!$update || $only_inherited) && $this->cloneId !== null
                  && $this->MAPCFG->getValue($this->cloneId, $attr, true) !== false) {
             // Get the value set in the object to be cloned if there is some set
             // But don't try this when running in "update" mode
             $val = $this->MAPCFG->getValue($this->cloneId, $attr, true);
 
         } elseif(!$must && isset($typeDefaults[$attr])) {
-            // Get the inherited value - but only for non-must attributes
+            // Get the inherited value
             $val = $typeDefaults[$attr];
             $inherited = true;
         }
@@ -267,10 +268,13 @@ class WuiViewMapAddModify {
             
             // Prepare translation of value to a nice display string in case of
             // e.g. boolean fields
-            if(isset($typeDefaults[$propname]))
-                $valueTxt = $typeDefaults[$propname];
-            else
+            if($this->mode == 'view_params' || isset($typeDefaults[$propname])) {
+            	$valueTxt = $this->getAttr($typeDefaults, $update, $propname, $prop['must'], true);
+                $valueTxt = $valueTxt[1];
+                //$valueTxt = $typeDefaults[$propname];
+            } else {
                 $valueTxt = '';
+            }
 
             if(isset($prop['array']) && $prop['array']) {
                 if(is_array($valueTxt))

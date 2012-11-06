@@ -1339,6 +1339,35 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         return $r[0];
     }
 
+    public function getProgramStart() {
+	$r = $this->queryLivestatusSingleColumn("GET status\nColumns: program_start\n");
+        if(isset($r[0]))
+            return $r[0];
+        else
+            return -1;
+    }
+
+    public function getGeomapHosts($filterHostgroup = null) {
+        $query = "GET hosts\nColumns: name custom_variable_names custom_variable_values alias\n";
+        if($filterHostgroup) {
+            $query .= "Filter: groups >= ".$filterHostgroup."\n";
+        }
+        $r = $this->queryLivestatus($query);
+        $hosts = array();
+        foreach($r AS $row) {
+		$custom_variables = array_combine($row[1], $row[2]);
+                if(isset($custom_variables['LAT']) && isset($custom_variables['LONG'])) {
+                    $hosts[] = array(
+                        'name'  => $row[0],
+                        'lat'   => $custom_variables['LAT'],
+                        'long'  => $custom_variables['LONG'],
+                        'alias' => $row[3],
+                    );
+                }
+        }
+        return $hosts;
+    }
+
     private function command($cmd) {
         return $this->queryLivestatus('COMMAND ['.time().'] '.$cmd."\n", false);
     }

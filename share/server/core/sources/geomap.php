@@ -2,11 +2,15 @@
 
 class GeomapError extends MapSourceError {}
 
+//
+// CSV source file handling
+//
+
 function geomap_source_file($p) {
     return cfg('paths', 'geomap') . '/' . $p['source_file'] . '.csv';
 }
 
-function geomap_get_locations($p) {
+function geomap_read_csv($p) {
     $locations = array();
     $f = geomap_source_file($p);
 
@@ -27,6 +31,65 @@ function geomap_get_locations($p) {
     }
 
     return $locations;
+}
+
+//
+// Backend source handling
+//
+
+function geomap_backend_locations($p) {
+    global $_BACKEND;
+    $_BACKEND->checkBackendExists($p['backend_id'], true);
+    $_BACKEND->checkBackendFeature($p['backend_id'], 'getGeomapHosts', true);
+    return $_BACKEND->getBackend($p['backend_id'])->getGeomapHosts($p['filter_group']);
+}
+
+function geomap_backend_program_start($p) {
+    global $_BACKEND;
+    $_BACKEND->checkBackendExists($p['backend_id'], true);
+    $_BACKEND->checkBackendFeature($p['backend_id'], 'getProgramStart', true);
+    return $_BACKEND->getBackend($p['backend_id'])->getProgramStart();
+}
+
+//
+// General source handling code
+//
+
+function geomap_get_locations($p) {
+    switch($p['source_type']) {
+        case 'csv':
+            return geomap_read_csv($p);
+        break;
+        case 'backend':
+            return geomap_backend_locations($p);
+        break;
+        default:
+            throw new GeomapError(l('Unhandled source type "[S]"', Array('S' => $p['source_type'])));
+        break;
+    }
+}
+
+//function geomap_backend_cache_file($p) {
+//    if(isset($p['filter_group']) && $p['filter_group'] != '') {
+//        $fname = '-'.$p['filter_group'];
+//    } else {
+//        $fname = '';
+//    }
+//    return cfg('paths', 'var') . '/source-geomap-locations' . $fname . '.cache';
+//}
+
+function geomap_source_age($p) {
+    switch($p['source_type']) {
+        case 'csv':
+    	    return filemtime(geomap_source_file($p));
+        break;
+        case 'backend':
+            return geomap_backend_program_start($p);
+        break;
+        default:
+            throw new GeomapError(l('Unhandled source type "[S]"', Array('S' => $p['source_type'])));
+        break;
+    }
 }
 
 function geomap_get_contents($url) {
@@ -63,6 +126,13 @@ function list_geomap_types() {
     );
 }
 
+function list_geomap_source_types() {
+    return array(
+        'csv'     => l('CSV-File'),
+        'backend' => l('NagVis Backend'),
+    );
+}
+
 function list_geomap_source_files($CORE) {
     return $CORE->getAvailableGeomapSourceFiles();
 }
@@ -71,9 +141,11 @@ function list_geomap_source_files($CORE) {
 global $viewParams;
 $viewParams = array(
     'geomap' => array(
+        'backend_id',
         'geomap_type',
         'geomap_zoom',
         'geomap_border',
+        'source_type',
         'source_file',
     )
 );
@@ -93,12 +165,21 @@ $configVars = array(
         'default'    => '',
         'match'      => MATCH_INTEGER,
     ),
-    'source_file' => array(
+    'source_type' => array(
         'must'       => false,
-        'default'    => '',
-        'match'      => MATCH_STRING_EMPTY,
+        'default'    => 'csv',
+        'match'      => MATCH_STRING,
         'field_type' => 'dropdown',
-        'list'       => 'list_geomap_source_files',
+        'list'       => 'list_geomap_source_types',
+    ),
+    'source_file' => array(
+        'must'          => false,
+        'default'       => '',
+        'match'         => MATCH_STRING_EMPTY,
+        'field_type'    => 'dropdown',
+        'list'          => 'list_geomap_source_files',
+        'depends_on'    => 'source_type',
+        'depends_value' => 'csv',
     ),
     'geomap_border' => Array(
         'must'       => false,
@@ -213,14 +294,14 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     //file_put_contents('/tmp/123', $url);
 
     // Fetch the background image when needed
-    if(!file_exists($image_path) || filemtime(geomap_source_file($params)) > filemtime($image_path)) {
+    if(!file_exists($image_path) || geomap_source_age($params) > filemtime($image_path)) {
         // Allow/enable proxy
         $contents = geomap_get_contents($url);
         file_put_contents($image_path, $contents);
     }
 
     // Fetch the map bounds when needed
-    if(!file_exists($data_path) || filemtime(geomap_source_file($params)) > filemtime($data_path)) {
+    if(!file_exists($data_path) || geomap_source_age($params) > filemtime($data_path)) {
         // Get the lat/long of the image bounds. The api adds a border area to the
         // generated image. This is good since this makes the outer nodes not touch
         // the border of the image. But this makes calculation of the x/y coords
@@ -266,9 +347,14 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
         // Calculate the lat (y) coords
         $obj['y'] = round($params['height'] - ($lat_para * ($obj['lat'] - $img_down)) - ($icon_h / 2));
+        if($obj['y'] < 0)
+            $obj['y'] = 0;		
         
         // Calculate the long (x) coords
         $obj['x'] = round(($long_para * ($obj['long'] - $img_left)) - ($icon_w / 2));
+        if($obj['x'] < 0)
+            $obj['x'] = 0;
+
         unset($obj['lat']);
         unset($obj['long']);
     }
@@ -290,7 +376,7 @@ function changed_geomap($MAPCFG, $compare_time) {
         return true;
 
     // b)
-    $t = filemtime(geomap_source_file($params));
+    $t = geomap_source_age($params);
     if($t > $compare_time)
         return true;
 

@@ -37,14 +37,19 @@
     iconset=std_medium
     backend_id=demo
     # Geomap Parameters
+    source_type=csv
     source_file=demo-locations
     width=800
     height=600
 }</pre>
 
         <p>The <code>sources=geomap</code> line tells the map to use the geomap source for altering the
-        map configuration. The <code>source_file=demo-locations</code> definition tells the geomap source
-        to use the file <code>demo-locations.csv</code> located in the <code>etc/geomap</code> directory.</p>
+        map configuration.
+
+        The <code>source_type=csv</code> (<font color="#ff0000">New in 1.7.4</font>) line tells the geomap 
+        source to use the CSV file defined in the 
+        <code>source_file=demo-locations</code> definition located in the <code>etc/geomap</code> directory
+        for gathering a list of hosts and coordinates to add to the geomap.</p>
 
         <p>The <code>demo-locations.csv</code> file contains the following two lines:</p>
 
@@ -54,6 +59,13 @@ muc-srv1;Munich Server1;48.1448353;11.5580067</pre>
         <p>Each line defines one host to be added to the map. The columns are separated by <code>;</code> signs.
         The first column contains the host-name, the second an optional alias, the third the LAT coordinate and
         the fourth the LONG coordinate.</p>
+
+        <p><font color="#ff0000">New in 1.7.4</font>: It is also possible to set <code>source_type=backend</code>
+        to use the backend set via <code>backend_id</code> to gather the list of hosts to be shown on the geomap
+        and their coordinates. This is only possible when using the livestatus backend. It fetches all hosts
+        from the backend and uses all hosts which have the custom object variables <code>_LAT</code> and
+        <code>_LONG</code> configured. It is possible to filter the fetched hosts by the membership in a host group
+        by setting the option <code>filter_group</code> to the name of the host group.</p>
         
         <h2>Configuring geomaps</h2>
         <p>The geomap source uses view parameters for configuration. For details take a look at the modify view
@@ -81,9 +93,16 @@ muc-srv1;Munich Server1;48.1448353;11.5580067</pre>
                 calculated min/max geo coordinates.</td>
         </tr>
         <tr>
+            <td>source_type</td>
+            <td>csv</td>
+            <td>The type of the datasource used for for fetching the geomap objects. Might be <code>csv</code>
+                or <code>backend</code>.</td>
+        </tr>
+        <tr>
             <td>source_file</td>
             <td></td>
-            <td>The name of the CSV file to use as source for rendering the geomap.</td>
+            <td>The name of the CSV file to use as source for rendering the geomap. Is only used when
+                <code>source_type</code> is set to <code>csv</code>.</td>
         </tr>
         <tr>
             <td>width</td>

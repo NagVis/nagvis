@@ -1,6 +1,11 @@
 1.7.4
-Core:
-  * Bugfix: Geomap - always rounding calculated coordinates
+Geomap:
+  * New option source_type to configure a csv file or the used backend as
+    datasource. In backend mode, the backend used on the map must support
+    the new geomap functions (currently only livestatus backend). All hosts
+    to be shown need the custom variables _LAT and _LONG. The hosts can
+    optionally be filtered by hostgroups
+  * Bugfix: Always rounding calculated coordinates, fixed negative coords
 
 1.7.3
 Core:

@@ -845,8 +845,8 @@ class GlobalMapCfg {
 
             // loop validConfig for checking: => missing "must" attributes
             foreach(self::$validConfig[$type] AS $key => $val) {
-                if(isset($val['must']) && $val['must'] == '1') {
-                    if(!isset($element[$key]) || $element[$key] == '') {
+                if(isset($val['must']) && $val['must'] == true) {
+                    if((!isset($element[$key]) || $element[$key] == '') && (!isset($val['default']) || $val['default'] == '')) {
                         throw new $exception(l('mapCfgMustValueNotSet',
                                              Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key,
                                                    'TYPE'    => $type,       'ID'        => $id)));
