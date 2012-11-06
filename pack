@@ -16,12 +16,8 @@ case "$1" in
         V=1.4
         BRANCH=nagvis-1.4
     ;;
-    ms)
-        V=1.6
-        BRANCH=map_sources
-    ;;
     *)
-        echo "ERROR: No param given."
+        echo "ERROR: No param given (master|1.7|1.6|1.5|1.4)."
         exit 1
     ;;
 esac
