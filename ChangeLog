@@ -1,3 +1,7 @@
+1.7.4
+Core:
+  * Bugfix: Geomap - always rounding calculated coordinates
+
 1.7.3
 Core:
   * Bugfix: Fixed problem in geomap exception handling

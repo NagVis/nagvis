@@ -265,10 +265,10 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
             continue;
 
         // Calculate the lat (y) coords
-        $obj['y'] = $params['height'] - ($lat_para * ($obj['lat'] - $img_down)) - ($icon_h / 2);
+        $obj['y'] = round($params['height'] - ($lat_para * ($obj['lat'] - $img_down)) - ($icon_h / 2));
         
         // Calculate the long (x) coords
-        $obj['x'] = ($long_para * ($obj['long'] - $img_left)) - ($icon_w / 2);
+        $obj['x'] = round(($long_para * ($obj['long'] - $img_left)) - ($icon_w / 2));
         unset($obj['lat']);
         unset($obj['long']);
     }
