@@ -123,7 +123,7 @@ function ajaxError(e) {
 function httpError(text) {
     frontendMessage({'type': 'CRITICAL',
                      'title': 'HTTP error',
-                     'message': text});
+                     'message': text}, 0, 'httpError');
 }
 
 function phpError(text) {
@@ -182,16 +182,22 @@ function getAsyncRequest(sUrl, bCacheable, callback, callbackParams) {
                 // If something different is received, something must be wrong. Raise a whole
                 // screen message in this case.
                 if(oRequest.status != 200) {
+                    if(oRequest.status == 0) {
+                        return; // silently skip status code 0 (occurs e.g. during page switching)
+                    }
+
                     var msg = 'HTTP-Response: ' + oRequest.status;
                     if(oRequest.responseText != '') {
                         msg += ' - Body: ' + oRequest.responseText;
                     } else if(oRequest.status == 500) {
                         msg += ' - Internal Server Error (Take a look at the apache error log for details.)'
                     }
+
                     httpError(msg);
                     return;
                 }
 
+                frontendMessageRemove('httpError');
                 frontendMessageRemove('ajaxError');
                 if(oRequest.responseText.replace(/\s+/g, '').length === 0) {
                     if(bCacheable)

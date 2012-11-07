@@ -1,4 +1,7 @@
 1.7.4
+Frontend:
+  * Hiding HTTP status error messages automatically on next successful request
+
 Geomap:
   * New option source_type to configure a csv file or the used backend as
     datasource. In backend mode, the backend used on the map must support
