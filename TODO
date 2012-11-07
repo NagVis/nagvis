@@ -14,7 +14,6 @@ Offene Punkte:
     - Automap Migration
 
 - WUI: printLang() durch neuen _() Mechnismus ersetzen
-- Overview-Seite: Bei HTTP Fehler, z.b. 500 wegen Memory-Limit, ordentlichen Fehler zeigen
 
 -------------------------------------------------------------------------------
 
@@ -30,7 +29,6 @@ Relative Koordinaten:
 - Rotationen: Externe Seiten alternativ in iframe öffnen (z.B. Check_MK Views)
 
 - Geomap:
-  - CSV Quelle und geomap aufteilen
   - Andere Objekte in Geomaps erlauben (Dazu die Felder type, name1, name2) einführen
 
 - Automap: User Defined Coords:
@@ -182,6 +180,9 @@ Exception/Error log bauen:
 ===============================================================================
 # ERLEDIGT
 ===============================================================================
+
+- Overview-Seite: Bei HTTP Fehler, z.b. 500 wegen Memory-Limit, ordentlichen Fehler zeigen
+- CSV Quelle und geomap aufteilen
 
 *** NagVis Map Zoom ***
 
