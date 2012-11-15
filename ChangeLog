@@ -1,4 +1,8 @@
 1.7.4
+Core:
+  * Added new logon module CoreLogonMultisite121 to support the
+    new cookie format of Check_MK 1.2.1i2 and newer
+
 Frontend:
   * Hiding HTTP status error messages automatically on next successful request
 
