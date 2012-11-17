@@ -1301,7 +1301,9 @@ function zoomHandler(event) {
     // Another IE specific thing: "this" points to the window element,
     // not the raising object
     if(this == window) {
-        var obj = img;
+        if(event.srcElement) {
+            var obj = event.srcElement;
+        }
     } else {
         var obj = this;
     }
@@ -1340,7 +1342,6 @@ function addZoomHandler(oImage) {
         return; // If not zoomed, no handler is needed
     oImage.style.display = 'none';
 
-    var img = oImage;
     addEvent(oImage, 'load', zoomHandler);
     oImage = null;
 }
