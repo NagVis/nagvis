@@ -18,17 +18,19 @@
         </ul>
         
         <h2> First call </h2>
-        The automap can be called like this: <pre>http://&lt;nagios-server>/&lt;path-to-nagvis>/frontend/nagvis-js/index.php?mod=AutoMap&act=view&show=__automap</pre>
+        If you have no experience with the automap yet, take a look at the demo automaps installed with NagVis (demo-automap and demo-automap2). You should be able to
+        open those automaps right after installation of NagVis from the "Open" menu in header navigation.
 
-        If everything is configured properly the root host and two levels of child hosts should be displayed on the automap.
+        If everything is configured properly the root host and three levels of child hosts should be displayed on the demonstration automap "demo-automap".
+        
+        <h2> Map configuration </h2>
+        In past, the automaps were configured in special configuration files located in <code>etc/automaps</code>, but this has changed with NagVis 1.7.
+        The automap configuration files are created as regular map configurations (like written in the map config format definitions). To create an
+        automap in NagVis 1.7 you have to configure the map source to <code>automap</code>. To do this, you need to add the <code>source</code> parameter
+        to the global section and set its value to <code>automap</code>.
         
         <h2> Main configuration </h2>
         Some parameters for the automap can be set in the main configuration of NagVis. For further information see <a href="nagvis_config_format_description.html">Main Config Format Description</a>.
-        
-        <h2> Map configuration </h2>
-        The automaps can be configured by special configuration files located in <code>etc/automaps</code>. The default map configuration file is named <code>__automap.cfg</code>. All values can be found in the <a href="automap_config_format.html">Automap Config Format Description</a>.
-        
-        The values like iconset etc. are inherited to all objects on the map.
         
         <h2> URL Parameters </h2>
         The automap can be called with several url parameters. Since NagVis 1.7 these options can be put into the
