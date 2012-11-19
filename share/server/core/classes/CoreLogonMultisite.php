@@ -24,29 +24,43 @@
  *****************************************************************************/
 
 class CoreLogonMultisite extends CoreLogonModule {
-    private   $htpasswdPath;
-    private   $secretPath;
+    private $htpasswdPath;
+    private $serialsPath;
+    private $secretPath;
+    private $authFile;
 
     public function __construct() {
         $this->htpasswdPath = cfg('global', 'logon_multisite_htpasswd');
+        $this->serialsPath  = cfg('global', 'logon_multisite_serials');
         $this->secretPath   = cfg('global', 'logon_multisite_secret');
 
-        if(!file_exists($this->htpasswdPath)) {
-            throw new NagVisException(l('LogonMultisite: The htpasswd file &quot;[PATH]&quot; does not exist.',
-                          array('PATH' => $this->htpasswdPath)));
+        // When the auth.serial file exists, use this instead of the htpasswd
+        // for validating the cookie. The structure of the file is equal, so
+        // the same code can be used.
+        if(file_exists($this->serialsPath)) {
+            $this->authFile = 'serial';
+
+        } elseif(file_exists($this->htpasswdPath)) {
+            $this->authFile = 'htpasswd';
+
+        } else {
+            throw new NagVisException(l('LogonMultisite: The htpasswd file &quot;[HTPASSWD]&quot; or '
+                                       .'the authentication serial file &quot;[SERIAL]&quot; do not exist.',
+                          array('HTPASSWD' => $this->htpasswdPath, 'SERIAL' => $this->serialsPath)));
         }
+
         if(!file_exists($this->secretPath)) {
             $this->redirectToLogin();
-            //throw new NagVisException(l('LogonMultisite: The auth secret file &quot;[PATH]&quot; does not exist.',
-            //              array('PATH' => $this->secretPath)));
         }
     }
 
-    private function loadHtpasswd() {
+    private function loadAuthFile($path) {
         $creds = array();
-        foreach(file($this->htpasswdPath) AS $line) {
-            list($username, $pwhash) = explode(':', $line, 2);
-            $creds[$username] = rtrim($pwhash);
+        foreach(file($path) AS $line) {
+            if(strpos($line, ':') !== false) {
+                list($username, $secret) = explode(':', $line, 2);
+                $creds[$username] = rtrim($secret);
+            }
         }
         return $creds;
     }
@@ -55,9 +69,9 @@ class CoreLogonMultisite extends CoreLogonModule {
         return trim(file_get_contents($this->secretPath));
     }
 
-    private function generateHash($username, $now, $pwhash) {
+    private function generateHash($username, $now, $user_secret) {
         $secret = $this->loadSecret();
-        return md5($username . $now . $pwhash . $secret);
+        return md5($username . $now . $user_secret . $secret);
     }
 
     private function checkAuthCookie($cookieName) {
@@ -67,16 +81,18 @@ class CoreLogonMultisite extends CoreLogonModule {
 
         list($username, $issueTime, $cookieHash) = explode(':', $_COOKIE[$cookieName], 3);
 
-        // FIXME: Check expire time?
-        
-        $users = $this->loadHtpasswd();
+        if($this->authFile == 'htpasswd')
+            $users = $this->loadAuthFile($this->htpasswdPath);
+        else
+            $users = $this->loadAuthFile($this->serialsPath);
+
         if(!isset($users[$username])) {
             throw new Exception();
         }
-        $pwhash = $users[$username];
+        $user_secret = $users[$username];
 
         // Validate the hash
-        if($cookieHash != $this->generateHash($username, $issueTime, $pwhash)) {
+        if($cookieHash != $this->generateHash($username, $issueTime, (string) $user_secret)) {
             throw new Exception();
         }
 

@@ -185,12 +185,12 @@ class GlobalMainCfg {
                     'depends_value' => 'LogonMultisite',
                     'match'         => MATCH_STRING_PATH,
                 ),
-                'logon_multisite_profiles' => Array(
+                'logon_multisite_serials' => Array(
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => '',
                     'depends_on'    => 'logonmodule',
-                    'depends_value' => 'LogonMultisite121',
+                    'depends_value' => 'LogonMultisite',
                     'match'         => MATCH_STRING_PATH,
                 ),
                 'logon_multisite_secret' => Array(
