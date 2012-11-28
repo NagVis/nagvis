@@ -83,6 +83,9 @@ div.welcome a:hover {color:#779D2A}
 
 /* Background images */
 #backgroundImage {
+    position: absolute;
+    top: 0;
+    left: 0;
     z-index: 0;
 }
 
