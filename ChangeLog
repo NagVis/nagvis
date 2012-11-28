@@ -15,6 +15,8 @@ Geomap:
     to be shown need the custom variables _LAT and _LONG. The hosts can
     optionally be filtered by hostgroups
   * Bugfix: Always rounding calculated coordinates, fixed negative coords
+  * Bugfix: Also using source_file parameter for cache file names to prevent
+    problems with multiple geomaps
 
 1.7.3
 Core:

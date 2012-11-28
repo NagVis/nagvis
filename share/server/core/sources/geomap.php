@@ -189,10 +189,10 @@ $configVars = array(
 );
 
 function geomap_files($params) {
-    $use_params = $params;
-    if(isset($use_params['source_file']))
-        unset($use_params['source_file']);
-    $image_name  = 'geomap-'.implode('_', array_values($use_params)).'.png';
+    // The source_file parameter was filtered here in previous versions. Users
+    // reported that this is not very useful. So I removed it. Hope it works
+    // for most users.
+    $image_name  = 'geomap-'.implode('_', array_values($params)).'.png';
     return array(
         $image_name,
         path('sys', '', 'backgrounds').'/'.$image_name,
