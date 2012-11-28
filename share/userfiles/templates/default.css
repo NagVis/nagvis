@@ -45,7 +45,7 @@ img {border:0}
 .main {margin:0;padding:0;background-color:white;color:black}
 .header {position:fixed;top:0;left:0;padding:0;z-index:100;min-width:1000px;}
 .headerspacer {width:100%}
-.map {position:relative;top:0;left:0;z-index:98}
+.map, #overview {position:relative;top:0;left:0;z-index:98}
 
 /* Welcome page */
 div.welcome {padding:20px;width:600px}
@@ -158,10 +158,13 @@ div.control.togglemid {
     background-image: url('../images/templates/default.control_togglemid.gif');
 }
 
+div.infopage {
+    padding-top: 25px;
+}
+
 /* Style on info pages (index.php?info, index.php) */
 div.infopage > table {
     margin: auto;
-    margin-top: 25px;
     margin-bottom: 25px;
 
     width: 800px;

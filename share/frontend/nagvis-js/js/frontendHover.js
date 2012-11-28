@@ -98,8 +98,8 @@ function hoverShow(x, y, id) {
 
     // hide the menu first to avoid an "up-then-over" visual effect
     hoverMenu.style.display = 'none';
-    hoverMenu.style.left = (x + scrollLeft + hoverSpacer) + 'px';
-    hoverMenu.style.top = (y + scrollTop + hoverSpacer) + 'px';
+    hoverMenu.style.left = (x + scrollLeft + hoverSpacer - getSidebarWidth()) + 'px';
+    hoverMenu.style.top = (y + scrollTop + hoverSpacer - getHeaderHeight()) + 'px';
     if(isIE) {
         hoverMenu.style.width = '0px';
     } else {
