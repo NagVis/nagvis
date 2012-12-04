@@ -5,6 +5,7 @@ Core:
 
 Frontend:
   * Hiding HTTP status error messages automatically on next successful request
+  * Bugfix: Added missing lock/unlock line middle control to BW-lines
   * Bugfix: Fixed "img" not defined js error in IE8 (Please note: Zoom
     function does not work in IE8 - IE8 event handling seems to be broken)
   * Bugfix: Fixed flickering hover menu on overview page when sidebar opened
