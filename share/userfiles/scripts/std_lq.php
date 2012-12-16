@@ -61,21 +61,34 @@ $setAuthUser = true;
 
 /*** *** *** *** *** *** *** END OF CONFIGURATION *** *** *** *** *** *** ***/
 
+if(file_exists('../../server/core/defines/global.php')) {
+    $_nv_core_dir = '../../server/core';
+} else {
+    // handle OMD local/ hierarchy
+    $_path_parts = explode('/', dirname($_SERVER["SCRIPT_FILENAME"]));
+    if($_path_parts[count($_path_parts) - 6] == 'local') {
+        $_nv_core_dir = join(array_slice(explode('/' ,dirname($_SERVER["SCRIPT_FILENAME"])), 0, -6), '/').'/share/nagvis/htdocs/server/core';
+    } else {
+        echo 'ERROR: Unable to detect nagvis core dir';
+        exit(1);
+    }
+}
+
 // Include global defines
-require('../../server/core/defines/global.php');
-require('../../server/core/defines/matches.php');
+require($_nv_core_dir.'/defines/global.php');
+require($_nv_core_dir.'/defines/matches.php');
 
 // Include functions
-require('../../server/core/functions/autoload.php');
-require('../../server/core/functions/debug.php');
-require('../../server/core/functions/oldPhpVersionFixes.php');
-require('../../server/core/classes/CoreExceptions.php');
-require('../../server/core/functions/nagvisErrorHandler.php');
+require($_nv_core_dir.'/functions/autoload.php');
+require($_nv_core_dir.'/functions/debug.php');
+require($_nv_core_dir.'/functions/oldPhpVersionFixes.php');
+require($_nv_core_dir.'/classes/CoreExceptions.php');
+require($_nv_core_dir.'/functions/nagvisErrorHandler.php');
 
 define('CONST_AJAX', true);
 
 try {
-    require('../../server/core/functions/core.php');
+    require($_nv_core_dir.'/functions/core.php');
 
     // Authenticate the user
     $SHANDLER = new CoreSessionHandler();
