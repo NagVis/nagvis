@@ -48,7 +48,7 @@ class GlobalLanguage {
         $this->sCurrentEncoding = 'UTF-8';
 
         // Check for gettext extension
-        require_once('../../server/core/ext/php-gettext-1.0.9/gettext.inc');
+        require_once('gettext.inc');
 
         $this->setLanguage();
 
