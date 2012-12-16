@@ -1322,7 +1322,48 @@
         </tr>
         </table>
 
-        <a name="types"><a><h2>Variable Types</h2>
+        <a name="container"></a><h4>Script: std_lq.php (<font color="#ff0000">New in 1.7.1</font>)</h4>
+        <p>This script is delivered with NagVis. It can be used to list data fetched via livestatus on
+        your maps to e.g. display lists of items or just raw numbers.</p>
+
+        <p><i>Please note:</i> By default all querys get the current username added with the <code>AuthUser</code>
+        livestatus filer. Resulting of this, a user can only see the hosts and services he is a contact of.
+        To change this behavior you can customize (copy) the std_lq.php and change the <code>setAuthUser</code>
+        to the following defenition:</p>
+        <pre>$setAuthUser = true;</pre>
+
+        <p>To add the script to your maps you need to add <code>std_lq.php</code> with additional parameters
+        to the <code>url</code> parameter in a container object. The parameters are given as URL parameters.
+
+        <p>You have to call this script with at least two parameters:</p>
+        <table>
+            <tr>
+                <td>backend_id</td><td>The id of the backend to use as configured in NagVis</td>
+            </tr><tr>
+                <td>query</td><td>The livestatus query to execute (newlines must be given as \\n)</td>
+            </tr>
+        </table>
+        <p>Optional parameters:</p>
+        <table>
+            <tr>
+                <td>type</td><td>Customize the way the resulting data is displayed</td>
+            </tr>
+        </table>
+        <p>Example calls to this script:</p>
+        
+        Query a single cell as simple string:
+        <pre>std_lq.php?backend_id=live_1&query=GET hosts\\nLimit: 1\\nColumns: host_name\\n&type=cell</pre>
+        
+        Query several columns from a single dataset. Resulting values are displayed separated by ", ":
+        <pre>std_lq.php?backend_id=live_1&query=GET hosts\\nLimit: 1\\nColumns: host_name address state\\n&type=row</pre>
+        
+        Query one column from several datasets. Each found cell is displayed in a separate line:
+        <pre>std_lq.php?backend_id=live_1&query=GET hosts\\nLimit: 2\\nColumns: host_name\\n&type=column</pre>
+        
+        Query several columns from several datasets and display them as table:
+        <pre>std_lq.php?backend_id=live_1&query=GET hosts\\nLimit: 2\\nColumns: host_name state address\\n&type=list</pre>
+
+        <a name="types"></a><h2>Variable Types</h2>
         <p>This chapter explains the different variable types used in the map configuration file.</p>
 
         <a name="coordinate"></a><h3>Coordinates</h3>
