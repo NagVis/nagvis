@@ -1485,7 +1485,11 @@ function parseOverviewRotations(aRotationsConf) {
         }
     } else {
         // Hide the rotations container
-        document.getElementById('overviewRotations').style.display = 'none';
+        var container = document.getElementById('overviewRotations');
+        if(container) {
+            container.style.display = 'none';
+            container = null;
+        }
     }
 
     eventlog("worker", "debug", "setOverviewObjects: End setting rotations");

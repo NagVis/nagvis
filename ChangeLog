@@ -10,6 +10,7 @@ Frontend:
     function does not work in IE8 - IE8 event handling seems to be broken)
   * Bugfix: Fixed flickering hover menu on overview page when sidebar opened
   * Bugfix: Fixed background positioning on browser zoomed maps
+  * Bugfix: Fixed javascript error when rotations are disabled
 
 Geomap:
   * New option source_type to configure a csv file or the used backend as
