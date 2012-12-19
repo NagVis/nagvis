@@ -11,6 +11,9 @@ Frontend:
   * Bugfix: Fixed flickering hover menu on overview page when sidebar opened
   * Bugfix: Fixed background positioning on browser zoomed maps
   * Bugfix: Fixed javascript error when rotations are disabled
+  * Bugfix: Multisite module is catching single map errors now and show all
+    maps in the list regardless of the error. Maps with errors will be listed
+    as UNKNOWN (orange) in the multisite snapin
 
 Geomap:
   * New option source_type to configure a csv file or the used backend as

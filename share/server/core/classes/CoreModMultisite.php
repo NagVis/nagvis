@@ -84,6 +84,9 @@ class CoreModMultisite extends CoreModule {
             } catch(MapCfgInvalid $e) {
                 $map['configError'] = true;
                 $map['configErrorMsg'] = $e->getMessage();
+            } catch(Exception $e) {
+                $map['error'] = true;
+                $map['errorMsg'] = $e->getMessage();
             }
 
             if($MAPCFG->getValue(0, 'show_in_lists') != 1 || $MAPCFG->getValue(0, 'show_in_multisite') != 1)
@@ -108,6 +111,14 @@ class CoreModMultisite extends CoreModule {
                 $map['overview_class']  = 'error';
                 $map['overview_url']    = 'javascript:alert(\''.$map['configErrorMsg'].'\');';
                 $map['summary_output']  = l('Map Configuration Error: '.$map['configErrorMsg']);
+
+                $MAP->MAPOBJ->clearMembers();
+                $MAP->MAPOBJ->setSummaryState('ERROR');
+                $MAP->MAPOBJ->fetchIcon();
+            } elseif(isset($map['error'])) {
+                $map['overview_class']  = 'error';
+                $map['overview_url']    = 'javascript:alert(\''.$map['errorMsg'].'\');';
+                $map['summary_output']  = l('Error: '.$map['errorMsg']);
 
                 $MAP->MAPOBJ->clearMembers();
                 $MAP->MAPOBJ->setSummaryState('ERROR');
