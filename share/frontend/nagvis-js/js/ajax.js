@@ -353,9 +353,10 @@ function handleJsonResponse(sUrl, responseText) {
         return '';
     } else {
         if(isset(oResponse.type) && isset(oResponse.message)) {
-            frontendMessage(oResponse);
+            frontendMessage(oResponse, 0, 'miscError');
             return '';
         }
+        frontendMessageRemove('miscError');
         return oResponse;
     }
 }

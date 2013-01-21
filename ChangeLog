@@ -1,4 +1,7 @@
 1.7.5
+Frontend:
+  * Hiding all kind of javascript error messages automatically on next
+    successful processing
 
 1.7.4
 Core:
