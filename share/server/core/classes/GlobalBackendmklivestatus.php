@@ -1390,5 +1390,68 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         $this->command('ACKNOWLEDGE_'.$what.'_PROBLEM;'.$spec.';'.$sticky.';'.$notify.';'.$persist.';'.$user.';'.$comment);
     }
+    /**
+     * PUBLIC getDirectChildDependenciesNamesByHostName()
+     *
+     * Queries the livestatus socket for all direct childs dependencies of a host
+     *
+     * @param   String   Hostname
+     * @return  Array    List of hostnames
+     * @author  Thibault Cohen <thibault.cohen@savoirfairelinux.com>
+     */
+    public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact=false) {
+        $query = "GET hosts\nColumns: child_dependencies\nFilter: name = ".$hostName."\n";
+        $raw_result = $this->queryLivestatusSingleColumn($query);
+        if ($min_business_impact) {
+            $query = "GET hosts\nColumns:host_name\nFilter: name = $raw_result[0][1]\n";
+            foreach ($raw_result[0] as &$value) {
+                $query = $query . "Filter: name = $value\nOr: 2\n";
+            }
+            $query = $query . "Filter: business_impact >= $min_business_impact\nAnd: 2\n";
+            $result = $this->queryLivestatusSingleColumn($query);
+        }
+        else {
+            $result = array();
+            foreach ($raw_result[0] as &$value) {
+                if (strpos($value, "/") == False) {
+                    array_push($result, $value);
+                }
+            }
+        }
+        return $result;
+    }
+
+    /*
+     * PUBLIC getDirectParentNamesByHostName()
+     *
+     * Queries the livestatus socket for all direct parents of a host
+     *
+     * @param   String   Hostname
+     * @return  Array    List of hostnames
+   * @author  Mathias Kettner <mk@mathias-kettner.de>
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact=false) {
+        $query = "GET hosts\nColumns: parent_dependencies\nFilter: name = ".$hostName."\n";
+        $raw_result = $this->queryLivestatusSingleColumn($query);
+        if ($min_business_impact) {
+            $query = "GET hosts\nColumns:host_name\nFilter: name = $raw_result[0][1]\n";
+            foreach ($raw_result[0] as &$value) {
+                $query = $query . "Filter: name = $value\nOr: 2\n";
+            }
+            $query = $query . "Filter: business_impact >= $min_business_impact\nAnd: 2\n";
+            $result = $this->queryLivestatusSingleColumn($query);
+        }
+        else {
+            $result = array();
+            foreach ($raw_result[0] as &$value) {
+                if (strpos($value, "/") == False) {
+                    array_push($result, $value);
+                }
+            }
+        }
+        return $result;
+    }
+
 }
 ?>

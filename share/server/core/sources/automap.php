@@ -17,6 +17,9 @@ $viewParams = array(
         'overlap',
     ),
 );
+if (cfg('global', 'shinken_features')) {
+    array_push($viewParams['automap'], 'min_business_impact');
+}
 
 function list_automap_render_modes() {
     return Array(
@@ -133,6 +136,30 @@ $configVars = array(
         'list'       => 'list_automap_overlaps',
     ),
 );
+
+
+if (cfg('global', 'shinken_features')) {
+    function list_business_impact() {
+        return Array(
+            '0'          => '0_development',
+            '1'          => '1_testing',
+            '2'          => '2_standard',
+            '3'          => '3_production',
+            '4'          => '4_top_production',
+            '5'          => '5_business_critical',
+        );
+    }
+    $configVars['min_business_impact'] = array(
+        'must'       => false,
+        'default'    => '0_development',
+        'match'      => MATCH_AUTOMAP_BUSINESS_IMPACT,
+        'field_type' => 'dropdown',
+        'list'       => 'list_business_impact',
+    );
+}
+
+
+
 
 /**
  * Get root host object by NagVis configuration or by backend.
@@ -301,9 +328,25 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
         try {
             global $_BACKEND;
             if($dir == 'childs')
-                $relations = $_BACKEND->getBackend($params['backend_id'])->getDirectChildNamesByHostName($obj_name);
+                if (cfg('global', 'shinken_features')) {
+                    if ($params['min_business_impact']){
+                        $tmp_array = array_flip(list_business_impact());
+                        $min_business_impact = $tmp_array[$params['min_business_impact']];
+                    }
+                    $relations = $_BACKEND->getBackend($params['backend_id'])->getDirectChildDependenciesNamesByHostName($obj_name, $min_business_impact);
+                } else { 
+                    $relations = $_BACKEND->getBackend($params['backend_id'])->getDirectChildNamesByHostName($obj_name);
+                }
             else
-                $relations = $_BACKEND->getBackend($params['backend_id'])->getDirectParentNamesByHostName($obj_name);
+                if (cfg('global', 'shinken_features')) {
+                    if ($params['min_business_impact']){
+                        $tmp_array = array_flip(list_business_impact());
+                        $min_business_impact = $tmp_array[$params['min_business_impact']];
+                    }
+                    $relations = $_BACKEND->getBackend($params['backend_id'])->getDirectParentDependenciesNamesByHostName($obj_name, $min_business_impact);
+                } else {
+                    $relations = $_BACKEND->getBackend($params['backend_id'])->getDirectParentNamesByHostName($obj_name);
+                }
         } catch(BackendException $e) {
             $relations = array();
         }

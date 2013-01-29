@@ -1311,5 +1311,29 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 
         return $arrReturn;
     }
+
+        /**
+     * PUBLIC getDirectChildDependenciesNamesByHostName()
+     *
+     * @param   String   Hostname
+     * @return  Array    List of hostnames
+     * @author  Thibault Cohen <thibault.cohen@savoirfairelinux.com>
+     */
+    public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact=false) {
+        return $this->getDirectChildNamesByHostName($hostName);
+    }
+    
+    /*  
+     * PUBLIC getDirectParentNamesByHostName()
+     *
+     * @param   String   Hostname
+     * @return  Array    List of hostnames
+   * @author  Mathias Kettner <mk@mathias-kettner.de>
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact=false) {
+        return $this->getDirectParentNamesByHostName($hostName);
+    }
+
 }
 ?>

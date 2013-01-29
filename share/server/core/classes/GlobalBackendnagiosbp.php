@@ -369,6 +369,10 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
     public function getDirectParentNamesByHostName($hostName) {
         return Array();
     }
+
+    public function getDirectChildDependenciesNamesByHostName($hostName) {
+        return Array();
+    }
 }
 
 if(!function_exists('l')) {
