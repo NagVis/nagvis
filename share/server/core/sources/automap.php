@@ -309,6 +309,9 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
         }
 
         foreach($relations AS $rel_name) {
+            if (in_array($rel_name, $params['ignore_hosts']) == True){
+                continue;
+            }
             $obj = automap_obj($MAPCFG, $params, $saved_config, $rel_name);
 
             // Add to tree
