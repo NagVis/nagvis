@@ -1,4 +1,8 @@
 1.7.5
+Core:
+  * Allowing rgba(255,255,255,0.6) like definitions in e.g. label_style
+  attributes in map configuration files
+
 Frontend:
   * Hiding all kind of javascript error messages automatically on next
     successful processing
