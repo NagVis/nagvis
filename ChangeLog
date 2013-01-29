@@ -3,6 +3,8 @@ Frontend:
   * Hiding all kind of javascript error messages automatically on next
     successful processing
   * IE below 9: Fixed invisible lines (z-index was not set)
+  * Weathermap lines with byte/bit values in labels should print human
+    readable traffic now
 
 1.7.4
 Core:

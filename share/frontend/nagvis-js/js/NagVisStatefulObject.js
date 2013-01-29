@@ -553,6 +553,28 @@ var NagVisStatefulObject = NagVisObject.extend({
                 if(setPerfdata[0][2] === null || setPerfdata[0][2] === ''
                    || setPerfdata[1][2] === null || setPerfdata[1][2] === '') {
                     setPerfdata = this.calculateUsage(setPerfdata);
+                } else {
+                    // Handle the case where a plugin like check_iftraffic.pl or does not provide human readable
+                    // byte values. Calculate them.
+                    for(var i = 0; i < setPerfdata.length; i++) {
+                        if((setPerfdata[i][0] == 'inAbsolut' || setPerfdata[i][0] == 'outAbsolut')
+                           && (setPerfdata[i][2] === null || setPerfdata[i][2] === '' || setPerfdata[i][2] === 'B')) {
+                            // Hack: The following NagVis code assumes that perfdata sets are structured as follows:
+                            // 0: in percentage
+                            // 1: out percentage
+                            // 2: in bytes/bits
+                            // 3: in bytes/bits
+                            // This rewrites the found indexes when needed. It is kind of a hack, but works
+                            // for the moment and should not break existing setups.
+                            var iNew = i;
+                            if(setPerfdata[i][0] == 'inAbsolut' && i != 2) {
+                                iNew = 2;
+                            } else if(setPerfdata[i][0] == 'outAbsolut' && i != 3) {
+                                iNew = 3;
+                            }
+                            setPerfdata[iNew] = this.perfdataCalcBitsReadable(setPerfdata[i]);
+                        }
+                    }
                 }
 
                 // Get colorFill #1 (in)
@@ -646,6 +668,32 @@ var NagVisStatefulObject = NagVisObject.extend({
     },
 
     /**
+     * PRIVATE perfdataCalcBitsReadable()
+     *
+     * Transform bits in a perfdata set to a human readable value
+     *
+     * @author	Lars Michelsen <lars@vertical-visions.de>
+     */
+    perfdataCalcBitsReadable: function(set) {
+        var KB   = 1024;
+        var MB   = 1024 * 1024;
+        var GB   = 1024 * 1024 * 1024;
+        alert(set);
+        if(set[1] > GB) {
+            set[1] /= GB
+            set[2]  = 'Gbit/s'
+        } else if(set[1] > MB) {
+            set[1] /= MB
+            set[2]  = 'Mbit/s'
+        } else if(set[1] > KB) {
+            set[1] /= KB
+            set[2]  = 'Kbit/s'
+        }
+        set[1] = Math.round(set[1]*100)/100;
+        return set;
+    },
+
+    /**
      * PRIVATE perfdataCalcBytesReadable()
      *
      * Transform bytes in a perfdata set to a human readable value
@@ -653,32 +701,22 @@ var NagVisStatefulObject = NagVisObject.extend({
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     perfdataCalcBytesReadable: function(set) {
-        // Check if all needed information are present
-        if(set[1] === null || set[6] === null || set[1] == '' || set[6] == '')
-            return set;
-
         var KB   = 1024;
         var MB   = 1024 * 1024;
         var GB   = 1024 * 1024 * 1024;
-        var val  = set[1];
-        var crit = set[6];
-        var uom  = 'B';
-        if(val > GB) {
-            val  /= GB
-            uom   = 'GB'
-            crit /= GB
-        } else if(val > MB) {
-            val  /= MB
-            uom  = 'MB'
-            crit /= MB
-        } else if(val > KB) {
-            val  /= KB
-            uom   = 'KB'
-            crit /= KB
+        alert(set);
+        if(set[1] > GB) {
+            set[1] /= GB
+            set[2]  = 'GB/s'
+        } else if(set[1] > MB) {
+            set[1] /= MB
+            set[2]  = 'MB/s'
+        } else if(set[1] > KB) {
+            set[1] /= KB
+            set[2]  = 'KB/s'
         }
-
-        // Calculate percentages with 2 decimals and reset other options
-        return Array(set[0], Math.round(val*100)/100, uom, set[3], set[4], 0, Math.round(crit*100)/100);
+        set[1] = Math.round(set[1]*100)/100;
+        return set;
     },
 
     /**
