@@ -57,20 +57,20 @@ function min(arr) {
 }
 
 function newX(a, b, x, y) {
-    return (Math.cos(Math.atan2(y,x)+Math.atan2(b,a))*Math.sqrt(x*x+y*y));
+    return Math.round(Math.cos(Math.atan2(y,x)+Math.atan2(b,a))*Math.sqrt(x*x+y*y));
 }
 
 function newY(a, b, x, y) {
-    return (Math.sin(Math.atan2(y,x)+Math.atan2(b,a))*Math.sqrt(x*x+y*y));
+    return Math.round(Math.sin(Math.atan2(y,x)+Math.atan2(b,a))*Math.sqrt(x*x+y*y));
 }
 
 // Draws polygon based object. By default it draws lines (arrows and also plain lines)
 // FIXME: Make this reload aware
 function drawPolygonBasedObject(objectId, num, xCoord, yCoord, z, colorFill, colorBorder) {
-    var xMin = Math.round(min(xCoord));
-    var yMin = Math.round(min(yCoord));
-    var xMax = Math.round(max(xCoord));
-    var yMax = Math.round(max(yCoord));
+    var xMin = min(xCoord);
+    var yMin = min(yCoord);
+    var xMax = max(xCoord);
+    var yMax = max(yCoord);
 
     // Detect if the browser is able to render canvas objects
     // If so: Use canvas rendering which performs much better
@@ -126,6 +126,9 @@ function drawPolygonBasedObject(objectId, num, xCoord, yCoord, z, colorFill, col
             oContainer = document.createElement('div');
             oLine.appendChild(oContainer);
         }
+
+        oContainer.setAttribute('class', 'jsline');
+        oContainer.setAttribute('className', 'jsline');
         
         // Fallback to old line style
         var oL = new jsGraphics(oContainer);

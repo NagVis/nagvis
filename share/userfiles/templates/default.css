@@ -106,6 +106,10 @@ div.welcome a:hover {color:#779D2A}
     border-color : black;
 }
 
+.jsline div {
+    z-index: 10;
+}
+
 a.linelink {
   color: #000000;
 }
