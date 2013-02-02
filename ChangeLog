@@ -10,6 +10,9 @@ Frontend:
   * Weathermap lines with byte/bit values in labels should print human
     readable traffic now
 
+Automap:
+  * Reimplemented ignore_hosts parameter (Thanks to Thibault Cohen)
+
 1.7.4
 Core:
   * Extended logon module CoreLogonMultisite to support the
