@@ -341,10 +341,13 @@ var NagVisObject = Base.extend({
                 }
 
                 if (to_be_checked) {
-                    if (op == '=' && to_be_checked != val)
+                    if (op == '=' && to_be_checked != val) {
                         hide = true;
-                    else if (op == '~' && to_be_checked.indexOf(val) == -1)
+                    } else if (op == '~' && to_be_checked.indexOf(val) == -1) {
                         hide = true;
+                    }
+                } else {
+                    hide = true;
                 }
             }
 

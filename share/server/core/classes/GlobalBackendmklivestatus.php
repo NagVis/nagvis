@@ -788,7 +788,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     $arrTmpReturn['last_hard_state_change'] = $e[13];
                     $arrTmpReturn['perfdata'] = $e[14];
                     $arrTmpReturn['check_command'] = $e[21];
-                    $arrTmpReturn['custom_variables'] = array_combine($e[22], $e[23]);
+                    if(isset($e[22][0]) && isset($e[23][0]))
+                        $arrTmpReturn['custom_variables'] = array_combine($e[22], $e[23]);
                 }
 
                 if($specific) {
