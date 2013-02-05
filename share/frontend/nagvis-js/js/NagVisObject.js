@@ -348,13 +348,16 @@ var NagVisObject = Base.extend({
                 }
             }
 
-            // Filtered out, hide the selection
-            if(hide) {
-                oSectionMacros['action_'+key] = '<!--\\sBEGIN\\saction_'+key+'\\s-->.+?<!--\\sEND\\saction_'+key+'\\s-->';
+            // Remove the section macros of not hidden actions
+            if(!hide) {
+                oSectionMacros['action_'+key] = '<!--\\s(BEGIN|END)\\saction_'+key+'\\s-->';
             }
             cond = null;
             action = null;
         }
+        
+        // Remove all not hidden actions
+        oSectionMacros['actions'] = '<!--\\sBEGIN\\saction_.+?\\s-->.+?<!--\\sEND\\saction_.+?\\s-->';
 
         // Loop and replace all unwanted section macros
         for (var key in oSectionMacros) {

@@ -431,11 +431,11 @@ interval=15
 ; has the string "win" in the TAGS Nagios custom macro. 
 ; When clicking on the link, NagVis generates a .rdp file which contains makes
 ; the client connect to the given host via RDP.
-[action_rdp]
-action_type="rdp"
-obj_type="host,service"
-condition="TAGS~win"
-client_os="win"
+;[action_rdp]
+;action_type="rdp"
+;obj_type="host,service"
+;condition="TAGS~win"
+;client_os="win"
 ;domain=""
 ;username=""
 
@@ -444,40 +444,40 @@ client_os="win"
 ; detects that the client watching the map uses windows.
 ; When clicking on the link, NagVis generates a .cmd file which contains a
 ; call to putty which makes putty connect via SSH to this host.
-[action_win_ssh]
-action_type="win_ssh"
-obj_type="host,service"
-client_os="win"
-condition="TAGS~unix"
+;[action_win_ssh]
+;action_type="win_ssh"
+;obj_type="host,service"
+;client_os="win"
+;condition="TAGS~unix"
 
 ; Adds the action "connect via ssh" to service/host objects which have the
 ; string "unix" in the TAGS Nagios custom macro. Is only added when NagVis
 ; detects that the client watching the map uses linux or mac os.
 ; When clicking on the link, the browser opens the URL ssh://<address>/,
 ; you need to configure your clients browser to handle these urls correctly.
-[action_ssh_url]
-action_type="ssh_url"
-obj_type="host,service"
-client_os="mac,lnx"
-condition="TAGS~unix"
+;[action_ssh_url]
+;action_type="ssh_url"
+;obj_type="host,service"
+;client_os="mac,lnx"
+;condition="TAGS~unix"
 
 ; Adds the action "connect via http" to service/host objects which have the
 ; string "web-80" in the TAGS Nagios custom macro
 ; When clicking on the link, the browser opens a new window with the URL
 ; http://<host_address>/. This can be changed by modyfing the context template.
-[action_http]
-action_type="http"
-obj_type="host,service"
-condition="TAGS~web-80"
+;[action_http]
+;action_type="http"
+;obj_type="host,service"
+;condition="TAGS~web-80"
 
 ; Adds the action "connect via http" to service/host objects which have the
 ; string "web-443" in the TAGS Nagios custom macro
 ; When clicking on the link, the browser opens a new window with the URL
 ; https://<host_address>/. This can be changed by modyfing the context template.
-[action_https]
-action_type="https"
-obj_type="host,service"
-condition="TAGS~web-443"
+;[action_https]
+;action_type="https"
+;obj_type="host,service"
+;condition="TAGS~web-443"
 
 ; ------------------------------------------------------------------------------
 ; Below you find some advanced stuff
