@@ -54,6 +54,23 @@
     <li><a href="[html_cgi]/cmd.cgi?cmd_typ=7&host=[name]&service=[service_description]&force_check" target="_blank">[lang_reschedule_next_check]</a></li>
     <!-- BEGIN permitted_perform -->
     <li><a href="javascript:void(0)" onClick="showAckDialog('[map_name]', '[obj_id]');contextHide();return false">[lang_ack]</a></li>
+
+    <!-- BEGIN action_rdp -->
+    <li><a href="javascript:void(0)" onClick="window.location=oGeneralProperties.path_server+'?mod=Action&act=custom_action&cmd=rdp&map=[map_name]&object_id=[obj_id]';contextHide();return false">[lang_action_rdp]</a></li>
+    <!-- END action_rdp -->
+    <!-- BEGIN action_win_ssh -->
+    <li><a href="javascript:void(0)" onClick="window.location=oGeneralProperties.path_server+'?mod=Action&act=custom_action&cmd=win_ssh&map=[map_name]&object_id=[obj_id]';contextHide();return false">[lang_action_ssh]</a></li>
+    <!-- END action_win_ssh -->
+    <!-- BEGIN action_ssh_url -->
+    <li><a href="ssh://[address]/">[lang_action_ssh]</a></li>
+    <!-- END action_ssh_url -->
+    <!-- BEGIN action_http -->
+    <li><a href="http://[address]/" target="_blank">[lang_action_http]</a></li>
+    <!-- END action_http -->
+    <!-- BEGIN action_https -->
+    <li><a href="https://[address]/" target="_blank">[lang_action_https]</a></li>
+    <!-- END action_https -->
+
     <!-- END permitted_perform -->
     <!-- END service -->
 </ul>
