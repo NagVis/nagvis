@@ -413,7 +413,7 @@ interval=15
 ; ----------------------------
 ; Action definitions
 ; ----------------------------
-; Since NagVis 1.7.7 it is possible to use so called actions to extend the
+; Since NagVis 1.7.6 it is possible to use so called actions to extend the
 ; default context menu. This enables users to connect directly to the monitored
 ; hosts from the NagVis context menu. Here you can configure those actions.
 ;

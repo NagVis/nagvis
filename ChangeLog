@@ -1,3 +1,12 @@
+1.7.6
+Core:
+  * Improved main configuration parsing code (should not mixup comments
+    and empty lines anymore)
+
+Frontend:
+  * Added support for custom context menu actions like connecting via
+    SSH, RDP, HTTP, ... to the monitored hosts.
+
 1.7.5
 Core:
   * Allowing rgba(255,255,255,0.6) like definitions in e.g. label_style
