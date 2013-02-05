@@ -552,6 +552,13 @@ class GlobalMainCfg {
                     'default' => '',
                     'field_type' => 'hidden',
                     'match' => MATCH_STRING_PATH),
+                'actions' => Array(
+                    'must'       => 0,
+                    'editable'   => 0,
+                    'default'    => '',
+                    'field_type' => 'hidden',
+                    'match'      => MATCH_STRING_PATH
+                ),
                 'icons' => Array('must' => 0,
                     'editable' => 0,
                     'default' => '',
@@ -736,7 +743,7 @@ class GlobalMainCfg {
                 'rotationid' => Array('must' => 1,
                     'editable' => 1,
                     'default' => 'demo',
-                    'match' =>MATCH_STRING_NO_SPACE),
+                    'match' => MATCH_STRING_NO_SPACE),
                 'interval' => Array('must' => 0,
                     'editable' => 1,
                     'default' => '',
@@ -745,6 +752,41 @@ class GlobalMainCfg {
                     'editable' => 1,
                     'default' => 'demo,demo2',
                     'match' => MATCH_STRING)),
+            'action' => Array(
+                'action_type' => Array(
+                    'must'     => 1,
+                    'editable' => 0,
+                    'default'  => '',
+                    'match'    => MATCH_STRING_NO_SPACE
+                ),
+                'action_id' => Array(
+                    'must'     => 1,
+                    'editable' => 0,
+                    'default'  => '',
+                    'match'    => MATCH_STRING_NO_SPACE
+                ),
+                'condition' => Array(
+                    'must'     => 0,
+                    'editable' => 1,
+                    'default'  => '',
+                    'match'    => MATCH_CONDITION
+                ),
+                'obj_type' => Array(
+                    'must'     => 1,
+                    'editable' => 1,
+                    'array'    => true,
+                    'default'  => array('host', 'service'),
+                    'match'    => MATCH_STRING
+                ),
+                'client_os' => Array(
+                    'must'     => 0,
+                    'editable' => 1,
+                    'array'    => true,
+                    'default'  => array(),
+                    'match'    => MATCH_STRING
+                ),
+                'options' => Array()
+            ),
             'automap' => Array(
                 'defaultparams' => Array('must' => 0,
                     'editable' => 1,
@@ -1149,6 +1191,26 @@ class GlobalMainCfg {
         $this->setConfigFiles($this->getConfigFiles());
     }
 
+    /**
+     * Loads the custom action definitions from their files
+     */
+    private function fetchCustomActions() {
+        foreach(GlobalCore::getInstance()->getAvailableCustomActions() AS $action_file) {
+            $configVars = array();
+
+            if(file_exists(path('sys', 'local', 'actions'))) {
+                include(path('sys', 'local', 'actions') . '/'. $action_file);
+            } else {
+                include(path('sys', 'global', 'actions') . '/'. $action_file);
+            }
+
+            $name = substr($action_file, 0, -4);
+
+            // Feed the valid config array to get the options from the sources
+            $this->validConfig['action']['options'][$name] = $configVars;
+        }
+    }
+
     public function setConfigFiles($arr) {
         $this->configFiles = $arr;
     }
@@ -1174,6 +1236,9 @@ class GlobalMainCfg {
         $this->onlyUserConfig = $onlyUserConfig;
         // Get the valid configuration definitions from the available backends
         $this->getBackendValidConf();
+
+        // Load valid config definitions registered by custom actions
+        $this->fetchCustomActions();
 
         // Use the newest file as indicator for using the cache or not
         $this->CACHE = new GlobalFileCache(CONST_MAINCFG, CONST_MAINCFG_CACHE.'-'.CONST_VERSION.'-cache'.$cacheSuffix);
@@ -1289,6 +1354,7 @@ class GlobalMainCfg {
         $this->validConfig['paths']['shapes']['default']             = 'userfiles/images/shapes/';
         $this->validConfig['paths']['sounds']['default']             = 'userfiles/sounds/';
         $this->validConfig['paths']['sources']['default']            = 'server/core/sources';
+        $this->validConfig['paths']['actions']['default']            = 'server/core/actions';
 
         $this->validConfig['paths']['templateimages']['default']     = 'userfiles/images/templates/';
 
@@ -1342,105 +1408,117 @@ class GlobalMainCfg {
             // cut spaces from beginning and end
             $line = trim($file[$i]);
 
-            // don't read empty lines
-            if(isset($line) && $line != '') {
-                // get first char of actual line
-                $firstChar = substr($line,0,1);
+            // get first char of actual line
+            $firstChar = substr($line,0,1);
 
-                // check what's in this line
-                if($firstChar == ';') {
-                    if($isUserMainCfg) {
-                        // comment...
-                        $key = 'comment_'.($numComments++);
-                        $val = trim($line);
+            // check what's in this line
+            if($firstChar == ';' || $line == '') {
+                if($isUserMainCfg) {
+                    // comment...
+                    $key = 'comment_'.($numComments++);
+                    $val = trim($line);
 
-                        if(isset($sec) && $sec != '') {
-                            $this->config[$sec][$key] = $val;
-                        } else {
-                            $this->config[$key] = $val;
-                        }
-                    }
-                } elseif ((substr($line, 0, 1) == '[') && (substr($line, -1, 1)) == ']') {
-                    // section
-                    $sec = trim(substr($line, 1, strlen($line)-2));
-
-                    // write to array
-                    if(!isset($this->config[$sec])) {
-                        if(preg_match('/^backend_/i', $sec)) {
-                            $this->config[$sec] = Array();
-                            $this->config[$sec]['backendid'] = str_replace('backend_','',$sec);
-                        } elseif(preg_match('/^rotation_/i', $sec)) {
-                            $this->config[$sec] = Array();
-                            $this->config[$sec]['rotationid'] = str_replace('rotation_','',$sec);
-                        } else {
-                            $this->config[$sec] = Array();
-                        }
-                    }
-                } else {
-                    // parameter...
-
-                    // separate string in an array
-                    $arr = explode('=', $line);
-                    // read key from array and delete it
-                    $key = strtolower(trim($arr[0]));
-                    unset($arr[0]);
-                    // build string from rest of array
-                    $val = trim(implode('=', $arr));
-
-                    // remove " at beginning and at the end of the string
-                    if ((substr($val,0,1) == '"') && (substr($val,-1,1)=='"')) {
-                        $val = substr($val,1,strlen($val)-2);
-                    }
-
-                    // Special options (Arrays)
-                    if(isset($this->validConfig[$sec][$key]['array']) && $this->validConfig[$sec][$key]['array'] === true) {
-                        $val = $this->stringToArray($val);
-                    } elseif(preg_match('/^rotation_/i', $sec) && $key == 'maps') {
-                        // Explode comma separated list to array
-                        $val = explode(',', $val);
-
-                        // Check if an element has a label defined
-                        foreach($val AS $id => $element) {
-                            if(preg_match("/^([^\[.]+:)?(\[(.+)\]|(.+))$/", $element, $arrRet)) {
-                                $label = '';
-                                $map = '';
-
-                                // When no label is set, set map or url as label
-                                if($arrRet[1] != '') {
-                                    $label = substr($arrRet[1],0,-1);
-                                } else {
-                                    if($arrRet[3] != '') {
-                                        $label = $arrRet[3];
-                                    } else {
-                                        $label = $arrRet[4];
-                                    }
-                                }
-
-                                if(isset($arrRet[4]) && $arrRet[4] != '') {
-                                    // Remove leading/trailing spaces
-                                    $map = $arrRet[4];
-                                }
-
-                                // Remove surrounding spaces
-                                $label = trim($label);
-                                $map = trim($map);
-
-                                // Save the extracted information to an array
-                                $val[$id] = Array('label' => $label, 'map' => $map, 'url' => $arrRet[3], 'target' => '');
-                            }
-                        }
-                    }
-
-                    // write in config array
-                    if(isset($sec))
+                    if(isset($sec) && $sec != '') {
                         $this->config[$sec][$key] = $val;
-                    else
+                    } else {
                         $this->config[$key] = $val;
+                    }
+                }
+            } elseif ((substr($line, 0, 1) == '[') && (substr($line, -1, 1)) == ']') {
+                // section
+                $sec = trim(substr($line, 1, strlen($line)-2));
+
+                // write to array
+                if(!isset($this->config[$sec])) {
+                    if(preg_match('/^backend_/i', $sec)) {
+                        $this->config[$sec] = Array();
+                        $this->config[$sec]['backendid'] = str_replace('backend_', '', $sec);
+                    } elseif(preg_match('/^rotation_/i', $sec)) {
+                        $this->config[$sec] = Array();
+                        $this->config[$sec]['rotationid'] = str_replace('rotation_', '', $sec);
+                    } elseif(preg_match('/^action_/i', $sec)) {
+                        $this->config[$sec] = Array();
+                        $this->config[$sec]['action_id'] = str_replace('action_', '', $sec);
+                    } else {
+                        $this->config[$sec] = Array();
+                    }
                 }
             } else {
-                //$sec = '';
-                if($isUserMainCfg)
-                    $this->config['comment_'.($numComments++)] = '';
+                // parameter...
+
+                // separate string in an array
+                $arr = explode('=', $line);
+                // read key from array and delete it
+                $key = strtolower(trim($arr[0]));
+                unset($arr[0]);
+                // build string from rest of array
+                $val = trim(implode('=', $arr));
+
+                // remove " at beginning and at the end of the string
+                if ((substr($val,0,1) == '"') && (substr($val,-1,1)=='"')) {
+                    $val = substr($val,1,strlen($val)-2);
+                }
+
+                // Try to get the valid config array. But be aware. This is not the whole
+                // truth. Since we might not know the (backend|action)_type, there are some
+                // vars missing in this array. But this is ok for us ... for the moment.
+                if (substr($sec, 0, 7) == 'action_') {
+                    $validConfig = $this->validConfig['action'];
+
+                } elseif (substr($sec, 0, 8) == 'backend_') {
+                    $validConfig = $this->validConfig['action'];
+
+                } elseif (isset($this->validConfig[$sec])) {
+                    $validConfig = $this->validConfig[$sec];
+                } else {
+                    $validConfig = array();
+                }
+
+                // Special options (Arrays)
+                if(isset($validConfig[$key]['array']) && $validConfig[$key]['array'] === true) {
+                    $val = $this->stringToArray($val);
+
+                } elseif(substr($sec, 0, 9) == 'rotation_' && $key == 'maps') {
+                    // Explode comma separated list to array
+                    $val = explode(',', $val);
+
+                    // Check if an element has a label defined
+                    foreach($val AS $id => $element) {
+                        if(preg_match("/^([^\[.]+:)?(\[(.+)\]|(.+))$/", $element, $arrRet)) {
+                            $label = '';
+                            $map = '';
+
+                            // When no label is set, set map or url as label
+                            if($arrRet[1] != '') {
+                                $label = substr($arrRet[1],0,-1);
+                            } else {
+                                if($arrRet[3] != '') {
+                                    $label = $arrRet[3];
+                                } else {
+                                    $label = $arrRet[4];
+                                }
+                            }
+
+                            if(isset($arrRet[4]) && $arrRet[4] != '') {
+                                // Remove leading/trailing spaces
+                                $map = $arrRet[4];
+                            }
+
+                            // Remove surrounding spaces
+                            $label = trim($label);
+                            $map = trim($map);
+
+                            // Save the extracted information to an array
+                            $val[$id] = Array('label' => $label, 'map' => $map, 'url' => $arrRet[3], 'target' => '');
+                        }
+                    }
+                }
+
+                // write in config array
+                if(isset($sec))
+                    $this->config[$sec][$key] = $val;
+                else
+                    $this->config[$key] = $val;
             }
         }
 
@@ -1461,6 +1539,21 @@ class GlobalMainCfg {
     }
 
     /**
+     * Returns the computed (merged) valid configuration for the instanciated section
+     * of a specific type. Is used for "backend" and "action" at the moment.
+     */
+    private function getInstanceableValidConfig($what, $sec) {
+        $ty = $this->getValue($sec, ($what == 'backend' ? 'backendtype' : 'action_type'));
+
+        if(isset($this->validConfig[$what]['options'][$ty])
+             && is_array($this->validConfig[$what]['options'][$ty])) {
+            return array_merge($this->validConfig[$what], $this->validConfig[$what]['options'][$ty]);
+        } else {
+            return $this->validConfig[$what];
+        }
+    }
+
+    /**
      * Checks if the main config file is valid
      *
      * @param	Boolean $printErr
@@ -1471,17 +1564,17 @@ class GlobalMainCfg {
         // check given objects and attributes
         foreach($this->config AS $type => &$vars) {
             if(!preg_match('/^comment_/',$type)) {
-                if(isset($this->validConfig[$type]) || preg_match('/^(backend|rotation)_/', $type)) {
+                if(isset($this->validConfig[$type]) || preg_match('/^(backend|rotation|action)_/', $type)) {
                     // loop validConfig for checking: => missing "must" atributes
                     if(preg_match('/^backend_/', $type)) {
-                        if(isset($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])
-                             && is_array($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])) {
-                            $arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
-                        } else {
-                            $arrValidConfig = $this->validConfig['backend'];
-                        }
+                        $arrValidConfig = $this->getInstanceableValidConfig('backend', $type);
+
                     } elseif(preg_match('/^rotation_/', $type)) {
                         $arrValidConfig = $this->validConfig['rotation'];
+
+                    } elseif(preg_match('/^action_/', $type)) {
+                        $arrValidConfig = $this->getInstanceableValidConfig('action', $type);
+
                     } else {
                         $arrValidConfig = $this->validConfig[$type];
                     }
@@ -1501,14 +1594,26 @@ class GlobalMainCfg {
                     foreach($vars AS $key => $val) {
                         if(!preg_match('/^comment_/', $key)) {
                             if(preg_match('/^backend_/', $type)) {
-                                if(isset($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])
-                                     && is_array($this->validConfig['backend']['options'][$this->getValue($type,'backendtype')])) {
-                                    $arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$this->getValue($type,'backendtype')]);
+                                $ty = $this->getValue($type,'backendtype');
+                                if(isset($this->validConfig['backend']['options'][$ty])
+                                     && is_array($this->validConfig['backend']['options'][$ty])) {
+                                    $arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$ty]);
                                 } else {
                                     $arrValidConfig = $this->validConfig['backend'];
                                 }
+
                             } elseif(preg_match('/^rotation_/', $type)) {
                                 $arrValidConfig = $this->validConfig['rotation'];
+
+                            } elseif(preg_match('/^action_/', $type)) {
+                                $ty = $this->getValue($type, 'action_type');
+                                if(isset($this->validConfig['action']['options'][$ty])
+                                     && is_array($this->validConfig['action']['options'][$ty])) {
+                                    $arrValidConfig = array_merge($this->validConfig['action'], $this->validConfig['action']['options'][$ty]);
+                                } else {
+                                    $arrValidConfig = $this->validConfig['action'];
+                                }
+
                             } else {
                                 $arrValidConfig = $this->validConfig[$type];
                             }
@@ -1699,12 +1804,29 @@ class GlobalMainCfg {
                         return $this->validConfig['backend'][$var]['default'];
                     }
                 }
+
             } elseif(strpos($sec, 'rotation_') === 0) {
                 if(isset($this->config[$sec]) && is_array($this->config[$sec])) {
                     return $this->validConfig['rotation'][$var]['default'];
                 } else {
                     return null;
                 }
+
+            } elseif(strpos($sec, 'action_') === 0) {
+                if(!isset($this->config[$sec]['action_type']))
+                    return null;
+                $ty = $this->config[$sec]['action_type'];
+
+                // This value could be emtpy - so only check if it is set
+                if(isset($this->validConfig['action']['options'][$ty][$var]['default'])) {
+                    return $this->validConfig['action']['options'][$ty][$var]['default'];
+                } else {
+                    // This value could be emtpy - so only check if it is set
+                    if(isset($this->validConfig['action'][$var]['default'])) {
+                        return $this->validConfig['action'][$var]['default'];
+                    }
+                }
+
             } else {
                 return $this->validConfig[$sec][$var]['default'];
             }
@@ -1758,7 +1880,7 @@ class GlobalMainCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parseGeneralProperties() {
-        return json_encode(Array(
+        $p = Array(
           'controls_size'  => intval($this->getValue('global', 'controls_size')),
           'date_format'    => $this->getValue('global', 'dateformat'),
           'path_base'      => $this->getValue('paths','htmlbase'),
@@ -1769,7 +1891,19 @@ class GlobalMainCfg {
           'path_images'    => $this->getValue('paths','htmlimages'),
           'path_server'    => $this->getValue('paths','htmlbase').'/server/core/ajax_handler.php',
           'internal_title' => $this->getValue('internal', 'title'),
-        ));
+        );
+
+        // Add custom action configuration
+        $p['actions'] = array();
+        foreach (GlobalCore::getInstance()->getDefinedCustomActions() as $id) {
+            $p['actions'][$id] = array(
+                'obj_type'  => $this->getValue('action_'.$id, 'obj_type'),
+                'client_os' => $this->getValue('action_'.$id, 'client_os'),
+                'condition' => $this->getValue('action_'.$id, 'condition')
+            );
+        }
+
+        return json_encode($p);
     }
 
     /**
@@ -1969,7 +2103,7 @@ class GlobalMainCfg {
                             }
 
                             // Don't write the backendid/rotationid attributes (Are internal)
-                            if($key2 !== 'backendid' && $key2 !== 'rotationid') {
+                            if($key2 !== 'backendid' && $key2 !== 'rotationid' && $key2 !== 'action_id') {
                                 // Don't apply config options which are set to the same
                                 // value in the pre user config files
                                 if($this->preUserConfig !== null
@@ -1977,7 +2111,17 @@ class GlobalMainCfg {
                                    && isset($this->preUserConfig[$key][$key2])
                                    && $item2 == $this->preUserConfig[$key][$key2])
                                     continue;
-                                if(isset($this->validConfig[$key][$key2]['array']) && $this->validConfig[$key][$key2]['array'] === true)
+
+                                if (substr($key, 0, 8) == 'backend_')
+                                    $arrValidConfig = $this->getInstanceableValidConfig('backend', $key);
+                                elseif (substr($key, 0, 9) == 'rotation_')
+                                    $arrValidConfig = $this->validConfig['rotation'];
+                                elseif (substr($key, 0, 7) == 'action_')
+                                    $arrValidConfig = $this->getInstanceableValidConfig('action', $key);
+                                else
+                                    $arrValidConfig = $this->validConfig[$key];
+
+                                if(isset($arrValidConfig[$key2]['array']) && $arrValidConfig[$key2]['array'] === true)
                                     $item2 = implode(',', $item2);
 
                                 $content .= $key2.'="'.$item2.'"'."\n";

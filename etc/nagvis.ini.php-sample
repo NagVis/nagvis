@@ -410,6 +410,75 @@ maps="demo-germany,demo-ham-racks,demo-load,demo-muc-srv1,demo-geomap,demo-autom
 ; rotation interval (seconds)
 interval=15
 
+; ----------------------------
+; Action definitions
+; ----------------------------
+; Since NagVis 1.7.6 it is possible to use so called actions to extend the
+; default context menu. This enables users to connect directly to the monitored
+; hosts from the NagVis context menu. Here you can configure those actions.
+;
+; It is possible to add such actions to the context menus of service and host
+; objects. They are not added blindly to all objects of those types, you can
+; use the attribute "condition" to configure which objects shal have the
+; specific actions. By default we use Nagios custom macros of the host object
+; to make the actions visible/invisible. This filtering mechanism is not limited
+; to custom macros, you can also use regular host attributes which are available
+; within NagVis.
+; With the option "client_os" you can configure the option to only be available
+; on the clients which have a listed operating system running.
+
+; Adds the action "connect via rdp" to service/host objects where the host object
+; has the string "win" in the TAGS Nagios custom macro. 
+; When clicking on the link, NagVis generates a .rdp file which contains makes
+; the client connect to the given host via RDP.
+;[action_rdp]
+;action_type="rdp"
+;obj_type="host,service"
+;condition="TAGS~win"
+;client_os="win"
+;domain=""
+;username=""
+
+; Adds the action "connect via ssh" to service/host objects which have the
+; string "unix" in the TAGS Nagios custom macro. Is only added when NagVis
+; detects that the client watching the map uses windows.
+; When clicking on the link, NagVis generates a .cmd file which contains a
+; call to putty which makes putty connect via SSH to this host.
+;[action_win_ssh]
+;action_type="win_ssh"
+;obj_type="host,service"
+;client_os="win"
+;condition="TAGS~unix"
+
+; Adds the action "connect via ssh" to service/host objects which have the
+; string "unix" in the TAGS Nagios custom macro. Is only added when NagVis
+; detects that the client watching the map uses linux or mac os.
+; When clicking on the link, the browser opens the URL ssh://<address>/,
+; you need to configure your clients browser to handle these urls correctly.
+;[action_ssh_url]
+;action_type="ssh_url"
+;obj_type="host,service"
+;client_os="mac,lnx"
+;condition="TAGS~unix"
+
+; Adds the action "connect via http" to service/host objects which have the
+; string "web-80" in the TAGS Nagios custom macro
+; When clicking on the link, the browser opens a new window with the URL
+; http://<host_address>/. This can be changed by modyfing the context template.
+;[action_http]
+;action_type="http"
+;obj_type="host,service"
+;condition="TAGS~web-80"
+
+; Adds the action "connect via http" to service/host objects which have the
+; string "web-443" in the TAGS Nagios custom macro
+; When clicking on the link, the browser opens a new window with the URL
+; https://<host_address>/. This can be changed by modyfing the context template.
+;[action_https]
+;action_type="https"
+;obj_type="host,service"
+;condition="TAGS~web-443"
+
 ; ------------------------------------------------------------------------------
 ; Below you find some advanced stuff
 ; ------------------------------------------------------------------------------

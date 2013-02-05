@@ -195,6 +195,21 @@ class GlobalCore {
     }
 
     /**
+     * Gets all available custom actions
+     */
+    public function getDefinedCustomActions() {
+        $ret = Array();
+        foreach(self::getMainCfg()->getSections() AS $name) {
+            if(preg_match('/^action_/i', $name)) {
+                $id = self::getMainCfg()->getValue($name, 'action_id');
+                $ret[$id] = $id;
+            }
+        }
+
+        return $ret;
+    }
+
+    /**
      * Reads all languages which are available in NagVis and
      * are enabled by the configuration
      *
@@ -318,6 +333,16 @@ class GlobalCore {
         return array_merge(
           self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'sources'), MATCH_PHP_FILE),
           self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'sources'), MATCH_PHP_FILE, null, null, null, null, false)
+        );
+    }
+
+    /**
+     * Returns the list of available custom action files
+     */
+    public function getAvailableCustomActions() {
+        return array_merge(
+          self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'actions'), MATCH_PHP_FILE),
+          self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'actions'), MATCH_PHP_FILE, null, null, null, null, false)
         );
     }
 

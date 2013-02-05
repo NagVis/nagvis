@@ -42,6 +42,9 @@
             <a href="#rotation">rotation_*</a><br />
             Rotation pool definitions</li>
         <li>
+            <a href="#action">action_*</a><br />
+            Custom context action definitions</li>
+        <li>
             <a href="#states">states</a><br />
             Options which affect the handling and appearance of the different states</li>
         </ul>
@@ -603,8 +606,126 @@ interval=15</pre>
         <td> 
             <p>Comma separated list of maps to rotate in this pool. You can also add external URLs surrounded by [ and ] (e.g. maps="demo1,[http://localhost/test.php]". The URL has to be reachable and accessible by the server which NagVis is running on.</p>
             <p> You can add labels in the following format &lt;label&gt;:&lt;map&gt; and &lt;label&gt;:&lt;[url]&gt;. The labels are displayed in the rotation list.</p>
-            <p> It is also possible to add automaps to rotations. Simply prepend the automap name with an @ sign to add an automap to the rotation.</p>
         </td>
+        </tr>
+        </table>
+
+        <a name="action"></a>
+        <h3>action_* (<font color="#ff0000">New in 1.7.6</font>)</h3>
+        <p>Since NagVis 1.7.6 it is possible to use so called actions to extend the
+        default context menu. This enables users to connect directly to the monitored
+        hosts from the NagVis context menu. The configuration is done using
+        <code>[action_*]</code> sections in the main configuration.</p>
+
+        <p>It is possible to add such actions to the context menus of service and host
+        objects depending on the "obj_type" option. They are not added blindly to all
+        objects of those types, you can use the attribute "condition" to configure
+        which objects shal have the specific actions. By default we use Nagios custom
+        macros of the host object to make the actions visible/invisible. This filtering
+        mechanism is not limited to custom macros, you can also use regular host
+        attributes which are available within NagVis.<br />
+        With the option "client_os" you can configure the option to only be available
+        on the clients which have a listed operating system running.</p>
+       
+        <p>Here is an example for such a section, taken from the sample config:</p> 
+<pre>
+; Adds the action "connect via ssh" to service/host objects which have the
+; string "unix" in the TAGS Nagios custom macro. Is only added when NagVis
+; detects that the client watching the map uses linux or mac os.
+; When clicking on the link, the browser opens the URL ssh://&lt;address&gt;/,
+; you need to configure your clients browser to handle these urls correctly.
+[action_ssh_url]
+action_type="ssh_url"
+obj_type="host,service"
+client_os="mac,lnx"
+condition="TAGS~unix"</pre>
+
+        <table style="width:100%">
+        <tr>
+        <th width="200">Value</th><th width="150">Default</th><th>Description</th>
+        </tr>
+        <tr>
+            <td>action_type</td><td></td>
+            <td>The type of the custom action (used as reference to the optional custom
+            action script files located in <code>share/server/core/actions</code>).</td>
+        </tr>
+        <tr>
+            <td>obj_type</td><td>host,service</td>
+            <td>Comma separated list of object types to display this custom action for</td>
+        </tr>
+        <tr>
+            <td>client_os</td><td></td>
+            <td>Comma separated list of client operating systems to display this custom action for. You can
+            use the values <code>win</code>, <code>lnx</code> and/or <code>mac</code> here.</td>
+        </tr>
+        <tr>
+            <td>condition</td><td></td>
+            <td><p>You can use some sort of filtering mechanism to display the action not on all
+            objects of that type. The example above can be read like this: "Add this filter to all host and
+            service objects which contain the string <code>unix</code> in the custom macro <code>TAGS</code>".
+            Means the action is only added to unix hosts.</p>
+            <p>You can use regular attributes or even custom macros of the objects as keys.
+            At the moment you can use the operator <code>=</code> to test is the value 
+            does match the needle exactly. The operator <code>~</code> can be used to search
+            the given substring in the value. Both operators are case sensitive.</p>
+            </td>
+        </tr>
+        </table>
+
+        <p>An action can be constructed out of three parts:
+        <ul>
+            <li>The configuration section, which is needed to register the action to NagVis</li>
+            <li>The HTML snippet to be added to the context menu in the context template</li>
+            <li><i>Optional:</i> An action plugin which can register custom config variables for this
+            plugin and a handler function which can be executed on the server to perform some
+            custom action on in the context of the server (e.g. generate some files). Those
+            files are located in <code>share/server/core/actions</code>).</li>
+        </ul>
+        </p> 
+
+        <p>The sample configuration defines several sample actions, which might be useful for
+        some users. Here is the list and a short description of the actions:</p>
+        
+        <table style="width:100%">
+        <tr>
+        <th width="200">Action Id</th><th>Description</th>
+        </tr>
+        <tr>
+            <td>rdp</td>
+            <td>Adds the action "connect via rdp" to service/host objects where the host object
+            has the string "win" in the TAGS Nagios custom macro.
+            When clicking on the link, NagVis generates a .rdp file which contains makes
+            the client connect to the given host via RDP.</td>
+        </tr>
+        <tr>
+            <td>win_ssh</td>
+            <td>Adds the action "connect via ssh" to service/host objects which have the
+            string "unix" in the TAGS Nagios custom macro. Is only added when NagVis
+            detects that the client watching the map uses windows.
+            When clicking on the link, NagVis generates a .cmd file which contains a
+            call to putty which makes putty connect via SSH to this host.</td>
+        </tr>
+        <tr>
+            <td>ssh_url</td>
+            <td>Adds the action "connect via ssh" to service/host objects which have the
+            string "unix" in the TAGS Nagios custom macro. Is only added when NagVis
+            detects that the client watching the map uses linux or mac os.
+            When clicking on the link, the browser opens the URL ssh://&lt;address>/,
+            you need to configure your clients browser to handle these urls correctly.</td>
+        </tr>
+        <tr>
+            <td>http</td>
+            <td>Adds the action "connect via http" to service/host objects which have the
+            string "web-80" in the TAGS Nagios custom macro
+            When clicking on the link, the browser opens a new window with the URL
+            http://&lt;host_address>/. This can be changed by modyfing the context template.</td>
+        </tr>
+        <tr>
+            <td>https</td>
+            <td>Adds the action "connect via http" to service/host objects which have the
+            string "web-443" in the TAGS Nagios custom macro
+            When clicking on the link, the browser opens a new window with the URL
+            https://&lt;host_address>/. This can be changed by modyfing the context template.</td>
         </tr>
         </table>
         

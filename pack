@@ -17,8 +17,13 @@ case "$1" in
         BRANCH=nagvis-1.4
     ;;
     *)
-        echo "ERROR: No param given (master|1.7|1.6|1.5|1.4)."
-        exit 1
+        if [ -z "$1" ]; then
+            echo "ERROR: No param given (master|1.7|1.6|1.5|1.4)."
+            exit 1
+        else
+            V=$1
+            BRANCH=$1
+        fi
     ;;
 esac
 
