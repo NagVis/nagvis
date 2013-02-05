@@ -296,6 +296,66 @@ var NagVisObject = Base.extend({
         if(this.conf.type !== 'map')
             oSectionMacros.map = '<!--\\sBEGIN\\smap\\s-->.+?<!--\\sEND\\smap\\s-->';
 
+        // Loop all registered actions, check wether or not this action should be shown for this object
+        // and either add the replacement section or not
+        for (var key in oGeneralProperties.actions) {
+            var action = oGeneralProperties.actions[key];
+            var hide = false;
+
+            // Check object type
+            hide = action.obj_type.indexOf(this.conf.type) == -1;
+
+            // Only check the condition when not already hidden by another check before
+            if(!hide && isset(action.client_os) && action.client_os.length > 0) {
+                // Check the client os
+                var os = navigator.platform.toLowerCase();
+                if (os.indexOf('win') !== -1)
+                    os = 'win';
+                else if (os.indexOf('linux') !== -1)
+                    os = 'lnx';
+                else if (os.indexOf('mac') !== -1)
+                    os = 'mac';
+
+                hide = action.client_os.indexOf(os) == -1;
+            }
+
+            // Only check the condition when not already hidden by another check before
+            if(!hide && isset(action.condition) && action.condition !== '') {
+                var cond = action.condition;
+                
+                var op = '';
+                if (cond.indexOf('~') != -1) {
+                    op = '~';
+                } else if (cond.indexOf('=') != -1) {
+                    op = '=';
+                }
+
+                var parts = cond.split(op);
+                var attr  = parts[0];
+                var val   = parts[1];
+                var to_be_checked;
+                if (isset(this.conf.custom_variables) && isset(this.conf.custom_variables[attr])) {
+                    to_be_checked = this.conf.custom_variables[attr];
+                } else if(isset(this.conf[attr])) {
+                    to_be_checked = this.conf[attr];
+                }
+
+                if (to_be_checked) {
+                    if (op == '=' && to_be_checked != val)
+                        hide = true;
+                    else if (op == '~' && to_be_checked.indexOf(val) == -1)
+                        hide = true;
+                }
+            }
+
+            // Filtered out, hide the selection
+            if(hide) {
+                oSectionMacros['action_'+key] = '<!--\\sBEGIN\\saction_'+key+'\\s-->.+?<!--\\sEND\\saction_'+key+'\\s-->';
+            }
+            cond = null;
+            action = null;
+        }
+
         // Loop and replace all unwanted section macros
         for (var key in oSectionMacros) {
             var regex = getRegEx('section-'+key, oSectionMacros[key], 'gm');

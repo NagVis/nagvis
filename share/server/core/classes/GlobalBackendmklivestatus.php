@@ -580,7 +580,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
           "current_attempt max_check_attempts last_state_change ".
           "last_hard_state_change statusmap_image perf_data ".
           "acknowledged scheduled_downtime_depth has_been_checked name ".
-          "check_command\n".
+          "check_command custom_variable_names custom_variable_values\n".
           $objFilter;
 
         $l = $this->queryLivestatus($q);
@@ -625,7 +625,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                   'last_hard_state_change' => $e[12],
                   'statusmap_image'        => $e[13],
                   'perfdata'               => $e[14],
-                  'check_command'          => $e[19]
+                  'check_command'          => $e[19],
+                  'custom_variables'       => array_combine($e[20], $e[21])
                 );
 
                 /**
@@ -693,7 +694,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
           "state_type current_attempt max_check_attempts last_state_change ".
           "last_hard_state_change perf_data scheduled_downtime_depth ".
           "acknowledged host_acknowledged host_scheduled_downtime_depth ".
-          "has_been_checked host_name check_command\n");
+          "has_been_checked host_name check_command custom_variable_names custom_variable_values\n");
 
         $arrReturn = Array();
         if(is_array($l) && count($l) > 0) {
@@ -787,6 +788,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     $arrTmpReturn['last_hard_state_change'] = $e[13];
                     $arrTmpReturn['perfdata'] = $e[14];
                     $arrTmpReturn['check_command'] = $e[21];
+                    $arrTmpReturn['custom_variables'] = array_combine($e[22], $e[23]);
                 }
 
                 if($specific) {

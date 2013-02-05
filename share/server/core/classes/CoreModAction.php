@@ -35,6 +35,7 @@ class CoreModAction extends CoreModule {
         // Register valid actions
         $this->aActions = Array(
             'acknowledge'       => 'perform',
+            'custom_action'     => 'perform',
         );
     }
 
@@ -43,6 +44,43 @@ class CoreModAction extends CoreModule {
 
         if($this->offersAction($this->sAction)) {
             switch($this->sAction) {
+                case 'custom_action':
+                    $aOpts = Array(
+                        'map'       => MATCH_MAP_NAME,
+                        'object_id' => MATCH_OBJECTID,
+                        'cmd'       => MATCH_STRING_NO_SPACE,
+                    );
+                    $attrs = $this->getCustomOptions($aOpts, Array());
+
+                    // Input validations
+                    // - Valid custom action?
+                    $actions = GlobalCore::getInstance()->getDefinedCustomActions();
+                    if(!isset($actions[$attrs['cmd']]))
+                        throw new NagVisException(l('The given custom action is not defined.'));
+
+                    // - does the map exist?
+                    $this->verifyMapExists($attrs['map']);
+
+                    // - does the object exist on the map?
+                    $this->MAPCFG = new GlobalMapCfg(GlobalCore::getInstance(), $attrs['map']);
+                    $this->MAPCFG->skipSourceErrors();
+                    $this->MAPCFG->readMapConfig();
+
+                    if(!isset($attrs['object_id']) && $attrs['object_id'] == '')
+                        throw new NagVisException(l('The object_id value is missing.'));
+                    
+                    if(!$this->MAPCFG->objExists($attrs['object_id']))
+                        throw new NagVisException(l('The object does not exist.'));
+                    $objId = $attrs['object_id'];
+
+                    $func = 'handle_action_'.$attrs['cmd'];
+                    if(!function_exists($func))
+                        throw new NagVisException(l('Action handler not implemented.'));
+
+                    $func($this->MAPCFG, $objId);
+
+                break;
+                
                 case 'acknowledge':
                     $aOpts = Array(
                         'map'       => MATCH_MAP_NAME,

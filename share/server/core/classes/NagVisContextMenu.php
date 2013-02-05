@@ -158,6 +158,22 @@ class NagVisContextMenu {
         if(strpos($this->code,'[lang_make_root]') !== FALSE) {
             $this->code = str_replace('[lang_make_root]', l('Make root'), $this->code);
         }
+
+        if(strpos($this->code,'[lang_action_rdp]') !== FALSE) {
+            $this->code = str_replace('[lang_action_rdp]', l('Connect (RDP)'), $this->code);
+        }
+
+        if(strpos($this->code,'[lang_action_ssh]') !== FALSE) {
+            $this->code = str_replace('[lang_action_ssh]', l('Connect (SSH)'), $this->code);
+        }
+
+        if(strpos($this->code,'[lang_action_http]') !== FALSE) {
+            $this->code = str_replace('[lang_action_http]', l('Connect (HTTP)'), $this->code);
+        }
+
+        if(strpos($this->code,'[lang_action_https]') !== FALSE) {
+            $this->code = str_replace('[lang_action_https]', l('Connect (HTTPS)'), $this->code);
+        }
     }
 
     /**
