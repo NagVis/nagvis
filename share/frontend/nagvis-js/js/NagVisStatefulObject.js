@@ -678,7 +678,6 @@ var NagVisStatefulObject = NagVisObject.extend({
         var KB   = 1024;
         var MB   = 1024 * 1024;
         var GB   = 1024 * 1024 * 1024;
-        alert(set);
         if(set[1] > GB) {
             set[1] /= GB
             set[2]  = 'Gbit/s'
@@ -704,7 +703,6 @@ var NagVisStatefulObject = NagVisObject.extend({
         var KB   = 1024;
         var MB   = 1024 * 1024;
         var GB   = 1024 * 1024 * 1024;
-        alert(set);
         if(set[1] > GB) {
             set[1] /= GB
             set[2]  = 'GB/s'

@@ -6,6 +6,7 @@ Core:
 Frontend:
   * Added support for custom context menu actions like connecting via
     SSH, RDP, HTTP, ... to the monitored hosts.
+  * FIX: Removed debug output while recalculating bandwidth of weathermap lines
 
 1.7.5
 Core:
