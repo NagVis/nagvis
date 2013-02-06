@@ -10,6 +10,7 @@ Frontend:
   * Added support for custom context menu actions like connecting via
     SSH, RDP, HTTP, ... to the monitored hosts.
   * FIX: Removed debug output while recalculating bandwidth of weathermap lines
+  * FIX: Fixed height of iframes in Container objects
 
 1.7.5
 Core:

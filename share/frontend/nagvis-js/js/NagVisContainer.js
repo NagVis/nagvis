@@ -61,6 +61,7 @@ var NagVisContainer = NagVisStatelessObject.extend({
             var oSpan = oTextbox.childNodes[0];
             if(oSpan) {
                 oSpan.style.display = 'block';
+                oSpan.style.height = '100%';
 
                 if(this.conf.view_type === 'inline') {
                     // Request data via ajax call and add it directly to the current page
