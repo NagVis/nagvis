@@ -2,6 +2,9 @@
 Core:
   * Improved main configuration parsing code (should not mixup comments
     and empty lines anymore)
+  * Added shinken business_impact filter to automaps (set shinken_features=1
+    in [global] section in main configuration to enable this feature)
+    Thanks to Thibault Cohen for the patch)
 
 Frontend:
   * Added support for custom context menu actions like connecting via

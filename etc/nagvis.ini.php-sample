@@ -149,6 +149,11 @@
 ; The startshow parameter is only used by some views at the moment. It is used
 ; by the Map module.
 ;startshow=""
+;
+; Turn on to enable some shinken related features in NagVis, like the
+; min_business_impact-filter on automaps which can be used to render automaps
+; based on the shinken attribute "business_impact".
+;shinken_features=0
 
 ; Path definitions
 [paths]
