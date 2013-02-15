@@ -687,6 +687,8 @@ var NagVisStatefulObject = NagVisObject.extend({
         } else if(set[1] > KB) {
             set[1] /= KB
             set[2]  = 'Kbit/s'
+        } else {
+            set[2]  = 'bit/s'
         }
         set[1] = Math.round(set[1]*100)/100;
         return set;
@@ -712,6 +714,8 @@ var NagVisStatefulObject = NagVisObject.extend({
         } else if(set[1] > KB) {
             set[1] /= KB
             set[2]  = 'KB/s'
+        } else {
+            set[2]  = 'B/s'
         }
         set[1] = Math.round(set[1]*100)/100;
         return set;
