@@ -299,6 +299,8 @@ var NagVisObject = Base.extend({
         // Loop all registered actions, check wether or not this action should be shown for this object
         // and either add the replacement section or not
         for (var key in oGeneralProperties.actions) {
+            if(key == "indexOf")
+                continue; // skip indexOf prototype (seems to be looped in IE)
             var action = oGeneralProperties.actions[key];
             var hide = false;
 
