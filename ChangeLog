@@ -1,3 +1,5 @@
+1.7.7
+
 1.7.6
 Core:
   * Improved main configuration parsing code (should not mixup comments
