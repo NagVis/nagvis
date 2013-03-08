@@ -1421,7 +1421,7 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
         restore "$USERFILES_DIR/images/iconsets/" "iconset files" "/20x20.png /std_*_*.png /demo_*.png"
     
         LINE="Restoring custom shapes..."
-        restore "$USERFILES_DIR/images/shapes/" "shapes" "*demo*png /std_dummy.png"
+        restore "$USERFILES_DIR/images/shapes/" "shapes" "*demo*png /std_*"
         
         LINE="Restoring custom templates..."
         restore "$USERFILES_DIR/templates/" "templates" "/default.*"

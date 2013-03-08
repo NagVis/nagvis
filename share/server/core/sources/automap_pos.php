@@ -55,11 +55,6 @@ function graphviz_config_tree(&$params, &$tree, $layer = 0) {
     $str .= 'label="", ';
     $str .= 'URL="'.$tree['object_id'].'", ';
     $str .= 'tooltip="'.$tree['object_id'].'", ';
-
-    // The root host has to be highlighted, these are the options to do this
-    /*if($layer == 0) {
-        $str .= 'shape="egg",';
-    }*/
     
     $width  = $tree['.width'];
     $height = $tree['.height'];
@@ -110,7 +105,7 @@ function graphviz_config(&$params, &$tree) {
     $str .= '    graph [';
     $str .= 'dpi="72", ';
     //ratio: expand, auto, fill, compress
-    $str .= 'ratio="fill", ';
+    //$str .= 'ratio="fill", ';
     $str .= 'margin='.graphviz_px2inch($params['margin']).', ';
     //$str .= 'bgcolor="'.$this->MAPCFG->getValue(0, 'background_color').'", ';
     $str .= 'root="'.$tree['object_id'].'", ';
@@ -145,8 +140,8 @@ function graphviz_config(&$params, &$tree) {
     $str .= '    node [';
     // default margin is 0.11,0.055
     $str .= 'margin="0.0,0.0", ';
-    $str .= 'ratio="auto", ';
     $str .= 'shape="rect", ';
+    $str .= 'fixedsize="true", ';
     $str .= 'color="white", ';
     // This may be altered by the single objects depending on the icon size
     $str .= 'width="'.graphviz_px2inch(16).'", ';

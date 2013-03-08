@@ -48,4 +48,15 @@ function iconset_size($iconset) {
         return array(0, 0);
 }
 
+function shape_size($icon) {
+    $iconPath      = path('sys',  'global', 'shapes').'/'.$icon;
+    $iconPathLocal = path('sys',  'local',  'shapes').'/'.$icon;
+    if(file_exists($iconPathLocal))
+        return getimagesize($iconPathLocal);
+    elseif(file_exists($iconPath))
+        return getimagesize($iconPath);
+    else
+        return array(0, 0);
+}
+
 ?>

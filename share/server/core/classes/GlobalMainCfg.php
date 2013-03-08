@@ -799,7 +799,7 @@ class GlobalMainCfg {
                     'match' => MATCH_STRING_URL),
                 'defaultroot' => Array('must' => 0,
                     'editable' => 1,
-                    'default' => 'localhost',
+                    'default' => '<<<monitoring>>>',
                     'match' => MATCH_STRING_NO_SPACE_EMPTY),
                 'graphvizpath' => Array('must' => 0,
                     'editable' => 1,

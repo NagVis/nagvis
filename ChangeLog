@@ -1,4 +1,10 @@
 1.7.7
+Automap:
+  * Changed default behaviour of the automap concerning the root host. By
+    default NagVis uses a virtual root node which represents the monitoring
+    core. It adds the parent tree and all nodes which have no parents defined
+    below this node. If no parents are configured, all hosts are rendered
+    below this virtual root node.
 
 1.7.6
 Core:

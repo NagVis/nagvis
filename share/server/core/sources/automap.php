@@ -76,7 +76,7 @@ $configVars = array(
     ),
     'root' => array(
         'must'       => false,
-        'default'    => '',
+        'default'    => '<<<monitoring>>>',
         'match'      => MATCH_STRING_NO_SPACE_EMPTY,
     ),
     'filter_by_state' => array(
@@ -130,7 +130,7 @@ $configVars = array(
     ),
     'overlap' => array(
         'must'       => false,
-        'default'    => 'true',
+        'default'    => 'scale',
         'match'      => MATCH_AUTOMAP_OVERLAP,
         'field_type' => 'dropdown',
         'list'       => 'list_automap_overlaps',
@@ -280,19 +280,28 @@ function automap_obj_base($MAPCFG, &$params, &$saved_config, $obj_name) {
 function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
     $obj = automap_obj_base($MAPCFG, $params, $saved_config, $obj_name);
     
-    // Default to params iconset
-    if(!isset($obj['iconset']))
-        $obj['iconset'] = $params['iconset'];
+    if ($obj_name === '<<<monitoring>>>') {
+        $obj['host_name'] = 'Monitoring';
+        $obj['type']      = 'shape';
+        $obj['icon']      = 'std_nagvis.png';
+        $obj['.width']    = 22;
+        $obj['.height']   = 22;
+    } else {
+        $obj['type']      = 'host';
+        $obj['host_name'] = $obj_name;
 
-    // Calculate the size of the object for later auto positioning
-    $size = iconset_size($obj['iconset']);
-    $obj['.width']      = $size[0];
-    $obj['.height']     = $size[1];
+        // Default to params iconset
+        if(!isset($obj['iconset']))
+            $obj['iconset'] = $params['iconset'];
 
-    $obj['type']        = 'host';
+        // Calculate the size of the object for later auto positioning
+        $size = iconset_size($obj['iconset']);
+        $obj['.width']      = $size[0];
+        $obj['.height']     = $size[1];
+    }
+
     // Header menu has z-index 100, this object's label the below+1
     $obj['z']           = 98;
-    $obj['host_name']   = $obj_name;
     $obj['.parents']    = array();
     $obj['.childs']     = array();
 
@@ -327,17 +336,23 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
     if($layers_left != 0) {
         try {
             global $_BACKEND;
-            if($dir == 'childs')
-                if (cfg('global', 'shinken_features')) {
+            if($dir == 'childs') {
+                if($obj_name == '<<<monitoring>>>') {
+                    try {
+                        $relations = $_BACKEND->getBackend($params['backend_id'])->getHostNamesWithNoParent();
+                    } catch(BackendConnectionProblem $e) {
+                        $relations = array();
+                    }
+                } elseif (cfg('global', 'shinken_features')) {
                     if ($params['min_business_impact']){
                         $tmp_array = array_flip(list_business_impact());
                         $min_business_impact = $tmp_array[$params['min_business_impact']];
                     }
                     $relations = $_BACKEND->getBackend($params['backend_id'])->getDirectChildDependenciesNamesByHostName($obj_name, $min_business_impact);
-                } else { 
+                } else {
                     $relations = $_BACKEND->getBackend($params['backend_id'])->getDirectChildNamesByHostName($obj_name);
                 }
-            else
+            } else {
                 if (cfg('global', 'shinken_features')) {
                     if ($params['min_business_impact']){
                         $tmp_array = array_flip(list_business_impact());
@@ -347,6 +362,7 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
                 } else {
                     $relations = $_BACKEND->getBackend($params['backend_id'])->getDirectParentNamesByHostName($obj_name);
                 }
+            }
         } catch(BackendException $e) {
             $relations = array();
         }

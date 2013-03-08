@@ -287,8 +287,11 @@
 [automap]
 ; Default URL parameters for links to the automap
 ;defaultparams="&childLayers=2"
-; Default root host (NagVis uses this if it can't detect it via NDO)
-;defaultroot=""
+; Default root host (NagVis uses this if it can't detect it via backend)
+; You can configure a hostname here or use "<<<monitoring>>>" as "virtual"
+; node which shows the parent tree and all hosts which have no parents
+; defined below the is node.
+;defaultroot="<<<monitoring>>>"
 ; Path to the graphviz binaries (dot,neato,...); Only needed if not in ENV PATH
 ;graphvizpath="/usr/bin/"
 
