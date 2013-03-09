@@ -38,7 +38,7 @@ class FrontendModMap extends FrontendModule {
 
         // Parse the view specific options
         $aOpts = Array(
-            'show'          => MATCH_MAP_NAME,
+            'show'          => MATCH_MAP_NAME_EMPTY,
             'search'        => MATCH_STRING_NO_SPACE_EMPTY,
             'rotation'      => MATCH_ROTATION_NAME_EMPTY,
             'rotationStep'  => MATCH_INTEGER_EMPTY,
@@ -89,6 +89,7 @@ class FrontendModMap extends FrontendModule {
         global $AUTHORISATION;
         // Initialize map configuration
         $MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
+
         // Read the map configuration file (Only global section!)
         $MAPCFG->readMapConfig(ONLY_GLOBAL);
 
@@ -104,7 +105,7 @@ class FrontendModMap extends FrontendModule {
             $INDEX->setCustomStylesheet($this->CORE->getMainCfg()->getPath('html', 'global', 'styles', $customStylesheet));
 
         // Need to parse the header menu by config or url value?
-        if($opts['header_menu']) {
+        if(isset($opts['header_menu']) && $opts['header_menu']) {
             // Parse the header menu
             $HEADER = new NagVisHeaderMenu($this->CORE, $this->UHANDLER, $MAPCFG->getValue(0 ,'header_template'), $MAPCFG);
 

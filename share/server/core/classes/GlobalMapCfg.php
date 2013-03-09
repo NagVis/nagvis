@@ -255,46 +255,9 @@ class GlobalMapCfg {
     }
 
     /**
-     * Reads the map config file (copied from readFile->readNagVisCfg())
-     *
-     * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * Really parses a map configuration file
      */
-    public function readMapConfig($onlyGlobal = 0, $resolveTemplates = true, $useCache = true) {
-        if($this->name == '')
-            return false;
-
-        // Only use cache when there is
-        // a) The cache should be used
-        // b) When whole config file should be read
-        // c) Some valid cache file
-        // d) Some valid main configuration cache file
-        // e) This cache file newer than main configuration cache file
-        if($onlyGlobal == 0
-           && $useCache === true
-           && $this->CACHE->isCached() !== -1
-           && $this->CORE->getMainCfg()->isCached() !== -1
-           && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
-            $this->mapConfig = $this->CACHE->getCache();
-            $this->typeDefaults = $this->DCACHE->getCache();
-
-            // Now process the information from the sources
-            $this->processSources();
-
-            // Cache objects are not needed anymore
-            $this->CACHE = null;
-            $this->DCACHE = null;
-
-            $this->BACKGROUND = $this->getBackground();
-
-            // YAY! Got cached data.
-            return TRUE;
-        }
-
-        //
-        // Got no cached data. Now parse the map config.
-        //
-
+    public function parseConfigFile($onlyGlobal) {
         if(!$this->checkMapConfigExists(TRUE) || !$this->checkMapConfigReadable(TRUE))
             return false;
 
@@ -321,7 +284,6 @@ class GlobalMapCfg {
 
         // Loop each line
         $iNumLines = count($file);
-        $unknownObject = null;
         for($l = 0; $l < $iNumLines; $l++) {
             // Remove spaces, newlines, tabs, etc. (http://de.php.net/rtrim)
             $file[$l] = rtrim($file[$l]);
@@ -412,6 +374,55 @@ class GlobalMapCfg {
             else
                 $obj[$sKey] = $sValue;
         }
+    }
+
+    /**
+     * Reads the map config file (copied from readFile->readNagVisCfg())
+     *
+     * @return	Boolean	Is Successful?
+     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function readMapConfig($onlyGlobal = 0, $resolveTemplates = true, $useCache = true) {
+        // Only use cache when there is
+        // a) The cache should be used
+        // b) When whole config file should be read
+        // c) Some valid cache file
+        // d) Some valid main configuration cache file
+        // e) This cache file newer than main configuration cache file
+        if($onlyGlobal == 0
+           && $useCache === true
+           && $this->CACHE->isCached() !== -1
+           && $this->CORE->getMainCfg()->isCached() !== -1
+           && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
+            $this->mapConfig = $this->CACHE->getCache();
+            $this->typeDefaults = $this->DCACHE->getCache();
+
+            // Now process the information from the sources
+            $this->processSources();
+
+            // Cache objects are not needed anymore
+            $this->CACHE = null;
+            $this->DCACHE = null;
+
+            $this->BACKGROUND = $this->getBackground();
+
+            // YAY! Got cached data.
+            return TRUE;
+        }
+
+        //
+        // Got no cached data. Now parse the map config.
+        //
+
+        if($this->hasConfigFile()) {
+            $this->parseConfigFile($onlyGlobal);
+        } else {
+            // Initialize basic configuration for configless (ondemand) maps
+            // Now load the user parameters into global config
+            $this->mapConfig[0] = array_merge(array(
+                'type' => 'global',
+            ), $this->getSourceParams(true, true));
+        }
 
         // Gather the default values for the object types
         $this->gatherTypeDefaults($onlyGlobal);
@@ -422,10 +433,6 @@ class GlobalMapCfg {
                 $this->mergeTemplates();
             }
         }
-
-        // unknown object type found on map
-        if($unknownObject)
-            throw new MapCfgInvalid($unknownObject);
 
         try {
             $this->checkMapConfigIsValid();
@@ -546,7 +553,11 @@ class GlobalMapCfg {
         if(isset($_REQUEST[$key])) {
             if(!$only_customized || $_REQUEST[$key] != $this->getValue(0, $key)) {
                 // Only get options which differ from the defaults
-                return $_REQUEST[$key];
+                // Maybe convert the type, if requested
+                if(isset(self::$validConfig['global'][$key]['array']) && self::$validConfig['global'][$key]['array'] === true)
+                    return explode(',', $_REQUEST[$key]);
+                else
+                    return $_REQUEST[$key];
             } else {
                 return null;
             }
@@ -571,7 +582,7 @@ class GlobalMapCfg {
      * Returns an assiziative array of all parameters with values for all sources
      * used on the current map
      */
-    public function getSourceParams($only_user_supplied = false, $only_customized = false) {
+    public function getSourceParams($only_user_supplied = false, $only_customized = false, $recurse = true) {
         // First get a flat list of all parameters of all sources
 
         if(isset(self::$viewParams['*']))
@@ -593,6 +604,21 @@ class GlobalMapCfg {
             $val = $this->getSourceParam($key, $only_user_supplied, $only_customized);
             if($val !== null)
                 $params[$key] = $val;
+        }
+
+        // The map sources might have changed basd on source params - we need an
+        // additional run to get params which belong to this sources
+        if(isset($params['sources'])) {
+            $keys = array();
+            foreach($params['sources'] AS $source) {
+                $keys = array_merge($keys, self::$viewParams[$source]);
+            }
+
+            foreach($keys AS $key) {
+                $val = $this->getSourceParam($key, $only_user_supplied, $only_customized);
+                if($val !== null)
+                    $params[$key] = $val;
+            }
         }
 
         return $params;
@@ -631,6 +657,18 @@ class GlobalMapCfg {
         $this->ignoreSourceErrors = $flag;
     }
 
+    // converts params to their string representations, like used in filenames for caches
+    private function paramsToString($params) {
+        $p = array();
+        foreach ($params AS $key => $val) {
+            if(isset(self::$validConfig['global'][$key]['array']) && self::$validConfig['global'][$key]['array'] === true) {
+                $val = implode(',', $val);
+            }
+            $p[$key] = $val;
+        }
+        return implode('_', $p);
+    }
+
     /**
      * A source can modify the map configuration before it is used for further processing.
      * Such a source is a key which points to a "process", "params" and "changed" function
@@ -651,7 +689,7 @@ class GlobalMapCfg {
         // FIXME: Add a flag to exclude options from cache file naming
         if(isset($params['source_file']))
             unset($params['source_file']);
-        $param_values = implode('_', array_values($params));
+        $param_values = $this->paramsToString($params);
         $cacheFile = cfg('paths','var').'source-'.$this->name.'.cfg-'.$param_values.'-'.CONST_VERSION.'.cache';
         $CACHE = new GlobalFileCache(array(), $cacheFile);
 
@@ -748,6 +786,14 @@ class GlobalMapCfg {
         foreach($this->getDefinitions('template') AS $id => $template) {
             unset($this->mapConfig[$id]);
         }
+    }
+
+    /**
+     * It might be possible that a map does not use a configuration file and is only
+     * computed on-demand using parameters, this informs the callers about this
+     */
+    public function hasConfigFile() {
+        return $this->name != '';
     }
 
     /**
@@ -1003,6 +1049,10 @@ class GlobalMapCfg {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getFileModificationTime($compareTime = null) {
+        // on-demand maps have no age, return the compare time
+        if(!$this->hasConfigFile())
+            return $compareTime;
+
         if($this->checkMapConfigReadable(1)) {
             // When the sources changed compared to the given time,
             // return always the current time

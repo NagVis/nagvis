@@ -75,7 +75,7 @@ class CoreModMap extends CoreModule {
             case 'addModify':
             case 'checkLinked':
             case 'toStaticMap':
-                $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME));
+                $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME_EMPTY));
                 $this->name = $aVals['show'];
             break;
             // And those have the objecs in the POST var "map"

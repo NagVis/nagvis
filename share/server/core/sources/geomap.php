@@ -147,6 +147,7 @@ $viewParams = array(
         'geomap_border',
         'source_type',
         'source_file',
+        'label_show',
     )
 );
 

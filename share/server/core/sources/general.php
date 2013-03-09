@@ -4,6 +4,7 @@
 global $viewParams;
 $viewParams = array(
     '*' => array(
+        'sources',
         'backend_id',
         'iconset',
 
@@ -18,7 +19,9 @@ $viewParams = array(
     )
 );
 
-// Config variables to be registered for this source
+// Config variables to be registered for all sources, only options
+// which are not already available as map paramters need to be
+// registered here
 global $configVars;
 $configVars = array(
     'width' => array(

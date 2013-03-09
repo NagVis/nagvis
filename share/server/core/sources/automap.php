@@ -15,6 +15,7 @@ $viewParams = array(
         'margin',
         'rankdir',
         'overlap',
+        'label_show',
     ),
 );
 if (cfg('global', 'shinken_features')) {
@@ -77,7 +78,7 @@ $configVars = array(
     'root' => array(
         'must'       => false,
         'default'    => '<<<monitoring>>>',
-        'match'      => MATCH_STRING_NO_SPACE_EMPTY,
+        'match'      => MATCH_AUTOMAP_HOSTNAME,
     ),
     'filter_by_state' => array(
         'must'       => false,
@@ -299,6 +300,9 @@ function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
         $obj['.width']      = $size[0];
         $obj['.height']     = $size[1];
     }
+
+    $obj['label_show'] = true;
+    $obj['label_border'] = 'transparent';
 
     // Header menu has z-index 100, this object's label the below+1
     $obj['z']           = 98;

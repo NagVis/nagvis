@@ -1,4 +1,11 @@
 1.7.7
+Core:
+  * Implemented "on demand" maps. Maps which only need a basic configuration
+    of global parameters like automaps and geomaps can now be configured and 
+    created on demand by URL parameters. This mode is reached by simply
+    calling the map URL without "show=" parameter and a bunch of parameters
+    for the global section of the map instead.
+
 Automap:
   * Changed default behaviour of the automap concerning the root host. By
     default NagVis uses a virtual root node which represents the monitoring

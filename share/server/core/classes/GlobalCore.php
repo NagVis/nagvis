@@ -475,12 +475,27 @@ class GlobalCore {
         return false;
     }
 
+    public function debugPrintCallingFunction () {
+        $file = 'n/a';
+        $func = 'n/a';
+        $line = 'n/a';
+        $debugTrace = debug_backtrace();
+        if (isset($debugTrace[1])) {
+            $file = $debugTrace[1]['file'] ? $debugTrace[1]['file'] : 'n/a';
+            $line = $debugTrace[1]['line'] ? $debugTrace[1]['line'] : 'n/a';
+        }
+        if (isset($debugTrace[2])) $func = $debugTrace[2]['function'] ? $debugTrace[2]['function'] : 'n/a';
+        echo "<pre>\n$file, $func, $line\n</pre>";
+    } 
+
     public function checkReadable($path, $printErr = true) {
         if($path != '' && is_readable($path))
             return true;
 
-        if($printErr)
+        if($printErr) {
+            $this->debugPrintCallingFunction();
             throw new NagVisException(l('The path "[PATH]" is not readable.', Array('PATH' => $path)));
+        }
 
         return false;
     }
