@@ -1074,7 +1074,7 @@ function drawNagVisTextbox(oContainer, id, className, bgColor, borderColor, x, y
     }
 
     oLabelSpan = null;
-    oLabelDiv = null;
+    return oLabelDiv;
 }
 
 /**

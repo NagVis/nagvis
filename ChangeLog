@@ -5,6 +5,8 @@ Core:
     created on demand by URL parameters. This mode is reached by simply
     calling the map URL without "show=" parameter and a bunch of parameters
     for the global section of the map instead.
+  * Implemented center and bottom as label coordinate values which are
+    automatically calculated depending on the rendered sizes
 
 Automap:
   * Changed default behaviour of the automap concerning the root host. By

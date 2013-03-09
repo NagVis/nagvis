@@ -540,17 +540,19 @@ $mapConfigVars = Array(
         'depends_value' => '1'
     ),
     'label_x' => Array(
-        'must' => 0,
-        'default' => '-20',
-        'match' => MATCH_INTEGER_PRESIGN,
-        'depends_on' => 'label_show',
-        'depends_value' => '1'),
+        'must'          => 0,
+        'default'       => 'center',
+        'match'         => MATCH_LABEL_X,
+        'depends_on'    => 'label_show',
+        'depends_value' => '1'
+    ),
     'label_y' => Array(
-        'must' => 0,
-        'default' => '+20',
-        'match' => MATCH_INTEGER_PRESIGN,
-        'depends_on' => 'label_show',
-        'depends_value' => '1'),
+        'must'          => 0,
+        'default'       => 'bottom',
+        'match'         => MATCH_LABEL_Y,
+        'depends_on'    => 'label_show',
+        'depends_value' => '1'
+    ),
     'label_width' => Array(
         'must' => 0,
         'default' => 'auto',

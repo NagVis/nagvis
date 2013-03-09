@@ -825,10 +825,7 @@ var NagVisStatefulObject = NagVisObject.extend({
      */
     moveLabel: function () {
         var label  = document.getElementById(this.conf.object_id + '-label');
-        var coords = this.getLabelPos();
-        label.style.top  = coords[1] + 'px';
-        label.style.left = coords[0] + 'px';
-        coords = null;
+        this.updateLabelPos(label);
         label  = null;
     },
 
@@ -887,13 +884,23 @@ var NagVisStatefulObject = NagVisObject.extend({
     },
 
     /**
-     * Calculates and returns the positions of the objects label
-     *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * Calculates and applies the real positions of the objects label. It uses the configuration
+     * variables label_x/label_y and repositions the labels based on the config. The label
+     * must have been rendered and added to dom to have the dimensions of the object to be able
+     * to realize the center/bottom coordinate definitions.
      */
-    getLabelPos: function () {
+    updateLabelPos: function (oLabel) {
         var x = this.conf.label_x,
             y = this.conf.label_y;
+
+        if(this.conf.label_x && this.conf.label_x.toString() == 'center') {
+            var diff_x = parseInt(parseInt(oLabel.clientWidth) - this.getObjWidth()) / 2;
+            x = this.parseCoord(this.parseLabelCoord(this.conf.x), 'x', false) - diff_x;
+        }
+
+        if(this.conf.label_y && this.conf.label_y.toString() == 'bottom') {
+            y = this.parseCoord(this.conf.y, 'y', false) + this.getObjHeight();
+        }
 
         // If there is a presign it should be relative to the objects x/y
         if(this.conf.label_x && this.conf.label_x.toString().match(/^(?:\+|\-)/))
@@ -907,7 +914,9 @@ var NagVisStatefulObject = NagVisObject.extend({
         if(!this.conf.label_y || this.conf.label_y === '' || this.conf.label_y === '0')
             y = this.parseCoord(this.parseLabelCoord(this.conf.y), 'y', false);
 
-        return [ addZoomFactor(x), addZoomFactor(y) ];
+        oLabel.style.left = addZoomFactor(x) + 'px';
+        oLabel.style.top  = addZoomFactor(y) + 'px';
+        oLabel = null;
     },
 
     parseLabelCoord: function (val) {
@@ -924,14 +933,17 @@ var NagVisStatefulObject = NagVisObject.extend({
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     parseLabel: function (oContainer) {
-        var coords = this.getLabelPos();
-        drawNagVisTextbox(
+        var oLabel = drawNagVisTextbox(
             oContainer, this.conf.object_id + '-label', 'object_label',
             this.conf.label_background, this.conf.label_border,
-            coords[0], coords[1], this.conf.z,
+            // use object coords for initial rendering, updated by updateLabelPos below
+            this.parseCoord(this.conf.x, 'x', false), this.parseCoord(this.conf.y, 'y', false),
+            this.conf.z,
             this.conf.label_width, '', this.replaceLabelTextDynamicMacros(),
             this.conf.label_style
         );
+        this.updateLabelPos(oLabel);
+        oLabel = null;
     },
 
     unlockLabel: function () {
