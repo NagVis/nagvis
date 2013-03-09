@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[ -z $SITE ] && SITE=lancom
+[ -z $SITE ] && SITE=event
 which sudo >/dev/null 2>&1 && SUDO=sudo || SUDO=
 BASE=$(pwd)
 

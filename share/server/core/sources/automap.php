@@ -16,6 +16,7 @@ $viewParams = array(
         'rankdir',
         'overlap',
         'label_show',
+        'url_target',
     ),
 );
 if (cfg('global', 'shinken_features')) {
