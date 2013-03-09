@@ -105,7 +105,7 @@ function graphviz_config(&$params, &$tree) {
     $str .= '    graph [';
     $str .= 'dpi="72", ';
     //ratio: expand, auto, fill, compress
-    //$str .= 'ratio="fill", ';
+    $str .= 'ratio="fill", ';
     $str .= 'margin='.graphviz_px2inch($params['margin']).', ';
     //$str .= 'bgcolor="'.$this->MAPCFG->getValue(0, 'background_color').'", ';
     $str .= 'root="'.$tree['object_id'].'", ';
