@@ -626,8 +626,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                   'statusmap_image'        => $e[13],
                   'perfdata'               => $e[14],
                   'check_command'          => $e[19],
-                  'custom_variables'       => array_combine($e[20], $e[21])
                 );
+                if(isset($e[20][0]) && isset($e[21][0]))
+                    $arrTmpReturn['custom_variables'] = array_combine($e[20], $e[21]);
 
                 /**
                 * Handle host/service acks
