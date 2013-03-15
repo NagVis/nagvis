@@ -81,14 +81,14 @@
             <td>event_repeat_interval</td>
             <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
             <td>Repeat frontend events in the given interval. The interval is configured in seconds.
-                Set value to 30 to let NagVis re-raise events for problemati objects every 30 seconds.
+                Set value to 30 to let NagVis re-raise events for problematic objects every 30 seconds.
                 (<font color="#ff0000">New in 1.7b3</font>)</td>
         </tr>
         <tr>
             <td>event_repeat_duration</td>
             <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
-            <td>The time in seconds to repeat alerts for a problematic ojects for as configured in
-                event_repeat_interval. This value defaults to -1, this leads to repeated events till
+            <td>The time in seconds to repeat alerts for a problematic object as configured in
+                event_repeat_interval. This value defaults to -1, this leads to repeated events until
                 the problematic state has been fixed.
                 (<font color="#ff0000">New in 1.7b3</font>)</td>
         </tr>
@@ -158,7 +158,7 @@
         <td> header_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the header menu </td>
         </tr>
         <tr>
-        <td> header_template </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> <a href="header_templates.html">header template</a> to be used on ths map </td>
+        <td> header_template </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> <a href="header_templates.html">header template</a> to be used on this map </td>
         </tr>
         <tr>
         <td> hover_childs_limit </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Number of maximum children to be displayed. Set to -1 to disable the limit.</td>
@@ -1290,7 +1290,7 @@
         <tr>
             <td>view_type</td>
             <td>inline</td>
-            <td>This option defines the way to render the. Possible values are: "inline" an "iframe". Inline means the
+            <td>This option defines the way to render the image. Possible values are: "inline" an "iframe". Inline means the
                 fetched contents are directly put in the a container object (<code>innerHTML</code>). When setting the
                 value to iframe an iframe object is created to render the given URL in this iframe.</td>
         </tr>
@@ -1331,10 +1331,10 @@
         <p>This script is delivered with NagVis. It can be used to list data fetched via livestatus on
         your maps to e.g. display lists of items or just raw numbers.</p>
 
-        <p><i>Please note:</i> By default all querys get the current username added with the <code>AuthUser</code>
-        livestatus filer. Resulting of this, a user can only see the hosts and services he is a contact of.
-        To change this behavior you can customize (copy) the std_lq.php and change the <code>setAuthUser</code>
-        to the following defenition:</p>
+        <p><i>Please note:</i> By default all queries get the current username added with the <code>AuthUser</code>
+        livestatus filer. Resulting from this a user can only see the hosts and services he is a contact of.
+        To change this behaviour you can customize (copy) the std_lq.php and change the <code>setAuthUser</code>
+        to the following definition:</p>
         <pre>$setAuthUser = true;</pre>
 
         <p>To add the script to your maps you need to add <code>std_lq.php</code> with additional parameters
@@ -1362,10 +1362,10 @@
         Query several columns from a single dataset. Resulting values are displayed separated by ", ":
         <pre>std_lq.php?backend_id=live_1&query=GET hosts\\nLimit: 1\\nColumns: host_name address state\\n&type=row</pre>
         
-        Query one column from several datasets. Each found cell is displayed in a separate line:
+        Query one column from several datasets. Each cell found is displayed on a separate line:
         <pre>std_lq.php?backend_id=live_1&query=GET hosts\\nLimit: 2\\nColumns: host_name\\n&type=column</pre>
         
-        Query several columns from several datasets and display them as table:
+        Query several columns from several datasets and display them as a table:
         <pre>std_lq.php?backend_id=live_1&query=GET hosts\\nLimit: 2\\nColumns: host_name state address\\n&type=list</pre>
 
         <a name="types"></a><h2>Variable Types</h2>
@@ -1424,8 +1424,8 @@ define service {
     To get that fixed it is possible to define an optional offset to the parent object.</p>
     <p>Set the following coordinates to configure an offset of 10px in both directions:</p>
      <pre>x=41790e%+10,200
- y=41790e%+10,200</pre>
-  <p>It is also possible to set a negative offset by switching the plus (+) sign with a minus (-) sign.</p>
+y=41790e%+10,200</pre>
+  <p>It is also possible to set a negative offset by replacing the plus (+) sign with a minus (-) sign.</p>
 
     <a name="exclude"></a><h3>Exclude Regex <font color="#ff0000">(New in 1.6b4)</font></h3>
     <p>The exclude regular expressions can be used to filter out one or several members of objects. For example
@@ -1445,7 +1445,7 @@ define service {
    <p>The same is possible for hostgroups, servicegroups and so on.</p>
 
    <p>Another more advanced task is to exclude just one service of one host from a hostgroup. This can be seen as a member
-   element of a member. Lets exclude &quot;CPU load&quot; of the host &quot;localhost&quot;.</p>
+   element of a member. Let&apos;s exclude &quot;CPU load&quot; of the host &quot;localhost&quot;.</p>
 <pre>define hostgroup {
   object_id=b5932a
   hostgroup_name=mygroup
