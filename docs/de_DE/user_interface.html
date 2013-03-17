@@ -15,8 +15,6 @@
     <h1>User-Interface </h1>
     Diese Seite soll die unterschiedlichen Ansichten des NagVis-User-Interfaces beschreiben.
     Die Pfade sind relativ zum NagVis-root-Verzeichnis.<br><br>
-    Mit NagVis 1.5 wurde das URL-Schema ver&auml;ndert.
-    Falls Ihre alten URLs weiterhin in NagVis 1.6 funktionieren sollen, dann k&ouml;nnen Sie die mod_rewrite-Konfiguration in der mitgelieferten Beispiel-Webserver-Konfiguration nutzen.<br><br>
     
     <table border=0 width=100%>
         <tr>
@@ -36,15 +34,11 @@
                 <table>
                     <tr><td>search=&lt;regex&gt;</td><td>Suchen nach einem Map-Objekt w&auml;hrend des Ladevorgangs. Gefundene Objekte werden hervorgehoben.</td></tr>
                     <tr><td>rotation=&lt;name&gt;</td><td>Rotieren der Objekte im angegebenen Rotations-Pool, wenn die Map Bestandteil des Pools ist.</td></tr>
-                    <tr><td>enableHeader=1/0</td><td>Aktivieren/Deaktivieren des Header-Men&uuml;s, unabh&auml;ngig von der Konfigurationseinstellung</td></tr>
-                    <tr><td>enableHover=1/0</td><td>Aktivieren/Deaktivieren des Hover-Men&uuml;s, unabh&auml;ngig von der Konfigurationseinstellung</td></tr>
-                    <tr><td>enableContext=1/0</td><td>Aktivieren/Deaktivieren des Context-Men&uuml;s, unabh&auml;ngig von der Konfigurationseinstellung</td></tr>
+                    <tr><td>header_menu=1/0<br><strike>enableHeader=1/0</strike></td><td>Aktivieren/Deaktivieren des Header-Men&uuml;s, unabh&auml;ngig von der Konfigurationseinstellung</td></tr>
+                    <tr><td>hover_menu=1/0<br><strike>enableHover=1/0</strike></td><td>Aktivieren/Deaktivieren des Hover-Men&uuml;s, unabh&auml;ngig von der Konfigurationseinstellung</td></tr>
+                    <tr><td>context_menu=1/0<br><strike>enableContext=1/0</strike></td><td>Aktivieren/Deaktivieren des Context-Men&uuml;s, unabh&auml;ngig von der Konfigurationseinstellung</td></tr>
                 </table>
             </td>
-        </tr>
-        <tr>
-            <td>nagvis/frontend/nagvis-js/index.php?mod=Automap&show=&lt;name&gt;</td><td>Dies ist die Automap-Ansicht. In dieser Ansicht wird die angegebene NagVis-Map angezeigt. Der Inhalt wird automatisch mit Hilfe von Ajax-Aufrufen an den NagVis-Core aktualisiert.<p>
-                Die verf&uuml;gbaren Parameter finden Sie auf der <a href="automap.html">Automap</a>-Seite.</td>
         </tr>
         <tr>
             <td>nagvis/frontend/nagvis-js/index.php?info</td><td>Dies ist eine Seite mit Support-Informationen, die Sie mitliefern k&ouml;nnen, wenn Sie Probleme mit NagVis haben.</td>
@@ -53,19 +47,7 @@
             <th colspan=2>Rotationen</th>
         </tr>
         <tr>
-            <td>nagvis/frontend/nagvis-js/index.php?rotation=&lt;name></td><td>Dies ist der Map-Rotationsmodus. In diesem Modus wird die erste angegebene Map angezeigt (Rotation muss in der Hauptkonfigurationsdatei definiert werden). Nach einem definierten Intervall wird die n&auml;chste angegebene Map geladen usf.</td>
-        </tr>
-        <tr>
-            <td>nagvis/frontend/nagvis-js/index.php?rotation=&lt;name>&amp;rotate=0</td><td>Dies ist der Rotationsmodus. Die Rotation wird durch den angegebenen Wert gestoppt. In diesem Modus werden die Maps automatisch aktualisiert. Es kann sinnvoll sein, eine Rotation zu stoppen, wenn Sie etwas Interessantes auf der Map gefunden haben. Die Rotation wird aktiviert, wenn Sie den Wert auf 1 setzen oder den Rotationswert l&ouml;schen.</td>
-        </tr>
-        <tr>
-            <th colspan=2>WUI (NagVis-Konfiguration)</th>
-        </tr>
-        <tr>
-            <td>config.php</td><td>Dies ist eine Weiterleitung zu wui/index.php (Konfigurations-Interface)</td>
-        </tr>
-        <tr>
-            <td>wui/index.php</td><td>Dies ist die Willkommen-Seite des NagVis-Konfigurations-Interfaces (WUI). Rechtsklicken Sie auf dem Hintergrund-Bild, um das WUI-Men&uuml; zu &ouml;ffnen.</td>
+            <td>nagvis/frontend/nagvis-js/index.php?Rotation=&lt;name></td><td>Dies ist der Map-Rotationsmodus. In diesem Modus wird die erste angegebene Map angezeigt (Rotation muss in der Hauptkonfigurationsdatei definiert werden). Nach einem definierten Intervall wird die n&auml;chste angegebene Map geladen usf.</td>
         </tr>
     </table>
 </html>

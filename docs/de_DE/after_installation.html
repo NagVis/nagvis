@@ -16,8 +16,7 @@
         <p>NagVis basiert auf verschiedenen Konfigurationsdateien.
             Die <a href="nagvis_config_format_description.html" target="_blank">Hauptkonfiguration</a>sdatei enth&auml;lt grundlegende und globale Konfigurationsoptionen.
             Die Map-spezifischen Konfigurationsoptionen werden in <code>etc/maps/</code>in den <a href="map_config_format_description.html" target="_blank">Map-Konfiguration</a>sdateien abgelegt.
-            Ein spezieller Typ von Maps sind die Automaps, die in einem eigenen Konfigurationsverzeichnis (<code>etc/automaps/</code>) gespeichert werden.
-            Die <a href="automap_config_format.html" target="_blank">Automap-Konfiguration</a>sdateien benutzen die gleiche Syntax wie die Map-Konfigurationsdateien, haben aber mehr Optionen.</p>
+            Ein spezieller Typ von Maps sind die Automaps. Mehr Informationen dazu finden Sie in der Dokumentation zur <a href="automap_config_format.html">Automap-Konfiguration</a>.
         <p>Die gesamte NagVis-Konfiguration kann mit Hilfe des webbasierten Konfigurationsprogramms ge&auml;ndert werden.</p>
         <h2>Authentifizierung/Autorisierung</h2>
         <p>Als Standard benutzt NagVis eine interne Benutzer- und Berechtigungsdatenbank (SQLite) f&uuml;r Authentifizierung und Autorisierung.
@@ -54,6 +53,7 @@
             <li>die NagVis-Version (inkl., ob Sie NagVis &uuml;ber ein Paket aus der Distribution oder aus den Sourcen installiert haben)</li>
             <li><code>grep "^[^;|^$]" &lt;config-Datei&gt;</code> (falls Sie ein Problem mit der Konfiguration haben). Ersetzen Sie "&lt;config-Datei&gt;" durch den Namen der Datei, in der Sie einen Fehler vermuten</li>
             <li>Apache-Meldungen (error log)</li>
+            <li>die Support-Informationen (Men&uuml; -> "Hilfe ?" -> "NagVis-Support-Informationen")</li>
         </lu>
     </body>
 </html>
