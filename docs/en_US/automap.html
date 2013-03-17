@@ -25,12 +25,13 @@
         
         <h2> Map configuration </h2>
         In the past, the automaps were configured in special configuration files located in <code>etc/automaps</code>, but this has changed with NagVis 1.7.
-        The automap configuration files are created as regular map configurations (like written in the map config format definitions). To create an
+        The automap configuration files are created as regular map configurations (like described in 
+        <a href="map_config_format_description">map configuration</a>). To create an
         automap in NagVis 1.7 you have to set the map source to <code>automap</code>. To do this, you need to add the <code>sources</code> parameter
         to the global section and set its value to <code>automap</code>.
         
         <h2> Main configuration </h2>
-        Some parameters for the automap can be set in the main configuration of NagVis. For further information see <a href="nagvis_config_format_description.html">Main Config Format Description</a>.
+        Some parameters for the automap can be set in the main configuration of NagVis. For further information see <a href="nagvis_config_format_description.html">Main Configuration</a>.
         
         <h2> URL Parameters </h2>
         The automap can be called with several url parameters. Since NagVis 1.7 these options can be put into the
@@ -43,7 +44,7 @@
             <td>show</td><td></td><td>The name of the automap. Since NagVis 1.5 different automap configuration files can be defined. The automap to view needs to be set here.</td>
         </tr>
         <tr>
-            <td>backend_id <strike>backend</strike></td><td> default backend </td><td> The backend-id of the backend to fetch the objects from. For details see the [backend_*] section in the <a href="nagvis_config_format_description.html">Main Config Format Description</a> </td>
+            <td>backend_id <strike>backend</strike></td><td> default backend </td><td> The backend-id of the backend to fetch the objects from. For details see the [backend_*] section in the <a href="nagvis_config_format_description.html">Main Configuration</a> </td>
         </tr>
         <tr>
             <td>root</td><td> see <a href="#root/object/definition">root object definition</a> </td><td> This is the name of the root object. It is not essential to set the host here. There are some more ways to tell the root object. For details see the <a href="#root/object/definition">root object definition</a> chapter on this page. </td>
@@ -93,7 +94,7 @@
             <td>context_menu <strike>enableContext</strike></td><td>none</td><td>Enable/Disable the context menus. To be specified as integer (1/0). Overrides the configuration.</td>
         </tr>
         <tr>
-            <td>margin</td><td>50</td><td>Sets the free space border of the automap graph on all sides. Has to be specified in pixels.</td>
+            <td>margin</td><td>50</td><td>Sets the free area on the border of the automap graph. Has to be specified in pixels.</td>
         </tr>
         <tr>
             <td>overlap</td><td>true</td><td>Configure collision handling of objects (take a look at the graphviz docs for explanations of the values) <font color="#ff0000">(new in 1.7)</font></td>
