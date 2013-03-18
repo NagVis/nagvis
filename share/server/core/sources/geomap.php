@@ -106,6 +106,10 @@ function geomap_get_contents($url) {
             $opts['http']['proxy'] = $proxy;
             $opts['http']['request_fulluri'] = true;
         }
+        $proxy_auth = cfg('global', 'http_proxy_auth');
+        if($proxy_auth !== null) {
+            $opts['http']['header'] = 'Proxy-Authorization: Basic ' . base64_encode("$proxy_auth");
+        }
         
         $context = stream_context_create($opts);
 

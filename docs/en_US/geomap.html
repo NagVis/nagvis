@@ -20,7 +20,8 @@
         via port 80. NagVis uses a simple HTTP based API to get the map image and the coordinates of that image.</p>
         <p>In most cases the NagVis host does not have direct internet access. You can configure the <code>http_proxy</code>
         option in the <code>[global]</code> section of your NagVis main configuration to tell NagVis to use
-         a proxy such requests.</p>
+        a proxy such requests. Most proxies require an authentication to control access to the internet.
+        Please use the option <code>http_proxy_auth</code> to set the credentials.</p>
         
         <h2>The first call</h2>
         <p>NagVis comes with a demo geomap called "demo-geomap". If your NagVis is configured correctly

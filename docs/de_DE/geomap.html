@@ -20,7 +20,8 @@
         NagVis benutzt eine simple HTTP-basierte API, um das Map-Image und die Koordinaten dieses Images zu erhalten.</p>
         <p>In den meisten F&auml;llen hat der NagVis-Host keinen direkten Internet-Zugriff. Sie k&ouml;nnen die <code>http_proxy</code>
         Option im <code>[global]</code>-Abschnitt Ihrer NagVis-Hauptkonfigurationsdatei (nagvis.ini.php) verwenden, um NagVis anzuweisen,
-        einen Proxy f&uuml;r solche Anfragen zu benutzen.</p>
+        einen Proxy f&uuml;r solche Anfragen zu benutzen. Die meisten Proxies erfordern eine Authentifizierung, um den Zugang zum
+        Internet zu kontrollieren. Mit der Option <code>http_proxy_auth</code> k&ouml;nnen die Zugangsdaten gesetzt werden.</p>
         
         <h2>Der erste Aufruf</h2>
         <p>NagVis wird mit einer Demo-Geomap namens &quot;demo-geomap&quot; ausgeliefert. Wenn Ihr NagVis korrekt konfiguriert ist,
