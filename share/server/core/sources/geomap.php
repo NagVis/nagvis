@@ -21,6 +21,9 @@ function geomap_read_csv($p) {
         throw new GeomapError(l('Location source file "[F]" does not exist.', Array('F' => $f)));
 
     foreach(file($f) AS $line) {
+        // skip lines beginning with any of the usual comment characters
+        if(preg_match('/^[;#\/]',$line))
+            continue;
         $parts = explode(';', $line);
         $locations[] = array(
             'name'  => $parts[0],
@@ -351,7 +354,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
             continue;
 
         // Calculate the lat (y) coords
-        $obj['y'] = round($params['height'] - ($lat_para * ($obj['lat'] - $img_down)) - ($icon_h / 2));
+        $obj['y'] = round($lat_para * ($img_top - $obj['lat']) + ($icon_h / 2));
         if($obj['y'] < 0)
             $obj['y'] = 0;		
         
