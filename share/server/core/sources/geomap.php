@@ -22,7 +22,7 @@ function geomap_read_csv($p) {
 
     foreach(file($f) AS $line) {
         // skip lines beginning with any of the usual comment characters
-        if(preg_match('/^[;#\/]',$line))
+        if(preg_match('/^[;#\/]/',$line))
             continue;
         $parts = explode(';', $line);
         $locations[] = array(
@@ -108,10 +108,10 @@ function geomap_get_contents($url) {
         if($proxy !== null) {
             $opts['http']['proxy'] = $proxy;
             $opts['http']['request_fulluri'] = true;
-        }
-        $proxy_auth = cfg('global', 'http_proxy_auth');
-        if($proxy_auth !== null) {
-            $opts['http']['header'] = 'Proxy-Authorization: Basic ' . base64_encode("$proxy_auth");
+            $proxy_auth = cfg('global', 'http_proxy_auth');
+            if($proxy_auth !== null) {
+                $opts['http']['header'] = 'Proxy-Authorization: Basic ' . base64_encode("$proxy_auth");
+            }
         }
         
         $context = stream_context_create($opts);
@@ -144,7 +144,7 @@ function list_geomap_source_files($CORE) {
     return $CORE->getAvailableGeomapSourceFiles();
 }
 
-// options to be modyfiable by the user(url)
+// options to be modifiable by the user(url)
 global $viewParams;
 $viewParams = array(
     'geomap' => array(

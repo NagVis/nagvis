@@ -134,7 +134,7 @@ class GlobalMainCfg {
                 'http_proxy_auth' => array(
                     'must'    => 0,
                     'default' => null,
-                    'match'   => MATCH_STRING_NO_SPACE,
+                    'match'   => MATCH_STRING,
                 ),
                 'http_timeout' => array(
                     'must'    => 1,
