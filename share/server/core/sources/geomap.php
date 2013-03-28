@@ -351,6 +351,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
     $long_para = $params['width'] / $long_diff;
     $lat_para  = $params['height'] / $lat_diff;
+    $lat_mult  = $params['height'] / (ProjectF($img_top) - ProjectF($img_down));
 
     // Now add the coordinates to the map objects
     foreach($map_config AS &$obj) {
@@ -358,7 +359,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
             continue;
 
         // Calculate the lat (y) coords
-        $obj['y'] = round($lat_para * ($img_top - $obj['lat']) + ($icon_h / 2));
+        $obj['y'] = round((ProjectF($img_top) - ProjectF($obj['lat'])) * lat_mult - ($icon_h / 2));
         if($obj['y'] < 0)
             $obj['y'] = 0;		
         
@@ -397,6 +398,18 @@ function changed_geomap($MAPCFG, $compare_time) {
         return true;
 
     return false;
+}
+
+# calculate lat on Mercator based map
+# for details see:
+#    http://wiki.openstreetmap.org/wiki/Slippy_map_tilesnames#X_and_Y
+# function copied from
+#    http://almien.co.uk/OSM/Tools/Coord/source.php
+
+function ProjectF($Lat){
+  $Lat = deg2rad($Lat);
+  $Y = log(tan($Lat) + (1/cos($Lat)));
+  return($Y);
 }
 
 ?>
