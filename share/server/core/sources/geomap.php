@@ -359,7 +359,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
             continue;
 
         // Calculate the lat (y) coords
-        $obj['y'] = round((ProjectF($img_top) - ProjectF($obj['lat'])) * lat_mult - ($icon_h / 2));
+        $obj['y'] = round((ProjectF($img_top) - ProjectF($obj['lat'])) * $lat_mult - ($icon_h / 2));
         if($obj['y'] < 0)
             $obj['y'] = 0;		
         
