@@ -1,3 +1,5 @@
+1.7.8
+
 1.7.7
 Core:
   * Implemented "on demand" maps. Maps which only need a basic configuration
