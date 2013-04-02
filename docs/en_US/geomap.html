@@ -20,7 +20,8 @@
         via port 80. NagVis uses a simple HTTP based API to get the map image and the coordinates of that image.</p>
         <p>In most cases the NagVis host does not have direct internet access. You can configure the <code>http_proxy</code>
         option in the <code>[global]</code> section of your NagVis main configuration to tell NagVis to use
-         a proxy such requests.</p>
+        a proxy such requests. Most proxies require an authentication to control access to the internet.
+        Please use the option <code>http_proxy_auth</code> to set the credentials.</p>
         
         <h2>The first call</h2>
         <p>NagVis comes with a demo geomap called "demo-geomap". If your NagVis is configured correctly
@@ -46,7 +47,7 @@
         <p>The <code>sources=geomap</code> line tells the map to use the geomap source for altering the
         map configuration.
 
-        The <code>source_type=csv</code> (<font color="#ff0000">New in 1.7.4</font>) line tells the geomap 
+        The <code>source_type=csv</code> (<font color="#ff0000">new in 1.7.4</font>) line tells the geomap 
         source to use the CSV file defined in the 
         <code>source_file=demo-locations</code> definition located in the <code>etc/geomap</code> directory
         for gathering a list of hosts and coordinates to add to the geomap.</p>
@@ -59,6 +60,8 @@ muc-srv1;Munich Server1;48.1448353;11.5580067</pre>
         <p>Each line defines one host to be added to the map. The columns are separated by <code>;</code> signs.
         The first column contains the host-name, the second an optional alias, the third the LAT coordinate and
         the fourth the LONG coordinate.</p>
+        <p><font color="red">(starting with git-version as of 2013-03-21)</font>: Lines starting with the usual comment characters
+        (<code>;</code>, <code>#</code>, or <code>//</code>) are treated as comments.</p>
 
         <p><font color="#ff0000">New in 1.7.4</font>: It is also possible to set <code>source_type=backend</code>
         to use the backend set via <code>backend_id</code> to gather the list of hosts to be shown on the geomap

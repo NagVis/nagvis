@@ -109,13 +109,13 @@
         </tr>
 
         <tr>
-          <td>http_proxy<font color="#ff0000">(new in 1.6)</font></td>
+          <td>http_proxy <font color="#ff0000">(new in 1.6)</font></td>
 	  <td></td>
 	  <td>The proxy server to use for external HTTP request.</td>
         </tr>
 
         <tr>
-          <td>http_timeout<font color="#ff0000">(new in 1.6)</font></td>
+          <td>http_timeout <font color="#ff0000">(new in 1.6)</font></td>
 	  <td>10</td>
 	  <td>The timeout in seconds for external HTTP requests.</td>
         </tr>
@@ -128,7 +128,7 @@
         </tr>
         <tr>
         <td>language_detection</td><td>user,session,browser,config</td><td>This controls how NagVis tries to detect the language of the user to translate NagVis. NagVis knows several mechanisms to detect the language:<br />
-        - <i>user</i>: Explict user selected language<br />
+        - <i>user</i>: Explicit user selected language<br />
         - <i>session</i>: When the user selects a language it is stored in the current session<br />
         - <i>browser</i>: NagVis tries to detect the user language by the browser agent<br />
         - <i>config</i>: The installation default language<br />
@@ -163,8 +163,8 @@
             Simply set logonmodule to "LogonEnv", put the environment variable
             to use as username to the option logonenvvar and tell the 
             authentication module to create users in the database when provided
-            users does not exist. The option logonenvcreaterole tells the
-            module to assign the new user to a specific role set to empty
+            users do not exist. The option logonenvcreaterole tells the
+            module to assign the new user to a specific role; set to empty
             string to disable that behaviour.</p>
     
             <p><i>LogonMultisite</i>: This module uses the authentication
@@ -179,7 +179,7 @@
         <td>logonenvvar</td><td>REMOTE_USER</td><td>Defines the environment variable to be used for fetching the authenticated user from the webservers environment. This option is only used with the logon modules LogonEnv and LogonMixed.</td>
         </tr>
         <tr>
-        <td>logonenvcreateuser</td><td>1</td><td>Tells the LogonEnv/LogonMixed module to create a user account for each unknown user which opens the NagVis pages. This option is only used with the logon modules LogonEnv and LogonMixed.</td>
+        <td>logonenvcreateuser</td><td>1</td><td>Tells the LogonEnv/LogonMixed module to create a user account for each unknown user who opens the NagVis pages. This option is only used with the logon modules LogonEnv and LogonMixed.</td>
         </tr>
         <tr>
         <td>logonenvcreaterole</td><td>Guests</td><td>Tells the LogonEnv/LogonMixed module to create the user accounts with the given role associated. This option is only used with the logon modules LogonEnv and LogonMixed.</td>
@@ -215,7 +215,7 @@
         <td>sesscookiepath</td><td>auto-detected</td><td>You may need to control the path on which the cookie will be set. By default NagVis uses the paths/htmlbase value for setting the cookie. This should work in most environments but may be changed e.g. when using url rewriting.</td>
         </tr>
         <tr>
-        <td>sesscookieduration</td><td>86400</td><td>Lifetime of the NagVis session cookie in seconds. The default value is set to 24 hours. The value the NagVis session cookie contains will be renewed on every page visit. If a session is idle for more time than configured here it will become invalid.</td>
+        <td>sesscookieduration</td><td>86400</td><td>Lifetime of the NagVis session cookie in seconds. The default value is set to 24 hours. The value of the NagVis session cookie contains will be renewed on every page visit. If a session is idle for more time than configured here it will become invalid.</td>
         </tr>
         <tr>
         <td>startmodule</td><td>overview</td><td>The default module to show when none is given by the user</td>
@@ -270,7 +270,7 @@
         <tr>
             <td>event_on_load</td>
             <td>0</td>
-            <td>Enabled/disables eventhandling on page loading. Initial problematic states will
+            <td>Enabled/disables event handling on page loading. Initial problematic states will
                 raise events in frontend during page rendering.
                 (<font color="#ff0000">New in 1.7b3</font>)</td>
         </tr>
@@ -278,7 +278,7 @@
             <td>event_repeat_interval</td>
             <td>0</td>
             <td>Repeat frontend events in the given interval. The interval is configured in seconds.
-                Set value to 30 to let NagVis re-raise events for problemati objects every 30 seconds.
+                Set value to 30 to let NagVis re-raise events for problematic objects every 30 seconds.
                 Setting this value smaller than [worker] interval will have no effect.
                 (<font color="#ff0000">New in 1.7b3</font>)</td>
         </tr>
@@ -286,125 +286,125 @@
             <td>event_repeat_duration</td>
             <td>-1</td>
             <td>The time in seconds to repeat alerts for a problematic ojects for as configured in
-                event_repeat_interval. This value defaults to -1, this leads to repeated events till
+                event_repeat_interval. This value defaults to -1, this leads to repeated events until
                 the problematic state has been fixed.
                 (<font color="#ff0000">New in 1.7b3</font>)</td>
         </tr>
         <tr>
-        <td> eventbackground </td><td> 0 </td><td> Enable/Disable changing background colour on state changes (configured colour is shown when summary state is PENDING, OK or UP)  </td>
+        <td> eventbackground </td><td> 0 </td><td>Enable/Disable changing background colour on state changes (configured colour is shown when summary state is PENDING, OK or UP)</td>
         </tr>
         <tr>
-        <td> eventhighlight </td><td> 1 </td><td> Enable/Disable highlighting of the state changing object by adding a flashing border  </td>
+        <td> eventhighlight </td><td> 1 </td><td>Enable/Disable highlighting of the state changing object by adding a flashing border</td>
         </tr>
         <tr>
-        <td> eventhighlightduration </td><td> 10000 </td><td> Duration of the highlighting in miliseconds </td>
+        <td> eventhighlightduration </td><td> 10000 </td><td>Duration of the highlighting in milliseconds</td>
         </tr>
         <tr>
-        <td> eventhighlightinterval </td><td> 500 </td><td> Interval of the highlighting in miliseconds </td>
+        <td> eventhighlightinterval </td><td> 500 </td><td>Interval of the highlighting in milliseconds</td>
         </tr>
         <tr>
-        <td> eventlog </td><td> 0 </td><td> Enable/Disable the eventlog in the new javascript frontend. The eventlog keeps track of important actions and information  </td>
+        <td> eventlog </td><td> 0 </td><td>Enable/Disable the eventlog in the new javascript frontend. The eventlog keeps track of important actions and information</td>
         </tr>
         <tr>
         <td>eventlogevents</td><td>24</td><td>Number of events in the eventlog scrollback</td>
         </tr>
         <tr>
-        <td> eventloglevel </td><td> info </td><td> Loglevel of the eventlog (Available: debug, info, warning, critical)  </td>
+        <td> eventloglevel </td><td> info </td><td>Loglevel of the eventlog (Available: debug, info, warning, critical)</td>
         </tr>
         <tr>
-        <td>eventlogheight</td><td>100</td><td>Height of the javascript eventlog in px </td>
+        <td>eventlogheight</td><td>100</td><td>Height of the javascript eventlog in px</td>
         </tr>
         <tr>
-        <td>eventloghidden</td><td>1</td><td>Hide/Show the eventlog on map loading </td>
+        <td>eventloghidden</td><td>1</td><td>Hide/Show the eventlog on map loading</td>
         </tr>
         <tr>
-        <td>eventscroll</td><td> 1 </td><td> Enable/Disable scrolling to the icon which changed the state when the icon is out of the visible scope  </td>
+        <td>eventscroll</td><td> 1 </td><td>Enable/Disable scrolling to the icon which changed the state when the icon is out of the visible scope</td>
         </tr>
         <tr>
-        <td> eventsound </td><td> 1 </td><td> Enable/Disable sound signals on state changes  </td>
+        <td> eventsound </td><td> 1 </td><td>Enable/Disable sound signals on state changes</td>
         </tr>
         <tr>
-        <td> headerfade </td><td> 0 </td><td>Enable/Disable the fade effect of the submenus in the header menu (When the used header menu supports that option).</td>
+        <td> headerfade </td><td> 0 </td><td>Enable/Disable the fade effect of the submenus in the header menu (When the used header menu supports that option)</td>
         </tr>
         <tr>
-        <td> headermenu </td><td> 1 </td><td> Enable/Disable the header menu </td>
+        <td> headermenu </td><td> 1 </td><td>Enable/Disable the header menu</td>
         </tr>
         <tr>
-        <td> headertemplate </td><td> default </td><td> Default <a href="header_templates.html">header template</a> </td>
+        <td> headertemplate </td><td> default </td><td>Default <a href="header_templates.html">header template</a></td>
         </tr>
         <tr>
-        <td> hoverchildslimit </td><td> 10 </td><td> Limit hover child objects to this maximum value</td>
+        <td> hoverchildslimit </td><td> 10 </td><td>Limit hover child objects to this maximum value</td>
         </tr>
         <tr>
-        <td> hoverchildsorder </td><td> asc </td><td> Order of the child objects (Available: asc/desc)</td>
+        <td> hoverchildsorder </td><td> asc </td><td>Order of the child objects (Available: asc/desc)</td>
         </tr>
         <tr>
-        <td> hoverchildsshow </td><td> 1 </td><td> Enable/Disable the child objects in hover menu</td>
+        <td> hoverchildsshow </td><td> 1 </td><td>Enable/Disable the child objects in hover menu</td>
         </tr>
         <tr>
-        <td> hoverchildssort </td><td> a </td><td> Sort method of the child objects (Available: "s": State, "a": Alphabet )</td>
+        <td> hoverchildssort </td><td> a </td><td>Sort method of the child objects (available: "s": state, "a": alphabet )</td>
         </tr>
         <tr>
-        <td> hoverdelay </td><td> 0 </td><td> Delay of hover menu appearance in seconds </td>
+        <td> hoverdelay </td><td> 0 </td><td>Delay of hover menu appearance in seconds</td>
         </tr>
         <tr>
-        <td> hovermenu </td><td> 1 </td><td> Enable/Disable the hover menu </td>
+        <td> hovermenu </td><td> 1 </td><td>Enable/Disable the hover menu</td>
         </tr>
         <tr>
-        <td> hovertemplate </td><td> default </td><td> Default <a href="hover_templates.html">hover template</a> </td>
+        <td> hovertemplate </td><td> default </td><td>Default <a href="hover_templates.html">hover template</a></td>
         </tr>
         <tr>
-        <td> <strike>hovertimeout</strike> </td><td> <strike>5</strike> </td><td> <strike>Default hover menu ajax request timeout in seconds</strike> <font color="#ff0000">(Deprecated in 1.4)</font></td>
+        <td> <strike>hovertimeout</strike> </td><td> <strike>5</strike> </td><td> <strike>Default hover menu ajax request timeout in seconds</strike> <font color="#ff0000">(deprecated in 1.4)</font></td>
         </tr>
         <tr>
-        <td> icons </td><td> std_medium </td><td> Default iconset </td>
+        <td> icons </td><td> std_medium </td><td>Default iconset</td>
         </tr>
         <tr>
-        <td> onlyhardstates </td><td> 0 </td><td> Recognize only hard states (not soft) </td>
+        <td> onlyhardstates </td><td> 0 </td><td>Recognize only hard states (not soft)</td>
         </tr>
         <tr>
-        <td> recognizeservices </td><td> 1 </td><td> Recognize service states in host/hostgroup objects </td>
+        <td> recognizeservices </td><td> 1 </td><td>Recognize service states in host/hostgroup objects</td>
         </tr>
         <tr>
-        <td> showinlists </td><td> 1 </td><td> Show the maps in lists (dropdowns,index page,...) </td>
+        <td> showinlists </td><td> 1 </td><td>Show the maps in lists (dropdowns,index page,...)</td>
         </tr>
         <tr>
-        <td> showinmultisite </td><td> 1 </td><td> Show the maps in multisite snapin </td>
+        <td> showinmultisite </td><td> 1 </td><td>Show the maps in multisite snapin</td>
         </tr>
         <tr>
-        <td>stylesheet</td><td></td><td>Filename of the custom stylesheet to use on the maps (The file needs to be located in the share/nagvis/styles directory)</td>
+        <td>stylesheet</td><td></td><td>Filename of the custom stylesheet to use on the maps (the file needs to be located in the share/nagvis/styles directory)</td>
         </tr>
         <tr>
-        <td> urltarget </td><td> _self </td><td> Target of the Icon link, this option adapts <code>&lt;a target=""></code> (_self is same window) </td>
+        <td> urltarget </td><td> _self </td><td>Target of the Icon link, this option adapts <code>&lt;a target=""></code> (_self is same window) </td>
         </tr>
         <tr>
             <td>hosturl</td>
             <td>[htmlcgi]/status.cgi?host=[host_name]</td>
-            <td>The default url to follow when a user left-clicks on an host object. Available Macros: [htmlcgi], [htmlbase], [host_name], [backend_id]</td>
+            <td>The default url to follow when a user left-clicks on a host object. Available macros: [htmlcgi], [htmlbase], [host_name], [backend_id]</td>
         </tr>
         <tr>
             <td>hostgroupurl</td>
         <td>[htmlcgi]/status.cgi?hostgroup=[hostgroup_name]</td>
         <td>The default url to follow when a user left-clicks on an hostgroup object.
-          Available Macros: [htmlcgi], [htmlbase], [hostgroup_name], [backend_id]</td>
+          Available macros: [htmlcgi], [htmlbase], [hostgroup_name], [backend_id]</td>
         </tr>
         <tr>
             <td>serviceurl</td>
         <td>[htmlcgi]/extinfo.cgi?type=2&host=[host_name]&service=[service_description]</td>
         <td>The default url to follow when a user left-clicks on an service object.
-          Available Macros: [htmlcgi], [htmlbase], [host_name], [service_description], [backend_id]</td>
+          Available macros: [htmlcgi], [htmlbase], [host_name], [service_description], [backend_id]</td>
         </tr>
         <tr>
             <td>servicegroupurl</td>
         <td>[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]</td>
         <td>The default url to follow when a user left-clicks on an servicegroup object.
-          Available Macros: [htmlcgi], [htmlbase], [servicegroup_name], [backend_id]</td>
+          Available macros: [htmlcgi], [htmlbase], [servicegroup_name], [backend_id]</td>
         </tr>
         <tr>
             <td>mapurl</td>
         <td>[htmlbase]/index.php?mod=Map&act=view&show=[map_name]</td>
         <td>The default url to follow when a user left-clicks on an map object.
-          Available Macros: [htmlcgi], [htmlbase], [map_name]</td>
+          Available macros: [htmlcgi], [htmlbase], [map_name]</td>
         </tr>
         <tr>
             <td>view_template</td>
@@ -419,7 +419,7 @@
         <tr>
             <td>line_weather_colors</td>
             <td>10:#8c00ff,25:#2020ff,40:#00c0ff,55:#00f000,70:#f0f000,85:#ffc000,100:#ff0000</td>
-            <td><font color="#ff0000">New in 1.6.5:</font> This defines the colours of weathermap colours
+            <td><font color="#ff0000">New in 1.6.5:</font> This defines the colours of weathermap lines
              in the different percentage levels. For example above 10% load it will be coloured #8c00ff.</td>
         </tr>
         </table>
@@ -523,13 +523,13 @@
         <td> interval </td><td> 5 </td><td> The interval in seconds in which the worker will check for objects which need to be updated. </td>
         </tr>
         <tr>
-        <td> requestmaxparams</td><td>0</td><td>The maximum number of parameters used in ajax http requests Some intrusion detection/prevention systems have a problem with too many parameters in the url. Give 0 for no limit.</td>
+        <td> requestmaxparams</td><td>0</td><td>The maximum number of parameters used in ajax http requests. Some intrusion detection/prevention systems have a problem with too many parameters in the url. Set to 0 for no limit.</td>
         </tr>
         <tr>
-        <td> requestmaxlength</td><td>1900</td><td>The maxium length of http request urls during ajax http requests. Some intrusion detection/prevention systems have a problem with too long queries.</td>
+        <td> requestmaxlength</td><td>1900</td><td>The maximum length of http request urls during ajax http requests. Some intrusion detection/prevention systems have a problem with queries being too long.</td>
         </tr>
         <tr>
-        <td> updateobjectstates </td><td> 15 </td><td> The retention time of the states in seconds in the frontend. The state information will be refreshed after this time is over on next worker interval. </td>
+        <td> updateobjectstates </td><td> 15 </td><td> The retention time of the states in seconds in the frontend. The state information will be refreshed after this time is over on next worker interval.</td>
         </tr>
         </table>
         
@@ -611,7 +611,7 @@ interval=15</pre>
         </table>
 
         <a name="action"></a>
-        <h3>action_* (<font color="#ff0000">New in 1.7.6</font>)</h3>
+        <h3>action_* (<font color="#ff0000">new in 1.7.6</font>)</h3>
         <p>Since NagVis 1.7.6 it is possible to use so called actions to extend the
         default context menu. This enables users to connect directly to the monitored
         hosts from the NagVis context menu. The configuration is done using
@@ -620,7 +620,7 @@ interval=15</pre>
         <p>It is possible to add such actions to the context menus of service and host
         objects depending on the "obj_type" option. They are not added blindly to all
         objects of those types, you can use the attribute "condition" to configure
-        which objects shal have the specific actions. By default we use Nagios custom
+        which objects shall have the specific actions. By default we use Nagios custom
         macros of the host object to make the actions visible/invisible. This filtering
         mechanism is not limited to custom macros, you can also use regular host
         attributes which are available within NagVis.<br />
@@ -665,8 +665,8 @@ condition="TAGS~unix"</pre>
             service objects which contain the string <code>unix</code> in the custom macro <code>TAGS</code>".
             Means the action is only added to unix hosts.</p>
             <p>You can use regular attributes or even custom macros of the objects as keys.
-            At the moment you can use the operator <code>=</code> to test is the value 
-            does match the needle exactly. The operator <code>~</code> can be used to search
+            At the moment you can use the operator <code>=</code> to test if the value 
+            matches the string exactly. The operator <code>~</code> can be used to search
             the given substring in the value. Both operators are case sensitive.</p>
             </td>
         </tr>
@@ -694,7 +694,7 @@ condition="TAGS~unix"</pre>
             <td>rdp</td>
             <td>Adds the action "connect via rdp" to service/host objects where the host object
             has the string "win" in the TAGS Nagios custom macro.
-            When clicking on the link, NagVis generates a .rdp file which contains makes
+            When clicking on the link, NagVis generates a .rdp file which contains a call to make
             the client connect to the given host via RDP.</td>
         </tr>
         <tr>
@@ -718,14 +718,14 @@ condition="TAGS~unix"</pre>
             <td>Adds the action "connect via http" to service/host objects which have the
             string "web-80" in the TAGS Nagios custom macro
             When clicking on the link, the browser opens a new window with the URL
-            http://&lt;host_address>/. This can be changed by modyfing the context template.</td>
+            http://&lt;host_address>/. This can be changed by modifying the context template.</td>
         </tr>
         <tr>
             <td>https</td>
-            <td>Adds the action "connect via http" to service/host objects which have the
+            <td>Adds the action "connect via https" to service/host objects which have the
             string "web-443" in the TAGS Nagios custom macro
             When clicking on the link, the browser opens a new window with the URL
-            https://&lt;host_address>/. This can be changed by modyfing the context template.</td>
+            https://&lt;host_address>/. This can be changed by modifying the context template.</td>
         </tr>
         </table>
         
@@ -765,8 +765,8 @@ condition="TAGS~unix"</pre>
         
         <p>This settings define the behaviour of states in the frontend.</p>
         <ul>
-            <li><b>*_bgcolor:</b> The bgcolor option is used in the background colour changing eventhandler.</li>
-            <li><b>*_color:</b> You can configure the foreground colors which are used for example as line colors and also in the highlight eventhandler.</li>
+            <li><b>*_bgcolor:</b> The bgcolor option is used in the background colour changing event handler.</li>
+            <li><b>*_color:</b> You can configure the foreground colors which are used for example as line colors and also in the highlight event handler.</li>
             <li><b>*_sound:</b> The sound file is being played on changes to the mentioned state (Needs to be MP3 format).</li>
         </ul>
         

@@ -35,23 +35,26 @@
     </ul>
 
     <h2>Erster Aufruf</h2>
-    Die Automap kann wie folgt aufgerufen werden: <pre>http://&lt;nagios-server>/&lt;path-to-nagvis>/frontend/nagvis-js/index.php?mod=Automap&amp;act=view&amp;show=__automap</pre>
-    Wenn alles richtig konfiguriert ist, sollten der Root-Host und zwei Ebenen von abh&auml;ngigen Hosts auf der Automap angezeigt werden.
+    Wenn Sie bisher keine Erfahrung mit der Automap haben, dann werfen Sie einen Blick auf die Demo-Automaps, die mit NagVis installiert
+    werden (demo-automap und demo-automap2). Sie sollten in der Lage sein, diese Automaps direkt nach der NagVis-Installation &uuml;ber das
+    &quot;&Ouml;ffnen&quot;-Men&uuml; in der Kopfzeile zu &ouml;ffnen.
+    Wenn alles korrekt konfiguriert ist, sollten auf der Demonstrations-Map &quot;demo-automap&quot; der root-Host und drei Ebenen von
+    Kind-Hosts angezeigt werden.
+    <br>
+    <h2>Map-Konfiguration</h2>
+    In der Vergangenheit wurden die Automaps durch spezielle Map-Konfigurationsdateien konfiguriert, die im Verzeichnis
+    <code>etc/automaps</code> abgelegt waren, aber dies wurde mit NagVis 1.7 ge&auml;ndert. Die Automap-Konfigurationsdateien werden nun
+    wie normale Map-Konfigurationen erzeugt (wie in <a href="map_config_format_description">Map-Konfigurationsdatei</a> beschrieben.
+    Um ab NagVis 1.7 eine Automap zu erzeugen, m&uuml;ssen Sie die Map-Source auf <code>automap</code> setzen. Um dies zu tun, m&uuml;ssen
+    Sie im global-Abschnitt den <code>sources</code>-Parameter einf&uuml;gen und ihm den Wert <code>automap</code> geben.
     <br>
     <h2>Hauptkonfiguration</h2>
     Einige Parameter f&uuml;r die Automap k&ouml;nnen in der Hauptkonfiguration von NagVis gesetzt werden.
     Weitere Informationen finden Sie in der <a href=./nagvis_config_format_description.html>Beschreibung der Hauptkonfigurationsdatei</a>.
     <br>
-    <h2>Map-Konfiguration</h2>
-    Die Automaps werden durch spezielle Map-Konfigurationsdateien konfiguriert, die im Verzeichnis <code>etc/automaps</code> abgelegt werden.
-    Die Default-Map-Konfigurationsdatei hei&szlig;t <code>__automap.cfg</code>.
-    Alle Werte finden Sie in der <a href=./automap_config_format.html>Beschreibung der Automap-Konfigurationsdatei</a>.
-    <br>
-    <br>
-    Die Werte wie iconset usw. werden an alle Objekte der Map vererbt.
-    <br>
     <h2>URL-Parameter</h2>
-    Die Automap kann mit verschiedenen URL-Parametern aufgerufen werden. Hier eine Liste aller verf&uuml;gbarer Optionen:<br>
+    Die Automap kann mit verschiedenen URL-Parametern aufgerufen werden. Seit NagVis 1.7 k&ouml;nnen diese Optionen in den global-Abschnitt
+    der Map-Konfiguration eingetragen werden, damit sie persistent sind. Hier eine Liste aller verf&uuml;gbarer Optionen:<br>
     <table border=0>
         <tr>
             <th> Parameter </th><th> Default </th><th> Beschreibung </th>
@@ -60,19 +63,20 @@
             <td> show </td><td> </td><td> Der Name der Automap. Seit NagVis 1.5 k&ouml;nnen verschiedene Automap-Konfigurationsdateien definiert werden. Die anzuzeigende Automap muss hier angegeben werden.</td>
         </tr>
         <tr>
-            <td> backend </td><td> default backend </td><td> Die Backend-Id des Backends, dessen Objekte benutzt werden sollen. F&uuml;r Einzelheiten schauen Sie in den [backend_*]-Abschnitt der <a href=./nagvis_config_format_description.html>Beschreibung der Hauptkonfigurationsdatei</a>.</td>
+            <td> backend_id<strike> backend </strike></td><td> default backend </td><td> Die Backend-Id des Backends, dessen Objekte benutzt werden sollen. Einzelheiten
+            finden Sie im [backend_*]-Abschnitt der <a href=./nagvis_config_format_description.html>Beschreibung der Hauptkonfigurationsdatei</a>.</td>
         </tr>
         <tr>
             <td> root </td><td> siehe <a href="#root/object/definition">root object definition</a></td><td>Dies ist der Name des Root-Objektes. Es ist nicht notwendig, den Host hier zu setzen. Es gibt mehrere Wege, das Root-Objekt zu ermitteln. Einzelheiten finden Sie im <a href=#Root-Objekt-Definition>Root-Objekt-Definition</a>-Kapitel auf dieser Seite</td>
         </tr>
         <tr>
-            <td> childLayers </td><td> 2 </td><td> maximale Anzahl von anzuzeigenden Ebenen abh&auml;ngiger "Child"-Hosts.</td>
+            <td> child_layers<strike> childLayers </strike></td><td> 2 </td><td> maximale Anzahl von anzuzeigenden Ebenen abh&auml;ngiger "Child"-Hosts.</td>
         </tr>
         <tr>
-            <td> parentLayers </td><td> 0 </td><td> maximale Anzahl von anzuzeigenden Ebenen dar&uuml;ber liegender "Parent"-Hosts.</td>
+            <td> parent_layers<strike> parentLayers </strike></td><td> 0 </td><td> maximale Anzahl von anzuzeigenden Ebenen dar&uuml;ber liegender "Parent"-Hosts.</td>
         </tr>
         <tr>
-            <td> renderMode </td><td> undirected </td><td> Setzt den Render-Modus der Map. Einzelheiten finden Sie unter <a href=#available/render/modes>verf&uuml;gbare Render-Modi</a> </td>
+            <td> render_mode<strike> renderMode </strike></td><td> undirected </td><td> Setzt den Render-Modus der Map. Einzelheiten finden Sie unter <a href=#available/render/modes>verf&uuml;gbare Render-Modi</a> </td>
         </tr>
         <tr>
             <td> width </td><td> 1024 </td><td> Breite der Automap in Pixeln </td>
@@ -81,28 +85,43 @@
             <td> height </td><td> 786 </td><td> H&ouml;he der Automap in Pixeln</td>
         </tr>
         <tr>
-            <td> ignoreHosts </td><td> none </td><td> Kommaseparierte Liste von Hosts (einschlie&szlig;lich abh&auml;ngiger Hosts), die nicht angezeigt werden sollen</td>
+            <td> ignore_hosts<strike> ignoreHosts </strike></td><td> none </td><td> Kommaseparierte Liste von Hosts (einschlie&szlig;lich abh&auml;ngiger Hosts), die nicht angezeigt werden sollen</td>
         </tr>
         <tr>
-            <td> filterByState </td><td> none </td><td> Bei einem Wert von 1 ist der "Problem Automap"-Modus aktiviert. Dabei werden alle Zweige ausgefiltert, die nur Hosts im Status "UP" enthalten. Das resultiert in einer "Problem-Automap", die einen Baum zeigt, in dem in jedem Zweig mindestens einen Host mit einem Problem gibt</td>
+            <td> filter_by_state<strike> filterByState </strike></td><td> none </td><td> Bei einem Wert von 1 ist der "Problem Automap"-Modus aktiviert. Dabei werden alle Zweige ausgefiltert, die nur Hosts im Status "UP" enthalten. Das resultiert in einer "Problem-Automap", die einen Baum zeigt, in dem in jedem Zweig mindestens einen Host mit einem Problem gibt</td>
         </tr>
         <tr>
-            <td> filterGroup </td><td> none </td><td> Geben Sie den Namen einer Hostgruppe an. Nur Hosts dieser Hostgruppe werden auf der Map angezeigt.</td>
+            <td> filter_by_id </td><td></td><td> Die angegebenen object_ids ausschlie&szlig;en; wird haupts&auml;chlich intern genutzt
+            <font color="red">(neu in 1.7)</font>.</td>
+        </tr>
+        <tr>
+            <td> filter_group<strike> filterGroup </strike></td><td> none </td><td> Geben Sie den Namen einer Hostgruppe an. Nur Hosts dieser Hostgruppe werden auf der Map angezeigt.</td>
         </tr>
         <tr>
             <td> search </td><td> none </td><td> Suche nach einem Map-Objekt w&auml;hrend des Map-Ladens. Passende Objekte werden hervorgehoben.</td>
         </tr>
         <tr>
+            <td> rankdir </td>LR<td> none </td><td> Konfiguriert die Richtung von gerichteten Automaps, kann auf TB (Top/Bottom) oder LR (Links/Rechts) gesetzt werden <font color="red">(neu in 1.7)</font>.</td>
+        </tr>
+        <tr>
             <td> rotation </td><td> none </td><td> Rotieren der Map-Objekte im angegebenen Rotations-Pool</td>
         </tr>
         <tr>
-            <td> enableHeader </td><td> none </td><td> Aktivieren/Deaktivieren des Header-Men&uuml;s durch 1 bzw. 0. &Uuml;bersteuert die Konfiguration.</td>
+            <td> header_menu<strike> enableHeader </strike></td><td> none </td><td> Aktivieren/Deaktivieren des Header-Men&uuml;s durch 1 bzw. 0. &Uuml;bersteuert die Konfiguration.</td>
         </tr>
         <tr>
-            <td> enableHover </td><td> none </td><td> Aktivieren/Deaktivieren des Hover-Men&uuml;s durch 1 bzw. 0. &Uuml;bersteuert die Konfiguration.</td>
+            <td> hover_menu<strike> enableHover </strike></td><td> none </td><td> Aktivieren/Deaktivieren des Hover-Men&uuml;s durch 1 bzw. 0. &Uuml;bersteuert die Konfiguration.</td>
         </tr>
         <tr>
-            <td> enableContext </td><td> none </td><td> Aktivieren/Deaktivieren des Context-Men&uuml;s durch 1 bzw. 0. &Uuml;bersteuert die Konfiguration.</td>
+            <td> context_menu<strike> enableContext </strike></td><td> none </td><td> Aktivieren/Deaktivieren des Context-Men&uuml;s durch 1 bzw. 0. &Uuml;bersteuert die Konfiguration.</td>
+        </tr>
+        <tr>
+            <td> margin </strike></td><td> none </td><td> Setzt den freien Bereich am Rand des Automap-Graphen.
+            Die Angabe erfolgt in Pixeln.</td>
+        </tr>
+        <tr>
+            <td> overlap </strike></td><td> none </td><td> Konfigurieren der Kollisionsbehandlung von Objekten (eine Erkl&auml;rung der
+            Werte finden Sie in der GraphViz-Dokumentation) (<font color="red">(neu in 1.7)</font></td>
         </tr>
     </table>
     <a name=root/object/definition></a> 

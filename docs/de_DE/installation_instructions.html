@@ -30,7 +30,7 @@
     
     <a name=SCHRITT_3></a>
     <h2>SCHRITT 3: verschieben Sie das entpackte NagVis-Verzeichnis</h2>
-    Platzieren Sie den NagVis-Verzeichnisbaum irgendwo in Ihrem Nagios-share-Verzeichnis.
+    Platzieren Sie den NagVis-Verzeichnisbaum irgendwo in Ihrem System.
     In den meisten F&auml;llen ist <code>/usr/local/nagvis</code> die beste Wahl. <br>
     <pre>mv nagvis-1.7.x /usr/local/nagvis</pre>
     Sie sollten mindestens die folgenden Dateien und Verzeichnisse unter dem nagvis-Verzeichnis sehen<br>
@@ -58,7 +58,7 @@
     <a name=SCHRITT_5></a>
     <h2>SCHRITT 5: konfigurieren des Web-Servers</h2>
     <p>Seit NagVis 1.5 ist es notwendig, den Web-Server zu konfigurieren, um NagVis zu nutzen.
-        Sie finden eine Beispiel-Konfigurationsdatei in <code>etc/apache2-nagvis.conf-sample</code>.
+        Sie finden eine Beispiel-Konfigurationsdatei in <code>etc/apache2-nagvis.conf-sample</code>.</br>
         Kopieren Sie einfach die Datei in das <code>conf.d</code>-Verzeichnis Ihres Web-Servers.
         Dies ist z.B. <code>/etc/apache2/conf.d</code>.
         <pre>cp etc/apache2-nagvis.conf-sample /etc/apache2/conf.d/apache2-nagvis.conf</pre>

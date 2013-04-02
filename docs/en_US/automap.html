@@ -24,13 +24,14 @@
         If everything is configured properly the root host and three levels of child hosts should be displayed on the demonstration automap "demo-automap".
         
         <h2> Map configuration </h2>
-        In past, the automaps were configured in special configuration files located in <code>etc/automaps</code>, but this has changed with NagVis 1.7.
-        The automap configuration files are created as regular map configurations (like written in the map config format definitions). To create an
-        automap in NagVis 1.7 you have to configure the map source to <code>automap</code>. To do this, you need to add the <code>source</code> parameter
+        In the past, the automaps were configured in special configuration files located in <code>etc/automaps</code>, but this has changed with NagVis 1.7.
+        The automap configuration files are created as regular map configurations (like described in 
+        <a href="map_config_format_description">map configuration</a>). To create an
+        automap in NagVis 1.7 you have to set the map source to <code>automap</code>. To do this, you need to add the <code>sources</code> parameter
         to the global section and set its value to <code>automap</code>.
         
         <h2> Main configuration </h2>
-        Some parameters for the automap can be set in the main configuration of NagVis. For further information see <a href="nagvis_config_format_description.html">Main Config Format Description</a>.
+        Some parameters for the automap can be set in the main configuration of NagVis. For further information see <a href="nagvis_config_format_description.html">Main Configuration</a>.
         
         <h2> URL Parameters </h2>
         The automap can be called with several url parameters. Since NagVis 1.7 these options can be put into the
@@ -43,7 +44,7 @@
             <td>show</td><td></td><td>The name of the automap. Since NagVis 1.5 different automap configuration files can be defined. The automap to view needs to be set here.</td>
         </tr>
         <tr>
-            <td>backend_id <strike>backend</strike></td><td> default backend </td><td> The backend-id of the backend to fetch the objects from. For details see the [backend_*] section in the <a href="nagvis_config_format_description.html">Main Config Format Description</a> </td>
+            <td>backend_id <strike>backend</strike></td><td> default backend </td><td> The backend-id of the backend to fetch the objects from. For details see the [backend_*] section in the <a href="nagvis_config_format_description.html">Main Configuration</a> </td>
         </tr>
         <tr>
             <td>root</td><td> see <a href="#root/object/definition">root object definition</a> </td><td> This is the name of the root object. It is not essential to set the host here. There are some more ways to tell the root object. For details see the <a href="#root/object/definition">root object definition</a> chapter on this page. </td>
@@ -67,10 +68,10 @@
             <td>ignore_hosts <strike>ignoreHosts</strike></td><td> none </td><td> comma separated list of hosts (including children) not to display </td>
         </tr>
         <tr>
-            <td>filter_by_state <strike>filterByState</strike></td><td>none</td><td>Set to 1 to enable the &quot;problem automap&quot; mode. When it is set to 1 it will filter all branches out which have only OK/UP hosts. This will result in a "problem automap" which only shows up a tree where each branch has at least one problem.</td>
+            <td>filter_by_state <strike>filterByState</strike></td><td>none</td><td>Set to 1 to enable the &quot;problem automap&quot; mode. When it is set to 1 it will exclude all branches which have only OK/UP hosts. This will result in a "problem automap" which only shows up a tree where each branch has at least one problem.</td>
         </tr>
         <tr>
-            <td>filter_by_id</td><td></td><td>Filter out given object_ids, is mostly used internal <font color="#ff0000">(New in 1.7)</font></td>
+            <td>filter_by_id</td><td></td><td>Exclude specified object_ids, is mostly used internal <font color="#ff0000">(new in 1.7)</font></td>
         <tr>
             <td>filter_group <strike>filterGroup</strike></td><td>none</td><td>Provide a hostgroup name. Only hosts in this hostgroup will be shown on the map.</td>
         </tr>
@@ -78,25 +79,25 @@
             <td>search</td><td>none</td><td>Search for a map object on map load. Matching objects will be highlighted.</td>
         </tr>
         <tr>
-            <td>rankdir</td><td>LR</td><td>Configure direction of directed automaps, can be set to TB (Top/Bottom) and LR (Left/Right)<font color="#ff0000">(New in 1.7)</font></td>
+            <td>rankdir</td><td>LR</td><td>Configure direction of directed automaps, can be set to TB (Top/Bottom) and LR (Left/Right) <font color="#ff0000">(new in 1.7)</font></td>
         </tr>
         <tr>
             <td>rotation</td><td>none</td><td>Rotate in the given rotation pool when the map is a step in the pool.</td>
         </tr>
         <tr>
-            <td>header_menu <strike>enableHeader</strike></td><td>none</td><td>Enable/Disable the header menu. To be given as integer (1/0). Overrides the configuration.</td>
+            <td>header_menu <strike>enableHeader</strike></td><td>none</td><td>Enable/Disable the header menu. To be specified as integer (1/0). Overrides the configuration.</td>
         </tr>
         <tr>
-            <td>hover_menu <strike>enableHover</strike></td><td>none</td><td>Enable/Disable the hover menus. To be given as integer (1/0). Overrides the configuration.</td>
+            <td>hover_menu <strike>enableHover</strike></td><td>none</td><td>Enable/Disable the hover menus. To be specified as integer (1/0). Overrides the configuration.</td>
         </tr>
         <tr>
-            <td>context_menu <strike>enableContext</strike></td><td>none</td><td>Enable/Disable the context menus. To be given as integer (1/0). Overrides the configuration.</td>
+            <td>context_menu <strike>enableContext</strike></td><td>none</td><td>Enable/Disable the context menus. To be specified as integer (1/0). Overrides the configuration.</td>
         </tr>
         <tr>
-            <td>margin</td><td>50</td><td>Sets the free space border of the automap graph on all sides. Has to be given in pixels.</td>
+            <td>margin</td><td>50</td><td>Sets the free area on the border of the automap graph. Has to be specified in pixels.</td>
         </tr>
         <tr>
-            <td>overlap</td><td>true</td><td>Configure collision handling of objects (Take a look at the graphviz docs for explanations of the values)<font color="#ff0000">(New in 1.7)</font></td>
+            <td>overlap</td><td>true</td><td>Configure collision handling of objects (take a look at the graphviz docs for explanations of the values) <font color="#ff0000">(new in 1.7)</font></td>
         </tr>
         </table>
         
@@ -107,7 +108,7 @@
         There are several ways to get the root object:
         <ul>
         <li> URL-Parameter: The root object can be set by the parameter <code>root</code>.</li>
-        <li> Main configuration: The <code>defaultroot</code> option can be set in the <code>[automap]</code>-section.</li>
+        <li> Main configuration: The <code>defaultroot</code> option can be set in the <code>[automap]</code> section.</li>
         <li> Auto detection: Ask the backend for a host without parent. This only works when there is ONE host in your Nagios installation without any parent object.</li>
         </ul>
         
@@ -152,7 +153,7 @@
         the automap including the generated background image to a regular map using the
         &quot;Export to map&quot; which can be found in the &quot;Actions&quot; submenu
         in your header menu.</p>
-        <p>With the exported map you can add design elements as you like and customize
+        <p>Using the exported map you can add design elements as you like and customize
         your layout according to your needs.</p>
         <p>A map can be exported multiple times to the same target map but it will
         overwrite all changes you made to the target map before. You can only overwrite
@@ -163,7 +164,7 @@
         <p>The URLs of the host objects are used for identifying the host objects during
         automap rendering. Especially the &quot;host=&quot; parameter is important. When
         this parameter is missing in the host URLs the object positions can not be gathered.</p>
-        <p>By default this information should not of interest to you. But when you customize the
+        <p>By default this information should not be of interest to you. But when you customize the
         host URLs in your NagVis installation it is important to know that your custom URL
         needs to have the &quot;host=&quot; parameter set to the hostname of the object to
         be able to use the hosts on the automap.</p>

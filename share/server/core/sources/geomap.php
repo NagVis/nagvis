@@ -21,6 +21,9 @@ function geomap_read_csv($p) {
         throw new GeomapError(l('Location source file "[F]" does not exist.', Array('F' => $f)));
 
     foreach(file($f) AS $line) {
+        // skip lines beginning with any of the usual comment characters
+        if(preg_match('/^[;#\/]/',$line))
+            continue;
         $parts = explode(';', $line);
         $locations[] = array(
             'name'  => $parts[0],
@@ -105,6 +108,10 @@ function geomap_get_contents($url) {
         if($proxy !== null) {
             $opts['http']['proxy'] = $proxy;
             $opts['http']['request_fulluri'] = true;
+            $proxy_auth = cfg('global', 'http_proxy_auth');
+            if($proxy_auth !== null) {
+                $opts['http']['header'] = 'Proxy-Authorization: Basic ' . base64_encode("$proxy_auth");
+            }
         }
         
         $context = stream_context_create($opts);
@@ -137,7 +144,7 @@ function list_geomap_source_files($CORE) {
     return $CORE->getAvailableGeomapSourceFiles();
 }
 
-// options to be modyfiable by the user(url)
+// options to be modifiable by the user(url)
 global $viewParams;
 $viewParams = array(
     'geomap' => array(
@@ -193,6 +200,10 @@ function geomap_files($params) {
     // The source_file parameter was filtered here in previous versions. Users
     // reported that this is not very useful. So I removed it. Hope it works
     // for most users.
+    // FIXME: the following two "unset" statements fix an "array to string conversion" error
+    unset ($params['filter_group']);
+    unset ($params['sources']);
+
     $image_name  = 'geomap-'.implode('_', array_values($params)).'.png';
     return array(
         $image_name,
@@ -340,6 +351,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
     $long_para = $params['width'] / $long_diff;
     $lat_para  = $params['height'] / $lat_diff;
+    $lat_mult  = $params['height'] / (ProjectF($img_top) - ProjectF($img_down));
 
     // Now add the coordinates to the map objects
     foreach($map_config AS &$obj) {
@@ -347,7 +359,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
             continue;
 
         // Calculate the lat (y) coords
-        $obj['y'] = round($params['height'] - ($lat_para * ($obj['lat'] - $img_down)) - ($icon_h / 2));
+        $obj['y'] = round((ProjectF($img_top) - ProjectF($obj['lat'])) * $lat_mult - ($icon_h / 2));
         if($obj['y'] < 0)
             $obj['y'] = 0;		
         
@@ -386,6 +398,18 @@ function changed_geomap($MAPCFG, $compare_time) {
         return true;
 
     return false;
+}
+
+# calculate lat on Mercator based map
+# for details see:
+#    http://wiki.openstreetmap.org/wiki/Slippy_map_tilesnames#X_and_Y
+# function copied from
+#    http://almien.co.uk/OSM/Tools/Coord/source.php
+
+function ProjectF($Lat){
+  $Lat = deg2rad($Lat);
+  $Y = log(tan($Lat) + (1/cos($Lat)));
+  return($Y);
 }
 
 ?>

@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>NagVis-Geomap</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+  </head>
+    <body>
+        <h1>NagVis-Geomap</h1>
+        <h2>Einleitung</h2>
+        <p>Die NagVis-Geomap-Map-Source wurde in NagVis 1.7 eingef&uuml;hrt. Sie wurde entwickelt, um ohne viel Arbeit sauber gerenderte
+        und skalierte &Uuml;bersichts-Maps zu erhalten.</p>
+        <p>Die Geomap rendert verschiedene Hosts auf einer von <a href="http://www.openstreetmap.org">Open Street Map</a> als
+        Hintergrundbild zur Verf&uuml;gung gestellten Karte.
+        <p>F&uuml;r die aktuelle Geomap ben&ouml;tigen Sie lediglich eine CSV-Datei, die NagVis die Hosts und die Geo-Koordinaten f&uuml;r
+        die zu platzierenden Objekte angibt.</p>
+
+        <h2>Voraussetzungen</h2>
+        <p>Es ist keine spezielle Software auf dem NagVis-Host erforderlich. Allerdings gibt es eine besondere Anforderung.
+        Um dieses Feature nutzen zu k&ouml;nnen ben&ouml;tigt NagVis Zugriff auf den Host <code>geomap.nagvis.org</code> via port 80.
+        NagVis benutzt eine simple HTTP-basierte API, um das Map-Image und die Koordinaten dieses Images zu erhalten.</p>
+        <p>In den meisten F&auml;llen hat der NagVis-Host keinen direkten Internet-Zugriff. Sie k&ouml;nnen die <code>http_proxy</code>
+        Option im <code>[global]</code>-Abschnitt Ihrer NagVis-Hauptkonfigurationsdatei (nagvis.ini.php) verwenden, um NagVis anzuweisen,
+        einen Proxy f&uuml;r solche Anfragen zu benutzen. Die meisten Proxies erfordern eine Authentifizierung, um den Zugang zum
+        Internet zu kontrollieren. Mit der Option <code>http_proxy_auth</code> k&ouml;nnen die Zugangsdaten gesetzt werden.</p>
+        
+        <h2>Der erste Aufruf</h2>
+        <p>NagVis wird mit einer Demo-Geomap namens &quot;demo-geomap&quot; ausgeliefert. Wenn Ihr NagVis korrekt konfiguriert ist,
+        sollten Sie eine Karte von Deutschland mit zwei Knoten sehen. Ein Knoten zeigt den Host &quot;ham-srv1&quot; in Hamburg.
+        Der andere Knoten &quot;muc-srv1&quot; steht in M&uuml;nchen.</p>
+
+        <p>Die Geomap wird definiert mit Hilfe der Map-Konfigurationsdatei "demo-geomap.cfg". Der Inhalt sieht ungef&auml;hr so aus:</p>
+        
+        <pre>global {
+    sources=geomap
+    alias=Demo: 4 Geomap
+    parent_map=demo-overview
+    iconset=std_medium
+    backend_id=demo
+    # Geomap Parameters
+    source_type=csv
+    source_file=demo-locations
+    width=800
+    height=600
+}</pre>
+
+        <p>Die Zeile <code>sources=geomap</code> bewirkt, dass die geomap-Source benutzt werden soll, um die Map-Konfiguration zu &auml;ndern.
+
+        Die Zeile <code>source_type=csv</code> (<font color="#ff0000">neu in 1.7.4</font>) weist den geomap-Code an, die CSV-Datei zu lesen,
+        die in <code>source_file=demo-locations</code> angegeben und im Verzeichnis <code>etc/geomap</code> abgelegt ist, um mit einer Liste
+        von Hosts und Koordinaten eine Geomap zu f&uuml;llen.</p>
+
+        <p>Die Datei <code>demo-locations.csv</code> enth&auml;lt die folgenden zwei Zeilen:</p>
+
+        <pre>ham-srv1;Hamburg Server 1;53.556866;9.994622
+muc-srv1;Munich Server1;48.1448353;11.5580067</pre>
+
+        <p>Jede Zeile definiert einen Host, der zur Map hinzugef&uuml;gt werden soll. Die Spalten werden durch <code>;</code>-Zeichen
+        getrennt. Die ersten Spalte enth&auml;lt den Host-Namen, die zweite einen optionalen Alias, die dritte die LAT-Koordinate
+        (Breitengrad) und die vierte die LONG-Koordinate (L&auml;ngengrad).</p>
+        <p><font color="red">(Ab Git-Version vom 21.03.2013)</font>: Zeilen, die mit den &uuml;blichen Kommentarzeichen beginnen
+        (<code>;</code>, <code>#</code> oder <code>//</code>), werden als Kommentar behandelt.</p>
+
+        <p><font color="#ff0000">Neu in 1.7.4</font>: Es ist auch m&ouml;glich, <code>source_type=backend</code>
+        zu setzen, um das per <code>backend_id</code> eingestellte Backend f&uuml;r die Ermittlung der anzuzeigenden Hosts und ihrer
+        Koordinaten zu nutzen. Das ist nur m&ouml;glich, wenn das livestatus-Backend genutzt wird. Es holt alle Hosts, bei denen die 
+        benutzerdefinierten Objektvariablen <code>_LAT</code> und <code>_LONG</code> konfiguriert sind. Es ist m&ouml;glich, die ermittelten
+        Hosts durch Angabe der Option <code>filter_group</code> auf die Mitgliedschaft der angegebenen Host-Gruppe einzugrenzen.</p>
+        
+        <h2>Konfigurieren von Geomaps</h2>
+        <p>Die Geomap-Source benutzt Anzeigeparameter zur Konfiguration. F&uuml;r Einzelheiten werfen Sie einen Blick auf den
+        "Ansicht &auml;ndern"-Dialog, der im Header-Men&uuml; &uuml;ber "Aktionen -> Ansicht &auml;ndern" ge&ouml;ffnet werden kann.</p>
+        <p>Die Anzeigeparameter k&ouml;nnen auch als Map-Konfigurationsattribute im global-Abschnitt der Maps angegeben werden.</p>
+        <table style="width:100%">
+        <tr>
+            <th>Parameter</th><th>Default</th><th>Beschreibung</th>
+        </tr>
+        <tr>
+            <td>geomap_type</td>
+            <td>mapnik</td>
+            <td>Definiert den Render-Modus der Geomap. G&uuml;ltige Werte sind: osmarender, mapnik oder cycle.</td>
+        </tr>
+        <tr>
+            <td>geomap_zoom</td>
+            <td></td>
+            <td>Konfiguriert den Zoom-Faktor der Geomap w&auml;hrend der Map-Abfragen.
+                Werfen Sie einen Blick auf die <a href="">OSM-Zoom-Dokumentation</a> f&uuml;r weitere Details.</td>
+        </tr>
+        <tr>
+            <td>geomap_border</td>
+            <td>0.25</td>
+            <td>Der Rand, der auf jeder Seite der Geomap hinzugef&uuml;gt werden soll. Dieser Wert wird einfach zu den berechneten
+                min/max Geo-Koordinaten addiert.</td>
+        </tr>
+        <tr>
+            <td>source_type</td>
+            <td>csv</td>
+            <td>Der Typ der Data-Source, die genutzt wird, um die Geomap-Objekte zu ermitteln. Kann <code>csv</code> oder
+                <code>backend</code> sein.</td>
+        </tr>
+        <tr>
+            <td>source_file</td>
+            <td></td>
+            <td>Der Name der CSV-Datei, die als Quelle f&uuml;r das Rendering der Geomap genutzt werden soll. Das wird nur genutzt, wenn
+                <code>source_type</code> auf <code>csv</code> gesetzt ist.</td>
+        </tr>
+        <tr>
+            <td>width</td>
+            <td></td>
+            <td>Definiert die Breite der Geomap in Pixeln. Die maximale Gr&ouml;&szlig;e ist begrenzt durch den benutzten Web-Service.
+            geomap.nagvis.org unterst&uuml;tzt bis zu 50 "Kacheln", was ein Aufl&ouml;sind bis zu 1920x1080 erm&ouml;glichen sollte.
+            Bitte kontaktieren Sie uns, falls Sie mehr ben&ouml;tigen sollten.</td>
+        </tr>
+        <tr>
+            <td>height</td>
+            <td></td>
+            <td>Definiert die H&ouml;he der Geomap in Pixeln. Die maximale Gr&ouml;&szlig;e ist begrenzt durch den benutzten Web-Service.
+            geomap.nagvis.org unterst&uuml;tzt bis zu 50 "Kacheln", was ein Aufl&ouml;sind bis zu 1920x1080 erm&ouml;glichen sollte.
+            Bitte kontaktieren Sie uns, falls Sie mehr ben&ouml;tigen sollten.</td>
+        </tr>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <title>NagVis-Maps</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+</head>
+<body>
+  <h1>Statische und dynamische Maps</h1>
+  <p>Die verschiedenen Ansichten in NagVis hei&szlig;en &quot;maps&quot;. Der klassische und gebr&auml;uchlichste Typ der NagVis-Maps sind
+  die statischen Maps. Das bedeutet, dass man mit Hilfe des Web-basierten Konfigurations-Editors oder eines Text-Editors eine
+  Map-Konfiguration erstellt.</p>
+  <p>Ab NagVis 1.7 gibt es eine neue Erweiterung der Map-Konfiguration. Sie basiert weiterhin auf dem statischen Map-Konfigurations-Ansatz,
+  aber nun ist es m&ouml;glich, diese statischen Konfigurationsteile mit dynamischen und programmierbaren Mechanismen zu erweitern.</p>
+  <p>Die neue M&ouml;glichkeit wurde &quot;map sources&quot; benannt. Jede Map kann eine oder mehreren Map-Sources nutzen.
+  Jede dieser Sources kann die gesamte Map-Konfiguration l&ouml;schen, ersetzen oder ver&auml;ndern.</p>
+  <p>Ein Map-Source besteht aus verschiedenen PHP-Funktionen mit einem standardisierten Satz von Parametern. Die Funktionen sind komplett
+  frei in dem, was sie tun. Eine Source kann z.B. CSV-Datei mit Objekten und Koordinaten lesen, sich mit Datenbanken verbinden, um
+  Informationen zu holen, oder Daten von externen Diensten lesen. Der Entwickler entscheidet.</p>
+
+  <h2>Die Map-Sources-API</h2>
+  <p>Textdateien mit PHP-Code m&uuml;ssen im Verzeichnis <code>share/server/core/sources</code> relativ zum NagVis-Basis-Verzeichnis stehen.
+  In OMD werden die Site-spezifischen Dateien im Verzeichnis <code>local/share/nagvis/htdocs/server/core/sources</code> relativ zum 
+  Site-Basisverzeichnis abgelegt.</p>
+  <p>Es gibt keine 1:1-Relation zwischen den Dateien und den Sources selbst. Eine Datei kann eine, mehrere oder gar keine Source enthalten
+  (z.B. um Funktionen zu definieren, die von mehreren Sources benutzt werden).</p>
+  <p>Eine Map-Source besteht aus zwei PHP-Funktionen, die die folgenden Spezifikationen erf&uuml;llen m&uuml;ssen:</p>
+  <table>
+  <tr><th>Funktionsnamenmuster</th><th>Parameter</th></tr>
+  <tr>
+      <td rowspan=3>
+        <pre>process_&lt;source-name></pre>
+        <p>Dies ist die tats&auml;liche Verarbeitungsfunktion. Sie kann die aktive Map-Konfiguration ersetzen. Der Return-Code der Funktion
+        wird im Moment nicht genutzt.</p>
+      </td>
+      <td><code>$MAPCFG</code> - das GlobalMapCfg-PHP-Objekt</td>
+  </tr>
+  <tr>
+      <td><code>$map_name</code> - der Name der Map als Zeichenkette</td>
+  </tr>
+  <tr>
+      <td><code>&$map_config</code> - Referenz des Map-Konfigurations-Arrays. Dieses Array muss modifiziert werden, um die Map-Konfiguration
+      zu &auml;ndern.
+      </td>
+  </tr>
+  <tr>
+     <td rowspan=2>
+        <pre>changed_&lt;source-name></pre>
+        <p>Diese Funktion wird genutzt, um der Verarbeitung der Map-Konfigurationen mitzuteilen, ob sie erneut geladen werden muss oder
+        nicht. Die Funktion muss &quot;true&quot; zur&uuml;ckliefern, damit NagVis die Konfiguration erneut verarbeitet. Das bedeutet auch,
+        dass die process_* f&uuml;r alle konfigurierten Sources ausgef&uuml;hrt wird.</td>
+     </td>
+     <td><code>$MAPCFG</code> - das GlobalMapCfg-PHP-Objekt</td>
+  </tr>
+  <tr>
+      <td><code>$compare_time</code> - der Unix-Zeitstempel der aktuell zwischengespeicherten Map-Konfiguration.</p>
+  </tr>
+  </table>
+
+  <p>W&auml;hrend eine Map-Konfiguration geladen wird, pr&uuml;ft NagVis, ob diese bereits analysiert und zwischengespeichert wurde.
+  Ist das der Fall und der Cache ist aktuell, dann kann NagVis diese Daten viel schneller verarbeiten als wenn die Daten erst analysiert
+  und gepr&uuml;ft werden m&uuml;ssten.</p>
+  <p>Im Allgemeinen vergleicht NagVis die Zeitstempel der verwendeten Konfigurationsdateien (Haupt- und Map-Konfigurationsdateien) mit dem
+  Map-Konfigurations-Cache, um diese Entscheidung zu treffen.</p>
+  <p>Wenn Map-Sources verwendet werden, muss jede Source dem Map-Konfigurationsverarbeitungs-Code mitteilen, ob die Map-Konfiguration
+  erneut geladen werden muss oder der Map-Konfigurations-Cache benutzt werden kann. Dies erfolgt durch die changed_*-Funktion jeder Source.
+  Wenn diese Funktion &quot;true&quot; zur&uuml;ckliefert, wird NagVis die Map-Konfiguration erneut laden.</p>
+  <p>Die Map-Konfiguration zu laden bedeutet, dass NagVis die Map-Konfigurationsdatei analysiert, um das Array der Map-Objekte zu
+  f&uuml;llen. Dann werden diese Daten gepr&uuml;ft, um fehlerhafte Konfigurationen zu verhindern. Danach werden alle konfigurierten
+  Map-Sources verarbeitet, um diesen die M&ouml;glichkeit zu geben, die Map-Konfiguration zu ver&auml;ndern.</p>
+
+  <p>Jede Map-Source kann Anzeigeparameter und Konfigurationsvariablen definieren, die in den Maps verf&uuml;gbar sind, die diese
+  Sourcen verwenden. Dies ist eine Beispieldefinition der Geomap-Map-Source:</p>
+  <pre>
+// options to be modifiable by the user(url)
+global $viewParams;
+$viewParams = array(
+    'geomap' => array(
+        'zoom',
+        'geomap_type',
+        'source_file',
+    )
+);
+
+// Config variables to be registered for this source
+global $configVars;
+$configVars = array(
+    'geomap_type' => array(
+        'must'       => false,
+        'default'    => 'osmarender',
+        'match'      => '/^(osmarender|mapnik|cycle)$/i',
+        'field_type' => 'dropdown',
+        'list'       => 'list_geomap_types',
+    ),
+    'source_file' => array(
+        'must'       => false,
+        'default'    => '',
+        'match'      => MATCH_STRING_EMPTY,
+        'field_type' => 'dropdown',
+        'list'       => 'list_geomap_source_files',
+    ),
+    'zoom' => array(
+        'must'       => false,
+        'default'    => '',
+        'match'      => MATCH_INTEGER_EMPTY,
+    ),
+);
+  </pre>
+
+  <p>Diese Definitionen f&uuml;hren zu a) drei neuen Map-Konfigurationsoptionen im global-Abschnitt der Map und b) zur Verf&uuml;gbarkeit
+  der Variablen in den URLs der Maps, die diese Source verwenden.</p>
+
+  <h2>Allgemeine Map-Anzeigeparameter</h2>
+  <p>Seit der Implementierung der Map-Sources k&ouml;nnen sogar regul&auml;re Maps ohne konfigurierte Sources mit Hilfe einiger Standard-
+  Anzeigeparameter ver&auml;ndert werden. Einige der Parameter sind nicht komplett neu, sondern sie wurden lediglich zu Anzeigeparametern.
+  umkodiert. Hier ist die Liste der allgemeinen Anzeigeparameter:</p>
+  <table>
+  <tr><th>Parameter</th><th>Beschreibung</th></tr>
+  <tr>
+    <td>backend_id</td>
+    <td>
+    &Auml;ndert das zu verwendende Standard-Backend der aktuellen Map. Einzelheiten finden Sie in der Beschreibung der Option in der 
+    <a href="map_config_format_description.html#global">Map-Konfiguration</a>.
+    </td>
+  </tr>
+  <tr>
+    <td>iconset</td>
+    <td>
+    &Uuml;berschreibt das iconset, das im global-Abschnitt der Map konfiguriert ist. Einzelheiten finden Sie in der Beschreibung der Option
+    <a href="map_config_format_description.html#global">Map-Konfiguration</a>.
+    </td>
+  </tr>
+  <tr>
+    <td>width</td>
+    <td>
+    Kann benutzt werden, um die Breite der Map-Anzeige zu &auml;ndern. Wird zurzeit nicht von regul&auml;ren Maps verwendet.
+    Diese Option wird nur von einigen Map-Sources benutzt.
+    </td>
+  </tr>
+  <tr>
+    <td>height</td>
+    <td>
+    Kann benutzt werden, um die H&ouml;he der Map-Anzeige zu &auml;ndern. Wird zurzeit nicht von regul&auml;ren Maps verwendet.
+    Diese Option wird nur von einigen Map-Sources benutzt.
+    </td>
+  </tr>
+  <tr>
+    <td>header_menu</td>
+    <td>
+    &Uuml;berschreibt die header_menu-Einstellung im global-Abschnitt der Map. Einzelheiten finden Sie in der Beschreibung der Option in der
+    <a href="map_config_format_description.html#global">Map-Konfiguration</a>.
+    </td>
+  </tr>
+  <tr>
+    <td>hover_menu</td>
+    <td>
+    &Uuml;berschreibt die hover_menu-Einstellung im global-Abschnitt der Map. Einzelheiten finden Sie in der Beschreibung der Option in der
+    <a href="map_config_format_description.html#global">Map-Konfiguration</a>.
+    </td>
+  </tr>
+  <tr>
+    <td>context_menu</td>
+    <td>
+    &Uuml;berschreibt die context_menu-Einstellung im global-Abschnitt der Map. Einzelheiten finden Sie in der Beschreibung der Option in der
+    <a href="map_config_format_description.html#global">Map-Konfiguration</a>.
+    </td>
+  </tr>
+  </table>
+  
+  <h2>Standard-Map-Sources</h2>
+  <p>Im Moment sind zwei Map-Sources f&uuml;r NagVis verf&uuml;gbar. Beschreibungen zu den <a href=geomap.html>geomap</a>- und den
+   <a href=automap.html>automap</a>-Sources finden Sie auf den jeweils Dokumentationsseiten.</p>
+</body>
+</table>
+</html>

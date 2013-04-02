@@ -7,11 +7,11 @@
  <body>
         <h1>MKLivestatus backend</h1>
         <p>MKLivestatus is a very simple and smart Nagios eventbroker module. Livestatus
-             is concepted and tuned to reduce disk, memory and cpu loads caused by live-data
+             is concepted and tuned to reduce disk, memory and cpu load caused by live-data
              processing on the Nagios system. Just as NDO, Livestatus makes use of the Nagios
              Event Broker API and loads a binary module into the Nagios process. But other
              than the NDO, Livestatus does not actively write out data e.g. to the disk.
-             Instead, it opens a socket for external applications to connect to and fetch
+             Instead, it opens a socket for external applications to connect to and fetches
              the current status information from Nagios. For details about the new data
              access provider take a look at the <a href="http://www.mathias-kettner.de/checkmk_livestatus.html#H1:How to access Nagios status data" target="_blank">official documentation</a>.</p>
         <p>Since the first NagVis 1.5 release the mklivestatus backend is included on
@@ -26,7 +26,7 @@
         <tr>
             <td>socket</td>
             <td>unix:/usr/local/nagios/var/rw/live</td>
-            <td><p>The socket to connect to can be a local unix socket or a tcp socket. You have to define the type at the beginning of the string. Set &quot;unix:&quot; for unix sockets or &quot;tcp:&quot; for tcp sockets.</p> <p>In case of the unix socket you need to put the path of the livestatus unix socket to connect to.</p> <p>When using a tcp socket you have to enter a hostaddress and a tcp port using the following scheme: &lt;host>:&lt;port>. The host address can be an IP-address or an FQDN.</p></td>
+            <td><p>The socket to connect to can be a local unix socket or a tcp socket. You have to define the type at the beginning of the string. Set &quot;unix:&quot; for unix sockets or &quot;tcp:&quot; for tcp sockets.</p> <p>In case of the unix socket you need to specify the path of the livestatus unix socket to connect to.</p> <p>When using a tcp socket you have to enter a host address and a tcp port using the following scheme: &lt;host>:&lt;port>. The host address can be an IP address or an FQDN.</p></td>
         </tr><tr>
             <td>timeout</td>
             <td>5</td>
