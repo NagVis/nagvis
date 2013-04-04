@@ -559,9 +559,16 @@ function process_automap($MAPCFG, $map_name, &$map_config) {
                 unset($map_config[$object_id][$key]);
 }
 
+function automap_program_start($p) {
+    global $_BACKEND;
+    $_BACKEND->checkBackendExists($p['backend_id'], true);
+    $_BACKEND->checkBackendFeature($p['backend_id'], 'getProgramStart', true);
+    return $_BACKEND->getBackend($p['backend_id'])->getProgramStart();
+}
+
 function changed_automap($MAPCFG, $compare_time) {
-    // FIXME:
-    // - Nagios restarted
+    $params = $MAPCFG->getSourceParams();
+    return automap_program_start($params) > $compare_time;
 }
 
 ?>
