@@ -2,6 +2,9 @@
 Automap:
   * FIX: Added missing program restarted check to invalidate chaches
 
+Frontend:
+  * FIX: Fixed "Undefined index" error when changing backend_id of maps
+
 1.7.7
 Core:
   * Implemented "on demand" maps. Maps which only need a basic configuration

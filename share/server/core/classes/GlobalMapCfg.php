@@ -611,7 +611,9 @@ class GlobalMapCfg {
         if(isset($params['sources'])) {
             $keys = array();
             foreach($params['sources'] AS $source) {
-                $keys = array_merge($keys, self::$viewParams[$source]);
+                if($source != '') {
+                    $keys = array_merge($keys, self::$viewParams[$source]);
+                }
             }
 
             foreach($keys AS $key) {
