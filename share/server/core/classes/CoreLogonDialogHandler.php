@@ -39,8 +39,10 @@ class CoreLogonDialogHandler {
                 // Try to authenticate the user
                 $result = $AUTH->isAuthenticated();
                 if($result === true) {
-                    // Success: Store in session
-                    $AUTH->storeInSession();
+                    if(!isset($data['onetime'])) {
+                        // Success: Store in session
+                        $AUTH->storeInSession();
+                    }
                     return true;
                 } else {
                     throw new FieldInputError(null, l('Authentication failed.'));
@@ -59,9 +61,6 @@ class CoreLogonDialogHandler {
     }
 
     private function handleResponseAuth() {
-        $attr = Array('_username' => MATCH_USER_NAME,
-                      '_password' => null);
-
         $FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
 
         // Don't try to auth if one of the vars is missing
@@ -79,6 +78,12 @@ class CoreLogonDialogHandler {
         
         $a = Array('user'     => $FHANDLER->get('_username'),
                    'password' => $FHANDLER->get('_password'));
+
+        // It is possible to only request onetime access to prevent getting added
+        // and authentication cookie
+        if(isset($_REQUEST['_onetime'])) {
+            $a['onetime'] = true;
+        }
     
         // Remove authentication infos. Hide it from the following code
         if(isset($_REQUEST['_username']))
