@@ -553,28 +553,6 @@ var NagVisStatefulObject = NagVisObject.extend({
                 if(setPerfdata[0][2] === null || setPerfdata[0][2] === ''
                    || setPerfdata[1][2] === null || setPerfdata[1][2] === '') {
                     setPerfdata = this.calculateUsage(setPerfdata);
-                } else {
-                    // Handle the case where a plugin like check_iftraffic.pl or does not provide human readable
-                    // byte values. Calculate them.
-                    for(var i = 0; i < setPerfdata.length; i++) {
-                        if((setPerfdata[i][0] == 'inAbsolut' || setPerfdata[i][0] == 'outAbsolut')
-                           && (setPerfdata[i][2] === null || setPerfdata[i][2] === '' || setPerfdata[i][2] === 'B')) {
-                            // Hack: The following NagVis code assumes that perfdata sets are structured as follows:
-                            // 0: in percentage
-                            // 1: out percentage
-                            // 2: in bytes/bits
-                            // 3: in bytes/bits
-                            // This rewrites the found indexes when needed. It is kind of a hack, but works
-                            // for the moment and should not break existing setups.
-                            var iNew = i;
-                            if(setPerfdata[i][0] == 'inAbsolut' && i != 2) {
-                                iNew = 2;
-                            } else if(setPerfdata[i][0] == 'outAbsolut' && i != 3) {
-                                iNew = 3;
-                            }
-                            setPerfdata[iNew] = this.perfdataCalcBitsReadable(setPerfdata[i]);
-                        }
-                    }
                 }
 
                 // Get colorFill #1 (in)
