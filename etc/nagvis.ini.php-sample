@@ -64,8 +64,9 @@
 ; The proxy url to be used in NagVis can be configured here. One possible value
 ; is "tcp://127.0.0.1:8080".
 ;http_proxy=""
-; Most proxies require authentication to access the internet.
-;http_proxy_auth="user:password"
+; Most proxies require authentication to access the internet. Use the format
+; "<username>:<password>" to provide auth credentials
+;http_proxy_auth=""
 ; Set the timeout (in seconds) for outbound HTTP requests (for example geomap requests)
 ;http_timeout=10
 ;

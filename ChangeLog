@@ -2,6 +2,9 @@
 Automap:
   * FIX: Added missing program restarted check to invalidate chaches
 
+Geomap:
+  * FIX: Not providing auth credentials in http requests to proxy when none set
+
 Frontend:
   * FIX: Fixed "Undefined index" error when changing backend_id of maps
   * Reverted change from 1.7.5 (Weathermap lines with byte/bit values in 
