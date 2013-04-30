@@ -87,15 +87,13 @@ var NagVisShape = NagVisStatelessObject.extend({
         // Extract external URLs
         if(this.conf.icon.match(/^\[(.*)\]$/))
             this.conf.icon = this.conf.icon.replace(/^\[(.*)\]$/, '$1');
-        else
-            this.conf.icon = oGeneralProperties.path_shapes + this.conf.icon;
 
         addZoomHandler(oIcon);
 
         if(this.conf.icon.indexOf('?') !== -1) {
-            oIcon.src = this.conf.icon+'&_t='+iNow;
+            oIcon.src = oGeneralProperties.path_shapes + this.conf.icon + '&_t=' + iNow;
         } else {
-            oIcon.src = this.conf.icon+'?_t='+iNow;
+            oIcon.src = oGeneralProperties.path_shapes + this.conf.icon + '?_t=' + iNow;
         }
 
         oIcon.alt = this.conf.type;

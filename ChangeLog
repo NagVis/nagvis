@@ -7,6 +7,7 @@ Geomap:
 
 Frontend:
   * FIX: Fixed "Undefined index" error when changing backend_id of maps
+  * FIX: Fixed hiding of shapes during refresh (enable_refresh=1)
   * Reverted change from 1.7.5 (Weathermap lines with byte/bit values in 
     labels should print human) which broke the handling for some plugins
 
