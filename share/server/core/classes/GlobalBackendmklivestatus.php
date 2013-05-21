@@ -627,7 +627,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                   'perfdata'               => $e[14],
                   'check_command'          => $e[19],
                 );
-                if(isset($e[20][0]) && isset($e[21][0]))
+
+                if($e[20] && $e[21])
                     $arrTmpReturn['custom_variables'] = array_combine($e[20], $e[21]);
 
                 /**
@@ -1359,7 +1360,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $r = $this->queryLivestatus($query);
         $hosts = array();
         foreach($r AS $row) {
-		$custom_variables = array_combine($row[1], $row[2]);
+            if($row[1] && $row[2]) {
+	        $custom_variables = array_combine($row[1], $row[2]);
                 if(isset($custom_variables['LAT']) && isset($custom_variables['LONG'])) {
                     $hosts[] = array(
                         'name'  => $row[0],
@@ -1368,6 +1370,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                         'alias' => $row[3],
                     );
                 }
+            }
         }
         return $hosts;
     }
