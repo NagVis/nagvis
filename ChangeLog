@@ -3,6 +3,7 @@ Core:
   * Livestatus: Fixed handling of hosts/services without custom variables
   * Added option to perform privilege switch to a user with less permissions
     for viewing maps in the context of this user
+  * FIX: Fixed state weight definition parsing
 
 1.7.8
 Automap:

@@ -893,11 +893,11 @@ class GlobalMainCfg {
             'states' => Array(
                 'unreachable' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '9',
+                    'default' => 9,
                     'match' => MATCH_INTEGER),
                 'unreachable_ack' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '6',
+                    'default' => 6,
                     'match' => MATCH_INTEGER),
                 'unreachable_ack_bgcolor' => Array('must' => 0,
                     'editable' => 1,
@@ -905,7 +905,7 @@ class GlobalMainCfg {
                     'match' => MATCH_COLOR),
                 'unreachable_downtime' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '6',
+                    'default' => 6,
                     'match' => MATCH_INTEGER),
                 'unreachable_downtime_bgcolor' => Array('must' => 0,
                     'editable' => 1,
@@ -925,11 +925,11 @@ class GlobalMainCfg {
                     'match' => MATCH_MP3_FILE),
                 'down' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '10',
+                    'default' => 10,
                     'match' => MATCH_INTEGER),
                 'down_ack' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '6',
+                    'default' => 6,
                     'match' => MATCH_INTEGER),
                 'down_ack_bgcolor' => Array('must' => 0,
                     'editable' => 1,
@@ -957,11 +957,11 @@ class GlobalMainCfg {
                     'match' => MATCH_MP3_FILE),
                 'critical' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '8',
+                    'default' => 8,
                     'match' => MATCH_INTEGER),
                 'critical_ack' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '6',
+                    'default' => 6,
                     'match' => MATCH_INTEGER),
                 'critical_ack_bgcolor' => Array('must' => 0,
                     'editable' => 1,
@@ -969,7 +969,7 @@ class GlobalMainCfg {
                     'match' => MATCH_COLOR),
                 'critical_downtime' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '6',
+                    'default' => 6,
                     'match' => MATCH_INTEGER),
                 'critical_downtime_bgcolor' => Array('must' => 0,
                     'editable' => 1,
@@ -989,11 +989,11 @@ class GlobalMainCfg {
                     'match' => MATCH_MP3_FILE),
                 'warning' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '7',
+                    'default' => 7,
                     'match' => MATCH_INTEGER),
                 'warning_ack' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '5',
+                    'default' => 5,
                     'match' => MATCH_INTEGER),
                 'warning_ack_bgcolor' => Array('must' => 0,
                     'editable' => 1,
@@ -1001,7 +1001,7 @@ class GlobalMainCfg {
                     'match' => MATCH_COLOR),
                 'warning_downtime' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '5',
+                    'default' => 5,
                     'match' => MATCH_INTEGER),
                 'warning_downtime_bgcolor' => Array('must' => 0,
                     'editable' => 1,
@@ -1021,11 +1021,11 @@ class GlobalMainCfg {
                     'match' => MATCH_MP3_FILE),
                 'unknown' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '4',
+                    'default' => 4,
                     'match' => MATCH_INTEGER),
                 'unknown_ack' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '3',
+                    'default' => 3,
                     'match' => MATCH_INTEGER),
                 'unknown_ack_bgcolor' => Array('must' => 0,
                     'editable' => 1,
@@ -1033,7 +1033,7 @@ class GlobalMainCfg {
                     'match' => MATCH_COLOR),
                 'unknown_downtime' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '3',
+                    'default' => 3,
                     'match' => MATCH_INTEGER),
                 'unknown_downtime_bgcolor' => Array('must' => 0,
                     'editable' => 1,
@@ -1053,11 +1053,11 @@ class GlobalMainCfg {
                     'match' => MATCH_MP3_FILE),
                 'error' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '4',
+                    'default' => 4,
                     'match' => MATCH_INTEGER),
                 'error_ack' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '3',
+                    'default' => 3,
                     'match' => MATCH_INTEGER),
                 'error_ack_bgcolor' => Array('must' => 0,
                     'editable' => 1,
@@ -1065,7 +1065,7 @@ class GlobalMainCfg {
                     'match' => MATCH_COLOR),
                 'error_downtime' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '3',
+                    'default' => 3,
                     'match' => MATCH_INTEGER),
                 'error_downtime_bgcolor' => Array('must' => 0,
                     'editable' => 1,
@@ -1085,11 +1085,11 @@ class GlobalMainCfg {
                     'match' => MATCH_MP3_FILE),
                 'up' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '2',
+                    'default' => 2,
                     'match' => MATCH_INTEGER),
                 'up_downtime' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '2',
+                    'default' => 2,
                     'match' => MATCH_INTEGER),
                 'up_bgcolor' => Array('must' => 1,
                     'editable' => 1,
@@ -1105,11 +1105,11 @@ class GlobalMainCfg {
                     'match' => MATCH_MP3_FILE),
                 'ok' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '1',
+                    'default' => 1,
                     'match' => MATCH_INTEGER),
                 'ok_downtime' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '1',
+                    'default' => 1,
                     'match' => MATCH_INTEGER),
                 'ok_bgcolor' => Array('must' => 1,
                     'editable' => 1,
@@ -1125,11 +1125,11 @@ class GlobalMainCfg {
                     'match' => MATCH_MP3_FILE),
                 'pending' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '0',
+                    'default' => 0,
                     'match' => MATCH_INTEGER),
                 'pending_downtime' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '0',
+                    'default' => 0,
                     'match' => MATCH_INTEGER),
                 'pending_bgcolor' => Array('must' => 1,
                     'editable' => 1,
@@ -1145,11 +1145,11 @@ class GlobalMainCfg {
                     'match' => MATCH_MP3_FILE),
                 'unchecked' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '0',
+                    'default' => 0,
                     'match' => MATCH_INTEGER),
                 'unchecked_downtime' => Array('must' => 1,
                     'editable' => 1,
-                    'default' => '0',
+                    'default' => 0,
                     'match' => MATCH_INTEGER),
                 'unchecked_bgcolor' => Array('must' => 1,
                     'editable' => 1,
@@ -1957,13 +1957,23 @@ class GlobalMainCfg {
                 $arr[strtoupper($key[0])] = Array();
             }
 
+            // Convert state values to int
+            $last_part = $key[sizeof($key) - 1];
+            if($last_part != 'color' && $last_part != 'bgcolor' && $last_part != 'sound') {
+                $val = intval($this->getValue('states', $lowState));
+            } else {
+                $val = $this->getValue('states', $lowState);
+            }
+
             if(isset($key[1]) && isset($key[2])) {
-                $arr[strtoupper($key[0])][$key[1].'_'.$key[2]] = $this->getValue('states', $lowState);
+                // at the moment only bg colors of substates
+                $arr[strtoupper($key[0])][$key[1].'_'.$key[2]] = $val;
             } elseif(isset($key[1])) {
                 // ack/downtime
-                $arr[strtoupper($key[0])][$key[1]] = $this->getValue('states', $lowState);
+                $arr[strtoupper($key[0])][$key[1]] = $val;
             } else {
-                $arr[strtoupper($key[0])]['normal'] = $this->getValue('states', $lowState);
+                // normal state definition
+                $arr[strtoupper($key[0])]['normal'] = $val;
             }
         }
 
