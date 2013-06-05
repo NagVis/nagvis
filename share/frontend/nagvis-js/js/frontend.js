@@ -281,7 +281,9 @@ function getObjectsToUpdate() {
     for(var i in oMapObjects) {
         if(oMapObjects[i].lastUpdate <= iNow - oWorkerProperties.worker_update_object_states) {
             // Do not update objects where enable_refresh=0
-            if(oMapObjects[i].conf.type !== 'shape' && oMapObjects[i].conf.type !== 'container') {
+            if(oMapObjects[i].conf.type !== 'textbox' 
+               && oMapObjects[i].conf.type !== 'shape'
+               && oMapObjects[i].conf.type !== 'container') {
                 arrReturn.push(i);
             } else if(oMapObjects[i].conf.enable_refresh && oMapObjects[i].conf.enable_refresh == '1') {
                 arrReturn.push(i);
@@ -1926,7 +1928,7 @@ function getUrlParts(arrObj) {
 
     // Only continue with the loop when below param limit
     // and below maximum length
-    for(var i = 0, len = arrObj.length; i < len && (oWorkerProperties.worker_request_max_params == 0 || (oWorkerProperties.worker_request_max_params != 0 && iUrlParams < oWorkerProperties.worker_request_max_params)); i++) {
+    for(var i = 0, len = arrObj.length; i < len && (oWorkerProperties.worker_request_max_params == 0 || iUrlParams < oWorkerProperties.worker_request_max_params); i++) {
         var type = oMapObjects[arrObj[i]].conf.type;
         var name = oMapObjects[arrObj[i]].conf.name;
         if(name) {
