@@ -1,6 +1,8 @@
 1.7.9
 Core:
   * Livestatus: Fixed handling of hosts/services without custom variables
+  * Added option to perform privilege switch to a user with less permissions
+    for viewing maps in the context of this user
 
 1.7.8
 Automap:

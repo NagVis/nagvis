@@ -223,10 +223,19 @@ class GlobalMainCfg {
                     'match'         => MATCH_STRING
                 ),
 
+                'user_filtering' => Array(
+                    'must'       => 0,
+                    'editable'   => 1,
+                    'default'    => 0,
+                    'field_type' => 'boolean',
+                    'match'      => MATCH_BOOLEAN
+                ),
+
                 'refreshtime' => Array('must' => 1,
                     'editable' => 1,
                     'default' => '60',
                     'match' => MATCH_INTEGER),
+
                 'sesscookiedomain' => Array('must' => 0,
                     'editable' => 1,
                     'default' => '',
@@ -244,6 +253,7 @@ class GlobalMainCfg {
                     'default'     => '0',
                     'field_type'    => 'boolean',
                     'match'         => MATCH_BOOLEAN),
+
                 'startmodule' => Array('must' => 1,
                     'editable'    => 1,
                     'default'     => 'Overview',
