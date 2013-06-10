@@ -8,6 +8,8 @@ Core:
 Frontend:
   * FIX: Not adding textboxes to "to be updated list" anymore; This might have
     lead to objects not being reloaded on maps with many texboxes
+  * FIX: More robust handling of broken/no perfdata handling in weathermap
+         lines of type -->BW+%-><-BW+%--
 
 1.7.8
 Automap:
