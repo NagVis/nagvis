@@ -259,6 +259,11 @@ function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, col
     var xEnd   = x[x.length - 1];
     var yEnd   = y[y.length - 1];
 
+    //If no performance data is available, make perfdata defined, so perfdata[0]
+    //doesn't trigger an error, but is unset
+    if(perfdata == null)
+        perfdata = [];
+
     // Handle start/end offsets
     //xStart = xStart + newX(xEnd-xStart, yEnd-yStart, 16, 0);
     //yStart = yStart + newY(xEnd-xStart, yEnd-yStart, 16, 0);
@@ -266,8 +271,10 @@ function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, col
     //yEnd   = yEnd + newY(xEnd-xStart, yEnd-yStart, -16, 0);
 
     width = parseInt(width, 10);
-    var perfdataA = null;
-    var perfdataB = null;
+
+    // If not set below, better output something readable than "null"
+    var perfdataA = "N/A";
+    var perfdataB = "N/A";
 
     // Cuts
     // Lines meeting point position
