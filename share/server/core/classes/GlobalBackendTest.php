@@ -324,8 +324,12 @@ class GlobalBackendTest implements GlobalBackendInterface {
         }
     }
 
-    function getHostNamesInHostgroup($group) {
+    public function getHostNamesInHostgroup($group) {
         return $this->obj['hostgroup'][$group]['members'];
+    }
+
+    public function getProgramStart() {
+        return -1;
     }
 
     function getAllTypeObjects($type) {
