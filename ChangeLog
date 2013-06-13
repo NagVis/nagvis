@@ -1,3 +1,5 @@
+1.7.10
+
 1.7.9
 Core:
   * Livestatus: Fixed handling of hosts/services without custom variables
