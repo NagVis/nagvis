@@ -27,13 +27,8 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisObject {
-    protected $CORE;
-
     protected $conf;
 
-    // "Global" Configuration variables for all objects
-    // Highly used and therefor public to prevent continous getter calls
-    public $type;
     protected $object_id;
     protected $x;
     protected $y;
@@ -54,9 +49,7 @@ class NagVisObject {
     protected static $stateWeight = null;
     private static $arrDenyKeys = null;
 
-    public function __construct($CORE) {
-        $this->CORE = $CORE;
-
+    public function __construct() {
         // Initialize object_id (Should be overriden later)
         //$this->object_id = rand(0, 1000);
 
@@ -198,20 +191,6 @@ class NagVisObject {
         }
     }
 
-    protected function numMembers() {
-        // Save the number of members
-        switch($this->type) {
-            case 'host':
-            case 'hostgroup':
-            case 'servicegroup':
-                return $this->getNumMembers();
-            break;
-            case 'map':
-                return $this->getNumStatefulMembers();
-            break;
-        }
-    }
-
     /**
      * PUBLIC getObjectInformation()
      *
@@ -221,6 +200,7 @@ class NagVisObject {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getObjectInformation($bFetchChilds = true) {
+        global $CORE;
         $arr = Array();
 
         // When the childs don't need to be fetched this object is a child
@@ -234,7 +214,7 @@ class NagVisObject {
         // FIXME: Would be much better to name the needed vars explicit
         if(self::$arrDenyKeys == null)
             self::$arrDenyKeys = Array(
-              'CORE' => '', 'BACKEND' => '', 'MAPCFG' => '', 'MAP'  => '', 'GRAPHIC' => '',
+                'MAPCFG' => '', 'MAP'  => '',
                 'conf' => '', 'services' => '', 'fetchedChildObjects' => '', 'childObjects' => '',
                 'parentObjects' => '', 'members' => '', 'objects' => '', 'linkedMaps' => '',
                 'isSummaryObject' => '', 'isView' => '', 'dateFormat' => '', 'arrDenyKeys' => '',
@@ -245,15 +225,14 @@ class NagVisObject {
             if(!isset(self::$arrDenyKeys[$key]) && $val !== null)
                 $arr[$key] = $val;
 
-        $num_members = $this->numMembers();
-        if($num_members !== null)
-            $arr['num_members'] = $this->numMembers();
-
-        /**
-         * FIXME: Find another place for that! This is a bad place for language strings!
-         */
-
         if($this instanceof NagVisStatefulObject) {
+            $num_members = $this->getNumMembers();
+            if($num_members !== null)
+                $arr['num_members'] = $num_members;
+
+            /**
+             * FIXME: Find another place for that! This is a bad place for language strings!
+             */
             switch($this->type) {
                 case 'host':
                     if(NagVisHost::$langType === null) {
@@ -316,7 +295,7 @@ class NagVisObject {
         }
 
         // I want only "name" in js
-        if(!isset($this->CORE->statelessObjectTypes[$this->type])) {
+        if(!isset($CORE->statelessObjectTypes[$this->type])) {
             $arr['name'] = $this->getName();
 
             if($this->type == 'service') {
@@ -546,6 +525,7 @@ class NagVisObject {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private static function sortObjectsByState($OBJ1, $OBJ2) {
+        global $_MAINCFG;
         $state1 = $OBJ1->summary_state;
         $state2 = $OBJ2->summary_state;
 
@@ -554,17 +534,16 @@ class NagVisObject {
             return 0;
         }
 
-        if(NagVisObject::$stateWeight === null)
-            NagVisObject::$stateWeight = $OBJ1->CORE->getMainCfg()->getStateWeight();
+        $stateWeight = $_MAINCFG->getStateWeight();
 
         // Handle normal/ack/downtime states
 
         $stubState1 = $OBJ1->getSubState(SUMMARY_STATE);
         $stubState2 = $OBJ2->getSubState(SUMMARY_STATE);
 
-        if(NagVisObject::$stateWeight[$state1][$stubState1] == NagVisObject::$stateWeight[$state2][$stubState2]) {
+        if($stateWeight[$state1][$stubState1] == $stateWeight[$state2][$stubState2]) {
             return 0;
-        } elseif(NagVisObject::$stateWeight[$state1][$stubState1] < NagVisObject::$stateWeight[$state2][$stubState2]) {
+        } elseif($stateWeight[$state1][$stubState1] < $stateWeight[$state2][$stubState2]) {
             // Sort depending on configured direction
             if(self::$sSortOrder === 'asc') {
                 return +1;

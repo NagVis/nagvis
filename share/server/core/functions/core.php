@@ -23,6 +23,8 @@
  *
  *****************************************************************************/
 
+$CORE = GlobalCore::getInstance();
+
 /*
  * l() needs to be available in MainCfg initialization and config parsing,
  * but GlobalLanguage initialization relies on the main configuration in

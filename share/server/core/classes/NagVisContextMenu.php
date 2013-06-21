@@ -48,7 +48,7 @@ class NagVisContextMenu {
         $this->templateName = $templateName;
 
         $this->pathHtmlBase     = cfg('paths', 'htmlbase');
-        $this->pathTemplateFile = $this->CORE->getMainCfg()->getPath('sys', '', 'templates', $this->templateName.'.context.html');
+        $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName.'.context.html');
 
         $this->CACHE = new GlobalFileCache($this->pathTemplateFile,
                                            cfg('paths','var').'context-'.$this->templateName.'-'.curLang().'.cache');
@@ -148,11 +148,11 @@ class NagVisContextMenu {
         }
 
         if(strpos($this->code,'[html_templates]') !== FALSE) {
-            $this->code = str_replace('[html_templates]', $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'), $this->code);
+            $this->code = str_replace('[html_templates]', path('html', 'global', 'templates'), $this->code);
         }
 
         if(strpos($this->code,'[html_template_images]') !== FALSE) {
-            $this->code = str_replace('[html_template_images]', $this->CORE->getMainCfg()->getPath('html', 'global', 'templateimages'), $this->code);
+            $this->code = str_replace('[html_template_images]', path('html', 'global', 'templateimages'), $this->code);
         }
 
         if(strpos($this->code,'[lang_make_root]') !== FALSE) {
@@ -213,7 +213,7 @@ class NagVisContextMenu {
     }
 
     public function getCssFile() {
-        return $this->CORE->getMainCfg()->getPath('html', 'global', 'templates', $this->templateName.'.context.css');
+        return path('html', 'global', 'templates', $this->templateName.'.context.css');
     }
 }
 ?>

@@ -26,7 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisMapView {
-    private $CORE      = null;
     private $MAPCFG    = null;
     private $name      = '';
     private $search    = '';
@@ -34,15 +33,7 @@ class NagVisMapView {
     private $editMode  = false;
     private $aParams   = Array();
 
-    /**
-     * Class Constructor
-     *
-     * @param    GlobalCore      $CORE
-     * @param    String          $NAME
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
     public function __construct(GlobalCore $CORE, $name) {
-        $this->CORE = $CORE;
         $this->name = $name;
     }
 
@@ -84,24 +75,25 @@ class NagVisMapView {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parse() {
+        global $_MAINCFG;
         // Initialize template system
-        $TMPL    = new FrontendTemplateSystem($this->CORE);
+        $TMPL    = new FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
         $USERCFG = new CoreUserCfg();
 
-        $this->MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
+        $this->MAPCFG = new GlobalMapCfg($this->name);
         $this->MAPCFG->readMapConfig(ONLY_GLOBAL);
 
         $aData = Array(
-            'generalProperties'  => $this->CORE->getMainCfg()->parseGeneralProperties(),
-            'workerProperties'   => $this->CORE->getMainCfg()->parseWorkerProperties(),
+            'generalProperties'  => $_MAINCFG->parseGeneralProperties(),
+            'workerProperties'   => $_MAINCFG->parseWorkerProperties(),
             'rotationProperties' => json_encode($this->aRotation),
             'viewProperties'     => $this->parseViewProperties(),
-            'stateProperties'    => json_encode($this->CORE->getMainCfg()->getStateWeight()),
+            'stateProperties'    => json_encode($_MAINCFG->getStateWeight()),
             'userProperties'     => $USERCFG->doGetAsJson(),
             'mapName'            => $this->name,
             'fileAges'           => json_encode(Array(
-                'maincfg'   => $this->CORE->getMainCfg()->getConfigFileAge(),
+                'maincfg'   => $_MAINCFG->getConfigFileAge(),
                 $this->name => $this->MAPCFG->getFileModificationTime(),
             )),
             'locales'            => json_encode(Array(
@@ -123,6 +115,7 @@ class NagVisMapView {
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     private function parseViewProperties() {
+        global $AUTHORISATION;
         $arr = Array();
 
         $arr['search']                = $this->search;
@@ -133,8 +126,8 @@ class NagVisMapView {
         $arr['event_repeat_interval'] = intval($this->MAPCFG->getValue(0, 'event_repeat_interval'));
         $arr['event_repeat_duration'] = intval($this->MAPCFG->getValue(0, 'event_repeat_duration'));
         $arr['event_on_load']         = intval($this->MAPCFG->getValue(0, 'event_on_load'));
-        $arr['permitted_edit']        = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Map', 'edit', $this->name);
-        $arr['permitted_perform']     = $this->CORE->getAuthorization() !== null && $this->CORE->getAuthorization()->isPermitted('Action', 'perform', '*');
+        $arr['permitted_edit']        = $AUTHORISATION !== null && $AUTHORISATION->isPermitted('Map', 'edit', $this->name);
+        $arr['permitted_perform']     = $AUTHORISATION !== null && $AUTHORISATION->isPermitted('Action', 'perform', '*');
 
         // hover_menu & context_menu have to be handled separated from the others
         // It is special for them that the object individual settings have to be

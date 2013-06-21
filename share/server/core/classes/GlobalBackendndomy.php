@@ -28,7 +28,6 @@
  */
 
 class GlobalBackendndomy implements GlobalBackendInterface {
-    private $CORE;
     private $CONN;
     private $backendId;
     private $dbName;
@@ -89,9 +88,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * @author	Andreas Husch <downanup@nagios-wiki.de>
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function __construct($CORE, $backendId) {
-        $this->CORE = $CORE;
-
+    public function __construct($backendId) {
         $this->backendId = $backendId;
 
         $this->hostCache = Array();

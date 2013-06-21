@@ -42,7 +42,7 @@ class WuiViewMapAddModify {
         $this->mode = $mode;
         $this->CORE = GlobalCore::getInstance();
 
-        $this->MAPCFG = new GlobalMapCfg($this->CORE, $map);
+        $this->MAPCFG = new GlobalMapCfg($map);
         try {
             $this->MAPCFG->skipSourceErrors();
             $this->MAPCFG->readMapConfig();

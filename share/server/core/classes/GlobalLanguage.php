@@ -27,7 +27,6 @@
  */
 class GlobalLanguage {
     private $USERCFG = null;
-    private $CORE = null;
     private $textDomain;
     private $sCurrentLanguage;
     private $sCurrentEncoding;
@@ -40,8 +39,6 @@ class GlobalLanguage {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function __construct($textDomain = 'nagvis') {
-        $this->CORE = GlobalCore::getInstance();
-
         $this->textDomain = $textDomain;
 
         // Append encoding (UTF8)
@@ -148,7 +145,7 @@ class GlobalLanguage {
     private function getUserLanguage() {
         $sLang = '';
 
-        $UHANDLER = new CoreUriHandler(GlobalCore::getInstance());
+        $UHANDLER = new CoreUriHandler();
 
         // Load the specific params to the UriHandler
         $UHANDLER->parseModSpecificUri(Array('lang' => MATCH_LANGUAGE_EMPTY));
@@ -233,10 +230,11 @@ class GlobalLanguage {
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     private function checkLanguageAvailable($sLang, $printErr = 1, $ignoreConf = false) {
+        global $CORE;
         // Checks two things:
         // a) The language availabilty in the filesyste,
         // b) Listed language in global/language_available config option
-        if(in_array($sLang, $this->CORE->getAvailableLanguages())
+        if(in_array($sLang, $CORE->getAvailableLanguages())
            && ($ignoreConf == true
                || ($ignoreConf == false
                    && in_array($sLang, cfg('global', 'language_available'))))) {

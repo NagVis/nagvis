@@ -77,7 +77,7 @@ class CoreModMultisite extends CoreModule {
             $map = Array();
             $map['type'] = 'map';
 
-            $MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
+            $MAPCFG = new GlobalMapCfg($mapName);
 
             try {
                 $MAPCFG->readMapConfig();
@@ -92,7 +92,7 @@ class CoreModMultisite extends CoreModule {
             if($MAPCFG->getValue(0, 'show_in_lists') != 1 || $MAPCFG->getValue(0, 'show_in_multisite') != 1)
                 continue;
 
-            $MAP = new NagVisMap($this->CORE, $MAPCFG, GET_STATE, !IS_VIEW);
+            $MAP = new NagVisMap($MAPCFG, GET_STATE, !IS_VIEW);
 
             // Apply default configuration to object
             $objConf = $MAPCFG->getTypeDefaults('global');

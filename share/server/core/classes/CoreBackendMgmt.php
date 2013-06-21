@@ -26,7 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreBackendMgmt {
-    protected $CORE;
     public $BACKENDS = Array();
     private $aInitialized = Array();
     private $aQueue = Array();
@@ -49,11 +48,7 @@ class CoreBackendMgmt {
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     public function __construct() {
-        $this->CORE = GlobalCore::getInstance();
-
         $this->loadBackends();
-
-        return 0;
     }
 
     public function getBackend($id) {
@@ -216,7 +211,7 @@ class CoreBackendMgmt {
                 $members = Array();
                 foreach($aServices AS $host => $serviceList) {
                     foreach($serviceList AS $aService) {
-                        $SOBJ = new NagVisService($this->CORE, $this, $backendId, $host, $aService['service_description']);
+                        $SOBJ = new NagVisService($backendId, $host, $aService['service_description']);
 
                         // Append contents of the array to the object properties
                         $SOBJ->setObjectInformation($aService);
@@ -277,7 +272,7 @@ class CoreBackendMgmt {
 
                 $members = Array();
                 foreach($aHosts AS $name => $aHost) {
-                    $HOBJ = new NagVisHost($this->CORE, $this, $backendId, $name);
+                    $HOBJ = new NagVisHost($backendId, $name);
 
                     // Append contents of the array to the object properties
                     $HOBJ->setObjectInformation($aHost);
@@ -371,7 +366,7 @@ class CoreBackendMgmt {
                 foreach($OBJS AS $OBJ) {
                     $members = Array();
                     foreach($aMembers[$name] AS $service => $details) {
-                        $MOBJ = new NagVisService($this->CORE, $this, $backendId, $OBJ->getName(), $details['service_description']);
+                        $MOBJ = new NagVisService($backendId, $OBJ->getName(), $details['service_description']);
                         $MOBJ->setState($details);
                         $members[] = $MOBJ;
                     }
@@ -388,7 +383,8 @@ class CoreBackendMgmt {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function loadBackends() {
-        $aBackends = $this->CORE->getDefinedBackends();
+        global $CORE;
+        $aBackends = $CORE->getDefinedBackends();
 
         if(!count($aBackends))
             throw new NagVisException(l('noBackendDefined'));
@@ -402,7 +398,8 @@ class CoreBackendMgmt {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function checkBackendExists($backendId, $printErr) {
-        if($this->CORE->checkExisting(cfg('paths','class').'GlobalBackend'.cfg('backend_'.$backendId,'backendtype').'.php', false))
+        global $CORE;
+        if($CORE->checkExisting(cfg('paths','class').'GlobalBackend'.cfg('backend_'.$backendId,'backendtype').'.php', false))
             return true;
 
         if($printErr == 1)
@@ -425,7 +422,7 @@ class CoreBackendMgmt {
 
         try {
             $filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
-            $aObjs = Array($statusHost => Array(new NagVisHost($this->CORE, $this, $statusBackend, $statusHost)));
+            $aObjs = Array($statusHost => Array(new NagVisHost($statusBackend, $statusHost)));
             $aCounts = $this->getBackend($statusBackend)->getHostState($aObjs, 1, $filters);
         } catch(BackendException $e) {
             return true;
@@ -467,7 +464,7 @@ class CoreBackendMgmt {
 
         try {
             $backendClass = 'GlobalBackend' . cfg('backend_' . $backendId, 'backendtype');
-            $this->BACKENDS[$backendId] = new $backendClass($this->CORE, $backendId);
+            $this->BACKENDS[$backendId] = new $backendClass($backendId);
 
             // Mark backend as initialized
             $this->aInitialized[$backendId] = true;

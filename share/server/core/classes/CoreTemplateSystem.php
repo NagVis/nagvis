@@ -30,10 +30,5 @@
 // links from core to frontend classes are hacks which should be reduced
 require_once('../../frontend/nagvis-js/classes/FrontendTemplateSystem.php');
 
-class CoreTemplateSystem extends FrontendTemplateSystem {
-    public function __construct($CORE) {
-        parent::__construct($CORE);
-    }
-}
-
+class CoreTemplateSystem extends FrontendTemplateSystem {} 
 ?>

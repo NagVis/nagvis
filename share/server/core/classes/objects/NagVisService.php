@@ -26,17 +26,79 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class NagVisService extends NagiosService {
-    protected $gadget_url;
+class NagVisService extends NagVisStatefulObject {
+    protected $type = 'service';
 
     protected static $langType = null;
     protected static $langSelf = null;
 
-    public function __construct($CORE, $BACKEND, $backend_id, $hostName, $serviceDescription) {
-        $this->type = 'service';
-        $this->iconset = 'std_medium';
+    protected $host_name;
+    protected $service_description;
+    protected $alias;
+    protected $display_name;
+    protected $address;
+    protected $notes;
+    protected $check_command;
 
-        parent::__construct($CORE, $BACKEND, $backend_id, $hostName, $serviceDescription);
+    protected $perfdata;
+    protected $last_check;
+    protected $next_check;
+    protected $state_type;
+    protected $current_check_attempt;
+    protected $max_check_attempts;
+    protected $last_state_change;
+    protected $last_hard_state_change;
+
+    protected $downtime_start;
+    protected $downtime_end;
+    protected $downtime_author;
+    protected $downtime_data;
+
+    protected $childObjects = array();
+    protected $services;
+    protected $gadget_url;
+
+    public function __construct($backend_id, $hostName, $serviceDescription) {
+        $this->backend_id = $backend_id;
+        $this->host_name = $hostName;
+        $this->service_description = $serviceDescription;
+        parent::__construct();
+    }
+
+    public function getNumMembers() {
+         return null;
+    }
+
+    public function hasMembers() {
+         return false;
+    }
+
+    /**
+     * Queues state fetching for this object
+     */
+    public function queueState($_unused_flag = true, $_unused_flag = true) {
+        global $_BACKEND;
+        $_BACKEND->queue(Array('serviceState' => true), $this);
+    }
+
+    /**
+     * Applies the fetched state
+     */
+    public function applyState() {
+        if($this->problem_msg !== null) {
+            $this->state = 'ERROR';
+            $this->output = $this->problem_msg;
+        }
+
+        $this->fetchSummaryState();
+        $this->fetchSummaryOutput();
+    }
+
+    /**
+     * Returns the service description
+     */
+    public function getServiceDescription() {
+        return $this->service_description;
     }
 
     # End public methods
@@ -54,7 +116,24 @@ class NagVisService extends NagiosService {
         if(preg_match('/^\[(.*)\]$/',$this->gadget_url,$match) > 0)
             $this->gadget_url = $match[1];
         else
-            $this->gadget_url = $this->CORE->getMainCfg()->getPath('html', 'global', 'gadgets', $this->gadget_url);
+            $this->gadget_url = path('html', 'global', 'gadgets', $this->gadget_url);
     }
+
+    /**
+     * Is just a dummy here, this sets the state of the service as summary state
+     */
+    private function fetchSummaryState() {
+        $this->summary_state = $this->state;
+        $this->summary_problem_has_been_acknowledged = $this->problem_has_been_acknowledged;
+        $this->summary_in_downtime = $this->in_downtime;
+    }
+
+    /**
+     * Is just a dummy here, this sets the output of the service as summary output
+     */
+    private function fetchSummaryOutput() {
+        $this->summary_output = $this->output;
+    }
+
 }
 ?>

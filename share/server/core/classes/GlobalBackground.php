@@ -26,20 +26,12 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalBackground {
-    protected $CORE;
     protected $image;
     protected $path;
     protected $webPath;
     protected $type;
 
-    /**
-     * Constructor
-     *
-     * @param   config  $MAINCFG
-     * @author  Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function __construct($CORE, $image) {
-        $this->CORE = $CORE;
+    public function __construct($image) {
         $this->image = $image;
 
         $this->fetchPath();
@@ -82,8 +74,8 @@ class GlobalBackground {
             } else {
                 $this->type = 'local';
 
-                $this->path    = $this->CORE->getMainCfg()->getPath('sys', '',        'backgrounds', $this->getFileName());
-                $this->webPath = $this->CORE->getMainCfg()->getPath('html', 'global', 'backgrounds', $this->getFileName());
+                $this->path    = path('sys', '',        'backgrounds', $this->getFileName());
+                $this->webPath = path('html', 'global', 'backgrounds', $this->getFileName());
             }
         } else {
             $this->type = 'none';
@@ -115,7 +107,7 @@ class GlobalBackground {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     protected function checkFileExists($printErr) {
-        return GlobalCore::getInstance()->checkExisting($this->path, $printErr);
+        return $CORE->checkExisting($this->path, $printErr);
     }
 
     /**
@@ -126,7 +118,7 @@ class GlobalBackground {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     protected function checkFileReadable($printErr) {
-        return GlobalCore::getInstance()->checkReadable($this->path, $printErr);
+        return $CORE->checkReadable($this->path, $printErr);
     }
 
     /**
@@ -137,7 +129,7 @@ class GlobalBackground {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     protected function checkFileWriteable($printErr) {
-        return GlobalCore::getInstance()->checkWriteable($this->path, $printErr);
+        return $CORE->checkWriteable($this->path, $printErr);
     }
 
     /**
@@ -148,7 +140,7 @@ class GlobalBackground {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     protected function checkFolderWriteable($printErr) {
-        return GlobalCore::getInstance()->checkWriteable(dirname($this->path), $printErr);
+        return $CORE->checkWriteable(dirname($this->path), $printErr);
     }
 
     /**
@@ -159,7 +151,7 @@ class GlobalBackground {
     * @author	Lars Michelsen <lars@vertical-visions.de>
     */
     function createImage($color, $width, $height) {
-        $this->path = $this->CORE->getMainCfg()->getPath('sys', '', 'backgrounds') . '/' . $this->image;
+        $this->path = path('sys', '', 'backgrounds') . '/' . $this->image;
         if(!$this->checkFileExists(0)) {
             if($this->checkFolderWriteable(1)) {
                 $image = imagecreatetruecolor($width, $height);

@@ -72,7 +72,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
     /**
      * Basic initialization happens here
      */
-    public function __construct($CORE, $backendId) {
+    public function __construct($backendId) {
         $this->backendId = $backendId;
 
         $this->baseUrl = cfg('backend_'.$backendId, 'base_url');

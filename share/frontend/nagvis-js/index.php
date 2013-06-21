@@ -42,7 +42,6 @@ define('CONST_AJAX' , FALSE);
 
 try {
     require('../../server/core/functions/core.php');
-    $CORE     = GlobalCore::getInstance();
     $MHANDLER = new FrontendModuleHandler();
     $_name    = 'nagvis-js';
     $_modules = Array(

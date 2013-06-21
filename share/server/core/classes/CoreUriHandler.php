@@ -26,15 +26,12 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreUriHandler {
-    private $CORE;
     private $sRequestUri;
     private $aOpts;
 
     private $aAliases;
 
     public function __construct() {
-        $this->CORE = GlobalCore::getInstance();
-
         $this->aAliases = Array('module' => 'mod', 'action' => 'act');
 
         $this->sRequestUri = strip_tags($_SERVER['REQUEST_URI']);

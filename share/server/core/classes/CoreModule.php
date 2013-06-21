@@ -132,7 +132,7 @@ abstract class CoreModule {
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     protected function initUriHandler() {
-        $this->UHANDLER = new CoreUriHandler($this->CORE);
+        $this->UHANDLER = new CoreUriHandler();
     }
 
     /**
@@ -289,7 +289,7 @@ abstract class CoreModule {
 
             } elseif($ty == 'map') {
                 if($AUTHORISATION->isPermitted('Map', 'view', $name)) {
-                    $MAPCFG  = new NagVisMapCfg($this->CORE, $name);
+                    $MAPCFG  = new GlobalMapCfg($name);
                     $MAPCFG->readMapConfig();
                     $cur_age = $MAPCFG->getFileModificationTime($age);
                 }

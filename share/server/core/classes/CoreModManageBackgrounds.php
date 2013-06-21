@@ -93,12 +93,12 @@ class CoreModManageBackgrounds extends CoreModule {
         if(!preg_match(MATCH_PNG_GIF_JPG_FILE, $fileName))
             throw new NagVisException(l('The uploaded file is no image (png,jpg,gif) file or contains unwanted chars.'));
 
-        $filePath = $this->CORE->getMainCfg()->getPath('sys', '', 'backgrounds').$fileName;
+        $filePath = path('sys', '', 'backgrounds').$fileName;
         return move_uploaded_file($a['image_file']['tmp_name'], $filePath) && $this->CORE->setPerms($filePath);
     }
 
     protected function doDelete($a) {
-        $BACKGROUND = new GlobalBackground($this->CORE, $a['image']);
+        $BACKGROUND = new GlobalBackground($a['image']);
         $BACKGROUND->deleteImage();
 
         return true;
@@ -116,7 +116,7 @@ class CoreModManageBackgrounds extends CoreModule {
     }
 
     protected function doCreate($a) {
-        $BACKGROUND = new GlobalBackground($this->CORE, $a['name'].'.png');
+        $BACKGROUND = new GlobalBackground($a['name'].'.png');
         $BACKGROUND->createImage($a['color'], $a['width'], $a['height']);
 
         return true;
@@ -150,7 +150,7 @@ class CoreModManageBackgrounds extends CoreModule {
 
         $using = Array();
         foreach($this->CORE->getAvailableMaps() AS $map) {
-            $MAPCFG1 = new GlobalMapCfg($this->CORE, $map);
+            $MAPCFG1 = new GlobalMapCfg($map);
             try {
                 $MAPCFG1->readMapConfig(ONLY_GLOBAL);
             } catch(MapCfgInvalid $e) {

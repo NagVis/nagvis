@@ -27,7 +27,7 @@
  */
 
 interface GlobalBackendInterface {
-    public function __construct($CORE, $backendId);
+    public function __construct($backendId);
 
     /**
      * Static function which returns the backend specific configuration options

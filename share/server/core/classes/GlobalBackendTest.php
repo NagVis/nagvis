@@ -26,7 +26,6 @@
  * @author  Lars Michelsen  <lars@vertical-visions.de>
  */
 class GlobalBackendTest implements GlobalBackendInterface {
-    private $CORE = null;
     private $backendId = '';
 
     // These are the backend local configuration options
@@ -75,15 +74,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
         'UNKNOWN'     => Array('hard'),
     );
 
-    /**
-     * PUBLIC class constructor
-     *
-     * @param   GlobalCore    Instance of the NagVis CORE
-     * @param   String        ID if the backend
-     * @author  Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function __construct($CORE, $backendId) {
-        $this->CORE = $CORE;
+    public function __construct($backendId) {
         $this->backendId = $backendId;
         $this->now = time();
         $this->genObj();
@@ -637,7 +628,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
             foreach($objects AS $OBJS) {
                 $name = $OBJS[0]->getName();
                 foreach($this->obj['hostgroup'][$name]['members'] AS $hostname) {
-                    $resp = $this->getHostStateCounts(Array(Array(new NagVisHost($this->CORE, $this, $this->backendId, $hostname))), $options, Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name')));
+                    $resp = $this->getHostStateCounts(Array(Array(new NagVisHost($this->backendId, $hostname))), $options, Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name')));
                     $aReturn[$hostname] = $resp[$hostname];
                 }
             }
@@ -688,7 +679,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     if($options & 2)
                         continue;
 
-                    $resp = $this->getHostStateCounts(Array(Array(new NagVisHost($this->CORE, $this, $this->backendId, $hostname))), $options,
+                    $resp = $this->getHostStateCounts(Array(Array(new NagVisHost($this->backendId, $hostname))), $options,
                                                                         Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name')));
                     foreach($resp[$hostname]['counts'] AS $state => $substates)
                         foreach($substates AS $substate => $count)

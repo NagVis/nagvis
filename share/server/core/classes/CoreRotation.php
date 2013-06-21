@@ -26,8 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreRotation {
-    private $CORE = null;
-
     private $sPoolName = NULL;
 
     private $arrSteps = Array();
@@ -37,16 +35,8 @@ class CoreRotation {
     private $intNextStep = NULL;
     private $strNextStep = NULL;
 
-    /**
-     * Class Constructor
-     *
-     * @param  GlobalCore  $CORE
-     * @param  String      Name of the rotation pool
-     * @author Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function __construct(GlobalCore $CORE, $sPoolName) {
-        $this->CORE = $CORE;
-
+    public function __construct($sPoolName) {
+        global $CORE, $AUTHORISATION;
         $this->sPoolName = $sPoolName;
 
         // Check wether the pool is defined
@@ -58,8 +48,8 @@ class CoreRotation {
         // Trigger the autorization backend to create new rotation permissions when needed
         // FIXME: maybe not the best place for that. But there is better central place to
         //        trigger thath
-        foreach($this->CORE->getDefinedRotationPools() AS $name) {
-            GlobalCore::getInstance()->getAuthorization()->createPermission('Rotation', $name);
+        foreach($CORE->getDefinedRotationPools() AS $name) {
+            $AUTHORISATION->createPermission('Rotation', $name);
         }
 
         // Read the array of steps from configuration
@@ -202,7 +192,8 @@ class CoreRotation {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     private function checkPoolExists() {
-        $pools = $this->CORE->getDefinedRotationPools();
+        global $CORE;
+        $pools = $CORE->getDefinedRotationPools();
 
         if(isset($pools[$this->sPoolName])) {
             return true;

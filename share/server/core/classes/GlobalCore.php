@@ -266,8 +266,8 @@ class GlobalCore {
      */
     public function getAvailableHoverTemplates() {
         return array_merge(
-          self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'templates'), MATCH_HOVER_TEMPLATE_FILE),
-          self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'templates'), MATCH_HOVER_TEMPLATE_FILE, null, null, null, null, false)
+          self::listDirectory(path('sys', 'global', 'templates'), MATCH_HOVER_TEMPLATE_FILE),
+          self::listDirectory(path('sys', 'local',  'templates'), MATCH_HOVER_TEMPLATE_FILE, null, null, null, null, false)
         );
     }
 
@@ -279,8 +279,8 @@ class GlobalCore {
      */
     public function getAvailableHeaderTemplates() {
         return array_merge(
-          self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'templates'), MATCH_HEADER_TEMPLATE_FILE),
-          self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'templates'), MATCH_HEADER_TEMPLATE_FILE, null, null, null, null, false)
+          self::listDirectory(path('sys', 'global', 'templates'), MATCH_HEADER_TEMPLATE_FILE),
+          self::listDirectory(path('sys', 'local',  'templates'), MATCH_HEADER_TEMPLATE_FILE, null, null, null, null, false)
         );
     }
 
@@ -292,8 +292,8 @@ class GlobalCore {
      */
     public function getAvailableContextTemplates() {
         return array_merge(
-          self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'templates'), MATCH_CONTEXT_TEMPLATE_FILE),
-          self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'templates'), MATCH_CONTEXT_TEMPLATE_FILE, null, null, null, null, false)
+          self::listDirectory(path('sys', 'global', 'templates'), MATCH_CONTEXT_TEMPLATE_FILE),
+          self::listDirectory(path('sys', 'local',  'templates'), MATCH_CONTEXT_TEMPLATE_FILE, null, null, null, null, false)
         );
     }
 
@@ -305,8 +305,8 @@ class GlobalCore {
      */
     public function getAvailableShapes() {
         return array_merge(
-          self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0),
-          self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, null, false)
+          self::listDirectory(path('sys', 'global', 'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0),
+          self::listDirectory(path('sys', 'local',  'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, null, false)
         );
     }
 
@@ -318,8 +318,8 @@ class GlobalCore {
      */
     public function getAvailableIconsets() {
         return array_merge(
-          self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'icons'), MATCH_ICONSET),
-          self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'icons'), MATCH_ICONSET, null, null, null, null, false)
+          self::listDirectory(path('sys', 'global', 'icons'), MATCH_ICONSET),
+          self::listDirectory(path('sys', 'local',  'icons'), MATCH_ICONSET, null, null, null, null, false)
         );
     }
 
@@ -331,8 +331,8 @@ class GlobalCore {
      */
     public function getAvailableSources() {
         return array_merge(
-          self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'sources'), MATCH_PHP_FILE),
-          self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'sources'), MATCH_PHP_FILE, null, null, null, null, false)
+          self::listDirectory(path('sys', 'global', 'sources'), MATCH_PHP_FILE),
+          self::listDirectory(path('sys', 'local',  'sources'), MATCH_PHP_FILE, null, null, null, null, false)
         );
     }
 
@@ -341,8 +341,8 @@ class GlobalCore {
      */
     public function getAvailableCustomActions() {
         return array_merge(
-          self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'actions'), MATCH_PHP_FILE),
-          self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'actions'), MATCH_PHP_FILE, null, null, null, null, false)
+          self::listDirectory(path('sys', 'global', 'actions'), MATCH_PHP_FILE),
+          self::listDirectory(path('sys', 'local',  'actions'), MATCH_PHP_FILE, null, null, null, null, false)
         );
     }
 
@@ -359,8 +359,8 @@ class GlobalCore {
         if(isset($this->iconsetTypeCache[$iconset]))
             $type = $this->iconsetTypeCache[$iconset];
         else
-            foreach(Array(self::getMainCfg()->getPath('sys', 'local',  'icons'),
-                          self::getMainCfg()->getPath('sys', 'global', 'icons')) AS $path)
+            foreach(Array(path('sys', 'local',  'icons'),
+                          path('sys', 'global', 'icons')) AS $path)
                 if(file_exists($path))
                     foreach(Array('png', 'gif', 'jpg') AS $ext)
                         if(file_exists($path . $iconset . '_ok.'.$ext))
@@ -400,8 +400,8 @@ class GlobalCore {
      */
     public function getAvailableBackgroundImages() {
         return array_merge(
-          self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'backgrounds'), MATCH_PNG_GIF_JPG_FILE, null, null, 0),
-          self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'backgrounds'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, null, false)
+          self::listDirectory(path('sys', 'global', 'backgrounds'), MATCH_PNG_GIF_JPG_FILE, null, null, 0),
+          self::listDirectory(path('sys', 'local',  'backgrounds'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, null, false)
         );
     }
 
@@ -413,8 +413,8 @@ class GlobalCore {
      */
     public function getAvailableGadgets() {
         return array_merge(
-            self::listDirectory(self::getMainCfg()->getPath('sys', 'global', 'gadgets'), MATCH_PHP_FILE, Array('gadgets_core.php' => true), null, null, null, true),
-            self::listDirectory(self::getMainCfg()->getPath('sys', 'local',  'gadgets'), MATCH_PHP_FILE, Array('gadgets_core.php' => true), null, null, null, false)
+            self::listDirectory(path('sys', 'global', 'gadgets'), MATCH_PHP_FILE, Array('gadgets_core.php' => true), null, null, null, true),
+            self::listDirectory(path('sys', 'local',  'gadgets'), MATCH_PHP_FILE, Array('gadgets_core.php' => true), null, null, null, false)
         );
     }
 

@@ -52,7 +52,7 @@ class WuiViewMapManageTmpl {
         $TMPLSYS = $TMPL->getTmplSys();
 
         // Read map configig but don't resolve tempaltes
-        $MAPCFG = new GlobalMapCfg($CORE, $this->aOpts['show']);
+        $MAPCFG = new GlobalMapCfg($this->aOpts['show']);
         $MAPCFG->readMapConfig(0, false, false);
 
         $aData = Array(

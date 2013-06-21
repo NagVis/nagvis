@@ -26,16 +26,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisOverviewView {
-    private $CORE;
-
-    /**
-     * Class Constructor
-     *
-     * @param 	GlobalCore 	$CORE
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
     public function __construct($CORE) {
-        $this->CORE = $CORE;
     }
 
     /**
@@ -45,18 +36,19 @@ class NagVisOverviewView {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parse() {
+        global $_MAINCFG;
         // Initialize template system
-        $TMPL    = new FrontendTemplateSystem($this->CORE);
+        $TMPL    = new FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
         $USERCFG = new CoreUserCfg();
 
         $aData = Array(
-            'generalProperties' => $this->CORE->getMainCfg()->parseGeneralProperties(),
-            'workerProperties'  => $this->CORE->getMainCfg()->parseWorkerProperties(),
-            'stateProperties'   => json_encode($this->CORE->getMainCfg()->getStateWeight()),
+            'generalProperties' => $_MAINCFG->parseGeneralProperties(),
+            'workerProperties'  => $_MAINCFG->parseWorkerProperties(),
+            'stateProperties'   => json_encode($_MAINCFG->getStateWeight()),
             'userProperties'    => $USERCFG->doGetAsJson(),
             'fileAges'          => json_encode(Array(
-                'maincfg' => $this->CORE->getMainCfg()->getConfigFileAge(),
+                'maincfg' => $_MAINCFG->getConfigFileAge(),
             )),
             'locales'           => json_encode(Array(
                 // FIXME: Duplicated definitions in NagVisMapView.php and NagVisOverviewView.php

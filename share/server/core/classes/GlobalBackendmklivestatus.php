@@ -63,12 +63,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     /**
      * PUBLIC class constructor
      *
-     * @param   GlobalCore    Instance of the NagVis CORE
      * @param   String        ID if the backend
    * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    public function __construct($CORE, $backendId) {
+    public function __construct($backendId) {
         $this->backendId = $backendId;
 
         // Parse the socket params
