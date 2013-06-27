@@ -1,4 +1,7 @@
 1.7.10
+Frontend:
+  * Weathermap lines now deal with bit/byte values provided by Check_MKs
+    interface checks
 
 1.7.9
 Core:
