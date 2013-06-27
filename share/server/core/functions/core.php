@@ -86,4 +86,8 @@ function curLang() {
  */
 $_BACKEND = new CoreBackendMgmt();
 
+function val($arr, $key, $dflt = null) {
+    return isset($arr[$key]) ? $arr[$key] : $dflt;
+}
+
 ?>

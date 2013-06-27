@@ -49,11 +49,6 @@ class NagVisService extends NagVisStatefulObject {
     protected $last_state_change;
     protected $last_hard_state_change;
 
-    protected $downtime_start;
-    protected $downtime_end;
-    protected $downtime_author;
-    protected $downtime_data;
-
     protected $childObjects = array();
     protected $services;
     protected $gadget_url;
@@ -86,8 +81,10 @@ class NagVisService extends NagVisStatefulObject {
      */
     public function applyState() {
         if($this->problem_msg !== null) {
-            $this->state = 'ERROR';
-            $this->output = $this->problem_msg;
+            $this->setState(array(
+                'state'  => 'ERROR',
+                'output' => $this->problem_msg
+            ));
         }
 
         $this->fetchSummaryState();
@@ -123,16 +120,16 @@ class NagVisService extends NagVisStatefulObject {
      * Is just a dummy here, this sets the state of the service as summary state
      */
     private function fetchSummaryState() {
-        $this->summary_state = $this->state;
-        $this->summary_problem_has_been_acknowledged = $this->problem_has_been_acknowledged;
-        $this->summary_in_downtime = $this->in_downtime;
+        $this->summary_state = val($this->state, 'state');
+        $this->summary_problem_has_been_acknowledged = val($this->state, 'problem_has_been_acknowledged');
+        $this->summary_in_downtime = val($this->state, 'in_downtime');
     }
 
     /**
      * Is just a dummy here, this sets the output of the service as summary output
      */
     private function fetchSummaryOutput() {
-        $this->summary_output = $this->output;
+        $this->summary_output = $this->state['output'];
     }
 
 }

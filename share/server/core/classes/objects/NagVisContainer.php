@@ -24,10 +24,7 @@
  *****************************************************************************/
 
 class NagVisContainer extends NagVisStatelessObject {
-    public function __construct() {
-        $this->type = 'Container';
-        parent::__construct();
-    }
+    protected $type = 'container';
 
     /**
      * PUBLIC parseJson()

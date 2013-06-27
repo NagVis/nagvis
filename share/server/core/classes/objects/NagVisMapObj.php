@@ -42,8 +42,6 @@ class NagVisMapObj extends NagVisStatefulObject {
     protected $map_name;
     protected $alias;
 
-    protected $in_downtime;
-
     // When this map object summarizes the state of a map this is true
     // Prevents loops
     protected $isSummaryObject;
@@ -60,7 +58,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 
         $this->map_name = $this->MAPCFG->getName();
         $this->alias = $this->MAPCFG->getAlias();
-        $this->iconset = 'std_medium';
 
         $this->linkedMaps = Array();
         $this->isSummaryObject = false;
@@ -224,7 +221,7 @@ class NagVisMapObj extends NagVisStatefulObject {
         // At least summary output
         $this->fetchSummaryOutput();
 
-        $this->state = $this->summary_state;
+        $this->state['state'] = $this->summary_state;
     }
 
     /**
@@ -308,6 +305,7 @@ class NagVisMapObj extends NagVisStatefulObject {
             if($type == 'global' || $type == 'template')
                 continue;
 
+            log_mem('preconf');
             $typeDefs = $this->MAPCFG->getTypeDefaults($type);
 
             // merge with "global" settings
@@ -317,6 +315,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 
             switch($type) {
                 case 'host':
+                    log_mem('prehost');
                     $OBJ = new NagVisHost($objConf['backend_id'], $objConf['host_name']);
                 break;
                 case 'service':
@@ -404,6 +403,7 @@ class NagVisMapObj extends NagVisStatefulObject {
                 break;
             }
 
+            log_mem('preconf');
             // Apply default configuration to object
             $OBJ->setConfiguration($objConf);
 
@@ -413,6 +413,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 
             // Write member to object array
             $this->members[] = $OBJ;
+            log_mem('posthost');
         }
 
         // Now dig into the next map level. This has to be done here to fight

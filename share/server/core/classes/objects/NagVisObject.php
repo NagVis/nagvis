@@ -27,7 +27,7 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisObject {
-    protected $conf;
+    protected $conf = array();
 
     protected $object_id;
     protected $x;
@@ -49,12 +49,7 @@ class NagVisObject {
     protected static $stateWeight = null;
     private static $arrDenyKeys = null;
 
-    public function __construct() {
-        // Initialize object_id (Should be overriden later)
-        //$this->object_id = rand(0, 1000);
-
-        $this->conf = Array();
-    }
+    public function __construct() {}
 
     /**
      * Get method for all options
@@ -173,7 +168,6 @@ class NagVisObject {
      */
     public function setConfiguration($obj) {
         foreach($obj AS $key => $val) {
-            $this->conf[$key] = $val;
             $this->{$key} = $val;
         }
     }
@@ -186,6 +180,7 @@ class NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function setObjectInformation($obj) {
+        debug(json_encode($obj));
         foreach($obj AS $key => $val) {
             $this->{$key} = $val;
         }

@@ -32,8 +32,6 @@ class NagVisStatefulObject extends NagVisObject {
     protected $backend_id;
     protected $problem_msg = null;
 
-    protected $iconset;
-
     protected $label_show;
     protected $recognize_services;
     protected $only_hard_states;
@@ -41,17 +39,11 @@ class NagVisStatefulObject extends NagVisObject {
     protected $line_type;
     protected $line_arrow = 'none';
 
-    protected $state = null;
-    protected $output = '';
-
     // Highly used and therefor public to prevent continous getter calls
     public $summary_state = null;
     protected $summary_output = null;
     protected $summary_problem_has_been_acknowledged = 0;
     protected $summary_in_downtime = 0;
-
-    protected $problem_has_been_acknowledged = 0;
-    protected $in_downtime = 0;
 
     // Details about the icon image (cache)
     protected $iconDetails;
@@ -59,9 +51,9 @@ class NagVisStatefulObject extends NagVisObject {
     protected static $iconPath        = null;
     protected static $iconPathLocal   = null;
     protected static $langChildStates = null;
+    protected static $dateFormat      = null;
 
-    protected $dateFormat;
-
+    protected $state = null;
     protected $aStateCounts = null;
 
     public function __construct() {
@@ -69,16 +61,10 @@ class NagVisStatefulObject extends NagVisObject {
     }
 
     /**
-     * PUBLIC setState()
-     *
      * Sets the state of the object
-     *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function setState($arr) {
-        foreach($arr AS $key => $val) {
-            $this->{$key} = $val;
-        }
+        $this->state = $arr;
     }
 
     /**
@@ -152,18 +138,6 @@ class NagVisStatefulObject extends NagVisObject {
     }
 
     /**
-     * PUBLIC getInDowntime()
-     *
-     * Get method for the in downtime option
-     *
-     * @return	Boolean		True: object is in downtime, False: not in downtime
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function getInDowntime() {
-        return $this->in_downtime;
-    }
-
-    /**
      * PUBLIC getDowntimeAuthor()
      *
      * Get method for the in downtime author
@@ -172,7 +146,7 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getDowntimeAuthor() {
-        return $this->downtime_author;
+        return $this->state['downtime_author'];
     }
 
     /**
@@ -184,7 +158,7 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getDowntimeData() {
-        return $this->downtime_data;
+        return $this->state['downtime_data'];
     }
 
     /**
@@ -196,12 +170,12 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getDowntimeStart() {
-        if(isset($this->in_downtime) && $this->in_downtime == 1) {
-            if($this->dateFormat == '') {
-                $this->dateFormat = cfg('global','dateformat');
+        if(isset($this->state['in_downtime']) && $this->state['in_downtime'] == 1) {
+            if(self::$dateFormat === null) {
+                self::$dateFormat = cfg('global','dateformat');
             }
 
-            return date($this->dateFormat, $this->downtime_start);
+            return date(self::$dateFormat, $this->state['downtime_start']);
         } else {
             return 'N/A';
         }
@@ -216,24 +190,19 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getDowntimeEnd() {
-        if(isset($this->in_downtime) && $this->in_downtime == 1) {
-            if($this->dateFormat == '') {
-                $this->dateFormat = cfg('global','dateformat');
+        if(isset($this->state['in_downtime']) && $this->state['in_downtime'] == 1) {
+            if(self::$dateFormat === null) {
+                self::$dateFormat = cfg('global','dateformat');
             }
 
-            return date($this->dateFormat, $this->downtime_end);
+            return date(self::$dateFormat, $this->state['downtime_end']);
         } else {
             return 'N/A';
         }
     }
 
     /**
-     * PUBLIC getInDowntime()
-     *
      * Get method for the in downtime option
-     *
-     * @return	Boolean		True: object is in downtime, False: not in downtime
-     * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getSummaryInDowntime() {
         return $this->summary_in_downtime;
@@ -264,30 +233,6 @@ class NagVisStatefulObject extends NagVisObject {
     }
 
     /**
-     * PUBLIC getState()
-     *
-     * Get method for the state of this object
-     *
-     * @return	String		State of the object
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function getState() {
-        return $this->state;
-    }
-
-    /**
-     * PUBLIC getOutput()
-     *
-     * Get method for the output of this object
-     *
-     * @return	String		Output of the object
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function getOutput() {
-        return $this->output;
-    }
-
-    /**
      * PUBLIC getBackendId()
      *
      * Get method for the backend_id of this object
@@ -297,18 +242,6 @@ class NagVisStatefulObject extends NagVisObject {
      */
     public function getBackendId() {
         return $this->backend_id;
-    }
-
-    /**
-     * PUBLIC getAcknowledgement()
-     *
-     * Get method for the acknowledgement state of this object
-     *
-     * @return	Boolean		True: Acknowledged, False: Not Acknowledged
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function getAcknowledgement() {
-        return $this->problem_has_been_acknowledged;
     }
 
     /**
@@ -333,9 +266,9 @@ class NagVisStatefulObject extends NagVisObject {
             elseif($this->summary_in_downtime == 1)
                 return 'downtime';
         } else {
-            if($this->problem_has_been_acknowledged == 1)
+            if($this->state['problem_has_been_acknowledged'] == 1)
                 return  'ack';
-            elseif($this->in_downtime == 1)
+            elseif($this->state['in_downtime'] == 1)
                 return 'downtime';
         }
         return 'normal';
@@ -386,92 +319,27 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getStateDuration() {
-        if(isset($this->last_state_change) && $this->last_state_change != '0' && $this->last_state_change != '') {
-            if($this->dateFormat == '') {
-                $this->dateFormat = cfg('global','dateformat');
+        if(isset($this->state['last_state_change']) && $this->state['last_state_change'] != '0'
+           && $this->state['last_state_change'] != '') {
+            if(self::$dateFormat == '') {
+                self::$dateFormat = cfg('global','dateformat');
             }
 
-            return date($this->dateFormat, ($_SERVER['REQUEST_TIME'] - $this->last_state_change));
+            return date(self::$dateFormat, ($_SERVER['REQUEST_TIME'] - $this->state['last_state_change']));
         } else {
             return 'N/A';
         }
     }
 
     /**
-     * PUBLIC getLastStateChange()
-     *
-     * Get method for the last state change
-     *
-     * @return	String		Time in the configured format
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * Returns state timestamp as human readable date
      */
-    public function getLastStateChange() {
-        if(isset($this->last_state_change) && $this->last_state_change != '0' && $this->last_state_change != '') {
-            if($this->dateFormat == '') {
-                $this->dateFormat = cfg('global','dateformat');
+    public function get_date($attr) {
+        if(isset($this->state[$attr]) && $this->state[$attr] != '0' && $this->state[$attr] != '') {
+            if(self::$dateFormat == '') {
+                self::$dateFormat = cfg('global','dateformat');
             }
-
-            return date($this->dateFormat, $this->last_state_change);
-        } else {
-            return 'N/A';
-        }
-    }
-
-    /**
-     * PUBLIC getLastHardStateChange()
-     *
-     * Get method for the last hard state change
-     *
-     * @return	String		Time in the configured format
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function getLastHardStateChange() {
-        if(isset($this->last_hard_state_change) && $this->last_hard_state_change != '0' && $this->last_hard_state_change != '') {
-            if($this->dateFormat == '') {
-                $this->dateFormat = cfg('global','dateformat');
-            }
-
-            return date($this->dateFormat, $this->last_hard_state_change);
-        } else {
-            return 'N/A';
-        }
-    }
-
-    /**
-     * PUBLIC getLastCheck()
-     *
-     * Get method for the time of the last check
-     *
-     * @return	String		Time in the configured format
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function getLastCheck() {
-        if(isset($this->last_check) && $this->last_check != '0' && $this->last_check != '') {
-            if($this->dateFormat == '') {
-                $this->dateFormat = cfg('global','dateformat');
-            }
-
-            return date($this->dateFormat, $this->last_check);
-        } else {
-            return 'N/A';
-        }
-    }
-
-    /**
-     * PUBLIC getNextCheck()
-     *
-     * Get method for the time of the next check
-     *
-     * @return	String		Time in the configured format
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function getNextCheck() {
-        if(isset($this->next_check) && $this->next_check != '0' && $this->next_check != '') {
-            if($this->dateFormat == '') {
-                $this->dateFormat = cfg('global','dateformat');
-            }
-
-            return date($this->dateFormat, $this->next_check);
+            return date(self::$dateFormat, $this->state[$attr]);
         } else {
             return 'N/A';
         }
@@ -486,9 +354,9 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getStateType() {
-        if(isset($this->state_type) && $this->state_type != '') {
+        if(isset($this->state['state_type']) && $this->state['state_type'] != '') {
             $stateTypes = Array(0 => 'SOFT', 1 => 'HARD');
-            return $stateTypes[$this->state_type];
+            return $stateTypes[$this->state['state_type']];
         } else {
             return 'N/A';
         }
@@ -503,8 +371,8 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getCurrentCheckAttempt() {
-        if(isset($this->current_check_attempt) && $this->current_check_attempt != '') {
-            return $this->current_check_attempt;
+        if(isset($this->state['current_check_attempt']) && $this->state['current_check_attempt'] != '') {
+            return $this->state['current_check_attempt'];
         } else {
             return '';
         }
@@ -552,8 +420,8 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getMaxCheckAttempts() {
-        if(isset($this->max_check_attempts) && $this->max_check_attempts != '') {
-            return $this->max_check_attempts;
+        if(isset($this->state['max_check_attempts']) && $this->state['max_check_attempts'] != '') {
+            return $this->state['max_check_attempts'];
         } else {
             return '';
         }
@@ -570,35 +438,32 @@ class NagVisStatefulObject extends NagVisObject {
     public function getObjectStateInformations($bFetchChilds=true) {
         $arr = Array();
 
-        $arr['state'] = $this->getState();
-        $arr['summary_state'] = $this->getSummaryState();
+        $arr['state']                         = val($this->state, 'state');
+        $arr['summary_state']                 = $this->getSummaryState();
         $arr['summary_problem_has_been_acknowledged'] = $this->getSummaryAcknowledgement();
-        $arr['problem_has_been_acknowledged'] = $this->getAcknowledgement();
-        $arr['summary_in_downtime'] = $this->getSummaryInDowntime();
-        $arr['in_downtime'] = $this->getInDowntime();
+        $arr['problem_has_been_acknowledged'] = val($this->state, 'problem_has_been_acknowledged');
+        $arr['summary_in_downtime']           = $this->getSummaryInDowntime();
+        $arr['in_downtime']                   = val($this->state, 'in_downtime');
 
-        $arr['output'] = $this->escapeStringForJson($this->output);
+        $arr['output']         = $this->escapeStringForJson(val($this->state, 'output', ''));
         $arr['summary_output'] = $this->escapeStringForJson($this->getSummaryOutput());
 
         // Macros which are only for services and hosts
         if($this->type == 'host' || $this->type == 'service') {
-            if($this->downtime_author !== null)
-                $arr['downtime_author'] = $this->downtime_author;
-            if($this->downtime_data !== null)
-                $arr['downtime_data'] = $this->downtime_data;
-            if($this->downtime_end !== null)
-                $arr['downtime_end'] = $this->downtime_end;
-            if($this->downtime_start !== null)
-                $arr['downtime_start'] = $this->downtime_start;
-            $arr['last_check'] = $this->getLastCheck();
-            $arr['next_check'] = $this->getNextCheck();
+            $arr['downtime_author'] = val($this->state, 'downtime_author');
+            $arr['downtime_data']   = val($this->state, 'downtime_data');
+            $arr['downtime_end']    = val($this->state, 'downtime_end');
+            $arr['downtime_start']  = val($this->state, 'downtime_start');
+
+            $arr['last_check'] = $this->get_date('last_check');
+            $arr['next_check'] = $this->get_date('next_check');
             $arr['state_type'] = $this->getStateType();
             $arr['current_check_attempt'] = $this->getCurrentCheckAttempt();
             $arr['max_check_attempts'] = $this->getMaxCheckAttempts();
-            $arr['last_state_change'] = $this->getLastStateChange();
-            $arr['last_hard_state_change'] = $this->getLastHardStateChange();
+            $arr['last_state_change']      = $this->get_date('last_state_change');
+            $arr['last_hard_state_change'] = $this->get_date('last_hard_state_change');
             $arr['state_duration'] = $this->getStateDuration();
-            $arr['perfdata'] = $this->escapeStringForJson($this->perfdata);
+            $arr['perfdata'] = $this->escapeStringForJson($this->state['perfdata']);
         }
 
         // Enable/Disable fetching children

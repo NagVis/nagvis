@@ -33,26 +33,6 @@ class NagVisHost extends NagVisStatefulObject {
     protected static $langServices = null;
 
     protected $host_name;
-    protected $alias;
-    protected $display_name;
-    protected $address;
-    protected $statusmap_image;
-    protected $notes;
-    protected $check_command;
-
-    protected $perfdata;
-    protected $last_check;
-    protected $next_check;
-    protected $state_type;
-    protected $current_check_attempt;
-    protected $max_check_attempts;
-    protected $last_state_change;
-    protected $last_hard_state_change;
-
-    protected $downtime_start;
-    protected $downtime_end;
-    protected $downtime_author;
-    protected $downtime_data;
 
     protected $members = array();
 
@@ -180,8 +160,7 @@ class NagVisHost extends NagVisStatefulObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     private function addHostStateToStateCounts() {
-        $sState = $this->state;
-
+        $sState = $this->state['state'];
         $sSubState = $this->getSubState();
         if(!isset($this->aStateCounts[$sState]))
             $this->aStateCounts[$sState] = Array($sSubState => 1);
@@ -203,7 +182,7 @@ class NagVisHost extends NagVisStatefulObject {
             NagVisHost::$langHostStateIs = l('hostStateIs');
 
         // Write host state
-        $this->summary_output = NagVisHost::$langHostStateIs.' '.$this->state.'. ';
+        $this->summary_output = NagVisHost::$langHostStateIs.' '.$this->state['state'].'. ';
 
         // Only merge host state with service state when recognize_services is set
         // to 1
@@ -253,7 +232,7 @@ class NagVisHost extends NagVisStatefulObject {
      */
     private function fetchSummaryOutput() {
         // Write host state
-        $this->summary_output = l('hostStateIs').' '.$this->state.'. ';
+        $this->summary_output = l('hostStateIs').' '.$this->state['state'].'. ';
 
         // Only merge host state with service state when recognize_services is set
         // to 1
