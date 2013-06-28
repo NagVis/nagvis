@@ -254,16 +254,16 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
 
             $ret[$key] = Array(
                 'details' => Array(
-                    'alias'         => $bp['display_name'],
+                    'alias' => $bp['display_name'],
                     // This forces the BP state to be the summary state of the BP object
-                    'summary_state' => $this->getBPState($bp['hardstate']),
+                    'state' => $this->getBPState($bp['hardstate']),
                 ),
                 'counts'  => $this->getBPCounts($bp),
             );
 
             // Add optional outputs which replaces the NagVis summary_output
             if(isset($bp['external_info']))
-                $ret[$key]['summary_output'] = $bp['external_info'];
+                $ret[$key]['output'] = $bp['external_info'];
 
             // Forces the URL to point to nagios-bp if the current url does not point to a map
             if(strpos($OBJS[0]->getUrl(), 'show=') === false)

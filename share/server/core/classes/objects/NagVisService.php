@@ -49,8 +49,6 @@ class NagVisService extends NagVisStatefulObject {
     protected $last_state_change;
     protected $last_hard_state_change;
 
-    protected $childObjects = array();
-    protected $services;
     protected $gadget_url;
 
     public function __construct($backend_id, $hostName, $serviceDescription) {
@@ -67,6 +65,10 @@ class NagVisService extends NagVisStatefulObject {
     public function hasMembers() {
          return false;
     }
+    
+    public function getStateRelevantMembers() {
+        return array();
+    }
 
     /**
      * Queues state fetching for this object
@@ -82,13 +84,14 @@ class NagVisService extends NagVisStatefulObject {
     public function applyState() {
         if($this->problem_msg !== null) {
             $this->setState(array(
-                'state'  => 'ERROR',
-                'output' => $this->problem_msg
+                'ERROR',
+                $this->problem_msg,
+                null,
+                null,
             ));
         }
 
-        $this->fetchSummaryState();
-        $this->fetchSummaryOutput();
+        $this->sum = $this->state;
     }
 
     /**
@@ -115,22 +118,5 @@ class NagVisService extends NagVisStatefulObject {
         else
             $this->gadget_url = path('html', 'global', 'gadgets', $this->gadget_url);
     }
-
-    /**
-     * Is just a dummy here, this sets the state of the service as summary state
-     */
-    private function fetchSummaryState() {
-        $this->summary_state = val($this->state, 'state');
-        $this->summary_problem_has_been_acknowledged = val($this->state, 'problem_has_been_acknowledged');
-        $this->summary_in_downtime = val($this->state, 'in_downtime');
-    }
-
-    /**
-     * Is just a dummy here, this sets the output of the service as summary output
-     */
-    private function fetchSummaryOutput() {
-        $this->summary_output = $this->state['output'];
-    }
-
 }
 ?>

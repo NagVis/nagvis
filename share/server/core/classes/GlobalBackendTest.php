@@ -88,71 +88,88 @@ class GlobalBackendTest implements GlobalBackendInterface {
     }
 
     private function host($name, $state, $stateType = 'hard', $substate = 'normal') {
-        $host = Array('name'                     => $name,
-                         'alias'                  => 'Alias host-'.$name,
-                           'state'                  => $state,
-                           'output'                 => 'Host with state '.$state,
-                           'display_name'           => 'Display Name host-'.$name,
-                           'address'                => 'localhost',
-                           'notes'                  => '',
-                           'last_check'             => $this->now-60,
-                           'next_check'             => $this->now+60,
-                           'state_type'             => $stateType == 'hard' ? 1 : 0,
-                           'current_check_attempt'  => 3,
-                           'max_check_attempts'     => 3,
-                           'last_state_change'      => $this->now-60,
-                           'last_hard_state_change' => $this->now-60,
-                           'statusmap_image'        => '',
-                 					 'perfdata'               => '',
-                 					 'problem_has_been_acknowledged' => 0,
-                 					 'in_downtime'            => 0,
+        $ack = $substate == 'ack';
+        $in_downtime = $substate == 'downtime';
+        if ($in_downtime) {
+            $downtime_author = 'Kunibert';
+            $downtime_data   = 'xyz';
+            $downtime_start  = $this->now-60;
+            $downtime_end    = $this->now+60;
+        } else {
+            $downtime_author = null;
+            $downtime_data   = null;
+            $downtime_start  = null;
+            $downtime_end    = null;
+        }
+
+        return array(
+            $state,
+            'Host with state '.$state, // output
+            $ack,
+            $in_downtime,
+            $stateType == 'hard' ? 1 : 0,
+            3, // current attempt
+            3, // max attempts
+            $this->now-60, // last check
+            $this->now+60, // next check
+            $this->now-60, // last hard state change
+            $this->now-60, // last state change
+            '', // perfdata
+            'Display Name host-'.$name,
+            'Alias host-'.$name,
+            'localhost', // address
+            '', // notes
+            null, // check command
+            null, // custom vars
+            $downtime_author,
+            $downtime_data,
+            $downtime_start,
+            $downtime_end
         );
-
-        if($substate == 'downtime') {
-            $host['in_downtime']     = 1;
-            $host['downtime_author'] = 'Kunibert';
-            $host['downtime_data']   = 'xyz';
-            $host['downtime_start']  = $this->now-60;
-            $host['downtime_end']    = $this->now+60;
-        } elseif($substate == 'ack')
-            $host['problem_has_been_acknowledged'] = 1;
-
-        return $host;
     }
 
     private function service($name1, $name2, $state, $stateType = 'hard', $substate = 'normal', $output = null, $perfdata = '') {
+        $ack = $substate == 'ack';
+        $in_downtime = $substate == 'downtime';
+        if ($in_downtime) {
+            $downtime_author = 'Kunibert';
+            $downtime_data   = 'xyz';
+            $downtime_start  = $this->now-60;
+            $downtime_end    = $this->now+60;
+        } else {
+            $downtime_author = null;
+            $downtime_data   = null;
+            $downtime_start  = null;
+            $downtime_end    = null;
+        }
         if($output === null)
             $output = 'output '.$name2;
-        $s = Array(
-                  'name'                          => $name1,
-                  'service_description'           => $name2,
-                  'display_name'                  => 'display name '.$name2,
-                  'state'                         => $state,
-                  'problem_has_been_acknowledged' => 0,
-                  'in_downtime'                   => 0,
-                  'alias'                         => 'alias '.$name2,
-                  'address'                       => 'localhost',
-                  'output'                        => $output,
-                  'notes'                         => '',
-                  'last_check'                    => $this->now-60,
-                  'next_check'                    => $this->now+60,
-                  'state_type'                    => $stateType == 'hard' ? 1 : 0,
-                  'current_check_attempt'         => 3,
-                  'max_check_attempts'            => 3,
-                  'last_state_change'             => $this->now-60,
-                  'last_hard_state_change'        => $this->now-60,
-                  'perfdata'                      => $perfdata,
-                );
-        if($substate == 'downtime') {
-            $s['in_downtime']     = 1;
-            $s['downtime_author'] = 'Kunibert';
-            $s['downtime_data']   = 'xyz';
-            $s['downtime_start']  = $this->now-60;
-            $s['downtime_end']    = $this->now+60;
-        } elseif($substate == 'ack')
-            $s['problem_has_been_acknowledged'] = 1;
 
-        return $s;
+        return array(
+            $state,
+            $output,
+            $ack,
+            $in_downtime,
+            $stateType == 'hard' ? 1 : 0,
+            3, // current attempt
+            3, // max attempts
+            $this->now-60, // last check
+            $this->now+60, // next check
+            $this->now-60, // last hard state change
+            $this->now-60, // last state change
+            $perfdata,
+            'display name '.$name2,
+            'alias '.$name2,
+            'localhost', // address
+            '', // notes
+            null, // check command
+            null, // custom vars
+            $downtime_author,
+            $downtime_data,
+            $downtime_start,
+            $downtime_end,
+            $name2
+        );
     }
 
     private function hostgroup($name, $members) {
@@ -173,8 +190,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
          */
         $this->obj['host']['muc-gw1']         = $this->host('muc-gw1',      'UP',   'hard', 'normal');
         $wan = $this->service('muc-gw1', 'Interface WAN', 'CRITICAL', 'hard', 'normal');
-        $wan['perfdata'] = 'in=98.13%;85;98 out=12.12%;85;98';
-        $wan['output']   = 'In: 98.13%, Out: 12.12%';
+        $wan[PERFDATA] = 'in=98.13%;85;98 out=12.12%;85;98';
+        $wan[OUTPUT]   = 'In: 98.13%, Out: 12.12%';
         $this->obj['service']['muc-gw1']      = Array($wan);
 
         $this->obj['host']['muc-srv1']        = $this->host('muc-srv1',     'UP',   'hard', 'normal');
@@ -209,8 +226,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
 
         $this->obj['host']['ham-gw1']         = $this->host('ham-gw1',      'UP',   'hard', 'normal');
         $wan = $this->service('ham-gw1', 'Interface WAN', 'OK', 'hard', 'normal');
-        $wan['perfdata'] = 'in=77.24%;85;98 out=32.89%;85;98';
-        $wan['output']   = 'In: 77.24%, Out: 32.89%';
+        $wan[PERFDATA] = 'in=77.24%;85;98 out=32.89%;85;98';
+        $wan[OUTPUT]   = 'In: 77.24%, Out: 32.89%';
         $this->obj['service']['ham-gw1']      = Array($wan);
 
         $this->obj['host']['ham-srv1']        = $this->host('ham-srv1',     'UP',   'hard', 'normal');
@@ -227,8 +244,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
 
         $this->obj['host']['cgn-gw1']         = $this->host('cgn-gw1',      'UP',   'hard', 'normal');
         $wan = $this->service('cgn-gw1', 'Interface WAN', 'OK', 'hard', 'normal');
-        $wan['perfdata'] = 'in=19.34%;85;98 out=0.89%;85;98';
-        $wan['output']   = 'In: 19.34%, Out: 0.89%';
+        $wan[PERFDATA] = 'in=19.34%;85;98 out=0.89%;85;98';
+        $wan[OUTPUT]   = 'In: 19.34%, Out: 0.89%';
         $this->obj['service']['cgn-gw1']      = Array($wan);
 
         $this->obj['host']['cgn-srv1']        = $this->host('cgn-srv1',     'UP',   'hard', 'normal');
@@ -564,7 +581,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                 foreach($this->obj['servicegroup'][$name]['members'] AS $attr) {
                     list($name1, $name2) = $attr;
                     foreach($this->obj['service'][$name1] AS $service) {
-                        if($service['service_description'] != $name2)
+                        if($service[DESCRIPTION] != $name2)
                             continue;
                         $arrReturn[$name1][] = $service;
                     }
@@ -575,7 +592,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
             // One specific service of a host
             foreach($objects AS $OBJS) {
                 foreach($arrReturn[$OBJS[0]->getName()] = $this->obj['service'][$OBJS[0]->getName()] AS $service) {
-                    if($service['service_description'] == $OBJS[0]->getServiceDescription()) {
+                    if($service[DESCRIPTION] == $OBJS[0]->getServiceDescription()) {
                         $arrReturn[$OBJS[0]->getName().'~~'.$OBJS[0]->getServiceDescription()] = $service;
                     }
                 }
@@ -615,12 +632,12 @@ class GlobalBackendTest implements GlobalBackendInterface {
                 $aReturn[$name] = Array('counts' => $this->serviceStates);
                 if(isset($this->obj['service'][$name]))
                     foreach($this->obj['service'][$name] AS $service) {
-                        if($service['problem_has_been_acknowledged'] == 1)
-                            $aReturn[$name]['counts'][$service['state']]['ack']++;
-                        elseif($service['in_downtime'] == 1)
-                            $aReturn[$name]['counts'][$service['state']]['downtime']++;
+                        if($service[ACK] === true)
+                            $aReturn[$name]['counts'][$service[STATE]]['ack']++;
+                        elseif($service[DOWNTIME] === true)
+                            $aReturn[$name]['counts'][$service[STATE]]['downtime']++;
                         else
-                            $aReturn[$name]['counts'][$service['state']]['normal']++;
+                            $aReturn[$name]['counts'][$service[STATE]]['normal']++;
                 }
             }
         } elseif(count($filters) == 1 && $filters[0]['key'] == 'host_groups' && $filters[0]['op'] == '>=') {
@@ -668,12 +685,12 @@ class GlobalBackendTest implements GlobalBackendInterface {
                 foreach($this->obj['hostgroup'][$name]['members'] AS $hostname) {
                     $host = $this->obj['host'][$hostname];
 
-                    if($host['problem_has_been_acknowledged'] == 1)
-                        $aReturn[$name]['counts'][$host['state']]['ack']++;
-                    elseif($host['in_downtime'] == 1)
-                        $aReturn[$name]['counts'][$host['state']]['downtime']++;
+                    if($host[ACK] === true)
+                        $aReturn[$name]['counts'][$host[STATE]]['ack']++;
+                    elseif($host[DOWNTIME] === true)
+                        $aReturn[$name]['counts'][$host[STATE]]['downtime']++;
                     else
-                        $aReturn[$name]['counts'][$host['state']]['normal']++;
+                        $aReturn[$name]['counts'][$host[STATE]]['normal']++;
 
               // If recognize_services are disabled don't fetch service information
                     if($options & 2)
@@ -728,16 +745,16 @@ class GlobalBackendTest implements GlobalBackendInterface {
                 foreach($this->obj['servicegroup'][$name]['members'] AS $attr) {
                     list($name1, $name2) = $attr;
                     foreach($this->obj['service'][$name1] AS $service) {
-                        if($service['service_description'] != $name2)
+                        if($service[DESCRIPTION] != $name2)
                             continue;
 
-                        $state = $service['state'];
+                        $state = $service[STATE];
                         if(!isset($aReturn[$name]['counts'][$state]))
                             $aReturn[$name]['counts'][$state] = $this->serviceStates[$state];
 
-                        if($service['problem_has_been_acknowledged'] == 1)
+                        if($service[ACK] === true)
                             $aReturn[$name]['counts'][$state]['ack']++;
-                        elseif($service['in_downtime'] == 1)
+                        elseif($service[DOWNTIME] === true)
                             $aReturn[$name]['counts'][$state]['downtime']++;
                         else
                             $aReturn[$name]['counts'][$state]['normal']++;

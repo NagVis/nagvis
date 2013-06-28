@@ -32,10 +32,6 @@ class NagVisHostgroup extends NagVisStatefulObject {
 
     protected $hostgroup_name;
     protected $alias;
-    protected $display_name;
-    protected $address;
-
-    protected $in_downtime;
 
     protected $members = array();
 
@@ -68,8 +64,7 @@ class NagVisHostgroup extends NagVisStatefulObject {
      */
     public function applyState() {
         if($this->problem_msg) {
-            $this->summary_state = 'ERROR';
-            $this->summary_output = $this->problem_msg;
+            $this->state = array('ERROR', $this->problem_msg);
             $this->members = Array();
             return;
         }
@@ -86,21 +81,21 @@ class NagVisHostgroup extends NagVisStatefulObject {
             // Calculate summary state and output
 
             // Only create summary from childs when not set yet (e.g by backend)
-            if($this->summary_state === null)
+            if($this->sum[STATE] === null)
                 $this->fetchSummaryStateFromCounts();
 
             // Only create summary from childs when not set yet (e.g by backend)
-            if($this->summary_output === null)
+            if($this->sum[OUTPUT] === null)
                 $this->fetchSummaryOutputFromCounts();
         } else {
-            if($this->summary_state === null)
+            if($this->sum[STATE] === null)
                 $this->fetchSummaryState();
 
-            if($this->summary_output === null)
+            if($this->sum[OUTPUT] === null)
                 $this->fetchSummaryOutput();
         }
 
-        $this->state = $this->summary_state;
+        $this->state = $this->sum;
     }
 
     # End public methods
@@ -142,14 +137,14 @@ class NagVisHostgroup extends NagVisStatefulObject {
 
         // Fallback for hostgroups without members
         if($iSumCount == 0) {
-            $this->summary_output = l('The hostgroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
+            $this->sum[OUTPUT] = l('The hostgroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
                                                                                         Array('GROUP' => $this->getName(),
                                                                                               'BACKEND' => $this->backend_id));
         } else {
             // FIXME: Recode mergeSummaryOutput method
             $this->mergeSummaryOutput($arrHostStates, l('hosts'));
             if($this->recognize_services) {
-                $this->summary_output .= "<br />";
+                $this->sum[OUTPUT] .= "<br />";
                 $this->mergeSummaryOutput($arrServiceStates, l('services'));
             }
         }
@@ -163,7 +158,7 @@ class NagVisHostgroup extends NagVisStatefulObject {
         if($this->hasMembers())
             $this->wrapChildState($this->members);
         else
-            $this->summary_state = 'ERROR';
+            $this->sum[STATE] = 'ERROR';
     }
 
     /**
@@ -182,7 +177,7 @@ class NagVisHostgroup extends NagVisStatefulObject {
 
             $this->mergeSummaryOutput($arrStates, l('hosts'));
         } else {
-            $this->summary_output = l('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
+            $this->sum[OUTPUT] = l('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
         }
     }
 }

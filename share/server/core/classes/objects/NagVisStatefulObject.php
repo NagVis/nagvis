@@ -39,12 +39,6 @@ class NagVisStatefulObject extends NagVisObject {
     protected $line_type;
     protected $line_arrow = 'none';
 
-    // Highly used and therefor public to prevent continous getter calls
-    public $summary_state = null;
-    protected $summary_output = null;
-    protected $summary_problem_has_been_acknowledged = 0;
-    protected $summary_in_downtime = 0;
-
     // Details about the icon image (cache)
     protected $iconDetails;
 
@@ -54,11 +48,9 @@ class NagVisStatefulObject extends NagVisObject {
     protected static $dateFormat      = null;
 
     protected $state = null;
-    protected $aStateCounts = null;
 
-    public function __construct() {
-        parent::__construct();
-    }
+    protected $sum   = array(null, null, null, null);
+    protected $aStateCounts = null;
 
     /**
      * Sets the state of the object
@@ -138,74 +130,10 @@ class NagVisStatefulObject extends NagVisObject {
     }
 
     /**
-     * PUBLIC getDowntimeAuthor()
-     *
-     * Get method for the in downtime author
-     *
-     * @return	String		The username of the downtime author
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function getDowntimeAuthor() {
-        return $this->state['downtime_author'];
-    }
-
-    /**
-     * PUBLIC getDowntimeData()
-     *
-     * Get method for the in downtime data
-     *
-     * @return	String		The downtime data
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function getDowntimeData() {
-        return $this->state['downtime_data'];
-    }
-
-    /**
-     * PUBLIC getDowntimeStart()
-     *
-     * Get method for the in downtime start time
-     *
-     * @return	String		The formated downtime start time
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function getDowntimeStart() {
-        if(isset($this->state['in_downtime']) && $this->state['in_downtime'] == 1) {
-            if(self::$dateFormat === null) {
-                self::$dateFormat = cfg('global','dateformat');
-            }
-
-            return date(self::$dateFormat, $this->state['downtime_start']);
-        } else {
-            return 'N/A';
-        }
-    }
-
-    /**
-     * PUBLIC getDowntimeEnd()
-     *
-     * Get method for the in downtime end time
-     *
-     * @return	String		The formated downtime end time
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function getDowntimeEnd() {
-        if(isset($this->state['in_downtime']) && $this->state['in_downtime'] == 1) {
-            if(self::$dateFormat === null) {
-                self::$dateFormat = cfg('global','dateformat');
-            }
-
-            return date(self::$dateFormat, $this->state['downtime_end']);
-        } else {
-            return 'N/A';
-        }
-    }
-
-    /**
      * Get method for the in downtime option
      */
     public function getSummaryInDowntime() {
-        return $this->summary_in_downtime;
+        return $this->sum[DOWNTIME];
     }
 
     /**
@@ -253,7 +181,7 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getSummaryState() {
-        return $this->summary_state;
+        return $this->sum[STATE];
     }
 
     /**
@@ -261,14 +189,14 @@ class NagVisStatefulObject extends NagVisObject {
      */
     public function getSubState($summary = false) {
         if($summary) {
-            if($this->summary_problem_has_been_acknowledged == 1)
+            if($this->sum[ACK] == 1)
                 return  'ack';
-            elseif($this->summary_in_downtime == 1)
+            elseif($this->sum[DOWNTIME] == 1)
                 return 'downtime';
         } else {
-            if($this->state['problem_has_been_acknowledged'] == 1)
+            if($this->state[ACK] == 1)
                 return  'ack';
-            elseif($this->state['in_downtime'] == 1)
+            elseif($this->state[DOWNTIME] == 1)
                 return 'downtime';
         }
         return 'normal';
@@ -283,7 +211,7 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function setSummaryState($s) {
-        $this->summary_state = $s;
+        $this->sum[STATE] = $s;
     }
 
     /**
@@ -295,7 +223,7 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getSummaryOutput() {
-        return $this->summary_output;
+        return $this->sum[OUTPUT];
     }
 
     /**
@@ -307,7 +235,7 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getSummaryAcknowledgement() {
-        return $this->summary_problem_has_been_acknowledged;
+        return $this->sum[ACK];
     }
 
     /**
@@ -354,27 +282,11 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getStateType() {
-        if(isset($this->state['state_type']) && $this->state['state_type'] != '') {
+        if(isset($this->state[STATE_TYPE]) && $this->state[STATE_TYPE] != '') {
             $stateTypes = Array(0 => 'SOFT', 1 => 'HARD');
-            return $stateTypes[$this->state['state_type']];
+            return $stateTypes[$this->state[STATE_TYPE]];
         } else {
             return 'N/A';
-        }
-    }
-
-    /**
-     * PUBLIC getCurrentCheckAttempt()
-     *
-     * Get method for the current check attempt
-     *
-     * @return	Integer		Current check attempt
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function getCurrentCheckAttempt() {
-        if(isset($this->state['current_check_attempt']) && $this->state['current_check_attempt'] != '') {
-            return $this->state['current_check_attempt'];
-        } else {
-            return '';
         }
     }
 
@@ -412,22 +324,6 @@ class NagVisStatefulObject extends NagVisObject {
     }
 
     /**
-     * PUBLIC getMaxCheckAttempts()
-     *
-     * Get method for the maximum check attempt
-     *
-     * @return	Integer		maximum check attempts
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function getMaxCheckAttempts() {
-        if(isset($this->state['max_check_attempts']) && $this->state['max_check_attempts'] != '') {
-            return $this->state['max_check_attempts'];
-        } else {
-            return '';
-        }
-    }
-
-    /**
      * PUBLIC getObjectStateInformations()
      *
      * Gets the state information of the object
@@ -438,32 +334,32 @@ class NagVisStatefulObject extends NagVisObject {
     public function getObjectStateInformations($bFetchChilds=true) {
         $arr = Array();
 
-        $arr['state']                         = val($this->state, 'state');
-        $arr['summary_state']                 = $this->getSummaryState();
-        $arr['summary_problem_has_been_acknowledged'] = $this->getSummaryAcknowledgement();
-        $arr['problem_has_been_acknowledged'] = val($this->state, 'problem_has_been_acknowledged');
-        $arr['summary_in_downtime']           = $this->getSummaryInDowntime();
-        $arr['in_downtime']                   = val($this->state, 'in_downtime');
+        $arr['state']                         = val($this->state, STATE);
+        $arr['problem_has_been_acknowledged'] = val($this->state, ACK);
+        $arr['in_downtime']                   = val($this->state, DOWNTIME);
+        $arr['output']         = $this->escapeStringForJson(val($this->state, OUTPUT, ''));
 
-        $arr['output']         = $this->escapeStringForJson(val($this->state, 'output', ''));
-        $arr['summary_output'] = $this->escapeStringForJson($this->getSummaryOutput());
+        $arr['summary_state']                 = val($this->sum, STATE);
+        $arr['summary_problem_has_been_acknowledged'] = val($this->sum, ACK);
+        $arr['summary_in_downtime']           = val($this->sum, DOWNTIME);
+        $arr['summary_output']                = $this->escapeStringForJson(val($this->sum, OUTPUT, ''));
 
         // Macros which are only for services and hosts
         if($this->type == 'host' || $this->type == 'service') {
-            $arr['downtime_author'] = val($this->state, 'downtime_author');
-            $arr['downtime_data']   = val($this->state, 'downtime_data');
-            $arr['downtime_end']    = val($this->state, 'downtime_end');
-            $arr['downtime_start']  = val($this->state, 'downtime_start');
+            $arr['downtime_author'] = val($this->state, DOWNTIME_AUTHOR);
+            $arr['downtime_data']   = val($this->state, DOWNTIME_DATA);
+            $arr['downtime_start']  = val($this->state, DOWNTIME_START);
+            $arr['downtime_end']    = val($this->state, DOWNTIME_END);
 
-            $arr['last_check'] = $this->get_date('last_check');
-            $arr['next_check'] = $this->get_date('next_check');
+            $arr['last_check'] = $this->get_date(LAST_CHECK);
+            $arr['next_check'] = $this->get_date(NEXT_CHECK);
             $arr['state_type'] = $this->getStateType();
-            $arr['current_check_attempt'] = $this->getCurrentCheckAttempt();
-            $arr['max_check_attempts'] = $this->getMaxCheckAttempts();
-            $arr['last_state_change']      = $this->get_date('last_state_change');
-            $arr['last_hard_state_change'] = $this->get_date('last_hard_state_change');
-            $arr['state_duration'] = $this->getStateDuration();
-            $arr['perfdata'] = $this->escapeStringForJson($this->state['perfdata']);
+            $arr['current_check_attempt']  = val($this->state, CURRENT_ATTEMPT);
+            $arr['max_check_attempts']     = val($this->state, MAX_CHECK_ATTEMPTS);
+            $arr['last_state_change']      = $this->get_date(LAST_STATE_CHANGE);
+            $arr['last_hard_state_change'] = $this->get_date(LAST_HARD_STATE_CHANGE);
+            $arr['state_duration']         = $this->getStateDuration();
+            $arr['perfdata'] = $this->escapeStringForJson(val($this->state, PERFDATA, ''));
         }
 
         // Enable/Disable fetching children
@@ -660,12 +556,14 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     protected function fetchObjectAsChild() {
-        $aChild = Array('type' => $this->getType(),
-                        'name' => $this->getName(),
-                        'summary_state' => $this->getSummaryState(),
-                        'summary_in_downtime' => $this->getSummaryInDowntime(),
-                        'summary_problem_has_been_acknowledged' => $this->getSummaryAcknowledgement(),
-                        'summary_output' => $this->escapeStringForJson($this->getSummaryOutput()));
+        $aChild = Array(
+            'type' => $this->getType(),
+            'name' => $this->getName(),
+            'summary_state' => $this->sum[STATE],
+            'summary_in_downtime' => $this->sum[DOWNTIME],
+            'summary_problem_has_been_acknowledged' => $this->sum[ACK],
+            'summary_output' => $this->escapeStringForJson($this->sum[OUTPUT])
+        );
 
         if($this->type == 'service') {
             $aChild['service_description'] = $this->getServiceDescription();
@@ -714,14 +612,14 @@ class NagVisStatefulObject extends NagVisObject {
         $stateWeight = $_MAINCFG->getStateWeight();
 
         // Fetch the current state to start with
-        if($this->summary_state == null) {
+        if($this->sum[STATE] == null) {
             $currWeight = null;
         } else {
-            if(isset($stateWeight[$this->summary_state])) {
-                $currWeight = $stateWeight[$this->summary_state][$this->getSubState(SUMMARY_STATE)];
+            if(isset($stateWeight[$this->sum[STATE]])) {
+                $currWeight = $stateWeight[$this->sum[STATE]][$this->getSubState(SUMMARY_STATE)];
             } else {
                 throw new NagVisException(l('Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE].',
-                                            Array('STATE'    => $this->summary_state,
+                                            Array('STATE'    => $this->sum[STATE],
                                                   'SUBSTATE' => $this->getSubState(SUMMARY_STATE),
                                                   'TYPE'     => $this->getType())));
             }
@@ -751,18 +649,18 @@ class NagVisStatefulObject extends NagVisObject {
 
                             // Modify the summary information
 
-                            $this->summary_state = $sState;
+                            $this->sum[STATE] = $sState;
 
                             if($sSubState == 'ack') {
-                                $this->summary_problem_has_been_acknowledged = 1;
+                                $this->sum[ACK] = 1;
                             } else {
-                                $this->summary_problem_has_been_acknowledged = 0;
+                                $this->sum[ACK] = 0;
                             }
 
                             if($sSubState == 'downtime') {
-                                $this->summary_in_downtime = 1;
+                                $this->sum[DOWNTIME] = 1;
                             } else {
-                                $this->summary_in_downtime = 0;
+                                $this->sum[DOWNTIME] = 0;
                             }
                         }
                     } else {
@@ -777,8 +675,8 @@ class NagVisStatefulObject extends NagVisObject {
         }
 
         // Fallback for objects without state and without members
-        if($this->summary_state == null && $iSumCount == 0) {
-            $this->summary_state = 'ERROR';
+        if($this->sum[STATE] == null && $iSumCount == 0) {
+            $this->sum[STATE] = 'ERROR';
         }
     }
 
@@ -793,18 +691,21 @@ class NagVisStatefulObject extends NagVisObject {
         if(NagVisStatefulObject::$langChildStates === null)
             NagVisStatefulObject::$langChildStates = l('childStatesAre');
 
-        $this->summary_output .= NagVisStatefulObject::$langChildStates.' ';
+        if($this->sum[OUTPUT] === null)
+            $this->sum[OUTPUT] = '';
+
+        $this->sum[OUTPUT] .= NagVisStatefulObject::$langChildStates.' ';
         foreach($arrStates AS $state => $num)
             if($num > 0)
-                $this->summary_output .= $num.' '.$state.', ';
+                $this->sum[OUTPUT] .= $num.' '.$state.', ';
 
         // If some has been added remove last comma, else add a simple 0
-        if(substr($this->summary_output, -2, 2) == ', ')
-            $this->summary_output = rtrim($this->summary_output, ', ');
+        if(substr($this->sum[OUTPUT], -2, 2) == ', ')
+            $this->sum[OUTPUT] = rtrim($this->sum[OUTPUT], ', ');
         else
-            $this->summary_output .= '0 ';
+            $this->sum[OUTPUT] .= '0 ';
 
-        $this->summary_output .= ' '.$objLabel.'.';
+        $this->sum[OUTPUT] .= ' '.$objLabel.'.';
     }
 
     /**
@@ -821,15 +722,15 @@ class NagVisStatefulObject extends NagVisObject {
 
         // Initialize empty or with current object state
         $currentStateWeight = null;
-        if($this->summary_state != null)
-            $currentStateWeight = $stateWeight[$this->summary_state][$this->getSubState(SUMMARY_STATE)];
+        if($this->sum[STATE] != null)
+            $currentStateWeight = $stateWeight[$this->sum[STATE]][$this->getSubState(SUMMARY_STATE)];
 
         // Loop all object to gather the worst state and set it as summary
         // state of the current object
         foreach($OBJS AS $OBJ) {
-            $objSummaryState = $OBJ->summary_state;
-            $objAck          = $OBJ->summary_problem_has_been_acknowledged;
-            $objDowntime     = $OBJ->summary_in_downtime;
+            $objSummaryState = $OBJ->sum[STATE];
+            $objAck          = $OBJ->sum[ACK];
+            $objDowntime     = $OBJ->sum[DOWNTIME];
 
             if(isset($stateWeight[$objSummaryState])) {
                 // Gather the object summary state type
@@ -841,10 +742,10 @@ class NagVisStatefulObject extends NagVisObject {
 
                 if(isset($stateWeight[$objSummaryState][$objType])
                    && ($currentStateWeight === null || $stateWeight[$objSummaryState][$objType] >= $currentStateWeight)) {
-                    $this->summary_state                         = $objSummaryState;
-                    $this->summary_problem_has_been_acknowledged = $objAck;
-                    $this->summary_in_downtime                   = $objDowntime;
-                    $currentStateWeight                          = $stateWeight[$objSummaryState][$objType];
+                    $this->sum[STATE]    = $objSummaryState;
+                    $this->sum[ACK]      = $objAck;
+                    $this->sum[DOWNTIME] = $objDowntime;
+                    $currentStateWeight  = $stateWeight[$objSummaryState][$objType];
                 }
             }
         }

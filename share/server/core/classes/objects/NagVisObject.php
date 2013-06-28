@@ -521,8 +521,8 @@ class NagVisObject {
      */
     private static function sortObjectsByState($OBJ1, $OBJ2) {
         global $_MAINCFG;
-        $state1 = $OBJ1->summary_state;
-        $state2 = $OBJ2->summary_state;
+        $state1 = $OBJ1->sum[STATE];
+        $state2 = $OBJ2->sum[STATE];
 
         // Quit when nothing to compare
         if($state1 == '' || $state2 == '') {

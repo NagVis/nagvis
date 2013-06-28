@@ -36,7 +36,7 @@ class NagVisMapObj extends NagVisStatefulObject {
     protected $MAPCFG;
     private $MAP;
 
-    protected $members;
+    protected $members = array();
     protected $linkedMaps;
 
     protected $map_name;
@@ -200,8 +200,8 @@ class NagVisMapObj extends NagVisStatefulObject {
      */
     public function applyState() {
         if($this->problem_msg) {
-            $this->summary_state = 'ERROR';
-            $this->summary_output = $this->problem_msg;
+            $this->sum[STATE]  = 'ERROR';
+            $this->sum[OUTPUT] = $this->problem_msg;
             $this->clearMembers();
             return;
         }
@@ -221,7 +221,7 @@ class NagVisMapObj extends NagVisStatefulObject {
         // At least summary output
         $this->fetchSummaryOutput();
 
-        $this->state['state'] = $this->summary_state;
+        $this->state = $this->sum;
     }
 
     /**
@@ -460,12 +460,12 @@ class NagVisMapObj extends NagVisStatefulObject {
                                'PENDING'     => 0);
 
             foreach($this->getStateRelevantMembers(true) AS $OBJ)
-                if(isset($arrStates[$OBJ->summary_state]))
-                    $arrStates[$OBJ->summary_state]++;
+                if(isset($arrStates[$OBJ->sum[STATE]]))
+                    $arrStates[$OBJ->sum[STATE]]++;
 
             $this->mergeSummaryOutput($arrStates, l('objects'));
         } else {
-            $this->summary_output = l('mapIsEmpty','MAP~'.$this->getName());
+            $this->sum[OUTPUT] = l('mapIsEmpty','MAP~'.$this->getName());
         }
     }
 
@@ -484,8 +484,8 @@ class NagVisMapObj extends NagVisStatefulObject {
            && $AUTHORISATION->isPermitted('Map', 'view', $OBJ->getName()))
             return true;
         else {
-            $OBJ->summary_state = 'UNKNOWN';
-            $OBJ->summary_output = l('noReadPermissions');
+            $OBJ->sum[STATE]  = 'UNKNOWN';
+            $OBJ->sum[OUTPUT] = l('noReadPermissions');
 
             return false;
         }
@@ -503,7 +503,7 @@ class NagVisMapObj extends NagVisStatefulObject {
         if($this->hasMembers())
             $this->wrapChildState($this->getStateRelevantMembers(true));
         else
-            $this->summary_state = 'UNKNOWN';
+            $this->sum[STATE] = 'UNKNOWN';
     }
 }
 ?>

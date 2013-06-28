@@ -577,8 +577,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
           "Columns: ".$stateAttr." plugin_output alias display_name ".
           "address notes last_check next_check state_type ".
           "current_attempt max_check_attempts last_state_change ".
-          "last_hard_state_change statusmap_image perf_data ".
-          "acknowledged scheduled_downtime_depth has_been_checked name ".
+          "last_hard_state_change perf_data acknowledged ".
+          "scheduled_downtime_depth has_been_checked name ".
           "check_command custom_variable_names custom_variable_values\n".
           $objFilter;
 
@@ -595,8 +595,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 // $e[0]:  state
                 if($e[17] == 0 || $state === '') {
                     $arrReturn[$e[18]] = Array(
-                        'state'  => 'UNCHECKED',
-                        'output' => l('hostIsPending', Array('HOST' => $e[18]))
+                        'UNCHECKED',
+                        l('hostIsPending', Array('HOST' => $e[18])),
+                        null,
+                        null,
                     );
                     continue;
                 }
@@ -608,60 +610,57 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     default:  $state = "UNKNOWN"; break;
                 }
 
-                $arrTmpReturn = Array(
-                  'state'                  => $state,
-                  'output'                 => $e[1],
-                  'alias'                  => $e[2],
-                  'display_name'           => $e[3],
-                  'address'                => $e[4],
-                  'notes'                  => $e[5],
-                  'last_check'             => $e[6],
-                  'next_check'             => $e[7],
-                  'state_type'             => $e[8],
-                  'current_check_attempt'  => $e[9],
-                  'max_check_attempts'     => $e[10],
-                  'last_state_change'      => $e[11],
-                  'last_hard_state_change' => $e[12],
-                  'statusmap_image'        => $e[13],
-                  'perfdata'               => $e[14],
-                  'check_command'          => $e[19],
-                );
+                // 15: acknowledged
+                $acknowledged = $state != 'UP' && $e[15] == 1;
 
-                if($e[20] && $e[21])
-                    $arrTmpReturn['custom_variables'] = array_combine($e[20], $e[21]);
-
-                /**
-                * Handle host/service acks
-                *
-                * If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not
-                * acknowledged => check for acknowledged host
-                */
-                // $e[15]: acknowledged
-                if($state != 'UP' && $e[15] == 1) {
-                    $arrTmpReturn['problem_has_been_acknowledged'] = 1;
-                } else {
-                    $arrTmpReturn['problem_has_been_acknowledged'] = 0;
-                }
+                // 20: keys, 21: values
+                if(isset($e[20][0]) && isset($e[21][0]))
+                    $custom_vars = array_combine($e[20], $e[21]);
+                else
+                    $custom_vars = null;
 
                 // If there is a downtime for this object, save the data
                 // $e[16]: scheduled_downtime_depth
+                $dt_details = array(null, null, null, null);
                 if(isset($e[16]) && $e[16] > 0) {
-                    $arrTmpReturn['in_downtime'] = 1;
+                    $in_downtime = true;
 
                     // This handles only the first downtime. But this is not backend
                     // specific. The other backends do this as well.
-                    $d = $this->queryLivestatusSingleRow(
+                    $data = $this->queryLivestatusSingleRow(
                         "GET downtimes\n".
                         "Columns: author comment start_time end_time\n" .
                         "Filter: host_name = ".$e[18]."\n");
-
-                    $arrTmpReturn['downtime_author'] = $d[0];
-                    $arrTmpReturn['downtime_data'] = $d[1];
-                    $arrTmpReturn['downtime_start'] = $d[2];
-                    $arrTmpReturn['downtime_end'] = $d[3];
+                    if(isset($data[0]))
+                        $dt_details = $data;
+                } else {
+                    $in_downtime = false;
                 }
 
-                $arrReturn[$e[18]] = $arrTmpReturn;
+                $arrReturn[$e[18]] = Array(
+                    $state,
+                    $e[1],  // output
+                    $acknowledged,
+                    $in_downtime,
+                    $e[8],  // state type
+                    $e[9],  // current attempt
+                    $e[10], // max attempts
+                    $e[6],  // last check
+                    $e[7],  // next check
+                    $e[12], // last hard state change
+                    $e[11], // last state change
+                    $e[14], // perfdata
+                    $e[3],  // display name
+                    $e[13], // alias
+                    $e[4],  // address
+                    $e[5],  // notes
+                    $e[19], // check command
+                    $custom_vars,
+                    $dt_details[0], // downtime author
+                    $dt_details[1], // downtime comment
+                    $dt_details[2], // downtime start
+                    $dt_details[3], // downtime end
+                );
             }
         }
 
@@ -700,10 +699,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $arrReturn = Array();
         if(is_array($l) && count($l) > 0) {
             foreach($l as $e) {
-                $arrTmpReturn = Array();
-                $arrTmpReturn['service_description'] = $e[0];
-                $arrTmpReturn['display_name'] = $e[1];
-
                 // test for the correct key
                 if(isset($objects[$e[20].'~~'.$e[0]])) {
                     $specific = true;
@@ -717,8 +712,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 // $e[19]: has_been_checked
                 // $e[2]:  state
                 if($e[19] == 0 || $e[2] === '') {
-                    $arrTmpReturn['state'] = 'PENDING';
-                    $arrTmpReturn['output'] = l('serviceNotChecked', Array('SERVICE' => $e[0]));
+                    $svc = array_fill(0, EXT_STATE_SIZE, null);
+                    $svc[DESCRIPTION]  = $e[0];
+                    $svc[DISPLAY_NAME] = $e[1];
+                    $svc[STATE]  = 'PENDING';
+                    $svc[OUTPUT] = l('serviceNotChecked', Array('SERVICE' => $e[0]));
                 } else {
                     $state = $e[2];
 
@@ -738,17 +736,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                      */
                     // $e[16]: acknowledged
                     // $e[17]: host_acknowledged
-                    if($state != 'OK' && ($e[16] == 1 || $e[17] == 1)) {
-                        $arrTmpReturn['problem_has_been_acknowledged'] = 1;
-                    } else {
-                        $arrTmpReturn['problem_has_been_acknowledged'] = 0;
-                    }
+                    $acknowledged = $state != 'OK' && ($e[16] == 1 || $e[17] == 1);
 
                     // Handle host/service downtimes
                     // $e[15]: scheduled_downtime_depth
                     // $e[18]: host_scheduled_downtime_depth
                     if((isset($e[15]) && $e[15] > 0) || (isset($e[18]) && $e[18] > 0)) {
-                        $arrTmpReturn['in_downtime'] = 1;
+                        $in_downtime = true;
 
                         // This handles only the first downtime. But this is not backend
                         // specific. The other backends do this as well.
@@ -756,50 +750,62 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                         // Handle host/service downtime difference
                         if(isset($e[15]) && $e[15] > 0) {
                             // Service downtime
-                            $d = $this->queryLivestatusSingleRow(
+                            $dt_details = $this->queryLivestatusSingleRow(
                               "GET downtimes\n".
                               "Columns: author comment start_time end_time\n" .
                               "Filter: host_name = ".$e[20]."\n" .
                               "Filter: service_description = ".$e[0]."\n");
                         } else {
                             // Host downtime
-                            $d = $this->queryLivestatusSingleRow(
+                            $dt_details = $this->queryLivestatusSingleRow(
                               "GET downtimes\n".
                               "Columns: author comment start_time end_time\n" .
                               "Filter: host_name = ".$e[20]."\n");
                         }
-
-                        $arrTmpReturn['downtime_author'] = $d[0];
-                        $arrTmpReturn['downtime_data'] = $d[1];
-                        $arrTmpReturn['downtime_start'] = $d[2];
-                        $arrTmpReturn['downtime_end'] = $d[3];
+                    } else {
+                        $in_downtime = false;
+                        $dt_details = array(null, null, null, null);
                     }
 
-                    $arrTmpReturn['state'] = $state;
-                    $arrTmpReturn['alias'] = $e[3];
-                    $arrTmpReturn['address'] = $e[4];
-                    $arrTmpReturn['output'] = $e[5];
-                    $arrTmpReturn['notes'] = $e[6];
-                    $arrTmpReturn['last_check'] = $e[7];
-                    $arrTmpReturn['next_check'] = $e[8];
-                    $arrTmpReturn['state_type'] = $e[9];
-                    $arrTmpReturn['current_check_attempt'] = $e[10];
-                    $arrTmpReturn['max_check_attempts'] = $e[11];
-                    $arrTmpReturn['last_state_change'] = $e[12];
-                    $arrTmpReturn['last_hard_state_change'] = $e[13];
-                    $arrTmpReturn['perfdata'] = $e[14];
-                    $arrTmpReturn['check_command'] = $e[21];
                     if(isset($e[22][0]) && isset($e[23][0]))
-                        $arrTmpReturn['custom_variables'] = array_combine($e[22], $e[23]);
+                        $custom_vars = array_combine($e[22], $e[23]);
+                    else
+                        $custom_vars = null;
+
+                    $svc = array(
+                        $state,
+                        $e[5],  // output
+                        $acknowledged,
+                        $in_downtime,
+                        $e[9],  // state type
+                        $e[10], // current attempt
+                        $e[11], // max check attempts
+                        $e[7],  // last check
+                        $e[8],  // next check
+                        $e[13], // last hard state change
+                        $e[12], // last state change
+                        $e[14], // perfdata
+                        $e[1],  // display name
+                        $e[3],  // alias
+                        $e[4],  // address
+                        $e[6],  // notes
+                        $e[21], // check command
+                        $custom_vars,
+                        $dt_details[0], // dt author
+                        $dt_details[1], // dt data
+                        $dt_details[2], // dt start
+                        $dt_details[3], // dt end
+                        $e[0]   // descr
+                    );
                 }
 
                 if($specific) {
-                    $arrReturn[$key] = $arrTmpReturn;
+                    $arrReturn[$key] = $svc;
                 } else {
                     if(!isset($arrReturn[$key]))
-                        $arrReturn[$key] = Array();
+                        $arrReturn[$key] = array();
 
-                    $arrReturn[$key][] = $arrTmpReturn;
+                    $arrReturn[$key][] = $svc;
                 }
             }
         }

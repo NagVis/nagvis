@@ -46,6 +46,7 @@ class NagVisMap {
             $this->MAPOBJ = new NagVisMapObj($MAPCFG, $bIsView);
             log_mem('postmapinit');
             $this->MAPOBJ->fetchMapObjects();
+            log_mem('map ' .$this->MAPCFG->getName(). ' '.count($this->MAPOBJ->getMembers()));
             log_mem('postmapobjects');
 
             if($bIsView === IS_VIEW) {

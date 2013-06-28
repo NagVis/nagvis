@@ -211,14 +211,8 @@ class CoreBackendMgmt {
                 $members = Array();
                 foreach($aServices AS $host => $serviceList) {
                     foreach($serviceList AS $aService) {
-                        $SOBJ = new NagVisService($backendId, $host, $aService['service_description']);
-
-                        // Append contents of the array to the object properties
-                        $SOBJ->setObjectInformation($aService);
-
-                        // Also get summary state
-                        $aService['summary_state'] = $aService['state'];
-                        $aService['summary_output'] = $aService['output'];
+                        $SOBJ = new NagVisService($backendId, $host, $aService[DESCRIPTION]);
+                        $SOBJ->setState($aService);
 
                         // The services have to know how they should handle hard/soft
                         // states. This is a little dirty but the simplest way to do this
@@ -273,9 +267,7 @@ class CoreBackendMgmt {
                 $members = Array();
                 foreach($aHosts AS $name => $aHost) {
                     $HOBJ = new NagVisHost($backendId, $name);
-
-                    // Append contents of the array to the object properties
-                    $HOBJ->setObjectInformation($aHost);
+                    $HOBJ->setState($aHost);
 
                     // The services have to know how they should handle hard/soft
                     // states. This is a little dirty but the simplest way to do this
@@ -339,7 +331,7 @@ class CoreBackendMgmt {
                 else
                     foreach($OBJS AS $OBJ) {
                         if(isset($aResult[$name]['details']))
-                            $OBJ->setObjectInformation($aResult[$name]['details']);
+                            $OBJ->setState($aResult[$name]['details']);
                         if(isset($aResult[$name]['counts']))
                             $OBJ->setStateCounts($aResult[$name]['counts']);
                     }
@@ -366,7 +358,7 @@ class CoreBackendMgmt {
                 foreach($OBJS AS $OBJ) {
                     $members = Array();
                     foreach($aMembers[$name] AS $service => $details) {
-                        $MOBJ = new NagVisService($backendId, $OBJ->getName(), $details['service_description']);
+                        $MOBJ = new NagVisService($backendId, $OBJ->getName(), $details[DESCRIPTION]);
                         $MOBJ->setState($details);
                         $members[] = $MOBJ;
                     }
