@@ -147,7 +147,7 @@
     <div>
     {if $map.childs}<a class=open href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}">&gt;</a>{/if}
     <a class="{if $map.childs}title{/if} {$map.class} {if $map.configError}error{/if}"
-       {if $map.childs}onclick="sidebarToggleSubtree(this)" id="sb-{$map.mapName}"{/if}
+       {if $map.childs}onclick="sidebarToggleSubtree(this);return false" id="sb-{$map.mapName}"{/if}
        {if $map.childs}href="#"{else}href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}"{/if}>{$map.mapAlias}</a>
     </div>
 
@@ -164,11 +164,11 @@
 <div id="sidebar">
 <ul>
     {if $permittedOverview}<li class="spacerbottom"><div><a href="{$pathBase}/frontend/nagvis-js/index.php">{$langOverview}</a></div></li>{/if}
-    <li class="closed"><div><a id="sb-maps" class="title" href="#" onclick="sidebarToggleSubtree(this)">{$langMaps}</a></div>
+    <li class="closed"><div><a id="sb-maps" class="title" href="#" onclick="sidebarToggleSubtree(this);return false;">{$langMaps}</a></div>
         <ul id="sb-maps-childs" style="display:none;">{sideMaps $maps $pathBase "Map"}</ul>
     </li>
     {if count($rotations) > 0}
-    <li class="closed spacertop"><div><a id="sb-rotations" class="title" href="#" onclick="sidebarToggleSubtree(this)">{$langRotations}</a></div>
+    <li class="closed spacertop"><div><a id="sb-rotations" class="title" href="#" onclick="sidebarToggleSubtree(this);return false">{$langRotations}</a></div>
         <ul id="sb-rotations-childs" style="display:none;">
         {foreach $rotations rotation}
             <li class=lvl1><div><a href="{$pathBase}/frontend/nagvis-js/index.php?mod=Rotation&act=view&show={$rotation}">{$rotation}</a></div></li>
