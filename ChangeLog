@@ -1,3 +1,11 @@
+1.8b1
+Core:
+  * Changed internal structures to improve memory consumtion on large maps
+
+Frontend:
+  * All nodes with assigned childs in sidebar are now expandable. The state
+    is stored for each user individually.
+
 1.7.10
 
 1.7.9

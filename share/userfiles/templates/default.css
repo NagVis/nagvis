@@ -675,15 +675,29 @@ td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 #sidebar li {margin:0;padding:0;line-height:25px;}
 #sidebar li.spacerbottom {border-bottom:1px dotted #a4a4a4}
 #sidebar li.spacertop {border-top:1px dotted #a4a4a4}
-#sidebar li a {display:block;padding-left:20px;width:180px;color:#43B3CF;text-decoration:none;}
+#sidebar li div {width:200px;height:25px;clear:both;}
+#sidebar li div a {padding-left:20px;}
+
+#sidebar li.parent div {}
+#sidebar li.parent a.title {width:160px;}
+#sidebar li.parent a.open {width:20px;padding:0;text-align:center;float:right}
+#sidebar li.parent.lvl1 a.title{padding-left:30px;width:150px;background-position:10px 0;}
+#sidebar li.parent.lvl2 a.title{padding-left:40px;width:140px;background-position:20px 0;}
+#sidebar li.parent.lvl3 a.title{padding-left:50px;width:130px;background-position:30px 0;}
+#sidebar li.parent.lvl4 a.title{padding-left:60px;width:120px;background-position:40px 0;}
+#sidebar li.parent.lvl5 a.title{padding-left:70px;width:110px;background-position:50px 0;}
+#sidebar li.parent.lvl6 a.title{padding-left:80px;width:100px;background-position:60px 0;}
+
+#sidebar li a {display:block;width:180px;color:#43B3CF;text-decoration:none;}
 #sidebar li.lvl2 a{padding-left:30px;width:170px}
 #sidebar li.lvl3 a{padding-left:40px;width:160px}
 #sidebar li.lvl4 a{padding-left:50px;width:150px}
 #sidebar li.lvl5 a{padding-left:60px;width:140px}
 #sidebar li.lvl6 a{padding-left:70px;width:130px}
-#sidebar li.open a.title {background: url('../images/templates/default.folder_open.gif') no-repeat left #eaf0f2;}
-#sidebar li.closed a.title {background: url('../images/templates/default.folder_closed.gif') no-repeat left #eaf0f2;}
-#sidebar li a:hover {background-color:#d9e1e4;color:#779D2A}
+#sidebar li.open > div a.title {background: url('../images/templates/default.folder_open.gif') no-repeat left #eaf0f2;}
+#sidebar li.closed > div a.title {background: url('../images/templates/default.folder_closed.gif') no-repeat left #eaf0f2;}
+#sidebar li div a:hover,
+#sidebar li div a.title:hover {background-color:#d9e1e4;color:#779D2A}
 #sidebar a.error, #sidebar a.error:active, #sidebar a.error:visited {color:#ff0000}
 
 /*

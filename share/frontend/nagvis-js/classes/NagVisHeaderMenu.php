@@ -135,6 +135,7 @@ class NagVisHeaderMenu {
         $permEditAnyMap = false;
         $aMaps = Array();
         $childMaps = Array();
+        
         foreach($maps AS $mapName) {
             $map = Array();
 
@@ -153,9 +154,10 @@ class NagVisHeaderMenu {
             if($type == 'maps' && !$AUTHORISATION->isPermitted('Map', 'view', $mapName))
                 continue;
 
-            $map['mapName'] = $MAPCFG1->getName();
+            $map['mapName']  = $MAPCFG1->getName();
             $map['mapAlias'] = $MAPCFG1->getValue(0, 'alias');
-            $map['childs'] = Array();
+            $map['childs']   = Array();
+            $map['class']    = '';
             if($type == 'maps') {
                 $map['permittedEdit'] = $AUTHORISATION->isPermitted('Map', 'edit', $mapName);
 
@@ -188,6 +190,7 @@ class NagVisHeaderMenu {
         foreach($maps AS $map) {
             $freeParent = $map['mapName'];
             if(isset($childMaps[$freeParent])) {
+                $maps[$freeParent]['class'] = 'title';
                 $maps[$freeParent]['childs'] = $this->mapListToTree($childMaps[$freeParent], $childMaps);
             }
         }
