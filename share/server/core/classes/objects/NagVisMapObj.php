@@ -200,8 +200,12 @@ class NagVisMapObj extends NagVisStatefulObject {
      */
     public function applyState() {
         if($this->problem_msg) {
-            $this->sum[STATE]  = 'ERROR';
-            $this->sum[OUTPUT] = $this->problem_msg;
+            $this->sum = array(
+                ERROR,
+                $this->problem_msg,
+                null,
+                null
+            );
             $this->clearMembers();
             return;
         }
@@ -220,8 +224,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 
         // At least summary output
         $this->fetchSummaryOutput();
-
-        $this->state = $this->sum;
     }
 
     /**
@@ -454,10 +456,10 @@ class NagVisMapObj extends NagVisStatefulObject {
      */
     private function fetchSummaryOutput() {
         if($this->hasMembers()) {
-            $arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0, 'DOWN' => 0,
-                               'WARNING'     => 0, 'UNKNOWN'  => 0, 'UP'   => 0,
-                               'OK'          => 0, 'ERROR'    => 0, 'ACK'  => 0,
-                               'PENDING'     => 0);
+            $arrStates = Array(UNREACHABLE => 0, CRITICAL => 0, DOWN => 0,
+                               WARNING     => 0, UNKNOWN  => 0, UP   => 0,
+                               OK          => 0, ERROR    => 0, UNCHECKED => 0,
+                               PENDING     => 0);
 
             foreach($this->getStateRelevantMembers(true) AS $OBJ)
                 if(isset($arrStates[$OBJ->sum[STATE]]))
@@ -484,7 +486,7 @@ class NagVisMapObj extends NagVisStatefulObject {
            && $AUTHORISATION->isPermitted('Map', 'view', $OBJ->getName()))
             return true;
         else {
-            $OBJ->sum[STATE]  = 'UNKNOWN';
+            $OBJ->sum[STATE]  = UNKNOWN;
             $OBJ->sum[OUTPUT] = l('noReadPermissions');
 
             return false;
@@ -501,9 +503,9 @@ class NagVisMapObj extends NagVisStatefulObject {
     private function fetchSummaryState() {
         // Get summary state of this object from single objects
         if($this->hasMembers())
-            $this->wrapChildState($this->getStateRelevantMembers(true));
+            $this->calcSummaryState($this->getStateRelevantMembers(true));
         else
-            $this->sum[STATE] = 'UNKNOWN';
+            $this->sum[STATE] = UNKNOWN;
     }
 }
 ?>

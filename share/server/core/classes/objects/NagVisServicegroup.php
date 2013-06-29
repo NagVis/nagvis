@@ -62,8 +62,13 @@ class NagVisServicegroup extends NagVisStatefulObject {
      */
     public function applyState() {
         if($this->problem_msg) {
-            $this->state   = array('ERROR', $this->problem_msg);
-            $this->members = Array();
+            $this->sum = array(
+                ERROR,
+                $this->problem_msg,
+                null,
+                null
+            );
+            $this->members = array();
             return;
         }
 
@@ -94,8 +99,6 @@ class NagVisServicegroup extends NagVisStatefulObject {
             if($this->sum[OUTPUT] === null)
                 $this->fetchSummaryOutput();
         }
-
-        $this->state = $this->sum;
     }
 
     # End public methods
@@ -107,9 +110,9 @@ class NagVisServicegroup extends NagVisStatefulObject {
     private function fetchSummaryState() {
         // Get summary state from member objects
         if($this->hasMembers())
-            $this->wrapChildState($this->members);
+            $this->calcSummaryState();
         else
-            $this->sum[STATE] = 'ERROR';
+            $this->sum[STATE] = ERROR;
     }
 
     /**
@@ -154,9 +157,9 @@ class NagVisServicegroup extends NagVisStatefulObject {
      */
     private function fetchSummaryOutput() {
         if($this->hasMembers()) {
-            $arrStates = Array('CRITICAL' => 0, 'DOWN'    => 0, 'WARNING'   => 0,
-                               'UNKNOWN'  => 0, 'UP'      => 0, 'OK'        => 0,
-                               'ERROR'    => 0, 'PENDING' => 0, 'UNCHECKED' => 0);
+            $arrStates = Array(CRITICAL => 0, WARNING => 0,
+                               UNKNOWN  => 0, OK      => 0,
+                               ERROR    => 0, PENDING => 0);
 
             // Get summary state of this and child objects
             foreach($this->members AS &$MEMBER) {

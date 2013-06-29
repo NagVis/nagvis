@@ -49,29 +49,29 @@ class GlobalBackendTest implements GlobalBackendInterface {
         'servicegroup' => Array(),
     );
     private $hostStates = Array(
-        'UP'          => Array('normal' => 0, 'downtime' => 0),
-        'DOWN'        => Array('normal' => 0, 'ack' => 0, 'downtime' => 0),
-        'UNREACHABLE' => Array('normal' => 0, 'ack' => 0, 'downtime' => 0),
-        'UNCHECKED'   => Array('normal' => 0, 'downtime' => 0),
+        UP          => Array('normal' => 0, 'downtime' => 0),
+        DOWN        => Array('normal' => 0, 'ack' => 0, 'downtime' => 0),
+        UNREACHABLE => Array('normal' => 0, 'ack' => 0, 'downtime' => 0),
+        UNCHECKED   => Array('normal' => 0, 'downtime' => 0),
     );
     private $serviceStates = Array(
-        'OK'          => Array('normal' => 0, 'downtime' => 0),
-        'WARNING'     => Array('normal' => 0, 'ack' => 0, 'downtime' => 0),
-        'CRITICAL'    => Array('normal' => 0, 'ack' => 0, 'downtime' => 0),
-        'UNKNOWN'     => Array('normal' => 0, 'ack' => 0, 'downtime' => 0),
-        'PENDING'     => Array('normal' => 0, 'downtime' => 0),
+        OK          => Array('normal' => 0, 'downtime' => 0),
+        WARNING     => Array('normal' => 0, 'ack' => 0, 'downtime' => 0),
+        CRITICAL    => Array('normal' => 0, 'ack' => 0, 'downtime' => 0),
+        UNKNOWN     => Array('normal' => 0, 'ack' => 0, 'downtime' => 0),
+        PENDING     => Array('normal' => 0, 'downtime' => 0),
     );
 
     private $canBeSoft = Array(
-        'UP'          => Array('hard'),
-        'DOWN'        => Array('hard', 'soft'),
-        'UNREACHABLE' => Array('hard', 'soft'),
-        'UNCHECKED'   => Array('hard'),
-        'PENDING'     => Array('hard'),
-        'OK'          => Array('hard'),
-        'WARNING'     => Array('hard', 'soft'),
-        'CRITICAL'    => Array('hard', 'soft'),
-        'UNKNOWN'     => Array('hard'),
+        UP          => Array('hard'),
+        DOWN        => Array('hard', 'soft'),
+        UNREACHABLE => Array('hard', 'soft'),
+        UNCHECKED   => Array('hard'),
+        PENDING     => Array('hard'),
+        OK          => Array('hard'),
+        WARNING     => Array('hard', 'soft'),
+        CRITICAL    => Array('hard', 'soft'),
+        UNKNOWN     => Array('hard'),
     );
 
     public function __construct($backendId) {
@@ -144,6 +144,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
         }
         if($output === null)
             $output = 'output '.$name2;
+        else
+            $output = 'empty output';
 
         return array(
             $state,
@@ -188,71 +190,71 @@ class GlobalBackendTest implements GlobalBackendInterface {
         /**
          * Generate objects for demo maps
          */
-        $this->obj['host']['muc-gw1']         = $this->host('muc-gw1',      'UP',   'hard', 'normal');
-        $wan = $this->service('muc-gw1', 'Interface WAN', 'CRITICAL', 'hard', 'normal');
+        $this->obj['host']['muc-gw1']         = $this->host('muc-gw1',      UP,   'hard', 'normal');
+        $wan = $this->service('muc-gw1', 'Interface WAN', CRITICAL, 'hard', 'normal');
         $wan[PERFDATA] = 'in=98.13%;85;98 out=12.12%;85;98';
         $wan[OUTPUT]   = 'In: 98.13%, Out: 12.12%';
         $this->obj['service']['muc-gw1']      = Array($wan);
 
-        $this->obj['host']['muc-srv1']        = $this->host('muc-srv1',     'UP',   'hard', 'normal');
+        $this->obj['host']['muc-srv1']        = $this->host('muc-srv1',     UP,   'hard', 'normal');
         $this->obj['service']['muc-srv1']     = Array(
-            $this->service('muc-srv1', 'CPU load',       'OK', 'hard', 'normal', 'OK - 15min Load 0.05 at 2 CPUs', 'load1=0.2;2;5;0; load5=0.24;2;5;0; load15=0.17;2;5;0;'),
-            $this->service('muc-srv1', 'Memory used',    'OK', 'hard', 'normal',
+            $this->service('muc-srv1', 'CPU load',       OK, 'hard', 'normal', 'OK - 15min Load 0.05 at 2 CPUs', 'load1=0.2;2;5;0; load5=0.24;2;5;0; load15=0.17;2;5;0;'),
+            $this->service('muc-srv1', 'Memory used',    OK, 'hard', 'normal',
                            'OK - 0.79 GB RAM+SWAP used (this is 20.9% of RAM size)',
                            'ramused=807MB;;;0;3858 swapused=0MB;;;0;1909 memused=807MB;5787;7716;0;5768'),
-            $this->service('muc-srv1', 'Interface eth0', 'OK', 'hard', 'normal',
+            $this->service('muc-srv1', 'Interface eth0', OK, 'hard', 'normal',
                            'OK - [2] (up) 100MBit/s, in: 0.00B/s(0.0%), out: 0.00B/s(0.0%)',
                            'in=0;;;0;12500000 inucast=0;;;; innucast=0;;;; indisc=0;;;; inerr=0;0.01;0.1;; out=0;;;0;12500000 outucast=0;;;; outnucast=0;;;; outdisc=0;;;; outerr=0;0.01;0.1;; outqlen=0;;;;'),
-            $this->service('muc-srv1', 'fs_/',           'OK', 'hard', 'normal', 'OK',
+            $this->service('muc-srv1', 'fs_/',           OK, 'hard', 'normal', 'OK',
                            'OK - 73.3% used (84.71 of 115.5 GB), (levels at 80.0/90.0%), trend: +3.84MB / 24 hours',
                            '/=86747.1757812MB;94641;106472;0;118302.46875'),
-            $this->service('muc-srv1', 'fs_/home',       'OK', 'hard', 'normal', 'OK',
+            $this->service('muc-srv1', 'fs_/home',       OK, 'hard', 'normal', 'OK',
                            'OK - 75.2% used (22.21 of 29.5 GB), (levels at 80.0/90.0%), trend: -27.68KB / 24 hours',
                            '/usr=22746.109375MB;24190;27213;0;30237.746094'),
-            $this->service('muc-srv1', 'NTP Time',       'OK', 'hard', 'normal', 'OK',
+            $this->service('muc-srv1', 'NTP Time',       OK, 'hard', 'normal', 'OK',
                            'OK - stratum 2, offset 0.02 ms, jitter 0.01 ms'),
         );
 
-        $this->obj['host']['muc-srv2']        = $this->host('muc-srv2',     'UP',   'hard', 'normal');
+        $this->obj['host']['muc-srv2']        = $this->host('muc-srv2',     UP,   'hard', 'normal');
         $this->obj['service']['muc-srv2']     = Array(
-            $this->service('muc-srv2', 'CPU load',       'OK', 'hard', 'normal', 'OK - 15min Load 1.00 at 2 CPUs', 'load1=1.6;2;5;0; load5=1.2;2;5;0; load15=1.00;2;5;0;'),
+            $this->service('muc-srv2', 'CPU load',       OK, 'hard', 'normal', 'OK - 15min Load 1.00 at 2 CPUs', 'load1=1.6;2;5;0; load5=1.2;2;5;0; load15=1.00;2;5;0;'),
         );
 
-        $this->obj['host']['muc-printer1']    = $this->host('muc-printer1', 'DOWN', 'hard', 'normal');
+        $this->obj['host']['muc-printer1']    = $this->host('muc-printer1', DOWN, 'hard', 'normal');
         $this->obj['service']['muc-printer1'] = Array();
-        $this->obj['host']['muc-printer2']    = $this->host('muc-printer2', 'DOWN', 'hard', 'downtime');
+        $this->obj['host']['muc-printer2']    = $this->host('muc-printer2', DOWN, 'hard', 'downtime');
         $this->obj['service']['muc-printer2'] = Array();
         $this->obj['hostgroup']['muc']        = $this->hostgroup('muc', Array('muc-gw1', 'muc-srv1', 'muc-srv2', 'muc-printer1', 'muc-printer2'));
 
-        $this->obj['host']['ham-gw1']         = $this->host('ham-gw1',      'UP',   'hard', 'normal');
-        $wan = $this->service('ham-gw1', 'Interface WAN', 'OK', 'hard', 'normal');
+        $this->obj['host']['ham-gw1']         = $this->host('ham-gw1',      UP,   'hard', 'normal');
+        $wan = $this->service('ham-gw1', 'Interface WAN', OK, 'hard', 'normal');
         $wan[PERFDATA] = 'in=77.24%;85;98 out=32.89%;85;98';
         $wan[OUTPUT]   = 'In: 77.24%, Out: 32.89%';
         $this->obj['service']['ham-gw1']      = Array($wan);
 
-        $this->obj['host']['ham-srv1']        = $this->host('ham-srv1',     'UP',   'hard', 'normal');
+        $this->obj['host']['ham-srv1']        = $this->host('ham-srv1',     UP,   'hard', 'normal');
         $this->obj['service']['ham-srv1']     = Array(
-            $this->service('ham-srv1', 'CPU load',       'OK', 'hard', 'normal', 'OK - 15min Load 1.00 at 2 CPUs', 'load1=1.6;2;5;0; load5=1.2;2;5;0; load15=1.00;2;5;0;'),
+            $this->service('ham-srv1', 'CPU load',       OK, 'hard', 'normal', 'OK - 15min Load 1.00 at 2 CPUs', 'load1=1.6;2;5;0; load5=1.2;2;5;0; load15=1.00;2;5;0;'),
         );
-        $this->obj['host']['ham-srv2']        = $this->host('ham-srv2',     'WARNING', 'hard', 'ack');
+        $this->obj['host']['ham-srv2']        = $this->host('ham-srv2',     WARNING, 'hard', 'ack');
         $this->obj['service']['ham-srv2']     = Array(
-            $this->service('ham-srv2', 'CPU load',       'OK', 'hard', 'normal', 'OK - 15min Load 3.00 at 4 CPUs', 'load1=5.0;10;20;0; load5=4.2;5;8;0; load15=3.0;3.5;4;0;'),
+            $this->service('ham-srv2', 'CPU load',       OK, 'hard', 'normal', 'OK - 15min Load 3.00 at 4 CPUs', 'load1=5.0;10;20;0; load5=4.2;5;8;0; load15=3.0;3.5;4;0;'),
         );
-        $this->obj['host']['ham-printer1']    = $this->host('ham-printer1', 'UP', 'hard', 'normal');
+        $this->obj['host']['ham-printer1']    = $this->host('ham-printer1', UP, 'hard', 'normal');
         $this->obj['service']['ham-printer1'] = Array();
         $this->obj['hostgroup']['ham']        = $this->hostgroup('ham', Array('ham-gw1', 'ham-srv1', 'ham-srv2', 'ham-printer1'));
 
-        $this->obj['host']['cgn-gw1']         = $this->host('cgn-gw1',      'UP',   'hard', 'normal');
-        $wan = $this->service('cgn-gw1', 'Interface WAN', 'OK', 'hard', 'normal');
+        $this->obj['host']['cgn-gw1']         = $this->host('cgn-gw1',      UP,   'hard', 'normal');
+        $wan = $this->service('cgn-gw1', 'Interface WAN', OK, 'hard', 'normal');
         $wan[PERFDATA] = 'in=19.34%;85;98 out=0.89%;85;98';
         $wan[OUTPUT]   = 'In: 19.34%, Out: 0.89%';
         $this->obj['service']['cgn-gw1']      = Array($wan);
 
-        $this->obj['host']['cgn-srv1']        = $this->host('cgn-srv1',     'UP',   'hard', 'normal');
+        $this->obj['host']['cgn-srv1']        = $this->host('cgn-srv1',     UP,   'hard', 'normal');
         $this->obj['service']['cgn-srv1']     = Array();
-        $this->obj['host']['cgn-srv2']        = $this->host('cgn-srv2',     'WARNING', 'hard', 'ack');
+        $this->obj['host']['cgn-srv2']        = $this->host('cgn-srv2',     WARNING, 'hard', 'ack');
         $this->obj['service']['cgn-srv2']     = Array();
-        $this->obj['host']['cgn-srv3']        = $this->host('cgn-srv3',     'UP', 'hard', 'normal');
+        $this->obj['host']['cgn-srv3']        = $this->host('cgn-srv3',     UP, 'hard', 'normal');
         $this->obj['service']['cgn-srv3']     = Array();
         $this->obj['hostgroup']['cgn']        = $this->hostgroup('cgn', Array('cgn-gw1', 'cgn-srv1', 'cgn-srv2', 'cgn-srv3'));
 
@@ -299,7 +301,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                 foreach(array_keys($substates) AS $substate) {
                     $ident = 'service-'.$state.'-'.$substate;
                     $hostname = 'host-'.$ident;
-                    $this->obj['host'][$hostname] = $this->host($hostname, 'UNCHECKED');
+                    $this->obj['host'][$hostname] = $this->host($hostname, UNCHECKED);
                     $this->obj['service'][$hostname] = Array($this->service($hostname, $ident, $state, $stateType, $substate));
                     $this->obj['hostgroup']['hostgroup-'.$ident] = $this->hostgroup('hostgroup-'.$ident, Array($hostname));
                     $this->obj['servicegroup']['servicegroup-'.$ident] = $this->servicegroup('servicegroup-'.$ident, Array(Array($hostname, $ident)));
@@ -680,8 +682,10 @@ class GlobalBackendTest implements GlobalBackendInterface {
         if(count($filters) == 1 && $filters[0]['key'] == 'groups' && $filters[0]['op'] == '>=') {
             foreach($objects AS $OBJS) {
                 $name = $OBJS[0]->getName();
-                if(!isset($aReturn[$name]))
-                    $aReturn[$name] = Array('counts' => array_merge($this->hostStates, $this->serviceStates));
+                if(!isset($aReturn[$name])) {
+                    $aReturn[$name] = Array('counts' => $this->serviceStates);
+                    $aReturn[$name]['counts'] += $this->hostStates;
+                }
                 foreach($this->obj['hostgroup'][$name]['members'] AS $hostname) {
                     $host = $this->obj['host'][$hostname];
 

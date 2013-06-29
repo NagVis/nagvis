@@ -342,7 +342,7 @@ class CoreBackendMgmt {
                             $OBJ->setBackendProblem($msg);
                         else
                             $OBJ->setBackendProblem(l('The object "[OBJ]" does not exist ([TYPE]).',
-                                                             Array('OBJ' => $name, 'TYPE' => $type)));
+                                                             Array('OBJ' => $name, 'TYPE' => $OBJ->getType())));
     }
 
     private function fetchHostMemberDetails($backendId, $options, $aObjs) {

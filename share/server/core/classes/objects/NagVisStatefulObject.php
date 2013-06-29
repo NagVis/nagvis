@@ -334,12 +334,12 @@ class NagVisStatefulObject extends NagVisObject {
     public function getObjectStateInformations($bFetchChilds=true) {
         $arr = Array();
 
-        $arr['state']                         = val($this->state, STATE);
+        $arr['state']                         = state_str(val($this->state, STATE));
         $arr['problem_has_been_acknowledged'] = val($this->state, ACK);
         $arr['in_downtime']                   = val($this->state, DOWNTIME);
         $arr['output']         = $this->escapeStringForJson(val($this->state, OUTPUT, ''));
 
-        $arr['summary_state']                 = val($this->sum, STATE);
+        $arr['summary_state']                 = state_str(val($this->sum, STATE));
         $arr['summary_problem_has_been_acknowledged'] = val($this->sum, ACK);
         $arr['summary_in_downtime']           = val($this->sum, DOWNTIME);
         $arr['summary_output']                = $this->escapeStringForJson(val($this->sum, OUTPUT, ''));
@@ -412,18 +412,17 @@ class NagVisStatefulObject extends NagVisObject {
         global $CORE;
         $fileType = $CORE->getIconsetFiletype($this->iconset);
 
-        if($this->getSummaryState() != '') {
-            $stateLow = strtolower($this->getSummaryState());
-
+        if ($this->sum[STATE] !== null) {
+            $stateLow = strtolower(state_str($this->sum[STATE]));
             switch($stateLow) {
                 case 'unknown':
                 case 'unreachable':
                 case 'down':
                 case 'critical':
                 case 'warning':
-                    if($this->getSummaryAcknowledgement() == 1) {
+                    if($this->sum[ACK]) {
                         $icon = $this->iconset.'_'.$stateLow.'_ack.'.$fileType;
-                    } elseif($this->getSummaryInDowntime() == 1) {
+                    } elseif($this->sum[DOWNTIME]) {
                         $icon = $this->iconset.'_'.$stateLow.'_dt.'.$fileType;
                     } else {
                         $icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
@@ -431,7 +430,7 @@ class NagVisStatefulObject extends NagVisObject {
                 break;
                 case 'up':
                 case 'ok':
-                    if($this->getSummaryInDowntime() == 1) {
+                    if($this->sum[DOWNTIME]) {
                         $icon = $this->iconset.'_'.$stateLow.'_dt.'.$fileType;
                     } else {
                         $icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
@@ -557,12 +556,12 @@ class NagVisStatefulObject extends NagVisObject {
      */
     protected function fetchObjectAsChild() {
         $aChild = Array(
-            'type' => $this->getType(),
-            'name' => $this->getName(),
-            'summary_state' => $this->sum[STATE],
+            'type'                => $this->getType(),
+            'name'                => $this->getName(),
+            'summary_state'       => state_str($this->sum[STATE]),
             'summary_in_downtime' => $this->sum[DOWNTIME],
             'summary_problem_has_been_acknowledged' => $this->sum[ACK],
-            'summary_output' => $this->escapeStringForJson($this->sum[OUTPUT])
+            'summary_output'      => $this->escapeStringForJson($this->sum[OUTPUT])
         );
 
         if($this->type == 'service') {
@@ -676,7 +675,7 @@ class NagVisStatefulObject extends NagVisObject {
 
         // Fallback for objects without state and without members
         if($this->sum[STATE] == null && $iSumCount == 0) {
-            $this->sum[STATE] = 'ERROR';
+            $this->sum[STATE] = ERROR;
         }
     }
 
@@ -697,7 +696,7 @@ class NagVisStatefulObject extends NagVisObject {
         $this->sum[OUTPUT] .= NagVisStatefulObject::$langChildStates.' ';
         foreach($arrStates AS $state => $num)
             if($num > 0)
-                $this->sum[OUTPUT] .= $num.' '.$state.', ';
+                $this->sum[OUTPUT] .= $num.' '.state_str($state).', ';
 
         // If some has been added remove last comma, else add a simple 0
         if(substr($this->sum[OUTPUT], -2, 2) == ', ')
@@ -709,14 +708,9 @@ class NagVisStatefulObject extends NagVisObject {
     }
 
     /**
-     * PROTECTED wrapChildState()
-     *
-     * Loops all given object so gather the summary state of the current object
-     *
-     * @param   Array   List of objects to gather the summary state from
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * Loops all member objects to calculate the summary state
      */
-    protected function wrapChildState($OBJS) {
+    protected function calcSummaryState($objects = null) {
         global $_MAINCFG;
         $stateWeight = $_MAINCFG->getStateWeight();
 
@@ -725,9 +719,12 @@ class NagVisStatefulObject extends NagVisObject {
         if($this->sum[STATE] != null)
             $currentStateWeight = $stateWeight[$this->sum[STATE]][$this->getSubState(SUMMARY_STATE)];
 
+        if ($objects === null)
+            $objects = $this->members;
+
         // Loop all object to gather the worst state and set it as summary
         // state of the current object
-        foreach($OBJS AS $OBJ) {
+        foreach($objects AS $OBJ) {
             $objSummaryState = $OBJ->sum[STATE];
             $objAck          = $OBJ->sum[ACK];
             $objDowntime     = $OBJ->sum[DOWNTIME];

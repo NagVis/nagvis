@@ -1965,15 +1965,16 @@ class GlobalMainCfg {
                 $val = $this->getValue('states', $lowState);
             }
 
+            $state = state_num(strtoupper($key[0]));
             if(isset($key[1]) && isset($key[2])) {
                 // at the moment only bg colors of substates
-                $arr[strtoupper($key[0])][$key[1].'_'.$key[2]] = $val;
+                $arr[$state][$key[1].'_'.$key[2]] = $val;
             } elseif(isset($key[1])) {
                 // ack/downtime
-                $arr[strtoupper($key[0])][$key[1]] = $val;
+                $arr[$state][$key[1]] = $val;
             } else {
                 // normal state definition
-                $arr[strtoupper($key[0])]['normal'] = $val;
+                $arr[$state]['normal'] = $val;
             }
         }
 

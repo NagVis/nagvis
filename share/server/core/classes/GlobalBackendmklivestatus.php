@@ -588,12 +588,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         if(is_array($l) && count($l) > 0) {
             foreach($l as $e) {
-                $state = $e[0];
-
                 // Catch unchecked objects
                 // $e[17]: has_been_checked
                 // $e[0]:  state
-                if($e[17] == 0 || $state === '') {
+                if($e[17] == 0 || $e[0] === '') {
                     $arrReturn[$e[18]] = Array(
                         'UNCHECKED',
                         l('hostIsPending', Array('HOST' => $e[18])),
@@ -603,15 +601,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     continue;
                 }
 
-                switch($state) {
-                    case "0": $state = "UP"; break;
-                    case "1": $state = "DOWN"; break;
-                    case "2": $state = "UNREACHABLE"; break;
-                    default:  $state = "UNKNOWN"; break;
+                switch($e[0]) {
+                    case "0": $state = UP; break;
+                    case "1": $state = DOWN; break;
+                    case "2": $state = UNREACHABLE; break;
+                    default:  $state = UNKNOWN; break;
                 }
 
                 // 15: acknowledged
-                $acknowledged = $state != 'UP' && $e[15] == 1;
+                $acknowledged = $state != UP && $e[15] == 1;
 
                 // 20: keys, 21: values
                 if(isset($e[20][0]) && isset($e[21][0]))
@@ -715,17 +713,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     $svc = array_fill(0, EXT_STATE_SIZE, null);
                     $svc[DESCRIPTION]  = $e[0];
                     $svc[DISPLAY_NAME] = $e[1];
-                    $svc[STATE]  = 'PENDING';
+                    $svc[STATE]  = PENDING;
                     $svc[OUTPUT] = l('serviceNotChecked', Array('SERVICE' => $e[0]));
                 } else {
-                    $state = $e[2];
-
-                    switch ($state) {
-                        case "0": $state = "OK"; break;
-                        case "1": $state = "WARNING"; break;
-                        case "2": $state = "CRITICAL"; break;
-                        case "3": $state = "UNKNOWN"; break;
-                        default: $state = "UNKNOWN"; break;
+                    switch ($e[2]) {
+                        case "0": $state = OK; break;
+                        case "1": $state = WARNING; break;
+                        case "2": $state = CRITICAL; break;
+                        case "3": $state = UNKNOWN; break;
+                        default:  $state = UNKNOWN; break;
                     }
 
                     /**
@@ -736,7 +732,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                      */
                     // $e[16]: acknowledged
                     // $e[17]: host_acknowledged
-                    $acknowledged = $state != 'OK' && ($e[16] == 1 || $e[17] == 1);
+                    $acknowledged = $state != OK && ($e[16] == 1 || $e[17] == 1);
 
                     // Handle host/service downtimes
                     // $e[15]: scheduled_downtime_depth
@@ -923,24 +919,24 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 $arrReturn[$e[0]] = Array(
                     'details' => Array('alias' => $e[1]),
                     'counts' => Array(
-                        'PENDING' => Array(
+                        PENDING => Array(
                             'normal'   => intval($e[2]),
                         ),
-                        'OK' => Array(
+                        OK => Array(
                             'normal'   => intval($e[3]),
                             'downtime' => intval($e[4]),
                         ),
-                        'WARNING' => Array(
+                        WARNING => Array(
                             'normal'   => intval($e[5]),
                             'ack'      => intval($e[6]),
                             'downtime' => intval($e[7]),
                         ),
-                        'CRITICAL' => Array(
+                        CRITICAL => Array(
                             'normal'   => intval($e[8]),
                             'ack'      => intval($e[9]),
                             'downtime' => intval($e[10]),
                         ),
-                        'UNKNOWN' => Array(
+                        UNKNOWN => Array(
                             'normal'   => intval($e[11]),
                             'ack'      => intval($e[12]),
                             'downtime' => intval($e[13]),
@@ -1031,19 +1027,19 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 $arrReturn[$e[0]] = Array(
                     'details' => Array('alias' => $e[1]),
                     'counts' => Array(
-                        'UNCHECKED' => Array(
+                        UNCHECKED => Array(
                             'normal'    => intval($e[2]),
                         ),
-                        'UP' => Array(
+                        UP => Array(
                             'normal'    => intval($e[3]),
                             'downtime'  => intval($e[4]),
                         ),
-                        'DOWN' => Array(
+                        DOWN => Array(
                             'normal'    => intval($e[5]),
                             'ack'       => intval($e[6]),
                             'downtime'  => intval($e[7]),
                         ),
-                        'UNREACHABLE' => Array(
+                        UNREACHABLE => Array(
                             'normal'    => intval($e[8]),
                             'ack'       => intval($e[9]),
                             'downtime'  => intval($e[10]),
@@ -1144,18 +1140,18 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         if(is_array($l) && count($l) > 0) {
             foreach($l as $e) {
-                $arrReturn[$e[0]]['counts']['PENDING']['normal']    = intval($e[1]);
-                $arrReturn[$e[0]]['counts']['OK']['normal']         = intval($e[2]);
-                $arrReturn[$e[0]]['counts']['OK']['downtime']       = intval($e[3]);
-                $arrReturn[$e[0]]['counts']['WARNING']['normal']    = intval($e[4]);
-                $arrReturn[$e[0]]['counts']['WARNING']['ack']       = intval($e[5]);
-                $arrReturn[$e[0]]['counts']['WARNING']['downtime']  = intval($e[6]);
-                $arrReturn[$e[0]]['counts']['CRITICAL']['normal']   = intval($e[7]);
-                $arrReturn[$e[0]]['counts']['CRITICAL']['ack']      = intval($e[8]);
-                $arrReturn[$e[0]]['counts']['CRITICAL']['downtime'] = intval($e[9]);
-                $arrReturn[$e[0]]['counts']['UNKNOWN']['normal']    = intval($e[10]);
-                $arrReturn[$e[0]]['counts']['UNKNOWN']['ack']       = intval($e[11]);
-                $arrReturn[$e[0]]['counts']['UNKNOWN']['downtime']  = intval($e[12]);
+                $arrReturn[$e[0]]['counts'][PENDING]['normal']    = intval($e[1]);
+                $arrReturn[$e[0]]['counts'][OK]['normal']         = intval($e[2]);
+                $arrReturn[$e[0]]['counts'][OK]['downtime']       = intval($e[3]);
+                $arrReturn[$e[0]]['counts'][WARNING]['normal']    = intval($e[4]);
+                $arrReturn[$e[0]]['counts'][WARNING]['ack']       = intval($e[5]);
+                $arrReturn[$e[0]]['counts'][WARNING]['downtime']  = intval($e[6]);
+                $arrReturn[$e[0]]['counts'][CRITICAL]['normal']   = intval($e[7]);
+                $arrReturn[$e[0]]['counts'][CRITICAL]['ack']      = intval($e[8]);
+                $arrReturn[$e[0]]['counts'][CRITICAL]['downtime'] = intval($e[9]);
+                $arrReturn[$e[0]]['counts'][UNKNOWN]['normal']    = intval($e[10]);
+                $arrReturn[$e[0]]['counts'][UNKNOWN]['ack']       = intval($e[11]);
+                $arrReturn[$e[0]]['counts'][UNKNOWN]['downtime']  = intval($e[12]);
             }
         }
 
@@ -1273,24 +1269,24 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 $arrReturn[$e[0]] = Array(
                     'details' => Array('alias' => $e[1]),
                     'counts' => Array(
-                        'PENDING' => Array(
+                        PENDING => Array(
                             'normal'    => intval($e[2]),
                         ),
-                        'OK' => Array(
+                        OK => Array(
                             'normal'    => intval($e[3]),
                             'downtime'  => intval($e[4]),
                         ),
-                        'WARNING' => Array(
+                        WARNING => Array(
                             'normal'    => intval($e[5]),
                             'ack'       => intval($e[6]),
                             'downtime'  => intval($e[7]),
                         ),
-                        'CRITICAL' => Array(
+                        CRITICAL => Array(
                             'normal'    => intval($e[8]),
                             'ack'       => intval($e[9]),
                             'downtime'  => intval($e[10]),
                         ),
-                        'UNKNOWN' => Array(
+                        UNKNOWN => Array(
                             'normal'    => intval($e[11]),
                             'ack'       => intval($e[12]),
                             'downtime'  => intval($e[13]),

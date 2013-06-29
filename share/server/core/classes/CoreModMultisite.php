@@ -113,7 +113,12 @@ class CoreModMultisite extends CoreModule {
                 $map['summary_output']  = l('Map Configuration Error: '.$map['configErrorMsg']);
 
                 $MAP->MAPOBJ->clearMembers();
-                $MAP->MAPOBJ->setSummaryState('ERROR');
+                $MAP->MAPOBJ->setState(array(
+                    ERROR,
+                    $map['summary_output'],
+                    null,
+                    null
+                ));
                 $MAP->MAPOBJ->fetchIcon();
             } elseif(isset($map['error'])) {
                 $map['overview_class']  = 'error';
@@ -121,7 +126,12 @@ class CoreModMultisite extends CoreModule {
                 $map['summary_output']  = l('Error: '.$map['errorMsg']);
 
                 $MAP->MAPOBJ->clearMembers();
-                $MAP->MAPOBJ->setSummaryState('ERROR');
+                $MAP->MAPOBJ->setState(array(
+                    ERROR,
+                    $map['summary_output'],
+                    null,
+                    null
+                ));
                 $MAP->MAPOBJ->fetchIcon();
             } elseif($MAP->MAPOBJ->checkMaintenance(0)) {
                 $MAP->MAPOBJ->fetchIcon();
@@ -135,7 +145,12 @@ class CoreModMultisite extends CoreModule {
                 $map['summary_output']  = l('mapInMaintenance');
 
                 $MAP->MAPOBJ->clearMembers();
-                $MAP->MAPOBJ->setSummaryState('UNKNOWN');
+                $MAP->MAPOBJ->setState(array(
+                    UNKNOWN,
+                    $map['summary_output'],
+                    null,
+                    null
+                ));
                 $MAP->MAPOBJ->fetchIcon();
             }
 
