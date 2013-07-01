@@ -955,7 +955,7 @@ var NagVisObject = Base.extend({
 
         // Move the objects label when enabled
         if(this.conf.label_show && this.conf.label_show == '1')
-            this.moveLabel();
+            this.updateLabel();
 
         // Move child objects
         for(var i = 0, l = this.childs.length; i < l; i++)

@@ -7,6 +7,7 @@ Automap:
   * Labels have now a white background to improve the text readability
   * Labels should not overlap on automaps with many hosts anymore
   * FIX: Rendering lines on zoomed automaps correctly
+  * FIX: Fixed positions of labels on zoomed automaps
 
 1.7.9
 Core:

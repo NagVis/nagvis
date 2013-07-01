@@ -820,7 +820,7 @@ var NagVisStatefulObject = NagVisObject.extend({
      *
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-    moveLabel: function () {
+    updateLabel: function () {
         var label  = document.getElementById(this.conf.object_id + '-label');
         this.updateLabelPos(label);
         label  = null;
@@ -891,12 +891,12 @@ var NagVisStatefulObject = NagVisObject.extend({
             y = this.conf.label_y;
 
         if(this.conf.label_x && this.conf.label_x.toString() == 'center') {
-            var diff_x = parseInt(parseInt(oLabel.clientWidth) - this.getObjWidth()) / 2;
+            var diff_x = parseInt(parseInt(oLabel.clientWidth) - rmZoomFactor(this.getObjWidth())) / 2;
             x = this.parseCoord(this.parseLabelCoord(this.conf.x), 'x', false) - diff_x;
         }
 
         if(this.conf.label_y && this.conf.label_y.toString() == 'bottom') {
-            y = this.parseCoord(this.conf.y, 'y', false) + this.getObjHeight();
+            y = this.parseCoord(this.conf.y, 'y', false) + rmZoomFactor(this.getObjHeight());
         }
 
         // If there is a presign it should be relative to the objects x/y

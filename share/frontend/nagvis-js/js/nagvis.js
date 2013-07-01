@@ -1320,14 +1320,23 @@ function zoomHandler(event) {
     obj.style.display = 'block';
     var width  = addZoomFactor(obj.width);
     var height = addZoomFactor(obj.height);
+
     obj.style.display = 'none';
 
     obj.width  = width;
     obj.height = height;
     // Now really show the image
     obj.style.display = 'block';
-    obj = null;
 
+    // Fix also the label position on e.g. automap nodes
+    var arr     = obj.id.split('-');
+    var map_obj = getMapObjByDomObjId(arr[0]);
+    if(map_obj && typeof(map_obj.updateLabel) == 'function') {
+        map_obj.updateLabel();
+    }
+
+    map_obj = null;
+    obj = null;
 }
 
 /**
