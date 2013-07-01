@@ -52,7 +52,7 @@ function graphviz_config_tree(&$params, &$tree, $layer = 0) {
     $name = $tree['host_name'];
 
     $str .= '    "'.$tree['object_id'].'" [ ';
-    $str .= 'label="", ';
+    $str .= 'label="'.$tree['host_name'].'", ';
     $str .= 'URL="'.$tree['object_id'].'", ';
     $str .= 'tooltip="'.$tree['object_id'].'", ';
     

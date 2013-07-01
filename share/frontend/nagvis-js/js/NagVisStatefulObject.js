@@ -625,17 +625,34 @@ var NagVisStatefulObject = NagVisObject.extend({
         var newPerfdata = [];
         var foundNew = false;
 
+        // Check_MK if/if64 checks support switching between bytes/bits. The detection
+        // can be made by some curios hack. The most hackish hack I've ever seen. From hell.
+        // Well, let's deal with it.
+        var display_bits = false;
+        if(oldPerfdata.length >= 11 && oldPerfdata[10][5] == '0.0')
+            display_bits = true;
+
         // This loop takes perfdata with the labels "in" and "out" and uses the current value
         // and maximum values to parse the percentage usage of the line
         for(var i = 0; i < oldPerfdata.length; i++) {
             if(oldPerfdata[i][0] == 'in' && (oldPerfdata[i][2] === null || oldPerfdata[i][2] === '')) {
                 newPerfdata[0] = this.perfdataCalcPerc(oldPerfdata[i]);
-                newPerfdata[2] = this.perfdataCalcBytesReadable(oldPerfdata[i]);
+                if(!display_bits) {
+                    newPerfdata[2] = this.perfdataCalcBytesReadable(oldPerfdata[i]);
+                } else {
+                    oldPerfdata[i][1] *= 8; // convert those hakish bytes to bits
+                    newPerfdata[2] = this.perfdataCalcBitsReadable(oldPerfdata[i]);
+                }
                 foundNew = true;
             }
             if(oldPerfdata[i][0] == 'out' && (oldPerfdata[i][2] === null || oldPerfdata[i][2] === '')) {
                 newPerfdata[1] = this.perfdataCalcPerc(oldPerfdata[i]);
-                newPerfdata[3] = this.perfdataCalcBytesReadable(oldPerfdata[i]);
+                if(!display_bits) {
+                    newPerfdata[3] = this.perfdataCalcBytesReadable(oldPerfdata[i]);
+                } else {
+                    oldPerfdata[i][1] *= 8; // convert those hakish bytes to bits
+                    newPerfdata[3] = this.perfdataCalcBitsReadable(oldPerfdata[i]);
+                }
                 foundNew = true;
             }
         }

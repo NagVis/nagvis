@@ -7,6 +7,13 @@ Frontend:
     is stored for each user individually.
 
 1.7.10
+Frontend:
+  * Weathermap lines now deal with bit/byte values provided by Check_MKs
+    interface checks
+
+Automap:
+  * Labels have now a white background to improve the text readability
+  * Labels should not overlap on automaps with many hosts anymore
 
 1.7.9
 Core:
