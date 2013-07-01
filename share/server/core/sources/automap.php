@@ -304,6 +304,7 @@ function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
 
     $obj['label_show']       = true;
     $obj['label_border']     = 'transparent';
+    $obj['label_background'] = '#fff';
 
     // Header menu has z-index 100, this object's label the below+1
     $obj['z']           = 98;
