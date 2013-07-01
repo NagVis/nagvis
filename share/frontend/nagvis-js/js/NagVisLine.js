@@ -111,6 +111,8 @@ var NagVisLine = NagVisStatelessObject.extend({
         var y = this.parseCoords(this.conf.y, 'y');
 
         var width = addZoomFactor(this.conf.line_width);
+        if(width <= 0)
+            width = 1; // minimal width for lines
 
         var colorFill = this.conf.line_color;
         var colorBorder = this.conf.line_color_border;

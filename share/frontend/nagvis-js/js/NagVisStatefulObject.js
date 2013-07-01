@@ -468,6 +468,8 @@ var NagVisStatefulObject = NagVisObject.extend({
         var y = this.parseCoords(this.conf.y, 'y');
 
         var width = addZoomFactor(this.conf.line_width);
+        if(width <= 0)
+            width = 1; // minimal width for lines
 
         var colorFill   = '';
         var colorFill2  = '';
