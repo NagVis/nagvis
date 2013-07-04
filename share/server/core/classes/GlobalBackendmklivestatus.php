@@ -1458,5 +1458,21 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         return $result;
     }
 
+    /**
+     * Returns an assoziative array with contact names as keys and
+     * a list of their contactgroups as value
+     */
+    public function getContactsWithGroups() {
+        $contacts = array();
+        $query = "GET contactgroups\nColumns: name members\n";
+        foreach($this->queryLivestatus($query) as $row) {
+            foreach($row[1] as $contact) {
+                if(!isset($contacts[$contact]))
+                    $contacts[$contact] = array();
+                $contacts[$contact][] = $row[0];
+            }
+        }
+        return $contacts;
+    }
 }
 ?>

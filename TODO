@@ -72,7 +72,17 @@ IDs:
 
 -1 ERROR
 
--------------------------------------------------------------------------------
+=======
+Berechtigungen auf Maps mit Kontaktgruppen steuern
+  - Es gibt pro Map zwei Rechte: view, edit
+  - Die Rechte werden in verschachtelten Listen gespeichert
+    - Erste Ebene: Name der Kontaktgruppe
+    - Zweite Ebene: edit/view 
+    - Dritte Ebene: Liste von Maps
+  - Gespeichert werden die Daten unter etc/nagvis/perms.db
+  - Die Daten werden im JSON-Format persistiert
+  - Es wird ein Authorisation-Modul implementiert, das die Daten auswertet.
+  - Die Dialoge zur Konfiguration der Rollen/Rechte sind mit diesem Modul deaktiviert.
 
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?

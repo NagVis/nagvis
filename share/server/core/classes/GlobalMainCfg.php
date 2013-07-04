@@ -73,6 +73,24 @@ class GlobalMainCfg {
                     'match'         => MATCH_STRING_PATH,
                 ),
 
+                'authorisation_group_perms_file' => Array(
+                    'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => '',
+                    'depends_on'    => 'authorisationmodule',
+                    'depends_value' => 'CoreAuthorisationModGroup',
+                    'match'         => MATCH_STRING_PATH,
+                ),
+                'authorisation_group_backends' => Array(
+                    'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => array(),
+                    'array'         => true,
+                    'depends_on'    => 'authorisationmodule',
+                    'depends_value' => 'CoreAuthorisationModGroup',
+                    'match'         => MATCH_STRING_NO_SPACE,
+                ),
+
                 'controls_size' => Array(
 		    'must'     => 1,
                     'editable' => 1,
@@ -1348,6 +1366,7 @@ class GlobalMainCfg {
         $this->validConfig['paths']['mapcfg']['default']             = $base.'etc/maps/';
         $this->validConfig['paths']['geomap']['default']             = $base.'etc/geomap';
         $this->validConfig['paths']['profiles']['default']           = $base.'etc/profiles';
+        $this->validConfig['global']['authorisation_group_perms_file']['default'] = $base.'etc/perms.db';
 
         $this->validConfig['paths']['var']['default']                = $base.'var/';
         $this->validConfig['paths']['sharedvar']['default']          = $base.HTDOCS_DIR.'/var/';

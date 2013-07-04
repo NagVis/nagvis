@@ -1,6 +1,8 @@
 1.8b1
 Core:
   * Changed internal structures to improve memory consumtion on large maps
+  * Added authorisation module based on the users contact group memberships
+    defined in the monitoring core
 
 Frontend:
   * All nodes with assigned childs in sidebar are now expandable. The state

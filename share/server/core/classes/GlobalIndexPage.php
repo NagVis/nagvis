@@ -230,7 +230,7 @@ class GlobalIndexPage {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parseRotationsJson() {
-        global $AUTHORISATION;
+        global $AUTHORISATION, $CORE;
         // Only display the rotation list when enabled
         if(cfg('index','showrotations') != 1)
             return json_encode(Array());

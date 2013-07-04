@@ -26,6 +26,7 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreAuthorisationModMySQL extends CoreAuthorisationModule {
+    public $rolesConfigurable = true;
     private $DB = null;
 
     public function __construct() {

@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+ <head>
+  <title>Authorisation Module: Groups</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+ </head>
+ <body>
+    <h1>Authorisation Module: Groups</h1>
+    <p>NagVis uses an own user, role and permission management in current versions. However,
+    since the authorisation is modularized, it is possible to use alernative authorisation modules.</p>
+    <p>Since NagVis 1.8b1 there is a new auhthorisation module shipped with NagVis named <tt>CoreAuthorisationModGroups</tt>.
+    It makes use of the contact groups defined in your monitoring core and a mapping table, which is NagVis specific,
+    to gather the permissions of the users within NagVis. Please note that this new feature can only be used when using
+    the livestatus backend.</p>
+    
+    <p>To use this module each user which should get access to NagVis has to have a contact with a matching
+    name defined in your monitoring core. You also need to assign at least one contact group to this contact.</p>
+
+    <p>When you have defined your contacts, contact groups and the memberships within your core, you can start
+    creating the mapping table which maps the contact group names to NagVis permissions.</p>
+
+    <p>The mapping table is configured using a JSON construct within the file <tt>nagvis/etc/perms.db</tt>.
+    This JSON contruct is an object which uses the contact group names as keys which each refer to a nested
+    object which contains the permissions assigned to each member of this group.</p>
+    <p>
+
+    <p>Here you can see the contents of the example configuration:</p>
+    <pre>{
+  "admins": {
+    "admin": 1
+  },
+  "first_level_support": {
+    "view": [ "*" ]
+  },
+  "power_users": {
+    "view": [ "*" ],
+    "edit": [ "*" ]
+  },
+  "oracle_admins": {
+    "view": [ "oracle_servers" ],
+    "edit": [ "oracle_servers" ]
+  }
+}
+</pre>
+
+    <p>In the example above all members of the contact group "admins" get full access to NagVis including 
+    all permissions. The contact group named "first_level_support" gets view access to all maps defined in NagVis.
+    The contact group named "power_users" gets view and edit permissions to all maps.
+    The contact group named "oracle_admins" is allowed to view and edit the map named "oracle_servers".</p>
+
+    </body>
+</html>

@@ -120,6 +120,10 @@ class CoreAuthorisationHandler {
         return $this->sModuleName;
     }
 
+    public function rolesConfigurable() {
+        return $this->MOD->rolesConfigurable;
+    }
+
     public function deleteRole($roleId) {
         // FIXME: First check if this is supported
 

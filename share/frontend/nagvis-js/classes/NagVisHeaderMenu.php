@@ -349,7 +349,9 @@ class NagVisHeaderMenu {
             // Supported by backend and not using trusted auth
             'supportedChangePassword' => $AUTH->checkFeature('changePassword') && !$AUTH->authedTrusted(),
             'permittedUserMgmt' => $AUTHORISATION->isPermitted('UserMgmt', 'manage'),
-            'permittedRoleMgmt' => $AUTHORISATION->isPermitted('RoleMgmt', 'manage'));
+            'permittedRoleMgmt' => $AUTHORISATION->isPermitted('RoleMgmt', 'manage'),
+            'rolesConfigurable' => $AUTHORISATION->rolesConfigurable()
+        );
 
         return $aReturn;
     }
