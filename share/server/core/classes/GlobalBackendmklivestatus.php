@@ -593,7 +593,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 // $e[0]:  state
                 if($e[17] == 0 || $e[0] === '') {
                     $arrReturn[$e[18]] = Array(
-                        'UNCHECKED',
+                        UNCHECKED,
                         l('hostIsPending', Array('HOST' => $e[18])),
                         null,
                         null,
