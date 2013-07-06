@@ -144,8 +144,8 @@ class NagVisHost extends NagVisStatefulObject {
     private function fetchSummaryState() {
         // Get Host state
         $this->sum[STATE]    = $this->state[STATE];
-        $this->sum[ACK]      = $this->state['problem_has_been_acknowledged'];
-        $this->sum[DOWNTIME] = $this->state['in_downtime'];
+        $this->sum[ACK]      = $this->state[ACK];
+        $this->sum[DOWNTIME] = $this->state[DOWNTIME];
 
         // Only merge host state with service state when recognize_services is set to 1
         if($this->recognize_services)
@@ -193,19 +193,19 @@ class NagVisHost extends NagVisStatefulObject {
             // Loop all major states
             if($this->aStateCounts !== null) {
                 foreach($this->aStateCounts AS $sState => $aSubstates) {
-                    // Ignore host state here
-                    if(is_host_state($sState)) {
-                        // Loop all substates (normal,ack,downtime,...)
-                        foreach($aSubstates AS $sSubState => $iCount) {
-                            // Found some objects with this state+substate
-                            if($iCount > 0) {
-                                if(!isset($arrServiceStates[$sState])) {
-                                    $arrServiceStates[$sState] = $iCount;
-                                    $iNumServices += $iCount;
-                                } else {
-                                    $arrServiceStates[$sState] += $iCount;
-                                    $iNumServices += $iCount;
-                                }
+                    if(is_host_state($sState))
+                        continue;
+
+                    // Loop all substates (normal,ack,downtime,...)
+                    foreach($aSubstates AS $sSubState => $iCount) {
+                        // Found some objects with this state+substate
+                        if($iCount > 0) {
+                            if(!isset($arrServiceStates[$sState])) {
+                                $arrServiceStates[$sState] = $iCount;
+                                $iNumServices += $iCount;
+                            } else {
+                                $arrServiceStates[$sState] += $iCount;
+                                $iNumServices += $iCount;
                             }
                         }
                     }

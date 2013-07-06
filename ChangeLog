@@ -3,6 +3,12 @@ Core:
   * Changed internal structures to improve memory consumtion on large maps
   * Added authorisation module based on the users contact group memberships
     defined in the monitoring core
+  * It is now possible to merge states of host, hostgroup and servicegroup
+    objects with equal names from different backends. For example, this can
+    be used to create a single hostgroup object on a map which is populated
+    by different hostgroups from several monitoring instances. This is simply
+    configured by putting several backend ids to the backend_id parameter
+    (separated by ",").
 
 Frontend:
   * All nodes with assigned childs in sidebar are now expandable. The state

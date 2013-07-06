@@ -59,7 +59,15 @@
         <td> alias </td><td> map name </td><td> The alias is the label for each map. If it is defined it is shown everywhere in NagVis frontend.</td>
         </tr>
         <tr>
-        <td> backend_id </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend defined as "defaultbackend" at the <a href="nagvis_config_format_description.html">Main Configuration file</a> is used.</td>
+        <td>backend_id</td>
+        <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+        <td>Backend-ID defined in Main Configuration file where NagVis should search for the object states. 
+        If this parameter is not given, the Backend defined as default backend in the 
+        <a href="nagvis_config_format_description.html">Main Configuration file</a> is used.
+        As of NagVis 1.8 it is possible to define a "," separated list of backends here to combine
+        objects of several backends. Host, host and service group objects do support merging their
+        members into one object when multiple backends are configured for an object.
+        </td>
         </tr>
         <tr>
         <td> background_color </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Background colour of this map. If this is not set backgroundcolor from Main Configuration file is taken. </td>
@@ -291,7 +299,14 @@
               Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
         </tr>
         <tr>
-        <td> backend_id </td><td> inherited (<a href="#global">global</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken. </td>
+          <td>backend_id</td>
+          <td> inherited (<a href="#global">global</a>)</td>
+          <td>
+          Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken.
+          As of NagVis 1.8 it is possible to define a "," separated list of backends here to combine
+          objects of several backends. All services for hosts with matching names found in all given
+          backends will be added to the single host object.
+          </td>
         </tr>
         <tr>
         <td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
@@ -443,7 +458,11 @@
               Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
         </tr>
         <tr>
-        <td> backend_id </td><td> inherited (<a href="#global">global</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken. </td>
+          <td>backend_id</td>
+          <td> inherited (<a href="#global">global</a>)</td>
+          <td>
+          Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken.
+          </td>
         </tr>
         <tr>
         <td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
@@ -632,7 +651,14 @@
               Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
         </tr>
         <tr>
-        <td> backend_id </td><td> inherited (<a href="#global">global</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken. </td>
+          <td>backend_id</td>
+          <td> inherited (<a href="#global">global</a>)</td>
+          <td>
+          Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken.
+          As of NagVis 1.8 it is possible to define a "," separated list of backends here to combine
+          objects of several backends. All host members of host groups with matching names found in all 
+          given backends will be added to the single host group object.
+          </td>
         </tr>
         <tr>
         <td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
@@ -775,7 +801,14 @@
               Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
         </tr>
         <tr>
-        <td> backend_id </td><td> inherited (<a href="#global">global</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken. </td>
+          <td>backend_id</td>
+          <td> inherited (<a href="#global">global</a>)</td>
+          <td>
+          Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken.
+          As of NagVis 1.8 it is possible to define a "," separated list of backends here to combine
+          objects of several backends. All service members of groups with matching names found in all 
+          given backends will be added to the single servie group object.
+          </td>
         </tr>
         <tr>
         <td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>

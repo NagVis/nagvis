@@ -285,15 +285,20 @@ class GlobalMainCfg {
                     'default'     => '',
                     'match'       => MATCH_STRING_EMPTY)),
             'defaults' => Array(
-                'backend' => Array('must' => 0,
-                    'editable' => 0,
-                    'default' => 'live_1',
-                    'field_type' => 'dropdown',
-                    'match' => MATCH_STRING_NO_SPACE),
-                'backgroundcolor' => Array('must' => 0,
-                    'editable' => 1,
-                    'default' => 'transparent',
-                    'match' => MATCH_COLOR),
+                'backend' => Array(
+                    'must'        => 0,
+                    'editable'    => 1,
+                    'default'     => 'live_1',
+                    'array'       => true,
+                    'field_type'  => 'dropdown',
+                    'match'       => MATCH_BACKEND_ID
+                ),
+                'backgroundcolor' => Array(
+                    'must'        => 0,
+                    'editable'    => 1,
+                    'default'     => 'transparent',
+                    'match'       => MATCH_COLOR
+                ),
                 'contextmenu' => Array('must' => 0,
                     'editable' => 1,
                     'default' => 1,

@@ -42,10 +42,10 @@ class NagVisStatefulObject extends NagVisObject {
     // Details about the icon image (cache)
     protected $iconDetails;
 
-    protected static $iconPath        = null;
-    protected static $iconPathLocal   = null;
-    protected static $langChildStates = null;
-    protected static $dateFormat      = null;
+    protected static $iconPath         = null;
+    protected static $iconPathLocal    = null;
+    protected static $langMemberStates = null;
+    protected static $dateFormat       = null;
 
     protected $state = null;
 
@@ -60,25 +60,24 @@ class NagVisStatefulObject extends NagVisObject {
     }
 
     /**
-     * PUBLIC setStateCounts()
-     *
-     * Sets the state counts of the object members
-     *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * Adds state counts of members to the object. Works incremental!
      */
-    public function setStateCounts($arr) {
-        $this->aStateCounts = $arr;
+    public function addStateCounts($arr) {
+        if($this->aStateCounts === null) {
+            $this->aStateCounts = $arr;
+        } else {
+            // Add new state counts to current ones
+            foreach($arr AS $state => $substates)
+                foreach($substates AS $substate => $num)
+                    $this->aStateCounts[$state][$substate] += $num;
+        }
     }
 
     /**
-     * PUBLIC setMembers()
-     *
-     * Adds a new list of members to the object
-     *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * Adds new members to the object. It works incremental!
      */
-    public function setMembers($arr) {
-        $this->members = $arr;
+    public function addMembers($arr) {
+        $this->members = array_merge($this->members, $arr);
     }
 
     /**
@@ -161,14 +160,9 @@ class NagVisStatefulObject extends NagVisObject {
     }
 
     /**
-     * PUBLIC getBackendId()
-     *
-     * Get method for the backend_id of this object
-     *
-     * @return	String		Output of the object
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * Returns the array of all backend_ids
      */
-    public function getBackendId() {
+    public function getBackendIds() {
         return $this->backend_id;
     }
 
@@ -479,15 +473,10 @@ class NagVisStatefulObject extends NagVisObject {
     }
 
     /**
-     * public getChildFetchingStateFilters()
-     *
      * Is used to build a state filter for the backend when fetching child
      * objects for the hover menu child list. If the childs should be sorted
      * by state it may be possible to limit the number of requested objects
      * dramatically when using the state filters.
-     *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
-     *
      */
     public function getChildFetchingStateFilters() {
         global $_MAINCFG;
@@ -573,15 +562,13 @@ class NagVisStatefulObject extends NagVisObject {
 
 
     /**
-     * PUBLIC setBackendProblem()
-     *
      * Sets output/state on backend problems
-     *
-     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setBackendProblem($s) {
+    public function setBackendProblem($s, $backendId = null) {
+        if($backendId === null)
+            $backendId = $this->backend_id[0];
         $this->problem_msg = l('Problem (Backend: [BACKENDID]): [MSG]',
-                               Array('BACKENDID' => $this->backend_id, 'MSG' => $s));
+                               Array('BACKENDID' => $backendId, 'MSG' => $s));
     }
 
     /**
@@ -680,20 +667,18 @@ class NagVisStatefulObject extends NagVisObject {
     }
 
     /**
-     * RPROTECTED mergeSummaryOutput()
-     *
      * Merges the summary output from objects and all child objects together
-     *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-    protected function mergeSummaryOutput($arrStates, $objLabel) {
-        if(NagVisStatefulObject::$langChildStates === null)
-            NagVisStatefulObject::$langChildStates = l('childStatesAre');
+    protected function mergeSummaryOutput($arrStates, $objLabel, $finish = true, $continue = false) {
+        if(NagVisStatefulObject::$langMemberStates === null)
+            NagVisStatefulObject::$langMemberStates = l('Contains');
 
         if($this->sum[OUTPUT] === null)
             $this->sum[OUTPUT] = '';
 
-        $this->sum[OUTPUT] .= NagVisStatefulObject::$langChildStates.' ';
+        if (!$continue)
+            $this->sum[OUTPUT] .= NagVisStatefulObject::$langMemberStates.' ';
+
         foreach($arrStates AS $state => $num)
             if($num > 0)
                 $this->sum[OUTPUT] .= $num.' '.state_str($state).', ';
@@ -704,7 +689,9 @@ class NagVisStatefulObject extends NagVisObject {
         else
             $this->sum[OUTPUT] .= '0 ';
 
-        $this->sum[OUTPUT] .= ' '.$objLabel.'.';
+        $this->sum[OUTPUT] .= ' '.$objLabel;
+        if ($finish)
+            $this->sum[OUTPUT] .=  '.';
     }
 
     /**

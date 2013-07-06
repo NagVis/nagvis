@@ -145,10 +145,10 @@ class NagVisHostgroup extends NagVisStatefulObject {
                                                                                               'BACKEND' => $this->backend_id));
         } else {
             // FIXME: Recode mergeSummaryOutput method
-            $this->mergeSummaryOutput($arrHostStates, l('hosts'));
+            $this->mergeSummaryOutput($arrHostStates, l('hosts'), false);
             if($this->recognize_services) {
-                $this->sum[OUTPUT] .= "<br />";
-                $this->mergeSummaryOutput($arrServiceStates, l('services'));
+                $this->sum[OUTPUT] .= ' ' . l('and') . ' ';
+                $this->mergeSummaryOutput($arrServiceStates, l('services'), true, true);
             }
         }
     }

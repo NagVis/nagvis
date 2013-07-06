@@ -52,7 +52,7 @@ class NagVisService extends NagVisStatefulObject {
     protected $gadget_url;
 
     public function __construct($backend_id, $hostName, $serviceDescription) {
-        $this->backend_id = $backend_id;
+        $this->backend_id = array($backend_id[0]); // only supports one backend
         $this->host_name = $hostName;
         $this->service_description = $serviceDescription;
         parent::__construct();

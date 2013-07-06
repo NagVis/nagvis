@@ -73,13 +73,15 @@ class CoreBackendMgmt {
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     public function queue($query, $OBJ) {
-        $backendId = $OBJ->getBackendId();
-        if(!isset($this->aQueue[$backendId]))
-            $this->aQueue[$backendId] = Array();
+        $backendIds = $OBJ->getBackendIds();
+        foreach($backendIds as $backendId)
+            if(!isset($this->aQueue[$backendId]))
+                $this->aQueue[$backendId] = Array();
 
         foreach($query AS $query => $_unused) {
-            if(!isset($this->aQueue[$backendId][$query]))
-                $this->aQueue[$backendId][$query] = Array();
+            foreach($backendIds as $backendId)
+                if(!isset($this->aQueue[$backendId][$query]))
+                    $this->aQueue[$backendId][$query] = Array();
 
             // Gather the object name
             if($query == 'serviceState')
@@ -98,12 +100,13 @@ class CoreBackendMgmt {
             // If the object is queued several times with the same options+filters
             // add it to the list of objects. The backend result will be added to
             // all objects in that list later
-            if(!isset($this->aQueue[$backendId][$query][$options][$objFilters]))
-                $this->aQueue[$backendId][$query][$options][$objFilters] = Array($name => Array($OBJ));
-            elseif(!isset($this->aQueue[$backendId][$query][$options][$objFilters][$name]))
-                $this->aQueue[$backendId][$query][$options][$objFilters][$name] = Array($OBJ);
-            else
-                $this->aQueue[$backendId][$query][$options][$objFilters][$name][] = $OBJ;
+            foreach($backendIds as $backendId)
+                if(!isset($this->aQueue[$backendId][$query][$options][$objFilters]))
+                    $this->aQueue[$backendId][$query][$options][$objFilters] = Array($name => Array($OBJ));
+                elseif(!isset($this->aQueue[$backendId][$query][$options][$objFilters][$name]))
+                    $this->aQueue[$backendId][$query][$options][$objFilters][$name] = Array($OBJ);
+                else
+                    $this->aQueue[$backendId][$query][$options][$objFilters][$name][] = $OBJ;
         }
     }
 
@@ -204,7 +207,7 @@ class CoreBackendMgmt {
                 } catch(BackendException $e) {
                     $aServices = Array();
                     $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
-                                                                   Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())));
+                              Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())), $backendId);
                 }
 
                 // Regular member adding loop
@@ -223,7 +226,7 @@ class CoreBackendMgmt {
                         // Add child object to the members array
                         $members[] = $SOBJ;
                     }
-                    $OBJ->setMembers($members);
+                    $OBJ->addMembers($members);
                 }
             }
     }
@@ -251,7 +254,7 @@ class CoreBackendMgmt {
                 } catch(BackendException $e) {
                     $aHosts = Array();
                     $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
-                                                                  Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())));
+                                           Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())), $backendId);
                 }
 
                 // Now fetch the service state counts for all hostgroup members
@@ -277,7 +280,7 @@ class CoreBackendMgmt {
 
                     // Put state counts to the object
                     if(isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts'])) {
-                        $HOBJ->setStateCounts($aServiceStateCounts[$name]['counts']);
+                        $HOBJ->addStateCounts($aServiceStateCounts[$name]['counts']);
                     }
 
                     // Fetch summary state and output
@@ -286,7 +289,7 @@ class CoreBackendMgmt {
                     $members[] = $HOBJ;
                 }
 
-                $OBJ->setMembers($members);
+                $OBJ->addMembers($members);
             }
 
     }
@@ -323,8 +326,8 @@ class CoreBackendMgmt {
             $msg = $e->getMessage();
         }
 
-        foreach($aObjs AS $name => $OBJS)
-            if(isset($aResult[$name]))
+        foreach($aObjs AS $name => $OBJS) {
+            if(isset($aResult[$name])) {
                 if($type == 'serviceState' || $type == 'hostState')
                     foreach($OBJS AS $OBJ)
                         $OBJ->setState($aResult[$name]);
@@ -333,16 +336,18 @@ class CoreBackendMgmt {
                         if(isset($aResult[$name]['details']))
                             $OBJ->setState($aResult[$name]['details']);
                         if(isset($aResult[$name]['counts']))
-                            $OBJ->setStateCounts($aResult[$name]['counts']);
+                            $OBJ->addStateCounts($aResult[$name]['counts']);
                     }
-            else
+            } else {
                 if($type != 'hostMemberState')
                     foreach($OBJS AS $OBJ)
                         if(isset($msg))
-                            $OBJ->setBackendProblem($msg);
+                            $OBJ->setBackendProblem($msg, $backendId);
                         else
                             $OBJ->setBackendProblem(l('The object "[OBJ]" does not exist ([TYPE]).',
-                                                             Array('OBJ' => $name, 'TYPE' => $OBJ->getType())));
+                                                    Array('OBJ' => $name, 'TYPE' => $OBJ->getType())), $backendId);
+            }
+        }
     }
 
     private function fetchHostMemberDetails($backendId, $options, $aObjs) {
@@ -363,7 +368,7 @@ class CoreBackendMgmt {
                         $members[] = $MOBJ;
                     }
 
-                    $OBJ->setMembers($members);
+                    $OBJ->addMembers($members);
                 }
             }
         }

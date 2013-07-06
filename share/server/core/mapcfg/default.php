@@ -98,13 +98,15 @@ function listZoomFactors($CORE) {
 function getObjectNames($type, $CORE, $MAPCFG, $objId, $attrs) {
     global $_BACKEND;
     if(isset($attrs['backend_id']) && $attrs['backend_id'] != '')
-        $backendId = $attrs['backend_id'];
+        $backendIds = explode(',', $attrs['backend_id']);
     else
-        $backendId = $MAPCFG->getValue($objId, 'backend_id');
+        $backendIds = $MAPCFG->getValue($objId, 'backend_id');
 
     // Initialize the backend
-    $_BACKEND->checkBackendExists($backendId, true);
-    $_BACKEND->checkBackendFeature($backendId, 'getObjects', true);
+    foreach($backendIds as $backendId) {
+        $_BACKEND->checkBackendExists($backendId, true);
+        $_BACKEND->checkBackendFeature($backendId, 'getObjects', true);
+    }
 
     $name1 = '';
     if($type === 'service') {
@@ -119,12 +121,14 @@ function getObjectNames($type, $CORE, $MAPCFG, $objId, $attrs) {
 
     // Read all objects of the requested type from the backend
     $aRet = Array();
-    $objs = $_BACKEND->getBackend($backendId)->getObjects($type, $name1, '');
-    foreach($objs AS $obj) {
-        if($type !== 'service')
-            $aRet[] = $obj['name1'];
-        else
-            $aRet[] = $obj['name2'];
+    foreach($backendIds as $backendId) {
+        $objs = $_BACKEND->getBackend($backendId)->getObjects($type, $name1, '');
+        foreach($objs AS $obj) {
+            if($type !== 'service')
+                $aRet[] = $obj['name1'];
+            else
+                $aRet[] = $obj['name2'];
+        }
     }
 
     return $aRet;
@@ -155,7 +159,8 @@ function listShapes($CORE) {
 }
 
 function listBackendIds($CORE) {
-    return $CORE->getDefinedBackends();
+    $backends = $CORE->getDefinedBackends();
+    return $backends;
 }
 
 $mapConfigVars = Array(
@@ -184,13 +189,14 @@ $mapConfigVars = Array(
     'sources' => Array(
         'must'       => 0,
         'default'    => array(),
-        'array'      => True,
+        'array'      => true,
         'match'      => MATCH_STRING
     ),
     'backend_id' => Array(
         'must'       => 0,
         'default'    => cfg('defaults', 'backend'),
-        'match'      => MATCH_STRING_NO_SPACE,
+        'match'      => MATCH_BACKEND_ID,
+        'array'      => true,
         'field_type' => 'dropdown',
         'list'       => 'listBackendIds',
     ),
@@ -642,7 +648,7 @@ $mapConfigVars = Array(
     'use' => Array(
         'must'    => 0,
         'default' => array(),
-        'array'   => True,
+        'array'   => true,
         'match'   => MATCH_STRING_NO_SPACE,
     ),
 

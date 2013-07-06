@@ -595,6 +595,10 @@ class GlobalMapCfg {
         $sources = $this->getValue(0, 'sources');
         if($sources) {
             foreach($sources AS $source) {
+                if(!isset(self::$viewParams[$source])) {
+                    throw new NagVisException(l('Requested source "[S]" does not exist',
+                                                                array('S' => $source)));
+                }
                 $keys = array_merge($keys, self::$viewParams[$source]);
             }
         }
@@ -944,9 +948,10 @@ class GlobalMapCfg {
 
                     // Check if the configured backend is defined in main configuration file
                     // Raise such an exception only when error is found in global section
-                    if($type == 'global' && $key == 'backend_id' && !in_array($val, $CORE->getDefinedBackends())) {
-                        throw new $exception(l('backendNotDefined', Array('BACKENDID' => $val)));
-                    }
+                    if($type == 'global' && $key == 'backend_id')
+                        foreach($val as $backend_id)
+                            if(!in_array($backend_id, $CORE->getDefinedBackends()))
+                                throw new $exception(l('backendNotDefined', Array('BACKENDID' => $backend_id)));
                 }
             }
 

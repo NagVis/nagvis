@@ -589,9 +589,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         if(is_array($l) && count($l) > 0) {
             foreach($l as $e) {
                 // Catch unchecked objects
-                // $e[17]: has_been_checked
+                // $e[16]: has_been_checked
                 // $e[0]:  state
-                if($e[17] == 0 || $e[0] === '') {
+                if($e[16] == 0 || $e[0] === '') {
                     $arrReturn[$e[18]] = Array(
                         UNCHECKED,
                         l('hostIsPending', Array('HOST' => $e[18])),
@@ -609,18 +609,18 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 }
 
                 // 15: acknowledged
-                $acknowledged = $state != UP && $e[15] == 1;
+                $acknowledged = $state != UP && $e[14] == 1;
 
-                // 20: keys, 21: values
-                if(isset($e[20][0]) && isset($e[21][0]))
-                    $custom_vars = array_combine($e[20], $e[21]);
+                // 19: keys, 20: values
+                if(isset($e[19][0]) && isset($e[20][0]))
+                    $custom_vars = array_combine($e[19], $e[20]);
                 else
                     $custom_vars = null;
 
                 // If there is a downtime for this object, save the data
-                // $e[16]: scheduled_downtime_depth
+                // $e[15]: scheduled_downtime_depth
                 $dt_details = array(null, null, null, null);
-                if(isset($e[16]) && $e[16] > 0) {
+                if(isset($e[15]) && $e[15] > 0) {
                     $in_downtime = true;
 
                     // This handles only the first downtime. But this is not backend
@@ -628,14 +628,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     $data = $this->queryLivestatusSingleRow(
                         "GET downtimes\n".
                         "Columns: author comment start_time end_time\n" .
-                        "Filter: host_name = ".$e[18]."\n");
+                        "Filter: host_name = ".$e[17]."\n");
                     if(isset($data[0]))
                         $dt_details = $data;
                 } else {
                     $in_downtime = false;
                 }
 
-                $arrReturn[$e[18]] = Array(
+                $arrReturn[$e[17]] = Array(
                     $state,
                     $e[1],  // output
                     $acknowledged,
@@ -647,12 +647,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     $e[7],  // next check
                     $e[12], // last hard state change
                     $e[11], // last state change
-                    $e[14], // perfdata
+                    $e[13], // perfdata
                     $e[3],  // display name
                     $e[13], // alias
                     $e[4],  // address
                     $e[5],  // notes
-                    $e[19], // check command
+                    $e[18], // check command
                     $custom_vars,
                     $dt_details[0], // downtime author
                     $dt_details[1], // downtime comment
@@ -917,7 +917,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
             foreach($l as $e) {
                 $arrReturn[$e[0]] = Array(
-                    'details' => Array('alias' => $e[1]),
+                    //'details' => Array('alias' => $e[1]),
                     'counts' => Array(
                         PENDING => Array(
                             'normal'   => intval($e[2]),
@@ -1025,7 +1025,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                                                                         Array('BACKENDID' => $this->backendId)));
             foreach($l as $e) {
                 $arrReturn[$e[0]] = Array(
-                    'details' => Array('alias' => $e[1]),
+                    'details' => Array(ALIAS => $e[1]),
                     'counts' => Array(
                         UNCHECKED => Array(
                             'normal'    => intval($e[2]),

@@ -256,7 +256,13 @@
         <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
         </tr>
         <tr>
-        <td> backend </td><td> live_1 </td><td> Default backend (ID of the backend - copy the text from which <code>&lt;backend-id></code> stands for in <code>[backend_&lt;backend-id>]</code> ) </td>
+          <td>backend</td>
+          <td>live_1</td>
+          <td>Default backend (ID of the backend - copy the text from which 
+              <code>&lt;backend-id></code> stands for in <code>[backend_&lt;backend-id>]</code>).
+              As of NagVis 1.8 it is possible to define a "," separated list of backends here to combine
+              objects of several backends. Host, host and service group objects do support merging their
+              members into one object when multiple backends are configured for an object.</td>
         </tr>
         <tr>
         <td>backgroundcolor</td><td>transparent</td><td>Default background colour of maps </td>

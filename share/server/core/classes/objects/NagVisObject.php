@@ -312,15 +312,20 @@ class NagVisObject {
             }
 
             // Add the custom htmlcgi path for the object
-            $arr['htmlcgi'] = cfg('backend_'.$this->backend_id, 'htmlcgi');
-            $arr['custom_1'] = cfg('backend_'.$this->backend_id, 'custom_1');
-            $arr['custom_2'] = cfg('backend_'.$this->backend_id, 'custom_2');
-            $arr['custom_3'] = cfg('backend_'.$this->backend_id, 'custom_3');
-
-            if(cfg('backend_'.$this->backend_id,'backendtype') == 'ndomy') {
-                $arr['backend_instancename'] = cfg('backend_'.$this->backend_id,'dbinstancename');
-            } else {
-                $arr['backend_instancename'] = '';
+            $i = 0;
+            foreach($this->backend_id as $backend_id) {
+                if($i == 0) {
+                    $arr['htmlcgi']  = cfg('backend_'.$backend_id, 'htmlcgi');
+                    $arr['custom_1'] = cfg('backend_'.$backend_id, 'custom_1');
+                    $arr['custom_2'] = cfg('backend_'.$backend_id, 'custom_2');
+                    $arr['custom_3'] = cfg('backend_'.$backend_id, 'custom_3');
+                } else {
+                    $arr['htmlcgi_'.$i]  = cfg('backend_'.$backend_id, 'htmlcgi');
+                    $arr['custom_1_'.$i] = cfg('backend_'.$backend_id, 'custom_1');
+                    $arr['custom_2_'.$i] = cfg('backend_'.$backend_id, 'custom_2');
+                    $arr['custom_3_'.$i] = cfg('backend_'.$backend_id, 'custom_3');
+                }
+                $i++;
             }
 
             // Little hack: Overwrite the options with correct state information
