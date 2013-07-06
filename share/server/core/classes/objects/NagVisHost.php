@@ -182,7 +182,7 @@ class NagVisHost extends NagVisStatefulObject {
             NagVisHost::$langHostStateIs = l('hostStateIs');
 
         // Write host state
-        $this->sum[OUTPUT] = NagVisHost::$langHostStateIs.' '.$this->state[STATE].'. ';
+        $this->sum[OUTPUT] = NagVisHost::$langHostStateIs.' '.state_str($this->state[STATE]).'. ';
 
         // Only merge host state with service state when recognize_services is set
         // to 1
@@ -232,7 +232,7 @@ class NagVisHost extends NagVisStatefulObject {
      */
     private function fetchSummaryOutput() {
         // Write host state
-        $this->sum[OUTPUT] = l('hostStateIs').' '.$this->state[STATE].'. ';
+        $this->sum[OUTPUT] = l('hostStateIs').' '.state_str($this->state[STATE]).'. ';
 
         // Only merge host state with service state when recognize_services is set
         // to 1
