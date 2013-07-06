@@ -127,4 +127,8 @@ function state_num($state_str) {
     return $a[$state_str];
 }
 
+function is_host_state($state) {
+    return $state == UNCHECKED || $state == UNREACHABLE || $state == DOWN || $state == UP;
+}
+
 ?>

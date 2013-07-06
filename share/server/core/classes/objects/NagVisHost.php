@@ -194,7 +194,7 @@ class NagVisHost extends NagVisStatefulObject {
             if($this->aStateCounts !== null) {
                 foreach($this->aStateCounts AS $sState => $aSubstates) {
                     // Ignore host state here
-                    if($sState != 'UP' && $sState != 'DOWN' && $sState != 'UNREACHABLE' && $sState != 'UNCHECKED') {
+                    if(is_host_state($sState)) {
                         // Loop all substates (normal,ack,downtime,...)
                         foreach($aSubstates AS $sSubState => $iCount) {
                             // Found some objects with this state+substate

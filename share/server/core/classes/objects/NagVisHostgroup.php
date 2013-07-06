@@ -121,7 +121,7 @@ class NagVisHostgroup extends NagVisStatefulObject {
                     // Count all child objects
                     $iSumCount += $iCount;
 
-                    if($sState === 'UP' || $sState === 'DOWN' || $sState === 'UNREACHABLE' || $sState === 'UNCHECKED') {
+                    if(is_host_state($sState)) {
                         if(!isset($arrHostStates[$sState])) {
                             $arrHostStates[$sState] = $iCount;
                         } else {
