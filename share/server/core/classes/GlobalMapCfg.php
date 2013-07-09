@@ -556,7 +556,8 @@ class GlobalMapCfg {
             if(!$only_customized || $_REQUEST[$key] != $this->getValue(0, $key)) {
                 // Only get options which differ from the defaults
                 // Maybe convert the type, if requested
-                if(isset(self::$validConfig['global'][$key]['array']) && self::$validConfig['global'][$key]['array'] === true)
+                if(isset(self::$validConfig['global'][$key]['array'])
+                   && self::$validConfig['global'][$key]['array'] === true)
                     return explode(',', $_REQUEST[$key]);
                 else
                     return $_REQUEST[$key];

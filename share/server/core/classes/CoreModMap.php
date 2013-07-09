@@ -442,9 +442,21 @@ class CoreModMap extends CoreModule {
                 throw new FieldInputError($key, l('The attribute is deprecated.'));
 
             // The object has a match regex, it can be checked
-            if(isset($attrDefs[$key]['match']) && !preg_match($attrDefs[$key]['match'], $val))
-                throw new FieldInputError($key, l('The attribute has the wrong format (Regex: [MATCH]).',
-                    Array('MATCH' => $attrDefs[$key]['match'])));
+            // -> In case of array attributes validate the single parts
+            if(isset($attrDefs[$key]['match'])) {
+                $array = isset($attrDefs[$key]['array']) && $attrDefs[$key]['array'];
+                if(!$array)
+                    $v = array($val);
+                else
+                    $v = explode(',', $val);
+
+                foreach($v as $part) {
+                    if(!preg_match($attrDefs[$key]['match'], $part)) {
+                        throw new FieldInputError($key, l('The attribute has the wrong format (Regex: [MATCH]).',
+                            Array('MATCH' => $attrDefs[$key]['match'])));
+                    }
+                }
+            }
         }
     }
 

@@ -102,6 +102,10 @@ function getObjectNames($type, $CORE, $MAPCFG, $objId, $attrs) {
     else
         $backendIds = $MAPCFG->getValue($objId, 'backend_id');
 
+    // Return simply nothing when a user just choosen to insert multiple backends
+    if(isset($attrs['backend_id']) && $attrs['backend_id'] == '<<<multiple>>>')
+        return array();
+
     // Initialize the backend
     foreach($backendIds as $backendId) {
         $_BACKEND->checkBackendExists($backendId, true);
