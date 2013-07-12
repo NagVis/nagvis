@@ -350,7 +350,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
         return Array();
     }
 
-    public function getHostStateCounts($objects, $options, $filters) {
+    public function getHostMemberCounts($objects, $options, $filters) {
         return Array();
     }
 

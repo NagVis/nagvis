@@ -81,6 +81,13 @@ function listViewTypes($CORE) {
     return Array('icon', 'line');
 }
 
+function listDynGroupTypes($CORE) {
+    return Array(
+        'hosts'    => l('Hosts'),
+        'services' => l('Services')
+    );
+}
+
 function listZoomFactors($CORE) {
     return Array(
         10  => ' 10%',
@@ -858,6 +865,31 @@ $mapConfigVars = Array(
         'field_type'    => 'dropdown',
         'list'          => 'listViewTypesContainer',
     ),
+
+    // DYNAMIC GROUP SPECIFIC OPTIONS
+
+    'dyngroup_name' => Array(
+        'must'       => 1,
+        'match'      => MATCH_STRING,
+        'default'    => '',
+    ),
+    'object_types' => Array(
+        'must'       => 1,
+        'default'    => '',
+        'field_type' => 'dropdown',
+        'match'      => MATCH_DYN_GROUP_TYPES,
+        'list'       => 'listDynGroupTypes', 
+    ),
+    'object_filter' => Array(
+        'must'       => 0,
+        'default'    => '',
+        'match'      => MATCH_LIVESTATUS_FILTER,
+    ),
+    'dyngroup_url' => Array(
+        'must'       => 0,
+        'default'    => cfg('defaults', 'dyngroupurl'),
+        'match'      => MATCH_STRING_URL_EMPTY,
+    ),
 );
 
 // STATELESS LINE SPECIFIC OPTIONS
@@ -1232,6 +1264,50 @@ $mapConfigVarMap['container'] = Array(
     'context_template' => null,
 
     'style' => null,
+    'use' => null,
+);
+
+$mapConfigVarMap['dyngroup'] = array(
+    'type'          => null,
+    'object_id'     => null,
+    'dyngroup_name' => 'name',
+    'object_types'  => null,
+    'object_filter' => null,
+    'x' => null,
+    'y' => null,
+    'z' => null,
+    'backend_id' => null,
+    'view_type' => null,
+    'iconset' => null,
+    'line_type' => null,
+    'line_arrow' => null,
+    'line_cut' => null,
+    'line_width' => null,
+    'line_weather_colors' => null,
+    'context_menu' => null,
+    'context_template' => null,
+    'exclude_members' => null,
+    'exclude_member_states' => null,
+    'hover_menu' => null,
+    'hover_delay' => null,
+    'hover_template' => null,
+    'hover_url' => null,
+    'hover_childs_show' => null,
+    'hover_childs_sort' => null,
+    'hover_childs_order' => null,
+    'hover_childs_limit' => null,
+    'label_show' => null,
+    'label_text' => null,
+    'label_x' => null,
+    'label_y' => null,
+    'label_width' => null,
+    'label_background' => null,
+    'label_border' => null,
+    'label_style' => null,
+    'only_hard_states' => null,
+    'recognize_services' => null,
+    'dyngroup_url' => 'url',
+    'url_target' => null,
     'use' => null,
 );
 

@@ -796,14 +796,14 @@ class GlobalBackendndomy implements GlobalBackendInterface {
     }
 
     /**
-     * PUBLIC getHostStateCounts()
+     * PUBLIC getHostMemberCounts()
      *
      * @param   Array     List of objects to query
      * @param   Array     List of filters to apply
      * @return  Array     List of states and counts
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    public function getHostStateCounts($objects, $options, $filters) {
+    public function getHostMemberCounts($objects, $options, $filters) {
         if($options & 1)
             $stateAttr = 'IF((ss.state_type = 0), ss.last_hard_state, ss.current_state)';
         else

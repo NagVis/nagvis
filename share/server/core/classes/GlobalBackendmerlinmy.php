@@ -564,7 +564,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
         }
     }
 
-    public function getHostStateCounts($query, $options, $filters) {}
+    public function getHostMemberCounts($query, $options, $filters) {}
     public function getHostgroupStateCounts($query, $options, $filters) {}
     public function getServicegroupStateCounts($query, $options, $filters) {}
     public function getDirectParentNamesByHostName($hostName) {}

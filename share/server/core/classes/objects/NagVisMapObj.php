@@ -329,6 +329,9 @@ class NagVisMapObj extends NagVisStatefulObject {
                 case 'servicegroup':
                     $OBJ = new NagVisServicegroup($objConf['backend_id'], $objConf['servicegroup_name']);
                 break;
+                case 'dyngroup':
+                    $OBJ = new NagVisDynGroup($objConf['backend_id'], $objConf['name']);
+                break;
                 case 'map':
                     // Initialize map configuration
                     $SUBMAPCFG = new GlobalMapCfg($objConf['map_name']);

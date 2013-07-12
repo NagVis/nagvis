@@ -319,6 +319,7 @@ class NagVisHeaderMenu {
             'langService' => l('service'),
             'langHostgroup' => l('hostgroup'),
             'langServicegroup' => l('servicegroup'),
+            'langDynGroup' => l('Dynamic Group'),
             'langMapEdit' => l('Edit Map'),
             'langMaps' => l('Maps'),
             'langTextbox' => l('textbox'),

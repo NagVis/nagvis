@@ -607,7 +607,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
     }
 
     /**
-     * PUBLIC getHostStateCounts()
+     * PUBLIC getHostMemberCounts()
      *
      * Queries the livestatus socket for host state counts. The information
      * are used to calculate the summary output and the summary state of a
@@ -620,7 +620,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @return  Array     List of states and counts
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    public function getHostStateCounts($objects, $options, $filters) {
+    public function getHostMemberCounts($objects, $options, $filters) {
         /*if($options & 1)
             $stateAttr = 'last_hard_state';
         else
@@ -647,12 +647,12 @@ class GlobalBackendTest implements GlobalBackendInterface {
             foreach($objects AS $OBJS) {
                 $name = $OBJS[0]->getName();
                 foreach($this->obj['hostgroup'][$name]['members'] AS $hostname) {
-                    $resp = $this->getHostStateCounts(Array(Array(new NagVisHost($this->backendId, $hostname))), $options, Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name')));
+                    $resp = $this->getHostMemberCounts(Array(Array(new NagVisHost($this->backendId, $hostname))), $options, Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name')));
                     $aReturn[$hostname] = $resp[$hostname];
                 }
             }
         } else {
-            throw new BackendException('Unhandled filter in backend (getHostStateCounts)');
+            throw new BackendException('Unhandled filter in backend (getHostMemberCounts)');
         }
 
         return $aReturn;
@@ -700,7 +700,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     if($options & 2)
                         continue;
 
-                    $resp = $this->getHostStateCounts(Array(Array(new NagVisHost($this->backendId, $hostname))), $options,
+                    $resp = $this->getHostMemberCounts(Array(Array(new NagVisHost($this->backendId, $hostname))), $options,
                                                                         Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name')));
                     foreach($resp[$hostname]['counts'] AS $state => $substates)
                         foreach($substates AS $substate => $count)
@@ -708,7 +708,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                 }
             }
         } else {
-            throw new BackendException('Unhandled filter in backend (getHostStateCounts)');
+            throw new BackendException('Unhandled filter in backend (getHostgroupStateCounts)');
             exit;
         }
 

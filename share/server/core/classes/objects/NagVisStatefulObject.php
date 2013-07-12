@@ -95,7 +95,7 @@ class NagVisStatefulObject extends NagVisObject {
     }
 
     /**
-     * Simple check if the hostgroup has at least one member
+     * Simple check if the object has at least one member
      */
     public function hasMembers() {
         return isset($this->members[0]);

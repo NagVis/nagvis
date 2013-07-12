@@ -172,6 +172,7 @@ class GlobalMapCfg {
 
             $this->typeDefaults['host'][$sVar] = $sTmp;
             $this->typeDefaults['hostgroup'][$sVar] = $sTmp;
+            $this->typeDefaults['dyngroup'][$sVar] = $sTmp;
 
             // Handle exceptions for servicegroups
             if($sVar != 'recognize_services') {

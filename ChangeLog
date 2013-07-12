@@ -9,6 +9,10 @@ Core:
     by different hostgroups from several monitoring instances. This is simply
     configured by putting several backend ids to the backend_id parameter
     (separated by ",").
+  * Added new object called "dynamic groups". Can only be used with livestatus
+    backend. It uses the configuration option object_filter to group a dynamic
+    list of services or hosts in a NagVis map object without having to define
+    it in the monitoring core.
 
 Frontend:
   * All nodes with assigned childs in sidebar are now expandable. The state

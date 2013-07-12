@@ -88,6 +88,7 @@ class NagVisMap {
                 case 'NagVisHost':
                 case 'NagVisService':
                 case 'NagVisHostgroup':
+                case 'NagVisDynGroup':
                 case 'NagVisServicegroup':
                 case 'NagVisMapObj':
                     if($type == 'state') {

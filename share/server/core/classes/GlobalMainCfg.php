@@ -508,6 +508,11 @@ class GlobalMainCfg {
                 'servicegroupurl' => Array('must' => 0,
                     'default' => '[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]&style=detail',
                     'match' => MATCH_STRING_URL_EMPTY),
+                'dyngroupurl' => Array(
+                    'must'    => 0,
+                    'default' => '',
+                    'match'   => MATCH_STRING_URL_EMPTY
+                ),
                 'view_template' => Array(
                     'must'     => 0,
                     'editable' => 1,

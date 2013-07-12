@@ -1091,6 +1091,9 @@ function setMapObjects(aMapObjectConf) {
             case 'servicegroup':
                 oObj = new NagVisServicegroup(aMapObjectConf[i]);
             break;
+            case 'dyngroup':
+                oObj = new NagVisDynGroup(aMapObjectConf[i]);
+            break;
             case 'map':
                 oObj = new NagVisMap(aMapObjectConf[i]);
             break;

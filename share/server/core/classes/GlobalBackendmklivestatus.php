@@ -507,6 +507,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     break;
                 }
             }
+
+            // is this a dynamic group with already compiled filters?
+            if($isMemberQuery && $OBJS[0]->getType() == 'dyngroup') {
+                return $OBJS[0]->getObjectFilter();
+            }
             
             // Are there child exclude filters defined for this object?
             // The objType is the type of the objects to query the data for
@@ -808,21 +813,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         return $arrReturn;
     }
+
     /**
-     * PUBLIC getHostStateCounts()
-     *
      * Queries the livestatus socket for host state counts. The information
      * are used to calculate the summary output and the summary state of a
      * host and a well performing alternative to the existing recurisve
      * algorithm.
-     *
-     * @param   Array     List of objects to query
-     * @param   Bitmask   This is a mask of options to use during the query
-     * @param   Array     List of filters to apply
-     * @return  Array     List of states and counts
-     * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    public function getHostStateCounts($objects, $options, $filters) {
+    public function getHostMemberCounts($objects, $options, $filters) {
         $objFilter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
 
         if($options & 1)
@@ -913,7 +911,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             if(!isset($l[0][13]))
                 throw new BackendInvalidResponse(
                     l('Livestatus version used in backend [BACKENDID] is too old. Please update.',
-                                                                        Array('BACKENDID' => $this->backendId)));
+                                                           Array('BACKENDID' => $this->backendId)));
 
             foreach($l as $e) {
                 $arrReturn[$e[0]] = Array(
@@ -950,20 +948,141 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     }
 
     /**
-     * PUBLIC getHostgroupStateCounts()
-     *
-     * Queries the livestatus socket for hostgroup state counts. The information
-     * are used to calculate the summary output and the summary state of a
-     * hostgroup and a well performing alternative to the existing recurisve
-     * algorithm.
-     *
-     * @param   Array     List of objects to query
-     * @param   Array     List of filters to apply
-     * @return  Array     List of states and counts
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * Queries the livestatus socket a bunch of services matching a given livestatus filter.
+     * It does not return all objects, instead it returns the state counts.
      */
-    public function getHostgroupStateCounts($objects, $options, $filters) {
-        $objFilter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, HOST_QUERY);
+    public function getServiceListCounts($options, $filter) {
+        if($options & 1)
+            $stateAttr = 'last_hard_state';
+        else
+            $stateAttr = 'state';
+
+        // Get service information
+        $l = $this->queryLivestatus("GET services\n" .
+            $filter.
+            // Count PENDING
+            "Stats: has_been_checked = 0\n" .
+            // Count OK
+            "Stats: ".$stateAttr." = 0\n" .
+            "Stats: has_been_checked != 0\n" .
+            "Stats: scheduled_downtime_depth = 0\n" .
+            "Stats: host_scheduled_downtime_depth = 0\n" .
+            "StatsAnd: 4\n" .
+            // Count OK (DOWNTIME)
+            "Stats: ".$stateAttr." = 0\n" .
+            "Stats: has_been_checked != 0\n" .
+            "Stats: scheduled_downtime_depth > 0\n" .
+            "Stats: host_scheduled_downtime_depth > 0\n" .
+            "StatsOr: 2\n" .
+            "StatsAnd: 3\n" .
+            // Count WARNING
+            "Stats: ".$stateAttr." = 1\n" .
+            "Stats: acknowledged = 0\n" .
+            "Stats: host_acknowledged = 0\n" .
+            "Stats: scheduled_downtime_depth = 0\n" .
+            "Stats: host_scheduled_downtime_depth = 0\n" .
+            "StatsAnd: 5\n" .
+            // Count WARNING(ACK)
+            "Stats: ".$stateAttr." = 1\n" .
+            "Stats: acknowledged = 1\n" .
+            "Stats: host_acknowledged = 1\n" .
+            "StatsOr: 2\n" .
+            "StatsAnd: 2\n" .
+            // Count WARNING(DOWNTIME)
+            "Stats: ".$stateAttr." = 1\n" .
+            "Stats: scheduled_downtime_depth > 0\n" .
+            "Stats: host_scheduled_downtime_depth > 0\n" .
+            "StatsOr: 2\n" .
+            "StatsAnd: 2\n" .
+            // Count CRITICAL
+            "Stats: ".$stateAttr." = 2\n" .
+            "Stats: acknowledged = 0\n" .
+            "Stats: host_acknowledged = 0\n" .
+            "Stats: scheduled_downtime_depth = 0\n" .
+            "Stats: host_scheduled_downtime_depth = 0\n" .
+            "StatsAnd: 5\n" .
+            // Count CRITICAL(ACK)
+            "Stats: ".$stateAttr." = 2\n" .
+            "Stats: acknowledged = 1\n" .
+            "Stats: host_acknowledged = 1\n" .
+            "StatsOr: 2\n" .
+            "StatsAnd: 2\n" .
+            // Count CRITICAL(DOWNTIME)
+            "Stats: ".$stateAttr." = 2\n" .
+            "Stats: scheduled_downtime_depth > 0\n" .
+            "Stats: host_scheduled_downtime_depth > 0\n" .
+            "StatsOr: 2\n" .
+            "StatsAnd: 2\n" .
+            // Count UNKNOWN
+            "Stats: ".$stateAttr." = 3\n" .
+            "Stats: acknowledged = 0\n" .
+            "Stats: host_acknowledged = 0\n" .
+            "Stats: scheduled_downtime_depth = 0\n" .
+            "Stats: host_scheduled_downtime_depth = 0\n" .
+            "StatsAnd: 5\n" .
+            // Count UNKNOWN(ACK)
+            "Stats: ".$stateAttr." = 3\n" .
+            "Stats: acknowledged = 1\n" .
+            "Stats: host_acknowledged = 1\n" .
+            "StatsOr: 2\n" .
+            "StatsAnd: 2\n" .
+            // Count UNKNOWN(DOWNTIME)
+            "Stats: ".$stateAttr." = 3\n" .
+            "Stats: scheduled_downtime_depth > 0\n" .
+            "Stats: host_scheduled_downtime_depth > 0\n" .
+            "StatsOr: 2\n" .
+            "StatsAnd: 2\n");
+
+        $counts = Array();
+        if(!is_array($l) || count($l) != 1)
+            return array();
+        $e = $l[0];
+        return Array(
+            PENDING => Array(
+                'normal'   => intval($e[0]),
+            ),
+            OK => Array(
+                'normal'   => intval($e[1]),
+                'downtime' => intval($e[2]),
+            ),
+            WARNING => Array(
+                'normal'   => intval($e[3]),
+                'ack'      => intval($e[4]),
+                'downtime' => intval($e[5]),
+            ),
+            CRITICAL => Array(
+                'normal'   => intval($e[6]),
+                'ack'      => intval($e[7]),
+                'downtime' => intval($e[8]),
+            ),
+            UNKNOWN => Array(
+                'normal'   => intval($e[9]),
+                'ack'      => intval($e[10]),
+                'downtime' => intval($e[11]),
+            ),
+        );
+    }
+
+    public function getHostAndServiceCounts($options, $host_filter, $service_filter, $by_group = true) {
+        if ($by_group) {
+            $host_suffix    = 'bygroup';
+            $service_suffix = 'byhostgroup';
+
+            $host_grouping    = "Columns: hostgroup_name hostgroup_alias\n";
+            $service_grouping = "Columns: hostgroup_name\n";
+
+            $hoffset = 2;
+            $soffset = 1;
+        } else {
+            $host_suffix    = '';
+            $service_suffix = '';
+
+            $host_grouping    = '';
+            $service_grouping = '';
+
+            $hoffset = 0;
+            $soffset = 0;
+        }
 
         if($options & 1)
             $stateAttr = 'hard_state';
@@ -971,8 +1090,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             $stateAttr = 'state';
 
         // Get host information
-        $l = $this->queryLivestatus("GET hostsbygroup\n" .
-            $objFilter.
+        $l = $this->queryLivestatus("GET hosts".$host_suffix."\n" .
+            $host_filter.
             // Count UNCHECKED
             "Stats: has_been_checked = 0\n" .
             // Count UP
@@ -1011,7 +1130,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             "Stats: ".$stateAttr." = 2\n" .
             "Stats: scheduled_downtime_depth > 0\n" .
             "StatsAnd: 2\n".
-            "Columns: hostgroup_name hostgroup_alias\n");
+            $host_grouping);
 
         // If the method should fetch several objects and did not find
         // any object, don't return anything => The message
@@ -1019,37 +1138,41 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $arrReturn = Array();
         if(is_array($l) && count($l) > 0) {
             // livestatus previous 1.1.9i3 answers without hostgroup_alias - these users should update.
-            if(!isset($l[0][10]))
+            if(!isset($l[0][8+$hoffset]))
                 throw new BackendInvalidResponse(
                     l('Livestatus version used in backend [BACKENDID] is too old. Please update.',
                                                                         Array('BACKENDID' => $this->backendId)));
             foreach($l as $e) {
-                $arrReturn[$e[0]] = Array(
-                    'details' => Array(ALIAS => $e[1]),
-                    'counts' => Array(
-                        UNCHECKED => Array(
-                            'normal'    => intval($e[2]),
-                        ),
-                        UP => Array(
-                            'normal'    => intval($e[3]),
-                            'downtime'  => intval($e[4]),
-                        ),
-                        DOWN => Array(
-                            'normal'    => intval($e[5]),
-                            'ack'       => intval($e[6]),
-                            'downtime'  => intval($e[7]),
-                        ),
-                        UNREACHABLE => Array(
-                            'normal'    => intval($e[8]),
-                            'ack'       => intval($e[9]),
-                            'downtime'  => intval($e[10]),
-                        ),
-                    )
+                $counts = array(
+                    UNCHECKED => Array(
+                        'normal'    => intval($e[0+$hoffset]),
+                    ),
+                    UP => Array(
+                        'normal'    => intval($e[1+$hoffset]),
+                        'downtime'  => intval($e[2+$hoffset]),
+                    ),
+                    DOWN => Array(
+                        'normal'    => intval($e[3]+$hoffset),
+                        'ack'       => intval($e[4]+$hoffset),
+                        'downtime'  => intval($e[5]+$hoffset),
+                    ),
+                    UNREACHABLE => Array(
+                        'normal'    => intval($e[6+$hoffset]),
+                        'ack'       => intval($e[7+$hoffset]),
+                        'downtime'  => intval($e[8+$hoffset]),
+                    ),
                 );
+
+                if(!$by_group) {
+                    $arrReturn = $counts;
+                } else {
+                    $arrReturn[$e[0]] = Array(
+                        'details' => Array(ALIAS => $e[1]),
+                        'counts'  => $counts
+                    );
+                }
             }
         }
-
-        $objFilter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
 
         // If recognize_services are disabled don't fetch service information
         if($options & 2)
@@ -1060,12 +1183,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         else
             $stateAttr = 'state';
 
-        // Little hack to correct the different field names
-        $objFilter = str_replace(' groups ', ' host_groups ', $objFilter);
-
         // Get service information
-        $l = $this->queryLivestatus("GET servicesbyhostgroup\n" .
-            $objFilter.
+        $l = $this->queryLivestatus("GET services".$service_suffix."\n" .
+            $service_filter.
             // Count PENDING
             "Stats: has_been_checked = 0\n" .
             // Count OK
@@ -1136,26 +1256,67 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             "Stats: host_scheduled_downtime_depth > 0\n" .
             "StatsOr: 2\n" .
             "StatsAnd: 2\n".
-            "Columns: hostgroup_name\n");
+            $service_grouping);
 
         if(is_array($l) && count($l) > 0) {
             foreach($l as $e) {
-                $arrReturn[$e[0]]['counts'][PENDING]['normal']    = intval($e[1]);
-                $arrReturn[$e[0]]['counts'][OK]['normal']         = intval($e[2]);
-                $arrReturn[$e[0]]['counts'][OK]['downtime']       = intval($e[3]);
-                $arrReturn[$e[0]]['counts'][WARNING]['normal']    = intval($e[4]);
-                $arrReturn[$e[0]]['counts'][WARNING]['ack']       = intval($e[5]);
-                $arrReturn[$e[0]]['counts'][WARNING]['downtime']  = intval($e[6]);
-                $arrReturn[$e[0]]['counts'][CRITICAL]['normal']   = intval($e[7]);
-                $arrReturn[$e[0]]['counts'][CRITICAL]['ack']      = intval($e[8]);
-                $arrReturn[$e[0]]['counts'][CRITICAL]['downtime'] = intval($e[9]);
-                $arrReturn[$e[0]]['counts'][UNKNOWN]['normal']    = intval($e[10]);
-                $arrReturn[$e[0]]['counts'][UNKNOWN]['ack']       = intval($e[11]);
-                $arrReturn[$e[0]]['counts'][UNKNOWN]['downtime']  = intval($e[12]);
+                $counts = array(
+                    PENDING => array(
+                        'normal'   => intval($e[0+$soffset])
+                    ),
+                    OK => array(
+                        'normal'   => intval($e[1+$soffset]),
+                        'downtime' => intval($e[2+$soffset]),
+                    ),
+                    WARNING => array(
+                        'normal'   => intval($e[3+$soffset]),
+                        'ack'      => intval($e[4+$soffset]),
+                        'downtime' => intval($e[5+$soffset]),
+                    ),
+                    CRITICAL => array(
+                        'normal'   => intval($e[6+$soffset]),
+                        'ack'      => intval($e[7+$soffset]),
+                        'downtime' => intval($e[8+$soffset]),
+                    ),
+                    UNKNOWN => array(
+                        'normal'   => intval($e[9+$soffset]),
+                        'ack'      => intval($e[10+$soffset]),
+                        'downtime' => intval($e[11+$soffset]),
+                    ),
+                );
+                
+                if(!$by_group) {
+                    $arrReturn += $counts;
+                } else {
+                    $arrReturn[$e[0]]['counts'] += $counts;
+                }
             }
         }
 
         return $arrReturn;
+    }
+
+    /**
+     * PUBLIC getHostgroupStateCounts()
+     *
+     * Queries the livestatus socket for hostgroup state counts. The information
+     * are used to calculate the summary output and the summary state of a
+     * hostgroup and a well performing alternative to the existing recurisve
+     * algorithm.
+     *
+     * @param   Array     List of objects to query
+     * @param   Array     List of filters to apply
+     * @return  Array     List of states and counts
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function getHostgroupStateCounts($objects, $options, $filters) {
+        $host_filter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, HOST_QUERY);
+
+        $service_filter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
+        // Little hack to correct the different field names
+        $service_filter = str_replace(' groups ', ' host_groups ', $service_filter);
+
+        return $this->getHostAndServiceCounts($options, $host_filter, $service_filter);
     }
 
     /**

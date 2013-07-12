@@ -132,7 +132,9 @@ class NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getName() {
-        if($this->type == 'service') {
+        if($this->type == 'dyngroup') {
+            return $this->name;
+        } elseif ($this->type == 'service') {
             return $this->host_name;
         } else {
             return $this->{$this->type.'_name'};
@@ -274,6 +276,17 @@ class NagVisObject {
                     $arr['lang_name']         = NagVisServicegroup::$langSelf;
                     $arr['lang_child_name']   = NagVisServicegroup::$langChild;
                     $arr['lang_child_name1']  = NagVisServicegroup::$langChild1;
+                break;
+                case 'dyngroup':
+                    if(NagVisDynGroup::$langType === null) {
+                        NagVisDynGroup::$langType  = l('Dynamic Group');
+                        NagVisDynGroup::$langSelf  = l('Dynamic Group Name');
+                        NagVisDynGroup::$langChild = l('Object Name');
+                    }
+
+                    $arr['lang_obj_type']    = NagVisDynGroup::$langType;
+                    $arr['lang_name']        = NagVisDynGroup::$langSelf;
+                    $arr['lang_child_name']  = NagVisDynGroup::$langChild;
                 break;
                 case 'map':
                     if(NagVisMapObj::$langType === null) {
@@ -530,7 +543,7 @@ class NagVisObject {
         $state2 = $OBJ2->sum[STATE];
 
         // Quit when nothing to compare
-        if($state1 == '' || $state2 == '') {
+        if($state1 === null || $state2 === null) {
             return 0;
         }
 
