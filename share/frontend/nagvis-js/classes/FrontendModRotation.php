@@ -76,7 +76,7 @@ class FrontendModRotation extends FrontendModule {
 
     private function showViewDialog() {
         // Initialize rotation/refresh
-        $ROTATION = new FrontendRotation($this->CORE, $this->name);
+        $ROTATION = new FrontendRotation($this->name);
 
         // Set the requested step
         if($this->type != '' && $this->step != '')

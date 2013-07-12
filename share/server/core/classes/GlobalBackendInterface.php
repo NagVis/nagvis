@@ -27,7 +27,7 @@
  */
 
 interface GlobalBackendInterface {
-    public function __construct($CORE, $backendId);
+    public function __construct($backendId);
 
     /**
      * Static function which returns the backend specific configuration options
@@ -57,7 +57,7 @@ interface GlobalBackendInterface {
      * Returns the service state counts for a list of hosts. Using
      * the given objects and filters.
      */
-    public function getHostStateCounts($objects, $options, $filters);
+    public function getHostMemberCounts($objects, $options, $filters);
 
     /**
      * Returns the host and service state counts for a list of hostgroups. Using

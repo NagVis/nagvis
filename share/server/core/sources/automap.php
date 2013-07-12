@@ -177,7 +177,7 @@ function automap_get_root_hostname($params) {
     $defaultRoot = cfg('automap','defaultroot', TRUE);
     if(!isset($defaultRoot) || $defaultRoot == '') {
         try {
-            $hostsWithoutParent = $_BACKEND->getBackend($params['backend_id'])->getHostNamesWithNoParent();
+            $hostsWithoutParent = $_BACKEND->getBackend($params['backend_id'][0])->getHostNamesWithNoParent();
         } catch(BackendConnectionProblem $e) {}
 
         if(isset($hostsWithoutParent) && count($hostsWithoutParent) == 1)
@@ -345,7 +345,7 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
             if($dir == 'childs') {
                 if($obj_name == '<<<monitoring>>>') {
                     try {
-                        $relations = $_BACKEND->getBackend($params['backend_id'])->getHostNamesWithNoParent();
+                        $relations = $_BACKEND->getBackend($params['backend_id'][0])->getHostNamesWithNoParent();
                     } catch(BackendConnectionProblem $e) {
                         $relations = array();
                     }
@@ -354,9 +354,9 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
                         $tmp_array = array_flip(list_business_impact());
                         $min_business_impact = $tmp_array[$params['min_business_impact']];
                     }
-                    $relations = $_BACKEND->getBackend($params['backend_id'])->getDirectChildDependenciesNamesByHostName($obj_name, $min_business_impact);
+                    $relations = $_BACKEND->getBackend($params['backend_id'][0])->getDirectChildDependenciesNamesByHostName($obj_name, $min_business_impact);
                 } else {
-                    $relations = $_BACKEND->getBackend($params['backend_id'])->getDirectChildNamesByHostName($obj_name);
+                    $relations = $_BACKEND->getBackend($params['backend_id'][0])->getDirectChildNamesByHostName($obj_name);
                 }
             } else {
                 if (cfg('global', 'shinken_features')) {
@@ -364,9 +364,9 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
                         $tmp_array = array_flip(list_business_impact());
                         $min_business_impact = $tmp_array[$params['min_business_impact']];
                     }
-                    $relations = $_BACKEND->getBackend($params['backend_id'])->getDirectParentDependenciesNamesByHostName($obj_name, $min_business_impact);
+                    $relations = $_BACKEND->getBackend($params['backend_id'][0])->getDirectParentDependenciesNamesByHostName($obj_name, $min_business_impact);
                 } else {
-                    $relations = $_BACKEND->getBackend($params['backend_id'])->getDirectParentNamesByHostName($obj_name);
+                    $relations = $_BACKEND->getBackend($params['backend_id'][0])->getDirectParentNamesByHostName($obj_name);
                 }
             }
         } catch(BackendException $e) {
@@ -472,9 +472,9 @@ function automap_filter_by_group(&$obj, $params) {
         return;
 
     global $_BACKEND;
-    $_BACKEND->checkBackendExists($params['backend_id'], true);
-    $_BACKEND->checkBackendFeature($params['backend_id'], 'getHostNamesInHostgroup', true);
-    $hosts = $_BACKEND->getBackend($params['backend_id'])->getHostNamesInHostgroup($params['filter_group']);
+    $_BACKEND->checkBackendExists($params['backend_id'][0], true);
+    $_BACKEND->checkBackendFeature($params['backend_id'][0], 'getHostNamesInHostgroup', true);
+    $hosts = $_BACKEND->getBackend($params['backend_id'][0])->getHostNamesInHostgroup($params['filter_group']);
 
     $allowed_ids = array_flip(automap_hostnames_to_object_ids($hosts));
     automap_filter_tree($allowed_ids, $obj);
@@ -491,7 +491,6 @@ function automap_tree_to_map_config($MAPCFG, &$params, &$saved_config, &$map_con
     $map_config[$tree['object_id']] = $tree;
     
     // Remove internal attributes here
-    // FIXME: Is it ok here?
     unset($map_config[$tree['object_id']]['.childs']);
     unset($map_config[$tree['object_id']]['.parents']);
 
@@ -562,9 +561,9 @@ function process_automap($MAPCFG, $map_name, &$map_config) {
 
 function automap_program_start($p) {
     global $_BACKEND;
-    $_BACKEND->checkBackendExists($p['backend_id'], true);
-    $_BACKEND->checkBackendFeature($p['backend_id'], 'getProgramStart', true);
-    return $_BACKEND->getBackend($p['backend_id'])->getProgramStart();
+    $_BACKEND->checkBackendExists($p['backend_id'][0], true);
+    $_BACKEND->checkBackendFeature($p['backend_id'][0], 'getProgramStart', true);
+    return $_BACKEND->getBackend($p['backend_id'][0])->getProgramStart();
 }
 
 function changed_automap($MAPCFG, $compare_time) {

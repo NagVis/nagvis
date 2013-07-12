@@ -88,7 +88,7 @@ class FrontendModMap extends FrontendModule {
     private function showViewDialog() {
         global $AUTHORISATION;
         // Initialize map configuration
-        $MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
+        $MAPCFG = new GlobalMapCfg($this->name);
 
         // Read the map configuration file (Only global section!)
         $MAPCFG->readMapConfig(ONLY_GLOBAL);
@@ -102,12 +102,12 @@ class FrontendModMap extends FrontendModule {
         // Need to load the custom stylesheet?
         $customStylesheet = $MAPCFG->getValue(0, 'stylesheet');
         if($customStylesheet !== '')
-            $INDEX->setCustomStylesheet($this->CORE->getMainCfg()->getPath('html', 'global', 'styles', $customStylesheet));
+            $INDEX->setCustomStylesheet(path('html', 'global', 'styles', $customStylesheet));
 
         // Need to parse the header menu by config or url value?
         if(isset($opts['header_menu']) && $opts['header_menu']) {
             // Parse the header menu
-            $HEADER = new NagVisHeaderMenu($this->CORE, $this->UHANDLER, $MAPCFG->getValue(0 ,'header_template'), $MAPCFG);
+            $HEADER = new NagVisHeaderMenu($this->UHANDLER, $MAPCFG->getValue(0 ,'header_template'), $MAPCFG);
 
             // Put rotation information to header menu
             if($this->rotation != '') {
@@ -132,7 +132,7 @@ class FrontendModMap extends FrontendModule {
         if($this->rotation != '') {
             // Only allow the rotation if the user is permitted to use it
             if($AUTHORISATION->isPermitted('Rotation', 'view', $this->rotation)) {
-                $ROTATION = new FrontendRotation($this->CORE, $this->rotation);
+                $ROTATION = new FrontendRotation($this->rotation);
                 $ROTATION->setStep('map', $this->name, $this->rotationStep);
                 $this->VIEW->setRotation($ROTATION->getRotationProperties());
             }

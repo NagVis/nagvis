@@ -63,6 +63,7 @@ NAGVIS_VER_OLD=""
 NAGVIS_CONF="etc/nagvis.ini.php"
 # Relative path to the NagVis SQLite auth database
 NAGVIS_AUTH_DB="etc/auth.db"
+NAGVIS_PERMS_DB="etc/perms.db"
 # File for saving the old removed map permissions
 AUTH_BACKUP="etc/auth-backup"
 # Default nagios web conf
@@ -1440,6 +1441,9 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" ]; then
         LINE="Restoring auth database file..."
         restore "$NAGVIS_AUTH_DB" "auth database file" ""
         restore "$AUTH_BACKUP" "auth backup file" ""
+        if [ -f $NAGVIS_PATH_BACKUP/$NAGVIS_PERMS_DB ]; then
+            restore "$NAGVIS_PERMS_DB" "permission database file" ""
+        fi
 
         LINE="Restoring custom stylesheets..."
         restore "$USERFILES_DIR/styles/" "stylesheets" ""

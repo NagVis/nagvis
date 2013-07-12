@@ -28,7 +28,6 @@
  */
 
 class GlobalBackendmerlinmy implements GlobalBackendInterface {
-    private $CORE;
     private $CONN;
     private $backendId;
     private $dbName;
@@ -77,9 +76,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      * @author	Roman Kyrylych <rkyrylych@op5.com>
      */
-    public function __construct($CORE, $backendId) {
-        $this->CORE = $CORE;
-
+    public function __construct($backendId) {
         $this->backendId = $backendId;
 
         $this->hostCache = Array();
@@ -567,7 +564,7 @@ class GlobalBackendmerlinmy implements GlobalBackendInterface {
         }
     }
 
-    public function getHostStateCounts($query, $options, $filters) {}
+    public function getHostMemberCounts($query, $options, $filters) {}
     public function getHostgroupStateCounts($query, $options, $filters) {}
     public function getServicegroupStateCounts($query, $options, $filters) {}
     public function getDirectParentNamesByHostName($hostName) {}

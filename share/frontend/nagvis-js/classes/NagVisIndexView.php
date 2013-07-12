@@ -27,22 +27,12 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisIndexView {
-    private $CORE = null;
-
     private $sSubtitle = '';
     private $sCustomStylesheet = '';
     private $sHeaderMenu = '';
     private $sContent = '';
 
-    /**
-     * Class Constructor
-     *
-     * @param    GlobalCore      $CORE
-     * @param    String          $NAME
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
     public function __construct(GlobalCore $CORE) {
-        $this->CORE = $CORE;
     }
 
     public function setSubtitle($s) {
@@ -69,7 +59,7 @@ class NagVisIndexView {
      */
     public function parse() {
         // Initialize template system
-        $TMPL = New FrontendTemplateSystem($this->CORE);
+        $TMPL = New FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
@@ -77,7 +67,7 @@ class NagVisIndexView {
             'htmlBase'         => cfg('paths', 'htmlbase'),
             'htmlJs'           => cfg('paths', 'htmljs'),
             'htmlCss'          => cfg('paths', 'htmlcss'),
-            'htmlTemplates'    => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'),
+            'htmlTemplates'    => path('html', 'global', 'templates'),
             'bUseCompressedJs' => $this->checkJsCompressed(),
             'customStylesheet' => $this->sCustomStylesheet,
             'headerMenu'       => $this->sHeaderMenu,

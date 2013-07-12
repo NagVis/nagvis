@@ -42,16 +42,16 @@ function geomap_read_csv($p) {
 
 function geomap_backend_locations($p) {
     global $_BACKEND;
-    $_BACKEND->checkBackendExists($p['backend_id'], true);
-    $_BACKEND->checkBackendFeature($p['backend_id'], 'getGeomapHosts', true);
-    return $_BACKEND->getBackend($p['backend_id'])->getGeomapHosts($p['filter_group']);
+    $_BACKEND->checkBackendExists($p['backend_id'][0], true);
+    $_BACKEND->checkBackendFeature($p['backend_id'][0], 'getGeomapHosts', true);
+    return $_BACKEND->getBackend($p['backend_id'][0])->getGeomapHosts($p['filter_group']);
 }
 
 function geomap_backend_program_start($p) {
     global $_BACKEND;
-    $_BACKEND->checkBackendExists($p['backend_id'], true);
-    $_BACKEND->checkBackendFeature($p['backend_id'], 'getProgramStart', true);
-    return $_BACKEND->getBackend($p['backend_id'])->getProgramStart();
+    $_BACKEND->checkBackendExists($p['backend_id'][0], true);
+    $_BACKEND->checkBackendFeature($p['backend_id'][0], 'getProgramStart', true);
+    return $_BACKEND->getBackend($p['backend_id'][0])->getProgramStart();
 }
 
 //
@@ -203,6 +203,7 @@ function geomap_files($params) {
     // FIXME: the following two "unset" statements fix an "array to string conversion" error
     unset ($params['filter_group']);
     unset ($params['sources']);
+    unset ($params['backend_id']);
 
     $image_name  = 'geomap-'.implode('_', array_values($params)).'.png';
     return array(

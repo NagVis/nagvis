@@ -26,7 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class CoreUserCfg {
-    private $CORE;
     private $profilesDir;
 
     // Optional list of value types to be fixed
@@ -36,14 +35,7 @@ class CoreUserCfg {
       'eventlog' => 'b',
     );
 
-    /**
-     * Class Constructor
-     *
-     * @param	String			$name		Name of the map
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
     public function __construct() {
-        $this->CORE = GlobalCore::getInstance();
         $this->profilesDir = cfg('paths', 'profiles');
     }
 
@@ -84,10 +76,10 @@ class CoreUserCfg {
     }
 
     public function doSet($opts) {
-        global $AUTH;
+        global $CORE, $AUTH;
         $file = $this->profilesDir.'/'.$AUTH->getUser().'.profile';
 
-        if(!$this->CORE->checkExisting(dirname($file), true) || !$this->CORE->checkWriteable(dirname($file), true))
+        if(!$CORE->checkExisting(dirname($file), true) || !$CORE->checkWriteable(dirname($file), true))
             return false;
 
         $cfg = $this->doGet(true);
@@ -99,7 +91,7 @@ class CoreUserCfg {
         }
 
         $ret = file_put_contents($file, json_encode($cfg)) !== false;
-        $this->CORE->setPerms($file);
+        $CORE->setPerms($file);
         return $ret;
     }
 

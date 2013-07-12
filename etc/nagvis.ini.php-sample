@@ -27,11 +27,30 @@
 ;authmodule="CoreAuthModSQLite"
 ;
 ; Defines the authorisation module to use. By default NagVis uses the built-in
-; SQLite authorisation module. On delivery there is no other authorisation
-; module available. It is possible to add own authorisation modules for 
-; supporting other authorisation mechanisms. For details take a look at the
-; documentation.
+; SQLite authorisation module. On delivery there are some other modules available:
+;
+; - CoreAuthorisationModMySQL: Uses the same data structure as the SQLite authorisation
+;   module, but stores the data in a MySQL database.
+; - CoreAuthorisationModMultisite: Uses information exported by Check_MKs Multisite
+;   to gather user permissions. This makes use of the roles defined for a user within
+;   multisite and the resulting permissions.
+; - CoreAuthorisationModGroups: Assumes all users which should access NagVis are
+;   available in your monitoring core as contacts and assigned to contactgroups. Those
+;   contact group memberships are matched against a mapping table, which is defined in
+;   nagvis/etc/perms.db. This mapping table defines the permissions of each contact
+;   group within NagVis. Take a look at the docs for details.
+;
+; It is possible to add own authorisation modules for supporting other authorisation
+; mechanisms. For details take a look at the documentation.
 ;authorisationmodule="CoreAuthorisationModSQLite"
+;
+; If you use CoreAuthorisationModGroups above, you might need these options:
+; This option defines the path to your group permission mapping table. This file
+; is searched within the NagVis etc directory.
+;authorisation_group_perms_file="/usr/local/nagvis/etc/perms.db"
+; This option is used to configure one or several backend_ids, seperated by ",", which
+; should be used to get the users contact group memberships from.
+;authorisation_group_backends="live_1"
 ;
 ; Sets the size of the controls in unlocked (edit) mode of the frontend. This 
 ; defaults to a value of 10 which makes each control be sized to 10px * 10px.
@@ -256,6 +275,8 @@
 ;serviceurl="[htmlcgi]/extinfo.cgi?type=2&host=[host_name]&service=[service_description]"
 ; URL template for servicegroup object links
 ;servicegroupurl="[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]&style=detail"
+; URL template for dynamic group object links (disabled by default)
+;dyngroupurl=""
 ; URL template for nested map links
 ;mapurl="[htmlbase]/index.php?mod=Map&act=view&show=[map_name]"
 ; Templates to be used for the different views.

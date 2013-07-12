@@ -25,6 +25,7 @@
         <li><a href="#line">Line</a></li>
         <li><a href="#template">Template</a></li>
         <li><a href="#container">Container</a> (<font color="#ff0000">New in 1.7.1</font>)</li>
+        <li><a href="#dyngroup">Dynamic Group</a> (<font color="#ff0000">New in 1.8b1</font>)</li>
         </ul>
         
         <h2>Description of the object types</h2>
@@ -59,7 +60,15 @@
         <td> alias </td><td> map name </td><td> The alias is the label for each map. If it is defined it is shown everywhere in NagVis frontend.</td>
         </tr>
         <tr>
-        <td> backend_id </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend defined as "defaultbackend" at the <a href="nagvis_config_format_description.html">Main Configuration file</a> is used.</td>
+        <td>backend_id</td>
+        <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+        <td>Backend-ID defined in Main Configuration file where NagVis should search for the object states. 
+        If this parameter is not given, the Backend defined as default backend in the 
+        <a href="nagvis_config_format_description.html">Main Configuration file</a> is used.
+        As of NagVis 1.8 it is possible to define a "," separated list of backends here to combine
+        objects of several backends. Host, host and service group objects do support merging their
+        members into one object when multiple backends are configured for an object.
+        </td>
         </tr>
         <tr>
         <td> background_color </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Background colour of this map. If this is not set backgroundcolor from Main Configuration file is taken. </td>
@@ -291,7 +300,14 @@
               Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
         </tr>
         <tr>
-        <td> backend_id </td><td> inherited (<a href="#global">global</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken. </td>
+          <td>backend_id</td>
+          <td> inherited (<a href="#global">global</a>)</td>
+          <td>
+          Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken.
+          As of NagVis 1.8 it is possible to define a "," separated list of backends here to combine
+          objects of several backends. All services for hosts with matching names found in all given
+          backends will be added to the single host object.
+          </td>
         </tr>
         <tr>
         <td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
@@ -443,7 +459,11 @@
               Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
         </tr>
         <tr>
-        <td> backend_id </td><td> inherited (<a href="#global">global</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken. </td>
+          <td>backend_id</td>
+          <td> inherited (<a href="#global">global</a>)</td>
+          <td>
+          Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken.
+          </td>
         </tr>
         <tr>
         <td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
@@ -632,7 +652,14 @@
               Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
         </tr>
         <tr>
-        <td> backend_id </td><td> inherited (<a href="#global">global</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken. </td>
+          <td>backend_id</td>
+          <td> inherited (<a href="#global">global</a>)</td>
+          <td>
+          Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken.
+          As of NagVis 1.8 it is possible to define a "," separated list of backends here to combine
+          objects of several backends. All host members of host groups with matching names found in all 
+          given backends will be added to the single host group object.
+          </td>
         </tr>
         <tr>
         <td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
@@ -775,7 +802,14 @@
               Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
         </tr>
         <tr>
-        <td> backend_id </td><td> inherited (<a href="#global">global</a>) </td><td> Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken. </td>
+          <td>backend_id</td>
+          <td> inherited (<a href="#global">global</a>)</td>
+          <td>
+          Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken.
+          As of NagVis 1.8 it is possible to define a "," separated list of backends here to combine
+          objects of several backends. All service members of groups with matching names found in all 
+          given backends will be added to the single servie group object.
+          </td>
         </tr>
         <tr>
         <td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
@@ -1367,6 +1401,169 @@
         
         Query several columns from several datasets and display them as a table:
         <pre>std_lq.php?backend_id=live_1&query=GET hosts\\nLimit: 2\\nColumns: host_name state address\\n&type=list</pre>
+
+        <a name="dyngroup"></a><h3>Dynamic Group</h3>
+        <p><i>Please note:</i> Dynamic groups can only be used with livestatus backends.</p>
+        <p>This example creates a dynamic group named "My Dynamic Group" which engroups all services
+        which have the name "CPU load". All used options have to be set (note that options already defined
+         in the global section are optional):</p>
+<pre>define dyngroup {
+ name=My Dynamic Group
+ object_types=services
+ object_filter=Filter: service_description = CPU load\n
+ x=100
+ y=200
+}</pre>
+        <table style="width:100%">
+        <tr>
+        <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
+        </tr>
+        <tr>
+          <td><b>object_id</b></td><td></td>
+          <td>Unique identifier of the object on the current map. Each object
+              on the map needs to have an object_id. The object_id is built of
+              alphanumeric signs of any length. When no object_id is given NagVis
+              will generate one for the object.</td>
+        </tr>
+        <tr>
+            <td><b>name</b></td>
+            <td></td>
+            <td>You can configure any name here, it is just a string to make the object
+                identifyable for you.</td>
+        </tr>
+        <tr>
+            <td><b>object_types</b></td>
+            <td></td>
+            <td>Controls which type of objects are used within the dynamic group. Can be set to
+                either "hosts" or "services.</td>
+        </tr>
+        <tr>
+            <td><b>object_filter</b></td>
+            <td></td>
+            <td>This is used in the livestatus queries belonging to this object to filter the
+                member objects used in this dynamic group. You need to provide valid livestatus
+                filter definitions here.</td>
+        </tr>
+        <tr>
+        <td><b>x</b></td>
+            <td></td>
+            <td>X axis coordinate(s).
+            Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+            <td><b>y</b></td>
+            <td></td>
+            <td>Y axis coordinate(s).
+              Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
+        </tr>
+        <tr>
+          <td>backend_id</td>
+          <td> inherited (<a href="#global">global</a>)</td>
+          <td>
+          Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken.
+          As of NagVis 1.8 it is possible to define a "," separated list of backends here to combine
+          objects of several backends. All host members of host groups with matching names found in all 
+          given backends will be added to the single host group object.
+          </td>
+        </tr>
+        <tr>
+        <td>context_menu</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Enable/Disable the context menu for this object. </td>
+        </tr>
+        <tr>
+        <td>context_template</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td><a href="context_templates.html">Context template</a> for this object. </td>
+        </tr>
+
+        <tr>
+        <td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
+        </tr>
+        <tr>
+        <td> hover_delay </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Delay of hover menu appearance in seconds </td>
+        </tr>
+        <tr>
+        <td> hover_template </td><td> inherited (<a href="#global">global</a>) </td><td> <a href="hover_templates.html">Hover template</a> for this object </td>
+        </tr>
+        <tr>
+        <td> <strike>hover_timeout</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Hover menu ajax request timeout in seconds for this object</strike> </td>
+        </tr>
+        <tr>
+        <td> hover_url </td><td> </td><td> URL which should be displayed in hover menu instead of standard information. There are some macros available:<br />
+            <b>[dyngroup_name]</b>: This macro stands for the object name.</td>
+        </tr>
+        <tr>
+        <td> hover_childs_show </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable displaying child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_sort </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sort method of child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_order </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Order direction of child objects </td>
+        </tr>
+        <tr>
+        <td> hover_childs_limit </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Maximum number of children to be displayed. Set to -1 to disable the limit. </td>
+        </tr>
+        <tr>
+        <td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
+        </tr>
+        <tr>
+        <td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
+        </tr>
+        <tr>
+        <td> label_text </td><td> [name] </td><td> Text of the label. Available macros: [name], [alias], [output] </td>
+        </tr>
+        <tr>
+        <td> label_x </td><td> inherited (<a href="#global">global</a>) </td><td> Label X-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
+        </tr>
+        <tr>
+        <td> label_y </td><td> inherited (<a href="#global">global</a>) </td><td> Label Y-Position (with prefix + or - relative to the upper left corner of the icons, otherwise absolute position) </td>
+        </tr>
+        <tr>
+        <td> label_width </td><td> inherited (<a href="#global">global</a>) </td><td> Width of the label in px </td>
+        </tr>
+        <tr>
+        <td> label_background </td><td> inherited (<a href="#global">global</a>) </td><td> Background colour of the label. The colour should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        </tr>
+        <tr>
+        <td> label_border </td><td> inherited (<a href="#global">global</a>) </td><td> Border colour of the labels. The colour should be given in hexcode. Can also be &quot;transparent&quot;. </td>
+        </tr>
+        <tr>
+        <td>label_style</td><td>inherited (<a href="#global">global</a>)</td><td>Custom styling for the label text. To be given like HTML style attribute contents. E.g. <code>font-family:sans;font-weight:bold;</code></td>
+        </tr>
+
+        <tr>
+        <td> line_type </td><td>inherited (<a href="#global">global</a>)</td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow.</td>
+        </tr>
+        <tr>
+        <td>line_arrow</td><td>inherited (<a href="#global">global</a>)</td>
+        <td>This defines the arrows at the end of the line. At the moment this
+        attribute is only being used for the lines between hosts on the automap. Possible values: forward, back, both, none.</td>
+        </tr>
+        <tr>
+        <td>line_width</td><td>inherited (<a href="#global">global</a>)</td><td>This defines the width of the line in px when this object is being displayed as line.</td>
+        </tr>
+
+        <tr>
+        <td> recognize_services </td><td> inherited (<a href="#global">global</a>) </td><td> Defines if the services of the hosts affect the displayed state. If set to "1" a critical service on one of the host will result in a hostgroup state display as critical too. If set to "0" only the Nagios Host State (UP or DOWN) will be used and the services of the hosts will be ignored. </td>
+        </tr>
+        <tr>
+            <td>url</td>
+            <td></td>
+            <td> URL where the Icon should link to. Default link is to the Nagios CGIs.
+                Macros [dyngroup_name], [htmlcgi] and [htmlbase] are available.
+                The value can be set to an empty string to disable the link.</td>
+        </tr>
+        <tr>
+        <td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window). Available macros: [name]</td>
+        </tr>
+        <tr>
+        <td> use </td><td> </td><td> Comma separated list of object templates to use. For details see <a href="#template">template objects</a></td>
+        </tr>
+        <tr>
+        <td> view_type </td><td> icon </td><td> This option defines the type of view for this object. Possible values are: "icon" or "line". Before NagVis 1.4 you could change the view of an object by setting the line_type. Since NagVis 1.4 you need to set the view_type for changing icons to lines.  </td>
+        </tr>
+        <tr>
+        <td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
+        </tr>
+        </table>
 
         <a name="types"></a><h2>Variable Types</h2>
         <p>This chapter explains the different variable types used in the map configuration file.</p>

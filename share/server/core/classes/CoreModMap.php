@@ -236,7 +236,7 @@ class CoreModMap extends CoreModule {
                     $aVals = $this->getCustomOptions($aOpts);
 
                     // Read map config but don't resolve templates and don't use the cache
-                    $MAPCFG = new GlobalMapCfg($this->CORE, $aVals['show']);
+                    $MAPCFG = new GlobalMapCfg($aVals['show']);
                     $MAPCFG->readMapConfig(0, false, false);
 
                     $aTmp = $MAPCFG->getDefinitions('template');
@@ -303,11 +303,11 @@ class CoreModMap extends CoreModule {
 
         // Read the old config
         $this->verifyMapExists($this->name);
-        $MAPCFG = new GlobalMapCfg($this->CORE, $this->name);
+        $MAPCFG = new GlobalMapCfg($this->name);
         $MAPCFG->readMapConfig();
 
         // Create a new map config
-        $NEW = new GlobalMapCfg($this->CORE, $target);
+        $NEW = new GlobalMapCfg($target);
         $NEW->createMapConfig();
         foreach($MAPCFG->getMapObjects() AS $object_id => $cfg) {
             // Remove "sources" from the global section. Cause this makes the maps dynamic
@@ -348,7 +348,7 @@ class CoreModMap extends CoreModule {
     // Validate and process addModify form submissions
     protected function handleAddModify($mode, $perm, $map, $attrs, $attrsFiltered) {
         $this->verifyMapExists($map);
-        $MAPCFG = new GlobalMapCfg($this->CORE, $map);
+        $MAPCFG = new GlobalMapCfg($map);
 
         try {
             $MAPCFG->skipSourceErrors();
@@ -442,9 +442,21 @@ class CoreModMap extends CoreModule {
                 throw new FieldInputError($key, l('The attribute is deprecated.'));
 
             // The object has a match regex, it can be checked
-            if(isset($attrDefs[$key]['match']) && !preg_match($attrDefs[$key]['match'], $val))
-                throw new FieldInputError($key, l('The attribute has the wrong format (Regex: [MATCH]).',
-                    Array('MATCH' => $attrDefs[$key]['match'])));
+            // -> In case of array attributes validate the single parts
+            if(isset($attrDefs[$key]['match'])) {
+                $array = isset($attrDefs[$key]['array']) && $attrDefs[$key]['array'];
+                if(!$array)
+                    $v = array($val);
+                else
+                    $v = explode(',', $val);
+
+                foreach($v as $part) {
+                    if(!preg_match($attrDefs[$key]['match'], $part)) {
+                        throw new FieldInputError($key, l('The attribute has the wrong format (Regex: [MATCH]).',
+                            Array('MATCH' => $attrDefs[$key]['match'])));
+                    }
+                }
+            }
         }
     }
 
@@ -474,12 +486,12 @@ class CoreModMap extends CoreModule {
     }
 
     protected function doExportMap($a) {
-        $MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
+        $MAPCFG = new GlobalMapCfg($a['map']);
         return $MAPCFG->exportMap();
     }
 
     protected function doTmplModify($a) {
-        $MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
+        $MAPCFG = new GlobalMapCfg($a['map']);
         $MAPCFG->readMapConfig(0, false, false);
 
         $id = $MAPCFG->getTemplateIdByName($a['opts']['name']);
@@ -522,7 +534,7 @@ class CoreModMap extends CoreModule {
 
         // Check if the template already exists
         // Read map config but don't resolve templates and don't use the cache
-        $MAPCFG = new GlobalMapCfg($this->CORE, $FHANDLER->get('map'));
+        $MAPCFG = new GlobalMapCfg($FHANDLER->get('map'));
         $MAPCFG->readMapConfig(0, false, false);
         if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) <= 0) {
             throw new NagVisException(l('A template with this name does not exist.'));
@@ -558,7 +570,7 @@ class CoreModMap extends CoreModule {
 
     protected function doTmplDelete($a) {
         // Read map config but don't resolve templates and don't use the cache
-        $MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
+        $MAPCFG = new GlobalMapCfg($a['map']);
         $MAPCFG->readMapConfig(0, false, false);
 
         $id = $MAPCFG->getTemplateIdByName($a['name']);
@@ -597,7 +609,7 @@ class CoreModMap extends CoreModule {
 
         // Check if the template already exists
         // Read map config but don't resolve templates and don't use the cache
-        $MAPCFG = new GlobalMapCfg($this->CORE, $FHANDLER->get('map'));
+        $MAPCFG = new GlobalMapCfg($FHANDLER->get('map'));
         $MAPCFG->readMapConfig(0, false, false);
         if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) <= 0)
             throw new NagVisException(l('The template does not exist.'));
@@ -614,7 +626,7 @@ class CoreModMap extends CoreModule {
     }
 
     protected function doTmplAdd($a) {
-        $MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
+        $MAPCFG = new GlobalMapCfg($a['map']);
         $MAPCFG->readMapConfig(0, false, false);
 
         // append a new object definition to the map configuration
@@ -650,7 +662,7 @@ class CoreModMap extends CoreModule {
 
         // Check if the template already exists
         // Read map config but don't resolve templates and don't use the cache
-        $MAPCFG = new GlobalMapCfg($this->CORE, $FHANDLER->get('map'));
+        $MAPCFG = new GlobalMapCfg($FHANDLER->get('map'));
         $MAPCFG->readMapConfig(0, false, false);
         if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) > 0)
             throw new NagVisException(l('A template with this name already exists.'));
@@ -689,7 +701,7 @@ class CoreModMap extends CoreModule {
         #$this->name
         $linking = Array();
         foreach($this->CORE->getAvailableMaps() AS $map) {
-            $MAPCFG1 = new GlobalMapCfg($this->CORE, $map);
+            $MAPCFG1 = new GlobalMapCfg($map);
             try {
                 $MAPCFG1->readMapConfig();
             } catch(MapCfgInvalid $e) {
@@ -707,7 +719,7 @@ class CoreModMap extends CoreModule {
 
     protected function doDeleteObject($a) {
         // initialize map and read map config
-        $MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
+        $MAPCFG = new GlobalMapCfg($a['map']);
         // Ignore map configurations with errors in it.
         // the problems may get resolved by deleting the object
         try {
@@ -759,7 +771,7 @@ class CoreModMap extends CoreModule {
     }
 
     protected function doDelete($a) {
-        $MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
+        $MAPCFG = new GlobalMapCfg($a['map']);
         try {
             $MAPCFG->readMapConfig();
         } catch(MapCfgInvalidObject $e) {}
@@ -795,7 +807,7 @@ class CoreModMap extends CoreModule {
     }
 
     protected function doModifyObject($a) {
-        $MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
+        $MAPCFG = new GlobalMapCfg($a['map']);
         try {
             $MAPCFG->readMapConfig();
         } catch(MapCfgInvalid $e) {}
@@ -878,7 +890,7 @@ class CoreModMap extends CoreModule {
         // loop all map configs to replace mapname in all map configs
         foreach($this->CORE->getAvailableMaps() as $mapName) {
             try {
-                $MAPCFG1 = new GlobalMapCfg($this->CORE, $mapName);
+                $MAPCFG1 = new GlobalMapCfg($mapName);
                 $MAPCFG1->readMapConfig();
 
                 $i = 0;
@@ -939,7 +951,7 @@ class CoreModMap extends CoreModule {
     }
 
     protected function doAdd($a) {
-        $MAPCFG = new GlobalMapCfg($this->CORE, $a['map']);
+        $MAPCFG = new GlobalMapCfg($a['map']);
         if(!$MAPCFG->createMapConfig())
             return false;
 
@@ -981,7 +993,7 @@ class CoreModMap extends CoreModule {
     }
 
     private function getMapProperties() {
-        $MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
+        $MAPCFG = new GlobalMapCfg($this->name);
         $MAPCFG->readMapConfig(ONLY_GLOBAL);
 
         $arr = Array();
@@ -1009,10 +1021,10 @@ class CoreModMap extends CoreModule {
     }
 
     private function getMapObjects() {
-        $MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
+        $MAPCFG = new GlobalMapCfg($this->name);
         $MAPCFG->readMapConfig();
 
-        $MAP = new NagVisMap($this->CORE, $MAPCFG, GET_STATE, IS_VIEW);
+        $MAP = new NagVisMap($MAPCFG, GET_STATE, IS_VIEW);
         return $MAP->parseObjectsJson();
     }
 
@@ -1032,7 +1044,7 @@ class CoreModMap extends CoreModule {
         }
 
         // Initialize map configuration (Needed in getMapObjConf)
-        $MAPCFG = new NagVisMapCfg($this->CORE, $this->name);
+        $MAPCFG = new GlobalMapCfg($this->name);
         $MAPCFG->readMapConfig();
 
         // i might not be set when all map objects should be fetched or when only
@@ -1040,7 +1052,7 @@ class CoreModMap extends CoreModule {
         if($aVals['i'] != '')
             $MAPCFG->filterMapObjects($aVals['i']);
 
-        $MAP = new NagVisMap($this->CORE, $MAPCFG, GET_STATE, IS_VIEW);
+        $MAP = new NagVisMap($MAPCFG, GET_STATE, IS_VIEW);
         return $MAP->parseObjectsJson($aVals['ty']);
     }
 

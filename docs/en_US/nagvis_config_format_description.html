@@ -256,7 +256,13 @@
         <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
         </tr>
         <tr>
-        <td> backend </td><td> live_1 </td><td> Default backend (ID of the backend - copy the text from which <code>&lt;backend-id></code> stands for in <code>[backend_&lt;backend-id>]</code> ) </td>
+          <td>backend</td>
+          <td>live_1</td>
+          <td>Default backend (ID of the backend - copy the text from which 
+              <code>&lt;backend-id></code> stands for in <code>[backend_&lt;backend-id>]</code>).
+              As of NagVis 1.8 it is possible to define a "," separated list of backends here to combine
+              objects of several backends. Host, host and service group objects do support merging their
+              members into one object when multiple backends are configured for an object.</td>
         </tr>
         <tr>
         <td>backgroundcolor</td><td>transparent</td><td>Default background colour of maps </td>
@@ -396,9 +402,17 @@
         </tr>
         <tr>
             <td>servicegroupurl</td>
-        <td>[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]</td>
-        <td>The default url to follow when a user left-clicks on an servicegroup object.
-          Available macros: [htmlcgi], [htmlbase], [servicegroup_name], [backend_id]</td>
+            <td>[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]</td>
+            <td>The default url to follow when a user left-clicks on an servicegroup object.
+              Available macros: [htmlcgi], [htmlbase], [servicegroup_name], [backend_id]</td>
+        </tr>
+        <tr>
+            <td>dyngroupurl</td>
+            <td></td>
+            <td>The default url to follow when a user left-clicks on an dynamic group object.
+                This is disabled by default, because there is no good link target in the default
+                web GUI. So if you use another web GUI, there might be a useful target.
+              Available macros: [htmlcgi], [htmlbase], [dyngroup_name], [backend_id]</td>
         </tr>
         <tr>
             <td>mapurl</td>

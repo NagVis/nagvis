@@ -53,7 +53,7 @@ define('MATCH_BOOLEAN', '/^(?:1|0)$/i');
 define('MATCH_BOOLEAN_EMPTY', '/^(?:1|0)*$/i');
 
 define('MATCH_COLOR', '/^(#?[0-9a-f]{3,6}|transparent)$/i');
-define('MATCH_OBJECTTYPE', '/^(?:global|host|service|hostgroup|servicegroup|map|textbox|shape|line|template|container)$/i');
+define('MATCH_OBJECTTYPE', '/^(?:global|host|service|dyngroup|hostgroup|servicegroup|map|textbox|shape|line|template|container)$/i');
 define('MATCH_OBJECTID', '/^(?:[a-z0-9]+)$/i');
 define('MATCH_OBJECTID_EMPTY', '/^(?:[a-z0-9]*)$/i');
 define('MATCH_PNGFILE', '/^([^\s]+)\.png$/i');
@@ -65,6 +65,7 @@ define('MATCH_LANGUAGE_EMPTY', '/^[a-zA-Z0-9\-_]*$/');
 define('MATCH_LANGUAGE_FILE', '/^([^\.].*)/');
 define('MATCH_ICONSET', '/^(.+)_ok.(png|gif|jpg)$/');
 define('MATCH_BACKEND_FILE', '/^GlobalBackend([^MI].+)\.php$/');
+define('MATCH_BACKEND_ID', '/^[0-9a-z\._-]*$/iu');
 define('MATCH_DOC_DIR', '/^([a-z]{2}_[A-Z]{2})/');
 define('MATCH_MAINCFG_FILE', '/^.+\.ini\.php$/i');
 
@@ -79,7 +80,7 @@ define('MATCH_VIEW_TYPE_SERVICE_EMPTY', '/^(?:icon|line|gadget)*$/i');
 define('MATCH_VIEW_TYPE_CONTAINER', '/^(?:inline|iframe)$/i');
 define('MATCH_GET_OBJECT_TYPE', '/^(state|complete|summary)$/');
 define('MATCH_GADGET_TYPE', '/^(?:img|html)$/i');
-define('MATCH_OBJECT_TYPES', '/^(host|service|hostgroup|servicegroup|map)$/');
+define('MATCH_OBJECT_TYPES', '/^(host|service|hostgroup|servicegroup|dyngroup|map)$/');
 define('MATCH_AUTOMAP_RENDER_MODE', '/^(directed|undirected|radial|circular|undirected2|undirected3)?$/');
 define('MATCH_AUTOMAP_RANKDIR', '/^(TB|LR|BT|RL)?$/');
 define('MATCH_AUTOMAP_OVERLAP', '/^(true|false|scale|scalexy|ortho|orthoxy|orthoyx|compress|ipsep|vpsc)?$/');
@@ -89,6 +90,8 @@ define('MATCH_LINE_TYPE', '/^(10|11|12|13|14|15)?$/');
 define('MATCH_LINE_ARROW', '/^(none|forward|back|both)?$/');
 define('MATCH_USER_NAME', '/^[0-9A-Za-z_\-\.\@\s]+$/');
 define('MATCH_ROLE_NAME', '/^[0-9A-Za-z_\-\.\@\s]+$/');
+define('MATCH_DYN_GROUP_TYPES', '/^(?:hosts|services)$/');
+define('MATCH_LIVESTATUS_FILTER', '/^(?:Filter: .*\\\n)+$/i');
 
 define('MATCH_URI_PART', '/^[a-zA-Z0-9\-_]*$/');
 

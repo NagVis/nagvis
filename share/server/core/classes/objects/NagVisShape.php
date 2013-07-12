@@ -34,16 +34,16 @@ class NagVisShape extends NagVisStatelessObject {
      * @param		String	 	Image of the shape
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function __construct($CORE, $icon) {
+    public function __construct($icon) {
         if(self::$iconPath === null) {
-            self::$iconPath      = $CORE->getMainCfg()->getPath('sys',  'global', 'shapes');
-            self::$iconPathLocal = $CORE->getMainCfg()->getPath('sys',  'local', 'shapes');
+            self::$iconPath      = path('sys',  'global', 'shapes');
+            self::$iconPathLocal = path('sys',  'local', 'shapes');
         }
 
         $this->icon = $icon;
         $this->type = 'shape';
 
-        parent::__construct($CORE);
+        parent::__construct();
     }
 
     /**

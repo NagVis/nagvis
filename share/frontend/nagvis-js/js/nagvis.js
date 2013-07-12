@@ -1394,3 +1394,32 @@ function _(s, replace) {
 
     return s;
 }
+
+function has_class(o, cn) {
+    var parts = o.className.split(' ');
+    for (x=0; x<parts.length; x++) {
+        if (parts[x] == cn)
+            return true;
+    }
+    return false;
+}
+
+function remove_class(o, cn) {
+    var parts = o.className.split(' ');
+    var new_parts = Array();
+    for (x=0; x<parts.length; x++) {
+        if (parts[x] != cn)
+            new_parts.push(parts[x]);
+    }
+    o.className = new_parts.join(" ");
+}
+
+function add_class(o, cn) {
+    if (!has_class(o, cn))
+        o.className += " " + cn;
+}
+
+function change_class(o, a, b) {
+    remove_class(o, a);
+    add_class(o, b);
+}

@@ -86,12 +86,12 @@ class CoreModManageShapes extends CoreModule {
         if(!preg_match(MATCH_PNG_GIF_JPG_FILE, $fileName))
             throw new NagVisException(l('The uploaded file is no image (png,jpg,gif) file or contains unwanted chars.'));
 
-        $filePath = $this->CORE->getMainCfg()->getPath('sys', '', 'shapes').$fileName;
+        $filePath = path('sys', '', 'shapes').$fileName;
         return move_uploaded_file($a['image_file']['tmp_name'], $filePath) && $this->CORE->setPerms($filePath);
     }
 
     protected function doDelete($a) {
-        $path = $this->CORE->getMainCfg()->getPath('sys', '', 'shapes', $a['image']);
+        $path = path('sys', '', 'shapes', $a['image']);
         if($path !== '')
             return unlink($path);
         else
@@ -119,7 +119,7 @@ class CoreModManageShapes extends CoreModule {
 
         $using = Array();
         foreach($this->CORE->getAvailableMaps() AS $map) {
-            $MAPCFG1 = new GlobalMapCfg($this->CORE, $map);
+            $MAPCFG1 = new GlobalMapCfg($map);
             try {
                 $MAPCFG1->readMapConfig();
             } catch(MapCfgInvalid $e) {

@@ -62,7 +62,7 @@ class CoreModAction extends CoreModule {
                     $this->verifyMapExists($attrs['map']);
 
                     // - does the object exist on the map?
-                    $this->MAPCFG = new GlobalMapCfg(GlobalCore::getInstance(), $attrs['map']);
+                    $this->MAPCFG = new GlobalMapCfg($attrs['map']);
                     $this->MAPCFG->skipSourceErrors();
                     $this->MAPCFG->readMapConfig();
 
@@ -94,7 +94,7 @@ class CoreModAction extends CoreModule {
 
                     $this->verifyMapExists($attrs['map']);
 
-                    $this->MAPCFG = new GlobalMapCfg(GlobalCore::getInstance(), $attrs['map']);
+                    $this->MAPCFG = new GlobalMapCfg($attrs['map']);
                     $this->MAPCFG->skipSourceErrors();
                     $this->MAPCFG->readMapConfig();
 

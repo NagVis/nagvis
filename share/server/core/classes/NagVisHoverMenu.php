@@ -49,7 +49,7 @@ class NagVisHoverMenu {
         $this->templateName = $templateName;
 
         $this->pathHtmlBase     = cfg('paths','htmlbase');
-        $this->pathTemplateFile = $this->CORE->getMainCfg()->getPath('sys', '', 'templates', $this->templateName.'.hover.html');
+        $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName.'.hover.html');
 
         // Simply skip processing with an invalid template file name
         if($this->pathTemplateFile === '')
@@ -180,11 +180,11 @@ class NagVisHoverMenu {
         }
 
         if(strpos($this->code,'[html_templates]') !== FALSE) {
-            $this->code = str_replace('[html_templates]',$this->CORE->getMainCfg()->getPath('sys', 'global', 'templates'),$this->code);
+            $this->code = str_replace('[html_templates]', path('sys', 'global', 'templates'),$this->code);
         }
 
         if(strpos($this->code,'[html_template_images]') !== FALSE)
-            $this->code = str_replace('[html_template_images]', $this->CORE->getMainCfg()->getPath('html', 'global', 'templateimages'), $this->code);
+            $this->code = str_replace('[html_template_images]', path('html', 'global', 'templateimages'), $this->code);
     }
 
     /**
@@ -224,7 +224,7 @@ class NagVisHoverMenu {
     }
 
     public function getCssFile() {
-        return $this->CORE->getMainCfg()->getPath('html', 'global', 'templates', $this->templateName.'.hover.css');
+        return path('html', 'global', 'templates', $this->templateName.'.hover.css');
     }
 }
 ?>

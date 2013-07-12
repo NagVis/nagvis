@@ -1,11 +1,8 @@
-<?php
 /*****************************************************************************
  *
- * NagVisStatelessObject.php - Abstract class of a stateless object in NagVis
- *                  with all necessary information which belong to the object
- *                  handling in NagVis
+ * NagVisDynGroup.js - This class handles the visualisation of dynamic groups
  *
- * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -24,11 +21,11 @@
  *
  *****************************************************************************/
 
-class NagVisStatelessObject extends NagVisObject {
-    // "Global" Configuration variables for all stateless objects
-    protected $label_show;
+var NagVisDynGroup = NagVisStatefulObject.extend({
+    constructor: function(oConf) {
+        // Call parent constructor
+        this.base(oConf);
 
-    protected static $iconPath      = null;
-    protected static $iconPathLocal = null;
-}
-?>
+        this.getMembers();
+    }
+});

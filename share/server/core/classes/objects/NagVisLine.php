@@ -28,21 +28,9 @@
  */
 class NagVisLine extends NagVisStatelessObject {
 
-    public function __construct($CORE) {
+    public function __construct() {
         $this->type = 'line';
-        parent::__construct($CORE);
-    }
-
-    /**
-     * PUBLIC parseJson()
-     *
-     * Parses the object in json format
-     *
-     * @return	String		JSON code of the object
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function parseJson() {
-        return parent::parseJson();
+        parent::__construct();
     }
 
     /**

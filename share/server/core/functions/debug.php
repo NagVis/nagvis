@@ -48,9 +48,13 @@ function debug($msg) {
  * @author 	Lars Michelsen <lars@vertical-visions.de>
  */
 function debugFinalize() {
-	debug('###########################################################');
-	debug('Render Time: '.(microtime_float()-DEBUGSTART).' URI: '.$_SERVER['REQUEST_URI']);
-	debug('###########################################################');
+	debug('==> Render Time: '.round((microtime_float() - DEBUGSTART), 2).'sec'
+             .' Mem peak: '.round(memory_get_peak_usage()/1024/1024, 2).'Mb'
+             .' URI: '.$_SERVER['REQUEST_URI']);
+}
+
+function log_mem($txt = 'somewhere') {
+    debug('mem ['.$txt.']: ' . round(memory_get_usage()/1024/1024, 2) . 'Mb');
 }
 
 /**

@@ -23,6 +23,8 @@
  *
  *****************************************************************************/
 
+$CORE = GlobalCore::getInstance();
+
 /*
  * l() needs to be available in MainCfg initialization and config parsing,
  * but GlobalLanguage initialization relies on the main configuration in
@@ -83,5 +85,50 @@ function curLang() {
  * connections. This is only done when the pages request data from any backend
  */
 $_BACKEND = new CoreBackendMgmt();
+
+// ----------------------------------------------------------------------------
+// some untilities
+
+function val($arr, $key, $dflt = null) {
+    return isset($arr[$key]) ? $arr[$key] : $dflt;
+}
+
+function state_str($state) {
+    switch($state) {
+        case UNCHECKED:   return 'UNCHECKED';
+        case UNREACHABLE: return 'UNREACHABLE';
+        case DOWN:        return 'DOWN';
+        case UP:          return 'UP';
+        case PENDING:     return 'PENDING';
+        case UNKNOWN:     return 'UNKNOWN';
+        case CRITICAL:    return 'CRITICAL';
+        case WARNING:     return 'WARNING';
+        case OK:          return 'OK';
+        case ERROR:       return 'ERROR';
+        default:          return 'ERROR'; // unspecified state
+    }
+}
+
+function state_num($state_str) {
+    $a = array(
+        'UNCHECKED'     => UNCHECKED,
+        'UNREACHABLE'   => UNREACHABLE,
+        'DOWN'          => DOWN,
+        'UP'            => UP,
+        // services
+        'PENDING'       => PENDING,
+        'UNKNOWN'       => UNKNOWN,
+        'CRITICAL'      => CRITICAL,
+        'WARNING'       => WARNING,
+        'OK'            => OK,
+        // generic
+        'ERROR'         => ERROR
+    );
+    return $a[$state_str];
+}
+
+function is_host_state($state) {
+    return $state == UNCHECKED || $state == UNREACHABLE || $state == DOWN || $state == UP;
+}
 
 ?>

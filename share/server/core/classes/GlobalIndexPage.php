@@ -26,19 +26,9 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalIndexPage {
-    private $CORE;
     private $htmlBase;
 
-
-    /**
-     * Class Constructor
-     *
-     * @param 	GlobalCore 	$CORE
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
     public function __construct() {
-        global $CORE;
-        $this->CORE = $CORE;
         $this->htmlBase = cfg('paths','htmlbase');
     }
 
@@ -68,7 +58,7 @@ class GlobalIndexPage {
 
         $map = Array('object_id' => $objectId);
 
-        $MAPCFG = new NagVisMapCfg($this->CORE, $mapName);
+        $MAPCFG = new GlobalMapCfg($mapName);
         $MAPCFG->checkMapConfigExists(true);
         $MAPCFG->readMapConfig();
 
@@ -78,7 +68,7 @@ class GlobalIndexPage {
 
         $objConf = $MAPCFG->getTypeDefaults('global');
 
-        $MAP = new NagVisMap($this->CORE, $MAPCFG, GET_STATE, !IS_VIEW);
+        $MAP = new NagVisMap($MAPCFG, GET_STATE, !IS_VIEW);
 
         // Apply default configuration to object
         $objConf = array_merge($objConf, $this->getMapDefaultOpts($mapType, $mapName, $MAPCFG->getAlias()));
@@ -114,7 +104,7 @@ class GlobalIndexPage {
      * FIXME: More cleanups, compacting and extraction of single parts
      */
     public function parseMapsJson($type, $what = COMPLETE, $objects = Array()) {
-        global $_BACKEND;
+        global $_BACKEND, $CORE;
         // initial parsing mode: Skip processing when this type of object should not be shown
         if($type != 'list' && cfg('index', 'show'.$type.'s') != 1)
             return json_encode(Array());
@@ -122,10 +112,11 @@ class GlobalIndexPage {
         if($type == 'list')
             $mapList = $objects;
         else
-            $mapList = $this->CORE->getAvailableMaps();
+            $mapList = $CORE->getAvailableMaps();
 
         $aMaps = Array();
         $aObjs = Array();
+        log_mem('pre');
         foreach($mapList AS $objectId) {
             if($type == 'list') {
                 $a = explode('-', $objectId, 2);
@@ -155,6 +146,7 @@ class GlobalIndexPage {
             }
 
             $aObjs[] = $ret;
+            log_mem('post '. $mapName);
         }
 
         // Now fetch and apply data from backend
@@ -168,6 +160,7 @@ class GlobalIndexPage {
             else
                 $aMaps[] = array_merge($aObj[0]->parseJson(), $aObj[1]);
         }
+        log_mem('post backend');
 
         if($type != 'list') {
             usort($aMaps, Array('GlobalCore', 'cmpAlias'));
@@ -207,6 +200,7 @@ class GlobalIndexPage {
     }
 
     private function renderMapThumb($MAPCFG) {
+        global $CORE;
         $imgPath     = $MAPCFG->BACKGROUND->getFile(GET_PHYSICAL_PATH);
 
         // Check if
@@ -214,7 +208,7 @@ class GlobalIndexPage {
         // b) The image is a local one
         // c) The image exists
         // When one is not OK, then use the large map image
-        if(!$this->CORE->checkGd(0) || !$MAPCFG->BACKGROUND->getFileType() == 'local' || !file_exists($imgPath))
+        if(!$CORE->checkGd(0) || !$MAPCFG->BACKGROUND->getFileType() == 'local' || !file_exists($imgPath))
             return $MAPCFG->BACKGROUND->getFile();
 
         $sThumbFile     = $MAPCFG->getName() . '-thumb.' . $this->getFileType($imgPath);
@@ -236,18 +230,18 @@ class GlobalIndexPage {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parseRotationsJson() {
-        global $AUTHORISATION;
+        global $AUTHORISATION, $CORE;
         // Only display the rotation list when enabled
         if(cfg('index','showrotations') != 1)
             return json_encode(Array());
 
         $aRotations = Array();
-        foreach($this->CORE->getDefinedRotationPools() AS $poolName) {
+        foreach($CORE->getDefinedRotationPools() AS $poolName) {
             // Check if the user is permitted to view this rotation
             if(!$AUTHORISATION->isPermitted('Rotation', 'view', $poolName))
                 continue;
 
-            $ROTATION = new CoreRotation($this->CORE, $poolName);
+            $ROTATION = new CoreRotation($poolName);
             $iNum = $ROTATION->getNumSteps();
             $aSteps = Array();
             for($i = 0; $i < $iNum; $i++) {
@@ -326,7 +320,8 @@ class GlobalIndexPage {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     private function createThumbnail($imgPath, $thumbPath) {
-        if($this->CORE->checkVarFolderWriteable(TRUE) && $this->checkImageExists($imgPath, TRUE)) {
+        global $CORE;
+        if($CORE->checkVarFolderWriteable(TRUE) && $this->checkImageExists($imgPath, TRUE)) {
             // 0: width, 1:height, 2:type
             $imgSize = getimagesize($imgPath);
             $strFileType = '';
@@ -427,7 +422,8 @@ class GlobalIndexPage {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function checkImageExists($imgPath, $printErr) {
-        return $this->CORE->checkExisting($imgPath, $printErr);
+        global $CORE;
+        return $CORE->checkExisting($imgPath, $printErr);
     }
 }
 ?>

@@ -17,6 +17,61 @@ Offene Punkte:
 
 -------------------------------------------------------------------------------
 
+*** state handling cleanup ***
+
+Ein Zustand bedeutet:
+- state
+- output
+- problem_has_been_acknowledged
+- in_downtime
+
+Der Summary-State ist auch ein solches Zustandskonstrukt. Ergibt sich
+aber bei Hosts eben aus dem eigenen Zustand und den Member-Zuständen.
+
+Zustand mit Details bedeutet:
+- state
+- output
+- problem_has_been_acknowledged
+- in_downtime
+- state_type
+- last_state_change
+- current_check_attempt
+- max_check_attempts
+- perfdata
+- downtime_author
+- downtime_data
+- downtime_start
+- downtime_end
+
+- Alle zustandsbezogenen Dinge kommen in ein eigenes Array()
+- Dieser spiegelt den kompletten Zustand des Objektes selbst
+  - Gilt also nur für Hosts und Services
+- Jedes Objekt (ausser Services) hat eine Liste Members. Diese Liste hält die Zustände der Members
+  Hosts: Services
+  Hostgroups: Host + Service-States
+  Servicegroups: Service-States
+  Maps: Alles
+- In der Member-Liste sind nicht nur die direkten States enthalten, sondern alle
+
+-------------------------------------------------------------------------------
+
+Intern states als Konstanten behandeln, nicht mehr Strings verwenden
+
+IDs:
+
+14 UNCHECKED
+12 UNREACHABLE
+11 DOWN
+10 UP
+
+4 PENDING
+3 UNKNOWN
+2 CRITICAL
+1 WARNING
+0 OK
+
+-1 ERROR
+
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
   - An Shapes anheften fehlt - Eventuell auch nicht. Was ist denn, wenn man Shapes
@@ -181,8 +236,58 @@ Exception/Error log bauen:
 # ERLEDIGT
 ===============================================================================
 
+*** Dynamische Gruppen anhand von Livestatus-Filtern ***
+
+- Bisher gibt es als Objekte, die einzelne Hosts/Services zusammenfassen
+  Hostgruppen und Servicegruppen.
+- Die Mitgliedschaft in diesen Gruppen ist zur Laufzeit statisch
+- Es wäre gut flexible Objekte zu haben, die ihre Mitglieder anhand von
+  bestimmten Filterkriterien zur Laufzeit ermitteln.
+- Wir beschränken uns bei der Realisierung auf das Livestatus-Backend,
+  d.h. die Objekte funktionieren nur, wenn man diese mit Livestatus-Backends
+  benutzt.
+- Hierzu wird ein neuer Objekttyp eingeführt: Dynamic Groups (NagVisDynGroup)
+- Diesen Objekttyp konfiguriert man mit
+  a) Einem Namen, den man frei definieren kann, der z.B. zur Anzeige genutzt wird
+     -> name
+  a) der Livestatus-Tabelle, die man abfragen will (hosts, services)
+     -> object_types="(hosts|services)"
+  b) den Livestatus-Filtern, die man nutzen will (z.b. Filter: custom_variables = ID xyz)
+     -> object_filter="Filter: custom_variables = ID xyz"
+     -> object_filter="Filter: custom_variables = TAGS local_test"
+- Zusätzlich kann man natürlich noch ein oder mehrere Backends konfigurieren,
+  die dann diese Anfragen bearbeiten. Die Ergebnisse werden addiert.
+
+*** Objekte aus mehreren Backends ***
+
+- Objekte mit Membern (Hosts und Gruppen) können in mehreren Backends unter dem gleichen
+  Namen definiert sein.
+- Diese Objekte kann man im NagVis bisher nur getrennt hinzufügen.
+- Neue Möglichkeit: Bei einem Objekt mehrere Backend-IDs konfigurieren, dadurch wird
+  das Objekt von mehreren Backends abgefragt.
+- Wenn von mindestens einem Backend Daten für das Objekt kommen, ist es in Ordnung
+- In der Konfiguration muss für den Fall der Dropdown-Felder mit Mehrauswahlmöglichkeit
+  eine Alternative eingabemöglichkeit (Mehrfachselektion, Reihenfolge) gefunden werden.
+  Eventuell weiterhin ein Dropdown-Feld und ein Knopf zum Hinzufügen eines weiteren Feldes.
+- In der Konfiguration wird so gespeichert: backend_id=backend1,backend2,backend3.
+- Hover-/Context-Macros: Das erste konfigurierte Backend definiert weiterhin die Attribute 
+  htmlcgi und custom_1 bis 3. Bei den anderen wird die jeweilige Nummer angehängt, z.B.
+  htmlcgi_1, htmlcgi_2
+
+*** Berechtigungen auf Maps mit Kontaktgruppen steuern ***
+  - Es gibt pro Map zwei Rechte: view, edit
+  - Die Rechte werden in verschachtelten Listen gespeichert
+    - Erste Ebene: Name der Kontaktgruppe
+    - Zweite Ebene: edit/view 
+    - Dritte Ebene: Liste von Maps
+  - Gespeichert werden die Daten unter etc/nagvis/perms.db
+  - Die Daten werden im JSON-Format persistiert
+  - Es wird ein Authorisation-Modul implementiert, das die Daten auswertet.
+  - Die Dialoge zur Konfiguration der Rollen/Rechte sind mit diesem Modul deaktiviert.
+
 - Overview-Seite: Bei HTTP Fehler, z.b. 500 wegen Memory-Limit, ordentlichen Fehler zeigen
 - CSV Quelle und geomap aufteilen
+
 
 *** NagVis Map Zoom ***
 

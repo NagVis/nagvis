@@ -26,24 +26,21 @@
  *
  *****************************************************************************/
 
-/**
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
 class NagVisMapObj extends NagVisStatefulObject {
-    protected $MAPCFG;
-    private $MAP;
+    protected $type = 'map';
 
     protected static $langType = null;
     protected static $langSelf = null;
     protected static $langChild = null;
 
-    protected $members;
+    protected $MAPCFG;
+    private $MAP;
+
+    protected $members = array();
     protected $linkedMaps;
 
     protected $map_name;
     protected $alias;
-
-    protected $in_downtime;
 
     // When this map object summarizes the state of a map this is true
     // Prevents loops
@@ -56,13 +53,11 @@ class NagVisMapObj extends NagVisStatefulObject {
     // This controlls wether this is MapObj is used as view or as object on a map
     protected $isView;
 
-    public function __construct($CORE, $BACKEND, $MAPCFG, $bIsView = IS_VIEW) {
+    public function __construct($MAPCFG, $bIsView = IS_VIEW) {
         $this->MAPCFG = $MAPCFG;
 
         $this->map_name = $this->MAPCFG->getName();
         $this->alias = $this->MAPCFG->getAlias();
-        $this->type = 'map';
-        $this->iconset = 'std_medium';
 
         $this->linkedMaps = Array();
         $this->isSummaryObject = false;
@@ -73,28 +68,18 @@ class NagVisMapObj extends NagVisStatefulObject {
 
         $this->backend_id = $this->MAPCFG->getValue(0, 'backend_id');
 
-        parent::__construct($CORE, $BACKEND);
+        parent::__construct();
     }
 
     /**
-     * PUBLIC clearMembers()
-     *
      * Clears the map
-     *
-     * @return	Array	Array with map objects
-     * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function clearMembers() {
         $this->members = Array();
     }
 
     /**
-     * PUBLIC getMembers()
-     *
      * Returns the array of objects on the map
-     *
-     * @return	Array	Array with map objects
-     * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getMembers() {
         return $this->members;
@@ -102,32 +87,26 @@ class NagVisMapObj extends NagVisStatefulObject {
 
     /**
      * Adds several members to the map
-     *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function addMembers($add) {
         $this->members = array_merge($this->members, $add);
     }
 
     /**
-     * PUBLIC getStateRelevantMembers()
-     *
      * Returns an array of state relevant members
      * textboxes, shapes and "summary objects" are
      * excluded here
-     *
-     * @return  Array Array with map objects
-     * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     public function getStateRelevantMembers($excludeMemberStates = false) {
+        global $CORE;
         $a = Array();
 
         // Loop all members
         foreach($this->members AS $OBJ) {
-            $sType = $OBJ->type;
+            $sType = $OBJ->getType();
 
             // Skip unrelevant object types
-            if(isset($this->CORE->statelessObjectTypes[$sType]))
+            if(isset($CORE->statelessObjectTypes[$sType]))
                 continue;
 
             /**
@@ -159,30 +138,14 @@ class NagVisMapObj extends NagVisStatefulObject {
     }
 
     /**
-     * PUBLIC getNumMembers()
-     *
-     * Returns the number of objects on the map
-     *
-     * @return	Integer	Number of objects on the map
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * Returns the number of stateful objects on the map
      */
     public function getNumMembers() {
-        return count($this->members);
-    }
-
-    /**
-     * PUBLIC getNumiStatefulMembers()
-     *
-     * Returns the number of stateful objects on the map
-     *
-     * @return  Integer    Number of stateful objects on the map
-     * @author  Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function getNumStatefulMembers() {
+        global $CORE;
         $i = 0;
         // Loop all objects except the stateless ones and count them
         foreach($this->members AS $OBJ) {
-            if(!isset($this->CORE->statelessObjectTypes[$OBJ->type])) {
+            if(!isset($CORE->statelessObjectTypes[$OBJ->getType()])) {
                 $i++;
             }
         }
@@ -191,47 +154,16 @@ class NagVisMapObj extends NagVisStatefulObject {
     }
 
     /**
-     * PUBLIC hasObjects()
-     *
-     * The fastest way I can expect to check if the map has objects
-     *
-     * @return	Boolean
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function hasObjects() {
-        return isset($this->members[0]);
-    }
-
-    /**
-     * PUBLIC hasObjects()
-     *
-     * The fastest way I can expect to check if the map has objects
-     *
-     * @return	Boolean
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * With current data the best way to check wether the map has stateful members
      */
     public function hasMembers() {
-        return isset($this->members[0]);
-    }
-
-    /**
-     * PUBLIC hasStatefulObjects()
-     *
-     * Check if the map has a stateful object on it
-     *
-     * @return	Boolean
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function hasStatefulObjects() {
-        // Loop all objects on the map
+        global $CORE;
+        // Loop all objects except the stateless ones and count them
         foreach($this->members AS $OBJ) {
-            if(!isset($this->CORE->statelessObjectTypes[$OBJ->type])) {
-                // Exit on first result
+            if(!isset($CORE->statelessObjectTypes[$OBJ->getType()])) {
                 return true;
             }
         }
-
-        // No stateful object found
         return false;
     }
 
@@ -268,8 +200,12 @@ class NagVisMapObj extends NagVisStatefulObject {
      */
     public function applyState() {
         if($this->problem_msg) {
-            $this->summary_state = 'ERROR';
-            $this->summary_output = $this->problem_msg;
+            $this->sum = array(
+                ERROR,
+                $this->problem_msg,
+                null,
+                null
+            );
             $this->clearMembers();
             return;
         }
@@ -288,8 +224,6 @@ class NagVisMapObj extends NagVisStatefulObject {
 
         // At least summary output
         $this->fetchSummaryOutput();
-
-        $this->state = $this->summary_state;
     }
 
     /**
@@ -339,13 +273,14 @@ class NagVisMapObj extends NagVisStatefulObject {
      * are handled by the backends, not in the NagVis code.
      */
     private function excludeMapObject($OBJ, $isCount) {
+        global $CORE;
         // at the moment only handle the complete exclusion
         $filter  = $this->getExcludeFilter($isCount);
         $objType = $OBJ->getType();
         $parts   = explode('~~', $filter);
 
         // Never exclude stateless objects
-        if(isset($this->CORE->statelessObjectTypes[$objType]))
+        if(isset($CORE->statelessObjectTypes[$objType]))
             return false;
     
         if(isset($parts[1]) && $objType == 'service'
@@ -372,6 +307,7 @@ class NagVisMapObj extends NagVisStatefulObject {
             if($type == 'global' || $type == 'template')
                 continue;
 
+            log_mem('preconf');
             $typeDefs = $this->MAPCFG->getTypeDefaults($type);
 
             // merge with "global" settings
@@ -381,20 +317,24 @@ class NagVisMapObj extends NagVisStatefulObject {
 
             switch($type) {
                 case 'host':
-                    $OBJ = new NagVisHost($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['host_name']);
+                    log_mem('prehost');
+                    $OBJ = new NagVisHost($objConf['backend_id'], $objConf['host_name']);
                 break;
                 case 'service':
-                    $OBJ = new NagVisService($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['host_name'], $objConf['service_description']);
+                    $OBJ = new NagVisService($objConf['backend_id'], $objConf['host_name'], $objConf['service_description']);
                 break;
                 case 'hostgroup':
-                    $OBJ = new NagVisHostgroup($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['hostgroup_name']);
+                    $OBJ = new NagVisHostgroup($objConf['backend_id'], $objConf['hostgroup_name']);
                 break;
                 case 'servicegroup':
-                    $OBJ = new NagVisServicegroup($this->CORE, $this->BACKEND, $objConf['backend_id'], $objConf['servicegroup_name']);
+                    $OBJ = new NagVisServicegroup($objConf['backend_id'], $objConf['servicegroup_name']);
+                break;
+                case 'dyngroup':
+                    $OBJ = new NagVisDynGroup($objConf['backend_id'], $objConf['name']);
                 break;
                 case 'map':
                     // Initialize map configuration
-                    $SUBMAPCFG = new NagVisMapCfg($this->CORE, $objConf['map_name']);
+                    $SUBMAPCFG = new GlobalMapCfg($objConf['map_name']);
 
                     $mapCfgInvalid = null;
                     if($SUBMAPCFG->checkMapConfigExists(0)) {
@@ -407,7 +347,7 @@ class NagVisMapObj extends NagVisStatefulObject {
                         }
                     }
 
-                    $OBJ = new NagVisMapObj($this->CORE, $this->BACKEND, $SUBMAPCFG, !IS_VIEW);
+                    $OBJ = new NagVisMapObj($SUBMAPCFG, !IS_VIEW);
 
                     if($mapCfgInvalid)
                         $OBJ->setProblem($mapCfgInvalid);
@@ -450,16 +390,16 @@ class NagVisMapObj extends NagVisStatefulObject {
                     }
                 break;
                 case 'shape':
-                    $OBJ = new NagVisShape($this->CORE, $objConf['icon']);
+                    $OBJ = new NagVisShape($objConf['icon']);
                 break;
                 case 'textbox':
-                    $OBJ = new NagVisTextbox($this->CORE);
+                    $OBJ = new NagVisTextbox();
                 break;
                 case 'container':
-                    $OBJ = new NagVisContainer($this->CORE);
+                    $OBJ = new NagVisContainer();
                 break;
                 case 'line':
-                    $OBJ = new NagVisLine($this->CORE);
+                    $OBJ = new NagVisLine();
                 break;
                 default:
                     throw new NagVisException(l('unknownObject',
@@ -468,6 +408,7 @@ class NagVisMapObj extends NagVisStatefulObject {
                 break;
             }
 
+            log_mem('preconf');
             // Apply default configuration to object
             $OBJ->setConfiguration($objConf);
 
@@ -477,12 +418,13 @@ class NagVisMapObj extends NagVisStatefulObject {
 
             // Write member to object array
             $this->members[] = $OBJ;
+            log_mem('posthost');
         }
 
         // Now dig into the next map level. This has to be done here to fight
         // the loops at this level and not at the single branches of map links.
         foreach($this->members AS $OBJ) {
-            $sType = $OBJ->type;
+            $sType = $OBJ->getType();
 
             if($sType == 'map') {
                 /**
@@ -516,19 +458,19 @@ class NagVisMapObj extends NagVisStatefulObject {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function fetchSummaryOutput() {
-        if($this->hasObjects() && $this->hasStatefulObjects()) {
-            $arrStates = Array('UNREACHABLE' => 0, 'CRITICAL' => 0, 'DOWN' => 0,
-                               'WARNING'     => 0, 'UNKNOWN'  => 0, 'UP'   => 0,
-                               'OK'          => 0, 'ERROR'    => 0, 'ACK'  => 0,
-                               'PENDING'     => 0);
+        if($this->hasMembers()) {
+            $arrStates = Array(UNREACHABLE => 0, CRITICAL => 0, DOWN => 0,
+                               WARNING     => 0, UNKNOWN  => 0, UP   => 0,
+                               OK          => 0, ERROR    => 0, UNCHECKED => 0,
+                               PENDING     => 0);
 
             foreach($this->getStateRelevantMembers(true) AS $OBJ)
-                if(isset($arrStates[$OBJ->summary_state]))
-                    $arrStates[$OBJ->summary_state]++;
+                if(isset($arrStates[$OBJ->sum[STATE]]))
+                    $arrStates[$OBJ->sum[STATE]]++;
 
             $this->mergeSummaryOutput($arrStates, l('objects'));
         } else {
-            $this->summary_output = l('mapIsEmpty','MAP~'.$this->getName());
+            $this->sum[OUTPUT] = l('mapIsEmpty','MAP~'.$this->getName());
         }
     }
 
@@ -542,12 +484,13 @@ class NagVisMapObj extends NagVisStatefulObject {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function isPermitted($OBJ) {
-        if($this->CORE->getAuthorization() !== null
-           && $this->CORE->getAuthorization()->isPermitted('Map', 'view', $OBJ->getName()))
+        global $AUTHORISATION;
+        if($AUTHORISATION !== null
+           && $AUTHORISATION->isPermitted('Map', 'view', $OBJ->getName()))
             return true;
         else {
-            $OBJ->summary_state = 'UNKNOWN';
-            $OBJ->summary_output = l('noReadPermissions');
+            $OBJ->sum[STATE]  = UNKNOWN;
+            $OBJ->sum[OUTPUT] = l('noReadPermissions');
 
             return false;
         }
@@ -562,10 +505,10 @@ class NagVisMapObj extends NagVisStatefulObject {
      */
     private function fetchSummaryState() {
         // Get summary state of this object from single objects
-        if($this->hasObjects() && $this->hasStatefulObjects())
-            $this->wrapChildState($this->getStateRelevantMembers(true));
+        if($this->hasMembers())
+            $this->calcSummaryState($this->getStateRelevantMembers(true));
         else
-            $this->summary_state = 'UNKNOWN';
+            $this->sum[STATE] = UNKNOWN;
     }
 }
 ?>

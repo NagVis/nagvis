@@ -73,6 +73,24 @@ class GlobalMainCfg {
                     'match'         => MATCH_STRING_PATH,
                 ),
 
+                'authorisation_group_perms_file' => Array(
+                    'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => '',
+                    'depends_on'    => 'authorisationmodule',
+                    'depends_value' => 'CoreAuthorisationModGroup',
+                    'match'         => MATCH_STRING_PATH,
+                ),
+                'authorisation_group_backends' => Array(
+                    'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => array(),
+                    'array'         => true,
+                    'depends_on'    => 'authorisationmodule',
+                    'depends_value' => 'CoreAuthorisationModGroup',
+                    'match'         => MATCH_STRING_NO_SPACE,
+                ),
+
                 'controls_size' => Array(
 		    'must'     => 1,
                     'editable' => 1,
@@ -267,15 +285,20 @@ class GlobalMainCfg {
                     'default'     => '',
                     'match'       => MATCH_STRING_EMPTY)),
             'defaults' => Array(
-                'backend' => Array('must' => 0,
-                    'editable' => 0,
-                    'default' => 'live_1',
-                    'field_type' => 'dropdown',
-                    'match' => MATCH_STRING_NO_SPACE),
-                'backgroundcolor' => Array('must' => 0,
-                    'editable' => 1,
-                    'default' => 'transparent',
-                    'match' => MATCH_COLOR),
+                'backend' => Array(
+                    'must'        => 0,
+                    'editable'    => 1,
+                    'default'     => 'live_1',
+                    'array'       => true,
+                    'field_type'  => 'dropdown',
+                    'match'       => MATCH_BACKEND_ID
+                ),
+                'backgroundcolor' => Array(
+                    'must'        => 0,
+                    'editable'    => 1,
+                    'default'     => 'transparent',
+                    'match'       => MATCH_COLOR
+                ),
                 'contextmenu' => Array('must' => 0,
                     'editable' => 1,
                     'default' => 1,
@@ -485,6 +508,11 @@ class GlobalMainCfg {
                 'servicegroupurl' => Array('must' => 0,
                     'default' => '[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]&style=detail',
                     'match' => MATCH_STRING_URL_EMPTY),
+                'dyngroupurl' => Array(
+                    'must'    => 0,
+                    'default' => '',
+                    'match'   => MATCH_STRING_URL_EMPTY
+                ),
                 'view_template' => Array(
                     'must'     => 0,
                     'editable' => 1,
@@ -1348,6 +1376,7 @@ class GlobalMainCfg {
         $this->validConfig['paths']['mapcfg']['default']             = $base.'etc/maps/';
         $this->validConfig['paths']['geomap']['default']             = $base.'etc/geomap';
         $this->validConfig['paths']['profiles']['default']           = $base.'etc/profiles';
+        $this->validConfig['global']['authorisation_group_perms_file']['default'] = $base.'etc/perms.db';
 
         $this->validConfig['paths']['var']['default']                = $base.'var/';
         $this->validConfig['paths']['sharedvar']['default']          = $base.HTDOCS_DIR.'/var/';
@@ -1965,15 +1994,16 @@ class GlobalMainCfg {
                 $val = $this->getValue('states', $lowState);
             }
 
+            $state = state_num(strtoupper($key[0]));
             if(isset($key[1]) && isset($key[2])) {
                 // at the moment only bg colors of substates
-                $arr[strtoupper($key[0])][$key[1].'_'.$key[2]] = $val;
+                $arr[$state][$key[1].'_'.$key[2]] = $val;
             } elseif(isset($key[1])) {
                 // ack/downtime
-                $arr[strtoupper($key[0])][$key[1]] = $val;
+                $arr[$state][$key[1]] = $val;
             } else {
                 // normal state definition
-                $arr[strtoupper($key[0])]['normal'] = $val;
+                $arr[$state]['normal'] = $val;
             }
         }
 

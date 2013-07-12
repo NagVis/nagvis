@@ -1,5 +1,0 @@
-open scp://root:monitor@%SERVER%
-lcd bin/debug/ 
-cd %RPATH%
-synchronize -mirror remote 
-exit

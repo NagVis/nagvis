@@ -102,6 +102,7 @@ cat > $OMD_CFG <<EOF
 
 [global]
 sesscookiepath="/$OMD_SITE/nagvis"
+authorisation_group_perms_file="$OMD_ROOT/etc/nagvis/perms.db"
 
 [paths]
 base="$OMD_ROOT/local/share/nagvis/"

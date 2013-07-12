@@ -26,7 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisUrlView {
-    private $CORE = null;
     private $url = '';
     private $content = '';
     private $aRotation = Array();
@@ -34,12 +33,10 @@ class NagVisUrlView {
     /**
      * Class Constructor
      *
-     * @param    GlobalCore      $CORE
      * @param    String          $NAME
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function __construct(GlobalCore $CORE, $url) {
-        $this->CORE = $CORE;
         $this->url = $url;
     }
 
@@ -69,17 +66,18 @@ class NagVisUrlView {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parse() {
+        global $_MAINCFG;
         // Initialize template system
-        $TMPL = New FrontendTemplateSystem($this->CORE);
+        $TMPL = New FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
 
         $aData = Array(
-            'generalProperties'  => $this->CORE->getMainCfg()->parseGeneralProperties(),
-            'workerProperties'   => $this->CORE->getMainCfg()->parseWorkerProperties(),
+            'generalProperties'  => $_MAINCFG->parseGeneralProperties(),
+            'workerProperties'   => $_MAINCFG->parseWorkerProperties(),
             'rotationProperties' => json_encode($this->aRotation),
             'url'                => $this->url,
             'fileAges'           => json_encode(Array(
-                'maincfg' => $this->CORE->getMainCfg()->getConfigFileAge(),
+                'maincfg' => $_MAINCFG->getConfigFileAge(),
             )),
             'locales'            => json_encode(Array()),
         );

@@ -64,6 +64,7 @@
                 	<li><a class="topline" href="#" onclick="addObject(event, 'service', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langService}</a></li>
                 	<li><a class="topline" href="#" onclick="addObject(event, 'hostgroup', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langHostgroup}</a></li>
                 	<li><a class="topline" href="#" onclick="addObject(event, 'servicegroup', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langServicegroup}</a></li>
+                	<li><a class="topline" href="#" onclick="addObject(event, 'dyngroup', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langDynGroup}</a></li>
                 	<li><a class="topline underline" href="#" onclick="addObject(event, 'map', 'icon', 1, 'add');ddMenuHide(['map-addicon','map']);">{$langMap}</a></li>
                 </ul>
             </li>
@@ -74,6 +75,7 @@
                 	<li><a class="topline" href="#" onclick="addObject(event, 'service', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langService}</a></li>
                 	<li><a class="topline" href="#" onclick="addObject(event, 'hostgroup', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langHostgroup}</a></li>
                 	<li><a class="topline" href="#" onclick="addObject(event, 'servicegroup', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langServicegroup}</a></li>
+                	<li><a class="topline" href="#" onclick="addObject(event, 'dyngroup', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langDynGroup}</a></li>
                 	<li><a class="topline underline" href="#" onclick="addObject(event, 'map', 'line', 2, 'add');ddMenuHide(['map-addline','map']);">{$langMap}</a></li>
                 </ul>
             </li>
@@ -117,7 +119,7 @@
         	<li><a href="#">{$langLoggedIn}: {$currentUser}</a></li>
         	{if $supportedChangePassword && $permittedChangePassword}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ChangePassword&amp;act=view', '{$langChangePassword}');">{$langChangePassword}</a></li>{/if}
         	{if $permittedUserMgmt}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=UserMgmt&amp;act=view', '{$langUserMgmt}');">{$langUserMgmt}</a></li>{/if}
-        	{if $permittedRoleMgmt}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=RoleMgmt&amp;act=view', '{$langManageRoles}', 500);">{$langManageRoles}</a></li>{/if}
+        	{if $rolesConfigurable && $permittedRoleMgmt}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=RoleMgmt&amp;act=view', '{$langManageRoles}', 500);">{$langManageRoles}</a></li>{/if}
             {if $permittedLogout}<li><a href="#" onclick="getSyncRequest('{$pathBase}/server/core/ajax_handler.php?mod=Auth&amp;act=logout');return false;">{$langLogout}</a></li>{/if}
             <li class="spacer underline"></li>
         </ul>
@@ -143,24 +145,35 @@
 
 {template sideMaps maps pathBase type indent=1}
 {foreach $maps map}
-    {if $map.configError == true}<li class="lvl{$indent}"><a class="error">{$map.mapAlias}</a></li>
-    {else}<li class="lvl{$indent}"><a href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}">{$map.mapAlias}</a></li>{/if}
+    <li class="lvl{$indent} {if $map.childs}closed parent{/if}">
+    <div>
+    {if $map.childs}<a class=open href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}">&gt;</a>{/if}
+    <a class="{if $map.childs}title{/if} {$map.class} {if $map.configError}error{/if}"
+       {if $map.childs}onclick="sidebarToggleSubtree(this);return false" id="sb-{$map.mapName}"{/if}
+       {if $map.childs}href="#"{else}href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}"{/if}>{$map.mapAlias}</a>
+    </div>
+
+<!---href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}">{$map.mapAlias}</a></li>--->
+
     {if $map.childs}
+        <ul id="sb-{$map.mapName}-childs" style="display:none;">
         {sideMaps $map.childs $pathBase $type $indent+1}
+        </ul>
     {/if}
+    </li>
 {/foreach}
 {/template}
 <div id="sidebar">
 <ul>
-    {if $permittedOverview}<li class="spacerbottom"><a href="{$pathBase}/frontend/nagvis-js/index.php">{$langOverview}</a></li>{/if}
-    <li class="closed"><a class="title" href="#" onclick="sidebarToggleSubtree(this)">{$langMaps}</a>
-        <ul style="display:none;">{sideMaps $maps $pathBase "Map"}</ul>
+    {if $permittedOverview}<li class="spacerbottom"><div><a href="{$pathBase}/frontend/nagvis-js/index.php">{$langOverview}</a></div></li>{/if}
+    <li class="closed"><div><a id="sb-maps" class="title" href="#" onclick="sidebarToggleSubtree(this);return false;">{$langMaps}</a></div>
+        <ul id="sb-maps-childs" style="display:none;">{sideMaps $maps $pathBase "Map"}</ul>
     </li>
     {if count($rotations) > 0}
-    <li class="closed spacertop"><a class="title" href="#" onclick="sidebarToggleSubtree(this)">{$langRotations}</a>
-        <ul style="display:none;">
+    <li class="closed spacertop"><div><a id="sb-rotations" class="title" href="#" onclick="sidebarToggleSubtree(this);return false">{$langRotations}</a></div>
+        <ul id="sb-rotations-childs" style="display:none;">
         {foreach $rotations rotation}
-            <li class=lvl1><a href="{$pathBase}/frontend/nagvis-js/index.php?mod=Rotation&act=view&show={$rotation}">{$rotation}</a></li>
+            <li class=lvl1><div><a href="{$pathBase}/frontend/nagvis-js/index.php?mod=Rotation&act=view&show={$rotation}">{$rotation}</a></div></li>
         {/foreach}
         </ul>
     </li>

@@ -116,7 +116,7 @@ getUserRoles = function (id) \{
 </fieldset>
 </div>
 
-<div id="manageUsers">
+{if $rolesConfigurable}<div id="manageUsers">
 <fieldset class="form">
     <legend>{$langUserModify}</legend>
     <form name="userEdit" id="userEditForm" action="#" onsubmit="selectAllOpts('rolesSelected');submitFrontendForm('{$formTargetEdit}', 'userEditForm', true);return false" method="post">
@@ -158,7 +158,7 @@ getUserRoles = function (id) \{
         </p>
     </form>
 </fieldset>
-</div>
+</div>{/if}
 
 <div id="deleteUsers">
 <fieldset class="form">
@@ -180,7 +180,7 @@ getUserRoles = function (id) \{
 </fieldset>
 </div>
 
-<div id="userPwReset">
+{if $supportedChangePassword}<div id="userPwReset">
 <fieldset class="form">
     <legend>{$langUserPwReset}</legend>
     <form name="userPwReset" id="userPwResetForm" action="#" onsubmit="submitFrontendForm('{$formTargetPwReset}', 'userPwResetForm', true);return false" method="post">
@@ -210,5 +210,5 @@ getUserRoles = function (id) \{
             </td></tr>
         </table>
     </form>
-</fieldset>
+</fieldset>{/if}
 </div>

@@ -27,11 +27,8 @@
  */
 class FrontendTemplateSystem {
     private $TMPL;
-    private $CORE;
 
-    public function __construct($CORE) {
-        $this->CORE = $CORE;
-
+    public function __construct() {
         // Load Dwoo. It is used as external library
         require_once(cfg('paths','base')
                      .HTDOCS_DIR.'/frontend/nagvis-js/ext/dwoo-1.1.0/dwooAutoload.php');
@@ -45,7 +42,7 @@ class FrontendTemplateSystem {
     }
 
     public function getTmplFile($sTheme, $sTmpl) {
-        return new Dwoo_Template_File($this->CORE->getMainCfg()->getPath('sys', '', 'templates', $sTheme.'.'.$sTmpl.'.html'));
+        return new Dwoo_Template_File(path('sys', '', 'templates', $sTheme.'.'.$sTmpl.'.html'));
     }
 }
 

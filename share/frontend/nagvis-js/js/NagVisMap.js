@@ -61,6 +61,7 @@ var NagVisMap = NagVisStatefulObject.extend({
         var url = this.conf.overview_url;
         oTd.onclick = function() {
             location.href = url;
+            return false;
         };
 
         // Only show map thumb when configured

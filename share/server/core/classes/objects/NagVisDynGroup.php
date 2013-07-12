@@ -1,10 +1,9 @@
 <?php
 /*****************************************************************************
  *
- * NagVisHostgroup.php - Class of a Hostgroup in NagVis with all necessary
- *                  information which belong to the object handling in NagVis
+ * NagVisDynGroup.php - Handles dynamic grouping of either hosts or services
  *
- * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -23,24 +22,27 @@
  *
  *****************************************************************************/
 
-class NagVisHostgroup extends NagVisStatefulObject {
-    protected $type = 'hostgroup';
+class NagVisDynGroup extends NagVisStatefulObject {
+    protected $type = 'dyngroup';
 
     protected static $langType = null;
     protected static $langSelf = null;
     protected static $langChild = null;
 
-    protected $hostgroup_name;
-    protected $alias;
+    protected $name;
 
     protected $members = array();
 
-    public function __construct($backend_id, $hostgroupName) {
+    public function __construct($backend_id, $name) {
         $this->backend_id = $backend_id;
-        $this->hostgroup_name = $hostgroupName;
+        $this->name       = $name;
         parent::__construct();
     }
 
+    public function getObjectFilter() {
+        // convert '\n' to \n
+        return str_replace('\n', "\n", $this->object_filter);
+    }
 
     /**
      * Queues the state fetching to the backend.
@@ -49,12 +51,12 @@ class NagVisHostgroup extends NagVisStatefulObject {
      */
     public function queueState($_unused = true, $bFetchMemberState = true) {
         global $_BACKEND;
-        $queries = Array('hostgroupMemberState' => true);
+        $queries = Array('DYN_GROUP_MEMBER_STATE' => true);
 
         if($this->hover_menu == 1
            && $this->hover_childs_show == 1
            && $bFetchMemberState)
-            $queries['hostgroupMemberDetails'] = true;
+            $queries['DYN_GROUP_MEMBER_DETAILS'] = true;
 
         $_BACKEND->queue($queries, $this);
     }
@@ -140,9 +142,9 @@ class NagVisHostgroup extends NagVisStatefulObject {
 
         // Fallback for hostgroups without members
         if($iSumCount == 0) {
-            $this->sum[OUTPUT] = l('The hostgroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
-                                                                                        Array('GROUP' => $this->getName(),
-                                                                                              'BACKEND' => $this->backend_id));
+            $this->sum[OUTPUT] = l('The dynamic group "[GROUP]" has no members (Backend: [BACKEND]).',
+                                                       Array('GROUP' => $this->name,
+                                                       'BACKEND' => implode(',', $this->backend_id)));
         } else {
             // FIXME: Recode mergeSummaryOutput method
             $this->mergeSummaryOutput($arrHostStates, l('hosts'), false);
@@ -179,7 +181,9 @@ class NagVisHostgroup extends NagVisStatefulObject {
 
             $this->mergeSummaryOutput($arrStates, l('hosts'));
         } else {
-            $this->sum[OUTPUT] = l('hostGroupNotFoundInDB','HOSTGROUP~'.$this->hostgroup_name);
+            $this->sum[OUTPUT] = l('The dynamic group "[GROUP]" has no members (Backend: [BACKEND]).',
+                                                       Array('GROUP' => $this->name,
+                                                       'BACKEND' => implode(',', $this->backend_id)));
         }
     }
 }

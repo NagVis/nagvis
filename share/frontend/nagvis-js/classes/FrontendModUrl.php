@@ -75,7 +75,7 @@ class FrontendModUrl extends FrontendModule {
         // Need to parse the header menu?
         if(cfg('index','headermenu')) {
             // Parse the header menu
-            $HEADER = new NagVisHeaderMenu($this->CORE, $this->UHANDLER, cfg('index', 'headertemplate'));
+            $HEADER = new NagVisHeaderMenu($this->UHANDLER, cfg('index', 'headertemplate'));
 
             // Put rotation information to header menu
             if($this->rotation != '') {
@@ -90,7 +90,7 @@ class FrontendModUrl extends FrontendModule {
 
         // Maybe it is needed to handle the requested rotation
         if($this->rotation != '') {
-            $ROTATION = new FrontendRotation($this->CORE, $this->rotation);
+            $ROTATION = new FrontendRotation($this->rotation);
             $ROTATION->setStep('url', $this->url, $this->rotationStep);
             $this->VIEW->setRotation($ROTATION->getRotationProperties());
         }

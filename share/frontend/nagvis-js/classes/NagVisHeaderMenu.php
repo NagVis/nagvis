@@ -26,7 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisHeaderMenu {
-    private $CORE;
     private $UHANDLER;
     private $OBJ;
     private $TMPL;
@@ -39,23 +38,16 @@ class NagVisHeaderMenu {
     private $aMacros = Array();
     private $bRotation = false;
 
-    /**
-     * Class Constructor
-     *
-     * @param 	GlobalCore 	$CORE
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function __construct($CORE, CoreUriHandler $UHANDLER, $templateName, $OBJ = null) {
-        $this->CORE = $CORE;
+    public function __construct(CoreUriHandler $UHANDLER, $templateName, $OBJ = null) {
         $this->UHANDLER = $UHANDLER;
         $this->OBJ = $OBJ;
         $this->templateName = $templateName;
 
         $this->pathHtmlBase = cfg('paths','htmlbase');
-        $this->pathTemplateFile = $this->CORE->getMainCfg()->getPath('sys', '', 'templates', $this->templateName.'.header.html');
+        $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName.'.header.html');
 
         // Initialize template system
-        $this->TMPL = New FrontendTemplateSystem($this->CORE);
+        $this->TMPL = New FrontendTemplateSystem();
         $this->TMPLSYS = $this->TMPL->getTmplSys();
 
         // Read the contents of the template file
@@ -94,8 +86,9 @@ class NagVisHeaderMenu {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function getLangList() {
+        global $CORE;
         // Build language list
-        $aLang = $this->CORE->getAvailableAndEnabledLanguages();
+        $aLang = $CORE->getAvailableAndEnabledLanguages();
         $numLang = count($aLang);
         foreach($aLang AS $lang) {
             $aLangs[$lang] = Array();
@@ -142,10 +135,11 @@ class NagVisHeaderMenu {
         $permEditAnyMap = false;
         $aMaps = Array();
         $childMaps = Array();
+        
         foreach($maps AS $mapName) {
             $map = Array();
 
-            $MAPCFG1 = new NagVisMapCfg($this->CORE, $mapName);
+            $MAPCFG1 = new GlobalMapCfg($mapName);
             try {
                 $MAPCFG1->readMapConfig(ONLY_GLOBAL);
             } catch(MapCfgInvalid $e) {
@@ -160,9 +154,10 @@ class NagVisHeaderMenu {
             if($type == 'maps' && !$AUTHORISATION->isPermitted('Map', 'view', $mapName))
                 continue;
 
-            $map['mapName'] = $MAPCFG1->getName();
+            $map['mapName']  = $MAPCFG1->getName();
             $map['mapAlias'] = $MAPCFG1->getValue(0, 'alias');
-            $map['childs'] = Array();
+            $map['childs']   = Array();
+            $map['class']    = '';
             if($type == 'maps') {
                 $map['permittedEdit'] = $AUTHORISATION->isPermitted('Map', 'edit', $mapName);
 
@@ -195,6 +190,7 @@ class NagVisHeaderMenu {
         foreach($maps AS $map) {
             $freeParent = $map['mapName'];
             if(isset($childMaps[$freeParent])) {
+                $maps[$freeParent]['class'] = 'title';
                 $maps[$freeParent]['childs'] = $this->mapListToTree($childMaps[$freeParent], $childMaps);
             }
         }
@@ -210,7 +206,7 @@ class NagVisHeaderMenu {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     private function getMacros() {
-        global $AUTH, $AUTHORISATION;
+        global $CORE, $AUTH, $AUTHORISATION;
         // First get all static macros
         $this->aMacros = $this->getStaticMacros();
 
@@ -255,7 +251,7 @@ class NagVisHeaderMenu {
 
         // Add permitted rotations
         $this->aMacros['rotations'] = array();
-        foreach($this->CORE->getDefinedRotationPools() AS $poolName) {
+        foreach($CORE->getDefinedRotationPools() AS $poolName) {
             if($AUTHORISATION->isPermitted('Rotation', 'view', $poolName)) {
                 $this->aMacros['rotations'][] = $poolName;
             }
@@ -264,7 +260,7 @@ class NagVisHeaderMenu {
         // Initialize the enable fade option. Is overridden by the current map or left as is
         $this->aMacros['bEnableFade'] = cfg('defaults', 'headerfade');
 
-        list($this->aMacros['maps'], $this->aMacros['permittedEditAnyMap']) = $this->getMapList('maps', $this->CORE->getAvailableMaps());
+        list($this->aMacros['maps'], $this->aMacros['permittedEditAnyMap']) = $this->getMapList('maps', $CORE->getAvailableMaps());
         $this->aMacros['langs'] = $this->getLangList();
     }
 
@@ -276,7 +272,8 @@ class NagVisHeaderMenu {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     private function getDocLanguage() {
-        if(in_array(curLang(), $this->CORE->getAvailableDocs()))
+        global $CORE;
+        if(in_array(curLang(), $CORE->getAvailableDocs()))
 	    return curLang();
 	else
 	    return 'en_US';
@@ -296,9 +293,9 @@ class NagVisHeaderMenu {
         $aReturn = Array('pathBase' => $this->pathHtmlBase,
             'currentUri'         => preg_replace('/[&?]lang=[a-z]{2}_[A-Z]{2}/', '', $this->UHANDLER->getRequestUri()),
             'pathImages'         => cfg('paths','htmlimages'),
-            'pathHeaderJs'       => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates', $this->templateName.'.header.js'),
-            'pathTemplates'      => $this->CORE->getMainCfg()->getPath('html', 'global', 'templates'),
-            'pathTemplateImages' => $this->CORE->getMainCfg()->getPath('html', 'global', 'templateimages'),
+            'pathHeaderJs'       => path('html', 'global', 'templates', $this->templateName.'.header.js'),
+            'pathTemplates'      => path('html', 'global', 'templates'),
+            'pathTemplateImages' => path('html', 'global', 'templateimages'),
             'langSearch'         => l('Search'),
             'langUserMgmt'       => l('Manage Users'),
             'langManageRoles'    => l('Manage Roles'),
@@ -322,6 +319,7 @@ class NagVisHeaderMenu {
             'langService' => l('service'),
             'langHostgroup' => l('hostgroup'),
             'langServicegroup' => l('servicegroup'),
+            'langDynGroup' => l('Dynamic Group'),
             'langMapEdit' => l('Edit Map'),
             'langMaps' => l('Maps'),
             'langTextbox' => l('textbox'),
@@ -352,7 +350,9 @@ class NagVisHeaderMenu {
             // Supported by backend and not using trusted auth
             'supportedChangePassword' => $AUTH->checkFeature('changePassword') && !$AUTH->authedTrusted(),
             'permittedUserMgmt' => $AUTHORISATION->isPermitted('UserMgmt', 'manage'),
-            'permittedRoleMgmt' => $AUTHORISATION->isPermitted('RoleMgmt', 'manage'));
+            'permittedRoleMgmt' => $AUTHORISATION->isPermitted('RoleMgmt', 'manage'),
+            'rolesConfigurable' => $AUTHORISATION->rolesConfigurable()
+        );
 
         return $aReturn;
     }
@@ -365,7 +365,8 @@ class NagVisHeaderMenu {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function checkTemplateReadable($printErr) {
-        return GlobalCore::getInstance()->checkReadable($this->pathTemplateFile, $printErr);
+        global $CORE;
+        return $CORE->checkReadable($this->pathTemplateFile, $printErr);
     }
 }
 ?>

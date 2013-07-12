@@ -26,7 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class GlobalMapCfg {
-    private $CORE;
     public $BACKGROUND;
     private $CACHE;
     private $DCACHE;
@@ -53,8 +52,7 @@ class GlobalMapCfg {
     /**
      * Class Constructor
      */
-    public function __construct($CORE, $name = '') {
-        $this->CORE = $CORE;
+    public function __construct($name = '') {
         $this->name = $name;
 
         if(self::$validConfig == null)
@@ -85,6 +83,7 @@ class GlobalMapCfg {
      * the options like variable format, validation regexes and so on.
      */
     private function fetchValidConfig() {
+        global $CORE;
         self::$validConfig = Array();
         // Holds all registered config vars
         $mapConfigVars   = Array();
@@ -92,7 +91,7 @@ class GlobalMapCfg {
         $mapConfigVarMap = Array();
 
         $path = cfg('paths', 'server') . '/mapcfg';
-        $files = $this->CORE->listDirectory($path, MATCH_PHP_FILE);
+        $files = $CORE->listDirectory($path, MATCH_PHP_FILE);
         foreach($files AS $f) {
             include_once(realpath($path . '/' . $f));
         }
@@ -173,6 +172,7 @@ class GlobalMapCfg {
 
             $this->typeDefaults['host'][$sVar] = $sTmp;
             $this->typeDefaults['hostgroup'][$sVar] = $sTmp;
+            $this->typeDefaults['dyngroup'][$sVar] = $sTmp;
 
             // Handle exceptions for servicegroups
             if($sVar != 'recognize_services') {
@@ -230,7 +230,7 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function getBackground() {
-        $RET = new GlobalBackground($this->CORE, $this->getValue(0, 'map_image'));
+        $RET = new GlobalBackground($this->getValue(0, 'map_image'));
         return $RET;
     }
 
@@ -241,6 +241,7 @@ class GlobalMapCfg {
      * @author Lars Michelsen <lars@vertical-visions.de>
      */
     public function createMapConfig() {
+        global $CORE;
         // does file exist?
         if($this->checkMapConfigReadable(false))
             return false;
@@ -250,7 +251,7 @@ class GlobalMapCfg {
 
         // create empty file
         fclose(fopen($this->configFile, 'w'));
-        $this->CORE->setPerms($this->configFile);
+        $CORE->setPerms($this->configFile);
         return true;
     }
 
@@ -383,6 +384,7 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function readMapConfig($onlyGlobal = 0, $resolveTemplates = true, $useCache = true) {
+        global $_MAINCFG, $AUTHORISATION;
         // Only use cache when there is
         // a) The cache should be used
         // b) When whole config file should be read
@@ -392,8 +394,8 @@ class GlobalMapCfg {
         if($onlyGlobal == 0
            && $useCache === true
            && $this->CACHE->isCached() !== -1
-           && $this->CORE->getMainCfg()->isCached() !== -1
-           && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
+           && $_MAINCFG->isCached() !== -1
+           && $this->CACHE->isCached() >= $_MAINCFG->isCached()) {
             $this->mapConfig = $this->CACHE->getCache();
             $this->typeDefaults = $this->DCACHE->getCache();
 
@@ -446,16 +448,15 @@ class GlobalMapCfg {
             // object_id on the map for the object
             $this->verifyObjectIds();
 
+            // Trigger the autorization backend to create new permissions when needed
+            if($AUTHORISATION !== null) {
+                $AUTHORISATION->createPermission('Map', $this->getName());
+            }
+
             // Build cache
             if($useCache === true) {
                 $this->CACHE->writeCache($this->mapConfig, 1);
                 $this->DCACHE->writeCache($this->typeDefaults, 1);
-            }
-
-            // Trigger the autorization backend to create new permissions when needed
-            $AUTHORIZATION = $this->CORE->getAuthorization();
-            if($AUTHORIZATION !== null) {
-                $this->CORE->getAuthorization()->createPermission('Map', $this->getName());
             }
         }
 
@@ -477,7 +478,8 @@ class GlobalMapCfg {
      * Performs the initial map source loading
      */
     private function fetchMapSources() {
-        foreach($this->CORE->getAvailableSources() AS $source_file) {
+        global $CORE;
+        foreach($CORE->getAvailableSources() AS $source_file) {
             $viewParams = array();
             $configVars = array();
 
@@ -508,13 +510,14 @@ class GlobalMapCfg {
      * Returns possible options for the source params to make them selectable by lists
      */
     public function getSourceParamChoices($params) {
+        global $CORE;
         $values = array();
         $validConfig = self::$validConfig['global'];
         foreach($params AS $param) {
             if(isset($validConfig[$param]) && isset($validConfig[$param]['list'])) {
                 $func = $validConfig[$param]['list'];
                 try {
-                    $vals = $func($this->CORE, $this, 0, array());
+                    $vals = $func($CORE, $this, 0, array());
 
                     // When this is an associative array use labels instead of real values
                     // Change other arrays to associative ones for easier handling afterwards
@@ -554,7 +557,8 @@ class GlobalMapCfg {
             if(!$only_customized || $_REQUEST[$key] != $this->getValue(0, $key)) {
                 // Only get options which differ from the defaults
                 // Maybe convert the type, if requested
-                if(isset(self::$validConfig['global'][$key]['array']) && self::$validConfig['global'][$key]['array'] === true)
+                if(isset(self::$validConfig['global'][$key]['array'])
+                   && self::$validConfig['global'][$key]['array'] === true)
                     return explode(',', $_REQUEST[$key]);
                 else
                     return $_REQUEST[$key];
@@ -593,6 +597,10 @@ class GlobalMapCfg {
         $sources = $this->getValue(0, 'sources');
         if($sources) {
             foreach($sources AS $source) {
+                if(!isset(self::$viewParams[$source])) {
+                    throw new NagVisException(l('Requested source "[S]" does not exist',
+                                                                array('S' => $source)));
+                }
                 $keys = array_merge($keys, self::$viewParams[$source]);
             }
         }
@@ -806,7 +814,8 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function checkMapConfigExists($printErr) {
-        return GlobalCore::getInstance()->checkExisting($this->configFile, $printErr);
+        global $CORE;
+        return $CORE->checkExisting($this->configFile, $printErr);
     }
 
     /**
@@ -819,7 +828,8 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     protected function checkMapConfigReadable($printErr) {
-        return GlobalCore::getInstance()->checkReadable($this->configFile, $printErr);
+        global $CORE;
+        return $CORE->checkReadable($this->configFile, $printErr);
     }
 
     /**
@@ -882,6 +892,7 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function checkMapConfigIsValid() {
+        global $CORE;
         foreach($this->mapConfig AS $id => $element) {
             $type = $element['type'];
 
@@ -939,9 +950,10 @@ class GlobalMapCfg {
 
                     // Check if the configured backend is defined in main configuration file
                     // Raise such an exception only when error is found in global section
-                    if($type == 'global' && $key == 'backend_id' && !in_array($val, $this->CORE->getDefinedBackends())) {
-                        throw new $exception(l('backendNotDefined', Array('BACKENDID' => $val)));
-                    }
+                    if($type == 'global' && $key == 'backend_id')
+                        foreach($val as $backend_id)
+                            if(!in_array($backend_id, $CORE->getDefinedBackends()))
+                                throw new $exception(l('backendNotDefined', Array('BACKENDID' => $backend_id)));
                 }
             }
 
@@ -1079,7 +1091,8 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     function checkMapCfgFolderWriteable($printErr) {
-        return GlobalCore::getInstance()->checkReadable(dirname($this->configFile), $printErr);
+        global $CORE;
+        return $CORE->checkReadable(dirname($this->configFile), $printErr);
     }
 
     private function getConfig() {
@@ -1549,7 +1562,8 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function checkMapConfigWriteable($printErr) {
-        return GlobalCore::getInstance()->checkWriteable($this->configFile, $printErr);
+        global $CORE;
+        return $CORE->checkWriteable($this->configFile, $printErr);
     }
 
     /**
@@ -1559,6 +1573,7 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function deleteMapConfig($printErr=1) {
+        global $AUTHORISATION;
         // is file writeable?
         if($this->checkMapConfigWriteable($printErr)) {
             if(unlink($this->configFile)) {
@@ -1567,7 +1582,7 @@ class GlobalMapCfg {
                     unlink($this->cacheFile);
 
                 // And also remove the permission
-                GlobalCore::getInstance()->getAuthorization()->deletePermission('Map', $this->name);
+                $AUTHORISATION->deletePermission('Map', $this->name);
 
                 return TRUE;
             } else {
@@ -1588,6 +1603,7 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
    */
     public function checkMapLocked($printErr=1) {
+        global $AUTH;
         // read lockfile
         $lockdata = $this->readMapLock();
         if(is_array($lockdata)) {
@@ -1595,8 +1611,7 @@ class GlobalMapCfg {
             if(time() - $lockdata['time'] < cfg('wui','maplocktime') * 60) {
                 // there is a lock and it should be recognized
                 // check if this is the lock of the current user (Happens e.g. by pressing F5)
-                if(GlobalCore::getInstance()->getAuthentication()->getUser() == $lockdata['user']
-                                                                                        && $_SERVER['REMOTE_ADDR'] == $lockdata['ip']) {
+                if($AUTH->getUser() == $lockdata['user'] && $_SERVER['REMOTE_ADDR'] == $lockdata['ip']) {
                     // refresh the lock (write a new lock)
                     $this->writeMapLock();
                     // it's locked by the current user, so it's not locked for him
@@ -1653,17 +1668,18 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function writeMapLock() {
+        global $CORE, $AUTH;
         // Can an existing lock be updated?
         if($this->checkMapLockExists(0) && !$this->checkMapLockWriteable(0))
             return false;
 
         // If no map lock exists: Can a new one be created?
-        if(!$this->checkMapLockExists(0) && !GlobalCore::getInstance()->checkWriteable(dirname($this->mapLockPath), 0))
+        if(!$this->checkMapLockExists(0) && !$CORE->checkWriteable(dirname($this->mapLockPath), 0))
             return false;
 
         // open file for writing and insert the needed information
         $fp = fopen($this->mapLockPath, 'w');
-        fwrite($fp, time() . ':' . GlobalCore::getInstance()->getAuthentication()->getUser() . ':' . $_SERVER['REMOTE_ADDR']);
+        fwrite($fp, time() . ':' . $AUTH->getUser() . ':' . $_SERVER['REMOTE_ADDR']);
         fclose($fp);
         return true;
     }
@@ -1691,7 +1707,8 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function checkMapLockExists($printErr) {
-        return GlobalCore::getInstance()->checkExisting($this->mapLockPath, $printErr);
+        global $CORE;
+        return $CORE->checkExisting($this->mapLockPath, $printErr);
     }
 
     /**
@@ -1702,7 +1719,8 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function checkMapLockReadable($printErr) {
-        return GlobalCore::getInstance()->checkReadable($this->mapLockPath, $printErr);
+        global $CORE;
+        return $CORE->checkReadable($this->mapLockPath, $printErr);
     }
 
     /**
@@ -1713,7 +1731,8 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function checkMapLockWriteable($printErr) {
-        return GlobalCore::getInstance()->checkWriteable($this->mapLockPath, $printErr);
+        global $CORE;
+        return $CORE->checkWriteable($this->mapLockPath, $printErr);
     }
 }
 ?>

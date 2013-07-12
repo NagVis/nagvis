@@ -39,7 +39,6 @@ define('CONST_AJAX' , TRUE);
 
 try {
     require('../../server/core/functions/core.php');
-    $CORE     = GlobalCore::getInstance();
     $MHANDLER = new CoreModuleHandler();
     $_name    = 'core';
     $_modules = Array(

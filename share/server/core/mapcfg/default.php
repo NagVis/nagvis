@@ -81,6 +81,13 @@ function listViewTypes($CORE) {
     return Array('icon', 'line');
 }
 
+function listDynGroupTypes($CORE) {
+    return Array(
+        'hosts'    => l('Hosts'),
+        'services' => l('Services')
+    );
+}
+
 function listZoomFactors($CORE) {
     return Array(
         10  => ' 10%',
@@ -98,13 +105,19 @@ function listZoomFactors($CORE) {
 function getObjectNames($type, $CORE, $MAPCFG, $objId, $attrs) {
     global $_BACKEND;
     if(isset($attrs['backend_id']) && $attrs['backend_id'] != '')
-        $backendId = $attrs['backend_id'];
+        $backendIds = explode(',', $attrs['backend_id']);
     else
-        $backendId = $MAPCFG->getValue($objId, 'backend_id');
+        $backendIds = $MAPCFG->getValue($objId, 'backend_id');
+
+    // Return simply nothing when a user just choosen to insert multiple backends
+    if(isset($attrs['backend_id']) && $attrs['backend_id'] == '<<<multiple>>>')
+        return array();
 
     // Initialize the backend
-    $_BACKEND->checkBackendExists($backendId, true);
-    $_BACKEND->checkBackendFeature($backendId, 'getObjects', true);
+    foreach($backendIds as $backendId) {
+        $_BACKEND->checkBackendExists($backendId, true);
+        $_BACKEND->checkBackendFeature($backendId, 'getObjects', true);
+    }
 
     $name1 = '';
     if($type === 'service') {
@@ -119,12 +132,14 @@ function getObjectNames($type, $CORE, $MAPCFG, $objId, $attrs) {
 
     // Read all objects of the requested type from the backend
     $aRet = Array();
-    $objs = $_BACKEND->getBackend($backendId)->getObjects($type, $name1, '');
-    foreach($objs AS $obj) {
-        if($type !== 'service')
-            $aRet[] = $obj['name1'];
-        else
-            $aRet[] = $obj['name2'];
+    foreach($backendIds as $backendId) {
+        $objs = $_BACKEND->getBackend($backendId)->getObjects($type, $name1, '');
+        foreach($objs AS $obj) {
+            if($type !== 'service')
+                $aRet[] = $obj['name1'];
+            else
+                $aRet[] = $obj['name2'];
+        }
     }
 
     return $aRet;
@@ -155,7 +170,8 @@ function listShapes($CORE) {
 }
 
 function listBackendIds($CORE) {
-    return $CORE->getDefinedBackends();
+    $backends = $CORE->getDefinedBackends();
+    return $backends;
 }
 
 $mapConfigVars = Array(
@@ -184,13 +200,14 @@ $mapConfigVars = Array(
     'sources' => Array(
         'must'       => 0,
         'default'    => array(),
-        'array'      => True,
+        'array'      => true,
         'match'      => MATCH_STRING
     ),
     'backend_id' => Array(
         'must'       => 0,
         'default'    => cfg('defaults', 'backend'),
-        'match'      => MATCH_STRING_NO_SPACE,
+        'match'      => MATCH_BACKEND_ID,
+        'array'      => true,
         'field_type' => 'dropdown',
         'list'       => 'listBackendIds',
     ),
@@ -642,7 +659,7 @@ $mapConfigVars = Array(
     'use' => Array(
         'must'    => 0,
         'default' => array(),
-        'array'   => True,
+        'array'   => true,
         'match'   => MATCH_STRING_NO_SPACE,
     ),
 
@@ -847,6 +864,31 @@ $mapConfigVars = Array(
         'match'         => MATCH_VIEW_TYPE_CONTAINER,
         'field_type'    => 'dropdown',
         'list'          => 'listViewTypesContainer',
+    ),
+
+    // DYNAMIC GROUP SPECIFIC OPTIONS
+
+    'dyngroup_name' => Array(
+        'must'       => 1,
+        'match'      => MATCH_STRING,
+        'default'    => '',
+    ),
+    'object_types' => Array(
+        'must'       => 1,
+        'default'    => '',
+        'field_type' => 'dropdown',
+        'match'      => MATCH_DYN_GROUP_TYPES,
+        'list'       => 'listDynGroupTypes', 
+    ),
+    'object_filter' => Array(
+        'must'       => 0,
+        'default'    => '',
+        'match'      => MATCH_LIVESTATUS_FILTER,
+    ),
+    'dyngroup_url' => Array(
+        'must'       => 0,
+        'default'    => cfg('defaults', 'dyngroupurl'),
+        'match'      => MATCH_STRING_URL_EMPTY,
     ),
 );
 
@@ -1222,6 +1264,50 @@ $mapConfigVarMap['container'] = Array(
     'context_template' => null,
 
     'style' => null,
+    'use' => null,
+);
+
+$mapConfigVarMap['dyngroup'] = array(
+    'type'          => null,
+    'object_id'     => null,
+    'dyngroup_name' => 'name',
+    'object_types'  => null,
+    'object_filter' => null,
+    'x' => null,
+    'y' => null,
+    'z' => null,
+    'backend_id' => null,
+    'view_type' => null,
+    'iconset' => null,
+    'line_type' => null,
+    'line_arrow' => null,
+    'line_cut' => null,
+    'line_width' => null,
+    'line_weather_colors' => null,
+    'context_menu' => null,
+    'context_template' => null,
+    'exclude_members' => null,
+    'exclude_member_states' => null,
+    'hover_menu' => null,
+    'hover_delay' => null,
+    'hover_template' => null,
+    'hover_url' => null,
+    'hover_childs_show' => null,
+    'hover_childs_sort' => null,
+    'hover_childs_order' => null,
+    'hover_childs_limit' => null,
+    'label_show' => null,
+    'label_text' => null,
+    'label_x' => null,
+    'label_y' => null,
+    'label_width' => null,
+    'label_background' => null,
+    'label_border' => null,
+    'label_style' => null,
+    'only_hard_states' => null,
+    'recognize_services' => null,
+    'dyngroup_url' => 'url',
+    'url_target' => null,
     'use' => null,
 );
 

@@ -174,17 +174,13 @@ function sidebarDraw() {
         return;
 
     var openNodes = oUserProperties.sidebarOpenNodes.split(',');
-    var nodes = document.getElementById('sidebar').getElementsByTagName('ul');
     for(var i = 0, len = openNodes.length; i < len; i++) {
-        if(isset(nodes[openNodes[i]])) {
-            var node = nodes[openNodes[i]];
+        var node = document.getElementById(openNodes[i] + '-childs');
+        if(node) {
             node.style.display = 'block';
-            node.parentNode.setAttribute('class', 'open');
-            node.parentNode.setAttribute('className', 'open');
+            add_class(node.parentNode, 'open');
+            remove_class(node.parentNode, 'closed');
             node = null;
-        } else {
-            // The "open node" does not exist (anymore)
-            // FIXME: Remove from stored open nodes
         }
     }
 }
@@ -202,62 +198,58 @@ function sidebarDrawSubtree(node, index) {
 
 function sidebarToggleSubtree(oTitle) {
     var oList = sidebarGetListByTitle(oTitle);
-    var index = getListNodeIndex(oList);
+    var this_id = oTitle.id;
     var state = 1;
     if(oUserProperties.sidebarOpenNodes === '')
         var openNodes = [];
     else
         var openNodes = oUserProperties.sidebarOpenNodes.split(',');
 
+    var oListItem = oTitle.parentNode.parentNode;
     if(oList.style.display == 'none' || oList.style.display == '') {
         // Make the sublist visible
         oList.style.display = 'block';
 
         // Open the folder
-        oTitle.parentNode.setAttribute('class', 'open');
-        oTitle.parentNode.setAttribute('className', 'open');
+        add_class(oListItem, 'open');
+        remove_class(oListItem, 'closed');
     } else {
         // Hide the sublist
         oList.style.display = 'none';
 
         // Close the folder
-        oTitle.parentNode.setAttribute('class', 'closed');
-        oTitle.parentNode.setAttribute('className', 'closed');
+        add_class(oListItem, 'closed');
+        remove_class(oListItem, 'open');
         state = 0;
     }
 
-    // Is it visible at the moment? Search for the index in openNodes list
-    var open = null;
-    for(var i = 0, len = openNodes.length; i < len; i++) {
-        if(openNodes[i] == index) {
-            open = i;
-            break;
-        }
+    // Loop all currently open nodes to check wether they still exist or not
+    // Remove not existing nodes -> cleanup data
+    for(var i = openNodes.length; i >= 0; i--) {
+        var node = document.getElementById(openNodes[i]);
+        if(!node)
+            openNodes.splice(i, 1);
     }
+
+    // Is it visible at the moment? Search for the index in openNodes list
+    var open = openNodes.indexOf(this_id);
 
     // When the new state is "closed" remove it from the openNodes list
     // When the node is visible and is not in the list yet, append it
-    if(state === 0 && open !== null) {
+    if(state === 0 && open !== -1) {
         openNodes.splice(open, 1);
-    } else if(state === 1 && open === null)
-        openNodes.push(index);
+    } else if(state === 1 && open === -1)
+        openNodes.push(this_id);
 
     storeUserOption('sidebarOpenNodes', openNodes.join(','));
 
     open = null;
     openNodes = null;
     oTitle = null;
+    oListItem = null;
     oList = null;
 }
 
-function getListNodeIndex(oList) {
-    var nodes = document.getElementById('sidebar').getElementsByTagName('ul');
-    for (var i = 0; i < nodes.length; i++)
-        if(nodes[i] == oList)
-            return i;
-    return -1;
-}
-
 function sidebarGetListByTitle(title) {
-    return title.parentNode.getElementsByTagName('ul')[0];
+    return title.parentNode.parentNode.getElementsByTagName('ul')[0];
 }

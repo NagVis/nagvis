@@ -24,6 +24,7 @@
  ******************************************************************************/
 
 class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
+    public $rolesConfigurable = false;
     private $file;
     private $permissions;
 

@@ -1,0 +1,37 @@
+/*
+ * This file should help you create a perms.db file used by the
+ * CoreAuthorisationModGroups NagVis authorisation module.
+ * It makes it possible to use contact and contact group assignments
+ * from your monitoring core to control permissions of users in NagVis.
+ *
+ * Below you find the JSON structure which is used to map contact groups
+ * to NagVis permissions.
+ *
+ * In the example below all members of the contact group "admins" get
+ * full access to NagVis including all permissions.
+ *
+ * The contact group named "first_level_support" gets view access to all
+ * maps defined in NagVis.
+ *
+ * The contact group named "power_users" gets view and edit permissions 
+ * to all maps.
+ *
+ * The contact group named "oracle_admins" is allowed to view and edit
+ * the map named "oracle_servers".
+ */
+{
+  "admins": {
+    "admin": 1
+  },
+  "first_level_support": {
+    "view": [ "*" ]
+  },
+  "power_users": {
+    "view": [ "*" ],
+    "edit": [ "*" ]
+  },
+  "oracle_admins": {
+    "view": [ "oracle_servers" ],
+    "edit": [ "oracle_servers" ]
+  }
+}

@@ -79,6 +79,7 @@ cmp_js() {
     cmp NagVisService.js
     cmp NagVisHostgroup.js
     cmp NagVisServicegroup.js
+    cmp NagVisDynGroup.js
     cmp NagVisMap.js
     cmp NagVisShape.js
     cmp NagVisLine.js

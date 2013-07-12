@@ -27,7 +27,7 @@
  */
 
 // NagVis Version
-define('CONST_VERSION', '1.7.10');
+define('CONST_VERSION', '1.8b1');
 
 // Set PHP error handling to standard level
 // Different levels for php versions below 5.1 because PHP 5.1 reports
@@ -54,7 +54,7 @@ set_include_path(
 define('PROFILE', false);
 
 // enable/disable the debug mode
-define('DEBUG', false);
+define('DEBUG', true);
 
 /**
  * For desired debug output add these possible values:
@@ -115,6 +115,56 @@ define('SUMMARY_STATE', true);
 define('COUNT_QUERY', true);
 define('MEMBER_QUERY', true);
 define('HOST_QUERY', true);
+
+// Field definitions - fields in state constructs. There is one
+// basic state construct which is used wherever an object is only
+// handled as member state. The exteded state construct is used
+// for hosts/services which are directly added to a map to get
+// more details from those objects
+//
+// basic state
+define('STATE',    0);
+define('OUTPUT',   1);
+define('ACK',      2);
+define('DOWNTIME', 3);
+// extended generic
+define('STATE_TYPE',              4);
+define('CURRENT_ATTEMPT',         5);
+define('MAX_CHECK_ATTEMPTS',      6);
+define('LAST_CHECK',              7);
+define('NEXT_CHECK',              8);
+define('LAST_HARD_STATE_CHANGE',  9);
+define('LAST_STATE_CHANGE',      10);
+define('PERFDATA',               11);
+define('DISPLAY_NAME',           12);
+define('ALIAS',                  13);
+define('ADDRESS',                14);
+define('NOTES',                  15);
+define('CHECK_COMMAND',          16);
+define('CUSTOM_VARS',            17);
+define('DOWNTIME_AUTHOR',        18);
+define('DOWNTIME_DATA',          19);
+define('DOWNTIME_START',         20);
+define('DOWNTIME_END',           21);
+// extended service
+define('DESCRIPTION',            22);
+
+define('EXT_STATE_SIZE', 23);
+
+// State definitions - internal numbers representing the states
+// hosts
+define('UNCHECKED',   14);
+define('UNREACHABLE', 12);
+define('DOWN',        11);
+define('UP',          10);
+// services
+define('PENDING',      4);
+define('UNKNOWN',      3);
+define('CRITICAL',     2);
+define('WARNING',      1);
+define('OK',           0);
+// generic
+define('ERROR',       -1);
 
 // Maximum length for usernames/passwords
 define('AUTH_MAX_PASSWORD_LENGTH', 30);
