@@ -32,7 +32,7 @@ class GlobalIndexPage {
         $this->htmlBase = cfg('paths','htmlbase');
     }
 
-    private function parseMapJson($objectId, $mapType, $mapName, $what) {
+    private function parseMapJson($objectId, $mapName, $what) {
         global $AUTHORISATION;
         // Check if the user is permitted to view this
         if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName))
@@ -71,7 +71,7 @@ class GlobalIndexPage {
         $MAP = new NagVisMap($MAPCFG, GET_STATE, !IS_VIEW);
 
         // Apply default configuration to object
-        $objConf = array_merge($objConf, $this->getMapDefaultOpts($mapType, $mapName, $MAPCFG->getAlias()));
+        $objConf = array_merge($objConf, $this->getMapDefaultOpts($mapName, $MAPCFG->getAlias()));
 
         $MAP->MAPOBJ->setConfiguration($objConf);
 
@@ -106,13 +106,13 @@ class GlobalIndexPage {
     public function parseMapsJson($type, $what = COMPLETE, $objects = Array()) {
         global $_BACKEND, $CORE;
         // initial parsing mode: Skip processing when this type of object should not be shown
-        if($type != 'list' && cfg('index', 'show'.$type.'s') != 1)
+        if($type != 'list' && cfg('index', 'showmaps') != 1)
             return json_encode(Array());
 
         if($type == 'list')
             $mapList = $objects;
         else
-            $mapList = $CORE->getAvailableMaps();
+            $mapList = $CORE->getPermittedMaps();
 
         $aMaps = Array();
         $aObjs = Array();
@@ -126,7 +126,7 @@ class GlobalIndexPage {
                 list($mapType, $mapName) = $a;
 
                 // list mode: Skip processing when this type of object should not be shown
-                if(cfg('index', 'show'.$mapType.'s') != 1)
+                if(cfg('index', 'showmaps') != 1)
                     continue;
             } else {
                 $mapName  = $objectId;
@@ -135,13 +135,13 @@ class GlobalIndexPage {
             }
 
             try {
-                $ret = $this->parseMapJson($objectId, $mapType, $mapName, $what);
+                $ret = $this->parseMapJson($objectId, $mapName, $what);
                 if($ret === null) {
                     // Skip maps which shal not be shown to the user
                     continue;
                 }
             } catch(Exception $e) {
-                $aMaps[] = $this->mapError($mapType, $mapName, $e->getMessage());
+                $aMaps[] = $this->mapError($mapName, $e->getMessage());
                 continue;
             }
 
@@ -169,11 +169,11 @@ class GlobalIndexPage {
         return json_encode($aMaps);
     }
 
-    private function getMapDefaultOpts($type, $name, $alias) {
+    private function getMapDefaultOpts($name, $alias) {
         return Array(
           'type'              => 'map',
           'map_name'          => $name,
-          'object_id'         => $type.'-'.$name,
+          'object_id'         => 'map-'.$name,
           // Enable the hover menu in all cases - maybe make it configurable
           'hover_menu'        => 1,
           'hover_childs_show' => 1,
@@ -184,8 +184,8 @@ class GlobalIndexPage {
         );
     }
 
-    private function mapError($type, $name, $msg) {
-        $map = $this->getMapDefaultOpts($type, $name, $name);
+    private function mapError($name, $msg) {
+        $map = $this->getMapDefaultOpts($name, $name);
         $map['name']            = $map['map_name'];
         unset($map['map_name']);
         $map['state']           = 'ERROR';
@@ -236,11 +236,7 @@ class GlobalIndexPage {
             return json_encode(Array());
 
         $aRotations = Array();
-        foreach($CORE->getDefinedRotationPools() AS $poolName) {
-            // Check if the user is permitted to view this rotation
-            if(!$AUTHORISATION->isPermitted('Rotation', 'view', $poolName))
-                continue;
-
+        foreach($CORE->getPermittedRotationPools() AS $poolName) {
             $ROTATION = new CoreRotation($poolName);
             $iNum = $ROTATION->getNumSteps();
             $aSteps = Array();

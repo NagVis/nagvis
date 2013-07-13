@@ -195,6 +195,20 @@ class GlobalCore {
     }
 
     /**
+     * Only returns rotations the users is permitted for
+     */
+    public function getPermittedRotationPools() {
+        global $AUTHORISATION;
+        $list = array();
+        foreach($this->getDefinedRotationPools() AS $poolName) {
+            if($AUTHORISATION->isPermitted('Rotation', 'view', $poolName)) {
+                $list[$poolName] = $poolName;
+            }
+        }
+        return $list;
+    }
+
+    /**
      * Gets all available custom actions
      */
     public function getDefinedCustomActions() {
@@ -390,6 +404,38 @@ class GlobalCore {
      */
     public function getAvailableMaps($strMatch = null, $setKey = null) {
         return self::listDirectory(self::getMainCfg()->getValue('paths', 'mapcfg'), MATCH_CFG_FILE, null, $strMatch, null, $setKey);
+    }
+
+    public function getPermittedMaps() {
+        global $AUTHORISATION;
+
+        $list = array();
+        foreach ($this->getAvailableMaps() AS $mapName) {
+            // Check if the user is permitted to view this
+            if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName))
+                continue;
+
+            // If the parameter filterUser is set, filter the maps by the username
+            // given in this parameter. This is a mechanism to be authed as generic
+            // user but see the maps of another user. This feature is disabled by
+            // default but could be enabled if you need it.
+            if(cfg('global', 'user_filtering') && isset($_GET['filterUser']) && $_GET['filterUser'] != '') {
+                $AUTHORISATION2 = new CoreAuthorisationHandler();
+                $AUTHORISATION2->parsePermissions($_GET['filterUser']);
+                if(!$AUTHORISATION2->isPermitted('Map', 'view', $mapName))
+                    continue;
+
+                // Switch the auth cookie to this user
+                global $SHANDLER;
+                $SHANDLER->aquire();
+                $SHANDLER->set('authCredentials', array('user' => $_GET['filterUser'], 'password' => ''));
+                $SHANDLER->set('authTrusted',     true);
+                $SHANDLER->commit();
+            }
+
+            $list[$mapName] = $mapName;
+        }
+        return $list;
     }
 
     /**

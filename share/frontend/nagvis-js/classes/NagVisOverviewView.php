@@ -36,11 +36,14 @@ class NagVisOverviewView {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parse() {
-        global $_MAINCFG;
+        global $_MAINCFG, $CORE;
         // Initialize template system
         $TMPL    = new FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
         $USERCFG = new CoreUserCfg();
+
+        $maps      = cfg('index', 'showmaps') == 1 ? array_keys($CORE->getPermittedMaps()) : array();
+        $rotations = cfg('index', 'showrotations') == 1 ? array_keys($CORE->getPermittedRotationPools()) : array();
 
         $aData = Array(
             'generalProperties' => $_MAINCFG->parseGeneralProperties(),
@@ -55,6 +58,8 @@ class NagVisOverviewView {
                 'more items...' => l('more items...'),
                 'Create Object' => l('Create Object'),
             )),
+            'rotation_names'    => json_encode($rotations),
+            'map_names'         => json_encode($maps),
         );
 
         // Build page based on the template file and the data array

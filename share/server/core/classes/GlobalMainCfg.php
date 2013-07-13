@@ -885,6 +885,7 @@ class GlobalMainCfg {
                 'showgeomap' => Array('must' => 0,
                     'editable' => 1,
                     'default' => 0,
+                    'deprecated' => 1,
                     'field_type' => 'boolean',
                     'match' => MATCH_BOOLEAN),
                 'showmapthumbs' => Array('must' => 0,

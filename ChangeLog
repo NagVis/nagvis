@@ -17,6 +17,8 @@ Core:
 Frontend:
   * All nodes with assigned childs in sidebar are now expandable. The state
     is stored for each user individually.
+  * Changed map rendering on overview from a single bulk request to one
+    request per map.
 
 1.7.10
 Frontend:

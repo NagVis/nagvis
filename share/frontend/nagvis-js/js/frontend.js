@@ -1268,9 +1268,8 @@ function flashIcon(objectId, iDuration, iInterval){
 function parseOverviewPage() {
     var oContainer = document.getElementById('overview');
 
-    // Render maps, geomaps and the rotations when enabled
+    // Render maps and the rotations when enabled
     var types = [ [ oPageProperties.showmaps,      'overviewMaps',      oPageProperties.lang_mapIndex ],
-                  [ oPageProperties.showgeomap,    'overviewGeomap',    'Geomap' ],
                   [ oPageProperties.showrotations, 'overviewRotations', oPageProperties.lang_rotationPools ] ];
     for(var i = 0; i < types.length; i++) {
         if(types[i][0] === 1) {
@@ -1307,163 +1306,81 @@ function parseOverviewPage() {
     oContainer = null;
 }
 
+g_overview_cur_row = null;
+g_rendered_maps = 0;
+g_processed_maps = 0;
+
 /**
- * parseOverviewMaps()
- *
- * Does initial parsing of maps on the overview page
- *
- * @param   Array    Array of objects to parse to the map
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * Adds a single map to the overview map list
  */
-function parseOverviewMaps(aMapsConf) {
-    eventlog("worker", "debug", "parseOverviewMaps: Start setting maps");
+function addOverviewMap(map_conf) {
+    g_processed_maps += 1;
 
     // Exit this function on invalid call
-    if(aMapsConf === null)  {
-        eventlog("worker", "warning", "parseOverviewMaps: Invalid call - maybe broken ajax response");
-        hideStatusMessage();
+    if(map_conf === null || map_conf.length != 1)  {
+        eventlog("worker", "warning", "addOverviewMap: Invalid call - maybe broken ajax response");
+        if (g_processed_maps == g_map_names.length)
+            finishOverviewMaps();
         return false;
     }
 
-    // Render the maps when enabled
-    if(oPageProperties.showmaps === 1) {
-        if(aMapsConf.length == 0) {
-            document.getElementById('overviewMaps').parentNode.style.display = 'none';
-            hideStatusMessage();
-            return false;
-        }
+    g_rendered_maps += 1; // also count errors
 
-        var oTable = document.getElementById('overviewMaps');
+    var oTable = document.getElementById('overviewMaps');
+
+    if (g_overview_cur_row === null) {
+        // on first map, create the first row
         var oTr = document.createElement('tr');
-
-        for(var i = 0, len = aMapsConf.length; i < len; i++) {
-            var oObj;
-
-            oObj = new NagVisMap(aMapsConf[i]);
-
-            if(oObj !== null) {
-                // Save object to map objects array
-                oMapObjects[oObj.conf.object_id] = oObj;
-
-                // Parse child and save reference in parsedObject
-                oObj.parsedObject = oTr.appendChild(oObj.parseOverview());
-            }
-
-            if((i+1) % oPageProperties.cellsperrow === 0) {
-                oTable.appendChild(oTr);
-                oTr = null;
-                oTr = document.createElement('tr');
-            }
-
-            oObj = null;
-        }
-
-        // Fill table with empty cells if there are not enough maps to get the last
-        // row filled
-        if(i % oPageProperties.cellsperrow !== 0) {
-            for(var a = 0; a < (oPageProperties.cellsperrow - (i % oPageProperties.cellsperrow)); a++) {
-                var oTd = document.createElement('td');
-                oTr.appendChild(oTd);
-                oTd = null;
-            }
-        }
-
-        // Append last row
         oTable.appendChild(oTr);
-        oTr = null;
-
-        oTable = null;
+        g_overview_cur_row = oTr;
+    } else {
+        var oTr = g_overview_cur_row;
     }
 
-    eventlog("worker", "debug", "parseOverviewMaps: End setting maps");
-    getAndParseTemplates();
+    // render the map object
+    var oObj = new NagVisMap(map_conf[0]);
+    if(oObj !== null) {
+        // Save object to map objects array
+        oMapObjects[oObj.conf.object_id] = oObj;
 
-    // Hide the "Loading..." message. This is not the best place since geomaps/rotations 
-    // might not have been loaded now but in most cases this is the longest running request
-    hideStatusMessage();
+        // Parse child and save reference in parsedObject
+        oObj.parsedObject = oTr.appendChild(oObj.parseOverview());
+    }
+    oObj = null;
+
+    // maybe add a new row
+    if(g_rendered_maps % oPageProperties.cellsperrow === 0) {
+        oTr = document.createElement('tr');
+        oTable.appendChild(oTr);
+        g_overview_cur_row = oTr;
+    }
+
+    // Finalize rendering after last map...
+    if (g_processed_maps == g_map_names.length)
+        finishOverviewMaps();
+
+    oTr = null;
+    oTable = null;
 }
 
-/**
- * parseOverviewGeomap()
- *
- * Does initial parsing of geomap on the overview page
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- * @author	Roman Kyrylych <rkyrylych@op5.com>
- */
-function parseOverviewGeomap() {
-    eventlog("worker", "debug", "parseOverviewGeomap: Start setting geomap");
-
-    // Render the maps when enabled
-    if(oPageProperties.showgeomap === 1) {
-        var oTable = document.getElementById('overviewGeomap');
-        var oTr = document.createElement('tr');
-
-        var oTd = document.createElement('td');
-        oTd.setAttribute('id', 'geomap-icon');
-        oTd.setAttribute('class', 'geomap');
-        oTd.setAttribute('className', 'geomap');
-        oTd.style.width = '200px';
-
-        // Only show map thumb when configured
-        if(oPageProperties.showmapthumbs === 1) {
-            oTd.style.height = '200px';
-        }
-
-        oTr.appendChild(oTd);
-
-        // Link
-        var oLink = document.createElement('a');
-        oLink.href = oGeneralProperties.path_base+'/netmap/shell.html';
-
-        // Status image
-        var oImg = document.createElement('img');
-        oImg.align = "right";
-        oImg.src = oGeneralProperties.path_iconsets+'std_small_unknown.png';
-        oImg.alt = 'geomap';
-
-        oLink.appendChild(oImg);
-        oImg = null;
-
-        // Title
-        var h2 = document.createElement('h2');
-        h2.appendChild(document.createTextNode('Geomap'));
-        oLink.appendChild(h2);
-        h2 = null;
-
-        var br = document.createElement('br');
-        oLink.appendChild(br);
-        br = null;
-
-        // Only show map thumb when configured
-        if(oPageProperties.showmapthumbs === 1) {
-            oImg = document.createElement('img');
-            oImg.style.width = '200px';
-            oImg.style.height = '150px';
-            oImg.src = oGeneralProperties.path_images+'maps/geomap-thumb.png';
-            oLink.appendChild(oImg);
-            oImg = null;
-        }
-
-        oTd.appendChild(oLink);
-        oLink = null;
-
-        oTd = null;
-
-        for(var a = 0; a < (oPageProperties.cellsperrow - 1); a++) {
+function finishOverviewMaps() {
+    // Fill table with empty cells if there are not enough maps to get the last
+    // row filled
+    if(g_rendered_maps % oPageProperties.cellsperrow !== 0) {
+        for(var a = 0; a < (oPageProperties.cellsperrow - (g_rendered_maps % oPageProperties.cellsperrow)); a++) {
             var oTd = document.createElement('td');
-            oTr.appendChild(oTd);
+            g_overview_cur_row.appendChild(oTd);
             oTd = null;
         }
-
-        // Append last row
-        oTable.appendChild(oTr);
-        oTr = null;
-
-        oTable = null;
     }
+    g_overview_cur_row = null;
 
-    eventlog("worker", "debug", "parseOverviewGeomap: End setting geomap");
+    eventlog("worker", "debug", "addOverviewMap: Finished parsing all maps");
+    getAndParseTemplates();
+
+    // Hide the "Loading..." message. This is not the best place since rotations 
+    // might not have been loaded now but in most cases this is the longest running request
+    hideStatusMessage();
 }
 
 /**
@@ -1516,8 +1433,23 @@ function getOverviewProperties(mapName) {
  * Fetches all maps to be shown on the overview page
  */
 function getOverviewMaps() {
-    getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getOverviewMaps' + getViewParams(),
-                    false, parseOverviewMaps);
+    if(oPageProperties.showmaps !== 1) {
+        return false;
+    }
+
+    if(g_map_names.length == 0) {
+        document.getElementById('overviewMaps').parentNode.style.display = 'none';
+        hideStatusMessage();
+        return false;
+    }
+
+    eventlog("worker", "debug", "getOverviewMaps: Start requesting maps...");
+
+    for (var i = 0, len = g_map_names.length; i < len; i++) {
+        getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getObjectStates'
+                        + '&i[]=map-' + escapeUrlValues(g_map_names[i]) + getViewParams(),
+                        false, addOverviewMap);
+    }
 }
 
 /**
@@ -1777,9 +1709,6 @@ function workerInitialize(iCount, sType, sIdentifier) {
         parseOverviewPage();
 
         getOverviewMaps();
-
-        eventlog("worker", "debug", "Parsing geomap");
-        parseOverviewGeomap();
 
         eventlog("worker", "debug", "Parsing rotations");
         parseOverviewRotations(getOverviewRotations());
