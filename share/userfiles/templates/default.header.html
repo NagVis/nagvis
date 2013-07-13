@@ -7,15 +7,9 @@
     <li onmouseover="!sidebarOpen() ? ddMenu('views',1) : void(0)" onmouseout="ddMenuHide(['views'])" class="dropdown">
         <span id="views-ddheader" onclick="toggleSidebar(true);ddMenuHide(['views'])">{$langOpen} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         {template headMaps maps pathBase type indent=1}
-        {foreach $maps map}
-            <li class="lvl{$indent}">
-            {if $map.configError == true}<a class="error" href="#">{$map.mapAlias}</a>
-            {else}<a href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}">{$map.mapAlias}</a> {/if}
-            </li>
-            {if $map.childs}
-                {headMaps $map.childs $pathBase $type $indent+1}
-            {/if}
-        {/foreach}
+        {foreach $maps map}<li class="lvl{$indent}">{if $map.configError == true}<a class="error" href="#">{$map.mapAlias}</a>
+            {else}<a href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}">{$map.mapAlias}</a> {/if}</li>
+            {if $map.childs}{headMaps $map.childs $pathBase $type $indent+1}{/if}{/foreach}
         {/template}
         <ul id="views-ddcontent">
             {if $permittedOverview}
@@ -144,24 +138,11 @@
 </div>
 
 {template sideMaps maps pathBase type indent=1}
-{foreach $maps map}
-    <li class="lvl{$indent} {if $map.childs}closed parent{/if}">
-    <div>
-    {if $map.childs}<a class=open href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}">&gt;</a>{/if}
-    <a class="{if $map.childs}title{/if} {$map.class} {if $map.configError}error{/if}"
-       {if $map.childs}onclick="sidebarToggleSubtree(this);return false" id="sb-{$map.mapName}"{/if}
-       {if $map.childs}href="#"{else}href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}"{/if}>{$map.mapAlias}</a>
-    </div>
-
-<!---href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}">{$map.mapAlias}</a></li>--->
-
-    {if $map.childs}
-        <ul id="sb-{$map.mapName}-childs" style="display:none;">
-        {sideMaps $map.childs $pathBase $type $indent+1}
-        </ul>
-    {/if}
-    </li>
-{/foreach}
+{foreach $maps map}<li class="lvl{$indent} {if $map.childs}closed parent{/if}"><div>
+{if $map.childs}<a class=open href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}">&gt;</a>{/if}
+<a class="{if $map.childs}title{/if} {$map.class} {if $map.configError}error{/if}" {if $map.childs}onclick="sidebarToggleSubtree(this);return false" id="sb-{$map.mapName}"{/if}
+{if $map.childs}href="#"{else}href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}"{/if}>{$map.mapAlias}</a>
+</div>{if $map.childs}<ul id="sb-{$map.mapName}-childs" style="display:none;">{sideMaps $map.childs $pathBase $type $indent+1}</ul>{/if}</li>{/foreach}
 {/template}
 <div id="sidebar">
 <ul>
