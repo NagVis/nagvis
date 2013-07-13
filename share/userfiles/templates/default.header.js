@@ -118,8 +118,12 @@ function ddMenu(id, d, reposition){
 function toggleSidebar(store) {
     var sidebar = document.getElementById('sidebar');
     var content = document.getElementById('map');
-    if(content == null)
+    var is_overview = false;
+    if(content == null) {
         content = document.getElementById('overview');
+        is_overview = true;
+    }
+
     // If there is still no content don't execute the main code. So the sidebar
     // will not be available in undefined views like the WUI
     if(content == null)
@@ -128,11 +132,15 @@ function toggleSidebar(store) {
     var state = 1;
     if(sidebarOpen()) {
         sidebar.style.display = 'none';
-        content.style.left = '0';
+        if(is_overview === false) {
+            content.style.left = '0';
+        }
         state = 0;
     } else {
         sidebar.style.display = 'inline';
-        content.style.left = '200px';
+        if(is_overview === false) {
+            content.style.left = '200px';
+        }
     }
 
     if(store === true)
