@@ -33,6 +33,15 @@ var NagVisMap = NagVisStatefulObject.extend({
         this.getMembers();
     },
 
+    stateText: function () {
+        var substate = '';
+        if (this.conf.summary_in_downtime == 1)
+            substate = ' (downtime)';
+        else if (this.conf.summary_problem_has_been_acknowledged == 1)
+            substate = ' (ack)';
+        return this.conf.summary_state + substate;
+    },
+
     /**
      * Parses the object of a map on the overview page
      *
@@ -82,7 +91,7 @@ var NagVisMap = NagVisStatefulObject.extend({
             var oImg   = document.createElement('img');
             oImg.align = 'right';
             oImg.src   = oGeneralProperties.path_iconsets + this.conf.icon;
-            oImg.alt   = this.conf.type + '-' + alt;
+            oImg.alt   = this.stateText();
 
             oLink.appendChild(oImg);
             oImg = null;
