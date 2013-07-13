@@ -64,140 +64,140 @@ class WuiViewEditMainCfg {
         $i = 1;
         foreach($CORE->getMainCfg()->getValidConfig() AS $cat => $arr) {
             // don't display backend,rotation and internal options
-            if(!preg_match("/^(backend|internal|rotation|auth|action)/i", $cat)) {
-                $ret .= '<tr><th class="cat" colspan="3"><h2>'.$cat.'</h2></th></tr>';
+            if(preg_match("/^(backend|internal|rotation|auth|action)/i", $cat)) {
+                continue
+            }
 
-                foreach($arr AS $propname => $prop) {
-                    $class = '';
-                    $style = '';
-                    $isDefaultValue = false;
+            $ret .= '<tr><th class="cat" colspan="3"><h2>'.$cat.'</h2></th></tr>';
 
-                    // Skip deprecated options
-                    if(isset($prop['deprecated']) && $prop['deprecated'] == 1)
-                        continue;
+            foreach($arr AS $propname => $prop) {
+                $class = '';
+                $style = '';
+                $isDefaultValue = false;
 
-                    // Set field type to show
-                    $fieldType = 'text';
-                    if(isset($prop['field_type'])) {
-                        $fieldType = $prop['field_type'];
+                // Skip deprecated options
+                if(isset($prop['deprecated']) && $prop['deprecated'] == 1)
+                    continue;
+
+                // Set field type to show
+                $fieldType = 'text';
+                if(isset($prop['field_type'])) {
+                    $fieldType = $prop['field_type'];
+                }
+
+                // Don't show anything for hidden options
+                if($fieldType !== 'hidden') {
+                    // Only get the really set value
+                    $val2 = cfg($cat, $propname, true);
+
+                    // Check if depends_on and depends_value are defined and if the value
+                    // is equal. If not equal hide the field
+                    if(isset($prop['depends_on']) && isset($prop['depends_value'])
+                        && cfg($cat, $prop['depends_on'], false) != $prop['depends_value']) {
+
+                        $class = ' class="child-row"';
+                        $style = ' style="display:none;"';
+                    } elseif(isset($prop['depends_on']) && isset($prop['depends_value'])
+                        && cfg($cat, $prop['depends_on'], false) == $prop['depends_value']) {
+
+                        //$style .= 'display:;';
+                        $class = ' class="child-row"';
                     }
 
-                    // Don't show anything for hidden options
-                    if($fieldType !== 'hidden') {
-                        // Only get the really set value
-                        $val2 = cfg($cat, $propname, true);
+                    // Create a "helper" field which contains the real applied value
+                    if($val2 === false) {
+                        $defaultValue = cfg($cat, $propname, false);
 
-                        // Check if depends_on and depends_value are defined and if the value
-                        // is equal. If not equal hide the field
-                        if(isset($prop['depends_on']) && isset($prop['depends_value'])
-                            && cfg($cat, $prop['depends_on'], false) != $prop['depends_value']) {
-
-                            $class = ' class="child-row"';
-                            $style = ' style="display:none;"';
-                        } elseif(isset($prop['depends_on']) && isset($prop['depends_value'])
-                            && cfg($cat, $prop['depends_on'], false) == $prop['depends_value']) {
-
-                            //$style .= 'display:;';
-                            $class = ' class="child-row"';
+                        if(is_array($defaultValue)) {
+                            $defaultValue = implode(',', $defaultValue);
                         }
 
-                        // Create a "helper" field which contains the real applied value
-                        if($val2 === false) {
-                            $defaultValue = cfg($cat, $propname, false);
+                        $ret .= '<input type="hidden" id="_'.$cat.'_'.$propname.'" name="_'.$cat.'_'.$propname.'" value="'.$defaultValue.'" />';
+                    } else {
+                        $ret .= '<input type="hidden" id="_'.$cat.'_'.$propname.'" name="_'.$cat.'_'.$propname.'" value="" />';
+                    }
 
-                            if(is_array($defaultValue)) {
-                                $defaultValue = implode(',', $defaultValue);
+                    # we add a line in the form
+                    $ret .= '<tr'.$class.$style.'>';
+                    $ret .= '<td class="tdlabel">'.$propname.'</td>';
+
+                    if(preg_match('/^TranslationNotFound:/', l($propname)) > 0) {
+                        $ret .= '<td class="tdfield"></td>';
+                    } else {
+                        $ret .= '<td class="tdfield">';
+                        $default_str = is_array($arr[$propname]['default']) ? implode(',', $arr[$propname]['default']) : $arr[$propname]['default'];
+                        $ret .= "<img style=\"cursor:help\" src=\"./images/help_icon.png\" "
+                               ."onclick=\"javascript:alert('".l($propname)." (".l('defaultValue').": ".$default_str.")')\" />";
+                        $ret .= '</td>';
+                    }
+
+                    $ret .= '<td class="tdfield">';
+                    switch($fieldType) {
+                        case 'dropdown':
+                            switch($propname) {
+                                case 'language':
+                                    $arrOpts = $CORE->getAvailableLanguages();
+                                break;
+                                case 'backend':
+                                    $arrOpts = $CORE->getDefinedBackends();
+                                break;
+                                case 'icons':
+                                    $arrOpts = $CORE->getAvailableIconsets();
+                                break;
+                                case 'headertemplate':
+                                    $arrOpts = $CORE->getAvailableHeaderTemplates();
+                                break;
                             }
 
-                            $ret .= '<input type="hidden" id="_'.$cat.'_'.$propname.'" name="_'.$cat.'_'.$propname.'" value="'.$defaultValue.'" />';
-                        } else {
-                            $ret .= '<input type="hidden" id="_'.$cat.'_'.$propname.'" name="_'.$cat.'_'.$propname.'" value="" />';
-                        }
+                            $ret .= '<select id="'.$cat.'_'.$propname.'" name="'.$cat.'_'.$propname.'" onBlur="validateMainConfigFieldValue(this, 0)">';
+                            $ret .= '<option value=""></option>';
 
-                        # we add a line in the form
-                        $ret .= '<tr'.$class.$style.'>';
-                        $ret .= '<td class="tdlabel">'.$propname.'</td>';
-
-                        if(preg_match('/^TranslationNotFound:/', l($propname)) > 0) {
-                            $ret .= '<td class="tdfield"></td>';
-                        } else {
-                            $ret .= '<td class="tdfield">';
-                            $default_str = is_array($arr[$propname]['default']) ? implode(',', $arr[$propname]['default']) : $arr[$propname]['default'];
-                            $ret .= "<img style=\"cursor:help\" src=\"./images/help_icon.png\" "
-                                   ."onclick=\"javascript:alert('".l($propname)." (".l('defaultValue').": ".$default_str.")')\" />";
-                            $ret .= '</td>';
-                        }
-
-                        $ret .= '<td class="tdfield">';
-                        switch($fieldType) {
-                            case 'dropdown':
-                                switch($propname) {
-                                    case 'language':
-                                        $arrOpts = $CORE->getAvailableLanguages();
-                                    break;
-                                    case 'backend':
-                                        $arrOpts = $CORE->getDefinedBackends();
-                                    break;
-                                    case 'icons':
-                                        $arrOpts = $CORE->getAvailableIconsets();
-                                    break;
-                                    case 'headertemplate':
-                                        $arrOpts = $CORE->getAvailableHeaderTemplates();
-                                    break;
+                            foreach($arrOpts AS $val) {
+                                if(is_array($val)) {
+                                    $ret .= '<option value="'.$val['value'].'">'.$val['label'].'</option>';
+                                } else {
+                                    $ret .= '<option value="'.$val.'">'.$val.'</option>';
                                 }
+                            }
 
-                                $ret .= '<select id="'.$cat.'_'.$propname.'" name="'.$cat.'_'.$propname.'" onBlur="validateMainConfigFieldValue(this, 0)">';
-                                $ret .= '<option value=""></option>';
+                            $ret .= '</select>';
 
-                                foreach($arrOpts AS $val) {
-                                    if(is_array($val)) {
-                                        $ret .= '<option value="'.$val['value'].'">'.$val['label'].'</option>';
-                                    } else {
-                                        $ret .= '<option value="'.$val.'">'.$val.'</option>';
-                                    }
-                                }
+                            $ret .= '<script>document.edit_config.elements[\''.$cat.'_'.$propname.'\'].value = \''.$val2.'\';</script>';
+                        break;
+                        case 'boolean':
+                            $ret .= '<select id="'.$cat.'_'.$propname.'" name="'.$cat.'_'.$propname.'" onBlur="validateMainConfigFieldValue(this, 0)">';
+                            $ret .= '<option value=""></option>';
+                            $ret .= '<option value="1">'.l('yes').'</option>';
+                            $ret .= '<option value="0">'.l('no').'</option>';
+                            $ret .= '</select>';
 
-                                $ret .= '</select>';
+                            $ret .= '<script>document.edit_config.elements[\''.$cat.'_'.$propname.'\'].value = \''.$val2.'\';</script>';
+                        break;
+                        case 'text':
+                            if(is_array($val2)) {
+                                $val2 = implode(',', $val2);
+                            }
 
-                                $ret .= '<script>document.edit_config.elements[\''.$cat.'_'.$propname.'\'].value = \''.$val2.'\';</script>';
-                            break;
-                            case 'boolean':
-                                $ret .= '<select id="'.$cat.'_'.$propname.'" name="'.$cat.'_'.$propname.'" onBlur="validateMainConfigFieldValue(this, 0)">';
-                                $ret .= '<option value=""></option>';
-                                $ret .= '<option value="1">'.l('yes').'</option>';
-                                $ret .= '<option value="0">'.l('no').'</option>';
-                                $ret .= '</select>';
+                            $ret .= '<input id="'.$cat.'_'.$propname.'" type="text" name="'.$cat.'_'.$propname.'" value="'.$val2.'" onBlur="validateMainConfigFieldValue(this, 0)" />';
 
-                                $ret .= '<script>document.edit_config.elements[\''.$cat.'_'.$propname.'\'].value = \''.$val2.'\';</script>';
-                            break;
-                            case 'text':
-                                if(is_array($val2)) {
-                                    $val2 = implode(',', $val2);
-                                }
-
-                                $ret .= '<input id="'.$cat.'_'.$propname.'" type="text" name="'.$cat.'_'.$propname.'" value="'.$val2.'" onBlur="validateMainConfigFieldValue(this, 0)" />';
-
-                                if(isset($prop['locked']) && $prop['locked'] == 1) {
-                                    $ret .= "<script>document.edit_config.elements['".$cat."_".$propname."'].disabled=true;</script>";
-                                }
-                            break;
-                        }
-
-                        // Initially toggle the depending fields
-                        $ret .= '<script>validateMainConfigFieldValue(document.getElementById("'.$cat.'_'.$propname.'"), 1);</script>';
-
-                        $ret .= '</td>';
-                        $ret .= '</tr>';
+                            if(isset($prop['locked']) && $prop['locked'] == 1) {
+                                $ret .= "<script>document.edit_config.elements['".$cat."_".$propname."'].disabled=true;</script>";
+                            }
+                        break;
                     }
+
+                    // Initially toggle the depending fields
+                    $ret .= '<script>validateMainConfigFieldValue(document.getElementById("'.$cat.'_'.$propname.'"), 1);</script>';
+
+                    $ret .= '</td>';
+                    $ret .= '</tr>';
                 }
-
-                if($i % 3 == 0) {
-                    $ret .= '</table><table class="mytable" style="width:300px;float:left">';
-                }
-
-                $i++;
-
             }
+
+            if($i % 3 == 0) {
+                $ret .= '</table><table class="mytable" style="width:300px;float:left">';
+            }
+            $i++;
         }
 
         return $ret;
