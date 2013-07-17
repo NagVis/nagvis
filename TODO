@@ -19,6 +19,41 @@ Offene Punkte:
 
 -------------------------------------------------------------------------------
 
+*** Dynamische Maps ***
+
+Aktuell gibt es neben den statischen Maps die Automap, die die Parent-/Child-
+Beziehungen darstellt, die Geomap, die eine bestimmte Menge von Hosts auf einer
+Karte darstellt.
+
+In grossen Umgebungen ist es muehsam einzelne Maps dauerhaft zu pflegen. Wenn
+die Maps einem bestimmten Schema folgen, koennte man zumindest die Objekete,
+die auf einer Karte dargestellt werden sollen, automatisch verwalten.
+
+Sprich: Wenn ein Host ueber die Konfiguration des Monitoring-Cores aufgenommen
+wird, wird er automatisch auf der Map aufgenommen. Wenn ein Host entfernt wird,
+dann wird dieser automatisch entfernt. Dieser Automatismus steuert allerdings nur
+das initiale Anlegen und Loeschen. Alle anderen Dinge, wie z.B. die korrekte
+Positionierung, werden wie ueblich konfiguriert.
+
+Wir nennen das Feature: "Dynamic Maps".
+
+Es wird ueber eine Map-Source realisiert. Diese nutzt folgende Optionen:
+
+dynmap_object_types="(hosts|services)"
+dynmap_object_filter="Filter: custom_variables = ID xyz"
+dynmap_init_x=20
+dynmap_init_y=700
+dynmap_offset_x=30
+dynmap_offset_y=30
+dynmap_per_row=10
+
+Beim hinzufuegen/entfernen wird ermittelt welche Objekte sich momentan im
+Raster befinden. Diese Objekte werden anhand des Namens sortiert und im
+Raster neu positioniert.
+
+Die Source muss die Positionen nur neu berechnen, wenn der Core neu gestartet
+wurde. In der Zwischenzeit kann ein Cache verwendet werden.
+
 *** state handling cleanup ***
 
 Ein Zustand bedeutet:

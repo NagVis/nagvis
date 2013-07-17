@@ -174,6 +174,10 @@ function listBackendIds($CORE) {
     return $backends;
 }
 
+function listSources($CORE) {
+    return $CORE->getAvailableSources();
+}
+
 $mapConfigVars = Array(
     'type' => Array(
         'must'       => 0,
@@ -201,13 +205,17 @@ $mapConfigVars = Array(
         'must'       => 0,
         'default'    => array(),
         'array'      => true,
-        'match'      => MATCH_STRING
+	'multiple'   => true,
+        'match'      => MATCH_STRING,
+        'field_type' => 'dropdown',
+        'list'       => 'listSources',
     ),
     'backend_id' => Array(
         'must'       => 0,
         'default'    => cfg('defaults', 'backend'),
         'match'      => MATCH_BACKEND_ID,
         'array'      => true,
+	'multiple'   => true,
         'field_type' => 'dropdown',
         'list'       => 'listBackendIds',
     ),

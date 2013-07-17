@@ -479,14 +479,14 @@ class GlobalMapCfg {
      */
     private function fetchMapSources() {
         global $CORE;
-        foreach($CORE->getAvailableSources() AS $source_file) {
+        foreach($CORE->getAvailableSources() AS $source_name) {
             $viewParams = array();
             $configVars = array();
 
             if(file_exists(path('sys', 'local', 'sources'))) {
-                include_once(path('sys', 'local', 'sources') . '/'. $source_file);
+                include_once(path('sys', 'local', 'sources') . '/'. $source_name . '.php');
             } else {
-                include_once(path('sys', 'global', 'sources') . '/'. $source_file);
+                include_once(path('sys', 'global', 'sources') . '/'. $source_name. '.php');
             }
 
             // Add the view params of that source to the list of parameters
@@ -501,7 +501,7 @@ class GlobalMapCfg {
             foreach($configVars AS $key => $val) {
                 self::$validConfig['global'][$key] = $val;
                 // Mark this option as source parameter. Save the source file in the value
-                self::$validConfig['global'][$key]['source_param'] = $source_file;
+                self::$validConfig['global'][$key]['source_param'] = $source_name. '.php';
             }
         }
     }
@@ -619,7 +619,7 @@ class GlobalMapCfg {
         if(isset($params['sources'])) {
             $keys = array();
             foreach($params['sources'] AS $source) {
-                if($source != '') {
+                if($source != '' && isset(self::$viewParams[$source])) {
                     $keys = array_merge($keys, self::$viewParams[$source]);
                 }
             }

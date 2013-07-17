@@ -102,6 +102,7 @@ define('MATCH_HEADER_TEMPLATE_FILE', '/^(.+)\.header\.html$/i');
 define('MATCH_HOVER_TEMPLATE_FILE', '/^(.+)\.hover\.html$/i');
 define('MATCH_CONTEXT_TEMPLATE_FILE', '/^(.+)\.context\.html$/i');
 define('MATCH_PHP_FILE', '/^(.+\.php)$/i');
+define('MATCH_SOURCE_FILE', '/^(.+)\.php$/i');
 define('MATCH_INTEGER_PRESIGN', '/^[\+\-]?[0-9]+$/');
 define('MATCH_INTEGER_PRESIGN_EMPTY', '/^[\+\-]?[0-9]*$/');
 define('MATCH_LABEL_X', '/^([\+\-]?[0-9]+|center)$/');

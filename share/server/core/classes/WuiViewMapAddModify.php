@@ -292,10 +292,11 @@ class WuiViewMapAddModify {
                     $ret .= $this->selectField($propname, $options, $value, $hideField, $onChange);
                 break;
                 case 'dropdown':
-                    $array = isset($prop['array']) && $prop['array'];
+                    $array    = isset($prop['array']) && $prop['array'];
+                    $multiple = isset($prop['multiple']) && $prop['multiple'];
                     // If var is backend_id or var is host_name in service objects submit the form
                     // to update the depdant lists.
-                    if($onChange == '' && ($propname == 'backend_id'
+                    if($onChange == '' && (($multiple && $value !== '<<<multiple>>>')
                        || ($type == 'service' && $propname == 'host_name')))
                         $onChange = 'document.getElementById(\'update\').value=\'1\';document.getElementById(\'commit\').click();';
 
@@ -330,14 +331,14 @@ class WuiViewMapAddModify {
                                     l('Current value is not a known option - falling back to input field.')));
                             }
 
-                            if ($propname === 'backend_id' && $value === '<<<multiple>>>')
+                            if ($array && $multiple && $value === '<<<multiple>>>')
                                 $value = '';
 
                             $ret .= $this->inputField($propname, $value, $hideField);
                             break;
                         }
 
-                        if($array) {
+                        if($array && $multiple) {
                             $options['<<<multiple>>>'] = l('>>> Select multiple');
                         }
 

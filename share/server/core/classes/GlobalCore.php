@@ -345,8 +345,8 @@ class GlobalCore {
      */
     public function getAvailableSources() {
         return array_merge(
-          self::listDirectory(path('sys', 'global', 'sources'), MATCH_PHP_FILE),
-          self::listDirectory(path('sys', 'local',  'sources'), MATCH_PHP_FILE, null, null, null, null, false)
+          self::listDirectory(path('sys', 'global', 'sources'), MATCH_SOURCE_FILE),
+          self::listDirectory(path('sys', 'local',  'sources'), MATCH_SOURCE_FILE, null, null, null, null, false)
         );
     }
 
