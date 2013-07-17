@@ -407,7 +407,7 @@ function automap_get_object_tree($MAPCFG, $params, &$saved_config) {
     if(isset($params['parent_layers']) && $params['parent_layers'] != 0) {
         global $_BACKEND;
         
-        if($_BACKEND->checkBackendFeature($params['backend_id'], 'getDirectParentNamesByHostName')) {
+        if($_BACKEND->checkBackendFeature($params['backend_id'][0], 'getDirectParentNamesByHostName')) {
             automap_fetch_tree('parents', $MAPCFG, $params, $saved_config, $root_name, $params['parent_layers'], $root_obj['.parents']);
         }
     }
