@@ -166,15 +166,12 @@ class CoreModOverview extends CoreModule {
                 $a = explode('-', $objectId, 2);
                 if(!isset($a[1]))
                     continue;
-
-                list($mapType, $mapName) = $a;
-
+                $mapName = $a[1];
                 // list mode: Skip processing when this type of object should not be shown
                 if(cfg('index', 'showmaps') != 1)
                     continue;
             } else {
                 $mapName  = $objectId;
-                $mapType  = $type;
                 $objectId = $type . '-' . $mapName;
             }
 

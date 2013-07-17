@@ -288,7 +288,7 @@ class GlobalMainCfg {
                 'backend' => Array(
                     'must'        => 0,
                     'editable'    => 1,
-                    'default'     => 'live_1',
+                    'default'     => array('live_1'),
                     'array'       => true,
                     'field_type'  => 'dropdown',
                     'match'       => MATCH_BACKEND_ID
