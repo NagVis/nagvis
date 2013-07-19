@@ -83,8 +83,8 @@ function listViewTypes($CORE) {
 
 function listDynGroupTypes($CORE) {
     return Array(
-        'hosts'    => l('Hosts'),
-        'services' => l('Services')
+        'host'    => l('Hosts'),
+        'service' => l('Services')
     );
 }
 

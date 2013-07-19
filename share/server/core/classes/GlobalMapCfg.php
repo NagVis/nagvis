@@ -501,7 +501,7 @@ class GlobalMapCfg {
             foreach($configVars AS $key => $val) {
                 self::$validConfig['global'][$key] = $val;
                 // Mark this option as source parameter. Save the source file in the value
-                self::$validConfig['global'][$key]['source_param'] = $source_name. '.php';
+                self::$validConfig['global'][$key]['source_param']  = $source_name;
             }
         }
     }
@@ -551,19 +551,24 @@ class GlobalMapCfg {
         return $defs;
     }
 
+    // Handles
+    // a) map config
+    // b) user config
+    // c) url parameters
     public function getSourceParam($key, $only_user_supplied = false, $only_customized = false) {
         // Allow _GET or _POST (_POST is needed for add/modify dialog submission)
         if(isset($_REQUEST[$key])) {
-            if(!$only_customized || $_REQUEST[$key] != $this->getValue(0, $key)) {
-                // Only get options which differ from the defaults
-                // Maybe convert the type, if requested
-                if(isset(self::$validConfig['global'][$key]['array'])
-                   && self::$validConfig['global'][$key]['array'] === true)
-                    return explode(',', $_REQUEST[$key]);
-                else
-                    return $_REQUEST[$key];
+            // Only get options which differ from the defaults
+            // Maybe convert the type, if requested
+            if(isset(self::$validConfig['global'][$key]['array'])
+               && self::$validConfig['global'][$key]['array'] === true) {
+                $val = explode(',', $_REQUEST[$key]);
             } else {
-                return null;
+                $val = $_REQUEST[$key];
+            }
+                
+            if(!$only_customized || ($val != $this->getValue(0, $key))) {
+                return $val;
             }
         } else {
             // Try to use the user profile
@@ -576,32 +581,31 @@ class GlobalMapCfg {
                 // Otherwise use the map global value (if allowed)
                 return $this->getValue(0, $key);
 
-            } else {
-                return null;
             }
         }
+
+        return null;
     }
 
-    /**
-     * Returns an assiziative array of all parameters with values for all sources
-     * used on the current map
-     */
-    public function getSourceParams($only_user_supplied = false, $only_customized = false, $recurse = true) {
-        // First get a flat list of all parameters of all sources
+    private function getSourceParamsOfSources($sources, $only_user_supplied, $only_customized, $only_view_parameters) {
+        $keys = array();
+        // Get keys of all view params belonging to all configured sources
+        foreach($sources AS $source) {
+            if(!isset(self::$viewParams[$source])) {
+                throw new NagVisException(l('Requested source "[S]" does not exist',
+                                                            array('S' => $source)));
+            }
+            $keys += self::$viewParams[$source];
+        }
 
-        if(isset(self::$viewParams['*']))
-            $keys = self::$viewParams['*'];
-        else
-            $keys = array();
-
-        $sources = $this->getValue(0, 'sources');
-        if($sources) {
-            foreach($sources AS $source) {
-                if(!isset(self::$viewParams[$source])) {
-                    throw new NagVisException(l('Requested source "[S]" does not exist',
-                                                                array('S' => $source)));
+        if(!$only_view_parameters) {
+            // If allowed, also use the configuration parameters which are no view parameters
+            // (These are the configuration options which belong to a source but are not
+            //  available as user modifyable view parameters)
+            foreach (self::$validConfig['global'] as $key => $opt) {
+                if (isset($opt['source_param']) && in_array($opt['source_param'], $sources)) {
+                    $keys[] = $key;
                 }
-                $keys = array_merge($keys, self::$viewParams[$source]);
             }
         }
 
@@ -614,21 +618,25 @@ class GlobalMapCfg {
                 $params[$key] = $val;
         }
 
+        return $params;
+    }
+
+    /**
+     * Returns an associative array of all parameters with values for all sources
+     * used on the current map.
+     * The default case is to return view parameters and config values of the
+     * enabled sources. But in some cases the function on returns the view parameters.
+     */
+    public function getSourceParams($only_user_supplied = false, $only_customized = false, $only_view_parameters = false) {
+        // First get a list of source names to get the parameters for
+        $sources = array_merge(array('*'), $this->getValue(0, 'sources'));
+        $params = $this->getSourceParamsOfSources($sources, $only_user_supplied, $only_customized, $only_view_parameters);
+
         // The map sources might have changed basd on source params - we need an
         // additional run to get params which belong to this sources
         if(isset($params['sources'])) {
-            $keys = array();
-            foreach($params['sources'] AS $source) {
-                if($source != '' && isset(self::$viewParams[$source])) {
-                    $keys = array_merge($keys, self::$viewParams[$source]);
-                }
-            }
-
-            foreach($keys AS $key) {
-                $val = $this->getSourceParam($key, $only_user_supplied, $only_customized);
-                if($val !== null)
-                    $params[$key] = $val;
-            }
+            $sources = array_merge(array('*'), $params['sources']);
+            $params = $this->getSourceParamsOfSources($sources, $only_user_supplied, $only_customized, $only_view_parameters);
         }
 
         return $params;
@@ -904,6 +912,11 @@ class GlobalMapCfg {
 
             // loop validConfig for checking: => missing "must" attributes
             foreach(self::$validConfig[$type] AS $key => $val) {
+                // In case of "source" options only validate the ones which belong
+                // to currently enabled sources
+                if(isset($val['source_param']) && !in_array($val['source_param'], $this->getValue(0, 'sources')))
+                    continue;
+
                 if(isset($val['must']) && $val['must'] == true) {
                     if((!isset($element[$key]) || $element[$key] == '') && (!isset($val['default']) || $val['default'] == '')) {
                         throw new $exception(l('mapCfgMustValueNotSet',

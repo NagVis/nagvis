@@ -432,10 +432,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @param   String   Name1 of the objecs
      * @param   String   Name2 of the objecs
      * @return  Array    Results of the query
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
+     * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
-    public function getObjects($type, $name1Pattern = '', $name2Pattern = '') {
+    public function getObjects($type, $name1Pattern = '', $name2Pattern = '', $add_filter = '') {
         $ret = Array();
         $filter = '';
         $sFile = '';
@@ -444,14 +444,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             case 'host':
             case 'hostgroup':
             case 'servicegroup':
-                $l = $this->queryLivestatus("GET ".$type."s\nColumns: name alias\n");
+                $l = $this->queryLivestatus("GET ".$type."s\nColumns: name alias\n".$add_filter);
             break;
             case 'service':
-                $query = "GET services\nColumns: description description\n";
+                $query = "GET services\nColumns: host_name description\n";
 
                 if($name1Pattern) {
                     $query .= "Filter: host_name = " . $name1Pattern . "\n";
                 }
+                $query .= $add_filter;
 
                 $l = $this->queryLivestatus($query);
             break;
