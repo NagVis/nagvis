@@ -482,6 +482,7 @@ class GlobalMapCfg {
         foreach($CORE->getAvailableSources() AS $source_name) {
             $viewParams = array();
             $configVars = array();
+            $selectable = false;
 
             if(file_exists(path('sys', 'local', 'sources'))) {
                 include_once(path('sys', 'local', 'sources') . '/'. $source_name . '.php');
@@ -502,6 +503,11 @@ class GlobalMapCfg {
                 self::$validConfig['global'][$key] = $val;
                 // Mark this option as source parameter. Save the source file in the value
                 self::$validConfig['global'][$key]['source_param']  = $source_name;
+            }
+
+            // Register the slectable source
+            if ($selectable) {
+                $CORE->addSelectableSource($source_name);
             }
         }
     }
@@ -562,7 +568,10 @@ class GlobalMapCfg {
             // Maybe convert the type, if requested
             if(isset(self::$validConfig['global'][$key]['array'])
                && self::$validConfig['global'][$key]['array'] === true) {
-                $val = explode(',', $_REQUEST[$key]);
+                if ($_REQUEST[$key] !== '')
+                    $val = explode(',', $_REQUEST[$key]);
+                else
+                    $val = array();
             } else {
                 $val = $_REQUEST[$key];
             }

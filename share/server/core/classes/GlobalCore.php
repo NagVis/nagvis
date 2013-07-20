@@ -35,6 +35,7 @@ class GlobalCore {
 
     private static $instance = null;
     protected $iconsetTypeCache = Array();
+    protected $selectable_sources = array();
 
     public $statelessObjectTypes = Array(
         'textbox'   => true,
@@ -727,6 +728,14 @@ class GlobalCore {
             return $site_parts[count($site_parts) - 1];
         }
         return null;
+    }
+
+    public function addSelectableSource($source_name) {
+        $this->selectable_sources[$source_name] = $source_name;
+    }
+
+    public function getSelectableSources() {
+        return $this->selectable_sources;
     }
 }
 ?>

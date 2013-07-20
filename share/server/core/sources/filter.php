@@ -15,11 +15,7 @@ $filter_processed = false;
 
 // options to be modyfiable by the user(url)
 global $viewParams;
-$viewParams = array(
-    '*' => array(
-        'filter_group',
-    )
-);
+$viewParams = array();
 
 // Config variables to be registered for this source
 global $configVars;

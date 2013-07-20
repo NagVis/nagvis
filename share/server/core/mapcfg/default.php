@@ -175,7 +175,7 @@ function listBackendIds($CORE) {
 }
 
 function listSources($CORE) {
-    return $CORE->getAvailableSources();
+    return $CORE->getSelectableSources();
 }
 
 $mapConfigVars = Array(

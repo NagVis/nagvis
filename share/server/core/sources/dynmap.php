@@ -46,6 +46,10 @@ function dynmap_program_start($p) {
     return $newest;
 }
 
+// Register this source as being selectable by the user
+global $selectable;
+$selectable = true;
+
 // options to be modifiable by the user(url)
 global $viewParams;
 $viewParams = array(

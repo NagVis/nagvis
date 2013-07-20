@@ -144,6 +144,10 @@ function list_geomap_source_files($CORE) {
     return $CORE->getAvailableGeomapSourceFiles();
 }
 
+// Register this source as being selectable by the user
+global $selectable;
+$selectable = true;
+
 // options to be modifiable by the user(url)
 global $viewParams;
 $viewParams = array(
@@ -154,7 +158,11 @@ $viewParams = array(
         'geomap_border',
         'source_type',
         'source_file',
+        'width',
+        'height',
+        'iconset',
         'label_show',
+        'filter_group',
     )
 );
 

@@ -1,5 +1,9 @@
 <?php
 
+// Register this source as being selectable by the user
+global $selectable;
+$selectable = true;
+
 // options to be modyfiable by the user(url)
 global $viewParams;
 $viewParams = array(
@@ -7,8 +11,12 @@ $viewParams = array(
         'root',
         'render_mode',
         'backend_id',
+        'width',
+        'height',
+        'iconset',
         'filter_by_state',
         'filter_by_ids',
+        'filter_group',
         'child_layers',
         'parent_layers',
         'ignore_hosts',
