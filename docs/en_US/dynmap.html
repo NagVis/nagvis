@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>NagVis Dynamic Maps</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+  </head>
+    <body>
+        <h1>NagVis Dynamic Maps</h1>
+        <h2>Introduction</h2>
+        <p>The NagVis Dynamic Map source was introducted in NagVis 1.8. It has been created to make it easier
+        to create schematic maps which contain equal kinds of objects.</p>
+        <p>For example if you like to have one single map which contains several host objects, maybe all hosts
+        which name starts with <code>srv-</code>. Without the dynamic maps you would always have to add a host
+        object to your map if you add a new host to your monitoring and also remove it if some of those hosts
+        is being removed.<br />
+        <p>Using the dynamic maps you can now compute your rule definitions once and every time the monitoring
+        configuration changes, the map checks itselfs if some host needs to be added, removed or repositioned.</p
+        <p><i>Please Note:</i> This feature is only available when you are using the livestatus backend (at the moment).</p>
+
+        <h2>How to configure?</h2>
+        <p>You could simply create a new map in the NagVis user interface, configure it to use the source 
+        <code>dynmap</code> and then change all the <code>dynmap_*</code> options to fit your needs.        
+
+        <p>An alternative way is to create the map configuration by hand. Browse to the map config directory
+        and create a new file, for example named <code>test-dynmap.cfg</code>.</p>
+
+        <p>Now add the necessary options to the map configuration file you just created:</p> 
+        
+        <pre>global {
+    sources=dynmap
+    alias=Test Dynmap
+    iconset=std_medium
+    backend_id=demo
+    # Dynmap Parameters
+    dynmap_object_types=host
+    dynmap_object_filter=Filter: name ~ srv-.*\n
+}</pre>
+
+        <p>The <code>sources=dynmap</code> line tells the map to use the dynmap source for altering the
+        map configuration.
+
+        The <code>dynmap_object_types=host</code> line tells the dynmap source to gather objects of the
+        type host to be shown on the map.
+
+        <p>The <code>dynmap_object_filter=Filter: name ~ srv-.*\n</code> line contains one or several livestatus
+        filter definitions to be used to filter the map objects.
+
+        <h2>Configuring dynmaps</h2>
+        <p>The dynmap uses the following map configuration attributes in the global section of the maps.</p>
+        <table style="width:100%">
+        <tr>
+            <th>Parameter</th><th>Default</th><th>Description</th>
+        </tr>
+        <tr>
+            <td>dynmap_object_types</td>
+            <td></td>
+            <td>The type of objects to be shown on this map, either host, service, hostgroup or servicegroup.</td>
+        </tr>
+        <tr>
+            <td>dynmap_object_filter</td>
+            <td></td>
+            <td>One or several livestatus filter definitions, seperated by "\n".</td>
+        </tr>
+        <tr>
+            <td>dynmap_init_x</td>
+            <td>20</td>
+            <td>The left px coordinate of the object grid.</td>
+        </tr>
+        <tr>
+            <td>dynmap_init_y</td>
+            <td>700</td>
+            <td>The top px coordinate of the object grid</td>
+        </tr>
+        <tr>
+            <td>dynmap_offset_x</td>
+            <td>30</td>
+            <td>The offset in pixel to seperate the objects of a row horizontally.</td>
+        </tr>
+        <tr>
+            <td>dynmap_offset_y</td>
+            <td>30</td>
+            <td>The offset in pixel to seperate the lines of objects with.</p>
+        </tr>
+        <tr>
+            <td>dynmap_per_row</td>
+            <td>30</td>
+            <td>Objects to add in the grid per row. The Y offset is applied once a row reaches this number.</td>
+        </tr>
+        </table>
+    </body>
+</html>
