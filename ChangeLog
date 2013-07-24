@@ -25,6 +25,7 @@ Frontend:
 Frontend:
   * Weathermap lines now deal with bit/byte values provided by Check_MKs
     interface checks
+  * FIX: Fixed "TypeError: oLabel is null" on at least geomaps
 
 Automap:
   * Labels have now a white background to improve the text readability
