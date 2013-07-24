@@ -84,18 +84,23 @@ var NagVisShape = NagVisStatelessObject.extend({
         var oIcon = document.createElement('img');
         oIcon.setAttribute('id', this.conf.object_id+'-icon');
 
-        // Extract external URLs
-        if(this.conf.icon.match(/^\[(.*)\]$/))
-            this.conf.icon = this.conf.icon.replace(/^\[(.*)\]$/, '$1');
+        // Construct the real url to fetch for this shape
+        var img_url = null;
+        if(this.conf.icon.match(/^\[(.*)\]$/)) {
+            img_url = this.conf.icon.replace(/^\[(.*)\]$/, '$1');
+        } else {
+            img_url = oGeneralProperties.path_shapes + this.conf.icon;
+        }
+
+        if(img_url.indexOf('?') !== -1) {
+            img_url += '&_t=' + iNow;
+        } else {
+            img_url += '?_t=' + iNow;
+        }
 
         addZoomHandler(oIcon);
 
-        if(this.conf.icon.indexOf('?') !== -1) {
-            oIcon.src = oGeneralProperties.path_shapes + this.conf.icon + '&_t=' + iNow;
-        } else {
-            oIcon.src = oGeneralProperties.path_shapes + this.conf.icon + '?_t=' + iNow;
-        }
-
+        oIcon.src = img_url;
         oIcon.alt = this.conf.type;
 
         if(this.conf.url && this.conf.url !== '') {
