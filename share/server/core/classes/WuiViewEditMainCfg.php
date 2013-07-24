@@ -65,7 +65,7 @@ class WuiViewEditMainCfg {
         foreach($CORE->getMainCfg()->getValidConfig() AS $cat => $arr) {
             // don't display backend,rotation and internal options
             if(preg_match("/^(backend|internal|rotation|auth|action)/i", $cat)) {
-                continue
+                continue;
             }
 
             $ret .= '<tr><th class="cat" colspan="3"><h2>'.$cat.'</h2></th></tr>';
