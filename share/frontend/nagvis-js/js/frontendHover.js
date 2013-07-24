@@ -56,11 +56,11 @@ function hoverHide(id) {
         _hoverTimer = null;
     }
 
-    // Change cursor to auto when hiding hover menu
-    document.body.style.cursor = 'auto';
-
     var obj = getMapObjByDomObjId(id);
     if(obj) {
+        // Change cursor to auto when hiding hover menu
+        obj.parsedObject.style.cursor = 'auto';
+
         obj.hoverX = null;
         obj.hoverY = null;
         obj = null;
@@ -77,7 +77,6 @@ function hoverShow(x, y, id) {
     var obj = getMapObjByDomObjId(id);
     obj.hoverX = x;
     obj.hoverY = y;
-    obj = null;
 
     // document.body.scrollTop does not work in IE
     var scrollTop = document.body.scrollTop ? document.body.scrollTop :
@@ -94,7 +93,8 @@ function hoverShow(x, y, id) {
     }
 
     // Change cursor to "hand" when displaying hover menu
-    document.body.style.cursor = 'pointer';
+    obj.parsedObject.style.cursor = 'pointer';
+    obj = null;
 
     // hide the menu first to avoid an "up-then-over" visual effect
     hoverMenu.style.display = 'none';
