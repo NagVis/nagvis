@@ -822,8 +822,10 @@ var NagVisStatefulObject = NagVisObject.extend({
      */
     updateLabel: function () {
         var label  = document.getElementById(this.conf.object_id + '-label');
-        this.updateLabelPos(label);
-        label  = null;
+        if (label) {
+            this.updateLabelPos(label);
+            label  = null;
+        }
     },
 
     /**
