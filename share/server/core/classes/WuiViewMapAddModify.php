@@ -172,17 +172,21 @@ class WuiViewMapAddModify {
 
         if($objId == 0) {
             // Special handling for the global section:
-            // It might allow some source parameters (but not all).
+            // It might contain some source related parameters (if some sources are enabled).
             // Another speciality ist that the dialog can be opened in "view_params" mode
-            // where only the view params shal be shown.
-            $source_params = $this->MAPCFG->getSourceParams();
+            // where only the view params (parameters modifyable by the user) shal be shown.
             if($this->mode == 'view_params') {
+                $source_params = $this->MAPCFG->getSourceParams(false, false, true);
                 $typeDef = $this->MAPCFG->getSourceParamDefs(array_keys($source_params));
             } else {
+                $source_params = $this->MAPCFG->getSourceParams();
                 $typeDef = $this->MAPCFG->getValidObjectType($type);
 
-                // Filter the typedef list. Only show the valid source params
+                // Filter unwanted source parameters from the typedef list. Only leave
+                // source parameters which apply to the current map.
                 foreach($typeDef as $propname => $prop) {
+                    // Exclude the entries which are not mentioned in source_params construct
+                    // and are really source params
                     if(!isset($source_params[$propname]) && isset($prop['source_param'])) {
                         unset($typeDef[$propname]);
                     }
@@ -292,10 +296,11 @@ class WuiViewMapAddModify {
                     $ret .= $this->selectField($propname, $options, $value, $hideField, $onChange);
                 break;
                 case 'dropdown':
-                    $array = isset($prop['array']) && $prop['array'];
+                    $array    = isset($prop['array']) && $prop['array'];
+                    $multiple = isset($prop['multiple']) && $prop['multiple'];
                     // If var is backend_id or var is host_name in service objects submit the form
                     // to update the depdant lists.
-                    if($onChange == '' && ($propname == 'backend_id'
+                    if($onChange == '' && (($multiple && $value !== '<<<multiple>>>')
                        || ($type == 'service' && $propname == 'host_name')))
                         $onChange = 'document.getElementById(\'update\').value=\'1\';document.getElementById(\'commit\').click();';
 
@@ -330,14 +335,14 @@ class WuiViewMapAddModify {
                                     l('Current value is not a known option - falling back to input field.')));
                             }
 
-                            if ($propname === 'backend_id' && $value === '<<<multiple>>>')
+                            if ($array && $multiple && $value === '<<<multiple>>>')
                                 $value = '';
 
                             $ret .= $this->inputField($propname, $value, $hideField);
                             break;
                         }
 
-                        if($array) {
+                        if($array && $multiple) {
                             $options['<<<multiple>>>'] = l('>>> Select multiple');
                         }
 

@@ -35,6 +35,7 @@ class GlobalCore {
 
     private static $instance = null;
     protected $iconsetTypeCache = Array();
+    protected $selectable_sources = array();
 
     public $statelessObjectTypes = Array(
         'textbox'   => true,
@@ -345,8 +346,8 @@ class GlobalCore {
      */
     public function getAvailableSources() {
         return array_merge(
-          self::listDirectory(path('sys', 'global', 'sources'), MATCH_PHP_FILE),
-          self::listDirectory(path('sys', 'local',  'sources'), MATCH_PHP_FILE, null, null, null, null, false)
+          self::listDirectory(path('sys', 'global', 'sources'), MATCH_SOURCE_FILE),
+          self::listDirectory(path('sys', 'local',  'sources'), MATCH_SOURCE_FILE, null, null, null, null, false)
         );
     }
 
@@ -727,6 +728,14 @@ class GlobalCore {
             return $site_parts[count($site_parts) - 1];
         }
         return null;
+    }
+
+    public function addSelectableSource($source_name) {
+        $this->selectable_sources[$source_name] = $source_name;
+    }
+
+    public function getSelectableSources() {
+        return $this->selectable_sources;
     }
 }
 ?>

@@ -824,10 +824,10 @@ var NagVisStatefulObject = NagVisObject.extend({
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     updateLabel: function () {
-        var label  = document.getElementById(this.conf.object_id + '-label');
+        var label = document.getElementById(this.conf.object_id + '-label');
         if (label) {
             this.updateLabelPos(label);
-            label  = null;
+            label = null;
         }
     },
 

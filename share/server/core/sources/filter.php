@@ -15,11 +15,7 @@ $filter_processed = false;
 
 // options to be modyfiable by the user(url)
 global $viewParams;
-$viewParams = array(
-    '*' => array(
-        'filter_group',
-    )
-);
+$viewParams = array();
 
 // Config variables to be registered for this source
 global $configVars;
@@ -47,10 +43,10 @@ function filter_hostgroup(&$map_config, $p) {
 
     // Initialize the backend
     global $_BACKEND;
-    $_BACKEND->checkBackendExists($p['backend_id'], true);
-    $_BACKEND->checkBackendFeature($p['backend_id'], 'getHostNamesInHostgroup', true);
+    $_BACKEND->checkBackendExists($p['backend_id'][0], true);
+    $_BACKEND->checkBackendFeature($p['backend_id'][0], 'getHostNamesInHostgroup', true);
 
-    $hosts = $_BACKEND->getBackend($p['backend_id'])->getHostNamesInHostgroup($p['filter_group']);
+    $hosts = $_BACKEND->getBackend($p['backend_id'][0])->getHostNamesInHostgroup($p['filter_group']);
 
     // Remove all hosts not found in the hostgroup
     $hosts = array_flip($hosts);

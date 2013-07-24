@@ -5,11 +5,6 @@ global $viewParams;
 $viewParams = array(
     '*' => array(
         'sources',
-        'backend_id',
-        'iconset',
-
-        'width',
-        'height',
 
         'header_menu',
         'hover_menu',

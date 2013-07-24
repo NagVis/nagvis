@@ -44,6 +44,7 @@ define('MATCH_STRING_STYLE', '/^[0-9a-z\:\;\-\+\%\#\(\)\,\.]*$/i');
 define('MATCH_COORDS',       '/^(?:(?:[0-9]+)|([a-z0-9]+(?:%[+-][0-9]+)?))$/');
 define('MATCH_COORDS_MULTI', '/^(?:(?:(?:[0-9]+)|([a-z0-9]+(?:%[+-][0-9]+)?))[\.\,]?)+$/');
 define('MATCH_COORDS_MULTI_EMPTY', '/^(?:(?:(?:[0-9]+)|([a-z0-9]+(?:%[+-][0-9]+)?))[\.\,]?)*$/');
+define('MATCH_COORD_SIMPLE', '/^[0-9]+$/');
 
 define('MATCH_INTEGER', '/^[0-9]+$/');
 define('MATCH_INTEGER_EMPTY', '/^[0-9]*$/');
@@ -90,7 +91,8 @@ define('MATCH_LINE_TYPE', '/^(10|11|12|13|14|15)?$/');
 define('MATCH_LINE_ARROW', '/^(none|forward|back|both)?$/');
 define('MATCH_USER_NAME', '/^[0-9A-Za-z_\-\.\@\s]+$/');
 define('MATCH_ROLE_NAME', '/^[0-9A-Za-z_\-\.\@\s]+$/');
-define('MATCH_DYN_GROUP_TYPES', '/^(?:hosts|services)$/');
+define('MATCH_DYN_GROUP_TYPES', '/^(?:host|service)$/');
+define('MATCH_DYN_OBJECT_TYPES', '/^(?:host|service|hostgroup|servicegroup)$/');
 define('MATCH_LIVESTATUS_FILTER', '/^(?:Filter: .*\\\n)+$/i');
 
 define('MATCH_URI_PART', '/^[a-zA-Z0-9\-_]*$/');
@@ -102,6 +104,7 @@ define('MATCH_HEADER_TEMPLATE_FILE', '/^(.+)\.header\.html$/i');
 define('MATCH_HOVER_TEMPLATE_FILE', '/^(.+)\.hover\.html$/i');
 define('MATCH_CONTEXT_TEMPLATE_FILE', '/^(.+)\.context\.html$/i');
 define('MATCH_PHP_FILE', '/^(.+\.php)$/i');
+define('MATCH_SOURCE_FILE', '/^(.+)\.php$/i');
 define('MATCH_INTEGER_PRESIGN', '/^[\+\-]?[0-9]+$/');
 define('MATCH_INTEGER_PRESIGN_EMPTY', '/^[\+\-]?[0-9]*$/');
 define('MATCH_LABEL_X', '/^([\+\-]?[0-9]+|center)$/');

@@ -1409,7 +1409,7 @@
          in the global section are optional):</p>
 <pre>define dyngroup {
  name=My Dynamic Group
- object_types=services
+ object_types=service
  object_filter=Filter: service_description = CPU load\n
  x=100
  y=200
@@ -1435,7 +1435,7 @@
             <td><b>object_types</b></td>
             <td></td>
             <td>Controls which type of objects are used within the dynamic group. Can be set to
-                either "hosts" or "services.</td>
+                either "host" or "service".</td>
         </tr>
         <tr>
             <td><b>object_filter</b></td>

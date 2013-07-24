@@ -26,7 +26,6 @@
  * @author Lars Michelsen <lars@vertical-visions.de>
  */
 abstract class CoreModule {
-    protected $CORE = null;
     protected $UHANDLER = null;
     protected $FHANDLER = null;
 
@@ -271,7 +270,7 @@ abstract class CoreModule {
      * Returns null when nothing changed or a structure of the changed objects
      */
     protected function checkFilesChanged($files) {
-        global $AUTHORISATION;
+        global $AUTHORISATION, $CORE;
         $changed = array();
 
         foreach($files AS $file) {
@@ -285,7 +284,7 @@ abstract class CoreModule {
             // Try to fetch the current age of the requested file
             $cur_age = null;
             if($ty == 'maincfg') {
-                $cur_age = $this->CORE->getMainCfg()->getConfigFileAge();
+                $cur_age = $CORE->getMainCfg()->getConfigFileAge();
 
             } elseif($ty == 'map') {
                 if($AUTHORISATION->isPermitted('Map', 'view', $name)) {

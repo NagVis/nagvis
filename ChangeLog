@@ -13,6 +13,12 @@ Core:
     backend. It uses the configuration option object_filter to group a dynamic
     list of services or hosts in a NagVis map object without having to define
     it in the monitoring core.
+  * Added new map source "dynmap" which can be used to realize some sort of
+    dynamic maps. Those maps list several objects matching a given livestatus
+    filter on the map. In first instance it automatically gathers the list of
+    objects to add on this map and positions them in a grid on the map. The
+    user can then modify all the objects, for example change their options
+    like, positions and visualisation. 
 
 Frontend:
   * All nodes with assigned childs in sidebar are now expandable. The state

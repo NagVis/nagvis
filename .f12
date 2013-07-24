@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[ -z $SITE ] && SITE=event
+[ -z $SITE ] && SITE=$(omd sites --bare | head -n1)
 which sudo >/dev/null 2>&1 && SUDO=sudo || SUDO=
 BASE=$(pwd)
 

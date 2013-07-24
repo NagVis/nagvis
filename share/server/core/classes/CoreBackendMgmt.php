@@ -199,7 +199,7 @@ class CoreBackendMgmt {
         foreach($aObjs AS $name => $OBJS) {
             foreach($OBJS AS $OBJ) {
                 try {
-                    if($OBJ->object_types == 'services') {
+                    if($OBJ->object_types == 'service') {
                         $counts = $this->getBackend($backendId)->getServiceListCounts(
                                     $options, $OBJ->getObjectFilter());
                     } else {
