@@ -8,7 +8,7 @@ function dynmap_get_objects($MAPCFG, $p) {
 
     $type = $p['dynmap_object_types'];
     $filter = str_replace('\n', "\n", $p['dynmap_object_filter']);
-    foreach($p['backend_id'] AS $backend_id) {
+    foreach($MAPCFG->getValue(0, 'backend_id') AS $backend_id) {
         $ret = $_BACKEND->getBackend($backend_id)->getObjects($type, '', '', $filter);
         // only use the internal names
         foreach ($ret AS $key => $val) {
@@ -34,10 +34,10 @@ function dynmap_get_objects($MAPCFG, $p) {
     return $objects;
 }
 
-function dynmap_program_start($p) {
+function dynmap_program_start($MAPCFG, $p) {
     global $_BACKEND;
     $newest = null;
-    foreach($p['backend_id'] AS $backend_id) {
+    foreach($MAPCFG->getValue(0, 'backend_id') AS $backend_id) {
         $this_start = $_BACKEND->getBackend($backend_id)->getProgramStart();
         if($newest === null || $this_start > $newest) {
             $newest = $this_start;
@@ -197,7 +197,7 @@ function process_dynmap($MAPCFG, $map_name, &$map_config) {
 function changed_dynmap($MAPCFG, $compare_time) {
     $params = $MAPCFG->getSourceParams();
 
-    $t = dynmap_program_start($params);
+    $t = dynmap_program_start($MAPCFG, $params);
     if($t > $compare_time)
         return true;
 
