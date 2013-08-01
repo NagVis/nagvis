@@ -381,6 +381,13 @@ div.infopage a:hover {
     display: block;
     text-align: left;
     font-size: 10px;
+    width: 560px;
+    overflow: scroll;
+}
+
+#messageBoxDiv div.details {
+    text-align: left;
+    font-size: 10px;
 }
 
 /*

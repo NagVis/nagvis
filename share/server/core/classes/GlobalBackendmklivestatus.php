@@ -1091,7 +1091,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             $stateAttr = 'state';
 
         // Get host information
-        $l = $this->queryLivestatus("GET hosts".$host_suffix."\n" .
+        $q = "GET hosts".$host_suffix."\n" .
             $host_filter.
             // Count UNCHECKED
             "Stats: has_been_checked = 0\n" .
@@ -1131,7 +1131,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             "Stats: ".$stateAttr." = 2\n" .
             "Stats: scheduled_downtime_depth > 0\n" .
             "StatsAnd: 2\n".
-            $host_grouping);
+            $host_grouping;
+        $l = $this->queryLivestatus($q);
 
         // If the method should fetch several objects and did not find
         // any object, don't return anything => The message
@@ -1153,9 +1154,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                         'downtime'  => intval($e[2+$hoffset]),
                     ),
                     DOWN => Array(
-                        'normal'    => intval($e[3]+$hoffset),
-                        'ack'       => intval($e[4]+$hoffset),
-                        'downtime'  => intval($e[5]+$hoffset),
+                        'normal'    => intval($e[3+$hoffset]),
+                        'ack'       => intval($e[4+$hoffset]),
+                        'downtime'  => intval($e[5+$hoffset]),
                     ),
                     UNREACHABLE => Array(
                         'normal'    => intval($e[6+$hoffset]),

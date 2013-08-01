@@ -344,7 +344,7 @@ function handleJsonResponse(sUrl, responseText) {
         oResponse = eval('( '+responseText+')');
         frontendMessageRemove('jsonError');
     } catch(e) {
-        jsonError("Invalid json response:\nTime:" + iNow + "\nURL: " + sUrl + "\nResponse: " + responseText);
+        jsonError("Invalid json response<div class=details>\nTime: " + iNow + "<br />\nURL: " + sUrl + "<br />\nResponse: <code>" + responseText + '</code></div>');
         return '';
     }
 
