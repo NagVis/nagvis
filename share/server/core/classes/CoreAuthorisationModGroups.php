@@ -43,7 +43,7 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule {
 
         $this->backends = cfg('global', 'authorisation_group_backends');
         if(!$this->backends)
-            $this->backends[] = cfg('defaults', 'backend');
+            $this->backends = cfg('defaults', 'backend');
 
         $cacheFile = cfg('paths','var').'group-perms-'.CONST_VERSION.'-cache';
         $this->CACHE = new GlobalFileCache($this->file, $cacheFile);

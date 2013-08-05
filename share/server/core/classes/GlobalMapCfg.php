@@ -604,7 +604,7 @@ class GlobalMapCfg {
                 throw new NagVisException(l('Requested source "[S]" does not exist',
                                                             array('S' => $source)));
             }
-            $keys += self::$viewParams[$source];
+            $keys = array_merge($keys, self::$viewParams[$source]);
         }
 
         if(!$only_view_parameters) {
@@ -638,8 +638,9 @@ class GlobalMapCfg {
      */
     public function getSourceParams($only_user_supplied = false, $only_customized = false, $only_view_parameters = false) {
         // First get a list of source names to get the parameters for
-        $sources = array_merge(array('*'), $this->getValue(0, 'sources'));
-        $params = $this->getSourceParamsOfSources($sources, $only_user_supplied, $only_customized, $only_view_parameters);
+        $config  = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : array();
+        $sources = array_merge(array('*'), $config);
+        $params  = $this->getSourceParamsOfSources($sources, $only_user_supplied, $only_customized, $only_view_parameters);
 
         // The map sources might have changed basd on source params - we need an
         // additional run to get params which belong to this sources
