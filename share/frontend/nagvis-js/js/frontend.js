@@ -954,7 +954,8 @@ function refreshMapObject(event, objectId) {
     var sAddPart = '';
     if(oPageProperties.view_type === 'map') {
         sMod = 'Map';
-        sMapPart = '&show='+escapeUrlValues(map);
+        if (map !== false)
+            sMapPart = '&show='+escapeUrlValues(map);
         sAddPart = getViewParams();
     } else if(oPageProperties.view_type === 'overview') {
         sMod = 'Overview';
