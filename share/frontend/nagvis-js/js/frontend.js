@@ -321,7 +321,7 @@ function getFileAgeParams(viewType, mapName) {
         var mapName = oPageProperties.map_name;
 
     var addParams = '';
-    if(viewType === 'map')
+    if(viewType === 'map' && mapName !== false)
         addParams = '&f[]=map,' + mapName + ',' + oFileAges[mapName];
     return '&f[]=maincfg,maincfg,' + oFileAges['maincfg'] + addParams;
 }
@@ -1909,10 +1909,13 @@ function workerUpdate(iCount, sType, sIdentifier) {
 
     if(sType === 'map' || sType === 'overview') {
         var mod = 'Map';
-        var show = '&show=' + oPageProperties.map_name;
-        if(sType === 'overview') {
+        
+        var show = '';
+        if (sType === 'map' && oPageProperties.map_name !== false)
+            show = '&show=' + escapeUrlValues(oPageProperties.map_name);
+
+        if (sType === 'overview') {
             mod = 'Overview';
-            show = '';
         }
 
         // Get objects which need an update
