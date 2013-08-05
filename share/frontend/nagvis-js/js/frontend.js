@@ -625,11 +625,14 @@ function setPageTitle(sTitle) {
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function updateMapBasics() {
+    var show_filter = '';
+    if (oPageProperties.map_name !== false)
+        show_filter = '&show=' + escapeUrlValues(oPageProperties.map_name)
+
     // Get new map state from core
     oMapSummaryObj = new NagVisMap(getSyncRequest(oGeneralProperties.path_server
-                                   + '?mod=Map&act=getObjectStates&ty=summary&show='
-                                   + escapeUrlValues(oPageProperties.map_name)
-                                   + getViewParams(), false)[0]);
+                                   + '?mod=Map&act=getObjectStates&ty=summary'
+                                   + show_filter + getViewParams(), false)[0]);
 
     // FIXME: Add method to refetch oMapSummaryObj when it is null
     // Be tolerant - check if oMapSummaryObj is null or anything unexpected
