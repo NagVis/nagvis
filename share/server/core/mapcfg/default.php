@@ -679,6 +679,12 @@ $mapConfigVars = Array(
         'field_type'    => 'dropdown',
         'list'          => 'listZoomFactors',
     ),
+    'zoombar' => Array(
+        'must' => 0,
+        'default'    => cfg('defaults', 'zoombar'),
+        'match'      => MATCH_BOOLEAN,
+        'field_type' => 'boolean'
+    ),
 
     // HOST SPECIFIC OPTIONS
 
@@ -973,6 +979,7 @@ $mapConfigVarMap['global'] = Array(
     'stylesheet' => null,
     'url_target' => null,
     'zoom' => null,
+    'zoombar' => null,
 );
 
 $mapConfigVarMap['host'] = Array(

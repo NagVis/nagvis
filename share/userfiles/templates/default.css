@@ -752,3 +752,57 @@ td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 	
 	font-size: 9px;
 }
+
+/**
+ * The zoom bar
+ */
+
+div#zoombar {
+    position: absolute;
+    width: 20px;
+    height: 145px;
+    z-index: 1001;
+    left: 10px;
+    top: 40px;
+}
+
+div#zoombar a {
+    display: block;
+    width: 100%;
+    height: 20px;
+
+    background-color: #EAF0F2;
+    border: 1px solid #43B3CF;
+
+    text-align: center;
+    vertical-align: middle;
+    line-height: 20px;
+    color: #43B3CF;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+div#zoombar a.minus {
+    border-bottom: none;
+}
+div#zoombar a:hover {
+    background-color: #d9e1e4;
+    color: #779D2A   
+}
+div#zoombar div.drag {
+    position: relative;
+    height: 100px;
+    width: 100%;
+    background-image:url('../images/templates/default.zoombar_bg.gif')
+}
+div#zoombar div.drag div {
+    position: absolute;
+    left: 3px;
+
+    width: 14px;
+    height: 6px;
+    cursor: pointer;
+
+    background-color: #EAF0F2;
+    border: 1px solid #43B3CF;
+}

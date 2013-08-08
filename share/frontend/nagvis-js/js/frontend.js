@@ -1468,6 +1468,218 @@ function getOverviewRotations() {
     return getSyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getOverviewRotations')
 }
 
+function set_zoom(val) {
+    setViewParam('zoom', val);
+    if(workerTimeoutID)
+        window.clearTimeout(workerTimeoutID);
+    window.location = makeuri({'zoom': val});
+}
+
+function zoom(how) {
+    var cur_zoom = parseInt(getViewParam('zoom'));
+    var new_zoom = 100;
+    if (how != 0) {
+        new_zoom = cur_zoom + how;
+
+        if (new_zoom <= 0 || new_zoom >= 200)
+            return;
+    }
+
+    if (cur_zoom != new_zoom) {
+        set_zoom(new_zoom);
+    }
+}
+
+function wheel_zoom(event) {
+    if (!event)
+        event = window.event;
+
+    var delta = 0;
+
+    if (!event.altKey)
+        return; // only proceed with pressed ALT
+
+    if (event.wheelDelta) { // IE/Opera.
+        delta = event.wheelDelta/120;
+    } else if (event.detail) { // firefox
+        delta = -event.detail/3;
+    }
+
+    if (delta > 0) {
+        zoom(delta * 5);
+    } else if (delta < 0) {
+        zoom(delta * 5);
+    }
+
+    // Prevent default events
+    if (event.preventDefault)
+        event.preventDefault();
+    event.returnValue = false;
+}
+
+var g_drag_ind = null;
+
+function zoombarDragStart(event) {
+    if (!event)
+        event = window.event;
+
+    if ((event.which === null && event.button >= 2) || (event.which !== null && event.which >= 2))
+        return; // skip clicks with other than left mouse
+
+    g_left_clicked = true;
+    g_drag_ind = document.getElementById('zoombar-drag_ind');
+}
+
+function zoombarDrag(event) {
+    if (!event)
+        event = window.event;
+
+    if (g_drag_ind === null)
+        return true;
+
+    // Is the mouse still pressed? if not, stop dragging!
+    if (!g_left_clicked) {
+        zoombarDragStop(event);
+        return;
+    }
+
+    var top_offset = 62;
+    var ind_offset = 3; // height / 2
+    var pos = (event.clientY - top_offset);
+
+    if (pos > g_drag_ind.parentNode.clientHeight) {
+        pos = g_drag_ind.parentNode.clientHeight;               
+    } else if (pos < 0) {
+        pos = 0;
+    }
+
+    g_drag_ind.style.top = (pos - ind_offset) + 'px';
+}
+
+function zoombarDragStop(event) {
+    if (!event)
+        event = window.event;
+
+    if (g_drag_ind === null)
+        return true;
+
+    if ((event.which === null && event.button >= 2) || (event.which !== null && event.which >= 2))
+        return; // skip clicks with other than left mouse
+
+    g_left_clicked = false;
+
+    // Get the zoom value
+    var zoom = parseInt(getViewParam('zoom'));
+    var val = parseInt((100 - (parseInt(g_drag_ind.style.top.replace('px', '')) + 3)) / 100 * 200);
+    if (val != zoom) {
+        if (val <= 0)
+            val = 10;
+        set_zoom(val);
+    }
+
+    g_drag_ind = null;
+
+    if (event.preventDefault)
+        event.preventDefault();
+    if (event.stopPropagation)
+        event.stopPropagation();
+    event.returnValue = false;
+    return false;
+}
+
+var g_left_clicked = false;
+
+function mouse_click(event) {
+    if (!event)
+        event = window.event;
+
+    if ((event.which === null && event.button >= 2) || (event.which !== null && event.which >= 2))
+        return; // skip clicks with other than left mouse
+
+    g_left_clicked = true;
+}
+
+function mouse_release(event) {
+    if (!event)
+        event = window.event;
+
+    if ((event.which === null && event.button >= 2) || (event.which !== null && event.which >= 2))
+        return; // skip clicks with other than left mouse
+
+    g_left_clicked = false;
+
+    zoombarDragStop(event);
+}
+
+function updateZoomIndicator() {
+    var zoom = parseInt(getViewParam('zoom'));
+    var ind = document.getElementById('zoombar-drag_ind');
+
+    // zoom is 0 to 200, the bar is 0px to 100px, the
+    // indicator has a heihgt of 6px
+    ind.style.top = (100 - ((zoom / 200 * 100)) - 3) + 'px';
+    ind = null;
+}
+
+/**
+ * Zoom bar rendering
+ */
+function renderZoombar() {
+    if (getViewParam('zoombar') == 0)
+        return;
+
+    var bar = document.createElement('div');
+    bar.setAttribute('id', 'zoombar');
+
+    var plus = document.createElement('a');
+    plus.setAttribute('id', 'zoombar-plus');
+    plus.setAttribute('class', 'plus');
+    plus.appendChild(document.createTextNode('+'));
+    plus.onclick = function() {
+        zoom(10);
+    };
+    bar.appendChild(plus);
+
+    var drag = document.createElement('div');
+    drag.setAttribute('id', 'zoombar-drag');
+    drag.setAttribute('class', 'drag');
+    bar.appendChild(drag);
+
+    var drag_ind = document.createElement('div');
+    drag_ind.setAttribute('id', 'zoombar-drag_ind');
+    drag_ind.setAttribute('class', 'drag_ind');
+    addEvent(drag_ind, 'mousedown', zoombarDragStart);
+    addEvent(drag,     'mousemove', zoombarDrag);
+    addEvent(drag,     'mouseup',   zoombarDragStop);
+    drag.appendChild(drag_ind);
+
+    var minus = document.createElement('a');
+    minus.setAttribute('id', 'zoombar-minus');
+    minus.setAttribute('class', 'minus');
+    minus.appendChild(document.createTextNode('-'));
+    minus.onclick = function() {
+        zoom(-10);
+    };
+    bar.appendChild(minus);
+
+    var norm = document.createElement('a');
+    norm.setAttribute('class', 'norm');
+    norm.appendChild(document.createTextNode('o'));
+    norm.onclick = function() {
+        zoom(0);
+    };
+    bar.appendChild(norm);
+
+    // Register scroll events (mouse wheel)
+    var wheel_event = (/Firefox/i.test(navigator.userAgent)) ? "DOMMouseScroll" : "mousewheel";
+    addEvent(document, wheel_event, wheel_zoom);
+    addEvent(document, 'mousedown', mouse_click);
+    addEvent(document, 'mouseup',   mouse_release);
+
+    document.body.appendChild(bar);
+    updateZoomIndicator();
+}
+
 /**
  * getViewParams()
  *
@@ -1523,6 +1735,10 @@ function getViewParam(param) {
        && isset(oViewProperties['params'][param]))
         return oViewProperties['params'][param];
     return null;
+}
+
+function setViewParam(param, val) {
+    oViewProperties['params'][param] = val;
 }
 
 /**
@@ -1697,6 +1913,7 @@ function workerInitialize(iCount, sType, sIdentifier) {
     // Handle the page rendering
     if(sType == 'map') {
         eventlog("worker", "debug", "Parsing " + sType + ": " + sIdentifier);
+        renderZoombar();
         parseMap(oFileAges[sIdentifier], sType, sIdentifier);
 
     } else if(sType === 'overview') {

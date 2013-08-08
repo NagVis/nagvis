@@ -25,6 +25,8 @@ Frontend:
     is stored for each user individually.
   * Changed map rendering on overview from a single bulk request to one
     request per map.
+  * Added optional zoom bar and mousewheel zoom handlers (ALT + wheel move)
+    (Must be enabled with option "zoombar=1")
   * FIX: Fixed centering of overview tables when opening the sidebar
   * FIX: Fixed mouse pointer confusions when adding a new object and hovering
     another menu which then shows up the hover menu

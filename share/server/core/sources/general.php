@@ -9,6 +9,7 @@ $viewParams = array(
         'header_menu',
         'hover_menu',
         'context_menu',
+        'zoombar',
 
         'zoom',
     )
