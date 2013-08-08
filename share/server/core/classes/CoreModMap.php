@@ -390,7 +390,7 @@ class CoreModMap extends CoreModule {
             if(!$MAPCFG->objExists($objId))
                 throw new NagVisException(l('The object does not exist.'));
 
-            $this->validateAttributes($MAPCFG->getValidObjectType($type), $attrs);
+            $this->validateAttributes($MAPCFG, $MAPCFG->getValidObjectType($type), $attrs);
 
             // Update the map configuration   
             if($mode == 'view_params') {
@@ -410,7 +410,7 @@ class CoreModMap extends CoreModule {
             // Create the new object
             $type  = $attrs['type'];
 
-            $this->validateAttributes($MAPCFG->getValidObjectType($type), $attrs);
+            $this->validateAttributes($MAPCFG, $MAPCFG->getValidObjectType($type), $attrs);
 
             // append a new object definition to the map configuration
             $MAPCFG->addElement($type, $attrs, true);
@@ -426,12 +426,18 @@ class CoreModMap extends CoreModule {
         return $successMsg;
     }
 
-    private function validateAttributes($attrDefs, $attrs) {
+    private function validateAttributes($MAPCFG, $attrDefs, $attrs) {
         // Are some must values missing?
         foreach($attrDefs as $propname => $prop) {
-            if(isset($prop['must']) && $prop['must'] == '1'
-               && (!isset($attrs[$propname]) || $attrs[$propname] == ''))
-                throw new FieldInputError($propname, l('The attribute needs to be set.'));
+            if(isset($prop['must']) && $prop['must'] == '1') {
+                // In case of "source" options only validate the ones which belong
+                // to currently enabled sources
+                if(isset($prop['source_param']) && !in_array($prop['source_param'], $MAPCFG->getValue(0, 'sources')))
+                    continue;
+                
+                if (!isset($attrs[$propname]) || $attrs[$propname] == '')
+                    throw new FieldInputError($propname, l('The attribute needs to be set.'));
+            }
         }
 
         // FIXME: Are all given attrs valid ones?
