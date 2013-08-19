@@ -201,7 +201,12 @@ class CoreModMap extends CoreModule {
                         $perm = null;
                     }
 
-                    $VIEW = new WuiViewMapAddModify($aVals['show'], $mode);
+                    if($mode == 'view_params' && !isset($aVals['show']))
+                        $map_name = null;
+                    else
+                        $map_name = $aVals['show'];
+
+                    $VIEW = new WuiViewMapAddModify($map_name, $mode);
                     $VIEW->setAttrs($attrs);
 
                     // This tells the following handling when the page only needs to be repainted
@@ -214,7 +219,7 @@ class CoreModMap extends CoreModule {
                     if(isset($aVals['submit']) && $aVals['submit'] != '' && !$update) {
                         // The form has been submitted.
                         try {
-                            $success = $this->handleAddModify($mode, $perm, $aVals['show'], $attrs, $attrsFiltered);
+                            $success = $this->handleAddModify($mode, $perm, $map_name, $attrs, $attrsFiltered);
                         } catch(FieldInputError $e) {
                             $err = $e;
                         }
@@ -347,7 +352,8 @@ class CoreModMap extends CoreModule {
 
     // Validate and process addModify form submissions
     protected function handleAddModify($mode, $perm, $map, $attrs, $attrsFiltered) {
-        $this->verifyMapExists($map);
+        if ($mode != 'view_params')
+            $this->verifyMapExists($map);
         $MAPCFG = new GlobalMapCfg($this->CORE, $map);
 
         try {
