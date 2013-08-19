@@ -49,7 +49,7 @@
         </ul>
     </li>
     {/if}
-    {if $mod == 'Map' && $permittedEdit == true}
+    {if $mod == 'Map' && $currentMap != '' && $permittedEdit == true}
     <li onmouseover="ddMenu('map',1)" onmouseout="ddMenuHide(['map'])" class="dropdown">
         <span id="map-ddheader">{$langMapEdit} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         <ul id="map-ddcontent">
