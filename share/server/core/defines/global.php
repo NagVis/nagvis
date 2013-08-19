@@ -54,7 +54,7 @@ set_include_path(
 define('PROFILE', false);
 
 // enable/disable the debug mode
-define('DEBUG', true);
+define('DEBUG', false);
 
 /**
  * For desired debug output add these possible values:

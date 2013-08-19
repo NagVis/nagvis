@@ -240,13 +240,15 @@ class NagVisHeaderMenu {
 
         // Replace some special macros
         if($this->OBJ !== null && $this->aMacros['mod'] == 'Map') {
-            $this->aMacros['currentMap'] = $this->OBJ->getName();
-            $this->aMacros['currentMapAlias'] = $this->OBJ->getValue(0, 'alias');
-            $this->aMacros['usesSources'] = count($this->OBJ->getValue(0, 'sources')) > 0;
+            $this->aMacros['currentMap']        = $this->OBJ->getName();
+            $this->aMacros['currentMapAlias']   = $this->OBJ->getValue(0, 'alias');
+            $this->aMacros['usesSources']       = count($this->OBJ->getValue(0, 'sources')) > 0;
+            $this->aMacros['zoombar']           = $this->OBJ->getValue(0, 'zoombar');
         } else {
-            $this->aMacros['currentMap'] = '';
-            $this->aMacros['currentMapAlias'] = '';
-            $this->aMacros['usesSources'] = false;
+            $this->aMacros['currentMap']        = '';
+            $this->aMacros['currentMapAlias']   = '';
+            $this->aMacros['usesSources']       = false;
+            $this->aMacros['zoombar']           = false;
         }
 
         // Add permitted rotations
