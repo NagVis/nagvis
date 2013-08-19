@@ -141,12 +141,13 @@ function graphviz_config(&$params, &$tree) {
     // default margin is 0.11,0.055
     $str .= 'margin="0.0,0.0", ';
     $str .= 'shape="rect", ';
-    $str .= 'fixedsize="true", ';
+    // Do not use this as this would make the nodes ignore the label sizes
+    //$str .= 'fixedsize="true", ';
     $str .= 'color="white", ';
     // This may be altered by the single objects depending on the icon size
     $str .= 'width="'.graphviz_px2inch(16).'", ';
     $str .= 'height="'.graphviz_px2inch(16).'", ';
-    $str .= 'fontcolor=black, fontsize=10';
+    $str .= 'fontsize=10';
     $str .= '];'."\n";
 
     // Create nodes for all hosts

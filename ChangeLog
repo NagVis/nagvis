@@ -41,6 +41,7 @@ Frontend:
 Automap:
   * Labels have now a white background to improve the text readability
   * Labels should not overlap on automaps with many hosts anymore
+  * Slightly layout improvement of automaps in undirected mode
   * FIX: Rendering lines on zoomed automaps correctly
   * FIX: Fixed positions of labels on zoomed automaps
 
