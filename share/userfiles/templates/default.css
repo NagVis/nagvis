@@ -651,7 +651,16 @@ td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
     text-decoration: none;
 }
 
-#editIndicator span {margin:0;padding:0;width:100%;height:31px;padding-left:8px;padding-right:8px;line-height:31px;font-weight:bold;width:90px;color:#ff0000}
+.header ul li span {
+    margin:0;
+    width:100%;
+    height:31px;
+    line-height:31px;
+    font-weight:bold;
+    padding: 0 8px;
+}
+
+#editIndicator span {width:89px;color:#ff0000}
 .dropdown span, .header div#refreshCounterHead {display:block;margin:0;padding:0;height:31px;padding-left:8px;padding-right:8px;line-height:31px;width:auto;font-weight:bold;cursor:pointer;background-image:url('../images/templates/default.header.png')}
 .dropdown span:hover {background-image:url('../images/templates/default.header_over.png')}
 .dropdown img {vertical-align:middle;margin-left:10px}

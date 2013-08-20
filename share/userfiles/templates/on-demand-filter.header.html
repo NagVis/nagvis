@@ -1,0 +1,26 @@
+<script type="text/javascript" src="{$pathTemplates}default.header.js"></script>
+<script type="text/javascript">
+function filter_group(field) \{
+    var grp = field.value;
+    if(workerTimeoutID)
+        window.clearTimeout(workerTimeoutID);
+
+    window.location = makeuri(\{'filter_group': grp});
+    storeUserOption('params-', '\{"filter_group": "'+grp+'"}');
+}
+</script>
+<div id="headershow" class="header"><a href="#" onclick="headerToggle(true)"><img src="{$pathTemplateImages}default.header_show.png" alt="Show header menu" /></a></div>
+<div id="header" class="header">
+<ul class="head">
+  <li><a href="#" onclick="headerToggle(true)"><img src="{$pathTemplateImages}default.header_hide.png" alt="Hide header menu" /></a></li>
+    <li><span>Filter:</span></li>
+    <li><span>
+      <select onchange="filter_group(this)">
+        {foreach $hostgroups hostgroup}<option {if $filter_group == $hostgroup.name1}selected {/if}value="{$hostgroup.name1}">{$hostgroup.name2}</option>{/foreach}
+      </select>
+    </span></li>
+  </li>
+</ul>
+</div>
+<div id="headerspacer"></div>
+<script type="text/javascript">addDOMLoadEvent(function()\{headerDraw();});</script>

@@ -8,6 +8,7 @@ $selectable = true;
 global $viewParams;
 $viewParams = array(
     'automap' => array(
+        'header_template',
         'root',
         'render_mode',
         'backend_id',

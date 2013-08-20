@@ -66,7 +66,13 @@ class CoreModUser extends CoreModule {
     protected function handleResponseSet() {
         $FHANDLER = new CoreRequestHandler($_GET);
         $this->verifyValuesSet($FHANDLER, Array('opts'));
-        return Array('opts' => $FHANDLER->get('opts'));
+        $opts = $FHANDLER->get('opts');
+
+        foreach($opts as $key => $val)
+            if (substr($val, 0, 1) == '{')
+                $opts[$key] = json_decode($val);
+
+        return Array('opts' => $opts);
     }
 }
 ?>

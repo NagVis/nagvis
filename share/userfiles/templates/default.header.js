@@ -153,8 +153,10 @@ function toggleSidebar(store) {
 }
 
 function sidebarOpen() {
-    display = document.getElementById('sidebar').style.display;
-    return !(display  == 'none' || display == '');
+    var o = document.getElementById('sidebar');
+    if (!o)
+        return false;
+    return !(o.style.display  == 'none' || o.style.display == '');
 }
 
 function getSidebarWidth() {
@@ -171,7 +173,7 @@ function sidebarDraw() {
         return;
 
     if(typeof(oUserProperties.sidebar) !== 'undefined' && oUserProperties.sidebar === 1)
-    toggleSidebar(false);
+        toggleSidebar(false);
 
     // Initialize value
     if(typeof(oUserProperties.sidebarOpenNodes) === 'undefined')

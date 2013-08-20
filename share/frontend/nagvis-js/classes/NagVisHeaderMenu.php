@@ -264,6 +264,21 @@ class NagVisHeaderMenu {
 
         list($this->aMacros['maps'], $this->aMacros['permittedEditAnyMap']) = $this->getMapList('maps', $CORE->getAvailableMaps());
         $this->aMacros['langs'] = $this->getLangList();
+
+        // Specific information for special templates
+        if ($this->templateName == 'on-demand-filter') {
+            global $_BACKEND;
+            $this->aMacros['hostgroups'] = $_BACKEND->getBackend($_GET['backend_id'])->getObjects('hostgroup', '', '');
+            array_unshift($this->aMacros['hostgroups'], array('name1' => '', 'name2' => ''));
+
+            $default = '';
+            $USERCFG = new CoreUserCfg();
+            $cfg = $USERCFG->doGet();
+            if (isset($cfg['params-']) && isset($cfg['params-']['filter_group']))
+                $default = $cfg['params-']['filter_group'];
+
+            $this->aMacros['filter_group'] = isset($_GET['filter_group']) ? htmlspecialchars($_GET['filter_group']) : $default;
+        }
     }
 
     /**
