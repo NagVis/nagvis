@@ -36,29 +36,95 @@ class CoreModMultisite extends CoreModule {
     }
 
     public function handleAction() {
-        global $_BACKEND;
-        $sReturn = '';
-
         if(!$this->offersAction($this->sAction))
             return '';
 
         switch($this->sAction) {
             case 'getMaps':
-                // Initialize template system
-                $TMPL = New CoreTemplateSystem($this->CORE);
-                $TMPLSYS = $TMPL->getTmplSys();
-
-                $aData = Array(
-                    'htmlBase'  => cfg('paths', 'htmlbase'),
-                    'maps'      => $this->getMaps(),
-                );
-
-                // Build page based on the template file and the data array
-                $sReturn = $TMPLSYS->get($TMPL->getTmplFile('default', 'multisiteMaps'), $aData);
+                if (cfg('global', 'multisite_snapin_layout') == 'tree') {
+                    return $this->renderTree();
+                } else {
+                    return $this->renderTable();
+                }
             break;
         }
+    }
 
-        return $sReturn;
+    private function renderTree() {
+        $maps = array();
+        $childs = array();
+        foreach ($this->getMaps() as $map) {
+            if($map['parent_map'] === '')
+                $maps[$map['name']] = $map;
+            else {
+                if(!isset($childs[$map['parent_map']]))
+                    $childs[$map['parent_map']] = Array();
+                $childs[$map['parent_map']][$map['name']] = $map;
+            }
+        }
+
+        $s = '<ul>'.$this->renderTreeNodes($maps, $childs).'</ul>';
+
+        // FIXME: check_mk/tree_state.py?tree=nagvis holen
+        // evaluieren
+        // alles was auf off steht per toggle_foldable_container schließen
+        return $s;
+    }
+
+    private function renderTreeNodes($maps, $childs) {
+        $s = '';
+        foreach($maps AS $map) {
+            // this copies the foldable_container code provided in Check_MK htmllib
+            // assume always open by default
+            $s .= '<li>';
+            if(isset($childs[$map['name']])) {
+                $act = 'onclick="toggle_foldable_container(\'nagvis\', \''.$map['name'].'\')" '
+                     . 'onmouseover="this.style.cursor=\'pointer\';" '
+                     . 'onmouseout="this.style.cursor=\'auto\';"';
+
+                $s .= '<img align=absbottom class="treeangle" id="treeimg.nagvis.'.$map['name'].'" '
+                    . 'src="images/tree_90.png" '.$act.' />';
+                $s .= '<b class="treeangle title" class=treeangle '.$act.'>'.$map['alias'].'</b><br>';
+                    $s .= '<ul class="treeangle open" style="padding-left:0;" id="tree.nagvis.'.$map['name'].'">';
+                    $s .= $this->renderTreeNodes($childs[$map['name']], $childs);
+                    $s .= '</ul>';
+            } else {
+                $s .= '<a target="main" href="'.cfg('paths', 'htmlbase').'/index.php?mod=Map&act=view'
+                    . '&show='.$map['name'].'">'.$map['alias'].'</a>';
+            }
+            $s .= '</li>';
+        }
+        return $s;
+    }
+
+    private function renderTable() {
+        $code = '<table class="allhosts"><tbody>';
+        foreach ($this->getMaps() as $map) {
+            switch($map['state']) {
+                case 'OK':
+                case 'UP':
+                    $state = 0;
+                    break;
+                case 'WARNING':
+                    $state = 1;
+                    break;
+                case 'CRITICAL':
+                case 'DOWN':
+                case 'UNREACHABLE':
+                    $state = 2;
+                    break;
+                default:
+                    $state = 3;
+                    break;
+            }
+            $code .= '<tr><td>';
+            $code .= '<div class="statebullet state'.$state.'">&nbsp;</div>';
+            $code .= '<a href="'.cfg('paths', 'htmlbase').'/index.php?mod=Map&act=view&show='.$map['name'].'" ';
+            $code .= 'class="link" target="main">'.$map['alias'].'</a>';
+            $code .= '</td></tr>';
+        }
+        $code .= '</tbody></table>';
+        return $code;
     }
 
     /**
@@ -74,19 +140,16 @@ class CoreModMultisite extends CoreModule {
             if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName))
                 continue;
 
-            $map = Array();
-            $map['type'] = 'map';
-
             $MAPCFG = new GlobalMapCfg($mapName);
 
+            $config_error = null;
+            $error = null;
             try {
                 $MAPCFG->readMapConfig();
             } catch(MapCfgInvalid $e) {
-                $map['configError'] = true;
-                $map['configErrorMsg'] = $e->getMessage();
+                $config_error = $e->getMessage();
             } catch(Exception $e) {
-                $map['error'] = true;
-                $map['errorMsg'] = $e->getMessage();
+                $error = $e->getMessage();
             }
 
             if($MAPCFG->getValue(0, 'show_in_lists') != 1 || $MAPCFG->getValue(0, 'show_in_multisite') != 1)
@@ -100,54 +163,39 @@ class CoreModMultisite extends CoreModule {
             $objConf['map_name']          = $MAPCFG->getName();
             $objConf['object_id']         = $object_id;
             // Enable the hover menu in all cases - maybe make it configurable
-            $objConf['hover_menu']        = 1;
-            $objConf['hover_childs_show'] = 1;
+            $objConf['hover_menu']        = 0;
+            $objConf['hover_childs_show'] = 0;
             $objConf['hover_template']    = 'default';
+            $objConf['parent_map']        = $MAPCFG->getValue(0, 'parent_map');
             unset($objConf['alias']);
 
             $MAP->MAPOBJ->setConfiguration($objConf);
 
-            if(isset($map['configError'])) {
-                $map['overview_class']  = 'error';
-                $map['overview_url']    = 'javascript:alert(\''.$map['configErrorMsg'].'\');';
-                $map['summary_output']  = l('Map Configuration Error: '.$map['configErrorMsg']);
-
+            if($config_error !== null) {
                 $MAP->MAPOBJ->clearMembers();
                 $MAP->MAPOBJ->setState(array(
                     ERROR,
-                    $map['summary_output'],
+                    l('Map Configuration Error: ').$config_error,
                     null,
                     null
                 ));
                 $MAP->MAPOBJ->fetchIcon();
-            } elseif(isset($map['error'])) {
-                $map['overview_class']  = 'error';
-                $map['overview_url']    = 'javascript:alert(\''.$map['errorMsg'].'\');';
-                $map['summary_output']  = l('Error: '.$map['errorMsg']);
-
+            } elseif($error !== null) {
                 $MAP->MAPOBJ->clearMembers();
                 $MAP->MAPOBJ->setState(array(
                     ERROR,
-                    $map['summary_output'],
+                    l('Error: ').$error,
                     null,
                     null
                 ));
                 $MAP->MAPOBJ->fetchIcon();
             } elseif($MAP->MAPOBJ->checkMaintenance(0)) {
                 $MAP->MAPOBJ->fetchIcon();
-
-                $map['overview_url']    = cfg('paths', 'htmlbase').'/index.php?mod=Map&act=view&show='.$mapName;
-                $map['overview_class']  = '';
-                $map['summary_output']  = $MAP->MAPOBJ->getSummaryOutput();
             } else {
-                $map['overview_class']  = 'disabled';
-                $map['overview_url']    = 'javascript:alert(\''.l('mapInMaintenance').'\');';
-                $map['summary_output']  = l('mapInMaintenance');
-
                 $MAP->MAPOBJ->clearMembers();
                 $MAP->MAPOBJ->setState(array(
                     UNKNOWN,
-                    $map['summary_output'],
+                    l('mapInMaintenance'),
                     null,
                     null
                 ));
@@ -155,17 +203,17 @@ class CoreModMultisite extends CoreModule {
             }
 
             $MAP->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
-            $aObjs[] = Array($MAP->MAPOBJ, $map);
+            $aObjs[] = $MAP->MAPOBJ;
         }
 
         $_BACKEND->execute();
 
         $aMaps = Array();
-        foreach($aObjs AS $aObj) {
-            $aObj[0]->applyState();
-            $aObj[0]->fetchIcon();
+        foreach($aObjs AS $MAP) {
+            $MAP->applyState();
+            $MAP->fetchIcon();
 
-            $aMaps[] = $aObj[0]->getObjectInformation();
+            $aMaps[] = $MAP->getObjectInformation();
         }
 
         usort($aMaps, Array('GlobalCore', 'cmpAlias'));

@@ -182,7 +182,6 @@ class NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function setObjectInformation($obj) {
-        debug(json_encode($obj));
         foreach($obj AS $key => $val) {
             $this->{$key} = $val;
         }

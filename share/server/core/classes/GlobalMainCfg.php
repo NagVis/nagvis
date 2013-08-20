@@ -241,6 +241,13 @@ class GlobalMainCfg {
                     'match'         => MATCH_STRING
                 ),
 
+                'multisite_snapin_layout' => Array(
+                    'must'        => 0,
+                    'editable'    => 1,
+                    'default'     => 'list',
+                    'match'       => MATCH_STRING_NO_SPACE,
+                ),
+
                 'user_filtering' => Array(
                     'must'       => 0,
                     'editable'   => 1,
@@ -283,7 +290,9 @@ class GlobalMainCfg {
                 'startshow'   => Array('must' => 0,
                     'editable'    => 1,
                     'default'     => '',
-                    'match'       => MATCH_STRING_EMPTY)),
+                    'match'       => MATCH_STRING_EMPTY
+                ),
+            ),
             'defaults' => Array(
                 'backend' => Array(
                     'must'        => 0,

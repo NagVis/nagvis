@@ -29,6 +29,8 @@ Frontend:
     (Must be enabled with option "zoombar=1")
   * Added "on-demand-filter" header menu to support quick filter mechanism
     for on demand automaps
+  * Added new option multisite_snapin_layout to render the multisite snapin
+    in a "tree" instead of a "list"
   * FIX: Fixed centering of overview tables when opening the sidebar
   * FIX: Fixed mouse pointer confusions when adding a new object and hovering
     another menu which then shows up the hover menu
