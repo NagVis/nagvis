@@ -269,6 +269,7 @@ class NagVisHeaderMenu {
         if ($this->templateName == 'on-demand-filter') {
             global $_BACKEND;
             $this->aMacros['hostgroups'] = $_BACKEND->getBackend($_GET['backend_id'])->getObjects('hostgroup', '', '');
+            usort($this->aMacros['hostgroups'], Array($this, 'sortHostgroups'));
             array_unshift($this->aMacros['hostgroups'], array('name1' => '', 'name2' => ''));
 
             $default = '';
@@ -279,6 +280,10 @@ class NagVisHeaderMenu {
 
             $this->aMacros['filter_group'] = isset($_GET['filter_group']) ? htmlspecialchars($_GET['filter_group']) : $default;
         }
+    }
+
+    private function sortHostgroups($a, $b) {
+        return strnatcasecmp($a['name1'], $b['name1']);
     }
 
     /**
