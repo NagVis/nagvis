@@ -113,7 +113,7 @@ function replaceHoverTemplateMacrosChild(oObj, sTemplateCode) {
     else
         oMacros.obj_name = oObj.conf.name;
 
-    if(oObj.parent_type === 'servicegroup' && oObj.conf.type === 'service')
+    if((oObj.parent_type === 'servicegroup' || oObj.parent_type === 'dyngroup') && oObj.conf.type === 'service')
         oMacros.obj_name1 = oObj.conf.name;
     else {
         var regex = getRegEx('section-sgchild', '<!--\\sBEGIN\\sservicegroup_child\\s-->.+?<!--\\sEND\\sservicegroup_child\\s-->', 'gm');
@@ -264,7 +264,7 @@ function replaceHoverTemplateStaticMacros(oObj, sTemplateCode) {
         oSectionMacros.host = '<!--\\sBEGIN\\shost\\s-->.+?<!--\\sEND\\shost\\s-->';
 
     // Replace servicegroup sections when not servicegroup object
-    if(oObj.conf.type !== 'servicegroup') {
+    if(oObj.conf.type !== 'servicegroup' && !(oObj.conf.type === 'dyngroup' && oObj.conf.object_types == 'service')) {
         oSectionMacros.servicegroup = '<!--\\sBEGIN\\sservicegroup\\s-->.+?<!--\\sEND\\sservicegroup\\s-->';
     }
 

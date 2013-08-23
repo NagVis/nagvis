@@ -278,14 +278,17 @@ class NagVisObject {
                 break;
                 case 'dyngroup':
                     if(NagVisDynGroup::$langType === null) {
-                        NagVisDynGroup::$langType  = l('Dynamic Group');
-                        NagVisDynGroup::$langSelf  = l('Dynamic Group Name');
-                        NagVisDynGroup::$langChild = l('Object Name');
+                        NagVisDynGroup::$langType   = l('Dynamic Group');
+                        NagVisDynGroup::$langSelf   = l('Dynamic Group Name');
+                        NagVisDynGroup::$langChild  = l('Object Name');
+                        NagVisDynGroup::$langChild1 = l('hostname');
                     }
 
                     $arr['lang_obj_type']    = NagVisDynGroup::$langType;
                     $arr['lang_name']        = NagVisDynGroup::$langSelf;
                     $arr['lang_child_name']  = NagVisDynGroup::$langChild;
+                    if ($this->object_types == 'service')
+                        $arr['lang_child_name1'] = NagVisDynGroup::$langChild1;
                 break;
                 case 'map':
                     if(NagVisMapObj::$langType === null) {

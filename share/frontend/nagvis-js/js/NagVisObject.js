@@ -289,7 +289,7 @@ var NagVisObject = Base.extend({
             oSectionMacros.hostgroup = '<!--\\sBEGIN\\shostgroup\\s-->.+?<!--\\sEND\\shostgroup\\s-->';
 
         // Replace servicegroup range macros when not in a servicegroup
-        if(this.conf.type !== 'servicegroup')
+        if(this.conf.type !== 'servicegroup' && !(this.conf.type === 'dyngroup' && this.conf.object_types == 'service'))
             oSectionMacros.servicegroup = '<!--\\sBEGIN\\sservicegroup\\s-->.+?<!--\\sEND\\sservicegroup\\s-->';
 
         // Replace map range macros when not in a hostgroup

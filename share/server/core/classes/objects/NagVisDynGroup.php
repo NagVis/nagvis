@@ -25,9 +25,10 @@
 class NagVisDynGroup extends NagVisStatefulObject {
     protected $type = 'dyngroup';
 
-    protected static $langType = null;
-    protected static $langSelf = null;
-    protected static $langChild = null;
+    protected static $langType   = null;
+    protected static $langSelf   = null;
+    protected static $langChild  = null;
+    protected static $langChild1 = null;
 
     protected $name;
 
