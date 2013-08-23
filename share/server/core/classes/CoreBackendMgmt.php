@@ -219,40 +219,99 @@ class CoreBackendMgmt {
 
     /**
      * Fetches details for all given dynamic groups
+     * Sending "array()" as filter construct to the backend since the backend uses the filters which are
+     * already compiled in the object and ignores the given array() parameter
      */
     private function fetchDynGroupMemberDetails($backendId, $options, $aObjs) {
         foreach($aObjs AS $name => $OBJS) {
             foreach($OBJS AS $OBJ) {
-                // Fist get the states for all the group members
-                try {
-                    $aServices = $this->getBackend($backendId)->getServiceState(
-                        Array($OBJ->getName() => Array($OBJ)), $options, array(), MEMBER_QUERY);
-                } catch(BackendException $e) {
-                    $aServices = Array();
-                    $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
-                              Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())), $backendId);
-                }
-
-                // Regular member adding loop
                 $members = Array();
-                foreach($aServices AS $host => $serviceList) {
-                    foreach($serviceList AS $aService) {
-                        $SOBJ = new NagVisService($backendId, $host, $aService[DESCRIPTION]);
-                        $SOBJ->setState($aService);
-
-                        // The services have to know how they should handle hard/soft
-                        // states. This is a little dirty but the simplest way to do this
-                        // until the hard/soft state handling has moved from backend to the
-                        // object classes.
-                        $SOBJ->setConfiguration($OBJ->getObjectConfiguration());
-
-                        // Add child object to the members array
-                        $members[] = $SOBJ;
+                if ($OBJ->object_types == 'service') {
+                    // Fist get the states for all the members
+                    try {
+                        $aServices = $this->getBackend($backendId)->getServiceState(
+                            Array($OBJ->getName() => Array($OBJ)), $options, array(), MEMBER_QUERY);
+                    } catch(BackendException $e) {
+                        $aServices = Array();
+                        $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
+                                  Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())), $backendId);
                     }
+
+                    // Regular member adding loop
+                    foreach($aServices AS $host => $serviceList) {
+                        foreach($serviceList AS $aService) {
+                            $members[] = $this->createServiceObject($backendId, $host, $aService[DESCRIPTION],
+                                                                    $aService, $OBJ->getObjectConfiguration());
+                        }
+                    }
+
+                } else {
+                    // First get the host states
+                    try {
+                        $aHosts = $this->getBackend($backendId)->getHostState(Array($OBJ->getName() => Array($OBJ)),
+                                                                              $options, array(), MEMBER_QUERY);
+                    } catch(BackendException $e) {
+                        $aHosts = Array();
+                        $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
+                                               Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())), $backendId);
+                    }
+
+                    // Now fetch the service state counts for all hosts
+                    $aServiceState = Array();
+                    if($OBJ->getRecognizeServices()) {
+                        try {
+                            $aServiceStateCounts = $this->getBackend($backendId)->getHostMemberCounts(
+                                               Array($OBJ->getName() => Array($OBJ)), $options, array());
+                        } catch(BackendException $e) {}
+                    }
+
+                    $members = Array();
+                    foreach($aHosts AS $name => $aHost) {
+                        if(isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts']))
+                            $service_states = $aServiceStateCounts[$name]['counts'];
+                        else
+                            $service_states = null;
+                        $members[] = $this->createHostObject($backendId, $name, $aHost,
+                                                             $OBJ->getObjectConfiguration(), $service_states);
+                    }
+
                 }
                 $OBJ->addMembers($members);
             }
         }
+    }
+
+    private function createServiceObject($backendId, $host, $descr, $state, $config) {
+        $OBJ = new NagVisService($backendId, $host, $state[DESCRIPTION]);
+        $OBJ->setState($state);
+
+        // The services have to know how they should handle hard/soft
+        // states. This is a little dirty but the simplest way to do this
+        // until the hard/soft state handling has moved from backend to the
+        // object classes.
+        $OBJ->setConfiguration($config);
+        return $OBJ;
+    }
+
+    private function createHostObject($backendId, $name, $state, $config, $service_states) {
+        $OBJ = new NagVisHost($backendId, $name);
+        $OBJ->setState($state);
+
+        // The services have to know how they should handle hard/soft
+        // states. This is a little dirty but the simplest way to do this
+        // until the hard/soft state handling has moved from backend to the
+        // object classes.
+        $OBJ->setConfiguration($config);
+
+        // Put state counts to the object
+        if ($service_states !== null) {
+            $OBJ->addStateCounts($service_states);
+        }
+
+        // Fetch summary state and output
+        $OBJ->fetchSummariesFromCounts();
+
+        return $OBJ;
     }
 
     /**
@@ -284,17 +343,8 @@ class CoreBackendMgmt {
                 $members = Array();
                 foreach($aServices AS $host => $serviceList) {
                     foreach($serviceList AS $aService) {
-                        $SOBJ = new NagVisService($backendId, $host, $aService[DESCRIPTION]);
-                        $SOBJ->setState($aService);
-
-                        // The services have to know how they should handle hard/soft
-                        // states. This is a little dirty but the simplest way to do this
-                        // until the hard/soft state handling has moved from backend to the
-                        // object classes.
-                        $SOBJ->setConfiguration($OBJ->getObjectConfiguration());
-
-                        // Add child object to the members array
-                        $members[] = $SOBJ;
+                        $members[] = $this->createServiceObject($backendId, $host, $aService[DESCRIPTION],
+                                                                $aService, $OBJ->getObjectConfiguration());
                     }
                 }
                 $OBJ->addMembers($members);
@@ -316,7 +366,7 @@ class CoreBackendMgmt {
      */
     private function fetchHostgroupMemberDetails($backendId, $options, $aObjs) {
         // And then apply them to the objects
-        foreach($aObjs AS $name => $OBJS)
+        foreach($aObjs AS $name => $OBJS) {
             foreach($OBJS AS $OBJ) {
                 // First get the host states for all the hostgroup members
                 try {
@@ -340,29 +390,17 @@ class CoreBackendMgmt {
 
                 $members = Array();
                 foreach($aHosts AS $name => $aHost) {
-                    $HOBJ = new NagVisHost($backendId, $name);
-                    $HOBJ->setState($aHost);
-
-                    // The services have to know how they should handle hard/soft
-                    // states. This is a little dirty but the simplest way to do this
-                    // until the hard/soft state handling has moved from backend to the
-                    // object classes.
-                    $HOBJ->setConfiguration($OBJ->getObjectConfiguration());
-
-                    // Put state counts to the object
-                    if(isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts'])) {
-                        $HOBJ->addStateCounts($aServiceStateCounts[$name]['counts']);
-                    }
-
-                    // Fetch summary state and output
-                    $HOBJ->fetchSummariesFromCounts();
-
-                    $members[] = $HOBJ;
+                    if(isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts']))
+                        $service_states = $aServiceStateCounts[$name]['counts'];
+                    else
+                        $service_states = null;
+                    $members[] = $this->createHostObject($backendId, $name, $aHost,
+                                                         $OBJ->getObjectConfiguration(), $service_states);
                 }
 
                 $OBJ->addMembers($members);
             }
-
+        }
     }
 
     private function fetchStateCounts($backendId, $type, $options, $aObjs) {
