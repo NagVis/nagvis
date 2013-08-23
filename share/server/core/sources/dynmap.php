@@ -13,18 +13,20 @@ function dynmap_get_objects($MAPCFG, $p) {
         // only use the internal names
         foreach ($ret AS $key => $val) {
             if ($type == 'service') {
-                $obj_id = $MAPCFG->genObjId($val['name1'] . '~~' . $val['name2']);
+                $obj_id = $MAPCFG->genObjId($backend_id.'~~'.$val['name1'] . '~~' . $val['name2']);
                 $object = array(
                     'type'                => $type,
                     'object_id'           => $obj_id,
+                    'backend_id'          => array($backend_id),
                     'host_name'           => $val['name1'],
                     'service_description' => $val['name1'],
                 );
             } else {
-                $obj_id = $MAPCFG->genObjId($val['name1']);
+                $obj_id = $MAPCFG->genObjId($backend_id.'~~'.$val['name1']);
                 $object = array(
                     'type'                => $type,
                     'object_id'           => $obj_id,
+                    'backend_id'          => array($backend_id),
                     $type.'_name'         => $val['name1'],
                 );
             }
