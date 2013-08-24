@@ -19,7 +19,7 @@ function dynmap_get_objects($MAPCFG, $p) {
                     'object_id'           => $obj_id,
                     'backend_id'          => array($backend_id),
                     'host_name'           => $val['name1'],
-                    'service_description' => $val['name1'],
+                    'service_description' => $val['name2'],
                 );
             } else {
                 $obj_id = $MAPCFG->genObjId($backend_id.'~~'.$val['name1']);
