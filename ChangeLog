@@ -19,6 +19,7 @@ Core:
     objects to add on this map and positions them in a grid on the map. The
     user can then modify all the objects, for example change their options
     like, positions and visualisation. 
+  * Changed default http_timeout from 10 to 2 seconds
 
 Frontend:
   * All nodes with assigned childs in sidebar are now expandable. The state
