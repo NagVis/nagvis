@@ -87,7 +87,7 @@
 ; "<username>:<password>" to provide auth credentials
 ;http_proxy_auth=""
 ; Set the timeout (in seconds) for outbound HTTP requests (for example geomap requests)
-;http_timeout=10
+;http_timeout=2
 ;
 ; Defines which translations of NagVis are available to the users
 ;language_available="de_DE,en_US,es_ES,fr_FR,pt_BR"
