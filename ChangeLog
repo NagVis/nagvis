@@ -6,6 +6,7 @@ Frontend:
   * FIX: Fixed shape image displaying when using external URLS
   * FIX: Hiding	"Edit Map" link for "on demand" automaps
   * FIX: Fixed "modify view" dialog for "on demand" automaps
+  * FIX: Fixed wrong viewport html header (Thanks to Carl Helmertz <chelmertz@op5.com>)
 
 Automap:
   * Labels have now a white background to improve the text readability
