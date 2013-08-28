@@ -162,6 +162,7 @@ class GlobalMapCfg {
             'label_background',
             'label_border',
             'label_style',
+            'label_maxlen',
             'url_target',
             'hover_childs_show',
             'hover_childs_sort',

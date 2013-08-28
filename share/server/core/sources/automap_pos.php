@@ -50,9 +50,12 @@ function graphviz_config_tree(&$params, &$tree, $layer = 0) {
     $str = '';
 
     $name = $tree['host_name'];
+    if (strlen($name) > 14) {
+        $name = substr($name, 0, 12) . '...';
+    }
 
     $str .= '    "'.$tree['object_id'].'" [ ';
-    $str .= 'label="'.$tree['host_name'].'", ';
+    $str .= 'label="'.$name.'", ';
     $str .= 'URL="'.$tree['object_id'].'", ';
     $str .= 'tooltip="'.$tree['object_id'].'", ';
     
@@ -60,11 +63,16 @@ function graphviz_config_tree(&$params, &$tree, $layer = 0) {
     $height = $tree['.height'];
 
     // This should be scaled by the choosen iconset
-    if($width != 16) {
+    if($width != 22) {
         $str .= 'width="'.graphviz_px2inch($width).'", ';
     }
-    if($height != 16) {
+    if($height != 22) {
         $str .= 'height="'.graphviz_px2inch($height).'", ';
+    }
+
+    // This is the root node
+    if($layer == 0) {
+        $str .= 'pos="'.graphviz_px2inch($params['width']/2).','.graphviz_px2inch($params['height']/2).'", ';
     }
 
     // The object has configured x/y coords. Use them.
@@ -104,12 +112,11 @@ function graphviz_config(&$params, &$tree) {
     //, ranksep="0.1", nodesep="0.4", ratio=auto, bb="0,0,500,500"
     $str .= '    graph [';
     $str .= 'dpi="72", ';
-    //ratio: expand, auto, fill, compress
-    $str .= 'ratio="fill", ';
     $str .= 'margin='.graphviz_px2inch($params['margin']).', ';
     //$str .= 'bgcolor="'.$this->MAPCFG->getValue(0, 'background_color').'", ';
     $str .= 'root="'.$tree['object_id'].'", ';
     $str .= 'rankdir="'.$params['rankdir'].'", ';
+    $str .= 'center=true, ';
 
     /* Directed (dot) only */
     if($params['render_mode'] == 'directed') {
@@ -132,21 +139,32 @@ function graphviz_config(&$params, &$tree) {
         $str .= 'overlap="'.$params['overlap'].'", ';
     }
 
-    $str .= 'size="'.graphviz_px2inch($params['width']).','.graphviz_px2inch($params['height']).'"];'."\n";
+    //ratio: expand, auto, fill, compress
+    //$str .= 'ratio="auto", ';
+    // enforces the size of the drawing area to this value
+    $str .= 'size="'.graphviz_px2inch($params['width']).','.graphviz_px2inch($params['height']).'!" ';
+    $str .= "];\n";
 
     /**
      * Default settings for automap nodes
      */
     $str .= '    node [';
-    // default margin is 0.11,0.055
-    $str .= 'margin="0.0,0.0", ';
     $str .= 'shape="rect", ';
+    // Show labels below the image
+    $str .= 'labelloc="b", ';
+    $str .= 'color="red", ';
+    // needs to be included for correct rendering
+    $str .= 'image="'.path('sys', 'global', 'icons').'std_medium_ok.png", ';
+
+    // default margin is 0.11,0.055
+    //$str .= 'margin="0.05,0.025", ';
+    // This may be altered by the single objects depending on the icon size
+    // -> must not be set, because it would make ignore the label text size for calculations
+    //$str .= 'width="'.graphviz_px2inch(22).'", ';
+    //$str .= 'height="'.graphviz_px2inch(22).'", ';
     // Do not use this as this would make the nodes ignore the label sizes
     //$str .= 'fixedsize="true", ';
-    $str .= 'color="white", ';
-    // This may be altered by the single objects depending on the icon size
-    $str .= 'width="'.graphviz_px2inch(16).'", ';
-    $str .= 'height="'.graphviz_px2inch(16).'", ';
+
     $str .= 'fontsize=10';
     $str .= '];'."\n";
 

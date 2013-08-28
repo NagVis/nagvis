@@ -21,6 +21,12 @@ Core:
     like, positions and visualisation. 
   * Changed default http_timeout from 10 to 2 seconds
 
+Automap:
+  * Added "on-demand-filter" header menu to support quick filter mechanism
+    for on demand automaps
+  * Host labels are now limited to 14 chars on automaps
+  * Again, trying to improve the default automap rendering
+
 Frontend:
   * All nodes with assigned childs in sidebar are now expandable. The state
     is stored for each user individually.
@@ -28,8 +34,6 @@ Frontend:
     request per map.
   * Added optional zoom bar and mousewheel zoom handlers (ALT + wheel move)
     (Must be enabled with option "zoombar=1")
-  * Added "on-demand-filter" header menu to support quick filter mechanism
-    for on demand automaps
   * Added new option multisite_snapin_layout to render the multisite snapin
     in a "tree" instead of a "list"
   * FIX: Fixed centering of overview tables when opening the sidebar

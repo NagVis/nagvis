@@ -431,6 +431,10 @@ var NagVisStatefulObject = NagVisObject.extend({
             }
         }
 
+        if (this.conf.label_maxlen > 0 && sReturn.length > this.conf.label_maxlen) {
+            sReturn = sReturn.substr(0, this.conf.label_maxlen - 2) + '...';
+        }
+
         return sReturn;
     },
 
