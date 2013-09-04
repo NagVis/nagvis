@@ -49,7 +49,7 @@ class NagVisStatefulObject extends NagVisObject {
 
     protected $state = null;
 
-    protected $sum   = array(null, null, null, null);
+    public $sum = array(null, null, null, null);
     protected $aStateCounts = null;
 
     /**
