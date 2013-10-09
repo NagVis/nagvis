@@ -54,7 +54,8 @@ function debugFinalize() {
 }
 
 function log_mem($txt = 'somewhere') {
-    debug('mem ['.$txt.']: ' . round(memory_get_usage()/1024/1024, 2) . 'Mb');
+    if (DEBUG && DEBUGLEVEL & 2)
+        debug('mem ['.$txt.']: ' . round(memory_get_usage()/1024/1024, 2) . 'Mb');
 }
 
 /**
