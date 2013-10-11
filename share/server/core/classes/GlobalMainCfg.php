@@ -1987,21 +1987,15 @@ class GlobalMainCfg {
         ));
     }
 
-    /**$
-     * Parses the state weight configuration array
-     *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+    /**
+     * Populates the state weight structure, provided by hardcoded defaults
+     * and maybe the user configuration
      */
     private function parseStateWeight() {
         $arr = Array();
 
         foreach($this->validConfig['states'] AS $lowState => $aVal) {
             $key = explode('_', $lowState);
-
-            // First create array when not exists
-            if(!isset($arr[strtoupper($key[0])])) {
-                $arr[strtoupper($key[0])] = Array();
-            }
 
             // Convert state values to int
             $last_part = $key[sizeof($key) - 1];
@@ -2012,6 +2006,12 @@ class GlobalMainCfg {
             }
 
             $state = state_num(strtoupper($key[0]));
+
+            // First create array when not exists
+            if(!isset($arr[$state])) {
+                $arr[$state] = Array();
+            }
+
             if(isset($key[1]) && isset($key[2])) {
                 // at the moment only bg colors of substates
                 $arr[$state][$key[1].'_'.$key[2]] = $val;
@@ -2035,6 +2035,19 @@ class GlobalMainCfg {
      */
     public function getStateWeight() {
         return $this->stateWeight;
+    }
+
+    /**
+     * Returns an array with the state weight configuration for the
+     * JS frontend, which is not yet aware of numeric state codes. So
+     * translate the states here.
+     */
+    public function getStateWeightJS() {
+        $arr = array();
+        foreach ($this->stateWeight AS $state => $val) {
+            $arr[state_str($state)] = $val;
+        }
+        return $arr;
     }
 
     /**

@@ -48,7 +48,7 @@ class NagVisOverviewView {
         $aData = Array(
             'generalProperties' => $_MAINCFG->parseGeneralProperties(),
             'workerProperties'  => $_MAINCFG->parseWorkerProperties(),
-            'stateProperties'   => json_encode($_MAINCFG->getStateWeight()),
+            'stateProperties'   => json_encode($_MAINCFG->getStateWeightJS()),
             'userProperties'    => $USERCFG->doGetAsJson(),
             'fileAges'          => json_encode(Array(
                 'maincfg' => $_MAINCFG->getConfigFileAge(),
