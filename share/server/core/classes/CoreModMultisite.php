@@ -100,7 +100,7 @@ class CoreModMultisite extends CoreModule {
     private function renderTable() {
         $code = '<table class="allhosts"><tbody>';
         foreach ($this->getMaps() as $map) {
-            switch($map['state']) {
+            switch($map['summary_state']) {
                 case 'OK':
                 case 'UP':
                     $state = 0;
