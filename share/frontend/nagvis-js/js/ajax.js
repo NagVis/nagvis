@@ -436,8 +436,6 @@ function postSyncRequest(sUrl, sParams) {
 
         // Set post specific options
         oRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        oRequest.setRequestHeader("Content-length", sParams.length);
-        oRequest.setRequestHeader("Connection", "close");
 
         try {
             oRequest.send(sParams);
