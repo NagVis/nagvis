@@ -280,6 +280,8 @@ class NagVisHeaderMenu {
 
             $this->aMacros['filter_group'] = isset($_GET['filter_group']) ? htmlspecialchars($_GET['filter_group']) : $default;
         }
+
+        $this->aMacros['mapNames'] = json_encode(array_keys($CORE->getPermittedMaps()));
     }
 
     private function sortHostgroups($a, $b) {
@@ -314,7 +316,8 @@ class NagVisHeaderMenu {
         // Replace paths and language macros
         $aReturn = Array('pathBase' => $this->pathHtmlBase,
             'currentUri'         => preg_replace('/[&?]lang=[a-z]{2}_[A-Z]{2}/', '', $this->UHANDLER->getRequestUri()),
-            'pathImages'         => cfg('paths','htmlimages'),
+            'pathImages'         => cfg('paths', 'htmlimages'),
+            'showStates'         => cfg('defaults', 'header_show_states'),
             'pathHeaderJs'       => path('html', 'global', 'templates', $this->templateName.'.header.js'),
             'pathTemplates'      => path('html', 'global', 'templates'),
             'pathTemplateImages' => path('html', 'global', 'templateimages'),

@@ -691,8 +691,8 @@ td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 #sidebar li {margin:0;padding:0;line-height:25px;}
 #sidebar li.spacerbottom {border-bottom:1px dotted #a4a4a4}
 #sidebar li.spacertop {border-top:1px dotted #a4a4a4}
-#sidebar li div {width:200px;height:25px;clear:both;}
-#sidebar li div a {padding-left:20px;}
+#sidebar li > div {width:200px;height:25px;clear:both;}
+#sidebar li > div a {padding-left:20px;}
 
 #sidebar li.parent div {}
 #sidebar li.parent a.title {width:160px;}
@@ -712,9 +712,49 @@ td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 #sidebar li.lvl6 a{padding-left:70px;width:130px}
 #sidebar li.open > div a.title {background: url('../images/templates/default.folder_open.gif') no-repeat left #eaf0f2;}
 #sidebar li.closed > div a.title {background: url('../images/templates/default.folder_closed.gif') no-repeat left #eaf0f2;}
-#sidebar li div a:hover,
-#sidebar li div a.title:hover {background-color:#d9e1e4;color:#779D2A}
+#sidebar li > div a:hover,
+#sidebar li > div a.title:hover {background-color:#d9e1e4;color:#779D2A}
 #sidebar a.error, #sidebar a.error:active, #sidebar a.error:visited {color:#ff0000}
+
+div.statediv {
+    display: none;
+    float: left;
+    margin-top: 9px;
+    margin-left: 5px;
+    width: 5px;
+    height: 5px;
+    border: 1px solid #000;
+}
+
+div.statediv.sOK, div.statediv.sUP {
+    display: block;
+    background-color: #00FF00;
+}
+
+div.statediv.sWARNING {
+    display: block;
+    background-color: #FFFF00;
+}
+
+div.statediv.sCRITICAL, div.statediv.sDOWN, div.statediv.sUNREACHABLE {
+    display: block;
+    background-color: #ff0000;
+}
+
+div.statediv.sUNKNOWN {
+    display: block;
+    background-color: #FFCC66;
+}
+
+div.statediv.sERROR {
+    display: block;
+    background-color: #519EFF;
+}
+
+div.statediv.sPENDING, div.statediv.sUNCHECKED {
+    display: block;
+    background-color: #C0C0C0;
+}
 
 /*
  * Frontend eventlog styling

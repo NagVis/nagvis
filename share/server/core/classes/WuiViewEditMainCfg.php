@@ -162,6 +162,9 @@ class WuiViewEditMainCfg {
 
                             $ret .= '</select>';
 
+                            if(is_array($val2)) {
+                                $val2 = implode(',', $val2);
+                            }
                             $ret .= '<script>document.edit_config.elements[\''.$cat.'_'.$propname.'\'].value = \''.$val2.'\';</script>';
                         break;
                         case 'boolean':

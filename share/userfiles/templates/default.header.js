@@ -36,7 +36,7 @@ function headerDraw() {
         return;
 
     if(typeof(oUserProperties.header) !== 'undefined' && oUserProperties.header === false)
-    headerToggle(false);
+        headerToggle(false);
 }
 
 function headerToggle(store) {
@@ -65,6 +65,38 @@ function headerToggle(store) {
     show   = null;
     spacer = null;
     header = null;
+}
+
+function showMapDropdown() {
+    ddMenu('views', 1);
+}
+
+// Sets/Updates the state of a map in the header menu
+function headerUpdateState(map_conf) {
+    // Exit this function on invalid call
+    if(map_conf === null || map_conf.length != 1)  {
+        eventlog("worker", "warning", "headerUpdateState: Invalid call - maybe broken ajax response");
+        return false;
+    }
+
+    var map = map_conf[0];
+
+    var side = document.getElementById('side-state-' + map['name']);
+    if (side) {
+        side.className = 'statediv s' + map['summary_state'];
+        side = null;
+    }
+
+    head = null;
+}
+
+// Is called to initialize fetching states for the header/sidebar menu
+function headerUpdateStates() {
+    for (var i = 0; i < g_map_names.length; i++) {
+        getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getObjectStates'
+                        + '&i[]=map-' + escapeUrlValues(g_map_names[i]) + getViewParams(),
+                        false, headerUpdateState);
+    }
 }
 
 // Hide the given menus instant
@@ -141,14 +173,17 @@ function toggleSidebar(store) {
         if(is_overview === false) {
             content.style.left = '200px';
         }
+
+        if (oGeneralProperties.header_show_states)
+            headerUpdateStates();
     }
 
     if(store === true)
         storeUserOption('sidebar', state);
 
     state   = null;
-  content = null;
-  sidebar = null;
+    content = null;
+    sidebar = null;
     return false;
 }
 

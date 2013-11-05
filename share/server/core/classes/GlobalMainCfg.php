@@ -407,11 +407,13 @@ class GlobalMainCfg {
                     'field_type' => 'boolean',
                     'match' => MATCH_BOOLEAN),
 
-                'headermenu' => Array('must' => 1,
-                    'editable' => 1,
-                    'default' => '1',
+                'headermenu' => Array(
+                    'must'       => 1,
+                    'editable'   => 1,
+                    'default'    => '1',
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
+                    'match'      => MATCH_BOOLEAN
+                ),
                 'headertemplate' => Array('must' => 0,
                     'editable' => 1,
                     'default' => 'default',
@@ -419,12 +421,19 @@ class GlobalMainCfg {
                     'depends_value' => 1,
                     'match' => MATCH_STRING_NO_SPACE),
                 'headerfade' => Array(
-                        'must'          => 0,
+                    'must'          => 0,
                     'editable'      => 1,
                     'default'       => 0,
                     'depends_on'    => 'headermenu',
                     'depends_value' => 1,
                     'match'         => MATCH_BOOLEAN
+                ),
+                'header_show_states' => Array(
+                    'must'       => 1,
+                    'editable'   => 1,
+                    'default'    => 1,
+                    'field_type' => 'boolean',
+                    'match'      => MATCH_BOOLEAN
                 ),
                 'hovermenu' => Array('must' => 0,
                     'editable' => 1,
@@ -1947,16 +1956,17 @@ class GlobalMainCfg {
      */
     public function parseGeneralProperties() {
         $p = Array(
-          'controls_size'  => intval($this->getValue('global', 'controls_size')),
-          'date_format'    => $this->getValue('global', 'dateformat'),
-          'path_base'      => $this->getValue('paths','htmlbase'),
-          'path_cgi'       => $this->getValue('paths','htmlcgi'),
-          'path_sounds'    => $this->getPath('html', 'global', 'sounds'),
-          'path_iconsets'  => $this->getPath('html', 'global', 'icons'),
-          'path_shapes'    => $this->getPath('html', 'global', 'shapes'),
-          'path_images'    => $this->getValue('paths','htmlimages'),
-          'path_server'    => $this->getValue('paths','htmlbase').'/server/core/ajax_handler.php',
-          'internal_title' => $this->getValue('internal', 'title'),
+          'controls_size'      => intval($this->getValue('global', 'controls_size')),
+          'date_format'        => $this->getValue('global', 'dateformat'),
+          'path_base'          => $this->getValue('paths','htmlbase'),
+          'path_cgi'           => $this->getValue('paths','htmlcgi'),
+          'path_sounds'        => $this->getPath('html', 'global', 'sounds'),
+          'path_iconsets'      => $this->getPath('html', 'global', 'icons'),
+          'path_shapes'        => $this->getPath('html', 'global', 'shapes'),
+          'path_images'        => $this->getValue('paths','htmlimages'),
+          'path_server'        => $this->getValue('paths','htmlbase').'/server/core/ajax_handler.php',
+          'internal_title'     => $this->getValue('internal', 'title'),
+          'header_show_states' => $this->getValue('defaults', 'header_show_states'),
         );
 
         // Add custom action configuration

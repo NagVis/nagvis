@@ -36,6 +36,9 @@ Frontend:
     (Must be enabled with option "zoombar=1")
   * Added new option multisite_snapin_layout to render the multisite snapin
     in a "tree" instead of a "list"
+  * Summary states of maps can now be displayed in the sidebar menu (must be
+    enabled by setting header_show_states=1 in [defaults] section in global
+    configuration)
   * FIX: Fixed centering of overview tables when opening the sidebar
   * FIX: Fixed mouse pointer confusions when adding a new object and hovering
     another menu which then shows up the hover menu
