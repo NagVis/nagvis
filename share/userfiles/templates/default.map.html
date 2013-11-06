@@ -18,6 +18,6 @@ gridParse();
 
 // This disables the context menu when someone clicked anywhere on the map
 document.onmousedown = contextMouseDown;
-window.onresize = function() { scaleView(); };
+window.onresize = function() { scaleView(); {if $zoomFill}set_zoom('fill');{/if} };
 window.onscroll = function() { scaleView(); };
 </script>

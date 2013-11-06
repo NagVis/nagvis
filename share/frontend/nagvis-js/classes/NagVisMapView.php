@@ -92,6 +92,7 @@ class NagVisMapView {
             'stateProperties'    => json_encode($_MAINCFG->getStateWeightJS()),
             'userProperties'     => $USERCFG->doGetAsJson(),
             'mapName'            => $this->name,
+            'zoomFill'           => $this->MAPCFG->getValue(0, 'zoom') == 'fill',
             'fileAges'           => json_encode(Array(
                 'maincfg'   => $_MAINCFG->getConfigFileAge(),
                 $this->name => $this->MAPCFG->getFileModificationTime(),
