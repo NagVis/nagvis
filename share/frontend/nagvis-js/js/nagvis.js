@@ -1273,7 +1273,9 @@ function getZoomFactor() {
         return g_zoom_factor; // only compute once
 
     var zoom = getViewParam('zoom');
-    if(zoom === null)
+    // Fill: At first use 100% zoom. Later, when everything has been rendered,
+    // calculate the fill zoom factor and re-render with this option.
+    if (zoom === null || zoom == 'fill')
         g_zoom_factor = 100;
     else
         g_zoom_factor = parseInt(zoom); 

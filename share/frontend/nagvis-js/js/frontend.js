@@ -1468,6 +1468,44 @@ function getOverviewRotations() {
     return getSyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getOverviewRotations')
 }
 
+/**
+ * Calculates which zoom factor shal be used to zoom the map
+ * to fill the whole screen. To reach this, it must loop
+ * all map objects to get the extreme coordinates of top/left
+ * and bottom/right. Mixing this with the width/height of the
+ * viewport, this function calculates the correct zoom factor.
+ */
+function set_fill_zoom_factor() {
+    var obj, zoom;
+    var c_top = null, c_left = null, c_bottom = null, c_right = null;
+    var o_top, o_left, o_bottom, o_right;
+    for(var i in oMapObjects) {
+        obj = oMapObjects[i];
+        if (obj && obj.getObjLeft && obj.getObjTop && obj.getObjHeight && obj.getObjWidth) {
+            o_top = obj.getObjTop();
+            if (c_top === null || o_top < c_top)
+                c_top = o_top;
+
+            o_left = obj.getObjLeft();
+            if (c_left === null || o_left < c_left)
+                c_left = o_left;
+
+            o_bottom = o_top + obj.getObjHeight();
+            if (c_bottom === null || o_bottom > c_bottom)
+                c_bottom = o_bottom;
+
+            o_right = o_left + obj.getObjWidth();
+            if (c_right === null || o_right > c_right)
+                c_right = o_right;
+        }
+    }
+
+    var border = 40; // border per side in px * 2
+    var zoom_y = parseInt((pageHeight() - border) / parseFloat(c_bottom) * 100);
+    var zoom_x = parseInt((pageWidth() - border)/ parseFloat(c_right) * 100);
+    set_zoom(Math.min(zoom_y, zoom_x));
+}
+
 function set_zoom(val) {
     setViewParam('zoom', val);
     if(workerTimeoutID)
@@ -1476,7 +1514,10 @@ function set_zoom(val) {
 }
 
 function zoom(how) {
-    var cur_zoom = parseInt(getViewParam('zoom'));
+    var cur_zoom = getZoomFactor();
+    // This is not really correct. Assume 
+    if (cur_zoom == 'fill')
+        cur_zoom = 100;
     var new_zoom = 100;
     if (how != 0) {
         new_zoom = cur_zoom + how;
@@ -1569,7 +1610,7 @@ function zoombarDragStop(event) {
     g_left_clicked = false;
 
     // Get the zoom value
-    var zoom = parseInt(getViewParam('zoom'));
+    var zoom = getZoomFactor();
     var val = parseInt((100 - (parseInt(g_drag_ind.style.top.replace('px', '')) + 3)) / 100 * 200);
     if (val != zoom) {
         if (val <= 0)
@@ -1612,7 +1653,7 @@ function mouse_release(event) {
 }
 
 function updateZoomIndicator() {
-    var zoom = parseInt(getViewParam('zoom'));
+    var zoom = getZoomFactor();
     var ind = document.getElementById('zoombar-drag_ind');
 
     // zoom is 0 to 200, the bar is 0px to 100px, the
@@ -1848,6 +1889,10 @@ function parseMapHandler(oObjects, params) {
     // Set map objects
     eventlog("worker", "info", "Parsing "+type+" objects");
     setMapObjects(oObjects);
+
+    // Maybe force page reload when the map shal fill the viewport
+    if (getViewParam('zoom') == 'fill')
+        set_fill_zoom_factor();
 
     // Set map basics
     // Needs to be called after the summary state of the map is known

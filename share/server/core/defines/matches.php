@@ -94,6 +94,7 @@ define('MATCH_ROLE_NAME', '/^[0-9A-Za-z_\-\.\@\s]+$/');
 define('MATCH_DYN_GROUP_TYPES', '/^(?:host|service)$/');
 define('MATCH_DYN_OBJECT_TYPES', '/^(?:host|service|hostgroup|servicegroup)$/');
 define('MATCH_LIVESTATUS_FILTER', '/^(?:Filter: .*\\\n)+$/i');
+define('MATCH_ZOOM_FACTOR', '/^(?:[0-9]+|fill)$/');
 
 define('MATCH_URI_PART', '/^[a-zA-Z0-9\-_]*$/');
 

@@ -20,6 +20,8 @@ Core:
     user can then modify all the objects, for example change their options
     like, positions and visualisation. 
   * Changed default http_timeout from 10 to 2 seconds
+  * Added new iconset std_area, which can be used to create maps which are
+    visible from a greater distance
 
 Automap:
   * Added "on-demand-filter" header menu to support quick filter mechanism
@@ -39,6 +41,8 @@ Frontend:
   * Summary states of maps can now be displayed in the sidebar menu (must be
     enabled by setting header_show_states=1 in [defaults] section in global
     configuration)
+  * The "zoom" parameter can be configured to "fill" to make the view fill the
+    whole viewport of the browser
   * FIX: Fixed centering of overview tables when opening the sidebar
   * FIX: Fixed mouse pointer confusions when adding a new object and hovering
     another menu which then shows up the hover menu

@@ -90,14 +90,15 @@ function listDynGroupTypes($CORE) {
 
 function listZoomFactors($CORE) {
     return Array(
-        10  => ' 10%',
-        25  => ' 25%',
-        50  => ' 50%',
-        75  => ' 75%',
-        100 => '100%',
-        125 => '125%',
-        150 => '150%',
-        200 => '200%',
+        10     => ' 10%',
+        25     => ' 25%',
+        50     => ' 50%',
+        75     => ' 75%',
+        100    => '100%',
+        125    => '125%',
+        150    => '150%',
+        200    => '200%',
+        'fill' => l('Fill screen'),
     );
 }
 
@@ -682,7 +683,7 @@ $mapConfigVars = Array(
     'zoom' => Array(
         'must'          => 0,
         'default'       => 100,
-        'match'         => MATCH_INTEGER,
+        'match'         => MATCH_ZOOM_FACTOR,
         'field_type'    => 'dropdown',
         'list'          => 'listZoomFactors',
     ),
