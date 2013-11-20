@@ -46,6 +46,7 @@ Frontend:
   * FIX: Fixed centering of overview tables when opening the sidebar
   * FIX: Fixed mouse pointer confusions when adding a new object and hovering
     another menu which then shows up the hover menu
+  * FIX: Ajax request: Not setting headers which are usually set by the browser
 
 1.7.10
 Frontend:
