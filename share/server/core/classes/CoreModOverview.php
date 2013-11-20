@@ -156,7 +156,7 @@ class CoreModOverview extends CoreModule {
         if($type == 'list')
             $mapList = $objects;
         else
-            $mapList = $CORE->getPermittedMaps();
+            $mapList = $CORE->getListMaps();
 
         $aMaps = Array();
         $aObjs = Array();

@@ -439,6 +439,24 @@ class GlobalCore {
         return $list;
     }
 
+    public function getListMaps() {
+        $list = array();
+        $maps = $this->getPermittedMaps();
+        foreach ($maps AS $mapName) {
+            $MAPCFG = new GlobalMapCfg($mapName);
+            $MAPCFG->checkMapConfigExists(true);
+            try {
+                $MAPCFG->readMapConfig(ONLY_GLOBAL);
+            } catch(MapCfgInvalid $e) {
+                continue;
+            }
+            
+            if($MAPCFG->getValue(0, 'show_in_lists') == 1)
+                $list[$mapName] = $mapName;
+        }
+        return $list;
+    }
+
     /**
      * Reads all map images in map path
      *
