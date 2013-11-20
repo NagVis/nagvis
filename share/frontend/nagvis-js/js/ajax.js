@@ -199,6 +199,8 @@ function getAsyncRequest(sUrl, bCacheable, callback, callbackParams) {
 
                 frontendMessageRemove('httpError');
                 frontendMessageRemove('ajaxError');
+
+                var oResponse = null;
                 if(oRequest.responseText.replace(/\s+/g, '').length === 0) {
                     if(bCacheable)
                         updateQueryCache(sUrl, iNow, '');
@@ -211,15 +213,14 @@ function getAsyncRequest(sUrl, bCacheable, callback, callbackParams) {
                     } else {
                         // Handle responses of json objects - including eval and wron response
                         // error handling and clearing
-                        var oResponse = handleJsonResponse(sUrl, responseText);
-
-                        if(oResponse)
-                            callback(oResponse, callbackParams);
-                        oResponse = null;
+                        oResponse = handleJsonResponse(sUrl, responseText);
+                        if(oResponse === '')
+                            oResponse = null;
                     }
-
                     responseText = null;
                 }
+                callback(oResponse, callbackParams);
+                oResponse = null;
             }
         }
 

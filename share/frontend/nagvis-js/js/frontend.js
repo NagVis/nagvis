@@ -1317,12 +1317,12 @@ g_processed_maps = 0;
 /**
  * Adds a single map to the overview map list
  */
-function addOverviewMap(map_conf) {
+function addOverviewMap(map_conf, map_name) {
     g_processed_maps += 1;
 
     // Exit this function on invalid call
     if(map_conf === null || map_conf.length != 1)  {
-        eventlog("worker", "warning", "addOverviewMap: Invalid call - maybe broken ajax response");
+        eventlog("worker", "warning", "addOverviewMap: Invalid call - maybe broken ajax response ("+map_name+")");
         if (g_processed_maps == g_map_names.length)
             finishOverviewMaps();
         return false;
@@ -1452,7 +1452,7 @@ function getOverviewMaps() {
     for (var i = 0, len = g_map_names.length; i < len; i++) {
         getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getObjectStates'
                         + '&i[]=map-' + escapeUrlValues(g_map_names[i]) + getViewParams(),
-                        false, addOverviewMap);
+                        false, addOverviewMap, g_map_names[i]);
     }
 }
 
