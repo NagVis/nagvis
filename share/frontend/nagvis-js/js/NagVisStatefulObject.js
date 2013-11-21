@@ -1003,7 +1003,7 @@ var NagVisStatefulObject = NagVisObject.extend({
     },
 
     getObjLeft: function () {
-        if (this.conf.x.split(',').length > 1) {
+        if (this.conf.x.toString().split(',').length > 1) {
             return Math.min.apply(Math, this.parseCoords(this.conf.x, 'x'));
         } else {
             return this.parseCoord(this.conf.x, 'x');
@@ -1011,7 +1011,7 @@ var NagVisStatefulObject = NagVisObject.extend({
     },
 
     getObjTop: function () {
-        if (this.conf.x.split(',').length > 1) {
+        if (this.conf.x.toString().split(',').length > 1) {
             return Math.min.apply(Math, this.parseCoords(this.conf.y, 'y'));
         } else {
             return this.parseCoord(this.conf.y, 'y');
