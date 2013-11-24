@@ -2040,6 +2040,11 @@ function handleUpdate(o, aParams) {
         return false;
     }
 
+    if (!o) {
+        eventlog("ajax", "info", "handleUpdate: got empty object. Terminating.");
+        return false;
+    }
+
     // Procees the "config changed" responses
     if(isset(o['status']) && o['status'] == 'CHANGED') {
         var oChanged = o['data'];
