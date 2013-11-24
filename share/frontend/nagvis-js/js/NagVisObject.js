@@ -608,6 +608,38 @@ var NagVisObject = Base.extend({
         return false;
     },
 
+    getObjLeft: function () {
+        if (this.conf.x.toString().split(',').length > 1) {
+            return Math.min.apply(Math, this.parseCoords(this.conf.x, 'x'));
+        } else {
+            return this.parseCoord(this.conf.x, 'x');
+        }
+    },
+
+    getObjTop: function () {
+        if (this.conf.x.toString().split(',').length > 1) {
+            return Math.min.apply(Math, this.parseCoords(this.conf.y, 'y'));
+        } else {
+            return this.parseCoord(this.conf.y, 'y');
+        }
+    },
+
+    getObjWidth: function () {
+        var o = document.getElementById(this.conf.object_id + '-icondiv');
+        if(o && o.clientWidth)
+            return parseInt(o.clientWidth);
+        else
+            return 0;
+    },
+
+    getObjHeight: function () {
+        var o = document.getElementById(this.conf.object_id + '-icondiv');
+        if(o && o.clientHeight)
+            return parseInt(o.clientHeight);
+        else
+            return 0;
+    },
+
     /**
      * This method parses a given coordinate which can be a simple integer
      * which is simply returned or a reference to another object and/or

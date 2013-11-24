@@ -986,38 +986,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 	    this.unlockLabel();
     },
 
-    getObjWidth: function () {
-        var o = document.getElementById(this.conf.object_id + '-icondiv');
-        if(o && o.clientWidth)
-            return parseInt(o.clientWidth);
-        else
-            return 0;
-    },
-
-    getObjHeight: function () {
-        var o = document.getElementById(this.conf.object_id + '-icondiv');
-        if(o && o.clientHeight)
-            return parseInt(o.clientHeight);
-        else
-            return 0;
-    },
-
-    getObjLeft: function () {
-        if (this.conf.x.toString().split(',').length > 1) {
-            return Math.min.apply(Math, this.parseCoords(this.conf.x, 'x'));
-        } else {
-            return this.parseCoord(this.conf.x, 'x');
-        }
-    },
-
-    getObjTop: function () {
-        if (this.conf.x.toString().split(',').length > 1) {
-            return Math.min.apply(Math, this.parseCoords(this.conf.y, 'y'));
-        } else {
-            return this.parseCoord(this.conf.y, 'y');
-        }
-    },
-
     parseIconControls: function () {
         // Simply make it dragable. Maybe will be extended in the future...
         makeDragable([this.conf.object_id+'-icondiv'], this.saveObject, this.moveObject);

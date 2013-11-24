@@ -1501,7 +1501,7 @@ function set_fill_zoom_factor() {
     }
 
     var border = 40; // border per side in px * 2
-    var zoom_y = parseInt((pageHeight() - border) / parseFloat(c_bottom) * 100);
+    var zoom_y = parseInt((pageHeight() - border - getHeaderHeight()) / parseFloat(c_bottom) * 100);
     var zoom_x = parseInt((pageWidth() - border)/ parseFloat(c_right) * 100);
     set_zoom(Math.min(zoom_y, zoom_x));
 }
