@@ -440,11 +440,13 @@ class GlobalBackendTest implements GlobalBackendInterface {
         }
 
         $result = Array();
-        foreach($l as $entry) {
-            if($type != 'service') {
-                $result[] = Array('name1' => $entry['name'], 'name2' => $entry['alias']);
+        foreach ($l as $key => $entry) {
+            if ($type == 'host') {
+                $result[] = Array('name1' => $key, 'name2' => $entry[13]);
+            } elseif ($type != 'service') {
+                $result[] = Array('name1' => $key, 'name2' => $entry['alias']);
             } else {
-                $result[] = Array('name1' => $entry['service_description'], 'name2' => $entry['service_description']);
+                $result[] = Array('name1' => $entry[22], 'name2' => $entry[22]);
             }
         }
 
