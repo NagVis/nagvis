@@ -115,7 +115,7 @@ class WuiViewMapAddModify {
         // update is true during view repaint
         // only_inherited is true when only asking for inherited value
         $val = '';
-        $inherited = false;
+        $isInherited = false;
         // Use url given values when there is some and remove it from the attr list.
         // The url values left will be added as hidden attributes to the form later
         if(!$only_inherited && isset($this->attrs[$attr])) {
@@ -130,13 +130,13 @@ class WuiViewMapAddModify {
             // the shown values
             $val = $this->MAPCFG->getSourceParam($attr, true, true);
 
-        } elseif(isset($this->attrs['object_id'])
+        } elseif(!$only_inherited && isset($this->attrs['object_id'])
                  && $this->MAPCFG->getValue($this->attrs['object_id'], $attr, true) !== false) {
             // Get the value set in this object if there is some set
             $val = $this->MAPCFG->getValue($this->attrs['object_id'], $attr, true);
             // In view_param mode this is inherited
             if($this->mode == 'view_params')
-                $inherited = true;
+                $isInherited = true;
 
         } elseif((!$update || $only_inherited) && $this->cloneId !== null
                  && $this->MAPCFG->getValue($this->cloneId, $attr, true) !== false) {
@@ -147,9 +147,9 @@ class WuiViewMapAddModify {
         } elseif(!$must && isset($typeDefaults[$attr])) {
             // Get the inherited value
             $val = $typeDefaults[$attr];
-            $inherited = true;
+            $isInherited = true;
         }
-        return Array($inherited, $val);
+        return Array($isInherited, $val);
     }
 
     /**
@@ -208,7 +208,7 @@ class WuiViewMapAddModify {
                || (isset($prop['deprecated']) && $prop['deprecated'] === true))
                 continue;
 
-            list($inherited, $value) = $this->getAttr($typeDefaults, $update, $propname, $prop['must']);
+            list($isInherited, $value) = $this->getAttr($typeDefaults, $update, $propname, $prop['must']);
             unset($this->hiddenAttrs[$propname]);
 
             // Only add the fields of type hidden which have values
@@ -252,7 +252,7 @@ class WuiViewMapAddModify {
                 $checked = '';
                 // FIXME: In case of the view_params mode the dialog must select and show the user sele
                 //if($this->mode == 'view_params') {
-                if($inherited === false)
+                if($isInherited === false)
                     $checked = ' checked'; 
                 $ret .= '<input type="checkbox" name="toggle_'.$propname.'"'.$checked.' onclick="toggle_option(\''.$propname.'\');'.$onChange.'" value=on />';
             }
@@ -260,7 +260,7 @@ class WuiViewMapAddModify {
             $ret .= '</td><td class=tdfield>';
 
             // Display as text if inherited, otherwise display the input fields
-            if($inherited === false) {
+            if($isInherited === false) {
                 $hideTxt   = ' style="display:none"';
                 $hideField = '';
             } else {
