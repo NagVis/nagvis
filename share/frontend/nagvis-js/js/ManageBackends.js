@@ -126,6 +126,11 @@ function updateBackendOptions(sBackendType, backendId, sFormId) {
 function check_backend_add() {
     var backendType = document.backend_add.backendtype.value;
 
+    if (backendType == '') {
+        alert(_("Backend type not selected. Please choose one."));
+        return false;
+    }
+
     // Merge global backend options with type specific options
     var oOptions;
     oOptions = validMainConfig['backend']['options'][backendType];

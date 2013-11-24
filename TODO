@@ -1,8 +1,6 @@
 This is a small file for storing quick thoughts about new features and needed changes:
 ===============================================================================
 
-Bug: backend_id in global main cfg editierdialog
-
 Offene Punkte:
   - Automap zu source umbauen
     - filter_by_state neu implementieren (Und evtl. auch für alle Ansichten)
