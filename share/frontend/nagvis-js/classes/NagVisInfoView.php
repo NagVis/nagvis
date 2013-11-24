@@ -4,7 +4,7 @@
  * NagVisInfoView.php - Class for handling the rendering of the support
  *                      information page
  *
- * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

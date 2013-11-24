@@ -3,7 +3,7 @@
  * frontend.js - Functions implementing the new ajax frontend with automatic
  *               worker function etc.
  *
- * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

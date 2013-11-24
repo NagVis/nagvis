@@ -2,7 +2,7 @@
  *
  * ManageBackends.js - Functions which are used by the backend management
  *
- * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

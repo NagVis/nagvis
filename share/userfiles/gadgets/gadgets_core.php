@@ -3,7 +3,7 @@
  *
  * gadgets_core.php - Core code for standard gadgets, provides basic functions
  *
- * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

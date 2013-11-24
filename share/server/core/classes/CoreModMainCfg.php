@@ -3,7 +3,7 @@
  *
  * CoreModMainCfg.php - Core Map module to handle ajax requests
  *
- * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

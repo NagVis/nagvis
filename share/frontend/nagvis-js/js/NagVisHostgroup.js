@@ -3,7 +3,7 @@
  * NagVisHostgroup.js - This class handles the visualisation of
  *                      hostgroup objects
  *
- * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

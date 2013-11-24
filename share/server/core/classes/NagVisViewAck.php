@@ -3,7 +3,7 @@
  *
  * NagVisViewAck.php - Class for handling the Ack dialog
  *
- * Copyright (c) 2004-2012 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

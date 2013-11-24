@@ -3,7 +3,7 @@
  *
  * CoreModAction.php - Core module to handle object actions
  *
- * Copyright (c) 2004-2012 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

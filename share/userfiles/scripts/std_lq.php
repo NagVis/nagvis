@@ -4,7 +4,7 @@
  * std_lq.php - Example helper script to query a requested livestatus backend
  *              with a custom livestatus query.
  *
- * Copyright (c) 2004-2012 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

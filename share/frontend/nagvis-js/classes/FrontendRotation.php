@@ -3,7 +3,7 @@
  *
  * FrontendRotation.php - Wrapper class to have rotation handling in nagvis-js
  *
- * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
