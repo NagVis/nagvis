@@ -48,6 +48,7 @@ Frontend:
     another menu which then shows up the hover menu
   * FIX: Ajax request: Not setting headers which are usually set by the browser
   * FIX: Fixed displaying default value in object / global attribute edit dialog
+  * FIX: Fixed dependent attribute update in case of "parent" toggle/untoggle
 
 1.7.10
 Frontend:

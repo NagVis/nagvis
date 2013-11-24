@@ -241,10 +241,19 @@ class WuiViewMapAddModify {
 
             $ret .= '<tr class="'.implode(' ', $rowClasses).'"'.$rowHide.'><td class=tdlabel>'.$propname.'</td><td class=tdbox>';
 
+            $multiple = $fieldType == 'dropdown' && isset($prop['multiple']) && $prop['multiple'];
+
             $onChange = '';
             // Submit the form when an attribute which has dependant attributes is changed
-            if($this->MAPCFG->hasDependants($type, $propname))
+            if($this->MAPCFG->hasDependants($type, $propname)) {
                 $onChange = 'document.getElementById(\'update\').value=\'1\';document.getElementById(\'commit\').click();';
+            }
+            elseif ($onChange == '' && (($multiple && $value !== '<<<multiple>>>')
+                                        || ($type == 'service' && $propname == 'host_name'))) {
+                // If var is backend_id or var is host_name in service objects submit the form
+                // to update the depdant lists.
+                $onChange = 'document.getElementById(\'update\').value=\'1\';document.getElementById(\'commit\').click();';
+            }
             
             // Add a checkbox to toggle the usage of an attribute. But only add it for
             // non-must attributes.
@@ -297,12 +306,6 @@ class WuiViewMapAddModify {
                 break;
                 case 'dropdown':
                     $array    = isset($prop['array']) && $prop['array'];
-                    $multiple = isset($prop['multiple']) && $prop['multiple'];
-                    // If var is backend_id or var is host_name in service objects submit the form
-                    // to update the depdant lists.
-                    if($onChange == '' && (($multiple && $value !== '<<<multiple>>>')
-                       || ($type == 'service' && $propname == 'host_name')))
-                        $onChange = 'document.getElementById(\'update\').value=\'1\';document.getElementById(\'commit\').click();';
 
                     $func = $this->MAPCFG->getListFunc($type, $propname);
                     // Handle case that e.g. host_names can not be fetched from backend by
