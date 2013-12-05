@@ -533,7 +533,7 @@ class CoreBackendMgmt {
             return true;
         }
 
-        if($aCounts[$statusHost]['state'] == 'UP')
+        if($aCounts[$statusHost][STATE] == UP)
             return true;
         else
             return false;
