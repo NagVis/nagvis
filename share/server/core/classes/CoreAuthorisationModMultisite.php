@@ -57,10 +57,11 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
         );
 
         $nagvis_permissions = array(
-            array('*', '*', '*'),
-            array('Map', 'view', '*'),
-            array('Map', 'edit', '*'),
-            array('Map', 'delete', '*'),
+            array('*',        '*',      '*'),
+            array('Map',      'view',   '*'),
+            array('Map',      'edit',   '*'),
+            array('Map',      'delete', '*'),
+            array('Rotation', 'view',   '*'),
         );
 
         # Loop the multisite NagVis related permissions and add them

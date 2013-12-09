@@ -1,5 +1,6 @@
 1.8b2
 Core:
+  * Processing Rotation/view/* permission when using Multisite authorisation
   * FIX: Fixed PHP error when using status hosts in backends
 
 1.8b1
