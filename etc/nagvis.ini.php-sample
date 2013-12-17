@@ -17,7 +17,7 @@
 [global]
 ; Enable/Disable logging of security related user actions in Nagvis. For
 ; example user logins and logouts are logged in var/nagvis-audit.log
-;audit_log="1"
+;audit_log="0"
 ;
 ; Defines the authentication module to use. By default NagVis uses the built-in
 ; SQLite authentication module. On delivery there is no other authentication
