@@ -127,7 +127,7 @@ class CoreLogonMultisite extends CoreLogonModule {
             throw new NagVisException(l('LogonMultisite: Not authenticated.'));
         }
         // FIXME: Get the real path to multisite
-        header('Location:../../../check_mk/login.py?_origtarget=' . $_SERVER['REQUEST_URI']);
+        header('Location:../../../check_mk/login.py?_origtarget=' . urlencode($_SERVER['REQUEST_URI']));
     }
 
     public function check($printErr = true) {

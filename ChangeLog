@@ -2,6 +2,7 @@
 Core:
   * Processing Rotation/view/* permission when using Multisite authorisation
   * FIX: Fixed PHP error when using status hosts in backends
+  * FIX: Encoding _origtarget URL parameter handed over to multisite now
 
 1.8b1
 Core:
