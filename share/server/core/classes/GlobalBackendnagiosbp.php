@@ -174,30 +174,30 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
 
     private function getBPState($state) {
         if($state == null)
-            $state = 'UNKNOWN';
-        return $state;
+            $state = UNKNOWN;
+        return state_num($state);
     }
 
     private function getBPCounts($bp) {
         $c = Array(
-            'PENDING' => Array(
+            PENDING => Array(
                 'normal'   => 0,
             ),
-            'OK' => Array(
+            OK => Array(
                 'normal'   => 0,
                 'downtime' => 0,
             ),
-            'WARNING' => Array(
+            WARNING => Array(
                 'normal'   => 0,
                 'ack'      => 0,
                 'downtime' => 0,
             ),
-            'CRITICAL' => Array(
+            CRITICAL => Array(
                 'normal'   => 0,
                 'ack'      => 0,
                 'downtime' => 0,
             ),
-            'UNKNOWN' => Array(
+            UNKNOWN => Array(
                 'normal'   => 0,
                 'ack'      => 0,
                 'downtime' => 0,
@@ -308,23 +308,67 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
             foreach($bp['components'] AS $comp) {
                 if(isset($comp['service'])) {
                     // Service
-                    $ret[$key][] = Array(
-                        'host_name'           => $comp['host'],
-                        'service_description' => $comp['service'],
-                        'state'               => $this->getBPState($comp['hardstate']),
-                        'output'              => '',
+                    //$ret[$key][] = Array(
+                    //    STATE => $this->getBPState($comp['hardstate']),
+                    //    OUTPUT => '',
+                    //    ALIAS => $comp['host'],
+                    //    DESCRIPTION => $comp['service'],
+                    //);
+                    $ret[$key][] = array(
+                        $this->getBPState($comp['hardstate']),
+                        '',  // output
+                        0,
+                        0,
+                        1,  // state type
+                        1, // current attempt
+                        1, // max check attempts
+                        null,  // last check
+                        null,  // next check
+                        null, // last hard state change
+                        null, // last state change
+                        '', // perfdata
+                        $comp['service'],  // display name
+                        $comp['service'],  // alias
+                        '',  // address
+                        '',  // notes
+                        '', // check command
+                        null,
+                        null, // dt author
+                        null, // dt data
+                        null, // dt start
+                        null, // dt end
+                        $comp['service'] // descr
                     );
                 } else {
                     // BP
-                    $childBP = Array(
-                        'host_name'           => $comp['subprocess'],
-                        'service_description' => $comp['display_name'],
-                        'state'               => $this->getBPState($comp['hardstate']),
-                        'output'              => '',
+                    $childBP = array(
+                        $this->getBPState($comp['hardstate']),
+                        '',  // output
+                        0,
+                        0,
+                        1,  // state type
+                        1, // current attempt
+                        1, // max check attempts
+                        null,  // last check
+                        null,  // next check
+                        null, // last hard state change
+                        null, // last state change
+                        '', // perfdata
+                        $comp['display_name'],  // display name
+                        $comp['display_name'],  // alias
+                        '',  // address
+                        '',  // notes
+                        '', // check command
+                        null,
+                        null, // dt author
+                        null, // dt data
+                        null, // dt start
+                        null, // dt end
+                        $comp['display_name'] // descr
                     );
 
                     if(isset($bps[$comp['subprocess']]['external_info']))
-                        $childBP['output'] = $bps[$comp['subprocess']]['external_info'];
+                        $childBP[OUTPUT] = $bps[$comp['subprocess']]['external_info'];
 
                     $ret[$key][] = $childBP;
                 }
