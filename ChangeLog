@@ -7,6 +7,8 @@ Core:
     (Just for the next stable release - on the later releases it will be dropped)
   * FIX: The NagiosBP backend is now usable again
   * FIX: Fixed host alias attribute in livestatus backend
+  * Dropped the merlinmy backend for the moment as it was not working for a
+    time. Please provide a fixed one if you like to see this working again
 
 1.8b1
 Core:
