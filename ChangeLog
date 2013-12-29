@@ -3,6 +3,9 @@ Core:
   * Processing Rotation/view/* permission when using Multisite authorisation
   * FIX: Fixed PHP error when using status hosts in backends
   * FIX: Encoding _origtarget URL parameter handed over to multisite now
+  * FIX: The NDO backend is now usable again with maps and automaps
+    (Just for the next stable release - on the later releases it will be dropped)
+  * FIX: Fixed host alias attribute in livestatus backend
 
 1.8b1
 Core:
