@@ -655,7 +655,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     $e[11], // last state change
                     $e[13], // perfdata
                     $e[3],  // display name
-                    $e[13], // alias
+                    $e[2], // alias
                     $e[4],  // address
                     $e[5],  // notes
                     $e[18], // check command
