@@ -3,6 +3,12 @@ Core:
   * Processing Rotation/view/* permission when using Multisite authorisation
   * FIX: Fixed PHP error when using status hosts in backends
   * FIX: Encoding _origtarget URL parameter handed over to multisite now
+  * FIX: Fixed PHP errors when acknowleding host/service problems 
+
+Installer:
+  * FIX: Installer uses /etc/apache2/conf-available instead of the old conf.d
+         directory for installing it's apache sample configuration. It is
+         currently not enabled by default. Use "a2enconf nagvis" to enable it.
 
 1.8b1
 Core:

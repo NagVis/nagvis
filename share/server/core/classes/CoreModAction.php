@@ -146,15 +146,17 @@ class CoreModAction extends CoreModule {
 
         // Now send the acknowledgement
         global $_BACKEND, $AUTH;
-        $backendId = $this->MAPCFG->getValue($attrs['object_id'], 'backend_id');
-        $BACKEND = $_BACKEND->getBackend($backendId);
-        $BACKEND->actionAcknowledge(
-            $type, $spec, $attrs['comment'],
-            $attrs['sticky'] == '1',
-            $attrs['notify'] == '1',
-            $attrs['persist'] == '1',
-            $AUTH->getUser()
-        );
+        $backendIds = $this->MAPCFG->getValue($attrs['object_id'], 'backend_id');
+        foreach ($backendIds AS $backendId) {
+            $BACKEND = $_BACKEND->getBackend($backendId);
+            $BACKEND->actionAcknowledge(
+                $type, $spec, $attrs['comment'],
+                $attrs['sticky'] == '1',
+                $attrs['notify'] == '1',
+                $attrs['persist'] == '1',
+                $AUTH->getUser()
+            );
+        }
 
         return l('The command has been sent to the monitoring core. Refreshing in 2 seconds');
     }

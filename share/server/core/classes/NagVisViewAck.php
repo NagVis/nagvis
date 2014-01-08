@@ -37,11 +37,13 @@ class NagVisViewAck {
         $s = '';
 
         global $_BACKEND;
-        $backendId = $this->MAPCFG->getValue($attrs['object_id'], 'backend_id');
-        if(!$_BACKEND->checkBackendFeature($backendId, 'actionAcknowledge', false)) {
-            return '<div class=err>'
-             .l('The requested feature is not available for this backend. The MKLivestatus backend supports this feature.')
-             .'</div>';
+        $backendIds = $this->MAPCFG->getValue($attrs['object_id'], 'backend_id');
+        foreach ($backendIds AS $backendId) {
+            if(!$_BACKEND->checkBackendFeature($backendId, 'actionAcknowledge', false)) {
+                return '<div class=err>'
+                 .l('The requested feature is not available for this backend. The MKLivestatus backend supports this feature.')
+                 .'</div>';
+            }
         }
         
         if($err)

@@ -567,6 +567,7 @@ check_apache_php() {
     DIR=$1
     [ ! -d $DIR ] && return
     WEB_PATH=${DIR%%/}
+    [ -d $DIR/conf-available ]&&WEB_PATH=$WEB_PATH/conf-available
     [ -d $DIR/conf.d ]&&WEB_PATH=$WEB_PATH/conf.d
     
     # The apache user/group are defined by env vars in Ubuntu, set them here

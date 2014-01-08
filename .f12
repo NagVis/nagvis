@@ -11,9 +11,9 @@ $SUDO ./install.sh -a y -q -r -F -c y \
              -W /nagvis -n /usr/local/nagios \
              -i mklivestatus -p /usr/local/nagvis \
              -u www-data -g www-data \
-             -w /etc/apache2/conf.d \
+             -w /etc/apache2/conf-available \
              -l unix:/omd/sites/muc/tmp/run/live
-$SUDO rm -f /etc/apache2/conf.d/nagvis.conf.*
+$SUDO rm -f /etc/apache2/conf-available/nagvis.conf.*
 
 #
 # Install to omd site local/
