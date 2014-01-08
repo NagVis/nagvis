@@ -545,7 +545,6 @@ class GlobalBackendndomy implements GlobalBackendInterface {
             output, perfdata,
             h.notes,
             problem_has_been_acknowledged,
-            statusmap_image,
             UNIX_TIMESTAMP(last_check) AS last_check, UNIX_TIMESTAMP(next_check) AS next_check,
             hs.state_type, hs.current_check_attempt, hs.max_check_attempts, hs.check_command,
             UNIX_TIMESTAMP(dh.scheduled_start_time) AS downtime_start, UNIX_TIMESTAMP(dh.scheduled_end_time) AS downtime_end,
@@ -565,32 +564,14 @@ class GlobalBackendndomy implements GlobalBackendInterface {
             AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=o.object_id)');
 
         while($data = mysql_fetch_assoc($QUERYHANDLE)) {
-            $arrTmpReturn = Array();
-
-            $arrTmpReturn['alias'] = $data['alias'];
-            $arrTmpReturn['display_name'] = $data['display_name'];
-            $arrTmpReturn['address'] = $data['address'];
-            $arrTmpReturn['statusmap_image'] = $data['statusmap_image'];
-            $arrTmpReturn['notes'] = $data['notes'];
-            $arrTmpReturn['check_command'] = $data['check_command'];
-
-            // Add Additional information to array
-            $arrTmpReturn['perfdata'] = $data['perfdata'];
-            $arrTmpReturn['last_check'] = $data['last_check'];
-            $arrTmpReturn['next_check'] = $data['next_check'];
-            $arrTmpReturn['state_type'] = $data['state_type'];
-            $arrTmpReturn['current_check_attempt'] = $data['current_check_attempt'];
-            $arrTmpReturn['max_check_attempts'] = $data['max_check_attempts'];
-            $arrTmpReturn['last_state_change'] = $data['last_state_change'];
-            $arrTmpReturn['last_hard_state_change'] = $data['last_hard_state_change'];
 
             // If there is a downtime for this object, save the data
+            $in_downtime = 0;
+            $dt_details = array(null, null, null, null);
             if(isset($data['downtime_start']) && $data['downtime_start'] != '') {
-                $arrTmpReturn['in_downtime'] = 1;
-                $arrTmpReturn['downtime_start'] = $data['downtime_start'];
-                $arrTmpReturn['downtime_end'] = $data['downtime_end'];
-                $arrTmpReturn['downtime_author'] = $data['downtime_author'];
-                $arrTmpReturn['downtime_data'] = $data['downtime_data'];
+                $in_downtime = 1;
+                $dt_details = array($data['downtime_author'], $data['downtime_data'],
+                                    $data['downtime_start'], $data['downtime_end']);
             }
 
             /**
@@ -606,41 +587,65 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 else
                     $data['current_state'] = $data['last_hard_state'];
 
+            $acknowledged = 0;
+
             if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
-                $arrTmpReturn['state'] = 'UNCHECKED';
-                $arrTmpReturn['output'] = l('hostIsPending', Array('HOST' => $data['name1']));
+                $state = UNCHECKED;
+                $output = l('hostIsPending', Array('HOST' => $data['name1']));
             } elseif($data['current_state'] == '0') {
                 // Host is UP
-                $arrTmpReturn['state'] = 'UP';
-                $arrTmpReturn['output'] = $data['output'];
+                $state = UP;
+                $output = $data['output'];
             } else {
                 // Host is DOWN/UNREACHABLE/UNKNOWN
 
-                // Store acknowledgement state in array
-                $arrTmpReturn['problem_has_been_acknowledged'] = intval($data['problem_has_been_acknowledged']);
+                $acknowledged = intval($data['problem_has_been_acknowledged']);
 
                 // Store state and output in array
                 switch($data['current_state']) {
                     case '1':
-                        $arrTmpReturn['state'] = 'DOWN';
-                        $arrTmpReturn['output'] = $data['output'];
+                        $state = DOWN;
+                        $output = $data['output'];
                     break;
                     case '2':
-                        $arrTmpReturn['state'] = 'UNREACHABLE';
-                        $arrTmpReturn['output'] = $data['output'];
+                        $state = UNREACHABLE;
+                        $output = $data['output'];
                     break;
                     case '3':
-                        $arrTmpReturn['state'] = 'UNKNOWN';
-                        $arrTmpReturn['output'] = $data['output'];
+                        $state = UNKNOWN;
+                        $output = $data['output'];
                     break;
                     default:
-                        $arrTmpReturn['state'] = 'UNKNOWN';
-                        $arrTmpReturn['output'] = 'GlobalBackendndomy::getHostState: Undefined state!';
+                        $state = UNKNOWN;
+                        $output = 'GlobalBackendndomy::getHostState: Undefined state!';
                     break;
                 }
             }
 
-            $arrReturn[$data['name1']] = $arrTmpReturn;
+            $arrReturn[$data['name1']] = array(
+                $state,
+                $output,
+                $acknowledged,
+                $in_downtime,
+                $data['state_type'],
+                $data['current_check_attempt'],
+                $data['max_check_attempts'],
+                $data['last_check'],
+                $data['next_check'],
+                $data['last_hard_state_change'],
+                $data['last_state_change'],
+                $data['perfdata'],
+                $data['display_name'],
+                $data['alias'],
+                $data['address'],
+                $data['notes'],
+                $data['check_command'],
+                null, // custom_vars
+                $dt_details[0], // downtime author
+                $dt_details[1], // downtime comment
+                $dt_details[2], // downtime start
+                $dt_details[3], // downtime end
+            );
         }
 
         // Free memory
@@ -699,30 +704,13 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 $key = $data['name1'];
             }
 
-            $arrTmpReturn['service_description'] = $data['name2'];
-            $arrTmpReturn['display_name'] = $data['display_name'];
-            $arrTmpReturn['alias'] = $data['display_name'];
-            $arrTmpReturn['address'] = $data['address'];
-            $arrTmpReturn['notes'] = $data['notes'];
-            $arrTmpReturn['check_command'] = $data['check_command'];
-
-            // Add additional information to array
-            $arrTmpReturn['perfdata'] = $data['perfdata'];
-            $arrTmpReturn['last_check'] = $data['last_check'];
-            $arrTmpReturn['next_check'] = $data['next_check'];
-            $arrTmpReturn['state_type'] = $data['state_type'];
-            $arrTmpReturn['current_check_attempt'] = $data['current_check_attempt'];
-            $arrTmpReturn['max_check_attempts'] = $data['max_check_attempts'];
-            $arrTmpReturn['last_state_change'] = $data['last_state_change'];
-            $arrTmpReturn['last_hard_state_change'] = $data['last_hard_state_change'];
-
             // If there is a downtime for this object, save the data
+            $in_downtime = 0;
+            $dt_details = array(null, null, null, null);
             if(isset($data['downtime_start']) && $data['downtime_start'] != '') {
-                $arrTmpReturn['in_downtime'] = 1;
-                $arrTmpReturn['downtime_start'] = $data['downtime_start'];
-                $arrTmpReturn['downtime_end'] = $data['downtime_end'];
-                $arrTmpReturn['downtime_author'] = $data['downtime_author'];
-                $arrTmpReturn['downtime_data'] = $data['downtime_data'];
+                $in_downtime = 1;
+                $dt_details = array($data['downtime_author'], $data['downtime_data'],
+                                    $data['downtime_start'], $data['downtime_end']);
             }
 
             /**
@@ -738,13 +726,14 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 else
                     $data['current_state'] = $data['last_hard_state'];
 
+            $acknowledged = 0;
             if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
-                $arrTmpReturn['state'] = 'PENDING';
-                $arrTmpReturn['output'] = l('serviceNotChecked', Array('SERVICE' => $data['name2']));
+                $state = PENDING;
+                $output = l('serviceNotChecked', Array('SERVICE' => $data['name2']));
             } elseif($data['current_state'] == '0') {
                 // Host is UP
-                $arrTmpReturn['state'] = 'OK';
-                $arrTmpReturn['output'] = $data['output'];
+                $state = OK;
+                $output = $data['output'];
             } else {
                 // Host is DOWN/UNREACHABLE/UNKNOWN
 
@@ -753,39 +742,65 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                     * acknowledged => check for acknowledged host
                     */
                 if($data['problem_has_been_acknowledged'] != 1) {
-                    $arrTmpReturn['problem_has_been_acknowledged'] = $this->getHostAckByHostname($data['name1']);
+                    $acknowledged = $this->getHostAckByHostname($data['name1']);
                 } else {
-                    $arrTmpReturn['problem_has_been_acknowledged'] = intval($data['problem_has_been_acknowledged']);
+                    $acknowledged = intval($data['problem_has_been_acknowledged']);
                 }
 
                 // Store state and output in array
                 switch($data['current_state']) {
                     case '1':
-                        $arrTmpReturn['state'] = 'WARNING';
-                        $arrTmpReturn['output'] = $data['output'];
+                        $state = WARNING;
+                        $output = $data['output'];
                     break;
                     case '2':
-                        $arrTmpReturn['state'] = 'CRITICAL';
-                        $arrTmpReturn['output'] = $data['output'];
+                        $state = CRITICAL;
+                        $output = $data['output'];
                     break;
                     case '3':
-                        $arrTmpReturn['state'] = 'UNKNOWN';
-                        $arrTmpReturn['output'] = $data['output'];
+                        $state = UNKNOWN;
+                        $output = $data['output'];
                     break;
                     default:
-                        $arrTmpReturn['state'] = 'UNKNOWN';
-                        $arrTmpReturn['output'] = 'GlobalBackendndomy::getServiceState: Undefined state!';
+                        $state = UNKNOWN;
+                        $output = 'GlobalBackendndomy::getServiceState: Undefined state!';
                     break;
                 }
             }
 
+            $svc = array(
+                $state,
+                $output,
+                $acknowledged,
+                $in_downtime,
+                $data['state_type'],
+                $data['current_check_attempt'],
+                $data['max_check_attempts'],
+                $data['last_check'],
+                $data['next_check'],
+                $data['last_hard_state_change'],
+                $data['last_state_change'],
+                $data['perfdata'],
+                $data['display_name'],
+                $data['display_name'],
+                $data['address'],
+                $data['notes'],
+                $data['check_command'],
+                null, //custom_vars
+                $dt_details[0], // dt author
+                $dt_details[1], // dt data
+                $dt_details[2], // dt start
+                $dt_details[3], // dt end
+                $data['name2']
+            );
+
             if($specific) {
-                $arrReturn[$key] = $arrTmpReturn;
+                $arrReturn[$key] = $svc;
             } else {
                 if(!isset($arrReturn[$key]))
                     $arrReturn[$key] = Array();
 
-                $arrReturn[$key][] = $arrTmpReturn;
+                $arrReturn[$key][] = $svc;
             }
         }
 
@@ -841,26 +856,26 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         $arrReturn = Array();
         while($data = mysql_fetch_assoc($QUERYHANDLE)) {
             $arrReturn[$data['name1']] = Array(
-                'details' => Array('alias' => $data['alias']),
+                //'details' => Array('alias' => $data['alias']),
                 'counts' => Array(
-                    'UNCHECKED' => Array(
+                    PENDING => Array(
                         'normal' => intval($data['pending']),
                     ),
-                    'OK' => Array(
+                    OK => Array(
                         'normal'   => intval($data['ok']),
                         'downtime' => intval($data['ok_downtime']),
                     ),
-                    'WARNING' => Array(
+                    WARNING => Array(
                         'normal'   => intval($data['warning']),
                         'ack'      => intval($data['warning_ack']),
                         'downtime' => intval($data['warning_downtime']),
                     ),
-                    'CRITICAL' => Array(
+                    CRITICAL => Array(
                         'normal'   => intval($data['critical']),
                         'ack'      => intval($data['critical_ack']),
                         'downtime' => intval($data['critical_downtime']),
                     ),
-                    'UNKNOWN' => Array(
+                    UNKNOWN => Array(
                         'normal'   => intval($data['unknown']),
                         'ack'      => intval($data['unknown_ack']),
                         'downtime' => intval($data['unknown_downtime']),
@@ -916,19 +931,19 @@ class GlobalBackendndomy implements GlobalBackendInterface {
             $arrReturn[$data['name1']] = Array(
                 'details' => Array('alias' => $data['alias']),
                 'counts' => Array(
-                    'UNCHECKED' => Array(
+                    UNCHECKED => Array(
                         'normal'    => intval($data['unchecked']),
                     ),
-                    'UP' => Array(
+                    UP => Array(
                         'normal'    => intval($data['up']),
                         'downtime'  => intval($data['up_downtime']),
                     ),
-                    'DOWN' => Array(
+                    DOWN => Array(
                         'normal'    => intval($data['down']),
                         'ack'       => intval($data['down_ack']),
                         'downtime'  => intval($data['down_downtime']),
                     ),
-                    'UNREACHABLE' => Array(
+                    UNREACHABLE => Array(
                         'normal'    => intval($data['unreachable']),
                         'ack'       => intval($data['unreachable_ack']),
                         'downtime'  => intval($data['unreachable_downtime']),
@@ -980,18 +995,18 @@ class GlobalBackendndomy implements GlobalBackendInterface {
             GROUP BY o.object_id');
 
         while($data = mysql_fetch_assoc($QUERYHANDLE)) {
-            $arrReturn[$data['name1']]['counts']['PENDING']['normal']    = intval($data['pending']);
-            $arrReturn[$data['name1']]['counts']['OK']['normal']         = intval($data['ok']);
-            $arrReturn[$data['name1']]['counts']['OK']['downtime']       = intval($data['ok_downtime']);
-            $arrReturn[$data['name1']]['counts']['WARNING']['normal']    = intval($data['warning']);
-            $arrReturn[$data['name1']]['counts']['WARNING']['ack']       = intval($data['warning_ack']);
-            $arrReturn[$data['name1']]['counts']['WARNING']['downtime']  = intval($data['warning_downtime']);
-            $arrReturn[$data['name1']]['counts']['CRITICAL']['normal']   = intval($data['critical']);
-            $arrReturn[$data['name1']]['counts']['CRITICAL']['ack']      = intval($data['critical_ack']);
-            $arrReturn[$data['name1']]['counts']['CRITICAL']['downtime'] = intval($data['critical_downtime']);
-            $arrReturn[$data['name1']]['counts']['UNKNOWN']['normal']    = intval($data['unknown']);
-            $arrReturn[$data['name1']]['counts']['UNKNOWN']['ack']       = intval($data['unknown_ack']);
-            $arrReturn[$data['name1']]['counts']['UNKNOWN']['downtime']  = intval($data['unknown_downtime']);
+            $arrReturn[$data['name1']]['counts'][PENDING]['normal']    = intval($data['pending']);
+            $arrReturn[$data['name1']]['counts'][OK]['normal']         = intval($data['ok']);
+            $arrReturn[$data['name1']]['counts'][OK]['downtime']       = intval($data['ok_downtime']);
+            $arrReturn[$data['name1']]['counts'][WARNING]['normal']    = intval($data['warning']);
+            $arrReturn[$data['name1']]['counts'][WARNING]['ack']       = intval($data['warning_ack']);
+            $arrReturn[$data['name1']]['counts'][WARNING]['downtime']  = intval($data['warning_downtime']);
+            $arrReturn[$data['name1']]['counts'][CRITICAL]['normal']   = intval($data['critical']);
+            $arrReturn[$data['name1']]['counts'][CRITICAL]['ack']      = intval($data['critical_ack']);
+            $arrReturn[$data['name1']]['counts'][CRITICAL]['downtime'] = intval($data['critical_downtime']);
+            $arrReturn[$data['name1']]['counts'][UNKNOWN]['normal']    = intval($data['unknown']);
+            $arrReturn[$data['name1']]['counts'][UNKNOWN]['ack']       = intval($data['unknown_ack']);
+            $arrReturn[$data['name1']]['counts'][UNKNOWN]['downtime']  = intval($data['unknown_downtime']);
         }
 
         // Free memory
@@ -1044,24 +1059,24 @@ class GlobalBackendndomy implements GlobalBackendInterface {
             $arrReturn[$data['name1']] = Array(
                 'details' => Array('alias' => $data['alias']),
                 'counts' => Array(
-                    'PENDING' => Array(
+                    PENDING => Array(
                         'normal'   => intval($data['pending']),
                     ),
-                    'OK' => Array(
+                    OK => Array(
                         'normal'   => intval($data['ok']),
                         'downtime' => intval($data['ok_downtime']),
                     ),
-                    'WARNING' => Array(
+                    WARNING => Array(
                         'normal'   => intval($data['warning']),
                         'ack'      => intval($data['warning_ack']),
                         'downtime' => intval($data['warning_downtime']),
                     ),
-                    'CRITICAL' => Array(
+                    CRITICAL => Array(
                         'normal'   => intval($data['critical']),
                         'ack'      => intval($data['critical_ack']),
                         'downtime' => intval($data['critical_downtime']),
                     ),
-                    'UNKNOWN' => Array(
+                    UNKNOWN => Array(
                         'normal'   => intval($data['unknown']),
                         'ack'      => intval($data['unknown_ack']),
                         'downtime' => intval($data['unknown_downtime']),
@@ -1331,6 +1346,18 @@ class GlobalBackendndomy implements GlobalBackendInterface {
     public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact=false) {
         return $this->getDirectParentNamesByHostName($hostName);
     }
+
+    public function getProgramStart() {
+        $QUERYHANDLE = $this->mysqlQuery('SELECT UNIX_TIMESTAMP(program_start_time) AS program_start '
+                                        .'FROM '.$this->dbPrefix.'programstatus WHERE instance_id='.$this->dbInstanceId);
+        $data = mysql_fetch_array($QUERYHANDLE);
+        mysql_free_result($QUERYHANDLE);
+        if(isset($data[0]))
+            return $data[0];
+        else
+            return -1;
+    }
+
 
 }
 ?>

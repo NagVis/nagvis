@@ -405,26 +405,6 @@ backendtype="ndomy"
 ; path to the cgi-bin of this backend
 ;htmlcgi="/nagios/cgi-bin"
 
-; Example definition of a Merlin backend
-; in this example the ID of the Backend is "merlinmy_1" you can define another ID.
-[backend_merlinmy_1]
-; type of backend - MUST be set
-backendtype="merlinmy"
-; hostname for Merlin db
-;dbhost="localhost"
-; portname for Merlin db
-;dbport=3306
-; database name for Merlin db
-;dbname="merlin"
-; username for Merlin db
-;dbuser="merlin"
-; password for Merlin db
-;dbpass="merlin"
-; maximum delay of the Merlin Database in seconds
-;maxtimewithoutupdate=180
-; path to the cgi-bin of this backend
-;htmlcgi="/nagios/cgi-bin"
-
 ; ----------------------------
 ; Rotation pool definitions
 ; ----------------------------
