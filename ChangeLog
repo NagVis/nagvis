@@ -1,4 +1,7 @@
 1.8b2
+Frontend:
+  * FIX: Fixed warning icon of std_area iconset
+
 Core:
   * Processing Rotation/view/* permission when using Multisite authorisation
   * FIX: Fixed PHP error when using status hosts in backends
