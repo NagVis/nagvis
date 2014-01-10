@@ -13,6 +13,7 @@ Core:
   * Dropped the merlinmy backend for the moment as it was not working for a
     time. Please provide a fixed one if you like to see this working again
   * FIX: Fixed PHP errors when acknowleding host/service problems 
+  * FIX: Fixed missing values alias, display_name, address values in hover templates
 
 Installer:
   * FIX: Installer uses /etc/apache2/conf-available instead of the old conf.d

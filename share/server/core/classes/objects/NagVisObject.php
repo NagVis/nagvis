@@ -314,16 +314,20 @@ class NagVisObject {
                 unset($arr[$this->type.'_name']);
             }
 
-            if(isset($this->alias) && $this->alias != '') {
-                $arr['alias'] = $this->alias;
-            } else {
-                $arr['alias'] = '';
-            }
-
-            if(isset($this->display_name) && $this->display_name != '') {
-                $arr['display_name'] = $this->display_name;
-            } else {
-                $arr['display_name'] = '';
+            if ($this->type == 'host' || $this->type == 'service') {
+                $obj_attrs = array(
+                    'alias'         => ALIAS,
+                    'display_name'  => DISPLAY_NAME,
+                    'address'       => ADDRESS,
+                    'notes'         => NOTES,
+                    'check_command' => CHECK_COMMAND,
+                );
+                foreach ($obj_attrs AS $attr => $state_key) {
+                    if (isset($this->state[$state_key]) && $this->state[$state_key] != '')
+                        $arr[$attr] = $this->state[$state_key];
+                    else
+                        $arr[$attr] = '';
+                }
             }
 
             // Add the custom htmlcgi path for the object

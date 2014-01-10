@@ -57,7 +57,6 @@ class NagVisMapObj extends NagVisStatefulObject {
         $this->MAPCFG = $MAPCFG;
 
         $this->map_name = $this->MAPCFG->getName();
-        $this->alias = $this->MAPCFG->getAlias();
 
         $this->linkedMaps = Array();
         $this->isSummaryObject = false;
@@ -69,6 +68,8 @@ class NagVisMapObj extends NagVisStatefulObject {
         $this->backend_id = $this->MAPCFG->getValue(0, 'backend_id');
 
         parent::__construct();
+
+        $this->state[ALIAS] = $this->MAPCFG->getAlias();
     }
 
     /**

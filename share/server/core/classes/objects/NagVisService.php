@@ -32,23 +32,6 @@ class NagVisService extends NagVisStatefulObject {
     protected static $langType = null;
     protected static $langSelf = null;
 
-    protected $host_name;
-    protected $service_description;
-    protected $alias;
-    protected $display_name;
-    protected $address;
-    protected $notes;
-    protected $check_command;
-
-    protected $perfdata;
-    protected $last_check;
-    protected $next_check;
-    protected $state_type;
-    protected $current_check_attempt;
-    protected $max_check_attempts;
-    protected $last_state_change;
-    protected $last_hard_state_change;
-
     protected $gadget_url;
 
     public function __construct($backend_id, $hostName, $serviceDescription) {
