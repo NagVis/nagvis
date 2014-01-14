@@ -40,7 +40,6 @@ class NagVisMapObj extends NagVisStatefulObject {
     protected $linkedMaps;
 
     protected $map_name;
-    protected $alias;
 
     // When this map object summarizes the state of a map this is true
     // Prevents loops
@@ -70,6 +69,15 @@ class NagVisMapObj extends NagVisStatefulObject {
         parent::__construct();
 
         $this->state[ALIAS] = $this->MAPCFG->getAlias();
+    }
+
+    /**
+     * Special handling for maps, because the alias has been set before
+     */
+    public function setState($arr) {
+        $alias = $this->state[ALIAS];
+        $this->state = $arr;
+        $this->state[ALIAS] = $alias;
     }
 
     /**

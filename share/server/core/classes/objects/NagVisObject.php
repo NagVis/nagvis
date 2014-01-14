@@ -328,6 +328,11 @@ class NagVisObject {
                     else
                         $arr[$attr] = '';
                 }
+            } elseif ($this->type == 'map') {
+                if (isset($this->state[ALIAS]))
+                    $arr['alias'] = $this->state[ALIAS];
+                else
+                    $arr['alias'] = '';
             }
 
             // Add the custom htmlcgi path for the object
