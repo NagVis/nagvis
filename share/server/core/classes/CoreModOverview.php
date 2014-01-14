@@ -48,9 +48,6 @@ class CoreModOverview extends CoreModule {
                 case 'getOverviewProperties':
                     $sReturn = $this->parseIndexPropertiesJson();
                 break;
-                case 'getOverviewMaps':
-                    $sReturn = $this->parseMapsJson('map');
-                break;
                 case 'getOverviewRotations':
                     $sReturn = $this->parseRotationsJson();
                 break;
@@ -68,7 +65,7 @@ class CoreModOverview extends CoreModule {
                             return $result;
                     }
 
-                    $sReturn = $this->parseMapsJson('list', COMPLETE, $aVals['i']);
+                    $sReturn = $this->parseMapsJson(COMPLETE, $aVals['i']);
                 break;
             }
         }
@@ -147,33 +144,21 @@ class CoreModOverview extends CoreModule {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      * FIXME: More cleanups, compacting and extraction of single parts
      */
-    public function parseMapsJson($type, $what = COMPLETE, $objects = Array()) {
+    public function parseMapsJson($what = COMPLETE, $objects = Array()) {
         global $_BACKEND, $CORE;
-        // initial parsing mode: Skip processing when this type of object should not be shown
-        if($type != 'list' && cfg('index', 'showmaps') != 1)
-            return json_encode(Array());
-
-        if($type == 'list')
-            $mapList = $objects;
-        else
-            $mapList = $CORE->getListMaps();
+        $mapList = $objects;
 
         $aMaps = Array();
         $aObjs = Array();
         log_mem('pre');
         foreach($mapList AS $objectId) {
-            if($type == 'list') {
-                $a = explode('-', $objectId, 2);
-                if(!isset($a[1]))
-                    continue;
-                $mapName = $a[1];
-                // list mode: Skip processing when this type of object should not be shown
-                if(cfg('index', 'showmaps') != 1)
-                    continue;
-            } else {
-                $mapName  = $objectId;
-                $objectId = $type . '-' . $mapName;
-            }
+            $a = explode('-', $objectId, 2);
+            if(!isset($a[1]))
+                continue;
+            $mapName = $a[1];
+            // list mode: Skip processing when this type of object should not be shown
+            if(cfg('index', 'showmaps') != 1)
+                continue;
 
             try {
                 $ret = $this->parseMapJson($objectId, $mapName, $what);
@@ -202,11 +187,6 @@ class CoreModOverview extends CoreModule {
                 $aMaps[] = array_merge($aObj[0]->parseJson(), $aObj[1]);
         }
         log_mem('post backend');
-
-        if($type != 'list') {
-            usort($aMaps, Array('GlobalCore', 'cmpAlias'));
-        }
-
         return json_encode($aMaps);
     }
 
