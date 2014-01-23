@@ -669,7 +669,7 @@ var NagVisObject = Base.extend({
         }
 
         if(addZoom === undefined || addZoom === true)
-            return addZoomFactor(coord);
+            return addZoomFactor(coord, true);
         else
             return coord;
     },

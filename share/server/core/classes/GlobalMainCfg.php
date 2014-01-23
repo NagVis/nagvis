@@ -557,6 +557,13 @@ class GlobalMainCfg {
                     'field_type'    => 'boolean',
                     'match'         => MATCH_BOOLEAN
                 ),
+                'zoom_scale_objects' => array(
+                    'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => 1,
+                    'field_type'    => 'boolean',
+                    'match'         => MATCH_BOOLEAN
+                ),
             ),
             'wui' => Array(
                 'allowedforconfig' => Array(
@@ -1967,6 +1974,7 @@ class GlobalMainCfg {
           'path_server'        => $this->getValue('paths','htmlbase').'/server/core/ajax_handler.php',
           'internal_title'     => $this->getValue('internal', 'title'),
           'header_show_states' => $this->getValue('defaults', 'header_show_states'),
+          'zoom_scale_objects' => $this->getValue('defaults', 'zoom_scale_objects'),
         );
 
         // Add custom action configuration

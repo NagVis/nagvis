@@ -235,8 +235,8 @@ function dragObject(event) {
     draggingObject.style.position = 'absolute';
     draggingObject.style.top  = newTop + 'px';
     draggingObject.style.left = newLeft + 'px';
-    draggingObject.x = rmZoomFactor(newLeft);
-    draggingObject.y = rmZoomFactor(newTop);
+    draggingObject.x = rmZoomFactor(newLeft, true);
+    draggingObject.y = rmZoomFactor(newTop, true);
 
     // When this object has a relative coordinated label, then move this too
     moveRelativeObject(draggingObject.id, newTop, newLeft);
@@ -482,8 +482,8 @@ function getEventMousePos(e) {
     // Take the zoom into account. If the map is zoomed this function gathers
     // coordinates where the zoom factor is included. It has to be removed for
     // further processing.
-    posx = rmZoomFactor(posx);
-    posy = rmZoomFactor(posy);
+    posx = rmZoomFactor(posx, true);
+    posy = rmZoomFactor(posy, true);
 
     return [ posx, posy ];
 }

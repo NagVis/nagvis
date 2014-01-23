@@ -1,5 +1,10 @@
 1.8b3
 Frontend:
+  * Added option "zoom_scale_objects" to default section of global config to
+    allow users to control the scaling behaviour of zoomed objects. By 
+    default the whole maps is zoomed like in previous versions. But when 
+    zoom_scale_objects is set to 0, the map objects and labels are not 
+    resized, but only repositioned according to the given zoom factor.
   * FIX: Fixed broken NagVis Multisite sidebar dashlet
 
 Core:

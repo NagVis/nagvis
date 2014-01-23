@@ -1018,7 +1018,7 @@ function setMapBackgroundImage(sImage) {
             document.getElementById('map').appendChild(oImage);
         }
 
-        addZoomHandler(oImage);
+        addZoomHandler(oImage, true);
 
         oImage.src = sImage;
         oImage = null;

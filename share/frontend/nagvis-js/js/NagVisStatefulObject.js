@@ -896,40 +896,37 @@ var NagVisStatefulObject = NagVisObject.extend({
      * to realize the center/bottom coordinate definitions.
      */
     updateLabelPos: function (oLabel) {
-        var x = this.conf.label_x,
-            y = this.conf.label_y;
-
-        if(this.conf.label_x && this.conf.label_x.toString() == 'center') {
-            var diff_x = parseInt(parseInt(oLabel.clientWidth) - rmZoomFactor(this.getObjWidth())) / 2;
-            x = this.parseCoord(this.parseLabelCoord(this.conf.x), 'x', false) - diff_x;
-        }
-
-        if(this.conf.label_y && this.conf.label_y.toString() == 'bottom') {
-            y = this.parseCoord(this.conf.y, 'y', false) + rmZoomFactor(this.getObjHeight());
-        }
-
-        // If there is a presign it should be relative to the objects x/y
-        if(this.conf.label_x && this.conf.label_x.toString().match(/^(?:\+|\-)/))
-            x = this.parseCoord(this.parseLabelCoord(this.conf.x), 'x', false) + parseFloat(this.conf.label_x);
-        if(this.conf.label_y && this.conf.label_y.toString().match(/^(?:\+|\-)/))
-            y = this.parseCoord(this.parseLabelCoord(this.conf.y), 'y', false) + parseFloat(this.conf.label_y);
-
-        // If no x/y coords set, fallback to object x/y
-        if(!this.conf.label_x || this.conf.label_x === '' || this.conf.label_x === '0')
-            x = this.parseCoord(this.parseLabelCoord(this.conf.x), 'x', false);
-        if(!this.conf.label_y || this.conf.label_y === '' || this.conf.label_y === '0')
-            y = this.parseCoord(this.parseLabelCoord(this.conf.y), 'y', false);
-
-        oLabel.style.left = addZoomFactor(x) + 'px';
-        oLabel.style.top  = addZoomFactor(y) + 'px';
+        oLabel.style.left = this.parseLabelCoord('x', oLabel) + 'px';
+        oLabel.style.top  = this.parseLabelCoord('y', oLabel) + 'px';
         oLabel = null;
     },
 
-    parseLabelCoord: function (val) {
-	var k = val.toString().indexOf(",");
-	if (k > 0)
-	    return val.substring(0, k);
-	return val;
+    parseLabelCoord: function (dir, oLabel) {
+        if (dir === 'x') {
+            var coord     = this.conf.label_x;
+            var obj_coord = addZoomFactor(this.parseCoords(this.conf.x, 'x', false)[0], true);
+        } else {
+            var coord     = this.conf.label_y;
+            var obj_coord = addZoomFactor(this.parseCoords(this.conf.y, 'y', false)[0], true);
+        }
+
+        if (dir == 'x' && coord && coord.toString() == 'center') {
+            var diff = parseInt(parseInt(oLabel.clientWidth) - rmZoomFactor(this.getObjWidth())) / 2;
+            coord = obj_coord - diff;
+        } else if (dir == 'y' && coord && coord.toString() == 'bottom') {
+            coord = obj_coord + rmZoomFactor(this.getObjHeight());
+        } else if (coord && coord.toString().match(/^(?:\+|\-)/)) {
+            // If there is a presign it should be relative to the objects x/y
+            coord = obj_coord + addZoomFactor(parseFloat(coord));
+        } else if (!coord || coord === '0') {
+           // If no x/y coords set, fallback to object x/y
+            coord = obj_coord;
+        } else {
+            // This must be absolute coordinates, apply zoom factor
+            coord = addZoomFactor(coord, true);
+        }
+
+        return coord;
     },
 
     /**

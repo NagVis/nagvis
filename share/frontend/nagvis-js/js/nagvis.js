@@ -1291,25 +1291,35 @@ function isZoomed() {
  * Handles the zoom factor of the current view for a single integer which
  * might be a coordinate or a dimension of an object
  */
-function addZoomFactor(coord) {
+function addZoomFactor(coord, forced) {
+    if (typeof(forced) === 'undefined')
+        var forced = false;
+
+    if (!forced && oGeneralProperties.zoom_scale_objects)
+        return parseInt(coord);
+
     return parseInt(coord * getZoomFactor() / 100);
 }
 
-function rmZoomFactor(coord) {
+function rmZoomFactor(coord, forced) {
+    if (typeof(forced) === 'undefined')
+        var forced = false;
+
+    if (!forced && oGeneralProperties.zoom_scale_objects)
+        return parseInt(coord);
+
     return parseInt(coord / getZoomFactor() * 100);
 }
 
-function zoomHandler(event) {
+function zoomHandler(event, obj, forced_zoom) {
     // Another IE specific thing: "this" points to the window element,
     // not the raising object
-    if(this == window) {
+    if(obj == window) {
         if(event.srcElement) {
             var obj = event.srcElement;
         }
-    } else {
-        var obj = this;
     }
-    
+
     if(!obj)
         return false;
 
@@ -1320,8 +1330,8 @@ function zoomHandler(event) {
     // because IE can not tell us anything about the dimensions when
     // the object is not visible
     obj.style.display = 'block';
-    var width  = addZoomFactor(obj.width);
-    var height = addZoomFactor(obj.height);
+    var width  = addZoomFactor(obj.width, forced_zoom);
+    var height = addZoomFactor(obj.height, forced_zoom);
 
     obj.style.display = 'none';
 
@@ -1348,12 +1358,16 @@ function zoomHandler(event) {
  * resizing of the objects.
  * The '.src' attribute must be assigned afterwards
  */
-function addZoomHandler(oImage) {
+function addZoomHandler(oImage, forced_zoom) {
     if(!isZoomed())
         return; // If not zoomed, no handler is needed
+
+    if (typeof(forced_zoom) == 'undefined')
+        var forced_zoom = false;
+
     oImage.style.display = 'none';
 
-    addEvent(oImage, 'load', zoomHandler);
+    addEvent(oImage, 'load', function(event) { zoomHandler(event, this, forced_zoom); });
     oImage = null;
 }
 

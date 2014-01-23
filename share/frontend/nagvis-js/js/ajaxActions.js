@@ -28,8 +28,8 @@ function handleDragResult(objId, anchorId) {
 
 function saveObjectAfterResize(oObj) {
     var objId = oObj.id.split('-')[0];
-    var objX = rmZoomFactor(pxToInt(oObj.style.left));
-    var objY = rmZoomFactor(pxToInt(oObj.style.top));
+    var objX = rmZoomFactor(pxToInt(oObj.style.left), true);
+    var objY = rmZoomFactor(pxToInt(oObj.style.top), true);
     var objW = rmZoomFactor(parseInt(oObj.style.width));
     var objH = rmZoomFactor(parseInt(oObj.style.height));
 
