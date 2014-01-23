@@ -615,7 +615,7 @@ class CoreBackendMgmt {
         } else {
             if($printErr == 1) {
                 throw new NagVisException(l('The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend.',
-                                          Array('FEATURE'     => htmlentities($feature),
+                                          Array('FEATURE'     => htmlentities($feature, ENT_COMPAT, 'UTF-8'),
                                                 'BACKENDID'   => $backendId,
                                                 'BACKENDTYPE' => cfg('backend_'.$backendId,'backendtype'))));
             }
