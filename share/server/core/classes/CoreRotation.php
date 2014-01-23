@@ -52,7 +52,7 @@ class CoreRotation {
         // Check wether the pool is defined
         if(!$this->checkPoolExists()) {
             throw new NagVisException(l('mapRotationPoolNotExists',
-                                      Array('ROTATION' => htmlentities($this->sPoolName))));
+                                      Array('ROTATION' => htmlentities($this->sPoolName, ENT_COMPAT, 'UTF-8'))));
         }
 
         // Trigger the autorization backend to create new rotation permissions when needed
@@ -138,9 +138,9 @@ class CoreRotation {
             $this->setNextStep();
         } else {
             throw new NagVisException(l('The requested step [STEP] of type [TYPE] does not exist in the rotation pool [ROTATION]',
-                                      Array('ROTATION' => htmlentities($this->sPoolName),
-                                            'STEP'     => htmlentities($sStep),
-                                            'TYPE'     => htmlentities($sType))));
+                                      Array('ROTATION' => htmlentities($this->sPoolName, ENT_COMPAT, 'UTF-8'),
+                                            'STEP'     => htmlentities($sStep, ENT_COMPAT, 'UTF-8'),
+                                            'TYPE'     => htmlentities($sType, ENT_COMPAT, 'UTF-8'))));
         }
     }
 

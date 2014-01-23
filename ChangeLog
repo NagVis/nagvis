@@ -1,3 +1,7 @@
+1.7.11
+Core:
+  * FIX: Fixed rare occuring encoding problems of vars in several places 
+
 1.7.10
 Frontend:
   * Weathermap lines now deal with bit/byte values provided by Check_MKs

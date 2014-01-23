@@ -359,7 +359,7 @@ class WuiViewMapAddModify {
                 }
             }
 
-            $ret .= '<span id="_txt_'.$propname.'"'.$hideTxt.'>'.htmlentities($valueTxt).'</span>';
+            $ret .= '<span id="_txt_'.$propname.'"'.$hideTxt.'>'.htmlentities($valueTxt, ENT_COMPAT, 'UTF-8').'</span>';
 
             $ret .= '</td></tr>';
 
