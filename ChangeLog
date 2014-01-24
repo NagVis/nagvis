@@ -9,6 +9,7 @@ Frontend:
 
 Core:
   * FIX: Fixed rare occuring encoding problems of vars in several places 
+  * FIX: Fixed PHP error with map objects linking to not existing maps
 
 1.8b2
 Frontend:

@@ -65,6 +65,8 @@ class NagVisMapObj extends NagVisStatefulObject {
         $this->clearMembers();
 
         $this->backend_id = $this->MAPCFG->getValue(0, 'backend_id');
+        if ($this->backend_id === false)
+            $this->backend_id = array();
 
         parent::__construct();
 
