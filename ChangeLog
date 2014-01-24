@@ -6,10 +6,12 @@ Frontend:
     zoom_scale_objects is set to 0, the map objects and labels are not 
     resized, but only repositioned according to the given zoom factor.
   * FIX: Fixed broken NagVis Multisite sidebar dashlet
+  * FIX: Fixed showing URLs as hover menus (hover_url option)
 
 Core:
   * FIX: Fixed rare occuring encoding problems of vars in several places 
   * FIX: Fixed PHP error with map objects linking to not existing maps
+  * FIX: Trying to workaround broken processing of non UTF-8 pages in hover_urls
 
 1.8b2
 Frontend:

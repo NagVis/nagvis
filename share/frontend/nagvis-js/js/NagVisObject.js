@@ -1096,7 +1096,8 @@ var NagVisObject = Base.extend({
 
     needsHoverMenu: function() {
         return this.conf.hover_menu && this.conf.hover_menu !== '' && this.conf.hover_menu !== '0'
-            && this.conf.hover_template && this.conf.hover_template !== ''
+            && ((this.conf.hover_template && this.conf.hover_template !== '') ||
+                (this.conf.hover_url && this.conf.hover_url !== ''));
     },
 
     needsLink: function() {
