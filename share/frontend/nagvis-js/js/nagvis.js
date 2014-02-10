@@ -1295,7 +1295,7 @@ function addZoomFactor(coord, forced) {
     if (typeof(forced) === 'undefined')
         var forced = false;
 
-    if (!forced && oGeneralProperties.zoom_scale_objects && oGeneralProperties.zoom_scale_objects == 1)
+    if (!forced && oGeneralProperties.zoom_scale_objects && oGeneralProperties.zoom_scale_objects != 1)
         return parseInt(coord);
 
     return parseInt(coord * getZoomFactor() / 100);
@@ -1305,7 +1305,7 @@ function rmZoomFactor(coord, forced) {
     if (typeof(forced) === 'undefined')
         var forced = false;
 
-    if (!forced && oGeneralProperties.zoom_scale_objects && oGeneralProperties.zoom_scale_objects == 1)
+    if (!forced && oGeneralProperties.zoom_scale_objects && oGeneralProperties.zoom_scale_objects != 1)
         return parseInt(coord);
 
     return parseInt(coord / getZoomFactor() * 100);
