@@ -7,6 +7,8 @@ Frontend:
     resized, but only repositioned according to the given zoom factor.
   * FIX: Fixed broken NagVis Multisite sidebar dashlet
   * FIX: Fixed showing URLs as hover menus (hover_url option)
+  * FIX: Coord calculation - better validation in internal code
+    (Thanks to Daniel Albers for the patch)
 
 Core:
   * FIX: Fixed rare occuring encoding problems of vars in several places 
