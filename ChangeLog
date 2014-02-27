@@ -13,6 +13,9 @@ Core:
   * FIX: Fixed PHP error with map objects linking to not existing maps
   * FIX: Trying to workaround broken processing of non UTF-8 pages in hover_urls
 
+Geomap:
+  * FIX: Improved error handling in case of invalid webservice data
+
 1.8b2
 Frontend:
   * FIX: Fixed warning icon of std_area iconset
