@@ -11,6 +11,7 @@ Frontend:
     (Thanks to Daniel Albers for the patch)
 
 Core:
+  * Allowing ~ chars in URLs now (Thanks to Daniel Albers for the patch)
   * FIX: Fixed rare occuring encoding problems of vars in several places 
   * FIX: Fixed PHP error with map objects linking to not existing maps
   * FIX: Trying to workaround broken processing of non UTF-8 pages in hover_urls
