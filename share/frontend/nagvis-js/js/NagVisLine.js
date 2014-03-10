@@ -107,9 +107,6 @@ var NagVisLine = NagVisStatelessObject.extend({
      * FIXME: Eliminate duplicate code with NagVisStatefulObject
      */
     drawLine: function() {
-        var x = this.parseCoords(this.conf.x, 'x');
-        var y = this.parseCoords(this.conf.y, 'y');
-
         var width = addZoomFactor(this.conf.line_width);
         if(width <= 0)
             width = 1; // minimal width for lines
@@ -117,11 +114,8 @@ var NagVisLine = NagVisStatelessObject.extend({
         var colorFill = this.conf.line_color;
         var colorBorder = this.conf.line_color_border;
 
-        // Cuts
-        var cuts = [this.conf.line_cut, this.conf.line_label_pos_in, this.conf.line_label_pos_out];
-
         // Parse the line object
-        drawNagVisLine(this.conf.object_id, this.conf.line_type, cuts, x, y,
+        drawNagVisLine(this.conf.object_id, this.conf.line_type, this.lineCoords(),
                        this.conf.z, width, colorFill, null, null, colorBorder,
                        this.needsLineHoverArea(),
                        (this.conf.line_label_show && this.conf.line_label_show === '1'),

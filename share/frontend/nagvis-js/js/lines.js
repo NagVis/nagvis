@@ -247,7 +247,11 @@ function drawSimpleLine(objectId, num, x1, y1, x2, y2, z, w, colorFill, colorBor
 }
 
 // This function is being called by NagVis for drawing the lines
-function drawNagVisLine(objectId, lineType, cuts, x, y, z, width, colorFill, colorFill2, perfdata, colorBorder, bLinkArea, bLabelShow, yOffset) {
+function drawNagVisLine(objectId, lineType, lineCoords, z, width, colorFill, colorFill2, perfdata, colorBorder, bLinkArea, bLabelShow, yOffset) {
+    var x    = lineCoords[0];
+    var y    = lineCoords[1];
+    var cuts = lineCoords[2];
+
     // Convert all coords to int
     for(var i = 0; i < x.length; i++) {
         x[i] = parseInt(x[i], 10);

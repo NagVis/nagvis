@@ -471,9 +471,6 @@ var NagVisStatefulObject = NagVisObject.extend({
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     drawLine: function() {
-        var x = this.parseCoords(this.conf.x, 'x');
-        var y = this.parseCoords(this.conf.y, 'y');
-
         var width = addZoomFactor(this.conf.line_width);
         if(width <= 0)
             width = 1; // minimal width for lines
@@ -588,11 +585,8 @@ var NagVisStatefulObject = NagVisObject.extend({
             colorFill = lightenColor(colorFill, 100, 100, 100);
         }
 
-        // Cuts
-        var cuts = [this.conf.line_cut, this.conf.line_label_pos_in, this.conf.line_label_pos_out];
-
         // Parse the line object
-        drawNagVisLine(this.conf.object_id, this.conf.line_type, cuts, x, y,
+        drawNagVisLine(this.conf.object_id, this.conf.line_type, this.lineCoords(),
                        this.conf.z, width, colorFill, colorFill2, setPerfdata, colorBorder,
                        this.needsLineHoverArea(),
                        (this.conf.line_label_show && this.conf.line_label_show === '1'),
@@ -903,11 +897,20 @@ var NagVisStatefulObject = NagVisObject.extend({
 
     parseLabelCoord: function (dir, oLabel) {
         if (dir === 'x') {
-            var coord     = this.conf.label_x;
-            var obj_coord = addZoomFactor(this.parseCoords(this.conf.x, 'x', false)[0], true);
+            var coord = this.conf.label_x;
+
+            if (this.conf.view_type && this.conf.view_type == 'line') {
+                var obj_coord = this.getLineMid(this.conf.x, 'x');
+            } else {
+                var obj_coord = addZoomFactor(this.parseCoords(this.conf.x, 'x', false)[0], true);
+            }
         } else {
-            var coord     = this.conf.label_y;
-            var obj_coord = addZoomFactor(this.parseCoords(this.conf.y, 'y', false)[0], true);
+            var coord = this.conf.label_y;
+            if (this.conf.view_type && this.conf.view_type == 'line') {
+                var obj_coord = this.getLineMid(this.conf.y, 'y');
+            } else {
+                var obj_coord = addZoomFactor(this.parseCoords(this.conf.y, 'y', false)[0], true);
+            }
         }
 
         if (dir == 'x' && coord && coord.toString() == 'center') {

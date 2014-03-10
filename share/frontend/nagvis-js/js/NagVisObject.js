@@ -1182,6 +1182,14 @@ var NagVisObject = Base.extend({
             return this.parseCoords(coord, dir)[1];
     },
 
+    lineCoords: function() {
+        return [
+            this.parseCoords(this.conf.x, 'x'),
+            this.parseCoords(this.conf.y, 'y'),
+            [this.conf.line_cut, this.conf.line_label_pos_in, this.conf.line_label_pos_out]
+        ];
+    },
+
     removeControls: function() {
         var oControls = document.getElementById(this.conf.object_id+'-controls');
         if(oControls)
