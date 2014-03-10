@@ -455,14 +455,14 @@ function getEventMousePos(e) {
 
     // Only accept "left" mouse clicks
     if(getButton(event) != 'LEFT')
-        return;
+        return null;
 
     // Ignore clicks on the header menu
     if(event.target) {
         var target = event.target;
         while(target) {
             if(target.id && target.id == 'header') {
-                return;
+                return false;
             }
             target = target.parentNode;
         }
@@ -488,11 +488,31 @@ function getEventMousePos(e) {
     return [ posx, posy ];
 }
 
+function stop_adding() {
+    if(document.body)
+        document.body.style.cursor = 'default';
+
+    addObjType  = null,
+    addViewType = null,
+    addNumLeft  = null,
+    addAction   = null,
+    addX        = [],
+    addY        = [],
+    addFollow   = false,
+    addShape    = null;
+}
+
 function addClick(e) {
     if(!adding())
         return;
 
     var pos = getEventMousePos(e);
+    if (pos === false) {
+        // abort adding when clicking on the header
+        stop_adding();
+        return;
+    }
+        
     addX.push(pos[0] - getSidebarWidth());
     addY.push(pos[1]);
     addNumLeft -= 1;
@@ -516,9 +536,6 @@ function addClick(e) {
     //
     // If this is reached all object coords have been collected
     //
-
-    if(document.body)
-        document.body.style.cursor = 'default';
 
     if(addObjType == 'textbox' || addObjType == 'container') {
         var w = addX.pop();
@@ -555,14 +572,7 @@ function addClick(e) {
     showFrontendDialog(sUrl, _('Create Object'));
     sUrl = '';
 
-    addObjType  = null,
-    addViewType = null,
-    addNumLeft  = null,
-    addAction   = null,
-    addX        = [],
-    addY        = [],
-    addFollow   = false,
-    addShape    = null;
+    stop_adding();
 }
 
 function adding() {
@@ -571,7 +581,7 @@ function adding() {
 
 function addFollowing(e) {
     if(!addFollow)
-    return;
+        return;
 
     var pos = getEventMousePos(e);
 

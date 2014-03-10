@@ -10,6 +10,7 @@ Frontend:
   * FIX: Coord calculation - better validation in internal code
     (Thanks to Daniel Albers for the patch)
   * FIX: Add/Modify dialog: scroll to top of page on submission
+  * FIX: Add object: Stop adding an object when clicking on header menu
 
 Core:
   * Allowing ~ chars in URLs now (Thanks to Daniel Albers for the patch)
