@@ -9,6 +9,7 @@ Frontend:
   * FIX: Fixed showing URLs as hover menus (hover_url option)
   * FIX: Coord calculation - better validation in internal code
     (Thanks to Daniel Albers for the patch)
+  * FIX: Add/Modify dialog: scroll to top of page on submission
 
 Core:
   * Allowing ~ chars in URLs now (Thanks to Daniel Albers for the patch)

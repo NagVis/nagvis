@@ -410,8 +410,9 @@ class CoreModMap extends CoreModule {
                 $MAPCFG->updateElement($objId, $attrs, true);
             }
 
+            $t = $type == 'global' ? l('map configuration') : $type;
             $successMsg = array(2, '', l('The [TYPE] has been modified. Reloading in 2 seconds.',
-                                                               Array('TYPE' => $type)));
+                                                               Array('TYPE' => $t)));
         } else {
             // Create the new object
             $type  = $attrs['type'];
@@ -428,6 +429,9 @@ class CoreModMap extends CoreModule {
         // delete map lock
         if(!$MAPCFG->deleteMapLock())
             throw new NagVisException(l('mapLockNotDeleted'));
+
+        // On success, always scroll to top of page
+        $successMsg[2] .= '<script type="text/javascript">document.body.scrollTop = document.documentElement.scrollTop = 0;</script>';
 
         return $successMsg;
     }

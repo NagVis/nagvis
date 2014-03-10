@@ -109,8 +109,6 @@ Relative Koordinaten:
 
 - SQLite/MySQL Handling/Update abstrahieren und wesentliche Dinge an zentraler Stelle definieren
 
-- NagVis Multisite Snapin optional als Baum
-
 - Backends:
  - Zusätzlich beliebige Variablen vom Backend holen lassen
    Pro Objekt "Custom Vars" für Context- und Hover-Menus einbauen. Diese werden dann pro Objekt
