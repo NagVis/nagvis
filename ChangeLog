@@ -1,4 +1,5 @@
 1.8b4
+  * FIX: Custom context actions: Conditions, e.g. filtering by custom vars, did not work
 
 1.8b3
 Frontend:

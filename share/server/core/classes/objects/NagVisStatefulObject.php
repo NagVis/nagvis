@@ -340,6 +340,7 @@ class NagVisStatefulObject extends NagVisObject {
 
         // Macros which are only for services and hosts
         if($this->type == 'host' || $this->type == 'service') {
+            $arr['custom_variables'] = val($this->state, CUSTOM_VARS);
             $arr['downtime_author'] = val($this->state, DOWNTIME_AUTHOR);
             $arr['downtime_data']   = val($this->state, DOWNTIME_DATA);
             $arr['downtime_start']  = val($this->state, DOWNTIME_START);
