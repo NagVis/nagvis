@@ -48,7 +48,6 @@ var NagVisTextbox = NagVisStatelessObject.extend({
         // Create container div
         oContainerDiv = document.createElement('div');
         oContainerDiv.setAttribute('id', this.conf.object_id);
-        this.parseTextbox(oContainerDiv);
 
         // When this is an update, remove the object first
         this.remove();
@@ -58,6 +57,8 @@ var NagVisTextbox = NagVisStatelessObject.extend({
             this.parsedObject = oMap.appendChild(oContainerDiv);
             oMap = null;
         }
+
+        this.parseTextbox(oContainerDiv);
         oContainerDiv = null;
 
         // Enable the controls when the object is not locked

@@ -1,5 +1,7 @@
 1.8b4
+Frontend:
   * FIX: Custom context actions: Conditions, e.g. filtering by custom vars, did not work
+  * FIX: Fixed zoom of text in textbox objects in chrome
 
 1.8b3
 Frontend:
