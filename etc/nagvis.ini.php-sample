@@ -287,6 +287,11 @@
 ;label_show=0
 ; Configure the colors used by weathermap lines
 ;line_weather_colors="10:#8c00ff,25:#2020ff,40:#00c0ff,55:#00f000,70:#f0f000,85:#ffc000,100:#ff0000"
+; Show mouse controllable elements for zooming the maps at the upper left corner of the map
+;zoombar=0
+; Enables scaling of the objects (icons, texts, lines, ...) when zooming the map. This can be disabled
+; to have the objects remain at the same size during zooming
+;zoom_scale_objects=1
 
 ; Options to configure the Overview page of NagVis
 [index]
