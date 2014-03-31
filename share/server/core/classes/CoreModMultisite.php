@@ -103,22 +103,35 @@ class CoreModMultisite extends CoreModule {
             switch($map['summary_state']) {
                 case 'OK':
                 case 'UP':
-                    $state = 0;
+                    $state = '0';
                     break;
                 case 'WARNING':
-                    $state = 1;
+                    $state = '1';
                     break;
                 case 'CRITICAL':
                 case 'DOWN':
                 case 'UNREACHABLE':
-                    $state = 2;
+                    $state = '2';
                     break;
                 default:
-                    $state = 3;
+                    $state = '3';
                     break;
             }
+
+            $title = $map['summary_state'];
+
+            if ($map['summary_in_downtime']) {
+                $state .= ' stated';
+                $title .= ' (Downtime)';
+            }
+            elseif ($map['summary_problem_has_been_acknowledged']) {
+                $state .= ' statea';
+                $title .= ' (Acknowledged)';
+            }
+
+
             $code .= '<tr><td>';
-            $code .= '<div class="statebullet state'.$state.'">&nbsp;</div>';
+            $code .= '<div class="statebullet state'.$state.'" title="'.$title.'">&nbsp;</div>';
             $code .= '<a href="'.cfg('paths', 'htmlbase').'/index.php?mod=Map&act=view&show='.$map['name'].'" ';
             $code .= 'class="link" target="main">'.$map['alias'].'</a>';
             $code .= '</td></tr>';

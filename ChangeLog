@@ -1,5 +1,6 @@
 1.8b4
 Frontend:
+  * Multisite snapin now transports downtime / acknowledgement information
   * FIX: Custom context actions: Conditions, e.g. filtering by custom vars, did not work
   * FIX: Fixed zoom of text in textbox objects in chrome
   * FIX: Not altering relative object coordinates when zoom_scale_objects is
