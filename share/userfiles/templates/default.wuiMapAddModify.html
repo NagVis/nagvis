@@ -2,9 +2,11 @@
 
 {if $successMsg != ''}<div class=success>{$successMsg}</div>
 <script type="text/javascript">
+document.getElementById('commit').disabled = true;
 window.setTimeout(function() \{ window.location.reload(); }, {$reloadTime}*1000);
 </script>
 {elseif $addParams != '' && $addParams != '{}'}<script type="text/javascript">
+document.getElementById('commit').disabled = true;
 window.setTimeout(function() \{ window.location.href = makeuri({$addParams}); }, {$reloadTime}*1000);
 </script>{/if}
 

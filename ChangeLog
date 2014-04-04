@@ -5,6 +5,7 @@ Frontend:
   * FIX: Fixed zoom of text in textbox objects in chrome
   * FIX: Not altering relative object coordinates when zoom_scale_objects is
   disabled
+  * FIX: Disabling save button during adding new objects to prevent double adding
 
 1.8b3
 Frontend:
