@@ -6,6 +6,7 @@ Frontend:
   * FIX: Not altering relative object coordinates when zoom_scale_objects is
   disabled
   * FIX: Disabling save button during adding new objects to prevent double adding
+  * FIX: Roles can not be deleted when used by users
 
 1.8b3
 Frontend:

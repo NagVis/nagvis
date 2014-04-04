@@ -115,6 +115,7 @@ class CoreModRoleMgmt extends CoreModule {
     }
 
     private function handleResponseDelete() {
+        global $AUTHORISATION;
         $bValid = true;
 
         // Check for needed params
@@ -128,7 +129,11 @@ class CoreModRoleMgmt extends CoreModule {
         // Parse the specific options
         $roleId = intval($this->FHANDLER->get('roleId'));
 
-        // FIXME: Check not to delete any referenced role
+        // Check not to delete any referenced role
+        $usedBy = $AUTHORISATION->roleUsedBy($roleId);
+        if($bValid && count($usedBy) > 0)
+            throw new NagVisException(l('Not deleting this role, the role is in use by the users [U].',
+                                    array('U' => implode(', ', $usedBy))));
 
       // Store response data
       if($bValid === true)

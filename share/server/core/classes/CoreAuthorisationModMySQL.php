@@ -81,6 +81,18 @@ class CoreAuthorisationModMySQL extends CoreAuthorisationModule {
         }
     }
 
+    public function roleUsedBy($roleId) {
+        $RES = $this->DB->query(
+            'SELECT users2roles.userId AS userId, users.name AS name '.
+            'FROM users2roles LEFT JOIN users ON users2roles.userId=users.userId WHERE roldeId='.$this->DB->escape($roleId));
+        $users = array();
+        while($data = $this->DB->fetchAssoc($RES)) {
+            $users[] = $data['name'];
+        }
+
+        return $users;
+    }
+
     public function deleteRole($roleId) {
         // Delete user
         $this->DB->query('DELETE FROM roles WHERE roleId='.$this->DB->escape($roleId));

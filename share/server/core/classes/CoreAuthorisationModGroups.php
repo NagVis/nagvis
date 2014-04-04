@@ -204,6 +204,10 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule {
         return false;
     }
 
+    public function roleUsedBy($roleId) {
+        return false;
+    }
+
     public function deleteRole($roleId) {
         return false;
     }

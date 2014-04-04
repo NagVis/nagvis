@@ -130,6 +130,10 @@ class CoreAuthorisationHandler {
         return $this->MOD->deleteRole($roleId);
     }
 
+    public function roleUsedBy($roleId) {
+        return $this->MOD->roleUsedBy($roleId);
+    }
+
     public function deleteUser($userId) {
         // FIXME: First check if this is supported
 

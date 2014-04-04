@@ -78,6 +78,19 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
         }
     }
 
+    public function roleUsedBy($roleId) {
+        $RES = $this->DB->query(
+            'SELECT users.name AS name FROM users2roles '.
+            'LEFT JOIN users ON users2roles.userId=users.userId '.
+            'WHERE users2roles.roleId='.$this->DB->escape($roleId));
+        $users = array();
+        while($data = $this->DB->fetchAssoc($RES)) {
+            $users[] = $data['name'];
+        }
+
+        return $users;
+    }
+
     public function deleteRole($roleId) {
         // Delete user
         $this->DB->exec('DELETE FROM roles WHERE roleId='.$this->DB->escape($roleId));
