@@ -197,21 +197,24 @@ class CoreModUserMgmt extends CoreModule {
         // Check for needed params
         if($bValid && !$this->FHANDLER->isSetAndNotEmpty('userId'))
             $bValid = false;
-        if($bValid && !$this->FHANDLER->isSetAndNotEmpty('rolesSelected'))
-            $bValid = false;
 
         // Regex validate
         if($bValid && !$this->FHANDLER->match('userId', MATCH_INTEGER))
             $bValid = false;
-        if($bValid && !$this->FHANDLER->match('rolesSelected', MATCH_INTEGER))
+        if($bValid && $this->FHANDLER->isSetAndNotEmpty('rolesSelected')
+           && !$this->FHANDLER->match('rolesSelected', MATCH_INTEGER))
             $bValid = false;
 
         // Parse the specific options
         $userId = intval($this->FHANDLER->get('userId'));
 
+        $roles = $this->FHANDLER->get('rolesSelected');
+        if ($roles === NULL)
+            $roles = array();
+
         // Store response data
         if($bValid === true)
-            return Array('userId' => $userId, 'roles' => $this->FHANDLER->get('rolesSelected'));
+            return Array('userId' => $userId, 'roles' => $roles);
         else
             return false;
     }

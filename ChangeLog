@@ -7,6 +7,7 @@ Frontend:
   disabled
   * FIX: Disabling save button during adding new objects to prevent double adding
   * FIX: Roles can not be deleted when used by users
+  * FIX: Last assigned role can now be removed from a user
 
 1.8b3
 Frontend:
