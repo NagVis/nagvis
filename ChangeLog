@@ -9,6 +9,9 @@ Frontend:
   * FIX: Roles can not be deleted when used by users
   * FIX: Last assigned role can now be removed from a user
 
+Automap:
+  * FIX: Removed debug code which might prevent map rendering in some cases
+
 1.8b3
 Frontend:
   * Added option "zoom_scale_objects" to default section of global config to
