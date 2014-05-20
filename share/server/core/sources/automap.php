@@ -234,9 +234,9 @@ function automap_hostnames_to_object_ids($names) {
     foreach($names AS $name) {
         if(isset($automap_object_ids[$name])) {
             $ids[] = $automap_object_ids[$name];
-        } else {
+        }/* else {
             echo 'DEBUG: Missing automap objid '.$name;
-        }
+        }*/
     }
     return $ids;
 }
