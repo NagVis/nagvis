@@ -41,7 +41,6 @@ var NagVisRotation = NagVisStatelessObject.extend({
         oTd.rowSpan = this.conf.num_steps;
 
         var url = this.conf.url;
-
         oTd.onclick = function() {
             location.href = url;
         };
@@ -75,11 +74,11 @@ var NagVisRotation = NagVisStatelessObject.extend({
             oTd = document.createElement('td');
             oTd.width = '250px';
 
-            var sUrl = this.conf.steps[i].url;
-
-            oTd.onclick = function() {
-                location.href = sUrl;
-            };
+            oTd.onclick = function(url) {
+                return function() {
+                    location.href = url;
+                }
+            }(this.conf.steps[i].url);
 
             oTd.onmouseover = function() {
                 this.style.cursor = 'pointer';

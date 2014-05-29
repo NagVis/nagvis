@@ -1,4 +1,6 @@
 1.8b5
+Frontend:
+  * FIX: Fixed links of rotation steps (always linking to last step)
 
 1.8b4
 Frontend:
