@@ -163,6 +163,15 @@
 ; visit. If a session is idle for more time than configured here it will become
 ; invalid.
 ;sesscookieduration="86400"
+; Most modern browsers will deny javascript access to cookies if the HttpOnly
+; flag is set. This prevents XSS attacks from stealing cookies. Default is off
+; to not break any existing installations that rely on this functionality. Set
+; to 1 to enable.
+;sesscookiehttponly=0
+; Most modern browsers will prevent cookies from being sent unencrypted if the
+; Secure flag is set. Default is off since not all Nagvis installations require
+; HTTPS. Set to 1 to enable.
+;sesscookiesecure=0
 ;
 ; Start page to redirect the user to when first visiting NagVis without
 ; special parameters.

@@ -34,6 +34,8 @@ class CoreSessionHandler {
         $sDomain   = cfg('global', 'sesscookiedomain');
         $sPath     = cfg('global', 'sesscookiepath');
         $iDuration = cfg('global', 'sesscookieduration');
+        $bSecure   = cfg('global', 'sesscookiesecure');
+        $bHTTPOnly = cfg('global', 'sesscookiehttponly');
 
         // Set the session name (used in params/cookie names)
         session_name(SESSION_NAME);
@@ -49,7 +51,7 @@ class CoreSessionHandler {
             $sDomain = null;
 
         // Set custom params for the session cookie
-        session_set_cookie_params(0, $sPath, $sDomain);
+        session_set_cookie_params(0, $sPath, $sDomain, $bSecure, $bHTTPOnly);
 
         // Start a session for the user when not started yet
         if(!isset($_SESSION)) {
@@ -78,7 +80,7 @@ class CoreSessionHandler {
             // the half of the expiration time has passed
             if(time() >= $this->get('sessionExpires') - ($iDuration/2)) {
                 $exp = time() + $iDuration;
-                setcookie(SESSION_NAME, $_COOKIE[SESSION_NAME], $exp, $sPath, $sDomain);
+                setcookie(SESSION_NAME, $_COOKIE[SESSION_NAME], $exp, $sPath, $sDomain, $bSecure, $bHTTPOnly);
 
                 // Store the update time of the session cookie
                 $this->set('sessionExpires', $exp);

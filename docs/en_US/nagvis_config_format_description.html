@@ -226,6 +226,12 @@
         <td>sesscookieduration</td><td>86400</td><td>Lifetime of the NagVis session cookie in seconds. The default value is set to 24 hours. The value of the NagVis session cookie contains will be renewed on every page visit. If a session is idle for more time than configured here it will become invalid.</td>
         </tr>
         <tr>
+			<td>sesscookiehttponly</td><td>0</td><td>Most modern browsers will deny javascript access to cookies if the HttpOnly flag is set. This prevents XSS attacks from stealing cookies. Default is off to not break any existing installations that rely on this functionality. Set to 1 to enable.</td>
+        </tr>
+        <tr>
+			<td>sesscookiesecure</td><td>0</td><td>Most modern browsers will prevent cookies from being sent unencrypted if the Secure flag is set. Default is off since not all Nagvis installations require HTTPS. Set to 1 to enable.</td>
+        </tr>
+        <tr>
         <td>startmodule</td><td>overview</td><td>The default module to show when none is given by the user</td>
         </tr>
         <tr>
