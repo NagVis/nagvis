@@ -34,8 +34,8 @@ class CoreSessionHandler {
         $sDomain   = cfg('global', 'sesscookiedomain');
         $sPath     = cfg('global', 'sesscookiepath');
         $iDuration = cfg('global', 'sesscookieduration');
-        $bSecure   = cfg('global', 'sesscookiesecure');
-        $bHTTPOnly = cfg('global', 'sesscookiehttponly');
+        $bSecure   = cfg('global', 'sesscookiesecure') == 1;
+        $bHTTPOnly = cfg('global', 'sesscookiehttponly') == 1;
 
         // Set the session name (used in params/cookie names)
         session_name(SESSION_NAME);

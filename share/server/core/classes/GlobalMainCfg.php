@@ -273,18 +273,20 @@ class GlobalMainCfg {
                     'editable'    => 1,
                     'default'     => '86400',
                     'match'       => MATCH_STRING),
-				'sesscookiesecure' => Array(
-					'must' => 0,
-                    'editable' => 1,
-                    'default' => '0',
-					'match' => MATCH_BOOLEAN
-				),
-				'sesscookiehttponly' => Array(
-					'must' => 0,
-                    'editable' => 1,
-                    'default' => '0',
-					'match' => MATCH_BOOLEAN
-				),
+                'sesscookiesecure' => Array(
+                    'must'        => 0,
+                    'editable'    => 1,
+                    'default'     => 0,
+                    'field_type'  => 'boolean',
+                    'match'       => MATCH_BOOLEAN
+                ),
+                'sesscookiehttponly' => Array(
+                    'must'        => 0,
+                    'editable'    => 1,
+                    'default'     => 0,
+                    'field_type'  => 'boolean',
+                    'match'       => MATCH_BOOLEAN
+                ),
                 'shinken_features' => Array('must' => 1,
                     'editable'    => 1,
                     'default'     => '0',
