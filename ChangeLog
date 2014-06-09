@@ -4,6 +4,7 @@ Frontend:
     (Thanks to mikael.falkvidd@op5.com for the patch)
   * FIX: Fixed links of rotation steps (always linking to last step)
   * FIX: Hiding empty "Action" header menu entry on overview page
+  * FIX: Trying to fix too long map list in dropdown menu (menu is scrollable now)
 
 Core:
   * FIX: Deleting no longer required map permission entries (e.g. of maps deleted

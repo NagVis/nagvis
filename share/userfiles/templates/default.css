@@ -685,6 +685,8 @@ td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 .subdropdown .topline {border-top:1px solid #a4a4a4}
 .subdropdown .underline {border-bottom:1px solid #a4a4a4}
 
+.dropdown ul#views-ddcontent {max-height:690px;overflow-y:auto;overflow-x:hidden}
+
 /* Styling for the sidebar */
 #sidebar {position:relative;top:0;left:0;float:left;min-height:100%;width:200px;z-index:99;display:none;background-color:#eaf0f2;text-decoration:none;font-size:0.6em;padding-top:10px;border-right:1px solid #a4a4a4;padding-top:32px;}
 #sidebar ul {margin:0;padding:0;display:block;list-style:none}
