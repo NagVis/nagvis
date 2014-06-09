@@ -38,6 +38,11 @@ class NagVisViewManageRoles {
         $TMPL = New CoreTemplateSystem($CORE);
         $TMPLSYS = $TMPL->getTmplSys();
 
+        // Delete permissions, which are not needed anymore when opening the
+        // "manage roles" dialog. This could be done during usual page
+        // processing, but would add overhead which is not really needed.
+        $AUTHORISATION->cleanupPermissions();
+
         $aData = Array(
             'htmlBase' => cfg('paths', 'htmlbase'),
             'formTargetAdd' => cfg('paths','htmlbase').'/server/core/ajax_handler.php?mod=RoleMgmt&amp;act=doAdd',

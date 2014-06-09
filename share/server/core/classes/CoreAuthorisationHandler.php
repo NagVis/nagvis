@@ -162,6 +162,20 @@ class CoreAuthorisationHandler {
         return strcmp($a['mod'].$a['obj'].$a['act'], $b['mod'].$b['obj'].$b['act']);
     }
 
+    public function cleanupPermissions() {
+        global $CORE;
+
+        // loop all map related permissions and check whether or not the map
+        // is still available
+        foreach ($this->getAllVisiblePerms() AS $perm) {
+            if ($perm['mod'] == 'Map' && $perm['obj'] != '*') {
+                if(count($CORE->getAvailableMaps('/^'.$perm['obj'].'$/')) <= 0) {
+                    $this->deletePermission('Map', $perm['obj']);
+                }
+            }
+        }
+    }
+
     public function getAllVisiblePerms() {
         $aReturn = Array();
         // FIXME: First check if this is supported
