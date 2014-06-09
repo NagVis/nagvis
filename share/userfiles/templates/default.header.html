@@ -24,7 +24,7 @@
             <li class="spacer underline"></li>
         </ul>
     </li>
-    {if ($mod == 'Map' && ($permittedEdit == true && $act != 'edit' || $permittedView == true && $act != 'view')) || $bRotation == true || $permittedSearch}
+    {if ($mod == 'Map' && (($permittedEdit == true && $act != 'edit') || ($permittedView == true && $act != 'view') || $permittedSearch)) || $bRotation == true}
     <li onmouseover="ddMenu('action',1)" onmouseout="ddMenuHide(['action'])" class="dropdown">
         <span id="action-ddheader">{$langActions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         <ul id="action-ddcontent">
