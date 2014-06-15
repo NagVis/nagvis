@@ -129,6 +129,10 @@ class CoreModMultisite extends CoreModule {
                 $title .= ' (Acknowledged)';
             }
 
+            if ($map['summary_stale']) {
+                $state .= ' stale';
+                $title .= ' (Stale)';
+            }
 
             $code .= '<tr><td>';
             $code .= '<div class="statebullet state'.$state.'" title="'.$title.'">&nbsp;</div>';
@@ -190,7 +194,8 @@ class CoreModMultisite extends CoreModule {
                     ERROR,
                     l('Map Configuration Error: ').$config_error,
                     null,
-                    null
+                    null,
+                    null,
                 ));
                 $MAP->MAPOBJ->fetchIcon();
             } elseif($error !== null) {
@@ -199,7 +204,8 @@ class CoreModMultisite extends CoreModule {
                     ERROR,
                     l('Error: ').$error,
                     null,
-                    null
+                    null,
+                    null,
                 ));
                 $MAP->MAPOBJ->fetchIcon();
             } elseif($MAP->MAPOBJ->checkMaintenance(0)) {
@@ -209,6 +215,7 @@ class CoreModMultisite extends CoreModule {
                 $MAP->MAPOBJ->setState(array(
                     UNKNOWN,
                     l('mapInMaintenance'),
+                    null,
                     null,
                     null
                 ));

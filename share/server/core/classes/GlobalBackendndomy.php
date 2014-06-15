@@ -627,6 +627,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 $output,
                 $acknowledged,
                 $in_downtime,
+                0, // staleness
                 $data['state_type'],
                 $data['current_check_attempt'],
                 $data['max_check_attempts'],
@@ -773,6 +774,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 $output,
                 $acknowledged,
                 $in_downtime,
+                0, // staleness
                 $data['state_type'],
                 $data['current_check_attempt'],
                 $data['max_check_attempts'],
@@ -863,20 +865,24 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                     ),
                     OK => Array(
                         'normal'   => intval($data['ok']),
+                        'stale'    => 0,
                         'downtime' => intval($data['ok_downtime']),
                     ),
                     WARNING => Array(
                         'normal'   => intval($data['warning']),
+                        'stale'    => 0,
                         'ack'      => intval($data['warning_ack']),
                         'downtime' => intval($data['warning_downtime']),
                     ),
                     CRITICAL => Array(
                         'normal'   => intval($data['critical']),
+                        'stale'    => 0,
                         'ack'      => intval($data['critical_ack']),
                         'downtime' => intval($data['critical_downtime']),
                     ),
                     UNKNOWN => Array(
                         'normal'   => intval($data['unknown']),
+                        'stale'    => 0,
                         'ack'      => intval($data['unknown_ack']),
                         'downtime' => intval($data['unknown_downtime']),
                     ),
@@ -936,15 +942,18 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                     ),
                     UP => Array(
                         'normal'    => intval($data['up']),
+                        'stale'    => 0,
                         'downtime'  => intval($data['up_downtime']),
                     ),
                     DOWN => Array(
                         'normal'    => intval($data['down']),
+                        'stale'    => 0,
                         'ack'       => intval($data['down_ack']),
                         'downtime'  => intval($data['down_downtime']),
                     ),
                     UNREACHABLE => Array(
                         'normal'    => intval($data['unreachable']),
+                        'stale'    => 0,
                         'ack'       => intval($data['unreachable_ack']),
                         'downtime'  => intval($data['unreachable_downtime']),
                     ),
@@ -997,14 +1006,18 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         while($data = mysql_fetch_assoc($QUERYHANDLE)) {
             $arrReturn[$data['name1']]['counts'][PENDING]['normal']    = intval($data['pending']);
             $arrReturn[$data['name1']]['counts'][OK]['normal']         = intval($data['ok']);
+            $arrReturn[$data['name1']]['counts'][OK]['stale']          = 0;
             $arrReturn[$data['name1']]['counts'][OK]['downtime']       = intval($data['ok_downtime']);
             $arrReturn[$data['name1']]['counts'][WARNING]['normal']    = intval($data['warning']);
+            $arrReturn[$data['name1']]['counts'][WARNING]['stale']     = 0;
             $arrReturn[$data['name1']]['counts'][WARNING]['ack']       = intval($data['warning_ack']);
             $arrReturn[$data['name1']]['counts'][WARNING]['downtime']  = intval($data['warning_downtime']);
             $arrReturn[$data['name1']]['counts'][CRITICAL]['normal']   = intval($data['critical']);
+            $arrReturn[$data['name1']]['counts'][CRITICAL]['stale']    = 0;
             $arrReturn[$data['name1']]['counts'][CRITICAL]['ack']      = intval($data['critical_ack']);
             $arrReturn[$data['name1']]['counts'][CRITICAL]['downtime'] = intval($data['critical_downtime']);
             $arrReturn[$data['name1']]['counts'][UNKNOWN]['normal']    = intval($data['unknown']);
+            $arrReturn[$data['name1']]['counts'][UNKNOWN]['stale']     = 0;
             $arrReturn[$data['name1']]['counts'][UNKNOWN]['ack']       = intval($data['unknown_ack']);
             $arrReturn[$data['name1']]['counts'][UNKNOWN]['downtime']  = intval($data['unknown_downtime']);
         }
@@ -1064,20 +1077,24 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                     ),
                     OK => Array(
                         'normal'   => intval($data['ok']),
+                        'stale'    => 0,
                         'downtime' => intval($data['ok_downtime']),
                     ),
                     WARNING => Array(
                         'normal'   => intval($data['warning']),
+                        'stale'    => 0,
                         'ack'      => intval($data['warning_ack']),
                         'downtime' => intval($data['warning_downtime']),
                     ),
                     CRITICAL => Array(
                         'normal'   => intval($data['critical']),
+                        'stale'    => 0,
                         'ack'      => intval($data['critical_ack']),
                         'downtime' => intval($data['critical_downtime']),
                     ),
                     UNKNOWN => Array(
                         'normal'   => intval($data['unknown']),
+                        'stale'    => 0,
                         'ack'      => intval($data['unknown_ack']),
                         'downtime' => intval($data['unknown_downtime']),
                     ),

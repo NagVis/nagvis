@@ -560,6 +560,118 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         return implode($aFilters).$count;
     }
 
+    private function serviceStateStats($stateAttr) {
+        $staleness_thresh = cfg('global', 'staleness_threshold');
+
+        return
+            // Count PENDING
+            "Stats: has_been_checked = 0\n" .
+            // Count OK
+            "Stats: ".$stateAttr." = 0\n" .
+            "Stats: has_been_checked != 0\n" .
+            "Stats: scheduled_downtime_depth = 0\n" .
+            "Stats: host_scheduled_downtime_depth = 0\n" .
+            "Stats: staleness < ".$staleness_thresh."\n" .
+            "StatsAnd: 5\n" .
+            // Count OK (STALE)
+            "Stats: ".$stateAttr." = 0\n" .
+            "Stats: has_been_checked != 0\n" .
+            "Stats: scheduled_downtime_depth = 0\n" .
+            "Stats: host_scheduled_downtime_depth = 0\n" .
+            "Stats: staleness >= ".$staleness_thresh."\n" .
+            "StatsAnd: 5\n" .
+            // Count OK (DOWNTIME)
+            "Stats: ".$stateAttr." = 0\n" .
+            "Stats: has_been_checked != 0\n" .
+            "Stats: scheduled_downtime_depth > 0\n" .
+            "Stats: host_scheduled_downtime_depth > 0\n" .
+            "StatsOr: 2\n" .
+            "StatsAnd: 3\n" .
+            // Count WARNING
+            "Stats: ".$stateAttr." = 1\n" .
+            "Stats: acknowledged = 0\n" .
+            "Stats: host_acknowledged = 0\n" .
+            "Stats: scheduled_downtime_depth = 0\n" .
+            "Stats: host_scheduled_downtime_depth = 0\n" .
+            "Stats: staleness < ".$staleness_thresh."\n" .
+            "StatsAnd: 6\n" .
+            // Count WARNING (STALE)
+            "Stats: ".$stateAttr." = 1\n" .
+            "Stats: acknowledged = 0\n" .
+            "Stats: host_acknowledged = 0\n" .
+            "Stats: scheduled_downtime_depth = 0\n" .
+            "Stats: host_scheduled_downtime_depth = 0\n" .
+            "Stats: staleness >= ".$staleness_thresh."\n" .
+            "StatsAnd: 6\n" .
+            // Count WARNING(ACK)
+            "Stats: ".$stateAttr." = 1\n" .
+            "Stats: acknowledged = 1\n" .
+            "Stats: host_acknowledged = 1\n" .
+            "StatsOr: 2\n" .
+            "StatsAnd: 2\n" .
+            // Count WARNING(DOWNTIME)
+            "Stats: ".$stateAttr." = 1\n" .
+            "Stats: scheduled_downtime_depth > 0\n" .
+            "Stats: host_scheduled_downtime_depth > 0\n" .
+            "StatsOr: 2\n" .
+            "StatsAnd: 2\n" .
+            // Count CRITICAL
+            "Stats: ".$stateAttr." = 2\n" .
+            "Stats: acknowledged = 0\n" .
+            "Stats: host_acknowledged = 0\n" .
+            "Stats: scheduled_downtime_depth = 0\n" .
+            "Stats: host_scheduled_downtime_depth = 0\n" .
+            "Stats: staleness < ".$staleness_thresh."\n" .
+            "StatsAnd: 6\n" .
+            // Count CRITICAL (STALE)
+            "Stats: ".$stateAttr." = 2\n" .
+            "Stats: acknowledged = 0\n" .
+            "Stats: host_acknowledged = 0\n" .
+            "Stats: scheduled_downtime_depth = 0\n" .
+            "Stats: host_scheduled_downtime_depth = 0\n" .
+            "Stats: staleness >= ".$staleness_thresh."\n" .
+            "StatsAnd: 6\n" .
+            // Count CRITICAL(ACK)
+            "Stats: ".$stateAttr." = 2\n" .
+            "Stats: acknowledged = 1\n" .
+            "Stats: host_acknowledged = 1\n" .
+            "StatsOr: 2\n" .
+            "StatsAnd: 2\n" .
+            // Count CRITICAL(DOWNTIME)
+            "Stats: ".$stateAttr." = 2\n" .
+            "Stats: scheduled_downtime_depth > 0\n" .
+            "Stats: host_scheduled_downtime_depth > 0\n" .
+            "StatsOr: 2\n" .
+            "StatsAnd: 2\n" .
+            // Count UNKNOWN
+            "Stats: ".$stateAttr." = 3\n" .
+            "Stats: acknowledged = 0\n" .
+            "Stats: host_acknowledged = 0\n" .
+            "Stats: scheduled_downtime_depth = 0\n" .
+            "Stats: host_scheduled_downtime_depth = 0\n" .
+            "Stats: staleness < ".$staleness_thresh."\n" .
+            "StatsAnd: 6\n" .
+            // Count UNKNOWN (STALE)
+            "Stats: ".$stateAttr." = 3\n" .
+            "Stats: acknowledged = 0\n" .
+            "Stats: host_acknowledged = 0\n" .
+            "Stats: scheduled_downtime_depth = 0\n" .
+            "Stats: host_scheduled_downtime_depth = 0\n" .
+            "Stats: staleness >= ".$staleness_thresh."\n" .
+            "StatsAnd: 6\n" .
+            // Count UNKNOWN(ACK)
+            "Stats: ".$stateAttr." = 3\n" .
+            "Stats: acknowledged = 1\n" .
+            "Stats: host_acknowledged = 1\n" .
+            "StatsOr: 2\n" .
+            "StatsAnd: 2\n" .
+            // Count UNKNOWN(DOWNTIME)
+            "Stats: ".$stateAttr." = 3\n" .
+            "Stats: scheduled_downtime_depth > 0\n" .
+            "Stats: host_scheduled_downtime_depth > 0\n" .
+            "StatsOr: 2\n" .
+            "StatsAnd: 2\n";
+    }
 
     /**
      * PUBLIC getHostState()
@@ -585,7 +697,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
           "current_attempt max_check_attempts last_state_change ".
           "last_hard_state_change perf_data acknowledged ".
           "scheduled_downtime_depth has_been_checked name ".
-          "check_command custom_variable_names custom_variable_values\n".
+          "check_command custom_variable_names custom_variable_values staleness\n".
           $objFilter;
 
         $l = $this->queryLivestatus($q);
@@ -601,6 +713,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     $arrReturn[$e[18]] = Array(
                         UNCHECKED,
                         l('hostIsPending', Array('HOST' => $e[18])),
+                        null,
                         null,
                         null,
                     );
@@ -646,6 +759,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     $e[1],  // output
                     $acknowledged,
                     $in_downtime,
+                    (float)$e[21], // staleness
                     $e[8],  // state type
                     $e[9],  // current attempt
                     $e[10], // max attempts
@@ -698,7 +812,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
           "state_type current_attempt max_check_attempts last_state_change ".
           "last_hard_state_change perf_data scheduled_downtime_depth ".
           "acknowledged host_acknowledged host_scheduled_downtime_depth ".
-          "has_been_checked host_name check_command custom_variable_names custom_variable_values\n");
+          "has_been_checked host_name check_command custom_variable_names custom_variable_values ".
+          "staleness\n");
 
         $arrReturn = Array();
         if(is_array($l) && count($l) > 0) {
@@ -779,6 +894,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                         $e[5],  // output
                         $acknowledged,
                         $in_downtime,
+                        (float)$e[24], // staleness
                         $e[9],  // state type
                         $e[10], // current attempt
                         $e[11], // max check attempts
@@ -797,7 +913,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                         $dt_details[1], // dt data
                         $dt_details[2], // dt start
                         $dt_details[3], // dt end
-                        $e[0]   // descr
+                        $e[0], // descr
                     );
                 }
 
@@ -832,78 +948,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         // Get service information
         $l = $this->queryLivestatus("GET services\n" .
             $objFilter.
-            // Count PENDING
-            "Stats: has_been_checked = 0\n" .
-            // Count OK
-            "Stats: ".$stateAttr." = 0\n" .
-            "Stats: has_been_checked != 0\n" .
-            "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: host_scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 4\n" .
-            // Count OK (DOWNTIME)
-            "Stats: ".$stateAttr." = 0\n" .
-            "Stats: has_been_checked != 0\n" .
-            "Stats: scheduled_downtime_depth > 0\n" .
-            "Stats: host_scheduled_downtime_depth > 0\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 3\n" .
-            // Count WARNING
-            "Stats: ".$stateAttr." = 1\n" .
-            "Stats: acknowledged = 0\n" .
-            "Stats: host_acknowledged = 0\n" .
-            "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: host_scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 5\n" .
-            // Count WARNING(ACK)
-            "Stats: ".$stateAttr." = 1\n" .
-            "Stats: acknowledged = 1\n" .
-            "Stats: host_acknowledged = 1\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count WARNING(DOWNTIME)
-            "Stats: ".$stateAttr." = 1\n" .
-            "Stats: scheduled_downtime_depth > 0\n" .
-            "Stats: host_scheduled_downtime_depth > 0\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count CRITICAL
-            "Stats: ".$stateAttr." = 2\n" .
-            "Stats: acknowledged = 0\n" .
-            "Stats: host_acknowledged = 0\n" .
-            "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: host_scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 5\n" .
-            // Count CRITICAL(ACK)
-            "Stats: ".$stateAttr." = 2\n" .
-            "Stats: acknowledged = 1\n" .
-            "Stats: host_acknowledged = 1\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count CRITICAL(DOWNTIME)
-            "Stats: ".$stateAttr." = 2\n" .
-            "Stats: scheduled_downtime_depth > 0\n" .
-            "Stats: host_scheduled_downtime_depth > 0\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count UNKNOWN
-            "Stats: ".$stateAttr." = 3\n" .
-            "Stats: acknowledged = 0\n" .
-            "Stats: host_acknowledged = 0\n" .
-            "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: host_scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 5\n" .
-            // Count UNKNOWN(ACK)
-            "Stats: ".$stateAttr." = 3\n" .
-            "Stats: acknowledged = 1\n" .
-            "Stats: host_acknowledged = 1\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count UNKNOWN(DOWNTIME)
-            "Stats: ".$stateAttr." = 3\n" .
-            "Stats: scheduled_downtime_depth > 0\n" .
-            "Stats: host_scheduled_downtime_depth > 0\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
+            $this->serviceStateStats($stateAttr).
             "Columns: host_name host_alias\n");
 
         $arrReturn = Array();
@@ -923,22 +968,26 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                         ),
                         OK => Array(
                             'normal'   => intval($e[3]),
-                            'downtime' => intval($e[4]),
+                            'stale'    => intval($e[4]),
+                            'downtime' => intval($e[5]),
                         ),
                         WARNING => Array(
-                            'normal'   => intval($e[5]),
-                            'ack'      => intval($e[6]),
-                            'downtime' => intval($e[7]),
+                            'normal'   => intval($e[6]),
+                            'stale'    => intval($e[7]),
+                            'ack'      => intval($e[8]),
+                            'downtime' => intval($e[9]),
                         ),
                         CRITICAL => Array(
-                            'normal'   => intval($e[8]),
-                            'ack'      => intval($e[9]),
-                            'downtime' => intval($e[10]),
-                        ),
-                        UNKNOWN => Array(
-                            'normal'   => intval($e[11]),
+                            'normal'   => intval($e[10]),
+                            'stale'    => intval($e[11]),
                             'ack'      => intval($e[12]),
                             'downtime' => intval($e[13]),
+                        ),
+                        UNKNOWN => Array(
+                            'normal'   => intval($e[14]),
+                            'stale'    => intval($e[15]),
+                            'ack'      => intval($e[16]),
+                            'downtime' => intval($e[17]),
                         ),
                     )
                 );
@@ -961,78 +1010,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         // Get service information
         $l = $this->queryLivestatus("GET services\n" .
             $filter.
-            // Count PENDING
-            "Stats: has_been_checked = 0\n" .
-            // Count OK
-            "Stats: ".$stateAttr." = 0\n" .
-            "Stats: has_been_checked != 0\n" .
-            "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: host_scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 4\n" .
-            // Count OK (DOWNTIME)
-            "Stats: ".$stateAttr." = 0\n" .
-            "Stats: has_been_checked != 0\n" .
-            "Stats: scheduled_downtime_depth > 0\n" .
-            "Stats: host_scheduled_downtime_depth > 0\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 3\n" .
-            // Count WARNING
-            "Stats: ".$stateAttr." = 1\n" .
-            "Stats: acknowledged = 0\n" .
-            "Stats: host_acknowledged = 0\n" .
-            "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: host_scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 5\n" .
-            // Count WARNING(ACK)
-            "Stats: ".$stateAttr." = 1\n" .
-            "Stats: acknowledged = 1\n" .
-            "Stats: host_acknowledged = 1\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count WARNING(DOWNTIME)
-            "Stats: ".$stateAttr." = 1\n" .
-            "Stats: scheduled_downtime_depth > 0\n" .
-            "Stats: host_scheduled_downtime_depth > 0\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count CRITICAL
-            "Stats: ".$stateAttr." = 2\n" .
-            "Stats: acknowledged = 0\n" .
-            "Stats: host_acknowledged = 0\n" .
-            "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: host_scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 5\n" .
-            // Count CRITICAL(ACK)
-            "Stats: ".$stateAttr." = 2\n" .
-            "Stats: acknowledged = 1\n" .
-            "Stats: host_acknowledged = 1\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count CRITICAL(DOWNTIME)
-            "Stats: ".$stateAttr." = 2\n" .
-            "Stats: scheduled_downtime_depth > 0\n" .
-            "Stats: host_scheduled_downtime_depth > 0\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count UNKNOWN
-            "Stats: ".$stateAttr." = 3\n" .
-            "Stats: acknowledged = 0\n" .
-            "Stats: host_acknowledged = 0\n" .
-            "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: host_scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 5\n" .
-            // Count UNKNOWN(ACK)
-            "Stats: ".$stateAttr." = 3\n" .
-            "Stats: acknowledged = 1\n" .
-            "Stats: host_acknowledged = 1\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count UNKNOWN(DOWNTIME)
-            "Stats: ".$stateAttr." = 3\n" .
-            "Stats: scheduled_downtime_depth > 0\n" .
-            "Stats: host_scheduled_downtime_depth > 0\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n");
+            $this->serviceStateStats($stateAttr)
+        );
 
         $counts = Array();
         if(!is_array($l) || count($l) != 1)
@@ -1044,22 +1023,26 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             ),
             OK => Array(
                 'normal'   => intval($e[1]),
-                'downtime' => intval($e[2]),
+                'stale'    => intval($e[2]),
+                'downtime' => intval($e[3]),
             ),
             WARNING => Array(
                 'normal'   => intval($e[3]),
-                'ack'      => intval($e[4]),
-                'downtime' => intval($e[5]),
+                'stale'    => intval($e[4]),
+                'ack'      => intval($e[5]),
+                'downtime' => intval($e[6]),
             ),
             CRITICAL => Array(
-                'normal'   => intval($e[6]),
-                'ack'      => intval($e[7]),
-                'downtime' => intval($e[8]),
+                'normal'   => intval($e[7]),
+                'stale'    => intval($e[8]),
+                'ack'      => intval($e[9]),
+                'downtime' => intval($e[10]),
             ),
             UNKNOWN => Array(
                 'normal'   => intval($e[9]),
-                'ack'      => intval($e[10]),
-                'downtime' => intval($e[11]),
+                'stale'    => intval($e[10]),
+                'ack'      => intval($e[11]),
+                'downtime' => intval($e[12]),
             ),
         );
     }
@@ -1085,6 +1068,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             $soffset = 0;
         }
 
+        $staleness_thresh = cfg('global', 'staleness_threshold');
+
         if($options & 1)
             $stateAttr = 'hard_state';
         else
@@ -1099,7 +1084,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             "Stats: ".$stateAttr." = 0\n" .
             "Stats: has_been_checked != 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 3\n" .
+            "Stats: staleness < ".$staleness_thresh."\n" .
+            "StatsAnd: 4\n" .
+            // Count UP(STALE)
+            "Stats: ".$stateAttr." = 0\n" .
+            "Stats: has_been_checked != 0\n" .
+            "Stats: scheduled_downtime_depth = 0\n" .
+            "Stats: staleness >= ".$staleness_thresh."\n" .
+            "StatsAnd: 4\n" .
             // Count UP (DOWNTIME)
             "Stats: ".$stateAttr." = 0\n" .
             "Stats: has_been_checked != 0\n" .
@@ -1109,7 +1101,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             "Stats: ".$stateAttr." = 1\n" .
             "Stats: acknowledged = 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 3\n" .
+            "Stats: staleness < ".$staleness_thresh."\n" .
+            "StatsAnd: 4\n" .
+            // Count DOWN(STALE)
+            "Stats: ".$stateAttr." = 1\n" .
+            "Stats: acknowledged = 0\n" .
+            "Stats: scheduled_downtime_depth = 0\n" .
+            "Stats: staleness >= ".$staleness_thresh."\n" .
+            "StatsAnd: 4\n" .
             // Count DOWN(ACK)
             "Stats: ".$stateAttr." = 1\n" .
             "Stats: acknowledged = 1\n" .
@@ -1122,7 +1121,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             "Stats: ".$stateAttr." = 2\n" .
             "Stats: acknowledged = 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 3\n" .
+            "Stats: staleness < ".$staleness_thresh."\n" .
+            "StatsAnd: 4\n" .
+            // Count UNREACHABLE(STALE)
+            "Stats: ".$stateAttr." = 2\n" .
+            "Stats: acknowledged = 0\n" .
+            "Stats: scheduled_downtime_depth = 0\n" .
+            "Stats: staleness >= ".$staleness_thresh."\n" .
+            "StatsAnd: 4\n" .
             // Count UNREACHABLE(ACK)
             "Stats: ".$stateAttr." = 2\n" .
             "Stats: acknowledged = 1\n" .
@@ -1151,17 +1157,20 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     ),
                     UP => Array(
                         'normal'    => intval($e[1+$hoffset]),
-                        'downtime'  => intval($e[2+$hoffset]),
+                        'stale'     => intval($e[2+$hoffset]),
+                        'downtime'  => intval($e[3+$hoffset]),
                     ),
                     DOWN => Array(
-                        'normal'    => intval($e[3+$hoffset]),
-                        'ack'       => intval($e[4+$hoffset]),
-                        'downtime'  => intval($e[5+$hoffset]),
+                        'normal'    => intval($e[4+$hoffset]),
+                        'stale'     => intval($e[5+$hoffset]),
+                        'ack'       => intval($e[6+$hoffset]),
+                        'downtime'  => intval($e[7+$hoffset]),
                     ),
                     UNREACHABLE => Array(
-                        'normal'    => intval($e[6+$hoffset]),
-                        'ack'       => intval($e[7+$hoffset]),
-                        'downtime'  => intval($e[8+$hoffset]),
+                        'normal'    => intval($e[8+$hoffset]),
+                        'stale'     => intval($e[9+$hoffset]),
+                        'ack'       => intval($e[10+$hoffset]),
+                        'downtime'  => intval($e[11+$hoffset]),
                     ),
                 );
 
@@ -1188,76 +1197,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         // Get service information
         $l = $this->queryLivestatus("GET services".$service_suffix."\n" .
             $service_filter.
-            // Count PENDING
-            "Stats: has_been_checked = 0\n" .
-            // Count OK
-            "Stats: ".$stateAttr." = 0\n" .
-            "Stats: has_been_checked != 0\n" .
-            "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: host_scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 4\n" .
-            // Count OK (Downtime)
-            "Stats: ".$stateAttr." = 0\n" .
-            "Stats: scheduled_downtime_depth > 0\n" .
-            "Stats: host_scheduled_downtime_depth > 0\n" .
-            "StatsAnd: 3\n" .
-            // Count WARNING
-            "Stats: ".$stateAttr." = 1\n" .
-            "Stats: acknowledged = 0\n" .
-            "Stats: host_acknowledged = 0\n" .
-            "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: host_scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 5\n" .
-            // Count WARNING(ACK)
-            "Stats: ".$stateAttr." = 1\n" .
-            "Stats: acknowledged = 1\n" .
-            "Stats: host_acknowledged = 1\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count WARNING(DOWNTIME)
-            "Stats: ".$stateAttr." = 1\n" .
-            "Stats: scheduled_downtime_depth > 0\n" .
-            "Stats: host_scheduled_downtime_depth > 0\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count CRITICAL
-            "Stats: ".$stateAttr." = 2\n" .
-            "Stats: acknowledged = 0\n" .
-            "Stats: host_acknowledged = 0\n" .
-            "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: host_scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 5\n" .
-            // Count CRITICAL(ACK)
-            "Stats: ".$stateAttr." = 2\n" .
-            "Stats: acknowledged = 1\n" .
-            "Stats: host_acknowledged = 1\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count CRITICAL(DOWNTIME)
-            "Stats: ".$stateAttr." = 2\n" .
-            "Stats: scheduled_downtime_depth > 0\n" .
-            "Stats: host_scheduled_downtime_depth > 0\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count UNKNOWN
-            "Stats: ".$stateAttr." = 3\n" .
-            "Stats: acknowledged = 0\n" .
-            "Stats: host_acknowledged = 0\n" .
-            "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: host_scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 5\n" .
-            // Count UNKNOWN(ACK)
-            "Stats: ".$stateAttr." = 3\n" .
-            "Stats: acknowledged = 1\n" .
-            "Stats: host_acknowledged = 1\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count UNKNOWN(DOWNTIME)
-            "Stats: ".$stateAttr." = 3\n" .
-            "Stats: scheduled_downtime_depth > 0\n" .
-            "Stats: host_scheduled_downtime_depth > 0\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n".
+            $this->serviceStateStats($stateAttr).
             $service_grouping);
 
         if(is_array($l) && count($l) > 0) {
@@ -1268,22 +1208,26 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     ),
                     OK => array(
                         'normal'   => intval($e[1+$soffset]),
-                        'downtime' => intval($e[2+$soffset]),
+                        'stale'    => intval($e[2+$soffset]),
+                        'downtime' => intval($e[3+$soffset]),
                     ),
                     WARNING => array(
-                        'normal'   => intval($e[3+$soffset]),
-                        'ack'      => intval($e[4+$soffset]),
-                        'downtime' => intval($e[5+$soffset]),
+                        'normal'   => intval($e[4+$soffset]),
+                        'stale'    => intval($e[5+$soffset]),
+                        'ack'      => intval($e[6+$soffset]),
+                        'downtime' => intval($e[7+$soffset]),
                     ),
                     CRITICAL => array(
-                        'normal'   => intval($e[6+$soffset]),
-                        'ack'      => intval($e[7+$soffset]),
-                        'downtime' => intval($e[8+$soffset]),
-                    ),
-                    UNKNOWN => array(
-                        'normal'   => intval($e[9+$soffset]),
+                        'normal'   => intval($e[8+$soffset]),
+                        'stale'    => intval($e[9+$soffset]),
                         'ack'      => intval($e[10+$soffset]),
                         'downtime' => intval($e[11+$soffset]),
+                    ),
+                    UNKNOWN => array(
+                        'normal'   => intval($e[12+$soffset]),
+                        'stale'    => intval($e[13+$soffset]),
+                        'ack'      => intval($e[14+$soffset]),
+                        'downtime' => intval($e[15+$soffset]),
                     ),
                 );
                 
@@ -1345,77 +1289,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         // Get service information
         $l = $this->queryLivestatus("GET servicesbygroup\n" .
             $objFilter.
-            // Count PENDING
-            "Stats: has_been_checked = 0\n" .
-            // Count OK
-            "Stats: ".$stateAttr." = 0\n" .
-            "Stats: has_been_checked != 0\n" .
-            "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: host_scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 4\n" .
-            // Count OK (Downtime)
-            "Stats: ".$stateAttr." = 0\n" .
-            "Stats: scheduled_downtime_depth > 0\n" .
-            "Stats: host_scheduled_downtime_depth > 0\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count WARNING
-            "Stats: ".$stateAttr." = 1\n" .
-            "Stats: acknowledged = 0\n" .
-            "Stats: host_acknowledged = 0\n" .
-            "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: host_scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 5\n" .
-            // Count WARNING(ACK)
-            "Stats: ".$stateAttr." = 1\n" .
-            "Stats: acknowledged = 1\n" .
-            "Stats: host_acknowledged = 1\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count WARNING(DOWNTIME)
-            "Stats: ".$stateAttr." = 1\n" .
-            "Stats: scheduled_downtime_depth > 0\n" .
-            "Stats: host_scheduled_downtime_depth > 0\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count CRITICAL
-            "Stats: ".$stateAttr." = 2\n" .
-            "Stats: acknowledged = 0\n" .
-            "Stats: host_acknowledged = 0\n" .
-            "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: host_scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 5\n" .
-            // Count CRITICAL(ACK)
-            "Stats: ".$stateAttr." = 2\n" .
-            "Stats: acknowledged = 1\n" .
-            "Stats: host_acknowledged = 1\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count CRITICAL(DOWNTIME)
-            "Stats: ".$stateAttr." = 2\n" .
-            "Stats: scheduled_downtime_depth > 0\n" .
-            "Stats: host_scheduled_downtime_depth > 0\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count UNKNOWN
-            "Stats: ".$stateAttr." = 3\n" .
-            "Stats: acknowledged = 0\n" .
-            "Stats: host_acknowledged = 0\n" .
-            "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: host_scheduled_downtime_depth = 0\n" .
-            "StatsAnd: 5\n" .
-            // Count UNKNOWN(ACK)
-            "Stats: ".$stateAttr." = 3\n" .
-            "Stats: acknowledged = 1\n" .
-            "Stats: host_acknowledged = 1\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n" .
-            // Count UNKNOWN(DOWNTIME)
-            "Stats: ".$stateAttr." = 3\n" .
-            "Stats: scheduled_downtime_depth > 0\n" .
-            "Stats: host_scheduled_downtime_depth > 0\n" .
-            "StatsOr: 2\n" .
-            "StatsAnd: 2\n".
+            $this->serviceStateStats($stateAttr).
             "Columns: servicegroup_name servicegroup_alias\n");
 
         // If the method should fetch several objects and did not find
@@ -1437,22 +1311,26 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                         ),
                         OK => Array(
                             'normal'    => intval($e[3]),
-                            'downtime'  => intval($e[4]),
+                            'stale'     => intval($e[4]),
+                            'downtime'  => intval($e[5]),
                         ),
                         WARNING => Array(
                             'normal'    => intval($e[5]),
-                            'ack'       => intval($e[6]),
-                            'downtime'  => intval($e[7]),
+                            'stale'     => intval($e[6]),
+                            'ack'       => intval($e[7]),
+                            'downtime'  => intval($e[8]),
                         ),
                         CRITICAL => Array(
-                            'normal'    => intval($e[8]),
-                            'ack'       => intval($e[9]),
-                            'downtime'  => intval($e[10]),
+                            'normal'    => intval($e[9]),
+                            'stale'     => intval($e[10]),
+                            'ack'       => intval($e[11]),
+                            'downtime'  => intval($e[12]),
                         ),
                         UNKNOWN => Array(
-                            'normal'    => intval($e[11]),
-                            'ack'       => intval($e[12]),
-                            'downtime'  => intval($e[13]),
+                            'normal'    => intval($e[13]),
+                            'stale'     => intval($e[14]),
+                            'ack'       => intval($e[15]),
+                            'downtime'  => intval($e[16]),
                         ),
                     )
                 );

@@ -173,6 +173,14 @@
 ; HTTPS. Set to 1 to enable.
 ;sesscookiesecure=0
 ;
+; Staleness threshold (Only used with livestatus backend). Take a look at the
+; Check_MK documentation for details about the staleness of hosts/services.
+; The staleness means that an object has not received any state information for
+; a given time. The configured value is a factor of the regular check interval.
+; A value of 1.5 means that an object is marked as stale after one and a half
+; check intervals have passed without update.
+;staleness_threshold=1.5
+;
 ; Start page to redirect the user to when first visiting NagVis without
 ; special parameters.
 ;startmodule="Overview"

@@ -229,7 +229,19 @@
 			<td>sesscookiehttponly</td><td>0</td><td>Most modern browsers will deny javascript access to cookies if the HttpOnly flag is set. This prevents XSS attacks from stealing cookies. Default is off to not break any existing installations that rely on this functionality. Set to 1 to enable.</td>
         </tr>
         <tr>
-			<td>sesscookiesecure</td><td>0</td><td>Most modern browsers will prevent cookies from being sent unencrypted if the Secure flag is set. Default is off since not all Nagvis installations require HTTPS. Set to 1 to enable.</td>
+	    <td>sesscookiesecure</td><td>0</td><td>Most modern browsers will prevent cookies from being sent unencrypted if the Secure flag is set. Default is off since not all Nagvis installations require HTTPS. Set to 1 to enable.</td>
+        </tr>
+        <tr>
+	    <td>staleness_threshold <font color="#ff0000">(new in 1.8b5)</font></td>
+            <td>1.5</td>
+            <td>
+            Staleness threshold (Only used with livestatus backend). Take a look at the
+            Check_MK documentation for details about the staleness of hosts/services.
+            The staleness means that an object has not received any state information for
+            a given time. The configured value is a factor of the regular check interval.
+            A value of 1.5 means that an object is marked as stale after one and a half
+            check intervals have passed without update.
+            </td>
         </tr>
         <tr>
         <td>startmodule</td><td>overview</td><td>The default module to show when none is given by the user</td>

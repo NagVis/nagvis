@@ -66,6 +66,7 @@ class NagVisServicegroup extends NagVisStatefulObject {
                 ERROR,
                 $this->problem_msg,
                 null,
+                null,
                 null
             );
             $this->members = array();

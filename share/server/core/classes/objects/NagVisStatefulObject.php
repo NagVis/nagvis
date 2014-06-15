@@ -49,7 +49,7 @@ class NagVisStatefulObject extends NagVisObject {
 
     protected $state = null;
 
-    public $sum = array(null, null, null, null);
+    public $sum = array(null, null, null, null, null);
     protected $aStateCounts = null;
 
     /**
@@ -178,6 +178,14 @@ class NagVisStatefulObject extends NagVisObject {
         return $this->sum[STATE];
     }
 
+    public function isStale($summary = false) {
+        if ($summary) {
+            return $this->sum[STALE] > cfg('global', 'staleness_threshold');
+        } else {
+            return val($this->state, STALE, 0) > cfg('global', 'staleness_threshold');
+        }
+    }
+
     /**
      * Returns the current sub-state of the object
      */
@@ -187,11 +195,15 @@ class NagVisStatefulObject extends NagVisObject {
                 return  'ack';
             elseif($this->sum[DOWNTIME] == 1)
                 return 'downtime';
+            elseif($this->isStale($summary))
+                return 'stale';
         } else {
             if($this->state[ACK] == 1)
                 return  'ack';
             elseif($this->state[DOWNTIME] == 1)
                 return 'downtime';
+            elseif($this->isStale($summary))
+                return 'stale';
         }
         return 'normal';
     }
@@ -331,11 +343,13 @@ class NagVisStatefulObject extends NagVisObject {
         $arr['state']                         = state_str(val($this->state, STATE));
         $arr['problem_has_been_acknowledged'] = val($this->state, ACK);
         $arr['in_downtime']                   = val($this->state, DOWNTIME);
+        $arr['stale']                         = $this->isStale(false);
         $arr['output']         = $this->escapeStringForJson(val($this->state, OUTPUT, ''));
 
         $arr['summary_state']                 = state_str(val($this->sum, STATE));
         $arr['summary_problem_has_been_acknowledged'] = val($this->sum, ACK);
         $arr['summary_in_downtime']           = val($this->sum, DOWNTIME);
+        $arr['summary_stale']                 = $this->isStale(true);
         $arr['summary_output']                = $this->escapeStringForJson(val($this->sum, OUTPUT, ''));
 
         // Macros which are only for services and hosts
@@ -419,6 +433,8 @@ class NagVisStatefulObject extends NagVisObject {
                         $icon = $this->iconset.'_'.$stateLow.'_ack.'.$fileType;
                     } elseif($this->sum[DOWNTIME]) {
                         $icon = $this->iconset.'_'.$stateLow.'_dt.'.$fileType;
+                    } elseif($this->isStale(true)) {
+                        $icon = $this->iconset.'_'.$stateLow.'_stale.'.$fileType;
                     } else {
                         $icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
                     }
@@ -427,6 +443,8 @@ class NagVisStatefulObject extends NagVisObject {
                 case 'ok':
                     if($this->sum[DOWNTIME]) {
                         $icon = $this->iconset.'_'.$stateLow.'_dt.'.$fileType;
+                    } elseif($this->isStale(true)) {
+                        $icon = $this->iconset.'_'.$stateLow.'_stale.'.$fileType;
                     } else {
                         $icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
                     }
@@ -551,6 +569,7 @@ class NagVisStatefulObject extends NagVisObject {
             'summary_state'       => state_str($this->sum[STATE]),
             'summary_in_downtime' => $this->sum[DOWNTIME],
             'summary_problem_has_been_acknowledged' => $this->sum[ACK],
+            'summary_stale'       => $this->isStale(true),
             'summary_output'      => $this->escapeStringForJson($this->sum[OUTPUT])
         );
 
@@ -649,6 +668,12 @@ class NagVisStatefulObject extends NagVisObject {
                             } else {
                                 $this->sum[DOWNTIME] = 0;
                             }
+
+                            if($sSubState == 'stale') {
+                                $this->sum[STALE] = 1;
+                            } else {
+                                $this->sum[STALE] = 0;
+                            }
                         }
                     } else {
                         throw new NagVisException(l('Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME].',
@@ -716,6 +741,7 @@ class NagVisStatefulObject extends NagVisObject {
             $objSummaryState = $OBJ->sum[STATE];
             $objAck          = $OBJ->sum[ACK];
             $objDowntime     = $OBJ->sum[DOWNTIME];
+            $objStale        = $OBJ->sum[STALE];
 
             if(isset($stateWeight[$objSummaryState])) {
                 // Gather the object summary state type
@@ -724,12 +750,15 @@ class NagVisStatefulObject extends NagVisObject {
                     $objType = 'ack';
                 elseif($objDowntime == 1 && isset($stateWeight[$objSummaryState]['downtime']))
                     $objType = 'downtime';
+                elseif($objStale == 1 && isset($stateWeight[$objSummaryState]['stale']))
+                    $objType = 'stale';
 
                 if(isset($stateWeight[$objSummaryState][$objType])
                    && ($currentStateWeight === null || $stateWeight[$objSummaryState][$objType] >= $currentStateWeight)) {
                     $this->sum[STATE]    = $objSummaryState;
                     $this->sum[ACK]      = $objAck;
                     $this->sum[DOWNTIME] = $objDowntime;
+                    $this->sum[STALE]    = $objStale;
                     $currentStateWeight  = $stateWeight[$objSummaryState][$objType];
                 }
             }

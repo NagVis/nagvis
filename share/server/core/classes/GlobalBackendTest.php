@@ -49,17 +49,17 @@ class GlobalBackendTest implements GlobalBackendInterface {
         'servicegroup' => Array(),
     );
     private $hostStates = Array(
-        UP          => Array('normal' => 0, 'downtime' => 0),
-        DOWN        => Array('normal' => 0, 'ack' => 0, 'downtime' => 0),
-        UNREACHABLE => Array('normal' => 0, 'ack' => 0, 'downtime' => 0),
-        UNCHECKED   => Array('normal' => 0, 'downtime' => 0),
+        UP          => Array('normal' => 0, 'stale' => 0, 'downtime' => 0),
+        DOWN        => Array('normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0),
+        UNREACHABLE => Array('normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0),
+        UNCHECKED   => Array('normal' => 0, 'stale' => 0, 'downtime' => 0),
     );
     private $serviceStates = Array(
-        OK          => Array('normal' => 0, 'downtime' => 0),
-        WARNING     => Array('normal' => 0, 'ack' => 0, 'downtime' => 0),
-        CRITICAL    => Array('normal' => 0, 'ack' => 0, 'downtime' => 0),
-        UNKNOWN     => Array('normal' => 0, 'ack' => 0, 'downtime' => 0),
-        PENDING     => Array('normal' => 0, 'downtime' => 0),
+        OK          => Array('normal' => 0, 'stale' => 0, 'downtime' => 0),
+        WARNING     => Array('normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0),
+        CRITICAL    => Array('normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0),
+        UNKNOWN     => Array('normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0),
+        PENDING     => Array('normal' => 0, 'stale' => 0, 'downtime' => 0),
     );
 
     private $canBeSoft = Array(
@@ -107,6 +107,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
             'Host with state '.$state, // output
             $ack,
             $in_downtime,
+            0, // staleness
             $stateType == 'hard' ? 1 : 0,
             3, // current attempt
             3, // max attempts
@@ -124,7 +125,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
             $downtime_author,
             $downtime_data,
             $downtime_start,
-            $downtime_end
+            $downtime_end,
         );
     }
 
@@ -152,6 +153,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
             $output,
             $ack,
             $in_downtime,
+            0, // staleness
             $stateType == 'hard' ? 1 : 0,
             3, // current attempt
             3, // max attempts

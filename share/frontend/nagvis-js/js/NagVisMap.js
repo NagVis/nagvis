@@ -39,6 +39,8 @@ var NagVisMap = NagVisStatefulObject.extend({
             substate = ' (downtime)';
         else if (this.conf.summary_problem_has_been_acknowledged == 1)
             substate = ' (ack)';
+        else if (this.conf.summary_stale)
+            substate = ' (stale)';
         return this.conf.summary_state + substate;
     },
 

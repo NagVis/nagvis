@@ -123,33 +123,35 @@ define('HOST_QUERY', true);
 // more details from those objects
 //
 // basic state
-define('STATE',    0);
-define('OUTPUT',   1);
-define('ACK',      2);
-define('DOWNTIME', 3);
+define('STATE',     0);
+define('OUTPUT',    1);
+define('ACK',       2);
+define('DOWNTIME',  3);
+define('STALE',     4);
 // extended generic
-define('STATE_TYPE',              4);
-define('CURRENT_ATTEMPT',         5);
-define('MAX_CHECK_ATTEMPTS',      6);
-define('LAST_CHECK',              7);
-define('NEXT_CHECK',              8);
-define('LAST_HARD_STATE_CHANGE',  9);
-define('LAST_STATE_CHANGE',      10);
-define('PERFDATA',               11);
-define('DISPLAY_NAME',           12);
-define('ALIAS',                  13);
-define('ADDRESS',                14);
-define('NOTES',                  15);
+define('STATE_TYPE',              5);
+define('CURRENT_ATTEMPT',         6);
+define('MAX_CHECK_ATTEMPTS',      7);
+define('LAST_CHECK',              8);
+define('NEXT_CHECK',              9);
+define('LAST_HARD_STATE_CHANGE', 10);
+define('LAST_STATE_CHANGE',      11);
+define('PERFDATA',               12);
+define('DISPLAY_NAME',           13);
+define('ALIAS',                  14);
+define('ADDRESS',                15);
+define('NOTES',                  16);
 define('CHECK_COMMAND',          16);
-define('CUSTOM_VARS',            17);
-define('DOWNTIME_AUTHOR',        18);
-define('DOWNTIME_DATA',          19);
-define('DOWNTIME_START',         20);
-define('DOWNTIME_END',           21);
+define('CUSTOM_VARS',            18);
+define('DOWNTIME_AUTHOR',        19);
+define('DOWNTIME_DATA',          20);
+define('DOWNTIME_START',         21);
+define('DOWNTIME_END',           22);
 // extended service
-define('DESCRIPTION',            22);
+define('DESCRIPTION',            23);
 
-define('EXT_STATE_SIZE', 23);
+// Number of fields in extended state structures
+define('EXT_STATE_SIZE', 24);
 
 // State definitions - internal numbers representing the states
 // hosts

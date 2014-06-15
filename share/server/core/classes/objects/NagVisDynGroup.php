@@ -71,7 +71,8 @@ class NagVisDynGroup extends NagVisStatefulObject {
                 ERROR,
                 $this->problem_msg,
                 null,
-                null
+                null,
+                null,
             );
             $this->members = Array();
             return;

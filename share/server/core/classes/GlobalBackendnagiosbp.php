@@ -185,20 +185,24 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
             ),
             OK => Array(
                 'normal'   => 0,
+                'stale'    => 0,
                 'downtime' => 0,
             ),
             WARNING => Array(
                 'normal'   => 0,
+                'stale'    => 0,
                 'ack'      => 0,
                 'downtime' => 0,
             ),
             CRITICAL => Array(
                 'normal'   => 0,
+                'stale'    => 0,
                 'ack'      => 0,
                 'downtime' => 0,
             ),
             UNKNOWN => Array(
                 'normal'   => 0,
+                'stale'    => 0,
                 'ack'      => 0,
                 'downtime' => 0,
             ),
@@ -337,6 +341,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
                         null, // dt data
                         null, // dt start
                         null, // dt end
+                        0, // staleness
                         $comp['service'] // descr
                     );
                 } else {
@@ -364,6 +369,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
                         null, // dt data
                         null, // dt start
                         null, // dt end
+                        0, // staleness
                         $comp['display_name'] // descr
                     );
 

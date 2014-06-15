@@ -71,6 +71,7 @@ class NagVisService extends NagVisStatefulObject {
                 $this->problem_msg,
                 null,
                 null,
+                null,
             ));
         }
 

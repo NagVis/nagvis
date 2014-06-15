@@ -107,6 +107,7 @@ var NagVisStatefulObject = NagVisObject.extend({
         this.last_state = {
           'summary_state': this.conf.summary_state,
             'summary_in_downtime': this.conf.summary_in_downtime,
+            'summary_stale': this.conf.summary_stale,
             'summary_problem_has_been_acknowledged': this.conf.summary_problem_has_been_acknowledged,
             'output': this.conf.output,
             'perfdata': this.conf.perfdata
@@ -123,6 +124,7 @@ var NagVisStatefulObject = NagVisObject.extend({
     stateChanged: function() {
         if(this.conf.summary_state != this.last_state.summary_state ||
            this.conf.summary_problem_has_been_acknowledged != this.last_state.summary_problem_has_been_acknowledged ||
+           this.conf.summary_stale != this.last_state.summary_stale ||
            this.conf.summary_in_downtime != this.last_state.summary_in_downtime) {
             return true;
         } else {
@@ -143,6 +145,8 @@ var NagVisStatefulObject = NagVisObject.extend({
             lastSubState = 'ack';
         } else if(this.last_state.summary_in_downtime && this.last_state.summary_in_downtime == 1) {
             lastSubState = 'downtime';
+        } else if(this.last_state.summary_stale) {
+            lastSubState = 'stale';
         }
 
         // If there is no "last state" return true here
@@ -157,6 +161,8 @@ var NagVisStatefulObject = NagVisObject.extend({
             subState = 'ack';
         } else if(this.conf.summary_in_downtime && this.conf.summary_in_downtime === 1) {
             subState = 'downtime';
+        } else if(this.conf.summary_stale) {
+            subState = 'stale';
         }
 
         var weight = oStates[this.conf.summary_state][subState];
@@ -172,6 +178,8 @@ var NagVisStatefulObject = NagVisObject.extend({
         if(this.conf.summary_problem_has_been_acknowledged && this.conf.summary_problem_has_been_acknowledged === 1) {
             return false;
         } else if(this.conf.summary_in_downtime && this.conf.summary_in_downtime === 1) {
+            return false;
+        } else if(this.conf.summary_stale && this.conf.summary_stale) {
             return false;
         }
         
@@ -580,7 +588,7 @@ var NagVisStatefulObject = NagVisObject.extend({
         }
 
         // Get the border color depending on ack/downtime
-        if(this.conf.summary_problem_has_been_acknowledged === 1 || this.conf.summary_in_downtime === 1) {
+        if(this.conf.summary_problem_has_been_acknowledged === 1 || this.conf.summary_in_downtime === 1 || this.conf.summary_stale) {
             colorBorder = '#666666';
             colorFill = lightenColor(colorFill, 100, 100, 100);
         }

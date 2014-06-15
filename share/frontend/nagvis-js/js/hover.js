@@ -106,6 +106,9 @@ function replaceHoverTemplateMacrosChild(oObj, sTemplateCode) {
     if(oObj.conf.summary_in_downtime && oObj.conf.summary_in_downtime == 1)
         oMacros.obj_summary_in_downtime = '(Downtime)';
 
+    if(oObj.conf.summary_stale)
+        oMacros.obj_summary_stale = '(Stale)';
+
     // On child service objects in hover menu replace obj_name with
     // service_description
     if(oObj.conf.type === 'service')
@@ -151,6 +154,12 @@ function replaceHoverTemplateDynamicMacros(oObj) {
 
     if(oObj.conf.in_downtime && oObj.conf.in_downtime === 1)
         oMacros.obj_in_downtime = '(Downtime)';
+
+    if(oObj.conf.summary_stale)
+        oMacros.obj_summary_stale = '(Stale)';
+
+    if(oObj.conf.stale)
+        oMacros.obj_stale = '(Stale)';
 
     oMacros.obj_output = oObj.conf.output;
     oMacros.obj_summary_output = oObj.conf.summary_output;

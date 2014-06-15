@@ -8,6 +8,8 @@ Frontend:
   * FIX: Fixed small styling issues in header menu
 
 Core:
+  * Dealing with the staleness value of hosts and services as a new sub-state
+  (like downtime / ack); The staleness marks the state of a host/service as outdated
   * FIX: Deleting no longer required map permission entries (e.g. of maps deleted
   by hand) before rendering the manage roles dialog
 
