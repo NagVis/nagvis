@@ -157,6 +157,10 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
      * It is simply read-only.
      */
 
+    public function renameMapPermissions($old_name, $new_name) {
+        return false;
+    }
+
     public function deletePermission($mod, $name) {
         return false;
     }

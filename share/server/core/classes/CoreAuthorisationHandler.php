@@ -108,6 +108,10 @@ class CoreAuthorisationHandler {
         $this->MOD = new $this->sModuleName();
     }
 
+    public function renameMapPermissions($old_name, $new_name) {
+        return $this->MOD->renameMapPermissions($old_name, $new_name);
+    }
+
     public function createPermission($mod, $name) {
         return $this->MOD->createPermission($mod, $name);
     }

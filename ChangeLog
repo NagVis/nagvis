@@ -12,6 +12,7 @@ Core:
   (like downtime / ack); The staleness marks the state of a host/service as outdated
   * FIX: Deleting no longer required map permission entries (e.g. of maps deleted
   by hand) before rendering the manage roles dialog
+  * FIX: Updating map permissions during renaming of maps (not renaming via CLI)
 
 1.8b4
 Frontend:

@@ -47,6 +47,11 @@ class CoreAuthorisationModSQLite extends CoreAuthorisationModule {
         }
     }
 
+    public function renameMapPermissions($old_name, $new_name) {
+        $this->DB->query('UPDATE perms SET obj='.$this->DB->escape($new_name)
+                        .' WHERE mod=\'Map\' AND obj='.$this->DB->escape($old_name));
+    }
+
     public function deletePermission($mod, $name) {
         if($name === '') {
             return false;

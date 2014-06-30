@@ -901,6 +901,7 @@ class CoreModMap extends CoreModule {
     }
 
     protected function doRename($a) {
+        global $AUTHORISATION;
         $files = Array();
 
         // loop all map configs to replace mapname in all map configs
@@ -923,6 +924,9 @@ class CoreModMap extends CoreModule {
                 // Do nothing. Siletly pass config errors here...
             }
         }
+
+        // And also remove the permission
+        $AUTHORISATION->renameMapPermissions($a['map'], $a['map_new_name']);
 
         // rename config file
         rename(cfg('paths', 'mapcfg').$a['map'].'.cfg',
