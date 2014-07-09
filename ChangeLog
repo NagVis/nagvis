@@ -1,5 +1,6 @@
 1.8b5
 Frontend:
+  * Multisite snapin: Parent maps in tree mode can now be clicked to open the map
   * Add support for secure and httponly cookies (sesscookiehttponly,  sesscookiesecure)
     (Thanks to mikael.falkvidd@op5.com for the patch)
   * FIX: Fixed links of rotation steps (always linking to last step)

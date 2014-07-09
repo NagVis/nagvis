@@ -77,6 +77,7 @@ class CoreModMultisite extends CoreModule {
             // this copies the foldable_container code provided in Check_MK htmllib
             // assume always open by default
             $s .= '<li>';
+            $map_url = cfg('paths', 'htmlbase').'/index.php?mod=Map&act=view&show='.$map['name'];
             if(isset($childs[$map['name']])) {
                 $act = 'onclick="toggle_foldable_container(\'nagvis\', \''.$map['name'].'\')" '
                      . 'onmouseover="this.style.cursor=\'pointer\';" '
@@ -84,13 +85,14 @@ class CoreModMultisite extends CoreModule {
 
                 $s .= '<img align=absbottom class="treeangle" id="treeimg.nagvis.'.$map['name'].'" '
                     . 'src="images/tree_90.png" '.$act.' />';
-                $s .= '<b class="treeangle title" class=treeangle '.$act.'>'.$map['alias'].'</b><br>';
-                    $s .= '<ul class="treeangle open" style="padding-left:0;" id="tree.nagvis.'.$map['name'].'">';
-                    $s .= $this->renderTreeNodes($childs[$map['name']], $childs);
-                    $s .= '</ul>';
+                $s .= '<a href="'.$map_url.'" target="main"><b class="treeangle title" class=treeangle>';
+                $s .= $map['alias'];
+                $s .= '</b></a><br>';
+                $s .= '<ul class="treeangle open" style="padding-left:0;" id="tree.nagvis.'.$map['name'].'">';
+                $s .= $this->renderTreeNodes($childs[$map['name']], $childs);
+                $s .= '</ul>';
             } else {
-                $s .= '<a target="main" href="'.cfg('paths', 'htmlbase').'/index.php?mod=Map&act=view'
-                    . '&show='.$map['name'].'">'.$map['alias'].'</a>';
+                $s .= '<a target="main" href="'.$map_url.'">'.$map['alias'].'</a>';
             }
             $s .= '</li>';
         }
