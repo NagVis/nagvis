@@ -51,7 +51,10 @@ class CoreSessionHandler {
             $sDomain = null;
 
         // Set custom params for the session cookie
-        session_set_cookie_params(0, $sPath, $sDomain, $bSecure, $bHTTPOnly);
+        if (version_compare(PHP_VERSION, '5.2') >= 0)
+            session_set_cookie_params(0, $sPath, $sDomain, $bSecure, $bHTTPOnly);
+        else
+            session_set_cookie_params(0, $sPath, $sDomain, $bSecure);
 
         // Start a session for the user when not started yet
         if(!isset($_SESSION)) {
