@@ -42,16 +42,28 @@ function geomap_read_csv($p) {
 
 function geomap_backend_locations($p) {
     global $_BACKEND;
-    $_BACKEND->checkBackendExists($p['backend_id'][0], true);
-    $_BACKEND->checkBackendFeature($p['backend_id'][0], 'getGeomapHosts', true);
-    return $_BACKEND->getBackend($p['backend_id'][0])->getGeomapHosts($p['filter_group']);
+    $hosts = array();
+    foreach ($p['backend_id'] AS $backend_id) {
+        $_BACKEND->checkBackendExists($backend_id, true);
+        $_BACKEND->checkBackendFeature($backend_id, 'getGeomapHosts', true);
+
+        $hosts = array_merge($hosts, $_BACKEND->getBackend($backend_id)->getGeomapHosts($p['filter_group']));
+    }
+    return $hosts;
 }
 
 function geomap_backend_program_start($p) {
     global $_BACKEND;
-    $_BACKEND->checkBackendExists($p['backend_id'][0], true);
-    $_BACKEND->checkBackendFeature($p['backend_id'][0], 'getProgramStart', true);
-    return $_BACKEND->getBackend($p['backend_id'][0])->getProgramStart();
+    $t = null;
+    foreach ($p['backend_id'] AS $backend_id) {
+        $_BACKEND->checkBackendExists($backend_id, true);
+        $_BACKEND->checkBackendFeature($backend_id, 'getProgramStart', true);
+
+        $this_t = $_BACKEND->getBackend($backend_id)->getProgramStart();
+        if ($t === null || $this_t > $t)
+            $t = $this_t;
+    }
+    return $t;
 }
 
 //

@@ -1,3 +1,7 @@
+1.8b6:
+Geomap:
+  * Geomaps support multiple backends as object source now
+
 1.8b5
 Frontend:
   * Multisite snapin: Parent maps in tree mode can now be clicked to open the map
