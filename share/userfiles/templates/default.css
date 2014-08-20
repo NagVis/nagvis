@@ -812,7 +812,7 @@ div#zoombar {
     position: absolute;
     width: 20px;
     height: 145px;
-    z-index: 1001;
+    z-index: 99;
     left: 10px;
     top: 40px;
 }
