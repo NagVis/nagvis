@@ -2,6 +2,9 @@
 Frontend:
   * FIX: The zoombar is now rendered below the header menu layer
 
+Core:
+  * Multisite Authorisation: It is now possible to specific manage map view/edit permissions
+
 1.8b6:
 Geomap:
   * Geomaps support multiple backends as object source now

@@ -56,18 +56,24 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
             array('Multisite', 'getMaps',            '*'),
         );
 
-        $nagvis_permissions = array(
-            array('*',        '*',      '*'),
-            array('Map',      'view',   '*'),
-            array('Map',      'edit',   '*'),
-            array('Map',      'delete', '*'),
-            array('Rotation', 'view',   '*'),
-        );
+        # Gather NagVis related permissions
+        $nagvis_permissions = array();
+        global $mk_roles;
+        foreach ($mk_roles AS $role_id => $permissions) {
+            foreach ($permissions AS $perm_id) {
+                if (strpos($perm_id, 'nagvis.') === 0) {
+                    $key = substr($perm_id, 7);
+                    if (!isset($nagvis_permissions[$key])) {
+                        $nagvis_permissions[$key] = null;
+                    }
+                }
+            }
+        }
 
         # Loop the multisite NagVis related permissions and add them
-        foreach($nagvis_permissions AS $p) {
-            if(may($username, 'nagvis.'.implode('_', $p))) {
-                $perms[] = $p;
+        foreach($nagvis_permissions AS $p => $_unused) {
+            if(may($username, 'nagvis.'.$p)) {
+                $perms[] = explode('_', $p);
             }    
         }
 
