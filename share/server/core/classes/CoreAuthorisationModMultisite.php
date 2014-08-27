@@ -73,7 +73,18 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
         # Loop the multisite NagVis related permissions and add them
         foreach($nagvis_permissions AS $p => $_unused) {
             if(may($username, 'nagvis.'.$p)) {
-                $perms[] = explode('_', $p);
+                $parts = explode('_', $p);
+                if (count($parts) == 3) {
+                    // Add native multisite permissions
+                    $perms[] = $parts;
+                } else {
+                    // Special permissions with two parts are controlling the permissions
+                    // on the maps the user is explicitly permitted for by its contactgroup
+                    // memberships
+                    foreach (permitted_maps($username) AS $map_name) {
+                        $perms[] = array_merge($parts, array($map_name));
+                    }
+                }
             }    
         }
 
