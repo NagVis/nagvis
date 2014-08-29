@@ -32,6 +32,15 @@ function listLineTypes($CORE) {
     );
 }
 
+function listLineArrows($CORE) {
+    return Array(
+        'forward' => '------->',
+        'back'    => '<-------',
+        'both'    => '<------>',
+        'none'    => '--------',
+    );
+}
+
 function listHoverChildSorters() {
     return Array(
         'a' => l('Alphabetically'),
@@ -474,11 +483,14 @@ $mapConfigVars = Array(
     // the style of the connector arrow. But maybe this attribute can be
     // used on regular maps for line objects too.
     'line_arrow' => Array(
-        'must' => 0,
-        'default' => 'forward',
-        'match' => MATCH_LINE_ARROW,
-        'depends_on' => 'view_type',
-        'depends_value' => 'line'),
+        'must'          => 0,
+        'default'       => 'forward',
+        'match'         => MATCH_LINE_ARROW,
+        'depends_on'    => 'view_type',
+        'depends_value' => 'line',
+        'field_type'    => 'dropdown',
+        'list'          => 'listLineArrows',
+    ),
     'line_color' => Array(
         'must'          => 0,
         'default'       => '#ffffff',
@@ -968,6 +980,7 @@ $mapConfigVarMap['global'] = Array(
     'iconset' => null,
     'line_type' => null,
     'line_arrow' => null,
+    'line_color' => null,
     'line_cut' => null,
     'line_width' => null,
     'line_weather_colors' => null,

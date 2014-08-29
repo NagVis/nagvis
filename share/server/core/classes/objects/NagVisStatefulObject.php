@@ -37,7 +37,6 @@ class NagVisStatefulObject extends NagVisObject {
     protected $only_hard_states;
 
     protected $line_type;
-    protected $line_arrow = 'none';
 
     // Details about the icon image (cache)
     protected $iconDetails;

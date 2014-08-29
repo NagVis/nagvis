@@ -5,6 +5,9 @@ Frontend:
 Core:
   * Multisite Authorisation: It is now possible to specific manage map view/edit permissions
 
+Automap:
+  * Now using line_color and line_width from map global definitions
+
 1.8b6:
 Geomap:
   * Geomaps support multiple backends as object source now
