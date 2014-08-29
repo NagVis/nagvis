@@ -169,10 +169,15 @@ if (cfg('global', 'shinken_features')) {
     );
 }
 
-// Hack to reflect the automap line default settings
-GlobalMapCfg::$validConfig['global']['line_color']['default'] = '#000000';
-GlobalMapCfg::$validConfig['global']['line_width']['default'] = '1';
-GlobalMapCfg::$validConfig['global']['line_arrow']['default'] = 'forward';
+// Alter some global vars with automap specific things
+$updateConfigVars = array(
+    'line_width' => array(
+        'default' => '1',
+    ),
+    'line_color' => array(
+        'default' => '#000000',
+    ),
+);
 
 /**
  * Get root host object by NagVis configuration or by backend.

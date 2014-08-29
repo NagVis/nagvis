@@ -45,6 +45,7 @@ class GlobalMapCfg {
 
     // Array for config validation
     protected static $validConfig = null;
+    protected static $updateValidConfig = array();
 
     // Array for holding the registered map sources
     protected static $viewParams = array();
@@ -427,6 +428,13 @@ class GlobalMapCfg {
             ), $this->getSourceParams(true, true));
         }
 
+        // Update the valid config construct with source specific adaptions
+        // It is a hack to do it here, because these changes might affect maps
+        // which are using other sources. But for the moment this seems to be
+        // okay, because the sources only adapt options which are related to
+        // the visualisation of objects.
+        $this->addSourceDefaults();
+
         // Gather the default values for the object types
         $this->gatherTypeDefaults($onlyGlobal);
 
@@ -481,9 +489,10 @@ class GlobalMapCfg {
     private function fetchMapSources() {
         global $CORE;
         foreach($CORE->getAvailableSources() AS $source_name) {
-            $viewParams = array();
-            $configVars = array();
-            $selectable = false;
+            $viewParams       = array();
+            $configVars       = array();
+            $updateConfigVars = array();
+            $selectable       = false;
 
             if(file_exists(path('sys', 'local', 'sources'))) {
                 include_once(path('sys', 'local', 'sources') . '/'. $source_name . '.php');
@@ -504,6 +513,11 @@ class GlobalMapCfg {
                 self::$validConfig['global'][$key] = $val;
                 // Mark this option as source parameter. Save the source file in the value
                 self::$validConfig['global'][$key]['source_param']  = $source_name;
+            }
+
+            // Apply adaptions to the generic options
+            if (count($updateConfigVars) > 0) {
+                self::$updateValidConfig[$source_name] = $updateConfigVars;
             }
 
             // Register the slectable source
@@ -651,6 +665,19 @@ class GlobalMapCfg {
         }
 
         return $params;
+    }
+
+    private function addSourceDefaults() {
+        $sources = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : array();
+        foreach ($sources AS $source_name) {
+            if (isset(self::$updateValidConfig[$source_name])) {
+                foreach(self::$updateValidConfig[$source_name] AS $param => $spec) {
+                    foreach ($spec AS $key => $val) {
+                        self::$validConfig['global'][$param][$key] = $val;
+                    }
+                }
+            }
+        }
     }
 
     /**
