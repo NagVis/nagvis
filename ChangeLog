@@ -13,6 +13,8 @@ Automap:
 
 Geomap:
   * FIX: Removed map editing options from menus which make no sense
+  * FIX: Removed not working geomap types osmarender and cycle
+  * FIX: Tried to fix geomap_zoom parameter, but does still not work with all zoom levels
 
 1.8b6:
 Geomap:

@@ -139,9 +139,7 @@ function geomap_get_contents($url) {
 
 function list_geomap_types() {
     return array(
-        'osmarender' => 'Osmarender',
         'mapnik'     => 'Mapnik',
-        'cycle'      => 'Cycle',
     );
 }
 
@@ -184,7 +182,7 @@ $configVars = array(
     'geomap_type' => array(
         'must'       => false,
         'default'    => 'mapnik',
-        'match'      => '/^(osmarender|mapnik|cycle)$/i',
+        'match'      => '/^(mapnik)$/i',
         'field_type' => 'dropdown',
         'list'       => 'list_geomap_types',
     ),
@@ -308,22 +306,26 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
     // FIXME: Too small min/max? What is the minimum bbox size?
 
-    $mid_lat  = ($min_lat + $max_lat) / 2;
-    $mid_long = ($min_long + $max_long) / 2;
-
     //echo $min_lat . ' - ' . $max_lat. ' - '. $mid_lat.'\n';
     //echo $min_long . ' - ' . $max_long. ' - ' . $mid_long;
 
     // Using this API: http://pafciu17.dev.openstreetmap.org/
     $url = cfg('global', 'geomap_server')
-          .'?module=map&center='.$mid_long.','.$mid_lat
+          .'?module=map'
           .'&width='.$params['width'].'&height='.$params['height']
           .'&type='.$params['geomap_type'];
-          //.'&points='.$min_long.','.$max_lat.';'.$max_long.','.$min_lat;
+
     // The geomap zoom seems to be something different than the nagvis zoom. Use
     // the dedicated geomap_zoom parameter
-    if(isset($params['geomap_zoom']) && $params['geomap_zoom'] != '')
-        $url .= '&zoom='.$params['geomap_zoom'];
+    if(isset($params['geomap_zoom']) && $params['geomap_zoom'] != '') {
+        $mid_lat  = ($min_lat + $max_lat) / 2;
+        $mid_long = ($min_long + $max_long) / 2;
+        $url .= '&zoom='.$params['geomap_zoom']
+               .'&center='.$mid_long.','.$mid_lat;
+    }
+    else {
+        $url .= '&bbox='.$min_long.','.$max_lat.','.$max_long.','.$min_lat;
+    }
     //file_put_contents('/tmp/123', $url);
 
     // Fetch the background image when needed
