@@ -49,10 +49,15 @@
     <li onmouseover="ddMenu('map',1)" onmouseout="ddMenuHide(['map'])" class="dropdown">
         <span id="map-ddheader">{$langMapEdit} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         <ul id="map-ddcontent">
+            {if $canMoveObjects || $canAddObjects || $canEditObjects}
             <li><a href="#" onclick="toggleAllMapObjectsLock();ddMenuHide(['map'])">{$langLockUnlockAll}</a></li>
             <li class="spacer"><hr /></li>
+            {/if}
+            {if $canMoveObjects}
             <li><a href="#" onclick="gridToggle();ddMenuHide(['map'])">{$langToggleGrid}</a></li>
             <li class="spacer"><hr /></li>
+            {/if}
+            {if $canAddObjects}
             <li onmouseover="ddMenu('map-addicon',1,1)" onmouseout="ddMenuHide(['map-addicon'])" class="dropdown subdropdown">
                 <a class="submenu-link" id="map-addicon-ddheader" href="#">{$langMapAddIcon}</a>
                 <ul id="map-addicon-ddcontent">
@@ -86,6 +91,7 @@
             </li>
             <li class="spacer"><hr /></li>
             <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=manageTmpl&amp;show={$currentMap}', '{$langMapManageTmpl}', 300)">{$langMapManageTmpl}</a></li>
+            {/if}
             <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=addModify&amp;show={$currentMap}&amp;object_id=0', '{$langMapOptions}');" class="underline">{$langMapOptions}</a></li>
         </ul>
     </li>

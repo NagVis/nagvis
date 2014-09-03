@@ -8,6 +8,11 @@ Core:
 
 Automap:
   * Now using line_color and line_width from map global definitions
+  * FIX: Removed useless "Make root" link for connector lines
+  * FIX: Removed map editing options from menus which make no sense
+
+Geomap:
+  * FIX: Removed map editing options from menus which make no sense
 
 1.8b6:
 Geomap:

@@ -220,8 +220,8 @@ class NagVisHeaderMenu {
         $this->aMacros['permittedOverview'] = $AUTHORISATION->isPermitted('Overview', 'view', '*');
 
         // Check if the user is permitted to edit the current map
-        $this->aMacros['permittedView'] = $AUTHORISATION->isPermitted($this->aMacros['mod'], 'view', $this->UHANDLER->get('show'));
-        $this->aMacros['permittedEdit'] = $AUTHORISATION->isPermitted($this->aMacros['mod'], 'edit', $this->UHANDLER->get('show'));
+        $this->aMacros['permittedView']  = $AUTHORISATION->isPermitted($this->aMacros['mod'], 'view', $this->UHANDLER->get('show'));
+        $this->aMacros['permittedEdit']  = $AUTHORISATION->isPermitted($this->aMacros['mod'], 'edit', $this->UHANDLER->get('show'));
 
         // Permissions for the option menu
         $this->aMacros['permittedSearch']            = $AUTHORISATION->isPermitted('Search', 'view', '*');
@@ -238,17 +238,24 @@ class NagVisHeaderMenu {
         $this->aMacros['permittedLogout'] = $AUTH->logoutSupported()
                                         & $AUTHORISATION->isPermitted('Auth', 'logout', '*');
 
-        // Replace some special macros
+        // Replace some special macros for maps
         if($this->OBJ !== null && $this->aMacros['mod'] == 'Map') {
             $this->aMacros['currentMap']        = $this->OBJ->getName();
             $this->aMacros['currentMapAlias']   = $this->OBJ->getValue(0, 'alias');
             $this->aMacros['usesSources']       = count($this->OBJ->getValue(0, 'sources')) > 0;
             $this->aMacros['zoombar']           = $this->OBJ->getValue(0, 'zoombar');
+
+            $this->aMacros['canAddObjects']  = !in_array('automap', $this->OBJ->getValue(0, 'sources')) && !in_array('geomap', $this->OBJ->getValue(0, 'sources'));
+            $this->aMacros['canEditObjects'] = !in_array('automap', $this->OBJ->getValue(0, 'sources'));
+            $this->aMacros['canMoveObjects'] = !in_array('automap', $this->OBJ->getValue(0, 'sources')) && !in_array('geomap', $this->OBJ->getValue(0, 'sources'));
         } else {
             $this->aMacros['currentMap']        = '';
             $this->aMacros['currentMapAlias']   = '';
             $this->aMacros['usesSources']       = false;
             $this->aMacros['zoombar']           = false;
+            $this->aMacros['canAddObjects']     = false;
+            $this->aMacros['canEditObjects']    = false;
+            $this->aMacros['canMoveObjects']    = false;
         }
 
         // Add permitted rotations
