@@ -14,6 +14,9 @@ Automap:
 Geomap:
   * FIX: Removed map editing options from menus which make no sense
   * FIX: Removed not working geomap types osmarender and cycle
+  * FIX: Removed global map parameter map_image. Technically it could be changed,
+         but seems a bit senseless for geomaps
+         (where the background is rendered automatically)
   * FIX: Tried to fix geomap_zoom parameter, but does still not work with all zoom levels
 
 1.8b6:

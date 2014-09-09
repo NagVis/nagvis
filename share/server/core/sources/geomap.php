@@ -214,6 +214,11 @@ $configVars = array(
     ),
 );
 
+// Global config vars not to show for geomaps
+$hiddenConfigVars = array(
+    'map_image',
+);
+
 function geomap_files($params) {
     // The source_file parameter was filtered here in previous versions. Users
     // reported that this is not very useful. So I removed it. Hope it works

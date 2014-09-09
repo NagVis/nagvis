@@ -191,6 +191,11 @@ class WuiViewMapAddModify {
                         unset($typeDef[$propname]);
                     }
                 }
+
+                // Filter unwanted global parameters
+                foreach ($this->MAPCFG->getHiddenConfigVars() AS $propname) {
+                    unset($typeDef[$propname]);
+                }
             }
         } else {
             $typeDef = $this->MAPCFG->getValidObjectType($type);

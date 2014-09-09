@@ -44,8 +44,9 @@ class GlobalMapCfg {
     protected $ignoreSourceErrors = false;
 
     // Array for config validation
-    protected static $validConfig = null;
+    protected static $validConfig       = null;
     protected static $updateValidConfig = array();
+    protected static $hiddenConfigVars  = array();
 
     // Array for holding the registered map sources
     protected static $viewParams = array();
@@ -492,6 +493,7 @@ class GlobalMapCfg {
             $viewParams       = array();
             $configVars       = array();
             $updateConfigVars = array();
+            $hiddenConfigVars = array();
             $selectable       = false;
 
             if(file_exists(path('sys', 'local', 'sources'))) {
@@ -518,6 +520,11 @@ class GlobalMapCfg {
             // Apply adaptions to the generic options
             if (count($updateConfigVars) > 0) {
                 self::$updateValidConfig[$source_name] = $updateConfigVars;
+            }
+
+            // Apply adaptions to the generic options
+            if (count($hiddenConfigVars) > 0) {
+                self::$hiddenConfigVars[$source_name] = $hiddenConfigVars;
             }
 
             // Register the slectable source
@@ -665,6 +672,17 @@ class GlobalMapCfg {
         }
 
         return $params;
+    }
+
+    public function getHiddenConfigVars() {
+        $hidden = array();
+        $sources = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : array();
+        foreach ($sources AS $source_name) {
+            if (isset(self::$hiddenConfigVars[$source_name])) {
+                $hidden = array_merge($hidden, self::$hiddenConfigVars[$source_name]);
+            }
+        }
+        return $hidden;
     }
 
     private function addSourceDefaults() {
