@@ -80,10 +80,6 @@ Relative Koordinaten:
 - Geomap:
   - Andere Objekte in Geomaps erlauben (Dazu die Felder type, name1, name2) einführen
 
-- Header Dropdown bei zu vielen Elemenenten nach rechts verbreitern
-
-- Zeige Rotations in Sidebar
-
 - Verzeichnis-Hierarchie unterhalb von maps/
   - Anstatt flachem Listing einen Walk machen
   - Map-Name enthält dann den Pfad relativ zum Maps Verzeichnis
