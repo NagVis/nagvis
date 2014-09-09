@@ -11,63 +11,6 @@ Offene Punkte:
 
 - WUI: printLang() durch neuen _() Mechnismus ersetzen
 
--------------------------------------------------------------------------------
-
-*** state handling cleanup ***
-
-Ein Zustand bedeutet:
-- state
-- output
-- problem_has_been_acknowledged
-- in_downtime
-
-Der Summary-State ist auch ein solches Zustandskonstrukt. Ergibt sich
-aber bei Hosts eben aus dem eigenen Zustand und den Member-Zuständen.
-
-Zustand mit Details bedeutet:
-- state
-- output
-- problem_has_been_acknowledged
-- in_downtime
-- state_type
-- last_state_change
-- current_check_attempt
-- max_check_attempts
-- perfdata
-- downtime_author
-- downtime_data
-- downtime_start
-- downtime_end
-
-- Alle zustandsbezogenen Dinge kommen in ein eigenes Array()
-- Dieser spiegelt den kompletten Zustand des Objektes selbst
-  - Gilt also nur für Hosts und Services
-- Jedes Objekt (ausser Services) hat eine Liste Members. Diese Liste hält die Zustände der Members
-  Hosts: Services
-  Hostgroups: Host + Service-States
-  Servicegroups: Service-States
-  Maps: Alles
-- In der Member-Liste sind nicht nur die direkten States enthalten, sondern alle
-
--------------------------------------------------------------------------------
-
-Intern states als Konstanten behandeln, nicht mehr Strings verwenden
-
-IDs:
-
-14 UNCHECKED
-12 UNREACHABLE
-11 DOWN
-10 UP
-
-4 PENDING
-3 UNKNOWN
-2 CRITICAL
-1 WARNING
-0 OK
-
--1 ERROR
-
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
   - An Shapes anheften fehlt - Eventuell auch nicht. Was ist denn, wenn man Shapes
@@ -215,6 +158,59 @@ Exception/Error log bauen:
 ===============================================================================
 # ERLEDIGT
 ===============================================================================
+
+*** state handling cleanup ***
+
+Ein Zustand bedeutet:
+- state
+- output
+- problem_has_been_acknowledged
+- in_downtime
+
+Der Summary-State ist auch ein solches Zustandskonstrukt. Ergibt sich
+aber bei Hosts eben aus dem eigenen Zustand und den Member-Zuständen.
+
+Zustand mit Details bedeutet:
+- state
+- output
+- problem_has_been_acknowledged
+- in_downtime
+- state_type
+- last_state_change
+- current_check_attempt
+- max_check_attempts
+- perfdata
+- downtime_author
+- downtime_data
+- downtime_start
+- downtime_end
+
+- Alle zustandsbezogenen Dinge kommen in ein eigenes Array()
+- Dieser spiegelt den kompletten Zustand des Objektes selbst
+  - Gilt also nur für Hosts und Services
+- Jedes Objekt (ausser Services) hat eine Liste Members. Diese Liste hält die Zustände der Members
+  Hosts: Services
+  Hostgroups: Host + Service-States
+  Servicegroups: Service-States
+  Maps: Alles
+- In der Member-Liste sind nicht nur die direkten States enthalten, sondern alle
+
+*** Intern states als Konstanten behandeln, nicht mehr Strings verwenden ***
+
+IDs:
+
+14 UNCHECKED
+12 UNREACHABLE
+11 DOWN
+10 UP
+
+4 PENDING
+3 UNKNOWN
+2 CRITICAL
+1 WARNING
+0 OK
+
+-1 ERROR
 
 *** Dynamische Maps ***
 
