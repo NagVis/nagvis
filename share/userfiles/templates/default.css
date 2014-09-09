@@ -666,6 +666,7 @@ td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 .dropdown img {vertical-align:middle;margin-left:10px}
 .dropdown ul {margin:0;padding:0;list-style:none;width:205px;z-index:100;position:absolute;top:31px;display:none}
 .dropdown li {margin:0;padding:0}
+.dropdown li.current a{font-weight:bold;}
 .dropdown li.lvl2 a{padding-left:10px;width:188px}
 .dropdown li.lvl3 a{padding-left:20px;width:178px}
 .dropdown li.lvl4 a{padding-left:30px;width:168px}
@@ -714,6 +715,7 @@ td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 #sidebar li.lvl6 a{padding-left:70px;width:130px}
 #sidebar li.open > div a.title {background: url('../images/templates/default.folder_open.gif') no-repeat left #eaf0f2;}
 #sidebar li.closed > div a.title {background: url('../images/templates/default.folder_closed.gif') no-repeat left #eaf0f2;}
+#sidebar li.current > div {font-weight: bold;}
 #sidebar li > div a:hover,
 #sidebar li > div a.title:hover {background-color:#d9e1e4;color:#779D2A}
 #sidebar a.error, #sidebar a.error:active, #sidebar a.error:visited {color:#ff0000}

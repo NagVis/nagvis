@@ -9,10 +9,6 @@ Offene Punkte:
       Eine Möglichkeit wäre die Objekte einfach zu verstecken, die nicht angezeigt
       werden sollen. Das würde dann zu leeren flecken auf der Map führen.
 
-  - Doku:
-    - Alte zu neuen Automap Parametern
-    - Automap Migration
-
 - WUI: printLang() durch neuen _() Mechnismus ersetzen
 
 -------------------------------------------------------------------------------
@@ -77,22 +73,12 @@ Relative Koordinaten:
   - An Shapes anheften fehlt - Eventuell auch nicht. Was ist denn, wenn man Shapes
     als Design Elemente nutzen möchte, die einfach im Hintergrund liegen? Eventuell
     muss man das beim Shape konfigurierbar machen.
-- Sidebar Folder auf/zu klappbar
-- In Sidebar/Dropdown die aktuelle Map highlighten
 
 - Hover- und Contextmenü-Macros vereinheitlichen
 - Rotationen: Externe Seiten alternativ in iframe öffnen (z.B. Check_MK Views)
 
 - Geomap:
   - Andere Objekte in Geomaps erlauben (Dazu die Felder type, name1, name2) einführen
-
-- Automap: User Defined Coords:
-  - Speichern testen (Nur nötigste Attribute schreiben)
-  - Werden die korrekt übernommen?
-  - margin abziehen?
-  Da diese Umsetzung mit Graphviz nicht möglich ist, bleiben nun zwei Möglichkeiten:
-    1. Das Feature wieder abklemmen.
-    2. Das Programm zum Rendering wechseln <<<
 
 - Header Dropdown bei zu vielen Elemenenten nach rechts verbreitern
 

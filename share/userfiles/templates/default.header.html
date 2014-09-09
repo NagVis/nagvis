@@ -8,10 +8,10 @@
     <li class="logo"><a href="http://www.nagvis.org/"><img src="{$pathImages}/internal/logo_96x25.png" alt="NagVis" /></a></li>
     <li onmouseover="!sidebarOpen() ? showMapDropdown() : void(0)" onmouseout="ddMenuHide(['views'])" class="dropdown">
         <span id="views-ddheader" onclick="toggleSidebar(true);ddMenuHide(['views'])">{$langOpen} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
-        {template headMaps maps pathBase type indent=1}
-        {foreach $maps map}<li class="lvl{$indent}">{if $map.configError == true}<a class="error" href="#">{$map.mapAlias}</a>
-            {else}<a href="{$pathBase}/frontend/nagvis-js/index.php?mod={$type}&amp;act=view&amp;show={$map.mapName}">{$map.mapAlias}</a> {/if}</li>
-            {if $map.childs}{headMaps $map.childs $pathBase $type $indent+1}{/if}{/foreach}
+        {template headMaps maps pathBase currentMap indent=1}
+        {foreach $maps map}<li class="lvl{$indent}{if $currentMap == $map.mapName} current{/if}">{if $map.configError == true}<a class="error" href="#">{$map.mapAlias}</a>
+            {else}<a href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.mapName}">{$map.mapAlias}</a> {/if}</li>
+            {if $map.childs}{headMaps $map.childs $pathBase $currentMap $indent+1}{/if}{/foreach}
         {/template}
         <ul id="views-ddcontent">
             {if $permittedOverview}
@@ -19,7 +19,7 @@
             {/if}
             {if count($maps) > 0}
               <li class="spacer"><hr /></li>
-              {headMaps $maps $pathBase "Map"}
+              {headMaps $maps $pathBase $currentMap}
             {/if}
             <li class="spacer underline"></li>
         </ul>
@@ -145,19 +145,19 @@
 </ul>
 </div>
 
-{template sideMaps maps pathBase showStates indent=1}
-{foreach $maps map}<li class="lvl{$indent} {if $map.childs}closed parent{/if}"><div>
+{template sideMaps maps pathBase showStates currentMap indent=1}
+{foreach $maps map}<li class="lvl{$indent}{if $map.childs} closed parent{/if}{if $currentMap == $map.mapName} current{/if}"><div>
 {if $showStates}<div class="statediv" id="side-state-{$map.mapName}"></div>{/if}
 {if $map.childs}<a class=open href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.mapName}">&gt;</a>{/if}
 <a class="{if $map.childs}title{/if} {$map.class} {if $map.configError}error{/if}" {if $map.childs}onclick="sidebarToggleSubtree(this);return false" id="sb-{$map.mapName}"{/if}
 {if $map.childs}href="#"{else}href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.mapName}"{/if}>{$map.mapAlias}</a>
-</div>{if $map.childs}<ul id="sb-{$map.mapName}-childs" style="display:none;">{sideMaps $map.childs $pathBase $showStates $indent+1}</ul>{/if}</li>{/foreach}
+</div>{if $map.childs}<ul id="sb-{$map.mapName}-childs" style="display:none;">{sideMaps $map.childs $pathBase $showStates $currentMap $indent+1}</ul>{/if}</li>{/foreach}
 {/template}
 <div id="sidebar">
 <ul>
     {if $permittedOverview}<li class="spacerbottom"><div><a href="{$pathBase}/frontend/nagvis-js/index.php">{$langOverview}</a></div></li>{/if}
     <li class="closed"><div><a id="sb-maps" class="title" href="#" onclick="sidebarToggleSubtree(this);return false;">{$langMaps}</a></div>
-        <ul id="sb-maps-childs" style="display:none;">{sideMaps $maps $pathBase $showStates}</ul>
+        <ul id="sb-maps-childs" style="display:none;">{sideMaps $maps $pathBase $showStates $currentMap}</ul>
     </li>
     {if count($rotations) > 0}
     <li class="closed spacertop"><div><a id="sb-rotations" class="title" href="#" onclick="sidebarToggleSubtree(this);return false">{$langRotations}</a></div>

@@ -1,5 +1,6 @@
 1.8b7:
 Frontend:
+  * Highlighting the current map in sidebar and header dropdown menus
   * FIX: The zoombar is now rendered below the header menu layer
   * FIX: The line_arrow is now configured using a dropdown field
 
