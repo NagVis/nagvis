@@ -1,4 +1,4 @@
-1.8b7:
+1.8b7
 Frontend:
   * Highlighting the current map in sidebar and header dropdown menus
   * FIX: The zoombar is now rendered below the header menu layer
@@ -26,7 +26,7 @@ Geomap:
          (where the background is rendered automatically)
   * FIX: Tried to fix geomap_zoom parameter, but does still not work with all zoom levels
 
-1.8b6:
+1.8b6
 Geomap:
   * Geomaps support multiple backends as object source now
 
