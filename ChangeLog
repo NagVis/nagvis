@@ -6,6 +6,10 @@ Frontend:
 
 Core:
   * Multisite Authorisation: It is now possible to specific manage map view/edit permissions
+  * Livestatus: Added missing space OutputFormat livestatus header (worked before, but was
+    implementing the livestatus protocol strictly not strict
+  * Livestatus: Using "name" column instead of "host_name" when querying the hosts table now
+    (Also worked as implemented before, but was using non documented livestatus behaviour)
 
 Automap:
   * Now using line_color and line_width for connectors from map global definitions

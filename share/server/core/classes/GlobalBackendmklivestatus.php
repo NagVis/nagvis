@@ -235,7 +235,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         // Query to get a json formated array back
         // Use KeepAlive with fixed16 header
         if($response)
-            $query .= "OutputFormat:json\nKeepAlive: on\nResponseHeader: fixed16\n\n";
+            $query .= "OutputFormat: json\nKeepAlive: on\nResponseHeader: fixed16\n\n";
         // Disable regular error reporting to suppress php error messages
         $oldLevel = error_reporting(0);
         $write = fwrite($this->SOCKET, $query);
@@ -486,8 +486,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         foreach($objects AS $OBJS) {
             $objFilters = Array();
             foreach($filters AS $filter) {
+                if ($isHostQuery && $filter['key'] == 'host_name')
+                    $key = 'name';
+                else
+                    $key = $filter['key'];
+
                 // Array('key' => 'host_name', 'operator' => '=', 'name'),
-                switch($filter['key']) {
+                switch($key) {
+                    case 'name':
                     case 'host_name':
                     case 'host_groups':
                     case 'service_description':
@@ -496,15 +502,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     case 'hostgroup_name':
                     case 'group_name':
                     case 'servicegroup_name':
-                        if($filter['key'] != 'service_description')
+                        if($key != 'service_description')
                             $val = $OBJS[0]->getName();
                         else
                             $val = $OBJS[0]->getServiceDescription();
 
-                        $objFilters[] = 'Filter: '.$filter['key'].' '.$filter['op'].' '.$val."\n";
+                        $objFilters[] = 'Filter: '.$key.' '.$filter['op'].' '.$val."\n";
                     break;
                     default:
-                        throw new BackendConnectionProblem('Invalid filter key ('.$filter['key'].')');
+                        throw new BackendConnectionProblem('Invalid filter key ('.$key.')');
                     break;
                 }
             }
@@ -684,7 +690,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     public function getHostState($objects, $options, $filters, $isMemberQuery = false) {
-        $objFilter = $this->parseFilter($objects, $filters, $isMemberQuery, false, HOST_QUERY);
+        $objFilter = $this->parseFilter($objects, $filters, $isMemberQuery, !COUNT_QUERY, HOST_QUERY);
 
         if($options & 1)
             $stateAttr = 'hard_state';
@@ -797,7 +803,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     public function getServiceState($objects, $options, $filters, $isMemberQuery = false) {
-        $objFilter = $this->parseFilter($objects, $filters, $isMemberQuery, false, !HOST_QUERY);
+        $objFilter = $this->parseFilter($objects, $filters, $isMemberQuery, !COUNT_QUERY, !HOST_QUERY);
 
         if($options & 1)
             $stateAttr = 'last_hard_state';
@@ -1449,7 +1455,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $query = "GET hosts\nColumns: child_dependencies\nFilter: name = ".$hostName."\n";
         $raw_result = $this->queryLivestatusSingleColumn($query);
         if ($min_business_impact) {
-            $query = "GET hosts\nColumns:host_name\nFilter: name = $raw_result[0][1]\n";
+            $query = "GET hosts\nColumns: name\nFilter: name = $raw_result[0][1]\n";
             foreach ($raw_result[0] as &$value) {
                 $query = $query . "Filter: name = $value\nOr: 2\n";
             }
@@ -1481,7 +1487,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $query = "GET hosts\nColumns: parent_dependencies\nFilter: name = ".$hostName."\n";
         $raw_result = $this->queryLivestatusSingleColumn($query);
         if ($min_business_impact) {
-            $query = "GET hosts\nColumns:host_name\nFilter: name = $raw_result[0][1]\n";
+            $query = "GET hosts\nColumns: name\nFilter: name = $raw_result[0][1]\n";
             foreach ($raw_result[0] as &$value) {
                 $query = $query . "Filter: name = $value\nOr: 2\n";
             }
