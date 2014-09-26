@@ -38,7 +38,7 @@ INSTALLER_CONFIG_MOD="y"
 # files to ignore/delete
 IGNORE_DEMO=""
 # backends to use
-NAGVIS_BACKENDS="mklivestatus,ndo2db,ido2db,merlinmy"
+NAGVIS_BACKENDS="mklivestatus,ndo2db,ido2db"
 # data source
 SOURCE=nagios
 # skip checks
@@ -411,6 +411,8 @@ detect_nagios_path() {
 detect_livestatus_socket() {
     if [ -S "/var/run/nagios/rw/live" ]; then
         LIVESTATUS_SOCK="unix:/var/run/nagios/rw/live"
+    elif [ -S "/var/run/icinga2/cmd/livestatus" ]; then
+        LIVESTATUS_SOCK="unix:/var/run/icinga2/cmd/livestatus"
     else
         LIVESTATUS_SOCK="unix:$NAGIOS_PATH/var/rw/live"
     fi
