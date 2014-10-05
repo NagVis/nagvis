@@ -141,7 +141,7 @@ define('DISPLAY_NAME',           13);
 define('ALIAS',                  14);
 define('ADDRESS',                15);
 define('NOTES',                  16);
-define('CHECK_COMMAND',          16);
+define('CHECK_COMMAND',          17);
 define('CUSTOM_VARS',            18);
 define('DOWNTIME_AUTHOR',        19);
 define('DOWNTIME_DATA',          20);

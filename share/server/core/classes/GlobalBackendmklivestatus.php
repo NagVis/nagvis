@@ -1045,10 +1045,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 'downtime' => intval($e[10]),
             ),
             UNKNOWN => Array(
-                'normal'   => intval($e[9]),
-                'stale'    => intval($e[10]),
-                'ack'      => intval($e[11]),
-                'downtime' => intval($e[12]),
+                'normal'   => intval($e[11]),
+                'stale'    => intval($e[12]),
+                'ack'      => intval($e[13]),
+                'downtime' => intval($e[14]),
             ),
         );
     }
@@ -1321,22 +1321,22 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                             'downtime'  => intval($e[5]),
                         ),
                         WARNING => Array(
-                            'normal'    => intval($e[5]),
-                            'stale'     => intval($e[6]),
-                            'ack'       => intval($e[7]),
-                            'downtime'  => intval($e[8]),
+                            'normal'    => intval($e[6]),
+                            'stale'     => intval($e[7]),
+                            'ack'       => intval($e[8]),
+                            'downtime'  => intval($e[9]),
                         ),
                         CRITICAL => Array(
-                            'normal'    => intval($e[9]),
-                            'stale'     => intval($e[10]),
-                            'ack'       => intval($e[11]),
-                            'downtime'  => intval($e[12]),
+                            'normal'    => intval($e[10]),
+                            'stale'     => intval($e[11]),
+                            'ack'       => intval($e[12]),
+                            'downtime'  => intval($e[13]),
                         ),
                         UNKNOWN => Array(
-                            'normal'    => intval($e[13]),
-                            'stale'     => intval($e[14]),
-                            'ack'       => intval($e[15]),
-                            'downtime'  => intval($e[16]),
+                            'normal'    => intval($e[14]),
+                            'stale'     => intval($e[15]),
+                            'ack'       => intval($e[16]),
+                            'downtime'  => intval($e[17]),
                         ),
                     )
                 );

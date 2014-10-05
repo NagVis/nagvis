@@ -1,4 +1,7 @@
 1.8b8
+Core:
+  * Livestatus: Fixed wrong state aggregation for servicegroups
+  * Livestatus: Fixed check_command value of host/services
 
 1.8b7
 Frontend:
