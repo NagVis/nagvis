@@ -3,6 +3,9 @@ Core:
   * Livestatus: Fixed wrong state aggregation for servicegroups
   * Livestatus: Fixed check_command value of host/services
 
+Frontend:
+  * FIX: Background images could not be deleted
+
 1.8b7
 Frontend:
   * Highlighting the current map in sidebar and header dropdown menus

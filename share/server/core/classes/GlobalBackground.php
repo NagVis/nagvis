@@ -107,6 +107,7 @@ class GlobalBackground {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     protected function checkFileExists($printErr) {
+        global $CORE;
         return $CORE->checkExisting($this->path, $printErr);
     }
 
@@ -118,6 +119,7 @@ class GlobalBackground {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     protected function checkFileReadable($printErr) {
+        global $CORE;
         return $CORE->checkReadable($this->path, $printErr);
     }
 
@@ -129,6 +131,7 @@ class GlobalBackground {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     protected function checkFileWriteable($printErr) {
+        global $CORE;
         return $CORE->checkWriteable($this->path, $printErr);
     }
 
@@ -140,6 +143,7 @@ class GlobalBackground {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     protected function checkFolderWriteable($printErr) {
+        global $CORE;
         return $CORE->checkWriteable(dirname($this->path), $printErr);
     }
 
