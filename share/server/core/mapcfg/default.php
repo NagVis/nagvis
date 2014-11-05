@@ -152,6 +152,7 @@ function getObjectNames($type, $CORE, $MAPCFG, $objId, $attrs) {
         }
     }
 
+    natcasesort($aRet);
     return $aRet;
 }
 

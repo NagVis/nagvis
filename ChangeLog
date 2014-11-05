@@ -5,6 +5,7 @@ Core:
 
 Frontend:
   * FIX: Background images could not be deleted
+  * FIX: Natural sorting object names in add/modify dialog
 
 1.8b7
 Frontend:
