@@ -1412,10 +1412,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	        $custom_variables = array_combine($row[1], $row[2]);
                 if(isset($custom_variables['LAT']) && isset($custom_variables['LONG'])) {
                     $hosts[] = array(
-                        'name'  => $row[0],
-                        'lat'   => $custom_variables['LAT'],
-                        'long'  => $custom_variables['LONG'],
-                        'alias' => $row[3],
+                        'name'       => $row[0],
+                        'lat'        => $custom_variables['LAT'],
+                        'long'       => $custom_variables['LONG'],
+                        'alias'      => $row[3],
+                        'backend_id' => $this->backendId,
                     );
                 }
             }

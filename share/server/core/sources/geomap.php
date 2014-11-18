@@ -270,6 +270,10 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
             'lat'       => $loc['lat'],
             'long'      => $loc['long'],
         );
+
+        if (isset($loc['backend_id'])) {
+            $map_config[$object_id]['backend_id'] = array($loc['backend_id']);
+        }
     }
     unset($locations);
 
@@ -277,7 +281,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     process_filter($MAPCFG, $map_name, $map_config, $params);
 
     // Terminate empty views
-    if(count($map_config) == 0)
+    if(count($map_config) <= 1)
         throw new GeomapError(l('Got empty map after filtering. Terminate rendering geomap.'));
 
     // Now detect the upper and lower bounds of the locations to display

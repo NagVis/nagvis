@@ -1,4 +1,7 @@
 1.8b8
+Geomap:
+  * FIX: Fixed handling of multiple backends on one geomap
+
 Core:
   * Livestatus: Fixed wrong state aggregation for servicegroups
   * Livestatus: Fixed check_command value of host/services
