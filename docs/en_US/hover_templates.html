@@ -142,7 +142,7 @@
         <th width="250"> Macro </th><th> Description </th>
         </tr>
         <tr>
-        <td> [obj_backendid] </td><td> The backend-id of the objects backend (backend_<*>) </td>
+        <td> [obj_backendid] </td><td> The backend-id of the objects backend (backend_&lt;*>) </td>
         </tr>
         <tr>
         <td> [obj_backend_instancename] </td><td> The NDO instance name of the objects backend </td>
@@ -183,6 +183,13 @@
         </tr>
         <tr>
         <td>[obj_notes]</td><td>The configured notes of the host or service objects</td>
+        </tr>
+        <tr>
+            <td>[obj_tags]</td>
+            <td>When a custom macro is available for this host/service named <tt>TAGS</tt>,
+                which contains a space separated list of strings, called tags, this list of tags
+                is fully available with this macro. This is available, for example, for all hosts
+                configured with CheckMK. <font color="#ff0000">(New in 1.8rc1)</font></td>
         </tr>
         </table>
         

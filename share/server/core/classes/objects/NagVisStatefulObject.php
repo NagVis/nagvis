@@ -354,6 +354,20 @@ class NagVisStatefulObject extends NagVisObject {
         // Macros which are only for services and hosts
         if($this->type == 'host' || $this->type == 'service') {
             $arr['custom_variables'] = val($this->state, CUSTOM_VARS);
+
+            // Add (Check_MK) tags as array of tags (when available)
+            if (isset($arr['custom_variables']['TAGS']))
+                $arr['tags'] = explode(' ', $arr['custom_variables']['TAGS']);
+            else
+                $arr['tags'] = array();
+
+            // Now, to be very user friendly, we now try to use the Check_MK WATO php-api to gather
+            // titles and grouping information of the tags. These can, for example, be used in the hover
+            // templates
+            //if ($arr['tags']) {
+            //    
+            //}
+
             $arr['downtime_author'] = val($this->state, DOWNTIME_AUTHOR);
             $arr['downtime_data']   = val($this->state, DOWNTIME_DATA);
             $arr['downtime_start']  = val($this->state, DOWNTIME_START);

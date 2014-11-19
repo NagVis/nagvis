@@ -256,8 +256,17 @@ function replaceHoverTemplateStaticMacros(oObj, sTemplateCode) {
     }
 
     // Macros which are only for services and hosts
-    if(oObj.conf.type === 'host' || oObj.conf.type === 'service')
+    if(oObj.conf.type === 'host' || oObj.conf.type === 'service') {
         oMacros.obj_address = oObj.conf.address;
+        oMacros.obj_tags    = oObj.conf.tags.join(', ');
+    } else {
+        oMacros.obj_address = '';
+        oMacros.obj_tags    = '';
+    }
+
+    if (oMacros.obj_tags == '') {
+        oSectionMacros.has_tags = '<!--\\sBEGIN\\shas_tags\\s-->.+?<!--\\sEND\\shas_tags\\s-->';
+    }
 
     if(oObj.conf.type === 'service') {
         oMacros.service_description = oObj.conf.service_description;
