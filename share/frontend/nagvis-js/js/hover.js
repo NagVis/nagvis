@@ -259,6 +259,20 @@ function replaceHoverTemplateStaticMacros(oObj, sTemplateCode) {
     if(oObj.conf.type === 'host' || oObj.conf.type === 'service') {
         oMacros.obj_address = oObj.conf.address;
         oMacros.obj_tags    = oObj.conf.tags.join(', ');
+
+        // Add taggroup information
+        for (var group_id in oObj.conf.taggroups) {
+            var group = oObj.conf.taggroups[group_id];
+            oMacros['obj_taggroup_' + group_id + '_title'] = group.title;
+            oMacros['obj_taggroup_' + group_id + '_topic'] = group.topic;
+            if (group.value) {
+                oMacros['obj_taggroup_' + group_id + '_value']       = group.value[0];
+                oMacros['obj_taggroup_' + group_id + '_value_title'] = group.value[1];
+            } else {
+                oMacros['obj_taggroup_' + group_id + '_value']       = '';
+                oMacros['obj_taggroup_' + group_id + '_value_title'] = '';
+            }
+        }
     } else {
         oMacros.obj_address = '';
         oMacros.obj_tags    = '';

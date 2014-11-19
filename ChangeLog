@@ -8,6 +8,8 @@ Core:
 
 Frontend:
   * Service-/Hosttags are shown in default hover template now (when available)
+  * Taggroups, values and their titles can now be used to be displayed in hover menu
+    (When using NagVis in an OMD environment together with Check_MK 1.2.5i6p4 or newer)
   * FIX: Background images could not be deleted
   * FIX: Natural sorting object names in add/modify dialog
 

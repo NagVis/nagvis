@@ -363,10 +363,15 @@ class NagVisStatefulObject extends NagVisObject {
 
             // Now, to be very user friendly, we now try to use the Check_MK WATO php-api to gather
             // titles and grouping information of the tags. These can, for example, be used in the hover
-            // templates
-            //if ($arr['tags']) {
-            //    
-            //}
+            // templates. This has been implemented to only work in OMD environments.
+            $arr['taggroups'] = array();
+            if ($arr['tags'] && isset($_SERVER['OMD_ROOT'])) {
+                $path = $_SERVER['OMD_ROOT'] . '/var/check_mk/wato/php-api/hosttags.php';
+                if (file_exists($path)) {
+                    require_once($path);
+                    $arr['taggroups'] = all_taggroup_choices($arr['tags']);
+                }
+            }
 
             $arr['downtime_author'] = val($this->state, DOWNTIME_AUTHOR);
             $arr['downtime_data']   = val($this->state, DOWNTIME_DATA);
