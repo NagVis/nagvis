@@ -1,4 +1,4 @@
-1.8b8
+1.8rc1
 Geomap:
   * FIX: Fixed handling of multiple backends on one geomap
 
