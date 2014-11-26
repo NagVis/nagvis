@@ -1,7 +1,7 @@
 <?php
 
-function listMapNames($CORE) {
-    global $AUTHORISATION;
+function listMapNames() {
+    global $CORE, $AUTHORISATION;
     $list = Array();
     $maps = $CORE->getAvailableMaps();
     foreach($maps AS $key => $val)
@@ -11,17 +11,14 @@ function listMapNames($CORE) {
     return $list;
 }
 
-function listMapImages($CORE) {
+function listMapImages() {
+    global $CORE;
     $options = $CORE->getAvailableBackgroundImages();
     array_unshift($options, 'none');
     return $options;
 }
 
-function listIconsets($CORE) {
-    return $CORE->getAvailableIconsets();
-}
-
-function listLineTypes($CORE) {
+function listLineTypes() {
     return Array(
         '10' => '-------><-------',
         '11' => '--------------->',
@@ -32,26 +29,12 @@ function listLineTypes($CORE) {
     );
 }
 
-function listLineArrows($CORE) {
+function listLineArrows() {
     return Array(
         'forward' => '------->',
         'back'    => '<-------',
         'both'    => '<------>',
         'none'    => '--------',
-    );
-}
-
-function listHoverChildSorters() {
-    return Array(
-        'a' => l('Alphabetically'),
-        's' => l('State'),
-    );
-}
-
-function listHoverChildOrders() {
-    return Array(
-        'asc'  => l('Ascending'),
-        'desc' => l('Descending'),
     );
 }
 
@@ -62,42 +45,31 @@ function listGadgetTypes() {
     );
 }
 
-function listGadgets($CORE) {
+function listGadgets() {
+    global $CORE;
     return $CORE->getAvailableGadgets();
 }
 
-function listHeaderTemplates($CORE) {
-    return $CORE->getAvailableHeaderTemplates();
-}
-
-function listHoverTemplates($CORE) {
-    return $CORE->getAvailableHoverTemplates();
-}
-
-function listContextTemplates($CORE) {
-    return $CORE->getAvailableContextTemplates();
-}
-
-function listViewTypesContainer($CORE) {
+function listViewTypesContainer() {
     return Array('inline', 'iframe');
 }
 
-function listViewTypesService($CORE) {
+function listViewTypesService() {
     return Array('icon', 'line', 'gadget');
 }
 
-function listViewTypes($CORE) {
+function listViewTypes() {
     return Array('icon', 'line');
 }
 
-function listDynGroupTypes($CORE) {
+function listDynGroupTypes() {
     return Array(
         'host'    => l('Hosts'),
         'service' => l('Services')
     );
 }
 
-function listZoomFactors($CORE) {
+function listZoomFactors() {
     return Array(
         10     => ' 10%',
         25     => ' 25%',
@@ -112,7 +84,7 @@ function listZoomFactors($CORE) {
 }
 
 
-function getObjectNames($type, $CORE, $MAPCFG, $objId, $attrs) {
+function getObjectNames($type, $MAPCFG, $objId, $attrs) {
     global $_BACKEND;
     if(isset($attrs['backend_id']) && $attrs['backend_id'] != '')
         $backendIds = explode(',', $attrs['backend_id']);
@@ -156,36 +128,33 @@ function getObjectNames($type, $CORE, $MAPCFG, $objId, $attrs) {
     return $aRet;
 }
 
-function listHostNames($CORE, $MAPCFG, $objId, $attrs) {
-    return getObjectNames('host', $CORE, $MAPCFG, $objId, $attrs);
+function listHostNames($MAPCFG, $objId, $attrs) {
+    return getObjectNames('host', $MAPCFG, $objId, $attrs);
 }
 
-function listHostgroupNames($CORE, $MAPCFG, $objId, $attrs) {
-    return getObjectNames('hostgroup', $CORE, $MAPCFG, $objId, $attrs);
+function listHostgroupNames($MAPCFG, $objId, $attrs) {
+    return getObjectNames('hostgroup', $MAPCFG, $objId, $attrs);
 }
 
-function listServiceNames($CORE, $MAPCFG, $objId, $attrs) {
-    return getObjectNames('service', $CORE, $MAPCFG, $objId, $attrs);
+function listServiceNames($MAPCFG, $objId, $attrs) {
+    return getObjectNames('service', $MAPCFG, $objId, $attrs);
 }
 
-function listServicegroupNames($CORE, $MAPCFG, $objId, $attrs) {
-    return getObjectNames('servicegroup', $CORE, $MAPCFG, $objId, $attrs);
+function listServicegroupNames($MAPCFG, $objId, $attrs) {
+    return getObjectNames('servicegroup', $MAPCFG, $objId, $attrs);
 }
 
-function listTemplateNames($CORE) {
+function listTemplateNames() {
     return Array();
 }
 
-function listShapes($CORE) {
+function listShapes() {
+    global $CORE;
     return $CORE->getAvailableShapes();
 }
 
-function listBackendIds($CORE) {
-    $backends = $CORE->getDefinedBackends();
-    return $backends;
-}
-
-function listSources($CORE) {
+function listSources() {
+    global $CORE;
     return $CORE->getSelectableSources();
 }
 

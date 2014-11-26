@@ -10,6 +10,8 @@ Frontend:
   * Service-/Hosttags are shown in default hover template now (when available)
   * Taggroups, values and their titles can now be used to be displayed in hover menu
     (When using NagVis in an OMD environment together with Check_MK 1.2.5i6p4 or newer)
+  * Reworked main configuration editing dialog to be much more user friendly
+  * Consolidated styling of the popup dialogs
   * FIX: Background images could not be deleted
   * FIX: Natural sorting object names in add/modify dialog
 

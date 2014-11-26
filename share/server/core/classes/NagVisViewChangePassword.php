@@ -56,7 +56,7 @@ class NagVisViewChangePassword {
             'maxPasswordLength' => AUTH_MAX_PASSWORD_LENGTH,
             'langOldPassword' => l('Old password'),
             'langNewPassword1' => l('New password'),
-            'langNewPassword2' => l('New password confirmation'),
+            'langNewPassword2' => l('New password (confirm)'),
             'langChangePassword' => l('Change password')
         );
 

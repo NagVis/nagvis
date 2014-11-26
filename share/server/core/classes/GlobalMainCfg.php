@@ -22,6 +22,18 @@
  *
  *****************************************************************************/
 
+function listMultisiteSnapinLayouts() {
+    return Array(
+        'tree' => l('Show the map tree'),
+        'list' => l('Show a flat list'),
+    );
+}
+
+function listAvailableLanguages() {
+    global $CORE;
+    return $CORE->getAvailableLanguages();
+}
+
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
@@ -49,10 +61,11 @@ class GlobalMainCfg {
         $this->validConfig = Array(
             'global' => Array(
                 'audit_log' => Array(
-                    'must'     => 0,
-                    'editable' => 1,
-                    'default'  => 0,
-                    'match'    => MATCH_BOOLEAN
+                    'must'       => 0,
+                    'editable'   => 1,
+                    'default'    => 0,
+                    'match'      => MATCH_BOOLEAN,
+                    'field_type' => 'boolean',
                 ),
                 'authmodule' => Array('must' => 1,
                     'editable' => 1,
@@ -105,22 +118,25 @@ class GlobalMainCfg {
                 ),
 
                 'dialog_ack_sticky' => Array(
-                    'must'     => 1,
-                    'editable' => 1,
-                    'default'  => 1,
-                    'match'    => MATCH_BOOLEAN
+                    'must'       => 1,
+                    'editable'   => 1,
+                    'default'    => 1,
+                    'field_type' => 'boolean',
+                    'match'      => MATCH_BOOLEAN
                 ),
                 'dialog_ack_notify' => Array(
-                    'must'     => 1,
-                    'editable' => 1,
-                    'default'  => 1,
-                    'match'    => MATCH_BOOLEAN
+                    'must'       => 1,
+                    'editable'   => 1,
+                    'default'    => 1,
+                    'field_type' => 'boolean',
+                    'match'      => MATCH_BOOLEAN
                 ),
                 'dialog_ack_persist' => Array(
-                    'must'     => 1,
-                    'editable' => 1,
-                    'default'  => 0,
-                    'match'    => MATCH_BOOLEAN
+                    'must'       => 1,
+                    'editable'   => 1,
+                    'default'    => 0,
+                    'field_type' => 'boolean',
+                    'match'      => MATCH_BOOLEAN
                 ),
 
                 'displayheader' => Array('must' => 1,
@@ -170,11 +186,14 @@ class GlobalMainCfg {
                     'array' => true,
                     'default' => Array('de_DE', 'en_US', 'es_ES', 'fr_FR', 'pt_BR'),
                     'match' => MATCH_STRING_NO_SPACE),
-                'language' => Array('must' => 1,
-                    'editable' => 1,
-                    'default' => 'en_US',
+                'language' => Array(
+                    'must'       => 1,
+                    'editable'   => 1,
+                    'default'    => 'en_US',
                     'field_type' => 'dropdown',
-                    'match' => MATCH_LANGUAGE_EMPTY),
+                    'list'       => 'listAvailableLanguages',
+                    'match'      => MATCH_LANGUAGE_EMPTY
+                ),
                 'logonmodule' => Array('must' => 1,
                     'editable' => 1,
                     'default' => 'LogonMixed',
@@ -246,6 +265,8 @@ class GlobalMainCfg {
                     'editable'    => 1,
                     'default'     => 'list',
                     'match'       => MATCH_STRING_NO_SPACE,
+                    'field_type'  => 'dropdown',
+                    'list'        => 'listMultisiteSnapinLayouts',
                 ),
 
                 'user_filtering' => Array(
@@ -321,6 +342,7 @@ class GlobalMainCfg {
                     'default'     => array('live_1'),
                     'array'       => true,
                     'field_type'  => 'dropdown',
+                    'list'        => 'listBackendIds',
                     'match'       => MATCH_BACKEND_ID
                 ),
                 'backgroundcolor' => Array(
@@ -334,12 +356,16 @@ class GlobalMainCfg {
                     'default' => 1,
                     'field_type' => 'boolean',
                     'match' => MATCH_BOOLEAN),
-                'contexttemplate' => Array('must' => 0,
-                    'editable' => 1,
-                    'default' => 'default',
-                    'depends_on' => 'contextmenu',
+                'contexttemplate' => Array(
+                    'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => 'default',
+                    'depends_on'    => 'contextmenu',
                     'depends_value' => 1,
-                    'match' => MATCH_STRING_NO_SPACE),
+                    'field_type'    => 'dropdown',
+                    'list'          => 'listContextTemplates',
+                    'match'         => MATCH_STRING_NO_SPACE
+                ),
                 'stylesheet' => Array('must' => 0,
                     'editable' => 1,
                     'default' => '',
@@ -435,18 +461,23 @@ class GlobalMainCfg {
                     'field_type' => 'boolean',
                     'match'      => MATCH_BOOLEAN
                 ),
-                'headertemplate' => Array('must' => 0,
-                    'editable' => 1,
-                    'default' => 'default',
-                    'depends_on' => 'headermenu',
+                'headertemplate' => Array(
+                    'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => 'default',
+                    'depends_on'    => 'headermenu',
                     'depends_value' => 1,
-                    'match' => MATCH_STRING_NO_SPACE),
+                    'field_type'    => 'dropdown',
+                    'list'          => 'listHeaderTemplates',
+                    'match'         => MATCH_STRING_NO_SPACE,
+),
                 'headerfade' => Array(
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => 0,
                     'depends_on'    => 'headermenu',
                     'depends_value' => 1,
+                    'field_type'    => 'boolean',
                     'match'         => MATCH_BOOLEAN
                 ),
                 'header_show_states' => Array(
@@ -461,12 +492,16 @@ class GlobalMainCfg {
                     'default' => '1',
                     'field_type' => 'boolean',
                     'match' => MATCH_BOOLEAN),
-                'hovertemplate' => Array('must' => 0,
-                    'editable' => 1,
-                    'default' => 'default',
-                    'depends_on' => 'hovermenu',
+                'hovertemplate' => Array(
+                    'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => 'default',
+                    'depends_on'    => 'hovermenu',
                     'depends_value' => 1,
-                    'match' => MATCH_STRING_NO_SPACE),
+                    'field_type'    => 'dropdown',
+                    'list'          => 'listHoverTemplates',
+                    'match'         => MATCH_STRING_NO_SPACE,
+                ),
                 'hovertimeout' => Array('must' => 0,
                     'editable' => 1,
                     'default' => '5',
@@ -491,23 +526,34 @@ class GlobalMainCfg {
                     'depends_on' => 'hovermenu',
                     'depends_value' => 1,
                     'match' => MATCH_INTEGER_PRESIGN),
-                'hoverchildsorder' => Array('must' => 0,
-                    'editable' => 1,
-                    'default' => 'asc',
-                    'depends_on' => 'hovermenu',
+                'hoverchildsorder' => Array(
+                    'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => 'asc',
+                    'depends_on'    => 'hovermenu',
                     'depends_value' => 1,
-                    'match' => MATCH_ORDER),
-                'hoverchildssort' => Array('must' => 0,
-                    'editable' => 1,
-                    'default' => 's',
-                    'depends_on' => 'hovermenu',
+                    'field_type'    => 'dropdown',
+                    'list'          => 'listHoverChildOrders',
+                    'match'         => MATCH_ORDER
+                ),
+                'hoverchildssort' => Array(
+                    'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => 's',
+                    'depends_on'    => 'hovermenu',
                     'depends_value' => 1,
-                    'match' => MATCH_STRING_NO_SPACE),
-                'icons' => Array('must' => 1,
-                    'editable' => 1,
-                    'default' => 'std_medium',
+                    'field_type'    => 'dropdown',
+                    'list'          => 'listHoverChildOrders',
+                    'match'         => MATCH_STRING_NO_SPACE,
+                ),
+                'icons' => Array(
+                    'must'       => 1,
+                    'editable'   => 1,
+                    'default'    => 'std_medium',
                     'field_type' => 'dropdown',
-                    'match' => MATCH_STRING_NO_SPACE),
+                    'list'       => 'listIconsets',
+                    'match'      => MATCH_STRING_NO_SPACE
+                ),
                 'onlyhardstates' => Array('must' => 0,
                     'editable' => 1,
                     'default' => 0,
@@ -605,14 +651,17 @@ class GlobalMainCfg {
                     'default' => '1',
                     'field_type' => 'boolean',
                     'match' => MATCH_BOOLEAN),
-                'headertemplate' => Array('must' => 0,
-                    'editable' => 1,
-                    'default' => 'default',
-                    'deprecated' => 1,
-                    'depends_on' => 'headermenu',
+                'headertemplate' => Array(
+                    'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => 'default',
+                    'deprecated'    => 1,
+                    'depends_on'    => 'headermenu',
                     'depends_value' => 1,
-                    'field_type' => 'dropdown',
-                    'match' => MATCH_STRING_NO_SPACE),
+                    'field_type'    => 'dropdown',
+                    'list'          => 'listHeaderTemplates',
+                    'match'         => MATCH_STRING_NO_SPACE
+                ),
                 'maplocktime' => Array('must' => 0,
                     'editable' => 1,
                     'default' => '5',
@@ -918,12 +967,16 @@ class GlobalMainCfg {
                     'default' => '1',
                     'field_type' => 'boolean',
                     'match' => MATCH_BOOLEAN),
-                'headertemplate' => Array('must' => 0,
-                    'editable' => 1,
-                    'default' => 'default',
-                    'depends_on' => 'headermenu',
+                'headertemplate' => Array(
+                    'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => 'default',
+                    'depends_on'    => 'headermenu',
                     'depends_value' => 1,
-                    'match' => MATCH_STRING_NO_SPACE),
+                    'field_type'    => 'dropdown',
+                    'list'          => 'listHeaderTemplates',
+                    'match'         => MATCH_STRING_NO_SPACE,
+                ),
                 'showautomaps' => Array('must' => 0,
                     'editable' => 1,
                     'default' => 1,
@@ -1869,6 +1922,10 @@ class GlobalMainCfg {
         return TRUE;
     }
 
+    public function unsetValue($sec, $var) {
+        unset($this->config[$sec][$var]);
+    }
+
     public function getPath($type, $loc, $var, $relfile = '') {
         $lb = $this->getValue('paths', 'local_base', True) . HTDOCS_DIR;
         $b  = $this->getValue('paths', 'base') . HTDOCS_DIR;
@@ -1901,71 +1958,78 @@ class GlobalMainCfg {
     }
 
     /**
-     * Gets a config setting
-     *
-     * @param	String	$sec	Section
-     * @param	String	$var	Variable
-     * @param   Bool	$ignoreDefault Don't read default value
-     * @return	String	$val	Value
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * returns the hard coded default value of a config option
      * FIXME: Needs to be simplified
      */
-    public function getValue($sec, $var, $ignoreDefault=FALSE) {
-        // if nothing is set in the config file, use the default value
-        // (Removed "&& is_array($this->config[$sec]) due to performance issues)
-        if(isset($this->config[$sec]) && isset($this->config[$sec][$var])) {
-            return $this->config[$sec][$var];
-        } elseif(!$ignoreDefault) {
-            // Speed up this method by first checking for major sections and only if
-            // they don't match try to match the backend_ and rotation_ sections
-            if($sec == 'global' || $sec == 'defaults' || $sec == 'paths') {
-                return $this->validConfig[$sec][$var]['default'];
-            } elseif(strpos($sec, 'backend_') === 0) {
+    public function getDefaultValue($sec, $var) {
+        // Speed up this method by first checking for major sections and only if
+        // they don't match try to match the backend_ and rotation_ sections
+        if($sec == 'global' || $sec == 'defaults' || $sec == 'paths') {
+            return $this->validConfig[$sec][$var]['default'];
+        } elseif(strpos($sec, 'backend_') === 0) {
 
-                // Choose the backend type (Configured one or the system default)
-                $backendType = '';
-                if(isset($this->config[$sec]['backendtype']) && $this->config[$sec]['backendtype'] !== '') {
-                    $backendType = $this->config[$sec]['backendtype'];
-                } else {
-                    $backendType = $this->validConfig['backend']['backendtype']['default'];
-                }
-
-                // This value could be emtpy - so only check if it is set
-                if(isset($this->validConfig['backend']['options'][$backendType][$var]['default'])) {
-                    return $this->validConfig['backend']['options'][$backendType][$var]['default'];
-                } else {
-                    // This value could be emtpy - so only check if it is set
-                    if(isset($this->validConfig['backend'][$var]['default'])) {
-                        return $this->validConfig['backend'][$var]['default'];
-                    }
-                }
-
-            } elseif(strpos($sec, 'rotation_') === 0) {
-                if(isset($this->config[$sec]) && is_array($this->config[$sec])) {
-                    return $this->validConfig['rotation'][$var]['default'];
-                } else {
-                    return null;
-                }
-
-            } elseif(strpos($sec, 'action_') === 0) {
-                if(!isset($this->config[$sec]['action_type']))
-                    return null;
-                $ty = $this->config[$sec]['action_type'];
-
-                // This value could be emtpy - so only check if it is set
-                if(isset($this->validConfig['action']['options'][$ty][$var]['default'])) {
-                    return $this->validConfig['action']['options'][$ty][$var]['default'];
-                } else {
-                    // This value could be emtpy - so only check if it is set
-                    if(isset($this->validConfig['action'][$var]['default'])) {
-                        return $this->validConfig['action'][$var]['default'];
-                    }
-                }
-
+            // Choose the backend type (Configured one or the system default)
+            $backendType = '';
+            if(isset($this->config[$sec]['backendtype']) && $this->config[$sec]['backendtype'] !== '') {
+                $backendType = $this->config[$sec]['backendtype'];
             } else {
-                return $this->validConfig[$sec][$var]['default'];
+                $backendType = $this->validConfig['backend']['backendtype']['default'];
             }
+
+            // This value could be emtpy - so only check if it is set
+            if(isset($this->validConfig['backend']['options'][$backendType][$var]['default'])) {
+                return $this->validConfig['backend']['options'][$backendType][$var]['default'];
+            } else {
+                // This value could be emtpy - so only check if it is set
+                if(isset($this->validConfig['backend'][$var]['default'])) {
+                    return $this->validConfig['backend'][$var]['default'];
+                }
+            }
+
+        } elseif(strpos($sec, 'rotation_') === 0) {
+            if(isset($this->config[$sec]) && is_array($this->config[$sec])) {
+                return $this->validConfig['rotation'][$var]['default'];
+            } else {
+                return null;
+            }
+
+        } elseif(strpos($sec, 'action_') === 0) {
+            if(!isset($this->config[$sec]['action_type']))
+                return null;
+            $ty = $this->config[$sec]['action_type'];
+
+            // This value could be emtpy - so only check if it is set
+            if(isset($this->validConfig['action']['options'][$ty][$var]['default'])) {
+                return $this->validConfig['action']['options'][$ty][$var]['default'];
+            } else {
+                // This value could be emtpy - so only check if it is set
+                if(isset($this->validConfig['action'][$var]['default'])) {
+                    return $this->validConfig['action'][$var]['default'];
+                }
+            }
+
         } else {
+            return $this->validConfig[$sec][$var]['default'];
+        }
+    }
+
+    /**
+     * Returns the value of a main configuration option. Either the hard coded default
+     * value, or the configured one
+     */
+    public function getValue($sec, $var, $ignoreDefault=false, $ignoreUserConfig=false) {
+        if ($ignoreUserConfig && $this->preUserConfig !== null)
+            $arr = $this->preUserConfig;
+        else
+            $arr = $this->config;
+
+        if (isset($arr[$sec]) && isset($arr[$sec][$var])) {
+            return $arr[$sec][$var];
+        }
+        elseif (!$ignoreDefault) {
+            return $this->getDefaultValue($sec, $var);
+        }
+        else {
             return null;
         }
     }
@@ -2333,6 +2397,43 @@ class GlobalMainCfg {
             $val[$trimKey] = trim($trimVal);
 
         return $val;
+    }
+
+    public function getSectionTitle($sec) {
+        $titles = array(
+            'global'   => l('Global Settings'),
+            'defaults' => l('Object Defaults'),
+            'index'    => l('Overview Page'),
+            'worker'   => l('State Updates'),
+            'states'   => l('States'),
+            'paths'    => l('Paths'),
+            'automap'  => l('Automap'),
+        );
+        if (isset($titles[$sec]))
+            return $titles[$sec];
+        else
+            return $sec;
+    }
+
+    /**
+     * Returns the name of the list function for the given map config option
+     */
+    public function getListFunc($sec, $key) {
+        if(isset($this->validConfig[$sec][$key]['list']))
+            return $this->validConfig[$sec][$key]['list'];
+        else
+            throw new NagVisException(l('No "list" function registered for option "[OPT]" of type "[TYPE]"',
+                                                                       Array('OPT' => $sec, 'TYPE' => $key)));
+    }
+
+    /**
+     * Finds out if an attribute has dependant attributes
+     */
+    public function hasDependants($sec, $key) {
+        foreach ($this->validConfig[$sec] AS $arr)
+            if (isset($arr['depends_on']) && $arr['depends_on'] == $key)
+                return true;
+        return false;
     }
 }
 ?>

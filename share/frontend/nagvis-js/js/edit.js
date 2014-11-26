@@ -625,162 +625,12 @@ if (window.addEventListener) {
   };
 }
 
-
-
-/******************************************************************************
- * Edit code, moved from WUI
- *****************************************************************************/
-
-/**
- * toggleDependingFields
- *
- * This function shows/hides the fields which depend on the changed field
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function toggleDependingFields(formName, name, value) {
-    var aFields = document.getElementById(formName).elements;
-
-    var oConfig;
-    if(formName == 'edit_config')
-        oConfig = validMainConfig;
-    else
-        oConfig = validMapConfig;
-
-    for(var i = 0, len = aFields.length; i < len; i++) {
-        // Filter helper fields
-        if(aFields[i].name.charAt(0) !== '_') {
-            if(aFields[i].type != 'hidden' && aFields[i].type != 'submit') {
-                // Handle different structures of main cfg and map cfg editing
-                var sMasterName, sTypeName, sOptName, sFieldName;
-                if(formName == 'edit_config') {
-                    sMasterName = name.replace(sTypeName+'_', '');
-                    sTypeName = aFields[i].name.split('_')[0];
-                    sOptName = aFields[i].name.replace(sTypeName+'_', '');
-                    sFieldName = aFields[i].name;
-                } else {
-                    sMasterName = name;
-                    sTypeName = document.getElementById(formName).type.value;
-                    sOptName = aFields[i].name;
-                }
-
-                var sFieldName = aFields[i].name;
-
-                // Show option fields when parent field value is equal and hide when
-                // parent field value differs
-                if(oConfig[sTypeName] && oConfig[sTypeName][sOptName]['depends_on'] === sMasterName
-                     && oConfig[sTypeName][sOptName]['depends_value'] != value) {
-
-                    document.getElementById(sFieldName).parentNode.parentNode.style.display = 'none';
-                    document.getElementById(sFieldName).value = '';
-                } else if(oConfig[sTypeName] && oConfig[sTypeName][sOptName]['depends_on'] === sMasterName
-                     && oConfig[sTypeName][sOptName]['depends_value'] == value) {
-
-                    document.getElementById(sFieldName).parentNode.parentNode.style.display = '';
-
-                    // Toggle the value of the field. If empty or just switched the function will
-                    // try to display the default value
-                    toggleDefaultOption(sFieldName);
-                } else if(!oConfig[sTypeName]) {
-                    alert('No data for type: '+sTypeName);
-                }
-
-            }
-        }
-    }
-
-    oConfig = null;
-    aFields = null;
-}
-
-/**
- * toggleFieldType
- *
- * Changes the field type from select to input and vice versa
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function toggleFieldType(sName, sValue) {
-    var bReturn = false;
-    var sBaseName;
-    var bInputHelper = false;
-
-    if(sName.indexOf('_inp_') !== -1) {
-        sBaseName = sName.replace('_inp_', '');
-        bInputHelper = true;
-    } else {
-        sBaseName = sName;
-    }
-
-    // Check if the field should be changed
-    // this is toggled on
-    // - Input helper field set to ""
-    if(bInputHelper === true && sValue == '') {
-        var oSelectField = document.getElementById(sBaseName);
-        var oInputField = document.getElementById('_inp_' + sBaseName);
-
-        if(bInputHelper == false) {
-            oSelectField.parentNode.parentNode.style.display = 'none';
-            oInputField.parentNode.parentNode.style.display = '';
-        } else {
-            oSelectField.parentNode.parentNode.style.display = '';
-            oInputField.parentNode.parentNode.style.display = 'none';
-        }
-
-        oInputField = null;
-        oSelectField = null;
-
-        bReturn = true;
-    }
-
-    return bReturn;
-}
-
-/**
- * toggleDefaultOption
- *
- * This function checks the value of the field to reset it to the default value
- * which is stored in a "helper field". The default value is inserted when there
- * is no option given in the current object.
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function toggleDefaultOption(sName, bOverrideCurrentValue) {
-    var oField = document.getElementById(sName);
-    var oFieldDefault = document.getElementById('_'+sName);
-
-    if(typeof bOverrideCurrentValue === 'undefined') {
-        bOverrideCurrentValue = false;
-    }
-
-    if(oField && oFieldDefault) {
-        // Set option only when the field is emtpy and the default value has a value
-        // Added override flag to ignore the current value
-        if((bOverrideCurrentValue === true || (bOverrideCurrentValue === false && oField.value === '')) && oFieldDefault.value !== '') {
-            // Set value to default value
-            oField.value = oFieldDefault.value;
-
-            // Visualize the default value
-            oField.style.color = '#B0A8B8';
-        } else if(oField.value != oFieldDefault.value) {
-            // Reset the visualisation
-            oField.style.color = '';
-        } else if(oField.value == oFieldDefault.value) {
-            // Visualize the default value
-            oField.style.color = '#B0A8B8';
-        }
-    }
-
-    oFieldDefault = null;
-    oField = null;
-}
-
 /**
  * validateValue(oField)
  *
  * This function checks a string for valid format. The check is done by the
  * given regex.
- *
+ * @FIXME: Remove this. Replace dialogs with "server validate"
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function validateValue(sName, sValue, sRegex) {
@@ -925,54 +775,26 @@ function coordsToGrid(x, y) {
     }
 }
 
-/**
- * validateMainConfigFieldValue(oField)
- *
- * This function checks a config field value for valid format. The check is done
- * by the match regex from validMainConfig array.
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function validateMainConfigFieldValue(oField, init) {
-    var sName;
-    var bInputHelper = false;
-    var bChanged;
-
-    if(!oField)
-        return false;
-
-    if(oField.name.indexOf('_inp_') !== -1) {
-        sName = oField.name.replace('_inp_', '');
-        bInputHelper = true;
-    } else {
-        sName = oField.name;
+function toggle_maincfg_section(sec) {
+    var tables = document.getElementsByClassName('section');
+    for (var i = 0; i < tables.length; i++) {
+        if (tables[i].id == 'sec_' + sec)
+            tables[i].style.display = '';
+        else
+            tables[i].style.display = 'none';
     }
 
-    // Check if "manual input" was selected in this field. If so: change the field
-    // type from select to input
-    bChanged = toggleFieldType(oField.name, oField.value);
-
-    // Toggle the value of the field. If empty or just switched the function will
-    // try to display the default value
-    toggleDefaultOption(sName, bChanged);
-
-    // Check if some fields depend on this. If so: Add a javacript
-    // event handler function to toggle these fields
-    toggleDependingFields("edit_config", sName, oField.value);
-
-    // Only validate when field type not changed
-    if(!bChanged) {
-        // Only validate when not initial parsing
-        if(!init) {
-        		var aName = sName.split('_');
-                        var sSec  = aName.shift();
-            return validateValue(sName, oField.value, validMainConfig[sSec][aName.join('_')].match);
-        } else {
-            return true;
-        }
-    } else {
-        return false;
+    // update the navigation
+    var nav_items = document.getElementById('nav').childNodes;
+    for (var i = 0; i < nav_items.length; i++) {
+        if (nav_items[i].id == 'nav_' + sec)
+            add_class(nav_items[i], 'active');
+        else
+            remove_class(nav_items[i], 'active');
     }
+
+    // update the helper field value
+    document.getElementById('sec').value = sec;
 }
 
 function printLang(sLang, sReplace) {

@@ -317,9 +317,9 @@ class WuiViewMapAddModify {
                     // showing error text instead of fields
                     try {
                         if($this->cloneId !== null)
-                            $options = $func($this->CORE, $this->MAPCFG, $this->cloneId, $this->attrs);
+                            $options = $func($this->MAPCFG, $this->cloneId, $this->attrs);
                         else
-                            $options = $func($this->CORE, $this->MAPCFG, $objId, $this->attrs);
+                            $options = $func($this->MAPCFG, $objId, $this->attrs);
 
                         // When this is an associative array use labels instead of real values
                         // Change other arrays to associative ones for easier handling afterwards

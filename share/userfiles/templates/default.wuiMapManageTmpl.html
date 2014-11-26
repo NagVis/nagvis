@@ -5,7 +5,7 @@
     <table name="mytable" class="mytable" id="table_add">
         <tbody>
             <tr><th class="cat" colspan="2"><h2>{$langTmplAdd}</h2></th></tr>
-            <tr><td class="tdlabel" style="color:red;">{$langTmplName}</td><td class="tdfield"><input id="name" type="text" name="name" value="" onBlur="" /></td></tr>
+            <tr class="must"><td class="tdlabel">{$langTmplName}</td><td class="tdfield"><input id="name" type="text" name="name" value="" onBlur="" /></td></tr>
             <tr><td></td><td><a href="javascript:formAddOption('add')">{$langTmplAddOption}</a></td></tr>
             <tr><td class="tdlabel" colspan="2" align="center"><input class="submit" type="submit" name="submit" id="commit" value="{$langTmplDoAdd}" /></td></tr>
         </tbody>
@@ -17,8 +17,8 @@
     <table name="mytable" class="mytable" id="table_modify">
         <tbody>
             <tr><th class="cat" colspan="2"><h2>{$langTmplModify}</h2></th></tr>
-            <tr>
-                <td class="tdlabel" style="color:red;">{$langTmplName}</td>
+            <tr class="must">
+                <td class="tdlabel">{$langTmplName}</td>
                 <td class="tdfield">
                     <select id="name" name="name" onChange="putTmplOpts(this.value)" onBlur="">
                         <option value=""></option>

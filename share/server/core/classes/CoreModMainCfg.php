@@ -38,7 +38,6 @@ class CoreModMainCfg extends CoreModule {
             'edit'              => REQUIRES_AUTHORISATION,
             'manageBackends'    => 'edit',
             'getBackendOptions' => 'edit',
-            'doEdit'            => 'edit',
             'doBackendDefault'  => 'edit',
             'doBackendAdd'      => 'edit',
             'doBackendEdit'     => 'edit',
@@ -54,12 +53,6 @@ class CoreModMainCfg extends CoreModule {
                 case 'edit':
                     $VIEW = new WuiViewEditMainCfg();
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
-                break;
-                case 'doEdit':
-                    $this->handleResponse('handleResponseEdit', 'doEdit',
-                                          l('The main configuration has been updated.'),
-                                          l('The main configuration could not be updated.'),
-                                          1);
                 break;
 
                 case 'manageBackends':
@@ -140,24 +133,6 @@ class CoreModMainCfg extends CoreModule {
         $FHANDLER = new CoreRequestHandler($_POST);
         $this->verifyValuesSet($FHANDLER, Array('defaultbackend'));
         return Array('defaultbackend' => $FHANDLER->get('defaultbackend'));
-    }
-
-    protected function doEdit($a) {
-        foreach($a['opts'] AS $key => $val) {
-            $key = explode('_', $key, 2);
-            if(sizeof($key) == 2) 
-                $this->CORE->getUserMainCfg()->setValue($key[0], $key[1], $val);
-        }
-
-        // Write the changes to the main configuration file
-        $this->CORE->getUserMainCfg()->writeConfig();
-
-        return true;
-    }
-
-    protected function handleResponseEdit() {
-        // FIXME: Validate the response
-        return Array('opts' => $_POST);
     }
 
     protected function handleResponseBackendAdd() {

@@ -131,4 +131,43 @@ function is_host_state($state) {
     return $state == UNCHECKED || $state == UNREACHABLE || $state == DOWN || $state == UP;
 }
 
+function listIconsets() {
+    global $CORE;
+    return $CORE->getAvailableIconsets();
+}
+
+function listBackendIds() {
+    global $CORE;
+    return $CORE->getDefinedBackends();
+}
+
+function listHeaderTemplates() {
+    global $CORE;
+    return $CORE->getAvailableHeaderTemplates();
+}
+
+function listHoverTemplates() {
+    global $CORE;
+    return $CORE->getAvailableHoverTemplates();
+}
+
+function listContextTemplates() {
+    global $CORE;
+    return $CORE->getAvailableContextTemplates();
+}
+
+function listHoverChildSorters() {
+    return Array(
+        'a' => l('Alphabetically'),
+        's' => l('State'),
+    );
+}
+
+function listHoverChildOrders() {
+    return Array(
+        'asc'  => l('Ascending'),
+        'desc' => l('Descending'),
+    );
+}
+
 ?>

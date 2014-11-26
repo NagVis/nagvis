@@ -6,15 +6,12 @@ lang = {$lang};
 <form name="create_image" id="create_image" method="POST" action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=ManageBackgrounds&amp;act=doCreate', 'create_image');" enctype="" onsubmit="return check_image_create();">
     <table name="mytable" class="mytable" id="table_create_image">
         <tr><th class="cat" colspan="2"><h2>{$langCreateBackground}</h2></th></tr>
-        <tr><td class="tdlabel" style="color:red;">{$langBackgroundName}</td><td class="tdfield"><input type="text" name="image_name" value="" onBlur="" /></td></tr>
-        <tr>
-          <td class="tdlabel" style="color:red;">{$langBackgroundColor}</td>
+        <tr class="must"><td class="tdlabel">{$langBackgroundName}</td><td class="tdfield"><input type="text" name="image_name" value="" onBlur="" /></td></tr>
+        <tr class="must">
+          <td class="tdlabel">{$langBackgroundColor}</td>
           <td class="tdfield">
             <div id="image_color_container" class="picker">
-            <input type="text" id="image_color" name="image_color" value="#" style="width:148px" />
-            <a href="javascript:void(0);" onClick="togglePicker('image_color');">
-            <img src="{$htmlImages}/internal/picker.png" alt="{$langColorSelect}" />
-            </a></div>
+            <input type="text" id="image_color" name="image_color" value="#" /><a href="javascript:void(0);" onClick="togglePicker('image_color');"><img src="{$htmlImages}/internal/picker.png" alt="{$langColorSelect}" /></a></div>
             <script type="text/javascript">
             var o = document.getElementById('image_color');
             o.color = new jscolor.color(o, \{pickerOnfocus:false,adjust:false,hash:true});
@@ -22,8 +19,8 @@ lang = {$lang};
             </script>
             </td>
         </tr>
-        <tr><td class="tdlabel" style="color:red;">{$langBackgroundWidth}</td><td class="tdfield"><input type="text" name="image_width" value="" onBlur="" /></td></tr>
-        <tr><td class="tdlabel" style="color:red;">{$langBackgroundHeight}</td><td class="tdfield"><input type="text" name="image_height" value="" onBlur="" /></td></tr>
+        <tr class="must"><td class="tdlabel">{$langBackgroundWidth}</td><td class="tdfield"><input type="text" name="image_width" value="" onBlur="" /></td></tr>
+        <tr class="must"><td class="tdlabel">{$langBackgroundHeight}</td><td class="tdfield"><input type="text" name="image_height" value="" onBlur="" /></td></tr>
         <tr><td class="tdlabel" colspan="2" align="center"><input class="submit" type="submit" name="submit" value="{$langCreate}" /></td></tr>
     </table>
 </form>

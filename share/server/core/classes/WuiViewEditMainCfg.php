@@ -22,188 +22,240 @@
  *
  *****************************************************************************/
 
-/**
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
 class WuiViewEditMainCfg {
-    /**
-     * Parses the information in html format
-     *
-     * @return	String 	String with Html Code
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function parse() {
-        global $CORE;
+    private $exclude_pattern = '/^(backend|internal|rotation|auth|action|wui)/i';
+    private $error = null;
 
-        // Initialize template system
-        $TMPL = New CoreTemplateSystem($CORE);
-        $TMPLSYS = $TMPL->getTmplSys();
+    private function handleAction() {
+        global $CORE, $_MAINCFG;
+        $UMAINCFG = $CORE->getUserMainCfg();
 
-        $aData = Array(
-            'htmlBase'     => cfg('paths', 'htmlbase'),
-            'formContents' => $this->getFields(),
-            'langSave'     => l('save'),
-            'validMainCfg' => json_encode($CORE->getMainCfg()->getValidConfig()),
-            'lang'         => $CORE->getJsLang(),
-        );
-
-        // Build page based on the template file and the data array
-        return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'wuiEditMainCfg'), $aData);
-    }
-
-    /**
-     * Parses the Form fields
-     *
-     * @return	Array Html
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    function getFields() {
-        global $CORE;
-        $ret = '';
-
-        $i = 1;
-        foreach($CORE->getMainCfg()->getValidConfig() AS $cat => $arr) {
-            // don't display backend,rotation and internal options
-            if(preg_match("/^(backend|internal|rotation|auth|action)/i", $cat)) {
+        // loop all sections
+        foreach ($_MAINCFG->getValidConfig() AS $sec => $arr) {
+            if (preg_match($this->exclude_pattern, $sec))
                 continue;
-            }
 
-            $ret .= '<tr><th class="cat" colspan="3"><h2>'.$cat.'</h2></th></tr>';
-
-            foreach($arr AS $propname => $prop) {
-                $class = '';
-                $style = '';
-                $isDefaultValue = false;
-
-                // Skip deprecated options
-                if(isset($prop['deprecated']) && $prop['deprecated'] == 1)
+            // loop all options
+            foreach ($_MAINCFG->getValidObjectType($sec) AS $key => $spec) {
+                if (isset($spec['deprecated']) && $spec['deprecated'] == 1)
                     continue;
 
-                // Set field type to show
-                $fieldType = 'text';
-                if(isset($prop['field_type'])) {
-                    $fieldType = $prop['field_type'];
+                $field_type = val($spec, 'field_type', 'text');
+                if ($field_type == 'hidden')
+                    continue;
+
+                $ident = $sec.'_'.$key;
+                if (isset($_POST['toggle_'.$ident]) && $_POST['toggle_'.$ident] != '') {
+                    // set the option
+                    $raw_val = $_POST[$ident];
+
+                    if (val($spec, 'array', false))
+                        $val = explode(',', $raw_val);
+                    else
+                        $val = $raw_val;
+
+                    // now check for value format
+                    if (!preg_match($spec['match'], $raw_val))
+                        throw new FieldInputError($ident, l('Invalid format given. Regex: [r]',
+                                                                    array('r' => $spec['match'])));
+
+                    $UMAINCFG->setValue($sec, $key, $val);
                 }
-
-                // Don't show anything for hidden options
-                if($fieldType !== 'hidden') {
-                    // Only get the really set value
-                    $val2 = cfg($cat, $propname, true);
-
-                    // Check if depends_on and depends_value are defined and if the value
-                    // is equal. If not equal hide the field
-                    if(isset($prop['depends_on']) && isset($prop['depends_value'])
-                        && cfg($cat, $prop['depends_on'], false) != $prop['depends_value']) {
-
-                        $class = ' class="child-row"';
-                        $style = ' style="display:none;"';
-                    } elseif(isset($prop['depends_on']) && isset($prop['depends_value'])
-                        && cfg($cat, $prop['depends_on'], false) == $prop['depends_value']) {
-
-                        //$style .= 'display:;';
-                        $class = ' class="child-row"';
-                    }
-
-                    // Create a "helper" field which contains the real applied value
-                    if($val2 === false) {
-                        $defaultValue = cfg($cat, $propname, false);
-
-                        if(is_array($defaultValue)) {
-                            $defaultValue = implode(',', $defaultValue);
-                        }
-
-                        $ret .= '<input type="hidden" id="_'.$cat.'_'.$propname.'" name="_'.$cat.'_'.$propname.'" value="'.$defaultValue.'" />';
-                    } else {
-                        $ret .= '<input type="hidden" id="_'.$cat.'_'.$propname.'" name="_'.$cat.'_'.$propname.'" value="" />';
-                    }
-
-                    # we add a line in the form
-                    $ret .= '<tr'.$class.$style.'>';
-                    $ret .= '<td class="tdlabel">'.$propname.'</td>';
-
-                    if(preg_match('/^TranslationNotFound:/', l($propname)) > 0) {
-                        $ret .= '<td class="tdfield"></td>';
-                    } else {
-                        $ret .= '<td class="tdfield">';
-                        $default_str = is_array($arr[$propname]['default']) ? implode(',', $arr[$propname]['default']) : $arr[$propname]['default'];
-                        $ret .= "<img style=\"cursor:help\" src=\"./images/help_icon.png\" "
-                               ."onclick=\"javascript:alert('".l($propname)." (".l('defaultValue').": ".$default_str.")')\" />";
-                        $ret .= '</td>';
-                    }
-
-                    $ret .= '<td class="tdfield">';
-                    switch($fieldType) {
-                        case 'dropdown':
-                            switch($propname) {
-                                case 'language':
-                                    $arrOpts = $CORE->getAvailableLanguages();
-                                break;
-                                case 'backend':
-                                    $arrOpts = $CORE->getDefinedBackends();
-                                break;
-                                case 'icons':
-                                    $arrOpts = $CORE->getAvailableIconsets();
-                                break;
-                                case 'headertemplate':
-                                    $arrOpts = $CORE->getAvailableHeaderTemplates();
-                                break;
-                            }
-
-                            $ret .= '<select id="'.$cat.'_'.$propname.'" name="'.$cat.'_'.$propname.'" onBlur="validateMainConfigFieldValue(this, 0)">';
-                            $ret .= '<option value=""></option>';
-
-                            foreach($arrOpts AS $val) {
-                                if(is_array($val)) {
-                                    $ret .= '<option value="'.$val['value'].'">'.$val['label'].'</option>';
-                                } else {
-                                    $ret .= '<option value="'.$val.'">'.$val.'</option>';
-                                }
-                            }
-
-                            $ret .= '</select>';
-
-                            if(is_array($val2)) {
-                                $val2 = implode(',', $val2);
-                            }
-                            $ret .= '<script>document.edit_config.elements[\''.$cat.'_'.$propname.'\'].value = \''.$val2.'\';</script>';
-                        break;
-                        case 'boolean':
-                            $ret .= '<select id="'.$cat.'_'.$propname.'" name="'.$cat.'_'.$propname.'" onBlur="validateMainConfigFieldValue(this, 0)">';
-                            $ret .= '<option value=""></option>';
-                            $ret .= '<option value="1">'.l('yes').'</option>';
-                            $ret .= '<option value="0">'.l('no').'</option>';
-                            $ret .= '</select>';
-
-                            $ret .= '<script>document.edit_config.elements[\''.$cat.'_'.$propname.'\'].value = \''.$val2.'\';</script>';
-                        break;
-                        case 'text':
-                            if(is_array($val2)) {
-                                $val2 = implode(',', $val2);
-                            }
-
-                            $ret .= '<input id="'.$cat.'_'.$propname.'" type="text" name="'.$cat.'_'.$propname.'" value="'.$val2.'" onBlur="validateMainConfigFieldValue(this, 0)" />';
-
-                            if(isset($prop['locked']) && $prop['locked'] == 1) {
-                                $ret .= "<script>document.edit_config.elements['".$cat."_".$propname."'].disabled=true;</script>";
-                            }
-                        break;
-                    }
-
-                    // Initially toggle the depending fields
-                    $ret .= '<script>validateMainConfigFieldValue(document.getElementById("'.$cat.'_'.$propname.'"), 1);</script>';
-
-                    $ret .= '</td>';
-                    $ret .= '</tr>';
+                else {
+                    $UMAINCFG->unsetValue($sec, $key);
                 }
             }
-
-            if($i % 3 == 0) {
-                $ret .= '</table><table class="mytable" style="width:300px;float:left">';
-            }
-            $i++;
         }
 
-        return $ret;
+        $UMAINCFG->writeConfig(); // persist changes
+        echo '<div class="success">'.l('The configuration has been saved.').'</div>';
+        echo '<script>window.scrollTo(0, 0);'
+            .'window.setTimeout(function() { window.location.reload(); }, 1500);</script>';
+    }
+
+    public function parse() {
+        global $_MAINCFG;
+        ob_start();
+        echo '<form name="edit_config" id="edit_config" action="javascript:submitFrontendForm2(\''.cfg('paths', 'htmlbase').'/server/core/ajax_handler.php?mod=MainCfg&amp;act=edit\', \'edit_config\');">';
+
+        if (isset($_POST['submit']) && $_POST['update'] != '1')
+            try {
+                $this->handleAction();
+            } catch (FieldInputError $e) {
+                $this->error = $e;
+            }
+
+        $open = isset($_POST['sec']) ? $_POST['sec'] : 'global'; // default open section
+        echo '<input type="hidden" id="sec" name="sec" value="'.htmlspecialchars($open).'" />';
+        echo '<input type="hidden" id="update" name="update" value="0" />';
+
+        // first render navigation
+        echo '<ul class="nav" id="nav">';
+        foreach ($_MAINCFG->getValidConfig() AS $sec => $arr) {
+            if (!preg_match($this->exclude_pattern, $sec)) {
+                $class = $open == $sec ? ' class="active"' : '';
+                echo '<li id="nav_'.$sec.'" '.$class.'><a href="javascript:toggle_maincfg_section(\''.$sec.'\')">'.$_MAINCFG->getSectionTitle($sec).'</a></li>';
+            }
+        }
+        echo '</ul>';
+
+        foreach ($_MAINCFG->getValidConfig() AS $sec => $arr) {
+            if (!preg_match($this->exclude_pattern, $sec))
+                $this->renderSection($sec, $open);
+        }
+
+        echo '<input class="submit" type="submit" name="submit" id="submit" value="'.l('save').'" />';
+        echo '</form>';
+
+        return ob_get_clean();
+    }
+
+    private function getCurVal($sec, $key, $ignore_default = true) {
+        global $CORE;
+        $UMAINCFG = $CORE->getUserMainCfg();
+
+        $cur_val = $UMAINCFG->getValue($sec, $key, $ignore_default);
+        $ident = $sec.'_'.$key;
+        if (isset($_POST['toggle_'.$ident]) && $_POST['toggle_'.$ident] != '')
+            $cur_val = val($_POST, $ident);
+        if (is_array($cur_val))
+            $cur_val = implode(',', $cur_val);
+        return $cur_val;
+    }
+
+    private function renderSection($sec, $open) {
+        global $_MAINCFG, $CORE;
+
+        $display = $sec != $open ? 'display:none' : '';
+        echo '<table id="sec_'.$sec.'" class="mytable section" style="'.$display.'">';
+        foreach ($_MAINCFG->getValidObjectType($sec) AS $key => $spec) {
+            // Skip deprecated options
+            if (isset($spec['deprecated']) && $spec['deprecated'] == 1)
+                continue;
+
+            $field_type = val($spec, 'field_type', 'text');
+            if ($field_type == 'hidden')
+                continue;
+
+            $ident = $sec.'_'.$key;
+
+            // value configured by the user. might be null when nothing is configured
+            $cur_val = $this->getCurVal($sec, $key);
+
+            // Get either the option configured in non gui editable config files or the
+            // hardcoded default value
+            $def_val = $_MAINCFG->getValue($sec, $key, false, true);
+            if (is_array($def_val))
+                $def_val = implode(',', $def_val);
+
+            // Check if depends_on and depends_value are defined and if the value
+            // is equal. If not equal hide the field
+            $row_class = '';
+            $row_style = '';
+            if(isset($spec['depends_on']) && isset($spec['depends_value'])
+                && $this->getCurVal($sec, $spec['depends_on'], false) != $spec['depends_value']) {
+
+                $row_class = ' class="child-row"';
+                $row_style = ' style="display:none;"';
+            } elseif(isset($spec['depends_on']) && isset($spec['depends_value'])
+                && $this->getCurVal($sec, $spec['depends_on'], false) == $spec['depends_value']) {
+
+                $row_class = ' class="child-row"';
+            }
+
+            if ($cur_val !== null) {
+                $checked      = ' checked="checked"';
+                $show_default = ' style="display:none"';
+                $show_input   = '';
+            }
+            else {
+                $checked      = '';
+                $show_default = '';
+                $show_input   = ' style="display:none"';
+            }
+
+            echo '<tr'.$row_class.$row_style.'>';
+            echo '<td class="tdlabel">'.$key.'</td>';
+            echo '<td class="tdbox"><input type="checkbox" name="toggle_'.$ident.'" value="1" '
+                .'onclick="toggle_option(\'box_'.$ident.'\')"'.$checked.'/></td>';
+            echo '<td class="tdfield">';
+
+            echo '<div id="_txt_box_'.$ident.'"'.$show_default.' class="default">';
+            switch ($field_type) {
+                case 'boolean':
+                    if ($def_val == '1')
+                        echo l('Yes');
+                    else
+                        echo l('No');
+                break;
+                default:
+                    echo htmlentities($def_val, ENT_COMPAT, 'UTF-8');
+            }
+            echo '</div>';
+
+            echo '<div id="box_'.$ident.'"'.$show_input.'>';
+            $this->renderInput($sec, $key, $spec, $def_val, $cur_val);
+            if ($this->error && $this->error->field == $ident) {
+                echo '<div class="err">'.htmlentities($this->error->msg, ENT_COMPAT, 'UTF-8').'</div>';
+            }
+            echo '</div>';
+
+            echo '</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+    }
+
+    private function renderInput($sec, $key, $spec, $def_val, $cur_val) {
+        global $_MAINCFG;
+        $field_type = val($spec, 'field_type', 'text');
+
+        // Make the default value the starting value for editing
+        if ($cur_val === null)
+            $cur_val = $def_val;
+
+        $on_change = '';
+        if($_MAINCFG->hasDependants($sec, $key))
+            $on_change = ' onchange="document.getElementById(\'update\').value=\'1\';'
+                        .'document.getElementById(\'submit\').click();"';
+        
+        switch ($field_type) {
+            case 'dropdown':
+                $func_name = $_MAINCFG->getListFunc($sec, $key);
+                $choices = $func_name();
+        
+                echo '<select id="'.$sec.'_'.$key.'" name="'.$sec.'_'.$key.'"'.$on_change.'>';
+                echo '<option value=""></option>';
+        
+                foreach ($choices AS $choice_key => $choice_val) {
+                    if(is_array($choice_val)) {
+                        echo '<option value="'.$choice_val['value'].'">'.$choice_val['label'].'</option>';
+                    } else {
+                        if (is_int($choice_key))
+                            $choice_key = $choice_val; // do not indexes of assoc arrays as values
+                        echo '<option value="'.$choice_key.'">'.$choice_val.'</option>';
+                    }
+                }
+        
+                echo '</select>';
+                echo '<script>document.edit_config.elements[\''.$sec.'_'.$key.'\'].value = \''.$cur_val.'\';</script>';
+            break;
+            case 'boolean':
+                echo '<select id="'.$sec.'_'.$key.'" name="'.$sec.'_'.$key.'"'.$on_change.'>';
+                echo '<option value=""></option>';
+                echo '<option value="1">'.l('yes').'</option>';
+                echo '<option value="0">'.l('no').'</option>';
+                echo '</select>';
+        
+                echo '<script>document.edit_config.elements[\''.$sec.'_'.$key.'\'].value = \''.$cur_val.'\';</script>';
+            break;
+            case 'text':
+                echo '<input id="'.$sec.'_'.$key.'" type="text" name="'.$sec.'_'.$key.'" value="'.$cur_val.'">';
+            break;
+        }
+        
+        if(isset($spec['locked']) && $spec['locked'] == 1)
+            echo "<script>document.edit_config.elements['".$sec."_".$key."'].disabled=true;</script>";
     }
 }
 ?>

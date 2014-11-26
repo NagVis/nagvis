@@ -97,13 +97,12 @@ function updateBackendOptions(sBackendType, backendId, sFormId) {
 
         var row = tbl.insertRow(lastRow);
         row.id = 'row_'+lastRow;
+        if(oOptions[sKey].must === 1)
+            add_class(row, "must");
 
         // Add label
         var label = row.insertCell(0);
         label.className = "tdlabel";
-        if(oOptions[sKey].must === 1) {
-            label.setAttribute('style', 'color:red;');
-        }
         label.innerHTML = sKey;
 
         // Add option

@@ -100,7 +100,7 @@
     <li onmouseover="ddMenu('wui',1)" onmouseout="ddMenuHide(['wui'])" class="dropdown">
         <span id="wui-ddheader">{$langOptions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         <ul id="wui-ddcontent">
-            {if $permittedEditMainCfg}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=MainCfg&amp;act=edit', '{$langEditMainCfg}', 970)">{$langEditMainCfg}</a></li>
+            {if $permittedEditMainCfg}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=MainCfg&amp;act=edit', '{$langEditMainCfg}', 550)">{$langEditMainCfg}</a></li>
             <li class="spacer"><hr /></li>
             <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=MainCfg&amp;act=manageBackends', '{$langMgmtBackends}');">{$langMgmtBackends}</a></li>{/if}
             {if $permittedManageBackgrounds}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ManageBackgrounds&amp;act=view', '{$langMgmtBackgrounds}');">{$langMgmtBackgrounds}</a></li>{/if}
