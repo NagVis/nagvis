@@ -7,10 +7,10 @@ lang = {$lang};
 <form name="backend_default" id="backend_default" method="POST" action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=MainCfg&amp;act=doBackendDefault', 'backend_default');">
     <table name="mytable" class="mytable" id="table_backend_default">
         <tr><th class="cat" colspan="2"><h2>{$langSetDefaultBackend}</h2></th></tr>
-        <tr class="must">
+        <tr>
             <td class="tdlabel">{$langDefaultBackend}</td>
             <td class="tdfield">
-                <select name="defaultbackend" onChange="" onBlur="">
+                <select name="defaultbackend" onChange="" onBlur="" required>
                     {foreach $definedBackends backendId}
                         {if $backendId == $defaultBackend}
                             <option value="{$backendId}" selected>{$backendId}</option>
@@ -36,14 +36,14 @@ lang = {$lang};
         <tr>
             <th class="cat" colspan="2"><h2>{$langAddBackend}</h2></th>
         </tr>
-        <tr class="must">
+        <tr>
             <td class="tdlabel">backendid</td>
-            <td class="tdfield"><input type="text" name="backendid" value="" /></td>
+            <td class="tdfield"><input type="text" name="backendid" value="" required /></td>
         </tr>
-        <tr class="must">
+        <tr>
             <td class="tdlabel">backendtype</td>
             <td class="tdfield">
-                <select name="backendtype" onChange="updateBackendOptions(this.value, '', 'backend_add');">
+                <select name="backendtype" onChange="updateBackendOptions(this.value, '', 'backend_add');" required>
                     {foreach $availableBackends type}<option value="{$type}">{$type}</option>{/foreach}
                 </select>
             </td>
@@ -60,10 +60,10 @@ lang = {$lang};
     <input type="hidden" name="backendtype" value="" />
     <table name="mytable" class="mytable" id="table_backend_edit">
         <tr><th class="cat" colspan="2"><h2>{$langEditBackend}</h2></th></tr>
-        <tr class="must">
+        <tr>
             <td class="tdlabel">backendid</td>
             <td class="tdfield">
-                <select name="backendid" onChange="updateBackendOptions('', this.value, 'backend_edit');">
+                <select name="backendid" onChange="updateBackendOptions('', this.value, 'backend_edit');" required>
                     {foreach $editableBackends backendId}<option value="{$backendId}">{$backendId}</option>{/foreach}
                 </select>
             </td>
@@ -79,10 +79,10 @@ lang = {$lang};
 <form name="backend_del" id="backend_del" method="POST" action="javascript:submitFrontendForm('{$htmlBase}/server/core/ajax_handler.php?mod=MainCfg&amp;act=doBackendDel', 'backend_del');" onsubmit="return check_backend_del();">
     <table name="mytable" class="mytable" id="table_backend_del">
         <tr><th class="cat" colspan="2"><h2>{$langDelBackend}</h2></th></tr>
-        <tr class="must">
+        <tr>
             <td class="tdlabel">backendid</td>
             <td class="tdfield">
-                <select name="backendid">
+                <select name="backendid" required>
                     {foreach $editableBackends backendId}<option value="{$backendId}">{$backendId}</option>{/foreach}
                 </select>
             </td>

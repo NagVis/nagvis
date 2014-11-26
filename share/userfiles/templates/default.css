@@ -482,7 +482,15 @@ td#popupWindowContent p {
 }
 
 /* title */
-td#popupWindowContent table.mytable th h2 {font-size:16px;text-align:center;background:#eee;padding:3px 10px 2px 20px;line-height:20px;font-weight:normal;-moz-border-radius:8px;-webkit-border-radius:8px;text-shadow: 1px 1px 1px #bbbbbb;margin-bottom:5px;}
+td#popupWindowContent h2 {
+    font-size: 16px;
+    text-align: left;
+    padding: 3px 10px 2px 2px;
+    line-height:20px;
+    font-weight:normal;
+    margin: 5px 0;
+    border-bottom: 1px solid #7EA434;
+}
 
 /* cat */
 td#popupWindowContent table.mytable th.cat {font-size: 12px;}
@@ -502,9 +510,6 @@ td#popupWindowContent table.mytable td.tdfield {
 }
 td#popupWindowContent table.mytable tr td.tdfield input,
 td#popupWindowContent table.mytable tr td.tdfield select {
-    font-size: 10px;
-    background-color: #fff;
-    border: 1px solid #43b3cf;
     width: 165px;
 }
 td#popupWindowContent table.mytable tr td.tdfield input {
@@ -531,15 +536,25 @@ td#popupWindowContent table.mytable tr td.tdfield div.err {
 }
 
 td#popupWindowContent .submit {
-    font-weight: bold;
+    /*font-weight: bold;
     color: #43b3cf;
-    vertical-align: middle;
+    vertical-align: middle;*/
+
+    padding: 3px 10px;
+    font-size: 12px;
+    background-color: #fbfbfb;
+    border: 1px solid #e5e5e5;
+    border-width: 1px;
+    border-style: solid;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+
     margin: 2px auto;
     display: block;
-}
-
-td#popupWindowContent table.mytable tr.must td {
-    font-weight: bold;
 }
 
 td#popupWindowContent table.mytable tr td.err div {
@@ -576,36 +591,13 @@ td#popupWindowContent div.err {
 
 /* Popup window forms */
 
-td#popupWindowContent fieldset {
-    margin: 1.5em 0 0 0;
-    padding: 5px;
-    width: 100%;
-    border: 1px solid #BFBAB0;
-    background-color: #F2EFE9;
-}
-
-td#popupWindowContent legend {
-    margin-left: 1em;
-    font-size: 1em;
-    font-weight: bold;
-}
-
-td#popupWindowContent fieldset.form table {
-    width: 100%;
-}
-
-td#popupWindowContent fieldset.form label {
-    font-weight: bold;
-    margin-right: 20px;
-}
-
 td#popupWindowContent a {color:#43B3CF;text-decoration:none;}
 td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 
 td#popupWindowContent input, select {
-    border: 1px solid #49caf2;
-    background-color: #fff;
     font-size: 11px;
+    background-color: #fbfbfb;
+    border: 1px solid #e5e5e5;
 }
 
 /* Header styling */
@@ -881,7 +873,7 @@ form#edit_config ul.nav {
     height: 21px;
     margin: 0;
     padding: 0;
-    border-bottom: 1px solid #49CAF2;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 form#edit_config ul.nav li {
@@ -895,17 +887,29 @@ form#edit_config ul.nav li a {
     padding: 0 5px;
     margin: 0 1px;
     line-height: 20px;
-    border: 1px solid #49CAF2;
+    border: 1px solid #e5e5e5;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
 
 form#edit_config ul.nav li a:hover {
     text-decoration: none;
-    background:#d9e1e4;
-    color:#779D2A
+    color:#779D2A;
+    background-color: #fbfbfb;
 }
 
 form#edit_config ul.nav li.active a {
     border-bottom: 1px solid #fff;
+    color: #000;
+}
+
+/* search dialog */
+
+td#popupWindowContent div#search input#highlightInput {
+    width: 200px;
+}
+
+td#popupWindowContent div#search .submit {
+    display: inline-block;
+    margin: 2px 10px;
 }

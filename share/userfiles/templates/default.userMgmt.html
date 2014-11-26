@@ -1,4 +1,4 @@
-<br>
+<input type="hidden" /><!-- The template must not start with a script tag. This would be ignored by IE //-->
 <script type="text/javascript">
 selectAllOpts = function (field) \{
     var oTarget = document.getElementById(field);
@@ -92,123 +92,108 @@ getUserRoles = function (id) \{
 </script>
 
 <div id="userAdd">
-<fieldset class="form">
-    <legend>{$langUserAdd}</legend>
+    <h2>{$langUserAdd}</h2>
     <form name="userAdd" id="userAddForm" action="#" onsubmit="submitFrontendForm('{$formTargetAdd}', 'userAddForm', true);return false" method="post">
-        <table>
+        <table class="mytable">
             <tr>
-                <td><label for="username">{$langUsername}:</label></td>
-                <td><input type="text" name="username" id="username" class="input" value="" size="{$maxUsernameLength}" tabindex="10" /></td>
+                <td class="tdlabel">{$langUsername}</td>
+                <td class="tdfield"><input type="text" name="username" id="username" class="input" value="" size="{$maxUsernameLength}" tabindex="10" required /></td>
             </tr>
             <tr>
-                <td><label for="password1">{$langPassword1}:</td>
-            <td><input type="password" name="password1" id="password1" class="input" value="" size="{$maxPasswordLength}" tabindex="20" /></td>
+                <td class="tdlabel">{$langPassword1}</td>
+                <td class="tdfield"><input type="password" name="password1" id="password1" class="input" value="" size="{$maxPasswordLength}" tabindex="20" required /></td>
             </tr>
             <tr>
-                <td><label for="password2">{$langPassword2}:</td>
-                <td><input type="password" name="password2" id="password2" class="input" value="" size="{$maxPasswordLength}" tabindex="30" /></td>
+                <td class="tdlabel">{$langPassword2}</td>
+                <td class="tdfield"><input type="password" name="password2" id="password2" class="input" value="" size="{$maxPasswordLength}" tabindex="30" required /></td>
             </tr>
             <tr>
-                <td colspan="2"><input type="submit" name="submit" id="submit" value="{$langUserAdd}" tabindex="40" /></td>
+                <td colspan="2"><input class="submit" type="submit" name="submit" value="{$langUserAdd}" tabindex="40" /></td>
             </tr>
         </table>
     </form>
-</fieldset>
 </div>
 
 {if $rolesConfigurable}<div id="manageUsers">
-<fieldset class="form">
-    <legend>{$langUserModify}</legend>
+    <h2>{$langUserModify}</h2>
     <form name="userEdit" id="userEditForm" action="#" onsubmit="selectAllOpts('rolesSelected');submitFrontendForm('{$formTargetEdit}', 'userEditForm', true);return false" method="post">
-        <p>
-            <label>{$langSelectUser}<br />
-            <select type="text" name="userId" id="userId" class="select" tabindex="50" onchange="getUserRoles(this.options[this.selectedIndex].value);" />
-                <option value="" selected="selected"></option>
-                {foreach $users user}<option value="{$user.userId}">{$user.name}</option>{/foreach}
-            </select>
-            </label>
-        </p>
-        <p>
-            <label>{$langManageRoles}<br />
-            <table>
-                <tr>
-                    <th style="width:50%">{$langRolesAvailable}</th>
-                    <th></th>
-                    <th style="width:50%">{$langRolesSelected}</th>
-                </tr>
-                <tr>
-                    <td>
-                        <select style="width:100%" name="rolesAvailable" id="rolesAvailable" class="select" tabindex="60" size="5" multiple />
-                        </select>
-                    </td>
-                    <td style="vertical-align:middle">
-                    <input type="button" name="add" onclick="roleModify(true)" value="&gt;" tabindex="70" /><br />
-                    <input type="button" name="remove" onclick="roleModify()" value="&lt;" tabindex="80" /></a>
-                    </td>
-                    <td>
-                        <select style="width:100%" name="rolesSelected" id="rolesSelected" class="select" tabindex="90" size="5" multiple />
-                        </select>
-                    </td>
-                </tr>
-            </table>
-            </label>
-        </p>
-        <p class="submit">
-            <input type="submit" name="submit" id="submit" value="{$langUserModify}" tabindex="100" />
-        </p>
+    <table class="mytable">
+        <tr>
+            <td class="tdlabel">{$langSelectUser}</td>
+            <td class="tdfield" colspan="2">
+                <select type="text" name="userId" id="userId" tabindex="50" onchange="getUserRoles(this.options[this.selectedIndex].value);" required />
+                    <option value="" selected="selected"></option>
+                    {foreach $users user}<option value="{$user.userId}">{$user.name}</option>{/foreach}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>{$langRolesAvailable}</td>
+            <td style="width:30px"></td>
+            <td>{$langRolesSelected}</td>
+        </tr>
+        <tr>
+            <td>
+                <select style="width:100%" name="rolesAvailable" id="rolesAvailable" tabindex="60" size="5" multiple />
+                </select>
+            </td>
+            <td style="vertical-align:middle">
+            <input type="button" name="add" onclick="roleModify(true)" value="&gt;" tabindex="70" /><br />
+            <input type="button" name="remove" onclick="roleModify()" value="&lt;" tabindex="80" /></a>
+            </td>
+            <td>
+                <select style="width:100%" name="rolesSelected" id="rolesSelected" tabindex="90" size="5" multiple />
+                </select>
+            </td>
+        </tr>
+    </table>
+    <input class="submit" type="submit" name="submit" value="{$langUserModify}" tabindex="100" />
     </form>
-</fieldset>
 </div>{/if}
 
 <div id="deleteUsers">
-<fieldset class="form">
-    <legend>{$langUserDelete}</legend>
+    <h2>{$langUserDelete}</h2>
     <form name="userDelete" id="userDeleteForm" action="#" onsubmit="submitFrontendForm('{$formTargetDelete}', 'userDeleteForm', true);return false" method="post">
-        <table>
+        <table class="mytable">
             <tr>
-                <td><label for="username">{$langUsername}:</label></td>
-                <td>
-                    <select type="text" name="userId" id="userId" class="select" tabindex="110" />
+                <td class="tdlabel">{$langUsername}</td>
+                <td class="tdfield">
+                    <select type="text" name="userId" id="userId" tabindex="110" required />
                         <option value="" selected="selected"></option>
                         {foreach $users user}<option value="{$user.userId}">{$user.name}</option>{/foreach}
                     </select>
                 </td>
-                <td><input type="submit" name="submit" id="submit" value="{$langUserDelete}" tabindex="120" /></td>
+                <td><input type="submit" name="submit" value="{$langUserDelete}" tabindex="120" /></td>
             </tr>
         </table>
     </form>
-</fieldset>
 </div>
 
 {if $supportedChangePassword}<div id="userPwReset">
-<fieldset class="form">
-    <legend>{$langUserPwReset}</legend>
+    <h2>{$langUserPwReset}</h2>
     <form name="userPwReset" id="userPwResetForm" action="#" onsubmit="submitFrontendForm('{$formTargetPwReset}', 'userPwResetForm', true);return false" method="post">
-        <table>
-            <tr><td style="vertical-align:top">
-                <label>{$langSelectUser}<br />
-                <select type="text" name="userId" id="userId" class="select" tabindex="130" />
+        <table class="mytable">
+            <tr>
+                <td class="tdlabel">{$langSelectUser}</td>
+                <td class="tdfield">
+                <select type="text" name="userId" id="userId" tabindex="130" required />
                     <option value="" selected="selected"></option>
                     {foreach $users user}<option value="{$user.userId}">{$user.name}</option>{/foreach}
                 </select>
-                </label>
-            </td>
-            <td>
-                <table>
-                    <tr>
-                        <td><label for="password1">{$langPassword1}:</td>
-                        <td><input type="password" name="password1" id="password1" class="input" value="" size="{$maxPasswordLength}" tabindex="140" /></td>
-                    </tr>
-                    <tr>
-                        <td><label for="password2">{$langPassword2}:</td>
-                        <td><input type="password" name="password2" id="password2" class="input" value="" size="{$maxPasswordLength}" tabindex="150" /></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><input type="submit" name="submit" id="submit" value="{$langUserPwReset}" tabindex="160" /></td>
-                    </tr>
-                </table>
-            </td></tr>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdlabel">{$langPassword1}</td>
+                <td class="tdfield"><input type="password" name="password1" id="password1" class="input" value="" size="{$maxPasswordLength}" tabindex="140" /></td>
+            </tr>
+            <tr>
+                <td class="tdlabel">{$langPassword2}</td>
+                <td class="tdfield"><input type="password" name="password2" id="password2" class="input" value="" size="{$maxPasswordLength}" tabindex="150" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input class="submit" type="submit" name="submit" value="{$langUserPwReset}" tabindex="160" /></td>
+            </tr>
         </table>
     </form>
-</fieldset>{/if}
+{/if}
 </div>

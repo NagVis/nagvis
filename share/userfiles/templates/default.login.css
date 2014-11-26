@@ -34,18 +34,18 @@ form .forgetmenot { font-weight: normal; float: left; margin-bottom: 0; }
 #login form .submit input {
     font-family: "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif;
     padding: 3px 10px;
-    border: none;
     font-size: 12px;
+    background-color: #fbfbfb;
+    border: 1px solid #e5e5e5;
     border-width: 1px;
     border-style: solid;
-    -moz-border-radius: 11px;
-    -khtml-border-radius: 11px;
-    -webkit-border-radius: 11px;
-    border-radius: 11px;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
     margin-top: -3px;
-    text-shadow: rgba(0,0,0,0.3) 0 -1px 0;
 }
 
 #login form p {
