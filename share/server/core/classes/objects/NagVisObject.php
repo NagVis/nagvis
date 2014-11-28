@@ -328,7 +328,7 @@ class NagVisObject {
                     else
                         $arr[$attr] = '';
                 }
-            } elseif ($this->type == 'map') {
+            } elseif ($this->type == 'map' || $this->type == 'servicegroup' || $this->type == 'hostgroup') {
                 if (isset($this->state[ALIAS]))
                     $arr['alias'] = $this->state[ALIAS];
                 else

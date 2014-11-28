@@ -1310,7 +1310,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                                                                         Array('BACKENDID' => $this->backendId)));
             foreach($l as $e) {
                 $arrReturn[$e[0]] = Array(
-                    'details' => Array('alias' => $e[1]),
+                    'details' => Array(ALIAS => $e[1]),
                     'counts' => Array(
                         PENDING => Array(
                             'normal'    => intval($e[2]),

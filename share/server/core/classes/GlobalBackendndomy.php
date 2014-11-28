@@ -935,7 +935,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         $arrReturn = Array();
         while($data = mysql_fetch_assoc($QUERYHANDLE)) {
             $arrReturn[$data['name1']] = Array(
-                'details' => Array('alias' => $data['alias']),
+                'details' => Array(ALIAS => $data['alias']),
                 'counts' => Array(
                     UNCHECKED => Array(
                         'normal'    => intval($data['unchecked']),
@@ -1070,7 +1070,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         $arrReturn = Array();
         while($data = mysql_fetch_assoc($QUERYHANDLE)) {
             $arrReturn[$data['name1']] = Array(
-                'details' => Array('alias' => $data['alias']),
+                'details' => Array(ALIAS => $data['alias']),
                 'counts' => Array(
                     PENDING => Array(
                         'normal'   => intval($data['pending']),

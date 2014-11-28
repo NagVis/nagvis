@@ -121,7 +121,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
         $s = @file_get_contents($url, false, $this->context);
         if($s === false)
             throw new BackendConnectionProblem(l('Unable to fetch data from URL [U]: [M]',
-                                                Array('U' => $url, 'M' => "".error_get_last())));
+                                                Array('U' => $url, 'M' => json_encode(error_get_last()))));
 
         //DEBUG:
         //$fh = fopen('/tmp/bp', 'a');
@@ -258,9 +258,9 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
 
             $ret[$key] = Array(
                 'details' => Array(
-                    'alias' => $bp['display_name'],
+                    ALIAS => $bp['display_name'],
                     // This forces the BP state to be the summary state of the BP object
-                    'state' => $this->getBPState($bp['hardstate']),
+                    STATE => $this->getBPState($bp['hardstate']),
                 ),
                 'counts'  => $this->getBPCounts($bp),
             );
@@ -271,7 +271,9 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
 
             // Forces the URL to point to nagios-bp if the current url does not point to a map
             if(strpos($OBJS[0]->getUrl(), 'show=') === false)
-                $ret[$key]['details']['url'] = $this->bpUrl($key);
+                $ret[$key]['attrs'] = array(
+                    'url' => $this->bpUrl($key),
+                );
         }
 
         return $ret;

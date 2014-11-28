@@ -444,6 +444,8 @@ class CoreBackendMgmt {
                     foreach($OBJS AS $OBJ) {
                         if(isset($aResult[$name]['details']))
                             $OBJ->setState($aResult[$name]['details']);
+                        if(isset($aResult[$name]['attrs']))
+                            $OBJ->setObjectInformation($aResult[$name]['attrs']);
                         if(isset($aResult[$name]['counts']))
                             $OBJ->addStateCounts($aResult[$name]['counts']);
                     }
