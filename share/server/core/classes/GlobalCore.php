@@ -732,12 +732,12 @@ class GlobalCore {
 
     // Sort array of map arrays by alias
     static function cmpAlias($a, $b) {
-        return strnatcmp($a['alias'], $b['alias']);
+        return strnatcasecmp($a['alias'], $b['alias']);
     }
 
     // Sort array of map arrays by alias used for header menu
     static function cmpMapAlias($a, $b) {
-        return strnatcmp($a['mapAlias'], $b['mapAlias']);
+        return strnatcasecmp($a['mapAlias'], $b['mapAlias']);
     }
 
     public function omdSite() {
