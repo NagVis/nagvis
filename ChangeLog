@@ -1,4 +1,9 @@
 1.8rc3
+Core:
+  * New backend: Check_MK Business Intelligence (mkbi) which can be used to
+    add Check_MK BI aggregations to your maps
+      (Configure this new backend, then add "Aggregation" objects to your maps)
+
 Frontend:
   * FIX: Changed sorting of maps in sidebare/header to ignore case of names (natural sorting)
 

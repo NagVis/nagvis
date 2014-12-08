@@ -132,7 +132,7 @@ class NagVisObject {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     public function getName() {
-        if($this->type == 'dyngroup') {
+        if($this->type == 'dyngroup' || $this->type == 'aggr') {
             return $this->name;
         } elseif ($this->type == 'service') {
             return $this->host_name;
@@ -289,6 +289,19 @@ class NagVisObject {
                     $arr['lang_child_name']  = NagVisDynGroup::$langChild;
                     if ($this->object_types == 'service')
                         $arr['lang_child_name1'] = NagVisDynGroup::$langChild1;
+                break;
+                case 'aggr':
+                    if(NagVisAggr::$langType === null) {
+                        NagVisAggr::$langType   = l('Aggregation');
+                        NagVisAggr::$langSelf   = l('Aggregation Name');
+                        NagVisAggr::$langChild  = l('Name');
+                        NagVisAggr::$langChild1 = l('Name');
+                    }
+
+                    $arr['lang_obj_type']    = NagVisAggr::$langType;
+                    $arr['lang_name']        = NagVisAggr::$langSelf;
+                    $arr['lang_child_name']  = NagVisAggr::$langChild;
+                    $arr['lang_child_name1'] = NagVisAggr::$langChild1;
                 break;
                 case 'map':
                     if(NagVisMapObj::$langType === null) {

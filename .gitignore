@@ -4,6 +4,7 @@
 *~
 *.tar.gz
 .metadata
+.site
 uifx/.settings
 uifx/.actionScriptProperties
 uifx/.flexProperties

@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+ <head>
+  <title>NagVis Check_MK Business Intelligence Backend</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+ </head>
+ <body>
+    <h1>Check_MK Business Intelligence Backend</h1>
+    <p>The Check_MK Business Intelligence (BI) Backend is used to connect NagVis directly with the
+       aggregations configured within <a href="http://mathias-kettner.de/checkmk_bi.html" target="_blank">Check_MK BI</a>.</p>
+
+    <h2>The Check_MK BI API</h2>
+    <p>Check_MK BI offers a webservice which is called by HTTP GET requests and
+       responds with JSON objects.</p>
+
+    <h2>Representation in NagVis</h2>
+    <p>This backend is a special one compared to the other backends which handle Nagios status
+       information 1:1. This backend only handles Check_MK BI aggregations as dedicated object.</p>
+    <p>The backend only provides information for objects of the type <code>aggr</code>, which
+        has been introduced to represent aggregation objects.</p>
+    <p>The aggregations objects link (left click on icon) are automatically set by the mkbi
+       backend to point to the Check_MK Web-GUI, except when the <code>url</code> parameter
+       of the aggr object is configured to point to another map 
+       (e.g. <code>[htmlbase]/index.php?mod=Map&amp;act=view&amp;show=bi-webshop-details</code>).</p>
+
+    <h2>Configuration</h2>
+
+    <p>You can use the following parameters to configure the Check_MK BI backend:</p>
+    
+    <table style="width:100%">
+    <tr>
+    <th width="200">Value</th><th width="150">Default</th><th>Description</th>
+    </tr>
+    <tr>
+        <td><strong>base_url</strong></td>
+        <td>http://localhost/check_mk/</td>
+        <td>The full base URL to the <code>view.py</code> script which is part of Check_MK.
+            It serves the AJAX-API which the backend connects to. This URL must be reachable
+            from the host NagVis is running on.</td>
+    </tr>
+    <tr>
+        <td>auth_user</td>
+        <td></td>
+        <td>User to use for authentication when accessing the <code>base_url</code>. It
+            has to be created within Check_MK as &quot;automation&quot; user in order to 
+            configure a backend which is allowed to retrieve Check_MK BI states.</td>
+    </tr>
+    <tr>
+        <td>auth_secret</td>
+        <td></td>
+        <td>The authentication secret configured within Check_MK for the tiven user.</td>
+    </tr>
+    </table>
+    <p>There are also some general backend parameters. You can read about them in 
+       <a href="nagvis_config_format_description.html#backend">main configuration format description</a>.</p>
+</body>
+</html>

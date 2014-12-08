@@ -598,6 +598,11 @@ class GlobalMainCfg {
                     'default' => '',
                     'match'   => MATCH_STRING_URL_EMPTY
                 ),
+                'aggrurl' => Array(
+                    'must'    => 0,
+                    'default' => '',
+                    'match'   => MATCH_STRING_URL_EMPTY
+                ),
                 'view_template' => Array(
                     'must'     => 0,
                     'editable' => 1,

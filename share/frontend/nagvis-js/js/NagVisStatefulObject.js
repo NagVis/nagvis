@@ -66,6 +66,9 @@ var NagVisStatefulObject = NagVisObject.extend({
                     case 'dyngroup':
                         oObj = new NagVisDynGroup(oMember);
                     break;
+                    case 'aggr':
+                        oObj = new NagVisAggr(oMember);
+                    break;
                     case 'map':
                         oObj = new NagVisMap(oMember);
                     break;

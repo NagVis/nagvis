@@ -1,6 +1,7 @@
 #!/bin/bash
 
-[ -z $SITE ] && SITE=$(omd sites --bare | head -n1)
+SITE=${SITE:-$(cat .site 2>/dev/null || true)}
+SITE=${SITE:-$(omd sites --bare | head -n 1)}
 which sudo >/dev/null 2>&1 && SUDO=sudo || SUDO=
 BASE=$(pwd)
 

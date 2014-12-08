@@ -54,7 +54,7 @@ define('MATCH_BOOLEAN', '/^(?:1|0)$/i');
 define('MATCH_BOOLEAN_EMPTY', '/^(?:1|0)*$/i');
 
 define('MATCH_COLOR', '/^(#?[0-9a-f]{3,6}|transparent)$/i');
-define('MATCH_OBJECTTYPE', '/^(?:global|host|service|dyngroup|hostgroup|servicegroup|map|textbox|shape|line|template|container)$/i');
+define('MATCH_OBJECTTYPE', '/^(?:global|host|service|dyngroup|aggr|hostgroup|servicegroup|map|textbox|shape|line|template|container)$/i');
 define('MATCH_OBJECTID', '/^(?:[a-z0-9]+)$/i');
 define('MATCH_OBJECTID_EMPTY', '/^(?:[a-z0-9]*)$/i');
 define('MATCH_PNGFILE', '/^([^\s]+)\.png$/i');
@@ -81,7 +81,7 @@ define('MATCH_VIEW_TYPE_SERVICE_EMPTY', '/^(?:icon|line|gadget)*$/i');
 define('MATCH_VIEW_TYPE_CONTAINER', '/^(?:inline|iframe)$/i');
 define('MATCH_GET_OBJECT_TYPE', '/^(state|complete|summary)$/');
 define('MATCH_GADGET_TYPE', '/^(?:img|html)$/i');
-define('MATCH_OBJECT_TYPES', '/^(host|service|hostgroup|servicegroup|dyngroup|map)$/');
+define('MATCH_OBJECT_TYPES', '/^(host|service|hostgroup|servicegroup|dyngroup|aggr|map)$/');
 define('MATCH_AUTOMAP_RENDER_MODE', '/^(directed|undirected|radial|circular|undirected2|undirected3)?$/');
 define('MATCH_AUTOMAP_RANKDIR', '/^(TB|LR|BT|RL)?$/');
 define('MATCH_AUTOMAP_OVERLAP', '/^(true|false|scale|scalexy|ortho|orthoxy|orthoyx|compress|ipsep|vpsc)?$/');

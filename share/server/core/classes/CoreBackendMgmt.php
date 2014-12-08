@@ -165,8 +165,16 @@ class CoreBackendMgmt {
                             case 'hostMemberState':
                             case 'hostgroupMemberState':
                             case 'servicegroupMemberState':
+                            case 'AGGR_MEMBER_STATE':
                                 $this->fetchStateCounts($backendId, $type, $option, $aObjs);
                             break;
+                            case 'DYN_GROUP_MEMBER_STATE':
+                                // Can not use the generic fetchStateCounts() method. It uses summarized queries
+                                // to reduce the number of backend queries, but this is not possible for member
+                                // states as this makes use of individual filter queries per objects.
+                                $this->fetchDynGroupMemberCounts($backendId, $option, $aObjs);
+                            break;
+
                             case 'hostMemberDetails':
                                 $this->fetchHostMemberDetails($backendId, $option, $aObjs);
                             break;
@@ -176,14 +184,11 @@ class CoreBackendMgmt {
                             case 'servicegroupMemberDetails':
                                 $this->fetchServicegroupMemberDetails($backendId, $option, $aObjs);
                             break;
-                            case 'DYN_GROUP_MEMBER_STATE':
-                                // Can not use the generic fetchStateCounts() method. It uses summarized queries
-                                // to reduce the number of backend queries, but this is not possible for member
-                                // states as this makes use of individual filter queries per objects.
-                                $this->fetchDynGroupMemberCounts($backendId, $option, $aObjs);
-                            break;
                             case 'DYN_GROUP_MEMBER_DETAILS':
                                 $this->fetchDynGroupMemberDetails($backendId, $option, $aObjs);
+                            break;
+                            case 'AGGR_MEMBER_DETAILS':
+                                $this->fetchAggrMemberDetails($backendId, $option, $aObjs);
                             break;
                         }
                     }
@@ -193,6 +198,39 @@ class CoreBackendMgmt {
 
         // Clear the queue after processing
         $this->clearQueue();
+    }
+
+    /**
+     * Loops all queued aggregation and executes the queries for each group.
+     * Gets all members of the aggregation and saves them to the members array
+     *
+     * This is trimmed to reduce the number of queries to the backend:
+     * 1.) fetch states for all objects
+     * 2.) fetch state counts for all objects
+     */
+    private function fetchAggrMemberDetails($backendId, $options, $aObjs) {
+        foreach($aObjs AS $name => $OBJS) {
+            foreach($OBJS AS $OBJ) {
+                try {
+                    $filters = Array(Array('key' => 'aggr_name', 'op' => '>=', 'val' => 'name'));
+                    $aServices = $this->getBackend($backendId)->getServiceState(Array($OBJ->getName() => Array($OBJ)), $options, $filters, MEMBER_QUERY);
+                } catch(BackendException $e) {
+                    $aServices = Array();
+                    $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
+                              Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())), $backendId);
+                }
+
+                // Regular member adding loop
+                $members = Array();
+                foreach($aServices AS $host => $serviceList) {
+                    foreach($serviceList AS $aService) {
+                        $members[] = $this->createServiceObject($backendId, $host, $aService[DESCRIPTION],
+                                                                $aService, $OBJ->getObjectConfiguration());
+                    }
+                }
+                $OBJ->addMembers($members);
+            }
+        }
     }
 
     private function fetchDynGroupMemberCounts($backendId, $options, $aObjs) {
@@ -428,6 +466,10 @@ class CoreBackendMgmt {
                 case 'hostMemberState':
                     $filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
                     $aResult = $this->getBackend($backendId)->getHostMemberCounts($aObjs, $options, $filters);
+                break;
+                case 'AGGR_MEMBER_STATE':
+                    $filters = Array(Array('key' => 'aggr_name', 'op' => '=', 'val' => 'name'));
+                    $aResult = $this->getBackend($backendId)->getAggrStateCounts($aObjs, $options, $filters);
                 break;
             }
         } catch(BackendException $e) {

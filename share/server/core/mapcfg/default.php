@@ -144,6 +144,10 @@ function listServicegroupNames($MAPCFG, $objId, $attrs) {
     return getObjectNames('servicegroup', $MAPCFG, $objId, $attrs);
 }
 
+function listAggrNames($MAPCFG, $objId, $attrs) {
+    return getObjectNames('aggr', $MAPCFG, $objId, $attrs);
+}
+
 function listTemplateNames() {
     return Array();
 }
@@ -894,6 +898,20 @@ $mapConfigVars = Array(
         'default'    => cfg('defaults', 'dyngroupurl'),
         'match'      => MATCH_STRING_URL_EMPTY,
     ),
+
+    // AGGREGATION SPECIFIC
+
+    'aggr_name' => Array(
+        'must'       => 1,
+        'match'      => MATCH_STRING,
+        'field_type' => 'dropdown',
+        'list'       => 'listAggrNames',
+    ),
+    'aggr_url' => Array(
+        'must'       => 0,
+        'default'    => cfg('defaults', 'aggrurl'),
+        'match'      => MATCH_STRING_URL_EMPTY,
+    ),
 );
 
 // STATELESS LINE SPECIFIC OPTIONS
@@ -1322,6 +1340,48 @@ $mapConfigVarMap['dyngroup'] = array(
     'dyngroup_url' => 'url',
     'url_target' => null,
     'use' => null,
+);
+
+$mapConfigVarMap['aggr'] = Array(
+    'type'                  => null,
+    'object_id'             => null,
+    'aggr_name'             => 'name',
+    'x'                     => null,
+    'y'                     => null,
+    'z'                     => null,
+    'backend_id'            => null,
+    'view_type'             => null,
+    'iconset'               => null,
+    'line_type'             => null,
+    'line_arrow'            => null,
+    'line_cut'              => null,
+    'line_width'            => null,
+    'line_weather_colors'   => null,
+    'context_menu'          => null,
+    'context_template'      => null,
+    'exclude_members'       => null,
+    'exclude_member_states' => null,
+    'hover_menu'            => null,
+    'hover_delay'           => null,
+    'hover_template'        => null,
+    'hover_url'             => null,
+    'hover_childs_show'     => null,
+    'hover_childs_sort'     => null,
+    'hover_childs_order'    => null,
+    'hover_childs_limit'    => null,
+    'label_show'            => null,
+    'label_text'            => null,
+    'label_x'               => null,
+    'label_y'               => null,
+    'label_width'           => null,
+    'label_background'      => null,
+    'label_border'          => null,
+    'label_style'           => null,
+    'label_maxlen'          => null,
+    'only_hard_states'      => null,
+    'aggr_url'              => 'url',
+    'url_target'            => null,
+    'use'                   => null,
 );
 
 ?>

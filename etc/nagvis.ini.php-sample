@@ -296,6 +296,8 @@
 ;servicegroupurl="[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]&style=detail"
 ; URL template for dynamic group object links (disabled by default)
 ;dyngroupurl=""
+; URL template for aggregations object links (disabled by default)
+;aggrurl=""
 ; URL template for nested map links
 ;mapurl="[htmlbase]/index.php?mod=Map&act=view&show=[map_name]"
 ; Templates to be used for the different views.

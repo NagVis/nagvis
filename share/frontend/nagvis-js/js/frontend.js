@@ -1098,6 +1098,9 @@ function setMapObjects(aMapObjectConf) {
             case 'dyngroup':
                 oObj = new NagVisDynGroup(aMapObjectConf[i]);
             break;
+            case 'aggr':
+                oObj = new NagVisAggr(aMapObjectConf[i]);
+            break;
             case 'map':
                 oObj = new NagVisMap(aMapObjectConf[i]);
             break;
