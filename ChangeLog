@@ -3,6 +3,7 @@ Core:
   * New backend: Check_MK Business Intelligence (mkbi) which can be used to
     add Check_MK BI aggregations to your maps
       (Configure this new backend, then add "Aggregation" objects to your maps)
+  * FIX: Livestatus: Fixed wrong state aggregation for dynamic service groups
 
 Frontend:
   * FIX: Changed sorting of maps in sidebare/header to ignore case of names (natural sorting)
@@ -17,8 +18,8 @@ Geomap:
   * FIX: Fixed handling of multiple backends on one geomap
 
 Core:
-  * Livestatus: Fixed wrong state aggregation for servicegroups
-  * Livestatus: Fixed check_command value of host/services
+  * FIX: Livestatus: Fixed wrong state aggregation for servicegroups
+  * FIX: Livestatus: Fixed check_command value of host/services
 
 Frontend:
   * Service-/Hosttags are shown in default hover template now (when available)
