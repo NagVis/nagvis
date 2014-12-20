@@ -7,6 +7,7 @@ Core:
 
 Frontend:
   * FIX: Changed sorting of maps in sidebare/header to ignore case of names (natural sorting)
+  * FIX: Fixed exception preventing editing the map options of geomaps
 
 1.8rc2
 Core:

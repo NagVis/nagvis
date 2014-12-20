@@ -150,7 +150,8 @@ function list_geomap_source_types() {
     );
 }
 
-function list_geomap_source_files($CORE) {
+function list_geomap_source_files() {
+    global $CORE;
     return $CORE->getAvailableGeomapSourceFiles();
 }
 
