@@ -1284,7 +1284,7 @@ function getZoomFactor() {
 }
 
 function isZoomed() {
-    return g_zoom_factor !== 100;
+    return getZoomFactor() !== 100;
 }
 
 /**

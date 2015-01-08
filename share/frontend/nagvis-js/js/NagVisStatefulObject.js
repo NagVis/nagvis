@@ -786,8 +786,12 @@ var NagVisStatefulObject = NagVisObject.extend({
             var arr   = this.id.split('-');
             var objId = arr[0];
             var obj = getMapObjByDomObjId(objId);
-            if(obj && !obj.bIsLocked){
-                obj.redrawControls();
+            if (obj) {
+                if (obj.conf.label_show && obj.conf.label_show == '1')
+                    obj.updateLabel();
+
+                if (!obj.bIsLocked)
+                    obj.redrawControls();
                 obj = null;
             }
             objId = null;

@@ -6,6 +6,7 @@ Core:
   * FIX: Livestatus: Fixed wrong state aggregation for dynamic service groups
 
 Frontend:
+  * FIX: Fixed relative label positioning (center, bottom) on first page load sometimes wrong
   * FIX: Changed sorting of maps in sidebare/header to ignore case of names (natural sorting)
   * FIX: Fixed exception preventing editing the map options of geomaps
 
