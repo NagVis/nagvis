@@ -1,3 +1,7 @@
+1.8rc4
+Frontend:
+  * FIX: Fixed relative label positioning (center, bottom) on first page load sometimes wrong
+
 1.8rc3
 Core:
   * New backend: Check_MK Business Intelligence (mkbi) which can be used to
@@ -6,7 +10,6 @@ Core:
   * FIX: Livestatus: Fixed wrong state aggregation for dynamic service groups
 
 Frontend:
-  * FIX: Fixed relative label positioning (center, bottom) on first page load sometimes wrong
   * FIX: Changed sorting of maps in sidebare/header to ignore case of names (natural sorting)
   * FIX: Fixed exception preventing editing the map options of geomaps
 
