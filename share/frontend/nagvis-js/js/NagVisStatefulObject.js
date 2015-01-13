@@ -1032,6 +1032,14 @@ var NagVisStatefulObject = NagVisObject.extend({
         oObjIcon    = null;
     },
 
+    detectGadgetType: function (param_str) {
+        var content = getSyncUrl(this.conf.gadget_url + param_str);
+        if (content.substring(0, 4) === 'GIF8' || ! /^[\x00-\x7F]*$/.test(content[0]))
+            this.gadget_type = 'img';
+        else
+            this.gadget_type = 'html';
+    },
+
     /**
      * Parses the object as gadget
      */
@@ -1054,15 +1062,16 @@ var NagVisStatefulObject = NagVisObject.extend({
         if (this.conf.gadget_opts && this.conf.gadget_opts != '')
             sParams += '&opts=' + escapeUrlValues(this.conf.gadget_opts.toString());
 
-        if(this.conf.gadget_type === 'img') {
+        // Append with leading "?" or "&" to build a correct url
+        if (this.conf.gadget_url.indexOf('?') == -1)
+            sParams = '?' + sParams;
+        else
+            sParams = '&' + sParams;
+
+        this.detectGadgetType(sParams);
+        if (this.gadget_type === 'img') {
             var oGadget = document.createElement('img');
             addZoomHandler(oGadget);
-
-            // Append with leading "?" or "&" to build a correct url
-            if (this.conf.gadget_url.indexOf('?') == -1)
-                sParams = '?' + sParams;
-            else
-                sParams = '&' + sParams;
             oGadget.src = this.conf.gadget_url + sParams;
 
             var alt = this.conf.type + '-' + this.conf.name;

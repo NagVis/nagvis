@@ -3,6 +3,7 @@ Core:
   * All stateful objects can now be rendered as gadgets
     (Although there is no gadget available yet which is useful for objects
     which have no perfdata. But you can build one now)
+  * The option gadget_type is now deprecated as the type is automatically detected
   * FIX: gadgets_core.php perfdata parsing allows "/" for perfdatas UOM now
   (e.g. to be able to parse units like Kb/s, even when they are not allowed
   according to nagios plugin guidelines)

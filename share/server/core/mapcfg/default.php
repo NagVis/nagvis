@@ -684,11 +684,12 @@ $mapConfigVars = Array(
     'gadget_type' => Array(
         'must'          => 0,
         'match'         => MATCH_GADGET_TYPE,
-        'field_type'    => 'dropdown',
         'depends_on'    => 'view_type',
         'depends_value' => 'gadget',
         'default'       => 'img',
         'list'          => 'listGadgetTypes',
+        # FIXME: switch to 'deprecated' => true, one day
+        'field_type'    => 'hidden',
     ),
     'gadget_scale' => Array('must' => 0,
         'default' => 100,
