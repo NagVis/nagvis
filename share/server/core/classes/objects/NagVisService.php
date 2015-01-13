@@ -87,20 +87,5 @@ class NagVisService extends NagVisStatefulObject {
 
     # End public methods
     # #########################################################################
-
-    /**
-     * PROTECTED parseGadgetUrl()
-     *
-     * Sets the path of gadget_url. The method adds htmlgadgets path when relative
-     * path or will remove [] when full url given
-     *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    protected function parseGadgetUrl() {
-        if(preg_match('/^\[(.*)\]$/',$this->gadget_url,$match) > 0)
-            $this->gadget_url = $match[1];
-        else
-            $this->gadget_url = path('html', 'global', 'gadgets', $this->gadget_url);
-    }
 }
 ?>

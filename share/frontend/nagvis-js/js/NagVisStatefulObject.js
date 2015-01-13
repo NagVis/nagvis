@@ -1030,5 +1030,75 @@ var NagVisStatefulObject = NagVisObject.extend({
         sColor      = null;
         oObjIconDiv = null;
         oObjIcon    = null;
+    },
+
+    /**
+     * Parses the object as gadget
+     */
+    parseGadget: function () {
+        var sParams = 'name1=' + this.conf.name;
+        if (this.conf.type == 'service')
+            sParams += '&name2=' + escapeUrlValues(this.conf.service_description);
+
+        sParams += '&type=' + this.conf.type
+                 + '&scale=' + escapeUrlValues(this.conf.gadget_scale.toString())
+                 + '&state=' + this.conf.state
+                 + '&stateType=' + this.conf.state_type
+                 + '&ack=' + this.conf.summary_problem_has_been_acknowledged
+                 + '&downtime=' + this.conf.summary_in_downtime;
+
+        if (this.conf.perfdata && this.conf.perfdata != '')
+            sParams += '&perfdata=' + this.conf.perfdata.replace(/\&quot\;|\&\#145\;/g,'%22');
+
+        // Process the optional gadget_opts param
+        if (this.conf.gadget_opts && this.conf.gadget_opts != '')
+            sParams += '&opts=' + escapeUrlValues(this.conf.gadget_opts.toString());
+
+        if(this.conf.gadget_type === 'img') {
+            var oGadget = document.createElement('img');
+            addZoomHandler(oGadget);
+
+            // Append with leading "?" or "&" to build a correct url
+            if (this.conf.gadget_url.indexOf('?') == -1)
+                sParams = '?' + sParams;
+            else
+                sParams = '&' + sParams;
+            oGadget.src = this.conf.gadget_url + sParams;
+
+            var alt = this.conf.type + '-' + this.conf.name;
+            if (this.conf.type == 'service')
+                alt += '-'+this.conf.service_description;
+            oGadget.alt = alt;
+        } else {
+            var oGadget = document.createElement('div');
+            oGadget.innerHTML = getSyncUrl(this.conf.gadget_url + sParams);
+        }
+        oGadget.setAttribute('id', this.conf.object_id + '-icon');
+
+        var oIconDiv = document.createElement('div');
+        oIconDiv.setAttribute('id', this.conf.object_id + '-icondiv');
+        oIconDiv.setAttribute('class', 'icon');
+        oIconDiv.setAttribute('className', 'icon');
+        oIconDiv.style.position = 'absolute';
+        oIconDiv.style.top      = this.parseCoord(this.conf.y, 'y') + 'px';
+        oIconDiv.style.left     = this.parseCoord(this.conf.x, 'x') + 'px';
+        oIconDiv.style.zIndex   = this.conf.z;
+
+        // Parse link only when set
+        if(this.conf.url && this.conf.url !== '') {
+            var oIconLink = document.createElement('a');
+            oIconLink.href = this.conf.url;
+            oIconLink.target = this.conf.url_target;
+            oIconLink.appendChild(oGadget);
+            oGadget = null;
+
+            oIconDiv.appendChild(oIconLink);
+            oIconLink = null;
+        } else {
+            oIconDiv.appendChild(oGadget);
+            oGadget = null;
+        }
+
+        return oIconDiv;
     }
 });

@@ -488,27 +488,6 @@ class NagVisStatefulObject extends NagVisObject {
         }
     }
 
-    # End public methods
-    # #########################################################################
-
-    private static function sortStateCountsByState($a1, $a2) {
-        if($a1['weight'] == $a2['weight']) {
-            return 0;
-        } elseif($a1['weight'] < $a2['weight']) {
-            if(NagVisObject::$sSortOrder === 'asc') {
-                return +1;
-            } else {
-                return -1;
-            }
-        } else {
-            if(NagVisObject::$sSortOrder === 'asc') {
-                return -1;
-            } else {
-                return +1;
-            }
-        }
-    }
-
     /**
      * Is used to build a state filter for the backend when fetching child
      * objects for the hover menu child list. If the childs should be sorted
@@ -546,6 +525,47 @@ class NagVisStatefulObject extends NagVisObject {
         return $stateFilter;
     }
 
+    /**
+     * Sets output/state on backend problems
+     */
+    public function setBackendProblem($s, $backendId = null) {
+        if($backendId === null)
+            $backendId = $this->backend_id[0];
+        $this->problem_msg = l('Problem (Backend: [BACKENDID]): [MSG]',
+                               Array('BACKENDID' => $backendId, 'MSG' => $s));
+    }
+
+    /**
+     * Sets output/state on object handling problems
+     */
+    public function setProblem($s) {
+        $this->problem_msg = l('Problem: [MSG]', Array('MSG' => $s));
+    }
+
+    public function hasProblem() {
+        return $this->problem_msg !== null;
+    }
+
+    # End public methods
+    # #########################################################################
+
+    private static function sortStateCountsByState($a1, $a2) {
+        if($a1['weight'] == $a2['weight']) {
+            return 0;
+        } elseif($a1['weight'] < $a2['weight']) {
+            if(NagVisObject::$sSortOrder === 'asc') {
+                return +1;
+            } else {
+                return -1;
+            }
+        } else {
+            if(NagVisObject::$sSortOrder === 'asc') {
+                return -1;
+            } else {
+                return +1;
+            }
+        }
+    }
 
     /**
      * PROTECTED belowHoverChildsLimit()
@@ -598,30 +618,15 @@ class NagVisStatefulObject extends NagVisObject {
         return $aChild;
     }
 
-
     /**
-     * Sets output/state on backend problems
+     * Sets the path of gadget_url. The method adds htmlgadgets path when relative
+     * path or will remove [] when full url given
      */
-    public function setBackendProblem($s, $backendId = null) {
-        if($backendId === null)
-            $backendId = $this->backend_id[0];
-        $this->problem_msg = l('Problem (Backend: [BACKENDID]): [MSG]',
-                               Array('BACKENDID' => $backendId, 'MSG' => $s));
-    }
-
-    /**
-     * PUBLIC setProblem()
-     *
-     * Sets output/state on object handling problems
-     *
-     * @author  Lars Michelsen <lm@larsmichelsen.com>
-     */
-    public function setProblem($s) {
-        $this->problem_msg = l('Problem: [MSG]', Array('MSG' => $s));
-    }
-
-    public function hasProblem() {
-        return $this->problem_msg !== null;
+    protected function parseGadgetUrl() {
+        if(preg_match('/^\[(.*)\]$/',$this->gadget_url,$match) > 0)
+            $this->gadget_url = $match[1];
+        else
+            $this->gadget_url = path('html', 'global', 'gadgets', $this->gadget_url);
     }
 
     /**
