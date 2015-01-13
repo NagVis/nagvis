@@ -1,4 +1,9 @@
 1.8rc4
+Core:
+  * FIX: gadgets_core.php perfdata parsing allows "/" for perfdatas UOM now
+  (e.g. to be able to parse units like Kb/s, even when they are not allowed
+  according to nagios plugin guidelines)
+
 Frontend:
   * FIX: Fixed relative label positioning (center, bottom) on first page load sometimes wrong
 
