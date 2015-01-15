@@ -5,6 +5,12 @@ Core:
     which have no perfdata. But you can build one now)
   * The option gadget_type is now deprecated as the type is automatically detected
   * FIX: gadgets_core.php perfdata parsing allows "/" for perfdatas UOM now
+  * Gadgets can use object member states now
+    Gadgets are now called with mixed POST request where the GET vars used in previous
+    versions are still handed over to the gadgets per GET parameters to
+    maintain compatibility. More complex parameters are now given to the
+    gadget with POST vars. For example there is the POST var "members" now,
+    which provides information about the object members states.
   (e.g. to be able to parse units like Kb/s, even when they are not allowed
   according to nagios plugin guidelines)
 

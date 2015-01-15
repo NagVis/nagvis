@@ -365,13 +365,27 @@ function handleJsonResponse(sUrl, responseText) {
 /**
  * This function simply loads a remote url and returns the responseText 1:1
  * without any special error handling
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function getSyncUrl(url) {
     var oReq = initXMLHttpClient();
     oReq.open('GET', url, false);
     oReq.send(null);
+    return oReq.responseText;
+}
+
+ /**
+  * This function simply loads a remote url using a POST request including sending
+  * a request body and returns the responseText 1:1 without any special error handling
+  */
+function postSyncUrl(url, data) {
+    var oReq = initXMLHttpClient();
+    oReq.open('POST', url, false);
+    oReq.setRequestHeader("If-Modified-Since", "Sat, 22 Sep 1986 00:00:00 GMT");
+    // Set post specific options
+    oReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    oReq.setRequestHeader("Content-length", data.length);
+    oReq.setRequestHeader("Connection", "close");
+    oReq.send(data);
     return oReq.responseText;
 }
 

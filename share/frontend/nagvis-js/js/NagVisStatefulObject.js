@@ -1032,8 +1032,13 @@ var NagVisStatefulObject = NagVisObject.extend({
         oObjIcon    = null;
     },
 
+    requestGadget: function (param_str) {
+        var data = 'members='+escape(JSON.stringify(this.conf.members));
+        return postSyncUrl(this.conf.gadget_url + param_str, data);
+    },
+
     detectGadgetType: function (param_str) {
-        var content = getSyncUrl(this.conf.gadget_url + param_str);
+        var content = this.requestGadget(param_str);
         if (content.substring(0, 4) === 'GIF8' || ! /^[\x00-\x7F]*$/.test(content[0]))
             this.gadget_type = 'img';
         else
@@ -1049,6 +1054,7 @@ var NagVisStatefulObject = NagVisObject.extend({
             sParams += '&name2=' + escapeUrlValues(this.conf.service_description);
 
         sParams += '&type=' + this.conf.type
+                 + '&object_id=' + this.conf.object_id
                  + '&scale=' + escapeUrlValues(this.conf.gadget_scale.toString())
                  + '&state=' + this.conf.state
                  + '&stateType=' + this.conf.state_type
@@ -1080,7 +1086,7 @@ var NagVisStatefulObject = NagVisObject.extend({
             oGadget.alt = alt;
         } else {
             var oGadget = document.createElement('div');
-            oGadget.innerHTML = getSyncUrl(this.conf.gadget_url + sParams);
+            oGadget.innerHTML = this.requestGadget(sParams);
         }
         oGadget.setAttribute('id', this.conf.object_id + '-icon');
 
