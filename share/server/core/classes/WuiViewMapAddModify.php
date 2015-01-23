@@ -170,7 +170,8 @@ class WuiViewMapAddModify {
 
         $typeDefaults = $this->MAPCFG->getTypeDefaults($type);
 
-        if($objId == 0) {
+        list($isInherited, $sources) = $this->getAttr($typeDefaults, $update, 'sources', false);
+        if($objId == 0 && $sources != '<<<other>>>') {
             // Special handling for the global section:
             // It might contain some source related parameters (if some sources are enabled).
             // Another speciality ist that the dialog can be opened in "view_params" mode
@@ -246,14 +247,14 @@ class WuiViewMapAddModify {
 
             $ret .= '<tr class="'.implode(' ', $rowClasses).'"'.$rowHide.'><td class=tdlabel>'.$propname.'</td><td class=tdbox>';
 
-            $multiple = $fieldType == 'dropdown' && isset($prop['multiple']) && $prop['multiple'];
+            $other = $fieldType == 'dropdown' && isset($prop['other']) && $prop['other'];
 
             $onChange = '';
             // Submit the form when an attribute which has dependant attributes is changed
             if($this->MAPCFG->hasDependants($type, $propname)) {
                 $onChange = 'document.getElementById(\'update\').value=\'1\';document.getElementById(\'commit\').click();';
             }
-            elseif ($onChange == '' && (($multiple && $value !== '<<<multiple>>>')
+            elseif ($onChange == '' && (($other && $value !== '<<<other>>>')
                                         || ($type == 'service' && $propname == 'host_name'))) {
                 // If var is backend_id or var is host_name in service objects submit the form
                 // to update the depdant lists.
@@ -337,21 +338,21 @@ class WuiViewMapAddModify {
                         // Fallback to an input field when the attribute has an value which is not
                         // an option in the select field
                         if($value != '' && !isset($options[$value])) {
-                            // In case of multiple selected the single objects can not be found, this is ok.
-                            if (!$array) {
+                            // In case of "other" selected, the single objects can not be found, this is ok.
+                            if (!$other) {
                                 $this->setError(new FieldInputError($propname,
                                     l('Current value is not a known option - falling back to input field.')));
                             }
 
-                            if ($array && $multiple && $value === '<<<multiple>>>')
+                            if ($other && $value === '<<<other>>>')
                                 $value = '';
 
                             $ret .= $this->inputField($propname, $value, $hideField);
                             break;
                         }
 
-                        if($array && $multiple) {
-                            $options['<<<multiple>>>'] = l('>>> Select multiple');
+                        if($other) {
+                            $options['<<<other>>>'] = l('>>> Specify other');
                         }
 
                         $ret .= $this->selectField($propname, $options, $value, $hideField, $onChange);

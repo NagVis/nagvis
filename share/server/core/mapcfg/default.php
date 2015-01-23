@@ -92,7 +92,7 @@ function getObjectNames($type, $MAPCFG, $objId, $attrs) {
         $backendIds = $MAPCFG->getValue($objId, 'backend_id');
 
     // Return simply nothing when a user just choosen to insert multiple backends
-    if(isset($attrs['backend_id']) && $attrs['backend_id'] == '<<<multiple>>>')
+    if(isset($attrs['backend_id']) && $attrs['backend_id'] == '<<<other>>>')
         return array();
 
     // Initialize the backend
@@ -152,13 +152,19 @@ function listTemplateNames() {
     return Array();
 }
 
-function listShapes() {
+function listShapes($MAPCFG, $objId, $attrs) {
     global $CORE;
+    // Return simply nothing when a user just choosen to insert "other" icon
+    if(isset($attrs['icon']) && $attrs['icon'] == '<<<other>>>')
+        return array();
     return $CORE->getAvailableShapes();
 }
 
-function listSources() {
+function listSources($MAPCFG, $objId, $attrs) {
     global $CORE;
+    // Return simply nothing when a user just choosen to insert "other" sources
+    if(isset($attrs['sources']) && $attrs['sources'] == '<<<other>>>')
+        return array();
     return $CORE->getSelectableSources();
 }
 
@@ -189,7 +195,7 @@ $mapConfigVars = Array(
         'must'       => 0,
         'default'    => array(),
         'array'      => true,
-	'multiple'   => true,
+	'other'      => true,
         'match'      => MATCH_STRING,
         'field_type' => 'dropdown',
         'list'       => 'listSources',
@@ -199,7 +205,7 @@ $mapConfigVars = Array(
         'default'    => cfg('defaults', 'backend'),
         'match'      => MATCH_BACKEND_ID,
         'array'      => true,
-	'multiple'   => true,
+	'other'      => true,
         'field_type' => 'dropdown',
         'list'       => 'listBackendIds',
     ),
@@ -835,6 +841,7 @@ $mapConfigVars = Array(
         'must'       => 1,
         'match'      => MATCH_PNG_GIF_JPG_FILE_OR_URL,
         'field_type' => 'dropdown',
+	'other'      => true,
         'list'       => 'listShapes',
     ),
     'enable_refresh' => Array(
