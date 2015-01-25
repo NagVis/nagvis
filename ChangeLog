@@ -16,6 +16,8 @@ Core:
 
 Frontend:
   * URLs of shape images can now be configured via configuration dialog
+  * Added std_table.php gadget which can render state tables for any stateful object type
+    (Thanks to Thibault Cohen for providing the idea and base code!)
   * FIX: Fixed exception when trying to define Multiple/Other values for "sources"
   * FIX: Fixed relative label positioning (center, bottom) on first page load sometimes wrong
 
