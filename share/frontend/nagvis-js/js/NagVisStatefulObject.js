@@ -1056,10 +1056,13 @@ var NagVisStatefulObject = NagVisObject.extend({
         sParams += '&type=' + this.conf.type
                  + '&object_id=' + this.conf.object_id
                  + '&scale=' + escapeUrlValues(this.conf.gadget_scale.toString())
-                 + '&state=' + this.conf.state
+                 + '&state=' + this.conf.summary_state
                  + '&stateType=' + this.conf.state_type
                  + '&ack=' + this.conf.summary_problem_has_been_acknowledged
                  + '&downtime=' + this.conf.summary_in_downtime;
+
+        if (this.conf.type == 'dyngroup')
+            sParams += '&object_types=' + this.conf.object_types;
 
         if (this.conf.perfdata && this.conf.perfdata != '')
             sParams += '&perfdata=' + this.conf.perfdata.replace(/\&quot\;|\&\#145\;/g,'%22');
