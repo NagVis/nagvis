@@ -586,7 +586,7 @@ $mapConfigVars = Array(
         'depends_value' => '1'),
     'label_border' => Array(
         'must'          => 0,
-        'default'       => '#000000',
+        'default'       => '#e5e5e5',
         'field_type'    => 'color',
         'match'         => MATCH_COLOR,
         'depends_on'    => 'label_show',
@@ -810,7 +810,7 @@ $mapConfigVars = Array(
     ),
     'border_color' => Array(
         'must'       => 0,
-        'default'    => '#000000',
+        'default'    => '#e5e5e5',
         'field_type' => 'color',
         'match'      => MATCH_COLOR,
     ),
