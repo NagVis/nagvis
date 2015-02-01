@@ -21,21 +21,17 @@
  *
  *****************************************************************************/
 
-/**
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-
 div.context {
   position: absolute;
   overflow: visible;
   margin:0;
   padding:0;
 
-  width: 160px;
-
-  background-color: #a4a4a4;
+  width: 205px;
+  background: #fbfbfb;
 
   font-size: 11px;
+  border: 1px solid #e5e5e5;
 }
 
 div.context ul {
@@ -45,37 +41,32 @@ div.context ul {
 }
 
 div.context ul li {
-  background-color: #EAF0F2;
+  background: #fbfbfb;
+  color: #43B3CF;
   list-style-type: none;
-  margin: 1px;
   position: relative;
-  color: #43B3CF;
-  padding: 2px;
+  margin: 0;
+  padding: 0;
 }
 
-div.context ul li:hover {
-  background-color: #D9E1E4;
-  color: #779D2A;
-}
-
-div.context ul li.spacer {
-  padding: 1px;
-  margin: 1px;
-}
-
-div.context ul li.spacer:hover {
-  background-color: #EAF0F2;
-  color: #43B3CF;
+div.context li.spacer {width:203px}
+div.context li.spacer hr {
+    border: 0;
+    height: 1px;
+    width: 95%;
+    background-color: #e5e5e5;
 }
 
 div.context ul li a {
   color: #43B3CF;
   display: block;
-  width: 100%;
+  width: 193px;
   text-decoration: none;
+  padding: 5px;
 }
 
 div.context ul li a:hover {
+  background-color: #ffffff;
   color: #779D2A;
 }
 
