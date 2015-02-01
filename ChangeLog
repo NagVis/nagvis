@@ -18,6 +18,8 @@ Frontend:
   * URLs of shape images can now be configured via configuration dialog
   * Added std_table.php gadget which can render state tables for any stateful object type
     (Thanks to Thibault Cohen for providing the idea and base code!)
+  * Usability fix: Header dropdowns now only close when clicking somewhere out
+    of the menu instead of hiding when moving the mouse out of the menu
   * FIX: Fixed exception when trying to define Multiple/Other values for "sources"
   * FIX: Fixed relative label positioning (center, bottom) on first page load sometimes wrong
 

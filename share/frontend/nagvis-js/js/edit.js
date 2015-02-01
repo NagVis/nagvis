@@ -83,6 +83,10 @@ var dragObjectChilds = {};
 var dragStopHandlers = {};
 var dragMoveHandlers = {};
 
+function getTargetRaw(event) {
+    return event.target ? event.target : event.srcElement;
+}
+
 function getTarget(event, ignoreType) {
     if(typeof(ignoreType) === 'undefined')
         var ignoreType = null;

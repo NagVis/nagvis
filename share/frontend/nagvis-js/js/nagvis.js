@@ -1412,6 +1412,8 @@ function _(s, replace) {
 }
 
 function has_class(o, cn) {
+    if (typeof o.className === 'undefined')
+        return false;
     var parts = o.className.split(' ');
     for (x=0; x<parts.length; x++) {
         if (parts[x] == cn)

@@ -37,6 +37,27 @@ function headerDraw() {
 
     if(typeof(oUserProperties.header) !== 'undefined' && oUserProperties.header === false)
         headerToggle(false);
+
+    addEvent(document, 'mousedown', checkHideMenu);
+}
+
+// Is executed when the user clicks somewhere on the map. Checks whether or
+// not one of the headers dropdown menus is currently open. Hides it when
+// the user clicks out of the menu or takes no action when clicking inside.
+function checkHideMenu(event) {
+    if (!event)
+        event = window.event;
+
+    // Check whether or not a parent has the class "dropdown"
+    var target = getTargetRaw(event);
+    while (target) {
+        if (has_class(target, 'dropdown'))
+            return; // found the menu object, no further action
+        target = target.parentNode;
+    }
+
+    // Did not find the menu object. Close the currently open menu
+    ddMenuHide();
 }
 
 function headerToggle(store) {
@@ -90,6 +111,8 @@ function headerUpdateState(map_conf) {
     head = null;
 }
 
+open_menus = [];
+
 // Is called to initialize fetching states for the header/sidebar menu
 function headerUpdateStates() {
     for (var i = 0; i < g_map_names.length; i++) {
@@ -100,20 +123,18 @@ function headerUpdateStates() {
 }
 
 // Hide the given menus instant
-function ddMenuHide(aIds) {
-    var h;
-    for(var i = 0; i < aIds.length; i++) {
-        h = document.getElementById(aIds[i] + '-ddheader');
+function ddMenuHide(close_menus) {
+    if(typeof(close_menus) === 'undefined')
+        var close_menus = open_menus.slice(); // copy open menus array
 
-        // Not imediately hide the hover menu. It might happen
-        // that the user opens a submenu. To prevent strange
-        // effects the timer is used to hide the menu after
-        // some time if no submenu was opened within this time.
-        clearTimeout(h.timer);
-        var id = aIds[i];
-        h.timer = window.setTimeout(function () {
-            document.getElementById(id + '-ddcontent').style.display = "none";
-        }, 50);
+    var h, index;
+    for(var i = 0; i < close_menus.length; i++) {
+        h = document.getElementById(close_menus[i] + '-ddcontent');
+        h.style.display = "none";
+
+        index = open_menus.indexOf(close_menus[i]);
+        if (index != -1)
+            open_menus.splice(index, 1);
     }
 
     h = null;
@@ -121,11 +142,17 @@ function ddMenuHide(aIds) {
 }
 
 // main function to handle the mouse events //
-function ddMenu(id, d, reposition){
+function ddMenu(id, d, reposition) {
+    for (var i = 0; i < open_menus.length; i++) {
+        if (open_menus[i].indexOf(id) !== 0) {
+            ddMenuHide([open_menus[i]]);
+        }
+    }
+
     var h = document.getElementById(id + '-ddheader');
     var c = document.getElementById(id + '-ddcontent');
 
-    clearTimeout(h.timer);
+    open_menus.push(id);
 
     // Reposition by trigger object when some given (used on submenus)
     if(typeof reposition !== 'undefined' && d == 1) {
@@ -135,7 +162,6 @@ function ddMenu(id, d, reposition){
         c.style.top = h.offsetTop + "px";
     }
 
-    //clearInterval(c.timer);
     if(d == 1)
         c.style.display = 'block';
     else
@@ -169,6 +195,10 @@ function toggleSidebar(store) {
         }
         state = 0;
     } else {
+        // open the sidebar
+
+        ddMenuHide(); // hide all dropdown menus
+
         sidebar.style.display = 'inline';
         if(is_overview === false) {
             content.style.left = '200px';
