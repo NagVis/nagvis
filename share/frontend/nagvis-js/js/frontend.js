@@ -1280,32 +1280,19 @@ function parseOverviewPage() {
                   [ oPageProperties.showrotations, 'overviewRotations', oPageProperties.lang_rotationPools ] ];
     for(var i = 0; i < types.length; i++) {
         if(types[i][0] === 1) {
-            var oTable = document.createElement('table');
-            oTable.setAttribute('class', 'infobox');
-            oTable.setAttribute('className', 'infobox');
+            var clear = document.createElement('div');
+            clear.className = 'clear';
+            oContainer.appendChild(clear);
 
-            var oTbody = document.createElement('tbody');
-            oTbody.setAttribute('id', types[i][1]);
+            var h2 = document.createElement('h2');
+            h2.innerHTML = types[i][2];
+            oContainer.appendChild(h2);
 
-            var oTr = document.createElement('tr');
+            var container = document.createElement('div');
+            container.setAttribute('id', types[i][1]);
+            container.className = 'infobox';
 
-            var oTh = document.createElement('th');
-            if(types[i][1] == 'overviewRotations')
-                oTh.colSpan = 2
-            else
-                oTh.colSpan = oPageProperties.cellsperrow;
-            oTh.innerHTML = types[i][2];
-
-            oTr.appendChild(oTh);
-            oTh = null;
-
-            oTbody.appendChild(oTr);
-            oTr = null;
-
-            oTable.appendChild(oTbody);
-            oTbody = null;
-
-            oContainer.appendChild(oTable);
+            oContainer.appendChild(container);
             oTable = null;
         }
     }
@@ -1313,7 +1300,6 @@ function parseOverviewPage() {
     oContainer = null;
 }
 
-g_overview_cur_row = null;
 g_rendered_maps = 0;
 g_processed_maps = 0;
 
@@ -1333,16 +1319,7 @@ function addOverviewMap(map_conf, map_name) {
 
     g_rendered_maps += 1; // also count errors
 
-    var oTable = document.getElementById('overviewMaps');
-
-    if (g_overview_cur_row === null) {
-        // on first map, create the first row
-        var oTr = document.createElement('tr');
-        oTable.appendChild(oTr);
-        g_overview_cur_row = oTr;
-    } else {
-        var oTr = g_overview_cur_row;
-    }
+    var container = document.getElementById('overviewMaps');
 
     // render the map object
     var oObj = new NagVisMap(map_conf[0]);
@@ -1351,37 +1328,18 @@ function addOverviewMap(map_conf, map_name) {
         oMapObjects[oObj.conf.object_id] = oObj;
 
         // Parse child and save reference in parsedObject
-        oObj.parsedObject = oTr.appendChild(oObj.parseOverview());
+        oObj.parsedObject = container.appendChild(oObj.parseOverview());
     }
     oObj = null;
-
-    // maybe add a new row
-    if(g_rendered_maps % oPageProperties.cellsperrow === 0) {
-        oTr = document.createElement('tr');
-        oTable.appendChild(oTr);
-        g_overview_cur_row = oTr;
-    }
 
     // Finalize rendering after last map...
     if (g_processed_maps == g_map_names.length)
         finishOverviewMaps();
 
-    oTr = null;
-    oTable = null;
+    container = null;
 }
 
 function finishOverviewMaps() {
-    // Fill table with empty cells if there are not enough maps to get the last
-    // row filled
-    if(g_rendered_maps % oPageProperties.cellsperrow !== 0) {
-        for(var a = 0; a < (oPageProperties.cellsperrow - (g_rendered_maps % oPageProperties.cellsperrow)); a++) {
-            var oTd = document.createElement('td');
-            g_overview_cur_row.appendChild(oTd);
-            oTd = null;
-        }
-    }
-    g_overview_cur_row = null;
-
     eventlog("worker", "debug", "addOverviewMap: Finished parsing all maps");
     getAndParseTemplates();
 
@@ -1415,7 +1373,7 @@ function parseOverviewRotations(aRotationsConf) {
     } else {
         // Hide the rotations container
         var container = document.getElementById('overviewRotations');
-        if(container) {
+        if (container) {
             container.style.display = 'none';
             container = null;
         }

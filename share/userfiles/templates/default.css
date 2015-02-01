@@ -2,7 +2,7 @@
  *
  * style.css - NagVis default theme stylesheet
  *
- * Copyright (c) 2004-2011 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2014 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
@@ -21,9 +21,6 @@
  *
  *****************************************************************************/
 
-/**
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
 body, table, th, td {
     margin: 0;
     padding: 0;
@@ -46,13 +43,6 @@ img {border:0}
 .header {position:fixed;top:0;left:0;padding:0;z-index:100;min-width:1000px;}
 .headerspacer {width:100%}
 .map, #overview {position:relative;top:0;left:0;z-index:98}
-
-/* Welcome page */
-div.welcome {padding:20px;width:600px}
-div.welcome h1 {color:#43B3CF;background:#eee;padding:3px 10px 2px 20px;font-size:24px;line-height:30px;font-weight:normal;-moz-border-radius:8px;-webkit-border-radius:8px;margin-bottom:5px}
-div.welcome p {padding:5px;font-size:12px}
-div.welcome a,div.welcome a:active,div.welcome a:visited {color:#43B3CF}
-div.welcome a:hover {color:#779D2A}
 
 /* Message-Box */
 .messageBox {
@@ -165,57 +155,105 @@ div.control.togglemid {
     background-image: url('../images/templates/default.control_togglemid.gif');
 }
 
-div.infopage {
-    padding-top: 25px;
+/* new overview page */
+
+div.infopage h2 {
+    margin: 20px 10px 0 10px;
 }
 
-/* Style on info pages (index.php?info, index.php) */
+div.infobox {
+    margin: 0 auto;
+    padding: 10px;
+}
+
+div.infopage div.clear {
+    clear: left;
+}
+
+div.infobox div.mapobj {
+    float: left;
+    width: 200px;
+    height: 36px;
+    margin: 1px;
+    background-color: #fbfbfb;
+    border: 1px solid #e5e5e5;
+    overflow: hidden;
+}
+
+div.infobox div.mapobj h3,
+div.infobox table.rotation h3 {
+    font-size: 12px;
+    color: #43B3CF;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-left: 2px;
+    font-weight: normal;
+}
+
+div.infobox div.mapobj img.state {
+    margin: 2px;
+}
+
+div.infobox table.rotation {
+    width: 600px;
+    margin: 2px auto;
+    border-collapse:collapse;
+    background-color: #fbfbfb;
+}
+
+div.infobox table.rotation td.title {
+    width: 300px;
+}
+
+div.infobox table.rotation td {
+    padding: 4px;
+    border: 1px solid #e5e5e5;
+    vertical-align: top;
+}
+
+/* Style on info page */
 div.infopage > table {
     margin: auto;
+    margin-top: 20px;
     margin-bottom: 25px;
 
     width: 800px;
 
-    background-color: #eee;
+    background-color: #fbfbfb;
     border-collapse:collapse;
 }
 
 div.infopage > table td, div.infopage > table th {
-    border: 1px #a4a4a4 solid;
+    border: 1px solid #e5e5e5;
     padding: 4px;
 
-    font-size: 11px;
+    font-size: 12px;
     color: #43B3CF;
     vertical-align: top;
 }
 
 div.infopage > table th {
     text-align: center;
-    background-color: #eee;
 }
 
 div.infopage > table th.head {
     font-size: 20px;
 }
 
-div.infopage h2 {
-    font-size: 12px;
-    color: #43B3CF;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    margin-left: 2px;
-}
-
-div.infopage > table td.disabled h2  {
+div.infopage > div.map.disabled h3  {
     color: #a4a4a4;
 }
 
-div.infopage > table td.error h2  {
+div.infopage > div.map.error h3  {
     color: #ff0000;
 }
 
 div.infopage a {
-    color: #a4a4a4;
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: #43b3cf;
+    font-size: 12px;
     text-decoration: none;
 }
 
@@ -270,8 +308,8 @@ div.infopage a:hover {
 
 #statusMessage div.loading {
   background: url('../../frontend/nagvis-js/images/internal/loading.gif') 6px 3px no-repeat;
-  background-color: #EBEBEB;
-  border: 1px solid #CCCCCC;
+  background-color: #fbfbfb;
+  border: 1px solid #e5e5e5;
 }
 
 /**
@@ -482,14 +520,19 @@ td#popupWindowContent p {
 }
 
 /* title */
+div.infopage h2,
 td#popupWindowContent h2 {
     font-size: 16px;
     text-align: left;
     padding: 3px 10px 2px 2px;
     line-height:20px;
     font-weight:normal;
-    margin: 5px 0;
     border-bottom: 1px solid #7EA434;
+    color: #43B3CF;
+}
+
+td#popupWindowContent h2 {
+    margin: 5px 0;
 }
 
 /* cat */
@@ -602,31 +645,31 @@ td#popupWindowContent input, select {
 
 /* Header styling */
 .header {
+    background-color: #fbfbfb;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 3px 6px #ddd;
     color: #43B3CF;
     font-size: 0.6em;
     height: 31px;
     width: 100%;
-    background-image: url('../images/templates/default.header.png');
 }
 
 #headershow {
     display: none;
     width: 9px;
     min-width: 9px;
+    height: 31px;
     background-image: none;
+    background-color: #fbfbfb;
+    border: 1px solid #dddddd;
+    border-bottom-right-radius: 4px;
 }
 
 .header ul.head {
     margin: 0;
     padding: 0;
-
-    background-color: #F5F5F5;
-    background: url('../images/templates/default.header.png');
-
     height: 31px;
-
     float:left;
-
     list-style:none;
 }
 
@@ -659,47 +702,94 @@ td#popupWindowContent input, select {
 
 .header ul li span {
     margin:0;
-    width:100%;
     height:31px;
     line-height:31px;
-    font-weight:bold;
+    font-weight:normal;
     padding: 0 8px;
 }
 
 #editIndicator span {width:89px;color:#ff0000}
-.dropdown span, .header div#refreshCounterHead {display:block;margin:0;padding:0;height:31px;padding-left:8px;padding-right:8px;line-height:31px;width:auto;font-weight:bold;cursor:pointer;background-image:url('../images/templates/default.header.png')}
-.dropdown span:hover {background-image:url('../images/templates/default.header_over.png')}
+.dropdown span, .header div#refreshCounterHead {
+    display:block;
+    margin:0;
+    padding:0;
+    height:31px;
+    padding-left:8px;
+    padding-right:8px;
+    line-height:31px;
+    width:auto;
+    font-weight:normal;
+    cursor:pointer;
+}
+.dropdown span:hover {
+    background-color: #ffffff;
+}
 .dropdown img {vertical-align:middle;margin-left:10px}
 .dropdown ul {margin:0;padding:0;list-style:none;width:205px;z-index:100;position:absolute;top:31px;display:none}
 .dropdown li {margin:0;padding:0}
-.dropdown li.current a{font-weight:bold;}
+.dropdown li.current a{color:#000000}
 .dropdown li.lvl2 a{padding-left:10px;width:188px}
 .dropdown li.lvl3 a{padding-left:20px;width:178px}
 .dropdown li.lvl4 a{padding-left:30px;width:168px}
 .dropdown li.lvl5 a{padding-left:40px;width:158px}
 .dropdown li.lvl5 a{padding-left:50px;width:148px}
-.dropdown a, .dropdown a:active, .dropdown li.spacer, .dropdown dl.subdropdown dt {display:block;width:193px;background:#eaf0f2;margin:0;color:#43B3CF;text-decoration:none;border-left:1px solid #a4a4a4;border-right:1px solid #a4a4a4;padding:5px;z-index:100}
+.dropdown a, .dropdown a:active, .dropdown li.spacer, .dropdown dl.subdropdown dt {
+    display: block;
+    width: 193px;
+    background: #fbfbfb;
+    margin: 0;
+    color: #43B3CF;
+    text-decoration: none;
+    border-left: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    padding:5px;
+    z-index:100
+}
 .dropdown a:visited {color:#43B3CF;}
 .dropdown a.left, .dropdown a.left:active {float:left;width:152px;border-right:0}
 .dropdown a.right, .dropdown a.right:active {float:right;width:30px;border-left:1px solid #43B3CF}
 .dropdown a.error, .dropdown a.error:active, .dropdown a.error:visited {color:#ff0000}
-.dropdown a:hover {background:#d9e1e4;color:#779D2A}
+.dropdown a:hover {
+    background-color: #ffffff;
+    color: #789D2B;
+    text-decoration: none;
+}
 .dropdown a.submenu-link:after {float:right;content:">"}
 .dropdown li.spacer {width:203px}
-.dropdown li.spacer hr {width:95%;color:#43B3CF}
-.dropdown .underline {border-bottom:1px solid #a4a4a4}
+.dropdown li.spacer hr {
+    border: 0;
+    height: 1px;
+    width: 95%;
+    background-color: #e5e5e5;
+}
+.dropdown .underline {border-bottom:1px solid #e5e5e5}
 .subdropdown {position:relative;}
-.subdropdown .topline {border-top:1px solid #a4a4a4}
-.subdropdown .underline {border-bottom:1px solid #a4a4a4}
+.subdropdown .topline {border-top:1px solid #e5e5e5}
+.subdropdown .underline {border-bottom:1px solid #e5e5e5}
 
 .dropdown ul#views-ddcontent {max-height:690px;overflow-y:auto;overflow-x:hidden}
 
 /* Styling for the sidebar */
-#sidebar {position:relative;top:0;left:0;float:left;min-height:100%;width:200px;z-index:99;display:none;background-color:#eaf0f2;text-decoration:none;font-size:0.6em;padding-top:10px;border-right:1px solid #a4a4a4;padding-top:32px;}
+#sidebar {
+    position:relative;
+    top:0;
+    left:0;
+    float:left;
+    min-height:100%;
+    width:200px;
+    z-index:99;
+    display:none;
+    background-color:#fbfbfb;
+    text-decoration:none;
+    font-size:0.6em;
+    padding-top:10px;
+    border-right:1px solid #e5e5e5;
+    padding-top:32px;
+}
 #sidebar ul {margin:0;padding:0;display:block;list-style:none}
 #sidebar li {margin:0;padding:0;line-height:25px;}
-#sidebar li.spacerbottom {border-bottom:1px dotted #a4a4a4}
-#sidebar li.spacertop {border-top:1px dotted #a4a4a4}
+#sidebar li.spacerbottom {border-bottom:1px dotted #e5e5e5}
+#sidebar li.spacertop {border-top:1px dotted #e5e5e5}
 #sidebar li > div {width:200px;height:25px;clear:both;}
 #sidebar li > div a {padding-left:20px;}
 
@@ -719,11 +809,14 @@ td#popupWindowContent input, select {
 #sidebar li.lvl4 a{padding-left:50px;width:150px}
 #sidebar li.lvl5 a{padding-left:60px;width:140px}
 #sidebar li.lvl6 a{padding-left:70px;width:130px}
-#sidebar li.open > div a.title {background: url('../images/templates/default.folder_open.gif') no-repeat left #eaf0f2;}
-#sidebar li.closed > div a.title {background: url('../images/templates/default.folder_closed.gif') no-repeat left #eaf0f2;}
+#sidebar li.open > div a.title {background: url('../images/templates/default.folder_open.gif') no-repeat left #fbfbfb;}
+#sidebar li.closed > div a.title {background: url('../images/templates/default.folder_closed.gif') no-repeat left #fbfbfb;}
 #sidebar li.current > div {font-weight: bold;}
 #sidebar li > div a:hover,
-#sidebar li > div a.title:hover {background-color:#d9e1e4;color:#779D2A}
+#sidebar li > div a.title:hover {
+    background-color: #ffffff;
+    color:#779D2A
+}
 #sidebar a.error, #sidebar a.error:active, #sidebar a.error:visited {color:#ff0000}
 
 div.statediv {
@@ -830,8 +923,9 @@ div#zoombar a {
     width: 100%;
     height: 20px;
 
-    background-color: #EAF0F2;
-    border: 1px solid #43B3CF;
+    background-color: #fbfbfb;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
 
     text-align: center;
     vertical-align: middle;
@@ -845,7 +939,7 @@ div#zoombar a.minus {
     border-bottom: none;
 }
 div#zoombar a:hover {
-    background-color: #d9e1e4;
+    background-color: #ffffff;
     color: #779D2A   
 }
 div#zoombar div.drag {
@@ -862,8 +956,8 @@ div#zoombar div.drag div {
     height: 6px;
     cursor: pointer;
 
-    background-color: #EAF0F2;
-    border: 1px solid #43B3CF;
+    background-color: #fbfbfb;
+    border: 1px solid #e5e5e5;
 }
 
 /* edit main config dialog navigation (tabbing) */

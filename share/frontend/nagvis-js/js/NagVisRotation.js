@@ -31,66 +31,49 @@ var NagVisRotation = NagVisStatelessObject.extend({
     },
 
     parseOverview: function() {
-        var oTbody = document.getElementById('overviewRotations');
+        var container = document.getElementById('overviewRotations');
+
+        var oTable = document.createElement('table');
+        oTable.className = 'rotation';
+        container.appendChild(oTable);
+        var oTbody = document.createElement('tbody');
+        oTable.appendChild(oTbody);
 
         /* Rotation title */
-
         var oTr = document.createElement('tr');
         var oTd = document.createElement('td');
+        oTd.className = 'title';
         oTd.setAttribute('rowSpan', this.conf.num_steps);
         oTd.rowSpan = this.conf.num_steps;
 
-        var url = this.conf.url;
-        oTd.onclick = function() {
-            location.href = url;
-        };
+        // Link
+        var oLink = document.createElement('a');
+        oLink.href = this.conf.url;
 
-        oTd.onmouseover = function() {
-            this.style.cursor = 'pointer';
-            this.style.backgroundColor = '#ffffff';
-        };
+        var h3 = document.createElement('h3');
+        h3.appendChild(document.createTextNode(this.conf.name));
 
-        oTd.onmouseout = function() {
-            this.style.cursor = 'auto';
-            this.style.backgroundColor = '';
-        };
+        oLink.appendChild(h3);
+        h3 = null;
 
-        var oH2 = document.createElement('h2');
-        oH2.appendChild(document.createTextNode(this.conf.name));
-
-        oTd.appendChild(oH2);
-        oH2 = null;
+        oTd.appendChild(oLink);
 
         oTr.appendChild(oTd);
         oTd = null;
 
         /* Rotation steps */
-
         for(var i = 0, len = this.conf.steps.length; i < len; i++) {
-            if(i !== 0) {
+            if(i !== 0)
                 oTr = document.createElement('tr');
-            }
 
             oTd = document.createElement('td');
-            oTd.width = '250px';
 
-            oTd.onclick = function(url) {
-                return function() {
-                    location.href = url;
-                }
-            }(this.conf.steps[i].url);
+            oLink = document.createElement('a');
+            oLink.href = this.conf.steps[i].url;
+            oLink.appendChild(document.createTextNode(this.conf.steps[i].name));
 
-            oTd.onmouseover = function() {
-                this.style.cursor = 'pointer';
-                this.style.backgroundColor = '#ffffff';
-            };
-
-            oTd.onmouseout = function() {
-                this.style.cursor = 'auto';
-                this.style.backgroundColor = '';
-            };
-
-            oTd.appendChild(document.createTextNode(this.conf.steps[i].name));
+            oTd.appendChild(oLink);
+            oLink = null;
 
             oTr.appendChild(oTd);
             oTd = null;
@@ -99,6 +82,6 @@ var NagVisRotation = NagVisStatelessObject.extend({
             oTr = null;
         }
 
-        oTbody = null;
+        container = null;
     }
 });

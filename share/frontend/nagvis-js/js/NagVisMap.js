@@ -60,29 +60,25 @@ var NagVisMap = NagVisStatefulObject.extend({
 
         this.replaceMacros();
 
-        var oTd = document.createElement('td');
-        oTd.setAttribute('id', this.conf.object_id);
-        oTd.setAttribute('class', this.conf.overview_class);
-        oTd.setAttribute('className', this.conf.overview_class);
-        oTd.style.width = '200px';
-        oTd.style.margin = '0';
+        var div = document.createElement('div');
+        div.setAttribute('id', this.conf.object_id);
+        div.className = 'mapobj '+this.conf.overview_class;
 
         // needed for IE. It seems as the IE does not really know what to do
         // with the link definied below ... strange one
         var url = this.conf.overview_url;
-        oTd.onclick = function() {
+        div.onclick = function() {
             location.href = url;
             return false;
         };
 
         // Only show map thumb when configured
         if(oPageProperties.showmapthumbs == 1)
-            oTd.style.height = '200px';
+            div.style.height = '200px';
 
         // Link
         var oLink = document.createElement('a');
         oLink.setAttribute('id', this.conf.object_id+'-icon');
-        oLink.style.zIndex = 1000;
         oLink.style.display = "block";
         oLink.style.width = "100%";
         oLink.style.height = "100%";
@@ -91,6 +87,7 @@ var NagVisMap = NagVisStatefulObject.extend({
         // Status image
         if(this.conf.icon !== null && this.conf.icon !== '') {
             var oImg   = document.createElement('img');
+            oImg.className = 'state';
             oImg.align = 'right';
             oImg.src   = oGeneralProperties.path_iconsets + this.conf.icon;
             oImg.alt   = this.stateText();
@@ -100,14 +97,10 @@ var NagVisMap = NagVisStatefulObject.extend({
         }
 
         // Title
-        var h2 = document.createElement('h2');
-        h2.appendChild(document.createTextNode(this.conf.alias));
-        oLink.appendChild(h2);
-        h2 = null;
-
-        var br = document.createElement('br');
-        oLink.appendChild(br);
-        br = null;
+        var h3 = document.createElement('h3');
+        h3.appendChild(document.createTextNode(this.conf.alias));
+        oLink.appendChild(h3);
+        h3 = null;
 
         // Only show map thumb when configured
         if(oPageProperties.showmapthumbs == 1 && this.conf.overview_image != '') {
@@ -119,9 +112,9 @@ var NagVisMap = NagVisStatefulObject.extend({
             oImg = null;
         }
 
-        oTd.appendChild(oLink);
+        div.appendChild(oLink);
         oLink = null;
 
-        return oTd;
+        return div;
     }
 });

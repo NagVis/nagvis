@@ -966,6 +966,7 @@ class GlobalMainCfg {
                 'cellsperrow' => Array('must' => 0,
                     'editable' => 1,
                     'default' => '4',
+                    'deprecated' => 1,
                     'match' => MATCH_INTEGER),
                 'headermenu' => Array('must' => 1,
                     'editable' => 1,
