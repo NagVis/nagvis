@@ -21,27 +21,83 @@
  *
  *****************************************************************************/
 
-/**
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
+div.hover {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    z-index: 1000;
+    background-color: #fbfbfb;
+    border: 1px solid #e5e5e5;
+}
 
-div.hover {position:absolute;margin:0;padding:0;font-size:10px;z-index:1000}
-div.hover > table {border-collapse:collapse;margin:0;padding:0}
-div.hover > table td, div.hover > table th {border:1px #FBFDFD solid;padding:2px;font-size:9px;background-color:#EAF0F2;color:#000}
-div.hover > table th {text-align:center;background-color:#D7E2E5}
-div.hover > table td.spacer {height:3px;background-color:#D7E2E5}
-div.hover > table td.label {text-align:center;background-color:#D7E2E5}
-div.hover > table td.labelACK {background-color: #D7E2E5}
-div.hover > table td.labelPENDING, div.hover > table td.labelUNCHECKED {background-color:#D7E2E5}
-div.hover > table td.labelOK, div.hover > table td.labelUP {background-color:#66FF66}
-div.hover > table td.labelWARNING {background-color:#FFFF7E}
-div.hover > table td.labelCRITICAL, div.hover > table td.labelDOWN, div.hover > table td.labelUNREACHABLE {background-color:#FFBBBB}
-div.hover > table td.labelERROR {background-color:#D7E2E5}
-div.hover > table td.labelUNKNOWN {background-color:#D7E2E5}
-div.hover > table label {font-weight:bold}
-div.hover > table td.statePENDING {}
-div.hover > table td.stateOK, div.hover > table td.stateUP {background-color:#00CC00;color:#fff}
-div.hover > table td.stateWARNING {background-color:#FFFF00;color:#000}
-div.hover > table td.stateCRITICAL, div.hover > table td.stateDOWN, div.hover > table td.stateUNREACHABLE {background-color:#F83838;color:#fff}
-div.hover > table td.stateERROR {background-color:#66CCFF;color:#fff}
-div.hover > table td.stateUNKNOWN {background-color:#FFFF99;color:#000}
+div.hover > table {
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+}
+
+div.hover > table tr.even {
+    background-color: #f0f0f0;
+}
+
+div.hover > table td, div.hover > table th {
+    padding: 5px;
+    font-size: 0.6em;
+    color: #555555;
+}
+
+div.hover > table th {
+    text-align: left;
+    font-weight: normal;
+    border-bottom: 1px solid #7ea434;
+}
+
+div.hover > table td.spacer {
+    height:3px
+}
+
+div.hover > table td.label {
+    text-align:center;
+    color: #43B3CF;
+    white-space: nowrap;
+}
+
+div.hover > table label {
+    font-weight:normal;
+}
+
+div.hover > table td.stateOK, div.hover > table td.stateUP {
+    background-color:#00CC00;
+    color:#fff
+}
+
+div.hover > table td.stateWARNING {
+    background-color:#FFFF00;
+    color:#555
+}
+
+div.hover > table td.stateCRITICAL, div.hover > table td.stateDOWN, div.hover > table td.stateUNREACHABLE {
+    background-color:#F83838;
+    color:#fff
+}
+
+div.hover > table td.stateERROR {
+    background-color:#66CCFF;
+    color:#fff
+}
+
+div.hover > table td.stateUNKNOWN {
+    background-color:#FFFF99;
+    color:#000
+}
+
+div.hover > table td.child {
+    border-top: 1px solid #e5e5e5;
+    padding: 0;
+}
+
+div.hover table.childs {
+    margin: 0;
+    padding: 0;
+}

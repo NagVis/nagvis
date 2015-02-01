@@ -639,6 +639,7 @@ td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 
 td#popupWindowContent input, select {
     font-size: 11px;
+    color: #555555;
     background-color: #fbfbfb;
     border: 1px solid #e5e5e5;
 }
