@@ -434,17 +434,8 @@ div.infopage a:hover {
 
 div#popupWindow {
     z-index: 2000;
-}
-
-/* Popup window master table */
-table#popupWindowMaster {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    border-collapse: separate;
 
     margin-left: 8px;
-    padding: 6px 16px 16px 16px;
     font-weight: normal;
     -moz-border-radius: 11px;
     -khtml-border-radius: 11px;
@@ -458,6 +449,28 @@ table#popupWindowMaster {
     box-shadow: rgba(200,200,200,1) 0 4px 18px;
 }
 
+div#popupWindow div.close {
+    width: 20px;
+    height: 20px;
+    float: right;
+    font-size: 13px;
+    border: 1px dotted #c0c0c0;
+    text-align: center;
+    margin-top: 8px;
+    margin-right: 8px;
+    cursor: pointer;
+    color: #555;
+}
+
+/* Popup window master table */
+table#popupWindowMaster {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-collapse: separate;
+    padding: 6px 16px 16px 16px;
+}
+
 table#popupWindowMaster tr th,
 table#popupWindowMaster tr td {
     background-color: transparent;
@@ -465,27 +478,6 @@ table#popupWindowMaster tr td {
 
     font-size: 10px;
     color: #43B3CF;
-}
-
-/* Title bar */
-table#popupWindowMaster tbody tr th#dragbar {
-    text-align: left;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-/* Close button */
-table#popupWindowMaster tbody tr th.control {
-    padding: 0;
-    margin: 0;
-    width: 19px;
-    font-size: 16px;
-    text-align: center;
-    color: #43B3CF;
-    font-weight: bold;
-    text-decoration: none;
-    cursor: pointer;
-    border: 1px solid #43B3CF;
 }
 
 /* Content styling */
@@ -521,6 +513,7 @@ td#popupWindowContent p {
 
 /* title */
 div.infopage h2,
+div#popupWindow h1,
 td#popupWindowContent h2 {
     font-size: 16px;
     text-align: left;
@@ -529,6 +522,20 @@ td#popupWindowContent h2 {
     font-weight:normal;
     border-bottom: 1px solid #7EA434;
     color: #43B3CF;
+}
+
+div#popupWindow h1 {
+    font-weight: normal;
+    margin: 5px;
+    padding: 5px 10px;
+
+    cursor: move;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 td#popupWindowContent h2 {

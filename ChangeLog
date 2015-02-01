@@ -15,7 +15,7 @@ Core:
   according to nagios plugin guidelines)
 
 Frontend:
-  * Additional update of GUI design
+  * Huge update of GUI design for a more consistent look n feel
   * Overview page uses whole page width (floating layout) for maps
   * URLs of shape images can now be configured via configuration dialog
   * Added std_table.php gadget which can render state tables for any stateful object type

@@ -173,6 +173,32 @@ function popupWindow(title, oContent, openOnMousePosition, sWidth) {
 
     oContainerDiv.url = oContent.url;
 
+    // Render the close button
+    var oClose = document.createElement('div');
+    oClose.className = 'close';
+
+    oClose.onclick = function() {
+        popupWindowClose();
+        return false;
+    };
+
+    oClose.appendChild(document.createTextNode('x'));
+    oContainerDiv.appendChild(oClose);
+    oClose = null;
+
+    // Render the window title
+    var oTitle = document.createElement('h1');
+    oTitle.appendChild(document.createTextNode(title));
+
+    // Make title the drag window handler
+    oTitle.onmousedown = selectmouse;
+    oTitle.onmouseup = function() {
+        bDragging = false;
+    };
+
+    oContainerDiv.appendChild(oTitle);
+    oTitle = null;
+
     var oTable = document.createElement('table');
     oTable.setAttribute('id', 'popupWindowMaster');
 
@@ -183,36 +209,6 @@ function popupWindow(title, oContent, openOnMousePosition, sWidth) {
     }
 
     var oTbody = document.createElement('tbody');
-    var oRow = document.createElement('tr');
-    var oCell = document.createElement('th');
-    oCell.setAttribute('id', 'dragbar');
-
-    oCell.onmousedown = selectmouse;
-    oCell.onmouseup = function() {
-        bDragging = false;
-    };
-
-    oCell.appendChild(document.createTextNode(title));
-
-    oRow.appendChild(oCell);
-    oCell = null;
-
-    oCell = document.createElement('th');
-    oCell.setAttribute('class', 'control');
-    oCell.setAttribute('className', 'control');
-
-    oCell.onclick = function() {
-        popupWindowClose();
-        return false;
-    };
-
-    oCell.appendChild(document.createTextNode('x'));
-
-    oRow.appendChild(oCell);
-    oCell = null;
-
-    oTbody.appendChild(oRow);
-    oRow = null;
 
     oRow = document.createElement('tr');
 
