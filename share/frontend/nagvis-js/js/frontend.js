@@ -1286,10 +1286,6 @@ function parseOverviewPage() {
                   [ oPageProperties.showrotations, 'overviewRotations', oPageProperties.lang_rotationPools ] ];
     for(var i = 0; i < types.length; i++) {
         if(types[i][0] === 1) {
-            var clear = document.createElement('div');
-            clear.className = 'clear';
-            oContainer.appendChild(clear);
-
             var h2 = document.createElement('h2');
             h2.innerHTML = types[i][2];
             oContainer.appendChild(h2);

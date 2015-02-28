@@ -192,6 +192,8 @@ function toggleSidebar(store) {
         sidebar.style.display = 'none';
         if(is_overview === false) {
             content.style.left = '0';
+        } else {
+            content.style.marginLeft = '0px';
         }
         state = 0;
     } else {
@@ -202,6 +204,8 @@ function toggleSidebar(store) {
         sidebar.style.display = 'inline';
         if(is_overview === false) {
             content.style.left = '200px';
+        } else {
+            content.style.marginLeft = '200px';
         }
 
         if (oGeneralProperties.header_show_states)
