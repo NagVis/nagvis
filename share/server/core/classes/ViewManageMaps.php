@@ -321,6 +321,9 @@ class ViewManageMaps {
 
         if (is_action() && post('mode') == 'import') {
             try {
+                if (!isset($_FILES['map_file']))
+                    throw new FieldInputError('map_file', l('You need to select a file to import.'));
+
                 $file = $_FILES['map_file'];
                 if (!is_uploaded_file($file['tmp_name']))
                     throw new FieldInputError('map_file', l('The file could not be uploaded (Error: [ERROR]).',
