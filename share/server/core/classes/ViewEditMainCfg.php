@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * WuiViewEditMainCfg.php - Class to render the main configuration edit dialog
+ * ViewEditMainCfg.php - Class to render the main configuration edit dialog
  *
  * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
@@ -22,7 +22,7 @@
  *
  *****************************************************************************/
 
-class WuiViewEditMainCfg {
+class ViewEditMainCfg {
     private $exclude_pattern = '/^(backend|internal|rotation|auth|action|wui)/i';
     private $error = null;
 

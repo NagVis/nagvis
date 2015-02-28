@@ -160,7 +160,7 @@ class CoreModMap extends CoreModule {
                     else
                         $map_name = $aVals['show'];
 
-                    $VIEW = new WuiViewMapAddModify($map_name, $mode);
+                    $VIEW = new ViewMapAddModify($map_name, $mode);
                     $VIEW->setAttrs($attrs);
 
                     // This tells the following handling when the page only needs to be repainted
@@ -185,7 +185,7 @@ class CoreModMap extends CoreModule {
                     $aOpts = Array('show' => MATCH_MAP_NAME);
                     $aVals = $this->getCustomOptions($aOpts);
 
-                    $VIEW = new WuiViewMapManageTmpl();
+                    $VIEW = new ViewMapManageTmpl();
                     $VIEW->setOpts($aVals);
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;

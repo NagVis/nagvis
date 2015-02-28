@@ -52,7 +52,7 @@ class CoreModManageBackgrounds extends CoreModule {
                     $sReturn = json_encode($this->checkUsed());
                 break;
                 case 'view':
-                    $VIEW = new WuiViewManageBackgrounds();
+                    $VIEW = new ViewManageBackgrounds();
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'doCreate':

@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * WuiViewMapAddModify.php - Class to render the main configuration edit dialog
+ * ViewMapAddModify.php - Class to render the main configuration edit dialog
  *
  * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
@@ -22,10 +22,7 @@
  *
  *****************************************************************************/
 
-/**
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-class WuiViewMapAddModify {
+class ViewMapAddModify {
     private $MAPCFG      = null;
     private $attrs       = null;
     private $hiddenAttrs = null;

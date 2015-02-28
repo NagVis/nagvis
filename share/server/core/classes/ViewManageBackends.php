@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * WuiViewManageBackends.php - View to render manage backends page
+ * ViewManageBackends.php - View to render manage backends page
  *
  * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
@@ -25,7 +25,7 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class WuiViewManageBackends {
+class ViewManageBackends {
     /**
      * Parses the information in html format
      *

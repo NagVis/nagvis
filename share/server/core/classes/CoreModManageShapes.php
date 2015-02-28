@@ -51,7 +51,7 @@ class CoreModManageShapes extends CoreModule {
                     $sReturn = json_encode($this->checkUsed());
                 break;
                 case 'view':
-                    $VIEW = new WuiViewManageShapes();
+                    $VIEW = new ViewManageShapes();
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'doDelete':

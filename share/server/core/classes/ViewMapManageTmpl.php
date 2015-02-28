@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * WuiViewManageShapes.php - Class to manage shapes
+ * ViewMapManageTmpl.php - Class to render the map template management page
  *
  * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
@@ -25,7 +25,19 @@
 /**
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-class WuiViewManageShapes {
+class ViewMapManageTmpl {
+    private $aOpts = null;
+
+    /**
+     * Setter for the options array
+     *
+     * @param   Array   Array of options
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    public function setOpts($a) {
+        $this->aOpts = $a;
+    }
+
     /**
      * Parses the information in html format
      *
@@ -36,22 +48,30 @@ class WuiViewManageShapes {
         global $CORE;
 
         // Initialize template system
-        $TMPL = New CoreTemplateSystem($CORE);
+        $TMPL = new CoreTemplateSystem($CORE);
         $TMPLSYS = $TMPL->getTmplSys();
 
+        // Read map configig but don't resolve tempaltes
+        $MAPCFG = new GlobalMapCfg($this->aOpts['show']);
+        $MAPCFG->readMapConfig(0, false, false);
+
         $aData = Array(
-            'htmlBase'           => cfg('paths', 'htmlbase'),
-            'langUploadShape'    => l('uploadShape'),
-            'langChoosePngImage' => l('chooseImage'),
-            'langUpload'         => l('upload'),
-            'langDeleteShape'    => l('deleteShape'),
-            'langDelete'         => l('delete'),
-            'shapes'             => $CORE->getAvailableShapes(),
-            'lang'               => $CORE->getJsLang(),
+            'htmlBase' => cfg('paths', 'htmlbase'),
+            'map' => $this->aOpts['show'],
+            'langTmplAdd' => l('Create Template'),
+            'langTmplName' => l('Name'),
+            'langTmplAddOption' => l('Add Option'),
+            'langTmplDoAdd' => l('Add'),
+            'langTmplModify' => l('Modify Template'),
+            'langTmplDoModify' => l('Modify'),
+            'langTmplDelete' => l('Delete Template'),
+            'langTmplChoose' => l('Name'),
+            'langTmplDoDelete' => l('Delete'),
+            'templates' => $MAPCFG->getTemplateNames(),
         );
 
         // Build page based on the template file and the data array
-        return $TMPLSYS->get($TMPL->getTmplFile('default', 'wuiManageShapes'), $aData);
+        return $TMPLSYS->get($TMPL->getTmplFile('default', 'wuiMapManageTmpl'), $aData);
     }
 }
 ?>
