@@ -245,7 +245,7 @@ div.infopage > div.map.disabled h3  {
 }
 
 div.infopage > div.map.error h3  {
-    color: #ff0000;
+    color: #ff4f4f;
 }
 
 div.infopage a {
@@ -468,7 +468,7 @@ table#popupWindowMaster {
     padding: 0;
     border: 0;
     border-collapse: separate;
-    padding: 6px 16px 16px 16px;
+    padding: 0 16px 16px 16px;
 }
 
 table#popupWindowMaster tr th,
@@ -480,11 +480,16 @@ table#popupWindowMaster tr td {
     color: #43B3CF;
 }
 
-/* Content styling */
-td#popupWindowContent {
-    padding-top: 5px;
+table#popupWindowMaster div.error {
+    background-color: #ff4f4f;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    color: #fff;
+    margin-bottom: 2px;
+    padding: 3px;
 }
 
+/* Content styling */
 td#popupWindowContent table.mytable {
     width: 100%;
     padding: 0;
@@ -505,6 +510,10 @@ td#popupWindowContent table.mytable td {
 
 td#popupWindowContent label {
     font-size: 13px;
+}
+
+td#popupWindowContent label span {
+    vertical-align: middle;
 }
 
 td#popupWindowContent p {
@@ -558,6 +567,9 @@ td#popupWindowContent table.mytable td.tdfield {
     max-width: 167px;
     width: 165px;
 }
+td#popupWindowContent input[type="radio"] {
+    vertical-align: middle;
+}
 td#popupWindowContent table.mytable tr td.tdfield input,
 td#popupWindowContent table.mytable tr td.tdfield select {
     width: 165px;
@@ -579,6 +591,10 @@ td#popupWindowContent table.mytable tr td.tdfield div.picker img {
 td#popupWindowContent table.mytable tr td.tdfield input.checkbox {
     width: auto;
     margin-right:2px;
+}
+td#popupWindowContent table.mytable tr td.tdfield input.err,
+td#popupWindowContent table.mytable tr td.tdfield select.err {
+    border-color: #ff4f4f;
 }
 
 td#popupWindowContent table.mytable tr td.tdfield div.err {
@@ -611,7 +627,7 @@ td#popupWindowContent table.mytable tr td.err div {
     padding: 3px;
     margin: 0 0 0 20%;
     width: 80%;
-    border: 1px solid #ff0000;
+    border: 1px solid #ff4f4f;
     background-color: #ffdddd;
     color: #000000;
     -moz-border-radius: 5px;
@@ -634,7 +650,7 @@ td#popupWindowContent div.err {
 }
 
 td#popupWindowContent div.err {
-    border: 1px solid #ff0000;
+    border: 1px solid #ff4f4f;
     background-color: #FFC9C9;
     color: #000;
 }
@@ -716,7 +732,7 @@ td#popupWindowContent input, select {
     padding: 0 8px;
 }
 
-#editIndicator span {width:89px;color:#ff0000}
+#editIndicator span {width:89px;color:#ff4f4f}
 .dropdown span, .header div#refreshCounterHead {
     display:block;
     margin:0;
@@ -756,7 +772,7 @@ td#popupWindowContent input, select {
 .dropdown a:visited {color:#43B3CF;}
 .dropdown a.left, .dropdown a.left:active {float:left;width:152px;border-right:0}
 .dropdown a.right, .dropdown a.right:active {float:right;width:30px;border-left:1px solid #43B3CF}
-.dropdown a.error, .dropdown a.error:active, .dropdown a.error:visited {color:#ff0000}
+.dropdown a.error, .dropdown a.error:active, .dropdown a.error:visited {color:#ff4f4f}
 .dropdown a:hover {
     background-color: #ffffff;
     color: #789D2B;
@@ -825,7 +841,7 @@ td#popupWindowContent input, select {
     background-color: #ffffff;
     color:#779D2A
 }
-#sidebar a.error, #sidebar a.error:active, #sidebar a.error:visited {color:#ff0000}
+#sidebar a.error, #sidebar a.error:active, #sidebar a.error:visited {color:#ff4f4f}
 
 div.statediv {
     display: none;

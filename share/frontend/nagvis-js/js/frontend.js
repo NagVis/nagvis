@@ -95,7 +95,7 @@ function submitFrontendForm(sUrl, sFormId, bReloadOnSuccess) {
         bReloadOnSuccess = '';
     }
 
-    var oResult = postSyncRequest(sUrl, getFormParams(sFormId));
+    var oResult = postSyncRequest(sUrl, getFormParams(sFormId, true));
 
     if(oResult && oResult.type) {
         if(oResult.type === 'ok' && bReloadOnSuccess) {
@@ -125,7 +125,8 @@ function submitFrontendForm(sUrl, sFormId, bReloadOnSuccess) {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function submitFrontendForm2(sUrl, sFormId) {
-    var oResult = postSyncRequest(sUrl, getFormParams(sFormId));
+    var oResult = postSyncRequest(sUrl, getFormParams(sFormId, false));
+
     if(oResult && oResult.type) {
         // In case of an error show message and close the window
         frontendMessage(oResult);
@@ -135,6 +136,11 @@ function submitFrontendForm2(sUrl, sFormId) {
         popupWindowPutContent(oResult);
     }
     oResult = null;
+}
+
+function updateForm() {
+    document.getElementById('_update').value = '1';
+    document.getElementById('_submit').click();
 }
 
 /**

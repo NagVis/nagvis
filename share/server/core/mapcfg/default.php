@@ -197,7 +197,7 @@ $mapConfigVars = Array(
         'array'      => true,
 	'other'      => true,
         'match'      => MATCH_STRING,
-        'field_type' => 'dropdown',
+        'field_type' => 'hidden',
         'list'       => 'listSources',
     ),
     'backend_id' => Array(

@@ -217,6 +217,11 @@ class WuiViewMapAddModify {
             list($isInherited, $value) = $this->getAttr($typeDefaults, $update, $propname, $prop['must']);
             unset($this->hiddenAttrs[$propname]);
 
+            if(isset($prop['array']) && $prop['array']) {
+                if(is_array($value))
+                    $value = implode(',', $value);
+            }
+
             // Only add the fields of type hidden which have values
             if($fieldType === 'hidden') {
                 if($value != '') {
@@ -296,8 +301,6 @@ class WuiViewMapAddModify {
             if(isset($prop['array']) && $prop['array']) {
                 if(is_array($valueTxt))
                     $valueTxt = implode(',', $valueTxt);
-                if(is_array($value))
-                    $value    = implode(',', $value);
             }
 
             switch($fieldType) {

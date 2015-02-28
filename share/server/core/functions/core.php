@@ -1,9 +1,5 @@
 <?php
 /*****************************************************************************
- *
- * i18n.php - Instantiates the internationalization in NagVis and registers
- *            the global l() method to translate strings in NagVis
- *
  * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
  *
  * License:

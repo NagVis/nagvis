@@ -22,6 +22,10 @@ Frontend:
     (Thanks to Thibault Cohen for providing the idea and base code!)
   * Usability fix: Header dropdowns now only close when clicking somewhere out
     of the menu instead of hiding when moving the mouse out of the menu
+  * Reworked map management dialog for more comfortable form handling (errors, validation etc.)
+  * Map sources can now only be selected during map creation via GUI. When you like to
+    change map sources for an existing map, you will need to to it by modifying the
+    map configuration files directly. But this should be a very rare situation
   * FIX: Fixed exception when trying to define Multiple/Other values for "sources"
   * FIX: Fixed relative label positioning (center, bottom) on first page load sometimes wrong
 

@@ -38,14 +38,10 @@ class CoreModMap extends CoreModule {
             'getMapProperties'  => 'view',
             'getMapObjects'     => 'view',
             'getObjectStates'   => 'view',
+
             // WUI specific actions
             'manage'            => REQUIRES_AUTHORISATION,
-            'doAdd'             => 'add',
-            'doRename'          => 'edit',
-            'checkLinked'       => 'edit',
-            'doDelete'          => 'edit',
             'doExportMap'       => 'edit',
-            'doImportMap'       => 'edit',
 
             'addModify'         => 'edit',
             'modifyObject'      => 'edit',
@@ -73,21 +69,18 @@ class CoreModMap extends CoreModule {
             case 'manageTmpl':
             case 'getTmplOpts':
             case 'addModify':
-            case 'checkLinked':
             case 'toStaticMap':
+            case 'doExportMap':
                 $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME_EMPTY));
                 $this->name = $aVals['show'];
             break;
             // And those have the objecs in the POST var "map"
-            case 'doRename':
-            case 'doDelete':
             case 'createObject':
             case 'modifyObject':
             case 'deleteObject':
             case 'doTmplAdd':
             case 'doTmplModify':
             case 'doTmplDelete':
-            case 'doExportMap':
                 $FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
                 if($FHANDLER->match('map', MATCH_MAP_NAME))
                     $this->name = $FHANDLER->get('map');
@@ -116,47 +109,8 @@ class CoreModMap extends CoreModule {
                     $sReturn = $this->getObjectStates();
                 break;
                 case 'manage':
-                    $VIEW = new WuiViewManageMaps();
+                    $VIEW = new ViewManageMaps();
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
-                break;
-                case 'doAdd':
-                    $this->handleResponse('handleResponseAdd', 'doAdd',
-                                          l('The map has been created.'),
-                                          l('The map could not be created.'),
-                                          1, $this->htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$_POST['map']);
-                break;
-                case 'doRename':
-                    // if renamed map is open, redirect to new name
-                    $FHANDLER = new CoreRequestHandler($_POST);
-                    $current = $FHANDLER->get('map_current');
-                    $map     = $FHANDLER->get('map');
-                    if($current == 'undefined' || $current == '' || $current == $map)
-                        $map = $FHANDLER->get('map_new_name');
-                    else
-                        $map = $current;
-
-                    $this->handleResponse('handleResponseRename', 'doRename',
-                                          l('The map has been renamed.'),
-                                          l('The map could not be renamed.'),
-                                          1, $this->htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$map);
-                break;
-                case 'checkLinked':
-                    $sReturn = json_encode($this->checkLinked($this->name));
-                break;
-                case 'doDelete':
-                    // if deleted map is open, redirect to WUI main page
-                    $FHANDLER = new CoreRequestHandler($_POST);
-                    $current = $FHANDLER->get('map_current');
-                    $map     = $FHANDLER->get('map');
-                    if($current == 'undefined' || $current == '' || $current == $map)
-                        $url = $this->htmlBase.'/frontend/nagvis-js/index.php';
-                    else
-                        $url = $this->htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$current;
-
-                    $this->handleResponse('handleResponseDelete', 'doDelete',
-                                          l('The map has been deleted.'),
-                                          l('The map could not be deleted.'),
-                                          1, $url);
                 break;
                 case 'modifyObject':
                     $sReturn = $this->handleResponse('handleResponseModifyObject', 'doModifyObject',
@@ -270,13 +224,9 @@ class CoreModMap extends CoreModule {
                                                                 1);
                 break;
                 case 'doExportMap':
-                    $this->handleResponse('handleResponseDoExportMap', 'doExportMap',
-                                            l('The map configuration has been exported.'),
-                                                                l('The map configuration could not be exported.'));
-                break;
-                case 'doImportMap':
-                    if($this->handleResponse('handleResponseDoImportMap', 'doImportMap'))
-                        header('Location:'.$_SERVER['HTTP_REFERER']);
+                    $this->doExportMap($this->name);
+                    exit(0);
+                    //header('Location:'.$_SERVER['HTTP_REFERER']);
                 break;
                 case 'toStaticMap':
                     if(isset($_POST['target'])) {
@@ -476,33 +426,15 @@ class CoreModMap extends CoreModule {
         }
     }
 
-    protected function handleResponseDoImportMap() {
-        $FHANDLER = new CoreRequestHandler($_FILES);
-        $this->verifyValuesSet($FHANDLER, Array('map_file'));
-        return Array('map_file' => $FHANDLER->get('map_file'));
-    }
+    protected function doExportMap($name) {
+        global $CORE;
+        if (!$name)
+            throw new FieldInputError(null, l('Please choose a map'));
 
-    protected function doImportMap($a) {
-        if(!is_uploaded_file($a['map_file']['tmp_name']))
-            throw new NagVisException(l('The file could not be uploaded (Error: [ERROR]).',
-              Array('ERROR' => $a['map_file']['error'].': '.$this->CORE->getUploadErrorMsg($a['map_file']['error']))));
+        if (count($CORE->getAvailableMaps('/^'.preg_quote($name).'$/')) == 0)
+            throw new FieldInputError(null, l('The given map name is invalid'));
 
-        $mapName = $a['map_file']['name'];
-
-        if(!preg_match(MATCH_CFG_FILE, $mapName))
-            throw new NagVisException(l('The uploaded file is no map configuration file.'));
-
-        $filePath = cfg('paths', 'mapcfg').$mapName;
-        return move_uploaded_file($a['map_file']['tmp_name'], $filePath) && $this->CORE->setPerms($filePath);
-    }
-
-    protected function handleResponseDoExportMap() {
-        $FHANDLER = new CoreRequestHandler($_POST);
-        return Array('map' => $FHANDLER->get('map'));
-    }
-
-    protected function doExportMap($a) {
-        $MAPCFG = new GlobalMapCfg($a['map']);
+        $MAPCFG = new GlobalMapCfg($name);
         return $MAPCFG->exportMap();
     }
 
@@ -710,29 +642,6 @@ class CoreModMap extends CoreModule {
         }
     }
 
-    /**
-     * Creates a list of mapnames which link to the given map
-     */
-    protected function checkLinked($checkMap) {
-        #$this->name
-        $linking = Array();
-        foreach($this->CORE->getAvailableMaps() AS $map) {
-            $MAPCFG1 = new GlobalMapCfg($map);
-            try {
-                $MAPCFG1->readMapConfig();
-            } catch(MapCfgInvalid $e) {
-                continue;
-            }
-
-            foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
-                if(isset($obj['map_name']) && $obj['map_name'] == $this->name) {
-                    $linking[] = $MAPCFG1->getName();
-                }
-            }
-        }
-        return $linking;
-    }
-
     protected function doDeleteObject($a) {
         // initialize map and read map config
         $MAPCFG = new GlobalMapCfg($a['map']);
@@ -781,42 +690,6 @@ class CoreModMap extends CoreModule {
             // Return the data
             return Array('map' => $FHANDLER->get('map'),
                          'id' => $FHANDLER->get('id'));
-        } else {
-            return false;
-        }
-    }
-
-    protected function doDelete($a) {
-        $MAPCFG = new GlobalMapCfg($a['map']);
-        try {
-            $MAPCFG->readMapConfig();
-        } catch(MapCfgInvalidObject $e) {}
-        $MAPCFG->deleteMapConfig();
-
-        return true;
-    }
-
-    protected function handleResponseDelete() {
-        $bValid = true;
-        // Validate the response
-
-        $FHANDLER = new CoreRequestHandler($_POST);
-
-        // Check for needed params
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
-            $bValid = false;
-
-        // All fields: Regex check
-        if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
-            $bValid = false;
-
-        if($bValid)
-            $this->verifyMapExists($FHANDLER->get('map'));
-
-        // Store response data
-        if($bValid === true) {
-            // Return the data
-            return Array('map' => $FHANDLER->get('map'));
         } else {
             return false;
         }
@@ -895,118 +768,6 @@ class CoreModMap extends CoreModule {
                          'id'      => $FHANDLER->get('id'),
                          'refresh' => $FHANDLER->get('ref'),
                          'opts'    => $aOpts);
-        } else {
-            return false;
-        }
-    }
-
-    protected function doRename($a) {
-        global $AUTHORISATION;
-        $files = Array();
-
-        // loop all map configs to replace mapname in all map configs
-        foreach($this->CORE->getAvailableMaps() as $mapName) {
-            try {
-                $MAPCFG1 = new GlobalMapCfg($mapName);
-                $MAPCFG1->readMapConfig();
-
-                $i = 0;
-                // loop definitions of type map
-                foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
-                    // check if old map name is linked...
-                    if($obj['map_name'] == $a['map']) {
-                        $MAPCFG1->setValue('map', $i, 'map_name', $a['map_new_name']);
-                        $MAPCFG1->writeElement('map',$i);
-                    }
-                    $i++;
-                }
-            } catch(Exception $e) {
-                // Do nothing. Siletly pass config errors here...
-            }
-        }
-
-        // And also remove the permission
-        $AUTHORISATION->renameMapPermissions($a['map'], $a['map_new_name']);
-
-        // rename config file
-        rename(cfg('paths', 'mapcfg').$a['map'].'.cfg',
-               cfg('paths', 'mapcfg').$a['map_new_name'].'.cfg');
-
-        return true;
-    }
-
-    protected function handleResponseRename() {
-        $bValid = true;
-        // Validate the response
-
-        $FHANDLER = new CoreRequestHandler($_POST);
-
-        // Check for needed params
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
-            $bValid = false;
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('map_new_name'))
-            $bValid = false;
-
-        // All fields: Regex check
-        if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
-            $bValid = false;
-        if($bValid && !$FHANDLER->match('map_new_name', MATCH_MAP_NAME))
-            $bValid = false;
-        if($bValid && $FHANDLER->isSetAndNotEmpty('map_current') && !$FHANDLER->match('map_current', MATCH_MAP_NAME))
-            $bValid = false;
-
-        if($bValid)
-            $this->verifyMapExists($FHANDLER->get('map_new_name'), true);
-
-        // Store response data
-        if($bValid === true) {
-            // Return the data
-            return Array(
-                       'map_new_name' => $FHANDLER->get('map_new_name'),
-                       'map' => $FHANDLER->get('map'),
-                       'map_current' => $FHANDLER->get('map_current'));
-        } else {
-            return false;
-        }
-    }
-
-    protected function doAdd($a) {
-        $MAPCFG = new GlobalMapCfg($a['map']);
-        if(!$MAPCFG->createMapConfig())
-            return false;
-
-        $MAPCFG->addElement('global', $a, true, 0);
-        return true;
-    }
-
-    protected function handleResponseAdd() {
-        $bValid = true;
-        // Validate the response
-
-        $FHANDLER = new CoreRequestHandler($_POST);
-
-        // Check for needed params
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
-            $bValid = false;
-
-        // Check for valid vars
-        if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
-            $bValid = false;
-        if($bValid && $FHANDLER->isSetAndNotEmpty('map_iconset') && !$FHANDLER->match('map_iconset', MATCH_STRING_NO_SPACE))
-            $bValid = false;
-        if($bValid && $FHANDLER->isSetAndNotEmpty('map_image') && !$FHANDLER->match('map_image', MATCH_PNG_GIF_JPG_FILE_OR_URL_NONE))
-            $bValid = false;
-
-        if($bValid)
-            $this->verifyMapExists($FHANDLER->get('map'), true);
-
-        // Store response data
-        if($bValid === true) {
-            // Return the data
-            return Array(
-                       'map' => $FHANDLER->get('map'),
-                       'iconset' => $FHANDLER->get('map_iconset'),
-                       'map_image' => $FHANDLER->get('map_image'));
         } else {
             return false;
         }

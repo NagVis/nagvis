@@ -694,7 +694,6 @@ class GlobalCore {
      */
     public function getJsLang() {
         $lang = Array(
-            'wrongValueFormat'              => l('wrongValueFormat'),
             'wrongValueFormatOption'        => l('wrongValueFormatOption'),
             'mustValueNotSet'               => l('mustValueNotSet'),
             'firstMustChoosePngImage'       => l('firstMustChoosePngImage'),
@@ -708,22 +707,6 @@ class GlobalCore {
             'shapeInUse'                    => l('shapeInUse'),
             'confirmShapeDeletion'          => l('confirmShapeDeletion'),
             'unableToDeleteShape'           => l('unableToDeleteShape'),
-            'chooseMapName'                 => l('chooseMapName'),
-            'minOneUserAccess'              => l('minOneUserAccess'),
-            'noMapToRename'                 => l('noMapToRename'),
-            'noNewNameGiven'                => l('noNewNameGiven'),
-            'mapAlreadyExists'              => l('mapAlreadyExists'),
-            'foundNoMapToDelete'            => l('foundNoMapToDelete'),
-            'foundNoMapToExport'            => l('foundNoMapToExport'),
-            'foundNoMapToImport'            => l('foundNoMapToImport'),
-            'notCfgFile'                    => l('notCfgFile'),
-            'confirmNewMap'                 => l('confirmNewMap'),
-            'confirmMapRename'              => l('confirmMapRename'),
-            'confirmMapDeletion'            => l('confirmMapDeletion'),
-            'unableToDeleteMap'             => l('unableToDeleteMap'),
-            'noPermissions'                 => l('noPermissions'),
-            'minOneUserWriteAccess'         => l('minOneUserWriteAccess'),
-            'noSpaceAllowed'                => l('noSpaceAllowed'),
             'properties'                    => l('properties'),
         );
 

@@ -432,10 +432,8 @@ function getBulkRequest(sBaseUrl, aUrlParts, iLimit, bCacheable, handler, handle
  * Function for creating a synchronous POST request
  * - Response needs to be JS code or JSON => Parses the response with eval()
  * - Errors need to match following Regex: /^Notice:|^Warning:|^Error:|^Parse error:/
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function postSyncRequest(sUrl, sParams) {
+function postSyncRequest(sUrl, request) {
     var oResponse = null;
     var responseText;
 
@@ -448,11 +446,14 @@ function postSyncRequest(sUrl, sParams) {
         oRequest.open("POST", sUrl+"&_t="+iNow, false);
         oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
 
-        // Set post specific options
-        oRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        // Set post specific options. request might be a FormData object. In this case
+        // the request is not using form-urlencoded data, instead it is automatically
+        // set to multipart/form-data
+        if (typeof request !== 'object')
+            oRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
         try {
-            oRequest.send(sParams);
+            oRequest.send(request);
             frontendMessageRemove('ajaxError');
         } catch(e) {
             ajaxError(e);
@@ -493,93 +494,116 @@ function postSyncRequest(sUrl, sParams) {
 
 
 /**
- * Parses all values from the given form to a string which
- * can be used in ajax queries
- *
- * @param   String    ID of the form
- * @return  String    Param string
- * @author  Lars Michelsen <lars@vertical-visions.de>
+ * Parses all values from the given form to a string or form data object
+ * which is then be used as request data in ajax queries
  */
-function getFormParams(formId) {
-    var sReturn = '';
+function getFormParams(formId, skipHelperFields) {
+    if (window.FormData) {
+        var data = new FormData();
+        var formdata = true;
+    } else {
+        var formdata = false;
+        var data = '';
+    }
+
+    var add_data = function(key, val) {
+        if (formdata)
+            data.append(key, val);
+        else
+            data += key + "=" + escapeUrlValues(val) + "&";
+    };
 
     // Read form contents
     var oForm = document.getElementById(formId);
-
-    if(typeof oForm === 'undefined') {
-        return '';
-    }
+    if (typeof oForm === 'undefined')
+        return data;
 
     // Get relevant input elements
     var aFields = oForm.getElementsByTagName('input');
-    for(var i = 0, len = aFields.length; i < len; i++) {
-        // Filter helper fields (NagVis WUI specific)
-        if(aFields[i].name.charAt(0) !== '_') {
-            // Skip options which use the default value and where the value has
-            // not been set before
-            var oFieldDefault    = document.getElementById('_'+aFields[i].name);
-            if(aFields[i] && oFieldDefault && !document.getElementById('_conf_'+aFields[i].name)) {
-                if(aFields[i].value === oFieldDefault.value) {
-                    continue;
-                }
-            }
-            oFieldDefault = null;
+    for (var i = 0, len = aFields.length; i < len; i++) {
+        // Filter helper fields (if told to do so)
+        if (skipHelperFields && aFields[i].name.charAt(0) !== '_')
+            continue;
 
-            if(aFields[i].type == "hidden"
-               || aFields[i].type == "file"
-               || aFields[i].type == "text"
-               || aFields[i].type == "password"
-               || aFields[i].type == "submit")
-                sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
-
-            if(aFields[i].type == "checkbox") {
-                if(aFields[i].checked) {
-                    sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
-                } else {
-                    sReturn += aFields[i].name + "=&";
-                }
-            }
-
-            if(aFields[i].type == "radio") {
-                if(aFields[i].checked) {
-                    sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].value) + "&";
-                }
+        // Skip options which use the default value and where the value has
+        // not been set before
+        var oFieldDefault    = document.getElementById('_'+aFields[i].name);
+        if (aFields[i] && oFieldDefault && !document.getElementById('_conf_'+aFields[i].name)) {
+            if (aFields[i].value === oFieldDefault.value) {
+                continue;
             }
         }
+        oFieldDefault = null;
+
+        if (aFields[i].type == "hidden"
+            || aFields[i].type == "text"
+            || aFields[i].type == "password"
+            || aFields[i].type == "submit") {
+            add_data(aFields[i].name, aFields[i].value);
+        }
+        else if (aFields[i].type == "checkbox") {
+            if (aFields[i].checked) {
+                add_data(aFields[i].name, aFields[i].value);
+            }
+            else {
+                add_data(aFields[i].name, '');
+            }
+        }
+        else if (aFields[i].type == "radio") {
+            if (aFields[i].checked) {
+                add_data(aFields[i].name, aFields[i].value);
+            }
+        }
+        else if (aFields[i].type == "file") {
+            // Now handle the file upload elements (which lead to an error when not
+            // using the form data mechanism)
+            if (!formdata) {
+                throw new Error('File upload not supported with your browser. '
+                               +'This form can only be used when using a browser '
+                               +'which suports javascript file uploads (FormData).');
+            }
+
+            if (aFields[i].files.length > 0) {
+                var file = aFields[i].files[0];
+                data.append(aFields[i].name, file, file.name);
+            }
+        }
+
     }
 
     // Get relevant select elements
     aFields = oForm.getElementsByTagName('select');
     for(var i = 0, len = aFields.length; i < len; i++) {
         // Filter helper fields (NagVis WUI specific)
-        if(aFields[i].name.charAt(0) !== '_') {
-            // Skip options which use the default value
-            var oFieldDefault = document.getElementById('_'+aFields[i].name);
-            if(aFields[i] && oFieldDefault) {
-                if(aFields[i].value === oFieldDefault.value) {
-                    continue;
-                }
-            }
-            oFieldDefault = null;
+        if (skipHelperFields && aFields[i].name.charAt(0) !== '_')
+            continue;
 
+        // Skip options which use the default value
+        var oFieldDefault = document.getElementById('_'+aFields[i].name);
+        if(aFields[i] && oFieldDefault) {
+            if(aFields[i].value === oFieldDefault.value) {
+                continue;
+            }
+        }
+        oFieldDefault = null;
+
+        // Maybe nothing is selected
+        var sel = -1;
+        if(aFields[i].selectedIndex != -1) {
+            sel = aFields[i].selectedIndex;
+        }
+
+        // Can't use the selectedIndex when using select fields with multiple
+        if(!aFields[i].multiple || aFields[i].multiple !== true) {
             // Maybe nothing is selected
-            var sel = -1;
-            if(aFields[i].selectedIndex != -1) {
-                sel = aFields[i].selectedIndex;
+            if(sel != -1) {
+                add_data(aFields[i].name, aFields[i].options[sel].value);
             }
-
-            // Can't use the selectedIndex when using select fields with multiple
-            if(!aFields[i].multiple || aFields[i].multiple !== true) {
-                // Maybe nothing is selected
-                if(sel != -1) {
-                    sReturn += aFields[i].name + "=" + escapeUrlValues(aFields[i].options[sel].value) + "&";
-                }
-            } else {
-                for(var a = 0; a < aFields[i].options.length; a++) {
-                    // Only add selected ones
-                    if(aFields[i].options[a].selected == true) {
-                        sReturn += aFields[i].name + "[]=" + escapeUrlValues(aFields[i].options[a].value) + "&";
-                    }
+        } else {
+            for(var a = 0; a < aFields[i].options.length; a++) {
+                // Only add selected ones
+                if(aFields[i].options[a].selected == true) {
+                    add_data(aFields[i].name, aFields[i].options[a].value);
                 }
             }
         }
@@ -588,5 +612,5 @@ function getFormParams(formId) {
     aFields = null;
     oForm = null;
 
-    return sReturn;
+    return data;
 }

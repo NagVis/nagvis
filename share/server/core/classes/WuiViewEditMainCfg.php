@@ -76,18 +76,18 @@ class WuiViewEditMainCfg {
     public function parse() {
         global $_MAINCFG;
         ob_start();
-        echo '<form name="edit_config" id="edit_config" action="javascript:submitFrontendForm2(\''.cfg('paths', 'htmlbase').'/server/core/ajax_handler.php?mod=MainCfg&amp;act=edit\', \'edit_config\');">';
+        js_form_start('edit_config');
 
-        if (isset($_POST['submit']) && $_POST['update'] != '1')
+        if (is_action()) {
             try {
                 $this->handleAction();
             } catch (FieldInputError $e) {
                 $this->error = $e;
             }
+        }
 
         $open = isset($_POST['sec']) ? $_POST['sec'] : 'global'; // default open section
-        echo '<input type="hidden" id="sec" name="sec" value="'.htmlspecialchars($open).'" />';
-        echo '<input type="hidden" id="update" name="update" value="0" />';
+        hidden('sec', $open);
 
         // first render navigation
         echo '<ul class="nav" id="nav">';
@@ -104,8 +104,8 @@ class WuiViewEditMainCfg {
                 $this->renderSection($sec, $open);
         }
 
-        echo '<input class="submit" type="submit" name="submit" id="submit" value="'.l('save').'" />';
-        echo '</form>';
+        submit(l('save'));
+        form_end();
 
         return ob_get_clean();
     }
@@ -189,14 +189,14 @@ class WuiViewEditMainCfg {
                         echo l('No');
                 break;
                 default:
-                    echo htmlentities($def_val, ENT_COMPAT, 'UTF-8');
+                    echo escape_html($def_val);
             }
             echo '</div>';
 
             echo '<div id="box_'.$ident.'"'.$show_input.'>';
             $this->renderInput($sec, $key, $spec, $def_val, $cur_val);
             if ($this->error && $this->error->field == $ident) {
-                echo '<div class="err">'.htmlentities($this->error->msg, ENT_COMPAT, 'UTF-8').'</div>';
+                echo '<div class="err">'.escape_html($this->error->msg).'</div>';
             }
             echo '</div>';
 
@@ -216,8 +216,7 @@ class WuiViewEditMainCfg {
 
         $on_change = '';
         if($_MAINCFG->hasDependants($sec, $key))
-            $on_change = ' onchange="document.getElementById(\'update\').value=\'1\';'
-                        .'document.getElementById(\'submit\').click();"';
+            $on_change = ' onchange="updateForm()"';
         
         switch ($field_type) {
             case 'dropdown':

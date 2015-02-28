@@ -32,6 +32,7 @@ require('../../server/core/functions/debug.php');
 require('../../server/core/functions/oldPhpVersionFixes.php');
 require('../../server/core/classes/CoreExceptions.php');
 require('../../server/core/functions/nagvisErrorHandler.php');
+require('../../server/core/functions/html.php');
 
 if (PROFILE) profilingStart();
 
