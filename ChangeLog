@@ -1,10 +1,9 @@
-1.8rc4
+1.8
 Core:
   * All stateful objects can now be rendered as gadgets
     (Although there is no gadget available yet which is useful for objects
     which have no perfdata. But you can build one now)
   * The option gadget_type is now deprecated as the type is automatically detected
-  * FIX: gadgets_core.php perfdata parsing allows "/" for perfdatas UOM now
   * Gadgets can use object member states now
     Gadgets are now called with mixed POST request where the GET vars used in previous
     versions are still handed over to the gadgets per GET parameters to
@@ -13,6 +12,7 @@ Core:
     which provides information about the object members states.
   (e.g. to be able to parse units like Kb/s, even when they are not allowed
   according to nagios plugin guidelines)
+  * FIX: gadgets_core.php perfdata parsing allows "/" for perfdatas UOM now
 
 Frontend:
   * Huge update of GUI design for a more consistent look n feel
