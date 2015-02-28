@@ -1,7 +1,7 @@
 #!/bin/bash
 # omd_install.sh - Installs NagVis to the local/ path of OMD sites
 #
-# Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
+# Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
 #
 # Development:
 #  Lars Michelsen <lars@vertical-visions.de>

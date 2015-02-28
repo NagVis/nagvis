@@ -4,7 +4,7 @@
  * FronendMessage.php - Class to render a messagebox in the frontend (WUI
  *                      and regular NagVis frontend)
  *
- * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

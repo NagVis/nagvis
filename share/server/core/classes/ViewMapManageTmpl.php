@@ -3,7 +3,7 @@
  *
  * ViewMapManageTmpl.php - Class to render the map template management page
  *
- * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

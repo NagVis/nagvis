@@ -1,6 +1,6 @@
 <?php
 /*****************************************************************************
- * Copyright (c) 2004-2013 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

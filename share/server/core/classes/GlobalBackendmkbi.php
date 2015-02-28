@@ -4,7 +4,7 @@
  * GlobalBackendmkbi.php - backend class for connecting NagVis directly
  *                             to Check_MK Business Intelligence via JSON
  *
- * Copyright (c) 2004-2014 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
