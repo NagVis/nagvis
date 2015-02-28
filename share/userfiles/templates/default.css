@@ -164,6 +164,7 @@ div.infopage h2 {
 div.infobox {
     margin: 0 auto;
     padding: 10px;
+    overflow: hidden;
 }
 
 div.infopage div.clear {
