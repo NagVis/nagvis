@@ -209,7 +209,7 @@ function graphviz_run($map_name, &$params, $cfg) {
             $binary = 'sfdp';
         break;
         default:
-            throw new NagVisException(l('unknownrender_mode', Array('MODE' => $params['render_mode'])));
+            throw new NagVisException(l('Unknown render mode: [MODE]', Array('MODE' => $params['render_mode'])));
         break;
     }
 
