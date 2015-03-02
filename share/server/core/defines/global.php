@@ -22,12 +22,8 @@
  *
  *****************************************************************************/
  
-/**
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-
 // NagVis Version
-define('CONST_VERSION', '1.8');
+define('CONST_VERSION', '1.9a1');
 
 // Set PHP error handling to standard level
 // Different levels for php versions below 5.1 because PHP 5.1 reports
