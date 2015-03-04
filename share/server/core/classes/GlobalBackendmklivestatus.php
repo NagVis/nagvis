@@ -232,6 +232,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         //fwrite($fh, $query."\n\n");
         //fclose($fh);
 
+        //Add authorization data to mk livestatus query
+        if(cfg('global', 'only_permitted_objects') == true) {
+            global $AUTH;
+            $userName  = $AUTH->getUser();
+            $query .= "AuthUser: $userName\n";
+        }
+
         // Query to get a json formated array back
         // Use KeepAlive with fixed16 header
         if($response)

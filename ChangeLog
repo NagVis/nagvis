@@ -1,4 +1,9 @@
 1.9a1
+Core:
+  * Added option only_permitted_objects to restrict the objects a user can see
+    to the objects which a user is a contact for. This feature is currently
+    used only with the livestatus backend. It's disabled by default to keep
+    the default behaviour of NagVis. Thanks to norbert for providing the patch!
 
 1.8
 Core:

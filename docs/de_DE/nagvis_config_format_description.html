@@ -159,6 +159,26 @@
             <td>Guest</td>
             <td>Gleich wie die &quot;logonenvcreaterole&quot;-Option (wird nur vom LogonMultisite-Modul verwendet).</td>
         </tr>
+
+        <tr>
+            <td>only_permitted_objects</td>
+            <td>0</td>
+            <td><p>Aktiviert/Deaktiviert den Zugang nur zu erlaubten Monitoring-Objekten. Dies ist n&uuml;tzlich wenn man den
+                Zugriff auf Statusinformationen durch NagVis UND durch den Authorisierungmechanismus der Monitoring-Software
+                (z.B. Nagios) beschr&auml;nken m&ouml;chte.</p>
+
+                <p><i>Deaktiviert</i>: Der Zugriff auf Statusinformationen wird nur von NagVis beschr&auml;nkt. Jeder NagVis-Benutzer,
+                der Zugriff auf eine Map hat kann die Statusinformationen aller Objekte auf dieser Map sehen.
+                Falls er die Erlaubnis hat Objekte zu der Map hinzuzuf&uuml;gen kann er ALLE Monitoring-Objekte hinzuf&uuml;gen und wird
+                dabei nicht durch das NagVis-Rechtesystem eingeschr&auml;nkt.</p>
+
+                <p><i>Aktiviert</i>: Jeder Benutzer in NagVis kann nur die Statusinformationen sehen f&uuml;r deren Objekte er
+                auch eine Kontaktdefinition in der Monitoring-Software hat. Das bedeutet, dass er Statusinformationen
+                nur dann sehen kann, wenn er Zugriff auf eine Map hat UND wenn er die Erlaubnis des Monitoring-Systems hat.
+                Das gleiche gilt f&uuml;r das Hinzuf&uuml;gen von Objekten zu einer Map.</p>
+            </td>
+        </tr>
+
         <tr>
             <td>refreshtime</td><td>60</td><td>Aktualisierungsintervall in Maps bzw. laden der n&auml;chsten Map bei Map-Rotation</td>
         </tr>
@@ -169,7 +189,7 @@
             <td>sesscookiepath</td><td>automatisch ermittelt</td><td>Vielleicht m&ouml;chten Sie den Pfad festlegen, f&uuml;r den NagVis das Session-Cookie speichern soll. Per Default versucht NagVis, den Wert mit Hilfe der paths/htmlbase-Variablen selbst zu ermitteln. Dies sollte in den meisten Umgebungen funktionieren, k&ouml;nnte sich aber z.B. durch URL-Rewriting &auml;ndern.</td>
         </tr>
         <tr>
-            <td>sesscookieduration</td><td>86400</td><td> Lebensdauer des Cookies in Sekunden. Der Standardwert ist auf 24 Stunden eingestellt. Das NagVis-Session-Cookie wird bei jedem Seitenaufruf erneuert. Wenn eine Session länger als die eingestellte Zeit unt&auml;tig ist, wird sie ung&uuml;ltig.</td>
+            <td>sesscookieduration</td><td>86400</td><td> Lebensdauer des Cookies in Sekunden. Der Standardwert ist auf 24 Stunden eingestellt. Das NagVis-Session-Cookie wird bei jedem Seitenaufruf erneuert. Wenn eine Session l&auml;nger als die eingestellte Zeit unt&auml;tig ist, wird sie ung&uuml;ltig.</td>
         </tr>
         <tr>
             <td>startmodule</td><td>overview</td><td>Das anzuzeigende Startmodul, wenn vom Benutzer keins angegeben wird.</td>
@@ -263,7 +283,7 @@
             <td> eventlog     </td><td> 0 </td><td> aktivieren (1) bzw. deaktivieren (0) des Ereignisprotokolls im neuen JavaScript-Frontend. Das Ereignisprotokoll enth&auml;lt wichtige Aktionen und Informationen</td>
         </tr>
         <tr>
-            <td>eventlogevents</td><td>24</td><td>Anzahl von Ereignissen im Ereignisprotokoll-Rückblick</td>
+            <td>eventlogevents</td><td>24</td><td>Anzahl von Ereignissen im Ereignisprotokoll-R&uuml;ckblick</td>
         </tr>
         <tr>
             <td> eventloglevel     </td><td> info </td><td> Loglevel des Ereignisprotokolls (verf&uuml;gbar: debug, info, warning, critical)</td>

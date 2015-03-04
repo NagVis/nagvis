@@ -146,6 +146,21 @@
 ;logonenvcreateuser="1"
 ;logonenvcreaterole="Guests"
 ;
+; Enable/Disable access to permitted monitoring objects only. This is useful if you want
+; to restrict the access to status information by NagVis AND by the authorization mechanism
+; of the monitoring software (e.g. Nagios).
+;
+; Disabled: access to status information is controlled by NagVis only. Every NagVis user who
+; has access to a NagVis map can see the status of all objects on this map. If he has the
+; permission to add objects to a map he can add ALL monitoring objects and is not restricted
+; by the NagVis permission management.
+;
+; Enabled: every user in NagVis can see the status information only of those monitoring objects
+; for which he has a contact definition in the monitoring software. This means that he
+; can see status information only if he is allowed to access a map AND if he has the permission
+; from the monitoring software for this object. The same applies to adding objects to a map.
+;only_permitted_objects=0
+;
 ; Default rotation time of pages in rotations
 ;refreshtime=60
 ;

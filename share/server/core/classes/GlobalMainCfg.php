@@ -269,6 +269,14 @@ class GlobalMainCfg {
                     'list'        => 'listMultisiteSnapinLayouts',
                 ),
 
+                'only_permitted_objects' => Array(
+                    'must'       => 0,
+                    'editable'   => 1,
+                    'default'    => 0,
+                    'match'      => MATCH_BOOLEAN,
+                    'field_type' => 'boolean',
+                ),
+
                 'user_filtering' => Array(
                     'must'       => 0,
                     'editable'   => 1,
