@@ -1,4 +1,4 @@
-# NagVis - Visualization addon for your open source monitoring core 
+# NagVis - Visualize monitoring data
 
 NagVis is a program for visualizing the data the monitoring core of your choice,
 for example Nagios, Naemon, Icinga or Shinken, in a human friendly way.
@@ -16,16 +16,16 @@ are meant to show objects based on the geographical coordinates. These
 maps are currently only meant to be static, there is no browsing or zooming
 possible like in Open Street Map or Google Maps.
 
-# Installation
+## Installation
 
-## OMD
+### OMD
 
 There are different ways to install NagVis. The *best* way to an easily
 maintainable monitoring environment is to use [OMD](http://omdistro.org), the
 Open Monitoring Distribution. Everything you need comes in a single package.
 You will be ready to monitor within just a couple of minutes.
 
-## Manual installation
+### Manual installation
 
 The *classic* way is to install NagVis is to use the installer script which
 will ask you a couple of questions and then tries to do the right thing to
@@ -58,7 +58,7 @@ Once you are finished with the installer, you can remove the source directory.
 avoid interactive questions during installation. For details launch the
 installer with the `-h` option.
 
-# Get support
+## Get support
 
 There are many ways to get in touch with the NagVis team and community. For a
 detailed list just have a look at the [support page](http://nagvis.org/support).
@@ -67,12 +67,12 @@ Besides the free community support it is also possible to get paid services
 for NagVis. For example, if you need an extension for NagVis or assistance
 in customizing NagVis, feel free to [contact us](http://nagvis.org/contact).
 
-# Reporting Bugs, Feature Requests
+## Reporting Bugs, Feature Requests
 
 You found a bug in NagVis? The best way to submit the bug report is the 
 [GitHub issue tracker](https://github.com/NagVis/nagvis/issues)
 
-# Licensing
+## Licensing
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU General Public License version 2 as published by the 
