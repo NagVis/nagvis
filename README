@@ -1,31 +1,38 @@
 # NagVis - Visualization addon for your open source monitoring core 
 
 NagVis is a program for visualizing the data the monitoring core of your choice,
-for example Nagios, Naemon, Icinga or Shinken, in a human friendly way. Instead
-of rendering all your data in flat tables of hosts and service data which do
-not tell the user anything about relations between the object, in NagVis you
-can create a view on your objects which makes even non technical users
-understand the relations beteen your systems and services. This way visualized
-it is easy for the users to realize which components are affected by an
-occuring problem.
+for example Nagios, Naemon, Icinga or Shinken, in a human friendly way.
 
-## Installation
+Instead of rendering all your data in flat tables of hosts and service data
+which do not tell the user anything about relations between the object, in
+NagVis you can create a view on your objects which makes even non technical
+users understand the relations beteen your systems and services. This way
+visualized it is easy for the users to realize which components are affected by
+an occuring problem.
 
-### OMD
+Besides manually created maps it is possible the create so called automaps
+which visualize the parent/child relations between hosts or geomaps which
+are meant to show objects based on the geographical coordinates. These
+maps are currently only meant to be static, there is no browsing or zooming
+possible like in Open Street Map or Google Maps.
+
+# Installation
+
+## OMD
 
 There are different ways to install NagVis. The *best* way to an easily
 maintainable monitoring environment is to use [OMD](http://omdistro.org), the
 Open Monitoring Distribution. Everything you need comes in a single package.
 You will be ready to monitor within just a couple of minutes.
 
-# Manual installation
+## Manual installation
 
 The *classic* way is to install NagVis is to use the installer script which
 will ask you a couple of questions and then tries to do the right thing to
 provide you with a working installation.
 
-1. Get NagVis (releases can be found on [nagvis.org](http://nagvis.org/))
-2. Unpack NagVis
+First you need to download NagVis. The released versions can be found on
+[nagvis.org](http://nagvis.org/).
 
 Unpack the archive to a temporary place (for example /tmp), then change to
 that directory.
@@ -35,13 +42,13 @@ that directory.
 # cd /tmp/nagvis-1.*
 ```
 
-3. Run the installer and follow the instructions
+Now execute the installer and follow the instructions.
 
 ```
 # ./install.sh
 ```
 
-4. Now you can remove the source directory
+Once you are finished with the installer, you can remove the source directory.
 
 ```
 # rm -rf /tmp/nagvis-1.*
@@ -58,7 +65,7 @@ detailed list just have a look at the [support page](http://nagvis.org/support).
 
 Besides the free community support it is also possible to get paid services
 for NagVis. For example, if you need an extension for NagVis or assistance
-in customizing NagVis, feel free to contact us.
+in customizing NagVis, feel free to [contact us](http://nagvis.org/contact).
 
 # Reporting Bugs, Feature Requests
 
