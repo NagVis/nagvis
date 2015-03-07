@@ -93,6 +93,7 @@ $configVars = array(
     'filter_by_state' => array(
         'must'       => false,
         'default'    => '0',
+        'field_type' => 'boolean',
         'match'      => MATCH_BOOLEAN,
     ),
     'filter_by_ids' => array(
@@ -515,6 +516,30 @@ function automap_filter_by_group(&$obj, $params) {
 }
 
 /**
+ * Filter by state is a bit hackish, because we have no state information
+ * of the objects yet. So if we want to filter out all non summary OK/UP hosts,
+ * we need to fetch all object state information here.
+ * It would be cleaner to apply the NagVis state aggregation mechanism to determine
+ * whether or not an object is OK/UP or not, but this would be less efficient for
+ * most cases. Let's hope this is ok for most use cases.
+ */
+function automap_filter_by_state(&$obj, $params) {
+    if (!isset($params['filter_by_state']) || $params['filter_by_state'] != 1)
+        return;
+
+    // Now ask the backend for all hosts which have
+    // a) state != UP
+    // b) services != OK
+    global $_BACKEND;
+    $_BACKEND->checkBackendExists($params['backend_id'][0], true);
+    $_BACKEND->checkBackendFeature($params['backend_id'][0], 'getHostNamesProblematic', true);
+    $hosts = $_BACKEND->getBackend($params['backend_id'][0])->getHostNamesProblematic();
+
+    $allowed_ids = array_flip(automap_hostnames_to_object_ids($hosts));
+    automap_filter_tree($allowed_ids, $obj);
+}
+
+/**
  * Links the object in the object tree to the map objects
  */
 function automap_tree_to_map_config($MAPCFG, &$params, &$saved_config, &$map_config, &$tree) {
@@ -577,6 +602,7 @@ function process_automap($MAPCFG, $map_name, &$map_config) {
     automap_filter_by_ids($tree, $params);
     // Maybe also filter by group
     automap_filter_by_group($tree, $params);
+    automap_filter_by_state($tree, $params);
 
     // Transform the tree to a flat map config for regular map rendering
     automap_tree_to_map_config($MAPCFG, $params, $saved_config, $map_config, $tree);

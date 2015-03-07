@@ -1,15 +1,6 @@
 This is a small file for storing quick thoughts about new features and needed changes:
 ===============================================================================
 
-
-Offene Punkte:
-  - Automap zu source umbauen
-    - filter_by_state neu implementieren (Und evtl. auch für alle Ansichten)
-      Das ist ein Problem. Denn die Objekte werden ja schon positioniert, wenn der
-      Status der Objekte noch gar nicht vorhanden ist. Was kann man da nun tun?
-      Eine Möglichkeit wäre die Objekte einfach zu verstecken, die nicht angezeigt
-      werden sollen. Das würde dann zu leeren flecken auf der Map führen.
-
 - WUI: printLang() durch neuen _() Mechnismus ersetzen
 
 Relative Koordinaten:

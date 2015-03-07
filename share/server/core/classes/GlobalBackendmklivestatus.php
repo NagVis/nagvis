@@ -1399,6 +1399,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         return $r[0];
     }
 
+    // Returns all hostnames which have a state != UP or a service != OK
+    public function getHostNamesProblematic() {
+        $r = $this->queryLivestatusSingleColumn("GET hosts\nColumns: name\nFilter: state != 0\n");
+        $r = array_merge($r, $this->queryLivestatusSingleColumn("GET services\nColumns: host_name\nFilter: state != 0\n"));
+        return $r;
+    }
+
     public function getProgramStart() {
 	$r = $this->queryLivestatusSingleColumn("GET status\nColumns: program_start\n");
         if(isset($r[0]))

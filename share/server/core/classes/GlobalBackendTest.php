@@ -336,6 +336,20 @@ class GlobalBackendTest implements GlobalBackendInterface {
         }
     }
 
+    public function getHostNamesProblematic() {
+        $a = array();
+        foreach ($this->obj['host'] AS $hostname => $host)
+            if ($host[0] != UP)
+                $a[] = $hostname;
+
+        foreach ($this->obj['service'] AS $hostname => $services)
+            foreach ($services AS $service_desc => $service)
+                if ($service[0] != OK)
+                    $a[] = $hostname;
+
+        return $a;
+    }
+
     public function getHostNamesInHostgroup($group) {
         return $this->obj['hostgroup'][$group]['members'];
     }

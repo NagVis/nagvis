@@ -5,6 +5,9 @@ Core:
     used only with the livestatus backend. It's disabled by default to keep
     the default behaviour of NagVis. Thanks to norbert for providing the patch!
 
+Automap:
+  * Reimplemented missing "filter_by_state" functionality
+
 1.8
 Core:
   * All stateful objects can now be rendered as gadgets
