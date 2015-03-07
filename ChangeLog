@@ -4,6 +4,11 @@ Core:
     to the objects which a user is a contact for. This feature is currently
     used only with the livestatus backend. It's disabled by default to keep
     the default behaviour of NagVis. Thanks to norbert for providing the patch!
+  * Stale object states have the same state weight as when they are not stale
+    now. In previous versions the stale states were treated as being "less"
+    worse, but this seem to be logically wrong to me. If you want the old
+    behaviour back, you might change the state weights in your main
+    config.
 
 Automap:
   * Reimplemented missing "filter_by_state" functionality
