@@ -64,6 +64,10 @@ function frontendMessage(oMessage, iTimeout, key) {
     if(typeof oMessage.title !== 'undefined')
         sTitle = oMessage.title;
 
+    var closable = true;
+    if (typeof oMessage.closable !== 'undefined')
+        closable = oMessage.closable;
+
     // Skip processing when message with same key already shown
     if(isset(key) && frontendMessagePresent(key))
         return;
@@ -112,15 +116,17 @@ function frontendMessage(oMessage, iTimeout, key) {
     oCell.style.paddingRight = '5px';
     oCell.style.fontSize = '10px';
 
-    var oLink = document.createElement('a');
-    oLink.href = '#';
-    oLink.onclick = function() {
-        frontendMessageHide();
-        return false;
-    };
-    oLink.appendChild(document.createTextNode('[close]'));
-
-    oCell.appendChild(oLink);
+    if (closable) {
+        var oLink = document.createElement('a');
+        oLink.href = '#';
+        oLink.onclick = function() {
+            frontendMessageHide();
+            return false;
+        };
+        oLink.appendChild(document.createTextNode('[close]'));
+        oCell.appendChild(oLink);
+        oLink = null;
+    }
 
     oRow.appendChild(oCell);
     oCell = null;

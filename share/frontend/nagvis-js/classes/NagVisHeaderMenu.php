@@ -26,7 +26,6 @@
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 class NagVisHeaderMenu {
-    private $UHANDLER;
     private $OBJ;
     private $TMPL;
     private $TMPLSYS;
@@ -38,8 +37,7 @@ class NagVisHeaderMenu {
     private $aMacros = Array();
     private $bRotation = false;
 
-    public function __construct(CoreUriHandler $UHANDLER, $templateName, $OBJ = null) {
-        $this->UHANDLER = $UHANDLER;
+    public function __construct($templateName, $OBJ = null) {
         $this->OBJ = $OBJ;
         $this->templateName = $templateName;
 
@@ -206,13 +204,13 @@ class NagVisHeaderMenu {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     private function getMacros() {
-        global $CORE, $AUTH, $AUTHORISATION;
+        global $CORE, $AUTH, $AUTHORISATION, $UHANDLER;
         // First get all static macros
         $this->aMacros = $this->getStaticMacros();
 
         // Save the page
-        $this->aMacros['mod'] = $this->UHANDLER->get('mod');
-        $this->aMacros['act'] = $this->UHANDLER->get('act');
+        $this->aMacros['mod'] = $UHANDLER->get('mod');
+        $this->aMacros['act'] = $UHANDLER->get('act');
 
         // In rotation?
         $this->aMacros['bRotation'] = $this->bRotation;
@@ -220,8 +218,8 @@ class NagVisHeaderMenu {
         $this->aMacros['permittedOverview'] = $AUTHORISATION->isPermitted('Overview', 'view', '*');
 
         // Check if the user is permitted to edit the current map
-        $this->aMacros['permittedView']  = $AUTHORISATION->isPermitted($this->aMacros['mod'], 'view', $this->UHANDLER->get('show'));
-        $this->aMacros['permittedEdit']  = $AUTHORISATION->isPermitted($this->aMacros['mod'], 'edit', $this->UHANDLER->get('show'));
+        $this->aMacros['permittedView']  = $AUTHORISATION->isPermitted($this->aMacros['mod'], 'view', $UHANDLER->get('show'));
+        $this->aMacros['permittedEdit']  = $AUTHORISATION->isPermitted($this->aMacros['mod'], 'edit', $UHANDLER->get('show'));
 
         // Permissions for the option menu
         $this->aMacros['permittedSearch']            = $AUTHORISATION->isPermitted('Search', 'view', '*');
@@ -318,11 +316,11 @@ class NagVisHeaderMenu {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     private function getStaticMacros() {
-        global $SHANDLER, $AUTH, $AUTHORISATION;
+        global $SHANDLER, $AUTH, $AUTHORISATION, $UHANDLER;
 
         // Replace paths and language macros
         $aReturn = Array('pathBase' => $this->pathHtmlBase,
-            'currentUri'         => preg_replace('/[&?]lang=[a-z]{2}_[A-Z]{2}/', '', $this->UHANDLER->getRequestUri()),
+            'currentUri'         => preg_replace('/[&?]lang=[a-z]{2}_[A-Z]{2}/', '', $UHANDLER->getRequestUri()),
             'pathImages'         => cfg('paths', 'htmlimages'),
             'showStates'         => cfg('defaults', 'header_show_states'),
             'pathHeaderJs'       => path('html', 'global', 'templates', $this->templateName.'.header.js'),

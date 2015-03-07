@@ -107,7 +107,7 @@ class FrontendModMap extends FrontendModule {
         // Need to parse the header menu by config or url value?
         if(isset($opts['header_menu']) && $opts['header_menu']) {
             // Parse the header menu
-            $HEADER = new NagVisHeaderMenu($this->UHANDLER, $MAPCFG->getValue(0 ,'header_template'), $MAPCFG);
+            $HEADER = new NagVisHeaderMenu($MAPCFG->getValue(0 ,'header_template'), $MAPCFG);
 
             // Put rotation information to header menu
             if($this->rotation != '') {

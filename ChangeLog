@@ -13,6 +13,10 @@ Core:
 Automap:
   * Reimplemented missing "filter_by_state" functionality
 
+Frontend:
+  * Showing header menu on full page error messages to give the users the
+    option to navigate away from the error situation
+
 1.8
 Core:
   * All stateful objects can now be rendered as gadgets
