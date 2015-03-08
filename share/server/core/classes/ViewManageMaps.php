@@ -370,7 +370,6 @@ class ViewManageMaps {
     }
 
     public function parse() {
-        global $CORE;
         ob_start();
 
         $this->createForm();

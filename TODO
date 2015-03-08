@@ -10,7 +10,6 @@ Relative Koordinaten:
     muss man das beim Shape konfigurierbar machen.
 
 - Hover- und Contextmenü-Macros vereinheitlichen
-- Rotationen: Externe Seiten alternativ in iframe öffnen (z.B. Check_MK Views)
 
 - Geomap:
   - Andere Objekte in Geomaps erlauben (Dazu die Felder type, name1, name2) einführen
