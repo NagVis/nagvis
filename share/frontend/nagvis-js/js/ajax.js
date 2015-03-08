@@ -27,8 +27,8 @@
 
 // Array to store the cached queries
 var ajaxQueryCache = {};
-// Cache lifetime is 30 seconds (30,000 milliseconds)
-var ajaxQueryCacheLifetime = 30000;
+// Cache lifetime is 30 seconds
+var ajaxQueryCacheLifetime = 30;
 
 /**
  * Function to create an XMLHttpClient in a cross-browser manner

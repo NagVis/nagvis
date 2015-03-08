@@ -22,6 +22,7 @@ Automap:
 Frontend:
   * Showing header menu on full page error messages to give the users the
     option to navigate away from the error situation
+  * FIX: Cached ajax queries last no longer than 30 seconds now
 
 1.8
 Core:
