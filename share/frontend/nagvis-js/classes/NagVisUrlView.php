@@ -71,11 +71,19 @@ class NagVisUrlView {
         $TMPL = New FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
 
+        $iframe = false;
+        $url = $this->url;
+        if (strpos($this->url, 'iframe:') === 0) {
+            $iframe = true;
+            $url = substr($this->url, 7);
+        }
+
         $aData = Array(
             'generalProperties'  => $_MAINCFG->parseGeneralProperties(),
             'workerProperties'   => $_MAINCFG->parseWorkerProperties(),
             'rotationProperties' => json_encode($this->aRotation),
-            'url'                => $this->url,
+            'iframe'             => $iframe,
+            'url'                => $url,
             'fileAges'           => json_encode(Array(
                 'maincfg' => $_MAINCFG->getConfigFileAge(),
             )),

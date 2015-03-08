@@ -693,8 +693,21 @@ interval=15</pre>
         <tr>
         <td> maps </td><td> </td>
         <td> 
-            <p>Comma separated list of maps to rotate in this pool. You can also add external URLs surrounded by [ and ] (e.g. maps="demo1,[http://localhost/test.php]". The URL has to be reachable and accessible by the server which NagVis is running on.</p>
-            <p> You can add labels in the following format &lt;label&gt;:&lt;map&gt; and &lt;label&gt;:&lt;[url]&gt;. The labels are displayed in the rotation list.</p>
+            <p>Comma separated list of maps to rotate in this pool.</p>
+            <p>You can also add
+            external URLs surrounded by [ and ] (e.g. <code>maps="demo1,[http://localhost/test.php]"</code>).
+            In this mode the URL will be fetched by the webserver and included within a &lt;div&gt;
+            container on the page. The URL has to be reachable and accessible by the server which
+            NagVis is running on. This mode is recommended when including simple HTML pages without
+            much styling / javascripts.</p>
+            <p>If you like to include whole websites with e.g. own styling and scripts, you should
+            configure the URL to be included as iframe. This is done like this: 
+            <code>maps="demo1,[iframe:http://localhost/test.php]"</code>.
+            The page is included within an &lt;iframe&gt; element on the page and will be fetched
+            within the users webbrowsers context (also using it's stored authentication etc.).
+            <p> You can add labels in the following format 
+            &lt;label&gt;:&lt;map&gt; and &lt;label&gt;:&lt;[url]&gt;.
+            The labels are displayed in the rotation list on the overview page.</p>
         </td>
         </tr>
         </table>

@@ -9,6 +9,12 @@ Core:
     worse, but this seem to be logically wrong to me. If you want the old
     behaviour back, you might change the state weights in your main
     config.
+  * It is now possible to configure external URLs within rotations in two types:
+    a) embed it directly on the page: [http://url...]
+       This is useful when including only snippets of HTML without own styles,
+       scripts etc.
+    b) show the URL within an iframe: [iframe:http://...]
+       This is useful when including a whole webpage with own styles and scripts
 
 Automap:
   * Reimplemented missing "filter_by_state" functionality
