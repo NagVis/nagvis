@@ -903,10 +903,12 @@ class GlobalMainCfg {
                     'editable' => 1,
                     'default' => '',
                     'match' => MATCH_INTEGER),
-                'maps' => Array('must' => 1,
+                'maps' => Array(
+                    'must'     => 1,
                     'editable' => 1,
-                    'default' => 'demo,demo2',
-                    'match' => MATCH_STRING)),
+                    'default'  => 'demo,demo2',
+                    'match'    => MATCH_STRING_URL)
+                ),
             'action' => Array(
                 'action_type' => Array(
                     'must'     => 1,

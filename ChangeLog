@@ -1,3 +1,12 @@
+1.8.1
+Core:
+  * It is now possible to configure external URLs within rotations in two types:
+    a) embed it directly on the page: [http://url...]
+       This is useful when including only snippets of HTML without own styles,
+       scripts etc.
+    b) show the URL within an iframe: [iframe:http://...]
+       This is useful when including a whole webpage with own styles and scripts
+
 1.8
 Core:
   * All stateful objects can now be rendered as gadgets

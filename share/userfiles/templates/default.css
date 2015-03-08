@@ -42,7 +42,12 @@ img {border:0}
 .main {margin:0;padding:0;background-color:white;color:black}
 .header {position:fixed;top:0;left:0;padding:0;z-index:100;min-width:1000px;}
 .headerspacer {width:100%}
-.map, #overview {position:relative;top:0;left:0;z-index:98}
+.map, #overview, #url {position:relative;top:0;left:0;z-index:98}
+
+iframe#url {
+    width: 100%;
+    height: 100%;
+}
 
 /* Message-Box */
 .messageBox {

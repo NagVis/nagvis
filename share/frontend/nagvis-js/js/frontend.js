@@ -1885,15 +1885,21 @@ function parseMapHandler(oObjects, params) {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function parseUrl(sUrl) {
-    // Fetch contents from server
-    var oUrlContents = getSyncRequest(oGeneralProperties.path_server
-                       + '?mod=Url&act=getContents&show='
-                       + escapeUrlValues(sUrl));
+    var urlContainer = document.getElementById('url');
+    if (urlContainer.tagName == 'DIV') {
+        // Fetch contents from server
+        var oUrlContents = getSyncRequest(oGeneralProperties.path_server
+                           + '?mod=Url&act=getContents&show='
+                           + escapeUrlValues(sUrl));
 
-    if(typeof oUrlContents !== 'undefined' && oUrlContents.content) {
-        // Replace the current contents with the new url
-        var urlContainer = document.getElementById('url');
-        urlContainer.innerHTML = oUrlContents.content;
+        if(typeof oUrlContents !== 'undefined' && oUrlContents.content) {
+            // Replace the current contents with the new url
+            urlContainer.innerHTML = oUrlContents.content;
+        }
+    }
+    else {
+        // iframe
+        urlContainer.src = sUrl;
     }
 }
 
