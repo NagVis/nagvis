@@ -45,7 +45,7 @@
 
         <p>Die Zeile <code>sources=geomap</code> bewirkt, dass die geomap-Source benutzt werden soll, um die Map-Konfiguration zu &auml;ndern.
 
-        Die Zeile <code>source_type=csv</code> (<font color="#ff0000">neu in 1.7.4</font>) weist den geomap-Code an, die CSV-Datei zu lesen,
+        Die Zeile <code>source_type=csv</code> weist den geomap-Code an, die CSV-Datei zu lesen,
         die in <code>source_file=demo-locations</code> angegeben und im Verzeichnis <code>etc/geomap</code> abgelegt ist, um mit einer Liste
         von Hosts und Koordinaten eine Geomap zu f&uuml;llen.</p>
 
@@ -60,7 +60,7 @@ muc-srv1;Munich Server1;48.1448353;11.5580067</pre>
         <p><font color="red">(Ab Git-Version vom 21.03.2013)</font>: Zeilen, die mit den &uuml;blichen Kommentarzeichen beginnen
         (<code>;</code>, <code>#</code> oder <code>//</code>), werden als Kommentar behandelt.</p>
 
-        <p><font color="#ff0000">Neu in 1.7.4</font>: Es ist auch m&ouml;glich, <code>source_type=backend</code>
+        <p>: Es ist auch m&ouml;glich, <code>source_type=backend</code>
         zu setzen, um das per <code>backend_id</code> eingestellte Backend f&uuml;r die Ermittlung der anzuzeigenden Hosts und ihrer
         Koordinaten zu nutzen. Das ist nur m&ouml;glich, wenn das livestatus-Backend genutzt wird. Es holt alle Hosts, bei denen die 
         benutzerdefinierten Objektvariablen <code>_LAT</code> und <code>_LONG</code> konfiguriert sind. Es ist m&ouml;glich, die ermittelten
