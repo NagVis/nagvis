@@ -7,6 +7,9 @@ Core:
     b) show the URL within an iframe: [iframe:http://...]
        This is useful when including a whole webpage with own styles and scripts
 
+Frontend:
+  * FIX: Cached ajax queries last no longer than 30 seconds now
+
 1.8
 Core:
   * All stateful objects can now be rendered as gadgets
