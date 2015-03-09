@@ -24,13 +24,13 @@ create-tag:
 	git tag -a -m "Tag for NagVis $$V release" $$TAG ; \
 	git push origin --tags
 
-copy-to-archive:
-	cp $(NAME).tar.gz /d1/lm/nagvis-tools/releases
+copy-to-website:
 
 publish:
-	rsync -av -e ssh $(NAME).tar.gz nagvis@nagvis.org:htdocs/share/
+	cp $(NAME).tar.gz /d1/lm/nagvis.org/share
+	VERSION=$(NAME) $(MAKE) -C /d1/lm/nagvis.org/htdocs release
 
-release: dist copy-to-archive create-tag publish
+release: dist create-tag publish
 
 version:
 	@newversion=$$(dialog --stdout --inputbox "New Version:" 0 0 "$(VERSION)") ; \
