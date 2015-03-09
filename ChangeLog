@@ -8,6 +8,7 @@ Core:
        This is useful when including a whole webpage with own styles and scripts
 
 Frontend:
+  * FIX: Fixed form processing (e.g. user- and role management, pw change dialogs)
   * FIX: Cached ajax queries last no longer than 30 seconds now
 
 1.8

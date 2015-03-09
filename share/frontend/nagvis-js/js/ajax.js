@@ -522,7 +522,7 @@ function getFormParams(formId, skipHelperFields) {
     var aFields = oForm.getElementsByTagName('input');
     for (var i = 0, len = aFields.length; i < len; i++) {
         // Filter helper fields (if told to do so)
-        if (skipHelperFields && aFields[i].name.charAt(0) !== '_')
+        if (skipHelperFields && aFields[i].name.charAt(0) === '_')
             continue;
 
         // Skip options which use the default value and where the value has
@@ -575,7 +575,7 @@ function getFormParams(formId, skipHelperFields) {
     aFields = oForm.getElementsByTagName('select');
     for(var i = 0, len = aFields.length; i < len; i++) {
         // Filter helper fields (NagVis WUI specific)
-        if (skipHelperFields && aFields[i].name.charAt(0) !== '_')
+        if (skipHelperFields && aFields[i].name.charAt(0) === '_')
             continue;
 
         // Skip options which use the default value
@@ -587,23 +587,17 @@ function getFormParams(formId, skipHelperFields) {
         }
         oFieldDefault = null;
 
-        // Maybe nothing is selected
-        var sel = -1;
-        if(aFields[i].selectedIndex != -1) {
-            sel = aFields[i].selectedIndex;
-        }
-
         // Can't use the selectedIndex when using select fields with multiple
         if(!aFields[i].multiple || aFields[i].multiple !== true) {
-            // Maybe nothing is selected
-            if(sel != -1) {
-                add_data(aFields[i].name, aFields[i].options[sel].value);
+            // Skip fields where nothing is selected
+            if (aFields[i].selectedIndex != -1) {
+                add_data(aFields[i].name, aFields[i].options[aFields[i].selectedIndex].value);
             }
         } else {
-            for(var a = 0; a < aFields[i].options.length; a++) {
-                // Only add selected ones
-                if(aFields[i].options[a].selected == true) {
-                    add_data(aFields[i].name, aFields[i].options[a].value);
+            for (var a = 0; a < aFields[i].options.length; a++) {
+                // Only add selected options
+                if (aFields[i].options[a].selected == true) {
+                    add_data(aFields[i].name+'[]', aFields[i].options[a].value);
                 }
             }
         }
