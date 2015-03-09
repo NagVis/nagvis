@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-VERSION=1.9a1
+VERSION=1.8.1
 NAME=nagvis-$(VERSION)
 
 help:
