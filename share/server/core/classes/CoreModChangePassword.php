@@ -35,8 +35,10 @@ class CoreModChangePassword extends CoreModule {
         $this->sName = 'ChangePassword';
         $this->CORE = $CORE;
 
-        $this->aActions = Array('view'   => 'change',
-                                'change' => REQUIRES_AUTHORISATION);
+        $this->aActions = Array(
+            'view'   => 'change',
+            'change' => REQUIRES_AUTHORISATION
+        );
 
         $this->FHANDLER = new CoreRequestHandler($_POST);
     }
