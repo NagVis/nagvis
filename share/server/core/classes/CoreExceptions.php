@@ -48,6 +48,10 @@ class NagVisException extends Exception {
     function __toString() {
         return json_encode($this->e);
     }
+
+    function message() {
+        return $this->e['message'];
+    }
 }
 
 class MapInMaintenance extends NagVisException {
