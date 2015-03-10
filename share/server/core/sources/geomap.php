@@ -30,6 +30,7 @@ function geomap_read_csv($p) {
             'alias' => $parts[1],
             'lat'   => (float) $parts[2],
             'long'  => (float) $parts[3],
+            'status_type' => $parts[4],
         );
     }
 
@@ -252,6 +253,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     $map_config = array();
 
     $iconset = $params['iconset'];
+    $backend_id = $params['backend_id'];
     list($icon_w, $icon_h) = iconset_size($iconset);
     
     // Adapt the global section
@@ -262,8 +264,10 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     // Now add the objects to the map
     foreach($locations AS $loc) {
         $object_id = $MAPCFG->genObjId($loc['name']);
-        $map_config[$object_id] = array(
-            'type'      => 'host',
+        $status_type = $loc['status_type'];
+        if($status_type === 'host')
+          $map_config[$object_id] = array(
+            'type'      => $status_type,
             'host_name' => $loc['name'],
             'iconset'   => $iconset,
             'object_id' => $object_id,
@@ -271,7 +275,28 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
             'lat'       => $loc['lat'],
             'long'      => $loc['long'],
         );
-
+        if($status_type === 'servicegroup')
+          $map_config[$object_id] = array(
+            'type'      => $status_type,
+            'object_id' => $object_id,
+            'servicegroup_name' => $loc['name'],
+            'x' => $loc['lat'],
+            'y' => $loc['long'],
+            'lat'       => $loc['lat'],
+            'long'      => $loc['long'],
+            'backend_id' => $backend_id,
+        );
+        if($status_type === 'service')
+          $map_config[$object_id] = array(
+            'type'      => $status_type,
+            'object_id' => $object_id,
+            'host_name' => $loc['alias'],
+            'service_description' => $loc['name'],
+            'x' => $loc['lat'],
+            'y' => $loc['long'],
+            'lat'       => $loc['lat'],
+            'long'      => $loc['long'],
+        );
         if (isset($loc['backend_id'])) {
             $map_config[$object_id]['backend_id'] = array($loc['backend_id']);
         }
