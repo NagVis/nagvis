@@ -44,7 +44,7 @@ class CoreModSearch extends CoreModule {
                 case 'view':
                     // Check if user is already authenticated
                     if($AUTH->isAuthenticated()) {
-                        $VIEW = new NagVisViewSearch($this->CORE);
+                        $VIEW = new ViewSearch();
                         $sReturn = json_encode(Array('code' => $VIEW->parse()));
                     } else {
                         $sReturn = '';

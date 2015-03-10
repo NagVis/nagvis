@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * NagVisViewSearch.php - Class for handling the search dialog
+ * ViewSearch.php - Class for handling the search dialog
  *
  * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
  *
@@ -22,39 +22,17 @@
  *
  *****************************************************************************/
 
-/**
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-class NagVisViewSearch {
-    private $CORE;
-
-    /**
-     * Class Constructor
-     *
-     * @param 	GlobalCore 	$CORE
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function __construct($CORE) {
-        $this->CORE = $CORE;
-    }
-
-    /**
-     * Parses the information in html format
-     *
-     * @return	String 	String with Html Code
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
+class ViewSearch {
     public function parse() {
-        // Initialize template system
-        $TMPL = New CoreTemplateSystem($this->CORE);
-        $TMPLSYS = $TMPL->getTmplSys();
-
-        $aData = Array(
-            'langSearch' => l('Search')
-        );
-
-        // Build page based on the template file and the data array
-        return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'search'), $aData);
+        ob_start();
+        echo '<div id="search">'.N;
+        echo '<input type="text" name="highlightInput" id="highlightInput" '
+            .'onkeypress="searchObjectsKeyCheck(this.value, event)" autofocus />'.N;
+        echo '<input class="submit" type="button" name="submit" value="'.l('Search').'"'
+            .' onclick="searchObjects(document.getElementById(\'highlightInput\').value)" />'.N;
+        echo '</div>'.N;
+        js('try{document.getElementById(\'highlightInput\').focus();}catch(e){}');
+        return ob_get_clean();
     }
 }
 ?>
