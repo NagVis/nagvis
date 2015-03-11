@@ -336,6 +336,10 @@ class ViewManageMaps {
                 if (!preg_match(MATCH_CFG_FILE, $file_name))
                     throw new FieldInputError('map_file', l('The uploaded file is no map configuration file.'));
 
+                if (!preg_match(MATCH_MAP_NAME, $map_name))
+                    throw new FieldInputError('map_file', l('This is not a valid map name (need to match [M])',
+                                                                    array('M' => MATCH_MAP_NAME)));
+
                 // FIXME: We really should validate the contents of the file
 
                 move_uploaded_file($file['tmp_name'], $file_path);
