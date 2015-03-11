@@ -17,6 +17,10 @@ Frontend:
   * Showing header menu on full page error messages to give the users the
     option to navigate away from the error situation
 
+1.8.2
+Frontend:
+  * Map import: Added missing validation of map name format
+
 1.8.1
 Core:
   * It is now possible to configure external URLs within rotations in two types:
