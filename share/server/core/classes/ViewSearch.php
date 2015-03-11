@@ -25,7 +25,7 @@
 class ViewSearch {
     public function parse() {
         ob_start();
-        echo '<div id="search">'.N;
+        echo '<div class="simple_form">'.N;
         echo '<input type="text" name="highlightInput" id="highlightInput" '
             .'onkeypress="searchObjectsKeyCheck(this.value, event)" autofocus />'.N;
         echo '<input class="submit" type="button" name="submit" value="'.l('Search').'"'

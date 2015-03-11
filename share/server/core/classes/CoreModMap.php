@@ -69,9 +69,12 @@ class CoreModMap extends CoreModule {
             case 'manageTmpl':
             case 'getTmplOpts':
             case 'addModify':
-            case 'toStaticMap':
             case 'doExportMap':
                 $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME_EMPTY));
+                $this->name = $aVals['show'];
+            break;
+            case 'toStaticMap':
+                $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME_EMPTY), array(), true);
                 $this->name = $aVals['show'];
             break;
             // And those have the objecs in the POST var "map"
@@ -229,55 +232,13 @@ class CoreModMap extends CoreModule {
                     //header('Location:'.$_SERVER['HTTP_REFERER']);
                 break;
                 case 'toStaticMap':
-                    if(isset($_POST['target'])) {
-                        // Is called on form submission
-                        $this->toStaticMap();
-                    } else {
-                        $VIEW = new NagVisViewToStaticMap($this->CORE);
-                        $sReturn = json_encode(Array('code' => $VIEW->parse()));
-                    }
+                    $VIEW = new ViewToStaticMap();
+                    $sReturn = json_encode(Array('code' => $VIEW->parse($this->name)));
                 break;
             }
         }
 
         return $sReturn;
-    }
-
-    /**
-     * Converts maps using sources to static maps
-     */
-    private function toStaticMap() {
-        $FHANDLER = new CoreRequestHandler($_POST);
-        if(!$FHANDLER->match('target', MATCH_MAP_NAME)) {
-            throw new NagVisException(l('Invalid target option given.'));
-        }
-
-        $target = $FHANDLER->get('target');
-        // "true" negates the check
-        $this->verifyMapExists($target, true);
-
-        // Read the old config
-        $this->verifyMapExists($this->name);
-        $MAPCFG = new GlobalMapCfg($this->name);
-        $MAPCFG->readMapConfig();
-
-        // Create a new map config
-        $NEW = new GlobalMapCfg($target);
-        $NEW->createMapConfig();
-        foreach($MAPCFG->getMapObjects() AS $object_id => $cfg) {
-            // Remove "sources" from the global section. Cause this makes the maps dynamic
-            if($cfg['type'] == 'global') {
-                unset($cfg['sources']);
-            }
-            $NEW->addElement($cfg['type'], $cfg, $perm = true, $object_id);
-        }
-
-        throw new Success(
-            l('The map has been created.'),
-            null,
-            1,
-            cfg('paths','htmlbase').'/frontend/nagvis-js/index.php?mod=Map&show='.$target
-        );
     }
 
 

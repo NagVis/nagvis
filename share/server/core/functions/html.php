@@ -302,4 +302,8 @@ function reload($url, $sec) {
         js('setTimeout(function() {location.href=\''.$url.'\';}, '.$sec.'*1000);');
 }
 
+function focus($name) {
+    js('try{document.getElementById(\''.$name.'\').focus();}catch(e){}');
+}
+
 ?>

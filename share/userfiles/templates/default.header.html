@@ -39,7 +39,7 @@
             <li id="rotationStop" style="display:inline"><a href="#" onclick="switchRotation()">{$langRotationStop}</a></li>
             {/if}
             {if $mod == 'Map' && $usesSources && $permittedEdit == true}
-            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=toStaticMap&amp;show=dialog', '{$langToStaticMap}')">{$langToStaticMap}</a></li>
+            <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=toStaticMap&amp;show='+escapeUrlValues(oPageProperties.map_name)+'&amp;view_params='+escapeUrlValues(getViewParams(null, true)), '{$langToStaticMap}')">{$langToStaticMap}</a></li>
             {/if}
             <li class="spacer underline"></li>
         </ul>

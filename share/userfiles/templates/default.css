@@ -1029,11 +1029,11 @@ form#edit_config ul.nav li.active a {
 
 /* search dialog */
 
-td#popupWindowContent div#search input#highlightInput {
+td#popupWindowContent div.simple_form input#highlightInput {
     width: 200px;
 }
 
-td#popupWindowContent div#search .submit {
+td#popupWindowContent div.simple_form .submit {
     display: inline-block;
     margin: 2px 10px;
 }
