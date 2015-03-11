@@ -235,8 +235,6 @@ class ViewManageMaps {
                 $cur_map = post('current_map');
                 if ($cur_map && $cur_map == $name)
                     reload('index.php', 1); // change to overview page when current map has been deleted
-                else
-                    reload(null, 1);
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {
