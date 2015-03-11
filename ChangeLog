@@ -1,3 +1,7 @@
+1.8.2
+Frontend:
+  * Added missing validation for map names
+
 1.8.1
 Core:
   * It is now possible to configure external URLs within rotations in two types:
