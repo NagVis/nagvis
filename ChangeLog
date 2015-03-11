@@ -1,6 +1,6 @@
 1.8.2
 Frontend:
-  * Added missing validation for map names
+  * Map import: Added missing validation of map name format
 
 1.8.1
 Core:
