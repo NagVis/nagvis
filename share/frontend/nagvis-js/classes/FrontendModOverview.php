@@ -61,8 +61,8 @@ class FrontendModOverview extends FrontendModule {
     }
 
     private function showViewDialog() {
-    // Build index template
-    $INDEX = new NagVisIndexView($this->CORE);
+        // Build index template
+        $INDEX = new NagVisIndexView($this->CORE);
 
         // Need to parse the header menu?
         if(cfg('index','headermenu')) {
@@ -78,8 +78,8 @@ class FrontendModOverview extends FrontendModule {
             $INDEX->setHeaderMenu($HEADER->__toString());
         }
 
-    // Initialize map view
-    $this->VIEW = new NagVisOverviewView($this->CORE);
+        // Initialize overview view
+        $this->VIEW = new NagVisOverviewView($this->CORE);
 
         // Maybe it is needed to handle the requested rotation
         if($this->rotation != '') {
@@ -88,9 +88,8 @@ class FrontendModOverview extends FrontendModule {
             $this->VIEW->setRotation($ROTATION->getRotationProperties());
         }
 
-    $INDEX->setContent($this->VIEW->parse());
-
-    return $INDEX->parse();
+        $INDEX->setContent($this->VIEW->parse());
+        return $INDEX->parse();
     }
 }
 ?>

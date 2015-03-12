@@ -144,6 +144,8 @@ class NagVisHeaderMenu {
                 $MAPCFG1->readMapConfig(ONLY_GLOBAL);
             } catch(MapCfgInvalid $e) {
                 $map['configError'] = true;
+            } catch(NagVisException $e) {
+                $map['configError'] = true;
             }
 
             // Only show maps which should be shown
