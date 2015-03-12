@@ -514,10 +514,6 @@ td#popupWindowContent table.mytable td {
     vertical-align: middle;
 }
 
-td#popupWindowContent label {
-    font-size: 13px;
-}
-
 td#popupWindowContent label span {
     vertical-align: middle;
 }
@@ -992,6 +988,12 @@ div#zoombar div.drag div {
 
 /* edit main config dialog navigation (tabbing) */
 
+input[type=checkbox] {
+    position: relative;
+    vertical-align: middle;
+    bottom: 1px;
+}
+
 form#edit_config ul.nav {
     list-style: none;
     height: 21px;
@@ -1036,4 +1038,11 @@ td#popupWindowContent div.simple_form input#highlightInput {
 td#popupWindowContent div.simple_form .submit {
     display: inline-block;
     margin: 2px 10px;
+}
+
+/* ack dialog */
+
+td#popupWindowContent form#acknowledge input#comment {
+    width: 246px;
+    margin-left: 5px;
 }

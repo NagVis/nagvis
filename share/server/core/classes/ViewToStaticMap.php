@@ -40,7 +40,7 @@ class ViewToStaticMap {
                                                                     array('M' => MATCH_MAP_NAME)));
 
                 if (count($CORE->getAvailableMaps('/^'.$name.'$/')) > 0)
-                    throw new NagVisException(l('A map with this name already exists.'));
+                    throw new FieldInputError('name', l('A map with this name already exists.'));
 
                 // Read the old config
                 error_log($orig_name);
