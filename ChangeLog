@@ -18,6 +18,10 @@ Frontend:
     option to navigate away from the error situation
 
 1.8.2
+Core:
+  * Improved handling of map config files without read permissions on overview
+    page and in header menu (such maps are simply hidden)
+
 Frontend:
   * Map import: Added missing validation of map name format
 
