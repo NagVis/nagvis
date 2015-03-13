@@ -138,9 +138,9 @@ function submitFrontendForm2(sUrl, sFormId) {
     oResult = null;
 }
 
-function updateForm() {
-    document.getElementById('_update').value = '1';
-    document.getElementById('_submit').click();
+function updateForm(form) {
+    form._update.value = '1';
+    form._submit.click();
 }
 
 /**

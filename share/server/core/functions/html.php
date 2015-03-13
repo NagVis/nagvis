@@ -253,7 +253,7 @@ function select($name, $options, $default = '', $onchange = '', $style = '') {
     if(trim($class))
         $class = ' class="'.trim($class).'"';
 
-    if (submitted($form_name))
+    if (submitted($form_name) || !submitted()) // this or none submitted
         $default = post($name, form_var($name, $default));
 
     if($onchange != '')

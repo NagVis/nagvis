@@ -216,7 +216,7 @@ class ViewEditMainCfg {
 
         $on_change = '';
         if($_MAINCFG->hasDependants($sec, $key))
-            $on_change = ' onchange="updateForm()"';
+            $on_change = ' onchange="updateForm(this.form)"';
         
         switch ($field_type) {
             case 'dropdown':
