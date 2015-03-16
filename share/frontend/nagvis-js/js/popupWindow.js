@@ -124,7 +124,7 @@ function popupWindowPutContent(oContent) {
                 try {
                     eval(aScripts[i].text);
                 } catch(e) {
-                    alert(oDump(e)+": "+aScripts[i].text);
+                    handleException(e);
                 }
             }
         }

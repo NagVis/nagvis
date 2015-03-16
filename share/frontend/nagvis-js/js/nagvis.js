@@ -866,8 +866,7 @@ function handleJSError(sMsg, sUrl, iLine) {
     var oMsg = {};
     oMsg.type = 'CRITICAL';
     oMsg.message = "Javascript error occured:\n " + sMsg + " "
-                   + sUrl + " (" + iLine + ")<br /><br /><code>- Stacktrace - <br />"
-                   + printStackTrace().join("<br />") + '</code>';
+                   + sUrl + " (" + iLine + ")";
     oMsg.title = "Javascript error";
 
     // Handle application message/error
@@ -875,6 +874,13 @@ function handleJSError(sMsg, sUrl, iLine) {
     oMsg = null;
 
     return false;
+}
+
+function handleException(e) {
+    var msg = e.name+': '+e.message;
+    if (e.stack)
+        msg += '<br><br><code>'+e.stack+'</code>';
+    handleJSError(msg, e.fileName, e.lineNumber);
 }
 
 // Enable javascript error handler
