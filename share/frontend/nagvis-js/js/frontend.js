@@ -1400,12 +1400,10 @@ function getOverviewProperties(mapName) {
  * Fetches all maps to be shown on the overview page
  */
 function getOverviewMaps() {
-    if(oPageProperties.showmaps !== 1) {
-        return false;
-    }
-
-    if(g_map_names.length == 0) {
-        document.getElementById('overviewMaps').parentNode.style.display = 'none';
+    if(oPageProperties.showmaps !== 1 || g_map_names.length == 0) {
+        var map_container = document.getElementById('overviewMaps');
+        if (map_container)
+            map_container.parentNode.style.display = 'none';
         hideStatusMessage();
         return false;
     }

@@ -4,7 +4,8 @@ Core:
     page and in header menu (such maps are simply hidden)
 
 Frontend:
-  * Map import: Added missing validation of map name format
+  * FIX: Map import: Added missing validation of map name format
+  * FIX: Hiding "loading..." animation when maps are disabled on overview page
 
 1.8.1
 Core:
