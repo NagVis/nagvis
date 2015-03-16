@@ -172,7 +172,7 @@ function radio($name, $value, $checked = false) {
     echo '<input type="radio" name="'.$name.'" value="'.$value.'"'.$checked.' />';
 }
 
-function field($type, $name, $default = '', $class = '', $onclick = '', $style = '') {
+function field($type, $name, $default = '', $class = '', $onclick = '', $style = '', $id = null) {
     global $form_errors, $form_keys, $form_name;
     $form_keys[$name] = true;
 
@@ -184,12 +184,15 @@ function field($type, $name, $default = '', $class = '', $onclick = '', $style =
         $class = ' class="'.trim($class).'"';
 
     if (submitted($form_name))
-        $default = post($name, form_var($name, $default));
+        if ($type == 'checkbox')
+            $default = get_checkbox($name, form_var($name, $default));
+        else
+            $default = post($name, form_var($name, $default));
 
     $value = '';
     if ($default != '') {
         if($type == 'checkbox') {
-            if($default == '1') {
+            if ($default === true) {
                 $value = ' value="1" checked="yes"';
             } else {
                 $value = ' value="1"';
@@ -205,15 +208,18 @@ function field($type, $name, $default = '', $class = '', $onclick = '', $style =
     if($style != '')
         $style = ' style="'.$style.'"';
 
-    echo '<input id="'.$name.'" type="'.$type.'" name="'.$name.'"'.$value.$class.$onclick.$style.' />'.N;
+    if ($id === null)
+        $id = $name;
+
+    echo '<input id="'.$id.'" type="'.$type.'" name="'.$name.'"'.$value.$class.$onclick.$style.' />'.N;
 }
 
 function checkbox($name, $default = '', $class = '', $onclick = '') {
     field('checkbox', $name, $default, $class, $onclick);
 }
 
-function input($name, $default = '', $class = '', $style = '') {
-    field('text', $name, $default, $class, '', $style);
+function input($name, $default = '', $class = '', $style = '', $id = null) {
+    field('text', $name, $default, $class, '', $style, $id);
 }
 
 function password($name, $default = '', $class = '') {
@@ -262,7 +268,15 @@ function select($name, $options, $default = '', $onchange = '', $style = '') {
     if($style != '')
         $style = ' style="'.$style.'"';
 
-    $ret = '<select name="'.$name.'"'.$onchange.$class.$style.'>'.N;
+    // for sequential arrays use the values for the keys and the values
+    if (array_keys($options) == range(0, count($options) - 1)) {
+        $new_options = array();
+        foreach ($options as $values)
+            $new_options[$values] = $values;
+        $options = $new_options;
+    }
+
+    $ret = '<select id="'.$name.'" name="'.$name.'"'.$onchange.$class.$style.'>'.N;
     foreach($options AS $value => $display) {
         $select = '';
         if($value == $default)

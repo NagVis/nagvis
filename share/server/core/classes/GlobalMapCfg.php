@@ -1081,6 +1081,13 @@ class GlobalMapCfg {
         return $this->typeDefaults[$type];
     }
 
+    public function getDefaultValue($type, $key) {
+        if (isset($this->typeDefaults[$type][$key]))
+            return $this->typeDefaults[$type][$key];
+        else
+            return null;
+    }
+
     /**
      * Gets all definitions of type $type
      *

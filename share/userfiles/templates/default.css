@@ -574,25 +574,21 @@ td#popupWindowContent input[type="radio"] {
 }
 td#popupWindowContent table.mytable tr td.tdfield input,
 td#popupWindowContent table.mytable tr td.tdfield select {
-    width: 165px;
-}
-td#popupWindowContent table.mytable tr td.tdfield input {
-    padding: 0 1px;
     width: 163px;
+}
+td#popupWindowContent table.mytable tr td.tdfield input[type="checkbox"] {
+    width: auto;
+    margin-right:2px;
 }
 td#popupWindowContent table.mytable tr td.tdfield span {
     word-wrap: break-word;
 }
 td#popupWindowContent table.mytable tr td.tdfield div.picker input {
-    width:145px;
+    width:140px;
     margin-right:3px;
 }
 td#popupWindowContent table.mytable tr td.tdfield div.picker img {
     vertical-align: middle;
-}
-td#popupWindowContent table.mytable tr td.tdfield input.checkbox {
-    width: auto;
-    margin-right:2px;
 }
 td#popupWindowContent table.mytable tr td.tdfield input.err,
 td#popupWindowContent table.mytable tr td.tdfield select.err {
