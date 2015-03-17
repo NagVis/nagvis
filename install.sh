@@ -1054,6 +1054,12 @@ if [ $# -gt 0 ]; then
     done
 fi
 
+if [ $(($#-$OPTIND)) -gt 0 ]; then
+    echo "ERROR: Unprocessed command line parameter found. Maybe you provided an argument"
+    echo "       (dash missing) instead of the supported parameters."
+    exit 1
+fi
+
 if [ $FORCE -eq 1 ]; then
     if [ -z "$WEB_USER" -o -z "$WEB:GROUP" -o -z "$WEB_PATH" ]; then
         echo "ERROR: Using '-F' you also have to specify '-u ...', '-g ...' and '-w ...'"
