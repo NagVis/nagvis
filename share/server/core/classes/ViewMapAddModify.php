@@ -518,8 +518,7 @@ class ViewMapAddModify {
             try {
                 $success = $this->handleAddModify();
 
-                // On success, always scroll to top of page
-                js('document.body.scrollTop = document.documentElement.scrollTop = 0;');
+                scroll_up(); // On success, always scroll to top of page
 
                 $reload_time = $success[0];
                 if ($success[2] !== null) {

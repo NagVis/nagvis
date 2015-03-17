@@ -46,20 +46,7 @@ function req($name, $default = null) {
  */
 
 $form_keys   = array();
-$form_vars   = array();
 $form_errors = array();
-
-function set_form_vars($a) {
-    global $form_vars;
-    foreach ($a AS $k => $v) {
-        $form_vars[$k] = $v;
-    }
-}
-
-function form_var($name, $default = null) {
-    global $form_vars;
-    return isset($form_vars[$name]) ? $form_vars[$name] : $default;
-}
 
 function get_checkbox($key, $default = null) {
     return (bool)req($key, $default);
@@ -183,11 +170,12 @@ function field($type, $name, $default = '', $class = '', $onclick = '', $style =
     if(trim($class))
         $class = ' class="'.trim($class).'"';
 
-    if (submitted($form_name))
+    if (submitted($form_name)) {
         if ($type == 'checkbox')
-            $default = get_checkbox($name, form_var($name, $default));
+            $default = get_checkbox($name, $default);
         else
-            $default = post($name, form_var($name, $default));
+            $default = post($name, $default);
+    }
 
     $value = '';
     if ($default != '') {
@@ -242,7 +230,7 @@ function textarea($name, $default = '', $class = '', $style = '') {
         $style = ' style="'.$style.'"';
 
     if (submitted($form_name))
-        $default = post($name, form_var($name, $default));
+        $default = post($name, $default);
 
     echo '<textarea name="'.$name.'"'.$class.$style.'>'.escape_html($default).'</textarea>'.N;
 }
@@ -260,7 +248,7 @@ function select($name, $options, $default = '', $onchange = '', $style = '') {
         $class = ' class="'.trim($class).'"';
 
     if (submitted($form_name) || !submitted()) // this or none submitted
-        $default = post($name, form_var($name, $default));
+        $default = post($name, $default);
 
     if($onchange != '')
         $onchange = ' onchange="'.$onchange.'"';
@@ -318,6 +306,10 @@ function reload($url, $sec) {
 
 function focus($name) {
     js('try{document.getElementById(\''.$name.'\').focus();}catch(e){}');
+}
+
+function scroll_up() {
+    js('document.body.scrollTop = document.documentElement.scrollTop = 0;');
 }
 
 ?>

@@ -2,6 +2,7 @@ This is a small file for storing quick thoughts about new features and needed ch
 ===============================================================================
 
 - WUI: printLang() durch neuen _() Mechnismus ersetzen
+- Rework layout of role edit form
 
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
