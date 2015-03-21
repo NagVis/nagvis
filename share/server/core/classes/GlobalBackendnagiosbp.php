@@ -174,7 +174,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
 
     private function getBPState($state) {
         if($state == null)
-            $state = UNKNOWN;
+            return UNKNOWN;
         return state_num($state);
     }
 
