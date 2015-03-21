@@ -2,6 +2,7 @@
 Core:
   * Improved handling of map config files without read permissions on overview
     page and in header menu (such maps are simply hidden)
+  * NagiosBP-Backend: Fixed exception when component state is not known
 
 Frontend:
   * FIX: Map import: Added missing validation of map name format
