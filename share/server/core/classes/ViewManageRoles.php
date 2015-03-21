@@ -85,7 +85,9 @@ class ViewManageRoles {
         if (is_action() && post('mode') == 'edit') {
             try {
                 if ($role_id === null || $role_id === '')
-                    throw new FieldInputError('role_id', l('Please choose a role to delete.'));
+                    throw new FieldInputError('role_id', l('Please choose a role to edit.'));
+                if (!is_numeric($role_id))
+                    throw new FieldInputError('role_id', l('Invalid value provided.'));
                 $role_id = intval($role_id);
 
                 $found = false;
@@ -173,6 +175,8 @@ class ViewManageRoles {
                 $role_id = post('role_id');
                 if ($role_id === null || $role_id === '')
                     throw new FieldInputError('role_id', l('Please choose a role to delete.'));
+                if (!is_numeric($role_id))
+                    throw new FieldInputError('role_id', l('Invalid value provided.'));
                 $role_id = intval($role_id);
 
                 // Check not to delete any referenced role
@@ -184,10 +188,11 @@ class ViewManageRoles {
                 if ($AUTHORISATION->deleteRole($role_id))
                     success(l('The role has been deleted.'));
                 else
-                    throw new Success(l('Problem while deleting the role.'));
+                    throw new NagVisException(l('Problem while deleting the role.'));
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
-
+            } catch (NagVisException $e) {
+                form_error(null, $e->message());
             } catch (Exception $e) {
                 if (isset($e->msg))
                     form_error(null, $e->msg);

@@ -863,3 +863,34 @@ function pickWindowSize(id, dimension) {
     }
     o = null;
 }
+
+function updateUserRoles(bAdd) {
+    var user_roles = document.getElementById('user_roles');
+    var available  = document.getElementById('roles_available');
+    var selected   = document.getElementById('roles_selected');
+    if (bAdd) {
+        var source = available;
+        var target = selected;
+    } else {
+        var source = selected;
+        var target = available;
+    }
+
+    // Quit when no source selected
+    if (source.selectedIndex == -1)
+        return false;
+
+    // Save strings
+    var optName  = source.options[source.selectedIndex].text;
+    var optValue = source.options[source.selectedIndex].value;
+
+    // Move from source to target
+    source.options.remove(source.selectedIndex);
+    target.options[target.options.length] = new Option(optName, optValue, false, false);
+
+    // now update the internal helper field with the selected options
+    var selected_values = [];
+    for(var i = 0; i < selected.options.length; i++)
+        selected_values.push(selected.options[i].value);
+    user_roles.value = selected_values.join(',');
+}

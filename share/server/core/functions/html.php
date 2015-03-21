@@ -138,10 +138,12 @@ function form_end($keep_context=true) {
 // Adds all remaining vars we got as $_POST/$_GET which have not been added to
 // this form yet to keep the current variable context accross the single requests.
 function hidden_vars() {
-    global $form_keys;
-    foreach ($_REQUEST AS $key => $val) {
-        if (!isset($form_keys[$key])) {
-            hidden($key, $val);
+    global $form_keys, $form_name;
+    if (submitted($form_name)) {
+        foreach ($_REQUEST AS $key => $val) {
+            if (!isset($form_keys[$key])) {
+                hidden($key, $val);
+            }
         }
     }
 }
@@ -235,7 +237,7 @@ function textarea($name, $default = '', $class = '', $style = '') {
     echo '<textarea name="'.$name.'"'.$class.$style.'>'.escape_html($default).'</textarea>'.N;
 }
 
-function select($name, $options, $default = '', $onchange = '', $style = '') {
+function select($name, $options, $default = '', $onchange = '', $style = '', $size = null) {
     global $form_errors, $form_keys, $form_name;
     $form_keys[$name] = true;
 
@@ -257,14 +259,19 @@ function select($name, $options, $default = '', $onchange = '', $style = '') {
         $style = ' style="'.$style.'"';
 
     // for sequential arrays use the values for the keys and the values
-    if (array_keys($options) == range(0, count($options) - 1)) {
+    if (array_keys($options) === range(0, count($options) - 1)) {
         $new_options = array();
         foreach ($options as $values)
             $new_options[$values] = $values;
         $options = $new_options;
     }
 
-    $ret = '<select id="'.$name.'" name="'.$name.'"'.$onchange.$class.$style.'>'.N;
+    $multiple = '';
+    if ($size !== null) {
+        $multiple = ' size="'.$size.'" multiple';
+    }
+
+    $ret = '<select id="'.$name.'" name="'.$name.'"'.$onchange.$class.$style.$multiple.'>'.N;
     foreach($options AS $value => $display) {
         $select = '';
         if($value == $default)
@@ -281,6 +288,12 @@ function submit($label, $class = '') {
     if ($class)
         $class = ' '.$class;
     echo '<input class="submit'.$class.'" type="submit" name="_submit" id="_submit" value="'.$label.'" />'.N;
+}
+
+function button($name, $label, $onclick) {
+    global $form_keys;
+    $form_keys[$name] = true;
+    echo '<input type="button" name="'.$name.'" id="'.$name.'" value="'.$label.'" onclick="'.$onclick.'" />'.N;
 }
 
 function upload($name) {
