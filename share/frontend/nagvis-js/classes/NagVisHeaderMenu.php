@@ -290,7 +290,7 @@ class NagVisHeaderMenu {
             $this->aMacros['filter_group'] = isset($_GET['filter_group']) ? htmlspecialchars($_GET['filter_group']) : $default;
         }
 
-        $this->aMacros['mapNames'] = json_encode(array_keys($CORE->getListMaps()));
+        $this->aMacros['mapNames'] = json_encode($CORE->getListMaps());
     }
 
     private function sortHostgroups($a, $b) {

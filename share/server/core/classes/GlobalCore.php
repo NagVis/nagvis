@@ -454,9 +454,10 @@ class GlobalCore {
             }
             
             if($MAPCFG->getValue(0, 'show_in_lists') == 1)
-                $list[$mapName] = $mapName;
+                $list[$mapName] = $MAPCFG->getAlias();
         }
-        return $list;
+        natcasesort($list);
+        return array_keys($list);
     }
 
     /**

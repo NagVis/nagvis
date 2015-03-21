@@ -1323,6 +1323,17 @@ function addOverviewMap(map_conf, map_name) {
 
     var container = document.getElementById('overviewMaps');
 
+    // Find the map placeholder div (replace it to keep sorting)
+    var mapdiv = null;
+    var child = null;
+    for (var i = 0; i < container.childNodes.length; i++) {
+        child = container.childNodes[i];
+        if (child.id == map_name) {
+            mapdiv = child;
+            break;
+        }
+    }
+
     // render the map object
     var oObj = new NagVisMap(map_conf[0]);
     if(oObj !== null) {
@@ -1330,7 +1341,8 @@ function addOverviewMap(map_conf, map_name) {
         oMapObjects[oObj.conf.object_id] = oObj;
 
         // Parse child and save reference in parsedObject
-        oObj.parsedObject = container.appendChild(oObj.parseOverview());
+        oObj.parsedObject = oObj.parseOverview();
+        container.replaceChild(oObj.parsedObject, mapdiv);
     }
     oObj = null;
 
@@ -1400,8 +1412,9 @@ function getOverviewProperties(mapName) {
  * Fetches all maps to be shown on the overview page
  */
 function getOverviewMaps() {
+    var map_container = document.getElementById('overviewMaps');
+
     if(oPageProperties.showmaps !== 1 || g_map_names.length == 0) {
-        var map_container = document.getElementById('overviewMaps');
         if (map_container)
             map_container.parentNode.style.display = 'none';
         hideStatusMessage();
@@ -1411,6 +1424,10 @@ function getOverviewMaps() {
     eventlog("worker", "debug", "getOverviewMaps: Start requesting maps...");
 
     for (var i = 0, len = g_map_names.length; i < len; i++) {
+        var mapdiv = document.createElement('div');
+        mapdiv.setAttribute('id', g_map_names[i])
+        map_container.appendChild(mapdiv);
+        mapdiv = null;
         getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getObjectStates'
                         + '&i[]=map-' + escapeUrlValues(g_map_names[i]) + getViewParams(),
                         false, addOverviewMap, g_map_names[i]);
