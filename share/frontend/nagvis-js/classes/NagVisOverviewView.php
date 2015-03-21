@@ -42,7 +42,7 @@ class NagVisOverviewView {
         $TMPLSYS = $TMPL->getTmplSys();
         $USERCFG = new CoreUserCfg();
 
-        $maps      = cfg('index', 'showmaps') == 1 ? array_keys($CORE->getListMaps()) : array();
+        $maps      = cfg('index', 'showmaps') == 1 ? $CORE->getListMaps() : array();
         $rotations = cfg('index', 'showrotations') == 1 ? array_keys($CORE->getPermittedRotationPools()) : array();
 
         $aData = Array(

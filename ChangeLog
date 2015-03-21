@@ -25,6 +25,7 @@ Core:
 Frontend:
   * FIX: Map import: Added missing validation of map name format
   * FIX: Hiding "loading..." animation when maps are disabled on overview page
+  * FIX: Fixed sorting of maps on overview page
 
 1.8.1
 Core:
