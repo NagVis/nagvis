@@ -2098,8 +2098,8 @@ class GlobalMainCfg {
           'path_images'        => $this->getValue('paths','htmlimages'),
           'path_server'        => $this->getValue('paths','htmlbase').'/server/core/ajax_handler.php',
           'internal_title'     => $this->getValue('internal', 'title'),
-          'header_show_states' => $this->getValue('defaults', 'header_show_states'),
-          'zoom_scale_objects' => $this->getValue('defaults', 'zoom_scale_objects'),
+          'header_show_states' => intval($this->getValue('defaults', 'header_show_states')),
+          'zoom_scale_objects' => intval($this->getValue('defaults', 'zoom_scale_objects')),
         );
 
         // Add custom action configuration

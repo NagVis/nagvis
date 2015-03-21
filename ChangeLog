@@ -7,6 +7,8 @@ Frontend:
   * FIX: Map import: Added missing validation of map name format
   * FIX: Hiding "loading..." animation when maps are disabled on overview page
   * FIX: Fixed sorting of maps on overview page
+  * FIX: Fixed js exception "g_map_names" not defined when having
+         header_show_states set to disabled
 
 1.8.1
 Core:
