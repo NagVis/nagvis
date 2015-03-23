@@ -10,6 +10,7 @@ Frontend:
   * FIX: Fixed sorting of maps on overview page
   * FIX: Fixed js exception "g_map_names" not defined when having
          header_show_states set to disabled
+  * FIX: Fixed overlapping sub-hover menus for adding icons/lines
 
 1.8.1
 Core:

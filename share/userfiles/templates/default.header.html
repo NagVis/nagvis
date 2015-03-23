@@ -25,7 +25,7 @@
         </ul>
     </li>
     {if ($mod == 'Map' && (($permittedEdit == true && $act != 'edit') || ($permittedView == true && $act != 'view') || $permittedSearch)) || $bRotation == true}
-    <li onmouseover="ddMenu('action',1)" class="dropdown">
+    <li onmouseover="ddMenu('action')" class="dropdown">
         <span id="action-ddheader">{$langActions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         <ul id="action-ddcontent">
             {if $mod == 'Map' && $permittedSearch}
@@ -46,7 +46,7 @@
     </li>
     {/if}
     {if $mod == 'Map' && $currentMap != '' && $permittedEdit == true}
-    <li onmouseover="ddMenu('map',1)" class="dropdown">
+    <li onmouseover="ddMenu('map')" class="dropdown">
         <span id="map-ddheader">{$langMapEdit} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         <ul id="map-ddcontent">
             {if $canMoveObjects || $canAddObjects || $canEditObjects}
@@ -58,7 +58,7 @@
             <li class="spacer"><hr /></li>
             {/if}
             {if $canAddObjects}
-            <li onmouseover="ddMenu('map-addicon',1,1)" class="dropdown subdropdown">
+            <li onmouseover="ddMenu('map-addicon', true)" class="dropdown subdropdown">
                 <a class="submenu-link" id="map-addicon-ddheader" href="#">{$langMapAddIcon}</a>
                 <ul id="map-addicon-ddcontent">
                 	<li><a class="topline" href="#" onclick="addObject(event, 'host', 'icon', 1, 'add');ddMenuHide();">{$langHost}</a></li>
@@ -70,7 +70,7 @@
                 	<li><a class="underline" href="#" onclick="addObject(event, 'map', 'icon', 1, 'add');ddMenuHide();">{$langMap}</a></li>
                 </ul>
             </li>
-            <li onmouseover="ddMenu('map-addline',1,1)" class="dropdown subdropdown">
+            <li onmouseover="ddMenu('map-addline', true)" class="dropdown subdropdown">
                 <a class="submenu-link" id="map-addline-ddheader" href="#">{$langMapAddLine}</a>
                 <ul id="map-addline-ddcontent">
                 	<li><a class="topline" href="#" onclick="addObject(event, 'host', 'line', 2, 'add');ddMenuHide();">{$langHost}</a></li>
@@ -82,7 +82,7 @@
                 	<li><a class="underline" href="#" onclick="addObject(event, 'map', 'line', 2, 'add');ddMenuHide();">{$langMap}</a></li>
                 </ul>
             </li>
-            <li onmouseover="ddMenu('map-addspecial',1,1)" class="dropdown subdropdown">
+            <li onmouseover="ddMenu('map-addspecial', true)" class="dropdown subdropdown">
                 <a class="submenu-link" id="map-addspecial-ddheader" href="#">{$langMapAddSpecial}</a>
                 <ul id="map-addspecial-ddcontent">
                 	<li><a class="topline" href="#" onclick="addObject(event, 'shape', '', 1, 'add');ddMenuHide();">{$langShape}</a></li>
@@ -99,7 +99,7 @@
     </li>
     {/if}
     {if $permittedEditMainCfg || $permittedManageBackgrounds || $permittedManageMaps || $permittedManageShapes}
-    <li onmouseover="ddMenu('wui',1)" class="dropdown">
+    <li onmouseover="ddMenu('wui')" class="dropdown">
         <span id="wui-ddheader">{$langOptions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         <ul id="wui-ddcontent">
             {if $permittedEditMainCfg}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=MainCfg&amp;act=edit', '{$langEditMainCfg}', 550);ddMenuHide();">{$langEditMainCfg}</a></li>
@@ -117,7 +117,7 @@
     <li id="editIndicator" style="display:none">
         <span>Edit Mode!</span>
     </li>
-    <li onmouseover="ddMenu('user',1)" class="dropdown">
+    <li onmouseover="ddMenu('user')" class="dropdown">
         <span id="user-ddheader">{$langUser}<img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         <ul id="user-ddcontent">
         	<li><a href="#">{$langLoggedIn}: {$currentUser}</a></li>
@@ -128,14 +128,14 @@
             <li class="spacer underline"></li>
         </ul>
     </li>
-    <li onmouseover="ddMenu('language',1)" class="dropdown">
+    <li onmouseover="ddMenu('language')" class="dropdown">
         <span id="language-ddheader">{$langChooseLanguage} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         <ul id="language-ddcontent">
             {foreach $langs lang}<li><a href="{str_replace('&', '&amp;', $currentUri)}{if strpos($currentUri,'?') !== false}&amp;{else}?{/if}lang={$lang.language}">{$lang.langLanguageLocated}</a></li>{/foreach}
           	<li class="spacer underline"></li>
         </ul>
     </li>
-    <li onmouseover="ddMenu('support',1)" class="dropdown">
+    <li onmouseover="ddMenu('support')" class="dropdown">
         <span id="support-ddheader">{$langNeedHelp} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
         <ul id="support-ddcontent">
             <li><a href="{$pathBase}/docs/{$docLanguage}/index.html">{$langOnlineDoc}</a></li>

@@ -89,7 +89,7 @@ function headerToggle(store) {
 }
 
 function showMapDropdown() {
-    ddMenu('views', 1);
+    ddMenu('views');
 }
 
 // Sets/Updates the state of a map in the header menu
@@ -142,30 +142,39 @@ function ddMenuHide(close_menus) {
 }
 
 // main function to handle the mouse events //
-function ddMenu(id, d, reposition) {
+function ddMenu(id, reposition) {
+    // Hide all other open menus (which have not the id of the current menu in their id)
     for (var i = 0; i < open_menus.length; i++) {
-        if (open_menus[i].indexOf(id) !== 0) {
-            ddMenuHide([open_menus[i]]);
+        var other_id = open_menus[i];
+        if (id.indexOf('-') === -1) {
+            // main level menus (no minus in name) only hide other main level menus
+            if (other_id.indexOf(id) !== 0)
+                ddMenuHide([other_id]);
+        }
+        else {
+            // sub level menus only hide other sub level menus of their parent menu
+            if (id != other_id
+                && other_id.indexOf('-') !== -1
+                && other_id.indexOf(id.split('-')[0]) === 0) {
+                ddMenuHide([other_id]);
+            }
         }
     }
 
     var h = document.getElementById(id + '-ddheader');
     var c = document.getElementById(id + '-ddcontent');
 
-    open_menus.push(id);
+    if (open_menus.indexOf(id) === -1)
+        open_menus.push(id);
 
     // Reposition by trigger object when some given (used on submenus)
-    if(typeof reposition !== 'undefined' && d == 1) {
-        c.style.display = 'block';
+    if (reposition === true) {
         c.style.position = 'absolute';
         c.style.left = '204px';
         c.style.top = h.offsetTop + "px";
     }
 
-    if(d == 1)
-        c.style.display = 'block';
-    else
-        c.style.display = 'none';
+    c.style.display = 'block';
     return false;
 }
 
