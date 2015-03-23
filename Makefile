@@ -27,10 +27,10 @@ create-tag:
 copy-to-website:
 
 publish:
-	cp $(NAME).tar.gz /d1/lm/nagvis.org/share
+	cp $(NAME).tar.gz /d1/lm/nagvis.org/htdocs/share/
 	VERSION=$(NAME) $(MAKE) -C /d1/lm/nagvis.org/htdocs release
 
-release: dist create-tag publish
+release: dist create-tag publish version
 
 version:
 	@newversion=$$(dialog --stdout --inputbox "New Version:" 0 0 "$(VERSION)") ; \
