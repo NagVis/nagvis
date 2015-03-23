@@ -1,3 +1,6 @@
+1.8.3
+
+
 1.8.2
 Core:
   * Improved handling of map config files without read permissions on overview
