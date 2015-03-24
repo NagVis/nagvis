@@ -139,7 +139,7 @@ function form_end($keep_context=true) {
 // this form yet to keep the current variable context accross the single requests.
 function hidden_vars() {
     global $form_keys, $form_name;
-    if (submitted($form_name)) {
+    if (submitted($form_name) || !submitted()) {
         foreach ($_REQUEST AS $key => $val) {
             if (!isset($form_keys[$key])) {
                 hidden($key, $val);

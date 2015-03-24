@@ -86,13 +86,16 @@ function listZoomFactors() {
 
 function getObjectNames($type, $MAPCFG, $objId, $attrs) {
     global $_BACKEND;
-    if(isset($attrs['backend_id']) && $attrs['backend_id'] != '')
-        $backendIds = explode(',', $attrs['backend_id']);
-    else
+    if (isset($attrs['backend_id']) && $attrs['backend_id'] != '') {
+        $backendIds = $attrs['backend_id'];
+    } elseif ($objId !== null) {
         $backendIds = $MAPCFG->getValue($objId, 'backend_id');
+    } else {
+        $backendIds = $MAPCFG->getValue('0', 'backend_id');
+    }
 
     // Return simply nothing when a user just choosen to insert multiple backends
-    if(isset($attrs['backend_id']) && $attrs['backend_id'] == '<<<other>>>')
+    if(isset($attrs['backend_id']) && $attrs['backend_id'] == array('<<<other>>>'))
         return array();
 
     // Initialize the backend

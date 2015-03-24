@@ -48,14 +48,20 @@ class ViewMapAddModify {
             'perm_user' => true,
             'lang'      => true,
         );
+        $attrDefs = $this->MAPCFG->getValidObjectType($this->object_type);
         foreach ($_REQUEST as $attr => $val) {
             if (substr($attr, 0, 7) == 'toggle_' || substr($attr, 0, 1) == '_' || isset($exclude[$attr]))
                 continue;
 
-            if (!get_checkbox('toggle_'.$attr))
-                $this->attrs_filtered[$attr] = null;
-            else
+            if ((isset($attrDefs[$attr]['must']) && $attrDefs[$attr]['must'] == '1')
+                || get_checkbox('toggle_'.$attr)) {
+                if (isset($attrDefs[$attr]['array']) && $attrDefs[$attr]['array'])
+                    $val = explode(',', $val);
                 $this->attrs[$attr] = $val;
+            }
+            else {
+                $this->attrs_filtered[$attr] = null;
+            }
         }
     }
 
@@ -87,8 +93,6 @@ class ViewMapAddModify {
                 $array = isset($attrDefs[$key]['array']) && $attrDefs[$key]['array'];
                 if(!$array)
                     $v = array($val);
-                else
-                    $v = explode(',', $val);
 
                 foreach($v as $part) {
                     if(!preg_match($attrDefs[$key]['match'], $part)) {
@@ -340,9 +344,9 @@ class ViewMapAddModify {
                 // showing error text instead of fields
                 try {
                     if($this->clone_id !== null)
-                        $options = $func($this->MAPCFG, $this->clone_id, $_POST);
+                        $options = $func($this->MAPCFG, $this->clone_id, $this->attrs);
                     else
-                        $options = $func($this->MAPCFG, $this->object_id, $_POST);
+                        $options = $func($this->MAPCFG, $this->object_id, $this->attrs);
 
                     if(isset($options[$valueTxt]))
                         $valueTxt = $options[$valueTxt];
@@ -355,10 +359,10 @@ class ViewMapAddModify {
                             form_error($propname, l('Current value is not a known option - '
                                                     .'falling back to input field.'));
 
-                        if ($other && $value === '<<<other>>>')
-                            $value = '';
-
-                        input($propname, $value, '', $hideField);
+                        input($propname, '', '', $hideField);
+                        // Value needs to be set to "" by js
+                        if ($other && $value == '<<<other>>>')
+                            js('document.getElementById(\''.$propname.'\').value = \'\';');
                         break;
                     }
 
@@ -505,8 +509,8 @@ class ViewMapAddModify {
             $this->object_type = $this->MAPCFG->getValue($this->object_id, 'type');
         } else {
             // Creating/Cloning new object. The type is set by URL
-            $this->object_type = post('type');
-            $this->object_id   = '0';
+            $this->object_type = req('type');
+            $this->object_id   = null;
         }
 
         // FIXME: Check whether or not the object exists

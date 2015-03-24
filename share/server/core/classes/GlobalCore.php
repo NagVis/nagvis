@@ -170,7 +170,8 @@ class GlobalCore {
         $ret = Array();
         foreach($MAINCFG->getSections() AS $name) {
             if(preg_match('/^backend_/i', $name)) {
-                $ret[] = $MAINCFG->getValue($name, 'backendid');
+                $backend_id = $MAINCFG->getValue($name, 'backendid');
+                $ret[$backend_id] = $backend_id;
             }
         }
 

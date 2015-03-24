@@ -65,7 +65,7 @@ class ViewManageBackends {
         if (is_action() && post('mode') == 'default') {
             try {
                 $default = post('default');
-                if (!$default || !in_array($default, $this->defined_backends))
+                if (!$default || !isset($this->defined_backends[$default]))
                     throw new FieldInputError('default', l('You need to choose a default backend.'));
             
                 $CORE->getUserMainCfg()->setValue('defaults', 'backend', $default);
@@ -121,9 +121,9 @@ class ViewManageBackends {
                 if (!$backend_id || !preg_match(MATCH_BACKEND_ID, $backend_id))
                     throw new FieldInputError('backend_id', l('You need to specify a identifier for the backend.'));
 
-                if ($mode == 'add' && in_array($backend_id, $this->defined_backends))
+                if ($mode == 'add' && isset($this->defined_backends[$backend_id]))
                     throw new FieldInputError('backend_id', l('This ID is already used by another backend.'));
-                elseif ($mode == 'edit' && !in_array($backend_id, $this->editable_backends))
+                elseif ($mode == 'edit' && !isset($this->editable_backends[$backend_id]))
                     throw new FieldInputError('backend_id', l('The choosen backend does not exist.'));
 
                 if ($mode == 'add') {
@@ -225,7 +225,7 @@ class ViewManageBackends {
         if (is_action() && post('mode') == 'delete') {
             try {
                 $backend_id = post('backend_id');
-                if (!in_array($backend_id, $this->editable_backends))
+                if (!isset($this->editable_backends[$backend_id]))
                     throw new FieldInputError('backend_id', l('The choosen backend does not exist.'));
 
                 // FIXME: Check whether or not the backend is used anywhere
