@@ -1760,29 +1760,13 @@ function setViewParam(param, val) {
 }
 
 /**
- * getMapProperties()
- *
- * Fetches the current map properties from the core
- *
- * @return  Boolean  Success?
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * Fetches the current map properties from the core. Normally this
+ * is set during initial rendering, but needed when the configuration
+ * has changed on the server.
  */
 function getMapProperties(type, mapName) {
     return getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapProperties&show='
                           + escapeUrlValues(mapName)+getViewParams());
-}
-
-/**
- * getUrlProperties()
- *
- * Fetches the current url properties from the core
- *
- * @return  Boolean  Success?
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getUrlProperties(sUrl) {
-    return getSyncRequest(oGeneralProperties.path_server+'?mod=Url&act=getProperties&show='
-                                           + escapeUrlValues(sUrl));
 }
 
 // Returns true if the current view is
@@ -1803,7 +1787,7 @@ function usesSource(source) {
  * @return  Boolean  Success?
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function parseMap(iMapCfgAge, type, mapName) {
+function parseMap(iMapCfgAge, type, mapName, init) {
     var bReturn = false;
 
     // Block updates of the current map
@@ -1811,9 +1795,9 @@ function parseMap(iMapCfgAge, type, mapName) {
 
     var wasInMaintenance = inMaintenance(false);
 
-    // Get new map/object information from ajax handler
-    oPageProperties = getMapProperties(type, mapName);
-    oPageProperties.view_type = type;
+    // Get new map properties from server
+    if (!init)
+        oPageProperties = getMapProperties(type, mapName);
 
     if(inMaintenance()) {
         bBlockUpdates = false;
@@ -1942,14 +1926,9 @@ function workerInitialize(iCount, sType, sIdentifier) {
     if(sType == 'map') {
         eventlog("worker", "debug", "Parsing " + sType + ": " + sIdentifier);
         renderZoombar();
-        parseMap(oFileAges[sIdentifier], sType, sIdentifier);
+        parseMap(oFileAges[sIdentifier], sType, sIdentifier, true);
 
     } else if(sType === 'overview') {
-        // Load the overview properties
-        eventlog("worker", "debug", "Loading the overview properties");
-        oPageProperties = getOverviewProperties();
-        oPageProperties.view_type = sType;
-
         // Loading the overview page
         eventlog("worker", "debug", "Setting page basiscs like title and favicon");
         setPageBasics(oPageProperties);
@@ -1965,9 +1944,6 @@ function workerInitialize(iCount, sType, sIdentifier) {
         eventlog("worker", "info", "Finished parsing overview");
     } else if(sType === 'url') {
         // Load the map properties
-        eventlog("worker", "debug", "Loading the url properties");
-        oPageProperties = getUrlProperties(sIdentifier);
-        oPageProperties.view_type = sType;
 
         // Fetches the contents from the server and prints it to the page
         eventlog("worker", "debug", "Parsing url page");
@@ -2054,7 +2030,7 @@ function handleUpdate(o, aParams) {
                     eventlog("worker", "info", "Map config updated. "+iNumUnlocked+" objects unlocked - not reloading.");
                 } else {
                     eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
-                    parseMap(oChanged[key], sType, oPageProperties.map_name);
+                    parseMap(oChanged[key], sType, oPageProperties.map_name, false);
                     return;
                 }
             }
@@ -2077,7 +2053,7 @@ function handleUpdate(o, aParams) {
             //    automapParse(oPageProperties.map_name);
             //    setMapBackgroundImage(oPageProperties.background_image+iNow);
             //}
-            parseMap(oFileAges[oPageProperties.map_name], sType, oPageProperties.map_name);
+            parseMap(oFileAges[oPageProperties.map_name], sType, oPageProperties.map_name, false);
             return;
         }
     }

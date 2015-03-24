@@ -1811,5 +1811,31 @@ class GlobalMapCfg {
         global $CORE;
         return $CORE->checkWriteable($this->mapLockPath, $printErr);
     }
+
+    // Put the general map options needed for the frontend in an array
+    public function getMapProperties() {
+        return Array(
+            'view_type'                => 'map',
+            'map_name'                 => $this->getName(),
+            'alias'                    => $this->getValue(0, 'alias'),
+            'background_image'         => $this->BACKGROUND->getFile(),
+            'background_color'         => $this->getValue(0, 'background_color'),
+            'favicon_image'            => cfg('paths', 'htmlimages').'internal/favicon.png',
+            'page_title'               => $this->getValue(0, 'alias').' ([SUMMARY_STATE]) :: '.cfg('internal', 'title'),
+            'event_background'         => $this->getValue(0, 'event_background'),
+            'event_highlight'          => $this->getValue(0, 'event_highlight'),
+            'event_highlight_interval' => $this->getValue(0, 'event_highlight_interval'),
+            'event_highlight_duration' => $this->getValue(0, 'event_highlight_duration'),
+            'event_log'                => $this->getValue(0, 'event_log'),
+            'event_log_level'          => $this->getValue(0, 'event_log_level'),
+            'event_log_events'         => $this->getValue(0, 'event_log_events'),
+            'event_log_height'         => $this->getValue(0, 'event_log_height'),
+            'event_log_hidden'         => $this->getValue(0, 'event_log_hidden'),
+            'event_scroll'             => $this->getValue(0, 'event_scroll'),
+            'event_sound'              => $this->getValue(0, 'event_sound'),
+            'in_maintenance'           => $this->getValue(0, 'in_maintenance'),
+            'sources'                  => $this->getValue(0, 'sources'),
+        );
+    }
 }
 ?>

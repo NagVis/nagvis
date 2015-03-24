@@ -90,6 +90,7 @@ class NagVisMapView {
             'rotationProperties' => json_encode($this->aRotation),
             'viewProperties'     => $this->parseViewProperties(),
             'stateProperties'    => json_encode($_MAINCFG->getStateWeightJS()),
+            'pageProperties'     => json_encode($this->MAPCFG->getMapProperties()),
             'userProperties'     => $USERCFG->doGetAsJson(),
             'mapName'            => $this->name,
             'zoomFill'           => $this->MAPCFG->getValue(0, 'zoom') == 'fill',

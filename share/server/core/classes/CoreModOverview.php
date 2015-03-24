@@ -33,7 +33,6 @@ class CoreModOverview extends CoreModule {
         $this->sName = 'Overview';
 
         $this->aActions = Array(
-            'getOverviewProperties' => 'view',
             'getOverviewMaps'       => 'view',
             'getOverviewRotations'  => 'view',
             'getObjectStates'       => 'view',
@@ -45,9 +44,6 @@ class CoreModOverview extends CoreModule {
 
         if($this->offersAction($this->sAction)) {
             switch($this->sAction) {
-                case 'getOverviewProperties':
-                    $sReturn = $this->parseIndexPropertiesJson();
-                break;
                 case 'getOverviewRotations':
                     $sReturn = $this->parseRotationsJson();
                 break;
@@ -273,37 +269,6 @@ class CoreModOverview extends CoreModule {
         }
 
         return json_encode($aRotations);
-    }
-
-    /**
-     * Parses the overview page options in json format
-     *
-     * @return	String 	String with JSON Code
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    public function parseIndexPropertiesJson() {
-        $arr = Array();
-
-        $arr['cellsperrow']        = (int) cfg('index', 'cellsperrow');
-        $arr['showmaps']           = (int) cfg('index', 'showmaps');
-        $arr['showgeomap']         = (int) cfg('index', 'showgeomap');
-        $arr['showmapthumbs']      = (int) cfg('index', 'showmapthumbs');
-        $arr['showrotations']      = (int) cfg('index', 'showrotations');
-
-        $arr['page_title']         = cfg('internal', 'title');
-        $arr['favicon_image']      = cfg('paths', 'htmlimages').'internal/favicon.png';
-        $arr['background_color']   = cfg('index','backgroundcolor');
-
-        $arr['lang_mapIndex']      = l('mapIndex');
-        $arr['lang_rotationPools'] = l('rotationPools');
-
-        $arr['event_log']          = (int) cfg('defaults', 'eventlog');
-        $arr['event_log_level']    = cfg('defaults', 'eventloglevel');
-        $arr['event_log_events']   = (int) cfg('defaults', 'eventlogevents');
-        $arr['event_log_height']   = (int) cfg('defaults', 'eventlogheight');
-        $arr['event_log_hidden']   = (int) cfg('defaults', 'eventloghidden');
-
-        return json_encode($arr);
     }
 
     /**

@@ -59,6 +59,13 @@ class NagVisUrlView {
         $this->aRotation = $a;
     }
 
+    private function getProperties() {
+        return array(
+            'url'       => $this->url,
+            'view_type' => 'url',
+        );
+    }
+
     /**
      * Parses the url and the objects for the nagvis-js frontend
      *
@@ -82,6 +89,7 @@ class NagVisUrlView {
             'generalProperties'  => $_MAINCFG->parseGeneralProperties(),
             'workerProperties'   => $_MAINCFG->parseWorkerProperties(),
             'rotationProperties' => json_encode($this->aRotation),
+            'pageProperties'     => json_encode($this->getProperties()),
             'iframe'             => $iframe,
             'url'                => $url,
             'fileAges'           => json_encode(Array(

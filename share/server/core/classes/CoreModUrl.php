@@ -38,7 +38,6 @@ class CoreModUrl extends CoreModule {
         // Register valid actions
         $this->aActions = Array(
             'getContents'   => 'view',
-            'getProperties' => 'view',
         );
     }
 
@@ -50,9 +49,6 @@ class CoreModUrl extends CoreModule {
                 case 'getContents':
                     $sReturn = $this->getContents();
                 break;
-                case 'getProperties':
-                    $sReturn = $this->getProperties();
-                break;
             }
         }
 
@@ -60,13 +56,32 @@ class CoreModUrl extends CoreModule {
     }
 
     private function getContents() {
-        $URL = new NagVisUrl($this->CORE, $this->url);
-        return json_encode(Array('content' => $URL->getContents()));
-    }
+        $content = '';
 
-    private function getProperties() {
-        $URL = new NagVisUrl($this->CORE, $this->url);
-        return $URL->parsePropertiesJson();
+        // Suppress error messages from file_get_contents
+        $oldLevel = error_reporting(0);
+
+        // Only allow urls not paths for security reasons
+        // Reported here: http://news.gmane.org/find-root.php?message_id=%3cf60c42280909021938s7f36c0edhd66d3e9156a5d081%40mail.gmail.com%3e
+        $url = parse_url($this->url);
+        if(!isset($url['scheme']) || $url['scheme'] == '') {
+            throw new NagVisException(l('problemReadingUrl', Array(
+                'URL' => htmlentities($this->url, ENT_COMPAT, 'UTF-8'),
+                'MSG' => 'Not allowed url')));
+            exit(1);
+        }
+
+        if (false == ($content = file_get_contents($this->url))) {
+            $error = error_get_last();
+            throw new NagVisException(l('problemReadingUrl', Array(
+                'URL' => htmlentities($this->url, ENT_COMPAT, 'UTF-8'),
+                'MSG' => $error['message'])));
+        }
+
+        // set the old level of reporting back
+        error_reporting($oldLevel);
+
+        return json_encode(Array('content' => $content));
     }
 }
 ?>
