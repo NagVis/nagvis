@@ -1494,6 +1494,9 @@ class GlobalMapCfg {
         // Also remove cache file
         if(file_exists($this->cacheFile))
             unlink($this->cacheFile);
+
+        if (function_exists('hook_map_config_saved'))
+            hook_map_config_saved($this->getName(), $this->configFile);
     }
 
     /**

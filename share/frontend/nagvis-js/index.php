@@ -30,12 +30,8 @@ require('../../server/core/defines/matches.php');
 require('defines/nagvis-js.php');
 
 // Include functions
-require('../../server/core/functions/autoload.php');
-require('../../server/core/functions/debug.php');
-require('../../server/core/functions/html.php');
-require('../../server/core/functions/oldPhpVersionFixes.php');
 require('../../server/core/classes/CoreExceptions.php');
-require('../../server/core/functions/nagvisErrorHandler.php');
+require('../../server/core/functions/autoload.php');
 
 if (PROFILE) profilingStart();
 
