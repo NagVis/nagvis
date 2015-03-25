@@ -54,7 +54,8 @@ class ViewMapAddModify {
                 continue;
 
             if ((isset($attrDefs[$attr]['must']) && $attrDefs[$attr]['must'] == '1')
-                || get_checkbox('toggle_'.$attr)) {
+                || !has_var('toggle_'.$attr)
+                ||  get_checkbox('toggle_'.$attr)) {
                 if (isset($attrDefs[$attr]['array']) && $attrDefs[$attr]['array'])
                     $val = explode(',', $val);
                 $this->attrs[$attr] = $val;

@@ -41,6 +41,10 @@ function req($name, $default = null) {
     return isset($_REQUEST[$name]) ? $_REQUEST[$name] : $default;
 }
 
+function has_var($key) {
+    return isset($_REQUEST[$key]);
+}
+
 /**
  * FORM HANDLING
  */
