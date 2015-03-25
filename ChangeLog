@@ -16,6 +16,8 @@ Automap:
 Frontend:
   * Showing header menu on full page error messages to give the users the
     option to navigate away from the error situation
+  * FIX: Fixed annoying browser warning message when reloading pages which
+    are shown up right after logging in to NagVis
 
 1.8.2
 Core:

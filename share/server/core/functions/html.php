@@ -314,6 +314,12 @@ function upload($name) {
     echo '<input type="file" name="'.$name.'"'.$class.' />'.N;
 }
 
+function http_redirect($url = null) {
+    if ($url === null)
+        $url = $_SERVER['REQUEST_URI'];
+    header('Location: '.$url);
+}
+
 function reload($url, $sec) {
     if ($url == null)
         js('setTimeout(function() {location.reload();}, '.$sec.'*1000);');
