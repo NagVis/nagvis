@@ -46,4 +46,21 @@ function NagVisAutoload($sClass) {
 
 spl_autoload_register('NagVisAutoload');
 
+/**
+ * loads all files located in core/functions directory. This directory
+ * might contain custom functions which extend NagVis in some way.
+ */
+$dir = '../../server/core/functions/';
+if ($handle = opendir($dir)) {
+    while (false !== ($file = readdir($handle))) {
+        if (preg_match(MATCH_PHP_FILE, $file)
+            && $file != 'autoload.php'
+            && $file != 'core.php'
+            && $file != 'index.php') {
+            require($dir.$file);
+        }
+    }
+    closedir($handle);
+}
+
 ?>
