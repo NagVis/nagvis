@@ -9,6 +9,7 @@ Core:
     worse, but this seem to be logically wrong to me. If you want the old
     behaviour back, you might change the state weights in your main
     config.
+  * Deprecated unused config option header_fade / headerfade
 
 Automap:
   * Reimplemented missing "filter_by_state" functionality

@@ -486,6 +486,7 @@ class GlobalMainCfg {
                     'depends_on'    => 'headermenu',
                     'depends_value' => 1,
                     'field_type'    => 'boolean',
+                    'deprecated'    => 1,
                     'match'         => MATCH_BOOLEAN
                 ),
                 'header_show_states' => Array(

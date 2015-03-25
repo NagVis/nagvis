@@ -268,8 +268,6 @@
 ;headermenu="1"
 ; header template
 ;headertemplate="default"
-; Enable/Diable the fading effect of the submenus in the header menu
-;headerfade=1
 ; Show states in the sidebar header menu (if supported by template)
 ;header_show_states=0
 ; enable/disable hover menu

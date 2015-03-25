@@ -167,9 +167,6 @@ class NagVisHeaderMenu {
             // auto select current map and apply map specific optins to the header menu
             if($this->OBJ !== null && $this->aMacros['mod'] == 'Map' && $mapName == $this->OBJ->getName()) {
                 $map['selected'] = True;
-
-                // Override header fade option with map config
-                $this->aMacros['bEnableFade'] = $MAPCFG1->getValue(0, 'header_fade');
             }
 
             $map['parent'] = $MAPCFG1->getValue(0, 'parent_map');
@@ -265,9 +262,6 @@ class NagVisHeaderMenu {
                 $this->aMacros['rotations'][] = $poolName;
             }
         }
-
-        // Initialize the enable fade option. Is overridden by the current map or left as is
-        $this->aMacros['bEnableFade'] = cfg('defaults', 'headerfade');
 
         list($this->aMacros['maps'], $this->aMacros['permittedEditAnyMap']) = $this->getMapList('maps', $CORE->getAvailableMaps());
         $this->aMacros['langs'] = $this->getLangList();

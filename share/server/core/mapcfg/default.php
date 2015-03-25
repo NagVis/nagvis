@@ -378,12 +378,14 @@ $mapConfigVars = Array(
         'depends_value'  => '1',
         'list'           => 'listHeaderTemplates'),
     'header_fade' => Array(
-        'must' => 0,
+        'must'           => 0,
         'default'        => cfg('defaults', 'headerfade'),
         'match'          => MATCH_BOOLEAN,
-        'field_type'     => 'boolean',
+        'field_type'     => 'hidden',
         'depends_on'     => 'header_menu',
-        'depends_value'  => '1'),
+        'deprecated'     => true,
+        'depends_value'  => '1'
+    ),
 
     'hover_menu' => Array(
         'must' => 0,
