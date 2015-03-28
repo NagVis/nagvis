@@ -17,6 +17,10 @@ Automap:
 Frontend:
   * Showing header menu on full page error messages to give the users the
     option to navigate away from the error situation
+  * Reworked frontend dialogs to show form error messages directly in the dialog
+    instead of showing the old error popup window
+  * The map / object editing dialog is now using a tab navigation to reduce
+    the number of options shown at once for a more user friendly handling
   * FIX: Fixed annoying browser warning message when reloading pages which
     are shown up right after logging in to NagVis
 

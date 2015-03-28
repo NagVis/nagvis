@@ -186,11 +186,13 @@ $configVars = array(
         'match'      => '/^(mapnik)$/i',
         'field_type' => 'dropdown',
         'list'       => 'list_geomap_types',
+        'section'    => 'geomap',
     ),
     'geomap_zoom' => Array(
         'must'       => false,
         'default'    => '',
         'match'      => MATCH_INTEGER,
+        'section'    => 'geomap',
     ),
     'source_type' => array(
         'must'       => false,
@@ -198,6 +200,7 @@ $configVars = array(
         'match'      => MATCH_STRING,
         'field_type' => 'dropdown',
         'list'       => 'list_geomap_source_types',
+        'section'    => 'geomap',
     ),
     'source_file' => array(
         'must'          => false,
@@ -207,11 +210,13 @@ $configVars = array(
         'list'          => 'list_geomap_source_files',
         'depends_on'    => 'source_type',
         'depends_value' => 'csv',
+        'section'    => 'geomap',
     ),
     'geomap_border' => Array(
         'must'       => false,
         'default'    => 0.25,
         'match'      => MATCH_FLOAT,
+        'section'    => 'geomap',
     ),
 );
 

@@ -982,15 +982,15 @@ div#zoombar div.drag div {
     border: 1px solid #e5e5e5;
 }
 
-/* edit main config dialog navigation (tabbing) */
-
 input[type=checkbox] {
     position: relative;
     vertical-align: middle;
     bottom: 1px;
 }
 
-form#edit_config ul.nav {
+/* edit main config dialog navigation (tabbing) */
+
+#popupWindowContent ul.nav {
     list-style: none;
     height: 21px;
     margin: 0;
@@ -998,12 +998,12 @@ form#edit_config ul.nav {
     border-bottom: 1px solid #e5e5e5;
 }
 
-form#edit_config ul.nav li {
+#popupWindowContent ul.nav li {
     float: left;
     margin-bottom: 10px;
 }
 
-form#edit_config ul.nav li a {
+#popupWindowContent ul.nav li a {
     display: block;
     height: 20px;
     padding: 0 5px;
@@ -1014,13 +1014,13 @@ form#edit_config ul.nav li a {
     border-top-right-radius: 5px;
 }
 
-form#edit_config ul.nav li a:hover {
+#popupWindowContent ul.nav li a:hover {
     text-decoration: none;
     color:#779D2A;
     background-color: #fbfbfb;
 }
 
-form#edit_config ul.nav li.active a {
+#popupWindowContent ul.nav li.active a {
     border-bottom: 1px solid #fff;
     color: #000;
 }

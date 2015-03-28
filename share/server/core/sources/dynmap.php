@@ -75,37 +75,44 @@ $configVars = array(
         'default'    => '',
         'field_type' => 'dropdown',
         'match'      => MATCH_DYN_OBJECT_TYPES,
-        'list'       => 'listDynObjectTypes', 
+        'list'       => 'listDynObjectTypes',
+        'section'    => 'dynmap',
     ),
     'dynmap_object_filter' => Array(
         'must'       => false,
         'default'    => '',
         'match'      => MATCH_LIVESTATUS_FILTER,
+        'section'    => 'dynmap',
     ),
     'dynmap_init_x' => array(
         'must'       => false,
         'default'    => 20,
         'match'      => MATCH_COORD_SIMPLE,
+        'section'    => 'dynmap',
     ),
     'dynmap_init_y' => array(
         'must'       => false,
         'default'    => 700,
         'match'      => MATCH_COORD_SIMPLE,
+        'section'    => 'dynmap',
     ),
     'dynmap_offset_x' => array(
         'must'       => false,
         'default'    => 30,
         'match'      => MATCH_COORD_SIMPLE,
+        'section'    => 'dynmap',
     ),
     'dynmap_offset_y' => array(
         'must'       => false,
         'default'    => 30,
         'match'      => MATCH_COORD_SIMPLE,
+        'section'    => 'dynmap',
     ),
     'dynmap_per_row' => array(
         'must'       => false,
         'default'    => 30,
         'match'      => MATCH_COORD_SIMPLE,
+        'section'    => 'dynmap',
     ),
 );
 

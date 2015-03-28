@@ -779,7 +779,7 @@ function coordsToGrid(x, y) {
     }
 }
 
-function toggle_maincfg_section(sec) {
+function toggle_section(sec) {
     var tables = document.getElementsByClassName('section');
     for (var i = 0; i < tables.length; i++) {
         if (tables[i].id == 'sec_' + sec)

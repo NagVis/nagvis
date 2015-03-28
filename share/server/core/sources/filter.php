@@ -26,6 +26,7 @@ $configVars = array(
         'match'      => MATCH_STRING_EMPTY,
         'field_type' => 'dropdown',
         'list'       => 'listHostgroupNames',
+        'section'    => 'general',
     )
 );
 

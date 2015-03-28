@@ -25,12 +25,14 @@ $configVars = array(
         'default'    => '',
         'match'      => MATCH_INTEGER_EMPTY,
         'field_type' => 'dimension',
+        'section'    => 'appearance',
     ),
     'height' => array(
         'must'       => false,
         'default'    => '',
         'match'      => MATCH_INTEGER_EMPTY,
         'field_type' => 'dimension',
+        'section'    => 'appearance',
     ),
 );
 

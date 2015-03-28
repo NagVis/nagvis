@@ -47,6 +47,7 @@ class ViewMapAddModify {
             'perm'      => true,
             'perm_user' => true,
             'lang'      => true,
+            'sec'       => true,
         );
         $attrDefs = $this->MAPCFG->getValidObjectType($this->object_type);
         foreach ($_REQUEST as $attr => $val) {
@@ -251,10 +252,11 @@ class ViewMapAddModify {
         }
 
         // Only add the fields of type hidden which have values
-        if($fieldType === 'hidden') {
+        if ($fieldType === 'hidden' || $fieldType == 'readonly') {
             if($value != '')
                 hidden($propname, $value);
-            return;
+            if ($fieldType === 'hidden')
+                return;
         }
 
         $rowHide    = '';
@@ -298,7 +300,7 @@ class ViewMapAddModify {
         
         // Add a checkbox to toggle the usage of an attribute. But only add it for
         // non-must attributes.
-        if (!$prop['must']) {
+        if (!$prop['must'] && $fieldType != 'readonly') {
             checkbox('toggle_'.$propname, $isInherited === false, '', 'toggle_option(\''.$propname.'\');');
         }
         
@@ -328,6 +330,9 @@ class ViewMapAddModify {
         }
 
         switch($fieldType) {
+            case 'readonly':
+                echo $value;
+            break;
             case 'boolean':
                 $options = Array(
                     '1' => l('yes'),
@@ -405,6 +410,8 @@ class ViewMapAddModify {
         echo '</td></tr>';
     }
 
+    // Returns an array of property spec arrays which should be shown for the current object.
+    // These are already filtered depnding on the configured sources (in case of map global obj)
     private function getProperties() {
         $default_value = $this->MAPCFG->getDefaultValue($this->object_type, 'sources');
 
@@ -443,25 +450,52 @@ class ViewMapAddModify {
         return $typeDef;
     }
 
-    private function drawFields() {
-        // loop all valid properties for that object type
-        $properties = $this->getProperties();
-        foreach ($properties as $propname => $prop) {
+    private function drawFields($sec_props) {
+        foreach ($sec_props as $propname => $prop) {
             // do nothing with hidden or deprecated attributes
-            if($propname === 'object_id'
-               || (isset($prop['deprecated']) && $prop['deprecated'] === true))
+            if (isset($prop['deprecated']) && $prop['deprecated'] === true)
                 continue;
 
-            $this->drawField($propname, $prop, $properties);
+            $this->drawField($propname, $prop, $sec_props);
         }
     }
 
     private function drawForm() {
         js_form_start('addmodify');
-        echo '<table name="mytable" class="mytable" id="table_addmodify">';
-        $this->drawFields();
+        $open = isset($_POST['sec']) ? $_POST['sec'] : 'general'; // default open section
+        hidden('sec', $open);
 
-        if ($this->mode == 'view_params') {        
+        #$obj_spec = $this->MAPCFG->getValidObjectType($this->object_type);
+        $obj_spec = $this->getProperties();
+        $props_by_section = array();
+        foreach ($obj_spec AS $propname => $prop) {
+            $sec = $prop['section'];
+            if (!isset($props_by_section[$sec]))
+                $props_by_section[$sec] = array();
+            $props_by_section[$sec][$propname] = $prop;
+        }
+
+        echo '<ul class="nav" id="nav">';
+        foreach (array_keys($props_by_section) AS $sec) {
+            if ($sec == 'hidden')
+                continue;
+            $class = $open == $sec ? ' class="active"' : '';
+            echo '<li id="nav_'.$sec.'" '.$class.'>';
+            echo '<a href="javascript:toggle_section(\''.$sec.'\')">';
+            echo $this->MAPCFG->getSectionTitle($sec).'</a></li>';
+        }
+        echo '</ul>';
+
+        foreach ($props_by_section as $sec => $sec_props) {
+            if ($sec == 'hidden')
+                continue;
+            $display = $sec != $open ? 'display:none' : '';
+            echo '<table id="sec_'.$sec.'" class="mytable section" style="'.$display.'">';
+            $this->drawFields($sec_props);
+            echo '</table>';
+        }
+
+        if ($this->mode == 'view_params') {
             echo '<tr><td colspan=3 style="height:10px;"></td></tr>';
             echo '<tr><td class=tdlabel>'.l('Make Permanent').'</td>';
             echo '<td class=tdbox></td>';
@@ -472,7 +506,6 @@ class ViewMapAddModify {
             echo l('for you');
             echo '</td></tr>';
         }
-        echo '</table>';
         submit(l('Save'));
         form_end();
     }

@@ -99,12 +99,15 @@ class GlobalMapCfg {
         }
 
         // Now register the variables for the objec types
-        foreach($mapConfigVarMap AS $type => $vars) {
+        foreach ($mapConfigVarMap AS $type => $sections) {
             self::$validConfig[$type] = Array();
-            foreach($vars AS $var => $alias) {
-                if($alias === null)
-                    $alias = $var;
-                self::$validConfig[$type][$alias] = $mapConfigVars[$var];
+            foreach ($sections as $section => $vars) {
+                foreach ($vars AS $var => $alias) {
+                    if($alias === null)
+                        $alias = $var;
+                    self::$validConfig[$type][$alias] = $mapConfigVars[$var];
+                    self::$validConfig[$type][$alias]['section'] = $section;
+                }
             }
         }
     }
@@ -1839,6 +1842,26 @@ class GlobalMapCfg {
             'in_maintenance'           => $this->getValue(0, 'in_maintenance'),
             'sources'                  => $this->getValue(0, 'sources'),
         );
+    }
+
+    public function getSectionTitle($sec) {
+        $titles = array(
+            'general'           => l('General'),
+            'appearance'        => l('Appearance'),
+            'actions'           => l('Actions'),
+            'state'             => l('State'),
+            'actions'           => l('Actions'),
+            'label'             => l('Label'),
+            'dynmap'            => l('Dynmap'),
+            'automap'           => l('Automap'),
+            'geomap'            => l('Geomap'),
+            'object_defaults'   => l('Obj. Defaults'),
+            'events'            => l('Events'),
+        );
+        if (isset($titles[$sec]))
+            return $titles[$sec];
+        else
+            return $sec;
     }
 }
 ?>

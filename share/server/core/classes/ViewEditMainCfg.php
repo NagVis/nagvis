@@ -94,7 +94,9 @@ class ViewEditMainCfg {
         foreach ($_MAINCFG->getValidConfig() AS $sec => $arr) {
             if (!preg_match($this->exclude_pattern, $sec)) {
                 $class = $open == $sec ? ' class="active"' : '';
-                echo '<li id="nav_'.$sec.'" '.$class.'><a href="javascript:toggle_maincfg_section(\''.$sec.'\')">'.$_MAINCFG->getSectionTitle($sec).'</a></li>';
+                echo '<li id="nav_'.$sec.'" '.$class.'>';
+                echo '<a href="javascript:toggle_section(\''.$sec.'\')">';
+                echo $_MAINCFG->getSectionTitle($sec).'</a></li>';
             }
         }
         echo '</ul>';
