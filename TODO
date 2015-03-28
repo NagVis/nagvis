@@ -1,7 +1,6 @@
 This is a small file for storing quick thoughts about new features and needed changes:
 ===============================================================================
 
-- WUI: printLang() durch neuen _() Mechnismus ersetzen
 - Rework layout of role edit form
 
 Relative Koordinaten:

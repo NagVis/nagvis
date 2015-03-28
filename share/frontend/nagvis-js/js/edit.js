@@ -629,30 +629,6 @@ if (window.addEventListener) {
   };
 }
 
-/**
- * validateValue(oField)
- *
- * This function checks a string for valid format. The check is done by the
- * given regex.
- * @FIXME: Remove this. Replace dialogs with "server validate"
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function validateValue(sName, sValue, sRegex) {
-    // Remove PHP delimiters
-    sRegex = sRegex.replace(/^\//, "");
-    sRegex = sRegex.replace(/\/[iugm]*$/, "");
-
-    // Match the current value
-    var regex = new RegExp(sRegex, "i");
-    var match = regex.exec(sValue);
-    if(sValue == '' || match != null) {
-        return true;
-    } else {
-        alert(printLang(lang['wrongValueFormatOption'],'ATTRIBUTE~'+sName));
-        return false;
-    }
-}
-
 function useGrid() {
     return oViewProperties.grid_show === 1;
 }
@@ -799,32 +775,6 @@ function toggle_section(sec) {
 
     // update the helper field value
     document.getElementById('sec').value = sec;
-}
-
-function printLang(sLang, sReplace) {
-    if(typeof sLang === 'undefined')
-        return '';
-
-    sLang = sLang.replace(/<(\/|)(i|b)>/ig, '');
-    sLang = sLang.replace('&auml;', 'ä').replace('&uuml;', 'ü');
-    sLang = sLang.replace('&ouml;', 'ö').replace('&szlig;', '');
-
-    // sReplace maybe optional
-    if(typeof sReplace != "undefined") {
-        aReplace = sReplace.split(",");
-        for(var i = 0; i < aReplace.length; i++) {
-            var aReplaceSplit = aReplace[i].split("~");
-            sLang = sLang.replace("["+aReplaceSplit[0]+"]",aReplaceSplit[1]);
-        }
-    }
-
-    return sLang;
-}
-
-// checks that the file the user wants to upload has a valid extension
-function checkPngGifOrJpg(imageName) {
-    var type = imageName.substring(imageName.length-3,imageName.length).toLowerCase();
-    return type == 'png' || type == 'jpg' || type == 'gif';
 }
 
 // Toggles the state of an option (Showing inherited value or the current configured value)
