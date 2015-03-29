@@ -82,7 +82,7 @@ class NagVisMapView {
         $USERCFG = new CoreUserCfg();
 
         $this->MAPCFG = new GlobalMapCfg($this->name);
-        $this->MAPCFG->readMapConfig(ONLY_GLOBAL);
+        $this->MAPCFG->readMapConfig(ONLY_GLOBAL, true, true, true);
 
         $aData = Array(
             'generalProperties'  => $_MAINCFG->parseGeneralProperties(),

@@ -153,7 +153,7 @@ class CoreModMap extends CoreModule {
 
                     // Read map config but don't resolve templates and don't use the cache
                     $MAPCFG = new GlobalMapCfg($aVals['show']);
-                    $MAPCFG->readMapConfig(0, false, false);
+                    $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
 
                     $aTmp = $MAPCFG->getDefinitions('template');
                     $aTmp = $aTmp[$MAPCFG->getTemplateIdByName($aVals['name'])];
@@ -210,7 +210,7 @@ class CoreModMap extends CoreModule {
 
     protected function doTmplModify($a) {
         $MAPCFG = new GlobalMapCfg($a['map']);
-        $MAPCFG->readMapConfig(0, false, false);
+        $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
 
         $id = $MAPCFG->getTemplateIdByName($a['opts']['name']);
 
@@ -253,7 +253,7 @@ class CoreModMap extends CoreModule {
         // Check if the template already exists
         // Read map config but don't resolve templates and don't use the cache
         $MAPCFG = new GlobalMapCfg($FHANDLER->get('map'));
-        $MAPCFG->readMapConfig(0, false, false);
+        $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
         if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) <= 0) {
             throw new NagVisException(l('A template with this name does not exist.'));
 
@@ -289,7 +289,7 @@ class CoreModMap extends CoreModule {
     protected function doTmplDelete($a) {
         // Read map config but don't resolve templates and don't use the cache
         $MAPCFG = new GlobalMapCfg($a['map']);
-        $MAPCFG->readMapConfig(0, false, false);
+        $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
 
         $id = $MAPCFG->getTemplateIdByName($a['name']);
 
@@ -328,7 +328,7 @@ class CoreModMap extends CoreModule {
         // Check if the template already exists
         // Read map config but don't resolve templates and don't use the cache
         $MAPCFG = new GlobalMapCfg($FHANDLER->get('map'));
-        $MAPCFG->readMapConfig(0, false, false);
+        $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
         if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) <= 0)
             throw new NagVisException(l('The template does not exist.'));
         $MAPCFG = null;
@@ -345,7 +345,7 @@ class CoreModMap extends CoreModule {
 
     protected function doTmplAdd($a) {
         $MAPCFG = new GlobalMapCfg($a['map']);
-        $MAPCFG->readMapConfig(0, false, false);
+        $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
 
         // append a new object definition to the map configuration
         $MAPCFG->addElement('template', $a['opts'], true);
@@ -381,7 +381,7 @@ class CoreModMap extends CoreModule {
         // Check if the template already exists
         // Read map config but don't resolve templates and don't use the cache
         $MAPCFG = new GlobalMapCfg($FHANDLER->get('map'));
-        $MAPCFG->readMapConfig(0, false, false);
+        $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
         if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) > 0)
             throw new NagVisException(l('A template with this name already exists.'));
         $MAPCFG = null;

@@ -53,7 +53,7 @@ class ViewMapManageTmpl {
 
         // Read map configig but don't resolve tempaltes
         $MAPCFG = new GlobalMapCfg($this->aOpts['show']);
-        $MAPCFG->readMapConfig(0, false, false);
+        $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
 
         $aData = Array(
             'htmlBase' => cfg('paths', 'htmlbase'),

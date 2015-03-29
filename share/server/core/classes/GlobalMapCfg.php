@@ -390,7 +390,8 @@ class GlobalMapCfg {
      * @return	Boolean	Is Successful?
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-    public function readMapConfig($onlyGlobal = 0, $resolveTemplates = true, $useCache = true) {
+    public function readMapConfig($onlyGlobal = false, $resolveTemplates = true,
+                                  $useCache = true, $enforceSources = false) {
         global $_MAINCFG, $AUTHORISATION;
         // Only use cache when there is
         // a) The cache should be used
@@ -474,7 +475,7 @@ class GlobalMapCfg {
             }
         }
 
-        if($onlyGlobal == 0 || (isset($_GET['act']) && $_GET['act'] == 'getMapProperties')) {
+        if ($onlyGlobal == 0 || $enforceSources) {
             // Now process the data from the sources
             $this->processSources();
         }
