@@ -141,6 +141,17 @@ class NagVisObject {
         }
     }
 
+    // Returns the display_name of an object, if available, otherwise
+    // the alias of an object, if available, otherwise the name
+    public function getDisplayName() {
+        if (isset($this->state[DISPLAY_NAME]) && $this->state[DISPLAY_NAME] != '')
+            return $this->state[DISPLAY_NAME];
+        elseif (isset($this->state[ALIAS]))
+            return $this->state[ALIAS];
+        else
+            return $this->getName();
+    }
+
     /**
      * Get method for the hover template of the object
      *
