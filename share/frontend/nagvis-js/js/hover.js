@@ -96,8 +96,9 @@ function replaceHoverTemplateMacrosChild(oObj, sTemplateCode) {
     }
 
     var oMacros = {
-        'obj_summary_state':  oObj.conf.summary_state,
-        'obj_summary_output': oObj.conf.summary_output
+        'obj_summary_state'  : oObj.conf.summary_state,
+        'obj_summary_output' : oObj.conf.summary_output,
+        'obj_display_name'   : oObj.conf.display_name
     }
 
     if(oObj.conf.summary_problem_has_been_acknowledged && oObj.conf.summary_problem_has_been_acknowledged == 1)

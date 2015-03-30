@@ -21,6 +21,9 @@ Frontend:
     instead of showing the old error popup window
   * The map / object editing dialog is now using a tab navigation to reduce
     the number of options shown at once for a more user friendly handling
+  * It's now possible to use the macro [obj_display_name] in child objects
+   in hover menus of hosts or any other objects having childs (Thanks to
+   Andreas Steinel)
   * FIX: Fixed annoying browser warning message when reloading pages which
     are shown up right after logging in to NagVis
 

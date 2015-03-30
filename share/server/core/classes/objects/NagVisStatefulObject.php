@@ -604,6 +604,7 @@ class NagVisStatefulObject extends NagVisObject {
         $aChild = Array(
             'type'                => $this->getType(),
             'name'                => $this->getName(),
+            'display_name'        => $this->escapeStringForJson($this->display_name),
             'summary_state'       => state_str($this->sum[STATE]),
             'summary_in_downtime' => $this->sum[DOWNTIME],
             'summary_problem_has_been_acknowledged' => $this->sum[ACK],
