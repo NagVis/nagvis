@@ -58,6 +58,10 @@ class NagVisStatefulObject extends NagVisObject {
         $this->state = $arr;
     }
 
+    public function getStateAttr($attr) {
+        return val($this->state, $attr);
+    }
+
     /**
      * Adds state counts of members to the object. Works incremental!
      */

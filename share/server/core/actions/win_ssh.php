@@ -34,13 +34,13 @@ if (!function_exists('handle_action_win_ssh')) {
     
         // Get the host address! erm ... looks a little complicated...
         global $_BACKEND;
-        $backendId = $MAPCFG->getValue($objId, 'backend_id');
-        $OBJ = new NagVisHost(GlobalCore::getInstance(), $_BACKEND, $backendId, $host_name);
+        $backendIds = $MAPCFG->getValue($objId, 'backend_id');
+        $OBJ = new NagVisHost($backendIds, $host_name);
         $OBJ->setConfiguration($MAPCFG->getMapObject($objId));
         $OBJ->queueState(GET_STATE, DONT_GET_SINGLE_MEMBER_STATES);
         $_BACKEND->execute();
         $OBJ->applyState();
-        $host_address = $OBJ->get('address');
+        $host_address = $OBJ->getStateAttr(ADDRESS);
     
         // Now generate the .cmd file for the user which is then (hopefully) handled
         // correctly by the users browser.
