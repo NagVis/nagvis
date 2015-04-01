@@ -1730,6 +1730,9 @@ function getViewParams(update, userParams) {
         }
     }
 
+    if (usesSource('worldmap'))
+        params['bbox'] = g_map.getBounds().toBBoxString();
+
     var sParams = '';
     for(var param in params) {
         if(params[param] != '') {
@@ -1779,14 +1782,37 @@ function usesSource(source) {
         && oPageProperties.sources.indexOf(source) !== -1;
 }
 
-/**
- * parseMap()
- *
- * Parses the map on initial page load or changed map configuration
- *
- * @return  Boolean  Success?
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
+// Holds the global JS map object (e.g. leaflet js map object)
+var g_map;
+// Holds all map objects
+var g_map_objects;
+
+// Is used to update the objects to show on the worldmap
+function updateWorldmapObjects(e) {
+    parseMap(oFileAges[oPageProperties.map_name], 'map', oPageProperties.map_name, true);
+}
+
+function parseWorldmap() {
+    L.Icon.Default.imagePath = oGeneralProperties.path_base+'/frontend/nagvis-js/images/leaflet';
+    g_map = L.map('map').setView([51.505, -0.09], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(g_map);
+
+    g_map_objects = L.layerGroup().addTo(g_map);
+
+    // The worldmap is showing it's objects depending on the objects
+    // which are visible on the screen. This is realized by issueing
+    // an ajax call with the current viewport to the core code, which
+    // then returns a list of objects to add to the map depending on
+    // this viewport.
+    g_map.on('moveend', updateWorldmapObjects);
+
+    // hide eventual open header dropdown menus when clicking on the map
+    g_map.on('mousedown', checkHideMenu);
+}
+
+// Parses the map on initial page load or changed map configuration
 function parseMap(iMapCfgAge, type, mapName, init) {
     var bReturn = false;
 
@@ -1853,6 +1879,10 @@ function parseMapHandler(oObjects, params) {
         }
     }
     keys = null;
+
+    if (usesSource('worldmap')) {
+        g_map_objects.clearLayers();
+    }
 
     // Update timestamp for map configuration (No reparsing next time)
     oFileAges[mapName] = iMapCfgAge;
@@ -1935,7 +1965,11 @@ function workerInitialize(iCount, sType, sIdentifier) {
     // Handle the page rendering
     if(sType == 'map') {
         eventlog("worker", "debug", "Parsing " + sType + ": " + sIdentifier);
-        renderZoombar();
+
+        if (usesSource('worldmap'))
+            parseWorldmap();
+        else
+            renderZoombar();
         parseMap(oFileAges[sIdentifier], sType, sIdentifier, true);
 
     } else if(sType === 'overview') {

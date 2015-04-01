@@ -36,7 +36,7 @@ function headerDraw() {
         return;
 
     if(typeof(oUserProperties.header) !== 'undefined' && oUserProperties.header === false)
-        headerToggle(false);
+        toggleHeader(false);
 
     addEvent(document, 'mousedown', checkHideMenu);
 }
@@ -60,11 +60,14 @@ function checkHideMenu(event) {
     ddMenuHide();
 }
 
-function headerToggle(store) {
-    var header = document.getElementById('header');
-    var spacer = document.getElementById('headerspacer');
-    var show   = document.getElementById('headershow');
+function toggleHeader(store) {
+    var header  = document.getElementById('header');
+    var spacer  = document.getElementById('headerspacer');
+    var show    = document.getElementById('headershow');
     var state = true;
+
+    // Reset the header height cache
+    cacheHeaderHeight    = null;
 
     if(header.style.display === '') {
         header.style.display = 'none';
@@ -77,8 +80,7 @@ function headerToggle(store) {
         show.style.display   = 'none';
     }
 
-    // Reset the header height cache
-    cacheHeaderHeight    = null;
+    sidebarUpdatePosition();
 
     if(store === true)
         storeUserOption('header', state);
@@ -217,6 +219,8 @@ function toggleSidebar(store) {
             content.style.marginLeft = '200px';
         }
 
+        sidebarUpdatePosition();
+
         if (oGeneralProperties.header_show_states)
             headerUpdateStates();
     }
@@ -271,6 +275,12 @@ function sidebarDraw() {
             node = null;
         }
     }
+}
+
+function sidebarUpdatePosition() {
+    var sidebar = document.getElementById('sidebar');
+    if (sidebar && sidebarOpen())
+        sidebar.style.top = getHeaderHeight() + 'px';
 }
 
 function sidebarDrawSubtree(node, index) {

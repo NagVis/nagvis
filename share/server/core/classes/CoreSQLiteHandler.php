@@ -79,6 +79,10 @@ class CoreSQLiteHandler {
         return $RES->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function error() {
+        return $this->DB->errorInfo();
+    }
+
     public function close() {
         $this->DB = null;
     }
@@ -297,16 +301,16 @@ class CoreSQLiteHandler {
         }
     }
 
-    private function getDbVersion() {
+    public function getDbVersion() {
         $data = $this->fetchAssoc($this->DB->query('SELECT version FROM version'));
         return $data['version'];
     }
 
-    private function updateDbVersion() {
+    public function updateDbVersion() {
         $this->DB->query('UPDATE version SET version=\'' . CONST_VERSION . '\'');
     }
 
-    private function createVersionTable() {
+    public function createVersionTable() {
         $this->DB->query('CREATE TABLE version (version VARCHAR(100), PRIMARY KEY(version))');
         $this->DB->query('INSERT INTO version (version) VALUES (\''.CONST_VERSION.'\')');
     }

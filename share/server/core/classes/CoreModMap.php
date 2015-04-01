@@ -45,7 +45,6 @@ class CoreModMap extends CoreModule {
 
             'addModify'         => 'edit',
             'modifyObject'      => 'edit',
-            'createObject'      => 'edit',
             'deleteObject'      => 'edit',
             'toStaticMap'       => 'edit',
 
@@ -78,7 +77,6 @@ class CoreModMap extends CoreModule {
                 $this->name = $aVals['show'];
             break;
             // And those have the objecs in the POST var "map"
-            case 'createObject':
             case 'modifyObject':
             case 'deleteObject':
             case 'doTmplAdd':

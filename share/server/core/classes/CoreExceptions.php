@@ -92,6 +92,10 @@ class FieldInputError extends NagVisException {
         $this->field = $field;
         $this->msg   = $msg;
     }
+
+    function message() {
+        return $this->msg;
+    }
 }
 
 // This exception is used to handle PHP errors

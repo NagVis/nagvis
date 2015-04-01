@@ -42,7 +42,7 @@ define('MATCH_STRING_URL_EMPTY', '/^[0-9a-z\s:;|+[\]()=%?&_,.\-#@=\/\\\~]*$/i');
 define('MATCH_GADGET_OPT', '/^[0-9a-z\s:+[\]()_.,\-&?!#@=\/\\\%]+$/i');
 define('MATCH_STRING_STYLE', '/^[0-9a-z:;\-+%#(),.]*$/i');
 define('MATCH_COORDS',       '/^(?:(?:[0-9]+)|([a-z0-9]+(?:%[+-][0-9]+)?))$/');
-define('MATCH_COORDS_MULTI', '/^(?:(?:(?:[0-9]+)|([a-z0-9]+(?:%[+-][0-9]+)?))[.,]?)+$/');
+define('MATCH_COORDS_MULTI', '/^(?:(?:(?:[0-9]+)|(?:-?[0-9]+(?:.[0-9]+)?)|([a-z0-9]+(?:%[+-][0-9]+)?)),?)+$/');
 define('MATCH_COORDS_MULTI_EMPTY', '/^(?:(?:(?:[0-9]+)|([a-z0-9]+(?:%[+-][0-9]+)?))[.,]?)*$/');
 define('MATCH_COORD_SIMPLE', '/^[0-9]+$/');
 
@@ -52,6 +52,7 @@ define('MATCH_FLOAT', '/^[0-9]+[.,]*[0-9]*$/');
 define('MATCH_FLOAT_EMPTY', '/^([0-9]+[.,]?[0-9]*)*$/');
 define('MATCH_BOOLEAN', '/^(?:1|0)$/i');
 define('MATCH_BOOLEAN_EMPTY', '/^(?:1|0)*$/i');
+define('MATCH_LATLONG', '/^[0-9]+(.[0-9]+),[0-9]+(.[0-9]+)?$/');
 
 define('MATCH_COLOR', '/^(#?[0-9a-f]{3,6}|transparent)$/i');
 define('MATCH_OBJECTTYPE', '/^(?:global|host|service|dyngroup|aggr|hostgroup|servicegroup|map|textbox|shape|line|template|container)$/i');

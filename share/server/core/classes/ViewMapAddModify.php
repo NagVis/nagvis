@@ -529,7 +529,8 @@ class ViewMapAddModify {
 
         $this->MAPCFG = new GlobalMapCfg($map_name);
         try {
-            $this->MAPCFG->skipSourceErrors();
+            // FIXME: When to ignore?
+            //$this->MAPCFG->skipSourceErrors();
             $this->MAPCFG->readMapConfig();
         } catch(MapCfgInvalid $e) {}
 
@@ -570,7 +571,7 @@ class ViewMapAddModify {
                       .'makeuri('.json_encode($success[1]).'); }, '.$reload_time.'*1000);');
                 }
             } catch (NagVisException $e) {
-                form_error(null, $e->msg);
+                form_error(null, $e->message());
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {

@@ -57,6 +57,7 @@ cmp_js() {
     pushd $1 >/dev/null
     OUT=NagVisCompressed.js
     >$OUT
+    cmp ExtLeaflet.js
     cmp ExtStacktrace.js
     cmp nagvis.js
     cmp edit.js

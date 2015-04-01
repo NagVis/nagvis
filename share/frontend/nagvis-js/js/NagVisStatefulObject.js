@@ -236,13 +236,23 @@ var NagVisStatefulObject = NagVisObject.extend({
             break;
         }
 
-        // Append child to map and save reference in parsedObject
-        var oMap = doc.getElementById('map');
-        if(oMap) {
-            this.parsedObject = oMap.appendChild(oContainerDiv);
-            oMap = null;
+        // save reference to DOM obj in js obj
+        this.parsedObject = oContainerDiv;
+
+        // Append child to map and
+        if (!usesSource('worldmap')) {
+            var oMap = doc.getElementById('map');
+            if(oMap) {
+                this.parsedObject = oMap.appendChild(oContainerDiv);
+                oMap = null;
+            }
+            doc = null;
         }
-        doc = null;
+        else {
+            L.marker([parseFloat(this.conf.x), parseFloat(this.conf.y)], {
+                icon: L.nagVisObj({node: oContainerDiv})
+            }).addTo(g_map_objects);
+        }
 
         // Parse label when configured
         if(this.conf.label_show && this.conf.label_show == '1') {
@@ -340,7 +350,8 @@ var NagVisStatefulObject = NagVisObject.extend({
             this.removeControls();
 
         // Remove object from DOM
-        oMap.removeChild(this.parsedObject);
+        if (!usesSource('worldmap'))
+            oMap.removeChild(this.parsedObject);
 
         // Remove object reference
         this.parsedObject = null;
@@ -449,12 +460,7 @@ var NagVisStatefulObject = NagVisObject.extend({
         return sReturn;
     },
 
-    /**
-     * Parses the HTML-Code of a line
-     *
-     * @return	String		HTML code
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+    // Parses the line container object and returns it's DOM nodes
     parseLine: function () {
         // Create container div
         var doc = document;
@@ -758,14 +764,7 @@ var NagVisStatefulObject = NagVisObject.extend({
         this.conf.summary_output += ' (Weathermap Line Error: ' + type+' set of performance data ('+value+') for  '+name1+' ['+name2+'] is not a percentage value)';
     },
 
-    /**
-     * PUBLIC parseIcon()
-     *
-     * Parses the HTML-Code of an icon
-     *
-     * @return	String		String with Html Code
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
+    // Renders the object as icon and returns the icon container js object
     parseIcon: function () {
         var alt = '';
 
@@ -807,9 +806,11 @@ var NagVisStatefulObject = NagVisObject.extend({
         oIconDiv.setAttribute('id', this.conf.object_id+'-icondiv');
         oIconDiv.setAttribute('class', 'icon');
         oIconDiv.setAttribute('className', 'icon');
-        oIconDiv.style.position = 'absolute';
-        oIconDiv.style.top  = this.parseCoord(this.conf.y, 'y') + 'px';
-        oIconDiv.style.left = this.parseCoord(this.conf.x, 'x') + 'px';
+        if (!usesSource('worldmap')) {
+            oIconDiv.style.position = 'absolute';
+            oIconDiv.style.top  = this.parseCoord(this.conf.y, 'y') + 'px';
+            oIconDiv.style.left = this.parseCoord(this.conf.x, 'x') + 'px';
+        }
         oIconDiv.style.zIndex = this.conf.z;
 
         // Parse link only when set

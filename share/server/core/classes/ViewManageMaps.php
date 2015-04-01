@@ -27,10 +27,11 @@ class ViewManageMaps {
         echo '<h2>'.l('Create Map').'</h2>';
 
         $map_types = array(
-            'map'     => l('Regular map'),
-            'geomap'  => l('Geographical map'),
-            'automap' => l('Automap based on parent/child relations'),
-            'dynmap'  => l('Dynamic map'),
+            'map'      => l('Regular map'),
+            'worldmap' => l('Geographical map (interactive)'),
+            'geomap'   => l('Geographical map (non interactive)'),
+            'automap'  => l('Automap based on parent/child relations'),
+            'dynmap'   => l('Dynamic map'),
         );
 
         if (is_action() && post('mode') == 'create') {

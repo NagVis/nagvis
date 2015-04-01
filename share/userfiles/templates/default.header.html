@@ -1,10 +1,10 @@
 <script type="text/javascript" src="{$pathHeaderJs}"></script>
 {if $showStates}<script type="text/javascript">var g_map_names = {$mapNames};</script>{/if}
 
-<div id="headershow" class="header"><a href="#" onclick="headerToggle(true)"><img src="{$pathTemplateImages}default.header_show.png" alt="Show header menu" /></a></div>
+<div id="headershow" class="header"><a href="#" onclick="toggleHeader(true)"><img src="{$pathTemplateImages}default.header_show.png" alt="Show header menu" /></a></div>
 <div id="header" class="header">
 <ul class="head">
-  <li><a href="#" onclick="headerToggle(true)"><img src="{$pathTemplateImages}default.header_hide.png" alt="Hide header menu" /></a></li>
+  <li><a href="#" onclick="toggleHeader(true)"><img src="{$pathTemplateImages}default.header_hide.png" alt="Hide header menu" /></a></li>
     <li class="logo"><a href="http://www.nagvis.org/"><img src="{$pathImages}/internal/logo_96x25.png" alt="NagVis" /></a></li>
     <li onmouseover="!sidebarOpen() ? showMapDropdown() : void(0)" class="dropdown">
         <span id="views-ddheader" onclick="toggleSidebar(true)">{$langOpen} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>

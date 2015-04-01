@@ -9,10 +9,10 @@ function filter_group(field) \{
     storeUserOption('params-', '\{"filter_group": "'+grp+'"}');
 }
 </script>
-<div id="headershow" class="header"><a href="#" onclick="headerToggle(true)"><img src="{$pathTemplateImages}default.header_show.png" alt="Show header menu" /></a></div>
+<div id="headershow" class="header"><a href="#" onclick="toggleHeader(true)"><img src="{$pathTemplateImages}default.header_show.png" alt="Show header menu" /></a></div>
 <div id="header" class="header">
 <ul class="head">
-  <li><a href="#" onclick="headerToggle(true)"><img src="{$pathTemplateImages}default.header_hide.png" alt="Hide header menu" /></a></li>
+  <li><a href="#" onclick="toggleHeader(true)"><img src="{$pathTemplateImages}default.header_hide.png" alt="Hide header menu" /></a></li>
     <li><span>Filter:</span></li>
     <li><span>
       <select onchange="filter_group(this)">

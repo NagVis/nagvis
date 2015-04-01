@@ -1276,6 +1276,26 @@ class GlobalMapCfg {
      * EDIT STUFF BELOW
      ***************************************************************************/
 
+    // Gives the sources the chance to handle the task in question. If a source
+    // implements the action and handles the task, the function returns "true".
+    private function handleSources($act, $id) {
+        $sources = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : array();
+        foreach($sources AS $source) {
+            $func = $act.'_'.$source;
+            if (!function_exists($func))
+                continue; // silently ignore sources not implementing this
+            try {
+                if ($func($this, $this->name, $this->mapConfig, $id) === true)
+                    return true; // don't save in config file!
+            } catch(Exception $e) {
+                if(!$this->ignoreSourceErrors) {
+                    throw $e;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * Formats a map object for the map configuration file
      *
@@ -1332,6 +1352,11 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     private function storeAddElement($id) {
+        // First try whether or not there is a source which wants to store
+        // the object instead of storing it in the map config file
+        if ($this->handleSources('add_obj', $id) === true)
+            return true;
+
         $f = $this->getConfig();
 
         if(count($f) > 0 && trim($f[count($f) - 1]) !== '')
@@ -1366,6 +1391,11 @@ class GlobalMapCfg {
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     public function storeDeleteElement($id, $replaceWith = null) {
+        // First try whether or not there is a source which wants to store
+        // the object instead of storing it in the map config file
+        if ($this->handleSources('del_obj', $id) === true)
+            return true;
+
         $start = null;
         $inObj = false;
         $end = null;
@@ -1411,6 +1441,11 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function storeUpdateElement($id) {
+        // First try whether or not there is a source which wants to store
+        // the object instead of storing it in the map config file
+        if ($this->handleSources('update_obj', $id) === true)
+            return true;
+
         $type = $this->mapConfig[$id]['type'];
 
         if(is_numeric($id) && $id == 0)
@@ -1856,6 +1891,7 @@ class GlobalMapCfg {
             'dynmap'            => l('Dynmap'),
             'automap'           => l('Automap'),
             'geomap'            => l('Geomap'),
+            'worldmap'          => l('Worldmap'),
             'object_defaults'   => l('Obj. Defaults'),
             'events'            => l('Events'),
         );

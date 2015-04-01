@@ -542,8 +542,18 @@ function addClick(e) {
     //
 
     if(addObjType == 'textbox' || addObjType == 'container') {
-        var w = addX.pop();
-        var h = addY.pop();
+        var w = addX.pop() - addX[0];
+        var h = addY.pop() - addY[0];
+    }
+
+    if (usesSource('worldmap')) {
+        // convert the X/Y coords to lat/long
+        var latlng;
+        for (var i = 0; i < addX.length; i++) {
+            latlng = g_map.containerPointToLatLng(L.point(addX[i], addY[i]));
+            addX[i] = latlng.lat;
+            addY[i] = latlng.lng;
+        }
     }
 
     var sUrl = '';
@@ -562,7 +572,7 @@ function addClick(e) {
         sUrl += '&clone_id=' + cloneId;
 
     if(addObjType == 'textbox' || addObjType == 'container')
-        sUrl += '&w=' + (w - addX[0]) + '&h=' + (h - addY[0]);
+        sUrl += '&w=' + w+ '&h=' + h;
 
     if(sUrl === '')
         return false;

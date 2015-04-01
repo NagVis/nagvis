@@ -1256,6 +1256,9 @@ function getEffectiveStyle(e, attr) {
  */
 function scaleView() {
     var header       = document.getElementById('header');
+    var content      = document.getElementById('map');
+    if (content == null)
+        content = document.getElementById('overview');
     var headerSpacer = document.getElementById('headerspacer');
     if(header) {
         header.style.width = pageWidth() + 'px';
@@ -1266,12 +1269,9 @@ function scaleView() {
         header = null;
     }
 
-    // The sidebar should fill the whole screen all the time
-    var sidebar = document.getElementById('sidebar');
-    if(sidebar && sidebarOpen()) {
-        sidebar.style.height = (pageHeight() + getScrollTop()) + 'px';
-    }
-    sidebar = null;
+    content.style.top = getHeaderHeight() + 'px';
+
+    sidebarUpdatePosition();
 }
 
 var g_zoom_factor = null;
@@ -1448,3 +1448,48 @@ function change_class(o, a, b) {
     remove_class(o, a);
     add_class(o, b);
 }
+
+// Wrapper object for the worldmap (similar to leaflet js DivIcon, but
+// support adding an existing domNode)
+L.NagVisObj = L.Icon.extend({
+    options: {
+        iconSize: [12, 12], // also can be set through CSS
+        /*
+        iconAnchor: (Point)
+        popupAnchor: (Point)
+        node: (DOM node)
+        bgPos: (Point)
+        */
+        className: 'leaflet-nagvis-obj',
+        node: null
+    },
+
+    createIcon: function (oldIcon) {
+        var div = (oldIcon && oldIcon.tagName === 'DIV') ? oldIcon : document.createElement('div'),
+            options = this.options;
+
+        // remove all existing childs
+        for(var i = div.childNodes.length; i > 0; i--)
+            div.removeChild(div.childNodes[0]);
+
+        if (options.node !== null) {
+            div.appendChild(options.node);
+        }
+
+        if (options.bgPos) {
+            div.style.backgroundPosition =
+                    (-options.bgPos.x) + 'px ' + (-options.bgPos.y) + 'px';
+        }
+
+        this._setIconStyles(div, 'icon');
+        return div;
+    },
+
+    createShadow: function () {
+        return null;
+    }
+});
+
+L.nagVisObj = function (options) {
+    return new L.NagVisObj(options);
+};

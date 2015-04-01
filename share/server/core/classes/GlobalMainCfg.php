@@ -342,6 +342,17 @@ class GlobalMainCfg {
                     'default'     => '',
                     'match'       => MATCH_STRING_EMPTY
                 ),
+
+                'worldmap_start_pos' => array(
+                    'editable'    => true,
+                    'default'     => '51.505,-0.09',
+                    'match'       => MATCH_LATLONG,
+                ),
+                'worldmap_start_zoom' => array(
+                    'editable'    => true,
+                    'default'     => 13,
+                    'match'       => MATCH_INTEGER,
+                ),
             ),
             'defaults' => Array(
                 'backend' => Array(
