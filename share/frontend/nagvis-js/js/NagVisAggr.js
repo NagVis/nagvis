@@ -23,9 +23,6 @@
 
 var NagVisAggr = NagVisStatefulObject.extend({
     constructor: function(oConf) {
-        // Call parent constructor
         this.base(oConf);
-
-        this.getMembers();
     }
 });

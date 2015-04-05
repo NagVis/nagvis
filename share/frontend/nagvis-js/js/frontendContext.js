@@ -26,7 +26,6 @@
  */
 
 // replace the system context menu?
-var _replaceContext = false;
 var _openContextMenus = [];
 
 /**
@@ -59,48 +58,6 @@ function contextHide() {
     }
 }
 
-// call from the onMouseDown event, passing the event if standards compliant
-function contextMouseDown(event) {
-    var target;
-    var id = -1;
-
-    // IE is evil and doesn't pass the event object
-    if(event === null || typeof event === 'undefined')
-        event = window.event;
-
-    // we assume we have a standards compliant browser, but check if we have IE
-    if(typeof event.target != 'undefined' && event.target !== null)
-        target = event.target;
-    else
-        target = event.srcElement;
-
-    // Workaround for the different structure of targets on lines/icons
-  // Would be nice to fix the structure
-    // For example needed by the WUI contextMenu links
-    var oNode = target;
-    while(typeof oNode.parentNode != 'undefined'
-          && oNode.parentNode && oNode.parentNode !== null
-          && (typeof oNode.id === 'undefined' || oNode.id === ''))
-        oNode = oNode.parentNode;
-
-    if(typeof oNode.id !== 'undefined' && oNode.id !== '')
-        id = oNode.id;
-    oNode = null;
-
-    //document.getElementById('box_host_0').appendChild(document.createTextNode("click: "+id+"\n"));
-    // Hide all context menus except clicking the current open context menu
-    if(id === -1 || id.indexOf('http:') === -1 && id.indexOf('-context') === -1)
-        contextHide();
-
-    // Don't show the context menu when currently dragging
-    if(dragging())
-        return false;
-
-    // only show the context menu if the right mouse button is pressed on the obj
-    if(event.button === 2)
-        _replaceContext = true;
-}
-
 function contextShow(event) {
     var target;
 
@@ -114,7 +71,7 @@ function contextShow(event) {
     else
         target = event.srcElement;
 
-    if(!_replaceContext)
+    if(!g_replace_context)
         return false;
 
   // Hide hover menu
@@ -141,7 +98,7 @@ function contextShow(event) {
     if(typeof id === 'undefined') {
         eventlog("context", "error", "Target object search had no id");
 
-        _replaceContext = false;
+        g_replace_context = false;
         return false;
     }
 
@@ -157,7 +114,7 @@ function contextShow(event) {
     if(contextMenu === null) {
         eventlog('context', 'error', 'Found no context menu wit the id "'+id+'-context"');
 
-        _replaceContext = false;
+        g_replace_context = false;
         return false;
     }
 
@@ -191,7 +148,7 @@ function contextShow(event) {
 
     contextMenu = null;
 
-    _replaceContext = false;
+    g_replace_context = false;
 
     // If this returns false, the browser's context menu will not show up
     return false;

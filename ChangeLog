@@ -24,6 +24,8 @@ Frontend:
   * It's now possible to use the macro [obj_display_name] in child objects
    in hover menus of hosts or any other objects having childs (Thanks to
    Andreas Steinel)
+  * Dropped jsGraphics line rendering (browser needs to support canvas now)
+    for being able to use lines within NagVis
   * Overview: Broken map configs do not prevent to open the map anymore
   * FIX: Fixed annoying browser warning message when reloading pages which
     are shown up right after logging in to NagVis

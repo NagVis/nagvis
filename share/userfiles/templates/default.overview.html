@@ -21,8 +21,6 @@ oFileAges = {$fileAges};
 // Kick of the worker
 addDOMLoadEvent(function()\{runWorker(0, 'overview');});
 
-// This disables the context menu when someone clicked anywhere on the map
-document.onmousedown = contextMouseDown;
 window.onresize = function() { scaleView(); }
 window.onscroll = function() { scaleView(); };
 </script>

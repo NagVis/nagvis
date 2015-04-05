@@ -506,7 +506,6 @@ class CoreMySQLHandler {
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'doUpload\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ManageShapes\', \'doDelete\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Overview\', \'getOverviewRotations\', \'*\')');
-        $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Overview\', \'getOverviewProperties\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Overview\', \'getOverviewMaps\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'ChangePassword\', \'view\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'UserMgmt\', \'view\', \'*\')');

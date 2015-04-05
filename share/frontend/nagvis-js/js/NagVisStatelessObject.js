@@ -40,7 +40,7 @@ var NagVisStatelessObject = NagVisObject.extend({
      * This must not remove the object from the JS lists
      */
     remove: function () {
-        if(!this.parsedObject)
+        if (!this.dom_obj)
             return;
 
         // Remove event listeners
@@ -61,11 +61,11 @@ var NagVisStatelessObject = NagVisObject.extend({
         // Remove object from DOM
         var oMap = document.getElementById('map');
         if(oMap) {
-            oMap.removeChild(this.parsedObject);
+            oMap.removeChild(this.dom_obj);
             oMap = null;
         }
 
         // Remove object reference
-        this.parsedObject = null;
+        this.dom_obj = null;
     }
 });

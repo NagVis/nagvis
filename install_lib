@@ -66,13 +66,20 @@ cmp_js() {
     cmp frontendMessage.js
     cmp frontendEventlog.js
     cmp frontendHover.js
-    cmp hover.js
     cmp frontendContext.js
     cmp ajax.js
     cmp ajaxActions.js
     cmp dynfavicon.js
     cmp frontend.js
-    cmp lines.js
+    cmp Element.js
+    cmp ElementContext.js
+    cmp ElementHover.js
+    cmp ElementIcon.js
+    cmp ElementLine.js
+    cmp ElementGadget.js
+    cmp ElementLabel.js
+    cmp ElementShape.js
+    cmp ElementBox.js
     cmp NagVisObject.js
     cmp NagVisStatefulObject.js
     cmp NagVisStatelessObject.js

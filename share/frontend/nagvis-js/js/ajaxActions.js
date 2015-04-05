@@ -39,7 +39,7 @@ function saveObjectAfterResize(oObj) {
     obj.conf.y = objY;
     obj.conf.w = objW;
     obj.conf.h = objH;
-    obj.reposition();
+    obj.place();
 
     if(!isInt(objX) || !isInt(objY) || !isInt(objW) || !isInt(objH)) {
         alert('ERROR: Invalid coords ('+objX+'/'+objY+'/'+objW+'/'+objH+'). Terminating.');

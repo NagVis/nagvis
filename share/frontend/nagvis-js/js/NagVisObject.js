@@ -21,25 +21,18 @@
  *
  *****************************************************************************/
 
-/**
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-
 var NagVisObject = Base.extend({
-    parsedObject:          null,
-    hover_template_code:   null,
-    context_template_code: null,
+    dom_obj:               null,
+    trigger_obj:           null,
     conf:                  null,
-    contextMenu:           null,
     lastUpdate:            null,
     firstUpdate:           null,
     bIsFlashing:           false,
     bIsLocked:             true,
     objControls:           null,
     childs:                null,
-    // Current position of the active hover menu
-    hoverX:                null,
-    hoverY:                null,
+    // Holds all drawable GUI elements
+    elements:              null,
 
     constructor: function(oConf) {
         // Initialize
@@ -47,6 +40,7 @@ var NagVisObject = Base.extend({
 
         this.childs      = [];
         this.objControls = [];
+        this.elements    = [];
         this.conf        = oConf;
 
         // When no object_id given by server: generate own id
@@ -58,6 +52,92 @@ var NagVisObject = Base.extend({
         this.loadViewOpts();
     },
 
+    update: function() {
+        if (this.needsContextMenu())
+            new ElementContext(this).addTo(this);
+
+        if (this.needsHoverMenu())
+            new ElementHover(this).addTo(this);
+
+        if (this.conf.label_show && this.conf.label_show == '1')
+            new ElementLabel(this).addTo(this);
+
+        for (var i = 0; i < this.elements.length; i++)
+            this.elements[i].update();
+    },
+
+    // Renders the current object and all it's elements
+    render: function () {
+        // Create container div
+        var container = document.createElement('div');
+        container.setAttribute('id', this.conf.object_id);
+
+        // Save reference to DOM obj in js obj
+        this.dom_obj = container;
+
+        // Add the objects container to the map object
+        if (!usesSource('worldmap')) {
+            var oMap = document.getElementById('map');
+            if (oMap) {
+                oMap.appendChild(container);
+            }
+        }
+
+        for (var i = 0; i < this.elements.length; i++) {
+            this.elements[i].render();
+            this.elements[i].place();
+        }
+
+        // FIXME
+        //else {
+        //    L.marker([parseFloat(this.conf.x), parseFloat(this.conf.y)], {
+        //        icon: L.nagVisObj({node: oContainerDiv})
+        //    }).addTo(g_map_objects);
+        //}
+
+        // Enable the controls when the object is not locked
+        if (!this.bIsLocked) {
+            this.parseControls();
+	}
+    },
+
+    draw: function() {
+        for (var i = 0; i < this.elements.length; i++)
+            this.elements[i].draw(this);
+    },
+
+    erase: function () {
+        // Don't erase when it has not performed draw()
+        if (!this.dom_obj)
+            return;
+
+        for (var i = 0; i < this.elements.length; i++)
+            this.elements[i].erase(this);
+
+        // Remove all controls
+        if(!this.bIsLocked)
+            this.removeControls();
+
+        var oMap = document.getElementById('map');
+        if (!oMap) {
+            return;
+        }
+
+        // Remove object from DOM
+        if (!usesSource('worldmap'))
+            oMap.removeChild(this.dom_obj);
+    },
+
+    addElement: function(obj) {
+        if(this.elements.indexOf(obj) === -1)
+            this.elements.push(obj);
+        obj = null;
+    },
+
+    removeElement: function(obj) {
+        this.elements.splice(this.elements.indexOf(obj), 1);
+        obj = null;
+    },
 
     /**
      * PRIVATE loadLocked
@@ -122,423 +202,6 @@ var NagVisObject = Base.extend({
     },
 
     /**
-     * PUBLIC getContextMenu()
-     *
-     * Creates a context menu for the object
-     *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    getContextMenu: function (sObjId) {
-        // Writes template code to "this.context_template_code"
-        this.getContextTemplateCode();
-
-        // Replace object specific macros
-        this.replaceContextTemplateMacros();
-
-        var doc = document;
-        var oObj = doc.getElementById(sObjId);
-        var oContainer = doc.getElementById(this.conf.object_id);
-
-        if(oObj == null) {
-            eventlog("NagVisObject", "critical", "Could not get context menu object (ID:"+sObjId+")");
-            return false;
-        }
-
-        if(oContainer == null) {
-            eventlog("NagVisObject", "critical", "Could not get context menu container (ID:"+this.conf.object_id+")");
-            oObj = null;
-            return false;
-        }
-
-        // Only create a new div when the context menu does not exist
-        var contextMenu = doc.getElementById(this.conf.object_id+'-context');
-        var justAdded = false;
-        if(!contextMenu) {
-            // Create context menu div
-            var contextMenu = doc.createElement('div');
-            contextMenu.setAttribute('id', this.conf.object_id+'-context');
-            contextMenu.setAttribute('class', 'context');
-            contextMenu.setAttribute('className', 'context');
-            contextMenu.style.zIndex = '1000';
-            contextMenu.style.display = 'none';
-            contextMenu.style.position = 'absolute';
-            contextMenu.style.overflow = 'visible';
-            justAdded = true;
-        }
-
-        // Append template code to context menu div
-        contextMenu.innerHTML = this.context_template_code;
-
-        if(justAdded) {
-            // Append context menu div to object container
-            oContainer.appendChild(contextMenu);
-
-            // Add eventhandlers for context menu
-            oObj.onmousedown = contextMouseDown;
-            oObj.oncontextmenu = contextShow;
-        }
-
-        contextMenu = null;
-        oContainer = null;
-        oObj = null;
-        doc = null;
-    },
-
-    /**
-     * PUBLIC parseContextMenu()
-     *
-     * Parses the context menu. Don't add this functionality to the normal icon
-     * parsing
-     *
-     * @return	String		HTML code of the object
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    parseContextMenu: function () {
-        // Add a context menu to the object when enabled or when the object is unlocked
-        if(this.needsContextMenu()) {
-            if(this.conf.view_type && this.conf.view_type == 'line') {
-                this.getContextMenu(this.conf.object_id+'-linelink');
-            } else if(this.conf.type == 'textbox' || this.conf.type == 'container') {
-                this.getContextMenu(this.conf.object_id);
-            } else {
-                this.getContextMenu(this.conf.object_id+'-icon');
-            }
-        }
-    },
-
-    /**
-     * replaceContextTemplateMacros()
-     *
-     * Replaces object specific macros in the template code
-     *
-     * @return	String		HTML code for the hover box
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    replaceContextTemplateMacros: function() {
-        var oSectionMacros = {};
-
-        // Break when no template code found
-        if(!this.context_template_code || this.context_template_code === '') {
-            return false;
-        }
-
-        var oMacros = {
-            'obj_id':      this.conf.object_id,
-            'type':        this.conf.type,
-            'name':        this.conf.name,
-            'alias':       this.conf.alias,
-            'address':     this.conf.address,
-            'html_cgi':    this.conf.htmlcgi,
-            'backend_id':  this.conf.backend_id,
-            'custom_1':    this.conf.custom_1,
-            'custom_2':    this.conf.custom_2,
-            'custom_3':    this.conf.custom_3
-        };
-
-      if(typeof(oPageProperties) != 'undefined' && oPageProperties != null
-           && oPageProperties.view_type === 'map')
-            oMacros.map_name = oPageProperties.map_name;
-
-        if(this.conf.type === 'service') {
-            oMacros.service_description = escapeUrlValues(this.conf.service_description);
-
-            oMacros.pnp_hostname = this.conf.name.replace(/\s/g,'%20');
-            oMacros.pnp_service_description = this.conf.service_description.replace(/\s/g,'%20');
-        } else
-            oSectionMacros.service = '<!--\\sBEGIN\\sservice\\s-->.+?<!--\\sEND\\sservice\\s-->';
-
-        // Macros which are only for hosts
-        if(this.conf.type === 'host')
-            oMacros.pnp_hostname = this.conf.name.replace(/\s/g,'%20');
-        else
-            oSectionMacros.host = '<!--\\sBEGIN\\shost\\s-->.+?<!--\\sEND\\shost\\s-->';
-
-        if(this.conf.type !== 'host' && this.conf.type !== 'shape')
-            oSectionMacros.host_or_shape = '<!--\\sBEGIN\\shost_or_shape\\s-->.+?<!--\\sEND\\shost_or_shape\\s-->';
-
-        if(this.conf.type === 'line' || this.conf.type == 'shape'
-           || this.conf.type == 'textbox' || this.conf.type === 'container')
-            oSectionMacros.stateful = '<!--\\sBEGIN\\sstateful\\s-->.+?<!--\\sEND\\sstateful\\s-->';
-
-        // Remove unlocked section for locked objects
-        if(this.bIsLocked)
-            oSectionMacros.unlocked = '<!--\\sBEGIN\\sunlocked\\s-->.+?<!--\\sEND\\sunlocked\\s-->';
-        else
-            oSectionMacros.locked = '<!--\\sBEGIN\\slocked\\s-->.+?<!--\\sEND\\slocked\\s-->';
-
-        if(!oViewProperties || !oViewProperties.permitted_edit)
-            oSectionMacros.permitted_edit = '<!--\\sBEGIN\\spermitted_edit\\s-->.+?<!--\\sEND\\spermitted_edit\\s-->';
-
-        if(!oViewProperties || !oViewProperties.permitted_perform)
-            oSectionMacros.permitted_perform = '<!--\\sBEGIN\\spermitted_perform\\s-->.+?<!--\\sEND\\spermitted_perform\\s-->';
-
-        if(usesSource('automap')) {
-            oSectionMacros.not_automap = '<!--\\sBEGIN\\snot_automap\\s-->.+?<!--\\sEND\\snot_automap\\s-->';
-	    // Skip the root change link for the root host
-            if(this.conf.name === getUrlParam('root'))
-		oSectionMacros.automap_not_root = '<!--\\sBEGIN\\sautomap_not_root\\s-->.+?<!--\\sEND\\sautomap_not_root\\s-->';
-        } else {
-	    oSectionMacros.automap_not_root = '<!--\\sBEGIN\\sautomap_not_root\\s-->.+?<!--\\sEND\\sautomap_not_root\\s-->';
-            oSectionMacros.automap = '<!--\\sBEGIN\\sautomap\\s-->.+?<!--\\sEND\\sautomap\\s-->';
-        }
-        if(this.conf.view_type !== 'line')
-            oSectionMacros.line = '<!--\\sBEGIN\\sline\\s-->.+?<!--\\sEND\\sline\\s-->';
-        if(this.conf.view_type !== 'line'
-           || (this.conf.line_type == 11 || this.conf.line_type == 12))
-            oSectionMacros.line_type = '<!--\\sBEGIN\\sline_two_parts\\s-->.+?<!--\\sEND\\sline_two_parts\\s-->';
-
-        // Replace hostgroup range macros when not in a hostgroup
-        if(this.conf.type !== 'hostgroup')
-            oSectionMacros.hostgroup = '<!--\\sBEGIN\\shostgroup\\s-->.+?<!--\\sEND\\shostgroup\\s-->';
-
-        // Replace servicegroup range macros when not in a servicegroup
-        if(this.conf.type !== 'servicegroup' && !(this.conf.type === 'dyngroup' && this.conf.object_types == 'service'))
-            oSectionMacros.servicegroup = '<!--\\sBEGIN\\sservicegroup\\s-->.+?<!--\\sEND\\sservicegroup\\s-->';
-
-        // Replace map range macros when not in a hostgroup
-        if(this.conf.type !== 'map')
-            oSectionMacros.map = '<!--\\sBEGIN\\smap\\s-->.+?<!--\\sEND\\smap\\s-->';
-
-        // Loop all registered actions, check wether or not this action should be shown for this object
-        // and either add the replacement section or not
-        for (var key in oGeneralProperties.actions) {
-            if(key == "indexOf")
-                continue; // skip indexOf prototype (seems to be looped in IE)
-            var action = oGeneralProperties.actions[key];
-            var hide = false;
-
-            // Check object type
-            hide = action.obj_type.indexOf(this.conf.type) == -1;
-
-            // Only check the condition when not already hidden by another check before
-            if(!hide && isset(action.client_os) && action.client_os.length > 0) {
-                // Check the client os
-                var os = navigator.platform.toLowerCase();
-                if (os.indexOf('win') !== -1)
-                    os = 'win';
-                else if (os.indexOf('linux') !== -1)
-                    os = 'lnx';
-                else if (os.indexOf('mac') !== -1)
-                    os = 'mac';
-
-                hide = action.client_os.indexOf(os) == -1;
-            }
-
-            // Only check the condition when not already hidden by another check before
-            if(!hide && isset(action.condition) && action.condition !== '') {
-                var cond = action.condition;
-                
-                var op = '';
-                if (cond.indexOf('~') != -1) {
-                    op = '~';
-                } else if (cond.indexOf('=') != -1) {
-                    op = '=';
-                }
-
-                var parts = cond.split(op);
-                var attr  = parts[0];
-                var val   = parts[1];
-                var to_be_checked;
-                if (isset(this.conf.custom_variables) && isset(this.conf.custom_variables[attr])) {
-                    to_be_checked = this.conf.custom_variables[attr];
-                } else if(isset(this.conf[attr])) {
-                    to_be_checked = this.conf[attr];
-                }
-
-                if (to_be_checked) {
-                    if (op == '=' && to_be_checked != val) {
-                        hide = true;
-                    } else if (op == '~' && to_be_checked.indexOf(val) == -1) {
-                        hide = true;
-                    }
-                } else {
-                    hide = true;
-                }
-            }
-
-            // Remove the section macros of not hidden actions
-            if(!hide) {
-                oSectionMacros['action_'+key] = '<!--\\s(BEGIN|END)\\saction_'+key+'\\s-->';
-            }
-            cond = null;
-            action = null;
-        }
-
-        // Remove all not hidden actions
-        oSectionMacros['actions'] = '<!--\\sBEGIN\\saction_.+?\\s-->.+?<!--\\sEND\\saction_.+?\\s-->';
-
-        // Loop and replace all unwanted section macros
-        for (var key in oSectionMacros) {
-            var regex = getRegEx('section-'+key, oSectionMacros[key], 'gm');
-            this.context_template_code = this.context_template_code.replace(regex, '');
-            regex = null;
-        }
-        oSectionMacros = null;
-
-        // Loop and replace all normal macros
-        this.context_template_code = this.context_template_code.replace(/\[(\w*)\]/g,
-                                     function(){ return oMacros[ arguments[1] ] || '';});
-        oMacros = null;
-    },
-
-    /**
-     * getContextTemplateCode()
-     *
-     * Get the context template from the global object which holds all templates of
-     * the map
-     *
-     * @return	String		HTML code for the hover box
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    getContextTemplateCode: function() {
-        this.context_template_code = oContextTemplates[this.conf.context_template];
-    },
-
-    /**
-     * Returns true when the given menu is displayed at the moment
-     */
-    menuOpened: function(ty) {
-        var menu = document.getElementById(this.conf.object_id + '-' + ty);
-        if(menu) {
-            if(menu.style.display !== 'none') {
-                return true;
-            }
-            menu = null;
-        }
-        return false;
-    },
-
-    /**
-     * PUBLIC getHoverMenu
-     *
-     * Creates a hover box for objects
-     *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    getHoverMenu: function (sObjId) {
-        // Only enable hover menu when configured
-        if(!this.conf.hover_menu || this.conf.hover_menu != '1')
-            return;
-
-        var objId = this.conf.object_id;
-        var sTemplateCode = '';
-        var iHoverDelay = this.conf.hover_delay;
-
-        // Parse the configured URL or get the hover menu
-        if(this.conf.hover_url && this.conf.hover_url !== '') {
-            this.getHoverUrlCode();
-
-            sTemplateCode = this.hover_template_code;
-        } else {
-            // Only fetch hover template code and parse static macros when this is
-            // no update
-            if(this.hover_template_code === null)
-                this.getHoverTemplateCode();
-
-            // Replace dynamic (state dependent) macros
-            if(isset(this.conf.hover_template))
-                sTemplateCode = replaceHoverTemplateDynamicMacros(this);
-        }
-
-        var doc = document;
-        var oObj = doc.getElementById(sObjId);
-        var oContainer = doc.getElementById(this.conf.object_id);
-
-        if(oObj == null) {
-            eventlog("NagVisObject", "critical", "Could not get hover menu object (ID:"+sObjId+")");
-            return false;
-        }
-
-        if(oContainer == null) {
-            eventlog("NagVisObject", "critical", "Could not get hover menu container (ID:"+this.conf.object_id+")");
-            oObj = null;
-            return false;
-        }
-
-        // Only create a new div when the hover menu does not exist
-        var hoverMenu = doc.getElementById(this.conf.object_id+'-hover');
-        var justCreated = false;
-        if(!hoverMenu) {
-            // Create hover menu div
-            var hoverMenu = doc.createElement('div');
-            hoverMenu.setAttribute('id', this.conf.object_id+'-hover');
-            hoverMenu.setAttribute('class', 'hover');
-            hoverMenu.setAttribute('className', 'hover');
-            hoverMenu.style.zIndex = '1000';
-            hoverMenu.style.display = 'none';
-            hoverMenu.style.position = 'absolute';
-            hoverMenu.style.overflow = 'visible';
-            justCreated = true;
-        }
-
-        // Append template code to hover menu div
-        hoverMenu.innerHTML = sTemplateCode;
-        sTemplateCode = null;
-
-        if(justCreated) {
-            // Append hover menu div to object container
-            oContainer.appendChild(hoverMenu);
-
-            // Add eventhandlers for hover menu
-            if(oObj) {
-                oObj.onmousemove = function(event) {
-                    // IE is evil and doesn't pass the event object
-                    if(!isset(event))
-                        event = window.event;
-                    var id = objId;
-                    var iH = iHoverDelay;
-                    displayHoverMenu(event, id, iH);
-                    id = null; iH = null; event = null;
-                };
-                oObj.onmouseout = function(e) { var id = objId; hoverHide(id); id = null; };
-            }
-
-            // Is already done during map rendering before. But the hover menu
-            // is rendered after the map rendering and can not be disabled during
-            // map rendering. So simply repeat that action here
-	    if(typeof(this.toggleObjectActions) == 'function')
-                this.toggleObjectActions(this.bIsLocked);
-        }
-
-        justCreated = null;
-        hoverMenu = null;
-        oContainer = null;
-        oObj = null;
-        doc = null;
-    },
-
-    /**
-     * getHoverUrlCode()
-     *
-     * Get the hover code from the hover url
-     *
-     * @return	String		HTML code for the hover box
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    getHoverUrlCode: function() {
-        this.hover_template_code = oHoverUrls[this.conf.hover_url];
-
-        if(this.hover_template_code === null)
-            this.hover_template_code = '';
-    },
-
-    /**
-     * getHoverTemplateCode()
-     *
-     * Get the hover template from the global object which holds all templates of
-     * the map
-     *
-     * @return	String		HTML code for the hover box
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    getHoverTemplateCode: function() {
-        // Asign the template code and replace only the static macros
-        // These are typicaly configured static configued values from nagios
-        if(isset(this.conf.hover_template))
-            this.hover_template_code = replaceHoverTemplateStaticMacros(this, oHoverTemplates[this.conf.hover_template]);
-    },
-
-    /**
      * Locks/Unlocks the object and fires dependent actions
      * It returns +1,-1 or 0 depending on the final state of the object
      *
@@ -554,19 +217,13 @@ var NagVisObject = Base.extend({
         else
             this.bIsLocked = !this.bIsLocked;
 
-        if(this.conf.view_type === 'line' || this.conf.type === 'line')
-            this.parseLineHoverArea(document.getElementById(this.conf.object_id+'-linediv'));
-        // Re-render the context menu
-        this.parseContextMenu();
+        for (var i = 0; i < this.elements.length; i++)
+            if (lock)
+                this.elements[i].lock();
+            else
+                this.elements[i].unlock();
 
         if(this.toggleObjControls()) {
-
-	    if(typeof(this.toggleLabelLock) == 'function')
-		this.toggleLabelLock();
-
-	    if(typeof(this.toggleObjectActions) == 'function')
-		this.toggleObjectActions(this.bIsLocked);
-
             // Only save the user option when not using the edit_mode
             if(!isset(lock) && (!oViewProperties.hasOwnProperty('edit_mode') || oViewProperties['edit_mode'] !== true)) {
                 var unlocked = [];
@@ -965,18 +622,6 @@ var NagVisObject = Base.extend({
     },
 
     /**
-     * Moves the icon to it's location as described by this js object
-     *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    moveIcon: function () {
-        var container = document.getElementById(this.conf.object_id + '-icondiv');
-        container.style.top  = this.parseCoord(this.conf.y, 'y') + 'px';
-        container.style.left = this.parseCoord(this.conf.x, 'x') + 'px';
-        container = null;
-    },
-
-    /**
      * Returns the x coordinate of the object in px
      */
     parsedX: function() {
@@ -992,25 +637,16 @@ var NagVisObject = Base.extend({
 
     /**
      * Entry point for repositioning objects in NagVis frontend
-     * Handles whole redrawing of the object while moving
-     *
-     * Author: Lars Michelsen <lars@vertical-visions.de>
+     * Handles whole redrawing of the object while moving. The new
+     * coordinates have already been set
      */
-    reposition: function() {
-        if(this.conf.view_type === 'line' || this.conf.type === 'line')
-            this.drawLine();
-        else if(this.conf.type === 'textbox' || this.conf.type === 'container')
-            this.moveBox();
-        else
-            this.moveIcon();
-
-        // Move the objects label when enabled
-        if(this.conf.label_show && this.conf.label_show == '1')
-            this.updateLabel();
+    place: function() {
+        for(var i = 0, l = this.elements.length; i < l; i++)
+            this.elements[i].place();
 
         // Move child objects
         for(var i = 0, l = this.childs.length; i < l; i++)
-            this.childs[i].reposition();
+            this.childs[i].place();
 
         // redraw the controls
         if(!this.bIsLocked)
@@ -1032,19 +668,13 @@ var NagVisObject = Base.extend({
         if(!oControls) {
             oControls = document.createElement('div');
             oControls.setAttribute('id', this.conf.object_id+'-controls');
-            if(this.parsedObject)
-                this.parsedObject.appendChild(oControls);
+            if (this.dom_obj)
+                this.dom_obj.appendChild(oControls);
         }
         oControls = null;
 
         if(this.conf.view_type === 'line' || this.conf.type === 'line')
             this.parseLineControls();
-        else if(this.conf.view_type === 'icon' || this.conf.view_type === 'gadget')
-            this.parseIconControls();
-        else if(this.conf.type === 'textbox' || this.conf.type === 'container')
-            this.parseBoxControls();
-        else if(this.conf.type === 'shape')
-            this.parseShapeControls();
     },
 
     addControl: function (obj) {
@@ -1127,40 +757,6 @@ var NagVisObject = Base.extend({
         return this.needsHoverMenu() || this.needsContextMenu() || this.needsLink() || !this.bIsLocked;
     },
 
-    parseLineHoverArea: function(oContainer) {
-        // This is only the container for the hover/label elements
-        // The real area or labels are added later
-        var oLink = document.getElementById(this.conf.object_id+'-linelink');
-        if(!oLink) {
-            var oLink = document.createElement('a');
-            oLink.setAttribute('id', this.conf.object_id+'-linelink');
-            oLink.setAttribute('class', 'linelink');
-            oLink.setAttribute('className', 'linelink');
-            oLink.href = this.conf.url;
-            oLink.target = this.conf.url_target;
-
-            oContainer.appendChild(oLink);
-        }
-
-        // Hide if not needed, show if needed
-        if(!this.needsLineHoverArea()) {
-            oLink.style.display = 'none';
-        } else {
-            oLink.style.display = 'block';
-        }
-
-        oLink = null;
-        oContainer = null;
-    },
-
-    removeLineHoverArea: function() {
-        if(!this.needsLineHoverArea()) {
-            var area = document.getElementById(this.conf.object_id+'-linelink');
-            area.style.display = 'none';
-            area = null;
-        }
-    },
-
     parseLineControls: function () {
         var x = this.parseCoords(this.conf.x, 'x');
         var y = this.parseCoords(this.conf.y, 'y');
@@ -1169,13 +765,14 @@ var NagVisObject = Base.extend({
 	var lineEndSize = size;
 	if(size < 20)
 	    lineEndSize = 20;
+        var obj;
         for(var i = 0, l = x.length; i < l; i++) {
 	    // Line middle drag coord needs to be smaller
 	    if(l > 2 && i == 1) 
-		this.parseControlDrag(i, x[i], y[i], - size / 2, - size / 2, size);
+		obj = this.parseControlDrag(i, x[i], y[i], - size / 2, - size / 2, size);
 	    else
-		this.parseControlDrag(i, x[i], y[i], - lineEndSize / 2, - lineEndSize / 2, lineEndSize);
-            makeDragable([this.conf.object_id+'-drag-'+i], this.saveObject, this.moveObject);
+		obj = this.parseControlDrag(i, x[i], y[i], - lineEndSize / 2, - lineEndSize / 2, lineEndSize);
+            makeDragable(obj, this.saveObject, this.moveObject);
         }
 
         if(this.conf.view_type === 'line' && (this.conf.line_type == 10
@@ -1198,14 +795,6 @@ var NagVisObject = Base.extend({
             return this.parseCoords(coord, dir)[1];
     },
 
-    lineCoords: function() {
-        return [
-            this.parseCoords(this.conf.x, 'x'),
-            this.parseCoords(this.conf.y, 'y'),
-            [this.conf.line_cut, this.conf.line_label_pos_in, this.conf.line_label_pos_out]
-        ];
-    },
-
     removeControls: function() {
         var oControls = document.getElementById(this.conf.object_id+'-controls');
         if(oControls)
@@ -1213,16 +802,6 @@ var NagVisObject = Base.extend({
                 oControls.removeChild(oControls.childNodes[0]);
         this.objControls = [];
         oControls = null;
-
-        if(this.conf.type === 'textbox' || this.conf.type === 'container') {
-            this.removeBoxControls();
-            makeUndragable([this.conf.object_id+'-label']);
-        } else {
-            makeUndragable([this.conf.object_id+'-icondiv']);
-        }
-        
-        if(this.conf.view_type === 'line' || this.conf.type === 'line')
-            this.removeLineHoverArea();
     },
 
     parseControlDrag: function (num, objX, objY, offX, offY, size) {
@@ -1249,7 +828,7 @@ var NagVisObject = Base.extend({
         };
 
         this.addControl(ctl);
-        ctl = null;
+        return ctl;
     },
 
     /**
@@ -1351,7 +930,7 @@ var NagVisObject = Base.extend({
         jsObj.conf.x = newPos[0];
         jsObj.conf.y = newPos[1];
 
-        jsObj.reposition();
+        jsObj.place();
 
         jsObj      = null;
         objId      = null;
@@ -1392,7 +971,7 @@ var NagVisObject = Base.extend({
                jsObj.conf.y = jsObj.calcNewCoord(pos[1], 'y');
                pos = null;
             }
-            jsObj.reposition();
+            jsObj.place();
         }
 
         // Make relative when oParent set and not already relative
@@ -1411,58 +990,6 @@ var NagVisObject = Base.extend({
         objId    = null;
         anchorId = null;
         jsObj    = null;
-    },
-
-    /**
-     * Returns the object ID of the object
-     */
-    getJsObjId: function() {
-        if(this.conf.view_type && this.conf.view_type === 'line')
-            return this.conf.object_id+'-linelink';
-        else
-            return this.conf.object_id+'-icon';
-    },
-
-    /**
-     * PUBLIC toggleObjectActions()
-     *
-     * This enables/disables the hover menu and the icon link
-     * temporary. e.g. in unlocked mode the hover menu shal be suppressed.
-     *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    toggleObjectActions: function(enable) {
-	var o = document.getElementById(this.getJsObjId());
-	if(o) {
-	    if(enable && isset(o.disabled_onmousemove)) {
-                // Hover-menu
-		o.onmousemove = o.disabled_onmousemove;
-		o.onmouseout  = o.disabled_onmouseout;
-		o.disabled_onmousemove = null;
-		o.disabled_onmouseout  = null;
-
-                // Link (Left mouse action)
-                if(o.parentNode.tagName == 'A')
-                    o.parentNode.onclick = null;
-	    } else if(!enable) {
-                // Hover-menu
-		o.disabled_onmousemove = o.onmousemove;
-		o.disabled_onmouseout  = o.onmouseout;
-		o.onmousemove = null;
-		o.onmouseout  = null;
-
-                // Link (Left mouse action)
-                if(o.parentNode.tagName == 'A')
-                    o.parentNode.onclick = function(event) {
-                        var event = !event ? window.event : event;
-                        if(event.stopPropagation)
-                            event.stopPropagation();
-                        event.cancelBubble = true;
-                        return false;
-                    };
-	    }
-            o = null;
-	}
     },
 
     highlight: function(show) {}

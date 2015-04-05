@@ -29,10 +29,6 @@
 /**
  * Definition of needed variables
  */
-var oHoverTemplates = {};
-var oHoverTemplatesChild = {};
-var oHoverUrls = {};
-var oContextTemplates = {};
 // This is turned to true when the map is currently reparsing (e.g. due to
 // a changed map config file). This blocks object updates.
 var bBlockUpdates = false;
@@ -333,195 +329,6 @@ function getFileAgeParams(viewType, mapName) {
 }
 
 /**
- * Gets the code for needed hover templates and saves it for later use in icons
- */
-function getHoverUrls() {
-    var aUrlParts = [];
-
-    // Loop all map objects to get the urls which need to be fetched
-    for(var i in oMapObjects) {
-        if(oMapObjects[i].conf.hover_menu && oMapObjects[i].conf.hover_menu == 1
-           && oMapObjects[i].conf.hover_url && oMapObjects[i].conf.hover_url !== '') {
-            oHoverUrls[oMapObjects[i].conf.hover_url] = '';
-        }
-    }
-
-    // Build string for bulk fetching the templates
-    for(var i in oHoverUrls)
-        if(i != 'Inherits')
-            aUrlParts.push('&url[]='+escapeUrlValues(i));
-
-    // Get the needed templates via bulk request
-    var aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverUrl',
-                                          aUrlParts, oWorkerProperties.worker_request_max_length, true);
-
-    // Set the code to global object oHoverUrls
-    if(aTemplateObjects.length > 0)
-        for(var i = 0, len = aTemplateObjects.length; i < len; i++)
-            oHoverUrls[aTemplateObjects[i].url] = aTemplateObjects[i].code;
-    aTemplateObjects = null;
-}
-
-/**
- * parseHoverMenus()
- *
- * Assigns the hover template code to the object, replaces all macros and
- * adds the menu to all map objects
- *
- * @param   Object   Object with basic page properties
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function parseHoverMenus() {
-    for(var i in oMapObjects)
-        if(oMapObjects[i].needsHoverMenu())
-            oMapObjects[i].parseHoverMenu();
-}
-
-/**
- * getHoverTemplateChildCode()
- *
- * Extracts the childs code from the hover templates
- *
- * @param   String   The whole template code
- * @return  String   The child part template code
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getHoverTemplateChildCode(sTemplateCode) {
-    var regex = getRegEx('loopChild', "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
-    var results = regex.exec(sTemplateCode);
-    regex = null;
-
-    if(results !== null)
-        return results[1];
-    else
-        return '';
-}
-
-/**
- * getHoverTemplates()
- *
- * Gets the code for needed hover templates and saves it for later use in icons
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getHoverTemplates() {
-    var aUrlParts = [];
-
-    // Loop all map objects to get the used hover templates
-    for(var i in oMapObjects) {
-        // Ignore templates of objects which
-        // a) have a disabled hover menu
-        // b) do not use hover_url
-        // c) templates are already fetched
-        if(isset(oMapObjects[i].conf.hover_menu) && oMapObjects[i].conf.hover_menu == '1'
-           && (!oMapObjects[i].conf.hover_url || oMapObjects[i].conf.hover_url === '')
-           && isset(oMapObjects[i].conf.hover_template)
-           && (!isset(oHoverTemplates[oMapObjects[i].conf.hover_template]) || oHoverTemplates[oMapObjects[i].conf.hover_template] === '')) {
-            oHoverTemplates[oMapObjects[i].conf.hover_template] = '';
-        }
-    }
-
-    // Build string for bulk fetching the templates
-    for(var i in oHoverTemplates)
-        if(i !== 'Inherits' && oHoverTemplates[i] === '')
-            aUrlParts.push('&name[]='+i);
-
-    if(aUrlParts.length == 0)
-        return;
-
-    // Get the needed templates via bulk request
-    var aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverTemplate',
-                                          aUrlParts, oWorkerProperties.worker_request_max_length, true);
-
-    // Set the code to global object oHoverTemplates
-    if(aTemplateObjects.length > 0)
-        for(var i = 0, len = aTemplateObjects.length; i < len; i++) {
-            oHoverTemplates[aTemplateObjects[i].name] = aTemplateObjects[i].code;
-            oHoverTemplatesChild[aTemplateObjects[i].name] = getHoverTemplateChildCode(aTemplateObjects[i].code);
-
-            // Load css file is one is available
-            if(isset(aTemplateObjects[i].css_file)) {
-                // This is needed for some old browsers which do no load css files
-                // which are included in such fetched html code
-                var oLink = document.createElement('link');
-                oLink.href = aTemplateObjects[i].css_file
-                oLink.rel = 'stylesheet';
-                oLink.type = 'text/css';
-                document.getElementsByTagName("head")[0].appendChild(oLink);
-                oLink = null;
-            }
-        }
-    aTemplateObjects = null;
-}
-
-/**
- * getContextTemplates()
- *
- * Gets the code for needed context templates and saves it for later use in icons
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getContextTemplates() {
-    var aUrlParts = [];
-
-    // Loop all map objects to get the used templates
-    for(var i in oMapObjects)
-        // Ignore templates of objects which
-        // b) template is already known
-        // FIXME: conf.context_menu has inconsistent types (with and without quotes)
-        //        fix this and  === can be used here
-        if(isset(oMapObjects[i].conf.context_template)
-           && (!isset(oContextTemplates[oMapObjects[i].conf.context_template]) || oContextTemplates[oMapObjects[i].conf.context_template] === ''))
-            oContextTemplates[oMapObjects[i].conf.context_template] = '';
-
-    // Build string for bulk fetching the templates
-    for(var sName in oContextTemplates)
-        if(sName !== 'Inherits' && oContextTemplates[sName] === '')
-            aUrlParts.push('&name[]='+sName);
-
-    if(aUrlParts.length === 0)
-        return;
-
-    // Get the needed templates via bulk request
-    var aTemplateObjects = getBulkRequest(oGeneralProperties.path_server+'?mod=General&act=getContextTemplate', aUrlParts, oWorkerProperties.worker_request_max_length, true);
-
-    // Set the code to global object oContextTemplates
-    if(aTemplateObjects.length > 0) {
-        for(var i = 0, len = aTemplateObjects.length; i < len; i++) {
-            oContextTemplates[aTemplateObjects[i].name] = aTemplateObjects[i].code;
-
-            // Load css file is one is available
-            if(isset(aTemplateObjects[i].css_file)) {
-                // This is needed for some old browsers which do no load css files
-                // which are included in such fetched html code
-                var oLink = document.createElement('link');
-                oLink.href = aTemplateObjects[i].css_file
-                oLink.rel = 'stylesheet';
-                oLink.type = 'text/css';
-                document.getElementsByTagName("head")[0].appendChild(oLink);
-                oLink = null;
-            }
-        }
-    }
-    aTemplateObjects = null;
-}
-
-/**
- * parseContextMenus()
- *
- * Assigns the context template code to the object, replaces all macros and
- * adds the menu to all map objects
- *
- * @param   Object   Array of map objects to parse the context menu for
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function parseContextMenus() {
-    for(var i in oMapObjects)
-        if(oMapObjects[i].needsContextMenu())
-            oMapObjects[i].parseContextMenu();
-}
-
-/**
  * getBackgroundColor()
  *
  * Gets the background color of the map by the summary state of the map
@@ -666,205 +473,40 @@ function updateMapBasics() {
 }
 
 /**
- * Initializes repeated events (if configured to do so) after first event handling
- */
-function initRepeatedEvents(objectId) {
-    // Are the events configured to be re-raised?
-    if(isset(oViewProperties.event_repeat_interval)
-       && oViewProperties.event_repeat_interval != 0) {
-        oMapObjects[objectId].event_time_first = iNow;
-        oMapObjects[objectId].event_time_last  = iNow;
-    }
-}
-
-/**
  * Is called by the worker function to check all objects for repeated
  * events to be triggered independent of the state updates.
  */
 function handleRepeatEvents() {
     eventlog("worker", "debug", "handleRepeatEvents: Start");
-    for(var i in oMapObjects) {
+    for (var i in oMapObjects) {
         // Trigger repeated event checking/raising for eacht stateful object which
         // has event_time_first set (means there was an event before which is
         // required to be repeated some time)
-        if(oMapObjects[i].has_state && oMapObjects[i].event_time_first !== null) {
-            checkRepeatEvents(i);
+        if (oMapObjects[i].has_state && oMapObjects[i].event_time_first !== null) {
+            oMapObjects[i].checkRepeatEvents();
         }
     }
     eventlog("worker", "debug", "handleRepeatEvents: End");
 }
 
-/**
- * Checks wether or not repeated events need to be re-raised and re-raises
- * them if the time has come
- */
-function checkRepeatEvents(objectId) {
-    // Terminate repeated events after the state has changed to OK state
-    if(!oMapObjects[objectId].hasProblematicState()) {
-        // Terminate, reset vars
-        oMapObjects[objectId].event_time_first = null;
-        oMapObjects[objectId].event_time_last  = null;
-        return;
-    }
-
-    // Terminate repeated events after duration has been reached when
-    // a limited duration has been configured
-    if(oViewProperties.event_repeat_duration != -1 
-       && oMapObjects[objectId].event_time_first 
-          + oViewProperties.event_repeat_duration < iNow) {
-        // Terminate, reset vars
-        oMapObjects[objectId].event_time_first = null;
-        oMapObjects[objectId].event_time_last  = null;
-        return;
-    }
-    
-    // Time for next event interval?
-    if(oMapObjects[objectId].event_time_last
-       + oViewProperties.event_repeat_interval >= iNow) {
-        raiseEvents(objectId, false);
-        oMapObjects[objectId].event_time_last = iNow;
-    }
-}
-
-/**
- * Raise enabled frontend events for the object with the given object id
- */
-function raiseEvents(objectId, stateChanged) {
-    // - Highlight (Flashing)
-    if(oPageProperties.event_highlight === '1') {
-        if(oMapObjects[objectId].conf.view_type && oMapObjects[objectId].conf.view_type === 'icon') {
-            // Detach the handler
-            //  Had problems with this. Could not give the index to function:
-            //  function() { flashIcon(objectId, 10); iIndex = null; }
-            setTimeout('flashIcon("'+objectId+'", '+oPageProperties.event_highlight_duration+', '+oPageProperties.event_highlight_interval+')', 0);
-        } else {
-            // FIXME: Atm only flash icons, not lines or gadgets
-        }
-    }
-
-    // - Scroll to object
-    if(oPageProperties.event_scroll === '1') {
-        setTimeout('scrollSlow('+oMapObjects[objectId].parsedX()+', '+oMapObjects[objectId].parsedY()+', 1)', 0);
-    }
-
-    // - Eventlog
-    if(oMapObjects[objectId].conf.type == 'service') {
-        if(stateChanged) {
-            eventlog("state-change", "info", oMapObjects[objectId].conf.type+" "+oMapObjects[objectId].conf.name+" "+oMapObjects[objectId].conf.service_description+": Old: "+oMapObjects[objectId].last_state.summary_state+"/"+oMapObjects[objectId].last_state.summary_problem_has_been_acknowledged+"/"+oMapObjects[objectId].last_state.summary_in_downtime+" New: "+oMapObjects[objectId].conf.summary_state+"/"+oMapObjects[objectId].conf.summary_problem_has_been_acknowledged+"/"+oMapObjects[objectId].conf.summary_in_downtime);
-        } else {
-            eventlog("state-log", "info", oMapObjects[objectId].conf.type+" "+oMapObjects[objectId].conf.name+" "+oMapObjects[objectId].conf.service_description+": State: "+oMapObjects[objectId].conf.summary_state+"/"+oMapObjects[objectId].conf.summary_problem_has_been_acknowledged+"/"+oMapObjects[objectId].conf.summary_in_downtime);
-        }
-    } else {
-        if(stateChanged) {
-            eventlog("state-change", "info", oMapObjects[objectId].conf.type+" "+oMapObjects[objectId].conf.name+": Old: "+oMapObjects[objectId].last_state.summary_state+"/"+oMapObjects[objectId].last_state.summary_problem_has_been_acknowledged+"/"+oMapObjects[objectId].last_state.summary_in_downtime+" New: "+oMapObjects[objectId].conf.summary_state+"/"+oMapObjects[objectId].conf.summary_problem_has_been_acknowledged+"/"+oMapObjects[objectId].conf.summary_in_downtime);
-        } else {
-            eventlog("state-log", "info", oMapObjects[objectId].conf.type+" "+oMapObjects[objectId].conf.name+": State: "+oMapObjects[objectId].conf.summary_state+"/"+oMapObjects[objectId].conf.summary_problem_has_been_acknowledged+"/"+oMapObjects[objectId].conf.summary_in_downtime);
-        }
-    }
-
-    // - Sound
-    if(oPageProperties.event_sound === '1') {
-        setTimeout('playSound("'+objectId+'", 1)', 0);
-    }
-}
-
-/**
- * Bulk update map objects using the given object information
- *
- * @param   Array    Array of objects with new information
- * @param   String   Type of the page
- * @return  Boolean  Returns true when some state has changed
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function updateObjects(aMapObjectInformations, sType) {
-    var bStateChanged = false;
+// Bulk update map objects states and then visualize eventual changes
+function updateObjects(state_infos, sType) {
+    var at_least_one_changed = false;
 
     // Loop all object which have new information
-    for(var i = 0, len = aMapObjectInformations.length; i < len; i++) {
-        var objectId = aMapObjectInformations[i].object_id;
+    for(var i = 0, len = state_infos.length; i < len; i++) {
+        var objectId = state_infos[i].object_id;
 
         // Object not found
-        if(!isset(oMapObjects[objectId])) {
+        if (!isset(oMapObjects[objectId])) {
             eventlog("updateObjects", "critical", "Could not find an object with the id "+objectId+" in object array");
             return false;
         }
 
-        // Save old state for later "change detection"
-        oMapObjects[objectId].saveLastState();
-
-        // Update this object (loop all options from array and set in current obj)
-        for (var strIndex in aMapObjectInformations[i])
-            if(aMapObjectInformations[i][strIndex] != 'object_id')
-                oMapObjects[objectId].conf[strIndex] = aMapObjectInformations[i][strIndex];
-
-        // Update members list
-        oMapObjects[objectId].getMembers();
-
-        // Update lastUpdate timestamp
-        oMapObjects[objectId].setLastUpdate();
-
-        // Some objects need to be reloaded even when no state changed (perfdata or
-        // output could have changed since last update). Basically this is only
-        // needed for gadgets and/or labels with [output] or [perfdata] macros
-        if(sType === 'map'
-           && !oMapObjects[objectId].stateChanged()
-           && oMapObjects[objectId].outputOrPerfdataChanged()) {
-            oMapObjects[objectId].parse();
-        }
-
-        // Detect state changes and do some actions
-        if(isset(oMapObjects) && oMapObjects[objectId].stateChanged()) {
-
-            /* Internal handling */
-
-            // Save for return code
-            bStateChanged = true;
-
-            // Reparse the static macros of the hover template.
-            // It might happen that some static things like if the host has
-            // members or not change during state change. e.g. when a map is
-            // removed while viewed via the overview page
-            oMapObjects[objectId].hover_template_code = null;
-
-            // Reparse object to map
-            if(sType === 'map') {
-                oMapObjects[objectId].parse();
-            } else if(sType === 'overview') {
-                // Reparsing the object on index page.
-                // replaceChild seems not to work in all cases so workaround it
-                var oOld = oMapObjects[objectId].parsedObject;
-                oMapObjects[objectId].parsedObject = oMapObjects[objectId].parsedObject.parentNode.insertBefore(oMapObjects[objectId].parseOverview(), oMapObjects[objectId].parsedObject);
-                oMapObjects[objectId].parsedObject.parentNode.removeChild(oOld);
-
-                oOld = null;
-            }
-
-            /**
-             * Additional eventhandling
-             *
-             * event_log=1/0
-             * event_highlight=1/0
-             * event_scroll=1/0
-             * event_sound=1/0
-             */
-
-            // Only do eventhandling when object state changed to a worse state
-            if(oMapObjects[objectId].stateChangedToWorse()) {
-                raiseEvents(objectId, true);
-                initRepeatedEvents(objectId);
-            }
-        }
-
-        // Reparse the hover menu
-        oMapObjects[objectId].parseHoverMenu();
-
-        // Reparse the context menu
-        // The context menu only needs to be reparsed when the
-        // icon object has been reparsed
-        oMapObjects[objectId].parseContextMenu();
+        at_least_one_changed &= oMapObjects[objectId].update_state(state_infos[i]);
     }
 
-    return bStateChanged;
+    return at_least_one_changed;
 }
 
 function getMapObjByDomObjId(id) {
@@ -1146,14 +788,18 @@ function setMapObjects(aMapObjectConf) {
     for(var i in oMapObjects) {
         // Parse object to map
         if(oPageProperties.view_type === 'map') {
-            oMapObjects[i].parse();
+            // FIXME: Are all these steps needed here?
+            oMapObjects[i].erase();
+            oMapObjects[i].update();
+            oMapObjects[i].render();
+            oMapObjects[i].draw();
 
             // add eventhandling when enabled via event_on_load option
             if(isset(oViewProperties.event_on_load) && oViewProperties.event_on_load == 1
                && oMapObjects[i].has_state
                && oMapObjects[i].hasProblematicState()) {
-                raiseEvents(oMapObjects[i].conf.object_id, false);
-                initRepeatedEvents(oMapObjects[i].conf.object_id);
+                oMapObjects[i].raiseEvents(false);
+                oMapObjects[i].initRepeatedEvents();
             }
         }
 
@@ -1173,16 +819,12 @@ function setMapObjects(aMapObjectConf) {
     eventlog("worker", "debug", "setMapObjects: End setting map objects");
 }
 
-/**
- * reloadObjects()
- *
- * Bulk reload, reparse shapes and containers
- *
- * @param   Array    Array of objects to reparse
- */
-function reloadObjects(aObjs) {
+// Bulk reload, reparse shapes and containers which have enable_refresh=1
+function updateStatelessObjects(aObjs) {
     for(var i = 0, len = aObjs.length; i < len; i++) {
-        oMapObjects[aObjs[i]].parse();
+        oMapObjects[aObjs[i]].erase();
+        oMapObjects[aObjs[i]].render();
+        oMapObjects[aObjs[i]].draw();
     }
 }
 
@@ -1198,7 +840,7 @@ function reloadObjects(aObjs) {
 function playSound(objectId, iNumTimes){
     var sSound = '';
 
-    var id = oMapObjects[objectId].parsedObject.id;
+    var id = oMapObjects[objectId].dom_obj.id;
 
     var oObjIcon = document.getElementById(id+'-icon');
     var oObjIconDiv = document.getElementById(id+'-icondiv');
@@ -1340,9 +982,9 @@ function addOverviewMap(map_conf, map_name) {
         // Save object to map objects array
         oMapObjects[oObj.conf.object_id] = oObj;
 
-        // Parse child and save reference in parsedObject
-        oObj.parsedObject = oObj.parseOverview();
-        container.replaceChild(oObj.parsedObject, mapdiv);
+        // Parse child and save reference in dom_obj
+        oObj.dom_obj = oObj.parseOverview();
+        container.replaceChild(oObj.dom_obj, mapdiv);
     }
     oObj = null;
 
@@ -1353,59 +995,30 @@ function addOverviewMap(map_conf, map_name) {
     container = null;
 }
 
-function finishOverviewMaps() {
-    eventlog("worker", "debug", "addOverviewMap: Finished parsing all maps");
-    getAndParseTemplates();
-
-    // Hide the "Loading..." message. This is not the best place since rotations 
-    // might not have been loaded now but in most cases this is the longest running request
-    hideStatusMessage();
-}
-
-/**
- * parseOverviewRotations()
- *
- * Does initial parsing of rotations on the overview page
- *
- * @param   Array    Array of objects to parse to the map
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function parseOverviewRotations(aRotationsConf) {
+// Does initial parsing of rotations on the overview page
+function addOverviewRotations(rotations) {
     eventlog("worker", "debug", "setOverviewObjects: Start setting rotations");
 
-    if(oPageProperties.showrotations === 1 && aRotationsConf.length > 0) {
-        for(var i = 0, len = aRotationsConf.length; i < len; i++) {
-            var oObj;
-
-            oObj = new NagVisRotation(aRotationsConf[i]);
-
-            if(oObj !== null) {
-                // Parse object to overview
-                oObj.parseOverview();
-            }
+    if (oPageProperties.showrotations === 1 && rotations.length > 0) {
+        for (var i = 0, len = rotations.length; i < len; i++) {
+            new NagVisRotation(rotations[i]).parseOverview();
         }
     } else {
         // Hide the rotations container
         var container = document.getElementById('overviewRotations');
         if (container) {
             container.style.display = 'none';
-            container = null;
         }
     }
 
     eventlog("worker", "debug", "setOverviewObjects: End setting rotations");
 }
 
-/**
- * getOverviewProperties()
- *
- * Fetches the current map properties from the core
- *
- * @return  Boolean  Success?
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getOverviewProperties(mapName) {
-    return getSyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getOverviewProperties')
+function finishOverviewMaps() {
+    eventlog("worker", "debug", "addOverviewMap: Finished parsing all maps");
+    // Hide the "Loading..." message. This is not the best place since rotations 
+    // might not have been loaded now but in most cases this is the longest running request
+    hideStatusMessage();
 }
 
 /**
@@ -1434,16 +1047,10 @@ function getOverviewMaps() {
     }
 }
 
-/**
- * getOverviewRotations()
- *
- * Fetches all rotations to be shown on the overview page
- *
- * @return  Array of rotations
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
+// Fetches all rotations to be shown on the overview page
 function getOverviewRotations() {
-    return getSyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getOverviewRotations')
+    getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getOverviewRotations',
+                    false, addOverviewRotations);
 }
 
 /**
@@ -1899,9 +1506,6 @@ function parseMapHandler(oObjects, params) {
     // Needs to be called after the summary state of the map is known
     setMapBasics(oPageProperties);
 
-    // Load all templates
-    getAndParseTemplates();
-
     // When user searches for an object highlight it
     if(oViewProperties && oViewProperties.search && oViewProperties.search != '') {
         eventlog("worker", "info", "Searching for matching object(s)");
@@ -1942,16 +1546,7 @@ function parseUrl(sUrl) {
     }
 }
 
-/**
- * workerInitialize()
- *
- * Does the initial parsing of the pages
- *
- * @param   Integer  The iterator for the run id
- * @param   String   The type of the page which is currently displayed
- * @param   String   Optional: Identifier of the page to be displayed
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
+// Does the initial parsing of the pages
 function workerInitialize(iCount, sType, sIdentifier) {
     // Show status message
     displayStatusMessage('Loading...', 'loading', true);
@@ -1983,7 +1578,7 @@ function workerInitialize(iCount, sType, sIdentifier) {
         getOverviewMaps();
 
         eventlog("worker", "debug", "Parsing rotations");
-        parseOverviewRotations(getOverviewRotations());
+        getOverviewRotations();
 
         eventlog("worker", "info", "Finished parsing overview");
     } else if(sType === 'url') {
@@ -2003,34 +1598,9 @@ function workerInitialize(iCount, sType, sIdentifier) {
     }
 }
 
-function getAndParseTemplates() {
-    // Bulk get all hover templates which are needed on the overview page
-    eventlog("worker", "debug", "Fetching hover templates and urls");
-    getHoverTemplates();
-    getHoverUrls();
-
-    // Assign the hover templates to the objects and parse them
-    eventlog("worker", "debug", "Parse hover menus");
-    parseHoverMenus();
-
-    // Bulk get all context templates which are needed on the overview page
-    eventlog("worker", "debug", "Fetching context templates");
-    getContextTemplates();
-
-    // Assign the context templates to the objects and parse them
-    eventlog("worker", "debug", "Parse context menus");
-    parseContextMenus();
-}
-
 /**
- * handleUpdate()
- *
  * This callback function handles the ajax response of bulk object
  * status updates
- *
- * @param   Object   List of objects with new state informations
- * @param   Array    List of parameters for this handler
- * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function handleUpdate(o, aParams) {
     var sType = aParams[0];
@@ -2189,6 +1759,7 @@ function workerUpdate(iCount, sType, sIdentifier) {
         }
 
         // Get objects which need an update
+        // FIXME: separate stateless and stateful objects in different lists
         var arrObj = getObjectsToUpdate();
 
         // Get the updated objects via bulk request
@@ -2202,14 +1773,13 @@ function workerUpdate(iCount, sType, sIdentifier) {
             // handling as they are reloaded by being reparsed.
             var aReload = [];
             for(var i = 0, len = arrObj.length; i < len; i++)
-                if(oMapObjects[arrObj[i]].conf.type === 'shape'
+                if (oMapObjects[arrObj[i]].conf.type === 'shape'
                    || oMapObjects[arrObj[i]].conf.type === 'container')
                     aReload.push(arrObj[i]);
 
             // Update when needed
-            if(aReload.length > 0)
-                reloadObjects(aReload);
-            aReload = null;
+            if (aReload.length > 0)
+                updateStatelessObjects(aReload);
         }
 
         // Need to re-raise repeated events?
@@ -2283,7 +1853,9 @@ function runWorker(iCount, sType, sIdentifier) {
     }
 
     // Sleep until next worker run (1 Second)
-    workerTimeoutID = window.setTimeout(function() { runWorker((iCount+1), sType, sIdentifier); }, 1000);
+    workerTimeoutID = window.setTimeout(function() {
+        runWorker((iCount+1), sType, sIdentifier);
+    }, 1000);
 
     // Pro forma return
     return true;

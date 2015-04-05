@@ -59,7 +59,7 @@ function hoverHide(id) {
     var obj = getMapObjByDomObjId(id);
     if(obj) {
         // Change cursor to auto when hiding hover menu
-        obj.parsedObject.style.cursor = 'auto';
+        obj.trigger_obj.style.cursor = 'auto';
 
         obj.hoverX = null;
         obj.hoverY = null;
@@ -93,7 +93,7 @@ function hoverShow(x, y, id) {
     }
 
     // Change cursor to "hand" when displaying hover menu
-    obj.parsedObject.style.cursor = 'pointer';
+    obj.trigger_obj.style.cursor = 'pointer';
     obj = null;
 
     // hide the menu first to avoid an "up-then-over" visual effect

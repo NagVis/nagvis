@@ -109,55 +109,35 @@ function getButton(event) {
         return (event.which < 2) ? "LEFT" : ((event.which == 2) ? "MIDDLE" : "RIGHT");
 }
 
-function makeUndragable(objects) {
-    var len = objects.length;
-    if(len == 0)
-        return false;
+function makeUndragable(o) {
+    delete dragStopHandlers[o.id];
+    delete dragMoveHandlers[o.id];
 
-    for(var i = 0; i < len; i++) {
-	if(typeof(objects[i]) === 'object')
-	    var o = objects[i];
-	else
-            var o = document.getElementById(objects[i]);
-
-        if(o)  {
-            // Remove the handlers
-            delete dragStopHandlers[o.id];
-            delete dragMoveHandlers[o.id];
-
-            removeEvent(o, 'mousedown', dragStart);
-            removeEvent(o, 'mouseup',   dragStop);
-
-            o = null;
-        }
-    }
+    removeEvent(o, "mouseover", dragHover);
+    removeEvent(o, "mouseout", dragOut);
+    removeEvent(o, 'mousedown', dragStart);
+    removeEvent(document, 'mouseup',   dragStop);
 }
 
-function makeDragable(objects, dragStopHandler, dragMoveHandler) {
-    var len = objects.length;
-    if(len == 0)
-        return false;
+function makeDragable(o, dragStopHandler, dragMoveHandler) {
+    dragStopHandlers[o.id] = dragStopHandler;
+    dragMoveHandlers[o.id] = dragMoveHandler;
 
-    for(var i = 0; i < len; i++) {
-	if(typeof(objects[i]) === 'object')
-	    var o = objects[i];
-	else
-            var o = document.getElementById(objects[i]);
+    addEvent(o, "mouseover", dragHover);
+    addEvent(o, "mouseout", dragOut);
+    addEvent(o, "mousedown", dragStart);
+    // The drag stop event is registered globally on the whole document to prevent
+    // problems with too fast mouse movement which might lead to lag the dragging
+    // object behind the mouse and make it impossible to stop dragging.
+    addEvent(document, "mouseup", dragStop);
+}
 
-        if(o) {
-            // Register the handlers
-            dragStopHandlers[o.id] = dragStopHandler;
-            dragMoveHandlers[o.id] = dragMoveHandler;
+function dragHover() {
+    document.body.style.cursor = 'move';
+}
 
-            addEvent(o, "mousedown", dragStart);
-            // The drag stop event is registered globally on the whole document to prevent
-            // problems with too fast mouse movement which might lead to lag the dragging
-            // object behind the mouse and make it impossible to stop dragging.
-            addEvent(document, "mouseup", dragStop);
-            o = null;
-        }
-    }
-    len = null;
+function dragOut() {
+    document.body.style.cursor = 'auto';
 }
 
 /**

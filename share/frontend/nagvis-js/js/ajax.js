@@ -342,7 +342,7 @@ function getSyncRequest(sUrl, bCacheable, bRetryable) {
 
 function handleJsonResponse(sUrl, responseText) {
     try {
-        oResponse = eval('( '+responseText+')');
+        var oResponse = eval('( '+responseText+')');
         frontendMessageRemove('jsonError');
     } catch(e) {
         jsonError("Invalid json response<div class=details>\nTime: " + iNow + "<br />\nURL: " + sUrl + "<br />\nResponse: <code>" + responseText + '</code></div>');

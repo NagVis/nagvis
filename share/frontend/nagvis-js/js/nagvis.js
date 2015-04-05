@@ -514,29 +514,6 @@ function getRandom(min, max) {
     return min + parseInt(Math.random() * (max-min+1), 0);
 }
 
-function cloneObject(what) {
-    var o;
-    var i;
-
-    if(what instanceof Array) {
-        o = [];
-    } else {
-        o = {};
-    }
-
-    for (i in what) {
-        if (typeof what[i] == 'object') {
-            if(i != 'parsedObject') {
-                o[i] = cloneObject(what[i]);
-            }
-        } else {
-            o[i] = what[i];
-        }
-    }
-
-    return o;
-}
-
 function pageWidth() {
     var w;
 
@@ -973,7 +950,7 @@ function hideStatusMessage() {
  * @return  Object  Returns the div object of the textbox
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
-function drawNagVisTextbox(oContainer, id, className, bgColor, borderColor, x, y, z, w, h, text, customStyle) {
+function renderNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, text, customStyle) {
     var initRendering = false;
     var oLabelDiv = document.getElementById(id);
     if(!oLabelDiv) {
@@ -1052,7 +1029,6 @@ function drawNagVisTextbox(oContainer, id, className, bgColor, borderColor, x, y
     oLabelSpan.innerHTML = text;
 
     oLabelDiv.appendChild(oLabelSpan);
-    oContainer.appendChild(oLabelDiv);
 
     // Take zoom factor into account
     if(initRendering) {
@@ -1061,7 +1037,7 @@ function drawNagVisTextbox(oContainer, id, className, bgColor, borderColor, x, y
         var fontSize = getEffectiveStyle(oLabelSpan, 'font-size');
         if(fontSize === null) {
             eventlog(
-                "drawNagVisTextbox",
+                "renderNagVisTextbox",
                 "critical",
                 "Unable to fetch font-size attribute for textbox"
             );
@@ -1072,7 +1048,7 @@ function drawNagVisTextbox(oContainer, id, className, bgColor, borderColor, x, y
                 oLabelSpan.style.fontSize = addZoomFactor(fontSize) + 'px';
             } else {
                 eventlog(
-                    "drawNagVisTextbox",
+                    "renderNagVisTextbox",
                     "critical",
                     "Zoom: Can not handle this font-size declaration (" + fontSize + ")"
                 );
@@ -1447,6 +1423,45 @@ function add_class(o, cn) {
 function change_class(o, a, b) {
     remove_class(o, a);
     add_class(o, b);
+}
+
+// Calculates a position between two integers
+function middle(x1, x2, cut) {
+    return parseInt(x1) + parseInt((x2 - x1) * cut);
+}
+
+// Returns the maximum value in an array
+function max(arr) {
+    var max = arr[0];
+
+    for (var i = 1, len = arr.length; i < len; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
+
+    return max;
+}
+
+// Returns the minimum value in an array
+function min(arr) {
+    var min = arr[0];
+
+    for (var i = 1, len = arr.length; i < len; i++) {
+        if (arr[i] < min) {
+            min = arr[i];
+        }
+    }
+
+    return min;
+}
+
+function newX(a, b, x, y) {
+    return Math.round(Math.cos(Math.atan2(y,x)+Math.atan2(b,a))*Math.sqrt(x*x+y*y));
+}
+
+function newY(a, b, x, y) {
+    return Math.round(Math.sin(Math.atan2(y,x)+Math.atan2(b,a))*Math.sqrt(x*x+y*y));
 }
 
 // Wrapper object for the worldmap (similar to leaflet js DivIcon, but

@@ -35,6 +35,8 @@ $SUDO ./install.sh -a y -q -r -F -c y \
              -l unix:/omd/sites/muc/tmp/run/live
 $SUDO rm -f /etc/apache2/conf-available/nagvis.conf.*
 
+$SUDO rm -f /usr/local/nagvis/share/frontend/nagvis-js/js/NagVisCompressed.js
+
 #
 # Install to omd site local/
 #
