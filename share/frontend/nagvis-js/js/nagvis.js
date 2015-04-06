@@ -41,10 +41,6 @@ var oMapObjects = {};
 var oMapSummaryObj;
 var regexCache = {};
 
-// Used for editing
-var validMapConfig = {};
-var validMainConfig = {};
-
 // Initialize and define some other basic vars
 var iNow = Math.floor(Date.parse(new Date()) / 1000);
 

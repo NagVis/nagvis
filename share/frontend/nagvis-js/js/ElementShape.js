@@ -35,7 +35,7 @@ var ElementShape = Element.extend({
 
     unlock: function () {
         this.toggleLink(false);
-        makeDragable(this.dom_obj, this.obj.saveObject, this.obj.moveObject);
+        makeDragable(this.dom_obj, this.obj, this.obj.saveObject, this.obj.moveObject);
     },
 
     lock: function () {

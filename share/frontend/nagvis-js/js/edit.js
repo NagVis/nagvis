@@ -82,6 +82,7 @@ var dragObjectStartPos = null;
 var dragObjectChilds = {};
 var dragStopHandlers = {};
 var dragMoveHandlers = {};
+var dragObjects      = {};
 
 function getTargetRaw(event) {
     return event.target ? event.target : event.srcElement;
@@ -112,6 +113,7 @@ function getButton(event) {
 function makeUndragable(o) {
     delete dragStopHandlers[o.id];
     delete dragMoveHandlers[o.id];
+    delete dragObjects[o.id];
 
     removeEvent(o, "mouseover", dragHover);
     removeEvent(o, "mouseout", dragOut);
@@ -119,13 +121,14 @@ function makeUndragable(o) {
     removeEvent(document, 'mouseup',   dragStop);
 }
 
-function makeDragable(o, dragStopHandler, dragMoveHandler) {
-    dragStopHandlers[o.id] = dragStopHandler;
-    dragMoveHandlers[o.id] = dragMoveHandler;
+function makeDragable(trigger_obj, obj, dragStopHandler, dragMoveHandler) {
+    dragStopHandlers[trigger_obj.id] = dragStopHandler;
+    dragMoveHandlers[trigger_obj.id] = dragMoveHandler;
+    dragObjects[trigger_obj.id] = obj;
 
-    addEvent(o, "mouseover", dragHover);
-    addEvent(o, "mouseout", dragOut);
-    addEvent(o, "mousedown", dragStart);
+    addEvent(trigger_obj, "mouseover", dragHover);
+    addEvent(trigger_obj, "mouseout", dragOut);
+    addEvent(trigger_obj, "mousedown", dragStart);
     // The drag stop event is registered globally on the whole document to prevent
     // problems with too fast mouse movement which might lead to lag the dragging
     // object behind the mouse and make it impossible to stop dragging.
@@ -252,7 +255,7 @@ function dragObject(event) {
 
     // Call the dragging handler when one is set
     if(dragMoveHandlers[draggingObject.id])
-        dragMoveHandlers[draggingObject.id](draggingObject, event);
+        dragMoveHandlers[draggingObject.id](draggingObject, dragObjects[draggingObject.id], event);
     oParent = null;
 }
 
@@ -353,7 +356,7 @@ function dragStop(event) {
 
         // Call the dragging handler when one is set
         if(dragMoveHandlers[draggingObject.id])
-            dragMoveHandlers[draggingObject.id](draggingObject, event);
+            dragMoveHandlers[draggingObject.id](draggingObject, dragObjects[draggingObject.id], event);
 
         draggingObject = null;
         return;
@@ -379,7 +382,7 @@ function dragStop(event) {
     for(var objectId in getMapObjByDomObjId(draggingObject.id.split('-')[0]).getParentObjectIds())
         getMapObjByDomObjId(objectId).highlight(false);
 
-    dragStopHandlers[draggingObject.id](draggingObject, oParent);
+    dragStopHandlers[draggingObject.id](draggingObject, dragObjects[draggingObject.id], oParent);
 
     oParent = null;
     draggingObject    = null;

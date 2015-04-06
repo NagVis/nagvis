@@ -35,7 +35,7 @@ var ElementIcon = Element.extend({
 
     unlock: function () {
         this.toggleLink(false);
-        makeDragable(this.dom_obj, this.obj.saveObject, this.obj.moveObject);
+        makeDragable(this.dom_obj, this.obj, this.obj.saveObject, this.obj.moveObject);
     },
 
     lock: function () {
@@ -61,16 +61,11 @@ var ElementIcon = Element.extend({
 
         // Register controls reposition handler to handle resizes during
         // loading the image (from alt="" text to the real image
-        oIcon.onload = function(obj_id) {
+        oIcon.onload = function(obj) {
             return function() {
-                // In the event handler "this" points to the image object
-                var obj = getMapObjByDomObjId(obj_id);
-                if (obj) {
-                    obj.place();
-                    obj = null;
-                }
+                obj.place();
             };
-        }(this.obj.conf.object_id);
+        }(this.obj);
 
         addZoomHandler(oIcon);
 

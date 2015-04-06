@@ -1,16 +1,3 @@
-function getDomObjViewType(id) {
-    if(document.getElementById(id+'-icondiv'))
-        return 'icon';
-    else if(document.getElementById(id+'-linediv'))
-        return 'line';
-    // FIXME: What is in case of shapes,gadgets,textboxes,...
-}
-
-function getDomObjType(id) {
-    // FIXME: Code this!
-    return 'service';
-}
-
 function getMidOfAnchor(oObj) {
     return [ oObj.x + parseInt(oObj.style.width)  / 2,
              oObj.y + parseInt(oObj.style.height) / 2 ];

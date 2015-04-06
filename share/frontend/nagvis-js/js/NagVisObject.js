@@ -772,7 +772,7 @@ var NagVisObject = Base.extend({
 		obj = this.parseControlDrag(i, x[i], y[i], - size / 2, - size / 2, size);
 	    else
 		obj = this.parseControlDrag(i, x[i], y[i], - lineEndSize / 2, - lineEndSize / 2, lineEndSize);
-            makeDragable(obj, this.saveObject, this.moveObject);
+            makeDragable(obj, this, this.saveObject, this.moveObject);
         }
 
         if(this.conf.view_type === 'line' && (this.conf.line_type == 10
@@ -884,59 +884,44 @@ var NagVisObject = Base.extend({
      * Important: This is called from an event handler
      * the 'this.' keyword can not be used here.
      */
-    moveObject: function(obj) {
-        var arr        = obj.id.split('-');
-        var objId      = arr[0];
-        if(arr.length > 1)
-            var anchorType = arr[1];
-
+    moveObject: function(trigger_obj, obj) {
+        var arr = trigger_obj.id.split('-');
         var newPos;
-        var viewType = getDomObjViewType(objId);
-
-        var jsObj = getMapObjByDomObjId(objId);
-
-        if(viewType === 'line') {
-            newPos = getMidOfAnchor(obj);
+        if (obj.conf.view_type === 'line') {
+            newPos = getMidOfAnchor(trigger_obj);
 
             // Get current positions and replace only the current one
-            var anchorId   = arr[2];
-            newPos = [ jsObj.calcNewCoord(newPos[0], 'x', anchorId),
-                       jsObj.calcNewCoord(newPos[1], 'y', anchorId) ];
+            var anchorId = arr[2];
+            newPos = [ obj.calcNewCoord(newPos[0], 'x', anchorId),
+                       obj.calcNewCoord(newPos[1], 'y', anchorId) ];
 
-            var parents = jsObj.getParentObjectIds(anchorId);
+            var parents = obj.getParentObjectIds(anchorId);
 
             anchorId   = null;
         } else {
             // In case of an anchor there is an offset to the real object.
             // Handle this offset in the coordinate calculation for the obj
-            var offsetX = isset(obj.objOffsetX) ? obj.objOffsetX : 0;
-            var offsetY = isset(obj.objOffsetY) ? obj.objOffsetY : 0;
+            var offsetX = isset(trigger_obj.objOffsetX) ? trigger_obj.objOffsetX : 0;
+            var offsetY = isset(trigger_obj.objOffsetY) ? trigger_obj.objOffsetY : 0;
 
-            newPos = [ jsObj.calcNewCoord(obj.x - offsetX, 'x'),
-                       jsObj.calcNewCoord(obj.y - offsetY, 'y') ];
+            newPos = [ obj.calcNewCoord(trigger_obj.x - offsetX, 'x'),
+                       obj.calcNewCoord(trigger_obj.y - offsetY, 'y') ];
 
-            var parents = jsObj.getParentObjectIds();
+            var parents = obj.getParentObjectIds();
         }
 
         // Highlight parents when relative
         for (var objectId in parents) {
             var p = getMapObjByDomObjId(objectId);
-            if(p)
-            p.highlight(true);
-            p = null;
+            if(p) {
+                p.highlight(true);
+                p = null;
+            }
         }
-        parents = null;
 
-        jsObj.conf.x = newPos[0];
-        jsObj.conf.y = newPos[1];
-
-        jsObj.place();
-
-        jsObj      = null;
-        objId      = null;
-        anchorType = null;
-        newPos     = null;
-        viewType   = null;
+        obj.conf.x = newPos[0];
+        obj.conf.y = newPos[1];
+        obj.place();
     },
 
     /**
@@ -945,51 +930,40 @@ var NagVisObject = Base.extend({
      * Important: This is called from an event handler
      * the 'this.' keyword can not be used here.
      */
-    saveObject: function(obj, oParent) {
-        var arr        = obj.id.split('-');
-        var objId      = arr[0];
+    saveObject: function(trigger_obj, obj, oParent) {
+        var arr = trigger_obj.id.split('-');
         if(arr.length > 2)
             var anchorId = arr[2];
-        var viewType   = getDomObjViewType(objId);
-        var jsObj      = getMapObjByDomObjId(objId);
-
-        if(viewType !== 'line')
+        if (obj.conf.view_type !== 'line')
             anchorId = -1;
 
         // Honor the enabled grid and reposition the object after dropping
-        if(useGrid()) {
-            if(viewType === 'line') {
-               var pos = coordsToGrid(jsObj.parseCoords(jsObj.conf.x, 'x', false)[anchorId],
-                                      jsObj.parseCoords(jsObj.conf.y, 'y', false)[anchorId]);
-               jsObj.conf.x = jsObj.calcNewCoord(pos[0], 'x', anchorId);
-               jsObj.conf.y = jsObj.calcNewCoord(pos[1], 'y', anchorId);
-               pos = null;
+        if (useGrid()) {
+            if (obj.conf.view_type === 'line') {
+               var pos = coordsToGrid(obj.parseCoords(obj.conf.x, 'x', false)[anchorId],
+                                      obj.parseCoords(obj.conf.y, 'y', false)[anchorId]);
+               obj.conf.x = obj.calcNewCoord(pos[0], 'x', anchorId);
+               obj.conf.y = obj.calcNewCoord(pos[1], 'y', anchorId);
             } else {
-               var pos = coordsToGrid(jsObj.parseCoord(jsObj.conf.x, 'x', false),
-                                      jsObj.parseCoord(jsObj.conf.y, 'y', false));
-               jsObj.conf.x = jsObj.calcNewCoord(pos[0], 'x');
-               jsObj.conf.y = jsObj.calcNewCoord(pos[1], 'y');
-               pos = null;
+               var pos = coordsToGrid(obj.parseCoord(obj.conf.x, 'x', false),
+                                      obj.parseCoord(obj.conf.y, 'y', false));
+               obj.conf.x = obj.calcNewCoord(pos[0], 'x');
+               obj.conf.y = obj.calcNewCoord(pos[1], 'y');
             }
-            jsObj.place();
+            obj.place();
         }
 
         // Make relative when oParent set and not already relative
-        if(isset(oParent))
+        if (isset(oParent))
             if(oParent !== false)
-                jsObj.makeRelativeCoords(oParent, anchorId);
+                obj.makeRelativeCoords(oParent, anchorId);
             else
-                jsObj.makeAbsoluteCoords(anchorId);
+                obj.makeAbsoluteCoords(anchorId);
 
-        saveObjectAfterAnchorAction(obj);
+        saveObjectAfterAnchorAction(trigger_obj);
 
         // Remove the dragging hand after dropping
         document.body.style.cursor = 'auto';
-
-        arr      = null;
-        objId    = null;
-        anchorId = null;
-        jsObj    = null;
     },
 
     highlight: function(show) {}

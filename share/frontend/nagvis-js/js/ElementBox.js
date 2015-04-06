@@ -37,7 +37,7 @@ var ElementBox = Element.extend({
 
     unlock: function () {
         add_class(this.dom_obj, 'resizeMe');
-        makeDragable(this.dom_obj, this.saveObject, this.moveObject);
+        makeDragable(this.dom_obj, this.obj, this.obj.saveObject, this.obj.moveObject);
     },
 
     lock: function () {

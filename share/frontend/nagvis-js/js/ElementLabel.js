@@ -67,7 +67,7 @@ var ElementLabel = Element.extend({
             document.body.style.cursor = 'auto';
         };
 
-	makeDragable(this.dom_obj, this.saveLabel, this.dragLabel);
+	makeDragable(this.dom_obj, this.obj, this.saveLabel, this.dragLabel);
     },
 
     lock: function () {
@@ -115,48 +115,31 @@ var ElementLabel = Element.extend({
      * This needs to calculate the offset of the current position to the first position,
      * then create a new coord (relative/absolue) and save them in label_x/y attributes
      */
-    dragLabel: function(obj, event) {
-        var arr        = obj.id.split('-');
-        var objId      = arr[0];
-        var anchorType = arr[1];
+    // Important: It is called from an event handler the 'this.' keyword can not be used here.
+    dragLabel: function(trigger_obj, obj, event) {
+        // Calculates relative/absolute coords depending on the current configured type
+        var calcNewLabelCoord = function (labelCoord, coord, newCoord) {
+            if(labelCoord.toString().match(/^(?:\+|\-)/)) {
+                var ret = newCoord - coord;
+                if(ret >= 0)
+                    return '+' + ret;
+                return ret;
+            } else
+                return newCoord;
+        };
 
-        var viewType = getDomObjViewType(objId);
-
-        var jsObj = getMapObjByDomObjId(objId);
-
-        jsObj.conf.label_x = jsObj.calcNewLabelCoord(jsObj.conf.label_x, jsObj.parseCoord(jsObj.conf.x, 'x', false), obj.x);
-        jsObj.conf.label_y = jsObj.calcNewLabelCoord(jsObj.conf.label_y, jsObj.parseCoord(jsObj.conf.y, 'y', false), obj.y);
-
-        jsObj      = null;
-        objId      = null;
-        anchorType = null;
-        viewType   = null;
+        obj.conf.label_x = calcNewLabelCoord(obj.conf.label_x,
+                                             obj.parseCoord(obj.conf.x, 'x', false), trigger_obj.x);
+        obj.conf.label_y = calcNewLabelCoord(obj.conf.label_y,
+                                             obj.parseCoord(obj.conf.y, 'y', false), trigger_obj.y);
     },
 
-    /**
-     * Calculates relative/absolute coords depending on the current configured type
-     */
-    calcNewLabelCoord: function (labelCoord, coord, newCoord) {
-	if(labelCoord.toString().match(/^(?:\+|\-)/)) {
-	    var ret = newCoord - coord;
-	    if(ret >= 0)
-	        return '+' + ret;
-	    return ret;
-	} else
-	    return newCoord;
-    },
-
-    /**
-     * Important: This is called from an event handler
-     * the 'this.' keyword can not be used here.
-     */
-    saveLabel: function(obj, oParent) {
-        var arr        = obj.id.split('-');
-        var objId      = arr[0];
-        var jsObj      = getMapObjByDomObjId(objId);
-        saveObjectAttr(objId, { 'label_x': jsObj.conf.label_x, 'label_y': jsObj.conf.label_y});
-	jsObj = null;
-	arr   = null;
+    // Important: It is called from an event handler the 'this.' keyword can not be used here.
+    saveLabel: function(trigger_obj, obj, oParent) {
+        saveObjectAttr(obj.conf.object_id, {
+            'label_x': obj.conf.label_x,
+            'label_y': obj.conf.label_y
+        });
     },
 
     parseLabelCoord: function (dir, oLabel) {
