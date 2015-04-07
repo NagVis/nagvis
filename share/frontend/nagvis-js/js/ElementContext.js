@@ -80,7 +80,7 @@ var ElementContext = Element.extend({
 
         this.obj.trigger_obj.oncontextmenu = function(element_obj) {
             return function(event) {
-                // During render/drawing calls the template was not ready, so the hover menu
+                // During render/drawing calls the template was not ready, so the menu
                 // has not been drawn yet. Do it now.
                 if (element_obj.dom_obj === null) {
                     element_obj.draw(element_obj.obj);
@@ -99,12 +99,14 @@ var ElementContext = Element.extend({
 
     lock: function() {
         // FIXME: Re-render for new content
+        this.erase(this.obj);
         this.render();
         this.draw(this.obj);
     },
 
     unlock: function() {
         // FIXME: Re-render for new content
+        this.erase(this.obj);
         this.render();
         this.draw(this.obj);
     },
@@ -157,12 +159,8 @@ var ElementContext = Element.extend({
         var contextMenu = document.createElement('div');
         this.dom_obj = contextMenu;
         contextMenu.setAttribute('id', this.obj.conf.object_id+'-context');
-        contextMenu.setAttribute('class', 'context');
-        contextMenu.setAttribute('className', 'context');
-        contextMenu.style.zIndex = '1000';
+        contextMenu.className = 'context';
         contextMenu.style.display = 'none';
-        contextMenu.style.position = 'absolute';
-        contextMenu.style.overflow = 'visible';
 
         // Append template code to context menu div
         contextMenu.innerHTML = this.template_html;
@@ -216,7 +214,7 @@ var ElementContext = Element.extend({
             oSectionMacros.stateful = '<!--\\sBEGIN\\sstateful\\s-->.+?<!--\\sEND\\sstateful\\s-->';
 
         // Remove unlocked section for locked objects
-        if(this.bIsLocked)
+        if(this.obj.bIsLocked)
             oSectionMacros.unlocked = '<!--\\sBEGIN\\sunlocked\\s-->.+?<!--\\sEND\\sunlocked\\s-->';
         else
             oSectionMacros.locked = '<!--\\sBEGIN\\slocked\\s-->.+?<!--\\sEND\\slocked\\s-->';

@@ -32,6 +32,7 @@ div.context {
 
   font-size: 11px;
   border: 1px solid #e5e5e5;
+  z-index: 1000;
 }
 
 div.context ul {

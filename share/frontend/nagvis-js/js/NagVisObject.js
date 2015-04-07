@@ -34,17 +34,16 @@ var NagVisObject = Base.extend({
     // Holds all drawable GUI elements
     elements:              null,
 
-    constructor: function(oConf) {
-        // Initialize
+    constructor: function(conf) {
         this.setLastUpdate();
 
         this.childs      = [];
         this.objControls = [];
         this.elements    = [];
-        this.conf        = oConf;
+        this.conf        = conf;
 
         // When no object_id given by server: generate own id
-        if(this.conf.object_id == null)
+        if (this.conf.object_id == null)
             this.conf.object_id = getRandomLowerCaseLetter() + getRandom(1, 99999);
 
         // Load lock options
@@ -86,6 +85,9 @@ var NagVisObject = Base.extend({
         for (var i = 0; i < this.elements.length; i++) {
             this.elements[i].render();
             this.elements[i].place();
+
+            if (!this.bIsLocked)
+                this.elements[i].unlock();
         }
 
         // FIXME
@@ -162,7 +164,6 @@ var NagVisObject = Base.extend({
 
         var unlocked = oUserProperties['unlocked-' + oPageProperties.map_name].split(',');
         this.bIsLocked = unlocked.indexOf(this.conf.object_id) === -1 && unlocked.indexOf('*') === -1;
-        unlocked = null;
     },
 
     /**
@@ -218,7 +219,7 @@ var NagVisObject = Base.extend({
             this.bIsLocked = !this.bIsLocked;
 
         for (var i = 0; i < this.elements.length; i++)
-            if (lock)
+            if (this.bIsLocked)
                 this.elements[i].lock();
             else
                 this.elements[i].unlock();
