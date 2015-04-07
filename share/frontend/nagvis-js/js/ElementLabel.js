@@ -46,6 +46,15 @@ var ElementLabel = Element.extend({
         }
     },
 
+    update_state: function() {
+        // update the label on every state update where at least the output or perfdata changed
+        if (!this.obj.stateChanged() && this.obj.outputOrPerfdataChanged()) {
+            this.erase();
+            this.render();
+            this.draw(this.obj.dom_obj);
+        }
+    },
+
     render: function() {
         this.dom_obj = renderNagVisTextbox(
             this.obj.conf.object_id + '-label', 'object_label',

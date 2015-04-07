@@ -977,16 +977,13 @@ function addOverviewMap(map_conf, map_name) {
     }
 
     // render the map object
-    var oObj = new NagVisMap(map_conf[0]);
-    if(oObj !== null) {
-        // Save object to map objects array
-        oMapObjects[oObj.conf.object_id] = oObj;
-
-        // Parse child and save reference in dom_obj
-        oObj.dom_obj = oObj.parseOverview();
-        container.replaceChild(oObj.dom_obj, mapdiv);
-    }
-    oObj = null;
+    var obj = new NagVisMap(map_conf[0]);
+    // Save object to map objects array
+    oMapObjects[obj.conf.object_id] = obj;
+    obj.update();
+    obj.render();
+    obj.draw();
+    container.replaceChild(obj.dom_obj, mapdiv);
 
     // Finalize rendering after last map...
     if (g_processed_maps == g_map_names.length)

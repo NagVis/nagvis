@@ -36,6 +36,11 @@ var Element = Base.extend({
     // initialize this element and all eventual sub elements
     update: function() {},
 
+    // Is called on every state update. This is not implemented by
+    // most elements since they erase/render/draw on each state
+    // change.
+    update_state: function() {},
+
     // Is called to draw this elements DOM nodes this is called
     // once during initializaton and whenever the parent element
     // is redrawn, for example during a state update.

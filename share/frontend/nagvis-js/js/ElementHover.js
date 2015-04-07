@@ -41,7 +41,11 @@ var ElementHover = Element.extend({
                                     '\\[service_description\\]', 'g'), this.obj.conf.service_description);
         }
         this.getTemplate();
-   },
+    },
+
+    update_state: function() {
+        this.render();
+    },
 
     render: function() {
         this.getTemplate();
@@ -269,31 +273,32 @@ var ElementHover = Element.extend({
         return template_html;
     },
 
-    replaceMacrosOfChild: function (template_html) {
+    replaceMacrosOfChild: function (member_obj, template_html) {
         var oMacros = {
-            'obj_summary_state'  : this.obj.conf.summary_state,
-            'obj_summary_output' : this.obj.conf.summary_output,
-            'obj_display_name'   : this.obj.conf.display_name
+            'obj_summary_state'  : member_obj.conf.summary_state,
+            'obj_summary_output' : member_obj.conf.summary_output,
+            'obj_display_name'   : member_obj.conf.display_name
         }
 
-        if (this.obj.conf.summary_problem_has_been_acknowledged && this.obj.conf.summary_problem_has_been_acknowledged == 1)
+        if (member_obj.conf.summary_problem_has_been_acknowledged && member_obj.conf.summary_problem_has_been_acknowledged == 1)
             oMacros.obj_summary_acknowledged = '(Acknowledged)';
 
-        if (this.obj.conf.summary_in_downtime && this.obj.conf.summary_in_downtime == 1)
+        if (member_obj.conf.summary_in_downtime && member_obj.conf.summary_in_downtime == 1)
             oMacros.obj_summary_in_downtime = '(Downtime)';
 
-        if (this.obj.conf.summary_stale)
+        if (member_obj.conf.summary_stale)
             oMacros.obj_summary_stale = '(Stale)';
 
         // On child service objects in hover menu replace obj_name with
         // service_description
-        if (this.obj.conf.type === 'service')
-            oMacros.obj_name = this.obj.conf.service_description;
+        if (member_obj.conf.type === 'service')
+            oMacros.obj_name = member_obj.conf.service_description;
         else
-            oMacros.obj_name = this.obj.conf.name;
+            oMacros.obj_name = member_obj.conf.name;
 
-        if ((this.obj.parent_type === 'servicegroup' || this.obj.parent_type === 'dyngroup') && this.obj.conf.type === 'service')
-            oMacros.obj_name1 = this.obj.conf.name;
+        if ((member_obj.parent_type === 'servicegroup' || member_obj.parent_type === 'dyngroup')
+            && member_obj.conf.type === 'service')
+            oMacros.obj_name1 = member_obj.conf.name;
         else {
             var regex = getRegEx('section-sgchild', '<!--\\sBEGIN\\sservicegroup_child\\s-->.+?<!--\\sEND\\sservicegroup_child\\s-->', 'gm');
             if (template_html.search(regex) !== -1)

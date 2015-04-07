@@ -80,6 +80,7 @@ cmp_js() {
     cmp ElementLabel.js
     cmp ElementShape.js
     cmp ElementBox.js
+    cmp ElementTile.js
     cmp NagVisObject.js
     cmp NagVisStatefulObject.js
     cmp NagVisStatelessObject.js

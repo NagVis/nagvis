@@ -205,16 +205,18 @@ var NagVisStatefulObject = NagVisObject.extend({
         this.getMembers();
         this.replaceMacros();
 
-        switch (this.conf.view_type) {
-            case 'line':
-                new ElementLine(this).addTo(this);
-            break;
-            case 'gadget':
-                new ElementGadget(this).addTo(this);
-            break;
-            default:
-                new ElementIcon(this).addTo(this);
-            break;
+        if (oPageProperties.view_type !== 'overview') {
+            switch (this.conf.view_type) {
+                case 'line':
+                    new ElementLine(this).addTo(this);
+                break;
+                case 'gadget':
+                    new ElementGadget(this).addTo(this);
+                break;
+                default:
+                    new ElementIcon(this).addTo(this);
+                break;
+            }
         }
 
         this.base();
@@ -232,40 +234,14 @@ var NagVisStatefulObject = NagVisObject.extend({
         // Update lastUpdate timestamp
         this.setLastUpdate();
 
-        // Some objects need to be reloaded even when no state changed (perfdata or
-        // output could have changed since last update). Basically this is only
-        // needed for gadgets and/or labels with [output] or [perfdata] macros
-        var at_least_one_changed = false;
-        if (oPageProperties.view_type === 'map'
-           && !this.stateChanged()
-           && this.outputOrPerfdataChanged()) {
+        for (var i = 0; i < this.elements.length; i++)
+            this.elements[i].update_state();
+
+        if (this.stateChanged()) {
+            // Rerender and draw object
             this.erase();
             this.render();
             this.draw();
-        }
-        else if (this.stateChanged()) {
-            // Detect state changes and do some actions
-            at_least_one_changed = true;
-
-            // Reparse the static macros of the hover template.
-            // It might happen that some static things like if the host has
-            // members or not change during state change. e.g. when a map is
-            // removed while viewed via the overview page
-            // FIXME
-            //this.hover_template_code = null;
-
-            // Reparse object to map
-            if (oPageProperties.view_type=== 'map') {
-                this.erase();
-                this.render();
-                this.draw();
-            } else if (oPageProperties.view_type === 'overview') {
-                // Reparsing the object on index page.
-                // replaceChild seems not to work in all cases so workaround it
-                var old = this.dom_obj;
-                this.dom_obj = this.dom_obj.parentNode.insertBefore(this.parseOverview(), this.dom_obj);
-                this.dom_obj.parentNode.removeChild(old);
-            }
 
             /**
              * Additional eventhandling
@@ -281,9 +257,11 @@ var NagVisStatefulObject = NagVisObject.extend({
                 this.raiseEvents(true);
                 this.initRepeatedEvents(objectId);
             }
+            return true;
         }
-
-        return at_least_one_changed;
+        else {
+            return false;
+        }
     },
 
     /**

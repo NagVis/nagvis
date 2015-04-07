@@ -22,8 +22,11 @@
  *****************************************************************************/
 
 var NagVisMap = NagVisStatefulObject.extend({
-    constructor: function(oConf) {
-        this.base(oConf);
+    update: function () {
+        if (oPageProperties.view_type == 'overview')
+            new ElementTile(this).addTo(this);
+
+        this.base();
     },
 
     stateText: function () {
@@ -36,78 +39,4 @@ var NagVisMap = NagVisStatefulObject.extend({
             substate = ' (stale)';
         return this.conf.summary_state + substate;
     },
-
-    /**
-     * Parses the object of a map on the overview page
-     *
-     * @return	String		HTML code of the label
-     * @author	Lars Michelsen <lars@vertical-visions.de>
-     */
-    parseOverview: function () {
-        var alt = '';
-
-        if(this.type == 'service')
-            alt = this.conf.name+'-'+this.conf.service_description;
-        else
-            alt = this.conf.name;
-
-        this.replaceMacros();
-
-        var div = document.createElement('div');
-        div.setAttribute('id', this.conf.object_id);
-        div.className = 'mapobj '+this.conf.overview_class;
-
-        // needed for IE. It seems as the IE does not really know what to do
-        // with the link definied below ... strange one
-        var url = this.conf.overview_url;
-        div.onclick = function() {
-            location.href = url;
-            return false;
-        };
-
-        // Only show map thumb when configured
-        if(oPageProperties.showmapthumbs == 1)
-            div.style.height = '200px';
-
-        // Link
-        var oLink = document.createElement('a');
-        oLink.setAttribute('id', this.conf.object_id+'-icon');
-        oLink.style.display = "block";
-        oLink.style.width = "100%";
-        oLink.style.height = "100%";
-        oLink.href = this.conf.overview_url;
-
-        // Status image
-        if(this.conf.icon !== null && this.conf.icon !== '') {
-            var oImg   = document.createElement('img');
-            oImg.className = 'state';
-            oImg.align = 'right';
-            oImg.src   = oGeneralProperties.path_iconsets + this.conf.icon;
-            oImg.alt   = this.stateText();
-
-            oLink.appendChild(oImg);
-            oImg = null;
-        }
-
-        // Title
-        var h3 = document.createElement('h3');
-        h3.appendChild(document.createTextNode(this.conf.alias));
-        oLink.appendChild(h3);
-        h3 = null;
-
-        // Only show map thumb when configured
-        if(oPageProperties.showmapthumbs == 1 && this.conf.overview_image != '') {
-            oImg = document.createElement('img');
-            oImg.style.width = '200px';
-            oImg.style.height = '150px';
-            oImg.src = this.conf.overview_image;
-            oLink.appendChild(oImg);
-            oImg = null;
-        }
-
-        div.appendChild(oLink);
-        oLink = null;
-
-        return div;
-    }
 });

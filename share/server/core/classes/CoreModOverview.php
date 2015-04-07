@@ -195,6 +195,9 @@ class CoreModOverview extends CoreModule {
           'hover_menu'        => 1,
           'hover_childs_show' => 1,
           'hover_template'    => 'default',
+          'context_menu'      => 1,
+          'context_template'  => 'default',
+          'label_show'        => 0,
           // Enforce std_medium iconset - don't use map default iconset
           'iconset'           => 'std_medium',
           'alias'             => $alias
