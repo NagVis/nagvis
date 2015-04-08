@@ -29,6 +29,7 @@ div.hover {
     z-index: 1000;
     background-color: #fbfbfb;
     border: 1px solid #e5e5e5;
+    overflow: visible;
 }
 
 div.hover > table {

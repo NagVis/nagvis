@@ -65,8 +65,6 @@ cmp_js() {
     cmp ExtBase.js
     cmp frontendMessage.js
     cmp frontendEventlog.js
-    cmp frontendHover.js
-    cmp frontendContext.js
     cmp ajax.js
     cmp ajaxActions.js
     cmp dynfavicon.js

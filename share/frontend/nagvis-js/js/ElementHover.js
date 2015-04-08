@@ -24,10 +24,21 @@
 var g_hover_templates       = {};
 var g_hover_template_childs = {};
 var g_hover_urls            = {};
+var g_hover_open            = null;
+
+// Hides the currently open hover menu
+function hoverHide() {
+    if (g_hover_open !== null)
+        g_hover_open.hide();
+}
 
 var ElementHover = Element.extend({
-    hover_url:     null,
-    template_html: null,
+    hover_url      : null, // configured url with eventual replaced macros
+    template_html  : null, // hover HTML code with replaced config related macros
+    coords         : null, // list of x, y coordinates of the hover menu top left corner
+    show_timer     : null, // JS timer when hover delay is used
+    hover_spacer   : 5,    // px from screen border
+    min_width      : 400,  // px minimum width
 
     update: function() {
         this.hover_url = this.obj.conf.hover_url;
@@ -154,8 +165,7 @@ var ElementHover = Element.extend({
     enable: function() {
         this.obj.trigger_obj.onmousemove = function(element_obj) {
             return function(event) {
-                if (!isset(event)) // Fix for IE
-                    event = window.event;
+                var event = event ? event : window.event; // IE FIX
 
                 // During render/drawing calls the template was not ready, so the hover menu
                 // has not been drawn yet. Do it now.
@@ -168,29 +178,182 @@ var ElementHover = Element.extend({
                 // Only show up hover menu when no context menu is opened
                 // and only handle the events when no timer is in schedule at the moment to
                 // prevent strange movement effects when the timer has finished
-                if (!dragging() && !contextOpen() && _hoverTimer === null) {
-                    if (hover_delay && !hoverOpen())
-                        _hoverTimer = setTimeout(function(x, y, obj_id) {
-                            return function() {
-                                hoverShow(x, y, obj_id);
-                            };
-                        }(event.clientX, event.clientY, obj_id), hover_delay*1000);
-                    else
-                        hoverShow(event.clientX, event.clientY, element_obj.obj.conf.object_id);
+                if (!dragging() && g_context_open === null && element_obj.show_timer === null) {
+                    element_obj.coords = [event.clientX, event.clientY];
+                    if (hover_delay && !element_obj.isVisible())
+                        element_obj.show_timer = setTimeout(function() {
+                            element_obj.show();
+                        }, hover_delay*1000);
+                    else {
+                        element_obj.show();
+                    }
                 }
             };
         }(this);
 
-        this.obj.trigger_obj.onmouseout = function(obj_id) {
+        this.obj.trigger_obj.onmouseout = function(element_obj) {
             return function(e) {
-                hoverHide(obj_id);
+                element_obj.hide();
             };
-        }(this.obj.conf.object_id);
+        }(this);
     },
 
     disable: function() {
         this.obj.trigger_obj.onmousemove = null;
         this.obj.trigger_obj.onmouseout  = null;
+    },
+
+    // Is the menu currently visible to the user?
+    isVisible: function() {
+        return this.dom_obj.style.display !== 'none';
+    },
+
+    show: function() {
+        this.showAndPositionMenu();
+    },
+
+    hide: function() {
+        // Abort eventual running show timer
+        if (this.show_timer !== null) {
+            clearTimeout(this.show_timer);
+            this.show_timer = null;
+        }
+
+        this.dom_obj.style.display = 'none';
+        this.coords = null;
+        g_hover_open = null;
+    },
+
+    showAndPositionMenu: function() {
+        // document.body.scrollTop does not work in IE
+        var scrollTop = document.body.scrollTop ? document.body.scrollTop :
+                                                  document.documentElement.scrollTop;
+        var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft :
+                                                    document.documentElement.scrollLeft;
+
+        var x = this.coords[0],
+            y = this.coords[1];
+
+        // Change cursor to "hand" when displaying hover menu
+        this.obj.trigger_obj.style.cursor = 'pointer';
+
+        // hide the menu first to avoid an "up-then-over" visual effect
+        this.dom_obj.style.display = 'none';
+        this.dom_obj.style.left = (x + scrollLeft + this.hover_spacer - getSidebarWidth()) + 'px';
+        this.dom_obj.style.top = (y + scrollTop + this.hover_spacer - getHeaderHeight()) + 'px';
+        if(isIE) {
+            this.dom_obj.style.width = '0px';
+        } else {
+            this.dom_obj.style.width = 'auto';
+        }
+        this.dom_obj.style.display = '';
+        g_hover_open = this;
+
+        // Set the width but leave some border at the screens edge
+        if(this.dom_obj.clientWidth - this.hover_spacer > this.min_width)
+            this.dom_obj.style.width = this.dom_obj.clientWidth - this.hover_spacer + 'px';
+        else
+            this.dom_obj.style.width = this.min_width + 'px';
+
+        /**
+         * Check if the menu is "in screen" or too large.
+         * If there is some need for resize/reposition:
+         *  - Try to resize the hover menu at least to the minimum size
+         *  - If that is not possible try to reposition the hover menu
+         */
+
+        var hoverLeft = parseInt(this.dom_obj.style.left.replace('px', ''));
+        var screenWidth = pageWidth();
+        var hoverPosAndSizeOk = true;
+        if (!this.isOnScreen()) {
+            hoverPosAndSizeOk = false;
+            if (this.tryResize())
+                hoverPosAndSizeOk = true;
+        }
+
+        // Resizing was not enough so try to reposition the menu now
+        if (!hoverPosAndSizeOk) {
+            // First reposition by real size or by min width
+            if (this.dom_obj.clientWidth < this.min_width) {
+                this.dom_obj.style.left = (x - this.min_width - this.hover_spacer + scrollLeft) + 'px';
+            } else {
+                this.dom_obj.style.left = (x - this.dom_obj.clientWidth - this.hover_spacer + scrollLeft) + 'px';
+            }
+
+            if (this.isOnScreen()) {
+                hoverPosAndSizeOk = true;
+            } else {
+                // Still not ok. Now try to resize on the right down side of the icon
+                if (this.tryResize(true)) {
+                    hoverPosAndSizeOk = true;
+                }
+            }
+        }
+
+        // And if the hover menu is still not on the screen move it to the left edge
+        // and fill the whole screen width
+        if (!this.isOnScreen()) {
+            this.dom_obj.style.left = this.hover_spacer + scrollLeft + 'px';
+            this.dom_obj.style.width = pageWidth() - (2*this.hover_spacer) + 'px';
+        }
+
+        var hoverTop = parseInt(this.dom_obj.style.top.replace('px', ''));
+        // Only move the menu to the top when the new top will not be
+        // out of sight
+        if(hoverTop + this.dom_obj.clientHeight > pageHeight() && hoverTop - this.dom_obj.clientHeight >= 0)
+            this.dom_obj.style.top = hoverTop - this.dom_obj.clientHeight - this.hover_spacer - 5 + 'px';
+        hoverTop = null;
+    },
+
+    isOnScreen: function() {
+        var hoverLeft = parseInt(this.dom_obj.style.left.replace('px', ''));
+        var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft :
+                         document.documentElement.scrollLeft;
+    
+        if (hoverLeft < scrollLeft)
+            return false;
+    
+        // The most right px of the hover menu
+        var hoverRight = hoverLeft + this.dom_obj.clientWidth - scrollLeft;
+        // The most right px of the viewport
+        var viewRight  = pageWidth();
+    
+        if (hoverRight > viewRight)
+            return false;
+    
+        // There is not enough spacing at the left viewport border
+        if (hoverLeft - this.hover_spacer < 0)
+            return false;
+    
+        return true;
+    },
+
+    tryResize: function(rightSide) {
+        if (!isset(rightSide))
+            var reposition = false;
+    
+        var hoverLeft = parseInt(this.dom_obj.style.left.replace('px', ''));
+    
+        if (rightSide)
+            var overhead = hoverLeft + this.dom_obj.clientWidth + this.hover_spacer - pageWidth();
+        else
+            var overhead = hoverLeft;
+        var widthAfterResize = this.dom_obj.clientWidth - overhead;
+    
+        // If width is larger than this.min_width resize it
+        if (widthAfterResize > this.min_width) {
+            this.dom_obj.style.width = widthAfterResize + 'px';
+    
+            if (rightSide) {
+                if(overhead < 0)
+                    overhead *= -1
+                this.dom_obj.style.left = (hoverLeft + overhead) + 'px';
+            }
+    
+            return true;
+        } else {
+            return false;
+        }
     },
 
     renderMenu: function () {
@@ -204,24 +367,19 @@ var ElementHover = Element.extend({
         // Only create a new div when the hover menu does not exist
         var hoverMenu = document.getElementById(this.obj.conf.object_id+'-hover');
         if(!hoverMenu) {
-            // Create hover menu div
             var hoverMenu = document.createElement('div');
             this.dom_obj = hoverMenu;
             hoverMenu.setAttribute('id', this.obj.conf.object_id+'-hover');
-            hoverMenu.setAttribute('class', 'hover');
-            hoverMenu.setAttribute('className', 'hover');
-            hoverMenu.style.zIndex = '1000';
+            hoverMenu.className = 'hover';
             hoverMenu.style.display = 'none';
-            hoverMenu.style.position = 'absolute';
-            hoverMenu.style.overflow = 'visible';
         }
 
         // Append template code to hover menu div
         hoverMenu.innerHTML = template_html;
 
         // Display the hover menu again, when it was open before re-rendering
-        if (this.hoverX !== null)
-            hoverShow(this.hoverX, this.hoverY, this.obj.conf.object_id);
+        if (this.coords !== null)
+            this.show();
     },
 
     replaceChildMacros: function (template_html) {
@@ -522,5 +680,4 @@ var ElementHover = Element.extend({
             }
         }
     }
-
 });

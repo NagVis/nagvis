@@ -21,11 +21,19 @@
  *
  *****************************************************************************/
 
-var g_context_templates = {}
-var g_replace_context = false; // should the context menu be shown or not?
+var g_context_templates = {};
+var g_context_open      = null;
+
+// Hides the currently open context menu
+function contextHide() {
+    if (g_context_open !== null)
+        g_context_open.hide();
+}
 
 var ElementContext = Element.extend({
-    template_html: null,
+    template_html : null,
+    show_menu     : false, // set to true by mouedown when menu shal be shown
+    coords        : null, // list of x, y coordinates of the hover menu top left corner
 
     update: function() {
         this.getTemplate();
@@ -45,36 +53,37 @@ var ElementContext = Element.extend({
         if (this.dom_obj === null)
             this.render();
 
-        // This disables the context menu when someone clicked anywhere on the map
-
         this.base(obj);
-        this.obj.trigger_obj.onmousedown = function(event) {
-            var event = event ? event : window.event; // IE FIX
 
-            if (typeof event.target != 'undefined' && event.target !== null)
-                var target = event.target;
-            else
-                var target = event.srcElement;
+        this.obj.trigger_obj.onmousedown = function(element_obj) {
+            return function(event) {
+                var event = event ? event : window.event; // IE FIX
 
-            // Workaround for the different structure of targets on lines/icons.
-            // Find the first DOM node in parents having an id assigned
-            while (!target.id && target.parentNode)
-                target = target.parentNode;
+                if (typeof event.target != 'undefined' && event.target !== null)
+                    var target = event.target;
+                else
+                    var target = event.srcElement;
 
-            var id = target.id ? target.id : null;
+                // Workaround for the different structure of targets on lines/icons.
+                // Find the first DOM node in parents having an id assigned
+                while (!target.id && target.parentNode)
+                    target = target.parentNode;
 
-            // Hide all context menus except clicking the current open context menu
-            if (id === null || (id.indexOf('http:') === -1 && id.indexOf('-context') === -1))
-                contextHide();
+                var id = target.id ? target.id : null;
 
-            // Don't show the context menu when currently dragging
-            if (dragging())
-                return false;
+                // Hide all context menus except clicking the current open context menu
+                if (id === null || (id.indexOf('http:') === -1 && id.indexOf('-context') === -1))
+                    element_obj.hide();
 
-            // only show the context menu if the right mouse button is pressed on the obj
-            if (event.button === 2)
-                g_replace_context = true;
-        };
+                // Don't show the context menu when currently dragging
+                if (dragging())
+                    return false;
+
+                // only show the context menu if the right mouse button is pressed on the obj
+                if (event.button === 2)
+                    element_obj.show_menu = true;
+            };
+        }(this)
         // FIXME: Need to ensure that this is assigned only once per page?
         document.onmousedown = this.obj.trigger_obj.onmousedown;
 
@@ -85,8 +94,8 @@ var ElementContext = Element.extend({
                 if (element_obj.dom_obj === null) {
                     element_obj.draw(element_obj.obj);
                 }
-
-                return contextShow(event);
+                element_obj.coords = [event.clientX, event.clientY];
+                return element_obj.show();
             };
         }(this);
     },
@@ -151,6 +160,51 @@ var ElementContext = Element.extend({
                        +'&name[]='+escapeUrlValues(this.obj.conf.context_template),
                         false, this.handleTemplate, this);
         g_context_templates[this.obj.conf.context_template] = true; // mark as already requested
+    },
+
+    show: function() {
+        hoverHide(); // FIXME: Recode to hide this objects hover menu
+
+        // document.body.scrollTop does not work in IE
+        var scrollTop = document.body.scrollTop ? document.body.scrollTop :
+                                                  document.documentElement.scrollTop;
+        var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft :
+                                                    document.documentElement.scrollLeft;
+    
+        // hide the menu first to avoid an "up-then-over" visual effect
+        this.dom_obj.style.display = 'none';
+        this.dom_obj.style.left = this.coords[0] + scrollLeft - getSidebarWidth() + 'px';
+        this.dom_obj.style.top = this.coords[1] + scrollTop - getHeaderHeight() + 'px';
+        this.dom_obj.style.display = '';
+    
+        // Check if the context menu is "in screen".
+        // When not: reposition
+        var contextLeft = parseInt(this.dom_obj.style.left.replace('px', ''));
+        if(contextLeft+this.dom_obj.clientWidth > pageWidth()) {
+            // move the context menu to the left
+            this.dom_obj.style.left = contextLeft - this.dom_obj.clientWidth + 'px';
+        }
+    
+        var contextTop = parseInt(this.dom_obj.style.top.replace('px', ''));
+        if(contextTop+this.dom_obj.clientHeight > pageHeight()) {
+            // Only move the context menu to the top when the new top will not be
+            // out of sight
+            if(contextTop - this.dom_obj.clientHeight >= 0) {
+                this.dom_obj.style.top = contextTop - this.dom_obj.clientHeight + 'px';
+            }
+        }
+
+        g_context_open = this;
+        this.show_menu = false;
+    
+        // If this returns false, the browser's context menu will not show up
+        return false;
+    },
+
+    hide: function() {
+        if (this.dom_obj)
+            this.dom_obj.style.display = 'none';
+        g_context_open = null;
     },
 
     renderMenu: function () {

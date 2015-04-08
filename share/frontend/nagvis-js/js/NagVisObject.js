@@ -859,7 +859,7 @@ var NagVisObject = Base.extend({
             var objId = arr[0];
 
 	    toggleLineMidLock(event, objId);
-	    contextHide();
+	    contextHide(); // FIXME: Cleanup to close the context menu of the current object
 
             objId = null;
             arr   = null;
