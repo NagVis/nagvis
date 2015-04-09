@@ -2,6 +2,10 @@
 Core:
   * FIX: Fixed error in example custom actions for RDP and SSH
 
+Frongend:
+  ( FIX: Fixed dynmap_object_types exception after creating a dynmap
+    (the option is not declared as being mandatory anymore)
+
 1.8.2
 Core:
   * Improved handling of map config files without read permissions on overview
