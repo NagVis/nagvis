@@ -71,7 +71,7 @@ function listDynObjectTypes($CORE) {
 global $configVars;
 $configVars = array(
     'dynmap_object_types' => Array(
-        'must'       => true,
+        'must'       => false,
         'default'    => '',
         'field_type' => 'dropdown',
         'match'      => MATCH_DYN_OBJECT_TYPES,
