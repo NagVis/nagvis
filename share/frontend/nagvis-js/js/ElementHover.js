@@ -66,19 +66,19 @@ var ElementHover = Element.extend({
         this.renderMenu();
     },
 
-    draw: function(obj) {
+    draw: function() {
         // Not rendered yet, e.g. because template was not fetched yet during
         // initial rendering. Re-try rendering now
         if (this.dom_obj === null)
             this.render();
 
-        this.base(obj);
+        this.base();
         this.enable();
     },
 
-    erase: function(obj) {
+    erase: function() {
         this.disable();
-        this.base(obj);
+        this.base();
     },
 
     lock: function() {
@@ -169,9 +169,8 @@ var ElementHover = Element.extend({
 
                 // During render/drawing calls the template was not ready, so the hover menu
                 // has not been drawn yet. Do it now.
-                if (element_obj.dom_obj === null) {
-                    element_obj.draw(element_obj.obj);
-                }
+                if (element_obj.dom_obj === null)
+                    element_obj.draw();
 
                 var hover_delay = parseInt(element_obj.obj.conf.hover_delay);
 

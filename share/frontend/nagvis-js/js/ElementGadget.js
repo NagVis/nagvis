@@ -29,7 +29,7 @@ var ElementGadget = Element.extend({
         if (!this.stateChanged() && this.outputOrPerfdataChanged()) {
             this.erase();
             this.render();
-            this.draw(this.obj.dom_obj);
+            this.draw();
         }
     },
 

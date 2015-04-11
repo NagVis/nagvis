@@ -26,19 +26,6 @@
  */
 
 /**
- * Changes the handling of the line middle for lines with two parts
- */
-function toggleLineMidLock(event, objectId) {
-    getMapObjByDomObjId(objectId).toggleLineMidLock();
-
-    var event = !event ? window.event : event;
-    if(event.stopPropagation)
-    event.stopPropagation();
-    event.cancelBubble = true;
-    return false;
-}
-
-/**
  * Toggles the mode of the object: editable or not
  *
  * @author	Lars Michelsen <lars@vertical-visions.de>

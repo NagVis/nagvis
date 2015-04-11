@@ -713,16 +713,9 @@ function setMapBasics(oProperties) {
     setMapBackgroundImage(oProperties.background_image);
 }
 
-/**
- * setMapObjects()
- *
- * Does initial parsing of map objects
- *
- * @param   Array    Array of objects to parse to the map
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function setMapObjects(aMapObjectConf) {
-    eventlog("worker", "debug", "setMapObjects: Start setting map objects");
+// Does initial parsing of map objects
+function initializeMapObjects(aMapObjectConf) {
+    eventlog("worker", "debug", "initializeMapObjects: Start setting map objects");
 
     // Don't loop the first object - that is the summary of the current map
     oMapSummaryObj = new NagVisMap(aMapObjectConf[0]);
@@ -789,10 +782,8 @@ function setMapObjects(aMapObjectConf) {
         // Parse object to map
         if(oPageProperties.view_type === 'map') {
             // FIXME: Are all these steps needed here?
-            oMapObjects[i].erase();
             oMapObjects[i].update();
             oMapObjects[i].render();
-            oMapObjects[i].draw();
 
             // add eventhandling when enabled via event_on_load option
             if(isset(oViewProperties.event_on_load) && oViewProperties.event_on_load == 1
@@ -816,15 +807,13 @@ function setMapObjects(aMapObjectConf) {
         parents = null;
     }
 
-    eventlog("worker", "debug", "setMapObjects: End setting map objects");
+    eventlog("worker", "debug", "initializeMapObjects: End setting map objects");
 }
 
 // Bulk reload, reparse shapes and containers which have enable_refresh=1
 function updateStatelessObjects(aObjs) {
     for(var i = 0, len = aObjs.length; i < len; i++) {
-        oMapObjects[aObjs[i]].erase();
         oMapObjects[aObjs[i]].render();
-        oMapObjects[aObjs[i]].draw();
     }
 }
 
@@ -982,7 +971,6 @@ function addOverviewMap(map_conf, map_name) {
     oMapObjects[obj.conf.object_id] = obj;
     obj.update();
     obj.render();
-    obj.draw();
     container.replaceChild(obj.dom_obj, mapdiv);
 
     // Finalize rendering after last map...
@@ -1393,7 +1381,7 @@ var g_map_objects;
 
 // Is used to update the objects to show on the worldmap
 function updateWorldmapObjects(e) {
-    parseMap(oFileAges[oPageProperties.map_name], 'map', oPageProperties.map_name, true);
+    initializeMap(oFileAges[oPageProperties.map_name], 'map', oPageProperties.map_name, true);
 }
 
 function parseWorldmap() {
@@ -1417,7 +1405,7 @@ function parseWorldmap() {
 }
 
 // Parses the map on initial page load or changed map configuration
-function parseMap(iMapCfgAge, type, mapName, init) {
+function initializeMap(iMapCfgAge, type, mapName, init) {
     var bReturn = false;
 
     // Is updated later by getMapProperties(), but we might need it in
@@ -1450,10 +1438,10 @@ function parseMap(iMapCfgAge, type, mapName, init) {
 
     getAsyncRequest(oGeneralProperties.path_server
                     + '?mod=Map&act=getMapObjects&show='
-                    + mapName+getViewParams(), false, parseMapHandler, [iMapCfgAge, type, mapName]);
+                    + mapName+getViewParams(), false, handleMapInit, [iMapCfgAge, type, mapName]);
 }
 
-function parseMapHandler(oObjects, params) {
+function handleMapInit(oObjects, params) {
     // Only perform the reparsing actions when all information are there
     if(!oPageProperties || !oObjects) {
         // Close the status message window ("Loading...")
@@ -1493,7 +1481,7 @@ function parseMapHandler(oObjects, params) {
 
     // Set map objects
     eventlog("worker", "info", "Parsing "+type+" objects");
-    setMapObjects(oObjects);
+    initializeMapObjects(oObjects);
 
     // Maybe force page reload when the map shal fill the viewport
     if (getViewParam('zoom') == 'fill')
@@ -1562,7 +1550,7 @@ function workerInitialize(iCount, sType, sIdentifier) {
             parseWorldmap();
         else
             renderZoombar();
-        parseMap(oFileAges[sIdentifier], sType, sIdentifier, true);
+        initializeMap(oFileAges[sIdentifier], sType, sIdentifier, true);
 
     } else if(sType === 'overview') {
         // Loading the overview page
@@ -1641,7 +1629,7 @@ function handleUpdate(o, aParams) {
                     eventlog("worker", "info", "Map config updated. "+iNumUnlocked+" objects unlocked - not reloading.");
                 } else {
                     eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
-                    parseMap(oChanged[key], sType, oPageProperties.map_name, false);
+                    initializeMap(oChanged[key], sType, oPageProperties.map_name, false);
                     return;
                 }
             }
@@ -1664,7 +1652,7 @@ function handleUpdate(o, aParams) {
             //    automapParse(oPageProperties.map_name);
             //    setMapBackgroundImage(oPageProperties.background_image+iNow);
             //}
-            parseMap(oFileAges[oPageProperties.map_name], sType, oPageProperties.map_name, false);
+            initializeMap(oFileAges[oPageProperties.map_name], sType, oPageProperties.map_name, false);
             return;
         }
     }

@@ -54,19 +54,20 @@ var Element = Base.extend({
 
     // Is called by the parent element to add this elements DOM
     // object to the parent elements DOM object
-    draw: function(obj) {
+    draw: function() {
         if (this.dom_obj)
-            obj.dom_obj.appendChild(this.dom_obj);
+            this.obj.dom_obj.appendChild(this.dom_obj);
     },
 
     // Is called by the parent element to remove this elements DOM
-    // object from the parent elements DOM object
-    erase: function(obj) {
+    // object from the parent elements DOM object. This is the counterpart
+    // of the draw() method.
+    erase: function() {
         // FIXME: Remove all possible event handlers. Just to be
         // sure to prevent memory leaks
 
-        if (this.dom_obj)
-            obj.dom_obj.removeChild(this.dom_obj);
+        if (this.dom_obj && this.dom_obj.parentNode)
+            this.obj.dom_obj.removeChild(this.dom_obj);
     },
 
     // When the object is intially locked this is called once

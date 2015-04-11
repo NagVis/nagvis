@@ -947,15 +947,9 @@ function hideStatusMessage() {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function renderNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h, text, customStyle) {
-    var initRendering = false;
-    var oLabelDiv = document.getElementById(id);
-    if(!oLabelDiv) {
-        oLabelDiv = document.createElement('div');
-        oLabelDiv.setAttribute('id', id);
-        initRendering = true;
-    }
-    oLabelDiv.setAttribute('class', className);
-    oLabelDiv.setAttribute('className', className);
+    var oLabelDiv = document.createElement('div');
+    oLabelDiv.setAttribute('id', id);
+    oLabelDiv.className = className;
     oLabelDiv.style.background = bgColor;
     oLabelDiv.style.borderColor = borderColor;
 
@@ -1027,28 +1021,26 @@ function renderNagVisTextbox(id, className, bgColor, borderColor, x, y, z, w, h,
     oLabelDiv.appendChild(oLabelSpan);
 
     // Take zoom factor into account
-    if(initRendering) {
-        oLabelDiv.width  = addZoomFactor(oLabelDiv.width);
-        oLabelDiv.height = addZoomFactor(oLabelDiv.height);
-        var fontSize = getEffectiveStyle(oLabelSpan, 'font-size');
-        if(fontSize === null) {
+    oLabelDiv.width  = addZoomFactor(oLabelDiv.width);
+    oLabelDiv.height = addZoomFactor(oLabelDiv.height);
+    var fontSize = getEffectiveStyle(oLabelSpan, 'font-size');
+    if(fontSize === null) {
+        eventlog(
+            "renderNagVisTextbox",
+            "critical",
+            "Unable to fetch font-size attribute for textbox"
+        );
+    } else {
+        // Only take zoom into account if the fontSize is set in px
+        if(fontSize.indexOf('px') !== -1) {
+            var fontSize = parseInt(fontSize.replace('px', ''));
+            oLabelSpan.style.fontSize = addZoomFactor(fontSize) + 'px';
+        } else {
             eventlog(
                 "renderNagVisTextbox",
                 "critical",
-                "Unable to fetch font-size attribute for textbox"
+                "Zoom: Can not handle this font-size declaration (" + fontSize + ")"
             );
-        } else {
-            // Only take zoom into account if the fontSize is set in px
-            if(fontSize.indexOf('px') !== -1) {
-                var fontSize = parseInt(fontSize.replace('px', ''));
-                oLabelSpan.style.fontSize = addZoomFactor(fontSize) + 'px';
-            } else {
-                eventlog(
-                    "renderNagVisTextbox",
-                    "critical",
-                    "Zoom: Can not handle this font-size declaration (" + fontSize + ")"
-                );
-            }
         }
     }
 

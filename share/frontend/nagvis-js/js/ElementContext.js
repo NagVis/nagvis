@@ -47,13 +47,13 @@ var ElementContext = Element.extend({
         this.renderMenu();
     },
 
-    draw: function(obj) {
+    draw: function() {
         // Not rendered yet, e.g. because template was not fetched yet during
         // initial rendering. Re-try rendering now
         if (this.dom_obj === null)
             this.render();
 
-        this.base(obj);
+        this.base();
 
         this.obj.trigger_obj.onmousedown = function(element_obj) {
             return function(event) {
@@ -73,7 +73,7 @@ var ElementContext = Element.extend({
 
                 // Hide all context menus except clicking the current open context menu
                 if (id === null || (id.indexOf('http:') === -1 && id.indexOf('-context') === -1))
-                    element_obj.hide();
+                    contextHide();
 
                 // Don't show the context menu when currently dragging
                 if (dragging())
@@ -92,7 +92,7 @@ var ElementContext = Element.extend({
                 // During render/drawing calls the template was not ready, so the menu
                 // has not been drawn yet. Do it now.
                 if (element_obj.dom_obj === null) {
-                    element_obj.draw(element_obj.obj);
+                    element_obj.draw();
                 }
                 element_obj.coords = [event.clientX, event.clientY];
                 return element_obj.show();
@@ -100,24 +100,24 @@ var ElementContext = Element.extend({
         }(this);
     },
 
-    erase: function(obj) {
+    erase: function() {
         this.obj.trigger_obj.onmousedown    = null;
         this.obj.trigger_obj.oncontextmenu  = null;
-        this.base(obj);
+        this.base();
     },
 
     lock: function() {
         // FIXME: Re-render for new content
-        this.erase(this.obj);
+        this.erase();
         this.render();
-        this.draw(this.obj);
+        this.draw();
     },
 
     unlock: function() {
         // FIXME: Re-render for new content
-        this.erase(this.obj);
+        this.erase();
         this.render();
-        this.draw(this.obj);
+        this.draw();
     },
 
     //
@@ -163,7 +163,7 @@ var ElementContext = Element.extend({
     },
 
     show: function() {
-        hoverHide(); // FIXME: Recode to hide this objects hover menu
+        hoverHide();
 
         // document.body.scrollTop does not work in IE
         var scrollTop = document.body.scrollTop ? document.body.scrollTop :
@@ -202,8 +202,9 @@ var ElementContext = Element.extend({
     },
 
     hide: function() {
-        if (this.dom_obj)
+        if (this.dom_obj) {
             this.dom_obj.style.display = 'none';
+        }
         g_context_open = null;
     },
 

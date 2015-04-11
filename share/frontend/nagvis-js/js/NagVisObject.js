@@ -24,12 +24,12 @@
 var NagVisObject = Base.extend({
     dom_obj:               null,
     trigger_obj:           null,
+    visible:               false, // currently shown on the map?
     conf:                  null,
     lastUpdate:            null,
     firstUpdate:           null,
     bIsFlashing:           false,
     bIsLocked:             true,
-    objControls:           null,
     childs:                null,
     // Holds all drawable GUI elements
     elements:              null,
@@ -38,7 +38,6 @@ var NagVisObject = Base.extend({
         this.setLastUpdate();
 
         this.childs      = [];
-        this.objControls = [];
         this.elements    = [];
         this.conf        = conf;
 
@@ -67,6 +66,8 @@ var NagVisObject = Base.extend({
 
     // Renders the current object and all it's elements
     render: function () {
+        this.erase();
+
         // Create container div
         var container = document.createElement('div');
         container.setAttribute('id', this.conf.object_id);
@@ -97,28 +98,21 @@ var NagVisObject = Base.extend({
         //    }).addTo(g_map_objects);
         //}
 
-        // Enable the controls when the object is not locked
-        if (!this.bIsLocked) {
-            this.parseControls();
-	}
+        this.draw();
     },
 
     draw: function() {
         for (var i = 0; i < this.elements.length; i++)
             this.elements[i].draw(this);
+        this.visible = true;
     },
 
     erase: function () {
-        // Don't erase when it has not performed draw()
-        if (!this.dom_obj)
+        if (!this.visible)
             return;
 
         for (var i = 0; i < this.elements.length; i++)
             this.elements[i].erase(this);
-
-        // Remove all controls
-        if(!this.bIsLocked)
-            this.removeControls();
 
         var oMap = document.getElementById('map');
         if (!oMap) {
@@ -128,6 +122,7 @@ var NagVisObject = Base.extend({
         // Remove object from DOM
         if (!usesSource('worldmap'))
             oMap.removeChild(this.dom_obj);
+        this.visible = false;
     },
 
     addElement: function(obj) {
@@ -202,6 +197,16 @@ var NagVisObject = Base.extend({
             this.firstUpdate = this.lastUpdate;
     },
 
+    getLineMid: function(coord, dir) {
+        var c = coord.split(',');
+        if(c.length == 2)
+            return middle(this.parseCoords(coord, dir)[0],
+                          this.parseCoords(coord, dir)[1],
+                          this.conf.line_cut);
+        else
+            return this.parseCoords(coord, dir)[1];
+    },
+
     /**
      * Locks/Unlocks the object and fires dependent actions
      * It returns +1,-1 or 0 depending on the final state of the object
@@ -224,49 +229,24 @@ var NagVisObject = Base.extend({
             else
                 this.elements[i].unlock();
 
-        if(this.toggleObjControls()) {
-            // Only save the user option when not using the edit_mode
-            if(!isset(lock) && (!oViewProperties.hasOwnProperty('edit_mode') || oViewProperties['edit_mode'] !== true)) {
-                var unlocked = [];
-                if(oUserProperties.hasOwnProperty('unlocked-' + oPageProperties.map_name))
-                    unlocked = oUserProperties['unlocked-' + oPageProperties.map_name].split(',');
+        // Only save the user option when not using the edit_mode
+        if (!isset(lock) && (!oViewProperties.hasOwnProperty('edit_mode') || oViewProperties['edit_mode'] !== true)) {
+            var unlocked = [];
+            if(oUserProperties.hasOwnProperty('unlocked-' + oPageProperties.map_name))
+                unlocked = oUserProperties['unlocked-' + oPageProperties.map_name].split(',');
 
-                if(this.bIsLocked)
-                    unlocked.splice(unlocked.indexOf(this.conf.object_id), 1);
-                else
-                    unlocked.push(this.conf.object_id);
-                storeUserOption('unlocked-' + oPageProperties.map_name, unlocked.join(','));
-                unlocked = null;
-            }
-
-            if(equal === true)
-                return 0;
+            if(this.bIsLocked)
+                unlocked.splice(unlocked.indexOf(this.conf.object_id), 1);
             else
-                return this.bIsLocked ? -1 : 1;
-        } else {
-            return 0;
+                unlocked.push(this.conf.object_id);
+            storeUserOption('unlocked-' + oPageProperties.map_name, unlocked.join(','));
+            unlocked = null;
         }
-    },
 
-    /**
-     * Shows or hides all object controls of a map object depending
-     * on the lock state of this object.
-     *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
-     */
-    toggleObjControls: function() {
-        if(!this.bIsLocked) {
-            if(isset(this.parseControls)) {
-                this.parseControls();
-                return true;
-            }
-        } else {
-            if(isset(this.removeControls)) {
-                this.removeControls();
-                return true;
-            }
-        }
-        return false;
+        if (equal === true)
+            return 0;
+        else
+            return this.bIsLocked ? -1 : 1;
     },
 
     getObjLeft: function () {
@@ -648,95 +628,6 @@ var NagVisObject = Base.extend({
         // Move child objects
         for(var i = 0, l = this.childs.length; i < l; i++)
             this.childs[i].place();
-
-        // redraw the controls
-        if(!this.bIsLocked)
-            this.redrawControls();
-    },
-
-    /*** CONTROL FUNCTIONS ***/
-
-    redrawControls: function () {
-        if(typeof(this.removeControls) == 'function')
-            this.removeControls();
-        if(typeof(this.parseControls) == 'function')
-            this.parseControls();
-    },
-
-    parseControls: function () {
-        // Ensure the controls container exists
-        var oControls = document.getElementById(this.conf.object_id+'-controls');
-        if(!oControls) {
-            oControls = document.createElement('div');
-            oControls.setAttribute('id', this.conf.object_id+'-controls');
-            if (this.dom_obj)
-                this.dom_obj.appendChild(oControls);
-        }
-        oControls = null;
-
-        if(this.conf.view_type === 'line' || this.conf.type === 'line')
-            this.parseLineControls();
-    },
-
-    addControl: function (obj) {
-        var o = document.getElementById(this.conf.object_id+'-controls');
-        if(o) {
-            // Add to DOM
-            o.appendChild(obj);
-            o = null;
-
-            // Add to controls list
-            this.objControls.push(obj);
-        }
-    },
-
-    /**
-     * Toggles the position of the line middle. The mid of the line
-     * can either be the 2nd of three line coords or is automaticaly
-     * the middle between two line coords.
-     */
-    toggleLineMidLock: function() {
-        // What is the current state?
-        var x = this.conf.x.split(',');
-        var y = this.conf.y.split(',')
-
-        if(this.conf.line_type != 10 && this.conf.line_type != 13
-           && this.conf.line_type != 14 && this.conf.line_type != 15) {
-            alert('Not available for this line. Only lines with 2 line parts have a middle coordinate.');
-            return;
-        }
-
-        if(x.length == 2) {
-            // The line has 2 coords configured
-            // - Calculate and add the 3rd coord as 2nd
-            // - Add a drag control for the 2nd coord
-            this.conf.x = [
-              x[0],
-              middle(this.parseCoords(this.conf.x, 'x', false)[0], this.parseCoords(this.conf.x, 'x', false)[1], this.conf.line_cut),
-              x[1],
-            ].join(',');
-            this.conf.y = [
-                y[0],
-                middle(this.parseCoords(this.conf.y, 'y', false)[0], this.parseCoords(this.conf.y, 'y', false)[1], this.conf.line_cut),
-                y[1],
-            ].join(',');
-        } else {
-            // The line has 3 coords configured
-            // - Remove the 2nd coord
-            // - Remove the drag control for the 2nd coord
-            this.conf.x = [ x[0], x[2] ].join(',');
-            this.conf.y = [ y[0], y[2] ].join(',');
-        }
-
-        // send to server
-        saveObjectAttr(this.conf.object_id, { 'x': this.conf.x, 'y': this.conf.y});
-
-        // redraw the controls
-        if(!this.bIsLocked)
-            this.redrawControls();
-
-        // redraw the line
-        this.drawLine();
     },
 
     needsContextMenu: function () {
@@ -756,127 +647,6 @@ var NagVisObject = Base.extend({
 
     needsLineHoverArea: function() {
         return this.needsHoverMenu() || this.needsContextMenu() || this.needsLink() || !this.bIsLocked;
-    },
-
-    parseLineControls: function () {
-        var x = this.parseCoords(this.conf.x, 'x');
-        var y = this.parseCoords(this.conf.y, 'y');
-
-        var size = oGeneralProperties['controls_size'];
-	var lineEndSize = size;
-	if(size < 20)
-	    lineEndSize = 20;
-        var obj;
-        for(var i = 0, l = x.length; i < l; i++) {
-	    // Line middle drag coord needs to be smaller
-	    if(l > 2 && i == 1) 
-		obj = this.parseControlDrag(i, x[i], y[i], - size / 2, - size / 2, size);
-	    else
-		obj = this.parseControlDrag(i, x[i], y[i], - lineEndSize / 2, - lineEndSize / 2, lineEndSize);
-            makeDragable(obj, this, this.saveObject, this.moveObject);
-        }
-
-        if(this.conf.view_type === 'line' && (this.conf.line_type == 10
-           || this.conf.line_type == 13 || this.conf.line_type == 14 || this.conf.line_type == 15))
-	    this.parseControlToggleLineMid(x.length+2, this.getLineMid(this.conf.x, 'x'), this.getLineMid(this.conf.y, 'y'), 20 - size / 2, -size / 2 + 5, size);
-
-        lineEndSize = null;
-        size = null;
-        x = null;
-        y = null;
-    },
-
-    getLineMid: function(coord, dir) {
-        var c = coord.split(',');
-        if(c.length == 2)
-            return middle(this.parseCoords(coord, dir)[0],
-                          this.parseCoords(coord, dir)[1],
-                          this.conf.line_cut);
-        else
-            return this.parseCoords(coord, dir)[1];
-    },
-
-    removeControls: function() {
-        var oControls = document.getElementById(this.conf.object_id+'-controls');
-        if(oControls)
-            for(var i = oControls.childNodes.length; i > 0; i--)
-                oControls.removeChild(oControls.childNodes[0]);
-        this.objControls = [];
-        oControls = null;
-    },
-
-    parseControlDrag: function (num, objX, objY, offX, offY, size) {
-        var ctl = document.createElement('div');
-        ctl.setAttribute('id',         this.conf.object_id+'-drag-' + num);
-        ctl.setAttribute('class',     'control drag');
-        ctl.setAttribute('className', 'control drag');
-	// FIXME: Multilanguage
-	ctl.title          = 'Move object';
-        ctl.style.zIndex   = parseInt(this.conf.z)+1;
-        ctl.style.width    = addZoomFactor(size) + 'px';
-        ctl.style.height   = addZoomFactor(size) + 'px';
-        ctl.style.left     = (objX + offX) + 'px';
-        ctl.style.top      = (objY + offY) + 'px';
-        ctl.objOffsetX     = offX;
-        ctl.objOffsetY     = offY;
-
-        ctl.onmouseover = function() {
-            document.body.style.cursor = 'move';
-        };
-
-        ctl.onmouseout = function() {
-            document.body.style.cursor = 'auto';
-        };
-
-        this.addControl(ctl);
-        return ctl;
-    },
-
-    /**
-     * Adds the modify button to the controls including
-     * all eventhandlers
-     *
-     * Author: Lars Michelsen <lm@larsmichelsen.com>
-     */
-    parseControlToggleLineMid: function (num, objX, objY, offX, offY, size) {
-        var ctl= document.createElement('div');
-        ctl.setAttribute('id',         this.conf.object_id+'-togglemid-' + num);
-        ctl.setAttribute('class',     'control togglemid');
-        ctl.setAttribute('className', 'control togglemid');
-	// FIXME: Multilanguage
-	ctl.title          = 'Lock/Unlock line middle';
-        ctl.style.zIndex   = parseInt(this.conf.z)+1;
-        ctl.style.width    = addZoomFactor(size) + 'px';
-        ctl.style.height   = addZoomFactor(size) + 'px';
-        ctl.style.left     = (objX + offX) + 'px';
-        ctl.style.top      = (objY + offY) + 'px';
-        ctl.objOffsetX     = offX;
-        ctl.objOffsetY     = offY;
-
-        ctl.onclick = function(event) {
-            // In the event handler this points to the ctl object
-            var arr   = this.id.split('-');
-            var objId = arr[0];
-
-	    toggleLineMidLock(event, objId);
-	    contextHide(); // FIXME: Cleanup to close the context menu of the current object
-
-            objId = null;
-            arr   = null;
-
-            document.body.style.cursor = 'auto';
-        };
-
-        ctl.onmouseover = function() {
-            document.body.style.cursor = 'pointer';
-        };
-
-        ctl.onmouseout = function() {
-            document.body.style.cursor = 'auto';
-        };
-
-        this.addControl(ctl);
-        ctl = null;
     },
 
     /**

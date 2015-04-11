@@ -51,7 +51,7 @@ var ElementLabel = Element.extend({
         if (!this.obj.stateChanged() && this.obj.outputOrPerfdataChanged()) {
             this.erase();
             this.render();
-            this.draw(this.obj.dom_obj);
+            this.draw();
         }
     },
 

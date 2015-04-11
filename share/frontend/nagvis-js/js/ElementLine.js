@@ -22,24 +22,33 @@
  *****************************************************************************/
 
 var ElementLine = Element.extend({
+    line_container: null,
+
+    update: function() {
+         new ElementLineControls(this.obj).addTo(this.obj);
+    },
+
     render: function() {
-        var doc = document;
-        var oContainerDiv = doc.createElement('div');
-        oContainerDiv.setAttribute('id', this.obj.conf.object_id+'-linediv');
-        this.dom_obj = oContainerDiv;
+        var container = document.createElement('div');
+        container.setAttribute('id', this.obj.conf.object_id+'-linediv');
+        this.dom_obj = container;
 
         // Create line div
-        var oLineDiv = doc.createElement('div');
-        oContainerDiv.appendChild(oLineDiv);
+        var oLineDiv = document.createElement('div');
+        this.line_container = oLineDiv;
+        container.appendChild(oLineDiv);
         oLineDiv.setAttribute('id', this.obj.conf.object_id+'-line');
         oLineDiv.style.zIndex = this.obj.conf.z;
 
-        this.renderLine();
         this.renderHoverArea();
+        this.renderLine();
     },
 
     place: function() {
+        // FIXME: This should be possible without re-rendering everything
+        this.erase();
         this.render();
+        this.draw();
     },
 
     //
@@ -49,32 +58,24 @@ var ElementLine = Element.extend({
     renderHoverArea: function() {
         // This is only the container for the hover/label elements
         // The real area or labels are added later
-        var oLink = document.getElementById(this.obj.conf.object_id+'-linelink');
-        if(!oLink) {
-            var oLink = document.createElement('a');
-            this.dom_obj.appendChild(oLink);
-            this.obj.trigger_obj = oLink;
-            oLink.setAttribute('id', this.obj.conf.object_id+'-linelink');
-            oLink.setAttribute('class', 'linelink');
-            oLink.setAttribute('className', 'linelink');
-            oLink.href = this.obj.conf.url;
-            oLink.target = this.obj.conf.url_target;
-        }
+        var oLink = document.createElement('a');
+        this.dom_obj.appendChild(oLink);
+        this.obj.trigger_obj = oLink;
+        oLink.setAttribute('id', this.obj.conf.object_id+'-linelink');
+        oLink.className = 'linelink';
+        oLink.href = this.obj.conf.url;
+        oLink.target = this.obj.conf.url_target;
 
         // Hide if not needed, show if needed
-        if(!this.obj.needsLineHoverArea()) {
+        if (!this.obj.needsLineHoverArea())
             oLink.style.display = 'none';
-        } else {
+        else
             oLink.style.display = 'block';
-        }
     },
 
     removeLineHoverArea: function() {
-        if(!this.obj.needsLineHoverArea()) {
-            var area = document.getElementById(this.obj.conf.object_id+'-linelink');
-            area.style.display = 'none';
-            area = null;
-        }
+        if (!this.obj.needsLineHoverArea())
+            this.obj.trigger_obj.style.display = 'none';
     },
 
     renderLine: function() {
@@ -271,7 +272,6 @@ var ElementLine = Element.extend({
                     perfdataA = perfdata[0][1] + perfdata[0][2];
                 this.renderArrow(1, xStart, yStart, xMid, yMid, width, colorFill);
                 this.renderLinkOrLabel(1, middle(xStart, xMid, cutIn), middle(yStart, yMid, cutIn), perfdataA, perfdataB);
-    
                 if(isset(perfdata[1]) && isset(perfdata[1][1]) && isset(perfdata[1][2]))
                     perfdataA = perfdata[1][1] + perfdata[1][2];
                 this.renderArrow(2, xEnd, yEnd, xMid, yMid, width, colorFill2);
@@ -351,11 +351,7 @@ var ElementLine = Element.extend({
                 oCanvas = document.createElement('canvas');
                 oCanvas.setAttribute('id', this.obj.conf.object_id+'-canvas'+num);
                 oCanvas.style.position = 'absolute';
-                var oLineContainer = document.getElementById(this.obj.conf.object_id+'-line');
-                if(oLineContainer) { 
-                    oLineContainer.appendChild(oCanvas);
-                    oLineContainer = null;
-                }
+                this.line_container.appendChild(oCanvas);
             }
             oCanvas.style.left = xMin+"px";
             oCanvas.style.top = yMin+"px";
@@ -370,15 +366,10 @@ var ElementLine = Element.extend({
             ctx.beginPath();
             ctx.moveTo(xCoord[0]-xMin, yCoord[0]-yMin);
     
-            // Loop all coords
-            for(var i = 1, len = xCoord.length; i < len; i++) {
+            for(var i = 1, len = xCoord.length; i < len; i++)
                 ctx.lineTo(xCoord[i]-xMin, yCoord[i]-yMin);
-            }
     
             ctx.fill();
-            ctx = null;
-    
-            oCanvas = null;
         }
     },
 
@@ -452,27 +443,24 @@ var ElementLine = Element.extend({
     },
 
     renderLabel: function(num, lx, ly, perfdataA, perfdataB, yOffset) {
-        var oLinkContainer = document.getElementById(this.obj.conf.object_id+'-linelink');
-    
         var labelShift = this.getLabelShift(perfdataA);
     
         // Maybe use function to detect the real height in future
         var labelHeight = 21;
     
-        if(this.obj.conf.line_type == '13' || this.obj.conf.line_type == '15') {
-            if(oLinkContainer)
-                oLinkContainer.appendChild(
-                    renderNagVisTextbox(this.obj.conf.object_id+'-link'+num, 'box',
-                                        '#ffffff', '#000000', (lx-labelShift), parseInt(ly - labelHeight / 2),
-                                        this.obj.conf.z, 'auto', 'auto', '<b>' + perfdataA + '</b>'));
+        if (this.obj.conf.line_type == '13' || this.obj.conf.line_type == '15') {
+            this.obj.trigger_obj.appendChild(
+                renderNagVisTextbox(this.obj.conf.object_id+'-link'+num, 'box',
+                                    '#ffffff', '#000000', (lx-labelShift), parseInt(ly - labelHeight / 2),
+                                    this.obj.conf.z, 'auto', 'auto', '<b>' + perfdataA + '</b>'));
     
         } else if(this.obj.conf.line_type == '14') {
-            oLinkContainer.appendChild(
+            this.obj.trigger_obj.appendChild(
                 renderNagVisTextbox(this.obj.conf.object_id+'-link'+num, 'box',
                                    '#ffffff', '#000000', (lx-labelShift), parseInt(ly - labelHeight - yOffset),
                                    this.obj.conf.z, 'auto', 'auto', '<b>' + perfdataA + '</b>'));
             labelShift = this.getLabelShift(perfdataB);
-            oLinkContainer.appendChild(
+            this.obj.trigger_obj.appendChild(
                 renderNagVisTextbox(this.obj.conf.object_id+'-link'+(num+1), 'box',
                                     '#ffffff', '#000000', (lx-labelShift), parseInt(ly + yOffset),
                                     this.obj.conf.z, 'auto', 'auto', '<b>' + perfdataB + '</b>'));
@@ -480,27 +468,17 @@ var ElementLine = Element.extend({
     },
 
     renderLinkArea: function(num, lx, ly) {
-        var oLinkContainer = document.getElementById(this.obj.conf.object_id+'-linelink');
-        if(!oLinkContainer)
-            return;
-
-        var oImg = document.getElementById(this.obj.conf.object_id+'-link'+num);
-        if(!oImg) {
-            oImg = document.createElement('img');
-            oImg.setAttribute('id', this.obj.conf.object_id+'-link'+num);
-            oImg.style.position = 'absolute';
-            oImg.style.zIndex = parseInt(this.obj.conf.z)+1;
-        }
+        oImg = document.createElement('img');
+        oImg.setAttribute('id', this.obj.conf.object_id+'-link'+num);
+        oImg.style.position = 'absolute';
+        oImg.style.zIndex = parseInt(this.obj.conf.z)+1;
         oImg.src = oGeneralProperties.path_iconsets+'20x20.gif';
         oImg.style.left = (lx-10)+"px";
         oImg.style.top = (ly-10)+"px";
         oImg.style.width = addZoomFactor(20) + 'px';
         oImg.style.height = addZoomFactor(20) + 'px';
 
-        oLinkContainer.appendChild(oImg);
-        oImg = null;
-
-        oLinkContainer = null;
+        this.obj.trigger_obj.appendChild(oImg);
     },
 
     /**
@@ -692,4 +670,193 @@ var ElementLine = Element.extend({
         return parsed;
     }
 
+});
+
+var ElementLineControls = Element.extend({
+    render: function() {
+        // don't render the controls during normal render calls. We
+        // want to keep the number of DOM objects low, so only render
+        // them when being unlocked for the first time
+    },
+
+    draw: function() {
+        // When locked: Don't draw on regular draw calls (only draw when locked/unlocked)
+        if (!this.obj.bIsLocked)
+            this.base();
+    },
+
+    unlock: function() {
+        if (!this.dom_obj)
+            this._render();
+        this._draw();
+    },
+
+    lock: function() {
+        this.erase();
+    },
+
+    place: function() {
+        // FIXME: This should be possible without re-rendering everything
+        this.erase();
+        this._render();
+        this.draw();
+    },
+
+    //
+    // END OF PUBLIC METHODS
+    //
+
+    _draw: function() {
+        Element.prototype.draw.call(this);
+    },
+
+    _render: function() {
+        var container = document.createElement('div');
+        container.setAttribute('id', this.obj.conf.object_id+'-controls');
+        this.dom_obj = container;
+
+        var x = this.obj.parseCoords(this.obj.conf.x, 'x');
+        var y = this.obj.parseCoords(this.obj.conf.y, 'y');
+
+        var size = oGeneralProperties['controls_size'];
+	var lineEndSize = size;
+	if(size < 20)
+	    lineEndSize = 20;
+
+        var obj;
+        for(var i = 0, l = x.length; i < l; i++) {
+	    // Line middle drag coord needs to be smaller
+	    if(l > 2 && i == 1) 
+		obj = this.renderDragger(i, x[i], y[i], - size / 2, - size / 2, size);
+	    else
+		obj = this.renderDragger(i, x[i], y[i], - lineEndSize / 2, - lineEndSize / 2, lineEndSize);
+            makeDragable(obj, this.obj, this.obj.saveObject, this.obj.moveObject);
+        }
+
+        if (this.hasTwoParts())
+	    this.renderMidToggle(x.length+2,
+                this.obj.getLineMid(this.obj.conf.x, 'x'),
+                this.obj.getLineMid(this.obj.conf.y, 'y'),
+                20 - size / 2,
+                -size / 2 + 5,
+                size);
+    },
+
+    hasTwoParts: function() {
+        return this.obj.conf.view_type === 'line'
+               && (this.obj.conf.line_type == 10
+                   || this.obj.conf.line_type == 13
+                   || this.obj.conf.line_type == 14
+                   || this.obj.conf.line_type == 15);
+    },
+
+    renderDragger: function (num, objX, objY, offX, offY, size) {
+        var ctl = document.createElement('div');
+        this.dom_obj.appendChild(ctl);
+        ctl.setAttribute('id', this.obj.conf.object_id+'-drag-' + num);
+        ctl.className = 'control drag';
+	// FIXME: Multilanguage
+	ctl.title          = 'Move object';
+        ctl.style.zIndex   = parseInt(this.obj.conf.z)+1;
+        ctl.style.width    = addZoomFactor(size) + 'px';
+        ctl.style.height   = addZoomFactor(size) + 'px';
+        ctl.style.left     = (objX + offX) + 'px';
+        ctl.style.top      = (objY + offY) + 'px';
+        ctl.objOffsetX     = offX;
+        ctl.objOffsetY     = offY;
+
+        ctl.onmouseover = function() {
+            document.body.style.cursor = 'move';
+        };
+
+        ctl.onmouseout = function() {
+            document.body.style.cursor = 'auto';
+        };
+
+        return ctl;
+    },
+
+    // Adds the modify button to the controls including all eventhandlers
+    renderMidToggle: function (num, objX, objY, offX, offY, size) {
+        var ctl = document.createElement('div');
+        this.dom_obj.appendChild(ctl);
+        ctl.setAttribute('id', this.obj.conf.object_id+'-togglemid-' + num);
+        ctl.className = 'control togglemid';
+	// FIXME: Multilanguage
+        if (this.obj.bIsLocked)
+	    ctl.title = 'Unlock line middle';
+        else
+	    ctl.title = 'Lock line middle';
+        ctl.style.zIndex   = parseInt(this.obj.conf.z)+1;
+        ctl.style.width    = addZoomFactor(size) + 'px';
+        ctl.style.height   = addZoomFactor(size) + 'px';
+        ctl.style.left     = (objX + offX) + 'px';
+        ctl.style.top      = (objY + offY) + 'px';
+        ctl.objOffsetX     = offX;
+        ctl.objOffsetY     = offY;
+
+        ctl.onclick = function(element_obj) {
+            return function(event) {
+                var event = !event ? window.event : event;
+
+                element_obj.toggleMidLock();
+	        contextHide();
+                document.body.style.cursor = 'auto';
+
+                if(event.stopPropagation)
+                event.stopPropagation();
+                event.cancelBubble = true;
+                return false;
+            };
+        }(this);
+
+        ctl.onmouseover = function() {
+            document.body.style.cursor = 'pointer';
+        };
+
+        ctl.onmouseout = function() {
+            document.body.style.cursor = 'auto';
+        };
+
+        ctl = null;
+    },
+
+    /**
+     * Toggles the position of the line middle. The mid of the line
+     * can either be the 2nd of three line coords or is automaticaly
+     * the middle between two line coords.
+     */
+    toggleMidLock: function() {
+        // What is the current state?
+        var x = this.obj.conf.x.split(',');
+        var y = this.obj.conf.y.split(',')
+
+        if (x.length == 2) {
+            // The line has 2 coords configured
+            // - Calculate and add the 3rd coord as 2nd
+            // - Add a drag control for the 2nd coord
+            this.obj.conf.x = [
+              x[0],
+              middle(this.obj.parseCoords(this.obj.conf.x, 'x', false)[0], this.obj.parseCoords(this.obj.conf.x, 'x', false)[1], this.obj.conf.line_cut),
+              x[1],
+            ].join(',');
+            this.obj.conf.y = [
+                y[0],
+                middle(this.obj.parseCoords(this.obj.conf.y, 'y', false)[0], this.obj.parseCoords(this.obj.conf.y, 'y', false)[1], this.obj.conf.line_cut),
+                y[1],
+            ].join(',');
+        } else {
+            // The line has 3 coords configured
+            // - Remove the 2nd coord
+            // - Remove the drag control for the 2nd coord
+            this.obj.conf.x = [ x[0], x[2] ].join(',');
+            this.obj.conf.y = [ y[0], y[2] ].join(',');
+        }
+
+        // send to server
+        saveObjectAttr(this.obj.conf.object_id, { 'x': this.obj.conf.x, 'y': this.obj.conf.y});
+
+        // redraw the whole object
+        this.obj.render();
+    }
 });
