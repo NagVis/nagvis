@@ -697,9 +697,11 @@ var ElementLineControls = Element.extend({
 
     place: function() {
         // FIXME: This should be possible without re-rendering everything
-        this.erase();
-        this._render();
-        this.draw();
+        if (!this.obj.bIsLocked) {
+            this.erase();
+            this._render();
+            this.draw();
+        }
     },
 
     //
