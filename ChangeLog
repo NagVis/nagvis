@@ -32,8 +32,10 @@ Core:
   * FIX: Fixed error in example custom actions for RDP and SSH
 
 Frongend:
-  ( FIX: Fixed dynmap_object_types exception after creating a dynmap
+  * FIX: Fixed dynmap_object_types exception after creating a dynmap
     (the option is not declared as being mandatory anymore)
+  * FIX: Maps with source related problems (like geomaps without location file)
+    can now be deleted again using the map management dialog
 
 1.8.2
 Core:

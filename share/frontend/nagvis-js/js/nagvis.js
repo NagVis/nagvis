@@ -32,8 +32,9 @@
 /*jslint evil: true, */
 
 /* Initiate global vars which are set later in the parsed HTML */
-var oWorkerProperties, oGeneralProperties, oRotationProperties, oPageProperties;
+var oWorkerProperties, oGeneralProperties, oRotationProperties;
 var oViewProperties;
+var oPageProperties = {};
 var oFileAges;
 var oStatusMessageTimer;
 var oMapObjects = {};
