@@ -1806,13 +1806,21 @@ function usesSource(source) {
 function parseMap(iMapCfgAge, type, mapName) {
     var bReturn = false;
 
+    // Is updated later by getMapProperties(), but we might need it in
+    // the case an error occurs in getMapProperties() and one needs
+    // the map name anyways, e.g. to detect the currently open map
+    // during map deletion
+    oPageProperties.map_name = mapName;
+
     // Block updates of the current map
     bBlockUpdates = true;
 
     var wasInMaintenance = inMaintenance(false);
 
     // Get new map/object information from ajax handler
-    oPageProperties = getMapProperties(type, mapName);
+    var properties = getMapProperties(type, mapName);
+    if (properties)
+        oPageProperties = properties;
     oPageProperties.view_type = type;
 
     if(inMaintenance()) {
