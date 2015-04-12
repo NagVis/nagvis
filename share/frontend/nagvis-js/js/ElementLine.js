@@ -450,18 +450,18 @@ var ElementLine = Element.extend({
     
         if (this.obj.conf.line_type == '13' || this.obj.conf.line_type == '15') {
             this.obj.trigger_obj.appendChild(
-                renderNagVisTextbox(this.obj.conf.object_id+'-link'+num, 'box',
+                renderNagVisTextbox(this.obj.conf.object_id+'-link'+num,
                                     '#ffffff', '#000000', (lx-labelShift), parseInt(ly - labelHeight / 2),
                                     this.obj.conf.z, 'auto', 'auto', '<b>' + perfdataA + '</b>'));
     
         } else if(this.obj.conf.line_type == '14') {
             this.obj.trigger_obj.appendChild(
-                renderNagVisTextbox(this.obj.conf.object_id+'-link'+num, 'box',
+                renderNagVisTextbox(this.obj.conf.object_id+'-link'+num,
                                    '#ffffff', '#000000', (lx-labelShift), parseInt(ly - labelHeight - yOffset),
                                    this.obj.conf.z, 'auto', 'auto', '<b>' + perfdataA + '</b>'));
             labelShift = this.getLabelShift(perfdataB);
             this.obj.trigger_obj.appendChild(
-                renderNagVisTextbox(this.obj.conf.object_id+'-link'+(num+1), 'box',
+                renderNagVisTextbox(this.obj.conf.object_id+'-link'+(num+1),
                                     '#ffffff', '#000000', (lx-labelShift), parseInt(ly + yOffset),
                                     this.obj.conf.z, 'auto', 'auto', '<b>' + perfdataB + '</b>'));
         }
@@ -725,14 +725,12 @@ var ElementLineControls = Element.extend({
 	if(size < 20)
 	    lineEndSize = 20;
 
-        var obj;
         for(var i = 0, l = x.length; i < l; i++) {
 	    // Line middle drag coord needs to be smaller
 	    if(l > 2 && i == 1) 
-		obj = this.renderDragger(i, x[i], y[i], - size / 2, - size / 2, size);
+		this.renderDragger(i, x[i], y[i], - size / 2, - size / 2, size);
 	    else
-		obj = this.renderDragger(i, x[i], y[i], - lineEndSize / 2, - lineEndSize / 2, lineEndSize);
-            makeDragable(obj, this.obj, this.obj.saveObject, this.obj.moveObject);
+		this.renderDragger(i, x[i], y[i], - lineEndSize / 2, - lineEndSize / 2, lineEndSize);
         }
 
         if (this.hasTwoParts())
@@ -767,15 +765,7 @@ var ElementLineControls = Element.extend({
         ctl.objOffsetX     = offX;
         ctl.objOffsetY     = offY;
 
-        ctl.onmouseover = function() {
-            document.body.style.cursor = 'move';
-        };
-
-        ctl.onmouseout = function() {
-            document.body.style.cursor = 'auto';
-        };
-
-        return ctl;
+        makeDragable(ctl, this.obj, this.obj.saveObject, this.obj.moveObject);
     },
 
     // Adds the modify button to the controls including all eventhandlers
@@ -803,7 +793,6 @@ var ElementLineControls = Element.extend({
 
                 element_obj.toggleMidLock();
 	        contextHide();
-                document.body.style.cursor = 'auto';
 
                 if(event.stopPropagation)
                 event.stopPropagation();
@@ -811,15 +800,6 @@ var ElementLineControls = Element.extend({
                 return false;
             };
         }(this);
-
-        ctl.onmouseover = function() {
-            document.body.style.cursor = 'pointer';
-        };
-
-        ctl.onmouseout = function() {
-            document.body.style.cursor = 'auto';
-        };
-
         ctl = null;
     },
 

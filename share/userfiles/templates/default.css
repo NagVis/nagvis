@@ -92,11 +92,15 @@ iframe#url {
 }
 
 /* icons */
-.icon {
+.icondiv {
     position : absolute;
     border : 0;
     font-size: 12pt;
     z-index : 1;
+}
+
+.icon {
+    cursor: pointer;
 }
 
 /* lines */
@@ -118,18 +122,6 @@ a.linelink {
 
 /* textbox (object on map) */
 .box {
-    position : absolute;
-    z-index : 1;
-    border: 1px #000 solid;
-    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    padding: 2px;
-    /* tried to solve the off-screen text wrap. This fixes the problem but
-     * results no no linebreak at all: white-space:nowrap; */
-}
-
-/* labels for the objects on the maps */
-.object_label {
     position : absolute;
     z-index : 1;
     border: 1px #000 solid;
@@ -165,6 +157,11 @@ div.control.modify {
 
 div.control.togglemid {
     background-image: url('../images/templates/default.control_togglemid.gif');
+    cursor: pointer;
+}
+
+.dragger {
+    cursor: move;
 }
 
 /* new overview page */

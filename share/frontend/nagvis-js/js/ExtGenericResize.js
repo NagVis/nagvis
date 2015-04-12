@@ -171,7 +171,7 @@ function doMove(event) {
         var str = getDirection(event, el);
 
         // Fix the cursor
-        if (str == "") str = "default";
+        if (str == "") str = "";
         else str += "-resize";
         el.style.cursor = str;
 

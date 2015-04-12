@@ -86,9 +86,12 @@ var NagVisObject = Base.extend({
         for (var i = 0; i < this.elements.length; i++) {
             this.elements[i].render();
             this.elements[i].place();
+        }
 
-            if (!this.bIsLocked)
+        if (!this.bIsLocked) {
+            for (var i = 0; i < this.elements.length; i++) {
                 this.elements[i].unlock();
+            }
         }
 
         // FIXME
@@ -123,6 +126,10 @@ var NagVisObject = Base.extend({
         if (!usesSource('worldmap'))
             oMap.removeChild(this.dom_obj);
         this.visible = false;
+    },
+
+    remove: function() {
+        this.erase();
     },
 
     addElement: function(obj) {
@@ -732,9 +739,6 @@ var NagVisObject = Base.extend({
                 obj.makeAbsoluteCoords(anchorId);
 
         saveObjectAfterAnchorAction(trigger_obj);
-
-        // Remove the dragging hand after dropping
-        document.body.style.cursor = 'auto';
     },
 
     highlight: function(show) {}

@@ -63,17 +63,21 @@ var ElementHover = Element.extend({
         if (this.template_html === null || this.template_html === true)
             return false; // template not available yet, skip rendering
 
-        this.renderMenu();
+        // don't render during normal render calls. We
+        // want to keep the number of DOM objects low, so only render
+        // them when being unlocked for the first time
     },
 
     draw: function() {
-        // Not rendered yet, e.g. because template was not fetched yet during
-        // initial rendering. Re-try rendering now
-        if (this.dom_obj === null)
-            this.render();
+        if (this.obj.bIsLocked) {
+            // Not rendered yet, e.g. because template was not fetched yet during
+            // initial rendering. Re-try rendering now
+            if (!this.dom_obj)
+                this._render();
 
-        this.base();
-        this.enable();
+            this.base();
+            this.enable();
+        }
     },
 
     erase: function() {
@@ -82,6 +86,8 @@ var ElementHover = Element.extend({
     },
 
     lock: function() {
+        if (!this.dom_obj)
+            this._render();
         this.enable();
     },
 
@@ -92,6 +98,13 @@ var ElementHover = Element.extend({
     //
     // END OF PUBLIC METHODS
     //
+
+    _render: function() {
+        this.getTemplate();
+        if (this.template_html === null || this.template_html === true)
+            return false; // template not available yet, skip rendering
+        this.renderMenu();
+    },
 
     getTemplate: function() {
         if (this.hover_url && this.hover_url !== '') {
@@ -232,9 +245,6 @@ var ElementHover = Element.extend({
 
         var x = this.coords[0],
             y = this.coords[1];
-
-        // Change cursor to "hand" when displaying hover menu
-        this.obj.trigger_obj.style.cursor = 'pointer';
 
         // hide the menu first to avoid an "up-then-over" visual effect
         this.dom_obj.style.display = 'none';

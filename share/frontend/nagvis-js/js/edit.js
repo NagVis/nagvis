@@ -97,15 +97,15 @@ function getButton(event) {
         return (event.which < 2) ? "LEFT" : ((event.which == 2) ? "MIDDLE" : "RIGHT");
 }
 
-function makeUndragable(o) {
-    delete dragStopHandlers[o.id];
-    delete dragMoveHandlers[o.id];
-    delete dragObjects[o.id];
+function makeUndragable(trigger_obj) {
+    delete dragStopHandlers[trigger_obj.id];
+    delete dragMoveHandlers[trigger_obj.id];
+    delete dragObjects[trigger_obj.id];
 
-    removeEvent(o, "mouseover", dragHover);
-    removeEvent(o, "mouseout", dragOut);
-    removeEvent(o, 'mousedown', dragStart);
-    removeEvent(document, 'mouseup',   dragStop);
+    remove_class(trigger_obj, 'dragger');
+
+    removeEvent(trigger_obj, 'mousedown', dragStart);
+    removeEvent(document, 'mouseup', dragStop);
 }
 
 function makeDragable(trigger_obj, obj, dragStopHandler, dragMoveHandler) {
@@ -113,21 +113,13 @@ function makeDragable(trigger_obj, obj, dragStopHandler, dragMoveHandler) {
     dragMoveHandlers[trigger_obj.id] = dragMoveHandler;
     dragObjects[trigger_obj.id] = obj;
 
-    addEvent(trigger_obj, "mouseover", dragHover);
-    addEvent(trigger_obj, "mouseout", dragOut);
+    add_class(trigger_obj, 'dragger');
+
     addEvent(trigger_obj, "mousedown", dragStart);
     // The drag stop event is registered globally on the whole document to prevent
     // problems with too fast mouse movement which might lead to lag the dragging
     // object behind the mouse and make it impossible to stop dragging.
     addEvent(document, "mouseup", dragStop);
-}
-
-function dragHover() {
-    document.body.style.cursor = 'move';
-}
-
-function dragOut() {
-    document.body.style.cursor = 'auto';
 }
 
 /**
@@ -242,7 +234,8 @@ function dragObject(event) {
 
     // Call the dragging handler when one is set
     if(dragMoveHandlers[draggingObject.id])
-        dragMoveHandlers[draggingObject.id](draggingObject, dragObjects[draggingObject.id], event);
+        dragMoveHandlers[draggingObject.id](draggingObject,
+                                            dragObjects[draggingObject.id], event);
     oParent = null;
 }
 

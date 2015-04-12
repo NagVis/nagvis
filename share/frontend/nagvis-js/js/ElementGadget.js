@@ -35,7 +35,6 @@ var ElementGadget = Element.extend({
 
     render: function() {
         this.renderGadget();
-        this.place();
     },
 
     place: function() {

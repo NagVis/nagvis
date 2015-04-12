@@ -24,7 +24,6 @@
 var ElementIcon = Element.extend({
     render: function() {
         this.renderIcon();
-        this.place();
     },
 
     // Moves the icon to it's location as described by this js object
@@ -57,6 +56,7 @@ var ElementIcon = Element.extend({
 
         var oIcon = document.createElement('img');
         oIcon.setAttribute('id', this.obj.conf.object_id+'-icon');
+        oIcon.cuassName = 'icon';
         this.obj.trigger_obj = oIcon;
 
         // Register controls reposition handler to handle resizes during
@@ -75,9 +75,7 @@ var ElementIcon = Element.extend({
         var oIconDiv = document.createElement('div');
         this.dom_obj = oIconDiv;
         oIconDiv.setAttribute('id', this.obj.conf.object_id+'-icondiv');
-        oIconDiv.setAttribute('class', 'icon');
-        oIconDiv.setAttribute('className', 'icon');
-        oIconDiv.style.position = 'absolute';
+        oIconDiv.className = 'icondiv';
         oIconDiv.style.zIndex = this.obj.conf.z;
 
         // Parse link only when set

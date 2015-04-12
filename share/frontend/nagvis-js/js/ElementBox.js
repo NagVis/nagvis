@@ -24,15 +24,13 @@
 var ElementBox = Element.extend({
     render: function() {
         this.dom_obj = renderNagVisTextbox(
-            this.obj.conf.object_id+'-label', 'box',
+            this.obj.conf.object_id+'-label',
             this.obj.conf.background_color, this.obj.conf.border_color,
-            // FIXME: remove these coords, are replace by place()
-            this.obj.parseCoord(this.obj.conf.x, 'x'), this.obj.parseCoord(this.obj.conf.y, 'y'),
+            0, 0, // coords are set by this.place()
             this.obj.conf.z, this.obj.conf.w,
             this.obj.conf.h, this.obj.getText(), this.obj.conf.style
         );
         this.obj.trigger_obj = this.dom_obj;
-        this.place();
     },
 
     unlock: function () {
@@ -42,6 +40,9 @@ var ElementBox = Element.extend({
 
     lock: function () {
         remove_class(this.dom_obj, 'resizeMe');
+        // when locking the object while the cursor is a resize cursor,
+        // it will stay as it is, when not removing them.
+        this.dom_obj.style.cursor = '';
         makeUndragable(this.dom_obj);
     },
 

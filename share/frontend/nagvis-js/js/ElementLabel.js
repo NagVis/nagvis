@@ -57,7 +57,7 @@ var ElementLabel = Element.extend({
 
     render: function() {
         this.dom_obj = renderNagVisTextbox(
-            this.obj.conf.object_id + '-label', 'object_label',
+            this.obj.conf.object_id + '-label',
             this.obj.conf.label_background, this.obj.conf.label_border,
             // FIXME: remove these coords, are replace by place()
             this.obj.parseCoord(this.obj.conf.x, 'x', false), this.obj.parseCoord(this.obj.conf.y, 'y', false),
@@ -65,7 +65,6 @@ var ElementLabel = Element.extend({
             this.obj.conf.label_width, '', this.getText(),
             this.obj.conf.label_style
         );
-        this.place();
     },
 
     unlock: function () {
@@ -93,8 +92,8 @@ var ElementLabel = Element.extend({
      * to realize the center/bottom coordinate definitions.
      */
     place: function () {
-        this.dom_obj.style.left = this.parseLabelCoord('x', this.dom_obj) + 'px';
-        this.dom_obj.style.top  = this.parseLabelCoord('y', this.dom_obj) + 'px';
+        this.dom_obj.style.left = this.parseLabelCoord('x') + 'px';
+        this.dom_obj.style.top  = this.parseLabelCoord('y') + 'px';
     },
 
     //
@@ -151,7 +150,7 @@ var ElementLabel = Element.extend({
         });
     },
 
-    parseLabelCoord: function (dir, oLabel) {
+    parseLabelCoord: function (dir) {
         if (dir === 'x') {
             var coord = this.obj.conf.label_x;
 
@@ -170,7 +169,7 @@ var ElementLabel = Element.extend({
         }
 
         if (dir == 'x' && coord && coord.toString() == 'center') {
-            var diff = parseInt(parseInt(oLabel.clientWidth) - rmZoomFactor(this.obj.getObjWidth())) / 2;
+            var diff = parseInt(parseInt(this.dom_obj.clientWidth) - rmZoomFactor(this.obj.getObjWidth())) / 2;
             coord = obj_coord - diff;
         } else if (dir == 'y' && coord && coord.toString() == 'bottom') {
             coord = obj_coord + rmZoomFactor(this.obj.getObjHeight());
