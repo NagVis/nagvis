@@ -321,8 +321,8 @@ class GlobalCore {
      */
     public function getAvailableShapes() {
         return array_merge(
-          self::listDirectory(path('sys', 'global', 'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0),
-          self::listDirectory(path('sys', 'local',  'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, null, false)
+          self::listDirectory(path('sys', 'global', 'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, true),
+          self::listDirectory(path('sys', 'local',  'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, true, false)
         );
     }
 

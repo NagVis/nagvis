@@ -91,7 +91,8 @@ class ViewManageShapes {
                 if (!$name)
                     throw new FieldInputError('name', l('Please choose a shape'));
 
-                if (count($CORE->getAvailableShapes('/^'.preg_quote($name).'$/')) == 0)
+                $shapes = $CORE->getAvailableShapes();
+                if (!isset($shapes[$name]))
                     throw new FieldInputError('name', l('The shape does not exist.'));
 
                 // Check whether or not the shape is in use
