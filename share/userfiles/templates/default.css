@@ -103,6 +103,10 @@ iframe#url {
     cursor: pointer;
 }
 
+.dragger .icon {
+    cursor: move;
+}
+
 /* lines */
 .line {
     position : absolute;

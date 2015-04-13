@@ -56,7 +56,7 @@ var ElementIcon = Element.extend({
 
         var oIcon = document.createElement('img');
         oIcon.setAttribute('id', this.obj.conf.object_id+'-icon');
-        oIcon.cuassName = 'icon';
+        oIcon.className = 'icon';
         this.obj.trigger_obj = oIcon;
 
         // Register controls reposition handler to handle resizes during
