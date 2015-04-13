@@ -36,6 +36,8 @@ Frongend:
     (the option is not declared as being mandatory anymore)
   * FIX: Maps with source related problems (like geomaps without location file)
     can now be deleted again using the map management dialog
+  * FIX: Don't raise whole page errors when fetching of container URLs failed
+    instead the javascript error message is shown in the container
 
 1.8.2
 Core:
