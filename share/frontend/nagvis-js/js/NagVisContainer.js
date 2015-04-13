@@ -65,7 +65,11 @@ var NagVisContainer = NagVisStatelessObject.extend({
 
                 if(this.conf.view_type === 'inline') {
                     // Request data via ajax call and add it directly to the current page
-                    oSpan.innerHTML = getSyncUrl(this.conf.url);
+                    try {
+                        oSpan.innerHTML = getSyncUrl(this.conf.url);
+                    } catch(e) {
+                        oSpan.innerHTML = e.toString();
+                    }
                 } else {
                     // Create an iframe element which holds the requested url
                     oSpan.innerHTML = '';
