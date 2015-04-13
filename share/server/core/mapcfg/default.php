@@ -116,19 +116,19 @@ function getObjectNames($type, $MAPCFG, $objId, $attrs) {
     }
 
     // Read all objects of the requested type from the backend
-    $aRet = Array();
+    $ret = Array();
     foreach($backendIds as $backendId) {
         $objs = $_BACKEND->getBackend($backendId)->getObjects($type, $name1, '');
         foreach($objs AS $obj) {
             if($type !== 'service')
-                $aRet[] = $obj['name1'];
+                $ret[$obj['name1']] = $obj['name1'];
             else
-                $aRet[] = $obj['name2'];
+                $ret[$obj['name1']] = $obj['name2'];
         }
     }
 
-    natcasesort($aRet);
-    return $aRet;
+    natcasesort($ret);
+    return $ret;
 }
 
 function listHostNames($MAPCFG, $objId, $attrs) {

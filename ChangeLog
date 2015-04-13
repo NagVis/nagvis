@@ -24,6 +24,7 @@ Frontend:
   * It's now possible to use the macro [obj_display_name] in child objects
    in hover menus of hosts or any other objects having childs (Thanks to
    Andreas Steinel)
+  * Overview: Broken map configs do not prevent to open the map anymore
   * FIX: Fixed annoying browser warning message when reloading pages which
     are shown up right after logging in to NagVis
 
@@ -31,7 +32,7 @@ Frontend:
 Core:
   * FIX: Fixed error in example custom actions for RDP and SSH
 
-Frongend:
+Frontend:
   * FIX: Fixed dynmap_object_types exception after creating a dynmap
     (the option is not declared as being mandatory anymore)
   * FIX: Maps with source related problems (like geomaps without location file)

@@ -94,9 +94,9 @@ class ViewMapAddModify {
             if(isset($attrDefs[$key]['match'])) {
                 $array = isset($attrDefs[$key]['array']) && $attrDefs[$key]['array'];
                 if(!$array)
-                    $v = array($val);
+                    $val = array($val);
 
-                foreach($v as $part) {
+                foreach($val as $part) {
                     if(!preg_match($attrDefs[$key]['match'], $part)) {
                         throw new FieldInputError($key, l('The attribute has the wrong format (Regex: [MATCH]).',
                             Array('MATCH' => $attrDefs[$key]['match'])));
