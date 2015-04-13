@@ -221,7 +221,10 @@ var ElementHover = Element.extend({
     },
 
     show: function() {
-        this.showAndPositionMenu();
+        // when the hover template is not loaded yet and the menu not
+        // executed draw(), the menu can not be shown yet. Skip it.
+        if (this.dom_obj)
+            this.showAndPositionMenu();
     },
 
     hide: function() {
@@ -231,7 +234,9 @@ var ElementHover = Element.extend({
             this.show_timer = null;
         }
 
-        this.dom_obj.style.display = 'none';
+        // Might be called even when nothing has been rendered yet
+        if (this.dom_obj)
+            this.dom_obj.style.display = 'none';
         this.coords = null;
         g_hover_open = null;
     },
