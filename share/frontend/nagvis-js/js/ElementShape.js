@@ -51,13 +51,13 @@ var ElementShape = Element.extend({
         this.dom_obj = oIconDiv;
 
         oIconDiv.setAttribute('id', this.obj.conf.object_id+'-icondiv');
-        oIconDiv.setAttribute('class', 'icon');
-        oIconDiv.setAttribute('className', 'icon');
+        oIconDiv.className = 'icondiv';
         oIconDiv.style.zIndex = this.obj.conf.z;
 
         var oIcon = document.createElement('img');
         this.obj.trigger_obj = oIcon;
         oIcon.setAttribute('id', this.obj.conf.object_id+'-icon');
+        oIcon.className = 'icon';
 
         // Construct the real url to fetch for this shape
         var img_url = null;

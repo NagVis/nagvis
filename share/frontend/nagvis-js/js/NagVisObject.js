@@ -51,8 +51,9 @@ var NagVisObject = Base.extend({
     },
 
     update: function() {
-        if (this.needsContextMenu())
-            new ElementContext(this).addTo(this);
+        // All objects need a context menu
+        // (some in all states and some only unlocked)
+        new ElementContext(this).addTo(this);
 
         if (this.needsHoverMenu())
             new ElementHover(this).addTo(this);
@@ -639,7 +640,7 @@ var NagVisObject = Base.extend({
 
     needsContextMenu: function () {
         return (this.conf.context_menu && this.conf.context_menu !== '' && this.conf.context_menu !== '0'
-            && this.conf.context_template && this.conf.context_template !== '') || !this.bIsLocked;
+            && this.conf.context_template && this.conf.context_template !== '');
     },
 
     needsHoverMenu: function() {
@@ -653,7 +654,10 @@ var NagVisObject = Base.extend({
     },
 
     needsLineHoverArea: function() {
-        return this.needsHoverMenu() || this.needsContextMenu() || this.needsLink() || !this.bIsLocked;
+        return this.needsHoverMenu()
+            || this.needsContextMenu()
+            || this.needsLink()
+            || !this.bIsLocked;
     },
 
     /**

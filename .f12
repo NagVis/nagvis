@@ -24,26 +24,30 @@ SITE=${SITE:-$(omd sites --bare | head -n 1)}
 which sudo >/dev/null 2>&1 && SUDO=sudo || SUDO=
 BASE=$(pwd)
 
-#
-# Install to /usr/local/nagvis
-#
-$SUDO ./install.sh -a y -q -r -F -c y \
-             -W /nagvis -n /usr/local/nagios \
-             -i mklivestatus -p /usr/local/nagvis \
-             -u www-data -g www-data \
-             -w /etc/apache2/conf-available \
-             -l unix:/omd/sites/muc/tmp/run/live
-$SUDO rm -f /etc/apache2/conf-available/nagvis.conf.*
+sudo cp -r share/* /usr/local/nagvis/share/
+sudo bash -c '. install_lib ; cmp_js /usr/local/nagvis/share/frontend/nagvis-js/js'
 
-$SUDO rm -f /usr/local/nagvis/share/frontend/nagvis-js/js/NagVisCompressed.js
-
+# Old machanism. Slow, but using the default installer ways
+##
+## Install to /usr/local/nagvis
+##
+#$SUDO ./install.sh -a y -q -r -F -c y \
+#             -W /nagvis -n /usr/local/nagios \
+#             -i mklivestatus -p /usr/local/nagvis \
+#             -u www-data -g www-data \
+#             -w /etc/apache2/conf-available \
+#             -l unix:/omd/sites/muc/tmp/run/live
+#$SUDO rm -f /etc/apache2/conf-available/nagvis.conf.*
 #
-# Install to omd site local/
+##$SUDO rm -f /usr/local/nagvis/share/frontend/nagvis-js/js/NagVisCompressed.js
 #
-$SUDO su - $SITE -c "[ ! -d /omd/sites/$SITE/nvsrc ] && mkdir /omd/sites/$SITE/nvsrc || rm -rf /omd/sites/$SITE/nvsrc; \
-cd $BASE ; \
-rsync --filter='- .git' --filter='- .*.swp' -a ./ /omd/sites/$SITE/nvsrc/ ; \
-cd /omd/sites/$SITE/nvsrc/ ; \
-yes y | ./omd_install.sh"
-
-exit 0
+##
+## Install to omd site local/
+##
+#$SUDO su - $SITE -c "[ ! -d /omd/sites/$SITE/nvsrc ] && mkdir /omd/sites/$SITE/nvsrc || rm -rf /omd/sites/$SITE/nvsrc; \
+#cd $BASE ; \
+#rsync --filter='- .git' --filter='- .*.swp' -a ./ /omd/sites/$SITE/nvsrc/ ; \
+#cd /omd/sites/$SITE/nvsrc/ ; \
+#yes y | ./omd_install.sh"
+#
+#exit 0

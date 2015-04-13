@@ -40,7 +40,7 @@ var ElementLine = Element.extend({
         oLineDiv.setAttribute('id', this.obj.conf.object_id+'-line');
         oLineDiv.style.zIndex = this.obj.conf.z;
 
-        this.renderHoverArea();
+        this.renderActionContainer();
         this.renderLine();
     },
 
@@ -51,11 +51,19 @@ var ElementLine = Element.extend({
         this.draw();
     },
 
+    unlock: function() {
+        this.toggleActionContainer();
+    },
+
+    lock: function() {
+        this.toggleActionContainer();
+    },
+
     //
     // END OF PUBLIC METHODS
     //
 
-    renderHoverArea: function() {
+    renderActionContainer: function() {
         // This is only the container for the hover/label elements
         // The real area or labels are added later
         var oLink = document.createElement('a');
@@ -65,17 +73,14 @@ var ElementLine = Element.extend({
         oLink.className = 'linelink';
         oLink.href = this.obj.conf.url;
         oLink.target = this.obj.conf.url_target;
-
-        // Hide if not needed, show if needed
-        if (!this.obj.needsLineHoverArea())
-            oLink.style.display = 'none';
-        else
-            oLink.style.display = 'block';
     },
 
-    removeLineHoverArea: function() {
+    toggleActionContainer: function() {
+        // Hide if not needed, show if needed
         if (!this.obj.needsLineHoverArea())
             this.obj.trigger_obj.style.display = 'none';
+        else
+            this.obj.trigger_obj.style.display = 'block';
     },
 
     renderLine: function() {

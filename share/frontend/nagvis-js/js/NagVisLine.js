@@ -33,5 +33,7 @@ var NagVisLine = NagVisStatelessObject.extend({
         // this.conf.line_color
         // this.conf.line_color_border
         var line = new ElementLine(this).addTo(this);
+
+        this.base();
     },
 });
