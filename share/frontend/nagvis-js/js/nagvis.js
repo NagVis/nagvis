@@ -1221,6 +1221,9 @@ function scaleView() {
     var content      = document.getElementById('map');
     if (content == null)
         content = document.getElementById('overview');
+    if (content == null)
+        content = document.getElementById('page'); // other pages like error pages
+
     var headerSpacer = document.getElementById('headerspacer');
     if(header) {
         header.style.width = pageWidth() + 'px';

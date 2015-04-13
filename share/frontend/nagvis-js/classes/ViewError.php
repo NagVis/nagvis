@@ -31,12 +31,14 @@ class ViewError {
         js('oGeneralProperties = '.$_MAINCFG->parseGeneralProperties().';'.N
           .'oUserProperties = '.$USERCFG->doGetAsJson().';'.N);
 
+        echo '<div id="page">';
         js('frontendMessage({'.N
           .'    "type"    : "CRITICAL",'.N
           .'    "closable": false,'.N
           .'    "title"   : "'.l('Error').'",'.N
           .'    "message" : "'.htmlentities($e->getMessage(), ENT_COMPAT, 'UTF-8').'"'.N
           .'});');
+        echo '</div>';
 
         return ob_get_clean();
     }
