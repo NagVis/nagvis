@@ -253,6 +253,9 @@ var NagVisObject = Base.extend({
         else
             oSectionMacros.host = '<!--\\sBEGIN\\shost\\s-->.+?<!--\\sEND\\shost\\s-->';
 
+        if(this.conf.type !== 'host' && this.conf.type !== 'shape')
+            oSectionMacros.host = '<!--\\sBEGIN\\shost_or_shape\\s-->.+?<!--\\sEND\\shost_or_shape\\s-->';
+
         if(this.conf.type === 'line' || this.conf.type == 'shape'
            || this.conf.type == 'textbox' || this.conf.type === 'container')
             oSectionMacros.stateful = '<!--\\sBEGIN\\sstateful\\s-->.+?<!--\\sEND\\sstateful\\s-->';
