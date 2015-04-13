@@ -42,7 +42,7 @@ img {border:0}
 .main {margin:0;padding:0;background-color:white;color:black}
 .header {position:fixed;top:0;left:0;padding:0;z-index:100;min-width:1000px;}
 .headerspacer {width:100%}
-#map, #overview, #url {
+div#map, div#overview, div#url {
     position: absolute;
     top: 0;
     left: 0;
