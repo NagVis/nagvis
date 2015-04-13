@@ -261,7 +261,7 @@ var ElementContext = Element.extend({
         else
             oSectionMacros.host = '<!--\\sBEGIN\\shost\\s-->.+?<!--\\sEND\\shost\\s-->';
 
-        if(this.conf.type !== 'host' && this.conf.type !== 'shape')
+        if(this.obj.conf.type !== 'host' && this.obj.conf.type !== 'shape')
             oSectionMacros.host = '<!--\\sBEGIN\\shost_or_shape\\s-->.+?<!--\\sEND\\shost_or_shape\\s-->';
 
         if(this.obj.conf.type === 'line' || this.obj.conf.type == 'shape'
