@@ -383,55 +383,60 @@ function automap_connector($MAPCFG, &$params, &$saved_config, $from_obj, $to_obj
  * saved to the childObjects array
  */
 function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $layers_left, &$this_tree_lvl) {
-    // Stop recursion when the number of layers counted down
-    if($layers_left != 0) {
-        try {
-            global $_BACKEND;
-            if($dir == 'childs') {
-                if($obj_name == '<<<monitoring>>>') {
-                    try {
-                        $relations = $_BACKEND->getBackend($params['backend_id'][0])->getHostNamesWithNoParent();
-                    } catch(BackendConnectionProblem $e) {
-                        $relations = array();
-                    }
-                } elseif (cfg('global', 'shinken_features')) {
-                    if ($params['min_business_impact']){
-                        $tmp_array = array_flip(list_business_impact());
-                        $min_business_impact = $tmp_array[$params['min_business_impact']];
-                    }
-                    $relations = $_BACKEND->getBackend($params['backend_id'][0])->getDirectChildDependenciesNamesByHostName($obj_name, $min_business_impact);
-                } else {
-                    $relations = $_BACKEND->getBackend($params['backend_id'][0])->getDirectChildNamesByHostName($obj_name);
+    if($layers_left == 0)
+        return; // Stop recursion when the number of layers counted down
+
+    $relations = array();
+    try {
+        global $_BACKEND;
+        if($dir == 'childs') {
+            if($obj_name == '<<<monitoring>>>') {
+                try {
+                    $relations = $_BACKEND->getBackend($params['backend_id'][0])->getHostNamesWithNoParent();
+                } catch(BackendConnectionProblem $e) {
+                    $relations = array();
                 }
+            } elseif (cfg('global', 'shinken_features')) {
+                if ($params['min_business_impact']){
+                    $tmp_array = array_flip(list_business_impact());
+                    $min_business_impact = $tmp_array[$params['min_business_impact']];
+                }
+                $relations = $_BACKEND->getBackend($params['backend_id'][0])->getDirectChildDependenciesNamesByHostName($obj_name, $min_business_impact);
             } else {
-                if (cfg('global', 'shinken_features')) {
-                    if ($params['min_business_impact']){
-                        $tmp_array = array_flip(list_business_impact());
-                        $min_business_impact = $tmp_array[$params['min_business_impact']];
-                    }
-                    $relations = $_BACKEND->getBackend($params['backend_id'][0])->getDirectParentDependenciesNamesByHostName($obj_name, $min_business_impact);
-                } else {
-                    $relations = $_BACKEND->getBackend($params['backend_id'][0])->getDirectParentNamesByHostName($obj_name);
-                }
+                $relations = $_BACKEND->getBackend($params['backend_id'][0])->getDirectChildNamesByHostName($obj_name);
             }
-        } catch(BackendException $e) {
-            $relations = array();
         }
-
-        foreach($relations AS $rel_name) {
-            if (in_array($rel_name, $params['ignore_hosts']) == True){
-                continue;
+        elseif ($obj_name != '<<<monitoring>>>') {
+            if (cfg('global', 'shinken_features')) {
+                if ($params['min_business_impact']){
+                    $tmp_array = array_flip(list_business_impact());
+                    $min_business_impact = $tmp_array[$params['min_business_impact']];
+                }
+                $relations = $_BACKEND->getBackend($params['backend_id'][0])->getDirectParentDependenciesNamesByHostName($obj_name, $min_business_impact);
+            } else {
+                $relations = $_BACKEND->getBackend($params['backend_id'][0])->getDirectParentNamesByHostName($obj_name);
             }
-            $obj = automap_obj($MAPCFG, $params, $saved_config, $rel_name);
 
-            // Add to tree
-            $this_tree_lvl[$obj['object_id']] = $obj;
+            // When no parents can be found for one host, this is the root node,
+            // add the <<<monitoring>>> host as parent
+            if (count($relations) == 0)
+                $relations[] = '<<<monitoring>>>';
+        }
+    } catch(BackendException $e) {}
 
-            // < 0 - there is no limit
-            // > 0 - there is a limit but it is no reached yet
-            if($layers_left < 0 || $layers_left > 0) {
-                automap_fetch_tree($dir, $MAPCFG, $params, $saved_config, $rel_name, $layers_left - 1, $this_tree_lvl[$obj['object_id']]['.'.$dir]);
-            }
+    foreach($relations AS $rel_name) {
+        if (in_array($rel_name, $params['ignore_hosts']) == True){
+            continue;
+        }
+        $obj = automap_obj($MAPCFG, $params, $saved_config, $rel_name);
+
+        // Add to tree
+        $this_tree_lvl[$obj['object_id']] = $obj;
+
+        // < 0 - there is no limit
+        // > 0 - there is a limit but it is no reached yet
+        if($layers_left < 0 || $layers_left > 0) {
+            automap_fetch_tree($dir, $MAPCFG, $params, $saved_config, $rel_name, $layers_left - 1, $this_tree_lvl[$obj['object_id']]['.'.$dir]);
         }
     }
 }
