@@ -699,8 +699,8 @@ $mapConfigVars = Array(
         'depends_value' => 'gadget',
         'default'       => 'img',
         'list'          => 'listGadgetTypes',
-        # FIXME: switch to 'deprecated' => true, one day
-        'field_type'    => 'hidden',
+        'field_type'    => 'dropdown',
+        'deprecated'    => true,
     ),
     'gadget_scale' => Array('must' => 0,
         'default' => 100,
