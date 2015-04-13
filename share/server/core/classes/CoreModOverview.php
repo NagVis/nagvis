@@ -211,7 +211,7 @@ class CoreModOverview extends CoreModule {
         $map['members']         = Array();
         $map['num_members']     = 0;
         $map['overview_class']  = 'error';
-        $map['overview_url']    = 'javascript:alert(\''.$msg.'\');';
+        $map['overview_url']    = $this->htmlBase.'/index.php?mod=Map&act=view&show='.$map['name'];
         $map['summary_output']  = l('Map Error: [ERR]', Array('ERR' => $msg));
         return $map;
     }
