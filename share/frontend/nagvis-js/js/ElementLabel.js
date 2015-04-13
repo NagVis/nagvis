@@ -25,7 +25,7 @@ var ElementLabel = Element.extend({
     label_text: null,
 
     update: function() {
-        this.label_text = this.obj.conf.label_text;
+        this.label_text = this.obj.conf.label_text || '';
 
         // Replace configuration based macros in label_text when needed
         if (this.label_text && this.label_text !== '') {
