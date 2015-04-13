@@ -1,6 +1,8 @@
 This is a small file for storing quick thoughts about new features and needed changes:
 ===============================================================================
 
+- bei automap mit fehler (connection refused) die option "modify view" wegmachen
+- hover area auf linien entfernen. Aktionen auf ganze linien erlauben
 - Rework layout of role edit form
 
 Relative Koordinaten:
