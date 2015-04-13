@@ -34,6 +34,7 @@ Core:
 
 Automap:
   * FIX: The pseudo map root node is also shown when another host is the root
+  * FIX: The pseudo map root node can be made root again by context menu
   * FIX: Fixed setting too many view options when changing the root node
 
 Frontend:
