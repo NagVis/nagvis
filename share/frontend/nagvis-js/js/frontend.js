@@ -1386,7 +1386,9 @@ function updateWorldmapObjects(e) {
 
 function parseWorldmap() {
     L.Icon.Default.imagePath = oGeneralProperties.path_base+'/frontend/nagvis-js/images/leaflet';
-    g_map = L.map('map').setView([51.505, -0.09], 13);
+    g_map = L.map('map', {
+        markerZoomAnimation: false,
+    }).setView([51.505, -0.09], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(g_map);
