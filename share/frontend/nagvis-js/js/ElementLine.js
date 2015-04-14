@@ -198,7 +198,7 @@ var ElementLine = Element.extend({
     renderNagVisLine: function(colorFill, colorFill2, perfdata) {
         var x = this.obj.parseCoords(this.obj.conf.x, 'x');
         var y = this.obj.parseCoords(this.obj.conf.y, 'y');
-    
+
         // Convert all coords to int
         for(var i = 0; i < x.length; i++) {
             x[i] = parseInt(x[i], 10);

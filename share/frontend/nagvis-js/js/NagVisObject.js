@@ -41,6 +41,9 @@ var NagVisObject = Base.extend({
         this.elements    = [];
         this.conf        = conf;
 
+        if (usesSource('worldmap') && this.conf.x) // exclude map summary object
+            this.transformCoordinates();
+
         // When no object_id given by server: generate own id
         if (this.conf.object_id == null)
             this.conf.object_id = getRandomLowerCaseLetter() + getRandom(1, 99999);
@@ -83,6 +86,12 @@ var NagVisObject = Base.extend({
                 oMap.appendChild(container);
             }
         }
+        else {
+            var latlng = g_map.containerPointToLatLng(L.point(0, 0));
+            L.marker(latlng, {
+                icon: L.nagVisObj({node: container})
+            }).addTo(g_map_objects);
+        }
 
         for (var i = 0; i < this.elements.length; i++) {
             this.elements[i].render();
@@ -94,13 +103,6 @@ var NagVisObject = Base.extend({
                 this.elements[i].unlock();
             }
         }
-
-        // FIXME
-        //else {
-        //    L.marker([parseFloat(this.conf.x), parseFloat(this.conf.y)], {
-        //        icon: L.nagVisObj({node: oContainerDiv})
-        //    }).addTo(g_map_objects);
-        //}
 
         this.draw();
     },
@@ -203,6 +205,21 @@ var NagVisObject = Base.extend({
         // Save datetime of the first state update (needed for hover parsing)
         if(this.firstUpdate === null)
             this.firstUpdate = this.lastUpdate;
+    },
+
+    transformCoordinates: function() {
+        var x = this.conf.x.toString().split(',');
+        var y = this.conf.y.toString().split(',');
+        var new_x = [];
+        var new_y = [];
+        var new_coord = null;
+        for (var i = 0; i < x.length; i++) {
+            new_coord = g_map.latLngToContainerPoint(L.latLng(parseFloat(x[i]), parseFloat(y[i])));
+            new_x.push(new_coord.x);
+            new_y.push(new_coord.y);
+        }
+        this.conf.x = new_x.join(',');
+        this.conf.y = new_y.join(',');
     },
 
     getLineMid: function(coord, dir) {

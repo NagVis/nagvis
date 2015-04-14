@@ -26,6 +26,7 @@ BASE=$(pwd)
 
 sudo cp -r share/* /usr/local/nagvis/share/
 sudo bash -c '. install_lib ; cmp_js /usr/local/nagvis/share/frontend/nagvis-js/js'
+sudo rm -f /usr/local/nagvis/var/*cache*
 
 # Old machanism. Slow, but using the default installer ways
 ##

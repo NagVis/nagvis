@@ -407,8 +407,7 @@ function addObject(e, objType, viewType, numLeft, action) {
     addNumLeft  = numLeft;
     addAction   = action;
 
-    if(document.body)
-        document.body.style.cursor = 'crosshair';
+    add_class(document.body, 'add');
 
     var event = !e ? window.event : e;
     if(event.stopPropagation)
@@ -456,9 +455,7 @@ function getEventMousePos(e) {
 }
 
 function stop_adding() {
-    if(document.body)
-        document.body.style.cursor = 'default';
-
+    remove_class(document.body, 'add');
     addObjType  = null,
     addViewType = null,
     addNumLeft  = null,

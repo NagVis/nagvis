@@ -1049,7 +1049,11 @@ td#popupWindowContent form#acknowledge input#comment {
     margin-left: 5px;
 }
 
-/* geomap specific */
+body.add, body.add .leaflet-container {
+    cursor: crosshair;
+}
+
+/* worldmap specific */
 
 /* required styles */
 
