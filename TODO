@@ -7,6 +7,16 @@ This is a small file for storing quick thoughts about new features and needed ch
 
 - Rework layout of role edit form
 
+Worldmap:
+  - BUG: Hover menu funktioniert noch nicht
+  - BUG: Verschieben von Objekten funktioniert nicht
+  - BUG: Context menu actions gehen nicht
+  - Eventuell Objekte auf dem geklickten Punkt zentrieren?
+  - action: persist this view
+  - copy to new worldmap
+  - zoombar darf man nicht aktivieren
+  - normaler zoom parameter sollte auch weg
+
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
   - An Shapes anheften fehlt - Eventuell auch nicht. Was ist denn, wenn man Shapes

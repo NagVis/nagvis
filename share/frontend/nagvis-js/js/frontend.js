@@ -1382,13 +1382,18 @@ var g_map_objects;
 // Is used to update the objects to show on the worldmap
 function updateWorldmapObjects(e) {
     initializeMap(oFileAges[oPageProperties.map_name], 'map', oPageProperties.map_name, true);
+
+    // Update the related view properties
+    var ll = g_map.getCenter();
+    setViewParam('worldmap_center', ll.lat+','+ll.long);
+    setViewParam('worldmap_zoom', g_map.getZoom());
 }
 
 function parseWorldmap() {
     L.Icon.Default.imagePath = oGeneralProperties.path_base+'/frontend/nagvis-js/images/leaflet';
     g_map = L.map('map', {
         markerZoomAnimation: false,
-    }).setView([51.505, -0.09], 13);
+    }).setView(getViewParam('worldmap_center').split(','), parseInt(getViewParam('worldmap_zoom')));
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(g_map);
@@ -1404,6 +1409,7 @@ function parseWorldmap() {
 
     // hide eventual open header dropdown menus when clicking on the map
     g_map.on('mousedown', checkHideMenu);
+    g_map.on('mousedown', contextHide);
 }
 
 // Parses the map on initial page load or changed map configuration

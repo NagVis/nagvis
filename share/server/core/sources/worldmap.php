@@ -2,6 +2,8 @@
 
 class WorldmapError extends MapSourceError {}
 
+define('MATCH_WORLDMAP_ZOOM', '/^1?[0-9]$/');
+
 // Register this source as being selectable by the user
 global $selectable;
 $selectable = true;
@@ -11,12 +13,26 @@ global $viewParams;
 $viewParams = array(
     'worldmap' => array(
         'backend_id',
+        'worldmap_center',
+        'worldmap_zoom',
     )
 );
 
 // Config variables to be registered for this source
 global $configVars;
 $configVars = array(
+    'worldmap_center' => array(
+        'must'      => false,
+        'default'   => '51.505,-0.09',
+        'match'     => MATCH_LATLONG,
+        'section'   => 'worldmap',
+    ),
+    'worldmap_zoom' => array(
+        'must'      => false,
+        'default'   => 13,
+        'match'     => MATCH_WORLDMAP_ZOOM,
+        'section'   => 'worldmap',
+    ),
 );
 
 // Global config vars not to show for worldmaps
