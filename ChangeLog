@@ -27,6 +27,7 @@ Frontend:
   * Overview: Broken map configs do not prevent to open the map anymore
   * FIX: Fixed annoying browser warning message when reloading pages which
     are shown up right after logging in to NagVis
+  * FIX: Fixed duplicate map config processing for rendering the header menu
 
 1.8.3
 Core:
