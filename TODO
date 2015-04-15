@@ -11,6 +11,7 @@ Worldmap:
   - BUG: Hover menu funktioniert noch nicht
   - BUG: Verschieben von Objekten funktioniert nicht
   - BUG: Context menu actions gehen nicht
+  - Andere Provider auswählbar machen
   - Eventuell Objekte auf dem geklickten Punkt zentrieren?
   - action: persist this view
   - copy to new worldmap
