@@ -128,13 +128,31 @@ class NagVisHeaderMenu {
      * return   Array
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
-    private function getMapList($type, $maps) {
-        global $AUTHORISATION;
+    private function getMapList() {
+        global $_MAINCFG, $CORE, $AUTHORISATION;
         $permEditAnyMap = false;
+
         $aMaps = Array();
         $childMaps = Array();
         
-        foreach($maps AS $mapName) {
+        // Get all the maps global content and use only those which are needed
+        $filename=cfg('paths','var').'maplist-full-global.cfg-'.CONST_VERSION.'-cache';
+
+        $cfgFiles = $CORE->getAvailableMaps();
+        $path = $CORE->getMainCfg()->getValue('paths', 'mapcfg');
+        foreach ($cfgFiles as $name) $cfgFiles[$name] = $path.$name.".cfg";
+
+        $cache = new GlobalFileCache($cfgFiles, cfg('paths','var').'maplist-full-global.cfg-'.CONST_VERSION.'-cache');
+
+        if(   $cache->isCached() !== -1
+           && $_MAINCFG->isCached() !== -1
+           && $cache->isCached() >= $_MAINCFG->isCached()) {
+            // Read the whole list from the cache
+            $list = $cache->getCache();
+        } else {
+
+            // Get all the maps global content and cache it
+            foreach($CORE->getAvailableMaps() AS $mapName) {
             $map = Array();
 
             $MAPCFG1 = new GlobalMapCfg($mapName);
@@ -150,26 +168,31 @@ class NagVisHeaderMenu {
             if($MAPCFG1->getValue(0, 'show_in_lists') != 1)
                 continue;
 
-            // Only proceed permited objects
-            if($type == 'maps' && !$AUTHORISATION->isPermitted('Map', 'view', $mapName))
-                continue;
-
             $map['mapName']  = $MAPCFG1->getName();
             $map['mapAlias'] = $MAPCFG1->getValue(0, 'alias');
             $map['childs']   = Array();
             $map['class']    = '';
-            if($type == 'maps') {
-                $map['permittedEdit'] = $AUTHORISATION->isPermitted('Map', 'edit', $mapName);
+                $map['_HeadFade'] = $MAPCFG1->getValue(0, 'header_fade');
+                $map['parent'] = $MAPCFG1->getValue(0, 'parent_map');
 
-                $permEditAnyMap |= $map['permittedEdit'];
+                $list[$mapName] = $map;
+
             }
 
-            // auto select current map and apply map specific optins to the header menu
-            if($this->OBJ !== null && $this->aMacros['mod'] == 'Map' && $mapName == $this->OBJ->getName()) {
-                $map['selected'] = True;
+            // Save the list as cache        
+            $cache->writeCache($list, 1);
             }
 
-            $map['parent'] = $MAPCFG1->getValue(0, 'parent_map');
+        // Perform the specific actions on the cached data
+        foreach($list AS $map) {
+            // Remove unpermitted maps
+            if(!$AUTHORISATION->isPermitted('Map', 'view', $map['mapName'])) {
+                unset($list[$map['mapName']]);
+                continue;
+            }
+            // Change permission to edit
+            $map['permittedEdit'] = $AUTHORISATION->isPermitted('Map', 'edit', $map['mapName']);
+            $permEditAnyMap |= $map['permittedEdit'];
 
             if($map['parent'] === '')
                 $aMaps[$map['mapName']] = $map;
@@ -178,6 +201,12 @@ class NagVisHeaderMenu {
                     $childMaps[$map['parent']] = Array();
                 $childMaps[$map['parent']][$map['mapName']] = $map;
             }
+        }
+        // auto select current map and apply map specific options to the header menu 
+        if($this->OBJ !== null && $this->aMacros['mod'] == 'Map' && isset($list[$this->OBJ->getName()])) {
+            $list[$this->OBJ->getName()]['selected'] = True;
+            // Override header fade option with map config
+            $this->aMacros['bEnableFade'] = $list[$this->OBJ->getName()]['_HeadFade'];
         }
 
         return Array($this->mapListToTree($aMaps, $childMaps), $permEditAnyMap);
@@ -263,7 +292,7 @@ class NagVisHeaderMenu {
             }
         }
 
-        list($this->aMacros['maps'], $this->aMacros['permittedEditAnyMap']) = $this->getMapList('maps', $CORE->getAvailableMaps());
+        list($this->aMacros['maps'], $this->aMacros['permittedEditAnyMap']) = $this->getMapList();
         $this->aMacros['langs'] = $this->getLangList();
 
         // Specific information for special templates
