@@ -543,7 +543,7 @@ class GlobalMainCfg {
                     'depends_on'    => 'hovermenu',
                     'depends_value' => 1,
                     'field_type'    => 'dropdown',
-                    'list'          => 'listHoverChildOrders',
+                    'list'          => 'listHoverChildSorters',
                     'match'         => MATCH_STRING_NO_SPACE,
                 ),
                 'icons' => Array(
