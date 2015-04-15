@@ -130,83 +130,82 @@ class NagVisHeaderMenu {
      */
     private function getMapList() {
         global $_MAINCFG, $CORE, $AUTHORISATION;
-        $permEditAnyMap = false;
 
-        $aMaps = Array();
-        $childMaps = Array();
-        
         // Get all the maps global content and use only those which are needed
-        $filename=cfg('paths','var').'maplist-full-global.cfg-'.CONST_VERSION.'-cache';
+        $filename = cfg('paths','var').'maplist-full-global.cfg-'.CONST_VERSION.'-cache';
 
         $cfgFiles = $CORE->getAvailableMaps();
         $path = $CORE->getMainCfg()->getValue('paths', 'mapcfg');
-        foreach ($cfgFiles as $name) $cfgFiles[$name] = $path.$name.".cfg";
+        foreach ($cfgFiles as $name)
+            $cfgFiles[$name] = $path.$name.".cfg";
 
-        $cache = new GlobalFileCache($cfgFiles, cfg('paths','var').'maplist-full-global.cfg-'.CONST_VERSION.'-cache');
+        $CACHE = new GlobalFileCache($cfgFiles,
+            cfg('paths','var').'maplist-full-global.cfg-'.CONST_VERSION.'-cache');
 
-        if(   $cache->isCached() !== -1
+        if ($CACHE->isCached() !== -1
            && $_MAINCFG->isCached() !== -1
-           && $cache->isCached() >= $_MAINCFG->isCached()) {
+           && $CACHE->isCached() >= $_MAINCFG->isCached()) {
             // Read the whole list from the cache
-            $list = $cache->getCache();
+            $list = $CACHE->getCache();
         } else {
-
-            // Get all the maps global content and cache it
+            // Get all the maps global config sections and cache them
             foreach($CORE->getAvailableMaps() AS $mapName) {
-            $map = Array();
+                $MAPCFG = new GlobalMapCfg($mapName);
+                try {
+                    $MAPCFG->readMapConfig(ONLY_GLOBAL);
+                } catch(MapCfgInvalid $e) {
+                    $map['configError'] = true;
+                } catch(NagVisException $e) {
+                    $map['configError'] = true;
+                }
 
-            $MAPCFG1 = new GlobalMapCfg($mapName);
-            try {
-                $MAPCFG1->readMapConfig(ONLY_GLOBAL);
-            } catch(MapCfgInvalid $e) {
-                $map['configError'] = true;
-            } catch(NagVisException $e) {
-                $map['configError'] = true;
-            }
+                // Only show maps which should be shown
+                if ($MAPCFG->getValue(0, 'show_in_lists') != 1)
+                    continue;
 
-            // Only show maps which should be shown
-            if($MAPCFG1->getValue(0, 'show_in_lists') != 1)
-                continue;
-
-            $map['mapName']  = $MAPCFG1->getName();
-            $map['mapAlias'] = $MAPCFG1->getValue(0, 'alias');
-            $map['childs']   = Array();
-            $map['class']    = '';
-                $map['_HeadFade'] = $MAPCFG1->getValue(0, 'header_fade');
-                $map['parent'] = $MAPCFG1->getValue(0, 'parent_map');
-
-                $list[$mapName] = $map;
-
+                $list[$mapName] = Array(
+                    'mapName'   => $MAPCFG->getName(),
+                    'mapAlias'  => $MAPCFG->getValue(0, 'alias'),
+                    'childs'    => Array(),
+                    'class'     => '',
+                    'parent'    => $MAPCFG->getValue(0, 'parent_map'),
+                );
             }
 
             // Save the list as cache        
-            $cache->writeCache($list, 1);
-            }
+            $CACHE->writeCache($list, 1);
+        }
 
-        // Perform the specific actions on the cached data
-        foreach($list AS $map) {
+        $permEditAnyMap = false;
+        $aMaps = Array();
+        $childMaps = Array();
+
+        // Perform user specific filtering on the cached data
+        foreach ($list AS $map) {
             // Remove unpermitted maps
             if(!$AUTHORISATION->isPermitted('Map', 'view', $map['mapName'])) {
                 unset($list[$map['mapName']]);
                 continue;
             }
+
             // Change permission to edit
             $map['permittedEdit'] = $AUTHORISATION->isPermitted('Map', 'edit', $map['mapName']);
             $permEditAnyMap |= $map['permittedEdit'];
 
-            if($map['parent'] === '')
+            if ($map['parent'] === '') {
                 $aMaps[$map['mapName']] = $map;
-            else {
+            } else {
                 if(!isset($childMaps[$map['parent']]))
                     $childMaps[$map['parent']] = Array();
                 $childMaps[$map['parent']][$map['mapName']] = $map;
             }
         }
+
         // auto select current map and apply map specific options to the header menu 
-        if($this->OBJ !== null && $this->aMacros['mod'] == 'Map' && isset($list[$this->OBJ->getName()])) {
+        if ($this->OBJ !== null && $this->aMacros['mod'] == 'Map'
+            && isset($list[$this->OBJ->getName()])) {
+
             $list[$this->OBJ->getName()]['selected'] = True;
-            // Override header fade option with map config
-            $this->aMacros['bEnableFade'] = $list[$this->OBJ->getName()]['_HeadFade'];
         }
 
         return Array($this->mapListToTree($aMaps, $childMaps), $permEditAnyMap);
