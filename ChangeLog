@@ -31,6 +31,7 @@ Frontend:
 1.8.3
 Core:
   * FIX: Fixed error in example custom actions for RDP and SSH
+  * FIX: Fixed showing wrong options for [defaults] hoverchildssort global cfg
 
 Automap:
   * FIX: The pseudo map root node is also shown when another host is the root
