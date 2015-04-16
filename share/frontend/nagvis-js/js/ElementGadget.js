@@ -26,7 +26,7 @@ var ElementGadget = Element.extend({
 
     update_state: function() {
         // update the gadget on every state update where at least the output or perfdata changed
-        if (!this.stateChanged() && this.outputOrPerfdataChanged()) {
+        if (!this.obj.stateChanged() && this.obj.outputOrPerfdataChanged()) {
             this.erase();
             this.render();
             this.draw();
@@ -106,13 +106,12 @@ var ElementGadget = Element.extend({
             oGadget.innerHTML = this.requestGadget(sParams);
         }
         oGadget.setAttribute('id', this.obj.conf.object_id + '-icon');
+        this.obj.trigger_obj = oGadget;
 
         var oIconDiv = document.createElement('div');
         this.dom_obj = oIconDiv;
         oIconDiv.setAttribute('id', this.obj.conf.object_id + '-icondiv');
-        oIconDiv.setAttribute('class', 'icon');
-        oIconDiv.setAttribute('className', 'icon');
-        oIconDiv.style.position = 'absolute';
+        oIconDiv.className = 'icondiv';
         oIconDiv.style.zIndex   = this.obj.conf.z;
 
         // Parse link only when set
@@ -121,13 +120,9 @@ var ElementGadget = Element.extend({
             oIconLink.href = this.obj.conf.url;
             oIconLink.target = this.obj.conf.url_target;
             oIconLink.appendChild(oGadget);
-            oGadget = null;
-
             oIconDiv.appendChild(oIconLink);
-            oIconLink = null;
         } else {
             oIconDiv.appendChild(oGadget);
-            oGadget = null;
         }
     }
 });
