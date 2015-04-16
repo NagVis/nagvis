@@ -1574,6 +1574,10 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" -a "$INSTA
         sed -i '/^usegdlibs=/d' $NAGVIS_PATH/etc/maps/*.cfg
         chk_rc "| Error" "$DONE"
 
+        DONE=`log "Removing gadget_type from map configs..." done`
+        sed -i '/^gadget_type=/d' $NAGVIS_PATH/etc/maps/*.cfg
+        chk_rc "| Error" "$DONE"
+
         line
     fi
     
