@@ -79,20 +79,6 @@ var NagVisObject = Base.extend({
         // Save reference to DOM obj in js obj
         this.dom_obj = container;
 
-        // Add the objects container to the map object
-        if (!usesSource('worldmap')) {
-            var oMap = document.getElementById('map');
-            if (oMap) {
-                oMap.appendChild(container);
-            }
-        }
-        else {
-            var latlng = g_map.containerPointToLatLng(L.point(0, 0));
-            L.marker(latlng, {
-                icon: L.nagVisObj({node: container})
-            }).addTo(g_map_objects);
-        }
-
         for (var i = 0; i < this.elements.length; i++) {
             this.elements[i].render();
             this.elements[i].place();
@@ -105,6 +91,21 @@ var NagVisObject = Base.extend({
         }
 
         this.draw();
+
+        // Add the objects container to the map object
+        if (!usesSource('worldmap')) {
+            var oMap = document.getElementById('map');
+            if (oMap) {
+                oMap.appendChild(container);
+            }
+        }
+        else {
+            var latlng = g_map.containerPointToLatLng(L.point(0, 0));
+            L.nagVisMarker(latlng, {
+                icon: L.nagVisObj({node: container, obj: this}),
+                riseOnHover: true
+            }).addTo(g_map_objects);
+        }
     },
 
     draw: function() {

@@ -37,7 +37,7 @@ var ElementHover = Element.extend({
     template_html  : null, // hover HTML code with replaced config related macros
     coords         : null, // list of x, y coordinates of the hover menu top left corner
     show_timer     : null, // JS timer when hover delay is used
-    hover_spacer   : 5,    // px from screen border
+    spacing        : 5,    // px from screen border
     min_width      : 400,  // px minimum width
 
     update: function() {
@@ -176,7 +176,7 @@ var ElementHover = Element.extend({
     },
 
     enable: function() {
-        this.obj.trigger_obj.onmousemove = function(element_obj) {
+        addEvent(this.obj.trigger_obj, 'mousemove', function(element_obj) {
             return function(event) {
                 var event = event ? event : window.event; // IE FIX
 
@@ -201,18 +201,19 @@ var ElementHover = Element.extend({
                     }
                 }
             };
-        }(this);
+        }(this));
 
-        this.obj.trigger_obj.onmouseout = function(element_obj) {
+        addEvent(this.obj.trigger_obj, 'mouseout', function(element_obj) {
             return function(e) {
+                console.log('out');
                 element_obj.hide();
             };
-        }(this);
+        }(this));
     },
 
     disable: function() {
-        this.obj.trigger_obj.onmousemove = null;
-        this.obj.trigger_obj.onmouseout  = null;
+        removeEvent(this.obj.trigger_obj, 'mousemove');
+        removeEvent(this.obj.trigger_obj, 'mouseout');
     },
 
     // Is the menu currently visible to the user?
@@ -253,8 +254,8 @@ var ElementHover = Element.extend({
 
         // hide the menu first to avoid an "up-then-over" visual effect
         this.dom_obj.style.display = 'none';
-        this.dom_obj.style.left = (x + scrollLeft + this.hover_spacer - getSidebarWidth()) + 'px';
-        this.dom_obj.style.top = (y + scrollTop + this.hover_spacer - getHeaderHeight()) + 'px';
+        this.dom_obj.style.left = (x + scrollLeft + this.spacing - getSidebarWidth()) + 'px';
+        this.dom_obj.style.top = (y + scrollTop + this.spacing - getHeaderHeight()) + 'px';
         if(isIE) {
             this.dom_obj.style.width = '0px';
         } else {
@@ -264,8 +265,8 @@ var ElementHover = Element.extend({
         g_hover_open = this;
 
         // Set the width but leave some border at the screens edge
-        if(this.dom_obj.clientWidth - this.hover_spacer > this.min_width)
-            this.dom_obj.style.width = this.dom_obj.clientWidth - this.hover_spacer + 'px';
+        if(this.dom_obj.clientWidth - this.spacing > this.min_width)
+            this.dom_obj.style.width = this.dom_obj.clientWidth - this.spacing + 'px';
         else
             this.dom_obj.style.width = this.min_width + 'px';
 
@@ -289,9 +290,9 @@ var ElementHover = Element.extend({
         if (!hoverPosAndSizeOk) {
             // First reposition by real size or by min width
             if (this.dom_obj.clientWidth < this.min_width) {
-                this.dom_obj.style.left = (x - this.min_width - this.hover_spacer + scrollLeft) + 'px';
+                this.dom_obj.style.left = (x - this.min_width - this.spacing + scrollLeft) + 'px';
             } else {
-                this.dom_obj.style.left = (x - this.dom_obj.clientWidth - this.hover_spacer + scrollLeft) + 'px';
+                this.dom_obj.style.left = (x - this.dom_obj.clientWidth - this.spacing + scrollLeft) + 'px';
             }
 
             if (this.isOnScreen()) {
@@ -307,15 +308,15 @@ var ElementHover = Element.extend({
         // And if the hover menu is still not on the screen move it to the left edge
         // and fill the whole screen width
         if (!this.isOnScreen()) {
-            this.dom_obj.style.left = this.hover_spacer + scrollLeft + 'px';
-            this.dom_obj.style.width = pageWidth() - (2*this.hover_spacer) + 'px';
+            this.dom_obj.style.left = this.spacing + scrollLeft + 'px';
+            this.dom_obj.style.width = pageWidth() - (2*this.spacing) + 'px';
         }
 
         var hoverTop = parseInt(this.dom_obj.style.top.replace('px', ''));
         // Only move the menu to the top when the new top will not be
         // out of sight
         if(hoverTop + this.dom_obj.clientHeight > pageHeight() && hoverTop - this.dom_obj.clientHeight >= 0)
-            this.dom_obj.style.top = hoverTop - this.dom_obj.clientHeight - this.hover_spacer - 5 + 'px';
+            this.dom_obj.style.top = hoverTop - this.dom_obj.clientHeight - this.spacing - 5 + 'px';
         hoverTop = null;
     },
 
@@ -336,7 +337,7 @@ var ElementHover = Element.extend({
             return false;
     
         // There is not enough spacing at the left viewport border
-        if (hoverLeft - this.hover_spacer < 0)
+        if (hoverLeft - this.spacing < 0)
             return false;
     
         return true;
@@ -349,7 +350,7 @@ var ElementHover = Element.extend({
         var hoverLeft = parseInt(this.dom_obj.style.left.replace('px', ''));
     
         if (rightSide)
-            var overhead = hoverLeft + this.dom_obj.clientWidth + this.hover_spacer - pageWidth();
+            var overhead = hoverLeft + this.dom_obj.clientWidth + this.spacing - pageWidth();
         else
             var overhead = hoverLeft;
         var widthAfterResize = this.dom_obj.clientWidth - overhead;

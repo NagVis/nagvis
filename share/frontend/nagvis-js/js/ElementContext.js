@@ -33,6 +33,7 @@ function contextHide() {
 var ElementContext = Element.extend({
     template_html : null,
     show_menu     : false, // set to true by mouedown when menu shal be shown
+    spacing       : 5,    // px from screen border
     coords        : null, // list of x, y coordinates of the hover menu top left corner
 
     update: function() {
@@ -173,8 +174,8 @@ var ElementContext = Element.extend({
     
         // hide the menu first to avoid an "up-then-over" visual effect
         this.dom_obj.style.display = 'none';
-        this.dom_obj.style.left = this.coords[0] + scrollLeft - getSidebarWidth() + 'px';
-        this.dom_obj.style.top = this.coords[1] + scrollTop - getHeaderHeight() + 'px';
+        this.dom_obj.style.left = this.coords[0] + this.spacing + scrollLeft - getSidebarWidth() + 'px';
+        this.dom_obj.style.top = this.coords[1] + this.spacing + scrollTop - getHeaderHeight() + 'px';
         this.dom_obj.style.display = '';
     
         // Check if the context menu is "in screen".

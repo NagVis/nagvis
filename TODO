@@ -8,7 +8,6 @@ This is a small file for storing quick thoughts about new features and needed ch
 - Rework layout of role edit form
 
 Worldmap:
-  - BUG: Hover menu funktioniert noch nicht
   - BUG: Verschieben von Objekten funktioniert nicht
   - BUG: Context menu actions gehen nicht
   - Andere Provider auswählbar machen

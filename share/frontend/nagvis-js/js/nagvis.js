@@ -1457,15 +1457,12 @@ function newY(a, b, x, y) {
 // support adding an existing domNode)
 L.NagVisObj = L.Icon.extend({
     options: {
-        iconSize: [12, 12], // also can be set through CSS
-        /*
-        iconAnchor: (Point)
-        popupAnchor: (Point)
-        node: (DOM node)
-        bgPos: (Point)
-        */
+        // FIXME: make this dynamic depending on size
+        iconSize: [22, 22], // also can be set through CSS
+        iconAnchor: [0, 0],
         className: 'leaflet-nagvis-obj',
-        node: null
+        node: null,
+        obj: null,
     },
 
     createIcon: function (oldIcon) {
@@ -1480,12 +1477,15 @@ L.NagVisObj = L.Icon.extend({
             div.appendChild(options.node);
         }
 
-        if (options.bgPos) {
-            div.style.backgroundPosition =
-                    (-options.bgPos.x) + 'px ' + (-options.bgPos.y) + 'px';
-        }
-
         this._setIconStyles(div, 'icon');
+
+        // Fix icon position which is not automatically fixed by this._setIconStyles because we
+        // enforce iconAnchor: [0, 0].
+        var offset = L.point(options.iconSize);
+        offset._divideBy(2);
+        options.obj.trigger_obj.style.marginLeft = (-offset.x) + 'px';
+        options.obj.trigger_obj.style.marginTop  = (-offset.y) + 'px';
+
         return div;
     },
 
@@ -1496,4 +1496,27 @@ L.NagVisObj = L.Icon.extend({
 
 L.nagVisObj = function (options) {
     return new L.NagVisObj(options);
+};
+
+L.NagVisMarker = L.Marker.extend({
+    initialize: function (latlng, options) {
+        L.Marker.prototype.initialize.call(this, latlng, options);
+
+        //this.on('mousemove', this._onMouseMove, this);
+    }
+
+    //_onMouseMove: function (event) {
+    //    console.log('hover');
+    //    var element = this.options.icon.options.obj.trigger_obj;
+    //    console.log(element);
+    //    //if (document.createEvent) {
+    //    //    element.dispatchEvent(event.originalEvent);
+    //    //} else {
+    //    //    element.fireEvent("onmousemove", event.originalEvent);
+    //    //}
+    //}
+});
+
+L.nagVisMarker = function (ll, options) {
+    return new L.NagVisMarker(ll, options);
 };
