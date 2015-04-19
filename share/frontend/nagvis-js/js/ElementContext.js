@@ -30,9 +30,29 @@ function contextHide() {
         g_context_open.hide();
 }
 
+function context_handle_global_mousedown(event) {
+    event = event ? event : window.event; // IE FIX
+    if (usesSource('worldmap'))
+        event = event.originalEvent;
+    var target = getTargetRaw(event);
+
+    while (target && !has_class(target, 'context'))
+        target = target.parentNode;
+
+    if (target === null) {
+        // when not clicked on the context menu, hide it
+        contextHide();
+    }
+    else {
+        // Check for click on the context menu and do nothing in this case
+        var object_id = target.id.split('-')[0];
+        if (object_id == g_context_open.obj.conf.object_id)
+            return preventDefaultEvents(event);
+    }
+}
+
 var ElementContext = Element.extend({
     template_html : null,
-    show_menu     : false, // set to true by mouedown when menu shal be shown
     spacing       : 5,    // px from screen border
     coords        : null, // list of x, y coordinates of the hover menu top left corner
 
@@ -56,39 +76,7 @@ var ElementContext = Element.extend({
 
         this.base();
 
-        this.obj.trigger_obj.onmousedown = function(element_obj) {
-            return function(event) {
-                var event = event ? event : window.event; // IE FIX
-
-                if (typeof event.target != 'undefined' && event.target !== null)
-                    var target = event.target;
-                else
-                    var target = event.srcElement;
-
-                // Workaround for the different structure of targets on lines/icons.
-                // Find the first DOM node in parents having an id assigned
-                while (!target.id && target.parentNode)
-                    target = target.parentNode;
-
-                var id = target.id ? target.id : null;
-
-                // Hide all context menus except clicking the current open context menu
-                if (id === null || (id.indexOf('http:') === -1 && id.indexOf('-context') === -1))
-                    contextHide();
-
-                // Don't show the context menu when currently dragging
-                if (dragging())
-                    return false;
-
-                // only show the context menu if the right mouse button is pressed on the obj
-                if (event.button === 2)
-                    element_obj.show_menu = true;
-            };
-        }(this)
-        // FIXME: Need to ensure that this is assigned only once per page?
-        document.onmousedown = this.obj.trigger_obj.onmousedown;
-
-        this.obj.trigger_obj.oncontextmenu = function(element_obj) {
+        addEvent(this.obj.trigger_obj, 'contextmenu', function(element_obj) {
             return function(event) {
                 // During render/drawing calls the template was not ready, so the menu
                 // has not been drawn yet. Do it now.
@@ -96,14 +84,15 @@ var ElementContext = Element.extend({
                     element_obj.draw();
                 }
                 element_obj.coords = [event.clientX, event.clientY];
-                return element_obj.show();
+                element_obj.show();
+                return preventDefaultEvents(event);
             };
-        }(this);
+        }(this));
     },
 
     erase: function() {
-        this.obj.trigger_obj.onmousedown    = null;
-        this.obj.trigger_obj.oncontextmenu  = null;
+        removeEvent(this.obj.trigger_obj, 'mousedown');
+        removeEvent(this.obj.trigger_obj, 'contextmenu');
         this.base();
     },
 
@@ -196,10 +185,6 @@ var ElementContext = Element.extend({
         }
 
         g_context_open = this;
-        this.show_menu = false;
-    
-        // If this returns false, the browser's context menu will not show up
-        return false;
     },
 
     hide: function() {

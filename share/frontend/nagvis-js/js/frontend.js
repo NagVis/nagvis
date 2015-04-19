@@ -1121,10 +1121,7 @@ function wheel_zoom(event) {
         zoom(delta * 5);
     }
 
-    // Prevent default events
-    if (event.preventDefault)
-        event.preventDefault();
-    event.returnValue = false;
+    return preventDefaultEvents(event);
 }
 
 var g_drag_ind = null;
@@ -1188,13 +1185,7 @@ function zoombarDragStop(event) {
     }
 
     g_drag_ind = null;
-
-    if (event.preventDefault)
-        event.preventDefault();
-    if (event.stopPropagation)
-        event.stopPropagation();
-    event.returnValue = false;
-    return false;
+    return preventDefaultEvents(event);
 }
 
 var g_left_clicked = false;
@@ -1409,7 +1400,7 @@ function parseWorldmap() {
 
     // hide eventual open header dropdown menus when clicking on the map
     g_map.on('mousedown', checkHideMenu);
-    g_map.on('mousedown', contextHide);
+    g_map.on('mousedown', context_handle_global_mousedown);
 }
 
 // Parses the map on initial page load or changed map configuration
@@ -1556,8 +1547,10 @@ function workerInitialize(iCount, sType, sIdentifier) {
 
         if (usesSource('worldmap'))
             parseWorldmap();
-        else
+        else {
             renderZoombar();
+            addEvent(document, 'mousedown', context_handle_global_mousedown);
+        }
         initializeMap(oFileAges[sIdentifier], sType, sIdentifier, true);
 
     } else if(sType === 'overview') {

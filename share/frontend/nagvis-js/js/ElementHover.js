@@ -178,7 +178,7 @@ var ElementHover = Element.extend({
     enable: function() {
         addEvent(this.obj.trigger_obj, 'mousemove', function(element_obj) {
             return function(event) {
-                var event = event ? event : window.event; // IE FIX
+                event = event ? event : window.event; // IE FIX
 
                 // During render/drawing calls the template was not ready, so the hover menu
                 // has not been drawn yet. Do it now.
@@ -205,7 +205,6 @@ var ElementHover = Element.extend({
 
         addEvent(this.obj.trigger_obj, 'mouseout', function(element_obj) {
             return function(e) {
-                console.log('out');
                 element_obj.hide();
             };
         }(this));

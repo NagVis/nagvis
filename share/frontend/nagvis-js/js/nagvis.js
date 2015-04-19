@@ -884,6 +884,16 @@ function removeEvent(obj, type, fn) {
     }
 }
 
+function preventDefaultEvents(event) {
+    if (event.preventDefault)
+        event.preventDefault();
+    else
+        event.returnValue = false;
+    if (event.stopPropagation)
+        event.stopPropagation();
+    return false;
+}
+
 /**
  * Displays a system status message
  *

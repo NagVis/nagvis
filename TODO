@@ -9,7 +9,6 @@ This is a small file for storing quick thoughts about new features and needed ch
 
 Worldmap:
   - BUG: Verschieben von Objekten funktioniert nicht
-  - BUG: Context menu actions gehen nicht
   - Andere Provider auswählbar machen
   - Eventuell Objekte auf dem geklickten Punkt zentrieren?
   - action: persist this view
