@@ -90,10 +90,10 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
 
         # WATO folder related permissions
         foreach(get_folder_permissions($username) AS $folder_path => $p) {
-            if($p['read']) {
+            if(isset($p['read']) && $p['read']) {
                 $perms[] = array('Map', 'view', $this->getFolderMapName($folder_path));
             }
-            if($p['write']) {
+            if(isset($p['write']) && $p['write']) {
                 $perms[] = array('Map', 'edit', $this->getFolderMapName($folder_path));
             }
         }
