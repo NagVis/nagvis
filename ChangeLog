@@ -33,6 +33,8 @@ Frontend:
 Core:
   * FIX: Fixed error in example custom actions for RDP and SSH
   * FIX: Fixed showing wrong options for [defaults] hoverchildssort global cfg
+  * FIX: Fixed error with Check_MK integration when user is not permitted to
+         write a WATO folder related map
 
 Automap:
   * FIX: The pseudo map root node is also shown when another host is the root
