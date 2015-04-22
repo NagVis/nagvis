@@ -11,6 +11,7 @@ Automap:
   * FIX: Fixed setting too many view options when changing the root node
 
 Frontend:
+  * FIX: Forcing IE to always use the last available engine
   * FIX: Fixed dynmap_object_types exception after creating a dynmap
     (the option is not declared as being mandatory anymore)
   * FIX: Maps with source related problems (like geomaps without location file)
