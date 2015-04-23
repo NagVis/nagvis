@@ -70,6 +70,14 @@ class NagVisHeaderMenu {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function __toString() {
+        global $AUTH, $AUTHORISATION, $UHANDLER;
+
+        // In case of some really bad errors, the header menu can not be rendered, because basic
+        // objects like $UHANDLER, $AUTH and $AUTHORISATION have not been initialized. Catch this
+        // case here and terminate rendering
+        if (!isset($UHANDLER) || !isset($AUTH) || !isset($AUTHORISATION))
+            return '';
+
         // Get all macros
         $this->getMacros();
 
