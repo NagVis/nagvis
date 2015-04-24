@@ -22,22 +22,19 @@
  *
  *****************************************************************************/
 
-/**
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-
-/**
- * Definition of needed variables
- */
-// This is turned to true when the map is currently reparsing (e.g. due to
-// a changed map config file). This blocks object updates.
-var bBlockUpdates = false;
-// This is turned to true when at least one object on the map is unlocked
-// for editing. When set to true this flag prevents map reloading by changed
-// map config files
+// The number of currently unlocked objects for editing. When this is
+// above 0, it will lead to block state updates till it's 0 again
 var iNumUnlocked = false;
-var cacheHeaderHeight = null;
-var workerTimeoutID   = null;
+// Contains the number of pixels the header menu currently consumes
+var g_header_height_cache = null;
+// Points to the timer object of the worker timer
+var g_worker_id = null;
+// Holds the global JS map object (e.g. leaflet js map object)
+var g_map = null;
+// Holds all map objects
+var g_map_objects = null;
+// Holds the view management object
+var g_view = null;
 
 /**
  * Checks if a view is in maintenance mode and shows a message if
@@ -61,8 +58,8 @@ function inMaintenance(displayMsg) {
  * Returns the current height of the header menu
  */
 function getHeaderHeight() {
-    // Only gather the heather height once.
-    if(cacheHeaderHeight === null) {
+    // Only gather the header height once.
+    if(g_header_height_cache === null) {
         var ret = 0;
 
         var oHeader = document.getElementById('header');
@@ -70,13 +67,12 @@ function getHeaderHeight() {
             // Only return header height when header is shown
             if(oHeader.style.display != 'none')
                 ret = oHeader.clientHeight;
-            oHeader = null;
         }
 
-        cacheHeaderHeight = ret;
+        g_header_height_cache = ret;
     }
 
-    return cacheHeaderHeight;
+    return g_header_height_cache;
 }
 
 /**
@@ -139,29 +135,27 @@ function updateForm(form) {
     form._submit.click();
 }
 
-/**
- * showFrontendDialog()
- *
- * Show a dialog to the user
- *
- * @author  Lars Michelsen <lars@vertical-visions.de>
- */
 function showFrontendDialog(sUrl, sTitle, sWidth) {
-    if(typeof sWidth === 'undefined' || sWidth === null) {
+    if (typeof sWidth === 'undefined' || sWidth === null)
         sWidth = 350;
-    }
 
-    var oContent = getSyncRequest(sUrl, false, false);
-  if(isset(oContent)) {
-        // Store url for maybe later refresh
-        oContent.url = sUrl;
+    call_ajax(sUrl, {
+        response_handler: function(response, data) {
+            if (isset(response)) {
+                // Store url for maybe later refresh
+                response.url = sUrl;
 
-        if(typeof oContent !== 'undefined' && typeof oContent.code !== 'undefined') {
-            popupWindow(sTitle, oContent, true, sWidth);
+                if(typeof response !== 'undefined' && typeof response.code !== 'undefined') {
+                    popupWindow(data.title, response, true, data.width);
+                }
+            }
+        },
+        handler_data: {
+            title: sTitle,
+            width: sWidth
         }
+    });
 
-        oContent = null;
-    }
 }
 
 /**
@@ -206,8 +200,8 @@ function searchObjects(sMatch) {
 
     // Loop all map objects and search the matching attributes
     var obj;
-    for(var i in oMapObjects) {
-        obj = oMapObjects[i];
+    for(var i in g_view.objects) {
+        obj = g_view.objects[i];
         // Don't search shapes/textboxes/lines
         if(obj.conf.type != 'shape'
            && obj.conf.type != 'textbox'
@@ -248,7 +242,7 @@ function searchObjects(sMatch) {
         var objectId = aResults[i];
 
         // - highlight the object
-        if(oMapObjects[objectId].conf.view_type && oMapObjects[objectId].conf.view_type === 'icon') {
+        if(g_view.objects[objectId].conf.view_type && g_view.objects[objectId].conf.view_type === 'icon') {
             // Detach the handler
             //  Had problems with this. Could not give the index to function:
             //  function() { flashIcon(iIndex, 10); iIndex = null; }
@@ -260,258 +254,16 @@ function searchObjects(sMatch) {
         // - Scroll to object
         if(len == 1) {
             // Detach the handler
-            setTimeout('scrollSlow('+oMapObjects[objectId].parsedX()+', '+oMapObjects[objectId].parsedY()+', 1)', 0);
+            setTimeout('scrollSlow('+g_view.objects[objectId].parsedX()+', '+g_view.objects[objectId].parsedY()+', 1)', 0);
         }
 
         objectId = null;
     }
 }
 
-/**
- * getObjectsToUpdate()
- *
- * Detects objects with deprecated state information
- *
- * @return  Array    The array of oMapObjects indexes which need an update
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getObjectsToUpdate() {
-    eventlog("worker", "debug", "getObjectsToUpdate: Start");
-    var arrReturn = [];
-
-    // Assign all object which need an update indexes to return Array
-    for(var i in oMapObjects) {
-        if(oMapObjects[i].lastUpdate <= iNow - oWorkerProperties.worker_update_object_states) {
-            // Do not update objects where enable_refresh=0
-            if(oMapObjects[i].conf.type !== 'textbox' 
-               && oMapObjects[i].conf.type !== 'shape'
-               && oMapObjects[i].conf.type !== 'container') {
-                arrReturn.push(i);
-            } else if(oMapObjects[i].conf.enable_refresh && oMapObjects[i].conf.enable_refresh == '1') {
-                arrReturn.push(i);
-            }
-        }
-    }
-
-    // Now spread the objects in the available timeslots
-    var iNumTimeslots = Math.ceil(oWorkerProperties.worker_update_object_states / oWorkerProperties.worker_interval);
-    var iNumObjectsPerTimeslot = Math.ceil(oLength(oMapObjects) / iNumTimeslots);
-    eventlog("worker", "debug", "Number of timeslots: "+iNumTimeslots+" Number of Objects per Slot: "+iNumObjectsPerTimeslot);
-
-    // Only spread when the number of objects is larger than the objects for each
-    // timeslot
-    if(arrReturn.length > iNumObjectsPerTimeslot) {
-        eventlog("worker", "debug", "Spreading map objects in timeslots");
-
-        // Sort the objects by age and get the oldest objects first
-        arrReturn.sort(function(id_1, id_2) {
-            return oMapObjects[id_1].lastUpdate > oMapObjects[id_2].lastUpdate;
-        });
-
-        // Just remove all elements from the end of the array
-        arrReturn = arrReturn.slice(0, iNumObjectsPerTimeslot);
-    }
-
-    eventlog("worker", "debug", "getObjectsToUpdate: Have to update "+arrReturn.length+" objects");
-    return arrReturn;
-}
-
-function getFileAgeParams(viewType, mapName) {
-    if(!isset(viewType))
-        var viewType = oPageProperties.view_type;
-    if(!isset(mapName))
-        var mapName = oPageProperties.map_name;
-
-    var addParams = '';
-    if(viewType === 'map' && mapName !== false)
-        addParams = '&f[]=map,' + mapName + ',' + oFileAges[mapName];
-    return '&f[]=maincfg,maincfg,' + oFileAges['maincfg'] + addParams;
-}
-
-/**
- * getBackgroundColor()
- *
- * Gets the background color of the map by the summary state of the map
- *
- * @param   Object   Map object
- * @return  String   Hex code representing the color
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getBackgroundColor(oObj) {
-    var sColor;
-
-    // When state is PENDING, OK, UP, set default background color
-    if(!oObj.summary_state || oObj.summary_state == 'PENDING' || oObj.summary_state == 'OK' || oObj.summary_state == 'UP')
-        sColor = oPageProperties.background_color;
-    else {
-        sColor = oStates[oObj.summary_state].bgcolor;
-
-        // Ack or downtime?
-        if(oObj.summary_in_downtime && oObj.summary_in_downtime === 1)
-            if(isset(oStates[oObj.summary_state]['downtime_bgcolor']) && oStates[oObj.summary_state]['downtime_bgcolor'] != '')
-                sColor = oStates[oObj.summary_state]['downtime_bgcolor'];
-            else
-                sColor = lightenColor(sColor, 100, 100, 100);
-        else if(oObj.summary_problem_has_been_acknowledged && oObj.summary_problem_has_been_acknowledged === 1)
-            if(isset(oStates[oObj.summary_state]['ack_bgcolor']) && oStates[oObj.summary_state]['ack_bgcolor'] != '')
-                sColor = oStates[oObj.summary_state]['ack_bgcolor'];
-            else
-                sColor = lightenColor(sColor, 100, 100, 100);
-    }
-
-    oObj = null;
-    return sColor;
-}
-
-/**
- * Gets the favicon of the page representation the state of the map
- *
- * @return	String	Path to the favicon
- * @author 	Lars Michelsen <lars@vertical-visions.de>
- */
-function getFaviconImage(oObj) {
-    var sFavicon;
-
-    // Gather image on summary state of the object
-    if(oObj.summary_in_downtime && oObj.summary_in_downtime === 1)
-        sFavicon = 'downtime';
-    else if(oObj.summary_problem_has_been_acknowledged && oObj.summary_problem_has_been_acknowledged === 1)
-        sFavicon = 'ack';
-    else if(oObj.summary_state.toLowerCase() == 'unreachable')
-        sFavicon = 'down';
-    else
-        sFavicon = oObj.summary_state.toLowerCase();
-
-    oObj = null;
-
-    // Set full path
-    sFavicon = oGeneralProperties.path_images+'internal/favicon_'+sFavicon+'.png';
-
-    return sFavicon;
-}
-
-/**
- * setPageBackgroundColor()
- *
- * Sets the background color of the page
- *
- * @param   String   Hex code
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function setPageBackgroundColor(sColor) {
-    eventlog("background", "debug", "Setting backgroundcolor to " + sColor);
-    eventlog("background", "debug", "Old backgroundcolor: " + document.body.style.backgroundColor);
-    document.body.style.backgroundColor = sColor;
-    eventlog("background", "debug", "New backgroundcolor: " + document.body.style.backgroundColor);
-}
-
-/**
- * setPageFavicon()
- *
- * Sets the favicon of the pages
- *
- * @param   String   Path to the icon image
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function setPageFavicon(sFavicon) {
-    favicon.change(sFavicon);
-}
-
-/**
- * setPagePageTitle()
- *
- * Sets the title of the current page
- *
- * @param   String   Title
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function setPageTitle(sTitle) {
-    document.title = sTitle;
-}
-
-/**
- * updateMapBasics()
- *
- * This function updates the map basics like background, favicon and title with
- * current information
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function updateMapBasics() {
-    var show_filter = '';
-    if (oPageProperties.map_name !== false)
-        show_filter = '&show=' + escapeUrlValues(oPageProperties.map_name)
-
-    // Get new map state from core
-    oMapSummaryObj = new NagVisMap(getSyncRequest(oGeneralProperties.path_server
-                                   + '?mod=Map&act=getObjectStates&ty=summary'
-                                   + show_filter + getViewParams(), false)[0]);
-
-    // FIXME: Add method to refetch oMapSummaryObj when it is null
-    // Be tolerant - check if oMapSummaryObj is null or anything unexpected
-    if(oMapSummaryObj == null || typeof oMapSummaryObj === 'undefined') {
-        eventlog("worker", "debug", "The oMapSummaryObj is null. Maybe a communication problem with the backend");
-        return false;
-    }
-
-    // Update favicon
-    setPageFavicon(getFaviconImage(oMapSummaryObj.conf));
-
-    // Update page title
-    setPageTitle(oPageProperties.alias + ' ('
-                  + oMapSummaryObj.conf.summary_state + ') :: '
-                  + oGeneralProperties.internal_title);
-
-    // Change background color
-    if(oPageProperties.event_background && oPageProperties.event_background == '1')
-        setPageBackgroundColor(getBackgroundColor(oMapSummaryObj.conf));
-
-    // Update background image for automap
-    // FIXME: Maybe update for regular maps?
-    //if(oPageProperties.view_type === 'automap')
-    //    setMapBackgroundImage(oPageProperties.background_image+iNow);
-}
-
-/**
- * Is called by the worker function to check all objects for repeated
- * events to be triggered independent of the state updates.
- */
-function handleRepeatEvents() {
-    eventlog("worker", "debug", "handleRepeatEvents: Start");
-    for (var i in oMapObjects) {
-        // Trigger repeated event checking/raising for eacht stateful object which
-        // has event_time_first set (means there was an event before which is
-        // required to be repeated some time)
-        if (oMapObjects[i].has_state && oMapObjects[i].event_time_first !== null) {
-            oMapObjects[i].checkRepeatEvents();
-        }
-    }
-    eventlog("worker", "debug", "handleRepeatEvents: End");
-}
-
-// Bulk update map objects states and then visualize eventual changes
-function updateObjects(state_infos, sType) {
-    var at_least_one_changed = false;
-
-    // Loop all object which have new information
-    for(var i = 0, len = state_infos.length; i < len; i++) {
-        var objectId = state_infos[i].object_id;
-
-        // Object not found
-        if (!isset(oMapObjects[objectId])) {
-            eventlog("updateObjects", "critical", "Could not find an object with the id "+objectId+" in object array");
-            return false;
-        }
-
-        at_least_one_changed &= oMapObjects[objectId].update_state(state_infos[i]);
-    }
-
-    return at_least_one_changed;
-}
-
 function getMapObjByDomObjId(id) {
     try {
-        return oMapObjects[id];
+        return g_view.objects[id];
     } catch(er) {
         return null;
     }
@@ -558,7 +310,7 @@ function removeMapObject(objectId, msg) {
 
     obj = null;
 
-    delete oMapObjects[objectId];
+    delete g_view.objects[objectId];
 }
 
 /**
@@ -636,185 +388,8 @@ function refreshMapObject(event, objectId) {
  * Handles object state request answers received from the server
  */
 function getObjectStatesCallback(oResponse) {
-    var bStateChanged = false;
-    if(isset(oResponse) && oResponse.length > 0)
-        bStateChanged = updateObjects(oResponse, oPageProperties.view_type);
-    oResponse = null;
-
-    // Don't update basics on the overview page
-    if(oPageProperties.view_type !== 'overview' && bStateChanged)
-        updateMapBasics();
-    bStateChanged = null;
-}
-
-/**
- * setMapBackgroundImage()
- *
- * Parses the background image to the map
- *
- * @param   String   Path to map images
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function setMapBackgroundImage(sImage) {
-    // Only work with the background image if some is configured
-    if(typeof sImage !== 'undefined' && sImage !== 'none' && sImage !== '') {
-        // Use existing image or create new
-        var oImage = document.getElementById('backgroundImage');
-        if(!oImage) {
-            var oImage = document.createElement('img');
-            oImage.id = 'backgroundImage';
-            document.getElementById('map').appendChild(oImage);
-        }
-
-        addZoomHandler(oImage, true);
-
-        oImage.src = sImage;
-        oImage = null;
-    }
-}
-
-/**
- * setPageBasics()
- *
- * Sets basic information like favicon and page title
- *
- * @param   Object   Object with basic page properties
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function setPageBasics(oProperties) {
-    setPageFavicon(oProperties.favicon_image);
-    setPageTitle(oProperties.page_title);
-
-    // Set background color. When eventhandling enabled use the state for
-    // background color detection
-    if(oPageProperties.event_background && oPageProperties.event_background == '1')
-        setPageBackgroundColor(getBackgroundColor(oMapSummaryObj.conf));
-    else
-        setPageBackgroundColor(oProperties.background_color);
-}
-
-/**
- * setMapBasics()
- *
- * Sets basic information like background image
- *
- * @param   Object   Object with basic page properties
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function setMapBasics(oProperties) {
-    // Set dynamic page title
-    oProperties.page_title = oPageProperties.alias
-                                      + ' (' + oMapSummaryObj.conf.summary_state + ') :: '
-                                                      + oGeneralProperties.internal_title;
-    // Set dynamic favicon image
-    oProperties.favicon_image = getFaviconImage(oMapSummaryObj.conf);
-
-    setPageBasics(oProperties);
-    setMapBackgroundImage(oProperties.background_image);
-}
-
-// Does initial parsing of map objects
-function initializeMapObjects(aMapObjectConf) {
-    eventlog("worker", "debug", "initializeMapObjects: Start setting map objects");
-
-    // Don't loop the first object - that is the summary of the current map
-    oMapSummaryObj = new NagVisMap(aMapObjectConf[0]);
-
-    for(var i = 1, len = aMapObjectConf.length; i < len; i++) {
-        var oObj;
-
-        switch (aMapObjectConf[i].type) {
-            case 'host':
-                oObj = new NagVisHost(aMapObjectConf[i]);
-            break;
-            case 'service':
-                oObj = new NagVisService(aMapObjectConf[i]);
-            break;
-            case 'hostgroup':
-                oObj = new NagVisHostgroup(aMapObjectConf[i]);
-            break;
-            case 'servicegroup':
-                oObj = new NagVisServicegroup(aMapObjectConf[i]);
-            break;
-            case 'dyngroup':
-                oObj = new NagVisDynGroup(aMapObjectConf[i]);
-            break;
-            case 'aggr':
-                oObj = new NagVisAggr(aMapObjectConf[i]);
-            break;
-            case 'map':
-                oObj = new NagVisMap(aMapObjectConf[i]);
-            break;
-            case 'textbox':
-                oObj = new NagVisTextbox(aMapObjectConf[i]);
-            break;
-            case 'container':
-                oObj = new NagVisContainer(aMapObjectConf[i]);
-            break;
-            case 'shape':
-                oObj = new NagVisShape(aMapObjectConf[i]);
-            break;
-            case 'line':
-                oObj = new NagVisLine(aMapObjectConf[i]);
-            break;
-            default:
-                oObj = null;
-                alert('Error: Unknown object type');
-            break;
-        }
-
-        // Save the number of unlocked objects
-        if(!oObj.bIsLocked)
-            updateNumUnlocked(1);
-
-        // Save object to map objects array
-        if(oObj !== null)
-            oMapObjects[oObj.conf.object_id] = oObj;
-        oObj = null;
-    }
-
-    // First parse the objects on the map
-    // Then store the object position dependencies.
-    //
-    // Before both can be done all objects need to be added
-    // to the map objects list
-    for(var i in oMapObjects) {
-        // Parse object to map
-        if(oPageProperties.view_type === 'map') {
-            // FIXME: Are all these steps needed here?
-            oMapObjects[i].update();
-            oMapObjects[i].render();
-
-            // add eventhandling when enabled via event_on_load option
-            if(isset(oViewProperties.event_on_load) && oViewProperties.event_on_load == 1
-               && oMapObjects[i].has_state
-               && oMapObjects[i].hasProblematicState()) {
-                oMapObjects[i].raiseEvents(false);
-                oMapObjects[i].initRepeatedEvents();
-            }
-        }
-
-        // Store object dependencies
-        var parents = oMapObjects[i].getParentObjectIds();
-        if(parents) {
-            for (var objectId in parents) {
-                var refObj = getMapObjByDomObjId(objectId);
-                if(refObj)
-                    refObj.addChild(oMapObjects[i]);
-                refObj = null;
-            }
-        }
-        parents = null;
-    }
-
-    eventlog("worker", "debug", "initializeMapObjects: End setting map objects");
-}
-
-// Bulk reload, reparse shapes and containers which have enable_refresh=1
-function updateStatelessObjects(aObjs) {
-    for(var i = 0, len = aObjs.length; i < len; i++) {
-        oMapObjects[aObjs[i]].render();
-    }
+    if (isset(oResponse) && oResponse.length > 0)
+        g_view.updateObjects(oResponse);
 }
 
 /**
@@ -822,19 +397,19 @@ function updateStatelessObjects(aObjs) {
  *
  * Play a sound for an object state
  *
- * @param   Integer  Index in oMapObjects
+ * @param   Integer  Index in g_view.objects
  * @param   Integer  Iterator for number of left runs
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function playSound(objectId, iNumTimes){
     var sSound = '';
 
-    var id = oMapObjects[objectId].dom_obj.id;
+    var id = g_view.objects[objectId].dom_obj.id;
 
     var oObjIcon = document.getElementById(id+'-icon');
     var oObjIconDiv = document.getElementById(id+'-icondiv');
 
-    var sState = oMapObjects[objectId].conf.summary_state;
+    var sState = g_view.objects[objectId].conf.summary_state;
 
     if(oStates[sState] && oStates[sState].sound && oStates[sState].sound !== '') {
         sSound = oStates[sState].sound;
@@ -881,161 +456,21 @@ function playSound(objectId, iNumTimes){
  *
  * Highlights an object by show/hide a border around the icon
  *
- * @param   Integer  Index in oMapObjects
+ * @param   Integer  Index in g_view.objects
  * @param   Integer  Time remaining in miliseconds
  * @param   Integer  Interval in miliseconds
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function flashIcon(objectId, iDuration, iInterval){
-    if(isset(oMapObjects[objectId])) {
-        oMapObjects[objectId].highlight(!oMapObjects[objectId].bIsFlashing);
+    if(isset(g_view.objects[objectId])) {
+        g_view.objects[objectId].highlight(!g_view.objects[objectId].bIsFlashing);
 
         var iDurationNew = iDuration - iInterval;
 
         // Flash again until timer counted down and the border is hidden
-        if(iDurationNew > 0 || (iDurationNew <= 0 && oMapObjects[objectId].bIsFlashing === true))
+        if(iDurationNew > 0 || (iDurationNew <= 0 && g_view.objects[objectId].bIsFlashing === true))
             setTimeout(function() { flashIcon(objectId, iDurationNew, iInterval); }, iInterval);
     }
-}
-
-//--- Overview -----------------------------------------------------------------
-
-
-/**
- * parseOverviewPage()
- *
- * Parses the static html code of the overview page
- *
- * @param   Array    Array of objects to parse to the map
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function parseOverviewPage() {
-    var oContainer = document.getElementById('overview');
-
-    // Render maps and the rotations when enabled
-    var types = [ [ oPageProperties.showmaps,      'overviewMaps',      oPageProperties.lang_mapIndex ],
-                  [ oPageProperties.showrotations, 'overviewRotations', oPageProperties.lang_rotationPools ] ];
-    for(var i = 0; i < types.length; i++) {
-        if(types[i][0] === 1) {
-            var h2 = document.createElement('h2');
-            h2.innerHTML = types[i][2];
-            oContainer.appendChild(h2);
-
-            var container = document.createElement('div');
-            container.setAttribute('id', types[i][1]);
-            container.className = 'infobox';
-
-            oContainer.appendChild(container);
-            oTable = null;
-        }
-    }
-
-    oContainer = null;
-}
-
-g_rendered_maps = 0;
-g_processed_maps = 0;
-
-/**
- * Adds a single map to the overview map list
- */
-function addOverviewMap(map_conf, map_name) {
-    g_processed_maps += 1;
-
-    // Exit this function on invalid call
-    if(map_conf === null || map_conf.length != 1)  {
-        eventlog("worker", "warning", "addOverviewMap: Invalid call - maybe broken ajax response ("+map_name+")");
-        if (g_processed_maps == g_map_names.length)
-            finishOverviewMaps();
-        return false;
-    }
-
-    g_rendered_maps += 1; // also count errors
-
-    var container = document.getElementById('overviewMaps');
-
-    // Find the map placeholder div (replace it to keep sorting)
-    var mapdiv = null;
-    var child = null;
-    for (var i = 0; i < container.childNodes.length; i++) {
-        child = container.childNodes[i];
-        if (child.id == map_name) {
-            mapdiv = child;
-            break;
-        }
-    }
-
-    // render the map object
-    var obj = new NagVisMap(map_conf[0]);
-    // Save object to map objects array
-    oMapObjects[obj.conf.object_id] = obj;
-    obj.update();
-    obj.render();
-    container.replaceChild(obj.dom_obj, mapdiv);
-
-    // Finalize rendering after last map...
-    if (g_processed_maps == g_map_names.length)
-        finishOverviewMaps();
-
-    container = null;
-}
-
-// Does initial parsing of rotations on the overview page
-function addOverviewRotations(rotations) {
-    eventlog("worker", "debug", "setOverviewObjects: Start setting rotations");
-
-    if (oPageProperties.showrotations === 1 && rotations.length > 0) {
-        for (var i = 0, len = rotations.length; i < len; i++) {
-            new NagVisRotation(rotations[i]).parseOverview();
-        }
-    } else {
-        // Hide the rotations container
-        var container = document.getElementById('overviewRotations');
-        if (container) {
-            container.style.display = 'none';
-        }
-    }
-
-    eventlog("worker", "debug", "setOverviewObjects: End setting rotations");
-}
-
-function finishOverviewMaps() {
-    eventlog("worker", "debug", "addOverviewMap: Finished parsing all maps");
-    // Hide the "Loading..." message. This is not the best place since rotations 
-    // might not have been loaded now but in most cases this is the longest running request
-    hideStatusMessage();
-}
-
-/**
- * Fetches all maps to be shown on the overview page
- */
-function getOverviewMaps() {
-    var map_container = document.getElementById('overviewMaps');
-
-    if(oPageProperties.showmaps !== 1 || g_map_names.length == 0) {
-        if (map_container)
-            map_container.parentNode.style.display = 'none';
-        hideStatusMessage();
-        return false;
-    }
-
-    eventlog("worker", "debug", "getOverviewMaps: Start requesting maps...");
-
-    for (var i = 0, len = g_map_names.length; i < len; i++) {
-        var mapdiv = document.createElement('div');
-        mapdiv.setAttribute('id', g_map_names[i])
-        map_container.appendChild(mapdiv);
-        mapdiv = null;
-        getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getObjectStates'
-                        + '&i[]=map-' + escapeUrlValues(g_map_names[i]) + getViewParams(),
-                        false, addOverviewMap, g_map_names[i]);
-    }
-}
-
-// Fetches all rotations to be shown on the overview page
-function getOverviewRotations() {
-    getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getOverviewRotations',
-                    false, addOverviewRotations);
 }
 
 /**
@@ -1049,8 +484,8 @@ function set_fill_zoom_factor() {
     var obj, zoom;
     var c_top = null, c_left = null, c_bottom = null, c_right = null;
     var o_top, o_left, o_bottom, o_right;
-    for(var i in oMapObjects) {
-        obj = oMapObjects[i];
+    for(var i in g_view.objects) {
+        obj = g_view.objects[i];
         if (obj && obj.getObjLeft && obj.getObjTop && obj.getObjHeight && obj.getObjWidth) {
             o_top = obj.getObjTop();
             if (c_top === null || o_top < c_top)
@@ -1077,8 +512,8 @@ function set_fill_zoom_factor() {
 
 function set_zoom(val) {
     setViewParam('zoom', val);
-    if(workerTimeoutID)
-        window.clearTimeout(workerTimeoutID);
+    if (g_worker_id)
+        window.clearTimeout(g_worker_id);
     window.location = makeuri({'zoom': val});
 }
 
@@ -1155,7 +590,7 @@ function zoombarDrag(event) {
     var pos = (event.clientY - top_offset);
 
     if (pos > g_drag_ind.parentNode.clientHeight) {
-        pos = g_drag_ind.parentNode.clientHeight;               
+        pos = g_drag_ind.parentNode.clientHeight;
     } else if (pos < 0) {
         pos = 0;
     }
@@ -1345,16 +780,6 @@ function setViewParam(param, val) {
     oViewProperties['params'][param] = val;
 }
 
-/**
- * Fetches the current map properties from the core. Normally this
- * is set during initial rendering, but needed when the configuration
- * has changed on the server.
- */
-function getMapProperties(type, mapName) {
-    return getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapProperties&show='
-                          + escapeUrlValues(mapName)+getViewParams());
-}
-
 // Returns true if the current view is
 // a) a map
 // b) uses the given source
@@ -1365,431 +790,43 @@ function usesSource(source) {
         && oPageProperties.sources.indexOf(source) !== -1;
 }
 
-// Holds the global JS map object (e.g. leaflet js map object)
-var g_map;
-// Holds all map objects
-var g_map_objects;
-
-// Is used to update the objects to show on the worldmap
-function updateWorldmapObjects(e) {
-    initializeMap(oFileAges[oPageProperties.map_name], 'map', oPageProperties.map_name, true);
-
-    // Update the related view properties
-    var ll = g_map.getCenter();
-    setViewParam('worldmap_center', ll.lat+','+ll.long);
-    setViewParam('worldmap_zoom', g_map.getZoom());
-}
-
-function parseWorldmap() {
-    L.Icon.Default.imagePath = oGeneralProperties.path_base+'/frontend/nagvis-js/images/leaflet';
-    g_map = L.map('map', {
-        markerZoomAnimation: false,
-    }).setView(getViewParam('worldmap_center').split(','), parseInt(getViewParam('worldmap_zoom')));
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(g_map);
-
-    g_map_objects = L.layerGroup().addTo(g_map);
-
-    // The worldmap is showing it's objects depending on the objects
-    // which are visible on the screen. This is realized by issueing
-    // an ajax call with the current viewport to the core code, which
-    // then returns a list of objects to add to the map depending on
-    // this viewport.
-    g_map.on('moveend', updateWorldmapObjects);
-
-    // hide eventual open header dropdown menus when clicking on the map
-    g_map.on('mousedown', checkHideMenu);
-    g_map.on('mousedown', context_handle_global_mousedown);
-}
-
-// Parses the map on initial page load or changed map configuration
-function initializeMap(iMapCfgAge, type, mapName, init) {
-    var bReturn = false;
-
-    // Is updated later by getMapProperties(), but we might need it in
-    // the case an error occurs in getMapProperties() and one needs
-    // the map name anyways, e.g. to detect the currently open map
-    // during map deletion
-    oPageProperties.map_name = mapName;
-
-    // Block updates of the current map
-    bBlockUpdates = true;
-
-    var wasInMaintenance = inMaintenance(false);
-
-    // Get new map properties from server
-    if (!init) {
-        var properties = getMapProperties(type, mapName);
-        if (properties)
-            oPageProperties = properties;
-        oPageProperties.view_type = type;
-    }
-
-    if(inMaintenance()) {
-        bBlockUpdates = false;
-        return false
-    } else if(wasInMaintenance === true) {
-        // Hide the maintenance message when it was in maintenance before
-        frontendMessageHide();
-    }
-    wasInMaintenance = null;
-
-    getAsyncRequest(oGeneralProperties.path_server
-                    + '?mod=Map&act=getMapObjects&show='
-                    + mapName+getViewParams(), false, handleMapInit, [iMapCfgAge, type, mapName]);
-}
-
-function handleMapInit(oObjects, params) {
-    // Only perform the reparsing actions when all information are there
-    if(!oPageProperties || !oObjects) {
-        // Close the status message window ("Loading...")
-        hideStatusMessage();
-        return;
-    }
-
-    var iMapCfgAge = params[0];
-    var type       = params[1];
-    var mapName    = params[2];
-
-    // Remove all old objects
-    var keys = getKeys(oMapObjects);
-    for(var i = 0, len = keys.length; i < len; i++) {
-        var obj = oMapObjects[keys[i]];
-        if(obj && typeof obj.remove === 'function') {
-            // Remove parsed object from map
-            obj.remove();
-
-            if(!obj.bIsLocked)
-                updateNumUnlocked(-1);
-
-            obj = null;
-
-            // Remove element from object container
-            delete oMapObjects[keys[i]];
-        }
-    }
-    keys = null;
-
-    if (usesSource('worldmap')) {
-        g_map_objects.clearLayers();
-    }
-
-    // Update timestamp for map configuration (No reparsing next time)
-    oFileAges[mapName] = iMapCfgAge;
-
-    // Set map objects
-    eventlog("worker", "info", "Parsing "+type+" objects");
-    initializeMapObjects(oObjects);
-
-    // Maybe force page reload when the map shal fill the viewport
-    if (getViewParam('zoom') == 'fill')
-        set_fill_zoom_factor();
-
-    // Set map basics
-    // Needs to be called after the summary state of the map is known
-    setMapBasics(oPageProperties);
-
-    // When user searches for an object highlight it
-    if(oViewProperties && oViewProperties.search && oViewProperties.search != '') {
-        eventlog("worker", "info", "Searching for matching object(s)");
-        searchObjects(oViewProperties.search);
-    }
-
-    oObjects = null;
-
-    // Close the status message window ("Loading...")
-    hideStatusMessage();
-
-    // Updates are allowed again
-    bBlockUpdates = false;
-}
-
-/**
- * Fetches the contents of the given url and prints it on the current page
- *
- * @param   String   The url to fetch
- * @author  Lars Michelsen <lars@vertical-visions.de>
- */
-function parseUrl(sUrl) {
-    var urlContainer = document.getElementById('url');
-    if (urlContainer.tagName == 'DIV') {
-        // Fetch contents from server
-        var oUrlContents = getSyncRequest(oGeneralProperties.path_server
-                           + '?mod=Url&act=getContents&show='
-                           + escapeUrlValues(sUrl));
-
-        if(typeof oUrlContents !== 'undefined' && oUrlContents.content) {
-            // Replace the current contents with the new url
-            urlContainer.innerHTML = oUrlContents.content;
-        }
-    }
-    else {
-        // iframe
-        urlContainer.src = sUrl;
-    }
-}
-
 // Does the initial parsing of the pages
-function workerInitialize(iCount, sType, sIdentifier) {
-    // Show status message
+function workerInitialize(type, ident) {
     displayStatusMessage('Loading...', 'loading', true);
 
-    // Initialize everything
-    eventlog("worker", "info", "Initializing Worker (Run-ID: "+iCount+")");
-
-    // Load state properties
-    eventlog("worker", "debug", "Loading the state properties");
-
-    // Handle the page rendering
-    if(sType == 'map') {
-        eventlog("worker", "debug", "Parsing " + sType + ": " + sIdentifier);
-
-        if (usesSource('worldmap'))
-            parseWorldmap();
-        else {
-            renderZoombar();
-            addEvent(document, 'mousedown', context_handle_global_mousedown);
-        }
-        initializeMap(oFileAges[sIdentifier], sType, sIdentifier, true);
-
-    } else if(sType === 'overview') {
-        // Loading the overview page
-        eventlog("worker", "debug", "Setting page basiscs like title and favicon");
-        setPageBasics(oPageProperties);
-
-        eventlog("worker", "debug", "Parsing overview page");
-        parseOverviewPage();
-
-        getOverviewMaps();
-
-        eventlog("worker", "debug", "Parsing rotations");
-        getOverviewRotations();
-
-        eventlog("worker", "info", "Finished parsing overview");
-    } else if(sType === 'url') {
-        // Load the map properties
-
-        // Fetches the contents from the server and prints it to the page
-        eventlog("worker", "debug", "Parsing url page");
-        parseUrl(sIdentifier);
-
-        // Hide the "loading ..." message
-        hideStatusMessage();
-    } else {
-        eventlog("worker", "error", "Unknown view type: "+sType);
-
-        // Hide the "loading ..." message
-        hideStatusMessage();
-    }
-}
-
-/**
- * This callback function handles the ajax response of bulk object
- * status updates
- */
-function handleUpdate(o, aParams) {
-    var sType = aParams[0];
-    var bStateChanged = false;
-
-    // Stop processing these informations when the current view should not be
-    // updated at the moment e.g. when reparsing the map after a changed mapcfg
-    if(bBlockUpdates) {
-        eventlog("ajax", "info", "Throwing new object information away since the view is blocked");
-        return false;
-    }
-
-    if (!o) {
-        eventlog("ajax", "info", "handleUpdate: got empty object. Terminating.");
-        return false;
-    }
-
-    // Procees the "config changed" responses
-    if(isset(o['status']) && o['status'] == 'CHANGED') {
-        var oChanged = o['data'];
-        
-        for(var key in oChanged) {
-            if(key == 'maincfg') {
-                // FIXME: Not handled by ajax frontend, reload the page
-                eventlog("worker", "info", "Main configuration file was updated. Need to reload the page");
-                // Clear the scheduling timeout to prevent problems with FF4 bugs
-                if(workerTimeoutID)
-                    window.clearTimeout(workerTimeoutID);
-                window.location.reload(true);
-                return;
-
-            } else {
-                // FIXME: Maybe rerender map background images?
-                //if(sType === 'automap') {
-                //    // Render new background image and dot file, update background image
-                //    automapParse(oPageProperties.map_name);
-                //    setMapBackgroundImage(oPageProperties.background_image+iNow);
-                //}
-
-                if(iNumUnlocked > 0) {
-                    eventlog("worker", "info", "Map config updated. "+iNumUnlocked+" objects unlocked - not reloading.");
-                } else {
-                    eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
-                    initializeMap(oChanged[key], sType, oPageProperties.map_name, false);
-                    return;
-                }
-            }
-        }
-    }
-
-    // I don't think empty maps make any sense. So when no objects are present:
-    // Try to fetch them continously
-    if(oLength(oMapObjects) === 0) {
-        if(sType == 'overview') {
-            eventlog("worker", "info", "No maps found, reparsing...");
-            getOverviewMaps();
+    // Initialize the view objects. This code should not perform any rendering
+    // taks. This is only meant to initialize all needed objects
+    switch (type) {
+        case 'map':
+            if (usesSource('worldmap'))
+                g_view = new ViewWorldmap(ident);
+            else
+                g_view = new ViewMap(ident);
+        break;
+        case 'overview':
+            g_view = new ViewOverview();
+        break;
+        case 'url':
+            g_view = new ViewUrl(ident);
+        default:
+            eventlog("worker", "error", "Unknown view type: "+type);
+            hideStatusMessage();
             return;
-
-        } else {
-            eventlog("worker", "info", "Map is empty. Strange. Re-fetching objects");
-            // FIXME: Maybe rerender map background images?
-            //if(sType === 'automap') {
-            //    // Render new background image and dot file, update background image
-            //    automapParse(oPageProperties.map_name);
-            //    setMapBackgroundImage(oPageProperties.background_image+iNow);
-            //}
-            initializeMap(oFileAges[oPageProperties.map_name], sType, oPageProperties.map_name, false);
-            return;
-        }
     }
-
-    /*
-     * Now proceed with real actions when everything is OK
-     */
-
-    if(o.length > 0)
-        bStateChanged = updateObjects(o, sType);
-
-    // When some state changed on the map update the title and favicon
-    if(sType == 'map' && bStateChanged)
-        updateMapBasics();
-
-    // FIXME: Add page basics (title, favicon, ...) update code for overview page
-
-    o = null;
-    bStateChanged = null;
+    g_view.init();
 }
 
-/**
- * getUrlParts()
- *
- * Create the ajax request parameters for bulk updates. Bulk updates
- * can strip the url into several HTTP requests to work around too long urls.
- *
- * @param   Array    List of objects to get a new status for
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getUrlParts(arrObj) {
-    var aUrlParts = [];
-    var iUrlParams = 0;
 
-    // Only continue with the loop when below param limit
-    // and below maximum length
-    for(var i = 0, len = arrObj.length; i < len && (oWorkerProperties.worker_request_max_params == 0 || iUrlParams < oWorkerProperties.worker_request_max_params); i++) {
-        var type = oMapObjects[arrObj[i]].conf.type;
-        var name = oMapObjects[arrObj[i]].conf.name;
-        if(name) {
-            var obj_id = oMapObjects[arrObj[i]].conf.object_id;
-            var service_description = oMapObjects[arrObj[i]].conf.service_description;
-
-            // Create request string
-            var sUrlPart = '&i[]='+obj_id;
-
-            // Adding 1 params above code, count them here
-            iUrlParams += 1;
-
-            // Append part to array of parts
-            aUrlParts.push(sUrlPart);
-            sUrlPart = null;
-
-            service_description = null;
-            obj_id = null;
-        }
-
-        name = null;
-        type = null;
-    }
-    iUrlParams = null;
-    arrObj = null;
-    return aUrlParts;
-}
-
-/**
- * workerUpdate()
- *
- * Updates the page on a regular base
- *
- * @param   Integer  The iterator for the run id
- * @param   String   The type of the page which is currently displayed
- * @param   String   Optional: Identifier of the page to be displayed
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
+// Updates the page on a regular base
 function workerUpdate(iCount, sType, sIdentifier) {
-    // Log normal worker step
     eventlog("worker", "debug", "Update (Run-ID: "+iCount+")");
-
-    if(sType === 'map' || sType === 'overview') {
-        var mod = 'Map';
-        
-        var show = '';
-        if (sType === 'map' && oPageProperties.map_name !== false)
-            show = '&show=' + escapeUrlValues(oPageProperties.map_name);
-
-        if (sType === 'overview') {
-            mod = 'Overview';
-        }
-
-        // Get objects which need an update
-        // FIXME: separate stateless and stateful objects in different lists
-        var arrObj = getObjectsToUpdate();
-
-        // Get the updated objects via bulk request
-        getBulkRequest(oGeneralProperties.path_server+'?mod=' + mod + '&act=getObjectStates'
-                       + show +'&ty=state'+getViewParams()+getFileAgeParams(),
-                       getUrlParts(arrObj), oWorkerProperties.worker_request_max_length,
-                       false, handleUpdate, [ sType ]);
-
-        if(sType === 'map') {
-            // Stateless objects which shal be refreshed (enable_refresh=1) need a special
-            // handling as they are reloaded by being reparsed.
-            var aReload = [];
-            for(var i = 0, len = arrObj.length; i < len; i++)
-                if (oMapObjects[arrObj[i]].conf.type === 'shape'
-                   || oMapObjects[arrObj[i]].conf.type === 'container')
-                    aReload.push(arrObj[i]);
-
-            // Update when needed
-            if (aReload.length > 0)
-                updateStatelessObjects(aReload);
-        }
-
-        // Need to re-raise repeated events?
-        handleRepeatEvents();
-
-    } else if(sType === 'url') {
-        // Fetches the contents from the server and prints it to the page
-        eventlog("worker", "debug", "Reparsing url page");
-        parseUrl(oPageProperties.url);
-    }
-
-    // Update lastWorkerRun
     oWorkerProperties.last_run = iNow;
-
-    // Update the worker counter on maps
-    updateWorkerCounter();
-
-    // Cleanup ajax query cache
+    g_view.update();
+    updateWorkerCounter(); // Update the worker last run time on maps
     cleanupAjaxQueryCache();
 }
 
 /**
- * runWorker()
- *
  * This function is the heart of the new NagVis frontend. It's called worker.
  * The worker is being called by setTimeout() every second. This method checks
  * for tasks which need to be performed like:
@@ -1808,13 +845,12 @@ function workerUpdate(iCount, sType, sIdentifier) {
  * @param   Integer  The iterator for the run id
  * @param   String   The type of the page which is currently displayed
  * @param   String   Optional: Identifier of the page to be displayed
- * @author	Lars Michelsen <lars@vertical-visions.de>
  */
 function runWorker(iCount, sType, sIdentifier) {
     // If the iterator is 0 it is the first run of the worker. Its only task is
     // to render the page
     if(iCount === 0) {
-        workerInitialize(iCount, sType, sIdentifier);
+        workerInitialize(sType, sIdentifier);
     } else {
         /**
          * Do these actions every run (every second) excepting the first run
@@ -1839,10 +875,7 @@ function runWorker(iCount, sType, sIdentifier) {
     }
 
     // Sleep until next worker run (1 Second)
-    workerTimeoutID = window.setTimeout(function() {
+    g_worker_id = window.setTimeout(function() {
         runWorker((iCount+1), sType, sIdentifier);
     }, 1000);
-
-    // Pro forma return
-    return true;
 }

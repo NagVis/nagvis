@@ -67,7 +67,7 @@ function toggleHeader(store) {
     var state = true;
 
     // Reset the header height cache
-    cacheHeaderHeight    = null;
+    g_header_height_cache = null;
 
     if(header.style.display === '') {
         header.style.display = 'none';

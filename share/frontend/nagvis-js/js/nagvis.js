@@ -1463,6 +1463,28 @@ function newY(a, b, x, y) {
     return Math.round(Math.sin(Math.atan2(y,x)+Math.atan2(b,a))*Math.sqrt(x*x+y*y));
 }
 
+// simple implementation of function default arguments when
+// using objects as function parameters. Example:
+// function xxx(args) {
+//     args = merge_args({
+//         'arg2': 'default_val',
+//     });
+// }
+// xxx({
+//   'arg1': 'val1',
+//   'arg3': 'val3',
+// })
+function merge_args()
+{
+    var defaults = arguments[0];
+    var args = arguments[1] || {};
+
+    for (var name in args)
+        defaults[name] = args[name];
+
+    return defaults;
+}
+
 // Wrapper object for the worldmap (similar to leaflet js DivIcon, but
 // support adding an existing domNode)
 L.NagVisObj = L.Icon.extend({

@@ -50,8 +50,8 @@ function toggleAllMapObjectsLock() {
     if(iNumUnlocked > 0)
         lock = true;
 
-    for(var i in oMapObjects)
-        updateNumUnlocked(oMapObjects[i].toggleLock(lock));
+    for(var i in g_view.objects)
+        updateNumUnlocked(g_view.objects[i].toggleLock(lock));
 
     if(!lock)
         storeUserOption('unlocked-' + oPageProperties.map_name, '*');
@@ -214,8 +214,8 @@ function dragObject(event) {
     // relative to this object.
     if(event.ctrlKey) {
         // Unhighlight all other objects
-        for(var i in oMapObjects)
-            oMapObjects[i].highlight(false);
+        for(var i in g_view.objects)
+            g_view.objects[i].highlight(false);
 
         // Find the nearest object to the current position and highlight it
         var o = getNearestObject(draggingObject, newLeft, newTop)
@@ -228,8 +228,8 @@ function dragObject(event) {
     // Shift key
     if(event.shiftKey) {
         // Unhighlight all other objects
-        for(var i in oMapObjects)
-            oMapObjects[i].highlight(false);
+        for(var i in g_view.objects)
+            g_view.objects[i].highlight(false);
     }
 
     // Call the dragging handler when one is set
@@ -250,8 +250,8 @@ function getNearestObject(draggingObject, x, y) {
     var dist;
 
     var obj;
-    for(var i in oMapObjects) {
-        obj = oMapObjects[i];
+    for(var i in g_view.objects) {
+        obj = g_view.objects[i];
 
         // Skip own object
         if(draggingObject.id.split('-')[0] == obj.conf.object_id)

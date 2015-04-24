@@ -138,6 +138,60 @@ function jsonError(text) {
                      'message': text}, 0, 'jsonError');
 }
 
+function call_ajax(url, args)
+{
+    args = merge_args({
+        response_handler : null,
+        error_handler    : null,
+        handler_data     : null,
+        method           : "GET",
+        post_data        : null,
+        sync             : false
+    }, args);
+
+    var AJAX = window.XMLHttpRequest ? new XMLHttpRequest()
+                                     : new ActiveXObject("Microsoft.XMLHTTP");
+    if (!AJAX)
+        return null;
+
+    AJAX.open(args.method, url, !args.sync);
+
+    if (args.method == "POST") {
+        // Set post specific options. request might be a FormData object. In this case
+        // the request is not using form-urlencoded data, instead it is automatically
+        // set to multipart/form-data
+        if (typeof request !== 'object')
+            AJAX.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        AJAX.setRequestHeader("Content-length", args.post_data.length);
+        AJAX.setRequestHeader("Connection", "close");
+    }
+
+    if (!args.sync) {
+        AJAX.onreadystatechange = function() {
+            if (AJAX && AJAX.readyState == 4) {
+                if (AJAX.status == 200) {
+                    if (args.response_handler)
+                        args.response_handler(args.handler_data, AJAX.responseText);
+                }
+                else if (AJAX.status == 401) {
+                    // This is reached when someone is not authenticated anymore
+                    // but has some webservices running which are still fetching
+                    // infos via AJAX. Reload the whole frameset or only the
+                    // single page in that case.
+                    document.location.reload();
+                }
+                else {
+                    if (args.error_handler)
+                        args.error_handler(args.handler_data, AJAX.status);
+                }
+            }
+        }
+    }
+
+    AJAX.send(args.post_data);
+    return AJAX;
+}
+
 /**
  * Function for creating a asynchronous GET request
  * - Uses query cache
