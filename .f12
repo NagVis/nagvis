@@ -1,5 +1,24 @@
 #!/bin/bash
 
+if [ $(uname) = Darwin ]; then
+    # Short snippet for installing NagVis on OSX into MacPorts path
+    # This is not meant for production use, just for development!
+
+    BASEDIR=/opt/local/nagvis
+    rsync -av etc $BASEDIR/
+    sed "s|@NAGVIS_WEB@|/nagvis|g;s|@NAGVIS_PATH@|/opt/local/nagvis/share|g" $BASEDIR/etc/apache2-nagvis.conf-sample > $BASEDIR/etc/apache.conf
+    if [ ! -f $BASEDIR/etc/nagvis.ini.php ]; then
+        cp $BASEDIR/etc/nagvis.ini.php{-sample,}
+    fi
+    rsync -av share /opt/local/nagvis/
+    rsync -av docs /opt/local/nagvis/share/
+    mkdir -p $BASEDIR/var/tmpl/{cache,compile}
+    mkdir -p $BASEDIR/etc/profiles
+    chown -R _www:_www $BASEDIR/var $BASEDIR/etc $BASEDIR/share/userfiles/images/maps
+
+    exit 0
+fi
+
 SITE=${SITE:-$(cat .site 2>/dev/null || true)}
 SITE=${SITE:-$(omd sites --bare | head -n 1)}
 which sudo >/dev/null 2>&1 && SUDO=sudo || SUDO=
