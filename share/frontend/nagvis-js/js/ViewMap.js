@@ -22,9 +22,12 @@
  *****************************************************************************/
 
 var ViewMap = View.extend({
+    type           : 'map',
+    // is set to true on first rendering
+    rendered       : false,
     // This is turned to true when the map is currently reparsing (e.g. due to
     // a changed map config file). This blocks object updates.
-    blockUpdates: false,
+    blockUpdates   : false,
 
     constructor: function(id) {
         this.base(id);
@@ -54,12 +57,12 @@ var ViewMap = View.extend({
      */
 
     // Parses the map on initial page load or changed map configuration
-    render: function(iMapCfgAge, type, mapName, init) {
+    render: function() {
         // Is updated later by this.getProperties(), but we might need it in
         // the case an error occurs in getProperties() and one needs
         // the map name anyways, e.g. to detect the currently open map
         // during map deletion
-        oPageProperties.map_name = mapName;
+        oPageProperties.map_name = this.id;
 
         // Block updates of the current map
         this.blockUpdates = true;
@@ -67,12 +70,8 @@ var ViewMap = View.extend({
         var wasInMaintenance = inMaintenance(false);
 
         // Get new map properties from server on changed map cfg
-        if (!init) {
-            var properties = this.getProperties();
-            if (properties)
-                oPageProperties = properties;
-            oPageProperties.view_type = type;
-        }
+        if (this.rendered)
+            this.updateProperties();
 
         if(inMaintenance()) {
             this.blockUpdates = false;
@@ -83,26 +82,24 @@ var ViewMap = View.extend({
         }
         wasInMaintenance = null;
 
-        getAsyncRequest(oGeneralProperties.path_server
-                        + '?mod=Map&act=getMapObjects&show='
-                        + mapName+getViewParams(), false, this.handleMapInit);
+        call_ajax(oGeneralProperties.path_server + '?mod=Map&act=getMapObjects&show='
+                  + this.id + getViewParams(), {
+            response_handler : this.handleMapInit.bind(this)
+        });
+
+        this.rendered = true;
     },
 
-    handleMapInit(oObjects, params) {
-        // Only perform the reparsing actions when all information are there
-        if (!oPageProperties || !oObjects) {
+    handleMapInit(oObjects) {
+        // Only perform the rendering actions when all information are available
+        if (!oObjects) {
             hideStatusMessage();
             return;
         }
 
-        var iMapCfgAge = params[0];
-        var type       = params[1];
-        var mapName    = params[2];
-
         // Remove all old objects
-        var keys = getKeys(this.objects);
-        for(var i = 0, len = keys.length; i < len; i++) {
-            var obj = this.objects[keys[i]];
+        for (var i in this.objects) {
+            var obj = this.objects[i];
             if(obj && typeof obj.remove === 'function') {
                 // Remove parsed object from map
                 obj.remove();
@@ -110,22 +107,16 @@ var ViewMap = View.extend({
                 if(!obj.bIsLocked)
                     updateNumUnlocked(-1);
 
-                obj = null;
-
                 // Remove element from object container
                 delete this.objects[keys[i]];
             }
         }
-        keys = null;
 
         if (usesSource('worldmap')) {
             g_map_objects.clearLayers();
         }
 
-        // Update timestamp for map configuration (No reparsing next time)
-        oFileAges[mapName] = iMapCfgAge;
-
-        eventlog("worker", "info", "Parsing "+type+" objects");
+        eventlog("worker", "info", "Parsing "+this.type+" objects");
         this.initializeObjects(oObjects);
 
         // Maybe force page reload when the map shal fill the viewport
@@ -153,7 +144,7 @@ var ViewMap = View.extend({
         eventlog("worker", "debug", "initializeObjects: Start setting map objects");
     
         // Don't loop the first object - that is the summary of the current map
-        this.sum_ob = new NagVisMap(aMapObjectConf[0]);
+        this.sum_obj = new NagVisMap(aMapObjectConf[0]);
     
         var oObj;
         for(var i = 1, len = aMapObjectConf.length; i < len; i++) {
@@ -248,7 +239,7 @@ var ViewMap = View.extend({
     },
 
     renderBackgroundImage: function() {
-        var sImage = oPageProperties.background_image);
+        var sImage = oPageProperties.background_image;
         // Only work with the background image if some is configured
         if (typeof sImage !== 'undefined' && sImage !== 'none' && sImage !== '') {
             // Use existing image or create new
@@ -266,9 +257,10 @@ var ViewMap = View.extend({
 
     // When at least one object state changed, fetch a new summary state from the server
     handleStateChanged: function() {
-        getAsyncRequest(oGeneralProperties.path_server
-                        + '?mod=Map&act=getObjectState&show='+this.id
-                        + 's&ty=summary' + getViewParams(), false, this.handleSumObjUpdate);
+        call_ajax(oGeneralProperties.path_server + '?mod=Map&act=getObjectState&show='+this.id
+                        + 's&ty=summary' + getViewParams(), {
+            response_handler : this.handleSumObjUpdate.bind(this)
+        });
     },
 
     // This function updates the map basics like background, favicon and title
@@ -282,10 +274,13 @@ var ViewMap = View.extend({
      * is set during initial rendering, but needed when the configuration
      * has changed on the server.
      */
-    getProperties: function() {
-        // FIXME: Make async
-        return getSyncRequest(oGeneralProperties.path_server+'?mod=Map&act=getMapProperties&show='
-                              + escapeUrlValues(this.id)+getViewParams());
+    updateProperties: function() {
+        call_ajax(oGeneralProperties.path_server+'?mod=Map&act=getMapProperties&show='
+                  + escapeUrlValues(this.id)+getViewParams(), {
+            response_handler : function(props) {
+                oPageProperties = props;
+            }
+        });
     },
 
     /**
@@ -295,6 +290,6 @@ var ViewMap = View.extend({
      */
     rerenderStatelessObjects: function(objects) {
         for (var i = 0, len = objects.length; i < len; i++)
-            this.objects[objects[i]].render();
+            this.objects[objects[i]].eender();
     }
 });

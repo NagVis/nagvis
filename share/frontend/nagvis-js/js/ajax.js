@@ -141,18 +141,25 @@ function jsonError(text) {
 function call_ajax(url, args)
 {
     args = merge_args({
+        add_ajax_id      : true,
         response_handler : null,
         error_handler    : null,
         handler_data     : null,
         method           : "GET",
         post_data        : null,
-        sync             : false
+        sync             : false,
+        decode_json      : true,
     }, args);
 
     var AJAX = window.XMLHttpRequest ? new XMLHttpRequest()
                                      : new ActiveXObject("Microsoft.XMLHTTP");
     if (!AJAX)
         return null;
+
+    if (args.add_ajax_id) {
+        url += url.indexOf('\?') !== -1 ? "&" : "?";
+        url += "_ajaxid="+iNow;
+    }
 
     AJAX.open(args.method, url, !args.sync);
 
@@ -170,8 +177,12 @@ function call_ajax(url, args)
         AJAX.onreadystatechange = function() {
             if (AJAX && AJAX.readyState == 4) {
                 if (AJAX.status == 200) {
+                    var response = AJAX.responseText;
+                    if (args.decode_json)
+                        response = JSON.parse(response);
+
                     if (args.response_handler)
-                        args.response_handler(args.handler_data, AJAX.responseText);
+                        args.response_handler(response, args.handler_data);
                 }
                 else if (AJAX.status == 401) {
                     // This is reached when someone is not authenticated anymore
@@ -182,7 +193,7 @@ function call_ajax(url, args)
                 }
                 else {
                     if (args.error_handler)
-                        args.error_handler(args.handler_data, AJAX.status);
+                        args.error_handler(AJAX.status, args.handler_data);
                 }
             }
         }

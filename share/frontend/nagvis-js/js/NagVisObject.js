@@ -157,13 +157,13 @@ var NagVisObject = Base.extend({
      */
     loadLocked: function() {
         // Editing is only possible in maps
-        if(oPageProperties.view_type != 'map')
+        if (g_view.type != 'map')
             return;
 
-        if(!oUserProperties.hasOwnProperty('unlocked-' + oPageProperties.map_name))
+        if (!oUserProperties.hasOwnProperty('unlocked-' + oPageProperties.map_name))
             return;
 
-        if(oViewProperties.hasOwnProperty('edit_mode') && oViewProperties['edit_mode'] === true) {
+        if (oViewProperties.hasOwnProperty('edit_mode') && oViewProperties['edit_mode'] === true) {
             this.bIsLocked = false;
             return;
         }
@@ -388,26 +388,21 @@ var NagVisObject = Base.extend({
         if(xParent == yParent) {
             var o = getMapObjByDomObjId(xParent);
             // Don't remove when another coord is a child of this object
-            if(o && getKeys(this.getRelativeCoordsUsingParent(xParent)).length == 1) {
+            if(o && Object.size(this.getRelativeCoordsUsingParent(xParent)) == 1) {
                 o.delChild(this);
-                o = null
             }
         } else {
             var o = getMapObjByDomObjId(xParent);
             // Don't remove when another coord is a child of this object
-            if(o && getKeys(this.getRelativeCoordsUsingParent(xParent)).length == 1) {
+            if(o && Object.size(this.getRelativeCoordsUsingParent(xParent)) == 1) {
                 o.delChild(this);
-                o = null
             }
             var o = getMapObjByDomObjId(yParent);
             // Don't remove when another coord is a child of this object
-            if(o && getKeys(this.getRelativeCoordsUsingParent(yParent)).length == 1) {
+            if(o && Object.size(this.getRelativeCoordsUsingParent(yParent)) == 1) {
                 o.delChild(this);
-                o = null
             }
         }
-        xParent = null;
-        yParent = null;
 
         // FIXME: Maybe the parent object is also a line. Then -1 is not correct
         //        But it is not coded to attach relative objects to lines. So it is no big
@@ -423,7 +418,6 @@ var NagVisObject = Base.extend({
             old  = this.conf.y.split(',');
             old[num] = this.parseCoord(y, 'y', false);
             this.conf.y = old.join(',');
-            old = null;
         }
     },
 

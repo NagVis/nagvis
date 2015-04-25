@@ -79,6 +79,11 @@ cmp_js() {
     cmp ElementShape.js
     cmp ElementBox.js
     cmp ElementTile.js
+    cmp View.js
+    cmp ViewMap.js
+    cmp ViewWorldmap.js
+    cmp ViewOverview.js
+    cmp ViewUrl.js
     cmp NagVisObject.js
     cmp NagVisStatefulObject.js
     cmp NagVisStatelessObject.js

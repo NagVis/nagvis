@@ -16,6 +16,14 @@ if [ $(uname) = Darwin ]; then
     mkdir -p $BASEDIR/etc/profiles
     chown -R _www:_www $BASEDIR/var $BASEDIR/etc $BASEDIR/share/userfiles/images/maps
 
+    touch /opt/local/nagvis/share/index.php # trigger browser reload
+
+    osascript <<EOF
+tell application "Firefox"
+    activate
+end tell
+EOF
+
     exit 0
 fi
 

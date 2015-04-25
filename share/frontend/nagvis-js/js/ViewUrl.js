@@ -22,6 +22,7 @@
  *****************************************************************************/
 
 var ViewUrl = View.extend({
+    type: 'url',
     constructor: function(id) {
         this.base(id);
     },
@@ -29,7 +30,7 @@ var ViewUrl = View.extend({
     init: function() {
         this.render();
         hideStatusMessage();
-    }
+    },
 
     update: function() {
         // Fetches the contents from the server and prints it to the page

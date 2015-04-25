@@ -25,10 +25,11 @@ var View = Base.extend({
     id      : null,
     dom_obj : null,
     sum_obj : null,
-    objects : [],
+    objects : null,
 
     constructor: function(id) {
         this.id = id;
+        this.objects = {};
     },
 
     update: function(args) {
@@ -37,9 +38,9 @@ var View = Base.extend({
         // Get the updated objects via bulk request
         call_ajax(oGeneralProperties.path_server+'?mod=' + args.mod + '&act=getObjectStates'
                        + show +'&ty=state'+getViewParams() + this.getFileAgeParams(), {
-            response_handler : this.handleUpdate,
+            response_handler : this.handleUpdate.bind(this),
             method           : "POST",
-            post_data        : arrObj,
+            post_data        : args.data
         });
 
         // Need to re-raise repeated events?
@@ -115,7 +116,7 @@ var View = Base.extend({
             // Object not found
             if (!isset(this.objects[objectId])) {
                 eventlog("updateObjects", "critical", "Could not find an object with "
-                                                      "the id "+objectId+" in object array");
+                                                     +"the id "+objectId+" in object array");
                 return false;
             }
     
@@ -147,7 +148,7 @@ var View = Base.extend({
 
     getFileAgeParams: function() {
         var addParams = '';
-        if (oPageProperties.view_type === 'map' && this.id !== false)
+        if (g_view.type === 'map' && this.id !== false)
             addParams = '&f[]=map,' + this.id + ',' + oFileAges[this.id];
         return '&f[]=maincfg,maincfg,' + oFileAges['maincfg'] + addParams;
     },
@@ -172,7 +173,7 @@ var View = Base.extend({
                 }
             }
         }
-    
+
         eventlog("worker", "debug", "getObjectsToUpdate: Stateful: "+stateful.length
                                    +" Stateless: "+stateless.length);
         return [stateful, stateless];
@@ -180,10 +181,14 @@ var View = Base.extend({
 
     // Renders basic information like favicon and page title
     renderPageBasics: function() {
-        favicon.change(this.getFaviconImage(this.sum_obj.conf));
+        if (this.sum_obj)
+            favicon.change(this.getFaviconImage(this.sum_obj.conf));
+
         document.title = oPageProperties.page_title;
-        document.body.style.backgroundColor = this.getBackgroundColor(this.sum_obj.conf);
-    }
+
+        if (this.sum_obj)
+            document.body.style.backgroundColor = this.getBackgroundColor(this.sum_obj.conf);
+    },
 
     // Gets the background color of the map by the summary state of the map
     getBackgroundColor: function(oObj) {
@@ -197,7 +202,7 @@ var View = Base.extend({
             sColor = oPageProperties.background_color;
         else {
             sColor = oStates[oObj.summary_state].bgcolor;
-    
+
             // Ack or downtime?
             if (oObj.summary_in_downtime && oObj.summary_in_downtime === 1)
                 if (isset(oStates[oObj.summary_state]['downtime_bgcolor'])

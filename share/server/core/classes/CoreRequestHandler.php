@@ -29,10 +29,6 @@ class CoreRequestHandler {
         $this->aOpts = $aOptions;
     }
 
-    public function getKeys() {
-        return array_keys($this->aOpts);
-    }
-
     public function get($sKey) {
         if(isset($this->aOpts[$sKey]))
             return $this->aOpts[$sKey];

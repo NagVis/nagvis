@@ -205,7 +205,7 @@ var NagVisStatefulObject = NagVisObject.extend({
         this.getMembers();
         this.replaceMacros();
 
-        if (oPageProperties.view_type !== 'overview') {
+        if (g_view.type === 'map') {
             switch (this.conf.view_type) {
                 case 'line':
                     new ElementLine(this).addTo(this);

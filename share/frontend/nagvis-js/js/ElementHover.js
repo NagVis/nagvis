@@ -487,7 +487,7 @@ var ElementHover = Element.extend({
     replaceDynamicMacros: function (template_html) {
         var oMacros = {};
     
-        if (oPageProperties.view_type === 'map')
+        if (g_view.type === 'map')
             oMacros.map_name = oPageProperties.map_name;
     
         oMacros.last_status_refresh = date(oGeneralProperties.date_format, this.obj.lastUpdate);

@@ -352,12 +352,13 @@ function refreshMapObject(event, objectId) {
     var sMapPart = '';
     var sMod = '';
     var sAddPart = '';
-    if(oPageProperties.view_type === 'map') {
+    if (g_view.type === 'map') {
         sMod = 'Map';
         if (map !== false)
             sMapPart = '&show='+escapeUrlValues(map);
         sAddPart = getViewParams();
-    } else if(oPageProperties.view_type === 'overview') {
+    }
+    else if (g_view.type === 'overview') {
         sMod = 'Overview';
         sMapPart = '';
     }
@@ -785,7 +786,6 @@ function setViewParam(param, val) {
 // b) uses the given source
 function usesSource(source) {
     return oPageProperties
-        && oPageProperties.view_type == 'map'
         && oPageProperties.sources
         && oPageProperties.sources.indexOf(source) !== -1;
 }

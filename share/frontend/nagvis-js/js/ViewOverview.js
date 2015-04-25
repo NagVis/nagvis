@@ -22,6 +22,7 @@
  *****************************************************************************/
 
 var ViewOverview = View.extend({
+    type           : 'overview',
     rendered_maps  : 0,
     processed_maps : 0,
 
@@ -33,7 +34,7 @@ var ViewOverview = View.extend({
         this.renderPageBasics();
         this.render();
         this.loadMaps();
-        this.loadRotations(();
+        this.loadRotations();
     },
 
     update: function() {
@@ -148,13 +149,13 @@ var ViewOverview = View.extend({
             map_container.appendChild(mapdiv);
             getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getObjectStates'
                             + '&i[]=map-' + escapeUrlValues(g_map_names[i]) + getViewParams(),
-                            false, this.addMap, g_map_names[i]);
+                            false, this.addMap.bind(this), g_map_names[i]);
         }
     },
     
     // Fetches all rotations to be shown on the overview page
     loadRotations: function() {
         getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getOverviewRotations',
-                        false, this.addRotations);
+                        false, this.addRotations.bind(this));
     }
 });

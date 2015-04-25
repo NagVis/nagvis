@@ -38,7 +38,6 @@ var oPageProperties = {};
 var oFileAges;
 var oStatusMessageTimer;
 var oMapObjects = {};
-var oMapSummaryObj;
 var regexCache = {};
 
 // Initialize and define some other basic vars
@@ -1148,11 +1147,13 @@ function isRelativeCoord(v) {
     return isset(v) && ((!isInt(v) && !isFloat(v)) || v.length === 6);
 }
 
-function getKeys(o) {
-    var a = [];
-    for(var key in o)
-        a.push(key);
-    return a;
+// Helper function to determine the number of entries in an object
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
 }
 
 // Is missing in some browser, e.g. IE

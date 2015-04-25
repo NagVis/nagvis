@@ -229,9 +229,8 @@ var ElementContext = Element.extend({
             'custom_3':    this.obj.conf.custom_3
         };
 
-      if(typeof(oPageProperties) != 'undefined' && oPageProperties != null
-           && oPageProperties.view_type === 'map')
-            oMacros.map_name = oPageProperties.map_name;
+        if (g_view.type === 'map')
+            oMacros.map_name = g_view.id;
 
         if(this.obj.conf.type === 'service') {
             oMacros.service_description = escapeUrlValues(this.obj.conf.service_description);

@@ -23,7 +23,7 @@
 
 var NagVisMap = NagVisStatefulObject.extend({
     update: function () {
-        if (oPageProperties.view_type == 'overview')
+        if (g_view.type == 'overview')
             new ElementTile(this).addTo(this);
 
         this.base();
