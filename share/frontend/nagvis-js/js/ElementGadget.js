@@ -48,7 +48,12 @@ var ElementGadget = Element.extend({
 
     requestGadget: function (param_str) {
         var data = 'members='+escape(JSON.stringify(this.obj.conf.members));
-        return postSyncUrl(this.obj.conf.gadget_url + param_str, data);
+        // FIXME: Change to async?
+        return call_ajax(this.obj.conf.gadget_url + param_str, {
+            method       : "POST",
+            post_data    : data,
+            sync         : true,
+        }).responseText;
     },
 
     detectGadgetType: function (param_str) {

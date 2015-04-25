@@ -1048,10 +1048,12 @@ class GlobalMainCfg {
                 'requestmaxparams' => Array('must' => 0,
                     'editable' => 1,
                     'default' => 0,
+                    'deprecated' => 1,
                     'match' => MATCH_INTEGER),
                 'requestmaxlength' => Array('must' => 0,
                     'editable' => 1,
                     'default' => 1900,
+                    'deprecated' => 1,
                     'match' => MATCH_INTEGER)),
             'states' => Array(
                 'unreachable' => Array('must' => 1,
@@ -2144,9 +2146,7 @@ class GlobalMainCfg {
     public function parseWorkerProperties() {
         return json_encode(Array(
             'worker_interval'             => $this->getValue('worker', 'interval'),
-            'worker_update_object_states' => $this->getValue('worker', 'updateobjectstates'),
-            'worker_request_max_params'   => $this->getValue('worker', 'requestmaxparams'),
-            'worker_request_max_length'   => $this->getValue('worker', 'requestmaxlength')
+            'worker_update_object_states' => $this->getValue('worker', 'updateobjectstates')
         ));
     }
 

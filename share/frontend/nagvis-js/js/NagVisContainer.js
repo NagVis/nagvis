@@ -34,13 +34,19 @@ var NagVisContainer = NagVisStatelessObject.extend({
         span.style.display = 'block';
         span.style.height = '100%';
 
-        if(this.conf.view_type === 'inline') {
+        if (this.conf.view_type === 'inline') {
             // Request data via ajax call and add it directly to the current page
-            try {
-                span.innerHTML = getSyncUrl(this.conf.url);
-            } catch(e) {
-                span.innerHTML = e.toString();
-            }
+            call_ajax(this.conf.url, {
+                response_handler: function(html, span) {
+                    span.innerHTML = html;
+                },
+                error_handler: function(status_code, span) {
+                    span.innerHTML = 'Error: '+status_code;
+                },
+                handler_data : span,
+                decode_json  : false,
+                add_ajax_id  : false,
+            });
         } else {
             // Create an iframe element which holds the requested url
             span.innerHTML = '';

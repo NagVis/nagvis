@@ -1556,6 +1556,14 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" -a "$INSTA
         sed -i '/^hovertimeout=/d' $NAGVIS_PATH/etc/nagvis.ini.php
         chk_rc "| Error" "$DONE"
         
+        DONE=`log "Removing requestmaxparams option from main config..." done`
+        sed -i '/^requestmaxparams=/d' $NAGVIS_PATH/etc/nagvis.ini.php
+        chk_rc "| Error" "$DONE"
+        
+        DONE=`log "Removing requestmaxlength option from main config..." done`
+        sed -i '/^requestmaxlength=/d' $NAGVIS_PATH/etc/nagvis.ini.php
+        chk_rc "| Error" "$DONE"
+        
         DONE=`log "Removing allowed_for_config option from map configs..." done`
         grep -r '^allowed_for_config=' $NAGVIS_PATH/etc/maps/*.cfg >> $NAGVIS_PATH/$AUTH_BACKUP
         sed -i '/^allowed_for_config=/d' $NAGVIS_PATH/etc/maps/*.cfg

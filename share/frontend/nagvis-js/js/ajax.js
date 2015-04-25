@@ -21,10 +21,6 @@
  *
  *****************************************************************************/
 
-/**
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-
 // Array to store the cached queries
 var ajaxQueryCache = {};
 // Cache lifetime is 30 seconds
@@ -425,72 +421,6 @@ function handleJsonResponse(sUrl, responseText) {
         frontendMessageRemove('miscError');
         return oResponse;
     }
-}
-
-/**
- * This function simply loads a remote url and returns the responseText 1:1
- * without any special error handling
- */
-function getSyncUrl(url) {
-    var oReq = initXMLHttpClient();
-    oReq.open('GET', url, false);
-    oReq.send(null);
-    return oReq.responseText;
-}
-
- /**
-  * This function simply loads a remote url using a POST request including sending
-  * a request body and returns the responseText 1:1 without any special error handling
-  */
-function postSyncUrl(url, data) {
-    var oReq = initXMLHttpClient();
-    oReq.open('POST', url, false);
-    oReq.setRequestHeader("If-Modified-Since", "Sat, 22 Sep 1986 00:00:00 GMT");
-    // Set post specific options
-    oReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    oReq.setRequestHeader("Content-length", data.length);
-    oReq.setRequestHeader("Connection", "close");
-    oReq.send(data);
-    return oReq.responseText;
-}
-
-/**
- * Prevent reaching too long urls, split the update to several
- * requests. Just start the request and clean the string strUrl
- * Plus fire the rest of the request on the last iteration
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getBulkRequest(sBaseUrl, aUrlParts, iLimit, bCacheable, handler, handlerParams) {
-    var sUrl = '';
-    var o;
-    var aReturn = [];
-
-    var async = false;
-    if(typeof handler == 'function')
-        async = true;
-
-    eventlog("ajax", "debug", "Bulk parts: "+aUrlParts.length+" Async: "+ async);
-    var count = 0;
-    for(var i = 0, len = aUrlParts.length; i < len; i++) {
-        sUrl = sUrl + aUrlParts[i];
-        count += 1;
-        if(sUrl !== '' && (sBaseUrl.length + sUrl.length > iLimit || i == len - 1)) {
-            eventlog("ajax", "debug", "Bulk go: "+ count);
-            if(async)
-                getAsyncRequest(sBaseUrl + sUrl, bCacheable, handler, handlerParams);
-            else {
-                o = getSyncRequest(sBaseUrl + sUrl, bCacheable);
-                if(o)
-                    aReturn = aReturn.concat(o);
-                o = null;
-            }
-
-            count = 0;
-            sUrl = '';
-        }
-    }
-    return aReturn;
 }
 
 /**
