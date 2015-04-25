@@ -108,7 +108,7 @@ var ViewMap = View.extend({
                     updateNumUnlocked(-1);
 
                 // Remove element from object container
-                delete this.objects[keys[i]];
+                delete this.objects[i];
             }
         }
 
