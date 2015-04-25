@@ -62,6 +62,8 @@ var ViewMap = View.extend({
 
     // Parses the map on initial page load or changed map configuration
     render: function() {
+        this.dom_obj = document.getElementById('map');
+
         // Is updated later by this.getProperties(), but we might need it in
         // the case an error occurs in getProperties() and one needs
         // the map name anyways, e.g. to detect the currently open map

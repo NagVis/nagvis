@@ -265,19 +265,18 @@ var View = Base.extend({
         var content = this.dom_obj;
         if (!content)
             return;
-    
+
         var headerSpacer = document.getElementById('headerspacer');
-        if(header) {
+        if (header) {
             header.style.width = pageWidth() + 'px';
-            if(headerSpacer) {
+            if (headerSpacer) {
                 headerSpacer.style.height = header.clientHeight + 'px';
                 headerSpacer = null;
             }
-            header = null;
         }
-    
+
         content.style.top = getHeaderHeight() + 'px';
-    
+
         sidebarUpdatePosition();
     }
 

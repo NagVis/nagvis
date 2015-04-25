@@ -10,10 +10,7 @@ This is a small file for storing quick thoughts about new features and needed ch
 - hover area auf linien entfernen. Aktionen auf ganze linien erlauben
 - linien: line border color wieder implementieren
 - grid nach seiten reload
-- hintergrund ist zu hoch verschoben (eventuell hats mit scaleView() zu tun)
 - template management dialog auf neue dialoge umbauen
-- pw reset wieder implementieren
-  share/server/core/classes/ViewUserMgmt.php
 
 - Rework layout of role edit form
 
