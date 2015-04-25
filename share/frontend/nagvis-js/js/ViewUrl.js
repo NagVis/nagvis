@@ -47,18 +47,18 @@ var ViewUrl = View.extend({
         this.dom_obj = document.getElementById('url');
         if (this.dom_obj.tagName == 'DIV') {
             // Fetch contents from server
-            var oUrlContents = getSyncRequest(oGeneralProperties.path_server
-                               + '?mod=Url&act=getContents&show='
-                               + escapeUrlValues(url));
-    
-            if (typeof oUrlContents !== 'undefined' && oUrlContents.content) {
-                // Replace the current contents with the new url
-                this.dom_obj.innerHTML = oUrlContents.content;
-            }
+            call_ajax(oGeneralProperties.path_server + '?mod=Url&act=getContents&show='
+                      + escapeUrlValues(url), {
+                response_handler: function(response) {
+                    this.dom_obj.innerHTML = response.content;
+                }.bind(this),
+            });
         }
         else {
             // iframe
             this.dom_obj.src = url;
         }
+
+        this.base();
     }
 });

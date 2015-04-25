@@ -34,9 +34,9 @@ function saveObjectAfterResize(oObj) {
     }
 
     var urlPart = '&x='+objX+'&y='+objY+'&w='+objW+'&h='+objH;
-    getAsyncRequest(oGeneralProperties.path_server + '?mod=Map&act=modifyObject'
-                    +'&map=' + escapeUrlValues(oPageProperties.map_name)
-                    + '&id=' + escapeUrlValues(objId) + urlPart);
+    call_ajax(oGeneralProperties.path_server + '?mod=Map&act=modifyObject'
+              +'&map=' + escapeUrlValues(oPageProperties.map_name)
+              + '&id=' + escapeUrlValues(objId) + urlPart);
 }
 
 /**
@@ -61,9 +61,9 @@ function saveObjectAfterAnchorAction(oAnchor) {
         alert('Unhandled action object: ' + anchorType);
     }
 
-    getAsyncRequest(oGeneralProperties.path_server + '?mod=Map&act=' + action + '&map='
-                    + escapeUrlValues(oPageProperties.map_name)
-                    + '&id=' + escapeUrlValues(objId) + urlPart);
+    call_ajax(oGeneralProperties.path_server + '?mod=Map&act=' + action + '&map='
+              + escapeUrlValues(oPageProperties.map_name)
+              + '&id=' + escapeUrlValues(objId) + urlPart);
 }
 
 function saveObjectAttr(objId, attr) {
@@ -71,12 +71,12 @@ function saveObjectAttr(objId, attr) {
     for (var key in attr)
         urlPart += '&' + key + '=' + escapeUrlValues(attr[key]);
 
-    getAsyncRequest(oGeneralProperties.path_server + '?mod=Map&act=modifyObject&map='
-                    + escapeUrlValues(oPageProperties.map_name) + '&id=' + escapeUrlValues(objId) + urlPart);
+    call_ajax(oGeneralProperties.path_server + '?mod=Map&act=modifyObject&map='
+              + escapeUrlValues(oPageProperties.map_name) + '&id=' + escapeUrlValues(objId) + urlPart);
 }
 
 function saveObjectRemove(objId) {
-    getAsyncRequest(oGeneralProperties.path_server + '?mod=Map&act=deleteObject&map='
-                    + escapeUrlValues(oPageProperties.map_name) + '&id=' + escapeUrlValues(objId));
+    call_ajax(oGeneralProperties.path_server + '?mod=Map&act=deleteObject&map='
+              + escapeUrlValues(oPageProperties.map_name) + '&id=' + escapeUrlValues(objId));
 
 }

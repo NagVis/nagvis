@@ -51,6 +51,12 @@ var View = Base.extend({
         this.handleRepeatEvents();
     },
 
+    render: function() {
+        addEvent(window, 'resize', function() { g_view.scaleView() });
+        addEvent(window, 'scroll', function() { g_view.scaleView() });
+        this.scaleView();
+    },
+
     /**
      * This callback function handles the ajax response of bulk object
      * status updates
@@ -242,5 +248,37 @@ var View = Base.extend({
             sFavicon = oObj.summary_state.toLowerCase();
         
         return oGeneralProperties.path_images+'internal/favicon_'+sFavicon+'.png';
+    },
+
+    /**
+     * Hack to scale elements which should fill 100% of the windows viewport. The
+     * problem here is that some map objects might increase the width of the map
+     * so that the viewport is not enough to display the whole map. In that case
+     * elements with a width of 100% don't scale to the map width. Instead of this
+     * the elements are scaled to the viewports width.
+     * This changes the behaviour and resizes the 100% elements to the map size.
+     *
+     * @author  Lars Michelsen <lars@vertical-visions.de>
+     */
+    scaleView: function() {
+        var header  = document.getElementById('header');
+        var content = this.dom_obj;
+        if (!content)
+            return;
+    
+        var headerSpacer = document.getElementById('headerspacer');
+        if(header) {
+            header.style.width = pageWidth() + 'px';
+            if(headerSpacer) {
+                headerSpacer.style.height = header.clientHeight + 'px';
+                headerSpacer = null;
+            }
+            header = null;
+        }
+    
+        content.style.top = getHeaderHeight() + 'px';
+    
+        sidebarUpdatePosition();
     }
+
 });

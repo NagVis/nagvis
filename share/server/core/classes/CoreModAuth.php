@@ -49,9 +49,7 @@ class CoreModAuth extends CoreModule {
             switch($this->sAction) {
                 case 'logout':
                     if($AUTH->logout())
-                        throw new Success(l('You have been logged out. You will be redirected.'),
-                                          l('Logged out'),
-                                          1, cfg('paths', 'htmlbase'));
+                        return true;
                     else
                         throw new NagVisException(l('Unable to log you out. Maybe it is not supported by your authentication module.'),
                                           null, 1, cfg('paths', 'htmlbase'));

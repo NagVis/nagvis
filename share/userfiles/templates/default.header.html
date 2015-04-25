@@ -124,7 +124,7 @@
         	{if $supportedChangePassword && $permittedChangePassword}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ChangePassword&amp;act=view', '{$langChangePassword}');ddMenuHide();">{$langChangePassword}</a></li>{/if}
         	{if $permittedUserMgmt}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=UserMgmt&amp;act=view', '{$langUserMgmt}');ddMenuHide();">{$langUserMgmt}</a></li>{/if}
         	{if $rolesConfigurable && $permittedRoleMgmt}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=RoleMgmt&amp;act=view', '{$langManageRoles}', 500);ddMenuHide();">{$langManageRoles}</a></li>{/if}
-            {if $permittedLogout}<li><a href="#" onclick="getSyncRequest('{$pathBase}/server/core/ajax_handler.php?mod=Auth&amp;act=logout');ddMenuHide();return false;">{$langLogout}</a></li>{/if}
+            {if $permittedLogout}<li><a href="#" onclick="logout();ddMenuHide();return false;">{$langLogout}</a></li>{/if}
             <li class="spacer underline"></li>
         </ul>
     </li>

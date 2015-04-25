@@ -75,6 +75,16 @@ function getHeaderHeight() {
     return g_header_height_cache;
 }
 
+function logout() {
+    call_ajax(oGeneralProperties.path_server+'?mod=Auth&act=logout', {
+        response_handler: function(response) {
+            if (response)
+                window.location.reload();
+        },
+        decode_json: false
+    });
+}
+
 /**
  * submitFrontendForm()
  *
@@ -87,25 +97,30 @@ function submitFrontendForm(sUrl, sFormId, bReloadOnSuccess) {
         bReloadOnSuccess = '';
     }
 
-    var oResult = postSyncRequest(sUrl, getFormParams(sFormId, true));
 
-    if(oResult && oResult.type) {
-        if(oResult.type === 'ok' && bReloadOnSuccess) {
-            if(typeof popupWindowRefresh == 'function') {
-                popupWindowRefresh();
-            }
-        } else {
-            // Show message and close the window
-            frontendMessage(oResult);
+    var oResult = call_ajax(sUrl, {
+        method           : "POST",
+        post_data        : getFormParams(sFormId, true),
+        response_handler : function(oResult) {
+            console.log(oResult);
+            if (oResult && oResult.type) {
+                if (oResult.type === 'ok' && bReloadOnSuccess) {
+                    if(typeof popupWindowRefresh == 'function') {
+                        popupWindowRefresh();
+                    }
+                } else {
+                    // Show message and close the window
+                    frontendMessage(oResult);
 
-            // Additionally close the popup window when the response is positive
-            if(typeof popupWindowClose == 'function') {
-                popupWindowClose();
+                    // Additionally close the popup window when the response is positive
+                    if(typeof popupWindowClose == 'function') {
+                        popupWindowClose();
+                    }
+                }
             }
         }
-    }
+    });
 
-    oResult = null;
 }
 
 /**
@@ -117,17 +132,21 @@ function submitFrontendForm(sUrl, sFormId, bReloadOnSuccess) {
  * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function submitFrontendForm2(sUrl, sFormId) {
-    var oResult = postSyncRequest(sUrl, getFormParams(sFormId, false));
-
-    if(oResult && oResult.type) {
-        // In case of an error show message and close the window
-        frontendMessage(oResult);
-        if(typeof popupWindowClose == 'function')
-            popupWindowClose();
-    } else {
-        popupWindowPutContent(oResult);
-    }
-    oResult = null;
+    var oResult = call_ajax(sUrl, {
+        method    : "POST",
+        post_data : getFormParams(sFormId, false),
+        response_handler : function(oResult) {
+            console.log(oResult);
+            if (oResult && oResult.type) {
+                // In case of an error show message and close the window
+                frontendMessage(oResult);
+                if (typeof popupWindowClose == 'function')
+                    popupWindowClose();
+            } else {
+                popupWindowPutContent(oResult);
+            }
+        }
+    });
 }
 
 function updateForm(form) {
@@ -782,6 +801,7 @@ function workerInitialize(type, ident) {
         break;
         case 'url':
             g_view = new ViewUrl(ident);
+        break;
         default:
             eventlog("worker", "error", "Unknown view type: "+type);
             hideStatusMessage();

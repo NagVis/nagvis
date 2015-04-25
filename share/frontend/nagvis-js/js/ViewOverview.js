@@ -69,6 +69,7 @@ var ViewOverview = View.extend({
                 this.dom_obj.appendChild(container);
             }
         }
+        this.base();
     },
 
     // Adds a single map to the overview map list

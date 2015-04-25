@@ -30,8 +30,6 @@
  */
 
 function headerDraw() {
-    scaleView();
-
     if(typeof(oUserProperties) === 'undefined')
         return;
 

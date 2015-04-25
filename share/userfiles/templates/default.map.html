@@ -17,6 +17,5 @@ addDOMLoadEvent(function()\{runWorker(0, 'map', '{$mapName}');});
 // Parses the grid if a user enabled it
 gridParse();
 
-window.onresize = function() { scaleView(); {if $zoomFill}set_zoom('fill');{/if} };
-window.onscroll = function() { scaleView(); };
+{if $zoomFill}addEvent(window, 'resize', function() \{set_zoom('fill');};{/if}
 </script>

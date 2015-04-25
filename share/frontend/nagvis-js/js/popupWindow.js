@@ -91,10 +91,10 @@ function popupWindowClose() {
 
 function popupWindowRefresh() {
     var oWindow = document.getElementById('popupWindow');
-
-    if(oWindow) {
-        popupWindowPutContent(getSyncRequest(oWindow.url, false, false));
-        oWindow = null;
+    if (oWindow) {
+        call_ajax(oWindow.url, {
+            response_handler: popupWindowPutContent
+        });
     }
 }
 

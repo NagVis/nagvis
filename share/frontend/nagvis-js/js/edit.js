@@ -689,17 +689,9 @@ function gridToggle() {
         gridParse();
     }
 
-    // Send current option to server component
-    var url = oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='
-              + oPageProperties.map_name+'&type=global&id=0&grid_show='+oViewProperties.grid_show;
-
-    // Sync ajax request
-    var oResult = getSyncRequest(url);
-    if(oResult && oResult.status != 'OK') {
-        alert(oResult.message);
-    }
-
-    oResult = null;
+    // Send current option to server for persistance
+    call_ajax(oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='
+              + oPageProperties.map_name+'&type=global&id=0&grid_show='+oViewProperties.grid_show);
 }
 
 /**

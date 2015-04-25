@@ -15,24 +15,18 @@ function checkTmplDelete() {
 
 function putTmplOpts(val) {
     formDeleteDynamicOptions('modify');
+    if (val -== '')
+        return;
 
-    if(val !== '') {
-        // fetch template options via ajax
-        var oResponse = getSyncRequest(
-            oGeneralProperties.path_server + '?mod=Map&act=getTmplOpts&show='
-            + escapeUrlValues(oPageProperties.map_name)+'&name='+val,
-            false, false
-        );
-
-        if(typeof oResponse !== 'undefined' && typeof oResponse.opts !== 'undefined') {
-            // render form lines
-            for(var key in oResponse.opts) {
-                formAddOption('modify', key, oResponse.opts[key])
-            }
+    // fetch template options via ajax
+    call_ajax(oGeneralProperties.path_server + '?mod=Map&act=getTmplOpts&show='
+              + escapeUrlValues(oPageProperties.map_name)+'&name='+val, {
+        response_handler: function(response) {
+            // render one line with two input fields per configured option
+            for (var key in response.opts)
+                formAddOption('modify', key, response.opts[key]);
         }
-
-        oResponse = null;
-    }
+    });
 }
 
 /**

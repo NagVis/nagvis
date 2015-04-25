@@ -92,6 +92,7 @@ var ViewMap = View.extend({
         });
 
         this.rendered = true;
+        this.base();
     },
 
     handleMapInit(oObjects) {

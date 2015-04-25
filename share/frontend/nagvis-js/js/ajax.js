@@ -163,7 +163,7 @@ function call_ajax(url, args)
         // Set post specific options. request might be a FormData object. In this case
         // the request is not using form-urlencoded data, instead it is automatically
         // set to multipart/form-data
-        if (typeof request !== 'object')
+        if (typeof args.post_data !== 'object')
             AJAX.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         AJAX.setRequestHeader("Content-length", args.post_data.length);
         AJAX.setRequestHeader("Connection", "close");
@@ -302,103 +302,6 @@ function handleAsyncResponse(oResponse) {
     if(isset(oResponse) && oResponse.status != 'OK')
         alert(oResponse.message);
     oResponse = null;
-}
-
-/**
- * Function for creating a synchronous GET request
- * - Uses query cache
- * - Response needs to be JS code or JSON => Parses the response with eval()
- * - Errors need to match following Regex: /^Notice:|^Warning:|^Error:|^Parse error:/
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function getSyncRequest(sUrl, bCacheable, bRetryable) {
-    var sResponse = null;
-    var responseText;
-
-    if(!isset(bCacheable))
-        bCacheable = true;
-
-    if(!isset(bRetryable))
-        bRetryable = true;
-
-    // Encode the url
-    sUrl = sUrl.replace("+", "%2B");
-
-    // use cache if last request is less than 30 seconds (30,000 milliseconds) ago
-    if(bCacheable
-       && typeof(ajaxQueryCache[sUrl]) !== 'undefined'
-       && iNow - ajaxQueryCache[sUrl].timestamp <= ajaxQueryCacheLifetime) {
-        eventlog("ajax", "debug", "Using cached query");
-        responseText = ajaxQueryCache[sUrl].response;
-
-        // Prevent using invalid code in cache
-        if(responseText !== '') {
-            // Handle responses of json objects - including eval and wron response
-            // error handling and clearing
-            sResponse = handleJsonResponse(sUrl, responseText);
-        } else {
-            // Remove the invalid code from cache
-            cleanupQueryCache(sUrl);
-        }
-
-        responseText = null;
-    } else {
-        var oRequest = initXMLHttpClient();
-
-        if(oRequest) {
-            // Save this options to oOpt (needed for query cache)
-            var url = sUrl;
-            var timestamp = iNow;
-
-            oRequest.open("GET", sUrl+"&_t="+timestamp, false);
-            oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
-
-            try {
-                oRequest.send(null);
-                frontendMessageRemove('ajaxError');
-            } catch(e) {
-                ajaxError(e);
-                bCacheable = false;
-            }
-
-            responseText = oRequest.responseText;
-
-            if(responseText.replace(/\s+/g, '').length === 0) {
-                if(bCacheable) {
-                    // Cache that dialog
-                    updateQueryCache(url, timestamp, '');
-                }
-
-                sResponse = '';
-            } else {
-                // Trim the left of the response
-                responseText = responseText.replace(/^\s+/,"");
-
-                // Error handling for the AJAX methods
-                if(responseText.match(/^Notice:|^Warning:|^Error:|^Parse error:/)) {
-                    phpError(responseText);
-                } else {
-                    // Handle responses of json objects - including eval and wron response
-                    // error handling and clearing
-                    sResponse = handleJsonResponse(sUrl, responseText)
-
-                    if(sResponse !== '' && bCacheable) {
-                        // Cache that answer (only when no error/warning/...)
-                        updateQueryCache(url, timestamp, responseText);
-                    }
-
-                    responseText = null;
-                }
-            }
-
-            url = null;
-            timestamp = null;
-        }
-
-        oRequest = null;
-    }
-    return sResponse;
 }
 
 function handleJsonResponse(sUrl, responseText) {

@@ -1217,39 +1217,6 @@ function getEffectiveStyle(e, attr) {
     return null;
 }
 
-/**
- * Hack to scale elements which should fill 100% of the windows viewport. The
- * problem here is that some map objects might increase the width of the map
- * so that the viewport is not enough to display the whole map. In that case
- * elements with a width of 100% don't scale to the map width. Instead of this
- * the elements are scaled to the viewports width.
- * This changes the behaviour and resizes the 100% elements to the map size.
- *
- * @author  Lars Michelsen <lars@vertical-visions.de>
- */
-function scaleView() {
-    var header       = document.getElementById('header');
-    var content      = document.getElementById('map');
-    if (content == null)
-        content = document.getElementById('overview');
-    if (content == null)
-        content = document.getElementById('page'); // other pages like error pages
-
-    var headerSpacer = document.getElementById('headerspacer');
-    if(header) {
-        header.style.width = pageWidth() + 'px';
-        if(headerSpacer) {
-            headerSpacer.style.height = header.clientHeight + 'px';
-            headerSpacer = null;
-        }
-        header = null;
-    }
-
-    content.style.top = getHeaderHeight() + 'px';
-
-    sidebarUpdatePosition();
-}
-
 var g_zoom_factor = null;
 function getZoomFactor() {
     if(g_zoom_factor !== null)
