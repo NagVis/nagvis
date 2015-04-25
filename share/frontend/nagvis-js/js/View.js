@@ -35,12 +35,16 @@ var View = Base.extend({
     update: function(args) {
         var show = args.show ? '&show='+args.show : '';
 
+        var post_vars = [];
+        for (var i = 0, len = args.data.length; i < len; i++)
+            post_vars.push('i[]='+args.data[i]);
+
         // Get the updated objects via bulk request
         call_ajax(oGeneralProperties.path_server+'?mod=' + args.mod + '&act=getObjectStates'
                        + show +'&ty=state'+getViewParams() + this.getFileAgeParams(), {
             response_handler : this.handleUpdate.bind(this),
             method           : "POST",
-            post_data        : args.data
+            post_data        : post_vars.join('&')
         });
 
         // Need to re-raise repeated events?
@@ -110,7 +114,7 @@ var View = Base.extend({
         var at_least_one_changed = false;
     
         // Loop all object which have new information
-        for(var i = 0, len = state_infos.length; i < len; i++) {
+        for (var i = 0, len = state_infos.length; i < len; i++) {
             var objectId = state_infos[i].object_id;
     
             // Object not found

@@ -66,6 +66,10 @@ var ElementHover = Element.extend({
         // don't render during normal render calls. We
         // want to keep the number of DOM objects low, so only render
         // them when being unlocked for the first time
+        // But when the object has already been rendered, re-render the object
+        // during all render() calls
+        if (this.dom_obj)
+            this._render();
     },
 
     draw: function() {

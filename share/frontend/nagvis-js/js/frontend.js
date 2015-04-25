@@ -333,13 +333,7 @@ function showAckDialog(map_name, objectId) {
                        + '&object_id=' + escapeUrlValues(objectId), 'Acknowledge Problem');
 }
 
-/**
- * refreshMapObject()
- *
- * Handles manual map object update triggered by e.g. the context menu
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
+// Handles manual map object update triggered by e.g. the context menu
 function refreshMapObject(event, objectId) {
     var oObj = getMapObjByDomObjId(objectId);
 
@@ -364,33 +358,13 @@ function refreshMapObject(event, objectId) {
     }
 
     // Start the ajax request to update this single object
-    getAsyncRequest(oGeneralProperties.path_server+'?mod='
-                    + escapeUrlValues(sMod) + '&act=getObjectStates'
-                    + sMapPart + '&ty=state&i[]=' + escapeUrlValues(obj_id) + sAddPart, false,
-                    getObjectStatesCallback);
-
-    sMod = null;
-    sMapPart = null;
-    map = null;
-    service_description = null;
-    obj_id = null;
-    name = null;
-
-    var event = !event ? window.event : event;
-    if(event) {
-        if(event.stopPropagation)
-            event.stopPropagation();
-        event.cancelBubble = true;
-    }
-    return false
-}
-
-/**
- * Handles object state request answers received from the server
- */
-function getObjectStatesCallback(oResponse) {
-    if (isset(oResponse) && oResponse.length > 0)
-        g_view.updateObjects(oResponse);
+    call_ajax(oGeneralProperties.path_server+'?mod=' + sMod + '&act=getObjectStates'
+              + sMapPart + '&ty=state&i[]=' + obj_id + sAddPart, {
+        response_handler: function(response) {
+            g_view.updateObjects(response);
+        }
+    });
+    return preventDefaultEvents(event);
 }
 
 /**

@@ -44,11 +44,15 @@ var ViewMap = View.extend({
 
     update: function() {
         var to_update = this.getObjectsToUpdate();
-        this.base({
-            mod  : 'Map',
-            show : this.id,
-            data : to_update[0]
-        });
+
+        if (to_update[0].length > 0) {
+            this.base({
+                mod  : 'Map',
+                show : this.id,
+                data : to_update[0]
+            });
+        }
+
         this.rerenderStatelessObjects(to_update[1]);
     },
 
@@ -215,7 +219,7 @@ var ViewMap = View.extend({
                 obj.raiseEvents(false);
                 obj.initRepeatedEvents();
             }
-    
+
             // Store object dependencies
             var parents = obj.getParentObjectIds();
             if (parents) {
@@ -224,7 +228,7 @@ var ViewMap = View.extend({
                 }
             }
         }
-    
+
         eventlog("worker", "debug", "initializeObjects: End setting map objects");
     },
 
@@ -233,7 +237,7 @@ var ViewMap = View.extend({
         oPageProperties.page_title = oPageProperties.alias
                                      + ' (' + this.sum_obj.conf.summary_state + ') :: '
                                      + oGeneralProperties.internal_title;
-    
+
         this.renderPageBasics();
         this.renderBackgroundImage();
     },
@@ -249,7 +253,7 @@ var ViewMap = View.extend({
                 oImage.id = 'backgroundImage';
                 document.getElementById('map').appendChild(oImage);
             }
-    
+
             addZoomHandler(oImage, true);
             oImage.src = sImage;
         }
