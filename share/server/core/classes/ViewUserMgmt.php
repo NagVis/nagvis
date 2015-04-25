@@ -135,7 +135,7 @@ class ViewUserMgmt {
         js_form_start('edit');
         hidden('mode', 'edit');
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Select User').'</td>';
+        echo '<tr><td class="tdlabel">'.l('Name').'</td>';
         echo '<td class="tdfield">';
         $choices = array('' => l('Please choose'));
         foreach ($AUTH->getAllUsers() AS $user)
@@ -148,7 +148,7 @@ class ViewUserMgmt {
             $user_roles = array();
             foreach ($AUTHORISATION->getUserRoles($user_id) as $role)
                 $user_roles[$role['roleId']] = $role['name'];
-                
+
             $available_roles = array();
             foreach ($AUTHORISATION->getAllRoles() AS $role)
                 if (!isset($user_roles[$role['roleId']]))
@@ -224,100 +224,90 @@ class ViewUserMgmt {
         form_end();
     }
 
+    private function resetPwForm() {
+        global $AUTH, $AUTHORISATION;
+        if (!$AUTH->checkFeature('changePassword') || $AUTH->authedTrusted())
+            return; // reset not supported
+
+        echo '<h2>'.l('Reset Password').'</h2>';
+
+        if (is_action() && post('mode') == 'reset_pw') {
+            try {
+                $user_id = post('user_id');
+                if ($user_id === null || $user_id === '')
+                    throw new FieldInputError('user_id', l('Please choose a user to delete.'));
+                if (!is_numeric($user_id))
+                    throw new FieldInputError('user_id', l('Invalid value provided.'));
+                $user_id = intval($user_id);
+
+                if ($AUTH->getUserId() == $user_id)
+                    throw new FieldInputError('user_id', l('Unable to delete your own user.'));
+
+                $password1 = post('password1');
+                if (!$password1)
+                    throw new FieldInputError('password1', l('Please specify a password.'));
+
+                if (count($password1) > AUTH_MAX_PASSWORD_LENGTH)
+                    throw new FieldInputError('password1', l('This password is too long.'));
+
+                $password2 = post('password2');
+                if (!$password2)
+                    throw new FieldInputError('password2', l('Please confirm your password.'));
+
+                if ($password1 != $password2)
+                    throw new FieldInputError('password2', l('The two passwords are not equal.'));
+
+                if ($AUTH->resetPassword($user_id, $password2))
+                    success(l('The password has been reset.'));
+                else
+                    throw new NagVisException('Failed to reset the password.');
+
+            } catch (FieldInputError $e) {
+                form_error($e->field, $e->msg);
+            } catch (NagVisException $e) {
+                form_error(null, $e->message());
+            } catch (Exception $e) {
+                if (isset($e->msg))
+                    form_error(null, $e->msg);
+                else
+                    throw $e;
+            }
+        }
+        echo $this->error;
+
+        js_form_start('reset_pw');
+        hidden('mode', 'reset_pw');
+
+        echo '<table class="mytable">';
+        echo '<tr><td class="tdlabel">'.l('Name').'</td>';
+        echo '<td class="tdfield">';
+        $choices = array('' => l('Please choose'));
+        foreach ($AUTH->getAllUsers() AS $user)
+            $choices[$user['userId']] = $user['name'];
+        select('user_id', $choices);
+        echo '</td></tr>';
+        echo '<tr><td class="tdlabel">'.l('Password').'</td>';
+        echo '<td class="tdfield">';
+        input('password1');
+        echo '</td></tr>';
+        echo '<tr><td class="tdlabel">'.l('Password Confirm').'</td>';
+        echo '<td class="tdfield">';
+        input('password2');
+        echo '</td></tr>';
+        echo '</table>';
+
+        submit(l('Save'));
+        form_end();
+    }
+
     public function parse() {
         ob_start();
         $this->addForm();
         $this->editForm();
         $this->deleteForm();
+        $this->resetPwForm();
         return ob_get_clean();
     }
 }
-
-    /*
-        $aData = Array(
-            'langUserPwReset'    => l('Reset Password'),
-            // Supported by backend and not using trusted auth
-            'supportedChangePassword' => $AUTH->checkFeature('changePassword') && !$AUTH->authedTrusted()
-        );
-
-/*
-
-{if $supportedChangePassword}<div id="userPwReset">
-    <h2>{$langUserPwReset}</h2>
-    <form name="userPwReset" id="userPwResetForm" action="#" onsubmit="submitFrontendForm('{$formTargetPwReset}', 'userPwResetForm', true);return false" method="post">
-        <table class="mytable">
-            <tr>
-                <td class="tdlabel">{$langSelectUser}</td>
-                <td class="tdfield">
-                <select type="text" name="userId" id="userId" tabindex="130" required />
-                    <option value="" selected="selected"></option>
-                    {foreach $users user}<option value="{$user.userId}">{$user.name}</option>{/foreach}
-                </select>
-                </td>
-            </tr>
-            <tr>
-                <td class="tdlabel">{$langPassword1}</td>
-                <td class="tdfield"><input type="password" name="password1" id="password1" class="input" value="" size="{$maxPasswordLength}" tabindex="140" /></td>
-            </tr>
-            <tr>
-                <td class="tdlabel">{$langPassword2}</td>
-                <td class="tdfield"><input type="password" name="password2" id="password2" class="input" value="" size="{$maxPasswordLength}" tabindex="150" /></td>
-            </tr>
-            <tr>
-                <td colspan="2"><input class="submit" type="submit" name="submit" value="{$langUserPwReset}" tabindex="160" /></td>
-            </tr>
-        </table>
-    </form>
-{/if}
-</div>
-
-                    $sReturn = json_encode($AUTHORISATION->getAllRoles());
-                case 'doPwReset':
-                    $this->handleResponse('handleResponseDoPwReset', 'doPwReset',
-                                            l('The password has been reset.'),
-                                                                l('The password could not be reset.'));
-                break;
-
-    protected function doPwReset($a) {
-        global $AUTH;
-        if($AUTH->authedTrusted())
-            return false;
-        return $AUTH->resetPassword($a['userId'], $a['password1']);
-    }
-
-    protected function handleResponseDoPwReset() {
-        global $AUTH;
-        $bValid = true;
-
-        $FHANDLER = new CoreRequestHandler($_POST);
-        $attr = Array('userId'     => MATCH_INTEGER,
-                      'password1'  => MATCH_STRING,
-                      'password2'  => MATCH_STRING);
-        $this->verifyValuesSet($FHANDLER,   $attr);
-        $this->verifyValuesMatch($FHANDLER, $attr);
-
-        // Check length limits
-        if($bValid && $this->FHANDLER->isLongerThan('password1', AUTH_MAX_PASSWORD_LENGTH))
-            $bValid = false;
-        if($bValid && $this->FHANDLER->isLongerThan('password2', AUTH_MAX_PASSWORD_LENGTH))
-            $bValid = false;
-
-        // Check if new passwords are equal
-        if($bValid && $this->FHANDLER->get('password1') !== $this->FHANDLER->get('password2'))
-            throw new NagVisException(l('The two passwords are not equal.'));
-
-        // Don't change own users password
-        if($AUTH->getUserId() == $FHANDLER->get('userId'))
-            throw new NagVisException(l('Unable to reset the password for your own user.'));
-
-        // Store response data
-        if($bValid === true)
-          return Array('userId'    => $FHANDLER->get('userId'),
-                         'password1' => $FHANDLER->get('password1'),
-                         'password2' => $FHANDLER->get('password2'));
-        else
-            return false;
-    }
-*/
 
 ?>
