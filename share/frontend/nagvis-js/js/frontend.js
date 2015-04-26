@@ -774,7 +774,6 @@ function workerUpdate(iCount, sType, sIdentifier) {
     oWorkerProperties.last_run = iNow;
     g_view.update();
     updateWorkerCounter(); // Update the worker last run time on maps
-    cleanupAjaxQueryCache();
 }
 
 /**

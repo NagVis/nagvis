@@ -33,12 +33,13 @@ function hoverHide() {
 }
 
 var ElementHover = Element.extend({
-    hover_url      : null, // configured url with eventual replaced macros
-    template_html  : null, // hover HTML code with replaced config related macros
-    coords         : null, // list of x, y coordinates of the hover menu top left corner
-    show_timer     : null, // JS timer when hover delay is used
-    spacing        : 5,    // px from screen border
-    min_width      : 400,  // px minimum width
+    hover_url      : null,  // configured url with eventual replaced macros
+    template_html  : null,  // hover HTML code with replaced config related macros
+    coords         : null,  // list of x, y coordinates of the hover menu top left corner
+    show_timer     : null,  // JS timer when hover delay is used
+    spacing        : 5,     // px from screen border
+    min_width      : 400,   // px minimum width
+    enabled        : false, // when true the event handlers are enabled
 
     update: function() {
         this.hover_url = this.obj.conf.hover_url;
@@ -60,6 +61,10 @@ var ElementHover = Element.extend({
 
     render: function() {
         this.getTemplate();
+
+        if (this.obj.bIsLocked)
+            this.enable();
+
         if (this.template_html === null || this.template_html === true)
             return false; // template not available yet, skip rendering
 
@@ -80,7 +85,6 @@ var ElementHover = Element.extend({
                 this._render();
 
             this.base();
-            this.enable();
         }
     },
 
@@ -90,8 +94,8 @@ var ElementHover = Element.extend({
     },
 
     lock: function() {
-        if (!this.dom_obj)
-            this._render();
+        //if (!this.dom_obj)
+        //    this._render();
         this.enable();
     },
 
@@ -105,8 +109,9 @@ var ElementHover = Element.extend({
 
     _render: function() {
         this.getTemplate();
-        if (this.template_html === null || this.template_html === true)
+        if (this.template_html === null || this.template_html === true) {
             return false; // template not available yet, skip rendering
+        }
         this.renderMenu();
     },
 
@@ -184,43 +189,50 @@ var ElementHover = Element.extend({
     },
 
     enable: function() {
-        addEvent(this.obj.trigger_obj, 'mousemove', function(element_obj) {
-            return function(event) {
-                event = event ? event : window.event; // IE FIX
-
-                // During render/drawing calls the template was not ready, so the hover menu
-                // has not been drawn yet. Do it now.
-                if (element_obj.dom_obj === null)
-                    element_obj.draw();
-
-                var hover_delay = parseInt(element_obj.obj.conf.hover_delay);
-
-                // Only show up hover menu when no context menu is opened
-                // and only handle the events when no timer is in schedule at the moment to
-                // prevent strange movement effects when the timer has finished
-                if (!dragging() && g_context_open === null && element_obj.show_timer === null) {
-                    element_obj.coords = [event.clientX, event.clientY];
-                    if (hover_delay && !element_obj.isVisible())
-                        element_obj.show_timer = setTimeout(function() {
-                            element_obj.show();
-                        }, hover_delay*1000);
-                    else {
-                        element_obj.show();
-                    }
-                }
-            };
-        }(this));
-
-        addEvent(this.obj.trigger_obj, 'mouseout', function(element_obj) {
-            return function(e) {
-                element_obj.hide();
-            };
-        }(this));
+        if (!this.enabled) {
+            this._handleMouseMove = this.handleMouseMove.bind(this); 
+            this._handleMouseOut  = this.handleMouseOut.bind(this); 
+            addEvent(this.obj.trigger_obj, 'mousemove', this._handleMouseMove);
+            addEvent(this.obj.trigger_obj, 'mouseout', this._handleMouseOut);
+            this.enabled = true;
+        }
     },
 
     disable: function() {
-        removeEvent(this.obj.trigger_obj, 'mousemove');
-        removeEvent(this.obj.trigger_obj, 'mouseout');
+        if (this.enabled) {
+            removeEvent(this.obj.trigger_obj, 'mousemove', this._handleMouseMove);
+            removeEvent(this.obj.trigger_obj, 'mouseout', this._handleMouseOut);
+            this.enabled = false;
+        }
+    },
+
+    handleMouseOut: function(event) {
+        this.hide();
+    },
+
+    handleMouseMove: function(event) {
+        event = event ? event : window.event; // IE FIX
+
+        // During render/drawing calls the template was not ready, so the hover menu
+        // has not been drawn yet. Do it now.
+        if (this.dom_obj === null)
+            this.draw();
+
+        var hover_delay = parseInt(this.obj.conf.hover_delay);
+
+        // Only show up hover menu when no context menu is opened
+        // and only handle the events when no timer is in schedule at the moment to
+        // prevent strange movement effects when the timer has finished
+        if (!dragging() && g_context_open === null && this.show_timer === null) {
+            this.coords = [event.clientX, event.clientY];
+            if (hover_delay && !this.isVisible())
+                this.show_timer = setTimeout(function() {
+                    this.show();
+                }, hover_delay*1000);
+            else {
+                this.show();
+            }
+        }
     },
 
     // Is the menu currently visible to the user?
