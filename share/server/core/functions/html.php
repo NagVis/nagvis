@@ -98,7 +98,7 @@ function js($code) {
 
 // Starts a HTML form which is submitted (and can be updated) via AJAX call
 function js_form_start($name) {
-    form_start($name, 'javascript:submitFrontendForm2(\''.cfg('paths', 'htmlbase')
+    form_start($name, 'javascript:submitForm(\''.cfg('paths', 'htmlbase')
                      .'/server/core/ajax_handler.php?mod='.$_REQUEST['mod']
                      .'&act='.$_REQUEST['act'].'\', \''.$name.'\');');
 }
@@ -143,13 +143,13 @@ function form_end($keep_context=true) {
 // this form yet to keep the current variable context accross the single requests.
 function hidden_vars() {
     global $form_keys, $form_name;
-    if (submitted($form_name) || !submitted()) {
-        foreach ($_REQUEST AS $key => $val) {
-            if (!isset($form_keys[$key])) {
-                hidden($key, $val);
-            }
+    //if (submitted($form_name) || !submitted()) {
+    foreach ($_REQUEST AS $key => $val) {
+        if (!isset($form_keys[$key])) {
+            hidden($key, $val);
         }
     }
+    //}
 }
 
 function hidden($name, $default = '') {
@@ -286,12 +286,12 @@ function select($name, $options, $default = '', $onchange = '', $style = '', $si
     echo $ret;
 }
 
-function submit($label, $class = '') {
+function submit($label, $class = '', $name = '_submit') {
     global $form_keys;
     $form_keys['_submit'] = true;
     if ($class)
         $class = ' '.$class;
-    echo '<input class="submit'.$class.'" type="submit" name="_submit" id="_submit" value="'.$label.'" />'.N;
+    echo '<input class="submit'.$class.'" type="submit" name="'.$name.'" id="'.$name.'" value="'.$label.'" />'.N;
 }
 
 function button($name, $label, $onclick) {

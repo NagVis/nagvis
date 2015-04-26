@@ -39,20 +39,13 @@ class CoreModMap extends CoreModule {
             'getMapObjects'     => 'view',
             'getObjectStates'   => 'view',
 
-            // WUI specific actions
             'manage'            => REQUIRES_AUTHORISATION,
             'doExportMap'       => 'edit',
-
             'addModify'         => 'edit',
             'modifyObject'      => 'edit',
             'deleteObject'      => 'edit',
             'toStaticMap'       => 'edit',
-
             'manageTmpl'        => 'edit',
-            'getTmplOpts'       => 'edit',
-            'doTmplAdd'         => 'edit',
-            'doTmplModify'      => 'edit',
-            'doTmplDelete'      => 'edit',
         );
 
         // Register valid objects
@@ -66,7 +59,6 @@ class CoreModMap extends CoreModule {
             case 'getMapObjects':
             case 'getObjectStates':
             case 'manageTmpl':
-            case 'getTmplOpts':
             case 'addModify':
             case 'doExportMap':
                 $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME_EMPTY));
@@ -79,9 +71,6 @@ class CoreModMap extends CoreModule {
             // And those have the objecs in the POST var "map"
             case 'modifyObject':
             case 'deleteObject':
-            case 'doTmplAdd':
-            case 'doTmplModify':
-            case 'doTmplDelete':
                 $FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
                 if($FHANDLER->match('map', MATCH_MAP_NAME))
                     $this->name = $FHANDLER->get('map');
@@ -137,46 +126,8 @@ class CoreModMap extends CoreModule {
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
                 break;
                 case 'manageTmpl':
-                    $aOpts = Array('show' => MATCH_MAP_NAME);
-                    $aVals = $this->getCustomOptions($aOpts);
-
                     $VIEW = new ViewMapManageTmpl();
-                    $VIEW->setOpts($aVals);
                     $sReturn = json_encode(Array('code' => $VIEW->parse()));
-                break;
-                case 'getTmplOpts':
-                    $aOpts = Array('show' => MATCH_MAP_NAME,
-                                   'name' => MATCH_STRING_NO_SPACE);
-                    $aVals = $this->getCustomOptions($aOpts);
-
-                    // Read map config but don't resolve templates and don't use the cache
-                    $MAPCFG = new GlobalMapCfg($aVals['show']);
-                    $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
-
-                    $aTmp = $MAPCFG->getDefinitions('template');
-                    $aTmp = $aTmp[$MAPCFG->getTemplateIdByName($aVals['name'])];
-                    unset($aTmp['type']);
-                    unset($aTmp['object_id']);
-
-                    $sReturn = json_encode(Array('opts' => $aTmp));
-                break;
-                case 'doTmplAdd':
-                    $this->handleResponse('handleResponseDoTmplAdd', 'doTmplAdd',
-                                            l('The object has been added.'),
-                                                                l('The object could not be added.'),
-                                                                1);
-                break;
-                case 'doTmplModify':
-                    $this->handleResponse('handleResponseDoTmplModify', 'doTmplModify',
-                                            l('The object has been modified.'),
-                                                                l('The object could not be modified.'),
-                                                                1);
-                break;
-                case 'doTmplDelete':
-                    $this->handleResponse('handleResponseDoTmplDelete', 'doTmplDelete',
-                                            l('The template has been deleted.'),
-                                                                l('The template could not be deleted.'),
-                                                                1);
                 break;
                 case 'doExportMap':
                     $this->doExportMap($this->name);
@@ -193,7 +144,6 @@ class CoreModMap extends CoreModule {
         return $sReturn;
     }
 
-
     protected function doExportMap($name) {
         global $CORE;
         if (!$name)
@@ -204,210 +154,6 @@ class CoreModMap extends CoreModule {
 
         $MAPCFG = new GlobalMapCfg($name);
         return $MAPCFG->exportMap();
-    }
-
-    protected function doTmplModify($a) {
-        $MAPCFG = new GlobalMapCfg($a['map']);
-        $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
-
-        $id = $MAPCFG->getTemplateIdByName($a['opts']['name']);
-
-        // set options in the array
-        foreach($a['opts'] AS $key => $val) {
-            $MAPCFG->setValue('template', $id, $key, $val);
-        }
-
-        $MAPCFG->writeElement('template', $id);
-
-        // delete map lock
-        if(!$MAPCFG->deleteMapLock()) {
-            throw new NagVisException(l('mapLockNotDeleted'));
-        }
-
-        return true;
-    }
-
-    protected function handleResponseDoTmplModify() {
-        $bValid = true;
-        // Validate the response
-
-        $FHANDLER = new CoreRequestHandler($_POST);
-
-        // Check for needed params
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
-            $bValid = false;
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('name'))
-            $bValid = false;
-
-        // All fields: Regex check
-        if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
-            $bValid = false;
-        if($bValid && !$FHANDLER->match('name', MATCH_STRING_NO_SPACE))
-            $bValid = false;
-
-        if($bValid)
-            $this->verifyMapExists($FHANDLER->get('map'));
-
-        // Check if the template already exists
-        // Read map config but don't resolve templates and don't use the cache
-        $MAPCFG = new GlobalMapCfg($FHANDLER->get('map'));
-        $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
-        if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) <= 0) {
-            throw new NagVisException(l('A template with this name does not exist.'));
-
-            $bValid = false;
-        }
-        $MAPCFG = null;
-
-        // FIXME: Recode to FHANDLER
-        $aOpts = $_POST;
-
-        // Remove the parameters which are not options of the object
-        unset($aOpts['submit']);
-        unset($aOpts['map']);
-
-        // Transform the array to key => value form
-        $opts = Array('name' => $FHANDLER->get('name'));
-        foreach($aOpts AS $key => $a) {
-            if(substr($key, 0, 3) === 'opt' && isset($a['name']) && isset($a['value'])) {
-                $opts[$a['name']] = $a['value'];
-            }
-        }
-
-        // Store response data
-        if($bValid === true) {
-            // Return the data
-            return Array('map' => $FHANDLER->get('map'),
-                         'opts' => $opts);
-        } else {
-            return false;
-        }
-    }
-
-    protected function doTmplDelete($a) {
-        // Read map config but don't resolve templates and don't use the cache
-        $MAPCFG = new GlobalMapCfg($a['map']);
-        $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
-
-        $id = $MAPCFG->getTemplateIdByName($a['name']);
-
-        // first delete element from array
-        $MAPCFG->deleteElement($id, true);
-
-        // delete map lock
-        if(!$MAPCFG->deleteMapLock()) {
-            throw new NagVisException(l('mapLockNotDeleted'));
-        }
-
-        return true;
-    }
-
-    protected function handleResponseDoTmplDelete() {
-        $bValid = true;
-        // Validate the response
-
-        $FHANDLER = new CoreRequestHandler($_POST);
-
-        // Check for needed params
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
-            $bValid = false;
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('name'))
-            $bValid = false;
-
-        // All fields: Regex check
-        if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
-            $bValid = false;
-        if($bValid && !$FHANDLER->match('name', MATCH_STRING_NO_SPACE))
-            $bValid = false;
-
-        if($bValid)
-            $this->verifyMapExists($FHANDLER->get('map'));
-
-        // Check if the template already exists
-        // Read map config but don't resolve templates and don't use the cache
-        $MAPCFG = new GlobalMapCfg($FHANDLER->get('map'));
-        $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
-        if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) <= 0)
-            throw new NagVisException(l('The template does not exist.'));
-        $MAPCFG = null;
-
-        // Store response data
-        if($bValid === true) {
-            // Return the data
-            return Array('map' => $FHANDLER->get('map'),
-                         'name' => $FHANDLER->get('name'));
-        } else {
-            return false;
-        }
-    }
-
-    protected function doTmplAdd($a) {
-        $MAPCFG = new GlobalMapCfg($a['map']);
-        $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
-
-        // append a new object definition to the map configuration
-        $MAPCFG->addElement('template', $a['opts'], true);
-
-        // delete map lock
-        if(!$MAPCFG->deleteMapLock())
-            throw new NagVisException(l('mapLockNotDeleted'));
-
-        return true;
-    }
-
-    protected function handleResponseDoTmplAdd() {
-        $bValid = true;
-        // Validate the response
-
-        $FHANDLER = new CoreRequestHandler($_POST);
-
-        // Check for needed params
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
-            $bValid = false;
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('name'))
-            $bValid = false;
-
-        // All fields: Regex check
-        if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
-            $bValid = false;
-        if($bValid && !$FHANDLER->match('name', MATCH_STRING_NO_SPACE))
-            $bValid = false;
-
-        if($bValid)
-            $this->verifyMapExists($FHANDLER->get('map'));
-
-        // Check if the template already exists
-        // Read map config but don't resolve templates and don't use the cache
-        $MAPCFG = new GlobalMapCfg($FHANDLER->get('map'));
-        $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
-        if($bValid && count($MAPCFG->getTemplateNames('/^'.$FHANDLER->get('name').'$/')) > 0)
-            throw new NagVisException(l('A template with this name already exists.'));
-        $MAPCFG = null;
-
-        // FIXME: Recode to FHANDLER
-        $aOpts = $_POST;
-
-        // Remove the parameters which are not options of the object
-        unset($aOpts['submit']);
-        unset($aOpts['map']);
-        unset($aOpts['name']);
-
-        // Transform the array to key => value form
-        $opts = Array('name' => $FHANDLER->get('name'));
-        foreach($aOpts AS $key => $a) {
-            if(substr($key, 0, 3) === 'opt' && isset($a['name']) && isset($a['value'])) {
-                $opts[$a['name']] = $a['value'];
-            }
-        }
-
-        // Store response data
-        if($bValid === true) {
-            // Return the data
-            return Array('map' => $FHANDLER->get('map'),
-                         'opts' => $opts);
-        } else {
-            return false;
-        }
     }
 
     protected function doDeleteObject($a) {

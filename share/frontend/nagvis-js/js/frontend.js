@@ -86,57 +86,14 @@ function logout() {
 }
 
 /**
- * submitFrontendForm()
- *
- * Submits a form in the frontend using ajax without reloading the page
- *
- * @author  Lars Michelsen <lars@vertical-visions.de>
- */
-function submitFrontendForm(sUrl, sFormId, bReloadOnSuccess) {
-    if(typeof bReloadOnSuccess === 'undefined' || bReloadOnSuccess === null) {
-        bReloadOnSuccess = '';
-    }
-
-
-    var oResult = call_ajax(sUrl, {
-        method           : "POST",
-        post_data        : getFormParams(sFormId, true),
-        response_handler : function(oResult) {
-            console.log(oResult);
-            if (oResult && oResult.type) {
-                if (oResult.type === 'ok' && bReloadOnSuccess) {
-                    if(typeof popupWindowRefresh == 'function') {
-                        popupWindowRefresh();
-                    }
-                } else {
-                    // Show message and close the window
-                    frontendMessage(oResult);
-
-                    // Additionally close the popup window when the response is positive
-                    if(typeof popupWindowClose == 'function') {
-                        popupWindowClose();
-                    }
-                }
-            }
-        }
-    });
-
-}
-
-/**
- * submitFrontendForm2()
- *
  * Submits a form in the frontend using ajax without reloading the page.
  * And simply reprints the response in the currently open window
- *
- * @author  Lars Michelsen <lars@vertical-visions.de>
  */
-function submitFrontendForm2(sUrl, sFormId) {
+function submitForm(sUrl, sFormId) {
     var oResult = call_ajax(sUrl, {
         method    : "POST",
         post_data : getFormParams(sFormId, false),
         response_handler : function(oResult) {
-            console.log(oResult);
             if (oResult && oResult.type) {
                 // In case of an error show message and close the window
                 frontendMessage(oResult);

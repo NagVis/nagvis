@@ -806,3 +806,9 @@ function updateUserRoles(bAdd) {
         selected_values.push(selected.options[i].value);
     user_roles.value = selected_values.join(',');
 }
+
+function addOption(form) {
+    var field = form.num_options;
+    field.value = parseInt(field.value) + 1;
+    updateForm(form);
+}

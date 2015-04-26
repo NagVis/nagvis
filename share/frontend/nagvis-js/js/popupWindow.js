@@ -89,15 +89,6 @@ function popupWindowClose() {
         jscolor.picker.owner.hidePicker();
 }
 
-function popupWindowRefresh() {
-    var oWindow = document.getElementById('popupWindow');
-    if (oWindow) {
-        call_ajax(oWindow.url, {
-            response_handler: popupWindowPutContent
-        });
-    }
-}
-
 function popupWindowPutContent(oContent) {
     if(oContent === null || oContent.code === null) {
         return false;

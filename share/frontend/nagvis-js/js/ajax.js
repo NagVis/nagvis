@@ -175,7 +175,14 @@ function call_ajax(url, args)
                 if (AJAX.status == 200) {
                     var response = AJAX.responseText;
                     if (args.decode_json)
-                        response = JSON.parse(response);
+                        try {
+                            response = JSON.parse(response);
+                        } catch(e) {
+                            jsonError("Invalid json response<div class=details>\nTime: "
+                                      + iNow + "<br />\nURL: " + url + "<br />\n"
+                                      + "Response: <code>" + response + '</code></div>');
+                            return '';
+                        }
 
                     if (args.response_handler)
                         args.response_handler(response, args.handler_data);
@@ -325,71 +332,6 @@ function handleJsonResponse(sUrl, responseText) {
         return oResponse;
     }
 }
-
-/**
- * Function for creating a synchronous POST request
- * - Response needs to be JS code or JSON => Parses the response with eval()
- * - Errors need to match following Regex: /^Notice:|^Warning:|^Error:|^Parse error:/
- */
-function postSyncRequest(sUrl, request) {
-    var oResponse = null;
-    var responseText;
-
-    // Encode the url
-    sUrl = sUrl.replace("+", "%2B");
-
-    var oRequest = initXMLHttpClient();
-
-    if(oRequest) {
-        oRequest.open("POST", sUrl+"&_t="+iNow, false);
-        oRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2005 00:00:00 GMT");
-
-        // Set post specific options. request might be a FormData object. In this case
-        // the request is not using form-urlencoded data, instead it is automatically
-        // set to multipart/form-data
-        if (typeof request !== 'object')
-            oRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-        try {
-            oRequest.send(request);
-            frontendMessageRemove('ajaxError');
-        } catch(e) {
-            ajaxError(e);
-        }
-
-        responseText = oRequest.responseText;
-
-        if(oResponse === null && responseText.replace(/\s+/g, '').length !== 0) {
-            // Trim the left of the response
-            responseText = responseText.replace(/^\s+/,"");
-
-            // Error handling for the AJAX methods
-            if(responseText.match(/^Notice:|^Warning:|^Error:|^Parse error:/)) {
-                oResponse = {};
-                oResponse.type = 'CRITICAL';
-                oResponse.message = "PHP error in ajax request handler:\n"+responseText;
-                oResponse.title = "PHP error";
-            } else {
-                // Handle invalid response (No JSON format)
-                try {
-                    oResponse = eval('( '+responseText+')');
-                } catch(e) {
-                    oResponse = {};
-                    oResponse.type = 'CRITICAL';
-                    oResponse.message = "Invalid JSON response:\n"+responseText;
-                    oResponse.title = "Syntax error";
-                }
-
-                responseText = null;
-            }
-        }
-    }
-
-    oRequest = null;
-
-    return oResponse;
-}
-
 
 /**
  * Parses all values from the given form to a string or form data object

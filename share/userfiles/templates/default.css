@@ -580,6 +580,9 @@ td#popupWindowContent table.mytable td.tdfield {
 td#popupWindowContent input[type="radio"] {
     vertical-align: middle;
 }
+td#popupWindowContent table.mytable tr td.tdlabel input {
+    width: 140x;
+}
 td#popupWindowContent table.mytable tr td.tdfield input,
 td#popupWindowContent table.mytable tr td.tdfield select {
     width: 163px;
