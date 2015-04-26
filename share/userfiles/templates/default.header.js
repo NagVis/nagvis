@@ -117,9 +117,10 @@ open_menus = [];
 // Is called to initialize fetching states for the header/sidebar menu
 function headerUpdateStates() {
     for (var i = 0; i < g_map_names.length; i++) {
-        getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getObjectStates'
-                        + '&i[]=map-' + escapeUrlValues(g_map_names[i]) + getViewParams(),
-                        false, headerUpdateState);
+        call_ajax(oGeneralProperties.path_server+'?mod=Overview&act=getObjectStates'
+                  + '&i[]=map-' + escapeUrlValues(g_map_names[i]) + getViewParams(), {
+            response_handler: headerUpdateState
+        });
     }
 }
 

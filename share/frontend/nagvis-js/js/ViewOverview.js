@@ -148,15 +148,18 @@ var ViewOverview = View.extend({
             var mapdiv = document.createElement('div');
             mapdiv.setAttribute('id', g_map_names[i])
             map_container.appendChild(mapdiv);
-            getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getObjectStates'
-                            + '&i[]=map-' + escapeUrlValues(g_map_names[i]) + getViewParams(),
-                            false, this.addMap.bind(this), g_map_names[i]);
+            call_ajax(oGeneralProperties.path_server+'?mod=Overview&act=getObjectStates'
+                      + '&i[]=map-' + escapeUrlValues(g_map_names[i]) + getViewParams(), {
+                response_handler : this.addMap.bind(this),
+                handler_data     : g_map_names[i]
+            });
         }
     },
-    
+
     // Fetches all rotations to be shown on the overview page
     loadRotations: function() {
-        getAsyncRequest(oGeneralProperties.path_server+'?mod=Overview&act=getOverviewRotations',
-                        false, this.addRotations.bind(this));
+        call_ajax(oGeneralProperties.path_server+'?mod=Overview&act=getOverviewRotations', {
+            response_handler: this.addRotations.bind(this)
+        });
     }
 });

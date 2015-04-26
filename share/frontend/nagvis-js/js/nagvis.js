@@ -1105,8 +1105,10 @@ function storeUserOption(key, value) {
     oUserProperties[key] = value;
 
     // And send to server
-    var url = oGeneralProperties.path_server + '?mod=User&act=setOption&opts['+escapeUrlValues(key)+']=' + escapeUrlValues(value);
-    getAsyncRequest(url, false, undefined, undefined);
+    call_ajax(oGeneralProperties.path_server + '?mod=User&act=setOption&'
+              +'opts['+escapeUrlValues(key)+']='+escapeUrlValues(value), {
+        decode_json: false
+    });
 }
 
 /**

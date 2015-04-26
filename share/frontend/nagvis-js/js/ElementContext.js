@@ -125,13 +125,13 @@ var ElementContext = Element.extend({
         }
     },
 
-    handleTemplate: function (templates, element_obj) {
+    handleTemplate: function (templates) {
         var name = templates[0]['name'];
         var code = templates[0]['code'];
 
         g_context_templates[name] = code;
 
-        element_obj.getTemplate(); // assign template to the object
+        this.getTemplate(); // assign template to the object
 
         // Load css file is one is available
         if (isset(templates[0]['css_file'])) {
@@ -146,9 +146,10 @@ var ElementContext = Element.extend({
     },
 
     requestTemplate: function () {
-        getAsyncRequest(oGeneralProperties.path_server+'?mod=General&act=getContextTemplate'
-                       +'&name[]='+escapeUrlValues(this.obj.conf.context_template),
-                        false, this.handleTemplate, this);
+        call_ajax(oGeneralProperties.path_server+'?mod=General&act=getContextTemplate'
+                  +'&name[]='+escapeUrlValues(this.obj.conf.context_template), {
+            response_handler: this.handleTemplate.bind(this)
+        });
         g_context_templates[this.obj.conf.context_template] = true; // mark as already requested
     },
 

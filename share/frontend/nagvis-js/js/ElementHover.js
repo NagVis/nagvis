@@ -131,14 +131,16 @@ var ElementHover = Element.extend({
         }
     },
 
-    handleUrl: function (urls, element_obj) {
+    handleUrl: function (urls) {
         g_hover_urls[urls[0]['url']] = urls[0]['code'];
-        element_obj.getTemplate(); // assign template to the object
+        this.getTemplate(); // assign template to the object
     },
 
     requestUrl: function () {
-        getAsyncRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverUrl'
-                       +'&url[]='+escapeUrlValues(this.hover_url), false, this.handleUrl, this);
+        call_ajax(oGeneralProperties.path_server+'?mod=General&act=getHoverUrl'
+                  +'&url[]='+escapeUrlValues(this.hover_url), {
+            response_handler: this.handleUrl.bind(this)
+        });
         g_hover_urls[this.hover_url] = true; // mark as already requested
     },
 
@@ -152,15 +154,15 @@ var ElementHover = Element.extend({
             return '';
     },
 
-    handleTemplate: function (templates, element_obj) {
+    handleTemplate: function (templates) {
         var name = templates[0]['name'];
         var code = templates[0]['code'];
 
         g_hover_templates[name] = code;
-        g_hover_template_childs[name] = element_obj.getChildCode(code);
+        g_hover_template_childs[name] = this.getChildCode(code);
 
-        element_obj.getTemplate(); // assign template to the object
-    
+        this.getTemplate(); // assign template to the object
+
         // Load css file is one is available
         if (isset(templates[0]['css_file'])) {
             // This is needed for some old browsers which do no load css files
@@ -174,8 +176,10 @@ var ElementHover = Element.extend({
     },
 
     requestTemplate: function () {
-        getAsyncRequest(oGeneralProperties.path_server+'?mod=General&act=getHoverTemplate'
-                       +'&name[]='+escapeUrlValues(this.obj.conf.hover_template), false, this.handleTemplate, this);
+        call_ajax(oGeneralProperties.path_server+'?mod=General&act=getHoverTemplate'
+                  +'&name[]='+escapeUrlValues(this.obj.conf.hover_template), {
+            response_handler: this.handleTemplate.bind(this)
+        });
         g_hover_templates[this.obj.conf.hover_template] = true; // mark as already requested
     },
 
