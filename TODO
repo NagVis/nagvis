@@ -4,7 +4,6 @@ This is a small file for storing quick thoughts about new features and needed ch
 - bei automap mit fehler (connection refused) die option "modify view" wegmachen
 - hover area auf linien entfernen. Aktionen auf ganze linien erlauben
 - linien: line border color wieder implementieren
-- grid nach seiten reload
 - map lock?
 
 - Rework layout of role edit form

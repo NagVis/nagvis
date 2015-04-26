@@ -605,67 +605,67 @@ function useGrid() {
 
 /**
  * Parses a grind to make the alignment of the icons easier
- *
- * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function gridParse() {
     // Only show when user configured to see a grid
-    if(useGrid()) {
-        // Create grid container and append to map
+    if (!useGrid())
+        return;
+
+    // Create grid container and append to map
+    var oGrid = document.getElementById('grid');
+    if (!oGrid) {
         var oGrid = document.createElement('div');
         oGrid.setAttribute('id', 'grid');
         document.getElementById('map').appendChild(oGrid);
-        oGrid = null;
-
-        // Add an options: grid_show, grid_steps, grid_color
-        var grid = new jsGraphics('grid');
-        grid.setColor(oViewProperties.grid_color);
-        grid.setStroke(1);
-
-        var gridStep = addZoomFactor(oViewProperties.grid_steps);
-
-        // Start
-        var gridYStart = 0;
-        var gridXStart = 0;
-
-        // End: Get screen height, width
-        var gridYEnd = pageHeight() - getHeaderHeight();
-        var gridXEnd = pageWidth();
-
-        // Draw vertical lines
-        for(var gridX = gridStep; gridX < gridXEnd; gridX = gridX + gridStep) {
-            grid.drawLine(gridX, gridYStart, gridX, gridYEnd);
-        }
-        // Draw horizontal lines
-        for(var gridY = gridStep; gridY < gridYEnd; gridY = gridY + gridStep) {
-            grid.drawLine(gridXStart, gridY, gridXEnd, gridY);
-        }
-
-        grid.paint();
-
-        gridXEnd = null
-        gridYEnd = null;
-        gridXStart = null;
-        gridYStart = null;
-        gridStep = null;
-        grid = null;
-
-        addEvent(window, "resize", gridRedraw);
     }
+    else {
+        while (oGrid.firstChild) {
+            oGrid.removeChild(oGrid.firstChild);
+        }
+    }
+
+    // Add options: grid_show, grid_steps, grid_color
+    var line = document.createElement('div');
+    line.style.backgroundColor = oViewProperties.grid_color;
+
+    var gridStep = addZoomFactor(oViewProperties.grid_steps);
+    var gridYStart = 0;
+    var gridXStart = 0;
+    var gridYEnd = pageHeight() - getHeaderHeight();
+    var gridXEnd = pageWidth();
+
+    var vline = null;
+    for(var gridX = gridStep; gridX < gridXEnd; gridX = gridX + gridStep) {
+        vline = line.cloneNode();
+        vline.className = "vertical";
+        vline.style.left   = gridX + 'px';
+        vline.style.top    = gridYStart + 'px';
+        vline.style.bottom = 0;
+        oGrid.appendChild(vline);
+    }
+
+    var hline;
+    for(var gridY = gridStep; gridY < gridYEnd; gridY = gridY + gridStep) {
+        hline = line.cloneNode();
+        hline.className = "horizontal";
+        hline.style.top    = gridY +'px';
+        hline.style.left   = gridXStart + 'px';
+        hline.style.right  = 0;
+        oGrid.appendChild(hline);
+    }
+
+    addEvent(window, "resize", gridRedraw);
+    addEvent(window, "scroll", gridRedraw);
 }
 
 function gridRemove() {
-    var oMap = document.getElementById('map');
-    if(oMap) {
-        var oGrid = document.getElementById('grid')
-        if(oGrid) {
-            oMap.removeChild(oGrid);
-            oGrid = null;
-        }
-        oMap = null;
-    }
+    var oGrid = document.getElementById('grid');
+    console.log('remove');
+    if (oGrid)
+        oGrid.parentNode.removeChild(oGrid);
 
     removeEvent(window, "resize", gridRedraw);
+    removeEvent(window, "scroll", gridRedraw);
 }
 
 function gridRedraw() {
@@ -676,8 +676,6 @@ function gridRedraw() {
 /**
  * Toggle the grid state in the current view and sends
  * current setting to server component for persistance
- *
- * @author  Lars Michelsen <lars@vertical-visions.de>
  */
 function gridToggle() {
     // Toggle the grid state

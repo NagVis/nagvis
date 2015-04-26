@@ -1056,6 +1056,22 @@ body.add, body.add .leaflet-container {
     cursor: crosshair;
 }
 
+/* edit grid */
+div#grid div {
+    position: absolute;
+    z-index: 9;
+}
+
+div#grid div.vertical {
+    position: absolute;
+    width: 1px;
+}
+
+div#grid div.horizontal {
+    position: absolute;
+    height: 1px;
+}
+
 /* worldmap specific */
 
 /* required styles */
