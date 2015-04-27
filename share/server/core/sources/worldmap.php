@@ -112,6 +112,9 @@ function add_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
     worldmap_init_db();
     $obj = $map_config[$obj_id];
 
+    if ($obj['type'] == 'global')
+        return false; // adding global section (during map creation)
+
     $lat  = $obj['x'];
     $lng  = $obj['y'];
     $lat2 = 'NULL';

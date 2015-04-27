@@ -699,7 +699,7 @@ function getViewParams(update, userParams) {
         }
     }
 
-    if (usesSource('worldmap'))
+    if (g_map && usesSource('worldmap'))
         params['bbox'] = g_map.getBounds().toBBoxString();
 
     var sParams = '';
