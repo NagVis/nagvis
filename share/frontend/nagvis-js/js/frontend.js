@@ -113,7 +113,7 @@ function updateForm(form) {
 
 function showFrontendDialog(sUrl, sTitle, sWidth) {
     if (typeof sWidth === 'undefined' || sWidth === null)
-        sWidth = 350;
+        sWidth = 360;
 
     call_ajax(sUrl, {
         response_handler: function(response, data) {
