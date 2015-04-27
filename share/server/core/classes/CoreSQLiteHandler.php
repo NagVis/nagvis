@@ -72,7 +72,7 @@ class CoreSQLiteHandler {
 
     public function count($query) {
         $RET = $this->query($query)->fetch(PDO::FETCH_ASSOC);
-      return intval($RET['num']) > 0;
+        return intval($RET['num']);
     }
 
     public function fetchAssoc($RES) {

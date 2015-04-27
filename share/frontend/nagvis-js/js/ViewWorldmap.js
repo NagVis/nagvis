@@ -39,16 +39,16 @@ var ViewWorldmap = ViewMap.extend({
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(g_map);
-    
+
         g_map_objects = L.layerGroup().addTo(g_map);
-    
+
         // The worldmap is showing it's objects depending on the objects
         // which are visible on the screen. This is realized by issueing
         // an ajax call with the current viewport to the core code, which
         // then returns a list of objects to add to the map depending on
         // this viewport.
-        g_map.on('moveend', this.handleMoveEnd);
-    
+        g_map.on('moveend', this.handleMoveEnd.bind(this));
+
         // hide eventual open header dropdown menus when clicking on the map
         g_map.on('mousedown', checkHideMenu);
         g_map.on('mousedown', context_handle_global_mousedown);
@@ -57,7 +57,7 @@ var ViewWorldmap = ViewMap.extend({
     // Is used to update the objects to show on the worldmap
     handleMoveEnd: function(e) {
         this.render(); // re-render the whole map
-    
+
         // Update the related view properties
         var ll = g_map.getCenter();
         setViewParam('worldmap_center', ll.lat+','+ll.long);

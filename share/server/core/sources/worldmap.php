@@ -107,6 +107,25 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
     return $objects;
 }
 
+function has_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
+    global $DB;
+    worldmap_init_db();
+    $q = 'SELECT COUNT(*) AS num FROM objects WHERE object_id='.$DB->escape($obj_id);
+    return $DB->count($q) > 0;
+}
+
+function del_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
+    global $DB;
+    worldmap_init_db();
+
+    $q = 'DELETE FROM objects WHERE object_id='.$DB->escape($obj_id);
+    if ($DB->exec($q))
+        return true;
+    else
+        throw new WorldmapError(l('Failed to delete object: [E]: [Q]', array(
+            'E' => json_encode($DB->error()), 'Q' => $q)));
+}
+
 function add_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
     global $DB;
     worldmap_init_db();

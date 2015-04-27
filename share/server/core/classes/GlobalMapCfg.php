@@ -1188,6 +1188,9 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function objExists($id) {
+        if ($this->handleSources('has_obj', $id) === true)
+            return true;
+
         return isset($this->mapConfig[$id]);
     }
 
@@ -1277,7 +1280,10 @@ class GlobalMapCfg {
      ***************************************************************************/
 
     // Gives the sources the chance to handle the task in question. If a source
-    // implements the action and handles the task, the function returns "true".
+    // implements the action, it may return a value to NagVis.
+    // What happes with the returned data depends on the $act. For example
+    // add_obj, when the function handles the task and wants to prevent NagVis from
+    // performing the default action, the function returns: true
     private function handleSources($act, $id) {
         $sources = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : array();
         foreach($sources AS $source) {
@@ -1285,8 +1291,7 @@ class GlobalMapCfg {
             if (!function_exists($func))
                 continue; // silently ignore sources not implementing this
             try {
-                if ($func($this, $this->name, $this->mapConfig, $id) === true)
-                    return true; // don't save in config file!
+                return $func($this, $this->name, $this->mapConfig, $id);
             } catch(Exception $e) {
                 if(!$this->ignoreSourceErrors) {
                     throw $e;
