@@ -12,10 +12,6 @@ Worldmap:
   - BUG: Verschieben von Objekten funktioniert nicht
   - Andere Provider auswählbar machen
   - Eventuell Objekte auf dem geklickten Punkt zentrieren?
-  - action: persist this view
-  - copy to new worldmap
-  - zoombar darf man nicht aktivieren
-  - normaler zoom parameter sollte auch weg
 
 Relative Koordinaten:
   - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?

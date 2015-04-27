@@ -37,6 +37,8 @@ $configVars = array(
 
 // Global config vars not to show for worldmaps
 $hiddenConfigVars = array(
+    'zoom',
+    'zoombar',
 );
 
 // The worldmap database object
