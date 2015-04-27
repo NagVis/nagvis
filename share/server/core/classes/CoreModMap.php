@@ -45,6 +45,7 @@ class CoreModMap extends CoreModule {
             'modifyObject'      => 'edit',
             'deleteObject'      => 'edit',
             'toStaticMap'       => 'edit',
+            'viewToNewMap'      => 'edit',
             'manageTmpl'        => 'edit',
         );
 
@@ -65,6 +66,10 @@ class CoreModMap extends CoreModule {
                 $this->name = $aVals['show'];
             break;
             case 'toStaticMap':
+                $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME_EMPTY), array(), true);
+                $this->name = $aVals['show'];
+            break;
+            case 'viewToNewMap':
                 $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME_EMPTY), array(), true);
                 $this->name = $aVals['show'];
             break;
@@ -136,6 +141,10 @@ class CoreModMap extends CoreModule {
                 break;
                 case 'toStaticMap':
                     $VIEW = new ViewToStaticMap();
+                    $sReturn = json_encode(Array('code' => $VIEW->parse($this->name)));
+                break;
+                case 'viewToNewMap':
+                    $VIEW = new ViewToNewMap();
                     $sReturn = json_encode(Array('code' => $VIEW->parse($this->name)));
                 break;
             }

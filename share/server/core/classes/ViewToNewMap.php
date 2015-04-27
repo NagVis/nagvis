@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * ViewToStaticMap.php - Class for rendering the "to static map" dialog
+ * ViewToNewMap.php - Class for rendering the "to new map" dialog
  *
  * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
  *
@@ -22,7 +22,7 @@
  *
  *****************************************************************************/
 
-class ViewToStaticMap {
+class ViewToNewMap {
     private $error = null;
 
     public function parse($orig_name) {
@@ -49,11 +49,7 @@ class ViewToStaticMap {
                 // Create a new map config
                 $NEW = new GlobalMapCfg($name);
                 $NEW->createMapConfig();
-                foreach($MAPCFG->getMapObjects() AS $object_id => $cfg) {
-                    // Remove "sources" from the global section. Cause this makes the maps dynamic
-                    if($cfg['type'] == 'global') {
-                        unset($cfg['sources']);
-                    }
+                foreach ($MAPCFG->getMapObjects() AS $object_id => $cfg) {
                     $NEW->addElement($cfg['type'], $cfg, $perm = true, $object_id);
                 }
 
@@ -73,7 +69,7 @@ class ViewToStaticMap {
         echo $this->error;
 
         echo '<div class="simple_form">'.N;
-        js_form_start('to_static_map');
+        js_form_start('to_new_map');
         input('name');
         submit(l('Save'));
         focus('name');

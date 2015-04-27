@@ -92,6 +92,16 @@
                 </ul>
             </li>
             <li class="spacer"><hr /></li>
+            {if $isWorldmap}
+            <li onmouseover="ddMenu('map-viewport', true)" class="dropdown subdropdown">
+                <a class="submenu-link" id="map-viewport-ddheader" href="#">{$langMapViewport}</a>
+                <ul id="map-viewport-ddcontent">
+                	<li><a class="topline" href="javascript:void(0)" onclick="g_view.saveView();ddMenuHide();">{$langSaveView}</a></li>
+                	<li><a class="underline" href="javascript:void(0)" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=viewToNewMap&amp;show='+escapeUrlValues(oPageProperties.map_name)+'&amp;view_params='+escapeUrlValues(getViewParams(null, true)), '{$langSaveViewAsNewMap}');ddMenuHide();">{$langSaveViewAsNewMap}</a></li>
+                </ul>
+            </li>
+            <li class="spacer"><hr /></li>
+            {/if}
             <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=manageTmpl&amp;show={$currentMap}', '{$langMapManageTmpl}');ddMenuHide();">{$langMapManageTmpl}</a></li>
             {/if}
             <li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=addModify&amp;show={$currentMap}&amp;object_id=0', '{$langMapOptions}');ddMenuHide();" class="underline">{$langMapOptions}</a></li>

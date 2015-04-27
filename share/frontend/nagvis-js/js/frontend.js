@@ -721,14 +721,15 @@ function getViewParams(update, userParams) {
  * The PHP backend computes all the parameters
  */
 function getViewParam(param) {
-    if(oViewProperties && isset(oViewProperties['params'])
-       && isset(oViewProperties['params'][param]))
+    if (oViewProperties && isset(oViewProperties['params'])
+        && isset(oViewProperties['params'][param]))
         return oViewProperties['params'][param];
     return null;
 }
 
 function setViewParam(param, val) {
     oViewProperties['params'][param] = val;
+    oViewProperties['user_params'][param] = val;
 }
 
 // Returns true if the current view is

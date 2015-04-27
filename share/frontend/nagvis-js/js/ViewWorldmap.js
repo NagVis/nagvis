@@ -60,8 +60,14 @@ var ViewWorldmap = ViewMap.extend({
 
         // Update the related view properties
         var ll = g_map.getCenter();
-        setViewParam('worldmap_center', ll.lat+','+ll.long);
+        setViewParam('worldmap_center', ll.lat+','+ll.lng);
         setViewParam('worldmap_zoom', g_map.getZoom());
-    }
+    },
 
+    saveView: function() {
+        call_ajax(oGeneralProperties.path_server+'?mod=Map&act=modifyObject&map='
+                  + this.id + '&type=global&id=0'
+                  + '&worldmap_center='+getViewParam('worldmap_center')
+                  + '&worldmap_zoom='+getViewParam('worldmap_zoom'));
+    }
 });

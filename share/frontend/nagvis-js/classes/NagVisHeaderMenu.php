@@ -281,6 +281,7 @@ class NagVisHeaderMenu {
             $this->aMacros['canAddObjects']  = !in_array('automap', $this->OBJ->getValue(0, 'sources')) && !in_array('geomap', $this->OBJ->getValue(0, 'sources'));
             $this->aMacros['canEditObjects'] = !in_array('automap', $this->OBJ->getValue(0, 'sources'));
             $this->aMacros['canMoveObjects'] = !in_array('automap', $this->OBJ->getValue(0, 'sources')) && !in_array('geomap', $this->OBJ->getValue(0, 'sources'));
+            $this->aMacros['isWorldmap']     = in_array('worldmap', $this->OBJ->getValue(0, 'sources'));
         } else {
             $this->aMacros['currentMap']        = '';
             $this->aMacros['currentMapAlias']   = '';
@@ -289,6 +290,7 @@ class NagVisHeaderMenu {
             $this->aMacros['canAddObjects']     = false;
             $this->aMacros['canEditObjects']    = false;
             $this->aMacros['canMoveObjects']    = false;
+            $this->aMacros['isWorldmap']        = true;
         }
 
         // Add permitted rotations
@@ -410,6 +412,9 @@ class NagVisHeaderMenu {
             'langToggleGrid' => l('Show/Hide Grid'),
             'langToStaticMap' => l('Export to static map'),
             'langModifyParams' => l('Modify view'),
+            'langMapViewport'      => l('Viewport'),
+            'langSaveView'         => l('Save View'),
+            'langSaveViewAsNewMap' => l('Save as new Map'),
             // Supported by backend and not using trusted auth
             'supportedChangePassword' => $AUTH->checkFeature('changePassword') && !$AUTH->authedTrusted(),
             'permittedUserMgmt' => $AUTHORISATION->isPermitted('UserMgmt', 'manage'),
