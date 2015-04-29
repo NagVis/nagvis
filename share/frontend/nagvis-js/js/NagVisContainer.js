@@ -40,8 +40,11 @@ var NagVisContainer = NagVisStatelessObject.extend({
                 response_handler: function(html, span) {
                     span.innerHTML = html;
                 },
-                error_handler: function(status_code, span) {
-                    span.innerHTML = 'Error: '+status_code;
+                error_handler: function(status_code, response, span) {
+                    if (status_code === 200)
+                        span.innerHTML = 'Error: '+response;
+                    else
+                        span.innerHTML = 'Error: '+status_code;
                 },
                 handler_data : span,
                 decode_json  : false,

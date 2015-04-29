@@ -32,7 +32,9 @@ function call_ajax(url, args)
     args = merge_args({
         add_ajax_id      : true,
         response_handler : null,
-        error_handler    : null,
+        error_handler    : function(status_code, response, handler_data) {
+            frontendMessage(response, 0, 'serverError');
+        },
         handler_data     : null,
         method           : "GET",
         post_data        : null,
@@ -67,7 +69,7 @@ function call_ajax(url, args)
             if (AJAX && AJAX.readyState == 4) {
                 if (AJAX.status == 200) {
                     var response = AJAX.responseText;
-                    if (args.decode_json)
+                    if (args.decode_json) {
                         try {
                             response = JSON.parse(response);
                         } catch(e) {
@@ -76,6 +78,22 @@ function call_ajax(url, args)
                                       + "Response: <code>" + response + '</code></div>');
                             return '';
                         }
+
+                        // The server might return a json object which is representing
+                        // an error which happened on the server.
+                        // We adapt the old behaviour of showing a frontend message for
+                        // all errors here by using the default error handler. Callers
+                        // which register their own error handlers need to deal with
+                        // this kind of error data on their own.
+                        if (isset(response.type) && isset(response.message)) {
+                            args.error_handler(AJAX.status, response, args.handler_data);
+                            return '';
+                        }
+                        // in case this is no error remove all frontend messages of type
+                        // serverError which might have been shown by the default
+                        // args.error_handler.
+                        frontendMessageRemove('serverError');
+                    }
 
                     if (args.response_handler)
                         args.response_handler(response, args.handler_data);
@@ -88,8 +106,7 @@ function call_ajax(url, args)
                     document.location.reload();
                 }
                 else {
-                    if (args.error_handler)
-                        args.error_handler(AJAX.status, args.handler_data);
+                    args.error_handler(AJAX.status, null, args.handler_data);
                 }
             }
         }
