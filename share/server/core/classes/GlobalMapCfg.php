@@ -1188,9 +1188,6 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function objExists($id) {
-        if ($this->handleSources('has_obj', $id) === true)
-            return true;
-
         return isset($this->mapConfig[$id]);
     }
 

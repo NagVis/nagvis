@@ -184,6 +184,9 @@ class CoreModMap extends CoreModule {
             $MAPCFG->readMapConfig();
         } catch(MapCfgInvalid $e) {}
 
+        // Give the sources the chance to load the object
+        $MAPCFG->handleSources('load_obj', $a['id']);
+
         if(!$MAPCFG->objExists($a['id']))
             throw new NagVisException(l('The object does not exist.'));
 
@@ -233,6 +236,9 @@ class CoreModMap extends CoreModule {
         try {
             $MAPCFG->readMapConfig();
         } catch(MapCfgInvalid $e) {}
+
+        // Give the sources the chance to load the object
+        $MAPCFG->handleSources('load_obj', $a['id']);
 
         if(!$MAPCFG->objExists($a['id']))
             throw new NagVisException(l('The object does not exist.'));

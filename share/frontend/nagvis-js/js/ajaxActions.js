@@ -3,16 +3,6 @@ function getMidOfAnchor(oObj) {
              oObj.y + parseInt(oObj.style.height) / 2 ];
 }
 
-function handleDragResult(objId, anchorId) {
-    var urlParts = '';
-    var jsObj = getMapObjByDomObjId(objId);
-
-    urlParts = '&x=' + escapeUrlValues(jsObj.conf.x) + '&y=' + escapeUrlValues(jsObj.conf.y);
-
-    jsObj = null;
-    return urlParts;
-}
-
 function saveObjectAfterResize(oObj) {
     var objId = oObj.id.split('-')[0];
     var objX = rmZoomFactor(pxToInt(oObj.style.left), true);
@@ -36,33 +26,6 @@ function saveObjectAfterResize(oObj) {
     var urlPart = '&x='+objX+'&y='+objY+'&w='+objW+'&h='+objH;
     call_ajax(oGeneralProperties.path_server + '?mod=Map&act=modifyObject'
               +'&map=' + escapeUrlValues(oPageProperties.map_name)
-              + '&id=' + escapeUrlValues(objId) + urlPart);
-}
-
-/**
- * Whenever an anchor action is performed this method should be called
- * once to send the changes to the server and make the changes permanent.
- */
-function saveObjectAfterAnchorAction(oAnchor) {
-    // Split id to get object information
-    var arr        = oAnchor.id.split('-');
-    var objId      = arr[0];
-    var anchorType = arr[1];
-    var anchorId   = arr[2];
-    arr = null;
-    var urlPart    = '';
-    var action     = 'modifyObject';
-
-    if(anchorType === 'drag' || anchorType === 'icondiv' || anchorType === 'label') {
-        urlPart = handleDragResult(objId, anchorId);
-    } else if(anchorType === 'delete') {
-        action  = 'deleteObject';
-    } else {
-        alert('Unhandled action object: ' + anchorType);
-    }
-
-    call_ajax(oGeneralProperties.path_server + '?mod=Map&act=' + action + '&map='
-              + escapeUrlValues(oPageProperties.map_name)
               + '&id=' + escapeUrlValues(objId) + urlPart);
 }
 

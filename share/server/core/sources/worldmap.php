@@ -61,21 +61,21 @@ function worldmap_init_schema() {
         $DB->createVersionTable();
 
         // Install demo data
-        worldmap_add_object('273924', 53.5749514424993, 10.0405490398407, array(
+        worldmap_db_update_object('273924', 53.5749514424993, 10.0405490398407, array(
             "x"         => "53.57495144249931",
             "y"         => "10.040549039840698",
             "type"      => "map",
             "map_name"  => "demo-ham-racks",
             "object_id" => "273924"
         ));
-        worldmap_add_object('0df2d3', 48.1125317248817, 11.6794109344482, array(
+        worldmap_db_update_object('0df2d3', 48.1125317248817, 11.6794109344482, array(
             "x"              => "48.11253172488166",
             "y"              => "11.67941093444824",
             "type"           => "hostgroup",
             "hostgroup_name" => "muc",
             "object_id"      => "0df2d3"
         ));
-        worldmap_add_object('ebbf59', 50.9391761712781, 6.95863723754883, array(
+        worldmap_db_update_object('ebbf59', 50.9391761712781, 6.95863723754883, array(
             "x"              => "50.93917617127812",
             "y"              => "6.958637237548828",
             "type"           => "hostgroup",
@@ -133,16 +133,30 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
 }
 
 // Worldmap internal helper function to add an object to the worldmap
-function worldmap_add_object($obj_id, $lat, $lng, $obj, $lat2 = 'NULL', $lng2 = 'NULL') {
+function worldmap_db_update_object($obj_id, $lat, $lng, $obj,
+                                   $lat2 = 'NULL', $lng2 = 'NULL', $insert = true) {
     global $DB;
-    $q = 'INSERT INTO objects (object_id, lat, lng, lat2, lng2, object)'
-        .' VALUES'
-        .'    ('.$DB->escape($obj_id).','
-        .'     '.$DB->escape($lat).','
-        .'     '.$DB->escape($lng).','
-        .'     '.$lat2.','
-        .'     '.$lng2.','
-        .'     '.$DB->escape(json_encode($obj)).')';
+    worldmap_init_db();
+
+    if ($insert) {
+        $q = 'INSERT INTO objects (object_id, lat, lng, lat2, lng2, object)'
+            .' VALUES'
+            .'    ('.$DB->escape($obj_id).','
+            .'     '.$DB->escape($lat).','
+            .'     '.$DB->escape($lng).','
+            .'     '.$lat2.','
+            .'     '.$lng2.','
+            .'     '.$DB->escape(json_encode($obj)).')';
+    }
+    else {
+        $q = 'UPDATE objects SET '
+            .' lat='.$DB->escape($lat).','
+            .' lng='.$DB->escape($lng).','
+            .' lat2='.$lat2.','
+            .' lng2='.$lng2.','
+            .' object='.$DB->escape(json_encode($obj)).' '
+            .'WHERE object_id='.$DB->escape($obj_id);
+    }
 
     if ($DB->exec($q))
         return true;
@@ -151,45 +165,7 @@ function worldmap_add_object($obj_id, $lat, $lng, $obj, $lat2 = 'NULL', $lng2 = 
             'E' => json_encode($DB->error()), 'Q' => $q)));
 }
 
-//
-// The following functions are used directly by NagVis
-//
-
-// Returns the minimum bounds needed to be able to display all objects
-function get_bounds_worldmap($MAPCFG, $map_name, &$map_config) {
-    global $DB;
-    worldmap_init_db();
-
-    $q = 'SELECT min(lat) as min_lat, min(lng) as min_lng, '
-        .'max(lat) as max_lat, max(lng) as max_lng '
-        .'FROM objects';
-    $b = $DB->fetchAssoc($DB->query($q));
-    return array(array($b['min_lat'], $b['min_lng']),
-                 array($b['max_lat'], $b['max_lng']));
-}
-
-function has_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
-    global $DB;
-    worldmap_init_db();
-    $q = 'SELECT COUNT(*) AS num FROM objects WHERE object_id='.$DB->escape($obj_id);
-    return $DB->count($q) > 0;
-}
-
-function del_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
-    global $DB;
-    worldmap_init_db();
-
-    $q = 'DELETE FROM objects WHERE object_id='.$DB->escape($obj_id);
-    if ($DB->exec($q))
-        return true;
-    else
-        throw new WorldmapError(l('Failed to delete object: [E]: [Q]', array(
-            'E' => json_encode($DB->error()), 'Q' => $q)));
-}
-
-function add_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
-    global $DB;
-    worldmap_init_db();
+function worldmap_update_object($MAPCFG, $map_name, &$map_config, $obj_id, $insert = true) {
     $obj = $map_config[$obj_id];
 
     if ($obj['type'] == 'global')
@@ -210,7 +186,57 @@ function add_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
         $lng2 = $y[count($y)-1];
     }
 
-    return worldmap_add_object($obj_id, $lat, $lng, $obj, $lat2, $lng2);
+    return worldmap_db_update_object($obj_id, $lat, $lng, $obj, $lat2, $lng2, $insert);
+}
+
+//
+// The following functions are used directly by NagVis
+//
+
+// Returns the minimum bounds needed to be able to display all objects
+function get_bounds_worldmap($MAPCFG, $map_name, &$map_config) {
+    global $DB;
+    worldmap_init_db();
+
+    $q = 'SELECT min(lat) as min_lat, min(lng) as min_lng, '
+        .'max(lat) as max_lat, max(lng) as max_lng '
+        .'FROM objects';
+    $b = $DB->fetchAssoc($DB->query($q));
+    return array(array($b['min_lat'], $b['min_lng']),
+                 array($b['max_lat'], $b['max_lng']));
+}
+
+function load_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
+    global $DB;
+    worldmap_init_db();
+
+    if (isset($map_config[$obj_id]))
+        return true; // already loaded
+
+    $q = 'SELECT object FROM objects WHERE object_id='.$DB->escape($obj_id);
+    $b = $DB->fetchAssoc($DB->query($q));
+    if ($b)
+        $map_config[$obj_id] = json_decode($b['object'], true);
+}
+
+function del_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
+    global $DB;
+    worldmap_init_db();
+
+    $q = 'DELETE FROM objects WHERE object_id='.$DB->escape($obj_id);
+    if ($DB->exec($q))
+        return true;
+    else
+        throw new WorldmapError(l('Failed to delete object: [E]: [Q]', array(
+            'E' => json_encode($DB->error()), 'Q' => $q)));
+}
+
+function update_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
+    return worldmap_update_object($MAPCFG, $map_name, $map_config, $obj_id, false);
+}
+
+function add_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
+    return worldmap_update_object($MAPCFG, $map_name, $map_config, $obj_id);
 }
 
 function process_worldmap($MAPCFG, $map_name, &$map_config) {

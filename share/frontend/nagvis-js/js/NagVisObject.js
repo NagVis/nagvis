@@ -754,7 +754,21 @@ var NagVisObject = Base.extend({
             else
                 obj.makeAbsoluteCoords(anchorId);
 
-        saveObjectAfterAnchorAction(trigger_obj);
+        var x = obj.conf.x,
+            y = obj.conf.y;
+
+        if (usesSource('worldmap')) {
+            var parts = g_view.convertXYToLatLng(x, y);
+            x = parts[0];
+            y = parts[1];
+        }
+
+        // Now send the new attributes to the server for persistance
+        call_ajax(oGeneralProperties.path_server + '?mod=Map&act=modifyObject&map='
+                  + escapeUrlValues(oPageProperties.map_name)
+                  + '&id=' + escapeUrlValues(obj.conf.object_id)
+                  + '&x=' + escapeUrlValues(x)
+                  + '&y=' + escapeUrlValues(y));
     },
 
     highlight: function(show) {}

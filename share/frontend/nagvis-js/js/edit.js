@@ -145,10 +145,6 @@ function dragStart(event) {
         posy = event.clientY;
     }
 
-    /*if(event.stopPropagation)
-        event.stopPropagation();
-    event.cancelBubble = true;*/
-
     draggingObject = target;
     draggingObject.x = draggingObject.offsetLeft;
     draggingObject.y = draggingObject.offsetTop;
@@ -169,11 +165,7 @@ function dragStart(event) {
     sLabelName = null;
 
     // Disable the default events for all the different browsers
-    if(event.preventDefault)
-        event.preventDefault();
-    else
-        event.returnValue = false;
-    return true;
+    return preventDefaultEvents(event);
 }
 
 /**
@@ -508,12 +500,9 @@ function addClick(e) {
 
     if (usesSource('worldmap')) {
         // convert the X/Y coords to lat/long
-        var latlng;
-        for (var i = 0; i < addX.length; i++) {
-            latlng = g_map.containerPointToLatLng(L.point(addX[i], addY[i]));
-            addX[i] = latlng.lat;
-            addY[i] = latlng.lng;
-        }
+        var parts = g_view.convertXYToLatLng(addX, addY);
+        addX = parts[0];
+        addY = parts[1];
     }
 
     var sUrl = '';
@@ -660,7 +649,6 @@ function gridParse() {
 
 function gridRemove() {
     var oGrid = document.getElementById('grid');
-    console.log('remove');
     if (oGrid)
         oGrid.parentNode.removeChild(oGrid);
 

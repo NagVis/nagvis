@@ -81,5 +81,23 @@ var ViewWorldmap = ViewMap.extend({
 
     handleScaleToAll: function(data) {
         g_map.fitBounds(data);
+    },
+
+    // converts an a single or an array of XY coordinates to latlng coordinates
+    // based on the current visible viewport
+    convertXYToLatLng: function(x, y) {
+        if (typeof x !== 'object') {
+            x = [x];
+            y = [y];
+        }
+
+        var latlng, lat = [], lng = [];
+        for (var i = 0, l = x.length; i < l; i++) {
+            latlng = g_map.containerPointToLatLng(L.point(x[i], y[i]));
+            lat[i] = latlng.lat;
+            lng[i] = latlng.lng;
+        }
+
+        return [lat, lng];
     }
 });

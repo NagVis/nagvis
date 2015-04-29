@@ -540,6 +540,12 @@ class ViewMapAddModify {
 
         $this->object_id = req('object_id');
         if ($this->object_id !== null) {
+            // Give the sources the chance to load the object
+            $this->MAPCFG->handleSources('load_obj', $this->object_id);
+
+            if (!$this->MAPCFG->objExists($this->object_id))
+                throw new NagVisException(l('The object does not exist.'));
+
             // 'object_id' is only set when modifying existing objects
             $this->object_type = $this->MAPCFG->getValue($this->object_id, 'type');
         } else {
@@ -547,8 +553,6 @@ class ViewMapAddModify {
             $this->object_type = req('type');
             $this->object_id   = null;
         }
-
-        // FIXME: Check whether or not the object exists
 
         $this->filterMapAttrs();
 
