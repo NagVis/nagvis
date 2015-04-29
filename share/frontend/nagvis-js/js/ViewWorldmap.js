@@ -69,5 +69,17 @@ var ViewWorldmap = ViewMap.extend({
                   + this.id + '&type=global&id=0'
                   + '&worldmap_center='+getViewParam('worldmap_center')
                   + '&worldmap_zoom='+getViewParam('worldmap_zoom'));
+    },
+
+    // Scale the map to a viewport showing all objects at once
+    scaleToAll: function() {
+        call_ajax(oGeneralProperties.path_server+'?mod=Map&act=getWorldmapBounds'
+                  + '&show=' + this.id, {
+            response_handler: this.handleScaleToAll.bind(this),
+        });
+    },
+
+    handleScaleToAll: function(data) {
+        g_map.fitBounds(data);
     }
 });

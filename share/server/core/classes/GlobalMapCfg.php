@@ -1284,14 +1284,17 @@ class GlobalMapCfg {
     // What happes with the returned data depends on the $act. For example
     // add_obj, when the function handles the task and wants to prevent NagVis from
     // performing the default action, the function returns: true
-    private function handleSources($act, $id) {
+    public function handleSources($act, $id = null) {
         $sources = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : array();
         foreach($sources AS $source) {
             $func = $act.'_'.$source;
             if (!function_exists($func))
                 continue; // silently ignore sources not implementing this
             try {
-                return $func($this, $this->name, $this->mapConfig, $id);
+                if ($id !== null)
+                    return $func($this, $this->name, $this->mapConfig, $id);
+                else
+                    return $func($this, $this->name, $this->mapConfig);
             } catch(Exception $e) {
                 if(!$this->ignoreSourceErrors) {
                     throw $e;

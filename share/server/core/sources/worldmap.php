@@ -83,6 +83,19 @@ function worldmap_init_db() {
     worldmap_init_schema();
 }
 
+// Returns the minimum bounds needed to be able to display all objects
+function get_bounds_worldmap($MAPCFG, $map_name, &$map_config) {
+    global $DB;
+    worldmap_init_db();
+
+    $q = 'SELECT min(lat) as min_lat, min(lng) as min_lng, '
+        .'max(lat) as max_lat, max(lng) as max_lng '
+        .'FROM objects';
+    $b = $DB->fetchAssoc($DB->query($q));
+    return array(array($b['min_lat'], $b['min_lng']),
+                 array($b['max_lat'], $b['max_lng']));
+}
+
 function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
     global $DB;
     worldmap_init_db();

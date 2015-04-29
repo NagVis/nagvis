@@ -96,7 +96,9 @@
             <li onmouseover="ddMenu('map-viewport', true)" class="dropdown subdropdown">
                 <a class="submenu-link" id="map-viewport-ddheader" href="#">{$langMapViewport}</a>
                 <ul id="map-viewport-ddcontent">
-                	<li><a class="topline" href="javascript:void(0)" onclick="g_view.saveView();ddMenuHide();">{$langSaveView}</a></li>
+                	<li><a class="topline" href="javascript:void(0)" onclick="g_view.scaleToAll();ddMenuHide();">{$langScaleToAll}</a></li>
+                        <li class="spacer"><hr /></li>
+                	<li><a href="javascript:void(0)" onclick="g_view.saveView();ddMenuHide();">{$langSaveView}</a></li>
                 	<li><a class="underline" href="javascript:void(0)" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Map&amp;act=viewToNewMap&amp;show='+escapeUrlValues(oPageProperties.map_name)+'&amp;view_params='+escapeUrlValues(getViewParams(null, true)), '{$langSaveViewAsNewMap}');ddMenuHide();">{$langSaveViewAsNewMap}</a></li>
                 </ul>
             </li>

@@ -45,8 +45,11 @@ class CoreModMap extends CoreModule {
             'modifyObject'      => 'edit',
             'deleteObject'      => 'edit',
             'toStaticMap'       => 'edit',
-            'viewToNewMap'      => 'edit',
             'manageTmpl'        => 'edit',
+
+            // Worldmap related
+            'getWorldmapBounds' => 'view',
+            'viewToNewMap'      => 'edit',
         );
 
         // Register valid objects
@@ -62,13 +65,11 @@ class CoreModMap extends CoreModule {
             case 'manageTmpl':
             case 'addModify':
             case 'doExportMap':
+            case 'getWorldmapBounds':
                 $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME_EMPTY));
                 $this->name = $aVals['show'];
             break;
             case 'toStaticMap':
-                $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME_EMPTY), array(), true);
-                $this->name = $aVals['show'];
-            break;
             case 'viewToNewMap':
                 $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME_EMPTY), array(), true);
                 $this->name = $aVals['show'];
@@ -147,10 +148,19 @@ class CoreModMap extends CoreModule {
                     $VIEW = new ViewToNewMap();
                     $sReturn = json_encode(Array('code' => $VIEW->parse($this->name)));
                 break;
+                case 'getWorldmapBounds':
+                    $sReturn = $this->getWorldmapBounds();
+                break;
             }
         }
 
         return $sReturn;
+    }
+
+    protected function getWorldmapBounds() {
+        $MAPCFG = new GlobalMapCfg($this->name);
+        $MAPCFG->readMapConfig();
+        return json_encode($MAPCFG->handleSources('get_bounds'));
     }
 
     protected function doExportMap($name) {
