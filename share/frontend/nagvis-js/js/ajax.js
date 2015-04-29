@@ -105,6 +105,10 @@ function call_ajax(url, args)
                     // single page in that case.
                     document.location.reload();
                 }
+                else if (AJAX.status == 0) {
+                    // this happens when a user aborts currently running ajax
+                    // requests by reloading the page. simply ignore
+                }
                 else {
                     args.error_handler(AJAX.status, null, args.handler_data);
                 }

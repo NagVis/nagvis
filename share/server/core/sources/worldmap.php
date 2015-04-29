@@ -59,6 +59,29 @@ function worldmap_init_schema() {
         $DB->exec('CREATE INDEX latlng ON objects (lat,long)');
         $DB->exec('CREATE INDEX latlng2 ON objects (lat2,long2)');
         $DB->createVersionTable();
+
+        // Install demo data
+        worldmap_add_object('273924', 53.5749514424993, 10.0405490398407, array(
+            "x"         => "53.57495144249931",
+            "y"         => "10.040549039840698",
+            "type"      => "map",
+            "map_name"  => "demo-ham-racks",
+            "object_id" => "273924"
+        ));
+        worldmap_add_object('0df2d3', 48.1125317248817, 11.6794109344482, array(
+            "x"              => "48.11253172488166",
+            "y"              => "11.67941093444824",
+            "type"           => "hostgroup",
+            "hostgroup_name" => "muc",
+            "object_id"      => "0df2d3"
+        ));
+        worldmap_add_object('ebbf59', 50.9391761712781, 6.95863723754883, array(
+            "x"              => "50.93917617127812",
+            "y"              => "6.958637237548828",
+            "type"           => "hostgroup",
+            "hostgroup_name" => "cgn",
+            "object_id"      => "ebbf59"
+        ));
     }
     //else {
     //    // Maybe an update is needed
@@ -81,19 +104,6 @@ function worldmap_init_db() {
                      Array('DB' => cfg('paths', 'cfg').'worldmap.db')));
 
     worldmap_init_schema();
-}
-
-// Returns the minimum bounds needed to be able to display all objects
-function get_bounds_worldmap($MAPCFG, $map_name, &$map_config) {
-    global $DB;
-    worldmap_init_db();
-
-    $q = 'SELECT min(lat) as min_lat, min(lng) as min_lng, '
-        .'max(lat) as max_lat, max(lng) as max_lng '
-        .'FROM objects';
-    $b = $DB->fetchAssoc($DB->query($q));
-    return array(array($b['min_lat'], $b['min_lng']),
-                 array($b['max_lat'], $b['max_lng']));
 }
 
 function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
@@ -120,6 +130,42 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
         $objects[$obj['object_id']] = $obj;
     }
     return $objects;
+}
+
+// Worldmap internal helper function to add an object to the worldmap
+function worldmap_add_object($obj_id, $lat, $lng, $obj, $lat2 = 'NULL', $lng2 = 'NULL') {
+    global $DB;
+    $q = 'INSERT INTO objects (object_id, lat, lng, lat2, lng2, object)'
+        .' VALUES'
+        .'    ('.$DB->escape($obj_id).','
+        .'     '.$DB->escape($lat).','
+        .'     '.$DB->escape($lng).','
+        .'     '.$lat2.','
+        .'     '.$lng2.','
+        .'     '.$DB->escape(json_encode($obj)).')';
+
+    if ($DB->exec($q))
+        return true;
+    else
+        throw new WorldmapError(l('Failed to add object: [E]: [Q]', array(
+            'E' => json_encode($DB->error()), 'Q' => $q)));
+}
+
+//
+// The following functions are used directly by NagVis
+//
+
+// Returns the minimum bounds needed to be able to display all objects
+function get_bounds_worldmap($MAPCFG, $map_name, &$map_config) {
+    global $DB;
+    worldmap_init_db();
+
+    $q = 'SELECT min(lat) as min_lat, min(lng) as min_lng, '
+        .'max(lat) as max_lat, max(lng) as max_lng '
+        .'FROM objects';
+    $b = $DB->fetchAssoc($DB->query($q));
+    return array(array($b['min_lat'], $b['min_lng']),
+                 array($b['max_lat'], $b['max_lng']));
 }
 
 function has_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
@@ -164,20 +210,7 @@ function add_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
         $lng2 = $y[count($y)-1];
     }
 
-    $q = 'INSERT INTO objects (object_id, lat, lng, lat2, lng2, object)'
-        .' VALUES'
-        .'    ('.$DB->escape($obj_id).','
-        .'     '.$DB->escape($lat).','
-        .'     '.$DB->escape($lng).','
-        .'     '.$lat2.','
-        .'     '.$lng2.','
-        .'     '.$DB->escape(json_encode($obj)).')';
-
-    if ($DB->exec($q))
-        return true;
-    else
-        throw new WorldmapError(l('Failed to add object: [E]: [Q]', array(
-            'E' => json_encode($DB->error()), 'Q' => $q)));
+    return worldmap_add_object($obj_id, $lat, $lng, $obj, $lat2, $lng2);
 }
 
 function process_worldmap($MAPCFG, $map_name, &$map_config) {
