@@ -668,14 +668,17 @@ function renderZoombar() {
 }
 
 /**
- * getViewParams()
+ * The view parameters are parameters which affect the current view in some
+ * way. For example a map can have a header menu enabled but a user might
+ * override this setting to disable the header menu by setting the view
+ * parameter header_menu=0.
  *
- * Parses the url params for the current view to be used in urls.
- * Adds the width/height parameter if not set yet. It will add the
- * size of the map div area. The width/height values are not used by all views.
+ * It's possible to modify the current view parameters by providing an object
+ * as first argument which overrides some attributes of the view parameters.
  *
- * @return  String    URL part with params and values
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * When userParams is set to true, only parameters customized by the user
+ * and values different to the default settings are returned. Otherwise the
+ * complete set of final parameters is returned.
  */
 function getViewParams(update, userParams) {
     if(!isset(userParams))

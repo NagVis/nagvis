@@ -1,6 +1,7 @@
 This is a small file for storing quick thoughts about new features and needed changes:
 ===============================================================================
 
+- getViewParams() - Aufrufe checken, ob die alle richtig parametrisiert sind
 - bei automap mit fehler (connection refused) die option "modify view" wegmachen
 - hover area auf linien entfernen. Aktionen auf ganze linien erlauben
 - linien: line border color wieder implementieren
@@ -11,17 +12,6 @@ This is a small file for storing quick thoughts about new features and needed ch
 Worldmap:
   - Andere Provider auswählbar machen
   - Eventuell Objekte auf dem geklickten Punkt zentrieren?
-
-Relative Koordinaten:
-  - Wie funktionieren Linien zu Linien Referenzen? Geht das überhaupt?
-  - An Shapes anheften fehlt - Eventuell auch nicht. Was ist denn, wenn man Shapes
-    als Design Elemente nutzen möchte, die einfach im Hintergrund liegen? Eventuell
-    muss man das beim Shape konfigurierbar machen.
-
-- Hover- und Contextmenü-Macros vereinheitlichen
-
-- Geomap:
-  - Andere Objekte in Geomaps erlauben (Dazu die Felder type, name1, name2) einführen
 
 - Verzeichnis-Hierarchie unterhalb von maps/
   - Anstatt flachem Listing einen Walk machen
@@ -40,11 +30,6 @@ Relative Koordinaten:
    u.U. sogar in separaten Queries an das Backend abgefragt und in Hover- und Context-Menus
    als spezielle Macros angeboten.
 
-Installer:
- - Der Installer sollte beim Update headermenu, headertemplate aus [wui] Sektion entfernen.
-   Leider ist das nicht ganz so einfach, wie bei den anderen Attributen, da in anderen Sektionen
-   diese Optionen noch erlaubt sind.
-
 *** Linien (Auch für neue Automap wichtig!) ***
  - Pfeilspitzen konfigurierbar machen
    - Größe
@@ -54,10 +39,7 @@ Installer:
 
 *** Cleanups ***
   - Variablen nach int/boolean casten, wenn sinnvoll
-  - Objekte klonen wieder implementieren
   - Weathermap Linien Perfdata Berechnungen nach check_command aufräumen
-  - ajax Funktionen aufräumen/konsolidieren
-  - OMD Tests
 
 *** Icon Koordinaten zentrieren ***
 
