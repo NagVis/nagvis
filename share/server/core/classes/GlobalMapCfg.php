@@ -1138,27 +1138,30 @@ class GlobalMapCfg {
     }
 
     /**
-     * Gets the last modification time of the configuration file
-     *
-     * @return	Integer Unix timestamp with last modification time
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * Gets the last modification time of the configuration file or the
+     * current timestamp when at least one map source reported that is
+     * has changed since either the compare time or the update time of
+     * the map configuration file
      */
     public function getFileModificationTime($compareTime = null) {
         // on-demand maps have no age, return the compare time
-        if(!$this->hasConfigFile())
+        if (!$this->hasConfigFile())
             return $compareTime;
 
-        if($this->checkMapConfigReadable(1)) {
+        if ($this->checkMapConfigReadable(1)) {
+            $cfgTime = filemtime($this->configFile);
+            // during initial page rendering there is no compare time set,
+            // but then use the current map config file age for the source
+            // changed comparision.
+            if ($compareTime === null)
+                $compareTime = $cfgTime;
+
             // When the sources changed compared to the given time,
             // return always the current time
-            if($compareTime !== null) {
-                if($this->sourcesChanged($compareTime)) {
-                    return time();
-                }
-            }
+            if ($this->sourcesChanged($compareTime))
+                return time();
 
-            $time = filemtime($this->configFile);
-            return $time;
+            return $cfgTime;
         } else {
             return FALSE;
         }

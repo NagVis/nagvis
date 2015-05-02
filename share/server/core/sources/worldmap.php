@@ -249,7 +249,8 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
 }
 
 function changed_worldmap($MAPCFG, $compare_time) {
-    return true; // some kind of cache possible?
+    $db_path = cfg('paths', 'cfg').'worldmap.db';
+    return filemtime($db_path) > $compare_time;
 }
 
 ?>
