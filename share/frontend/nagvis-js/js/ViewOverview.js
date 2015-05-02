@@ -39,16 +39,18 @@ var ViewOverview = View.extend({
 
     update: function() {
         var to_update = this.getObjectsToUpdate();
-        this.base({
-            mod  : 'Overview',
-            data : to_update[0]
-        });
+        if (to_update[0].length > 0) {
+            this.base({
+                mod  : 'Overview',
+                data : to_update[0]
+            });
+        }
     },
 
     /**
      * END OF PUBLIC METHODS
      */
-    
+
     render: function() {
         this.dom_obj = document.getElementById('overview');
 

@@ -52,7 +52,7 @@ class CoreModOverview extends CoreModule {
                         'i' => MATCH_STRING_NO_SPACE,
                         'f' => MATCH_STRING_NO_SPACE_EMPTY,
                     );
-                    $aVals = $this->getCustomOptions($aOpts);
+                    $aVals = $this->getCustomOptions($aOpts, array(), true);
 
                     // Is this request asked to check file ages?
                     if(isset($aVals['f']) && isset($aVals['f'][0])) {
