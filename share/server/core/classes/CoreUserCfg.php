@@ -42,7 +42,7 @@ class CoreUserCfg {
     public function doGet($onlyUserCfg = false) {
         global $AUTH, $AUTHORISATION;
         $opts = Array();
-        if(!$AUTH->isAuthenticated())
+        if(!isset($AUTH) || !$AUTH->isAuthenticated())
             return $opts;
 
         if(!file_exists($this->profilesDir))
