@@ -76,20 +76,17 @@ function selectmouse(e) {
     return false;
 }
 
-/**
- * popupWindowClose()
- *
- * Closes and removes the open dialog
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
 function popupWindowClose() {
     var w = document.getElementById('popupWindow');
-
-    if(w) {
+    if (w)
         document.body.removeChild(w);
-        w = null;
-    }
+
+    // Some windows use the jscolor color picker. It might be visible while
+    // a user closes the window. All eventual open color pickers are opened
+    // within popup windows. So it is safe to close all color pickers when
+    // closing a window
+    if (jscolor.picker)
+        jscolor.picker.owner.hidePicker();
 }
 
 function popupWindowRefresh() {

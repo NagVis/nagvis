@@ -795,7 +795,7 @@ function toggle_option(name) {
     }
 }
 
-function togglePicker(id) {
+function togglePicker(id, state) {
     var o = document.getElementById(id);
     if(jscolor.picker && jscolor.picker.owner == o.color)
         o.color.hidePicker();
