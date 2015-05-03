@@ -254,7 +254,7 @@ var NagVisObject = Base.extend({
             oSectionMacros.host = '<!--\\sBEGIN\\shost\\s-->.+?<!--\\sEND\\shost\\s-->';
 
         if(this.conf.type !== 'host' && this.conf.type !== 'shape')
-            oSectionMacros.host = '<!--\\sBEGIN\\shost_or_shape\\s-->.+?<!--\\sEND\\shost_or_shape\\s-->';
+            oSectionMacros.host_or_shape = '<!--\\sBEGIN\\shost_or_shape\\s-->.+?<!--\\sEND\\shost_or_shape\\s-->';
 
         if(this.conf.type === 'line' || this.conf.type == 'shape'
            || this.conf.type == 'textbox' || this.conf.type === 'container')
@@ -363,7 +363,7 @@ var NagVisObject = Base.extend({
             cond = null;
             action = null;
         }
-        
+
         // Remove all not hidden actions
         oSectionMacros['actions'] = '<!--\\sBEGIN\\saction_.+?\\s-->.+?<!--\\sEND\\saction_.+?\\s-->';
 
