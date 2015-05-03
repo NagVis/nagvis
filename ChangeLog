@@ -4,6 +4,7 @@ Core:
   * FIX: Fixed showing wrong options for [defaults] hoverchildssort global cfg
   * FIX: Fixed error with Check_MK integration when user is not permitted to
          write a WATO folder related map
+  * FIX: Fixed choosing services from test backends
 
 Automap:
   * FIX: The pseudo map root node is also shown when another host is the root
