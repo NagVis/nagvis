@@ -10,6 +10,7 @@ This is a small file for storing quick thoughts about new features and needed ch
 - Rework layout of role edit form
 
 Worldmap:
+  - BUG: Nach Objekt hinzufuegen ist die Worldmap leer (MAPCFG Cache?)
   - Andere Provider auswählbar machen
 
 - Verzeichnis-Hierarchie unterhalb von maps/
