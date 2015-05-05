@@ -691,6 +691,7 @@ td#popupWindowContent input, select {
     background-image: none;
     background-color: #fbfbfb;
     border: 1px solid #dddddd;
+    border-top: none;
     border-bottom-right-radius: 4px;
 }
 
@@ -711,6 +712,20 @@ td#popupWindowContent input, select {
     height: 100%;
 
     float: left;
+}
+
+.header ul.head li.toggle a,
+#headershow a {
+    display: block;
+    margin-left: 2px;
+    height: 100%;
+    line-height: 31px;
+    text-decoration: none;
+    color: #43B3CF;
+}
+
+#headershow a {
+    margin-left: 0;
 }
 
 .header ul.head li.logo {

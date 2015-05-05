@@ -79,7 +79,8 @@ function toggleHeader(store) {
     }
 
     sidebarUpdatePosition();
-    g_view.scaleView();
+    if (g_view)
+        g_view.scaleView();
 
     if(store === true)
         storeUserOption('header', state);

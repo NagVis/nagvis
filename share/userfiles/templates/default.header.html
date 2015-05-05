@@ -1,13 +1,13 @@
 <script type="text/javascript" src="{$pathHeaderJs}"></script>
 {if $showStates}<script type="text/javascript">var g_map_names = {$mapNames};</script>{/if}
 
-<div id="headershow" class="header"><a href="#" onclick="toggleHeader(true)"><img src="{$pathTemplateImages}default.header_show.png" alt="Show header menu" /></a></div>
+<div id="headershow" class="header"><a href="#" onclick="toggleHeader(true)" title="Show header menu">&gt;</a></div>
 <div id="header" class="header">
 <ul class="head">
-  <li><a href="#" onclick="toggleHeader(true)"><img src="{$pathTemplateImages}default.header_hide.png" alt="Hide header menu" /></a></li>
+    <li class="toggle"><a href="#" onclick="toggleHeader(true)" title="Hide header menu">&lt;</a></li>
     <li class="logo"><a href="http://www.nagvis.org/"><img src="{$pathImages}/internal/logo_small.png" alt="NagVis" /></a></li>
     <li onmouseover="!sidebarOpen() ? showMapDropdown() : void(0)" class="dropdown">
-        <span id="views-ddheader" onclick="toggleSidebar(true)">{$langOpen} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
+        <span id="views-ddheader" onclick="toggleSidebar(true)">{$langOpen}</span>
         {template headMaps maps pathBase currentMap indent=1}
         {foreach $maps map}<li class="lvl{$indent}{if $currentMap == $map.mapName} current{/if}">{if $map.configError == true}<a class="error" href="#">{$map.mapAlias}</a>
             {else}<a href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.mapName}">{$map.mapAlias}</a> {/if}</li>
@@ -26,7 +26,7 @@
     </li>
     {if ($mod == 'Map' && (($permittedEdit == true && $act != 'edit') || ($permittedView == true && $act != 'view') || $permittedSearch)) || $bRotation == true}
     <li onmouseover="ddMenu('action')" class="dropdown">
-        <span id="action-ddheader">{$langActions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
+        <span id="action-ddheader">{$langActions}</span>
         <ul id="action-ddcontent">
             {if $mod == 'Map' && $permittedSearch}
             <li><a href="javascript:void(0)" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Search&amp;act=view', '{$langSearch}')">{$langSearch}</a></li>
@@ -47,7 +47,7 @@
     {/if}
     {if $mod == 'Map' && $currentMap != '' && $permittedEdit == true}
     <li onmouseover="ddMenu('map')" class="dropdown">
-        <span id="map-ddheader">{$langMapEdit} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
+        <span id="map-ddheader">{$langMapEdit}</span>
         <ul id="map-ddcontent">
             {if $canMoveObjects || $canAddObjects || $canEditObjects}
             <li><a href="#" onclick="toggleAllMapObjectsLock();ddMenuHide()">{$langLockUnlockAll}</a></li>
@@ -112,7 +112,7 @@
     {/if}
     {if $permittedEditMainCfg || $permittedManageBackgrounds || $permittedManageMaps || $permittedManageShapes}
     <li onmouseover="ddMenu('wui')" class="dropdown">
-        <span id="wui-ddheader">{$langOptions} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
+        <span id="wui-ddheader">{$langOptions}</span>
         <ul id="wui-ddcontent">
             {if $permittedEditMainCfg}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=MainCfg&amp;act=edit', '{$langEditMainCfg}', 550);ddMenuHide();">{$langEditMainCfg}</a></li>
             <li class="spacer"><hr /></li>
@@ -130,7 +130,7 @@
         <span>Edit Mode!</span>
     </li>
     <li onmouseover="ddMenu('user')" class="dropdown">
-        <span id="user-ddheader">{$langUser}<img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
+        <span id="user-ddheader">{$langUser}</span>
         <ul id="user-ddcontent">
         	<li><a href="#">{$langLoggedIn}: {$currentUser}</a></li>
         	{if $supportedChangePassword && $permittedChangePassword}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ChangePassword&amp;act=view', '{$langChangePassword}');ddMenuHide();">{$langChangePassword}</a></li>{/if}
@@ -141,14 +141,14 @@
         </ul>
     </li>
     <li onmouseover="ddMenu('language')" class="dropdown">
-        <span id="language-ddheader">{$langChooseLanguage} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
+        <span id="language-ddheader">{$langChooseLanguage}</span>
         <ul id="language-ddcontent">
             {foreach $langs lang}<li><a href="{str_replace('&', '&amp;', $currentUri)}{if strpos($currentUri,'?') !== false}&amp;{else}?{/if}lang={$lang.language}">{$lang.langLanguageLocated}</a></li>{/foreach}
           	<li class="spacer underline"></li>
         </ul>
     </li>
     <li onmouseover="ddMenu('support')" class="dropdown">
-        <span id="support-ddheader">{$langNeedHelp} <img src="{$pathTemplateImages}default.header_down.png" alt="&#8711;" /></span>
+        <span id="support-ddheader">{$langNeedHelp}</span>
         <ul id="support-ddcontent">
             <li><a href="{$pathBase}/docs/{$docLanguage}/index.html">{$langOnlineDoc}</a></li>
             <li><a href="http://www.monitoring-portal.org/wbb/index.php?page=Board&amp;boardID=42">{$langForum}</a></li>
