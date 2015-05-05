@@ -719,6 +719,11 @@ td#popupWindowContent input, select {
     margin-top: 2px;
 }
 
+.header ul.head li.logo img {
+    height: 25px;
+    width: 97px;
+}
+
 .header ul.head li.logo a, .header ul.head li.logo a:active {
     margin: 0;
     padding: 0;

@@ -67,15 +67,15 @@ form .submit { float: right; }
 form p { margin-bottom: 24px; }
 
 h1 a {
-    background: no-repeat top center;
-    width: 300px;
-    height: 78px;
-    text-indent: -9999px;
-    overflow: hidden;
+    margin-left:15px;
     padding-bottom: 15px;
     display: block;
 }
 
+h1 img {
+    width: 300px;
+    height: 77px;
+}
 
 #login { width: 320px; margin: 7em auto; }
 
