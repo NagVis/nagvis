@@ -69,6 +69,7 @@ var ElementLine = Element.extend({
         this.calcLineParts();
         this.renderLine();
         this.renderActionContainer();
+        this.renderLabels();
     },
 
     place: function() {
@@ -134,13 +135,7 @@ var ElementLine = Element.extend({
             width = 1; // minimal width for lines
 
         // Lines meeting point position
-        // First line label position
-        // Second line label position
-        var cut    = this.obj.conf.line_cut;
-        var cutIn  = this.obj.conf.line_label_pos_in;
-        var cutOut = this.obj.conf.line_label_pos_out;
-
-        var yOffset = parseInt(this.obj.conf.line_label_y_offset);
+        var cut = this.obj.conf.line_cut;
 
         switch (this.obj.conf.line_type) {
             case '11': // ---> lines
@@ -384,45 +379,62 @@ var ElementLine = Element.extend({
         }
     },
 
-    // FIXME: Reimplement line labels
-    renderLabel: function(num, x, y, perfdataA, perfdataB, yOffset) {
-        // First try to create the labels (For weathermap lines only atm) and if none
-        // should be shown try to create link a link area for the line.
-        if (this.obj.conf.line_label_show && this.obj.conf.line_label_show === '1'
-            && (this.obj.conf.line_type == 13 || this.obj.conf.line_type == 14
-                || this.obj.conf.line_type == 15))
-            this.renderLabel(num, x, y, perfdataA, perfdataB, yOffset);
+    renderLabels: function() {
+        if (!this.isWeathermapLine())
+            return; // Only weathermap lines have labels at the moment
+
+        if (!this.obj.conf.line_label_show || this.obj.conf.line_label_show !== '1')
+            return; // skip over when labels are disabled
+
+        // First line label position
+        // Second line label position
+        var cutIn  = this.obj.conf.line_label_pos_in;
+        var cutOut = this.obj.conf.line_label_pos_out;
+        var yOffset = parseInt(this.obj.conf.line_label_y_offset);
+
+        this.renderLabel(0);
+        this.renderLabel(1);
     },
 
-    getLabelShift: function(str) {
+    getLabelWidth: function(str) {
         if(str && str.length > 0)
             return (str.length / 2) * 9;
         else
             return 10;
     },
 
-    renderLabel: function(num, lx, ly, perfdataA, perfdataB, yOffset) {
-        var labelShift = this.getLabelShift(perfdataA);
-    
+    renderLabel: function(id) {
+        var x1 = this.parts[id][0][0],
+            y1 = this.parts[id][0][1],
+            x2 = this.parts[id][1][0],
+            y2 = this.parts[id][1][1];
+
+        var cut = id == 0 ? this.obj.conf.line_label_pos_in
+                          : this.obj.conf.line_label_pos_out;
+
+        var x = middle(x1, x2, cut),
+            y = middle(y1, y2, cut);
+
+        var txt = this.perfdata[id][1] + this.perfdata[id][2];
+
         // Maybe use function to detect the real height in future
-        var labelHeight = 21;
-    
-        if (this.obj.conf.line_type == '13' || this.obj.conf.line_type == '15') {
+        var labelHeight = 21,
+            labelWidth  = this.getLabelWidth(txt);
+
+        // FIXME: really center the object
+        this.obj.trigger_obj.appendChild(
+            renderNagVisTextbox(this.obj.conf.object_id+'-link'+id,
+                                '#ffffff', '#000000', (x-labelWidth), parseInt(y - labelHeight / 2),
+                                this.obj.conf.z, 'auto', 'auto', '<b>' + txt + '</b>'));
+
+        // Paint the second label in case of line type 14
+        if (this.obj.conf.line_type == '14') {
+            txt = this.perfdata[id*2][1] + this.perfdata[id*2][2];
+            labelWidth = this.getLabelWidth(txt);
             this.obj.trigger_obj.appendChild(
-                renderNagVisTextbox(this.obj.conf.object_id+'-link'+num,
-                                    '#ffffff', '#000000', (lx-labelShift), parseInt(ly - labelHeight / 2),
-                                    this.obj.conf.z, 'auto', 'auto', '<b>' + perfdataA + '</b>'));
-    
-        } else if(this.obj.conf.line_type == '14') {
-            this.obj.trigger_obj.appendChild(
-                renderNagVisTextbox(this.obj.conf.object_id+'-link'+num,
-                                   '#ffffff', '#000000', (lx-labelShift), parseInt(ly - labelHeight - yOffset),
-                                   this.obj.conf.z, 'auto', 'auto', '<b>' + perfdataA + '</b>'));
-            labelShift = this.getLabelShift(perfdataB);
-            this.obj.trigger_obj.appendChild(
-                renderNagVisTextbox(this.obj.conf.object_id+'-link'+(num+1),
-                                    '#ffffff', '#000000', (lx-labelShift), parseInt(ly + yOffset),
-                                    this.obj.conf.z, 'auto', 'auto', '<b>' + perfdataB + '</b>'));
+                renderNagVisTextbox(this.obj.conf.object_id+'-link'+(id+1),
+                                    '#ffffff', '#000000', (x-labelWidth), parseInt(y + yOffset),
+                                    this.obj.conf.z, 'auto', 'auto', '<b>' + txt + '</b>'));
         }
     },
 

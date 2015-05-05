@@ -18,6 +18,14 @@ if [ $(uname) = Darwin ]; then
 
     touch /opt/local/nagvis/share/index.php # trigger browser reload
 
+    osascript <<EOF
+tell application "Safari"
+    activate
+    tell window 1
+        do JavaScript "window.location.reload(true)" in current tab
+    end tell
+end tell
+EOF
 #    osascript <<EOF
 #tell application "Firefox"
 #    activate
