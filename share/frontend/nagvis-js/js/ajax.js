@@ -60,8 +60,6 @@ function call_ajax(url, args)
         // set to multipart/form-data
         if (typeof args.post_data !== 'object')
             AJAX.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        AJAX.setRequestHeader("Content-length", args.post_data.length);
-        AJAX.setRequestHeader("Connection", "close");
     }
 
     if (!args.sync) {
