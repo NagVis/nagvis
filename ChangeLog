@@ -11,6 +11,11 @@ Core:
     config.
   * Deprecated unused config option header_fade / headerfade
 
+Worldmap:
+  * Introduced new interactive worldmaps. You can use these maps to position
+    all kind of NagVis objects on a geographical maps where you can browse
+    interactively in (zooming, panning, ...)
+
 Automap:
   * Reimplemented missing "filter_by_state" functionality
 
