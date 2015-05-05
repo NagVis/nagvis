@@ -105,3 +105,71 @@ var ViewWorldmap = ViewMap.extend({
         return [lat, lng];
     }
 });
+
+// Wrapper object for the worldmap (similar to leaflet js DivIcon, but
+// support adding an existing domNode)
+L.NagVisObj = L.Icon.extend({
+    options: {
+        // FIXME: make this dynamic depending on size
+        iconSize: [22, 22], // also can be set through CSS
+        iconAnchor: [0, 0],
+        className: 'leaflet-nagvis-obj',
+        node: null,
+        obj: null,
+    },
+
+    createIcon: function (oldIcon) {
+        var div = (oldIcon && oldIcon.tagName === 'DIV') ? oldIcon : document.createElement('div'),
+            options = this.options;
+
+        // remove all existing childs
+        for(var i = div.childNodes.length; i > 0; i--)
+            div.removeChild(div.childNodes[0]);
+
+        if (options.node !== null) {
+            div.appendChild(options.node);
+        }
+
+        this._setIconStyles(div, 'icon');
+
+        // Fix icon position which is not automatically fixed by this._setIconStyles because we
+        // enforce iconAnchor: [0, 0].
+        var offset = L.point(options.iconSize);
+        offset._divideBy(2);
+        options.obj.trigger_obj.style.marginLeft = (-offset.x) + 'px';
+        options.obj.trigger_obj.style.marginTop  = (-offset.y) + 'px';
+
+        return div;
+    },
+
+    createShadow: function () {
+        return null;
+    }
+});
+
+L.nagVisObj = function (options) {
+    return new L.NagVisObj(options);
+};
+
+L.NagVisMarker = L.Marker.extend({
+    initialize: function (latlng, options) {
+        L.Marker.prototype.initialize.call(this, latlng, options);
+
+        //this.on('mousemove', this._onMouseMove, this);
+    }
+
+    //_onMouseMove: function (event) {
+    //    console.log('hover');
+    //    var element = this.options.icon.options.obj.trigger_obj;
+    //    console.log(element);
+    //    //if (document.createEvent) {
+    //    //    element.dispatchEvent(event.originalEvent);
+    //    //} else {
+    //    //    element.fireEvent("onmousemove", event.originalEvent);
+    //    //}
+    //}
+});
+
+L.nagVisMarker = function (ll, options) {
+    return new L.NagVisMarker(ll, options);
+};
