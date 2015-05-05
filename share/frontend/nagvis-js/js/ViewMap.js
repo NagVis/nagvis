@@ -97,7 +97,7 @@ var ViewMap = View.extend({
         this.base();
     },
 
-    handleMapInit(oObjects) {
+    handleMapInit: function(oObjects) {
         // Only perform the rendering actions when all information are available
         if (!oObjects) {
             hideStatusMessage();

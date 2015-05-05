@@ -27,6 +27,10 @@ Frontend:
   * Dropped jsGraphics line rendering (browser needs to support canvas now)
     for being able to use lines within NagVis
   * Overview: Broken map configs do not prevent to open the map anymore
+  * Lines: Are now rendered nicely on high resolution devices (e.g. 4k screens)
+  * Lines: Re-implemented borders round the lines for better visibility
+  * Lines: Removed line action areas (small dotted boxes). The line related
+    actions (hover, context, link) are now possible on the whole lines
   * FIX: Fixed annoying browser warning message when reloading pages which
     are shown up right after logging in to NagVis
   * FIX: Fixed duplicate map config processing for rendering the header menu

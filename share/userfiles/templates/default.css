@@ -110,10 +110,6 @@ iframe#url {
 /* lines */
 .line {
     position : absolute;
-    z-index : 1;
-    border-style : dotted;
-    border-width : 1px;
-    border-color : black;
 }
 
 .jsline div {

@@ -22,6 +22,10 @@
  *****************************************************************************/
 
 var ViewWorldmap = ViewMap.extend({
+    constructor: function(id) {
+        this.base(id);
+    },
+
     init: function() {
         this.initWorldmap();
         this.base();
