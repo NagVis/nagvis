@@ -95,30 +95,10 @@ function popupWindowPutContent(oContent) {
     }
 
     var oCell = document.getElementById('popupWindowContent');
-
     if(oCell) {
         oCell.innerHTML = oContent.code;
-
-        // Need to fix javascript execution in innerHTML
-        // Works in firefox so don't do it for firefox
-        var aScripts = oCell.getElementsByTagName('script');
-        for(var i = 0, len = aScripts.length; i < len; i++) {
-            if(aScripts[i].src && aScripts[i].src !== '') {
-                var oScr = document.createElement('script');
-                oScr.src = aScripts[i].src;
-                document.body.appendChild(oScr);
-                oScr = null;
-            } else {
-                try {
-                    eval(aScripts[i].text);
-                } catch(e) {
-                    handleException(e);
-                }
-            }
-        }
-        aScripts = null;
+        executeJS(oCell);
     }
-    oCell = null;
 }
 
 /**

@@ -1024,6 +1024,7 @@ function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, cust
     }
 
     oLabelSpan.innerHTML = text;
+    executeJS(oLabelSpan);
 
     oLabelDiv.appendChild(oLabelSpan);
 
@@ -1444,8 +1445,7 @@ function newY(a, b, x, y) {
 //   'arg1': 'val1',
 //   'arg3': 'val3',
 // })
-function merge_args()
-{
+function merge_args() {
     var defaults = arguments[0];
     var args = arguments[1] || {};
 
@@ -1453,4 +1453,21 @@ function merge_args()
         defaults[name] = args[name];
 
     return defaults;
+}
+
+function executeJS(obj) {
+    var aScripts = obj.getElementsByTagName('script');
+    for (var i = 0; i < aScripts.length; i++) {
+        if (aScripts[i].src && aScripts[i].src !== '') {
+            var oScr = document.createElement('script');
+            oScr.src = aScripts[i].src;
+            document.getElementsByTagName("HEAD")[0].appendChild(oScr);
+        } else {
+            try {
+                eval(aScripts[i].text);
+            } catch(e) {
+                alert(aScripts[i].text + "\nError:" + e.message);
+            }
+        }
+    }
 }

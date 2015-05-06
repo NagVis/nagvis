@@ -63,6 +63,7 @@ Frontend:
     instead the javascript error message is shown in the container
   * FIX: Fixed too many context actions showing up for non host objects
   * FIX: Hiding eventual open color pickers on closing frontend windows
+  * FIX: It's possible to put javascript code in labels or textboxes again
 
 1.8.2
 Core:
