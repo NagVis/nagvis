@@ -1044,6 +1044,7 @@ function drawNagVisTextbox(oContainer, id, className, bgColor, borderColor, x, y
     }
 
     oLabelSpan.innerHTML = text;
+    executeJS(oLabelSpan);
 
     oLabelDiv.appendChild(oLabelSpan);
     oContainer.appendChild(oLabelDiv);
@@ -1441,4 +1442,21 @@ function add_class(o, cn) {
 function change_class(o, a, b) {
     remove_class(o, a);
     add_class(o, b);
+}
+
+function executeJS(obj) {
+    var aScripts = obj.getElementsByTagName('script');
+    for (var i = 0; i < aScripts.length; i++) {
+        if (aScripts[i].src && aScripts[i].src !== '') {
+            var oScr = document.createElement('script');
+            oScr.src = aScripts[i].src;
+            document.getElementsByTagName("HEAD")[0].appendChild(oScr);
+        } else {
+            try {
+                eval(aScripts[i].text);
+            } catch(e) {
+                alert(aScripts[i].text + "\nError:" + e.message);
+            }
+        }
+    }
 }
