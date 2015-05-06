@@ -35,16 +35,16 @@ var View = Base.extend({
     update: function(args) {
         var show = args.show ? '&show='+args.show : '';
 
-        var post_vars = [];
+        var data = [];
         for (var i = 0, len = args.data.length; i < len; i++)
-            post_vars.push('i[]='+args.data[i]);
+            data.push('i[]='+args.data[i]);
 
         // Get the updated objects via bulk request
         call_ajax(oGeneralProperties.path_server+'?mod=' + args.mod + '&act=getObjectStates'
                        + show +'&ty=state'+getViewParams() + this.getFileAgeParams(), {
             response_handler : this.handleUpdate.bind(this),
             method           : "POST",
-            post_data        : post_vars.join('&')
+            post_data        : data.join('&')
         });
 
         // Need to re-raise repeated events?
