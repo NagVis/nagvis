@@ -57,8 +57,8 @@ cmp_js() {
     pushd $1 >/dev/null
     OUT=NagVisCompressed.js
     >$OUT
-    cmp ExtLeaflet.js
     cmp ExtStacktrace.js
+    cmp ExtLeaflet.js
     cmp nagvis.js
     cmp edit.js
     cmp popupWindow.js
@@ -68,7 +68,6 @@ cmp_js() {
     cmp ajax.js
     cmp ajaxActions.js
     cmp dynfavicon.js
-    cmp frontend.js
     cmp Element.js
     cmp ElementContext.js
     cmp ElementHover.js
@@ -99,6 +98,7 @@ cmp_js() {
     cmp NagVisTextbox.js
     cmp NagVisContainer.js
     cmp NagVisRotation.js
+    cmp frontend.js
     cmp ExtWzJsGraphics.js
     cmp ExtGenericResize.js
     cmp ExtJSColor.js
