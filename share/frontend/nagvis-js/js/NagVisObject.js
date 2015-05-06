@@ -209,18 +209,11 @@ var NagVisObject = Base.extend({
     },
 
     transformCoordinates: function() {
-        var x = this.conf.x.toString().split(',');
-        var y = this.conf.y.toString().split(',');
-        var new_x = [];
-        var new_y = [];
-        var new_coord = null;
-        for (var i = 0; i < x.length; i++) {
-            new_coord = g_map.latLngToContainerPoint(L.latLng(parseFloat(x[i]), parseFloat(y[i])));
-            new_x.push(new_coord.x);
-            new_y.push(new_coord.y);
-        }
-        this.conf.x = new_x.join(',');
-        this.conf.y = new_y.join(',');
+        var converted = g_view.convertLatLngToXY(
+            this.conf.x.toString().split(','),
+            this.conf.y.toString().split(','));
+        this.conf.x = converted[0].join(',');
+        this.conf.y = converted[1].join(',');
     },
 
     getLineMid: function(coord, dir) {

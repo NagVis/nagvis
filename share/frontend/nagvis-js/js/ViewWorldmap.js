@@ -39,9 +39,13 @@ var ViewWorldmap = ViewMap.extend({
         L.Icon.Default.imagePath = oGeneralProperties.path_base+'/frontend/nagvis-js/images/leaflet';
         g_map = L.map('map', {
             markerZoomAnimation: false,
+            maxBounds: [ [-85,-180.0], [85,180.0] ],
+            minZoom: 2
         }).setView(getViewParam('worldmap_center').split(','), parseInt(getViewParam('worldmap_zoom')));
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            noWrap: true, // don't repeat the world on horizontal axe
+            detectRetina: true, // look nice on high resolution screens
         }).addTo(g_map);
 
         g_map_objects = L.layerGroup().addTo(g_map);
@@ -85,6 +89,16 @@ var ViewWorldmap = ViewMap.extend({
 
     handleScaleToAll: function(data) {
         g_map.fitBounds(data);
+    },
+
+    convertLatLngToXY: function(lat, lng) {
+        var new_coord, x = [], y = [];
+        for (var i = 0; i < lat.length; i++) {
+            new_coord = g_map.latLngToContainerPoint(L.latLng(parseFloat(lat[i]), parseFloat(lng[i])));
+            x.push(new_coord.x);
+            y.push(new_coord.y);
+        }
+        return [x, y];
     },
 
     // converts an a single or an array of XY coordinates to latlng coordinates

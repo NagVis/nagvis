@@ -1,24 +1,33 @@
 #!/bin/bash
 
+which sudo >/dev/null 2>&1 && SUDO=sudo || SUDO=
+
 if [ $(uname) = Darwin ]; then
     # Short snippet for installing NagVis on OSX into MacPorts path
     # This is not meant for production use, just for development!
 
     BASEDIR=/opt/local/nagvis
-    rsync -av etc $BASEDIR/
-    sed "s|@NAGVIS_WEB@|/nagvis|g;s|@NAGVIS_PATH@|/opt/local/nagvis/share|g" $BASEDIR/etc/apache2-nagvis.conf-sample > $BASEDIR/etc/apache.conf
+    $SUDO rsync -av etc $BASEDIR/
+    $SUDO sed "s|@NAGVIS_WEB@|/nagvis|g;s|@NAGVIS_PATH@|/opt/local/nagvis/share|g" $BASEDIR/etc/apache2-nagvis.conf-sample > $BASEDIR/etc/apache.conf
     if [ ! -f $BASEDIR/etc/nagvis.ini.php ]; then
-        cp $BASEDIR/etc/nagvis.ini.php{-sample,}
+        $SUDO cp $BASEDIR/etc/nagvis.ini.php{-sample,}
     fi
-    rsync -av share /opt/local/nagvis/
-    rsync -av docs /opt/local/nagvis/share/
-    mkdir -p $BASEDIR/var/tmpl/{cache,compile}
-    mkdir -p $BASEDIR/etc/profiles
-    chown -R _www:_www $BASEDIR/var $BASEDIR/etc $BASEDIR/share/userfiles/images/maps
+    $SUDO rsync -av share /opt/local/nagvis/
+    $SUDO rsync -av docs /opt/local/nagvis/share/
+    $SUDO mkdir -p $BASEDIR/var/tmpl/{cache,compile}
+    $SUDO mkdir -p $BASEDIR/etc/profiles
+    $SUDO chown -R _www:_www $BASEDIR/var $BASEDIR/etc $BASEDIR/share/userfiles/images/maps
 
-    touch /opt/local/nagvis/share/index.php # trigger browser reload
+    $SUDO touch /opt/local/nagvis/share/index.php # trigger browser reload
 
-    osascript <<EOF
+    if ps -x | grep [f]irefox >/dev/null 2>&1; then
+        osascript <<EOF
+tell application "Firefox"
+    activate
+end tell
+EOF
+    else
+        osascript <<EOF
 tell application "Safari"
     activate
     tell window 1
@@ -26,18 +35,13 @@ tell application "Safari"
     end tell
 end tell
 EOF
-#    osascript <<EOF
-#tell application "Firefox"
-#    activate
-#end tell
-#EOF
+    fi
 
     exit 0
 fi
 
 SITE=${SITE:-$(cat .site 2>/dev/null || true)}
 SITE=${SITE:-$(omd sites --bare | head -n 1)}
-which sudo >/dev/null 2>&1 && SUDO=sudo || SUDO=
 BASE=$(pwd)
 
 sudo cp -r share/* /usr/local/nagvis/share/
