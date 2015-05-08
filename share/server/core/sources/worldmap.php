@@ -242,10 +242,11 @@ function add_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
 function process_worldmap($MAPCFG, $map_name, &$map_config) {
     $bbox = val($_GET, 'bbox', null);
     if ($bbox === null)
-        return; // do nothing
+        return false; // do nothing
 
     list($sw_lng, $sw_lat, $ne_lng, $ne_lat) = explode(',', $bbox);
     $map_config = array_merge($map_config, worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat));
+    return true;
 }
 
 function changed_worldmap($MAPCFG, $compare_time) {

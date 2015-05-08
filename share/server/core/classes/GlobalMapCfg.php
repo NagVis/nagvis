@@ -392,6 +392,7 @@ class GlobalMapCfg {
      */
     public function readMapConfig($onlyGlobal = false, $resolveTemplates = true,
                                   $useCache = true, $enforceSources = false) {
+
         global $_MAINCFG, $AUTHORISATION;
         // Only use cache when there is
         // a) The cache should be used
@@ -785,6 +786,8 @@ class GlobalMapCfg {
             return;
         }
 
+        $cacheable = true;
+
         // 3b. Process all the sources
         foreach($sources AS $source) {
             $func = 'process_'.$source;
@@ -792,7 +795,7 @@ class GlobalMapCfg {
                 throw new NagVisException(l('Requested source "[S]" does not exist',
                                                                 array('S' => $source)));
             try {
-                $func($this, $this->name, $this->mapConfig);
+                $cacheable &= $func($this, $this->name, $this->mapConfig);
             } catch(Exception $e) {
                 if(!$this->ignoreSourceErrors) {
                     throw $e;
@@ -803,8 +806,8 @@ class GlobalMapCfg {
         // Call process filter implicit if not already done
         process_filter($this, $this->name, $this->mapConfig);
 
-        // Write cache
-        $CACHE->writeCache($this->mapConfig, 1);
+        if ($cacheable)
+            $CACHE->writeCache($this->mapConfig, 1);
 
         // FIXME: Invalidate/remove cache files on changed configurations
     }

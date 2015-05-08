@@ -17,6 +17,7 @@ if [ $(uname) = Darwin ]; then
     $SUDO mkdir -p $BASEDIR/var/tmpl/{cache,compile}
     $SUDO mkdir -p $BASEDIR/etc/profiles
     $SUDO chown -R _www:_www $BASEDIR/var $BASEDIR/etc $BASEDIR/share/userfiles/images/maps
+    $SUDO rm /opt/local/nagvis/var/*
 
     $SUDO touch /opt/local/nagvis/share/index.php # trigger browser reload
 

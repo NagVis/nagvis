@@ -60,13 +60,14 @@ function process_filter($MAPCFG, $map_name, &$map_config, $params = null) {
     global $filter_processed;
     // Skip implicit calls if already processed explicit
     if($params === null && $filter_processed)
-        return;
+        return true;
     $filter_processed = true;
 
     if($params === null)
         $params = $MAPCFG->getSourceParams();
 
     //filter_hostgroup($map_config, $params);
+    return true; // allow caching
 }
 
 ?>

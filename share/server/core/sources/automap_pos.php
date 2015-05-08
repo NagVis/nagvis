@@ -359,6 +359,8 @@ function process_automap_pos($MAPCFG, $map_name, &$map_config, &$tree, &$params)
     $cfg      = graphviz_config($params, $tree);
     $imagemap = graphviz_run($map_name, $params, $cfg);
     graphviz_parse($map_config, $imagemap);
+
+    return true; // allow caching
 }
 
 // Do the preflight checks

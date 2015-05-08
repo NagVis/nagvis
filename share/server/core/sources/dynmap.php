@@ -198,6 +198,8 @@ function process_dynmap($MAPCFG, $map_name, &$map_config) {
             $in_this_row = 0;
         }
     }
+
+    return true; // allow caching
 }
 
 /**

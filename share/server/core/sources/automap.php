@@ -632,6 +632,8 @@ function process_automap($MAPCFG, $map_name, &$map_config) {
         foreach(array_keys($conf) as $key)
             if($key[0] == '.')
                 unset($map_config[$object_id][$key]);
+
+    return true; // allow caching
 }
 
 function automap_program_start($p) {

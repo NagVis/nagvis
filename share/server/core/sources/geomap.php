@@ -410,6 +410,8 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
         unset($obj['lat']);
         unset($obj['long']);
     }
+
+    return true; // allow caching
 }
 
 /**
