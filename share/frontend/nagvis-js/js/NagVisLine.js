@@ -29,10 +29,14 @@ var NagVisLine = NagVisStatelessObject.extend({
     },
 
     update: function() {
-        // FIXME: Apply
-        // this.conf.line_color
-        // this.conf.line_color_border
         var line = new ElementLine(this).addTo(this);
+
+        // Apply line color configurations
+        line.calcColors = function(color, border_color) {
+            return function() {
+                return [color, border_color];
+            };
+        }(this.conf.line_color, this.conf.line_color_border);
 
         this.base();
     },

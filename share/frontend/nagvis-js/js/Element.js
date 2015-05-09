@@ -83,11 +83,13 @@ var Element = Base.extend({
     // Is called to add this element to the parent element
     addTo: function(obj) {
         obj.addElement(this);
+        return this;
     },
 
     // Is called to remove this element from the parent element
     removeFrom: function(obj) {
         obj.removeElement(this);
+        return this;
     },
 
     //

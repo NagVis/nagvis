@@ -38,6 +38,7 @@ Frontend:
     actions (hover, context, link) are now possible on the whole lines
   * Removed need to confirm object deletion (you already need at least two clicks:
     open the context menu, maybe unlock, and then click on delete)
+  * FIX: Stateless lines now handle line_color and line_color_border correctly
   * FIX: Fixed annoying browser warning message when reloading pages which
     are shown up right after logging in to NagVis
   * FIX: Fixed duplicate map config processing for rendering the header menu
