@@ -751,9 +751,19 @@ var NagVisObject = Base.extend({
             y = obj.conf.y;
 
         if (usesSource('worldmap')) {
+            if (anchorId != -1) {
+                x = x.split(',');
+                y = y.split(',');
+            }
+
             var parts = g_view.convertXYToLatLng(x, y);
             x = parts[0];
             y = parts[1];
+
+            if (anchorId != -1) {
+                x = x.join(',');
+                y = y.join(',');
+            }
         }
 
         // Now send the new attributes to the server for persistance
