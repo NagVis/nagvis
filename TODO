@@ -11,7 +11,8 @@ This is a small file for storing quick thoughts about new features and needed ch
 Worldmap:
   - BUG: Bewegen von Objekten !=22px Größe lässt die Objekte springen, weil in
     ViewWorldmap createIcon() mit einer festen iconSize rechnet, bzw. dadurch
-    das marginLeft/marginTop falsch setzt
+    das marginLeft/marginTop falsch setzt. Scheint nur für Textboxen/Container zu gelten.
+  - BUG: Canvas-Objekte von Linien verschatten Objekte (liegt wohl am icon popping vom leaflet)
   - Andere Provider auswählbar machen
 
 - Verzeichnis-Hierarchie unterhalb von maps/

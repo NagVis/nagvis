@@ -232,7 +232,7 @@ var ElementLine = Element.extend({
         canvas.height = Math.round(yMax-yMin)+2*border;
         canvas.style.zIndex = this.obj.conf.z;
 
-        //FIXME:addEvent(canvas, 'mousemove', this.handleMouseMove.bind(this));
+        addEvent(canvas, 'mousemove', this.handleMouseMove.bind(this));
 
         var ctx = canvas.getContext('2d');
 
@@ -342,11 +342,8 @@ var ElementLine = Element.extend({
     handleMouseMove: function(event) {
         event = event || window.event;
 
-        if (getTargetRaw(event).tagName !== 'canvas') {
-            console.log('handleMouseMove skip' + event.returnValue);
+        if (getTargetRaw(event).tagName !== 'CANVAS')
             return true;
-        }
-        console.log('handleMouseMove do');
 
         // Get the mouse position relative to window
         var x = event.clientX - getSidebarWidth();
