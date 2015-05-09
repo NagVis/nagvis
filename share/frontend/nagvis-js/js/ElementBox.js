@@ -34,16 +34,16 @@ var ElementBox = Element.extend({
     },
 
     unlock: function () {
-        add_class(this.dom_obj, 'resizeMe');
+        makeResizeable(this.dom_obj);
         makeDragable(this.dom_obj, this.obj, this.obj.saveObject, this.obj.moveObject);
     },
 
     lock: function () {
-        remove_class(this.dom_obj, 'resizeMe');
         // when locking the object while the cursor is a resize cursor,
         // it will stay as it is, when not removing them.
         this.dom_obj.style.cursor = '';
         makeUndragable(this.dom_obj);
+        makeUnresizeable(this.dom_obj);
     },
 
     place: function () {

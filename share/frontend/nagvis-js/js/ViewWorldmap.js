@@ -91,7 +91,7 @@ var ViewWorldmap = ViewMap.extend({
         g_map.fitBounds(data);
     },
 
-    convertLatLngToXY: function(lat, lng) {
+    project: function(lat, lng) {
         var new_coord, x = [], y = [];
         for (var i = 0; i < lat.length; i++) {
             new_coord = g_map.latLngToContainerPoint(L.latLng(parseFloat(lat[i]), parseFloat(lng[i])));
@@ -103,7 +103,7 @@ var ViewWorldmap = ViewMap.extend({
 
     // converts an a single or an array of XY coordinates to latlng coordinates
     // based on the current visible viewport
-    convertXYToLatLng: function(x, y) {
+    unproject: function(x, y) {
         if (typeof x !== 'object') {
             x = [x];
             y = [y];
@@ -170,7 +170,7 @@ L.NagVisMarker = L.Marker.extend({
         L.Marker.prototype.initialize.call(this, latlng, options);
 
         //this.on('mousemove', this._onMouseMove, this);
-    }
+    },
 
     //_onMouseMove: function (event) {
     //    console.log('hover');

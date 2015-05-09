@@ -232,7 +232,7 @@ var ElementLine = Element.extend({
         canvas.height = Math.round(yMax-yMin)+2*border;
         canvas.style.zIndex = this.obj.conf.z;
 
-        addEvent(canvas, 'mousemove', this.handleMouseMove.bind(this));
+        //FIXME:addEvent(canvas, 'mousemove', this.handleMouseMove.bind(this));
 
         var ctx = canvas.getContext('2d');
 
@@ -341,6 +341,12 @@ var ElementLine = Element.extend({
 
     handleMouseMove: function(event) {
         event = event || window.event;
+
+        if (getTargetRaw(event).tagName !== 'canvas') {
+            console.log('handleMouseMove skip' + event.returnValue);
+            return true;
+        }
+        console.log('handleMouseMove do');
 
         // Get the mouse position relative to window
         var x = event.clientX - getSidebarWidth();
@@ -753,7 +759,7 @@ var ElementLineControls = Element.extend({
 
         for(var i = 0, l = x.length; i < l; i++) {
 	    // Line middle drag coord needs to be smaller
-	    if(l > 2 && i == 1) 
+	    if(l > 2 && i == 1)
 		this.renderDragger(i, x[i], y[i], - size / 2, - size / 2, size);
 	    else
 		this.renderDragger(i, x[i], y[i], - lineEndSize / 2, - lineEndSize / 2, lineEndSize);
@@ -815,15 +821,10 @@ var ElementLineControls = Element.extend({
 
         ctl.onclick = function(element_obj) {
             return function(event) {
-                var event = !event ? window.event : event;
-
+                event = event || window.event;
                 element_obj.toggleMidLock();
 	        contextHide();
-
-                if(event.stopPropagation)
-                event.stopPropagation();
-                event.cancelBubble = true;
-                return false;
+                return preventDefaultEvents(event);
             };
         }(this);
         ctl = null;
@@ -861,8 +862,13 @@ var ElementLineControls = Element.extend({
             this.obj.conf.y = [ y[0], y[2] ].join(',');
         }
 
+        var parts = g_view.unproject(this.obj.conf.x.toString().split(','),
+                                     this.obj.conf.y.toString().split(','));
+        var x = parts[0].join(',');
+        var y = parts[1].join(',');
+
         // send to server
-        saveObjectAttr(this.obj.conf.object_id, { 'x': this.obj.conf.x, 'y': this.obj.conf.y});
+        saveObjectAttr(this.obj.conf.object_id, {'x': x, 'y': y});
 
         // redraw the whole object
         this.obj.render();

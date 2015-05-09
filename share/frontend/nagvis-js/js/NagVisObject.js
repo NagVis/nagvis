@@ -103,7 +103,8 @@ var NagVisObject = Base.extend({
             var latlng = g_map.containerPointToLatLng(L.point(0, 0));
             L.nagVisMarker(latlng, {
                 icon: L.nagVisObj({node: container, obj: this}),
-                riseOnHover: true
+                riseOnHover: true,
+                clickable: false // prevent using leaflets event handlers
             }).addTo(g_map_objects);
         }
     },
@@ -209,7 +210,7 @@ var NagVisObject = Base.extend({
     },
 
     transformCoordinates: function() {
-        var converted = g_view.convertLatLngToXY(
+        var converted = g_view.project(
             this.conf.x.toString().split(','),
             this.conf.y.toString().split(','));
         this.conf.x = converted[0].join(',');
@@ -750,28 +751,12 @@ var NagVisObject = Base.extend({
         var x = obj.conf.x,
             y = obj.conf.y;
 
-        if (usesSource('worldmap')) {
-            if (anchorId != -1) {
-                x = x.split(',');
-                y = y.split(',');
-            }
-
-            var parts = g_view.convertXYToLatLng(x, y);
-            x = parts[0];
-            y = parts[1];
-
-            if (anchorId != -1) {
-                x = x.join(',');
-                y = y.join(',');
-            }
-        }
+        var parts = g_view.unproject(x.toString().split(','), y.toString().split(','));
+        x = parts[0].join(',');
+        y = parts[1].join(',');
 
         // Now send the new attributes to the server for persistance
-        call_ajax(oGeneralProperties.path_server + '?mod=Map&act=modifyObject&map='
-                  + escapeUrlValues(oPageProperties.map_name)
-                  + '&id=' + escapeUrlValues(obj.conf.object_id)
-                  + '&x=' + escapeUrlValues(x)
-                  + '&y=' + escapeUrlValues(y));
+        saveObjectAttr(obj.conf.object_id, { 'x': x, 'y': y});
     },
 
     highlight: function(show) {}

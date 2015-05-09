@@ -100,7 +100,6 @@ cmp_js() {
     cmp NagVisRotation.js
     cmp frontend.js
     cmp ExtWzJsGraphics.js
-    cmp ExtGenericResize.js
     cmp ExtJSColor.js
     popd >/dev/null
 }

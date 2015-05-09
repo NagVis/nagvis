@@ -59,6 +59,197 @@ function toggleAllMapObjectsLock() {
         storeUserOption('unlocked-' + oPageProperties.map_name, '');
 }
 
+/** Object resizing **/
+
+var g_resize_obj = null; //This gets a value as soon as a resize start
+
+function g_resize_object() {
+    this.el        = null; //pointer to the object
+    this.dir    = "";      //type of current resize (n, s, e, w, ne, nw, se, sw)
+    this.grabx = null;     //Some useful values
+    this.graby = null;
+    this.width = null;
+    this.height = null;
+    this.left = null;
+    this.top = null;
+}
+
+// Find out what kind of resize! Return a string inlcluding the directions
+function getDirection(event, el) {
+    var xPos, yPos, offset, dir;
+    dir = "";
+
+    // Handle IE and other browsers
+    xPos = event.layerX ? event.layerX : event.offsetX ? event.offsetX : 0;
+    yPos = event.layerY ? event.layerY : event.offsetY ? event.offsetY : 0;
+
+    // The distance from the edge in pixels
+    offset = 8;
+
+    if (yPos < offset) {
+        dir += "n";
+    }	else if (yPos > el.offsetHeight - offset) {
+        dir += "s";
+    }
+
+    if(xPos < offset) {
+        dir += "w";
+    }	else if (xPos > el.offsetWidth - offset) {
+        dir += "e";
+    }
+
+    return dir;
+}
+
+function resizeMouseDown(event) {
+    event = event || window.event;
+    var target = getTargetRaw(event);
+    var el = getReal(target, "className", "resizeable");
+
+    if (el == null || el.id == '' || !has_class(el, "resizeable"))
+        return true;
+
+    dir = getDirection(event, el);
+    if (dir == "")
+        return true;
+
+    // Disable dragging while resizing
+    draggingEnabled = false;
+    draggingObject = null;
+
+    g_resize_obj = new g_resize_object();
+
+    g_resize_obj.el = el;
+    g_resize_obj.dir = dir;
+
+    g_resize_obj.grabx  = event.clientX;
+    g_resize_obj.graby  = event.clientY;
+    g_resize_obj.width  = el.offsetWidth;
+    g_resize_obj.height = el.offsetHeight;
+    g_resize_obj.left   = el.offsetLeft;
+    g_resize_obj.top    = el.offsetTop;
+
+    return preventDefaultEvents(event);
+}
+
+function resizeMouseUp(event) {
+    event = event || window.event;
+    if (g_resize_obj === null)
+        return true;
+
+    // Re-enable dragging
+    draggingEnabled = true;
+    draggingObject = null;
+
+    var dom_obj = g_resize_obj.el;
+
+    var objId = dom_obj.id.split('-')[0];
+    var objX = rmZoomFactor(pxToInt(dom_obj.style.left), true);
+    var objY = rmZoomFactor(pxToInt(dom_obj.style.top), true);
+    var objW = rmZoomFactor(parseInt(dom_obj.style.width));
+    var objH = rmZoomFactor(parseInt(dom_obj.style.height));
+
+    // Reposition in frontend
+    var obj = getMapObjByDomObjId(objId);
+    obj.conf.x = objX;
+    obj.conf.y = objY;
+    obj.conf.w = objW;
+    obj.conf.h = objH;
+    obj.place();
+
+    if (!isInt(objX) || !isInt(objY) || !isInt(objW) || !isInt(objH)) {
+        alert('ERROR: Invalid coords ('+objX+'/'+objY+'/'+objW+'/'+objH+'). Terminating.');
+        return false;
+    }
+
+    var parts = g_view.unproject(objX, objY);
+    objX = parts[0];
+    objY = parts[1];
+
+    saveObjectAttr(objId, {
+        'x': objX,
+        'y': objY,
+        'w': objW,
+        'h': objH
+    });
+
+    g_resize_obj = null;
+
+    return preventDefaultEvents(event);
+}
+
+function resizeMouseMove(event) {
+    event = event || window.event;
+    var target = getTargetRaw(event);
+
+    // First update the cursor. This needs to be done even
+    // when not yet resizing to visualize that it is possible
+
+    var el = getReal(target, "className", "resizeable");
+    if (has_class(el,"resizeable")) {
+        var str = getDirection(event, el);
+
+        // Fix the cursor
+        if (str == "")
+            str = "";
+        else
+            str += "-resize";
+        el.style.cursor = str;
+    }
+
+    // The following code is only relevant when already resizing
+
+    if (g_resize_obj === null)
+        return true;
+
+    var xMin = 8, // The smallest width and height possible
+        yMin = 8;
+
+    if(g_resize_obj.dir.indexOf("e") != -1)
+        g_resize_obj.el.style.width = Math.max(xMin, g_resize_obj.width + event.clientX - g_resize_obj.grabx) + "px";
+
+    if(g_resize_obj.dir.indexOf("s") != -1) {
+        g_resize_obj.el.style.height = Math.max(yMin, g_resize_obj.height + event.clientY - g_resize_obj.graby) + "px";
+    }
+
+    if(g_resize_obj.dir.indexOf("w") != -1) {
+        g_resize_obj.el.style.left = Math.min(g_resize_obj.left + event.clientX - g_resize_obj.grabx, g_resize_obj.left + g_resize_obj.width - xMin) + "px";
+        g_resize_obj.el.style.width = Math.max(xMin, g_resize_obj.width - event.clientX + g_resize_obj.grabx) + "px";
+    }
+    if(g_resize_obj.dir.indexOf("n") != -1) {
+        g_resize_obj.el.style.top = Math.min(g_resize_obj.top + event.clientY - g_resize_obj.graby, g_resize_obj.top + g_resize_obj.height - yMin) + "px";
+        g_resize_obj.el.style.height = Math.max(yMin, g_resize_obj.height - event.clientY + g_resize_obj.graby) + "px";
+    }
+
+    return preventDefaultEvents(event);
+}
+
+function getReal(el, type, value) {
+    temp = el;
+    while(isset(temp) && temp != null && temp.tagName != "BODY") {
+        var o = temp[type];
+        if(isset(o) && o.indexOf(value) !== -1) {
+            el = temp;
+            return el;
+        }
+        o = null;
+        temp = temp.parentElement;
+    }
+    return el;
+}
+
+function makeResizeable(trigger_obj) {
+    add_class(trigger_obj, 'resizeable');
+    addEvent(trigger_obj, 'mousedown', resizeMouseDown);
+    addEvent(trigger_obj, 'mouseup', resizeMouseUp);
+}
+
+function makeUnresizeable(trigger_obj) {
+    remove_class(trigger_obj, 'resizeable');
+    removeEvent(trigger_obj, 'mousedown', resizeMouseDown);
+    removeEvent(trigger_obj, 'mouseup', resizeMouseUp);
+}
+
 /*** Handles the object dragging ***/
 
 var draggingEnabled = true;
@@ -126,8 +317,7 @@ function makeDragable(trigger_obj, obj, dragStopHandler, dragMoveHandler) {
  * This function is called once an object is picked for dragging
  */
 function dragStart(event) {
-    if(!event)
-        event = window.event;
+    event = event || window.event;
 
     var target = getTarget(event, 'icon');
     var button = getButton(event);
@@ -136,21 +326,16 @@ function dragStart(event) {
     if(draggingObject !== null || button != 'LEFT' || !draggingEnabled)
         return true;
 
-    var posx, posy;
-    if (event.pageX || event.pageY) {
-        posx = event.pageX;
-        posy = event.pageY;
-    } else if (event.clientX || event.clientY) {
-        posx = event.clientX;
-        posy = event.clientY;
-    }
+    var parts = getEventMousePos(event),
+        posx  = parts[0],
+        posy  = parts[1];
 
     draggingObject = target;
     draggingObject.x = draggingObject.offsetLeft;
     draggingObject.y = draggingObject.offsetTop;
 
     // Save relative offset of the mouse
-    dragObjectOffset   = [ posy - draggingObject.offsetTop - getHeaderHeight(),
+    dragObjectOffset   = [ posy - draggingObject.offsetTop,
                            posx - draggingObject.offsetLeft ];
     dragObjectStartPos = [ draggingObject.offsetTop, draggingObject.offsetLeft ];
 
@@ -160,11 +345,7 @@ function dragStart(event) {
     if(oLabel) {
         dragObjectChilds[sLabelName] = [ oLabel.offsetTop - draggingObject.offsetTop,
                                          oLabel.offsetLeft - draggingObject.offsetLeft ];
-        oLabel = null;
     }
-    sLabelName = null;
-
-    // Disable the default events for all the different browsers
     return preventDefaultEvents(event);
 }
 
@@ -172,22 +353,16 @@ function dragStart(event) {
  * This function is called repeated while the object is being dragged
  */
 function dragObject(event) {
-    if(!event)
-        event = window.event;
+    event = event || window.event;
 
-    if(draggingObject === null || !draggingEnabled)
+    if (draggingObject === null || !draggingEnabled)
         return true;
 
-    var posx, posy;
-    if (event.pageX || event.pageY) {
-        posx = event.pageX;
-        posy = event.pageY;
-    } else if (event.clientX || event.clientY) {
-        posx = event.clientX;
-        posy = event.clientY;
-    }
+    var parts = getEventMousePos(event),
+        posx  = parts[0],
+        posy  = parts[1];
 
-    var newTop  = posy - dragObjectOffset[0] - getHeaderHeight();
+    var newTop  = posy - dragObjectOffset[0];
     var newLeft = posx - dragObjectOffset[1];
 
     draggingObject.style.position = 'absolute';
@@ -228,7 +403,7 @@ function dragObject(event) {
     if(dragMoveHandlers[draggingObject.id])
         dragMoveHandlers[draggingObject.id](draggingObject,
                                             dragObjects[draggingObject.id], event);
-    oParent = null;
+    return preventDefaultEvents(event);
 }
 
 /**
@@ -393,7 +568,9 @@ function cloneObject(e, objId) {
 /**
  * Is called once to start the object creation
  */
-function addObject(e, objType, viewType, numLeft, action) {
+function addObject(event, objType, viewType, numLeft, action) {
+    event = event || window.event;
+
     addObjType  = objType;
     addViewType = viewType;
     addNumLeft  = numLeft;
@@ -401,15 +578,11 @@ function addObject(e, objType, viewType, numLeft, action) {
 
     add_class(document.body, 'add');
 
-    var event = !e ? window.event : e;
-    if(event.stopPropagation)
-        event.stopPropagation();
-    event.cancelBubble = true;
-    return false;
+    return preventDefaultEvents(event);
 }
 
-function getEventMousePos(e) {
-    var event = !e ? window.event : e;
+function getEventMousePos(event) {
+    event = event || window.event;
 
     // Only accept "left" mouse clicks
     if(getButton(event) != 'LEFT')
@@ -460,13 +633,13 @@ function stop_adding() {
 
 function addClick(e) {
     if(!adding())
-        return;
+        return true;
 
     var pos = getEventMousePos(e);
     if (pos === false) {
         // abort adding when clicking on the header
         stop_adding();
-        return;
+        return false;
     }
         
     addX.push(pos[0] - getSidebarWidth());
@@ -487,7 +660,7 @@ function addClick(e) {
     }
 
     if(addNumLeft > 0)
-        return;
+        return false;
 
     //
     // If this is reached all object coords have been collected
@@ -498,12 +671,9 @@ function addClick(e) {
         var h = addY.pop() - addY[0];
     }
 
-    if (usesSource('worldmap')) {
-        // convert the X/Y coords to lat/long
-        var parts = g_view.convertXYToLatLng(addX, addY);
-        addX = parts[0];
-        addY = parts[1];
-    }
+    var parts = g_view.unproject(addX, addY);
+    addX = parts[0];
+    addY = parts[1];
 
     var sUrl = '';
     if(addAction == 'add' || addAction == 'clone')
@@ -536,6 +706,7 @@ function addClick(e) {
     sUrl = '';
 
     stop_adding();
+    return false;
 }
 
 function adding() {
@@ -544,7 +715,7 @@ function adding() {
 
 function addFollowing(e) {
     if(!addFollow)
-        return;
+        return true;
 
     var pos = getEventMousePos(e);
 
@@ -556,36 +727,6 @@ function addFollowing(e) {
         addShape.drawRect(addX[0], addY[0], (pos[0] - getSidebarWidth() - addX[0]), (pos[1] - addY[0]));
 
     addShape.paint();
-}
-
-/************************************************
- * Register events
- *************************************************/
-
-// First firefox and then the IE
-if (window.addEventListener) {
-  window.addEventListener("mousemove", function(e) {
-    dragObject(e);
-    addFollowing(e);
-    return false;
-  }, false);
-
-  window.addEventListener("click", function(e) {
-    addClick(e);
-    return false;
-  }, false);
-} else {
-  document.documentElement.onmousemove  = function(e) {
-    dragObject(e);
-    addFollowing(e);
-    return false;
-  };
-
-  document.documentElement.onclick = function(e) {
-    addClick(e);
-    // Never return false here! This would prevent open links in IE
-    return true;
-  };
 }
 
 function useGrid() {
@@ -814,3 +955,17 @@ function removeMapObject(objectId) {
 
     delete g_view.objects[objectId];
 }
+
+/************************************************
+ * Register events
+ *************************************************/
+
+addEvent(document, 'mousemove', function(event) {
+    return resizeMouseMove(event)
+            && dragObject(event)
+            && addFollowing(event);
+});
+
+addEvent(document, 'click', function(event) {
+    return addClick(event);
+});

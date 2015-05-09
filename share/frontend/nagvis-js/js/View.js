@@ -278,6 +278,19 @@ var View = Base.extend({
         content.style.top = getHeaderHeight() + 'px';
 
         sidebarUpdatePosition();
-    }
+    },
+
+    // Transforms the view specific coordinates to browser x/y coordinates.
+    // This is executed when loading object coordinates from persistance.
+    project: function(x, y) {
+        return [x, y];
+    },
+
+    // Transforms the X/Y coordinates to view specific coords, like
+    // on worldmaps to lat/long coordinates. This is executed when
+    // persisting the object coordinates after a change
+    unproject: function(x, y) {
+        return [x, y];
+    },
 
 });

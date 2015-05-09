@@ -9,6 +9,9 @@ This is a small file for storing quick thoughts about new features and needed ch
 - Rework layout of role edit form
 
 Worldmap:
+  - BUG: Bewegen von Objekten !=22px Größe lässt die Objekte springen, weil in
+    ViewWorldmap createIcon() mit einer festen iconSize rechnet, bzw. dadurch
+    das marginLeft/marginTop falsch setzt
   - Andere Provider auswählbar machen
 
 - Verzeichnis-Hierarchie unterhalb von maps/
