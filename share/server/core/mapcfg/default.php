@@ -29,6 +29,14 @@ function listLineTypes() {
     );
 }
 
+function listStatelessLineTypes() {
+    return Array(
+        '10' => '-------><-------',
+        '11' => '--------------->',
+        '12' => '----------------',
+    );
+}
+
 function listLineArrows() {
     return Array(
         'forward' => '------->',
@@ -878,6 +886,16 @@ $mapConfigVars = Array(
         'field_type'    => 'hidden',
     ),
 
+    'line_type_line' => Array(
+        'must'          => 0,
+        'default'       => '11',
+        'match'         => MATCH_LINE_TYPE,
+        'field_type'    => 'dropdown',
+        'depends_on'    => 'view_type',
+        'depends_value' => 'line',
+        'list'          => 'listStatelessLineTypes',
+    ),
+
     // CONTAINER SPECIFIC OPTIONS
 
     'view_type_container' => Array(
@@ -1320,11 +1338,12 @@ $mapConfigVarMap['line'] = Array(
         'object_id' => null,
     ),
     'appearance' => array(
-        'view_type_line' => 'view_type',
-        'line_type' => null,
-        'line_cut' => null,
-        'line_width' => null,
-        'line_color' => null,
+        'view_type_line'    => 'view_type',
+        'line_type_line'    => 'line_type',
+        'line_arrow'        => null,
+        'line_cut'          => null,
+        'line_width'        => null,
+        'line_color'        => null,
         'line_color_border' => null,
     ),
     'actions' => array(
