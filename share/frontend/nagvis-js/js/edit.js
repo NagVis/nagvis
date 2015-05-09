@@ -798,3 +798,19 @@ function addOption(form) {
     field.value = parseInt(field.value) + 1;
     updateForm(form);
 }
+
+/**
+ * Removes an element from the map
+ */
+function removeMapObject(objectId) {
+    var obj = getMapObjByDomObjId(objectId);
+
+    obj.detachChilds();
+    saveObjectRemove(objectId);
+    obj.remove();
+
+    if(!obj.bIsLocked)
+        updateNumUnlocked(-1);
+
+    delete g_view.objects[objectId];
+}

@@ -137,9 +137,6 @@ class NagVisContextMenu {
         if(strpos($this->code,'[lang_delete]') !== FALSE)
             $this->code = str_replace('[lang_delete]', l('Delete object'), $this->code);
 
-        if(strpos($this->code,'[lang_delete_confirm]') !== FALSE)
-            $this->code = str_replace('[lang_delete_confirm]', l('Really delete the object?'), $this->code);
-
         if(strpos($this->code,'[lang_toggle_line_mid]') !== FALSE)
             $this->code = str_replace('[lang_toggle_line_mid]', l('Lock/Unlock line middle'), $this->code);
 

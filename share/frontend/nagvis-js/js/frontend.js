@@ -269,27 +269,6 @@ function updateNumUnlocked(num) {
 }
 
 /**
- * Removes an element from the map
- */
-function removeMapObject(objectId, msg) {
-    if(msg != '' && !confirm(msg))
-        return;
-
-    var obj = getMapObjByDomObjId(objectId);
-
-    obj.detachChilds();
-    saveObjectRemove(objectId);
-    obj.remove();
-
-    if(!obj.bIsLocked)
-        updateNumUnlocked(-1);
-
-    obj = null;
-
-    delete g_view.objects[objectId];
-}
-
-/**
  * Shows the add/modify frontend dialog for the given object
  */
 function showAddModifyDialog(mapname, objectId) {
