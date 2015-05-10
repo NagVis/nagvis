@@ -79,7 +79,7 @@ define('MATCH_BACKGROUND_NAME', '/^[0-9A-Za-z_-]+$/');
 define('MATCH_VIEW_TYPE', '/^(?:icon|line)$/i');
 define('MATCH_VIEW_TYPE_OBJ', '/^(?:icon|line|gadget)$/i');
 define('MATCH_VIEW_TYPE_CONTAINER', '/^(?:inline|iframe)$/i');
-define('MATCH_GET_OBJECT_TYPE', '/^(state|complete|summary)$/');
+define('MATCH_GET_OBJECT_TYPE', '/^(state|full|complete|summary)$/');
 define('MATCH_GADGET_TYPE', '/^(?:img|html)$/i');
 define('MATCH_OBJECT_TYPES', '/^(host|service|hostgroup|servicegroup|dyngroup|aggr|map)$/');
 define('MATCH_AUTOMAP_RENDER_MODE', '/^(directed|undirected|radial|circular|undirected2|undirected3)?$/');

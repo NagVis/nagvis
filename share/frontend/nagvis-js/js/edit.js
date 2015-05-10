@@ -598,7 +598,7 @@ function getEventMousePos(event) {
     return [ posx, posy ];
 }
 
-function stop_adding() {
+function stopAdding() {
     remove_class(document.body, 'add');
     addObjType  = null,
     addViewType = null,
@@ -617,10 +617,10 @@ function addClick(e) {
     var pos = getEventMousePos(e);
     if (pos === false) {
         // abort adding when clicking on the header
-        stop_adding();
+        stopAdding();
         return false;
     }
-        
+
     addX.push(pos[0] - getSidebarWidth());
     addY.push(pos[1]);
     addNumLeft -= 1;
@@ -682,9 +682,7 @@ function addClick(e) {
     }
 
     showFrontendDialog(sUrl, _('Create Object'));
-    sUrl = '';
-
-    stop_adding();
+    stopAdding();
     return false;
 }
 

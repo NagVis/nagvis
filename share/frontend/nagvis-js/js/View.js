@@ -116,21 +116,28 @@ var View = Base.extend({
     },
 
     // Bulk update object states and then visualize eventual changes
-    updateObjects: function(state_infos) {
+    updateObjects: function(attrs) {
         var at_least_one_changed = false;
     
         // Loop all object which have new information
-        for (var i = 0, len = state_infos.length; i < len; i++) {
-            var objectId = state_infos[i].object_id;
+        for (var i = 0, len = attrs.length; i < len; i++) {
+            var objectId = attrs[i].object_id;
     
-            // Object not found
+            // Object not found. This should only be happen for new objects which have
+            // just been added to the map by the user. In this case we always have "full"
+            // object information, not only state attrs
             if (!isset(this.objects[objectId])) {
-                eventlog("updateObjects", "critical", "Could not find an object with "
-                                                     +"the id "+objectId+" in object array");
-                return false;
+                // this is only relevant for ViewMap at the moment
+                this.addObject(attrs[i]);
+                this.renderObject(objectId);
+                at_least_one_changed = true; // always reload summary state
             }
-    
-            at_least_one_changed &= this.objects[objectId].update_state(state_infos[i]);
+            else {
+                // the method is called update_state(), but it processes all attrs it
+                // is receiving. In case a user updates an object configuration this
+                // is handled correctly. Should consider renaming the method.
+                at_least_one_changed &= this.objects[objectId].update_state(attrs[i]);
+            }
         }
     
         if (at_least_one_changed)

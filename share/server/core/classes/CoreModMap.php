@@ -341,7 +341,7 @@ class CoreModMap extends CoreModule {
 
         // i might not be set when all map objects should be fetched or when only
         // the summary of the map is called
-        if($aVals['i'] != '')
+        if(isset($aVals['i']) && $aVals['i'] != '')
             $MAPCFG->filterMapObjects($aVals['i']);
 
         $MAP = new NagVisMap($MAPCFG, GET_STATE, IS_VIEW);

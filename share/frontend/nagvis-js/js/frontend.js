@@ -289,13 +289,9 @@ function showAckDialog(map_name, objectId) {
 }
 
 // Handles manual map object update triggered by e.g. the context menu
-function refreshMapObject(event, objectId) {
-    var oObj = getMapObjByDomObjId(objectId);
-
-    var name = oObj.conf.name;
-    var obj_id = oObj.conf.object_id;
-    var map = oPageProperties.map_name;
-    oObj = null;
+function refreshMapObject(event, objectId, only_state) {
+    if (typeof only_state === 'undefined')
+        only_state = true;
 
     // Only append map param if it is a known map
     var sMapPart = '';
@@ -303,8 +299,7 @@ function refreshMapObject(event, objectId) {
     var sAddPart = '';
     if (g_view.type === 'map') {
         sMod = 'Map';
-        if (map !== false)
-            sMapPart = '&show='+escapeUrlValues(map);
+        sMapPart = '&show='+escapeUrlValues(g_view.id);
         sAddPart = getViewParams();
     }
     else if (g_view.type === 'overview') {
@@ -312,14 +307,20 @@ function refreshMapObject(event, objectId) {
         sMapPart = '';
     }
 
+    var ty = only_state ? 'state' : 'full';
+
     // Start the ajax request to update this single object
     call_ajax(oGeneralProperties.path_server+'?mod=' + sMod + '&act=getObjectStates'
-              + sMapPart + '&ty=state&i[]=' + obj_id + sAddPart, {
+              + sMapPart + '&ty='+ty+'&i[]=' + objectId + sAddPart, {
         response_handler: function(response) {
             g_view.updateObjects(response);
         }
     });
-    return preventDefaultEvents(event);
+
+    // event might be null in case this is not called by context menu,
+    // but instead directly when adding/modifying an object
+    if (event)
+        return preventDefaultEvents(event);
 }
 
 /**

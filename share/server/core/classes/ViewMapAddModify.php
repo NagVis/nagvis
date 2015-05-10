@@ -109,8 +109,9 @@ class ViewMapAddModify {
 
     // Validate and process addModify form submissions
     private function handleAddModify() {
-        $perm      = get_checkbox('perm');
-        $perm_user = get_checkbox('perm_user');
+        $perm        = get_checkbox('perm');
+        $perm_user   = get_checkbox('perm_user');
+        $show_dialog = false;
 
         // Modification/Creation?
         // The object_id is known on modification. When it is not known 'type' is set
@@ -125,17 +126,26 @@ class ViewMapAddModify {
                 // This is the 1. case -> redirect the user to a well formated url
                 $attrs = array_merge($this->attrs, $this->attrs_filtered);
                 unset($attrs['object_id']);
-                $result = array(0, $attrs, null);
+
+                js('document.getElementById("_submit").disabled = true;'
+                  .'window.location.href = makeuri('.json_encode($attrs).');');
+                $show_dialog = true;
             }
             elseif ($this->mode == 'view_params' && !$perm && $perm_user) {
                 // This is the 2. case -> saving the options only for the user
                 $USERCFG = new CoreUserCfg();
                 $attrs = $this->attrs;
                 unset($attrs['object_id']);
+
                 $USERCFG->doSet(array(
                     'params-' . $this->MAPCFG->getName() => $attrs,
                 ));
-                $result = array(2, null, l('Personal settings saved.'));
+
+                scroll_up(); // On success, always scroll to top of page
+                success(l('Personal settings saved.'));
+                js('document.getElementById("_submit").disabled = true;'
+                  .'window.setTimeout(function() { window.location.reload(); }, 2000);');
+                $show_dialog = true;
             }
             else {
                 if (!$this->MAPCFG->objExists($this->object_id))
@@ -158,23 +168,25 @@ class ViewMapAddModify {
                 $t = $this->object_type == 'global' ? l('map configuration') : $this->object_type;
                 $result = array(2, null, l('The [TYPE] has been modified. Reloading in 2 seconds.',
                                                                Array('TYPE' => $t)));
+
+                js('popupWindowClose();'
+                  .'refreshMapObject(null, "'.$this->object_id.'", false);');
             }
         } else {
             // Create the new object
             $this->validateAttributes();
 
             // append a new object definition to the map configuration
-            $this->MAPCFG->addElement($this->object_type, $this->attrs, true);
+            $obj_id = $this->MAPCFG->addElement($this->object_type, $this->attrs, true);
 
-            $result = array(2, null, l('The [TYPE] has been added. Reloading in 2 seconds.',
-                                                            Array('TYPE' => $this->object_type)));
+            js('popupWindowClose();'
+              .'refreshMapObject(null, "'.$obj_id.'", false);');
         }
 
         // delete map lock
         if(!$this->MAPCFG->deleteMapLock())
             throw new NagVisException(l('mapLockNotDeleted'));
-
-        return $result;
+        return $show_dialog;
     }
 
     private function getAttr($default_value, $attr, $must, $only_inherited = false) {
@@ -559,21 +571,8 @@ class ViewMapAddModify {
         // Don't handle submit actions when the 'update' POST attribute is set
         if (is_action()) {
             try {
-                $success = $this->handleAddModify();
-
-                scroll_up(); // On success, always scroll to top of page
-
-                $reload_time = $success[0];
-                if ($success[2] !== null) {
-                    success($success[2]);
-                    js('document.getElementById("_submit").disabled = true;'
-                      .'window.setTimeout(function() { window.location.reload(); }, '.$reload_time.'*1000);');
-                }
-                elseif ($success[1] !== null) {
-                    js('document.getElementById("_submit").disabled = true;'
-                      .'window.setTimeout(function() { window.location.href = '
-                      .'makeuri('.json_encode($success[1]).'); }, '.$reload_time.'*1000);');
-                }
+                if (!$this->handleAddModify())
+                    return ob_get_clean();
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (FieldInputError $e) {

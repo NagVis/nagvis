@@ -52,8 +52,6 @@ Maße des Objektes ermitteln und prüfen, ob es neu positioniert werden muss.
 Eine Nebenwirkung könnte sein, dass die Entfernungen der Controls und die anderer
 relativ positionierten Objekte nicht automatisch mitskaliert werden.
 
-*** Nicht kompletter Reload bei veränderter Map Konfiguration ***
-
 Der Trend geht an einigen Stellen stark richtung dynamische Map Konfigurationen.
 Dem sollte man irgendwie begegnen. Momentan wird die Seite vom JS Frontend
 komplett neu geladen. Der bessere Weg wäre, wenn das Frontend irgendwie die Differenz

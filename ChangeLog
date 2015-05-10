@@ -38,6 +38,8 @@ Frontend:
     actions (hover, context, link) are now possible on the whole lines
   * Removed need to confirm object deletion (you already need at least two clicks:
     open the context menu, maybe unlock, and then click on delete)
+  * Adding/modifying map objects does not trigger map reload anymore. This makes
+    editing maps much more fun since you can do your work much faster! :-)
   * FIX: Stateless lines now handle line_color and line_color_border correctly
   * FIX: Removed useless weathermap line type selections from stateless lines
   * FIX: Fixed annoying browser warning message when reloading pages which

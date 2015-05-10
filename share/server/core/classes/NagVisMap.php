@@ -65,7 +65,8 @@ class NagVisMap {
      * Parses the objects of the map. Can be called in different modes
      *   complete: first object is the summary of the map and all map objects
      *   summary:  only the summary state of the map
-     *   state:    the state of all map objects
+     *   full:     all object infos of all map objects (might be filtered)
+     *   state:    the state of all map objects (might be filtered)
      *
      * @param   String  The type of request. Can be complete|summary|state
      * @return	String  Json Code
