@@ -103,13 +103,12 @@ function getDirection(event, el) {
 
 function resizeMouseDown(event) {
     event = event || window.event;
-    var target = getTargetRaw(event);
-    var el = getReal(target, "className", "resizeable");
+    var target = getTargetByClass(event, 'resizeable');
 
-    if (el == null || el.id == '' || !has_class(el, "resizeable"))
+    if (!target || target.id == '')
         return true;
 
-    dir = getDirection(event, el);
+    dir = getDirection(event, target);
     if (dir == "")
         return true;
 
@@ -119,15 +118,15 @@ function resizeMouseDown(event) {
 
     g_resize_obj = new g_resize_object();
 
-    g_resize_obj.el = el;
+    g_resize_obj.el = target;
     g_resize_obj.dir = dir;
 
     g_resize_obj.grabx  = event.clientX;
     g_resize_obj.graby  = event.clientY;
-    g_resize_obj.width  = el.offsetWidth;
-    g_resize_obj.height = el.offsetHeight;
-    g_resize_obj.left   = el.offsetLeft;
-    g_resize_obj.top    = el.offsetTop;
+    g_resize_obj.width  = target.offsetWidth;
+    g_resize_obj.height = target.offsetHeight;
+    g_resize_obj.left   = pxToInt(target.style.left);
+    g_resize_obj.top    = pxToInt(target.style.top);
 
     return preventDefaultEvents(event);
 }
@@ -180,21 +179,20 @@ function resizeMouseUp(event) {
 
 function resizeMouseMove(event) {
     event = event || window.event;
-    var target = getTargetRaw(event);
+    var target = getTargetByClass(event, 'resizeable');
 
     // First update the cursor. This needs to be done even
     // when not yet resizing to visualize that it is possible
 
-    var el = getReal(target, "className", "resizeable");
-    if (has_class(el,"resizeable")) {
-        var str = getDirection(event, el);
+    if (target) {
+        var str = getDirection(event, target);
 
         // Fix the cursor
         if (str == "")
             str = "";
         else
             str += "-resize";
-        el.style.cursor = str;
+        target.style.cursor = str;
     }
 
     // The following code is only relevant when already resizing
@@ -224,20 +222,6 @@ function resizeMouseMove(event) {
     return preventDefaultEvents(event);
 }
 
-function getReal(el, type, value) {
-    temp = el;
-    while(isset(temp) && temp != null && temp.tagName != "BODY") {
-        var o = temp[type];
-        if(isset(o) && o.indexOf(value) !== -1) {
-            el = temp;
-            return el;
-        }
-        o = null;
-        temp = temp.parentElement;
-    }
-    return el;
-}
-
 function makeResizeable(trigger_obj) {
     add_class(trigger_obj, 'resizeable');
     addEvent(trigger_obj, 'mousedown', resizeMouseDown);
@@ -245,6 +229,9 @@ function makeResizeable(trigger_obj) {
 }
 
 function makeUnresizeable(trigger_obj) {
+    // when locking the object while the cursor is a resize cursor,
+    // it will stay as it is, when not removing them.
+    trigger_obj.style.cursor = '';
     remove_class(trigger_obj, 'resizeable');
     removeEvent(trigger_obj, 'mousedown', resizeMouseDown);
     removeEvent(trigger_obj, 'mouseup', resizeMouseUp);
@@ -266,16 +253,10 @@ function getTargetRaw(event) {
     return event.target ? event.target : event.srcElement;
 }
 
-function getTarget(event, ignoreType) {
-    if(typeof(ignoreType) === 'undefined')
-        var ignoreType = null;
-
-    var target = event.target ? event.target : event.srcElement;
-    while(target && (target.tagName != 'DIV' 
-          || typeof(target.id) === 'undefined'
-          || (ignoreType !== null && (target.id.split('-')[1] === ignoreType)))) {
+function getTargetByClass(event, className) {
+    var target = getTargetRaw(event);
+    while (target && !has_class(target, className))
         target = target.parentNode;
-    }
     return target;
 }
 
@@ -319,11 +300,11 @@ function makeDragable(trigger_obj, obj, dragStopHandler, dragMoveHandler) {
 function dragStart(event) {
     event = event || window.event;
 
-    var target = getTarget(event, 'icon');
+    var target = getTargetByClass(event, 'dragger');
     var button = getButton(event);
 
     // Skip calls when already dragging or other button than left mouse
-    if(draggingObject !== null || button != 'LEFT' || !draggingEnabled)
+    if (draggingObject !== null || button != 'LEFT' || !target || !draggingEnabled)
         return true;
 
     var parts = getEventMousePos(event),
@@ -331,20 +312,19 @@ function dragStart(event) {
         posy  = parts[1];
 
     draggingObject = target;
-    draggingObject.x = draggingObject.offsetLeft;
-    draggingObject.y = draggingObject.offsetTop;
+    draggingObject.x = pxToInt(draggingObject.style.left);
+    draggingObject.y = pxToInt(draggingObject.style.top);
 
     // Save relative offset of the mouse
-    dragObjectOffset   = [ posy - draggingObject.offsetTop,
-                           posx - draggingObject.offsetLeft ];
-    dragObjectStartPos = [ draggingObject.offsetTop, draggingObject.offsetLeft ];
+    dragObjectOffset   = [ posx - draggingObject.x, posy - draggingObject.y ];
+    dragObjectStartPos = [ draggingObject.x, draggingObject.y ];
 
     // Save diff coords of relative objects
     var sLabelName = target.id.replace('box_', 'rel_label_');
     var oLabel = document.getElementById(sLabelName);
     if(oLabel) {
-        dragObjectChilds[sLabelName] = [ oLabel.offsetTop - draggingObject.offsetTop,
-                                         oLabel.offsetLeft - draggingObject.offsetLeft ];
+        dragObjectChilds[sLabelName] = [ oLabel.offsetLeft - draggingObject.x,
+                                         oLabel.offsetTop - draggingObject.y ];
     }
     return preventDefaultEvents(event);
 }
@@ -360,14 +340,13 @@ function dragObject(event) {
 
     var parts = getEventMousePos(event),
         posx  = parts[0],
-        posy  = parts[1];
-
-    var newTop  = posy - dragObjectOffset[0];
-    var newLeft = posx - dragObjectOffset[1];
+        posy  = parts[1],
+        newLeft = posx - dragObjectOffset[0],
+        newTop  = posy - dragObjectOffset[1];
 
     draggingObject.style.position = 'absolute';
-    draggingObject.style.top  = newTop + 'px';
     draggingObject.style.left = newLeft + 'px';
+    draggingObject.style.top  = newTop + 'px';
     draggingObject.x = rmZoomFactor(newLeft, true);
     draggingObject.y = rmZoomFactor(newTop, true);
 
@@ -479,8 +458,8 @@ function moveRelativeObject(parentId, parentTop, parentLeft) {
         var oLabel = document.getElementById(sLabelName);
         if(oLabel) {
             oLabel.style.position = 'absolute';
-            oLabel.style.top  = (dragObjectChilds[sLabelName][0] + parentTop) + 'px';
-            oLabel.style.left = (dragObjectChilds[sLabelName][1] + parentLeft) + 'px';
+            oLabel.style.left = (dragObjectChilds[sLabelName][0] + parentLeft) + 'px';
+            oLabel.style.top  = (dragObjectChilds[sLabelName][1] + parentTop) + 'px';
             oLabel = null;
         }
     }
@@ -494,12 +473,12 @@ function dragStop(event) {
 
     // When x or y are negative just return this and make no change
     if(draggingObject.y < 0 || draggingObject.x < 0) {
-        draggingObject.style.top  = dragObjectStartPos[0] + 'px';
-        draggingObject.style.left = dragObjectStartPos[1] + 'px';
-        draggingObject.x = dragObjectStartPos[1];
-        draggingObject.y = dragObjectStartPos[0];
+        draggingObject.style.left = dragObjectStartPos[0] + 'px';
+        draggingObject.style.top  = dragObjectStartPos[1] + 'px';
+        draggingObject.x = dragObjectStartPos[0];
+        draggingObject.y = dragObjectStartPos[1];
 
-        moveRelativeObject(draggingObject.id, dragObjectStartPos[0], dragObjectStartPos[1]);
+        moveRelativeObject(draggingObject.id, dragObjectStartPos[1], dragObjectStartPos[0]);
 
         // Call the dragging handler when one is set
         if(dragMoveHandlers[draggingObject.id])
@@ -510,7 +489,7 @@ function dragStop(event) {
     }
 
     // Skip when the object has not been moved
-    if(draggingObject.y == dragObjectStartPos[0] && draggingObject.x == dragObjectStartPos[1]) {
+    if(draggingObject.y == dragObjectStartPos[1] && draggingObject.x == dragObjectStartPos[0]) {
         draggingObject = null;
         return;
     }

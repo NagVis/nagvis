@@ -34,6 +34,6 @@ var NagVisTextbox = NagVisStatelessObject.extend({
     },
 
     getText: function() {
-        return this.replaceMacros(this.conf.text)
+        return this.replaceMacros(this.conf.text);
     }
 });

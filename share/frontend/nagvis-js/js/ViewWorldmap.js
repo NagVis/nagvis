@@ -124,8 +124,8 @@ var ViewWorldmap = ViewMap.extend({
 // support adding an existing domNode)
 L.NagVisObj = L.Icon.extend({
     options: {
-        // FIXME: make this dynamic depending on size
-        iconSize: [22, 22], // also can be set through CSS
+        // Is set later by onAdd function to respect the real icon size
+        iconSize: [0, 0],
         iconAnchor: [0, 0],
         className: 'leaflet-nagvis-obj',
         node: null,
@@ -145,15 +145,17 @@ L.NagVisObj = L.Icon.extend({
         }
 
         this._setIconStyles(div, 'icon');
+        this._applyOffset();
+        return div;
+    },
 
+    _applyOffset: function() {
         // Fix icon position which is not automatically fixed by this._setIconStyles because we
         // enforce iconAnchor: [0, 0].
-        var offset = L.point(options.iconSize);
+        var offset = L.point(this.options.iconSize);
         offset._divideBy(2);
-        options.obj.trigger_obj.style.marginLeft = (-offset.x) + 'px';
-        options.obj.trigger_obj.style.marginTop  = (-offset.y) + 'px';
-
-        return div;
+        this.options.obj.trigger_obj.style.marginLeft = (-offset.x) + 'px';
+        this.options.obj.trigger_obj.style.marginTop  = (-offset.y) + 'px';
     },
 
     createShadow: function () {
@@ -169,7 +171,20 @@ L.NagVisMarker = L.Marker.extend({
     initialize: function (latlng, options) {
         L.Marker.prototype.initialize.call(this, latlng, options);
 
+        this.on('add', this._onAdd, this);
         //this.on('mousemove', this._onMouseMove, this);
+    },
+
+    // Update the size off the icon to make the object being centered
+    _onAdd: function(lEvent) {
+        var icon = this.options.icon,
+            obj = icon.options.obj,
+            trigger_obj = icon.options.obj.trigger_obj,
+            w = trigger_obj.clientWidth,
+            h = trigger_obj.clientHeight;
+
+        icon.options.iconSize = [w, h];
+        icon._applyOffset();
     },
 
     //_onMouseMove: function (event) {
