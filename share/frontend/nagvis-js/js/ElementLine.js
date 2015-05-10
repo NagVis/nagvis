@@ -64,7 +64,9 @@ var ElementLine = Element.extend({
         this.line_container = oLineDiv;
         container.appendChild(oLineDiv);
         oLineDiv.setAttribute('id', this.obj.conf.object_id+'-line');
-        oLineDiv.style.zIndex = this.obj.conf.z;
+        // the objects canvas might hide icons behind it, put it one layer down,
+        // because normally icons and lines are on the same z-index
+        oLineDiv.style.zIndex = parseInt(this.obj.conf.z)-1;
 
         this.calcLineParts();
         this.renderLine();
@@ -230,7 +232,9 @@ var ElementLine = Element.extend({
         canvas.style.top = (yMin-border)+"px";
         canvas.width = Math.round(xMax-xMin)+2*border;
         canvas.height = Math.round(yMax-yMin)+2*border;
-        canvas.style.zIndex = this.obj.conf.z;
+        // the objects canvas might hide icons behind it, put it one layer down,
+        // because normally icons and lines are on the same z-index
+        canvas.style.zIndex = parseInt(this.obj.conf.z)-1;
 
         addEvent(canvas, 'mousemove', this.handleMouseMove.bind(this));
 
