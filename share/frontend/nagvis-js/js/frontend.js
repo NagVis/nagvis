@@ -313,7 +313,7 @@ function refreshMapObject(event, objectId, only_state) {
     call_ajax(oGeneralProperties.path_server+'?mod=' + sMod + '&act=getObjectStates'
               + sMapPart + '&ty='+ty+'&i[]=' + objectId + sAddPart, {
         response_handler: function(response) {
-            g_view.updateObjects(response);
+            g_view.updateObjects(response, only_state);
         }
     });
 

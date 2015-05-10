@@ -41,7 +41,7 @@ var NagVisObject = Base.extend({
         this.elements    = [];
         this.conf        = conf;
 
-        if (usesSource('worldmap') && this.conf.x) // exclude map summary object
+        if (this.conf.x) // exclude map summary object
             this.transformCoordinates();
 
         // When no object_id given by server: generate own id

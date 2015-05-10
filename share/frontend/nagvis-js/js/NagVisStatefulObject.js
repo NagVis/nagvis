@@ -222,7 +222,7 @@ var NagVisStatefulObject = NagVisObject.extend({
         this.base();
     },
 
-    update_state: function(state_info) {
+    update_state: function(state_info, only_state) {
         // Save old state for later "change detection"
         this.saveLastState();
 
@@ -231,18 +231,25 @@ var NagVisStatefulObject = NagVisObject.extend({
             if (key != 'object_id')
                 this.conf[key] = state_info[key];
 
+        if (!only_state)
+            this.transformCoordinates();
+
         // Update lastUpdate timestamp
         this.setLastUpdate();
 
         for (var i = 0; i < this.elements.length; i++)
             this.elements[i].update_state();
 
-        if (this.stateChanged()) {
+        // When either the state changed or the map attributes has been
+        // updated (after a config change by the user)
+        if (this.stateChanged() || !only_state) {
             // Rerender and draw object
             this.erase();
             this.render();
             this.draw();
+        }
 
+        if (this.stateChanged()) {
             /**
              * Additional eventhandling
              *

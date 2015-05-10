@@ -116,7 +116,7 @@ var View = Base.extend({
     },
 
     // Bulk update object states and then visualize eventual changes
-    updateObjects: function(attrs) {
+    updateObjects: function(attrs, only_state) {
         var at_least_one_changed = false;
     
         // Loop all object which have new information
@@ -136,7 +136,7 @@ var View = Base.extend({
                 // the method is called update_state(), but it processes all attrs it
                 // is receiving. In case a user updates an object configuration this
                 // is handled correctly. Should consider renaming the method.
-                at_least_one_changed &= this.objects[objectId].update_state(attrs[i]);
+                at_least_one_changed &= this.objects[objectId].update_state(attrs[i], only_state);
             }
         }
     
