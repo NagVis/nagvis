@@ -245,7 +245,8 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
         return false; // do nothing
 
     list($sw_lng, $sw_lat, $ne_lng, $ne_lat) = explode(',', $bbox);
-    $map_config = array_merge($map_config, worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat));
+    foreach (worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) as $object_id => $obj)
+        $map_config[$object_id] = $obj;
     return true;
 }
 
