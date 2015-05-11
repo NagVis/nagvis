@@ -91,28 +91,7 @@ var NagVisObject = Base.extend({
         }
 
         this.draw();
-
-        // Add the objects container to the map object
-        if (!usesSource('worldmap')) {
-            var oMap = document.getElementById('map');
-            if (oMap) {
-                oMap.appendChild(container);
-            }
-        }
-        else {
-            var latlng = g_map.containerPointToLatLng(L.point(0, 0));
-            L.nagVisMarker(latlng, {
-                icon: L.nagVisObj({node: container, obj: this}),
-                // prevent using leaflets event handlers
-                clickable: false,
-                // Would be nice to use but is problematic with the line canvas objects
-                // which will hide objects which are located behind them
-                //riseOnHover: true,
-                // Put lines one layer behind all other objects to fix canvas hiding
-                // the other objects
-                zIndexOffset: this.conf.view_type === 'line' ? -1 : 0
-            }).addTo(g_map_objects);
-        }
+        g_view.drawObject(this);
     },
 
     draw: function() {
@@ -128,14 +107,7 @@ var NagVisObject = Base.extend({
         for (var i = 0; i < this.elements.length; i++)
             this.elements[i].erase(this);
 
-        var oMap = document.getElementById('map');
-        if (!oMap) {
-            return;
-        }
-
-        // Remove object from DOM
-        if (!usesSource('worldmap'))
-            oMap.removeChild(this.dom_obj);
+        g_view.eraseObject(this);
         this.visible = false;
     },
 

@@ -146,6 +146,10 @@ var View = Base.extend({
 
     handleStateChanged: function() {},
 
+    // Is called by an object to add the rendered dom object to the map
+    drawObject: function(obj) {},
+    eraseObject: function(obj) {},
+
     /**
      * Is called by the worker function to check all objects for repeated
      * events to be triggered independent of the state updates.

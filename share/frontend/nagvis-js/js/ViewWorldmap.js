@@ -31,6 +31,23 @@ var ViewWorldmap = ViewMap.extend({
         this.base();
     },
 
+    drawObject: function(obj) {
+        var latlng = g_map.containerPointToLatLng(L.point(0, 0));
+        L.nagVisMarker(latlng, {
+            icon: L.nagVisObj({node: obj.dom_obj, obj: obj}),
+            // prevent using leaflets event handlers
+            clickable: false,
+            // Would be nice to use but is problematic with the line canvas objects
+            // which will hide objects which are located behind them
+            //riseOnHover: true,
+            // Put lines one layer behind all other objects to fix canvas hiding
+            // the other objects
+            zIndexOffset: obj.conf.view_type === 'line' ? -1 : 0
+        }).addTo(g_map_objects);
+    },
+
+    eraseObject: function(obj) {},
+
     /**
      * END OF PUBLIC METHODS
      */

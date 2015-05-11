@@ -219,6 +219,16 @@ var ViewMap = View.extend({
         }
     },
 
+    // Add the objects dom_obj to the maps dom_obj
+    drawObject: function(obj) {
+        this.dom_obj.appendChild(obj.dom_obj);
+    },
+
+    // Removes the given objects dom_obj from the maps dom_obj 
+    eraseObject: function(obj) {
+        this.dom_obj.removeChild(obj.dom_obj);
+    },
+
     // Does initial rendering of map objects
     initializeObjects: function(aMapObjectConf) {
         eventlog("worker", "debug", "initializeObjects: Start setting map objects");
