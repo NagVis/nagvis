@@ -45,7 +45,6 @@ var ElementLine = Element.extend({
         if (this.isWeathermapLine() &&
             (this.obj.stateChanged() || this.obj.outputOrPerfdataChanged())) {
             this.erase();
-            console.log('update_state');
             this.render();
             this.draw();
         }
@@ -267,7 +266,6 @@ var ElementLine = Element.extend({
             // now scale the context to counter
             // the fact that we've manually scaled
             // our canvas element
-            console.log(this.obj.conf.object_id + ' ' + ratio);
             ctx.scale(ratio, ratio);
         }
 
