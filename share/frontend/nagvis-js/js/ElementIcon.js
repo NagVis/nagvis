@@ -24,6 +24,7 @@
 var ElementIcon = Element.extend({
     render: function() {
         this.renderIcon();
+        this.place();
     },
 
     // Moves the icon to it's location as described by this js object

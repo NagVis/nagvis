@@ -45,6 +45,7 @@ var ElementLine = Element.extend({
         if (this.isWeathermapLine() &&
             (this.obj.stateChanged() || this.obj.outputOrPerfdataChanged())) {
             this.erase();
+            console.log('update_state');
             this.render();
             this.draw();
         }
@@ -75,7 +76,7 @@ var ElementLine = Element.extend({
     },
 
     place: function() {
-        // FIXME: This should be possible without re-rendering everything
+        // Totally redraw the line when moving the line anchors arround
         this.erase();
         this.render();
         this.draw();
@@ -239,6 +240,8 @@ var ElementLine = Element.extend({
         addEvent(canvas, 'mousemove', this.handleMouseMove.bind(this));
 
         var ctx = canvas.getContext('2d');
+        if (!ctx)
+            return; // silently skip
 
         // On high resolution devices like e.g. 4k screens where
         // the page is not rendered 1:1 but instead shown scaled,
@@ -264,6 +267,7 @@ var ElementLine = Element.extend({
             // now scale the context to counter
             // the fact that we've manually scaled
             // our canvas element
+            console.log(this.obj.conf.object_id + ' ' + ratio);
             ctx.scale(ratio, ratio);
         }
 

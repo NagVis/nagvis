@@ -81,7 +81,6 @@ var NagVisObject = Base.extend({
 
         for (var i = 0; i < this.elements.length; i++) {
             this.elements[i].render();
-            this.elements[i].place();
         }
 
         if (!this.bIsLocked) {

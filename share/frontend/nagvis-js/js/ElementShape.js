@@ -24,6 +24,7 @@
 var ElementShape = Element.extend({
     render: function() {
         this.renderShape();
+        this.place();
     },
 
     // Moves the Shape to it's location as described by this js object

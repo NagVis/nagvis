@@ -31,6 +31,7 @@ var ElementBox = Element.extend({
             this.obj.conf.h, this.obj.getText(), this.obj.conf.style
         );
         this.obj.trigger_obj = this.dom_obj;
+        this.place();
     },
 
     unlock: function () {

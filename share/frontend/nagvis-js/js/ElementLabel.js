@@ -59,12 +59,12 @@ var ElementLabel = Element.extend({
         this.dom_obj = renderNagVisTextbox(
             this.obj.conf.object_id + '-label',
             this.obj.conf.label_background, this.obj.conf.label_border,
-            // FIXME: remove these coords, are replace by place()
-            this.obj.parseCoord(this.obj.conf.x, 'x', false), this.obj.parseCoord(this.obj.conf.y, 'y', false),
+            0, 0, // coords are set by place()
             this.obj.conf.z,
             this.obj.conf.label_width, '', this.getText(),
             this.obj.conf.label_style
         );
+        this.place();
     },
 
     unlock: function () {
