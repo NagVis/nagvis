@@ -112,7 +112,7 @@ var View = Base.extend({
          */
     
         if (o.length > 0)
-            this.updateObjects(o);
+            this.updateObjects(o, true);
     },
 
     // Bulk update object states and then visualize eventual changes
