@@ -68,16 +68,16 @@ var View = Base.extend({
             eventlog("ajax", "info", "Throwing new object information away since the view is blocked");
             return false;
         }
-    
+
         if (!o) {
             eventlog("ajax", "info", "handleUpdate: got empty object. Terminating.");
             return false;
         }
-    
+
         // Procees the "config changed" responses
         if (isset(o['status']) && o['status'] == 'CHANGED') {
             var oChanged = o['data'];
-    
+
             for (var key in oChanged) {
                 if (key == 'maincfg') {
                     eventlog("worker", "info", "Main configuration file was updated. Need to reload the page");
@@ -86,19 +86,20 @@ var View = Base.extend({
                         window.clearTimeout(workerTimeoutID);
                     window.location.reload(true);
                     return;
-    
+
                 } else {
                     if (iNumUnlocked > 0) {
                         eventlog("worker", "info", "Map config updated. "+iNumUnlocked+" objects unlocked - not reloading.");
                     } else {
                         eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
                         g_view.render();
+                        g_view.updateFileAges(oChanged);
                         return;
                     }
                 }
             }
         }
-    
+
         // I don't think empty maps make any sense. So when no objects are present:
         // Try to fetch them continously
         if (oLength(g_view.objects) === 0) {
@@ -106,13 +107,18 @@ var View = Base.extend({
             g_view.init();
             return;
         }
-    
+
         /*
          * Now proceed with real actions when everything is OK
          */
     
         if (o.length > 0)
             this.updateObjects(o, true);
+    },
+
+    updateFileAges(data) {
+        for (var key in data)
+            oFileAges[key] = data[key];
     },
 
     // Bulk update object states and then visualize eventual changes
