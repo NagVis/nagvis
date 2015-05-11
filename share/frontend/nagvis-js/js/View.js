@@ -179,17 +179,15 @@ var View = Base.extend({
         eventlog("worker", "debug", "getObjectsToUpdate: Start");
         var stateful = [],
             stateless = [];
-    
+
         // Assign all object which need an update indexes to return Array
         for (var i in this.objects) {
             if (this.objects[i].lastUpdate <= iNow - oWorkerProperties.worker_update_object_states) {
-                // Do not update objects where enable_refresh=0
-                if (this.objects[i].conf.type !== 'textbox' 
-                   && this.objects[i].conf.type !== 'shape'
-                   && this.objects[i].conf.type !== 'container') {
+                if (this.objects[i] instanceof NagVisStatefulObject) {
                     stateful.push(i);
                 } else if (this.objects[i].conf.enable_refresh
                            && this.objects[i].conf.enable_refresh == '1') {
+                    // Do not update stateless objects where enable_refresh=0
                     stateless.push(i);
                 }
             }
