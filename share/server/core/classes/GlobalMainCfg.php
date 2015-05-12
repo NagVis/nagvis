@@ -574,6 +574,13 @@ class GlobalMainCfg {
                     'list'       => 'listIconsets',
                     'match'      => MATCH_STRING_NO_SPACE
                 ),
+                'icon_size' => Array(
+                    'must'       => 1,
+                    'editable'   => 1,
+                    'default'    => '',
+                    'match'      => MATCH_INTEGER,
+                    'array'    => true,
+                ),
                 'onlyhardstates' => Array('must' => 0,
                     'editable' => 1,
                     'default' => 0,

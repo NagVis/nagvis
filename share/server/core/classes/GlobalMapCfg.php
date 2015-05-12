@@ -147,6 +147,7 @@ class GlobalMapCfg {
             'only_hard_states',
             'backend_id',
             'iconset',
+            'icon_size',
             'exclude_members',
             'exclude_member_states',
             'line_type',

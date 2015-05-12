@@ -60,6 +60,22 @@ var ElementIcon = Element.extend({
         oIcon.className = 'icon';
         this.obj.trigger_obj = oIcon;
 
+        // When no icon size is configured, the native size of the image is used.
+        // An icon size might be either one integer for even sized images or
+        // two integers for differen height/width images
+        if (this.obj.conf.icon_size) {
+            var size = this.obj.conf.icon_size;
+            if (size.length == 1) {
+                var w = parseInt(size),
+                    h = parseInt(size);
+            } else {
+                var w = parseInt(size[0]),
+                    h = parseInt(size[1]);
+            }
+            oIcon.style.width = w + 'px';
+            oIcon.style.height = h + 'px';
+        }
+
         // Register controls reposition handler to handle resizes during
         // loading the image (from alt="" text to the real image
         oIcon.onload = function(obj) {
