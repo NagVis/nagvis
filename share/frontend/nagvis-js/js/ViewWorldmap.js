@@ -72,6 +72,7 @@ var ViewWorldmap = ViewMap.extend({
         // an ajax call with the current viewport to the core code, which
         // then returns a list of objects to add to the map depending on
         // this viewport.
+        g_map.on('zoomstart', this.handleMoveStart.bind(this));
         g_map.on('moveend', this.handleMoveEnd.bind(this));
 
         // hide eventual open header dropdown menus when clicking on the map
@@ -79,8 +80,12 @@ var ViewWorldmap = ViewMap.extend({
         g_map.on('mousedown', context_handle_global_mousedown);
     },
 
+    handleMoveStart: function(lEvent) {
+        this.erase();
+    },
+
     // Is used to update the objects to show on the worldmap
-    handleMoveEnd: function(e) {
+    handleMoveEnd: function(lEvent) {
         this.render(); // re-render the whole map
 
         // Update the related view properties

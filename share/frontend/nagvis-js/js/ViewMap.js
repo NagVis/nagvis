@@ -196,6 +196,12 @@ var ViewMap = View.extend({
         this.objects[obj.conf.object_id] = obj;
     },
 
+    erase: function() {
+        for (var i in this.objects) {
+            this.objects[i].erase();
+        }
+    },
+
     renderObject: function(object_id) {
         var obj = this.objects[object_id];
 
