@@ -192,7 +192,18 @@
         <td> <strike>hover_timeout</strike> </td><td> <strike>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</strike> </td><td> <strike>Default hover menu ajax request timeout in seconds</strike> <font color="#ff0000">(Deprecated in 1.4)</font></td>
         </tr>
         <tr>
-        <td> iconset </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Iconset to use as default for all objects placed on the map. Can be overwritten on a per object base. <br>In the example "std_small" is used which means an OK state will be displayed using "std_small_<i>ok</i>.png", a CRITICAL state will be displayed by using "std_small_<i>critical</i>.png" and so on. </td>
+            <td>iconset</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+            <td>Iconset to use as default for all objects placed on the map. Can be overwritten on a per object base.<br>
+                In the example "std_small" is used which means an OK state will be displayed using "std_small_<i>ok</i>.png",
+                a CRITICAL state will be displayed by using "std_small_<i>critical</i>.png" and so on. </td>
+        </tr>
+        <tr>
+            <td>icon_size</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+            <td>Scales the iconsets up or down while showing in the map. If left empty, the iconset images will be displayed
+                at their natural size. You can configure this option with either a single integer for giving width and height
+                at once, but you can also provide two comma separated integers to specify different values forr the width and height.
         </tr>
         <tr>
         <td> in_maintenance </td><td> 0 </td><td> Enable/Disable the maintenance mode of this map. If a map is in maintenance mode only a message gets displayed instead of the map. </td>
@@ -368,6 +379,13 @@
         <td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
         </tr>
         <tr>
+            <td>icon_size</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+            <td>Scales the iconsets up or down while showing in the map. If left empty, the iconset images will be displayed
+                at their natural size. You can configure this option with either a single integer for giving width and height
+                at once, but you can also provide two comma separated integers to specify different values forr the width and height.
+        </tr>
+        <tr>
         <td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
         </tr>
         <tr>
@@ -533,6 +551,13 @@
         </tr>
         <tr>
         <td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
+        </tr>
+        <tr>
+            <td>icon_size</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+            <td>Scales the iconsets up or down while showing in the map. If left empty, the iconset images will be displayed
+                at their natural size. You can configure this option with either a single integer for giving width and height
+                at once, but you can also provide two comma separated integers to specify different values forr the width and height.
         </tr>
         <tr>
         <td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
@@ -709,6 +734,13 @@
         <td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
         </tr>
         <tr>
+            <td>icon_size</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+            <td>Scales the iconsets up or down while showing in the map. If left empty, the iconset images will be displayed
+                at their natural size. You can configure this option with either a single integer for giving width and height
+                at once, but you can also provide two comma separated integers to specify different values forr the width and height.
+        </tr>
+        <tr>
         <td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
         </tr>
         <tr>
@@ -854,6 +886,13 @@
         <td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
         </tr>
         <tr>
+            <td>icon_size</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+            <td>Scales the iconsets up or down while showing in the map. If left empty, the iconset images will be displayed
+                at their natural size. You can configure this option with either a single integer for giving width and height
+                at once, but you can also provide two comma separated integers to specify different values forr the width and height.
+        </tr>
+        <tr>
         <td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
         </tr>
         <tr>
@@ -987,6 +1026,13 @@
         </tr>
         <tr>
         <td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
+        </tr>
+        <tr>
+            <td>icon_size</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+            <td>Scales the iconsets up or down while showing in the map. If left empty, the iconset images will be displayed
+                at their natural size. You can configure this option with either a single integer for giving width and height
+                at once, but you can also provide two comma separated integers to specify different values forr the width and height.
         </tr>
         <tr>
         <td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
@@ -1480,6 +1526,13 @@
         <td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
         </tr>
         <tr>
+            <td>icon_size</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+            <td>Scales the iconsets up or down while showing in the map. If left empty, the iconset images will be displayed
+                at their natural size. You can configure this option with either a single integer for giving width and height
+                at once, but you can also provide two comma separated integers to specify different values forr the width and height.
+        </tr>
+        <tr>
         <td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
         </tr>
         <tr>
@@ -1620,6 +1673,13 @@
         </tr>
         <tr>
         <td> iconset </td><td> inherited (<a href="#global">global</a>) </td><td> Special iconset. Is inherited from global paragraph if not specified. </td>
+        </tr>
+        <tr>
+            <td>icon_size</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+            <td>Scales the iconsets up or down while showing in the map. If left empty, the iconset images will be displayed
+                at their natural size. You can configure this option with either a single integer for giving width and height
+                at once, but you can also provide two comma separated integers to specify different values forr the width and height.
         </tr>
         <tr>
         <td> label_show </td><td> inherited (<a href="#global">global</a>) </td><td> Enable/Disable label for this object </td>
