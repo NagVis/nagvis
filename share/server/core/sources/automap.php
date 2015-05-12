@@ -15,6 +15,7 @@ $viewParams = array(
         'width',
         'height',
         'iconset',
+        'icon_size',
         'filter_by_state',
         'filter_by_ids',
         'filter_group',
@@ -328,6 +329,7 @@ function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
     if ($obj_name === '<<<monitoring>>>') {
         $obj['host_name'] = 'Monitoring';
         $obj['type']      = 'shape';
+        $obj['icon_size'] = [22];
         $obj['icon']      = 'std_nagvis.png';
         $obj['.width']    = 22;
         $obj['.height']   = 22;
@@ -336,13 +338,28 @@ function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
         $obj['host_name'] = $obj_name;
 
         // Default to params iconset
-        if(!isset($obj['iconset']))
+        if (!isset($obj['iconset']))
             $obj['iconset'] = $params['iconset'];
+        if (!isset($obj['icon_size']))
+            $obj['icon_size'] = $params['icon_size'];
 
-        // Calculate the size of the object for later auto positioning
-        $size = iconset_size($obj['iconset']);
-        $obj['.width']      = $size[0];
-        $obj['.height']     = $size[1];
+        if ($obj['icon_size']) {
+            if (count($obj['icon_size']) == 1) {
+                $w = (int)$obj['icon_size'][0];
+                $h = (int)$obj['icon_size'][0];
+            } else {
+                $w = (int)$obj['icon_size'][0];
+                $h = (int)$obj['icon_size'][1];
+            }
+        } else {
+            // Calculate the size of the object for later auto positioning
+            $size = iconset_size($obj['iconset']);
+            $w = $size[0];
+            $h = $size[1];
+        }
+
+        $obj['.width']  = $w;
+        $obj['.height'] = $h;
     }
 
     $obj['label_show']       = $MAPCFG->getValue(0, 'label_show');

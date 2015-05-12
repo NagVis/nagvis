@@ -60,6 +60,22 @@ var ElementShape = Element.extend({
         oIcon.setAttribute('id', this.obj.conf.object_id+'-icon');
         oIcon.className = 'icon';
 
+        // When no icon size is configured, the native size of the image is used.
+        // An icon size might be either one integer for even sized images or
+        // two integers for differen height/width images
+        if (this.obj.conf.icon_size) {
+            var size = this.obj.conf.icon_size;
+            if (size.length == 1) {
+                var w = parseInt(size),
+                    h = parseInt(size);
+            } else {
+                var w = parseInt(size[0]),
+                    h = parseInt(size[1]);
+            }
+            oIcon.style.width = w + 'px';
+            oIcon.style.height = h + 'px';
+        }
+
         // Construct the real url to fetch for this shape
         var img_url = null;
         if (this.obj.conf.icon.match(/^\[(.*)\]$/)) {
