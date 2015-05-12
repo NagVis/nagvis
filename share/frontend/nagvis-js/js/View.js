@@ -111,12 +111,12 @@ var View = Base.extend({
         /*
          * Now proceed with real actions when everything is OK
          */
-    
+
         if (o.length > 0)
             this.updateObjects(o, true);
     },
 
-    updateFileAges(data) {
+    updateFileAges: function(data) {
         for (var key in data)
             oFileAges[key] = data[key];
     },
@@ -124,7 +124,7 @@ var View = Base.extend({
     // Bulk update object states and then visualize eventual changes
     updateObjects: function(attrs, only_state) {
         var at_least_one_changed = false;
-    
+
         // Loop all object which have new information
         for (var i = 0, len = attrs.length; i < len; i++) {
             var objectId = attrs[i].object_id;

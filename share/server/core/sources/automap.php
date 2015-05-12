@@ -369,7 +369,6 @@ function automap_connector($MAPCFG, &$params, &$saved_config, $from_obj, $to_obj
     $obj['z']          = 90;
     $obj['line_color'] = $MAPCFG->getValue(0, 'line_color');
     $obj['line_width'] = $MAPCFG->getValue(0, 'line_width');
-    $obj['line_arrow'] = $MAPCFG->getValue(0, 'line_arrow');
     $obj['x']          = $from_obj['object_id'] . '%+' . ($from_obj['.width']  / 2) . ','
                         .$to_obj['object_id']   . '%+' . ($to_obj['.width']    / 2);
     $obj['y']          = $from_obj['object_id'] . '%+' . ($from_obj['.height'] / 2) . ','

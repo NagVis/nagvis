@@ -10,6 +10,7 @@ Core:
     behaviour back, you might change the state weights in your main
     config.
   * Deprecated unused config option header_fade / headerfade
+  * Removed unusued config option line_arrow from all objects
 
 Worldmap:
   * Introduced new interactive worldmaps. You can use these maps to position

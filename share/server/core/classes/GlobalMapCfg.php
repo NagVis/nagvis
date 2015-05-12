@@ -151,7 +151,6 @@ class GlobalMapCfg {
             'exclude_member_states',
             'line_type',
             'line_width',
-            'line_arrow',
             'line_weather_colors',
             'context_menu',
             'context_template',
