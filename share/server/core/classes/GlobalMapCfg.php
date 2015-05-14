@@ -98,15 +98,25 @@ class GlobalMapCfg {
             include_once(realpath($path . '/' . $f));
         }
 
-        // Now register the variables for the objec types
-        foreach ($mapConfigVarMap AS $type => $sections) {
-            self::$validConfig[$type] = Array();
+        // Now register the variables for the object types
+        $this->registerConfigVars($mapConfigVars, $mapConfigVarMap);
+    }
+
+    private function registerConfigVars($configVars, $configVarMap, $source_name = null) {
+        foreach ($configVarMap AS $type => $sections) {
+            if (!isset(self::$validConfig[$type]))
+                self::$validConfig[$type] = Array();
+
             foreach ($sections as $section => $vars) {
                 foreach ($vars AS $var => $alias) {
                     if($alias === null)
                         $alias = $var;
-                    self::$validConfig[$type][$alias] = $mapConfigVars[$var];
+                    self::$validConfig[$type][$alias] = $configVars[$var];
                     self::$validConfig[$type][$alias]['section'] = $section;
+
+                    // Mark this option as source parameter. Save the source file in the value
+                    if ($source_name !== null)
+                        self::$validConfig[$type][$alias]['source_param']  = $source_name;
                 }
             }
         }
@@ -119,10 +129,10 @@ class GlobalMapCfg {
      * @author	Lars Michelsen <lars@vertical-visions.de>
      */
     private function gatherTypeDefaults($onlyGlobal) {
-        if($onlyGlobal)
-            $types = Array('global');
-        else
-            $types = array_keys(self::$validConfig);
+        $types = array('global');
+
+        if (!$onlyGlobal)
+           $types = array_merge($types, getMapObjectTypes());
 
         // Extract defaults from valid config array
         foreach($types AS $type) {
@@ -498,6 +508,7 @@ class GlobalMapCfg {
         foreach($CORE->getAvailableSources() AS $source_name) {
             $viewParams       = array();
             $configVars       = array();
+            $configVarMap     = array();
             $updateConfigVars = array();
             $hiddenConfigVars = array();
             $selectable       = false;
@@ -517,11 +528,7 @@ class GlobalMapCfg {
             }
 
             // Also feed the valid config array to get the options from the sources
-            foreach($configVars AS $key => $val) {
-                self::$validConfig['global'][$key] = $val;
-                // Mark this option as source parameter. Save the source file in the value
-                self::$validConfig['global'][$key]['source_param']  = $source_name;
-            }
+            $this->registerConfigVars($configVars, $configVarMap, $source_name);
 
             // Apply adaptions to the generic options
             if (count($updateConfigVars) > 0) {

@@ -87,12 +87,12 @@ var ViewWorldmap = ViewMap.extend({
 
     // Is used to update the objects to show on the worldmap
     handleMoveEnd: function(lEvent) {
-        this.render(); // re-render the whole map
-
         // Update the related view properties
         var ll = g_map.getCenter();
         setViewParam('worldmap_center', ll.lat+','+ll.lng);
         setViewParam('worldmap_zoom', g_map.getZoom());
+
+        this.render(); // re-render the whole map
     },
 
     saveView: function() {

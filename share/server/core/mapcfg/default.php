@@ -1,5 +1,21 @@
 <?php
 
+function getMapObjectTypes() {
+    return array(
+        'host',
+        'hostgroup',
+        'service',
+        'servicegroup',
+        'map',
+        'line',
+        'textbox',
+        'shape',
+        'container',
+        'dyngroup',
+        'aggr',
+    );
+}
+
 function listMapNames() {
     global $CORE, $AUTHORISATION;
     $list = Array();

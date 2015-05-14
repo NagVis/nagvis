@@ -26,8 +26,17 @@ $configVars = array(
         'match'      => MATCH_STRING_EMPTY,
         'field_type' => 'dropdown',
         'list'       => 'listHostgroupNames',
-        'section'    => 'general',
     )
+);
+
+// Assign config variables to specific object types
+global $configVarMap;
+$configVarMap = array(
+    'global' => array(
+        'general' => array(
+            'filter_group'  => null,
+        ),
+    ),
 );
 
 /**

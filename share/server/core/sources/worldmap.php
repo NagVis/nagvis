@@ -21,24 +21,66 @@ $viewParams = array(
 // Config variables to be registered for this source
 global $configVars;
 $configVars = array(
+    /*** GLOBAL OPTIONS ***/
     'worldmap_center' => array(
         'must'      => false,
         'default'   => '51.505,-0.09',
         'match'     => MATCH_LATLONG,
-        'section'   => 'worldmap',
     ),
     'worldmap_zoom' => array(
         'must'      => false,
         'default'   => 13,
         'match'     => MATCH_WORLDMAP_ZOOM,
-        'section'   => 'worldmap',
+    ),
+
+    /*** OBJECT OPTIONS ***/
+    'min_zoom' => array(
+        'must'      => false,
+        'default'   => 2,
+        'match'     => MATCH_WORLDMAP_ZOOM,
+    ),
+    'max_zoom' => array(
+        'must'      => false,
+        'default'   => 18,
+        'match'     => MATCH_WORLDMAP_ZOOM,
     ),
 );
+
+// Assign config variables to specific object types
+global $configVarMap;
+$configVarMap = array(
+    'global' => array(
+        'worldmap' => array(
+            'worldmap_center' => null,
+            'worldmap_zoom'   => null,
+        ),
+    ),
+);
+
+// Assign these options to all map objects (except global)
+foreach (getMapObjectTypes() AS $type) {
+    $configVarMap[$type] = array(
+        'worldmap' => array(
+            'min_zoom' => null,
+            'max_zoom' => null,
+        ),
+    );
+}
 
 // Global config vars not to show for worldmaps
 $hiddenConfigVars = array(
     'zoom',
     'zoombar',
+);
+
+// Alter some global vars with automap specific things
+$updateConfigVars = array(
+    'iconset' => array(
+        'default' => 'std_geo',
+    ),
+    'icon_size' => array(
+        'default' => array(24),
+    ),
 );
 
 // The worldmap database object
@@ -244,9 +286,22 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
     if ($bbox === null)
         return false; // do nothing
 
+    $params = $MAPCFG->getSourceParams();
+    $zoom = (int)$params['worldmap_zoom'];
+
     list($sw_lng, $sw_lat, $ne_lng, $ne_lat) = explode(',', $bbox);
-    foreach (worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) as $object_id => $obj)
+    foreach (worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) as $object_id => $obj) {
+        // Now, when the object has a maximum / minimum zoom configured,
+        // hide it depending on the zoom
+        error_log(json_encode(array($zoom, isset($obj['min_zoom']) ? (int)$obj['min_zoom'] : null,
+                            isset($obj['max_zoom']) ? (int)$obj['max_zoom'] : null)));
+        if (isset($obj['min_zoom']) && $zoom < (int)$obj['min_zoom'])
+            continue;
+        if (isset($obj['max_zoom']) && $zoom > (int)$obj['max_zoom'])
+            continue;
+
         $map_config[$object_id] = $obj;
+    }
     return true;
 }
 

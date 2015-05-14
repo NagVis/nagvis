@@ -76,43 +76,52 @@ $configVars = array(
         'field_type' => 'dropdown',
         'match'      => MATCH_DYN_OBJECT_TYPES,
         'list'       => 'listDynObjectTypes',
-        'section'    => 'dynmap',
     ),
     'dynmap_object_filter' => Array(
         'must'       => false,
         'default'    => '',
         'match'      => MATCH_LIVESTATUS_FILTER,
-        'section'    => 'dynmap',
     ),
     'dynmap_init_x' => array(
         'must'       => false,
         'default'    => 20,
         'match'      => MATCH_COORD_SIMPLE,
-        'section'    => 'dynmap',
     ),
     'dynmap_init_y' => array(
         'must'       => false,
         'default'    => 700,
         'match'      => MATCH_COORD_SIMPLE,
-        'section'    => 'dynmap',
     ),
     'dynmap_offset_x' => array(
         'must'       => false,
         'default'    => 30,
         'match'      => MATCH_COORD_SIMPLE,
-        'section'    => 'dynmap',
     ),
     'dynmap_offset_y' => array(
         'must'       => false,
         'default'    => 30,
         'match'      => MATCH_COORD_SIMPLE,
-        'section'    => 'dynmap',
     ),
     'dynmap_per_row' => array(
         'must'       => false,
         'default'    => 30,
         'match'      => MATCH_COORD_SIMPLE,
-        'section'    => 'dynmap',
+    ),
+);
+
+// Assign config variables to specific object types
+global $configVarMap;
+$configVarMap = array(
+    'global' => array(
+        'dynmap' => array(
+            'dynmap_object_types'  => null,
+            'dynmap_object_filter' => null,
+            'dynmap_init_x'        => null,
+            'dynmap_init_y'        => null,
+            'dynmap_offset_x'      => null,
+            'dynmap_offset_y'      => null,
+            'dynmap_per_row'       => null,
+        ),
     ),
 );
 

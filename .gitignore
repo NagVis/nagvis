@@ -1,6 +1,6 @@
 # Exclude misc files
 *.bak
-*.swp
+*.sw[po]
 *~
 *.tar.gz
 .metadata

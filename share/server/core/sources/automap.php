@@ -85,27 +85,23 @@ $configVars = array(
         'match'      => MATCH_AUTOMAP_RENDER_MODE,
         'field_type' => 'dropdown',
         'list'       => 'list_automap_render_modes',
-        'section'    => 'automap',
     ),
     'root' => array(
         'must'       => false,
         'default'    => '<<<monitoring>>>',
         'match'      => MATCH_AUTOMAP_HOSTNAME,
-        'section'    => 'automap',
     ),
     'filter_by_state' => array(
         'must'       => false,
         'default'    => '0',
         'field_type' => 'boolean',
         'match'      => MATCH_BOOLEAN,
-        'section'    => 'automap',
     ),
     'filter_by_ids' => array(
         'must'       => false,
         'hidden'     => true,
         'default'    => '',
         'match'      => MATCH_BOOLEAN,
-        'section'    => 'automap',
     ),
 
     /**
@@ -116,7 +112,6 @@ $configVars = array(
         'must'       => false,
         'default'    => -1,
         'match'      => MATCH_INTEGER_PRESIGN_EMPTY,
-        'section'    => 'automap',
     ),
     /**
      * This sets how many parent layers should be displayed. Default value is
@@ -126,21 +121,18 @@ $configVars = array(
         'must'       => false,
         'default'    => 0,
         'match'      => MATCH_INTEGER_PRESIGN_EMPTY,
-        'section'    => 'automap',
     ),
 
     'ignore_hosts' => array(
         'must'       => false,
         'default'    => '',
         'match'      => MATCH_STRING_NO_SPACE_EMPTY,
-        'section'    => 'automap',
     ),
 
     'margin' => array(
         'must'       => false,
         'default'    => '50',
         'match'      => MATCH_FLOAT_EMPTY,
-        'section'    => 'automap',
     ),
     'rankdir' => array(
         'must'       => false,
@@ -148,7 +140,6 @@ $configVars = array(
         'match'      => MATCH_AUTOMAP_RANKDIR,
         'field_type' => 'dropdown',
         'list'       => 'list_automap_rankdirs',
-        'section'    => 'automap',
     ),
     'overlap' => array(
         'must'       => false,
@@ -156,10 +147,27 @@ $configVars = array(
         'match'      => MATCH_AUTOMAP_OVERLAP,
         'field_type' => 'dropdown',
         'list'       => 'list_automap_overlaps',
-        'section'    => 'automap',
     ),
 );
 
+// Assign config variables to specific object types
+global $configVarMap;
+$configVarMap = array(
+    'global' => array(
+        'automap' => array(
+            'render_mode'     => null,
+            'root'            => null,
+            'filter_by_state' => null,
+            'filter_by_ids'   => null,
+            'child_layers'    => null,
+            'parent_layers'   => null,
+            'ignore_hosts'    => null,
+            'margin'          => null,
+            'rankdir'         => null,
+            'overlap'         => null,
+        ),
+    ),
+);
 
 if (cfg('global', 'shinken_features')) {
     function list_business_impact() {
@@ -179,6 +187,8 @@ if (cfg('global', 'shinken_features')) {
         'field_type' => 'dropdown',
         'list'       => 'list_business_impact',
     );
+
+    $configVarMap['global']['automap']['min_business_impact'] = null;
 }
 
 // Alter some global vars with automap specific things

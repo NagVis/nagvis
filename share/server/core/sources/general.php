@@ -25,14 +25,23 @@ $configVars = array(
         'default'    => '',
         'match'      => MATCH_INTEGER_EMPTY,
         'field_type' => 'dimension',
-        'section'    => 'appearance',
     ),
     'height' => array(
         'must'       => false,
         'default'    => '',
         'match'      => MATCH_INTEGER_EMPTY,
         'field_type' => 'dimension',
-        'section'    => 'appearance',
+    ),
+);
+
+// Assign config variables to specific object types
+global $configVarMap;
+$configVarMap = array(
+    'global' => array(
+        'appearance' => array(
+            'width'  => null,
+            'height' => null,
+        ),
     ),
 );
 
