@@ -70,6 +70,8 @@ var ElementTile = Element.extend({
             oImg.className = 'state';
             oImg.align = 'right';
             oImg.src   = oGeneralProperties.path_iconsets + this.obj.conf.icon;
+            oImg.style.width = this.obj.conf.icon_size + 'px';
+            oImg.style.height = this.obj.conf.icon_size + 'px';
             oImg.alt   = this.obj.stateText();
 
             oLink.appendChild(oImg);

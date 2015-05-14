@@ -191,15 +191,15 @@ class CoreModOverview extends CoreModule {
           'type'              => 'map',
           'map_name'          => $name,
           'object_id'         => 'map-'.$name,
-          // Enable the hover menu in all cases - maybe make it configurable
           'hover_menu'        => 1,
           'hover_childs_show' => 1,
           'hover_template'    => 'default',
           'context_menu'      => 1,
           'context_template'  => 'default',
           'label_show'        => 0,
-          // Enforce std_medium iconset - don't use map default iconset
-          'iconset'           => 'std_medium',
+          // Enforce std_big iconset - don't use map default iconset
+          'iconset'           => 'std_big',
+          'icon_size'         => '22',
           'alias'             => $alias
         );
     }
@@ -210,7 +210,7 @@ class CoreModOverview extends CoreModule {
         unset($map['map_name']);
         $map['state']           = 'ERROR';
         $map['summary_state']   = 'ERROR';
-        $map['icon']            = 'std_medium_error.png';
+        $map['icon']            = 'std_big_error.png';
         $map['members']         = Array();
         $map['num_members']     = 0;
         $map['overview_class']  = 'error';
