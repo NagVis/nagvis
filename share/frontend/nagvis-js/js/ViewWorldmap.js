@@ -37,9 +37,10 @@ var ViewWorldmap = ViewMap.extend({
             icon: L.nagVisObj({node: obj.dom_obj, obj: obj}),
             // prevent using leaflets event handlers
             clickable: false,
-            // Would be nice to use but is problematic with the line canvas objects
-            // which will hide objects which are located behind them
-            //riseOnHover: true,
+            // Can not use this for lines, because line canvas objects would
+            // overlay normal icon objects and make theeir actions unusable
+            // Lines adapt this behaviour on their own.
+            riseOnHover: obj.conf.view_type !== 'line',
             // Put lines one layer behind all other objects to fix canvas hiding
             // the other objects
             zIndexOffset: obj.conf.view_type === 'line' ? -1 : 0
@@ -192,6 +193,9 @@ L.nagVisObj = function (options) {
 L.NagVisMarker = L.Marker.extend({
     initialize: function (latlng, options) {
         L.Marker.prototype.initialize.call(this, latlng, options);
+
+        // add reference to the marker object to the nagvis object
+        options.icon.options.obj.marker = this;
 
         this.on('add', this._onAdd, this);
         //this.on('mousemove', this._onMouseMove, this);

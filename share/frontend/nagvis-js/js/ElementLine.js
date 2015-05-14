@@ -382,9 +382,15 @@ var ElementLine = Element.extend({
             this.link_area.style.display = '';
             this.link_area.style.left = (x-5) + 'px';
             this.link_area.style.top = (y-5) + 'px';
+
+            if (usesSource('worldmap'))
+                this.obj.marker._bringToFront();
         } else {
             remove_class(this.canvas, 'active');
             this.link_area.style.display = 'none';
+
+            if (usesSource('worldmap'))
+               this.obj.marker._resetZIndex();
         }
     },
 
