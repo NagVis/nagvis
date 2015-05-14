@@ -293,8 +293,6 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
     foreach (worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) as $object_id => $obj) {
         // Now, when the object has a maximum / minimum zoom configured,
         // hide it depending on the zoom
-        error_log(json_encode(array($zoom, isset($obj['min_zoom']) ? (int)$obj['min_zoom'] : null,
-                            isset($obj['max_zoom']) ? (int)$obj['max_zoom'] : null)));
         if (isset($obj['min_zoom']) && $zoom < (int)$obj['min_zoom'])
             continue;
         if (isset($obj['max_zoom']) && $zoom > (int)$obj['max_zoom'])
