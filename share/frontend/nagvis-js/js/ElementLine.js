@@ -797,6 +797,12 @@ var ElementLineControls = Element.extend({
         ctl.objOffsetX     = offX;
         ctl.objOffsetY     = offY;
 
+        var img = document.createElement('img');
+        img.src = '../../frontend/nagvis-js/images/internal/control_drag.png';
+        img.style.width    = addZoomFactor(size) + 'px';
+        img.style.height   = addZoomFactor(size) + 'px';
+        ctl.appendChild(img);
+
         makeDragable(ctl, this.obj, this.obj.saveObject, this.obj.moveObject);
     },
 
