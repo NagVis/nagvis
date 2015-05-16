@@ -717,7 +717,10 @@ var ElementLineControls = Element.extend({
     render: function() {
         // don't render the controls during normal render calls. We
         // want to keep the number of DOM objects low, so only render
-        // them when being unlocked for the first time
+        // them when being unlocked for the first time. But when the
+        // element has already been rendered, then re-render it!
+        if (this.dom_obj)
+            this._render();
     },
 
     draw: function() {
