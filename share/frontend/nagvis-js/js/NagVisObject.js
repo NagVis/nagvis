@@ -68,6 +68,22 @@ var NagVisObject = Base.extend({
             this.elements[i].update();
     },
 
+    updateAttrs: function(attrs, only_state) {
+        // Update this object (loop all options from array and set in current obj)
+        for (var key in attrs)
+            if (key != 'object_id')
+                this.conf[key] = attrs[key];
+
+        if (!only_state)
+            this.transformCoordinates();
+
+        for (var i = 0; i < this.elements.length; i++)
+            this.elements[i].updateAttrs(only_state);
+
+        // Update lastUpdate timestamp
+        this.setLastUpdate();
+    },
+
     // Renders the current object and all it's elements
     render: function () {
         this.erase();

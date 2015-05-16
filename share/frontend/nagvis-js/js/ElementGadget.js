@@ -24,9 +24,9 @@
 var ElementGadget = Element.extend({
     gadget_type : null,
 
-    update_state: function() {
+    updateAttrs: function(only_state) {
         // update the gadget on every state update where at least the output or perfdata changed
-        if (!this.obj.stateChanged() && this.obj.outputOrPerfdataChanged()) {
+        if (!only_state || (!this.obj.stateChanged() && this.obj.outputOrPerfdataChanged())) {
             this.erase();
             this.render();
             this.draw();

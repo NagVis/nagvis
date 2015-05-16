@@ -32,11 +32,11 @@ var NagVisLine = NagVisStatelessObject.extend({
         var line = new ElementLine(this).addTo(this);
 
         // Apply line color configurations
-        line.calcColors = function(color, border_color) {
+        line.calcColors = function(obj) {
             return function() {
-                return [color, border_color];
+                return [obj.conf.line_color, obj.conf.line_color_border];
             };
-        }(this.conf.line_color, this.conf.line_color_border);
+        }(this);
 
         this.base();
     },

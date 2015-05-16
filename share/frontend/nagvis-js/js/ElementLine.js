@@ -41,9 +41,9 @@ var ElementLine = Element.extend({
          new ElementLineControls(this.obj).addTo(this.obj);
     },
 
-    update_state: function() {
-        if (this.isWeathermapLine() &&
-            (this.obj.stateChanged() || this.obj.outputOrPerfdataChanged())) {
+    updateAttrs: function(only_state) {
+        if (!only_state || (this.isWeathermapLine() &&
+             (this.obj.stateChanged() || this.obj.outputOrPerfdataChanged()))) {
             this.erase();
             this.render();
             this.draw();

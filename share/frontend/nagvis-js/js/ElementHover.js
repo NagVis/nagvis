@@ -55,7 +55,7 @@ var ElementHover = Element.extend({
         this.getTemplate();
     },
 
-    update_state: function() {
+    updateAttrs: function(only_state) {
         this.render();
     },
 

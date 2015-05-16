@@ -128,7 +128,7 @@ var View = Base.extend({
         // Loop all object which have new information
         for (var i = 0, len = attrs.length; i < len; i++) {
             var objectId = attrs[i].object_id;
-    
+
             // Object not found. This should only be happen for new objects which have
             // just been added to the map by the user. In this case we always have "full"
             // object information, not only state attrs
@@ -139,13 +139,10 @@ var View = Base.extend({
                 at_least_one_changed = true; // always reload summary state
             }
             else {
-                // the method is called update_state(), but it processes all attrs it
-                // is receiving. In case a user updates an object configuration this
-                // is handled correctly. Should consider renaming the method.
-                at_least_one_changed &= this.objects[objectId].update_state(attrs[i], only_state);
+                at_least_one_changed &= this.objects[objectId].updateAttrs(attrs[i], only_state);
             }
         }
-    
+
         if (at_least_one_changed)
             this.handleStateChanged();
     },
