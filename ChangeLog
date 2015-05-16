@@ -11,6 +11,7 @@ Core:
     config.
   * Deprecated unused config option header_fade / headerfade
   * Removed unusued config option line_arrow from all objects
+  * Removed unused config option controls_size from main configuration
 
 Worldmap:
   * Introduced new interactive worldmaps. You can use these maps to position

@@ -760,22 +760,13 @@ var ElementLineControls = Element.extend({
 
         var x = this.obj.parseCoords(this.obj.conf.x, 'x');
         var y = this.obj.parseCoords(this.obj.conf.y, 'y');
+        var size = 10;
 
-        var size = oGeneralProperties['controls_size'];
-	var lineEndSize = size;
-	if(size < 20)
-	    lineEndSize = 20;
-
-        for(var i = 0, l = x.length; i < l; i++) {
-	    // Line middle drag coord needs to be smaller
-	    if(l > 2 && i == 1)
-		this.renderDragger(i, x[i], y[i], - size / 2, - size / 2, size);
-	    else
-		this.renderDragger(i, x[i], y[i], - lineEndSize / 2, - lineEndSize / 2, lineEndSize);
-        }
+        for (var i = 0, l = x.length; i < l; i++)
+            this.renderDragger(i, x[i], y[i], - size / 2, - size / 2, size);
 
         if (this.hasTwoParts())
-	    this.renderMidToggle(x.length+2,
+            this.renderMidToggle(x.length+2,
                 this.obj.getLineMid(this.obj.conf.x, 'x'),
                 this.obj.getLineMid(this.obj.conf.y, 'y'),
                 20 - size / 2,
@@ -796,8 +787,8 @@ var ElementLineControls = Element.extend({
         this.dom_obj.appendChild(ctl);
         ctl.setAttribute('id', this.obj.conf.object_id+'-drag-' + num);
         ctl.className = 'control drag';
-	// FIXME: Multilanguage
-	ctl.title          = 'Move object';
+        // FIXME: Multilanguage
+        ctl.title          = 'Move object';
         ctl.style.zIndex   = parseInt(this.obj.conf.z)+1;
         ctl.style.width    = addZoomFactor(size) + 'px';
         ctl.style.height   = addZoomFactor(size) + 'px';

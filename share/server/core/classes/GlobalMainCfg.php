@@ -104,12 +104,6 @@ class GlobalMainCfg {
                     'match'         => MATCH_STRING_NO_SPACE,
                 ),
 
-                'controls_size' => Array(
-		    'must'     => 1,
-                    'editable' => 1,
-                    'default'  => 10,
-                    'match'    => MATCH_INTEGER
-                ),
                 'dateformat' => Array(
                     'must'     => 1,
                     'editable' => 1,
@@ -2117,7 +2111,6 @@ class GlobalMainCfg {
      */
     public function parseGeneralProperties() {
         $p = Array(
-          'controls_size'      => intval($this->getValue('global', 'controls_size')),
           'date_format'        => $this->getValue('global', 'dateformat'),
           'path_base'          => $this->getValue('paths','htmlbase'),
           'path_cgi'           => $this->getValue('paths','htmlcgi'),
