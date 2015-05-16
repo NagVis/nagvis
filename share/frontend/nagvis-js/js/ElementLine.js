@@ -828,6 +828,15 @@ var ElementLineControls = Element.extend({
         ctl.objOffsetX     = offX;
         ctl.objOffsetY     = offY;
 
+        var img = document.createElement('img');
+        if (this.isMidLocked())
+            img.src = '../../frontend/nagvis-js/images/internal/control_locked.png';
+        else
+            img.src = '../../frontend/nagvis-js/images/internal/control_unlocked.png';
+        img.style.width    = addZoomFactor(size) + 'px';
+        img.style.height   = addZoomFactor(size) + 'px';
+        ctl.appendChild(img);
+
         ctl.onclick = function(element_obj) {
             return function(event) {
                 event = event || window.event;
@@ -837,6 +846,10 @@ var ElementLineControls = Element.extend({
             };
         }(this);
         ctl = null;
+    },
+
+    isMidLocked: function() {
+        return this.obj.conf.x.split(',').length == 2;
     },
 
     /**
@@ -849,7 +862,7 @@ var ElementLineControls = Element.extend({
         var x = this.obj.conf.x.split(',');
         var y = this.obj.conf.y.split(',')
 
-        if (x.length == 2) {
+        if (this.isMidLocked()) {
             // The line has 2 coords configured
             // - Calculate and add the 3rd coord as 2nd
             // - Add a drag control for the 2nd coord

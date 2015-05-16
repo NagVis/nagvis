@@ -135,15 +135,9 @@ a.linelink {
 /* control styles */
 div.control {
     position: absolute;
-  /* scale background of controls - hope this works for the important browsers */
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
 }
 
 div.control.togglemid {
-    background-image: url('../images/templates/default.control_togglemid.gif');
     cursor: pointer;
 }
 
