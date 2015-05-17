@@ -101,8 +101,12 @@ var ElementLine = Element.extend({
         this.obj.trigger_obj = oLink;
         oLink.setAttribute('id', this.obj.conf.object_id+'-linelink');
         oLink.className = 'linelink';
-        oLink.href = this.obj.conf.url;
-        oLink.target = this.obj.conf.url_target;
+        if (this.obj.conf.url) {
+            oLink.href = this.obj.conf.url;
+            oLink.target = this.obj.conf.url_target;
+        } else {
+            oLink.href = 'javascript:void(0)';
+        }
 
         this.renderLinkArea();
     },
@@ -379,6 +383,7 @@ var ElementLine = Element.extend({
 
         if (over) {
             add_class(this.canvas, 'active');
+            // move the link area below the cursor to make actions possible
             this.link_area.style.display = '';
             this.link_area.style.left = (x-5) + 'px';
             this.link_area.style.top = (y-5) + 'px';
