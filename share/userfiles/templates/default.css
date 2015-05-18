@@ -291,12 +291,6 @@ div.infopage a:hover {
   border: 1px solid #DC5757;
 }
 
-#statusMessage div.confirmation {
-  background: url('../../frontend/nagvis-js/images/internal/confirm.png') 6px 3px no-repeat;
-  background-color: #A6EF7B;
-  border: 1px solid #76C83F;
-}
-
 #statusMessage div.loading {
   background: url('../../frontend/nagvis-js/images/internal/loading.gif') 6px 3px no-repeat;
   background-color: #fbfbfb;
