@@ -29,62 +29,9 @@ Worldmap:
    u.U. sogar in separaten Queries an das Backend abgefragt und in Hover- und Context-Menus
    als spezielle Macros angeboten.
 
-*** Linien (Auch für neue Automap wichtig!) ***
- - Pfeilspitzen konfigurierbar machen
-   - Größe
-   - Stil
-   - Farbe (?)
- - Offset zum Ziel
-
 *** Cleanups ***
   - Variablen nach int/boolean casten, wenn sinnvoll
   - Weathermap Linien Perfdata Berechnungen nach check_command aufräumen
-
-*** Icon Koordinaten zentrieren ***
-
-Die Icon Koordinaten beziehen sich momentan auf die linke obere Ecke der Icons.
-Eine Änderung auf einen Bezug zum Zentrum eines Objekts würde mehrere Vorteile
-mit sich bringen. Beispielsweise könnten die Icons innerhalb eines Iconsets
-verschiedene Größen haben.
-
-Wie soll das bei Textboxen gehen? Eventuell muss man bei jedem neu Rendern die
-Maße des Objektes ermitteln und prüfen, ob es neu positioniert werden muss.
-
-Eine Nebenwirkung könnte sein, dass die Entfernungen der Controls und die anderer
-relativ positionierten Objekte nicht automatisch mitskaliert werden.
-
-Der Trend geht an einigen Stellen stark richtung dynamische Map Konfigurationen.
-Dem sollte man irgendwie begegnen. Momentan wird die Seite vom JS Frontend
-komplett neu geladen. Der bessere Weg wäre, wenn das Frontend irgendwie die Differenz
-zwischen der aktuell geladenen Konfiguration und der aktuellen Konfigurationsdatei
-ermitteln könnte und dann anhand dessen einzelne Objekte hinzufügt/aktualisiert/entfernt.
-
-Fälle:
-
-1. Neues Objekt
-   - Neues Objekt in oMapObjecs erzeugen
-   - Neues Objekt malen .parse()
-2. Gelöschtes Objekt
-   - Objekt von Map entfernen .remove()
-   - Objekt aus oMapObjects entfernen
-3. Geändertes Objekt
-   - Objekt .conf aktualisieren
-   - Objekt von Map entfernen .remove()
-   - Objekt neu malen .parse()
-4. Geänderte Hauptkonfiguration
-5. Geändertes Global-Objekt
-   - mapProperties neu laded
-     - setMapBasics()
-     - setMapBackgroundImage()
-     - FIXME: Was wird noch aus den mapProperties abgeleitet?
-   - .conf bei allen Objekten aktualisieren
-   - Objekte von Map entfernen .remove()
-   - Objekte neu malen .parse()
-
-So. Und wie erkennen wir das nun? Wie wäre es bei einer geänderten Konfiguration
-einfach die aktuellen mapObjects laden (getMapObjects) und dann die Differenz zum
-aktuell geladenen oMapObjects Objekt ermitteln? So kann man dann im JS frontend genau
-ermitteln welche Dinge sich geändert haben.
 
 *** Installer renovieren ***
 
@@ -110,21 +57,9 @@ mehrere Nagios Prozesse gefunden werden.
 Eventuell auf Python umstellen. Das macht die ganze Programmierung um einiges einfacher und
 das ganze Zeug auch wartbarer.
 
-*** Shortcuts einbauen ***
-
-Gerade der Edit-Modus im normalen Frontend sollte Hotkeys haben. Diese sollten
-nach Möglichkeit nicht mit Hotkeys von FF/IE kollidieren.
-
-*** Fehlerbehandlung ***
-  Ajax Schnittstelle umbauen: Kleines Protokoll einbauen, mit Header inkl. Fehlercodes etc.
-  und man muss nicht bei jeder Anfrage immer die Feld-Namen mitsenden (-> weniger Overhead).
-
-  Bessere Fehlerbehandlung z.B. auf Übersichtsseite, wenn Antwort kein gültiges JS ist.
-
-Exception/Error log bauen:
+*** Exception/Error log bauen ***
   PHP Fehler loggen
 	Eventuell sogar Javascript fehler loggen
-
 
 *** Dokumentation ***
   - Neue Editier-Möglichkeiten in der normalen GUI

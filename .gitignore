@@ -5,14 +5,7 @@
 *.tar.gz
 .metadata
 .site
-uifx/.settings
-uifx/.actionScriptProperties
-uifx/.flexProperties
-uifx/.project
-uifx/bin
-uifx/bin-release
 install.log
-mache
 
 # Exclude main configuration file
 etc/nagvis.ini.php
