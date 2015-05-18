@@ -21,42 +21,23 @@
  *
  *****************************************************************************/
 
-/**
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-
-/**
- * Toggles the mode of the object: editable or not
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
-function toggleMapObjectLock(event, objectId) {
-    updateNumUnlocked(getMapObjByDomObjId(objectId).toggleLock());
-
-    var event = !event ? window.event : event;
-    if(event.stopPropagation)
-    event.stopPropagation();
-    event.cancelBubble = true;
-    return false;
+function toggleMapObjectLock(event, object_id) {
+    g_view.toggleObjectLock(object_id);
+    return preventDefaultEvents(event);
 }
 
-/**
- * Toggles the mode of all map objects: editable or not
- *
- * @author	Lars Michelsen <lars@vertical-visions.de>
- */
+// Toggles the mode of all map objects: editable or not
 function toggleAllMapObjectsLock() {
-    var lock = false;
-    if(iNumUnlocked > 0)
-        lock = true;
+    var lock = !g_view.hasUnlocked();
 
-    for(var i in g_view.objects)
-        updateNumUnlocked(g_view.objects[i].toggleLock(lock));
+    for (var object_id in g_view.objects)
+        g_view.toggleObjectLock(object_id, lock);
 
-    if(!lock)
+    if (!lock)
         storeUserOption('unlocked-' + oPageProperties.map_name, '*');
     else
         storeUserOption('unlocked-' + oPageProperties.map_name, '');
+    return preventDefaultEvents(event);
 }
 
 /** Object resizing **/
@@ -917,20 +898,10 @@ function addOption(form) {
     updateForm(form);
 }
 
-/**
- * Removes an element from the map
- */
-function removeMapObject(objectId) {
-    var obj = getMapObjByDomObjId(objectId);
-
-    obj.detachChilds();
-    saveObjectRemove(objectId);
-    obj.remove();
-
-    if(!obj.bIsLocked)
-        updateNumUnlocked(-1);
-
-    delete g_view.objects[objectId];
+// Removes an element from the map
+function removeMapObject(object_id) {
+    g_view.removeObject(objectId);
+    return preventDefaultEvents(event);
 }
 
 /************************************************

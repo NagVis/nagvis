@@ -685,11 +685,8 @@ var ElementLine = Element.extend({
         var perfdataMatches = perfdata.match(re);
 
         // Check for empty perfdata
-        if (perfdataMatches == null) {
-            frontendMessage({'type': 'WARNING', 'title': 'Data error',
-                             'message': 'No performance data found in perfdata string'});
+        if (perfdataMatches == null)
             return [];
-        }
 
         // Break perfdata parts into array
         for (var i = 0; i < perfdataMatches.length; i++) {
@@ -697,11 +694,8 @@ var ElementLine = Element.extend({
             var tmpSetMatches = perfdataMatches[i].match(/(&#145;)?([\w\s\=\']*)(&#145;)?\=([\d\.\-\+]*)([\w%]*)[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-\+]*)[\;|\s]?([\d\.\-\+]*)/);
 
             // Check if we got any perfdata
-            if (tmpSetMatches === null) {
-                frontendMessage({'type': 'WARNING', 'title': 'Data error',
-                                 'message': 'No valid performance data in perfdata string - lines.js (305)'});
+            if (tmpSetMatches === null)
                 continue;
-            }
 
             parsed.push([
                 tmpSetMatches[2], // label

@@ -22,9 +22,6 @@
  *
  *****************************************************************************/
 
-// The number of currently unlocked objects for editing. When this is
-// above 0, it will lead to block state updates till it's 0 again
-var iNumUnlocked = false;
 // Contains the number of pixels the header menu currently consumes
 var g_header_height_cache = null;
 // Points to the timer object of the worker timer
@@ -242,29 +239,6 @@ function getMapObjByDomObjId(id) {
         return g_view.objects[id];
     } catch(er) {
         return null;
-    }
-}
-
-function updateNumUnlocked(num) {
-    iNumUnlocked += num;
-    if(iNumUnlocked == 0) {
-        // Not in edit mode anymore
-        var o = document.getElementById('editIndicator');
-        if(o) {
-            o.style.display = 'none';
-            o = null;
-        }
-
-        gridRemove();
-    } else {
-        // In edit mode (for at least one object)
-        var o = document.getElementById('editIndicator');
-        if(o) {
-            o.style.display = '';
-            o = null;
-        }
-
-        gridParse();
     }
 }
 

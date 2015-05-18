@@ -28,6 +28,9 @@ var ViewMap = View.extend({
     // This is turned to true when the map is currently reparsing (e.g. due to
     // a changed map config file). This blocks object updates.
     blockUpdates   : false,
+    // The number of currently unlocked objects for editing. When this is
+    // above 0, it will lead to block state updates till it's 0 again
+    num_unlocked   : false,
 
     constructor: function(id) {
         this.base(id);
@@ -112,7 +115,7 @@ var ViewMap = View.extend({
                 obj.remove();
 
                 if(!obj.bIsLocked)
-                    updateNumUnlocked(-1);
+                    this.updateNumUnlocked(-1);
 
                 // Remove element from object container
                 delete this.objects[i];
@@ -190,7 +193,7 @@ var ViewMap = View.extend({
     
         // Save the number of unlocked objects
         if (!obj.bIsLocked)
-            updateNumUnlocked(1);
+            this.updateNumUnlocked(1);
     
         // Put object to map objects array
         this.objects[obj.conf.object_id] = obj;
@@ -318,5 +321,50 @@ var ViewMap = View.extend({
     rerenderStatelessObjects: function(objects) {
         for (var i = 0, len = objects.length; i < len; i++)
             this.objects[objects[i]].eender();
+    },
+
+    removeObject: function(object_id) {
+        var obj = this.objects[object_id];
+
+        obj.detachChilds();
+        saveObjectRemove(object_id);
+        obj.remove();
+
+        if (!obj.bIsLocked)
+            this.updateNumUnlocked(-1);
+
+        delete this.objects[object_id];
+    },
+
+    /**
+     * OBJECT VIEW/EDIT LOCKING
+     */
+
+    hasUnlocked: function() {
+        return this.num_locked > 0;
+    },
+
+    toggleObjectLock: function(object_id, lock) {
+        this.updateNumUnlocked(this.objects[object_id].toggleLock(lock));
+    },
+
+    updateNumUnlocked: function(num) {
+        this.num_unlocked += num;
+        if (this.num_unlocked == 0) {
+            // Not in edit mode anymore
+            var o = document.getElementById('editIndicator');
+            if (o)
+                o.style.display = 'none';
+
+            gridRemove();
+        } else {
+            // In edit mode (for at least one object)
+            var o = document.getElementById('editIndicator');
+            if (o)
+                o.style.display = '';
+
+            gridParse();
+        }
     }
+
 });
