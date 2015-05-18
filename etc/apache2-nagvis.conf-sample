@@ -7,8 +7,16 @@ Alias @NAGVIS_WEB@ "@NAGVIS_PATH@"
 <Directory "@NAGVIS_PATH@">
   Options FollowSymLinks
   AllowOverride None
-  Order allow,deny
-  Allow from all
+
+  <IfModule mod_authz_core.c>
+    # Apache >= 2.4
+    Require all granted
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    # Apache < 2.4
+    Order allow,deny
+    Allow from all
+  </IfModule>
 
   # To enable Nagios basic auth on NagVis use the following options
   # Just uncomment it. Maybe you need to adjust the path to the

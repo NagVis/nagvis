@@ -45,6 +45,7 @@ SITE=${SITE:-$(cat .site 2>/dev/null || true)}
 SITE=${SITE:-$(omd sites --bare | head -n 1)}
 BASE=$(pwd)
 
+sudo mkdir -p /usr/local/nagvis/share
 sudo cp -r share/* /usr/local/nagvis/share/
 sudo bash -c '. install_lib ; cmp_js /usr/local/nagvis/share/frontend/nagvis-js/js'
 sudo rm -f /usr/local/nagvis/var/*cache*
