@@ -1,4 +1,8 @@
 1.8.4
+Core:
+  * FIX: BI Backend: Fixed wrong summary state of aggregation objects when
+    not using the worst aggregation function. NagVis is now using the summary
+    state provided by the backend
 
 1.8.3
 Core:
