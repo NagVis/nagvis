@@ -48,6 +48,12 @@ Frontend:
     are shown up right after logging in to NagVis
   * FIX: Fixed duplicate map config processing for rendering the header menu
 
+1.8.4
+Core:
+  * FIX: BI Backend: Fixed wrong summary state of aggregation objects when
+    not using the worst aggregation function. NagVis is now using the summary
+    state provided by the backend
+
 1.8.3
 Core:
   * FIX: Fixed error in example custom actions for RDP and SSH

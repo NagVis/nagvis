@@ -80,6 +80,12 @@ class NagVisAggr extends NagVisStatefulObject {
             }
         }
 
+        // use the summary state provided by the backend, this is
+        // the summary state provided by the aggregation tool based
+        // on the configured rules
+        if ($this->state[STATE] !== null)
+            $this->sum[STATE] = $this->state[STATE];
+
         // Use state summaries when some are available to
         // calculate summary state and output
         if($this->aStateCounts !== null) {
