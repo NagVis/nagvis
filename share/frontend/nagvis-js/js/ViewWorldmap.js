@@ -210,7 +210,6 @@ L.NagVisMarker = L.Marker.extend({
         options.icon.options.obj.marker = this;
 
         this.on('add', this._onAdd, this);
-        //this.on('mousemove', this._onMouseMove, this);
     },
 
     // Update the size off the icon to make the object being centered
@@ -224,17 +223,6 @@ L.NagVisMarker = L.Marker.extend({
         icon.options.iconSize = [w, h];
         icon._applyOffset();
     },
-
-    //_onMouseMove: function (event) {
-    //    console.log('hover');
-    //    var element = this.options.icon.options.obj.trigger_obj;
-    //    console.log(element);
-    //    //if (document.createEvent) {
-    //    //    element.dispatchEvent(event.originalEvent);
-    //    //} else {
-    //    //    element.fireEvent("onmousemove", event.originalEvent);
-    //    //}
-    //}
 });
 
 L.nagVisMarker = function (ll, options) {

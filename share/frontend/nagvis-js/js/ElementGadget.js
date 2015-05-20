@@ -120,6 +120,14 @@ var ElementGadget = Element.extend({
         oIconDiv.className = 'icondiv';
         oIconDiv.style.zIndex   = this.obj.conf.z;
 
+        // Use this to catch the mousedown event which would, together with
+        // holding the left mousebutton clicked and moving change the viewport
+        // on the worldmap. This is not intended when clicking on an icon.
+        addEvent(this.obj.trigger_obj, 'mousedown', function(event) {
+            event = event || window.event;
+            return preventDefaultEvents(event);
+        });
+
         // Parse link only when set
         if(this.obj.conf.url && this.obj.conf.url !== '') {
             var oIconLink = document.createElement('a');

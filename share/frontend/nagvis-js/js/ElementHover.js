@@ -194,6 +194,7 @@ var ElementHover = Element.extend({
             this._handleMouseOut  = this.handleMouseOut.bind(this); 
             addEvent(this.obj.trigger_obj, 'mousemove', this._handleMouseMove);
             addEvent(this.obj.trigger_obj, 'mouseout', this._handleMouseOut);
+            addEvent(this.obj.trigger_obj, 'mousedown', this._handleMouseOut);
             this.enabled = true;
         }
     },
@@ -202,6 +203,7 @@ var ElementHover = Element.extend({
         if (this.enabled) {
             removeEvent(this.obj.trigger_obj, 'mousemove', this._handleMouseMove);
             removeEvent(this.obj.trigger_obj, 'mouseout', this._handleMouseOut);
+            removeEvent(this.obj.trigger_obj, 'mousedown', this._handleMouseOut);
             this.enabled = false;
         }
     },

@@ -108,6 +108,14 @@ var ElementLine = Element.extend({
             oLink.href = 'javascript:void(0)';
         }
 
+        // Use this to catch the mousedown event which would, together with
+        // holding the left mousebutton clicked and moving change the viewport
+        // on the worldmap. This is not intended when clicking on an icon.
+        addEvent(this.obj.trigger_obj, 'mousedown', function(event) {
+            event = event || window.event;
+            return preventDefaultEvents(event);
+        });
+
         this.renderLinkArea();
     },
 
