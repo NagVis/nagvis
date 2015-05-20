@@ -341,7 +341,7 @@ var ViewMap = View.extend({
      */
 
     hasUnlocked: function() {
-        return this.num_locked > 0;
+        return this.num_unlocked > 0;
     },
 
     toggleObjectLock: function(object_id, lock) {

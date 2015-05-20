@@ -88,10 +88,10 @@ var View = Base.extend({
                     return;
 
                 } else {
-                    if (iNumUnlocked > 0) {
-                        eventlog("worker", "info", "Map config updated. "+iNumUnlocked+" objects unlocked - not reloading.");
+                    if (g_view.hasUnlocked()) {
+                        eventlog("worker", "info", "Map config updated, but having unlocked objects - not reloading.");
                     } else {
-                        eventlog("worker", "info", "Map configuration file was updated. Reparsing the map.");
+                        eventlog("worker", "info", "Map configuration file was updated. Rerendering the map.");
                         g_view.render();
                         g_view.updateFileAges(oChanged);
                         return;

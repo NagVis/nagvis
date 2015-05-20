@@ -33,6 +33,8 @@ Frontend:
    Andreas Steinel)
   * Dropped jsGraphics line rendering (browser needs to support canvas now)
     for being able to use lines within NagVis
+  * Maps are not reloaded anymore when adding/editing objects. Only the
+    affected objects on the map are reloaded
   * Overview: Broken map configs do not prevent to open the map anymore
   * Lines: Are now rendered nicely on high resolution devices (e.g. 4k screens)
   * Lines: Re-implemented borders round the lines for better visibility
