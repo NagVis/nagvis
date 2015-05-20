@@ -206,15 +206,20 @@ L.NagVisMarker = L.Marker.extend({
     initialize: function (latlng, options) {
         L.Marker.prototype.initialize.call(this, latlng, options);
 
+        var obj = options.icon.options.obj;
+
         // add reference to the marker object to the nagvis object
-        options.icon.options.obj.marker = this;
+        obj.marker = this;
 
         // prevent dragging the viewport when click+hold+drag on an object
-        addEvent(options.icon.options.obj.dom_obj, 'mousedown', function(event) {
-            event = event || window.event;
-            if (getButton(event) == 'LEFT')
-                return preventDefaultEvents(event);
-        });
+        // this does not work correctly for lines, so disable it for them
+        if (obj.conf.view_type !== 'line') {
+            addEvent(obj.dom_obj, 'mousedown', function(event) {
+                event = event || window.event;
+                if (getButton(event) == 'LEFT')
+                    return preventDefaultEvents(event);
+            });
+        }
 
         this.on('add', this._onAdd, this);
     },
