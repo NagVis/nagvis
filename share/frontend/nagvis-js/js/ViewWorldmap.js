@@ -117,9 +117,15 @@ var ViewWorldmap = ViewMap.extend({
     project: function(lat, lng) {
         var new_coord, x = [], y = [];
         for (var i = 0; i < lat.length; i++) {
-            new_coord = g_map.latLngToContainerPoint(L.latLng(parseFloat(lat[i]), parseFloat(lng[i])));
-            x.push(new_coord.x);
-            y.push(new_coord.y);
+            if (isRelativeCoord(lat[i]) || isRelativeCoord(lng[i])) {
+                // do not convert relative positioned objects
+                x.push(lat[i]);
+                y.push(lng[i]);
+            } else {
+                new_coord = g_map.latLngToContainerPoint(L.latLng(parseFloat(lat[i]), parseFloat(lng[i])));
+                x.push(new_coord.x);
+                y.push(new_coord.y);
+            }
         }
         return [x, y];
     },
@@ -134,9 +140,15 @@ var ViewWorldmap = ViewMap.extend({
 
         var latlng, lat = [], lng = [];
         for (var i = 0, l = x.length; i < l; i++) {
-            latlng = g_map.containerPointToLatLng(L.point(x[i], y[i]));
-            lat[i] = latlng.lat;
-            lng[i] = latlng.lng;
+            if (isRelativeCoord(x[i]) || isRelativeCoord(y[i])) {
+                // do not convert relative positioned objects
+                lat[i] = x[i];
+                lng[i] = y[i];
+            } else {
+                latlng = g_map.containerPointToLatLng(L.point(x[i], y[i]));
+                lat[i] = latlng.lat;
+                lng[i] = latlng.lng;
+            }
         }
 
         return [lat, lng];

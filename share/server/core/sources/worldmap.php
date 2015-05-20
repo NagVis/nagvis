@@ -186,16 +186,16 @@ function worldmap_db_update_object($obj_id, $lat, $lng, $obj,
             .'    ('.$DB->escape($obj_id).','
             .'     '.$DB->escape($lat).','
             .'     '.$DB->escape($lng).','
-            .'     '.$lat2.','
-            .'     '.$lng2.','
+            .'     '.$DB->escape($lat2).','
+            .'     '.$DB->escape($lng2).','
             .'     '.$DB->escape(json_encode($obj)).')';
     }
     else {
         $q = 'UPDATE objects SET '
             .' lat='.$DB->escape($lat).','
             .' lng='.$DB->escape($lng).','
-            .' lat2='.$lat2.','
-            .' lng2='.$lng2.','
+            .' lat2='.$DB->escape($lat2).','
+            .' lng2='.$DB->escape($lng2).','
             .' object='.$DB->escape(json_encode($obj)).' '
             .'WHERE object_id='.$DB->escape($obj_id);
     }
