@@ -84,14 +84,6 @@ var ElementIcon = Element.extend({
             };
         }(this.obj);
 
-        // Use this to catch the mousedown event which would, together with
-        // holding the left mousebutton clicked and moving change the viewport
-        // on the worldmap. This is not intended when clicking on an icon.
-        addEvent(this.obj.trigger_obj, 'mousedown', function(event) {
-            event = event || window.event;
-            return preventDefaultEvents(event);
-        });
-
         addZoomHandler(oIcon);
 
         oIcon.src = oGeneralProperties.path_iconsets + this.obj.conf.icon;

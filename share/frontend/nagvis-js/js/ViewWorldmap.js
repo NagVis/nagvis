@@ -209,6 +209,13 @@ L.NagVisMarker = L.Marker.extend({
         // add reference to the marker object to the nagvis object
         options.icon.options.obj.marker = this;
 
+        // prevent dragging the viewport when click+hold+drag on an object
+        addEvent(options.icon.options.obj.dom_obj, 'mousedown', function(event) {
+            event = event || window.event;
+            if (getButton(event) == 'LEFT')
+                return preventDefaultEvents(event);
+        });
+
         this.on('add', this._onAdd, this);
     },
 
