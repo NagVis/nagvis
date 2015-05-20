@@ -68,12 +68,12 @@ var ElementLabel = Element.extend({
     },
 
     unlock: function () {
-	this.dom_obj.onmouseover = function() {
+        addEvent(this.dom_obj, 'mouseover', function() {
             document.body.style.cursor = 'move';
-        };
-        this.dom_obj.onmouseout = function() {
+        });
+        addEvent(this.dom_obj, 'mouseout', function() {
             document.body.style.cursor = 'auto';
-        };
+        });
 
 	makeDragable(this.dom_obj, this.obj, this.saveLabel, this.dragLabel);
     },

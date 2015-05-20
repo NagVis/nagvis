@@ -837,14 +837,14 @@ var ElementLineControls = Element.extend({
         img.style.height   = addZoomFactor(size) + 'px';
         ctl.appendChild(img);
 
-        ctl.onclick = function(element_obj) {
+        addEvent(ctl, 'click', function(element_obj) {
             return function(event) {
                 event = event || window.event;
                 element_obj.toggleMidLock();
 	        contextHide();
                 return preventDefaultEvents(event);
             };
-        }(this);
+        }(this));
         ctl = null;
     },
 

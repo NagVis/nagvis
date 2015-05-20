@@ -94,8 +94,6 @@ var ElementHover = Element.extend({
     },
 
     lock: function() {
-        //if (!this.dom_obj)
-        //    this._render();
         this.enable();
     },
 
@@ -191,7 +189,7 @@ var ElementHover = Element.extend({
     enable: function() {
         if (!this.enabled) {
             this._handleMouseMove = this.handleMouseMove.bind(this); 
-            this._handleMouseOut  = this.handleMouseOut.bind(this); 
+            this._handleMouseOut  = this.handleMouseOut.bind(this);
             addEvent(this.obj.trigger_obj, 'mousemove', this._handleMouseMove);
             addEvent(this.obj.trigger_obj, 'mouseout', this._handleMouseOut);
             addEvent(this.obj.trigger_obj, 'mousedown', this._handleMouseOut);

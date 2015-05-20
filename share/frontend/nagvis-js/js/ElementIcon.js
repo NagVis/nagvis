@@ -78,11 +78,12 @@ var ElementIcon = Element.extend({
 
         // Register controls reposition handler to handle resizes during
         // loading the image (from alt="" text to the real image
-        oIcon.onload = function(obj) {
+        addEvent(oIcon, 'load', function(obj) {
             return function() {
                 obj.place();
+                obj = null;
             };
-        }(this.obj);
+        }(this));
 
         addZoomHandler(oIcon);
 
