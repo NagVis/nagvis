@@ -49,6 +49,7 @@ Frontend:
   * FIX: Fixed annoying browser warning message when reloading pages which
     are shown up right after logging in to NagVis
   * FIX: Fixed duplicate map config processing for rendering the header menu
+  * FIX: Fixed js error when moving an object out of the screen
 
 1.8.4
 Core:

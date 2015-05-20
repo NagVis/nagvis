@@ -325,6 +325,10 @@ function dragObject(event) {
         newLeft = posx - dragObjectOffset[0],
         newTop  = posy - dragObjectOffset[1];
 
+    // skip further handling when moving out of screen
+    if (typeof posx === 'undefined' || typeof posy === undefined)
+        return preventDefaultEvents(event);
+
     draggingObject.style.position = 'absolute';
     draggingObject.style.left = newLeft + 'px';
     draggingObject.style.top  = newTop + 'px';
