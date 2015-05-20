@@ -463,6 +463,7 @@ var ElementLine = Element.extend({
         this.link_area = div;
         div.setAttribute('id', this.obj.conf.object_id+'-link');
         div.style.position = 'absolute';
+        div.style.top = '-100px'; // out of screen by default
         div.style.zIndex = parseInt(this.obj.conf.z)+1;
         div.style.width = '10px';
         div.style.height = '10px';
