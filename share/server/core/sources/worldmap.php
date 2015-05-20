@@ -152,7 +152,7 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
     global $DB;
     worldmap_init_db();
 
-    $q = 'SELECT object FROM objects WHERE'
+    $q = 'SELECT lat, lng, lat2, lng2, object FROM objects WHERE'
         .'(('.$sw_lat.' < '.$ne_lat.' AND lat BETWEEN '.$sw_lat.' AND '.$ne_lat.')'
         .' OR ('.$ne_lat.' < '.$sw_lat.' AND lat BETWEEN '.$ne_lat.' AND '.$sw_lat.')'
         .'AND '
@@ -167,10 +167,33 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
 
     $RES = $DB->query($q);
     $objects = array();
+    $referenced = array();
     while ($data = $DB->fetchAssoc($RES)) {
         $obj = json_decode($data['object'], true);
         $objects[$obj['object_id']] = $obj;
+
+        // check all coordinates for relative coords
+        $coords = array($data['lat'], $data['lng'], $data['lat2'], $data['lng2']);
+        foreach ($coords as $coord) {
+            if (strpos($coord, '%') !== false) {
+                $referenced[substr($coord, 0, 6)] = null;
+            }
+        }
     }
+
+    // When an object has relative coordinates also fetch the referenced object
+    if ($referenced) {
+        $filter = array();
+        foreach (array_keys($referenced) as $object_id)
+            $filter[] = 'object_id = '.$DB->escape($object_id);
+        $q = 'SELECT object FROM objects WHERE '.implode(' OR ', $filter);
+        $RES = $DB->query($q);
+        while ($data = $DB->fetchAssoc($RES)) {
+            $obj = json_decode($data['object'], true);
+            $objects[$obj['object_id']] = $obj;
+        }
+    }
+
     return $objects;
 }
 
