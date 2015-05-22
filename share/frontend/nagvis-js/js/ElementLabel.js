@@ -125,9 +125,13 @@ var ElementLabel = Element.extend({
      */
     // Important: It is called from an event handler the 'this.' keyword can not be used here.
     dragLabel: function(trigger_obj, obj, event) {
+        var isRelative = function(coord) {
+            return coord.toString().match(/^(?:\+|\-|center|bottom)/);
+        };
+
         // Calculates relative/absolute coords depending on the current configured type
         var calcNewLabelCoord = function (labelCoord, coord, newCoord) {
-            if(labelCoord.toString().match(/^(?:\+|\-)/)) {
+            if (isRelative(labelCoord)) {
                 var ret = newCoord - coord;
                 if(ret >= 0)
                     return '+' + ret;
@@ -140,6 +144,9 @@ var ElementLabel = Element.extend({
                                              obj.parseCoord(obj.conf.x, 'x', false), trigger_obj.x);
         obj.conf.label_y = calcNewLabelCoord(obj.conf.label_y,
                                              obj.parseCoord(obj.conf.y, 'y', false), trigger_obj.y);
+
+        if (isRelative(obj.conf.label_x) || isRelative(obj.conf.label_y))
+            obj.highlight(true);
     },
 
     // Important: It is called from an event handler the 'this.' keyword can not be used here.
@@ -148,6 +155,7 @@ var ElementLabel = Element.extend({
             'label_x': obj.conf.label_x,
             'label_y': obj.conf.label_y
         });
+        obj.highlight(false);
     },
 
     parseLabelCoord: function (dir) {

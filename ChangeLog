@@ -44,6 +44,9 @@ Frontend:
     open the context menu, maybe unlock, and then click on delete)
   * Adding/modifying map objects does not trigger map reload anymore. This makes
     editing maps much more fun since you can do your work much faster! :-)
+  * Labels: When center/Bottom positioned labels are dragged, the resulting
+    coordinates will still be relative ones to the object coordinates
+  * Labels: When dragging relative positioned labels, the object is highlighted
   * FIX: Stateless lines now handle line_color and line_color_border correctly
   * FIX: Removed useless weathermap line type selections from stateless lines
   * FIX: Fixed annoying browser warning message when reloading pages which
