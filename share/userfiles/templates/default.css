@@ -280,8 +280,8 @@ div.infopage a:hover {
 
 #statusMessage div.notice {
   background: url('../../frontend/nagvis-js/images/internal/info.png') 6px 3px no-repeat;
-  background-color: #F7FDCB;
-  border: 1px solid #C2D071;
+  background-color: #fbfbfb;
+  border: 1px solid #e5e5e5;
 }
 
 #statusMessage div.error,

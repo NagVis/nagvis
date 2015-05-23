@@ -480,6 +480,14 @@ var NagVisObject = Base.extend({
         return val;
     },
 
+    hasRelativeCoord: function() {
+        var coords = this.conf.x.toString().split(',').concat(this.conf.y.toString().split(','));
+        for (var i = 0, len = coords.length; i < len; i++)
+            if (isRelativeCoord(coords[i]))
+                return true;
+        return false;
+    },
+
     /**
      * Calculates new coordinates for the object where the given parameter
      * 'val' is the integer representing the current position of the object
@@ -689,15 +697,6 @@ var NagVisObject = Base.extend({
                        obj.calcNewCoord(trigger_obj.y - offsetY, 'y') ];
 
             var parents = obj.getParentObjectIds();
-        }
-
-        // Highlight parents when relative
-        for (var objectId in parents) {
-            var p = getMapObjByDomObjId(objectId);
-            if(p) {
-                p.highlight(true);
-                p = null;
-            }
         }
 
         obj.conf.x = newPos[0];

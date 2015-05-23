@@ -338,30 +338,61 @@ function dragObject(event) {
     // When this object has a relative coordinated label, then move this too
     moveRelativeObject(draggingObject.id, newTop, newLeft);
 
+    // Is this object currently relative positioned?
+    var idParts = draggingObject.id.split('-');
+    var obj = g_view.objects[idParts[0]];
+    if (obj.conf.view_type === 'line') {
+        var anchorId = idParts[2];
+        var parents = obj.getParentObjectIds(anchorId);
+    } else {
+        var parents = obj.getParentObjectIds();
+    }
+    var isRel = Object.keys(parents).length > 0;
+
+    // Unhighlight all other objects
+    for(var i in g_view.objects)
+        g_view.objects[i].highlight(false);
+
+
+    // Highlight parents when relative
+    for (var objectId in parents)
+        g_view.objects[objectId].highlight(true);
+
     // With pressed CTRL key the icon should be docked
     // This means the object will be positioned relative to that object
     // This code only highlights that object. When the CTRL key is still pressed
     // when dropping the object the currently moved object will be positioned
     // relative to this object.
+    var msg = null;
     if(event.ctrlKey) {
-        // Unhighlight all other objects
-        for(var i in g_view.objects)
-            g_view.objects[i].highlight(false);
-
         // Find the nearest object to the current position and highlight it
         var o = getNearestObject(draggingObject, newLeft, newTop)
         if(o) {
             o.highlight(true);
             o = null;
         }
+
+        if (!isRel)
+            msg = 'Hold CTRL till drop for relative positioning';
     }
 
-    // Shift key
-    if(event.shiftKey) {
-        // Unhighlight all other objects
+    // Shift key makes the object absolute positioned when still held during dropping
+    else if (event.shiftKey) {
+        // Unhighlight all objects
         for(var i in g_view.objects)
             g_view.objects[i].highlight(false);
+
+        if (isRel)
+            msg = 'Hold SHIFT till drop for absolute positioning';
+    } else {
+        if (isRel)
+            msg = 'Press SHIFT for absolute positioning';
+        else
+            msg = 'Press CTRL for relative positioning';
     }
+
+    if (msg !== null)
+        displayStatusMessage(msg, 'notice', true);
 
     // Call the dragging handler when one is set
     if(dragMoveHandlers[draggingObject.id])
@@ -455,6 +486,8 @@ function dragStop(event) {
     if(draggingObject === null || !draggingEnabled
        || typeof draggingObject.y == 'undefined' || typeof draggingObject.x == 'undefined')
         return;
+
+    hideStatusMessage();
 
     // When x or y are negative just return this and make no change
     if(draggingObject.y < 0 || draggingObject.x < 0) {

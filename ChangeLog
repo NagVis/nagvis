@@ -47,6 +47,7 @@ Frontend:
   * Labels: When center/Bottom positioned labels are dragged, the resulting
     coordinates will still be relative ones to the object coordinates
   * Labels: When dragging relative positioned labels, the object is highlighted
+  * Showing hint about absolute/relative coords while dragging objects
   * FIX: Stateless lines now handle line_color and line_color_border correctly
   * FIX: Removed useless weathermap line type selections from stateless lines
   * FIX: Fixed annoying browser warning message when reloading pages which
