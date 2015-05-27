@@ -246,7 +246,7 @@ var NagVisStatefulObject = NagVisObject.extend({
             // Only do eventhandling when object state changed to a worse state
             if (this.stateChangedToWorse()) {
                 this.raiseEvents(true);
-                this.initRepeatedEvents(objectId);
+                this.initRepeatedEvents();
             }
             return true;
         }
