@@ -71,12 +71,20 @@ var ElementLine = Element.extend({
         this.calcLineParts();
         this.renderLine();
         this.renderActionContainer();
+        this.renderLinkArea();
         this.renderLabels();
     },
 
     place: function() {
-        // Totally redraw the line when moving the line anchors arround
+        // Totally redraw the line when moving the line anchors arround. But keep the trigger
+        // object because it saves the attached event handlers
+        var trigger_obj = this.obj.trigger_obj;
+        trigger_obj.parentNode.removeChild(trigger_obj);
+        while (trigger_obj.firstChild)
+            trigger_obj.removeChild(trigger_obj.firstChild);
+
         this.erase();
+        this.obj.trigger_obj = trigger_obj;
         this.render();
         this.draw();
     },
@@ -94,21 +102,26 @@ var ElementLine = Element.extend({
     //
 
     renderActionContainer: function() {
-        // This is only the container for the hover/label elements
-        // The real area or labels are added later
-        var oLink = document.createElement('a');
+        // This is only the container for the hover/label elements. The real area or labels
+        // are added later. But this container gets all event handlers assigned. Because
+        // the line is using erase(), render(), draw() within place() which is called while
+        // the user moves the object, this dom node must not be re-created, because this
+        // would remove all event handlers 
+        if (!this.obj.trigger_obj) {
+            var oLink = document.createElement('a');
+            oLink.setAttribute('id', this.obj.conf.object_id+'-linelink');
+            oLink.className = 'linelink';
+            this.obj.trigger_obj = oLink;
+        } else {
+            var oLink = this.obj.trigger_obj;
+        }
         this.dom_obj.appendChild(oLink);
-        this.obj.trigger_obj = oLink;
-        oLink.setAttribute('id', this.obj.conf.object_id+'-linelink');
-        oLink.className = 'linelink';
         if (this.obj.conf.url) {
             oLink.href = this.obj.conf.url;
             oLink.target = this.obj.conf.url_target;
         } else {
             oLink.href = 'javascript:void(0)';
         }
-
-        this.renderLinkArea();
     },
 
     toggleActionContainer: function() {
