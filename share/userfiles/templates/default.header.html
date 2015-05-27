@@ -51,7 +51,7 @@
         <span id="map-ddheader" onclick="ddMenuToggle(event, 'map')">{$langMapEdit}</span>
         <ul id="map-ddcontent">
             {if $canMoveObjects || $canAddObjects || $canEditObjects}
-            <li><a href="#" onclick="toggleAllMapObjectsLock();ddMenuHide()">{$langLockUnlockAll}</a></li>
+            <li><a href="#" onclick="toggleAllMapObjectsLock(event);ddMenuHide()">{$langLockUnlockAll}</a></li>
             <li class="spacer"><hr /></li>
             {/if}
             {if $canMoveObjects}

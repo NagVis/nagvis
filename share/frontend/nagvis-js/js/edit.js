@@ -27,7 +27,7 @@ function toggleMapObjectLock(event, object_id) {
 }
 
 // Toggles the mode of all map objects: editable or not
-function toggleAllMapObjectsLock() {
+function toggleAllMapObjectsLock(event) {
     var lock = g_view.hasUnlocked();
 
     for (var object_id in g_view.objects)
