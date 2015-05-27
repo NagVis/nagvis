@@ -4,10 +4,11 @@
 <div id="headershow" class="header"><a href="#" onclick="toggleHeader(true)" title="Show header menu">&gt;</a></div>
 <div id="header" class="header">
 <ul class="head">
+    <div id="sidetoggle" onclick="toggleSidebar(true)"><img src="{$pathImages}/internal/sidebar_open.png" /></div>
     <li class="toggle"><a href="#" onclick="toggleHeader(true)" title="Hide header menu">&lt;</a></li>
     <li class="logo"><a href="http://www.nagvis.org/"><img src="{$pathImages}/internal/logo_small.png" alt="NagVis" /></a></li>
-    <li onmouseover="!sidebarOpen() ? showMapDropdown() : void(0)" class="dropdown">
-        <span id="views-ddheader" onclick="toggleSidebar(true)">{$langOpen}</span>
+    <li class="dropdown">
+        <span id="views-ddheader" onclick="ddMenuToggle(event, 'views')">{$langOpen}</span>
         {template headMaps maps pathBase currentMap indent=1}
         {foreach $maps map}<li class="lvl{$indent}{if $currentMap == $map.mapName} current{/if}">{if $map.configError == true}<a class="error" href="#">{$map.mapAlias}</a>
             {else}<a href="{$pathBase}/frontend/nagvis-js/index.php?mod=Map&amp;act=view&amp;show={$map.mapName}">{$map.mapAlias}</a> {/if}</li>
@@ -25,8 +26,8 @@
         </ul>
     </li>
     {if ($mod == 'Map' && (($permittedEdit == true && $act != 'edit') || ($permittedView == true && $act != 'view') || $permittedSearch)) || $bRotation == true}
-    <li onmouseover="ddMenu('action')" class="dropdown">
-        <span id="action-ddheader">{$langActions}</span>
+    <li class="dropdown">
+        <span id="action-ddheader" onclick="ddMenuToggle(event, 'action')">{$langActions}</span>
         <ul id="action-ddcontent">
             {if $mod == 'Map' && $permittedSearch}
             <li><a href="javascript:void(0)" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=Search&amp;act=view', '{$langSearch}')">{$langSearch}</a></li>
@@ -46,8 +47,8 @@
     </li>
     {/if}
     {if $mod == 'Map' && $currentMap != '' && $permittedEdit == true}
-    <li onmouseover="ddMenu('map')" class="dropdown">
-        <span id="map-ddheader">{$langMapEdit}</span>
+    <li class="dropdown">
+        <span id="map-ddheader" onclick="ddMenuToggle(event, 'map')">{$langMapEdit}</span>
         <ul id="map-ddcontent">
             {if $canMoveObjects || $canAddObjects || $canEditObjects}
             <li><a href="#" onclick="toggleAllMapObjectsLock();ddMenuHide()">{$langLockUnlockAll}</a></li>
@@ -111,7 +112,7 @@
     </li>
     {/if}
     {if $permittedEditMainCfg || $permittedManageBackgrounds || $permittedManageMaps || $permittedManageShapes}
-    <li onmouseover="ddMenu('wui')" class="dropdown">
+    <li onclick="ddMenuToggle(event, 'wui')" class="dropdown">
         <span id="wui-ddheader">{$langOptions}</span>
         <ul id="wui-ddcontent">
             {if $permittedEditMainCfg}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=MainCfg&amp;act=edit', '{$langEditMainCfg}', 550);ddMenuHide();">{$langEditMainCfg}</a></li>
@@ -129,7 +130,7 @@
     <li id="editIndicator" style="display:none">
         <span>Edit Mode!</span>
     </li>
-    <li onmouseover="ddMenu('user')" class="dropdown">
+    <li onclick="ddMenuToggle(event, 'user')" class="dropdown">
         <span id="user-ddheader">{$langUser}</span>
         <ul id="user-ddcontent">
         	<li><a href="#">{$langLoggedIn}: {$currentUser}</a></li>
@@ -140,19 +141,19 @@
             <li class="spacer underline"></li>
         </ul>
     </li>
-    <li onmouseover="ddMenu('language')" class="dropdown">
+    <li onclick="ddMenuToggle(event, 'language')" class="dropdown">
         <span id="language-ddheader">{$langChooseLanguage}</span>
         <ul id="language-ddcontent">
             {foreach $langs lang}<li><a href="{str_replace('&', '&amp;', $currentUri)}{if strpos($currentUri,'?') !== false}&amp;{else}?{/if}lang={$lang.language}">{$lang.langLanguageLocated}</a></li>{/foreach}
           	<li class="spacer underline"></li>
         </ul>
     </li>
-    <li onmouseover="ddMenu('support')" class="dropdown">
+    <li onclick="ddMenuToggle(event, 'support')" class="dropdown">
         <span id="support-ddheader">{$langNeedHelp}</span>
         <ul id="support-ddcontent">
-            <li><a href="{$pathBase}/docs/{$docLanguage}/index.html">{$langOnlineDoc}</a></li>
-            <li><a href="http://www.monitoring-portal.org/wbb/index.php?page=Board&amp;boardID=42">{$langForum}</a></li>
-            <li><a href="{$pathBase}/frontend/nagvis-js/index.php?mod=Info" class="underline">{$langSupportInfo}</a></li>
+            <li><a target="_blank" href="{$pathBase}/docs/{$docLanguage}/index.html">{$langOnlineDoc}</a></li>
+            <li><a target="_blank" href="http://www.monitoring-portal.org/wbb/index.php?page=Board&amp;boardID=42">{$langForum}</a></li>
+            <li><a target="_blank" href="{$pathBase}/frontend/nagvis-js/index.php?mod=Info" class="underline">{$langSupportInfo}</a></li>
         </ul>
     </li>
     <li style="width:120px"></li>

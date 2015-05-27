@@ -90,10 +90,6 @@ function toggleHeader(store) {
     header = null;
 }
 
-function showMapDropdown() {
-    ddMenu('views');
-}
-
 // Sets/Updates the state of a map in the header menu
 function headerUpdateState(map_conf) {
     // Exit this function on invalid call
@@ -123,6 +119,25 @@ function headerUpdateStates() {
             response_handler: headerUpdateState
         });
     }
+}
+
+function ddMenuToggle(event, id) {
+    event = event || window.event;
+    var some_open = open_menus.length > 0;
+    var this_open = false
+    for (var i = 0; i < open_menus.length; i++) {
+        if (open_menus[i] == id) {
+            this_open = true;
+            break;
+        }
+    }
+
+    // In any case close all open menus. When the triggered
+    // menu was not open before, then open it up again.
+    ddMenuHide();
+    if (!this_open)
+        ddMenu(id);
+    return preventDefaultEvents(event);
 }
 
 // Hide the given menus instant
@@ -187,6 +202,7 @@ function ddMenu(id, reposition) {
 
 function toggleSidebar(store) {
     var sidebar = document.getElementById('sidebar');
+    var toggle  = document.getElementById('sidetoggle');
     var content = document.getElementById('map');
     var is_overview = false;
     if(content == null) {
@@ -207,6 +223,7 @@ function toggleSidebar(store) {
         } else {
             content.style.marginLeft = '0px';
         }
+        toggle.firstChild.src = oGeneralProperties.path_images + 'internal/sidebar_open.png';
         state = 0;
     } else {
         // open the sidebar
@@ -219,6 +236,7 @@ function toggleSidebar(store) {
         } else {
             content.style.marginLeft = '200px';
         }
+        toggle.firstChild.src = oGeneralProperties.path_images + 'internal/sidebar_close.png';
 
         sidebarUpdatePosition();
 

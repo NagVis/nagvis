@@ -24,6 +24,10 @@ Automap:
 Frontend:
   * Showing header menu on full page error messages to give the users the
     option to navigate away from the error situation
+  * Header menu dropdown menus now open on click instead of hover which is
+    hopefully more user friendly as it is more unlikely to open/close the
+    menu unintended
+  * The sidebar is now toggled using a small control below the NagVis logo
   * Reworked frontend dialogs to show form error messages directly in the dialog
     instead of showing the old error popup window
   * The map / object editing dialog is now using a tab navigation to reduce

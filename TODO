@@ -9,6 +9,7 @@ This is a small file for storing quick thoughts about new features and needed ch
 - Rework layout of role edit form
 
 Worldmap:
+  - BUG: 0 Objekte auf Overview-Seite
   - BUG: Man kann auf den Objekten draggen. Sollte man nicht können, weil man sonst
     z.b. bei offenem Hover-Menu draggt und dann verschiebt es sich komisch
   - Andere Provider auswählbar machen

@@ -703,6 +703,31 @@ td#popupWindowContent input, select {
     margin-left: 0;
 }
 
+#sidetoggle {
+    position: absolute;
+    left: 50px;
+    top: 31px;
+    background-color: #fbfbfb;
+    border: 1px solid #dddddd;
+    border-top: none;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    width: 100px;
+    height: 5px;
+    text-align: center;
+}
+
+#sidetoggle:hover {
+    cursor:pointer;
+    background-color: #ffffff;
+}
+
+#sidetoggle img {
+    width: 20px;
+    height: 3px;
+    margin-top: 1px;
+}
+
 .header ul.head li.logo {
     padding-left: 5px;
     padding-right: 5px;
