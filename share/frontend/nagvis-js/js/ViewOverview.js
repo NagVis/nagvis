@@ -31,6 +31,7 @@ var ViewOverview = View.extend({
     },
 
     init: function() {
+        addEvent(document, 'mousedown', context_handle_global_mousedown);
         this.renderPageBasics();
         this.render();
         this.loadMaps();

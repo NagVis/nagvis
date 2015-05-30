@@ -321,7 +321,7 @@ var ElementContext = Element.extend({
             // Only check the condition when not already hidden by another check before
             if(!hide && isset(action.condition) && action.condition !== '') {
                 var cond = action.condition;
-                
+
                 var op = '';
                 if (cond.indexOf('~') != -1) {
                     op = '~';
@@ -357,7 +357,7 @@ var ElementContext = Element.extend({
             cond = null;
             action = null;
         }
-        
+
         // Remove all not hidden actions
         oSectionMacros['actions'] = '<!--\\sBEGIN\\saction_.+?\\s-->.+?<!--\\sEND\\saction_.+?\\s-->';
 
