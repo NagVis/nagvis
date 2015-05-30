@@ -141,15 +141,15 @@
             <li class="spacer underline"></li>
         </ul>
     </li>
-    <li onclick="ddMenuToggle(event, 'language')" class="dropdown">
-        <span id="language-ddheader">{$langChooseLanguage}</span>
+    <li class="dropdown">
+        <span id="language-ddheader" onclick="ddMenuToggle(event, 'language')">{$langChooseLanguage}</span>
         <ul id="language-ddcontent">
             {foreach $langs lang}<li><a href="{str_replace('&', '&amp;', $currentUri)}{if strpos($currentUri,'?') !== false}&amp;{else}?{/if}lang={$lang.language}">{$lang.langLanguageLocated}</a></li>{/foreach}
           	<li class="spacer underline"></li>
         </ul>
     </li>
-    <li onclick="ddMenuToggle(event, 'support')" class="dropdown">
-        <span id="support-ddheader">{$langNeedHelp}</span>
+    <li class="dropdown">
+        <span id="support-ddheader" onclick="ddMenuToggle(event, 'support')">{$langNeedHelp}</span>
         <ul id="support-ddcontent">
             <li><a target="_blank" href="{$pathBase}/docs/{$docLanguage}/index.html">{$langOnlineDoc}</a></li>
             <li><a target="_blank" href="http://www.monitoring-portal.org/wbb/index.php?page=Board&amp;boardID=42">{$langForum}</a></li>
