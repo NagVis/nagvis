@@ -27,8 +27,8 @@ create-tag:
 copy-to-website:
 
 publish:
-	cp $(NAME).tar.gz /d1/lm/nagvis.org/htdocs/share/
-	VERSION=$(NAME) $(MAKE) -C /d1/lm/nagvis.org/htdocs release
+	cp $(NAME).tar.gz /home/lm/git/nagvis.org/htdocs/share/
+	VERSION=$(NAME) $(MAKE) -C /home/lm/git/nagvis.org/htdocs release
 
 release: dist create-tag publish version
 
