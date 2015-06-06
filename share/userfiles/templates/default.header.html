@@ -130,8 +130,8 @@
     <li id="editIndicator" style="display:none">
         <span>Edit Mode!</span>
     </li>
-    <li onclick="ddMenuToggle(event, 'user')" class="dropdown">
-        <span id="user-ddheader">{$langUser}</span>
+    <li class="dropdown">
+        <span id="user-ddheader" onclick="ddMenuToggle(event, 'user')">{$langUser}</span>
         <ul id="user-ddcontent">
         	<li><a href="#">{$langLoggedIn}: {$currentUser}</a></li>
         	{if $supportedChangePassword && $permittedChangePassword}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=ChangePassword&amp;act=view', '{$langChangePassword}');ddMenuHide();">{$langChangePassword}</a></li>{/if}
