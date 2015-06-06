@@ -2,8 +2,8 @@
 <script type="text/javascript">
 function filter_group(field) \{
     var grp = field.value;
-    if(workerTimeoutID)
-        window.clearTimeout(workerTimeoutID);
+    if (g_worker_id)
+        window.clearTimeout(g_worker_id);
 
     window.location = makeuri(\{'filter_group': grp});
     storeUserOption('params-', '\{"filter_group": "'+grp+'"}');

@@ -82,8 +82,8 @@ var View = Base.extend({
                 if (key == 'maincfg') {
                     eventlog("worker", "info", "Main configuration file was updated. Need to reload the page");
                     // Clear the scheduling timeout to prevent problems with FF4 bugs
-                    if (workerTimeoutID)
-                        window.clearTimeout(workerTimeoutID);
+                    if (g_worker_id)
+                        window.clearTimeout(g_worker_id);
                     window.location.reload(true);
                     return;
 
