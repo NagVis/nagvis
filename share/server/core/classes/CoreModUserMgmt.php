@@ -35,7 +35,7 @@ class CoreModUserMgmt extends CoreModule {
         if($this->offersAction($this->sAction)) {
             switch($this->sAction) {
                 case 'view':
-                    $VIEW = new ViewUserMgmt();
+                    $VIEW = new ViewManageUsers();
                     return json_encode(Array('code' => $VIEW->parse()));
                 break;
             }

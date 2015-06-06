@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  *
- * ViewUserMgmt.php - User management dialog
+ * ViewManageUsers.php - User management dialog
  *
  * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
  *
@@ -22,7 +22,7 @@
  *
  *****************************************************************************/
 
-class ViewUserMgmt {
+class ViewManageUsers {
     private $error = null;
 
     private function addForm() {
@@ -86,11 +86,11 @@ class ViewUserMgmt {
         echo '</td></tr>';
         echo '<tr><td class="tdlabel">'.l('Password').'</td>';
         echo '<td class="tdfield">';
-        input('password1');
+        password('password1');
         echo '</td></tr>';
         echo '<tr><td class="tdlabel">'.l('Password Confirm').'</td>';
         echo '<td class="tdfield">';
-        input('password2');
+        password('password2');
         echo '</td></tr>';
         echo '</table>';
 
@@ -235,13 +235,13 @@ class ViewUserMgmt {
             try {
                 $user_id = post('user_id');
                 if ($user_id === null || $user_id === '')
-                    throw new FieldInputError('user_id', l('Please choose a user to delete.'));
+                    throw new FieldInputError('user_id', l('Please choose a user.'));
                 if (!is_numeric($user_id))
                     throw new FieldInputError('user_id', l('Invalid value provided.'));
                 $user_id = intval($user_id);
 
-                if ($AUTH->getUserId() == $user_id)
-                    throw new FieldInputError('user_id', l('Unable to delete your own user.'));
+                //if ($AUTH->getUserId() == $user_id)
+                //    throw new FieldInputError('user_id', l('Unable to delete your own user.'));
 
                 $password1 = post('password1');
                 if (!$password1)
@@ -288,11 +288,11 @@ class ViewUserMgmt {
         echo '</td></tr>';
         echo '<tr><td class="tdlabel">'.l('Password').'</td>';
         echo '<td class="tdfield">';
-        input('password1');
+        password('password1');
         echo '</td></tr>';
         echo '<tr><td class="tdlabel">'.l('Password Confirm').'</td>';
         echo '<td class="tdfield">';
-        input('password2');
+        password('password2');
         echo '</td></tr>';
         echo '</table>';
 
