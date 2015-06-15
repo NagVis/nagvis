@@ -642,12 +642,11 @@ function getViewParams(update, userParams) {
         var params = oViewProperties['params'];
     } else if(isset(oViewProperties) && isset(oViewProperties['user_params'])) {
         var params = oViewProperties['user_params'];
+    } else if(update) {
+        var params = {}
     } else {
         return '';
     }
-
-    if(!isset(params))
-        return '';
 
     // Udate the params before processing url
     if(isset(update)) {
@@ -655,6 +654,9 @@ function getViewParams(update, userParams) {
             params[param] = update[param];
         }
     }
+
+    if(!isset(params))
+        return '';
 
     if (g_map && usesSource('worldmap'))
         params['bbox'] = g_map.getBounds().toBBoxString();

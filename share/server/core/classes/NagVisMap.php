@@ -44,6 +44,10 @@ class NagVisMap {
 
         if($getState === GET_STATE) {
             $this->MAPOBJ = new NagVisMapObj($MAPCFG, $bIsView);
+            // FIXME: needed? $this->MAPOBJ->setConfiguration($this->MAPCFG->getTypeDefaults('global'));
+            $objConf = $MAPCFG->getMapObject(0);
+            unset($objConf['type']);
+            $this->MAPOBJ->setConfiguration($objConf);
             log_mem('postmapinit');
             $this->MAPOBJ->fetchMapObjects();
             log_mem('map ' .$this->MAPCFG->getName(). ' '.count($this->MAPOBJ->getMembers()));

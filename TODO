@@ -9,7 +9,7 @@ This is a small file for storing quick thoughts about new features and needed ch
 - Rework layout of role edit form
 
 Worldmap:
-  - BUG: 0 Objekte auf Overview-Seite
+  - Clustering von Objekten je nach Zoomstufe
   - Andere Provider auswählbar machen
 
 - Verzeichnis-Hierarchie unterhalb von maps/

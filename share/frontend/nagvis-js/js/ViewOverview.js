@@ -76,21 +76,56 @@ var ViewOverview = View.extend({
     },
 
     // Adds a single map to the overview map list
-    addMap: function(map_conf, map_name) {
+    addMap: function(objects, data) {
+        var map_name           = data[0],
+            worldmap_has_bbox  = data[1];
+
         this.processed_maps += 1;
-    
+
         // Exit this function on invalid call
-        if(map_conf === null || map_conf.length != 1)  {
+        if (objects === null || objects.length != 1)  {
             eventlog("worker", "warning", "addOverviewMap: Invalid call - maybe broken ajax response ("+map_name+")");
             if (this.processed_maps == g_map_names.length)
                 finishOverviewMaps();
             return false;
         }
-    
+        var map_conf = objects[0];
+
+        // The worldmap preview summary state should reflect the state shown by the worldmap
+        // when the user opens it. This means it is needed to calculate which area of the worldmap
+        // will be shown to the user and then only deal with the objects within this area.
+        // Bad here: For the worldmaps we need to do a second HTTP request which should be avoided
+        if (!worldmap_has_bbox && map_conf['sources']
+            && map_conf['sources'].indexOf('worldmap') !== -1) {
+
+            var worldmap = L.map('overview', {
+                markerZoomAnimation: false,
+                maxBounds: [ [-85,-180.0], [85,180.0] ],
+                minZoom: 2
+            }).setView(map_conf['worldmap_center'].split(','), parseInt(map_conf['worldmap_zoom']));
+
+            worldmap.remove();
+
+            // leaflet does not clean up everything. We do it on our own.
+            var overview = document.getElementById('overview');
+            remove_class(overview, 'leaflet-container');
+            remove_class(overview, 'leaflet-retina');
+            remove_class(overview, 'leaflet-fade-anim');
+
+            this.processed_maps -= 1;
+            call_ajax(oGeneralProperties.path_server+'?mod=Overview&act=getObjectStates'
+                      + '&i[]=map-' + escapeUrlValues(map_name)
+                      + getViewParams({'bbox': worldmap.getBounds().toBBoxString()}), {
+                response_handler : this.addMap.bind(this),
+                handler_data     : [ map_name, true ]
+            });
+            return;
+        }
+
         this.rendered_maps += 1; // also count errors
-    
+
         var container = document.getElementById('overviewMaps');
-    
+
         // Find the map placeholder div (replace it to keep sorting)
         var mapdiv = null;
         var child = null;
@@ -101,26 +136,26 @@ var ViewOverview = View.extend({
                 break;
             }
         }
-    
+
         // render the map object
-        var obj = new NagVisMap(map_conf[0]);
+        var obj = new NagVisMap(map_conf);
         // Save object to map objects array
         this.objects[obj.conf.object_id] = obj;
         obj.update();
         obj.render();
         container.replaceChild(obj.dom_obj, mapdiv);
-    
+
         // Finalize rendering after last map...
         if (this.processed_maps == g_map_names.length)
             this.finishMaps();
     },
-    
+
     finishMaps: function() {
-        // Hide the "Loading..." message. This is not the best place since rotations 
+        // Hide the "Loading..." message. This is not the best place since rotations
         // might not have been loaded now but in most cases this is the longest running request
         hideStatusMessage();
     },
-    
+
     // Does initial parsing of rotations on the overview page
     addRotations: function(rotations) {
         if (oPageProperties.showrotations === 1 && rotations.length > 0) {
@@ -135,18 +170,18 @@ var ViewOverview = View.extend({
             }
         }
     },
-    
+
     // Fetches all maps to be shown on the overview page
     loadMaps: function() {
         var map_container = document.getElementById('overviewMaps');
-    
+
         if (oPageProperties.showmaps !== 1 || g_map_names.length == 0) {
             if (map_container)
                 map_container.parentNode.style.display = 'none';
             hideStatusMessage();
             return false;
         }
-    
+
         for (var i = 0, len = g_map_names.length; i < len; i++) {
             var mapdiv = document.createElement('div');
             mapdiv.setAttribute('id', g_map_names[i])
@@ -154,7 +189,7 @@ var ViewOverview = View.extend({
             call_ajax(oGeneralProperties.path_server+'?mod=Overview&act=getObjectStates'
                       + '&i[]=map-' + escapeUrlValues(g_map_names[i]) + getViewParams(), {
                 response_handler : this.addMap.bind(this),
-                handler_data     : g_map_names[i]
+                handler_data     : [ g_map_names[i], false ]
             });
         }
     },

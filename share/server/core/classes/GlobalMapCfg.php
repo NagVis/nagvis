@@ -1278,7 +1278,7 @@ class GlobalMapCfg {
      * @author  Lars Michelsen <lars@vertical-visions.de>
      */
     public function filterMapObjects($objIds) {
-        $newConfig =  Array();
+        $newConfig =  Array(0 => $this->mapConfig[0]); // keep the global section
         foreach($objIds AS $id)
             if(isset($this->mapConfig[$id]))
                 $newConfig[$id] = $this->mapConfig[$id];

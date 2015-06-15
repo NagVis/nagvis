@@ -103,14 +103,10 @@ class CoreModOverview extends CoreModule {
         if($MAPCFG->getValue(0, 'show_in_lists') != 1)
             return null;
 
-        $objConf = $MAPCFG->getTypeDefaults('global');
-
         $MAP = new NagVisMap($MAPCFG, GET_STATE, !IS_VIEW);
 
-        // Apply default configuration to object
-        $objConf = array_merge($objConf, $this->getMapDefaultOpts($mapName, $MAPCFG->getAlias()));
-
-        $MAP->MAPOBJ->setConfiguration($objConf);
+        // Apply overview related configuration to object
+        $MAP->MAPOBJ->setConfiguration($this->getMapDefaultOpts($mapName, $MAPCFG->getAlias()));
 
         if($MAP->MAPOBJ->checkMaintenance(0)) {
             $map['overview_url']    = $this->htmlBase.'/index.php?mod=Map&act=view&show='.$mapName;
