@@ -64,6 +64,7 @@ Core:
   * FIX: BI Backend: Fixed wrong summary state of aggregation objects when
     not using the worst aggregation function. NagVis is now using the summary
     state provided by the backend
+  * BI Backend: it's now possible to use URLs configured in object attributes
 
 1.8.3
 Core:

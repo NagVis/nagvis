@@ -282,7 +282,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             $aggr = $this->matchAggregation($aggregations, $key);
             if ($aggr === null)
                 continue; // did not find this aggregation
-
+            $obj_url = $OBJS[0]->getUrl();
             $ret[$key] = Array(
                 'details' => Array(
                     ALIAS => $aggr['aggr_name'],
@@ -291,7 +291,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
                 ),
                 'attrs' => Array(
                     // Forces the URL to point to the BI aggregate
-                    'url' => $this->aggrUrl($key),
+                    'url' => $obj_url ? $obj_url : $this->aggrUrl($key),
                 ),
                 'counts'  => $this->getAggrCounts($aggr),
             );
