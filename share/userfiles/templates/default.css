@@ -25,12 +25,14 @@ body, table, th, td {
     margin: 0;
     padding: 0;
 
-    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-decoration: none;
 
     color: black;
-    font-size: 12pt;
+    font-size: 9pt;
 }
+
+span {font-size: 9pt;}
 
 html,body{height:100%;}
 
@@ -68,7 +70,6 @@ iframe#url {
 
     background-color: #CCCCCC;
 
-    font-size: 15pt;
     font-weight: bold;
     text-align: center;
 }
@@ -78,7 +79,6 @@ iframe#url {
 
     background-color: #EEEEEE;
 
-    font-size: 12pt;
     font-weight: bold;
     text-align: center;
 }
@@ -95,7 +95,6 @@ iframe#url {
 .icondiv {
     position : absolute;
     border : 0;
-    font-size: 12pt;
     z-index : 1;
 }
 
@@ -125,9 +124,7 @@ a.linelink {
     position: absolute;
     z-index : 1;
     border: 1px #000 solid;
-    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    /*padding: 2px;*/
+    padding: 0 2px;
     /* tried to solve the off-screen text wrap. This fixes the problem but
      * results no no linebreak at all: white-space:nowrap; */
 }
@@ -173,12 +170,12 @@ div.infobox div.mapobj {
 
 div.infobox div.mapobj h3,
 div.infobox table.rotation h3 {
-    font-size: 12px;
     color: #43B3CF;
     margin-top: 2px;
     margin-bottom: 2px;
     margin-left: 2px;
     font-weight: normal;
+    font-size: 1.0em;
 }
 
 div.infobox div.mapobj img.state {
@@ -218,7 +215,6 @@ div.infopage > table td, div.infopage > table th {
     border: 1px solid #e5e5e5;
     padding: 4px;
 
-    font-size: 12px;
     color: #43B3CF;
     vertical-align: top;
 }
@@ -228,7 +224,7 @@ div.infopage > table th {
 }
 
 div.infopage > table th.head {
-    font-size: 20px;
+    font-size: 1.3em;
 }
 
 div.infopage > div.map.disabled h3  {
@@ -244,7 +240,6 @@ div.infopage a {
     width: 100%;
     height: 100%;
     color: #43b3cf;
-    font-size: 12px;
     text-decoration: none;
 }
 
@@ -268,6 +263,7 @@ div.infopage a:hover {
   right: 200px;
   z-index: 5000;
   opacity: 0.85;
+  font-size: 1.5em;
 }
 
 #statusMessage div {
@@ -349,7 +345,7 @@ div.infopage a:hover {
     text-align: center;
     font-weight: bold;
     color: black;
-    font-size: 26pt;
+    font-size: 1.5em;
 }
 
 #messageBoxDiv th.error, #messageBoxDiv th.critical, #messageBoxDiv th.down {
@@ -377,7 +373,6 @@ div.infopage a:hover {
 #messageBoxDiv td {
     text-align: center;
     vertical-align: middle;
-    font-size: 16pt;
 }
 
 #messageBoxDiv td.error, #messageBoxDiv td.critical, #messageBoxDiv td.down {
@@ -403,14 +398,14 @@ div.infopage a:hover {
 #messageBoxDiv code {
     display: block;
     text-align: left;
-    font-size: 10px;
+    font-size: 0.8em;
     width: 560px;
     overflow: scroll;
 }
 
 #messageBoxDiv div.details {
     text-align: left;
-    font-size: 10px;
+    font-size: 0.8em;
 }
 
 /*
@@ -461,7 +456,6 @@ table#popupWindowMaster tr td {
     background-color: transparent;
     border: 0;
 
-    font-size: 10px;
     color: #43B3CF;
 }
 
@@ -483,7 +477,6 @@ td#popupWindowContent table.mytable {
 
 td#popupWindowContent table.mytable th,
 td#popupWindowContent table.mytable td {
-    font-size: 10px;
     padding: 0;
     margin: 0;
     border: 0;
@@ -505,7 +498,6 @@ td#popupWindowContent p {
 div.infopage h2,
 div#popupWindow h1,
 td#popupWindowContent h2 {
-    font-size: 16px;
     text-align: left;
     padding: 3px 10px 2px 2px;
     line-height:20px;
@@ -533,7 +525,7 @@ td#popupWindowContent h2 {
 }
 
 /* cat */
-td#popupWindowContent table.mytable th.cat {font-size: 12px;}
+td#popupWindowContent table.mytable th.cat {font-size: 1.2em;}
 
 /* Child rows */
 td#popupWindowContent table.mytable tr.child-row td.tdlabel {padding-left: 10px;}
@@ -587,7 +579,6 @@ td#popupWindowContent .submit {
     vertical-align: middle;*/
 
     padding: 3px 10px;
-    font-size: 12px;
     background-color: #fbfbfb;
     border: 1px solid #e5e5e5;
     border-width: 1px;
@@ -641,7 +632,6 @@ td#popupWindowContent a {color:#43B3CF;text-decoration:none;}
 td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 
 td#popupWindowContent input, select {
-    font-size: 11px;
     color: #555555;
     background-color: #fbfbfb;
     border: 1px solid #e5e5e5;
@@ -653,7 +643,6 @@ td#popupWindowContent input, select {
     border-bottom: 1px solid #ddd;
     box-shadow: 0 3px 6px #ddd;
     color: #43B3CF;
-    font-size: 0.6em;
     height: 31px;
     width: 100%;
 }
@@ -694,7 +683,7 @@ td#popupWindowContent input, select {
     display: block;
     margin-left: 2px;
     height: 100%;
-    line-height: 31px;
+    line-height: 32px;
     text-decoration: none;
     color: #43B3CF;
 }
@@ -752,7 +741,7 @@ td#popupWindowContent input, select {
 .header ul li span {
     margin:0;
     height:31px;
-    line-height:31px;
+    line-height:32px;
     font-weight:normal;
     padding: 0 8px;
 }
@@ -765,7 +754,7 @@ td#popupWindowContent input, select {
     height:31px;
     padding-left:8px;
     padding-right:8px;
-    line-height:31px;
+    line-height: 32px;
     width:auto;
     font-weight:normal;
     cursor:pointer;
@@ -829,7 +818,6 @@ td#popupWindowContent input, select {
     display:none;
     background-color:#fbfbfb;
     text-decoration:none;
-    font-size:0.6em;
     padding-top:10px;
     border-right:1px solid #e5e5e5;
 }
@@ -927,8 +915,7 @@ div.statediv.sPENDING, div.statediv.sUNCHECKED {
 	/*filter:alpha(opacity=40);*/
 	
 	padding: 2px;
-	
-	font-size: 9px;
+	font-size: 0.8em;
 }
 
 #eventlogControl {
@@ -949,7 +936,7 @@ div.statediv.sPENDING, div.statediv.sUNCHECKED {
 	
 	padding: 2px;
 	
-	font-size: 9px;
+	font-size: 0.8em;
 }
 
 /**
@@ -978,7 +965,6 @@ div#zoombar a {
     vertical-align: middle;
     line-height: 20px;
     color: #43B3CF;
-    font-size: 12px;
     font-weight: bold;
     cursor: pointer;
 }
@@ -987,7 +973,7 @@ div#zoombar a.minus {
 }
 div#zoombar a:hover {
     background-color: #ffffff;
-    color: #779D2A   
+    color: #779D2A;
 }
 div#zoombar div.drag {
     position: relative;

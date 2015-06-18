@@ -30,7 +30,6 @@ div.context {
   width: 205px;
   background: #fbfbfb;
 
-  font-size: 10px;
   border: 1px solid #e5e5e5;
   z-index: 1000;
 }
@@ -64,7 +63,6 @@ div.context ul li a {
   width: 193px;
   text-decoration: none;
   padding: 5px;
-  font-size: 10px;
 }
 
 div.context ul li a:hover {

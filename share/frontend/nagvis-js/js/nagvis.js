@@ -1040,8 +1040,8 @@ function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, cust
         );
     } else {
         // Only take zoom into account if the fontSize is set in px
-        if(fontSize.indexOf('px') !== -1) {
-            var fontSize = parseInt(fontSize.replace('px', ''));
+        if (fontSize.indexOf('px') !== -1) {
+            var fontSize = parseFloat(fontSize.replace('px', ''));
             oLabelSpan.style.fontSize = addZoomFactor(fontSize) + 'px';
         } else {
             eventlog(
