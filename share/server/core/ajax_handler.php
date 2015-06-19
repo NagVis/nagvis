@@ -60,14 +60,12 @@ try {
 } catch(NagVisException $e) {
     echo $e;
 } catch(NagVisErrorException $e) {
-    ob_end_clean(); // cleanup eventual exisiting output buffer
     echo json_encode(Array(
         'type'    => 'error',
         'message' => (string)$e,
         'title'   => l('Error: PHP Error'),
     ));
 } catch(Exception $e) {
-    ob_end_clean(); // cleanup eventual exisiting output buffer
     echo json_encode(Array(
         'type'    => 'error',
         'message' => $e->getMessage(),

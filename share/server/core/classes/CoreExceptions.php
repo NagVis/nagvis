@@ -101,12 +101,18 @@ class FieldInputError extends NagVisException {
 // This exception is used to handle PHP errors
 class NagVisErrorException extends ErrorException {
     function __toString() {
-        return "Error: (".$this->getCode().") ".$this->getMessage()
+        $msg = "Error: (".$this->getCode().") ".$this->getMessage()
              . "<div class=\"details\">"
              . "URL: ".$_SERVER['REQUEST_URI']."<br>\n"
              . "File: ".$this->getFile()."<br>\n"
              . "Line: ".$this->getLine()."<br>\n"
              . "<code>".str_replace("\n", "<br>\n", $this->getTraceAsString())."</code>";
 
+        if (ob_get_level() >= 1) {
+            $buffer = ob_get_clean();
+            if ($buffer)
+                $msg .= 'Output: <pre>'.htmlentities($buffer, ENT_COMPAT, 'UTF-8').'</pre>';
+        }
+        return $msg;
     }
 }

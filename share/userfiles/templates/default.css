@@ -317,7 +317,8 @@ div#popupWindow div.close {
     padding: 3px;
 }
 
-#popupWindowContent div.error code {
+#popupWindowContent div.error code,
+#popupWindowContent div.error pre {
     display: block;
     overflow: scroll;
     background-color: #fff;

@@ -848,7 +848,7 @@ function handleJSError(sMsg, sUrl, iLine) {
 function handleException(e) {
     var msg = e.name+': '+e.message;
     if (e.stack)
-        msg += '<br><br><code>'+e.stack+'</code>';
+        msg += '<br><code>'+e.stack+'</code>';
     handleJSError(msg, e.fileName, e.lineNumber);
 }
 
