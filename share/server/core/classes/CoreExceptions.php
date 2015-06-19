@@ -102,8 +102,11 @@ class FieldInputError extends NagVisException {
 class NagVisErrorException extends ErrorException {
     function __toString() {
         return "Error: (".$this->getCode().") ".$this->getMessage()
-             . " (".$this->getFile().":".$this->getLine().")<br /><br />\n"
-             . "<code>".str_replace("\n", "<br />\n", $this->getTraceAsString())."</code>";
+             . "<div class=\"details\">"
+             . "URL: ".$_SERVER['REQUEST_URI']."<br>\n"
+             . "File: ".$this->getFile()."<br>\n"
+             . "Line: ".$this->getLine()."<br>\n"
+             . "<code>".str_replace("\n", "<br>\n", $this->getTraceAsString())."</code>";
 
     }
 }
