@@ -177,15 +177,19 @@ class GlobalBackendTest implements GlobalBackendInterface {
     }
 
     private function hostgroup($name, $members) {
-            return  Array('name'  => $name,
-                        'alias' => 'Alias '.$name,
-                              'members' => $members);
+        return  Array(
+            'name'    => $name,
+            'alias'   => 'Alias '.$name,
+            'members' => $members
+        );
     }
 
     private function servicegroup($name, $members) {
-        return Array('name'  => $name,
-                     'alias' => 'Alias '.$name,
-                     'members' => $members);
+        return Array(
+            'name'    => $name,
+            'alias'   => 'Alias '.$name,
+            'members' => $members
+        );
     }
 
     private function genObj() {
@@ -462,7 +466,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                                   'name2' => $entry[DISPLAY_NAME]);
             } elseif ($type != 'service') {
                 $result[] = Array('name1' => $key,
-                                  'name2' => $entry[ALIAS]);
+                                  'name2' => $entry['alias']);
             } else {
                 $result[] = Array('name1' => $entry[DESCRIPTION],
                                   'name2' => $entry[DESCRIPTION]);
