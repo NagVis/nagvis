@@ -55,22 +55,23 @@ try {
         'User',
         'Action',
     );
-
     require('../../server/core/functions/index.php');
     exit(0);
 } catch(NagVisException $e) {
     echo $e;
 } catch(NagVisErrorException $e) {
+    ob_end_clean(); // cleanup eventual exisiting output buffer
     echo json_encode(Array(
         'type'    => 'error',
-        'message' => "".$e,
-        'title'   => l('PHP ERROR'),
+        'message' => (string)$e,
+        'title'   => l('Error: PHP Error'),
     ));
 } catch(Exception $e) {
+    ob_end_clean(); // cleanup eventual exisiting output buffer
     echo json_encode(Array(
         'type'    => 'error',
         'message' => $e->getMessage(),
-        'title'   => l('ERROR - Unexpected exception'),
+        'title'   => l('Error: Unhandled Exception'),
     ));
 }
 exit(1);

@@ -111,22 +111,22 @@ function popupWindowPutContent(oContent) {
  * @return  Boolean
  * @author	Lars Michelsen <lars@vertical-visions.de>
  */
-function popupWindow(title, oContent, openOnMousePosition, sWidth) {
+function popupWindow(title, oContent, sWidth, closable) {
     if(oContent === null || oContent.code === null)
         return false;
 
     if(typeof openOnMousePosition === 'undefined')
         openOnMousePosition = true;
 
-    if(typeof sWidth === 'undefined' || sWidth === null)
-        sWidth = '';
+    if (typeof closable === 'undefined')
+        closable = true;
 
     // Maybe some other window is still open. Close it now
     popupWindowClose();
 
     // Default window position
-    var posX = getScrollLeft() + 100;
-    var posY = getScrollTop() + 20;
+    var posX = getScrollLeft() + (pageWidth()/2 - sWidth/2);
+    var posY = getScrollTop() + 50;
 
     // Detect the current mouse position and create the window there
     if(openOnMousePosition) {
@@ -135,24 +135,26 @@ function popupWindow(title, oContent, openOnMousePosition, sWidth) {
 
     var oContainerDiv = document.createElement('div');
     oContainerDiv.setAttribute('id', 'popupWindow');
-    oContainerDiv.style.position = 'absolute';
     oContainerDiv.style.left = posX+'px';
     oContainerDiv.style.top = posY+'px';
+    oContainerDiv.style.width = sWidth+'px';
 
     oContainerDiv.url = oContent.url;
 
     // Render the close button
-    var oClose = document.createElement('div');
-    oClose.className = 'close';
+    if (closable) {
+        var oClose = document.createElement('div');
+        oClose.className = 'close';
 
-    oClose.onclick = function() {
-        popupWindowClose();
-        return false;
-    };
+        oClose.onclick = function() {
+            popupWindowClose();
+            return false;
+        };
 
-    oClose.appendChild(document.createTextNode('x'));
-    oContainerDiv.appendChild(oClose);
-    oClose = null;
+        oClose.appendChild(document.createTextNode('x'));
+        oContainerDiv.appendChild(oClose);
+        oClose = null;
+    }
 
     // Render the window title
     var oTitle = document.createElement('h1');
@@ -167,34 +169,10 @@ function popupWindow(title, oContent, openOnMousePosition, sWidth) {
     oContainerDiv.appendChild(oTitle);
     oTitle = null;
 
-    var oTable = document.createElement('table');
-    oTable.setAttribute('id', 'popupWindowMaster');
-
-    // When width is not set the window should be auto adjusted
-    if(sWidth !== '') {
-        oContainerDiv.style.width = sWidth+'px';
-        oTable.style.width = sWidth+'px';
-    }
-
-    var oTbody = document.createElement('tbody');
-
-    oRow = document.createElement('tr');
-
-    oCell = document.createElement('td');
-    oCell.setAttribute('id', 'popupWindowContent');
-    oCell.colSpan = '2';
-
-    oRow.appendChild(oCell);
-    oCell = null;
-
-    oTbody.appendChild(oRow);
-    oRow = null;
-
-    oTable.appendChild(oTbody);
-    oTbody = null;
-
-    oContainerDiv.appendChild(oTable);
-    oTable = null;
+    var content = document.createElement('div');
+    content.setAttribute('id', 'popupWindowContent');
+    oContainerDiv.appendChild(content);
+    content = null;
 
     document.body.appendChild(oContainerDiv);
     oContainerDiv = null;

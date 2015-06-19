@@ -33,7 +33,7 @@ class ViewError {
 
         echo '<div id="page">';
         js('frontendMessage({'.N
-          .'    "type"    : "CRITICAL",'.N
+          .'    "type"    : "error",'.N
           .'    "closable": false,'.N
           .'    "title"   : "'.l('Error').'",'.N
           .'    "message" : "'.htmlentities($e->getMessage(), ENT_COMPAT, 'UTF-8').'"'.N

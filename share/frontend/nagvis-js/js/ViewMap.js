@@ -87,7 +87,7 @@ var ViewMap = View.extend({
             return false
         } else if(wasInMaintenance === true) {
             // Hide the maintenance message when it was in maintenance before
-            frontendMessageHide();
+            frontendMessageRemove('maintenance');
         }
         wasInMaintenance = null;
 
@@ -103,7 +103,7 @@ var ViewMap = View.extend({
 
     handleMapInitError: function(status_code, response, handler_data) {
         hideStatusMessage();
-        frontendMessage(response, 0, 'serverError');
+        frontendMessage(response, 'serverError');
     },
 
     handleMapInit: function(oObjects) {

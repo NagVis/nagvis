@@ -43,8 +43,12 @@ function inMaintenance(displayMsg) {
         var displayMsg = true;
     if(oPageProperties && oPageProperties.in_maintenance === '1') {
         hideStatusMessage();
-        if(displayMsg && !frontendMessageActive())
-            frontendMessage({'type': 'NOTE', 'title': 'Maintenance', 'message': 'The current page is in maintenance mode.<br />Please be patient.'});
+        if(displayMsg)
+            frontendMessage({
+                'type': 'note',
+                'title': 'Maintenance',
+                'message': 'The current page is in maintenance mode.<br />Please be patient.'
+            }, 'maintenance');
         return true;
     } else {
         return false;
@@ -119,7 +123,7 @@ function showFrontendDialog(sUrl, sTitle, sWidth) {
                 response.url = sUrl;
 
                 if(typeof response !== 'undefined' && typeof response.code !== 'undefined') {
-                    popupWindow(data.title, response, true, data.width);
+                    popupWindow(data.title, response, data.width);
                 }
             }
         },

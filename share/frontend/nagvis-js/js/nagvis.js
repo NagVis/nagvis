@@ -832,20 +832,16 @@ addDOMLoadEvent = (function(){
 function handleJSError(sMsg, sUrl, iLine) {
     if(!isset(sUrl))
   	var sUrl = '<Empty URL>';
+
     // Log to javascript eventlog
     eventlog("js-error", "critical", "JS-Error occured: " + sMsg + " " + sUrl + " (" + iLine + ")");
 
-    // Show error box
-    var oMsg = {};
-    oMsg.type = 'CRITICAL';
-    oMsg.message = "Javascript error occured:\n " + sMsg + " "
-                   + sUrl + " (" + iLine + ")";
-    oMsg.title = "Javascript error";
-
-    // Handle application message/error
-    frontendMessage(oMsg);
-    oMsg = null;
-
+    frontendMessage({
+        'type'    : 'error',
+        'title'   : 'Error: Javascript Error',
+        'message' : 'Javascript error occured:\n ' + sMsg + ' '
+                   + sUrl + ' (' + iLine + ')'
+    });
     return false;
 }
 

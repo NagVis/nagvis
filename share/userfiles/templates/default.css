@@ -58,31 +58,6 @@ iframe#url {
     height: 100%;
 }
 
-/* Message-Box */
-.messageBox {
-    width: 600px;
-    border: 0px;
-    background-color: #CCCCCC;
-}
-
-.messageBox th {
-    height: 22px;
-
-    background-color: #CCCCCC;
-
-    font-weight: bold;
-    text-align: center;
-}
-
-.messageBox td {
-    height: 200px;
-
-    background-color: #EEEEEE;
-
-    font-weight: bold;
-    text-align: center;
-}
-
 /* Background images */
 #backgroundImage {
     position: absolute;
@@ -293,129 +268,14 @@ div.infopage a:hover {
   border: 1px solid #e5e5e5;
 }
 
-/**
- *
- *  Message box
- *
- */
-
-#messageBoxDiv {
-    position: absolute;
-  left: 50%;
-  top: 50%;
-
-    margin-left: -297px;
-    margin-top: -125px;
-
-    width:594px;
-    height:250px;
-
-    /*margin:20 auto;*/
-    z-index: 1000;
-}
-
-#messageBoxDiv table.error, #messageBoxDiv table.critical, #messageBoxDiv table.down {
-    border:1px solid #F00;
-}
-
-#messageBoxDiv table.error, #messageBoxDiv table.critical, #messageBoxDiv table.down {
-    border:1px solid #F00;
-}
-
-#messageBoxDiv table.warning {
-    border:1px solid #FF0;
-}
-
-#messageBoxDiv table.unknown, #messageBoxDiv table.permission, #messageBoxDiv table.unreachable {
-    border:1px solid #FF9900;
-}
-
-#messageBoxDiv table.ok, #messageBoxDiv table.up {
-    border:1px solid #00B233;
-}
-
-#messageBoxDiv table.note {
-    border:1px solid #00F;
-}
-
-/* Style for the header area */
-
-#messageBoxDiv th {
-    font-style: italic;
-    text-align: center;
-    font-weight: bold;
-    color: black;
-    font-size: 1.5em;
-}
-
-#messageBoxDiv th.error, #messageBoxDiv th.critical, #messageBoxDiv th.down {
-    background-color: #FF6666;
-}
-
-#messageBoxDiv th.warning {
-    background-color: #FFFF66;
-}
-
-#messageBoxDiv th.unknown, #messageBoxDiv th.permission, #messageBoxDiv th.unreachable {
-    background-color: #FFB200;
-}
-
-#messageBoxDiv th.ok, #messageBoxDiv th.up {
-    background-color: #99FF66;
-}
-
-#messageBoxDiv th.note {
-    background-color: #99CCFF;
-}
-
-/* Style for the message area */
-
-#messageBoxDiv td {
-    text-align: center;
-    vertical-align: middle;
-}
-
-#messageBoxDiv td.error, #messageBoxDiv td.critical, #messageBoxDiv td.down {
-    background-color: #FFB2B2;
-}
-
-#messageBoxDiv td.warning {
-    background-color: #FFFFCC;
-}
-
-#messageBoxDiv td.ok, #messageBoxDiv td.up {
-    background-color: #CCFF99;
-}
-
-#messageBoxDiv td.unknown, #messageBoxDiv td.permission, #messageBoxDiv td.unreachable {
-    background-color: #FFE566;
-}
-
-#messageBoxDiv td.note {
-    background-color: #CCE5FF;
-}
-
-#messageBoxDiv code {
-    display: block;
-    text-align: left;
-    font-size: 0.8em;
-    width: 560px;
-    overflow: scroll;
-}
-
-#messageBoxDiv div.details {
-    text-align: left;
-    font-size: 0.8em;
-}
-
 /*
  * popupWindow css
  */
 
 div#popupWindow {
+    position: absolute;
     z-index: 2000;
 
-    margin-left: 8px;
     font-weight: normal;
     -moz-border-radius: 11px;
     -khtml-border-radius: 11px;
@@ -442,62 +302,66 @@ div#popupWindow div.close {
     color: #555;
 }
 
-/* Popup window master table */
-table#popupWindowMaster {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    border-collapse: separate;
+/* Content styling */
+#popupWindowContent {
     padding: 0 16px 16px 16px;
-}
-
-table#popupWindowMaster tr th,
-table#popupWindowMaster tr td {
-    background-color: transparent;
-    border: 0;
-
     color: #43B3CF;
 }
 
-table#popupWindowMaster div.error {
-    background-color: #ff4f4f;
-    border: 1px solid #e5e5e5;
+#popupWindowContent div.error {
+    background-color: #febabb;
+    border: 1px solid #d5091b;
+    color: #d5091b;
     border-radius: 5px;
-    color: #fff;
-    margin-bottom: 2px;
+    margin: 2px 0;
     padding: 3px;
 }
 
-/* Content styling */
-td#popupWindowContent table.mytable {
+#popupWindowContent div.error code {
+    display: block;
+    overflow: scroll;
+    background-color: #fff;
+    color: #000;
+    margin: 2px;
+    padding: 2px;
+}
+
+#popupWindowContent div.error div.details {
+    margin-top: 5px;
+    text-align: left;
+    font-size: 0.8em;
+}
+
+#popupWindowContent table.mytable {
     width: 100%;
     padding: 0;
     margin: 0;
 }
 
-td#popupWindowContent table.mytable th,
-td#popupWindowContent table.mytable td {
+#popupWindowContent table.mytable th,
+#popupWindowContent table.mytable td {
     padding: 0;
     margin: 0;
     border: 0;
+    color: #43B3CF;
 }
 
-td#popupWindowContent table.mytable td {
+#popupWindowContent table.mytable td {
     vertical-align: middle;
 }
 
-td#popupWindowContent label span {
+#popupWindowContent label span {
     vertical-align: middle;
 }
 
-td#popupWindowContent p {
+#popupWindowContent p {
     margin-bottom: 12px;
 }
 
 /* title */
 div.infopage h2,
 div#popupWindow h1,
-td#popupWindowContent h2 {
+#popupWindowContent h2 {
     text-align: left;
     padding: 3px 10px 2px 2px;
     line-height:20px;
@@ -510,6 +374,7 @@ div#popupWindow h1 {
     font-weight: normal;
     margin: 5px;
     padding: 5px 10px;
+    font-size: 1.5em;
 
     cursor: move;
     -webkit-touch-callout: none;
@@ -520,60 +385,60 @@ div#popupWindow h1 {
     user-select: none;
 }
 
-td#popupWindowContent h2 {
+#popupWindowContent h2 {
     margin: 5px 0;
 }
 
 /* cat */
-td#popupWindowContent table.mytable th.cat {font-size: 1.2em;}
+#popupWindowContent table.mytable th.cat {font-size: 1.2em;}
 
 /* Child rows */
-td#popupWindowContent table.mytable tr.child-row td.tdlabel {padding-left: 10px;}
+#popupWindowContent table.mytable tr.child-row td.tdlabel {padding-left: 10px;}
 
 /* td labels */
-td#popupWindowContent table.mytable td.tdlabel {width: 140px;}
-td#popupWindowContent table.mytable td.tdbox {width: 25px;}
-td#popupWindowContent table.mytable td.tdfield {
+#popupWindowContent table.mytable td.tdlabel {width: 140px;}
+#popupWindowContent table.mytable td.tdbox {width: 25px;}
+#popupWindowContent table.mytable td.tdfield {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 167px;
     width: 165px;
 }
-td#popupWindowContent input[type="radio"] {
+#popupWindowContent input[type="radio"] {
     vertical-align: middle;
 }
-td#popupWindowContent table.mytable tr td.tdlabel input {
+#popupWindowContent table.mytable tr td.tdlabel input {
     width: 140x;
 }
-td#popupWindowContent table.mytable tr td.tdfield input,
-td#popupWindowContent table.mytable tr td.tdfield select {
+#popupWindowContent table.mytable tr td.tdfield input,
+#popupWindowContent table.mytable tr td.tdfield select {
     width: 163px;
 }
-td#popupWindowContent table.mytable tr td.tdfield input[type="checkbox"] {
+#popupWindowContent table.mytable tr td.tdfield input[type="checkbox"] {
     width: auto;
     margin-right:2px;
 }
-td#popupWindowContent table.mytable tr td.tdfield span {
+#popupWindowContent table.mytable tr td.tdfield span {
     word-wrap: break-word;
 }
-td#popupWindowContent table.mytable tr td.tdfield div.picker input {
+#popupWindowContent table.mytable tr td.tdfield div.picker input {
     width:140px;
     margin-right:3px;
 }
-td#popupWindowContent table.mytable tr td.tdfield div.picker img {
+#popupWindowContent table.mytable tr td.tdfield div.picker img {
     vertical-align: middle;
 }
-td#popupWindowContent table.mytable tr td.tdfield input.err,
-td#popupWindowContent table.mytable tr td.tdfield select.err {
+#popupWindowContent table.mytable tr td.tdfield input.err,
+#popupWindowContent table.mytable tr td.tdfield select.err {
     border-color: #ff4f4f;
 }
 
-td#popupWindowContent table.mytable tr td.tdfield div.err {
+#popupWindowContent table.mytable tr td.tdfield div.err {
     margin: 0;
 }
 
-td#popupWindowContent .submit {
+#popupWindowContent .submit {
     /*font-weight: bold;
     color: #43b3cf;
     vertical-align: middle;*/
@@ -594,7 +459,7 @@ td#popupWindowContent .submit {
     display: block;
 }
 
-td#popupWindowContent table.mytable tr td.err div {
+#popupWindowContent table.mytable tr td.err div {
     padding: 3px;
     margin: 0 0 0 20%;
     width: 80%;
@@ -607,8 +472,8 @@ td#popupWindowContent table.mytable tr td.err div {
     border-radius: 5px;
 }
 
-td#popupWindowContent div.success,
-td#popupWindowContent div.err {
+#popupWindowContent div.success,
+#popupWindowContent div.err {
     padding: 5px 8px;
     margin: 10px;
     border: 1px solid #00ff00;
@@ -620,7 +485,7 @@ td#popupWindowContent div.err {
     border-radius: 5px;
 }
 
-td#popupWindowContent div.err {
+#popupWindowContent div.err {
     border: 1px solid #ff4f4f;
     background-color: #FFC9C9;
     color: #000;
@@ -628,10 +493,10 @@ td#popupWindowContent div.err {
 
 /* Popup window forms */
 
-td#popupWindowContent a {color:#43B3CF;text-decoration:none;}
-td#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
+#popupWindowContent a {color:#43B3CF;text-decoration:none;}
+#popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 
-td#popupWindowContent input, select {
+#popupWindowContent input, select {
     color: #555555;
     background-color: #fbfbfb;
     border: 1px solid #e5e5e5;
@@ -1009,12 +874,12 @@ input[type=checkbox] {
     border-bottom: 1px solid #e5e5e5;
 }
 
-#popupWindowContent ul.nav li {
+#popupWindow ul.nav li {
     float: left;
     margin-bottom: 10px;
 }
 
-#popupWindowContent ul.nav li a {
+#popupWindow ul.nav li a {
     display: block;
     height: 20px;
     padding: 0 5px;
@@ -1025,31 +890,31 @@ input[type=checkbox] {
     border-top-right-radius: 5px;
 }
 
-#popupWindowContent ul.nav li a:hover {
+#popupWindow ul.nav li a:hover {
     text-decoration: none;
     color:#779D2A;
     background-color: #fbfbfb;
 }
 
-#popupWindowContent ul.nav li.active a {
+#popupWindow ul.nav li.active a {
     border-bottom: 1px solid #fff;
     color: #000;
 }
 
 /* search dialog */
 
-td#popupWindowContent div.simple_form input#highlightInput {
+td#popupWindow div.simple_form input#highlightInput {
     width: 200px;
 }
 
-td#popupWindowContent div.simple_form .submit {
+td#popupWindow div.simple_form .submit {
     display: inline-block;
     margin: 2px 10px;
 }
 
 /* ack dialog */
 
-td#popupWindowContent form#acknowledge input#comment {
+td#popupWindow form#acknowledge input#comment {
     width: 246px;
     margin-left: 5px;
 }

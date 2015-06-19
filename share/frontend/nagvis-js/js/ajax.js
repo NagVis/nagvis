@@ -21,19 +21,13 @@
  *
  *****************************************************************************/
 
-function jsonError(text) {
-    frontendMessage({'type': 'CRITICAL',
-                     'title': 'Syntax error',
-                     'message': text}, 0, 'jsonError');
-}
-
 function call_ajax(url, args)
 {
     args = merge_args({
         add_ajax_id      : true,
         response_handler : null,
         error_handler    : function(status_code, response, handler_data) {
-            frontendMessage(response, 0, 'serverError');
+            frontendMessage(response, 'serverError');
         },
         handler_data     : null,
         method           : "GET",
@@ -71,9 +65,13 @@ function call_ajax(url, args)
                         try {
                             response = JSON.parse(response);
                         } catch(e) {
-                            jsonError("Invalid json response<div class=details>\nTime: "
-                                      + iNow + "<br />\nURL: " + url + "<br />\n"
-                                      + "Response: <code>" + response + '</code></div>');
+                            args.error_handler(AJAX.status, {
+                                'type'    : 'error',
+                                'title'   : 'Error: Syntax Error',
+                                'message' : "Invalid JSON response<div class=details>\nTime: "
+                                      + iNow + "<br />\nURL: " + url.replace(/</g, '&lt;') + "<br />\n"
+                                      + "Response: <code>" + response + '</code></div>'
+                            }, 0, 'jsonError');
                             return '';
                         }
 

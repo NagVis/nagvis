@@ -2,7 +2,6 @@ This is a small file for storing quick thoughts about new features and needed ch
 ===============================================================================
 
 - Bug:
-  * Fehlerdialog endlich umdesignen
   * Deprizierte Attribute: Objekt auf Error setzen. Map trotzdem laden. Siehe bi-aggr-parent map
 
 - getViewParams() - Aufrufe checken, ob die alle richtig parametrisiert sind

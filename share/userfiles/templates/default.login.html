@@ -22,7 +22,7 @@
         var iLikeCookies = (document.cookie.indexOf("_testcookie") != -1) ? true : false;
 
         if(!iLikeCookies)
-            frontendMessage(\{'type': 'CRITICAL', 'message': '{$langTextCookiesDisabled}', 'title': '{$langTitleCookiesDisabled}'});
+            frontendMessage(\{'type': 'error', 'message': '{$langTextCookiesDisabled}', 'title': '{$langTitleCookiesDisabled}'});
         else \{
             var d = new Date();
             document.cookie = "_testcookie;expires=" + d.toGMTString() + ";" + ";";
