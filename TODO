@@ -1,6 +1,10 @@
 This is a small file for storing quick thoughts about new features and needed changes:
 ===============================================================================
 
+- Bug:
+  * Fehlerdialog endlich umdesignen
+  * Deprizierte Attribute: Objekt auf Error setzen. Map trotzdem laden. Siehe bi-aggr-parent map
+
 - getViewParams() - Aufrufe checken, ob die alle richtig parametrisiert sind
 - bei automap mit fehler (connection refused) die option "modify view" wegmachen
 - map lock?

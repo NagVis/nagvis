@@ -93,11 +93,17 @@ var ViewMap = View.extend({
 
         call_ajax(oGeneralProperties.path_server + '?mod=Map&act=getMapObjects&show='
                   + this.id + getViewParams(), {
-            response_handler : this.handleMapInit.bind(this)
+            response_handler : this.handleMapInit.bind(this),
+            error_handler    : this.handleMapInitError.bind(this)
         });
 
         this.rendered = true;
         this.base();
+    },
+
+    handleMapInitError: function(status_code, response, handler_data) {
+        hideStatusMessage();
+        frontendMessage(response, 0, 'serverError');
     },
 
     handleMapInit: function(oObjects) {
