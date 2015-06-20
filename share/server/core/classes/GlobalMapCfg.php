@@ -348,7 +348,7 @@ class GlobalMapCfg {
                 $iObjId++;
 
                 // If only the global section should be read break the loop after the global section
-                if($onlyGlobal == 1 && isset($this->mapConfig[0]))
+                if($onlyGlobal && isset($this->mapConfig[0]))
                     break;
                 else
                     continue;
@@ -410,8 +410,7 @@ class GlobalMapCfg {
         // c) Some valid cache file
         // d) Some valid main configuration cache file
         // e) This cache file newer than main configuration cache file
-        if($onlyGlobal == 0
-           && $useCache === true
+        if(!$onlyGlobal && $useCache
            && $this->CACHE->isCached() !== -1
            && $_MAINCFG->isCached() !== -1
            && $this->CACHE->isCached() >= $_MAINCFG->isCached()) {
@@ -455,7 +454,7 @@ class GlobalMapCfg {
         // Gather the default values for the object types
         $this->gatherTypeDefaults($onlyGlobal);
 
-        if($onlyGlobal == 0) {
+        if(!$onlyGlobal) {
             if($resolveTemplates == true) {
                 // Merge the objects with the linked templates
                 $this->mergeTemplates();
@@ -469,7 +468,7 @@ class GlobalMapCfg {
             throw $e;
         }
 
-        if($onlyGlobal == 0) {
+        if(!$onlyGlobal) {
             // Check object id attribute and if there is none generate a new unique
             // object_id on the map for the object
             $this->verifyObjectIds();
@@ -480,13 +479,13 @@ class GlobalMapCfg {
             }
 
             // Build cache
-            if($useCache === true) {
+            if($useCache) {
                 $this->CACHE->writeCache($this->mapConfig, 1);
                 $this->DCACHE->writeCache($this->typeDefaults, 1);
             }
         }
 
-        if ($onlyGlobal == 0 || $enforceSources) {
+        if (!$onlyGlobal || $enforceSources) {
             // Now process the data from the sources
             $this->processSources();
         }
