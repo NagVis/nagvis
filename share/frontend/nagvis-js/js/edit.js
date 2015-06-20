@@ -936,7 +936,8 @@ function addOption(form) {
 }
 
 // Removes an element from the map
-function removeMapObject(object_id) {
+function removeMapObject(event, object_id) {
+    event = event || window.event;
     g_view.removeObject(object_id);
     return preventDefaultEvents(event);
 }
