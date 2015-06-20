@@ -248,7 +248,7 @@ var ElementContext = Element.extend({
             oSectionMacros.host = '<!--\\sBEGIN\\shost\\s-->.+?<!--\\sEND\\shost\\s-->';
 
         if(this.obj.conf.type !== 'host' && this.obj.conf.type !== 'shape')
-            oSectionMacros.host = '<!--\\sBEGIN\\shost_or_shape\\s-->.+?<!--\\sEND\\shost_or_shape\\s-->';
+            oSectionMacros.host_or_shape = '<!--\\sBEGIN\\shost_or_shape\\s-->.+?<!--\\sEND\\shost_or_shape\\s-->';
 
         if(this.obj.conf.type === 'line' || this.obj.conf.type == 'shape'
            || this.obj.conf.type == 'textbox' || this.obj.conf.type === 'container')
