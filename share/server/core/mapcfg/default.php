@@ -20,9 +20,9 @@ function listMapNames() {
     global $CORE, $AUTHORISATION;
     $list = Array();
     $maps = $CORE->getAvailableMaps();
-    foreach($maps AS $key => $val)
-        if($AUTHORISATION->isPermitted('Map', 'view', $val))
-            $list[$key] = $val;
+    foreach($maps AS $map_name)
+        if($AUTHORISATION->isPermitted('Map', 'view', $map_name))
+            $list[$map_name] = $map_name;
 
     return $list;
 }

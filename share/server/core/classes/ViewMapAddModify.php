@@ -215,7 +215,7 @@ class ViewMapAddModify {
             if($this->mode == 'view_params')
                 $isInherited = true;
 
-        } elseif((!$update || $only_inherited) && $this->clone_id !== null
+        } elseif(!$only_inherited && $this->clone_id !== null && $attr !== 'object_id'
                  && $this->MAPCFG->getValue($this->clone_id, $attr, true) !== false) {
             // Get the value set in the object to be cloned if there is some set
             // But don't try this when running in "update" mode
