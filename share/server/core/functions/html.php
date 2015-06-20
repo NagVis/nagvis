@@ -92,6 +92,10 @@ function is_action() {
     return (submitted() || (bool)get('_action')) && post('_update', '0') == '0';
 }
 
+function is_update() {
+    return post('_update', '0') == '1';
+}
+
 function js($code) {
     echo '<script>'.$code.'</script>'.N;
 }
@@ -134,6 +138,7 @@ function form_start($name, $target, $type = 'POST', $multipart = false) {
 }
 
 function form_end($keep_context=true) {
+    global $form_name;
     if ($keep_context)
         hidden_vars();
     echo '</form>'.N;

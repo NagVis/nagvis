@@ -190,7 +190,7 @@ class ViewMapAddModify {
     }
 
     private function getAttr($default_value, $attr, $must, $only_inherited = false) {
-        $update = !is_action();
+        $update = !is_action() && is_update();
         // update is true during view repaint
         // only_inherited is true when only asking for inherited value
         $val = '';
@@ -207,7 +207,7 @@ class ViewMapAddModify {
             // the shown values
             $val = $this->MAPCFG->getSourceParam($attr, true, true);
 
-        } elseif(($this->mode == 'view_params' || !$only_inherited) && $this->object_id !== null
+        } elseif(!$update && ($this->mode == 'view_params' || !$only_inherited) && $this->object_id !== null
                  && $this->MAPCFG->getValue($this->object_id, $attr, true) !== false) {
             // Get the value set in this object if there is some set
             $val = $this->MAPCFG->getValue($this->object_id, $attr, true);
@@ -215,7 +215,7 @@ class ViewMapAddModify {
             if($this->mode == 'view_params')
                 $isInherited = true;
 
-        } elseif(!$only_inherited && $this->clone_id !== null && $attr !== 'object_id'
+        } elseif(!$update && !$only_inherited && $this->clone_id !== null && $attr !== 'object_id'
                  && $this->MAPCFG->getValue($this->clone_id, $attr, true) !== false) {
             // Get the value set in the object to be cloned if there is some set
             // But don't try this when running in "update" mode
@@ -313,7 +313,7 @@ class ViewMapAddModify {
         // Add a checkbox to toggle the usage of an attribute. But only add it for
         // non-must attributes.
         if (!$prop['must'] && $fieldType != 'readonly') {
-            checkbox('toggle_'.$propname, $isInherited === false, '', 'toggle_option(\''.$propname.'\');');
+            checkbox('toggle_'.$propname, $isInherited === false, '', 'toggle_option(\''.$propname.'\');'.$onChange);
         }
         
         echo '</td><td class=tdfield>';
