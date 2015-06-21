@@ -112,8 +112,8 @@
     </li>
     {/if}
     {if $permittedEditMainCfg || $permittedManageBackgrounds || $permittedManageMaps || $permittedManageShapes}
-    <li onclick="ddMenuToggle(event, 'wui')" class="dropdown">
-        <span id="wui-ddheader">{$langOptions}</span>
+    <li class="dropdown">
+        <span id="wui-ddheader" onclick="ddMenuToggle(event, 'wui')">{$langOptions}</span>
         <ul id="wui-ddcontent">
             {if $permittedEditMainCfg}<li><a href="#" onclick="showFrontendDialog(oGeneralProperties.path_server+'?mod=MainCfg&amp;act=edit', '{$langEditMainCfg}', 550);ddMenuHide();">{$langEditMainCfg}</a></li>
             <li class="spacer"><hr /></li>
