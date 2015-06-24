@@ -59,6 +59,13 @@ Frontend:
   * FIX: Fixed duplicate map config processing for rendering the header menu
   * FIX: Fixed js error when moving an object out of the screen
 
+1.8.5
+  * FIX: Fixed missing Action/perform/* permission for auth databases created
+    with NagVis versions newer than NagVis 1.7b3. All auth databases which
+    have been created before, have the Action/perform/* permission available.
+    It was not possible to permit user not having the */*/* permission to the
+    acknowledgement and custom actions via the context menu
+
 1.8.4
 Core:
   * FIX: BI Backend: Fixed wrong summary state of aggregation objects when
