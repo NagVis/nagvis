@@ -77,11 +77,7 @@ class NagVisOverviewView {
             'fileAges'          => json_encode(Array(
                 'maincfg' => $_MAINCFG->getConfigFileAge(),
             )),
-            'locales'           => json_encode(Array(
-                // FIXME: Duplicated definitions in NagVisMapView.php and NagVisOverviewView.php
-                'more items...' => l('more items...'),
-                'Create Object' => l('Create Object'),
-            )),
+            'locales'           => json_encode($CORE->getGeneralJSLocales()),
             'rotation_names'    => json_encode($rotations),
             'map_names'         => json_encode($maps),
         );

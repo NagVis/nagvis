@@ -75,7 +75,7 @@ class NagVisMapView {
      * @author 	Lars Michelsen <lars@vertical-visions.de>
      */
     public function parse() {
-        global $_MAINCFG;
+        global $_MAINCFG, $CORE;
         // Initialize template system
         $TMPL    = new FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
@@ -98,11 +98,7 @@ class NagVisMapView {
                 'maincfg'   => $_MAINCFG->getConfigFileAge(),
                 $this->name => $this->MAPCFG->getFileModificationTime(),
             )),
-            'locales'            => json_encode(Array(
-                // FIXME: Duplicated definitions in NagVisMapView.php and NagVisOverviewView.php
-                'more items...' => l('more items...'),
-                'Create Object' => l('Create Object'),
-            )),
+            'locales'            => json_encode($CORE->getGeneralJSLocales()),
         );
 
         // Build page based on the template file and the data array

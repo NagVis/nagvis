@@ -672,35 +672,31 @@ class GlobalCore {
         }
     }
 
-    /**
-     * Parses the needed language strings to javascript
-     * Used for the edit code which was moved from the WUI
-     *
-     * @return  String    JSON encoded array
-     * @author  Lars Michelsen <lars@vertical-visions.de>
-     * FIXME: Remove this when the edit dialogs are rewritten to
-     * a validation within the PHP code and do not need the js
-     * validation anymore.
-     */
-    public function getJsLang() {
-        $lang = Array(
-            'wrongValueFormatOption'        => l('wrongValueFormatOption'),
-            'mustValueNotSet'               => l('mustValueNotSet'),
-            'firstMustChoosePngImage'       => l('firstMustChoosePngImage'),
-            'noSpaceAllowedInName'          => l('Spaces are not allowed in file names.'),
-            'mustChooseValidImageFormat'    => l('mustChooseValidImageFormat'),
-            'foundNoBackgroundToDelete'     => l('foundNoBackgroundToDelete'),
-            'confirmBackgroundDeletion'     => l('confirmBackgroundDeletion'),
-            'unableToDeleteBackground'      => l('unableToDeleteBackground'),
-            'mustValueNotSet1'              => l('mustValueNotSet1'),
-            'foundNoShapeToDelete'          => l('foundNoShapeToDelete'),
-            'shapeInUse'                    => l('shapeInUse'),
-            'confirmShapeDeletion'          => l('confirmShapeDeletion'),
-            'unableToDeleteShape'           => l('unableToDeleteShape'),
-            'properties'                    => l('properties'),
+    // Returns localalized strings which are used by different pages
+    // in the JS frontend and not only used on some specific pages.
+    public function getGeneralJSLocales() {
+        return array(
+            'more items...'      => l('more items...'),
+            'Create Object'      => l('Create Object'),
+            // object types
+            'host'               => l('host'),
+            'hostname'           => l('hostname'),
+            'servicename'        => l('servicename'),
+            'service'            => l('service'),
+            'hostgroup'          => l('hostgroup'),
+            'hostgroupname'      => l('hostgroupname'),
+            'servicegroup'       => l('servicegroup'),
+            'servicegroupname'   => l('servicegroupname'),
+            'Dynamic Group'      => l('Dynamic Group'),
+            'Dynamic Group Name' => l('Dynamic Group Name'),
+            'Object Name'        => l('Object Name'),
+            'Aggregation'        => l('Aggregation'),
+            'Aggregation Name'   => l('Aggregation Name'),
+            'Name'               => l('Name'),
+            'map'                => l('map'),
+            'mapname'            => l('mapname'),
+            'objectname'         => l('objectname'),
         );
-
-        return json_encode($lang);
     }
 
     // Sort array of map arrays by alias

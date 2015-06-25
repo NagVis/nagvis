@@ -577,11 +577,33 @@ var ElementHover = Element.extend({
             oMacros.obj_type = this.obj.conf.type;
     
         // Replace language strings
-        oMacros.lang_obj_type = this.obj.conf.lang_obj_type;
-        oMacros.lang_name = this.obj.conf.lang_name;
-        oMacros.lang_child_name = this.obj.conf.lang_child_name;
-        oMacros.lang_child_name1 = this.obj.conf.lang_child_name1;
-    
+        oMacros.lang_obj_type = _(this.obj.conf.type);
+        if (this.obj.conf.type == 'host') {
+            oMacros.lang_name        = _('hostname');
+            oMacros.lang_child_name  = _('servicename');
+        } else if (this.obj.conf.type == 'service') {
+            oMacros.lang_name        = _('servicename');
+        } else if (this.obj.conf.type == 'hostgroup') {
+            oMacros.lang_name        = _('hostgroupname');
+            oMacros.lang_child_name  = _('hostname');
+        } else if (this.obj.conf.type == 'servicegroup') {
+            oMacros.lang_name        = _('servicegroupname');
+            oMacros.lang_child_name  = _('servicename');
+            oMacros.lang_child_name1 = _('hostname');
+        } else if (this.obj.conf.type == 'dyngroup') {
+            oMacros.lang_name        = _('Dynamic Group Name');
+            oMacros.lang_child_name  = _('Object Name');
+            if (this.obj.conf.object_types == 'service')
+                oMacros.lang_child_name1 = _('hostname');
+        } else if (this.obj.conf.type == 'aggr') {
+            oMacros.lang_name        = _('Aggregation Name');
+            oMacros.lang_child_name  = _('Name');
+            oMacros.lang_child_name1 = _('Name');
+        } else if (this.obj.conf.type == 'map') {
+            oMacros.lang_name        = _('mapname');
+            oMacros.lang_child_name  = _('objectname');
+        }
+
         // On child service objects in hover menu replace obj_name with
         // service_description
         oMacros.obj_name = this.obj.conf.name;
