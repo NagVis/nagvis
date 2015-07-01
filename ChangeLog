@@ -60,6 +60,10 @@ Frontend:
   * FIX: Fixed js error when moving an object out of the screen
 
 1.8.5
+Core:
+  * FIX: Livestatus Backend: Fixed exception handling when fetching services
+    which are marked to be in a downtime, but the downtime defails can not
+    be fetched
   * FIX: Fixed missing Action/perform/* permission for auth databases created
     with NagVis versions newer than NagVis 1.7b3. All auth databases which
     have been created before, have the Action/perform/* permission available.

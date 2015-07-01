@@ -871,6 +871,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     // Handle host/service downtimes
                     // $e[15]: scheduled_downtime_depth
                     // $e[18]: host_scheduled_downtime_depth
+                    $dt_details = array(null, null, null, null);
                     if((isset($e[15]) && $e[15] > 0) || (isset($e[18]) && $e[18] > 0)) {
                         $in_downtime = true;
 
@@ -880,21 +881,22 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                         // Handle host/service downtime difference
                         if(isset($e[15]) && $e[15] > 0) {
                             // Service downtime
-                            $dt_details = $this->queryLivestatusSingleRow(
+                            $data = $this->queryLivestatusSingleRow(
                               "GET downtimes\n".
                               "Columns: author comment start_time end_time\n" .
                               "Filter: host_name = ".$e[20]."\n" .
                               "Filter: service_description = ".$e[0]."\n");
                         } else {
                             // Host downtime
-                            $dt_details = $this->queryLivestatusSingleRow(
+                            $data = $this->queryLivestatusSingleRow(
                               "GET downtimes\n".
                               "Columns: author comment start_time end_time\n" .
                               "Filter: host_name = ".$e[20]."\n");
                         }
+                        if(isset($data[0]))
+                            $dt_details = $data;
                     } else {
                         $in_downtime = false;
-                        $dt_details = array(null, null, null, null);
                     }
 
                     if(isset($e[22][0]) && isset($e[23][0]))
