@@ -175,12 +175,33 @@ class CoreSQLiteHandler {
         // Now perform the update for pre 1.7b3
         if($dbVersion < 1070023)
             $this->updateDb1070023();
+
+        // Now perform the update for pre 1.8.5. Need to add the Action/perform
+        // permission again since it was not added during db creation till this
+        // release
+        if($dbVersion < 1080500)
+            $this->updateDb1080500();
+    }
+
+    private function updateDb1080500() {
+	// Create permissions for Action/perform/*
+        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Action\', \'perform\', \'*\')');
+
+        // Assign the new permission to the managers, users
+        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\'');
+        while($data = $this->fetchAssoc($RES))
+            $this->addRolePerm($data['roleId'], 'Action', 'perform', '*');
+
+        // Only apply the new version when this is the real release or newer
+        // (While development the version string remains on the old value)
+        if(GlobalCore::getInstance()->versionToTag(CONST_VERSION) >= 1080500)
+            $this->updateDbVersion();
     }
 
     private function updateDb1070023() {
 	// Create permissions for Action/perform/*
         $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Action\', \'perform\', \'*\')');
-        
+
         // Assign the new permission to the managers, users
         $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\'');
         while($data = $this->fetchAssoc($RES))
@@ -342,6 +363,9 @@ class CoreSQLiteHandler {
         // Access controll: Access to all General actions
         $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'General\', \'*\', \'*\')');
 
+	// Create permissions for Action/peform/*
+        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Action\', \'perform\', \'*\')');
+
         // Access controll: Map module levels for the demo maps
         foreach(GlobalCore::getInstance()->demoMaps AS $map) {
             $this->createMapPermissions($map);
@@ -408,6 +432,9 @@ class CoreSQLiteHandler {
         // Permit all actions in General module
         $this->addRolePerm($data['roleId'], 'General', '*', '*');
 
+        // Managers are allowed to perform actions
+        $this->addRolePerm($data['roleId'], 'Action', 'perform', '*');
+
         // Access assignment: Managers => Allowed to update user options
         $this->addRolePerm($data['roleId'], 'User', 'setOption', '*');
 
@@ -449,6 +476,9 @@ class CoreSQLiteHandler {
          */
 
         $data = $this->fetchAssoc($this->DB->query('SELECT roleId FROM roles WHERE name=\'Users (read-only)\''));
+
+        // Users are allowed to perform actions
+        $this->addRolePerm($data['roleId'], 'Action', 'perform', '*');
 
         // Permit all actions in General module
         $this->addRolePerm($data['roleId'], 'General', '*', '*');
