@@ -1,4 +1,8 @@
 1.8.5
+Core:
+  * FIX: Livestatus Backend: Fixed exception handling when fetching services
+    which are marked to be in a downtime, but the downtime defails can not
+    be fetched
 
 1.8.4
 Core:
