@@ -59,6 +59,8 @@ Frontend:
   * FIX: Fixed duplicate map config processing for rendering the header menu
   * FIX: Fixed js error when moving an object out of the screen
 
+1.8.6
+
 1.8.5
 Core:
   * FIX: Livestatus Backend: Fixed exception handling when fetching services
