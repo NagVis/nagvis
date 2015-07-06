@@ -70,6 +70,13 @@ Core:
     It was not possible to permit user not having the */*/* permission to the
     acknowledgement and custom actions via the context menu
 
+Frontend:
+  * Multisite Snapin: Improved performance when a lot of users use the snapin.
+    The snapin contents were calculated on each access in the past. Now, the
+    snapin contents are cached for 15 seconds. This gives a good performance
+    boost when multiple users have use the snapin while having access to the
+    same set of maps.
+
 1.8.4
 Core:
   * FIX: BI Backend: Fixed wrong summary state of aggregation objects when
