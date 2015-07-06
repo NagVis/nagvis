@@ -53,7 +53,7 @@ class CoreModMultisite extends CoreModule {
     private function renderTree() {
         $maps = array();
         $childs = array();
-        foreach ($this->getMaps() as $map) {
+        foreach ($this->getMapsCached() as $map) {
             if($map['parent_map'] === '')
                 $maps[$map['name']] = $map;
             else {
@@ -101,7 +101,7 @@ class CoreModMultisite extends CoreModule {
 
     private function renderTable() {
         $code = '<table class="allhosts"><tbody>';
-        foreach ($this->getMaps() as $map) {
+        foreach ($this->getMapsCached() as $map) {
             switch($map['summary_state']) {
                 case 'OK':
                 case 'UP':
@@ -146,19 +146,32 @@ class CoreModMultisite extends CoreModule {
         return $code;
     }
 
-    /**
-     * Returns the NagVis maps available to the user as HTML formated string
-     *
-     * @return	String  HTML code
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
-     */
-    private function getMaps() {
+    // Wraps the getMaps() function by applying a short livetime cache based
+    // on the maps a user can access. This respects the map access permissions.
+    // The cache optimizes the case where a lot of users having the Check_MK
+    // NagVis maps snapin open at the same time while most of the users have
+    // equal permissions.
+    private function getMapsCached() {
+        $maps = $this->CORE->getPermittedMaps();
+        $cache_file = cfg('paths','var').'snapin-'.md5(json_encode(array_keys($maps))).'-'.CONST_VERSION.'.cache';
+        $CACHE = new GlobalFileCache(array(), $cache_file);
+        $cached = $CACHE->isCached();
+
+        if ($cached != -1 && time() - $cached < 15) {
+            return $CACHE->getCache();
+        } else {
+            $result = $this->getMaps($maps);
+            $CACHE->writeCache($result);
+            return $result;
+        }
+    }
+
+    // Gathers an array of maps and their states to be shown to the user
+    // in the multisite snapin
+    private function getMaps($maps) {
         global $_BACKEND, $AUTHORISATION;
         $aObjs = Array();
-        foreach($this->CORE->getAvailableMaps() AS $object_id => $mapName) {
-            if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName))
-                continue;
-
+        foreach($maps AS $object_id => $mapName) {
             $MAPCFG = new GlobalMapCfg($mapName);
 
             $config_error = null;
