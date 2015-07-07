@@ -59,12 +59,25 @@ Frontend:
   * FIX: Fixed duplicate map config processing for rendering the header menu
   * FIX: Fixed js error when moving an object out of the screen
 
+1.8.6
+
 1.8.5
+Core:
+  * FIX: Livestatus Backend: Fixed exception handling when fetching services
+    which are marked to be in a downtime, but the downtime defails can not
+    be fetched
   * FIX: Fixed missing Action/perform/* permission for auth databases created
     with NagVis versions newer than NagVis 1.7b3. All auth databases which
     have been created before, have the Action/perform/* permission available.
     It was not possible to permit user not having the */*/* permission to the
     acknowledgement and custom actions via the context menu
+
+Frontend:
+  * Multisite Snapin: Improved performance when a lot of users use the snapin.
+    The snapin contents were calculated on each access in the past. Now, the
+    snapin contents are cached for 15 seconds. This gives a good performance
+    boost when multiple users have use the snapin while having access to the
+    same set of maps.
 
 1.8.4
 Core:
