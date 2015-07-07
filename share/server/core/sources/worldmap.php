@@ -328,7 +328,7 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
 
 function changed_worldmap($MAPCFG, $compare_time) {
     $db_path = cfg('paths', 'cfg').'worldmap.db';
-    return filemtime($db_path) > $compare_time;
+    return !file_exists($db_path) || filemtime($db_path) > $compare_time;
 }
 
 ?>
