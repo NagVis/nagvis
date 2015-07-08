@@ -23,13 +23,13 @@ global $configVars;
 $configVars = array(
     /*** GLOBAL OPTIONS ***/
     'worldmap_center' => array(
-        'must'      => false,
-        'default'   => '51.505,-0.09',
+        'must'      => true,
+        'default'   => '50.86837814203458,10.21728515625',
         'match'     => MATCH_LATLONG,
     ),
     'worldmap_zoom' => array(
-        'must'      => false,
-        'default'   => 13,
+        'must'      => true,
+        'default'   => 6,
         'match'     => MATCH_WORLDMAP_ZOOM,
     ),
 
@@ -257,6 +257,13 @@ function worldmap_update_object($MAPCFG, $map_name, &$map_config, $obj_id, $inse
 //
 // The following functions are used directly by NagVis
 //
+
+// Set the needed values for maps currently being created
+function init_map_worldmap($MAPCFG, $map_name, &$map_config) {
+    global $configVars;
+    $MAPCFG->setValue(0, "worldmap_center", $configVars["worldmap_center"]["default"]);
+    $MAPCFG->setValue(0, "worldmap_zoom", $configVars["worldmap_zoom"]["default"]);
+}
 
 // Returns the minimum bounds needed to be able to display all objects
 function get_bounds_worldmap($MAPCFG, $map_name, &$map_config) {

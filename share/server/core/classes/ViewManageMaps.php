@@ -42,7 +42,7 @@ class ViewManageMaps {
 
                 if (count($CORE->getAvailableMaps('/^'.preg_quote($name).'$/')) > 0)
                     throw new FieldInputError('name', l('A map with this name already exists'));
-            
+
                 if (!preg_match(MATCH_MAP_NAME, $name))
                     throw new FieldInputError('name', l('This is not a valid map name (need to match [M])',
                                                                     array('M' => MATCH_MAP_NAME)));
@@ -68,7 +68,9 @@ class ViewManageMaps {
                 if ($type != 'map')
                     $global['sources'] = array($type);
 
-                $MAPCFG->addElement('global', $global, true, 0);
+                $MAPCFG->addElement('global', $global, false, 0);
+                $MAPCFG->handleSources('init_map');
+                $MAPCFG->storeUpdateElement(0);
 
                 success(l('The map has been created. Changing to the new map...'));
                 reload('index.php?mod=Map&act=view&show='.$name, 1);
