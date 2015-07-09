@@ -1,6 +1,11 @@
 SHELL=/bin/bash
-VERSION=1.9a1
+VERSION=1.9b2
 NAME=nagvis-$(VERSION)
+
+SED ?= sed
+ifeq ($(shell uname), Darwin)
+    SED := gsed
+endif
 
 help:
 	@echo "This Makefile is meant to support development. Not useful for installing NagVis."
@@ -27,8 +32,8 @@ create-tag:
 copy-to-website:
 
 publish:
-	cp $(NAME).tar.gz /d1/lm/nagvis.org/htdocs/share/
-	VERSION=$(NAME) $(MAKE) -C /d1/lm/nagvis.org/htdocs release
+	cp $(NAME).tar.gz ~/git/nagvis.org/htdocs/share/
+	VERSION=$(NAME) $(MAKE) -C ~/git/nagvis.org/htdocs release
 
 release: dist create-tag publish version
 
@@ -37,22 +42,22 @@ version:
 	if [ -n "$$newversion" ] ; then $(MAKE) NEW_VERSION=$$newversion setversion ; fi
 
 setversion:
-	sed -ri 's/^(VERSION[[:space:]]*= *).*/\1'"$(NEW_VERSION)/" Makefile
-	sed -i "s/.*CONST_VERSION.*/define('CONST_VERSION', '$(NEW_VERSION)');/g" share/server/core/defines/global.php
+	$(SED) -i "s/^VERSION=.*/VERSION=$(NEW_VERSION)/g" Makefile
+	$(SED) -i "s/.*CONST_VERSION.*/define('CONST_VERSION', '$(NEW_VERSION)');/g" share/server/core/defines/global.php
 	MAJ_VERSION=$(NEW_VERSION) ; MAJ_VERSION=$${MAJ_VERSION::3} ; \
-	sed -i "s/<title>NagVis [^ ]*/<title>NagVis $$MAJ_VERSION/g" docs/*/index.html ; \
-	sed -i "s/<h1>NagVis [^ ]*/<h1>NagVis $$MAJ_VERSION/g" docs/*/welcome.html ; \
-	sed -i "s/: [0-9.]*\.x/: $$MAJ_VERSION.x/g" docs/*/welcome.html ; \
-	sed -i "s/>Version [^ ]*/>Version $$MAJ_VERSION/g" docs/*/toc.html
+	$(SED) -i "s/<title>NagVis [^ ]*/<title>NagVis $$MAJ_VERSION/g" docs/*/index.html ; \
+	$(SED) -i "s/<h1>NagVis [^ ]*/<h1>NagVis $$MAJ_VERSION/g" docs/*/welcome.html ; \
+	$(SED) -i "s/: [0-9.]*\.x/: $$MAJ_VERSION.x/g" docs/*/welcome.html ; \
+	$(SED) -i "s/>Version [^ ]*/>Version $$MAJ_VERSION/g" docs/*/toc.html
 
 update-copyright:
 	for F in $$(find . -name *.php -o -name *.js -o -name \*.sh); do \
-	    sed -i -r "s/Copyright \(c\) 2004-[0-9]{4} NagVis Project \(Contact: info@nagvis.org\)/Copyright (c) 2004-$$(date +%Y) NagVis Project (Contact: info@nagvis.org)/g" $$F ; \
+	    $(SED) -i -r "s/Copyright \(c\) 2004-[0-9]{4} NagVis Project \(Contact: info@nagvis.org\)/Copyright (c) 2004-$$(date +%Y) NagVis Project (Contact: info@nagvis.org)/g" $$F ; \
 	done
-	sed -i "s/Copyright &copy; 2008-[0-9]*/Copyright \&copy; 2008-$$(date +%Y)/g" docs/*/welcome.html
+	$(SED) -i "s/Copyright &copy; 2008-[0-9]*/Copyright \&copy; 2008-$$(date +%Y)/g" docs/*/welcome.html
 
 doc-cleanup:
-	find docs/* -name *.html -exec sed -ri \
+	find docs/* -name *.html -exec $(SED) -ri \
 	    's% ?\(?<font color="(#ff0000|red)">\(?(New|Neu|neu) in 1\.[567]\.?.?\)?:?</font>\)?%%g' {} \;
 
 localize: localize-sniff localize-compile
@@ -68,20 +73,20 @@ localize-sniff:
 	fi
 	PO_FILE=share/frontend/nagvis-js/locale/$(LANG)/LC_MESSAGES/nagvis.po ; \
 	MO_FILE=share/frontend/nagvis-js/locale/$(LANG)/LC_MESSAGES/nagvis.mo ; \
-	sed -i -e "/^#: /d" $$PO_FILE ; \
+	$(SED) -i -e "/^#: /d" $$PO_FILE ; \
 	xgettext --no-wrap --sort-output -j --keyword=l -L PHP --from-code=UTF-8 \
                  --foreign-user --package-version="" \
                  --package-name="NagVis $(VERSION)" \
                  --msgid-bugs-address=info\@nagvis.org \
                  -d "NagVis" -o $$PO_FILE `find . -type f | grep .php | xargs` ; \
-	sed -i -e "s/FULL NAME <EMAIL@ADDRESS>/Lars Michelsen <lars@vertical-visions.de>/g" $$PO_FILE ; \
-        sed -i -e "s/CHARSET/utf-8/g" $$PO_FILE ; \
-        sed -i -e "s/LANGUAGE <LL@li\.org>/NagVis Team <info@nagvis.org>/g" $$PO_FILE ; \
-        sed -i -e "s/YEAR-MO-DA HO:MI+ZONE/$$(date +"%Y-%m-%d %H:%M%z")/g" $$PO_FILE ; \
-        sed -i -e "s/FIRST AUTHOR <EMAIL@ADDRESS>, YEAR/Lars Michelsen <lm@larsmichelsen.com>, $$(date +%Y)/g" $$PO_FILE ; \
-        sed -i -e "s/SOME DESCRIPTIVE TITLE\./NagVis language file/g" $$PO_FILE ; \
-        sed -i -e "s/# This file is put in the public domain\./#/g" $$PO_FILE ; \
-        sed -i -e "s/\"Language: /\"Language: German/g" $$PO_FILE ; \
+	$(SED) -i -e "s/FULL NAME <EMAIL@ADDRESS>/Lars Michelsen <lars@vertical-visions.de>/g" $$PO_FILE ; \
+        $(SED) -i -e "s/CHARSET/utf-8/g" $$PO_FILE ; \
+        $(SED) -i -e "s/LANGUAGE <LL@li\.org>/NagVis Team <info@nagvis.org>/g" $$PO_FILE ; \
+        $(SED) -i -e "s/YEAR-MO-DA HO:MI+ZONE/$$(date +"%Y-%m-%d %H:%M%z")/g" $$PO_FILE ; \
+        $(SED) -i -e "s/FIRST AUTHOR <EMAIL@ADDRESS>, YEAR/Lars Michelsen <lm@larsmichelsen.com>, $$(date +%Y)/g" $$PO_FILE ; \
+        $(SED) -i -e "s/SOME DESCRIPTIVE TITLE\./NagVis language file/g" $$PO_FILE ; \
+        $(SED) -i -e "s/# This file is put in the public domain\./#/g" $$PO_FILE ; \
+        $(SED) -i -e "s/\"Language: /\"Language: German/g" $$PO_FILE ; \
 	echo "Updated file $$PO_FILE"
 
 localize-compile:

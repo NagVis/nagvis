@@ -1,3 +1,5 @@
+1.9a2
+
 1.9a1
 Core:
   * Added option only_permitted_objects to restrict the objects a user can see
