@@ -1,6 +1,6 @@
-1.9a2
+1.9b2
 
-1.9a1
+1.9b1
 Core:
   * Added option only_permitted_objects to restrict the objects a user can see
     to the objects which a user is a contact for. This feature is currently
