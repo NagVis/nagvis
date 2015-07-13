@@ -339,7 +339,7 @@ function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
     if ($obj_name === '<<<monitoring>>>') {
         $obj['host_name'] = 'Monitoring';
         $obj['type']      = 'shape';
-        $obj['icon_size'] = [22];
+        $obj['icon_size'] = array(22);
         $obj['icon']      = 'std_nagvis.png';
         $obj['.width']    = 22;
         $obj['.height']   = 22;

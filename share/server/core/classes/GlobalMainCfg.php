@@ -571,7 +571,7 @@ class GlobalMainCfg {
                 'icon_size' => Array(
                     'must'       => 1,
                     'editable'   => 1,
-                    'default'    => '',
+                    'default'    => array(),
                     'match'      => MATCH_INTEGER,
                     'array'    => true,
                 ),

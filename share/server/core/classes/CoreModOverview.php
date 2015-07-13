@@ -195,7 +195,7 @@ class CoreModOverview extends CoreModule {
           'label_show'        => 0,
           // Enforce std_big iconset - don't use map default iconset
           'iconset'           => 'std_big',
-          'icon_size'         => '22',
+          'icon_size'         => array(22),
           'alias'             => $alias
         );
     }

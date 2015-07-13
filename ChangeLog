@@ -1,4 +1,6 @@
 1.9b2
+Frontend:
+  * FIX: Fixed icon_size related PHP errors in some PHP versions (implode error)
 
 1.9b1
 Core:
