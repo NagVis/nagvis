@@ -2,6 +2,9 @@
 Frontend:
   * FIX: Fixed icon_size related PHP errors in some PHP versions (implode error)
 
+Worldmap:
+  * FIX: Ignoring min_zoom/max_zoom when min_zoom equal or larger than max_zoom
+
 1.9b1
 Core:
   * Added option only_permitted_objects to restrict the objects a user can see
