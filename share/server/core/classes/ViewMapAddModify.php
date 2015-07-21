@@ -305,17 +305,28 @@ class ViewMapAddModify {
         }
         elseif ($onChange == '' && (($other && $value !== '<<<other>>>')
                                     || ($this->object_type == 'service' && $propname == 'host_name'))) {
+            // When configuring services and the hostname changed, clear the service value.
+            // For other objects clear the *_name value when backend_id changed
+            if ($this->object_type == 'service' && $propname == 'host_name') {
+                $onChange .= "clearFormValue('service_description');";
+            } elseif ($this->object_type == 'aggr' && $propname == 'backend_id') {
+                $onChange .= "clearFormValue('name');";
+            } elseif (($this->object_type == 'host' || $this->object_type == 'hostgroup'
+                      || $this->object_type == 'servicegroup') && $propname == 'backend_id') {
+                $onChange .= "clearFormValue('".$this->object_type."_name');";
+            }
+
             // If var is backend_id or var is host_name in service objects submit the form
             // to update the depdant lists.
-            $onChange = 'updateForm(this.form);';
+            $onChange .= 'updateForm(this.form);';
         }
-        
+
         // Add a checkbox to toggle the usage of an attribute. But only add it for
         // non-must attributes.
         if (!$prop['must'] && $fieldType != 'readonly') {
             checkbox('toggle_'.$propname, $isInherited === false, '', 'toggle_option(\''.$propname.'\');'.$onChange);
         }
-        
+
         echo '</td><td class=tdfield>';
 
         // Display as text if inherited, otherwise display the input fields
@@ -326,7 +337,7 @@ class ViewMapAddModify {
             $hideTxt   = '';
             $hideField = 'display:none;';
         }
-        
+
         // Prepare translation of value to a nice display string in case of
         // e.g. boolean fields
         if ($this->mode == 'view_params' || $default_value !== null) {
@@ -380,7 +391,7 @@ class ViewMapAddModify {
                         input($propname, '', '', $hideField);
                         // Value needs to be set to "" by js
                         if ($other && $value == '<<<other>>>')
-                            js('document.getElementById(\''.$propname.'\').value = \'\';');
+                            js('clearFormValue(\''.$propname.'\');');
                         break;
                     }
 
@@ -404,7 +415,7 @@ class ViewMapAddModify {
                 input($propname, $value, '', $hideField);
             break;
         }
-        
+
         // Try to split too long values in chunks
         // At the moment the only way is to try to add a space after each ",".
         // The browsers do break automatically at & and spaces - so no need to
@@ -521,7 +532,7 @@ class ViewMapAddModify {
         submit(l('Save'));
         form_end();
     }
-                   
+
     public function parse() {
         global $CORE;
         ob_start();

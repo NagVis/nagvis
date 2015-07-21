@@ -112,6 +112,10 @@ function updateForm(form) {
     form._submit.click();
 }
 
+function clearFormValue(id) {
+    document.getElementById(id).value = '';
+}
+
 function showFrontendDialog(sUrl, sTitle, sWidth) {
     if (typeof sWidth === 'undefined' || sWidth === null)
         sWidth = 450;

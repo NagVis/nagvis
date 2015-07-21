@@ -140,14 +140,14 @@ function getObjectNames($type, $MAPCFG, $objId, $attrs) {
     }
 
     // Read all objects of the requested type from the backend
-    $ret = Array();
+    $ret = Array('' => '');
     foreach($backendIds as $backendId) {
         $objs = $_BACKEND->getBackend($backendId)->getObjects($type, $name1, '');
         foreach($objs AS $obj) {
             if($type !== 'service')
                 $ret[$obj['name1']] = $obj['name1'];
             else
-                $ret[$obj['name1']] = $obj['name2'];
+                $ret[$obj['name2']] = $obj['name2'];
         }
     }
 
