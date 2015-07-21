@@ -530,7 +530,7 @@ var ElementLine = Element.extend({
 
             this.perfdata = perf;
         } catch(e) {
-            this.obj.conf.summary_output += ' (Weathermap Line Error: ' + msg + ')';
+            this.obj.conf.summary_output += ' (Weathermap Line Error: ' + e + ')';
         }
     },
 
