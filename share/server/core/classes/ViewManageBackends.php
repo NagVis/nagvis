@@ -67,7 +67,7 @@ class ViewManageBackends {
                 $default = post('default');
                 if (!$default || !isset($this->defined_backends[$default]))
                     throw new FieldInputError('default', l('You need to choose a default backend.'));
-            
+
                 $CORE->getUserMainCfg()->setValue('defaults', 'backend', $default);
                 $CORE->getUserMainCfg()->writeConfig();
 
@@ -111,8 +111,8 @@ class ViewManageBackends {
         else
             echo '<h2>'.l('Edit Backend').'</h2>';
 
-        $backend_type = post('backend_type');
-        $backend_id   = post('backend_id');
+        $backend_type = submitted($mode) ? post('backend_type') : null;
+        $backend_id   = submitted($mode) ? post('backend_id') : null;
         if (is_action() && post('mode') == $mode) {
             try {
                 if ($mode == 'add' && (!$backend_type || !in_array($backend_type, $this->available_backends)))
@@ -130,6 +130,8 @@ class ViewManageBackends {
                     // Set standard values
                     $CORE->getUserMainCfg()->setSection('backend_'.$backend_id);
                     $CORE->getUserMainCfg()->setValue('backend_'.$backend_id, 'backendtype', $backend_type);
+                } else {
+                    $backend_type = cfg('backend_'.$backend_id, 'backendtype');
                 }
 
                 $found_option = false;
@@ -152,7 +154,7 @@ class ViewManageBackends {
 
                 // Persist the changes
                 $CORE->getUserMainCfg()->writeConfig();
-                
+
                 if ($mode == 'add')
                     success(l('The new backend has been added.'));
                 else

@@ -1,6 +1,7 @@
 1.9b2
 Frontend:
   * FIX: Fixed icon_size related PHP errors in some PHP versions (implode error)
+  * FIX: Fixed issue in backend management when adding/editing backends
 
 Worldmap:
   * FIX: Ignoring min_zoom/max_zoom when min_zoom equal or larger than max_zoom
