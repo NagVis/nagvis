@@ -250,6 +250,9 @@ class ViewEditMainCfg {
         
                 echo '<script>document.edit_config.elements[\''.$sec.'_'.$key.'\'].value = \''.$cur_val.'\';</script>';
             break;
+            case 'color':
+                $this->colorSelect($sec, $key, $cur_val);
+            break;
             case 'text':
                 echo '<input id="'.$sec.'_'.$key.'" type="text" name="'.$sec.'_'.$key.'" value="'.$cur_val.'">';
             break;
@@ -257,6 +260,18 @@ class ViewEditMainCfg {
         
         if(isset($spec['locked']) && $spec['locked'] == 1)
             echo "<script>document.edit_config.elements['".$sec."_".$key."'].disabled=true;</script>";
+    }
+
+    private function colorSelect($sec, $key, $value) {
+        $propname = $sec."_".$key;
+        echo '<div id="'.$propname.'" class=picker>';
+        input($propname, $value, '', '', $propname . '_inp');
+        echo '<a href="javascript:void(0);" onClick="togglePicker(\''.$propname.'_inp\');">';
+        echo '<img src="'.cfg('paths', 'htmlimages').'internal/picker.png" alt="'.l('Color select').'" />';
+        echo '</a></div>';
+        js('var o = document.getElementById(\''.$propname.'_inp\');'
+          .'o.color = new jscolor.color(o, {pickerOnfocus:false,adjust:false,hash:true});'
+          .'o = null;');
     }
 }
 ?>
