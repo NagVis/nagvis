@@ -148,45 +148,6 @@ class GlobalBackground {
     }
 
     /**
-    * Creates a simple map image
-    *
-    * @param	Boolean	$printErr
-    * @return	Boolean	Is Check Successful?
-    * @author	Lars Michelsen <lars@vertical-visions.de>
-    */
-    function createImage($color, $width, $height) {
-        $this->path = path('sys', '', 'backgrounds') . '/' . $this->image;
-        if(!$this->checkFileExists(0)) {
-            if($this->checkFolderWriteable(1)) {
-                $image = imagecreatetruecolor($width, $height);
-
-                // get rgb color from hexcode
-                $color = str_replace('#','',$color);
-                $int = hexdec($color);
-                $r = 0xFF & ($int >> 0x10);
-                $g = 0xFF & ($int >> 0x8);
-                $b = 0xFF & $int;
-
-                $bgColor = imagecolorallocate($image, $r, $g, $b);
-                imagefill($image, 0, 0, $bgColor);
-                imagepng($image, $this->path);
-                imagedestroy($image);
-
-                return TRUE;
-            } else {
-                // No need for error handling here
-                return FALSE;
-            }
-        } else {
-            if($printErr) {
-                throw new NagVisException(l('imageAlreadyExists',
-                                            Array('IMAGE' => $this->path)));
-            }
-            return FALSE;
-        }
-    }
-
-    /**
      * Deletes the map image
      *
      * @param	Boolean	$printErr

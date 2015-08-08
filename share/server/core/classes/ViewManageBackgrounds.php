@@ -23,84 +23,6 @@
  *****************************************************************************/
 
 class ViewManageBackgrounds {
-    private $error = null;
-
-    private function createForm() {
-        global $CORE;
-        echo '<h2>'.l('Create Background').'</h2>';
-
-        if (is_action() && post('mode') == 'create') {
-            try {
-                $name = post('name');
-                if (!$name)
-                    throw new FieldInputError('name', l('Please specify a name'));
-
-                $color = post('color');
-                if (!$color)
-                    throw new FieldInputError('color', l('Please specify a color'));
-
-                $width = post('width');
-                if (!$width)
-                    throw new FieldInputError('width', l('Please specify a width'));
-                if (!ctype_digit($width))
-                    throw new FieldInputError('width', l('Please specify a number'));
-
-                $height = post('height');
-                if (!$height)
-                    throw new FieldInputError('height', l('Please specify a height'));
-                if (!ctype_digit($height))
-                    throw new FieldInputError('height', l('Please specify a number'));
-
-                // Check if the background exists
-                if (in_array($name.'.png', $CORE->getAvailableBackgroundImages()))
-                    throw new NagVisException(l('The background does already exist.'));
-
-                $BACKGROUND = new GlobalBackground($name.'.png');
-                $BACKGROUND->createImage($color, $width, $height);
-                success(l('The background has been created.'));
-            } catch (FieldInputError $e) {
-                form_error($e->field, $e->msg);
-            } catch (Exception $e) {
-                if (isset($e->msg))
-                    form_error(null, $e->msg);
-                else
-                    throw $e;
-            }
-        }
-        echo $this->error;
-
-        js_form_start('create');
-        hidden('mode', 'create');
-        echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Name').'</td>';
-        echo '<td class="tdfield">';
-        input('name');
-        echo '</td></tr>';
-        echo '<tr><td class="tdlabel">'.l('Color').'</td>';
-        echo '<td class="tdfield">';
-        echo '<div id="image_color_container" class="picker">';
-        input('color', '#');
-        echo '<a href="javascript:void(0);" onClick="togglePicker(\'color\');">'
-            .'<img src="'.cfg('paths', 'htmlimages').'/internal/picker.png" '
-            .'alt="'.l('Select a color').'" /></a></div>';
-        js('var o = document.getElementById(\'color\');'.N
-          .'o.color = new jscolor.color(o, {pickerOnfocus: false, adjust: false, hash: true});'.N
-          .'o = null;'.N);
-        echo '</td></tr>';
-        echo '<tr><td class="tdlabel">'.l('Width').'</td>';
-        echo '<td class="tdfield">';
-        input('width');
-        echo '</td></tr>';
-        echo '<tr><td class="tdlabel">'.l('Height').'</td>';
-        echo '<td class="tdfield">';
-        input('height');
-        echo '</td></tr>';
-        echo '</table>';
-
-        submit(l('Create'));
-        form_end();
-    }
-
     private function uploadForm() {
         global $CORE;
         echo '<h2>'.l('Upload Background Image').'</h2>';
@@ -226,7 +148,6 @@ class ViewManageBackgrounds {
 
     public function parse() {
         ob_start();
-        $this->createForm();
         $this->uploadForm();
         $this->deleteForm();
         return ob_get_clean();
