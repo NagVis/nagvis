@@ -372,10 +372,15 @@ class ViewMapAddModify {
                 // Handle case that e.g. host_names can not be fetched from backend by
                 // showing error text instead of fields
                 try {
-                    if($this->clone_id !== null)
-                        $options = $func($this->MAPCFG, $this->clone_id, $this->attrs);
-                    else
-                        $options = $func($this->MAPCFG, $this->object_id, $this->attrs);
+                    try {
+                        if($this->clone_id !== null)
+                            $options = $func($this->MAPCFG, $this->clone_id, $this->attrs);
+                        else
+                            $options = $func($this->MAPCFG, $this->object_id, $this->attrs);
+                    } catch (Exception $e) {
+                        form_error($propname, l("Failed to get objects: [MSG]", array('MSG' => "".$e)));
+                        $options = array();
+                    }
 
                     if(isset($options[$valueTxt]))
                         $valueTxt = $options[$valueTxt];
