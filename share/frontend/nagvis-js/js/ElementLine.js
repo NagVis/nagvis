@@ -448,6 +448,9 @@ var ElementLine = Element.extend({
         var x = middle(x1, x2, cut),
             y = middle(y1, y2, cut);
 
+        if (this.perfdata === null)
+            return;
+
         var txt = this.perfdata[id][1] + this.perfdata[id][2];
 
         // Maybe use function to detect the real height in future
