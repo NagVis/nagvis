@@ -1,4 +1,7 @@
 1.9b2
+Core:
+  * FIX: Improved handling of not existing objects when using Test backend
+
 Frontend:
   * FIX: Fixed icon_size related PHP errors in some PHP versions (implode error)
   * FIX: Fixed issue in backend management when adding/editing backends

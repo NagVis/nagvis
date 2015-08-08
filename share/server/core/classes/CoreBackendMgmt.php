@@ -241,8 +241,15 @@ class CoreBackendMgmt {
                         $counts = $this->getBackend($backendId)->getServiceListCounts(
                                     $options, $OBJ->getObjectFilter());
                     } else {
-                        $counts = $this->getBackend($backendId)->getHostAndServiceCounts(
+                        if (!$this->checkBackendFeature($backendId, 'getHostAndServiceCounts', false)) {
+                            $counts = array();
+                            $OBJ->setBackendProblem(l('This type of object is not supportd by this backend ([BACKENDID]).',
+                                  Array('BACKENDID' => $backendId)), $backendId);
+                        }
+                        else {
+                            $counts = $this->getBackend($backendId)->getHostAndServiceCounts(
                                     $options, $OBJ->getObjectFilter(), $OBJ->getObjectFilter(), false);
+                        }
                     }
                 } catch(BackendException $e) {
                     $counts = Array();

@@ -560,6 +560,10 @@ class GlobalBackendTest implements GlobalBackendInterface {
         } elseif(count($filters) == 1 && $filters[0]['key'] == 'host_groups' && $filters[0]['op'] == '>=') {
             foreach($objects AS $OBJS) {
                 $name = $OBJS[0]->getName();
+
+                if (!isset($this->obj['hostgroup'][$name]))
+                    continue; // skip not existing hostgroups
+
                 foreach($this->obj['hostgroup'][$name]['members'] AS $hostname) {
                     $host = $this->obj['host'][$hostname];
                     $arrReturn[$hostname] = $this->obj['host'][$hostname];
@@ -594,7 +598,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
         if(count($filters) == 1 && $filters[0]['key'] == 'host_name' && $filters[0]['op'] == '=') {
             // All services of a host
             foreach($objects AS $OBJS) {
-                $arrReturn[$OBJS[0]->getName()] = $this->obj['service'][$OBJS[0]->getName()];
+                if (isset($this->obj['service'][$OBJS[0]->getName()]))
+                    $arrReturn[$OBJS[0]->getName()] = $this->obj['service'][$OBJS[0]->getName()];
             }
         } elseif(count($filters) == 1 && $filters[0]['key'] == 'service_groups' && $filters[0]['op'] == '>=') {
             // All services of a servicegroup
@@ -618,6 +623,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
             && $filters[1]['key'] == 'service_description' && $filters[1]['op'] == '=') {
             // One specific service of a host
             foreach($objects AS $OBJS) {
+                if (!isset($this->obj['service'][$OBJS[0]->getName()]))
+                    continue;
                 foreach($arrReturn[$OBJS[0]->getName()] = $this->obj['service'][$OBJS[0]->getName()] AS $service) {
                     if($service[DESCRIPTION] == $OBJS[0]->getServiceDescription()) {
                         $arrReturn[$OBJS[0]->getName().'~~'.$OBJS[0]->getServiceDescription()] = $service;
@@ -671,6 +678,10 @@ class GlobalBackendTest implements GlobalBackendInterface {
             // Get service state counts for all hosts in a hostgroup (separated by host)
             foreach($objects AS $OBJS) {
                 $name = $OBJS[0]->getName();
+
+                if (!isset($this->obj['hostgroup'][$name]))
+                    continue; // skip not existing hostgroups
+
                 foreach($this->obj['hostgroup'][$name]['members'] AS $hostname) {
                     $resp = $this->getHostMemberCounts(Array(Array(new NagVisHost($this->backendId, $hostname))), $options, Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name')));
                     $aReturn[$hostname] = $resp[$hostname];
@@ -711,6 +722,10 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     $aReturn[$name] = Array('counts' => $this->serviceStates);
                     $aReturn[$name]['counts'] += $this->hostStates;
                 }
+
+                if (!isset($this->obj['hostgroup'][$name]))
+                    continue; // skip not existing objects
+
                 foreach($this->obj['hostgroup'][$name]['members'] AS $hostname) {
                     $host = $this->obj['host'][$hostname];
 
@@ -721,7 +736,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     else
                         $aReturn[$name]['counts'][$host[STATE]]['normal']++;
 
-              // If recognize_services are disabled don't fetch service information
+                    // If recognize_services are disabled don't fetch service information
                     if($options & 2)
                         continue;
 
