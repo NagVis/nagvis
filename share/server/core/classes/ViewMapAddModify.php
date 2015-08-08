@@ -524,15 +524,15 @@ class ViewMapAddModify {
         }
 
         if ($this->mode == 'view_params') {
-            echo '<tr><td colspan=3 style="height:10px;"></td></tr>';
-            echo '<tr><td class=tdlabel>'.l('Make Permanent').'</td>';
-            echo '<td class=tdbox></td>';
+            echo '<table class=mytable>';
+            echo '<tr><td class=tdlabel style="width:70px">'.l('Make permanent').'</td>';
             echo '<td class=tdfield>';
             checkbox('perm');
             echo l('for all users').'<br>';
             checkbox('perm_user');
             echo l('for you');
             echo '</td></tr>';
+            echo '</table>';
         }
         submit(l('Save'));
         form_end();
