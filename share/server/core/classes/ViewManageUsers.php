@@ -104,7 +104,7 @@ class ViewManageUsers {
             return;
         echo '<h2>'.l('Modify User').'</h2>';
 
-        $user_id = post('user_id');
+        $user_id = submitted('edit') ? post('user_id') : null;
 
         if (is_action() && post('mode') == 'edit') {
             try {

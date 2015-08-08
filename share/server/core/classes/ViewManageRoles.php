@@ -80,7 +80,7 @@ class ViewManageRoles {
         global $AUTHORISATION;
         echo '<h2>'.l('Modify Role').'</h2>';
 
-        $role_id = post('role_id');
+        $role_id = submitted('edit') ? post('role_id') : null;
 
         if (is_action() && post('mode') == 'edit') {
             try {
@@ -138,7 +138,7 @@ class ViewManageRoles {
         select('role_id', $choices, '', 'updateForm(this.form)');
         echo '</td></tr>';
         echo '</table>';
-        
+
         if ($role_id) {
             echo '<h3>'.l('Set Permissions').'</h3>';
             echo '<table>';

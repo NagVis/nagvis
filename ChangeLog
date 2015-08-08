@@ -10,6 +10,7 @@ Frontend:
   * FIX: Fixed usability issues when selecting object names from name lists
     while adding / editing objects
   * FIX: Fixed js error when weathermap lines get no perfdata at all
+  * FIX: Fixed form submit confusions in role and user management dialogs
 
 Worldmap:
   * FIX: Ignoring min_zoom/max_zoom when min_zoom equal or larger than max_zoom
