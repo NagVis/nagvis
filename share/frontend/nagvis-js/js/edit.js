@@ -840,12 +840,12 @@ function coordsToGrid(x, y) {
 }
 
 function toggle_section(sec) {
-    var tables = document.getElementsByClassName('section');
-    for (var i = 0; i < tables.length; i++) {
-        if (tables[i].id == 'sec_' + sec)
-            tables[i].style.display = '';
+    var sections = document.getElementsByClassName('section');
+    for (var i = 0; i < sections.length; i++) {
+        if (sections[i].id == 'sec_' + sec)
+            sections[i].style.display = '';
         else
-            tables[i].style.display = 'none';
+            sections[i].style.display = 'none';
     }
 
     // update the navigation

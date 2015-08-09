@@ -340,4 +340,31 @@ function scroll_up() {
     js('document.body.scrollTop = document.documentElement.scrollTop = 0;');
 }
 
+function get_open_section($default) {
+    return post('sec', $default);
+}
+
+function render_section_navigation($open, $sections) {
+    hidden('sec', $open);
+
+    // first render navigation
+    echo '<ul class="nav" id="nav">';
+    foreach ($sections AS $sec => $title) {
+        $class = $open == $sec ? ' class="active"' : '';
+        echo '<li id="nav_'.$sec.'" '.$class.'>';
+        echo '<a href="javascript:toggle_section(\''.$sec.'\')">';
+        echo $title.'</a></li>';
+    }
+    echo '</ul>';
+}
+
+function render_section_start($sec, $open) {
+    $display = $sec != $open ? 'display:none' : '';
+    echo '<div id="sec_'.$sec.'" class="section" style="'.$display.'">';
+}
+
+function render_section_end() {
+    echo '</div>';
+}
+
 ?>

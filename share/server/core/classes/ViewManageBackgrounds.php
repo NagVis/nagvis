@@ -23,6 +23,8 @@
  *****************************************************************************/
 
 class ViewManageBackgrounds {
+    private $error = null;
+
     private function uploadForm() {
         global $CORE;
         echo '<h2>'.l('Upload Background Image').'</h2>';

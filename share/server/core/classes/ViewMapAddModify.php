@@ -33,7 +33,7 @@ class ViewMapAddModify {
 
     private $attrs          = array();
     private $attrs_filtered = array();
-    
+
     // Filter the attributes using the helper fields
     // Each attribute can have the toggle_* field set. If present
     // use it's value to filter out the attributes
@@ -490,10 +490,7 @@ class ViewMapAddModify {
 
     private function drawForm() {
         js_form_start('addmodify');
-        $open = isset($_POST['sec']) ? $_POST['sec'] : 'general'; // default open section
-        hidden('sec', $open);
 
-        #$obj_spec = $this->MAPCFG->getValidObjectType($this->object_type);
         $obj_spec = $this->getProperties();
         $props_by_section = array();
         foreach ($obj_spec AS $propname => $prop) {
@@ -503,24 +500,22 @@ class ViewMapAddModify {
             $props_by_section[$sec][$propname] = $prop;
         }
 
-        echo '<ul class="nav" id="nav">';
-        foreach (array_keys($props_by_section) AS $sec) {
-            if ($sec == 'hidden')
-                continue;
-            $class = $open == $sec ? ' class="active"' : '';
-            echo '<li id="nav_'.$sec.'" '.$class.'>';
-            echo '<a href="javascript:toggle_section(\''.$sec.'\')">';
-            echo $this->MAPCFG->getSectionTitle($sec).'</a></li>';
-        }
-        echo '</ul>';
+        $sections = array();
+        foreach (array_keys($props_by_section) AS $sec)
+            if ($sec != 'hidden')
+                $sections[$sec] = $this->MAPCFG->getSectionTitle($sec);
+
+        $open = get_open_section('general');
+        render_section_navigation($open, $sections);
 
         foreach ($props_by_section as $sec => $sec_props) {
-            if ($sec == 'hidden')
-                continue;
-            $display = $sec != $open ? 'display:none' : '';
-            echo '<table id="sec_'.$sec.'" class="mytable section" style="'.$display.'">';
-            $this->drawFields($sec_props);
-            echo '</table>';
+            if ($sec != 'hidden') {
+                render_section_start($sec, $open);
+                echo '<table class="mytable">';
+                $this->drawFields($sec_props);
+                echo '</table>';
+                render_section_end();
+            }
         }
 
         if ($this->mode == 'view_params') {

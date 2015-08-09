@@ -873,11 +873,11 @@ input[type=checkbox] {
     margin: 0;
     padding: 0;
     border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 10px;
 }
 
 #popupWindow ul.nav li {
     float: left;
-    margin-bottom: 10px;
 }
 
 #popupWindow ul.nav li a {
