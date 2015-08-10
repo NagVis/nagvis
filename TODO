@@ -9,8 +9,6 @@ This is a small file for storing quick thoughts about new features and needed ch
 - map lock?
 - make x/y coordinates in javascript an array of coordinates instead of comma separated string
 
-- Rework layout of role edit form
-
 Worldmap:
   - Clustering von Objekten je nach Zoomstufe
   - Andere Provider auswählbar machen

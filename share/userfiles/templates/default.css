@@ -494,6 +494,10 @@ div#popupWindow h1 {
 
 /* Popup window forms */
 
+#popupWindowContent table.perms td.perm {
+    text-align: center;
+}
+
 #popupWindowContent a {color:#43B3CF;text-decoration:none;}
 #popupWindowContent a:hover {color:#779D2A;text-decoration:underline}
 

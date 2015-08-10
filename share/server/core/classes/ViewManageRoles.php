@@ -139,31 +139,96 @@ class ViewManageRoles {
         echo '</td></tr>';
         echo '</table>';
 
-        if ($role_id) {
-            echo '<h3>'.l('Set Permissions').'</h3>';
-            echo '<table>';
-            echo '<tr>';
-            echo '<th>'.l('Module').'</th>';
-            echo '<th>'.l('Action').'</th>';
-            echo '<th>'.l('Object').'</th>';
-            echo '<th>'.l('Permitted').'</th>';
-            echo '</tr>';
-            $permitted = $AUTHORISATION->getRolePerms($role_id);
-            foreach ($AUTHORISATION->getAllVisiblePerms() AS $perm) {
-                unset($_REQUEST['perm_'.$perm['permId']]);
-                echo '<tr>';
-                echo '<td>'.$perm['mod'].'</td>';
-                echo '<td>'.$perm['act'].'</td>';
-                echo '<td>'.$perm['obj'].'</td>';
-                echo '<td>';
-                checkbox('perm_'.$perm['permId'], isset($permitted[$perm['permId']]));
-                echo '</td></tr>';
-            }
-            echo '</table>';
-        }
-
+        $this->renderPermissions($role_id);
         submit(l('Save'));
         form_end();
+    }
+
+    private function renderPermissions($role_id) {
+        global $AUTHORISATION;
+        if (!$role_id)
+            return;
+
+        $sections = array(
+            'general'   => l('General'),
+            'maps'      => l('Maps'),
+            'rotations' => l('Rotations'),
+        );
+
+        echo '<h3>'.l('Permissions').'</h3>';
+        $open = get_open_section('general');
+        render_section_navigation($open, $sections);
+
+        $permissions_by_section = array(
+            'general'   => array(),
+            'maps'      => array(),
+            'rotations' => array(),
+        );
+        foreach ($AUTHORISATION->getAllVisiblePerms() AS $perm) {
+            if ($perm['mod'] == 'Map' && $perm['act'] != 'add' && $perm['act'] != 'manage') {
+                if (!isset($permissions_by_section['maps'][$perm['obj']]))
+                    $permissions_by_section['maps'][$perm['obj']] = array();
+                $permissions_by_section['maps'][$perm['obj']][] = $perm;
+            } elseif ($perm['mod'] == 'Rotation') {
+                $permissions_by_section['rotations'][] = $perm;
+            } else {
+                $permissions_by_section['general'][] = $perm;
+            }
+        }
+
+        $permitted = $AUTHORISATION->getRolePerms($role_id);
+        foreach ($permissions_by_section AS $sec => $permissions) {
+            render_section_start($sec, $open);
+            if ($sec == 'maps')
+                $this->renderMapsSection($permissions, $permitted);
+            else
+                $this->renderOtherSection($permissions, $permitted);
+            render_section_end();
+        }
+    }
+
+    function renderMapsSection($permissions, $permitted) {
+        echo '<table class="mytable perms">';
+        echo '<tr>';
+        echo '<th>'.l('Map').'</th>';
+        echo '<th>'.l('View').'</th>';
+        echo '<th>'.l('Edit').'</th>';
+        echo '<th>'.l('Delete').'</th>';
+        echo '</tr>';
+        foreach ($permissions AS $map_perms) {
+            echo '<tr>';
+            echo '<td>'.$map_perms[0]['obj'].'</td>';
+            foreach ($map_perms as $perm) {
+                unset($_REQUEST['perm_'.$perm['permId']]);
+                echo '<td class=perm>';
+                checkbox('perm_'.$perm['permId'], isset($permitted[$perm['permId']]));
+                echo '</td>';
+            }
+            echo '</tr>';
+        }
+        echo '</table>';
+    }
+
+    function renderOtherSection($permissions, $permitted) {
+        echo '<table class="mytable perms">';
+        echo '<tr>';
+        echo '<th>'.l('Module').'</th>';
+        echo '<th>'.l('Action').'</th>';
+        echo '<th>'.l('Object').'</th>';
+        echo '<th>'.l('Permitted').'</th>';
+        echo '</tr>';
+        foreach ($permissions AS $perm) {
+            unset($_REQUEST['perm_'.$perm['permId']]);
+            echo '<tr>';
+            echo '<td>'.$perm['mod'].'</td>';
+            echo '<td>'.$perm['act'].'</td>';
+            echo '<td>'.$perm['obj'].'</td>';
+            echo '<td class=perm>';
+            checkbox('perm_'.$perm['permId'], isset($permitted[$perm['permId']]));
+            echo '</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
     }
 
     private function deleteForm() {

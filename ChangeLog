@@ -5,6 +5,7 @@ Core:
 Frontend:
   * Using color picker for color configuration in global settings
   * Removed mostly useless "create background" form (you can use the background_color)
+  * Grouped permissions in role permissions config in tabbed navigation
   * FIX: Fixed icon_size related PHP errors in some PHP versions (implode error)
   * FIX: Fixed issue in backend management when adding/editing backends
   * FIX: Fixed usability issues when selecting object names from name lists
