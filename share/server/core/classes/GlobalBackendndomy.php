@@ -689,7 +689,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 '.$this->dbPrefix.'scheduleddowntime AS dh
                 ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
             WHERE
-                (o.objecttype_id=2 AND ('.$this->parseFilter($objects, $filters, 'o', 'o', $isMemberQuery, false, !HOST_QUERY).'))
+                (o.objecttype_id=2 AND o.is_active=1 AND ('.$this->parseFilter($objects, $filters, 'o', 'o', $isMemberQuery, false, !HOST_QUERY).'))
                 AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id)
                 AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=s.host_object_id)
                 ');
@@ -849,7 +849,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 '.$this->dbPrefix.'servicestatus AS ss
                 ON ss.service_object_id=o.object_id
             WHERE
-                (o.objecttype_id=2 AND ('.$this->parseFilter($objects, $filters, 'o', 'o', MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY).'))
+                (o.objecttype_id=2 AND o.is_active=1 AND ('.$this->parseFilter($objects, $filters, 'o', 'o', MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY).'))
                 AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id)
                 AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=s.host_object_id)
                 AND (hs.host_object_id=h.host_object_id)
@@ -930,6 +930,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 AND (hg.config_type='.$this->objConfigType.' AND hg.instance_id='.$this->dbInstanceId.' AND hg.hostgroup_object_id=o.object_id)
                 AND hgm.hostgroup_id=hg.hostgroup_id
                 AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id)
+                               AND (o2.is_active=1)
             GROUP BY o.object_id');
 
         $arrReturn = Array();
@@ -1001,6 +1002,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 AND hgm.hostgroup_id=hg.hostgroup_id
                 AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.host_object_id=hgm.host_object_id)
                 AND (o2.objecttype_id=2 AND s.service_object_id=o2.object_id)
+                               AND (o2.is_active=1)
             GROUP BY o.object_id');
 
         while($data = mysql_fetch_assoc($QUERYHANDLE)) {

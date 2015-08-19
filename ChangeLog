@@ -1,3 +1,8 @@
+1.9b3
+Core:
+  * FIX: NDO/IDO backend: Correctly excluding deprecated objects from hosts and
+    hostgroups (having is_active=0 set)
+
 1.9b2
 Core:
   * FIX: Improved handling of not existing objects when using Test backend
