@@ -1,4 +1,7 @@
 1.8.6
+Automap:
+  * FIX: Detecting and preventing loops in automap
+    (Fixes PHP error: Allowed memory size ...  bytes exhausted)
 
 1.8.5
 Core:
