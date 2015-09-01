@@ -3,6 +3,10 @@ Core:
   * FIX: NDO/IDO backend: Correctly excluding deprecated objects from hosts and
     hostgroups (having is_active=0 set)
 
+Automap:
+  * FIX: Detecting and preventing loops in automap
+    (Fixes PHP error: Allowed memory size ...  bytes exhausted)
+
 1.9b2
 Core:
   * FIX: Improved handling of not existing objects when using Test backend

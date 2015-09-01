@@ -408,7 +408,7 @@ function automap_connector($MAPCFG, &$params, &$saved_config, $from_obj, $to_obj
  * Gets all child/parent objects of this host from the backend. The child objects are
  * saved to the childObjects array
  */
-function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $layers_left, &$this_tree_lvl) {
+function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $layers_left, &$this_tree_lvl, &$object_names) {
     if($layers_left == 0)
         return; // Stop recursion when the number of layers counted down
 
@@ -451,6 +451,10 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
     } catch(BackendException $e) {}
 
     foreach($relations AS $rel_name) {
+        if (isset($object_names[$rel_name])) {
+            continue; // skip this object to prevent a loop
+        }
+
         if (in_array($rel_name, $params['ignore_hosts']) == True){
             continue;
         }
@@ -458,11 +462,12 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
 
         // Add to tree
         $this_tree_lvl[$obj['object_id']] = $obj;
+        $object_names[$rel_name] = true;
 
         // < 0 - there is no limit
         // > 0 - there is a limit but it is no reached yet
         if($layers_left < 0 || $layers_left > 0) {
-            automap_fetch_tree($dir, $MAPCFG, $params, $saved_config, $rel_name, $layers_left - 1, $this_tree_lvl[$obj['object_id']]['.'.$dir]);
+            automap_fetch_tree($dir, $MAPCFG, $params, $saved_config, $rel_name, $layers_left - 1, $this_tree_lvl[$obj['object_id']]['.'.$dir], $object_names);
         }
     }
 }
@@ -475,16 +480,20 @@ function automap_get_object_tree($MAPCFG, $params, &$saved_config) {
     // Initialize the tree with the root objects
     $tree = &$root_obj;
 
-    automap_fetch_tree('childs', $MAPCFG, $params, $saved_config, $root_name, $params['child_layers'], $root_obj['.childs']);
+    // List of all object names already in the tree. Used to prevent loops. The used algorithm is not
+    // tuned for efficency, but should be sufficient for our needs.
+    $object_names = array($root_name => true);
+
+    automap_fetch_tree('childs', $MAPCFG, $params, $saved_config, $root_name, $params['child_layers'], $root_obj['.childs'], $object_names);
 
     // Get all parent object information from backend when needed
     // If some parent layers are requested: It should be checked if the used
     // backend supports this
     if(isset($params['parent_layers']) && $params['parent_layers'] != 0) {
         global $_BACKEND;
-        
+
         if($_BACKEND->checkBackendFeature($params['backend_id'][0], 'getDirectParentNamesByHostName')) {
-            automap_fetch_tree('parents', $MAPCFG, $params, $saved_config, $root_name, $params['parent_layers'], $root_obj['.parents']);
+            automap_fetch_tree('parents', $MAPCFG, $params, $saved_config, $root_name, $params['parent_layers'], $root_obj['.parents'], $object_names);
         }
     }
 
