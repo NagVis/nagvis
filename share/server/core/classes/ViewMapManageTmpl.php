@@ -187,8 +187,10 @@ class ViewMapManageTmpl {
             echo '<tr><td>'.l('Key').'</td><td>'.l('Value').'</td></tr>';
             for ($i = 0; $i < $num_options; $i++) {
                 if ($i < count($options)) {
-                    $_POST['key_'.$i] = array_keys($options)[$i];
-                    $_POST['val_'.$i] = array_values($options)[$i];
+                    $keys = array_keys($options);
+                    $_POST['key_'.$i] = $keys[$i];
+                    $values = array_values($options);
+                    $_POST['val_'.$i] = $values[$i];
                 } else {
                     unset($_POST['key_'.$i]);
                     unset($_POST['val_'.$i]);
