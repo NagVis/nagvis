@@ -65,6 +65,7 @@ function list_automap_overlaps() {
         'compress' => l('compress'),
         'ipsep'    => l('ipsep'),
         'vpsc'     => l('vpsc'),
+        'prism'    => l('prism'),
     );
 }
 

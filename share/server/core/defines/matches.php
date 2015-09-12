@@ -84,7 +84,7 @@ define('MATCH_GADGET_TYPE', '/^(?:img|html)$/i');
 define('MATCH_OBJECT_TYPES', '/^(host|service|hostgroup|servicegroup|dyngroup|aggr|map)$/');
 define('MATCH_AUTOMAP_RENDER_MODE', '/^(directed|undirected|radial|circular|undirected2|undirected3)?$/');
 define('MATCH_AUTOMAP_RANKDIR', '/^(TB|LR|BT|RL)?$/');
-define('MATCH_AUTOMAP_OVERLAP', '/^(true|false|scale|scalexy|ortho|orthoxy|orthoyx|compress|ipsep|vpsc)?$/');
+define('MATCH_AUTOMAP_OVERLAP', '/^(true|false|scale|scalexy|ortho|orthoxy|orthoyx|compress|ipsep|vpsc|prism)?$/');
 define('MATCH_AUTOMAP_BUSINESS_IMPACT', '/^(0_development|1_testing|2_standard|3_production|4_top_production|5_business_critical)?$/');
 define('MATCH_AUTOMAP_HOSTNAME', '/^[0-9a-zа-яё\p{L}:+[\]()_.,\-?!#@=\/\\\<>]+$/iu');
 define('MATCH_LINE_TYPE', '/^(10|11|12|13|14|15)?$/');

@@ -4,6 +4,7 @@ Core:
     hostgroups (having is_active=0 set)
 
 Automap:
+  * Added missing option "prism" to overlap parameter
   * FIX: Detecting and preventing loops in automap
     (Fixes PHP error: Allowed memory size ...  bytes exhausted)
 
