@@ -3,6 +3,10 @@ Core:
   * FIX: NDO/IDO backend: Correctly excluding deprecated objects from hosts and
     hostgroups (having is_active=0 set)
 
+Frontend:
+  * Supporting some more older browsers. Very outdated browsers will get an
+    error message when they don't support essential features
+
 Automap:
   * Added missing option "prism" to overlap parameter
   * FIX: Detecting and preventing loops in automap
