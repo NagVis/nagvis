@@ -708,6 +708,30 @@ function usesSource(source) {
         && oPageProperties.sources.indexOf(source) !== -1;
 }
 
+// Checks whether or not the users browser has the needed javascript
+// features. If not, an error message is shown and further page processing
+// will be terminated.
+function hasNeededJSFeatures() {
+    var msg = null;
+    if (typeof JSON === 'undefined') {
+        msg = 'It seems you are using an outdated browser to access NagVis. '
+             +'I am sorry, but you will not be able to use NagVis with this '
+             +'old browser. Please consider updating. (Missing JSON)';
+    }
+
+    if (msg) {
+        frontendMessage({
+            'type'     : 'error',
+            'title'    : 'Error: Outdated Browser',
+            'message'  : msg,
+            'closable' : false
+        });
+        return false;
+    } else {
+        return true;
+    }
+}
+
 // Does the initial parsing of the pages
 function workerInitialize(type, ident) {
     displayStatusMessage('Loading...', 'loading', true);
@@ -768,6 +792,8 @@ function runWorker(iCount, sType, sIdentifier) {
     // If the iterator is 0 it is the first run of the worker. Its only task is
     // to render the page
     if(iCount === 0) {
+        if (!hasNeededJSFeatures())
+            return; // sorry!
         workerInitialize(sType, sIdentifier);
     } else {
         /**
