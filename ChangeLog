@@ -7,6 +7,10 @@ Frontend:
   * Supporting some more older browsers. Very outdated browsers will get an
     error message when they don't support essential features
 
+Geomap:
+  * Improved error handling when creating geomaps but missing width or height
+  parameters
+
 Automap:
   * Added missing option "prism" to overlap parameter
   * FIX: Detecting and preventing loops in automap

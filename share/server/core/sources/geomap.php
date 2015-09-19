@@ -234,6 +234,16 @@ $hiddenConfigVars = array(
     'map_image',
 );
 
+// Alter some global vars with automap specific things
+$updateConfigVars = array(
+    'width' => array(
+        'default' => 1000,
+    ),
+    'height' => array(
+        'default' => 600,
+    ),
+);
+
 function geomap_files($params) {
     // The source_file parameter was filtered here in previous versions. Users
     // reported that this is not very useful. So I removed it. Hope it works
@@ -267,7 +277,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
     $iconset = $params['iconset'];
     list($icon_w, $icon_h) = iconset_size($iconset);
-    
+
     // Adapt the global section
     $map_config[0] = $saved_config[0];
     $map_config[0]['map_image'] = $image_name.'?'.time().'.png';
@@ -332,6 +342,9 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
     //echo $min_lat . ' - ' . $max_lat. ' - '. $mid_lat.'\n';
     //echo $min_long . ' - ' . $max_long. ' - ' . $mid_long;
+
+    if (!$params['width'] || !$params['height'])
+        throw new GeomapError(l('Missing mandatory "width" and "height" parameters."'));
 
     // Using this API: http://pafciu17.dev.openstreetmap.org/
     $url = cfg('global', 'geomap_server')
@@ -409,8 +422,8 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
         // Calculate the lat (y) coords
         $obj['y'] = round((ProjectF($img_top) - ProjectF($obj['lat'])) * $lat_mult - ($icon_h / 2));
         if($obj['y'] < 0)
-            $obj['y'] = 0;		
-        
+            $obj['y'] = 0;
+
         // Calculate the long (x) coords
         $obj['x'] = round(($long_para * ($obj['long'] - $img_left)) - ($icon_w / 2));
         if($obj['x'] < 0)
