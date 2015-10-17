@@ -157,6 +157,7 @@ class NagVisHeaderMenu {
             $list = $CACHE->getCache();
         } else {
             // Get all the maps global config sections and cache them
+            $list = Array();
             foreach($CORE->getAvailableMaps() AS $mapName) {
                 $MAPCFG = new GlobalMapCfg($mapName);
                 try {
