@@ -6,6 +6,7 @@ Core:
 Frontend:
   * Supporting some more older browsers. Very outdated browsers will get an
     error message when they don't support essential features
+  * FIX: Fix Undefined variable: list when there is no map
 
 Geomap:
   * Improved error handling when creating geomaps but missing width or height
