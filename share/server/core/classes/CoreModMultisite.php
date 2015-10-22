@@ -68,7 +68,7 @@ class CoreModMultisite extends CoreModule {
         // FIXME: check_mk/tree_state.py?tree=nagvis holen
         // evaluieren
         // alles was auf off steht per toggle_foldable_container schließen
-        return $s;
+        return $s.$this->renderFootnotelinks();
     }
 
     private function renderTreeNodes($maps, $childs) {
@@ -143,7 +143,14 @@ class CoreModMultisite extends CoreModule {
             $code .= '</td></tr>';
         }
         $code .= '</tbody></table>';
-        return $code;
+        return $code.$this->renderFootnotelinks();
+    }
+
+    private function renderFootnoteLinks() {
+        $url = cfg('paths', 'htmlbase');
+        return "<div class=footnotelink>"
+              ."<a onfocus=\"if (this.blur) this.blur();\" target=\"main\" class=\"link\" href=\"".$url."\">EDIT</a>"
+              ."</div>";
     }
 
     // Wraps the getMaps() function by applying a short livetime cache based
