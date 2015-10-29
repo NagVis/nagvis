@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-VERSION=1.9b3
+VERSION=1.9b4
 NAME=nagvis-$(VERSION)
 
 SED ?= sed
@@ -38,7 +38,7 @@ publish:
 release: dist create-tag publish version
 
 version:
-	@newversion=$$(dialog --stdout --inputbox "New Version:" 0 0 "$(VERSION)") ; \
+	@newversion=$$(dialog --stdout --inputbox "Next Version:" 0 0 "$(VERSION)") ; \
 	if [ -n "$$newversion" ] ; then $(MAKE) NEW_VERSION=$$newversion setversion ; fi
 
 setversion:
