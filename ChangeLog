@@ -1,3 +1,7 @@
+1.9b4
+Frontend:
+  * FIX: Fixed JS error in case of re-rendering stateless objects
+
 1.9b3
 Core:
   * FIX: NDO/IDO backend: Correctly excluding deprecated objects from hosts and

@@ -326,7 +326,7 @@ var ViewMap = View.extend({
      */
     rerenderStatelessObjects: function(objects) {
         for (var i = 0, len = objects.length; i < len; i++)
-            this.objects[objects[i]].eender();
+            this.objects[objects[i]].render();
     },
 
     removeObject: function(object_id) {
