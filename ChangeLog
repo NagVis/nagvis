@@ -102,6 +102,8 @@ Frontend:
   * FIX: Fixed js error when moving an object out of the screen
 
 1.8.6
+Core:
+  * FIX: Template objects can now be used recursive
 
 1.8.5
 Core:

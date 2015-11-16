@@ -1430,6 +1430,7 @@ $mapConfigVarMap['template'] = Array(
     ),
     'hidden' => array(
         'type' => null,
+        'use' => null,
     ),
 );
 
