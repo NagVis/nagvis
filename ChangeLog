@@ -1,4 +1,7 @@
 1.8.6
+Core:
+  * FIX: Template objects can now be used recursive
+
 Automap:
   * FIX: Detecting and preventing loops in automap
     (Fixes PHP error: Allowed memory size ...  bytes exhausted)

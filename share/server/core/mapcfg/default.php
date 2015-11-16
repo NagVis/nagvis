@@ -1297,6 +1297,7 @@ $mapConfigVarMap['template'] = Array(
     'type' => null,
     'name' => null,
     'object_id' => null,
+    'use' => null,
 );
 
 $mapConfigVarMap['container'] = Array(

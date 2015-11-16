@@ -833,8 +833,8 @@ class GlobalMapCfg {
     private function mergeTemplates() {
         // Loop all objects
         foreach($this->mapConfig AS $id => $element) {
-            // Except global and templates (makes no sense)
-            if($id == '0')
+            // Global type objects do not support templates, makes no sense
+            if($element["type"] == 'global')
                 continue;
 
             // Check for "use" value
