@@ -64,13 +64,13 @@ sudo rm -f /usr/local/nagvis/var/*cache*
 #
 ##$SUDO rm -f /usr/local/nagvis/share/frontend/nagvis-js/js/NagVisCompressed.js
 #
-##
-## Install to omd site local/
-##
-#$SUDO su - $SITE -c "[ ! -d /omd/sites/$SITE/nvsrc ] && mkdir /omd/sites/$SITE/nvsrc || rm -rf /omd/sites/$SITE/nvsrc; \
-#cd $BASE ; \
-#rsync --filter='- .git' --filter='- .*.swp' -a ./ /omd/sites/$SITE/nvsrc/ ; \
-#cd /omd/sites/$SITE/nvsrc/ ; \
-#yes y | ./omd_install.sh"
 #
-#exit 0
+# Install to omd site local/
+#
+$SUDO su - $SITE -c "[ ! -d /omd/sites/$SITE/nvsrc ] && mkdir /omd/sites/$SITE/nvsrc || rm -rf /omd/sites/$SITE/nvsrc; \
+cd $BASE ; \
+rsync --filter='- .git' --filter='- .*.swp' -a ./ /omd/sites/$SITE/nvsrc/ ; \
+cd /omd/sites/$SITE/nvsrc/ ; \
+yes y | ./omd_install.sh"
+
+exit 0

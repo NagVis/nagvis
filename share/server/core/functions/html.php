@@ -284,8 +284,8 @@ function select($name, $options, $default = '', $onchange = '', $style = '', $si
     foreach($options AS $value => $display) {
         $select = '';
         if($value == $default)
-            $select = 'selected';
-        $ret .= '<option value="'.$value.'" '.$select.'>'.$display.'</option>'.N;
+            $select = ' selected';
+        $ret .= '<option value="'.$value.'"'.$select.'>'.$display.'</option>'.N;
     }
     $ret .= '</select>'.N;
     echo $ret;
