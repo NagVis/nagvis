@@ -1272,7 +1272,7 @@ copy "etc" "$NAGVIS_PATH"
 makedir "$NAGVIS_PATH/etc/conf.d"
 makedir "$NAGVIS_PATH/etc/profiles"
 copy "README" "$NAGVIS_PATH"
-copy "LICENCE" "$NAGVIS_PATH"
+copy "COPYING" "$NAGVIS_PATH"
 copy "docs" "$NAGVIS_PATH/share/" "" "*/cleanup_new_notes.sh"
 cmp_js $NAGVIS_PATH/share/frontend/nagvis-js/js
 
