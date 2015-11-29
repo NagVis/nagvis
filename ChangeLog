@@ -104,6 +104,9 @@ Frontend:
 1.8.6
 Core:
   * FIX: Template objects can now be used recursive
+  * FIX: Fixed missing Url/view/* permission. It was not possible to permit
+  non admin users to access external URLs in rotation pools without this
+  permissions.
 
 1.8.5
 Core:

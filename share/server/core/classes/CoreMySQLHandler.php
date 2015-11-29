@@ -190,14 +190,35 @@ class CoreMySQLHandler {
         // release
         if($dbVersion < 1080500)
             $this->updateDb1080500();
+
+        // Now perform the update for pre 1.8.6. Need to add the Url/view
+        // permission again since it was not added during db creation till this
+        // release
+        if($dbVersion < 1080600)
+            $this->updateDb1080600();
+    }
+
+    private function updateDb1080600() {
+	// Create permissions for Url/view/*
+        $this->createPerm('Url', 'view', '*');
+
+        // Assign the new permission to the managers, users, guests
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
+        while($data = $this->fetchAssoc($RES))
+            $this->addRolePerm($data['roleId'], 'Url', 'view', '*');
+
+        // Only apply the new version when this is the real release or newer
+        // (While development the version string remains on the old value)
+        if(GlobalCore::getInstance()->versionToTag(CONST_VERSION) >= 1080600)
+            $this->updateDbVersion();
     }
 
     private function updateDb1080500() {
 	// Create permissions for Action/peform/*
         $this->createPerm('Action', 'perform', '*');
-        
+
         // Assign the new permission to the managers, users
-        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\'');
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\'');
         while($data = $this->fetchAssoc($RES))
             $this->addRolePerm($data['roleId'], 'Action', 'perform', '*');
 
@@ -210,9 +231,9 @@ class CoreMySQLHandler {
     private function updateDb1070023() {
 	// Create permissions for Action/peform/*
         $this->createPerm('Action', 'perform', '*');
-        
+
         // Assign the new permission to the managers, users
-        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\'');
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\'');
         while($data = $this->fetchAssoc($RES))
             $this->addRolePerm($data['roleId'], 'Action', 'perform', '*');
 
@@ -225,9 +246,9 @@ class CoreMySQLHandler {
     private function updateDb1060500() {
 	// Create permissions for Url/view/*
         $this->createPerm('Url', 'view', '*');
-        
+
         // Assign the new permission to the managers, users, guests
-        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\' or name=\'Guests\'');
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
         while($data = $this->fetchAssoc($RES))
             $this->addRolePerm($data['roleId'], 'Url', 'view', '*');
 
@@ -260,7 +281,7 @@ class CoreMySQLHandler {
         $this->createPerm('User', 'setOption', '*');
 
         // Assign the new permission to the managers, users, guests
-        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\' or name=\'Guests\'');
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
         while($data = $this->fetchAssoc($RES))
             $this->addRolePerm($data['roleId'], 'User', 'setOption', '*');
 
@@ -276,7 +297,7 @@ class CoreMySQLHandler {
         $this->createPerm('Multisite', 'getMaps', '*');
 
         // Assign the new permission to the managers
-        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\' or name=\'Guests\'');
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
         while($data = $this->fetchAssoc($RES)) {
             $this->addRolePerm($data['roleId'], 'Multisite', 'getMaps', '*');
         }
@@ -385,7 +406,13 @@ class CoreMySQLHandler {
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'manage\', \'*\')');
         $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Map\', \'add\', \'*\')');
 
-        $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'MainCfg\', \'edit\', \'*\')');
+        // Access control: View URLs e.g. in rotation pools
+        $this->query('INSERT INTO perms (`mod`, `act`, obj) VALUES (\'Url\', \'view\', \'*\')');
+
+        // Assign the new permission to the managers, users, guests
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
+        while($data = $this->fetchAssoc($RES))
+            $this->addRolePerm($data['roleId'], 'Url', 'view', '*');
 
         /*
          * Administrators handling
@@ -407,7 +434,7 @@ class CoreMySQLHandler {
 
         // Permit all actions in General module
         $this->addRolePerm($data['roleId'], 'General', '*', '*');
-        
+
         // Managers are allowed to perform actions
         $this->addRolePerm($data['roleId'], 'Action', 'perform', '*');
 
