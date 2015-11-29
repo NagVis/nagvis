@@ -111,8 +111,8 @@ class CoreSQLiteHandler {
         // Only create when not existing
         if($this->count('SELECT COUNT(*) AS num FROM perms WHERE mod='.$this->escape($mod).' AND act=\'view\' AND obj='.$this->escape($name)) > 0) {
             if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: delete permissions for '.$mod.' '.$name);
-            $this->DB->query('DELETE FROM perms WHERE mod='.$this->escape($mod).' AND obj='.$this->escape($name).'');
-            $this->DB->query('DELETE FROM roles2perms WHERE permId=(SELECT permId FROM perms WHERE mod='.$this->escape($mod).' AND obj='.$this->escape($name).')');
+            $this->query('DELETE FROM perms WHERE mod='.$this->escape($mod).' AND obj='.$this->escape($name).'');
+            $this->query('DELETE FROM roles2perms WHERE permId=(SELECT permId FROM perms WHERE mod='.$this->escape($mod).' AND obj='.$this->escape($name).')');
         } else {
             if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: won\'t delete '.$mod.' permissions '.$name);
         }
@@ -122,9 +122,9 @@ class CoreSQLiteHandler {
         // Only create when not existing
         if($this->count('SELECT COUNT(*) AS num FROM perms WHERE mod=\'Map\' AND act=\'view\' AND obj='.$this->escape($name)) <= 0) {
             if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: create permissions for map '.$name);
-            $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'view\', '.$this->escape($name).')');
-            $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'edit\', '.$this->escape($name).')');
-            $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'delete\', '.$this->escape($name).')');
+            $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'view\', '.$this->escape($name).')');
+            $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'edit\', '.$this->escape($name).')');
+            $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'delete\', '.$this->escape($name).')');
         } else {
             if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: won\'t create permissions for map '.$name);
         }
@@ -136,7 +136,7 @@ class CoreSQLiteHandler {
         // Only create when not existing
         if($this->count('SELECT COUNT(*) AS num FROM perms WHERE mod=\'Rotation\' AND act=\'view\' AND obj='.$this->escape($name)) <= 0) {
             if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: create permissions for rotation '.$name);
-            $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Rotation\', \'view\', '.$this->escape($name).')');
+            $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Rotation\', \'view\', '.$this->escape($name).')');
         } else {
             if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: won\'t create permissions for rotation '.$name);
         }
@@ -145,7 +145,7 @@ class CoreSQLiteHandler {
     }
 
     private function addRolePerm($roleId, $mod, $act, $obj) {
-        $this->DB->query('INSERT INTO roles2perms (roleId, permId) VALUES ('.$roleId.', (SELECT permId FROM perms WHERE mod=\''.$mod.'\' AND act=\''.$act.'\' AND obj=\''.$obj.'\'))');
+        $this->query('INSERT INTO roles2perms (roleId, permId) VALUES ('.$roleId.', (SELECT permId FROM perms WHERE mod=\''.$mod.'\' AND act=\''.$act.'\' AND obj=\''.$obj.'\'))');
     }
 
     public function updateDb() {
@@ -195,10 +195,10 @@ class CoreSQLiteHandler {
 
     private function updateDb1080600() {
 	// Create permissions for Url/view/*
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Url\', \'view\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Url\', \'view\', \'*\')');
         
         // Assign the new permission to the managers, users, guests
-        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
         while($data = $this->fetchAssoc($RES))
             $this->addRolePerm($data['roleId'], 'Url', 'view', '*');
 
@@ -210,10 +210,10 @@ class CoreSQLiteHandler {
 
     private function updateDb1080500() {
 	// Create permissions for Action/perform/*
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Action\', \'perform\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Action\', \'perform\', \'*\')');
 
         // Assign the new permission to the managers, users
-        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\'');
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\'');
         while($data = $this->fetchAssoc($RES))
             $this->addRolePerm($data['roleId'], 'Action', 'perform', '*');
 
@@ -225,10 +225,10 @@ class CoreSQLiteHandler {
 
     private function updateDb1070023() {
 	// Create permissions for Action/perform/*
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Action\', \'perform\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Action\', \'perform\', \'*\')');
 
         // Assign the new permission to the managers, users
-        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\'');
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\'');
         while($data = $this->fetchAssoc($RES))
             $this->addRolePerm($data['roleId'], 'Action', 'perform', '*');
 
@@ -240,10 +240,10 @@ class CoreSQLiteHandler {
 
     private function updateDb1060500() {
 	// Create permissions for Url/view/*
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Url\', \'view\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Url\', \'view\', \'*\')');
         
         // Assign the new permission to the managers, users, guests
-        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
         while($data = $this->fetchAssoc($RES))
             $this->addRolePerm($data['roleId'], 'Url', 'view', '*');
 
@@ -259,7 +259,7 @@ class CoreSQLiteHandler {
             $this->createMapPermissions($map);
         }
 
-        $data = $this->fetchAssoc($this->DB->query('SELECT roleId FROM roles WHERE name=\'Guests\''));
+        $data = $this->fetchAssoc($this->query('SELECT roleId FROM roles WHERE name=\'Guests\''));
         // Access assignment: Guests => Allowed to view the demo maps
         foreach(GlobalCore::getInstance()->demoMaps AS $map) {
             $this->addRolePerm($data['roleId'], 'Map', 'view', $map);
@@ -273,10 +273,10 @@ class CoreSQLiteHandler {
 
     private function updateDb1060022() {
 	// Create permissions for User/setOption
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'User\', \'setOption\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'User\', \'setOption\', \'*\')');
 
         // Assign the new permission to the managers, users, guests
-        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
         while($data = $this->fetchAssoc($RES))
             $this->addRolePerm($data['roleId'], 'User', 'setOption', '*');
 
@@ -289,10 +289,10 @@ class CoreSQLiteHandler {
 
     private function updateDb1050400() {
         // Create permissions for the multisite webservice
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Multisite\', \'getMaps\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Multisite\', \'getMaps\', \'*\')');
 
         // Assign the new permission to the managers, users, guests
-        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
         while($data = $this->fetchAssoc($RES)) {
             $this->addRolePerm($data['roleId'], 'Multisite', 'getMaps', '*');
         }
@@ -305,12 +305,12 @@ class CoreSQLiteHandler {
 
     private function updateDb1050300() {
         // Create permissions for WUI management pages
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageBackgrounds\', \'manage\', \'*\')');
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageShapes\', \'manage\', \'*\')');
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'manage\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageBackgrounds\', \'manage\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageShapes\', \'manage\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'manage\', \'*\')');
 
         // Assign the new permission to the managers
-        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\'');
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\'');
         while($data = $this->fetchAssoc($RES)) {
             $this->addRolePerm($data['roleId'], 'ManageBackgrounds', 'manage', '*');
             $this->addRolePerm($data['roleId'], 'ManageShapes', 'manage', '*');
@@ -329,14 +329,14 @@ class CoreSQLiteHandler {
         $this->createVersionTable();
 
         // Add addModify permission
-        $RES = $this->DB->query('SELECT obj FROM perms WHERE mod=\'Map\' AND act=\'view\'');
+        $RES = $this->query('SELECT obj FROM perms WHERE mod=\'Map\' AND act=\'view\'');
         while($data = $this->fetchAssoc($RES)) {
             if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: Adding new addModify perms for map '.$data['obj']);
-            $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'addModify\', '.$this->escape($data['obj']).')');
+            $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'addModify\', '.$this->escape($data['obj']).')');
         }
 
         // Assign the addModify permission to the managers
-        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\'');
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\'');
         while($data = $this->fetchAssoc($RES)) {
             if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: Assigning addModify perms to Managers role');
             $this->addRolePerm($data['roleId'], 'Map', 'addModify', '*');
@@ -344,52 +344,52 @@ class CoreSQLiteHandler {
     }
 
     public function getDbVersion() {
-        $data = $this->fetchAssoc($this->DB->query('SELECT version FROM version'));
+        $data = $this->fetchAssoc($this->query('SELECT version FROM version'));
         return $data['version'];
     }
 
     public function updateDbVersion() {
-        $this->DB->query('UPDATE version SET version=\'' . CONST_VERSION . '\'');
+        $this->query('UPDATE version SET version=\'' . CONST_VERSION . '\'');
     }
 
     public function createVersionTable() {
-        $this->DB->query('CREATE TABLE version (version VARCHAR(100), PRIMARY KEY(version))');
-        $this->DB->query('INSERT INTO version (version) VALUES (\''.CONST_VERSION.'\')');
+        $this->query('CREATE TABLE version (version VARCHAR(100), PRIMARY KEY(version))');
+        $this->query('INSERT INTO version (version) VALUES (\''.CONST_VERSION.'\')');
     }
 
     public function createInitialDb() {
-        $this->DB->query('CREATE TABLE users (userId INTEGER, name VARCHAR(100), password VARCHAR(40), PRIMARY KEY(userId), UNIQUE(name))');
-        $this->DB->query('CREATE TABLE roles (roleId INTEGER, name VARCHAR(100), PRIMARY KEY(roleId), UNIQUE(name))');
-        $this->DB->query('CREATE TABLE perms (permId INTEGER, mod VARCHAR(100), act VARCHAR(100), obj VARCHAR(100), PRIMARY KEY(permId), UNIQUE(mod,act,obj))');
-        $this->DB->query('CREATE TABLE users2roles (userId INTEGER, roleId INTEGER, PRIMARY KEY(userId, roleId))');
-        $this->DB->query('CREATE TABLE roles2perms (roleId INTEGER, permId INTEGER, PRIMARY KEY(roleId, permId))');
+        $this->query('CREATE TABLE users (userId INTEGER, name VARCHAR(100), password VARCHAR(40), PRIMARY KEY(userId), UNIQUE(name))');
+        $this->query('CREATE TABLE roles (roleId INTEGER, name VARCHAR(100), PRIMARY KEY(roleId), UNIQUE(name))');
+        $this->query('CREATE TABLE perms (permId INTEGER, mod VARCHAR(100), act VARCHAR(100), obj VARCHAR(100), PRIMARY KEY(permId), UNIQUE(mod,act,obj))');
+        $this->query('CREATE TABLE users2roles (userId INTEGER, roleId INTEGER, PRIMARY KEY(userId, roleId))');
+        $this->query('CREATE TABLE roles2perms (roleId INTEGER, permId INTEGER, PRIMARY KEY(roleId, permId))');
 
         $this->createVersionTable();
 
         // If running in OMD create the 'omdadmin' user instead of 'admin'
         if(GlobalCore::getInstance()->omdSite() !== null) {
-            $this->DB->query('INSERT INTO users (userId, name, password) VALUES (1, \'omdadmin\', \'051e0bbcfb79ea2a3ce5c487cc111051aac51ae8\')');
+            $this->query('INSERT INTO users (userId, name, password) VALUES (1, \'omdadmin\', \'051e0bbcfb79ea2a3ce5c487cc111051aac51ae8\')');
         } else {
-            $this->DB->query('INSERT INTO users (userId, name, password) VALUES (1, \'admin\', \'868103841a2244768b2dbead5dbea2b533940e20\')');
+            $this->query('INSERT INTO users (userId, name, password) VALUES (1, \'admin\', \'868103841a2244768b2dbead5dbea2b533940e20\')');
         }
 
-        $this->DB->query('INSERT INTO users (userId, name, password) VALUES (2, \'guest\', \'a4e74a1d28ec981c945310d87f8d7b535d794cd2\')');
-        $this->DB->query('INSERT INTO roles (roleId, name) VALUES (1, \'Administrators\')');
-        $this->DB->query('INSERT INTO roles (roleId, name) VALUES (2, \'Users (read-only)\')');
-        $this->DB->query('INSERT INTO roles (roleId, name) VALUES (3, \'Guests\')');
-        $this->DB->query('INSERT INTO roles (roleId, name) VALUES (4, \'Managers\')');
+        $this->query('INSERT INTO users (userId, name, password) VALUES (2, \'guest\', \'a4e74a1d28ec981c945310d87f8d7b535d794cd2\')');
+        $this->query('INSERT INTO roles (roleId, name) VALUES (1, \'Administrators\')');
+        $this->query('INSERT INTO roles (roleId, name) VALUES (2, \'Users (read-only)\')');
+        $this->query('INSERT INTO roles (roleId, name) VALUES (3, \'Guests\')');
+        $this->query('INSERT INTO roles (roleId, name) VALUES (4, \'Managers\')');
 
         // Access controll: Full access to everything
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'*\', \'*\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'*\', \'*\', \'*\')');
 
         // Access controll: Overview module levels
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Overview\', \'view\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Overview\', \'view\', \'*\')');
 
         // Access controll: Access to all General actions
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'General\', \'*\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'General\', \'*\', \'*\')');
 
 	// Create permissions for Action/peform/*
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Action\', \'perform\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Action\', \'perform\', \'*\')');
 
         // Access controll: Map module levels for the demo maps
         foreach(GlobalCore::getInstance()->demoMaps AS $map) {
@@ -400,47 +400,47 @@ class CoreSQLiteHandler {
         $this->createRotationPermissions('demo');
 
         // Access controll: Change user options
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'User\', \'setOption\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'User\', \'setOption\', \'*\')');
 
         // Access controll: Change own password
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ChangePassword\', \'change\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'ChangePassword\', \'change\', \'*\')');
 
         // Access controll: View maps via multisite
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Multisite\', \'getMaps\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Multisite\', \'getMaps\', \'*\')');
 
         // Access controll: Search objects on maps
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Search\', \'view\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Search\', \'view\', \'*\')');
 
         // Access controll: Authentication: Logout
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Auth\', \'logout\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Auth\', \'logout\', \'*\')');
 
         // Access controll: Summary permissions for viewing/editing/deleting all maps
         $this->createMapPermissions('*');
 
         // Access controll: Rotation module levels for viewing all rotations
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Rotation\', \'view\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Rotation\', \'view\', \'*\')');
 
         // Access controll: Manage users
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'UserMgmt\', \'manage\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'UserMgmt\', \'manage\', \'*\')');
 
         // Access controll: Manage roles
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'RoleMgmt\', \'manage\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'RoleMgmt\', \'manage\', \'*\')');
 
         // Access control: WUI Management pages
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageBackgrounds\', \'manage\', \'*\')');
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageShapes\', \'manage\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageBackgrounds\', \'manage\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'ManageShapes\', \'manage\', \'*\')');
 
         // Access controll: Edit/Delete maps
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'manage\', \'*\')');
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'add\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'manage\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'add\', \'*\')');
 
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'MainCfg\', \'edit\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'MainCfg\', \'edit\', \'*\')');
 
         // Access control: View URLs e.g. in rotation pools
-        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Url\', \'view\', \'*\')');
+        $this->query('INSERT INTO perms (mod, act, obj) VALUES (\'Url\', \'view\', \'*\')');
         
         // Assign the new permission to the managers, users, guests
-        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
+        $RES = $this->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
         while($data = $this->fetchAssoc($RES))
             $this->addRolePerm($data['roleId'], 'Url', 'view', '*');
 
@@ -448,10 +448,10 @@ class CoreSQLiteHandler {
          * Administrators handling
          */
 
-        $data = $this->fetchAssoc($this->DB->query('SELECT roleId FROM roles WHERE name=\'Administrators\''));
+        $data = $this->fetchAssoc($this->query('SELECT roleId FROM roles WHERE name=\'Administrators\''));
 
         // Role assignment: admin => Administrators
-        $this->DB->query('INSERT INTO users2roles (userId, roleId) VALUES (1, '.$data['roleId'].')');
+        $this->query('INSERT INTO users2roles (userId, roleId) VALUES (1, '.$data['roleId'].')');
 
         // Access assignment: Administrators => * * *
         $this->addRolePerm($data['roleId'], '*', '*', '*');
@@ -460,7 +460,7 @@ class CoreSQLiteHandler {
          * Managers handling
          */
 
-        $data = $this->fetchAssoc($this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\''));
+        $data = $this->fetchAssoc($this->query('SELECT roleId FROM roles WHERE name=\'Managers\''));
 
         // Permit all actions in General module
         $this->addRolePerm($data['roleId'], 'General', '*', '*');
@@ -508,7 +508,7 @@ class CoreSQLiteHandler {
          * Users handling
          */
 
-        $data = $this->fetchAssoc($this->DB->query('SELECT roleId FROM roles WHERE name=\'Users (read-only)\''));
+        $data = $this->fetchAssoc($this->query('SELECT roleId FROM roles WHERE name=\'Users (read-only)\''));
 
         // Users are allowed to perform actions
         $this->addRolePerm($data['roleId'], 'Action', 'perform', '*');
@@ -544,10 +544,10 @@ class CoreSQLiteHandler {
          * Guest handling
          */
 
-        $data = $this->fetchAssoc($this->DB->query('SELECT roleId FROM roles WHERE name=\'Guests\''));
+        $data = $this->fetchAssoc($this->query('SELECT roleId FROM roles WHERE name=\'Guests\''));
 
         // Role assignment: guest => Guests
-        $this->DB->query('INSERT INTO users2roles (userId, roleId) VALUES (2, '.$data['roleId'].')');
+        $this->query('INSERT INTO users2roles (userId, roleId) VALUES (2, '.$data['roleId'].')');
 
         // Permit all actions in General module
         $this->addRolePerm($data['roleId'], 'General', '*', '*');
