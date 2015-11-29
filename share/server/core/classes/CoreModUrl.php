@@ -29,6 +29,7 @@ class CoreModUrl extends CoreModule {
     private $url = null;
 
     public function __construct(GlobalCore $CORE) {
+        $this->sName = 'Url';
         $this->CORE = $CORE;
 
         $aOpts = Array('show' => MATCH_STRING_URL);

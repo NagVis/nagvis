@@ -31,6 +31,7 @@ class FrontendModUrl extends FrontendModule {
     private $rotationStep = '';
 
     public function __construct(GlobalCore $CORE) {
+        $this->sName = 'Url';
         $this->CORE = $CORE;
 
         // Parse the view specific options

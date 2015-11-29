@@ -181,6 +181,27 @@ class CoreSQLiteHandler {
         // release
         if($dbVersion < 1080500)
             $this->updateDb1080500();
+
+        // Now perform the update for pre 1.8.6. Need to add the Url/view
+        // permission again since it was not added during db creation till this
+        // release
+        if($dbVersion < 1080600)
+            $this->updateDb1080600();
+    }
+
+    private function updateDb1080600() {
+	// Create permissions for Url/view/*
+        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Url\', \'view\', \'*\')');
+        
+        // Assign the new permission to the managers, users, guests
+        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
+        while($data = $this->fetchAssoc($RES))
+            $this->addRolePerm($data['roleId'], 'Url', 'view', '*');
+
+        // Only apply the new version when this is the real release or newer
+        // (While development the version string remains on the old value)
+        if(GlobalCore::getInstance()->versionToTag(CONST_VERSION) >= 1080600)
+            $this->updateDbVersion();
     }
 
     private function updateDb1080500() {
@@ -188,7 +209,7 @@ class CoreSQLiteHandler {
         $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Action\', \'perform\', \'*\')');
 
         // Assign the new permission to the managers, users
-        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\'');
+        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\'');
         while($data = $this->fetchAssoc($RES))
             $this->addRolePerm($data['roleId'], 'Action', 'perform', '*');
 
@@ -203,7 +224,7 @@ class CoreSQLiteHandler {
         $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Action\', \'perform\', \'*\')');
 
         // Assign the new permission to the managers, users
-        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\'');
+        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\'');
         while($data = $this->fetchAssoc($RES))
             $this->addRolePerm($data['roleId'], 'Action', 'perform', '*');
 
@@ -218,7 +239,7 @@ class CoreSQLiteHandler {
         $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Url\', \'view\', \'*\')');
         
         // Assign the new permission to the managers, users, guests
-        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\' or name=\'Guests\'');
+        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
         while($data = $this->fetchAssoc($RES))
             $this->addRolePerm($data['roleId'], 'Url', 'view', '*');
 
@@ -251,7 +272,7 @@ class CoreSQLiteHandler {
         $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'User\', \'setOption\', \'*\')');
 
         // Assign the new permission to the managers, users, guests
-        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\' or name=\'Guests\'');
+        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
         while($data = $this->fetchAssoc($RES))
             $this->addRolePerm($data['roleId'], 'User', 'setOption', '*');
 
@@ -267,7 +288,7 @@ class CoreSQLiteHandler {
         $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Multisite\', \'getMaps\', \'*\')');
 
         // Assign the new permission to the managers, users, guests
-        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or \'Users (read-only)\' or name=\'Guests\'');
+        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
         while($data = $this->fetchAssoc($RES)) {
             $this->addRolePerm($data['roleId'], 'Multisite', 'getMaps', '*');
         }
@@ -410,6 +431,14 @@ class CoreSQLiteHandler {
         $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Map\', \'add\', \'*\')');
 
         $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'MainCfg\', \'edit\', \'*\')');
+
+        // Access control: View URLs e.g. in rotation pools
+        $this->DB->query('INSERT INTO perms (mod, act, obj) VALUES (\'Url\', \'view\', \'*\')');
+        
+        // Assign the new permission to the managers, users, guests
+        $RES = $this->DB->query('SELECT roleId FROM roles WHERE name=\'Managers\' or name=\'Users (read-only)\' or name=\'Guests\'');
+        while($data = $this->fetchAssoc($RES))
+            $this->addRolePerm($data['roleId'], 'Url', 'view', '*');
 
         /*
          * Administrators handling
