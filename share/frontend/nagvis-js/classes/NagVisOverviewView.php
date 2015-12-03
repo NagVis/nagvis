@@ -30,7 +30,6 @@ class NagVisOverviewView {
         $arr = Array();
 
         $arr['view_type']          = 'overview';
-        $arr['cellsperrow']        = (int) cfg('index', 'cellsperrow');
         $arr['showmaps']           = (int) cfg('index', 'showmaps');
         $arr['showgeomap']         = (int) cfg('index', 'showgeomap');
         $arr['showmapthumbs']      = (int) cfg('index', 'showmapthumbs');
