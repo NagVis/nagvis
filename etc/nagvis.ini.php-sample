@@ -316,8 +316,6 @@
 [index]
 ; Color of the overview background
 ;backgroundcolor=#ffffff
-; Set number of map cells per row
-;cellsperrow=4
 ; enable/disable header menu
 ;headermenu="1"
 ; header template

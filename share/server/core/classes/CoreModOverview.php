@@ -284,7 +284,6 @@ class CoreModOverview extends CoreModule {
     public function parseIndexPropertiesJson() {
         $arr = Array();
 
-        $arr['cellsperrow']        = (int) cfg('index', 'cellsperrow');
         $arr['showmaps']           = (int) cfg('index', 'showmaps');
         $arr['showgeomap']         = (int) cfg('index', 'showgeomap');
         $arr['showmapthumbs']      = (int) cfg('index', 'showmapthumbs');

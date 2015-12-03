@@ -105,6 +105,7 @@ Core:
 Frontend:
   * Huge update of GUI design for a more consistent look n feel
   * Overview page uses whole page width (floating layout) for maps
+  * Deprecated "cellsperrow" configuration option in [index] section
   * URLs of shape images can now be configured via configuration dialog
   * Added std_table.php gadget which can render state tables for any stateful object type
     (Thanks to Thibault Cohen for providing the idea and base code!)
