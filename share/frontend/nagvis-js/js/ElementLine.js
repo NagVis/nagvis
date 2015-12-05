@@ -469,7 +469,7 @@ var ElementLine = Element.extend({
             labelWidth = this.getLabelWidth(txt);
             this.obj.trigger_obj.appendChild(
                 renderNagVisTextbox(this.obj.conf.object_id+'-link'+(id+1),
-                                    '#ffffff', '#000000', (x-labelWidth), parseInt(y + yOffset),
+                                    '#ffffff', '#000000', (x-labelWidth), parseInt(y + labelHeight / 2),
                                     this.obj.conf.z, 'auto', 'auto', '<b>' + txt + '</b>'));
         }
     },
