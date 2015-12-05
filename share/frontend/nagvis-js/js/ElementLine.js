@@ -465,7 +465,7 @@ var ElementLine = Element.extend({
 
         // Paint the second label in case of line type 14
         if (this.obj.conf.line_type == '14') {
-            txt = this.perfdata[id*2][1] + this.perfdata[id*2][2];
+            txt = this.perfdata[2+id][1] + this.perfdata[2+id][2];
             labelWidth = this.getLabelWidth(txt);
             this.obj.trigger_obj.appendChild(
                 renderNagVisTextbox(this.obj.conf.object_id+'-link'+(id+1),

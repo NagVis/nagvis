@@ -2,6 +2,7 @@
 Frontend:
   * FIX: Fixed JS error in case of re-rendering stateless objects
   * FIX: Fixed JS error "yOffset is not defined" when rendering lines of type 14
+  * FIX: Fixed wrong label for inbound absolute traffic on lines of type 14
 
 1.9b3
 Core:
