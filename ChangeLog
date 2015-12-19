@@ -4,6 +4,10 @@ Frontend:
   * FIX: Fixed JS error "yOffset is not defined" when rendering lines of type 14
   * FIX: Fixed wrong label for inbound absolute traffic on lines of type 14
 
+Core:
+  * FIX: Fixed issue "The attribute is unknown." when adding/editing objects
+         with PHP < 5.4
+
 1.9b3
 Core:
   * FIX: NDO/IDO backend: Correctly excluding deprecated objects from hosts and

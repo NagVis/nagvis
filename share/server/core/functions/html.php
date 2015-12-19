@@ -150,7 +150,8 @@ function hidden_vars() {
     global $form_keys, $form_name;
     //if (submitted($form_name) || !submitted()) {
     foreach ($_REQUEST AS $key => $val) {
-        if (!isset($form_keys[$key])) {
+        // $_REQUEST might contain $_COOKIES. Skip these vars.
+        if (!isset($form_keys[$key]) && !isset($_COOKIE[$key])) {
             hidden($key, $val);
         }
     }

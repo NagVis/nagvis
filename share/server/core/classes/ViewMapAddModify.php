@@ -51,6 +51,9 @@ class ViewMapAddModify {
         );
         $attrDefs = $this->MAPCFG->getValidObjectType($this->object_type);
         foreach ($_REQUEST as $attr => $val) {
+            // $_REQUEST might contain cookie infos. Skipt them.
+            if (isset($_COOKIE[$attr]))
+                continue;
             if (substr($attr, 0, 7) == 'toggle_' || substr($attr, 0, 1) == '_' || isset($exclude[$attr]))
                 continue;
 
@@ -85,7 +88,7 @@ class ViewMapAddModify {
         // FIXME: Are all given attrs valid ones?
         foreach($this->attrs AS $key => $val) {
             if(!isset($attrDefs[$key]))
-                throw new FieldInputError($key, l('The attribute is unknown.'));
+                throw new FieldInputError($key, l('The attribute "[A]" is unknown.', array("A" => $key)));
             if(isset($attrDefs[$key]['deprecated']) && $attrDefs[$key]['deprecated'] === true)
                 throw new FieldInputError($key, l('The attribute is deprecated.'));
 
