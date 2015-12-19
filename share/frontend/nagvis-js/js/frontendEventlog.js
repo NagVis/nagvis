@@ -22,7 +22,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
 var _eventlog = null;
@@ -59,7 +59,7 @@ function eventlogToggle(store) {
  *
  * Initializes the eventlog when not yet present
  *
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function eventlogInitialize() {
     var doc = document;
@@ -109,7 +109,7 @@ function eventlogInitialize() {
  * @param   String   The component where the message occured
  * @param   String   The severity of the message
  * @param   String   The message
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function eventlog(sComponent, sSeverity, sText) {
     if(typeof(oPageProperties) != 'undefined' && oPageProperties !== null && oPageProperties.event_log && oPageProperties.event_log != '0') {

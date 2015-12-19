@@ -145,7 +145,7 @@ function showFrontendDialog(sUrl, sTitle, sWidth) {
  * Checks the keys which are entered to the object search field
  * if the user hits enter it searches for the matching object(s)
  *
- * @author  Lars Michelsen <lars@vertical-visions.de>
+ * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
 function searchObjectsKeyCheck(sMatch, e) {
     var charCode;
@@ -169,7 +169,7 @@ function searchObjectsKeyCheck(sMatch, e) {
  * Searches for matching objects on the map an highlights / focuses
  * the found object(s)
  *
- * @author  Lars Michelsen <lars@vertical-visions.de>
+ * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
 function searchObjects(sMatch) {
     var aResults = [];
@@ -312,7 +312,7 @@ function refreshMapObject(event, objectId, only_state) {
  *
  * @param   Integer  Index in g_view.objects
  * @param   Integer  Iterator for number of left runs
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function playSound(objectId, iNumTimes){
     var sSound = '';
@@ -372,7 +372,7 @@ function playSound(objectId, iNumTimes){
  * @param   Integer  Index in g_view.objects
  * @param   Integer  Time remaining in miliseconds
  * @param   Integer  Interval in miliseconds
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function flashIcon(objectId, iDuration, iInterval){
     if(isset(g_view.objects[objectId])) {

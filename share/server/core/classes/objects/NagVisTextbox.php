@@ -24,7 +24,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class NagVisTextbox extends NagVisStatelessObject {
 
@@ -38,7 +38,7 @@ class NagVisTextbox extends NagVisStatelessObject {
      *
      * Just a dummy here (Textbox won't need an icon)
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function fetchIcon() {
         // Nothing to do here, icon is set in constructor

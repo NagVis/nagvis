@@ -29,7 +29,7 @@
  * module handles the information gathered from the webservers vars or the
  * frontend.
  *
- * @author Lars Michelsen <lars@vertical-visions.de>
+ * @author Lars Michelsen <lm@larsmichelsen.com>
  */
 class CoreAuthHandler {
     private $SESS;

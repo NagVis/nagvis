@@ -22,7 +22,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
 /* Comments for jslint */
@@ -326,7 +326,7 @@ function date(format, timestamp) {
 /**
  * Update the worker counter
  *
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function updateWorkerCounter() {
     var oWorkerCounter = document.getElementById('workerLastRunCounter');
@@ -343,7 +343,7 @@ function updateWorkerCounter() {
 /**
  * Function to start the page refresh/rotation
  *
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function rotatePage() {
     if(oRotationProperties.nextStepUrl !== '') {
@@ -362,7 +362,7 @@ function rotatePage() {
  * Function counts down in 1 second intervals. If nextRotationTime is smaller
  * than 0, refresh/rotate
  *
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function rotationCountdown() {
     // Only proceed with counting when rotation is enabled and the next step time
@@ -395,7 +395,7 @@ function rotationCountdown() {
 /**
  * Function gets the value of url params
  *
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function getUrlParam(name) {
     var name2 = name.replace('[', '\\[').replace(']', '\\]');
@@ -452,7 +452,7 @@ function makeuri(addparams) {
 /**
  * Function to set the rotation switch label dynamicaly
  *
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function setRotationLabel() {
     if(oRotationProperties.rotationEnabled == true) {
@@ -467,7 +467,7 @@ function setRotationLabel() {
 /**
  * Function to start/stop the rotation
  *
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function switchRotation() {
     if(oRotationProperties.rotationEnabled == true) {
@@ -563,7 +563,7 @@ function getScrollLeft() {
 /**
  * Scrolls the screen to the defined coordinates
  *
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function scrollSlow(iTargetX, iTargetY, iSpeed) {
     var currentScrollTop = getScrollTop();
@@ -647,7 +647,7 @@ function scrollSlow(iTargetX, iTargetY, iSpeed) {
  *
  * Escapes some evil signs in the url parameters
  *
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function escapeUrlValues(sStr) {
     if(typeof sStr === undefined || sStr === null || sStr === '') {
@@ -691,7 +691,7 @@ function escapeUrlValues(sStr) {
  * Function to dumping arrays/objects in javascript for debugging purposes
  * Taken from http://refactormycode.com/codes/226-recursively-dump-an-object
  *
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function oDump(object, depth, max){
     depth = depth || 0;
@@ -731,7 +731,7 @@ function oLength(object) {
 /**
  * Detect firefox browser
  *
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function isFirefox() {
   return navigator.userAgent.indexOf("Firefox") > -1;
@@ -754,7 +754,7 @@ function isFirefox() {
  * Hope the use here in NagVis is ok for license reasons. If not please contact me.
  * Slightly extended for NagVis
  *
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 addDOMLoadEvent = (function(){
     // create event function stack
@@ -827,7 +827,7 @@ addDOMLoadEvent = (function(){
  * eventlog. It also displays an error box to the user.
  * It returns true to let the browser also handle the error.
  *
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function handleJSError(sMsg, sUrl, iLine) {
     if(!isset(sUrl))
@@ -860,7 +860,7 @@ try {
 /**
  * Cross browser mapper to add an event to an object
  *
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function addEvent(obj, type, fn) {
    if(obj.addEventListener) {
@@ -892,7 +892,7 @@ function preventDefaultEvents(event) {
 /**
  * Displays a system status message
  *
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function displayStatusMessage(msg, type, hold) {
     var iMessageTime = 5000;
@@ -949,7 +949,7 @@ function hideStatusMessage() {
  * Creates a html box on the map. Used by textbox objects, labels and line labels
  *
  * @return  Object  Returns the div object of the textbox
- * @author  Lars Michelsen <lars@vertical-visions.de>
+ * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
 function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, customStyle) {
     var oLabelDiv = document.createElement('div');
@@ -1056,7 +1056,7 @@ function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, cust
  * Scales a hex color down/up
  *
  * @return  String  New and maybe scaled hex code
- * @author  Lars Michelsen <lars@vertical-visions.de>
+ * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
 function lightenColor(code, rD, gD, bD) {
     var r = parseInt(code.substring(1, 3), 16);
@@ -1077,7 +1077,7 @@ function lightenColor(code, rD, gD, bD) {
 /**
  * Handles regular expressions in NagVis js frontend (including regex cache)
  *
- * @author  Lars Michelsen <lars@vertical-visions.de>
+ * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
 function getRegEx(n, exp, mod) {
     if(typeof(regexCache[n]) !== 'undefined')
@@ -1095,7 +1095,7 @@ function getRegEx(n, exp, mod) {
 /**
  * Sends a user option to the server using an async json request
  *
- * @author  Lars Michelsen <lars@vertical-visions.de>
+ * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
 function storeUserOption(key, value) {
     // Set in current page
@@ -1111,7 +1111,7 @@ function storeUserOption(key, value) {
 /**
  * Checks if a variable is set
  *
- * @author  Lars Michelsen <lars@vertical-visions.de>
+ * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
 function isset(v) {
     return typeof(v) !== 'undefined' && v !== null;
@@ -1120,7 +1120,7 @@ function isset(v) {
 /**
  * Checks if a variable is an integer
  *
- * @author  Lars Michelsen <lars@vertical-visions.de>
+ * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
 function isInt(v) {
   return parseFloat(v) == parseInt(v) && !isNaN(v);
@@ -1136,7 +1136,7 @@ function isFloat(v) {
 /**
  * Helper to parse px values from dom to numbers
  *
- * @author  Lars Michelsen <lars@vertical-visions.de>
+ * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
 function pxToInt(v) {
     return parseInt(v.replace('px', ''));

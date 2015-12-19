@@ -25,14 +25,14 @@
  *****************************************************************************/
  
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
 /**
  * This implements the function date_default_timezone_set() which is needed
  * since PHP 5.1 by all PHP date functions
  *
- * @author 	Lars Michelsen <lars@vertical-visions.de>
+ * @author 	Lars Michelsen <lm@larsmichelsen.com>
  */
 if(!function_exists('date_default_timezone_set')) {
 	function date_default_timezone_set($timezone_identifier) {
@@ -61,7 +61,7 @@ if(function_exists("date_default_timezone_get"))
  * Function taken from http://de.php.net/json_encode (Steve 01-May-2008 02:35)
  *
  * @param		String		Debug message
- * @author 	Lars Michelsen <lars@vertical-visions.de>
+ * @author 	Lars Michelsen <lm@larsmichelsen.com>
  */
 if (!function_exists('json_encode')) {
         define('COMPAT_JSON_ENCODE', True);
@@ -110,7 +110,7 @@ if (!function_exists('json_encode')) {
  * hope thats okay...
  *
  * @param   String    Debug message
- * @author  Lars Michelsen <lars@vertical-visions.de>
+ * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
 if(!function_exists('json_decode')){
         define('COMPAT_JSON_DECODE', True);

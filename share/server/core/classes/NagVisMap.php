@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class NagVisMap {
     public $MAPOBJ = null;
@@ -36,7 +36,7 @@ class NagVisMap {
      *
      * @param 	GlobalMainCfg 	$MAINCFG
      * @param 	GlobalMapCfg 	$MAPCFG
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($MAPCFG, $getState = GET_STATE, $bIsView = IS_VIEW) {
         global $_BACKEND;
@@ -74,7 +74,7 @@ class NagVisMap {
      *
      * @param   String  The type of request. Can be complete|summary|state
      * @return	String  Json Code
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseObjectsJson($type = 'complete') {
         $arrRet = Array();

@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class CoreRotation {
     private $sPoolName = NULL;
@@ -81,7 +81,7 @@ class CoreRotation {
      *
      * @param   String    Type of the step (map,url)
      * @param   String    Step identifier map name, url, ...
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function stepExists($type, $step) {
         $bRet = false;
@@ -104,7 +104,7 @@ class CoreRotation {
      *
      * @param   String    Type of the step (map,url)
      * @param   String    Step identifier map name, url, ...
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setStep($sType, $sStep, $iStepId = '') {
         // First check if the step exists
@@ -137,7 +137,7 @@ class CoreRotation {
     /**
      * Sets the next step to take
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function setNextStep() {
         if($this->intCurrentStep === FALSE || ($this->intCurrentStep + 1) >= sizeof($this->arrSteps)) {
@@ -151,7 +151,7 @@ class CoreRotation {
     /**
      * Sets the step intervall
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function gatherStepInterval() {
         if($this->sPoolName !== '') {
@@ -164,7 +164,7 @@ class CoreRotation {
     /**
      * Sets the urls of each step in this pool
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function createStepUrls() {
         $htmlBase = cfg('paths', 'htmlbase');
@@ -180,7 +180,7 @@ class CoreRotation {
     /**
      * Sets the steps which are defined in this pool
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function gatherSteps() {
         $this->arrSteps = cfg('rotation_'.$this->sPoolName, 'maps');
@@ -189,7 +189,7 @@ class CoreRotation {
     /**
      * Checks if the specified rotation pool exists
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkPoolExists() {
         global $CORE;
@@ -206,7 +206,7 @@ class CoreRotation {
      * Returns the next time to refresh or rotate in seconds
      *
      * @return	Integer		Returns The next rotation time in seconds
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getStepInterval() {
         return $this->intInterval;
@@ -217,7 +217,7 @@ class CoreRotation {
      * If Next map is in [ ], it will be an absolute url
      *
      * @return	String  URL to rotate to
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getCurrentStepLabel() {
         return $this->arrSteps[$this->intCurrentStep]['label'];
@@ -228,7 +228,7 @@ class CoreRotation {
      * If Next map is in [ ], it will be an absolute url
      *
      * @return	String  URL to rotate to
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getCurrentStepUrl() {
         return $this->arrSteps[$this->intCurrentStep]['target'];
@@ -239,7 +239,7 @@ class CoreRotation {
      * If Next map is in [ ], it will be an absolute url
      *
      * @return	String  URL to rotate to
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getNextStepUrl() {
         return $this->arrSteps[$this->intNextStep]['target'];
@@ -249,7 +249,7 @@ class CoreRotation {
      * Gets the name of the pool
      *
      * @return	Integer
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getPoolName() {
         return $this->sPoolName;
@@ -259,7 +259,7 @@ class CoreRotation {
      * Gets the url of a specific step
      *
      * @return	Integer
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getStepUrlById($intId) {
         return $this->arrSteps[$intId]['target'];
@@ -269,7 +269,7 @@ class CoreRotation {
      * Gets the label of a specific step
      *
      * @return	Integer
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getStepLabelById($intId) {
         return $this->arrSteps[$intId]['label'];
@@ -279,7 +279,7 @@ class CoreRotation {
      * Gets the number of steps
      *
      * @return	Integer
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getNumSteps() {
         return sizeof($this->arrSteps);
@@ -291,7 +291,7 @@ class CoreRotation {
      * Gets the rotation properties for the current view as array
      *
      * @return  Array    Rotation properties
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getRotationProperties() {
         $arr = Array();

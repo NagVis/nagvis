@@ -270,7 +270,7 @@ var View = Base.extend({
      * the elements are scaled to the viewports width.
      * This changes the behaviour and resizes the 100% elements to the map size.
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     scaleView: function() {
         var header  = document.getElementById('header');

@@ -26,7 +26,7 @@
  * Class for handlin the PHP sessions. The sessions are used to store
  * information between loading different pages.
  *
- * @author Lars Michelsen <lars@vertical-visions.de>
+ * @author Lars Michelsen <lm@larsmichelsen.com>
  */
 class CoreSessionHandler {
 

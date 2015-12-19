@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class NagVisHoverMenu {
     private $CORE;
@@ -40,7 +40,7 @@ class NagVisHoverMenu {
      * Class Constructor
      *
      * @param 	GlobalCore 	$CORE
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($CORE, $templateName, $OBJ = NULL) {
         $this->CORE = $CORE;
@@ -83,7 +83,7 @@ class NagVisHoverMenu {
      * Reads the contents of the hover template file
      *
      * @return	String		HTML Code for the hover menu
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function readTemplate() {
         if($this->checkTemplateReadable(1)) {
@@ -99,7 +99,7 @@ class NagVisHoverMenu {
      *
      * Replaces static macros like paths and language strings in template code
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function replaceStaticMacros() {
         // Replace the static macros (language, paths)
@@ -195,7 +195,7 @@ class NagVisHoverMenu {
      * Print the HTML code
      *
      * return   String  HTML Code
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __toString () {
         return $this->code;
@@ -208,7 +208,7 @@ class NagVisHoverMenu {
      *
      * @param		Boolean		Switch for enabling/disabling error messages
      * @return	Boolean		Check Result
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkTemplateReadable($printErr) {
         return GlobalCore::getInstance()->checkReadable($this->pathTemplateFile, $printErr);
@@ -221,7 +221,7 @@ class NagVisHoverMenu {
      *
      * @param		Boolean		Switch for enabling/disabling error messages
      * @return	Boolean		Check Result
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkTemplateExists($printErr) {
         return GlobalCore::getInstance()->checkExisting($this->pathTemplateFile, $printErr);

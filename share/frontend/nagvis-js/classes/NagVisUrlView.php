@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class NagVisUrlView {
     private $url = '';
@@ -34,7 +34,7 @@ class NagVisUrlView {
      * Class Constructor
      *
      * @param    String          $NAME
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct(GlobalCore $CORE, $url) {
         $this->url = $url;
@@ -43,7 +43,7 @@ class NagVisUrlView {
     /**
      * Set the page content
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setContent($s) {
         $this->content = $s;
@@ -53,7 +53,7 @@ class NagVisUrlView {
      * Set the rotation properties if the user wants a rotation
      *
      * @param   Array
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setRotation($a) {
         $this->aRotation = $a;
@@ -70,7 +70,7 @@ class NagVisUrlView {
      * Parses the url and the objects for the nagvis-js frontend
      *
      * @return	String 	String with JS Code
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parse() {
         global $_MAINCFG;

@@ -55,7 +55,7 @@ class NagVisOverviewView {
      * Parses the information for json
      *
      * @return	String 	String with Html Code
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parse() {
         global $_MAINCFG, $CORE;

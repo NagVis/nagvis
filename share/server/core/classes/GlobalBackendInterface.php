@@ -3,7 +3,7 @@
  *
  * GlobalBackendInterface.php - Interface for implementing a backend in NagVis
  *
- * Copyright (c) 2004-2010 NagVis Project (Contact: lars@vertical-visions.de)
+ * Copyright (c) 2004-2010 NagVis Project (Contact: lm@larsmichelsen.com)
  *
  * License:
  *
@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
 interface GlobalBackendInterface {

@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class CoreBackendMgmt {
     public $BACKENDS = Array();
@@ -46,7 +46,7 @@ class CoreBackendMgmt {
      * Initializes all backends
      *
      * @param   config  $MAINCFG
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct() {
         $this->loadBackends();
@@ -71,7 +71,7 @@ class CoreBackendMgmt {
      *
      * @param   Array   Queries to be added to the queue
      * @param   Object  Map object to fetch the informations for
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function queue($query, $OBJ) {
         $backendIds = $OBJ->getBackendIds();
@@ -137,7 +137,7 @@ class CoreBackendMgmt {
      *
      * Resets the backend queue
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function clearQueue() {
         $this->aQueue = Array();
@@ -149,7 +149,7 @@ class CoreBackendMgmt {
      * Executes all backend queries and assigns the gathered information
      * to the objects
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function execute() {
         // Loop all backends
@@ -369,7 +369,7 @@ class CoreBackendMgmt {
      * 1.) fetch states for all services
      * 2.) fetch state counts for all services
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchServicegroupMemberDetails($backendId, $options, $aObjs) {
         foreach($aObjs AS $name => $OBJS) {
@@ -407,7 +407,7 @@ class CoreBackendMgmt {
      * 1.) fetch states for all hosts
      * 2.) fetch state counts for all hosts
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchHostgroupMemberDetails($backendId, $options, $aObjs) {
         // And then apply them to the objects
@@ -536,7 +536,7 @@ class CoreBackendMgmt {
     /**
      * Loads all backends and prints an error when no backend defined
      *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function loadBackends() {
         global $CORE;
@@ -551,7 +551,7 @@ class CoreBackendMgmt {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkBackendExists($backendId, $printErr) {
         global $CORE;
@@ -568,7 +568,7 @@ class CoreBackendMgmt {
      * Checks if a backend host is status using status
    * information from another backend
      *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function backendAlive($backendId, $statusHost) {
         list($statusBackend, $statusHost) = explode(':', $statusHost, 2);
@@ -594,7 +594,7 @@ class CoreBackendMgmt {
      * Initializes a backend
      *
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function initializeBackend($backendId) {
         if(!$this->checkBackendExists($backendId, false)) {
@@ -637,7 +637,7 @@ class CoreBackendMgmt {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      * @deprecated Please don't use this function anymore
      */
     public function checkBackendInitialized($backendId, $printErr) {
@@ -657,7 +657,7 @@ class CoreBackendMgmt {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkBackendFeature($backendId, $feature, $printErr = 1) {
         $backendClass = 'GlobalBackend'.cfg('backend_'.$backendId, 'backendtype');

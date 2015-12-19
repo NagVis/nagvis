@@ -22,7 +22,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
 var NagVisStatefulObject = NagVisObject.extend({
@@ -103,7 +103,7 @@ var NagVisStatefulObject = NagVisObject.extend({
      *
      * Saves the current state in last state array for later change detection
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     saveLastState: function() {
         this.last_state = {
@@ -121,7 +121,7 @@ var NagVisStatefulObject = NagVisObject.extend({
      *
      * Check if a state change occured since last refresh
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     stateChanged: function() {
         if(this.conf.summary_state != this.last_state.summary_state ||
@@ -139,7 +139,7 @@ var NagVisStatefulObject = NagVisObject.extend({
      *
      * Check if a state change occured to a worse state
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     stateChangedToWorse: function() {
         var lastSubState = 'normal';
@@ -194,7 +194,7 @@ var NagVisStatefulObject = NagVisObject.extend({
      *
      * Check if an output/perfdata change occured since last refresh
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     outputOrPerfdataChanged: function() {
         return this.conf.output != this.last_state.output || this.conf.perfdata != this.last_state.perfdata;
@@ -356,7 +356,7 @@ var NagVisStatefulObject = NagVisObject.extend({
     /**
      * Replaces macros of urls and hover_urls
      *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     replaceMacros: function () {
         var name = '';

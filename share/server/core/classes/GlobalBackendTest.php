@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 /**
- * @author  Lars Michelsen  <lars@vertical-visions.de>
+ * @author  Lars Michelsen  <lm@larsmichelsen.com>
  */
 class GlobalBackendTest implements GlobalBackendInterface {
     private $backendId = '';
@@ -411,7 +411,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * at the moment when the class is destroyed. It is
      * important to close the socket in a clean way.
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __destruct() {}
 
@@ -421,7 +421,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * Returns the valid config for this backend
      *
      * @return	Array
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function getValidConfig() {
         return Array();
@@ -437,7 +437,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @param   String   Name2 of the objecs
      * @return  Array    Results of the query
    * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getObjects($type, $name1Pattern = '', $name2Pattern = '') {
         switch($type) {
@@ -484,7 +484,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @param   Array     List of objects to query
      * @param   Array     List of filters to apply
      * @return  String    Parsed filters
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function parseFilter($objects, $filters) {
         $aFilters = Array();
@@ -542,7 +542,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @param   Array     List of objects to query
      * @param   Array     List of filters to apply
      * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostState($objects, $options, $filters) {
         /*if($options & 1)
@@ -585,7 +585,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
      *
      * @param   Array     List of objects to query
      * @param   Array     List of filters to apply
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServiceState($objects, $options, $filters) {
         $objFilter = $this->parseFilter($objects, $filters);
@@ -650,7 +650,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @param   Bitmask   This is a mask of options to use during the query
      * @param   Array     List of filters to apply
      * @return  Array     List of states and counts
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostMemberCounts($objects, $options, $filters) {
         /*if($options & 1)
@@ -705,7 +705,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @param   Array     List of objects to query
      * @param   Array     List of filters to apply
      * @return  Array     List of states and counts
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostgroupStateCounts($objects, $options, $filters) {
         /*if($options & 1)
@@ -766,7 +766,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @param   Array     List of objects to query
      * @param   Array     List of filters to apply
      * @return  Array     List of states and counts
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServicegroupStateCounts($objects, $options, $filters) {
         /*if($options & 1)
@@ -846,7 +846,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @param   String   Hostname
      * @return  Array    List of hostnames
    * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact=false) {
         return $this->getDirectParentNamesByHostName($hostName);

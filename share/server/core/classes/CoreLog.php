@@ -28,7 +28,7 @@ class CoreLog {
      * Writes the debug output to the debug file
      *
      * @param   String    Debug message
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function l($msg) {
         if($this->FILE === null)

@@ -4,7 +4,7 @@
 # Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
 #
 # Development:
-#  Lars Michelsen <lars@vertical-visions.de>
+#  Lars Michelsen <lm@larsmichelsen.com>
 #
 # License:
 #

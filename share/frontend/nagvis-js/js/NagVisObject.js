@@ -171,7 +171,7 @@ var NagVisObject = Base.extend({
      *
      * Loads view specific options. Basically this options are triggered by url params
      *
-     * @author Lars Michelsen <lars@vertical-visions.de>
+     * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     loadViewOpts: function() {
         // Do not load the view options for stateless lines
@@ -192,7 +192,7 @@ var NagVisObject = Base.extend({
      *
      * Sets the time of last status update of this object
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     setLastUpdate: function() {
         this.lastUpdate = iNow;
@@ -224,7 +224,7 @@ var NagVisObject = Base.extend({
      * Locks/Unlocks the object and fires dependent actions
      * It returns +1,-1 or 0 depending on the final state of the object
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     toggleLock: function(lock) {
         var equal = false;
@@ -299,7 +299,7 @@ var NagVisObject = Base.extend({
      * which is simply returned or a reference to another object and/or
      * a specified anchor of the object.
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     parseCoord: function(val, dir, addZoom) {
         if (addZoom === undefined)
@@ -345,7 +345,7 @@ var NagVisObject = Base.extend({
      * Wrapper for the parseCoord method to parse multiple coords at once
      * e.g. for lines.
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     parseCoords: function(val, dir, addZoom) {
         var l = [];
@@ -495,7 +495,7 @@ var NagVisObject = Base.extend({
      * another object this function detects it and transforms the abslute px
      * coordinate to a relative coordinate and returns it.
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     calcNewCoord: function(val, dir, num) {
         if(!isset(num))
@@ -539,7 +539,7 @@ var NagVisObject = Base.extend({
      * configuration. Returns a object where the keys are the gathered
      * parent object ids.
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     getParentObjectIds: function(num) {
         var parentIds = {};
@@ -579,7 +579,7 @@ var NagVisObject = Base.extend({
      * gathered automatically by the frontend. Child positions depend
      * on the related parent position on the map -> relative positioning.
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     addChild: function(obj) {
         if(this.childs.indexOf(obj) === -1)

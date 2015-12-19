@@ -35,7 +35,7 @@ function listAvailableLanguages() {
 }
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class GlobalMainCfg {
     private $useCache = true;
@@ -55,7 +55,7 @@ class GlobalMainCfg {
      * Class Constructor
      *
      * @param	Array $configFile    List of paths to configuration files
-     * @author Lars Michelsen <lars@vertical-visions.de>
+     * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct() {
         $this->validConfig = Array(
@@ -1536,7 +1536,7 @@ class GlobalMainCfg {
      * Gets the cookie domain from the webservers environment and sets the
      * session cookie domain to this value
      *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function setCookieDomainByEnv() {
         if(isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME'] !== '') {
@@ -1549,7 +1549,7 @@ class GlobalMainCfg {
      * definitions were moved to the backends so it is easier to create new
      * backends without any need to modify the main configuration
      *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getBackendValidConf() {
         // Get the configuration options from the backends
@@ -1574,7 +1574,7 @@ class GlobalMainCfg {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function setPathsByBase($base, $htmlBase) {
         $this->validConfig['paths']['cfg']['default']                = $base.'etc/';
@@ -1621,7 +1621,7 @@ class GlobalMainCfg {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      * @author	Roman Kyrylych <rkyrylych@op5.com>
      */
     private function getBasePath() {
@@ -1636,7 +1636,7 @@ class GlobalMainCfg {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function readConfig($configFile, $printErr=1, $isUserMainCfg = False) {
         $numComments = 0;
@@ -1812,7 +1812,7 @@ class GlobalMainCfg {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkMainConfigIsValid($printErr) {
         // check given objects and attributes
@@ -1940,7 +1940,7 @@ class GlobalMainCfg {
      * Returns the last modification time of the configuration file
      *
      * @return	Integer	Unix Timestamp
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getConfigFileAge() {
         $newest = 0;
@@ -1956,7 +1956,7 @@ class GlobalMainCfg {
      *
      * @return  Boolean  Result
      * @return  Integer  Unix timestamp of cache creation time or -1 when not cached
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function isCached() {
         return $this->useCache;
@@ -1969,7 +1969,7 @@ class GlobalMainCfg {
      * @param	String	$var	Variable
      * @param	String	$val	Value
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setValue($sec, $var, $val) {
         if(isset($this->config[$sec][$var]) && $val == '') {
@@ -2104,7 +2104,7 @@ class GlobalMainCfg {
      * A getter to provide all section names of main configuration
      *
      * @return  Array  List of all sections as values
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getSections() {
         $aRet = Array();
@@ -2120,7 +2120,7 @@ class GlobalMainCfg {
      * @param	String	$var	Variable
      * @param	String	$val	Value
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setRuntimeValue($var, $val) {
         $this->runtimeConfig[$var] = $val;
@@ -2132,7 +2132,7 @@ class GlobalMainCfg {
      *
      * @param	String	$var	Variable
      * @return	String	$val	Value
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getRuntimeValue($var) {
         return isset($this->runtimeConfig[$var]) ? $this->runtimeConfig[$var] : '';
@@ -2142,7 +2142,7 @@ class GlobalMainCfg {
      * Parses general settings
      *
      * @return	String 	JSON Code
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseGeneralProperties() {
         $p = Array(
@@ -2176,7 +2176,7 @@ class GlobalMainCfg {
      * Parses the settings for the javascript worker
      *
      * @return	String 	JSON Code
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseWorkerProperties() {
         return json_encode(Array(
@@ -2229,7 +2229,7 @@ class GlobalMainCfg {
      * Returns an array with the state weight configuration
      *
      * @return  Array
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getStateWeight() {
         return $this->stateWeight;
@@ -2257,7 +2257,7 @@ class GlobalMainCfg {
      *
      * @param   String  Type to get the information for
      * @return  Array   The validConfig array
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     function getValidObjectType($type) {
         return $this->validConfig[$type];
@@ -2267,7 +2267,7 @@ class GlobalMainCfg {
      * Gets the valid configuration array
      *
      * @return	Array The validConfig array
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     function getValidConfig() {
         return $this->validConfig;
@@ -2277,7 +2277,7 @@ class GlobalMainCfg {
      * Gets the configuration array
      *
      * @return	Array The validConfig array
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     function getConfig() {
         return $this->config;
@@ -2288,7 +2288,7 @@ class GlobalMainCfg {
      *
      * @param	String	$sec	Section
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     function setSection($sec) {
         // Try to append new backends after already defined
@@ -2326,7 +2326,7 @@ class GlobalMainCfg {
      *
      * @param	String	$sec	Section
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     function delSection($sec) {
         $this->config[$sec] = '';
@@ -2339,7 +2339,7 @@ class GlobalMainCfg {
      * Writes the config file completly from array $this->configFile
      *
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     function writeConfig() {
         // Check for config file write permissions
@@ -2439,7 +2439,7 @@ class GlobalMainCfg {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     function checkNagVisConfigWriteable($printErr) {
         return GlobalCore::getInstance()->checkWriteable($this->configFiles[count($this->configFiles)-1], $printErr);

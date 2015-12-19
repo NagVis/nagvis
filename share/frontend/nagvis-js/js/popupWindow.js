@@ -22,7 +22,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
 var popupNN6 = document.getElementById && !document.all;
@@ -37,7 +37,7 @@ var dragObj = null;
  *
  * @param   Object   Event object
  * @return  Boolean
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function movemouse(e) {
  if(bDragging) {
@@ -57,7 +57,7 @@ function movemouse(e) {
  *
  * @param   Object   Event object
  * @return  Boolean
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function selectmouse(e) {
     bDragging = true;
@@ -109,7 +109,7 @@ function popupWindowPutContent(oContent) {
  * @param   String   Window title
  * @param   Object   Object containing the contents
  * @return  Boolean
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 function popupWindow(title, oContent, sWidth, closable) {
     if(oContent === null || oContent.code === null)

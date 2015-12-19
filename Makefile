@@ -79,7 +79,7 @@ localize-sniff:
                  --package-name="NagVis $(VERSION)" \
                  --msgid-bugs-address=info\@nagvis.org \
                  -d "NagVis" -o $$PO_FILE `find . -type f | grep .php | xargs` ; \
-	$(SED) -i -e "s/FULL NAME <EMAIL@ADDRESS>/Lars Michelsen <lars@vertical-visions.de>/g" $$PO_FILE ; \
+	$(SED) -i -e "s/FULL NAME <EMAIL@ADDRESS>/Lars Michelsen <lm@larsmichelsen.com>/g" $$PO_FILE ; \
         $(SED) -i -e "s/CHARSET/utf-8/g" $$PO_FILE ; \
         $(SED) -i -e "s/LANGUAGE <LL@li\.org>/NagVis Team <info@nagvis.org>/g" $$PO_FILE ; \
         $(SED) -i -e "s/YEAR-MO-DA HO:MI+ZONE/$$(date +"%Y-%m-%d %H:%M%z")/g" $$PO_FILE ; \

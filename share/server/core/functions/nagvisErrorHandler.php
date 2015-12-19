@@ -27,7 +27,7 @@
  * This is a custom error handling function for submitting PHP errors to the
  * ajax requesting frontend
  *
- * @author     Lars Michelsen <lars@vertical-visions.de>
+ * @author     Lars Michelsen <lm@larsmichelsen.com>
  */
 
 function nagvisException($OBJ) {

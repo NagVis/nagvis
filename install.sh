@@ -7,7 +7,7 @@
 #
 # Development:
 #  Wolfgang Nieder
-#  Lars Michelsen <lars@vertical-visions.de>
+#  Lars Michelsen <lm@larsmichelsen.com>
 #
 # License:
 #
@@ -195,7 +195,7 @@ License: GNU General Public License version 2
 
 Development:
 - Wolfgang Nieder
-- Lars Michelsen <lars@vertical-visions.de>
+- Lars Michelsen <lm@larsmichelsen.com>
 
 EOD
 }

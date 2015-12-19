@@ -47,7 +47,7 @@ class NagVisHost extends NagVisStatefulObject {
      *
      * Fetches the summary state and output from the already set state counts
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function fetchSummariesFromCounts() {
         // Generate summary output
@@ -77,7 +77,7 @@ class NagVisHost extends NagVisStatefulObject {
      *
      * @param   Boolean  Optional flag to disable fetching of the object status
      * @param   Boolean  Optional flag to disable fetching of member status
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function queueState($bFetchObjectState = true, $bFetchMemberState = true) {
         global $_BACKEND;
@@ -103,7 +103,7 @@ class NagVisHost extends NagVisStatefulObject {
      *
      * Applies the fetched state
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function applyState() {
         if($this->problem_msg) {
@@ -139,7 +139,7 @@ class NagVisHost extends NagVisStatefulObject {
      *
      * Fetches the summary state from all services
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchSummaryState() {
         // Get Host state
@@ -157,7 +157,7 @@ class NagVisHost extends NagVisStatefulObject {
      *
      * Adds the current host state to the member state counts
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function addHostStateToStateCounts() {
         $sState = $this->state[STATE];
@@ -175,7 +175,7 @@ class NagVisHost extends NagVisStatefulObject {
      *
      * Fetches the summary output from the object state counts
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchSummaryOutputFromCounts() {
         if(NagVisHost::$langHostStateIs === null)
@@ -228,7 +228,7 @@ class NagVisHost extends NagVisStatefulObject {
      *
      * Fetches the summary output from host and all services
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchSummaryOutput() {
         // Write host state

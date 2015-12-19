@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class GlobalFileCache {
     private $files;
@@ -37,7 +37,7 @@ class GlobalFileCache {
      *
      * @param 	String  File to check
      * @param   String  Path to cache file
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($files, $cacheFile) {
         if(is_string($files)) {
@@ -84,7 +84,7 @@ class GlobalFileCache {
      * Reads the cached things from cache and returns them
      *
      * @return	Cached things
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getCache() {
         return unserialize(file_get_contents($this->cacheFile));
@@ -96,7 +96,7 @@ class GlobalFileCache {
      * @param   Things which should be written to cache
      * @param   Boolean $printErr
      * @return  Boolean	Is Successful?
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function writeCache($contents, $printErr=1) {
         // Perform file writeable check only when cache file exists
@@ -127,7 +127,7 @@ class GlobalFileCache {
      *
      * @param   Boolean  $printErr
      * @return  Integer  Unix timestamp of cache creation time or -1 when not cached
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function isCached($printErr = false) {
         // Checks
@@ -151,7 +151,7 @@ class GlobalFileCache {
      *
      * @param   Boolean  $printErr
      * @return  Boolean  Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkCacheFolderWriteable($printErr) {
         return GlobalCore::getInstance()->checkWriteable(dirname($this->cacheFile), $printErr);
@@ -162,7 +162,7 @@ class GlobalFileCache {
      *
      * @param   Boolean  $printErr
      * @return  Boolean  Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkCacheFileWriteable($printErr) {
         return GlobalCore::getInstance()->checkWriteable($this->cacheFile, $printErr);
@@ -173,7 +173,7 @@ class GlobalFileCache {
      *
      * @param   Boolean  $printErr
      * @return  Boolean  Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkCacheFileExists($printErr) {
         return GlobalCore::getInstance()->checkExisting($this->cacheFile, $printErr);
@@ -183,7 +183,7 @@ class GlobalFileCache {
      * Returns the last modification time of the template file
      *
      * @return  Integer  Unix Timestamp
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getFileAge() {
         return $this->fileAge;
@@ -193,7 +193,7 @@ class GlobalFileCache {
      * Returns the last modification time of the cache file
      *
      * @return  Integer  Unix Timestamp
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getCacheFileAge() {
         return $this->cacheFileAge;

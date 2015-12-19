@@ -22,7 +22,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  *
  * Note: I found some of the functions below (ddMenu*) at several places in
  * the net. So I don't know about the real author and could not add any note here.

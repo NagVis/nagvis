@@ -23,7 +23,7 @@
  ******************************************************************************/
 
 /**
- * @author Lars Michelsen <lars@vertical-visions.de>
+ * @author Lars Michelsen <lm@larsmichelsen.com>
  */
 class CoreModOverview extends CoreModule {
     private $htmlBase;
@@ -133,7 +133,7 @@ class CoreModOverview extends CoreModule {
      * for the listed objects.
      *
      * @return	String  Json Code
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      * FIXME: More cleanups, compacting and extraction of single parts
      */
     public function parseMapsJson($what = COMPLETE, $objects = Array()) {
@@ -243,7 +243,7 @@ class CoreModOverview extends CoreModule {
      * Parses the rotations for the overview page
      *
      * @return	String  Json Code
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseRotationsJson() {
         global $AUTHORISATION, $CORE;
@@ -273,7 +273,7 @@ class CoreModOverview extends CoreModule {
     /**
      * Returns the filetype
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getFileType($imgPath) {
         $imgSize = getimagesize($imgPath);
@@ -298,7 +298,7 @@ class CoreModOverview extends CoreModule {
     /**
      * Creates thumbnail images for the index map
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function createThumbnail($imgPath, $thumbPath) {
         global $CORE;

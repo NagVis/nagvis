@@ -27,7 +27,7 @@
  * problem with other autoloaders from external code
  *
  * @param   String  Name of the requested class
- * @author 	Lars Michelsen <lars@vertical-visions.de>
+ * @author 	Lars Michelsen <lm@larsmichelsen.com>
  */
 function NagVisAutoload($sClass) {
 	if(substr($sClass, 0, 8) === 'Frontend' 

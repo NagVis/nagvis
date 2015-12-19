@@ -24,7 +24,7 @@
  *****************************************************************************/
  
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
 /**

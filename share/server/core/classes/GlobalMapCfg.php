@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class GlobalMapCfg {
     public $BACKGROUND;
@@ -126,7 +126,7 @@ class GlobalMapCfg {
      * Gets the default values for the different object types
      *
      * @param   Boolean  Only fetch global type settings
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function gatherTypeDefaults($onlyGlobal) {
         $types = array('global');
@@ -222,7 +222,7 @@ class GlobalMapCfg {
      * Initializes the map configuration file caching
      *
      * @param   String   Path to the configuration file
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function setConfigFile($file) {
         $this->configFile = $file;
@@ -231,7 +231,7 @@ class GlobalMapCfg {
     /**
      * Initializes the map configuration file caching
      *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function initCache() {
         if($this->cacheFile !== '') {
@@ -244,7 +244,7 @@ class GlobalMapCfg {
      * Initializes the background image
      *
      * @return	GlobalBackground
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getBackground() {
         $RET = new GlobalBackground($this->getValue(0, 'map_image'));
@@ -255,7 +255,7 @@ class GlobalMapCfg {
      * Creates a new Configfile
      *
      * @return	Boolean	Is Successful?
-     * @author Lars Michelsen <lars@vertical-visions.de>
+     * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public function createMapConfig() {
         global $CORE;
@@ -398,7 +398,7 @@ class GlobalMapCfg {
      * Reads the map config file (copied from readFile->readNagVisCfg())
      *
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function readMapConfig($onlyGlobal = false, $resolveTemplates = true,
                                   $useCache = true, $enforceSources = false) {
@@ -823,7 +823,7 @@ class GlobalMapCfg {
      *
      * @param   String   Name of the template
      * @return  Integer  ID of the template
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getTemplateIdByName($name) {
         foreach($this->mapConfig AS $id => $arr) {
@@ -841,7 +841,7 @@ class GlobalMapCfg {
      * Merges the object which "use" a template with the template values
      *
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function mergeTemplates() {
         // Loop all objects
@@ -889,7 +889,7 @@ class GlobalMapCfg {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkMapConfigExists($printErr) {
         global $CORE;
@@ -903,7 +903,7 @@ class GlobalMapCfg {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function checkMapConfigReadable($printErr) {
         global $CORE;
@@ -914,7 +914,7 @@ class GlobalMapCfg {
      * Generates a new object id for an object on the map
      *
      * @return  String  The object ID
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function genObjId($s) {
         return substr(sha1($s), 0, 6);
@@ -925,7 +925,7 @@ class GlobalMapCfg {
      * and unique object id. Objects without valid object
      * IDs will get a new one generated
      *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function verifyObjectIds() {
         $toBeWritten = Array();
@@ -967,7 +967,7 @@ class GlobalMapCfg {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkMapConfigIsValid() {
         global $CORE;
@@ -1058,7 +1058,7 @@ class GlobalMapCfg {
      *
      * @param   String  Specific object type
      * @return  Array   Valid object keys
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getValidTypeKeys($sType) {
         $aRet = Array();
@@ -1074,7 +1074,7 @@ class GlobalMapCfg {
      * Gets all valid object types
      *
      * @return  Array  Valid object types
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getValidObjectTypes() {
         $aRet = Array();
@@ -1088,7 +1088,7 @@ class GlobalMapCfg {
      * Gets the default configuration on the map for the given type
      *
      * @return  Array  Array of default options
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getTypeDefaults($type) {
         return $this->typeDefaults[$type];
@@ -1106,7 +1106,7 @@ class GlobalMapCfg {
      *
      * @param	String	$type
      * @return	Array	All elements of this type
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDefinitions($type) {
         // FIXME: Can be replaced?
@@ -1133,7 +1133,7 @@ class GlobalMapCfg {
      *
      * @param   String  Filter regex
      * @return  Array	  List of templates as keys
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getTemplateNames($strMatch = NULL) {
         $a = Array();
@@ -1181,7 +1181,7 @@ class GlobalMapCfg {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     function checkMapCfgFolderWriteable($printErr) {
         global $CORE;
@@ -1197,7 +1197,7 @@ class GlobalMapCfg {
     /**
      * Checks if an element with the given id exists
      *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function objExists($id) {
         return isset($this->mapConfig[$id]);
@@ -1210,7 +1210,7 @@ class GlobalMapCfg {
      * @param	String	$key
      * @param	String	$value
      * @return	Boolean	TRUE
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setValue($id, $key, $value) {
         $prop = $this->getValidObjectType($this->mapConfig[$id]['type']);
@@ -1229,7 +1229,7 @@ class GlobalMapCfg {
      * @param	String	$key
      * @param	Boolean	$ignoreDefault
      * @return	String	Value
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getValue($id, $key, $ignoreDefault = false) {
         if(isset($this->mapConfig[$id]) && isset($this->mapConfig[$id][$key])) {
@@ -1246,7 +1246,7 @@ class GlobalMapCfg {
      * Gets the mapName
      *
      * @return	String	MapName
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getName() {
         return $this->name;
@@ -1256,7 +1256,7 @@ class GlobalMapCfg {
      * Gets the map alias
      *
      * @return	String	Map alias
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAlias() {
         return $this->getValue(0, 'alias');
@@ -1274,7 +1274,7 @@ class GlobalMapCfg {
      * Only selects the wanted objects of the map and removes the others
      *
      * @param   Array of object ids
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function filterMapObjects($objIds) {
         $newConfig =  Array(0 => $this->mapConfig[0]); // keep the global section
@@ -1316,7 +1316,7 @@ class GlobalMapCfg {
     /**
      * Formats a map object for the map configuration file
      *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function formatElement($id) {
         $a = Array();
@@ -1349,7 +1349,7 @@ class GlobalMapCfg {
      *
      * @param	Array	$properties
      * @return	Integer	Id of the Element
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function addElement($type, $properties, $perm = false, $id = null) {
         if($id === null)
@@ -1366,7 +1366,7 @@ class GlobalMapCfg {
     /**
      * Adds the given element at the end of the configuration file
      *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function storeAddElement($id) {
         // First try whether or not there is a source which wants to store
@@ -1389,7 +1389,7 @@ class GlobalMapCfg {
      *
      * @param	Integer	$id
      * @return	Boolean	TRUE
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function deleteElement($id, $perm = false) {
         unset($this->mapConfig[$id]);
@@ -1405,7 +1405,7 @@ class GlobalMapCfg {
      * "_" sign.
      *
      * @param   Integer $id
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function storeDeleteElement($id, $replaceWith = null) {
         // First try whether or not there is a source which wants to store
@@ -1455,7 +1455,7 @@ class GlobalMapCfg {
      * Updates an element in the configuration file with the
      * current object config
      *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function storeUpdateElement($id) {
         // First try whether or not there is a source which wants to store
@@ -1536,7 +1536,7 @@ class GlobalMapCfg {
      * Writes the file contents to the configuration file and removes the cache
      * after finishing the write operation.
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function writeConfig($cfg = null) {
         if($cfg !== null)
@@ -1559,7 +1559,7 @@ class GlobalMapCfg {
      * Gathers the lines of an object by the number of the object
      *
      * @param   Integer $num
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getObjectLinesByNum($num) {
         $count = 0;
@@ -1596,7 +1596,7 @@ class GlobalMapCfg {
      * Gathers the lines of an object by the given object id
      *
      * @param   Integer $id
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getObjectLinesById($id) {
         $start = null;
@@ -1640,7 +1640,7 @@ class GlobalMapCfg {
      *
      * @param   String  Type to get the information for
      * @return  Array   The validConfig array
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getValidObjectType($type) {
         return self::$validConfig[$type];
@@ -1650,7 +1650,7 @@ class GlobalMapCfg {
      * Gets the valid configuration array
      *
      * @return	Array The validConfig array
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getValidConfig() {
         return self::$validConfig;
@@ -1672,7 +1672,7 @@ class GlobalMapCfg {
      * sends it as download to the client.
      *
      * @return	Boolean   Only returns FALSE if something went wrong
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function exportMap() {
         if($this->checkMapConfigReadable(1)) {
@@ -1695,7 +1695,7 @@ class GlobalMapCfg {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkMapConfigWriteable($printErr) {
         global $CORE;
@@ -1706,7 +1706,7 @@ class GlobalMapCfg {
      * Deletes the map configfile
      *
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function deleteMapConfig($printErr=1) {
         global $AUTHORISATION;
@@ -1736,7 +1736,7 @@ class GlobalMapCfg {
      *
      * @param	Boolean $printErr
      * @return	Array/Boolean   Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
    */
     public function checkMapLocked($printErr=1) {
         global $AUTH;
@@ -1779,7 +1779,7 @@ class GlobalMapCfg {
      * Reads the contents of the lockfile
      *
      * @return	Array/Boolean   Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function readMapLock() {
         if($this->checkMapLockReadable(0)) {
@@ -1801,7 +1801,7 @@ class GlobalMapCfg {
      * Writes the lockfile for a map
      *
      * @return	Boolean     Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function writeMapLock() {
         global $CORE, $AUTH;
@@ -1824,7 +1824,7 @@ class GlobalMapCfg {
      * Deletes the lockfile for a map
      *
      * @return	Boolean     Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function deleteMapLock() {
         if($this->checkMapLockWriteable(0)) {
@@ -1840,7 +1840,7 @@ class GlobalMapCfg {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkMapLockExists($printErr) {
         global $CORE;
@@ -1852,7 +1852,7 @@ class GlobalMapCfg {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkMapLockReadable($printErr) {
         global $CORE;
@@ -1864,7 +1864,7 @@ class GlobalMapCfg {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkMapLockWriteable($printErr) {
         global $CORE;

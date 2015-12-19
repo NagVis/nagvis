@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class NagVisMapView {
     private $MAPCFG    = null;
@@ -41,7 +41,7 @@ class NagVisMapView {
      * Set the search value if the user searches for an object
      *
      * @param   String    Search string
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setSearch($s) {
         $this->search = $s;
@@ -51,7 +51,7 @@ class NagVisMapView {
      * Set the rotation properties if the user wants a rotation
      *
      * @param   Array
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setRotation($a) {
         $this->aRotation = $a;
@@ -72,7 +72,7 @@ class NagVisMapView {
      * Parses the map and the objects for the nagvis-js frontend
      *
      * @return	String 	String with JS Code
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parse() {
         global $_MAINCFG, $CORE;
@@ -110,7 +110,7 @@ class NagVisMapView {
      * defined values which maybe given by url or session
      *
      * @return  String  JSON array
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function parseViewProperties() {
         global $AUTHORISATION;

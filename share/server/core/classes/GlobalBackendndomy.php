@@ -24,7 +24,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
 class GlobalBackendndomy implements GlobalBackendInterface {
@@ -86,7 +86,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * @param	config $MAINCFG
      * @param	String $backendId
      * @author	Andreas Husch <downanup@nagios-wiki.de>
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($backendId) {
         $this->backendId = $backendId;
@@ -156,7 +156,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * Checks if the needed tables are in the DB
      *
      * @return	Boolean
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkTablesExists() {
         if(mysql_num_rows($this->mysqlQuery('SHOW TABLES LIKE \''.$this->dbPrefix.'programstatus\'')) == 0) {
@@ -173,7 +173,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * Connects to DB
      *
      * @return	Boolean
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function connectDB() {
         // don't want to see mysql errors from connecting - only want our error messages
@@ -205,7 +205,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * Checks if MySQL is supported in this PHP version
      *
      * @return	Boolean
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkMysqlSupport() {
         // Check availability of PHP MySQL
@@ -223,7 +223,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * Returns the instanceId of the instanceName
      *
      * @return	String $ret
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getInstanceId() {
         $intInstanceId = NULL;
@@ -252,7 +252,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      *
      * @param   String      MySQL Query
      * @return	Handle      Query Handle
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function mysqlQuery($query) {
         // Can be used for debugging queries
@@ -269,7 +269,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * Returns the valid config for this backend
      *
      * @return	Array
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function getValidConfig() {
         return self::$validConfig;
@@ -283,7 +283,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      *
      * @param	string $type, string $name1Pattern, string $name2Pattern
      * @return	array $ret
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      * @author	Andreas Husch <downanup@nagios-wiki.de>
      */
     public function getObjects($type,$name1Pattern='',$name2Pattern='') {
@@ -376,7 +376,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * Checks if there are some object records with is_active=1
      *
      * @return	Boolean
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkForIsActiveObjects() {
         if(mysql_num_rows($this->mysqlQuery('SELECT object_id FROM '.$this->dbPrefix.'objects WHERE is_active=1')) > 0) {
@@ -392,7 +392,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * Checks if there are some object records with config_type=1
      *
      * @return	Boolean
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkConfigTypeObjects() {
         if(mysql_num_rows($this->mysqlQuery('SELECT host_id FROM '.$this->dbPrefix.'hosts WHERE config_type=1 AND instance_id='.$this->dbInstanceId.' LIMIT 1')) > 0) {
@@ -412,7 +412,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * @param   String    Table to use for filtering
      * @param   Boolean   Split the filter by options
      * @return  String    Parsed filters
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function parseFilter($objects, $filters, $table, $childTable, $isMemberQuery = false,
                                            $isCountQuery = false, $isHostQuery = true) {
@@ -493,7 +493,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      *
      * @param	string $hostName
      * @return	bool $ack
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getHostAckByHostname($hostName) {
         $return = 0;
@@ -530,7 +530,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      *
      * Returns the Nagios state and additional information for the requested host
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostState($objects, $options, $filters, $isMemberQuery = false) {
         $arrReturn = Array();
@@ -660,7 +660,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      *
      * Returns the state and additional information of the requested service
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServiceState($objects, $options, $filters, $isMemberQuery = false) {
         $arrReturn = Array();
@@ -818,7 +818,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * @param   Array     List of objects to query
      * @param   Array     List of filters to apply
      * @return  Array     List of states and counts
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostMemberCounts($objects, $options, $filters) {
         if($options & 1)
@@ -1116,7 +1116,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * Gets all hosts with no parent host. This method is needed by the automap
      * to get the root host.
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostNamesWithNoParent() {
         $arrReturn = Array();
@@ -1148,7 +1148,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      *
      * @param		String		Name of host to get the parents of
      * @return	Array			Array with hostnames
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectParentNamesByHostName($hostName) {
         $aParentNames = Array();
@@ -1180,7 +1180,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      *
      * @param		String		Name of host to get the children of
      * @return	Array			Array with hostnames
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectChildNamesByHostName($hostName) {
         $arrChildNames = Array();
@@ -1214,7 +1214,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      *
      * @param		String		Name of hostgroup to get the hosts of
      * @return	Array			Array with hostnames
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostsByHostgroupName($hostgroupName) {
         $arrReturn = Array();
@@ -1250,7 +1250,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      *
      * @param		String		Name of servicegroup to get the services of
      * @return	Array			Array with hostnames and service descriptions
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServicesByServicegroupName($servicegroupName) {
         $arrReturn = Array();
@@ -1286,7 +1286,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      *
      * @param	String		    Name of servicegroup
      * @return	Array			Array with object information
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServicegroupInformations($servicegroupName) {
         $arrReturn = Array();
@@ -1318,7 +1318,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      *
      * @param	String		    Name of group
      * @return	Array			Array with object information
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostgroupInformations($groupName) {
         $arrReturn = Array();
@@ -1360,7 +1360,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * @param   String   Hostname
      * @return  Array    List of hostnames
    * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact=false) {
         return $this->getDirectParentNamesByHostName($hostName);

@@ -23,7 +23,7 @@
  ******************************************************************************/
 
 /**
- * @author Lars Michelsen <lars@vertical-visions.de>
+ * @author Lars Michelsen <lm@larsmichelsen.com>
  */
 class CoreModuleHandler {
     protected $CORE;
@@ -45,7 +45,7 @@ class CoreModuleHandler {
      * before loading.
      *
      * @param  String  Name of the module to load
-     * @author Lars Michelsen <lars@vertical-visions.de>
+     * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public function loadModule($sModule) {
         // Check if module class is registered
@@ -67,7 +67,7 @@ class CoreModuleHandler {
      * to be loaded.
      *
      * @param  String  Name of the module to register
-     * @author Lars Michelsen <lars@vertical-visions.de>
+     * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public function regModule($sModule) {
         // Check if module class exists

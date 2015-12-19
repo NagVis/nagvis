@@ -26,7 +26,7 @@
  * This class handles all authorisation tasks and is the glue between the
  * application and the different authorisation modules.
  *
- * @author Lars Michelsen <lars@vertical-visions.de>
+ * @author Lars Michelsen <lm@larsmichelsen.com>
  */
 class CoreAuthorisationHandler {
     private $sModuleName = '';

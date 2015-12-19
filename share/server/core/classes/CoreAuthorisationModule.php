@@ -26,7 +26,7 @@
  * Abstract definition of a CoreAuthorisationModule
  * All authorisaiton modules should extend this class
  *
- * @author Lars Michelsen <lars@vertical-visions.de>
+ * @author Lars Michelsen <lm@larsmichelsen.com>
  */
 abstract class CoreAuthorisationModule {
     abstract public function parsePermissions($sUsername = null);

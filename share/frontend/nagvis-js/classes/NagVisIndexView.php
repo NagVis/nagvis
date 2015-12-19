@@ -24,7 +24,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class NagVisIndexView {
     private $sSubtitle = '';
@@ -55,7 +55,7 @@ class NagVisIndexView {
      * Parses the map and the objects for the nagvis-js frontend
      *
      * @return	String 	String with JS Code
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parse() {
         // Initialize template system
@@ -82,7 +82,7 @@ class NagVisIndexView {
      * Checks if the compressed javascript file exists
      *
      * @return	Boolean
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkJsCompressed() {
         return file_exists(cfg('paths', 'js').'NagVisCompressed.js');

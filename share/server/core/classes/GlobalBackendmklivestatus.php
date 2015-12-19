@@ -29,7 +29,7 @@
 
 /**
  * @author  Mathias Kettner <mk@mathias-kettner.de>
- * @author  Lars Michelsen  <lars@vertical-visions.de>
+ * @author  Lars Michelsen  <lm@larsmichelsen.com>
  *
  * For mor information about CheckMK's Livestatus Module
  * please visit: http://mathias-kettner.de/checkmk_livestatus.html
@@ -65,7 +65,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * @param   String        ID if the backend
    * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($backendId) {
         $this->backendId = $backendId;
@@ -94,7 +94,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * at the moment when the class is destroyed. It is
      * important to close the socket in a clean way.
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __destruct() {
         if($this->SOCKET !== null) {
@@ -109,7 +109,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * Parses and sets the socket options
      *
      * @return  String    Parses the socket
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function parseSocket($socket) {
         // Explode the given socket definition
@@ -139,7 +139,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * Returns the valid config for this backend
      *
      * @return	Array
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function getValidConfig() {
         return self::$validConfig;
@@ -151,7 +151,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * Checks if the socket exists
      *
      * @return  Boolean
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkSocketExists() {
         return file_exists($this->socketPath);
@@ -162,7 +162,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Connects to the livestatus socket when no connection is open
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function connectSocket() {
         // Only try to connect once per page. Re-raise the connection exception on
@@ -217,7 +217,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @param   String   Query to send to the socket
      * @return  Array    Results of the query
      * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function queryLivestatus($query, $response = true) {
         // Only connect when no connection opened yet
@@ -328,7 +328,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * @param   Integer  Number of bytes to read
      * @return  String   The read bytes
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function readSocket($len) {
         $offset = 0;
@@ -358,7 +358,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @param   String   Query to send to the socket
      * @return  Array    Results of the query
    * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function queryLivestatusSingleRow($query) {
         $l = $this->queryLivestatus($query);
@@ -377,7 +377,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @param   String   Query to send to the socket
      * @return  Array    Results of the query
    * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function queryLivestatusSingleColumn($query) {
         $l = $this->queryLivestatus($query);
@@ -398,7 +398,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @param   String   Query to send to the socket
      * @return  Array    Results of the query
    * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function queryLivestatusList($query) {
         $l = $this->queryLivestatus($query);
@@ -440,7 +440,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @param   String   Name2 of the objecs
      * @return  Array    Results of the query
      * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getObjects($type, $name1Pattern = '', $name2Pattern = '', $add_filter = '') {
         $ret = Array();
@@ -485,7 +485,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @param   Array     List of objects to query
      * @param   Array     List of filters to apply
      * @return  String    Parsed filters
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function parseFilter($objects, $filters, $isMemberQuery = false,
                                  $isCountQuery = false, $isHostQuery = true) {
@@ -694,7 +694,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @param   Array     List of objects to query
      * @param   Array     List of filters to apply
      * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostState($objects, $options, $filters, $isMemberQuery = false) {
         $objFilter = $this->parseFilter($objects, $filters, $isMemberQuery, !COUNT_QUERY, HOST_QUERY);
@@ -807,7 +807,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @param   Array     List of objects to query
      * @param   Array     List of filters to apply
      * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServiceState($objects, $options, $filters, $isMemberQuery = false) {
         $objFilter = $this->parseFilter($objects, $filters, $isMemberQuery, !COUNT_QUERY, !HOST_QUERY);
@@ -1268,7 +1268,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @param   Array     List of objects to query
      * @param   Array     List of filters to apply
      * @return  Array     List of states and counts
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostgroupStateCounts($objects, $options, $filters) {
         $host_filter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, HOST_QUERY);
@@ -1291,7 +1291,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @param   Array     List of objects to query
      * @param   Array     List of filters to apply
      * @return  Array     List of states and counts
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServicegroupStateCounts($objects, $options, $filters) {
         $objFilter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
@@ -1362,7 +1362,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * @return  Array    List of hostnames which have no parent
    * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostNamesWithNoParent() {
         return $this->queryLivestatusSingleColumn("GET hosts\nColumns: name\nFilter: parents =\n");
@@ -1376,7 +1376,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @param   String   Hostname
      * @return  Array    List of hostnames
    * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectChildNamesByHostName($hostName) {
         return $this->queryLivestatusList("GET hosts\nColumns: childs\nFilter: name = ".$hostName."\n");
@@ -1390,7 +1390,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @param   String   Hostname
      * @return  Array    List of hostnames
    * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectParentNamesByHostName($hostName) {
         return $this->queryLivestatusList("GET hosts\nColumns: parents\nFilter: name = ".$hostName."\n");
@@ -1498,7 +1498,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @param   String   Hostname
      * @return  Array    List of hostnames
    * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact=false) {
         $query = "GET hosts\nColumns: parent_dependencies\nFilter: name = ".$hostName."\n";

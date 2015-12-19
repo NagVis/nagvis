@@ -23,7 +23,7 @@
  *****************************************************************************/
  
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 define('MATCH_ALL', '/^.*$/i');
 define('MATCH_NOT_EMPTY', '/^.+$/');

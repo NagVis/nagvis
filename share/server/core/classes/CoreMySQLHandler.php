@@ -23,7 +23,7 @@
  ******************************************************************************/
 
 /**
- * @author Lars Michelsen <lars@vertical-visions.de>
+ * @author Lars Michelsen <lm@larsmichelsen.com>
  */
 class CoreMySQLHandler {
     private $DB = null;
@@ -45,7 +45,7 @@ class CoreMySQLHandler {
      * Connects to DB
      *
      * @return	Boolean
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function connectDB($host, $port, $db, $user, $pw) {
         // don't want to see mysql errors from connecting - only want our error messages

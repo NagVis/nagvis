@@ -23,7 +23,7 @@
  ******************************************************************************/
 
 /**
- * @author Lars Michelsen <lars@vertical-visions.de>
+ * @author Lars Michelsen <lm@larsmichelsen.com>
  */
 abstract class CoreModule {
     protected $UHANDLER = null;
@@ -38,7 +38,7 @@ abstract class CoreModule {
     /**
      * Tells if the module offers the requested action
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function offersAction($sAction) {
         return isset($this->aActions[$sAction]);
@@ -47,7 +47,7 @@ abstract class CoreModule {
     /**
      * Stores the requested action in the module
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setAction($sAction) {
         if(!$this->offersAction($sAction))
@@ -60,7 +60,7 @@ abstract class CoreModule {
     /**
      * Tells wether the requested action requires the users autorisation
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function actionRequiresAuthorisation() {
         return isset($this->aActions[$this->sAction]) && $this->aActions[$this->sAction] !== !REQUIRES_AUTHORISATION;
@@ -69,7 +69,7 @@ abstract class CoreModule {
     /**
      * Tells wether the requested object is available
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function offersObject($sObject) {
         return isset($this->aObjects[$sObject]);
@@ -79,7 +79,7 @@ abstract class CoreModule {
      * Stores the requested object name in the module
      * when it is supported
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setObject($sObject) {
         if(!$this->offersObject($sObject)) {
@@ -97,7 +97,7 @@ abstract class CoreModule {
     /**
      *  Returns the object string
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getObject() {
         return $this->sObject;
@@ -106,7 +106,7 @@ abstract class CoreModule {
     /**
      * Checks if the user is permitted to perform the requested action
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function isPermitted() {
         global $AUTHORISATION;
@@ -128,7 +128,7 @@ abstract class CoreModule {
     /**
      * Initializes the URI handler object
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function initUriHandler() {
         $this->UHANDLER = new CoreUriHandler();
@@ -149,7 +149,7 @@ abstract class CoreModule {
     /**
      * Reads a list of custom variables from the request
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function getCustomOptions($aKeys, $aDefaults = Array(), $mixed = false) {
         if($mixed) {
@@ -186,7 +186,7 @@ abstract class CoreModule {
      * when using different actions. So these special modules
      * can implement that by overriding this method.
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function initObject() {}
 
@@ -194,14 +194,14 @@ abstract class CoreModule {
      * This method needs to be implemented by each module
      * to handle the user called action
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     abstract public function handleAction();
 
     /**
      * Helper function to handle default form responses
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function handleResponse($validationHandler, $action, $successMsg = null,
                                         $failMessage = null, $reload = null, $redirectUrl = null) {
@@ -233,7 +233,7 @@ abstract class CoreModule {
     /**
      * Checks if the listed values are set. Otherwise it raises and error message
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function verifyValuesSet($HANDLER, $list) {
         // Check if the array is assoc. When it isn't re-format it.
@@ -253,7 +253,7 @@ abstract class CoreModule {
      * Checks if the listes values match the given patterns. Otherwise it raises
      * an error message.
      *
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function verifyValuesMatch($HANDLER, $list) {
         foreach($list AS $key => $pattern)

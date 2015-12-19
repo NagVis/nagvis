@@ -78,7 +78,7 @@
  *
  * @param   String  Nagios performance data
  * @return  Array   Array which contains parsed performance data information
- * @author      Lars Michelsen <lars@vertical-visions.de>
+ * @author      Lars Michelsen <lm@larsmichelsen.com>
  */
 function parsePerfdata($sPerfdata) {
 	$aMatches = Array();
@@ -154,7 +154,7 @@ function parsePerfdata($sPerfdata) {
  * Prints out an error box
  *
  * @param       String  $msg    String with error message
- * @author      Lars Michelsen <lars@vertical-visions.de>
+ * @author      Lars Michelsen <lm@larsmichelsen.com>
  */
 function errorBox($msg) {
     global $_MODE;

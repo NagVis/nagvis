@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class GlobalLanguage {
     private $USERCFG = null;
@@ -36,7 +36,7 @@ class GlobalLanguage {
      * Class Constructor
      *
      * @param	String			$type		Type of language-file
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($textDomain = 'nagvis') {
         $this->textDomain = $textDomain;
@@ -87,7 +87,7 @@ class GlobalLanguage {
      * Reads the language to use in NagVis
      *
      * @return  String
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function gatherCurrentLanguage() {
         $sReturn = '';
@@ -140,7 +140,7 @@ class GlobalLanguage {
      * Checks if the user requested a language by the url
      *
      * @return  String
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getUserLanguage() {
         $sLang = '';
@@ -167,7 +167,7 @@ class GlobalLanguage {
      * which is available
      *
      * @return  String
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getBrowserLanguage() {
         $return = Array();
@@ -214,7 +214,7 @@ class GlobalLanguage {
      * Returns the string representing the current language
      *
      * @return  String
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getCurrentLanguage() {
         return $this->sCurrentLanguage;
@@ -227,7 +227,7 @@ class GlobalLanguage {
      * @param   Boolean    Print error message or not
      * @param   Boolean    Check language_available config or not
      * @return  Boolean
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkLanguageAvailable($sLang, $printErr = 1, $ignoreConf = false) {
         global $CORE;
@@ -254,7 +254,7 @@ class GlobalLanguage {
      * @param	String	String to be localized
      * @param	String	Replace options
      * @return	String	Localized String
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getText($id, $replace = null) {
         // Use cache if available
@@ -293,7 +293,7 @@ class GlobalLanguage {
      *
      * @param	String	String to be localized
      * @return	String	Localized String
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getTextOfId($s) {
         return T_gettext($s);
@@ -306,7 +306,7 @@ class GlobalLanguage {
      * @param   String        String Plain language string
      * @param   String/Array  String or Array with macros to replace
      * @return  String        String Replaced language string
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     static public function getReplacedString($sLang, $replace) {
         if(!is_array($replace)) {

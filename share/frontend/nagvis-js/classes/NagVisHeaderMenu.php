@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class NagVisHeaderMenu {
     private $OBJ;
@@ -57,7 +57,7 @@ class NagVisHeaderMenu {
      *
      * Tells the header menu that the current view is rotating
      *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setRotationEnabled() {
         $this->bRotation = true;
@@ -67,7 +67,7 @@ class NagVisHeaderMenu {
      * Print the HTML code
      *
      * return   String  HTML Code
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __toString() {
         global $AUTH, $AUTHORISATION, $UHANDLER;
@@ -89,7 +89,7 @@ class NagVisHeaderMenu {
      * Returns a list of available languages for the header menus macro list
      *
      * return   Array
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getLangList() {
         global $CORE;
@@ -134,7 +134,7 @@ class NagVisHeaderMenu {
      * Returns a list of maps for the header menus macro list
      *
      * return   Array
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getMapList() {
         global $_MAINCFG, $CORE, $AUTHORISATION;
@@ -237,7 +237,7 @@ class NagVisHeaderMenu {
      *
      * Returns all macros for the header template
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getMacros() {
         global $CORE, $AUTH, $AUTHORISATION, $UHANDLER;
@@ -333,7 +333,7 @@ class NagVisHeaderMenu {
      * It either returns the language tag for the current language when a
      * documentation exists or en_US as fallback when no docs exist
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getDocLanguage() {
         global $CORE;
@@ -348,7 +348,7 @@ class NagVisHeaderMenu {
      *
      * Get all static macros for the template code
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getStaticMacros() {
         global $SHANDLER, $AUTH, $AUTHORISATION, $UHANDLER;
@@ -432,7 +432,7 @@ class NagVisHeaderMenu {
      *
      * @param 	Boolean	$printErr
      * @return	Boolean	Is Check Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkTemplateReadable($printErr) {
         global $CORE;

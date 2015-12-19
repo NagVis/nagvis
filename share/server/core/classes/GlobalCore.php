@@ -25,7 +25,7 @@
 /**
  * class GlobalCore
  *
- * @author  Lars Michelsen <lars@vertical-visions.de
+ * @author  Lars Michelsen <lm@larsmichelsen.com
  */
 class GlobalCore {
     protected static $MAINCFG = null;
@@ -57,21 +57,21 @@ class GlobalCore {
     /**
      * Deny construct
      *
-     * @author Lars Michelsen <lars@vertical-visions.de>
+     * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     private function __construct() {}
 
     /**
      * Deny clone
      *
-     * @author Lars Michelsen <lars@vertical-visions.de>
+     * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     private function __clone() {}
 
     /**
      * Getter function to initialize MAINCFG
      *
-     * @author Lars Michelsen <lars@vertical-visions.de>
+     * @author Lars Michelsen <lm@larsmichelsen.com>
      * FIXME: Remove this wrapper
      */
     public static function getMainCfg() {
@@ -97,7 +97,7 @@ class GlobalCore {
     /**
      * Setter for AA
      *
-     * @author Lars Michelsen <lars@vertical-visions.de>
+     * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function setAA(CoreAuthHandler $A1, CoreAuthorisationHandler $A2 = null) {
         self::$AUTHENTICATION = $A1;
@@ -107,7 +107,7 @@ class GlobalCore {
     /**
      * Getter function for AUTHORIZATION
      *
-     * @author Lars Michelsen <lars@vertical-visions.de>
+     * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function getAuthorization() {
         return self::$AUTHORIZATION;
@@ -116,7 +116,7 @@ class GlobalCore {
     /**
      * Getter function for AUTHENTICATION
      *
-     * @author Lars Michelsen <lars@vertical-visions.de>
+     * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function getAuthentication() {
         return self::$AUTHENTICATION;
@@ -125,7 +125,7 @@ class GlobalCore {
     /**
      * Static method for getting the instance
      *
-     * @author Lars Michelsen <lars@vertical-visions.de>
+     * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function getInstance() {
         if(self::$instance === null) {
@@ -143,7 +143,7 @@ class GlobalCore {
      *
      * @param	Boolean $printErr
      * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkGd($printErr) {
         if(!extension_loaded('gd')) {
@@ -159,7 +159,7 @@ class GlobalCore {
      * Reads all defined Backend-ids from the main configuration
      *
      * @return	Array Backend-IDs
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDefinedBackends($onlyUserCfg = false) {
         if($onlyUserCfg) {
@@ -182,7 +182,7 @@ class GlobalCore {
      * Gets all rotation pools
      *
      * @return	Array pools
-     * @author Lars Michelsen <lars@vertical-visions.de>
+     * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDefinedRotationPools() {
         $ret = Array();
@@ -230,7 +230,7 @@ class GlobalCore {
      * are enabled by the configuration
      *
      * @return	Array list
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableAndEnabledLanguages() {
         $aRet = Array();
@@ -248,7 +248,7 @@ class GlobalCore {
      * Reads all languages
      *
      * @return	Array list
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableLanguages() {
         return self::listDirectory(self::getMainCfg()->getValue('paths', 'language'), MATCH_LANGUAGE_FILE);
@@ -258,7 +258,7 @@ class GlobalCore {
      * Returns languages of all available documentations
      *
      * @return	Array list
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableDocs() {
         return self::listDirectory(self::getMainCfg()->getValue('paths', 'doc'), MATCH_DOC_DIR);
@@ -268,7 +268,7 @@ class GlobalCore {
      * Reads all available backends
      *
      * @return	Array Html
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableBackends() {
         return self::listDirectory(self::getMainCfg()->getValue('paths', 'class'), MATCH_BACKEND_FILE);
@@ -278,7 +278,7 @@ class GlobalCore {
      * Reads all hover templates
      *
      * @return	Array hover templates
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableHoverTemplates() {
         return array_merge(
@@ -291,7 +291,7 @@ class GlobalCore {
      * Reads all header templates
      *
      * @return	Array list
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableHeaderTemplates() {
         return array_merge(
@@ -304,7 +304,7 @@ class GlobalCore {
      * Reads all header templates
      *
      * @return	Array list
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableContextTemplates() {
         return array_merge(
@@ -317,7 +317,7 @@ class GlobalCore {
      * Reads all PNG images in shape path
      *
      * @return	Array Shapes
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableShapes() {
         return array_merge(
@@ -330,7 +330,7 @@ class GlobalCore {
      * Reads all iconsets in icon path
      *
      * @return	Array iconsets
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableIconsets() {
         return array_merge(
@@ -343,7 +343,7 @@ class GlobalCore {
      * Reads all available sources
      *
      * @return	Array hover templates
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableSources() {
         return array_merge(
@@ -367,7 +367,7 @@ class GlobalCore {
      *
      * @param   String  Iconset name
      * @return	String  Iconset file type
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getIconsetFiletype($iconset) {
         $type = '';
@@ -402,7 +402,7 @@ class GlobalCore {
      *
      * @param   String  Regex to match the map name
      * @return	Array   Array of maps
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableMaps($strMatch = null, $setKey = null) {
         return self::listDirectory(self::getMainCfg()->getValue('paths', 'mapcfg'), MATCH_CFG_FILE, null, $strMatch, null, $setKey);
@@ -465,7 +465,7 @@ class GlobalCore {
      * Reads all map images in map path
      *
      * @return	Array map images
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableBackgroundImages() {
         return array_merge(
@@ -478,7 +478,7 @@ class GlobalCore {
      * Reads all available gadgets
      *
      * @return	Array   Array of gadgets
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableGadgets() {
         return array_merge(
@@ -496,7 +496,7 @@ class GlobalCore {
      * @param   Integer Match part to be returned
      * @param   Boolean Print errors when dir does not exist
      * @return	Array   Sorted list of file names/parts in this directory
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function listDirectory($dir, $allowRegex = null, $ignoreList = null, $allowPartRegex = null, $returnPart = null, $setKey = null, $printErr = true) {
         $files = Array();
@@ -569,7 +569,7 @@ class GlobalCore {
      *
      * @param		Boolean 	$printErr
      * @return	Boolean		Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkVarFolderExists($printErr) {
         return $this->checkExisting(substr(self::getMainCfg()->getValue('paths', 'var'),0,-1), $printErr);
@@ -580,7 +580,7 @@ class GlobalCore {
      *
      * @param		Boolean 	$printErr
      * @return	Boolean		Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkVarFolderWriteable($printErr) {
         return $this->checkWriteable(substr(self::getMainCfg()->getValue('paths', 'var'),0,-1), $printErr);
@@ -591,7 +591,7 @@ class GlobalCore {
      *
      * @param		Boolean 	$printErr
      * @return	Boolean		Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkSharedVarFolderExists($printErr) {
         return $this->checkExisting(substr(self::getMainCfg()->getValue('paths', 'sharedvar'),0,-1), $printErr);
@@ -602,7 +602,7 @@ class GlobalCore {
      *
      * @param		Boolean 	$printErr
      * @return	Boolean		Is Successful?
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkSharedVarFolderWriteable($printErr) {
         return $this->checkWriteable(substr(self::getMainCfg()->getValue('paths', 'sharedvar'),0,-1), $printErr);
@@ -612,7 +612,7 @@ class GlobalCore {
      * Tries to set correct permissions on files
      * Works completely silent - no error messages here
      *
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setPerms($file) {
         try {
@@ -634,7 +634,7 @@ class GlobalCore {
      *
      * @param	  String    Version string
      * @return  Integer   Version as integer
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function versionToTag($s) {
         $s = str_replace('a', '.0.0', str_replace('b', '.0.2', str_replace('rc', '.0.4', $s)));
@@ -657,7 +657,7 @@ class GlobalCore {
      *
      * @param	  Integer   Error code from $_FILE
      * @return  String    The error message
-     * @author  Lars Michelsen <lars@vertical-visions.de>
+     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getUploadErrorMsg($id) {
         switch($id) {

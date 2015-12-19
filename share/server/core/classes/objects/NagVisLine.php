@@ -24,7 +24,7 @@
  *****************************************************************************/
 
 /**
- * @author	Lars Michelsen <lars@vertical-visions.de>
+ * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class NagVisLine extends NagVisStatelessObject {
 
@@ -39,7 +39,7 @@ class NagVisLine extends NagVisStatelessObject {
      *Gets the hover menu of a shape if it is requested by configuration
      *
      * @return	String	The Link
-     * @author 	Lars Michelsen <lars@vertical-visions.de>
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHoverMenu() {
         if(isset($this->hover_url) && $this->hover_url != '') {
@@ -52,7 +52,7 @@ class NagVisLine extends NagVisStatelessObject {
      *
      * Just a dummy here (Shape won't need an icon)
      *
-     * @author	Lars Michelsen <lars@vertical-visions.de>
+     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function fetchIcon() {
         // Nothing to do here, icon is set in constructor
