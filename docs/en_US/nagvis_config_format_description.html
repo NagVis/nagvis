@@ -61,10 +61,10 @@
         <td>audit_log</td><td>0</td><td>Enable/Disable logging of security related user actions in Nagvis. For example user logins and logouts are logged in var/nagvis-audit.log.</td>
         </tr>
         <tr>
-        <td>authmodule</td><td>CoreAuthModSQLite</td><td>Defines the authentication module to use. By default NagVis uses the built-in SQLite authentication module. On delivery there is no other authentication module available. It is possible to add own authentication modules for supporting other authentication mechanism. For details have a look at the <a href="auth_modules.html">authentication module</a> documentation.</td>
+        <td>authmodule</td><td>CoreAuthModSQLite</td><td>Defines the authentication module to use. By default NagVis uses the built-in SQLite authentication module. On delivery there is no other authentication module available. It is possible to add own authentication modules for supporting other authentication mechanism.</td>
         </tr>
         <tr>
-        <td>authorisationmodule</td><td>CoreAuthorisationModSQLite</td><td>Defines the authorisation module to use. By default NagVis uses the built-in SQLite authorisation module. On delivery there is no other authorisation module available. It is possible to add own authorisation modules for supporting other authorisation mechanism. For details have a look at the <a href="authorisation_modules.html">authorisation module</a> documentation.</td>
+        <td>authorisationmodule</td><td>CoreAuthorisationModSQLite</td><td>Defines the authorisation module to use. By default NagVis uses the built-in SQLite authorisation module. On delivery there is no other authorisation module available. It is possible to add own authorisation modules for supporting other authorisation mechanism.</td>
         </tr>
         <tr>
           <td>dateformat</td>
@@ -166,8 +166,7 @@
             multisite when using the cookie based authentication.</p>
 
             <p>It is possible to add own logon modules for serving other
-            dialogs. For details take a look at the 
-            <a href="logon_modules.html">logon module</a> documentation.</p></td>
+            dialogs.</p></td>
         </tr>
         <tr>
         <td>logonenvvar</td><td>REMOTE_USER</td><td>Defines the environment variable to be used for fetching the authenticated user from the webservers environment. This option is only used with the logon modules LogonEnv and LogonMixed.</td>
