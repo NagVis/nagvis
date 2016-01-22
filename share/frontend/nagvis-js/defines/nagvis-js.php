@@ -4,7 +4,7 @@
  * nagvis-js.php - File for nagvis-js frontend related constants and some
  *                 other standards
  *
- * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

@@ -4,7 +4,7 @@
  * NagVisContainer.php - Class of a container object in NagVis with all necessary
  *                  information which belong to the object handling in NagVis
  *
- * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

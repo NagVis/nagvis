@@ -4,7 +4,7 @@
  * CoreLogonMixed.php - Module for handling mixed logins. Uses LogonEnv
  *                             as default and LogonDialog as fallback.
  *
- * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

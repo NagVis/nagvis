@@ -2,7 +2,7 @@
  *
  * tmpl.default.js - javascript for default header template
  *
- * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

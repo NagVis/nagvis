@@ -4,7 +4,7 @@
  * index.php - This file is included by the single index files in NagVis to
  *             consolidate equal code
  *
- * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

@@ -3,7 +3,7 @@
  *
  * GlobalFileCache.php - Class for handling caching of config files etc.
  *
- * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

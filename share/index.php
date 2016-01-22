@@ -3,7 +3,7 @@
  *
  * index.php - Redirects the requests to the frontend index file
  *
- * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

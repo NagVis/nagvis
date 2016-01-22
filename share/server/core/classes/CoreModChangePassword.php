@@ -4,7 +4,7 @@
  * CoreModChangePassword.php - This module handles the password changes of
  *                             the users when using the internal auth db
  *
- * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

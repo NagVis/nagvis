@@ -4,7 +4,7 @@
  * CoreLogonModule.php - Implements some common used code which is used by
  *                       several different logon modules.
  *
- * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

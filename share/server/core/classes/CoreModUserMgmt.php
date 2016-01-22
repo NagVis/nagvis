@@ -3,7 +3,7 @@
  *
  * CoreModUserMgmt.php - Core module for handling the user management tasks
  *
- * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

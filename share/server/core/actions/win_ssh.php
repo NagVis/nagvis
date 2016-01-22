@@ -5,7 +5,7 @@
  *               implements the handler function which generates a file to be
  *               downloaded and used to connect to the target hosts.
  *
- * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *

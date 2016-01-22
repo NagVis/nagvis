@@ -6,7 +6,7 @@
  *           and implements the code to generate a *.rdp file for download
  *           or directly connecting to the hosts via RDP.
  *
- * Copyright (c) 2004-2015 NagVis Project (Contact: info@nagvis.org)
+ * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
  * License:
  *
