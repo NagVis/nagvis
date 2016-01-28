@@ -26,6 +26,21 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
  
+if (!function_exists('microtime_float')) {
+    
+     /**
+     * Returns the current time in microtime as float
+     *
+     * @return	Float		Microtime
+     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     */
+    function microtime_float() {
+        list($usec, $sec) = explode(' ', microtime());
+        return ((float)$usec + (float)$sec);
+    }
+
+}
+
 // Save the start time of NagVis
 define('DEBUGSTART',microtime_float());
 
@@ -56,17 +71,6 @@ function debugFinalize() {
 function log_mem($txt = 'somewhere') {
     if (DEBUG && DEBUGLEVEL & 2)
         debug('mem ['.$txt.']: ' . round(memory_get_usage()/1024/1024, 2) . 'Mb');
-}
-
-/**
- * Returns the current time in microtime as float
- *
- * @return	Float		Microtime
- * @author 	Lars Michelsen <lm@larsmichelsen.com>
- */
-function microtime_float() {
-	list($usec, $sec) = explode(' ', microtime());
-	return ((float)$usec + (float)$sec);
 }
 
 function profilingStart() {

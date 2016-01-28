@@ -61,9 +61,11 @@ function form_error($field, $msg) {
     $form_errors[$field] = $msg;
 }
 
-function get_error($key) {
-    global $form_errors;
-    return isset($form_errors[$key]) ? $form_errors[$key] : array();
+if (!function_exists('get_error')) {
+    function get_error($key) {
+        global $form_errors;
+        return isset($form_errors[$key]) ? $form_errors[$key] : array();
+    }
 }
 
 function success($msg) {
