@@ -206,6 +206,9 @@ class CoreModMultisite extends CoreModule {
                 'hover_childs_show' => 0,
                 'hover_template'    => 'default',
                 'parent_map'        => $MAPCFG->getValue(0, 'parent_map'),
+                // Enforce std_big iconset - don't use map default iconset
+                'iconset'           => 'std_big',
+                'icon_size'         => array(22),
             );
             $MAP->MAPOBJ->setConfiguration($objConf);
 

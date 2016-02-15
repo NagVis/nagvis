@@ -1,3 +1,7 @@
+1.9b5
+Frontend:
+  * Multisite Snapin: Fixed broken snapin contents
+
 1.9b4
 Frontend:
   * FIX: Fixed JS error in case of re-rendering stateless objects
