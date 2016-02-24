@@ -429,7 +429,7 @@ var ElementHover = Element.extend({
                     // Try to catch some error
                     if(!this.obj.members[i].conf) {
                         eventlog("hover-parsing", "critical",
-                                 "Problem while parsing child in hover template (t:" & this.obj.conf.type & " n:" & this.obj.conf.name &")");
+                                 "Problem while parsing child in hover template (t:" + this.obj.conf.type + " n:" + this.obj.conf.name + ")");
                     } else {
                         if(this.obj.members[i].conf.type !== 'textbox' && this.obj.members[i].conf.type !== 'shape') {
                             // Children need to know where they belong
