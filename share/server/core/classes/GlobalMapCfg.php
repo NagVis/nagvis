@@ -1006,8 +1006,12 @@ class GlobalMapCfg {
                     // unknown attribute
                     throw new $exception(l('unknownAttribute', Array('MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type)));
                 } elseif(isset(self::$validConfig[$type][$key]['deprecated']) && self::$validConfig[$type][$key]['deprecated'] === true) {
-                    // deprecated option
-                    throw new $exception(l('mapDeprecatedOption', Array('MAP' => $this->getName(), 'ATTRIBUTE' => $key, 'TYPE' => $type)));
+                    // Silently skip deprecated options. Previously version were throwing exceptions which
+                    // prevented rendering the whole map, but this was not really user friendly. From now
+                    // we write about deprecated options in the changelog and docs and will silently ignore
+                    // them in the code.
+                    //throw new $exception(l('mapDeprecatedOption', Array('MAP' => $this->getName(), 'ATTRIBUTE' => $key, 'TYPE' => $type)));
+                    continue;
                 } else {
                     // The object has a match regex, it can be checked
                     if(isset(self::$validConfig[$type][$key]['match'])) {

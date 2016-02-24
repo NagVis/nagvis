@@ -3,6 +3,10 @@ Frontend:
   * FIX: Multisite Snapin: Fixed broken snapin contents
 
 Core:
+  * Changed handling of deprecated map object attributes: They are silently
+    ignored by NagVis now. We inform users about deprecated (useless)
+    attributes in the ChangeLog and will mark old options in the documentation,
+    but the map loading will not be affected by the deprecated options anymore
   * FIX: Added proper error message when trying to use dynamic groups with NDO
          MySQL backend (which does not support dynamic groups)
 
