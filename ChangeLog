@@ -6,6 +6,10 @@ Core:
   * FIX: Added proper error message when trying to use dynamic groups with NDO
          MySQL backend (which does not support dynamic groups)
 
+Automap:
+  * FIX: Fixed exception when filtering maps by non existant host groups. Now
+         the map is just left empty instead of raising an exception.
+
 1.9b4
 Frontend:
   * FIX: Fixed JS error in case of re-rendering stateless objects

@@ -1398,7 +1398,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
     public function getHostNamesInHostgroup($name) {
         $r = $this->queryLivestatusSingleColumn("GET hostgroups\nColumns: members\nFilter: name = ".$name."\n");
-        return $r[0];
+        if (isset($r[0]))
+            return $r[0];
+        else
+            return array();
     }
 
     // Returns all hostnames which have a state != UP or a service != OK
