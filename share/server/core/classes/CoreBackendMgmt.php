@@ -238,8 +238,15 @@ class CoreBackendMgmt {
             foreach($OBJS AS $OBJ) {
                 try {
                     if($OBJ->object_types == 'service') {
-                        $counts = $this->getBackend($backendId)->getServiceListCounts(
+                        if (!$this->checkBackendFeature($backendId, 'getServiceListCounts', false)) {
+                            $counts = array();
+                            $OBJ->setBackendProblem(l('This type of object is not supportd by this backend ([BACKENDID]).',
+                                  Array('BACKENDID' => $backendId)), $backendId);
+                        }
+                        else {
+                            $counts = $this->getBackend($backendId)->getServiceListCounts(
                                     $options, $OBJ->getObjectFilter());
+                        }
                     } else {
                         if (!$this->checkBackendFeature($backendId, 'getHostAndServiceCounts', false)) {
                             $counts = array();

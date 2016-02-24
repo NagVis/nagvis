@@ -1,6 +1,10 @@
 1.9b5
 Frontend:
-  * Multisite Snapin: Fixed broken snapin contents
+  * FIX: Multisite Snapin: Fixed broken snapin contents
+
+Core:
+  * FIX: Added proper error message when trying to use dynamic groups with NDO
+         MySQL backend (which does not support dynamic groups)
 
 1.9b4
 Frontend:
