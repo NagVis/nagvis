@@ -1391,7 +1391,7 @@ function has_class(o, cn) {
     if (typeof o.className === 'undefined')
         return false;
     var parts = o.className.split(' ');
-    for (x=0; x<parts.length; x++) {
+    for (var x = 0; x < parts.length; x++) {
         if (parts[x] == cn)
             return true;
     }
@@ -1401,7 +1401,7 @@ function has_class(o, cn) {
 function remove_class(o, cn) {
     var parts = o.className.split(' ');
     var new_parts = Array();
-    for (x=0; x<parts.length; x++) {
+    for (var x = 0; x < parts.length; x++) {
         if (parts[x] != cn)
             new_parts.push(parts[x]);
     }
