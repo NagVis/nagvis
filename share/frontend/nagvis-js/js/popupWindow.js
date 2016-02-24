@@ -115,9 +115,6 @@ function popupWindow(title, oContent, sWidth, closable) {
     if(oContent === null || oContent.code === null)
         return false;
 
-    if(typeof openOnMousePosition === 'undefined')
-        openOnMousePosition = true;
-
     if (typeof closable === 'undefined')
         closable = true;
 
@@ -127,11 +124,6 @@ function popupWindow(title, oContent, sWidth, closable) {
     // Default window position
     var posX = getScrollLeft() + (pageWidth()/2 - sWidth/2);
     var posY = getScrollTop() + 50;
-
-    // Detect the current mouse position and create the window there
-    if(openOnMousePosition) {
-        //FIXME: Maybe code this in the future
-    }
 
     var oContainerDiv = document.createElement('div');
     oContainerDiv.setAttribute('id', 'popupWindow');
