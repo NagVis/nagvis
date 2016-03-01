@@ -66,6 +66,11 @@ function get_error($key) {
     return isset($form_errors[$key]) ? $form_errors[$key] : array();
 }
 
+function has_form_error($name) {
+    global $form_errors, $form_name;
+    return (!submitted() || submitted($form_name)) && isset($form_errors[$name]);
+}
+
 function success($msg) {
     msg($msg, 'success');
 }
@@ -129,7 +134,7 @@ function form_start($name, $target, $type = 'POST', $multipart = false) {
     echo '<form id="'.$name.'" name="'.$name.'" action="'.escape_html($target).'" '
         .'method="'.$type.'"'.$multipart.'>'.N;
 
-    if (submitted($form_name))
+    if (submitted($form_name) || !submitted())
         foreach ($form_errors AS $field => $message)
             error($message);
 
@@ -172,12 +177,11 @@ function radio($name, $value, $checked = false) {
 }
 
 function field($type, $name, $default = '', $class = '', $onclick = '', $style = '', $id = null) {
-    global $form_errors, $form_keys, $form_name;
+    global $form_keys, $form_name;
     $form_keys[$name] = true;
 
-    if (submitted($form_name) && isset($form_errors[$name])) {
+    if (has_form_error($name))
         $class .= ' err';
-    }
 
     if(trim($class))
         $class = ' class="'.trim($class).'"';
@@ -227,13 +231,12 @@ function password($name, $default = '', $class = '') {
 }
 
 function textarea($name, $default = '', $class = '', $style = '') {
-    global $form_errors, $form_keys, $form_name;
+    global $form_keys, $form_name;
     $form_keys['very_important'] = true;
 
     $err_class = '';
-    if (submitted($form_name) && isset($form_errors[$name])) {
+    if (has_form_error($name))
         $err_class = ' err';
-    }
 
     if($class != '' || $err_class != '')
         $class = ' class="'.$class.$err_class.'"';
@@ -248,13 +251,12 @@ function textarea($name, $default = '', $class = '', $style = '') {
 }
 
 function select($name, $options, $default = '', $onchange = '', $style = '', $size = null) {
-    global $form_errors, $form_keys, $form_name;
+    global $form_keys, $form_name;
     $form_keys[$name] = true;
 
     $class = '';
-    if (submitted($form_name) && isset($form_errors[$name])) {
+    if (has_form_error($name))
         $class .= ' err';
-    }
 
     if(trim($class))
         $class = ' class="'.trim($class).'"';
@@ -290,6 +292,9 @@ function select($name, $options, $default = '', $onchange = '', $style = '', $si
     }
     $ret .= '</select>'.N;
     echo $ret;
+
+    if (has_form_error($name) && !submitted())
+        error(get_error($name));
 }
 
 function submit($label, $class = '', $name = '_submit') {
@@ -307,13 +312,13 @@ function button($name, $label, $onclick) {
 }
 
 function upload($name) {
-    global $form_keys, $form_errors, $form_name;
+    global $form_keys, $form_name;
     $form_keys[$name] = true;
 
     $class = '';
-    if (submitted($form_name) && isset($form_errors[$name])) {
+    if (has_form_error($name))
         $class .= ' err';
-    }
+
     if(trim($class))
         $class = ' class="'.$class.'"';
 

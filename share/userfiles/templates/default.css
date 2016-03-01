@@ -315,6 +315,7 @@ div#popupWindow div.close {
     border-radius: 5px;
     margin: 2px 0;
     padding: 3px;
+    white-space: normal;
 }
 
 #popupWindowContent div.error code,

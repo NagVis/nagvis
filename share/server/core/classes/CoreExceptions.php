@@ -109,7 +109,7 @@ class NagVisErrorException extends ErrorException {
              . "<code>".str_replace("\n", "<br>\n", $this->getTraceAsString())."</code>";
 
         if (ob_get_level() >= 1) {
-            $buffer = ob_get_clean();
+            $buffer = ob_get_contents();
             if ($buffer)
                 $msg .= 'Output: <pre>'.htmlentities($buffer, ENT_COMPAT, 'UTF-8').'</pre>';
         }
