@@ -46,13 +46,13 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
     );
 
     private static $bi_short_states = Array(
-        'PD' => 'PENDING',
-        'OK' => 'OK',
-        'WA' => 'WARNING',
-        'CR' => 'CRITICAL',
-        'UN' => 'UNKNOWN',
-        'MI' => 'ERROR',
-        'NA' => 'UNREACHABLE',
+        'PD' => -1,
+        'OK' =>  0,
+        'WA' =>  1,
+        'CR' =>  2,
+        'UN' =>  3,
+        'MI' => -2,
+        'NA' =>  4,
     );
 
     // These are the backend local configuration options
@@ -170,7 +170,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
      * Returns the identifiers and names of all business processes
      */
     private function getAggregationNames() {
-        $aggregations = $this->getUrl('view.py?view_name=aggr_all_api');
+        $aggregations = $this->getUrl('view.py?view_name=aggr_all_api&expansion_level=0');
         $names = Array();
         foreach($aggregations AS $aggr) {
             $names[$aggr['aggr_name']] = $aggr['aggr_name'];
@@ -186,14 +186,49 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
     }
 
     private function getAggrElements($aggr) {
+        if (is_array($aggr['aggr_treestate']))
+            return $aggr['aggr_treestate']["nodes"];
+        else
+            return $this->getAggrElementsFromString($aggr["aggr_treestate"]);
+    }
+
+    // Be compatible to Check_MK <1.2.9
+    private function getAggrElementsFromString($aggr_treestate) {
         // remove leading/trailing newlines
-        $raw_states = trim($aggr['aggr_treestate']);
+        $raw_states = trim($aggr_treestate);
         // replace multiple newlines with singe ones
         $raw_states = preg_replace("/[\n]+/", "\n", $raw_states);
         $parts = explode("\n", $raw_states);
         array_shift($parts); // Remove first entry, the summary state
         array_shift($parts);
-        return array_chunk($parts, 2);
+        $pairs = array_chunk($parts, 2);
+
+        $elements = array();
+        foreach ($pairs AS $pair) {
+            list($short_state, $title) = $pair;
+
+            if(!isset(GlobalBackendmkbi::$bi_short_states[$short_state]))
+                throw new BackendException(l('Invalid state: "[S]"',
+                          Array('S' => $s)));
+            $bi_state = GlobalBackendmkbi::$bi_short_states[$short_state];
+
+            $element = array(
+                "title"             => $title,
+                "state"             => $bi_state,
+                // unknown infos in old Check_MK versions:
+                "assumed"           => false,
+                "acknowledged"      => false,
+                "in_downtime"       => false,
+                "in_service_period" => false,
+                // Create some kind of default output when aggregation does
+                // not provide any detail output
+                "output"            => l("BI-State is: [S]",
+                   array("S" => GlobalBackendmkbi::$bi_aggr_states[$bi_state])),
+            );
+            $elements[] = $element;
+        }
+
+        return $elements;
     }
 
     private function getAggrCounts($aggr) {
@@ -229,12 +264,13 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         // Add the single component state counts
         $elements = $this->getAggrElements($aggr);
         foreach ($elements AS $element) {
-            // 0: state short code, 1: element name
-            $s = state_num(GlobalBackendmkbi::$bi_short_states[$element[0]]);
-            if(!isset($c[$s]))
-                throw new BackendException(l('Invalid state: "[S]"',
-                          Array('S' => $s)));
-            $c[$s]['normal']++;
+            $state = $this->getAggrState($element["state"]);
+            if ($element["in_downtime"])
+                $c[$state]['downtime']++;
+            elseif ($element["acknowledged"])
+                $c[$state]['ack']++;
+            else
+                $c[$state]['normal']++;
         }
 
         return $c;
@@ -275,7 +311,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
      * the given objects and filters.
      */
     public function getAggrStateCounts($objects, $options, $filters) {
-        $aggregations = $this->getUrl('view.py?view_name=aggr_all_api&po_aggr_expand=1&po_aggr_treetype=0');
+        $aggregations = $this->getUrl('view.py?view_name=aggr_all_api&expansion_level=1');
 
         $ret = Array();
         foreach($objects AS $key => $OBJS) {
@@ -287,7 +323,10 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
                 'details' => Array(
                     ALIAS => $aggr['aggr_name'],
                     // This forces the aggregation state to be the summary state of the object
-                    STATE => $this->getAggrState($aggr['aggr_state_num']),
+                    STATE    => $this->getAggrState($aggr['aggr_state_num']),
+                    OUTPUT   => "xxxxxxxxxxxxxx",
+                    ACK      => $aggr['aggr_acknowledged'] == "1" ? 1 : 0,
+                    DOWNTIME => $aggr['aggr_in_downtime'] == "1" ? 1 : 0,
                 ),
                 'attrs' => Array(
                     // Forces the URL to point to the BI aggregate
@@ -309,7 +348,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
      * the given objects and filters.
      */
     public function getServiceState($objects, $options, $filters) {
-        $aggregations = $this->getUrl('view.py?view_name=aggr_all_api&po_aggr_expand=1&po_aggr_treetype=0');
+        $aggregations = $this->getUrl('view.py?view_name=aggr_all_api&expansion_level=1');
 
         $ret = Array();
         foreach($objects AS $key => $OBJS) {
@@ -321,14 +360,11 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             // Add the single component state counts
             $elements = $this->getAggrElements($aggr);
             foreach ($elements AS $element) {
-                // 0: state short code, 1: element name
-                $s = state_num(GlobalBackendmkbi::$bi_short_states[$element[0]]);
-
                 $child = array(
-                    $s,
-                    '',  // output
-                    0,
-                    0,
+                    $this->getAggrState($element["state"]),  // state
+                    $element["output"],            // output
+                    $element["acknowledged"],      // acknowledged
+                    $element["in_downtime"],       // in downtime
                     1,  // state type
                     1, // current attempt
                     1, // max check attempts
@@ -337,8 +373,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
                     null, // last hard state change
                     null, // last state change
                     '', // perfdata
-                    $element[1],  // display name
-                    $element[1],  // alias
+                    $element["title"],  // display name
+                    $element["title"],  // alias
                     '',  // address
                     '',  // notes
                     '', // check command
@@ -348,7 +384,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
                     null, // dt start
                     null, // dt end
                     0, // staleness
-                    $element[1] // descr
+                    $element["title"] // descr
                 );
 
                 $ret[$key][] = $child;
