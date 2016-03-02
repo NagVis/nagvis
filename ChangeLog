@@ -10,6 +10,10 @@ Core:
   * BI-Backend: Is now handling the acknowledgement and downtime infos of BI
   * FIX: Added proper error message when trying to use dynamic groups with NDO
          MySQL backend (which does not support dynamic groups)
+  * FIX: Only reading map configuration files with lower ".cfg" suffix. Maps
+         having e.g. an upper case ".CFG" suffix caused problems in NagVis and
+	 will not be read anymore. Please rename your map config files to match
+	 the ".cfg" suffix.
 
 Automap:
   * FIX: Fixed exception when filtering maps by non existant host groups. Now
