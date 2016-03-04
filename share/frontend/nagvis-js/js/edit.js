@@ -21,6 +21,17 @@
  *
  *****************************************************************************/
 
+function getTargetRaw(event) {
+    return event.target ? event.target : event.srcElement;
+}
+
+function getTargetByClass(event, className) {
+    var target = getTargetRaw(event);
+    while (target && !has_class(target, className))
+        target = target.parentNode;
+    return target;
+}
+
 function toggleMapObjectLock(event, object_id) {
     g_view.toggleObjectLock(object_id);
     return preventDefaultEvents(event);
@@ -40,9 +51,19 @@ function toggleAllMapObjectsLock(event) {
     return preventDefaultEvents(event);
 }
 
-/** Object resizing **/
+var draggingEnabled = true;
+var draggingObject = null;
+var dragObjectOffset = null;
+var dragObjectPos = null;
+var dragObjectStartPos = null;
+var dragObjectChilds = {};
+var dragStopHandlers = {};
+var dragMoveHandlers = {};
+var dragObjects      = {};
 
 var g_resize_obj = null; //This gets a value as soon as a resize start
+
+/** Object resizing **/
 
 function g_resize_object() {
     this.el        = null; //pointer to the object
@@ -89,7 +110,7 @@ function resizeMouseDown(event) {
     if (!target || target.id == '')
         return true;
 
-    dir = getDirection(event, target);
+    var dir = getDirection(event, target);
     if (dir == "")
         return true;
 
@@ -219,27 +240,6 @@ function makeUnresizeable(trigger_obj) {
 }
 
 /*** Handles the object dragging ***/
-
-var draggingEnabled = true;
-var draggingObject = null;
-var dragObjectOffset = null;
-var dragObjectPos = null;
-var dragObjectStartPos = null;
-var dragObjectChilds = {};
-var dragStopHandlers = {};
-var dragMoveHandlers = {};
-var dragObjects      = {};
-
-function getTargetRaw(event) {
-    return event.target ? event.target : event.srcElement;
-}
-
-function getTargetByClass(event, className) {
-    var target = getTargetRaw(event);
-    while (target && !has_class(target, className))
-        target = target.parentNode;
-    return target;
-}
 
 function getButton(event) {
     if (event.which == null)
@@ -450,7 +450,7 @@ function coordsReferTo(obj, target_object_id) {
     if (obj.conf.object_id == target_object_id) {
         return true;
     }
-    
+
     if (isRelativeCoord(obj.conf.x)) {
         var xParent = getMapObjByDomObjId(obj.getCoordParent(obj.conf.x, -1));
         if(coordsReferTo(xParent, target_object_id)) {
@@ -596,6 +596,7 @@ function getEventMousePos(event) {
         }
     }
 
+    var posx, posy;
     if (event.pageX || event.pageY) {
         posx = event.pageX;
         posy = event.pageY;
