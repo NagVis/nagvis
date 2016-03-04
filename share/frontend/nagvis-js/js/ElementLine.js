@@ -21,6 +21,190 @@
  *
  *****************************************************************************/
 
+var ElementLineControls = Element.extend({
+    render: function() {
+        // don't render the controls during normal render calls. We
+        // want to keep the number of DOM objects low, so only render
+        // them when being unlocked for the first time. But when the
+        // element has already been rendered, then re-render it!
+        if (this.dom_obj)
+            this._render();
+    },
+
+    draw: function() {
+        // When locked: Don't draw on regular draw calls (only draw when locked/unlocked)
+        if (!this.obj.bIsLocked)
+            this.base();
+    },
+
+    unlock: function() {
+        if (!this.dom_obj)
+            this._render();
+        this._draw();
+    },
+
+    lock: function() {
+        this.erase();
+    },
+
+    place: function() {
+        // FIXME: This should be possible without re-rendering everything
+        if (!this.obj.bIsLocked) {
+            this.erase();
+            this._render();
+            this.draw();
+        }
+    },
+
+    //
+    // END OF PUBLIC METHODS
+    //
+
+    _draw: function() {
+        Element.prototype.draw.call(this);
+    },
+
+    _render: function() {
+        var container = document.createElement('div');
+        container.setAttribute('id', this.obj.conf.object_id+'-controls');
+        this.dom_obj = container;
+
+        var x = this.obj.parseCoords(this.obj.conf.x, 'x');
+        var y = this.obj.parseCoords(this.obj.conf.y, 'y');
+        var size = 10;
+
+        for (var i = 0, l = x.length; i < l; i++)
+            this.renderDragger(i, x[i], y[i], - size / 2, - size / 2, size);
+
+        if (this.hasTwoParts())
+            this.renderMidToggle(x.length+2,
+                this.obj.getLineMid(this.obj.conf.x, 'x'),
+                this.obj.getLineMid(this.obj.conf.y, 'y'),
+                20 - size / 2,
+                -size / 2 + 5,
+                size);
+    },
+
+    hasTwoParts: function() {
+        return this.obj.conf.view_type === 'line'
+               && (this.obj.conf.line_type == 10
+                   || this.obj.conf.line_type == 13
+                   || this.obj.conf.line_type == 14
+                   || this.obj.conf.line_type == 15);
+    },
+
+    renderDragger: function (num, objX, objY, offX, offY, size) {
+        var ctl = document.createElement('div');
+        this.dom_obj.appendChild(ctl);
+        ctl.setAttribute('id', this.obj.conf.object_id+'-drag-' + num);
+        ctl.className = 'control drag';
+        // FIXME: Multilanguage
+        ctl.title          = 'Move object';
+        ctl.style.zIndex   = parseInt(this.obj.conf.z)+1;
+        ctl.style.width    = addZoomFactor(size) + 'px';
+        ctl.style.height   = addZoomFactor(size) + 'px';
+        ctl.style.left     = (objX + offX) + 'px';
+        ctl.style.top      = (objY + offY) + 'px';
+        ctl.objOffsetX     = offX;
+        ctl.objOffsetY     = offY;
+
+        var img = document.createElement('img');
+        img.src = '../../frontend/nagvis-js/images/internal/control_drag.png';
+        img.style.width    = addZoomFactor(size) + 'px';
+        img.style.height   = addZoomFactor(size) + 'px';
+        ctl.appendChild(img);
+
+        makeDragable(ctl, this.obj, this.obj.saveObject, this.obj.moveObject);
+    },
+
+    // Adds the modify button to the controls including all eventhandlers
+    renderMidToggle: function (num, objX, objY, offX, offY, size) {
+        var ctl = document.createElement('div');
+        this.dom_obj.appendChild(ctl);
+        ctl.setAttribute('id', this.obj.conf.object_id+'-togglemid-' + num);
+        ctl.className = 'control togglemid';
+	// FIXME: Multilanguage
+        if (this.obj.bIsLocked)
+	    ctl.title = 'Unlock line middle';
+        else
+	    ctl.title = 'Lock line middle';
+        ctl.style.zIndex   = parseInt(this.obj.conf.z)+1;
+        ctl.style.width    = addZoomFactor(size) + 'px';
+        ctl.style.height   = addZoomFactor(size) + 'px';
+        ctl.style.left     = (objX + offX) + 'px';
+        ctl.style.top      = (objY + offY) + 'px';
+        ctl.objOffsetX     = offX;
+        ctl.objOffsetY     = offY;
+
+        var img = document.createElement('img');
+        if (this.isMidLocked())
+            img.src = '../../frontend/nagvis-js/images/internal/control_locked.png';
+        else
+            img.src = '../../frontend/nagvis-js/images/internal/control_unlocked.png';
+        img.style.width    = addZoomFactor(size) + 'px';
+        img.style.height   = addZoomFactor(size) + 'px';
+        ctl.appendChild(img);
+
+        addEvent(ctl, 'click', function(element_obj) {
+            return function(event) {
+                event = event || window.event;
+                element_obj.toggleMidLock();
+	        contextHide();
+                return preventDefaultEvents(event);
+            };
+        }(this));
+        ctl = null;
+    },
+
+    isMidLocked: function() {
+        return this.obj.conf.x.split(',').length == 2;
+    },
+
+    /**
+     * Toggles the position of the line middle. The mid of the line
+     * can either be the 2nd of three line coords or is automaticaly
+     * the middle between two line coords.
+     */
+    toggleMidLock: function() {
+        // What is the current state?
+        var x = this.obj.conf.x.split(',');
+        var y = this.obj.conf.y.split(',')
+
+        if (this.isMidLocked()) {
+            // The line has 2 coords configured
+            // - Calculate and add the 3rd coord as 2nd
+            // - Add a drag control for the 2nd coord
+            this.obj.conf.x = [
+              x[0],
+              middle(this.obj.parseCoords(this.obj.conf.x, 'x', false)[0], this.obj.parseCoords(this.obj.conf.x, 'x', false)[1], this.obj.conf.line_cut),
+              x[1],
+            ].join(',');
+            this.obj.conf.y = [
+                y[0],
+                middle(this.obj.parseCoords(this.obj.conf.y, 'y', false)[0], this.obj.parseCoords(this.obj.conf.y, 'y', false)[1], this.obj.conf.line_cut),
+                y[1],
+            ].join(',');
+        } else {
+            // The line has 3 coords configured
+            // - Remove the 2nd coord
+            // - Remove the drag control for the 2nd coord
+            this.obj.conf.x = [ x[0], x[2] ].join(',');
+            this.obj.conf.y = [ y[0], y[2] ].join(',');
+        }
+
+        var parts = g_view.unproject(this.obj.conf.x.toString().split(','),
+                                     this.obj.conf.y.toString().split(','));
+        var x = parts[0].join(',');
+        var y = parts[1].join(',');
+
+        // send to server
+        saveObjectAttr(this.obj.conf.object_id, {'x': x, 'y': y});
+
+        // redraw the whole object
+        this.obj.render();
+    }
+});
+
 var ElementLine = Element.extend({
     line_container : null,
     parts          : null,
@@ -503,38 +687,48 @@ var ElementLine = Element.extend({
         */
         var perf = this.parsePerfdataString();
 
-        try {
-            if (!perf)
-                throw "Perfdata string is empty";
-
-            if (!isset(perf[0]))
-                throw "Value 1 is empty";
-
-            if (!isset(perf[1]))
-                throw "Value 2 is empty";
-
-            if (this.obj.conf.line_type == 14) {
-                if (!isset(perf[2]))
-                    throw "Value 3 is empty";
-
-                if (!isset(perf[3]))
-                    throw "Value 4 is empty";
-            }
-
-            // This is the correct place to handle other perfdata format than the percent value
-            // When no UOM is set try to calculate something...
-            // This can fix the perfdata values from Check_MKs if and if64 checks.
-            // The assumption is that there are perfdata values 'in' and 'out' with byte rates
-            // and maximum values given to be able to calculate the percentage usage
-            if (perf[0][2] === null || perf[0][2] === ''
-               || perf[1][2] === null || perf[1][2] === '') {
-                perf = this.calculateUsage(perf);
-            }
-
-            this.perfdata = perf;
-        } catch(e) {
-            this.obj.conf.summary_output += ' (Weathermap Line Error: ' + e + ')';
+        if (!perf) {
+            this.addWeathermapLineError("Perfdata string is empty");
+            return;
         }
+
+        if (!isset(perf[0])) {
+            this.addWeathermapLineError("Value 1 is empty");
+            return;
+        }
+
+        if (!isset(perf[1])) {
+            this.addWeathermapLineError("Value 2 is empty");
+            return;
+        }
+
+        if (this.obj.conf.line_type == 14) {
+            if (!isset(perf[2])) {
+                this.addWeathermapLineError("Value 3 is empty");
+                return;
+            }
+
+            if (!isset(perf[3])) {
+                this.addWeathermapLineError("Value 4 is empty");
+                return;
+            }
+        }
+
+        // This is the correct place to handle other perfdata format than the percent value
+        // When no UOM is set try to calculate something...
+        // This can fix the perfdata values from Check_MKs if and if64 checks.
+        // The assumption is that there are perfdata values 'in' and 'out' with byte rates
+        // and maximum values given to be able to calculate the percentage usage
+        if (perf[0][2] === null || perf[0][2] === ''
+           || perf[1][2] === null || perf[1][2] === '') {
+            perf = this.calculateUsage(perf);
+        }
+
+        this.perfdata = perf;
+    },
+
+    addWeathermapLineError: function(e) {
+        this.obj.conf.summary_output += ' (Weathermap Line Error: ' + e + ')';
     },
 
     calcWeathermapColor: function(id) {
@@ -727,188 +921,4 @@ var ElementLine = Element.extend({
         return parsed;
     }
 
-});
-
-var ElementLineControls = Element.extend({
-    render: function() {
-        // don't render the controls during normal render calls. We
-        // want to keep the number of DOM objects low, so only render
-        // them when being unlocked for the first time. But when the
-        // element has already been rendered, then re-render it!
-        if (this.dom_obj)
-            this._render();
-    },
-
-    draw: function() {
-        // When locked: Don't draw on regular draw calls (only draw when locked/unlocked)
-        if (!this.obj.bIsLocked)
-            this.base();
-    },
-
-    unlock: function() {
-        if (!this.dom_obj)
-            this._render();
-        this._draw();
-    },
-
-    lock: function() {
-        this.erase();
-    },
-
-    place: function() {
-        // FIXME: This should be possible without re-rendering everything
-        if (!this.obj.bIsLocked) {
-            this.erase();
-            this._render();
-            this.draw();
-        }
-    },
-
-    //
-    // END OF PUBLIC METHODS
-    //
-
-    _draw: function() {
-        Element.prototype.draw.call(this);
-    },
-
-    _render: function() {
-        var container = document.createElement('div');
-        container.setAttribute('id', this.obj.conf.object_id+'-controls');
-        this.dom_obj = container;
-
-        var x = this.obj.parseCoords(this.obj.conf.x, 'x');
-        var y = this.obj.parseCoords(this.obj.conf.y, 'y');
-        var size = 10;
-
-        for (var i = 0, l = x.length; i < l; i++)
-            this.renderDragger(i, x[i], y[i], - size / 2, - size / 2, size);
-
-        if (this.hasTwoParts())
-            this.renderMidToggle(x.length+2,
-                this.obj.getLineMid(this.obj.conf.x, 'x'),
-                this.obj.getLineMid(this.obj.conf.y, 'y'),
-                20 - size / 2,
-                -size / 2 + 5,
-                size);
-    },
-
-    hasTwoParts: function() {
-        return this.obj.conf.view_type === 'line'
-               && (this.obj.conf.line_type == 10
-                   || this.obj.conf.line_type == 13
-                   || this.obj.conf.line_type == 14
-                   || this.obj.conf.line_type == 15);
-    },
-
-    renderDragger: function (num, objX, objY, offX, offY, size) {
-        var ctl = document.createElement('div');
-        this.dom_obj.appendChild(ctl);
-        ctl.setAttribute('id', this.obj.conf.object_id+'-drag-' + num);
-        ctl.className = 'control drag';
-        // FIXME: Multilanguage
-        ctl.title          = 'Move object';
-        ctl.style.zIndex   = parseInt(this.obj.conf.z)+1;
-        ctl.style.width    = addZoomFactor(size) + 'px';
-        ctl.style.height   = addZoomFactor(size) + 'px';
-        ctl.style.left     = (objX + offX) + 'px';
-        ctl.style.top      = (objY + offY) + 'px';
-        ctl.objOffsetX     = offX;
-        ctl.objOffsetY     = offY;
-
-        var img = document.createElement('img');
-        img.src = '../../frontend/nagvis-js/images/internal/control_drag.png';
-        img.style.width    = addZoomFactor(size) + 'px';
-        img.style.height   = addZoomFactor(size) + 'px';
-        ctl.appendChild(img);
-
-        makeDragable(ctl, this.obj, this.obj.saveObject, this.obj.moveObject);
-    },
-
-    // Adds the modify button to the controls including all eventhandlers
-    renderMidToggle: function (num, objX, objY, offX, offY, size) {
-        var ctl = document.createElement('div');
-        this.dom_obj.appendChild(ctl);
-        ctl.setAttribute('id', this.obj.conf.object_id+'-togglemid-' + num);
-        ctl.className = 'control togglemid';
-	// FIXME: Multilanguage
-        if (this.obj.bIsLocked)
-	    ctl.title = 'Unlock line middle';
-        else
-	    ctl.title = 'Lock line middle';
-        ctl.style.zIndex   = parseInt(this.obj.conf.z)+1;
-        ctl.style.width    = addZoomFactor(size) + 'px';
-        ctl.style.height   = addZoomFactor(size) + 'px';
-        ctl.style.left     = (objX + offX) + 'px';
-        ctl.style.top      = (objY + offY) + 'px';
-        ctl.objOffsetX     = offX;
-        ctl.objOffsetY     = offY;
-
-        var img = document.createElement('img');
-        if (this.isMidLocked())
-            img.src = '../../frontend/nagvis-js/images/internal/control_locked.png';
-        else
-            img.src = '../../frontend/nagvis-js/images/internal/control_unlocked.png';
-        img.style.width    = addZoomFactor(size) + 'px';
-        img.style.height   = addZoomFactor(size) + 'px';
-        ctl.appendChild(img);
-
-        addEvent(ctl, 'click', function(element_obj) {
-            return function(event) {
-                event = event || window.event;
-                element_obj.toggleMidLock();
-	        contextHide();
-                return preventDefaultEvents(event);
-            };
-        }(this));
-        ctl = null;
-    },
-
-    isMidLocked: function() {
-        return this.obj.conf.x.split(',').length == 2;
-    },
-
-    /**
-     * Toggles the position of the line middle. The mid of the line
-     * can either be the 2nd of three line coords or is automaticaly
-     * the middle between two line coords.
-     */
-    toggleMidLock: function() {
-        // What is the current state?
-        var x = this.obj.conf.x.split(',');
-        var y = this.obj.conf.y.split(',')
-
-        if (this.isMidLocked()) {
-            // The line has 2 coords configured
-            // - Calculate and add the 3rd coord as 2nd
-            // - Add a drag control for the 2nd coord
-            this.obj.conf.x = [
-              x[0],
-              middle(this.obj.parseCoords(this.obj.conf.x, 'x', false)[0], this.obj.parseCoords(this.obj.conf.x, 'x', false)[1], this.obj.conf.line_cut),
-              x[1],
-            ].join(',');
-            this.obj.conf.y = [
-                y[0],
-                middle(this.obj.parseCoords(this.obj.conf.y, 'y', false)[0], this.obj.parseCoords(this.obj.conf.y, 'y', false)[1], this.obj.conf.line_cut),
-                y[1],
-            ].join(',');
-        } else {
-            // The line has 3 coords configured
-            // - Remove the 2nd coord
-            // - Remove the drag control for the 2nd coord
-            this.obj.conf.x = [ x[0], x[2] ].join(',');
-            this.obj.conf.y = [ y[0], y[2] ].join(',');
-        }
-
-        var parts = g_view.unproject(this.obj.conf.x.toString().split(','),
-                                     this.obj.conf.y.toString().split(','));
-        var x = parts[0].join(',');
-        var y = parts[1].join(',');
-
-        // send to server
-        saveObjectAttr(this.obj.conf.object_id, {'x': x, 'y': y});
-
-        // redraw the whole object
-        this.obj.render();
-    }
 });
