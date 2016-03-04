@@ -319,14 +319,18 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             if ($aggr === null)
                 continue; // did not find this aggregation
             $obj_url = $OBJS[0]->getUrl();
+
+            $is_acknowledged = isset($aggr['aggr_acknowledged']) && $aggr['aggr_acknowledged'] == "1";
+            $is_in_downtime = isset($aggr['aggr_in_downtime']) && $aggr['aggr_in_downtime'] == "1";
+
             $ret[$key] = Array(
                 'details' => Array(
                     ALIAS => $aggr['aggr_name'],
                     // This forces the aggregation state to be the summary state of the object
                     STATE    => $this->getAggrState($aggr['aggr_state_num']),
                     OUTPUT   => "xxxxxxxxxxxxxx",
-                    ACK      => $aggr['aggr_acknowledged'] == "1" ? 1 : 0,
-                    DOWNTIME => $aggr['aggr_in_downtime'] == "1" ? 1 : 0,
+                    ACK      => $is_acknowledged == "1" ? 1 : 0,
+                    DOWNTIME => $is_in_downtime == "1" ? 1 : 0,
                 ),
                 'attrs' => Array(
                     // Forces the URL to point to the BI aggregate
