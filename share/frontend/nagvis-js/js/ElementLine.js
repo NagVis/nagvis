@@ -637,18 +637,21 @@ var ElementLine = Element.extend({
 
         var txt = this.perfdata[id][1] + this.perfdata[id][2];
 
+        // Show only bandwidth label
+        if (this.obj.conf.line_type == 15)
+            txt = this.perfdata[2+id][1] + this.perfdata[2+id][2];
+
         // Maybe use function to detect the real height in future
         var labelHeight = 21,
             labelWidth  = this.getLabelWidth(txt);
 
-        // FIXME: really center the object
         this.obj.trigger_obj.appendChild(
             renderNagVisTextbox(this.obj.conf.object_id+'-link'+id,
                                 '#ffffff', '#000000', (x-labelWidth), parseInt(y - labelHeight / 2),
                                 this.obj.conf.z, 'auto', 'auto', '<b>' + txt + '</b>'));
 
         // Paint the second label in case of line type 14
-        if (this.obj.conf.line_type == '14') {
+        if (this.obj.conf.line_type == 14) {
             txt = this.perfdata[2+id][1] + this.perfdata[2+id][2];
             labelWidth = this.getLabelWidth(txt);
             this.obj.trigger_obj.appendChild(
@@ -702,7 +705,7 @@ var ElementLine = Element.extend({
             return;
         }
 
-        if (this.obj.conf.line_type == 14) {
+        if (this.obj.conf.line_type == 14 || this.obj.conf.line_type == 15) {
             if (!isset(perf[2])) {
                 this.addWeathermapLineError("Value 3 is empty");
                 return;

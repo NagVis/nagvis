@@ -1,6 +1,7 @@
 1.9b5
 Frontend:
   * FIX: Multisite Snapin: Fixed broken snapin contents
+  * FIX: Fixed the bandwith showing weathermap lines showing BW values again
 
 Core:
   * Changed handling of deprecated map object attributes: They are silently
