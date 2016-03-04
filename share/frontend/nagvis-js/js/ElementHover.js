@@ -417,31 +417,25 @@ var ElementHover = Element.extend({
     },
 
     replaceChildMacros: function (template_html) {
-        var childsHtmlCode = '';
+        var childs_html = '';
         var regex = '';
-    
-        var rowHtmlCode = g_hover_template_childs[this.obj.conf.hover_template];
-        if(typeof(rowHtmlCode) != 'undefined' && rowHtmlCode != '' && this.obj.members && this.obj.members.length > 0) {
+
+        var row_tmpl = g_hover_template_childs[this.obj.conf.hover_template];
+        var stateful_members = this.obj.getStatefulMembers();
+        if(typeof(row_tmpl) != 'undefined' && row_tmpl != '' && stateful_members.length > 0) {
             // Loop all child objects until all looped or the child limit is reached
-            for(var i = 0, len1 = this.obj.conf.hover_childs_limit, len2 = this.obj.members.length;
+            for(var i = 0, len1 = this.obj.conf.hover_childs_limit, len2 = stateful_members.length;
                 (len1 == -1 || (len1 >= 0 && i <= len1)) && i < len2; i++) {
+
                 if(len1 == -1 || (len1 >= 0 && i < len1)) {
-                    // Try to catch some error
-                    if(!this.obj.members[i].conf) {
-                        eventlog("hover-parsing", "critical",
-                                 "Problem while parsing child in hover template (t:" + this.obj.conf.type + " n:" + this.obj.conf.name + ")");
-                    } else {
-                        if(this.obj.members[i].conf.type !== 'textbox' && this.obj.members[i].conf.type !== 'shape') {
-                            // Children need to know where they belong
-                            this.obj.members[i].parent_type = this.obj.conf.type;
-                            this.obj.members[i].parent_name = this.obj.conf.name;
-    
-                            childsHtmlCode += this.replaceMacrosOfChild(this.obj.members[i], rowHtmlCode);
-                        }
-                    }
+                    // Children need to know where they belong
+                    stateful_members[i].parent_type = this.obj.conf.type;
+                    stateful_members[i].parent_name = this.obj.conf.name;
+
+                    childs_html += this.replaceMacrosOfChild(stateful_members[i], row_tmpl);
                 } else {
                     // Create an end line which shows the number of hidden child items
-                    var oMember = {
+                    var member = {
                         'conf': {
                             'type': 'host',
                             'name': '',
@@ -450,18 +444,18 @@ var ElementHover = Element.extend({
                             '<!--\\sBEGIN\\sservicegroup_child\\s-->.+?<!--\\sEND\\sservicegroup_child\\s-->': ''
                         }
                     };
-    
-                    childsHtmlCode += this.replaceMacrosOfChild(oMember, rowHtmlCode);
+
+                    childs_html += this.replaceMacrosOfChild(member, row_tmpl);
                 }
             }
         }
-    
-        if(childsHtmlCode != '')
+
+        if(childs_html != '')
             regex = getRegEx('loopChild', "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
         else
             regex = getRegEx('loopChildEmpty', '<!--\\sBEGIN\\schilds\\s-->.+?<!--\\sEND\\schilds\\s-->');
-    
-        template_html = template_html.replace(regex, childsHtmlCode);
+
+        template_html = template_html.replace(regex, childs_html);
         return template_html;
     },
 

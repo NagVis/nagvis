@@ -98,6 +98,16 @@ var NagVisStatefulObject = NagVisObject.extend({
         }
     },
 
+    getStatefulMembers: function() {
+        var stateful = [];
+        for (var i = 0, len = this.members.length; i < len; i++) {
+            if (this.members[i].has_state) {
+                stateful.push(this.members[i]);
+            }
+        }
+        return stateful;
+    },
+
     /**
      * PUBLIC saveLastState()
      *
@@ -227,6 +237,7 @@ var NagVisStatefulObject = NagVisObject.extend({
         this.saveLastState();
 
         this.base(attrs, only_state);
+        this.updateMemberAttrs(attrs, only_state);
 
         // When the config has not changed, but the state, rerender the whole object
         // the config update is handled within NagVisObject()
@@ -253,6 +264,27 @@ var NagVisStatefulObject = NagVisObject.extend({
         else {
             return false;
         }
+    },
+
+    updateMemberAttrs: function(attrs, only_state) {
+        if (!this.members)
+            return;
+
+        // Update already existing objects
+        for (var i = 0, len = attrs.members.length; i < len; i++) {
+            var member_attrs = attrs.members[i],
+                updated = false;
+
+            for (var a = 0, len2 = this.members.length; a < len2; a++) {
+                var member = this.members[a];
+                if (member_attrs.object_id == member.conf.object_id) {
+                    member.updateAttrs(member_attrs, only_state);
+                    break;
+                }
+            }
+        }
+
+        this.getMembers();
     },
 
     /**

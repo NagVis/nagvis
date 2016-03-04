@@ -751,5 +751,6 @@ var NagVisObject = Base.extend({
         saveObjectAttr(obj.conf.object_id, { 'x': x, 'y': y});
     },
 
-    highlight: function(show) {}
+    highlight: function(show) {},
+    getStatefulMembers: function() {}
 });
