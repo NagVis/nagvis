@@ -3,6 +3,7 @@ Frontend:
   * FIX: Multisite Snapin: Fixed broken snapin contents
   * FIX: Fixed the bandwith showing weathermap lines showing BW values again
   * FIX: Fixed update of the hover menu child infos while a map is open
+  * FIX: Fixed broken header toggle icon on on-demand-automaps
 
 Core:
   * Changed handling of deprecated map object attributes: They are silently
