@@ -4,6 +4,7 @@ Frontend:
   * FIX: Fixed the bandwith showing weathermap lines showing BW values again
   * FIX: Fixed update of the hover menu child infos while a map is open
   * FIX: Fixed broken header toggle icon on on-demand-automaps
+  * FIX: Fixed wrong scaling of object labels in IE
 
 Core:
   * Changed handling of deprecated map object attributes: They are silently
