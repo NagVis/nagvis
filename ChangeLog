@@ -7,6 +7,7 @@ Frontend:
   * FIX: Fixed wrong scaling of object labels in IE
 
 Core:
+  * FIX: Negative lat/long coordinates can now be configured
   * Changed handling of deprecated map object attributes: They are silently
     ignored by NagVis now. We inform users about deprecated (useless)
     attributes in the ChangeLog and will mark old options in the documentation,
