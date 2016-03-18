@@ -4,6 +4,9 @@
   * FIX: Fixed keeping unlisted values of dropdowns (object names, backend_id)
   * FIX: Cleaning up host/service attributes when changing the backend_id
 
+Geomap:
+  * Added support for host and service group objects
+
 1.9b7
 Fronted:
   * FIX: Fixed "function sidebarUpdatePosition is not defined" when header not shown
