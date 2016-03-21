@@ -917,7 +917,15 @@ class GlobalMapCfg {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function genObjId($s) {
-        return substr(sha1($s), 0, 6);
+        $hash = sha1($s);
+
+        if(preg_match('/^0e/', $hash)) {
+            $hash_offset = 1;
+        } else {
+            $hash_offset = 0;
+        }
+
+        return substr($hash, $hash_offset, 6);
     }
 
     /**
