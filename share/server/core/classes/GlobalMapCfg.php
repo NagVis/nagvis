@@ -1469,7 +1469,7 @@ class GlobalMapCfg {
 
         $type = $this->mapConfig[$id]['type'];
 
-        if(is_numeric($id) && $id == 0)
+        if(is_numeric($id) && $id === 0)
             list($inObj, $start, $end) = $this->getObjectLinesByNum(0);
         else
             list($inObj, $start, $end) = $this->getObjectLinesById($id);
