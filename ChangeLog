@@ -4,6 +4,8 @@ Core:
   * FIX: Fixed missing Url/view/* permission. It was not possible to permit
   non admin users to access external URLs in rotation pools without this
   permissions.
+  * FIX: Fixed possible broken global section during editing of maps when an
+    object on the map got an object ID starting with "0e."
 
 Automap:
   * FIX: Detecting and preventing loops in automap
