@@ -10,6 +10,8 @@ Core:
     attributes in the ChangeLog and will mark old options in the documentation,
     but the map loading will not be affected by the deprecated options anymore
   * BI-Backend: Is now handling the acknowledgement and downtime infos of BI
+  * FIX: Fixed possible broken global section during editing of maps when an
+    object on the map got an object ID starting with "0e."
   * FIX: Added proper error message when trying to use dynamic groups with NDO
          MySQL backend (which does not support dynamic groups)
   * FIX: Only reading map configuration files with lower ".cfg" suffix. Maps
