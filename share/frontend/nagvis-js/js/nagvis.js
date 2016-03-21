@@ -1025,26 +1025,29 @@ function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, cust
     oLabelDiv.appendChild(oLabelSpan);
 
     // Take zoom factor into account
-    oLabelDiv.width  = addZoomFactor(oLabelDiv.width);
-    oLabelDiv.height = addZoomFactor(oLabelDiv.height);
-    var fontSize = getEffectiveStyle(oLabelSpan, 'font-size');
-    if(fontSize === null) {
-        eventlog(
-            "renderNagVisTextbox",
-            "critical",
-            "Unable to fetch font-size attribute for textbox"
-        );
-    } else {
-        // Only take zoom into account if the fontSize is set in px
-        if (fontSize.indexOf('px') !== -1) {
-            var fontSize = parseFloat(fontSize.replace('px', ''));
-            oLabelSpan.style.fontSize = addZoomFactor(fontSize) + 'px';
-        } else {
+    if (isZoomed()) {
+        oLabelDiv.width  = addZoomFactor(oLabelDiv.width);
+        oLabelDiv.height = addZoomFactor(oLabelDiv.height);
+
+        var fontSize = getEffectiveStyle(oLabelSpan, 'font-size');
+        if(fontSize === null) {
             eventlog(
                 "renderNagVisTextbox",
                 "critical",
-                "Zoom: Can not handle this font-size declaration (" + fontSize + ")"
+                "Unable to fetch font-size attribute for textbox"
             );
+        } else {
+            // Only take zoom into account if the fontSize is set in px
+            if (fontSize.indexOf('px') !== -1) {
+                var fontSize = parseFloat(fontSize.replace('px', ''));
+                oLabelSpan.style.fontSize = addZoomFactor(fontSize) + 'px';
+            } else {
+                eventlog(
+                    "renderNagVisTextbox",
+                    "critical",
+                    "Zoom: Can not handle this font-size declaration (" + fontSize + ")"
+                );
+            }
         }
     }
 
