@@ -331,7 +331,7 @@ var NagVisObject = Base.extend({
                 // Only an object id. Get the coordinate and return it
                 var refObj = getMapObjByDomObjId(val);
                 if(refObj)
-                    coord = parseInt(refObj.parseCoord(refObj.conf[dir], dir));
+                    coord = parseInt(refObj.parseCoord(refObj.conf[dir], dir, false));
             }
         }
 
