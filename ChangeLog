@@ -1,3 +1,8 @@
+1.9b6
+Core:
+  * FIX: Fixed error with Icinga 2 when querying for not existant objects
+    (happened with default worldmap in previous versions)
+
 1.9b5
 Frontend:
   * FIX: Multisite Snapin: Fixed broken snapin contents

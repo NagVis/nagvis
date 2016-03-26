@@ -974,7 +974,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     l('Livestatus version used in backend [BACKENDID] is too old. Please update.',
                                                            Array('BACKENDID' => $this->backendId)));
 
-            foreach($l as $e) {
+            foreach ($l as $e) {
+                // Workaround for Icinga 2 which answers stats queries for not existing objects with
+                // 0 stats but with missing host_name and host_alias columns. So the number of answer
+                // columns is different leading to an exception in the code below.
+                if (count($e) != 18)
+                    continue;
+
                 $arrReturn[$e[0]] = Array(
                     //'details' => Array('alias' => $e[1]),
                     'counts' => Array(
@@ -1166,6 +1172,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     l('Livestatus version used in backend [BACKENDID] is too old. Please update.',
                                                                         Array('BACKENDID' => $this->backendId)));
             foreach($l as $e) {
+                // Workaround for Icinga 2 which answers stats queries for not existing objects with
+                // 0 stats but with missing host_name and host_alias columns. So the number of answer
+                // columns is different leading to an exception in the code below.
+                if (count($e) != 12+$hoffset)
+                    continue;
+
                 $counts = array(
                     UNCHECKED => Array(
                         'normal'    => intval($e[0+$hoffset]),
@@ -1217,6 +1229,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         if(is_array($l) && count($l) > 0) {
             foreach($l as $e) {
+                // Workaround for Icinga 2 which answers stats queries for not existing objects with
+                // 0 stats but with missing host_name and host_alias columns. So the number of answer
+                // columns is different leading to an exception in the code below.
+                if (count($e) != 16+$soffset)
+                    continue;
+
                 $counts = array(
                     PENDING => array(
                         'normal'   => intval($e[0+$soffset])
@@ -1245,7 +1263,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                         'downtime' => intval($e[15+$soffset]),
                     ),
                 );
-                
+
                 if(!$by_group) {
                     $arrReturn += $counts;
                 } else {
