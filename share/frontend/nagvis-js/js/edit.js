@@ -293,8 +293,8 @@ function dragStart(event) {
         posy  = parts[1];
 
     draggingObject = target;
-    draggingObject.x = pxToInt(draggingObject.style.left);
-    draggingObject.y = pxToInt(draggingObject.style.top);
+    draggingObject.x = rmZoomFactor(pxToInt(draggingObject.style.left), true);
+    draggingObject.y = rmZoomFactor(pxToInt(draggingObject.style.top), true);
 
     // Save relative offset of the mouse
     dragObjectOffset   = [ posx - draggingObject.x, posy - draggingObject.y ];
@@ -330,10 +330,10 @@ function dragObject(event) {
         return preventDefaultEvents(event);
 
     draggingObject.style.position = 'absolute';
-    draggingObject.style.left = newLeft + 'px';
-    draggingObject.style.top  = newTop + 'px';
-    draggingObject.x = rmZoomFactor(newLeft, true);
-    draggingObject.y = rmZoomFactor(newTop, true);
+    draggingObject.style.left = addZoomFactor(newLeft) + 'px';
+    draggingObject.style.top  = addZoomFactor(newTop) + 'px';
+    draggingObject.x = newLeft;
+    draggingObject.y = newTop;
 
     // When this object has a relative coordinated label, then move this too
     moveRelativeObject(draggingObject.id, newTop, newLeft);
@@ -715,12 +715,19 @@ function addFollowing(e) {
 
     var pos = getEventMousePos(e);
 
+    var start_x = addZoomFactor(addX[0]),
+        start_y = addZoomFactor(addY[0]);
+
+    var end_x = addZoomFactor(pos[0]),
+        end_y = addZoomFactor(pos[1]);
+
     addShape.clear();
 
     if(addViewType === 'line' || addObjType === 'line')
-        addShape.drawLine(addX[0], addY[0], pos[0] - getSidebarWidth(), pos[1]);
+        addShape.drawLine(start_x, start_y, end_x - getSidebarWidth(), end_y);
     else
-        addShape.drawRect(addX[0], addY[0], (pos[0] - getSidebarWidth() - addX[0]), (pos[1] - addY[0]));
+        addShape.drawRect(start_x, start_y, (end_x - getSidebarWidth() - start_x),
+                                            (end_y - start_y));
 
     addShape.paint();
 }

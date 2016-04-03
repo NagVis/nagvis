@@ -1,6 +1,8 @@
 1.9b6
 Frontend:
   * FIX: Fixed possible wrong scaling of icons when using NagVis zoom
+  * FIX: Fixed moving objects on zoomed maps
+  * FIX: Fixed line create indicator position on zoomed maps
 
 Core:
   * FIX: Fixed error with Icinga 2 when querying for not existant objects
