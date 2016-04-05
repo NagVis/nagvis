@@ -222,15 +222,13 @@ var ElementLine = Element.extend({
     },
 
     update: function() {
-         new ElementLineControls(this.obj).addTo(this.obj);
+        new ElementLineControls(this.obj).addTo(this.obj);
     },
 
     updateAttrs: function(only_state) {
         if (!only_state || (this.isWeathermapLine() &&
              (this.obj.stateChanged() || this.obj.outputOrPerfdataChanged()))) {
-            this.erase();
-            this.render();
-            this.draw();
+            this.redrawLine();
         }
     },
 
@@ -260,17 +258,7 @@ var ElementLine = Element.extend({
     },
 
     place: function() {
-        // Totally redraw the line when moving the line anchors arround. But keep the trigger
-        // object because it saves the attached event handlers
-        var trigger_obj = this.obj.trigger_obj;
-        trigger_obj.parentNode.removeChild(trigger_obj);
-        while (trigger_obj.firstChild)
-            trigger_obj.removeChild(trigger_obj.firstChild);
-
-        this.erase();
-        this.obj.trigger_obj = trigger_obj;
-        this.render();
-        this.draw();
+        this.redrawLine();
     },
 
     unlock: function() {
@@ -285,6 +273,19 @@ var ElementLine = Element.extend({
     // END OF PUBLIC METHODS
     //
 
+    redrawLine: function() {
+        // Totally redraw the line when moving the line anchors arround. But keep the trigger
+        // object because it saves the attached event handlers
+        var trigger_obj = this.obj.trigger_obj;
+        trigger_obj.parentNode.removeChild(trigger_obj);
+        this.clearActionContainer();
+
+        this.erase();
+        this.obj.trigger_obj = trigger_obj;
+        this.render();
+        this.draw();
+    },
+
     renderActionContainer: function() {
         // This is only the container for the hover/label elements. The real area or labels
         // are added later. But this container gets all event handlers assigned. Because
@@ -298,6 +299,7 @@ var ElementLine = Element.extend({
             this.obj.trigger_obj = oLink;
         } else {
             var oLink = this.obj.trigger_obj;
+            this.clearActionContainer();
         }
         this.dom_obj.appendChild(oLink);
         if (this.obj.conf.url) {
@@ -306,6 +308,11 @@ var ElementLine = Element.extend({
         } else {
             oLink.href = 'javascript:void(0)';
         }
+    },
+
+    clearActionContainer: function() {
+        while (this.obj.trigger_obj.firstChild)
+            this.obj.trigger_obj.removeChild(this.obj.trigger_obj.firstChild);
     },
 
     toggleActionContainer: function() {
