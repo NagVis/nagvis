@@ -9,6 +9,7 @@ Frontend:
 Core:
   * FIX: Fixed error with Icinga 2 when querying for not existant objects
     (happened with default worldmap in previous versions)
+  * FIX: Livestatus backend is now returning correct host info for pending hosts
 
 1.9b5
 Frontend:
