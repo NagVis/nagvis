@@ -9,6 +9,7 @@ Frontend:
          adding view permissions, ...)
   * FIX: Added missing "modify map" menu for users with limited edit permissions
   * FIX: Fixed broken add/modify page for users with limited edit permissions
+  * FIX: Template management: Fixed wrong options shown on result page after editing
 
 Core:
   * FIX: Fixed error with Icinga 2 when querying for not existant objects

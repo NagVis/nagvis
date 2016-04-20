@@ -144,15 +144,18 @@ class ViewMapManageTmpl {
         if (is_action() && post('mode') == 'edit') {
             try {
                 // Get all options from the POST vars
-                $options = array('name' => $name);
+                $save_options = array('name' => $name);
+                $options = array();
                 for ($i = 0; $i < $num_options; $i++) {
                     $key = post('key_'.$i);
                     $val = post('val_'.$i);
-                    if ($key !== '' && $val !== '')
+                    if ($key !== '' && $val !== '') {
+                        $save_options[$key] = $val;
                         $options[$key] = $val;
+                    }
                 }
 
-                $MAPCFG->updateElement($obj_id, $options, true);
+                $MAPCFG->updateElement($obj_id, $save_options, true);
                 success(l('The template has been modified.'));
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
