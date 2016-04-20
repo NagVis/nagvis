@@ -166,9 +166,10 @@ class ViewManageRoles {
         );
         foreach ($AUTHORISATION->getAllVisiblePerms() AS $perm) {
             if ($perm['mod'] == 'Map' && $perm['act'] != 'add' && $perm['act'] != 'manage') {
-                if (!isset($permissions_by_section['maps'][$perm['obj']]))
-                    $permissions_by_section['maps'][$perm['obj']] = array();
-                $permissions_by_section['maps'][$perm['obj']][] = $perm;
+                $map_name = $perm['obj'];
+                if (!isset($permissions_by_section['maps'][$map_name]))
+                    $permissions_by_section['maps'][$map_name] = array();
+                $permissions_by_section['maps'][$map_name][$perm['act']] = $perm;
             } elseif ($perm['mod'] == 'Rotation') {
                 $permissions_by_section['rotations'][] = $perm;
             } else {
@@ -195,10 +196,12 @@ class ViewManageRoles {
         echo '<th>'.l('Edit').'</th>';
         echo '<th>'.l('Delete').'</th>';
         echo '</tr>';
-        foreach ($permissions AS $map_perms) {
+        foreach ($permissions AS $map_name => $map_perms) {
             echo '<tr>';
-            echo '<td>'.$map_perms[0]['obj'].'</td>';
-            foreach ($map_perms as $perm) {
+            echo '<td>'.$map_name.'</td>';
+            $levels = array("view", "edit", "delete");
+            foreach ($levels as $level) {
+                $perm = $map_perms[$level];
                 unset($_REQUEST['perm_'.$perm['permId']]);
                 echo '<td class=perm>';
                 checkbox('perm_'.$perm['permId'], isset($permitted[$perm['permId']]));
