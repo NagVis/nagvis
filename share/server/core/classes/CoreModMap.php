@@ -66,7 +66,8 @@ class CoreModMap extends CoreModule {
             case 'addModify':
             case 'doExportMap':
             case 'getWorldmapBounds':
-                $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME_EMPTY));
+                // When e.g. submitting the addModify form the show parameter is a POST variable
+                $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME_EMPTY), array(), true);
                 $this->name = $aVals['show'];
             break;
             case 'toStaticMap':
