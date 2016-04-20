@@ -254,8 +254,8 @@ class NagVisHeaderMenu {
         $this->aMacros['permittedOverview'] = $AUTHORISATION->isPermitted('Overview', 'view', '*');
 
         // Check if the user is permitted to edit the current map
-        $this->aMacros['permittedView']  = $AUTHORISATION->isPermitted($this->aMacros['mod'], 'view', $UHANDLER->get('show'));
-        $this->aMacros['permittedEdit']  = $AUTHORISATION->isPermitted($this->aMacros['mod'], 'edit', $UHANDLER->get('show'));
+        $this->aMacros['permittedView']  = $AUTHORISATION->isPermitted($this->aMacros['mod'], 'view', $this->OBJ->getName());
+        $this->aMacros['permittedEdit']  = $AUTHORISATION->isPermitted($this->aMacros['mod'], 'edit', $this->OBJ->getName());
 
         // Permissions for the option menu
         $this->aMacros['permittedSearch']            = $AUTHORISATION->isPermitted('Search', 'view', '*');

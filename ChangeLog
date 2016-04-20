@@ -7,6 +7,7 @@ Frontend:
 	 eachother during state / perfdata changes
   * FIX: Map permissions where mixed up (delete permissions was granted when
          adding view permissions, ...)
+  * FIX: Added missing "modify map" menu for users with limited edit permissions
 
 Core:
   * FIX: Fixed error with Icinga 2 when querying for not existant objects
