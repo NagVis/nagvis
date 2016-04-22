@@ -54,6 +54,8 @@ if(!function_exists('date_default_timezone_set')) {
 if(function_exists("date_default_timezone_get"))
     date_default_timezone_set(@date_default_timezone_get());
 
+if (version_compare(PHP_VERSION, '5.2.0') < 0) {
+
 /**
  * Implements handling of PHP to JSON conversion for NagVis
  * (Needed for < PHP 5.2.0)
@@ -1224,5 +1226,7 @@ if(!class_exists('PEAR_Error')) {
 	                       $this->userinfo);
 	    }
 	}
+}
+
 }
 ?>
