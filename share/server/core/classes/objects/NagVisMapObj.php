@@ -187,7 +187,7 @@ class NagVisMapObj extends NagVisStatefulObject {
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function queueState($_unused_flag = true, $_unused_flag = true) {
+    public function queueState($_unused_flag = true, $_unused_flag2 = true) {
         // Get state of all member objects
         foreach($this->getStateRelevantMembers() AS $OBJ) {
             // The states of the map objects members only need to be fetched when this

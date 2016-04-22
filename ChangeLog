@@ -1,3 +1,7 @@
+1.9b7
+Core:
+  * FIX: Fixed some compatibility issues with PHP 7. NagVis should work with it.
+
 1.9b6
 Frontend:
   * FIX: Fixed possible wrong scaling of icons when using NagVis zoom

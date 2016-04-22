@@ -56,7 +56,7 @@ class NagVisService extends NagVisStatefulObject {
     /**
      * Queues state fetching for this object
      */
-    public function queueState($_unused_flag = true, $_unused_flag = true) {
+    public function queueState($_unused_flag = true, $_unused_flag2 = true) {
         global $_BACKEND;
         $_BACKEND->queue(Array('serviceState' => true), $this);
     }
