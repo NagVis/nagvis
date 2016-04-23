@@ -56,7 +56,8 @@ var NagVisObject = Base.extend({
     update: function() {
         // All objects need a context menu
         // (some in all states and some only unlocked)
-        new ElementContext(this).addTo(this);
+        if (this.needsContextMenu())
+            new ElementContext(this).addTo(this);
 
         if (this.needsHoverMenu())
             new ElementHover(this).addTo(this);
