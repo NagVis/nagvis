@@ -1,4 +1,7 @@
 1.9b7
+Fronted:
+  * FIX: Fixed "function sidebarUpdatePosition is not defined" when header not shown
+
 Core:
   * FIX: Fixed some compatibility issues with PHP 7. NagVis should work with it.
 

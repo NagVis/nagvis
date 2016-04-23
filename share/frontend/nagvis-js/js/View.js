@@ -289,7 +289,9 @@ var View = Base.extend({
 
         content.style.top = getHeaderHeight() + 'px';
 
-        sidebarUpdatePosition();
+        if (typeof sidebarUpdatePosition == "function") {
+            sidebarUpdatePosition();
+        }
     },
 
     // Transforms the view specific coordinates to browser x/y coordinates.
