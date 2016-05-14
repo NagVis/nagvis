@@ -247,7 +247,7 @@ if(!class_exists('Services_JSON')) {
 			*                                   bubble up with an error, so all return values
 			*                                   from encode() should be checked with isError()
 			*/
-			function Services_JSON($use = 0)
+			function __construct($use = 0)
 			{
 					$this->use = $use;
 			}
@@ -897,7 +897,7 @@ if(!class_exists('Services_JSON')) {
 
 			class Services_JSON_Error extends PEAR_Error
 			{
-					function Services_JSON_Error($message = 'unknown error', $code = null,
+					function __construct($message = 'unknown error', $code = null,
 																			$mode = null, $options = null, $userinfo = null)
 					{
 							parent::PEAR_Error($message, $code, $mode, $options, $userinfo);
@@ -911,7 +911,7 @@ if(!class_exists('Services_JSON')) {
 			*/
 			class Services_JSON_Error
 			{
-					function Services_JSON_Error($message = 'unknown error', $code = null,
+					function __construct($message = 'unknown error', $code = null,
 																			$mode = null, $options = null, $userinfo = null)
 					{
 
@@ -980,7 +980,7 @@ if(!class_exists('PEAR_Error')) {
 	     * @access public
 	     *
 	     */
-	    function PEAR_Error($message = 'unknown error', $code = null,
+	    function __construct($message = 'unknown error', $code = null,
 	                        $mode = null, $options = null, $userinfo = null) {
 	        if ($mode === null) {
 	            $mode = PEAR_ERROR_RETURN;
