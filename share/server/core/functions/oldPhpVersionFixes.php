@@ -1039,9 +1039,6 @@ if(!class_exists('PEAR_Error')) {
 	        }
 	    }
 	 
-	    // }}}
-	    // {{{ getMode()
-	 
 	    /**
 	     * Get the error mode from an error object.
 	     *
@@ -1052,9 +1049,6 @@ if(!class_exists('PEAR_Error')) {
 	        return $this->mode;
 	    }
 	 
-	    // }}}
-	    // {{{ getCallback()
-	 
 	    /**
 	     * Get the callback function/method from an error object.
 	     *
@@ -1064,10 +1058,6 @@ if(!class_exists('PEAR_Error')) {
 	    function getCallback() {
 	        return $this->callback;
 	    }
-	 
-	    // }}}
-	    // {{{ getMessage()
-	 
 	 
 	    /**
 	     * Get the error message from an error object.
@@ -1080,10 +1070,6 @@ if(!class_exists('PEAR_Error')) {
 	        return ($this->error_message_prefix . $this->message);
 	    }
 	 
-	 
-	    // }}}
-	    // {{{ getCode()
-	 
 	    /**
 	     * Get error code from an error object
 	     *
@@ -1094,9 +1080,6 @@ if(!class_exists('PEAR_Error')) {
 	     {
 	        return $this->code;
 	     }
-	 
-	    // }}}
-	    // {{{ getType()
 	 
 	    /**
 	     * Get the name of this error/exception.
@@ -1109,9 +1092,6 @@ if(!class_exists('PEAR_Error')) {
 	        return get_class($this);
 	    }
 	 
-	    // }}}
-	    // {{{ getUserInfo()
-	 
 	    /**
 	     * Get additional user-supplied information.
 	     *
@@ -1123,9 +1103,6 @@ if(!class_exists('PEAR_Error')) {
 	        return $this->userinfo;
 	    }
 	 
-	    // }}}
-	    // {{{ getDebugInfo()
-	 
 	    /**
 	     * Get additional debug information supplied by the application.
 	     *
@@ -1136,9 +1113,6 @@ if(!class_exists('PEAR_Error')) {
 	    {
 	        return $this->getUserInfo();
 	    }
-	 
-	    // }}}
-	    // {{{ getBacktrace()
 	 
 	    /**
 	     * Get the call backtrace from where the error was generated.
@@ -1159,9 +1133,6 @@ if(!class_exists('PEAR_Error')) {
 	        return $this->backtrace[$frame];
 	    }
 	 
-	    // }}}
-	    // {{{ addUserInfo()
-	 
 	    function addUserInfo($info)
 	    {
 	        if (empty($this->userinfo)) {
@@ -1171,14 +1142,10 @@ if(!class_exists('PEAR_Error')) {
 	        }
 	    }
 	 
-	    // }}}
-	    // {{{ toString()
 	    function __toString()
 	    {
 	        return $this->getMessage();
 	    }
-	    // }}}
-	    // {{{ toString()
 	 
 	    /**
 	     * Make a string representation of this object.
@@ -1228,5 +1195,9 @@ if(!class_exists('PEAR_Error')) {
 	}
 }
 
+}
+else {
+        define('COMPAT_JSON_ENCODE', False);
+        define('COMPAT_JSON_DECODE', False);
 }
 ?>
