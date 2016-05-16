@@ -1,3 +1,5 @@
+1.9b8
+
 1.9b7
 Fronted:
   * FIX: Fixed "function sidebarUpdatePosition is not defined" when header not shown
