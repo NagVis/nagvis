@@ -5,6 +5,7 @@ Fronted:
 
 Core:
   * FIX: Fixed some compatibility issues with PHP 7. NagVis should work with it.
+    The NDOMySQL backend is known not to work with PHP 7. Use MKLivestatus instead.
 
 1.9b6
 Frontend:
