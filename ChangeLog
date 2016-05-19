@@ -1,4 +1,6 @@
 1.9b8
+  * FIX: Improved error handling in case of modifying objects which
+    backends report issues
 
 1.9b7
 Fronted:

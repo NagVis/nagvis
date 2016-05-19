@@ -385,7 +385,12 @@ class ViewMapAddModify {
                         else
                             $options = $func($this->MAPCFG, $this->object_id, $this->attrs);
                     } catch (Exception $e) {
-                        form_error($propname, l("Failed to get objects: [MSG]", array('MSG' => "".$e)));
+                        if (is_subclass_of($e, "NagVisException"))
+                            $msg = $e->message();
+                        else
+                            $msg = "".$e;
+
+                        form_error($propname, l("Failed to get objects: [MSG]", array('MSG' => $msg)));
                         $options = array();
                     }
 

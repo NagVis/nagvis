@@ -293,7 +293,7 @@ function select($name, $options, $default = '', $onchange = '', $style = '', $si
     $ret .= '</select>'.N;
     echo $ret;
 
-    if (has_form_error($name) && !submitted())
+    if (has_form_error($name))
         error(get_error($name));
 }
 
