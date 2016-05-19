@@ -23,7 +23,6 @@
  *****************************************************************************/
 
 class ViewMapAddModify {
-    private $error = null;
     private $MAPCFG = null;
 
     // object related vars
@@ -79,7 +78,7 @@ class ViewMapAddModify {
                 // to currently enabled sources
                 if(isset($prop['source_param']) && !in_array($prop['source_param'], $this->MAPCFG->getValue(0, 'sources')))
                     continue;
-                
+
                 if (!isset($this->attrs[$propname]) || $this->attrs[$propname] == '')
                     throw new FieldInputError($propname, l('The attribute needs to be set.'));
             }
@@ -385,12 +384,12 @@ class ViewMapAddModify {
                         else
                             $options = $func($this->MAPCFG, $this->object_id, $this->attrs);
                     } catch (Exception $e) {
-                        if (is_subclass_of($e, "NagVisException"))
+                        if (is_a($e, "NagVisException"))
                             $msg = $e->message();
                         else
                             $msg = "".$e;
 
-                        form_error($propname, l("Failed to get objects: [MSG]", array('MSG' => $msg)));
+                        form_render_error($propname, l("Failed to get objects: [MSG]", array('MSG' => $msg)));
                         $options = array();
                     }
 
@@ -402,7 +401,7 @@ class ViewMapAddModify {
                     if ($value != '' && !isset($options[$value]) && !in_array($value, $options)) {
                         // In case of "other" selected, the single objects can not be found, this is ok.
                         if (!$can_have_other)
-                            form_error($propname, l('Current value is not a known option - '
+                            form_render_error($propname, l('Current value is not a known option - '
                                                     .'falling back to input field.'));
 
                         input($propname, '', '', $hideField);
@@ -417,7 +416,7 @@ class ViewMapAddModify {
 
                     select($propname, $options, $value, $onChange, $hideField);
                 } catch(BackendConnectionProblem $e) {
-                    form_error($propname, l('Unable to fetch data from backend - '
+                    form_render_error($propname, l('Unable to fetch data from backend - '
                                            .'falling back to input field.'));
                     input($propname, $value, '', $hideField);
                 }
@@ -596,10 +595,10 @@ class ViewMapAddModify {
             try {
                 if (!$this->handleAddModify())
                     return ob_get_clean();
+            } catch (FieldInputError $e) {
+                form_error($e->field, $e->message());
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
-            } catch (FieldInputError $e) {
-                form_error($e->field, $e->msg);
             } catch (Exception $e) {
                 if (isset($e->msg))
                     form_error(null, $e->msg);
@@ -607,8 +606,6 @@ class ViewMapAddModify {
                     throw $e;
             }
         }
-        echo $this->error;
-
         $this->drawForm();
 
         return ob_get_clean();

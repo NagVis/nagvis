@@ -61,9 +61,16 @@ function form_error($field, $msg) {
     $form_errors[$field] = $msg;
 }
 
+// Special form of form errors: Are not displayed at the start of
+// the form becaus they occur during rendering of the fields. Make
+// the message part an array in this case.
+function form_render_error($field, $msg) {
+    form_error($field, array(false, $msg));
+}
+
 function get_error($key) {
     global $form_errors;
-    return isset($form_errors[$key]) ? $form_errors[$key] : array();
+    return isset($form_errors[$key]) ? $form_errors[$key] : null;
 }
 
 function has_form_error($name) {
@@ -103,6 +110,15 @@ function is_update() {
 
 function js($code) {
     echo '<script>'.$code.'</script>'.N;
+}
+
+function show_form_render_error($name) {
+    // only display form rendering errors here
+    if (has_form_error($name)) {
+        $err = get_error($name);
+        if (is_array($err))
+            error($err[1]);
+    }
 }
 
 // Starts a HTML form which is submitted (and can be updated) via AJAX call
@@ -216,6 +232,8 @@ function field($type, $name, $default = '', $class = '', $onclick = '', $style =
         $id = $name;
 
     echo '<input id="'.$id.'" type="'.$type.'" name="'.$name.'"'.$value.$class.$onclick.$style.' />'.N;
+
+    show_form_render_error($name);
 }
 
 function checkbox($name, $default = '', $class = '', $onclick = '') {
@@ -293,8 +311,7 @@ function select($name, $options, $default = '', $onchange = '', $style = '', $si
     $ret .= '</select>'.N;
     echo $ret;
 
-    if (has_form_error($name))
-        error(get_error($name));
+    show_form_render_error($name);
 }
 
 function submit($label, $class = '', $name = '_submit') {
