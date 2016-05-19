@@ -308,8 +308,13 @@ class ViewMapAddModify {
         elseif (($can_have_other && $value !== '<<<other>>>')
                  || ($this->object_type == 'service' && $propname == 'host_name')) {
 
-            if ($this->object_type == 'service' && $propname == 'host_name') {
+            if ($this->object_type == 'service'
+                && ($propname == 'host_name' || $propname == 'backend_id')) {
                 // When configuring services and the hostname changed, clear the service value.
+                // When changing the backend_id, clear hostname and service
+                if ($propname == 'backend_id')
+                    $onChange .= "clearFormValue('host_name');";
+
                 $onChange .= "clearFormValue('service_description');";
 
             } elseif ($this->object_type == 'aggr' && $propname == 'backend_id') {
