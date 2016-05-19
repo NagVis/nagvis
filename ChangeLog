@@ -1,6 +1,7 @@
 1.9b8
   * FIX: Improved error handling in case of modifying objects which
     backends report issues
+  * FIX: Fixed keeping unlisted values of dropdowns (object names, backend_id)
 
 1.9b7
 Fronted:

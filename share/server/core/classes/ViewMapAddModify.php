@@ -404,10 +404,12 @@ class ViewMapAddModify {
                             form_render_error($propname, l('Current value is not a known option - '
                                                     .'falling back to input field.'));
 
-                        input($propname, '', '', $hideField);
+                        input($propname, $value, '', $hideField);
+
                         // Value needs to be set to "" by js
                         if ($can_have_other && $value == '<<<other>>>')
                             js('clearFormValue(\''.$propname.'\');');
+
                         break;
                     }
 
