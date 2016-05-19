@@ -299,23 +299,27 @@ class ViewMapAddModify {
         echo '<tr class="'.implode(' ', $rowClasses).'"'.$rowHide.'>';
         echo '<td class=tdlabel>'.$propname.'</td><td class=tdbox>';
 
-        $other = $fieldType == 'dropdown' && isset($prop['other']) && $prop['other'];
+        $can_have_other = $fieldType == 'dropdown' && isset($prop['other']) && $prop['other'];
 
         $onChange = '';
         // Submit the form when an attribute which has dependant attributes is changed
         if($this->MAPCFG->hasDependants($this->object_type, $propname)) {
             $onChange = 'updateForm(this.form);';
         }
-        elseif ($onChange == '' && (($other && $value !== '<<<other>>>')
-                                    || ($this->object_type == 'service' && $propname == 'host_name'))) {
-            // When configuring services and the hostname changed, clear the service value.
-            // For other objects clear the *_name value when backend_id changed
+        elseif (($can_have_other && $value !== '<<<other>>>')
+                 || ($this->object_type == 'service' && $propname == 'host_name')) {
+
             if ($this->object_type == 'service' && $propname == 'host_name') {
+                // When configuring services and the hostname changed, clear the service value.
                 $onChange .= "clearFormValue('service_description');";
+
             } elseif ($this->object_type == 'aggr' && $propname == 'backend_id') {
+                // For other objects clear the *_name value when backend_id changed
                 $onChange .= "clearFormValue('name');";
+
             } elseif (($this->object_type == 'host' || $this->object_type == 'hostgroup'
                       || $this->object_type == 'servicegroup') && $propname == 'backend_id') {
+                // For other objects clear the *_name value when backend_id changed
                 $onChange .= "clearFormValue('".$this->object_type."_name');";
             }
 
@@ -392,18 +396,18 @@ class ViewMapAddModify {
                     // an option in the select field
                     if ($value != '' && !isset($options[$value]) && !in_array($value, $options)) {
                         // In case of "other" selected, the single objects can not be found, this is ok.
-                        if (!$other)
+                        if (!$can_have_other)
                             form_error($propname, l('Current value is not a known option - '
                                                     .'falling back to input field.'));
 
                         input($propname, '', '', $hideField);
                         // Value needs to be set to "" by js
-                        if ($other && $value == '<<<other>>>')
+                        if ($can_have_other && $value == '<<<other>>>')
                             js('clearFormValue(\''.$propname.'\');');
                         break;
                     }
 
-                    if($other)
+                    if($can_have_other)
                         $options['<<<other>>>'] = l('>>> Specify other');
 
                     select($propname, $options, $value, $onChange, $hideField);
