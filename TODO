@@ -1,7 +1,6 @@
 This is a small file for storing quick thoughts about new features and needed changes:
 ===============================================================================
 
-- bei automap mit fehler (connection refused) die option "modify view" wegmachen
 - map lock?
 - make x/y coordinates in javascript an array of coordinates instead of comma separated string
 
