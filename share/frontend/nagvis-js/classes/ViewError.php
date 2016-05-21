@@ -43,16 +43,24 @@ class ViewError {
         return ob_get_clean();
     }
 
-    public function parse($e) {
+    public function parse($e, $MAPCFG = null) {
         global $CORE;
 
         $INDEX = new NagVisIndexView($CORE);
-        $HEADER = new NagVisHeaderMenu(cfg('index', 'headertemplate'));
+        $HEADER = new NagVisHeaderMenu(cfg('index', 'headertemplate'), $MAPCFG);
         $INDEX->setHeaderMenu($HEADER->__toString());
 
         $INDEX->setContent($this->errorPage($e));
 
         return $INDEX->parse();
+    }
+
+    public function parseWithMap($e, $map_name) {
+        $MAPCFG = new GlobalMapCfg($map_name);
+        try {
+            $MAPCFG->readMapConfig(ONLY_GLOBAL);
+        } catch(MapCfgInvalid $e) {}
+        return $this->parse($e, $MAPCFG);
     }
 }
 ?>

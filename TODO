@@ -2,7 +2,6 @@ This is a small file for storing quick thoughts about new features and needed ch
 ===============================================================================
 
 - map lock?
-- make x/y coordinates in javascript an array of coordinates instead of comma separated string
 
 Worldmap:
   - Clustering von Objekten je nach Zoomstufe
@@ -28,6 +27,7 @@ Worldmap:
 *** Cleanups ***
   - Variablen nach int/boolean casten, wenn sinnvoll
   - Weathermap Linien Perfdata Berechnungen nach check_command aufräumen
+  - make x/y coordinates in javascript an array of coordinates instead of comma separated string
 
 *** Installer renovieren ***
 
