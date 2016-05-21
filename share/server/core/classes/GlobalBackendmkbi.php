@@ -286,7 +286,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
      */
     public function getObjects($type, $name1Pattern = '', $name2Pattern = '') {
         if($type !== 'aggr')
-            return array();
+            throw new BackendException(l('This backend only supports "Aggregation" objects.'));
 
         $result = Array();
         foreach($this->getAggregationNames() AS $id => $name) {

@@ -1,4 +1,8 @@
 1.9b8
+Core:
+  * MK BI backend: Now prints an error message when trying to use it with
+    objects that are not aggregations.
+
 Frontend:
   * FIX: Improved error handling in case of modifying objects which
     backends report issues
