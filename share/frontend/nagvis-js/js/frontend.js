@@ -175,8 +175,8 @@ function searchObjects(sMatch) {
     var aResults = [];
     var bMatch = false;
 
-    // Skip empty searches
-    if(sMatch == '')
+    // Skip empty searches or searches on non initialized views
+    if (sMatch === '' || g_view === null)
         return false;
 
     // Loop all map objects and search the matching attributes

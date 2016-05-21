@@ -1,8 +1,12 @@
 1.9b8
+Frontend:
   * FIX: Improved error handling in case of modifying objects which
     backends report issues
   * FIX: Fixed keeping unlisted values of dropdowns (object names, backend_id)
   * FIX: Cleaning up host/service attributes when changing the backend_id
+
+Automap:
+  * FIX: Fixed error when searching for objects on non initialized automaps
 
 1.9b7
 Fronted:
