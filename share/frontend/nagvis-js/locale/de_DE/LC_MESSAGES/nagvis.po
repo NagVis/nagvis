@@ -862,7 +862,7 @@ msgstr "Altes Passwort"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:373
 msgid "Open"
-msgstr "öffnen"
+msgstr "Öffnen"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:397
 msgid "Options"
@@ -2192,7 +2192,7 @@ msgstr "Ausgabe"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:407
 #: share/server/core/classes/NagVisHoverMenu.php:135
 msgid "overview"
-msgstr "übersicht"
+msgstr "Übersicht"
 
 #: share/server/core/classes/NagVisHoverMenu.php:127
 msgid "perfdata"
