@@ -524,7 +524,7 @@ msgid "Login"
 msgstr ""
 
 #: share/server/core/classes/CoreLogonMultisite.php:35
-msgid "LogonMultisite: The htpasswd file &quot;[PATH]&quot; does not exist."
+msgid "LogonMultisite: The htpasswd file \"[PATH]\" does not exist."
 msgstr ""
 
 #: share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:212
@@ -2126,14 +2126,14 @@ msgstr "The automap is not supported here."
 #: share/server/core/classes/GlobalBackendndomy.php:244
 #: share/server/core/classes/GlobalBackendndomy.php:244
 msgid "backendInstanceNameNotUniq"
-msgstr "The given instance name &quot;[NAME]&quot; in backend &quot;[BACKENDID]&quot; is not unique."
+msgstr "The given instance name \"[NAME]\" in backend \"[BACKENDID]\" is not unique."
 
 #: nagvis/includes/classes/GlobalBackendndomy.php:246
 #: share/server/core/classes/GlobalBackendndomy.php:246
 #: share/server/core/classes/GlobalBackendndomy.php:241
 #: share/server/core/classes/GlobalBackendndomy.php:241
 msgid "backendInstanceNameNotValid"
-msgstr "The given instance name &quot;[NAME]&quot; in backend &quot;[BACKENDID]&quot; is not valid."
+msgstr "The given instance name \"[NAME]\" in backend \"[BACKENDID]\" is not valid."
 
 #: nagvis/includes/classes/GlobalMainCfg.php:750
 #: share/server/core/classes/GlobalMainCfg.php:1064
@@ -2156,7 +2156,7 @@ msgstr "The given instance name &quot;[NAME]&quot; in backend &quot;[BACKENDID]&
 #: share/server/core/classes/CoreBackendMgmt.php:448
 #: share/server/core/classes/GlobalMainCfg.php:1491
 msgid "backendNotDefined"
-msgstr "The backend with the id &quot;[BACKENDID]&quot; is not defined."
+msgstr "The backend with the id \"[BACKENDID]\" is not defined."
 
 #: nagvis/includes/classes/CoreBackendMgmt.php:79
 #: share/server/core/classes/CoreBackendMgmt.php:79
@@ -2165,7 +2165,7 @@ msgstr "The backend with the id &quot;[BACKENDID]&quot; is not defined."
 #: share/server/core/classes/CoreBackendMgmt.php:381
 #: share/server/core/classes/CoreBackendMgmt.php:409
 msgid "backendNotExists"
-msgstr "The backend with ID &quot;[BACKENDID]&quot; of type &quot;[BACKENDTYPE]&quot; does not exist."
+msgstr "The backend with ID \"[BACKENDID]\" of type \"[BACKENDTYPE]\" does not exist."
 
 #: wui/ajax_handler.php:73 wui/ajax_handler.php:104
 #: share/frontend/wui/ajax_handler.php:75
@@ -2205,7 +2205,7 @@ msgstr "Color (Hex)"
 #: share/server/core/classes/GlobalBackground.php:145
 #: share/server/core/classes/GlobalBackground.php:191
 msgid "backgroundFolderNotWriteable"
-msgstr "The background image folder &quot;[PATH]&quot; is not writeable."
+msgstr "The background image folder \"[PATH]\" is not writeable."
 
 #: wui/includes/classes/WuiBackgroundManagement.php:142
 #: share/frontend/wui/includes/classes/WuiBackgroundManagement.php:142
@@ -2241,7 +2241,7 @@ msgstr "The background image \"[IMGPATH]\" is not readable."
 #: share/server/core/classes/GlobalBackground.php:124
 #: share/server/core/classes/GlobalBackground.php:170
 msgid "backgroundNotWriteable"
-msgstr "The map image file &quot;[IMGPATH]&quot; is not writeable."
+msgstr "The map image file \"[IMGPATH]\" is not writeable."
 
 #: wui/includes/classes/WuiBackgroundManagement.php:141
 #: share/frontend/wui/includes/classes/WuiBackgroundManagement.php:141
@@ -2255,7 +2255,7 @@ msgstr "Width (px)"
 #: nagvis/includes/classes/GlobalFileCache.php:166
 #: share/server/core/classes/GlobalFileCache.php:166
 msgid "cacheFileNotExists"
-msgstr "The cache file &quot;[FILE]&quot; does not exist."
+msgstr "The cache file \"[FILE]\" does not exist."
 
 #: nagvis/includes/classes/GlobalFileCache.php:82
 #: nagvis/includes/classes/GlobalFileCache.php:148
@@ -2263,12 +2263,12 @@ msgstr "The cache file &quot;[FILE]&quot; does not exist."
 #: share/server/core/classes/GlobalFileCache.php:148
 #: share/server/core/classes/GlobalFileCache.php:109
 msgid "cacheFileNotWriteable"
-msgstr "The cache file &quot;[FILE]&quot; is not writeable."
+msgstr "The cache file \"[FILE]\" is not writeable."
 
 #: nagvis/includes/classes/GlobalFileCache.php:130
 #: share/server/core/classes/GlobalFileCache.php:130
 msgid "cacheFolderNotWriteable"
-msgstr "The parent folder for the cache file &quot;[FILE]&quot; is not writeable. The cache file can not be created. Please fix the permissions on the filesystem."
+msgstr "The parent folder for the cache file \"[FILE]\" is not writeable. The cache file can not be created. Please fix the permissions on the filesystem."
 
 #: wui/includes/classes/WuiMap.php:611 wui/includes/classes/WuiMap.php:613
 #: share/frontend/wui/includes/classes/WuiMap.php:616
@@ -2490,12 +2490,12 @@ msgstr "Schedule Downtime"
 #: nagvis/includes/classes/NagVisContextMenu.php:178
 #: share/server/core/classes/NagVisContextMenu.php:178
 msgid "contextTemplateNotExists"
-msgstr "The template file &quot;[FILE]&quot; does not exist."
+msgstr "The template file \"[FILE]\" does not exist."
 
 #: nagvis/includes/classes/NagVisContextMenu.php:158
 #: share/server/core/classes/NagVisContextMenu.php:158
 msgid "contextTemplateNotReadable"
-msgstr "The template is not readable. Please check the webservers permissions on the template file &quot;[FILE]&quot;."
+msgstr "The template is not readable. Please check the webservers permissions on the template file \"[FILE]\"."
 
 #: wui/includes/classes/WuiMapCfg.php:121
 #: share/frontend/wui/includes/classes/WuiMapCfg.php:121
@@ -2506,7 +2506,7 @@ msgstr "The template is not readable. Please check the webservers permissions on
 #: share/server/core/classes/GlobalMapCfg.php:2482
 #: share/server/core/classes/GlobalMapCfg.php:1482
 msgid "couldNotDeleteMapCfg"
-msgstr "Could not delete the map configuration file &quot;[MAPPATH]&quot;."
+msgstr "Could not delete the map configuration file \"[MAPPATH]\"."
 
 #: wui/includes/classes/WuiBackground.php:46
 #: share/frontend/wui/includes/classes/WuiBackground.php:46
@@ -2516,14 +2516,14 @@ msgstr "Could not delete the map configuration file &quot;[MAPPATH]&quot;."
 #: share/server/core/classes/GlobalBackground.php:205
 #: share/server/core/classes/GlobalBackground.php:206
 msgid "couldNotDeleteMapImage"
-msgstr "Could not delete the map image file &quot;[IMGPATH]&quot;."
+msgstr "Could not delete the map image file \"[IMGPATH]\"."
 
 #: nagvis/includes/classes/NagVisHoverUrl.php:85
 #: share/server/core/classes/NagVisHoverUrl.php:94
 #: share/server/core/classes/NagVisHoverUrl.php:95
 #: share/server/core/classes/NagVisHoverUrl.php:93
 msgid "couldNotGetHoverUrl"
-msgstr "Could not get hover URL &quot;[URL]&quot;. Maybe the URL is password protected."
+msgstr "Could not get hover URL \"[URL]\". Maybe the URL is password protected."
 
 #: nagvis/includes/classes/NagVisAutoMap.php:545
 #: share/server/core/classes/NagVisAutoMap.php:594
@@ -2537,7 +2537,7 @@ msgstr "Could not get hover URL &quot;[URL]&quot;. Maybe the URL is password pro
 #: share/server/core/classes/NagVisAutoMap.php:856
 #: share/server/core/sources/automap.php:123
 msgid "couldNotGetRootHostname"
-msgstr "The Automap needs one root hostname to start the drawing.<br><br> There are three ways to get a root host: URL parameter &quot;root&quot;, Main configuration &quot;automap > default_root&quot;, auto detect (only possible when there is <b>one</b> host with no parent)."
+msgstr "The Automap needs one root hostname to start the drawing.<br><br> There are three ways to get a root host: URL parameter \"root\", Main configuration \"automap > default_root\", auto detect (only possible when there is <b>one</b> host with no parent)."
 
 #: wui/includes/classes/WuiMapManagement.php:77
 #: wui/includes/classes/WuiBackgroundManagement.php:76
@@ -2673,7 +2673,7 @@ msgstr "Delete shape"
 #: share/server/core/classes/GlobalUserCfg.php:221
 #: share/server/core/classes/GlobalMainCfg.php:1031
 msgid "deprecatedOption"
-msgstr "The given option &quot;[ATTRIBUTE]&quot; in section &quot;[TYPE]&quot; is deprecated in this version. Please read the documentation/changelog for details."
+msgstr "The given option \"[ATTRIBUTE]\" in section \"[TYPE]\" is deprecated in this version. Please read the documentation/changelog for details."
 
 #: wui/includes/classes/WuiEditMainCfg.php:150
 #: share/frontend/wui/includes/classes/WuiEditMainCfg.php:150
@@ -2787,12 +2787,12 @@ msgstr "The file could not be uploaded to the webserver."
 #: share/server/core/classes/GlobalFileCache.php:114
 #: share/server/core/classes/GlobalFileCache.php:141
 msgid "fileNotCached"
-msgstr "The file &quot;[FILE]&quot; is not cached."
+msgstr "The file \"[FILE]\" is not cached."
 
 #: nagvis/includes/classes/GlobalFileCache.php:184
 #: share/server/core/classes/GlobalFileCache.php:184
 msgid "fileNotExists"
-msgstr "The file &quot;[FILE]&quot; does not exist."
+msgstr "The file \"[FILE]\" does not exist."
 
 #: wui/includes/classes/WuiMap.php:705
 #: share/frontend/wui/includes/classes/WuiMap.php:710
@@ -2910,7 +2910,7 @@ msgstr "You told NagVis to use the GD-Libs for drawing lines on the background i
 #: share/server/core/classes/NagVisAutoMap.php:713
 #: share/server/core/sources/automap_pos.php:27
 msgid "graphvizBinaryNotFound"
-msgstr "The required graphviz binary &quot;[NAME]&quot; could not be found in the paths: &quot;[PATHS]&quot;."
+msgstr "The required graphviz binary \"[NAME]\" could not be found in the paths: \"[PATHS]\"."
 
 #: nagvis/includes/classes/GlobalHeaderMenu.php:230
 #: share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:259
@@ -2921,7 +2921,7 @@ msgstr "The required graphviz binary &quot;[NAME]&quot; could not be found in th
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:349
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:352
 msgid "headerTemplateNotExists"
-msgstr "The requested header template file &quot;[FILE]&quot; does not exist."
+msgstr "The requested header template file \"[FILE]\" does not exist."
 
 #: nagvis/includes/classes/GlobalHeaderMenu.php:248
 #: share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:277
@@ -2932,7 +2932,7 @@ msgstr "The requested header template file &quot;[FILE]&quot; does not exist."
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:367
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:370
 msgid "headerTemplateNotReadable"
-msgstr "Please check the webservers permissions at the header template file &quot;[FILE]&quot;."
+msgstr "Please check the webservers permissions at the header template file \"[FILE]\"."
 
 #: wui/includes/classes/WuiMap.php:667
 #: share/frontend/wui/includes/classes/WuiMap.php:672
@@ -3136,12 +3136,12 @@ msgstr "Hosts"
 #: nagvis/includes/classes/NagVisHoverMenu.php:231
 #: share/server/core/classes/NagVisHoverMenu.php:231
 msgid "hoverTemplateNotExists"
-msgstr "The hover template file &quot;[FILE]&quot; does not exist."
+msgstr "The hover template file \"[FILE]\" does not exist."
 
 #: nagvis/includes/classes/NagVisHoverMenu.php:211
 #: share/server/core/classes/NagVisHoverMenu.php:211
 msgid "hoverTemplateNotReadable"
-msgstr "The hover template is not readable. Please check the webservers permissions for the hover template file &quot;[FILE]&quot;."
+msgstr "The hover template is not readable. Please check the webservers permissions for the hover template file \"[FILE]\"."
 
 #: wui/includes/classes/WuiMap.php:674
 #: share/frontend/wui/includes/classes/WuiMap.php:679
@@ -3157,7 +3157,7 @@ msgstr "Icon"
 #: share/frontend/wui/classes/WuiMap.php:194
 #: share/frontend/wui/classes/WuiMap.php:198
 msgid "iconNotExists"
-msgstr "An icon &quot;[IMGPATH]&quot; which is used on the map does not exist."
+msgstr "An icon \"[IMGPATH]\" which is used on the map does not exist."
 
 #: nagvis/includes/classes/GlobalCore.php:317
 #: share/server/core/classes/GlobalCore.php:324
@@ -3167,7 +3167,7 @@ msgstr "An icon &quot;[IMGPATH]&quot; which is used on the map does not exist."
 #: share/server/core/classes/GlobalCore.php:319
 #: share/server/core/classes/GlobalCore.php:340
 msgid "iconsetFiletypeUnknown"
-msgstr "Unable do determine the filetype of the iconset &quot;[ICONSET]&quot;. Maybe the &quot;_ok&quot; image is missing?"
+msgstr "Unable do determine the filetype of the iconset \"[ICONSET]\". Maybe the \"_ok\" image is missing?"
 
 #: wui/includes/classes/WuiBackground.php:125
 #: share/frontend/wui/includes/classes/WuiBackground.php:125
@@ -3188,7 +3188,7 @@ msgstr "The image \"[MAPNAME]\" already exists. Rename the file."
 #: share/server/core/classes/GlobalIndexPage.php:425
 #: share/server/core/classes/GlobalIndexPage.php:471
 msgid "imageNotExists"
-msgstr "An image &quot;[FILE]&quot; which is needed to create a thumbnail image does not exist."
+msgstr "An image \"[FILE]\" which is needed to create a thumbnail image does not exist."
 
 #: wui/includes/classes/WuiMapManagement.php:126
 #: share/frontend/wui/includes/classes/WuiMapManagement.php:126
@@ -3239,7 +3239,7 @@ msgstr "Instance"
 #: share/server/core/classes/GlobalLanguage.php:232
 #: share/server/core/classes/GlobalLanguage.php:231
 msgid "languageNotFound"
-msgstr "You configured NagVis to load language &quot;[LANG]&quot;. This language could not be found in language path."
+msgstr "You configured NagVis to load language \"[LANG]\". This language could not be found in language path."
 
 #: nagvis/includes/classes/NagVisHoverMenu.php:143
 #: share/server/core/classes/NagVisHoverMenu.php:143
@@ -3276,7 +3276,7 @@ msgstr "Line"
 #: share/server/core/classes/GlobalMapCfg.php:1703
 #: share/server/core/classes/GlobalMapCfg.php:1687
 msgid "lineTypeButViewTypeNotSet"
-msgstr "You told NagVis to show an object as line (option line_type set). Since NagVis 1.4 you have to set the option &quot;view_type=line&quot; for line objects. This problem was detected in an object of the type &quot;[TYPE]&quot; on map &quot;[MAP]&quot;."
+msgstr "You told NagVis to show an object as line (option line_type set). Since NagVis 1.4 you have to set the option \"view_type=line\" for line objects. This problem was detected in an object of the type \"[TYPE]\" on map \"[MAP]\"."
 
 #: wui/includes/classes/WuiMap.php:702
 #: share/frontend/wui/includes/classes/WuiMap.php:707
@@ -3286,7 +3286,7 @@ msgstr "You told NagVis to show an object as line (option line_type set). Since 
 #: share/server/core/classes/GlobalCore.php:579
 #: share/server/core/classes/GlobalCore.php:589
 msgid "lineTypeNotSet"
-msgstr "The option &quot;line_type&quot; is not set."
+msgstr "The option \"line_type\" is not set."
 
 #: wui/includes/classes/WuiMap.php:703
 #: share/frontend/wui/includes/classes/WuiMap.php:708
@@ -3319,7 +3319,7 @@ msgstr "The main configuration file cache is not writeable."
 #: share/server/core/classes/GlobalMainCfg.php:1233
 #: share/server/core/classes/GlobalMainCfg.php:1249
 msgid "mainCfgNotExists"
-msgstr "The main configuration file &quot;[MAINCFG]&quot; does not exists."
+msgstr "The main configuration file \"[MAINCFG]\" does not exists."
 
 #: nagvis/includes/classes/GlobalMainCfg.php:807
 #: share/server/core/classes/GlobalUserCfg.php:283
@@ -3329,7 +3329,7 @@ msgstr "The main configuration file &quot;[MAINCFG]&quot; does not exists."
 #: share/server/core/classes/GlobalMainCfg.php:1255
 #: share/server/core/classes/GlobalMainCfg.php:1271
 msgid "mainCfgNotReadable"
-msgstr "Please check the webservers permissions for the main configuration file &quot;[MAINCFG]&quot;."
+msgstr "Please check the webservers permissions for the main configuration file \"[MAINCFG]\"."
 
 #: wui/includes/classes/WuiMainCfg.php:182
 #: wui/includes/classes/WuiMainCfg.php:212
@@ -3354,7 +3354,7 @@ msgstr "The main configuration file is not writeable."
 #: share/server/core/classes/GlobalUserCfg.php:200
 #: share/server/core/classes/GlobalMainCfg.php:998
 msgid "mainMustValueNotSet"
-msgstr "The must value &quot;[ATTRIBUTE]&quot; is not set the section &quot;[TYPE]&quot; in main configuration file."
+msgstr "The must value \"[ATTRIBUTE]\" is not set the section \"[TYPE]\" in main configuration file."
 
 #: wui/includes/classes/WuiMap.php:684
 #: share/frontend/wui/includes/classes/WuiMap.php:689
@@ -3451,7 +3451,7 @@ msgstr "The map \"[MAPNAME]\" already exists. Rename the file."
 #: share/server/core/classes/GlobalMapCfg.php:1789
 #: share/server/core/classes/GlobalMapCfg.php:1825
 msgid "mapCfgDirNotWriteable"
-msgstr "Please check the webservers permissions for the map configuration folder &quot;[MAPPATH]&quot;."
+msgstr "Please check the webservers permissions for the map configuration folder \"[MAPPATH]\"."
 
 #: share/server/core/classes/GlobalMapCfg.php:1490
 #: share/server/core/classes/GlobalMapCfg.php:1540
@@ -3490,7 +3490,7 @@ msgstr "The map configuration file \"[MAP]\" does not exist"
 #: share/server/core/classes/GlobalMapCfg.php:1602
 #: share/server/core/classes/GlobalMapCfg.php:1628
 msgid "mapCfgNotReadable"
-msgstr "The map configuration file &quot;[MAP]&quot; is not readable."
+msgstr "The map configuration file \"[MAP]\" is not readable."
 
 #: wui/includes/classes/WuiMapCfg.php:142
 #: share/frontend/wui/includes/classes/WuiMapCfg.php:142
@@ -3511,7 +3511,7 @@ msgstr "The map configuration file is not writeable."
 #: share/server/core/classes/GlobalMapCfg.php:1906
 #: share/server/core/classes/GlobalMapCfg.php:838
 msgid "mapDeprecatedOption"
-msgstr "The given option &quot;[ATTRIBUTE]&quot; in section of type &quot;[TYPE]&quot; in map &quot;[MAP]&quot; is deprecated in this version. Please read the documentation/changelog for details."
+msgstr "The given option \"[ATTRIBUTE]\" in section of type \"[TYPE]\" in map \"[MAP]\" is deprecated in this version. Please read the documentation/changelog for details."
 
 #: wui/includes/classes/WuiMapManagement.php:187
 #: share/frontend/wui/includes/classes/WuiMapManagement.php:187
@@ -3625,7 +3625,7 @@ msgstr "The map lock could not be deleted."
 #: share/server/core/classes/WuiMapCfg.php:416
 #: share/server/core/classes/WuiMapCfg.php:418
 msgid "mapLockNotExists"
-msgstr "The lockfile &quot;[MAP]&quot; does not exist."
+msgstr "The lockfile \"[MAP]\" does not exist."
 
 #: wui/includes/classes/WuiMapCfg.php:421
 #: share/frontend/wui/includes/classes/WuiMapCfg.php:421
@@ -3633,7 +3633,7 @@ msgstr "The lockfile &quot;[MAP]&quot; does not exist."
 #: share/server/core/classes/WuiMapCfg.php:438
 #: share/server/core/classes/WuiMapCfg.php:440
 msgid "mapLockNotReadable"
-msgstr "The lockfile &quot;[MAP]&quot; is not readable."
+msgstr "The lockfile \"[MAP]\" is not readable."
 
 #: wui/includes/classes/WuiMapCfg.php:443
 #: share/frontend/wui/includes/classes/WuiMapCfg.php:443
@@ -3641,7 +3641,7 @@ msgstr "The lockfile &quot;[MAP]&quot; is not readable."
 #: share/server/core/classes/WuiMapCfg.php:460
 #: share/server/core/classes/WuiMapCfg.php:462
 msgid "mapLockNotWriteable"
-msgstr "The lockfile &quot;[MAP]&quot; is not writeable."
+msgstr "The lockfile \"[MAP]\" is not writeable."
 
 #: wui/includes/classes/WuiMapCfg.php:308
 #: share/frontend/wui/includes/classes/WuiMapCfg.php:308
@@ -3681,7 +3681,7 @@ msgstr "This map object will show the summary state of the map and its children.
 #: share/server/core/classes/CoreRotation.php:55
 #: share/server/core/classes/CoreRotation.php:54
 msgid "mapRotationPoolNotExists"
-msgstr "The given map rotation pool &quot;[ROTATION]&quot; is not defined in NagVis."
+msgstr "The given map rotation pool \"[ROTATION]\" is not defined in NagVis."
 
 #: nagvis/includes/classes/objects/NagVisObject.php:231
 #: share/server/core/classes/objects/NagVisObject.php:249
@@ -3918,7 +3918,7 @@ msgstr "NagVis configuration"
 #: share/server/core/classes/GlobalBackendndo2fs.php:80
 #: share/server/core/classes/GlobalBackendndomy.php:127
 msgid "nagiosDataNotUpToDate"
-msgstr "NDO claims that Nagios did no status update for more than &quot;[TIMEWITHOUTUPDATE]&quot; seconds. Make sure that Nagios and NDO daemons are running. (Backend-ID: [BACKENDID])"
+msgstr "NDO claims that Nagios did no status update for more than \"[TIMEWITHOUTUPDATE]\" seconds. Make sure that Nagios and NDO daemons are running. (Backend-ID: [BACKENDID])"
 
 #: nagvis/includes/classes/GlobalBackendndomy.php:122
 #: share/server/core/classes/GlobalBackendndomy.php:122
@@ -3929,7 +3929,7 @@ msgstr "NDO reports that Nagios is not running (Backend-ID: [BACKENDID])"
 #: nagvis/includes/classes/GlobalBackendndo2fs.php:79
 #: share/server/core/classes/GlobalBackendndo2fs.php:76
 msgid "ndo2fsFileStructureNotValid"
-msgstr "The file structure in the ndo2fs directory &quot;[PATH]&quot; is not valid. The directory is used by backend with the id &quot;[BACKENDID]&quot;"
+msgstr "The file structure in the ndo2fs directory \"[PATH]\" is not valid. The directory is used by backend with the id \"[BACKENDID]\""
 
 #: nagvis/includes/classes/GlobalHeaderMenu.php:178
 #: share/frontend/nagvis-js/classes/GlobalHeaderMenu.php:205
@@ -4049,7 +4049,7 @@ msgstr "Blanks are not allowed."
 #: share/server/core/classes/GlobalBackendmerlinmy.php:111
 #: share/server/core/classes/GlobalBackendndomy.php:166
 msgid "noTablesExists"
-msgstr "There are no tables in the database matching given prefix &quot;[PREFIX]&quot;. (Backend-ID: [BACKENDID])"
+msgstr "There are no tables in the database matching given prefix \"[PREFIX]\". (Backend-ID: [BACKENDID])"
 
 #: nagvis/includes/classes/GlobalPage.php:117
 #: share/frontend/nagvis-js/classes/GlobalPage.php:117
@@ -4071,7 +4071,7 @@ msgstr "No user name was handed over to NagVis! For possible solutions please ha
 #: share/server/core/classes/GlobalCore.php:584
 #: share/server/core/classes/GlobalCore.php:585
 msgid "not2coords"
-msgstr "It seems that you want to define a line (\"line_type\" is set) but you didn&quot;t give two \"[COORD]\" coordinates."
+msgstr "It seems that you want to define a line (\"line_type\" is set) but you didn\"t give two \"[COORD]\" coordinates."
 
 #: wui/includes/classes/WuiMap.php:723
 #: share/frontend/wui/includes/classes/WuiMap.php:728
@@ -4218,11 +4218,11 @@ msgstr "Overview"
 
 #: nagvis/ajax_handler.php:212 nagvis/ajax_handler.php:228
 msgid "parameterNameNotSet"
-msgstr "The parameter &quot;name&quot; is missing."
+msgstr "The parameter \"name\" is missing."
 
 #: nagvis/ajax_handler.php:82
 msgid "parameterObjIdNotSet"
-msgstr "The parameter &quot;objId&quot; is missing."
+msgstr "The parameter \"objId\" is missing."
 
 #: nagvis/ajax_handler.php:58 nagvis/ajax_handler.php:74
 #: nagvis/ajax_handler.php:188 nagvis/ajax_handler.php:200
@@ -4239,11 +4239,11 @@ msgstr "The objType parameter is missing."
 
 #: nagvis/ajax_handler.php:76
 msgid "parameterTypeNotSet"
-msgstr "The parameter &quot;type&quot; is missing."
+msgstr "The parameter \"type\" is missing."
 
 #: nagvis/ajax_handler.php:244
 msgid "parameterUrlNotSet"
-msgstr "The parameter &quot;url&quot; is missing."
+msgstr "The parameter \"url\" is missing."
 
 #: nagvis/includes/classes/NagVisHoverMenu.php:123
 #: share/server/core/classes/NagVisHoverMenu.php:123
@@ -4266,7 +4266,7 @@ msgstr "The user \"[USER]\" has no permission for this action"
 #: share/frontend/wui/classes/WuiCore.php:224
 #: share/frontend/wui/classes/WuiCore.php:233
 msgid "phpModuleNotLoaded"
-msgstr "The PHP module &quot;[MODULE]&quot; is not loaded."
+msgstr "The PHP module \"[MODULE]\" is not loaded."
 
 #: wui/includes/classes/WuiMap.php:620
 #: share/frontend/wui/includes/classes/WuiMap.php:625
@@ -4285,7 +4285,7 @@ msgstr "Position/Size"
 #: share/server/core/classes/NagVisUrl.php:62
 #: share/server/core/classes/NagVisUrl.php:70
 msgid "problemReadingUrl"
-msgstr "Unable to open the URL &quot;[URL]&quot;. Error: &quot;[MSG]&quot;"
+msgstr "Unable to open the URL \"[URL]\". Error: \"[MSG]\""
 
 #: wui/includes/classes/WuiMap.php:664
 #: share/frontend/wui/includes/classes/WuiMap.php:669
@@ -4793,7 +4793,7 @@ msgstr "The action \"[ACTION]\" is not supported by the ajax handler."
 #: share/server/core/classes/GlobalMapCfg.php:1903
 #: share/server/core/classes/GlobalMapCfg.php:835
 msgid "unknownAttribute"
-msgstr "The attribute &quot;[ATTRIBUTE]&quot; is not supported in objects of type &quot;[TYPE]&quot; on map [MAPNAME]."
+msgstr "The attribute \"[ATTRIBUTE]\" is not supported in objects of type \"[TYPE]\" on map [MAPNAME]."
 
 #: nagvis/ajax_handler.php:128
 #: share/server/core/classes/CoreModAutoMap.php:206
@@ -4825,7 +4825,7 @@ msgstr "The attribute &quot;[ATTRIBUTE]&quot; is not supported in objects of typ
 #: share/server/core/classes/GlobalMapCfg.php:372
 #: share/server/core/classes/objects/NagVisMapObj.php:455
 msgid "unknownObject"
-msgstr "The object of type &quot;[TYPE]&quot; in map &quot;[MAPNAME]&quot; is not allowed."
+msgstr "The object of type \"[TYPE]\" in map \"[MAPNAME]\" is not allowed."
 
 #: nagvis/ajax_handler.php:259
 msgid "unknownQuery"
@@ -4838,18 +4838,18 @@ msgstr "Unknown Query"
 #: share/server/core/classes/NagVisAutoMap.php:355
 #: share/server/core/classes/NagVisAutoMap.php:364
 msgid "unknownRenderMode"
-msgstr "The render mode &quot;[MODE]&quot; is not supported."
+msgstr "The render mode \"[MODE]\" is not supported."
 
 #: nagvis/includes/classes/GlobalMainCfg.php:761
 #: share/server/core/classes/GlobalMainCfg.php:1075
 msgid "unknownSection"
-msgstr "The section &quot;[TYPE]&quot; in main configuration file is not allowed."
+msgstr "The section \"[TYPE]\" in main configuration file is not allowed."
 
 #: nagvis/includes/classes/GlobalMainCfg.php:710
 #: share/server/core/classes/GlobalUserCfg.php:214
 #: share/server/core/classes/GlobalMainCfg.php:1024
 msgid "unknownValue"
-msgstr "The attribute &quot;[ATTRIBUTE]&quot; is not allowed in section &quot;[TYPE]&quot; in main configuration file."
+msgstr "The attribute \"[ATTRIBUTE]\" is not allowed in section \"[TYPE]\" in main configuration file."
 
 #: share/server/core/sources/automap_pos.php:188
 msgid "unknownrender_mode"
@@ -4931,14 +4931,14 @@ msgstr "Parameter [VAR] is out of range."
 #: share/server/core/classes/GlobalCore.php:584
 #: share/server/core/classes/GlobalCore.php:556
 msgid "varFolderNotExists"
-msgstr "The var folder &quot;[PATH]&quot; does not exist."
+msgstr "The var folder \"[PATH]\" does not exist."
 
 #: nagvis/includes/classes/GlobalCore.php:434
 #: share/server/core/classes/GlobalCore.php:490
 #: share/server/core/classes/GlobalCore.php:602
 #: share/server/core/classes/GlobalCore.php:574
 msgid "varFolderNotWriteable"
-msgstr "The var folder &quot;[PATH]&quot; is not writeable."
+msgstr "The var folder \"[PATH]\" is not writeable."
 
 #: nagvis/includes/classes/GlobalMapCfg.php:1473
 #: share/server/core/classes/GlobalMapCfg.php:1549
@@ -4949,7 +4949,7 @@ msgstr "The var folder &quot;[PATH]&quot; is not writeable."
 #: share/server/core/classes/GlobalMapCfg.php:1709
 #: share/server/core/classes/GlobalMapCfg.php:1693
 msgid "viewTypeGadgetButNoGadgetUrl"
-msgstr "NagVis found an object whitout gadget_url option but view_type=&quot;gadget&quot;. This problem was detected in an object of the type &quot;[TYPE]&quot; on map &quot;[MAP]&quot;."
+msgstr "NagVis found an object whitout gadget_url option but view_type=\"gadget\". This problem was detected in an object of the type \"[TYPE]\" on map \"[MAP]\"."
 
 #: wui/includes/classes/WuiMap.php:701
 #: share/frontend/wui/includes/classes/WuiMap.php:706
@@ -4959,7 +4959,7 @@ msgstr "NagVis found an object whitout gadget_url option but view_type=&quot;gad
 #: share/server/core/classes/GlobalCore.php:578
 #: share/server/core/classes/GlobalCore.php:588
 msgid "viewTypeWrong"
-msgstr "The given view_type is wrong. You configured more than one &quot;[COORD]&quot; coordinate. Though you should set view_type to &quot;line&quot;"
+msgstr "The given view_type is wrong. You configured more than one \"[COORD]\" coordinate. Though you should set view_type to \"line\""
 
 #: wui/includes/classes/WuiMapManagement.php:186
 #: share/frontend/wui/includes/classes/WuiMapManagement.php:186
@@ -4972,7 +4972,7 @@ msgstr "User with write permissions"
 #: share/frontend/wui/classes/WuiPage.php:93
 #: share/frontend/wui/classes/WuiPage.php:87
 msgid "wrongPhpVersion"
-msgstr "The PHP version you are using &quot;[CURRENT_VERSION]&quot; is too old. NagVis needs PHP &quot;[NEEDED_VERSION]&quot; or newer."
+msgstr "The PHP version you are using \"[CURRENT_VERSION]\" is too old. NagVis needs PHP \"[NEEDED_VERSION]\" or newer."
 
 #: wui/includes/classes/WuiMap.php:690
 #: nagvis/includes/classes/GlobalMainCfg.php:741

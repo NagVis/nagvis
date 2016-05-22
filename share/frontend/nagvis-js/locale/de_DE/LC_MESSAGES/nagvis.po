@@ -77,7 +77,7 @@ msgid "Actions"
 msgstr "Aktionen"
 
 msgid "Add"
-msgstr "Hinzuf&uuml;gen"
+msgstr "Hinzufügen"
 
 #: share/server/core/classes/ViewManageBackends.php:110
 msgid "Add Backend"
@@ -85,20 +85,20 @@ msgstr ""
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:378
 msgid "Add Icon"
-msgstr "Icon Hinzuf&uuml;gen"
+msgstr "Icon Hinzufügen"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:379
 msgid "Add Line"
-msgstr "Linie Hinzuf&uuml;gen"
+msgstr "Linie Hinzufügen"
 
 #: share/server/core/classes/ViewMapManageTmpl.php:104
 #: share/server/core/classes/ViewMapManageTmpl.php:204
 msgid "Add Option"
-msgstr "Option Hinzuf&uuml;gen"
+msgstr "Option Hinzufügen"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:381
 msgid "Add Special"
-msgstr "Spezial-Objekt Hinzuf&uuml;gen"
+msgstr "Spezial-Objekt Hinzufügen"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:387
 #: share/server/core/classes/GlobalCore.php:693
@@ -148,7 +148,7 @@ msgstr "Automap basierend auf Eltern/Kind Beziehungen"
 
 #: share/server/core/classes/ViewManageUsers.php:159
 msgid "Available Roles"
-msgstr "Rollen verf&uuml;gbar"
+msgstr "Rollen verfügbar"
 
 #: share/server/core/classes/ViewManageBackends.php:175
 #: share/server/core/classes/ViewManageBackends.php:186
@@ -175,11 +175,11 @@ msgstr "CSV-Datei"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:372
 #: share/server/core/classes/ViewChangePassword.php:92
 msgid "Change password"
-msgstr "Passwort &auml;ndern"
+msgstr "Passwort ändern"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:368
 msgid "Choose Language"
-msgstr "Sprache w&auml;hlen"
+msgstr "Sprache wählen"
 
 #: share/server/core/classes/ViewManageBackgrounds.php:215
 msgid "Choose a background"
@@ -295,7 +295,7 @@ msgstr "Aktueller Wert ist unbekannt - zeige Eingabefeld."
 
 #: share/server/core/classes/CoreAuthHandler.php:70
 msgid "Data has an invalid format"
-msgstr "Die Daten haben ein ung&uuml;ltiges Format"
+msgstr "Die Daten haben ein ungültiges Format"
 
 #: share/server/core/classes/CoreModGeneral.php:94
 msgid "Data not parsable: [URL] ([MSG])"
@@ -314,7 +314,7 @@ msgstr ""
 #: share/server/core/classes/ViewManageUsers.php:223
 #: share/server/core/classes/ViewMapManageTmpl.php:263
 msgid "Delete"
-msgstr "L&ouml;schen"
+msgstr "Löschen"
 
 #: share/server/core/classes/ViewManageBackends.php:223
 msgid "Delete Backend"
@@ -330,7 +330,7 @@ msgstr "Karte löschen"
 
 #: share/server/core/classes/ViewManageRoles.php:171
 msgid "Delete Role"
-msgstr "Rolle l&ouml;schen"
+msgstr "Rolle löschen"
 
 #: share/server/core/classes/ViewManageShapes.php:86
 msgid "Delete Shape"
@@ -338,11 +338,11 @@ msgstr ""
 
 #: share/server/core/classes/ViewMapManageTmpl.php:216
 msgid "Delete Template"
-msgstr "Template l&ouml;schen"
+msgstr "Template löschen"
 
 #: share/server/core/classes/ViewManageUsers.php:178
 msgid "Delete User"
-msgstr "Nutzer l&ouml;schen"
+msgstr "Nutzer löschen"
 
 #: share/server/core/classes/NagVisContextMenu.php:138
 msgid "Delete object"
@@ -503,12 +503,12 @@ msgstr ""
 
 #: share/server/core/sources/dynmap.php:65
 msgid "Hostgroup"
-msgstr "Ger&auml;tegruppe"
+msgstr "Gerätegruppe"
 
 #: share/server/core/mapcfg/default.php:91
 #: share/server/core/sources/dynmap.php:63
 msgid "Hosts"
-msgstr "Ger&auml;te"
+msgstr "Geräte"
 
 #: share/server/core/classes/ViewManageMaps.php:90
 msgid "ID (Internal Name)"
@@ -548,7 +548,7 @@ msgstr "Ungültiges Passwort."
 
 #: share/server/core/classes/CoreModMap.php:84
 msgid "Invalid query. The parameter [NAME] is missing or has an invalid format."
-msgstr "Ung&uuml;ltige Anfrage. Der Parameter [NAME] ist nicht vorhanden oder hat ein ung&uuml;ltiges Format."
+msgstr "Ungültige Anfrage. Der Parameter [NAME] ist nicht vorhanden oder hat ein ungültiges Format."
 
 #: share/server/core/classes/GlobalBackendmkbi.php:145
 #: share/server/core/classes/GlobalBackendmkbi.php:153
@@ -557,11 +557,11 @@ msgstr "Ungültige Antwort ([BACKENDID]): [RESPONSE]"
 
 #: share/server/core/classes/objects/NagVisStatefulObject.php:707
 msgid "Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME]."
-msgstr "Ung&uuml;ltiger Status+Substatus ([STATE], [SUBSTATE]) w&auml;hrend Status-Vergleich in einem Objekt vom Typ [TYPE] mit dem Namen [NAME] gefunden."
+msgstr "Ungültiger Status+Substatus ([STATE], [SUBSTATE]) während Status-Vergleich in einem Objekt vom Typ [TYPE] mit dem Namen [NAME] gefunden."
 
 #: share/server/core/classes/objects/NagVisStatefulObject.php:655
 msgid "Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE]."
-msgstr "Ung&uuml;ltiger Status+Substatus ([STATE], [SUBSTATE]) w&auml;hrend der Ermittlung des Gesamtstatus in einem Objekt vom Typ [TYPE] mit dem Namen [NAME] gefunden."
+msgstr "Ungültiger Status+Substatus ([STATE], [SUBSTATE]) während der Ermittlung des Gesamtstatus in einem Objekt vom Typ [TYPE] mit dem Namen [NAME] gefunden."
 
 #: share/server/core/classes/GlobalBackendmkbi.php:235
 #: share/server/core/classes/GlobalBackendnagiosbp.php:215
@@ -638,8 +638,8 @@ msgid "LogonMultisite: Not authenticated."
 msgstr "LogonMultisite: Nicht angemeldet."
 
 #: share/server/core/classes/CoreLogonMultisite.php:47
-msgid "LogonMultisite: The htpasswd file &quot;[HTPASSWD]&quot; or the authentication serial file &quot;[SERIAL]&quot; do not exist."
-msgstr "LogonMultisite: die htpasswd-Datei &quot;[HTPASSWD]&quot; oder die Serial-Datei &quot;[SERIAL]&quot; existieren nicht."
+msgid "LogonMultisite: The htpasswd file \"[HTPASSWD]\" or the authentication serial file \"[SERIAL]\" do not exist."
+msgstr "LogonMultisite: die htpasswd-Datei \"[HTPASSWD]\" oder die Serial-Datei \"[SERIAL]\" existieren nicht."
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:409
 msgid "Logout"
@@ -659,7 +659,7 @@ msgstr "Datenquellen verwalten"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:400
 msgid "Manage Backgrounds"
-msgstr "Hintergr&uuml;nde verwalten"
+msgstr "Hintergründe verwalten"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:401
 msgid "Manage Maps"
@@ -763,7 +763,7 @@ msgstr "NagVis-Datenquelle"
 
 #: share/frontend/nagvis-js/classes/NagVisLoginView.php:71
 msgid "NagVis is unable to set a cookie in your browser. Please enable cookies for at least the NagVis host."
-msgstr "NagVis konnte kein Cookie im Browser speichern. Damit NagVis benutzt werden kann, m&uuml;ssen Cookies f&uuml;r den NagVis-Host aktiviert sein."
+msgstr "NagVis konnte kein Cookie im Browser speichern. Damit NagVis benutzt werden kann, müssen Cookies für den NagVis-Host aktiviert sein."
 
 #: share/frontend/nagvis-js/classes/NagVisLoginView.php:67
 #: share/server/core/classes/GlobalCore.php:695
@@ -862,7 +862,7 @@ msgstr "Altes Passwort"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:373
 msgid "Open"
-msgstr "&Ouml;ffnen"
+msgstr "öffnen"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:397
 msgid "Options"
@@ -884,7 +884,7 @@ msgstr "Passwort"
 #: share/server/core/classes/ViewManageUsers.php:91
 #: share/server/core/classes/ViewManageUsers.php:293
 msgid "Password Confirm"
-msgstr "Neues Passwort (Best&auml;tigung)"
+msgstr "Neues Passwort (Bestätigung)"
 
 #: share/server/core/classes/GlobalMainCfg.php:2437
 msgid "Paths"
@@ -1010,14 +1010,14 @@ msgstr "Problem (Backend: [BACKENDID]): [MSG]"
 
 #: share/server/core/classes/ViewManageRoles.php:191
 msgid "Problem while deleting the role."
-msgstr "Rolle konnte nicht gel&ouml;scht werden."
+msgstr "Rolle konnte nicht gelöscht werden."
 
 #: share/server/core/classes/ViewManageUsers.php:196
 msgid "Problem while deleting the user."
 msgstr ""
 
 msgid "Problem while deleting user."
-msgstr "Nutzer konnte nicht gel&ouml;scht werden."
+msgstr "Nutzer konnte nicht gelöscht werden."
 
 #: share/server/core/classes/objects/NagVisMapObj.php:361
 msgid "Problem while processing map: [ERR]"
@@ -1114,10 +1114,10 @@ msgstr "Suchen"
 
 #: share/server/core/classes/ViewManageRoles.php:133
 msgid "Select Role"
-msgstr "Rolle w&auml;hlen"
+msgstr "Rolle wählen"
 
 msgid "Select User"
-msgstr "Nutzer w&auml;hlen"
+msgstr "Nutzer wählen"
 
 #: share/server/core/classes/ViewManageBackgrounds.php:85
 msgid "Select a color"
@@ -1210,11 +1210,11 @@ msgstr "Die Aggregation \"[NAME]\" enthält keine Objekte (Backend: [BACKEND])"
 
 #: share/server/core/classes/GlobalMainCfg.php:1874
 msgid "The attribute [ATTRIBUTE] in section [TYPE] in main configuration file does not match the correct format. Please review your configuration."
-msgstr "Das Attribut [ATTRIBUTE] im Abschnitt [TYPE] in der Hauptkonfiguration hat nicht das korrekte Format. Bitte die Konfiguration pr&uuml;fen."
+msgstr "Das Attribut [ATTRIBUTE] im Abschnitt [TYPE] in der Hauptkonfiguration hat nicht das korrekte Format. Bitte die Konfiguration prüfen."
 
 #: share/server/core/classes/GlobalMainCfg.php:1850
 msgid "The attribute [ATTRIBUTE] in section [TYPE] in main configuration file is deprecated. Please take a look at the documentation for updating your configuration."
-msgstr "Das Attribut [ATTRIBUTE] im Abschnitt [TYPE] in der Hauptkonfiguration ist veraltet. Bitte die Dokumentation nach Schritten zum Update pr&uuml;fen."
+msgstr "Das Attribut [ATTRIBUTE] im Abschnitt [TYPE] in der Hauptkonfiguration ist veraltet. Bitte die Dokumentation nach Schritten zum Update prüfen."
 
 #: share/server/core/classes/ViewMapAddModify.php:101
 msgid "The attribute has the wrong format (Regex: [MATCH])."
@@ -1244,7 +1244,7 @@ msgid "The background could not be created."
 msgstr "Das Hintergrundbild konnte nicht erstellt werden."
 
 msgid "The background could not be deleted."
-msgstr "Das Hintergrundbild konnte nicht gel&ouml;scht werden."
+msgstr "Das Hintergrundbild konnte nicht gelöscht werden."
 
 #: share/server/core/classes/ViewManageBackgrounds.php:56
 msgid "The background does already exist."
@@ -1260,7 +1260,7 @@ msgstr "Das Hintergrundbild wurde erstellt."
 
 #: share/server/core/classes/ViewManageBackgrounds.php:196
 msgid "The background has been deleted."
-msgstr "Das Hintergrundbild wurde gel&ouml;scht."
+msgstr "Das Hintergrundbild wurde gelöscht."
 
 #: share/server/core/classes/ViewManageBackgrounds.php:133
 msgid "The background has been uploaded."
@@ -1296,7 +1296,7 @@ msgstr "Die Datei konnte nicht hochgeladen werden (Error: [ERROR])."
 
 #: share/server/core/functions/index.php:123
 msgid "The given action is not valid"
-msgstr "Die Aktion ist ung&uuml;ltig"
+msgstr "Die Aktion ist ungültig"
 
 #: share/server/core/classes/CoreModAction.php:54
 msgid "The given custom action is not defined."
@@ -1315,11 +1315,11 @@ msgstr "Das Modul ist nicht registriert"
 
 #: share/server/core/classes/CoreUriHandler.php:141
 msgid "The given url is not valid"
-msgstr "Die URL ist ung&uuml;ltig"
+msgstr "Die URL ist ungültig"
 
 #: share/server/core/classes/objects/NagVisHostgroup.php:144
 msgid "The hostgroup \"[GROUP]\" has no members or does not exist (Backend: [BACKEND])."
-msgstr "Die  Ger&auml;tegruppe [NAME] hat keine Mitglieder oder existiert nicht (Backend: [BACKEND])."
+msgstr "Die  Gerätegruppe [NAME] hat keine Mitglieder oder existiert nicht (Backend: [BACKEND])."
 
 #: share/server/core/classes/ViewManageMaps.php:287
 msgid "The map configuration has been exported."
@@ -1346,7 +1346,7 @@ msgstr "Die Karte wurde erstellt. Öffne diese nun..."
 
 #: share/server/core/classes/ViewManageMaps.php:234
 msgid "The map has been deleted."
-msgstr "Die Karte wurde gel&ouml;scht."
+msgstr "Die Karte wurde gelöscht."
 
 #: share/server/core/classes/ViewManageMaps.php:347
 msgid "The map has been imported. Changing to the new map..."
@@ -1378,7 +1378,7 @@ msgstr "Das erforderliche Attribut [ATTRIBUTE] ist im Abschnitt vom Typ [TYPE] i
 
 #: share/server/core/classes/ViewChangePassword.php:50
 msgid "The new and old passwords are equal. Won't change anything."
-msgstr "Das neue und alte Passwort sind gleich. Das Passwort wird nicht ge&auml;ndert."
+msgstr "Das neue und alte Passwort sind gleich. Das Passwort wird nicht geändert."
 
 #: share/server/core/classes/ViewManageBackends.php:157
 msgid "The new backend has been added."
@@ -1397,7 +1397,7 @@ msgstr "Das Objekt konnte nicht erstellt werden."
 
 #: share/server/core/classes/CoreModMap.php:124
 msgid "The object could not be deleted."
-msgstr "Das Objekt konnte nicht gel&ouml;scht werden"
+msgstr "Das Objekt konnte nicht gelöscht werden"
 
 #: share/server/core/classes/CoreModMap.php:115
 msgid "The object could not be modified."
@@ -1418,7 +1418,7 @@ msgstr "Der Wert für die object_id fehlt."
 
 #: share/server/core/classes/CoreUriHandler.php:103
 msgid "The parameter \"[key]\" does not match the valid value format"
-msgstr "Der Parameter \"[key]\" entspricht nicht dem g&uuml;tigen Format"
+msgstr "Der Parameter \"[key]\" entspricht nicht dem gütigen Format"
 
 #: share/server/core/classes/ViewManageUsers.php:261
 msgid "The password has been reset."
@@ -1450,7 +1450,7 @@ msgstr ""
 
 #: share/server/core/classes/CoreBackendMgmt.php:661
 msgid "The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend."
-msgstr "Das Feature [FEATURE] wird vom angebenen Backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]) nicht unterst&uuml;tzt. Die angeforderte Ansicht ist mit diesem Backend nicht verf&uuml;gbar."
+msgstr "Das Feature [FEATURE] wird vom angebenen Backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]) nicht unterstützt. Die angeforderte Ansicht ist mit diesem Backend nicht verfügbar."
 
 #: share/server/core/classes/ViewAck.php:52
 msgid "The requested feature is not available for this backend. The MKLivestatus backend supports this feature."
@@ -1458,12 +1458,12 @@ msgstr "Die angeforderte Funktion wird von dieser Datenquelle nicht unterstützt
 
 #: share/server/core/classes/CoreRotation.php:130
 msgid "The requested step [STEP] of type [TYPE] does not exist in the rotation pool [ROTATION]"
-msgstr "Der gew&auml;hlte Schritt [STEP] vom Typ [TYPE] existiert nicht in der Rotation [ROTATION]"
+msgstr "Der gewählte Schritt [STEP] vom Typ [TYPE] existiert nicht in der Rotation [ROTATION]"
 
 #: share/server/core/classes/GlobalBackendmklivestatus.php:316
 #: share/server/core/classes/GlobalBackendnagiosbp.php:139
 msgid "The response has an invalid format in backend [BACKENDID]."
-msgstr "Die Antwort der Datenquelle hat ein ung&uuml;ltiges Format im Backend [BACKENDID]."
+msgstr "Die Antwort der Datenquelle hat ein ungültiges Format im Backend [BACKENDID]."
 
 #: share/server/core/classes/ViewManageRoles.php:49
 msgid "The role has been created."
@@ -1471,10 +1471,10 @@ msgstr "Die Rolle wurde angelegt."
 
 #: share/server/core/classes/ViewManageRoles.php:189
 msgid "The role has been deleted."
-msgstr "Die Rolle wurde gel&ouml;scht."
+msgstr "Die Rolle wurde gelöscht."
 
 msgid "The rolename is invalid or does already exist."
-msgstr "Der Rollenname ist nicht g&uuml;ltig oder existiert bereits."
+msgstr "Der Rollenname ist nicht gültig oder existiert bereits."
 
 #: share/server/core/classes/ViewManageUsers.php:119
 msgid "The roles for this user have been updated."
@@ -1482,7 +1482,7 @@ msgstr "Die Rollen wurden aktualisiert."
 
 #: share/server/core/classes/GlobalMainCfg.php:1894
 msgid "The section [TYPE] is not supported in main configuration. Please take a look at the documentation."
-msgstr "Der Abschnitt [TYPE] wird in der Hauptkonfiguration nicht unterst&uuml;tzt. Bitte die Dokumentation pr&uuml;fen."
+msgstr "Der Abschnitt [TYPE] wird in der Hauptkonfiguration nicht unterstützt. Bitte die Dokumentation prüfen."
 
 #: share/server/core/classes/objects/NagVisServicegroup.php:150
 msgid "The servicegroup \"[GROUP]\" has no members or does not exist (Backend: [BACKEND])."
@@ -1494,7 +1494,7 @@ msgstr "Das Bild existiert nicht."
 
 #: share/server/core/classes/ViewManageShapes.php:123
 msgid "The shape has been deleted."
-msgstr "Das Bild wurde gel&ouml;scht."
+msgstr "Das Bild wurde gelöscht."
 
 #: share/server/core/classes/ViewManageShapes.php:56
 msgid "The shape has been uploaded."
@@ -1506,19 +1506,19 @@ msgstr ""
 
 #: share/server/core/classes/ViewMapManageTmpl.php:236
 msgid "The template has been deleted."
-msgstr "Das Template wurde gel&ouml;scht."
+msgstr "Das Template wurde gelöscht."
 
 #: share/server/core/classes/ViewMapManageTmpl.php:156
 msgid "The template has been modified."
 msgstr ""
 
 msgid "The two new passwords are not equal."
-msgstr "Die zwei angegebenen Passw&ouml;rter stimmen nicht &uuml;berein."
+msgstr "Die zwei angegebenen Passwörter stimmen nicht überein."
 
 #: share/server/core/classes/ViewManageUsers.php:60
 #: share/server/core/classes/ViewManageUsers.php:258
 msgid "The two passwords are not equal."
-msgstr "Die zwei angegebenen Passw&ouml;rter stimmen nicht &uuml;berein."
+msgstr "Die zwei angegebenen Passwörter stimmen nicht überein."
 
 #: share/server/core/classes/ViewManageBackgrounds.php:122
 #: share/server/core/classes/ViewManageShapes.php:46
@@ -1540,7 +1540,7 @@ msgstr "Der Nutzer wurde angelegt."
 
 #: share/server/core/classes/ViewManageUsers.php:194
 msgid "The user has been deleted."
-msgstr "Der Nutzer wurde gel&ouml;scht."
+msgstr "Der Nutzer wurde gelöscht."
 
 #: share/server/core/classes/CoreModule.php:261
 msgid "The value of option \"[ATTRIBUTE]\" does not match the valid format."
@@ -1589,11 +1589,11 @@ msgstr "Nutzer konnte nicht authentifiziert werden. Der Nutzer existiert nicht."
 
 #: share/server/core/classes/GlobalBackendmklivestatus.php:78
 msgid "Unable to connect to livestatus socket. The socket [SOCKET] in backend [BACKENDID] does not exist. Maybe Nagios is not running or restarting."
-msgstr "Verbindung zum Livestatus Socket nicht m&ouml;glich. Der Socket [SOCKET] im Backend [BACKENDID] existiert nicht. Eventuell l&auml;ft Nagios nicht oder startet gerade neu."
+msgstr "Verbindung zum Livestatus Socket nicht möglich. Der Socket [SOCKET] im Backend [BACKENDID] existiert nicht. Eventuell läft Nagios nicht oder startet gerade neu."
 
 #: share/server/core/classes/GlobalBackendmklivestatus.php:190
 msgid "Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]"
-msgstr "Verbindung zum Socket [SOCKET] in Backend [BACKENDID] nicht m&ouml;glich: [MSG]"
+msgstr "Verbindung zum Socket [SOCKET] in Backend [BACKENDID] nicht möglich: [MSG]"
 
 #: share/server/core/classes/ViewManageBackgrounds.php:189
 msgid "Unable to delete this background, because it is currently used by these maps: [M]."
@@ -1605,7 +1605,7 @@ msgstr ""
 
 #: share/server/core/classes/ViewManageUsers.php:191
 msgid "Unable to delete your own user."
-msgstr "Der eigene Nutzer kann nicht gel&ouml;scht werden."
+msgstr "Der eigene Nutzer kann nicht gelöscht werden."
 
 #: share/server/core/sources/geomap.php:133
 msgid "Unable to fetch URL \"[U]\".<br/><br />The geomap needs to be able to fetch some data from the internet via webservice API. Please take a look at the docs for more details.<br /><br /><small>[E]</small>"
@@ -1622,7 +1622,7 @@ msgstr "Mögliche Objekte konnten nicht geladen werden - Zeige Eingabefeld."
 
 #: share/server/core/classes/CoreModAuth.php:54
 msgid "Unable to log you out. Maybe it is not supported by your authentication module."
-msgstr "Logout nicht m&ouml;glich. Wird eventuell vom Auth-Modul nicht unterst&uuml;tzt."
+msgstr "Logout nicht möglich. Wird eventuell vom Auth-Modul nicht unterstützt."
 
 #: share/server/core/classes/CoreAuthModMySQL.php:63
 #: share/server/core/classes/CoreAuthorisationModMySQL.php:41
@@ -1632,7 +1632,7 @@ msgstr "Die Auth-Datenbank konnte nicht geöffnet werden"
 #: share/server/core/classes/CoreAuthModSQLite.php:59
 #: share/server/core/classes/CoreAuthorisationModSQLite.php:37
 msgid "Unable to open auth database ([DB])"
-msgstr "Nutzerdatenbank konnte nicht ge&ouml;ffnet werden ([DB])"
+msgstr "Nutzerdatenbank konnte nicht geöffnet werden ([DB])"
 
 #: share/server/core/classes/CoreAuthorisationModGroups.php:41
 #: share/server/core/classes/CoreAuthorisationModMultisite.php:38
@@ -1702,7 +1702,7 @@ msgstr "Nutzer Login fehlgeschlagen ("
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:369
 msgid "User menu"
-msgstr "Nutzermen&uuml;"
+msgstr "Nutzermenü"
 
 #: share/server/core/classes/ViewManageUsers.php:83
 msgid "Username"
@@ -1747,12 +1747,12 @@ msgstr "Zugriff verweigert ([PAGE])."
 
 #: share/server/core/classes/CoreModAuth.php:91
 msgid "You entered invalid credentials."
-msgstr "Ung&uml;ltige Zugangsdaten eingegeben."
+msgstr "Ungültige Zugangsdaten eingegeben."
 
 #: share/server/core/classes/CoreModMap.php:127
 #: share/server/core/classes/CoreModule.php:222
 msgid "You entered invalid information."
-msgstr "Ung&uml;ltige Informationen eingegeben."
+msgstr "Ungültige Informationen eingegeben."
 
 #: share/server/core/classes/ViewManageBackends.php:119
 msgid "You need to choose a backend type."
@@ -1813,15 +1813,15 @@ msgstr "Ungültiger Typ"
 
 #: share/server/core/classes/CoreSQLiteHandler.php:102
 msgid "Your PHP installation does not support PDO SQLite (3.x). Please check if you installed the PHP module."
-msgstr "PHP unterst&uuml;tzt PDO SQLite (3.x) nicht. Das Modul wird in der PHP-Installation ben&ouml;tigt."
+msgstr "PHP unterstützt PDO SQLite (3.x) nicht. Das Modul wird in der PHP-Installation benötigt."
 
 #: share/server/core/classes/CoreSQLiteHandler.php:97
 msgid "Your PHP installation does not support PDO. Please check if you installed the PHP module."
-msgstr "PHP unterst&uuml;tzt PDO nicht. Das Modul wird in der PHP-Installation ben&ouml;tigt."
+msgstr "PHP unterstützt PDO nicht. Das Modul wird in der PHP-Installation benötigt."
 
 #: share/server/core/classes/CoreMySQLHandler.php:104
 msgid "Your PHP installation does not support mysql. Please check if you installed the PHP module."
-msgstr "PHP unterstützt mysql nicht. Das Modul wird in der PHP-Installation ben&ouml;tigt."
+msgstr "PHP unterstützt mysql nicht. Das Modul wird in der PHP-Installation benötigt."
 
 #: share/server/core/classes/ViewChangePassword.php:59
 msgid "Your password could not be changed."
@@ -1850,7 +1850,7 @@ msgstr "Der Instanz-Name \"[NAME]\" in Backend \"[BACKENDID]\" ist nicht eindeut
 
 #: share/server/core/classes/GlobalBackendndomy.php:238
 msgid "backendInstanceNameNotValid"
-msgstr "Der Instanz-Name \"[NAME]\" in Backend \"[BACKENDID]\" ist nicht g&uuml;ltig."
+msgstr "Der Instanz-Name \"[NAME]\" in Backend \"[BACKENDID]\" ist nicht gültig."
 
 #: share/server/core/classes/CoreBackendMgmt.php:594
 #: share/server/core/classes/GlobalMainCfg.php:1883
@@ -1860,15 +1860,15 @@ msgstr "Das Backend mit der ID \"[BACKENDID]\" ist nicht definiert."
 
 #: share/server/core/classes/CoreBackendMgmt.php:555
 msgid "backendNotExists"
-msgstr "Das Backend mit der ID &quot;[BACKENDID]&quot; vom Typ &quot;[BACKENDTYPE]&quot; existiert nicht."
+msgstr "Das Backend mit der ID \"[BACKENDID]\" vom Typ \"[BACKENDTYPE]\" existiert nicht."
 
 #: share/server/core/classes/CoreBackendMgmt.php:641
 msgid "backendNotInitialized"
-msgstr "Die Datenquelle mit der ID \"[BACKENDID]\" vom Typ \"[BACKENDTYPE]\" ist nicht initialisiert. M&ouml;glicherweise wird eine undefinierte Datenquelle in einer Karte verwendet."
+msgstr "Die Datenquelle mit der ID \"[BACKENDID]\" vom Typ \"[BACKENDTYPE]\" ist nicht initialisiert. Möglicherweise wird eine undefinierte Datenquelle in einer Karte verwendet."
 
 #: share/server/core/classes/GlobalFileCache.php:109
 msgid "cacheFileNotWriteable"
-msgstr "Die Cache-Datei &quot;[FILE]&quot; konnte nicht geschrieben werden."
+msgstr "Die Cache-Datei \"[FILE]\" konnte nicht geschrieben werden."
 
 #: share/server/core/sources/automap.php:65
 msgid "compress"
@@ -1876,7 +1876,7 @@ msgstr "komprimieren"
 
 #: share/server/core/classes/NagVisContextMenu.php:103
 msgid "confirmDelete"
-msgstr "Wollen Sie dieses Objekt wirklich l&ouml;schen?"
+msgstr "Wollen Sie dieses Objekt wirklich löschen?"
 
 #: share/server/core/classes/NagVisContextMenu.php:107
 msgid "contextConnectBySsh"
@@ -1888,7 +1888,7 @@ msgstr "Status aktualisieren"
 
 #: share/server/core/classes/NagVisContextMenu.php:115
 msgid "contextRescheduleNextCheck"
-msgstr "N&auml;chste Pr&uuml;fung verschieben"
+msgstr "Nächste Prüfung verschieben"
 
 #: share/server/core/classes/NagVisContextMenu.php:119
 msgid "contextScheduleDowntime"
@@ -1896,19 +1896,19 @@ msgstr "Downtime eintragen"
 
 #: share/server/core/classes/GlobalMapCfg.php:1726
 msgid "couldNotDeleteMapCfg"
-msgstr "Die Karten-Konfigurationsdatei \"[MAPPATH]\" konnte nicht gel&ouml;scht werden"
+msgstr "Die Karten-Konfigurationsdatei \"[MAPPATH]\" konnte nicht gelöscht werden"
 
 #: share/server/core/classes/GlobalBackground.php:202
 msgid "couldNotDeleteMapImage"
-msgstr "Das Hintergrundbild \"[IMGPATH]\" konnte nicht gel&ouml;scht werden"
+msgstr "Das Hintergrundbild \"[IMGPATH]\" konnte nicht gelöscht werden"
 
 #: share/server/core/classes/NagVisHoverUrl.php:93
 msgid "couldNotGetHoverUrl"
-msgstr "Konnte Hover-URL \"[URL]\" nicht finden. Eventuell ist die URL Passwort-gesch&uuml;tzt."
+msgstr "Konnte Hover-URL \"[URL]\" nicht finden. Eventuell ist die URL Passwort-geschützt."
 
 #: share/server/core/sources/automap.php:247
 msgid "couldNotGetRootHostname"
-msgstr "Die Automap ben&ouml;tigt einen Ursprungs-Host.[br][br] Es gibt drei M&ouml;glichkeiten um einen Ursprungs-Host zu bestimmen: URL-Parameter \"root\", Haupt-Konfiguration \"automap > default_root\", automatische Ermittlung (nur m&ouml;glich, wenn es [b]einen[/b] Host ohne Eltern-Host gibt)."
+msgstr "Die Automap benötigt einen Ursprungs-Host.[br][br] Es gibt drei Möglichkeiten um einen Ursprungs-Host zu bestimmen: URL-Parameter \"root\", Haupt-Konfiguration \"automap > default_root\", automatische Ermittlung (nur möglich, wenn es [b]einen[/b] Host ohne Eltern-Host gibt)."
 
 #: share/server/core/classes/NagVisHoverMenu.php:155
 msgid "currentAttempt"
@@ -1958,7 +1958,7 @@ msgstr "Forum"
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:115
 msgid "fr_FR"
-msgstr "Franz&ouml;sisch"
+msgstr "Französisch"
 
 #: share/server/core/classes/GlobalCore.php:151
 msgid "gdLibNotFound"
@@ -1966,12 +1966,12 @@ msgstr "NagVis wurde konfiguriert die GD-Libs zum Parsen von Linien und Hintergr
 
 #: share/server/core/sources/automap_pos.php:27
 msgid "graphvizBinaryNotFound"
-msgstr "Die ben&ouml;tigte Graphviz-Anwendung \"[NAME]\" konnte in den Pfaden \"[PATHS]\" nicht gefunden werden."
+msgstr "Die benötigte Graphviz-Anwendung \"[NAME]\" konnte in den Pfaden \"[PATHS]\" nicht gefunden werden."
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:382
 #: share/server/core/classes/GlobalCore.php:682
 msgid "host"
-msgstr "Ger&auml;t"
+msgstr "Gerät"
 
 #: share/server/core/classes/objects/NagVisHostgroup.php:183
 msgid "hostGroupNotFoundInDB"
@@ -1995,15 +1995,15 @@ msgstr "Der Host ist"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:384
 #: share/server/core/classes/GlobalCore.php:686
 msgid "hostgroup"
-msgstr "Ger&auml;tegruppe"
+msgstr "Gerätegruppe"
 
 #: share/server/core/classes/GlobalCore.php:687
 msgid "hostgroupname"
-msgstr "Ger&auml;tegruppenname"
+msgstr "Gerätegruppenname"
 
 #: share/server/core/classes/GlobalCore.php:683
 msgid "hostname"
-msgstr "Ger&auml;tename"
+msgstr "Gerätename"
 
 #: share/server/core/classes/objects/NagVisAggr.php:171
 #: share/server/core/classes/objects/NagVisDynGroup.php:152
@@ -2011,7 +2011,7 @@ msgstr "Ger&auml;tename"
 #: share/server/core/classes/objects/NagVisHostgroup.php:149
 #: share/server/core/classes/objects/NagVisHostgroup.php:181
 msgid "hosts"
-msgstr "Ger&auml;te"
+msgstr "Geräte"
 
 #: share/server/core/classes/GlobalCore.php:387
 msgid "iconsetFiletypeUnknown"
@@ -2032,7 +2032,7 @@ msgstr "ipsep"
 
 #: share/server/core/classes/NagVisHoverMenu.php:147
 msgid "lastCheck"
-msgstr "Letzte Pr&uuml;fung"
+msgstr "Letzte Prüfung"
 
 #: share/server/core/classes/NagVisHoverMenu.php:159
 msgid "lastStateChange"
@@ -2068,16 +2068,16 @@ msgstr "Die Karte \"[MAP]\" existiert nicht"
 
 #: share/server/core/classes/GlobalMapCfg.php:1010
 msgid "mapDeprecatedOption"
-msgstr "Die Option \"[ATTRIBUTE]\" in einem Objekt des Typs \"[TYPE]\" auf der Karte \"[MAP]\" ist veraltet. Bitte Changelog oder Dokumentation pr&uuml;fen und die Option anpassen."
+msgstr "Die Option \"[ATTRIBUTE]\" in einem Objekt des Typs \"[TYPE]\" auf der Karte \"[MAP]\" ist veraltet. Bitte Changelog oder Dokumentation prüfen und die Option anpassen."
 
 #: share/server/core/classes/CoreExceptions.php:61
 #: share/server/core/classes/CoreModMultisite.php:218
 msgid "mapInMaintenance"
-msgstr "Die Karte \"[MAP]\" befindet sich aktuell im Wartungsmodus. Diese Seite l&auml;dt automatisch neu."
+msgstr "Die Karte \"[MAP]\" befindet sich aktuell im Wartungsmodus. Diese Seite lädt automatisch neu."
 
 #: share/frontend/nagvis-js/classes/NagVisOverviewView.php:43
 msgid "mapIndex"
-msgstr "Karten&uuml;bersicht"
+msgstr "Kartenübersicht"
 
 #: share/server/core/classes/objects/NagVisMapObj.php:488
 msgid "mapIsEmpty"
@@ -2087,7 +2087,7 @@ msgstr "Die Karte \"[MAP]\" hat keine Objekte."
 #: share/server/core/classes/CoreModMap.php:256
 #: share/server/core/classes/ViewMapAddModify.php:188
 msgid "mapLockNotDeleted"
-msgstr "Die Sperre der Karte konnte nicht gel&ouml;scht werden"
+msgstr "Die Sperre der Karte konnte nicht gelöscht werden"
 
 #: share/server/core/classes/GlobalMapCfg.php:1760
 msgid "mapLocked"
@@ -2111,7 +2111,7 @@ msgstr "Der Pflichtwert \"[ATTRIBUTE]\" wurde nicht gesetzt."
 
 #: share/server/core/classes/GlobalBackendndomy.php:213
 msgid "mysqlNotSupported"
-msgstr "Ihre PHP-Installation hat keine MySQL-Unterst&uuml;tzung. Ohne php-mysql k&ouml;nnen Sie das NDO-Backend nicht nutzen"
+msgstr "Ihre PHP-Installation hat keine MySQL-Unterstützung. Ohne php-mysql können Sie das NDO-Backend nicht nutzen"
 
 #: share/server/core/classes/GlobalBackendndomy.php:124
 msgid "nagiosDataNotUpToDate"
@@ -2119,7 +2119,7 @@ msgstr "Laut NDO wurden von Nagios seit mehr als \"[TIMEWITHOUTUPDATE]\" Sekunde
 
 #: share/server/core/classes/GlobalBackendndomy.php:119
 msgid "nagiosNotRunning"
-msgstr "Laut NDO l&auml;uft der Nagios-Dienst nicht."
+msgstr "Laut NDO läuft der Nagios-Dienst nicht."
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:403
 msgid "needHelp"
@@ -2127,7 +2127,7 @@ msgstr "Hilfe?"
 
 #: share/server/core/classes/NagVisHoverMenu.php:143
 msgid "nextCheck"
-msgstr "N&auml;chste Pr&uuml;fung"
+msgstr "Nächste Prüfung"
 
 #: share/frontend/nagvis-js/classes/NagVisInfoView.php:80
 #: share/server/core/classes/ViewEditMainCfg.php:248
@@ -2150,7 +2150,7 @@ msgstr "Sie haben keine Berechtigung, den Status dieser Karte einzusehen."
 
 #: share/server/core/classes/GlobalBackendndomy.php:163
 msgid "noTablesExists"
-msgstr "In der Datenbank existieren keine Tabellen mit dem konfigurierten Pr&auml;fix \"\"[PREFIX]\"\"."
+msgstr "In der Datenbank existieren keine Tabellen mit dem konfigurierten Präfix \"[PREFIX]\"."
 
 #: share/server/core/classes/NagVisHoverMenu.php:171
 msgid "notes"
@@ -2192,7 +2192,7 @@ msgstr "Ausgabe"
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:407
 #: share/server/core/classes/NagVisHoverMenu.php:135
 msgid "overview"
-msgstr "&Uuml;bersicht"
+msgstr "übersicht"
 
 #: share/server/core/classes/NagVisHoverMenu.php:127
 msgid "perfdata"
@@ -2248,7 +2248,7 @@ msgstr "Die Dienstegruppe \"[SERVICEGROUP]\" konnte in der Datenbank nicht gefun
 #: share/server/core/classes/GlobalBackendmklivestatus.php:851
 #: share/server/core/classes/GlobalBackendndomy.php:733
 msgid "serviceNotChecked"
-msgstr "Der Dienst \"[SERVICE]\" wurde bisher nicht gepr&uuml;ft."
+msgstr "Der Dienst \"[SERVICE]\" wurde bisher nicht geprüft."
 
 #: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:385
 #: share/server/core/classes/GlobalCore.php:688
