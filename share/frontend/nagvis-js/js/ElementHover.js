@@ -225,10 +225,13 @@ var ElementHover = Element.extend({
         // prevent strange movement effects when the timer has finished
         if (!dragging() && g_context_open === null && this.show_timer === null) {
             this.coords = [event.clientX, event.clientY];
-            if (hover_delay && !this.isVisible())
-                this.show_timer = setTimeout(function() {
-                    this.show();
-                }, hover_delay*1000);
+            if (hover_delay && !this.isVisible()) {
+                this.show_timer = setTimeout(function(obj) {
+                    return function() {
+                        obj.show();
+                    };
+                }(this), hover_delay*1000);
+            }
             else {
                 this.show();
             }
