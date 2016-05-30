@@ -4,6 +4,7 @@ Core:
     objects that are not aggregations.
 
 Frontend:
+  * FIX: Prevent JS/CSS caching issues during updates of NagVis
   * FIX: Improved error handling in case of modifying objects which
     backends report issues
   * FIX: Improved error handling in case of missing backend configured

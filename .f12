@@ -8,7 +8,10 @@ if [ $(uname) = Darwin ]; then
 
     BASEDIR=/opt/local/nagvis
     $SUDO rsync -av etc $BASEDIR/
-    $SUDO sed "s|@NAGVIS_WEB@|/nagvis|g;s|@NAGVIS_PATH@|/opt/local/nagvis/share|g" $BASEDIR/etc/apache2-nagvis.conf-sample > $BASEDIR/etc/apache.conf
+    $SUDO cp $BASEDIR/etc/apache2-nagvis.conf-sample $BASEDIR/etc/apache.conf
+    $SUDO gsed -i -e 's|@NAGVIS_WEB@|/nagvis|g' \
+                 -e 's|@NAGVIS_PATH@|/opt/local/nagvis/share|g' $BASEDIR/etc/apache.conf
+    $SUDO apachectl restart
     if [ ! -f $BASEDIR/etc/nagvis.ini.php ]; then
         $SUDO cp $BASEDIR/etc/nagvis.ini.php{-sample,}
     fi

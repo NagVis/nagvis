@@ -67,6 +67,7 @@ class NagVisIndexView {
             'htmlBase'         => cfg('paths', 'htmlbase'),
             'htmlJs'           => cfg('paths', 'htmljs'),
             'htmlCss'          => cfg('paths', 'htmlcss'),
+            'version'          => CONST_VERSION,
             'htmlTemplates'    => path('html', 'global', 'templates'),
             'bUseCompressedJs' => $this->checkJsCompressed(),
             'customStylesheet' => $this->sCustomStylesheet,
