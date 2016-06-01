@@ -4,6 +4,7 @@ Core:
     objects that are not aggregations.
 
 Frontend:
+  * FIX: Fixed error in ad-hoc automaps (Network Topology in Check_MK) during state updates
   * FIX: Prevent JS/CSS caching issues during updates of NagVis
   * FIX: Improved error handling in case of modifying objects which
     backends report issues

@@ -33,7 +33,7 @@ var View = Base.extend({
     },
 
     update: function(args) {
-        var show = args.show ? '&show='+args.show : '';
+        var show = isset(args.show) ? '&show='+args.show : '';
 
         var data = [];
         for (var i = 0, len = args.data.length; i < len; i++)
