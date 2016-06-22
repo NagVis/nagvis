@@ -198,12 +198,12 @@ patch -s $OMD_ROOT/local/share/nagvis/htdocs/server/core/defines/global.php <<EO
  	get_include_path()
 -	.PATH_SEPARATOR.'../../server/core/classes'
 -	.PATH_SEPARATOR.'../../server/core/classes/objects'
--	.PATH_SEPARATOR.'../../server/core/ext/php-gettext-1.0.9'
+-	.PATH_SEPARATOR.'../../server/core/ext/php-gettext-1.0.12'
 +	.PATH_SEPARATOR.\$_base_dir.'/local/share/nagvis/htdocs/server/core/classes'
 +	.PATH_SEPARATOR.\$_base_dir.'/local/share/nagvis/htdocs/server/core/classes/objects'
 +	.PATH_SEPARATOR.\$_base_dir.'/share/nagvis/htdocs/server/core/classes'
 +	.PATH_SEPARATOR.\$_base_dir.'/share/nagvis/htdocs/server/core/classes/objects'
-+	.PATH_SEPARATOR.\$_base_dir.'/share/nagvis/htdocs/server/core/ext/php-gettext-1.0.9'
++	.PATH_SEPARATOR.\$_base_dir.'/share/nagvis/htdocs/server/core/ext/php-gettext-1.0.12'
  );
  
  // Enable/Disable profiling of NagVis using xhprof.  To make use of this the

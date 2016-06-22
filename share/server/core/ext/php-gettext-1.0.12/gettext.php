@@ -134,7 +134,7 @@ class gettext_reader {
    * Loads the translation tables from the MO file into the cache
    * If caching is enabled, also loads all strings into a cache
    * to speed up translation lookups
-   * 
+   *
    * @access private
    */
   function load_tables() {
@@ -144,10 +144,14 @@ class gettext_reader {
       return;
 
     /* get original and translations tables */
-    $this->STREAM->seekto($this->originals);
-    $this->table_originals = $this->readintarray($this->total * 2);
-    $this->STREAM->seekto($this->translations);
-    $this->table_translations = $this->readintarray($this->total * 2);
+    if (!is_array($this->table_originals)) {
+      $this->STREAM->seekto($this->originals);
+      $this->table_originals = $this->readintarray($this->total * 2);
+    }
+    if (!is_array($this->table_translations)) {
+      $this->STREAM->seekto($this->translations);
+      $this->table_translations = $this->readintarray($this->total * 2);
+    }
 
     if ($this->enable_cache) {
       $this->cache_translations = array ();
@@ -301,6 +305,20 @@ class gettext_reader {
   }
 
   /**
+   * Parse full PO header and extract only plural forms line.
+   *
+   * @access private
+   * @return string verbatim plural form header field
+   */
+  function extract_plural_forms_header_from_po_header($header) {
+    if (preg_match("/(^|\n)plural-forms: ([^\n]*)\n/i", $header, $regs))
+      $expr = $regs[2];
+    else
+      $expr = "nplurals=2; plural=n == 1 ? 0 : 1;";
+    return $expr;
+  }
+
+  /**
    * Get possible plural forms from MO header
    *
    * @access private
@@ -318,11 +336,7 @@ class gettext_reader {
       } else {
         $header = $this->get_translation_string(0);
       }
-      if (eregi("plural-forms: ([^\n]*)\n", $header, $regs))
-        $expr = $regs[1];
-      else
-        $expr = "nplurals=2; plural=n == 1 ? 0 : 1;";
-
+      $expr = $this->extract_plural_forms_header_from_po_header($header);
       $this->pluralheader = $this->sanitize_plural_expression($expr);
     }
     return $this->pluralheader;
@@ -336,6 +350,10 @@ class gettext_reader {
    * @return int array index of the right plural form
    */
   function select_string($n) {
+    if (!is_int($n)) {
+      throw new InvalidArgumentException(
+        "Select_string only accepts integers: " . $n);
+    }
     $string = $this->get_plural_forms();
     $string = str_replace('nplurals',"\$total",$string);
     $string = str_replace("n",$n,$string);
@@ -370,7 +388,7 @@ class gettext_reader {
     $select = $this->select_string($number);
 
     // this should contains all strings separated by NULLs
-    $key = $single.chr(0).$plural;
+    $key = $single . chr(0) . $plural;
 
 
     if ($this->enable_cache) {
@@ -393,6 +411,26 @@ class gettext_reader {
     }
   }
 
+  function pgettext($context, $msgid) {
+    $key = $context . chr(4) . $msgid;
+    $ret = $this->translate($key);
+    if (strpos($ret, "\004") !== FALSE) {
+      return $msgid;
+    } else {
+      return $ret;
+    }
+  }
+
+  function npgettext($context, $singular, $plural, $number) {
+    $key = $context . chr(4) . $singular;
+    $ret = $this->ngettext($key, $plural, $number);
+    if (strpos($ret, "\004") !== FALSE) {
+      return $singular;
+    } else {
+      return $ret;
+    }
+
+  }
 }
 
 ?>
