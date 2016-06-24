@@ -2,6 +2,7 @@
 Core:
   * MK BI backend: Now prints an error message when trying to use it with
     objects that are not aggregations.
+  * NDO MySQL backend: Filtering out legacy objects from DB (setting is_active filter)
   * FIX: A local exploitable security issue has been discovered in the php-gettext
     library which is used to make NagVis localizable on platforms which has no gettext
     support built into PHP.
