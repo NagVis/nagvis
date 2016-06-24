@@ -103,6 +103,14 @@ var ViewMap = View.extend({
 
     handleMapInitError: function(status_code, response, handler_data) {
         hideStatusMessage();
+        if (response === null) {
+            var response = {
+                'type'    : 'error',
+                'title'   : 'Error: Invalid response',
+                'message' : 'Got empty response from server (code: ' + status_code + '). '
+                          + 'Take a look at the web server error log for details.',
+            };
+        }
         frontendMessage(response, 'serverError');
     },
 

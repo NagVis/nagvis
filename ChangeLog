@@ -29,6 +29,7 @@ Frontend:
   * FIX: Cleaning up host/service attributes when changing the backend_id
   * FIX: Fixed broken hover_delay (JS error when hovering an object)
   * FIX: Multisite Snapin: Fixed wrong EDIT link
+  * FIX: Improved error handling in case of internal server error (500)
 
 Automap:
   * FIX: Fixed error when searching for objects on non initialized automaps
