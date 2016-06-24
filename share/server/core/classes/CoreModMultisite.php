@@ -149,7 +149,7 @@ class CoreModMultisite extends CoreModule {
     private function renderFootnoteLinks() {
         $url = cfg('paths', 'htmlbase');
         return "<div class=footnotelink>"
-              ."<a onfocus=\"if (this.blur) this.blur();\" target=\"main\" class=\"link\" href=\"".$url."\">EDIT</a>"
+              ."<a onfocus=\"if (this.blur) this.blur();\" target=\"main\" class=\"link\" href=\"".$url."/\">EDIT</a>"
               ."</div>";
     }
 
