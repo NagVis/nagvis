@@ -326,24 +326,9 @@ class GlobalBackendndomy implements GlobalBackendInterface {
             break;
         }
 
-        /**
-         * is_active default value is 0.
-         * When broker option is -1 or BROKER_RETENTION_DATA is activated the
-         * current objects have is_active=1 and the deprecated object have
-         * is_active=0. Workaround: Check if there is any is_active=1, then use the
-         * is_active filter.
-         *
-         * For details see:
-         * https://sourceforge.net/tracker/index.php?func=detail&aid=1839631&group_id=132019&atid=725179
-         * http://www.nagios-portal.de/forum/thread.php?postid=59971#post59971
-         */
-        if($this->checkForIsActiveObjects()) {
-            $isActiveFilter = ' is_active=1 AND';
-        } else {
-            $isActiveFilter = '';
-        }
-
-        $QUERYHANDLE = $this->mysqlQuery('SELECT name1,name2 FROM '.$this->dbPrefix.'objects WHERE objecttype_id='.$objectType.' AND '.$filter.$isActiveFilter.' instance_id='.$this->dbInstanceId.' ORDER BY name1');
+	/* All objects must have the is_active=1 flag enabled. */
+	$QUERYHANDLE = $this->mysqlQuery('SELECT name1,name2 FROM '.$this->dbPrefix.'objects
+            WHERE objecttype_id='.$objectType.' AND '.$filter.' is_active=1 AND instance_id='.$this->dbInstanceId.' ORDER BY name1');
         while($data = mysql_fetch_array($QUERYHANDLE)) {
             $ret[] = Array('name1' => $data['name1'],'name2' => $data['name2']);
         }
@@ -504,7 +489,9 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         } else {
             $QUERYHANDLE = $this->mysqlQuery('SELECT problem_has_been_acknowledged
             FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'hoststatus AS h
-            WHERE (o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') AND h.host_object_id=o.object_id LIMIT 1');
+            WHERE (o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') AND h.host_object_id=o.object_id LIMIT 1
+            AND (o.is_active=1)
+            ');
 
             $data = mysql_fetch_assoc($QUERYHANDLE);
 
@@ -560,8 +547,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
             ON dh.object_id=o.object_id AND NOW()>dh.scheduled_start_time AND NOW()<dh.scheduled_end_time
         WHERE
             (o.objecttype_id=1 AND ('.$this->parseFilter($objects, $filters, 'o', 'o', $isMemberQuery, false, HOST_QUERY).')
-             AND o.instance_id='.$this->dbInstanceId.')
-            AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=o.object_id)');
+            AND o.instance_id='.$this->dbInstanceId.')
+            AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=o.object_id)
+            AND (o.is_active=1)
+	    ');
 
         while($data = mysql_fetch_assoc($QUERYHANDLE)) {
 
@@ -930,7 +919,8 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 AND (hg.config_type='.$this->objConfigType.' AND hg.instance_id='.$this->dbInstanceId.' AND hg.hostgroup_object_id=o.object_id)
                 AND hgm.hostgroup_id=hg.hostgroup_id
                 AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id)
-                               AND (o2.is_active=1)
+                AND (o.is_active=1)
+                AND (o2.is_active=1)
             GROUP BY o.object_id');
 
         $arrReturn = Array();
@@ -1002,7 +992,8 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 AND hgm.hostgroup_id=hg.hostgroup_id
                 AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.host_object_id=hgm.host_object_id)
                 AND (o2.objecttype_id=2 AND s.service_object_id=o2.object_id)
-                               AND (o2.is_active=1)
+                AND (o.is_active=1)
+                AND (o2.is_active=1)
             GROUP BY o.object_id');
 
         while($data = mysql_fetch_assoc($QUERYHANDLE)) {
@@ -1067,6 +1058,8 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 AND sgm.servicegroup_id=sg.servicegroup_id
                 AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=sgm.service_object_id)
                 AND (o2.objecttype_id=2 AND s.service_object_id=o2.object_id)
+                AND (o.is_active=1)
+                AND (o2.is_active=1)
             GROUP BY o.object_id');
 
         $arrReturn = Array();
@@ -1128,7 +1121,9 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         LEFT OUTER JOIN `'.$this->dbPrefix.'host_parenthosts` AS ph1 ON h1.host_id=ph1.host_id
         WHERE o1.objecttype_id=1
         AND (h1.config_type='.$this->objConfigType.' AND h1.instance_id='.$this->dbInstanceId.' AND h1.host_object_id=o1.object_id)
-        AND ph1.parent_host_object_id IS null');
+        AND ph1.parent_host_object_id IS null
+        AND (o1.is_active=1)
+        ');
 
         while($data = mysql_fetch_array($QUERYHANDLE)) {
             $arrReturn[] = $data['name1'];
@@ -1162,7 +1157,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         WHERE o1.objecttype_id=1 AND o1.name1=\''.$hostName.'\'
         AND (h1.config_type='.$this->objConfigType.' AND h1.instance_id='.$this->dbInstanceId.' AND h1.host_object_id=o1.object_id)
         AND h1.host_id=ph1.host_id
-        AND o2.objecttype_id=1 AND o2.object_id=ph1.parent_host_object_id');
+        AND o2.objecttype_id=1 AND o2.object_id=ph1.parent_host_object_id
+        AND (o1.is_active=1)
+        AND (o2.is_active=1)
+        ');
         while($data = mysql_fetch_array($QUERYHANDLE)) {
             $aParentNames[] = $data['name1'];
         }
@@ -1196,7 +1194,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         AND (h1.config_type='.$this->objConfigType.' AND h1.instance_id='.$this->dbInstanceId.' AND h1.host_object_id=o1.object_id)
         AND o1.object_id=ph1.parent_host_object_id
         AND (h2.config_type='.$this->objConfigType.' AND h2.instance_id='.$this->dbInstanceId.' AND h2.host_id=ph1.host_id)
-        AND o2.objecttype_id=1 AND h2.host_object_id=o2.object_id');
+        AND o2.objecttype_id=1 AND h2.host_object_id=o2.object_id
+        AND (o1.is_active=1)
+        AND (o2.is_active=1)
+        ');
         while($data = mysql_fetch_array($QUERYHANDLE)) {
             $arrChildNames[] = $data['name1'];
         }
@@ -1230,7 +1231,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 (o.objecttype_id=3 AND o.name1 = binary \''.$hostgroupName.'\' AND o.instance_id='.$this->dbInstanceId.')
                 AND (hg.config_type='.$this->objConfigType.' AND hg.instance_id='.$this->dbInstanceId.' AND hg.hostgroup_object_id=o.object_id)
                 AND hgm.hostgroup_id=hg.hostgroup_id
-                AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id)');
+                AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id)
+                AND (o.is_active=1)
+                AND (o2.is_active=1)
+                ');
 
         while($data = mysql_fetch_array($QUERYHANDLE)) {
             // Assign actual dataset to return array
@@ -1266,7 +1270,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 (o.objecttype_id=4 AND o.name1 = binary \''.$servicegroupName.'\' AND o.instance_id='.$this->dbInstanceId.')
                 AND (sg.config_type='.$this->objConfigType.' AND sg.instance_id='.$this->dbInstanceId.' AND sg.servicegroup_object_id=o.object_id)
                 AND sgm.servicegroup_id=sg.servicegroup_id
-                AND (o2.objecttype_id=2 AND o2.object_id=sgm.service_object_id)');
+                AND (o2.objecttype_id=2 AND o2.object_id=sgm.service_object_id)
+                AND (o.is_active=1)
+                AND (o2.is_active=1)
+                ');
 
         while($data = mysql_fetch_array($QUERYHANDLE)) {
             // Assign actual dataset to return array
@@ -1299,6 +1306,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
             WHERE
                 (o.objecttype_id=4 AND o.name1 = binary \''.$servicegroupName.'\' AND o.instance_id='.$this->dbInstanceId.')
                 AND (sg.config_type='.$this->objConfigType.' AND sg.instance_id='.$this->dbInstanceId.' AND sg.servicegroup_object_id=o.object_id)
+                AND (o.is_active=1)
                 LIMIT 1');
 
         $data = mysql_fetch_array($QUERYHANDLE);
@@ -1331,6 +1339,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
             WHERE
                 (o.objecttype_id=3 AND o.name1 = binary \''.$groupName.'\' AND o.instance_id='.$this->dbInstanceId.')
                 AND (g.config_type='.$this->objConfigType.' AND g.instance_id='.$this->dbInstanceId.' AND g.hostgroup_object_id=o.object_id)
+                AND (o.is_active=1)
                 LIMIT 1');
 
         $data = mysql_fetch_array($QUERYHANDLE);
