@@ -348,8 +348,8 @@ class NagVisMapObj extends NagVisStatefulObject {
                     $OBJ = new NagVisAggr($objConf['backend_id'], $objConf['name']);
                 break;
                 case 'map':
-                    // Initialize map configuration
-                    $SUBMAPCFG = new GlobalMapCfg($objConf['map_name']);
+                    // Initialize map configuration (as non view map cfg)
+                    $SUBMAPCFG = new GlobalMapCfg($objConf['map_name'], false);
 
                     $mapCfgInvalid = null;
                     if($SUBMAPCFG->checkMapConfigExists(0)) {

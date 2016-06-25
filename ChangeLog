@@ -22,6 +22,9 @@ Frontend:
 Automap:
   * FIX: Fixed error when searching for objects on non initialized automaps
 
+Worldmap:
+  * FIX: Fixed permanent error state showed by automap objects on worldmaps
+
 1.9b7
 Fronted:
   * FIX: Fixed "function sidebarUpdatePosition is not defined" when header not shown

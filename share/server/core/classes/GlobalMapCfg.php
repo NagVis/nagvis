@@ -34,6 +34,7 @@ class GlobalMapCfg {
     protected $type = 'map';
     protected $mapConfig = Array();
     protected $typeDefaults = Array();
+    protected $isView = true;
 
     private $configFile = '';
     private $configFileContents = null;
@@ -54,8 +55,9 @@ class GlobalMapCfg {
     /**
      * Class Constructor
      */
-    public function __construct($name = '') {
+    public function __construct($name = '', $isView = true) {
         $this->name = $name;
+        $this->isView = $isView;
 
         if(self::$validConfig == null)
             $this->fetchValidConfig();
@@ -630,7 +632,8 @@ class GlobalMapCfg {
         return null;
     }
 
-    private function getSourceParamsOfSources($sources, $only_user_supplied, $only_customized, $only_view_parameters) {
+    private function getSourceParamsOfSources($sources, $only_user_supplied,
+                                              $only_customized, $only_view_parameters ) {
         $keys = array();
         // Get keys of all view params belonging to all configured sources
         foreach($sources AS $source) {
@@ -655,8 +658,13 @@ class GlobalMapCfg {
         // Now get the values. First try to fetch the value by _GET parameter (if allowed)
         // Otherwise use the value from mapcfg or default coded value
         $params = array();
+        $only_cfg_params = !$this->isView;
         foreach($keys AS $key) {
-            $val = $this->getSourceParam($key, $only_user_supplied, $only_customized);
+            if (!$only_cfg_params)
+                $val = $this->getSourceParam($key, $only_user_supplied, $only_customized);
+            else
+                $val = $this->getValue(0, $key);
+
             if($val !== null)
                 $params[$key] = $val;
         }
@@ -670,17 +678,20 @@ class GlobalMapCfg {
      * The default case is to return view parameters and config values of the
      * enabled sources. But in some cases the function on returns the view parameters.
      */
-    public function getSourceParams($only_user_supplied = false, $only_customized = false, $only_view_parameters = false) {
+    public function getSourceParams($only_user_supplied = false, $only_customized = false,
+                                    $only_view_parameters = false) {
         // First get a list of source names to get the parameters for
         $config  = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : array();
         $sources = array_merge(array('*'), $config);
-        $params  = $this->getSourceParamsOfSources($sources, $only_user_supplied, $only_customized, $only_view_parameters);
+        $params  = $this->getSourceParamsOfSources($sources, $only_user_supplied,
+                                                   $only_customized, $only_view_parameters);
 
         // The map sources might have changed basd on source params - we need an
         // additional run to get params which belong to this sources
         if(isset($params['sources'])) {
             $sources = array_merge(array('*'), $params['sources']);
-            $params = $this->getSourceParamsOfSources($sources, $only_user_supplied, $only_customized, $only_view_parameters);
+            $params = $this->getSourceParamsOfSources($sources, $only_user_supplied,
+                                                      $only_customized, $only_view_parameters);
         }
 
         return $params;
@@ -776,7 +787,7 @@ class GlobalMapCfg {
         if(isset($params['source_file']))
             unset($params['source_file']);
         $param_values = $this->paramsToString($params);
-        $cacheFile = cfg('paths','var').'source-'.$this->name.'.cfg-'.$param_values.'-'.CONST_VERSION.'.cache';
+        $cacheFile = cfg('paths','var').'source-'.$this->name.'.cfg-'.$param_values.'-'.$this->isView.'-'.CONST_VERSION.'.cache';
         $CACHE = new GlobalFileCache(array(), $cacheFile);
 
         // 2a. Check if the cache file exists
