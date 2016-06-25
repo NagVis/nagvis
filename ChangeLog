@@ -3,22 +3,9 @@ Core:
   * MK BI backend: Now prints an error message when trying to use it with
     objects that are not aggregations.
   * NDO MySQL backend: Filtering out legacy objects from DB (setting is_active filter)
-  * FIX: A local exploitable security issue has been discovered in the php-gettext
-    library which is used to make NagVis localizable on platforms which has no gettext
-    support built into PHP.
-
-    A local user with privileges to create/modify the .mo files used by NagVis
-    could modify a file in a way that it executes custom code with the privileges of
-    the web server which is executing the NagVis code.
-
-    To more than 99% of NagVis installations (installed with the install.sh
-    installer or OMD) this is no special threat because a user which is able to .mo
-    files is able to modify the .php program files of NagVis. An attacker
-    would rather modify the .php files directly instead of injecting it's code through
-    the .mo files.
-
-    However, to fix this for most installations minor issue, we included php-gettext
-    in version 1.0.12 with this release which fixes the issue.
+  * FIX: Updated php-gettext to 1.0.12 and commented out unused code because it contains
+    some exploitable PHP code which could be used to inject code using modified .mo files.
+    However, NagVis has never used these functions, so was never affected by this issue.
 
 Frontend:
   * FIX: Fixed error in ad-hoc automaps (Network Topology in Check_MK) during state updates
