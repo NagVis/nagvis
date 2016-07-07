@@ -28,8 +28,12 @@
 
     <!-- BEGIN host -->
     <li class="spacer"><hr /></li>
+    <!-- BEGIN has_host_downtime_url -->
     <li><a href="[host_downtime_url]" target="_blank">[lang_schedule_downtime]</a></li>
+    <!-- END has_host_downtime_url -->
+    <!-- BEGIN has_host_ack_url -->
     <li><a href="[host_ack_url]" target="_blank">[lang_reschedule_next_check]</a></li>
+    <!-- END has_host_ack_url -->
     <!-- BEGIN permitted_perform -->
     <li><a href="#" onClick="showAckDialog('[map_name]', '[obj_id]');contextHide();return false">[lang_ack]</a></li>
 
@@ -54,8 +58,12 @@
 
     <!-- BEGIN service -->
     <li class="spacer"><hr /></li>
+    <!-- BEGIN has_service_downtime_url -->
     <li><a href="[service_downtime_url]" target="_blank">[lang_schedule_downtime]</a></li>
+    <!-- END has_service_downtime_url -->
+    <!-- BEGIN has_service_ack_url -->
     <li><a href="[service_ack_url]" target="_blank">[lang_reschedule_next_check]</a></li>
+    <!-- END has_service_ack_url -->
     <!-- BEGIN permitted_perform -->
     <li><a href="javascript:void(0)" onClick="showAckDialog('[map_name]', '[obj_id]');contextHide();return false">[lang_ack]</a></li>
 

@@ -172,20 +172,18 @@ class NagVisContextMenu {
             $this->code = str_replace('[lang_action_https]', l('Connect (HTTPS)'), $this->code);
         }
 
-        if(strpos($this->code,'[host_downtime_url]') !== FALSE) {
-            $this->code = str_replace('[host_downtime_url]', cfg('defaults', 'host_downtime_url'), $this->code);
-        }
+        $action_urls = array("host_downtime_url", "host_ack_url",
+                             "service_downtime_url", "service_ack_url");
 
-        if(strpos($this->code,'[host_ack_url]') !== FALSE) {
-            $this->code = str_replace('[host_ack_url]', cfg('defaults', 'host_ack_url'), $this->code);
-        }
-
-        if(strpos($this->code,'[service_downtime_url]') !== FALSE) {
-            $this->code = str_replace('[service_downtime_url]', cfg('defaults', 'service_downtime_url'), $this->code);
-        }
-
-        if(strpos($this->code,'[service_ack_url]') !== FALSE) {
-            $this->code = str_replace('[service_ack_url]', cfg('defaults', 'service_ack_url'), $this->code);
+        foreach ($action_urls as $param) {
+            if (cfg('defaults', $param) != "") {
+                if(strpos($this->code,'['.$param.']') !== FALSE) {
+                    $this->code = str_replace('['.$param.']', cfg('defaults', $param), $this->code);
+                }
+            } else {
+                $this->code = preg_replace('/<!-- BEGIN has_'.$param.' -->.*?<!-- END has_'.$param.' -->/ms',
+                                           '', $this->code);
+            }
         }
     }
 
