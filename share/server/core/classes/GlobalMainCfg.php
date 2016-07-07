@@ -625,6 +625,26 @@ class GlobalMainCfg {
                     'default' => '',
                     'match'   => MATCH_STRING_URL_EMPTY
                 ),
+                'host_downtime_url' => Array(
+                    'must'    => 0,
+                    'default' => '[html_cgi]/cmd.cgi?cmd_typ=55&host=[name]',
+                    'match'   => MATCH_STRING_URL_EMPTY
+                ),
+                'host_ack_url' => Array(
+                    'must'    => 0,
+                    'default' => '[html_cgi]/cmd.cgi?cmd_typ=96&host=[name]&force_check',
+                    'match'   => MATCH_STRING_URL_EMPTY
+                ),
+                'service_downtime_url' => Array(
+                    'must'    => 0,
+                    'default' => '[html_cgi]/cmd.cgi?cmd_typ=56&host=[name]&service=[service_description]',
+                    'match'   => MATCH_STRING_URL_EMPTY
+                ),
+                'service_ack_url' => Array(
+                    'must'    => 0,
+                    'default' => '[html_cgi]/cmd.cgi?cmd_typ=7&host=[name]&service=[service_description]&force_check',
+                    'match'   => MATCH_STRING_URL_EMPTY
+                ),
                 'view_template' => Array(
                     'must'     => 0,
                     'editable' => 1,
