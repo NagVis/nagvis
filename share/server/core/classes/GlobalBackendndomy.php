@@ -489,8 +489,8 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         } else {
             $QUERYHANDLE = $this->mysqlQuery('SELECT problem_has_been_acknowledged
             FROM '.$this->dbPrefix.'objects AS o,'.$this->dbPrefix.'hoststatus AS h
-            WHERE (o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') AND h.host_object_id=o.object_id LIMIT 1
-            AND (o.is_active=1)
+            WHERE (o.objecttype_id=1 AND o.name1 = binary \''.$hostName.'\' AND o.instance_id='.$this->dbInstanceId.') AND h.host_object_id=o.object_id AND (o.is_active=1)
+	    LIMIT 1
             ');
 
             $data = mysql_fetch_assoc($QUERYHANDLE);
