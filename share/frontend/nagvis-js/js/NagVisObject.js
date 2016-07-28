@@ -552,7 +552,6 @@ var NagVisObject = Base.extend({
         } else {
             // Don't try to do strange things for objects not having coordinates. But
             // that should never happen anyways.
-            console.log(this.conf);
             return parentIds;
         }
 
