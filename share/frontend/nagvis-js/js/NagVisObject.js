@@ -545,17 +545,25 @@ var NagVisObject = Base.extend({
     getParentObjectIds: function(num) {
         var parentIds = {};
 
-        if(isset(num))
+        if (isset(num)) {
             var coords = (this.conf['x'].split(',')[num] + ',' + this.conf['y'].split(',')[num]).split(',');
-        else
+        } else if (isset(this.conf.x) && isset(this.conf.y)) {
             var coords = (this.conf.x + ',' + this.conf.y).split(',');
+        } else {
+            // Don't try to do strange things for objects not having coordinates. But
+            // that should never happen anyways.
+            console.log(this.conf);
+            return parentIds;
+        }
 
-        for(var i = 0, len = coords.length; i < len; i++)
-            if(isRelativeCoord(coords[i]))
+        for(var i = 0, len = coords.length; i < len; i++) {
+            if(isRelativeCoord(coords[i])) {
                 if(coords[i].search('%') !== -1)
                     parentIds[coords[i].split('%')[0]] = true;
-                else
+                else if (coords[i])
                     parentIds[coords[i]] = true;
+            }
+        }
         coords = null;
 
         return parentIds;

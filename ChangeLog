@@ -1,3 +1,7 @@
+1.9b9
+Automap:
+  * FIX: Fixed possible error "TypeError: this.objects[parentObjId] is undefined..."
+
 1.9b8
 Core:
   * MK BI backend: Now prints an error message when trying to use it with
