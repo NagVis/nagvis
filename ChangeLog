@@ -1,6 +1,7 @@
 1.9b9
 Automap:
   * FIX: Fixed possible error "TypeError: this.objects[parentObjId] is undefined..."
+  * FIX: Fixed automap issue when object having redundant links
 
 1.9b8
 Core:

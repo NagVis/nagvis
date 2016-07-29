@@ -453,7 +453,11 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
 
     foreach($relations AS $rel_name) {
         if (isset($object_names[$rel_name])) {
-            continue; // skip this object to prevent a loop
+            // already seen objects
+            $obj = $object_names[$rel_name];
+            $this_tree_lvl[$obj['object_id']] = $obj;
+
+            continue; // finished with this existing object
         }
 
         if (in_array($rel_name, $params['ignore_hosts']) == True){
@@ -463,7 +467,7 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
 
         // Add to tree
         $this_tree_lvl[$obj['object_id']] = $obj;
-        $object_names[$rel_name] = true;
+        $object_names[$rel_name] = $obj;
 
         // < 0 - there is no limit
         // > 0 - there is a limit but it is no reached yet
