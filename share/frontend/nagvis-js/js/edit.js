@@ -288,6 +288,8 @@ function dragStart(event) {
     if (draggingObject !== null || button != 'LEFT' || !target || !draggingEnabled)
         return true;
 
+    contextHide();
+
     var parts = getEventMousePos(event),
         posx  = parts[0],
         posy  = parts[1];
