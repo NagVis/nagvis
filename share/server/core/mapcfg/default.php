@@ -959,8 +959,6 @@ $mapConfigVars = Array(
 );
 
 // STATELESS LINE SPECIFIC OPTIONS
-$mapConfigVars['context_menu_line'] = $mapConfigVars['context_menu'];
-$mapConfigVars['context_menu_line']['default'] = '0';
 $mapConfigVars['hover_menu_line'] = $mapConfigVars['hover_menu'];
 $mapConfigVars['hover_menu_line']['default'] = '0';
 
@@ -1358,18 +1356,18 @@ $mapConfigVarMap['line'] = Array(
         'line_color_border' => null,
     ),
     'actions' => array(
-        'context_menu_line' => 'context_menu',
-        'context_template' => null,
-        'hover_menu_line' => 'hover_menu',
-        'hover_template' => null,
-        'hover_url' => null,
-        'hover_delay' => null,
-        'url' => null,
-        'url_target' => null,
+        'context_menu'      => null,
+        'context_template'  => null,
+        'hover_menu_line'   => 'hover_menu',
+        'hover_template'    => null,
+        'hover_url'         => null,
+        'hover_delay'       => null,
+        'url'               => null,
+        'url_target'        => null,
     ),
     'hidden' => array(
         'type' => null,
-        'use' => null,
+        'use'  => null,
     ),
 );
 

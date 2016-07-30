@@ -1,4 +1,7 @@
 1.9b9
+Frontend:
+  * FIX: Fixed missing context menu for stateless lines
+
 Automap:
   * FIX: Fixed possible error "TypeError: this.objects[parentObjId] is undefined..."
   * FIX: Fixed automap issue when object having redundant links
