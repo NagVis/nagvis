@@ -239,6 +239,10 @@ var NagVisStatefulObject = NagVisObject.extend({
         this.base(attrs, only_state);
         this.updateMemberAttrs(attrs, only_state);
 
+        if (!only_state) {
+            this.replaceMacros();
+        }
+
         // When the config has not changed, but the state, rerender the whole object
         // the config update is handled within NagVisObject()
         if (only_state && this.stateChanged())
@@ -264,6 +268,10 @@ var NagVisStatefulObject = NagVisObject.extend({
         else {
             return false;
         }
+    },
+
+    transformAttributes: function() {
+        this.replaceMacros();
     },
 
     updateMemberAttrs: function(attrs, only_state) {

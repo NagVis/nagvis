@@ -7,6 +7,10 @@ Automap:
   * FIX: Fixed possible error "TypeError: this.objects[parentObjId] is undefined..."
   * FIX: Fixed automap issue when object having redundant links
 
+Worldmap:
+  * FIX: Fixed broken left click URLs of objects after editing attributes
+         until next reload
+
 1.9b8
 Core:
   * MK BI backend: Now prints an error message when trying to use it with
