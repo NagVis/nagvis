@@ -10,6 +10,7 @@ Automap:
 Worldmap:
   * FIX: Fixed broken left click URLs of objects after editing attributes
          until next reload
+  * FIX: Fixed keeping lock state of objects after editing object attributes
 
 1.9b8
 Core:

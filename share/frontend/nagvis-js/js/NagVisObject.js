@@ -81,7 +81,10 @@ var NagVisObject = Base.extend({
         }
 
         for (var i = 0; i < this.elements.length; i++)
-            this.elements[i].updateAttrs(only_state);
+            this.elements[i].updateAttrs(only_state, this.bIsLocked);
+
+        if (!only_state)
+            g_view.drawObject(this);
 
         // Update lastUpdate timestamp
         this.setLastUpdate();

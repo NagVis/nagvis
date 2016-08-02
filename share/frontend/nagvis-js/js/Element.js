@@ -38,10 +38,14 @@ var Element = Base.extend({
 
     // Is called on every state/config update. For the most objects
     // this re-renders the element on each non state update.
-    updateAttrs: function(only_state) {
+    updateAttrs: function(only_state, is_locked) {
         if (!only_state) {
             this.erase();
             this.render();
+
+            if (!is_locked)
+                this.unlock();
+
             this.draw();
         }
     },
