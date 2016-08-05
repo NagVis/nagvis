@@ -320,7 +320,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
                     //    ALIAS => $comp['host'],
                     //    DESCRIPTION => $comp['service'],
                     //);
-                    $ret[$key][] = array(
+                    $ret[$comp['host']][] = array(
                         $this->getBPState($comp['hardstate']),
                         '',  // output
                         0,
