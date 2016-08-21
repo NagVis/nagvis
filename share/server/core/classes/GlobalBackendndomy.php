@@ -1,4 +1,5 @@
 <?php
+
 /*****************************************************************************
  *
  * GlobalBackendndomy.php - backend class for handling object and state
@@ -793,6 +794,48 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 
                 $arrReturn[$key][] = $svc;
             }
+        }
+
+        // Free memory
+        mysql_free_result($QUERYHANDLE);
+
+        return $arrReturn;
+    }
+
+    /**
+    * PUBLIC getHostNamesProblematic()
+    *
+    * Queries mysql for hosts with problems
+    * A problem is given when the host state != UP
+    * or a service != OK
+    *
+    * @return Array of hostnames
+    * @author Uwe Ebel <kobmaki@aol.com>
+    */
+
+    public function getHostNamesProblematic() {
+        $arrReturn = Array();
+
+	$QUERYHANDLE = $this->mysqlQuery('
+	    select o.name1 as host_name
+	    from '.$this->dbPrefix.'hoststatus as hs
+	    LEFT JOIN '.$this->dbPrefix.'objects as o ON hs.host_object_id=o.object_id
+	    WHERE o.is_active = 1
+	    AND hs.current_state > 0
+	    AND hs.config_type='.$this->objConfigType.'
+	    AND o.instance_id='.$this->dbInstanceId.'
+	    UNION
+	    SELECT o.name1 AS host_name
+	    FROM '.$this->dbPrefix.'servicestatus as ss
+	    LEFT JOIN '.$this->dbPrefix.'objects as o ON ss.service_object_id=o.object_id
+	    LEFT JOIN '.$this->dbPrefix.'services as s ON ss.service_object_id=s.service_object_id
+	    WHERE s.config_type='.$this->objConfigType.'
+	    AND ss.current_state > 0
+	    AND o.is_active=1
+	    AND o.instance_id='.$this->dbInstanceId
+	   );
+        while($data = mysql_fetch_array($QUERYHANDLE)) {
+            $arrReturn[] = $data['name1'];
         }
 
         // Free memory
