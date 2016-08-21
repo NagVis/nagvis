@@ -4,6 +4,7 @@ Frontend:
   * FIX: Closing eventual open context menu when dragging an object
 
 Automap:
+  * filter_by_state=1 can now be used with automaps using the NDO MySQL backend
   * FIX: Fixed possible error "TypeError: this.objects[parentObjId] is undefined..."
   * FIX: Fixed automap issue when object having redundant links
 
