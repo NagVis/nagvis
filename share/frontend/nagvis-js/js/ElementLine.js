@@ -559,9 +559,15 @@ var ElementLine = Element.extend({
         if (getTargetRaw(event).tagName !== 'CANVAS')
             return true;
 
+        // document.body.scrollTop does not work in IE
+        var scrollTop = document.body.scrollTop ? document.body.scrollTop :
+                                                  document.documentElement.scrollTop;
+        var scrollLeft = document.body.scrollLeft ? document.body.scrollLeft :
+                                                    document.documentElement.scrollLeft;
+
         // Get the mouse position relative to window
-        var x = event.clientX - getSidebarWidth();
-        var y = event.clientY - getHeaderHeight();
+        var x = event.clientX - getSidebarWidth() + scrollLeft;
+        var y = event.clientY - getHeaderHeight() + scrollTop;
 
         // Check whether or not the given coord is within the line part coords
         var pnpoly = function(nvert, vertx, verty, testx, testy) {

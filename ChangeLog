@@ -1,6 +1,7 @@
 1.9b9
 Frontend:
   * FIX: Fixed missing context menu for stateless lines
+  * FIX: Fixed line actions in case of scrolled browser windows
   * FIX: Closing eventual open context menu when dragging an object
 
 Automap:
