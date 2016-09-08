@@ -107,6 +107,7 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule {
             array('General',   'getHoverTemplate',   '*'),
             array('User',      'setOption',          '*'),
             array('Multisite', 'getMaps',            '*'),
+            array('Auth',      'logout',             '*'),
         );
 
         if(!isset($this->user_groups[$username]))

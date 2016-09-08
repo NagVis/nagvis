@@ -1,4 +1,7 @@
 1.9b9
+Core:
+  * FIX: CoreAuthorisationModGroups - Logout of users is now possible
+
 Frontend:
   * FIX: Fixed missing context menu for stateless lines
   * FIX: Fixed line actions in case of scrolled browser windows
