@@ -55,7 +55,7 @@ try {
 } catch(NagVisException $e) {
     $VIEW = new ViewError();
 
-    if ($MODULE && is_a($MODULE, "FrontendModMap"))
+    if (isset($MODULE) && is_a($MODULE, "FrontendModMap"))
         echo $VIEW->parseWithMap($e, $MODULE->getObject());
     else
         echo $VIEW->parse($e);

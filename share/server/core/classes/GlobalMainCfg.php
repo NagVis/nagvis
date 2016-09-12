@@ -1518,34 +1518,41 @@ class GlobalMainCfg {
         $this->PUCACHE = new GlobalFileCache(array_slice($this->configFiles, 0, count($this->configFiles) - 1),
                                              CONST_MAINCFG_CACHE.'-pre-user-'.CONST_VERSION.'-cache'.$cacheSuffix);
 
-  	if($this->CACHE->isCached(false) === -1
-           || $this->PUCACHE->isCached(false) === -1
-           || $this->PUCACHE->getCacheFileAge() < filemtime(CONST_MAINCFG_DIR)) {
-            // The cache is too old. Load all config files
-            foreach($this->configFiles AS $configFile) {
-                // Only proceed when the configuration file exists and is readable
-                if(!GlobalCore::getInstance()->checkExisting($configFile, true)
-                   || !GlobalCore::getInstance()->checkReadable($configFile, true))
-                    return false;
-                $this->readConfig($configFile, true, $configFile == end($this->configFiles));
+        try {
+  	    if($this->CACHE->isCached(false) === -1
+               || $this->PUCACHE->isCached(false) === -1
+               || $this->PUCACHE->getCacheFileAge() < filemtime(CONST_MAINCFG_DIR)) {
+                // The cache is too old. Load all config files
+                foreach($this->configFiles AS $configFile) {
+                    // Only proceed when the configuration file exists and is readable
+                    if(!GlobalCore::getInstance()->checkExisting($configFile, true)
+                       || !GlobalCore::getInstance()->checkReadable($configFile, true))
+                        return false;
+                    $this->readConfig($configFile, true, $configFile == end($this->configFiles));
+                }
+                $this->CACHE->writeCache($this->config, true);
+                if($this->preUserConfig !== null)
+                    $this->PUCACHE->writeCache($this->preUserConfig, true);
+            } else {
+                // Use the cache!
+                $this->config = $this->CACHE->getCache();
+                $this->preUserConfig = $this->PUCACHE->getCache();
             }
-            $this->CACHE->writeCache($this->config, true);
-            if($this->preUserConfig !== null)
-                $this->PUCACHE->writeCache($this->preUserConfig, true);
-        } else {
-            // Use the cache!
-            $this->config = $this->CACHE->getCache();
-            $this->preUserConfig = $this->PUCACHE->getCache();
-        }
 
-        // Update the cache time
-        $this->useCache = $this->CACHE->isCached(false);
+            // Update the cache time
+            $this->useCache = $this->CACHE->isCached(false);
+
+            // want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
+            $this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
+        }
+        catch (Exception $e) {
+            // Try our best to set the correct paths - even in case of exceptions
+            $this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
+            throw $e;
+        }
 
         // Parse the state weight array
         $this->parseStateWeight();
-
-        // want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
-        $this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
 
         // set default value
         $this->validConfig['rotation']['interval']['default'] = $this->getValue('global','refreshtime');
@@ -1935,7 +1942,7 @@ class GlobalMainCfg {
                                 // Check if the configured backend is defined in main configuration file
                                 if(!$this->onlyUserConfig && $type == 'defaults' && $key == 'backend' && !isset($this->config['backend_'.$val])) {
                                     if($printErr) {
-                                        throw new NagVisException(l('backendNotDefined', Array('BACKENDID' => $val)));
+                                        throw new NagVisException(l('The backend with the ID \"[BACKENDID]\" is not defined.', Array('BACKENDID' => $val)));
                                     }
                                     return FALSE;
                                 }
