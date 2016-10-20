@@ -6,6 +6,7 @@ Frontend:
   * FIX: Fixed missing context menu for stateless lines
   * FIX: Fixed line actions in case of scrolled browser windows
   * FIX: Closing eventual open context menu when dragging an object
+  * FIX: Gadgets can now be dragged again
 
 Automap:
   * filter_by_state=1 can now be used with automaps using the NDO MySQL backend

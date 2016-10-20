@@ -38,6 +38,16 @@ var ElementGadget = Element.extend({
         this.place();
     },
 
+    unlock: function () {
+        this.toggleLink(false);
+        makeDragable(this.dom_obj, this.obj, this.obj.saveObject, this.obj.moveObject);
+    },
+
+    lock: function () {
+        this.toggleLink(true);
+        makeUndragable(this.dom_obj);
+    },
+
     place: function() {
         this.dom_obj.style.top  = this.obj.parseCoord(this.obj.conf.y, 'y') + 'px';
         this.dom_obj.style.left = this.obj.parseCoord(this.obj.conf.x, 'x') + 'px';
