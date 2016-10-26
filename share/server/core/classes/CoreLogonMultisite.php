@@ -133,6 +133,12 @@ class CoreLogonMultisite extends CoreLogonModule {
     public function check($printErr = true) {
         global $AUTH, $CORE;
 
+        // Try to auth using the environment auth
+        $ENV= new CoreLogonEnv();
+        if($ENV->check(false) === true) {
+            return true;
+        }
+
         $username = $this->checkAuth();
         if($username === '') {
             $this->redirectToLogin();

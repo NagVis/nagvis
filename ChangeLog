@@ -1,3 +1,10 @@
+1.9b10
+Core:
+  * CoreLogonMultisite: In case a user is already authenticated via the web
+    server, the authenticated user name is treated as authenticated, just
+    like when using LogonEnv. If no user is authenticated, the regular
+    Check_MK multisite login is done
+
 1.9b9
 Core:
   * FIX: CoreAuthorisationModGroups - Logout of users is now possible
