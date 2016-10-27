@@ -69,6 +69,14 @@ var NagVisObject = Base.extend({
             this.elements[i].update();
     },
 
+    // The counterpart of update(). Remove the elements added
+    // by update. This is used to clean up to prepare a subsequent
+    // call of update
+    clearElements: function() {
+        for (var i = 0; i < this.elements.length; i++)
+            this.elements[i].removeFrom(this);
+    },
+
     updateAttrs: function(attrs, only_state) {
         // Update this object (loop all options from array and set in current obj)
         for (var key in attrs)
@@ -77,14 +85,19 @@ var NagVisObject = Base.extend({
 
         if (!only_state) {
             this.transformAttributes();
-            this.transformCoordinates();
+            if (this.conf.x)
+                this.transformCoordinates();
         }
 
         for (var i = 0; i < this.elements.length; i++)
             this.elements[i].updateAttrs(only_state, this.bIsLocked);
 
-        if (!only_state)
+        if (!only_state && this.conf.x) {
+            this.clearElements();
+            this.update();
+            this.render();
             g_view.drawObject(this);
+        }
 
         // Update lastUpdate timestamp
         this.setLastUpdate();
@@ -115,6 +128,13 @@ var NagVisObject = Base.extend({
 
         this.draw();
         g_view.drawObject(this);
+
+        // The line labels need a) the line added to DOM and b) the label added
+        // to the dom before being able to calculate the correct coordinates
+        // needed in place().   
+        if (this.conf.type == 'line' || this.conf.view_type == 'line')
+            for (var i = 0; i < this.elements.length; i++)
+                this.elements[i].place();
     },
 
     draw: function() {

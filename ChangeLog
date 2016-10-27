@@ -5,6 +5,10 @@ Core:
     like when using LogonEnv. If no user is authenticated, the regular
     Check_MK multisite login is done
 
+Frontend:
+  * FIX: Fixed removal of labels and hover menus right after editing objects
+  * FIX: Fixed repositioning of (line) labels on object updates
+
 1.9b9
 Core:
   * FIX: CoreAuthorisationModGroups - Logout of users is now possible

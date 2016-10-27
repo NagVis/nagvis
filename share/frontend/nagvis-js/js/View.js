@@ -121,7 +121,7 @@ var View = Base.extend({
             oFileAges[key] = data[key];
     },
 
-    // Bulk update object states and then visualize eventual changes
+    // Bulk update object states (and possibly configs) and then visualize changes
     updateObjects: function(attrs, only_state) {
         var at_least_one_changed = false;
 

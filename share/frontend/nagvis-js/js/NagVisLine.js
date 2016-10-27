@@ -29,6 +29,8 @@ var NagVisLine = NagVisStatelessObject.extend({
     },
 
     update: function() {
+        this.clearElements();
+
         var line = new ElementLine(this).addTo(this);
 
         // Apply line color configurations

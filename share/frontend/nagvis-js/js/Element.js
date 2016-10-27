@@ -64,7 +64,7 @@ var Element = Base.extend({
     // Is called by the parent element to add this elements DOM
     // object to the parent elements DOM object
     draw: function() {
-        if (this.dom_obj)
+        if (this.dom_obj && !this.dom_obj.parentNode)
             this.obj.dom_obj.appendChild(this.dom_obj);
     },
 

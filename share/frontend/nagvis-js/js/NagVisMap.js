@@ -23,6 +23,8 @@
 
 var NagVisMap = NagVisStatefulObject.extend({
     update: function () {
+        this.clearElements();
+
         if (g_view.type == 'overview')
             new ElementTile(this).addTo(this);
 

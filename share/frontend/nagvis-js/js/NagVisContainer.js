@@ -23,6 +23,7 @@
 
 var NagVisContainer = NagVisStatelessObject.extend({
     update: function() {
+        this.clearElements();
         new ElementBox(this).addTo(this);
         this.base();
     },

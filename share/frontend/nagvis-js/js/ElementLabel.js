@@ -64,7 +64,6 @@ var ElementLabel = Element.extend({
             this.obj.conf.label_width, '', this.getText(),
             this.obj.conf.label_style
         );
-        this.place();
     },
 
     unlock: function () {
