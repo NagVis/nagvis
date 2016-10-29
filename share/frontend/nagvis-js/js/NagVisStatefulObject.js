@@ -212,7 +212,6 @@ var NagVisStatefulObject = NagVisObject.extend({
 
     // Updates the logical elements of the object
     update: function () {
-        this.clearElements();
         this.getMembers();
         this.replaceMacros();
 
