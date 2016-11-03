@@ -1,0 +1,3034 @@
+# NagVis language file
+#
+# Lars Michelsen <lm@larsmichelsen.com>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NagVis 1.9b9\n"
+"Report-Msgid-Bugs-To: info@nagvis.org\n"
+"POT-Creation-Date: 2016-10-12 11:38+0800\n"
+"PO-Revision-Date: 2016-11-02 15:59+0800\n"
+"Last-Translator: Lars Michelsen <lm@larsmichelsen.com>\n"
+"Language-Team: NagVis Team <info@nagvis.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"X-Generator: Poedit 1.8.9\n"
+
+#: share/server/core/classes/ViewMapAddModify.php:422
+msgid ">>> Specify other"
+msgstr ""
+
+#: share/server/core/classes/ViewManageMaps.php:44
+#: share/server/core/classes/ViewManageMaps.php:164
+msgid "A map with this name already exists"
+msgstr "这个地图名称已存在"
+
+#: share/server/core/classes/ViewToNewMap.php:43
+#: share/server/core/classes/ViewToStaticMap.php:43
+msgid "A map with this name already exists."
+msgstr "这个地图名称已存在。"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:42
+#: share/server/core/classes/ViewMapManageTmpl.php:122
+#: share/server/core/classes/ViewMapManageTmpl.php:228
+msgid "A map with this name does not exists"
+msgstr "这个地图名称不存在"
+
+#: share/server/core/classes/ViewManageRoles.php:46
+msgid "A role with this name already exists."
+msgstr "这个角色名已存在。"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:56
+msgid "A template with this name already exists."
+msgstr "这个模板名称已经存在。"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:133
+#: share/server/core/classes/ViewMapManageTmpl.php:237
+msgid "A template with this name does not exist."
+msgstr "这个模板名称不存在。"
+
+#: share/server/core/classes/ViewManageUsers.php:46
+msgid "A user with this name already exists."
+msgstr "用户名已存在。"
+
+#: share/server/core/classes/CoreLogonDialogHandler.php:63
+msgid "Access denied"
+msgstr "访问拒绝"
+
+#: share/server/core/classes/ViewAck.php:111
+#: share/server/core/classes/NagVisContextMenu.php:123
+msgid "Acknowledge"
+msgstr "确认"
+
+#: share/server/core/classes/ViewManageRoles.php:219
+msgid "Action"
+msgstr "操作"
+
+#: share/server/core/classes/CoreModAction.php:75
+msgid "Action handler not implemented."
+msgstr "操作处理程序没有部署"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:371
+#: share/server/core/classes/GlobalMapCfg.php:1920
+#: share/server/core/classes/GlobalMapCfg.php:1922
+msgid "Actions"
+msgstr "操作"
+
+msgid "Add"
+msgstr "添加"
+
+#: share/server/core/classes/ViewManageBackends.php:110
+msgid "Add Backend"
+msgstr "添加后端"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:379
+msgid "Add Icon"
+msgstr "添加图标"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:380
+msgid "Add Line"
+msgstr "添加线条"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:104
+#: share/server/core/classes/ViewMapManageTmpl.php:209
+msgid "Add Option"
+msgstr "添加选项"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:382
+msgid "Add Special"
+msgstr "添加特殊物"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:388
+#: share/server/core/classes/GlobalCore.php:693
+msgid "Aggregation"
+msgstr "聚合"
+
+#: share/server/core/classes/GlobalCore.php:694
+msgid "Aggregation Name"
+msgstr "聚合名"
+
+#: share/server/core/classes/ViewManageMaps.php:97
+msgid "Alias"
+msgstr "别名"
+
+#: share/server/core/functions/core.php:157
+msgid "Alphabetically"
+msgstr "照字母顺序排列地"
+
+#: share/server/core/classes/GlobalMapCfg.php:1919
+msgid "Appearance"
+msgstr "外观"
+
+msgid "Apply"
+msgstr "应用"
+
+#: share/server/core/functions/core.php:164
+msgid "Ascending"
+msgstr "升序"
+
+#: share/server/core/classes/GlobalMapCfg.php:379
+msgid "Attribute definition out of object. In map [MAPNAME] at line #[LINE]."
+msgstr "在地图 [MAPNAME] 第 #[LINE] 行，属性定义超出对象范围"
+
+#: share/server/core/classes/CoreModAuth.php:92
+msgid "Authentication failed"
+msgstr "验证失败。"
+
+#: share/server/core/classes/CoreLogonDialogHandler.php:51
+msgid "Authentication failed."
+msgstr "验证失败。"
+
+msgid "Authentication failed. Invalid credentials."
+msgstr "验证失败。密码无效。"
+
+#: share/server/core/classes/GlobalMainCfg.php:2500
+#: share/server/core/classes/GlobalMapCfg.php:1925
+msgid "Automap"
+msgstr "自动地图"
+
+msgid "Automap Index"
+msgstr "（Automap）自动地图索引"
+
+#: share/server/core/classes/ViewManageMaps.php:33
+msgid "Automap based on parent/child relations"
+msgstr "基于父子关系的自动地图"
+
+msgid "Automaps"
+msgstr "自动地图"
+
+#: share/server/core/classes/ViewManageUsers.php:159
+msgid "Available Roles"
+msgstr "可用的角色"
+
+#: share/server/core/classes/GlobalBackendmkbi.php:225
+msgid "BI-State is: [S]"
+msgstr ""
+
+#: share/server/core/classes/ViewManageBackends.php:177
+#: share/server/core/classes/ViewManageBackends.php:188
+#: share/server/core/classes/ViewManageBackends.php:254
+msgid "Backend ID"
+msgstr "后端ID"
+
+#: share/server/core/classes/ViewManageBackends.php:181
+msgid "Backend Type"
+msgstr "后端类型"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:137
+msgid "Background"
+msgstr "背景"
+
+#: share/server/core/sources/automap.php:51
+msgid "Bottom to top"
+msgstr "底部到顶端"
+
+#: share/server/core/sources/geomap.php:148
+msgid "CSV-File"
+msgstr ""
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:373
+#: share/server/core/classes/ViewChangePassword.php:92
+msgid "Change password"
+msgstr "修改密码"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:369
+msgid "Choose Language"
+msgstr "选择语言"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:139
+msgid "Choose a background"
+msgstr "选择一个背景"
+
+#: share/server/core/classes/ViewManageMaps.php:200
+#: share/server/core/classes/ViewManageMaps.php:263
+#: share/server/core/classes/ViewManageMaps.php:307
+msgid "Choose a map"
+msgstr "选择一个地图"
+
+#: share/server/core/classes/ViewManageShapes.php:142
+msgid "Choose a shape"
+msgstr "选择一个形状"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:75
+#: share/server/core/classes/ViewManageShapes.php:74
+msgid "Choose an Image"
+msgstr "选择一张图片"
+
+msgid "Clone"
+msgstr "复制"
+
+#: share/server/core/classes/NagVisContextMenu.php:126
+msgid "Clone object"
+msgstr "复制对象"
+
+#: share/server/core/classes/ViewMapAddModify.php:238
+#: share/server/core/classes/ViewEditMainCfg.php:263
+msgid "Color select"
+msgstr "颜色选项"
+
+#: share/server/core/classes/ViewAck.php:99
+msgid "Comment"
+msgstr "注解"
+
+#: share/server/core/classes/CoreBackendMgmt.php:584
+msgid "Configuration Error: The statusHost ([STATUSHOST]) is in same backend as the one to check."
+msgstr "配置错误： 状态主机([STATUSHOST])和将检测的是在同一个后端"
+
+#: share/server/core/classes/NagVisContextMenu.php:168
+msgid "Connect (HTTP)"
+msgstr ""
+
+#: share/server/core/classes/NagVisContextMenu.php:172
+msgid "Connect (HTTPS)"
+msgstr ""
+
+#: share/server/core/classes/NagVisContextMenu.php:160
+msgid "Connect (RDP)"
+msgstr ""
+
+#: share/server/core/classes/NagVisContextMenu.php:164
+msgid "Connect (SSH)"
+msgstr ""
+
+#: share/server/core/classes/CoreBackendMgmt.php:219
+#: share/server/core/classes/CoreBackendMgmt.php:263
+#: share/server/core/classes/CoreBackendMgmt.php:288
+#: share/server/core/classes/CoreBackendMgmt.php:307
+#: share/server/core/classes/CoreBackendMgmt.php:390
+#: share/server/core/classes/CoreBackendMgmt.php:429
+msgid "Connection Problem (Backend: [BACKENDID]): [MSG]"
+msgstr "连接错误(Backend: [BACKENDID]): [MSG]"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:392
+msgid "Container"
+msgstr "容器"
+
+#: share/server/core/classes/objects/NagVisStatefulObject.php:728
+msgid "Contains"
+msgstr "包含"
+
+#: share/frontend/nagvis-js/classes/NagVisLoginView.php:70
+msgid "Cookies disabled"
+msgstr "禁用 cookie"
+
+msgid "Could not create livestatus socket [SOCKET] in backend [BACKENDID]."
+msgstr "不能在后端[BACKENDID]创建livestatus 套接字 [SOCKET]"
+
+#: share/server/core/classes/ViewManageUsers.php:97
+#: share/server/core/classes/ViewMapManageTmpl.php:109
+#: share/server/core/classes/ViewManageMaps.php:109
+#: share/server/core/classes/ViewManageRoles.php:75
+msgid "Create"
+msgstr "创建"
+
+#: share/server/core/classes/ViewManageMaps.php:27
+msgid "Create Map"
+msgstr "新建地图"
+
+#: share/server/core/classes/GlobalCore.php:680
+msgid "Create Object"
+msgstr "新建对象"
+
+#: share/server/core/classes/ViewManageRoles.php:30
+msgid "Create Role"
+msgstr "新建角色"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:30
+msgid "Create Template"
+msgstr "新建模板"
+
+#: share/server/core/classes/ViewManageUsers.php:30
+msgid "Create User"
+msgstr "新建用户"
+
+#: share/server/core/classes/ViewMapAddModify.php:409
+msgid "Current value is not a known option - falling back to input field."
+msgstr "此值不是一个已知选项 -- 退回到输入栏"
+
+#: share/server/core/classes/CoreAuthHandler.php:70
+msgid "Data has an invalid format"
+msgstr "数据格式不对"
+
+#: share/server/core/classes/CoreModGeneral.php:94
+msgid "Data not parsable: [URL] ([MSG])"
+msgstr ""
+
+#: share/server/core/classes/ViewManageBackends.php:63
+#: share/server/core/classes/ViewManageBackends.php:89
+msgid "Default Backend"
+msgstr "默认后端"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:147
+#: share/server/core/classes/ViewManageUsers.php:223
+#: share/server/core/classes/ViewManageBackends.php:264
+#: share/server/core/classes/ViewMapManageTmpl.php:268
+#: share/server/core/classes/ViewManageMaps.php:271
+#: share/server/core/classes/ViewManageShapes.php:150
+#: share/server/core/classes/ViewManageRoles.php:197
+#: share/server/core/classes/ViewManageRoles.php:287
+msgid "Delete"
+msgstr "删除"
+
+#: share/server/core/classes/ViewManageBackends.php:225
+msgid "Delete Backend"
+msgstr "删除后端"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:87
+msgid "Delete Background"
+msgstr "删除背景"
+
+#: share/server/core/classes/ViewManageMaps.php:219
+msgid "Delete Map"
+msgstr "删除地图"
+
+#: share/server/core/classes/ViewManageRoles.php:239
+msgid "Delete Role"
+msgstr "删除角色"
+
+#: share/server/core/classes/ViewManageShapes.php:86
+msgid "Delete Shape"
+msgstr "删除形状"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:221
+msgid "Delete Template"
+msgstr "删除模板"
+
+#: share/server/core/classes/ViewManageUsers.php:178
+msgid "Delete User"
+msgstr "删除用户"
+
+#: share/server/core/classes/NagVisContextMenu.php:138
+msgid "Delete object"
+msgstr "删除对象"
+
+#: share/server/core/functions/core.php:165
+msgid "Descending"
+msgstr "降序"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:387
+#: share/server/core/classes/GlobalCore.php:690
+msgid "Dynamic Group"
+msgstr "动态组"
+
+#: share/server/core/classes/GlobalCore.php:691
+msgid "Dynamic Group Name"
+msgstr "动态组名"
+
+#: share/server/core/classes/ViewManageMaps.php:34
+msgid "Dynamic map"
+msgstr "动态地图"
+
+#: share/server/core/classes/GlobalMapCfg.php:1924
+msgid "Dynmap"
+msgstr "动态地图"
+
+#: share/server/core/classes/CoreExceptions.php:32
+#: share/server/core/classes/CoreExceptions.php:71
+msgid "ERROR"
+msgstr "错误"
+
+msgid "ERROR - Unexpected exception"
+msgstr "错误 - 意外异常"
+
+#: share/server/core/classes/ViewManageRoles.php:196
+msgid "Edit"
+msgstr "编辑"
+
+#: share/server/core/classes/ViewManageBackends.php:112
+msgid "Edit Backend"
+msgstr "编辑后端"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:389
+msgid "Edit Map"
+msgstr "编辑地图"
+
+#: share/frontend/nagvis-js/classes/ViewError.php:38
+msgid "Error"
+msgstr "错误"
+
+#: share/server/core/classes/CoreModMultisite.php:229
+msgid "Error: "
+msgstr "错误："
+
+#: share/server/core/ajax_handler.php:67
+msgid "Error: PHP Error"
+msgstr "错误：PHP错误"
+
+#: share/server/core/ajax_handler.php:73
+msgid "Error: Unhandled Exception"
+msgstr "错误：未处理的异常"
+
+#: share/server/core/classes/GlobalMapCfg.php:1929
+msgid "Events"
+msgstr "事件"
+
+#: share/server/core/classes/ViewManageMaps.php:315
+msgid "Export"
+msgstr "导出"
+
+#: share/server/core/classes/ViewManageMaps.php:277
+msgid "Export Map"
+msgstr "导出地图"
+
+msgid "Export to Map"
+msgstr "导出到地图"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:414
+msgid "Export to static map"
+msgstr "导出到静态地图"
+
+#: share/server/core/sources/worldmap.php:229
+msgid "Failed to add object: [E]: [Q]"
+msgstr "无法添加对象：[E]：[Q]"
+
+#: share/server/core/classes/ViewManageMaps.php:61
+msgid "Failed to create the map"
+msgstr "创建地图失败"
+
+#: share/server/core/sources/worldmap.php:302
+msgid "Failed to delete object: [E]: [Q]"
+msgstr "删除对象失败：[E]: [Q]"
+
+#: share/server/core/classes/ViewMapAddModify.php:397
+msgid "Failed to get objects: [MSG]"
+msgstr "获取对象失败：[MSG]"
+
+#: share/server/core/classes/GlobalCore.php:669
+msgid "Failed to write file to disk"
+msgstr "文件写入磁盘失败"
+
+#: share/server/core/classes/GlobalCore.php:665
+msgid "File is too large (FORM limit)"
+msgstr "文件太大（FORM限制）"
+
+#: share/server/core/classes/GlobalCore.php:664
+msgid "File is too large (PHP limit)"
+msgstr "文件太大（PHP限制）"
+
+#: share/server/core/classes/GlobalCore.php:670
+msgid "File upload stopped by extension"
+msgstr "文件上传因扩展名停止"
+
+#: share/server/core/mapcfg/default.php:106
+msgid "Fill screen"
+msgstr "填充屏幕"
+
+#: share/server/core/classes/GlobalMapCfg.php:1918
+#: share/server/core/classes/ViewManageRoles.php:153
+msgid "General"
+msgstr "通常"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:399
+msgid "General Configuration"
+msgstr "一般配置"
+
+#: share/server/core/classes/ViewManageMaps.php:31
+msgid "Geographical map (interactive)"
+msgstr "地图（交互式）"
+
+#: share/server/core/classes/ViewManageMaps.php:32
+msgid "Geographical map (non interactive)"
+msgstr "地图（非交互）"
+
+#: share/server/core/classes/GlobalMapCfg.php:1926
+msgid "Geomap"
+msgstr "Geomap"
+
+#: share/server/core/classes/ViewMapAddModify.php:249
+msgid "Get current size"
+msgstr "获取当前尺寸"
+
+#: share/server/core/classes/GlobalMainCfg.php:2494
+msgid "Global Settings"
+msgstr "全局设置"
+
+#: share/server/core/sources/geomap.php:310
+msgid "Got empty map after filtering. Terminate rendering geomap."
+msgstr "结束geomap透视图，过滤后得到空地图"
+
+msgid "Got invalid data from \"[U]\""
+msgstr "从\"[U]\"得到无效的数据"
+
+#: share/server/core/sources/geomap.php:397
+msgid "Got invalid data from \"[U]\": \"[C]\""
+msgstr "从\"[U]\"得到无效的数据: \"[C]\""
+
+#: share/server/core/sources/geomap.php:392
+msgid "Got invalid response from \"[U]\". This is mostly caused by an unhandled request."
+msgstr "从 \"[U]\"得到无效的应答。很可能是由一个未处理的请求引起。"
+
+#: share/server/core/sources/automap_pos.php:232
+msgid "Graphviz call failed ([CODE]): [OUTPUT]<br /><br >Command was: \"[CMD]\""
+msgstr ""
+
+#: share/server/core/mapcfg/default.php:68
+msgid "HTML Code"
+msgstr " HTML 代码"
+
+#: share/server/core/sources/dynmap.php:65
+msgid "Hostgroup"
+msgstr "主机组"
+
+#: share/server/core/sources/dynmap.php:63
+#: share/server/core/mapcfg/default.php:91
+msgid "Hosts"
+msgstr "主机"
+
+#: share/server/core/classes/ViewManageMaps.php:92
+msgid "ID (Internal Name)"
+msgstr ""
+
+#: share/server/core/classes/CoreExceptions.php:62
+msgid "INFO"
+msgstr "信息"
+
+#: share/server/core/mapcfg/default.php:67
+msgid "Image"
+msgstr "图片"
+
+#: share/server/core/classes/ViewManageMaps.php:373
+msgid "Import"
+msgstr "导入"
+
+#: share/server/core/classes/ViewManageMaps.php:321
+msgid "Import Map"
+msgstr "导入地图"
+
+#: share/server/core/classes/ViewMapAddModify.php:580
+msgid "Invalid clone object id"
+msgstr "无效的复制对象ID"
+
+#: share/server/core/classes/CoreUserCfg.php:66
+msgid "Invalid data in \"[FILE]\"."
+msgstr "\"[FILE]\"中数据无效。"
+
+#: share/server/core/classes/ViewEditMainCfg.php:59
+msgid "Invalid format given. Regex: [r]"
+msgstr "格式无效。 Regex: [r]"
+
+msgid "Invalid mode [MODE] in language_detection option."
+msgstr "语言选项[MODE]无效。"
+
+#: share/server/core/classes/CoreLogonDialogHandler.php:81
+msgid "Invalid password."
+msgstr "密码无效。"
+
+#: share/server/core/classes/CoreModMap.php:85
+msgid "Invalid query. The parameter [NAME] is missing or has an invalid format."
+msgstr "查询无效。参数[NAME]缺失或格式不正确。"
+
+#: share/server/core/classes/GlobalBackendmkbi.php:145
+#: share/server/core/classes/GlobalBackendmkbi.php:153
+msgid "Invalid response ([BACKENDID]): [RESPONSE]"
+msgstr "返回值格式无效，在backend [BACKENDID]中."
+
+#: share/server/core/classes/objects/NagVisStatefulObject.php:707
+msgid "Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME]."
+msgstr "对类型[TYPE]名称[NAME]的对象状态比较时发现状态和子状态([STATE], [SUBSTATE])不正确."
+
+#: share/server/core/classes/objects/NagVisStatefulObject.php:655
+msgid "Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE]."
+msgstr "加载类型[TYPE]对象的目前概要状态时，状态和子状态([STATE], [SUBSTATE])不正确"
+
+#: share/server/core/classes/GlobalBackendmkbi.php:211
+#: share/server/core/classes/GlobalBackendnagiosbp.php:215
+msgid "Invalid state: \"[S]\""
+msgstr "状态无效： \"[S]\""
+
+msgid "Invalid target option given."
+msgstr "给出的目标选项无效"
+
+#: share/server/core/classes/CoreLogonDialogHandler.php:77
+msgid "Invalid username."
+msgstr "用户名不正确。"
+
+#: share/server/core/classes/ViewManageUsers.php:114
+#: share/server/core/classes/ViewManageUsers.php:186
+#: share/server/core/classes/ViewManageUsers.php:240
+#: share/server/core/classes/ViewManageRoles.php:90
+#: share/server/core/classes/ViewManageRoles.php:247
+msgid "Invalid value provided."
+msgstr "提供的值无效。"
+
+#: share/server/core/classes/ViewManageUsers.php:42
+#: share/server/core/classes/ViewManageBackends.php:149
+#: share/server/core/classes/ViewManageRoles.php:42
+msgid "Invalid value provided. Needs to match: [P]."
+msgstr "提供的值无效。需要匹配: [P]."
+
+#: share/server/core/classes/ViewMapManageTmpl.php:94
+#: share/server/core/classes/ViewMapManageTmpl.php:190
+msgid "Key"
+msgstr "关键字"
+
+#: share/server/core/classes/GlobalMapCfg.php:1923
+msgid "Label"
+msgstr "标签"
+
+#: share/server/core/sources/automap.php:50
+msgid "Left to right"
+msgstr "从左到右"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:381
+msgid "Line"
+msgstr "线条"
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:974
+#: share/server/core/classes/GlobalBackendmklivestatus.php:1172
+#: share/server/core/classes/GlobalBackendmklivestatus.php:1336
+msgid "Livestatus version used in backend [BACKENDID] is too old. Please update."
+msgstr "后端[BACKENDID]使用的Livestatus版本太旧，请升级。"
+
+#: share/server/core/sources/geomap.php:21
+msgid "Location source file \"[F]\" does not exist."
+msgstr "地址源文件\"[F]\"不存在。"
+
+#: share/server/core/classes/NagVisContextMenu.php:129
+msgid "Lock"
+msgstr "锁止"
+
+msgid "Lock/Unlock"
+msgstr "锁止/解锁"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:396
+msgid "Lock/Unlock all"
+msgstr "锁止/解锁所有"
+
+#: share/server/core/classes/NagVisContextMenu.php:141
+msgid "Lock/Unlock line middle"
+msgstr "锁止/解锁中等线条"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:372
+msgid "Logged in"
+msgstr "已登录"
+
+msgid "Logged out"
+msgstr "已退出"
+
+#: share/frontend/nagvis-js/classes/NagVisLoginView.php:69
+msgid "Login"
+msgstr "登录"
+
+#: share/server/core/classes/CoreLogonMultisite.php:127
+msgid "LogonMultisite: Not authenticated."
+msgstr "您尚未通过身份验证"
+
+#: share/server/core/classes/CoreLogonMultisite.php:47
+msgid "LogonMultisite: The htpasswd file &quot;[HTPASSWD]&quot; or the authentication serial file &quot;[SERIAL]&quot; do not exist."
+msgstr ""
+
+msgid "LogonMultisite: The htpasswd file &quot;[PATH]&quot; does not exist."
+msgstr "LogonMultisite: htpasswd文件&quot;[PATH]&quot;不存在。"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:410
+msgid "Logout"
+msgstr "退出"
+
+msgid "Make Permanent"
+msgstr "使永久"
+
+#: share/server/core/classes/ViewMapAddModify.php:541
+msgid "Make permanent"
+msgstr "使永久"
+
+#: share/server/core/classes/NagVisContextMenu.php:156
+msgid "Make root"
+msgstr "成为根"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:400
+msgid "Manage Backends"
+msgstr "后端（Backends）管理"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:401
+msgid "Manage Backgrounds"
+msgstr "背景管理"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:402
+msgid "Manage Maps"
+msgstr "地图管理"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:366
+msgid "Manage Roles"
+msgstr "角色管理"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:403
+msgid "Manage Shapes"
+msgstr "图形管理"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:378
+msgid "Manage Templates"
+msgstr "模板管理"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:365
+msgid "Manage Users"
+msgstr "用户管理"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:375
+#: share/server/core/classes/ViewManageMaps.php:198
+#: share/server/core/classes/ViewManageMaps.php:261
+#: share/server/core/classes/ViewManageMaps.php:305
+#: share/server/core/classes/ViewManageRoles.php:194
+msgid "Map"
+msgstr "地图"
+
+#: share/server/core/classes/CoreModMultisite.php:219
+msgid "Map Configuration Error: "
+msgstr "地图配置错误："
+
+#: share/server/core/classes/objects/NagVisMapObj.php:359
+msgid "Map Configuration Error: [ERR]"
+msgstr "地图配置错误：[ERR]"
+
+#: share/server/core/classes/CoreModOverview.php:214
+msgid "Map Error: [ERR]"
+msgstr "地图错误：[ERR]"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:377
+msgid "Map Options"
+msgstr "地图选项"
+
+#: share/server/core/classes/ViewManageMaps.php:102
+msgid "Map Type"
+msgstr "地图类型"
+
+#: share/server/core/classes/ViewManageMaps.php:367
+msgid "Map file"
+msgstr "地图文件"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:39
+#: share/server/core/classes/ViewMapManageTmpl.php:119
+#: share/server/core/classes/ViewMapManageTmpl.php:225
+msgid "Map name missing"
+msgstr "地图名缺失"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:390
+#: share/server/core/classes/ViewManageRoles.php:154
+msgid "Maps"
+msgstr "地图"
+
+#: share/server/core/classes/GlobalCore.php:668
+msgid "Missing a temporary folder"
+msgstr "缺少一个临时文件夹"
+
+#: share/server/core/sources/geomap.php:347
+msgid "Missing mandatory \"width\" and \"height\" parameters.\""
+msgstr "缺少必要参数“宽” 和“高”。"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:215
+msgid "Modify"
+msgstr "修改"
+
+msgid "Modify Automap view"
+msgstr "修改自动地图视图"
+
+#: share/server/core/classes/ViewManageRoles.php:81
+msgid "Modify Role"
+msgstr "修改角色"
+
+msgid "Modify Roles"
+msgstr "修改多个角色"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:115
+msgid "Modify Template"
+msgstr "修改模板"
+
+#: share/server/core/classes/ViewManageUsers.php:105
+msgid "Modify User"
+msgstr "修改用户"
+
+#: share/server/core/classes/NagVisContextMenu.php:135
+msgid "Modify object"
+msgstr "修改对象"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:415
+msgid "Modify view"
+msgstr "修改视图"
+
+#: share/server/core/classes/ViewManageRoles.php:218
+msgid "Module"
+msgstr "模块"
+
+#: share/server/core/sources/geomap.php:149
+msgid "NagVis Backend"
+msgstr "Nagvis后端"
+
+#: share/frontend/nagvis-js/classes/NagVisLoginView.php:71
+msgid "NagVis is unable to set a cookie in your browser. Please enable cookies for at least the NagVis host."
+msgstr "Nagvis不能在你的浏览器设置cookie，请至少为Nagvis主机激活cookies。"
+
+#: share/frontend/nagvis-js/classes/NagVisLoginView.php:67
+#: share/server/core/classes/ViewManageUsers.php:138
+#: share/server/core/classes/ViewManageUsers.php:214
+#: share/server/core/classes/ViewManageUsers.php:282
+#: share/server/core/classes/GlobalCore.php:695
+#: share/server/core/classes/ViewMapManageTmpl.php:86
+#: share/server/core/classes/ViewMapManageTmpl.php:177
+#: share/server/core/classes/ViewMapManageTmpl.php:259
+#: share/server/core/classes/ViewManageRoles.php:69
+#: share/server/core/classes/ViewManageRoles.php:277
+msgid "Name"
+msgstr "名称"
+
+msgid "Needs to be migrated."
+msgstr "需要迁移"
+
+#: share/server/core/classes/ViewManageMaps.php:206
+msgid "New name"
+msgstr "新名称"
+
+#: share/server/core/classes/ViewChangePassword.php:81
+msgid "New password"
+msgstr "新密码"
+
+#: share/server/core/classes/ViewChangePassword.php:85
+msgid "New password (confirm)"
+msgstr "新密码确认"
+
+msgid "New password confirmation"
+msgstr "新密码确认"
+
+#: share/server/core/classes/ViewEditMainCfg.php:183
+msgid "No"
+msgstr "No"
+
+#: share/server/core/classes/GlobalMainCfg.php:2515
+#: share/server/core/classes/GlobalMapCfg.php:1682
+msgid "No \"list\" function registered for option \"[OPT]\" of type \"[TYPE]\""
+msgstr "类型\"[TYPE]\"选项\"[OPT]\"没有注册\"list\"功能"
+
+#: share/server/core/classes/CoreAuthorisationModMultisite.php:35
+msgid "No auth file configured. Please specify the option authorisation_multisite_file in main configuration"
+msgstr "没有配置认证文件，请在主配置文件中设置authorisation_multisite_file"
+
+#: share/server/core/classes/GlobalCore.php:667
+msgid "No file uploaded"
+msgstr "没有文件上传"
+
+#: share/server/core/classes/CoreAuthorisationModGroups.php:38
+msgid "No group permission file specified. Please configure one via the option authorisation_group_perms_file in global section of the main configuration."
+msgstr "没有组权限文件。 请在主配置文件的global一节，配置authorisation_group_perms_file选项。"
+
+#: share/server/core/sources/geomap.php:18
+msgid "No location source file given. Terminate rendering geomap."
+msgstr "没有位置源文件，终止渲染geomap。"
+
+#: share/frontend/nagvis-js/classes/FrontendModUrl.php:71
+msgid "No url given."
+msgstr "没有url。"
+
+#: share/server/core/classes/objects/NagVisAggr.php:146
+msgid "Nodes"
+msgstr "节点"
+
+#: share/server/core/classes/NagVisHoverUrl.php:89
+msgid "Not allowed url"
+msgstr "不被允许的url"
+
+#: share/server/core/classes/ViewManageRoles.php:253
+msgid "Not deleting this role, the role is in use by the users [U]."
+msgstr "这个角色被用户 [U]使用中，不要删除。"
+
+#: share/server/core/classes/ViewAck.php:107
+msgid "Notify contacts"
+msgstr "通知联系人"
+
+#: share/server/core/classes/CoreExceptions.php:72
+msgid "OK"
+msgstr "确认"
+
+#: share/server/core/classes/GlobalMapCfg.php:1928
+msgid "Obj. Defaults"
+msgstr "对象默认值"
+
+#: share/server/core/classes/ViewManageRoles.php:220
+msgid "Object"
+msgstr "对象"
+
+#: share/server/core/classes/GlobalMainCfg.php:2495
+msgid "Object Defaults"
+msgstr "对象默认值"
+
+#: share/server/core/classes/GlobalCore.php:692
+msgid "Object Name"
+msgstr "对象名称"
+
+msgid "ObjectNotFoundOnMap"
+msgstr "地图上无此对象."
+
+#: share/server/core/classes/ViewChangePassword.php:77
+msgid "Old password"
+msgstr "旧密码"
+
+msgid "Only map and automap states can be fetched using this module/action."
+msgstr "使用这个模块/操作只能取得地图和自动地图的状态。"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:374
+msgid "Open"
+msgstr "打开"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:398
+msgid "Options"
+msgstr "选项"
+
+#: share/server/core/classes/GlobalMainCfg.php:2496
+msgid "Overview"
+msgstr "概要"
+
+msgid "PHP ERROR"
+msgstr "PHP错误"
+
+#: share/frontend/nagvis-js/classes/NagVisLoginView.php:68
+#: share/server/core/classes/ViewManageUsers.php:87
+#: share/server/core/classes/ViewManageUsers.php:289
+msgid "Password"
+msgstr "密码"
+
+#: share/server/core/classes/ViewManageUsers.php:91
+#: share/server/core/classes/ViewManageUsers.php:293
+msgid "Password Confirm"
+msgstr "密码确认"
+
+#: share/server/core/classes/GlobalMainCfg.php:2499
+msgid "Paths"
+msgstr "目录"
+
+#: share/server/core/classes/ViewManageRoles.php:158
+msgid "Permissions"
+msgstr "权限"
+
+#: share/server/core/classes/ViewManageRoles.php:221
+msgid "Permitted"
+msgstr "允许的"
+
+#: share/server/core/classes/ViewAck.php:110
+msgid "Persist comment"
+msgstr "注解"
+
+#: share/server/core/classes/ViewMapAddModify.php:147
+msgid "Personal settings saved."
+msgstr "个人设置已保存。"
+
+#: share/server/core/classes/ViewManageUsers.php:140
+#: share/server/core/classes/ViewManageUsers.php:216
+#: share/server/core/classes/ViewManageUsers.php:284
+#: share/server/core/classes/ViewManageBackends.php:91
+#: share/server/core/classes/ViewManageBackends.php:183
+#: share/server/core/classes/ViewManageBackends.php:190
+#: share/server/core/classes/ViewManageBackends.php:256
+#: share/server/core/classes/ViewMapManageTmpl.php:179
+#: share/server/core/classes/ViewMapManageTmpl.php:261
+#: share/server/core/classes/ViewManageRoles.php:135
+#: share/server/core/classes/ViewManageRoles.php:279
+msgid "Please choose"
+msgstr "请选择"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:93
+msgid "Please choose a background"
+msgstr "请选择一个背景"
+
+#: share/server/core/classes/CoreModMap.php:170
+#: share/server/core/classes/ViewManageMaps.php:154
+#: share/server/core/classes/ViewManageMaps.php:225
+#: share/server/core/classes/ViewManageMaps.php:283
+msgid "Please choose a map"
+msgstr "请选择一个地图"
+
+#: share/server/core/classes/ViewManageRoles.php:245
+msgid "Please choose a role to delete."
+msgstr "请选择一个要删除的角色。"
+
+#: share/server/core/classes/ViewManageRoles.php:88
+msgid "Please choose a role to edit."
+msgstr "请选择一个要编辑的角色。"
+
+#: share/server/core/classes/ViewManageShapes.php:92
+msgid "Please choose a shape"
+msgstr "选择一个图形"
+
+#: share/server/core/classes/ViewManageUsers.php:184
+msgid "Please choose a user to delete."
+msgstr "选择要删除的用户。"
+
+#: share/server/core/classes/ViewManageUsers.php:112
+msgid "Please choose a user to edit."
+msgstr "选择要编辑的用户。"
+
+#: share/server/core/classes/ViewManageUsers.php:238
+msgid "Please choose a user."
+msgstr "选择一个用户。"
+
+#: share/server/core/classes/ViewManageUsers.php:57
+#: share/server/core/classes/ViewManageUsers.php:255
+msgid "Please confirm your password."
+msgstr "请确认你的密码。"
+
+#: share/server/core/classes/ViewToNewMap.php:36
+#: share/server/core/classes/ViewToStaticMap.php:36
+msgid "Please provide a map name."
+msgstr "请提供地图名称。"
+
+#: share/server/core/classes/ViewManageMaps.php:161
+msgid "Please provide a new name"
+msgstr "请提供一个新名称"
+
+#: share/server/core/classes/ViewAck.php:35
+msgid "Please provide a valid map name."
+msgstr "请提供一个有效的地图名。"
+
+#: share/server/core/classes/ViewAck.php:39
+msgid "Please provide a valid object id."
+msgstr "请提供一个有效的对象id。"
+
+#: share/server/core/classes/ViewManageRoles.php:36
+msgid "Please specify a name"
+msgstr "请指定名称"
+
+#: share/server/core/classes/ViewManageUsers.php:36
+msgid "Please specify a name."
+msgstr "请指定名称。"
+
+#: share/server/core/classes/ViewManageUsers.php:50
+#: share/server/core/classes/ViewManageUsers.php:248
+msgid "Please specify a password."
+msgstr "请指定一个密码。"
+
+#: share/server/core/classes/objects/NagVisStatefulObject.php:538
+msgid "Problem (Backend: [BACKENDID]): [MSG]"
+msgstr "出错 (Backend: [BACKENDID]): [MSG]"
+
+#: share/server/core/classes/ViewManageRoles.php:259
+msgid "Problem while deleting the role."
+msgstr "删除角色出错。"
+
+#: share/server/core/classes/ViewManageUsers.php:196
+msgid "Problem while deleting the user."
+msgstr "删除用户出错。"
+
+msgid "Problem while deleting user."
+msgstr "删除用户出错。"
+
+#: share/server/core/classes/objects/NagVisMapObj.php:361
+msgid "Problem while processing map: [ERR]"
+msgstr "处理地图出错: [ERR]"
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:273
+#: share/server/core/classes/GlobalBackendmklivestatus.php:289
+#: share/server/core/classes/GlobalBackendmklivestatus.php:297
+msgid "Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]"
+msgstr " 读取socket [SOCKET] in backend [BACKENDID]: [MSG]出错"
+
+msgid "Problem while saving the changes."
+msgstr "保存时出错。"
+
+#: share/server/core/classes/ViewManageRoles.php:115
+msgid "Problem while updating role permissions."
+msgstr "更新角色许可时出错。"
+
+#: share/server/core/classes/ViewManageUsers.php:121
+msgid "Problem while updating user roles."
+msgstr "更新用户角色出错。"
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:252
+#: share/server/core/classes/GlobalBackendmklivestatus.php:258
+msgid "Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]"
+msgstr "写入socket [SOCKET] in backend [BACKENDID]: [MSG]出错"
+
+#: share/server/core/classes/objects/NagVisStatefulObject.php:546
+msgid "Problem: [MSG]"
+msgstr "出错：[MSG]"
+
+msgid "Really delete the object?"
+msgstr "确认删除对象？"
+
+#: share/server/core/classes/ViewManageMaps.php:30
+msgid "Regular map"
+msgstr "规则地图"
+
+msgid "Remove"
+msgstr "移除"
+
+#: share/server/core/classes/ViewManageMaps.php:213
+msgid "Rename"
+msgstr "重命名"
+
+#: share/server/core/classes/ViewManageMaps.php:148
+msgid "Rename Map"
+msgstr "重新命名地图"
+
+#: share/server/core/classes/GlobalMapCfg.php:641
+#: share/server/core/classes/GlobalMapCfg.php:812
+msgid "Requested source \"[S]\" does not exist"
+msgstr "需求的源 \"[S]\"不存在"
+
+#: share/server/core/classes/ViewManageUsers.php:232
+msgid "Reset Password"
+msgstr "重置密码"
+
+#: share/server/core/classes/GlobalBackendnagiosbp.php:145
+msgid "Response data is too old (json_created: [C])"
+msgstr "返回数据太旧 (json_created: [C])"
+
+#: share/server/core/sources/automap.php:52
+msgid "Right to left"
+msgstr "从右到左"
+
+msgid "Role Name"
+msgstr "角色名"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:376
+#: share/server/core/classes/ViewManageRoles.php:155
+msgid "Rotations"
+msgstr "关系"
+
+#: share/server/core/classes/ViewManageUsers.php:172
+#: share/server/core/classes/ViewManageUsers.php:299
+#: share/server/core/classes/ViewManageBackends.php:98
+#: share/server/core/classes/ViewManageBackends.php:219
+#: share/server/core/classes/ViewToNewMap.php:74
+#: share/server/core/classes/ViewMapAddModify.php:550
+#: share/server/core/classes/ViewManageRoles.php:143
+#: share/server/core/classes/ViewToStaticMap.php:78
+msgid "Save"
+msgstr "保存"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:417
+msgid "Save View"
+msgstr "保存视图"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:418
+msgid "Save as new Map"
+msgstr "保存为新地图"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:364
+#: share/server/core/classes/ViewSearch.php:31
+msgid "Search"
+msgstr "搜索"
+
+#: share/server/core/classes/ViewManageRoles.php:133
+msgid "Select Role"
+msgstr "选择角色"
+
+msgid "Select User"
+msgstr "选择用户"
+
+#: share/server/core/classes/ViewManageUsers.php:161
+msgid "Selected Roles"
+msgstr "选择的角色"
+
+#: share/server/core/sources/dynmap.php:66
+msgid "Servicegroup"
+msgstr "服务组"
+
+#: share/server/core/sources/dynmap.php:64
+#: share/server/core/mapcfg/default.php:92
+msgid "Services"
+msgstr "服务"
+
+msgid "Set Permissions"
+msgstr "设置权限"
+
+#: share/server/core/classes/ViewManageShapes.php:140
+msgid "Shape"
+msgstr "形状"
+
+#: share/server/core/classes/GlobalMainCfg.php:28
+msgid "Show a flat list"
+msgstr "显示平面列表"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:419
+msgid "Show all objects"
+msgstr "显示所有对象"
+
+#: share/server/core/classes/GlobalMainCfg.php:27
+msgid "Show the map tree"
+msgstr "显示地图树"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:413
+msgid "Show/Hide Grid"
+msgstr "显示/隐藏格子"
+
+#: share/server/core/classes/ViewManageBackends.php:102
+msgid "Some backends are not editable by using the web gui. They can only be configured by modifying the file in the NagVis conf.d directory."
+msgstr "某些后端不能通过web修改，只能通过Nagvis conf.d目录里的文件进行修改。"
+
+msgid "Spaces are not allowed in file names."
+msgstr "文件名不能有空格。"
+
+#: share/server/core/classes/GlobalMapCfg.php:1921
+#: share/server/core/functions/core.php:158
+msgid "State"
+msgstr "状态"
+
+#: share/server/core/classes/GlobalMainCfg.php:2497
+msgid "State Updates"
+msgstr "状态更新"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:394
+msgid "Stateless"
+msgstr "无状态"
+
+#: share/server/core/classes/GlobalMainCfg.php:2498
+msgid "States"
+msgstr "状态"
+
+#: share/server/core/classes/ViewAck.php:104
+msgid "Sticky"
+msgstr "粘性的"
+
+msgid "Store as Map"
+msgstr "存为地图"
+
+#: share/server/core/classes/NagVisHoverMenu.php:179
+msgid "Tags"
+msgstr "标记"
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:83
+msgid "The PHP function fsockopen is not available. Needed by backend [BACKENDID]."
+msgstr "后端[BACKENDID]需要的PHP 功能fsockopen不存在。"
+
+msgid "The PHP function socket_create is not available. Maybe the sockets module is missing in your PHP installation. Needed by backend [BACKENDID]."
+msgstr "后端[BACKENDID]需要的PHP 功能socket_create不存在。可能PHP安装时缺少这个套接字模块。"
+
+msgid "The [TYPE] has been added. Reloading in 2 seconds."
+msgstr "增加了[TYPE]，2秒后重新加载。"
+
+#: share/server/core/classes/ViewMapAddModify.php:171
+msgid "The [TYPE] has been modified. Reloading in 2 seconds."
+msgstr "修改了[TYPE]，2秒后重新加载。"
+
+#: share/server/core/classes/objects/NagVisAggr.php:142
+#: share/server/core/classes/objects/NagVisAggr.php:176
+msgid "The aggregation \"[NAME]\" has no members (Backend: [BACKEND])."
+msgstr ""
+
+#: share/server/core/classes/ViewMapAddModify.php:90
+msgid "The attribute \"[A]\" is unknown."
+msgstr ""
+
+#: share/server/core/classes/GlobalMainCfg.php:1936
+msgid "The attribute [ATTRIBUTE] in section [TYPE] in main configuration file does not match the correct format. Please review your configuration."
+msgstr "[TYPE]章节里的 [ATTRIBUTE]属性格式不正确，请检查配置。"
+
+#: share/server/core/classes/GlobalMainCfg.php:1912
+msgid "The attribute [ATTRIBUTE] in section [TYPE] in main configuration file is deprecated. Please take a look at the documentation for updating your configuration."
+msgstr "[TYPE]章节里的 [ATTRIBUTE]属性已失效，请看到文档进行配置更新。"
+
+#: share/server/core/classes/ViewMapAddModify.php:103
+msgid "The attribute has the wrong format (Regex: [MATCH])."
+msgstr "属性格式错误，Regex: [MATCH])。"
+
+#: share/server/core/classes/ViewMapAddModify.php:92
+msgid "The attribute is deprecated."
+msgstr "属性已失效。"
+
+msgid "The attribute is unknown."
+msgstr "属性不知。"
+
+#: share/server/core/classes/ViewMapAddModify.php:83
+msgid "The attribute needs to be set."
+msgstr "属性必须设置。"
+
+msgid "The backend could bot be deleted."
+msgstr "后端不能删除。"
+
+#: share/server/core/classes/ViewManageBackends.php:238
+msgid "The backend has been deleted."
+msgstr "后端已删除。"
+
+#: share/server/core/classes/CoreBackendMgmt.php:624
+msgid "The backend is reported as dead by the statusHost ([STATUSHOST])."
+msgstr "statusHost ([STATUSHOST])报告后端僵死。"
+
+#: share/server/core/classes/GlobalMainCfg.php:1945
+msgid "The backend with the ID \\\"[BACKENDID]\\\" is not defined."
+msgstr ""
+
+msgid "The background could not be created."
+msgstr "背景创建失败。"
+
+msgid "The background could not be deleted."
+msgstr "背景删除失败。"
+
+msgid "The background does already exist."
+msgstr "背景已存在。"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:96
+msgid "The background does not exist."
+msgstr "背景不存在。"
+
+msgid "The background has been created."
+msgstr "背景已创建。"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:120
+msgid "The background has been deleted."
+msgstr "背景删除。"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:57
+msgid "The background has been uploaded."
+msgstr "背景已上传。"
+
+#: share/server/core/classes/ViewManageBackends.php:161
+msgid "The changes have been saved."
+msgstr "更改已保存。"
+
+#: share/server/core/classes/ViewManageBackends.php:127
+#: share/server/core/classes/ViewManageBackends.php:231
+msgid "The choosen backend does not exist."
+msgstr "选择的后端不存在。"
+
+#: share/server/core/classes/ViewEditMainCfg.php:71
+msgid "The configuration has been saved."
+msgstr "配置已保存。"
+
+msgid "The default backend could not be changed."
+msgstr "默认后端修改不成功。"
+
+#: share/server/core/classes/ViewManageBackends.php:74
+msgid "The default backend has been changed."
+msgstr "默认后端已被修改。"
+
+#: share/server/core/classes/objects/NagVisDynGroup.php:147
+#: share/server/core/classes/objects/NagVisDynGroup.php:186
+msgid "The dynamic group \"[GROUP]\" has no members (Backend: [BACKEND])."
+msgstr "动态组 \"[GROUP]\" 没有成员 (Backend: [BACKEND])."
+
+#: share/server/core/classes/ViewManageBackgrounds.php:39
+#: share/server/core/classes/ViewManageMaps.php:330
+#: share/server/core/classes/ViewManageShapes.php:39
+msgid "The file could not be uploaded (Error: [ERROR])."
+msgstr "文件上传失败(Error: [ERROR])."
+
+#: share/server/core/functions/index.php:123
+msgid "The given action is not valid"
+msgstr "操作无效"
+
+#: share/server/core/classes/CoreModAction.php:54
+msgid "The given custom action is not defined."
+msgstr "自定义操作没有定义。"
+
+#: share/server/core/classes/CoreModMap.php:173
+#: share/server/core/classes/ViewManageMaps.php:157
+#: share/server/core/classes/ViewManageMaps.php:228
+#: share/server/core/classes/ViewManageMaps.php:286
+msgid "The given map name is invalid"
+msgstr "给出的地图名无效"
+
+msgid "The given message type [TYPE] is not known"
+msgstr "消息类型[TYPE]不知道"
+
+#: share/server/core/classes/CoreModuleHandler.php:61
+msgid "The given module is not registered"
+msgstr "模块没有注册"
+
+#: share/server/core/classes/CoreUriHandler.php:141
+msgid "The given url is not valid"
+msgstr "URL无效"
+
+#: share/server/core/classes/objects/NagVisHostgroup.php:144
+msgid "The hostgroup \"[GROUP]\" has no members or does not exist (Backend: [BACKEND])."
+msgstr "主机组\"[GROUP]\"没有成员或不存在(Backend: [BACKEND])。"
+
+msgid "The hostgroup [NAME] could not be found in backend [BACKENDID]."
+msgstr "backend [BACKENDID]没有主机组[NAME]。"
+
+msgid "The main configuration could not be updated."
+msgstr "主配置更新失败。"
+
+msgid "The main configuration has been updated."
+msgstr "主配置已更新。"
+
+msgid "The map configuration could not be exported."
+msgstr "地图配置导出失败。"
+
+#: share/server/core/classes/ViewManageMaps.php:289
+msgid "The map configuration has been exported."
+msgstr "地图配置导出成功。"
+
+msgid "The map could not be created."
+msgstr "地图创建失败。"
+
+msgid "The map could not be deleted."
+msgstr "地图删除失败。"
+
+msgid "The map could not be renamed."
+msgstr "地图重命名失败。"
+
+#: share/server/core/classes/CoreModMap.php:360
+msgid "The map does already exist."
+msgstr "地图已存在。"
+
+#: share/server/core/classes/CoreModMap.php:356
+#: share/server/core/classes/ViewMapAddModify.php:569
+#: share/server/core/classes/CoreModAction.php:58
+msgid "The map does not exist."
+msgstr "地图不存在。"
+
+#: share/server/core/classes/ViewToNewMap.php:56
+#: share/server/core/classes/ViewToStaticMap.php:60
+msgid "The map has been created."
+msgstr "地图已创建。"
+
+#: share/server/core/classes/ViewManageMaps.php:75
+msgid "The map has been created. Changing to the new map..."
+msgstr "地图已创建。修改新地图..."
+
+#: share/server/core/classes/ViewManageMaps.php:236
+msgid "The map has been deleted."
+msgstr "地图已删除。"
+
+#: share/server/core/classes/ViewManageMaps.php:349
+msgid "The map has been imported. Changing to the new map..."
+msgstr "地图已导入。修改新地图..."
+
+#: share/server/core/classes/ViewManageMaps.php:171
+msgid "The map has been renamed."
+msgstr "地图重命名成功。"
+
+#: share/server/core/classes/CoreModOverview.php:116
+#: share/server/core/classes/CoreModOverview.php:117
+msgid "The map is in maintenance mode. Please be patient."
+msgstr "地图在维护模式，请耐心等待。"
+
+msgid "The mapname does already exist."
+msgstr "地图名已经存在。"
+
+#: share/server/core/functions/index.php:94
+msgid "The module [MOD] is not known"
+msgstr "模块[MOD]未知"
+
+#: share/server/core/classes/CoreModuleHandler.php:79
+msgid "The module class does not exist"
+msgstr "模块不存在"
+
+#: share/server/core/classes/GlobalMainCfg.php:1867
+msgid "The needed attribute [ATTRIBUTE] is missing in section [TYPE] in main configuration file. Please take a look at the documentation."
+msgstr "主配置文件[TYPE]章节缺少属性[ATTRIBUTE]。"
+
+#: share/server/core/classes/ViewChangePassword.php:50
+msgid "The new and old passwords are equal. Won't change anything."
+msgstr "新旧密码一样，没有修改。"
+
+msgid "The new backend could not be added."
+msgstr "新的后端无法增加。"
+
+#: share/server/core/classes/ViewManageBackends.php:159
+msgid "The new backend has been added."
+msgstr "新后端添加成功。"
+
+msgid "The new mapname does already exist."
+msgstr "新地图名已经存在。"
+
+#: share/server/core/classes/ViewChangePassword.php:47
+msgid "The new passwords do not match."
+msgstr "新密码不匹配。"
+
+#: share/server/core/classes/CoreBackendMgmt.php:514
+msgid "The object \"[OBJ]\" does not exist ([TYPE])."
+msgstr "对象\"[OBJ]\"不存在([TYPE])."
+
+msgid "The object [NAME] has an invalid state \"[STATE]\"."
+msgstr "对象[NAME]有无效状态\"[STATE]\"."
+
+msgid "The object [TYPE]/[NAME] as child of [PTYPE]/[PNAME] has an invalid state \"[STATE]\"."
+msgstr "[PTYPE]/[PNAME]子对象[TYPE]/[NAME]有无效状态\"[STATE]\". "
+
+msgid "The object could not be added."
+msgstr "对象增加失败。"
+
+#: share/server/core/classes/CoreModMap.php:125
+msgid "The object could not be deleted."
+msgstr "对象删除失败。"
+
+#: share/server/core/classes/CoreModMap.php:116
+msgid "The object could not be modified."
+msgstr "对象修改失败。"
+
+#: share/server/core/classes/CoreModMap.php:192
+#: share/server/core/classes/CoreModMap.php:245
+#: share/server/core/classes/ViewMapAddModify.php:154
+#: share/server/core/classes/ViewMapAddModify.php:588
+#: share/server/core/classes/CoreModAction.php:70
+#: share/server/core/classes/ViewAck.php:46
+msgid "The object does not exist."
+msgstr "对象不存在。"
+
+msgid "The object has been added."
+msgstr "对象添加成功。"
+
+msgid "The object has been modified."
+msgstr "对象修改成功。"
+
+#: share/server/core/classes/CoreModAction.php:67
+msgid "The object_id value is missing."
+msgstr "object_id 无值。"
+
+#: share/server/core/classes/CoreUriHandler.php:103
+msgid "The parameter \"[key]\" does not match the valid value format"
+msgstr "参数 \"[key]\"不符合有效值格式"
+
+msgid "The password could not be changed."
+msgstr "密码修改失败。"
+
+msgid "The password could not be reset."
+msgstr "密码重置失败。"
+
+msgid "The password has been changed."
+msgstr "密码已修改。"
+
+#: share/server/core/classes/ViewManageUsers.php:261
+msgid "The password has been reset."
+msgstr "密码重置成功。"
+
+#: share/server/core/classes/GlobalCore.php:542
+msgid "The path \"[PATH]\" does not exist."
+msgstr "路劲\"[PATH]\"不存在。"
+
+#: share/server/core/classes/GlobalCore.php:552
+msgid "The path \"[PATH]\" is not readable."
+msgstr "路劲\"[PATH]\"不可读。"
+
+#: share/server/core/classes/GlobalCore.php:562
+msgid "The path \"[PATH]\" is not writeable."
+msgstr "路劲\"[PATH]\"不可写。"
+
+#: share/server/core/classes/CoreAuthorisationModGroups.php:61
+msgid "The permissions file [FILE] could not be parsed."
+msgstr "权限文件[FILE]不能解析。"
+
+#: share/server/core/classes/ViewManageRoles.php:113
+msgid "The permissions for this role have been updated."
+msgstr "角色权限已更新。"
+
+#: share/server/core/classes/ViewAck.php:82
+msgid "The problem has been acknowledged."
+msgstr "问题已被确认。"
+
+#: share/server/core/classes/CoreBackendMgmt.php:675
+msgid "The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend."
+msgstr "后端(Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE])没有提供需要的特性[FEATURE]，使用这个后端可能不能提供需要的视图。"
+
+#: share/server/core/classes/ViewAck.php:52
+msgid "The requested feature is not available for this backend. The MKLivestatus backend supports this feature."
+msgstr "这个后端不支持此特性。 MKLivestatus后端支持此特性。"
+
+#: share/server/core/classes/CoreRotation.php:130
+msgid "The requested step [STEP] of type [TYPE] does not exist in the rotation pool [ROTATION]"
+msgstr "滚动池[ROTATION]不存在需要的类型[TYPE]之步骤[STEP]"
+
+msgid "The response from the backend is not valid (Asked for [NUMASKED] attributes, got [NUMRESPONSE]) in backend [BACKENDID]"
+msgstr "后端的返回值对后端[BACKENDID]无效(需要[NUMASKED], 得到的是[NUMRESPONSE])"
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:316
+#: share/server/core/classes/GlobalBackendnagiosbp.php:139
+msgid "The response has an invalid format in backend [BACKENDID]."
+msgstr "返回值格式无效，在backend [BACKENDID]中."
+
+#: share/server/core/classes/ViewManageRoles.php:49
+msgid "The role has been created."
+msgstr "角色创建成功。"
+
+#: share/server/core/classes/ViewManageRoles.php:257
+msgid "The role has been deleted."
+msgstr "角色已删除。"
+
+msgid "The rolename is invalid or does already exist."
+msgstr "角色名无效或已存在。"
+
+#: share/server/core/classes/ViewManageUsers.php:119
+msgid "The roles for this user have been updated."
+msgstr "此用户角色已更新。"
+
+#: share/server/core/classes/GlobalMainCfg.php:1956
+msgid "The section [TYPE] is not supported in main configuration. Please take a look at the documentation."
+msgstr "主配置不支持[TYPE]。"
+
+#: share/server/core/classes/objects/NagVisServicegroup.php:150
+msgid "The servicegroup \"[GROUP]\" has no members or does not exist (Backend: [BACKEND])."
+msgstr "服务组\"[GROUP]\"无成员或不存在(Backend: [BACKEND])."
+
+msgid "The servicegroup [GROUP] could not be found in the backend [BACKENDID]."
+msgstr "后端[BACKEND]无服务组\"[GROUP]\"."
+
+msgid "The shape could not be deleted."
+msgstr "图形删除失败。"
+
+#: share/server/core/classes/ViewManageShapes.php:96
+msgid "The shape does not exist."
+msgstr "图形不存在"
+
+#: share/server/core/classes/ViewManageShapes.php:123
+msgid "The shape has been deleted."
+msgstr "图形已删除。"
+
+#: share/server/core/classes/ViewManageShapes.php:56
+msgid "The shape has been uploaded."
+msgstr "图形已上传。"
+
+msgid "The shared var folder [PATH] does not exist"
+msgstr "共享的var目录[PATH]不存在"
+
+msgid "The shared var folder [PATH] is not writeable"
+msgstr "共享的var目录[PATH]不可写"
+
+msgid "The template could not be deleted."
+msgstr "模板删除失败。"
+
+msgid "The template does not exist."
+msgstr "模板不存在。"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:69
+msgid "The template has been created."
+msgstr "模板已创建。"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:241
+msgid "The template has been deleted."
+msgstr "模板已删除。"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:159
+msgid "The template has been modified."
+msgstr "模板已修改。"
+
+msgid "The two new passwords are not equal."
+msgstr "新密码不一致。"
+
+#: share/server/core/classes/ViewManageUsers.php:60
+#: share/server/core/classes/ViewManageUsers.php:258
+msgid "The two passwords are not equal."
+msgstr "密码不一致。"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:46
+#: share/server/core/classes/ViewManageShapes.php:46
+msgid "The uploaded file is no image (png,jpg,gif) file or contains unwanted chars."
+msgstr "上传文件不是图形文件(png,jpg,gif)或包含非法字符。"
+
+#: share/server/core/classes/ViewManageMaps.php:338
+msgid "The uploaded file is no map configuration file."
+msgstr "上传文件不是地图配置文件。"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:51
+#: share/server/core/classes/ViewManageShapes.php:50
+msgid "The uploaded file is not an image (png, jpg and gif are allowed)."
+msgstr "上传的文件不是图形文件 (允许png, jpg and gif 文件）。"
+
+msgid "The user could not be created."
+msgstr "用户创建失败。"
+
+#: share/server/core/classes/ViewManageUsers.php:63
+msgid "The user has been created."
+msgstr "用户创建成功。"
+
+#: share/server/core/classes/ViewManageUsers.php:194
+msgid "The user has been deleted."
+msgstr "用户已删除。"
+
+msgid "The username is invalid or does already exist."
+msgstr "用户名无效或已存在。"
+
+#: share/server/core/classes/CoreModule.php:261
+msgid "The value of option \"[ATTRIBUTE]\" does not match the valid format."
+msgstr "选项\"[ATTRIBUTE]\" 值格式正确。"
+
+#: share/server/core/classes/ViewManageBackends.php:125
+msgid "This ID is already used by another backend."
+msgstr "这个ID已被其他后端使用。"
+
+#: share/server/core/classes/GlobalBackendmkbi.php:289
+msgid "This backend only supports \"Aggregation\" objects."
+msgstr ""
+
+#: share/server/core/classes/ViewManageMaps.php:56
+msgid "This is not a valid map alias (need to match [M])"
+msgstr ""
+
+#: share/server/core/classes/ViewToNewMap.php:39
+#: share/server/core/classes/ViewManageMaps.php:47
+#: share/server/core/classes/ViewManageMaps.php:167
+#: share/server/core/classes/ViewManageMaps.php:341
+#: share/server/core/classes/ViewToStaticMap.php:39
+msgid "This is not a valid map name (need to match [M])"
+msgstr ""
+
+#: share/server/core/classes/ViewManageRoles.php:39
+msgid "This name is too long"
+msgstr "名字太长"
+
+#: share/server/core/classes/ViewManageUsers.php:39
+msgid "This name is too long."
+msgstr "名字太长。"
+
+#: share/server/core/classes/ViewManageUsers.php:53
+#: share/server/core/classes/ViewManageUsers.php:251
+msgid "This password is too long."
+msgstr "密码太长。"
+
+#: share/server/core/classes/CoreBackendMgmt.php:243
+#: share/server/core/classes/CoreBackendMgmt.php:253
+msgid "This type of object is not supportd by this backend ([BACKENDID])."
+msgstr "后端([BACKENDID])这个对象不支持。"
+
+#: share/server/core/sources/automap.php:49
+msgid "Top to bottom"
+msgstr "从上到下"
+
+#: share/server/core/classes/CoreLogonEnv.php:35
+msgid "Unable to authenticate user. The environment variable [VAR] is not set or empty."
+msgstr "用户认证失败。环境参数[VAR]没有设置或为空。"
+
+#: share/server/core/classes/CoreLogonModule.php:49
+msgid "Unable to authenticate user. User does not exist."
+msgstr "用户认证失败，用户不存在。"
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:78
+msgid "Unable to connect to livestatus socket. The socket [SOCKET] in backend [BACKENDID] does not exist. Maybe Nagios is not running or restarting."
+msgstr "不能连接livestatus socket，socket [SOCKET] 在backend [BACKENDID] 内不存在。Nagios可能没有运作或在重启。"
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:190
+msgid "Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]"
+msgstr "不能连接[SOCKET] in backend [BACKENDID]: [MSG]"
+
+msgid "Unable to create map configuration file."
+msgstr "不能创建地图配置文件。"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:113
+msgid "Unable to delete this background, because it is currently used by these maps: [M]."
+msgstr ""
+
+#: share/server/core/classes/ViewManageShapes.php:115
+msgid "Unable to delete this shape, because it is currently used by these maps: [M]."
+msgstr ""
+
+#: share/server/core/classes/ViewManageUsers.php:191
+msgid "Unable to delete your own user."
+msgstr "不能删除自己。"
+
+msgid "Unable to export the automap. A map with this name already exists."
+msgstr "不能导出此自动地图。有同名的地图。"
+
+#: share/server/core/sources/geomap.php:133
+msgid "Unable to fetch URL \"[U]\".<br/><br />The geomap needs to be able to fetch some data from the internet via webservice API. Please take a look at the docs for more details.<br /><br /><small>[E]</small>"
+msgstr "不能获取URL \"[U]\".<br/><br />geomap需要通过webservice API从因特网获取一些数据。请查看文档获取详细信息。<br /><br /><small>[E]</small>"
+
+#: share/server/core/classes/GlobalBackendmkbi.php:136
+#: share/server/core/classes/GlobalBackendnagiosbp.php:123
+msgid "Unable to fetch data from URL [U]: [M]"
+msgstr "从URL [U]: [M]获取数据失败"
+
+#: share/server/core/classes/ViewMapAddModify.php:426
+msgid "Unable to fetch data from backend - falling back to input field."
+msgstr "获取后端数据失败 - 返回输入框。"
+
+#: share/server/core/classes/CoreModAuth.php:54
+msgid "Unable to log you out. Maybe it is not supported by your authentication module."
+msgstr "退出失败。"
+
+#: share/server/core/classes/CoreAuthorisationModMySQL.php:41
+#: share/server/core/classes/CoreAuthModMySQL.php:63
+msgid "Unable to open auth database"
+msgstr "打开认证数据库失败"
+
+#: share/server/core/classes/CoreAuthModSQLite.php:59
+#: share/server/core/classes/CoreAuthorisationModSQLite.php:37
+msgid "Unable to open auth database ([DB])"
+msgstr "打开认证数据库([DB])失败"
+
+#: share/server/core/classes/CoreAuthorisationModMultisite.php:38
+#: share/server/core/classes/CoreAuthorisationModGroups.php:41
+msgid "Unable to open auth file ([FILE])."
+msgstr "打开文件([FILE])失败。"
+
+#: share/server/core/sources/worldmap.php:145
+msgid "Unable to open the worldmap database ([DB])"
+msgstr ""
+
+msgid "Unable to reset the password for your own user."
+msgstr "不能给自己重置密码。"
+
+#: share/server/core/classes/GlobalCore.php:671
+msgid "Unhandled error"
+msgstr "未处理的错误"
+
+#: share/server/core/sources/geomap.php:82
+#: share/server/core/sources/geomap.php:105
+msgid "Unhandled source type \"[S]\""
+msgstr ""
+
+msgid "Unknown message type"
+msgstr "未知消息类型"
+
+#: share/server/core/sources/automap_pos.php:212
+msgid "Unknown render mode: [MODE]"
+msgstr ""
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:131
+msgid "Unknown socket type given in backend [BACKENDID]"
+msgstr "后端[BACKENDID]给出的套接字类型未知"
+
+#: share/server/core/classes/GlobalMainCfg.php:1905
+msgid "Unknown value [ATTRIBUTE] used in section [TYPE] in main configuration file."
+msgstr "主配置文件[TYPE]使用了未知值[ATTRIBUTE]。"
+
+#: share/server/core/classes/NagVisContextMenu.php:132
+msgid "Unlock"
+msgstr "解锁"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:81
+#: share/server/core/classes/ViewManageShapes.php:80
+msgid "Upload"
+msgstr "上传"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:30
+msgid "Upload Background Image"
+msgstr "上传背景图片"
+
+#: share/server/core/classes/ViewManageShapes.php:30
+msgid "Upload Shape"
+msgstr "上传形状"
+
+#: share/server/core/classes/GlobalCore.php:666
+msgid "Upload incomplete"
+msgstr "上传未完成"
+
+#: share/server/core/classes/CoreAuthHandler.php:165
+msgid "User logged in ("
+msgstr "登录用户("
+
+#: share/server/core/classes/CoreAuthHandler.php:184
+msgid "User logged out ("
+msgstr "退出用户("
+
+#: share/server/core/classes/CoreAuthHandler.php:167
+msgid "User login failed ("
+msgstr "用户登录失败("
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:370
+msgid "User menu"
+msgstr "用户菜单"
+
+#: share/server/core/classes/ViewManageUsers.php:83
+msgid "Username"
+msgstr "用户名"
+
+msgid "ValidatorNotAllowedParameterEntry"
+msgstr "参数[VAR] 不被允许."
+
+#: share/server/core/classes/ViewMapManageTmpl.php:94
+#: share/server/core/classes/ViewMapManageTmpl.php:190
+msgid "Value"
+msgstr "值"
+
+#: share/server/core/classes/ViewManageRoles.php:195
+msgid "View"
+msgstr "视图"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:397
+msgid "View current map"
+msgstr "查看当前地图"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:416
+msgid "Viewport"
+msgstr ""
+
+msgid "WUI"
+msgstr "WUI（web用户界面）"
+
+#: share/server/core/classes/GlobalMapCfg.php:1927
+msgid "Worldmap"
+msgstr "世界地图"
+
+#: share/server/core/classes/ViewEditMainCfg.php:181
+msgid "Yes"
+msgstr "是"
+
+#: share/server/core/classes/CoreModAuth.php:85
+msgid "You are already logged in. You will be redirected."
+msgstr "您已登录。您将被重定向。"
+
+#: share/server/core/classes/CoreLogonDialogHandler.php:63
+msgid "You are not authenticated"
+msgstr "您尚未通过身份验证"
+
+msgid "You are not permitted to access this page"
+msgstr "您不允许访问此页面"
+
+#: share/server/core/classes/CoreModule.php:124
+msgid "You are not permitted to access this page ([PAGE])."
+msgstr "您不允许访问此页面([PAGE])."
+
+#: share/server/core/classes/CoreModAuth.php:91
+msgid "You entered invalid credentials."
+msgstr "您输入的密码无效。"
+
+#: share/server/core/classes/CoreModMap.php:128
+#: share/server/core/classes/CoreModule.php:222
+msgid "You entered invalid information."
+msgstr "您输入的信息无效。"
+
+msgid "You have been authenticated. You will be <a href=\"[refererUrl]\">redirected</a>."
+msgstr "您已通过身份验证，您将被重定向到<a href=\"[refererUrl]\"></a>."
+
+msgid "You have been authenticated. You will be redirected."
+msgstr "您已通过身份验证。您将被重定向。"
+
+msgid "You have been logged out. You will be redirected."
+msgstr "您已退出。您将被重定向"
+
+#: share/server/core/classes/ViewManageBackends.php:119
+msgid "You need to choose a backend type."
+msgstr "您需要选一个后端类型。"
+
+#: share/server/core/classes/ViewManageBackends.php:69
+msgid "You need to choose a default backend."
+msgstr "您需要选一个默认后端。"
+
+#: share/server/core/classes/ViewMapManageTmpl.php:51
+msgid "You need to configure an unique name."
+msgstr "您需要设置一个唯一的名称。"
+
+#: share/server/core/classes/ViewManageBackends.php:145
+msgid "You need to configure this option."
+msgstr "您必须设置这个选项。"
+
+#: share/server/core/classes/ViewAck.php:69
+msgid "You need to provide a comment."
+msgstr "您需要提供一个注释。"
+
+#: share/server/core/classes/ViewMapAddModify.php:565
+msgid "You need to provide a map name."
+msgstr "您需要提供一个地图名。"
+
+#: share/server/core/classes/ViewManageMaps.php:41
+msgid "You need to provide a unique map name (ID) for the map"
+msgstr "您需要为地图提供一个唯一的名称（ID）"
+
+#: share/server/core/classes/ViewManageMaps.php:326
+msgid "You need to select a file to import."
+msgstr "你需要选择一个文件进行导入。"
+
+#: share/server/core/classes/ViewManageBackgrounds.php:35
+#: share/server/core/classes/ViewManageShapes.php:35
+msgid "You need to select an image to import."
+msgstr "您需要选择一张图片来导入。"
+
+#: share/server/core/classes/ViewManageBackends.php:122
+msgid "You need to specify a identifier for the backend."
+msgstr "您需要为后端指定一个id。"
+
+#: share/server/core/classes/ViewChangePassword.php:40
+msgid "You need to specify the new password."
+msgstr "您须输入新的密码。"
+
+#: share/server/core/classes/ViewChangePassword.php:36
+msgid "You need to specify the old password."
+msgstr "您须输入旧密码。"
+
+#: share/server/core/classes/ViewChangePassword.php:44
+msgid "You need to specify to confirm the new password."
+msgstr "您须确认新密码"
+
+#: share/server/core/classes/ViewManageMaps.php:52
+msgid "You provided an invalid type"
+msgstr "提供 的类型无效"
+
+#: share/server/core/classes/CoreSQLiteHandler.php:102
+msgid "Your PHP installation does not support PDO SQLite (3.x). Please check if you installed the PHP module."
+msgstr "您安装的PHP不支持PDO SQLite (3.x).请检查是否安装了该PHP模块。"
+
+#: share/server/core/classes/CoreSQLiteHandler.php:97
+msgid "Your PHP installation does not support PDO. Please check if you installed the PHP module."
+msgstr "您安装的PHP不支持PDO。请检查是否安装了该PHP模块。"
+
+msgid "Your PHP installation does not support SQLite. Please check if you installed the PHP module."
+msgstr "您安装的PHP不支持SQLite。请检查是否安装了该PHP模块。"
+
+#: share/server/core/classes/CoreMySQLHandler.php:104
+msgid "Your PHP installation does not support mysql. Please check if you installed the PHP module."
+msgstr "您安装的PHP不支持mysql。请检查是否安装了该PHP模块。"
+
+#: share/server/core/classes/ViewChangePassword.php:59
+msgid "Your password could not be changed."
+msgstr "您的密码无法修改。"
+
+#: share/server/core/classes/ViewChangePassword.php:60
+msgid "Your password has been changed."
+msgstr "您的密码已修改。"
+
+msgid "accessModeIsNotValid"
+msgstr "认证模式 \"[MODE]\" 无效."
+
+msgid "addBackend"
+msgstr "添加backend"
+
+msgid "addObject"
+msgstr "添加对象"
+
+#: share/server/core/classes/NagVisHoverMenu.php:111
+msgid "address"
+msgstr "地址"
+
+#: share/server/core/classes/NagVisHoverMenu.php:107
+msgid "alias"
+msgstr "别名"
+
+#: share/server/core/classes/objects/NagVisHostgroup.php:151
+#: share/server/core/classes/objects/NagVisDynGroup.php:154
+msgid "and"
+msgstr "和"
+
+msgid "automapNotSupportedHere"
+msgstr "这里不支持自动地图。"
+
+#: share/server/core/classes/GlobalBackendndomy.php:242
+msgid "backendInstanceNameNotUniq"
+msgstr "给出的后端 &quot;[BACKENDID]&quot;实例名 &quot;[NAME]&quot;不唯一。"
+
+#: share/server/core/classes/GlobalBackendndomy.php:239
+msgid "backendInstanceNameNotValid"
+msgstr "给出的后端 &quot;[BACKENDID]&quot;实例名 &quot;[NAME]&quot;无效。"
+
+#: share/server/core/classes/CoreBackendMgmt.php:608
+msgid "backendNotDefined"
+msgstr "后端ID&quot;[BACKENDID]&quot; 没有定义。"
+
+#: share/server/core/classes/CoreBackendMgmt.php:569
+msgid "backendNotExists"
+msgstr "类型为 &quot;[BACKENDTYPE]&quot; ID为&quot;[BACKENDID]&quot;的后端不存在。"
+
+#: share/server/core/classes/CoreBackendMgmt.php:655
+msgid "backendNotInitialized"
+msgstr " 类型为 &quot;[BACKENDTYPE]&quot; ID为&quot;[BACKENDID]&quot;的后端没有初始化。地图里可能使用了没有定义的后端？"
+
+msgid "background"
+msgstr "背景"
+
+msgid "backgroundColor"
+msgstr "颜色 (Hex)"
+
+msgid "backgroundFolderNotWriteable"
+msgstr "背景图片目录 &quot;[PATH]&quot;不可写。"
+
+msgid "backgroundHeight"
+msgstr "高度 (px)"
+
+msgid "backgroundName"
+msgstr "背景名称"
+
+msgid "backgroundNotExists"
+msgstr "地图文件 \"[IMGPATH]\" 不存在"
+
+msgid "backgroundNotReadable"
+msgstr "背景图片目录\"[IMGPATH]\"不可读。"
+
+msgid "backgroundNotWriteable"
+msgstr "地图图片文件&quot;[IMGPATH]&quot; 不可写。"
+
+msgid "backgroundWidth"
+msgstr "宽 (px)"
+
+msgid "cacheFileNotExists"
+msgstr "缓存文件 &quot;[FILE]&quot;不存在。"
+
+#: share/server/core/classes/GlobalFileCache.php:109
+msgid "cacheFileNotWriteable"
+msgstr "缓存文件 &quot;[FILE]&quot;不可写。"
+
+msgid "cacheFolderNotWriteable"
+msgstr "缓存文件 &quot;[FILE]&quot;上级目录不可写。缓存文件无法创建。请修改文件系统权限。"
+
+msgid "change"
+msgstr "修改"
+
+msgid "childStatesAre"
+msgstr "有"
+
+msgid "chooseImage"
+msgstr "选择一个图片"
+
+msgid "chooseMap"
+msgstr "选择地图"
+
+msgid "chooseMapFile"
+msgstr "选择地图配置文件"
+
+msgid "chooseMapName"
+msgstr "你需要为新地图添加一个名字。"
+
+msgid "choosePngImage"
+msgstr "选择一个PNG/GIF/JPG图片"
+
+msgid "chosenLineTypeNotValid"
+msgstr "选择的线条类型不正确。"
+
+msgid "clickMapToSetPoints"
+msgstr "点击地图以确定缺失点的位置。"
+
+#: share/server/core/sources/automap.php:65
+msgid "compress"
+msgstr "压缩"
+
+msgid "configured"
+msgstr "已配置"
+
+msgid "confirmBackgroundDeletion"
+msgstr "确定要删除这个背景图片？此操作不可逆。"
+
+#: share/server/core/classes/NagVisContextMenu.php:103
+msgid "confirmDelete"
+msgstr "确定要删除这个对象？"
+
+msgid "confirmMapDeletion"
+msgstr "确定要删除这个地图？此操作不可逆。"
+
+msgid "confirmMapRename"
+msgstr "确定要重命名这个地图？"
+
+msgid "confirmNewMap"
+msgstr "确定要创建一个新地图？"
+
+msgid "confirmRestore"
+msgstr "确定恢复备份？"
+
+msgid "confirmShapeDeletion"
+msgstr "确定要删除这个图形？此操作不可逆。"
+
+#: share/server/core/classes/NagVisContextMenu.php:107
+msgid "contextConnectBySsh"
+msgstr "通过ssh连接"
+
+#: share/server/core/classes/NagVisContextMenu.php:111
+msgid "contextRefreshStatus"
+msgstr "刷新状态"
+
+#: share/server/core/classes/NagVisContextMenu.php:115
+msgid "contextRescheduleNextCheck"
+msgstr "重新计划下一次检测"
+
+#: share/server/core/classes/NagVisContextMenu.php:119
+msgid "contextScheduleDowntime"
+msgstr "计划宕机时间"
+
+msgid "contextTemplateNotExists"
+msgstr "模板文件 &quot;[FILE]&quot; 不存在。"
+
+msgid "contextTemplateNotReadable"
+msgstr "模板不可读， 请检查模板文件&quot;[FILE]&quot; web服务器文件权限。"
+
+#: share/server/core/classes/GlobalMapCfg.php:1742
+msgid "couldNotDeleteMapCfg"
+msgstr "删除地图配置文件 &quot;[MAPPATH]&quot;失败。"
+
+#: share/server/core/classes/GlobalBackground.php:163
+msgid "couldNotDeleteMapImage"
+msgstr "删除地图图片文件&quot;[IMGPATH]&quot;失败。"
+
+#: share/server/core/classes/NagVisHoverUrl.php:93
+msgid "couldNotGetHoverUrl"
+msgstr "不能获得悬浮URL&quot;[URL]&quot;，URL可能有密码保护。"
+
+#: share/server/core/sources/automap.php:248
+msgid "couldNotGetRootHostname"
+msgstr "自动地图需要一个根主机名才能开始画图。<br><br>有三个方法得到根主机：URL参数&quot;root&quot;，主配置文件&quot;automap > default_root&quot;，自动检测（仅在有<b>一个</b>主机没有父关系时可行）。"
+
+msgid "create"
+msgstr "创建"
+
+msgid "createBackground"
+msgstr "创建背景图片"
+
+msgid "createMap"
+msgstr "创建地图"
+
+#: share/server/core/classes/NagVisHoverMenu.php:155
+msgid "currentAttempt"
+msgstr "本次尝试"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:109
+msgid "de_DE"
+msgstr "德语"
+
+msgid "defaultBackend"
+msgstr "默认后端"
+
+msgid "defaultValue"
+msgstr "默认值"
+
+msgid "delBackend"
+msgstr "删除后端"
+
+msgid "delete"
+msgstr "删除"
+
+msgid "deleteBackground"
+msgstr "删除背景图片"
+
+msgid "deleteMap"
+msgstr "删除地图"
+
+msgid "deleteShape"
+msgstr "删除图形"
+
+msgid "deprecatedOption"
+msgstr "&quot;[TYPE]&quot;里的选项 &quot;[ATTRIBUTE]&quot; 在本版本里不建议使用，更多细节请阅读文档和更改日志。"
+
+msgid "disabled"
+msgstr "去激活"
+
+msgid "editBackend"
+msgstr "编辑后端"
+
+msgid "editMap"
+msgstr "编辑当前地图"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:106
+msgid "en_US"
+msgstr "英文"
+
+#: share/server/core/classes/CoreMySQLHandler.php:57
+#: share/server/core/classes/GlobalBackendndomy.php:186
+msgid "errorConnectingMySQL"
+msgstr "连接MySQL服务器出错。后端连接属性错误？ MySQL-Error: [MYSQLERR]. (Backend-ID: [BACKENDID])"
+
+#: share/server/core/classes/CoreMySQLHandler.php:68
+#: share/server/core/classes/GlobalBackendndomy.php:196
+msgid "errorSelectingDb"
+msgstr "选择数据库出错。数据库名称错误或权限不够。MySQL-Error: [MYSQLERR]. (Backend-ID: [BACKENDID])"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:112
+msgid "es_ES"
+msgstr "西班牙语"
+
+msgid "export"
+msgstr "导出"
+
+msgid "exportMap"
+msgstr "导出地图"
+
+msgid "failedToDeleteShape"
+msgstr "不能删除图形 \"[IMAGE]\"。"
+
+#: share/server/core/sources/automap.php:59
+msgid "false"
+msgstr "错误的"
+
+msgid "fileCouldNotBeUploaded"
+msgstr "文件无法上传到web服务器。"
+
+#: share/server/core/classes/GlobalFileCache.php:141
+msgid "fileNotCached"
+msgstr "文件 &quot;[FILE]&quot; 没有被缓存。"
+
+msgid "fileNotExists"
+msgstr "文件 &quot;[FILE]&quot; 不存在。"
+
+msgid "firstMustChoosePngImage"
+msgstr "请选择PNG格式图片。"
+
+#: share/server/core/classes/ViewMapAddModify.php:544
+msgid "for all users"
+msgstr "对所有用户"
+
+#: share/server/core/classes/ViewMapAddModify.php:546
+msgid "for you"
+msgstr "对你"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:406
+msgid "forum"
+msgstr "技术支持论坛"
+
+msgid "foundNoBackgroundToDelete"
+msgstr "背景图片未找到，操作终止。"
+
+msgid "foundNoMapToDelete"
+msgstr "地图未找到，操作终止。"
+
+msgid "foundNoMapToExport"
+msgstr "地图未找到，请选择一个地图导出。"
+
+msgid "foundNoMapToImport"
+msgstr "未给出导入文件，请选择一个文件。"
+
+msgid "foundNoObjectOfThatTypeOnMap"
+msgstr "地图上没有找到此类型的对象。"
+
+msgid "foundNoShapeToDelete"
+msgstr "图形未找到，操作中止。"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:115
+msgid "fr_FR"
+msgstr "法语"
+
+#: share/server/core/classes/GlobalCore.php:151
+msgid "gdLibNotFound"
+msgstr "你的PNP没有安装或启用GD-Libs。"
+
+#: share/server/core/sources/automap_pos.php:27
+msgid "graphvizBinaryNotFound"
+msgstr "目录 &quot;[PATHS]&quot; 不存在graphviz二进制文件 &quot;[NAME]&quot; "
+
+msgid "headerTemplateNotExists"
+msgstr "header模板文件 &quot;[FILE]&quot; 不存在。"
+
+msgid "headerTemplateNotReadable"
+msgstr "请检查header 模板文件 &quot;[FILE]&quot;的权限。"
+
+msgid "help"
+msgstr "帮助"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:383
+#: share/server/core/classes/GlobalCore.php:682
+msgid "host"
+msgstr "主机"
+
+#: share/server/core/classes/objects/NagVisHostgroup.php:183
+msgid "hostGroupNotFoundInDB"
+msgstr "主机组\"[HOSTGROUP]\"在数据库里未找到。拼写错误？ (Backend-ID: [BACKENDID])"
+
+#: share/server/core/classes/objects/NagVisHost.php:221
+#: share/server/core/classes/objects/NagVisHost.php:252
+msgid "hostHasNoServices"
+msgstr "主机 \"[HOST]\" 没有服务。"
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:728
+#: share/server/core/classes/GlobalBackendndomy.php:584
+msgid "hostIsPending"
+msgstr "主机 \"[HOST]\" 处于未决状态"
+
+msgid "hostNotFoundInDB"
+msgstr "数据库里找不到主机 \"[HOST]\" 。拼写错误？ (Backend-ID: [BACKENDID])"
+
+#: share/server/core/classes/objects/NagVisHost.php:182
+#: share/server/core/classes/objects/NagVisHost.php:235
+msgid "hostStateIs"
+msgstr "主机是"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:385
+#: share/server/core/classes/GlobalCore.php:686
+msgid "hostgroup"
+msgstr "主机组"
+
+#: share/server/core/classes/GlobalCore.php:687
+msgid "hostgroupname"
+msgstr "主机组名"
+
+#: share/server/core/classes/GlobalCore.php:683
+msgid "hostname"
+msgstr "主机名"
+
+#: share/server/core/classes/objects/NagVisHostgroup.php:149
+#: share/server/core/classes/objects/NagVisHostgroup.php:181
+#: share/server/core/classes/objects/NagVisDynGroup.php:152
+#: share/server/core/classes/objects/NagVisDynGroup.php:184
+#: share/server/core/classes/objects/NagVisAggr.php:174
+msgid "hosts"
+msgstr "主机"
+
+msgid "hoverTemplateNotExists"
+msgstr "悬浮模板文件 &quot;[FILE]&quot; 不存在。"
+
+msgid "hoverTemplateNotReadable"
+msgstr " 悬浮模板文件不可读。 请检查悬浮模板文件&quot;[FILE]&quot;权限。"
+
+msgid "icon"
+msgstr "图标"
+
+msgid "iconNotExists"
+msgstr "地图上使用的图标&quot;[IMGPATH]&quot;不存在。"
+
+#: share/server/core/classes/GlobalCore.php:387
+msgid "iconsetFiletypeUnknown"
+msgstr "不能确定图标集 &quot;[ICONSET]&quot;文件类型，可能缺少&quot;_ok&quot; 图片？"
+
+msgid "imageAlreadyExists"
+msgstr "图片 \"[MAPNAME]\" 已经存在，请重新命名文件。"
+
+msgid "imageNotExists"
+msgstr "创建缩略图需要的图片文件&quot;[FILE]&quot; 不存在。"
+
+msgid "import"
+msgstr "导入"
+
+msgid "importMap"
+msgstr "导入地图"
+
+msgid "inherited"
+msgstr "继承的"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:409
+#: share/server/core/classes/NagVisHoverMenu.php:139
+msgid "instance"
+msgstr "实例"
+
+#: share/server/core/sources/automap.php:66
+msgid "ipsep"
+msgstr ""
+
+msgid "languageNotFound"
+msgstr "配置了NagVis加载语言&quot;[LANG]&quot; ，但语言目录下找到不该语言。"
+
+#: share/server/core/classes/NagVisHoverMenu.php:147
+msgid "lastCheck"
+msgstr "最后的检查"
+
+#: share/server/core/classes/NagVisHoverMenu.php:159
+msgid "lastStateChange"
+msgstr "最后的状态改变"
+
+#: share/server/core/classes/NagVisHoverMenu.php:175
+msgid "lastStatusRefresh"
+msgstr "最后的状态刷新"
+
+msgid "line"
+msgstr "线条"
+
+msgid "lineTypeButViewTypeNotSet"
+msgstr " 您让Nagvis显示对象为线条。NagVis 1.4后需要为线条对象设置选项&quot;view_type=line&quot; 。在地图 &quot;[MAP]&quot;检测到&quot;[TYPE]&quot; 对象类型有问题。"
+
+msgid "lineTypeNotSet"
+msgstr "选项&quot;line_type&quot;没有设置。"
+
+msgid "loopInMapRecursion"
+msgstr "地图递归中有loop循环"
+
+#: share/server/core/classes/GlobalMainCfg.php:2456
+msgid "mainCfgCouldNotWriteMainConfigFile"
+msgstr "主配置文件缓存不可写。"
+
+msgid "mainCfgNotExists"
+msgstr "主配置文件&quot;[MAINCFG]&quot; 不存在。"
+
+msgid "mainCfgNotReadable"
+msgstr "请检查主配置文件 &quot;[MAINCFG]&quot;的权限。"
+
+#: share/server/core/classes/GlobalMainCfg.php:2453
+msgid "mainCfgNotWriteable"
+msgstr "主配置文件不可写。"
+
+msgid "mainMustValueNotSet"
+msgstr "主配置文件中 &quot;[TYPE]&quot;章节没有设置&quot;[ATTRIBUTE]&quot; 。"
+
+msgid "manage"
+msgstr "管理"
+
+msgid "manageBackends"
+msgstr "后端"
+
+msgid "manageBackgrounds"
+msgstr "背景"
+
+msgid "manageMaps"
+msgstr "地图"
+
+msgid "manageShapes"
+msgstr "图形"
+
+msgid "manualInput"
+msgstr "手工录入"
+
+#: share/server/core/classes/GlobalCore.php:696
+msgid "map"
+msgstr "地图"
+
+#: share/server/core/classes/ViewMapAddModify.php:170
+msgid "map configuration"
+msgstr "地图配置"
+
+msgid "mapAlreadyExists"
+msgstr "地图 \"[MAPNAME]\"已经存在，请重新命名。"
+
+msgid "mapCfgDirNotWriteable"
+msgstr "请检查地图配置文件目录&quot;[MAPPATH]&quot;权限。"
+
+#: share/server/core/classes/GlobalMapCfg.php:1011
+msgid "mapCfgMustValueNotSet"
+msgstr "地图 [MAPNAME]中对象 [TYPE]/[ID]的必选项 [ATTRIBUTE]没有设置。"
+
+#: share/server/core/classes/objects/NagVisMapObj.php:371
+msgid "mapCfgNotExists"
+msgstr "地图配置文件\"[MAP]\" 不存在"
+
+msgid "mapCfgNotReadable"
+msgstr "地图配置文件 &quot;[MAP]&quot;不可读。"
+
+msgid "mapCfgNotWriteable"
+msgstr "地图配置文件不可写。"
+
+msgid "mapDeprecatedOption"
+msgstr "&quot;[TYPE]&quot;类型的 &quot;[ATTRIBUTE]&quot;选项在此版本中不建议使用，详情请阅读文档。"
+
+msgid "mapIconset"
+msgstr "地图图标集"
+
+#: share/server/core/classes/CoreModMultisite.php:241
+#: share/server/core/classes/CoreExceptions.php:61
+msgid "mapInMaintenance"
+msgstr "您要访问的地图处于维护模式，请耐心等待。页面已经自动重新加载。"
+
+#: share/frontend/nagvis-js/classes/NagVisOverviewView.php:42
+msgid "mapIndex"
+msgstr "地图索引"
+
+#: share/server/core/classes/objects/NagVisMapObj.php:488
+msgid "mapIsEmpty"
+msgstr "地图 \"[MAP]\"没有对象。"
+
+#: share/server/core/classes/CoreModMap.php:199
+#: share/server/core/classes/CoreModMap.php:257
+#: share/server/core/classes/ViewMapAddModify.php:190
+msgid "mapLockNotDeleted"
+msgstr "地图锁不能删除。"
+
+msgid "mapLockNotExists"
+msgstr "锁止文件&quot;[MAP]&quot; 不存在。"
+
+msgid "mapLockNotReadable"
+msgstr "锁止文件&quot;[MAP]&quot; 不可读。"
+
+msgid "mapLockNotWriteable"
+msgstr "锁止文件&quot;[MAP]&quot; 不可写。"
+
+#: share/server/core/classes/GlobalMapCfg.php:1776
+msgid "mapLocked"
+msgstr ""
+"自[TIME]起，地图\"[MAP]\"已被 来自 IP \"[IP]\"的用户 \"[USER]\"锁住\n"
+"\n"
+"继续编辑（覆盖锁）？"
+
+msgid "mapName"
+msgstr "地图名称"
+
+msgid "mapObjectWillShowSummaryState"
+msgstr "这个地图对象将显示该地图和它孩子的摘要信息。"
+
+#: share/server/core/classes/CoreRotation.php:44
+msgid "mapRotationPoolNotExists"
+msgstr "地图循环池 &quot;[ROTATION]&quot; 在NagVis中没有定义。"
+
+#: share/server/core/classes/GlobalCore.php:697
+msgid "mapname"
+msgstr "地图名称"
+
+msgid "methodNotSupportedByBackend"
+msgstr "后端不知道方法 \"[METHOD]\" ."
+
+msgid "minOneUserAccess"
+msgstr "至少有一个用户须能访问该地图。"
+
+msgid "minOneUserWriteAccess"
+msgstr "至少授权一个用户能修改该地图。"
+
+#: share/server/core/classes/GlobalCore.php:679
+msgid "more items..."
+msgstr "更多..."
+
+msgid "moveUploadedFileFailed"
+msgstr "不能把上传文件移至图形目录 \"[PATH]\"."
+
+msgid "mustBePngFile"
+msgstr "文件扩展名不正确（必须是 *.png）"
+
+msgid "mustChooseValidImageFormat"
+msgstr "必须选择一个已支持格式的图片 (Png, Gif, Jpg)。"
+
+msgid "mustValueNotSet"
+msgstr "必填项没有设置，红色标注的值是必填项。"
+
+#: share/server/core/classes/CoreModule.php:249
+msgid "mustValueNotSet1"
+msgstr "必填项 \"[ATTRIBUTE]\"没有设置。"
+
+#: share/server/core/classes/GlobalBackendndomy.php:214
+msgid "mysqlNotSupported"
+msgstr "PHP安装不支持SQL。没有php-mysql不能使用NDOMy后端。(Backend-ID: [BACKENDID]) "
+
+msgid "nagVisConfig"
+msgstr "NagVis 配置"
+
+#: share/server/core/classes/GlobalBackendndomy.php:125
+msgid "nagiosDataNotUpToDate"
+msgstr "NDO声明Nagios超过&quot;[TIMEWITHOUTUPDATE]&quot; 秒没有状态更新了。请确保Nagios 和NDO守护进程正运行。(Backend-ID: [BACKENDID])"
+
+#: share/server/core/classes/GlobalBackendndomy.php:120
+msgid "nagiosNotRunning"
+msgstr "NDO报告Nagios不在运行(Backend-ID: [BACKENDID])"
+
+msgid "ndo2fsFileStructureNotValid"
+msgstr "ndo2fs 目录 &quot;[PATH]&quot; 里的文件结构无效. 目录被后端&quot;[BACKENDID]&quot;使用。"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:404
+msgid "needHelp"
+msgstr "需要帮助？"
+
+msgid "newMapName"
+msgstr "新的名称"
+
+#: share/server/core/classes/NagVisHoverMenu.php:143
+msgid "nextCheck"
+msgstr "下次检查"
+
+#: share/frontend/nagvis-js/classes/NagVisInfoView.php:80
+#: share/server/core/classes/ViewMapAddModify.php:373
+#: share/server/core/classes/ViewEditMainCfg.php:241
+msgid "no"
+msgstr "否（No）"
+
+#: share/frontend/nagvis-js/classes/NagVisInfoView.php:81
+#: share/frontend/nagvis-js/classes/NagVisInfoView.php:82
+msgid "no (compat mode, may lead to performance problems)"
+msgstr ""
+
+#: share/server/core/classes/CoreBackendMgmt.php:553
+msgid "noBackendDefined"
+msgstr "NagVis配置文件里没有发现后端，为了获得状态信息必须配置一个后端。"
+
+msgid "noMapToRename"
+msgstr "地图没有找到，操作终止。"
+
+msgid "noNewNameGiven"
+msgstr "你没有指定新名称。"
+
+msgid "noPermissions"
+msgstr "你没有权限修改这个地图。"
+
+#: share/server/core/classes/objects/NagVisMapObj.php:508
+msgid "noReadPermissions"
+msgstr "您不被允许查看这个地图的状态。"
+
+msgid "noSpaceAllowed"
+msgstr "不允许有空格。"
+
+#: share/server/core/classes/GlobalBackendndomy.php:164
+msgid "noTablesExists"
+msgstr "数据库里没有表符合前缀 &quot;[PREFIX]&quot;. (Backend-ID: [BACKENDID])"
+
+msgid "noUser"
+msgstr " 没有用户名传给NagVis！解决办法请参考 www.nagvis.org的FAQ"
+
+msgid "not2coords"
+msgstr "看起来您想定义线条（设置了\"line_type\"），但您没有给出两个\"[COORD]\" 坐标。"
+
+msgid "notCfgFile"
+msgstr "文件没有扩展名 \".cfg\"，请重新命名。"
+
+#: share/server/core/classes/NagVisHoverMenu.php:171
+msgid "notes"
+msgstr "注释"
+
+#: share/server/core/classes/GlobalCore.php:698
+msgid "objectname"
+msgstr "对象名称"
+
+#: share/server/core/classes/objects/NagVisMapObj.php:486
+msgid "objects"
+msgstr "对象"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:405
+msgid "onlineDoc"
+msgstr "在线文档"
+
+msgid "only1or2coords"
+msgstr "仅能定义一个或两个[COORD] 坐标。"
+
+msgid "onlyLineOrIcon"
+msgstr "一个对象只能是一个图标或线条， \"iconset\" 和\"line_type\"不能一起使用。"
+
+#: share/server/core/classes/CoreModOverview.php:324
+#: share/server/core/classes/CoreModOverview.php:387
+msgid "onlyPngOrJpgImages"
+msgstr "地图文件只能使用PNG或JPG图片。"
+
+msgid "open"
+msgstr "打开地图"
+
+msgid "openInNagVis"
+msgstr "在NagVis中打开"
+
+#: share/server/core/sources/automap.php:62
+msgid "ortho"
+msgstr ""
+
+#: share/server/core/sources/automap.php:63
+msgid "orthoxy"
+msgstr ""
+
+#: share/server/core/sources/automap.php:64
+msgid "orthoyx"
+msgstr ""
+
+#: share/server/core/classes/NagVisHoverMenu.php:123
+msgid "output"
+msgstr "输出"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:408
+#: share/server/core/classes/NagVisHoverMenu.php:135
+msgid "overview"
+msgstr "概要"
+
+msgid "parameterNameNotSet"
+msgstr "缺少参数 &quot;name&quot; 。"
+
+msgid "parameterObjIdNotSet"
+msgstr "缺少参数 &quot;objId&quot; 。"
+
+msgid "parameterObjName1NotSet"
+msgstr "缺少参数 objName1 ."
+
+msgid "parameterObjName2NotSet"
+msgstr "缺少参数objName2 。"
+
+msgid "parameterObjTypeNotSet"
+msgstr "缺少参数 objType 。"
+
+msgid "parameterTypeNotSet"
+msgstr "缺少参 &quot;type&quot; 。"
+
+msgid "parameterUrlNotSet"
+msgstr "缺少参数 &quot;url&quot; 。"
+
+#: share/server/core/classes/NagVisHoverMenu.php:127
+msgid "perfdata"
+msgstr "Perfdata"
+
+msgid "permissionDenied"
+msgstr "用户\"[USER]\"没有该操作权限"
+
+msgid "phpModuleNotLoaded"
+msgstr "PHP 模块 &quot;[MODULE]&quot; 没有加载。"
+
+msgid "positionSize"
+msgstr "位置/尺寸"
+
+#: share/server/core/sources/automap.php:68
+msgid "prism"
+msgstr ""
+
+#: share/server/core/classes/CoreModUrl.php:69
+#: share/server/core/classes/CoreModUrl.php:77
+#: share/server/core/classes/NagVisHoverUrl.php:88
+msgid "problemReadingUrl"
+msgstr "不能打开URL &quot;[URL]&quot;. Error: &quot;[MSG]&quot;"
+
+msgid "properties"
+msgstr "选项"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:118
+msgid "pt_BR"
+msgstr "巴西葡萄牙"
+
+msgid "readUsers"
+msgstr "有读权限的用户"
+
+msgid "refreshStart"
+msgstr "开始刷新"
+
+msgid "refreshStop"
+msgstr "停止刷新"
+
+msgid "rename"
+msgstr "改名"
+
+msgid "renameMap"
+msgstr "地图改名"
+
+msgid "restore"
+msgstr "恢复"
+
+#: share/frontend/nagvis-js/classes/NagVisOverviewView.php:43
+msgid "rotationPools"
+msgstr "循环池"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:411
+msgid "rotationStart"
+msgstr "开始循环"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:412
+msgid "rotationStop"
+msgstr "停止循环"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:121
+msgid "ru_RU"
+msgstr "俄语"
+
+#: share/server/core/classes/ViewEditMainCfg.php:101
+msgid "save"
+msgstr "保存"
+
+#: share/server/core/sources/automap.php:60
+msgid "scale"
+msgstr ""
+
+#: share/server/core/sources/automap.php:61
+msgid "scalexy"
+msgstr ""
+
+msgid "selectMap"
+msgstr "选择地图"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:384
+#: share/server/core/classes/GlobalCore.php:685
+msgid "service"
+msgstr "服务"
+
+#: share/server/core/classes/objects/NagVisServicegroup.php:172
+msgid "serviceGroupNotFoundInDB"
+msgstr "数据库中没有服务组 \"[SERVICEGROUP]\" . 拼写错误? (Backend-ID: [BACKENDID])"
+
+#: share/server/core/classes/GlobalBackendmklivestatus.php:851
+#: share/server/core/classes/GlobalBackendndomy.php:723
+msgid "serviceNotChecked"
+msgstr "服务 \"[SERVICE]\" 尚未检查。"
+
+msgid "serviceNotFoundInDB"
+msgstr "没有找到主机\"[HOST]\" 的服务 \"[SERVICE]\" . 拼写错误? (Backend-ID: [BACKENDID])"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:386
+#: share/server/core/classes/GlobalCore.php:688
+msgid "servicegroup"
+msgstr "服务组"
+
+#: share/server/core/classes/GlobalCore.php:689
+msgid "servicegroupname"
+msgstr "服务组名"
+
+#: share/server/core/classes/GlobalCore.php:684
+#: share/server/core/classes/NagVisHoverMenu.php:167
+msgid "servicename"
+msgstr "服务名"
+
+#: share/server/core/classes/objects/NagVisHostgroup.php:152
+#: share/server/core/classes/objects/NagVisServicegroup.php:146
+#: share/server/core/classes/objects/NagVisServicegroup.php:170
+#: share/server/core/classes/objects/NagVisHost.php:217
+#: share/server/core/classes/objects/NagVisHost.php:250
+#: share/server/core/classes/objects/NagVisDynGroup.php:155
+msgid "services"
+msgstr "服务"
+
+msgid "setDefaultBackend"
+msgstr "设置默认后端"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:393
+msgid "shape"
+msgstr "图形"
+
+msgid "shapeDoesNotExist"
+msgstr "图形 \"[IMAGE]\" 不存在."
+
+msgid "shapeInUse"
+msgstr "图形已被地图\"[MAP]\"使用。"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:395
+msgid "special"
+msgstr "特殊"
+
+#: share/server/core/classes/NagVisHoverMenu.php:115
+msgid "state"
+msgstr "状态"
+
+#: share/server/core/classes/NagVisHoverMenu.php:163
+msgid "stateDuration"
+msgstr "状态持续时间"
+
+#: share/server/core/classes/NagVisHoverMenu.php:151
+msgid "stateType"
+msgstr "状态类型"
+
+#: share/server/core/classes/NagVisHoverMenu.php:131
+msgid "summaryOutput"
+msgstr "摘要输出"
+
+#: share/server/core/classes/NagVisHoverMenu.php:119
+msgid "summaryState"
+msgstr "状态摘要"
+
+#: share/frontend/nagvis-js/classes/NagVisInfoView.php:50
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:407
+msgid "supportInfo"
+msgstr "NagVis 支持信息"
+
+#: share/frontend/nagvis-js/classes/NagVisHeaderMenu.php:391
+msgid "textbox"
+msgstr "文本框"
+
+#: share/server/core/sources/automap.php:58
+msgid "true"
+msgstr "正确的"
+
+msgid "unableToDeleteBackground"
+msgstr "背景图片 \"[IMAGENAME]\" 被地图\"[MAP]\"使用，不能删除。"
+
+msgid "unableToDeleteMap"
+msgstr "不能删除 \"[MAP]\". 该地图包括在另一个地图\"[PARENTMAP]\"里."
+
+msgid "unableToDeleteShape"
+msgstr "图形 \"[IMAGENAME]\" 被地图 \"[MAP]\"使用，不能删除。"
+
+msgid "unableToWorkWithMap"
+msgstr "地图修改不能继续，过程被终止。"
+
+msgid "unknownAction"
+msgstr "ajax handler不支持操作 \"[ACTION]\" 。"
+
+#: share/server/core/classes/GlobalMapCfg.php:1026
+msgid "unknownAttribute"
+msgstr "属性 &quot;[ATTRIBUTE]&quot; 不被地图 [MAPNAME]上的类型 &quot;[TYPE]&quot;对象支持 。"
+
+#: share/server/core/classes/GlobalMapCfg.php:363
+#: share/server/core/classes/objects/NagVisMapObj.php:420
+msgid "unknownObject"
+msgstr "地图&quot;[MAPNAME]&quot;上的&quot;[TYPE]&quot;对象类型不被允许。"
+
+msgid "unknownQuery"
+msgstr "未知查询"
+
+msgid "unknownRenderMode"
+msgstr "渲染模式&quot;[MODE]&quot; 不支持。"
+
+msgid "unknownSection"
+msgstr "主配置文件里的 &quot;[TYPE]&quot; 不被允许。"
+
+msgid "unknownValue"
+msgstr "主配置文件&quot;[TYPE]&quot; 章节不支持 属性&quot;[ATTRIBUTE]&quot; 。"
+
+msgid "unknownrender_mode"
+msgstr "未知渲染模式"
+
+msgid "upload"
+msgstr "上传"
+
+msgid "uploadBackground"
+msgstr "上传背景图片"
+
+msgid "uploadFailed"
+msgstr "web服务器配置有问题，不能上传。"
+
+msgid "uploadShape"
+msgstr "上传图形"
+
+msgid "vaidatorNotValidUrl"
+msgstr "参数 [VAR] 不是有效的URL."
+
+msgid "validatorIsEmptyParameter"
+msgstr "参数 [VAR] 为空， 请为参数赋值。"
+
+msgid "validatorNotDefinedParameter"
+msgstr "参数 [VAR] 不是一个已定义的参数."
+
+msgid "validatorNotSetParameterValue"
+msgstr "参数 [VAR]未设置。"
+
+msgid "validatorNotValidBoolean"
+msgstr "参数 [VAR] 不是有效的布尔值 (TRUE / FALSE)."
+
+msgid "validatorNotValidInteger"
+msgstr "参数 [VAR] 不是有效integer。"
+
+msgid "validatorNotValidString"
+msgstr "参数 [VAR] 为无效字符串。"
+
+msgid "validatorValueOutOfRange"
+msgstr "参数[VAR] 超出范围。"
+
+msgid "varFolderNotExists"
+msgstr "var 目录&quot;[PATH]&quot; 不存在。"
+
+msgid "varFolderNotWriteable"
+msgstr "var 目录&quot;[PATH]&quot; 不可写。"
+
+msgid "viewTypeGadgetButNoGadgetUrl"
+msgstr " NagVis发现一个没有gadget_url选项的对象，但view_type=&quot;gadget&quot;。问题出现在地图&quot;[MAP]&quot; &quot;[TYPE]&quot;对象类型上。"
+
+msgid "viewTypeWrong"
+msgstr "view_type错误。配置了超过一个&quot;[COORD]&quot; 坐标。因此你需选择view_type &quot;line&quot; 。"
+
+#: share/server/core/sources/automap.php:67
+msgid "vpsc"
+msgstr ""
+
+msgid "writeUsers"
+msgstr "写权限用户"
+
+msgid "wrongPhpVersion"
+msgstr "您使用的PHP版本 &quot;[CURRENT_VERSION]&quot; 太旧了，NagVis需要&quot;[NEEDED_VERSION]&quot; 或更新。"
+
+msgid "wrongValueFormat"
+msgstr "主配置文件 section \"[TYPE]\"里的属性 \"[ATTRIBUTE]\" 值格式无效。"
+
+#: share/server/core/classes/GlobalMapCfg.php:1044
+#: share/server/core/classes/GlobalMapCfg.php:1052
+msgid "wrongValueFormatMap"
+msgstr "地图配置文件 \"[MAP]\"的元素类型 \"[TYPE]\"的属性 \"[ATTRIBUTE]\"值格式无效。"
+
+msgid "wrongValueFormatOption"
+msgstr "属性 \"[ATTRIBUTE]\"不符合有效值格式"
+
+#: share/frontend/nagvis-js/classes/NagVisInfoView.php:80
+#: share/frontend/nagvis-js/classes/NagVisInfoView.php:81
+#: share/frontend/nagvis-js/classes/NagVisInfoView.php:82
+#: share/server/core/classes/ViewMapAddModify.php:372
+#: share/server/core/classes/ViewEditMainCfg.php:240
+msgid "yes"
+msgstr "是（yes）"
+
+msgid "zh_CN"
+msgstr "简体中文"

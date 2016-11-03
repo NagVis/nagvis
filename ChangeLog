@@ -6,6 +6,7 @@ Core:
     Check_MK multisite login is done
 
 Frontend:
+  * Added localization for Simplified Chinese (zh_CN) (Thanks to Kevin Jin!)
   * FIX: Fixed removal of labels and hover menus right after editing objects
   * FIX: Fixed repositioning of (line) labels on object updates
 

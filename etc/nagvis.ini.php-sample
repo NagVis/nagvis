@@ -86,7 +86,7 @@
 ;http_timeout=2
 ;
 ; Defines which translations of NagVis are available to the users
-;language_available="de_DE,en_US,es_ES,fr_FR,pt_BR"
+;language_available="de_DE,en_US,es_ES,fr_FR,pt_BR,zh_CN"
 ; Language detection steps to use. Available:
 ;  - User:    The user selection
 ;  - Session: Language saved in the session (Usually set after first setting an
@@ -95,7 +95,7 @@
 ;  - Config:  Use configured default language (See below)
 ;language_detection="user,session,browser,config"
 ;
-; Select language (Available by default: en_US, de_DE, fr_FR, pt_BR)
+; Select language (Available by default: en_US, de_DE, fr_FR, pt_BR, zh_CN)
 ;language="en_US"
 ;
 ; Defines the logon module to use. There are three logon modules to be used by
