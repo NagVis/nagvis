@@ -1145,8 +1145,13 @@ function pxToInt(v) {
     return parseInt(v.replace('px', ''));
 }
 
+// It's a bit problematic to detect relative coords because there is no
+// 100% save way to detect relative coords. On the worldmap there may be
+// coordinates that have a huge offset value (e.g. a line from new york to
+// san francisco and zooming to new your will lead to a negative 5 digit
+// negative coord).
 function isRelativeCoord(v) {
-    return isset(v) && ((!isInt(v) && !isFloat(v)) || v.length === 6);
+    return isset(v) && ((!isInt(v) && !isFloat(v)) || (v.length === 6 && v.charAt(0) != "-"));
 }
 
 // Helper function to determine the number of entries in an object

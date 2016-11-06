@@ -12,6 +12,8 @@ Frontend:
 
 Worldmap:
   * FIX: Fixed broken worldmap (duplicate global section) after saving viewport
+  * FIX: Fixed "TypeError: this.objects[parentObjId] is undefined" issue on
+         worldmap when having long lines and zooming in a lot
 
 1.9b9
 Core:
