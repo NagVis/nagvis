@@ -10,6 +10,9 @@ Frontend:
   * FIX: Fixed removal of labels and hover menus right after editing objects
   * FIX: Fixed repositioning of (line) labels on object updates
 
+Worldmap:
+  * FIX: Fixed broken worldmap (duplicate global section) after saving viewport
+
 1.9b9
 Core:
   * FIX: CoreAuthorisationModGroups - Logout of users is now possible

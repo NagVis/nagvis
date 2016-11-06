@@ -303,9 +303,10 @@ class CoreModMap extends CoreModule {
 
         // Store response data
         if($bValid === true) {
+            $id = $FHANDLER->get('id') === "0" ? 0 : $FHANDLER->get('id');
             // Return the data
             return Array('map'     => $FHANDLER->get('map'),
-                         'id'      => $FHANDLER->get('id'),
+                         'id'      => $id,
                          'refresh' => $FHANDLER->get('ref'),
                          'opts'    => $aOpts);
         } else {
