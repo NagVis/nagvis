@@ -548,6 +548,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     if(isset($parts[1]))
                         $objFilters[] = 'Filter: host_name ~~ '.$parts[0]."\n"
                                        .'Filter: service_description ~~ '.$parts[1]."\n"
+                                       ."And: 2\n"
                                        ."Negate:\n";
                     else
                         $objFilters[] = 'Filter: host_name !~~ '.$parts[0]."\n";
