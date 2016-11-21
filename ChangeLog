@@ -1,11 +1,14 @@
+1.9b11
+Core:
+  * FIX: Livestatus backend was calculating wrong services for host group
+         objects having the "exclude_members" attribute configured
+
 1.9b10
 Core:
   * CoreLogonMultisite: In case a user is already authenticated via the web
     server, the authenticated user name is treated as authenticated, just
     like when using LogonEnv. If no user is authenticated, the regular
     Check_MK multisite login is done
-  * FIX: Livestatus backend was calculating wrong services for host group
-         objects having the "exclude_members" attribute configured
 
 Frontend:
   * Added localization for Simplified Chinese (zh_CN) (Thanks to Kevin Jin!)
