@@ -3,6 +3,9 @@ Core:
   * FIX: Livestatus backend was calculating wrong services for host group
          objects having the "exclude_members" attribute configured
 
+Frontend:
+  * FIX: Fixed lines using ack_bgcolor (when configured)
+
 1.9b10
 Core:
   * CoreLogonMultisite: In case a user is already authenticated via the web
