@@ -5,6 +5,7 @@ Core:
 
 Frontend:
   * FIX: Fixed lines using ack_bgcolor (when configured)
+  * FIX: Fixed wrong visualization (hover text, line color) of acknowledged services
 
 1.9b10
 Core:

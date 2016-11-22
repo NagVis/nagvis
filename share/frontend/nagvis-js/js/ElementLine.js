@@ -400,14 +400,16 @@ var ElementLine = Element.extend({
             color = this.calcWeathermapColor(id);
 
         // ack/downtime/staleness lighten the color a bit
-        if (this.obj.conf.summary_problem_has_been_acknowledged === 1
-            || this.obj.conf.summary_in_downtime === 1
+        if (this.obj.conf.summary_problem_has_been_acknowledged == 1
+            || this.obj.conf.summary_in_downtime == 1
             || this.obj.conf.summary_stale) {
 
-            if ((typeof(oStates[this.obj.conf.summary_state].ack_bgcolor) != 'undefined') && oStates[this.obj.conf.summary_state].ack_bgcolor != '') {
-                color = oStates[this.obj.conf.summary_state].ack_bgcolor;
-            } else {
-                color = lightenColor(color, 100, 100, 100);
+            color = lightenColor(color, 100, 100, 100);
+
+            if (this.obj.conf.summary_problem_has_been_acknowledged == 1
+                && typeof(oStates[this.obj.conf.summary_state].ack_bgcolor) != 'undefined'
+                && oStates[this.obj.conf.summary_state].ack_bgcolor != '') {
+                    color = oStates[this.obj.conf.summary_state].ack_bgcolor;
             }
         }
 

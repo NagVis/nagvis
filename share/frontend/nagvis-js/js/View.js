@@ -226,7 +226,7 @@ var View = Base.extend({
             sColor = oStates[oObj.summary_state].bgcolor;
 
             // Ack or downtime?
-            if (oObj.summary_in_downtime && oObj.summary_in_downtime === 1)
+            if (oObj.summary_in_downtime && oObj.summary_in_downtime == 1)
                 if (isset(oStates[oObj.summary_state]['downtime_bgcolor'])
                     && oStates[oObj.summary_state]['downtime_bgcolor'] != '')
                     sColor = oStates[oObj.summary_state]['downtime_bgcolor'];
@@ -234,7 +234,7 @@ var View = Base.extend({
                     sColor = lightenColor(sColor, 100, 100, 100);
 
             else if (oObj.summary_problem_has_been_acknowledged
-                     && oObj.summary_problem_has_been_acknowledged === 1)
+                     && oObj.summary_problem_has_been_acknowledged == 1)
 
                 if (isset(oStates[oObj.summary_state]['ack_bgcolor'])
                     && oStates[oObj.summary_state]['ack_bgcolor'] != '')
@@ -249,10 +249,10 @@ var View = Base.extend({
     getFaviconImage: function(oObj) {
         var sFavicon;
     
-        if (oObj.summary_in_downtime && oObj.summary_in_downtime === 1)
+        if (oObj.summary_in_downtime && oObj.summary_in_downtime == 1)
             sFavicon = 'downtime';
         else if (oObj.summary_problem_has_been_acknowledged
-                 && oObj.summary_problem_has_been_acknowledged === 1)
+                 && oObj.summary_problem_has_been_acknowledged == 1)
             sFavicon = 'ack';
         else if (oObj.summary_state.toLowerCase() == 'unreachable')
             sFavicon = 'down';

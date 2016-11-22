@@ -153,7 +153,7 @@ var NagVisStatefulObject = NagVisObject.extend({
      */
     stateChangedToWorse: function() {
         var lastSubState = 'normal';
-        if(this.last_state.summary_problem_has_been_acknowledged && this.last_state.summary_problem_has_been_acknowledged === 1) {
+        if(this.last_state.summary_problem_has_been_acknowledged && this.last_state.summary_problem_has_been_acknowledged == 1) {
             lastSubState = 'ack';
         } else if(this.last_state.summary_in_downtime && this.last_state.summary_in_downtime == 1) {
             lastSubState = 'downtime';
@@ -169,9 +169,9 @@ var NagVisStatefulObject = NagVisObject.extend({
         var lastWeight = oStates[this.last_state.summary_state][lastSubState];
 
         var subState = 'normal';
-        if(this.conf.summary_problem_has_been_acknowledged && this.conf.summary_problem_has_been_acknowledged === 1) {
+        if(this.conf.summary_problem_has_been_acknowledged && this.conf.summary_problem_has_been_acknowledged == 1) {
             subState = 'ack';
-        } else if(this.conf.summary_in_downtime && this.conf.summary_in_downtime === 1) {
+        } else if(this.conf.summary_in_downtime && this.conf.summary_in_downtime == 1) {
             subState = 'downtime';
         } else if(this.conf.summary_stale) {
             subState = 'stale';
@@ -187,9 +187,9 @@ var NagVisStatefulObject = NagVisObject.extend({
      */
     hasProblematicState: function() {
         // In case of acked/downtimed states this is no problematic state
-        if(this.conf.summary_problem_has_been_acknowledged && this.conf.summary_problem_has_been_acknowledged === 1) {
+        if(this.conf.summary_problem_has_been_acknowledged && this.conf.summary_problem_has_been_acknowledged == 1) {
             return false;
-        } else if(this.conf.summary_in_downtime && this.conf.summary_in_downtime === 1) {
+        } else if(this.conf.summary_in_downtime && this.conf.summary_in_downtime == 1) {
             return false;
         } else if(this.conf.summary_stale && this.conf.summary_stale) {
             return false;

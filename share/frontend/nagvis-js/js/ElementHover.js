@@ -512,16 +512,16 @@ var ElementHover = Element.extend({
         oMacros.obj_state = this.obj.conf.state;
         oMacros.obj_summary_state = this.obj.conf.summary_state;
     
-        if (this.obj.conf.summary_problem_has_been_acknowledged && this.obj.conf.summary_problem_has_been_acknowledged === 1)
+        if (this.obj.conf.summary_problem_has_been_acknowledged && this.obj.conf.summary_problem_has_been_acknowledged == 1)
             oMacros.obj_summary_acknowledged = '(Acknowledged)';
     
-        if (this.obj.conf.problem_has_been_acknowledged && this.obj.conf.problem_has_been_acknowledged === 1)
+        if (this.obj.conf.problem_has_been_acknowledged && this.obj.conf.problem_has_been_acknowledged == 1)
             oMacros.obj_acknowledged = '(Acknowledged)';
     
-        if (this.obj.conf.summary_in_downtime && this.obj.conf.summary_in_downtime === 1)
+        if (this.obj.conf.summary_in_downtime && this.obj.conf.summary_in_downtime == 1)
             oMacros.obj_summary_in_downtime = '(Downtime)';
     
-        if (this.obj.conf.in_downtime && this.obj.conf.in_downtime === 1)
+        if (this.obj.conf.in_downtime && this.obj.conf.in_downtime == 1)
             oMacros.obj_in_downtime = '(Downtime)';
     
         if (this.obj.conf.summary_stale)
