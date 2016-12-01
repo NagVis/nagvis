@@ -670,7 +670,7 @@ var ElementHover = Element.extend({
         if(this.obj.conf.type === 'service') {
             oMacros.service_description = this.obj.conf.service_description;
             oMacros.pnp_hostname = this.obj.conf.name.replace(/\s/g,'%20');
-            oMacros.pnp_service_description = this.obj.conf.service_description.replace(/\s/g,'%20');
+            oMacros.pnp_service_description = this.obj.conf.service_description.replace(/\s/g,'%20').replace(/#/g, '%23');
         } else
             oSectionMacros.service = '<!--\\sBEGIN\\sservice\\s-->.+?<!--\\sEND\\sservice\\s-->';
     
