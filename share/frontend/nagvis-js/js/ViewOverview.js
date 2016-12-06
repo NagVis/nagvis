@@ -75,6 +75,19 @@ var ViewOverview = View.extend({
         this.base();
     },
 
+    // Add the objects dom_obj to the maps dom_obj
+    drawObject: function(obj) {
+        var container = document.getElementById('overviewMaps');
+        container.appendChild(obj.dom_obj);
+    },
+
+    // Removes the given objects dom_obj from the maps dom_obj 
+    eraseObject: function(obj) {
+        var container = document.getElementById('overviewMaps');
+        if (obj.dom_obj.parentNode == container)
+            container.removeChild(obj.dom_obj);
+    },
+
     // Adds a single map to the overview map list
     addMap: function(objects, data) {
         var map_name           = data[0],

@@ -6,6 +6,7 @@ Core:
 Frontend:
   * FIX: Fixed lines using ack_bgcolor (when configured)
   * FIX: Fixed wrong visualization (hover text, line color) of acknowledged services
+  * FIX: Overfiew page: Fixed disappearing maps on state changes
 
 1.9b10
 Core:
