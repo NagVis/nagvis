@@ -59,7 +59,10 @@ var ElementLabel = Element.extend({
         this.dom_obj = renderNagVisTextbox(
             this.obj.conf.object_id + '-label',
             this.obj.conf.label_background, this.obj.conf.label_border,
-            0, 0, // coords are set by place()
+            // the x/y coords are only temporary coordinates. The right ones are later
+            // set by the place() method
+            //this.obj.conf.x, this.obj.conf.y,
+            0, 0,
             this.obj.conf.z,
             this.obj.conf.label_width, '', this.getText(),
             this.obj.conf.label_style

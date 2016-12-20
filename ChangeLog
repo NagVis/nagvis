@@ -4,6 +4,7 @@ Core:
          objects having the "exclude_members" attribute configured
 
 Frontend:
+  * FIX: Fixed wrong positioning of icon labels (regression since ~1.9b9)
   * FIX: Fixed lines using ack_bgcolor (when configured)
   * FIX: Fixed wrong visualization (hover text, line color) of acknowledged services
   * FIX: Overfiew page: Fixed disappearing maps on state changes

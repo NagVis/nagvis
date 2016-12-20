@@ -64,6 +64,38 @@ das ganze Zeug auch wartbarer.
   - Relative Koordinaten via Ctrl setzen und via Shift lösen
   - Backend Schnittstelle
 
+*** Frontend object rendering stack ***
+ViewMap->addObject()
+ViewMap->renderObject()
+    Object->update()
+        StatefulObject->update()
+           new ElementIcon()
+           NagVisObject->update()
+               new ElementContext()
+               new ElementHover()
+               new ElementLabel()
+               elements[i].update()
+    NagVisObject->render()
+        NagVisObject->erase()
+            elements[i]->erase()
+            ViewMap->eraseObject()
+
+        elements[i]->render()
+            ElementIcon->render()
+                ElementIcon->renderIcon()
+                    (image onload)
+                        NagVisObject->place()
+                            elements[i]->place()
+                            childs[i]->place()
+                ElementIcon->place()
+
+        NagVisObject->draw()
+            elements[i]->draw()
+
+        ViewMap->drawObject()
+
+        lines:
+            elements[i]->place()
 
 ===============================================================================
 # ERLEDIGT

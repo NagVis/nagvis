@@ -24,7 +24,6 @@
 var ElementIcon = Element.extend({
     render: function() {
         this.renderIcon();
-        this.place();
     },
 
     // Moves the icon to it's location as described by this js object
@@ -87,14 +86,16 @@ var ElementIcon = Element.extend({
 
         addZoomHandler(oIcon);
 
-        oIcon.src = oGeneralProperties.path_iconsets + this.obj.conf.icon;
-        oIcon.alt = this.obj.conf.type + '-' + alt;
-
         var oIconDiv = document.createElement('div');
         this.dom_obj = oIconDiv;
+        this.place();
+
         oIconDiv.setAttribute('id', this.obj.conf.object_id+'-icondiv');
         oIconDiv.className = 'icondiv';
         oIconDiv.style.zIndex = this.obj.conf.z;
+
+        oIcon.src = oGeneralProperties.path_iconsets + this.obj.conf.icon;
+        oIcon.alt = this.obj.conf.type + '-' + alt;
 
         // Parse link only when set
         if (this.obj.conf.url && this.obj.conf.url !== '' && this.obj.conf.url !== '#') {
