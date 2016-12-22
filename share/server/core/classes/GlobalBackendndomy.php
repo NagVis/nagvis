@@ -110,10 +110,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 
             // Do some checks to make sure that Nagios is running and the Data at the DB is ok
             $QUERYHANDLE = $this->mysqlQuery('SELECT is_currently_running, UNIX_TIMESTAMP(status_update_time) AS status_update_time FROM '.$this->dbPrefix.'programstatus WHERE instance_id='.$this->dbInstanceId);
-            $nagiosstate = mysql_fetch_array($QUERYHANDLE);
+            $nagiosstate = mysqli_fetch_array($QUERYHANDLE);
 
             // Free memory
-            mysql_free_result($QUERYHANDLE);
+            mysqli_free_result($QUERYHANDLE);
 
             // Check that Nagios reports itself as running
             if ($nagiosstate['is_currently_running'] != 1) {
@@ -160,7 +160,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkTablesExists() {
-        if(mysql_num_rows($this->mysqlQuery('SHOW TABLES LIKE \''.$this->dbPrefix.'programstatus\'')) == 0) {
+        if(mysqli_num_rows($this->mysqlQuery('SHOW TABLES LIKE \''.$this->dbPrefix.'programstatus\'')) == 0) {
             throw new BackendConnectionProblem(l('noTablesExists', Array('BACKENDID' => $this->backendId, 'PREFIX' => $this->dbPrefix)));
             return FALSE;
         } else {
@@ -180,20 +180,20 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         // don't want to see mysql errors from connecting - only want our error messages
         $oldLevel = error_reporting(0);
 
-        $this->CONN = mysql_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
+        $this->CONN = mysqli_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
 
         if(!$this->CONN){
-            throw new BackendConnectionProblem(l('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysql_error())));
+            throw new BackendConnectionProblem(l('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysqli_error($this->CONN))));
             return FALSE;
         }
 
-        $returnCode = mysql_select_db($this->dbName, $this->CONN);
+        $returnCode = mysqli_select_db($this->CONN, $this->dbName);
 
         // set the old level of reporting back
         error_reporting($oldLevel);
 
         if(!$returnCode){
-            throw new BackendConnectionProblem(l('errorSelectingDb', Array('BACKENDID' => $this->backendId, 'MYSQLERR' => mysql_error($this->CONN))));
+            throw new BackendConnectionProblem(l('errorSelectingDb', Array('BACKENDID' => $this->backendId, 'MYSQLERR' => mysqli_error($this->CONN))));
             return FALSE;
         } else {
             return TRUE;
@@ -210,7 +210,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      */
     private function checkMysqlSupport() {
         // Check availability of PHP MySQL
-        if (!extension_loaded('mysql')) {
+        if (!extension_loaded('mysqli')) {
             throw new BackendConnectionProblem(l('mysqlNotSupported', Array('BACKENDID' => $this->backendId)));
             return FALSE;
         } else {
@@ -231,10 +231,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 
         $QUERYHANDLE = $this->mysqlQuery('SELECT instance_id FROM '.$this->dbPrefix.'instances WHERE instance_name=\''.$this->dbInstanceName.'\'');
 
-        if(mysql_num_rows($QUERYHANDLE) == 1) {
-            $ret = mysql_fetch_array($QUERYHANDLE);
+        if(mysqli_num_rows($QUERYHANDLE) == 1) {
+            $ret = mysqli_fetch_array($QUERYHANDLE);
             $intInstanceId = $ret['instance_id'];
-        } elseif(mysql_num_rows($QUERYHANDLE) == 0) {
+        } elseif(mysqli_num_rows($QUERYHANDLE) == 0) {
             // ERROR: Instance name not valid
             throw new BackendConnectionProblem(l('backendInstanceNameNotValid', Array('BACKENDID' => $this->backendId, 'NAME' => $this->dbInstanceName)));
         } else {
@@ -243,7 +243,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         }
 
         // Free memory
-        mysql_free_result($QUERYHANDLE);
+        mysqli_free_result($QUERYHANDLE);
 
         return $intInstanceId;
     }
@@ -260,7 +260,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         //$fh = fopen('/tmp/ndomy', 'a');
         //fwrite($fh, $query."\n\n");
         //fclose($fh);
-        $QUERYHANDLE = mysql_query($query, $this->CONN) or die(mysql_error());
+        $QUERYHANDLE = mysqli_query($this->CONN, $query) or die(mysqli_error($this->CONN));
         return $QUERYHANDLE;
     }
 
@@ -330,12 +330,12 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	/* All objects must have the is_active=1 flag enabled. */
 	$QUERYHANDLE = $this->mysqlQuery('SELECT name1,name2 FROM '.$this->dbPrefix.'objects
             WHERE objecttype_id='.$objectType.' AND '.$filter.' is_active=1 AND instance_id='.$this->dbInstanceId.' ORDER BY name1');
-        while($data = mysql_fetch_array($QUERYHANDLE)) {
+        while($data = mysqli_fetch_array($QUERYHANDLE)) {
             $ret[] = Array('name1' => $data['name1'],'name2' => $data['name2']);
         }
 
         // Free memory
-        mysql_free_result($QUERYHANDLE);
+        mysqli_free_result($QUERYHANDLE);
 
         return $ret;
     }
@@ -365,7 +365,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkForIsActiveObjects() {
-        if(mysql_num_rows($this->mysqlQuery('SELECT object_id FROM '.$this->dbPrefix.'objects WHERE is_active=1')) > 0) {
+        if(mysqli_num_rows($this->mysqlQuery('SELECT object_id FROM '.$this->dbPrefix.'objects WHERE is_active=1')) > 0) {
             return TRUE;
         } else {
             return FALSE;
@@ -381,7 +381,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkConfigTypeObjects() {
-        if(mysql_num_rows($this->mysqlQuery('SELECT host_id FROM '.$this->dbPrefix.'hosts WHERE config_type=1 AND instance_id='.$this->dbInstanceId.' LIMIT 1')) > 0) {
+        if(mysqli_num_rows($this->mysqlQuery('SELECT host_id FROM '.$this->dbPrefix.'hosts WHERE config_type=1 AND instance_id='.$this->dbInstanceId.' LIMIT 1')) > 0) {
             return TRUE;
         } else {
             return FALSE;
@@ -494,10 +494,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	    LIMIT 1
             ');
 
-            $data = mysql_fetch_assoc($QUERYHANDLE);
+            $data = mysqli_fetch_assoc($QUERYHANDLE);
 
             // Free memory
-            mysql_free_result($QUERYHANDLE);
+            mysqli_free_result($QUERYHANDLE);
 
             // It's unnessecary to check if the value is 0, everything not equal to 1 is FALSE
             if(isset($data['problem_has_been_acknowledged']) && $data['problem_has_been_acknowledged'] == '1') {
@@ -553,7 +553,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
             AND (o.is_active=1)
 	    ');
 
-        while($data = mysql_fetch_assoc($QUERYHANDLE)) {
+        while($data = mysqli_fetch_assoc($QUERYHANDLE)) {
 
             // If there is a downtime for this object, save the data
             $in_downtime = 0;
@@ -640,7 +640,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         }
 
         // Free memory
-        mysql_free_result($QUERYHANDLE);
+        mysqli_free_result($QUERYHANDLE);
 
         return $arrReturn;
     }
@@ -684,7 +684,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=s.host_object_id)
                 ');
 
-        while($data = mysql_fetch_assoc($QUERYHANDLE)) {
+        while($data = mysqli_fetch_assoc($QUERYHANDLE)) {
             $arrTmpReturn = Array();
 
             if(isset($objects[$data['name1'].'~~'.$data['name2']])) {
@@ -797,7 +797,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         }
 
         // Free memory
-        mysql_free_result($QUERYHANDLE);
+        mysqli_free_result($QUERYHANDLE);
 
         return $arrReturn;
     }
@@ -834,12 +834,12 @@ class GlobalBackendndomy implements GlobalBackendInterface {
 	    AND o.is_active=1
 	    AND o.instance_id='.$this->dbInstanceId
 	   );
-        while($data = mysql_fetch_array($QUERYHANDLE)) {
+        while($data = mysqli_fetch_array($QUERYHANDLE)) {
             $arrReturn[] = $data['name1'];
         }
 
         // Free memory
-        mysql_free_result($QUERYHANDLE);
+        mysqli_free_result($QUERYHANDLE);
 
         return $arrReturn;
     }
@@ -885,10 +885,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id)
                 AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=s.host_object_id)
                 AND (hs.host_object_id=h.host_object_id)
-                GROUP BY h.host_object_id');
+                GROUP BY h.host_object_id, h.alias');
 
         $arrReturn = Array();
-        while($data = mysql_fetch_assoc($QUERYHANDLE)) {
+        while($data = mysqli_fetch_assoc($QUERYHANDLE)) {
             $arrReturn[$data['name1']] = Array(
                 //'details' => Array('alias' => $data['alias']),
                 'counts' => Array(
@@ -923,7 +923,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         }
 
         // Free memory
-        mysql_free_result($QUERYHANDLE);
+        mysqli_free_result($QUERYHANDLE);
 
         return $arrReturn;
     }
@@ -964,10 +964,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 AND (o2.objecttype_id=1 AND o2.object_id=hgm.host_object_id)
                 AND (o.is_active=1)
                 AND (o2.is_active=1)
-            GROUP BY o.object_id');
+            GROUP BY o.object_id, hg.alias');
 
         $arrReturn = Array();
-        while($data = mysql_fetch_assoc($QUERYHANDLE)) {
+        while($data = mysqli_fetch_assoc($QUERYHANDLE)) {
             $arrReturn[$data['name1']] = Array(
                 'details' => Array(ALIAS => $data['alias']),
                 'counts' => Array(
@@ -1039,7 +1039,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 AND (o2.is_active=1)
             GROUP BY o.object_id');
 
-        while($data = mysql_fetch_assoc($QUERYHANDLE)) {
+        while($data = mysqli_fetch_assoc($QUERYHANDLE)) {
             $arrReturn[$data['name1']]['counts'][PENDING]['normal']    = intval($data['pending']);
             $arrReturn[$data['name1']]['counts'][OK]['normal']         = intval($data['ok']);
             $arrReturn[$data['name1']]['counts'][OK]['stale']          = 0;
@@ -1059,7 +1059,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         }
 
         // Free memory
-        mysql_free_result($QUERYHANDLE);
+        mysqli_free_result($QUERYHANDLE);
 
         return $arrReturn;
     }
@@ -1103,10 +1103,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 AND (o2.objecttype_id=2 AND s.service_object_id=o2.object_id)
                 AND (o.is_active=1)
                 AND (o2.is_active=1)
-            GROUP BY o.object_id');
+            GROUP BY o.object_id, sg.alias');
 
         $arrReturn = Array();
-        while($data = mysql_fetch_assoc($QUERYHANDLE)) {
+        while($data = mysqli_fetch_assoc($QUERYHANDLE)) {
             $arrReturn[$data['name1']] = Array(
                 'details' => Array(ALIAS => $data['alias']),
                 'counts' => Array(
@@ -1141,7 +1141,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         }
 
         // Free memory
-        mysql_free_result($QUERYHANDLE);
+        mysqli_free_result($QUERYHANDLE);
 
         return $arrReturn;
     }
@@ -1168,12 +1168,12 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         AND (o1.is_active=1)
         ');
 
-        while($data = mysql_fetch_array($QUERYHANDLE)) {
+        while($data = mysqli_fetch_array($QUERYHANDLE)) {
             $arrReturn[] = $data['name1'];
         }
 
         // Free memory
-        mysql_free_result($QUERYHANDLE);
+        mysqli_free_result($QUERYHANDLE);
 
         return $arrReturn;
     }
@@ -1204,12 +1204,12 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         AND (o1.is_active=1)
         AND (o2.is_active=1)
         ');
-        while($data = mysql_fetch_array($QUERYHANDLE)) {
+        while($data = mysqli_fetch_array($QUERYHANDLE)) {
             $aParentNames[] = $data['name1'];
         }
 
         // Free memory
-        mysql_free_result($QUERYHANDLE);
+        mysqli_free_result($QUERYHANDLE);
 
         return $aParentNames;
     }
@@ -1241,12 +1241,12 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         AND (o1.is_active=1)
         AND (o2.is_active=1)
         ');
-        while($data = mysql_fetch_array($QUERYHANDLE)) {
+        while($data = mysqli_fetch_array($QUERYHANDLE)) {
             $arrChildNames[] = $data['name1'];
         }
 
         // Free memory
-        mysql_free_result($QUERYHANDLE);
+        mysqli_free_result($QUERYHANDLE);
 
         return $arrChildNames;
     }
@@ -1279,13 +1279,13 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 AND (o2.is_active=1)
                 ');
 
-        while($data = mysql_fetch_array($QUERYHANDLE)) {
+        while($data = mysqli_fetch_array($QUERYHANDLE)) {
             // Assign actual dataset to return array
             $arrReturn[] = $data['name1'];
         }
 
         // Free memory
-        mysql_free_result($QUERYHANDLE);
+        mysqli_free_result($QUERYHANDLE);
 
         return $arrReturn;
     }
@@ -1318,13 +1318,13 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 AND (o2.is_active=1)
                 ');
 
-        while($data = mysql_fetch_array($QUERYHANDLE)) {
+        while($data = mysqli_fetch_array($QUERYHANDLE)) {
             // Assign actual dataset to return array
             $arrReturn[] = Array('host_name' => $data['name1'], 'service_description' => $data['name2']);
         }
 
         // Free memory
-        mysql_free_result($QUERYHANDLE);
+        mysqli_free_result($QUERYHANDLE);
 
         return $arrReturn;
     }
@@ -1352,10 +1352,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 AND (o.is_active=1)
                 LIMIT 1');
 
-        $data = mysql_fetch_array($QUERYHANDLE);
+        $data = mysqli_fetch_array($QUERYHANDLE);
 
         // Free memory
-        mysql_free_result($QUERYHANDLE);
+        mysqli_free_result($QUERYHANDLE);
 
         $arrReturn['alias'] = $data['alias'];
 
@@ -1385,10 +1385,10 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 AND (o.is_active=1)
                 LIMIT 1');
 
-        $data = mysql_fetch_array($QUERYHANDLE);
+        $data = mysqli_fetch_array($QUERYHANDLE);
 
         // Free memory
-        mysql_free_result($QUERYHANDLE);
+        mysqli_free_result($QUERYHANDLE);
 
         $arrReturn['alias'] = $data['alias'];
 
@@ -1421,8 +1421,8 @@ class GlobalBackendndomy implements GlobalBackendInterface {
     public function getProgramStart() {
         $QUERYHANDLE = $this->mysqlQuery('SELECT UNIX_TIMESTAMP(program_start_time) AS program_start '
                                         .'FROM '.$this->dbPrefix.'programstatus WHERE instance_id='.$this->dbInstanceId);
-        $data = mysql_fetch_array($QUERYHANDLE);
-        mysql_free_result($QUERYHANDLE);
+        $data = mysqli_fetch_array($QUERYHANDLE);
+        mysqli_free_result($QUERYHANDLE);
         if(isset($data[0]))
             return $data[0];
         else
