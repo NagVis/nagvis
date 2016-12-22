@@ -2,6 +2,8 @@
 Core:
   * FIX: Livestatus backend was calculating wrong services for host group
          objects having the "exclude_members" attribute configured
+  * Check_MK BI backend: Added "timeout" parameter to adapt the default
+    5 second timeout
 
 Frontend:
   * FIX: Fixed wrong positioning of icon labels (regression since ~1.9b9)

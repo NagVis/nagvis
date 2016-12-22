@@ -75,6 +75,18 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             'default'  => '',
             'match'    => MATCH_STRING,
         ),
+        'auth_secret' => Array(
+            'must'     => 0,
+            'editable' => 1,
+            'default'  => '',
+            'match'    => MATCH_STRING,
+        ),
+        'timeout' => Array(
+          'must'      => 1,
+          'editable'  => 1,
+          'default'   => 5,
+          'match'     => MATCH_INTEGER,
+        ),
     );
 
     /**
@@ -88,7 +100,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         $httpContext = array( 
             'method'     => 'GET',
             'user_agent' => 'NagVis BI Backend',
-            'timeout'    => 5,
+            'timeout'    => cfg('backend_'.$backendId, 'timeout'),
         );
 
         // Always set the HTTP basic auth header
