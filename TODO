@@ -97,6 +97,25 @@ ViewMap->renderObject()
         lines:
             elements[i]->place()
 
+*** State updates on regular maps ***
+
+View->update()
+    View->handleUpdate()
+        View->updateObjects()
+            NagVisStatefulObject->updateAttrs()
+                NagVisObject->updateAttrs()
+                    elements[i]->updateAttrs()
+                    // !only_state
+                    ->clearElements()
+                    ->update()
+                    ->render()
+                    ViewMap->draw()
+                NagVisStatefulObject->updateMemberAttrs()
+                    members[i]->updateAttrs()
+
+                // -> state changed
+                NagVisObject->render()
+
 ===============================================================================
 # ERLEDIGT
 ===============================================================================
