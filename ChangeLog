@@ -4,8 +4,9 @@ Core:
          objects having the "exclude_members" attribute configured
   * Check_MK BI backend: Added "timeout" parameter to adapt the default
     5 second timeout
-  * NDO/IDO MySQL backend: Now using mysqli PHP functions
-  * NDO/IDO MySQL backend: Fixed compatibility with ONLY_FULL_GROUP_BY MySQL mode
+  * NDO/IDO MySQL backend: Now using mysqli PHP functions (Thanks to SteScho)
+  * NDO/IDO MySQL backend: Fixed compatibility with ONLY_FULL_GROUP_BY MySQL
+    mode (Thanks to SteScho)
 
 Frontend:
   * FIX: Fixed wrong positioning of icon labels (regression since ~1.9b9)
