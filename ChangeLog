@@ -13,6 +13,7 @@ Frontend:
   * FIX: Fixed lines using ack_bgcolor (when configured)
   * FIX: Fixed wrong visualization (hover text, line color) of acknowledged services
   * FIX: Overview page: Fixed disappearing maps on state changes
+  * FIX: Sidebar menu: Deleted maps were still visible in sidebar
 
 1.9b10
 Core:

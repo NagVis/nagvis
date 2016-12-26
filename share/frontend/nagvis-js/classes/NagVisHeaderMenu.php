@@ -148,7 +148,7 @@ class NagVisHeaderMenu {
             $cfgFiles[$name] = $path.$name.".cfg";
 
         $CACHE = new GlobalFileCache($cfgFiles,
-            cfg('paths','var').'maplist-full-global.cfg-'.CONST_VERSION.'-cache');
+            cfg('paths','var').'maplist-full-global.cfg-'.count($cfgFiles).'-'.CONST_VERSION.'-cache');
 
         if ($CACHE->isCached() !== -1
            && $_MAINCFG->isCached() !== -1
