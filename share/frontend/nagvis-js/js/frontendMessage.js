@@ -35,6 +35,10 @@ function frontendMessageRemove(key) {
 }
 
 function frontendMessage(oMessage, key) {
+    if (oMessage === null) {
+        throw "Could not display empty frontendMessage()";
+    }
+
     var sTitle = '';
     if (typeof oMessage.title !== 'undefined')
         sTitle = oMessage.title;

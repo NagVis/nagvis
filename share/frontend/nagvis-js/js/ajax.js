@@ -27,6 +27,18 @@ function call_ajax(url, args)
         add_ajax_id      : true,
         response_handler : null,
         error_handler    : function(status_code, response, handler_data) {
+            if (response === null) {
+                response = {
+                    'type'    : 'error',
+                    'title'   : 'Network error',
+                    'message' : "Failed to execute ajax call. Maybe a network issue or webserver is not available."
+                          + "<div class=details>\n"
+                          + "HTTP-Status-Code: " + status_code + "<br />\n"
+                          + "Time: " + iNow + "<br />\n"
+                          + "URL: <code>" + url.replace(/</g, '&lt;') + "</code><br />\n"
+                          + "</div>"
+                };
+            }
             frontendMessage(response, 'serverError');
         },
         handler_data     : null,
