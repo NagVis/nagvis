@@ -885,7 +885,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
                 AND (s.config_type='.$this->objConfigType.' AND s.instance_id='.$this->dbInstanceId.' AND s.service_object_id=o.object_id)
                 AND (h.config_type='.$this->objConfigType.' AND h.instance_id='.$this->dbInstanceId.' AND h.host_object_id=s.host_object_id)
                 AND (hs.host_object_id=h.host_object_id)
-                GROUP BY h.host_object_id, h.alias');
+                GROUP BY h.host_object_id, h.alias, o.name1');
 
         $arrReturn = Array();
         while($data = mysqli_fetch_assoc($QUERYHANDLE)) {
