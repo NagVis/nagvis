@@ -1,3 +1,9 @@
+1.9b12
+Core:
+  * FIX: Fixed NDO/IDO MySQL backend compatibility with ONLY_FULL_GROUP_BY MySQL
+    mode (Thanks to SteScho)
+
+
 1.9b11
 Core:
   * FIX: Livestatus backend was calculating wrong services for host group
