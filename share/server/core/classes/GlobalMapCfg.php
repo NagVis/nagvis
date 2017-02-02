@@ -420,7 +420,7 @@ class GlobalMapCfg {
             $this->typeDefaults = $this->DCACHE->getCache();
 
             // Now process the information from the sources
-            $this->processSources();
+            $this->processSources(true);
 
             // Cache objects are not needed anymore
             $this->CACHE = null;
@@ -489,7 +489,7 @@ class GlobalMapCfg {
 
         if (!$onlyGlobal || $enforceSources) {
             // Now process the data from the sources
-            $this->processSources();
+            $this->processSources(!$enforceSources);
         }
 
         // Cache objects are not needed anymore
@@ -775,7 +775,7 @@ class GlobalMapCfg {
      *  3. tell the source processing that the data used in this source has changed and the
      *     source needs processed again
      */
-    private function processSources() {
+    private function processSources($useCache) {
         global $_MAINCFG;
         $sources = $this->getValue(0, 'sources');
         if(!$sources)
@@ -795,7 +795,7 @@ class GlobalMapCfg {
         $cache_sources = $CACHE->isCached();
         $cache_map     = $this->CACHE->isCached();
         $cache_maincfg = $_MAINCFG->isCached();
-        if($cache_sources != -1 && $cache_map != -1 && $cache_maincfg != -1
+        if($useCache && $cache_sources != -1 && $cache_map != -1 && $cache_maincfg != -1
            && $cache_sources >= $cache_maincfg && $cache_sources >= $cache_map
            && !$this->sourcesChanged($cache_sources)) {
             // 3a. Use the cache
@@ -823,7 +823,7 @@ class GlobalMapCfg {
         // Call process filter implicit if not already done
         process_filter($this, $this->name, $this->mapConfig);
 
-        if ($cacheable)
+        if ($cacheable && $useCache)
             $CACHE->writeCache($this->mapConfig, 1);
 
         // FIXME: Invalidate/remove cache files on changed configurations

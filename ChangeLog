@@ -1,4 +1,7 @@
 1.9b12
+Frontend:
+  * FIX: Fixed possible empty maps when manually disabling the header menu
+
 Core:
   * FIX: Fixed NDO/IDO MySQL backend compatibility with ONLY_FULL_GROUP_BY MySQL
     mode (Thanks to SteScho)
