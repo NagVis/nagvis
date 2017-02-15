@@ -183,7 +183,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         $this->CONN = mysqli_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
 
         if(!$this->CONN){
-            throw new BackendConnectionProblem(l('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysqli_error($this->CONN))));
+            throw new BackendConnectionProblem(l('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysqli_connect_error($this->CONN))));
             return FALSE;
         }
 
