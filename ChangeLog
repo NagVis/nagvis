@@ -5,6 +5,8 @@ Frontend:
 Core:
   * FIX: Fixed NDO/IDO MySQL backend compatibility with ONLY_FULL_GROUP_BY MySQL
     mode (Thanks to SteScho)
+  * FIX: NDO/IDO MySQL backend: Fixed problem connecting to database
+  * FIX: NDO/IDO MySQL backend: Fixed problem reporting database connection issues
 
 
 1.9b11
