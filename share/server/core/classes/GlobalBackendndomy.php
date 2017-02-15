@@ -180,7 +180,7 @@ class GlobalBackendndomy implements GlobalBackendInterface {
         // don't want to see mysql errors from connecting - only want our error messages
         $oldLevel = error_reporting(0);
 
-        $this->CONN = mysqli_connect($this->dbHost.':'.$this->dbPort, $this->dbUser, $this->dbPass);
+        $this->CONN = mysqli_connect($this->dbHost, $this->dbUser, $this->dbPass, '', $this->dbPort);
 
         if(!$this->CONN){
             throw new BackendConnectionProblem(l('errorConnectingMySQL', Array('BACKENDID' => $this->backendId,'MYSQLERR' => mysqli_connect_error($this->CONN))));
