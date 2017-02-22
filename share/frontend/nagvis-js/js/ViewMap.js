@@ -284,18 +284,20 @@ var ViewMap = View.extend({
 
     renderBackgroundImage: function() {
         var sImage = oPageProperties.background_image;
-        // Only work with the background image if some is configured
+
+        var oImage = document.getElementById('backgroundImage');
         if (typeof sImage !== 'undefined' && sImage !== 'none' && sImage !== '') {
             // Use existing image or create new
-            var oImage = document.getElementById('backgroundImage');
             if (!oImage) {
                 var oImage = document.createElement('img');
-                oImage.id = 'backgroundImage';
+                oImage.setAttribute('id', 'backgroundImage');
                 document.getElementById('map').appendChild(oImage);
             }
 
             addZoomHandler(oImage, true);
             oImage.src = sImage;
+        } else if (oImage) {
+            oImage.parentNode.removeChild(oImage);
         }
     },
 
@@ -323,6 +325,7 @@ var ViewMap = View.extend({
                   + escapeUrlValues(this.id)+getViewParams(), {
             response_handler : function(props) {
                 oPageProperties = props;
+                g_view.renderMapBasics();
             }
         });
     },

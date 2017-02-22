@@ -171,8 +171,12 @@ class ViewMapAddModify {
                 $result = array(2, null, l('The [TYPE] has been modified. Reloading in 2 seconds.',
                                                                Array('TYPE' => $t)));
 
-                js('popupWindowClose();'
-                  .'refreshMapObject(null, "'.$this->object_id.'", false);');
+                if ($this->object_type == 'global')
+                    $refresh_code = 'g_view.updateProperties();';
+                else
+                    $refresh_code = 'refreshMapObject(null, "'.$this->object_id.'", false);';
+
+                js('popupWindowClose();'.$refresh_code);
             }
         } else {
             // Create the new object
