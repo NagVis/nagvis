@@ -2,6 +2,7 @@
 Frontend:
   * FIX: Fixed Javascript error when closing the object edit dialog after
          using the color picker
+  * FIX: Now really fixed refresh of changed map properties (like background image)
 
 
 1.9b12

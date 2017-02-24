@@ -172,7 +172,7 @@ class ViewMapAddModify {
                                                                Array('TYPE' => $t)));
 
                 if ($this->object_type == 'global')
-                    $refresh_code = 'g_view.updateProperties();';
+                    $refresh_code = 'location.reload();';
                 else
                     $refresh_code = 'refreshMapObject(null, "'.$this->object_id.'", false);';
 
