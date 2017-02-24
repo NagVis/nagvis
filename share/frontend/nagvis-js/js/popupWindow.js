@@ -85,7 +85,7 @@ function popupWindowClose() {
     // a user closes the window. All eventual open color pickers are opened
     // within popup windows. So it is safe to close all color pickers when
     // closing a window
-    if (jscolor.picker)
+    if (jscolor.picker && jscolor.picker.owner)
         jscolor.picker.owner.hidePicker();
 }
 

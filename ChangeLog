@@ -1,3 +1,9 @@
+1.9b13
+Frontend:
+  * FIX: Fixed Javascript error when closing the object edit dialog after
+         using the color picker
+
+
 1.9b12
 Frontend:
   * FIX: Fixed possible empty maps when manually disabling the header menu
