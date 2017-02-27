@@ -32,13 +32,13 @@ $table_colors['ERROR']   = "#3498db";
 $table_colors['HEADER']  = "#34495e";
 $table_colors['EMPTY']   = "#eff0f1";
 
-// Define Gadget UNIQUE name
-$ident = $_GET['object_id'] . '-gadget';
-
-if (!preg_match('/^(?:[a-z0-9]+)$/i', $ident)) {
+if (!preg_match('/^(?:[a-z0-9]+)$/i', $_GET['object_id'])) {
     echo "ERROR: Invalid object_id given.";
     exit(1);
 }
+
+// Define Gadget UNIQUE name
+$ident = $_GET['object_id'] . '-gadget';
 
 // Set default parameters values
 $show_header               = 1; // Show header or not (STATUS, DOWNTIME,...)
