@@ -35,6 +35,11 @@ $table_colors['EMPTY']   = "#eff0f1";
 // Define Gadget UNIQUE name
 $ident = $_GET['object_id'] . '-gadget';
 
+if (!preg_match('/^(?:[a-z0-9]+)$/i', $ident)) {
+    echo "ERROR: Invalid object_id given.";
+    exit(1);
+}
+
 // Set default parameters values
 $show_header               = 1; // Show header or not (STATUS, DOWNTIME,...)
 $show_subheader            = 1; // Show sub header or not (OK, WARNING, CRITICAL,...)
