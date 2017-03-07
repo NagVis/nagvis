@@ -3,7 +3,7 @@ Frontend:
   * FIX: Fixed Javascript error when closing the object edit dialog after
          using the color picker
   * FIX: Now really fixed refresh of changed map properties (like background image)
-  * FIX: Fixed possible XSS in std_table.php gadget
+  * FIX: Fixed possible XSS in std_table.php gadget (#91, CVE-2017-6393)
          (If you want to solve this issue for your installation without updating NagVis,
 	  you can remove the file std_table.php from your installation. It is
 	  only needed if you use the std_table.php gadget.)
