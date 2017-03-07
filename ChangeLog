@@ -1,3 +1,5 @@
+1.9b14
+
 1.9b13
 Frontend:
   * FIX: Fixed Javascript error when closing the object edit dialog after
@@ -7,7 +9,6 @@ Frontend:
          (If you want to solve this issue for your installation without updating NagVis,
 	  you can remove the file std_table.php from your installation. It is
 	  only needed if you use the std_table.php gadget.)
-
 
 1.9b12
 Frontend:
@@ -19,7 +20,6 @@ Core:
     mode (Thanks to SteScho)
   * FIX: NDO/IDO MySQL backend: Fixed problem connecting to database
   * FIX: NDO/IDO MySQL backend: Fixed problem reporting database connection issues
-
 
 1.9b11
 Core:
