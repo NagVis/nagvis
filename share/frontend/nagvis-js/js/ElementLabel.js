@@ -52,6 +52,18 @@ var ElementLabel = Element.extend({
             this.erase();
             this.render();
             this.draw();
+
+            // The x/y coords set above are only temporary coordinates. The right ones are
+            // later set by the place() executed in:
+            // a) onload of icon images
+            // b) at end of lines render() methods
+            //
+            // Normally the following call of this.place() should not be neccessary but there seem
+            // to be cases where the onload handler function of icons does not fire and
+            // icons won't be moved to their expected position. To workaround this, we call
+            // this.place() here which won't get the exact coordinates (in case of relative
+            // coordinates to the icon like bottom/center).
+            this.place();
         }
     },
 
@@ -64,17 +76,6 @@ var ElementLabel = Element.extend({
             this.obj.conf.label_width, '', this.getText(),
             this.obj.conf.label_style
         );
-        // The x/y coords set above are only temporary coordinates. The right ones are
-        // later set by the place() executed in:
-        // a) onload of icon images
-        // b) at end of lines render() methods
-        //
-        // Normally the following call of this.place() should not be neccessary but there seem
-        // to be cases where the onload handler function of icons does not fire and
-        // icons won't be moved to their expected position. To workaround this, we call
-        // this.place() here which won't get the exact coordinates (in case of relative
-        // coordinates to the icon like bottom/center).
-        this.place();
     },
 
     unlock: function () {
