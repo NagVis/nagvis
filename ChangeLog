@@ -1,4 +1,5 @@
 1.9b14
+Frontend:
   * FIX: Fixed wrong positioning of icon labels during object refresh (when no
          state but plugin output or perfdata changed) (#81 #93)
   * FIX: Fixed too small stale icons of the std_medium iconset
