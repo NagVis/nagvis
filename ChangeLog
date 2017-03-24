@@ -1,3 +1,8 @@
+1.9b15
+Core:
+  * FIX: Security fix: Authenticated users could read contents of local files
+         by opening a custom URL (#29). Only https/http URLs can now be used.
+
 1.9b14
 Frontend:
   * FIX: Fixed wrong positioning of icon labels during object refresh (when no
