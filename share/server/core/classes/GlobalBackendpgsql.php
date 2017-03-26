@@ -2,8 +2,8 @@
 
 /*****************************************************************************
  *
- * GlobalBackendndomy.php - backend class for handling object and state
- *                           information stored in the NDO database.
+ * GlobalBackendpgsql.php - backend class for handling object and state
+ *                           information stored in the PostgreSQL database
  *
  * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
@@ -28,9 +28,9 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
-class GlobalBackendndomy extends GlobalBackendPDO {
+class GlobalBackendpgsql extends GlobalBackendPDO {
     public function driverName() {
-        return 'mysql';
+        return 'pgsql';
     }
 }
 ?>
