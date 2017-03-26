@@ -72,6 +72,15 @@ class CoreModUrl extends CoreModule {
             exit(1);
         }
 
+        // Only accept known URLs. The only place where NagVis defines URLs is in rotation steps.
+        // Get all configured URLs from all configured rotations and check whether or not it's
+        // an allowed URL.
+        if (!$this->isAllowedUrl()) {
+            throw new NagVisException(l('problemReadingUrl', Array(
+                'URL' => htmlentities($this->url, ENT_COMPAT, 'UTF-8'),
+                'MSG' => 'Not allowed url')));
+        }
+
         if (false == ($content = file_get_contents($this->url))) {
             $error = error_get_last();
             throw new NagVisException(l('problemReadingUrl', Array(
@@ -83,6 +92,25 @@ class CoreModUrl extends CoreModule {
         error_reporting($oldLevel);
 
         return json_encode(Array('content' => $content));
+    }
+
+    private function isAllowedUrl() {
+        global $CORE;
+        $allowed = array();
+
+        foreach($CORE->getPermittedRotationPools() AS $pool_name) {
+            $ROTATION = new CoreRotation($pool_name);
+
+            $iNum = $ROTATION->getNumSteps();
+            for($i = 0; $i < $iNum; $i++) {
+                $step = $ROTATION->getStepById($i);
+                if(isset($step['url']) && $step['url'] != '') {
+                    $allowed[$step['url']] = true;
+                }
+            }
+        }
+
+        return isset($allowed[$this->url]);
     }
 }
 ?>

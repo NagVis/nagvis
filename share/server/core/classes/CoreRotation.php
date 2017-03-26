@@ -265,6 +265,10 @@ class CoreRotation {
         return $this->arrSteps[$intId]['target'];
     }
 
+    public function getStepById($intId) {
+        return $this->arrSteps[$intId];
+    }
+
     /**
      * Gets the label of a specific step
      *
