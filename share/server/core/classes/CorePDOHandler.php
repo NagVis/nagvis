@@ -212,6 +212,11 @@ class CorePDOHandler {
 
                 '-table-exists' => "SELECT * FROM sqlite_master WHERE type='table' AND name=:name",
             ),
+
+
+            'init' => array(
+                'PRAGMA journal_mode = WAL',
+            ),
         ),
 
         'mysql' => array(
