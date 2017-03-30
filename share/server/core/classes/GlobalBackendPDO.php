@@ -627,7 +627,7 @@ class GlobalBackendPDO implements GlobalBackendInterface {
             // If there is a downtime for this object, save the data
             $in_downtime = 0;
             $dt_details = array(null, null, null, null);
-            if(!$this->DB->is_nonnull_int($data['downtime_start'])) {
+            if($this->DB->is_nonnull_int($data['downtime_start'])) {
                 $in_downtime = 1;
                 $dt_details = array($data['downtime_author'], $data['downtime_data'],
                                     $data['downtime_start'], $data['downtime_end']);
