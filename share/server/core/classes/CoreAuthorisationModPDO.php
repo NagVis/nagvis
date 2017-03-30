@@ -22,9 +22,6 @@
  *
  ******************************************************************************/
 
-/**
- * @author Lars Michelsen <lm@larsmichelsen.com>
- */
 class CoreAuthorisationModPDO extends CoreAuthorisationModule {
     public $rolesConfigurable = true;
     private $DB = null;

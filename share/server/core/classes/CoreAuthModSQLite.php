@@ -22,9 +22,6 @@
  *
  ******************************************************************************/
 
-/**
- * @author Lars Michelsen <lm@larsmichelsen.com>
- */
 class CoreAuthModSQLite extends CoreAuthModPDO {
     public function getConfig() {
         return array(

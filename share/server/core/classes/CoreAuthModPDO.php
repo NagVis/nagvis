@@ -22,9 +22,6 @@
  *
  ******************************************************************************/
 
-/**
- * @author Lars Michelsen <lm@larsmichelsen.com>
- */
 class CoreAuthModPDO extends CoreAuthModule {
     private $USERCFG;
 

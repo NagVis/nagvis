@@ -22,9 +22,6 @@
  *
  ******************************************************************************/
 
-/**
- * @author Lars Michelsen <lm@larsmichelsen.com>
- */
 class CoreAuthorisationModMySQL extends CoreAuthorisationModPDO {
     public function getConfig() {
         return array(

@@ -22,10 +22,6 @@
  *
  ******************************************************************************/
 
-/**
- * @author Lars Michelsen <lm@larsmichelsen.com>
- */
-
 function _build_dsn_sqlite($params) {
     return $params['filename'];
 }
