@@ -205,7 +205,7 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
 
 // Worldmap internal helper function to add an object to the worldmap
 function worldmap_db_update_object($obj_id, $lat, $lng, $obj,
-                                   $lat2 = 'NULL', $lng2 = 'NULL', $insert = true) {
+                                   $lat2 = null, $lng2 = null, $insert = true) {
     global $DB;
     worldmap_init_db();
 
@@ -244,8 +244,8 @@ function worldmap_update_object($MAPCFG, $map_name, &$map_config, $obj_id, $inse
 
     $lat  = $obj['x'];
     $lng  = $obj['y'];
-    $lat2 = 'NULL';
-    $lng2 = 'NULL';
+    $lat2 = null;
+    $lng2 = null;
 
     // Handle lines and so on
     if ($MAPCFG->getValue($obj_id, 'view_type') == 'line' || $obj['type'] == 'line') {
