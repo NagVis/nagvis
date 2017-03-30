@@ -25,10 +25,6 @@
  *
  *****************************************************************************/
 
-/**
- * @author	Lars Michelsen <lm@larsmichelsen.com>
- */
-
 class GlobalBackendPDO implements GlobalBackendInterface {
     private $CONN;
     private $backendId;
@@ -87,8 +83,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @param	config $MAINCFG
      * @param	String $backendId
-     * @author	Andreas Husch <downanup@nagios-wiki.de>
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($backendId) {
         $this->backendId = $backendId;
@@ -159,7 +153,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      * Checks if the needed tables are in the DB
      *
      * @return	Boolean
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkTablesExists() {
         if(!$this->DB->tableExist($this->dbPrefix.'programstatus')) {
@@ -176,7 +169,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      * Returns the instanceId of the instanceName
      *
      * @return	String $ret
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getInstanceId() {
         $intInstanceId = NULL;
@@ -203,7 +195,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      * Returns the valid config for this backend
      *
      * @return	Array
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function getValidConfig() {
         return self::$validConfig;
@@ -217,8 +208,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @param	string $type, string $name1Pattern, string $name2Pattern
      * @return	array $ret
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
-     * @author	Andreas Husch <downanup@nagios-wiki.de>
      */
     public function getObjects($type,$name1Pattern='',$name2Pattern='') {
         $ret = Array();
@@ -274,7 +263,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @param	string $type
      * @return	array $ret
-     * @author	Roman Kyrylych <rkyrylych@op5.com>
      */
     public function getObjectsEx($type) {
         $ret = Array();
@@ -288,7 +276,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      * Checks if there are some object records with is_active=1
      *
      * @return	Boolean
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkForIsActiveObjects() {
         if($this->DB->query('SELECT object_id FROM '.$this->dbPrefix.'objects WHERE is_active=1')->fetch()) {
@@ -304,7 +291,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      * Checks if there are some object records with config_type=1
      *
      * @return	Boolean
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkConfigTypeObjects() {
         if($this->DB->query('SELECT host_id FROM '.$this->dbPrefix.'hosts WHERE config_type=1 AND instance_id=:instance LIMIT 1', array('instance' => $this->dbInstanceId))->fetch()) {
@@ -324,7 +310,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      * @param   String    Table to use for filtering
      * @param   Boolean   Split the filter by options
      * @return  String    Parsed filters
-     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function parseFilter($objects, $filters, $table, $childTable, $isMemberQuery = false,
                                            $isCountQuery = false, $isHostQuery = true) {
@@ -428,7 +413,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @param	string $hostName
      * @return	bool $ack
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getHostAckByHostname($hostName) {
         $return = 0;
@@ -463,8 +447,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      * PUBLIC getHostState()
      *
      * Returns the Nagios state and additional information for the requested host
-     *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostState($objects, $options, $filters, $isMemberQuery = false) {
         $arrReturn = Array();
@@ -595,8 +577,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      * PUBLIC getServiceState()
      *
      * Returns the state and additional information of the requested service
-     *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServiceState($objects, $options, $filters, $isMemberQuery = false) {
         $arrReturn = Array();
@@ -756,7 +736,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
     * or a service != OK
     *
     * @return Array of hostnames
-    * @author Uwe Ebel <kobmaki@aol.com>
     */
 
     public function getHostNamesProblematic() {
@@ -794,7 +773,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      * @param   Array     List of objects to query
      * @param   Array     List of filters to apply
      * @return  Array     List of states and counts
-     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostMemberCounts($objects, $options, $filters) {
         if($options & 1)
@@ -1099,8 +1077,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * Gets all hosts with no parent host. This method is needed by the automap
      * to get the root host.
-     *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostNamesWithNoParent() {
         $arrReturn = Array();
@@ -1131,7 +1107,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @param		String		Name of host to get the parents of
      * @return	Array			Array with hostnames
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectParentNamesByHostName($hostName) {
         $aParentNames = Array();
@@ -1163,7 +1138,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @param		String		Name of host to get the children of
      * @return	Array			Array with hostnames
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectChildNamesByHostName($hostName) {
         $arrChildNames = Array();
@@ -1197,7 +1171,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @param		String		Name of hostgroup to get the hosts of
      * @return	Array			Array with hostnames
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostsByHostgroupName($hostgroupName) {
         $arrReturn = Array();
@@ -1233,7 +1206,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @param		String		Name of servicegroup to get the services of
      * @return	Array			Array with hostnames and service descriptions
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServicesByServicegroupName($servicegroupName) {
         $arrReturn = Array();
@@ -1269,7 +1241,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @param	String		    Name of servicegroup
      * @return	Array			Array with object information
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServicegroupInformations($servicegroupName) {
         $arrReturn = Array();
@@ -1300,7 +1271,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @param	String		    Name of group
      * @return	Array			Array with object information
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostgroupInformations($groupName) {
         $arrReturn = Array();
@@ -1329,7 +1299,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @param   String   Hostname
      * @return  Array    List of hostnames
-     * @author  Thibault Cohen <thibault.cohen@savoirfairelinux.com>
      */
     public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact=false) {
         return $this->getDirectChildNamesByHostName($hostName);
@@ -1340,8 +1309,6 @@ class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @param   String   Hostname
      * @return  Array    List of hostnames
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
-     * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact=false) {
         return $this->getDirectParentNamesByHostName($hostName);

@@ -24,10 +24,6 @@
  *
  *****************************************************************************/
 
-/**
- * @author	Lars Michelsen <lm@larsmichelsen.com>
- */
-
 class GlobalBackendpgsql extends GlobalBackendPDO {
     public function driverName() {
         return 'pgsql';

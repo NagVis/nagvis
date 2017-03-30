@@ -24,10 +24,6 @@
  *
  *****************************************************************************/
 
-/**
- * @author	Lars Michelsen <lm@larsmichelsen.com>
- */
-
 class GlobalBackendndomy extends GlobalBackendPDO {
     public function driverName() {
         return 'mysql';
