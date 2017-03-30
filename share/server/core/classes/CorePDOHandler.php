@@ -386,6 +386,38 @@ class CorePDOHandler {
         $this->DB = null;
     }
 
+    /**
+     * PUBLIC is_nonnull_int()
+     *
+     * Checks whether a value (a string or an integer) returned by a database query
+     * represents a valid integer.
+     */
+    public function is_nonnull_int($v) {
+        return isset($v) && preg_match('/^-? (?: 0 | [1-9][0-9]* ) $/x', $v);
+    }
+
+    /**
+     * PUBLIC eq_int()
+     *
+     * Checks whether a value (a string or an integer) returned by a database query
+     * is a valid integer and is equal to the specified one.
+     */
+    public function eq_int($v, $exp) {
+        return $this->is_nonnull_int($v) && intval($v) == $exp;
+    }
+
+    /**
+     * PUBLIC eq_int()
+     *
+     * Checks whether a value (a string or an integer) returned by a database query
+     * is either null or a valid integer equal to the specified one.
+     * Returns true for an empty string; the caller should take care to use this
+     * function only on database fields that are supposed to be integers.
+     */
+    public function null_or_eq_int($v, $exp) {
+        return !isset($v) || $v === '' || $this->eq_int($v, $exp);
+    }
+
     public function deletePermissions($mod, $name) {
         // Only create when not existing
         if($this->count('-perm-count', array('mod' => $mod, 'act' => 'view', 'obj' => $name)) > 0) {

@@ -191,7 +191,7 @@ class GlobalBackendPDO implements GlobalBackendInterface {
             // ERROR: Given Instance name is not unique
             throw new BackendConnectionProblem(l('backendInstanceNameNotUniq', Array('BACKENDID' => $this->backendId, 'NAME' => $this->dbInstanceName)));
         } else {
-            $intInstanceId = $ret['instance_id'];
+            $intInstanceId = intval($ret['instance_id']);
         }
 
         return $intInstanceId;
@@ -507,7 +507,7 @@ class GlobalBackendPDO implements GlobalBackendInterface {
             // If there is a downtime for this object, save the data
             $in_downtime = 0;
             $dt_details = array(null, null, null, null);
-            if(isset($data['downtime_start']) && $data['downtime_start'] != '') {
+            if($this->DB->is_nonnull_int($data['downtime_start'])) {
                 $in_downtime = 1;
                 $dt_details = array($data['downtime_author'], $data['downtime_data'],
                                     $data['downtime_start'], $data['downtime_end']);
@@ -521,17 +521,17 @@ class GlobalBackendPDO implements GlobalBackendInterface {
                 * Thanks to Andurin and fredy82
                 */
             if($options & 1)
-                if($data['state_type'] != '0')
+                if(!$this->DB->eq_int($data['state_type'], 0))
                     $data['current_state'] = $data['current_state'];
                 else
                     $data['current_state'] = $data['last_hard_state'];
 
             $acknowledged = 0;
 
-            if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
+            if($this->DB->null_or_eq_int($data['has_been_checked'], 0) || !$this->DB->is_nonnull_int($data['current_state'])) {
                 $state = UNCHECKED;
                 $output = l('hostIsPending', Array('HOST' => $data['name1']));
-            } elseif($data['current_state'] == '0') {
+            } elseif($this->DB->eq_int($data['current_state'], 0)) {
                 // Host is UP
                 $state = UP;
                 $output = $data['output'];
@@ -541,16 +541,16 @@ class GlobalBackendPDO implements GlobalBackendInterface {
                 $acknowledged = intval($data['problem_has_been_acknowledged']);
 
                 // Store state and output in array
-                switch($data['current_state']) {
-                    case '1':
+                switch(intval($data['current_state'])) {
+                    case 1:
                         $state = DOWN;
                         $output = $data['output'];
                     break;
-                    case '2':
+                    case 2:
                         $state = UNREACHABLE;
                         $output = $data['output'];
                     break;
-                    case '3':
+                    case 3:
                         $state = UNKNOWN;
                         $output = $data['output'];
                     break;
@@ -647,7 +647,7 @@ class GlobalBackendPDO implements GlobalBackendInterface {
             // If there is a downtime for this object, save the data
             $in_downtime = 0;
             $dt_details = array(null, null, null, null);
-            if(isset($data['downtime_start']) && $data['downtime_start'] != '') {
+            if(!$this->DB->is_nonnull_int($data['downtime_start'])) {
                 $in_downtime = 1;
                 $dt_details = array($data['downtime_author'], $data['downtime_data'],
                                     $data['downtime_start'], $data['downtime_end']);
@@ -661,16 +661,16 @@ class GlobalBackendPDO implements GlobalBackendInterface {
                 * Thanks to Andurin and fredy82
                 */
             if($options & 1)
-                if($data['state_type'] != '0')
+                if(!$this->DB->eq_int($data['state_type'], 0))
                     $data['current_state'] = $data['current_state'];
                 else
                     $data['current_state'] = $data['last_hard_state'];
 
             $acknowledged = 0;
-            if($data['has_been_checked'] == '0' || $data['current_state'] == '') {
+            if($this->DB->null_or_eq_int($data['has_been_checked'], 0) || !$this->DB->is_nonnull_int($data['current_state'])) {
                 $state = PENDING;
                 $output = l('serviceNotChecked', Array('SERVICE' => $data['name2']));
-            } elseif($data['current_state'] == '0') {
+            } elseif($this->DB->eq_int($data['current_state'], 0)) {
                 // Host is UP
                 $state = OK;
                 $output = $data['output'];
@@ -681,23 +681,23 @@ class GlobalBackendPDO implements GlobalBackendInterface {
                     * If state is not OK (=> WARN, CRIT, UNKNOWN) and service is not
                     * acknowledged => check for acknowledged host
                     */
-                if($data['problem_has_been_acknowledged'] != 1) {
+                if(!$this->DB->eq_int($data['problem_has_been_acknowledged'], 1)) {
                     $acknowledged = $this->getHostAckByHostname($data['name1']);
                 } else {
                     $acknowledged = intval($data['problem_has_been_acknowledged']);
                 }
 
                 // Store state and output in array
-                switch($data['current_state']) {
-                    case '1':
+                switch(intval($data['current_state'])) {
+                    case 1:
                         $state = WARNING;
                         $output = $data['output'];
                     break;
-                    case '2':
+                    case 2:
                         $state = CRITICAL;
                         $output = $data['output'];
                     break;
-                    case '3':
+                    case 3:
                         $state = UNKNOWN;
                         $output = $data['output'];
                     break;
@@ -1352,8 +1352,8 @@ class GlobalBackendPDO implements GlobalBackendInterface {
                                         .'FROM '.$this->dbPrefix.'programstatus WHERE instance_id=:instance',
                 array('instance' => $this->dbInstanceId));
         $data = $QUERYHANDLE->fetch();
-        if(isset($data[0]))
-            return $data[0];
+        if($data !== false && $this->DB->is_nonnull_int($data['program_start']))
+            return intval($data['program_start']);
         else
             return -1;
     }
