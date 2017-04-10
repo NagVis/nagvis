@@ -1,5 +1,7 @@
 1.9b15
 Core:
+  * New backend "pgsql" to connect with PostgreSQL databases of Icinga
+    (Thanks a lot to Peter Pentchev for doing the work!)
   * FIX: Security fix: Authenticated users could read contents of local files
          by opening a custom URL (#29). Only https/http URLs can now be used.
   * FIX: Security fix: Only configured ULRs can be fetched using the Url module (#29)
