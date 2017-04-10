@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+ <head>
+  <title>NagVis PostgreSQL backend (pgsql)</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="../general/css/style.css" />
+ </head>
+ <body>
+        <h1>PostgreSQL backend (pgsql)</h1>
+        <p>The PostgreSQL backend, in short pgsl backend, is used to fetch Nagios information like status and configuration data via a PostgreSQL database as may be used by e.g. Icinga 2.</p>
+        <p>You can use the following parameters to configure a pgsql backend:</p>
+        
+        <table style="width:100%">
+        <tr>
+        <th width="200">Value</th><th width="150">Default</th><th>Description</th>
+        </tr>
+        <tr>
+        <td>dbhost</td><td>localhost</td><td>Hostname of the PostgreSQL Database</td>
+        </tr>
+        <tr>
+        <td>dbport</td><td>3306</td><td>Port of the PostgreSQL Database</td>
+        </tr>
+        <tr>
+        <td>dbname</td><td>db_nagios</td><td>Name of the PostgreSQL Database</td>
+        </tr>
+        <tr>
+        <td>dbuser</td><td>root</td><td>Username for Database Access (only needs read permissions)</td>
+        </tr>
+        <tr>
+        <td>dbpass</td><td>root</td><td>Password for Database Access (only needs read permissions)</td>
+        </tr>
+        <tr>
+        <td>dbprefix</td><td> nagios_ </td><td>Prefix of the tables in the PostgreSQL Database</td>
+        </tr>
+        <tr>
+        <td>dbinstancename</td><td> default </td><td>Name of the Nagios instance in the PostgreSQL Database</td>
+        </tr>
+        <tr>
+        <td>maxtimewithoutupdate</td><td>180</td><td>Maximum delay in seconds after last update in the PostgreSQL database. NagVis will report Nagios is not running if the delay is reached</td>
+        </tr>
+        </table>
+        <p>There are also some general parameters. You can read about them in <a href="nagvis_config_format_description.html#backend">main configuration format description</a>.</p>
+    </body>
+</html>

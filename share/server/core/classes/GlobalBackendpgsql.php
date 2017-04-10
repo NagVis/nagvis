@@ -1,7 +1,9 @@
 <?php
-/*******************************************************************************
+
+/*****************************************************************************
  *
- * CoreAuthModMySQL.php - Authentication module based on a MySQL database
+ * GlobalBackendpgsql.php - backend class for handling object and state
+ *                           information stored in the PostgreSQL database
  *
  * Copyright (c) 2004-2016 NagVis Project (Contact: info@nagvis.org)
  *
@@ -20,19 +22,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- ******************************************************************************/
+ *****************************************************************************/
 
-class CoreAuthModMySQL extends CoreAuthModPDO {
-    public function getConfig() {
-        return array(
-            'driver' => 'mysql',
-            'params' => array(
-                'dbhost' => cfg('auth_mysql', 'dbhost'),
-                'dbport' => cfg('auth_mysql', 'dbport'),
-                'dbname' => cfg('auth_mysql', 'dbname'),
-            ),
-            'username' => cfg('auth_mysql', 'dbuser'),
-            'password' => cfg('auth_mysql', 'dbpass'),
-        );
+class GlobalBackendpgsql extends GlobalBackendPDO {
+    public function driverName() {
+        return 'pgsql';
     }
 }
+?>

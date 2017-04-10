@@ -90,7 +90,7 @@ function worldmap_init_schema() {
     global $DB, $CORE;
     // Create initial db scheme if needed
     if (!$DB->tableExist('objects')) {
-        $DB->exec('CREATE TABLE objects '
+        $DB->query('CREATE TABLE objects '
                  .'(object_id VARCHAR(20),'
                  .' lat REAL,'
                  .' lng REAL,'
@@ -98,8 +98,8 @@ function worldmap_init_schema() {
                  .' lng2 REAL,'
                  .' object TEXT,'
                  .' PRIMARY KEY(object_id))');
-        $DB->exec('CREATE INDEX latlng ON objects (lat,long)');
-        $DB->exec('CREATE INDEX latlng2 ON objects (lat2,long2)');
+        $DB->query('CREATE INDEX latlng ON objects (lat,long)');
+        $DB->query('CREATE INDEX latlng2 ON objects (lat2,long2)');
         $DB->createVersionTable();
 
         // Install demo data
@@ -140,8 +140,8 @@ function worldmap_init_db() {
     global $DB;
     if ($DB !== null)
         return; // only init once
-    $DB = new CoreSQLiteHandler();
-    if (!$DB->open(cfg('paths', 'cfg').'worldmap.db'))
+    $DB = new CorePDOHandler();
+    if (!$DB->open('sqlite', array('filename' => cfg('paths', 'cfg').'worldmap.db'), null, null))
         throw new NagVisException(l('Unable to open the worldmap database ([DB])',
                      Array('DB' => cfg('paths', 'cfg').'worldmap.db')));
 
@@ -153,22 +153,22 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
     worldmap_init_db();
 
     $q = 'SELECT lat, lng, lat2, lng2, object FROM objects WHERE'
-        .'(('.$sw_lat.' < '.$ne_lat.' AND lat BETWEEN '.$sw_lat.' AND '.$ne_lat.')'
-        .' OR ('.$ne_lat.' < '.$sw_lat.' AND lat BETWEEN '.$ne_lat.' AND '.$sw_lat.')'
+        .'((:sw_lat < :ne_lat AND lat BETWEEN :sw_lat AND :ne_lat)'
+        .' OR (:ne_lat < :sw_lat AND lat BETWEEN :ne_lat AND :sw_lat)'
         .'AND '
-        .'('.$sw_lng.' < '.$ne_lng.' AND lng BETWEEN '.$sw_lng.' AND '.$ne_lng.')'
-        .' OR ('.$ne_lng.' < '.$sw_lng.' AND lng BETWEEN '.$ne_lng.' AND '.$sw_lng.'))'
+        .'(:sw_lng < :ne_lng AND lng BETWEEN :sw_lng AND :ne_lng)'
+        .' OR (:ne_lng < :sw_lng AND lng BETWEEN :ne_lng AND :sw_lng))'
         .'OR '
-        .'(('.$sw_lat.' < '.$ne_lat.' AND lat2 BETWEEN '.$sw_lat.' AND '.$ne_lat.')'
-        .' OR ('.$ne_lat.' < '.$sw_lat.' AND lat2 BETWEEN '.$ne_lat.' AND '.$sw_lat.')'
+        .'((:sw_lat < :ne_lat AND lat2 BETWEEN :sw_lat AND :ne_lat)'
+        .' OR (:ne_lat < :sw_lat AND lat2 BETWEEN :ne_lat AND :sw_lat)'
         .'AND '
-        .'('.$sw_lng.' < '.$ne_lng.' AND lng2 BETWEEN '.$sw_lng.' AND '.$ne_lng.')'
-        .' OR ('.$ne_lng.' < '.$sw_lng.' AND lng2 BETWEEN '.$ne_lng.' AND '.$sw_lng.'))';
+        .'(:sw_lng < :ne_lng AND lng2 BETWEEN :sw_lng AND :ne_lng)'
+        .' OR (:ne_lng < :sw_lng AND lng2 BETWEEN :ne_lng AND :sw_lng))';
 
-    $RES = $DB->query($q);
+    $RES = $DB->query($q, array('sw_lng' => $sw_lng, 'sw_lat' => $sw_lat, 'ne_lng' => $ne_lng, 'ne_lat' => $ne_lat));
     $objects = array();
     $referenced = array();
-    while ($data = $DB->fetchAssoc($RES)) {
+    while ($data = $RES->fetch()) {
         $obj = json_decode($data['object'], true);
         $objects[$obj['object_id']] = $obj;
 
@@ -183,12 +183,18 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
 
     // When an object has relative coordinates also fetch the referenced object
     if ($referenced) {
+        $keys = array_keys($referenced);
+        $count = count($keys);
+        $oids = array();
         $filter = array();
-        foreach (array_keys($referenced) as $object_id)
-            $filter[] = 'object_id = '.$DB->escape($object_id);
-        $q = 'SELECT object FROM objects WHERE '.implode(' OR ', $filter);
-        $RES = $DB->query($q);
-        while ($data = $DB->fetchAssoc($RES)) {
+        for ($i = 1; $i <= $count; $i++) {
+            $id = "o$i";
+            $oids[] = $id;
+            $filter[$id] = $keys[$i - 1];
+        }
+        $q = 'SELECT object FROM objects WHERE object_id IN ('.implode(', ', $oids).')';
+        $RES = $DB->query($q, $filter);
+        while ($data = $RES->fetch()) {
             $obj = json_decode($data['object'], true);
             $objects[$obj['object_id']] = $obj;
         }
@@ -199,31 +205,31 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
 
 // Worldmap internal helper function to add an object to the worldmap
 function worldmap_db_update_object($obj_id, $lat, $lng, $obj,
-                                   $lat2 = 'NULL', $lng2 = 'NULL', $insert = true) {
+                                   $lat2 = null, $lng2 = null, $insert = true) {
     global $DB;
     worldmap_init_db();
 
     if ($insert) {
         $q = 'INSERT INTO objects (object_id, lat, lng, lat2, lng2, object)'
-            .' VALUES'
-            .'    ('.$DB->escape($obj_id).','
-            .'     '.$DB->escape($lat).','
-            .'     '.$DB->escape($lng).','
-            .'     '.$DB->escape($lat2).','
-            .'     '.$DB->escape($lng2).','
-            .'     '.$DB->escape(json_encode($obj)).')';
+            .' VALUES (:obj_id, :lat, :lng, :lat2, :lng2, :object)';
     }
     else {
         $q = 'UPDATE objects SET '
-            .' lat='.$DB->escape($lat).','
-            .' lng='.$DB->escape($lng).','
-            .' lat2='.$DB->escape($lat2).','
-            .' lng2='.$DB->escape($lng2).','
-            .' object='.$DB->escape(json_encode($obj)).' '
-            .'WHERE object_id='.$DB->escape($obj_id);
+            .' lat=:lat,'
+            .' lng=:lng,'
+            .' lat2=:lat2,'
+            .' lng2=:lng2,'
+            .' object=:object '
+            .'WHERE object_id=:obj_id';
     }
 
-    if ($DB->exec($q))
+    if ($DB->query($q, array(
+        'obj_id' => $obj_id,
+        'lat' => $lat,
+        'lng' => $lng,
+        'lat2' => $lat2,
+        'lng2' => $lng2,
+        'object' => json_encode($obj))))
         return true;
     else
         throw new WorldmapError(l('Failed to add object: [E]: [Q]', array(
@@ -238,8 +244,8 @@ function worldmap_update_object($MAPCFG, $map_name, &$map_config, $obj_id, $inse
 
     $lat  = $obj['x'];
     $lng  = $obj['y'];
-    $lat2 = 'NULL';
-    $lng2 = 'NULL';
+    $lat2 = null;
+    $lng2 = null;
 
     // Handle lines and so on
     if ($MAPCFG->getValue($obj_id, 'view_type') == 'line' || $obj['type'] == 'line') {
@@ -273,7 +279,7 @@ function get_bounds_worldmap($MAPCFG, $map_name, &$map_config) {
     $q = 'SELECT min(lat) as min_lat, min(lng) as min_lng, '
         .'max(lat) as max_lat, max(lng) as max_lng '
         .'FROM objects';
-    $b = $DB->fetchAssoc($DB->query($q));
+    $b = $DB->query($q)->fetch();
     return array(array($b['min_lat'], $b['min_lng']),
                  array($b['max_lat'], $b['max_lng']));
 }
@@ -285,8 +291,8 @@ function load_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
     if (isset($map_config[$obj_id]))
         return true; // already loaded
 
-    $q = 'SELECT object FROM objects WHERE object_id='.$DB->escape($obj_id);
-    $b = $DB->fetchAssoc($DB->query($q));
+    $q = 'SELECT object FROM objects WHERE object_id=:obj_id';
+    $b = $DB->query($q, array('obj_id' => $obj_id))->fetch();
     if ($b)
         $map_config[$obj_id] = json_decode($b['object'], true);
 }
@@ -295,8 +301,8 @@ function del_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
     global $DB;
     worldmap_init_db();
 
-    $q = 'DELETE FROM objects WHERE object_id='.$DB->escape($obj_id);
-    if ($DB->exec($q))
+    $q = 'DELETE FROM objects WHERE object_id=:obj_id';
+    if ($DB->query($q, array('obj_id' => $obj_id)))
         return true;
     else
         throw new WorldmapError(l('Failed to delete object: [E]: [Q]', array(
