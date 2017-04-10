@@ -211,7 +211,7 @@ class CorePDOHandler {
 
 
             'init' => array(
-                'PRAGMA journal_mode = WAL',
+                'PRAGMA journal_mode = wal',
             ),
         ),
 
