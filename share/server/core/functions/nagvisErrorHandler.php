@@ -37,6 +37,7 @@ function nagvisException($OBJ) {
             echo $OBJ;
         } else {
             echo "Error (".get_class($OBJ)."): ".$OBJ->getMessage();
+            var_dump(debug_backtrace());
         }
 
         die();

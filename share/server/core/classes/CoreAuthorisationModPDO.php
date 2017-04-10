@@ -32,8 +32,9 @@ class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         // Open the database
         $config = $this->getConfig();
         if(!$this->DB->open($config['driver'], $config['params'], $config['username'], $config['password'])) {
-            throw new NagVisException(l('Unable to open auth database ([DB])',
-                                      Array('DB' => $dsn['dsn'])));
+            throw new NagVisException(l('Unable to open auth database ([DB]): [MSG]',
+                Array('DB' => $this->DB->dsn,
+                      'MSG' => json_encode($this->DB->error()))));
         } else {
             // Create initial db scheme if needed
             if(!$this->DB->tableExist('users')) {

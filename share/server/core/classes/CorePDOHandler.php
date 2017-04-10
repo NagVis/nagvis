@@ -271,8 +271,9 @@ class CorePDOHandler {
 
         try {
             $this->DB = new PDO($dsn, $username, $password, array(
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                #PDO::ATTR_TIMEOUT => 1,
+                // PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                // TODO: This should be loaded from the configuration (e.g. in cae of backends)
+                //PDO::ATTR_TIMEOUT => 1,
             ));
         } catch(PDOException $e) {
             error_log('Could not initialize a database connection: '.$e->getMessage());

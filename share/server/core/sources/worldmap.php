@@ -142,8 +142,9 @@ function worldmap_init_db() {
         return; // only init once
     $DB = new CorePDOHandler();
     if (!$DB->open('sqlite', array('filename' => cfg('paths', 'cfg').'worldmap.db'), null, null))
-        throw new NagVisException(l('Unable to open the worldmap database ([DB])',
-                     Array('DB' => cfg('paths', 'cfg').'worldmap.db')));
+        throw new NagVisException(l('Unable to open worldmap database ([DB]): [MSG]',
+            Array('DB' => $DB->dsn,
+                  'MSG' => json_encode($DB->error()))));
 
     worldmap_init_schema();
 }
