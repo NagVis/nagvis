@@ -270,7 +270,10 @@ class CorePDOHandler {
         $dsn = "$driver:".$drv_data['build_dsn']($params);
 
         try {
-            $this->DB = new PDO($dsn, $username, $password);
+            $this->DB = new PDO($dsn, $username, $password, array(
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                #PDO::ATTR_TIMEOUT => 1,
+            ));
         } catch(PDOException $e) {
             error_log('Could not initialize a database connection: '.$e->getMessage());
             return false;
