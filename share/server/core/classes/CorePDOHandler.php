@@ -291,7 +291,7 @@ class CorePDOHandler {
 
         if(isset($drv_data['init'])) {
             foreach($drv_data['init'] as $q) {
-                $res = $this->query($q);
+                $res = $this->DB->exec($q);
                 if($res === false) {
                     $this->DB = null;
                     return false;
