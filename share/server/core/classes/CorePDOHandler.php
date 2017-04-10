@@ -39,15 +39,6 @@ function _build_dsn_common($params) {
         $connData));
 }
 
-function _is_writeable_true($dsn) {
-    return true;
-}
-
-function _is_writeable_sqlite($filename) {
-    return GlobalCore::getInstance()->checkWriteable(dirname($filename))
-        && GlobalCore::getInstance()->checkWriteable($filename);
-}
-
 class CorePDOHandler {
     private $DB = null;
     private $file = null;
@@ -189,8 +180,6 @@ class CorePDOHandler {
         'sqlite' => array(
             'build_dsn' => '_build_dsn_sqlite',
 
-            'is_writeable' => '_is_writeable_sqlite',
-
             // Note that these require a '.load' of an appropriate regex() function module!
             're_op' => 'REGEXP',
             're_op_neg' => 'NOT REGEXP',
@@ -217,8 +206,6 @@ class CorePDOHandler {
 
         'mysql' => array(
             'build_dsn' => '_build_dsn_common',
-
-            'is_writeable' => '_is_writeable_true',
 
             're_op' => 'REGEXP BINARY',
             're_op_neg' => 'NOT REGEXP BINARY',
@@ -307,10 +294,6 @@ class CorePDOHandler {
 
     public function getNegatedRegularExpressionOperator() {
         return $this->data['re_op_neg'];
-    }
-
-    public function isWriteable() {
-        return $this->data['is_writeable']($this->dsn);
     }
 
     public function prep($q) {

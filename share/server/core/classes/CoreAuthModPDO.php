@@ -105,8 +105,6 @@ class CoreAuthModPDO extends CoreAuthModule {
     }
 
     private function addUser($user, $hash) {
-        if(!$this->DB->isWriteable())
-            return false;
         $this->DB->query('-user-add', array('name' => $user, 'password' => $hash));
     }
 
@@ -156,13 +154,7 @@ class CoreAuthModPDO extends CoreAuthModule {
         $this->addUser($user, $hash);
 
         // Check result
-        if($this->checkUserExists($user)) {
-            $bReturn = true;
-        } else {
-            $bReturn = false;
-        }
-
-        return $bReturn;
+        return $this->checkUserExists($user);
     }
 
     public function resetPassword($uid, $pw) {
