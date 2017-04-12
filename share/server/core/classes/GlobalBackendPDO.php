@@ -1083,9 +1083,9 @@ class GlobalBackendPDO implements GlobalBackendInterface {
 
         $QUERYHANDLE = $this->DB->query('SELECT o1.name1
         FROM
-        `'.$this->dbPrefix.'objects` AS o1,
-        `'.$this->dbPrefix.'hosts` AS h1
-        LEFT OUTER JOIN `'.$this->dbPrefix.'host_parenthosts` AS ph1 ON h1.host_id=ph1.host_id
+        '.$this->dbPrefix.'objects AS o1,
+        '.$this->dbPrefix.'hosts AS h1
+        LEFT OUTER JOIN '.$this->dbPrefix.'host_parenthosts AS ph1 ON h1.host_id=ph1.host_id
         WHERE o1.objecttype_id=1
         AND (h1.config_type=:configType AND h1.instance_id=:instance AND h1.host_object_id=o1.object_id)
         AND ph1.parent_host_object_id IS null
