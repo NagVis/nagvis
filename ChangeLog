@@ -1,3 +1,5 @@
+1.9b16
+
 1.9b15
 Core:
   * New backend "pgsql" to connect with PostgreSQL databases of Icinga
