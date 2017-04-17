@@ -123,7 +123,14 @@ if($MODULE !== false && $MODULE->offersAction($UHANDLER->get('act'))) {
     throw new NagVisException(l('The given action is not valid'));
 }
 
-echo $sContent;
+//When a callback is added to request, wraps the content into the callback
+//Useful when making cross-domain ajax requests
+if(isset($_GET['callback'])) {
+    echo $_GET['callback'] . '('.$sContent.')';
+} else {
+    echo $sContent;
+}
+
 if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
 if (PROFILE) profilingFinalize($_name.'-'.$UHANDLER->get('mod').'-'.$UHANDLER->get('act'));
 
