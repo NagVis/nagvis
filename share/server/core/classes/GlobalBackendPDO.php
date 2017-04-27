@@ -997,7 +997,7 @@ class GlobalBackendPDO implements GlobalBackendInterface {
             $stateAttr = 'ss.current_state';
 
         // FIXME: Recognize host ack/downtime
-        $this->parseFilter($objects, $filters, 'o', 'o2', MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
+        $filter = $this->parseFilter($objects, $filters, 'o', 'o2', MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
         $QUERYHANDLE = $this->DB->query('SELECT
             o.name1, sg.alias,
             SUM(CASE WHEN ss.has_been_checked=0 THEN 1 ELSE 0 END) AS pending,
