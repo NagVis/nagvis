@@ -1,4 +1,6 @@
 1.9b16
+Core:
+  * FIX: Fixed broken service group processing with pgsql/ndomy backends
 
 1.9b15
 Core:
