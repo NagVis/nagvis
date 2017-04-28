@@ -2,6 +2,9 @@
 Core:
   * FIX: Fixed broken service group processing with pgsql/ndomy backends
 
+Frontend:
+  * FIX: Temporary template files/directories are now created only user writable
+
 1.9b15
 Core:
   * New backend "pgsql" to connect with PostgreSQL databases of Icinga
