@@ -43,205 +43,211 @@ class CorePDOHandler {
     private $DB = null;
     private $file = null;
 
-    private static $DRIVERS = array(
-        '_common' => array(
-            'queries' => array(
-                '-perm-add' => 'INSERT INTO perms ("mod", act, obj) VALUES (:mod, :act, :obj)',
-                '-perm-check' => 'SELECT COUNT(obj) AS num FROM perms WHERE "mod" = :mod AND act = :act AND obj = :obj',
-                '-perm-count' => 'SELECT COUNT(*) AS num FROM perms WHERE "mod"=:mod AND act=:act AND obj=:obj',
-                '-perm-delete-by-obj' => 'DELETE FROM perms WHERE "mod"=:mod AND obj=:obj',
-                '-perm-get-all' => 'SELECT "permId", "mod", act, obj FROM perms ORDER BY "mod",act,obj',
-                '-perm-get-by-user' => 'SELECT perms."mod" AS "mod", perms.act AS act, perms.obj AS obj '.
-                    'FROM users2roles '.
-                    'INNER JOIN roles2perms ON roles2perms."roleId" = users2roles."roleId" '.
-                    'INNER JOIN perms ON perms."permId" = roles2perms."permId" '.
-                    'WHERE users2roles."userId" = :id',
-                '-perm-rename-map' => 'UPDATE perms SET obj=:new_name '.
-                    ' WHERE "mod"=\'Map\' AND obj=:old_name',
+    // needs to be initialized after class declaration because directly
+    // initializing it here is a syntax error in PHP 5.3
+    private static $DRIVERS = null;
 
-                '-role-add' => 'INSERT INTO roles (name) VALUES (:name)',
-                '-role-add-with-id' => 'INSERT INTO roles ("roleId", name) VALUES (:roleId, :name)',
-                '-role-add-perm' => 'INSERT INTO roles2perms ("roleId", "permId") VALUES (:roleId, :permId)',
-                '-role-add-user-by-id' => 'INSERT INTO users2roles("userId", "roleId") VALUES(:userId, :roleId)',
-                '-role-count-by-name' => 'SELECT COUNT(*) AS num FROM roles WHERE name=:name',
-                '-role-delete-by-id' => 'DELETE FROM roles WHERE "roleId"=:roleId',
-                '-role-delete-by-user-id' => 'DELETE FROM users2roles WHERE "userId"=:userId',
-                '-role-delete-perm-by-id' => 'DELETE FROM roles2perms WHERE "roleId"=:roleId',
-                '-role-delete-perm-by-obj' => 'DELETE FROM roles2perms WHERE "permId" IN (SELECT "permId" FROM perms WHERE "mod"=:mod AND obj=:obj)',
-                '-role-get-all' => 'SELECT "roleId", name FROM roles ORDER BY name',
-                '-role-get-by-name' => 'SELECT "roleId" FROM roles WHERE name=:name',
-                '-role-get-by-user' => 'SELECT users2roles."roleId" AS "roleId", roles.name AS name '.
-                    'FROM users2roles '.
-                    'LEFT JOIN roles ON users2roles."roleId"=roles."roleId" '.
-                    'WHERE "userId"=:id',
-                '-role-get-perm-by-id' => 'SELECT "permId" FROM roles2perms WHERE "roleId"=:roleId',
-                '-role-used-by' => 'SELECT users.name AS name FROM users2roles '.
-                    'LEFT JOIN users ON users2roles."userId"=users."userId" '.
-                    'WHERE users2roles."roleId"=:roleId',
+    public static function initialize_static() {
+        self::$DRIVERS = array(
+            '_common' => array(
+                'queries' => array(
+                    '-perm-add' => 'INSERT INTO perms ("mod", act, obj) VALUES (:mod, :act, :obj)',
+                    '-perm-check' => 'SELECT COUNT(obj) AS num FROM perms WHERE "mod" = :mod AND act = :act AND obj = :obj',
+                    '-perm-count' => 'SELECT COUNT(*) AS num FROM perms WHERE "mod"=:mod AND act=:act AND obj=:obj',
+                    '-perm-delete-by-obj' => 'DELETE FROM perms WHERE "mod"=:mod AND obj=:obj',
+                    '-perm-get-all' => 'SELECT "permId", "mod", act, obj FROM perms ORDER BY "mod",act,obj',
+                    '-perm-get-by-user' => 'SELECT perms."mod" AS "mod", perms.act AS act, perms.obj AS obj '
+                        .'FROM users2roles '
+                        .'INNER JOIN roles2perms ON roles2perms."roleId" = users2roles."roleId" '
+                        .'INNER JOIN perms ON perms."permId" = roles2perms."permId" '
+                        .'WHERE users2roles."userId" = :id',
+                    '-perm-rename-map' => 'UPDATE perms SET obj=:new_name '.
+                        ' WHERE "mod"=\'Map\' AND obj=:old_name',
 
-                '-user-add' => 'INSERT INTO users (name,password) VALUES (:name, :password)',
-                '-user-add-with-id' => 'INSERT INTO users ("userId", name, password) VALUES (:userId, :name, :password)',
-                '-user-count' => 'SELECT COUNT(*) AS num FROM users WHERE name=:name',
-                '-user-count-by-id' => 'SELECT COUNT(*) AS num FROM users WHERE "userId"=:userId',
-                '-user-delete' => 'DELETE FROM users WHERE "userId"=:userId',
-                '-user-delete-roles' => 'DELETE FROM users2roles WHERE "userId"=:userId',
-                '-user-get-all' => 'SELECT "userId", name FROM users ORDER BY name',
-                '-user-get-by-name' => 'SELECT "userId" FROM users WHERE name=:name',
-                '-user-get-by-pass' => 'SELECT "userId" FROM users WHERE name=:name AND password=:password',
-                '-user-update-pass' => 'UPDATE users SET password=:password WHERE "userId"=:id',
+                    '-role-add' => 'INSERT INTO roles (name) VALUES (:name)',
+                    '-role-add-with-id' => 'INSERT INTO roles ("roleId", name) VALUES (:roleId, :name)',
+                    '-role-add-perm' => 'INSERT INTO roles2perms ("roleId", "permId") VALUES (:roleId, :permId)',
+                    '-role-add-user-by-id' => 'INSERT INTO users2roles("userId", "roleId") VALUES(:userId, :roleId)',
+                    '-role-count-by-name' => 'SELECT COUNT(*) AS num FROM roles WHERE name=:name',
+                    '-role-delete-by-id' => 'DELETE FROM roles WHERE "roleId"=:roleId',
+                    '-role-delete-by-user-id' => 'DELETE FROM users2roles WHERE "userId"=:userId',
+                    '-role-delete-perm-by-id' => 'DELETE FROM roles2perms WHERE "roleId"=:roleId',
+                    '-role-delete-perm-by-obj' => 'DELETE FROM roles2perms WHERE "permId" IN (SELECT "permId" FROM perms WHERE "mod"=:mod AND obj=:obj)',
+                    '-role-get-all' => 'SELECT "roleId", name FROM roles ORDER BY name',
+                    '-role-get-by-name' => 'SELECT "roleId" FROM roles WHERE name=:name',
+                    '-role-get-by-user' => 'SELECT users2roles."roleId" AS "roleId", roles.name AS name '.
+                        'FROM users2roles '.
+                        'LEFT JOIN roles ON users2roles."roleId"=roles."roleId" '.
+                        'WHERE "userId"=:id',
+                    '-role-get-perm-by-id' => 'SELECT "permId" FROM roles2perms WHERE "roleId"=:roleId',
+                    '-role-used-by' => 'SELECT users.name AS name FROM users2roles '.
+                        'LEFT JOIN users ON users2roles."userId"=users."userId" '.
+                        'WHERE users2roles."roleId"=:roleId',
 
-                '-check-roles-perms' => 'SELECT COUNT(roles."name") AS num '.
-                    'FROM perms '.
-                    'INNER JOIN roles2perms ON roles2perms."permId" = perms."permId" '.
-                    'INNER JOIN roles ON roles."roleId" = roles2perms."roleId" '.
-                    'WHERE "mod" = :mod AND act = :act AND obj = :obj AND roles.name = :name',
+                    '-user-add' => 'INSERT INTO users (name,password) VALUES (:name, :password)',
+                    '-user-add-with-id' => 'INSERT INTO users ("userId", name, password) VALUES (:userId, :name, :password)',
+                    '-user-count' => 'SELECT COUNT(*) AS num FROM users WHERE name=:name',
+                    '-user-count-by-id' => 'SELECT COUNT(*) AS num FROM users WHERE "userId"=:userId',
+                    '-user-delete' => 'DELETE FROM users WHERE "userId"=:userId',
+                    '-user-delete-roles' => 'DELETE FROM users2roles WHERE "userId"=:userId',
+                    '-user-get-all' => 'SELECT "userId", name FROM users ORDER BY name',
+                    '-user-get-by-name' => 'SELECT "userId" FROM users WHERE name=:name',
+                    '-user-get-by-pass' => 'SELECT "userId" FROM users WHERE name=:name AND password=:password',
+                    '-user-update-pass' => 'UPDATE users SET password=:password WHERE "userId"=:id',
 
-                '-create-pop-roles-perms-1' => 'INSERT INTO roles2perms ("roleId", "permId") '.
-                    'SELECT r."roleId", p."permId" '.
-                    'FROM roles r, perms p '.
-                    'WHERE r.name = :r1 '.
-                    '  AND p."mod" = :mod AND p.act = :act AND p.obj = :obj',
+                    '-check-roles-perms' => 'SELECT COUNT(roles."name") AS num '.
+                        'FROM perms '.
+                        'INNER JOIN roles2perms ON roles2perms."permId" = perms."permId" '.
+                        'INNER JOIN roles ON roles."roleId" = roles2perms."roleId" '.
+                        'WHERE "mod" = :mod AND act = :act AND obj = :obj AND roles.name = :name',
 
-                '-create-pop-roles-perms-2' => 'INSERT INTO roles2perms ("roleId", "permId") '.
-                    'SELECT r."roleId", p."permId" '.
-                    'FROM roles r, perms p '.
-                    'WHERE r.name IN (:r1, :r2) '.
-                    '  AND p."mod" = :mod AND p.act = :act AND p.obj = :obj',
+                    '-create-pop-roles-perms-1' => 'INSERT INTO roles2perms ("roleId", "permId") '.
+                        'SELECT r."roleId", p."permId" '.
+                        'FROM roles r, perms p '.
+                        'WHERE r.name = :r1 '.
+                        '  AND p."mod" = :mod AND p.act = :act AND p.obj = :obj',
 
-                '-create-pop-roles-perms-3' => 'INSERT INTO roles2perms ("roleId", "permId") '.
-                    'SELECT r."roleId", p."permId" '.
-                    'FROM roles r, perms p '.
-                    'WHERE r.name IN (:r1, :r2, :r3) '.
-                    '  AND p."mod" = :mod AND p.act = :act AND p.obj = :obj',
+                    '-create-pop-roles-perms-2' => 'INSERT INTO roles2perms ("roleId", "permId") '.
+                        'SELECT r."roleId", p."permId" '.
+                        'FROM roles r, perms p '.
+                        'WHERE r.name IN (:r1, :r2) '.
+                        '  AND p."mod" = :mod AND p.act = :act AND p.obj = :obj',
 
-                '-create-pop-perms-from-perms' => 'INSERT INTO perms ("mod", act, obj) '.
-                    'SELECT :mod, :act, obj '.
-                    'FROM perms '.
-                    'WHERE "mod" = :fmod AND act = :fact',
+                    '-create-pop-roles-perms-3' => 'INSERT INTO roles2perms ("roleId", "permId") '.
+                        'SELECT r."roleId", p."permId" '.
+                        'FROM roles r, perms p '.
+                        'WHERE r.name IN (:r1, :r2, :r3) '.
+                        '  AND p."mod" = :mod AND p.act = :act AND p.obj = :obj',
 
-                '-create-update-db-version' => 'UPDATE version SET version=:version',
-            ),
+                    '-create-pop-perms-from-perms' => 'INSERT INTO perms ("mod", act, obj) '.
+                        'SELECT :mod, :act, obj '.
+                        'FROM perms '.
+                        'WHERE "mod" = :fmod AND act = :fact',
 
-            'updates' => array(
-                '1080600' => array(
-                    array('-perm-add', array('mod' => 'Url', 'act' => 'view', 'obj' => '*')),
-                    array('-create-pop-roles-perms-3', array(
-                        'r1' => 'Managers', 'r2' => 'Users (read-only)', 'r3' => 'Guests',
-                        'mod' => 'Url', 'act' => 'view', 'obj' => '*')),
+                    '-create-update-db-version' => 'UPDATE version SET version=:version',
                 ),
 
-                '1080500' => array(
-                    array('-perm-add', array('mod' => 'Action', 'act' => 'perform', 'obj' => '*')),
-                    array('-create-pop-roles-perms-2', array(
-                        'r1' => 'Managers', 'r2' => 'Users (read-only)',
-                        'mod' => 'Action', 'act' => 'perform', 'obj' => '*')),
+                'updates' => array(
+                    '1080600' => array(
+                        array('-perm-add', array('mod' => 'Url', 'act' => 'view', 'obj' => '*')),
+                        array('-create-pop-roles-perms-3', array(
+                            'r1' => 'Managers', 'r2' => 'Users (read-only)', 'r3' => 'Guests',
+                            'mod' => 'Url', 'act' => 'view', 'obj' => '*')),
+                    ),
+
+                    '1080500' => array(
+                        array('-perm-add', array('mod' => 'Action', 'act' => 'perform', 'obj' => '*')),
+                        array('-create-pop-roles-perms-2', array(
+                            'r1' => 'Managers', 'r2' => 'Users (read-only)',
+                            'mod' => 'Action', 'act' => 'perform', 'obj' => '*')),
+                    ),
+
+                    '1060022' => array(
+                        array('-perm-add', array('mod' => 'User', 'act' => 'setOption', 'obj' => '*')),
+                        array('-create-pop-roles-perms-3', array(
+                            'r1' => 'Managers', 'r2' => 'Users (read-only)', 'r3' => 'Guests',
+                            'mod' => 'User', 'act' => 'setOption', 'obj' => '*')),
+                    ),
+
+                    '1050400' => array(
+                        array('-perm-add', array('mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*')),
+                        array('-create-pop-roles-perms-3', array(
+                            'r1' => 'Managers', 'r2' => 'Users (read-only)', 'r3' => 'Guests',
+                            'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*')),
+                    ),
+
+                    '1050300' => array(
+                        array('-perm-add', array('mod' => 'ManageBackgrounds', 'act' => 'manage', 'obj' => '*')),
+                        array('-perm-add', array('mod' => 'ManageShapes', 'act' => 'manage', 'obj' => '*')),
+                        array('-perm-add', array('mod' => 'Map', 'act' => 'manage', 'obj' => '*')),
+                        array('-create-pop-roles-perms-1', array(
+                            'r1' => 'Managers',
+                            'mod' => 'ManageBackgrounds', 'act' => 'manage', 'obj' => '*')),
+                        array('-create-pop-roles-perms-1', array(
+                            'r1' => 'Managers',
+                            'mod' => 'ManageShapes', 'act' => 'manage', 'obj' => '*')),
+                        array('-create-pop-roles-perms-1', array(
+                            'r1' => 'Managers',
+                            'mod' => 'Map', 'act' => 'manage', 'obj' => '*')),
+                    ),
+
+                    '1050024' => array(
+                        array('-create-pop-perms-from-perms', array(
+                            'mod' => 'Map', 'act' => 'addModify',
+                            'fmod' => 'Map', 'fact' => 'view')),
+                        array('-create-pop-roles-perms-1', array(
+                            'r1' => 'Managers',
+                            'mod' => 'Map', 'act' => 'addModify', 'obj' => '*')),
+                    ),
+                ),
+            ),
+
+            'sqlite' => array(
+                'build_dsn' => '_build_dsn_sqlite',
+
+                // Note that these require a '.load' of an appropriate regex() function module!
+                're_op' => 'REGEXP',
+                're_op_neg' => 'NOT REGEXP',
+
+                'queries' => array(
+                    '-create-auth-users' => 'CREATE TABLE users (userId INTEGER, name VARCHAR(100), password VARCHAR(40), PRIMARY KEY(userId), UNIQUE(name))',
+                    '-create-auth-roles' => 'CREATE TABLE roles (roleId INTEGER, name VARCHAR(100), PRIMARY KEY(roleId), UNIQUE(name))',
+                    '-create-auth-perms' => 'CREATE TABLE perms (permId INTEGER, mod VARCHAR(100), act VARCHAR(100), obj VARCHAR(100), PRIMARY KEY(permId), UNIQUE(mod,act,obj))',
+                    '-create-auth-users2roles' => 'CREATE TABLE users2roles (userId INTEGER, roleId INTEGER, PRIMARY KEY(userId, roleId))',
+                    '-create-auth-roles2perms' => 'CREATE TABLE roles2perms (roleId INTEGER, permId INTEGER, PRIMARY KEY(roleId, permId))',
+
+                    '-create-auth-version' => 'CREATE TABLE version (version VARCHAR(100), PRIMARY KEY(version))',
+                    '-version-insert' => 'INSERT INTO version (version) VALUES (:version)',
+                    '-version-update' => 'UPDATE version SET version=:version',
+
+                    '-table-exists' => "SELECT * FROM sqlite_master WHERE type='table' AND name=:name",
                 ),
 
-                '1060022' => array(
-                    array('-perm-add', array('mod' => 'User', 'act' => 'setOption', 'obj' => '*')),
-                    array('-create-pop-roles-perms-3', array(
-                        'r1' => 'Managers', 'r2' => 'Users (read-only)', 'r3' => 'Guests',
-                        'mod' => 'User', 'act' => 'setOption', 'obj' => '*')),
-                ),
 
-                '1050400' => array(
-                    array('-perm-add', array('mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*')),
-                    array('-create-pop-roles-perms-3', array(
-                        'r1' => 'Managers', 'r2' => 'Users (read-only)', 'r3' => 'Guests',
-                        'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*')),
-                ),
-
-                '1050300' => array(
-                    array('-perm-add', array('mod' => 'ManageBackgrounds', 'act' => 'manage', 'obj' => '*')),
-                    array('-perm-add', array('mod' => 'ManageShapes', 'act' => 'manage', 'obj' => '*')),
-                    array('-perm-add', array('mod' => 'Map', 'act' => 'manage', 'obj' => '*')),
-                    array('-create-pop-roles-perms-1', array(
-                        'r1' => 'Managers',
-                        'mod' => 'ManageBackgrounds', 'act' => 'manage', 'obj' => '*')),
-                    array('-create-pop-roles-perms-1', array(
-                        'r1' => 'Managers',
-                        'mod' => 'ManageShapes', 'act' => 'manage', 'obj' => '*')),
-                    array('-create-pop-roles-perms-1', array(
-                        'r1' => 'Managers',
-                        'mod' => 'Map', 'act' => 'manage', 'obj' => '*')),
-                ),
-
-                '1050024' => array(
-                    array('-create-pop-perms-from-perms', array(
-                        'mod' => 'Map', 'act' => 'addModify',
-                        'fmod' => 'Map', 'fact' => 'view')),
-                    array('-create-pop-roles-perms-1', array(
-                        'r1' => 'Managers',
-                        'mod' => 'Map', 'act' => 'addModify', 'obj' => '*')),
+                'init' => array(
+                    'PRAGMA journal_mode = wal',
                 ),
             ),
-        ),
 
-        'sqlite' => array(
-            'build_dsn' => '_build_dsn_sqlite',
+            'mysql' => array(
+                'build_dsn' => '_build_dsn_common',
 
-            // Note that these require a '.load' of an appropriate regex() function module!
-            're_op' => 'REGEXP',
-            're_op_neg' => 'NOT REGEXP',
+                're_op' => 'REGEXP BINARY',
+                're_op_neg' => 'NOT REGEXP BINARY',
 
-            'queries' => array(
-                '-create-auth-users' => 'CREATE TABLE users (userId INTEGER, name VARCHAR(100), password VARCHAR(40), PRIMARY KEY(userId), UNIQUE(name))',
-                '-create-auth-roles' => 'CREATE TABLE roles (roleId INTEGER, name VARCHAR(100), PRIMARY KEY(roleId), UNIQUE(name))',
-                '-create-auth-perms' => 'CREATE TABLE perms (permId INTEGER, mod VARCHAR(100), act VARCHAR(100), obj VARCHAR(100), PRIMARY KEY(permId), UNIQUE(mod,act,obj))',
-                '-create-auth-users2roles' => 'CREATE TABLE users2roles (userId INTEGER, roleId INTEGER, PRIMARY KEY(userId, roleId))',
-                '-create-auth-roles2perms' => 'CREATE TABLE roles2perms (roleId INTEGER, permId INTEGER, PRIMARY KEY(roleId, permId))',
+                'queries' => array(
+                    '-create-auth-users' => 'CREATE TABLE users (userId INTEGER AUTO_INCREMENT, name VARCHAR(100), password VARCHAR(40), PRIMARY KEY(userId), UNIQUE(name))',
+                    '-create-auth-roles' => 'CREATE TABLE roles ("roleId" INTEGER AUTO_INCREMENT, name VARCHAR(100), PRIMARY KEY(roleId), UNIQUE(name))',
+                    '-create-auth-perms' => 'CREATE TABLE perms ("permId" INTEGER AUTO_INCREMENT, "mod" VARCHAR(100), act VARCHAR(100), obj VARCHAR(100), PRIMARY KEY("permId"), UNIQUE("mod", act, obj))',
+                    '-create-auth-users2roles' => 'CREATE TABLE users2roles ("userId" INTEGER, "roleId" INTEGER, PRIMARY KEY("userId", "roleId"))',
+                    '-create-auth-roles2perms' => 'CREATE TABLE roles2perms ("roleId" INTEGER, "permId" INTEGER, PRIMARY KEY("roleId", "permId"))',
 
-                '-create-auth-version' => 'CREATE TABLE version (version VARCHAR(100), PRIMARY KEY(version))',
-                '-version-insert' => 'INSERT INTO version (version) VALUES (:version)',
-                '-version-update' => 'UPDATE version SET version=:version',
+                    '-create-auth-version' => 'CREATE TABLE version (version VARCHAR(100), PRIMARY KEY(version))',
+                    '-version-insert' => 'INSERT INTO version (version) VALUES (:version)',
+                    '-version-update' => 'UPDATE version SET version=:version',
 
-                '-table-exists' => "SELECT * FROM sqlite_master WHERE type='table' AND name=:name",
+                    '-table-exists' => "SHOW TABLES LIKE :name",
+                ),
+
+                'init' => array(
+                    "SET SESSION sql_mode = 'postgresql'",
+                ),
             ),
 
+            'pgsql' => array(
+                'build_dsn' => '_build_dsn_common',
 
-            'init' => array(
-                'PRAGMA journal_mode = wal',
+                're_op' => '~',
+                're_op_neg' => '!~',
+
+                'queries' => array(
+                    '-table-exists' => "SELECT table_name ".
+                        "FROM information_schema.tables ".
+                        "WHERE table_schema='public' AND table_name = :name",
+                ),
             ),
-        ),
-
-        'mysql' => array(
-            'build_dsn' => '_build_dsn_common',
-
-            're_op' => 'REGEXP BINARY',
-            're_op_neg' => 'NOT REGEXP BINARY',
-
-            'queries' => array(
-                '-create-auth-users' => 'CREATE TABLE users (userId INTEGER AUTO_INCREMENT, name VARCHAR(100), password VARCHAR(40), PRIMARY KEY(userId), UNIQUE(name))',
-                '-create-auth-roles' => 'CREATE TABLE roles ("roleId" INTEGER AUTO_INCREMENT, name VARCHAR(100), PRIMARY KEY(roleId), UNIQUE(name))',
-                '-create-auth-perms' => 'CREATE TABLE perms ("permId" INTEGER AUTO_INCREMENT, "mod" VARCHAR(100), act VARCHAR(100), obj VARCHAR(100), PRIMARY KEY("permId"), UNIQUE("mod", act, obj))',
-                '-create-auth-users2roles' => 'CREATE TABLE users2roles ("userId" INTEGER, "roleId" INTEGER, PRIMARY KEY("userId", "roleId"))',
-                '-create-auth-roles2perms' => 'CREATE TABLE roles2perms ("roleId" INTEGER, "permId" INTEGER, PRIMARY KEY("roleId", "permId"))',
-
-                '-create-auth-version' => 'CREATE TABLE version (version VARCHAR(100), PRIMARY KEY(version))',
-                '-version-insert' => 'INSERT INTO version (version) VALUES (:version)',
-                '-version-update' => 'UPDATE version SET version=:version',
-
-                '-table-exists' => "SHOW TABLES LIKE :name",
-            ),
-
-            'init' => array(
-                "SET SESSION sql_mode = 'postgresql'",
-            ),
-        ),
-
-        'pgsql' => array(
-            'build_dsn' => '_build_dsn_common',
-
-            're_op' => '~',
-            're_op_neg' => '!~',
-
-            'queries' => array(
-                '-table-exists' => "SELECT table_name ".
-                    "FROM information_schema.tables ".
-                    "WHERE table_schema='public' AND table_name = :name",
-            ),
-        ),
-    );
+        );
+    }
 
     public function __construct() {}
 
@@ -749,4 +755,7 @@ class CorePDOHandler {
         $this->queryFatal('-create-pop-roles-perms-1', array('r1' => 'Guests', 'mod' => 'Auth', 'act' => 'logout', 'obj' => '*'));
     }
 }
+
+CorePDOHandler::initialize_static();
+
 ?>
