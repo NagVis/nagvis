@@ -1,3 +1,5 @@
+1.9b18
+
 1.9b17
 Core:
   * FIX: Fixed PHP 5.3 compatibility issue with new pgsql/ndomy code
