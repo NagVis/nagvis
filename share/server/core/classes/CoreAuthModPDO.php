@@ -91,7 +91,8 @@ class CoreAuthModPDO extends CoreAuthModule {
             $res = $this->DB->query('-user-get-by-name', array('name' => $this->sUsername));
         }
 
-        return intval($res->fetch()['userId']);
+        $data = $res->fetch();
+        return intval($data['userId']);
     }
 
     private function updatePassword($uid, $pw) {
