@@ -921,7 +921,7 @@ function updateUserRoles(bAdd) {
     }
 
     // Quit when no source selected
-    if (source.selectedIndex == -1)
+    if (source.selectedIndex === -1)
         return false;
 
     // Save strings
@@ -934,8 +934,9 @@ function updateUserRoles(bAdd) {
 
     // now update the internal helper field with the selected options
     var selected_values = [];
-    for(var i = 0; i < selected.options.length; i++)
+    for(var i = 0; i < selected.options.length; i++) {
         selected_values.push(selected.options[i].value);
+    }
     user_roles.value = selected_values.join(',');
 }
 

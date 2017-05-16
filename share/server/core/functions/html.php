@@ -173,7 +173,13 @@ function hidden_vars() {
     foreach ($_REQUEST AS $key => $val) {
         // $_REQUEST might contain $_COOKIES. Skip these vars.
         if (!isset($form_keys[$key]) && !isset($_COOKIE[$key])) {
-            hidden($key, $val);
+            if (is_array($val)) {
+                foreach($val AS $val_element) {
+                    hidden($key."[]", $val_element);
+                }
+            } else {
+                hidden($key, $val);
+            }
         }
     }
     //}

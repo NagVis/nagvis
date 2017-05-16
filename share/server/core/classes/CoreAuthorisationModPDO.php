@@ -127,6 +127,8 @@ class CoreAuthorisationModPDO extends CoreAuthorisationModule {
 
         // insert new user roles
         foreach($roles AS $roleId) {
+            if ($roleId === '')
+                continue;
             $this->DB->query('-role-add-user-by-id', array('userId' => $userId, 'roleId' => $roleId));
         }
 

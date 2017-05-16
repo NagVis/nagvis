@@ -95,7 +95,7 @@ class ViewManageUsers {
         echo '</table>';
 
         submit(l('Create'));
-        form_end();
+        form_end(false);
     }
 
     private function editForm() {
@@ -114,7 +114,11 @@ class ViewManageUsers {
                     throw new FieldInputError('user_id', l('Invalid value provided.'));
                 $user_id = intval($user_id);
 
-                $roles = explode(',', post('user_roles'));
+                if (post('user_roles') !== "")
+                    $roles = explode(',', post('user_roles'));
+                else
+                    $roles = array();
+
                 if ($AUTHORISATION->updateUserRoles($user_id, $roles))
                     success(l('The roles for this user have been updated.'));
                 else
@@ -146,8 +150,11 @@ class ViewManageUsers {
 
         if ($user_id) {
             $user_roles = array();
-            foreach ($AUTHORISATION->getUserRoles($user_id) as $role)
-                $user_roles[$role['roleId']] = $role['name'];
+            foreach ($AUTHORISATION->getUserRoles($user_id) as $role) {
+                if ($role['name'] !== null) {
+                    $user_roles[$role['roleId']] = $role['name'];
+                }
+            }
 
             $available_roles = array();
             foreach ($AUTHORISATION->getAllRoles() AS $role)
@@ -170,7 +177,7 @@ class ViewManageUsers {
         }
 
         submit(l('Save'));
-        form_end();
+        form_end(false);
     }
 
     private function deleteForm() {
@@ -221,7 +228,7 @@ class ViewManageUsers {
         echo '</table>';
 
         submit(l('Delete'));
-        form_end();
+        form_end(false);
     }
 
     private function resetPwForm() {
@@ -297,7 +304,7 @@ class ViewManageUsers {
         echo '</table>';
 
         submit(l('Save'));
-        form_end();
+        form_end(false);
     }
 
     public function parse() {

@@ -1,4 +1,6 @@
 1.9b19
+Frontend:
+  * FIX: Fixed problems while editing roles of users
 
 1.9b18
 Core:
