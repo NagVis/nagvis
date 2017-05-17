@@ -3,6 +3,10 @@ Frontend:
   * FIX: Fixed problems while editing roles of users
   * FIX: Fixed checkHideMenu is not defined issue when header menu is disabled
 
+Installer:
+  * FIX: Fixed install of apache config to /etc/apache2/config-available
+         instead of /etc/apache2/config-available/conf.d
+
 1.9b18
 Core:
   * FIX: Fixed additional PHP 5.3 compatibility issue with new pgsql/ndomy code
