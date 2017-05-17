@@ -77,7 +77,8 @@ var ViewWorldmap = ViewMap.extend({
         g_map.on('moveend', this.handleMoveEnd.bind(this));
 
         // hide eventual open header dropdown menus when clicking on the map
-        g_map.on('mousedown', checkHideMenu);
+        if (checkHideMenu)
+            g_map.on('mousedown', checkHideMenu);
         g_map.on('mousedown', context_handle_global_mousedown);
     },
 
