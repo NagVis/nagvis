@@ -1,4 +1,8 @@
 1.9b19
+Core:
+  * FIX: Fixed "hanging" user/role related actions with older SQLite versions
+    (e.g. seen on CentOS 6 or older)
+
 Frontend:
   * FIX: Fixed problems while editing roles of users
   * FIX: Fixed checkHideMenu is not defined issue when header menu is disabled

@@ -278,7 +278,6 @@ class CorePDOHandler {
         $this->dsn = $dsn;
         $this->driver = $driver;
         $this->data = $drv_data;
-        $this->prepared = array();
         $this->updating = false;
         $this->lastErrorInfo = null;
 
@@ -303,24 +302,23 @@ class CorePDOHandler {
     }
 
     public function prep($q) {
-        if (!array_key_exists($q, $this->prepared)) {
-            // TODO: some kind of LRU cache for the dynamically built queries
-            if (array_key_exists($q, $this->data['queries'])) {
-                $sql = $this->data['queries'][$q];
-            } elseif (array_key_exists($q, self::$DRIVERS['_common']['queries'])) {
-                $sql = self::$DRIVERS['_common']['queries'][$q];
-            } else {
-                $sql = $q;
-            }
-            $st = $this->DB->prepare($sql);
-            if ($st === false) {
-                $this->lastErrorInfo = $this->DB->errorInfo();
-                return false;
-            }
-            $st->setFetchMode(PDO::FETCH_ASSOC);
-            $this->prepared[$q] = $st;
+        // TODO: some kind of LRU cache for the dynamically built queries
+        if (array_key_exists($q, $this->data['queries'])) {
+            $sql = $this->data['queries'][$q];
+        } elseif (array_key_exists($q, self::$DRIVERS['_common']['queries'])) {
+            $sql = self::$DRIVERS['_common']['queries'][$q];
+        } else {
+            $sql = $q;
         }
-        return $this->prepared[$q];
+
+        $st = $this->DB->prepare($sql);
+        if ($st === false) {
+            $this->lastErrorInfo = $this->DB->errorInfo();
+            return false;
+        }
+
+        $st->setFetchMode(PDO::FETCH_ASSOC);
+        return $st;
     }
 
     public function tableExist($table) {
