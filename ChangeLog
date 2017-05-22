@@ -1,3 +1,5 @@
+1.9b20
+
 1.9b19
 Core:
   * FIX: Fixed "hanging" user/role related actions with older SQLite versions
