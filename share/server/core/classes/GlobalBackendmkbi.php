@@ -75,11 +75,11 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             'default'  => '',
             'match'    => MATCH_STRING,
         ),
-        'auth_secret' => Array(
+        'auth_secret_file' => Array(
             'must'     => 0,
             'editable' => 1,
             'default'  => '',
-            'match'    => MATCH_STRING,
+            'match'    => MATCH_STRING_PATH,
         ),
         'timeout' => Array(
           'must'      => 1,
@@ -105,7 +105,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
 
         // Always set the HTTP basic auth header
         $username = cfg('backend_'.$backendId, 'auth_user');
-        $secret   = cfg('backend_'.$backendId, 'auth_secret');
+        $secret = $this->getSecret();
         if($username && $secret) {
             $authCred = base64_encode($username.':'.$secret);
             $httpContext['header'] = 'Authorization: Basic '.$authCred."\r\n";
@@ -118,6 +118,14 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
      * HELPERS
      *************************************************************************/
 
+    private function getSecret() {
+        $secret_file_path = cfg('backend_'.$this->backendId, 'auth_secret_file');
+        if ($secret_file_path)
+            return trim(file_get_contents($secret_file_path));
+        else
+            return cfg('backend_'.$this->backendId, 'auth_secret');
+    }
+
     private function aggrUrl($name) {
         return $this->baseUrl.'view.py?view_name=aggr_single&aggr_name='.$name.'&po_aggr_expand=1';
     }
@@ -129,7 +137,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
     private function getUrl($params) {
         $url = $this->baseUrl.$params.'&output_format=json';
         $username = cfg('backend_'.$this->backendId, 'auth_user');
-        $secret   = cfg('backend_'.$this->backendId, 'auth_secret');
+        $secret   = $this->getSecret();
         if ($username && $secret)
             $url .= '&_username='.$username.'&_secret='.$secret;
 

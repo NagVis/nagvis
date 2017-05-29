@@ -1,4 +1,6 @@
 1.9b20
+Core:
+  * MKBI backend: New option "auth_secret_file" to read the secret from a file
 
 1.9b19
 Core:
