@@ -121,6 +121,13 @@ backend="$OMD_SITE"
 [backend_$OMD_SITE]
 backendtype="mklivestatus"
 socket="unix:$OMD_ROOT/tmp/run/live"
+
+[backend_${OMD_SITE}_bi]
+backendtype="mkbi"
+base_url="http://localhost/$OMD_SITE/check_mk/"
+auth_user="automation"
+auth_secret_file="$OMD_ROOT/var/check_mk/web/automation/automation.secret"
+timeout=10
 EOF
 
 # Backup the agvis.conf on first time using omd_install.sh
