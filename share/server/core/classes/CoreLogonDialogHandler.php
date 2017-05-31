@@ -46,7 +46,7 @@ class CoreLogonDialogHandler {
                     // In case of success do an redirect, to prevent the browser from
                     // showing up bad warning messages upon page reload about resending
                     // the logins POST request
-                    http_redirect();
+                    do_http_redirect();
                 } else {
                     throw new FieldInputError(null, l('Authentication failed.'));
                 }
