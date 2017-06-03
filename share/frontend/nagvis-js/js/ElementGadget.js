@@ -110,7 +110,18 @@ var ElementGadget = Element.extend({
         this.detectGadgetType(sParams);
         if (this.gadget_type === 'img') {
             var oGadget = document.createElement('img');
+
+            // Register controls reposition handler to handle resizes during
+            // loading the image (from alt="" text to the real image)
+            addEvent(oGadget, 'load', function(obj) {
+                return function() {
+                    obj.place();
+                    obj = null;
+                };
+            }(this.obj));
+
             addZoomHandler(oGadget);
+
             oGadget.src = this.obj.conf.gadget_url + sParams;
 
             var alt = this.obj.conf.type + '-' + this.obj.conf.name;

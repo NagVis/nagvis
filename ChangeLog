@@ -2,6 +2,9 @@
 Core:
   * FIX: Fixed incompatibility with pecl-http (Cannot redeclare http_redirect()) 
 
+Frontend:
+  * FIX: Fixed wrong positioned labels of gadgets
+
 1.9
 Core:
   * MKBI backend: New option "auth_secret_file" to read the secret from a file
