@@ -4,6 +4,7 @@ Core:
 
 Frontend:
   * FIX: Fixed wrong positioned labels of gadgets
+  * FIX: Added missing stale images of the std_small iconset
 
 1.9
 Core:
