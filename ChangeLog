@@ -5,6 +5,7 @@ Core:
 Frontend:
   * FIX: Fixed wrong positioned labels of gadgets
   * FIX: Added missing stale images of the std_small iconset
+  * FIX: Fixed map update (background color, title, favicon) on changed state
 
 1.9
 Core:

@@ -139,7 +139,7 @@ var View = Base.extend({
                 at_least_one_changed = true; // always reload summary state
             }
             else {
-                at_least_one_changed &= this.objects[objectId].updateAttrs(attrs[i], only_state);
+                at_least_one_changed |= this.objects[objectId].updateAttrs(attrs[i], only_state);
             }
         }
 
