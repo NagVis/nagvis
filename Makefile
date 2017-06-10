@@ -44,6 +44,7 @@ version:
 setversion:
 	$(SED) -i "s/^VERSION=.*/VERSION=$(NEW_VERSION)/g" Makefile
 	$(SED) -i "s/.*CONST_VERSION.*/define('CONST_VERSION', '$(NEW_VERSION)');/g" share/server/core/defines/global.php
+	$(SED) -i '1s;^;$(NEW_VERSION)\n\n;' ChangeLog
 	MAJ_VERSION=$(NEW_VERSION) ; MAJ_VERSION=$${MAJ_VERSION::3} ; \
 	$(SED) -i "s/<title>NagVis [^ ]*/<title>NagVis $$MAJ_VERSION/g" docs/*/index.html ; \
 	$(SED) -i "s/<h1>NagVis [^ ]*/<h1>NagVis $$MAJ_VERSION/g" docs/*/welcome.html ; \
