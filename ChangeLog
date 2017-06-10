@@ -1,6 +1,7 @@
 1.9.1
 Core:
   * FIX: Fixed incompatibility with pecl-http (Cannot redeclare http_redirect()) 
+  * FIX: Fixed duplicate global section in sample automaps after editing
 
 Frontend:
   * FIX: Fixed wrong positioned labels of gadgets
