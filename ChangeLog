@@ -1,3 +1,5 @@
+1.9.2
+
 1.9.1
 Core:
   * FIX: Fixed incompatibility with pecl-http (Cannot redeclare http_redirect()) 
