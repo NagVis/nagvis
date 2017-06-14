@@ -1,4 +1,9 @@
 1.9.2
+Core:
+  * The default values for the "url" option of map objects can now be
+    configured in the map global sections using the options
+    host_url, hostgroup_url, service_url, servicegroup_url, map_url,
+    dyngroup_url and aggr_url
 
 1.9.1
 Core:

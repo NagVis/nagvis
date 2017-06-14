@@ -1020,6 +1020,13 @@ $mapConfigVarMap['global'] = Array(
         'only_hard_states' => null,
         'recognize_services' => null,
         'url_target' => null,
+        'host_url' => null,
+        'hostgroup_url' => null,
+        'service_url' => null,
+        'servicegroup_url' => null,
+        'map_url' => null,
+        'dyngroup_url' => null,
+        'aggr_url' => null,
     ),
     'events' => array(
         'event_on_load' => null,

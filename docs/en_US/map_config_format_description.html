@@ -267,6 +267,51 @@
         <tr>
         <td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window) </td>
         </tr>
+
+        <tr>
+            <td>host_url</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+            <td>The default url to follow when a user left-clicks on a host object. Available macros: [htmlcgi], [htmlbase], [host_name], [backend_id]</td>
+        </tr>
+        <tr>
+            <td>hostgroup_url</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+        <td>The default url to follow when a user left-clicks on an hostgroup object.
+          Available macros: [htmlcgi], [htmlbase], [hostgroup_name], [backend_id]</td>
+        </tr>
+        <tr>
+            <td>serviceurl</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+        <td>The default url to follow when a user left-clicks on an service object.
+          Available macros: [htmlcgi], [htmlbase], [host_name], [service_description], [backend_id]</td>
+        </tr>
+        <tr>
+            <td>servicegroup_url</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+            <td>The default url to follow when a user left-clicks on an servicegroup object.
+              Available macros: [htmlcgi], [htmlbase], [servicegroup_name], [backend_id]</td>
+        </tr>
+        <tr>
+            <td>dyngroup_url</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+            <td>The default url to follow when a user left-clicks on a dynamic group object.
+                This is disabled by default, because there is no good link target in the default
+                web GUI. So if you use another web GUI, there might be a useful target.
+              Available macros: [htmlcgi], [htmlbase], [dyngroup_name], [backend_id]</td>
+        </tr>
+        <tr>
+            <td>aggr_url</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+            <td>The default url to follow when a user left-clicks on an aggregation object.
+              Available macros: [htmlcgi], [htmlbase], [aggr_name], [backend_id]</td>
+        </tr>
+        <tr>
+            <td>map_url</td>
+            <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
+        <td>The default url to follow when a user left-clicks on an map object.
+          Available macros: [htmlcgi], [htmlbase], [map_name]</td>
+        </tr>
+
         <tr>
             <td>zoom</td>
             <td>100</td>

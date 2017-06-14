@@ -218,6 +218,19 @@ class GlobalMapCfg {
                 $this->typeDefaults['line'][$sVar] = $sTmp;
             }
         }
+
+        $types_with_url = array(
+            "host",
+            "hostgroup",
+            "service",
+            "servicegroup",
+            "map",
+            "dyngroup",
+            "aggr",
+        );
+        foreach ($types_with_url as $type_name) {
+            $this->typeDefaults[$type_name]["url"] = $this->getValue(0, $type_name."_url");
+        }
     }
 
     /**
