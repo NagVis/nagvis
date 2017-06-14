@@ -1,3 +1,5 @@
+1.9.3
+
 1.9.2
 Core:
   * The default values for the "url" option of map objects can now be
