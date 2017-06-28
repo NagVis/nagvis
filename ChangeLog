@@ -1,4 +1,8 @@
 1.9.3
+Frontend:
+  * std_html_bar Gadget: Added new optional parameters "perfdata" to specify
+  the perfdata index to show and "border" to enable/disable the border of the
+  bar using the values 0/1
 
 1.9.2
 Core:

@@ -75,18 +75,30 @@ if(substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
 $min = 0;
 $max = -1;
 $default = 0; 
+
+// Set default parameters values
+$border                      = 1; // Border
+$perfdata                    = 0; // Perfdata
+
+// Get parameters from gadget_opts
+if (isset($_GET['opts']) && ($_GET['opts'] != '')){
+    preg_match_all('/(\w+)=(\d+)/', $_GET['opts'], $matches, PREG_SET_ORDER);
+    for ($i = 0; $i < count($matches); $i++) {
+        if ($matches[$i][1] == 'border') { $border = $matches[$i][2]; }
+        if ($matches[$i][1] == 'perfdata') { $perfdata = $matches[$i][2]; }
+    }
+}
  
 /* Now read the parameters */
 
-// This gadget is simple and dirty, it only recognizes the first dataset of
-// performance data
+// Read dataset of performance data from parameters
 
-$value = $aPerfdata[0]['value'];
-$uom   = $aPerfdata[0]['uom'];
-$warn  = $aPerfdata[0]['warning'];
-$crit  = $aPerfdata[0]['critical'];
-$min   = $aPerfdata[0]['min'];
-$max   = $aPerfdata[0]['max'];
+$value = $aPerfdata[$perfdata]['value'];
+$uom   = $aPerfdata[$perfdata]['uom'];
+$warn  = $aPerfdata[$perfdata]['warning'];
+$crit  = $aPerfdata[$perfdata]['critical'];
+$min   = $aPerfdata[$perfdata]['min'];
+$max   = $aPerfdata[$perfdata]['max'];
 
 //================
 // Normalize / Fix value and max
@@ -98,7 +110,7 @@ if($value == null) {
     if($max != '' && $value < $min) {
     $value = $min;
     } elseif($max != '' && $max != -1 && $value > $max) {
-	$value = $max;
+    $value = $max;
     }
 }
 
@@ -107,11 +119,11 @@ if(intval($max) == 0 || $max == '')
     if(intval($crit) == 0 || $crit != '')
         $max = $crit + 1;
     else
-	$max = $warn + 1;
+    $max = $warn + 1;
 
 $width = (int) $value * 100 / $max;
 
 echo "<div style='position:absolute;left:0;width:100px;height:30px;text-align:center;line-height:30px;'>".$value.$uom."</div>";
-echo "<table style='width:100px;border:1px solid #000;height:30px;'><tr><td style='text-align:center;background-color:#dfdfdf;width:".$width."px'></td><td></td></tr></table>";
+echo "<table style='width:100px;border:".$border."px solid #000;height:30px;'><tr><td style='text-align:center;background-color:#dfdfdf;width:".$width."px'></td><td></td></tr></table>";
 exit(0);
 ?>
