@@ -82,8 +82,8 @@ function getDirection(event, el) {
     dir = "";
 
     // Handle IE and other browsers
-    xPos = event.layerX ? event.layerX : event.offsetX ? event.offsetX : 0;
-    yPos = event.layerY ? event.layerY : event.offsetY ? event.offsetY : 0;
+    xPos = event.offsetX ? event.offsetX : event.layerX ? event.layerX : 0;
+    yPos = event.offsetY ? event.offsetY : event.layerY ? event.layerY : 0;
 
     // The distance from the edge in pixels
     offset = 8;
