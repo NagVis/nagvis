@@ -41,10 +41,6 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
         $this->readFile();
     }
 
-    private function getFolderMapName($folderPath) {
-        return str_replace('/', '_', $folderPath);
-    }
-
     private function getPermissions($username) {
         # Add implicit permissions. These are basic permissions
         # which are needed for most users.
@@ -86,16 +82,6 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
                     }
                 }
             }    
-        }
-
-        # WATO folder related permissions
-        foreach(get_folder_permissions($username) AS $folder_path => $p) {
-            if(isset($p['read']) && $p['read']) {
-                $perms[] = array('Map', 'view', $this->getFolderMapName($folder_path));
-            }
-            if(isset($p['write']) && $p['write']) {
-                $perms[] = array('Map', 'edit', $this->getFolderMapName($folder_path));
-            }
         }
 
         return $perms;
