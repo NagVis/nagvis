@@ -1,4 +1,9 @@
 1.9.3
+Core:
+  * Multisite auth: Dropped support for WATO folder permissions
+    (See
+    http://git.mathias-kettner.de/git/?p=check_mk.git;a=commit;h=6a1845bcba346111c391f28dfc3214b0e5dd8876)
+
 Frontend:
   * std_html_bar Gadget: Added new optional parameters "perfdata" to specify
   the perfdata index to show and "border" to enable/disable the border of the
