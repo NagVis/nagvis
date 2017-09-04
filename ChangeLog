@@ -1,4 +1,9 @@
 1.9.4
+Core:
+  * List of hover menu childs (e.g. services in host object hover) can now be
+    left unsorted (keep original sorting). This is useful for aggregation objects
+    where the single elements have a defined order and should not be sorted by state
+    (Configure this per object by adding the attribute hover_childs_sort=k).
 
 1.9.3
 Core:

@@ -327,6 +327,9 @@ class NagVisObject {
                 // Order by State
                 usort($aTmpMembers, Array("NagVisObject", "sortObjectsByState"));
             break;
+            case 'k':
+                // Keep original order (as provided by backend)
+            break;
             case 'a':
             default:
                 // Order alhpabetical

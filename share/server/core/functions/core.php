@@ -156,6 +156,7 @@ function listHoverChildSorters() {
     return Array(
         'a' => l('Alphabetically'),
         's' => l('State'),
+        'k' => l('Keep original order'),
     );
 }
 
