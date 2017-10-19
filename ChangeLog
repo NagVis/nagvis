@@ -5,6 +5,9 @@ Core:
     where the single elements have a defined order and should not be sorted by state
     (Configure this per object by adding the attribute hover_childs_sort=k).
 
+Frontend:
+  * FIX: Fixed moving textbox objects in IE
+
 1.9.3
 Core:
   * Multisite auth: Dropped support for WATO folder permissions
