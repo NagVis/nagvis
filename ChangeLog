@@ -6,6 +6,7 @@ Core:
     (Configure this per object by adding the attribute hover_childs_sort=k).
 
 Frontend:
+  * On demand automaps: Hostgroup filter in header menu is now a searchable dropdown field 
   * FIX: Fixed moving textbox objects in IE
 
 1.9.3

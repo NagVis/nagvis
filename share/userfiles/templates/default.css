@@ -609,7 +609,7 @@ div#popupWindow h1 {
     text-decoration: none;
 }
 
-.header ul li span {
+.header ul li > span {
     margin:0;
     height:31px;
     line-height:32px;
