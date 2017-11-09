@@ -579,7 +579,7 @@ var ElementHover = Element.extend({
             oMacros.lang_name        = _('hostname');
             oMacros.lang_child_name  = _('servicename');
         } else if (this.obj.conf.type == 'service') {
-            oMacros.lang_name        = _('servicename');
+            oMacros.lang_name        = _('hostname');
         } else if (this.obj.conf.type == 'hostgroup') {
             oMacros.lang_name        = _('hostgroupname');
             oMacros.lang_child_name  = _('hostname');

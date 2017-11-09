@@ -1,4 +1,6 @@
 1.9.5
+Frontend:
+  * FIX: Fixed wrong hostname label in service hover menus
 
 1.9.4
 Core:
