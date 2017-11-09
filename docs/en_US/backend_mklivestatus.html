@@ -27,7 +27,8 @@
             <td>socket</td>
             <td>unix:/usr/local/nagios/var/rw/live</td>
             <td><p>The socket to connect to can be a local unix socket or a tcp socket. You have to define the type at the beginning of the string. Set &quot;unix:&quot; for unix sockets or &quot;tcp:&quot; for tcp sockets.</p> <p>In case of the unix socket you need to specify the path of the livestatus unix socket to connect to.</p> <p>When using a tcp socket you have to enter a host address and a tcp port using the following scheme: &lt;host>:&lt;port>. The host address can be an IP address or an FQDN.</p></td>
-        </tr><tr>
+        </tr>
+        <tr>
             <td>timeout</td>
             <td>5</td>
             <td>
@@ -35,6 +36,15 @@
                 This is just a fallback. To prevent timeouts when accessing remote sites you really should configure a statushost for the backend.
                 For details take a look at the general backend parameters documented in the <a href="nagvis_config_format_description.html#backend">backend section</a>
                 of the main configuration format description.</a></td>
+        </tr>
+        <tr>
+            <td>keepalive</td>
+            <td>1</td>
+            <td>
+                <font color="#f00">New in 1.9.5</font>: In case you need to connect to a livestatus source which does not
+                support the <tt>KeepAlive</tt> header (like LMD), or you simply don't want to use keepalive mode, you can
+                set this option to 0.
+            </td>
         </tr>
         </table>
         <p>There are also some general parameters. You can read about them in <a href="nagvis_config_format_description.html#backend">main configuration format description</a>.</p>

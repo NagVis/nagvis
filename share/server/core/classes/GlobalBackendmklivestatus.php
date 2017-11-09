@@ -58,6 +58,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
           'default'   => 5,
           'match'     => MATCH_INTEGER,
         ),
+        'keepalive' => Array(
+          'must'       => 0,
+          'editable'   => 1,
+          'default'    => 1,
+          'field_type' => 'boolean',
+          'match'      => MATCH_BOOLEAN
+        ),
     );
 
     /**
@@ -241,8 +248,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         // Query to get a json formated array back
         // Use KeepAlive with fixed16 header
-        if($response)
-            $query .= "OutputFormat: json\nKeepAlive: on\nResponseHeader: fixed16\n\n";
+        if($response) {
+            $query .= "OutputFormat: json\n";
+            if ((bool)cfg('backend_'.$this->backendId, 'keepalive'))
+                $query .= "KeepAlive: on\n";
+            $query .= "ResponseHeader: fixed16\n\n";
+        }
+
         // Disable regular error reporting to suppress php error messages
         $oldLevel = error_reporting(0);
         $write = fwrite($this->SOCKET, $query);
