@@ -1,6 +1,4 @@
 1.9.5
-  * Livestatus backend: You can now set the "keepalive" backend option to 0 to
-  disable sending the keepalive livestatus header
 
 1.9.4
 Core:

@@ -399,12 +399,6 @@ backendtype="mklivestatus"
 ;   "<backend_id>:<hostname>" -> e.g. "live_2:nagios"
 ;statushost=""
 ;socket="unix:/usr/local/nagios/var/rw/live"
-; You can use this option to customize the TCP connect timeout
-;timeout=5
-; In case you need to connect to a livestatus source which does not support the
-; KeepAlive header, or you simply don't want to use keepalive mode, you can
-; set this option to 0
-;keepalive=1
 
 ; Example definition for a MySQL backend
 ; in this example the ID of the Backend is "ndomy_1" you can define another ID.
