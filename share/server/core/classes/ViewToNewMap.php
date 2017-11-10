@@ -29,6 +29,17 @@ class ViewToNewMap {
         global $CORE;
 
         ob_start();
+
+        $view_params = array();
+        $params = ltrim(req('view_params'), '&');
+        if ($params) {
+            $parts = explode('&', $params);
+            foreach ($parts as $part) {
+                list($key, $val) = explode('=', $part);
+                $view_params[$key] = $val;
+            }
+        }
+
         if (is_action()) {
             try {
                 $name = post('name');
@@ -42,6 +53,18 @@ class ViewToNewMap {
                 if (count($CORE->getAvailableMaps('/^'.$name.'$/')) > 0)
                     throw new FieldInputError('name', l('A map with this name already exists.'));
 
+                if (!isset($view_params["worldmap_center"]))
+                    throw new FieldInputError('view_params', l('Please change your viewport before saving as new map.'));
+
+                if (!preg_match(MATCH_COORDS_MULTI, $view_params["worldmap_center"]))
+                    throw new FieldInputError('view_params', l('This is not a valid worldmap center'));
+
+                if (!isset($view_params["worldmap_zoom"]))
+                    throw new FieldInputError('view_params', l('Worldmap zoom parameter missing.'));
+
+                if (!preg_match(MATCH_INTEGER, $view_params["worldmap_zoom"]))
+                    throw new FieldInputError('view_params', l('This is not a valid worldmap zoom'));
+
                 // Read the old config
                 $MAPCFG = new GlobalMapCfg($orig_name);
                 $MAPCFG->readMapConfig();
@@ -52,6 +75,10 @@ class ViewToNewMap {
                 foreach ($MAPCFG->getMapObjects() AS $object_id => $cfg) {
                     $NEW->addElement($cfg['type'], $cfg, $perm = true, $object_id);
                 }
+
+                $NEW->setValue(0, "worldmap_center", $view_params["worldmap_center"]);
+                $NEW->setValue(0, "worldmap_zoom", $view_params["worldmap_zoom"]);
+                $NEW->storeUpdateElement(0);
 
                 success(l('The map has been created.'));
                 reload(cfg('paths','htmlbase').'/frontend/nagvis-js/index.php?mod=Map&show='.$name, 1);
@@ -75,13 +102,8 @@ class ViewToNewMap {
         focus('name');
 
         // Keep the view parameters the users has set
-        $params = ltrim(req('view_params'), '&');
-        if ($params) {
-            $parts = explode('&', $params);
-            foreach ($parts as $part) {
-                list($key, $val) = explode('=', $part);
-                hidden($key, $val);
-            }
+        foreach ($view_params AS $key => $val) {
+            hidden($key, $val);
         }
 
         form_end();

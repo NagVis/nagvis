@@ -2,6 +2,9 @@
 Frontend:
   * FIX: Fixed wrong hostname label in service hover menus
 
+Worldmap:
+  * FIX: Fixed errors when saving viewport as new map
+
 1.9.4
 Core:
   * List of hover menu childs (e.g. services in host object hover) can now be

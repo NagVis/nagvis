@@ -243,6 +243,10 @@ function worldmap_update_object($MAPCFG, $map_name, &$map_config, $obj_id, $inse
     if ($obj['type'] == 'global')
         return false; // adding global section (during map creation)
 
+    // disable creating new objects during "view to new map" action
+    if (val($_GET, 'act', null) == 'viewToNewMap')
+        return true;
+
     $lat  = $obj['x'];
     $lng  = $obj['y'];
     $lat2 = null;

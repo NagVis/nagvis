@@ -414,8 +414,8 @@ class NagVisHeaderMenu {
             'langToStaticMap' => l('Export to static map'),
             'langModifyParams' => l('Modify view'),
             'langMapViewport'      => l('Viewport'),
-            'langSaveView'         => l('Save View'),
-            'langSaveViewAsNewMap' => l('Save as new Map'),
+            'langSaveView'         => l('Save view'),
+            'langSaveViewAsNewMap' => l('Save as new map'),
             'langScaleToAll'       => l('Show all objects'),
             // Supported by backend and not using trusted auth
             'supportedChangePassword' => $AUTH->checkFeature('changePassword') && !$AUTH->authedTrusted(),
