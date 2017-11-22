@@ -562,7 +562,7 @@ check_backend() {
     fi
     
     BACKENDS=${BACKENDS#,}
-    [ ! -z "$BACKENDS" ] && CALL="$CALL -b $NAGVIS_BACKEND"
+    [ ! -z "$BACKENDS" ] && CALL="$CALL -i $BACKENDS"
 }
 
 # Check Apache PHP module
