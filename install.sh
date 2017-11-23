@@ -1573,27 +1573,30 @@ if [ "$INSTALLER_ACTION" = "update" -a "$NAGVIS_VER_OLD" != "UNKNOWN" -a "$INSTA
         sed -i '/^requestmaxlength=/d' $NAGVIS_PATH/etc/nagvis.ini.php
         chk_rc "| Error" "$DONE"
         
-        DONE=`log "Removing allowed_for_config option from map configs..." done`
-        grep -r '^allowed_for_config=' $NAGVIS_PATH/etc/maps/*.cfg >> $NAGVIS_PATH/$AUTH_BACKUP
-        sed -i '/^allowed_for_config=/d' $NAGVIS_PATH/etc/maps/*.cfg
-        chk_rc "| Error" "$DONE"
-        
-        DONE=`log "Removing allowed_user from map configs..." done`
-        grep -r '^allowed_user=' $NAGVIS_PATH/etc/maps/*.cfg >> $NAGVIS_PATH/$AUTH_BACKUP
-        sed -i '/^allowed_user=/d' $NAGVIS_PATH/etc/maps/*.cfg
-        chk_rc "| Error" "$DONE"
+        # Remove options from maps only if maps are defined
+        if [ `find $NAGVIS_PATH/etc/maps -type f -name "*.cfg" | wc -l` -gt 0 ]; then
+            DONE=`log "Removing allowed_for_config option from map configs..." done`
+            grep -r '^allowed_for_config=' $NAGVIS_PATH/etc/maps/*.cfg >> $NAGVIS_PATH/$AUTH_BACKUP
+            sed -i '/^allowed_for_config=/d' $NAGVIS_PATH/etc/maps/*.cfg
+            chk_rc "| Error" "$DONE"
 
-        DONE=`log "Removing hover_timeout from map configs..." done`
-        sed -i '/^hover_timeout=/d' $NAGVIS_PATH/etc/maps/*.cfg
-        chk_rc "| Error" "$DONE"
+            DONE=`log "Removing allowed_user from map configs..." done`
+            grep -r '^allowed_user=' $NAGVIS_PATH/etc/maps/*.cfg >> $NAGVIS_PATH/$AUTH_BACKUP
+            sed -i '/^allowed_user=/d' $NAGVIS_PATH/etc/maps/*.cfg
+            chk_rc "| Error" "$DONE"
 
-        DONE=`log "Removing usegdlibs from map configs..." done`
-        sed -i '/^usegdlibs=/d' $NAGVIS_PATH/etc/maps/*.cfg
-        chk_rc "| Error" "$DONE"
+            DONE=`log "Removing hover_timeout from map configs..." done`
+            sed -i '/^hover_timeout=/d' $NAGVIS_PATH/etc/maps/*.cfg
+            chk_rc "| Error" "$DONE"
 
-        DONE=`log "Removing gadget_type from map configs..." done`
-        sed -i '/^gadget_type=/d' $NAGVIS_PATH/etc/maps/*.cfg
-        chk_rc "| Error" "$DONE"
+            DONE=`log "Removing usegdlibs from map configs..." done`
+            sed -i '/^usegdlibs=/d' $NAGVIS_PATH/etc/maps/*.cfg
+            chk_rc "| Error" "$DONE"
+
+            DONE=`log "Removing gadget_type from map configs..." done`
+            sed -i '/^gadget_type=/d' $NAGVIS_PATH/etc/maps/*.cfg
+            chk_rc "| Error" "$DONE"
+        fi
 
         line
     fi
