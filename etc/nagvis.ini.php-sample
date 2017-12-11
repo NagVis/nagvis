@@ -441,15 +441,15 @@ backendtype="ndomy"
 ; ----------------------------
 
 ; in this example the browser switches between the maps demo and demo2 every 15
-; seconds, the rotation is enabled by url: index.php?rotation=demo
-[rotation_demo]
+; seconds, the rotation is enabled by url: index.php?rotation=example
+;[rotation_example]
 ; These steps are rotated. The single steps may have optional prefixes like "Demo2:"
 ; which are used as display text on the index pages rotation list.
 ; You may also add external URLs as steps. Simply enclose the url using []
 ; instead of the map name.
-maps="demo-germany,demo-ham-racks,demo-load,demo-muc-srv1,demo-geomap,demo-automap"
+;maps="map1,map2,map3"
 ; rotation interval (seconds)
-interval=15
+;interval=15
 
 ; ----------------------------
 ; Action definitions
