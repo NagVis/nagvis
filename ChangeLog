@@ -5,6 +5,9 @@ Frontend:
 Worldmap:
   * FIX: Fixed errors when saving viewport as new map
 
+Installer:
+  * FIX: Fixed displaying wrong backend option "-b" in summary output
+
 1.9.4
 Core:
   * List of hover menu childs (e.g. services in host object hover) can now be
