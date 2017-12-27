@@ -421,6 +421,11 @@ detect_livestatus_socket() {
  
 # Check Backend module prerequisites
 check_backend() {
+    # Do not ask in quiet mode
+    if [ $INSTALLER_QUIET -eq 0 ]; then
+        return
+    fi
+
     # Ask to configure the backends during update
     if [ $INSTALLER_ACTION = "update" ]; then
         confirm "Do you want to update the backend configuration?" "n"
