@@ -423,8 +423,13 @@ detect_livestatus_socket() {
 check_backend() {
     # Ask to configure the backends during update
     if [ $INSTALLER_ACTION = "update" ]; then
-        confirm "Do you want to update the backend configuration?" "n"
-        if [ "$ANS" = "N" ]; then
+        ANS="n"
+        if [ $INSTALLER_QUIET -ne 1 ]; then
+            ask_user "ANS" "n" 1 "check_confirm" \
+                "Do you want to update the backend configuration?"
+        fi
+
+        if [ "$ANS" = "n" ]; then
             return
         fi
     fi
