@@ -9,6 +9,7 @@ Installer:
   * FIX: Fixed displaying wrong backend option "-b" in summary output
   * FIX: Don't display "update backend configuration" confirm in quiet mode
   * FIX: Don't fail updating map configurations when no maps are defined
+  * FIX: Don't register demo rotation when using the "-o" option
 
 1.9.4
 Core:
