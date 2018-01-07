@@ -292,9 +292,11 @@ var ViewMap = View.extend({
                 var oImage = document.createElement('img');
                 oImage.setAttribute('id', 'backgroundImage');
                 document.getElementById('map').appendChild(oImage);
+                addZoomHandler(oImage, true);
             }
 
-            addZoomHandler(oImage, true);
+            oImage.removeAttribute("width");
+            oImage.removeAttribute("height");
             oImage.src = sImage;
         } else if (oImage) {
             oImage.parentNode.removeChild(oImage);

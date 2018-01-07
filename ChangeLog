@@ -1,6 +1,7 @@
 1.9.5
 Frontend:
   * FIX: Fixed wrong hostname label in service hover menus
+  * FIX: Fixed repeated zoom of background image on state updates
 
 Worldmap:
   * FIX: Fixed errors when saving viewport as new map
