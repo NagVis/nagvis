@@ -184,12 +184,12 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
 
     // When an object has relative coordinates also fetch the referenced object
     if ($referenced) {
-        $keys = array_keys($referenced);
+        $keys = array_unique(array_keys($referenced));
         $count = count($keys);
         $oids = array();
         $filter = array();
         for ($i = 1; $i <= $count; $i++) {
-            $id = "o$i";
+            $id = ":o$i";
             $oids[] = $id;
             $filter[$id] = $keys[$i - 1];
         }
