@@ -115,7 +115,7 @@ function getObjectNames($type, $MAPCFG, $objId, $attrs) {
     } elseif ($objId !== null) {
         $backendIds = $MAPCFG->getValue($objId, 'backend_id');
     } else {
-        $backendIds = $MAPCFG->getValue('0', 'backend_id');
+        $backendIds = $MAPCFG->getValue(0, 'backend_id');
     }
 
     // Return simply nothing when a user just choosen to insert multiple backends

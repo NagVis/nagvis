@@ -5,6 +5,7 @@ Frontend:
 
 Worldmap:
   * FIX: Fixed errors when saving viewport as new map
+  * FIX: Fixed rare issue when cloning just added objects
 
 Installer:
   * FIX: Fixed displaying wrong backend option "-b" in summary output
