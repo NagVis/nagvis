@@ -117,7 +117,7 @@ abstract class CoreModule {
         // Maybe the requested action is summarized by some other
         $action = !is_bool($this->aActions[$this->sAction]) ? $this->aActions[$this->sAction] : $this->sAction;
 
-        if(!$AUTHORISATION->isPermitted($this->sName, $action, $this->sObject))
+        if($authorized && !$AUTHORISATION->isPermitted($this->sName, $action, $this->sObject))
             $authorized = false;
 
         if(!$authorized)
