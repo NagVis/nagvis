@@ -482,8 +482,13 @@ class CoreBackendMgmt {
                     $aResult = $this->getBackend($backendId)->getHostMemberCounts($aObjs, $options, $filters);
                 break;
                 case 'AGGR_MEMBER_STATE':
-                    $filters = Array(Array('key' => 'aggr_name', 'op' => '=', 'val' => 'name'));
-                    $aResult = $this->getBackend($backendId)->getAggrStateCounts($aObjs, $options, $filters);
+                    if (!$this->checkBackendFeature($backendId, 'getAggrStateCounts', false)) {
+                        throw new BackendException(l('This type of object is not supported by this backend ([BACKENDID]).',
+                              Array('BACKENDID' => $backendId)), $backendId);
+                    } else {
+                        $filters = Array(Array('key' => 'aggr_name', 'op' => '=', 'val' => 'name'));
+                        $aResult = $this->getBackend($backendId)->getAggrStateCounts($aObjs, $options, $filters);
+                    }
                 break;
             }
         } catch(BackendException $e) {

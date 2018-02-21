@@ -1,4 +1,7 @@
 1.9.6
+Core:
+  * FIX: Improved error handling when trying to use aggregation objects with
+         backends that don't support these object types
 
 1.9.5
 Frontend:
