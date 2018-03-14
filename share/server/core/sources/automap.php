@@ -194,6 +194,13 @@ if (cfg('global', 'shinken_features')) {
 
 // Alter some global vars with automap specific things
 $updateConfigVars = array(
+    // Fall back to any size in case no size is configured
+    'width' => array(
+        'default' => 1024,
+    ),
+    'height' => array(
+        'default' => 800,
+    ),
     'label_show' => array(
         'default' => '1',
     ),

@@ -2,6 +2,9 @@
 Core:
   * FIX: Improved error handling when trying to use aggregation objects with
          backends that don't support these object types
+  * FIX: Fixed "A non-numeric value encountered" when creating new automaps
+         without width/height attributes. A workaround would be to add
+	 height/width options manually to the map configuration.
 
 1.9.5
 Frontend:
