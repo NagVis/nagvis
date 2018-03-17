@@ -1,5 +1,7 @@
 1.9.6
 Core:
+  * Dynamic map objects can now be sorted by state (Using the new map global
+    settings dynmap_sort and dynmap_order)
   * FIX: Improved error handling when trying to use aggregation objects with
          backends that don't support these object types
   * FIX: Fixed "A non-numeric value encountered" when creating new automaps

@@ -130,7 +130,7 @@ class GlobalMapCfg {
      * @param   Boolean  Only fetch global type settings
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function gatherTypeDefaults($onlyGlobal) {
+    public function gatherTypeDefaults($onlyGlobal) {
         $types = array('global');
 
         if (!$onlyGlobal)

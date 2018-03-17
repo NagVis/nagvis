@@ -489,9 +489,20 @@ class NagVisObject {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private static function sortObjectsByState($OBJ1, $OBJ2) {
-        global $_MAINCFG;
         $state1 = $OBJ1->sum[STATE];
+        $subState1 = $OBJ1->getSubState(SUMMARY_STATE);
+
         $state2 = $OBJ2->sum[STATE];
+        $subState2 = $OBJ2->getSubState(SUMMARY_STATE);
+
+        return NagVisObject::sortObjectsByState($state1, $subState1, $state2, $subState2, self::$sSortOrder);
+    }
+
+    /**
+     * Helper to sort states independent of objects
+     */
+    public static function sortStatesByStateValues($state1, $subState1, $state2, $subState2, $sortOrder) {
+        global $_MAINCFG;
 
         // Quit when nothing to compare
         if($state1 === null || $state2 === null) {
@@ -501,22 +512,18 @@ class NagVisObject {
         $stateWeight = $_MAINCFG->getStateWeight();
 
         // Handle normal/ack/downtime states
-
-        $stubState1 = $OBJ1->getSubState(SUMMARY_STATE);
-        $stubState2 = $OBJ2->getSubState(SUMMARY_STATE);
-
-        if($stateWeight[$state1][$stubState1] == $stateWeight[$state2][$stubState2]) {
+        if($stateWeight[$state1][$subState1] == $stateWeight[$state2][$subState2]) {
             return 0;
-        } elseif($stateWeight[$state1][$stubState1] < $stateWeight[$state2][$stubState2]) {
+        } elseif($stateWeight[$state1][$subState1] < $stateWeight[$state2][$subState2]) {
             // Sort depending on configured direction
-            if(self::$sSortOrder === 'asc') {
+            if($sortOrder === 'asc') {
                 return +1;
             } else {
                 return -1;
             }
         } else {
             // Sort depending on configured direction
-            if(self::$sSortOrder === 'asc') {
+            if($sortOrder === 'asc') {
                 return -1;
             } else {
                 return +1;

@@ -107,6 +107,20 @@ $configVars = array(
         'default'    => 30,
         'match'      => MATCH_COORD_SIMPLE,
     ),
+    'dynmap_sort' => Array(
+        'must'       => false,
+        'default'    => 'a',
+        'match'      => MATCH_STRING_NO_SPACE,
+        'field_type' => 'dropdown',
+        'list'       => 'listHoverChildSorters',
+    ),
+    'dynmap_order' => Array(
+        'must'       => false,
+        'default'    => 'asc',
+        'match'      => MATCH_ORDER,
+        'field_type' => 'dropdown',
+        'list'       => 'listHoverChildOrders',
+    ),
 );
 
 // Assign config variables to specific object types
@@ -121,6 +135,8 @@ $configVarMap = array(
             'dynmap_offset_x'      => null,
             'dynmap_offset_y'      => null,
             'dynmap_per_row'       => null,
+            'dynmap_sort'          => null,
+            'dynmap_order'         => null,
         ),
     ),
 );
@@ -135,7 +151,52 @@ function dynmap_object_in_grid($params, $map_object) {
         && $map_object['y'] - $top > 0 && ($map_object['y'] - $top) % $step_y === 0;
 }
 
-function dynmap_sort_objects($o1, $o2) {
+function dynmap_sort_objects($MAPCFG, $map_name, &$map_config, &$params, &$objects) {
+    global $g_dynmap_order, $g_map_obj, $_BACKEND;
+
+    $g_dynmap_order = $params['dynmap_order'];
+
+    // Now recalculate and reposition all map objects which are currently
+    // positioned on the map using the grid mechanism. But first sort all
+    // objects.
+    switch($params['dynmap_sort']) {
+        case 's':
+            $SORT_MAPCFG = new GlobalMapCfg($map_name);
+            $SORT_MAPCFG->gatherTypeDefaults(false);
+            foreach ($objects AS $object_id => $object) {
+                $SORT_MAPCFG->addElement($object['type'], $object, false, $object_id);
+            }
+
+            $g_map_obj = new NagVisMapObj($SORT_MAPCFG, !IS_VIEW);
+            $g_map_obj->fetchMapObjects();
+            $g_map_obj->queueState(GET_STATE, DONT_GET_SINGLE_MEMBER_STATES);
+            $_BACKEND->execute();
+            $g_map_obj->applyState();
+
+            // Add keys for sorting to $objects entries
+            // TODO: Improve this: Adding these temporary keys should not be necessary
+            foreach($g_map_obj->getStateRelevantMembers() AS $OBJ) {
+                $object_id = $OBJ->getObjectId();
+                $objects[$object_id]['.state'] = $OBJ->sum[STATE];
+                $objects[$object_id]['.sub_state'] = $OBJ->getSubState(SUMMARY_STATE);
+            }
+
+            usort($objects, 'dynmap_sort_objects_by_state');
+
+            // Cleanup sort specific keys again
+            foreach ($objects AS $object_id => $object) {
+                unset($object['.state']);
+                unset($object['.sub_state']);
+            }
+        break;
+        case 'a':
+        default:
+            usort($objects, 'dynmap_sort_objects_by_name');
+        break;
+    }
+}
+
+function dynmap_sort_objects_by_name($o1, $o2) {
     $o1_str = '';
     $o2_str = '';
     if ($o1['type'] == 'service') {
@@ -151,6 +212,14 @@ function dynmap_sort_objects($o1, $o2) {
         return 0;
     return ($o1_str > $o2_str) ? 1 : -1;
 }
+
+function dynmap_sort_objects_by_state($o1, $o2) {
+    global $g_dynmap_order;
+    return NagVisObject::sortStatesByStateValues($o1['.state'], $o1['.sub_state'],
+                                                 $o2['.state'], $o2['.sub_state'], $g_dynmap_order);
+}
+
+$g_dynmap_order = 'asc';
 
 function process_dynmap($MAPCFG, $map_name, &$map_config) {
     $params = $MAPCFG->getSourceParams();
@@ -185,10 +254,7 @@ function process_dynmap($MAPCFG, $map_name, &$map_config) {
         }
     }
 
-    // Now recalculate and reposition all map objects which are currently
-    // positioned on the map using the grid mechanism. But first sort all
-    // objects by their names.
-    usort($objects, 'dynmap_sort_objects');
+    dynmap_sort_objects($MAPCFG, $map_name, $map_config, $params, $objects);
 
     $x = $params['dynmap_init_x'];
     $y = $params['dynmap_init_y'];
@@ -220,6 +286,14 @@ function changed_dynmap($MAPCFG, $compare_time) {
     $t = dynmap_program_start($MAPCFG, $params);
     if($t > $compare_time)
         return true;
+
+    // When sorted by state the state of the objects is relevant for
+    // the order of objects. Therefore we need to track state changes
+    // here.
+    if ($params["dynmap_sort"] === 's') {
+        // TODO
+        return true;
+    }
 
     return false;
 }
