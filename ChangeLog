@@ -1,3 +1,5 @@
+1.9.7
+
 1.9.6
 Core:
   * Dynamic map objects can now be sorted by state (Using the new map global
