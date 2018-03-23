@@ -495,7 +495,7 @@ class NagVisObject {
         $state2 = $OBJ2->sum[STATE];
         $subState2 = $OBJ2->getSubState(SUMMARY_STATE);
 
-        return NagVisObject::sortObjectsByState($state1, $subState1, $state2, $subState2, self::$sSortOrder);
+        return NagVisObject::sortStatesByStateValues($state1, $subState1, $state2, $subState2, self::$sSortOrder);
     }
 
     /**
