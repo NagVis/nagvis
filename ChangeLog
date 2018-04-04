@@ -1,5 +1,6 @@
 1.9.8
 Frontend:
+  * FIX: Fixed incompatibility with PHP 7.2 in Dwoo 3rd party code
   * FIX: Fixed outdated Monitoring portal link in header menu
 
 1.9.7
