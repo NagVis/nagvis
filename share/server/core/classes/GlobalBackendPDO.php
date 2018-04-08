@@ -1200,6 +1200,19 @@ class GlobalBackendPDO implements GlobalBackendInterface {
     }
 
     /**
+     * PUBLIC Method getHostNamesInHostgroup
+     *
+     * This is required to bypass the filter_group error in automap if you integrate nagvis with icinga2
+     *
+     * @param		String		Name of hostgroup to get the hosts of
+     * @return	Array			Array with hostnames
+     */
+    public function getHostNamesInHostgroup($hostgroupName) {
+    	return $this->getHostsByHostgroupName($hostgroupName); 
+    }
+
+
+    /**
      * PUBLIC Method getServicesByServicegroupName
      *
      * Gets all services of a servicegroup
