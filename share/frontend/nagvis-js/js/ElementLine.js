@@ -725,7 +725,7 @@ var ElementLine = Element.extend({
             return;
         }
 
-        if (this.obj.conf.line_type == 14 || this.obj.conf.line_type == 15) {
+        if (this.obj.conf.line_type == 14) {
             if (!isset(perf[2])) {
                 this.addWeathermapLineError("Value 3 is empty");
                 return;
