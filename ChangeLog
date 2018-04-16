@@ -6,6 +6,9 @@ Frontend:
 Automap:
   * FIX: Fixed automaps filter_group when using ndomy/pgsql backend
 
+Installer:
+  * FIX: Prevent error when trying to replace old map options and no map exists
+
 1.9.7
 Frontend:
   * FIX: Fixed object sort by state regression in 1.9.6
