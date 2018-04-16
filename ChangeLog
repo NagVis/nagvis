@@ -3,6 +3,9 @@ Frontend:
   * FIX: Fixed incompatibility with PHP 7.2 in Dwoo 3rd party code
   * FIX: Fixed outdated Monitoring portal link in header menu
 
+Automap:
+  * FIX: Fixed automaps filter_group when using ndomy/pgsql backend
+
 1.9.7
 Frontend:
   * FIX: Fixed object sort by state regression in 1.9.6
