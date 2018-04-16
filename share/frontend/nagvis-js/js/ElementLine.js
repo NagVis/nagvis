@@ -655,11 +655,15 @@ var ElementLine = Element.extend({
         if (this.perfdata === null)
             return;
 
-        var txt = this.perfdata[id][1] + this.perfdata[id][2];
-
-        // Show only bandwidth label
-        if (this.obj.conf.line_type == 15)
+        var txt;
+        if (this.obj.conf.line_type == 13 || this.obj.conf.line_type == 14) {
+            // Show percentage label
+            txt = this.perfdata[id][1] + this.perfdata[id][2];
+        }
+        else if (this.obj.conf.line_type == 15) {
+            // Show only bandwidth label
             txt = this.perfdata[2+id][1] + this.perfdata[2+id][2];
+        }
 
         // Maybe use function to detect the real height in future
         var labelHeight = 21,
