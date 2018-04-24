@@ -1,4 +1,7 @@
 1.9.9
+Frontend:
+  * FIX: Fixed possible "Cannot read property 'conf' ... Line 4383" error when
+         trying to interact with the map while it is initially loading
 
 1.9.8
 Frontend:

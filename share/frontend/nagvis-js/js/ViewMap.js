@@ -274,9 +274,11 @@ var ViewMap = View.extend({
 
     // Sets basic information like background image
     renderMapBasics: function() {
-        oPageProperties.page_title = oPageProperties.alias
-                                     + ' (' + this.sum_obj.conf.summary_state + ') :: '
-                                     + oGeneralProperties.internal_title;
+        var title = oPageProperties.alias;
+        if (this.sum_obj && this.sum_obj.conf)
+            title += ' (' + this.sum_obj.conf.summary_state + ')';
+        title += ' :: ' + oGeneralProperties.internal_title;
+        oPageProperties.page_title = title;
 
         this.renderPageBasics();
         this.renderBackgroundImage();
