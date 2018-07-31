@@ -340,7 +340,7 @@ function playSound(objectId, iNumTimes){
         var oEmbed = document.createElement('embed');
         oEmbed.setAttribute('id', 'sound'+sState);
         // Relative URL does not work, add full url
-        oEmbed.setAttribute('src', window.location.protocol + '//' + window.location.host + ':'
+        oEmbed.setAttribute('src', window.location.protocol + '//' + window.location.hostname + ':'
                                                  	+ window.location.port + oGeneralProperties.path_sounds+sSound);
         oEmbed.setAttribute('width', '0');
         oEmbed.setAttribute('height', '0');
