@@ -140,7 +140,12 @@ class ViewManageMaps {
 
         // rename config file
         rename(cfg('paths', 'mapcfg').$name.'.cfg',
-               cfg('paths', 'mapcfg').$new_name.'.cfg');
+		cfg('paths', 'mapcfg').$new_name.'.cfg');
+
+	// This is a bugfix. When a map is renamed, the maps cache file content is not updated with the new map name
+        // To solve the bug the cache must be deleted to force the system to recreate it.
+        exec('rm -f ' . cfg('paths','var') . 'map*');
+
     }
 
     private function renameForm() {
