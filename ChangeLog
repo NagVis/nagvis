@@ -2,6 +2,8 @@
 Frontend:
   * FIX: Fixed possible "Cannot read property 'conf' ... Line 4383" error when
          trying to interact with the map while it is initially loading
+  * FIX: Fixed incompatibility with PHP 7.2 when creating new users
+  * FIX: Fixed loading sounds when using non standard HTTP/HTTPS ports
 
 1.9.8
 Frontend:
