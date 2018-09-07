@@ -4,6 +4,8 @@ Frontend:
          trying to interact with the map while it is initially loading
   * FIX: Fixed incompatibility with PHP 7.2 when creating new users
   * FIX: Fixed loading sounds when using non standard HTTP/HTTPS ports
+  * FIX: Fixed "JavaScript Error : checkHideMenu" on worldmaps when header is
+         disabled
 
 1.9.8
 Frontend:
