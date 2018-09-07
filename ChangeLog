@@ -1,3 +1,5 @@
+1.9.10
+
 1.9.9
 Frontend:
   * FIX: Fixed possible "Cannot read property 'conf' ... Line 4383" error when

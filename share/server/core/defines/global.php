@@ -23,7 +23,7 @@
  *****************************************************************************/
  
 // NagVis Version
-define('CONST_VERSION', '1.9.9');
+define('CONST_VERSION', '1.9.10');
 
 // Set PHP error handling to standard level
 // Different levels for php versions below 5.1 because PHP 5.1 reports
