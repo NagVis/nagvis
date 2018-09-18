@@ -101,16 +101,7 @@ function popupWindowPutContent(oContent) {
     }
 }
 
-/**
- * popupWindow()
- *
- * Creates a javascript dialog
- *
- * @param   String   Window title
- * @param   Object   Object containing the contents
- * @return  Boolean
- * @author	Lars Michelsen <lm@larsmichelsen.com>
- */
+// Creates a javascript dialog
 function popupWindow(title, oContent, sWidth, closable) {
     if(oContent === null || oContent.code === null)
         return false;
@@ -167,9 +158,8 @@ function popupWindow(title, oContent, sWidth, closable) {
     content = null;
 
     document.body.appendChild(oContainerDiv);
-    oContainerDiv = null;
 
     popupWindowPutContent(oContent);
 
-    return false;
+    return oContainerDiv;
 }

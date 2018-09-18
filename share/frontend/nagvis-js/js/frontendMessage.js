@@ -34,6 +34,10 @@ function frontendMessageRemove(key) {
     }
 }
 
+function frontendMessageAdd(key, container) {
+    frontendMessages[key] = container;
+}
+
 function frontendMessage(oMessage, key) {
     if (oMessage === null) {
         throw "Could not display empty frontendMessage()";
@@ -51,8 +55,9 @@ function frontendMessage(oMessage, key) {
     if (isset(key) && frontendMessagePresent(key))
         return;
 
-    popupWindow(sTitle, {'code': '<div class="'+oMessage.type.toLowerCase()+'">'
+    var container = popupWindow(sTitle, {'code': '<div class="'+oMessage.type.toLowerCase()+'">'
                                  +oMessage.message+'</div>'}, 500, closable);
+    frontendMessageAdd(key, container);
 
     // Maybe there is a request for a reload/redirect
     if (typeof oMessage.reloadTime !== 'undefined' && oMessage.reloadTime !== null) {

@@ -72,6 +72,11 @@ function call_ajax(url, args)
         AJAX.onreadystatechange = function() {
             if (AJAX && AJAX.readyState == 4) {
                 if (AJAX.status == 200) {
+                    // in case this is no error remove all frontend messages of type
+                    // serverError which might have been shown by the default
+                    // args.error_handler.
+                    frontendMessageRemove('serverError');
+
                     var response = AJAX.responseText;
                     if (args.decode_json) {
                         try {
@@ -97,10 +102,6 @@ function call_ajax(url, args)
                             args.error_handler(AJAX.status, response, args.handler_data);
                             return '';
                         }
-                        // in case this is no error remove all frontend messages of type
-                        // serverError which might have been shown by the default
-                        // args.error_handler.
-                        frontendMessageRemove('serverError');
                     }
 
                     if (args.response_handler)

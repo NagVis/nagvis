@@ -1,4 +1,7 @@
 1.9.10
+Frontend
+  * FIX: Network error popups are now shown when an error occurs and hidden again
+         automatically when a subsequent call succeeds
 
 1.9.9
 Frontend:
