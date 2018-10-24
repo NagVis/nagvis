@@ -696,7 +696,7 @@ div#popupWindow h1 {
 #sidebar li {margin:0;padding:0;line-height:25px;}
 #sidebar li.spacerbottom {border-bottom:1px dotted #e5e5e5}
 #sidebar li.spacertop {border-top:1px dotted #e5e5e5}
-#sidebar li > div {width:200px;height:25px;clear:both;}
+#sidebar li > div {width:200px;clear:both;}
 #sidebar li > div a {padding-left:20px;}
 
 #sidebar li.parent div {}
