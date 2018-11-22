@@ -127,7 +127,7 @@ $configVars = array(
     'ignore_hosts' => array(
         'must'       => false,
         'default'    => '',
-        'match'      => MATCH_STRING_NO_SPACE_EMPTY,
+        'match'      => MATCH_REGEX,
     ),
 
     'margin' => array(
@@ -469,6 +469,11 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
 
         if (in_array($rel_name, $params['ignore_hosts']) == True){
             continue;
+        }
+        foreach($params['ignore_hosts'] as $value) {
+            if (preg_match('/'.$value.'/', $rel_name)) {
+                continue 2;
+            }
         }
         $obj = automap_obj($MAPCFG, $params, $saved_config, $rel_name);
 
