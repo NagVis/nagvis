@@ -471,8 +471,10 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
             continue;
         }
         foreach($params['ignore_hosts'] as $value) {
-            if (preg_match('/'.$value.'/', $rel_name)) {
-                continue 2;
+            if ($value != '') {
+                if (preg_match('/'.$value.'/', $rel_name)) {
+                    continue 2;
+                }
             }
         }
         $obj = automap_obj($MAPCFG, $params, $saved_config, $rel_name);
