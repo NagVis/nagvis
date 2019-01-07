@@ -759,6 +759,9 @@ var ElementLine = Element.extend({
     },
 
     calcWeathermapColor: function(id) {
+        if (this.obj.conf.summary_state == "ERROR")
+            return oStates["ERROR"].color;
+
         if (!this.perfdata)
             return '#FFCC66';
 
@@ -767,8 +770,7 @@ var ElementLine = Element.extend({
         } else {
             this.obj.conf.summary_output += ' (Weathermap Line Error: Value '
                                             + id +' is not a percentage value)';
-            return '#FFCC66';
-
+            return oStates["ERROR"].color;
         }
     },
 

@@ -1,4 +1,6 @@
 1.9.11
+Frontend
+  * FIX: Weathermap lines now respect the configured error colors
 
 1.9.10
 Frontend
