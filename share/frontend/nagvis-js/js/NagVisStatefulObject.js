@@ -436,20 +436,33 @@ var NagVisStatefulObject = NagVisObject.extend({
 
         var sColor = oStates[this.conf.summary_state].color;
 
+        // Use these classes (icon-flashing-<state>) in your custom css to customise flashing icons
+        // e.g. icon-flashing-critical, icondiv-flashing-critical
+        // Note you may need to use '!important' to override the inline default
+        // 
+        var sFlashingClass = 'icon-flashing-' + this.conf.summary_state.toLowerCase();
+        var sFlashingDivClass = 'icondiv-flashing-' + this.conf.summary_state.toLowerCase();
+
         this.bIsFlashing = show;
         if(show) {
             oObjIcon.style.border  = "5px solid " + sColor;
+            oObjIcon.classList.add(sFlashingClass);
             oObjIconDiv.style.top  = (this.parseCoord(this.conf.y, 'y') - 5) + 'px';
             oObjIconDiv.style.left = (this.parseCoord(this.conf.x, 'x') - 5) + 'px';
+            oObjIconDiv.classList.add(sFlashingDivClass);
         } else {
             oObjIcon.style.border  = "none";
+            oObjIcon.classList.remove(sFlashingClass);
             oObjIconDiv.style.top  = this.parseCoord(this.conf.y, 'y') + 'px';
             oObjIconDiv.style.left = this.parseCoord(this.conf.x, 'x') + 'px';
+            oObjIconDiv.classList.remove(sFlashingDivClass);
         }
 
-        sColor      = null;
-        oObjIconDiv = null;
-        oObjIcon    = null;
-    },
+        sColor            = null;
+        sFlashingClass    = null;
+        sFlashingDivClass = null;
+        oObjIconDiv       = null;
+        oObjIcon          = null;
+    }
 
 });
