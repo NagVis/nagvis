@@ -20,11 +20,18 @@ function geomap_read_csv($p) {
     if(!file_exists($f))
         throw new GeomapError(l('Location source file "[F]" does not exist.', Array('F' => $f)));
 
+    $i = 0;
     foreach(file($f) AS $line) {
+        $i++;
+
         // skip lines beginning with any of the usual comment characters
         if(preg_match('/^[;#\/]/',$line))
             continue;
         $parts = explode(';', $line);
+        if (count($parts) < 4)
+            throw new GeomapError(l('Invalid source file line found: Line "[NR]" in "[F]" '
+                                   .'has less than 4 fields', Array('NR' => $i, 'F' => $f)));
+
         $locations[] = array(
             'name'  => $parts[0],
             'alias' => $parts[1],

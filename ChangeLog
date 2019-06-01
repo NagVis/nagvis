@@ -2,6 +2,9 @@
 Frontend
   * FIX: Fixed incompatibility with PHP 7.2 (count(STRING)) when creating roles
 
+Geomap:
+  * Improved error handling of CSV lines with less than 4 fields
+
 1.9.11
 Frontend
   * FIX: Weathermap lines now respect the configured error colors
