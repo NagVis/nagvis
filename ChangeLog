@@ -1,4 +1,7 @@
 1.9.12
+Core:
+  * FIX: Allow "*" character to be part of backend dbpass values
+
 Frontend
   * FIX: Fixed incompatibility with PHP 7.2 (count(STRING)) when creating roles
 
