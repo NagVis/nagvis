@@ -35,7 +35,7 @@ class ViewManageRoles {
                 if (!$name)
                     throw new FieldInputError('name', l('Please specify a name'));
 
-                if (count($name) > AUTH_MAX_ROLENAME_LENGTH)
+                if (strlen($name) > AUTH_MAX_ROLENAME_LENGTH)
                     throw new FieldInputError('name', l('This name is too long'));
 
                 if (!preg_match(MATCH_ROLE_NAME, $name))

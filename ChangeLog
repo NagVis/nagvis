@@ -1,4 +1,6 @@
 1.9.12
+Frontend
+  * FIX: Fixed incompatibility with PHP 7.2 (count(STRING)) when creating roles
 
 1.9.11
 Frontend
