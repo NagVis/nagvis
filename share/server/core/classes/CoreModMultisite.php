@@ -39,15 +39,25 @@ class CoreModMultisite extends CoreModule {
         if(!$this->offersAction($this->sAction))
             return '';
 
+        $maps = array();
+
         switch($this->sAction) {
             case 'getMaps':
                 if (cfg('global', 'multisite_snapin_layout') == 'tree') {
-                    return $this->renderTree();
+                    $maps = array(
+                        "type" => "tree",
+                        "maps" => $this->renderTree(),
+                    );
                 } else {
-                    return $this->renderTable();
+                    $maps = array(
+                        "type" => "table",
+                        "maps" => $this->renderTable(),
+                    );
                 }
             break;
         }
+
+        return json_encode($maps);
     }
 
     private function renderTree() {
@@ -55,102 +65,38 @@ class CoreModMultisite extends CoreModule {
         $childs = array();
         foreach ($this->getMapsCached() as $map) {
             if($map['parent_map'] === '')
-                $maps[$map['name']] = $map;
+                $maps[$map['name']] = $this->getMapForMultisite($map);
             else {
                 if(!isset($childs[$map['parent_map']]))
                     $childs[$map['parent_map']] = Array();
-                $childs[$map['parent_map']][$map['name']] = $map;
+                $childs[$map['parent_map']][$map['name']] = $this->getMapForMultisite($map);
             }
         }
-
-        $s = '<ul>'.$this->renderTreeNodes($maps, $childs).'</ul>';
-
-        // FIXME: check_mk/tree_state.py?tree=nagvis holen
-        // evaluieren
-        // alles was auf off steht per toggle_foldable_container schließen
-        return $s.$this->renderFootnotelinks();
-    }
-
-    private function renderTreeNodes($maps, $childs) {
-        $s = '';
-        foreach($maps AS $map) {
-            // this copies the foldable_container code provided in Check_MK htmllib
-            // assume always open by default
-            $s .= '<li>';
-            $map_url = cfg('paths', 'htmlbase').'/index.php?mod=Map&act=view&show='.$map['name'];
-            if(isset($childs[$map['name']])) {
-                $act = 'onclick="toggle_foldable_container(\'nagvis\', \''.$map['name'].'\')" '
-                     . 'onmouseover="this.style.cursor=\'pointer\';" '
-                     . 'onmouseout="this.style.cursor=\'auto\';"';
-
-                $s .= '<img align=absbottom class="treeangle" id="treeimg.nagvis.'.$map['name'].'" '
-                    . 'src="images/tree_90.png" '.$act.' />';
-                $s .= '<a href="'.$map_url.'" target="main"><b class="treeangle title" class=treeangle>';
-                $s .= $map['alias'];
-                $s .= '</b></a><br>';
-                $s .= '<ul class="treeangle open" style="padding-left:0;" id="tree.nagvis.'.$map['name'].'">';
-                $s .= $this->renderTreeNodes($childs[$map['name']], $childs);
-                $s .= '</ul>';
-            } else {
-                $s .= '<a target="main" href="'.$map_url.'">'.$map['alias'].'</a>';
-            }
-            $s .= '</li>';
-        }
-        return $s;
+        return array(
+            "maps" => $maps,
+            "childs" => $childs,
+        );
     }
 
     private function renderTable() {
-        $code = '<table class="allhosts"><tbody>';
+        $maps = array();
         foreach ($this->getMapsCached() as $map) {
-            switch($map['summary_state']) {
-                case 'OK':
-                case 'UP':
-                    $state = '0';
-                    break;
-                case 'WARNING':
-                    $state = '1';
-                    break;
-                case 'CRITICAL':
-                case 'DOWN':
-                case 'UNREACHABLE':
-                    $state = '2';
-                    break;
-                default:
-                    $state = '3';
-                    break;
-            }
-
-            $title = $map['summary_state'];
-
-            if ($map['summary_in_downtime']) {
-                $state .= ' stated';
-                $title .= ' (Downtime)';
-            }
-            elseif ($map['summary_problem_has_been_acknowledged']) {
-                $state .= ' statea';
-                $title .= ' (Acknowledged)';
-            }
-
-            if ($map['summary_stale']) {
-                $state .= ' stale';
-                $title .= ' (Stale)';
-            }
-
-            $code .= '<tr><td>';
-            $code .= '<div class="statebullet state'.$state.'" title="'.$title.'">&nbsp;</div>';
-            $code .= '<a href="'.cfg('paths', 'htmlbase').'/index.php?mod=Map&act=view&show='.$map['name'].'" ';
-            $code .= 'class="link" target="main">'.$map['alias'].'</a>';
-            $code .= '</td></tr>';
+            $maps[] = $this->getMapForMultisite($map);
         }
-        $code .= '</tbody></table>';
-        return $code.$this->renderFootnotelinks();
+        return $maps;
     }
 
-    private function renderFootnoteLinks() {
-        $url = cfg('paths', 'htmlbase');
-        return "<div class=footnotelink>"
-              ."<a onfocus=\"if (this.blur) this.blur();\" target=\"main\" class=\"link\" href=\"".$url."/\">EDIT</a>"
-              ."</div>";
+    private function getMapForMultisite($map) {
+        return array(
+            "name" => $map["name"],
+            "title" => $map['summary_state'],
+            "alias" => $map['alias'],
+            "url" => cfg('paths', 'htmlbase').'/index.php?mod=Map&act=view&show='.$map['name'],
+            "summary_state" => $map["summary_state"],
+            "summary_in_downtime" => $map['summary_in_downtime'],
+            "summary_problem_has_been_acknowledged" => $map['summary_problem_has_been_acknowledged'],
+            "summary_stale" => $map['summary_stale'],
+        );
     }
 
     // Wraps the getMaps() function by applying a short livetime cache based
