@@ -6,6 +6,11 @@
 .metadata
 .site
 install.log
+launch.json
+
+# Exclude actual config files
+etc/auth.db
+etc/perms.db
 
 # Exclude main configuration file
 etc/nagvis.ini.php

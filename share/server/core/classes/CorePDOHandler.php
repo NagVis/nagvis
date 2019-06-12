@@ -261,6 +261,7 @@ class CorePDOHandler {
         }
         $drv_data = self::$DRIVERS[$driver];
         $dsn = "$driver:".$drv_data['build_dsn']($params);
+        $this->dsn = $dsn;
 
         try {
             $this->DB = new PDO($dsn, $username, $password, array(
@@ -270,12 +271,12 @@ class CorePDOHandler {
             ));
         } catch(PDOException $e) {
             error_log('Could not initialize a database connection: '.$e->getMessage());
+            $this->lastErrorInfo = $e->getMessage();
             return false;
-    	}
+        }
         if($this->DB === false || $this->DB === null)
             return false;
 
-        $this->dsn = $dsn;
         $this->driver = $driver;
         $this->data = $drv_data;
         $this->updating = false;
@@ -356,7 +357,7 @@ class CorePDOHandler {
         if (isset($this->lastErrorInfo))
             return $this->lastErrorInfo;
         else
-            return $this->DB->errorInfo();
+            return $this->DB ? $this->DB->errorInfo() : '';
     }
 
     public function errorString() {
@@ -618,7 +619,7 @@ class CorePDOHandler {
 
         // Access control: View URLs e.g. in rotation pools
         $this->queryFatal('-perm-add', array('mod' => 'Url', 'act' => 'view', 'obj' => '*'));
-        
+
         // Assign the new permission to the managers, users, guests
         $this->queryFatal('-create-pop-roles-perms-3', array(
             'r1' => 'Managers', 'r2' => 'Users (read-only)', 'r3' => 'Guests',
