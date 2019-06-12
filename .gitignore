@@ -11,6 +11,7 @@ launch.json
 # Exclude actual config files
 etc/auth.db
 etc/perms.db
+etc/worldmap.db
 
 # Exclude main configuration file
 etc/nagvis.ini.php

@@ -287,6 +287,7 @@ class CorePDOHandler {
                 $res = $this->DB->exec($q);
                 if($res === false) {
                     $this->DB = null;
+                    $this->lastErrorInfo = "Initial DB query ($q) failed";
                     return false;
                 }
             }
