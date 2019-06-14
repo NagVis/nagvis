@@ -1,6 +1,7 @@
 1.9.13
 Worldmap:
   * Configurable OpenStreetMap tile server URL (worldmap_tiles_url)
+  * FIX: worldmap textbox visibility per zoom level
 
 1.9.12
 Core:

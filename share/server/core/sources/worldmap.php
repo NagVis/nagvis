@@ -337,7 +337,7 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
         $min_zoom = isset($obj['min_zoom']) ? (int)$obj['min_zoom'] : $MAPCFG->getDefaultValue('host', 'min_zoom');
         $max_zoom = isset($obj['max_zoom']) ? (int)$obj['max_zoom'] : $MAPCFG->getDefaultValue('host', 'max_zoom');
 
-        if ($min_zoom < $max_zoom && ($zoom < $min_zoom || $zoom > $max_zoom))
+        if ($min_zoom <= $max_zoom && ($zoom < $min_zoom || $zoom > $max_zoom))
             continue;
 
         $map_config[$object_id] = $obj;
