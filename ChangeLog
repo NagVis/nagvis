@@ -1,4 +1,6 @@
 1.9.13
+Worldmap:
+  * FIX: worldmap textbox visibility per zoom level
 
 1.9.12
 Core:
