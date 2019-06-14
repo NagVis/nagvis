@@ -154,6 +154,12 @@ class GlobalMainCfg {
                     'match'   => MATCH_STRING_URL,
                 ),
 
+                'worldmap_tiles_url' => array(
+                    'must'    => 0,
+                    'default' => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    'match'   => MATCH_STRING_URL,
+                ),
+
                 'http_proxy' => array(
                     'must'    => 0,
                     'default' => null,
@@ -655,7 +661,7 @@ class GlobalMainCfg {
                     'must'       => 0,
                     'editable'   => 1,
                     'default'    => '0',
-                    'match'      => MATCH_BOOLEAN, 
+                    'match'      => MATCH_BOOLEAN,
                     'field_type' => 'boolean',
                 ),
                 'line_weather_colors' => Array(
@@ -2184,6 +2190,7 @@ class GlobalMainCfg {
           'internal_title'     => $this->getValue('internal', 'title'),
           'header_show_states' => intval($this->getValue('defaults', 'header_show_states')),
           'zoom_scale_objects' => intval($this->getValue('defaults', 'zoom_scale_objects')),
+          'worldmap_tiles_url' => $this->getValue('global', 'worldmap_tiles_url'),
         );
 
         // Add custom action configuration

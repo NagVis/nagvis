@@ -1,6 +1,7 @@
 1.9.13
 Worldmap:
   * FIX: worldmap textbox visibility per zoom level
+  * Configurable OpenStreetMap tile server URL (worldmap_tiles_url)
 
 1.9.12
 Core:
@@ -82,7 +83,7 @@ Core:
     (Configure this per object by adding the attribute hover_childs_sort=k).
 
 Frontend:
-  * On demand automaps: Hostgroup filter in header menu is now a searchable dropdown field 
+  * On demand automaps: Hostgroup filter in header menu is now a searchable dropdown field
   * FIX: Fixed moving textbox objects in IE
 
 1.9.3
@@ -105,7 +106,7 @@ Core:
 
 1.9.1
 Core:
-  * FIX: Fixed incompatibility with pecl-http (Cannot redeclare http_redirect()) 
+  * FIX: Fixed incompatibility with pecl-http (Cannot redeclare http_redirect())
   * FIX: Fixed duplicate global section in sample automaps after editing
 
 Frontend:
@@ -643,9 +644,9 @@ Automap:
 1.8b3
 Frontend:
   * Added option "zoom_scale_objects" to default section of global config to
-    allow users to control the scaling behaviour of zoomed objects. By 
-    default the whole maps is zoomed like in previous versions. But when 
-    zoom_scale_objects is set to 0, the map objects and labels are not 
+    allow users to control the scaling behaviour of zoomed objects. By
+    default the whole maps is zoomed like in previous versions. But when
+    zoom_scale_objects is set to 0, the map objects and labels are not
     resized, but only repositioned according to the given zoom factor.
   * FIX: Fixed broken NagVis Multisite sidebar dashlet
   * FIX: Fixed showing URLs as hover menus (hover_url option)
@@ -657,7 +658,7 @@ Frontend:
 
 Core:
   * Allowing ~ chars in URLs now (Thanks to Daniel Albers for the patch)
-  * FIX: Fixed rare occuring encoding problems of vars in several places 
+  * FIX: Fixed rare occuring encoding problems of vars in several places
   * FIX: Fixed PHP error with map objects linking to not existing maps
   * FIX: Trying to workaround broken processing of non UTF-8 pages in hover_urls
 
@@ -678,7 +679,7 @@ Core:
   * FIX: Fixed host alias attribute in livestatus backend
   * Dropped the merlinmy backend for the moment as it was not working for a
     time. Please provide a fixed one if you like to see this working again
-  * FIX: Fixed PHP errors when acknowleding host/service problems 
+  * FIX: Fixed PHP errors when acknowleding host/service problems
   * FIX: Fixed missing values alias, display_name, address values in hover templates
 
 Installer:
@@ -706,7 +707,7 @@ Core:
     filter on the map. In first instance it automatically gathers the list of
     objects to add on this map and positions them in a grid on the map. The
     user can then modify all the objects, for example change their options
-    like, positions and visualisation. 
+    like, positions and visualisation.
   * Changed default http_timeout from 10 to 2 seconds
   * Added new iconset std_area, which can be used to create maps which are
     visible from a greater distance
@@ -779,13 +780,13 @@ Geomap:
 Frontend:
   * FIX: Fixed "Undefined index" error when changing backend_id of maps
   * FIX: Fixed hiding of shapes during refresh (enable_refresh=1)
-  * Reverted change from 1.7.5 (Weathermap lines with byte/bit values in 
+  * Reverted change from 1.7.5 (Weathermap lines with byte/bit values in
     labels should print human) which broke the handling for some plugins
 
 1.7.7
 Core:
   * Implemented "on demand" maps. Maps which only need a basic configuration
-    of global parameters like automaps and geomaps can now be configured and 
+    of global parameters like automaps and geomaps can now be configured and
     created on demand by URL parameters. This mode is reached by simply
     calling the map URL without "show=" parameter and a bunch of parameters
     for the global section of the map instead.
@@ -936,7 +937,7 @@ Core
 Frontend
   * Added new map config option (global section) event_on_load to raise frontend events
     also on page loading
-  * Added new options event_repeat_interval and event_repeat_duration to 
+  * Added new options event_repeat_interval and event_repeat_duration to
     configured repeated frontend events
   * Added rotations to sidebar
   * Info page shows json_encode/json_decode capability of used PHP
@@ -1111,7 +1112,7 @@ Core
   * NagVis creates now "omdadmin" user in OMD environments when creating new auth.db files
   * Bugfix: Added missing default permissions for guest role (viewing demo maps)
   * Bugfix: Fixed version number format for stable versions like (1.6)
-    
+
 Frontend
   * Ajax call for redrawing map objects is not cacheable anymore (prevent strange
     hopping of icons after unlock -> edit -> lock in some cases.
@@ -1208,7 +1209,7 @@ Frontend
   * Bugfix: Don't hide dependent fiels where the master attribute is not available
   * Bugfix: Fixed map global section editing
   * Bugfix: IE8 fixing event registration (javascript errors on page loading)
-  * Updating map object information while having the hover menu open does not close 
+  * Updating map object information while having the hover menu open does not close
     open hover menus anymore
 
 1.6rc1
