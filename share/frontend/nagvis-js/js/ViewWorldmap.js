@@ -60,7 +60,7 @@ var ViewWorldmap = ViewMap.extend({
             maxBounds: [ [-85,-180.0], [85,180.0] ],
             minZoom: 2
         }).setView(getViewParam('worldmap_center').split(','), parseInt(getViewParam('worldmap_zoom')));
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        L.tileLayer(oGeneralProperties.worldmap_tiles_url, {
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             noWrap: true, // don't repeat the world on horizontal axe
             detectRetina: true, // look nice on high resolution screens

@@ -22,12 +22,13 @@
         <h2>Prerequisites</h2>
         <p>There is no special software needed on the NagVis server, but there is one special requirement. To
         be able to use this feature, the browser opening NagVis worldmaps needs to be able to fetch the background
-        images (map tiles) from the internet. In most corporate environments this means that your client needs
+        images (map tiles) from the internet, or a local mirror, see below. In most corporate environments this means that your client needs
         to have a proxy server configured.</p>
-        <p>The worldmaps currently use the official tile servers of Open Street Map 
-        (<code>https://{s}.tile.openstreetmap.org/</code>). This is currently hardcoded, but might be made configurable
-        in the future.</p>
-        
+        <p>The worldmaps use the official tile servers of Open Street Map (<code>https://{s}.tile.openstreetmap.org/</code>) as a default.
+        Alternative tile server (local mirror) may be set in configuration, for example: <code>worldmap_tiles_url="http://my-tiles.local/{z}/{x}/{y}.png"</code> </p>
+
+        <p>The <a href="https://switch2osm.org/serving-tiles/">switch2osm guides</a> might help you to spin up your local OpenStreetMap mirror.</p>
+
         <h2>The first call</h2>
         <p>NagVis comes with a demo worldmap called "demo-worldmap". If your NagVis is configured correctly
         and your browser is able to fetch the background images from the tile server, you should see a map
@@ -37,7 +38,7 @@
 
         <p>This worldmap is defined using the map configuration file "demo-worldmap.cfg". The contents
         look like this:</p>
-        
+
         <pre>define global {
     alias=Demo: 4 Worldmap
     parent_map=demo-overview

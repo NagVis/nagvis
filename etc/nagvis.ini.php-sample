@@ -71,6 +71,9 @@
 ; can be found on http://pafciu17.dev.openstreetmap.org/
 ;geomap_server="http://geomap.nagvis.org/"
 ;
+; Public or private mirror of OpenStreetMap tiles server
+;worldmap_tiles_url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+;
 ; In some cases NagVis needs to open connections to the internet. The cases are:
 ; - The new geomap needs access to openstreetmap webservices to be able to fetch
 ;   mapping information
