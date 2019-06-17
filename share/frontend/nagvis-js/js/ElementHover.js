@@ -716,7 +716,7 @@ var ElementHover = Element.extend({
         var regex = getRegEx('loopChild', "<!--\\sBEGIN\\sloop_child\\s-->(.+?)<!--\\sEND\\sloop_child\\s-->");
         if(this.template_html.search(regex) !== -1)
             this.template_html = this.template_html.replace(regex, '<!-- BEGIN loop_child -->'
-                                                                   + g_hover_template_childs[this.obj.hover_template]
+                                                                   + g_hover_template_childs[this.obj.conf.hover_template]
                                                                    + '<!-- END loop_child -->');
     
         // Search for images and append current timestamp to src (prevent caching of
