@@ -61,7 +61,7 @@ var ViewWorldmap = ViewMap.extend({
             minZoom: 2
         }).setView(getViewParam('worldmap_center').split(','), parseInt(getViewParam('worldmap_zoom')));
         L.tileLayer(oGeneralProperties.worldmap_tiles_url, {
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            attribution: oGeneralProperties.worldmap_tiles_attribution,
             noWrap: true, // don't repeat the world on horizontal axe
             detectRetina: true, // look nice on high resolution screens
         }).addTo(g_map);
