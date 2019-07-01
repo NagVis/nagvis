@@ -75,7 +75,7 @@ var ViewWorldmap = ViewMap.extend({
             minZoom: 2,
             layers: [layers.map]
         }).setView(getViewParam('worldmap_center').split(','), parseInt(getViewParam('worldmap_zoom')));
-        
+
         if (layers.satellite)
             L.control.layers(layers).addTo(g_map);
 
