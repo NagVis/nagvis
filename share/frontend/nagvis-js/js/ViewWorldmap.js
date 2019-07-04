@@ -60,6 +60,7 @@ var ViewWorldmap = ViewMap.extend({
                 attribution: oGeneralProperties.worldmap_tiles_attribution,
                 noWrap: true, // don't repeat the world on horizontal axis
                 detectRetina: true, // look nice on high resolution screens
+                maxZoom: 20,
             }),
         }
         if(oGeneralProperties.worldmap_satellite_tiles_url) {
@@ -67,6 +68,7 @@ var ViewWorldmap = ViewMap.extend({
                 attribution: oGeneralProperties.worldmap_satellite_tiles_attribution,
                 noWrap: true, // don't repeat the world on horizontal axis
                 detectRetina: true, // look nice on high resolution screens
+                maxZoom: 20,
             })
         }        
         g_map = L.map('map', {
