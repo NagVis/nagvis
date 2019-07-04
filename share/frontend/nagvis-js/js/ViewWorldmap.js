@@ -55,16 +55,29 @@ var ViewWorldmap = ViewMap.extend({
 
     initWorldmap: function() {
         L.Icon.Default.imagePath = oGeneralProperties.path_base+'/frontend/nagvis-js/images/leaflet';
+        var layers = {
+            "map": L.tileLayer(oGeneralProperties.worldmap_tiles_url, {
+                attribution: oGeneralProperties.worldmap_tiles_attribution,
+                noWrap: true, // don't repeat the world on horizontal axis
+                detectRetina: true, // look nice on high resolution screens
+            }),
+        }
+        if(oGeneralProperties.worldmap_satellite_tiles_url) {
+            layers.satellite = L.tileLayer(oGeneralProperties.worldmap_satellite_tiles_url, {
+                attribution: oGeneralProperties.worldmap_satellite_tiles_attribution,
+                noWrap: true, // don't repeat the world on horizontal axis
+                detectRetina: true, // look nice on high resolution screens
+            })
+        }        
         g_map = L.map('map', {
             markerZoomAnimation: false,
             maxBounds: [ [-85,-180.0], [85,180.0] ],
-            minZoom: 2
+            minZoom: 2,
+            layers: [layers.map]
         }).setView(getViewParam('worldmap_center').split(','), parseInt(getViewParam('worldmap_zoom')));
-        L.tileLayer(oGeneralProperties.worldmap_tiles_url, {
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-            noWrap: true, // don't repeat the world on horizontal axe
-            detectRetina: true, // look nice on high resolution screens
-        }).addTo(g_map);
+        
+        if (layers.satellite)
+            L.control.layers(layers).addTo(g_map);
 
         g_map_objects = L.layerGroup().addTo(g_map);
 
