@@ -2,7 +2,7 @@
 Worldmap:
   * FIX: worldmap textbox visibility per zoom level
   * Configurable OpenStreetMap tile server URL (worldmap_tiles_url)
-  * FIX: worldmap textbox visibility per zoom level
+  * Feature: dim openstreetmap colors
 
 1.9.12
 Core:
