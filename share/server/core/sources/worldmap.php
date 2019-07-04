@@ -32,6 +32,11 @@ $configVars = array(
         'default'   => 6,
         'match'     => MATCH_WORLDMAP_ZOOM,
     ),
+    'worldmap_tiles_saturate' => array(
+        'must'      => false,
+        'default'   => '',
+        'match'     => MATCH_INTEGER_EMPTY,
+    ),
 
     /*** OBJECT OPTIONS ***/
     'min_zoom' => array(
@@ -53,6 +58,7 @@ $configVarMap = array(
         'worldmap' => array(
             'worldmap_center' => null,
             'worldmap_zoom'   => null,
+            'worldmap_tiles_saturate'   => null,
         ),
     ),
 );

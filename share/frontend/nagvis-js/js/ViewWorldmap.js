@@ -80,6 +80,12 @@ var ViewWorldmap = ViewMap.extend({
         if (typeof checkHideMenu !== "undefined")
             g_map.on('mousedown', checkHideMenu);
         g_map.on('mousedown', context_handle_global_mousedown);
+
+        // dim the colors of map background so that red motorways don't distract
+        let saturate_percentage = getViewParam('worldmap_tiles_saturate')
+        let ltp = document.getElementsByClassName('leaflet-tile-pane');
+        if (ltp && saturate_percentage !== '')
+            ltp[0].style.filter = `saturate(${saturate_percentage}%)`
     },
 
     handleMoveStart: function(lEvent) {
