@@ -4,6 +4,7 @@ Worldmap:
   * Feature: dim openstreetmap colors
   * Optional 2nd map layer (satellite imagery)
   * FIX: worldmap textbox visibility per zoom level
+  * FIX: The "clone object" functionality
 
 1.9.12
 Core:
