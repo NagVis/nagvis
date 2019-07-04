@@ -49,6 +49,7 @@
     sources=worldmap
     worldmap_center=50.86837814203458,10.21728515625
     worldmap_zoom=6
+    worldmap_tiles_saturate=33
 }</pre>
 
         <p>Only the last three attributes are worldmap specific definitions, all of them are mandatory for
@@ -63,6 +64,8 @@
         <p>The <code>worldmap_zoom=6</code> specifies the initial zoom level to be used when rendering the worldmap.
         NagVis allows zoom levels from 2 to 18.</p>
 
+        <p>The <code>worldmap_tiles_saturate=33</code> dims the colors of default OpenStreetMap so that red motorways or
+        large green forests don't interfere with actual map objects. Possible values are 0 (no colors, grayscale) through 100 (full colors).</p>
 
         <h2>Create your own worldmap</h2>
 
