@@ -50,7 +50,7 @@ class ViewMapAddModify {
         );
         $attrDefs = $this->MAPCFG->getValidObjectType($this->object_type);
         foreach ($_REQUEST as $attr => $val) {
-            // $_REQUEST might contain cookie infos. Skipt them.
+            // $_REQUEST might contain cookie infos. Skip them.
             if (isset($_COOKIE[$attr]))
                 continue;
             if (substr($attr, 0, 7) == 'toggle_' || substr($attr, 0, 1) == '_' || isset($exclude[$attr]))
