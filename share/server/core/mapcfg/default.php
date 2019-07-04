@@ -110,11 +110,13 @@ function listZoomFactors() {
 
 function getObjectNames($type, $MAPCFG, $objId, $attrs) {
     global $_BACKEND;
+    $backendIds = false;
     if (isset($attrs['backend_id']) && $attrs['backend_id'] != '') {
         $backendIds = $attrs['backend_id'];
     } elseif ($objId !== null) {
         $backendIds = $MAPCFG->getValue($objId, 'backend_id');
-    } else {
+    }
+    if (!$backendIds) {
         $backendIds = $MAPCFG->getValue(0, 'backend_id');
     }
 
