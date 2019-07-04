@@ -210,6 +210,20 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
     return $objects;
 }
 
+function worldmap_get_object_by_id($id) {
+    global $DB;
+    worldmap_init_db();
+
+    $q = 'SELECT object FROM objects WHERE object_id = :id LIMIT 1';
+
+    $RES = $DB->query($q, array('id' => $id));
+    $objects = array();
+    $referenced = array();
+    if ($data = $RES->fetch()) {
+        return json_decode($data['object'], true);
+    }
+}
+
 // Worldmap internal helper function to add an object to the worldmap
 function worldmap_db_update_object($obj_id, $lat, $lng, $obj,
                                    $lat2 = null, $lng2 = null, $insert = true) {
@@ -330,25 +344,34 @@ function add_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
 
 function process_worldmap($MAPCFG, $map_name, &$map_config) {
     $bbox = val($_GET, 'bbox', null);
-    if ($bbox === null)
-        return false; // do nothing
+    $clone_id = val($_GET, 'clone_id', null);
 
-    $params = $MAPCFG->getSourceParams();
-    $zoom = (int)$params['worldmap_zoom'];
+    if ($bbox !== null)
+    {
+        $params = $MAPCFG->getSourceParams();
+        $zoom = (int)$params['worldmap_zoom'];
 
-    list($sw_lng, $sw_lat, $ne_lng, $ne_lat) = explode(',', $bbox);
-    foreach (worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) as $object_id => $obj) {
-        // Now, when the object has a maximum / minimum zoom configured,
-        // hide it depending on the zoom
-        $min_zoom = isset($obj['min_zoom']) ? (int)$obj['min_zoom'] : $MAPCFG->getDefaultValue('host', 'min_zoom');
-        $max_zoom = isset($obj['max_zoom']) ? (int)$obj['max_zoom'] : $MAPCFG->getDefaultValue('host', 'max_zoom');
+        list($sw_lng, $sw_lat, $ne_lng, $ne_lat) = explode(',', $bbox);
+        foreach (worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) as $object_id => $obj) {
+            // Now, when the object has a maximum / minimum zoom configured,
+            // hide it depending on the zoom
+            $min_zoom = isset($obj['min_zoom']) ? (int)$obj['min_zoom'] : $MAPCFG->getDefaultValue('host', 'min_zoom');
+            $max_zoom = isset($obj['max_zoom']) ? (int)$obj['max_zoom'] : $MAPCFG->getDefaultValue('host', 'max_zoom');
 
-        if ($min_zoom <= $max_zoom && ($zoom < $min_zoom || $zoom > $max_zoom))
-            continue;
+            if ($min_zoom <= $max_zoom && ($zoom < $min_zoom || $zoom > $max_zoom))
+                continue;
 
-        $map_config[$object_id] = $obj;
+            $map_config[$object_id] = $obj;
+        }
+        return true;
     }
-    return true;
+    elseif ($clone_id !== null)
+    {
+        $map_config[$clone_id] = worldmap_get_object_by_id($clone_id);
+        return true;
+    }
+
+    return false;
 }
 
 function changed_worldmap($MAPCFG, $compare_time) {
