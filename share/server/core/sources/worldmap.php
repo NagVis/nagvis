@@ -217,8 +217,6 @@ function worldmap_get_object_by_id($id) {
     $q = 'SELECT object FROM objects WHERE object_id = :id LIMIT 1';
 
     $RES = $DB->query($q, array('id' => $id));
-    $objects = array();
-    $referenced = array();
     if ($data = $RES->fetch()) {
         return json_decode($data['object'], true);
     }
