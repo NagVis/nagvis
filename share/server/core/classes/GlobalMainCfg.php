@@ -159,6 +159,21 @@ class GlobalMainCfg {
                     'default' => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     'match'   => MATCH_STRING_URL,
                 ),
+                'worldmap_tiles_attribution' => array(
+                    'must'    => 0,
+                    'default' => '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                    'match'   => MATCH_ALL
+                ),
+                'worldmap_satellite_tiles_url' => array(
+                    'must'    => 0,
+                    'default' => '',
+                    'match'   => MATCH_STRING_URL,
+                ),
+                'worldmap_satellite_tiles_attribution' => array(
+                    'must'    => 0,
+                    'default' => '',
+                    'match'   => MATCH_ALL
+                ),
 
                 'http_proxy' => array(
                     'must'    => 0,
@@ -2191,6 +2206,10 @@ class GlobalMainCfg {
           'header_show_states' => intval($this->getValue('defaults', 'header_show_states')),
           'zoom_scale_objects' => intval($this->getValue('defaults', 'zoom_scale_objects')),
           'worldmap_tiles_url' => $this->getValue('global', 'worldmap_tiles_url'),
+          'worldmap_tiles_attribution' => $this->getValue('global', 'worldmap_tiles_attribution'),
+          'worldmap_satellite_tiles_url' => $this->getValue('global', 'worldmap_satellite_tiles_url'),
+          'worldmap_satellite_tiles_attribution' => $this->getValue('global', 'worldmap_satellite_tiles_attribution'),
+          // Add custom action configuration
         );
 
         // Add custom action configuration

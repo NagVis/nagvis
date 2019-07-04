@@ -105,7 +105,23 @@
         <tr>
             <td>worldmap_tiles_url <font color="#ff0000">(new in 1.9.13)</font></td>
             <td>https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png</td>
-            <td>Worldmap uses OpenStreetMap tiles as a map background. The URL specifies where to GET the PNG tile images from.</td>
+            <td>Worldmap uses OpenStreetMap tiles as default map background. The URL specifies where to GET the PNG tile images from.</td>
+        </tr>
+        <tr>
+            <td>worldmap_tiles_attribution <font color="#ff0000">(new in 1.9.13)</font></td>
+            <td>&copy; &lt;a href="http://www.openstreetmap.org/copyright"&gt;OpenStreetMap&lt;/a&gt;</td>
+            <td>Map tiles attribution text (shown in bottom right corner)</td>
+        </tr>
+        <tr>
+            <td>worldmap_satellite_tiles_url<br>
+                worldmap_satellite_tiles_attribution<br>
+                <font color="#ff0000">(new in 1.9.13)</font>
+            </td>
+            <td></td>
+            <td>Secondary map background tiles (satellite images) URL and attribution.
+                When used, the <a href="https://leafletjs.com/reference-1.5.0.html#control-layers">layers control</a>
+                appears on top right corner of the map.
+            </td>
         </tr>
 
         <tr>
