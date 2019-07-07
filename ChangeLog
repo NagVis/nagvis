@@ -1,10 +1,14 @@
 1.9.13
 Worldmap:
   * Configurable OpenStreetMap tile server URL (worldmap_tiles_{url,attribution})
-  * Feature: dim openstreetmap colors
+  * OpenStreetMap tile colors can now be dimmed using the
+    worldmap_tiles_saturate configuration option so that larger colorful
+    backgrounds do not interfere with the map objects.
   * Optional 2nd map layer (satellite imagery)
-  * FIX: worldmap textbox visibility per zoom level
-  * FIX: The "clone object" functionality
+  * FIX: Worldmap textbox visibility per zoom level
+  * FIX: The "clone object" functionality did sometimes break with an error
+  message like "Invalid argument supplied for foreach()"
+  (Thanks to Vojtech Pithart for taking the time to improve the NagVis worldmap!)
 
 1.9.12
 Core:
