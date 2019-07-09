@@ -3,6 +3,9 @@ Core:
   * MKBI backend: Use "htmlcgi" URL/path for building links to the Checkmk GUI
     (Aggregations used the base_url, which should not be used for user URLs)
 
+Worldmap:
+  * Consistent page reloads: center + zoom of the map kept in URL
+
 Frontend
   * FIX: Fix creating users when mbstring extension is not available
 

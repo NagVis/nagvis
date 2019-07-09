@@ -70,14 +70,24 @@ var ViewWorldmap = ViewMap.extend({
                 detectRetina: true, // look nice on high resolution screens
                 maxZoom: 20,
             })
-        }        
+        }
+
         g_map = L.map('map', {
             markerZoomAnimation: false,
             maxBounds: [ [-85,-180.0], [85,180.0] ],
             minZoom: 2,
             layers: [layers.map]
-        }).setView(getViewParam('worldmap_center').split(','), parseInt(getViewParam('worldmap_zoom')));
-        
+        })
+
+        let restored_coordinates = window.location.hash.substr(1).split('/');
+        if (restored_coordinates.length === 3) {
+            // place the map view according to location hash (#lat/lon/zoom) - consistent page reloads
+            g_map.setView([restored_coordinates[1], restored_coordinates[0]], restored_coordinates[2]);
+        } else {
+            // or default (map-defined) view
+            g_map.setView(getViewParam('worldmap_center').split(','), parseInt(getViewParam('worldmap_zoom')));
+        }
+
         if (layers.satellite)
             L.control.layers(layers).addTo(g_map);
 
@@ -115,6 +125,10 @@ var ViewWorldmap = ViewMap.extend({
         setViewParam('worldmap_zoom', g_map.getZoom());
 
         this.render(); // re-render the whole map
+
+        // Put the new map view coords into URL (location) - consistent reloads
+        new_center = g_map.getCenter();
+        window.location.hash = `${new_center.lng}/${new_center.lat}/${g_map.getZoom()}`;
     },
 
     saveView: function() {
