@@ -1,4 +1,6 @@
 1.9.14
+Worldmap:
+  * consistent page reloads: center+zoom of the map kept in URL
 
 1.9.13
 Worldmap:
