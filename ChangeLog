@@ -5,6 +5,7 @@ Core:
 
 Worldmap:
   * Consistent page reloads: center + zoom of the map kept in URL
+  * Memory and performance optimization: line rendering - clip long lines protruding out of viewport
 
 Frontend
   * FIX: Fix creating users when mbstring extension is not available
