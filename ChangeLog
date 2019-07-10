@@ -1,4 +1,6 @@
 1.9.14
+Worldmap:
+  * memory and performance optimization: line rendering - clip long lines protruding out of viewport
 
 1.9.13
 Worldmap:
