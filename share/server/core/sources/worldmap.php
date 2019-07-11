@@ -159,18 +159,12 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
     global $DB;
     worldmap_init_db();
 
+    if ($sw_lat > $ne_lat) swap($sw_lat, $ne_lat);
+    if ($sw_lng > $ne_lng) swap($sw_lng, $ne_lng);
+        
     $q = 'SELECT lat, lng, lat2, lng2, object FROM objects WHERE'
-        .'((:sw_lat < :ne_lat AND lat BETWEEN :sw_lat AND :ne_lat)'
-        .' OR (:ne_lat < :sw_lat AND lat BETWEEN :ne_lat AND :sw_lat)'
-        .'AND '
-        .'(:sw_lng < :ne_lng AND lng BETWEEN :sw_lng AND :ne_lng)'
-        .' OR (:ne_lng < :sw_lng AND lng BETWEEN :ne_lng AND :sw_lng))'
-        .'OR '
-        .'((:sw_lat < :ne_lat AND lat2 BETWEEN :sw_lat AND :ne_lat)'
-        .' OR (:ne_lat < :sw_lat AND lat2 BETWEEN :ne_lat AND :sw_lat)'
-        .'AND '
-        .'(:sw_lng < :ne_lng AND lng2 BETWEEN :sw_lng AND :ne_lng)'
-        .' OR (:ne_lng < :sw_lng AND lng2 BETWEEN :ne_lng AND :sw_lng))';
+        .'(lat BETWEEN :sw_lat AND :ne_lat AND lng BETWEEN :sw_lng AND :ne_lng)'
+        .'OR (lat2 BETWEEN :sw_lat AND :ne_lat AND lng2 BETWEEN :sw_lng AND :ne_lng)';
 
     $RES = $DB->query($q, array('sw_lng' => $sw_lng, 'sw_lat' => $sw_lat, 'ne_lng' => $ne_lng, 'ne_lat' => $ne_lat));
     $objects = array();
@@ -375,6 +369,12 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
 function changed_worldmap($MAPCFG, $compare_time) {
     $db_path = cfg('paths', 'cfg').'worldmap.db';
     return !file_exists($db_path) || filemtime($db_path) > $compare_time;
+}
+
+function swap(&$x, &$y) {
+    $tmp=$x;
+    $x=$y;
+    $y=$tmp;
 }
 
 ?>
