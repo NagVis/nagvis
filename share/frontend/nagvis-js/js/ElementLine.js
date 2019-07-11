@@ -972,6 +972,9 @@ var ElementLine = Element.extend({
      */
      
     cutLineBeyondViewport: function(xA, yA, xB, yB) {
+        if (!g_map)
+            return([xA, yA, xB, yB]); // no viewport - no clipping
+
         let viewport_size = g_map.getSize();
         const xMax = viewport_size.x; // 1920
         const yMax = viewport_size.y; // 1080
