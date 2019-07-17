@@ -1,4 +1,6 @@
 1.9.14
+Frontend
+  * FIX: Fix creating users when mbstring extension is not available
 
 1.9.13
 Worldmap:

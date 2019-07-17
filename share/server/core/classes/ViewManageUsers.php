@@ -35,7 +35,7 @@ class ViewManageUsers {
                 if (!$name)
                     throw new FieldInputError('name', l('Please specify a name.'));
 
-                if (mb_strlen($name) > AUTH_MAX_USERNAME_LENGTH)
+                if (strlen($name) > AUTH_MAX_USERNAME_LENGTH)
                     throw new FieldInputError('name', l('This name is too long.'));
 
                 if (!preg_match(MATCH_USER_NAME, $name))
@@ -49,7 +49,7 @@ class ViewManageUsers {
                 if (!$password1)
                     throw new FieldInputError('password1', l('Please specify a password.'));
 
-                if (mb_strlen($password1) > AUTH_MAX_PASSWORD_LENGTH)
+                if (strlen($password1) > AUTH_MAX_PASSWORD_LENGTH)
                     throw new FieldInputError('password1', l('This password is too long.'));
 
                 $password2 = post('password2');
@@ -254,7 +254,7 @@ class ViewManageUsers {
                 if (!$password1)
                     throw new FieldInputError('password1', l('Please specify a password.'));
 
-                if (mb_strlen($password1) > AUTH_MAX_PASSWORD_LENGTH)
+                if (strlen($password1) > AUTH_MAX_PASSWORD_LENGTH)
                     throw new FieldInputError('password1', l('This password is too long.'));
 
                 $password2 = post('password2');
