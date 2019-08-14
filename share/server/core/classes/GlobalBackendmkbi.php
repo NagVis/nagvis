@@ -127,7 +127,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
     }
 
     private function aggrUrl($name) {
-        return $this->baseUrl.'view.py?view_name=aggr_single&aggr_name='.$name.'&po_aggr_expand=1';
+        $html_cgi = cfg('backend_'.$this->backendId, 'htmlcgi');
+        return $html_cgi.'/view.py?view_name=aggr_single&aggr_name='.$name.'&po_aggr_expand=1';
     }
 
     /**

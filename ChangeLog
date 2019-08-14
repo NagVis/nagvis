@@ -1,4 +1,8 @@
 1.9.14
+Core:
+  * MKBI backend: Use "htmlcgi" URL/path for building links to the Checkmk GUI
+    (Aggregations used the base_url, which should not be used for user URLs)
+
 Frontend
   * FIX: Fix creating users when mbstring extension is not available
 
