@@ -1,3 +1,5 @@
+1.9.15
+
 1.9.14
 Core:
   * MKBI backend: Use "htmlcgi" URL/path for building links to the Checkmk GUI
