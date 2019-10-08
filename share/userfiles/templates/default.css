@@ -414,8 +414,12 @@ div#popupWindow h1 {
     width: 140x;
 }
 #popupWindowContent table.mytable tr td.tdfield input,
+#popupWindowContent table.mytable tr td.tdfield textarea,
 #popupWindowContent table.mytable tr td.tdfield select {
     width: 163px;
+}
+#popupWindowContent table.mytable tr td.tdfield textarea {
+    height: 150px;
 }
 #popupWindowContent table.mytable tr td.tdfield input[type="checkbox"] {
     width: auto;
@@ -774,17 +778,17 @@ div.statediv.sPENDING, div.statediv.sUNCHECKED {
 	bottom: 0px;
 	right: 20px;
 	z-index: 1000;
-	
+
 	width: 400px;
 	height: 70px;
-	
+
 	background-color: #d0d0d0;
 	border: 1px solid #000000;
 	border-bottom: 0;
-	
+
 	opacity:0.4;
 	/*filter:alpha(opacity=40);*/
-	
+
 	padding: 2px;
 	font-size: 0.8em;
 }
@@ -794,19 +798,19 @@ div.statediv.sPENDING, div.statediv.sUNCHECKED {
 	bottom: 75px;
 	right: 20px;
 	z-index: 1001;
-	
+
 	width: 10px;
 	height: 10px;
-	
+
 	background-color: #d0d0d0;
 	border: 1px solid #000000;
 	border-bottom: 0;
-	
+
 	opacity:0.4;
 	/*filter:alpha(opacity=40);*/
-	
+
 	padding: 2px;
-	
+
 	font-size: 0.8em;
 }
 

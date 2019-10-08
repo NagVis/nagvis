@@ -834,6 +834,7 @@ $mapConfigVars = Array(
     'text' => Array(
         'must' => 1,
         'match' => MATCH_ALL,
+        'field_type'    => 'textarea',
     ),
     'border_color' => Array(
         'must'       => 0,
@@ -890,9 +891,9 @@ $mapConfigVars = Array(
         'match' => MATCH_STRING_NO_SPACE,
         'list'  => 'listTemplateNames',
     ),
-    
+
     // STATELESS LINE SPECIFIC OPTIONS
-    
+
     'view_type_line' => Array(
         'must'          => 1,
         'default'       => 'line',
@@ -932,7 +933,7 @@ $mapConfigVars = Array(
         'default'    => '',
         'field_type' => 'dropdown',
         'match'      => MATCH_DYN_GROUP_TYPES,
-        'list'       => 'listDynGroupTypes', 
+        'list'       => 'listDynGroupTypes',
     ),
     'object_filter' => Array(
         'must'       => 0,
@@ -1580,7 +1581,7 @@ $mapConfigVarMap['aggr'] = Array(
         'label_border'          => null,
         'label_style'           => null,
         'label_maxlen'          => null,
-    
+
     ),
     'hidden' => array(
         'type'                  => null,
