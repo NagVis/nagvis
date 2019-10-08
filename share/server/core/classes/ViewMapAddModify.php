@@ -155,7 +155,7 @@ class ViewMapAddModify {
 
                 $this->validateAttributes();
 
-                // Update the map configuration   
+                // Update the map configuration
                 if($this->mode == 'view_params') {
                     // Only modify/add the given attributes. Don't remove any
                     // set options in the array
@@ -440,6 +440,9 @@ class ViewMapAddModify {
             break;
             case 'text':
                 input($propname, $value, '', $hideField);
+            break;
+            case 'textarea':
+                textarea($propname, $value, '', $hideField);
             break;
         }
 
