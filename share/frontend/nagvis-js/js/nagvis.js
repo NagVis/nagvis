@@ -1237,7 +1237,7 @@ function getEffectiveStyle(e, attr) {
         // Object local
         return e.style[attr];
     } else if(document.defaultView && document.defaultView.getComputedStyle) {
-        // DOM 
+        // DOM
         return document.defaultView.getComputedStyle(e, null).getPropertyValue(attr);
     } else if(e.currentStyle){
         // IE
@@ -1263,7 +1263,7 @@ function getZoomFactor() {
     if (zoom === null || zoom == 'fill')
         g_zoom_factor = 100;
     else
-        g_zoom_factor = parseInt(zoom); 
+        g_zoom_factor = parseInt(zoom);
 
     return g_zoom_factor;
 }
@@ -1397,14 +1397,8 @@ function _(s, replace) {
 }
 
 function has_class(o, cn) {
-    if (typeof o.className === 'undefined')
-        return false;
-    var parts = o.className.split(' ');
-    for (var x = 0; x < parts.length; x++) {
-        if (parts[x] == cn)
-            return true;
-    }
-    return false;
+    if (!o.classList) return false;
+    return o.classList.contains(cn);
 }
 
 function remove_class(o, cn) {
