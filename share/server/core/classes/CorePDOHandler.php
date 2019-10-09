@@ -63,6 +63,7 @@ class CorePDOHandler {
                         .'WHERE users2roles."userId" = :id',
                     '-perm-rename-map' => 'UPDATE perms SET obj=:new_name '.
                         ' WHERE "mod"=\'Map\' AND obj=:old_name',
+                    '-perm-change-act' => 'UPDATE perms SET act=:new_act WHERE mod=:mod and act=:old_act',
 
                     '-role-add' => 'INSERT INTO roles (name) VALUES (:name)',
                     '-role-add-with-id' => 'INSERT INTO roles ("roleId", name) VALUES (:roleId, :name)',
@@ -128,6 +129,10 @@ class CorePDOHandler {
                 ),
 
                 'updates' => array(
+                    '1091500' => array(
+                        array('-perm-change-act', array('mod' => 'ChangePassword', 'old_act' => 'change', 'new_act' => '*'))
+                    ),
+
                     '1080600' => array(
                         array('-perm-add', array('mod' => 'Url', 'act' => 'view', 'obj' => '*')),
                         array('-create-pop-roles-perms-3', array(
@@ -462,7 +467,7 @@ class CorePDOHandler {
         try {
             ksort(self::$DRIVERS['_common']['updates']);
             foreach (self::$DRIVERS['_common']['updates'] as $ver => $queries) {
-                if (intval($ver) <= $dbVersion)
+                if (intval($ver) < $dbVersion)
                     continue;
 
                 if (!$this->inTrans) {
@@ -585,7 +590,7 @@ class CorePDOHandler {
         $this->queryFatal('-perm-add', array('mod' => 'User', 'act' => 'setOption', 'obj' => '*'));
 
         // Access controll: Change own password
-        $this->queryFatal('-perm-add', array('mod' => 'ChangePassword', 'act' => 'change', 'obj' => '*'));
+        $this->queryFatal('-perm-add', array('mod' => 'ChangePassword', 'act' => '*', 'obj' => '*'));
 
         // Access controll: View maps via multisite
         $this->queryFatal('-perm-add', array('mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*'));

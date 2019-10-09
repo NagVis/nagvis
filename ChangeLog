@@ -1,4 +1,8 @@
 1.9.15
+Core:
+  * FIX: "You are not permitted to access this page (ChangePassword/view/)" for users (issue #215)
+
+Frontend:
   * FIX: Fix IE 11 incompatibility regression introduced with 1.9.13
 
 1.9.14
