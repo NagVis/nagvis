@@ -271,7 +271,21 @@ function textarea($name, $default = '', $class = '', $style = '') {
     if (submitted($form_name))
         $default = post($name, $default);
 
-    echo '<textarea name="'.$name.'"'.$class.$style.'>'.escape_html($default).'</textarea>'.N;
+    // plain <textarea>
+    echo '<textarea id="textarea_'.$name.'" name="'.$name.'"'.$class.$style.'>'.escape_html($default).'</textarea>'.N;
+
+    // better <textarea>
+    echo '
+    <script>
+        let script = document.createElement("script");
+        script.src = "js/ExtNicEdit.js"
+        document.head.append(script);
+        script.onload = function() {
+            new nicEditor({fullPanel : true}).panelInstance("textarea_'.$name.'")
+        };
+    </script>
+    ';
+
 }
 
 function select($name, $options, $default = '', $onchange = '', $style = '', $size = null) {

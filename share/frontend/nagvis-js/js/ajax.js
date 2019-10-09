@@ -155,7 +155,8 @@ function getFormParams(formId, skipHelperFields) {
         return data;
 
     // Get relevant input elements
-    var aFields = oForm.getElementsByTagName('input');
+    var aFields = Array.from(oForm.getElementsByTagName('input'))
+    aFields = Array.prototype.concat(aFields, Array.from(oForm.getElementsByTagName('textarea')));
     for (var i = 0, len = aFields.length; i < len; i++) {
         // Filter helper fields (if told to do so)
         if (skipHelperFields && aFields[i].name.charAt(0) === '_')
@@ -173,6 +174,7 @@ function getFormParams(formId, skipHelperFields) {
 
         if (aFields[i].type == "hidden"
             || aFields[i].type == "text"
+            || aFields[i].type == "textarea"
             || aFields[i].type == "password"
             || aFields[i].type == "submit") {
             add_data(aFields[i].name, aFields[i].value);

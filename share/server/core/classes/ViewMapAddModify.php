@@ -624,5 +624,10 @@ class ViewMapAddModify {
 
         return ob_get_clean();
     }
+
+    public function object_type()
+    {
+        return $this->object_type;
+    }
 }
 ?>

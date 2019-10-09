@@ -404,8 +404,6 @@ div#popupWindow h1 {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 167px;
-    width: 165px;
 }
 #popupWindowContent input[type="radio"] {
     vertical-align: middle;
@@ -416,10 +414,10 @@ div#popupWindow h1 {
 #popupWindowContent table.mytable tr td.tdfield input,
 #popupWindowContent table.mytable tr td.tdfield textarea,
 #popupWindowContent table.mytable tr td.tdfield select {
-    width: 163px;
+    width: 99%;
 }
 #popupWindowContent table.mytable tr td.tdfield textarea {
-    height: 150px;
+    height: 250px;
 }
 #popupWindowContent table.mytable tr td.tdfield input[type="checkbox"] {
     width: auto;
