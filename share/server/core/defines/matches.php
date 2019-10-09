@@ -25,7 +25,7 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-define('MATCH_ALL', '/^.*$/i');
+define('MATCH_ALL', '/^.*$/mi');
 define('MATCH_NOT_EMPTY', '/^.+$/');
 define('MATCH_REGEX', '/^.*$/i');
 

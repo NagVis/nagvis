@@ -130,7 +130,10 @@ class CoreModMap extends CoreModule {
                 break;
                 case 'addModify':
                     $VIEW = new ViewMapAddModify();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
+                    $sReturn = json_encode(Array(
+                        'code' => $VIEW->parse(),
+                        'object_type' => $VIEW->object_type()
+                    ));
                 break;
                 case 'manageTmpl':
                     $VIEW = new ViewMapManageTmpl();

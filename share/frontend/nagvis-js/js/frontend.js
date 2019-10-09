@@ -117,9 +117,6 @@ function clearFormValue(id) {
 }
 
 function showFrontendDialog(sUrl, sTitle, sWidth) {
-    if (typeof sWidth === 'undefined' || sWidth === null)
-        sWidth = 450;
-
     call_ajax(sUrl, {
         response_handler: function(response, data) {
             if (isset(response)) {
@@ -127,7 +124,9 @@ function showFrontendDialog(sUrl, sTitle, sWidth) {
                 response.url = sUrl;
 
                 if(typeof response !== 'undefined' && typeof response.code !== 'undefined') {
-                    popupWindow(data.title, response, data.width);
+                    let width = data.sWidth || 450;
+                    if (response.object_type === 'textbox') width = 800
+                    popupWindow(data.title, response, width);
                 }
             }
         },
@@ -432,7 +431,7 @@ function set_zoom(val) {
 
 function zoom(how) {
     var cur_zoom = getZoomFactor();
-    // This is not really correct. Assume 
+    // This is not really correct. Assume
     if (cur_zoom == 'fill')
         cur_zoom = 100;
     var new_zoom = 100;

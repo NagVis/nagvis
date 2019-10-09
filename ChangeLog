@@ -5,6 +5,9 @@ Core:
   * Add new map global option "ignore_linked_maps_summary_state" (issue #223)
   * FIX: Worldmap max_zoom is now 20 (issue #228)
 
+Frontend:
+  * Textboxes can now be edited using a simple WYSIWIG editor (issue #216)
+
 1.9.17
 Core:
   * FIX: Fix PHP 5.3 incompatibility introduced with 1.9.16
