@@ -1,4 +1,6 @@
 1.9.15
+Core:
+  * Fix "You are not permitted to access this page (ChangePassword/view/)" for users (issue #215)
 
 1.9.14
 Core:
