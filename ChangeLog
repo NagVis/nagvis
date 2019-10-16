@@ -1,4 +1,5 @@
 1.9.15
+  * FIX: Fix IE 11 incompatibility regression introduced with 1.9.13
 
 1.9.14
 Core:
