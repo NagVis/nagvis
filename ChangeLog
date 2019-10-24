@@ -1,3 +1,5 @@
+1.9.17
+
 1.9.16
 Core:
   * Add support for Encrypted livestatus. You can now configure "tcp-tls:[address]:[port]"
