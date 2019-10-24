@@ -26,7 +26,21 @@
         <tr>
             <td>socket</td>
             <td>unix:/usr/local/nagios/var/rw/live</td>
-            <td><p>The socket to connect to can be a local unix socket or a tcp socket. You have to define the type at the beginning of the string. Set &quot;unix:&quot; for unix sockets or &quot;tcp:&quot; for tcp sockets.</p> <p>In case of the unix socket you need to specify the path of the livestatus unix socket to connect to.</p> <p>When using a tcp socket you have to enter a host address and a tcp port using the following scheme: &lt;host>:&lt;port>. The host address can be an IP address or an FQDN.</p></td>
+            <td><p>The socket to connect to can be a local unix socket or a tcp
+            socket. You have to define the type at the beginning of the string.
+            Set &quot;unix:&quot; for unix sockets or &quot;tcp:&quot; for tcp
+            sockets.</p>
+
+            <p><font color="#f00">New in 1.9.16</font>:Since Checkmk 1.6.0 it is possible to encrypt the Livestatus
+            channel using TLS. To connnect to such a channel use &quot;tcp-tls:&quot;.</p>
+
+            <p>In case of the unix socket you need to specify the
+            path of the livestatus unix socket to connect to.</p>
+
+            <p>When using a tcp socket you have to enter a host address and a
+            tcp port using the following scheme: &lt;host>:&lt;port>. The host address can
+            be an IP address or an FQDN.</p>
+            </td>
         </tr><tr>
             <td>timeout</td>
             <td>5</td>
@@ -35,6 +49,25 @@
                 This is just a fallback. To prevent timeouts when accessing remote sites you really should configure a statushost for the backend.
                 For details take a look at the general backend parameters documented in the <a href="nagvis_config_format_description.html#backend">backend section</a>
                 of the main configuration format description.</a></td>
+        </tr><tr>
+            <td>verify_tls_peer</td>
+            <td>1</td>
+            <td>
+                <font color="#f00">New in 1.9.16</font>: Only relevant when you connect to a Livestatus TLS encrypted socket.
+                This can be used to turn off the peer certificate verification. In case it is enabled, you will have to
+                set the <tt>verify_tls_ca_path</tt> option.
+            </td>
+        </tr><tr>
+            <td>verify_tls_ca_path</td>
+            <td></td>
+            <td>
+		<font color="#f00">New in 1.9.16</font>: Configure an absolute
+		path that points to a CA chain file which is then used to verify the
+		certificate of the Livestatus TLS server. You can, for example in Checkmk
+		sites, point it to the, "Trusted certificate authorities file of Checkmk
+		(/omd/sites/[site-id]/var/ssl/ca-certificates.crt) to use the same trust
+		configuration in NagVis and Checkmk.
+            </td>
         </tr>
         </table>
         <p>There are also some general parameters. You can read about them in <a href="nagvis_config_format_description.html#backend">main configuration format description</a>.</p>

@@ -1,4 +1,9 @@
 1.9.16
+Core:
+  * Add support for Encrypted livestatus. You can now configure "tcp-tls:[address]:[port]"
+    as socket address and control the TLS verification using the new backend specific
+    settings "verify_tls_peer" and "verify_tls_ca_path".
+
 
 1.9.15
 Core:
