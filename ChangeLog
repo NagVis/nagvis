@@ -1,4 +1,7 @@
 1.9.17
+  * FIX: Fix PHP 5.3 incompatibility introduced with 1.9.16
+  * FIX: Fix IE 11 incompatibility on worldmaps in relation to lines
+	 which was introduced with 1.9.13
 
 1.9.16
 Core:
