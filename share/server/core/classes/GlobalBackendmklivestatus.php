@@ -196,33 +196,35 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         } elseif($this->socketType === 'tcp-tls') {
             if (cfg('backend_'.$this->backendId, 'verify_tls_peer') == true) {
-		$ssl_options = [
-			'verify_peer' => true,
-                        'verify_peer_name' => false,
-			'verify_depth' => 1,
-		];
+                $ssl_options = Array(
+                    'verify_peer' => true,
+                    'verify_peer_name' => false,
+                    'verify_depth' => 1,
+                );
 
-		$ca_path = cfg('backend_'.$this->backendId, 'verify_tls_ca_path');
-		if ($ca_path)
-		    $ssl_options['cafile'] = $ca_path;
-
-		$context = stream_context_create([
+            $ca_path = cfg('backend_'.$this->backendId, 'verify_tls_ca_path');
+            if ($ca_path)
+                $ssl_options['cafile'] = $ca_path;
+                $context = stream_context_create(Array(
                     'ssl' => $ssl_options
-                ]);
-	    } else {
-		$context = stream_context_create([
-        	    'ssl' => [
+                ));
+            } else {
+                $context = stream_context_create(Array(
+                    'ssl' => Array(
                         'verify_peer' => false,
                         'verify_peer_name' => false
-                    ]
-                ]);
-	    }
+                    )
+                ));
+            }
 
-            $this->SOCKET= stream_socket_client("tls://" . $this->socketAddress . ":" . $this->socketPort, $errno, $errstr,
-						(float) cfg('backend_'.$this->backendId, 'timeout'), STREAM_CLIENT_CONNECT, $context);
+            $this->SOCKET= stream_socket_client(
+                "tls://" . $this->socketAddress . ":" . $this->socketPort, $errno, $errstr,
+                (float) cfg('backend_'.$this->backendId, 'timeout'), STREAM_CLIENT_CONNECT,
+                $context);
 
         } elseif($this->socketType === 'tcp') {
-            $this->SOCKET = fsockopen($this->socketAddress, $this->socketPort, $errno, $errstr, (float) cfg('backend_'.$this->backendId, 'timeout'));
+            $this->SOCKET = fsockopen($this->socketAddress, $this->socketPort, $errno, $errstr,
+                                        (float) cfg('backend_'.$this->backendId, 'timeout'));
         }
 
         restore_error_handler();
