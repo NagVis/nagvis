@@ -2,6 +2,8 @@
   * FIX: Fix PHP 5.3 incompatibility introduced with 1.9.16
   * FIX: Fix IE 11 incompatibility on worldmaps in relation to lines
 	 which was introduced with 1.9.13
+  * FIX: Fix incompatibility with Check 1.6 auth cookies of users with special
+         characters in the user ID
 
 1.9.16
 Core:

@@ -79,7 +79,11 @@ class CoreLogonMultisite extends CoreLogonModule {
             throw new Exception();
         }
 
-        list($username, $issueTime, $cookieHash) = explode(':', $_COOKIE[$cookieName], 3);
+        // Checkmk 1.6+ may add double quotes round the value in some cases
+        // (e.g. when @ signs are found in the value)
+        $cookieValue = trim($_COOKIE[$cookieName], '"');
+
+        list($username, $issueTime, $cookieHash) = explode(':', $cookieValue, 3);
 
         if($this->authFile == 'htpasswd')
             $users = $this->loadAuthFile($this->htpasswdPath);
