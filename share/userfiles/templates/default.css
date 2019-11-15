@@ -765,6 +765,10 @@ div.statediv.sPENDING, div.statediv.sUNCHECKED {
     background-color: #C0C0C0;
 }
 
+div.statediv.sACK {
+    border-style: dotted;
+}
+
 /*
  * Frontend eventlog styling
  */
