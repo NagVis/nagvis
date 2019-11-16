@@ -1,4 +1,6 @@
 1.9.18
+  * FIX: Sidebar map states now have a dotted border when summary is
+  acknowledged (issue #221)
 
 1.9.17
   * FIX: Fix PHP 5.3 incompatibility introduced with 1.9.16
