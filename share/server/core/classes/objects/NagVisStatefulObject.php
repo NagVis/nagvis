@@ -767,7 +767,8 @@ class NagVisStatefulObject extends NagVisObject {
         // state of the current object
         foreach($objects AS $OBJ) {
             if ($this->getType()=='map' && $OBJ->getType()=='map') {
-                continue;
+                if ($this->MAPCFG->getValue(0, 'ignore_linked_maps_summary_state') != 0)
+                    continue;
             }
 
             $objSummaryState = $OBJ->sum[STATE];
