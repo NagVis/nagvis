@@ -765,8 +765,17 @@ div.statediv.sPENDING, div.statediv.sUNCHECKED {
     background-color: #C0C0C0;
 }
 
-div.statediv.sACK {
+div.statediv.sACK:not(.sDOWNTIME) {
     border-style: dotted;
+    clip-path: polygon(100% 0, 100% 100%, 50% 50%, 0 100%, 0 0);
+}
+div.statediv.sDOWNTIME:not(.sACK) {
+    border-style: dotted;
+    clip-path: polygon(100% 0, 100% 100%, 0 100%, 0 0, 50% 50%);
+}
+div.statediv.sACK.sDOWNTIME {
+    border-style: dotted;
+    clip-path: polygon(50% 50%, 100% 0, 100% 100%, 50% 50%, 0 100%, 0 0);
 }
 
 /*
