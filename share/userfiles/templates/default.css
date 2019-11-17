@@ -767,6 +767,7 @@ div.statediv.sPENDING, div.statediv.sUNCHECKED {
 
 div.statediv.sACK {
     border-style: dotted;
+    clip-path: polygon(100% 0, 100% 20%, 20% 100%, 0 100%, 0 0);
 }
 
 /*
