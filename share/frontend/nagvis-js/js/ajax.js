@@ -155,8 +155,8 @@ function getFormParams(formId, skipHelperFields) {
         return data;
 
     // Get relevant input elements
-    var aFields = Array.from(oForm.getElementsByTagName('input'))
-    aFields = Array.prototype.concat(aFields, Array.from(oForm.getElementsByTagName('textarea')));
+    var aFields = oForm.querySelectorAll('input,textarea');
+
     for (var i = 0, len = aFields.length; i < len; i++) {
         // Filter helper fields (if told to do so)
         if (skipHelperFields && aFields[i].name.charAt(0) === '_')
