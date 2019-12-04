@@ -46,7 +46,7 @@ $configVars = array(
     ),
     'max_zoom' => array(
         'must'      => false,
-        'default'   => 18,
+        'default'   => 19,
         'match'     => MATCH_WORLDMAP_ZOOM,
     ),
 );
@@ -161,7 +161,7 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
 
     if ($sw_lat > $ne_lat) swap($sw_lat, $ne_lat);
     if ($sw_lng > $ne_lng) swap($sw_lng, $ne_lng);
-        
+
     $q = 'SELECT lat, lng, lat2, lng2, object FROM objects WHERE'
         .'(lat BETWEEN :sw_lat AND :ne_lat AND lng BETWEEN :sw_lng AND :ne_lng)'
         .'OR (lat2 BETWEEN :sw_lat AND :ne_lat AND lng2 BETWEEN :sw_lng AND :ne_lng)';
