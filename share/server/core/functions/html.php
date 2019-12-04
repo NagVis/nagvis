@@ -279,7 +279,7 @@ function textarea($name, $default = '', $class = '', $style = '') {
     <script>
         let script = document.createElement("script");
         script.src = "js/ExtNicEdit.js"
-        document.head.append(script);
+        document.head.appendChild(script);
         script.onload = function() {
             new nicEditor({fullPanel : true}).panelInstance("textarea_'.$name.'")
         };
