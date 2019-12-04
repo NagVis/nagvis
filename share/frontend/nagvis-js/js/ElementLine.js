@@ -344,7 +344,11 @@ var ElementLine = Element.extend({
         if (adjustedPoints === null) {
             return; // Line won't be visible -> this.parts left empty -> no rendering
         }
-        [xStart, yStart, xEnd, yEnd] = adjustedPoints;
+
+        xStart = adjustedPoints[0];
+        yStart = adjustedPoints[1];
+        xEnd = adjustedPoints[2];
+        yEnd = adjustedPoints[3];
 
         var width = addZoomFactor(this.obj.conf.line_width);
         if (width <= 0)

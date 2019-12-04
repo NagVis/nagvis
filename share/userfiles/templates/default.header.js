@@ -103,6 +103,9 @@ function headerUpdateState(map_conf) {
     var side = document.getElementById('side-state-' + map['name']);
     if (side) {
         side.className = 'statediv s' + map['summary_state'];
+        if (map['summary_problem_has_been_acknowledged']==1) {
+            side.className += ' sACK';
+        }
         side = null;
     }
 

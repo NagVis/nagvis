@@ -1,6 +1,28 @@
+1.9.18
+  * FIX: Sidebar map states now have a dotted border when summary is acknowledged (issue #221)
+  Worldmap:
+    * Usability: The Textbox has simple WYSIWIG editor
+
+1.9.17
+  * FIX: Fix PHP 5.3 incompatibility introduced with 1.9.16
+  * FIX: Fix IE 11 incompatibility on worldmaps in relation to lines
+	 which was introduced with 1.9.13
+  * FIX: Fix incompatibility with Check 1.6 auth cookies of users with special
+         characters in the user ID
+
+1.9.16
+Core:
+  * Add support for Encrypted livestatus. You can now configure "tcp-tls:[address]:[port]"
+    as socket address and control the TLS verification using the new backend specific
+    settings "verify_tls_peer" and "verify_tls_ca_path".
+
+
 1.9.15
-Worldmap:
-  * Usability: The Textbox has simple WYSIWIG editor
+Core:
+  * FIX: "You are not permitted to access this page (ChangePassword/view/)" for users (issue #215)
+
+Frontend:
+  * FIX: Fix IE 11 incompatibility regression introduced with 1.9.13
 
 1.9.14
 Core:

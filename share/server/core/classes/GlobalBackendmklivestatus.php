@@ -37,6 +37,7 @@
 class GlobalBackendmklivestatus implements GlobalBackendInterface {
     private $backendId = '';
 
+    private $CONNECT_ERR = "";
     private $CONNECT_EXC = null;
     private $SOCKET = null;
     private $socketType = '';
@@ -51,6 +52,19 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
           'editable'  => 1,
           'default'   => 'unix:/usr/local/nagios/var/rw/live',
           'match'     => MATCH_SOCKET,
+        ),
+        'verify_tls_peer' => Array(
+          'must'       => 0,
+          'editable'   => 1,
+          'default'    => 1,
+          'match'      => MATCH_BOOLEAN,
+          'field_type' => 'boolean',
+        ),
+        'verify_tls_ca_path' => Array(
+          'must'      => 0,
+          'editable'  => 1,
+          'default'   => '',
+          'match'     => MATCH_STRING_PATH,
         ),
         'timeout' => Array(
           'must'      => 1,
@@ -118,7 +132,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         if($type === 'unix') {
             $this->socketType = $type;
             $this->socketPath = $address;
-        } elseif($type === 'tcp') {
+        } elseif($type === 'tcp' || $type === 'tcp-tls') {
             $this->socketType = $type;
 
             // Extract address and port
@@ -126,6 +140,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
             $this->socketAddress = $address;
             $this->socketPort = $port;
+
         } else {
             throw new BackendConnectionProblem(
               l('Unknown socket type given in backend [BACKENDID]',
@@ -170,29 +185,75 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         if($this->CONNECT_EXC != null)
             throw $this->CONNECT_EXC;
 
+        set_error_handler(array($this, 'connectErrorHandler'), E_WARNING | E_NOTICE);
+
         // Connect to the socket
         // don't want to see the connection error messages - want to handle the
         // errors later with an own error message
         // FIXME: Maybe use pfsockopen in the future to use persistent connections
         if($this->socketType === 'unix') {
-            $oldLevel = error_reporting(0);
             $this->SOCKET = fsockopen('unix://'.$this->socketPath, NULL, $errno, $errstr, (float) cfg('backend_'.$this->backendId, 'timeout'));
-            error_reporting($oldLevel);
+
+        } elseif($this->socketType === 'tcp-tls') {
+            if (cfg('backend_'.$this->backendId, 'verify_tls_peer') == true) {
+                $ssl_options = Array(
+                    'verify_peer' => true,
+                    'verify_peer_name' => false,
+                    'verify_depth' => 1,
+                );
+
+            $ca_path = cfg('backend_'.$this->backendId, 'verify_tls_ca_path');
+            if ($ca_path)
+                $ssl_options['cafile'] = $ca_path;
+                $context = stream_context_create(Array(
+                    'ssl' => $ssl_options
+                ));
+            } else {
+                $context = stream_context_create(Array(
+                    'ssl' => Array(
+                        'verify_peer' => false,
+                        'verify_peer_name' => false
+                    )
+                ));
+            }
+
+            $this->SOCKET= stream_socket_client(
+                "tls://" . $this->socketAddress . ":" . $this->socketPort, $errno, $errstr,
+                (float) cfg('backend_'.$this->backendId, 'timeout'), STREAM_CLIENT_CONNECT,
+                $context);
+
         } elseif($this->socketType === 'tcp') {
-            $oldLevel = error_reporting(0);
-            $this->SOCKET = fsockopen($this->socketAddress, $this->socketPort, $errno, $errstr, (float) cfg('backend_'.$this->backendId, 'timeout'));
-            error_reporting($oldLevel);
+            $this->SOCKET = fsockopen($this->socketAddress, $this->socketPort, $errno, $errstr,
+                                        (float) cfg('backend_'.$this->backendId, 'timeout'));
         }
 
+        restore_error_handler();
+
         if(!$this->SOCKET) {
+            if ($errno === 0)
+                $error_msg = $this->CONNECT_ERR;
+            else
+                $error_msg = $errstr;
+
             $this->SOCKET = null;
             $this->CONNECT_EXC = new BackendConnectionProblem(
                                      l('Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]',
                                                Array('BACKENDID' => $this->backendId,
                                                      'SOCKET'    => $this->socketPath,
-                                                     'MSG'       => $errstr)));
+                                                     'MSG'       => $error_msg)));
             throw $this->CONNECT_EXC;
         }
+    }
+
+    /**
+     * Catch PHP errors occured during connect
+     */
+    public function connectErrorHandler($errno, $errstr) {
+    	if (($errno & E_WARNING) === 0 && ($errno & E_NOTICE) === 0) {
+            return false; // use default error handler
+    	}
+    	$this->CONNECT_ERR .= $errstr . "\n";
+    	return true;
     }
 
     /*private function verifyLivestatusVersion() {
