@@ -2,7 +2,7 @@
 
 class WorldmapError extends MapSourceError {}
 
-define('MATCH_WORLDMAP_ZOOM', '/^1?[0-9]$/');
+define('MATCH_WORLDMAP_ZOOM', '/^1?[0-9]|20$/');
 
 // Register this source as being selectable by the user
 global $selectable;
@@ -46,7 +46,7 @@ $configVars = array(
     ),
     'max_zoom' => array(
         'must'      => false,
-        'default'   => 19,
+        'default'   => 20,
         'match'     => MATCH_WORLDMAP_ZOOM,
     ),
 );
