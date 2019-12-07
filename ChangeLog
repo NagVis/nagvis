@@ -1,11 +1,10 @@
 1.9.18
 Core:
-  * Sidebar map states now have a dotted border when summary is
-  acknowledged (issue #221)
   * Add new map global option "ignore_linked_maps_summary_state" (issue #223)
   * FIX: Worldmap max_zoom is now 20 (issue #228)
 
 Frontend:
+  * Sidebar map states now indicate acknowledgement and downtime states (issue #221)
   * Textboxes can now be edited using a simple WYSIWIG editor (issue #216)
 
 1.9.17
