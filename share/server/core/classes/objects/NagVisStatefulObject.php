@@ -766,6 +766,11 @@ class NagVisStatefulObject extends NagVisObject {
         // Loop all object to gather the worst state and set it as summary
         // state of the current object
         foreach($objects AS $OBJ) {
+            if ($this->getType()=='map' && $OBJ->getType()=='map') {
+                if ($this->MAPCFG->getValue(0, 'ignore_linked_maps_summary_state') != 0)
+                    continue;
+            }
+
             $objSummaryState = $OBJ->sum[STATE];
             $objAck          = $OBJ->sum[ACK];
             $objDowntime     = $OBJ->sum[DOWNTIME];
