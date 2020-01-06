@@ -155,6 +155,26 @@ function worldmap_init_db() {
     worldmap_init_schema();
 }
 
+// compuetes 2D line constants from a segment (2 points)
+// returns parameters r,s,t of the common 2D "rx + sy + t = 0" equation
+function line_parameters($ax, $ay, $bx, $by) {
+    // segment vector
+    $ux = $bx - $ax;
+    $uy = $by - $ay;
+
+    // perpendicular vector
+    $nx = $uy;
+    $ny = -$ux;
+
+    // r, s, t constants
+    $r = $nx;
+    $s = $ny;
+    $t = -($r*$ax + $s*$ay);
+
+    if ($s == -0) $s = 0;
+
+    return [$r, $s, $t];
+}
 function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
     global $DB;
     worldmap_init_db();
@@ -162,17 +182,65 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
     if ($sw_lat > $ne_lat) swap($sw_lat, $ne_lat);
     if ($sw_lng > $ne_lng) swap($sw_lng, $ne_lng);
 
-    $q = 'SELECT lat, lng, lat2, lng2, object FROM objects WHERE'
-        .'(lat BETWEEN :sw_lat AND :ne_lat AND lng BETWEEN :sw_lng AND :ne_lng)'
-        .'OR (lat2 BETWEEN :sw_lat AND :ne_lat AND lng2 BETWEEN :sw_lng AND :ne_lng)';
+    // The 4 bounding lines expressed as common 2D "rx + sy + t = 0" equations
+    list($rWest, $sWest, $tWest) = line_parameters($sw_lng, $sw_lat, $sw_lng, $ne_lat);
+    list($rNorth, $sNorth, $tNorth) = line_parameters($sw_lng, $ne_lat, $ne_lng, $ne_lat);
+    list($rEast, $sEast, $tEast) = line_parameters($ne_lng, $sw_lat, $ne_lng, $ne_lat);
+    list($rSouth, $sSouth, $tSouth) = line_parameters($sw_lng, $sw_lat, $ne_lng, $sw_lat);
 
-    $RES = $DB->query($q, array('sw_lng' => $sw_lng, 'sw_lat' => $sw_lat, 'ne_lng' => $ne_lng, 'ne_lat' => $ne_lat));
+    /* SQLite 2D line equations */
+    $ux = '(lng2-lng)';
+    $uy = '(lat2-lat)';
+    $nx = $uy;
+    $ny = "(-($ux))";
+    $r = "($nx)";
+    $s = "($ny)";
+    $t = "(-$r*lng-$s*lat)";
+
+    // y-coordinate of line-vs-west-edge intersection
+    $intyWest = "($rWest*$t - ($tWest)*$r)/($sWest*$r - ($rWest)*$s)";
+    $intWithinWestBound = "($intyWest between :sw_lat and :ne_lat AND min(lng,lng2) <= :sw_lng AND max(lng,lng2) >= :sw_lng)";
+
+    // x-coordinate of line-vs-south-edge intersection
+    $intxSouth = "($s*$tSouth-($sSouth)*$t)/($sSouth*$r-$s*$rSouth)";
+    $intWithinSouthBound = "($intxSouth between :sw_lng and :ne_lng AND min(lat,lat2) <= :sw_lat AND max(lat,lat2) >= :sw_lat)";
+
+    // y-coordinate of line-vs-east-edge intersection
+    $intyEast = "($rEast*$t - ($tEast)*$r)/($sEast*$r - ($rEast)*$s)";
+    $intWithinEastBound = "($intyEast between :sw_lat and :ne_lat AND min(lng,lng2) <= :ne_lng AND max(lng,lng2) >= :ne_lng)";
+
+    // x-coordinate of line-vs-north-edge intersection
+    $intxNorth = "($s*$tNorth-($sNorth)*$t)/($sNorth*$r-$s*$rNorth)";
+    $intWithinNorthBound = "($intxNorth between :sw_lng and :ne_lng AND min(lat,lat2) <= :ne_lat AND max(lat,lat2) >= :ne_lat)";
+
+    $q = 'SELECT lat, lng, lat2, lng2, object FROM objects WHERE'
+        // object lays, or line starts within bbox
+        .'(lat BETWEEN :sw_lat AND :ne_lat AND lng BETWEEN :sw_lng AND :ne_lng)'
+        // line ends within bbox
+        .'OR (lat2 BETWEEN :sw_lat AND :ne_lat AND lng2 BETWEEN :sw_lng AND :ne_lng)'
+        // line intersects one of 4 bbox borders
+        ."OR (lat2>0 AND lng2>0 AND ($intWithinWestBound OR $intWithinSouthBound OR $intWithinEastBound OR $intWithinNorthBound))"
+        ;
+
+    $q = str_replace(':sw_lng', $sw_lng, $q);
+    $q = str_replace(':sw_lat', $sw_lat, $q);
+    $q = str_replace(':ne_lng', $ne_lng, $q);
+    $q = str_replace(':ne_lat', $ne_lat, $q);
+    // error_log("Query objects: $q");
+
+    $RES = $DB->query($q);
+
+    if ($RES == false) {
+        error_log(implode($DB->error(),','));
+        throw new WorldmapError(l('Failed to fetch objects: [E]; Query was [Q]', array(
+            'E' => json_encode($DB->error()), 'Q' => $q)));
+    }
+
     $objects = array();
     $referenced = array();
     while ($data = $RES->fetch()) {
         $obj = json_decode($data['object'], true);
         $objects[$obj['object_id']] = $obj;
-
         // check all coordinates for relative coords
         $coords = array($data['lat'], $data['lng'], $data['lat2'], $data['lng2']);
         foreach ($coords as $coord) {
