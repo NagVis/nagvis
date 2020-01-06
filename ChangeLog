@@ -6,6 +6,7 @@ Core:
 Frontend:
   * Sidebar map states now indicate acknowledgement and downtime states (issue #221)
   * Textboxes can now be edited using a simple WYSIWIG editor (issue #216)
+  * Worldmap: render middle sections of long lines
 
 1.9.17
 Core:
