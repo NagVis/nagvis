@@ -59,7 +59,7 @@ var ViewWorldmap = ViewMap.extend({
             "map": L.tileLayer(oGeneralProperties.worldmap_tiles_url, {
                 attribution: oGeneralProperties.worldmap_tiles_attribution,
                 noWrap: true, // don't repeat the world on horizontal axis
-                detectRetina: true, // look nice on high resolution screens
+                detectRetina: false, // this causes trouble with maximum zoom level (19 vs. 20), don't use
                 maxZoom: 20,
             }),
         }
@@ -67,7 +67,7 @@ var ViewWorldmap = ViewMap.extend({
             layers.satellite = L.tileLayer(oGeneralProperties.worldmap_satellite_tiles_url, {
                 attribution: oGeneralProperties.worldmap_satellite_tiles_attribution,
                 noWrap: true, // don't repeat the world on horizontal axis
-                detectRetina: true, // look nice on high resolution screens
+                detectRetina: false,
                 maxZoom: 20,
             })
         }
