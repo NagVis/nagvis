@@ -291,7 +291,7 @@ var ElementLine = Element.extend({
         // are added later. But this container gets all event handlers assigned. Because
         // the line is using erase(), render(), draw() within place() which is called while
         // the user moves the object, this dom node must not be re-created, because this
-        // would remove all event handlers 
+        // would remove all event handlers
         if (!this.obj.trigger_obj) {
             var oLink = document.createElement('a');
             oLink.setAttribute('id', this.obj.conf.object_id+'-linelink');
@@ -967,32 +967,32 @@ var ElementLine = Element.extend({
     /*
      * There is a rectangle: viewport (current Leaflet map shown) + 10% on each side.
      * This function cuts the lines protruding beyond the rectangle.
-     * Shortened lines prevent renderLine() from generating many vast <canvas> (10000-ish pixels) which eventually lead 
-     * to memory exhaustion or crash the browser 
-     * 
+     * Shortened lines prevent renderLine() from generating many vast <canvas> (10000-ish pixels) which eventually lead
+     * to memory exhaustion or crash the browser
+     *
      * Returns:
      *  either: [xA, yA, xB, yB] - original or adjusted line A/B coordinates,
      *  or: null - line out of a rectangle, don't render
      */
-     
+
     cutLineBeyondViewport: function(xA, yA, xB, yB) {
         if (!g_map)
             return([xA, yA, xB, yB]); // no viewport - no clipping
 
         let viewport_size = g_map.getSize();
-        const xMax = viewport_size.x; // 1920
-        const yMax = viewport_size.y; // 1080
-        const xTolerance = xMax * 0.1; // 192 (10%)
-        const yTolerance = yMax * 0.1; // 108 (10%)
-        
-        // Cohen-Sutherland algorithm 
-        
-        // region codes 
-        const INSIDE = 0; // 0000 
-        const LEFT = 1;   // 0001 
-        const RIGHT = 2;  // 0010 
-        const BOTTOM = 4; // 0100 
-        const TOP = 8;    // 1000 
+        const xMax = viewport_size.x;  // 1920
+        const yMax = viewport_size.y;  // 1080
+        const xTolerance = xMax * 0.95; // 1824 (95%)
+        const yTolerance = yMax * 0.95; // 1026 (95%)
+
+        // Cohen-Sutherland algorithm
+
+        // region codes
+        const INSIDE = 0; // 0000
+        const LEFT = 1;   // 0001
+        const RIGHT = 2;  // 0010
+        const BOTTOM = 4; // 0100
+        const TOP = 8;    // 1000
 
         // boundaries
         const x_min = -xTolerance;
@@ -1001,102 +1001,102 @@ var ElementLine = Element.extend({
         const y_max = yMax + yTolerance;
 
         // Function to compute region code
-        let regionCode = function (x, y) 
-        { 
-            let code = INSIDE; 
-        
-            if (x < x_min)       // to the left of rectangle 
-                code |= LEFT; 
-            else if (x > x_max)  // to the right of rectangle 
-                code |= RIGHT; 
-            if (y < y_min)       // below the rectangle 
-                code |= BOTTOM; 
-            else if (y > y_max)  // above the rectangle 
-                code |= TOP; 
-        
-            return code; 
-        } 
+        let regionCode = function (x, y)
+        {
+            let code = INSIDE;
+
+            if (x < x_min)       // to the left of rectangle
+                code |= LEFT;
+            else if (x > x_max)  // to the right of rectangle
+                code |= RIGHT;
+            if (y < y_min)       // below the rectangle
+                code |= BOTTOM;
+            else if (y > y_max)  // above the rectangle
+                code |= TOP;
+
+            return code;
+        }
 
         let cohenSutherlandClip = function (x1, y1, x2, y2) {
-            let code1 = regionCode(x1, y1); 
-            let code2 = regionCode(x2, y2); 
+            let code1 = regionCode(x1, y1);
+            let code2 = regionCode(x2, y2);
 
-            let accept = false; 
+            let accept = false;
 
-            while (true) 
-            { 
-                if ((code1 == 0) && (code2 == 0)) 
-                { 
-                    // If both endpoints lie within rectangle 
-                    accept = true; 
-                    break; 
-                } 
-                else if (code1 & code2) 
-                { 
-                    // If both endpoints are outside rectangle, 
-                    // in same region 
-                    break; 
-                } 
+            while (true)
+            {
+                if ((code1 == 0) && (code2 == 0))
+                {
+                    // If both endpoints lie within rectangle
+                    accept = true;
+                    break;
+                }
+                else if (code1 & code2)
+                {
+                    // If both endpoints are outside rectangle,
+                    // in same region
+                    break;
+                }
                 else
-                { 
-                    // Some segment of line lies within the 
-                    // rectangle 
-                    let code_out; 
-                    let x, y; 
+                {
+                    // Some segment of line lies within the
+                    // rectangle
+                    let code_out;
+                    let x, y;
 
-                    // At least one endpoint is outside the  
-                    // rectangle, pick it. 
-                    if (code1 != 0) 
-                        code_out = code1; 
+                    // At least one endpoint is outside the
+                    // rectangle, pick it.
+                    if (code1 != 0)
+                        code_out = code1;
                     else
-                        code_out = code2; 
+                        code_out = code2;
 
-                    // Find intersection point; 
-                    // using formulas y = y1 + slope * (x - x1), 
-                    // x = x1 + (1 / slope) * (y - y1) 
-                    if (code_out & TOP) 
-                    { 
-                        // point is above the clip rectangle 
-                        x = x1 + (x2 - x1) * (y_max - y1) / (y2 - y1); 
-                        y = y_max; 
-                    } 
-                    else if (code_out & BOTTOM) 
-                    { 
-                        // point is below the rectangle 
-                        x = x1 + (x2 - x1) * (y_min - y1) / (y2 - y1); 
-                        y = y_min; 
-                    } 
-                    else if (code_out & RIGHT) 
-                    { 
-                        // point is to the right of rectangle 
-                        y = y1 + (y2 - y1) * (x_max - x1) / (x2 - x1); 
-                        x = x_max; 
-                    } 
-                    else if (code_out & LEFT) 
-                    { 
-                        // point is to the left of rectangle 
-                        y = y1 + (y2 - y1) * (x_min - x1) / (x2 - x1); 
-                        x = x_min; 
-                    } 
+                    // Find intersection point;
+                    // using formulas y = y1 + slope * (x - x1),
+                    // x = x1 + (1 / slope) * (y - y1)
+                    if (code_out & TOP)
+                    {
+                        // point is above the clip rectangle
+                        x = x1 + (x2 - x1) * (y_max - y1) / (y2 - y1);
+                        y = y_max;
+                    }
+                    else if (code_out & BOTTOM)
+                    {
+                        // point is below the rectangle
+                        x = x1 + (x2 - x1) * (y_min - y1) / (y2 - y1);
+                        y = y_min;
+                    }
+                    else if (code_out & RIGHT)
+                    {
+                        // point is to the right of rectangle
+                        y = y1 + (y2 - y1) * (x_max - x1) / (x2 - x1);
+                        x = x_max;
+                    }
+                    else if (code_out & LEFT)
+                    {
+                        // point is to the left of rectangle
+                        y = y1 + (y2 - y1) * (x_min - x1) / (x2 - x1);
+                        x = x_min;
+                    }
 
-                    // Now intersection point x,y is found 
-                    // We replace point outside rectangle 
-                    // by intersection point 
-                    if (code_out == code1) 
-                    { 
-                        x1 = x; 
-                        y1 = y; 
-                        code1 = regionCode(x1, y1); 
-                    } 
+                    // Now intersection point x,y is found
+                    // We replace point outside rectangle
+                    // by intersection point
+                    if (code_out == code1)
+                    {
+                        x1 = x;
+                        y1 = y;
+                        code1 = regionCode(x1, y1);
+                    }
                     else
-                    { 
-                        x2 = x; 
-                        y2 = y; 
-                        code2 = regionCode(x2, y2); 
-                    } 
-                } 
-            } 
-            if (accept) 
+                    {
+                        x2 = x;
+                        y2 = y;
+                        code2 = regionCode(x2, y2);
+                    }
+                }
+            }
+            if (accept)
                 return([x1, y1, x2, y2]);
             else
                 return null;
