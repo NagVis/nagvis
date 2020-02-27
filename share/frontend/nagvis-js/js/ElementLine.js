@@ -777,7 +777,7 @@ var ElementLine = Element.extend({
             return oStates["ERROR"].color;
 
         if (!this.perfdata)
-            return '#FFCC66';
+            return oStates["CRITICAL"].color;
 
         if (this.perfdata[id][2] == '%' && this.perfdata[id][1] !== null) {
             return this.getColorFill(this.perfdata[id][1]);
