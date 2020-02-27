@@ -237,7 +237,7 @@ var ViewMap = View.extend({
         var parents = obj.getParentObjectIds();
         if (parents) {
             for (var parentObjId in parents) {
-                this.objects[parentObjId].addChild(obj);
+                if (obj.childs.length != 0) this.objects[parentObjId].addChild(obj);
             }
         }
     },
