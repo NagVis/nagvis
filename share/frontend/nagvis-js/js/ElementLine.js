@@ -655,6 +655,11 @@ var ElementLine = Element.extend({
     },
 
     renderLabel: function(id) {
+	if (this.parts.length === 0)
+	    return;
+	if (this.perfdata === null)
+            return;
+
         var x1 = this.parts[id][0][0],
             y1 = this.parts[id][0][1],
             x2 = this.parts[id][1][0],
@@ -665,9 +670,6 @@ var ElementLine = Element.extend({
 
         var x = middle(x1, x2, cut),
             y = middle(y1, y2, cut);
-
-        if (this.perfdata === null)
-            return;
 
         var txt;
         if (this.obj.conf.line_type == 13 || this.obj.conf.line_type == 14) {
