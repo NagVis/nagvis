@@ -816,6 +816,8 @@ var ElementLine = Element.extend({
     calculateUsage: function(oldPerfdata) {
         var newPerfdata = [];
         var foundNew = false;
+        var line_label_in = 'in';
+        var line_label_out = 'out';
 
         // Check_MK if/if64 checks support switching between bytes/bits. The detection
         // can be made by some curios hack. The most hackish hack I've ever seen. From hell.
@@ -826,8 +828,14 @@ var ElementLine = Element.extend({
 
         // This loop takes perfdata with the labels "in" and "out" and uses the current value
         // and maximum values to parse the percentage usage of the line
+        if (typeof this.obj.conf.line_label_in !== 'undefined') {
+            line_label_in = this.obj.conf.line_label_in;
+        }
+        if (typeof this.obj.conf.line_label_out !== 'undefined') {
+            line_label_out = this.obj.conf.line_label_out;
+        }
         for(var i = 0; i < oldPerfdata.length; i++) {
-            if(oldPerfdata[i][0] == 'in' && (oldPerfdata[i][2] === null || oldPerfdata[i][2] === '')) {
+            if(oldPerfdata[i][0] == line_label_in && (oldPerfdata[i][2] === null || oldPerfdata[i][2] === '')) {
                 newPerfdata[0] = this.perfdataCalcPerc(oldPerfdata[i]);
                 if(!display_bits) {
                     newPerfdata[2] = this.perfdataCalcBytesReadable(oldPerfdata[i]);
@@ -837,7 +845,7 @@ var ElementLine = Element.extend({
                 }
                 foundNew = true;
             }
-            if(oldPerfdata[i][0] == 'out' && (oldPerfdata[i][2] === null || oldPerfdata[i][2] === '')) {
+            if(oldPerfdata[i][0] == line_label_out && (oldPerfdata[i][2] === null || oldPerfdata[i][2] === '')) {
                 newPerfdata[1] = this.perfdataCalcPerc(oldPerfdata[i]);
                 if(!display_bits) {
                     newPerfdata[3] = this.perfdataCalcBytesReadable(oldPerfdata[i]);
@@ -947,7 +955,7 @@ var ElementLine = Element.extend({
         // Break perfdata parts into array
         for (var i = 0; i < perfdataMatches.length; i++) {
             // Get parts of perfdata from string
-            var tmpSetMatches = perfdataMatches[i].match(/(&#145;)?([\w\s\=\']*)(&#145;)?\=([\d\.\-\+]*)([\w%]*)[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-\+]*)[\;|\s]?([\d\.\-\+]*)/);
+            var tmpSetMatches = perfdataMatches[i].match(/(&#145;)?([\w\s\=\'\-]*)(&#145;)?\=([\d\.\-\+]*)([\w%]*)[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-:~@]+)*[\;|\s]?([\d\.\-\+]*)[\;|\s]?([\d\.\-\+]*)/);
 
             // Check if we got any perfdata
             if (tmpSetMatches === null)

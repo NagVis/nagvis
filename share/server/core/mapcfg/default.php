@@ -543,6 +543,20 @@ $mapConfigVars = Array(
         'depends_on'    => 'view_type',
         'depends_value' => 'line'
     ),
+    'line_label_in' => Array(
+        'must'          => 0,
+        'default'       => 'in',
+        'match'         => MATCH_STRING,
+        'depends_on'    => 'view_type',
+        'depends_value' => 'line',
+    ),
+    'line_label_out' => Array(
+        'must'          => 0,
+        'default'       => 'out',
+        'match'         => MATCH_STRING,
+        'depends_on'    => 'view_type',
+        'depends_value' => 'line',
+    ),
     'line_label_y_offset' => Array(
         'must'          => 0,
         'default'       => 2,
@@ -1195,6 +1209,8 @@ $mapConfigVarMap['service'] = Array(
         'line_type' => null,
         'line_cut' => null,
         'line_label_show' => null,
+        'line_label_in' => null,
+        'line_label_out' => null,
         'line_label_pos_in' => null,
         'line_label_pos_out' => null,
         'line_label_y_offset' => null,
