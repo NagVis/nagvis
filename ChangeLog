@@ -1,3 +1,5 @@
+1.9.19
+
 1.9.18
 Core:
   * Add new map global option "ignore_linked_maps_summary_state" (issue #223)
