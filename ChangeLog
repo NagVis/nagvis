@@ -4,7 +4,9 @@ Core:
   * FIX: Worldmap max_zoom is now 20 (issue #228)
 
 Frontend:
-  * Weather map lines: Use "CRITICAL" color when no perfdata is available (#243)
+  * Weathermap lines: New options line_label_in/line_label_out to configure
+    the name of the perfdata values to use for in/out traffic (#244)
+  * Weathermap lines: Use "CRITICAL" color when no perfdata is available (#243)
   * Sidebar map states now indicate acknowledgement and downtime states (issue #221)
   * Textboxes can now be edited using a simple WYSIWIG editor (issue #216)
   * Worldmap: render middle sections of long lines
