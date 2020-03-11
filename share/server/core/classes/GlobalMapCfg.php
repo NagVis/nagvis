@@ -301,7 +301,7 @@ class GlobalMapCfg {
         // here.
         if(version_compare(PHP_VERSION, '5.1.2', '==')) {
             $file = file($this->configFile);
-        } else { 
+        } else {
             $file = file($this->configFile, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
         }
 
@@ -624,7 +624,7 @@ class GlobalMapCfg {
             } else {
                 $val = $_REQUEST[$key];
             }
-                
+
             if(!$only_customized || ($val != $this->getValue(0, $key))) {
                 return $val;
             }
@@ -634,7 +634,7 @@ class GlobalMapCfg {
             $userParams = $USERCFG->getValue('params-' . $this->name);
             if(isset($userParams[$key])) {
                 return $userParams[$key];
-                
+
             } elseif(!$only_user_supplied) {
                 // Otherwise use the map global value (if allowed)
                 return $this->getValue(0, $key);
@@ -1544,6 +1544,8 @@ class GlobalMapCfg {
 
             if(is_array($val))
                 $val = implode(',', $val);
+
+            $val = str_replace( "\n", '<br/>', $val );
 
             $newLine = $key.'='.$val."\n";
 
