@@ -1,4 +1,7 @@
 1.9.19
+Frontend:
+  * FIX: New textboxes introduced with 1.9.18 broke the map configs (issue #245)
+  * FIX: Fix potential javascript error when zooming (issue #242)
 
 1.9.18
 Core:
