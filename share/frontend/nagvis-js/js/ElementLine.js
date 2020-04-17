@@ -764,7 +764,7 @@ var ElementLine = Element.extend({
         // and maximum values given to be able to calculate the percentage usage
         if (perf[0][2] === null || perf[0][2] === ''
            || perf[1][2] === null || perf[1][2] === '') {
-            perf = this.calculateUsage(perf);
+            perf = this.calculateUsage(perf, this.obj.conf.output);
         }
 
         this.perfdata = perf;
@@ -813,7 +813,7 @@ var ElementLine = Element.extend({
      * with an empty UOM. If found it uses the current value and max value
      * for calculating the percentage usage and also the current usage.
      */
-    calculateUsage: function(oldPerfdata) {
+    calculateUsage: function(oldPerfdata, output) {
         var newPerfdata = [];
         var foundNew = false;
         var line_label_in = 'in';
@@ -823,8 +823,10 @@ var ElementLine = Element.extend({
         // can be made by some curios hack. The most hackish hack I've ever seen. From hell.
         // Well, let's deal with it.
         var display_bits = false;
-        if(oldPerfdata.length >= 11 && oldPerfdata[10][5] == '0.0')
-            display_bits = true;
+        output = output.match("In: [0-9](.*)Out: [0-9]")[1] || "";
+        if(output.includes("bit/s")){
+            display_bits=true;
+        }
 
         // This loop takes perfdata with the labels "in" and "out" and uses the current value
         // and maximum values to parse the percentage usage of the line
