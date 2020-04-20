@@ -1,5 +1,7 @@
 1.9.19
 Frontend:
+  * FIX: Fix weathermap lines displaying byte/s instead of bit/s for Checkmk
+         interface checks (issue #230)
   * FIX: New textboxes introduced with 1.9.18 broke the map configs (issue #245)
   * FIX: Fix potential javascript error when zooming (issue #242)
 
