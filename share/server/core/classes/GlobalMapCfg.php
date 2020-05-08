@@ -966,9 +966,10 @@ class GlobalMapCfg {
         foreach(array_keys($this->mapConfig) AS $id) {
             $todo = false;
 
-            // Replace default integer object IDs
-            if($id[0] == '_')
+            // Replace default integer object IDs (are added with "_[index]" during config parsing)
+            if($id !== 0 && $id[0] == '_') {
                 $todo = true;
+            }
 
             // Remove duplicates by generating new IDs for the later objects
             if(isset($alreadySeen[$id])) {
