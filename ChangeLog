@@ -1,4 +1,6 @@
 1.9.20
+Core:
+  * Drop some PHP < 5.2 compatibility code for json encoding / decoding
   * FIX: PHP 7.4 compat fix (Trying to access array offset on value of type int)
 
 1.9.19
