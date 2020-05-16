@@ -377,8 +377,19 @@ var ElementLine = Element.extend({
                     var yMid = y[1];
                 }
 
-                this.renderArrow(0, xStart, yStart, xMid, yMid, width);
-                this.renderArrow(1, xEnd, yEnd, xMid, yMid, width);
+                if (cut == 1) {
+                // only ---> part, TODO: label handling, disabling for now
+                    this.renderArrow(0, xStart, yStart, xEnd, yEnd, width);
+                    this.obj.conf.line_label_show = '0';
+                } else if (cut == 0) {
+                // only <--- part, TODO: label handling, disabling for now
+                    this.renderArrow(1, xEnd, yEnd, xStart, yStart, width);
+                    this.obj.conf.line_label_show = '0';
+                } else {
+                // both parts, default behaviour
+                    this.renderArrow(0, xStart, yStart, xMid, yMid, width);
+                    this.renderArrow(1, xEnd, yEnd, xMid, yMid, width);
+                }
             break;
             default:
                 alert('Error: Unknown line type');
