@@ -131,7 +131,7 @@ var NagVisObject = Base.extend({
 
         // The line labels need a) the line added to DOM and b) the label added
         // to the dom before being able to calculate the correct coordinates
-        // needed in place().   
+        // needed in place().
         if (this.conf.type == 'line' || this.conf.view_type == 'line')
             for (var i = 0; i < this.elements.length; i++)
                 this.elements[i].place();
@@ -334,9 +334,9 @@ var NagVisObject = Base.extend({
             addZoom = true;
 
         var coord = 0;
-        if(!isRelativeCoord(val)) {
-            coord = parseInt(val);
-        } else {
+
+        // no relative coordinates on worldmap
+        if(!oViewProperties.params.worldmap_zoom && isRelativeCoord(val)) {
             // This must be an object id. Is there an offset given?
             if(val.search('%') !== -1) {
                 var parts     = val.split('%');
@@ -361,6 +361,8 @@ var NagVisObject = Base.extend({
                 if(refObj)
                     coord = parseInt(refObj.parseCoord(refObj.conf[dir], dir, false));
             }
+        } else {
+            coord = parseInt(val);
         }
 
         if (addZoom)
