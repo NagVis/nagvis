@@ -29,7 +29,7 @@ function frontendMessagePresent(key) {
 
 function frontendMessageRemove(key) {
     if(frontendMessagePresent(key)) {
-        document.body.removeChild(frontendMessages[key]);
+        popupWindowClose();
         delete frontendMessages[key];
     }
 }
