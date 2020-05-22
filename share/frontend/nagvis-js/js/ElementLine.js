@@ -66,7 +66,7 @@ var ElementLineControls = Element.extend({
 
     _render: function() {
         var container = document.createElement('div');
-        container.setAttribute('id', this.obj.conf.object_id+'-controls');
+        container.setAttribute('id', 'obj' + this.obj.conf.object_id+'-controls');
         this.dom_obj = container;
 
         var x = this.obj.parseCoords(this.obj.conf.x, 'x');
@@ -237,7 +237,7 @@ var ElementLine = Element.extend({
             this.parsePerfdata();
 
         var container = document.createElement('div');
-        container.setAttribute('id', this.obj.conf.object_id+'-linediv');
+        container.setAttribute('id', 'obj' + this.obj.conf.object_id+'-linediv');
         container.className = 'line';
         this.dom_obj = container;
 
@@ -343,6 +343,10 @@ var ElementLine = Element.extend({
         let adjustedPoints = this.cutLineBeyondViewport(xStart, yStart, xEnd, yEnd);
         if (adjustedPoints === null) {
             return; // Line won't be visible -> this.parts left empty -> no rendering
+        }
+
+        if (adjustedPoints[0] != xStart || adjustedPoints[1] != yStart || adjustedPoints[2] != xEnd || adjustedPoints[3] != yEnd) {
+            this.obj.conf.lineHasBeenClipped = true
         }
 
         xStart = adjustedPoints[0];
@@ -994,8 +998,8 @@ var ElementLine = Element.extend({
         let viewport_size = g_map.getSize();
         const xMax = viewport_size.x;  // 1920
         const yMax = viewport_size.y;  // 1080
-        const xTolerance = xMax * 0.95; // 1824 (95%)
-        const yTolerance = yMax * 0.95; // 1026 (95%)
+        const xTolerance = xMax * 0.50; // 960 (50%)
+        const yTolerance = yMax * 0.50; // 540 (50%)
 
         // Cohen-Sutherland algorithm
 

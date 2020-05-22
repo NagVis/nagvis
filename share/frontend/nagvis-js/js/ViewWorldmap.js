@@ -83,6 +83,7 @@ var ViewWorldmap = ViewMap.extend({
         if (restored_coordinates.length === 3) {
             // place the map view according to location hash (#lat/lon/zoom) - consistent page reloads
             g_map.setView([restored_coordinates[1], restored_coordinates[0]], restored_coordinates[2]);
+            setViewParam('worldmap_zoom', restored_coordinates[2]);
         } else {
             // or default (map-defined) view
             g_map.setView(getViewParam('worldmap_center').split(','), parseInt(getViewParam('worldmap_zoom')));
@@ -98,7 +99,7 @@ var ViewWorldmap = ViewMap.extend({
         // an ajax call with the current viewport to the core code, which
         // then returns a list of objects to add to the map depending on
         // this viewport.
-        g_map.on('zoomstart', this.handleMoveStart.bind(this));
+        g_map.on('zoomstart', this.handleZoomStart.bind(this));
         g_map.on('moveend', this.handleMoveEnd.bind(this));
 
         // hide eventual open header dropdown menus when clicking on the map
@@ -111,24 +112,102 @@ var ViewWorldmap = ViewMap.extend({
         let ltp = document.getElementsByClassName('leaflet-tile-pane');
         if (ltp && saturate_percentage !== '')
             ltp[0].style.filter = "saturate("+saturate_percentage+"%)";
+
+        this.last_zoom = g_map.getZoom()
     },
 
-    handleMoveStart: function(lEvent) {
-        this.erase();
-    },
-
-    // Is used to update the objects to show on the worldmap
     handleMoveEnd: function(lEvent) {
         // Update the related view properties
         var ll = g_map.getCenter();
         setViewParam('worldmap_center', ll.lat+','+ll.lng);
         setViewParam('worldmap_zoom', g_map.getZoom());
 
-        this.render(); // re-render the whole map
-
         // Put the new map view coords into URL (location) - consistent reloads
         new_center = g_map.getCenter();
         window.location.hash = new_center.lng + "/" + new_center.lat + "/" + g_map.getZoom();
+
+        // leaflet don't distinguish between zoom end and drag end; detect it:
+        if (this.last_zoom !== g_map.getZoom())
+            this.handleZoomEnd(lEvent)
+        else
+            this.handleDragEnd(lEvent)
+
+        this.last_zoom = g_map.getZoom()
+    },
+
+    handleDragEnd: function(lEvent) {
+        this.request_seq++;
+        call_ajax(oGeneralProperties.path_server + '?mod=Map&act=getMapObjects&show=' + this.id + getViewParams(), {
+            response_handler : this.reinitializeDifferentObjects.bind(this),
+            // response_handler : this.reinitializeAllObjects.bind(this),
+            handler_data     : this.request_seq,
+            error_handler    : this.handleMapInitError.bind(this)
+        });
+    },
+
+    handleZoomStart: function(lEvent) {
+        this.removeAllObjects();
+    },
+
+    handleZoomEnd: function(lEvent) {
+        this.request_seq++;
+        call_ajax(oGeneralProperties.path_server + '?mod=Map&act=getMapObjects&show=' + this.id + getViewParams(), {
+            response_handler : this.reinitializeAllObjects.bind(this),
+            handler_data     : this.request_seq,
+            error_handler    : this.handleMapInitError.bind(this)
+        });
+    },
+
+    reinitializeDifferentObjects: function(oObjects, seq) {
+        if (seq < this.request_seq) return;
+        hideStatusMessage();
+
+        // Drop first object (summary of the current map)
+        oObjects.shift();
+
+        let randomTag = Math.random();
+        let linesToReRender = [];
+
+        let count_before = Object.keys(this.objects).length;
+        let count_keep = 0;
+
+        // initialize those new objects coming from backend
+        for (let newObj of oObjects) {
+            let existingObject = this.objects[newObj.object_id]
+            if (existingObject) {
+                existingObject.randomTag = randomTag;
+                count_keep++;
+                if (newObj.view_type == 'line' && existingObject.conf.lineHasBeenClipped) {
+                    linesToReRender.push(newObj);
+                }
+            } else {
+                this.addObject(newObj);
+                this.renderObject(newObj.object_id);
+                this.objects[newObj.object_id].randomTag = randomTag;
+            }
+        }
+
+        // remove the rest
+        for (let objid in this.objects) {
+            if (this.objects[objid].randomTag !== randomTag) {
+                this.objects[objid].remove();
+                delete this.objects[objid];
+            }
+        }
+
+        // re-render once clipped (long) lines
+        for (line of linesToReRender) {
+            this.objects[line.object_id].remove();
+            delete this.objects[line.object_id];
+            this.addObject(line);
+            this.renderObject(line.object_id);
+        }
+    },
+
+    reinitializeAllObjects: function(oObjects, seq) {
+        if (seq < this.request_seq) return;
+        hideStatusMessage();
+        this.initializeObjects(oObjects, seq);
     },
 
     saveView: function() {

@@ -111,7 +111,7 @@ var NagVisObject = Base.extend({
 
         // Create container div
         var container = document.createElement('div');
-        container.setAttribute('id', this.conf.object_id);
+        container.setAttribute('id', 'obj' + this.conf.object_id); // ID must contain at least one character
 
         // Save reference to DOM obj in js obj
         this.dom_obj = container;
@@ -125,13 +125,12 @@ var NagVisObject = Base.extend({
                 this.elements[i].unlock();
             }
         }
-
         this.draw();
         g_view.drawObject(this);
 
         // The line labels need a) the line added to DOM and b) the label added
         // to the dom before being able to calculate the correct coordinates
-        // needed in place().   
+        // needed in place().
         if (this.conf.type == 'line' || this.conf.view_type == 'line')
             for (var i = 0; i < this.elements.length; i++)
                 this.elements[i].place();
