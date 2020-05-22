@@ -173,7 +173,7 @@ function line_parameters($ax, $ay, $bx, $by) {
 
     if ($s == -0) $s = 0;
 
-    return [$r, $s, $t];
+    return array($r, $s, $t);
 }
 function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
     global $DB;
