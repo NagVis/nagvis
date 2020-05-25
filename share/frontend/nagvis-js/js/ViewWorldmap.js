@@ -112,8 +112,6 @@ var ViewWorldmap = ViewMap.extend({
         let ltp = document.getElementsByClassName('leaflet-tile-pane');
         if (ltp && saturate_percentage !== '')
             ltp[0].style.filter = "saturate("+saturate_percentage+"%)";
-
-        this.last_zoom = g_map.getZoom()
     },
 
     handleMoveEnd: function(lEvent) {
@@ -126,88 +124,11 @@ var ViewWorldmap = ViewMap.extend({
         new_center = g_map.getCenter();
         window.location.hash = new_center.lng + "/" + new_center.lat + "/" + g_map.getZoom();
 
-        // leaflet don't distinguish between zoom end and drag end; detect it:
-        if (this.last_zoom !== g_map.getZoom())
-            this.handleZoomEnd(lEvent)
-        else
-            this.handleDragEnd(lEvent)
-
-        this.last_zoom = g_map.getZoom()
-    },
-
-    handleDragEnd: function(lEvent) {
-        this.request_seq++;
-        call_ajax(oGeneralProperties.path_server + '?mod=Map&act=getMapObjects&show=' + this.id + getViewParams(), {
-            response_handler : this.reinitializeDifferentObjects.bind(this),
-            // response_handler : this.reinitializeAllObjects.bind(this),
-            handler_data     : this.request_seq,
-            error_handler    : this.handleMapInitError.bind(this)
-        });
+        this.render(); // re-render the whole map
     },
 
     handleZoomStart: function(lEvent) {
         this.removeAllObjects();
-    },
-
-    handleZoomEnd: function(lEvent) {
-        this.request_seq++;
-        call_ajax(oGeneralProperties.path_server + '?mod=Map&act=getMapObjects&show=' + this.id + getViewParams(), {
-            response_handler : this.reinitializeAllObjects.bind(this),
-            handler_data     : this.request_seq,
-            error_handler    : this.handleMapInitError.bind(this)
-        });
-    },
-
-    reinitializeDifferentObjects: function(oObjects, seq) {
-        if (seq < this.request_seq) return;
-        hideStatusMessage();
-
-        // Drop first object (summary of the current map)
-        oObjects.shift();
-
-        let randomTag = Math.random();
-        let linesToReRender = [];
-
-        let count_before = Object.keys(this.objects).length;
-        let count_keep = 0;
-
-        // initialize those new objects coming from backend
-        for (let newObj of oObjects) {
-            let existingObject = this.objects[newObj.object_id]
-            if (existingObject) {
-                existingObject.randomTag = randomTag;
-                count_keep++;
-                if (newObj.view_type == 'line' && existingObject.conf.lineHasBeenClipped) {
-                    linesToReRender.push(newObj);
-                }
-            } else {
-                this.addObject(newObj);
-                this.renderObject(newObj.object_id);
-                this.objects[newObj.object_id].randomTag = randomTag;
-            }
-        }
-
-        // remove the rest
-        for (let objid in this.objects) {
-            if (this.objects[objid].randomTag !== randomTag) {
-                this.objects[objid].remove();
-                delete this.objects[objid];
-            }
-        }
-
-        // re-render once clipped (long) lines
-        for (line of linesToReRender) {
-            this.objects[line.object_id].remove();
-            delete this.objects[line.object_id];
-            this.addObject(line);
-            this.renderObject(line.object_id);
-        }
-    },
-
-    reinitializeAllObjects: function(oObjects, seq) {
-        if (seq < this.request_seq) return;
-        hideStatusMessage();
-        this.initializeObjects(oObjects, seq);
     },
 
     saveView: function() {
