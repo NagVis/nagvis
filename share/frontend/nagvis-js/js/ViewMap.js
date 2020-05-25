@@ -125,7 +125,7 @@ var ViewMap = View.extend({
             return;
         }
 
-        this.removeAllObjects()
+        this.removeAllObjects();
 
         if (usesSource('worldmap')) {
             g_map_objects.clearLayers();
