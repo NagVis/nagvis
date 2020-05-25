@@ -119,6 +119,11 @@ var ViewMap = View.extend({
     },
 
     handleMapInit: function(oObjects, seq) {
+        // skip rendering when subsequent (newer) getMapObjects request is already running
+        if (seq < this.request_seq) {
+            return;
+        }
+
         // Only perform the rendering actions when all information are available
         if (!oObjects) {
             hideStatusMessage();
@@ -132,7 +137,7 @@ var ViewMap = View.extend({
         }
 
         eventlog("worker", "info", "Parsing "+this.type+" objects");
-        this.initializeObjects(oObjects, seq);
+        this.initializeObjects(oObjects);
 
         // Maybe force page reload when the map shal fill the viewport
         if (getViewParam('zoom') == 'fill')
@@ -245,7 +250,7 @@ var ViewMap = View.extend({
     },
 
     // Does initial rendering of map objects
-    initializeObjects: function(oObjects, seq) {
+    initializeObjects: function(oObjects) {
         eventlog("worker", "debug", "initializeObjects: Start setting map objects");
 
         // Don't loop the first object - that is the summary of the current map
