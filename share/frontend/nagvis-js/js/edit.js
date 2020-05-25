@@ -309,6 +309,8 @@ function dragStart(event) {
         dragObjectChilds[sLabelName] = [ oLabel.offsetLeft - draggingObject.x,
                                          oLabel.offsetTop - draggingObject.y ];
     }
+
+    g_map.dragging.disable();
     return preventDefaultEvents(event);
 }
 
@@ -490,6 +492,8 @@ function dragStop(event) {
         return;
 
     hideStatusMessage();
+
+    g_map.dragging.enable();
 
     // When x or y are negative just return this and make no change
     if(draggingObject.y < 0 || draggingObject.x < 0) {
@@ -683,7 +687,7 @@ function addClick(e) {
                + '&x=' + addX.join(',')
                + '&y=' + addY.join(',');
 
-    if(addObjType != 'textbox' && addObjType != 'container' 
+    if(addObjType != 'textbox' && addObjType != 'container'
        && addObjType != 'shape' && addViewType != 'icon' && addViewType != '')
         sUrl += '&view_type=' + addViewType;
 
