@@ -130,6 +130,8 @@ function resizeMouseDown(event) {
     g_resize_obj.left   = pxToInt(target.style.left);
     g_resize_obj.top    = pxToInt(target.style.top);
 
+    g_map.dragging.disable();
+
     return preventDefaultEvents(event);
 }
 
@@ -175,6 +177,8 @@ function resizeMouseUp(event) {
     });
 
     g_resize_obj = null;
+
+    g_map.dragging.enable();
 
     return preventDefaultEvents(event);
 }
