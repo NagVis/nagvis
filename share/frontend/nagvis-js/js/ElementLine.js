@@ -819,12 +819,10 @@ var ElementLine = Element.extend({
         var line_label_in = 'in';
         var line_label_out = 'out';
 
-        // Check_MK if/if64 checks support switching between bytes/bits. The detection
-        // can be made by some curios hack. The most hackish hack I've ever seen. From hell.
-        // Well, let's deal with it.
+        // Check_MK if/if64 checks support switching between bytes/bits.
         var display_bits = false;
-        output = output.match("In: [0-9](.*)Out: [0-9]")[1] || "";
-        if(output.includes("bit/s")){
+
+        if (output.match('In: [0-9].*bit/s.*Out: [0-9]+')) {
             display_bits=true;
         }
 
