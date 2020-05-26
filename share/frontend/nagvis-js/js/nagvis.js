@@ -951,7 +951,7 @@ function hideStatusMessage() {
  * @return  Object  Returns the div object of the textbox
  * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
-function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, customStyle) {
+function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, customStyle, scale) {
     var oLabelDiv = document.createElement('div');
     oLabelDiv.setAttribute('id', id);
     oLabelDiv.className = 'box';
@@ -968,6 +968,9 @@ function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, cust
         oLabelDiv.style.height = addZoomFactor(h) + 'px';
 
     oLabelDiv.style.zIndex = parseInt(z) + 1;
+
+    if (scale)
+        oLabelDiv.style.transform = `scale(${scale})`;
 
     /**
      * IE workaround: The transparent for the color is not enough. The border

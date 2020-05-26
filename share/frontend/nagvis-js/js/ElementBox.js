@@ -23,12 +23,22 @@
 
 var ElementBox = Element.extend({
     render: function() {
+        let scale = 1;
+        if (g_map && usesSource('worldmap') && this.obj.conf.scale_to_max_zoom == '1') {
+            let currentZoom = g_map.getZoom();
+            let maxZoom = Number(this.obj.conf.max_zoom)
+            if (currentZoom < maxZoom) {
+                scale = 1 / Math.pow(2, maxZoom-currentZoom)
+            }
+        }
+
         this.dom_obj = renderNagVisTextbox(
             this.obj.conf.object_id+'-label',
             this.obj.conf.background_color, this.obj.conf.border_color,
             0, 0, // coords are set by this.place()
             this.obj.conf.z, this.obj.conf.w,
-            this.obj.conf.h, this.obj.getText(), this.obj.conf.style
+            this.obj.conf.h, this.obj.getText(), this.obj.conf.style,
+            scale
         );
         this.obj.trigger_obj = this.dom_obj;
         this.place();
