@@ -2,6 +2,9 @@
 Frontend:
   * FIX: Fix random error "NotFoundError: Node.removeChild"
 
+Worldmap:
+  * textbox scaling according to zoom (scale_to_max_zoom option)
+
 1.9.20
 Core:
   * Drop some PHP < 5.2 compatibility code for json encoding / decoding
