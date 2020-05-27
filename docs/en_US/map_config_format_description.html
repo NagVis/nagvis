@@ -1825,11 +1825,17 @@
     <p>When lines have one part (e.g. <i>---&gt;</i>) there must be two coords set.
         When using lines with two (e.g. <i>---&gt;&lt;---</i>) parts it is possible to set two coordinates for
     direct lines or three coordinates to reposition the middle of the line to a custom place.</p>
-
+    <h3>Relative coordinates</h3>
         <p>Since NagVis 1.6 it is possible to position objects depending on other objects. A relationship between
         two objects is defined from the &quot;childs&quot; view. This means the configuration needs to be done in
         the object which belongs to another object.<br />
         To define a relationship the coordinate is not given as integer anymore. Instead of the px offset the <i>object_id</i> of the parent object is used to define a relative position.</p>
+        Examples:
+        <ul>
+            <li><code>41790e%+30</code> = coordinate of object 41790e plus 30 pixels</li>
+            <li><code>41790e%-199</code> = coordinate of object 41790e minus 199 pixels</li>
+            <li><code>41790e%+0</code> = coordinate same as of object 41790e</li>
+        </ul>
         <p>We adapt the examples above and give the start of the line a relative position to the host object:</p>
     <pre>define host {
  object_id=41790e
@@ -1844,8 +1850,8 @@ define service {
  service_description=Interface eth0
  view_type=line
  line_type=10
- x=41790e,200
- y=41790e,200
+ x=41790e%+0,200
+ y=41790e%+0,200
 }</pre>
     <p>With the configuration above the beginning of the line is attached to the host object and moved every time
   the host object is moved.</p>
