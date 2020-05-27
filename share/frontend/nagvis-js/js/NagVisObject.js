@@ -335,34 +335,25 @@ var NagVisObject = Base.extend({
 
         var coord = 0;
 
-        // no relative coordinates on worldmap
-        if(!oViewProperties.params.worldmap_zoom && isRelativeCoord(val)) {
-            // This must be an object id. Is there an offset given?
-            if(val.search('%') !== -1) {
-                var parts     = val.split('%');
-                var objectId  = parts[0];
-                var offset    = parts[1];
-                var refObj    = getMapObjByDomObjId(objectId);
-                if (refObj) {
-                    coord = parseFloat(refObj.parseCoord(refObj.conf[dir], dir, false));
-                    if (addZoom)
-                        coord = addZoomFactor(coord, true);
-
-                    if (addZoom)
-                        coord += addZoomFactor(parseFloat(offset), false);
-                    else
-                        coord += parseFloat(offset);
-
-                    return coord;
-                }
-            } else {
-                // Only an object id. Get the coordinate and return it
-                var refObj = getMapObjByDomObjId(val);
-                if(refObj)
-                    coord = parseInt(refObj.parseCoord(refObj.conf[dir], dir, false));
-            }
-        } else {
+        if(!isRelativeCoord(val)) {
             coord = parseInt(val);
+        } else {
+            var parts     = val.split('%');
+            var objectId  = parts[0];
+            var offset    = parts[1];
+            var refObj    = getMapObjByDomObjId(objectId);
+            if (refObj) {
+                coord = parseFloat(refObj.parseCoord(refObj.conf[dir], dir, false));
+                if (addZoom)
+                    coord = addZoomFactor(coord, true);
+
+                if (addZoom)
+                    coord += addZoomFactor(parseFloat(offset), false);
+                else
+                    coord += parseFloat(offset);
+
+                return coord;
+            }
         }
 
         if (addZoom)

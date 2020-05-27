@@ -1154,8 +1154,7 @@ function pxToInt(v) {
 // san francisco and zooming to new your will lead to a negative 5 digit
 // negative coord).
 function isRelativeCoord(v) {
-    return isset(v) && ((!isInt(v) && !isFloat(v))
-                        || (v.length === 6 && v.charAt(0) != "-" && v.indexOf(".") == -1));
+    return typeof(v) === 'string' && v.includes('%')
 }
 
 // Helper function to determine the number of entries in an object
