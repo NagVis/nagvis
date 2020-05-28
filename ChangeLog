@@ -1,9 +1,11 @@
 1.9.21
 Frontend:
+  * FIX: Additional fix for weathermap lines byte/bit handling for Checkmk
+         interface checks (issue #256)
   * FIX: Fix random error "NotFoundError: Node.removeChild"
 
 Worldmap:
-  * textbox scaling according to zoom (scale_to_max_zoom option)
+  * textbox scaling according to zoom (scale_to_max_zoom option) (issue #255)
 
 1.9.20
 Core:
