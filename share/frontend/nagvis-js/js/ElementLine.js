@@ -354,6 +354,16 @@ var ElementLine = Element.extend({
         if (width <= 0)
             width = 1; // minimal width for lines
 
+        if (typeof(this.obj.conf.stateful_outline) == 'string' && this.obj.conf.stateful_outline != 'none') {
+            let outlineWidth = this.obj.conf.stateful_outline_width || 5;
+            let states = this.obj.conf.stateful_outline.toUpperCase().split(',');
+            console.log('states:', states)
+            console.log('is:', this.obj.conf.summary_state)
+            if (states[0] == 'ALL' || states.includes(this.obj.conf.summary_state)) {
+                this.renderStatefulOutline(xStart, yStart, xEnd, yEnd, width + 2 * outlineWidth);
+            }
+        }
+
         // Lines meeting point position
         var cut = this.obj.conf.line_cut;
 
@@ -387,8 +397,14 @@ var ElementLine = Element.extend({
 
     // Calculates the colors of a line part
     calcColors: function(id) {
+        if (this.obj.conf.fixed_colors == '1') {
+            return [this.obj.conf.line_color, border_color = this.obj.conf.line_color_border];
+        }
+        return [this.statefulColor(id), '#000000'];
+    },
+
+    statefulColor: function(id) {
         var color = '#FFCC66';
-        var border_color = '#000000';
 
         // Get the fill color depending on the object state
         switch (this.obj.conf.summary_state) {
@@ -423,7 +439,7 @@ var ElementLine = Element.extend({
             }
         }
 
-        return [color, border_color];
+        return color;
     },
 
     isWeathermapLine: function() {
@@ -508,6 +524,15 @@ var ElementLine = Element.extend({
 
             ctx.fillStyle = part[4][0];
 
+            // shadow & blur
+            ctx.shadowColor = 0;
+            ctx.shadowBlur = 0;
+            if (part[4][2]) {
+                ctx.shadowColor = part[4][2];
+                ctx.shadowBlur = this.obj.conf.stateful_outline_blur || 10;
+            }
+
+            // line elements
             ctx.beginPath();
             ctx.moveTo(part[2][0]-xMin+border, part[3][0]-yMin+border);
 
@@ -519,6 +544,7 @@ var ElementLine = Element.extend({
             // border
             ctx.lineWidth = 1;
             ctx.strokeStyle = part[4][1];
+
             ctx.stroke();
         }
     },
@@ -554,20 +580,40 @@ var ElementLine = Element.extend({
     renderSimpleLine: function(id, x1, y1, x2, y2, w) {
         var xCoord = [
             x1 + newX(x2-x1, y2-y1, 0, w),
-            x2 + newX(x2-x1, y2-y1, w, w),
-            x2 + newX(x2-x1, y2-y1, w, -w),
+            x2 + newX(x2-x1, y2-y1, 0, w),
+            x2 + newX(x2-x1, y2-y1, 0, -w),
             x1 + newX(x2-x1, y2-y1, 0, -w),
             x1 + newX(x2-x1, y2-y1, 0, w)
         ];
         var yCoord = [
             y1 + newY(x2-x1, y2-y1, 0, w),
-            y2 + newY(x2-x1, y2-y1, w, w),
-            y2 + newY(x2-x1, y2-y1, w, -w),
+            y2 + newY(x2-x1, y2-y1, 0, w),
+            y2 + newY(x2-x1, y2-y1, 0, -w),
             y1 + newY(x2-x1, y2-y1, 0, -w),
             y1 + newY(x2-x1, y2-y1, 0, w)
         ];
 
         this.renderLinePart(id, [x1, y1], [x2, y2], xCoord, yCoord);
+    },
+
+    renderStatefulOutline: function(x1, y1, x2, y2, w) {
+        var xCoord = [
+            x1 + newX(x2-x1, y2-y1, w, w),
+            x2 + newX(x2-x1, y2-y1, -w, w),
+            x2 + newX(x2-x1, y2-y1, -w, -w),
+            x1 + newX(x2-x1, y2-y1, w, -w),
+            x1 + newX(x2-x1, y2-y1, w, w)
+        ];
+        var yCoord = [
+            y1 + newY(x2-x1, y2-y1, w, w),
+            y2 + newY(x2-x1, y2-y1, -w, w),
+            y2 + newY(x2-x1, y2-y1, -w, -w),
+            y1 + newY(x2-x1, y2-y1, w, -w),
+            y1 + newY(x2-x1, y2-y1, w, w)
+        ];
+
+        let color = this.statefulColor(0)
+        this.parts.push([[x1, y1], [x2, y2], xCoord, yCoord, [color, color, color]]);
     },
 
     renderLinePart: function(id, start, end, x, y) {

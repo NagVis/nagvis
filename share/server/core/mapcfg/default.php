@@ -45,6 +45,15 @@ function listLineTypes() {
     );
 }
 
+function statefulOutlineTypes() {
+    return Array(
+        'none' => 'none',
+        'down' => 'when DOWN',
+        'down,warning' => 'when DOWN or WARNING',
+        'down,warning,unknown' => 'when DOWN or WARNING or UNKNOWN',
+        'all' => 'for any state'
+    );
+}
 function listStatelessLineTypes() {
     return Array(
         '10' => '-------><-------',
@@ -498,6 +507,14 @@ $mapConfigVars = Array(
         'depends_value' => 'line',
         'list'          => 'listLineTypes',
     ),
+    'fixed_colors' => Array(
+        'must'          => 0,
+        'default'       => '0',
+        'match'         => MATCH_BOOLEAN,
+        'field_type'    => 'boolean',
+        'depends_on'    => 'view_type',
+        'depends_value' => 'line',
+    ),
     'line_color' => Array(
         'must'          => 0,
         'default'       => '#ffffff',
@@ -566,16 +583,42 @@ $mapConfigVars = Array(
     ),
     'line_width' => Array(
         'must' => 0,
-        'default' => '3',
+        'default' => '2',
         'match' => MATCH_INTEGER,
         'depends_on' => 'view_type',
-        'depends_value' => 'line'),
+        'depends_value' => 'line'
+    ),
+    'stateful_outline' => Array(
+        'must'       => 0,
+        'default'    => 'none',
+        'match'      => '/.*/',
+        'field_type' => 'dropdown',
+        'list'       => 'statefulOutlineTypes',
+        'depends_on'    => 'view_type',
+        'depends_value' => 'line'
+    ),
+    'stateful_outline_width' => Array(
+        'must'       => 0,
+        'default'    => '1',
+        'match'      => MATCH_INTEGER,
+        'depends_on'    => 'view_type',
+        'depends_value' => 'line'
+    ),
+    'stateful_outline_blur' => Array(
+        'must'       => 0,
+        'default'    => '10',
+        'match'      => MATCH_INTEGER,
+        'depends_on'    => 'view_type',
+        'depends_value' => 'line'
+    ),
+
     'line_weather_colors' => Array(
         'must'          => 0,
         'default'       => cfg('defaults', 'line_weather_colors'),
         'match'         => MATCH_WEATHER_COLORS,
         'depends_on'    => 'view_type',
-        'depends_value' => 'line'),
+        'depends_value' => 'line'
+    ),
 
     'in_maintenance' => Array(
         'must'       => 0,
@@ -1096,7 +1139,13 @@ $mapConfigVarMap['host'] = Array(
         'line_type' => null,
         'line_cut' => null,
         'line_width' => null,
+        'fixed_colors' => null,
+        'line_color' => null,
+        'line_color_border' => null,
         'line_weather_colors' => null,
+        'stateful_outline' => null,
+        'stateful_outline_width' => null,
+        'stateful_outline_blur' => null,
         'gadget_url' => null,
         'gadget_type' => null,
         'gadget_scale' => null,
