@@ -130,7 +130,7 @@ function resizeMouseDown(event) {
     g_resize_obj.left   = pxToInt(target.style.left);
     g_resize_obj.top    = pxToInt(target.style.top);
 
-    g_map.dragging.disable();
+    if (g_map) g_map.dragging.disable();
 
     return preventDefaultEvents(event);
 }
@@ -178,7 +178,7 @@ function resizeMouseUp(event) {
 
     g_resize_obj = null;
 
-    g_map.dragging.enable();
+    if (g_map) g_map.dragging.enable();
 
     return preventDefaultEvents(event);
 }
@@ -314,7 +314,7 @@ function dragStart(event) {
                                          oLabel.offsetTop - draggingObject.y ];
     }
 
-    g_map.dragging.disable();
+    if (g_map) g_map.dragging.disable();
     return preventDefaultEvents(event);
 }
 
@@ -497,7 +497,7 @@ function dragStop(event) {
 
     hideStatusMessage();
 
-    g_map.dragging.enable();
+    if (g_map) g_map.dragging.enable();
 
     // When x or y are negative just return this and make no change
     if(draggingObject.y < 0 || draggingObject.x < 0) {
