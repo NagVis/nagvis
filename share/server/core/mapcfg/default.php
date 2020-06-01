@@ -48,10 +48,11 @@ function listLineTypes() {
 function statefulOutlineTypes() {
     return Array(
         'none' => 'none',
-        'down' => 'when DOWN',
-        'down,warning' => 'when DOWN or WARNING',
-        'down,warning,unknown' => 'when DOWN or WARNING or UNKNOWN',
-        'all' => 'for any state'
+        'all' => 'for any state',
+        'down,critical,error,warning,unknown,unreachable,pending' => 'for any state except UP/OK',
+        'down,critical,error,warning,unknown,unreachable' => 'for DOWN/CRITICAL/ERROR or WARNING or UNKNOWN or UNREACHABLE',
+        'down,critical,error,warning' => 'for DOWN/CRITICAL/ERROR or WARNING',
+        'down,critical,error' => 'for DOWN/CRITICAL/ERROR only',
     );
 }
 function listStatelessLineTypes() {
