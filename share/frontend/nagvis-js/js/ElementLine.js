@@ -357,8 +357,6 @@ var ElementLine = Element.extend({
         if (typeof(this.obj.conf.stateful_outline) == 'string' && this.obj.conf.stateful_outline != 'none') {
             let outlineWidth = this.obj.conf.stateful_outline_width || 5;
             let states = this.obj.conf.stateful_outline.toUpperCase().split(',');
-            console.log('states:', states)
-            console.log('is:', this.obj.conf.summary_state)
             if (states[0] == 'ALL' || states.includes(this.obj.conf.summary_state)) {
                 this.renderStatefulOutline(xStart, yStart, xEnd, yEnd, width + 2 * outlineWidth);
             }
