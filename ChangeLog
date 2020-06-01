@@ -6,7 +6,8 @@ Frontend:
   * FIX: Fix relative coordinate handling (issue #250)
 
 Worldmap:
-  * textbox scaling according to zoom (scale_to_max_zoom option) (issue #255)
+  * Feature: textbox scaling according to zoom (scale_to_max_zoom option) (issue #255)
+  * Feature: more flexible line coloring ('stateful_outline' and 'fixed_colors')
 
 1.9.20
 Core:
