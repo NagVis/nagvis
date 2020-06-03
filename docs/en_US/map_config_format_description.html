@@ -6,12 +6,12 @@
  </head>
  <body>
         <h1>Map configuration format description</h1>
-        
+
         <h2>General Information</h2>
         <p>The NagVis configuration file format is very similiar to the format used by <a href="http://www.nagios.org">Nagios</a>&reg;.</p>
         <p>Configuration statements start with the keyword "define" followed by a type field and a left curly bracket ({). Every following line defines variable-value pairs, separated by an equal sign (=) until a right curly bracket (}) is found.</p>
         <p>Hashes (#) are used to mark comments, note that a comment line <i>MUST</i> start with a hash not with other chars like whitespaces!</p>
-        
+
         <h2>Object types</h2>
         <ul>
         <li><a href="#global">Global</a></li>
@@ -28,16 +28,16 @@
         <li><a href="#dyngroup">Dynamic Group</a> (<font color="#ff0000">New in 1.8b1</font>)</li>
         <li><a href="#aggr">Aggregation</a> (<font color="#ff0000">New in 1.8rc2</font>)</li>
         </ul>
-        
+
         <h2>Description of the object types</h2>
-        
+
         <a name="global"></a><h3> Global </h3>
         <p>The first definition in every config file should be of the special type "global". Options which are defined at this paragraph are valid for the whole map and are getting inherited to other types defined later.</p>
         <p>Example with all options which have to be set:</p>
         <pre>define global {
  map_image=lan.png
 }</pre>
-        
+
         <table style="width:100%">
         <tr>
         <th width="200"> Value </th><th width="150"> Default </th><th> Description </th>
@@ -63,8 +63,8 @@
         <tr>
         <td>backend_id</td>
         <td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td>
-        <td>Backend-ID defined in Main Configuration file where NagVis should search for the object states. 
-        If this parameter is not given, the Backend defined as default backend in the 
+        <td>Backend-ID defined in Main Configuration file where NagVis should search for the object states.
+        If this parameter is not given, the Backend defined as default backend in the
         <a href="nagvis_config_format_description.html">Main Configuration file</a> is used.
         As of NagVis 1.8 it is possible to define a "," separated list of backends here to combine
         objects of several backends. Host, host and service group objects do support merging their
@@ -244,7 +244,7 @@
         <tr>
         <td>line_weather_colors</td><td>inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>)</td><td>This defines the colours of weathermap colours in the different percentage levels. For example above 10% load it will be coloured #8c00ff.</td>
         </tr>
-        
+
         <tr>
         <td>only_hard_states</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
         </tr>
@@ -264,7 +264,7 @@
 	<td>Ignore child map summary state in parent's summary state</td>
         </tr>
         <tr>
-	
+
         <td> show_in_multisite</td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td>Show the maps in multisite snapin</td>
         </tr>
         <tr>
@@ -334,7 +334,7 @@
                 (<font color="#ff0000">New in 1.8b1</font>)</td>
         </tr>
         </table>
-        
+
         <a name="host"></a><h3> Host </h3>
         <p>Example with all options which have to be set (note that options already defined in the global section are optional):</p>
         <pre>define host {
@@ -397,6 +397,14 @@
             look at the <a href="#exclude">exclude regex definition</a>. <font color="#ff0000">(New in 1.6b4)</font></p></td>
         </tr>
 
+        <tr>
+            <td>fixed_colors</td><td>0</td>
+            <td>
+                0 ... Line color is determined by object state (OK = green, WARNING = yellow, DOWN = red)<br>
+                1 ... Fixed color as configured in <code>line_color</code> and <code>line_color_border</code>. See also: <code>stateful_outline</code>.<br>
+                <i>(for view_type=line only)</i>
+            </td>
+        </tr>
         <tr>
         <td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
         </tr>
@@ -462,6 +470,16 @@
         </tr>
 
         <tr>
+            <td>line_color</td>
+            <td>#ffffff</td>
+            <td>The fixed fill colour of the line in hex form. Can also be "transparent". Only applicable with <code>fixed_colors=1</code>.</td>
+        </tr>
+        <tr>
+            <td>line_color_border</td>
+            <td>#000000</td>
+            <td>The fixed border colour of the line in hex form. Can also be "transparent". Only applicable with <code>fixed_colors=1</code>.</td>
+        </tr>
+        <tr>
         <td> line_type </td><td>inherited (<a href="#global">global</a>)</td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow.</td>
         </tr>
         <tr>
@@ -473,6 +491,34 @@
         </tr>
         <tr>
         <td> recognize_services </td><td> inherited (<a href="#global">global</a>) </td><td> Defines if the services of the host affect the displayed state. If set to "1" a critical service on the host will result in a host state display as critical too. If set to "0" only the Nagios Host State (UP or DOWN) will be used and the services of the host will be ignored. </td>
+        </tr>
+        <tr>
+            <td>stateful_outline</td>
+            <td>none</td>
+            <td>
+                Draw an "outline", or thick borders of the line, colored depending on object state. Green for OK, yellow for WARNING, red for DOWN. Comes handy combined with <code>fixed_colors=1</code>.
+                <ul>
+                <li><code>all</code> ... for any state</li>
+                <li><code>down,critical,error,warning,unknown,unreachable,pending</code> ... for any state except UP/OK,</li>
+                <li><code>down,critical,error,warning,unknown,unreachable</code> ... for DOWN/CRITICAL/ERROR or WARNING or UNKNOWN or UNREACHABLE</li>
+                <li><code>down,critical,error,warning</code> ... for DOWN/CRITICAL/ERROR or WARNING</li>
+                <li><code>down,critical,error</code> ... for DOWN/CRITICAL/ERROR only</li>
+                </ul>
+                or draw no outline (disable the feature)
+                <ul>
+                    <li><code>none</code></li>
+                </ul>
+                </td>
+        </tr>
+        <tr>
+            <td>stateful_outline_width</td>
+            <td>1</td>
+            <td>This defines the width of both borders (outline) in px when this <code>stateful_outline</code> is enabled.</td>
+        </tr>
+        <tr>
+            <td>stateful_outline_blur</td>
+            <td>10</td>
+            <td><a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowBlur">Blurs</a> the outline. Value of 0 represents no blur and larger numbers represent increasingly more blur.</td>
         </tr>
         <tr>
         <td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
@@ -490,7 +536,7 @@
         <td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
         </tr>
         </table>
-        
+
         <a name="service"></a><h3> Service </h3>
         <p>Example with all options which have to be set (note that option already defined in the global section are optional):</p>
 <pre>define service {
@@ -555,6 +601,14 @@
             look at the <a href="#exclude">exclude regex definition</a>. <font color="#ff0000">(New in 1.6b4)</font></p></td>
         </tr>
 
+        <tr>
+            <td>fixed_colors</td><td>0</td>
+            <td>
+                0 ... Line color is determined by object state (OK = green, WARNING = yellow, DOWN = red)<br>
+                1 ... Fixed color as configured in <code>line_color</code> and <code>line_color_border</code>. See also: <code>stateful_outline</code>.<br>
+                <i>(for view_type=line only)</i>
+            </td>
+        </tr>
         <tr>
         <td> gadget_url </td><td></td><td> The value can be a gadget script in gadget path (<code>nagvis/gadgets</code>) e.g. &quot;std_speedometer.php&quot; or a full URI to a gadget like script surrounded by brackets e.g. &quot;[http://127.0.0.1/nagvis/gadgets/std_speedometer.php]&quot;. For details about gadgets see <a href="gadgets.html">here</a>. This option is only recognised when view_type=&quot;gadget&quot; is set.  </td>
         </tr>
@@ -636,6 +690,16 @@
         </tr>
 
         <tr>
+            <td>line_color</td>
+            <td>#ffffff</td>
+            <td>The fixed fill colour of the line in hex form. Can also be "transparent". Only applicable with <code>fixed_colors=1</code>.</td>
+        </tr>
+        <tr>
+            <td>line_color_border</td>
+            <td>#000000</td>
+            <td>The fixed border colour of the line in hex form. Can also be "transparent". Only applicable with <code>fixed_colors=1</code>.</td>
+        </tr>
+        <tr>
         <td> line_type </td><td>inherited (<a href="#global">global</a>)</td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow.</td>
         </tr>
         <tr>
@@ -685,7 +749,35 @@
         <td> only_hard_states </td><td> inherited (<a href="#global">global</a>)</td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
         </tr>
         <tr>
-        <td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
+            <tr>
+                <td>stateful_outline</td>
+                <td>none</td>
+                <td>
+                    Draw an "outline", or thick borders of the line, colored depending on object state. Green for OK, yellow for WARNING, red for DOWN. Comes handy combined with <code>fixed_colors=1</code>.
+                    <ul>
+                    <li><code>all</code> ... for any state</li>
+                    <li><code>down,critical,error,warning,unknown,unreachable,pending</code> ... for any state except UP/OK,</li>
+                    <li><code>down,critical,error,warning,unknown,unreachable</code> ... for DOWN/CRITICAL/ERROR or WARNING or UNKNOWN or UNREACHABLE</li>
+                    <li><code>down,critical,error,warning</code> ... for DOWN/CRITICAL/ERROR or WARNING</li>
+                    <li><code>down,critical,error</code> ... for DOWN/CRITICAL/ERROR only</li>
+                    </ul>
+                    or draw no outline (disable the feature)
+                    <ul>
+                        <li><code>none</code></li>
+                    </ul>
+                    </td>
+            </tr>
+            <tr>
+                <td>stateful_outline_width</td>
+                <td>1</td>
+                <td>This defines the width of both borders (outline) in px when this <code>stateful_outline</code> is enabled.</td>
+            </tr>
+            <tr>
+                <td>stateful_outline_blur</td>
+                <td>10</td>
+                <td><a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowBlur">Blurs</a> the outline. Value of 0 represents no blur and larger numbers represent increasingly more blur.</td>
+            </tr>
+            <td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
         </tr>
         <tr>
         <td> url_target </td><td> _self </td><td> Target of the Icon link, this option adapts &lt;a target=""> (_self is same window). Available macros: [name], [service_description], </td>
@@ -700,7 +792,7 @@
         <td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
         </tr>
         </table>
-        
+
         <a name="hostgroup"></a><h3> Hostgroup </h3>
         <p>Example with all options which have to be set (note that options already defined in the global section are optional):</p>
 <pre>define hostgroup {
@@ -738,7 +830,7 @@
           <td>
           Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken.
           As of NagVis 1.8 it is possible to define a "," separated list of backends here to combine
-          objects of several backends. All host members of host groups with matching names found in all 
+          objects of several backends. All host members of host groups with matching names found in all
           given backends will be added to the single host group object.
           </td>
         </tr>
@@ -763,6 +855,14 @@
             look at the <a href="#exclude">exclude regex definition</a>. <font color="#ff0000">(New in 1.6b4)</font></p></td>
         </tr>
 
+        <tr>
+            <td>fixed_colors</td><td>0</td>
+            <td>
+                0 ... Line color is determined by object state (OK = green, WARNING = yellow, DOWN = red)<br>
+                1 ... Fixed color as configured in <code>line_color</code> and <code>line_color_border</code>. See also: <code>stateful_outline</code>.<br>
+                <i>(for view_type=line only)</i>
+            </td>
+        </tr>
         <tr>
         <td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
         </tr>
@@ -827,6 +927,16 @@
         </tr>
 
         <tr>
+            <td>line_color</td>
+            <td>#ffffff</td>
+            <td>The fixed fill colour of the line in hex form. Can also be "transparent". Only applicable with <code>fixed_colors=1</code>.</td>
+        </tr>
+        <tr>
+            <td>line_color_border</td>
+            <td>#000000</td>
+            <td>The fixed border colour of the line in hex form. Can also be "transparent". Only applicable with <code>fixed_colors=1</code>.</td>
+        </tr>
+        <tr>
         <td> line_type </td><td>inherited (<a href="#global">global</a>)</td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow.</td>
         </tr>
         <tr>
@@ -835,6 +945,34 @@
 
         <tr>
         <td> recognize_services </td><td> inherited (<a href="#global">global</a>) </td><td> Defines if the services of the hosts affect the displayed state. If set to "1" a critical service on one of the host will result in a hostgroup state display as critical too. If set to "0" only the Nagios Host State (UP or DOWN) will be used and the services of the hosts will be ignored. </td>
+        </tr>
+        <tr>
+            <td>stateful_outline</td>
+            <td>none</td>
+            <td>
+                Draw an "outline", or thick borders of the line, colored depending on object state. Green for OK, yellow for WARNING, red for DOWN. Comes handy combined with <code>fixed_colors=1</code>.
+                <ul>
+                <li><code>all</code> ... for any state</li>
+                <li><code>down,critical,error,warning,unknown,unreachable,pending</code> ... for any state except UP/OK,</li>
+                <li><code>down,critical,error,warning,unknown,unreachable</code> ... for DOWN/CRITICAL/ERROR or WARNING or UNKNOWN or UNREACHABLE</li>
+                <li><code>down,critical,error,warning</code> ... for DOWN/CRITICAL/ERROR or WARNING</li>
+                <li><code>down,critical,error</code> ... for DOWN/CRITICAL/ERROR only</li>
+                </ul>
+                or draw no outline (disable the feature)
+                <ul>
+                    <li><code>none</code></li>
+                </ul>
+                </td>
+        </tr>
+        <tr>
+            <td>stateful_outline_width</td>
+            <td>1</td>
+            <td>This defines the width of both borders (outline) in px when this <code>stateful_outline</code> is enabled.</td>
+        </tr>
+        <tr>
+            <td>stateful_outline_blur</td>
+            <td>10</td>
+            <td><a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowBlur">Blurs</a> the outline. Value of 0 represents no blur and larger numbers represent increasingly more blur.</td>
         </tr>
         <tr>
         <td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
@@ -852,7 +990,7 @@
         <td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
         </tr>
         </table>
-        
+
         <a name="servicegroup"></a><h3> Servicegroup </h3>
         <p>Example with all options which have to be set (note that options already defined in the global section are optional):</p>
 <pre>define servicegroup {
@@ -890,7 +1028,7 @@
           <td>
           Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken.
           As of NagVis 1.8 it is possible to define a "," separated list of backends here to combine
-          objects of several backends. All service members of groups with matching names found in all 
+          objects of several backends. All service members of groups with matching names found in all
           given backends will be added to the single servie group object.
           </td>
         </tr>
@@ -915,6 +1053,14 @@
             look at the <a href="#exclude">exclude regex definition</a>. <font color="#ff0000">(New in 1.6b4)</font></p></td>
         </tr>
 
+        <tr>
+            <td>fixed_colors</td><td>0</td>
+            <td>
+                0 ... Line color is determined by object state (OK = green, WARNING = yellow, DOWN = red)<br>
+                1 ... Fixed color as configured in <code>line_color</code> and <code>line_color_border</code>. See also: <code>stateful_outline</code>.<br>
+                <i>(for view_type=line only)</i>
+            </td>
+        </tr>
         <tr>
         <td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
         </tr>
@@ -979,6 +1125,16 @@
         </tr>
 
         <tr>
+            <td>line_color</td>
+            <td>#ffffff</td>
+            <td>The fixed fill colour of the line in hex form. Can also be "transparent". Only applicable with <code>fixed_colors=1</code>.</td>
+        </tr>
+        <tr>
+            <td>line_color_border</td>
+            <td>#000000</td>
+            <td>The fixed border colour of the line in hex form. Can also be "transparent". Only applicable with <code>fixed_colors=1</code>.</td>
+        </tr>
+        <tr>
         <td> line_type </td><td>inherited (<a href="#global">global</a>)</td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow.</td>
         </tr>
         <tr>
@@ -987,6 +1143,34 @@
 
         <tr>
         <td> only_hard_states </td><td> inherited (<a href="#global">global</a>) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
+        </tr>
+        <tr>
+            <td>stateful_outline</td>
+            <td>none</td>
+            <td>
+                Draw an "outline", or thick borders of the line, colored depending on object state. Green for OK, yellow for WARNING, red for DOWN. Comes handy combined with <code>fixed_colors=1</code>.
+                <ul>
+                <li><code>all</code> ... for any state</li>
+                <li><code>down,critical,error,warning,unknown,unreachable,pending</code> ... for any state except UP/OK,</li>
+                <li><code>down,critical,error,warning,unknown,unreachable</code> ... for DOWN/CRITICAL/ERROR or WARNING or UNKNOWN or UNREACHABLE</li>
+                <li><code>down,critical,error,warning</code> ... for DOWN/CRITICAL/ERROR or WARNING</li>
+                <li><code>down,critical,error</code> ... for DOWN/CRITICAL/ERROR only</li>
+                </ul>
+                or draw no outline (disable the feature)
+                <ul>
+                    <li><code>none</code></li>
+                </ul>
+                </td>
+        </tr>
+        <tr>
+            <td>stateful_outline_width</td>
+            <td>1</td>
+            <td>This defines the width of both borders (outline) in px when this <code>stateful_outline</code> is enabled.</td>
+        </tr>
+        <tr>
+            <td>stateful_outline_blur</td>
+            <td>10</td>
+            <td><a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowBlur">Blurs</a> the outline. Value of 0 represents no blur and larger numbers represent increasingly more blur.</td>
         </tr>
         <tr>
         <td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
@@ -1004,7 +1188,7 @@
         <td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
         </tr>
         </table>
-        
+
         <a name="map"></a><h3> Map </h3>
         <p>Example with all options which have to be set (note that options already defined in the global section are optional):</p>
 <pre>define map {
@@ -1057,6 +1241,14 @@
             look at the <a href="#exclude">exclude regex definition</a>. <font color="#ff0000">(New in 1.6b4)</font></p></td>
         </tr>
 
+        <tr>
+            <td>fixed_colors</td><td>0</td>
+            <td>
+                0 ... Line color is determined by object state (OK = green, WARNING = yellow, DOWN = red)<br>
+                1 ... Fixed color as configured in <code>line_color</code> and <code>line_color_border</code>. See also: <code>stateful_outline</code>.<br>
+                <i>(for view_type=line only)</i>
+            </td>
+        </tr>
         <tr>
         <td> hover_menu </td><td> inherited (<a href="nagvis_config_format_description.html">nagvis.ini.php</a>) </td><td> Enable/Disable the hover menu </td>
         </tr>
@@ -1121,6 +1313,16 @@
         </tr>
 
         <tr>
+            <td>line_color</td>
+            <td>#ffffff</td>
+            <td>The fixed fill colour of the line in hex form. Can also be "transparent". Only applicable with <code>fixed_colors=1</code>.</td>
+        </tr>
+        <tr>
+            <td>line_color_border</td>
+            <td>#000000</td>
+            <td>The fixed border colour of the line in hex form. Can also be "transparent". Only applicable with <code>fixed_colors=1</code>.</td>
+        </tr>
+        <tr>
         <td> line_type </td><td>inherited (<a href="#global">global</a>)</td><td>Specifies the type of line when view_type=line. Valid values are:<br /> &quot;11&quot; for lines with one arrow at the end of a line.<br /> &quot;10&quot; for lines with two arrows pointing to each other in the middle of the line.<br /> &quot;12&quot; for plain lines without arrow.</td>
         </tr>
         <tr>
@@ -1131,6 +1333,34 @@
         <td> only_hard_states </td><td> inherited (<a href="#global">global</a>) </td><td> Sets whether soft states should be ignored. Default setting is 0. </td>
         </tr>
         <tr>
+        <tr>
+            <td>stateful_outline</td>
+            <td>none</td>
+            <td>
+                Draw an "outline", or thick borders of the line, colored depending on object state. Green for OK, yellow for WARNING, red for DOWN. Comes handy combined with <code>fixed_colors=1</code>.
+                <ul>
+                <li><code>all</code> ... for any state</li>
+                <li><code>down,critical,error,warning,unknown,unreachable,pending</code> ... for any state except UP/OK,</li>
+                <li><code>down,critical,error,warning,unknown,unreachable</code> ... for DOWN/CRITICAL/ERROR or WARNING or UNKNOWN or UNREACHABLE</li>
+                <li><code>down,critical,error,warning</code> ... for DOWN/CRITICAL/ERROR or WARNING</li>
+                <li><code>down,critical,error</code> ... for DOWN/CRITICAL/ERROR only</li>
+                </ul>
+                or draw no outline (disable the feature)
+                <ul>
+                    <li><code>none</code></li>
+                </ul>
+                </td>
+        </tr>
+        <tr>
+            <td>stateful_outline_width</td>
+            <td>1</td>
+            <td>This defines the width of both borders (outline) in px when this <code>stateful_outline</code> is enabled.</td>
+        </tr>
+        <tr>
+            <td>stateful_outline_blur</td>
+            <td>10</td>
+            <td><a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/shadowBlur">Blurs</a> the outline. Value of 0 represents no blur and larger numbers represent increasingly more blur.</td>
+        </tr>
         <td> url </td><td></td><td> URL where the Icon should link to. Default link is to the Nagios CGIs. Macros [host_name], [htmlcgi] and [htmlbase] are available. The value can be set to &quot;#&quot; to disable the link. </td>
         </tr>
         <tr>
@@ -1146,7 +1376,7 @@
         <td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
         </tr>
         </table>
-        
+
         <a name="textbox"></a><h3> Textbox </h3>
         <p>Example with major options:</p>
 <pre>define textbox {
@@ -1202,10 +1432,10 @@
         <td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
         </tr>
         </table>
-        
+
         <a name="shape"></a><h3> Shape </h3>
         <p>Basicaly shapes are simple images which can be moved and positioned on the map. The shapes are meant to be layout elements. The shapes were added to give the users the option to create less static maps.</p>
-        
+
         <p>Example with all values which have to be set:</p>
 <pre>define shape {
  icon="test"
@@ -1243,7 +1473,7 @@
         <tr>
         <td> enable_refresh </td><td> 0 </td><td> This option activates the shape for regular updates in the frontend. This is only needed for dynamic shape images which change once in a while.  </td>
         </tr>
-        
+
         <tr>
         <td> hover_menu </td><td> 0 </td><td> Enable/Disable the hover menu </td>
         </tr>
@@ -1266,7 +1496,7 @@
         <td> z </td><td> 1 </td><td> The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
         </tr>
         </table>
-        
+
         <a name="line"></a><h3>Line</h3>
         <p>The line is a stateless layout element to connect elements and visualize stateless connections between other objects. The objecttype has been created to make the design less static.</p>
         <p>Example with all values which have to be set:</p>
@@ -1299,7 +1529,7 @@
     <td>Y axis coordinate(s).
               Take a look at the <a href="#coordinate">coordinate definition</a> for details.</td>
         </tr>
-        
+
         <tr>
         <td>line_width</td><td>3</td><td>The width of the line in pixels.</td>
         </tr>
@@ -1331,7 +1561,7 @@
         <td>z</td><td>1</td><td>The z option defines the order of icons which are stacked on top of each other. The highest value will be displayed on top. The background image has the value of 0. So valid values should be above or equal 1. <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.</td>
         </tr>
         </table>
-        
+
         <a name="template"></a><h3> Template </h3>
         <p>With this object you have the ability to define all values except the
         <code>must-have-attributes</code> in one object for many others. You can
@@ -1425,7 +1655,7 @@
         <tr>
             <td>style</td>
             <td></td>
-            <td>Custom styling for the text. To be given like HTML style attribute contents. E.g. 
+            <td>Custom styling for the text. To be given like HTML style attribute contents. E.g.
                 <code>font-family:sans;font-weight:bold;</code>. It is applied to a "span" element, the
                 container element which gets the contents of the requested url added.</td>
         </tr>
@@ -1435,9 +1665,9 @@
         <tr>
             <td>z</td>
             <td>5</td>
-            <td>The z option defines the order of icons which are stacked on top of each 
-                other. The highest value will be displayed on top. The background image 
-                has the value of 0. So valid values should be above or equal 1. 
+            <td>The z option defines the order of icons which are stacked on top of each
+                other. The highest value will be displayed on top. The background image
+                has the value of 0. So valid values should be above or equal 1.
                 <i>Note:</i> To prevent conflicts with the header navigation you should keep this value below 100.
             </td>
         </tr>
@@ -1471,16 +1701,16 @@
             </tr>
         </table>
         <p>Example calls to this script:</p>
-        
+
         Query a single cell as simple string:
         <pre>std_lq.php?backend_id=live_1&query=GET hosts\\nLimit: 1\\nColumns: host_name\\n&type=cell</pre>
-        
+
         Query several columns from a single dataset. Resulting values are displayed separated by ", ":
         <pre>std_lq.php?backend_id=live_1&query=GET hosts\\nLimit: 1\\nColumns: host_name address state\\n&type=row</pre>
-        
+
         Query one column from several datasets. Each cell found is displayed on a separate line:
         <pre>std_lq.php?backend_id=live_1&query=GET hosts\\nLimit: 2\\nColumns: host_name\\n&type=column</pre>
-        
+
         Query several columns from several datasets and display them as a table:
         <pre>std_lq.php?backend_id=live_1&query=GET hosts\\nLimit: 2\\nColumns: host_name state address\\n&type=list</pre>
 
@@ -1544,7 +1774,7 @@
           <td>
           Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken.
           As of NagVis 1.8 it is possible to define a "," separated list of backends here to combine
-          objects of several backends. All host members of host groups with matching names found in all 
+          objects of several backends. All host members of host groups with matching names found in all
           given backends will be added to the single host group object.
           </td>
         </tr>
@@ -1693,7 +1923,7 @@
           <td>
           Backend-ID defined in Main Configuration file where NagVis should search for the object states. If this parameter is not given, the Backend which was set in global section of the map is taken.
           As of NagVis 1.8 it is possible to define a "," separated list of backends here to combine
-          objects of several backends. All host members of host groups with matching names found in all 
+          objects of several backends. All host members of host groups with matching names found in all
           given backends will be added to the single host group object.
           </td>
         </tr>
