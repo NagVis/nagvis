@@ -27,6 +27,11 @@ function listMapNames() {
     return $list;
 }
 
+function listRegularMapNames() {
+    global $CORE;
+    return $CORE->getListRegularMaps();
+}
+
 function listMapImages() {
     global $CORE;
     $options = $CORE->getAvailableBackgroundImages();

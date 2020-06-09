@@ -164,6 +164,11 @@ var ViewMap = View.extend({
     },
 
     addObject: function(attrs) {
+        let obj = this.constructObject(attrs);
+        this.objects[obj.conf.object_id] = obj;
+    },
+
+    constructObject: function(attrs) {
         var obj;
         switch (attrs.type) {
             case 'host':
@@ -204,13 +209,12 @@ var ViewMap = View.extend({
                 return;
             break;
         }
-    
+
         // Save the number of unlocked objects
         if (!obj.bIsLocked)
             this.updateNumUnlocked(1);
-    
-        // Put object to map objects array
-        this.objects[obj.conf.object_id] = obj;
+
+        return obj;
     },
 
     erase: function() {
@@ -225,7 +229,7 @@ var ViewMap = View.extend({
         // FIXME: Are all these steps needed here?
         obj.update();
         obj.render();
-    
+
         // add eventhandling when enabled via event_on_load option
         if (isset(oViewProperties.event_on_load) && oViewProperties.event_on_load == 1
            && obj.has_state && obj.hasProblematicState()) {
@@ -247,7 +251,7 @@ var ViewMap = View.extend({
         this.dom_obj.appendChild(obj.dom_obj);
     },
 
-    // Removes the given objects dom_obj from the maps dom_obj 
+    // Removes the given objects dom_obj from the maps dom_obj
     eraseObject: function(obj) {
         this.dom_obj.removeChild(obj.dom_obj);
     },
@@ -255,13 +259,13 @@ var ViewMap = View.extend({
     // Does initial rendering of map objects
     initializeObjects: function(aMapObjectConf) {
         eventlog("worker", "debug", "initializeObjects: Start setting map objects");
-    
+
         // Don't loop the first object - that is the summary of the current map
         this.sum_obj = new NagVisMap(aMapObjectConf[0]);
-    
+
         for (var i = 1, len = aMapObjectConf.length; i < len; i++)
             this.addObject(aMapObjectConf[i]);
-    
+
         // First parse the objects on the map
         // Then store the object position dependencies.
         // Before both can be done all objects need to be added
