@@ -143,6 +143,7 @@ var ViewWorldmap = ViewMap.extend({
 
     addScreenfixedObject: function(attrs) {
         attrs.context_menu = '0'; // no right-click context menu on screenfixed objects
+        attrs.z = Number(attrs.z) + 1000; // always on top of leaflet panes
         let obj = this.constructObject(attrs);
         this.screenFixedObjects[obj.conf.object_id] = obj;
     },
