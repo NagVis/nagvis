@@ -4,6 +4,7 @@ Frontend:
          interface checks (issue #256)
   * FIX: Fix random error "NotFoundError: Node.removeChild"
   * FIX: Fix relative coordinate handling (issue #250)
+  * FIX: Remove "\r", "\t" and 0x00 - 0x1F from multiline text boxes (issue #258)
 
 Worldmap:
   * textbox scaling according to zoom (scale_to_max_zoom option) (issue #255)
