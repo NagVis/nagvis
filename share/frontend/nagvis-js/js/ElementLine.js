@@ -299,6 +299,7 @@ var ElementLine = Element.extend({
                 oLink.target = this.obj.conf.url_target;
             } else {
                 var oLink = document.createElement('div');
+                oLink.style.cursor = 'pointer';
             }
             oLink.setAttribute('id', this.obj.conf.object_id+'-linelink');
             oLink.className = 'linelink';
