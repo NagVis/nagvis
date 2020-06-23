@@ -91,8 +91,21 @@
             <tr>
                 <td>max_zoom</td><td>20</td><td>Only show the object at specified zoom levels or lower (wider view)</td>
             </tr>
+        </table>
+
+        <h2>Scalable textboxes on worldmap</h2>
+        Static textboxes can scale according to the view zoom level. In other words, a box shrinks as you zoom out, or grows as you zoom in.
+        <table style="width:100%">
             <tr>
-                <td>scale_to_max_zoom</td><td>No</td><td>Scale the object size down to 50% for every zoom level below <code>max_zoom</code>. Only applicable to textboxes.</td>
+                <th>Parameter</th><th>Default</th><th>Description</th>
+            </tr>
+            <tr>
+                <td>scale_to_zoom</td><td>No</td><td>Scale the textbox size down to 50% for every zoom level below <code>normal_size_at_zoom</code>,
+                    or 50% up for every zoom level above.
+                </td>
+            </tr>
+            <tr>
+                <td>normal_size_at_zoom</td><td>19</td><td>At this zoom level, the <code>scale_to_zoom=yes</code> textboxes are displayed at original 1:1 (100%) size.</td>
             </tr>
         </table>
     </body>

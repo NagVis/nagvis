@@ -861,12 +861,6 @@ $mapConfigVars = Array(
         'field_type' => 'color',
         'match'      => MATCH_COLOR,
     ),
-    'scale_to_max_zoom' => Array(
-        'must'       => 0,
-        'default'    => 0,
-        'match'      => MATCH_BOOLEAN,
-        'field_type' => 'boolean',
-    ),
     'style' => Array(
         'must' => 0,
         'default' => '',
@@ -1433,9 +1427,7 @@ $mapConfigVarMap['textbox'] = Array(
         'type' => null,
         'use' => null,
     ),
-    'worldmap' => array(
-        'scale_to_max_zoom' => null,
-    )
+    // See also: core/sources/worldmap.php (textbox-specific options)
 );
 
 $mapConfigVarMap['shape'] = Array(
