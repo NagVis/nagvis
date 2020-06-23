@@ -49,6 +49,19 @@ $configVars = array(
         'default'   => 20,
         'match'     => MATCH_WORLDMAP_ZOOM,
     ),
+
+    'scale_to_zoom' => Array(
+        'must'       => 0,
+        'default'    => 0,
+        'match'      => MATCH_BOOLEAN,
+        'field_type' => 'boolean',
+    ),
+    'normal_size_at_zoom' => array(
+        'must'      => false,
+        'default'   => 19,
+        'match'     => MATCH_WORLDMAP_ZOOM,
+    ),
+
 );
 
 // Assign config variables to specific object types
@@ -72,6 +85,12 @@ foreach (getMapObjectTypes() AS $type) {
         ),
     );
 }
+
+// Textbox-specific options
+$configVarMap['textbox']['worldmap'] = array_merge($configVarMap['textbox']['worldmap'], array(
+    'scale_to_zoom' => null,
+    'normal_size_at_zoom' => null,
+));
 
 // Global config vars not to show for worldmaps
 $hiddenConfigVars = array(

@@ -24,11 +24,14 @@
 var ElementBox = Element.extend({
     render: function() {
         let scale = 1;
-        if (g_map && usesSource('worldmap') && this.obj.conf.scale_to_max_zoom == '1') {
+        if (g_map && usesSource('worldmap') && this.obj.conf.scale_to_zoom == '1') {
             let currentZoom = g_map.getZoom();
-            let maxZoom = Number(this.obj.conf.max_zoom)
-            if (currentZoom < maxZoom) {
-                scale = 1 / Math.pow(2, maxZoom-currentZoom)
+            let one2oneZoom = Number(this.obj.conf.normal_size_at_zoom) || 19
+            if (currentZoom < one2oneZoom) {
+                scale = 1 / Math.pow(2, one2oneZoom-currentZoom)
+            }
+            if (currentZoom > one2oneZoom) {
+                scale = Math.pow(2, currentZoom-one2oneZoom)
             }
         }
 
