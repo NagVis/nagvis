@@ -1,3 +1,5 @@
+1.9.22
+
 1.9.21
 Frontend:
   * FIX: Additional fix for weathermap lines byte/bit handling for Checkmk
