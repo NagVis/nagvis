@@ -124,7 +124,7 @@ function showFrontendDialog(sUrl, sTitle, sWidth) {
                 response.url = sUrl;
 
                 if(typeof response !== 'undefined' && typeof response.code !== 'undefined') {
-                    let width = data.sWidth || 450;
+                    let width = data.sWidth || 650;
                     if (response.object_type === 'textbox') width = 800
                     popupWindow(data.title, response, width);
                 }

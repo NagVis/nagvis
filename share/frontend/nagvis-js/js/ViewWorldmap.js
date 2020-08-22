@@ -22,6 +22,8 @@
  *****************************************************************************/
 
 var ViewWorldmap = ViewMap.extend({
+    screenFixedObjects: [],
+
     constructor: function(id) {
         this.base(id);
     },
@@ -111,6 +113,45 @@ var ViewWorldmap = ViewMap.extend({
         let ltp = document.getElementsByClassName('leaflet-tile-pane');
         if (ltp && saturate_percentage !== '')
             ltp[0].style.filter = "saturate("+saturate_percentage+"%)";
+
+        let loadScreenfixedObjectsFrom = getViewParam('worldmap_screenfixed_objects_from_map');
+        if (loadScreenfixedObjectsFrom) {
+           call_ajax(oGeneralProperties.path_server + '?mod=Map&act=getMapObjects&show=' + loadScreenfixedObjectsFrom, {
+                response_handler : this.initializescreenFixedObjects.bind(this),
+            });
+        }
+
+    },
+
+    initializescreenFixedObjects: function(aMapObjectConf) {
+        // Counterfeit `ViewMap` instance instead of `ViewWorldmap` so that screen-fixed object's DOM elements get rendered out of Leaflet map
+        let g_view_tmp = g_view
+        g_view = new ViewMap(g_view_tmp.id)
+        g_view.init();
+
+        for (var i = 1, len = aMapObjectConf.length; i < len; i++) {
+            this.addScreenfixedObject(aMapObjectConf[i]);
+        }
+
+        for (var i in this.screenFixedObjects)
+            this.renderScreenfixedObject(i);
+
+        // restore original `ViewWorldmap` instance
+        g_view = g_view_tmp
+    },
+
+
+    addScreenfixedObject: function(attrs) {
+        attrs.context_menu = '0'; // no right-click context menu on screenfixed objects
+        attrs.z = Number(attrs.z) + 1000; // always on top of leaflet panes
+        let obj = this.constructObject(attrs);
+        this.screenFixedObjects[obj.conf.object_id] = obj;
+    },
+
+    renderScreenfixedObject: function(object_id) {
+        var obj = this.screenFixedObjects[object_id];
+        obj.update();
+        obj.render();
     },
 
     handleMoveStart: function(lEvent) {

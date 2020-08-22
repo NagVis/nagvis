@@ -453,8 +453,29 @@ class GlobalCore {
             } catch(NagVisException $e) {
                 continue; // skip e.g. not read config files
             }
-            
+
             if($MAPCFG->getValue(0, 'show_in_lists') == 1)
+                $list[$mapName] = $MAPCFG->getAlias();
+        }
+        natcasesort($list);
+        return array_keys($list);
+    }
+
+    public function getListRegularMaps() {
+        $list = array();
+        $maps = $this->getPermittedMaps();
+        foreach ($maps AS $mapName) {
+            $MAPCFG = new GlobalMapCfg($mapName);
+            try {
+                $MAPCFG->readMapConfig(ONLY_GLOBAL);
+            } catch(MapCfgInvalid $e) {
+                continue; // skip configs with broken global sections
+            } catch(NagVisException $e) {
+                continue; // skip e.g. not read config files
+            }
+
+            // maps with no 'sources=' in 'define global {}' section are regular
+            if($MAPCFG->getValue(0, 'sources') == [])
                 $list[$mapName] = $MAPCFG->getAlias();
         }
         natcasesort($list);

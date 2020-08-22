@@ -95,5 +95,28 @@
                 <td>scale_to_max_zoom</td><td>No</td><td>Scale the object size down to 50% for every zoom level below <code>max_zoom</code>. Only applicable to textboxes.</td>
             </tr>
         </table>
+
+        <h2>Screen-fixed objects</h2>
+
+        Screen-fixed objects <b>do not move</b> when a map is dragged or zoomed. Unlike any worldmap objects, those are placed to screen by pixels rather than geographical coordinates.
+
+        <table style="width:100%">
+            <tr>
+                <th>Parameter</th><th>Default</th><th>Description</th>
+            </tr>
+            <tr>
+                <td>worldmap_screenfixed_objects_from_map</td><td><i>none</i></td><td>Name of other regular map to load screen-fixed objects from.</td>
+            </tr>
+        </table>
+
+        To use the feature, create two maps:
+        <ol>
+            <li>This worldmap</li>
+            <li>Another <b>regular</b> map</li>
+        </ol>
+        On this worldmap (1), set <code>worldmap_screenfixed_objects_from_map=name_of_another_regular_map</code>. Objects from regular map (2) are now visible on this worldmap (1) and are always fixed to the same spot on the screen.
+
+You may also want to set <code>show_in_lists=0</code> on the referred regular map.
+
     </body>
 </html>

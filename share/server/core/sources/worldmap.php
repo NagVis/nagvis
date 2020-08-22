@@ -37,6 +37,13 @@ $configVars = array(
         'default'   => '',
         'match'     => MATCH_INTEGER_EMPTY,
     ),
+    'worldmap_screenfixed_objects_from_map' => array(
+        'must'       => 0,
+        'default'    => '',
+        'match'      => MATCH_MAP_NAME_EMPTY,
+        'field_type' => 'dropdown',
+        'list'       => 'listRegularMapNames',
+    ),
 
     /*** OBJECT OPTIONS ***/
     'min_zoom' => array(
@@ -59,6 +66,7 @@ $configVarMap = array(
             'worldmap_center' => null,
             'worldmap_zoom'   => null,
             'worldmap_tiles_saturate'   => null,
+            'worldmap_screenfixed_objects_from_map' => null,
         ),
     ),
 );

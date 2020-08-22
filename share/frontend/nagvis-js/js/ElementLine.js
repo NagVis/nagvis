@@ -293,7 +293,14 @@ var ElementLine = Element.extend({
         // the user moves the object, this dom node must not be re-created, because this
         // would remove all event handlers
         if (!this.obj.trigger_obj) {
-            var oLink = document.createElement('a');
+            if (this.obj.conf.url) {
+                var oLink = document.createElement('a');
+                oLink.href = this.obj.conf.url;
+                oLink.target = this.obj.conf.url_target;
+            } else {
+                var oLink = document.createElement('div');
+                oLink.style.cursor = 'pointer';
+            }
             oLink.setAttribute('id', this.obj.conf.object_id+'-linelink');
             oLink.className = 'linelink';
             this.obj.trigger_obj = oLink;
@@ -302,12 +309,6 @@ var ElementLine = Element.extend({
             this.clearActionContainer();
         }
         this.dom_obj.appendChild(oLink);
-        if (this.obj.conf.url) {
-            oLink.href = this.obj.conf.url;
-            oLink.target = this.obj.conf.url_target;
-        } else {
-            oLink.href = 'javascript:void(0)';
-        }
     },
 
     clearActionContainer: function() {
@@ -619,13 +620,13 @@ var ElementLine = Element.extend({
             this.link_area.style.left = (x-5) + 'px';
             this.link_area.style.top = (y-5) + 'px';
 
-            if (usesSource('worldmap'))
+            if (usesSource('worldmap') && this.obj.marker)
                 this.obj.marker._bringToFront();
         } else {
             remove_class(this.canvas, 'active');
             this.link_area.style.display = 'none';
 
-            if (usesSource('worldmap'))
+            if (usesSource('worldmap') && this.obj.marker)
                this.obj.marker._resetZIndex();
         }
     },

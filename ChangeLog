@@ -10,6 +10,7 @@ Frontend:
 
 Worldmap:
   * textbox scaling according to zoom (scale_to_max_zoom option) (issue #255)
+  * Feature: screen-fixed objects
 
 1.9.20
 Core:
