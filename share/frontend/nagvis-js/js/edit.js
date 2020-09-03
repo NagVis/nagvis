@@ -150,26 +150,19 @@ function resizeMouseUp(event) {
     var objW = rmZoomFactor(parseInt(dom_obj.style.width));
     var objH = rmZoomFactor(parseInt(dom_obj.style.height));
 
-    // Reposition in frontend
-    var obj = getMapObjByDomObjId(objId);
-    obj.conf.x = objX;
-    obj.conf.y = objY;
-    obj.conf.w = objW;
-    obj.conf.h = objH;
-    obj.place();
-
-    if (!isInt(objX) || !isInt(objY) || !isInt(objW) || !isInt(objH)) {
-        alert('ERROR: Invalid coords ('+objX+'/'+objY+'/'+objW+'/'+objH+'). Terminating.');
-        return false;
+    // (worldmap) X and Y are center coordinates, not the top/left corner
+    var objMarginTop = rmZoomFactor(pxToInt(dom_obj.style.marginTop), true);
+    var objMarginLeft = rmZoomFactor(pxToInt(dom_obj.style.marginLeft), true);
+    if (objMarginLeft && objMarginTop) {
+      objX = Math.round(objX + objMarginLeft + objW/2);
+      objY = Math.round(objY + objMarginTop + objH/2);
     }
 
     var parts = g_view.unproject(objX, objY);
-    objX = parts[0];
-    objY = parts[1];
 
     saveObjectAttr(objId, {
-        'x': objX,
-        'y': objY,
+        'x': parts[0],
+        'y': parts[1],
         'w': objW,
         'h': objH
     });
@@ -683,7 +676,7 @@ function addClick(e) {
                + '&x=' + addX.join(',')
                + '&y=' + addY.join(',');
 
-    if(addObjType != 'textbox' && addObjType != 'container' 
+    if(addObjType != 'textbox' && addObjType != 'container'
        && addObjType != 'shape' && addViewType != 'icon' && addViewType != '')
         sUrl += '&view_type=' + addViewType;
 
