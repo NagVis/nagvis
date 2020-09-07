@@ -125,8 +125,8 @@ function resizeMouseDown(event) {
 
     g_resize_obj.grabx  = event.clientX;
     g_resize_obj.graby  = event.clientY;
-    g_resize_obj.width  = target.offsetWidth;
-    g_resize_obj.height = target.offsetHeight;
+    g_resize_obj.width  = pxToInt(target.style.width);
+    g_resize_obj.height = pxToInt(target.style.height);
     g_resize_obj.left   = pxToInt(target.style.left);
     g_resize_obj.top    = pxToInt(target.style.top);
 
@@ -195,24 +195,59 @@ function resizeMouseMove(event) {
     if (g_resize_obj === null)
         return true;
 
-    var xMin = 8, // The smallest width and height possible
-        yMin = 8;
+    var scale = g_resize_obj.el.dataset.theScale ? g_resize_obj.el.dataset.theScale : 1;
 
-    if(g_resize_obj.dir.indexOf("e") != -1)
-        g_resize_obj.el.style.width = Math.max(xMin, g_resize_obj.width + event.clientX - g_resize_obj.grabx) + "px";
+    var minWidth = 8 * scale, // The smallest width and height possible
+        minHeight = 8 * scale;
 
+    let grabOffsetX = event.clientX - g_resize_obj.grabx;
+    let grabOffsetY = event.clientY - g_resize_obj.graby;
+
+    if(g_resize_obj.dir.indexOf("e") != -1) {
+        grabOffsetX = Math.max(grabOffsetX, -g_resize_obj.width*scale + minWidth);
+
+        let newWidth = g_resize_obj.width + grabOffsetX/scale;
+        let newLeft = g_resize_obj.left + grabOffsetX/2;
+        let newMarginLeft = -newWidth/2;
+
+        g_resize_obj.el.style.width = newWidth + "px";
+        g_resize_obj.el.style.left = newLeft + "px";
+        g_resize_obj.el.style.marginLeft = newMarginLeft + "px";
+    }
     if(g_resize_obj.dir.indexOf("s") != -1) {
-        g_resize_obj.el.style.height = Math.max(yMin, g_resize_obj.height + event.clientY - g_resize_obj.graby) + "px";
+        grabOffsetY = Math.max(grabOffsetY, -g_resize_obj.height*scale + minHeight);
+
+        let newHeight = g_resize_obj.height + grabOffsetY/scale;
+        let newTop = g_resize_obj.top + grabOffsetY/2;
+        let newMarginTop = -newHeight/2;
+
+        g_resize_obj.el.style.height = newHeight + "px";
+        g_resize_obj.el.style.top = newTop + "px";
+        g_resize_obj.el.style.marginTop = newMarginTop + "px";
     }
 
     if(g_resize_obj.dir.indexOf("w") != -1) {
-        g_resize_obj.el.style.left = Math.min(g_resize_obj.left + event.clientX - g_resize_obj.grabx, g_resize_obj.left + g_resize_obj.width - xMin) + "px";
-        g_resize_obj.el.style.width = Math.max(xMin, g_resize_obj.width - event.clientX + g_resize_obj.grabx) + "px";
+        grabOffsetX = Math.min(grabOffsetX, g_resize_obj.width*scale - minWidth);
+
+        let newWidth = g_resize_obj.width - grabOffsetX/scale;
+        let newLeft = g_resize_obj.left + grabOffsetX/2;
+        let newMarginLeft = -newWidth/2;
+
+        g_resize_obj.el.style.width = newWidth + "px";
+        g_resize_obj.el.style.left = newLeft + "px";
+        g_resize_obj.el.style.marginLeft = newMarginLeft + "px";
     }
     if(g_resize_obj.dir.indexOf("n") != -1) {
-        g_resize_obj.el.style.top = Math.min(g_resize_obj.top + event.clientY - g_resize_obj.graby, g_resize_obj.top + g_resize_obj.height - yMin) + "px";
-        g_resize_obj.el.style.height = Math.max(yMin, g_resize_obj.height - event.clientY + g_resize_obj.graby) + "px";
-    }
+        grabOffsetY = Math.min(grabOffsetY, g_resize_obj.height*scale - minHeight);
+
+        let newHeight = g_resize_obj.height - grabOffsetY/scale;
+        let newTop = g_resize_obj.top + grabOffsetY/2;
+        let newMarginTop = -newHeight/2;
+
+        g_resize_obj.el.style.height = newHeight + "px";
+        g_resize_obj.el.style.top = newTop + "px";
+        g_resize_obj.el.style.marginTop = newMarginTop + "px";
+  }
 
     return preventDefaultEvents(event);
 }

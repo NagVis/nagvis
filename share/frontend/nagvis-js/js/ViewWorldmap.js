@@ -263,10 +263,9 @@ L.NagVisMarker = L.Marker.extend({
     // Update the size off the icon to make the object being centered
     _onAdd: function(lEvent) {
         var icon = this.options.icon,
-            obj = icon.options.obj,
             trigger_obj = icon.options.obj.trigger_obj,
-            w = trigger_obj.clientWidth,
-            h = trigger_obj.clientHeight;
+            w = pxToInt(trigger_obj.style.width),
+            h = pxToInt(trigger_obj.style.height);
 
         icon.options.iconSize = [w, h];
         icon._applyOffset();

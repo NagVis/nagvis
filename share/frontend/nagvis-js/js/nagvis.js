@@ -969,8 +969,10 @@ function renderNagVisTextbox(id, bgColor, borderColor, x, y, z, w, h, text, cust
 
     oLabelDiv.style.zIndex = parseInt(z) + 1;
 
-    if (scale)
+    if (scale) {
         oLabelDiv.style.transform = `scale(${scale})`;
+        oLabelDiv.dataset.theScale = scale;
+    }
 
     /**
      * IE workaround: The transparent for the color is not enough. The border
