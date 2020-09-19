@@ -3,6 +3,9 @@ Frontend:
   * FIX: Improve validation of file names in several places to prevent input of
     not printable characters.
 
+Worldmap:
+  * Improve recently introduced textbox scaling according to zoom (pull #263)
+
 1.9.21
 Frontend:
   * FIX: Additional fix for weathermap lines byte/bit handling for Checkmk
@@ -12,7 +15,7 @@ Frontend:
   * FIX: Remove "\r", "\t" and 0x00 - 0x1F from multiline text boxes (issue #258)
 
 Worldmap:
-  * textbox scaling according to zoom (scale_to_zoom option) (pull #255, #263)
+  * textbox scaling according to zoom (scale_to_zoom option) (pull #255)
 
 1.9.20
 Core:
