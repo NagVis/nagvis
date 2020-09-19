@@ -42,6 +42,7 @@ function _build_dsn_common($params) {
 class CorePDOHandler {
     private $DB = null;
     private $file = null;
+    private $dsn = null;
 
     // needs to be initialized after class declaration because directly
     // initializing it here is a syntax error in PHP 5.3
