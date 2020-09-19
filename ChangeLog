@@ -1,4 +1,7 @@
 1.9.22
+Frontend:
+  * FIX: Improve validation of file names in several places to prevent input of
+    not printable characters.
 
 1.9.21
 Frontend:
