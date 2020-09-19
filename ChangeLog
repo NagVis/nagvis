@@ -1,3 +1,5 @@
+1.9.23
+
 1.9.22
 Core:
   * FIX: Fix error handling of DB backends when DB opening failed
