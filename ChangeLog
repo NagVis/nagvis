@@ -1,5 +1,6 @@
 1.9.22
 Frontend:
+  * Colors with alpha channel are now allowed (format: #RRGGBBAA) (#270)
   * FIX: Improve validation of file names in several places to prevent input of
     not printable characters.
 
