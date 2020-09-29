@@ -69,9 +69,14 @@ class CoreLogonMultisite extends CoreLogonModule {
         return trim(file_get_contents($this->secretPath));
     }
 
-    private function generateHash($username, $now, $user_secret) {
+    private function generateHash($username, $session_id, $user_secret) {
         $secret = $this->loadSecret();
-        return md5($username . $now . $user_secret . $secret);
+        return hash("sha256", $username . $session_id. $user_secret . $secret);
+    }
+
+    private function generatePre20Hash($username, $issue_time, $user_secret) {
+        $secret = $this->loadSecret();
+        return md5($username . $issue_time . $user_secret . $secret);
     }
 
     private function checkAuthCookie($cookieName) {
@@ -83,7 +88,8 @@ class CoreLogonMultisite extends CoreLogonModule {
         // (e.g. when @ signs are found in the value)
         $cookieValue = trim($_COOKIE[$cookieName], '"');
 
-        list($username, $issueTime, $cookieHash) = explode(':', $cookieValue, 3);
+        // 2nd field is "issue time" in pre 2.0 cookies. Now it's the session ID
+        list($username, $sessionId, $cookieHash) = explode(':', $cookieValue, 3);
 
         if($this->authFile == 'htpasswd')
             $users = $this->loadAuthFile($this->htpasswdPath);
@@ -95,8 +101,20 @@ class CoreLogonMultisite extends CoreLogonModule {
         }
         $user_secret = $users[$username];
 
+        // Checkmk 2.0 changed the following:
+        // a) 2nd field from "issue time" to session ID
+        // b) 3rd field from md5 hash to sha256 hash
+        // NagVis is used with older and newer Checkmk versions. Be compatible
+        // to both cookie formats.
+        $is_pre_20_cookie = strlen($cookieHash) == 32;
+
+        if ($is_pre_20_cookie)
+            $hash = $this->generatePre20Hash($username, $sessionId, (string) $user_secret);
+        else
+            $hash = $this->generateHash($username, $sessionId, (string) $user_secret);
+
         // Validate the hash
-        if($cookieHash != $this->generateHash($username, $issueTime, (string) $user_secret)) {
+        if ($cookieHash != $hash) {
             throw new Exception();
         }
 
