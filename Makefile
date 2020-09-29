@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-VERSION=1.9.23
+VERSION=1.9.24
 NAME=nagvis-$(VERSION)
 
 SED ?= sed

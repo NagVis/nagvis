@@ -1,3 +1,5 @@
+1.9.24
+
 1.9.23
 Frontend:
   * Make NagVis compatible with Checkmk 2.0 auth cookies
