@@ -92,7 +92,12 @@ class CoreAuthModPDO extends CoreAuthModule {
         }
 
         $data = $res->fetch();
-        return intval($data['userId']);
+            if (isset($data['userId'])){
+                return intval($data['userId']);
+            }else{
+                return intval(null);
+            }
+        
     }
 
     private function updatePassword($uid, $pw) {
