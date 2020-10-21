@@ -92,6 +92,9 @@ class CoreAuthModPDO extends CoreAuthModule {
         }
 
         $data = $res->fetch();
+
+        if (!isset($data['userId']))
+            return 0;
         return intval($data['userId']);
     }
 

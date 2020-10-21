@@ -341,8 +341,16 @@ class GlobalMapCfg {
             if($sFirstChar == '}') {
                 if($obj['type'] === 'global')
                     $id = 0;
-                else
+                else {
                     $id = isset($obj['object_id']) ? $obj['object_id'] : '_'.$iObjId;
+
+                    // In case a numeric object_id is read from the config,
+                    // normalize it to the "_[id]" format (which get's replaced
+                    // later in verifyObjectIds)
+                    if (is_numeric($obj['object_id'])) {
+                        $id = '_'.$obj['object_id'];
+                    }
+                }
 
                 // It might happen that there is a duplicate object on the map
                 // This generates a new object_id for the later objects
