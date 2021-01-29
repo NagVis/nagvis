@@ -2,6 +2,8 @@
   * FIX: Fix more PHP 7.4 incompatibilites (#265)
     (This fixes one issue related to the PDO auth module and one issue related
     to map configurations with numeric object_id attributes.)
+  * FIX: Fix Checkmk BI backend error when pending services are in downtime
+    (Undefined index 'downtime' was shown)
 
 1.9.23
 Frontend:

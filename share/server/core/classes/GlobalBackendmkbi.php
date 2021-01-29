@@ -256,6 +256,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         $c = Array(
             PENDING => Array(
                 'normal'   => 0,
+                'downtime' => 0,
             ),
             OK => Array(
                 'normal'   => 0,
