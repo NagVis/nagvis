@@ -1,3 +1,5 @@
+1.9.25
+
 1.9.24
   * FIX: Fix more PHP 7.4 incompatibilites (#265)
     (This fixes one issue related to the PDO auth module and one issue related
