@@ -993,7 +993,7 @@ class GlobalMapCfg {
                 $this->mapConfig[$new] = $this->mapConfig[$id];
                 unset($this->mapConfig[$id]);
 
-                $toBeWritten[$new] = $id;
+                $toBeWritten[$new] = ltrim($id, '_');
                 $aleadySeen[$new] = true;
             }
         }
