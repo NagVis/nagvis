@@ -1,5 +1,6 @@
 1.9.25
   * FIX: Fix possible map corruption caused by object ID cleanup (#280)
+  * FIX: Fix missing socket string in some livestatus backend error messages
 
 1.9.24
   * FIX: Fix more PHP 7.4 incompatibilites (#265)

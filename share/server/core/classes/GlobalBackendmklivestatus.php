@@ -85,7 +85,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $this->backendId = $backendId;
 
         // Parse the socket params
-        $this->parseSocket(cfg('backend_'.$backendId, 'socket'));
+        $this->socketSpec = cfg('backend_'.$backendId, 'socket');
+        $this->parseSocket($this->socketSpec);
 
         // Run preflight checks
         if($this->socketType == 'unix' && !$this->checkSocketExists()) {
@@ -95,7 +96,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         if(!function_exists('fsockopen')) {
             throw new BackendConnectionProblem(l('The PHP function fsockopen is not available. Needed by backend [BACKENDID].',
-                               Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath)));
+                               Array('BACKENDID' => $this->backendId, 'SOCKET' => $this->socketSpec)));
         }
 
         return true;
@@ -239,7 +240,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             $this->CONNECT_EXC = new BackendConnectionProblem(
                                      l('Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]',
                                                Array('BACKENDID' => $this->backendId,
-                                                     'SOCKET'    => $this->socketPath,
+                                                     'SOCKET'    => $this->socketSpec,
                                                      'MSG'       => $error_msg)));
             throw $this->CONNECT_EXC;
         }
@@ -312,13 +313,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         if($write=== false)
             throw new BackendConnectionProblem(l('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
                                                  Array('BACKENDID' => $this->backendId,
-                                                       'SOCKET'    => $this->socketPath,
+                                                       'SOCKET'    => $this->socketSpec,
                                                        'MSG'       => 'Error while sending query to socket.')));
 
         if($write !== strlen($query))
             throw new BackendConnectionProblem(l('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
                                                  Array('BACKENDID' => $this->backendId,
-                                                       'SOCKET'    => $this->socketPath,
+                                                       'SOCKET'    => $this->socketSpec,
                                                        'MSG'       => 'Connection terminated.')));
 
 
@@ -333,7 +334,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         if($read === false)
             throw new BackendConnectionProblem(l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
                                                  Array('BACKENDID' => $this->backendId,
-                                                       'SOCKET'    => $this->socketPath,
+                                                       'SOCKET'    => $this->socketSpec,
                                                        'MSG'       => 'Error while reading socket (header)')));
 
         // Extract status code
@@ -349,7 +350,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         if($read === false) {
             throw new BackendConnectionProblem(l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
                                                  Array('BACKENDID' => $this->backendId,
-                                                       'SOCKET'    => $this->socketPath,
+                                                       'SOCKET'    => $this->socketSpec,
                                                        'MSG'       => 'Error while reading socket (content)')));
         }
 
@@ -357,7 +358,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         if($status != "200") {
             throw new BackendConnectionProblem(l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
                                                  Array('BACKENDID' => $this->backendId,
-                                                       'SOCKET'    => $this->socketPath,
+                                                       'SOCKET'    => $this->socketSpec,
                                                        'MSG'       => $read)));
         }
 
