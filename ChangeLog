@@ -1,4 +1,5 @@
 1.9.25
+  * FIX: Fix editing map options when object_id not set in global section object
   * FIX: Fix possible map corruption caused by object ID cleanup (#280)
   * FIX: Fix missing socket string in some livestatus backend error messages
 

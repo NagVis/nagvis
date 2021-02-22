@@ -164,7 +164,8 @@ class ViewMapAddModify {
                     $this->MAPCFG->storeUpdateElement($this->object_id);
                 } else {
                     // add/modify case: Rewrite whole object with the given attributes
-                    $this->MAPCFG->updateElement($this->object_id, $this->attrs, true);
+                    $object_id = $this->object_id === '0' ? 0 : $this->object_id;
+                    $this->MAPCFG->updateElement($object_id, $this->attrs, true);
                 }
 
                 $t = $this->object_type == 'global' ? l('map configuration') : $this->object_type;
