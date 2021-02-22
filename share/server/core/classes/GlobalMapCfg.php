@@ -341,16 +341,8 @@ class GlobalMapCfg {
             if($sFirstChar == '}') {
                 if($obj['type'] === 'global')
                     $id = 0;
-                else {
+                else
                     $id = isset($obj['object_id']) ? $obj['object_id'] : '_'.$iObjId;
-
-                    // In case a numeric object_id is read from the config,
-                    // normalize it to the "_[id]" format (which get's replaced
-                    // later in verifyObjectIds)
-                    if (is_numeric($obj['object_id'])) {
-                        $id = '_'.$obj['object_id'];
-                    }
-                }
 
                 // It might happen that there is a duplicate object on the map
                 // This generates a new object_id for the later objects
@@ -974,10 +966,16 @@ class GlobalMapCfg {
         foreach(array_keys($this->mapConfig) AS $id) {
             $todo = false;
 
+            if($id === 0)
+                continue;
+
+            // object_id which is numeric and used as $this->mapConfig key is casted to
+            // int by PHP. Fix this by casting back to str here.
+            $id = strval($id);
+
             // Replace default integer object IDs (are added with "_[index]" during config parsing)
-            if($id !== 0 && $id[0] == '_') {
+            if($id[0] == '_')
                 $todo = true;
-            }
 
             // Remove duplicates by generating new IDs for the later objects
             if(isset($alreadySeen[$id])) {
@@ -993,7 +991,7 @@ class GlobalMapCfg {
                 $this->mapConfig[$new] = $this->mapConfig[$id];
                 unset($this->mapConfig[$id]);
 
-                $toBeWritten[$new] = ltrim($id, '_');
+                $toBeWritten[$new] = $id;
                 $aleadySeen[$new] = true;
             }
         }

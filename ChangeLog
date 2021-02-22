@@ -1,4 +1,11 @@
 1.9.25
+  * FIX: Fix map corruption regression introduced with 1.9.24
+  This issue was triggered by objects on a map having a numeric "object_id"
+  attribute. The issue resulted in map configuration files without "define
+  global" object at the beginning of the map. In this situation NagVis will
+  show an error like "Error: (0) in_array() expects parameter 2 to be array, bool given".
+  You will have to find the problematic map config (.cfg) and readd the global
+  section.
   * FIX: Fix editing map options when object_id not set in global section object
   * FIX: Fix possible map corruption caused by object ID cleanup (#280)
   * FIX: Fix missing socket string in some livestatus backend error messages
