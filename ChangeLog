@@ -1,4 +1,5 @@
 1.9.26
+  * FIX: Fix PHP 8 incompatibilites
 
 1.9.25
   * FIX: Fix map corruption regression introduced with 1.9.24

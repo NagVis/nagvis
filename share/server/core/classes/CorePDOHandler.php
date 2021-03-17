@@ -301,6 +301,10 @@ class CorePDOHandler {
         return true;
     }
 
+    public function getDSN() {
+        return $this->dsn;
+    }
+
     public function getRegularExpressionOperator() {
         return $this->data['re_op'];
     }
