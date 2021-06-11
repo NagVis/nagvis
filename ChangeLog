@@ -1,7 +1,13 @@
 1.9.26
+Core:
   * FIX: Fix PHP 8 incompatibilites
 
+Worldmap:
+  * Add new option filter_group for filtering host objects on a worldmap based
+    on the membership of hosts in a host group.
+
 1.9.25
+Core:
   * FIX: Fix map corruption regression introduced with 1.9.24
   This issue was triggered by objects on a map having a numeric "object_id"
   attribute. The issue resulted in map configuration files without "define
@@ -9,11 +15,14 @@
   show an error like "Error: (0) in_array() expects parameter 2 to be array, bool given".
   You will have to find the problematic map config (.cfg) and readd the global
   section.
-  * FIX: Fix editing map options when object_id not set in global section object
   * FIX: Fix possible map corruption caused by object ID cleanup (#280)
   * FIX: Fix missing socket string in some livestatus backend error messages
 
+Frontend:
+  * FIX: Fix editing map options when object_id not set in global section object
+
 1.9.24
+Core:
   * FIX: Fix more PHP 7.4 incompatibilites (#265)
     (This fixes one issue related to the PDO auth module and one issue related
     to map configurations with numeric object_id attributes.)

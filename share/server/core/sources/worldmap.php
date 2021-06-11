@@ -15,6 +15,7 @@ $viewParams = array(
         'backend_id',
         'worldmap_center',
         'worldmap_zoom',
+        'filter_group',
     )
 );
 
@@ -442,6 +443,7 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
 
             $map_config[$object_id] = $obj;
         }
+
         return true;
     }
     elseif ($clone_id !== null)

@@ -75,7 +75,7 @@ function process_filter($MAPCFG, $map_name, &$map_config, $params = null) {
     if($params === null)
         $params = $MAPCFG->getSourceParams();
 
-    //filter_hostgroup($map_config, $params);
+    filter_hostgroup($map_config, $params);
     return true; // allow caching
 }
 
