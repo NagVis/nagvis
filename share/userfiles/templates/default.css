@@ -1155,6 +1155,9 @@ div#grid div.horizontal {
     border: 2px dotted #38f;
     background: rgba(255,255,255,0.5);
     }
+.leaflet-interactive {
+    cursor: grab;
+}
 
 
 /* general typography */

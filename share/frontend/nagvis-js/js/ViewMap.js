@@ -31,6 +31,8 @@ var ViewMap = View.extend({
     // The number of currently unlocked objects for editing. When this is
     // above 0, it will lead to block state updates till it's 0 again
     num_unlocked   : false,
+    // Sequence number of currently running call_ajax()
+    request_seq    : 0,
 
     constructor: function(id) {
         this.base(id);
@@ -91,9 +93,11 @@ var ViewMap = View.extend({
         }
         wasInMaintenance = null;
 
+        this.request_seq++;
         call_ajax(oGeneralProperties.path_server + '?mod=Map&act=getMapObjects&show='
                   + this.id + getViewParams(), {
             response_handler : this.handleMapInit.bind(this),
+            handler_data     : this.request_seq,
             error_handler    : this.handleMapInitError.bind(this)
         });
 
@@ -114,27 +118,19 @@ var ViewMap = View.extend({
         frontendMessage(response, 'serverError');
     },
 
-    handleMapInit: function(oObjects) {
+    handleMapInit: function(oObjects, seq) {
+        // skip rendering when subsequent (newer) getMapObjects request is already running
+        if (seq < this.request_seq) {
+            return;
+        }
+
         // Only perform the rendering actions when all information are available
         if (!oObjects) {
             hideStatusMessage();
             return;
         }
 
-        // Remove all old objects
-        for (var i in this.objects) {
-            var obj = this.objects[i];
-            if(obj && typeof obj.remove === 'function') {
-                // Remove parsed object from map
-                obj.remove();
-
-                if(!obj.bIsLocked)
-                    this.updateNumUnlocked(-1);
-
-                // Remove element from object container
-                delete this.objects[i];
-            }
-        }
+        this.removeAllObjects();
 
         if (usesSource('worldmap')) {
             g_map_objects.clearLayers();
@@ -200,15 +196,15 @@ var ViewMap = View.extend({
                 obj = new NagVisLine(attrs);
             break;
             default:
-                alert('Error: Unknown object type');
+                console.error(`Error: Unknown object type: [${attrs.type}]`);
                 return;
             break;
         }
-    
+
         // Save the number of unlocked objects
         if (!obj.bIsLocked)
             this.updateNumUnlocked(1);
-    
+
         // Put object to map objects array
         this.objects[obj.conf.object_id] = obj;
     },
@@ -221,11 +217,12 @@ var ViewMap = View.extend({
 
     renderObject: function(object_id) {
         var obj = this.objects[object_id];
+        if (!obj) return;
 
         // FIXME: Are all these steps needed here?
         obj.update();
         obj.render();
-    
+
         // add eventhandling when enabled via event_on_load option
         if (isset(oViewProperties.event_on_load) && oViewProperties.event_on_load == 1
            && obj.has_state && obj.hasProblematicState()) {
@@ -247,27 +244,22 @@ var ViewMap = View.extend({
         this.dom_obj.appendChild(obj.dom_obj);
     },
 
-    // Removes the given objects dom_obj from the maps dom_obj 
+    // Removes the given objects dom_obj from the maps dom_obj
     eraseObject: function(obj) {
         this.dom_obj.removeChild(obj.dom_obj);
     },
 
     // Does initial rendering of map objects
-    initializeObjects: function(aMapObjectConf) {
+    initializeObjects: function(oObjects) {
         eventlog("worker", "debug", "initializeObjects: Start setting map objects");
-    
+
         // Don't loop the first object - that is the summary of the current map
-        this.sum_obj = new NagVisMap(aMapObjectConf[0]);
-    
-        for (var i = 1, len = aMapObjectConf.length; i < len; i++)
-            this.addObject(aMapObjectConf[i]);
-    
-        // First parse the objects on the map
-        // Then store the object position dependencies.
-        // Before both can be done all objects need to be added
-        // to the map objects list
-        for (var i in this.objects)
-            this.renderObject(i);
+        this.sum_obj = new NagVisMap(oObjects.shift());
+
+        for (obj of oObjects) {
+            this.addObject(obj);
+            this.renderObject(obj.object_id);
+        }
 
         eventlog("worker", "debug", "initializeObjects: End setting map objects");
     },
@@ -355,6 +347,23 @@ var ViewMap = View.extend({
             this.updateNumUnlocked(-1);
 
         delete this.objects[object_id];
+    },
+
+    // Remove all objects & remove them from DOM
+    removeAllObjects: function() {
+        for (var i in this.objects) {
+            var obj = this.objects[i];
+            if(obj && typeof obj.remove === 'function') {
+                // Remove parsed object from map
+                obj.remove();
+
+                if(!obj.bIsLocked)
+                    this.updateNumUnlocked(-1);
+
+                // Remove element from object container
+                delete this.objects[i];
+            }
+        }
     },
 
     /**

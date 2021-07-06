@@ -13,11 +13,11 @@ cmp() {
         sub(/\/\*[^@]*\*\//,"");
         # Remove // comments (line beginning)
         sub(/^\/\/.*/,"");
-        
+
         # Count braces
         anz1 = gsub(/\{/,"{");
         anz2 = gsub(/}/,"}");
-        
+
         if (OK == 1) {
             braces += anz1;
             braces -= anz2;
@@ -50,7 +50,7 @@ cmp() {
                 #   }
                 #}
                 #line = line $0;
-                
+
                 print line;
             }
         }
@@ -63,7 +63,6 @@ cmp_js() {
     OUT=NagVisCompressed.js
     >$OUT
     cmp ExtStacktrace.js
-    cmp ExtLeaflet.js
     cmp nagvis.js
     cmp edit.js
     cmp popupWindow.js

@@ -111,7 +111,7 @@ var NagVisObject = Base.extend({
 
         // Create container div
         var container = document.createElement('div');
-        container.setAttribute('id', this.conf.object_id);
+        container.setAttribute('id', 'obj' + this.conf.object_id); // ID must contain at least one character
 
         // Save reference to DOM obj in js obj
         this.dom_obj = container;
@@ -125,7 +125,6 @@ var NagVisObject = Base.extend({
                 this.elements[i].unlock();
             }
         }
-
         this.draw();
         g_view.drawObject(this);
 

@@ -83,6 +83,7 @@ var ViewWorldmap = ViewMap.extend({
         if (restored_coordinates.length === 3) {
             // place the map view according to location hash (#lat/lon/zoom) - consistent page reloads
             g_map.setView([restored_coordinates[1], restored_coordinates[0]], restored_coordinates[2]);
+            setViewParam('worldmap_zoom', restored_coordinates[2]);
         } else {
             // or default (map-defined) view
             g_map.setView(getViewParam('worldmap_center').split(','), parseInt(getViewParam('worldmap_zoom')));
@@ -98,7 +99,7 @@ var ViewWorldmap = ViewMap.extend({
         // an ajax call with the current viewport to the core code, which
         // then returns a list of objects to add to the map depending on
         // this viewport.
-        g_map.on('zoomstart', this.handleMoveStart.bind(this));
+        g_map.on('zoomstart', this.handleZoomStart.bind(this));
         g_map.on('moveend', this.handleMoveEnd.bind(this));
 
         // hide eventual open header dropdown menus when clicking on the map
@@ -113,22 +114,21 @@ var ViewWorldmap = ViewMap.extend({
             ltp[0].style.filter = "saturate("+saturate_percentage+"%)";
     },
 
-    handleMoveStart: function(lEvent) {
-        this.erase();
-    },
-
-    // Is used to update the objects to show on the worldmap
     handleMoveEnd: function(lEvent) {
         // Update the related view properties
         var ll = g_map.getCenter();
         setViewParam('worldmap_center', ll.lat+','+ll.lng);
         setViewParam('worldmap_zoom', g_map.getZoom());
 
-        this.render(); // re-render the whole map
-
         // Put the new map view coords into URL (location) - consistent reloads
         new_center = g_map.getCenter();
         window.location.hash = new_center.lng + "/" + new_center.lat + "/" + g_map.getZoom();
+
+        this.render(); // re-render the whole map
+    },
+
+    handleZoomStart: function(lEvent) {
+        this.removeAllObjects();
     },
 
     saveView: function() {

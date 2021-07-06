@@ -8,11 +8,13 @@
     <title>{$pageTitle}</title>
     <meta name="viewport" content="width=480, initial-scale=0.6666, maximum-scale=1.0, minimum-scale=0.6666" />
 
+    <script type="text/javascript" src="{$htmlJs}../ext/leaflet-1.6.0/leaflet.js?v={$version}"></script>
+    <link rel="stylesheet" type="text/css" href="{$htmlCss}../ext/leaflet-1.6.0/leaflet.css?v={$version}" />
+
     {if $bUseCompressedJs}
     <script type="text/javascript" src="{$htmlJs}NagVisCompressed.js?v={$version}"></script>
     {else}
     <script type="text/javascript" src="{$htmlJs}ExtStacktrace.js?v={$version}"></script>
-    <script type="text/javascript" src="{$htmlJs}ExtLeaflet.js?v={$version}"></script>
     <script type="text/javascript" src="{$htmlJs}nagvis.js?v={$version}"></script>
     <script type="text/javascript" src="{$htmlJs}edit.js?v={$version}"></script>
     <script type="text/javascript" src="{$htmlJs}popupWindow.js?v={$version}"></script>
