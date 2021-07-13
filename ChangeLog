@@ -1,4 +1,7 @@
 1.9.27
+Core
+  * FIX: Fix PHP 7 (or older) incompatibilities introduced with 1.9.26
+    (Error (Error): Call to undefined method ReflectionType::getName())
 
 1.9.26
 Core

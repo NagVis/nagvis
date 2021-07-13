@@ -3006,17 +3006,33 @@ class Dwoo_Compiler implements Dwoo_ICompiler
 		}
 
 		$out = array();
-                foreach ($ref->getParameters() as $param) {
-			if ($param->getType() && !$param->getType()->isBuiltin() && $param->getType()->getName() === 'Dwoo') {
-				continue;
+
+		if (PHP_VERSION_ID < 70100) {
+			foreach ($ref->getParameters() as $param) {
+				if (($class = $param->getClass()) !== null && $class->name === 'Dwoo') {
+					continue;
+				}
+				if (($class = $param->getClass()) !== null && $class->name === 'Dwoo_Compiler') {
+					continue;
+				}
+				if ($param->getName() === 'rest' && $param->isArray() === true) {
+					$out[] = array('*', $param->isOptional(), null);
+				}
+				$out[] = array($param->getName(), $param->isOptional(), $param->isOptional() ? $param->getDefaultValue() : null);
 			}
-			if ($param->getType() && !$param->getType()->isBuiltin() && $param->getType()->getName() === 'Dwoo_Compiler') {
-				continue;
+		} else {
+			foreach ($ref->getParameters() as $param) {
+				if ($param->getType() && !$param->getType()->isBuiltin() && $param->getType()->getName() === 'Dwoo') {
+					continue;
+				}
+				if ($param->getType() && !$param->getType()->isBuiltin() && $param->getType()->getName() === 'Dwoo_Compiler') {
+					continue;
+				}
+				if ($param->getName() === 'rest' && $param->getType() && $param->getType()->getName() === 'array') {
+					$out[] = array('*', $param->isOptional(), null);
+				}
+				$out[] = array($param->getName(), $param->isOptional(), $param->isOptional() ? $param->getDefaultValue() : null);
 			}
-			if ($param->getName() === 'rest' && $param->getType() && $param->getType()->getName() === 'array') {
-				$out[] = array('*', $param->isOptional(), null);
-			}
-			$out[] = array($param->getName(), $param->isOptional(), $param->isOptional() ? $param->getDefaultValue() : null);
 		}
 
 		return $out;
