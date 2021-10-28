@@ -822,7 +822,7 @@ var ElementLine = Element.extend({
         // Check_MK if/if64 checks support switching between bytes/bits.
         var display_bits = false;
 
-        if (output.match('In: [0-9].*bit/s.*Out: [0-9]+')) {
+        if (output.match('In: [0-9].*[Bit|bit]/s.*Out: [0-9]+')) {
             display_bits=true;
         }
 
