@@ -378,7 +378,7 @@ class GlobalCore {
             foreach(Array(path('sys', 'local',  'icons'),
                           path('sys', 'global', 'icons')) AS $path)
                 if(file_exists($path))
-                    foreach(Array('png', 'gif', 'jpg') AS $ext)
+                    foreach(Array('png', 'gif', 'jpg', 'svg') AS $ext)
                         if(file_exists($path . $iconset . '_ok.'.$ext))
                             return $ext;
 
