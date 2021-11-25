@@ -403,7 +403,6 @@ div#popupWindow h1 {
 #popupWindowContent table.mytable td.tdfield {
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
 }
 #popupWindowContent input[type="radio"] {
     vertical-align: middle;
