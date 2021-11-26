@@ -1,5 +1,6 @@
 1.9.28
 Frontend
+  * Add support for svg image based icon sets (#298 Thanks to itsul)
   * FIX: Fix off-screen text input boxes in popups (#300 Thanks to jacobbaungard)
 
 1.9.27
