@@ -410,7 +410,6 @@ div#popupWindow h1 {
 #popupWindowContent table.mytable tr td.tdlabel input {
     width: 140x;
 }
-#popupWindowContent table.mytable tr td.tdfield input,
 #popupWindowContent table.mytable tr td.tdfield textarea,
 #popupWindowContent table.mytable tr td.tdfield select {
     width: 99%;
