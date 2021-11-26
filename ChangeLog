@@ -1,4 +1,6 @@
 1.9.28
+Frontend
+  * FIX: Fix off-screen text input boxes in popups (#300 Thanks to jacobbaungard)
 
 1.9.27
 Core
