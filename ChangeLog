@@ -2,6 +2,7 @@
 Frontend
   * Add support for svg image based icon sets (#298 Thanks to itsul)
   * FIX: Fix off-screen text input boxes in popups (#300 Thanks to jacobbaungard)
+  * FIX: Fix weathermap lines handling "Bit" of Checkmk checks (#296 Thanks to BlackFlash5)
 
 1.9.27
 Core
