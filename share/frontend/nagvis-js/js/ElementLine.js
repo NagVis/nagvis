@@ -659,7 +659,8 @@ var ElementLine = Element.extend({
 	    return;
 	if (this.perfdata === null)
             return;
-
+	    
+	var yOffset=parseInt(this.obj.conf.line_label_y_offset);
         var x1 = this.parts[id][0][0],
             y1 = this.parts[id][0][1],
             x2 = this.parts[id][1][0],
@@ -669,7 +670,7 @@ var ElementLine = Element.extend({
                           : this.obj.conf.line_label_pos_out;
 
         var x = middle(x1, x2, cut),
-            y = middle(y1, y2, cut);
+            y = middle(y1, y2, cut) + yOffset;
 
         var txt;
         if (this.obj.conf.line_type == 13 || this.obj.conf.line_type == 14) {
