@@ -1,3 +1,5 @@
+1.9.30
+
 1.9.29
 Security:
   * FIX: Fix possible deletion of arbitrary files (CVE-2021-33178)
