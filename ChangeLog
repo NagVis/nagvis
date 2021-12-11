@@ -1,4 +1,12 @@
 1.9.29
+Security:
+  * FIX: Fix possible deletion of arbitrary files (CVE-2021-33178)
+  An authenticated user with enough permissions to access the NagVis
+  ManageBackgrounds endpoint, such as admin, can delete arbitrary files on the
+  server limited by the rights of the Apache system user. In OMD environments,
+  such as Checkmk, this is limited to files owned by the site user. In other
+  environments this may affect all files that are writable by the web server
+  user.
 
 1.9.28
 Frontend

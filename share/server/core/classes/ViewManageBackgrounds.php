@@ -92,7 +92,7 @@ class ViewManageBackgrounds {
                 if (!$name)
                     throw new FieldInputError('name', l('Please choose a background'));
 
-                if (count($CORE->getAvailableBackgroundImages('/^'.preg_quote($name).'$/')) == 0)
+                if (!in_array($name, $CORE->getAvailableBackgroundImages()))
                     throw new FieldInputError('name', l('The background does not exist.'));
 
                 // Check whether or not the backgroun is in use
