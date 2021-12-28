@@ -122,7 +122,7 @@ var ElementGadget = Element.extend({
 
             addZoomHandler(oGadget);
 
-            oGadget.src = this.obj.conf.gadget_url + sParams;
+            oGadget.src = this.obj.conf.gadget_url + sParams + "&cache=" + new Date().getTime();
 
             var alt = this.obj.conf.type + '-' + this.obj.conf.name;
             if (this.obj.conf.type == 'service')
