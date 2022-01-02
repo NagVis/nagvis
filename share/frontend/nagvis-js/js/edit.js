@@ -371,11 +371,12 @@ function dragObject(event) {
     // Is this object currently relative positioned?
     var idParts = draggingObject.id.split('-');
     var obj = g_view.objects[idParts[0]];
+    var parents;
     if (obj.conf.view_type === 'line') {
         var anchorId = idParts[2];
-        var parents = obj.getParentObjectIds(anchorId);
+        parents = obj.getParentObjectIds(anchorId);
     } else {
-        var parents = obj.getParentObjectIds();
+        parents = obj.getParentObjectIds();
     }
     var isRel = Object.keys(parents).length > 0;
 
@@ -409,8 +410,8 @@ function dragObject(event) {
     // Shift key makes the object absolute positioned when still held during dropping
     else if (event.shiftKey) {
         // Unhighlight all objects
-        for(var i in g_view.objects)
-            g_view.objects[i].highlight(false);
+        for(var a in g_view.objects)
+            g_view.objects[a].highlight(false);
 
         if (isRel)
             msg = 'Hold SHIFT till drop for absolute positioning';
@@ -544,7 +545,7 @@ function dragStop(event) {
 
     var oParent = null;
     if(event.ctrlKey) {
-        var oParent = getNearestObject(draggingObject, draggingObject.x, draggingObject.y);
+        oParent = getNearestObject(draggingObject, draggingObject.x, draggingObject.y);
         if(oParent)
             oParent.highlight(false);
     }
@@ -777,7 +778,7 @@ function gridParse() {
     // Create grid container and append to map
     var oGrid = document.getElementById('grid');
     if (!oGrid) {
-        var oGrid = document.createElement('div');
+        oGrid = document.createElement('div');
         oGrid.setAttribute('id', 'grid');
         document.getElementById('map').appendChild(oGrid);
     }
@@ -865,7 +866,7 @@ function coordsToGrid(x, y) {
         y = y.split(',');
         for(var i = 0; i < x.length; i++) {
             x[i] = x[i] - (x[i] % addZoomFactor(oViewProperties.grid_steps));
-            y[i] = y[i] - (y[i] % addZoomFactor(ooViewProperties.grid_steps));
+            y[i] = y[i] - (y[i] % addZoomFactor(oViewProperties.grid_steps));
         }
         return [ x.join(','), y.join(',') ];
     } else {
@@ -940,12 +941,13 @@ function updateUserRoles(bAdd) {
     var user_roles = document.getElementById('user_roles');
     var available  = document.getElementById('roles_available');
     var selected   = document.getElementById('roles_selected');
+    var source, target;
     if (bAdd) {
-        var source = available;
-        var target = selected;
+        source = available;
+        target = selected;
     } else {
-        var source = selected;
-        var target = available;
+        source = selected;
+        target = available;
     }
 
     // Quit when no source selected

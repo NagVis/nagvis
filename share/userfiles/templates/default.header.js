@@ -111,8 +111,6 @@ function headerUpdateState(map_conf) {
         }
         side = null;
     }
-
-    head = null;
 }
 
 open_menus = [];
@@ -129,7 +127,6 @@ function headerUpdateStates() {
 
 function ddMenuToggle(event, id) {
     event = event || window.event;
-    var some_open = open_menus.length > 0;
     var this_open = false
     for (var i = 0; i < open_menus.length; i++) {
         if (open_menus[i] == id) {
@@ -323,10 +320,11 @@ function sidebarToggleSubtree(oTitle) {
     var oList = sidebarGetListByTitle(oTitle);
     var this_id = oTitle.id;
     var state = 1;
+    var openNodes;
     if(oUserProperties.sidebarOpenNodes === '')
-        var openNodes = [];
+        openNodes = [];
     else
-        var openNodes = oUserProperties.sidebarOpenNodes.split(',');
+        openNodes = oUserProperties.sidebarOpenNodes.split(',');
 
     var oListItem = oTitle.parentNode.parentNode;
     if(oList.style.display == 'none' || oList.style.display == '') {
