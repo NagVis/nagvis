@@ -1010,6 +1010,9 @@ class GlobalMapCfg {
      */
     private function checkMapConfigIsValid() {
         global $CORE;
+
+        $sources = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : array();
+
         foreach($this->mapConfig AS $id => $element) {
             $type = $element['type'];
 
@@ -1023,7 +1026,7 @@ class GlobalMapCfg {
             foreach(self::$validConfig[$type] AS $key => $val) {
                 // In case of "source" options only validate the ones which belong
                 // to currently enabled sources
-                if(isset($val['source_param']) && !in_array($val['source_param'], $this->getValue(0, 'sources')))
+                if(isset($val['source_param']) && !in_array($val['source_param'], $sources))
                     continue;
 
                 if(isset($val['must']) && $val['must'] == true) {
