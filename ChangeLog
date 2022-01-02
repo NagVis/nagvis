@@ -1,4 +1,8 @@
 1.9.30
+Frontend:
+  * FIX: Fix reload of gadgets in chrome in some situations (#305 Thanks to gzalo)
+  * FIX: Fix line_label_y_offset on weather map line labels (#301 Thanks to
+  corus87)
 
 1.9.29
 Security:
