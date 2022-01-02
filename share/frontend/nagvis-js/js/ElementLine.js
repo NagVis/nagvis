@@ -637,12 +637,6 @@ var ElementLine = Element.extend({
         if (!this.obj.conf.line_label_show || this.obj.conf.line_label_show !== '1')
             return; // skip over when labels are disabled
 
-        // First line label position
-        // Second line label position
-        var cutIn  = this.obj.conf.line_label_pos_in;
-        var cutOut = this.obj.conf.line_label_pos_out;
-        var yOffset = parseInt(this.obj.conf.line_label_y_offset);
-
         this.renderLabel(0);
         this.renderLabel(1);
     },
@@ -659,8 +653,9 @@ var ElementLine = Element.extend({
 	    return;
 	if (this.perfdata === null)
             return;
-	    
-	var yOffset=parseInt(this.obj.conf.line_label_y_offset);
+
+        var y_offset = parseInt(this.obj.conf.line_label_y_offset);
+
         var x1 = this.parts[id][0][0],
             y1 = this.parts[id][0][1],
             x2 = this.parts[id][1][0],
@@ -670,7 +665,7 @@ var ElementLine = Element.extend({
                           : this.obj.conf.line_label_pos_out;
 
         var x = middle(x1, x2, cut),
-            y = middle(y1, y2, cut) + yOffset;
+            y = middle(y1, y2, cut) + y_offset;
 
         var txt;
         if (this.obj.conf.line_type == 13 || this.obj.conf.line_type == 14) {
