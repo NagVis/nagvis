@@ -119,6 +119,10 @@ div.control.togglemid {
 
 /* new overview page */
 
+div.infopage {
+    overflow: auto;    
+}
+
 div.infopage h2 {
     margin: 20px 10px 0 10px;
 }
