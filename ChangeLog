@@ -3,6 +3,11 @@ Frontend:
   * FIX: Fix reload of gadgets in chrome in some situations (#305 Thanks to gzalo)
   * FIX: Fix line_label_y_offset on weather map line labels (#301 Thanks to
   corus87)
+  * Remove builtin "on-demand-filter" header template. It was introduced for
+    supporting NagVis backed "network topology" views in Checkmk, which are not
+    used anymore from Checkmk. Since the template relies on an outdated jquery
+    and select2 3rd party dependency and there does not seem to be a use for it
+    anymore, we drop it now.
 
 1.9.29
 Security:
