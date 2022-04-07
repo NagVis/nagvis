@@ -145,7 +145,7 @@ cat > $OMD_ROOT/etc/apache/conf.d/nagvis.conf <<EOF
 Alias /$OMD_SITE/nagvis/var "$OMD_ROOT/tmp/nagvis/share"
 Alias /$OMD_SITE/nagvis "$OMD_ROOT/local/share/nagvis/htdocs"
 
-<Location ~ "/heute/nagvis/(index\.php|frontend/nagvis-js/index\.php|server/core/ajax_handler\.php)$">
+<Location ~ "/$OMD_SITE/nagvis/(index\.php|frontend/nagvis-js/index\.php|server/core/ajax_handler\.php)$">
   Options +ExecCGI
 </Location>
 
