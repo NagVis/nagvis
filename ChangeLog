@@ -1,5 +1,7 @@
 1.9.31
+Frontend:
   * FIX: Add support for services with single quotes in names (#314 Thanks to Yogibaer75)
+  * FIX: Fix scrolling on overview page (#307 Thanks to ArminRadmueller)
 
 1.9.30
 Frontend:
