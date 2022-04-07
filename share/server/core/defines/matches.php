@@ -71,6 +71,7 @@ define('MATCH_BACKEND_ID', '/^[0-9a-z._-]*$/iu');
 define('MATCH_DOC_DIR', '/^([a-z]{2}_[A-Z]{2})/');
 define('MATCH_MAINCFG_FILE', '/^.+\.ini\.php$/i');
 
+define('MATCH_SERVICE_DESCRIPTION', '/^[0-9a-zа-яё\p{L}\s:+[\]()_.,\'\-\*?!#@=\/\\\]+$/iu');
 define('MATCH_MAP_NAME', '/^[0-9A-Za-z_\-]+$/');
 define('MATCH_MAP_NAME_EMPTY', '/^[0-9A-Za-z_-]*$/');
 define('MATCH_ROTATION_NAME', '/^[0-9A-Za-z_-]+$/');

@@ -803,7 +803,7 @@ $mapConfigVars = Array(
 
     'service_description' => Array(
         'must'       => 1,
-        'match'      => MATCH_STRING,
+        'match'      => MATCH_SERVICE_DESCRIPTION,
         'field_type' => 'dropdown',
         'list'       => 'listServiceNames',
     ),
