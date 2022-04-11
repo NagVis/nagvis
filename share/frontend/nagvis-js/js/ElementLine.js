@@ -861,10 +861,10 @@ var ElementLine = Element.extend({
     /**
      * Transform bits in a perfdata set to a human readable value
      */
-    perfdataCalcBitsReadable: function(set) {
-        var KB   = 1024;
-        var MB   = 1024 * 1024;
-        var GB   = 1024 * 1024 * 1024;
+    perfdataCalcBitsReadable: function(set, kiloMultiplier=1024) {
+        var KB   = kiloMultiplier;
+        var MB   = kiloMultiplier * kiloMultiplier;
+        var GB   = kiloMultiplier * kiloMultiplier * kiloMultiplier;
         if(set[1] > GB) {
             set[1] /= GB
             set[2]  = 'Gbit/s'
@@ -884,10 +884,10 @@ var ElementLine = Element.extend({
     /**
      * Transform bytes in a perfdata set to a human readable value
      */
-    perfdataCalcBytesReadable: function(set) {
-        var KB   = 1024;
-        var MB   = 1024 * 1024;
-        var GB   = 1024 * 1024 * 1024;
+    perfdataCalcBytesReadable: function(set, kiloMultiplier=1000) {
+        var KB   = kiloMultiplier;
+        var MB   = kiloMultiplier * kiloMultiplier;
+        var GB   = kiloMultiplier * kiloMultiplier * kiloMultiplier;
         if(set[1] > GB) {
             set[1] /= GB
             set[2]  = 'GB/s'
