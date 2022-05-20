@@ -1692,7 +1692,7 @@ class Dwoo_Compiler implements Dwoo_ICompiler
 					$defValue = false;
 				} elseif ($defValue === 'true') {
 					$defValue = true;
-				} elseif (preg_match('#^([\'"]).*?\1$#', $defValue)) {
+				} elseif ($hasDefault && preg_match('#^([\'"]).*?\1$#', $defValue)) {
 					$defValue = substr($defValue, 1, -1);
 				}
 				$map[] = array($param, $hasDefault, $defValue);

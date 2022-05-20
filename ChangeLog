@@ -1,4 +1,6 @@
 1.9.32
+Core:
+  * FIX: Fix PHP 8.1 incompatibility
 
 1.9.31
 Frontend:
