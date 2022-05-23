@@ -861,7 +861,7 @@ var ElementLine = Element.extend({
     /**
      * Transform bits in a perfdata set to a human readable value
      */
-    perfdataCalcBitsReadable: function(set, kiloMultiplier=1024) {
+    perfdataCalcBitsReadable: function(set, kiloMultiplier=1000) {
         var KB   = kiloMultiplier;
         var MB   = kiloMultiplier * kiloMultiplier;
         var GB   = kiloMultiplier * kiloMultiplier * kiloMultiplier;
