@@ -2,6 +2,8 @@
 Frontend:
   * FIX: Weathermap lines of Checkmk monitored network interfaces displaying
     network traffic in bytes instead of bits
+  * FIX: Weathermap lines of Checkmk use 1000 as base instead of 1024
+    (#315 Thanks to soeren-gugel)
 
 1.9.32
 Core:
