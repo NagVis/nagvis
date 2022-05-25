@@ -262,7 +262,7 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
         $obj = json_decode($data['object'], true);
         $objects[$obj['object_id']] = $obj;
         // check all coordinates for relative coords
-        $coords = array($data['lat'], $data['lng'], $data['lat2'], $data['lng2']);
+        $coords = array_map('strval', array($data['lat'], $data['lng'], $data['lat2'], $data['lng2']));
         foreach ($coords as $coord) {
             if (strpos($coord, '%') !== false) {
                 $referenced[substr($coord, 0, 6)] = null;
