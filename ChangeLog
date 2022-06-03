@@ -1,6 +1,6 @@
 1.9.34
-Core:
-  * FIX: Fix worldmap PHP 8.1 incompatibility
+Worldmap:
+  * FIX: Fix PHP 8.1 incompatibility (#316 Thanks to loocars)
 
 1.9.33
 Frontend:
