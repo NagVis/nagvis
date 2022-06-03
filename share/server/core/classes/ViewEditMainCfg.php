@@ -183,7 +183,8 @@ class ViewEditMainCfg {
                         echo l('No');
                 break;
                 default:
-                    echo escape_html($def_val);
+                    if ($def_val !== null)
+                        echo escape_html($def_val);
             }
             echo '</div>';
 
