@@ -81,6 +81,19 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             'default'  => '',
             'match'    => MATCH_STRING_PATH,
         ),
+        'verify_peer' => Array(
+          'must'       => 0,
+          'editable'   => 1,
+          'default'    => 1,
+          'match'      => MATCH_BOOLEAN,
+          'field_type' => 'boolean',
+        ),
+        'ca_path' => Array(
+          'must'      => 0,
+          'editable'  => 1,
+          'default'   => '',
+          'match'     => MATCH_STRING_PATH,
+        ),
         'timeout' => Array(
           'must'      => 1,
           'editable'  => 1,
@@ -97,11 +110,30 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
 
         $this->baseUrl = cfg('backend_'.$backendId, 'base_url');
 
-        $httpContext = array( 
+        $httpContext = array(
             'method'     => 'GET',
             'user_agent' => 'NagVis BI Backend',
             'timeout'    => cfg('backend_'.$backendId, 'timeout'),
         );
+
+        $sslContext = array();
+
+        if (cfg('backend_'.$backendId, 'verify_peer') == true) {
+            $sslContext = array(
+                'verify_peer'      => true,
+                'verify_peer_name' => false,
+                'verify_depth'     => 1,
+            );
+            $ca_path = cfg('backend_'.$backendId, 'ca_path');
+            if ($ca_path) {
+                $sslContext['cafile'] = $ca_path;
+            }
+        } else {
+            $sslContext = array(
+                'verify_peer'      => false,
+                'verify_peer_name' => false,
+            );
+        }
 
         // Always set the HTTP basic auth header
         $username = cfg('backend_'.$backendId, 'auth_user');
@@ -111,7 +143,10 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             $httpContext['header'] = 'Authorization: Basic '.$authCred."\r\n";
         }
 
-        $this->context = stream_context_create(array('http' => $httpContext));
+        $this->context = stream_context_create(array(
+            'http' => $httpContext,
+            'ssl'  => $sslContext,
+        ));
     }
 
     /**************************************************************************
