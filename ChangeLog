@@ -1,4 +1,7 @@
 1.9.34
+Core:
+  * FIX: BI-Backend HTTPS incompatibility
+
 Frontend:
   * FIX: Fix PHP 8.1 incompatibility in different configuration dialogs
 
