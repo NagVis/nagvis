@@ -1,6 +1,6 @@
 1.9.34
 Frontend:
-  * FIX: Fix PHP 8.1 incompatibility in "General configuration" dialog
+  * FIX: Fix PHP 8.1 incompatibility in different configuration dialogs
 
 Worldmap:
   * FIX: Fix PHP 8.1 incompatibility (#316 Thanks to loocars)
