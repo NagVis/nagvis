@@ -51,13 +51,31 @@
         <td>The authentication secret configured within Check_MK for the tiven user.</td>
     </tr>
     <tr>
-            <td>timeout</td>
-            <td>5</td>
-            <td>
-                <font color="#f00">New in 1.9b11</font>: This option controls the request timeout 
-                of the HTTP requests to Check_MK BI.
-            </td>
-        </tr>
+        <td>verify_peer</td>
+        <td>1</td>
+        <td>
+            <font color="#f00">New in 1.9.34</font>: Whether to verify the
+            certificate the HTTPS server is providing.
+        </td>
+    </tr>
+    <tr>
+        <td>ca_path</td>
+        <td></td>
+        <td>
+            <font color="#f00">New in 1.9.34</font>: Location of Certificate
+            Authority file on local filesystem which should be used with the
+            verify_peer context option to authenticate the identity of the
+            remote peer.
+        </td>
+    </tr>
+    <tr>
+        <td>timeout</td>
+        <td>5</td>
+        <td>
+            <font color="#f00">New in 1.9b11</font>: This option controls the request timeout 
+            of the HTTP requests to Check_MK BI.
+        </td>
+    </tr>
     </table>
     <p>There are also some general backend parameters. You can read about them in 
        <a href="nagvis_config_format_description.html#backend">main configuration format description</a>.</p>

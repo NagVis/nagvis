@@ -1,6 +1,7 @@
 1.9.34
 Core:
-  * FIX: BI-Backend HTTPS incompatibility
+  * Checkmk BI backend: Add verify_peer and ca_path options to configure
+    parameters for HTTPS certificate verification (#317 Thanks to loocars)
 
 Frontend:
   * FIX: Fix PHP 8.1 incompatibility in different configuration dialogs
