@@ -88,6 +88,12 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
           'match'      => MATCH_BOOLEAN,
           'field_type' => 'boolean',
         ),
+        'verify_depth' => Array(
+            'must'       => 0,
+            'editable'   => 1,
+            'default'    => 3,
+            'match'      => MATCH_INTEGER,
+        ),
         'ca_path' => Array(
           'must'      => 0,
           'editable'  => 1,
@@ -122,7 +128,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             $sslContext = array(
                 'verify_peer'      => true,
                 'verify_peer_name' => false,
-                'verify_depth'     => 1,
+                'verify_depth'     => cfg('backend_'.$backendId, 'verify_depth'),
             );
             $ca_path = cfg('backend_'.$backendId, 'ca_path');
             if ($ca_path) {

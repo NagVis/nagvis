@@ -1,6 +1,6 @@
 1.9.34
 Core:
-  * Checkmk BI backend: Add verify_peer and ca_path options to configure
+  * Checkmk BI backend: Add verify_peer, ca_path and verify_depth options to configure
     parameters for HTTPS certificate verification (#317 Thanks to loocars)
 
 Frontend:
