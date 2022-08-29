@@ -11,6 +11,12 @@ Worldmap:
 
 Security:
   * FIX: Fix SSRF (triggerable by admin users) in geomap.php (#319 Thanks to dontqwerty)
+  * FIX: Fix arbitrary file read in (#322 Thanks to Shortfinga)
+  * FIX: Fix type juggling vulnerability in cookie hash processing (#321 Thanks to Shortfinga)
+  * Add option to enable compatibility with Checkmk 2.2 cookies. This needs to
+    be enable with a new configuration option (logon_multisite_cookie_version).
+    This setting will automatically be enabled when NagVis is shipped together
+    with Checkmk. (#323 Thanks to Shortfinga)
 
 1.9.33
 Frontend:
