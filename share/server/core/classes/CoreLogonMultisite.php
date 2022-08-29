@@ -30,9 +30,10 @@ class CoreLogonMultisite extends CoreLogonModule {
     private $authFile;
 
     public function __construct() {
-        $this->htpasswdPath = cfg('global', 'logon_multisite_htpasswd');
-        $this->serialsPath  = cfg('global', 'logon_multisite_serials');
-        $this->secretPath   = cfg('global', 'logon_multisite_secret');
+        $this->htpasswdPath  = cfg('global', 'logon_multisite_htpasswd');
+        $this->serialsPath   = cfg('global', 'logon_multisite_serials');
+        $this->secretPath    = cfg('global', 'logon_multisite_secret');
+        $this->cookieVersion = cfg('global', 'logon_multisite_cookie_version');
 
         // When the auth.serial file exists, use this instead of the htpasswd
         // for validating the cookie. The structure of the file is equal, so
@@ -71,6 +72,11 @@ class CoreLogonMultisite extends CoreLogonModule {
 
     private function generateHash($username, $session_id, $user_secret) {
         $secret = $this->loadSecret();
+        return hash_hmac("sha256", $username . $session_id. $user_secret, $secret);
+    }
+
+    private function generatePre22Hash($username, $session_id, $user_secret) {
+        $secret = $this->loadSecret();
         return hash("sha256", $username . $session_id. $user_secret . $secret);
     }
 
@@ -101,17 +107,27 @@ class CoreLogonMultisite extends CoreLogonModule {
         }
         $user_secret = $users[$username];
 
-        // Checkmk 2.0 changed the following:
-        // a) 2nd field from "issue time" to session ID
-        // b) 3rd field from md5 hash to sha256 hash
-        // NagVis is used with older and newer Checkmk versions. Be compatible
-        // to both cookie formats.
-        $is_pre_20_cookie = strlen($cookieHash) == 32;
+	if ($this->cookieVersion < 1) {
+	    // Older Checkmk versions do not set the cookieVersion, therefore we guess based on the length.
 
-        if ($is_pre_20_cookie)
-            $hash = $this->generatePre20Hash($username, $sessionId, (string) $user_secret);
-        else
+            // Checkmk 2.0 changed the following:
+            // a) 2nd field from "issue time" to session ID
+            // b) 3rd field from md5 hash to sha256 hash
+            // NagVis is used with older and newer Checkmk versions. Be compatible
+            // to both cookie formats.
+            $is_pre_20_cookie = strlen($cookieHash) == 32;
+
+            if ($is_pre_20_cookie)
+                $hash = $this->generatePre20Hash($username, $sessionId, (string) $user_secret);
+            else
+                $hash = $this->generatePre22Hash($username, $sessionId, (string) $user_secret);
+	}
+	elseif ($this->cookieVersion == 1) {
             $hash = $this->generateHash($username, $sessionId, (string) $user_secret);
+	}
+	else {
+            throw new NagVisException(l('The Multisite Cookie version is not supported'));
+	}
 
         // Validate the hash
         if ($cookieHash !== $hash) {
