@@ -114,11 +114,9 @@ class CoreLogonMultisite extends CoreLogonModule {
             $hash = $this->generateHash($username, $sessionId, (string) $user_secret);
 
         // Validate the hash
-        if ($cookieHash != $hash) {
+        if ($cookieHash !== $hash) {
             throw new Exception();
         }
-
-        // FIXME: Maybe renew the cookie here too
 
         return $username;
     }
