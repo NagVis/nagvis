@@ -1,3 +1,5 @@
+1.9.35
+
 1.9.34
 Core:
   * Checkmk BI backend: Add verify_peer, ca_path and verify_depth options to configure
