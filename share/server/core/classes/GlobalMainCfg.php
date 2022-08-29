@@ -258,6 +258,14 @@ class GlobalMainCfg {
                     'depends_value' => 'LogonMultisite',
                     'match'         => MATCH_STRING_PATH,
                 ),
+                'logon_multisite_cookie_version' => Array(
+                    'must'          => 0,
+                    'editable'      => 1,
+                    'default'       => '0',
+                    'depends_on'    => 'logonmodule',
+                    'depends_value' => 'LogonMultisite',
+                    'match'         => MATCH_INTEGER,
+                ),
                 'logon_multisite_createuser' => Array(
                     'must'          => 1,
                     'editable'      => 1,
