@@ -9,6 +9,9 @@ Frontend:
 Worldmap:
   * FIX: Fix PHP 8.1 incompatibility (#316 Thanks to loocars)
 
+Security:
+  * FIX: Fix SSRF (triggerable by admin users) in geomap.php (#319 Thanks to dontqwerty)
+
 1.9.33
 Frontend:
   * FIX: Weathermap lines of Checkmk monitored network interfaces displaying
