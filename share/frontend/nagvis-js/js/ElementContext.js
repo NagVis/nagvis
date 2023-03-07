@@ -46,7 +46,7 @@ function context_handle_global_mousedown(event) {
     else {
         // Check for click on the context menu and do nothing in this case
         var object_id = target.id.split('-')[0];
-        if (object_id == g_context_open.obj.conf.object_id)
+        if (g_context_open && object_id == g_context_open.obj.conf.object_id)
             return preventDefaultEvents(event);
     }
 }
@@ -192,7 +192,12 @@ var ElementContext = Element.extend({
         if (this.dom_obj) {
             this.dom_obj.style.display = 'none';
         }
-        g_context_open = null;
+        if(g_context_open) {
+            const context_obj = document.getElementById(g_context_open.obj.conf.object_id+'-context');
+            if (context_obj)
+                context_obj.style.display = 'none';
+            g_context_open = null;
+        }
     },
 
     renderMenu: function () {
