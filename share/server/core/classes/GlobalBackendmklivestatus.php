@@ -193,7 +193,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         // errors later with an own error message
         // FIXME: Maybe use pfsockopen in the future to use persistent connections
         if($this->socketType === 'unix') {
-            $this->SOCKET = fsockopen('unix://'.$this->socketPath, NULL, $errno, $errstr, (float) cfg('backend_'.$this->backendId, 'timeout'));
+            $this->SOCKET = fsockopen('unix://'.$this->socketPath, -1, $errno, $errstr, (float) cfg('backend_'.$this->backendId, 'timeout'));
 
         } elseif($this->socketType === 'tcp-tls') {
             if (cfg('backend_'.$this->backendId, 'verify_tls_peer') == true) {
