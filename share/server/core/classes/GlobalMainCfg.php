@@ -40,6 +40,7 @@ function listAvailableLanguages() {
 class GlobalMainCfg {
     private $useCache = true;
     private $CACHE;
+    private $PUCACHE;
 
     protected $config = Array();
     protected $preUserConfig = null;

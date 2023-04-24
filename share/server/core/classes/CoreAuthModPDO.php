@@ -24,6 +24,7 @@
 
 class CoreAuthModPDO extends CoreAuthModule {
     private $USERCFG;
+    private $DB;
 
     private $iUserId = -1;
     private $sUsername = '';

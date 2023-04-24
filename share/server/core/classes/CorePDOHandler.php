@@ -44,6 +44,12 @@ class CorePDOHandler {
     private $file = null;
     private $dsn = null;
 
+    private $driver = null;
+    private $data = null;
+    private $updating = false;
+    private $lastErrorInfo = null;
+    private $inTrans = false;
+
     // needs to be initialized after class declaration because directly
     // initializing it here is a syntax error in PHP 5.3
     private static $DRIVERS = null;

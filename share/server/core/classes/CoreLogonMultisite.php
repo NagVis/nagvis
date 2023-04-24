@@ -27,6 +27,7 @@ class CoreLogonMultisite extends CoreLogonModule {
     private $htpasswdPath;
     private $serialsPath;
     private $secretPath;
+    private $cookieVersion;
     private $authFile;
 
     public function __construct() {
