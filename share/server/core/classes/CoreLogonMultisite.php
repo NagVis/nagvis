@@ -34,7 +34,7 @@ class CoreLogonMultisite extends CoreLogonModule {
         $this->htpasswdPath  = cfg('global', 'logon_multisite_htpasswd');
         $this->serialsPath   = cfg('global', 'logon_multisite_serials');
         $this->secretPath    = cfg('global', 'logon_multisite_secret');
-        $this->cookieVersion = cfg('global', 'logon_multisite_cookie_version');
+        $this->cookieVersion = intval(cfg('global', 'logon_multisite_cookie_version'));
 
         // When the auth.serial file exists, use this instead of the htpasswd
         // for validating the cookie. The structure of the file is equal, so
@@ -68,7 +68,7 @@ class CoreLogonMultisite extends CoreLogonModule {
     }
 
     private function loadSecret() {
-        return trim(file_get_contents($this->secretPath));
+        return file_get_contents($this->secretPath);
     }
 
     private function generateHash($username, $session_id, $user_secret) {
