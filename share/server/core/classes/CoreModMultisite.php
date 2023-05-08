@@ -159,8 +159,8 @@ class CoreModMultisite extends CoreModule {
             );
             $MAP->MAPOBJ->setConfiguration($objConf);
 
+            $state = null;
             if($config_error !== null) {
-                $MAP->MAPOBJ->clearMembers();
                 $state = array(
                     ERROR,
                     l('Map Configuration Error: ').$config_error,
@@ -168,10 +168,7 @@ class CoreModMultisite extends CoreModule {
                     null,
                     null,
                 );
-                $MAP->MAPOBJ->setState($state);
-                $MAP->MAPOBJ->setSummary($state);
             } elseif($error !== null) {
-                $MAP->MAPOBJ->clearMembers();
                 $state = array(
                     ERROR,
                     l('Error: ').$error,
@@ -179,31 +176,33 @@ class CoreModMultisite extends CoreModule {
                     null,
                     null,
                 );
-                $MAP->MAPOBJ->setState($state);
-                $MAP->MAPOBJ->setSummary($state);
             } elseif(!$MAP->MAPOBJ->checkMaintenance(0)) {
-                $MAP->MAPOBJ->clearMembers();
                 $state = array(
-                    UNKNOWN,
+                    PENDING,
                     l('mapInMaintenance'),
                     null,
                     null,
                     null
                 );
-                $MAP->MAPOBJ->setState($state);
-                $MAP->MAPOBJ->setSummary($state);
+            } else {
+                $MAP->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
             }
 
-            $MAP->MAPOBJ->fetchIcon();
-            $MAP->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
-            $aObjs[] = $MAP->MAPOBJ;
+            $aObjs[] = array($MAP->MAPOBJ, $state);
         }
 
         $_BACKEND->execute();
 
         $aMaps = Array();
-        foreach($aObjs AS $MAP) {
-            $MAP->applyState();
+        foreach($aObjs AS list($MAP, $state)) {
+            if ($state !== null) {
+                $MAP->clearMembers();
+                $MAP->setState($state);
+                $MAP->setSummary($state);
+            } else {
+                $MAP->applyState();
+            }
+
             $MAP->fetchIcon();
 
             $aMaps[] = $MAP->getObjectInformation();
