@@ -2,6 +2,7 @@
 Core
   * FIX: Fix PHP 8.2 various incompatibilities
   * FIX: Fix PHP 8.1 fsockopen incompatibility (#337 Thanks to loocars)
+  * FIX: Fix Checkmk Snapin displaying status output when hovering the state icon
 
 1.9.34
 Core:

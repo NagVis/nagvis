@@ -212,6 +212,15 @@ class NagVisStatefulObject extends NagVisObject {
     }
 
     /**
+     * PUBLIC setSummary()
+     *
+     * Set the summary object
+     */
+    public function setSummary($s) {
+        $this->sum = $s;
+    }
+
+    /**
      * PUBLIC setSummaryState()
      *
      * Set the summary state of the object

@@ -93,6 +93,7 @@ class CoreModMultisite extends CoreModule {
             "alias" => $map['alias'],
             "url" => cfg('paths', 'htmlbase').'/index.php?mod=Map&act=view&show='.$map['name'],
             "summary_state" => $map["summary_state"],
+            "summary_output" => $map["summary_output"],
             "summary_in_downtime" => $map['summary_in_downtime'],
             "summary_problem_has_been_acknowledged" => $map['summary_problem_has_been_acknowledged'],
             "summary_stale" => $map['summary_stale'],
@@ -160,31 +161,37 @@ class CoreModMultisite extends CoreModule {
 
             if($config_error !== null) {
                 $MAP->MAPOBJ->clearMembers();
-                $MAP->MAPOBJ->setState(array(
+                $state = array(
                     ERROR,
                     l('Map Configuration Error: ').$config_error,
                     null,
                     null,
                     null,
-                ));
+                );
+                $MAP->MAPOBJ->setState($state);
+                $MAP->MAPOBJ->setSummary($state);
             } elseif($error !== null) {
                 $MAP->MAPOBJ->clearMembers();
-                $MAP->MAPOBJ->setState(array(
+                $state = array(
                     ERROR,
                     l('Error: ').$error,
                     null,
                     null,
                     null,
-                ));
+                );
+                $MAP->MAPOBJ->setState($state);
+                $MAP->MAPOBJ->setSummary($state);
             } elseif(!$MAP->MAPOBJ->checkMaintenance(0)) {
                 $MAP->MAPOBJ->clearMembers();
-                $MAP->MAPOBJ->setState(array(
+                $state = array(
                     UNKNOWN,
                     l('mapInMaintenance'),
                     null,
                     null,
                     null
-                ));
+                );
+                $MAP->MAPOBJ->setState($state);
+                $MAP->MAPOBJ->setSummary($state);
             }
 
             $MAP->MAPOBJ->fetchIcon();
