@@ -159,6 +159,9 @@ class CoreModMultisite extends CoreModule {
             );
             $MAP->MAPOBJ->setConfiguration($objConf);
 
+            $sources = $MAPCFG->getValue(0, 'sources') !== false ? $MAPCFG->getValue(0, 'sources') : array();
+            $is_worldmap = in_array('worldmap', $sources);
+
             $state = null;
             if($config_error !== null) {
                 $state = array(
@@ -172,6 +175,30 @@ class CoreModMultisite extends CoreModule {
                 $state = array(
                     ERROR,
                     l('Error: ').$error,
+                    null,
+                    null,
+                    null,
+                );
+            } elseif($is_worldmap) {
+                // To give the correct state aggregation for the area of the
+                // worldmap the user would see when opening the worldmap, we would
+                // need this:
+                //
+                //   1. Viewport resolution of the users browser
+                //   2. Code needed to compute the bbox (LeafletJS)
+                //
+                // The first could be provided by the Checkmk frontend code. But
+                // the later one is not available there. We also don't have code
+                // to compute it in the PHP code. So, instead of doing things that
+                // would surprise users, we just skip the state computation for
+                // worldmaps here.
+                //
+                // The NagVis internal overview page needs something similar, but
+                // there we have everything we need. See the function addMap() in
+                // share/frontend/nagvis-js/js/ViewOverview.js.
+                $state = array(
+                    PENDING,
+                    l('Worldmaps don\'t support state preview'),
                     null,
                     null,
                     null,

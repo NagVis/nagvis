@@ -3,6 +3,16 @@ Core
   * FIX: Fix PHP 8.2 various incompatibilities
   * FIX: Fix PHP 8.1 fsockopen incompatibility (#337 Thanks to loocars)
   * FIX: Fix Checkmk Snapin displaying status output when hovering the state icon
+  * FIX: Disable state preview for worldmaps in Checkmk snapin. The state
+    previews do not work correctly for worldmaps. To be able to calculate the
+    state preview, we would need the area of the map the user would see when
+    opening the map. To be able to do so, we need this information when
+    rendering the snapin: a) the viewport size and b) the NagVis javascript
+    code. Both is not available in this situation, so we can not correctly
+    render it. In the past the computation was done based on information cached
+    in NagVis, which could produce aggregated states, but these might be
+    misleading as they did not necessarily represent the state of the objects
+    you see in the map.
 
 1.9.34
 Core:
