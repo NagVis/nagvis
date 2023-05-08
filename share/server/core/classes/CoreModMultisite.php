@@ -167,7 +167,6 @@ class CoreModMultisite extends CoreModule {
                     null,
                     null,
                 ));
-                $MAP->MAPOBJ->fetchIcon();
             } elseif($error !== null) {
                 $MAP->MAPOBJ->clearMembers();
                 $MAP->MAPOBJ->setState(array(
@@ -177,10 +176,7 @@ class CoreModMultisite extends CoreModule {
                     null,
                     null,
                 ));
-                $MAP->MAPOBJ->fetchIcon();
-            } elseif($MAP->MAPOBJ->checkMaintenance(0)) {
-                $MAP->MAPOBJ->fetchIcon();
-            } else {
+            } elseif(!$MAP->MAPOBJ->checkMaintenance(0)) {
                 $MAP->MAPOBJ->clearMembers();
                 $MAP->MAPOBJ->setState(array(
                     UNKNOWN,
@@ -189,9 +185,9 @@ class CoreModMultisite extends CoreModule {
                     null,
                     null
                 ));
-                $MAP->MAPOBJ->fetchIcon();
             }
 
+            $MAP->MAPOBJ->fetchIcon();
             $MAP->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
             $aObjs[] = $MAP->MAPOBJ;
         }
