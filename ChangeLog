@@ -1,4 +1,6 @@
 1.9.36
+Geomap:
+  * Fix PHP 5.4 incompatibility (#341 Thanks to loocars)
 
 1.9.35
 Core
