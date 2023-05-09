@@ -6,8 +6,6 @@ class GeomapError extends MapSourceError {}
 // CSV source file handling
 //
 
-const ACCEPTED_GEOMAP_SERVER_URL_SCHEMES = ["http", "https"];
-
 function geomap_source_file($p) {
     return cfg('paths', 'geomap') . '/' . $p['source_file'] . '.csv';
 }
@@ -280,7 +278,7 @@ function validate_geomap_server_base_url($url) {
     }
 
     $url_scheme = parse_url($url, PHP_URL_SCHEME);
-    if (!$url_scheme || !in_array(strtolower($url_scheme), ACCEPTED_GEOMAP_SERVER_URL_SCHEMES)) {
+    if (!$url_scheme || !in_array(strtolower($url_scheme), ["http", "https"])) {
         throw new GeomapError(l('Invalid scheme in Geomap server URL: "[U]"',
             array('U' => $url)));
     }
