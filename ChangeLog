@@ -135,6 +135,8 @@ Worldmap
   * Improve recently introduced textbox scaling according to zoom (pull #263)
 
 1.9.21
+Worldmap:
+  * improved rendering performance
 Frontend:
   * FIX: Additional fix for weathermap lines byte/bit handling for Checkmk
          interface checks (issue #256)

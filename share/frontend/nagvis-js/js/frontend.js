@@ -667,7 +667,7 @@ function getViewParams(update, userParams) {
 
     if (g_map && usesSource('worldmap')) {
         let bounds = g_map.getBounds();
-        bounds = bounds.pad(0.95); // also load objects within 95% beyond actual viewport (better dragging experience)
+        bounds = bounds.pad(0.50); // also load objects within 50% beyond actual viewport (better dragging experience)
         params['bbox'] = bounds.toBBoxString();
     }
 

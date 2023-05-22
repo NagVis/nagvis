@@ -81,7 +81,7 @@ var ViewOverview = View.extend({
         container.appendChild(obj.dom_obj);
     },
 
-    // Removes the given objects dom_obj from the maps dom_obj 
+    // Removes the given objects dom_obj from the maps dom_obj
     eraseObject: function(obj) {
         var container = document.getElementById('overviewMaps');
         if (obj.dom_obj.parentNode == container)
@@ -117,6 +117,8 @@ var ViewOverview = View.extend({
                 minZoom: 2
             }).setView(map_conf['worldmap_center'].split(','), parseInt(map_conf['worldmap_zoom']));
 
+            let boundingBox = worldmap.getBounds().toBBoxString();
+
             worldmap.remove();
 
             // leaflet does not clean up everything. We do it on our own.
@@ -128,7 +130,7 @@ var ViewOverview = View.extend({
             this.processed_maps -= 1;
             call_ajax(oGeneralProperties.path_server+'?mod=Overview&act=getObjectStates'
                       + '&i[]=map-' + escapeUrlValues(map_name)
-                      + getViewParams({'bbox': worldmap.getBounds().toBBoxString()}), {
+                      + getViewParams({'bbox': boundingBox}), {
                 response_handler : this.addMap.bind(this),
                 handler_data     : [ map_name, true ]
             });
