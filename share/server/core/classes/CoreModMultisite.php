@@ -198,7 +198,7 @@ class CoreModMultisite extends CoreModule {
                 // share/frontend/nagvis-js/js/ViewOverview.js.
                 $state = array(
                     PENDING,
-                    l('Worldmaps don\'t support state preview'),
+                    l('Worldmaps do not support state preview'),
                     null,
                     null,
                     null,
