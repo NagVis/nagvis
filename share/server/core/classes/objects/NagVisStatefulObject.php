@@ -285,7 +285,7 @@ class NagVisStatefulObject extends NagVisObject {
             if(self::$dateFormat == '') {
                 self::$dateFormat = cfg('global','dateformat');
             }
-            return date(self::$dateFormat, $this->state[$attr]);
+            return date(self::$dateFormat, intval($this->state[$attr]));
         } else {
             return 'N/A';
         }
