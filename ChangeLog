@@ -3,6 +3,9 @@ Core:
   * FIX: MySQL 8.0 - Fix "Invalid JSON response" (#348 Thanks to KayckMatias)
   * FIX PHP 8.1: Deprecated: Implicit conversion from float (#347 Thanks to KayckMatias)
 
+Frontend:
+  * FIX: Fix context menu not hiding in some situations (#333 Thanks to euniceremoquillo)
+
 Geomap:
   * Fix PHP 5.4 incompatibility (#341 Thanks to loocars)
 
