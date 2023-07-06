@@ -1,4 +1,8 @@
 1.9.36
+Core:
+  * FIX: MySQL 8.0 - Fix "Invalid JSON response" (#348 Thanks to KayckMatias)
+  * FIX PHP 8.1: Deprecated: Implicit conversion from float (#347 Thanks to KayckMatias)
+
 Geomap:
   * Fix PHP 5.4 incompatibility (#341 Thanks to loocars)
 
