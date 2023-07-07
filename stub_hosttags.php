@@ -11,7 +11,7 @@ function taggroup_title($group_id) {
     if (isset($mk_hosttags[$group_id]))
         return $mk_hosttags[$group_id][0];
     else
-        return $taggroup;
+        return $group_id;
 }
 
 function taggroup_choice($group_id, $object_tags) {
