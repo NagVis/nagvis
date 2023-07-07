@@ -81,6 +81,16 @@ class NagVisStatefulObject extends NagVisObject {
         }
     }
 
+    // Returns the display_name of an object, if available, otherwise
+    // the alias of an object, if available, otherwise the name
+    public function getDisplayName() {
+        if (isset($this->state[DISPLAY_NAME]) && $this->state[DISPLAY_NAME] != '')
+            return $this->state[DISPLAY_NAME];
+        if (isset($this->state[ALIAS]))
+            return $this->state[ALIAS];
+        parent::getDisplayName();
+    }
+
     /**
      * Adds new members to the object. It works incremental!
      */
