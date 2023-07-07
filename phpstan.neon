@@ -1,0 +1,14 @@
+parameters:
+    level: 0
+    paths:
+        - .
+    excludePaths:
+        - share/frontend/nagvis-js/ext
+        - share/server/core/ext
+        - etc/conf.d/demo.ini.php
+    bootstrapFiles:
+        - share/server/core/defines/global.php
+        - share/server/core/defines/matches.php
+        - share/frontend/nagvis-js/ext/dwoo-1.1.0/dwooAutoload.php
+        - share/server/core/ext/php-gettext-1.0.12/gettext.inc
+        - stub_multisite_auth.php
