@@ -43,6 +43,10 @@ class NagVisService extends NagVisStatefulObject {
         parent::__construct();
     }
 
+    public function getName() {
+        return $this->host_name;
+    }
+
     public function getNumMembers() {
          return null;
     }

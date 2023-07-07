@@ -26,7 +26,6 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-#[AllowDynamicProperties]
 class NagVisObject {
     protected $conf = array();
 
@@ -129,18 +128,9 @@ class NagVisObject {
 
     /**
      * Get method for the name of the object
-     *
-     * @return	String		Name of the object
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getName() {
-        if($this->type == 'dyngroup' || $this->type == 'aggr') {
-            return $this->name;
-        } elseif ($this->type == 'service') {
-            return $this->host_name;
-        } else {
-            return $this->{$this->type.'_name'};
-        }
+        return $this->{$this->type.'_name'};
     }
 
     // Returns the display_name of an object, if available, otherwise
@@ -166,9 +156,6 @@ class NagVisObject {
 
     /**
      * Set method for the object coords
-     *
-     * @return	Array		Array of the objects coords
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setMapCoords($arrCoords) {
         $this->setConfiguration($arrCoords);

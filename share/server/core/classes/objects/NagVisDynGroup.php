@@ -41,6 +41,10 @@ class NagVisDynGroup extends NagVisStatefulObject {
         parent::__construct();
     }
 
+    public function getName() {
+        return $this->name;
+    }
+
     public function getObjectFilter() {
         // convert '\n' to \n
         return str_replace('\n', "\n", $this->object_filter);

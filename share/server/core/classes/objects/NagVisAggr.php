@@ -41,6 +41,10 @@ class NagVisAggr extends NagVisStatefulObject {
         parent::__construct();
     }
 
+    public function getName() {
+        return $this->name;
+    }
+
     /**
      * Queues the state fetching to the backend.
      * @param   Boolean  Unused flag here
