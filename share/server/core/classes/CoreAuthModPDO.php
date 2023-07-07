@@ -22,6 +22,7 @@
  *
  ******************************************************************************/
 
+#[AllowDynamicProperties]
 class CoreAuthModPDO extends CoreAuthModule {
     private $USERCFG;
     private $DB;

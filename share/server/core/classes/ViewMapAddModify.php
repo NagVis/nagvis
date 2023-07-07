@@ -24,6 +24,7 @@
 
 class ViewMapAddModify {
     private $MAPCFG = null;
+    private $mode = null;
 
     // object related vars
     private $object_id   = null;

@@ -40,6 +40,7 @@ class NagVisMapObj extends NagVisStatefulObject {
     protected $linkedMaps;
 
     protected $map_name;
+    protected $alias;
 
     // When this map object summarizes the state of a map this is true
     // Prevents loops

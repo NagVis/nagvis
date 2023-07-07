@@ -24,6 +24,7 @@
 
 class CoreModMainCfg extends CoreModule {
     private $name = null;
+    private $CORE;
 
     public function __construct(GlobalCore $CORE) {
         $this->sName = 'MainCfg';

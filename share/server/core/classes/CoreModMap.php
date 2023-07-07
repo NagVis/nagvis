@@ -27,6 +27,8 @@
  */
 class CoreModMap extends CoreModule {
     private $name = null;
+    private $CORE;
+    private $htmlBase;
 
     public function __construct(GlobalCore $CORE) {
         $this->sName = 'Map';

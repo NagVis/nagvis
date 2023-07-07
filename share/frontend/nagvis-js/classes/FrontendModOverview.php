@@ -28,6 +28,8 @@
 class FrontendModOverview extends FrontendModule {
     private $rotation = '';
     private $rotationStep = '';
+    private $CORE;
+    private $VIEW;
 
     public function __construct(GlobalCore $CORE) {
         $this->sName = 'Overview';

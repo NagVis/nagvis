@@ -26,6 +26,7 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
+#[AllowDynamicProperties]
 class NagVisObject {
     protected $conf = array();
 

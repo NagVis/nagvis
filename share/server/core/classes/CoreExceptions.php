@@ -88,6 +88,9 @@ class UserInputError extends NagVisException {}
 class InputErrorRedirect extends NagVisException {}
 
 class FieldInputError extends NagVisException {
+    public $field;
+    public $msg;
+
     function __construct($field, $msg) {
         $this->field = $field;
         $this->msg   = $msg;

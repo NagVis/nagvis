@@ -26,6 +26,8 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class FrontendModMap extends FrontendModule {
+    private $CORE;
+    private $VIEW;
     private $name = '';
     private $search = '';
     private $rotation = '';

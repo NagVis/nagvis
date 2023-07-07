@@ -44,6 +44,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     private $socketPath = '';
     private $socketAddress = '';
     private $socketPort = 0;
+    private $socketSpec = '';
 
     // These are the backend local configuration options
     private static $validConfig = Array(

@@ -24,6 +24,9 @@
 
 class ViewManageBackends {
     private $error = null;
+    private $editable_backends;
+    private $defined_backends;
+    private $available_backends;
 
     public function __construct() {
         global $CORE;

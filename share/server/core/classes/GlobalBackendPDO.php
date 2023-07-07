@@ -25,6 +25,7 @@
  *
  *****************************************************************************/
 
+#[AllowDynamicProperties]
 class GlobalBackendPDO implements GlobalBackendInterface {
     private $CONN;
     private $backendId;

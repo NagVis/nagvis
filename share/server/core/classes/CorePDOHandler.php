@@ -39,6 +39,7 @@ function _build_dsn_common($params) {
         $connData));
 }
 
+#[AllowDynamicProperties]
 class CorePDOHandler {
     private $DB = null;
     private $file = null;
