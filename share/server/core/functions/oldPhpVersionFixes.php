@@ -59,7 +59,7 @@ if(function_exists("date_default_timezone_get"))
 // which defaults to mbstring and falls back to a polyfill.
 function iso8859_1_to_utf8(string $s): string {
     if (function_exists("mb_convert_encoding")) {
-        return mb_convert_encoding($string, 'UTF-8', 'ISO-8859-1');
+        return mb_convert_encoding($s, 'UTF-8', 'ISO-8859-1');
     }
 
     $s .= $s;
