@@ -119,7 +119,7 @@ class CoreAuthHandler {
 
     public function resetPassword($uid, $pw) {
         if(!$this->checkFeature('resetPassword'))
-            throw new CoreAuthModNoSupport();
+            throw new CoreAuthModNoSupport("Password reset not supported");
         return $this->MOD->resetPassword($uid, $pw);
     }
 

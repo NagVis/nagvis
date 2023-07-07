@@ -34,20 +34,6 @@ class NagVisLine extends NagVisStatelessObject {
     }
 
     /**
-     * PUBLIC getHoverMenu()
-     *
-     *Gets the hover menu of a shape if it is requested by configuration
-     *
-     * @return	String	The Link
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
-     */
-    public function getHoverMenu() {
-        if(isset($this->hover_url) && $this->hover_url != '') {
-            parent::getHoverMenu();
-        }
-    }
-
-    /**
      * PUBLIC fetchIcon()
      *
      * Just a dummy here (Shape won't need an icon)

@@ -81,7 +81,7 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
                         $perms[] = array_merge($parts, array($map_name));
                     }
                 }
-            }    
+            }
         }
 
         return $perms;

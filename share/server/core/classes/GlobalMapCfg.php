@@ -863,9 +863,6 @@ class GlobalMapCfg {
 
     /**
      * Merges the object which "use" a template with the template values
-     *
-     * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function mergeTemplates() {
         // Loop all objects
@@ -1003,10 +1000,6 @@ class GlobalMapCfg {
 
     /**
      * Checks if the config file is valid
-     *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkMapConfigIsValid() {
         global $CORE;
@@ -1769,6 +1762,7 @@ class GlobalMapCfg {
                 if($printErr)
                     throw new NagVisException(l('couldNotDeleteMapCfg',
                                               Array('MAPPATH' => $this->configFile)));
+                return FALSE;
             }
         } else {
             return FALSE;
@@ -1945,7 +1939,6 @@ class GlobalMapCfg {
         $titles = array(
             'general'           => l('General'),
             'appearance'        => l('Appearance'),
-            'actions'           => l('Actions'),
             'state'             => l('State'),
             'actions'           => l('Actions'),
             'label'             => l('Label'),

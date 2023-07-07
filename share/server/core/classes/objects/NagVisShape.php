@@ -62,19 +62,6 @@ class NagVisShape extends NagVisStatelessObject {
     }
 
     /**
-     * PUBLIC getHoverMenu()
-     *
-     *Gets the hover menu of a shape if it is requested by configuration
-     *
-     * @return	String	The Link
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
-     */
-    public function getHoverMenu() {
-        if(isset($this->hover_url) && $this->hover_url != '')
-            parent::getHoverMenu();
-    }
-
-    /**
      * PUBLIC fetchIcon()
      *
      * Is executed to detect missing shape images. Is not doing anything

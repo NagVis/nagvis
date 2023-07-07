@@ -25,14 +25,14 @@
  *
  *****************************************************************************/
 
-#[AllowDynamicProperties]
-class GlobalBackendPDO implements GlobalBackendInterface {
-    private $CONN;
+abstract class GlobalBackendPDO implements GlobalBackendInterface {
+    private $DB;
     private $backendId;
     private $dbName;
     private $dbUser;
     private $dbPass;
     private $dbHost;
+    private $dbPort;
     private $dbPrefix;
     private $dbInstanceName;
     private $dbInstanceId;
@@ -41,6 +41,11 @@ class GlobalBackendPDO implements GlobalBackendInterface {
     private $hostCache;
     private $serviceCache;
     private $hostAckCache;
+
+    private $re_op;
+    private $re_op_neg;
+
+    abstract public function driverName();
 
     // Define the backend local configuration options
     private static $validConfig = Array(

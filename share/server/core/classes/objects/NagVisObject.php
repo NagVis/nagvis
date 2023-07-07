@@ -30,6 +30,7 @@
 class NagVisObject {
     protected $conf = array();
 
+    protected $type;
     protected $object_id;
     protected $x;
     protected $y;

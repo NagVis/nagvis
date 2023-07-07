@@ -22,9 +22,11 @@
  *
  ******************************************************************************/
 
-class CoreAuthorisationModPDO extends CoreAuthorisationModule {
+abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
     public $rolesConfigurable = true;
     private $DB = null;
+
+    abstract public function getConfig();
 
     public function __construct() {
         $this->DB = new CorePDOHandler();
