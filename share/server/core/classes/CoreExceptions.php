@@ -27,6 +27,8 @@
  */
 
 class NagVisException extends Exception {
+    protected $e;
+
     function __construct($msg, $title = null, $time = null, $url = null) {
         if($title === null)
             $title = l('ERROR');

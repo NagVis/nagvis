@@ -210,7 +210,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
 
         // Decode the json response
         // json_decode returns null on syntax problems
-        $parsed = json_decode(utf8_encode($s), true);
+        $parsed = json_decode(iso8859_1_to_utf8($s), true);
         if ($parsed === null || !is_array($parsed))
             throw new BackendInvalidResponse(l('Invalid response ([BACKENDID]): [RESPONSE]',
                                                       Array('BACKENDID' => $this->backendId,

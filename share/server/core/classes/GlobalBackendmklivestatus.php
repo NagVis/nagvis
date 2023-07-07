@@ -368,7 +368,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         //fclose($fh);
 
         // Decode the json response
-        $obj = json_decode(utf8_encode($read));
+        $obj = json_decode(iso8859_1_to_utf8($read));
 
         // TEST: Disable KeepAlive:
         //fclose($this->SOCKET);

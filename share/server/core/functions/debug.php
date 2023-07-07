@@ -38,7 +38,7 @@ define('DEBUGSTART',microtime_float());
  */
 function debug($msg) {
 	$fh = fopen(DEBUGFILE, 'a');
-	fwrite($fh, utf8_encode(microtime_float().' '.$msg."\n"));
+	fwrite($fh, iso8859_1_to_utf8(microtime_float().' '.$msg."\n"));
 	fclose($fh);
 }
 

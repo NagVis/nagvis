@@ -134,7 +134,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
 
         // Decode the json response
         // json_decode returns null on syntax problems
-        $obj = json_decode(utf8_encode($s), true);
+        $obj = json_decode(iso8859_1_to_utf8($s), true);
         if($obj === null || !isset($obj['json_created']))
             throw new BackendInvalidResponse(l('The response has an invalid format in backend [BACKENDID].',
                                                       Array('BACKENDID' => $this->backendId)));

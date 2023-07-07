@@ -334,7 +334,7 @@ class GlobalMapCfg {
             // be misssing. Simply skip this in that case.
             if(function_exists('mb_detect_encoding')
                && mb_detect_encoding($file[$l], 'UTF-8, ISO-8859-1') == 'ISO-8859-1')
-                $file[$l] = utf8_encode($file[$l]);
+                $file[$l] = iso8859_1_to_utf8($file[$l]);
 
 
             // This is an object ending. Reset the object type and skip to next line

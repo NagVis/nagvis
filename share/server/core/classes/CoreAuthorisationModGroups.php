@@ -54,8 +54,8 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule {
     }
 
     private function readFile() {
-        $json = utf8_encode(file_get_contents($this->file));
-        $json = preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t](//).*)#", '', $json); 
+        $json = iso8859_1_to_utf8(file_get_contents($this->file));
+        $json = preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t](//).*)#", '', $json);
         $this->group_perms = json_decode($json, true);
         if($this->group_perms === null) {
             throw new NagVisException(l('The permissions file [FILE] could not be parsed.',
