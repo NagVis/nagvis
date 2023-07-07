@@ -32,11 +32,15 @@ class NagVisStatefulObject extends NagVisObject {
     protected $backend_id;
     protected $problem_msg = null;
 
+    protected $iconset;
     protected $label_show;
     protected $recognize_services;
     protected $only_hard_states;
+    protected $exclude_member_states;
+    protected $exclude_members;
 
     protected $line_type;
+    protected $gadget_url;
 
     // Details about the icon image (cache)
     protected $iconDetails;
@@ -47,6 +51,7 @@ class NagVisStatefulObject extends NagVisObject {
     protected static $dateFormat       = null;
 
     protected $state = null;
+    protected $members;
 
     public $sum = array(null, null, null, null, null);
     protected $aStateCounts = null;
@@ -221,12 +226,7 @@ class NagVisStatefulObject extends NagVisObject {
     }
 
     /**
-     * PUBLIC setSummaryState()
-     *
      * Set the summary state of the object
-     *
-     * @return	String		Summary state
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setSummaryState($s) {
         $this->sum[STATE] = $s;
