@@ -184,23 +184,11 @@ class NagVisObject {
     }
 
     /**
-     * PUBLIC getObjectInformation()
-     *
      * Gets all necessary information of the object as array
-     *
-     * @return	Array		Object configuration
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getObjectInformation($bFetchChilds = true) {
+    public function getObjectInformation() {
         global $CORE;
         $arr = Array();
-
-        // When the childs don't need to be fetched this object is a child
-        // itselfs. So much less information are needed. Progress them here
-        // If someone wants more information in hover menu children, this is
-        // the place to change.
-        if(!$bFetchChilds)
-            return $this->fetchObjectAsChild();
 
         // Need to remove some options which are not relevant
         // FIXME: Would be much better to name the needed vars explicit
@@ -217,121 +205,18 @@ class NagVisObject {
             if(!isset(self::$arrDenyKeys[$key]) && $val !== null)
                 $arr[$key] = $val;
 
-        if($this instanceof NagVisStatefulObject) {
-            $num_members = $this->getNumMembers();
-            if($num_members !== null)
-                $arr['num_members'] = $num_members;
-        }
-
         // I want only "name" in js
-        if(!isset($CORE->statelessObjectTypes[$this->type])) {
-            $arr['name'] = $this->getName();
+        $arr['name'] = $this->getName();
 
-            if($this->type == 'service') {
-                unset($arr['host_name']);
-            } else {
-                unset($arr[$this->type.'_name']);
-            }
-
-            if ($this->type == 'host' || $this->type == 'service') {
-                $obj_attrs = array(
-                    'alias'         => ALIAS,
-                    'display_name'  => DISPLAY_NAME,
-                    'address'       => ADDRESS,
-                    'notes'         => NOTES,
-                    'check_command' => CHECK_COMMAND,
-                );
-                foreach ($obj_attrs AS $attr => $state_key) {
-                    if (isset($this->state[$state_key]) && $this->state[$state_key] != '')
-                        $arr[$attr] = $this->state[$state_key];
-                    else
-                        $arr[$attr] = '';
-                }
-            } elseif ($this->type == 'map'
-                      || $this->type == 'servicegroup'
-                      || $this->type == 'hostgroup'
-                      || $this->type == 'aggregation') {
-                if (isset($this->state[ALIAS]))
-                    $arr['alias'] = $this->state[ALIAS];
-                else
-                    $arr['alias'] = '';
-            }
-
-            // Add the custom htmlcgi path for the object
-            $i = 0;
-            foreach($this->backend_id as $backend_id) {
-                if($i == 0) {
-                    $arr['htmlcgi']  = cfg('backend_'.$backend_id, 'htmlcgi');
-                    $arr['custom_1'] = cfg('backend_'.$backend_id, 'custom_1');
-                    $arr['custom_2'] = cfg('backend_'.$backend_id, 'custom_2');
-                    $arr['custom_3'] = cfg('backend_'.$backend_id, 'custom_3');
-                } else {
-                    $arr['htmlcgi_'.$i]  = cfg('backend_'.$backend_id, 'htmlcgi');
-                    $arr['custom_1_'.$i] = cfg('backend_'.$backend_id, 'custom_1');
-                    $arr['custom_2_'.$i] = cfg('backend_'.$backend_id, 'custom_2');
-                    $arr['custom_3_'.$i] = cfg('backend_'.$backend_id, 'custom_3');
-                }
-                $i++;
-            }
-
-            // Little hack: Overwrite the options with correct state information
-            $arr = array_merge($arr, $this->getObjectStateInformations(false));
-        }
-
-        // If there are some members fetch the information for them
-        if(isset($arr['num_members']) && $arr['num_members'] > 0) {
-            $members = Array();
-            foreach($this->getSortedObjectMembers() AS $OBJ) {
-                $members[] = $OBJ->fetchObjectAsChild();
-            }
-            $arr['members'] = $members;
+        if($this->type == 'service' && isset($arr['host_name'])) {
+            unset($arr['host_name']);
+        } else {
+            unset($arr[$this->type.'_name']);
         }
 
         return $arr;
     }
 
-    /**
-     * PUBLIC getSortedObjectMembers()
-     *
-     * Gets an array of member objects
-     *
-     * @return	Array		Member object information
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
-     */
-    public function getSortedObjectMembers() {
-        $arr = Array();
-
-        $aTmpMembers = $this->getStateRelevantMembers();
-
-        // Set the sort order
-        self::$sSortOrder = $this->hover_childs_order;
-
-        // Sort the array of child objects by the sort option
-        switch($this->hover_childs_sort) {
-            case 's':
-                // Order by State
-                usort($aTmpMembers, Array("NagVisObject", "sortObjectsByState"));
-            break;
-            case 'k':
-                // Keep original order (as provided by backend)
-            break;
-            case 'a':
-            default:
-                // Order alhpabetical
-                usort($aTmpMembers, Array("NagVisObject", "sortObjectsAlphabetical"));
-            break;
-        }
-
-        // Count only once, not in loop header
-        $iNumObjects = count($aTmpMembers);
-
-        // Loop all child object until all looped or the child limit is reached
-        for($i = 0; $this->belowHoverChildsLimit($i) && $i < $iNumObjects; $i++) {
-            $arr[] = $aTmpMembers[$i];
-        }
-
-        return $arr;
-    }
 
     /**
      * PUBLIC getObjectConfiguration()
@@ -382,7 +267,7 @@ class NagVisObject {
      */
     public function parseMapCfg($globalOpts = Array()) {
         $ret = 'define '.$this->type." {\n";
-        if($this->type === 'host')
+        if($this->type === 'host' && $this instanceof NagVisHost)
             $ret .= '  host_name='.$this->host_name."\n";
         $ret .= '  object_id='.$this->object_id."\n";
         foreach($this->getObjectConfiguration(false) AS $key => $val) {

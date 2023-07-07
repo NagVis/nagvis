@@ -616,15 +616,11 @@ class NagVisStatefulObject extends NagVisObject {
 
 
     /**
-     * PROTECTED fetchObjectAsChild()
-     *
      * Is called when an object should only be displayed as child
      * e.g. in hover menus. There are much less macros needed for this.
-     *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function fetchObjectAsChild() {
-        $aChild = Array(
+        return Array(
             'type'                => $this->getType(),
             'name'                => $this->getName(),
             'display_name'        => $this->escapeStringForJson($this->getDisplayName()),
@@ -634,12 +630,6 @@ class NagVisStatefulObject extends NagVisObject {
             'summary_stale'       => $this->isStale(true),
             'summary_output'      => $this->escapeStringForJson($this->sum[OUTPUT])
         );
-
-        if($this->type == 'service') {
-            $aChild['service_description'] = $this->getServiceDescription();
-        }
-
-        return $aChild;
     }
 
     /**
@@ -785,7 +775,7 @@ class NagVisStatefulObject extends NagVisObject {
         // Loop all object to gather the worst state and set it as summary
         // state of the current object
         foreach($objects AS $OBJ) {
-            if ($this->getType()=='map' && $OBJ->getType()=='map') {
+            if ($this->getType()=='map' && $OBJ->getType()=='map' && $this instanceof NagVisMapObj) {
                 if ($this->MAPCFG->getValue(0, 'ignore_linked_maps_summary_state') != 0)
                     continue;
             }
@@ -815,6 +805,114 @@ class NagVisStatefulObject extends NagVisObject {
                 }
             }
         }
+    }
+
+    public function getObjectInformation($bFetchChilds = true) {
+        // When the childs don't need to be fetched this object is a child
+        // itselfs. So much less information are needed. Progress them here
+        // If someone wants more information in hover menu children, this is
+        // the place to change.
+        if (!$bFetchChilds)
+            return $this->fetchObjectAsChild();
+
+        $arr = parent::getObjectConfiguration($bFetchChilds);
+
+        if ($this->type == 'host' || $this->type == 'service') {
+            $obj_attrs = array(
+                'alias'         => ALIAS,
+                'display_name'  => DISPLAY_NAME,
+                'address'       => ADDRESS,
+                'notes'         => NOTES,
+                'check_command' => CHECK_COMMAND,
+            );
+            foreach ($obj_attrs AS $attr => $state_key) {
+                if (isset($this->state[$state_key]) && $this->state[$state_key] != '')
+                    $arr[$attr] = $this->state[$state_key];
+                else
+                    $arr[$attr] = '';
+            }
+        } elseif ($this->type == 'map'
+                  || $this->type == 'servicegroup'
+                  || $this->type == 'hostgroup'
+                  || $this->type == 'aggregation') {
+            if (isset($this->state[ALIAS]))
+                $arr['alias'] = $this->state[ALIAS];
+            else
+                $arr['alias'] = '';
+        }
+
+        // Add the custom htmlcgi path for the object
+        $i = 0;
+        foreach($this->backend_id as $backend_id) {
+            if($i == 0) {
+                $arr['htmlcgi']  = cfg('backend_'.$backend_id, 'htmlcgi');
+                $arr['custom_1'] = cfg('backend_'.$backend_id, 'custom_1');
+                $arr['custom_2'] = cfg('backend_'.$backend_id, 'custom_2');
+                $arr['custom_3'] = cfg('backend_'.$backend_id, 'custom_3');
+            } else {
+                $arr['htmlcgi_'.$i]  = cfg('backend_'.$backend_id, 'htmlcgi');
+                $arr['custom_1_'.$i] = cfg('backend_'.$backend_id, 'custom_1');
+                $arr['custom_2_'.$i] = cfg('backend_'.$backend_id, 'custom_2');
+                $arr['custom_3_'.$i] = cfg('backend_'.$backend_id, 'custom_3');
+            }
+            $i++;
+        }
+
+        // Little hack: Overwrite the options with correct state information
+        $arr = array_merge($arr, $this->getObjectStateInformations(false));
+
+        $num_members = $this->getNumMembers();
+        if($num_members !== null)
+            $arr['num_members'] = $num_members;
+
+        // If there are some members fetch the information for them
+        if(isset($arr['num_members']) && $arr['num_members'] > 0) {
+            $members = Array();
+            foreach($this->getSortedObjectMembers() AS $OBJ) {
+                $members[] = $OBJ->fetchObjectAsChild();
+            }
+            $arr['members'] = $members;
+        }
+
+        return $arr;
+    }
+
+    /**
+     * Gets an array of member objects
+     */
+    public function getSortedObjectMembers() {
+        $arr = Array();
+
+        $aTmpMembers = $this->getStateRelevantMembers();
+
+        // Set the sort order
+        self::$sSortOrder = $this->hover_childs_order;
+
+        // Sort the array of child objects by the sort option
+        switch($this->hover_childs_sort) {
+            case 's':
+                // Order by State
+                usort($aTmpMembers, Array("NagVisObject", "sortObjectsByState"));
+            break;
+            case 'k':
+                // Keep original order (as provided by backend)
+            break;
+            case 'a':
+            default:
+                // Order alhpabetical
+                usort($aTmpMembers, Array("NagVisObject", "sortObjectsAlphabetical"));
+            break;
+        }
+
+        // Count only once, not in loop header
+        $iNumObjects = count($aTmpMembers);
+
+        // Loop all child object until all looped or the child limit is reached
+        for($i = 0; $this->belowHoverChildsLimit($i) && $i < $iNumObjects; $i++) {
+            $arr[] = $aTmpMembers[$i];
+        }
+
+        return $arr;
     }
 }
 ?>

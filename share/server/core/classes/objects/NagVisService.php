@@ -84,14 +84,14 @@ class NagVisService extends NagVisStatefulObject {
         $this->sum = $this->state;
     }
 
-    /**
-     * Returns the service description
-     */
     public function getServiceDescription() {
         return $this->service_description;
     }
 
-    # End public methods
-    # #########################################################################
+    protected function fetchObjectAsChild() {
+        $aChild = parent::fetchObjectAsChild();
+        $aChild['service_description'] = $this->getServiceDescription();
+        return $aChild;
+    }
 }
 ?>
