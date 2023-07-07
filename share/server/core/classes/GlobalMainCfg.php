@@ -1630,7 +1630,6 @@ class GlobalMainCfg {
      * Gets the base path
      *
      * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function setPathsByBase($base, $htmlBase) {

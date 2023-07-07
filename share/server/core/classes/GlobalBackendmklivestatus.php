@@ -124,7 +124,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Parses and sets the socket options
      *
-     * @return  String    Parses the socket
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function parseSocket($socket) {

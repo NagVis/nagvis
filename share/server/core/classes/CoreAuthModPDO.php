@@ -22,16 +22,17 @@
  *
  ******************************************************************************/
 
-#[AllowDynamicProperties]
-class CoreAuthModPDO extends CoreAuthModule {
+abstract class CoreAuthModPDO extends CoreAuthModule {
     private $USERCFG;
     private $DB;
 
     private $iUserId = -1;
     private $sUsername = '';
     private $sPassword = '';
-    private $sPasswordnew = '';
+    private $sPasswordNew = '';
     private $sPasswordHash = '';
+
+    abstract public function getConfig();
 
     public function __construct() {
         parent::$aFeatures = Array(

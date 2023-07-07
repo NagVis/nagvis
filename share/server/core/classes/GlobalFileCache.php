@@ -139,7 +139,7 @@ class GlobalFileCache {
         } else {
             if($printErr) {
                 throw new NagVisException(l('fileNotCached',
-                                          Array('FILE' => $this->file,
+                                          Array('FILE' => json_encode($this->files),
                                                 'CACHEFILE' => $this->cacheFile)));
             }
             return -1;

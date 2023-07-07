@@ -26,6 +26,7 @@
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
 class CoreModUrl extends CoreModule {
+    private $CORE;
     private $url = null;
 
     public function __construct(GlobalCore $CORE) {

@@ -26,6 +26,8 @@
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
 class CoreModMultisite extends CoreModule {
+    private $CORE;
+
     public function __construct(GlobalCore $CORE) {
         $this->sName = 'Multisite';
         $this->CORE = $CORE;

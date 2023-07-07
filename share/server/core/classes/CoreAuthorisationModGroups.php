@@ -24,6 +24,8 @@
  ******************************************************************************/
 
 class CoreAuthorisationModGroups extends CoreAuthorisationModule {
+    private $CACHE;
+
     public $rolesConfigurable = false;
     private $file;
     private $backends;

@@ -26,6 +26,8 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class FrontendModUrl extends FrontendModule {
+    private $CORE;
+    private $VIEW;
     private $url = '';
     private $rotation = '';
     private $rotationStep = '';

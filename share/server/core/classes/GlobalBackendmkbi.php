@@ -271,7 +271,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
 
             if(!isset(GlobalBackendmkbi::$bi_short_states[$short_state]))
                 throw new BackendException(l('Invalid state: "[S]"',
-                          Array('S' => $s)));
+                          Array('S' => $short_state)));
             $bi_state = GlobalBackendmkbi::$bi_short_states[$short_state];
 
             $element = array(

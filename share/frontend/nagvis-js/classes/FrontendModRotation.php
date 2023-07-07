@@ -26,6 +26,7 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class FrontendModRotation extends FrontendModule {
+    private $CORE;
     private $name   = '';
     private $type   = '';
     private $step   = '';

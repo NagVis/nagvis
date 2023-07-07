@@ -59,9 +59,6 @@ class GlobalBackground {
 
     /**
      * Fetches the path and saves it on initial load
-     *
-     * @return	String File Name
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchPath() {
         if($this->getFileName() != '' && $this->getFileName() != 'none') {
@@ -166,6 +163,7 @@ class GlobalBackground {
                 return FALSE;
             }
         }
+        return FALSE;
     }
 }
 ?>
