@@ -27,6 +27,8 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class NagVisLine extends NagVisStatelessObject {
+    protected $line_color;
+    protected $line_color_border;
 
     public function __construct() {
         $this->type = 'line';

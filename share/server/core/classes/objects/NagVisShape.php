@@ -27,6 +27,9 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class NagVisShape extends NagVisStatelessObject {
+    protected $enable_refresh;
+    protected $icon;
+
     /**
      * Class constructor
      *

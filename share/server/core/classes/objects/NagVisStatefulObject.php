@@ -33,14 +33,31 @@ class NagVisStatefulObject extends NagVisObject {
     protected $problem_msg = null;
 
     protected $iconset;
-    protected $label_show;
+    protected $icon_size;
     protected $recognize_services;
-    protected $only_hard_states;
     protected $exclude_member_states;
     protected $exclude_members;
+    protected $line_weather_colors;
+    protected $gadget_url;
+    protected $gadget_type;
+    protected $gadget_scale;
+    protected $gadget_opts;
+    protected $only_hard_states;
+    protected $hover_childs_show;
+    protected $hover_childs_sort;
+    protected $hover_childs_order;
+    protected $hover_childs_limit;
+    protected $label_show;
+    protected $label_text;
+    protected $label_x;
+    protected $label_y;
+    protected $label_width;
+    protected $label_background;
+    protected $label_border;
+    protected $label_style;
+    protected $label_maxlen;
 
     protected $line_type;
-    protected $gadget_url;
 
     // Details about the icon image (cache)
     protected $iconDetails;

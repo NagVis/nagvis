@@ -23,9 +23,6 @@
  *
  *****************************************************************************/
 
-/**
- * @author	Lars Michelsen <lm@larsmichelsen.com>
- */
 class NagVisObject {
     protected $conf = array();
 
@@ -35,17 +32,27 @@ class NagVisObject {
     protected $y;
     protected $z;
     protected $icon;
-    protected $url;
     protected $url_target;
+    protected $context_menu;
+    protected $context_template;
+    protected $use;
 
-    protected $view_type;
+    protected $url; // Not supported by Textbox
+    protected $view_type; // Not supported by Textbox, Shape
+
     protected $hover_menu;
+    protected $hover_delay;
+    protected $hover_url;
     protected $hover_template;
     protected $hover_childs_show;
     protected $hover_childs_sort;
     protected $hover_childs_order;
     protected $hover_childs_limit;
     protected $label_show;
+
+    protected $line_cut;
+    protected $line_type;
+    protected $line_width;
 
     protected static $sSortOrder = 'asc';
     protected static $stateWeight = null;

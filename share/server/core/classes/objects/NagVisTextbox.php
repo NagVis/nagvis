@@ -27,6 +27,12 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class NagVisTextbox extends NagVisStatelessObject {
+    protected $text;
+    protected $w;
+    protected $h;
+    protected $style;
+    protected $background_color;
+    protected $border_color;
 
     public function __construct() {
         $this->type = 'textbox';

@@ -35,6 +35,12 @@ class NagVisService extends NagVisStatefulObject {
     protected $gadget_url;
     protected $host_name;
     protected $service_description;
+    protected $line_label_show;
+    protected $line_label_in;
+    protected $line_label_out;
+    protected $line_label_pos_in;
+    protected $line_label_pos_out;
+    protected $line_label_y_offset;
 
     public function __construct($backend_id, $hostName, $serviceDescription) {
         $this->backend_id = array($backend_id[0]); // only supports one backend

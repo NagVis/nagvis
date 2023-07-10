@@ -26,6 +26,13 @@
 class NagVisContainer extends NagVisStatelessObject {
     protected $type = 'container';
 
+    protected $enable_refresh;
+    protected $w;
+    protected $h;
+    protected $style;
+    protected $background_color;
+    protected $border_color;
+
     /**
      * PUBLIC parseJson()
      * Parses the object in json format
