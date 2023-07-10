@@ -42,6 +42,50 @@ class NagVisMapObj extends NagVisStatefulObject {
     protected $map_name;
     protected $alias;
 
+    protected $sources;
+
+    // Worldmap source
+    protected $worldmap_center;
+    protected $worldmap_zoom;
+    protected $worldmap_tiles_saturate;
+
+    // Automap source
+    protected $render_mode;
+    protected $root;
+    protected $filter_by_state;
+    protected $filter_by_ids;
+    protected $child_layers;
+    protected $parent_layers;
+    protected $ignore_hosts;
+    protected $margin;
+    protected $rankdir;
+    protected $overlap;
+
+    // Geomap source
+    protected $geomap_type;
+    protected $geomap_zoom;
+    protected $source_type;
+    protected $source_file;
+    protected $geomap_border;
+
+    // General source
+    protected $width;
+    protected $height;
+
+    // Filter source
+    protected $filter_group;
+
+    // Dynmap source
+    protected $dynmap_object_types;
+    protected $dynmap_object_filter;
+    protected $dynmap_init_x;
+    protected $dynmap_init_y;
+    protected $dynmap_offset_x;
+    protected $dynmap_offset_y;
+    protected $dynmap_per_row;
+    protected $dynmap_sort;
+    protected $dynmap_order;
+
     // When this map object summarizes the state of a map this is true
     // Prevents loops
     protected $isSummaryObject;

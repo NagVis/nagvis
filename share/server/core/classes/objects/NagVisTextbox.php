@@ -34,6 +34,10 @@ class NagVisTextbox extends NagVisStatelessObject {
     protected $background_color;
     protected $border_color;
 
+    // Worldmap
+    protected $scale_to_zoom;
+    protected $normal_size_at_zoom;
+
     public function __construct() {
         $this->type = 'textbox';
         parent::__construct();

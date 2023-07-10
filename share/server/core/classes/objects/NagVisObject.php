@@ -54,6 +54,9 @@ class NagVisObject {
     protected $line_type;
     protected $line_width;
 
+    protected $min_zoom;
+    protected $max_zoom;
+
     protected static $sSortOrder = 'asc';
     protected static $stateWeight = null;
     private static $arrDenyKeys = null;
