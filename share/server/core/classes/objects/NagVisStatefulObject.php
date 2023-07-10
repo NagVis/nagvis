@@ -589,7 +589,7 @@ class NagVisStatefulObject extends NagVisObject {
     # End public methods
     # #########################################################################
 
-    private static function sortStateCountsByState($a1, $a2) {
+    public static function sortStateCountsByState($a1, $a2) {
         if($a1['weight'] == $a2['weight']) {
             return 0;
         } elseif($a1['weight'] < $a2['weight']) {
@@ -624,6 +624,8 @@ class NagVisStatefulObject extends NagVisObject {
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function escapeStringForJson($s) {
+        if (is_null($s))
+            return '';
         return strtr($s, Array("\r" => '<br />',
                                "\n" => '<br />',
                                '"'  => '&quot;',

@@ -31,7 +31,7 @@ class NagVisDynGroup extends NagVisStatefulObject {
     protected static $langChild1 = null;
 
     protected $name;
-    protected $object_types;
+    public $object_types;
     protected $object_filter;
 
     protected $members = array();

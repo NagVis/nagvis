@@ -327,7 +327,7 @@ class NagVisObject {
      * @param	OBJ		Second object to sort
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
+    public static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
         if($OBJ1->type == 'service') {
             $name1 = strtolower($OBJ1->getName().$OBJ1->getServiceDescription());
         } else {
@@ -368,7 +368,7 @@ class NagVisObject {
      * @param	OBJ		Second object to sort
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private static function sortObjectsByState($OBJ1, $OBJ2) {
+    public static function sortObjectsByState($OBJ1, $OBJ2) {
         $state1 = $OBJ1->sum[STATE];
         $subState1 = $OBJ1->getSubState(SUMMARY_STATE);
 

@@ -43,6 +43,10 @@ class NagVisTextbox extends NagVisStatelessObject {
         parent::__construct();
     }
 
+    public function getName() {
+        return $this->object_id;
+    }
+
     /**
      * PUBLIC fetchIcon()
      *
