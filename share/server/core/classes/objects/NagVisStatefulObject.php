@@ -834,7 +834,7 @@ class NagVisStatefulObject extends NagVisObject {
         if (!$bFetchChilds)
             return $this->fetchObjectAsChild();
 
-        $arr = parent::getObjectConfiguration($bFetchChilds);
+        $arr = parent::getObjectInformation($bFetchChilds);
 
         if ($this->type == 'host' || $this->type == 'service') {
             $obj_attrs = array(

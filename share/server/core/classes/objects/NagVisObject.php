@@ -197,7 +197,6 @@ class NagVisObject {
      * Gets all necessary information of the object as array
      */
     public function getObjectInformation() {
-        global $CORE;
         $arr = Array();
 
         // Need to remove some options which are not relevant
