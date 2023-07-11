@@ -200,7 +200,7 @@ var ViewMap = View.extend({
                 obj = new NagVisLine(attrs);
             break;
             default:
-                alert('Error: Unknown object type: ' + attrs);
+                console.error('Error: Unknown object type', attrs);
                 return;
             break;
         }
