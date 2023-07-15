@@ -303,10 +303,9 @@ class CoreModOverview extends CoreModule {
     private function createThumbnail($imgPath, $thumbPath) {
         global $CORE;
         if($CORE->checkVarFolderWriteable(TRUE) && $CORE->checkExisting($imgPath, TRUE)) {
-            // 0: width, 1:height, 2:type
             $imgSize = getimagesize($imgPath);
             $strFileType = '';
-
+    
             switch($imgSize[2]) {
                 case 1:
                     $image = imagecreatefromgif($imgPath);
@@ -324,29 +323,29 @@ class CoreModOverview extends CoreModule {
                     throw new NagVisException(l('onlyPngOrJpgImages'));
                 break;
             }
-
+    
             // Size of source images
             list($bgWidth, $bgHeight) = $imgSize;
-
+    
             // Target size
             $thumbResWidth = 200;
             $thumbResHeight = 150;
-
+    
             if($bgWidth > $bgHeight) {
                 // Calculate size
                 $thumbWidth = $thumbResWidth;
-                $thumbHeight = $bgHeight / ($bgWidth / $thumbWidth);
-
+                $thumbHeight = (int) round($bgHeight / ($bgWidth / $thumbWidth));
+    
                 // Calculate offset
                 $thumbX = 0;
-                $thumbY = ($thumbResHeight - $thumbHeight) / 2;
+                $thumbY = (int) round(($thumbResHeight - $thumbHeight) / 2);
             } elseif($bgHeight > $bgWidth) {
                 // Calculate size
                 $thumbHeight = $thumbResHeight;
-                $thumbWidth = $bgWidth / ($bgHeight / $thumbResHeight);
-
+                $thumbWidth = (int) round($bgWidth / ($bgHeight / $thumbResHeight));
+    
                 // Calculate offset
-                $thumbX = ($thumbResWidth - $thumbWidth) / 2;
+                $thumbX = (int) round(($thumbResWidth - $thumbWidth) / 2);
                 $thumbY = 0;
             } else {
                 // Calculate size
@@ -360,38 +359,38 @@ class CoreModOverview extends CoreModule {
                         $thumbHeight = $thumbResHeight;
                         $thumbWidth = $thumbResHeight;
                 }
-
+    
                 // Calculate offset
-                $thumbX = ($thumbResWidth - $thumbWidth) / 2;
-                $thumbY = ($thumbResHeight - $thumbHeight) / 2;
+                $thumbX = (int) round(($thumbResWidth - $thumbWidth) / 2);
+                $thumbY = (int) round(($thumbResHeight - $thumbHeight) / 2);
             }
-
+            
             $thumb = imagecreatetruecolor($thumbResWidth, $thumbResHeight);
 
-            imagefill($thumb, 0, 0, imagecolorallocate($thumb, 255, 255, 254));
-            imagecolortransparent($thumb, imagecolorallocate($thumb, 255, 255, 254));
+    imagefill($thumb, 0, 0, imagecolorallocate($thumb, 255, 255, 254));
+    imagecolortransparent($thumb, imagecolorallocate($thumb, 255, 255, 254));
 
-            imagecopyresampled($thumb, $image, $thumbX, $thumbY, 0, 0, $thumbWidth, $thumbHeight, $bgWidth, $bgHeight);
+    imagecopyresampled($thumb, $image, $thumbX, $thumbY, 0, 0, $thumbWidth, $thumbHeight, $bgWidth, $bgHeight);
 
-            switch($imgSize[2]) {
-                case 1:
-                    imagegif($thumb, $thumbPath);
-                break;
-                case 2:
-                    imagejpeg($thumb, $thumbPath);
-                break;
-                case 3:
-                    imagepng($thumb, $thumbPath);
-                break;
-                default:
-                    throw new NagVisException(l('onlyPngOrJpgImages'));
-                break;
-            }
-
-            return $thumbPath;
-        } else {
-            return '';
-        }
+    switch ($imgSize[2]) {
+      case 1:
+        imagegif($thumb, $thumbPath);
+        break;
+      case 2:
+        imagejpeg($thumb, $thumbPath);
+        break;
+      case 3:
+        imagepng($thumb, $thumbPath);
+        break;
+      default:
+        throw new NagVisException(l('onlyPngOrJpgImages'));
+        break;
     }
+
+    return $thumbPath;
+  } else {
+    return '';
+  }
+  }
 }
 ?>
