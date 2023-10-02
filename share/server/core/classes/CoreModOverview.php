@@ -371,7 +371,7 @@ class CoreModOverview extends CoreModule {
             imagefill($thumb, 0, 0, imagecolorallocate($thumb, 255, 255, 254));
             imagecolortransparent($thumb, imagecolorallocate($thumb, 255, 255, 254));
 
-            imagecopyresampled($thumb, $image, $thumbX, $thumbY, 0, 0, $thumbWidth, $thumbHeight, $bgWidth, $bgHeight);
+            imagecopyresampled($thumb, $image, (int)$thumbX, (int)$thumbY, 0, 0, (int)$thumbWidth, (int)$thumbHeight, (int)$bgWidth, (int)$bgHeight);
 
             switch($imgSize[2]) {
                 case 1:
