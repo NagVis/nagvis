@@ -167,7 +167,7 @@ function _check_locale_and_function($function=false) {
 function _get_codeset($domain=null) {
     global $text_domains, $default_domain, $LC_CATEGORIES;
     if (!isset($domain)) $domain = $default_domain;
-    return (isset($text_domains[$domain]->codeset))? $text_domains[$domain]->codeset : ini_get('mbstring.internal_encoding');
+    return (isset($text_domains[$domain]->codeset))? $text_domains[$domain]->codeset : ini_get('default_charset');
 }
 
 /**
