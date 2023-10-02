@@ -315,12 +315,7 @@ function refreshMapObject(event, objectId, only_state) {
  */
 function playSound(objectId, iNumTimes){
     var sSound = '';
-
     var id = g_view.objects[objectId].dom_obj.id;
-
-    var oObjIcon = document.getElementById(id+'-icon');
-    var oObjIconDiv = document.getElementById(id+'-icondiv');
-
     var sState = g_view.objects[objectId].conf.summary_state;
 
     if(oStates[sState] && oStates[sState].sound && oStates[sState].sound !== '') {
@@ -330,27 +325,9 @@ function playSound(objectId, iNumTimes){
     eventlog("state-change", "debug", "Sound to play: "+sSound);
 
     if(sSound !== '') {
-        // Remove old sound when present
-        if(document.getElementById('sound'+sState)) {
-            document.body.removeChild(document.getElementById('sound'+sState));
-        }
-
-        // Load sound
-        var oEmbed = document.createElement('embed');
-        oEmbed.setAttribute('id', 'sound'+sState);
-        // Relative URL does not work, add full url
-        oEmbed.setAttribute('src', window.location.protocol + '//' + window.location.hostname + ':'
+        const audio = new Audio(window.location.protocol + '//' + window.location.hostname + ':'
                                                  	+ window.location.port + oGeneralProperties.path_sounds+sSound);
-        oEmbed.setAttribute('width', '0');
-        oEmbed.setAttribute('height', '0');
-        oEmbed.setAttribute('hidden', 'true');
-        oEmbed.setAttribute('loop', 'false');
-        oEmbed.setAttribute('autostart', 'true');
-        oEmbed.setAttribute('enablejavascript', 'true');
-
-        // Add object to body => the sound is played
-        oEmbed = document.body.appendChild(oEmbed);
-        oEmbed = null;
+        audio.play();
 
         iNumTimes = iNumTimes - 1;
 
@@ -358,9 +335,6 @@ function playSound(objectId, iNumTimes){
             setTimeout(function() { playSound(objectId, iNumTimes); }, 500);
         }
     }
-
-    oObjIcon = null;
-    oObjIconDiv = null;
 }
 
 /**

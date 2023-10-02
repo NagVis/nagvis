@@ -1,4 +1,7 @@
 1.9.37
+Frontend:
+  * FIX: Sound events, which are triggered e.g. in case an object turns CRITICAL, now work in modern
+         browsers (Edge 12+, Firefox 20+, Internet Explorer 9+, Opera 15+, Safari 4+, Chrome)
 
 1.9.36
 Core:
