@@ -33,6 +33,7 @@ class NagVisHost extends NagVisStatefulObject {
     protected static $langServices = null;
 
     protected $host_name;
+    protected $alias;
 
     protected $members = array();
 

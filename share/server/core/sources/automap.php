@@ -378,12 +378,12 @@ function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
 
         $obj['.width']  = $w;
         $obj['.height'] = $h;
-    }
 
-    $obj['label_show']       = $MAPCFG->getValue(0, 'label_show');
-    $obj['label_border']     = $MAPCFG->getValue(0, 'label_border');
-    $obj['label_background'] = $MAPCFG->getValue(0, 'label_background');
-    $obj['label_maxlen']     = $MAPCFG->getValue(0, 'label_maxlen');
+        $obj['label_show']       = $MAPCFG->getValue(0, 'label_show');
+        $obj['label_border']     = $MAPCFG->getValue(0, 'label_border');
+        $obj['label_background'] = $MAPCFG->getValue(0, 'label_background');
+        $obj['label_maxlen']     = $MAPCFG->getValue(0, 'label_maxlen');
+    }
 
     // Header menu has z-index 100, this object's label the below+1
     $obj['z']           = 98;
@@ -610,6 +610,10 @@ function automap_tree_to_map_config($MAPCFG, &$params, &$saved_config, &$map_con
     }
 
     $map_config[$tree['object_id']] = $tree;
+
+    // Remove automap internal attribute from <<<monitoring>>> node
+    if ($map_config[$tree['object_id']]['type'] == 'shape')
+        unset($map_config[$tree['object_id']]['host_name']);
     
     // Remove internal attributes here
     unset($map_config[$tree['object_id']]['.childs']);

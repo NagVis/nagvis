@@ -29,6 +29,7 @@
 class NagVisShape extends NagVisStatelessObject {
     protected $enable_refresh;
     protected $icon;
+    protected $icon_size;
 
     /**
      * Class constructor
