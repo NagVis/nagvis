@@ -158,30 +158,30 @@ imagefill($img, 0, 0, $oBackground);
 imagecolortransparent($img, $oBackground);
 
 // Base
-imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 180, 0, $oGreen, IMG_ARC_EDGED);
+imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia), intval($outerdia), 180, 0, $oGreen, IMG_ARC_EDGED);
 
 // Warning
 if($warn && $warnp <= -1) {
 	// The "360 +" fix has been worked out by hipska. Thanks for that!
-	imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 360 + $warnp, 0, $oYellow, IMG_ARC_EDGED);
+	imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia), intval($outerdia), intval(360 + $warnp), 0, $oYellow, IMG_ARC_EDGED);
 }
 // Critical
 if($crit && $critp <= -1) {
 	// The "360 +" fix has been worked out by hipska. Thanks for that!
-	imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 360 + $critp, 0, $oRed, IMG_ARC_EDGED);
+	imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia), intval($outerdia), intval(360 + $critp), 0, $oRed, IMG_ARC_EDGED);
 }
 
 // Borders
-imagearc($img, $centerx, $centery+1, $outerdia+2, $outerdia+2, 180, 0, $oBlack);
-imagefilledarc($img, $centerx, $centery, $outerdia/10, $outerdia/10,180, 0, $oBlue, IMG_ARC_EDGED);
+imagearc($img, intval($centerx), intval($centery+1), intval($outerdia+2), intval($outerdia+2), 180, 0, $oBlack);
+imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia/10), intval($outerdia/10), 180, 0, $oBlue, IMG_ARC_EDGED);
 
 //===================
 // Create tacho line.
 //===================
 
-$diffy = sin (deg2rad(-$p+360))*(($outerdia+10)/2);
-$diffx = cos (deg2rad(-$p+360))*(($outerdia+10)/2);
-imagefilledarc($img, ($centerx-$diffx), ($centery+$diffy), ($outerdia+10), ($outerdia+10),($p-1),($p+1), $oBlue, IMG_ARC_EDGED);
+$diffy = sin(deg2rad(-$p+360))*(($outerdia+10)/2);
+$diffx = cos(deg2rad(-$p+360))*(($outerdia+10)/2);
+imagefilledarc($img, intval($centerx-$diffx), intval($centery+$diffy), intval($outerdia+10), intval($outerdia+10),intval($p-1),intval($p+1), $oBlue, IMG_ARC_EDGED);
 
 //===================
 // Labels
@@ -189,9 +189,9 @@ imagefilledarc($img, ($centerx-$diffx), ($centery+$diffy), ($outerdia+10), ($out
 
 // Speedometer labels
 
-imageline($img, ($centerx-$outerdia/2-5), ($centery+1), ($centerx+$outerdia/2+5), ($centery+1), $oBlack);
-imagestring($img, 1, ($centerx-$outerdia/2-15), ($centery-6), $min , $oBlack); 
-imagestring($img, 1, ($centerx+$outerdia/2+8), ($centery-6), $max, $oBlack);
+imageline($img, intval($centerx-$outerdia/2-5), intval($centery+1), intval($centerx+$outerdia/2+5), intval($centery+1), $oBlack);
+imagestring($img, 1, intval($centerx-$outerdia/2-15), intval($centery-6), $min , $oBlack); 
+imagestring($img, 1, intval($centerx+$outerdia/2+8), intval($centery-6), $max, $oBlack);
 
 $count = 1;
 $iOffsetX = -10;
@@ -200,10 +200,10 @@ for($degrees=45; $degrees<180; $degrees = $degrees+45) {
 	$bediffx=cos (deg2rad(-$degrees+360))*(($outerdia+10)/2);
 	$bediffy1=sin (deg2rad(-$degrees+360))*(($outerdia-10)/2);
 	$bediffx1=cos (deg2rad(-$degrees+360))*(($outerdia-10)/2);
-	
-	imageline($img, ($centerx-$bediffx), ($centery+$bediffy),($centerx-$bediffx1), ($centery+$bediffy1), $oBlack);
-	imagestring($img , 1 ,($centerx-$bediffx+$iOffsetX-8), ($centery+$bediffy-10) , (($max-$min)/4*$count+$min) , $oBlack); 
-	
+
+	imageline($img, intval($centerx-$bediffx), intval($centery+$bediffy),intval($centerx-$bediffx1), intval($centery+$bediffy1), $oBlack);
+	imagestring($img , 1 ,intval($centerx-$bediffx+$iOffsetX-8), intval($centery+$bediffy-10) , intval(($max-$min)/4*$count+$min) , $oBlack); 
+
 	$count = $count+1;
 	$iOffsetX = $iOffsetX + 10;
 }
