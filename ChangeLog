@@ -1,11 +1,14 @@
 1.9.39
+Core:
+  * FIX: Fix PHP 5.4 compatibility issue (syntax error, unexpected ':', expecting '{' in)
+  * FIX: Fix PHP 8.2 deprecation warnings caused by std_speedometer gadget
+
 
 1.9.38
 Frontend:
   * FIX: Fix XSS vulnerability
   * FIX: Fix PHP 8.2 deprecation warnings caused by shapes on automaps and host alias
   * FIX: Fix PHP 8.2 deprecation warnings caused by gettext.inc
-  * FIX: Fix PHP 8.2 deprecation warnings caused by std_speedometer gadget
 
 1.9.37
 Frontend:
