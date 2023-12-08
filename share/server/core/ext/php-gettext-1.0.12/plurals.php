@@ -141,9 +141,9 @@ class PluralsExpression {
   private $operator;
   private $operands;
 
-  const BINARY_OPERATORS = [
+  private static $BINARY_OPERATORS = [
     '==', '!=', '>=', '<=', '&&', '||', '+', '-', '*', '/', '%', '>', '<'];
-  const UNARY_OPERATORS = ['!'];
+  private static $UNARY_OPERATORS = ['!'];
 
   /**
    * Constructor
@@ -156,9 +156,9 @@ class PluralsExpression {
    * PluralExpression. Unary operators expect one operand, binary operators
    * expect two operands and trinary operators expect three operands.
    */
-  public function __construct($operator, ...$operands) {
+  public function __construct($operator, $operand1 = null, $operand2 = null, $operand3 = null) {
     $this->operator = $operator;
-    $this->operands = $operands;
+    $this->operands = array($operand1, $operand2, $operand3);
   }
 
   /**
@@ -170,11 +170,11 @@ class PluralsExpression {
   public function to_string() {
     if ($this->operator == 'const' || $this->operator == 'var') {
       return $this->operands[0];
-    } elseif (in_array($this->operator, self::BINARY_OPERATORS)) {
+    } elseif (in_array($this->operator, self::$BINARY_OPERATORS)) {
       return sprintf(
         "(%s %s %s)", $this->operands[0]->to_string(), $this->operator,
         $this->operands[1]->to_string());
-    } elseif (in_array($this->operator, self::UNARY_OPERATORS)) {
+    } elseif (in_array($this->operator, self::$UNARY_OPERATORS)) {
       return sprintf(
         "(%s %s)", $this->operator, $this->operands[0]->to_string());
     } elseif ($this->operator == '?') {
@@ -197,7 +197,7 @@ class PluralsExpression {
     if (!in_array($this->operator, ['const', 'var'])) {
       $operand1 = $this->operands[0]->evaluate($n);
     }
-    if (in_array($this->operator, self::BINARY_OPERATORS) ||
+    if (in_array($this->operator, self::$BINARY_OPERATORS) ||
         $this->operator == '?') {
       $operand2 = $this->operands[1]->evaluate($n);
     }
@@ -259,14 +259,14 @@ class PluralsParser {
    * 0. However, ':' and ')' exist here to make sure that parsing does not
    * proceed beyond them when they are not to be parsed.
    */
-  private const PREC = [
+  private static $PREC = [
     ':' => -1, '?' => 0, '||' => 1, '&&' => 2, '==' => 3, '!=' => 3,
     '>' => 4, '<' => 4, '>=' => 4, '<=' => 4, '+' => 5, '-' => 5, '*' => 6,
     '/' => 6, '%' => 6, '!' => 7, '__END__' => -1, ')' => -1
   ];
 
   // List of right associative operators
-  private const RIGHT_ASSOC = ['?'];
+  private static $RIGHT_ASSOC = ['?'];
 
   /**
    * Constructor
@@ -326,7 +326,7 @@ class PluralsParser {
         $token = $this->lexer->fetch_token();
     }
 
-    if ($token !== NULL && !array_key_exists($token, self::PREC)) {
+    if ($token !== NULL && !array_key_exists($token, self::$PREC)) {
       throw new Exception('Operator expected');
     }
     return $token;
@@ -349,7 +349,7 @@ class PluralsParser {
   private function _parse($left_side, $min_precedence) {
     $next_token = $this->_parse_operator(true);
 
-    while (self::PREC[$next_token] >= $min_precedence) {
+    while (self::$PREC[$next_token] >= $min_precedence) {
       $operator = $this->_parse_operator(false);
       $right_side = $this->_parse_primary();
 
@@ -359,11 +359,11 @@ class PluralsParser {
        * Consume (recursively) into right hand side all expressions of higher
        * precedence.
        */
-      while ((self::PREC[$operator] < self::PREC[$next_token]) ||
-             ((self::PREC[$operator] == self::PREC[$next_token]) &&
-              in_array($operator, self::RIGHT_ASSOC))) {
+      while ((self::$PREC[$operator] < self::$PREC[$next_token]) ||
+             ((self::$PREC[$operator] == self::$PREC[$next_token]) &&
+              in_array($operator, self::$RIGHT_ASSOC))) {
         $right_side = $this->_parse(
-            $right_side, self::PREC[$next_token]);
+            $right_side, self::$PREC[$next_token]);
         $next_token = $this->_parse_operator(true);
       }
 
@@ -381,7 +381,7 @@ class PluralsParser {
         }
 
         $right_side2 = $this->_parse(
-          $this->_parse_primary(), self::PREC[$operator] + 1);
+          $this->_parse_primary(), self::$PREC[$operator] + 1);
         $next_token = $this->_parse_operator(true);
         $left_side = new PluralsExpression(
             '?', $left_side, $right_side, $right_side2);

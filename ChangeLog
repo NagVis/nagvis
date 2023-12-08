@@ -1,4 +1,6 @@
 1.9.40
+Core:
+  * FIX: Fix PHP 5.4 and 5.5 compatibility issue (Fatal error: Arrays are not allowed in class constants)
 
 1.9.39
 Core:
