@@ -35,8 +35,8 @@ class ViewError {
         js('frontendMessage({'.N
           .'    "type"    : "error",'.N
           .'    "closable": false,'.N
-          .'    "title"   : "'.l('Error').'",'.N
-          .'    "message" : "'.htmlentities($e->getMessage(), ENT_COMPAT, 'UTF-8').'"'.N
+          .'    "title"   : '.json_encode(l('Error')).','.N
+          .'    "message" : '.json_encode(htmlentities($e->getMessage(), ENT_COMPAT, 'UTF-8')).N
           .'});');
         echo '</div>';
 
