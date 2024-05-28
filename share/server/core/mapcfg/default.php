@@ -565,10 +565,10 @@ $mapConfigVars = Array(
         'depends_value' => 'line',
     ),
     'line_width' => Array(
-        'must' => 0,
-        'default' => '3',
-        'match' => MATCH_INTEGER,
-        'depends_on' => 'view_type',
+        'must'          => 0,
+        'default'       => cfg('defaults', 'line_width'),
+        'match'         => MATCH_INTEGER,
+        'depends_on'    => 'view_type',
         'depends_value' => 'line'),
     'line_weather_colors' => Array(
         'must'          => 0,

@@ -1,6 +1,7 @@
 1.9.41
 Frontend:
-   * FIX: Fix failing reporting of errors when messages contained special characters
+  * Added option "line_width" to default section of global config
+  * FIX: Fix failing reporting of errors when messages contained special characters
 
 1.9.40
 Core:
