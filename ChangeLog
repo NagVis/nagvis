@@ -1,5 +1,6 @@
 1.9.41
 Frontend:
+  * FIX: Fix PHP 5.4 compatibility issue (syntax error, unexpected 'list')
   * Added option "line_width" to default section of global config
   * FIX: Fix failing reporting of errors when messages contained special characters
 
