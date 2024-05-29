@@ -223,7 +223,9 @@ class CoreModMultisite extends CoreModule {
         $_BACKEND->execute();
 
         $aMaps = Array();
-        foreach($aObjs AS list($MAP, $state)) {
+        foreach($aObjs AS $aObj) {
+            $MAP = $aObj[0];
+            $state = $aObj[1];
             if ($state !== null) {
                 $MAP->clearMembers();
                 $MAP->setState($state);
