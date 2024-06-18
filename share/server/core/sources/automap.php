@@ -411,9 +411,9 @@ function automap_connector($MAPCFG, &$params, &$saved_config, $from_obj, $to_obj
     $obj['line_color'] = $MAPCFG->getValue(0, 'line_color');
     $obj['line_width'] = $MAPCFG->getValue(0, 'line_width');
     $obj['x']          = $from_obj['object_id'] . '%+' . ($from_obj['.width']  / 2) . ','
-                        .$to_obj['object_id']   . '%+' . ($to_obj['.width']    / 2);
+                        . $to_obj['object_id']   . '%+' . ($to_obj['.width']    / 2);
     $obj['y']          = $from_obj['object_id'] . '%+' . ($from_obj['.height'] / 2) . ','
-                        .$to_obj['object_id']   . '%+' . ($to_obj['.height']   / 2);
+                        . $to_obj['object_id']   . '%+' . ($to_obj['.height']   / 2);
 
     return $obj;
 }

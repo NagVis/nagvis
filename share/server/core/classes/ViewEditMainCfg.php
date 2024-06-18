@@ -74,7 +74,7 @@ class ViewEditMainCfg {
         $UMAINCFG->writeConfig(); // persist changes
         echo '<div class="success">' . l('The configuration has been saved.') . '</div>';
         echo '<script>window.scrollTo(0, 0);'
-            .'window.setTimeout(function() { window.location.reload(); }, 1500);</script>';
+            . 'window.setTimeout(function() { window.location.reload(); }, 1500);</script>';
     }
 
     public function parse() {
@@ -181,7 +181,7 @@ class ViewEditMainCfg {
             echo '<tr' . $row_class . $row_style . '>';
             echo '<td class="tdlabel">' . $key . '</td>';
             echo '<td class="tdbox"><input type="checkbox" name="toggle_' . $ident . '" value="1" '
-                .'onclick="toggle_option(\'box_' . $ident . '\')"' . $checked . '/></td>';
+                . 'onclick="toggle_option(\'box_' . $ident . '\')"' . $checked . '/></td>';
             echo '<td class="tdfield">';
 
             echo '<div id="_txt_box_' . $ident . '"' . $show_default . ' class="default">';
@@ -280,8 +280,8 @@ class ViewEditMainCfg {
         echo '<img src="' . cfg('paths', 'htmlimages') . 'internal/picker.png" alt="' . l('Color select') . '" />';
         echo '</a></div>';
         js('var o = document.getElementById(\'' . $propname . '_inp\');'
-          .'o.color = new jscolor.color(o, {pickerOnfocus:false,adjust:false,hash:true});'
-          .'o = null;');
+          . 'o.color = new jscolor.color(o, {pickerOnfocus:false,adjust:false,hash:true});'
+          . 'o = null;');
     }
 }
 

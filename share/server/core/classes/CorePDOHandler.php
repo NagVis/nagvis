@@ -64,10 +64,10 @@ class CorePDOHandler {
                     '-perm-delete-by-obj' => 'DELETE FROM perms WHERE "mod"=:mod AND obj=:obj',
                     '-perm-get-all' => 'SELECT "permId", "mod", act, obj FROM perms ORDER BY "mod",act,obj',
                     '-perm-get-by-user' => 'SELECT perms."mod" AS "mod", perms.act AS act, perms.obj AS obj '
-                        .'FROM users2roles '
-                        .'INNER JOIN roles2perms ON roles2perms."roleId" = users2roles."roleId" '
-                        .'INNER JOIN perms ON perms."permId" = roles2perms."permId" '
-                        .'WHERE users2roles."userId" = :id',
+                        . 'FROM users2roles '
+                        . 'INNER JOIN roles2perms ON roles2perms."roleId" = users2roles."roleId" '
+                        . 'INNER JOIN perms ON perms."permId" = roles2perms."permId" '
+                        . 'WHERE users2roles."userId" = :id',
                     '-perm-rename-map' => 'UPDATE perms SET obj=:new_name ' . 
                         ' WHERE "mod"=\'Map\' AND obj=:old_name',
                     '-perm-change-act' => 'UPDATE perms SET act=:new_act WHERE mod=:mod and act=:old_act',

@@ -553,9 +553,9 @@ class GlobalMapCfg {
             $selectable       = false;
 
             if(file_exists(path('sys', 'local', 'sources'))) {
-                include_once(path('sys', 'local', 'sources') . '/'. $source_name . '.php');
+                include_once(path('sys', 'local', 'sources') . '/' . $source_name . '.php');
             } else {
-                include_once(path('sys', 'global', 'sources') . '/'. $source_name. '.php');
+                include_once(path('sys', 'global', 'sources') . '/' . $source_name . '.php');
             }
 
             // Add the view params of that source to the list of parameters

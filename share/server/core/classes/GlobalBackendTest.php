@@ -387,23 +387,23 @@ class GlobalBackendTest implements GlobalBackendInterface {
 
     function genMapCfg($path) {
         $f = "define global {\n"
-            ."  backend_id=test_1\n"
-            ."}\n"
-                ."\n";
+            . "  backend_id=test_1\n"
+            . "}\n"
+                . "\n";
         $x = 0;
         $y = 0;
         foreach(array_keys($this->obj) AS $type) {
             foreach($this->getAllTypeObjects($type) AS $obj) {
                 $t = $type == 'service' ? 'host' : $type;
                 $f .= "define " . $type . " {\n"
-                     ."  " . $t . "_name=" . $obj['name'] . "\n";
+                     . "  " . $t . "_name=" . $obj['name'] . "\n";
                 if($type == 'service') {
                     $f .= "  service_description=" . $obj['service_description'] . "\n";
                 }
                 $f .= "  x=" . $x . "\n"
-                     ."  y=" . $y . "\n"
-                   ."}\n"
-                       ."\n";
+                     . "  y=" . $y . "\n"
+                   . "}\n"
+                       . "\n";
                 $x += 22;
                 if($x > 1800) {
                     $y += 22;

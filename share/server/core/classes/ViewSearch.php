@@ -27,9 +27,9 @@ class ViewSearch {
         ob_start();
         echo '<div class="simple_form">' . N;
         echo '<input type="text" name="highlightInput" id="highlightInput" '
-            .'onkeypress="searchObjectsKeyCheck(this.value, event)" autofocus />' . N;
+            . 'onkeypress="searchObjectsKeyCheck(this.value, event)" autofocus />' . N;
         echo '<input class="submit" type="button" name="submit" value="' . l('Search') . '"'
-            .' onclick="searchObjects(document.getElementById(\'highlightInput\').value)" />' . N;
+            . ' onclick="searchObjects(document.getElementById(\'highlightInput\').value)" />' . N;
         echo '</div>' . N;
         js('try{document.getElementById(\'highlightInput\').focus();}catch(e){}');
         return ob_get_clean();
