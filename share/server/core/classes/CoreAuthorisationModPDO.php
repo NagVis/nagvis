@@ -39,14 +39,12 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
                     'DB' => $this->DB->getDSN(),
                       'MSG' => json_encode($this->DB->error())
                 ]));
-        } else {
+        } elseif(!$this->DB->tableExist('users')) {
             // Create initial db scheme if needed
-            if(!$this->DB->tableExist('users')) {
-                $this->DB->createInitialDb();
-            } else {
-                // Maybe an update is needed
-                $this->DB->updateDb();
-            }
+            $this->DB->createInitialDb();
+        } else {
+            // Maybe an update is needed
+            $this->DB->updateDb();
         }
     }
 

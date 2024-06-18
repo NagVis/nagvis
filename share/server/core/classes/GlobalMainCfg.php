@@ -2197,12 +2197,10 @@ class GlobalMainCfg {
                             // When no label is set, set map or url as label
                             if($arrRet[1] != '') {
                                 $label = substr($arrRet[1],0,-1);
+                            } elseif($arrRet[3] != '') {
+                                $label = $arrRet[3];
                             } else {
-                                if($arrRet[3] != '') {
-                                    $label = $arrRet[3];
-                                } else {
-                                    $label = $arrRet[4];
-                                }
+                                $label = $arrRet[4];
                             }
 
                             if(isset($arrRet[4]) && $arrRet[4] != '') {
@@ -2503,11 +2501,9 @@ class GlobalMainCfg {
             // This value could be emtpy - so only check if it is set
             if(isset($this->validConfig['backend']['options'][$backendType][$var]['default'])) {
                 return $this->validConfig['backend']['options'][$backendType][$var]['default'];
-            } else {
+            } elseif(isset($this->validConfig['backend'][$var]['default'])) {
                 // This value could be emtpy - so only check if it is set
-                if(isset($this->validConfig['backend'][$var]['default'])) {
-                    return $this->validConfig['backend'][$var]['default'];
-                }
+                return $this->validConfig['backend'][$var]['default'];
             }
 
         } elseif(strpos($sec, 'rotation_') === 0) {
@@ -2526,11 +2522,9 @@ class GlobalMainCfg {
             // This value could be emtpy - so only check if it is set
             if(isset($this->validConfig['action']['options'][$ty][$var]['default'])) {
                 return $this->validConfig['action']['options'][$ty][$var]['default'];
-            } else {
+            } elseif(isset($this->validConfig['action'][$var]['default'])) {
                 // This value could be emtpy - so only check if it is set
-                if(isset($this->validConfig['action'][$var]['default'])) {
-                    return $this->validConfig['action'][$var]['default'];
-                }
+                return $this->validConfig['action'][$var]['default'];
             }
 
         } else {
@@ -2818,8 +2812,48 @@ class GlobalMainCfg {
                 foreach ($item as $key2 => $item2) {
                     if(substr($key2,0,8) == 'comment_') {
                         $content .= $item2."\n";
+                    } elseif(is_numeric($item2) || is_bool($item2)) {
+                        // Don't apply config options which are set to the same
+                        // value in the pre user config files
+                        if($this->preUserConfig !== null
+                           && isset($this->preUserConfig[$key])
+                           && isset($this->preUserConfig[$key][$key2])
+                           && $item2 == $this->preUserConfig[$key][$key2]) {
+                            continue;
+                        }
+                        $content .= $key2."=".$item2."\n";
                     } else {
-                        if(is_numeric($item2) || is_bool($item2)) {
+                        if(is_array($item2) && preg_match('/^rotation_/i', $key) && $key2 == 'maps') {
+                            $val = '';
+                            // Check if an element has a label defined
+                            foreach($item2 AS $intId => $arrStep) {
+                                $seperator = ',';
+                                $label = '';
+                                $step = '';
+
+                                if($intId == 0) {
+                                    $seperator = '';
+                                }
+
+                                if(isset($arrStep['map']) && $arrStep['map'] != '') {
+                                    $step = $arrStep['map'];
+                                } else {
+                                    $step = '[' . $arrStep['url'] . ']';
+                                }
+
+                                if(isset($arrStep['label']) && $arrStep['label'] != '' && $arrStep['label'] != $step) {
+                                    $label = $arrStep['label'] . ':';
+                                }
+
+                                // Save the extracted information to an array
+                                $val .= $seperator.$label.$step;
+                            }
+
+                            $item2 = $val;
+                        }
+
+                        // Don't write the backendid/rotationid attributes (Are internal)
+                        if($key2 !== 'backendid' && $key2 !== 'rotationid' && $key2 !== 'action_id') {
                             // Don't apply config options which are set to the same
                             // value in the pre user config files
                             if($this->preUserConfig !== null
@@ -2828,66 +2862,24 @@ class GlobalMainCfg {
                                && $item2 == $this->preUserConfig[$key][$key2]) {
                                 continue;
                             }
-                            $content .= $key2."=".$item2."\n";
-                        } else {
-                            if(is_array($item2) && preg_match('/^rotation_/i', $key) && $key2 == 'maps') {
-                                $val = '';
-                                // Check if an element has a label defined
-                                foreach($item2 AS $intId => $arrStep) {
-                                    $seperator = ',';
-                                    $label = '';
-                                    $step = '';
 
-                                    if($intId == 0) {
-                                        $seperator = '';
-                                    }
-
-                                    if(isset($arrStep['map']) && $arrStep['map'] != '') {
-                                        $step = $arrStep['map'];
-                                    } else {
-                                        $step = '[' . $arrStep['url'] . ']';
-                                    }
-
-                                    if(isset($arrStep['label']) && $arrStep['label'] != '' && $arrStep['label'] != $step) {
-                                        $label = $arrStep['label'] . ':';
-                                    }
-
-                                    // Save the extracted information to an array
-                                    $val .= $seperator.$label.$step;
-                                }
-
-                                $item2 = $val;
+                            if (substr($key, 0, 8) == 'backend_') {
+                                $arrValidConfig = $this->getInstanceableValidConfig('backend', $key);
+                            }
+                            elseif (substr($key, 0, 9) == 'rotation_') {
+                                $arrValidConfig = $this->validConfig['rotation'];
+                            }
+                            elseif (substr($key, 0, 7) == 'action_') {
+                                $arrValidConfig = $this->getInstanceableValidConfig('action', $key);
+                            } else {
+                                $arrValidConfig = $this->validConfig[$key];
                             }
 
-                            // Don't write the backendid/rotationid attributes (Are internal)
-                            if($key2 !== 'backendid' && $key2 !== 'rotationid' && $key2 !== 'action_id') {
-                                // Don't apply config options which are set to the same
-                                // value in the pre user config files
-                                if($this->preUserConfig !== null
-                                   && isset($this->preUserConfig[$key])
-                                   && isset($this->preUserConfig[$key][$key2])
-                                   && $item2 == $this->preUserConfig[$key][$key2]) {
-                                    continue;
-                                }
-
-                                if (substr($key, 0, 8) == 'backend_') {
-                                    $arrValidConfig = $this->getInstanceableValidConfig('backend', $key);
-                                }
-                                elseif (substr($key, 0, 9) == 'rotation_') {
-                                    $arrValidConfig = $this->validConfig['rotation'];
-                                }
-                                elseif (substr($key, 0, 7) == 'action_') {
-                                    $arrValidConfig = $this->getInstanceableValidConfig('action', $key);
-                                } else {
-                                    $arrValidConfig = $this->validConfig[$key];
-                                }
-
-                                if(isset($arrValidConfig[$key2]['array']) && $arrValidConfig[$key2]['array'] === true) {
-                                    $item2 = implode(',', $item2);
-                                }
-
-                                $content .= $key2.'="'.$item2.'"'."\n";
+                            if(isset($arrValidConfig[$key2]['array']) && $arrValidConfig[$key2]['array'] === true) {
+                                $item2 = implode(',', $item2);
                             }
+
+                            $content .= $key2.'="'.$item2.'"'."\n";
                         }
                     }
                 }

@@ -112,19 +112,16 @@ class CoreRotation {
             if($iStepId != '') {
                 $this->intCurrentStep = (int)$iStepId;
             }
-            else
+            elseif ($sStep !== '') {
                 // Get position of current step in the array
-            {
-                if ($sStep !== '') {
-                    foreach ($this->arrSteps as $iIndex => $arrStep) {
-                        if (isset($arrStep[$sType]) && $arrStep[$sType] === $sStep) {
-                            $this->intCurrentStep = $iIndex;
-                            break;
-                        }
+                foreach ($this->arrSteps as $iIndex => $arrStep) {
+                    if (isset($arrStep[$sType]) && $arrStep[$sType] === $sStep) {
+                        $this->intCurrentStep = $iIndex;
+                        break;
                     }
-                } else {
-                    $this->intCurrentStep = 0;
                 }
+            } else {
+                $this->intCurrentStep = 0;
             }
 
             // Set the next step after setting the current step

@@ -92,12 +92,10 @@ $max = $aPerfdata[0]['max'];
 
 if($value == null) {
 	$value = $default;
-} else {
-	if($max != '' && $value < $min) {
-		$value = $min;
-	} elseif($max != '' && $max != -1 && $value > $max) {
-		$value = $max;
-	}
+} elseif($max != '' && $value < $min) {
+    $value = $min;
+} elseif($max != '' && $max != -1 && $value > $max) {
+    $value = $max;
 }
 
 // If there is no max value given set it critical or warning value

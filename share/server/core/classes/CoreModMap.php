@@ -383,10 +383,8 @@ class CoreModMap extends CoreModule {
             if(count($this->CORE->getAvailableMaps('/^'.$map.'$/')) <= 0) {
                 throw new NagVisException(l('The map does not exist.'));
             }
-        } else {
-            if(count($this->CORE->getAvailableMaps('/^'.$map.'$/')) > 0) {
-                throw new NagVisException(l('The map does already exist.'));
-            }
+        } elseif(count($this->CORE->getAvailableMaps('/^'.$map.'$/')) > 0) {
+            throw new NagVisException(l('The map does already exist.'));
         }
     }
 }

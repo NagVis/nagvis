@@ -259,15 +259,13 @@ class CoreBackendMgmt {
                             $counts = $this->getBackend($backendId)->getServiceListCounts(
                                     $options, $OBJ->getObjectFilter());
                         }
+                    } elseif (!$this->checkBackendFeature($backendId, 'getHostAndServiceCounts', false)) {
+                        $counts = [];
+                        $OBJ->setBackendProblem(l('This type of object is not supportd by this backend ([BACKENDID]).',
+                              ['BACKENDID' => $backendId]), $backendId);
                     } else {
-                        if (!$this->checkBackendFeature($backendId, 'getHostAndServiceCounts', false)) {
-                            $counts = [];
-                            $OBJ->setBackendProblem(l('This type of object is not supportd by this backend ([BACKENDID]).',
-                                  ['BACKENDID' => $backendId]), $backendId);
-                        } else {
-                            $counts = $this->getBackend($backendId)->getHostAndServiceCounts(
-                                    $options, $OBJ->getObjectFilter(), $OBJ->getObjectFilter(), false);
-                        }
+                        $counts = $this->getBackend($backendId)->getHostAndServiceCounts(
+                                $options, $OBJ->getObjectFilter(), $OBJ->getObjectFilter(), false);
                     }
                 } catch(BackendException $e) {
                     $counts = [];
@@ -528,15 +526,13 @@ class CoreBackendMgmt {
                         }
                     }
                 }
-            } else {
-                if($type != 'hostMemberState') {
-                    foreach ($OBJS as $OBJ) {
-                        if (isset($msg)) {
-                            $OBJ->setBackendProblem($msg, $backendId);
-                        } else {
-                            $OBJ->setBackendProblem(l('The object "[OBJ]" does not exist ([TYPE]).',
-                                ['OBJ' => $name, 'TYPE' => $OBJ->getType()]), $backendId);
-                        }
+            } elseif($type != 'hostMemberState') {
+                foreach ($OBJS as $OBJ) {
+                    if (isset($msg)) {
+                        $OBJ->setBackendProblem($msg, $backendId);
+                    } else {
+                        $OBJ->setBackendProblem(l('The object "[OBJ]" does not exist ([TYPE]).',
+                            ['OBJ' => $name, 'TYPE' => $OBJ->getType()]), $backendId);
                     }
                 }
             }
