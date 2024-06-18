@@ -2,7 +2,7 @@
 
 class WorldmapError extends MapSourceError {}
 
-define('MATCH_WORLDMAP_ZOOM', '/^1?[0-9]|20$/');
+const MATCH_WORLDMAP_ZOOM = '/^1?[0-9]|20$/';
 
 // Register this source as being selectable by the user
 global $selectable;
@@ -205,10 +205,10 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
     if ($sw_lng > $ne_lng) swap($sw_lng, $ne_lng);
 
     // The 4 bounding lines expressed as common 2D "rx + sy + t = 0" equations
-    list($rWest, $sWest, $tWest) = line_parameters($sw_lng, $sw_lat, $sw_lng, $ne_lat);
-    list($rNorth, $sNorth, $tNorth) = line_parameters($sw_lng, $ne_lat, $ne_lng, $ne_lat);
-    list($rEast, $sEast, $tEast) = line_parameters($ne_lng, $sw_lat, $ne_lng, $ne_lat);
-    list($rSouth, $sSouth, $tSouth) = line_parameters($sw_lng, $sw_lat, $ne_lng, $sw_lat);
+    [$rWest, $sWest, $tWest] = line_parameters($sw_lng, $sw_lat, $sw_lng, $ne_lat);
+    [$rNorth, $sNorth, $tNorth] = line_parameters($sw_lng, $ne_lat, $ne_lng, $ne_lat);
+    [$rEast, $sEast, $tEast] = line_parameters($ne_lng, $sw_lat, $ne_lng, $ne_lat);
+    [$rSouth, $sSouth, $tSouth] = line_parameters($sw_lng, $sw_lat, $ne_lng, $sw_lat);
 
     /* SQLite 2D line equations */
     $ux = '(lng2-lng)';
@@ -439,7 +439,7 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
         $params = $MAPCFG->getSourceParams();
         $zoom = (int)$params['worldmap_zoom'];
 
-        list($sw_lng, $sw_lat, $ne_lng, $ne_lat) = explode(',', $bbox);
+        [$sw_lng, $sw_lat, $ne_lng, $ne_lat] = explode(',', $bbox);
         foreach (worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) as $object_id => $obj) {
             // Now, when the object has a maximum / minimum zoom configured,
             // hide it depending on the zoom
