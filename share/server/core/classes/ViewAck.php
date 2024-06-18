@@ -31,7 +31,7 @@ class ViewAck {
         ob_start();
 
         $map = req('map');
-        if (!$map || count($CORE->getAvailableMaps('/^'.$map.'$/')) == 0) {
+        if (!$map || count($CORE->getAvailableMaps('/^' . $map . '$/')) == 0) {
             throw new NagVisException(l('Please provide a valid map name.'));
         }
 
@@ -86,7 +86,7 @@ class ViewAck {
 
                 success(l('The problem has been acknowledged.'));
                  js('window.setTimeout(function() {'
-                   .'popupWindowClose(); refreshMapObject(null, \''.$object_id.'\');}, 2000);');
+                   .'popupWindowClose(); refreshMapObject(null, \'' . $object_id . '\');}, 2000);');
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (NagVisException $e) {
@@ -102,18 +102,18 @@ class ViewAck {
         echo $this->error;
 
         js_form_start('acknowledge');
-        echo '<label>'.l('Comment');
+        echo '<label>' . l('Comment');
         input('comment');
         echo '</label>';
         echo '<label>';
         checkbox('sticky', cfg('global', 'dialog_ack_sticky'));
-        echo l('Sticky').'</label>';
+        echo l('Sticky') . '</label>';
         echo '<label>';
         checkbox('notify', cfg('global', 'dialog_ack_notify'));
-        echo l('Notify contacts').'</label>';
+        echo l('Notify contacts') . '</label>';
         echo '<label>';
         checkbox('persist', cfg('global', 'dialog_ack_persist'));
-        echo l('Persist comment').'</label>';
+        echo l('Persist comment') . '</label>';
         submit(l('Acknowledge'));
         form_end();
         focus('comment');

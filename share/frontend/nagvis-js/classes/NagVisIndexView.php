@@ -86,7 +86,7 @@ class NagVisIndexView {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkJsCompressed() {
-        return file_exists(cfg('paths', 'js').'NagVisCompressed.js');
+        return file_exists(cfg('paths', 'js') . 'NagVisCompressed.js');
     }
 }
 

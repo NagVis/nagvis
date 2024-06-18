@@ -193,7 +193,7 @@ class NagVisHost extends NagVisStatefulObject {
         }
 
         // Write host state
-        $this->sum[OUTPUT] = NagVisHost::$langHostStateIs.' '.state_str($this->state[STATE]).'. ';
+        $this->sum[OUTPUT] = NagVisHost::$langHostStateIs . ' ' . state_str($this->state[STATE]) . '. ';
 
         // Only merge host state with service state when recognize_services is set
         // to 1
@@ -231,7 +231,7 @@ class NagVisHost extends NagVisStatefulObject {
 
                 $this->mergeSummaryOutput($arrServiceStates, NagVisHost::$langServices);
             } else {
-                $this->sum[OUTPUT] .= l('hostHasNoServices','HOST~'.$this->getName());
+                $this->sum[OUTPUT] .= l('hostHasNoServices','HOST~' . $this->getName());
             }
         }
     }
@@ -245,7 +245,7 @@ class NagVisHost extends NagVisStatefulObject {
      */
     private function fetchSummaryOutput() {
         // Write host state
-        $this->sum[OUTPUT] = l('hostStateIs').' '.state_str($this->state[STATE]).'. ';
+        $this->sum[OUTPUT] = l('hostStateIs') . ' ' . state_str($this->state[STATE]) . '. ';
 
         // Only merge host state with service state when recognize_services is set
         // to 1
@@ -264,7 +264,7 @@ class NagVisHost extends NagVisStatefulObject {
 
                 $this->mergeSummaryOutput($arrStates, l('services'));
             } else {
-                $this->sum[OUTPUT] .= l('hostHasNoServices','HOST~'.$this->getName());
+                $this->sum[OUTPUT] .= l('hostHasNoServices','HOST~' . $this->getName());
             }
         }
     }

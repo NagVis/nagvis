@@ -176,7 +176,7 @@ class CoreModMap extends CoreModule {
             throw new FieldInputError(null, l('Please choose a map'));
         }
 
-        if (count($CORE->getAvailableMaps('/^'.preg_quote($name).'$/')) == 0) {
+        if (count($CORE->getAvailableMaps('/^' . preg_quote($name) . '$/')) == 0) {
             throw new FieldInputError(null, l('The given map name is invalid'));
         }
 
@@ -380,10 +380,10 @@ class CoreModMap extends CoreModule {
     // Check if the map exists
     private function verifyMapExists($map, $negate = false) {
         if(!$negate) {
-            if(count($this->CORE->getAvailableMaps('/^'.$map.'$/')) <= 0) {
+            if(count($this->CORE->getAvailableMaps('/^' . $map . '$/')) <= 0) {
                 throw new NagVisException(l('The map does not exist.'));
             }
-        } elseif(count($this->CORE->getAvailableMaps('/^'.$map.'$/')) > 0) {
+        } elseif(count($this->CORE->getAvailableMaps('/^' . $map . '$/')) > 0) {
             throw new NagVisException(l('The map does already exist.'));
         }
     }

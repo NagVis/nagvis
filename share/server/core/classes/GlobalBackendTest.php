@@ -80,7 +80,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
         $this->now = time();
         $this->genObj();
 
-        if(cfg('backend_'.$backendId, 'generate_mapcfg')
+        if(cfg('backend_' . $backendId, 'generate_mapcfg')
            && (isset($_POST['new']) || !file_exists(cfg('paths', 'mapcfg') . 'test-gen.cfg'))) {
             $this->genMapCfg(cfg('paths', 'mapcfg') . 'test-gen.cfg');
         }
@@ -105,7 +105,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
 
         return [
             $state,
-            'Host with state '.$state, // output
+            'Host with state ' . $state, // output
             $ack,
             $in_downtime,
             0, // staleness
@@ -117,8 +117,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
             $this->now-60, // last hard state change
             $this->now-60, // last state change
             '', // perfdata
-            'Display Name host-'.$name,
-            'Alias host-'.$name,
+            'Display Name host-' . $name,
+            'Alias host-' . $name,
             'localhost', // address
             '', // notes
             null, // check command
@@ -164,8 +164,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
             $this->now-60, // last hard state change
             $this->now-60, // last state change
             $perfdata,
-            'display name '.$name2,
-            'alias '.$name2,
+            'display name ' . $name2,
+            'alias ' . $name2,
             'localhost', // address
             '', // notes
             null, // check command
@@ -181,7 +181,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
     private function hostgroup($name, $members) {
         return  [
             'name'    => $name,
-            'alias'   => 'Alias '.$name,
+            'alias'   => 'Alias ' . $name,
             'members' => $members
         ];
     }
@@ -189,7 +189,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
     private function servicegroup($name, $members) {
         return [
             'name'    => $name,
-            'alias'   => 'Alias '.$name,
+            'alias'   => 'Alias ' . $name,
             'members' => $members
         ];
     }
@@ -291,12 +291,12 @@ class GlobalBackendTest implements GlobalBackendInterface {
         foreach($this->hostStates AS $state => $substates) {
             foreach($this->canBeSoft[$state] AS $stateType) {
                 foreach(array_keys($substates) AS $substate) {
-                    $ident    = 'host-'.$state.'-'.$stateType.'-'.$substate;
+                    $ident    = 'host-' . $state . '-' . $stateType . '-' . $substate;
                     $hostname = $ident;
 
                     $this->obj['host'][$hostname] = $this->host($hostname, $state, $stateType, $substate);
                     $this->obj['service'][$hostname] = [];
-                    $this->obj['hostgroup']['hostgroup-'.$ident] = $this->hostgroup('hostgroup-'.$ident, [$hostname]);
+                    $this->obj['hostgroup']['hostgroup-' . $ident] = $this->hostgroup('hostgroup-' . $ident, [$hostname]);
                 }
             }
         }
@@ -307,12 +307,12 @@ class GlobalBackendTest implements GlobalBackendInterface {
         foreach($this->serviceStates AS $state => $substates) {
             foreach($this->canBeSoft[$state] AS $stateType) {
                 foreach(array_keys($substates) AS $substate) {
-                    $ident = 'service-'.$state.'-'.$substate;
-                    $hostname = 'host-'.$ident;
+                    $ident = 'service-' . $state . '-' . $substate;
+                    $hostname = 'host-' . $ident;
                     $this->obj['host'][$hostname] = $this->host($hostname, UNCHECKED);
                     $this->obj['service'][$hostname] = [$this->service($hostname, $ident, $state, $stateType, $substate)];
-                    $this->obj['hostgroup']['hostgroup-'.$ident] = $this->hostgroup('hostgroup-'.$ident, [$hostname]);
-                    $this->obj['servicegroup']['servicegroup-'.$ident] = $this->servicegroup('servicegroup-'.$ident, [[$hostname, $ident]]);
+                    $this->obj['hostgroup']['hostgroup-' . $ident] = $this->hostgroup('hostgroup-' . $ident, [$hostname]);
+                    $this->obj['servicegroup']['servicegroup-' . $ident] = $this->servicegroup('servicegroup-' . $ident, [[$hostname, $ident]]);
                 }
             }
         }
@@ -327,13 +327,13 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     foreach($this->serviceStates AS $state => $substates) {
                         foreach($this->canBeSoft[$state] AS $stateType) {
                             foreach(array_keys($substates) AS $substate) {
-                                $ident = 'host-'.$hostState.'-'.$hostStateType.'-'.$hostSubstate.'-service-'.$state.'-'.$substate;
+                                $ident = 'host-' . $hostState . '-' . $hostStateType . '-' . $hostSubstate . '-service-' . $state . '-' . $substate;
                                 $hostname = $ident;
 
                                 $this->obj['host'][$hostname] = $this->host($hostname, $hostState, $hostStateType, $hostSubstate);
                                 $this->obj['service'][$hostname] = [$this->service($hostname, $ident, $state, $stateType, $substate)];
-                                $this->obj['hostgroup']['hostgroup-'.$ident] = $this->hostgroup('hostgroup-'.$ident, [$hostname]);
-                                $this->obj['servicegroup']['servicegroup-'.$ident] = $this->servicegroup('servicegroup-'.$ident, [[$hostname, $ident]]);
+                                $this->obj['hostgroup']['hostgroup-' . $ident] = $this->hostgroup('hostgroup-' . $ident, [$hostname]);
+                                $this->obj['servicegroup']['servicegroup-' . $ident] = $this->servicegroup('servicegroup-' . $ident, [[$hostname, $ident]]);
                             }
                         }
                     }
@@ -395,13 +395,13 @@ class GlobalBackendTest implements GlobalBackendInterface {
         foreach(array_keys($this->obj) AS $type) {
             foreach($this->getAllTypeObjects($type) AS $obj) {
                 $t = $type == 'service' ? 'host' : $type;
-                $f .= "define ".$type." {\n"
-                     ."  ".$t."_name=".$obj['name']."\n";
+                $f .= "define " . $type . " {\n"
+                     ."  " . $t . "_name=" . $obj['name'] . "\n";
                 if($type == 'service') {
                     $f .= "  service_description=" . $obj['service_description'] . "\n";
                 }
-                $f .= "  x=".$x."\n"
-                     ."  y=".$y."\n"
+                $f .= "  x=" . $x . "\n"
+                     ."  y=" . $y . "\n"
                    ."}\n"
                        ."\n";
                 $x += 22;
@@ -526,10 +526,10 @@ class GlobalBackendTest implements GlobalBackendInterface {
                             $val = $OBJS[0]->getServiceDescription();
                         }
 
-                        $objFilters[] = 'Filter: '.$filter['key'].' '.$filter['op'].' '.$val."\n";
+                        $objFilters[] = 'Filter: ' . $filter['key'] . ' ' . $filter['op'] . ' ' . $val . "\n";
                     break;
                     default:
-                        throw new BackendConnectionProblem('Invalid filter key ('.$filter['key'].')');
+                        throw new BackendConnectionProblem('Invalid filter key (' . $filter['key'] . ')');
                     break;
                 }
             }
@@ -542,7 +542,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                 $count = '';
             }
 
-            $aFilters[] = implode($objFilters).$count;
+            $aFilters[] = implode($objFilters) . $count;
         }
 
         $count = count($aFilters);
@@ -552,7 +552,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
             $count = '';
         }
 
-        return implode($aFilters).$count;
+        return implode($aFilters) . $count;
     }
 
 
@@ -594,7 +594,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                 }
             }
         } else {
-            throw new BackendException('Unhandled query - filters: '.json_encode($filters));
+            throw new BackendException('Unhandled query - filters: ' . json_encode($filters));
             exit;
         }
 
@@ -655,12 +655,12 @@ class GlobalBackendTest implements GlobalBackendInterface {
                 }
                 foreach($arrReturn[$OBJS[0]->getName()] = $this->obj['service'][$OBJS[0]->getName()] AS $service) {
                     if($service[DESCRIPTION] == $OBJS[0]->getServiceDescription()) {
-                        $arrReturn[$OBJS[0]->getName().'~~'.$OBJS[0]->getServiceDescription()] = $service;
+                        $arrReturn[$OBJS[0]->getName() . '~~' . $OBJS[0]->getServiceDescription()] = $service;
                     }
                 }
             }
         } else {
-            throw new BackendException('Unhandled filter in backend (getServiceState): '.json_encode($filters));
+            throw new BackendException('Unhandled filter in backend (getServiceState): ' . json_encode($filters));
         }
 
         return $arrReturn;
@@ -850,7 +850,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                 }
             }
         } else {
-            throw new BackendException('Unhandled filter in backend (getServicegroupStateCounts): '.json_encode($aReturn));
+            throw new BackendException('Unhandled filter in backend (getServicegroupStateCounts): ' . json_encode($aReturn));
         }
         return $aReturn;
     }

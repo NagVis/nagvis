@@ -95,7 +95,7 @@ class CoreModMultisite extends CoreModule {
             "name" => $map["name"],
             "title" => $map['summary_state'],
             "alias" => $map['alias'],
-            "url" => cfg('paths', 'htmlbase').'/index.php?mod=Map&act=view&show='.$map['name'],
+            "url" => cfg('paths', 'htmlbase') . '/index.php?mod=Map&act=view&show=' . $map['name'],
             "summary_state" => $map["summary_state"],
             "summary_output" => $map["summary_output"],
             "summary_in_downtime" => $map['summary_in_downtime'],
@@ -111,7 +111,7 @@ class CoreModMultisite extends CoreModule {
     // equal permissions.
     private function getMapsCached() {
         $maps = $this->CORE->getPermittedMaps();
-        $cache_file = cfg('paths','var').'snapin-'.md5(json_encode(array_keys($maps))).'-'.CONST_VERSION.'.cache';
+        $cache_file = cfg('paths','var') . 'snapin-' . md5(json_encode(array_keys($maps))) . '-' . CONST_VERSION . '.cache';
         $CACHE = new GlobalFileCache([], $cache_file);
         $cached = $CACHE->isCached();
 
@@ -171,7 +171,7 @@ class CoreModMultisite extends CoreModule {
             if($config_error !== null) {
                 $state = [
                     ERROR,
-                    l('Map Configuration Error: ').$config_error,
+                    l('Map Configuration Error: ') . $config_error,
                     null,
                     null,
                     null,
@@ -179,7 +179,7 @@ class CoreModMultisite extends CoreModule {
             } elseif($error !== null) {
                 $state = [
                     ERROR,
-                    l('Error: ').$error,
+                    l('Error: ') . $error,
                     null,
                     null,
                     null,

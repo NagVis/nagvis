@@ -81,15 +81,15 @@ class ViewChangePassword {
 
         js_form_start('change_password');
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Old password').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Old password') . '</td>';
         echo '<td class="tdfield">';
         password('password_old');
         echo '</td></tr>';
-        echo '<tr><td class="tdlabel">'.l('New password').'</td>';
+        echo '<tr><td class="tdlabel">' . l('New password') . '</td>';
         echo '<td class="tdfield">';
         password('password_new1');
         echo '</td></tr>';
-        echo '<tr><td class="tdlabel">'.l('New password (confirm)').'</td>';
+        echo '<tr><td class="tdlabel">' . l('New password (confirm)') . '</td>';
         echo '<td class="tdfield">';
         password('password_new2');
         echo '</td></tr>';

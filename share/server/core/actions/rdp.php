@@ -61,9 +61,9 @@ if (!function_exists('handle_action_rdp')) {
         // Now generate the .rdp file for the user which is then (hopefully) handled
         // correctly by the users browser.
         header('Content-Type: application/rdp; charset=utf-8');
-        header('Content-Disposition: attachment; filename='.$host_name.'.rdp');
+        header('Content-Disposition: attachment; filename=' . $host_name . '.rdp');
     
-        echo 'full address:s:'.$host_address."\n";
+        echo 'full address:s:' . $host_address . "\n";
         if($domain) {
             echo 'domain:s:' . $domain . "\n";
         }

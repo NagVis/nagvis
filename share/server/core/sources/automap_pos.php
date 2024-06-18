@@ -12,9 +12,9 @@ function automap_check_graphviz($binary) {
      * configured path. Prefer the configured path.
      */
     $bFound = false;
-    foreach([cfg('automap','graphvizpath').$binary, $binary] AS $path) {
+    foreach([cfg('automap','graphvizpath') . $binary, $binary] AS $path) {
         // Check if dot can be found in path (If it is there $returnCode is 0, if not it is 1)
-        exec('which '.$path.' 2>/dev/null', $arrReturn, $exitCode);
+        exec('which ' . $path . ' 2>/dev/null', $arrReturn, $exitCode);
 
         if($exitCode == 0) {
             $automap_graphviz_path = str_replace($binary, '', $arrReturn[0]);
@@ -26,7 +26,7 @@ function automap_check_graphviz($binary) {
     if(!$bFound) {
         throw new NagVisException(l('graphvizBinaryNotFound', [
             'NAME' => $binary,
-                                    'PATHS' => $_SERVER['PATH'].':'.cfg('automap','graphvizpath')
+                                    'PATHS' => $_SERVER['PATH'] . ':' . cfg('automap','graphvizpath')
         ]));
     }
 
@@ -45,7 +45,7 @@ function automap_pos_check_preflight($params) {
 }
 
 function graphviz_config_connector($from_id, $to_id) {
-    return '    "'.$from_id.'" -- "'.$to_id.'" [ weight=2 ];'."\n";
+    return '    "' . $from_id . '" -- "' . $to_id . '" [ weight=2 ];' . "\n";
 }
 
 function graphviz_config_tree(&$params, &$tree, $layer = 0) {
@@ -56,31 +56,31 @@ function graphviz_config_tree(&$params, &$tree, $layer = 0) {
         $name = substr($name, 0, 12) . '...';
     }
 
-    $str .= '    "'.$tree['object_id'].'" [ ';
-    $str .= 'label="'.$name.'", ';
-    $str .= 'URL="'.$tree['object_id'].'", ';
-    $str .= 'tooltip="'.$tree['object_id'].'", ';
+    $str .= '    "' . $tree['object_id'] . '" [ ';
+    $str .= 'label="' . $name . '", ';
+    $str .= 'URL="' . $tree['object_id'] . '", ';
+    $str .= 'tooltip="' . $tree['object_id'] . '", ';
     
     $width  = $tree['.width'];
     $height = $tree['.height'];
 
     // This should be scaled by the choosen iconset
     if($width != 22) {
-        $str .= 'width="'.graphviz_px2inch($width).'", ';
+        $str .= 'width="' . graphviz_px2inch($width) . '", ';
     }
     if($height != 22) {
-        $str .= 'height="'.graphviz_px2inch($height).'", ';
+        $str .= 'height="' . graphviz_px2inch($height) . '", ';
     }
 
     // This is the root node
     if($layer == 0) {
-        $str .= 'pos="'.graphviz_px2inch($params['width']/2).','.graphviz_px2inch($params['height']/2).'", ';
+        $str .= 'pos="' . graphviz_px2inch($params['width']/2) . ',' . graphviz_px2inch($params['height']/2) . '", ';
     }
 
     // The object has configured x/y coords. Use them.
     // FIXME: This does not work for some reason ...
     if(isset($tree['x']) && isset($tree['y'])) {
-        $str .= 'pos="'.graphviz_px2inch($tree['x'] - $width / 2).','.graphviz_px2inch($tree['y'] - $height / 2).'", ';
+        $str .= 'pos="' . graphviz_px2inch($tree['x'] - $width / 2) . ',' . graphviz_px2inch($tree['y'] - $height / 2) . '", ';
         $str .= 'pin=true, ';
     }
 
@@ -88,8 +88,8 @@ function graphviz_config_tree(&$params, &$tree, $layer = 0) {
     //if($this->automapConnector)
     //	$str .= 'height="'.$this->pxToInch($width/2).'", width="'.$this->pxToInch($width/2).'", ';
 
-    $str .= 'layer="'.$layer.'"';
-    $str .= ' ];'."\n";
+    $str .= 'layer="' . $layer . '"';
+    $str .= ' ];' . "\n";
 
     foreach($tree['.childs'] AS $child) {
         $str .= graphviz_config_tree($params, $child, $layer + 1);
@@ -114,10 +114,10 @@ function graphviz_config(&$params, &$tree) {
     //, ranksep="0.1", nodesep="0.4", ratio=auto, bb="0,0,500,500"
     $str .= '    graph [';
     $str .= 'dpi="72", ';
-    $str .= 'margin='.graphviz_px2inch($params['margin']).', ';
+    $str .= 'margin=' . graphviz_px2inch($params['margin']) . ', ';
     //$str .= 'bgcolor="'.$this->MAPCFG->getValue(0, 'background_color').'", ';
-    $str .= 'root="'.$tree['object_id'].'", ';
-    $str .= 'rankdir="'.$params['rankdir'].'", ';
+    $str .= 'root="' . $tree['object_id'] . '", ';
+    $str .= 'rankdir="' . $params['rankdir'] . '", ';
     $str .= 'center=true, ';
 
     /* Directed (dot) only */
@@ -138,13 +138,13 @@ function graphviz_config(&$params, &$tree) {
     /* All but directed (dot) */
     if($params['render_mode'] != 'directed') {
         //overlap: true,false,scale,scalexy,ortho,orthoxy,orthoyx,compress,ipsep,vpsc
-        $str .= 'overlap="'.$params['overlap'].'", ';
+        $str .= 'overlap="' . $params['overlap'] . '", ';
     }
 
     //ratio: expand, auto, fill, compress
     //$str .= 'ratio="auto", ';
     // enforces the size of the drawing area to this value
-    $str .= 'size="'.graphviz_px2inch($params['width']).','.graphviz_px2inch($params['height']).'!" ';
+    $str .= 'size="' . graphviz_px2inch($params['width']) . ',' . graphviz_px2inch($params['height']) . '!" ';
     $str .= "];\n";
 
     /**
@@ -156,7 +156,7 @@ function graphviz_config(&$params, &$tree) {
     $str .= 'labelloc="b", ';
     $str .= 'color="red", ';
     // needs to be included for correct rendering
-    $str .= 'image="'.path('sys', 'global', 'icons').'std_medium_ok.png", ';
+    $str .= 'image="' . path('sys', 'global', 'icons') . 'std_medium_ok.png", ';
 
     // default margin is 0.11,0.055
     //$str .= 'margin="0.05,0.025", ';
@@ -168,7 +168,7 @@ function graphviz_config(&$params, &$tree) {
     //$str .= 'fixedsize="true", ';
 
     $str .= 'fontsize=10';
-    $str .= '];'."\n";
+    $str .= '];' . "\n";
 
     // Create nodes for all hosts
     $str .= graphviz_config_tree($params, $tree);
@@ -220,13 +220,13 @@ function graphviz_run($map_name, &$params, $cfg) {
      * result in commands too long with big maps. So write the config to a file
      * and let it be read by graphviz binary.
      */
-    $dotFile = cfg('paths', 'var').$map_name.'.dot';
+    $dotFile = cfg('paths', 'var') . $map_name . '.dot';
     file_put_contents($dotFile, $cfg);
     $CORE->setPerms($dotFile);
 
     // Parse map
-    $cmd = $automap_graphviz_path.$binary
-           .' -Tcmapx '.cfg('paths', 'var').$map_name.'.dot 2>&1';
+    $cmd = $automap_graphviz_path . $binary
+           .' -Tcmapx ' . cfg('paths', 'var') . $map_name . '.dot 2>&1';
 
     exec($cmd, $arrMapCode, $returnCode);
 

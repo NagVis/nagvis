@@ -400,7 +400,7 @@ function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
 }
 
 function automap_connector($MAPCFG, &$params, &$saved_config, $from_obj, $to_obj) {
-    $obj_name = $from_obj['object_id'].'x'.$to_obj['object_id'];
+    $obj_name = $from_obj['object_id'] . 'x' . $to_obj['object_id'];
 
     $obj = automap_obj_base($MAPCFG, $params, $saved_config, $obj_name);
 
@@ -487,7 +487,7 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
         // < 0 - there is no limit
         // > 0 - there is a limit but it is no reached yet
         if($layers_left < 0 || $layers_left > 0) {
-            automap_fetch_tree($dir, $MAPCFG, $params, $saved_config, $rel_name, $layers_left - 1, $this_tree_lvl[$obj['object_id']]['.'.$dir], $object_names);
+            automap_fetch_tree($dir, $MAPCFG, $params, $saved_config, $rel_name, $layers_left - 1, $this_tree_lvl[$obj['object_id']]['.' . $dir], $object_names);
         }
     }
 }
@@ -534,13 +534,13 @@ function automap_filter_tree($allowed_ids, &$obj, $directions = null) {
 
     // Loop both directions
     foreach($directions as $dir) {
-        foreach($obj['.'.$dir] AS $rel_id => &$rel) {
+        foreach($obj['.' . $dir] AS $rel_id => &$rel) {
             // Or does a relative allow this object to remain on the map?
             $rel_remain = automap_filter_tree($allowed_ids, $rel, [$dir]);
 
             // If there is no reason for this relative to remain on the map, remove it here
             if(!$rel_remain) {
-                unset($obj['.'.$dir][$rel_id]);
+                unset($obj['.' . $dir][$rel_id]);
             } else {
                 // If at least one rel is allowed to remain, the ancestor must stay
                 $remain = true;

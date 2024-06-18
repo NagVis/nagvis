@@ -47,7 +47,7 @@ class NagVisInfoView {
         $userPerms = $AUTHORISATION->parsePermissions();
 
         $aData = [
-            'pageTitle'      => cfg('internal', 'title') . ' &rsaquo; '.l('supportInfo'),
+            'pageTitle'      => cfg('internal', 'title') . ' &rsaquo; ' . l('supportInfo'),
             'htmlBase'       => cfg('paths', 'htmlbase'),
             'htmlTemplates'  => path('html', 'global', 'templates'),
             'nagvisVersion'  => CONST_VERSION,
@@ -57,7 +57,7 @@ class NagVisInfoView {
             'serverSoftware' => $_SERVER['SERVER_SOFTWARE'],
             'scriptFilename' => $_SERVER['SCRIPT_FILENAME'],
             'scriptName' => $_SERVER['SCRIPT_NAME'],
-            'requestTime' => $_SERVER['REQUEST_TIME'].' (gmdate(): '.gmdate('r',$_SERVER['REQUEST_TIME']).')',
+            'requestTime' => $_SERVER['REQUEST_TIME'] . ' (gmdate(): ' . gmdate('r',$_SERVER['REQUEST_TIME']) . ')',
             'phpErrorReporting' => ini_get('error_reporting'),
             'phpSafeMode' => (ini_get('safe_mode')?"yes":"no"),
             'phpMaxExecTime' => ini_get('max_execution_time'),
@@ -72,7 +72,7 @@ class NagVisInfoView {
             'logonEnvVal'         => (isset($_SERVER[cfg('global', 'logonenvvar')]) ? $_SERVER[cfg('global', 'logonenvvar')] : ''),
             'logonEnvCreateUser'  => cfg('global', 'logonenvcreateuser'),
             'logonEnvCreateRole'  => cfg('global', 'logonenvcreaterole'),
-            'loggedIn'            => $userName.' ('.$userId.')',
+            'loggedIn'            => $userName . ' (' . $userId . ')',
             'userRoles'           => json_encode($userRoles),
             'userPerms'           => json_encode($userPerms),
             'userAuthModule'      => $AUTH->getAuthModule(),

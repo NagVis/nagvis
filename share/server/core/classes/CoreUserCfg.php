@@ -57,11 +57,11 @@ class CoreUserCfg {
                 $files[] = $role['name'] . '.profile';
             }
         }
-        $files[] = $AUTH->getUser().'.profile';
+        $files[] = $AUTH->getUser() . '.profile';
 
         // Read all configurations and append to the option array
         foreach($files AS $file) {
-            $f = $this->profilesDir.'/'.$file;
+            $f = $this->profilesDir . '/' . $file;
             if(!file_exists($f)) {
                 continue;
             }
@@ -83,7 +83,7 @@ class CoreUserCfg {
 
     public function doSet($opts) {
         global $CORE, $AUTH;
-        $file = $this->profilesDir.'/'.$AUTH->getUser().'.profile';
+        $file = $this->profilesDir . '/' . $AUTH->getUser() . '.profile';
 
         if(!$CORE->checkExisting(dirname($file), true) || !$CORE->checkWriteable(dirname($file), true)) {
             return false;

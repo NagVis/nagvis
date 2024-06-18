@@ -27,7 +27,7 @@ class ViewManageRoles {
 
     private function addForm() {
         global $AUTHORISATION;
-        echo '<h2>'.l('Create Role').'</h2>';
+        echo '<h2>' . l('Create Role') . '</h2>';
 
         if (is_action() && post('mode') == 'create') {
             try {
@@ -72,7 +72,7 @@ class ViewManageRoles {
         hidden('mode', 'create');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Name').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Name') . '</td>';
         echo '<td class="tdfield">';
         input('name');
         echo '</td></tr>';
@@ -84,7 +84,7 @@ class ViewManageRoles {
 
     private function modifyForm() {
         global $AUTHORISATION;
-        echo '<h2>'.l('Modify Role').'</h2>';
+        echo '<h2>' . l('Modify Role') . '</h2>';
 
         $role_id = submitted('edit') ? post('role_id') : null;
 
@@ -143,7 +143,7 @@ class ViewManageRoles {
         hidden('mode', 'edit');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Select Role').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Select Role') . '</td>';
         echo '<td class="tdfield">';
         $choices = ['' => l('Please choose')];
         foreach ($AUTHORISATION->getAllRoles() AS $role) {
@@ -170,7 +170,7 @@ class ViewManageRoles {
             'rotations' => l('Rotations'),
         ];
 
-        echo '<h3>'.l('Permissions').'</h3>';
+        echo '<h3>' . l('Permissions') . '</h3>';
         $open = get_open_section('general');
         render_section_navigation($open, $sections);
 
@@ -208,20 +208,20 @@ class ViewManageRoles {
     function renderMapsSection($permissions, $permitted) {
         echo '<table class="mytable perms">';
         echo '<tr>';
-        echo '<th>'.l('Map').'</th>';
-        echo '<th>'.l('View').'</th>';
-        echo '<th>'.l('Edit').'</th>';
-        echo '<th>'.l('Delete').'</th>';
+        echo '<th>' . l('Map') . '</th>';
+        echo '<th>' . l('View') . '</th>';
+        echo '<th>' . l('Edit') . '</th>';
+        echo '<th>' . l('Delete') . '</th>';
         echo '</tr>';
         foreach ($permissions AS $map_name => $map_perms) {
             echo '<tr>';
-            echo '<td>'.$map_name.'</td>';
+            echo '<td>' . $map_name . '</td>';
             $levels = ["view", "edit", "delete"];
             foreach ($levels as $level) {
                 $perm = $map_perms[$level];
-                unset($_REQUEST['perm_'.$perm['permId']]);
+                unset($_REQUEST['perm_' . $perm['permId']]);
                 echo '<td class=perm>';
-                checkbox('perm_'.$perm['permId'], isset($permitted[$perm['permId']]));
+                checkbox('perm_' . $perm['permId'], isset($permitted[$perm['permId']]));
                 echo '</td>';
             }
             echo '</tr>';
@@ -232,19 +232,19 @@ class ViewManageRoles {
     function renderOtherSection($permissions, $permitted) {
         echo '<table class="mytable perms">';
         echo '<tr>';
-        echo '<th>'.l('Module').'</th>';
-        echo '<th>'.l('Action').'</th>';
-        echo '<th>'.l('Object').'</th>';
-        echo '<th>'.l('Permitted').'</th>';
+        echo '<th>' . l('Module') . '</th>';
+        echo '<th>' . l('Action') . '</th>';
+        echo '<th>' . l('Object') . '</th>';
+        echo '<th>' . l('Permitted') . '</th>';
         echo '</tr>';
         foreach ($permissions AS $perm) {
-            unset($_REQUEST['perm_'.$perm['permId']]);
+            unset($_REQUEST['perm_' . $perm['permId']]);
             echo '<tr>';
-            echo '<td>'.$perm['mod'].'</td>';
-            echo '<td>'.$perm['act'].'</td>';
-            echo '<td>'.$perm['obj'].'</td>';
+            echo '<td>' . $perm['mod'] . '</td>';
+            echo '<td>' . $perm['act'] . '</td>';
+            echo '<td>' . $perm['obj'] . '</td>';
             echo '<td class=perm>';
-            checkbox('perm_'.$perm['permId'], isset($permitted[$perm['permId']]));
+            checkbox('perm_' . $perm['permId'], isset($permitted[$perm['permId']]));
             echo '</td>';
             echo '</tr>';
         }
@@ -253,7 +253,7 @@ class ViewManageRoles {
 
     private function deleteForm() {
         global $AUTHORISATION;
-        echo '<h2>'.l('Delete Role').'</h2>';
+        echo '<h2>' . l('Delete Role') . '</h2>';
 
         if (is_action() && post('mode') == 'delete') {
             try {
@@ -296,7 +296,7 @@ class ViewManageRoles {
         hidden('mode', 'delete');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Name').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Name') . '</td>';
         echo '<td class="tdfield">';
         $choices = ['' => l('Please choose')];
         foreach ($AUTHORISATION->getAllRoles() AS $role) {
