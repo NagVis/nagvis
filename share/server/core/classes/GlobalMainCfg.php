@@ -2955,4 +2955,4 @@ class GlobalMainCfg {
         return false;
     }
 }
-?>
+

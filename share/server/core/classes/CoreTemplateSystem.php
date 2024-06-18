@@ -31,4 +31,4 @@
 require_once('../../frontend/nagvis-js/classes/FrontendTemplateSystem.php');
 
 class CoreTemplateSystem extends FrontendTemplateSystem {} 
-?>
+

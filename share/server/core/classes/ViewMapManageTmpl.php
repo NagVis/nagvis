@@ -278,4 +278,4 @@ class ViewMapManageTmpl {
     }
 }
 
-?>
+

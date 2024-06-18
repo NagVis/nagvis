@@ -310,4 +310,4 @@ abstract class CoreModule {
         }
     }
 }
-?>
+

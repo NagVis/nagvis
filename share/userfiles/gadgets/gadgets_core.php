@@ -220,4 +220,4 @@ if(isset($_GET['opts']) && $_GET['opts'] != '') {
 	$aPerfdata = parsePerfdata($aOpts['perfdata']);
 }
 
-?>
+

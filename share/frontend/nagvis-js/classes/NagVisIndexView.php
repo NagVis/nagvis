@@ -89,4 +89,4 @@ class NagVisIndexView {
         return file_exists(cfg('paths', 'js').'NagVisCompressed.js');
     }
 }
-?>
+

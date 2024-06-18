@@ -31,4 +31,4 @@
 abstract class CoreAuthorisationModule {
     abstract public function parsePermissions($sUsername = null);
 }
-?>
+

@@ -45,4 +45,4 @@ class CoreModUserMgmt extends CoreModule {
     }
 }
 
-?>
+

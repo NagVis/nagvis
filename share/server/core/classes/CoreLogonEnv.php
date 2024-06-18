@@ -56,4 +56,4 @@ class CoreLogonEnv extends CoreLogonModule {
         return $AUTH->isAuthenticated();
    }
 }
-?>
+

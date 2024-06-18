@@ -56,4 +56,4 @@ class CoreModSearch extends CoreModule {
         return $sReturn;
     }
 }
-?>
+

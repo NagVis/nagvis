@@ -161,4 +161,4 @@ class ViewManageShapes {
         return ob_get_clean();
     }
 }
-?>
+

@@ -277,4 +277,4 @@ class ViewManageBackends {
         return ob_get_clean();
     }
 }
-?>
+

@@ -144,4 +144,4 @@ class FrontendModMap extends FrontendModule {
         return $INDEX->parse();
     }
 }
-?>
+

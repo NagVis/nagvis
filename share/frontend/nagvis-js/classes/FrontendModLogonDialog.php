@@ -58,4 +58,4 @@ class FrontendModLogonDialog extends FrontendModule {
     }
 }
 
-?>
+

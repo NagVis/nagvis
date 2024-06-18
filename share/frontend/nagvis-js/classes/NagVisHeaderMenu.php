@@ -440,4 +440,4 @@ class NagVisHeaderMenu {
         return $CORE->checkReadable($this->pathTemplateFile, $printErr);
     }
 }
-?>
+

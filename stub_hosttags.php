@@ -45,4 +45,4 @@ function all_taggroup_choices($object_tags) {
     return $choices;
 }
 
-?>
+

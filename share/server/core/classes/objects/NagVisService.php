@@ -100,4 +100,4 @@ class NagVisService extends NagVisStatefulObject {
         return $aChild;
     }
 }
-?>
+

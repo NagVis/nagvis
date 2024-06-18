@@ -804,4 +804,4 @@ class CorePDOHandler {
 
 CorePDOHandler::initialize_static();
 
-?>
+

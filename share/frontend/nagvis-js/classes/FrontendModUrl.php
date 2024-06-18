@@ -104,4 +104,4 @@ class FrontendModUrl extends FrontendModule {
         return $INDEX->parse();
     }
 }
-?>
+

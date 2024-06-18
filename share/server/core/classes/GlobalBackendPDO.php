@@ -1367,4 +1367,4 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
 
 
 }
-?>
+

@@ -398,4 +398,4 @@ class CoreModOverview extends CoreModule {
         }
     }
 }
-?>
+

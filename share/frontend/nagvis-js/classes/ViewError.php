@@ -63,4 +63,4 @@ class ViewError {
         return $this->parse($e, $MAPCFG);
     }
 }
-?>
+
