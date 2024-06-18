@@ -58,4 +58,4 @@ class CoreModMainCfg extends CoreModule {
         return $sReturn;
     }
 }
-?>
+

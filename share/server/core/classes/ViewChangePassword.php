@@ -99,4 +99,4 @@ class ViewChangePassword {
         return ob_get_clean();
     }
 }
-?>
+

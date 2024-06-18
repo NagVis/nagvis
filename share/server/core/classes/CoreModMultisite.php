@@ -243,4 +243,4 @@ class CoreModMultisite extends CoreModule {
         return $aMaps;
     }
 }
-?>
+

@@ -54,4 +54,4 @@ class CoreModManageBackgrounds extends CoreModule {
         return $sReturn;
     }
 }
-?>
+

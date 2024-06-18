@@ -1635,4 +1635,4 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         return $contacts;
     }
 }
-?>
+

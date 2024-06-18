@@ -79,4 +79,4 @@ function process_filter($MAPCFG, $map_name, &$map_config, $params = null) {
     return true; // allow caching
 }
 
-?>
+

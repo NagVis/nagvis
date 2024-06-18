@@ -75,4 +75,4 @@ class CoreModUser extends CoreModule {
         return ['opts' => $opts];
     }
 }
-?>
+

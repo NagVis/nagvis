@@ -189,4 +189,4 @@ class NagVisAggr extends NagVisStatefulObject {
         }
     }
 }
-?>
+

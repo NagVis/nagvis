@@ -163,4 +163,4 @@ class CoreLogonMultisite extends CoreLogonModule {
     }
 }
 
-?>
+
