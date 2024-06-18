@@ -1832,7 +1832,7 @@ class GlobalMapCfg {
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function deleteMapConfig($printErr=1) {
+    public function deleteMapConfig($printErr = 1) {
         global $AUTHORISATION;
         // is file writeable?
         if($this->checkMapConfigWriteable($printErr)) {
@@ -1865,7 +1865,7 @@ class GlobalMapCfg {
      * @return	bool   Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
    */
-    public function checkMapLocked($printErr=1) {
+    public function checkMapLocked($printErr = 1) {
         global $AUTH;
         // read lockfile
         $lockdata = $this->readMapLock();

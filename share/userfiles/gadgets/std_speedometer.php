@@ -146,7 +146,7 @@ $lineext = $linewidth / 2;
 // Create tacho image.
 //====================
 
-$img=imagecreatetruecolor($imgwidth, $imgheight);
+$img = imagecreatetruecolor($imgwidth, $imgheight);
 
 $oBackground = imagecolorallocate($img, 122, 23, 211);
 $oBlack = imagecolorallocate($img, 0, 0, 0);
@@ -196,11 +196,11 @@ imagestring($img, 1, intval($centerx + $outerdia / 2 + 8), intval($centery - 6),
 
 $count = 1;
 $iOffsetX = -10;
-for($degrees=45; $degrees<180; $degrees = $degrees + 45) {
-	$bediffy=sin (deg2rad(-$degrees + 360)) * (($outerdia + 10) / 2);
-	$bediffx=cos (deg2rad(-$degrees + 360)) * (($outerdia + 10) / 2);
-	$bediffy1=sin (deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
-	$bediffx1=cos (deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
+for($degrees = 45; $degrees < 180; $degrees = $degrees + 45) {
+	$bediffy = sin (deg2rad(-$degrees + 360)) * (($outerdia + 10) / 2);
+	$bediffx = cos (deg2rad(-$degrees + 360)) * (($outerdia + 10) / 2);
+	$bediffy1 = sin (deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
+	$bediffx1 = cos (deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
 
 	imageline($img, intval($centerx - $bediffx), intval($centery + $bediffy),intval($centerx - $bediffx1), intval($centery + $bediffy1), $oBlack);
 	imagestring($img , 1 ,intval($centerx - $bediffx + $iOffsetX - 8), intval($centery + $bediffy - 10) , intval(($max - $min) / 4 * $count + $min) , $oBlack);
