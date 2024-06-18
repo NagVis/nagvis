@@ -40,7 +40,7 @@ class ViewManageUsers {
 
                 if (!preg_match(MATCH_USER_NAME, $name))
                     throw new FieldInputError('name', l('Invalid value provided. Needs to match: [P].',
-                                                                          array('P' => MATCH_USER_NAME)));
+                                                                          ['P' => MATCH_USER_NAME]));
 
                 if ($AUTH->checkUserExists($name))
                     throw new FieldInputError('name', l('A user with this name already exists.'));
@@ -117,7 +117,7 @@ class ViewManageUsers {
                 if (post('user_roles') !== "")
                     $roles = explode(',', post('user_roles'));
                 else
-                    $roles = array();
+                    $roles = [];
 
                 if ($AUTHORISATION->updateUserRoles($user_id, $roles))
                     success(l('The roles for this user have been updated.'));
@@ -141,7 +141,7 @@ class ViewManageUsers {
         echo '<table class="mytable">';
         echo '<tr><td class="tdlabel">'.l('Name').'</td>';
         echo '<td class="tdfield">';
-        $choices = array('' => l('Please choose'));
+        $choices = ['' => l('Please choose')];
         foreach ($AUTH->getAllUsers() AS $user)
             $choices[$user['userId']] = $user['name'];
         select('user_id', $choices, '', 'updateForm(this.form)');
@@ -149,14 +149,14 @@ class ViewManageUsers {
         echo '</table>';
 
         if ($user_id) {
-            $user_roles = array();
+            $user_roles = [];
             foreach ($AUTHORISATION->getUserRoles($user_id) as $role) {
                 if ($role['name'] !== null) {
                     $user_roles[$role['roleId']] = $role['name'];
                 }
             }
 
-            $available_roles = array();
+            $available_roles = [];
             foreach ($AUTHORISATION->getAllRoles() AS $role)
                 if (!isset($user_roles[$role['roleId']]))
                     $available_roles[$role['roleId']] = $role['name'];
@@ -220,7 +220,7 @@ class ViewManageUsers {
         echo '<table class="mytable">';
         echo '<tr><td class="tdlabel">'.l('Name').'</td>';
         echo '<td class="tdfield">';
-        $choices = array('' => l('Please choose'));
+        $choices = ['' => l('Please choose')];
         foreach ($AUTH->getAllUsers() AS $user)
             $choices[$user['userId']] = $user['name'];
         select('user_id', $choices);
@@ -288,7 +288,7 @@ class ViewManageUsers {
         echo '<table class="mytable">';
         echo '<tr><td class="tdlabel">'.l('Name').'</td>';
         echo '<td class="tdfield">';
-        $choices = array('' => l('Please choose'));
+        $choices = ['' => l('Please choose')];
         foreach ($AUTH->getAllUsers() AS $user)
             $choices[$user['userId']] = $user['name'];
         select('user_id', $choices);

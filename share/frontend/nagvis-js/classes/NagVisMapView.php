@@ -29,9 +29,9 @@ class NagVisMapView {
     private $MAPCFG    = null;
     private $name      = '';
     private $search    = '';
-    private $aRotation = Array();
+    private $aRotation = [];
     private $editMode  = false;
-    private $aParams   = Array();
+    private $aParams   = [];
 
     public function __construct(GlobalCore $CORE, $name) {
         $this->name = $name;
@@ -84,7 +84,7 @@ class NagVisMapView {
         $this->MAPCFG = new GlobalMapCfg($this->name);
         $this->MAPCFG->readMapConfig(ONLY_GLOBAL, true, true, true);
 
-        $aData = Array(
+        $aData = [
             'generalProperties'  => $_MAINCFG->parseGeneralProperties(),
             'workerProperties'   => $_MAINCFG->parseWorkerProperties(),
             'rotationProperties' => json_encode($this->aRotation),
@@ -94,12 +94,12 @@ class NagVisMapView {
             'userProperties'     => $USERCFG->doGetAsJson(),
             'mapName'            => $this->name,
             'zoomFill'           => $this->MAPCFG->getValue(0, 'zoom') == 'fill',
-            'fileAges'           => json_encode(Array(
+            'fileAges'           => json_encode([
                 'maincfg'   => $_MAINCFG->getConfigFileAge(),
                 $this->name => $this->MAPCFG->getFileModificationTime(),
-            )),
+            ]),
             'locales'            => json_encode($CORE->getGeneralJSLocales()),
-        );
+        ];
 
         // Build page based on the template file and the data array
         return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'),'map'), $aData);
@@ -114,7 +114,7 @@ class NagVisMapView {
      */
     private function parseViewProperties() {
         global $AUTHORISATION;
-        $arr = Array();
+        $arr = [];
 
         $arr['search']                = $this->search;
         $arr['edit_mode']             = $this->editMode;

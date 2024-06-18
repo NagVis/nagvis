@@ -15,29 +15,29 @@ $filter_processed = false;
 
 // options to be modyfiable by the user(url)
 global $viewParams;
-$viewParams = array();
+$viewParams = [];
 
 // Config variables to be registered for this source
 global $configVars;
-$configVars = array(
-    'filter_group' => array(
+$configVars = [
+    'filter_group' => [
         'must'       => false,
         'default'    => '',
         'match'      => MATCH_STRING_EMPTY,
         'field_type' => 'dropdown',
         'list'       => 'listHostgroupNames',
-    )
-);
+    ]
+];
 
 // Assign config variables to specific object types
 global $configVarMap;
-$configVarMap = array(
-    'global' => array(
-        'general' => array(
+$configVarMap = [
+    'global' => [
+        'general' => [
             'filter_group'  => null,
-        ),
-    ),
-);
+        ],
+    ],
+];
 
 /**
  * This filters the current map config by a given hostgroup.

@@ -35,7 +35,7 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
     abstract public function getConfig();
 
     public function __construct() {
-        parent::$aFeatures = Array(
+        parent::$aFeatures = [
             // General functions for authentication
             'passCredentials' => true,
             'getCredentials' => true,
@@ -50,7 +50,7 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
 
             // Managing users
             'createUser' => true,
-        );
+        ];
 
         $this->DB = new CorePDOHandler();
 
@@ -58,8 +58,10 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         $config = $this->getConfig();
         if(!$this->DB->open($config['driver'], $config['params'], $config['username'], $config['password'])) {
             throw new NagVisException(l('Unable to open auth database ([DB]): [MSG]',
-                Array('DB' => $this->DB->getDSN(),
-                      'MSG' => json_encode($this->DB->error()))));
+                [
+                    'DB' => $this->DB->getDSN(),
+                      'MSG' => json_encode($this->DB->error())
+                ]));
         } else {
             // Create initial db scheme if needed
             if(!$this->DB->tableExist('users')) {
@@ -72,7 +74,7 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
     }
 
     public function getAllUsers() {
-        $aPerms = Array();
+        $aPerms = [];
 
         // Get all the users in the system
       $RES = $this->DB->query('-user-get-all');
@@ -84,11 +86,11 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
     }
 
     public function checkUserExists($name) {
-        return $this->DB->count('-user-count', array('name' => $name));
+        return $this->DB->count('-user-count', ['name' => $name]);
     }
 
     private function checkUserAuth() {
-        $data = $this->DB->query('-user-get-by-pass', array('name' => $this->sUsername, 'password' => $this->sPasswordHash))->fetch();
+        $data = $this->DB->query('-user-get-by-pass', ['name' => $this->sUsername, 'password' => $this->sPasswordHash])->fetch();
         if (!isset($data['userId']))
             return 0;
         return intval($data['userId']);
@@ -116,7 +118,7 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
 
     private function updatePassword($uid, $pw) {
         try {
-            $res = $this->DB->query('-user-update-pass', array('id' => $uid, 'password' => $pw));
+            $res = $this->DB->query('-user-update-pass', ['id' => $uid, 'password' => $pw]);
             return $res !== false && $res->rowCount() === 1;
         } catch (PDOException $e) {
             error_log("Could not update the password of user $uid: ".$e->getMessage());
@@ -125,7 +127,7 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
     }
 
     private function addUser($user, $hash) {
-        $this->DB->query('-user-add', array('name' => $user, 'password' => $hash));
+        $this->DB->query('-user-add', ['name' => $user, 'password' => $hash]);
     }
 
     public function passCredentials($aData) {
@@ -159,9 +161,11 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
     }
 
     public function getCredentials() {
-        return Array('user' => $this->sUsername,
+        return [
+            'user' => $this->sUsername,
                      'passwordHash' => $this->sPasswordHash,
-                     'userId' => $this->iUserId);
+                     'userId' => $this->iUserId
+        ];
     }
 
     public function createUser($user, $password) {

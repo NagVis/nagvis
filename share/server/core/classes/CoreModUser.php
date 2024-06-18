@@ -34,10 +34,10 @@ class CoreModUser extends CoreModule {
         $this->sName = 'User';
         $this->CORE = $CORE;
 
-        $this->aActions = Array(
+        $this->aActions = [
             'getOptions' => REQUIRES_AUTHORISATION,
             'setOption'  => REQUIRES_AUTHORISATION,
-        );
+        ];
     }
 
     public function handleAction() {
@@ -65,14 +65,14 @@ class CoreModUser extends CoreModule {
 
     protected function handleResponseSet() {
         $FHANDLER = new CoreRequestHandler($_GET);
-        $this->verifyValuesSet($FHANDLER, Array('opts'));
+        $this->verifyValuesSet($FHANDLER, ['opts']);
         $opts = $FHANDLER->get('opts');
 
         foreach($opts as $key => $val)
             if (substr($val, 0, 1) == '{')
                 $opts[$key] = json_decode($val);
 
-        return Array('opts' => $opts);
+        return ['opts' => $opts];
     }
 }
 ?>

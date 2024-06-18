@@ -50,11 +50,11 @@ class ViewChangePassword {
                     throw new FieldInputError('password_new1', l('The new and old passwords are equal. Won\'t change anything.'));
 
                 // Set new passwords in authentication module, then change it
-                $AUTH->passNewPassword(array(
+                $AUTH->passNewPassword([
                     'user'        => $user,
                     'password'    => $password_old,
                     'passwordNew' => $password_new1,
-                ));
+                ]);
                 if (!$AUTH->changePassword())
                     throw new NagVisException(l('Your password could not be changed.'));
                 success(l('Your password has been changed.'));

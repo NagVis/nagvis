@@ -85,12 +85,14 @@ class NagVisHoverUrl {
         // Reported here: http://news.gmane.org/find-root.php?message_id=%3cf60c42280909021938s7f36c0edhd66d3e9156a5d081%40mail.gmail.com%3e
         $aUrl = parse_url($this->url);
         if(!isset($aUrl['scheme']) || $aUrl['scheme'] == '' || ($aUrl['scheme'] != 'http' && $aUrl['scheme'] != 'https'))
-            throw new NagVisException(l('problemReadingUrl', Array('URL' => $this->url,
-                                                                   'MSG' => l('Not allowed url'))));
+            throw new NagVisException(l('problemReadingUrl', [
+                'URL' => $this->url,
+                                                                   'MSG' => l('Not allowed url')
+            ]));
 
 
         if(!$content = file_get_contents($this->url)) {
-            throw new NagVisException(l('couldNotGetHoverUrl', Array('URL' => $this->url)));
+            throw new NagVisException(l('couldNotGetHoverUrl', ['URL' => $this->url]));
         }
 
         // Try to recode non utf-8 encoded responses to utf-8. Later used

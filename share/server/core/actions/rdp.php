@@ -27,20 +27,20 @@
 
 // Config variables to be registered for custom actions of this name
 global $configVars;
-$configVars = array(
-    'domain' => Array(
+$configVars = [
+    'domain' => [
         'must'     => 1,
         'editable' => 1,
         'default'  => '',
         'match'    => MATCH_STRING_NO_SPACE_EMPTY
-    ),
-    'username' => Array(
+    ],
+    'username' => [
         'must'     => 1,
         'editable' => 1,
         'default'  => '',
         'match'    => MATCH_STRING_NO_SPACE_EMPTY
-    ),
-);
+    ],
+];
 
 if (!function_exists('handle_action_rdp')) {
     function handle_action_rdp($MAPCFG, $objId) {

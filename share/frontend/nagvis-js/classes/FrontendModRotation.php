@@ -37,10 +37,12 @@ class FrontendModRotation extends FrontendModule {
         $this->CORE = $CORE;
 
         // Parse the view specific options
-        $aOpts = Array('show' => MATCH_ROTATION_NAME,
+        $aOpts = [
+            'show' => MATCH_ROTATION_NAME,
                        'type' => MATCH_ROTATION_STEP_TYPES_EMPTY,
                        'step' => MATCH_STRING_NO_SPACE_EMPTY,
-                       'stepId' => MATCH_INTEGER_EMPTY);
+                       'stepId' => MATCH_INTEGER_EMPTY
+        ];
 
         $aVals = $this->getCustomOptions($aOpts);
         $this->name   = $aVals['show'];
@@ -49,9 +51,9 @@ class FrontendModRotation extends FrontendModule {
         $this->stepId = $aVals['stepId'];
 
         // Register valid actions
-        $this->aActions = Array(
+        $this->aActions = [
             'view' => REQUIRES_AUTHORISATION
-        );
+        ];
 
         // Register valid objects
         $this->aObjects = $this->CORE->getDefinedRotationPools();

@@ -40,7 +40,7 @@ class ViewManageRoles {
 
                 if (!preg_match(MATCH_ROLE_NAME, $name))
                     throw new FieldInputError('name', l('Invalid value provided. Needs to match: [P].',
-                                                                          array('P' => MATCH_ROLE_NAME)));
+                                                                          ['P' => MATCH_ROLE_NAME]));
 
                 if ($AUTHORISATION->checkRoleExists($name))
                     throw new FieldInputError('name', l('A role with this name already exists.'));
@@ -98,7 +98,7 @@ class ViewManageRoles {
                     throw new NagVisException('Invalid role id provided');
 
                 // Load permissions from parameters
-                $perms = Array();
+                $perms = [];
                 foreach (array_keys($_POST) AS $key) {
                     if(strpos($key, 'perm_') !== false) {
                         $key_parts = explode('_', $key);
@@ -132,7 +132,7 @@ class ViewManageRoles {
         echo '<table class="mytable">';
         echo '<tr><td class="tdlabel">'.l('Select Role').'</td>';
         echo '<td class="tdfield">';
-        $choices = array('' => l('Please choose'));
+        $choices = ['' => l('Please choose')];
         foreach ($AUTHORISATION->getAllRoles() AS $role)
             $choices[$role['roleId']] = $role['name'];
         select('role_id', $choices, '', 'updateForm(this.form)');
@@ -149,26 +149,26 @@ class ViewManageRoles {
         if (!$role_id)
             return;
 
-        $sections = array(
+        $sections = [
             'general'   => l('General'),
             'maps'      => l('Maps'),
             'rotations' => l('Rotations'),
-        );
+        ];
 
         echo '<h3>'.l('Permissions').'</h3>';
         $open = get_open_section('general');
         render_section_navigation($open, $sections);
 
-        $permissions_by_section = array(
-            'general'   => array(),
-            'maps'      => array(),
-            'rotations' => array(),
-        );
+        $permissions_by_section = [
+            'general'   => [],
+            'maps'      => [],
+            'rotations' => [],
+        ];
         foreach ($AUTHORISATION->getAllVisiblePerms() AS $perm) {
             if ($perm['mod'] == 'Map' && $perm['act'] != 'add' && $perm['act'] != 'manage') {
                 $map_name = $perm['obj'];
                 if (!isset($permissions_by_section['maps'][$map_name]))
-                    $permissions_by_section['maps'][$map_name] = array();
+                    $permissions_by_section['maps'][$map_name] = [];
                 $permissions_by_section['maps'][$map_name][$perm['act']] = $perm;
             } elseif ($perm['mod'] == 'Rotation') {
                 $permissions_by_section['rotations'][] = $perm;
@@ -199,7 +199,7 @@ class ViewManageRoles {
         foreach ($permissions AS $map_name => $map_perms) {
             echo '<tr>';
             echo '<td>'.$map_name.'</td>';
-            $levels = array("view", "edit", "delete");
+            $levels = ["view", "edit", "delete"];
             foreach ($levels as $level) {
                 $perm = $map_perms[$level];
                 unset($_REQUEST['perm_'.$perm['permId']]);
@@ -251,7 +251,7 @@ class ViewManageRoles {
                 $used_by = $AUTHORISATION->roleUsedBy($role_id);
                 if(count($used_by) > 0)
                     throw new NagVisException(l('Not deleting this role, the role is in use by the users [U].',
-                                            array('U' => implode(', ', $used_by))));
+                                            ['U' => implode(', ', $used_by)]));
 
                 if ($AUTHORISATION->deleteRole($role_id))
                     success(l('The role has been deleted.'));
@@ -276,7 +276,7 @@ class ViewManageRoles {
         echo '<table class="mytable">';
         echo '<tr><td class="tdlabel">'.l('Name').'</td>';
         echo '<td class="tdfield">';
-        $choices = array('' => l('Please choose'));
+        $choices = ['' => l('Please choose')];
         foreach ($AUTHORISATION->getAllRoles() AS $role)
             $choices[$role['roleId']] = $role['name'];
         select('role_id', $choices);

@@ -81,8 +81,8 @@
  * @author      Lars Michelsen <lm@larsmichelsen.com>
  */
 function parsePerfdata($sPerfdata) {
-	$aMatches = Array();
-	$aPerfdata = Array();
+	$aMatches = [];
+	$aPerfdata = [];
 	
 	// Cleanup
 	$sPerfdata = str_replace(',', '.', $sPerfdata);
@@ -105,7 +105,7 @@ function parsePerfdata($sPerfdata) {
 		$aTmp = $aMatches[$i];
 		
 		// Save needed values
-		$aSet = Array('label' => $aTmp[1], 'value' => $aTmp[2]);
+		$aSet = ['label' => $aTmp[1], 'value' => $aTmp[2]];
 		
 		// Save optional values
 		if(isset($aTmp[3])) {
@@ -178,8 +178,8 @@ function errorBox($msg) {
 
 /* Now read the parameters */
 
-$aOpts = Array();
-$aPerfdata = Array();
+$aOpts = [];
+$aPerfdata = [];
 
 /**
  * Needed:
@@ -194,9 +194,11 @@ $aPerfdata = Array();
  */
 
 // Get params without default values
-foreach(Array('opts'  => null, 'name1'     => null, 'name2' => null,
+foreach([
+            'opts'  => null, 'name1'     => null, 'name2' => null,
               'state' => null, 'stateType' => null, 'scale' => 100,
-              'ack'   => null, 'downtime'  => null) AS $opt => $default)
+              'ack'   => null, 'downtime'  => null
+        ] AS $opt => $default)
 	if(isset($_GET[$opt]) && $_GET[$opt] != '')
 		$aOpts[$opt] = $_GET[$opt];
 	elseif($default !== null)

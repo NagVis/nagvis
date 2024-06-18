@@ -35,7 +35,7 @@ class NagVisHost extends NagVisStatefulObject {
     protected $host_name;
     protected $alias;
 
-    protected $members = array();
+    protected $members = [];
 
     public function __construct($backend_id, $hostName) {
         $this->backend_id = $backend_id;
@@ -82,7 +82,7 @@ class NagVisHost extends NagVisStatefulObject {
      */
     public function queueState($bFetchObjectState = true, $bFetchMemberState = true) {
         global $_BACKEND;
-        $queries = Array();
+        $queries = [];
 
         if($bFetchObjectState)
             $queries['hostState'] = true;
@@ -110,7 +110,7 @@ class NagVisHost extends NagVisStatefulObject {
         if($this->problem_msg) {
             $this->sum[STATE]  = ERROR;
             $this->sum[OUTPUT] = $this->problem_msg;
-            $this->members = Array();
+            $this->members = [];
             return;
         }
 
@@ -164,7 +164,7 @@ class NagVisHost extends NagVisStatefulObject {
         $sState = $this->state[STATE];
         $sSubState = $this->getSubState();
         if(!isset($this->aStateCounts[$sState]))
-            $this->aStateCounts[$sState] = Array($sSubState => 1);
+            $this->aStateCounts[$sState] = [$sSubState => 1];
         elseif(!isset($this->aStateCounts[$sState][$sSubState]))
             $this->aStateCounts[$sState][$sSubState] = 1;
         else
@@ -189,7 +189,7 @@ class NagVisHost extends NagVisStatefulObject {
         // to 1
         if($this->recognize_services) {
             $iNumServices = 0;
-            $arrServiceStates = Array();
+            $arrServiceStates = [];
 
             // Loop all major states
             if($this->aStateCounts !== null) {
@@ -240,9 +240,11 @@ class NagVisHost extends NagVisStatefulObject {
         if($this->recognize_services) {
             // If there are services write the summary state for them
             if($this->hasMembers()) {
-                $arrStates = Array(CRITICAL => 0, DOWN    => 0, WARNING   => 0,
+                $arrStates = [
+                    CRITICAL => 0, DOWN    => 0, WARNING   => 0,
                                    UNKNOWN  => 0, UP      => 0, OK        => 0,
-                                   ERROR    => 0, PENDING => 0, UNCHECKED => 0);
+                                   ERROR    => 0, PENDING => 0, UNCHECKED => 0
+                ];
 
                 foreach($this->members AS &$SERVICE) {
                     $arrStates[$SERVICE->getSummaryState()]++;

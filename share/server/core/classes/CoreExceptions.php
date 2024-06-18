@@ -33,11 +33,11 @@ class NagVisException extends Exception {
         if($title === null)
             $title = l('ERROR');
 
-        $this->e = Array(
+        $this->e = [
             'message' => $msg,
             'title'   => $title,
             'type'    => 'error',
-        );
+        ];
 
         if($time !== null)
             $this->e['reloadTime'] = $time;
@@ -58,11 +58,11 @@ class NagVisException extends Exception {
 
 class MapInMaintenance extends NagVisException {
     function __construct($map) {
-        $this->e = Array(
+        $this->e = [
             'type'    => 'info',
-            'message' => l('mapInMaintenance', Array('MAP' => $map)),
+            'message' => l('mapInMaintenance', ['MAP' => $map]),
             'title'   => l('INFO'),
-        );
+        ];
     }
 }
 

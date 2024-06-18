@@ -32,7 +32,7 @@ class CoreUriHandler {
     private $aAliases;
 
     public function __construct() {
-        $this->aAliases = Array('module' => 'mod', 'action' => 'act');
+        $this->aAliases = ['module' => 'mod', 'action' => 'act'];
 
         $this->sRequestUri = strip_tags($_SERVER['REQUEST_URI']);
 
@@ -76,7 +76,7 @@ class CoreUriHandler {
             return false;
     }
 
-    public function parseModSpecificUri($aKeys, $aDefaults = Array()) {
+    public function parseModSpecificUri($aKeys, $aDefaults = []) {
         foreach($aKeys AS $key => $sMatch) {
             // Validate the value
             $bValid = true;
@@ -101,7 +101,7 @@ class CoreUriHandler {
                 $this->aOpts[$key] = $_GET[$key];
             } else {
                 throw new NagVisException(l('The parameter "[key]" does not match the valid value format',
-                                            Array('key' => htmlentities($key, ENT_COMPAT, 'UTF-8'))));
+                                            ['key' => htmlentities($key, ENT_COMPAT, 'UTF-8')]));
             }
         }
     }

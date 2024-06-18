@@ -36,7 +36,7 @@ class NagVisMapObj extends NagVisStatefulObject {
     protected $MAPCFG;
     private $MAP;
 
-    protected $members = array();
+    protected $members = [];
     protected $linkedMaps;
 
     protected $map_name;
@@ -154,7 +154,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 
         $this->map_name = $this->MAPCFG->getName();
 
-        $this->linkedMaps = Array();
+        $this->linkedMaps = [];
         $this->isSummaryObject = false;
         $this->isLoopingBacklink = false;
         $this->isView = $bIsView;
@@ -163,7 +163,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 
         $this->backend_id = $this->MAPCFG->getValue(0, 'backend_id');
         if ($this->backend_id === false)
-            $this->backend_id = array();
+            $this->backend_id = [];
 
         parent::__construct();
 
@@ -183,7 +183,7 @@ class NagVisMapObj extends NagVisStatefulObject {
      * Clears the map
      */
     public function clearMembers() {
-        $this->members = Array();
+        $this->members = [];
     }
 
     /**
@@ -207,7 +207,7 @@ class NagVisMapObj extends NagVisStatefulObject {
      */
     public function getStateRelevantMembers($excludeMemberStates = false) {
         global $CORE;
-        $a = Array();
+        $a = [];
 
         // Loop all members
         foreach($this->members AS $OBJ) {
@@ -308,13 +308,13 @@ class NagVisMapObj extends NagVisStatefulObject {
      */
     public function applyState() {
         if($this->problem_msg) {
-            $this->sum = array(
+            $this->sum = [
                 ERROR,
                 $this->problem_msg,
                 null,
                 null,
                 null,
-            );
+            ];
             $this->clearMembers();
             return;
         }
@@ -342,7 +342,7 @@ class NagVisMapObj extends NagVisStatefulObject {
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function objectTreeToMapObjects(&$OBJ, &$arrHostnames=Array()) {
+    public function objectTreeToMapObjects(&$OBJ, &$arrHostnames= []) {
         $this->members[] = $OBJ;
 
         foreach($OBJ->getChildsAndParents() AS $OBJ1) {
@@ -409,7 +409,7 @@ class NagVisMapObj extends NagVisStatefulObject {
      * @author	Thomas Casteleyn <thomas.casteleyn@super-visions.com>
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function fetchMapObjects(&$arrMapNames = Array(), $depth = 0) {
+    public function fetchMapObjects(&$arrMapNames = [], $depth = 0) {
         foreach($this->MAPCFG->getMapObjects() AS $objConf) {
             $type = $objConf['type'];
 
@@ -453,9 +453,9 @@ class NagVisMapObj extends NagVisStatefulObject {
                         try {
                             $SUBMAPCFG->readMapConfig();
                         } catch(MapCfgInvalid $e) {
-                            $mapCfgInvalid = l('Map Configuration Error: [ERR]', Array('ERR' => $e->getMessage()));
+                            $mapCfgInvalid = l('Map Configuration Error: [ERR]', ['ERR' => $e->getMessage()]);
                         } catch(Exception $e) {
-                            $mapCfgInvalid = l('Problem while processing map: [ERR]', Array('ERR' => (string) $e));
+                            $mapCfgInvalid = l('Problem while processing map: [ERR]', ['ERR' => (string) $e]);
                         }
                     }
 
@@ -515,8 +515,10 @@ class NagVisMapObj extends NagVisStatefulObject {
                 break;
                 default:
                     throw new NagVisException(l('unknownObject',
-                                              Array('TYPE'    => $type,
-                                                    'MAPNAME' => $this->getName())));
+                                              [
+                                                  'TYPE'    => $type,
+                                                    'MAPNAME' => $this->getName()
+                                              ]));
                 break;
             }
 
@@ -571,10 +573,12 @@ class NagVisMapObj extends NagVisStatefulObject {
      */
     private function fetchSummaryOutput() {
         if($this->hasMembers()) {
-            $arrStates = Array(UNREACHABLE => 0, CRITICAL => 0, DOWN => 0,
+            $arrStates = [
+                UNREACHABLE => 0, CRITICAL => 0, DOWN => 0,
                                WARNING     => 0, UNKNOWN  => 0, UP   => 0,
                                OK          => 0, ERROR    => 0, UNCHECKED => 0,
-                               PENDING     => 0);
+                               PENDING     => 0
+            ];
 
             foreach($this->getStateRelevantMembers(true) AS $OBJ)
                 if(isset($arrStates[$OBJ->sum[STATE]]))

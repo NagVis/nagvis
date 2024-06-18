@@ -30,18 +30,18 @@
  */
 class CoreAuthorisationHandler {
     private $sModuleName = '';
-    private $aPermissions = Array();
+    private $aPermissions = [];
 
     private $MOD;
 
     // FIXME: This is not really used anymore. It is only needed to hide the "hidden"
     // permissions from the user. Those hidden permissions are not used anymore. So
     // cleanup the auth DB and then remove this list.
-    private $summarizePerms = Array(
-        'MainCfg' => Array(
+    private $summarizePerms = [
+        'MainCfg' => [
             'doEdit' => 'edit'
-        ),
-        'Map' => Array(
+        ],
+        'Map' => [
             'getMapProperties' => 'view',
             'getMapObjects' => 'view',
             'getObjectStates' => 'view',
@@ -54,14 +54,14 @@ class CoreAuthorisationHandler {
             'deleteObject' => 'edit',
             'addModify' => 'edit',
             'editHtml' => 'edit',
-        ),
-        'Overview' => Array(
+        ],
+        'Overview' => [
             'getOverviewRotations' => 'view',
             'getOverviewProperties' => 'view',
             'getOverviewMaps' => 'view',
             'getOverviewAutomaps' => 'view',
-        ),
-        'AutoMap' => Array(
+        ],
+        'AutoMap' => [
             'getAutomapProperties' => 'view',
             'getAutomapObjects' => 'view',
             'parseAutomap' => 'view',
@@ -73,36 +73,37 @@ class CoreAuthorisationHandler {
             'modifyObject' => 'edit',
             'createObject' => 'edit',
             'deleteObject' => 'edit',
-        ),
-        'ManageShapes' => Array(
+        ],
+        'ManageShapes' => [
             'view'                 => 'manage',
             'doUpload'             => 'manage',
             'doDelete'             => 'manage',
-        ),
-        'ManageBackgrounds' => Array(
+        ],
+        'ManageBackgrounds' => [
             'view'                 => 'manage',
             'doUpload'             => 'manage',
             'doCreate'             => 'manage',
             'doDelete'             => 'manage',
-        ),
-        'ChangePassword' => Array(
+        ],
+        'ChangePassword' => [
             'view' => 'change',
-        ),
-        'UserMgmt' => Array(
+        ],
+        'UserMgmt' => [
             'view' => 'manage',
             'getUserRoles' => 'manage',
             'getAllRoles' => 'manage',
             'doAdd' => 'manage',
             'doEdit' => 'manage',
             'doDelete' => 'manage',
-        ),
-        'RoleMgmt' => Array(
+        ],
+        'RoleMgmt' => [
             'view' => 'manage',
             'getRolePerms' => 'manage',
             'doAdd' => 'manage',
             'doEdit' => 'manage',
             'doDelete' => 'manage',
-        ));
+        ]
+    ];
 
     public function __construct() {
         $this->sModuleName = cfg('global', 'authorisationmodule');
@@ -182,7 +183,7 @@ class CoreAuthorisationHandler {
     }
 
     public function getAllVisiblePerms() {
-        $aReturn = Array();
+        $aReturn = [];
         // FIXME: First check if this is supported
 
         $aPerms = $this->MOD->getAllPerms();
@@ -194,7 +195,7 @@ class CoreAuthorisationHandler {
             }
         }
 
-        usort($aReturn, Array($this, 'sortPerms'));
+        usort($aReturn, [$this, 'sortPerms']);
 
         return $aReturn;
     }
@@ -239,19 +240,19 @@ class CoreAuthorisationHandler {
 
     public function isPermitted($sModule, $sAction, $sObj = null) {
         // Module access?
-        $access = Array();
+        $access = [];
         if(isset($this->aPermissions[$sModule]))
-            $access[$sModule] = Array();
+            $access[$sModule] = [];
         if(isset($this->aPermissions[AUTH_PERMISSION_WILDCARD]))
-            $access[AUTH_PERMISSION_WILDCARD] = Array();
+            $access[AUTH_PERMISSION_WILDCARD] = [];
 
         if(count($access) > 0) {
             // Action access?
             foreach($access AS $mod => $acts) {
                 if(isset($this->aPermissions[$mod][$sAction]))
-                    $access[$mod][$sAction] = Array();
+                    $access[$mod][$sAction] = [];
                 if(isset($this->aPermissions[$mod][AUTH_PERMISSION_WILDCARD]))
-                    $access[$mod][AUTH_PERMISSION_WILDCARD] = Array();
+                    $access[$mod][AUTH_PERMISSION_WILDCARD] = [];
             }
 
             if(count($access[$mod]) > 0) {

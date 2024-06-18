@@ -27,7 +27,7 @@ class NagVisOverviewView {
     }
 
     private function getProperties() {
-        $arr = Array();
+        $arr = [];
 
         $arr['view_type']          = 'overview';
         $arr['showmaps']           = (int) cfg('index', 'showmaps');
@@ -64,22 +64,22 @@ class NagVisOverviewView {
         $TMPLSYS = $TMPL->getTmplSys();
         $USERCFG = new CoreUserCfg();
 
-        $maps      = cfg('index', 'showmaps') == 1 ? $CORE->getListMaps() : array();
-        $rotations = cfg('index', 'showrotations') == 1 ? array_keys($CORE->getPermittedRotationPools()) : array();
+        $maps      = cfg('index', 'showmaps') == 1 ? $CORE->getListMaps() : [];
+        $rotations = cfg('index', 'showrotations') == 1 ? array_keys($CORE->getPermittedRotationPools()) : [];
 
-        $aData = Array(
+        $aData = [
             'generalProperties' => $_MAINCFG->parseGeneralProperties(),
             'workerProperties'  => $_MAINCFG->parseWorkerProperties(),
             'stateProperties'   => json_encode($_MAINCFG->getStateWeightJS()),
             'userProperties'    => $USERCFG->doGetAsJson(),
             'pageProperties'    => json_encode($this->getProperties()),
-            'fileAges'          => json_encode(Array(
+            'fileAges'          => json_encode([
                 'maincfg' => $_MAINCFG->getConfigFileAge(),
-            )),
+            ]),
             'locales'           => json_encode($CORE->getGeneralJSLocales()),
             'rotation_names'    => json_encode($rotations),
             'map_names'         => json_encode($maps),
-        );
+        ];
 
         // Build page based on the template file and the data array
         return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'overview'), $aData);

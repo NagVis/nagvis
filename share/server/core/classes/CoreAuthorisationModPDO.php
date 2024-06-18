@@ -35,8 +35,10 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         $config = $this->getConfig();
         if(!$this->DB->open($config['driver'], $config['params'], $config['username'], $config['password'])) {
             throw new NagVisException(l('Unable to open auth database ([DB]): [MSG]',
-                Array('DB' => $this->DB->getDSN(),
-                      'MSG' => json_encode($this->DB->error()))));
+                [
+                    'DB' => $this->DB->getDSN(),
+                      'MSG' => json_encode($this->DB->error())
+                ]));
         } else {
             // Create initial db scheme if needed
             if(!$this->DB->tableExist('users')) {
@@ -49,7 +51,7 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
     }
 
     public function renameMapPermissions($old_name, $new_name) {
-        $this->DB->query('-perm-rename-map', array('old_name' => $old_name, 'new_name' => $new_name));
+        $this->DB->query('-perm-rename-map', ['old_name' => $old_name, 'new_name' => $new_name]);
     }
 
     public function deletePermission($mod, $name) {
@@ -84,8 +86,8 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
     }
 
     public function roleUsedBy($roleId) {
-        $RES = $this->DB->query('-role-used-by', array('roleId' => $roleId));
-        $users = array();
+        $RES = $this->DB->query('-role-used-by', ['roleId' => $roleId]);
+        $users = [];
         while($data = $RES->fetch()) {
             $users[] = $data['name'];
         }
@@ -95,10 +97,10 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
 
     public function deleteRole($roleId) {
         // Delete role
-        $this->DB->query('-role-delete-by-id', array('roleId' => $roleId));
+        $this->DB->query('-role-delete-by-id', ['roleId' => $roleId]);
 
         // Delete role permissions
-        $this->DB->query('-role-delete-perm-by-id', array('roleId' => $roleId));
+        $this->DB->query('-role-delete-perm-by-id', ['roleId' => $roleId]);
 
         // Check result
         if(!$this->checkRoleExists($roleId)) {
@@ -110,10 +112,10 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
 
     public function deleteUser($userId) {
         // Delete user
-        $this->DB->query('-user-delete', array('userId' => $userId));
+        $this->DB->query('-user-delete', ['userId' => $userId]);
 
         // Delete user roles
-        $this->DB->query('-user-delete-roles', array('userId' => $userId));
+        $this->DB->query('-user-delete-roles', ['userId' => $userId]);
 
         // Check result
         if($this->checkUserExistsById($userId) <= 0) {
@@ -125,23 +127,23 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
 
     public function updateUserRoles($userId, $roles) {
         // First delete all role perms
-        $this->DB->query('-role-delete-by-user-id', array('userId' => $userId));
+        $this->DB->query('-role-delete-by-user-id', ['userId' => $userId]);
 
         // insert new user roles
         foreach($roles AS $roleId) {
             if ($roleId === '')
                 continue;
-            $this->DB->query('-role-add-user-by-id', array('userId' => $userId, 'roleId' => $roleId));
+            $this->DB->query('-role-add-user-by-id', ['userId' => $userId, 'roleId' => $roleId]);
         }
 
         return true;
     }
 
     public function getUserRoles($userId) {
-        $aRoles = Array();
+        $aRoles = [];
 
         // Get all the roles of the user
-      $RES = $this->DB->query('-role-get-by-user', array('id' => $userId));
+      $RES = $this->DB->query('-role-get-by-user', ['id' => $userId]);
       while($data = $RES->fetch()) {
       	$aRoles[] = $data;
       }
@@ -150,7 +152,7 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
     }
 
     public function getAllRoles() {
-        $aRoles = Array();
+        $aRoles = [];
 
         // Get all the roles of the user
       $RES = $this->DB->query('-role-get-all');
@@ -162,13 +164,13 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
     }
 
     public function getRoleId($sRole) {
-        $ret = $this->DB->query('-role-get-by-name', array('name' => $sRole))->fetch();
+        $ret = $this->DB->query('-role-get-by-name', ['name' => $sRole])->fetch();
 
         return intval($ret['roleId']);
     }
 
     public function getAllPerms() {
-        $aPerms = Array();
+        $aPerms = [];
 
         // Get all the roles of the user
       $RES = $this->DB->query('-perm-get-all');
@@ -180,10 +182,10 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
     }
 
     public function getRolePerms($roleId) {
-        $aRoles = Array();
+        $aRoles = [];
 
         // Get all the roles of the user
-      $RES = $this->DB->query('-role-get-perm-by-id', array('roleId' => $roleId));
+      $RES = $this->DB->query('-role-get-perm-by-id', ['roleId' => $roleId]);
       while($data = $RES->fetch()) {
       	$aRoles[$data['permId']] = true;
       }
@@ -193,12 +195,12 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
 
     public function updateRolePerms($roleId, $perms) {
         // First delete all role perms
-        $this->DB->query('-role-delete-perm-by-id', array('roleId' => $roleId));
+        $this->DB->query('-role-delete-perm-by-id', ['roleId' => $roleId]);
 
         // insert new role perms
         foreach($perms AS $permId => $val) {
             if($val === true) {
-                $this->DB->query('-role-add-perm', array('roleId' => $roleId, 'permId' => $permId));
+                $this->DB->query('-role-add-perm', ['roleId' => $roleId, 'permId' => $permId]);
             }
         }
 
@@ -206,7 +208,7 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
     }
 
     public function checkRoleExists($name) {
-        if($this->DB->count('-role-count-by-name', array('name' => $name)) > 0) {
+        if($this->DB->count('-role-count-by-name', ['name' => $name]) > 0) {
             return true;
         } else {
             return false;
@@ -214,7 +216,7 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
     }
 
     public function createRole($name) {
-        $this->DB->query('-role-add', array('name' => $name));
+        $this->DB->query('-role-add', ['name' => $name]);
 
         // Check result
         if($this->checkRoleExists($name)) {
@@ -226,7 +228,7 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
 
     public function parsePermissions($sUsername = null) {
         global $AUTH;
-        $aPerms = Array();
+        $aPerms = [];
 
         if($sUsername === null)
             $sUsername = $AUTH->getUser();
@@ -235,19 +237,19 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         $userId = $this->getUserId($sUsername);
         if($userId > 0) {
           // Get all the roles of the user
-          $RES = $this->DB->query('-perm-get-by-user', array('id' => $userId));
+          $RES = $this->DB->query('-perm-get-by-user', ['id' => $userId]);
 
             while($data = $RES->fetch()) {
                 if(!isset($aPerms[$data['mod']])) {
-                    $aPerms[$data['mod']] = Array();
+                    $aPerms[$data['mod']] = [];
                 }
 
                 if(!isset($aPerms[$data['mod']][$data['act']])) {
-                    $aPerms[$data['mod']][$data['act']] = Array();
+                    $aPerms[$data['mod']][$data['act']] = [];
                 }
 
                 if(!isset($aPerms[$data['mod']][$data['act']][$data['obj']])) {
-                    $aPerms[$data['mod']][$data['act']][$data['obj']] = Array();
+                    $aPerms[$data['mod']][$data['act']][$data['obj']] = [];
                 }
             }
         }
@@ -256,11 +258,11 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
     }
 
     private function checkUserExistsById($id) {
-        return $this->DB->count('-user-count-by-id', array('userId' => $id));
+        return $this->DB->count('-user-count-by-id', ['userId' => $id]);
     }
 
     public function getUserId($sUsername) {
-        $ret = $this->DB->query('-user-get-by-name', array('name' => $sUsername))->fetch();
+        $ret = $this->DB->query('-user-get-by-name', ['name' => $sUsername])->fetch();
 
         return intval($ret['userId']);
     }
