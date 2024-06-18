@@ -1096,28 +1096,23 @@ class GlobalMapCfg {
                     // them in the code.
                     //throw new $exception(l('mapDeprecatedOption', Array('MAP' => $this->getName(), 'ATTRIBUTE' => $key, 'TYPE' => $type)));
                     continue;
-                } else {
+                } elseif(isset(self::$validConfig[$type][$key]['match'])) {
                     // The object has a match regex, it can be checked
-                    if(isset(self::$validConfig[$type][$key]['match'])) {
-                        if(is_array($val)) {
-                            // This is an array
+                    if(is_array($val)) {
+                        // This is an array
 
-                            // Loop and check each element
-                            foreach($val AS $key2 => $val2) {
-                                if(!preg_match(self::$validConfig[$type][$key]['match'], $val2)) {
-                                    // wrong format
-                                    throw new $exception(l('wrongValueFormatMap', ['MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key]));
-                                }
-                            }
-                        } else {
-                            // This is a string value
-
-                            if(!preg_match(self::$validConfig[$type][$key]['match'],$val)) {
-                                // Wrong format
+                        // Loop and check each element
+                        foreach($val AS $key2 => $val2) {
+                            if(!preg_match(self::$validConfig[$type][$key]['match'], $val2)) {
+                                // wrong format
                                 throw new $exception(l('wrongValueFormatMap', ['MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key]));
                             }
                         }
+                    } elseif(!preg_match(self::$validConfig[$type][$key]['match'],$val)) {
+                        // Wrong format
+                        throw new $exception(l('wrongValueFormatMap', ['MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key]));
                     }
+                    // This is a string value
                 }
             }
 

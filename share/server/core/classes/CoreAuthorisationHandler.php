@@ -272,22 +272,16 @@ class CoreAuthorisationHandler {
                         }
                         elseif(isset($this->aPermissions[$mod][$act][AUTH_PERMISSION_WILDCARD])) {
                             return true;
-                        } else {
-                            if (DEBUG && DEBUGLEVEL & 2) {
-                                debug('Object access denied (Mod: ' . $sModule . ' Act: ' . $sAction . ' Object: ' . $sObj);
-                            }
+                        } elseif (DEBUG && DEBUGLEVEL & 2) {
+                            debug('Object access denied (Mod: ' . $sModule . ' Act: ' . $sAction . ' Object: ' . $sObj);
                         }
                     }
                 }
-            } else {
-                if (DEBUG && DEBUGLEVEL & 2) {
-                    debug('Action access denied (Mod: ' . $sModule . ' Act: ' . $sAction . ' Object: ' . $sObj);
-                }
+            } elseif (DEBUG && DEBUGLEVEL & 2) {
+                debug('Action access denied (Mod: ' . $sModule . ' Act: ' . $sAction . ' Object: ' . $sObj);
             }
-        } else {
-            if (DEBUG && DEBUGLEVEL & 2) {
-                debug('Module access denied (Mod: ' . $sModule . ' Act: ' . $sAction . ' Object: ' . $sObj);
-            }
+        } elseif (DEBUG && DEBUGLEVEL & 2) {
+            debug('Module access denied (Mod: ' . $sModule . ' Act: ' . $sAction . ' Object: ' . $sObj);
         }
 
         return false;

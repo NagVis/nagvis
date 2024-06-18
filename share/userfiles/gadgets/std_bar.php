@@ -231,12 +231,10 @@ for ($i=0; $i < $pdc; $i++){
 
       if($value == null) {
          $value = $default;
-      } else {
-         if($max != '' && $value < $min) {
-            $value = $min;
-         } elseif($max != '' && $max != -1 && $value > $max) {
-            $value = $max;
-         }
+      } elseif($max != '' && $value < $min) {
+        $value = $min;
+      } elseif($max != '' && $max != -1 && $value > $max) {
+        $value = $max;
       }
 
       // If there is no max value given set it using the critical value

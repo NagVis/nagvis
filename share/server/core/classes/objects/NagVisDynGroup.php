@@ -142,12 +142,10 @@ class NagVisDynGroup extends NagVisStatefulObject {
                         } else {
                             $arrHostStates[$sState] += $iCount;
                         }
+                    } elseif(!isset($arrServiceStates[$sState])) {
+                        $arrServiceStates[$sState] = $iCount;
                     } else {
-                        if(!isset($arrServiceStates[$sState])) {
-                            $arrServiceStates[$sState] = $iCount;
-                        } else {
-                            $arrServiceStates[$sState] += $iCount;
-                        }
+                        $arrServiceStates[$sState] += $iCount;
                     }
                 }
             }
