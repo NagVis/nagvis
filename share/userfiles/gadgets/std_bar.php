@@ -130,7 +130,7 @@ $threshold = 'pct';        // threshold values in percent
 
 $sect1 = intval($imgheight / 5);
 $sect2 = intval($imgheight / 2);
-$sect3 = intval($imgheight / 5)*3;
+$sect3 = intval($imgheight / 5) * 3;
 $chrSize = $ratio * 5;
 if ($chrSize < 1) { $chrSize = 1; }
 
@@ -154,7 +154,7 @@ $rows = ceil($pdc / $cols);   // max. no. of rows with graphs
 // Create image
 //====================
 
-$img=imagecreatetruecolor($imgwidth*$cols, $imgheight*$rows);
+$img=imagecreatetruecolor($imgwidth * $cols, $imgheight * $rows);
 
 $oBackground = imagecolorallocate($img, 122, 23, 211);
 $oBlack = imagecolorallocate($img, 0, 0, 0);
@@ -267,7 +267,7 @@ for ($i=0; $i < $pdc; $i++){
             imageFilledRectangle($img, $offX + 1, $offY + 1, $offX + $warnv - 1, $offY + $sect1, $oYellow);
          }
          if (file_exists ("$font")) {
-            ImageTTFText($img, $chrSize*2, 0, $offX + $warnv + 1, $offY + $sect1, $oBlack, $font, intval($warnt));
+            ImageTTFText($img, $chrSize * 2, 0, $offX + $warnv + 1, $offY + $sect1, $oBlack, $font, intval($warnt));
          } else {
             imagestring($img, $chrSize, $offX + $warnv + 1, $offY - 2, intval($warnt), $oBlack);
          }
@@ -280,7 +280,7 @@ for ($i=0; $i < $pdc; $i++){
             imageFilledRectangle($img, $offX + 1, $offY + 1, $offX + $critv - 1, $offY + $sect1, $oRed);
          }
          if (file_exists ("$font")) {
-            ImageTTFText($img, $chrSize*2, 0, $offX + $critv + 1, $offY + $sect1, $oBlack, $font, intval($critt));
+            ImageTTFText($img, $chrSize * 2, 0, $offX + $critv + 1, $offY + $sect1, $oBlack, $font, intval($critt));
          } else {
             imagestring($img, $chrSize, $offX + $critv + 1, $offY - 2, intval($critt), $oBlack);
          }
@@ -296,7 +296,7 @@ for ($i=0; $i < $pdc; $i++){
          if (isset($aPerfdata[$i]['max'])) { $maxv = " of " . $aPerfdata[$i]['max']; }
          if ($down) { $maxv = " [down]"; }
          if (file_exists ("$font")) {
-            ImageTTFText($img, $chrSize*3.5, 0, $offX + 5, $offY + $sect3 - 1, $oBlack, $font, $desc . ':' . $value . $uom . $maxv);
+            ImageTTFText($img, $chrSize * 3.5, 0, $offX + 5, $offY + $sect3 - 1, $oBlack, $font, $desc . ':' . $value . $uom . $maxv);
          } else {
             imagestring($img, $chrSize, $offX + 3, $offY + $sect1 + 2, $desc . ': ' . $value . $uom . $maxv, $oBlack);
          }
@@ -308,12 +308,12 @@ for ($i=0; $i < $pdc; $i++){
             $desc = substr($desc,0,14) . "...";
          }
          if (file_exists ("$font")) {
-            ImageTTFText($img, $chrSize*2.5, 0, $offX + 3, $offY + $maxY - 1, $oBlack, $font, $hostname);
-            ImageTTFText($img, $chrSize*2.5, 0, $offX + $imgwidth/2, $offY + $maxY - 1, $oBlack, $font, $svcdesc);
+            ImageTTFText($img, $chrSize * 2.5, 0, $offX + 3, $offY + $maxY - 1, $oBlack, $font, $hostname);
+            ImageTTFText($img, $chrSize * 2.5, 0, $offX + $imgwidth / 2, $offY + $maxY - 1, $oBlack, $font, $svcdesc);
 //          ImageTTFText($img, $chrSize*2.5, 0, $offX+$imgwidth/2, $offY+$maxY-1, $oBlack, $font, $desc);
          } else {
             imagestring($img, $chrSize, $offX + 3, $offY + $sect3, $hostname, $oBlack);
-            imagestring($img, $chrSize, $offX + $imgwidth/2, $offY + $sect3, $svcdesc, $oBlack);
+            imagestring($img, $chrSize, $offX + $imgwidth / 2, $offY + $sect3, $svcdesc, $oBlack);
 //          imagestring($img, $chrSize, $offX+$imgwidth/2, $offY+$sect3, $desc, $oBlack); // perf label
          }
       }

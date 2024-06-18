@@ -528,7 +528,7 @@ function changed_geomap($MAPCFG, $compare_time) {
 
 function ProjectF($Lat){
   $Lat = deg2rad($Lat);
-  $Y = log(tan($Lat) + (1/cos($Lat)));
+  $Y = log(tan($Lat) + (1 / cos($Lat)));
   return($Y);
 }
 
