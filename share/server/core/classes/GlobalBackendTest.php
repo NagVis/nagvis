@@ -94,8 +94,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
         if ($in_downtime) {
             $downtime_author = 'Kunibert';
             $downtime_data   = 'xyz';
-            $downtime_start  = $this->now-60;
-            $downtime_end    = $this->now+60;
+            $downtime_start  = $this->now - 60;
+            $downtime_end    = $this->now + 60;
         } else {
             $downtime_author = null;
             $downtime_data   = null;
@@ -112,10 +112,10 @@ class GlobalBackendTest implements GlobalBackendInterface {
             $stateType == 'hard' ? 1 : 0,
             3, // current attempt
             3, // max attempts
-            $this->now-60, // last check
-            $this->now+60, // next check
-            $this->now-60, // last hard state change
-            $this->now-60, // last state change
+            $this->now - 60, // last check
+            $this->now + 60, // next check
+            $this->now - 60, // last hard state change
+            $this->now - 60, // last state change
             '', // perfdata
             'Display Name host-' . $name,
             'Alias host-' . $name,
@@ -136,8 +136,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
         if ($in_downtime) {
             $downtime_author = 'Kunibert';
             $downtime_data   = 'xyz';
-            $downtime_start  = $this->now-60;
-            $downtime_end    = $this->now+60;
+            $downtime_start  = $this->now - 60;
+            $downtime_end    = $this->now + 60;
         } else {
             $downtime_author = null;
             $downtime_data   = null;
@@ -159,10 +159,10 @@ class GlobalBackendTest implements GlobalBackendInterface {
             $stateType == 'hard' ? 1 : 0,
             3, // current attempt
             3, // max attempts
-            $this->now-60, // last check
-            $this->now+60, // next check
-            $this->now-60, // last hard state change
-            $this->now-60, // last state change
+            $this->now - 60, // last check
+            $this->now + 60, // next check
+            $this->now - 60, // last hard state change
+            $this->now - 60, // last state change
             $perfdata,
             'display name ' . $name2,
             'alias ' . $name2,
