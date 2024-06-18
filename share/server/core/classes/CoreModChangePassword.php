@@ -30,9 +30,9 @@ class CoreModChangePassword extends CoreModule {
     public function __construct($CORE) {
         $this->sName = 'ChangePassword';
 
-        $this->aActions = Array(
+        $this->aActions = [
             'view'   => REQUIRES_AUTHORISATION,
-        );
+        ];
     }
 
     public function handleAction() {
@@ -46,7 +46,7 @@ class CoreModChangePassword extends CoreModule {
                     // Change password must be denied when using trusted mode
                     if($AUTH->isAuthenticated() && !$AUTH->authedTrusted()) {
                         $VIEW = new ViewChangePassword();
-                        $sReturn = json_encode(Array('code' => $VIEW->parse()));
+                        $sReturn = json_encode(['code' => $VIEW->parse()]);
                     } else {
                         $sReturn = '';
                     }

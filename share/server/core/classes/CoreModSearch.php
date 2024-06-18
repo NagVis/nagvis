@@ -32,7 +32,7 @@ class CoreModSearch extends CoreModule {
         $this->sName = 'Search';
         $this->CORE = $CORE;
 
-        $this->aActions = Array('view' => REQUIRES_AUTHORISATION);
+        $this->aActions = ['view' => REQUIRES_AUTHORISATION];
     }
 
     public function handleAction() {
@@ -45,7 +45,7 @@ class CoreModSearch extends CoreModule {
                     // Check if user is already authenticated
                     if($AUTH->isAuthenticated()) {
                         $VIEW = new ViewSearch();
-                        $sReturn = json_encode(Array('code' => $VIEW->parse()));
+                        $sReturn = json_encode(['code' => $VIEW->parse()]);
                     } else {
                         $sReturn = '';
                     }

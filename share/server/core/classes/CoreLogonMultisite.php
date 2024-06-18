@@ -48,7 +48,7 @@ class CoreLogonMultisite extends CoreLogonModule {
         } else {
             throw new NagVisException(l('LogonMultisite: The htpasswd file &quot;[HTPASSWD]&quot; or '
                                        .'the authentication serial file &quot;[SERIAL]&quot; do not exist.',
-                          array('HTPASSWD' => $this->htpasswdPath, 'SERIAL' => $this->serialsPath)));
+                          ['HTPASSWD' => $this->htpasswdPath, 'SERIAL' => $this->serialsPath]));
         }
 
         if(!file_exists($this->secretPath)) {
@@ -57,7 +57,7 @@ class CoreLogonMultisite extends CoreLogonModule {
     }
 
     private function loadAuthFile($path) {
-        $creds = array();
+        $creds = [];
         foreach(file($path) AS $line) {
             if(strpos($line, ':') !== false) {
                 list($username, $secret) = explode(':', $line, 2);
@@ -192,7 +192,7 @@ class CoreLogonMultisite extends CoreLogonModule {
 
         $AUTH->setTrustUsername(true);
         $AUTH->setLogoutPossible(false);
-        $AUTH->passCredentials(Array('user' => $username));
+        $AUTH->passCredentials(['user' => $username]);
         return $AUTH->isAuthenticated();
     }
 }

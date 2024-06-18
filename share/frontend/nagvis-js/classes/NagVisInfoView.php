@@ -46,7 +46,7 @@ class NagVisInfoView {
         $userRoles = $AUTHORISATION->getUserRoles($userId);
         $userPerms = $AUTHORISATION->parsePermissions();
 
-        $aData = Array(
+        $aData = [
             'pageTitle'      => cfg('internal', 'title') . ' &rsaquo; '.l('supportInfo'),
             'htmlBase'       => cfg('paths', 'htmlbase'),
             'htmlTemplates'  => path('html', 'global', 'templates'),
@@ -80,7 +80,7 @@ class NagVisInfoView {
             'userAuthTrusted'     => ($AUTH->authedTrusted() ? l("yes") : l("no")),
             'compatJsonEncode'    => (l("yes")),
             'compatJsonDecode'    => (l("yes")),
-        );
+        ];
 
         // Build page based on the template file and the data array
         return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'info'), $aData);

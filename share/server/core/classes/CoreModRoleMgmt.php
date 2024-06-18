@@ -31,9 +31,9 @@ class CoreModRoleMgmt extends CoreModule {
     public function __construct($CORE) {
         $this->sName = 'RoleMgmt';
 
-        $this->aActions = Array(
+        $this->aActions = [
             'view'         => 'manage',
-        );
+        ];
     }
 
     public function handleAction() {
@@ -41,7 +41,7 @@ class CoreModRoleMgmt extends CoreModule {
             switch($this->sAction) {
                 case 'view':
                     $VIEW = new ViewManageRoles();
-                    return json_encode(Array('code' => $VIEW->parse()));
+                    return json_encode(['code' => $VIEW->parse()]);
                 break;
             }
         }

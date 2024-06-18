@@ -36,7 +36,7 @@ class CoreModMap extends CoreModule {
         $this->htmlBase = cfg('paths', 'htmlbase');
 
         // Register valid actions
-        $this->aActions = Array(
+        $this->aActions = [
             'getMapProperties'  => 'view',
             'getMapObjects'     => 'view',
             'getObjectStates'   => 'view',
@@ -52,7 +52,7 @@ class CoreModMap extends CoreModule {
             // Worldmap related
             'getWorldmapBounds' => 'view',
             'viewToNewMap'      => 'edit',
-        );
+        ];
 
         // Register valid objects
         $this->aObjects = $this->CORE->getAvailableMaps(null, SET_KEYS);
@@ -69,12 +69,12 @@ class CoreModMap extends CoreModule {
             case 'doExportMap':
             case 'getWorldmapBounds':
                 // When e.g. submitting the addModify form the show parameter is a POST variable
-                $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME_EMPTY), array(), true);
+                $aVals = $this->getCustomOptions(['show' => MATCH_MAP_NAME_EMPTY], [], true);
                 $this->name = $aVals['show'];
             break;
             case 'toStaticMap':
             case 'viewToNewMap':
-                $aVals = $this->getCustomOptions(Array('show' => MATCH_MAP_NAME_EMPTY), array(), true);
+                $aVals = $this->getCustomOptions(['show' => MATCH_MAP_NAME_EMPTY], [], true);
                 $this->name = $aVals['show'];
             break;
             // And those have the objecs in the POST var "map"
@@ -85,7 +85,7 @@ class CoreModMap extends CoreModule {
                     $this->name = $FHANDLER->get('map');
                 else
                     throw new NagVisException(l('Invalid query. The parameter [NAME] is missing or has an invalid format.',
-                                                Array('NAME' => 'map')));
+                                                ['NAME' => 'map']));
             break;
         }
 
@@ -111,7 +111,7 @@ class CoreModMap extends CoreModule {
                 break;
                 case 'manage':
                     $VIEW = new ViewManageMaps();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
+                    $sReturn = json_encode(['code' => $VIEW->parse()]);
                 break;
                 case 'modifyObject':
                     $sReturn = $this->handleResponse('handleResponseModifyObject', 'doModifyObject',
@@ -122,7 +122,7 @@ class CoreModMap extends CoreModule {
 
                     if($aReturn !== false) {
                         if($this->doDeleteObject($aReturn)) {
-                            $sReturn = json_encode(Array('status' => 'OK', 'message' => ''));
+                            $sReturn = json_encode(['status' => 'OK', 'message' => '']);
                         } else {
                             throw new NagVisException(l('The object could not be deleted.'));
                         }
@@ -132,14 +132,14 @@ class CoreModMap extends CoreModule {
                 break;
                 case 'addModify':
                     $VIEW = new ViewMapAddModify();
-                    $sReturn = json_encode(Array(
+                    $sReturn = json_encode([
                         'code' => $VIEW->parse(),
                         'object_type' => $VIEW->object_type()
-                    ));
+                    ]);
                 break;
                 case 'manageTmpl':
                     $VIEW = new ViewMapManageTmpl();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
+                    $sReturn = json_encode(['code' => $VIEW->parse()]);
                 break;
                 case 'doExportMap':
                     $this->doExportMap($this->name);
@@ -148,11 +148,11 @@ class CoreModMap extends CoreModule {
                 break;
                 case 'toStaticMap':
                     $VIEW = new ViewToStaticMap();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse($this->name)));
+                    $sReturn = json_encode(['code' => $VIEW->parse($this->name)]);
                 break;
                 case 'viewToNewMap':
                     $VIEW = new ViewToNewMap();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse($this->name)));
+                    $sReturn = json_encode(['code' => $VIEW->parse($this->name)]);
                 break;
                 case 'getWorldmapBounds':
                     $sReturn = $this->getWorldmapBounds();
@@ -230,8 +230,10 @@ class CoreModMap extends CoreModule {
         // Store response data
         if($bValid === true) {
             // Return the data
-            return Array('map' => $FHANDLER->get('map'),
-                         'id' => $FHANDLER->get('id'));
+            return [
+                'map' => $FHANDLER->get('map'),
+                         'id' => $FHANDLER->get('id')
+            ];
         } else {
             return false;
         }
@@ -262,7 +264,7 @@ class CoreModMap extends CoreModule {
             throw new NagVisException(l('mapLockNotDeleted'));
         }
 
-        return json_encode(Array('status' => 'OK', 'message' => ''));
+        return json_encode(['status' => 'OK', 'message' => '']);
     }
 
     protected function handleResponseModifyObject() {
@@ -310,10 +312,12 @@ class CoreModMap extends CoreModule {
         if($bValid === true) {
             $id = $FHANDLER->get('id') === "0" ? 0 : $FHANDLER->get('id');
             // Return the data
-            return Array('map'     => $FHANDLER->get('map'),
+            return [
+                'map'     => $FHANDLER->get('map'),
                          'id'      => $id,
                          'refresh' => $FHANDLER->get('ref'),
-                         'opts'    => $aOpts);
+                         'opts'    => $aOpts
+            ];
         } else {
             return false;
         }
@@ -328,12 +332,12 @@ class CoreModMap extends CoreModule {
     }
 
     private function getObjectStates() {
-        $aOpts = Array(
+        $aOpts = [
             'ty' => MATCH_GET_OBJECT_TYPE,
             'i'  => MATCH_STRING_NO_SPACE_EMPTY,
             'f'  => MATCH_STRING_NO_SPACE_EMPTY
-        );
-        $aVals = $this->getCustomOptions($aOpts, array(), true);
+        ];
+        $aVals = $this->getCustomOptions($aOpts, [], true);
 
         // Is this request asked to check file ages?
         if(isset($aVals['f']) && isset($aVals['f'][0]) && $aVals['f'] != '') {

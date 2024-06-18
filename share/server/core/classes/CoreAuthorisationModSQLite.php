@@ -24,14 +24,14 @@
 
 class CoreAuthorisationModSQLite extends CoreAuthorisationModPDO {
     public function getConfig() {
-        return array(
+        return [
             'driver' => 'sqlite',
-            'params' => array(
+            'params' => [
                 'filename' => cfg('paths', 'cfg').'auth.db',
-            ),
+            ],
             'username' => null,
             'password' => null,
-        );
+        ];
     }
 }
 ?>

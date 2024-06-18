@@ -106,7 +106,7 @@ function state_str($state) {
 }
 
 function state_num($state_str) {
-    $a = array(
+    $a = [
         'UNCHECKED'     => UNCHECKED,
         'UNREACHABLE'   => UNREACHABLE,
         'DOWN'          => DOWN,
@@ -119,7 +119,7 @@ function state_num($state_str) {
         'OK'            => OK,
         // generic
         'ERROR'         => ERROR
-    );
+    ];
     return $a[$state_str];
 }
 
@@ -153,18 +153,18 @@ function listContextTemplates() {
 }
 
 function listHoverChildSorters() {
-    return Array(
+    return [
         'a' => l('Alphabetically'),
         's' => l('State'),
         'k' => l('Keep original order'),
-    );
+    ];
 }
 
 function listHoverChildOrders() {
-    return Array(
+    return [
         'asc'  => l('Ascending'),
         'desc' => l('Descending'),
-    );
+    ];
 }
 
 ?>

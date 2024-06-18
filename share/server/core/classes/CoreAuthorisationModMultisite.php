@@ -36,7 +36,7 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
 
         if(!file_exists($this->file))
             throw new NagVisException(l('Unable to open auth file ([FILE]).',
-                                                Array('FILE' => $this->file)));
+                                                ['FILE' => $this->file]));
 
         $this->readFile();
     }
@@ -44,16 +44,16 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
     private function getPermissions($username) {
         # Add implicit permissions. These are basic permissions
         # which are needed for most users.
-        $perms =  array(
-            array('Overview',  'view',               '*'),
-            array('General',   'getContextTemplate', '*'),
-            array('General',   'getHoverTemplate',   '*'),
-            array('User',      'setOption',          '*'),
-            array('Multisite', 'getMaps',            '*'),
-        );
+        $perms =  [
+            ['Overview',  'view',               '*'],
+            ['General',   'getContextTemplate', '*'],
+            ['General',   'getHoverTemplate',   '*'],
+            ['User',      'setOption',          '*'],
+            ['Multisite', 'getMaps',            '*'],
+        ];
 
         # Gather NagVis related permissions
-        $nagvis_permissions = array();
+        $nagvis_permissions = [];
         global $mk_roles;
         foreach ($mk_roles AS $role_id => $permissions) {
             foreach ($permissions AS $perm_id) {
@@ -78,7 +78,7 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
                     // on the maps the user is explicitly permitted for by its contactgroup
                     // memberships
                     foreach (permitted_maps($username) AS $map_name) {
-                        $perms[] = array_merge($parts, array($map_name));
+                        $perms[] = array_merge($parts, [$map_name]);
                     }
                 }
             }
@@ -89,21 +89,21 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
 
     private function readFile() {
         require_once($this->file);
-        $this->permissions = array();
+        $this->permissions = [];
         foreach(all_users() AS $username => $user) {
-            $this->permissions[$username] = array(
+            $this->permissions[$username] = [
                 'permissions' => $this->getPermissions($username),
                 'language'    => $user['language'],
-            );
+            ];
         }
     }
 
     public function getUserRoles($userId) {
-        return Array();
+        return [];
     }
 
     public function getAllRoles() {
-        return Array();
+        return [];
     }
 
     public function getRoleId($sRole) {
@@ -111,11 +111,11 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
     }
 
     public function getAllPerms() {
-        return array();
+        return [];
     }
 
     public function getRolePerms($roleId) {
-        return array();
+        return [];
     }
 
     public function checkRoleExists($name) {
@@ -132,20 +132,20 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
 
         if(!isset($this->permissions[$username])
            || !isset($this->permissions[$username]['permissions']))
-            return array();
+            return [];
     
         # Array ( [0] => Overview [1] => view [2] => * )
-        $perms = Array();
+        $perms = [];
         foreach($this->permissions[$username]['permissions'] AS $value) {
             // Module entry
             if(!isset($perms[$value[0]]))
-                $perms[$value[0]] = array();
+                $perms[$value[0]] = [];
             
             if(!isset($perms[$value[0]][$value[1]]))
-                $perms[$value[0]][$value[1]] = array();
+                $perms[$value[0]][$value[1]] = [];
             
             if(!isset($perms[$value[0]][$value[1]][$value[2]]))
-                $perms[$value[0]][$value[1]][$value[2]] = array();
+                $perms[$value[0]][$value[1]][$value[2]] = [];
         }
 
         return $perms;

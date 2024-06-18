@@ -34,7 +34,7 @@ class CoreLogonModule {
         if($role !== '') {
             $A = new CoreAuthorisationHandler();
             $A->parsePermissions();
-            $A->updateUserRoles($A->getUserId($username), Array($A->getRoleId($role)));
+            $A->updateUserRoles($A->getUserId($username), [$A->getRoleId($role)]);
         }
     }
 

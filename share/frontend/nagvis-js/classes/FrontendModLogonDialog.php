@@ -32,7 +32,7 @@ class FrontendModLogonDialog extends FrontendModule {
         $this->sName = 'LogonDialog';
         $this->CORE = $CORE;
 
-        $this->aActions = Array('view' => !REQUIRES_AUTHORISATION);
+        $this->aActions = ['view' => !REQUIRES_AUTHORISATION];
     }
 
     public function handleAction() {

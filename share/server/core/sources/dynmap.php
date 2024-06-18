@@ -4,7 +4,7 @@ class DynmapError extends MapSourceError {}
 
 function dynmap_get_objects($MAPCFG, $p) {
     global $_BACKEND;
-    $objects = array();
+    $objects = [];
 
     $type = $p['dynmap_object_types'];
     $filter = str_replace('\n', "\n", $p['dynmap_object_filter']);
@@ -14,21 +14,21 @@ function dynmap_get_objects($MAPCFG, $p) {
         foreach ($ret AS $key => $val) {
             if ($type == 'service') {
                 $obj_id = $MAPCFG->genObjId($backend_id.'~~'.$val['name1'] . '~~' . $val['name2']);
-                $object = array(
+                $object = [
                     'type'                => $type,
                     'object_id'           => $obj_id,
-                    'backend_id'          => array($backend_id),
+                    'backend_id'          => [$backend_id],
                     'host_name'           => $val['name1'],
                     'service_description' => $val['name2'],
-                );
+                ];
             } else {
                 $obj_id = $MAPCFG->genObjId($backend_id.'~~'.$val['name1']);
-                $object = array(
+                $object = [
                     'type'                => $type,
                     'object_id'           => $obj_id,
-                    'backend_id'          => array($backend_id),
+                    'backend_id'          => [$backend_id],
                     $type.'_name'         => $val['name1'],
-                );
+                ];
             }
             $objects[$obj_id] = $object;
         }
@@ -54,80 +54,80 @@ $selectable = true;
 
 // options to be modifiable by the user(url)
 global $viewParams;
-$viewParams = array(
-    'dynmap' => array(),
-);
+$viewParams = [
+    'dynmap' => [],
+];
 
 function listDynObjectTypes($CORE) {
-    return Array(
+    return [
         'host'         => l('Hosts'),
         'service'      => l('Services'),
         'hostgroup'    => l('Hostgroup'),
         'servicegroup' => l('Servicegroup'),
-    );
+    ];
 }
 
 // Config variables to be registered for this source
 global $configVars;
-$configVars = array(
-    'dynmap_object_types' => Array(
+$configVars = [
+    'dynmap_object_types' => [
         'must'       => false,
         'default'    => '',
         'field_type' => 'dropdown',
         'match'      => MATCH_DYN_OBJECT_TYPES,
         'list'       => 'listDynObjectTypes',
-    ),
-    'dynmap_object_filter' => Array(
+    ],
+    'dynmap_object_filter' => [
         'must'       => false,
         'default'    => '',
         'match'      => MATCH_LIVESTATUS_FILTER,
-    ),
-    'dynmap_init_x' => array(
+    ],
+    'dynmap_init_x' => [
         'must'       => false,
         'default'    => 20,
         'match'      => MATCH_COORD_SIMPLE,
-    ),
-    'dynmap_init_y' => array(
+    ],
+    'dynmap_init_y' => [
         'must'       => false,
         'default'    => 700,
         'match'      => MATCH_COORD_SIMPLE,
-    ),
-    'dynmap_offset_x' => array(
+    ],
+    'dynmap_offset_x' => [
         'must'       => false,
         'default'    => 30,
         'match'      => MATCH_COORD_SIMPLE,
-    ),
-    'dynmap_offset_y' => array(
+    ],
+    'dynmap_offset_y' => [
         'must'       => false,
         'default'    => 30,
         'match'      => MATCH_COORD_SIMPLE,
-    ),
-    'dynmap_per_row' => array(
+    ],
+    'dynmap_per_row' => [
         'must'       => false,
         'default'    => 30,
         'match'      => MATCH_COORD_SIMPLE,
-    ),
-    'dynmap_sort' => Array(
+    ],
+    'dynmap_sort' => [
         'must'       => false,
         'default'    => 'a',
         'match'      => MATCH_STRING_NO_SPACE,
         'field_type' => 'dropdown',
         'list'       => 'listHoverChildSorters',
-    ),
-    'dynmap_order' => Array(
+    ],
+    'dynmap_order' => [
         'must'       => false,
         'default'    => 'asc',
         'match'      => MATCH_ORDER,
         'field_type' => 'dropdown',
         'list'       => 'listHoverChildOrders',
-    ),
-);
+    ],
+];
 
 // Assign config variables to specific object types
 global $configVarMap;
-$configVarMap = array(
-    'global' => array(
-        'dynmap' => array(
+$configVarMap = [
+    'global' => [
+        'dynmap' => [
             'dynmap_object_types'  => null,
             'dynmap_object_filter' => null,
             'dynmap_init_x'        => null,
@@ -137,9 +137,9 @@ $configVarMap = array(
             'dynmap_per_row'       => null,
             'dynmap_sort'          => null,
             'dynmap_order'         => null,
-        ),
-    ),
-);
+        ],
+    ],
+];
 
 function dynmap_object_in_grid($params, $map_object) {
     $top  = $params['dynmap_init_y'];

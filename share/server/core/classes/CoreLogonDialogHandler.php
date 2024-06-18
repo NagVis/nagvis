@@ -58,7 +58,7 @@ class CoreLogonDialogHandler {
         // Authentication failed. Show the login dialog with the error message to
         // the user again. In case of an ajax request, simply raise an exception
         if(!CONST_AJAX) {
-            return array('LogonDialog', 'view', $err);
+            return ['LogonDialog', 'view', $err];
         } else {
             throw new NagVisException(l('You are not authenticated'), null, l('Access denied'));
         }
@@ -80,8 +80,10 @@ class CoreLogonDialogHandler {
            || $FHANDLER->isLongerThan('_password', AUTH_MAX_PASSWORD_LENGTH))
             throw new FieldInputError('_password', l('Invalid password.'));
         
-        $a = Array('user'     => $FHANDLER->get('_username'),
-                   'password' => $FHANDLER->get('_password'));
+        $a = [
+            'user'     => $FHANDLER->get('_username'),
+                   'password' => $FHANDLER->get('_password')
+        ];
 
         // It is possible to only request onetime access to prevent getting added
         // and authentication cookie

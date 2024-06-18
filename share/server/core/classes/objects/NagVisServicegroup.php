@@ -34,7 +34,7 @@ class NagVisServicegroup extends NagVisStatefulObject {
     protected $servicegroup_name;
     protected $alias;
 
-    protected $members = array();
+    protected $members = [];
 
     public function __construct($backend_id, $servicegroupName) {
         $this->backend_id = $backend_id;
@@ -47,7 +47,7 @@ class NagVisServicegroup extends NagVisStatefulObject {
      */
     public function queueState($_unused_flag = true, $bFetchMemberState = true) {
         global $_BACKEND;
-        $queries = Array('servicegroupMemberState' => true);
+        $queries = ['servicegroupMemberState' => true];
 
         if($this->hover_menu == 1
            && $this->hover_childs_show == 1
@@ -62,14 +62,14 @@ class NagVisServicegroup extends NagVisStatefulObject {
      */
     public function applyState() {
         if($this->problem_msg) {
-            $this->sum = array(
+            $this->sum = [
                 ERROR,
                 $this->problem_msg,
                 null,
                 null,
                 null
-            );
-            $this->members = array();
+            ];
+            $this->members = [];
             return;
         }
 
@@ -120,7 +120,7 @@ class NagVisServicegroup extends NagVisStatefulObject {
      * Fetches the summary output from the object state counts
      */
     private function fetchSummaryOutputFromCounts() {
-        $arrServiceStates = Array();
+        $arrServiceStates = [];
 
         // Loop all major states
         $iSumCount = 0;
@@ -148,8 +148,10 @@ class NagVisServicegroup extends NagVisStatefulObject {
         // Fallback for groups without members
         if($iSumCount == 0) {
             $this->sum[OUTPUT] = l('The servicegroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
-                                                Array('GROUP' => $this->getName(),
-                                                      'BACKEND' => implode(', ', $this->backend_id)));
+                                                [
+                                                    'GROUP' => $this->getName(),
+                                                      'BACKEND' => implode(', ', $this->backend_id)
+                                                ]);
         }
     }
 
@@ -158,9 +160,11 @@ class NagVisServicegroup extends NagVisStatefulObject {
      */
     private function fetchSummaryOutput() {
         if($this->hasMembers()) {
-            $arrStates = Array(CRITICAL => 0, WARNING => 0,
+            $arrStates = [
+                CRITICAL => 0, WARNING => 0,
                                UNKNOWN  => 0, OK      => 0,
-                               ERROR    => 0, PENDING => 0);
+                               ERROR    => 0, PENDING => 0
+            ];
 
             // Get summary state of this and child objects
             foreach($this->members AS &$MEMBER) {

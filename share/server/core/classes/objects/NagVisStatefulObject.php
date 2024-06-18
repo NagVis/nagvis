@@ -70,7 +70,7 @@ class NagVisStatefulObject extends NagVisObject {
     protected $state = null;
     protected $members;
 
-    public $sum = array(null, null, null, null, null);
+    public $sum = [null, null, null, null, null];
     protected $aStateCounts = null;
 
     /**
@@ -328,7 +328,7 @@ class NagVisStatefulObject extends NagVisObject {
      */
     public function getStateType() {
         if(isset($this->state[STATE_TYPE]) && $this->state[STATE_TYPE] != '') {
-            $stateTypes = Array(0 => 'SOFT', 1 => 'HARD');
+            $stateTypes = [0 => 'SOFT', 1 => 'HARD'];
             return $stateTypes[$this->state[STATE_TYPE]];
         } else {
             return 'N/A';
@@ -377,7 +377,7 @@ class NagVisStatefulObject extends NagVisObject {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getObjectStateInformations($bFetchChilds=true) {
-        $arr = Array();
+        $arr = [];
 
         $arr['state']                         = state_str(val($this->state, STATE));
         $arr['problem_has_been_acknowledged'] = val($this->state, ACK);
@@ -399,12 +399,12 @@ class NagVisStatefulObject extends NagVisObject {
             if (isset($arr['custom_variables']['TAGS']))
                 $arr['tags'] = explode(' ', $arr['custom_variables']['TAGS']);
             else
-                $arr['tags'] = array();
+                $arr['tags'] = [];
 
             // Now, to be very user friendly, we now try to use the Check_MK WATO php-api to gather
             // titles and grouping information of the tags. These can, for example, be used in the hover
             // templates. This has been implemented to only work in OMD environments.
-            $arr['taggroups'] = array();
+            $arr['taggroups'] = [];
             if ($arr['tags'] && isset($_SERVER['OMD_ROOT'])) {
                 $path = $_SERVER['OMD_ROOT'] . '/var/check_mk/wato/php-api/hosttags.php';
                 if (file_exists($path)) {
@@ -430,7 +430,7 @@ class NagVisStatefulObject extends NagVisObject {
         }
 
         // Enable/Disable fetching children
-        $arr['members'] = Array();
+        $arr['members'] = [];
         if($bFetchChilds && method_exists($this, 'getMembers'))
             foreach($this->getSortedObjectMembers() AS $OBJ)
                 $arr['members'][] = $OBJ->fetchObjectAsChild();
@@ -536,7 +536,7 @@ class NagVisStatefulObject extends NagVisObject {
      */
     public function getChildFetchingStateFilters() {
         global $_MAINCFG;
-        $stateCounts = Array();
+        $stateCounts = [];
         $stateWeight = $_MAINCFG->getStateWeight();
 
         if($this->aStateCounts !== null) {
@@ -545,17 +545,19 @@ class NagVisStatefulObject extends NagVisObject {
                     && isset($stateWeight[$sState]['normal'])
                     && isset($aSubstates['normal'])
                     && $aSubstates['normal'] !== 0) {
-                    $stateCounts[] = Array('name'   => $sState,
+                    $stateCounts[] = [
+                        'name'   => $sState,
                                            'weight' => $stateWeight[$sState]['normal'],
-                                           'count'  => $aSubstates['normal']);
+                                           'count'  => $aSubstates['normal']
+                    ];
                 }
             }
         }
         NagVisObject::$sSortOrder = $this->hover_childs_order;
-        usort($stateCounts, Array("NagVisStatefulObject", "sortStateCountsByState"));
+        usort($stateCounts, ["NagVisStatefulObject", "sortStateCountsByState"]);
 
         $objCount = 0;
-        $stateFilter = Array();
+        $stateFilter = [];
         foreach($stateCounts AS $aState) {
             $stateFilter[] = $aState['name'];
             if(($objCount += $aState['count']) >= $this->hover_childs_limit)
@@ -572,14 +574,14 @@ class NagVisStatefulObject extends NagVisObject {
         if($backendId === null)
             $backendId = $this->backend_id[0];
         $this->problem_msg = l('Problem (Backend: [BACKENDID]): [MSG]',
-                               Array('BACKENDID' => $backendId, 'MSG' => $s));
+                               ['BACKENDID' => $backendId, 'MSG' => $s]);
     }
 
     /**
      * Sets output/state on object handling problems
      */
     public function setProblem($s) {
-        $this->problem_msg = l('Problem: [MSG]', Array('MSG' => $s));
+        $this->problem_msg = l('Problem: [MSG]', ['MSG' => $s]);
     }
 
     public function hasProblem() {
@@ -626,11 +628,13 @@ class NagVisStatefulObject extends NagVisObject {
     protected function escapeStringForJson($s) {
         if (is_null($s))
             return '';
-        return strtr($s, Array("\r" => '<br />',
+        return strtr($s, [
+            "\r" => '<br />',
                                "\n" => '<br />',
                                '"'  => '&quot;',
                                '\'' => '&#145;',
-                               '$'  => '&#36;'));
+                               '$'  => '&#36;'
+        ]);
     }
 
 
@@ -639,7 +643,7 @@ class NagVisStatefulObject extends NagVisObject {
      * e.g. in hover menus. There are much less macros needed for this.
      */
     protected function fetchObjectAsChild() {
-        return Array(
+        return [
             'type'                => $this->getType(),
             'name'                => $this->getName(),
             'display_name'        => $this->escapeStringForJson($this->getDisplayName()),
@@ -648,7 +652,7 @@ class NagVisStatefulObject extends NagVisObject {
             'summary_problem_has_been_acknowledged' => $this->sum[ACK],
             'summary_stale'       => $this->isStale(true),
             'summary_output'      => $this->escapeStringForJson($this->sum[OUTPUT])
-        );
+        ];
     }
 
     /**
@@ -681,9 +685,11 @@ class NagVisStatefulObject extends NagVisObject {
                 $currWeight = $stateWeight[$this->sum[STATE]][$this->getSubState(SUMMARY_STATE)];
             } else {
                 throw new NagVisException(l('Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE].',
-                                            Array('STATE'    => $this->sum[STATE],
+                                            [
+                                                'STATE'    => $this->sum[STATE],
                                                   'SUBSTATE' => $this->getSubState(SUMMARY_STATE),
-                                                  'TYPE'     => $this->getType())));
+                                                  'TYPE'     => $this->getType()
+                                            ]));
             }
         }
 
@@ -733,10 +739,12 @@ class NagVisStatefulObject extends NagVisObject {
                         }
                     } else {
                         throw new NagVisException(l('Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME].',
-                                                    Array('STATE'    => $sState,
+                                                    [
+                                                        'STATE'    => $sState,
                                                           'SUBSTATE' => $sSubState,
                                                           'TYPE'     => $this->getType(),
-                                                          'NAME'     => $this->getName())));
+                                                          'NAME'     => $this->getName()
+                                                    ]));
                     }
                 }
             }
@@ -837,13 +845,13 @@ class NagVisStatefulObject extends NagVisObject {
         $arr = parent::getObjectInformation($bFetchChilds);
 
         if ($this->type == 'host' || $this->type == 'service') {
-            $obj_attrs = array(
+            $obj_attrs = [
                 'alias'         => ALIAS,
                 'display_name'  => DISPLAY_NAME,
                 'address'       => ADDRESS,
                 'notes'         => NOTES,
                 'check_command' => CHECK_COMMAND,
-            );
+            ];
             foreach ($obj_attrs AS $attr => $state_key) {
                 if (isset($this->state[$state_key]) && $this->state[$state_key] != '')
                     $arr[$attr] = $this->state[$state_key];
@@ -886,7 +894,7 @@ class NagVisStatefulObject extends NagVisObject {
 
         // If there are some members fetch the information for them
         if(isset($arr['num_members']) && $arr['num_members'] > 0) {
-            $members = Array();
+            $members = [];
             foreach($this->getSortedObjectMembers() AS $OBJ) {
                 $members[] = $OBJ->fetchObjectAsChild();
             }
@@ -900,7 +908,7 @@ class NagVisStatefulObject extends NagVisObject {
      * Gets an array of member objects
      */
     public function getSortedObjectMembers() {
-        $arr = Array();
+        $arr = [];
 
         $aTmpMembers = $this->getStateRelevantMembers();
 
@@ -911,7 +919,7 @@ class NagVisStatefulObject extends NagVisObject {
         switch($this->hover_childs_sort) {
             case 's':
                 // Order by State
-                usort($aTmpMembers, Array("NagVisObject", "sortObjectsByState"));
+                usort($aTmpMembers, ["NagVisObject", "sortObjectsByState"]);
             break;
             case 'k':
                 // Keep original order (as provided by backend)
@@ -919,7 +927,7 @@ class NagVisStatefulObject extends NagVisObject {
             case 'a':
             default:
                 // Order alhpabetical
-                usort($aTmpMembers, Array("NagVisObject", "sortObjectsAlphabetical"));
+                usort($aTmpMembers, ["NagVisObject", "sortObjectsAlphabetical"]);
             break;
         }
 

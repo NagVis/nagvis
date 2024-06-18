@@ -6,8 +6,8 @@ $selectable = true;
 
 // options to be modyfiable by the user(url)
 global $viewParams;
-$viewParams = array(
-    'automap' => array(
+$viewParams = [
+    'automap' => [
         'header_template',
         'root',
         'render_mode',
@@ -27,34 +27,34 @@ $viewParams = array(
         'overlap',
         'label_show',
         'url_target',
-    ),
-);
+    ],
+];
 if (cfg('global', 'shinken_features')) {
     array_push($viewParams['automap'], 'min_business_impact');
 }
 
 function list_automap_render_modes() {
-    return Array(
+    return [
         'directed'    => 'directed',
         'undirected'  => 'undirected',
         'radial'      => 'radial',
         'circular'    => 'circular',
         'undirected2' => 'undirected2',
         'undirected3' => 'undirected3',
-    );
+    ];
 }
 
 function list_automap_rankdirs() {
-    return Array(
+    return [
         'TB' => l('Top to bottom'),
         'LR' => l('Left to right'),
         'BT' => l('Bottom to top'),
         'RL' => l('Right to left'),
-    );
+    ];
 }
 
 function list_automap_overlaps() {
-    return array(
+    return [
         'true'     => l('true'),
         'false'    => l('false'),
         'scale'    => l('scale'),
@@ -66,11 +66,11 @@ function list_automap_overlaps() {
         'ipsep'    => l('ipsep'),
         'vpsc'     => l('vpsc'),
         'prism'    => l('prism'),
-    );
+    ];
 }
 
 function list_automaps($CORE) {
-    $arr = array();
+    $arr = [];
     foreach($CORE->getAvailableAutomaps() AS $mapName) {
         $arr[$mapName] = $mapName;
     }
@@ -79,83 +79,83 @@ function list_automaps($CORE) {
 
 // Config variables to be registered for this source
 global $configVars;
-$configVars = array(
-    'render_mode' => array(
+$configVars = [
+    'render_mode' => [
         'must'       => false,
         'default'    => 'undirected',
         'match'      => MATCH_AUTOMAP_RENDER_MODE,
         'field_type' => 'dropdown',
         'list'       => 'list_automap_render_modes',
-    ),
-    'root' => array(
+    ],
+    'root' => [
         'must'       => false,
         'default'    => '<<<monitoring>>>',
         'match'      => MATCH_AUTOMAP_HOSTNAME,
-    ),
-    'filter_by_state' => array(
+    ],
+    'filter_by_state' => [
         'must'       => false,
         'default'    => '0',
         'field_type' => 'boolean',
         'match'      => MATCH_BOOLEAN,
-    ),
-    'filter_by_ids' => array(
+    ],
+    'filter_by_ids' => [
         'must'       => false,
         'hidden'     => true,
         'default'    => '',
         'match'      => MATCH_BOOLEAN,
-    ),
+    ],
 
     /**
      * This sets how many child layers should be displayed. Default value is -1,
      * this means no limitation.
      */
-    'child_layers' => array(
+    'child_layers' => [
         'must'       => false,
         'default'    => -1,
         'match'      => MATCH_INTEGER_PRESIGN_EMPTY,
-    ),
+    ],
     /**
      * This sets how many parent layers should be displayed. Default value is
      * 0, this means the direction is not fteched
      */
-    'parent_layers' => array(
+    'parent_layers' => [
         'must'       => false,
         'default'    => 0,
         'match'      => MATCH_INTEGER_PRESIGN_EMPTY,
-    ),
+    ],
 
-    'ignore_hosts' => array(
+    'ignore_hosts' => [
         'must'       => false,
         'default'    => '',
         'match'      => MATCH_STRING_NO_SPACE_EMPTY,
-    ),
+    ],
 
-    'margin' => array(
+    'margin' => [
         'must'       => false,
         'default'    => '50',
         'match'      => MATCH_FLOAT_EMPTY,
-    ),
-    'rankdir' => array(
+    ],
+    'rankdir' => [
         'must'       => false,
         'default'    => 'LR',
         'match'      => MATCH_AUTOMAP_RANKDIR,
         'field_type' => 'dropdown',
         'list'       => 'list_automap_rankdirs',
-    ),
-    'overlap' => array(
+    ],
+    'overlap' => [
         'must'       => false,
         'default'    => 'scale',
         'match'      => MATCH_AUTOMAP_OVERLAP,
         'field_type' => 'dropdown',
         'list'       => 'list_automap_overlaps',
-    ),
-);
+    ],
+];
 
 // Assign config variables to specific object types
 global $configVarMap;
-$configVarMap = array(
-    'global' => array(
-        'automap' => array(
+$configVarMap = [
+    'global' => [
+        'automap' => [
             'render_mode'     => null,
             'root'            => null,
             'filter_by_state' => null,
@@ -166,64 +166,64 @@ $configVarMap = array(
             'margin'          => null,
             'rankdir'         => null,
             'overlap'         => null,
-        ),
-    ),
-);
+        ],
+    ],
+];
 
 if (cfg('global', 'shinken_features')) {
     function list_business_impact() {
-        return Array(
+        return [
             '0'          => '0_development',
             '1'          => '1_testing',
             '2'          => '2_standard',
             '3'          => '3_production',
             '4'          => '4_top_production',
             '5'          => '5_business_critical',
-        );
+        ];
     }
-    $configVars['min_business_impact'] = array(
+    $configVars['min_business_impact'] = [
         'must'       => false,
         'default'    => '0_development',
         'match'      => MATCH_AUTOMAP_BUSINESS_IMPACT,
         'field_type' => 'dropdown',
         'list'       => 'list_business_impact',
-    );
+    ];
 
     $configVarMap['global']['automap']['min_business_impact'] = null;
 }
 
 // Alter some global vars with automap specific things
-$updateConfigVars = array(
+$updateConfigVars = [
     // Fall back to any size in case no size is configured
-    'width' => array(
+    'width' => [
         'default' => 1024,
-    ),
-    'height' => array(
+    ],
+    'height' => [
         'default' => 800,
-    ),
-    'label_show' => array(
+    ],
+    'label_show' => [
         'default' => '1',
-    ),
-    'label_border' => array(
+    ],
+    'label_border' => [
         'default' => 'transparent',
-    ),
-    'label_background' => array(
+    ],
+    'label_background' => [
         'default' => '#ffffff',
-    ),
-    'label_maxlen' => array(
+    ],
+    'label_maxlen' => [
         'default' => '14',
-    ),
-    'line_width' => array(
+    ],
+    'line_width' => [
         'default' => '1',
-    ),
-    'line_color' => array(
+    ],
+    'line_color' => [
         'default' => '#000000',
-    ),
-);
+    ],
+];
 
-$hiddenConfigVars = array(
+$hiddenConfigVars = [
     'line_type',
-);
+];
 
 /**
  * Get root host object by NagVis configuration or by backend.
@@ -283,7 +283,7 @@ function automap_load_params($MAPCFG) {
 function automap_hostnames_to_object_ids($names) {
     global $automap_object_ids;
 
-    $ids = array();
+    $ids = [];
     foreach($names AS $name) {
         if(isset($automap_object_ids[$name])) {
             $ids[] = $automap_object_ids[$name];
@@ -303,7 +303,7 @@ function automap_load_object_ids() {
         if(GlobalCore::getInstance()->checkExisting($automap_object_id_file, false))
             $automap_object_ids = json_decode(file_get_contents($automap_object_id_file), true);
         else
-            $automap_object_ids = array();
+            $automap_object_ids = [];
 
     return $automap_object_ids;
 }
@@ -325,7 +325,7 @@ function automap_obj_base($MAPCFG, &$params, &$saved_config, $obj_name) {
         $automap_object_ids_changed = true;
     }
 
-    $obj = array();
+    $obj = [];
 
     // Add maybe existing explicit config from saved_config. This includes
     // initial coordinates set by the user
@@ -347,7 +347,7 @@ function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
     if ($obj_name === '<<<monitoring>>>') {
         $obj['host_name'] = 'Monitoring';
         $obj['type']      = 'shape';
-        $obj['icon_size'] = array(22);
+        $obj['icon_size'] = [22];
         $obj['icon']      = 'std_nagvis.png';
         $obj['.width']    = 22;
         $obj['.height']   = 22;
@@ -387,8 +387,8 @@ function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
 
     // Header menu has z-index 100, this object's label the below+1
     $obj['z']           = 98;
-    $obj['.parents']    = array();
-    $obj['.childs']     = array();
+    $obj['.parents']    = [];
+    $obj['.childs']     = [];
 
     return $obj;
 }
@@ -420,7 +420,7 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
     if($layers_left == 0)
         return; // Stop recursion when the number of layers counted down
 
-    $relations = array();
+    $relations = [];
     try {
         global $_BACKEND;
         if($dir == 'childs') {
@@ -428,7 +428,7 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
                 try {
                     $relations = $_BACKEND->getBackend($params['backend_id'][0])->getHostNamesWithNoParent();
                 } catch(BackendConnectionProblem $e) {
-                    $relations = array();
+                    $relations = [];
                 }
             } elseif (cfg('global', 'shinken_features')) {
                 if ($params['min_business_impact']){
@@ -494,7 +494,7 @@ function automap_get_object_tree($MAPCFG, $params, &$saved_config) {
 
     // List of all object names already in the tree. Used to prevent loops. The used algorithm is not
     // tuned for efficency, but should be sufficient for our needs.
-    $object_names = array($root_name => true);
+    $object_names = [$root_name => true];
 
     automap_fetch_tree('childs', $MAPCFG, $params, $saved_config, $root_name, $params['child_layers'], $root_obj['.childs'], $object_names);
 
@@ -521,14 +521,14 @@ function automap_filter_tree($allowed_ids, &$obj, $directions = null) {
     $remain = isset($allowed_ids[$obj['object_id']]);
 
     if($directions == null) {
-        $directions = array('parents', 'childs');
+        $directions = ['parents', 'childs'];
     }
 
     // Loop both directions
     foreach($directions as $dir) {
         foreach($obj['.'.$dir] AS $rel_id => &$rel) {
             // Or does a relative allow this object to remain on the map?
-            $rel_remain = automap_filter_tree($allowed_ids, $rel, array($dir));
+            $rel_remain = automap_filter_tree($allowed_ids, $rel, [$dir]);
 
             // If there is no reason for this relative to remain on the map, remove it here
             if(!$rel_remain) {
@@ -648,7 +648,7 @@ function process_automap($MAPCFG, $map_name, &$map_config) {
     // The existing map config must not create new objects. The truth about the
     // existing objects comes only from this source.
     $saved_config = $map_config;
-    $map_config = array(0 => $saved_config[0]);
+    $map_config = [0 => $saved_config[0]];
 
     // Get the object trees
     $tree = automap_get_object_tree($MAPCFG, $params, $saved_config);

@@ -34,7 +34,7 @@ class NagVisHeaderMenu {
     private $pathHtmlBase;
     private $pathTemplateFile;
 
-    private $aMacros = Array();
+    private $aMacros = [];
     private $bRotation = false;
 
     public function __construct($templateName, $OBJ = null) {
@@ -97,7 +97,7 @@ class NagVisHeaderMenu {
         $aLang = $CORE->getAvailableAndEnabledLanguages();
         $numLang = count($aLang);
         foreach($aLang AS $lang) {
-            $aLangs[$lang] = Array();
+            $aLangs[$lang] = [];
             $aLangs[$lang]['language'] = $lang;
 
             // Get translated language name
@@ -157,7 +157,7 @@ class NagVisHeaderMenu {
             $list = $CACHE->getCache();
         } else {
             // Get all the maps global config sections and cache them
-            $list = Array();
+            $list = [];
             foreach($CORE->getAvailableMaps() AS $mapName) {
                 $MAPCFG = new GlobalMapCfg($mapName);
                 try {
@@ -172,13 +172,13 @@ class NagVisHeaderMenu {
                 if ($MAPCFG->getValue(0, 'show_in_lists') != 1)
                     continue;
 
-                $list[$mapName] = Array(
+                $list[$mapName] = [
                     'mapName'   => $MAPCFG->getName(),
                     'mapAlias'  => $MAPCFG->getValue(0, 'alias'),
-                    'childs'    => Array(),
+                    'childs'    => [],
                     'class'     => '',
                     'parent'    => $MAPCFG->getValue(0, 'parent_map'),
-                );
+                ];
             }
 
             // Save the list as cache
@@ -186,8 +186,8 @@ class NagVisHeaderMenu {
         }
 
         $permEditAnyMap = false;
-        $aMaps = Array();
-        $childMaps = Array();
+        $aMaps = [];
+        $childMaps = [];
 
         // Perform user specific filtering on the cached data
         foreach ($list AS $map) {
@@ -205,7 +205,7 @@ class NagVisHeaderMenu {
                 $aMaps[$map['mapName']] = $map;
             } else {
                 if(!isset($childMaps[$map['parent']]))
-                    $childMaps[$map['parent']] = Array();
+                    $childMaps[$map['parent']] = [];
                 $childMaps[$map['parent']][$map['mapName']] = $map;
             }
         }
@@ -217,7 +217,7 @@ class NagVisHeaderMenu {
             $list[$this->OBJ->getName()]['selected'] = True;
         }
 
-        return Array($this->mapListToTree($aMaps, $childMaps), $permEditAnyMap);
+        return [$this->mapListToTree($aMaps, $childMaps), $permEditAnyMap];
     }
 
     private function mapListToTree($maps, $childMaps) {
@@ -228,7 +228,7 @@ class NagVisHeaderMenu {
                 $maps[$freeParent]['childs'] = $this->mapListToTree($childMaps[$freeParent], $childMaps);
             }
         }
-        usort($maps, Array('GlobalCore', 'cmpMapAlias'));
+        usort($maps, ['GlobalCore', 'cmpMapAlias']);
         return $maps;
     }
 
@@ -295,7 +295,7 @@ class NagVisHeaderMenu {
         }
 
         // Add permitted rotations
-        $this->aMacros['rotations'] = array();
+        $this->aMacros['rotations'] = [];
         foreach($CORE->getDefinedRotationPools() AS $poolName) {
             if($AUTHORISATION->isPermitted('Rotation', 'view', $poolName)) {
                 $this->aMacros['rotations'][] = $poolName;
@@ -309,8 +309,8 @@ class NagVisHeaderMenu {
         if ($this->templateName == 'on-demand-filter') {
             global $_BACKEND;
             $this->aMacros['hostgroups'] = $_BACKEND->getBackend($_GET['backend_id'])->getObjects('hostgroup', '', '');
-            usort($this->aMacros['hostgroups'], Array($this, 'sortHostgroups'));
-            array_unshift($this->aMacros['hostgroups'], array('name1' => '', 'name2' => ''));
+            usort($this->aMacros['hostgroups'], [$this, 'sortHostgroups']);
+            array_unshift($this->aMacros['hostgroups'], ['name1' => '', 'name2' => '']);
 
             $default = '';
             $USERCFG = new CoreUserCfg();
@@ -354,7 +354,8 @@ class NagVisHeaderMenu {
         global $SHANDLER, $AUTH, $AUTHORISATION, $UHANDLER;
 
         // Replace paths and language macros
-        $aReturn = Array('pathBase' => $this->pathHtmlBase,
+        $aReturn = [
+            'pathBase' => $this->pathHtmlBase,
             'currentUri'         => preg_replace('/[&?]lang=[a-z]{2}_[A-Z]{2}/', '', $UHANDLER->getRequestUri()),
             'pathImages'         => cfg('paths', 'htmlimages'),
             'showStates'         => cfg('defaults', 'header_show_states'),
@@ -422,7 +423,7 @@ class NagVisHeaderMenu {
             'permittedUserMgmt' => $AUTHORISATION->isPermitted('UserMgmt', 'manage'),
             'permittedRoleMgmt' => $AUTHORISATION->isPermitted('RoleMgmt', 'manage'),
             'rolesConfigurable' => $AUTHORISATION->rolesConfigurable()
-        );
+        ];
 
         return $aReturn;
     }

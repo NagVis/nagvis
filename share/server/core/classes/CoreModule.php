@@ -29,8 +29,8 @@ abstract class CoreModule {
     protected $UHANDLER = null;
     protected $FHANDLER = null;
 
-    protected $aActions = Array();
-    protected $aObjects = Array();
+    protected $aActions = [];
+    protected $aObjects = [];
     protected $sName = '';
     protected $sAction = '';
     protected $sObject = null;
@@ -122,7 +122,7 @@ abstract class CoreModule {
 
         if(!$authorized)
             throw new NagVisException(l('You are not permitted to access this page ([PAGE]).',
-                                        Array('PAGE' => $this->sName.'/'.$action.'/'.$this->sObject)));
+                                        ['PAGE' => $this->sName.'/'.$action.'/'.$this->sObject]));
     }
 
     /**
@@ -138,7 +138,7 @@ abstract class CoreModule {
      * Returns all _GET+_POST vars. Supports optional array of attributes to
      * exclude where the keys are the var names. Always excludes mod/act params
      */
-    protected function getAllOptions($exclude = Array()) {
+    protected function getAllOptions($exclude = []) {
         if(!isset($this->FHANDLER))
             $this->FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
         $exclude['mod'] = true;
@@ -151,12 +151,12 @@ abstract class CoreModule {
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function getCustomOptions($aKeys, $aDefaults = Array(), $mixed = false) {
+    protected function getCustomOptions($aKeys, $aDefaults = [], $mixed = false) {
         if($mixed) {
             if(!isset($this->FHANDLER))
                 $this->FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
 
-            $aReturn = Array();
+            $aReturn = [];
             foreach($aKeys AS $key => $val)
                 if($this->FHANDLER->match($key, $val))
                     $aReturn[$key] = $this->FHANDLER->get($key);
@@ -172,7 +172,7 @@ abstract class CoreModule {
         $this->UHANDLER->parseModSpecificUri($aKeys, $aDefaults);
 
         // Now get those params
-        $aReturn = Array();
+        $aReturn = [];
         foreach($aKeys AS $key => $val)
             $aReturn[$key] = $this->UHANDLER->get($key);
 
@@ -238,7 +238,7 @@ abstract class CoreModule {
     protected function verifyValuesSet($HANDLER, $list) {
         // Check if the array is assoc. When it isn't re-format it.
         if(array_keys($list) === range(0, count($list) - 1)) {
-            $assoc = Array();
+            $assoc = [];
             foreach($list AS $value)
                 $assoc[$value] = true;
             $list = $assoc;
@@ -246,7 +246,7 @@ abstract class CoreModule {
 
         foreach($list AS $key => $value)
             if(!$HANDLER->isSetAndNotEmpty($key))
-                throw new UserInputError(l('mustValueNotSet1', Array('ATTRIBUTE' => $key)));
+                throw new UserInputError(l('mustValueNotSet1', ['ATTRIBUTE' => $key]));
     }
 
     /**
@@ -259,7 +259,7 @@ abstract class CoreModule {
         foreach($list AS $key => $pattern)
             if($pattern && !$HANDLER->match($key, $pattern))
                 throw new UserInputError(l('The value of option "[ATTRIBUTE]" does not match the valid format.',
-                                           Array('ATTRIBUTE' => $key)));
+                                           ['ATTRIBUTE' => $key]));
 
     }
 
@@ -271,7 +271,7 @@ abstract class CoreModule {
      */
     protected function checkFilesChanged($files) {
         global $AUTHORISATION, $CORE;
-        $changed = array();
+        $changed = [];
 
         foreach($files AS $file) {
             $parts = explode(',', $file);
@@ -301,10 +301,10 @@ abstract class CoreModule {
         }
 
         if(count($changed) > 0) {
-            return json_encode(array(
+            return json_encode([
                 'status' => 'CHANGED',
                 'data'   => $changed,
-            ));
+            ]);
         } else {
             return null;
         }

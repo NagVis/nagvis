@@ -30,50 +30,50 @@ class GlobalBackendTest implements GlobalBackendInterface {
     private $now;
 
     // These are the backend local configuration options
-    private static $validConfig = Array(
-        'generate_mapcfg' => Array(
+    private static $validConfig = [
+        'generate_mapcfg' => [
           'must'       => 1,
           'editable'   => 1,
           'default'    => 0,
           'field_type' => 'boolean',
           'match'      => MATCH_BOOLEAN
-        )
-    );
+        ]
+    ];
 
-    private $parents = Array();
-    private $childs  = Array();
+    private $parents = [];
+    private $childs  = [];
 
-    private $obj = Array(
-        'host' => Array(),
-        'service' => Array(),
-        'hostgroup' => Array(),
-        'servicegroup' => Array(),
-    );
-    private $hostStates = Array(
-        UP          => Array('normal' => 0, 'stale' => 0, 'downtime' => 0),
-        DOWN        => Array('normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0),
-        UNREACHABLE => Array('normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0),
-        UNCHECKED   => Array('normal' => 0, 'stale' => 0, 'downtime' => 0),
-    );
-    private $serviceStates = Array(
-        OK          => Array('normal' => 0, 'stale' => 0, 'downtime' => 0),
-        WARNING     => Array('normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0),
-        CRITICAL    => Array('normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0),
-        UNKNOWN     => Array('normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0),
-        PENDING     => Array('normal' => 0, 'stale' => 0, 'downtime' => 0),
-    );
+    private $obj = [
+        'host' => [],
+        'service' => [],
+        'hostgroup' => [],
+        'servicegroup' => [],
+    ];
+    private $hostStates = [
+        UP          => ['normal' => 0, 'stale' => 0, 'downtime' => 0],
+        DOWN        => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
+        UNREACHABLE => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
+        UNCHECKED   => ['normal' => 0, 'stale' => 0, 'downtime' => 0],
+    ];
+    private $serviceStates = [
+        OK          => ['normal' => 0, 'stale' => 0, 'downtime' => 0],
+        WARNING     => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
+        CRITICAL    => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
+        UNKNOWN     => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
+        PENDING     => ['normal' => 0, 'stale' => 0, 'downtime' => 0],
+    ];
 
-    private $canBeSoft = Array(
-        UP          => Array('hard'),
-        DOWN        => Array('hard', 'soft'),
-        UNREACHABLE => Array('hard', 'soft'),
-        UNCHECKED   => Array('hard'),
-        PENDING     => Array('hard'),
-        OK          => Array('hard'),
-        WARNING     => Array('hard', 'soft'),
-        CRITICAL    => Array('hard', 'soft'),
-        UNKNOWN     => Array('hard'),
-    );
+    private $canBeSoft = [
+        UP          => ['hard'],
+        DOWN        => ['hard', 'soft'],
+        UNREACHABLE => ['hard', 'soft'],
+        UNCHECKED   => ['hard'],
+        PENDING     => ['hard'],
+        OK          => ['hard'],
+        WARNING     => ['hard', 'soft'],
+        CRITICAL    => ['hard', 'soft'],
+        UNKNOWN     => ['hard'],
+    ];
 
     public function __construct($backendId) {
         $this->backendId = $backendId;
@@ -103,7 +103,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
             $downtime_end    = null;
         }
 
-        return array(
+        return [
             $state,
             'Host with state '.$state, // output
             $ack,
@@ -127,7 +127,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
             $downtime_data,
             $downtime_start,
             $downtime_end,
-        );
+        ];
     }
 
     private function service($name1, $name2, $state, $stateType = 'hard', $substate = 'normal', $output = null, $perfdata = '') {
@@ -149,7 +149,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
         else
             $output = 'empty output';
 
-        return array(
+        return [
             $state,
             $output,
             $ack,
@@ -174,23 +174,23 @@ class GlobalBackendTest implements GlobalBackendInterface {
             $downtime_start,
             $downtime_end,
             $name2
-        );
+        ];
     }
 
     private function hostgroup($name, $members) {
-        return  Array(
+        return  [
             'name'    => $name,
             'alias'   => 'Alias '.$name,
             'members' => $members
-        );
+        ];
     }
 
     private function servicegroup($name, $members) {
-        return Array(
+        return [
             'name'    => $name,
             'alias'   => 'Alias '.$name,
             'members' => $members
-        );
+        ];
     }
 
     private function genObj() {
@@ -201,10 +201,10 @@ class GlobalBackendTest implements GlobalBackendInterface {
         $wan = $this->service('muc-gw1', 'Interface WAN', CRITICAL, 'hard', 'normal');
         $wan[PERFDATA] = 'in=98.13%;85;98 out=12.12%;85;98';
         $wan[OUTPUT]   = 'In: 98.13%, Out: 12.12%';
-        $this->obj['service']['muc-gw1']      = Array($wan);
+        $this->obj['service']['muc-gw1']      = [$wan];
 
         $this->obj['host']['muc-srv1']        = $this->host('muc-srv1',     UP,   'hard', 'normal');
-        $this->obj['service']['muc-srv1']     = Array(
+        $this->obj['service']['muc-srv1']     = [
             $this->service('muc-srv1', 'CPU load',       OK, 'hard', 'normal', 'OK - 15min Load 0.05 at 2 CPUs', 'load1=0.2;2;5;0; load5=0.24;2;5;0; load15=0.17;2;5;0;'),
             $this->service('muc-srv1', 'Memory used',    OK, 'hard', 'normal',
                            'OK - 0.79 GB RAM+SWAP used (this is 20.9% of RAM size)',
@@ -220,64 +220,64 @@ class GlobalBackendTest implements GlobalBackendInterface {
                            '/usr=22746.109375MB;24190;27213;0;30237.746094'),
             $this->service('muc-srv1', 'NTP Time',       OK, 'hard', 'normal', 'OK',
                            'OK - stratum 2, offset 0.02 ms, jitter 0.01 ms'),
-        );
+        ];
 
         $this->obj['host']['muc-srv2']        = $this->host('muc-srv2',     UP,   'hard', 'normal');
-        $this->obj['service']['muc-srv2']     = Array(
+        $this->obj['service']['muc-srv2']     = [
             $this->service('muc-srv2', 'CPU load',       OK, 'hard', 'normal', 'OK - 15min Load 1.00 at 2 CPUs', 'load1=1.6;2;5;0; load5=1.2;2;5;0; load15=1.00;2;5;0;'),
-        );
+        ];
 
         $this->obj['host']['muc-printer1']    = $this->host('muc-printer1', DOWN, 'hard', 'normal');
-        $this->obj['service']['muc-printer1'] = Array();
+        $this->obj['service']['muc-printer1'] = [];
         $this->obj['host']['muc-printer2']    = $this->host('muc-printer2', DOWN, 'hard', 'downtime');
-        $this->obj['service']['muc-printer2'] = Array();
-        $this->obj['hostgroup']['muc']        = $this->hostgroup('muc', Array('muc-gw1', 'muc-srv1', 'muc-srv2', 'muc-printer1', 'muc-printer2'));
+        $this->obj['service']['muc-printer2'] = [];
+        $this->obj['hostgroup']['muc']        = $this->hostgroup('muc', ['muc-gw1', 'muc-srv1', 'muc-srv2', 'muc-printer1', 'muc-printer2']);
 
         $this->obj['host']['ham-gw1']         = $this->host('ham-gw1',      UP,   'hard', 'normal');
         $wan = $this->service('ham-gw1', 'Interface WAN', OK, 'hard', 'normal');
         $wan[PERFDATA] = 'in=77.24%;85;98 out=32.89%;85;98';
         $wan[OUTPUT]   = 'In: 77.24%, Out: 32.89%';
-        $this->obj['service']['ham-gw1']      = Array($wan);
+        $this->obj['service']['ham-gw1']      = [$wan];
 
         $this->obj['host']['ham-srv1']        = $this->host('ham-srv1',     UP,   'hard', 'normal');
-        $this->obj['service']['ham-srv1']     = Array(
+        $this->obj['service']['ham-srv1']     = [
             $this->service('ham-srv1', 'CPU load',       OK, 'hard', 'normal', 'OK - 15min Load 1.00 at 2 CPUs', 'load1=1.6;2;5;0; load5=1.2;2;5;0; load15=1.00;2;5;0;'),
-        );
+        ];
         $this->obj['host']['ham-srv2']        = $this->host('ham-srv2',     WARNING, 'hard', 'ack');
-        $this->obj['service']['ham-srv2']     = Array(
+        $this->obj['service']['ham-srv2']     = [
             $this->service('ham-srv2', 'CPU load',       OK, 'hard', 'normal', 'OK - 15min Load 3.00 at 4 CPUs', 'load1=5.0;10;20;0; load5=4.2;5;8;0; load15=3.0;3.5;4;0;'),
-        );
+        ];
         $this->obj['host']['ham-printer1']    = $this->host('ham-printer1', UP, 'hard', 'normal');
-        $this->obj['service']['ham-printer1'] = Array();
-        $this->obj['hostgroup']['ham']        = $this->hostgroup('ham', Array('ham-gw1', 'ham-srv1', 'ham-srv2', 'ham-printer1'));
+        $this->obj['service']['ham-printer1'] = [];
+        $this->obj['hostgroup']['ham']        = $this->hostgroup('ham', ['ham-gw1', 'ham-srv1', 'ham-srv2', 'ham-printer1']);
 
         $this->obj['host']['cgn-gw1']         = $this->host('cgn-gw1',      UP,   'hard', 'normal');
         $wan = $this->service('cgn-gw1', 'Interface WAN', OK, 'hard', 'normal');
         $wan[PERFDATA] = 'in=19.34%;85;98 out=0.89%;85;98';
         $wan[OUTPUT]   = 'In: 19.34%, Out: 0.89%';
-        $this->obj['service']['cgn-gw1']      = Array($wan);
+        $this->obj['service']['cgn-gw1']      = [$wan];
 
         $this->obj['host']['cgn-srv1']        = $this->host('cgn-srv1',     UP,   'hard', 'normal');
-        $this->obj['service']['cgn-srv1']     = Array();
+        $this->obj['service']['cgn-srv1']     = [];
         $this->obj['host']['cgn-srv2']        = $this->host('cgn-srv2',     WARNING, 'hard', 'ack');
-        $this->obj['service']['cgn-srv2']     = Array();
+        $this->obj['service']['cgn-srv2']     = [];
         $this->obj['host']['cgn-srv3']        = $this->host('cgn-srv3',     UP, 'hard', 'normal');
-        $this->obj['service']['cgn-srv3']     = Array();
-        $this->obj['hostgroup']['cgn']        = $this->hostgroup('cgn', Array('cgn-gw1', 'cgn-srv1', 'cgn-srv2', 'cgn-srv3'));
+        $this->obj['service']['cgn-srv3']     = [];
+        $this->obj['hostgroup']['cgn']        = $this->hostgroup('cgn', ['cgn-gw1', 'cgn-srv1', 'cgn-srv2', 'cgn-srv3']);
 
-        $this->obj['servicegroup']['load']    = $this->servicegroup('load', Array(Array('muc-srv1', 'CPU load'), Array('ham-srv1', 'CPU load'), Array('ham-srv2', 'CPU load')));
+        $this->obj['servicegroup']['load']    = $this->servicegroup('load', [['muc-srv1', 'CPU load'], ['ham-srv1', 'CPU load'], ['ham-srv2', 'CPU load']]);
 
-        $this->childs = Array(
-            'muc-srv2' => Array('muc-srv1', 'muc-gw1'),
-            'muc-gw1'  => Array('ham-gw1', 'cgn-gw1'),
-            'cgn-gw1'  => Array('cgn-srv1', 'cgn-srv2', 'cgn-srv3'),
-            'ham-gw1'  => Array('ham-srv1', 'ham-srv2', 'ham-printer1'),
-        );
+        $this->childs = [
+            'muc-srv2' => ['muc-srv1', 'muc-gw1'],
+            'muc-gw1'  => ['ham-gw1', 'cgn-gw1'],
+            'cgn-gw1'  => ['cgn-srv1', 'cgn-srv2', 'cgn-srv3'],
+            'ham-gw1'  => ['ham-srv1', 'ham-srv2', 'ham-printer1'],
+        ];
 
         foreach($this->childs AS $parent => $childs) {
             foreach($childs AS $child) {
                 if(!isset($this->parents[$child])) {
-                    $this->parents[$child] = Array($parent);
+                    $this->parents[$child] = [$parent];
                 } else {
                     $this->parents[$child][] = $parent;
                 }
@@ -294,8 +294,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     $hostname = $ident;
 
                     $this->obj['host'][$hostname] = $this->host($hostname, $state, $stateType, $substate);
-                    $this->obj['service'][$hostname] = Array();
-                    $this->obj['hostgroup']['hostgroup-'.$ident] = $this->hostgroup('hostgroup-'.$ident, Array($hostname));
+                    $this->obj['service'][$hostname] = [];
+                    $this->obj['hostgroup']['hostgroup-'.$ident] = $this->hostgroup('hostgroup-'.$ident, [$hostname]);
                 }
             }
         }
@@ -309,9 +309,9 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     $ident = 'service-'.$state.'-'.$substate;
                     $hostname = 'host-'.$ident;
                     $this->obj['host'][$hostname] = $this->host($hostname, UNCHECKED);
-                    $this->obj['service'][$hostname] = Array($this->service($hostname, $ident, $state, $stateType, $substate));
-                    $this->obj['hostgroup']['hostgroup-'.$ident] = $this->hostgroup('hostgroup-'.$ident, Array($hostname));
-                    $this->obj['servicegroup']['servicegroup-'.$ident] = $this->servicegroup('servicegroup-'.$ident, Array(Array($hostname, $ident)));
+                    $this->obj['service'][$hostname] = [$this->service($hostname, $ident, $state, $stateType, $substate)];
+                    $this->obj['hostgroup']['hostgroup-'.$ident] = $this->hostgroup('hostgroup-'.$ident, [$hostname]);
+                    $this->obj['servicegroup']['servicegroup-'.$ident] = $this->servicegroup('servicegroup-'.$ident, [[$hostname, $ident]]);
                 }
             }
         }
@@ -330,9 +330,9 @@ class GlobalBackendTest implements GlobalBackendInterface {
                                 $hostname = $ident;
 
                                 $this->obj['host'][$hostname] = $this->host($hostname, $hostState, $hostStateType, $hostSubstate);
-                                $this->obj['service'][$hostname] = Array($this->service($hostname, $ident, $state, $stateType, $substate));
-                                $this->obj['hostgroup']['hostgroup-'.$ident] = $this->hostgroup('hostgroup-'.$ident, Array($hostname));
-                                $this->obj['servicegroup']['servicegroup-'.$ident] = $this->servicegroup('servicegroup-'.$ident, Array(Array($hostname, $ident)));
+                                $this->obj['service'][$hostname] = [$this->service($hostname, $ident, $state, $stateType, $substate)];
+                                $this->obj['hostgroup']['hostgroup-'.$ident] = $this->hostgroup('hostgroup-'.$ident, [$hostname]);
+                                $this->obj['servicegroup']['servicegroup-'.$ident] = $this->servicegroup('servicegroup-'.$ident, [[$hostname, $ident]]);
                             }
                         }
                     }
@@ -342,7 +342,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
     }
 
     public function getHostNamesProblematic() {
-        $a = array();
+        $a = [];
         foreach ($this->obj['host'] AS $hostname => $host)
             if ($host[0] != UP)
                 $a[] = $hostname;
@@ -359,7 +359,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
         if (isset($this->obj['hostgroup'][$group]))
             return $this->obj['hostgroup'][$group]['members'];
         else
-            return array();
+            return [];
     }
 
     public function getProgramStart() {
@@ -368,7 +368,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
 
     function getAllTypeObjects($type) {
         if($type == 'service') {
-            $s = Array();
+            $s = [];
             foreach($this->obj['service'] AS $services) {
                 $s = array_merge($s, $services);
             }
@@ -428,7 +428,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function getValidConfig() {
-        return Array();
+        return [];
     }
 
     /**
@@ -459,21 +459,27 @@ class GlobalBackendTest implements GlobalBackendInterface {
                 }
             break;
             default:
-                return Array();
+                return [];
             break;
         }
 
-        $result = Array();
+        $result = [];
         foreach ($l as $key => $entry) {
             if ($type == 'host') {
-                $result[] = Array('name1' => $key,
-                                  'name2' => $entry[DISPLAY_NAME]);
+                $result[] = [
+                    'name1' => $key,
+                                  'name2' => $entry[DISPLAY_NAME]
+                ];
             } elseif ($type != 'service') {
-                $result[] = Array('name1' => $key,
-                                  'name2' => $entry['alias']);
+                $result[] = [
+                    'name1' => $key,
+                                  'name2' => $entry['alias']
+                ];
             } else {
-                $result[] = Array('name1' => $entry[DESCRIPTION],
-                                  'name2' => $entry[DESCRIPTION]);
+                $result[] = [
+                    'name1' => $entry[DESCRIPTION],
+                                  'name2' => $entry[DESCRIPTION]
+                ];
             }
         }
 
@@ -491,9 +497,9 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function parseFilter($objects, $filters) {
-        $aFilters = Array();
+        $aFilters = [];
         foreach($objects AS $OBJS) {
-            $objFilters = Array();
+            $objFilters = [];
             foreach($filters AS $filter) {
                 // Array('key' => 'host_name', 'operator' => '=', 'name'),
                 switch($filter['key']) {
@@ -554,7 +560,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
         else
             $stateAttr = 'state';*/
 
-        $arrReturn = Array();
+        $arrReturn = [];
         if(count($filters) == 1 && $filters[0]['key'] == 'host_name' && $filters[0]['op'] == '=') {
             foreach($objects AS $OBJS) {
                 $name = $OBJS[0]->getName();
@@ -598,7 +604,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
         else
             $stateAttr = 'state';*/
 
-        $arrReturn = Array();
+        $arrReturn = [];
         if(count($filters) == 1 && $filters[0]['key'] == 'host_name' && $filters[0]['op'] == '=') {
             // All services of a host
             foreach($objects AS $OBJS) {
@@ -662,12 +668,12 @@ class GlobalBackendTest implements GlobalBackendInterface {
         else
             $stateAttr = 'state';*/
 
-        $aReturn = Array();
+        $aReturn = [];
         if(count($filters) == 1 && $filters[0]['key'] == 'host_name' && $filters[0]['op'] == '=') {
             // Get service state counts of one host
             foreach($objects AS $OBJS) {
                 $name = $OBJS[0]->getName();
-                $aReturn[$name] = Array('counts' => $this->serviceStates);
+                $aReturn[$name] = ['counts' => $this->serviceStates];
                 if(isset($this->obj['service'][$name]))
                     foreach($this->obj['service'][$name] AS $service) {
                         if($service[ACK] === true)
@@ -687,7 +693,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     continue; // skip not existing hostgroups
 
                 foreach($this->obj['hostgroup'][$name]['members'] AS $hostname) {
-                    $resp = $this->getHostMemberCounts(Array(Array(new NagVisHost($this->backendId, $hostname))), $options, Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name')));
+                    $resp = $this->getHostMemberCounts([[new NagVisHost($this->backendId, $hostname)]], $options, [['key' => 'host_name', 'op' => '=', 'val' => 'name']]);
                     $aReturn[$hostname] = $resp[$hostname];
                 }
             }
@@ -717,13 +723,13 @@ class GlobalBackendTest implements GlobalBackendInterface {
         else
             $stateAttr = 'state';*/
 
-        $aReturn = Array();
+        $aReturn = [];
         // Get all host and service states of a hostgroup
         if(count($filters) == 1 && $filters[0]['key'] == 'groups' && $filters[0]['op'] == '>=') {
             foreach($objects AS $OBJS) {
                 $name = $OBJS[0]->getName();
                 if(!isset($aReturn[$name])) {
-                    $aReturn[$name] = Array('counts' => $this->serviceStates);
+                    $aReturn[$name] = ['counts' => $this->serviceStates];
                     $aReturn[$name]['counts'] += $this->hostStates;
                 }
 
@@ -744,8 +750,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     if($options & 2)
                         continue;
 
-                    $resp = $this->getHostMemberCounts(Array(Array(new NagVisHost($this->backendId, $hostname))), $options,
-                                                                        Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name')));
+                    $resp = $this->getHostMemberCounts([[new NagVisHost($this->backendId, $hostname)]], $options,
+                                                                        [['key' => 'host_name', 'op' => '=', 'val' => 'name']]);
                     foreach($resp[$hostname]['counts'] AS $state => $substates)
                         foreach($substates AS $substate => $count)
                             $aReturn[$name]['counts'][$state][$substate] += $count;
@@ -777,7 +783,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
             $stateAttr = 'last_hard_state';
         else
             $stateAttr = 'state';*/
-        $aReturn = Array();
+        $aReturn = [];
         // Get all service state counts of a servicegroup
         if(count($filters) == 1 && $filters[0]['key'] == 'groups' && $filters[0]['op'] == '>=') {
             foreach($objects AS $OBJS) {
@@ -788,7 +794,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     continue;
 
                 if(!isset($aReturn[$name]))
-                    $aReturn[$name] = Array('counts' => Array());
+                    $aReturn[$name] = ['counts' => []];
 
                 foreach($this->obj['servicegroup'][$name]['members'] AS $attr) {
                     list($name1, $name2) = $attr;
@@ -816,21 +822,21 @@ class GlobalBackendTest implements GlobalBackendInterface {
     }
 
     public function getHostNamesWithNoParent() {
-        return Array('muc-srv2');
+        return ['muc-srv2'];
     }
 
     public function getDirectChildNamesByHostName($hostName) {
         if(isset($this->childs[$hostName]))
             return $this->childs[$hostName];
         else
-            return Array();
+            return [];
     }
 
     public function getDirectParentNamesByHostName($hostName) {
         if(isset($this->parents[$hostName]))
             return $this->parents[$hostName];
         else
-            return Array();
+            return [];
     }
 
     /**

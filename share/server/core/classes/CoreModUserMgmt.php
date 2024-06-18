@@ -26,9 +26,9 @@ class CoreModUserMgmt extends CoreModule {
     public function __construct($CORE) {
         $this->sName = 'UserMgmt';
 
-        $this->aActions = Array(
+        $this->aActions = [
             'view'         => 'manage',
-        );
+        ];
     }
 
     public function handleAction() {
@@ -36,7 +36,7 @@ class CoreModUserMgmt extends CoreModule {
             switch($this->sAction) {
                 case 'view':
                     $VIEW = new ViewManageUsers();
-                    return json_encode(Array('code' => $VIEW->parse()));
+                    return json_encode(['code' => $VIEW->parse()]);
                 break;
             }
         }

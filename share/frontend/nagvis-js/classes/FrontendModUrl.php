@@ -37,9 +37,11 @@ class FrontendModUrl extends FrontendModule {
         $this->CORE = $CORE;
 
         // Parse the view specific options
-        $aOpts = Array('show' => MATCH_STRING_URL,
+        $aOpts = [
+            'show' => MATCH_STRING_URL,
                        'rotation' => MATCH_ROTATION_NAME_EMPTY,
-                       'rotationStep' => MATCH_INTEGER_EMPTY);
+                       'rotationStep' => MATCH_INTEGER_EMPTY
+        ];
 
         $aVals = $this->getCustomOptions($aOpts);
         $this->url = $aVals['show'];
@@ -47,9 +49,9 @@ class FrontendModUrl extends FrontendModule {
         $this->rotationStep = $aVals['rotationStep'];
 
         // Register valid actions
-        $this->aActions = Array(
+        $this->aActions = [
             'view' => REQUIRES_AUTHORISATION
-        );
+        ];
     }
 
     public function handleAction() {

@@ -37,7 +37,7 @@ class ViewManageShapes {
                 $file = $_FILES['image'];
                 if (!is_uploaded_file($file['tmp_name']))
                     throw new FieldInputError('image', l('The file could not be uploaded (Error: [ERROR]).',
-                      Array('ERROR' => $file['error'].': '.$CORE->getUploadErrorMsg($file['error']))));
+                      ['ERROR' => $file['error'].': '.$CORE->getUploadErrorMsg($file['error'])]));
 
                 $file_name = $file['name'];
                 $file_path = path('sys', '', 'shapes').$file_name;
@@ -46,7 +46,7 @@ class ViewManageShapes {
                     throw new FieldInputError('image', l('The uploaded file is no image (png,jpg,gif) file or contains unwanted chars.'));
 
                 $data = getimagesize($file['tmp_name']);
-                if (!in_array($data[2], array(IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG)))
+                if (!in_array($data[2], [IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG]))
                     throw new FieldInputError('image', l('The uploaded file is not an image '
                                                         .'(png, jpg and gif are allowed).'));
 
@@ -96,7 +96,7 @@ class ViewManageShapes {
                     throw new FieldInputError('name', l('The shape does not exist.'));
 
                 // Check whether or not the shape is in use
-                $using = Array();
+                $using = [];
                 foreach($CORE->getAvailableMaps() AS $map) {
                     $MAPCFG = new GlobalMapCfg($map);
                     try {
@@ -114,7 +114,7 @@ class ViewManageShapes {
                 if ($using)
                     throw new FieldInputError('name', l('Unable to delete this shape, because it is '
                                                        .'currently used by these maps: [M].',
-                                                            array('M' => implode(',', $using))));
+                                                            ['M' => implode(',', $using)]));
             
                 $path = path('sys', '', 'shapes', $name);
                 if ($path !== '')
@@ -139,7 +139,7 @@ class ViewManageShapes {
         echo '<table class="mytable">';
         echo '<tr><td class="tdlabel">'.l('Shape').'</td>';
         echo '<td class="tdfield">';
-        $shapes = array('' => l('Choose a shape'));
+        $shapes = ['' => l('Choose a shape')];
         foreach ($CORE->getAvailableShapes() AS $name)
             $shapes[$name] = $name;
         select('name', $shapes);

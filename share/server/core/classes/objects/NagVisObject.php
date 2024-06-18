@@ -24,7 +24,7 @@
  *****************************************************************************/
 
 class NagVisObject {
-    protected $conf = array();
+    protected $conf = [];
 
     protected $type;
     protected $object_id;
@@ -197,18 +197,18 @@ class NagVisObject {
      * Gets all necessary information of the object as array
      */
     public function getObjectInformation() {
-        $arr = Array();
+        $arr = [];
 
         // Need to remove some options which are not relevant
         // FIXME: Would be much better to name the needed vars explicit
         if(self::$arrDenyKeys == null)
-            self::$arrDenyKeys = Array(
+            self::$arrDenyKeys = [
                 'MAPCFG' => '', 'MAP'  => '',
                 'conf' => '', 'services' => '', 'fetchedChildObjects' => '', 'childObjects' => '',
                 'parentObjects' => '', 'members' => '', 'objects' => '', 'linkedMaps' => '',
                 'isSummaryObject' => '', 'isView' => '', 'dateFormat' => '', 'arrDenyKeys' => '',
                 'aStateCounts' => '',	'iconDetails' => '', 'problem_msg' => '', 'isLoopingBacklink' => ''
-            );
+            ];
 
         foreach($this AS $key => $val)
             if(!isset(self::$arrDenyKeys[$key]) && $val !== null)
@@ -274,7 +274,7 @@ class NagVisObject {
      * @return	String  This object in map config format
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parseMapCfg($globalOpts = Array()) {
+    public function parseMapCfg($globalOpts = []) {
         $ret = 'define '.$this->type." {\n";
         if($this->type === 'host' && $this instanceof NagVisHost)
             $ret .= '  host_name='.$this->host_name."\n";

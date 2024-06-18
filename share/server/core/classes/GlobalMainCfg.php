@@ -23,10 +23,10 @@
  *****************************************************************************/
 
 function listMultisiteSnapinLayouts() {
-    return Array(
+    return [
         'tree' => l('Show the map tree'),
         'list' => l('Show a flat list'),
-    );
+    ];
 }
 
 function listAvailableLanguages() {
@@ -42,9 +42,9 @@ class GlobalMainCfg {
     private $CACHE;
     private $PUCACHE;
 
-    protected $config = Array();
+    protected $config = [];
     protected $preUserConfig = null;
-    protected $runtimeConfig = Array();
+    protected $runtimeConfig = [];
     protected $stateWeight;
     protected $onlyUserConfig = false;
 
@@ -59,348 +59,386 @@ class GlobalMainCfg {
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct() {
-        $this->validConfig = Array(
-            'global' => Array(
-                'audit_log' => Array(
+        $this->validConfig = [
+            'global' => [
+                'audit_log' => [
                     'must'       => 0,
                     'editable'   => 1,
                     'default'    => 0,
                     'match'      => MATCH_BOOLEAN,
                     'field_type' => 'boolean',
-                ),
-                'authmodule' => Array('must' => 1,
+                ],
+                'authmodule' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 'CoreAuthModSQLite',
-                    'match' => MATCH_STRING),
+                    'match' => MATCH_STRING
+                ],
 
-                'authorisationmodule' => Array('must' => 1,
+                'authorisationmodule' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 'CoreAuthorisationModSQLite',
-                    'match' => MATCH_STRING),
+                    'match' => MATCH_STRING
+                ],
 
-                'authorisation_multisite_file' => Array(
+                'authorisation_multisite_file' => [
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => '',
                     'depends_on'    => 'authorisationmodule',
                     'depends_value' => 'CoreAuthorisationModMultisite',
                     'match'         => MATCH_STRING_PATH,
-                ),
+                ],
 
-                'authorisation_group_perms_file' => Array(
+                'authorisation_group_perms_file' => [
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => '',
                     'depends_on'    => 'authorisationmodule',
                     'depends_value' => 'CoreAuthorisationModGroup',
                     'match'         => MATCH_STRING_PATH,
-                ),
-                'authorisation_group_backends' => Array(
+                ],
+                'authorisation_group_backends' => [
                     'must'          => 0,
                     'editable'      => 1,
-                    'default'       => array(),
+                    'default'       => [],
                     'array'         => true,
                     'depends_on'    => 'authorisationmodule',
                     'depends_value' => 'CoreAuthorisationModGroup',
                     'match'         => MATCH_STRING_NO_SPACE,
-                ),
+                ],
 
-                'dateformat' => Array(
+                'dateformat' => [
                     'must'     => 1,
                     'editable' => 1,
                     'default'  => 'Y-m-d H:i:s',
                     'match'    => MATCH_STRING
-                ),
+                ],
 
-                'dialog_ack_sticky' => Array(
+                'dialog_ack_sticky' => [
                     'must'       => 1,
                     'editable'   => 1,
                     'default'    => 1,
                     'field_type' => 'boolean',
                     'match'      => MATCH_BOOLEAN
-                ),
-                'dialog_ack_notify' => Array(
+                ],
+                'dialog_ack_notify' => [
                     'must'       => 1,
                     'editable'   => 1,
                     'default'    => 1,
                     'field_type' => 'boolean',
                     'match'      => MATCH_BOOLEAN
-                ),
-                'dialog_ack_persist' => Array(
+                ],
+                'dialog_ack_persist' => [
                     'must'       => 1,
                     'editable'   => 1,
                     'default'    => 0,
                     'field_type' => 'boolean',
                     'match'      => MATCH_BOOLEAN
-                ),
+                ],
 
-                'displayheader' => Array('must' => 1,
+                'displayheader' => [
+                    'must' => 1,
                     'editable' => 1,
                     'deprecated' => 1,
                     'default' => '1',
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'file_group' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'file_group' => [
+                    'must' => 0,
                     'default' => '',
-                    'match' => MATCH_STRING),
-                'file_mode' => Array(
+                    'match' => MATCH_STRING
+                ],
+                'file_mode' => [
                     'must'    => 1,
                     'default' => 660,
                     'match'   => MATCH_INTEGER_EMPTY
-                ),
+                ],
 
-                'geomap_server' => array(
+                'geomap_server' => [
                     'must'    => 1,
                     'default' => 'http://geomap.nagvis.org/',
                     'match'   => MATCH_STRING_URL,
-                ),
+                ],
 
-                'worldmap_tiles_url' => array(
+                'worldmap_tiles_url' => [
                     'must'    => 0,
                     'default' => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     'match'   => MATCH_STRING_URL,
-                ),
-                'worldmap_tiles_attribution' => array(
+                ],
+                'worldmap_tiles_attribution' => [
                     'must'    => 0,
                     'default' => '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
                     'match'   => MATCH_ALL
-                ),
-                'worldmap_satellite_tiles_url' => array(
+                ],
+                'worldmap_satellite_tiles_url' => [
                     'must'    => 0,
                     'default' => '',
                     'match'   => MATCH_STRING_URL,
-                ),
-                'worldmap_satellite_tiles_attribution' => array(
+                ],
+                'worldmap_satellite_tiles_attribution' => [
                     'must'    => 0,
                     'default' => '',
                     'match'   => MATCH_ALL
-                ),
+                ],
 
-                'http_proxy' => array(
+                'http_proxy' => [
                     'must'    => 0,
                     'default' => null,
                     'match'   => MATCH_STRING_URL,
-                ),
-                'http_proxy_auth' => array(
+                ],
+                'http_proxy_auth' => [
                     'must'    => 0,
                     'default' => null,
                     'match'   => MATCH_NOT_EMPTY,
-                ),
-                'http_timeout' => array(
+                ],
+                'http_timeout' => [
                     'must'    => 1,
                     'default' => 2,
                     'match'   => MATCH_INTEGER,
-                ),
+                ],
 
-                'language_detection' => Array('must' => 1,
+                'language_detection' => [
+                    'must' => 1,
                     'editable' => 1,
                     'array' => true,
-                    'default' => Array('user', 'session', 'browser', 'config'),
-                    'match' => MATCH_STRING_NO_SPACE),
-                'language_available' => Array('must' => 1,
+                    'default' => ['user', 'session', 'browser', 'config'],
+                    'match' => MATCH_STRING_NO_SPACE
+                ],
+                'language_available' => [
+                    'must' => 1,
                     'editable' => 1,
                     'array' => true,
-                    'default' => Array('de_DE', 'en_US', 'es_ES', 'fr_FR', 'pt_BR', 'zh_CN'),
-                    'match' => MATCH_STRING_NO_SPACE),
-                'language' => Array(
+                    'default' => ['de_DE', 'en_US', 'es_ES', 'fr_FR', 'pt_BR', 'zh_CN'],
+                    'match' => MATCH_STRING_NO_SPACE
+                ],
+                'language' => [
                     'must'       => 1,
                     'editable'   => 1,
                     'default'    => 'en_US',
                     'field_type' => 'dropdown',
                     'list'       => 'listAvailableLanguages',
                     'match'      => MATCH_LANGUAGE_EMPTY
-                ),
-                'logonmodule' => Array('must' => 1,
+                ],
+                'logonmodule' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 'LogonMixed',
-                    'match' => MATCH_STRING),
+                    'match' => MATCH_STRING
+                ],
 
-                'logonenvvar' => Array('must' => 1,
+                'logonenvvar' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 'REMOTE_USER',
                     'depends_on' => 'logonmodule',
                     'depends_value' => 'LogonEnv',
-                    'match' => MATCH_STRING),
-                'logonenvcreateuser' => Array('must' => 1,
+                    'match' => MATCH_STRING
+                ],
+                'logonenvcreateuser' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '1',
                     'field_type' => 'boolean',
                     'depends_on' => 'logonmodule',
                     'depends_value' => 'LogonEnv',
-                    'match' => MATCH_BOOLEAN),
-                'logonenvcreaterole' => Array('must' => 1,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'logonenvcreaterole' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 'Guests',
                     'depends_on' => 'logonmodule',
                     'depends_value' => 'LogonEnv',
-                    'match' => MATCH_STRING),
+                    'match' => MATCH_STRING
+                ],
 
-                'logon_multisite_htpasswd' => Array(
+                'logon_multisite_htpasswd' => [
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => '',
                     'depends_on'    => 'logonmodule',
                     'depends_value' => 'LogonMultisite',
                     'match'         => MATCH_STRING_PATH,
-                ),
-                'logon_multisite_serials' => Array(
+                ],
+                'logon_multisite_serials' => [
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => '',
                     'depends_on'    => 'logonmodule',
                     'depends_value' => 'LogonMultisite',
                     'match'         => MATCH_STRING_PATH,
-                ),
-                'logon_multisite_secret' => Array(
+                ],
+                'logon_multisite_secret' => [
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => '',
                     'depends_on'    => 'logonmodule',
                     'depends_value' => 'LogonMultisite',
                     'match'         => MATCH_STRING_PATH,
-                ),
-                'logon_multisite_cookie_version' => Array(
+                ],
+                'logon_multisite_cookie_version' => [
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => '0',
                     'depends_on'    => 'logonmodule',
                     'depends_value' => 'LogonMultisite',
                     'match'         => MATCH_INTEGER,
-                ),
-                'logon_multisite_createuser' => Array(
+                ],
+                'logon_multisite_createuser' => [
                     'must'          => 1,
                     'editable'      => 1,
                     'default'       => '1',
                     'field_type'    => 'boolean',
                     'depends_on'    => 'logonmodule',
                     'depends_value' => 'LogonMultisite',
-                    'match'         => MATCH_BOOLEAN),
-                'logon_multisite_createrole' => Array(
+                    'match'         => MATCH_BOOLEAN
+                ],
+                'logon_multisite_createrole' => [
                     'must'          => 1,
                     'editable'      => 1,
                     'default'       => 'Guests',
                     'depends_on'    => 'logonmodule',
                     'depends_value' => 'LogonMultisite',
                     'match'         => MATCH_STRING
-                ),
+                ],
 
-                'multisite_snapin_layout' => Array(
+                'multisite_snapin_layout' => [
                     'must'        => 0,
                     'editable'    => 1,
                     'default'     => 'list',
                     'match'       => MATCH_STRING_NO_SPACE,
                     'field_type'  => 'dropdown',
                     'list'        => 'listMultisiteSnapinLayouts',
-                ),
+                ],
 
-                'only_permitted_objects' => Array(
+                'only_permitted_objects' => [
                     'must'       => 0,
                     'editable'   => 1,
                     'default'    => 0,
                     'match'      => MATCH_BOOLEAN,
                     'field_type' => 'boolean',
-                ),
+                ],
 
-                'user_filtering' => Array(
+                'user_filtering' => [
                     'must'       => 0,
                     'editable'   => 1,
                     'default'    => 0,
                     'field_type' => 'boolean',
                     'match'      => MATCH_BOOLEAN
-                ),
+                ],
 
-                'refreshtime' => Array('must' => 1,
+                'refreshtime' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '60',
-                    'match' => MATCH_INTEGER),
+                    'match' => MATCH_INTEGER
+                ],
 
-                'sesscookiedomain' => Array('must' => 0,
+                'sesscookiedomain' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_STRING),
-                'sesscookiepath' => Array('must' => 1,
+                    'match' => MATCH_STRING
+                ],
+                'sesscookiepath' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_STRING),
-                'sesscookieduration' => Array('must' => 1,
+                    'match' => MATCH_STRING
+                ],
+                'sesscookieduration' => [
+                    'must' => 1,
                     'editable'    => 1,
                     'default'     => '86400',
-                    'match'       => MATCH_STRING),
-                'sesscookiesecure' => Array(
+                    'match'       => MATCH_STRING
+                ],
+                'sesscookiesecure' => [
                     'must'        => 0,
                     'editable'    => 1,
                     'default'     => 0,
                     'field_type'  => 'boolean',
                     'match'       => MATCH_BOOLEAN
-                ),
-                'sesscookiehttponly' => Array(
+                ],
+                'sesscookiehttponly' => [
                     'must'        => 0,
                     'editable'    => 1,
                     'default'     => 0,
                     'field_type'  => 'boolean',
                     'match'       => MATCH_BOOLEAN
-                ),
-                'shinken_features' => Array('must' => 1,
+                ],
+                'shinken_features' => [
+                    'must' => 1,
                     'editable'    => 1,
                     'default'     => '0',
                     'field_type'    => 'boolean',
-                    'match'         => MATCH_BOOLEAN),
+                    'match'         => MATCH_BOOLEAN
+                ],
 
-                'staleness_threshold' => Array(
+                'staleness_threshold' => [
                     'must'        => 1,
                     'editable'    => 1,
                     'default'     => '1.5',
                     'match'       => MATCH_FLOAT,
-                ),
+                ],
 
-                'startmodule' => Array('must' => 1,
+                'startmodule' => [
+                    'must' => 1,
                     'editable'    => 1,
                     'default'     => 'Overview',
-                    'match'       => MATCH_STRING),
-                'startaction' => Array('must' => 1,
+                    'match'       => MATCH_STRING
+                ],
+                'startaction' => [
+                    'must' => 1,
                     'editable'    => 1,
                     'default'     => 'view',
-                    'match'       => MATCH_STRING),
-                'startshow'   => Array('must' => 0,
+                    'match'       => MATCH_STRING
+                ],
+                'startshow'   => [
+                    'must' => 0,
                     'editable'    => 1,
                     'default'     => '',
                     'match'       => MATCH_STRING_EMPTY
-                ),
+                ],
 
-                'worldmap_start_pos' => array(
+                'worldmap_start_pos' => [
                     'editable'    => true,
                     'default'     => '51.505,-0.09',
                     'match'       => MATCH_LATLONG,
-                ),
-                'worldmap_start_zoom' => array(
+                ],
+                'worldmap_start_zoom' => [
                     'editable'    => true,
                     'default'     => 13,
                     'match'       => MATCH_INTEGER,
-                ),
-            ),
-            'defaults' => Array(
-                'backend' => Array(
+                ],
+            ],
+            'defaults' => [
+                'backend' => [
                     'must'        => 0,
                     'editable'    => 1,
-                    'default'     => array('live_1'),
+                    'default'     => ['live_1'],
                     'array'       => true,
                     'field_type'  => 'dropdown',
                     'list'        => 'listBackendIds',
                     'match'       => MATCH_BACKEND_ID
-                ),
-                'backgroundcolor' => Array(
+                ],
+                'backgroundcolor' => [
                     'must'        => 0,
                     'editable'    => 1,
                     'default'     => 'transparent',
                     'field_type'  => 'color',
                     'match'       => MATCH_COLOR
-                ),
-                'contextmenu' => Array('must' => 0,
+                ],
+                'contextmenu' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 1,
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'contexttemplate' => Array(
+                    'match' => MATCH_BOOLEAN
+                ],
+                'contexttemplate' => [
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => 'default',
@@ -409,103 +447,127 @@ class GlobalMainCfg {
                     'field_type'    => 'dropdown',
                     'list'          => 'listContextTemplates',
                     'match'         => MATCH_STRING_NO_SPACE
-                ),
-                'stylesheet' => Array('must' => 0,
+                ],
+                'stylesheet' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_STRING_NO_SPACE),
+                    'match' => MATCH_STRING_NO_SPACE
+                ],
 
-                'event_on_load' => Array(
+                'event_on_load' => [
                     'must'       => 0,
                     'editable'   => 1,
                     'default'    => 0,
                     'field_type' => 'boolean',
                     'match'      => MATCH_BOOLEAN
-                ),
-                'event_repeat_interval' => Array(
+                ],
+                'event_repeat_interval' => [
                     'must'       => 0,
                     'editable'   => 1,
                     'default'    => 0,
                     'match'      => MATCH_INTEGER,
-                ),
-                'event_repeat_duration' => Array(
+                ],
+                'event_repeat_duration' => [
                     'must'       => 0,
                     'editable'   => 1,
                     'default'    => -1,
                     'match'      => MATCH_INTEGER_PRESIGN,
-                ),
+                ],
 
-                'eventbackground' => Array('must' => 0,
+                'eventbackground' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '0',
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'eventhighlight' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'eventhighlight' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '1',
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'eventhighlightinterval' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'eventhighlightinterval' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '500',
                     'depends_on' => 'eventhighlight',
                     'depends_value' => 1,
-                    'match' => MATCH_INTEGER),
-                'eventhighlightduration' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'eventhighlightduration' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '10000',
                     'depends_on' => 'eventhighlight',
                     'depends_value' => 1,
-                    'match' => MATCH_INTEGER),
-                'eventlog' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'eventlog' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '0',
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'eventloglevel' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'eventloglevel' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 'info',
                     'depends_on' => 'eventlog',
                     'depends_value' => 1,
-                    'match' => MATCH_STRING_NO_SPACE),
-                'eventlogheight' => Array('must' => 0,
+                    'match' => MATCH_STRING_NO_SPACE
+                ],
+                'eventlogheight' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '100',
                     'depends_on' => 'eventlog',
                     'depends_value' => 1,
-                    'match' => MATCH_INTEGER),
-                'eventlogevents' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'eventlogevents' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '24',
                     'depends_on' => 'eventlog',
                     'depends_value' => 1,
-                    'match' => MATCH_INTEGER),
-                'eventloghidden' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'eventloghidden' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 1,
                     'depends_on' => 'eventlog',
                     'depends_value' => 1,
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'eventscroll' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'eventscroll' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '1',
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'eventsound' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'eventsound' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '1',
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
+                    'match' => MATCH_BOOLEAN
+                ],
 
-                'headermenu' => Array(
+                'headermenu' => [
                     'must'       => 1,
                     'editable'   => 1,
                     'default'    => '1',
                     'field_type' => 'boolean',
                     'match'      => MATCH_BOOLEAN
-                ),
-                'headertemplate' => Array(
+                ],
+                'headertemplate' => [
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => 'default',
@@ -514,8 +576,8 @@ class GlobalMainCfg {
                     'field_type'    => 'dropdown',
                     'list'          => 'listHeaderTemplates',
                     'match'         => MATCH_STRING_NO_SPACE,
-),
-                'headerfade' => Array(
+                ],
+                'headerfade' => [
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => 0,
@@ -524,20 +586,22 @@ class GlobalMainCfg {
                     'field_type'    => 'boolean',
                     'deprecated'    => 1,
                     'match'         => MATCH_BOOLEAN
-                ),
-                'header_show_states' => Array(
+                ],
+                'header_show_states' => [
                     'must'       => 1,
                     'editable'   => 1,
                     'default'    => 1,
                     'field_type' => 'boolean',
                     'match'      => MATCH_BOOLEAN
-                ),
-                'hovermenu' => Array('must' => 0,
+                ],
+                'hovermenu' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '1',
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'hovertemplate' => Array(
+                    'match' => MATCH_BOOLEAN
+                ],
+                'hovertemplate' => [
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => 'default',
@@ -546,32 +610,40 @@ class GlobalMainCfg {
                     'field_type'    => 'dropdown',
                     'list'          => 'listHoverTemplates',
                     'match'         => MATCH_STRING_NO_SPACE,
-                ),
-                'hovertimeout' => Array('must' => 0,
+                ],
+                'hovertimeout' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '5',
                     'deprecated' => 1,
-                    'match' => MATCH_INTEGER),
-                'hoverdelay' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'hoverdelay' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '0',
                     'depends_on' => 'hovermenu',
                     'depends_value' => 1,
-                    'match' => MATCH_INTEGER),
-                'hoverchildsshow' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'hoverchildsshow' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '1',
                     'depends_on' => 'hovermenu',
                     'depends_value' => 1,
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'hoverchildslimit' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'hoverchildslimit' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '10',
                     'depends_on' => 'hovermenu',
                     'depends_value' => 1,
-                    'match' => MATCH_INTEGER_PRESIGN),
-                'hoverchildsorder' => Array(
+                    'match' => MATCH_INTEGER_PRESIGN
+                ],
+                'hoverchildsorder' => [
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => 'asc',
@@ -580,8 +652,8 @@ class GlobalMainCfg {
                     'field_type'    => 'dropdown',
                     'list'          => 'listHoverChildOrders',
                     'match'         => MATCH_ORDER
-                ),
-                'hoverchildssort' => Array(
+                ],
+                'hoverchildssort' => [
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => 's',
@@ -590,151 +662,176 @@ class GlobalMainCfg {
                     'field_type'    => 'dropdown',
                     'list'          => 'listHoverChildSorters',
                     'match'         => MATCH_STRING_NO_SPACE,
-                ),
-                'icons' => Array(
+                ],
+                'icons' => [
                     'must'       => 1,
                     'editable'   => 1,
                     'default'    => 'std_medium',
                     'field_type' => 'dropdown',
                     'list'       => 'listIconsets',
                     'match'      => MATCH_STRING_NO_SPACE
-                ),
-                'icon_size' => Array(
+                ],
+                'icon_size' => [
                     'must'       => 1,
                     'editable'   => 1,
-                    'default'    => array(),
+                    'default'    => [],
                     'match'      => MATCH_INTEGER,
                     'array'    => true,
-                ),
-                'onlyhardstates' => Array('must' => 0,
+                ],
+                'onlyhardstates' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 0,
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'recognizeservices' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'recognizeservices' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 1,
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'showinlists' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'showinlists' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 1,
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'showinmultisite' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'showinmultisite' => [
+                    'must' => 0,
                     'editable'                => 1,
                     'default'                 => 1,
                     'field_type'              => 'boolean',
-                    'match'                   => MATCH_BOOLEAN),
-                'urltarget' => Array('must' => 0,
+                    'match'                   => MATCH_BOOLEAN
+                ],
+                'urltarget' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '_self',
-                    'match' => MATCH_STRING_NO_SPACE),
-                'mapurl' => Array('must' => 0,
+                    'match' => MATCH_STRING_NO_SPACE
+                ],
+                'mapurl' => [
+                    'must' => 0,
                     'default' => '[htmlbase]/index.php?mod=Map&act=view&show=[map_name]',
-                    'match' => MATCH_STRING_URL_EMPTY),
-                'hosturl' => Array('must' => 0,
+                    'match' => MATCH_STRING_URL_EMPTY
+                ],
+                'hosturl' => [
+                    'must' => 0,
                     'default' => '[htmlcgi]/status.cgi?host=[host_name]',
-                    'match' => MATCH_STRING_URL_EMPTY),
-                'hostgroupurl' => Array('must' => 0,
+                    'match' => MATCH_STRING_URL_EMPTY
+                ],
+                'hostgroupurl' => [
+                    'must' => 0,
                     'default' => '[htmlcgi]/status.cgi?hostgroup=[hostgroup_name]',
-                    'match' => MATCH_STRING_URL_EMPTY),
-                'serviceurl' => Array('must' => 0,
+                    'match' => MATCH_STRING_URL_EMPTY
+                ],
+                'serviceurl' => [
+                    'must' => 0,
                     'default' => '[htmlcgi]/extinfo.cgi?type=2&host=[host_name]&service=[service_description]',
-                    'match' => MATCH_STRING_URL_EMPTY),
-                'servicegroupurl' => Array('must' => 0,
+                    'match' => MATCH_STRING_URL_EMPTY
+                ],
+                'servicegroupurl' => [
+                    'must' => 0,
                     'default' => '[htmlcgi]/status.cgi?servicegroup=[servicegroup_name]&style=detail',
-                    'match' => MATCH_STRING_URL_EMPTY),
-                'dyngroupurl' => Array(
+                    'match' => MATCH_STRING_URL_EMPTY
+                ],
+                'dyngroupurl' => [
                     'must'    => 0,
                     'default' => '',
                     'match'   => MATCH_STRING_URL_EMPTY
-                ),
-                'aggrurl' => Array(
+                ],
+                'aggrurl' => [
                     'must'    => 0,
                     'default' => '',
                     'match'   => MATCH_STRING_URL_EMPTY
-                ),
-                'host_downtime_url' => Array(
+                ],
+                'host_downtime_url' => [
                     'must'    => 0,
                     'default' => '[html_cgi]/cmd.cgi?cmd_typ=55&host=[name]',
                     'match'   => MATCH_STRING_URL_EMPTY
-                ),
-                'host_ack_url' => Array(
+                ],
+                'host_ack_url' => [
                     'must'    => 0,
                     'default' => '[html_cgi]/cmd.cgi?cmd_typ=96&host=[name]&force_check',
                     'match'   => MATCH_STRING_URL_EMPTY
-                ),
-                'service_downtime_url' => Array(
+                ],
+                'service_downtime_url' => [
                     'must'    => 0,
                     'default' => '[html_cgi]/cmd.cgi?cmd_typ=56&host=[name]&service=[service_description]',
                     'match'   => MATCH_STRING_URL_EMPTY
-                ),
-                'service_ack_url' => Array(
+                ],
+                'service_ack_url' => [
                     'must'    => 0,
                     'default' => '[html_cgi]/cmd.cgi?cmd_typ=7&host=[name]&service=[service_description]&force_check',
                     'match'   => MATCH_STRING_URL_EMPTY
-                ),
-                'view_template' => Array(
+                ],
+                'view_template' => [
                     'must'     => 0,
                     'editable' => 1,
                     'default'  => 'default',
                     'match'    => MATCH_STRING_NO_SPACE
-                ),
-                'label_show' => Array(
+                ],
+                'label_show' => [
                     'must'       => 0,
                     'editable'   => 1,
                     'default'    => '0',
                     'match'      => MATCH_BOOLEAN,
                     'field_type' => 'boolean',
-                ),
-                'line_weather_colors' => Array(
+                ],
+                'line_weather_colors' => [
                     'must'       => 0,
                     'editable'   => 1,
                     'default'    => '10:#8c00ff,25:#2020ff,40:#00c0ff,55:#00f000,70:#f0f000,85:#ffc000,100:#ff0000',
                     'match'      => MATCH_WEATHER_COLORS,
-                ),
-                'line_width' => Array(
+                ],
+                'line_width' => [
                     'must'       => 0,
                     'editable'   => 1,
                     'default'    => 3,
                     'match'      => MATCH_INTEGER,
-                ),
-                'zoombar' => Array(
+                ],
+                'zoombar' => [
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => 0,
                     'field_type'    => 'boolean',
                     'match'         => MATCH_BOOLEAN
-                ),
-                'zoom_scale_objects' => array(
+                ],
+                'zoom_scale_objects' => [
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => 1,
                     'field_type'    => 'boolean',
                     'match'         => MATCH_BOOLEAN
-                ),
-            ),
-            'wui' => Array(
-                'allowedforconfig' => Array(
+                ],
+            ],
+            'wui' => [
+                'allowedforconfig' => [
                     'must' => 0,
                     'editable' => 1,
                     'deprecated' => 1,
-                    'default' => Array('EVERYONE'),
-                    'match' => MATCH_STRING),
-                'autoupdatefreq' => Array('must' => 0,
+                    'default' => ['EVERYONE'],
+                    'match' => MATCH_STRING
+                ],
+                'autoupdatefreq' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '25',
                     'deprecated' => 1,
                     'field_type' => 'dropdown',
-                    'match' => MATCH_INTEGER),
-                'headermenu' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'headermenu' => [
+                    'must' => 1,
                     'editable' => 1,
                     'deprecated' => 1,
                     'default' => '1',
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'headertemplate' => Array(
+                    'match' => MATCH_BOOLEAN
+                ],
+                'headertemplate' => [
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => 'default',
@@ -744,317 +841,421 @@ class GlobalMainCfg {
                     'field_type'    => 'dropdown',
                     'list'          => 'listHeaderTemplates',
                     'match'         => MATCH_STRING_NO_SPACE
-                ),
-                'maplocktime' => Array('must' => 0,
+                ],
+                'maplocktime' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '5',
-                    'match' => MATCH_INTEGER),
-                'grid_show' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'grid_show' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 0,
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'grid_color' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'grid_color' => [
+                    'must' => 0,
                     'editable' => 1,
                     'depends_on' => 'grid_show',
                     'depends_value' => 1,
                     'default' => '#D5DCEF',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'grid_steps' => Array('must' => 0,
+                    'match' => MATCH_COLOR
+                ],
+                'grid_steps' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 32,
                     'depends_on' => 'grid_show',
                     'depends_value' => 1,
-                    'match' => MATCH_INTEGER)),
-            'paths' => Array(
-                'base' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ]
+            ],
+            'paths' => [
+                'base' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_STRING_PATH),
-                'local_base' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'local_base' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_STRING_PATH),
-                'cfg' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'cfg' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'sources' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'sources' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'actions' => Array(
+                    'match' => MATCH_STRING_PATH
+                ],
+                'actions' => [
                     'must'       => 0,
                     'editable'   => 0,
                     'default'    => '',
                     'field_type' => 'hidden',
                     'match'      => MATCH_STRING_PATH
-                ),
-                'icons' => Array('must' => 0,
+                ],
+                'icons' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'images' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'images' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'js' => Array('must' => 1,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'js' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'wuijs' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'wuijs' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'hidden',
                     'deprecated' => 1,
-                    'match' => MATCH_STRING_PATH),
-                'shapes' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'shapes' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'language' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'language' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'class' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'class' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'server' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'server' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'doc' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'doc' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'var' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'var' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'sharedvar' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'sharedvar' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'mapcfg' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'mapcfg' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'geomap' => Array(
+                    'match' => MATCH_STRING_PATH
+                ],
+                'geomap' => [
                     'must'       => 0,
                     'editable'   => 0,
                     'default'    => '',
                     'field_type' => 'hidden',
                     'match'      => MATCH_STRING_PATH,
-                ),
-                'profiles' => Array('must' => 0,
+                ],
+                'profiles' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'automapcfg' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'automapcfg' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'deprecated' => 1,
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'gadgets' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'gadgets' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'styles' => Array(
+                    'match' => MATCH_STRING_PATH
+                ],
+                'styles' => [
                     'must'       => 0,
                     'editable'   => 0,
                     'default'    => '',
                     'field_type' => 'hidden',
-                    'match'      => MATCH_STRING_PATH),
-                'backgrounds' => Array(
+                    'match'      => MATCH_STRING_PATH
+                ],
+                'backgrounds' => [
                     'must'       => 0,
                     'editable'   => 0,
                     'default'    => '',
                     'field_type' => 'hidden',
-                    'match'      => MATCH_STRING_PATH),
-                'templates' => Array('must' => 0,
+                    'match'      => MATCH_STRING_PATH
+                ],
+                'templates' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'htmlbase' => Array('must' => 1,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'htmlbase' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '/nagvis',
-                    'match' => MATCH_STRING_PATH),
-                'local_htmlbase' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'local_htmlbase' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '/nagvis',
-                    'match' => MATCH_STRING_PATH),
-                'htmlcgi' => Array('must' => 1,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'htmlcgi' => [
+                    'must' => 1,
                     'editable' => 1,
                     'field_type' => 'hidden',
                     'default' => '/nagios/cgi-bin',
-                    'match' => MATCH_STRING_URL),
-                'htmlcss' => Array('must' => 1,
+                    'match' => MATCH_STRING_URL
+                ],
+                'htmlcss' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'htmlimages' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'htmlimages' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '/',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'htmljs' => Array('must' => 1,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'htmljs' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'htmlwuijs' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'htmlwuijs' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'hidden',
                     'deprecated' => 1,
-                    'match' => MATCH_STRING_PATH),
-                'sounds' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'sounds' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'templateimages' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'templateimages' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH),
-                'htmlsharedvar' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'htmlsharedvar' => [
+                    'must' => 0,
                     'editable' => 0,
                     'default' => '',
                     'field_type' => 'hidden',
-                    'match' => MATCH_STRING_PATH)),
-            'backend' => Array(
-                'backendtype' => Array('must' => 1,
+                    'match' => MATCH_STRING_PATH
+                ]
+            ],
+            'backend' => [
+                'backendtype' => [
+                    'must' => 1,
                     'editable' => 0,
                     'default' => '',
-                    'match' => MATCH_STRING_NO_SPACE),
-                'backendid' => Array('must' => 1,
+                    'match' => MATCH_STRING_NO_SPACE
+                ],
+                'backendid' => [
+                    'must' => 1,
                     'editable' => 0,
                     'default' => '',
-                    'match' => MATCH_STRING_NO_SPACE),
-                'statushost' => Array('must' => 0,
+                    'match' => MATCH_STRING_NO_SPACE
+                ],
+                'statushost' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_STRING_NO_SPACE_EMPTY),
-                'htmlcgi' => Array('must' => 0,
+                    'match' => MATCH_STRING_NO_SPACE_EMPTY
+                ],
+                'htmlcgi' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_STRING_URL),
-                'custom_1' => Array('must' => 0,
+                    'match' => MATCH_STRING_URL
+                ],
+                'custom_1' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_STRING_URL_EMPTY),
-                'custom_2' => Array('must' => 0,
+                    'match' => MATCH_STRING_URL_EMPTY
+                ],
+                'custom_2' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_STRING_URL_EMPTY),
-                'custom_3' => Array('must' => 0,
+                    'match' => MATCH_STRING_URL_EMPTY
+                ],
+                'custom_3' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_STRING_URL_EMPTY),
-                'options' => Array()),
-            'rotation' => Array(
-                'rotationid' => Array('must' => 1,
+                    'match' => MATCH_STRING_URL_EMPTY
+                ],
+                'options' => []
+            ],
+            'rotation' => [
+                'rotationid' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 'demo',
-                    'match' => MATCH_STRING_NO_SPACE),
-                'interval' => Array('must' => 0,
+                    'match' => MATCH_STRING_NO_SPACE
+                ],
+                'interval' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_INTEGER),
-                'maps' => Array(
+                    'match' => MATCH_INTEGER
+                ],
+                'maps' => [
                     'must'     => 1,
                     'editable' => 1,
                     'default'  => 'demo,demo2',
-                    'match'    => MATCH_STRING_URL)
-                ),
-            'action' => Array(
-                'action_type' => Array(
+                    'match'    => MATCH_STRING_URL
+                ]
+            ],
+            'action' => [
+                'action_type' => [
                     'must'     => 1,
                     'editable' => 0,
                     'default'  => '',
                     'match'    => MATCH_STRING_NO_SPACE
-                ),
-                'action_id' => Array(
+                ],
+                'action_id' => [
                     'must'     => 1,
                     'editable' => 0,
                     'default'  => '',
                     'match'    => MATCH_STRING_NO_SPACE
-                ),
-                'condition' => Array(
+                ],
+                'condition' => [
                     'must'     => 0,
                     'editable' => 1,
                     'default'  => '',
                     'match'    => MATCH_CONDITION
-                ),
-                'obj_type' => Array(
+                ],
+                'obj_type' => [
                     'must'     => 1,
                     'editable' => 1,
                     'array'    => true,
-                    'default'  => array('host', 'service'),
+                    'default'  => ['host', 'service'],
                     'match'    => MATCH_STRING
-                ),
-                'client_os' => Array(
+                ],
+                'client_os' => [
                     'must'     => 0,
                     'editable' => 1,
                     'array'    => true,
-                    'default'  => array(),
+                    'default'  => [],
                     'match'    => MATCH_STRING
-                ),
-                'options' => Array()
-            ),
-            'automap' => Array(
-                'defaultparams' => Array('must' => 0,
+                ],
+                'options' => []
+            ],
+            'automap' => [
+                'defaultparams' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '&childLayers=2',
-                    'match' => MATCH_STRING_URL),
-                'defaultroot' => Array('must' => 0,
+                    'match' => MATCH_STRING_URL
+                ],
+                'defaultroot' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '<<<monitoring>>>',
-                    'match' => MATCH_STRING_NO_SPACE_EMPTY),
-                'graphvizpath' => Array('must' => 0,
+                    'match' => MATCH_STRING_NO_SPACE_EMPTY
+                ],
+                'graphvizpath' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '/usr/local/bin/',
-                    'match' => MATCH_STRING_PATH),
-                'showinlists' => Array('must' => 0,
+                    'match' => MATCH_STRING_PATH
+                ],
+                'showinlists' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '1',
                     'field_type' => 'boolean',
                     'deprecated' => 1,
-                    'match' => MATCH_BOOLEAN)
-                ),
-            'index' => Array(
-                'cellsperrow' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ]
+            ],
+            'index' => [
+                'cellsperrow' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '4',
                     'deprecated' => 1,
-                    'match' => MATCH_INTEGER),
-                'headermenu' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'headermenu' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '1',
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'headertemplate' => Array(
+                    'match' => MATCH_BOOLEAN
+                ],
+                'headertemplate' => [
                     'must'          => 0,
                     'editable'      => 1,
                     'default'       => 'default',
@@ -1063,431 +1264,619 @@ class GlobalMainCfg {
                     'field_type'    => 'dropdown',
                     'list'          => 'listHeaderTemplates',
                     'match'         => MATCH_STRING_NO_SPACE,
-                ),
-                'showautomaps' => Array('must' => 0,
+                ],
+                'showautomaps' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 1,
                     'field_type' => 'boolean',
                     'deprecated' => 1,
-                    'match' => MATCH_BOOLEAN),
-                'showmaps' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'showmaps' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 1,
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'showgeomap' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'showgeomap' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 0,
                     'deprecated' => 1,
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'showmapthumbs' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'showmapthumbs' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 0,
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'showrotations' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'showrotations' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 1,
                     'field_type' => 'boolean',
-                    'match' => MATCH_BOOLEAN),
-                'backgroundcolor' => Array('must' => 0,
+                    'match' => MATCH_BOOLEAN
+                ],
+                'backgroundcolor' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '#ffffff',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR)),
-            'worker' => Array(
-                'interval' => Array('must' => 0,
+                    'match' => MATCH_COLOR
+                ]
+            ],
+            'worker' => [
+                'interval' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '10',
-                    'match' => MATCH_INTEGER),
-                'updateobjectstates' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'updateobjectstates' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '30',
-                    'match' => MATCH_INTEGER),
-                'requestmaxparams' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'requestmaxparams' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 0,
                     'deprecated' => 1,
-                    'match' => MATCH_INTEGER),
-                'requestmaxlength' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'requestmaxlength' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 1900,
                     'deprecated' => 1,
-                    'match' => MATCH_INTEGER)),
-            'states' => Array(
-                'unreachable' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ]
+            ],
+            'states' => [
+                'unreachable' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 9,
-                    'match' => MATCH_INTEGER),
-                'unreachable_stale' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'unreachable_stale' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 9,
-                    'match' => MATCH_INTEGER),
-                'unreachable_ack' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'unreachable_ack' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 6,
-                    'match' => MATCH_INTEGER),
-                'unreachable_ack_bgcolor' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'unreachable_ack_bgcolor' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'unreachable_downtime' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'unreachable_downtime' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 6,
-                    'match' => MATCH_INTEGER),
-                'unreachable_downtime_bgcolor' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'unreachable_downtime_bgcolor' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'unreachable_bgcolor' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'unreachable_bgcolor' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#F1811B',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'unreachable_color' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'unreachable_color' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#F1811B',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'unreachable_sound' => Array('must' => 0,
+                    'match' => MATCH_COLOR
+                ],
+                'unreachable_sound' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 'std_unreachable.mp3',
-                    'match' => MATCH_MP3_FILE),
-                'down' => Array('must' => 1,
+                    'match' => MATCH_MP3_FILE
+                ],
+                'down' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 10,
-                    'match' => MATCH_INTEGER),
-                'down_stale' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'down_stale' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 10,
-                    'match' => MATCH_INTEGER),
-                'down_ack' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'down_ack' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 6,
-                    'match' => MATCH_INTEGER),
-                'down_ack_bgcolor' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'down_ack_bgcolor' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'down_downtime' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'down_downtime' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '6',
-                    'match' => MATCH_INTEGER),
-                'down_downtime_bgcolor' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'down_downtime_bgcolor' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'down_bgcolor' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'down_bgcolor' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#FF0000',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'down_color' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'down_color' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#FF0000',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'down_sound' => Array('must' => 0,
+                    'match' => MATCH_COLOR
+                ],
+                'down_sound' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 'std_down.mp3',
-                    'match' => MATCH_MP3_FILE),
-                'critical' => Array('must' => 1,
+                    'match' => MATCH_MP3_FILE
+                ],
+                'critical' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 8,
-                    'match' => MATCH_INTEGER),
-                'critical_stale' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'critical_stale' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 8,
-                    'match' => MATCH_INTEGER),
-                'critical_ack' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'critical_ack' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 6,
-                    'match' => MATCH_INTEGER),
-                'critical_ack_bgcolor' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'critical_ack_bgcolor' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'critical_downtime' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'critical_downtime' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 6,
-                    'match' => MATCH_INTEGER),
-                'critical_downtime_bgcolor' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'critical_downtime_bgcolor' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'critical_bgcolor' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'critical_bgcolor' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#FF0000',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'critical_color' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'critical_color' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#FF0000',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'critical_sound' => Array('must' => 0,
+                    'match' => MATCH_COLOR
+                ],
+                'critical_sound' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 'std_critical.mp3',
-                    'match' => MATCH_MP3_FILE),
-                'warning' => Array('must' => 1,
+                    'match' => MATCH_MP3_FILE
+                ],
+                'warning' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 7,
-                    'match' => MATCH_INTEGER),
-                'warning_stale' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'warning_stale' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 7,
-                    'match' => MATCH_INTEGER),
-                'warning_ack' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'warning_ack' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 5,
-                    'match' => MATCH_INTEGER),
-                'warning_ack_bgcolor' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'warning_ack_bgcolor' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'warning_downtime' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'warning_downtime' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 5,
-                    'match' => MATCH_INTEGER),
-                'warning_downtime_bgcolor' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'warning_downtime_bgcolor' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'warning_bgcolor' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'warning_bgcolor' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#FFFF00',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'warning_color' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'warning_color' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#FFFF00',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'warning_sound' => Array('must' => 0,
+                    'match' => MATCH_COLOR
+                ],
+                'warning_sound' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => 'std_warning.mp3',
-                    'match' => MATCH_MP3_FILE),
-                'unknown' => Array('must' => 1,
+                    'match' => MATCH_MP3_FILE
+                ],
+                'unknown' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 4,
-                    'match' => MATCH_INTEGER),
-                'unknown_stale' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'unknown_stale' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 4,
-                    'match' => MATCH_INTEGER),
-                'unknown_ack' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'unknown_ack' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 3,
-                    'match' => MATCH_INTEGER),
-                'unknown_ack_bgcolor' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'unknown_ack_bgcolor' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'unknown_downtime' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'unknown_downtime' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 3,
-                    'match' => MATCH_INTEGER),
-                'unknown_downtime_bgcolor' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'unknown_downtime_bgcolor' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'unknown_bgcolor' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'unknown_bgcolor' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#FFCC66',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'unknown_color' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'unknown_color' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#FFCC66',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'unknown_sound' => Array('must' => 0,
+                    'match' => MATCH_COLOR
+                ],
+                'unknown_sound' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_MP3_FILE),
-                'error' => Array('must' => 1,
+                    'match' => MATCH_MP3_FILE
+                ],
+                'error' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 4,
-                    'match' => MATCH_INTEGER),
-                'error_stale' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'error_stale' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 4,
-                    'match' => MATCH_INTEGER),
-                'error_ack' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'error_ack' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 3,
-                    'match' => MATCH_INTEGER),
-                'error_ack_bgcolor' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'error_ack_bgcolor' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'error_downtime' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'error_downtime' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 3,
-                    'match' => MATCH_INTEGER),
-                'error_downtime_bgcolor' => Array('must' => 0,
+                    'match' => MATCH_INTEGER
+                ],
+                'error_downtime_bgcolor' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'error_bgcolor' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'error_bgcolor' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#0000FF',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'error_color' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'error_color' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#0000FF',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'error_sound' => Array('must' => 0,
+                    'match' => MATCH_COLOR
+                ],
+                'error_sound' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_MP3_FILE),
-                'up' => Array('must' => 1,
+                    'match' => MATCH_MP3_FILE
+                ],
+                'up' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 2,
-                    'match' => MATCH_INTEGER),
-                'up_stale' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'up_stale' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 2,
-                    'match' => MATCH_INTEGER),
-                'up_downtime' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'up_downtime' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 2,
-                    'match' => MATCH_INTEGER),
-                'up_bgcolor' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'up_bgcolor' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#00FF00',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'up_color' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'up_color' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#00FF00',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'up_sound' => Array('must' => 0,
+                    'match' => MATCH_COLOR
+                ],
+                'up_sound' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_MP3_FILE),
-                'ok' => Array('must' => 1,
+                    'match' => MATCH_MP3_FILE
+                ],
+                'ok' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 1,
-                    'match' => MATCH_INTEGER),
-                'ok_stale' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'ok_stale' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 1,
-                    'match' => MATCH_INTEGER),
-                'ok_downtime' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'ok_downtime' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 1,
-                    'match' => MATCH_INTEGER),
-                'ok_bgcolor' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'ok_bgcolor' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#00FF00',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'ok_color' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'ok_color' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#00FF00',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'ok_sound' => Array('must' => 0,
+                    'match' => MATCH_COLOR
+                ],
+                'ok_sound' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_MP3_FILE),
-                'pending' => Array('must' => 1,
+                    'match' => MATCH_MP3_FILE
+                ],
+                'pending' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 0,
-                    'match' => MATCH_INTEGER),
-                'pending_downtime' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'pending_downtime' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 0,
-                    'match' => MATCH_INTEGER),
-                'pending_bgcolor' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'pending_bgcolor' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#C0C0C0',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'pending_color' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'pending_color' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#C0C0C0',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'pending_sound' => Array('must' => 0,
+                    'match' => MATCH_COLOR
+                ],
+                'pending_sound' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_MP3_FILE),
-                'unchecked' => Array('must' => 1,
+                    'match' => MATCH_MP3_FILE
+                ],
+                'unchecked' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 0,
-                    'match' => MATCH_INTEGER),
-                'unchecked_downtime' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'unchecked_downtime' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 0,
-                    'match' => MATCH_INTEGER),
-                'unchecked_bgcolor' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'unchecked_bgcolor' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#C0C0C0',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'unchecked_color' => Array('must' => 1,
+                    'match' => MATCH_COLOR
+                ],
+                'unchecked_color' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => '#C0C0C0',
                     'field_type' => 'color',
-                    'match' => MATCH_COLOR),
-                'unchecked_sound' => Array('must' => 0,
+                    'match' => MATCH_COLOR
+                ],
+                'unchecked_sound' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_MP3_FILE)
-            ),
-            'auth_mysql' => Array(
-                'dbhost' => Array('must' => 1,
+                    'match' => MATCH_MP3_FILE
+                ]
+            ],
+            'auth_mysql' => [
+                'dbhost' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 'localhost',
-                    'match' => MATCH_STRING_NO_SPACE),
-                'dbport' => Array('must' => 0,
+                    'match' => MATCH_STRING_NO_SPACE
+                ],
+                'dbport' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '3306',
-                    'match' => MATCH_INTEGER),
-                'dbname' => Array('must' => 1,
+                    'match' => MATCH_INTEGER
+                ],
+                'dbname' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 'nagvis-auth',
-                    'match' => MATCH_STRING_NO_SPACE),
-                'dbuser' => Array('must' => 1,
+                    'match' => MATCH_STRING_NO_SPACE
+                ],
+                'dbuser' => [
+                    'must' => 1,
                     'editable' => 1,
                     'default' => 'root',
-                    'match' => MATCH_STRING_NO_SPACE),
-                'dbpass' => Array('must' => 0,
+                    'match' => MATCH_STRING_NO_SPACE
+                ],
+                'dbpass' => [
+                    'must' => 0,
                     'editable' => 1,
                     'default' => '',
-                    'match' => MATCH_STRING_EMPTY),
-            ),
-            'internal' => Array(
-                'version' => Array('must' => 1,
+                    'match' => MATCH_STRING_EMPTY
+                ],
+            ],
+            'internal' => [
+                'version' => [
+                    'must' => 1,
                     'editable' => 0,
                     'default' => CONST_VERSION,
                     'locked' => 1,
-                    'match' => MATCH_STRING_NO_SPACE),
-                'title' => Array('must' => 1,
+                    'match' => MATCH_STRING_NO_SPACE
+                ],
+                'title' => [
+                    'must' => 1,
                     'editable' => 0,
                     'default' => 'NagVis ' . CONST_VERSION,
                     'locked' => 1,
-                    'match' => MATCH_STRING)
-            )
-        );
+                    'match' => MATCH_STRING
+                ]
+            ]
+        ];
 
         // Detect the cookie domain to use
         //$this->setCookieDomainByEnv();
@@ -1505,7 +1894,7 @@ class GlobalMainCfg {
      */
     private function fetchCustomActions() {
         foreach(GlobalCore::getInstance()->getAvailableCustomActions() AS $action_file) {
-            $configVars = array();
+            $configVars = [];
 
             if(file_exists(path('sys', 'local', 'actions'))) {
                 include(path('sys', 'local', 'actions') . '/'. $action_file);
@@ -1625,8 +2014,8 @@ class GlobalMainCfg {
             //$this->validConfig['backend']['options'][$backend] = $class->getValidConfig();
             // I'd prefer to use the above but for the moment I use the fix below
 
-            if (is_callable(array($class, 'getValidConfig'))) {
-                $this->validConfig['backend']['options'][$backend] = call_user_func(Array('GlobalBackend'.$backend, 'getValidConfig'));
+            if (is_callable([$class, 'getValidConfig'])) {
+                $this->validConfig['backend']['options'][$backend] = call_user_func(['GlobalBackend'.$backend, 'getValidConfig']);
                 //$this->validConfig['backend']['options'][$backend] = call_user_func('GlobalBackend'.$backend.'::getValidConfig');
             }
         }
@@ -1716,7 +2105,7 @@ class GlobalMainCfg {
         $tmpConfig = null;
         if($isUserMainCfg) {
             $this->preUserConfig = $this->config;
-            $this->config = Array();
+            $this->config = [];
         }
 
         // loop trough array
@@ -1747,16 +2136,16 @@ class GlobalMainCfg {
                 // write to array
                 if(!isset($this->config[$sec])) {
                     if(preg_match('/^backend_/i', $sec)) {
-                        $this->config[$sec] = Array();
+                        $this->config[$sec] = [];
                         $this->config[$sec]['backendid'] = str_replace('backend_', '', $sec);
                     } elseif(preg_match('/^rotation_/i', $sec)) {
-                        $this->config[$sec] = Array();
+                        $this->config[$sec] = [];
                         $this->config[$sec]['rotationid'] = str_replace('rotation_', '', $sec);
                     } elseif(preg_match('/^action_/i', $sec)) {
-                        $this->config[$sec] = Array();
+                        $this->config[$sec] = [];
                         $this->config[$sec]['action_id'] = str_replace('action_', '', $sec);
                     } else {
-                        $this->config[$sec] = Array();
+                        $this->config[$sec] = [];
                     }
                 }
             } else {
@@ -1787,7 +2176,7 @@ class GlobalMainCfg {
                 } elseif (isset($this->validConfig[$sec])) {
                     $validConfig = $this->validConfig[$sec];
                 } else {
-                    $validConfig = array();
+                    $validConfig = [];
                 }
 
                 // Special options (Arrays)
@@ -1825,7 +2214,7 @@ class GlobalMainCfg {
                             $map = trim($map);
 
                             // Save the extracted information to an array
-                            $val[$id] = Array('label' => $label, 'map' => $map, 'url' => $arrRet[3], 'target' => '');
+                            $val[$id] = ['label' => $label, 'map' => $map, 'url' => $arrRet[3], 'target' => ''];
                         }
                     }
                 }
@@ -1900,7 +2289,7 @@ class GlobalMainCfg {
                             if($this->getValue($type,$key) === null) {
                                 // a "must" value is missing or empty
                                 throw new NagVisException(l('The needed attribute [ATTRIBUTE] is missing in section [TYPE] in main configuration file. Please take a look at the documentation.',
-                                                            Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
+                                                            ['ATTRIBUTE' => $key, 'TYPE' => $type]));
                                 return FALSE;
                             }
                         }
@@ -1938,14 +2327,14 @@ class GlobalMainCfg {
                                 // unknown attribute
                                 if($printErr) {
                                     throw new NagVisException(l('Unknown value [ATTRIBUTE] used in section [TYPE] in main configuration file.',
-                                                                Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
+                                                                ['ATTRIBUTE' => $key, 'TYPE' => $type]));
                                 }
                                 return FALSE;
                             } elseif(isset($arrValidConfig[$key]['deprecated']) && $arrValidConfig[$key]['deprecated'] == 1) {
                                 // deprecated option
                                 if($printErr) {
                                     throw new NagVisException(l('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file is deprecated. Please take a look at the documentation for updating your configuration.',
-                                                                Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
+                                                                ['ATTRIBUTE' => $key, 'TYPE' => $type]));
                                 }
                                 return FALSE;
                             } else {
@@ -1969,7 +2358,7 @@ class GlobalMainCfg {
                                     // wrong format
                                     if($printErr) {
                                         throw new NagVisException(l('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file does not match the correct format. Please review your configuration.',
-                                                                    Array('ATTRIBUTE' => $key, 'TYPE' => $type)));
+                                                                    ['ATTRIBUTE' => $key, 'TYPE' => $type]));
                                     }
                                     return FALSE;
                                 }
@@ -1977,7 +2366,7 @@ class GlobalMainCfg {
                                 // Check if the configured backend is defined in main configuration file
                                 if(!$this->onlyUserConfig && $type == 'defaults' && $key == 'backend' && !isset($this->config['backend_'.$val])) {
                                     if($printErr) {
-                                        throw new NagVisException(l('The backend with the ID \"[BACKENDID]\" is not defined.', Array('BACKENDID' => $val)));
+                                        throw new NagVisException(l('The backend with the ID \"[BACKENDID]\" is not defined.', ['BACKENDID' => $val]));
                                     }
                                     return FALSE;
                                 }
@@ -1989,7 +2378,7 @@ class GlobalMainCfg {
                     if($printErr) {
                         throw new NagVisException(
                             l('The section [TYPE] is not supported in main configuration. Please take a look at the documentation.',
-                              Array('TYPE' => $type)));
+                              ['TYPE' => $type]));
                     }
                     return FALSE;
                 }
@@ -2169,7 +2558,7 @@ class GlobalMainCfg {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getSections() {
-        $aRet = Array();
+        $aRet = [];
         foreach($this->config AS $key => $var) {
             $aRet[] = $key;
         }
@@ -2207,7 +2596,7 @@ class GlobalMainCfg {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseGeneralProperties() {
-        $p = Array(
+        $p = [
           'date_format'        => $this->getValue('global', 'dateformat'),
           'path_base'          => $this->getValue('paths','htmlbase'),
           'path_cgi'           => $this->getValue('paths','htmlcgi'),
@@ -2224,16 +2613,16 @@ class GlobalMainCfg {
           'worldmap_satellite_tiles_url' => $this->getValue('global', 'worldmap_satellite_tiles_url'),
           'worldmap_satellite_tiles_attribution' => $this->getValue('global', 'worldmap_satellite_tiles_attribution'),
           // Add custom action configuration
-        );
+        ];
 
         // Add custom action configuration
-        $p['actions'] = array();
+        $p['actions'] = [];
         foreach (GlobalCore::getInstance()->getDefinedCustomActions() as $id) {
-            $p['actions'][$id] = array(
+            $p['actions'][$id] = [
                 'obj_type'  => $this->getValue('action_'.$id, 'obj_type'),
                 'client_os' => $this->getValue('action_'.$id, 'client_os'),
                 'condition' => $this->getValue('action_'.$id, 'condition')
-            );
+            ];
         }
 
         return json_encode($p);
@@ -2246,10 +2635,10 @@ class GlobalMainCfg {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseWorkerProperties() {
-        return json_encode(Array(
+        return json_encode([
             'worker_interval'             => $this->getValue('worker', 'interval'),
             'worker_update_object_states' => $this->getValue('worker', 'updateobjectstates')
-        ));
+        ]);
     }
 
     /**
@@ -2257,7 +2646,7 @@ class GlobalMainCfg {
      * and maybe the user configuration
      */
     private function parseStateWeight() {
-        $arr = Array();
+        $arr = [];
 
         foreach($this->validConfig['states'] AS $lowState => $aVal) {
             $key = explode('_', $lowState);
@@ -2274,7 +2663,7 @@ class GlobalMainCfg {
 
             // First create array when not exists
             if(!isset($arr[$state])) {
-                $arr[$state] = Array();
+                $arr[$state] = [];
             }
 
             if(isset($key[1]) && isset($key[2])) {
@@ -2308,7 +2697,7 @@ class GlobalMainCfg {
      * translate the states here.
      */
     public function getStateWeightJS() {
-        $arr = array();
+        $arr = [];
         foreach ($this->stateWeight AS $state => $val) {
             $arr[state_str($state)] = $val;
         }
@@ -2375,14 +2764,14 @@ class GlobalMainCfg {
                 // Append the new section after the already defined
                 $slicedBefore = array_slice($this->config, 0, ($lastBackendIndex + 1));
                 $slicedAfter = array_slice($this->config, ($lastBackendIndex + 1));
-                $tmp[$sec] = Array();
+                $tmp[$sec] = [];
                 $this->config = array_merge($slicedBefore,$tmp,$slicedAfter);
             } else {
                 // If no defined backend found, add it to the EOF
-                $this->config[$sec] = Array();
+                $this->config[$sec] = [];
             }
         } else {
-            $this->config[$sec] = Array();
+            $this->config[$sec] = [];
         }
 
         return TRUE;
@@ -2530,7 +2919,7 @@ class GlobalMainCfg {
     }
 
     public function getSectionTitle($sec) {
-        $titles = array(
+        $titles = [
             'global'   => l('Global Settings'),
             'defaults' => l('Object Defaults'),
             'index'    => l('Overview'),
@@ -2538,7 +2927,7 @@ class GlobalMainCfg {
             'states'   => l('States'),
             'paths'    => l('Paths'),
             'automap'  => l('Automap'),
-        );
+        ];
         if (isset($titles[$sec]))
             return $titles[$sec];
         else
@@ -2553,7 +2942,7 @@ class GlobalMainCfg {
             return $this->validConfig[$sec][$key]['list'];
         else
             throw new NagVisException(l('No "list" function registered for option "[OPT]" of type "[TYPE]"',
-                                                                       Array('OPT' => $sec, 'TYPE' => $key)));
+                                                                       ['OPT' => $sec, 'TYPE' => $key]));
     }
 
     /**

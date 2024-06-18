@@ -30,7 +30,7 @@ class GlobalLanguage {
     private $textDomain;
     private $sCurrentLanguage;
     private $sCurrentEncoding;
-    private $cache = Array();
+    private $cache = [];
 
     /**
      * Class Constructor
@@ -117,7 +117,7 @@ class GlobalLanguage {
                         if($sReturn != ''
                            && $this->USERCFG !== null
                            && $sReturn != $this->USERCFG->getValue('language', ''))
-                            $this->USERCFG->doSet(Array('language' => $sReturn));
+                            $this->USERCFG->doSet(['language' => $sReturn]);
                     break;
                     case 'config':
                         // Read default language from configuration
@@ -127,7 +127,7 @@ class GlobalLanguage {
                     default:
                         throw new NagVisException(
                             $this->getText('Invalid mode [MODE] in language_detection option.',
-                                          Array('MODE' => $sMethod)));
+                                          ['MODE' => $sMethod]));
                     break;
                 }
             }
@@ -148,7 +148,7 @@ class GlobalLanguage {
         $UHANDLER = new CoreUriHandler();
 
         // Load the specific params to the UriHandler
-        $UHANDLER->parseModSpecificUri(Array('lang' => MATCH_LANGUAGE_EMPTY));
+        $UHANDLER->parseModSpecificUri(['lang' => MATCH_LANGUAGE_EMPTY]);
 
         if($UHANDLER->isSetAndNotEmpty('lang')
            // Check if language is available
@@ -170,8 +170,8 @@ class GlobalLanguage {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getBrowserLanguage() {
-        $return = Array();
-        $langs = Array();
+        $return = [];
+        $langs = [];
 
         if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             // break up string into pieces (languages and q factors)
@@ -241,7 +241,7 @@ class GlobalLanguage {
             return TRUE;
         } else {
             if($printErr) {
-                throw new NagVisException($this->getText('languageNotFound', Array('LANG' => $sLang)));
+                throw new NagVisException($this->getText('languageNotFound', ['LANG' => $sLang]));
             }
             return FALSE;
         }

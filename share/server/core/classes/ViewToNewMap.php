@@ -30,7 +30,7 @@ class ViewToNewMap {
 
         ob_start();
 
-        $view_params = array();
+        $view_params = [];
         $params = ltrim(req('view_params'), '&');
         if ($params) {
             $parts = explode('&', $params);
@@ -48,7 +48,7 @@ class ViewToNewMap {
 
                 if (!preg_match(MATCH_MAP_NAME, $name))
                     throw new FieldInputError('name', l('This is not a valid map name (need to match [M])',
-                                                                    array('M' => MATCH_MAP_NAME)));
+                                                                    ['M' => MATCH_MAP_NAME]));
 
                 if (count($CORE->getAvailableMaps('/^'.$name.'$/')) > 0)
                     throw new FieldInputError('name', l('A map with this name already exists.'));

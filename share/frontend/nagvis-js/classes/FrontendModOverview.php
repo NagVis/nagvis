@@ -36,15 +36,17 @@ class FrontendModOverview extends FrontendModule {
         $this->CORE = $CORE;
 
         // Parse the view specific options
-        $aOpts = Array('rotation' => MATCH_ROTATION_NAME_EMPTY,
-                       'rotationStep' => MATCH_INTEGER_EMPTY);
+        $aOpts = [
+            'rotation' => MATCH_ROTATION_NAME_EMPTY,
+                       'rotationStep' => MATCH_INTEGER_EMPTY
+        ];
         $aVals = $this->getCustomOptions($aOpts);
         $this->rotation = $aVals['rotation'];
         $this->rotationStep = $aVals['rotationStep'];
 
-        $this->aActions = Array(
+        $this->aActions = [
             'view' => REQUIRES_AUTHORISATION
-        );
+        ];
     }
 
     public function handleAction() {

@@ -37,7 +37,7 @@ class ViewManageBackgrounds {
                 $file = $_FILES['image'];
                 if (!is_uploaded_file($file['tmp_name']))
                     throw new FieldInputError('image', l('The file could not be uploaded (Error: [ERROR]).',
-                      Array('ERROR' => $file['error'].': '.$CORE->getUploadErrorMsg($file['error']))));
+                      ['ERROR' => $file['error'].': '.$CORE->getUploadErrorMsg($file['error'])]));
 
                 $file_name = $file['name'];
                 $file_path = path('sys', '', 'backgrounds').$file_name;
@@ -47,7 +47,7 @@ class ViewManageBackgrounds {
                                                         .'file or contains unwanted chars.'));
 
                 $data = getimagesize($file['tmp_name']);
-                if (!in_array($data[2], array(IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG)))
+                if (!in_array($data[2], [IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG]))
                     throw new FieldInputError('image', l('The uploaded file is not an image '
                                                         .'(png, jpg and gif are allowed).'));
 
@@ -96,7 +96,7 @@ class ViewManageBackgrounds {
                     throw new FieldInputError('name', l('The background does not exist.'));
 
                 // Check whether or not the backgroun is in use
-                $using = Array();
+                $using = [];
                 foreach ($CORE->getAvailableMaps() AS $map) {
                     $MAPCFG = new GlobalMapCfg($map);
                     try {
@@ -112,7 +112,7 @@ class ViewManageBackgrounds {
                 if ($using)
                     throw new FieldInputError('name', l('Unable to delete this background, because it is '
                                                        .'currently used by these maps: [M].',
-                                                            array('M' => implode(',', $using))));
+                                                            ['M' => implode(',', $using)]));
 
                 $BACKGROUND = new GlobalBackground($name);
                 $BACKGROUND->deleteImage();
@@ -136,7 +136,7 @@ class ViewManageBackgrounds {
         echo '<table class="mytable">';
         echo '<tr><td class="tdlabel">'.l('Background').'</td>';
         echo '<td class="tdfield">';
-        $images = array('' => l('Choose a background'));
+        $images = ['' => l('Choose a background')];
         foreach ($CORE->getAvailableBackgroundImages() AS $name)
             $images[$name] = $name;
         select('name', $images);

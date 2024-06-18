@@ -60,8 +60,8 @@ class CoreRequestHandler {
         return (isset($this->aOpts[$sKey]) && $this->aOpts[$sKey] != '');
     }
 
-    public function getAll($exclude = Array()) {
-        $ret = Array();
+    public function getAll($exclude = []) {
+        $ret = [];
         foreach($this->aOpts AS $key => $val) {
             if(!isset($exclude[$key])) {
                 $ret[$key] = $val;

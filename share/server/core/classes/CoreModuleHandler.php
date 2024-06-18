@@ -36,7 +36,7 @@ class CoreModuleHandler {
         else
             $this->CORE = $CORE;
 
-        $this->aRegistered = Array();
+        $this->aRegistered = [];
         $this->sPrefix = 'CoreMod';
     }
 

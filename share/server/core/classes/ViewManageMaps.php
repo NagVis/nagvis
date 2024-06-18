@@ -26,13 +26,13 @@ class ViewManageMaps {
         global $CORE;
         echo '<h2>'.l('Create Map').'</h2>';
 
-        $map_types = array(
+        $map_types = [
             'map'      => l('Regular map'),
             'worldmap' => l('Geographical map (interactive)'),
             'geomap'   => l('Geographical map (non interactive)'),
             'automap'  => l('Automap based on parent/child relations'),
             'dynmap'   => l('Dynamic map'),
-        );
+        ];
 
         if (is_action() && post('mode') == 'create') {
             try {
@@ -45,7 +45,7 @@ class ViewManageMaps {
 
                 if (!preg_match(MATCH_MAP_NAME, $name))
                     throw new FieldInputError('name', l('This is not a valid map name (need to match [M])',
-                                                                    array('M' => MATCH_MAP_NAME)));
+                                                                    ['M' => MATCH_MAP_NAME]));
 
                 $type = post('type');
                 if (!isset($map_types[$type]))
@@ -54,19 +54,19 @@ class ViewManageMaps {
                 $alias = post('alias');
                 if ($alias && !preg_match(MATCH_STRING, $alias))
                     throw new FieldInputError('alias', l('This is not a valid map alias (need to match [M])',
-                                                                    array('M' => MATCH_STRING)));
+                                                                    ['M' => MATCH_STRING]));
 
                 $MAPCFG = new GlobalMapCfg($name);
                 if (!$MAPCFG->createMapConfig())
                     throw new NagVisException(l('Failed to create the map'));
 
-                $global = array();
+                $global = [];
 
                 if ($alias)
                     $global['alias'] = $alias;
 
                 if ($type != 'map')
-                    $global['sources'] = array($type);
+                    $global['sources'] = [$type];
 
                 $MAPCFG->addElement('global', $global, false, 0);
                 $MAPCFG->handleSources('init_map');
@@ -112,7 +112,7 @@ class ViewManageMaps {
 
     private function doRename($name, $new_name) {
         global $CORE, $AUTHORISATION;
-        $files = Array();
+        $files = [];
 
         // loop all map configs to replace mapname in all map configs
         foreach($CORE->getAvailableMaps() as $mapName) {
@@ -165,7 +165,7 @@ class ViewManageMaps {
             
                 if (!preg_match(MATCH_MAP_NAME, $new_name))
                     throw new FieldInputError('new_name', l('This is not a valid map name (need to match [M])',
-                                                                    array('M' => MATCH_MAP_NAME)));
+                                                                    ['M' => MATCH_MAP_NAME]));
 
                 $this->doRename($name, $new_name);
                 success(l('The map has been renamed.'));
@@ -197,7 +197,7 @@ class ViewManageMaps {
         echo '<table class="mytable">';
         echo '<tr><td class="tdlabel">'.l('Map').'</td>';
         echo '<td class="tdfield">';
-        $maps = array('' => l('Choose a map'));
+        $maps = ['' => l('Choose a map')];
         foreach ($CORE->getAvailableMaps() AS $map)
             $maps[$map] = $map;
         select('name', $maps);
@@ -260,7 +260,7 @@ class ViewManageMaps {
         echo '<table class="mytable">';
         echo '<tr><td class="tdlabel">'.l('Map').'</td>';
         echo '<td class="tdfield">';
-        $maps = array('' => l('Choose a map'));
+        $maps = ['' => l('Choose a map')];
         foreach ($CORE->getAvailableMaps() AS $map)
             $maps[$map] = $map;
         select('name', $maps);
@@ -304,7 +304,7 @@ class ViewManageMaps {
         echo '<table class="mytable">';
         echo '<tr><td class="tdlabel">'.l('Map').'</td>';
         echo '<td class="tdfield">';
-        $maps = array('' => l('Choose a map'));
+        $maps = ['' => l('Choose a map')];
         foreach ($CORE->getAvailableMaps() AS $map)
             $maps[$map] = $map;
         select('map', $maps);
@@ -328,7 +328,7 @@ class ViewManageMaps {
                 $file = $_FILES['map_file'];
                 if (!is_uploaded_file($file['tmp_name']))
                     throw new FieldInputError('map_file', l('The file could not be uploaded (Error: [ERROR]).',
-                      Array('ERROR' => $file['error'].': '.$CORE->getUploadErrorMsg($file['error']))));
+                      ['ERROR' => $file['error'].': '.$CORE->getUploadErrorMsg($file['error'])]));
 
                 $file_name = $file['name'];
                 $file_path = cfg('paths', 'mapcfg').$file_name;
@@ -339,7 +339,7 @@ class ViewManageMaps {
 
                 if (!preg_match(MATCH_MAP_NAME, $map_name))
                     throw new FieldInputError('map_file', l('This is not a valid map name (need to match [M])',
-                                                                    array('M' => MATCH_MAP_NAME)));
+                                                                    ['M' => MATCH_MAP_NAME]));
 
                 // FIXME: We really should validate the contents of the file
 

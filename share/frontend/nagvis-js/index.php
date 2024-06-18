@@ -41,14 +41,14 @@ try {
     require('../../server/core/functions/core.php');
     $MHANDLER = new FrontendModuleHandler();
     $_name    = 'nagvis-js';
-    $_modules = Array(
+    $_modules = [
         'Info',
         'Map',
         'Url',
         'Overview',
         'Rotation',
         'LogonDialog',
-    );
+    ];
     
     require('../../server/core/functions/index.php');
     exit(0);

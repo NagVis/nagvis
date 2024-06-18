@@ -39,16 +39,16 @@ class FrontendModMap extends FrontendModule {
         $this->CORE  = $CORE;
 
         // Parse the view specific options
-        $aOpts = Array(
+        $aOpts = [
             'show'          => MATCH_MAP_NAME_EMPTY,
             'search'        => MATCH_STRING_NO_SPACE_EMPTY,
             'rotation'      => MATCH_ROTATION_NAME_EMPTY,
             'rotationStep'  => MATCH_INTEGER_EMPTY,
             'perm'          => MATCH_BOOLEAN_EMPTY,
-        );
+        ];
 
         // There might be a default map when none is given
-        $aDefaults = Array('show' => cfg('global', 'startshow'));
+        $aDefaults = ['show' => cfg('global', 'startshow')];
 
         // getCustomOptions fetches and validates the values
         $aVals = $this->getCustomOptions($aOpts, $aDefaults);
@@ -59,10 +59,10 @@ class FrontendModMap extends FrontendModule {
         $this->perm         = $aVals['perm'];
 
         // Register valid actions
-        $this->aActions = Array(
+        $this->aActions = [
             'view' => REQUIRES_AUTHORISATION,
             'edit' => REQUIRES_AUTHORISATION,
-        );
+        ];
 
         // Register valid objects
         $this->aObjects = $this->CORE->getAvailableMaps(null, SET_KEYS);

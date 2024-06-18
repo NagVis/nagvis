@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 // Set colors
-$table_colors = Array();
+$table_colors = [];
 $table_colors['WARNING'] = "#FFFF00";
 $table_colors['UNKNOWN'] = "#FFCC66";
 $table_colors['UP']      = "#00FF00";
@@ -77,14 +77,14 @@ $current_state = $_GET['state'];
 // Get members of this element (Servicegroup, ...)
 $members = json_decode($_POST['members'], True);
 
-$show_states = Array();
+$show_states = [];
 if ($show_service_states)
-    $show_states = array_merge($show_states, array('OK', 'WARNING', 'CRITICAL', 'UNKNOWN', 'ERROR'));
+    $show_states = array_merge($show_states, ['OK', 'WARNING', 'CRITICAL', 'UNKNOWN', 'ERROR']);
 if ($show_host_states)
-    $show_states = array_merge($show_states, array('UP', 'DOWN', 'UNREACHABLE', 'ERROR'));
+    $show_states = array_merge($show_states, ['UP', 'DOWN', 'UNREACHABLE', 'ERROR']);
 
 // Init statistic array
-$stats = Array();
+$stats = [];
 foreach ($show_states AS $state) {
     $stats['S_'.$state] = 0;
     $stats['D_'.$state] = 0;
@@ -268,7 +268,7 @@ if ($show_header == 1) {
     // Write Header
     echo "<thead>";
     echo "<tr>";
-    $header1 = Array();
+    $header1 = [];
     $header1['S'] = "STATUS";
     if ($group_states == 0){
         $header1['D'] = "DOWNTIME";

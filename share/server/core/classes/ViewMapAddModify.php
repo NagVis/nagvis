@@ -31,14 +31,14 @@ class ViewMapAddModify {
     private $object_type = null;
     private $clone_id    = null;
 
-    private $attrs          = array();
-    private $attrs_filtered = array();
+    private $attrs          = [];
+    private $attrs_filtered = [];
 
     // Filter the attributes using the helper fields
     // Each attribute can have the toggle_* field set. If present
     // use it's value to filter out the attributes
     private function filterMapAttrs() {
-        $exclude = Array(
+        $exclude = [
             'mod'       => true,
             'act'       => true,
             'show'      => true,
@@ -48,7 +48,7 @@ class ViewMapAddModify {
             'perm_user' => true,
             'lang'      => true,
             'sec'       => true,
-        );
+        ];
         $attrDefs = $this->MAPCFG->getValidObjectType($this->object_type);
         foreach ($_REQUEST as $attr => $val) {
             // $_REQUEST might contain cookie infos. Skip them.
@@ -88,7 +88,7 @@ class ViewMapAddModify {
         // FIXME: Are all given attrs valid ones?
         foreach($this->attrs AS $key => $val) {
             if(!isset($attrDefs[$key]))
-                throw new FieldInputError($key, l('The attribute "[A]" is unknown.', array("A" => $key)));
+                throw new FieldInputError($key, l('The attribute "[A]" is unknown.', ["A" => $key]));
             if(isset($attrDefs[$key]['deprecated']) && $attrDefs[$key]['deprecated'] === true)
                 throw new FieldInputError($key, l('The attribute is deprecated.'));
 
@@ -97,12 +97,12 @@ class ViewMapAddModify {
             if(isset($attrDefs[$key]['match'])) {
                 $array = isset($attrDefs[$key]['array']) && $attrDefs[$key]['array'];
                 if(!$array)
-                    $val = array($val);
+                    $val = [$val];
 
                 foreach($val as $part) {
                     if(!preg_match($attrDefs[$key]['match'], $part)) {
                         throw new FieldInputError($key, l('The attribute has the wrong format (Regex: [MATCH]).',
-                            Array('MATCH' => $attrDefs[$key]['match'])));
+                            ['MATCH' => $attrDefs[$key]['match']]));
                     }
                 }
             }
@@ -140,9 +140,9 @@ class ViewMapAddModify {
                 $attrs = $this->attrs;
                 unset($attrs['object_id']);
 
-                $USERCFG->doSet(array(
+                $USERCFG->doSet([
                     'params-' . $this->MAPCFG->getName() => $attrs,
-                ));
+                ]);
 
                 scroll_up(); // On success, always scroll to top of page
                 success(l('Personal settings saved.'));
@@ -170,8 +170,10 @@ class ViewMapAddModify {
                 }
 
                 $t = $this->object_type == 'global' ? l('map configuration') : $this->object_type;
-                $result = array(2, null, l('The [TYPE] has been modified. Reloading in 2 seconds.',
-                                                               Array('TYPE' => $t)));
+                $result = [
+                    2, null, l('The [TYPE] has been modified. Reloading in 2 seconds.',
+                                                               ['TYPE' => $t])
+                ];
 
                 if ($this->object_type == 'global')
                     $refresh_code = 'location.reload();';
@@ -234,7 +236,7 @@ class ViewMapAddModify {
             $val = $default_value;
             $isInherited = true;
         }
-        return Array($isInherited, $val);
+        return [$isInherited, $val];
     }
 
     private function colorSelect($propname, $value, $hideField) {
@@ -280,7 +282,7 @@ class ViewMapAddModify {
         }
 
         $rowHide    = '';
-        $rowClasses = Array();
+        $rowClasses = [];
 
         // Check if depends_on and depends_value are defined and if the value
         // is equal. If not equal hide the field
@@ -374,10 +376,10 @@ class ViewMapAddModify {
                 echo $value;
             break;
             case 'boolean':
-                $options = Array(
+                $options = [
                     '1' => l('yes'),
                     '0' => l('no'),
-                );
+                ];
                 $valueTxt = $options[$valueTxt];
                 // FIXME: !isset($options[$value]) -> fallback to input field
                 select($propname, $options, $value, $onChange, $hideField);
@@ -400,8 +402,8 @@ class ViewMapAddModify {
                         else
                             $msg = "".$e;
 
-                        form_render_error($propname, l("Failed to get objects: [MSG]", array('MSG' => $msg)));
-                        $options = array();
+                        form_render_error($propname, l("Failed to get objects: [MSG]", ['MSG' => $msg]));
+                        $options = [];
                     }
 
                     if(isset($options[$valueTxt]))
@@ -519,15 +521,15 @@ class ViewMapAddModify {
         js_form_start('addmodify');
 
         $obj_spec = $this->getProperties();
-        $props_by_section = array();
+        $props_by_section = [];
         foreach ($obj_spec AS $propname => $prop) {
             $sec = $prop['section'];
             if (!isset($props_by_section[$sec]))
-                $props_by_section[$sec] = array();
+                $props_by_section[$sec] = [];
             $props_by_section[$sec][$propname] = $prop;
         }
 
-        $sections = array();
+        $sections = [];
         foreach (array_keys($props_by_section) AS $sec)
             if ($sec != 'hidden')
                 $sections[$sec] = $this->MAPCFG->getSectionTitle($sec);

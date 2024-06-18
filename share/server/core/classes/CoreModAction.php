@@ -27,10 +27,10 @@ class CoreModAction extends CoreModule {
         $this->sName = 'Action';
 
         // Register valid actions
-        $this->aActions = Array(
+        $this->aActions = [
             'acknowledge'       => 'perform',
             'custom_action'     => 'perform',
-        );
+        ];
     }
 
     public function handleAction() {
@@ -40,12 +40,12 @@ class CoreModAction extends CoreModule {
         if($this->offersAction($this->sAction)) {
             switch($this->sAction) {
                 case 'custom_action':
-                    $aOpts = Array(
+                    $aOpts = [
                         'map'       => MATCH_MAP_NAME,
                         'object_id' => MATCH_OBJECTID,
                         'cmd'       => MATCH_STRING_NO_SPACE,
-                    );
-                    $attrs = $this->getCustomOptions($aOpts, Array());
+                    ];
+                    $attrs = $this->getCustomOptions($aOpts, []);
 
                     // Input validations
                     // - Valid custom action?
@@ -80,7 +80,7 @@ class CoreModAction extends CoreModule {
                 
                 case 'acknowledge':
                     $VIEW = new ViewAck();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
+                    $sReturn = json_encode(['code' => $VIEW->parse()]);
                 break;
             }
         }

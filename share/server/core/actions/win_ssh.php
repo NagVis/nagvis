@@ -26,7 +26,7 @@
 
 // Config variables to be registered for custom actions of this name
 global $configVars;
-$configVars = array();
+$configVars = [];
 
 if (!function_exists('handle_action_win_ssh')) {
     function handle_action_win_ssh($MAPCFG, $objId) {

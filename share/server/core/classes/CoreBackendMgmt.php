@@ -26,18 +26,18 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class CoreBackendMgmt {
-    public $BACKENDS = Array();
-    private $aInitialized = Array();
-    private $aQueue = Array();
-    private $aError = Array();
-    private $countQueries = Array(
+    public $BACKENDS = [];
+    private $aInitialized = [];
+    private $aQueue = [];
+    private $aError = [];
+    private $countQueries = [
         'serviceState'            => '',
         'hostState'               => '',
         'hostMemberState'         => '',
         'hostgroupMemberState'    => '',
         'servicegroupMemberState' => '',
         'DYN_GROUP_MEMBER_STATE'  => '',
-    );
+    ];
 
 
     /**
@@ -77,12 +77,12 @@ class CoreBackendMgmt {
         $backendIds = $OBJ->getBackendIds();
         foreach($backendIds as $backendId)
             if(!isset($this->aQueue[$backendId]))
-                $this->aQueue[$backendId] = Array();
+                $this->aQueue[$backendId] = [];
 
         foreach($query AS $query => $_unused) {
             foreach($backendIds as $backendId)
                 if(!isset($this->aQueue[$backendId][$query]))
-                    $this->aQueue[$backendId][$query] = Array();
+                    $this->aQueue[$backendId][$query] = [];
 
             // Gather the object name
             if($query == 'serviceState')
@@ -103,9 +103,9 @@ class CoreBackendMgmt {
             // all objects in that list later
             foreach($backendIds as $backendId)
                 if(!isset($this->aQueue[$backendId][$query][$options][$objFilters]))
-                    $this->aQueue[$backendId][$query][$options][$objFilters] = Array($name => Array($OBJ));
+                    $this->aQueue[$backendId][$query][$options][$objFilters] = [$name => [$OBJ]];
                 elseif(!isset($this->aQueue[$backendId][$query][$options][$objFilters][$name]))
-                    $this->aQueue[$backendId][$query][$options][$objFilters][$name] = Array($OBJ);
+                    $this->aQueue[$backendId][$query][$options][$objFilters][$name] = [$OBJ];
                 else
                     $this->aQueue[$backendId][$query][$options][$objFilters][$name][] = $OBJ;
         }
@@ -140,7 +140,7 @@ class CoreBackendMgmt {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function clearQueue() {
-        $this->aQueue = Array();
+        $this->aQueue = [];
     }
 
     /**
@@ -212,16 +212,16 @@ class CoreBackendMgmt {
         foreach($aObjs AS $name => $OBJS) {
             foreach($OBJS AS $OBJ) {
                 try {
-                    $filters = Array(Array('key' => 'aggr_name', 'op' => '>=', 'val' => 'name'));
-                    $aServices = $this->getBackend($backendId)->getServiceState(Array($OBJ->getName() => Array($OBJ)), $options, $filters, MEMBER_QUERY);
+                    $filters = [['key' => 'aggr_name', 'op' => '>=', 'val' => 'name']];
+                    $aServices = $this->getBackend($backendId)->getServiceState([$OBJ->getName() => [$OBJ]], $options, $filters, MEMBER_QUERY);
                 } catch(BackendException $e) {
-                    $aServices = Array();
+                    $aServices = [];
                     $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
-                              Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())), $backendId);
+                              ['BACKENDID' => $backendId, 'MSG' => $e->getMessage()]), $backendId);
                 }
 
                 // Regular member adding loop
-                $members = Array();
+                $members = [];
                 foreach($aServices AS $host => $serviceList) {
                     foreach($serviceList AS $aService) {
                         $members[] = $this->createServiceObject($backendId, $host, $aService[DESCRIPTION],
@@ -239,9 +239,9 @@ class CoreBackendMgmt {
                 try {
                     if($OBJ->object_types == 'service') {
                         if (!$this->checkBackendFeature($backendId, 'getServiceListCounts', false)) {
-                            $counts = array();
+                            $counts = [];
                             $OBJ->setBackendProblem(l('This type of object is not supportd by this backend ([BACKENDID]).',
-                                  Array('BACKENDID' => $backendId)), $backendId);
+                                  ['BACKENDID' => $backendId]), $backendId);
                         }
                         else {
                             $counts = $this->getBackend($backendId)->getServiceListCounts(
@@ -249,9 +249,9 @@ class CoreBackendMgmt {
                         }
                     } else {
                         if (!$this->checkBackendFeature($backendId, 'getHostAndServiceCounts', false)) {
-                            $counts = array();
+                            $counts = [];
                             $OBJ->setBackendProblem(l('This type of object is not supportd by this backend ([BACKENDID]).',
-                                  Array('BACKENDID' => $backendId)), $backendId);
+                                  ['BACKENDID' => $backendId]), $backendId);
                         }
                         else {
                             $counts = $this->getBackend($backendId)->getHostAndServiceCounts(
@@ -259,9 +259,9 @@ class CoreBackendMgmt {
                         }
                     }
                 } catch(BackendException $e) {
-                    $counts = Array();
+                    $counts = [];
                     $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
-                              Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())), $backendId);
+                              ['BACKENDID' => $backendId, 'MSG' => $e->getMessage()]), $backendId);
                 }
 
                 $OBJ->addStateCounts($counts);
@@ -277,16 +277,16 @@ class CoreBackendMgmt {
     private function fetchDynGroupMemberDetails($backendId, $options, $aObjs) {
         foreach($aObjs AS $name => $OBJS) {
             foreach($OBJS AS $OBJ) {
-                $members = Array();
+                $members = [];
                 if ($OBJ->object_types == 'service') {
                     // Fist get the states for all the members
                     try {
                         $aServices = $this->getBackend($backendId)->getServiceState(
-                            Array($OBJ->getName() => Array($OBJ)), $options, array(), MEMBER_QUERY);
+                            [$OBJ->getName() => [$OBJ]], $options, [], MEMBER_QUERY);
                     } catch(BackendException $e) {
-                        $aServices = Array();
+                        $aServices = [];
                         $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
-                                  Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())), $backendId);
+                                  ['BACKENDID' => $backendId, 'MSG' => $e->getMessage()]), $backendId);
                     }
 
                     // Regular member adding loop
@@ -300,24 +300,24 @@ class CoreBackendMgmt {
                 } else {
                     // First get the host states
                     try {
-                        $aHosts = $this->getBackend($backendId)->getHostState(Array($OBJ->getName() => Array($OBJ)),
-                                                                              $options, array(), MEMBER_QUERY);
+                        $aHosts = $this->getBackend($backendId)->getHostState([$OBJ->getName() => [$OBJ]],
+                                                                              $options, [], MEMBER_QUERY);
                     } catch(BackendException $e) {
-                        $aHosts = Array();
+                        $aHosts = [];
                         $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
-                                               Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())), $backendId);
+                                               ['BACKENDID' => $backendId, 'MSG' => $e->getMessage()]), $backendId);
                     }
 
                     // Now fetch the service state counts for all hosts
-                    $aServiceState = Array();
+                    $aServiceState = [];
                     if($OBJ->getRecognizeServices()) {
                         try {
                             $aServiceStateCounts = $this->getBackend($backendId)->getHostMemberCounts(
-                                               Array($OBJ->getName() => Array($OBJ)), $options, array());
+                                               [$OBJ->getName() => [$OBJ]], $options, []);
                         } catch(BackendException $e) {}
                     }
 
-                    $members = Array();
+                    $members = [];
                     foreach($aHosts AS $name => $aHost) {
                         if(isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts']))
                             $service_states = $aServiceStateCounts[$name]['counts'];
@@ -383,16 +383,16 @@ class CoreBackendMgmt {
             foreach($OBJS AS $OBJ) {
                 // Fist get the host states for all the servicegroup members
                 try {
-                    $filters = Array(Array('key' => 'service_groups', 'op' => '>=', 'val' => 'name'));
-                    $aServices = $this->getBackend($backendId)->getServiceState(Array($OBJ->getName() => Array($OBJ)), $options, $filters, MEMBER_QUERY);
+                    $filters = [['key' => 'service_groups', 'op' => '>=', 'val' => 'name']];
+                    $aServices = $this->getBackend($backendId)->getServiceState([$OBJ->getName() => [$OBJ]], $options, $filters, MEMBER_QUERY);
                 } catch(BackendException $e) {
-                    $aServices = Array();
+                    $aServices = [];
                     $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
-                              Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())), $backendId);
+                              ['BACKENDID' => $backendId, 'MSG' => $e->getMessage()]), $backendId);
                 }
 
                 // Regular member adding loop
-                $members = Array();
+                $members = [];
                 foreach($aServices AS $host => $serviceList) {
                     foreach($serviceList AS $aService) {
                         $members[] = $this->createServiceObject($backendId, $host, $aService[DESCRIPTION],
@@ -422,25 +422,25 @@ class CoreBackendMgmt {
             foreach($OBJS AS $OBJ) {
                 // First get the host states for all the hostgroup members
                 try {
-                    $filters = Array(Array('key' => 'host_groups', 'op' => '>=', 'val' => 'name'));
-                    $aHosts = $this->getBackend($backendId)->getHostState(Array($OBJ->getName() => Array($OBJ)), $options, $filters, MEMBER_QUERY);
+                    $filters = [['key' => 'host_groups', 'op' => '>=', 'val' => 'name']];
+                    $aHosts = $this->getBackend($backendId)->getHostState([$OBJ->getName() => [$OBJ]], $options, $filters, MEMBER_QUERY);
                 } catch(BackendException $e) {
-                    $aHosts = Array();
+                    $aHosts = [];
                     $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
-                                           Array('BACKENDID' => $backendId, 'MSG' => $e->getMessage())), $backendId);
+                                           ['BACKENDID' => $backendId, 'MSG' => $e->getMessage()]), $backendId);
                 }
 
                 // Now fetch the service state counts for all hostgroup members
-                $aServiceState = Array();
+                $aServiceState = [];
                 if($OBJ->getRecognizeServices()) {
                     try {
-                        $filters = Array(Array('key' => 'host_groups', 'op' => '>=', 'val' => 'name'));
+                        $filters = [['key' => 'host_groups', 'op' => '>=', 'val' => 'name']];
                         $aServiceStateCounts = $this->getBackend($backendId)->getHostMemberCounts(
-                                           Array($OBJ->getName() => Array($OBJ)), $options, $filters);
+                                           [$OBJ->getName() => [$OBJ]], $options, $filters);
                     } catch(BackendException $e) {}
                 }
 
-                $members = Array();
+                $members = [];
                 foreach($aHosts AS $name => $aHost) {
                     if(isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts']))
                         $service_states = $aServiceStateCounts[$name]['counts'];
@@ -459,40 +459,40 @@ class CoreBackendMgmt {
         try {
             switch($type) {
                 case 'servicegroupMemberState':
-                    $filters = Array(Array('key' => 'groups', 'op' => '>=', 'val' => 'name'));
+                    $filters = [['key' => 'groups', 'op' => '>=', 'val' => 'name']];
                     $aResult = $this->getBackend($backendId)->getServicegroupStateCounts($aObjs, $options, $filters);
                 break;
                 case 'hostgroupMemberState':
-                    $filters = Array(Array('key' => 'groups', 'op' => '>=', 'val' => 'name'));
+                    $filters = [['key' => 'groups', 'op' => '>=', 'val' => 'name']];
                     $aResult = $this->getBackend($backendId)->getHostgroupStateCounts($aObjs, $options, $filters);
                 break;
                 case 'serviceState':
-                    $filters = Array(
-                        Array('key' => 'host_name', 'op' => '=', 'val' => 'name'),
-                        Array('key' => 'service_description', 'op' => '=', 'service_description')
-                    );
+                    $filters = [
+                        ['key' => 'host_name', 'op' => '=', 'val' => 'name'],
+                        ['key' => 'service_description', 'op' => '=', 'service_description']
+                    ];
                     $aResult = $this->getBackend($backendId)->getServiceState($aObjs, $options, $filters);
                 break;
                 case 'hostState':
-                    $filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
+                    $filters = [['key' => 'host_name', 'op' => '=', 'val' => 'name']];
                     $aResult = $this->getBackend($backendId)->getHostState($aObjs, $options, $filters);
                 break;
                 case 'hostMemberState':
-                    $filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
+                    $filters = [['key' => 'host_name', 'op' => '=', 'val' => 'name']];
                     $aResult = $this->getBackend($backendId)->getHostMemberCounts($aObjs, $options, $filters);
                 break;
                 case 'AGGR_MEMBER_STATE':
                     if (!$this->checkBackendFeature($backendId, 'getAggrStateCounts', false)) {
                         throw new BackendException(l('This type of object is not supported by this backend ([BACKENDID]).',
-                              Array('BACKENDID' => $backendId)), $backendId);
+                              ['BACKENDID' => $backendId]), $backendId);
                     } else {
-                        $filters = Array(Array('key' => 'aggr_name', 'op' => '=', 'val' => 'name'));
+                        $filters = [['key' => 'aggr_name', 'op' => '=', 'val' => 'name']];
                         $aResult = $this->getBackend($backendId)->getAggrStateCounts($aObjs, $options, $filters);
                     }
                 break;
             }
         } catch(BackendException $e) {
-            $aResult = Array();
+            $aResult = [];
             $msg = $e->getMessage();
         }
 
@@ -517,23 +517,23 @@ class CoreBackendMgmt {
                             $OBJ->setBackendProblem($msg, $backendId);
                         else
                             $OBJ->setBackendProblem(l('The object "[OBJ]" does not exist ([TYPE]).',
-                                                    Array('OBJ' => $name, 'TYPE' => $OBJ->getType())), $backendId);
+                                                    ['OBJ' => $name, 'TYPE' => $OBJ->getType()]), $backendId);
             }
         }
     }
 
     private function fetchHostMemberDetails($backendId, $options, $aObjs) {
         try {
-            $filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
+            $filters = [['key' => 'host_name', 'op' => '=', 'val' => 'name']];
             $aMembers = $this->getBackend($backendId)->getServiceState($aObjs, $options, $filters, MEMBER_QUERY);
         } catch(BackendException $e) {
-            $aMembers = Array();
+            $aMembers = [];
         }
 
         foreach($aObjs AS $name => $OBJS) {
             if(isset($aMembers[$name])) {
                 foreach($OBJS AS $OBJ) {
-                    $members = Array();
+                    $members = [];
                     foreach($aMembers[$name] AS $service => $details) {
                         $MOBJ = new NagVisService($backendId, $OBJ->getName(), $details[DESCRIPTION]);
                         $MOBJ->setState($details);
@@ -571,8 +571,10 @@ class CoreBackendMgmt {
             return true;
 
         if($printErr == 1)
-            throw new NagVisException(l('backendNotExists', Array('BACKENDID'   => $backendId,
-                                                                  'BACKENDTYPE' => cfg('backend_'.$backendId,'backendtype'))));
+            throw new NagVisException(l('backendNotExists', [
+                'BACKENDID'   => $backendId,
+                                                                  'BACKENDTYPE' => cfg('backend_'.$backendId,'backendtype')
+            ]));
         return false;
     }
 
@@ -586,11 +588,11 @@ class CoreBackendMgmt {
         list($statusBackend, $statusHost) = explode(':', $statusHost, 2);
 
         if($statusBackend == $backendId)
-            $this->aError[$backendId] = new BackendConnectionProblem(l('Configuration Error: The statusHost ([STATUSHOST]) is in same backend as the one to check.', Array('STATUSHOST' => $statusHost)));
+            $this->aError[$backendId] = new BackendConnectionProblem(l('Configuration Error: The statusHost ([STATUSHOST]) is in same backend as the one to check.', ['STATUSHOST' => $statusHost]));
 
         try {
-            $filters = Array(Array('key' => 'host_name', 'op' => '=', 'val' => 'name'));
-            $aObjs = Array($statusHost => Array(new NagVisHost($statusBackend, $statusHost)));
+            $filters = [['key' => 'host_name', 'op' => '=', 'val' => 'name']];
+            $aObjs = [$statusHost => [new NagVisHost($statusBackend, $statusHost)]];
             $aCounts = $this->getBackend($statusBackend)->getHostState($aObjs, 1, $filters);
         } catch(BackendException $e) {
             return true;
@@ -611,7 +613,7 @@ class CoreBackendMgmt {
     private function initializeBackend($backendId) {
         if(!$this->checkBackendExists($backendId, false)) {
             $this->aError[$backendId] = new BackendConnectionProblem(l('backendNotDefined',
-                                            Array('BACKENDID'   => $backendId)));
+                                            ['BACKENDID'   => $backendId]));
             return false;
         }
         /**
@@ -626,7 +628,7 @@ class CoreBackendMgmt {
          */
         $statusHost = cfg('backend_' . $backendId, 'statushost');
         if($statusHost != '' && !$this->backendAlive($backendId, $statusHost)) {
-            $this->aError[$backendId] = new BackendConnectionProblem(l('The backend is reported as dead by the statusHost ([STATUSHOST]).', Array('STATUSHOST' => $statusHost)));
+            $this->aError[$backendId] = new BackendConnectionProblem(l('The backend is reported as dead by the statusHost ([STATUSHOST]).', ['STATUSHOST' => $statusHost]));
             return false;
         }
 
@@ -657,8 +659,10 @@ class CoreBackendMgmt {
             return true;
         } else {
             if($printErr == 1) {
-                throw new NagVisException(l('backendNotInitialized', Array('BACKENDID' => $backendId,
-                    'BACKENDTYPE' => cfg('backend_'.$backendId,'backendtype'))));
+                throw new NagVisException(l('backendNotInitialized', [
+                    'BACKENDID' => $backendId,
+                    'BACKENDTYPE' => cfg('backend_'.$backendId,'backendtype')
+                ]));
             }
             return false;
         }
@@ -678,9 +682,11 @@ class CoreBackendMgmt {
         } else {
             if($printErr == 1) {
                 throw new NagVisException(l('The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend.',
-                                          Array('FEATURE'     => htmlentities($feature, ENT_COMPAT, 'UTF-8'),
+                                          [
+                                              'FEATURE'     => htmlentities($feature, ENT_COMPAT, 'UTF-8'),
                                                 'BACKENDID'   => $backendId,
-                                                'BACKENDTYPE' => cfg('backend_'.$backendId,'backendtype'))));
+                                                'BACKENDTYPE' => cfg('backend_'.$backendId,'backendtype')
+                                          ]));
             }
             return false;
         }

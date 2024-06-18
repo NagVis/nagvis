@@ -49,8 +49,8 @@ function has_var($key) {
  * FORM HANDLING
  */
 
-$form_keys   = array();
-$form_errors = array();
+$form_keys   = [];
+$form_errors = [];
 
 function get_checkbox($key, $default = null) {
     return (bool)req($key, $default);
@@ -65,7 +65,7 @@ function form_error($field, $msg) {
 // the form becaus they occur during rendering of the fields. Make
 // the message part an array in this case.
 function form_render_error($field, $msg) {
-    form_error($field, array(false, $msg));
+    form_error($field, [false, $msg]);
 }
 
 function get_error($key) {
@@ -131,7 +131,7 @@ function js_form_start($name) {
 function form_start($name, $target, $type = 'POST', $multipart = false) {
     global $form_keys, $form_errors, $form_name;
     $form_name = $name;
-    $form_keys = array();
+    $form_keys = [];
 
     // Add vars of "target" url to form_keys
     $url = parse_url($target);
@@ -310,7 +310,7 @@ function select($name, $options, $default = '', $onchange = '', $style = '', $si
 
     // for sequential arrays use the values for the keys and the values
     if (array_keys($options) === range(0, count($options) - 1)) {
-        $new_options = array();
+        $new_options = [];
         foreach ($options as $values)
             $new_options[$values] = $values;
         $options = $new_options;

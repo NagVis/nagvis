@@ -62,7 +62,7 @@ class NagVisIndexView {
         $TMPL = New FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
 
-        $aData = Array(
+        $aData = [
             'pageTitle'        => cfg('internal', 'title') . $this->sSubtitle,
             'htmlBase'         => cfg('paths', 'htmlbase'),
             'htmlJs'           => cfg('paths', 'htmljs'),
@@ -73,7 +73,7 @@ class NagVisIndexView {
             'customStylesheet' => $this->sCustomStylesheet,
             'headerMenu'       => $this->sHeaderMenu,
             'content'          => $this->sContent
-        );
+        ];
 
         // Build page based on the template file and the data array
         return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'index'), $aData);

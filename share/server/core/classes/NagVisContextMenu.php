@@ -172,8 +172,10 @@ class NagVisContextMenu {
             $this->code = str_replace('[lang_action_https]', l('Connect (HTTPS)'), $this->code);
         }
 
-        $action_urls = array("host_downtime_url", "host_ack_url",
-                             "service_downtime_url", "service_ack_url");
+        $action_urls = [
+            "host_downtime_url", "host_ack_url",
+                             "service_downtime_url", "service_ack_url"
+        ];
 
         foreach ($action_urls as $param) {
             if (cfg('defaults', $param) != "") {

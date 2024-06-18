@@ -56,7 +56,7 @@ class ViewMapManageTmpl {
                     throw new FieldInputError('name', l('A template with this name already exists.'));
 
                 // Get all options from the POST vars
-                $options = array('name' => $name);
+                $options = ['name' => $name];
                 for ($i = 0; $i < $num_options; $i++) {
                     $key = post('key_'.$i);
                     $val = post('val_'.$i);
@@ -134,7 +134,7 @@ class ViewMapManageTmpl {
 
             $templates   = $MAPCFG->getDefinitions('template');
             $obj_id      = $MAPCFG->getTemplateIdByName($name);
-            $options = array();
+            $options = [];
             foreach ($templates[$obj_id] as $key => $val)
                 if ($key != 'type' && $key != 'object_id' && $key != 'name')
                     $options[$key] = $val;
@@ -144,8 +144,8 @@ class ViewMapManageTmpl {
         if (is_action() && post('mode') == 'edit') {
             try {
                 // Get all options from the POST vars
-                $save_options = array('name' => $name);
-                $options = array();
+                $save_options = ['name' => $name];
+                $options = [];
                 for ($i = 0; $i < $num_options; $i++) {
                     $key = post('key_'.$i);
                     $val = post('val_'.$i);
@@ -176,7 +176,7 @@ class ViewMapManageTmpl {
         echo '<table class="mytable">';
         echo '<tr><td class="tdlabel">'.l('Name').'</td>';
         echo '<td class="tdfield">';
-        $choices = array('' => l('Please choose'));
+        $choices = ['' => l('Please choose')];
         foreach (array_keys($MAPCFG->getTemplateNames()) AS $tmpl_name)
             $choices[$tmpl_name] = $tmpl_name;
         select('name', $choices, '', 'updateForm(this.form)');
@@ -258,7 +258,7 @@ class ViewMapManageTmpl {
         echo '<table class="mytable">';
         echo '<tr><td class="tdlabel">'.l('Name').'</td>';
         echo '<td class="tdfield">';
-        $choices = array('' => l('Please choose'));
+        $choices = ['' => l('Please choose')];
         foreach (array_keys($MAPCFG->getTemplateNames()) AS $tmpl_name)
             $choices[$tmpl_name] = $tmpl_name;
         select('name', $choices, '', 'updateForm(this.form)');

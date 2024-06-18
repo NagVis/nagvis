@@ -28,7 +28,7 @@
 class NagVisUrlView {
     private $url = '';
     private $content = '';
-    private $aRotation = Array();
+    private $aRotation = [];
 
     /**
      * Class Constructor
@@ -60,10 +60,10 @@ class NagVisUrlView {
     }
 
     private function getProperties() {
-        return array(
+        return [
             'url'       => $this->url,
             'view_type' => 'url',
-        );
+        ];
     }
 
     /**
@@ -85,18 +85,18 @@ class NagVisUrlView {
             $url = substr($this->url, 7);
         }
 
-        $aData = Array(
+        $aData = [
             'generalProperties'  => $_MAINCFG->parseGeneralProperties(),
             'workerProperties'   => $_MAINCFG->parseWorkerProperties(),
             'rotationProperties' => json_encode($this->aRotation),
             'pageProperties'     => json_encode($this->getProperties()),
             'iframe'             => $iframe,
             'url'                => $url,
-            'fileAges'           => json_encode(Array(
+            'fileAges'           => json_encode([
                 'maincfg' => $_MAINCFG->getConfigFileAge(),
-            )),
-            'locales'            => json_encode(Array()),
-        );
+            ]),
+            'locales'            => json_encode([]),
+        ];
 
         // Build page based on the template file and the data array
         return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'url'), $aData);

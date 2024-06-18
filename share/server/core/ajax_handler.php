@@ -39,7 +39,7 @@ try {
     require('../../server/core/functions/core.php');
     $MHANDLER = new CoreModuleHandler();
     $_name    = 'core';
-    $_modules = Array(
+    $_modules = [
         'General',
         'Overview',
         'Map',
@@ -55,23 +55,23 @@ try {
         'Multisite',
         'User',
         'Action',
-    );
+    ];
     require('../../server/core/functions/index.php');
     exit(0);
 } catch(NagVisException $e) {
     echo $e;
 } catch(NagVisErrorException $e) {
-    echo json_encode(Array(
+    echo json_encode([
         'type'    => 'error',
         'message' => (string)$e,
         'title'   => l('Error: PHP Error'),
-    ));
+    ]);
 } catch(Exception $e) {
-    echo json_encode(Array(
+    echo json_encode([
         'type'    => 'error',
         'message' => $e->getMessage(),
         'title'   => l('Error: Unhandled Exception'),
-    ));
+    ]);
 }
 exit(1);
 

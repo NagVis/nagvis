@@ -12,7 +12,7 @@ function automap_check_graphviz($binary) {
      * configured path. Prefer the configured path.
      */
     $bFound = false;
-    foreach(Array(cfg('automap','graphvizpath').$binary, $binary) AS $path) {
+    foreach([cfg('automap','graphvizpath').$binary, $binary] AS $path) {
         // Check if dot can be found in path (If it is there $returnCode is 0, if not it is 1)
         exec('which '.$path.' 2>/dev/null', $arrReturn, $exitCode);
 
@@ -24,8 +24,10 @@ function automap_check_graphviz($binary) {
     }
 
     if(!$bFound) {
-        throw new NagVisException(l('graphvizBinaryNotFound', Array('NAME' => $binary,
-                                    'PATHS' => $_SERVER['PATH'].':'.cfg('automap','graphvizpath'))));
+        throw new NagVisException(l('graphvizBinaryNotFound', [
+            'NAME' => $binary,
+                                    'PATHS' => $_SERVER['PATH'].':'.cfg('automap','graphvizpath')
+        ]));
     }
 
     return true;
@@ -209,7 +211,7 @@ function graphviz_run($map_name, &$params, $cfg) {
             $binary = 'sfdp';
         break;
         default:
-            throw new NagVisException(l('Unknown render mode: [MODE]', Array('MODE' => $params['render_mode'])));
+            throw new NagVisException(l('Unknown render mode: [MODE]', ['MODE' => $params['render_mode']]));
         break;
     }
 
@@ -230,7 +232,7 @@ function graphviz_run($map_name, &$params, $cfg) {
 
     if($returnCode !== 0)
         throw new NagVisException(l('Graphviz call failed ([CODE]): [OUTPUT]<br /><br >Command was: "[CMD]"',
-               Array('CODE' => $returnCode, 'OUTPUT' => implode("\n",$arrMapCode), 'CMD' => $cmd)));
+               ['CODE' => $returnCode, 'OUTPUT' => implode("\n",$arrMapCode), 'CMD' => $cmd]));
 
     return implode("\n", $arrMapCode);
 }
@@ -294,7 +296,7 @@ function graphviz_parse(&$map_config, $imagemap) {
      */
 
     // Extract the positions from the html area definitions
-    $objCoords = Array();
+    $objCoords = [];
     foreach(explode("\n", $imagemap) AS $sLine) {
         $sLine = str_replace('&#45;', '-', $sLine);
         // Extract the area objects

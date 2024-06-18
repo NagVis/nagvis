@@ -34,17 +34,17 @@ class GlobalCore {
     protected static $AUTHORIZATION = null;
 
     private static $instance = null;
-    protected $iconsetTypeCache = Array();
-    protected $selectable_sources = array();
+    protected $iconsetTypeCache = [];
+    protected $selectable_sources = [];
 
-    public $statelessObjectTypes = Array(
+    public $statelessObjectTypes = [
         'textbox'   => true,
         'shape'     => true,
         'line'      => true,
         'container' => true,
-    );
+    ];
 
-    public $demoMaps = Array(
+    public $demoMaps = [
         'demo-germany',
         'demo-ham-racks',
         'demo-load',
@@ -52,7 +52,7 @@ class GlobalCore {
         'demo-overview',
         'demo-geomap',
         'demo-automap',
-    );
+    ];
 
     /**
      * Deny construct
@@ -88,7 +88,7 @@ class GlobalCore {
         global $_UMAINCFG;
         if(!isset($_UMAINCFG)) {
             $_UMAINCFG = new GlobalMainCfg();
-            $_UMAINCFG->setConfigFiles(Array(CONST_MAINCFG));
+            $_UMAINCFG->setConfigFiles([CONST_MAINCFG]);
             $_UMAINCFG->init(True, '-user-only');
         }
         return $_UMAINCFG;
@@ -167,7 +167,7 @@ class GlobalCore {
         } else {
             $MAINCFG = self::getMainCfg();
         }
-        $ret = Array();
+        $ret = [];
         foreach($MAINCFG->getSections() AS $name) {
             if(preg_match('/^backend_/i', $name)) {
                 $backend_id = $MAINCFG->getValue($name, 'backendid');
@@ -185,7 +185,7 @@ class GlobalCore {
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDefinedRotationPools() {
-        $ret = Array();
+        $ret = [];
         foreach(self::getMainCfg()->getSections() AS $name) {
             if(preg_match('/^rotation_/i', $name)) {
                 $id = self::getMainCfg()->getValue($name, 'rotationid');
@@ -201,7 +201,7 @@ class GlobalCore {
      */
     public function getPermittedRotationPools() {
         global $AUTHORISATION;
-        $list = array();
+        $list = [];
         foreach($this->getDefinedRotationPools() AS $poolName) {
             if($AUTHORISATION->isPermitted('Rotation', 'view', $poolName)) {
                 $list[$poolName] = $poolName;
@@ -214,7 +214,7 @@ class GlobalCore {
      * Gets all available custom actions
      */
     public function getDefinedCustomActions() {
-        $ret = Array();
+        $ret = [];
         foreach(self::getMainCfg()->getSections() AS $name) {
             if(preg_match('/^action_/i', $name)) {
                 $id = self::getMainCfg()->getValue($name, 'action_id');
@@ -233,7 +233,7 @@ class GlobalCore {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableAndEnabledLanguages() {
-        $aRet = Array();
+        $aRet = [];
 
         foreach($this->getAvailableLanguages() AS $val) {
             if(in_array($val, self::getMainCfg()->getValue('global', 'language_available'))) {
@@ -375,16 +375,18 @@ class GlobalCore {
         if(isset($this->iconsetTypeCache[$iconset]))
             $type = $this->iconsetTypeCache[$iconset];
         else
-            foreach(Array(path('sys', 'local',  'icons'),
-                          path('sys', 'global', 'icons')) AS $path)
+            foreach([
+                        path('sys', 'local',  'icons'),
+                          path('sys', 'global', 'icons')
+                    ] AS $path)
                 if(file_exists($path))
-                    foreach(Array('png', 'gif', 'jpg', 'svg') AS $ext)
+                    foreach(['png', 'gif', 'jpg', 'svg'] AS $ext)
                         if(file_exists($path . $iconset . '_ok.'.$ext))
                             return $ext;
 
         // Catch error when iconset filetype could not be fetched
         if($type === '')
-            throw new NagVisException(l('iconsetFiletypeUnknown', Array('ICONSET' => $iconset)));
+            throw new NagVisException(l('iconsetFiletypeUnknown', ['ICONSET' => $iconset]));
 
         $this->iconsetTypeCache[$iconset] = $type;
         return $type;
@@ -411,7 +413,7 @@ class GlobalCore {
     public function getPermittedMaps() {
         global $AUTHORISATION;
 
-        $list = array();
+        $list = [];
         foreach ($this->getAvailableMaps() AS $mapName) {
             // Check if the user is permitted to view this
             if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName))
@@ -430,7 +432,7 @@ class GlobalCore {
                 // Switch the auth cookie to this user
                 global $SHANDLER;
                 $SHANDLER->aquire();
-                $SHANDLER->set('authCredentials', array('user' => $_GET['filterUser'], 'password' => ''));
+                $SHANDLER->set('authCredentials', ['user' => $_GET['filterUser'], 'password' => '']);
                 $SHANDLER->set('authTrusted',     true);
                 $SHANDLER->commit();
             }
@@ -441,7 +443,7 @@ class GlobalCore {
     }
 
     public function getListMaps() {
-        $list = array();
+        $list = [];
         $maps = $this->getPermittedMaps();
         foreach ($maps AS $mapName) {
             $MAPCFG = new GlobalMapCfg($mapName);
@@ -482,8 +484,8 @@ class GlobalCore {
      */
     public function getAvailableGadgets() {
         return array_merge(
-            self::listDirectory(path('sys', 'global', 'gadgets'), MATCH_PHP_FILE, Array('gadgets_core.php' => true), null, null, null, true),
-            self::listDirectory(path('sys', 'local',  'gadgets'), MATCH_PHP_FILE, Array('gadgets_core.php' => true), null, null, null, false)
+            self::listDirectory(path('sys', 'global', 'gadgets'), MATCH_PHP_FILE, ['gadgets_core.php' => true], null, null, null, true),
+            self::listDirectory(path('sys', 'local',  'gadgets'), MATCH_PHP_FILE, ['gadgets_core.php' => true], null, null, null, false)
         );
     }
 
@@ -499,7 +501,7 @@ class GlobalCore {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function listDirectory($dir, $allowRegex = null, $ignoreList = null, $allowPartRegex = null, $returnPart = null, $setKey = null, $printErr = true) {
-        $files = Array();
+        $files = [];
 
         if($returnPart === null)
             $returnPart = 1;
@@ -539,7 +541,7 @@ class GlobalCore {
             return true;
 
         if($printErr)
-            throw new NagVisException(l('The path "[PATH]" does not exist.', Array('PATH' => $path)));
+            throw new NagVisException(l('The path "[PATH]" does not exist.', ['PATH' => $path]));
 
         return false;
     }
@@ -549,7 +551,7 @@ class GlobalCore {
             return true;
 
         if($printErr) {
-            throw new NagVisException(l('The path "[PATH]" is not readable.', Array('PATH' => $path)));
+            throw new NagVisException(l('The path "[PATH]" is not readable.', ['PATH' => $path]));
         }
 
         return false;
@@ -559,7 +561,7 @@ class GlobalCore {
             return true;
 
         if($printErr)
-            throw new NagVisException(l('The path "[PATH]" is not writeable.', Array('PATH' => $path)));
+            throw new NagVisException(l('The path "[PATH]" is not writeable.', ['PATH' => $path]));
 
         return false;
     }
@@ -675,7 +677,7 @@ class GlobalCore {
     // Returns localalized strings which are used by different pages
     // in the JS frontend and not only used on some specific pages.
     public function getGeneralJSLocales() {
-        return array(
+        return [
             'more items...'      => l('more items...'),
             'Create Object'      => l('Create Object'),
             // object types
@@ -696,7 +698,7 @@ class GlobalCore {
             'map'                => l('map'),
             'mapname'            => l('mapname'),
             'objectname'         => l('objectname'),
-        );
+        ];
     }
 
     // Sort array of map arrays by alias

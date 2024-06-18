@@ -29,11 +29,11 @@ class CoreUserCfg {
     private $profilesDir;
 
     // Optional list of value types to be fixed
-    private $types = Array(
+    private $types = [
       'sidebar'  => 'i',
       'header'   => 'b',
       'eventlog' => 'b',
-    );
+    ];
 
     public function __construct() {
         $this->profilesDir = cfg('paths', 'profiles');
@@ -41,7 +41,7 @@ class CoreUserCfg {
 
     public function doGet($onlyUserCfg = false) {
         global $AUTH, $AUTHORISATION;
-        $opts = Array();
+        $opts = [];
         if(!isset($AUTH) || !$AUTH->isAuthenticated())
             return $opts;
 
@@ -49,7 +49,7 @@ class CoreUserCfg {
             return $opts;
 
         // Fetch all profile files to load
-        $files = Array();
+        $files = [];
         if(!$onlyUserCfg && isset($AUTHORISATION))
             foreach($AUTHORISATION->getUserRoles($AUTH->getUserId()) AS $role)
                 $files[] = $role['name'].'.profile';
@@ -63,7 +63,7 @@ class CoreUserCfg {
 
             $a = json_decode(file_get_contents($f), true);
             if(!is_array($a))
-                throw new NagVisException(l('Invalid data in "[FILE]".', Array('FILE' => $f)));
+                throw new NagVisException(l('Invalid data in "[FILE]".', ['FILE' => $f]));
 
             $opts = array_merge($opts, $a);
         }
