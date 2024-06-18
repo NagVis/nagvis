@@ -40,7 +40,7 @@ class GlobalBackground {
     /**
      * Gets the name of the image file
      *
-     * @return	String File Name
+     * @return	string File Name
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getFileName() {
@@ -50,7 +50,7 @@ class GlobalBackground {
     /**
      * Gets the locationtype of the file
      *
-     * @return	String File Name
+     * @return	string File Name
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getFileType() {
@@ -85,8 +85,8 @@ class GlobalBackground {
     /**
      * Gets the background file
      *
-     * @param   Boolean Get web path or alternatively the physical path
-     * @return  String  HTML Path to background file
+     * @param   bool $bWebPath Get web path or alternatively the physical path
+     * @return  string  HTML Path to background file
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getFile($bWebPath = true) {
@@ -99,8 +99,8 @@ class GlobalBackground {
     /**
      * Checks for existing map image file
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function checkFileExists($printErr) {
@@ -111,8 +111,8 @@ class GlobalBackground {
     /**
      * Checks for readable map image file
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function checkFileReadable($printErr) {
@@ -123,8 +123,8 @@ class GlobalBackground {
     /**
      * Checks for writeable map image file
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function checkFileWriteable($printErr) {
@@ -135,8 +135,8 @@ class GlobalBackground {
     /**
      * Checks for writeable map image folder
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function checkFolderWriteable($printErr) {
@@ -147,8 +147,8 @@ class GlobalBackground {
     /**
      * Deletes the map image
      *
-     * @param	Boolean	$printErr
-     * @return	Boolean	Is Check Successful?
+     * @param	bool	$printErr
+     * @return	bool	Is Check Successful?
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     function deleteImage($printErr=1) {

@@ -132,7 +132,7 @@ class CoreModOverview extends CoreModule {
      * Then it is called for a list of maps to return the current state
      * for the listed objects.
      *
-     * @return	String  Json Code
+     * @return	string  Json Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      * FIXME: More cleanups, compacting and extraction of single parts
      */
@@ -242,7 +242,7 @@ class CoreModOverview extends CoreModule {
     /**
      * Parses the rotations for the overview page
      *
-     * @return	String  Json Code
+     * @return	string  Json Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseRotationsJson() {

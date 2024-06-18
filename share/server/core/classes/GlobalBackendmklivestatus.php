@@ -78,7 +78,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     /**
      * PUBLIC class constructor
      *
-     * @param   String        ID if the backend
+     * @param   string $backendId ID if the backend
    * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -154,7 +154,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Returns the valid config for this backend
      *
-     * @return	Array
+     * @return	array
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function getValidConfig() {
@@ -166,7 +166,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Checks if the socket exists
      *
-     * @return  Boolean
+     * @return  bool
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkSocketExists() {
@@ -278,8 +278,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Queries the livestatus socket and returns the result as array
      *
-     * @param   String   Query to send to the socket
-     * @return  Array    Results of the query
+     * @param   string $query Query to send to the socket
+     * @return  array    Results of the query
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -400,8 +400,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Method for reading a fixed amount of bytest from the socket
      *
-     * @param   Integer  Number of bytes to read
-     * @return  String   The read bytes
+     * @param   int $len Number of bytes to read
+     * @return  string   The read bytes
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function readSocket($len) {
@@ -429,8 +429,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Queries the livestatus socket for a single row
      *
-     * @param   String   Query to send to the socket
-     * @return  Array    Results of the query
+     * @param   string $query Query to send to the socket
+     * @return  array    Results of the query
    * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -448,8 +448,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Queries the livestatus socket for a single column in several rows
      *
-     * @param   String   Query to send to the socket
-     * @return  Array    Results of the query
+     * @param   string $query Query to send to the socket
+     * @return  array    Results of the query
    * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -469,8 +469,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Queries the livestatus socket for a list of objects
      *
-     * @param   String   Query to send to the socket
-     * @return  Array    Results of the query
+     * @param   string $query Query to send to the socket
+     * @return  array    Results of the query
    * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -509,10 +509,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Queries the livestatus socket for a list of objects
      *
-     * @param   String   Type of object
-     * @param   String   Name1 of the objecs
-     * @param   String   Name2 of the objecs
-     * @return  Array    Results of the query
+     * @param   string $type Type of object
+     * @param   string $name1Pattern Name1 of the objecs
+     * @param   string $name2Pattern Name2 of the objecs
+     * @return  array    Results of the query
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -556,9 +556,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Parses the filter array to backend
      *
-     * @param   Array     List of objects to query
-     * @param   Array     List of filters to apply
-     * @return  String    Parsed filters
+     * @param   array $objects List of objects to query
+     * @param   array $filters List of filters to apply
+     * @return  string    Parsed filters
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function parseFilter($objects, $filters, $isMemberQuery = false,
@@ -766,8 +766,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Queries the livestatus socket for the state of one or several hosts
      *
-     * @param   Array     List of objects to query
-     * @param   Array     List of filters to apply
+     * @param   array $objects List of objects to query
+     * @param   array $options List of filters to apply
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -879,8 +879,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * Queries the livestatus socket for a specific service
      * or all services of a host
      *
-     * @param   Array     List of objects to query
-     * @param   Array     List of filters to apply
+     * @param   array $objects List of objects to query
+     * @param   array $options List of filters to apply
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -1358,9 +1358,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * hostgroup and a well performing alternative to the existing recurisve
      * algorithm.
      *
-     * @param   Array     List of objects to query
-     * @param   Array     List of filters to apply
-     * @return  Array     List of states and counts
+     * @param   array $objects List of objects to query
+     * @param   array $options List of filters to apply
+     * @return  array     List of states and counts
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostgroupStateCounts($objects, $options, $filters) {
@@ -1381,9 +1381,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * servicegroup and a well performing alternative to the existing recurisve
      * algorithm.
      *
-     * @param   Array     List of objects to query
-     * @param   Array     List of filters to apply
-     * @return  Array     List of states and counts
+     * @param   array $objects List of objects to query
+     * @param   array $options List of filters to apply
+     * @return  array     List of states and counts
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServicegroupStateCounts($objects, $options, $filters) {
@@ -1453,7 +1453,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Queries the livestatus socket for all hosts without parent
      *
-     * @return  Array    List of hostnames which have no parent
+     * @return  array    List of hostnames which have no parent
    * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -1466,8 +1466,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Queries the livestatus socket for all direct childs of a host
      *
-     * @param   String   Hostname
-     * @return  Array    List of hostnames
+     * @param   string $hostName Hostname
+     * @return  array    List of hostnames
    * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -1480,8 +1480,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Queries the livestatus socket for all direct parents of a host
      *
-     * @param   String   Hostname
-     * @return  Array    List of hostnames
+     * @param   string   Hostname
+     * @return  array    List of hostnames
    * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -1560,8 +1560,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Queries the livestatus socket for all direct childs dependencies of a host
      *
-     * @param   String   Hostname
-     * @return  Array    List of hostnames
+     * @param   string $hostName Hostname
+     * @return  array    List of hostnames
      * @author  Thibault Cohen <thibault.cohen@savoirfairelinux.com>
      */
     public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact=false) {
@@ -1591,8 +1591,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * Queries the livestatus socket for all direct parents of a host
      *
-     * @param   String   Hostname
-     * @return  Array    List of hostnames
+     * @param   string   Hostname
+     * @return  array    List of hostnames
    * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */

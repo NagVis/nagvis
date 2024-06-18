@@ -143,7 +143,7 @@ class NagVisStatefulObject extends NagVisObject {
      * object it only calls the getMembers() function. It is useful to
      * exclude uninteresting objects on maps.
      *
-     * @return  Array  Array of child objects
+     * @return  array  Array of child objects
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getStateRelevantMembers() {
@@ -154,7 +154,7 @@ class NagVisStatefulObject extends NagVisObject {
      * Method to get details about the used icon image.
      * This is mainly a wrapper arround getimagesize with caching code.
      *
-     * @return  Array  Attributes/Details about the image
+     * @return  array  Attributes/Details about the image
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getIconDetails() {
@@ -175,7 +175,7 @@ class NagVisStatefulObject extends NagVisObject {
      *
      * Get method for the only hard states option
      *
-     * @return	Boolean		True: Only hard states, False: Not only hard states
+     * @return	bool		True: Only hard states, False: Not only hard states
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getOnlyHardStates() {
@@ -187,7 +187,7 @@ class NagVisStatefulObject extends NagVisObject {
      *
      * Get method for the recognize services option
      *
-     * @return	Boolean		True: Recognize service states, False: Not recognize service states
+     * @return	bool		True: Recognize service states, False: Not recognize service states
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getRecognizeServices() {
@@ -206,7 +206,7 @@ class NagVisStatefulObject extends NagVisObject {
      *
      * Get method for the summary state of this object and members/childs
      *
-     * @return	String		Summary state
+     * @return	string		Summary state
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getSummaryState() {
@@ -264,7 +264,7 @@ class NagVisStatefulObject extends NagVisObject {
      *
      * Get method for the summary output of this object and members/childs
      *
-     * @return	String		Summary output
+     * @return	string		Summary output
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getSummaryOutput() {
@@ -276,7 +276,7 @@ class NagVisStatefulObject extends NagVisObject {
      *
      * Get method for the acknowledgement state of this object and members/childs
      *
-     * @return	Boolean		True: Acknowledged, False: Not Acknowledged
+     * @return	bool		True: Acknowledged, False: Not Acknowledged
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getSummaryAcknowledgement() {
@@ -288,7 +288,7 @@ class NagVisStatefulObject extends NagVisObject {
      *
      * Get method for the duration of the current state
      *
-     * @return	String		Time in the configured format
+     * @return	string		Time in the configured format
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getStateDuration() {
@@ -323,7 +323,7 @@ class NagVisStatefulObject extends NagVisObject {
      *
      * Get method for the type of the current state
      *
-     * @return	String		Type of state (HARD/SOFT)
+     * @return	string		Type of state (HARD/SOFT)
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getStateType() {
@@ -373,7 +373,7 @@ class NagVisStatefulObject extends NagVisObject {
      *
      * Gets the state information of the object
      *
-     * @return	Array		Object configuration
+     * @return	array		Object configuration
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getObjectStateInformations($bFetchChilds=true) {
@@ -445,7 +445,7 @@ class NagVisStatefulObject extends NagVisObject {
      *
      * Parses the object in json format
      *
-     * @return	String  JSON code of the object
+     * @return	string  JSON code of the object
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseJson() {

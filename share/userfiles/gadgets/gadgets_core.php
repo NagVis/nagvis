@@ -76,8 +76,8 @@
  * The function is originally taken from Nagios::Plugin::Performance
  * Thanks to Gavin Carr and Ton Voon
  *
- * @param   String  Nagios performance data
- * @return  Array   Array which contains parsed performance data information
+ * @param   string $sPerfdata Nagios performance data
+ * @return  array   Array which contains parsed performance data information
  * @author      Lars Michelsen <lm@larsmichelsen.com>
  */
 function parsePerfdata($sPerfdata) {
@@ -153,7 +153,7 @@ function parsePerfdata($sPerfdata) {
 /**
  * Prints out an error box
  *
- * @param       String  $msg    String with error message
+ * @param       string  $msg    String with error message
  * @author      Lars Michelsen <lm@larsmichelsen.com>
  */
 function errorBox($msg) {

@@ -55,7 +55,6 @@ class GlobalMainCfg {
     /**
      * Class Constructor
      *
-     * @param	Array $configFile    List of paths to configuration files
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct() {
@@ -2024,8 +2023,9 @@ class GlobalMainCfg {
     /**
      * Gets the base path
      *
-     * @param	Boolean $printErr
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param string $base
+     * @param string $htmlBase
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function setPathsByBase($base, $htmlBase) {
         $this->validConfig['paths']['cfg']['default']                = $base.'etc/';
@@ -2070,10 +2070,9 @@ class GlobalMainCfg {
     /**
      * Gets the base path
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
-     * @author	Roman Kyrylych <rkyrylych@op5.com>
+     * @return    string
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
+     * @author    Roman Kyrylych <rkyrylych@op5.com>
      */
     private function getBasePath() {
         // Go 3 levels up from nagvis/share/nagvis to nagvis base path
@@ -2085,8 +2084,8 @@ class GlobalMainCfg {
     /**
      * Reads the specified config file
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function readConfig($configFile, $printErr=1, $isUserMainCfg = False) {
@@ -2261,8 +2260,8 @@ class GlobalMainCfg {
     /**
      * Checks if the main config file is valid
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkMainConfigIsValid($printErr) {
@@ -2390,7 +2389,7 @@ class GlobalMainCfg {
     /**
      * Returns the last modification time of the configuration file
      *
-     * @return	Integer	Unix Timestamp
+     * @return	int	Unix Timestamp
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getConfigFileAge() {
@@ -2405,8 +2404,8 @@ class GlobalMainCfg {
     /**
      * Public Adaptor for the isCached method of CACHE object
      *
-     * @return  Boolean  Result
-     * @return  Integer  Unix timestamp of cache creation time or -1 when not cached
+     * @return  bool  Result
+     * @return  int  Unix timestamp of cache creation time or -1 when not cached
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function isCached() {
@@ -2416,10 +2415,10 @@ class GlobalMainCfg {
     /**
      * Sets a config setting
      *
-     * @param	String	$sec	Section
-     * @param	String	$var	Variable
-     * @param	String	$val	Value
-     * @return	Boolean	Is Successful?
+     * @param	string	$sec	Section
+     * @param	string	$var	Variable
+     * @param	string	$val	Value
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setValue($sec, $var, $val) {
@@ -2554,7 +2553,7 @@ class GlobalMainCfg {
     /**
      * A getter to provide all section names of main configuration
      *
-     * @return  Array  List of all sections as values
+     * @return  array  List of all sections as values
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getSections() {
@@ -2568,9 +2567,9 @@ class GlobalMainCfg {
     /**
      * Sets a runtime config value
      *
-     * @param	String	$var	Variable
-     * @param	String	$val	Value
-     * @return	Boolean	Is Successful?
+     * @param	string	$var	Variable
+     * @param	string	$val	Value
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setRuntimeValue($var, $val) {
@@ -2581,8 +2580,8 @@ class GlobalMainCfg {
     /**
      * Gets a runtime config value
      *
-     * @param	String	$var	Variable
-     * @return	String	$val	Value
+     * @param	string	$var	Variable
+     * @return	string	$val	Value
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getRuntimeValue($var) {
@@ -2592,7 +2591,7 @@ class GlobalMainCfg {
     /**
      * Parses general settings
      *
-     * @return	String 	JSON Code
+     * @return	string 	JSON Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseGeneralProperties() {
@@ -2631,7 +2630,7 @@ class GlobalMainCfg {
     /**
      * Parses the settings for the javascript worker
      *
-     * @return	String 	JSON Code
+     * @return	string 	JSON Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseWorkerProperties() {
@@ -2684,7 +2683,7 @@ class GlobalMainCfg {
     /**
      * Returns an array with the state weight configuration
      *
-     * @return  Array
+     * @return  array
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getStateWeight() {
@@ -2711,8 +2710,8 @@ class GlobalMainCfg {
     /**
      * Gets all information about an object type
      *
-     * @param   String  Type to get the information for
-     * @return  Array   The validConfig array
+     * @param   string $type Type to get the information for
+     * @return  array   The validConfig array
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     function getValidObjectType($type) {
@@ -2722,7 +2721,7 @@ class GlobalMainCfg {
     /**
      * Gets the valid configuration array
      *
-     * @return	Array The validConfig array
+     * @return	array The validConfig array
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     function getValidConfig() {
@@ -2732,7 +2731,7 @@ class GlobalMainCfg {
     /**
      * Gets the configuration array
      *
-     * @return	Array The validConfig array
+     * @return	array The validConfig array
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     function getConfig() {
@@ -2742,8 +2741,8 @@ class GlobalMainCfg {
     /**
      * Sets a config section in the config array
      *
-     * @param	String	$sec	Section
-     * @return	Boolean	Is Successful?
+     * @param	string	$sec	Section
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     function setSection($sec) {
@@ -2780,8 +2779,8 @@ class GlobalMainCfg {
     /**
      * Deletes a config section in the config array
      *
-     * @param	String	$sec	Section
-     * @return	Boolean	Is Successful?
+     * @param	string	$sec	Section
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     function delSection($sec) {
@@ -2794,7 +2793,7 @@ class GlobalMainCfg {
     /**
      * Writes the config file completly from array $this->configFile
      *
-     * @return	Boolean	Is Successful?
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     function writeConfig() {
@@ -2893,8 +2892,8 @@ class GlobalMainCfg {
     /**
      * Checks for writeable config file
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     function checkNagVisConfigWriteable($printErr) {
@@ -2904,8 +2903,8 @@ class GlobalMainCfg {
     /**
    * Transforms a string option to an array with trimmed values
    *
-   * @param  String  Comma separated value
-   * @return Array   Exploded Array
+   * @param  string $val Comma separated value
+   * @return array   Exploded Array
    */
     private function stringToArray($val) {
         // Explode comma separated list to array

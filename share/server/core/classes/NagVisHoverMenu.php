@@ -82,7 +82,7 @@ class NagVisHoverMenu {
      *
      * Reads the contents of the hover template file
      *
-     * @return	String		HTML Code for the hover menu
+     * @return    bool        HTML Code for the hover menu
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function readTemplate() {
@@ -206,8 +206,8 @@ class NagVisHoverMenu {
      *
      * Checks if the requested hover template file is readable
      *
-     * @param		Boolean		Switch for enabling/disabling error messages
-     * @return	Boolean		Check Result
+     * @param		bool $printErr Switch for enabling/disabling error messages
+     * @return	bool		Check Result
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkTemplateReadable($printErr) {
@@ -219,8 +219,8 @@ class NagVisHoverMenu {
      *
      * Checks if the requested hover template file exists
      *
-     * @param		Boolean		Switch for enabling/disabling error messages
-     * @return	Boolean		Check Result
+     * @param		bool $printErr Switch for enabling/disabling error messages
+     * @return	bool		Check Result
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkTemplateExists($printErr) {
