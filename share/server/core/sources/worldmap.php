@@ -373,8 +373,8 @@ function worldmap_update_object($MAPCFG, $map_name, &$map_config, $obj_id, $inse
         $y = explode(',', $obj['y']);
         $lat  = $x[0];
         $lng  = $y[0];
-        $lat2 = $x[count($x)-1];
-        $lng2 = $y[count($y)-1];
+        $lat2 = $x[count($x) - 1];
+        $lng2 = $y[count($y) - 1];
     }
 
     return worldmap_db_update_object($obj_id, $lat, $lng, $obj, $lat2, $lng2, $insert);

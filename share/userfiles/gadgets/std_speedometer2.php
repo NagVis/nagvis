@@ -112,8 +112,8 @@ for ($i=1; $i<=3; $i++) {
 	$degrees = deg2rad (-45 * $i + 360);
 	$bediffy[$i] = sin ($degrees) * $outerrad2;
 	$bediffx[$i] = cos ($degrees) * $outerrad2;
-	$bediffy1[$i]= sin ($degrees) * ($outerrad-5);
-	$bediffx1[$i]= cos ($degrees) * ($outerrad-5);
+	$bediffy1[$i]= sin ($degrees) * ($outerrad - 5);
+	$bediffx1[$i]= cos ($degrees) * ($outerrad - 5);
 }
 
 //==========================================
@@ -212,7 +212,7 @@ for ($i=0; $i < $pdc; $i++){
 		}
 		// "highlight" graph if non-ok value
 		if ($colour != '') {
-			imagefilledrectangle ($img, $offX,$offY,$offX+$imgwidth-1,$centery+20,$colour);
+			imagefilledrectangle ($img, $offX,$offY,$offX + $imgwidth - 1,$centery + 20,$colour);
 		}
 		
 		//================
@@ -272,17 +272,17 @@ for ($i=0; $i < $pdc; $i++){
 		}
 		
 		// Borders
-		imagearc($img, $centerx, $centery+1, $outerdia+2, $outerdia+2, 180, 0, $oBlack);
+		imagearc($img, $centerx, $centery + 1, $outerdia + 2, $outerdia + 2, 180, 0, $oBlack);
 		imagefilledarc($img, $centerx, $centery, $innerrad, $innerrad, 180, 0, $oBlue, IMG_ARC_EDGED);
 		
 		//===================
 		// Create tacho line.
 		//===================
 		
-		$degrees = deg2rad(-$p+360);
+		$degrees = deg2rad(-$p + 360);
 		$diffx = cos ($degrees) * $outerrad2;
 		$diffy = sin ($degrees) * $outerrad2;
-		imagefilledarc($img, ($centerx-$diffx), ($centery+$diffy), $outerdia2, $outerdia2, ($p-1), ($p+1), $oBlue, IMG_ARC_EDGED);
+		imagefilledarc($img, ($centerx - $diffx), ($centery + $diffy), $outerdia2, $outerdia2, ($p - 1), ($p + 1), $oBlue, IMG_ARC_EDGED);
 		
 		//===================
 		// Labels
@@ -290,22 +290,22 @@ for ($i=0; $i < $pdc; $i++){
 		
 		// Speedometer labels
 		
-		imageline($img, ($centerx-$outerrad-5), ($centery+1), ($centerx+$outerrad+5), ($centery+1), $oBlack);
-		imagestring($img, 1, ($centerx-$outerrad-15), ($centery-6), 0, $oBlack);
-		imagestring($img, 1, ($centerx+$outerrad+8), ($centery-6), "$limit $uom", $oBlack);
+		imageline($img, ($centerx - $outerrad - 5), ($centery + 1), ($centerx + $outerrad + 5), ($centery + 1), $oBlack);
+		imagestring($img, 1, ($centerx - $outerrad - 15), ($centery - 6), 0, $oBlack);
+		imagestring($img, 1, ($centerx + $outerrad + 8), ($centery - 6), "$limit $uom", $oBlack);
 		
 		$count = 1;
 		$iOffsetX = -10;
 		for($d=1; $d<=3; $d++) {
 			
-			imageline($img, ($centerx-$bediffx[$d]), ($centery+$bediffy[$d]),($centerx-$bediffx1[$d]), ($centery+$bediffy1[$d]), $oBlack);
-			imagestring($img , 1 ,($centerx-$bediffx[$d]+$iOffsetX-8), ($centery+$bediffy[$d]-10) , ($limit/4*$d) , $oBlack);
+			imageline($img, ($centerx - $bediffx[$d]), ($centery + $bediffy[$d]),($centerx - $bediffx1[$d]), ($centery + $bediffy1[$d]), $oBlack);
+			imagestring($img , 1 ,($centerx - $bediffx[$d] + $iOffsetX - 8), ($centery + $bediffy[$d] - 10) , ($limit/4*$d) , $oBlack);
 			
 			$iOffsetX = $iOffsetX + 10;
 		}
 
 		if ($current == 1) {
-			imagestring($img, 1, $offX, $imgheight+$offY-10, $label . ': ' . $value, $oBlack);
+			imagestring($img, 1, $offX, $imgheight + $offY - 10, $label . ': ' . $value, $oBlack);
 		}
 		$offG++;
 	}

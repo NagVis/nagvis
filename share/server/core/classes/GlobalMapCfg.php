@@ -413,12 +413,12 @@ class GlobalMapCfg {
             // there is an open object
             if($sObjType === '') {
                 throw new NagVisException(l('Attribute definition out of object. In map [MAPNAME] at line #[LINE].',
-                                          ['MAPNAME' => $this->name, 'LINE' => $l+1]));
+                                          ['MAPNAME' => $this->name, 'LINE' => $l + 1]));
             }
 
             $iDelimPos = strpos($file[$l], '=');
             $sKey = trim(substr($file[$l],0,$iDelimPos));
-            $sValue = trim(substr($file[$l],($iDelimPos+1)));
+            $sValue = trim(substr($file[$l],($iDelimPos + 1)));
 
             if(isset($ignoreKeys[$sKey])) {
                 continue;
@@ -1747,7 +1747,7 @@ class GlobalMapCfg {
             $delimPos = strpos($f[$i], '=');
             if($delimPos !== false) {
                 $key   = trim(substr($f[$i], 0, $delimPos));
-                $value = trim(substr($f[$i], ($delimPos+1)));
+                $value = trim(substr($f[$i], ($delimPos + 1)));
                 if($key === 'object_id' && $value === $id) {
                     $inObj = true;
                     continue;
