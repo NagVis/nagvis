@@ -281,7 +281,7 @@ if ($show_header == 1) {
         foreach ($stats as $stat => $value){
             if (strpos($stat, $prefix . "_") === 0) {
                 if ($value > 0 || $show_all == 1) {
-                    $colspan ++;
+                    $colspan++;
                 }
             }
         }

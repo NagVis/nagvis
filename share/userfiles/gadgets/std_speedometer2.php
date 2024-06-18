@@ -108,7 +108,7 @@ $innerrad  = $outerdia / 10;
  */
 
 // calculate positions of labels
-for ($i=1; $i<=3; $i++) {
+for ($i = 1; $i <= 3; $i++) {
 	$degrees = deg2rad (-45 * $i + 360);
 	$bediffy[$i] = sin ($degrees) * $outerrad2;
 	$bediffx[$i] = cos ($degrees) * $outerrad2;
@@ -149,7 +149,7 @@ $rows = ceil($pdc / $cols);	// max. no. of rows with graphs
 // Create tacho image.
 //====================
 
-$img=imagecreatetruecolor($imgwidth * $cols, $imgheight * $rows);
+$img = imagecreatetruecolor($imgwidth * $cols, $imgheight * $rows);
 
 $oBackground = imagecolorallocate($img, 122, 23, 211);
 $oBlack = imagecolorallocate($img, 0, 0, 0);
@@ -167,7 +167,7 @@ if ($label == 1) {
 	imagestring($img, 1, 0, 8, $aOpts['name2'], $oBlack);	// print service description
 }
 
-for ($i=0; $i < $pdc; $i++){
+for ($i = 0; $i < $pdc; $i++){
 	$label = preg_replace('(.*::)','',$aPerfdata[$i]['label']);	// omit check_multi description
 	if (preg_match("/$string/",$label)) {
 		$colour = '';
@@ -296,7 +296,7 @@ for ($i=0; $i < $pdc; $i++){
 		
 		$count = 1;
 		$iOffsetX = -10;
-		for($d=1; $d<=3; $d++) {
+		for($d = 1; $d <= 3; $d++) {
 			
 			imageline($img, ($centerx - $bediffx[$d]), ($centery + $bediffy[$d]),($centerx - $bediffx1[$d]), ($centery + $bediffy1[$d]), $oBlack);
 			imagestring($img , 1 ,($centerx - $bediffx[$d] + $iOffsetX - 8), ($centery + $bediffy[$d] - 10) , ($limit / 4 * $d) , $oBlack);

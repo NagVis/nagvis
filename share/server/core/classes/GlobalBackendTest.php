@@ -882,7 +882,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @return  array    List of hostnames
      * @author  Thibault Cohen <thibault.cohen@savoirfairelinux.com>
      */
-    public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact=false) {
+    public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact = false) {
         return $this->getDirectChildNamesByHostName($hostName);
     }
 
@@ -894,7 +894,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
    * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact=false) {
+    public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact = false) {
         return $this->getDirectParentNamesByHostName($hostName);
     }
 }

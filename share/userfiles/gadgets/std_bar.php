@@ -154,7 +154,7 @@ $rows = ceil($pdc / $cols);   // max. no. of rows with graphs
 // Create image
 //====================
 
-$img=imagecreatetruecolor($imgwidth * $cols, $imgheight * $rows);
+$img = imagecreatetruecolor($imgwidth * $cols, $imgheight * $rows);
 
 $oBackground = imagecolorallocate($img, 122, 23, 211);
 $oBlack = imagecolorallocate($img, 0, 0, 0);
@@ -169,7 +169,7 @@ imagefill($img, 0, 0, $oBackground);
 imagecolortransparent($img, $oBackground);
 
 $offG = 0;              // current graph
-for ($i=0; $i < $pdc; $i++){
+for ($i = 0; $i < $pdc; $i++){
    $desc = preg_replace('(.*::)','',$aPerfdata[$i]['label']);  // omit check_multi description
    if (preg_match("/$string/",$desc)) {
       $colour = '';

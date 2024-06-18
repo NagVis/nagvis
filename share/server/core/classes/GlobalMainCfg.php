@@ -2090,7 +2090,7 @@ class GlobalMainCfg {
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function readConfig($configFile, $printErr=1, $isUserMainCfg = False) {
+    private function readConfig($configFile, $printErr = 1, $isUserMainCfg = False) {
         $numComments = 0;
         $sec = '';
 
@@ -2161,7 +2161,7 @@ class GlobalMainCfg {
                 $val = trim(implode('=', $arr));
 
                 // remove " at beginning and at the end of the string
-                if ((substr($val,0,1) == '"') && (substr($val,-1,1)=='"')) {
+                if ((substr($val,0,1) == '"') && (substr($val,-1,1) == '"')) {
                     $val = substr($val,1,strlen($val) - 2);
                 }
 
@@ -2536,7 +2536,7 @@ class GlobalMainCfg {
      * Returns the value of a main configuration option. Either the hard coded default
      * value, or the configured one
      */
-    public function getValue($sec, $var, $ignoreDefault=false, $ignoreUserConfig=false) {
+    public function getValue($sec, $var, $ignoreDefault = false, $ignoreUserConfig = false) {
         if ($ignoreUserConfig && $this->preUserConfig !== null) {
             $arr = $this->preUserConfig;
         } else {

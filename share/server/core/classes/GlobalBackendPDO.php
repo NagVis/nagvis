@@ -136,7 +136,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
 
             // Check that Nagios reports itself as running
             if ($nagiosstate['is_currently_running'] != 1) {
-                throw new BackendConnectionProblem(l('nagiosNotRunning', ['BACKENDID' =>$this->backendId]));
+                throw new BackendConnectionProblem(l('nagiosNotRunning', ['BACKENDID' => $this->backendId]));
             }
 
             // Be suspicious and check that the data at the db is not older that "maxTimeWithoutUpdate" too
@@ -232,7 +232,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param	string $type, string $name1Pattern, string $name2Pattern
      * @return	array $ret
      */
-    public function getObjects($type,$name1Pattern='',$name2Pattern='') {
+    public function getObjects($type,$name1Pattern = '',$name2Pattern = '') {
         $ret = [];
 
         $max = 1;
@@ -1357,7 +1357,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param   string $hostName Hostname
      * @return  array    List of hostnames
      */
-    public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact=false) {
+    public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact = false) {
         return $this->getDirectChildNamesByHostName($hostName);
     }
     
@@ -1367,7 +1367,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param   string   Hostname
      * @return  array    List of hostnames
      */
-    public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact=false) {
+    public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact = false) {
         return $this->getDirectParentNamesByHostName($hostName);
     }
 

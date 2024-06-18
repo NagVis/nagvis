@@ -316,7 +316,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $write = fwrite($this->SOCKET, $query);
         error_reporting($oldLevel);
 
-        if($write=== false) {
+        if($write === false) {
             throw new BackendConnectionProblem(l('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
                 [
                     'BACKENDID' => $this->backendId,
@@ -1603,7 +1603,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @return  array    List of hostnames
      * @author  Thibault Cohen <thibault.cohen@savoirfairelinux.com>
      */
-    public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact=false) {
+    public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact = false) {
         $query = "GET hosts\nColumns: child_dependencies\nFilter: name = " . $hostName . "\n";
         $raw_result = $this->queryLivestatusSingleColumn($query);
         if ($min_business_impact) {
@@ -1634,7 +1634,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
    * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact=false) {
+    public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact = false) {
         $query = "GET hosts\nColumns: parent_dependencies\nFilter: name = " . $hostName . "\n";
         $raw_result = $this->queryLivestatusSingleColumn($query);
         if ($min_business_impact) {

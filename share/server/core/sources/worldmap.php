@@ -483,9 +483,9 @@ function changed_worldmap($MAPCFG, $compare_time) {
 }
 
 function swap(&$x, &$y) {
-    $tmp=$x;
-    $x=$y;
-    $y=$tmp;
+    $tmp = $x;
+    $x = $y;
+    $y = $tmp;
 }
 
 
