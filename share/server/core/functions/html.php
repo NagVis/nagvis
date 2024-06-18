@@ -162,7 +162,7 @@ function form_start($name, $target, $type = 'POST', $multipart = false) {
     hidden('_update', '0');
 }
 
-function form_end($keep_context=true) {
+function form_end($keep_context = true) {
     global $form_name;
     if ($keep_context) {
         hidden_vars();

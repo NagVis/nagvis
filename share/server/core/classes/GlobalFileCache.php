@@ -99,7 +99,7 @@ class GlobalFileCache {
      * @return  bool	Is Successful?
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function writeCache($contents, $printErr=1) {
+    public function writeCache($contents, $printErr = 1) {
         // Perform file writeable check only when cache file exists
         // When no cache file exists check if file can be created in directory
         if((!$this->checkCacheFileExists(0)

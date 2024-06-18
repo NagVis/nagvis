@@ -390,7 +390,7 @@ class NagVisStatefulObject extends NagVisObject {
      * @return	array		Object configuration
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getObjectStateInformations($bFetchChilds=true) {
+    public function getObjectStateInformations($bFetchChilds = true) {
         $arr = [];
 
         $arr['state']                         = state_str(val($this->state, STATE));
@@ -829,7 +829,7 @@ class NagVisStatefulObject extends NagVisObject {
         // Loop all object to gather the worst state and set it as summary
         // state of the current object
         foreach($objects AS $OBJ) {
-            if ($this->getType()=='map' && $OBJ->getType()=='map' && $this instanceof NagVisMapObj) {
+            if ($this->getType() == 'map' && $OBJ->getType() == 'map' && $this instanceof NagVisMapObj) {
                 if ($this->MAPCFG->getValue(0, 'ignore_linked_maps_summary_state') != 0) {
                     continue;
                 }
