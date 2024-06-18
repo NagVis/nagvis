@@ -125,8 +125,8 @@ function show_form_render_error($name) {
 // Starts a HTML form which is submitted (and can be updated) via AJAX call
 function js_form_start($name) {
     form_start($name, 'javascript:submitForm(\'' . cfg('paths', 'htmlbase')
-                     .'/server/core/ajax_handler.php?mod=' . $_REQUEST['mod']
-                     .'&act=' . $_REQUEST['act'] . '\', \'' . $name . '\');');
+                     . '/server/core/ajax_handler.php?mod=' . $_REQUEST['mod']
+                     . '&act=' . $_REQUEST['act'] . '\', \'' . $name . '\');');
 }
 
 function form_start($name, $target, $type = 'POST', $multipart = false) {
@@ -150,7 +150,7 @@ function form_start($name, $target, $type = 'POST', $multipart = false) {
     }
 
     echo '<form id="' . $name . '" name="' . $name . '" action="' . escape_html($target) . '" '
-        .'method="' . $type . '"' . $multipart . '>' . N;
+        . 'method="' . $type . '"' . $multipart . '>' . N;
 
     if (submitted($form_name) || !submitted()) {
         foreach ($form_errors as $field => $message) {

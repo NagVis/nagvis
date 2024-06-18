@@ -226,7 +226,7 @@ function graphviz_run($map_name, &$params, $cfg) {
 
     // Parse map
     $cmd = $automap_graphviz_path . $binary
-           .' -Tcmapx ' . cfg('paths', 'var') . $map_name . '.dot 2>&1';
+           . ' -Tcmapx ' . cfg('paths', 'var') . $map_name . '.dot 2>&1';
 
     exec($cmd, $arrMapCode, $returnCode);
 

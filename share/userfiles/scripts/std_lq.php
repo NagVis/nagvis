@@ -194,7 +194,7 @@ try {
 
     exit(0);
 } catch(NagVisException $e) {
-    echo 'Exception (std_lq.php): ' .$e->getMessage();
+    echo 'Exception (std_lq.php): ' . $e->getMessage();
 }
 exit(1);
 
