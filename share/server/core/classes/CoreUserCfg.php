@@ -53,8 +53,9 @@ class CoreUserCfg {
         // Fetch all profile files to load
         $files = [];
         if(!$onlyUserCfg && isset($AUTHORISATION)) {
-            foreach ($AUTHORISATION->getUserRoles($AUTH->getUserId()) as $role)
+            foreach ($AUTHORISATION->getUserRoles($AUTH->getUserId()) as $role) {
                 $files[] = $role['name'] . '.profile';
+            }
         }
         $files[] = $AUTH->getUser().'.profile';
 
