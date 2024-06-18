@@ -32,7 +32,7 @@ require('../../server/core/functions/autoload.php');
 
 if (PROFILE) profilingStart();
 
-define('CONST_AJAX' , TRUE);
+const CONST_AJAX = true;
 header('Content-Type: application/json');
 
 try {

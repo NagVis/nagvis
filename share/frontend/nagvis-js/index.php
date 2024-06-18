@@ -36,7 +36,7 @@ require('../../server/core/functions/passwordCompatibility.php');
 
 if (PROFILE) profilingStart();
 
-define('CONST_AJAX' , FALSE);
+const CONST_AJAX = false;
 
 try {
     require('../../server/core/functions/core.php');
