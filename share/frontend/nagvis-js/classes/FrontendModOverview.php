@@ -95,4 +95,4 @@ class FrontendModOverview extends FrontendModule {
         return $INDEX->parse();
     }
 }
-?>
+

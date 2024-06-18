@@ -386,4 +386,4 @@ class ViewManageMaps {
         return ob_get_clean();
     }
 }
-?>
+

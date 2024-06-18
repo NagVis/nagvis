@@ -31,4 +31,3 @@ class FrontendRequestHandler extends CoreRequestHandler {
         parent::__construct($aOptions);
     }
 }
-?>

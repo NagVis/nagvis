@@ -101,4 +101,4 @@ class CoreModAuth extends CoreModule {
     }
 }
 
-?>
+

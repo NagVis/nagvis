@@ -1963,4 +1963,4 @@ class GlobalMapCfg {
             return $sec;
     }
 }
-?>
+

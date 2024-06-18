@@ -201,4 +201,4 @@ class NagVisDynGroup extends NagVisStatefulObject {
         }
     }
 }
-?>
+

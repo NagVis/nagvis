@@ -327,4 +327,4 @@ class GlobalLanguage {
         return $sLang;
     }
 }
-?>
+

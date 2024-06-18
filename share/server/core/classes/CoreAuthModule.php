@@ -51,4 +51,3 @@ abstract class CoreAuthModule {
     abstract public function getUser();
     abstract public function getUserId();
 }
-?>

@@ -627,4 +627,4 @@ class NagVisMapObj extends NagVisStatefulObject {
             $this->sum[STATE] = UNKNOWN;
     }
 }
-?>
+

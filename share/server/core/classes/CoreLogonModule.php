@@ -54,4 +54,4 @@ class CoreLogonModule {
         return true;
     }
 }
-?>
+

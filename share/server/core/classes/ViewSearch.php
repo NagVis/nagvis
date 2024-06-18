@@ -35,4 +35,4 @@ class ViewSearch {
         return ob_get_clean();
     }
 }
-?>
+

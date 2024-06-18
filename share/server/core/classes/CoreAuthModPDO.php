@@ -225,4 +225,4 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         return sha1(AUTH_PASSWORD_SALT.$password);
     }
 }
-?>
+

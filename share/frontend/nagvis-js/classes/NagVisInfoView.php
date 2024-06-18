@@ -86,4 +86,4 @@ class NagVisInfoView {
         return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'info'), $aData);
     }
 }
-?>
+

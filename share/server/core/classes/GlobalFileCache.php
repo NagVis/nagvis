@@ -201,4 +201,4 @@ class GlobalFileCache {
         return $this->cacheFileAge;
     }
 }
-?>
+

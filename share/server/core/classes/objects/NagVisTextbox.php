@@ -61,4 +61,4 @@ class NagVisTextbox extends NagVisStatelessObject {
     # End public methods
     # #########################################################################
 }
-?>
+

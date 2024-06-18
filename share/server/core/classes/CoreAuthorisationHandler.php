@@ -281,4 +281,4 @@ class CoreAuthorisationHandler {
         return false;
     }
 }
-?>
+

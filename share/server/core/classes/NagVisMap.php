@@ -116,4 +116,4 @@ class NagVisMap {
         return json_encode($arrRet);
     }
 }
-?>
+

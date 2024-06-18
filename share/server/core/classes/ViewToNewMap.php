@@ -112,4 +112,4 @@ class ViewToNewMap {
         return ob_get_clean();
     }
 }
-?>
+

@@ -634,4 +634,4 @@ class ViewMapAddModify {
         return $this->object_type;
     }
 }
-?>
+

@@ -375,4 +375,4 @@ function graphviz_px2inch($px) {
     return number_format($px / 72, 4, '.', '');
 }
 
-?>
+

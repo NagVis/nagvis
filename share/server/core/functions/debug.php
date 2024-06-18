@@ -83,4 +83,4 @@ function profilingFinalize($pre) {
 
 // Start profiling now when configured to do so
 if (PROFILE) profilingStart();
-?>
+

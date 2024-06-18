@@ -298,4 +298,4 @@ function changed_dynmap($MAPCFG, $compare_time) {
     return false;
 }
 
-?>
+

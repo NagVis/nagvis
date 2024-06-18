@@ -126,4 +126,4 @@ $width = (int) $value * 100 / $max;
 echo "<div style='position:absolute;left:0;width:100px;height:30px;text-align:center;line-height:30px;'>".$value.$uom."</div>";
 echo "<table style='width:100px;border:".$border."px solid #000;height:30px;'><tr><td style='text-align:center;background-color:#dfdfdf;width:".$width."px'></td><td></td></tr></table>";
 exit(0);
-?>
+

@@ -29,4 +29,4 @@ class GlobalBackendndomy extends GlobalBackendPDO {
         return 'mysql';
     }
 }
-?>
+

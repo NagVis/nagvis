@@ -56,4 +56,4 @@ class FrontendModInfo extends FrontendModule {
         return $VIEW->parse();
     }
 }
-?>
+

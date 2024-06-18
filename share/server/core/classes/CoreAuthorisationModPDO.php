@@ -267,4 +267,4 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         return intval($ret['userId']);
     }
 }
-?>
+

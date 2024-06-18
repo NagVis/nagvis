@@ -48,4 +48,4 @@ class CoreModRoleMgmt extends CoreModule {
         return '';
     }
 }
-?>
+

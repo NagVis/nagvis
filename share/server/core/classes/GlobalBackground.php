@@ -166,4 +166,4 @@ class GlobalBackground {
         return FALSE;
     }
 }
-?>
+

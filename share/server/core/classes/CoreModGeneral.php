@@ -99,4 +99,4 @@ class CoreModGeneral extends CoreModule {
         return $result;
     }
 }
-?>
+

@@ -35,4 +35,4 @@ class NagVisStatelessObject extends NagVisObject {
         return $this->object_id;
     }
 }
-?>
+

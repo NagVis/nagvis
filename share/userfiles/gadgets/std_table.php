@@ -334,4 +334,4 @@ echo "</tbody>";
 // END of Write table body
 echo "</table>";
 exit(0);
-?>
+

@@ -29,4 +29,4 @@ class GlobalBackendpgsql extends GlobalBackendPDO {
         return 'pgsql';
     }
 }
-?>
+

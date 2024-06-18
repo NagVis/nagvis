@@ -313,4 +313,4 @@ class CoreRotation {
         return $arr;
     }
 }
-?>
+
