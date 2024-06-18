@@ -54,7 +54,7 @@ class NagVisIndexView {
     /**
      * Parses the map and the objects for the nagvis-js frontend
      *
-     * @return	String 	String with JS Code
+     * @return	string 	String with JS Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parse() {
@@ -82,7 +82,7 @@ class NagVisIndexView {
     /**
      * Checks if the compressed javascript file exists
      *
-     * @return	Boolean
+     * @return	bool
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkJsCompressed() {

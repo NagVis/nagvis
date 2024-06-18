@@ -45,7 +45,7 @@ class CoreBackendMgmt {
      *
      * Initializes all backends
      *
-     * @param   config  $MAINCFG
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct() {
@@ -69,8 +69,8 @@ class CoreBackendMgmt {
      *
      * Add a backend query to the queue
      *
-     * @param   Array   Queries to be added to the queue
-     * @param   Object  Map object to fetch the informations for
+     * @param   array $query Queries to be added to the queue
+     * @param   object $OBJ Map object to fetch the informations for
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function queue($query, $OBJ) {
@@ -561,8 +561,8 @@ class CoreBackendMgmt {
     /**
      * Checks for existing backend file
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkBackendExists($backendId, $printErr) {
@@ -585,7 +585,7 @@ class CoreBackendMgmt {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function backendAlive($backendId, $statusHost) {
-        list($statusBackend, $statusHost) = explode(':', $statusHost, 2);
+        [$statusBackend, $statusHost] = explode(':', $statusHost, 2);
 
         if($statusBackend == $backendId)
             $this->aError[$backendId] = new BackendConnectionProblem(l('Configuration Error: The statusHost ([STATUSHOST]) is in same backend as the one to check.', ['STATUSHOST' => $statusHost]));
@@ -607,7 +607,7 @@ class CoreBackendMgmt {
     /**
      * Initializes a backend
      *
-     * @return	Boolean	Is Successful?
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function initializeBackend($backendId) {
@@ -649,8 +649,8 @@ class CoreBackendMgmt {
     /**
      * Checks for an initialized backend
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      * @deprecated Please don't use this function anymore
      */
@@ -671,8 +671,8 @@ class CoreBackendMgmt {
     /**
      * Checks if the given feature is provided by the given backend
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkBackendFeature($backendId, $feature, $printErr = 1) {

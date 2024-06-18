@@ -26,7 +26,7 @@
  * Load required files for NagVis. This autoloader has no compatibility
  * problem with other autoloaders from external code
  *
- * @param   String  Name of the requested class
+ * @param   string $sClass Name of the requested class
  * @author 	Lars Michelsen <lm@larsmichelsen.com>
  */
 function NagVisAutoload($sClass) {

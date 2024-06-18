@@ -431,8 +431,8 @@ class NagVisHeaderMenu {
     /**
      * Checks for readable header template
      *
-     * @param 	Boolean	$printErr
-     * @return	Boolean	Is Check Successful?
+     * @param 	bool	$printErr
+     * @return	bool	Is Check Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkTemplateReadable($printErr) {

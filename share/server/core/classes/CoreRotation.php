@@ -79,8 +79,8 @@ class CoreRotation {
      *
      * Checks if the state of given type and identifier exists
      *
-     * @param   String    Type of the step (map,url)
-     * @param   String    Step identifier map name, url, ...
+     * @param   string $type Type of the step (map,url)
+     * @param   string $step Step identifier map name, url, ...
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function stepExists($type, $step) {
@@ -102,8 +102,8 @@ class CoreRotation {
      *
      * Sets the current step
      *
-     * @param   String    Type of the step (map,url)
-     * @param   String    Step identifier map name, url, ...
+     * @param   string $sType Type of the step (map,url)
+     * @param   string $sStep Step identifier map name, url, ...
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setStep($sType, $sStep, $iStepId = '') {
@@ -207,7 +207,7 @@ class CoreRotation {
     /**
      * Returns the next time to refresh or rotate in seconds
      *
-     * @return	Integer		Returns The next rotation time in seconds
+     * @return    int|null        Returns The next rotation time in seconds
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getStepInterval() {
@@ -218,7 +218,7 @@ class CoreRotation {
      * Gets the Next step to rotate to, if enabled
      * If Next map is in [ ], it will be an absolute url
      *
-     * @return	String  URL to rotate to
+     * @return	string  URL to rotate to
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getCurrentStepLabel() {
@@ -229,7 +229,7 @@ class CoreRotation {
      * Gets the Next step to rotate to, if enabled
      * If Next map is in [ ], it will be an absolute url
      *
-     * @return	String  URL to rotate to
+     * @return	string  URL to rotate to
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getCurrentStepUrl() {
@@ -240,7 +240,7 @@ class CoreRotation {
      * Gets the Next step to rotate to, if enabled
      * If Next map is in [ ], it will be an absolute url
      *
-     * @return	String  URL to rotate to
+     * @return	string  URL to rotate to
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getNextStepUrl() {
@@ -250,7 +250,7 @@ class CoreRotation {
     /**
      * Gets the name of the pool
      *
-     * @return	Integer
+     * @return    int|null
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getPoolName() {
@@ -260,7 +260,7 @@ class CoreRotation {
     /**
      * Gets the url of a specific step
      *
-     * @return	Integer
+     * @return	int
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getStepUrlById($intId) {
@@ -274,7 +274,7 @@ class CoreRotation {
     /**
      * Gets the label of a specific step
      *
-     * @return	Integer
+     * @return	int
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getStepLabelById($intId) {
@@ -284,7 +284,7 @@ class CoreRotation {
     /**
      * Gets the number of steps
      *
-     * @return	Integer
+     * @return	int
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getNumSteps() {
@@ -296,7 +296,7 @@ class CoreRotation {
      *
      * Gets the rotation properties for the current view as array
      *
-     * @return  Array    Rotation properties
+     * @return  array    Rotation properties
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getRotationProperties() {

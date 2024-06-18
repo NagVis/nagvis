@@ -66,7 +66,7 @@ class NagVisObject {
     /**
      * Get method for all options
      *
-     * @return	Value  Value of the given option
+     * @return	mixed  Value of the given option
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function get($option) {
@@ -76,7 +76,7 @@ class NagVisObject {
     /**
      * Get method for x coordinate of the object
      *
-     * @return	Integer		x coordinate on the map
+     * @return	int		x coordinate on the map
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getX() {
@@ -86,7 +86,7 @@ class NagVisObject {
     /**
      * Get method for y coordinate of the object
      *
-     * @return	Integer		y coordinate on the map
+     * @return	int		y coordinate on the map
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getY() {
@@ -96,7 +96,7 @@ class NagVisObject {
     /**
      * Get method for z coordinate of the object
      *
-     * @return	Integer		z coordinate on the map
+     * @return	int		z coordinate on the map
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getZ() {
@@ -106,7 +106,7 @@ class NagVisObject {
     /**
      * Get method for type of the object
      *
-     * @return	String		Type of the object
+     * @return	string		Type of the object
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getType() {
@@ -118,7 +118,7 @@ class NagVisObject {
      *
      * Get method for the object id
      *
-     * @return	Integer		Object ID
+     * @return	int		Object ID
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getObjectId() {
@@ -130,7 +130,7 @@ class NagVisObject {
      *
      * Set method for the object id
      *
-     * @param   Integer    Object id to set for the object
+     * @param   int $id Object id to set for the object
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setObjectId($id) {
@@ -153,7 +153,7 @@ class NagVisObject {
     /**
      * Get method for the hover template of the object
      *
-     * @return	String		Hover template of the object
+     * @return	string		Hover template of the object
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHoverTemplate() {
@@ -232,7 +232,7 @@ class NagVisObject {
      *
      * Gets the configuration of the object
      *
-     * @return	Array		Object configuration
+     * @return	array		Object configuration
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getObjectConfiguration($abstract = true) {
@@ -258,7 +258,7 @@ class NagVisObject {
      *
      * Parses the object in json format
      *
-     * @return	String  JSON code of the object
+     * @return	string  JSON code of the object
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseJson() {
@@ -270,8 +270,8 @@ class NagVisObject {
      *
      * Parses the object in map configuration format
      *
-     * @param   Array   Array of global map options
-     * @return	String  This object in map config format
+     * @param   array $globalOpts Array of global map options
+     * @return	string  This object in map config format
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseMapCfg($globalOpts = []) {
@@ -310,7 +310,7 @@ class NagVisObject {
      *
      * Returns the target frame for the object link
      *
-     * @return	String	Target
+     * @return	string	Target
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function getUrlTarget() {
@@ -322,8 +322,8 @@ class NagVisObject {
      *
      * Sorts both objects alphabetically by name
      *
-     * @param	OBJ		First object to sort
-     * @param	OBJ		Second object to sort
+     * @param	object $OBJ1 First object to sort
+     * @param	object $OBJ2 Second object to sort
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
@@ -363,8 +363,8 @@ class NagVisObject {
      *
      * Sorts both by state of the object
      *
-     * @param	OBJ		First object to sort
-     * @param	OBJ		Second object to sort
+     * @param	object $OBJ1 First object to sort
+     * @param	object $OBJ2 Second object to sort
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function sortObjectsByState($OBJ1, $OBJ2) {

@@ -34,9 +34,11 @@ class NagVisMap {
     /**
      * Class Constructor
      *
-     * @param 	GlobalMainCfg 	$MAINCFG
-     * @param 	GlobalMapCfg 	$MAPCFG
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param GlobalMapCfg $MAPCFG
+     * @param true $getState
+     * @param true $bIsView
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($MAPCFG, $getState = GET_STATE, $bIsView = IS_VIEW) {
         global $_BACKEND;
@@ -72,8 +74,8 @@ class NagVisMap {
      *   full:     all object infos of all map objects (might be filtered)
      *   state:    the state of all map objects (might be filtered)
      *
-     * @param   String  The type of request. Can be complete|summary|state
-     * @return	String  Json Code
+     * @param   string $type The type of request. Can be complete|summary|state
+     * @return	string  Json Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseObjectsJson($type = 'complete') {

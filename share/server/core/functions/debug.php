@@ -33,7 +33,7 @@ define('DEBUGSTART',microtime_float());
 /**
  * Writes the debug output to the debug file
  *
- * @param		String		Debug message
+ * @param		string $msg Debug message
  * @author 	Lars Michelsen <lm@larsmichelsen.com>
  */
 function debug($msg) {

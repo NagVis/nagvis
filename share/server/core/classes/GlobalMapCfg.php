@@ -127,7 +127,7 @@ class GlobalMapCfg {
     /**
      * Gets the default values for the different object types
      *
-     * @param   Boolean  Only fetch global type settings
+     * @param   bool $onlyGlobal Only fetch global type settings
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function gatherTypeDefaults($onlyGlobal) {
@@ -238,7 +238,7 @@ class GlobalMapCfg {
     /**
      * Initializes the map configuration file caching
      *
-     * @param   String   Path to the configuration file
+     * @param   string $file Path to the configuration file
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function setConfigFile($file) {
@@ -271,7 +271,7 @@ class GlobalMapCfg {
     /**
      * Creates a new Configfile
      *
-     * @return	Boolean	Is Successful?
+     * @return	bool	Is Successful?
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public function createMapConfig() {
@@ -416,7 +416,7 @@ class GlobalMapCfg {
     /**
      * Reads the map config file (copied from readFile->readNagVisCfg())
      *
-     * @return	Boolean	Is Successful?
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function readMapConfig($onlyGlobal = false, $resolveTemplates = true,
@@ -849,8 +849,8 @@ class GlobalMapCfg {
     /**
      * Gets the numeric index of a template by the name
      *
-     * @param   String   Name of the template
-     * @return  Integer  ID of the template
+     * @param   string $name Name of the template
+     * @return  int  ID of the template
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getTemplateIdByName($name) {
@@ -912,8 +912,8 @@ class GlobalMapCfg {
     /**
      * Checks for existing config file
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkMapConfigExists($printErr) {
@@ -926,8 +926,8 @@ class GlobalMapCfg {
      *
      * Checks for readable config file
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function checkMapConfigReadable($printErr) {
@@ -938,7 +938,7 @@ class GlobalMapCfg {
     /**
      * Generates a new object id for an object on the map
      *
-     * @return  String  The object ID
+     * @return  string  The object ID
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function genObjId($s) {
@@ -1094,8 +1094,8 @@ class GlobalMapCfg {
     /**
      * Gets valid keys for a specific object type
      *
-     * @param   String  Specific object type
-     * @return  Array   Valid object keys
+     * @param   string $sType Specific object type
+     * @return  array   Valid object keys
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getValidTypeKeys($sType) {
@@ -1111,7 +1111,7 @@ class GlobalMapCfg {
     /**
      * Gets all valid object types
      *
-     * @return  Array  Valid object types
+     * @return  array  Valid object types
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getValidObjectTypes() {
@@ -1125,7 +1125,7 @@ class GlobalMapCfg {
     /**
      * Gets the default configuration on the map for the given type
      *
-     * @return  Array  Array of default options
+     * @return  array  Array of default options
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getTypeDefaults($type) {
@@ -1142,8 +1142,8 @@ class GlobalMapCfg {
     /**
      * Gets all definitions of type $type
      *
-     * @param	String	$type
-     * @return	Array	All elements of this type
+     * @param	string	$type
+     * @return	array	All elements of this type
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDefinitions($type) {
@@ -1169,8 +1169,8 @@ class GlobalMapCfg {
      * Gets a list of available templates with optional regex filtering
      * the templates are listed as keys
      *
-     * @param   String  Filter regex
-     * @return  Array	  List of templates as keys
+     * @param   string $strMatch Filter regex
+     * @return  array	  List of templates as keys
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getTemplateNames($strMatch = NULL) {
@@ -1217,8 +1217,8 @@ class GlobalMapCfg {
     /**
      * Checks for writeable MapCfgFolder
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     function checkMapCfgFolderWriteable($printErr) {
@@ -1244,10 +1244,10 @@ class GlobalMapCfg {
     /**
      * Sets a config value in the array
      *
-     * @param	Integer	$id
-     * @param	String	$key
-     * @param	String	$value
-     * @return	Boolean	TRUE
+     * @param	int	$id
+     * @param	string	$key
+     * @param	string	$value
+     * @return	bool	TRUE
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setValue($id, $key, $value) {
@@ -1263,10 +1263,10 @@ class GlobalMapCfg {
     /**
      * Gets a config value from the array
      *
-     * @param	Integer	$id
-     * @param	String	$key
-     * @param	Boolean	$ignoreDefault
-     * @return	String	Value
+     * @param	int	$id
+     * @param	string	$key
+     * @param	bool	$ignoreDefault
+     * @return	string	Value
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getValue($id, $key, $ignoreDefault = false) {
@@ -1283,7 +1283,7 @@ class GlobalMapCfg {
     /**
      * Gets the mapName
      *
-     * @return	String	MapName
+     * @return	string	MapName
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getName() {
@@ -1293,7 +1293,7 @@ class GlobalMapCfg {
     /**
      * Gets the map alias
      *
-     * @return	String	Map alias
+     * @return	string	Map alias
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAlias() {
@@ -1311,7 +1311,7 @@ class GlobalMapCfg {
     /**
      * Only selects the wanted objects of the map and removes the others
      *
-     * @param   Array of object ids
+     * @param   array $objIds of object ids
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function filterMapObjects($objIds) {
@@ -1385,8 +1385,8 @@ class GlobalMapCfg {
     /**
      * Adds an element of the specified type to the config array
      *
-     * @param	Array	$properties
-     * @return	Integer	Id of the Element
+     * @param	array	$properties
+     * @return	int	Id of the Element
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function addElement($type, $properties, $perm = false, $id = null) {
@@ -1425,8 +1425,8 @@ class GlobalMapCfg {
     /**
      * Deletes an element of the specified type from the config array
      *
-     * @param	Integer	$id
-     * @return	Boolean	TRUE
+     * @param	int	$id
+     * @return	bool	TRUE
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function deleteElement($id, $perm = false) {
@@ -1442,7 +1442,7 @@ class GlobalMapCfg {
      * referencing in whole NagVis. Or by object number of the map with a leading
      * "_" sign.
      *
-     * @param   Integer $id
+     * @param   int $id
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function storeDeleteElement($id, $replaceWith = null) {
@@ -1601,7 +1601,7 @@ class GlobalMapCfg {
     /**
      * Gathers the lines of an object by the number of the object
      *
-     * @param   Integer $num
+     * @param   int $num
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getObjectLinesByNum($num) {
@@ -1638,7 +1638,7 @@ class GlobalMapCfg {
     /**
      * Gathers the lines of an object by the given object id
      *
-     * @param   Integer $id
+     * @param   int $id
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getObjectLinesById($id) {
@@ -1681,8 +1681,8 @@ class GlobalMapCfg {
     /**
      * Gets all information about an object type
      *
-     * @param   String  Type to get the information for
-     * @return  Array   The validConfig array
+     * @param   string $type Type to get the information for
+     * @return  array   The validConfig array
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getValidObjectType($type) {
@@ -1692,7 +1692,7 @@ class GlobalMapCfg {
     /**
      * Gets the valid configuration array
      *
-     * @return	Array The validConfig array
+     * @return    array|null The validConfig array
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getValidConfig() {
@@ -1714,7 +1714,7 @@ class GlobalMapCfg {
      * Reads the configuration file of the map and
      * sends it as download to the client.
      *
-     * @return	Boolean   Only returns FALSE if something went wrong
+     * @return	bool   Only returns FALSE if something went wrong
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function exportMap() {
@@ -1736,8 +1736,8 @@ class GlobalMapCfg {
     /**
      * Checks for writeable map config file
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkMapConfigWriteable($printErr) {
@@ -1748,7 +1748,7 @@ class GlobalMapCfg {
     /**
      * Deletes the map configfile
      *
-     * @return	Boolean	Is Successful?
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function deleteMapConfig($printErr=1) {
@@ -1778,8 +1778,8 @@ class GlobalMapCfg {
     /**
      * Gets lockfile information
      *
-     * @param	Boolean $printErr
-     * @return	Array/Boolean   Is Successful?
+     * @param	bool $printErr
+     * @return	bool   Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
    */
     public function checkMapLocked($printErr=1) {
@@ -1824,7 +1824,7 @@ class GlobalMapCfg {
     /**
      * Reads the contents of the lockfile
      *
-     * @return	Array/Boolean   Is Successful?
+     * @return	array/Boolean   Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function readMapLock() {
@@ -1846,7 +1846,7 @@ class GlobalMapCfg {
     /**
      * Writes the lockfile for a map
      *
-     * @return	Boolean     Is Successful?
+     * @return	bool     Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function writeMapLock() {
@@ -1869,7 +1869,7 @@ class GlobalMapCfg {
     /**
      * Deletes the lockfile for a map
      *
-     * @return	Boolean     Is Successful?
+     * @return	bool     Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function deleteMapLock() {
@@ -1884,8 +1884,8 @@ class GlobalMapCfg {
     /**
      * Checks for existing lockfile
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkMapLockExists($printErr) {
@@ -1896,8 +1896,8 @@ class GlobalMapCfg {
     /**
      * Checks for readable lockfile
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkMapLockReadable($printErr) {
@@ -1908,8 +1908,8 @@ class GlobalMapCfg {
     /**
      * Checks for writeable lockfile
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkMapLockWriteable($printErr) {

@@ -141,8 +141,8 @@ class GlobalCore {
     /**
      * Check if GD-Libs installed, when GD-Libs are enabled
      *
-     * @param	Boolean $printErr
-     * @return	Boolean	Is Successful?
+     * @param	bool $printErr
+     * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkGd($printErr) {
@@ -158,7 +158,7 @@ class GlobalCore {
     /**
      * Reads all defined Backend-ids from the main configuration
      *
-     * @return	Array Backend-IDs
+     * @return	array Backend-IDs
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDefinedBackends($onlyUserCfg = false) {
@@ -181,7 +181,7 @@ class GlobalCore {
     /**
      * Gets all rotation pools
      *
-     * @return	Array pools
+     * @return	array pools
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDefinedRotationPools() {
@@ -229,7 +229,7 @@ class GlobalCore {
      * Reads all languages which are available in NagVis and
      * are enabled by the configuration
      *
-     * @return	Array list
+     * @return	array list
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableAndEnabledLanguages() {
@@ -247,7 +247,7 @@ class GlobalCore {
     /**
      * Reads all languages
      *
-     * @return	Array list
+     * @return	array list
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableLanguages() {
@@ -257,7 +257,7 @@ class GlobalCore {
     /**
      * Returns languages of all available documentations
      *
-     * @return	Array list
+     * @return	array list
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableDocs() {
@@ -267,7 +267,7 @@ class GlobalCore {
     /**
      * Reads all available backends
      *
-     * @return	Array Html
+     * @return	array Html
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableBackends() {
@@ -277,7 +277,7 @@ class GlobalCore {
     /**
      * Reads all hover templates
      *
-     * @return	Array hover templates
+     * @return	array hover templates
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableHoverTemplates() {
@@ -290,7 +290,7 @@ class GlobalCore {
     /**
      * Reads all header templates
      *
-     * @return	Array list
+     * @return	array list
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableHeaderTemplates() {
@@ -303,7 +303,7 @@ class GlobalCore {
     /**
      * Reads all header templates
      *
-     * @return	Array list
+     * @return	array list
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableContextTemplates() {
@@ -316,7 +316,7 @@ class GlobalCore {
     /**
      * Reads all PNG images in shape path
      *
-     * @return	Array Shapes
+     * @return	array Shapes
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableShapes() {
@@ -329,7 +329,7 @@ class GlobalCore {
     /**
      * Reads all iconsets in icon path
      *
-     * @return	Array iconsets
+     * @return	array iconsets
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableIconsets() {
@@ -342,7 +342,7 @@ class GlobalCore {
     /**
      * Reads all available sources
      *
-     * @return	Array hover templates
+     * @return	array hover templates
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableSources() {
@@ -365,8 +365,8 @@ class GlobalCore {
     /**
      * Returns the filetype of an iconset
      *
-     * @param   String  Iconset name
-     * @return	String  Iconset file type
+     * @param   string $iconset Iconset name
+     * @return	string  Iconset file type
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getIconsetFiletype($iconset) {
@@ -402,8 +402,8 @@ class GlobalCore {
     /**
      * Reads all maps in mapcfg path
      *
-     * @param   String  Regex to match the map name
-     * @return	Array   Array of maps
+     * @param   string $strMatch Regex to match the map name
+     * @return	array   Array of maps
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableMaps($strMatch = null, $setKey = null) {
@@ -466,7 +466,7 @@ class GlobalCore {
     /**
      * Reads all map images in map path
      *
-     * @return	Array map images
+     * @return	array map images
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableBackgroundImages() {
@@ -479,7 +479,7 @@ class GlobalCore {
     /**
      * Reads all available gadgets
      *
-     * @return	Array   Array of gadgets
+     * @return	array   Array of gadgets
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getAvailableGadgets() {
@@ -492,12 +492,12 @@ class GlobalCore {
     /**
    * Lists the contents of a directory with some checking, filtering and sorting
      *
-     * @param   String  Path to the directory
-     * @param   String  Regex the file(s) need to match
-     * @param   Array   Lists of filenames to ignore (The filenames need to be the keys)
-     * @param   Integer Match part to be returned
-     * @param   Boolean Print errors when dir does not exist
-     * @return	Array   Sorted list of file names/parts in this directory
+     * @param   string $dir Path to the directory
+     * @param   string $allowRegex Regex the file(s) need to match
+     * @param   array $ignoreList Lists of filenames to ignore (The filenames need to be the keys)
+     * @param   int $allowPartRegex Match part to be returned
+     * @param   bool $returnPart Print errors when dir does not exist
+     * @return	array   Sorted list of file names/parts in this directory
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function listDirectory($dir, $allowRegex = null, $ignoreList = null, $allowPartRegex = null, $returnPart = null, $setKey = null, $printErr = true) {
@@ -569,8 +569,8 @@ class GlobalCore {
     /**
      * Checks for existing var folder
      *
-     * @param		Boolean 	$printErr
-     * @return	Boolean		Is Successful?
+     * @param		bool 	$printErr
+     * @return	bool		Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkVarFolderExists($printErr) {
@@ -580,8 +580,8 @@ class GlobalCore {
     /**
      * Checks for writeable VarFolder
      *
-     * @param		Boolean 	$printErr
-     * @return	Boolean		Is Successful?
+     * @param		bool 	$printErr
+     * @return	bool		Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkVarFolderWriteable($printErr) {
@@ -591,8 +591,8 @@ class GlobalCore {
     /**
      * Checks for existing shared var folder
      *
-     * @param		Boolean 	$printErr
-     * @return	Boolean		Is Successful?
+     * @param		bool 	$printErr
+     * @return	bool		Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkSharedVarFolderExists($printErr) {
@@ -602,8 +602,8 @@ class GlobalCore {
     /**
      * Checks for writeable shared var folder
      *
-     * @param		Boolean 	$printErr
-     * @return	Boolean		Is Successful?
+     * @param		bool 	$printErr
+     * @return	bool		Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkSharedVarFolderWriteable($printErr) {
@@ -634,8 +634,8 @@ class GlobalCore {
      * Transforms a NagVis version to integer which can be used
      * for comparing different versions.
      *
-     * @param	  String    Version string
-     * @return  Integer   Version as integer
+     * @param	  string $s Version string
+     * @return  int   Version as integer
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function versionToTag($s) {
@@ -657,8 +657,8 @@ class GlobalCore {
      * Returns the human readable upload error message
      * matching the given error code.
      *
-     * @param	  Integer   Error code from $_FILE
-     * @return  String    The error message
+     * @param	  int $id Error code from $_FILE
+     * @return  string    The error message
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getUploadErrorMsg($id) {

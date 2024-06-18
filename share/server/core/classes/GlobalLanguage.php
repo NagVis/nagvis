@@ -35,8 +35,8 @@ class GlobalLanguage {
     /**
      * Class Constructor
      *
-     * @param	String			$type		Type of language-file
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @param string $textDomain
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($textDomain = 'nagvis') {
         $this->textDomain = $textDomain;
@@ -86,7 +86,7 @@ class GlobalLanguage {
     /**
      * Reads the language to use in NagVis
      *
-     * @return  String
+     * @return  string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function gatherCurrentLanguage() {
@@ -139,7 +139,7 @@ class GlobalLanguage {
     /**
      * Checks if the user requested a language by the url
      *
-     * @return  String
+     * @return  string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getUserLanguage() {
@@ -166,7 +166,7 @@ class GlobalLanguage {
      * HTTP_ACCEPT_LANGUAGE var. Returns a language string when found one language
      * which is available
      *
-     * @return  String
+     * @return  string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getBrowserLanguage() {
@@ -213,7 +213,7 @@ class GlobalLanguage {
     /**
      * Returns the string representing the current language
      *
-     * @return  String
+     * @return  string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getCurrentLanguage() {
@@ -223,10 +223,10 @@ class GlobalLanguage {
     /**
      * Checks if the choosen language is available
      *
-     * @param   String     Language definition string
-     * @param   Boolean    Print error message or not
-     * @param   Boolean    Check language_available config or not
-     * @return  Boolean
+     * @param   string $sLang Language definition string
+     * @param   bool $printErr Print error message or not
+     * @param   bool $ignoreConf Check language_available config or not
+     * @return  bool
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkLanguageAvailable($sLang, $printErr = 1, $ignoreConf = false) {
@@ -251,9 +251,9 @@ class GlobalLanguage {
      * Calls the real getText method and replaces some macros after fetching the
      * text
      *
-     * @param	String	String to be localized
-     * @param	String	Replace options
-     * @return	String	Localized String
+     * @param	string $id String to be localized
+     * @param	string $replace Replace options
+     * @return	string	Localized String
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getText($id, $replace = null) {
@@ -291,8 +291,8 @@ class GlobalLanguage {
     /**
      * Gets the text of an id
      *
-     * @param	String	String to be localized
-     * @return	String	Localized String
+     * @param	string $s String to be localized
+     * @return	string	Localized String
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function getTextOfId($s) {
@@ -303,9 +303,9 @@ class GlobalLanguage {
     /**
      * Gets the text of an id
      *
-     * @param   String        String Plain language string
-     * @param   String/Array  String or Array with macros to replace
-     * @return  String        String Replaced language string
+     * @param   string $sLang String Plain language string
+     * @param   string $replace /Array  String or Array with macros to replace
+     * @return  string        String Replaced language string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     static public function getReplacedString($sLang, $replace) {

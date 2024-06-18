@@ -33,8 +33,9 @@ class NagVisUrlView {
     /**
      * Class Constructor
      *
-     * @param    String          $NAME
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param GlobalCore $CORE
+     * @param string $url
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct(GlobalCore $CORE, $url) {
         $this->url = $url;
@@ -52,7 +53,7 @@ class NagVisUrlView {
     /**
      * Set the rotation properties if the user wants a rotation
      *
-     * @param   Array
+     * @param   array $a
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setRotation($a) {
@@ -69,7 +70,7 @@ class NagVisUrlView {
     /**
      * Parses the url and the objects for the nagvis-js frontend
      *
-     * @return	String 	String with JS Code
+     * @return	string 	String with JS Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parse() {

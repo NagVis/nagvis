@@ -36,7 +36,7 @@ abstract class CoreAuthModule {
      *
      * Returns a list of supported features
      *
-     * @return	Array
+     * @return	array
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getSupportedFeatures() {
