@@ -44,7 +44,7 @@ class CoreModuleHandler {
      * Loads an instance of the given module. The module needs to be registered
      * before loading.
      *
-     * @param  String  Name of the module to load
+     * @param  string $sModule Name of the module to load
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public function loadModule($sModule) {
@@ -66,7 +66,7 @@ class CoreModuleHandler {
      * Registers a module by its name. After registering it is available
      * to be loaded.
      *
-     * @param  String  Name of the module to register
+     * @param  string $sModule Name of the module to register
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public function regModule($sModule) {

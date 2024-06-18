@@ -78,7 +78,7 @@ class NagVisContextMenu {
      *
      * Reads the contents of the template file
      *
-     * @return	Boolean		Result
+     * @return	bool		Result
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     function readTemplate() {
@@ -204,8 +204,8 @@ class NagVisContextMenu {
      *
      * Checks if the requested template file is readable
      *
-     * @param		Boolean		Switch for enabling/disabling error messages
-     * @return	Boolean		Check Result
+     * @param		bool $printErr Switch for enabling/disabling error messages
+     * @return	bool		Check Result
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkTemplateReadable($printErr) {
@@ -217,8 +217,8 @@ class NagVisContextMenu {
      *
      * Checks if the requested template file exists
      *
-     * @param		Boolean		Switch for enabling/disabling error messages
-     * @return	Boolean		Check Result
+     * @param		bool $printErr Switch for enabling/disabling error messages
+     * @return	bool		Check Result
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkTemplateExists($printErr) {

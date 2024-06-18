@@ -54,7 +54,7 @@ class NagVisOverviewView {
     /**
      * Parses the information for json
      *
-     * @return	String 	String with Html Code
+     * @return	string 	String with Html Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parse() {

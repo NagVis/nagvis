@@ -40,7 +40,7 @@ class NagVisMapView {
     /**
      * Set the search value if the user searches for an object
      *
-     * @param   String    Search string
+     * @param   string $s Search string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setSearch($s) {
@@ -50,7 +50,7 @@ class NagVisMapView {
     /**
      * Set the rotation properties if the user wants a rotation
      *
-     * @param   Array
+     * @param   array $a
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setRotation($a) {
@@ -71,7 +71,7 @@ class NagVisMapView {
     /**
      * Parses the map and the objects for the nagvis-js frontend
      *
-     * @return	String 	String with JS Code
+     * @return	string 	String with JS Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parse() {
@@ -109,7 +109,7 @@ class NagVisMapView {
      * Parses the view specific properties. In most cases this will be user
      * defined values which maybe given by url or session
      *
-     * @return  String  JSON array
+     * @return  string  JSON array
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function parseViewProperties() {

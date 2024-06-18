@@ -76,8 +76,8 @@ class NagVisHost extends NagVisStatefulObject {
      *
      * Queues the state fetching to the backend.
      *
-     * @param   Boolean  Optional flag to disable fetching of the object status
-     * @param   Boolean  Optional flag to disable fetching of member status
+     * @param   bool $bFetchObjectState Optional flag to disable fetching of the object status
+     * @param   bool $bFetchMemberState Optional flag to disable fetching of member status
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function queueState($bFetchObjectState = true, $bFetchMemberState = true) {

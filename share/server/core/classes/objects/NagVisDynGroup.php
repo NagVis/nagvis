@@ -53,8 +53,8 @@ class NagVisDynGroup extends NagVisStatefulObject {
 
     /**
      * Queues the state fetching to the backend.
-     * @param   Boolean  Unused flag here
-     * @param   Boolean  Optional flag to disable fetching of member status
+     * @param   bool $_unused Unused flag here
+     * @param   bool $bFetchMemberState Optional flag to disable fetching of member status
      */
     public function queueState($_unused = true, $bFetchMemberState = true) {
         global $_BACKEND;

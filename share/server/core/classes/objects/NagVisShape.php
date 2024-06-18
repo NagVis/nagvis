@@ -34,8 +34,7 @@ class NagVisShape extends NagVisStatelessObject {
     /**
      * Class constructor
      *
-     * @param		Object 		Object of class GlobalMainCfg
-     * @param		String	 	Image of the shape
+     * @param		object $icon Object of class GlobalMainCfg
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($icon) {
@@ -55,7 +54,7 @@ class NagVisShape extends NagVisStatelessObject {
      *
      * Parses the object in json format
      *
-     * @return	String		JSON code of the object
+     * @return	string		JSON code of the object
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseJson() {

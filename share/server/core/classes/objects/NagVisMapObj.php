@@ -364,8 +364,8 @@ class NagVisMapObj extends NagVisStatefulObject {
     /**
      * Checks if the map is in maintenance mode
      *
-     * @param 	Boolean	$printErr
-     * @return	Boolean	Is Check Successful?
+     * @param 	bool	$printErr
+     * @return	bool	Is Check Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkMaintenance($printErr) {
@@ -595,8 +595,8 @@ class NagVisMapObj extends NagVisStatefulObject {
      *
      * check for permissions to view the state of the map
      *
-     * @param		Object		Map object to check
-     * @return	Boolean		Permitted/Not permitted
+     * @param		object $OBJ Map object to check
+     * @return	bool		Permitted/Not permitted
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function isPermitted($OBJ) {

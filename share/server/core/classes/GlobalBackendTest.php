@@ -424,7 +424,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
      *
      * Returns the valid config for this backend
      *
-     * @return	Array
+     * @return	array
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function getValidConfig() {
@@ -436,10 +436,10 @@ class GlobalBackendTest implements GlobalBackendInterface {
      *
      * Queries the livestatus socket for a list of objects
      *
-     * @param   String   Type of object
-     * @param   String   Name1 of the objecs
-     * @param   String   Name2 of the objecs
-     * @return  Array    Results of the query
+     * @param   string $type Type of object
+     * @param   string $name1Pattern Name1 of the objecs
+     * @param   string $name2Pattern Name2 of the objecs
+     * @return  array    Results of the query
    * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -491,9 +491,9 @@ class GlobalBackendTest implements GlobalBackendInterface {
      *
      * Parses the filter array to backend
      *
-     * @param   Array     List of objects to query
-     * @param   Array     List of filters to apply
-     * @return  String    Parsed filters
+     * @param   array $objects List of objects to query
+     * @param   array $filters List of filters to apply
+     * @return  string    Parsed filters
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function parseFilter($objects, $filters) {
@@ -549,8 +549,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
      *
      * Queries the livestatus socket for the state of a host
      *
-     * @param   Array     List of objects to query
-     * @param   Array     List of filters to apply
+     * @param   array $objects List of objects to query
+     * @param   array $options List of filters to apply
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -593,8 +593,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * Queries the livestatus socket for a specific service
      * or all services of a host
      *
-     * @param   Array     List of objects to query
-     * @param   Array     List of filters to apply
+     * @param   array $objects List of objects to query
+     * @param   array $options List of filters to apply
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServiceState($objects, $options, $filters) {
@@ -656,10 +656,10 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * host and a well performing alternative to the existing recurisve
      * algorithm.
      *
-     * @param   Array     List of objects to query
-     * @param   Bitmask   This is a mask of options to use during the query
-     * @param   Array     List of filters to apply
-     * @return  Array     List of states and counts
+     * @param   array $objects List of objects to query
+     * @param   int $options This is a mask of options to use during the query
+     * @param   array $filters List of filters to apply
+     * @return  array     List of states and counts
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostMemberCounts($objects, $options, $filters) {
@@ -712,9 +712,9 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * hostgroup and a well performing alternative to the existing recurisve
      * algorithm.
      *
-     * @param   Array     List of objects to query
-     * @param   Array     List of filters to apply
-     * @return  Array     List of states and counts
+     * @param   array $objects List of objects to query
+     * @param   array $options List of filters to apply
+     * @return  array     List of states and counts
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostgroupStateCounts($objects, $options, $filters) {
@@ -773,9 +773,9 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * servicegroup and a well performing alternative to the existing recurisve
      * algorithm.
      *
-     * @param   Array     List of objects to query
-     * @param   Array     List of filters to apply
-     * @return  Array     List of states and counts
+     * @param   array $objects List of objects to query
+     * @param   array $options List of filters to apply
+     * @return  array     List of states and counts
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServicegroupStateCounts($objects, $options, $filters) {
@@ -842,8 +842,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
     /**
      * PUBLIC getDirectChildDependenciesNamesByHostName()
      *
-     * @param   String   Hostname
-     * @return  Array    List of hostnames
+     * @param   string $hostName Hostname
+     * @return  array    List of hostnames
      * @author  Thibault Cohen <thibault.cohen@savoirfairelinux.com>
      */
     public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact=false) {
@@ -853,8 +853,8 @@ class GlobalBackendTest implements GlobalBackendInterface {
     /*
      * PUBLIC getDirectParentNamesByHostName()
      *
-     * @param   String   Hostname
-     * @return  Array    List of hostnames
+     * @param   string   Hostname
+     * @return  array    List of hostnames
    * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
