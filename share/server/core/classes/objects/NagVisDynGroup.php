@@ -176,8 +176,7 @@ class NagVisDynGroup extends NagVisStatefulObject {
     private function fetchSummaryState() {
         if($this->hasMembers()) {
             $this->calcSummaryState();
-        }
-        else {
+        } else {
             $this->sum[STATE] = ERROR;
         }
     }

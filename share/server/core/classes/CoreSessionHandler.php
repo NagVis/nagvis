@@ -55,8 +55,7 @@ class CoreSessionHandler {
         // Set custom params for the session cookie
         if (version_compare(PHP_VERSION, '5.2') >= 0) {
             session_set_cookie_params(0, $sPath, $sDomain, $bSecure, $bHTTPOnly);
-        }
-        else {
+        } else {
             session_set_cookie_params(0, $sPath, $sDomain, $bSecure);
         }
 

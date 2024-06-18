@@ -114,8 +114,7 @@ class CoreUserCfg {
         elseif($type == 'b') {
             if($val == '1' || $val === 'true') {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         } else {

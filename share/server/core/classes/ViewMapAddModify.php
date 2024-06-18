@@ -66,8 +66,7 @@ class ViewMapAddModify {
                     $val = explode(',', $val);
                 }
                 $this->attrs[$attr] = $val;
-            }
-            else {
+            } else {
                 $this->attrs_filtered[$attr] = null;
             }
         }
@@ -157,8 +156,7 @@ class ViewMapAddModify {
                 js('document.getElementById("_submit").disabled = true;'
                   .'window.setTimeout(function() { window.location.reload(); }, 2000);');
                 $show_dialog = true;
-            }
-            else {
+            } else {
                 if (!$this->MAPCFG->objExists($this->object_id)) {
                     throw new NagVisException(l('The object does not exist.'));
                 }
@@ -187,8 +185,7 @@ class ViewMapAddModify {
 
                 if ($this->object_type == 'global') {
                     $refresh_code = 'location.reload();';
-                }
-                else {
+                } else {
                     $refresh_code = 'refreshMapObject(null, "' . $this->object_id . '", false);';
                 }
 
@@ -416,15 +413,13 @@ class ViewMapAddModify {
                     try {
                         if($this->clone_id !== null) {
                             $options = $func($this->MAPCFG, $this->clone_id, $this->attrs);
-                        }
-                        else {
+                        } else {
                             $options = $func($this->MAPCFG, $this->object_id, $this->attrs);
                         }
                     } catch (Exception $e) {
                         if (is_a($e, "NagVisException")) {
                             $msg = $e->message();
-                        }
-                        else {
+                        } else {
                             $msg = "" . $e;
                         }
 
@@ -659,8 +654,7 @@ class ViewMapAddModify {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }

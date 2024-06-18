@@ -627,8 +627,7 @@ class NagVisMapObj extends NagVisStatefulObject {
         if($AUTHORISATION !== null
            && $AUTHORISATION->isPermitted('Map', 'view', $OBJ->getName())) {
             return true;
-        }
-        else {
+        } else {
             $OBJ->sum[STATE]  = UNKNOWN;
             $OBJ->sum[OUTPUT] = l('noReadPermissions');
 
@@ -647,8 +646,7 @@ class NagVisMapObj extends NagVisStatefulObject {
         // Get summary state of this object from single objects
         if($this->hasMembers()) {
             $this->calcSummaryState($this->getStateRelevantMembers(true));
-        }
-        else {
+        } else {
             $this->sum[STATE] = UNKNOWN;
         }
     }

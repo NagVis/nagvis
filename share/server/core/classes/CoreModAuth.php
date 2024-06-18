@@ -52,8 +52,7 @@ class CoreModAuth extends CoreModule {
                 case 'logout':
                     if($AUTH->logout()) {
                         return true;
-                    }
-                    else {
+                    } else {
                         throw new NagVisException(l('Unable to log you out. Maybe it is not supported by your authentication module.'),
                             null, 1, cfg('paths', 'htmlbase'));
                     }
@@ -87,8 +86,7 @@ class CoreModAuth extends CoreModule {
                 'user' => $this->FHANDLER->get('username'),
                 'password' => $this->FHANDLER->get('password')
             ];
-        }
-        else {
+        } else {
             return false;
         }
     }

@@ -352,8 +352,7 @@ class NagVisStatefulObject extends NagVisObject {
         if($isCount) {
             return (isset($this->exclude_members) && $this->exclude_members !== '')
                 || (isset($this->exclude_member_states) && $this->exclude_member_states !== '');
-        }
-        else {
+        } else {
             return isset($this->exclude_members) && $this->exclude_members !== '';
         }
     }
@@ -367,8 +366,7 @@ class NagVisStatefulObject extends NagVisObject {
         }
         if($key == 'exclude_members') {
             return $this->exclude_members;
-        }
-        else {
+        } else {
             return '';
         }
     }
@@ -381,8 +379,7 @@ class NagVisStatefulObject extends NagVisObject {
         }
         elseif($this->exclude_members !== '') {
             return 'exclude_members';
-        }
-        else {
+        } else {
             return '';
         }
     }
@@ -417,8 +414,7 @@ class NagVisStatefulObject extends NagVisObject {
             // Add (Check_MK) tags as array of tags (when available)
             if (isset($arr['custom_variables']['TAGS'])) {
                 $arr['tags'] = explode(' ', $arr['custom_variables']['TAGS']);
-            }
-            else {
+            } else {
                 $arr['tags'] = [];
             }
 
@@ -687,8 +683,7 @@ class NagVisStatefulObject extends NagVisObject {
     protected function parseGadgetUrl() {
         if(preg_match('/^\[(.*)\]$/',$this->gadget_url,$match) > 0) {
             $this->gadget_url = $match[1];
-        }
-        else {
+        } else {
             $this->gadget_url = path('html', 'global', 'gadgets', $this->gadget_url);
         }
     }
@@ -809,8 +804,7 @@ class NagVisStatefulObject extends NagVisObject {
         // If some has been added remove last comma, else add a simple 0
         if(substr($this->sum[OUTPUT], -2, 2) == ', ') {
             $this->sum[OUTPUT] = rtrim($this->sum[OUTPUT], ', ');
-        }
-        else {
+        } else {
             $this->sum[OUTPUT] .= '0 ';
         }
 
@@ -898,8 +892,7 @@ class NagVisStatefulObject extends NagVisObject {
             foreach ($obj_attrs AS $attr => $state_key) {
                 if (isset($this->state[$state_key]) && $this->state[$state_key] != '') {
                     $arr[$attr] = $this->state[$state_key];
-                }
-                else {
+                } else {
                     $arr[$attr] = '';
                 }
             }
@@ -909,8 +902,7 @@ class NagVisStatefulObject extends NagVisObject {
                   || $this->type == 'aggregation') {
             if (isset($this->state[ALIAS])) {
                 $arr['alias'] = $this->state[ALIAS];
-            }
-            else {
+            } else {
                 $arr['alias'] = '';
             }
         }

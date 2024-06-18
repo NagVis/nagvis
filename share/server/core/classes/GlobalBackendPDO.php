@@ -358,16 +358,14 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                     case 'service_description':
                         if($filter['key'] != 'service_description') {
                             $val = $OBJS[0]->getName();
-                        }
-                        else {
+                        } else {
                             $val = $OBJS[0]->getServiceDescription();
                         }
 
                         // Translate field names
                         if($filter['key'] == 'service_description') {
                             $filter['key'] = 'name2';
-                        }
-                        else {
+                        } else {
                             $filter['key'] = 'name1';
                         }
 
@@ -816,8 +814,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
     public function getHostMemberCounts($objects, $options, $filters) {
         if($options & 1) {
             $stateAttr = 'CASE WHEN ss.state_type = 0 THEN ss.last_hard_state ELSE ss.current_state END';
-        }
-        else {
+        } else {
             $stateAttr = 'ss.current_state';
         }
 
@@ -895,8 +892,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
     public function getHostgroupStateCounts($objects, $options, $filters) {
         if($options & 1) {
             $stateAttr = 'CASE WHEN (hs.state_type = 0) THEN hs.last_hard_state ELSE hs.current_state END';
-        }
-        else {
+        } else {
             $stateAttr = 'hs.current_state';
         }
 
@@ -966,8 +962,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
 
         if($options & 1) {
             $stateAttr = 'CASE WHEN (ss.state_type = 0) THEN ss.last_hard_state ELSE ss.current_state END';
-        }
-        else {
+        } else {
             $stateAttr = 'ss.current_state';
         }
 
@@ -1039,8 +1034,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
     public function getServicegroupStateCounts($objects, $options, $filters) {
         if($options & 1) {
             $stateAttr = 'CASE WHEN (ss.state_type = 0) THEN ss.last_hard_state ELSE ss.current_state END';
-        }
-        else {
+        } else {
             $stateAttr = 'ss.current_state';
         }
 
@@ -1382,8 +1376,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
         $data = $QUERYHANDLE->fetch();
         if($data !== false && $this->DB->is_nonnull_int($data['program_start'])) {
             return intval($data['program_start']);
-        }
-        else {
+        } else {
             return -1;
         }
     }

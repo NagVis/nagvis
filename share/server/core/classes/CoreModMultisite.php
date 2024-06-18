@@ -69,8 +69,7 @@ class CoreModMultisite extends CoreModule {
         foreach ($this->getMapsCached() as $map) {
             if($map['parent_map'] === '') {
                 $maps[$map['name']] = $this->getMapForMultisite($map);
-            }
-            else {
+            } else {
                 if(!isset($childs[$map['parent_map']])) {
                     $childs[$map['parent_map']] = [];
                 }

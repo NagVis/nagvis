@@ -359,8 +359,7 @@ class GlobalMapCfg {
             if($sFirstChar == '}') {
                 if($obj['type'] === 'global') {
                     $id = 0;
-                }
-                else {
+                } else {
                     $id = isset($obj['object_id']) ? $obj['object_id'] : '_' . $iObjId;
                 }
 
@@ -386,8 +385,7 @@ class GlobalMapCfg {
                 // If only the global section should be read break the loop after the global section
                 if($onlyGlobal && isset($this->mapConfig[0])) {
                     break;
-                }
-                else {
+                } else {
                     continue;
                 }
             }
@@ -430,8 +428,7 @@ class GlobalMapCfg {
                && isset(self::$validConfig[$sObjType][$sKey])
                && isset(self::$validConfig[$sObjType][$sKey]['array'])) {
                 $obj[$sKey] = explode(',', $sValue);
-            }
-            else {
+            } else {
                 $obj[$sKey] = $sValue;
             }
         }
@@ -565,8 +562,7 @@ class GlobalMapCfg {
             foreach($viewParams AS $source => $val) {
                 if(isset(self::$viewParams[$source])) {
                     self::$viewParams[$source] = array_merge(self::$viewParams[$source], $val);
-                }
-                else {
+                } else {
                     self::$viewParams[$source] = $val;
                 }
             }
@@ -650,8 +646,7 @@ class GlobalMapCfg {
                && self::$validConfig['global'][$key]['array'] === true) {
                 if ($_REQUEST[$key] !== '') {
                     $val = explode(',', $_REQUEST[$key]);
-                }
-                else {
+                } else {
                     $val = [];
                 }
             } else {
@@ -708,8 +703,7 @@ class GlobalMapCfg {
         foreach($keys AS $key) {
             if (!$only_cfg_params) {
                 $val = $this->getSourceParam($key, $only_user_supplied, $only_customized);
-            }
-            else {
+            } else {
                 $val = $this->getValue(0, $key);
             }
 
@@ -1062,8 +1056,7 @@ class GlobalMapCfg {
             // check given objects and attributes
             if($type == 'global') {
                 $exception = 'MapCfgInvalid';
-            }
-            else {
+            } else {
                 $exception = 'MapCfgInvalidObject';
             }
 
@@ -1187,8 +1180,7 @@ class GlobalMapCfg {
     public function getDefaultValue($type, $key) {
         if (isset($this->typeDefaults[$type][$key])) {
             return $this->typeDefaults[$type][$key];
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -1407,8 +1399,7 @@ class GlobalMapCfg {
             try {
                 if ($id !== null) {
                     return $func($this, $this->name, $this->mapConfig, $id);
-                }
-                else {
+                } else {
                     return $func($this, $this->name, $this->mapConfig);
                 }
             } catch(Exception $e) {
@@ -1435,8 +1426,7 @@ class GlobalMapCfg {
         // of options. So read all keys which are currently set
         if($type !== 'template') {
             $keys = $this->getValidTypeKeys($type);
-        }
-        else {
+        } else {
             $keys = array_keys($this->mapConfig[$id]);
         }
 
@@ -1547,8 +1537,7 @@ class GlobalMapCfg {
         $f = $this->getConfig();
         if($replaceWith) {
             array_splice($f, $start, $end - $start + 1, $replaceWith);
-        }
-        else {
+        } else {
             array_splice($f, $start, $end - $start + 1);
         }
         $this->writeConfig($f);
@@ -1719,8 +1708,7 @@ class GlobalMapCfg {
             if($inObj && trim($f[$i]) === '}') {
                 if(isset($f[$i + 1]) && trim($f[$i + 1]) === '') {
                     $end = $i + 1;
-                }
-                else {
+                } else {
                     $end = $i;
                 }
                 break;
@@ -1753,8 +1741,7 @@ class GlobalMapCfg {
             if($inObj && trim($f[$i]) === '}') {
                 if(isset($f[$i + 1]) && trim($f[$i + 1]) === '') {
                     $end = $i + 1;
-                }
-                else {
+                } else {
                     $end = $i;
                 }
                 break;
@@ -1802,8 +1789,7 @@ class GlobalMapCfg {
     public function getListFunc($type, $var) {
         if(isset(self::$validConfig[$type][$var]['list'])) {
             return self::$validConfig[$type][$var]['list'];
-        }
-        else {
+        } else {
             throw new NagVisException(l('No "list" function registered for option "[OPT]" of type "[TYPE]"',
                 ['OPT' => $var, 'TYPE' => $type]));
         }
@@ -2063,8 +2049,7 @@ class GlobalMapCfg {
         ];
         if (isset($titles[$sec])) {
             return $titles[$sec];
-        }
-        else {
+        } else {
             return $sec;
         }
     }

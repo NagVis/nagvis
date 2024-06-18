@@ -63,8 +63,7 @@ class ViewAck {
                 $type = $MAPCFG->getValue($object_id, 'type');
                 if ($type == 'host') {
                     $spec = $MAPCFG->getValue($object_id, 'host_name');
-                }
-                else {
+                } else {
                     $spec = $MAPCFG->getValue($object_id, 'host_name')
                         . ';' . $MAPCFG->getValue($object_id, 'service_description');
                 }
@@ -95,8 +94,7 @@ class ViewAck {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }

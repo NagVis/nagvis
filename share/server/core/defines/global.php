@@ -31,8 +31,7 @@ const CONST_VERSION = '1.9.42';
 // everything is OK when using E_STRICT.
 if(version_compare(PHP_VERSION, '5.2') >= 0) {
     error_reporting(E_ALL ^ E_STRICT);
-}
-else {
+} else {
     error_reporting(E_ALL);
 }
 

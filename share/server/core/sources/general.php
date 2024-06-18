@@ -55,8 +55,7 @@ function iconset_size($iconset) {
     }
     elseif(file_exists($iconPath)) {
         return getimagesize($iconPath);
-    }
-    else {
+    } else {
         return [0, 0];
     }
 }
@@ -69,8 +68,7 @@ function shape_size($icon) {
     }
     elseif(file_exists($iconPath)) {
         return getimagesize($iconPath);
-    }
-    else {
+    } else {
         return [0, 0];
     }
 }

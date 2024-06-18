@@ -344,10 +344,9 @@ class NagVisHeaderMenu {
         global $CORE;
         if(in_array(curLang(), $CORE->getAvailableDocs())) {
             return curLang();
+        } else {
+            return 'en_US';
         }
-	else {
-        return 'en_US';
-    }
     }
 
     /**

@@ -2223,8 +2223,7 @@ class GlobalMainCfg {
                 // write in config array
                 if(isset($sec)) {
                     $this->config[$sec][$key] = $val;
-                }
-                else {
+                } else {
                     $this->config[$key] = $val;
                 }
             }
@@ -2458,8 +2457,7 @@ class GlobalMainCfg {
         // Get the relative path
         if(isset($this->config['paths']) && isset($this->config['paths'][$var])) {
             $relpath = $this->config['paths'][$var];
-        }
-        else {
+        } else {
             $relpath = $this->validConfig['paths'][$var]['default'];
         }
 
@@ -2478,8 +2476,7 @@ class GlobalMainCfg {
         }
         elseif($loc === 'global' || ($loc === '' && file_exists($file))) {
             return $type == 'sys' ? $file : $h . '/' . $relpath . $relfile;
-        }
-        else {
+        } else {
             return '';
         }
     }
@@ -2548,8 +2545,7 @@ class GlobalMainCfg {
     public function getValue($sec, $var, $ignoreDefault=false, $ignoreUserConfig=false) {
         if ($ignoreUserConfig && $this->preUserConfig !== null) {
             $arr = $this->preUserConfig;
-        }
-        else {
+        } else {
             $arr = $this->config;
         }
 
@@ -2558,8 +2554,7 @@ class GlobalMainCfg {
         }
         elseif (!$ignoreDefault) {
             return $this->getDefaultValue($sec, $var);
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -2849,8 +2844,7 @@ class GlobalMainCfg {
 
                                     if(isset($arrStep['map']) && $arrStep['map'] != '') {
                                         $step = $arrStep['map'];
-                                    }
-                                    else {
+                                    } else {
                                         $step = '[' . $arrStep['url'] . ']';
                                     }
 
@@ -2884,8 +2878,7 @@ class GlobalMainCfg {
                                 }
                                 elseif (substr($key, 0, 7) == 'action_') {
                                     $arrValidConfig = $this->getInstanceableValidConfig('action', $key);
-                                }
-                                else {
+                                } else {
                                     $arrValidConfig = $this->validConfig[$key];
                                 }
 
@@ -2959,8 +2952,7 @@ class GlobalMainCfg {
         ];
         if (isset($titles[$sec])) {
             return $titles[$sec];
-        }
-        else {
+        } else {
             return $sec;
         }
     }
@@ -2971,8 +2963,7 @@ class GlobalMainCfg {
     public function getListFunc($sec, $key) {
         if(isset($this->validConfig[$sec][$key]['list'])) {
             return $this->validConfig[$sec][$key]['list'];
-        }
-        else {
+        } else {
             throw new NagVisException(l('No "list" function registered for option "[OPT]" of type "[TYPE]"',
                 ['OPT' => $sec, 'TYPE' => $key]));
         }

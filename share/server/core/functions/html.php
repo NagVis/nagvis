@@ -145,8 +145,7 @@ function form_start($name, $target, $type = 'POST', $multipart = false) {
 
     if ($multipart) {
         $multipart = ' enctype="multipart/form-data"';
-    }
-    else {
+    } else {
         $multipart = '';
     }
 
@@ -218,8 +217,7 @@ function field($type, $name, $default = '', $class = '', $onclick = '', $style =
     if (submitted($form_name)) {
         if ($type == 'checkbox') {
             $default = get_checkbox($name, $default);
-        }
-        else {
+        } else {
             $default = post($name, $default);
         }
     }
@@ -399,8 +397,7 @@ function do_http_redirect($url = null) {
 function reload($url, $sec) {
     if ($url == null) {
         js('setTimeout(function() {location.reload();}, ' . $sec . '*1000);');
-    }
-    else {
+    } else {
         js('setTimeout(function() {location.href=\'' . $url . '\';}, ' . $sec . '*1000);');
     }
 }

@@ -87,8 +87,7 @@ class ViewManageMaps {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }
@@ -188,8 +187,7 @@ class ViewManageMaps {
                 $cur_map = post('cur_map');
                 if ($cur_map && $cur_map == $name) {
                     reload('index.php?mod=Map&act=view&show=' . $new_name, 1);
-                }
-                else {
+                } else {
                     reload(null, 1);
                 }
             } catch (FieldInputError $e) {
@@ -197,8 +195,7 @@ class ViewManageMaps {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }
@@ -266,8 +263,7 @@ class ViewManageMaps {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }
@@ -320,8 +316,7 @@ class ViewManageMaps {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }
@@ -388,8 +383,7 @@ class ViewManageMaps {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }

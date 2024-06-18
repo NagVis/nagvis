@@ -92,8 +92,7 @@ class GlobalBackground {
     public function getFile($bWebPath = true) {
         if($bWebPath) {
             return $this->webPath;
-        }
-        else {
+        } else {
             return $this->path;
         }
     }

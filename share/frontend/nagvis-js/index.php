@@ -59,8 +59,7 @@ try {
 
     if (isset($MODULE) && is_a($MODULE, "FrontendModMap")) {
         echo $VIEW->parseWithMap($e, $MODULE->getObject());
-    }
-    else {
+    } else {
         echo $VIEW->parse($e);
     }
 }

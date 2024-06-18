@@ -137,8 +137,7 @@ function getObjectNames($type, $MAPCFG, $objId, $attrs) {
     if($type === 'service') {
         if(isset($attrs['host_name']) && $attrs['host_name'] != '') {
             $name1 = $attrs['host_name'];
-        }
-        else {
+        } else {
             $name1 = $MAPCFG->getValue($objId, 'host_name');
         }
 
@@ -154,8 +153,7 @@ function getObjectNames($type, $MAPCFG, $objId, $attrs) {
         foreach($objs AS $obj) {
             if($type !== 'service') {
                 $ret[$obj['name1']] = $obj['name1'];
-            }
-            else {
+            } else {
                 $ret[$obj['name2']] = $obj['name2'];
             }
         }

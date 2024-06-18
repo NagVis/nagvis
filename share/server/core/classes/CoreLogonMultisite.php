@@ -100,8 +100,7 @@ class CoreLogonMultisite extends CoreLogonModule {
 
         if($this->authFile == 'htpasswd') {
             $users = $this->loadAuthFile($this->htpasswdPath);
-        }
-        else {
+        } else {
             $users = $this->loadAuthFile($this->serialsPath);
         }
 
@@ -122,15 +121,13 @@ class CoreLogonMultisite extends CoreLogonModule {
 
             if ($is_pre_20_cookie) {
                 $hash = $this->generatePre20Hash($username, $sessionId, (string)$user_secret);
-            }
-            else {
+            } else {
                 $hash = $this->generatePre22Hash($username, $sessionId, (string)$user_secret);
             }
 	}
 	elseif ($this->cookieVersion == 1) {
             $hash = $this->generateHash($username, $sessionId, (string) $user_secret);
-	}
-	else {
+	} else {
             throw new NagVisException(l('The Multisite Cookie version is not supported'));
 	}
 

@@ -68,8 +68,7 @@ class CoreModGeneral extends CoreModule {
         foreach($aOpts['name'] AS $sName) {
             if($type == 'hover') {
                 $OBJ = new NagVisHoverMenu($this->CORE, $sName);
-            }
-            else {
+            } else {
                 $OBJ = new NagVisContextMenu($this->CORE, $sName);
             }
 

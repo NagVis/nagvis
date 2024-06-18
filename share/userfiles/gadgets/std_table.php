@@ -116,8 +116,7 @@ $padding = $size;
 $font_size = 6 + $size * 2;
 if ($show_subheader == "1") {
     $width = 21 + 6 * $size;
-}
-else {
+} else {
     $width = 18 + 2 * $size;
 }
 
@@ -321,8 +320,7 @@ foreach ($stats as $stat => $value){
         if ($value > 0 || $show_all == 1) {
             if ($value > 0) {
                 $class = substr(strchr($stat, "_"), 1);
-            }
-            else {
+            } else {
                 $class = 'EMPTY';
             }
             echo '<td class="'. $class .' table_stat">';

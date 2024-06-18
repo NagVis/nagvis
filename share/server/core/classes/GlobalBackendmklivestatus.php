@@ -235,8 +235,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         if(!$this->SOCKET) {
             if ($errno === 0) {
                 $error_msg = $this->CONNECT_ERR;
-            }
-            else {
+            } else {
                 $error_msg = $errstr;
             }
 
@@ -578,8 +577,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             foreach($filters AS $filter) {
                 if ($isHostQuery && $filter['key'] == 'host_name') {
                     $key = 'name';
-                }
-                else {
+                } else {
                     $key = $filter['key'];
                 }
 
@@ -596,8 +594,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     case 'servicegroup_name':
                         if($key != 'service_description') {
                             $val = $OBJS[0]->getName();
-                        }
-                        else {
+                        } else {
                             $val = $OBJS[0]->getServiceDescription();
                         }
 
@@ -639,8 +636,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                             . 'Filter: service_description ~~ ' . $parts[1] . "\n"
                             . "And: 2\n"
                             . "Negate:\n";
-                    }
-                    else {
+                    } else {
                         $objFilters[] = 'Filter: host_name !~~ ' . $parts[0] . "\n";
                     }
                 }
@@ -650,8 +646,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             $count = count($objFilters);
             if($count > 1) {
                 $count = 'And: ' . $count . "\n";
-            }
-            else {
+            } else {
                 $count = '';
             }
 
@@ -661,8 +656,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $count = count($aFilters);
         if($count > 1) {
             $count = 'Or: ' . $count . "\n";
-        }
-        else {
+        } else {
             $count = '';
         }
 
@@ -797,8 +791,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         if($options & 1) {
             $stateAttr = 'hard_state';
-        }
-        else {
+        } else {
             $stateAttr = 'state';
         }
 
@@ -844,8 +837,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 // 19: keys, 20: values
                 if(isset($e[19][0]) && isset($e[20][0])) {
                     $custom_vars = array_combine($e[19], $e[20]);
-                }
-                else {
+                } else {
                     $custom_vars = null;
                 }
 
@@ -915,8 +907,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         if($options & 1) {
             $stateAttr = 'last_hard_state';
-        }
-        else {
+        } else {
             $stateAttr = 'state';
         }
 
@@ -1005,8 +996,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
                     if(isset($e[22][0]) && isset($e[23][0])) {
                         $custom_vars = array_combine($e[22], $e[23]);
-                    }
-                    else {
+                    } else {
                         $custom_vars = null;
                     }
 
@@ -1064,8 +1054,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         if($options & 1) {
             $stateAttr = 'last_hard_state';
-        }
-        else {
+        } else {
             $stateAttr = 'state';
         }
 
@@ -1136,8 +1125,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     public function getServiceListCounts($options, $filter) {
         if($options & 1) {
             $stateAttr = 'last_hard_state';
-        }
-        else {
+        } else {
             $stateAttr = 'state';
         }
 
@@ -1207,8 +1195,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         if($options & 1) {
             $stateAttr = 'hard_state';
-        }
-        else {
+        } else {
             $stateAttr = 'state';
         }
 
@@ -1337,8 +1324,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         if($options & 1) {
             $stateAttr = 'last_hard_state';
-        }
-        else {
+        } else {
             $stateAttr = 'state';
         }
 
@@ -1438,8 +1424,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         if($options & 1) {
             $stateAttr = 'last_hard_state';
-        }
-        else {
+        } else {
             $stateAttr = 'state';
         }
 
@@ -1543,8 +1528,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $r = $this->queryLivestatusSingleColumn("GET hostgroups\nColumns: members\nFilter: name = ".$name."\n");
         if (isset($r[0])) {
             return $r[0];
-        }
-        else {
+        } else {
             return [];
         }
     }
@@ -1560,8 +1544,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 	$r = $this->queryLivestatusSingleColumn("GET status\nColumns: program_start\n");
         if(isset($r[0])) {
             return $r[0];
-        }
-        else {
+        } else {
             return -1;
         }
     }
@@ -1630,8 +1613,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             }
             $query = $query . "Filter: business_impact >= $min_business_impact\nAnd: 2\n";
             $result = $this->queryLivestatusSingleColumn($query);
-        }
-        else {
+        } else {
             $result = [];
             foreach ($raw_result[0] as &$value) {
                 if (strpos($value, "/") == False) {
@@ -1662,8 +1644,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             }
             $query = $query . "Filter: business_impact >= $min_business_impact\nAnd: 2\n";
             $result = $this->queryLivestatusSingleColumn($query);
-        }
-        else {
+        } else {
             $result = [];
             foreach ($raw_result[0] as &$value) {
                 if (strpos($value, "/") == False) {

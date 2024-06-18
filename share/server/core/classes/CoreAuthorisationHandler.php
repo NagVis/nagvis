@@ -272,8 +272,7 @@ class CoreAuthorisationHandler {
                         }
                         elseif(isset($this->aPermissions[$mod][$act][AUTH_PERMISSION_WILDCARD])) {
                             return true;
-                        }
-                        else {
+                        } else {
                             if (DEBUG && DEBUGLEVEL & 2) {
                                 debug('Object access denied (Mod: ' . $sModule . ' Act: ' . $sAction . ' Object: ' . $sObj);
                             }

@@ -408,8 +408,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
         $mid_long = ($min_long + $max_long) / 2;
         $url .= '&zoom='.$params['geomap_zoom']
                .'&center='.$mid_long.','.$mid_lat;
-    }
-    else {
+    } else {
         $url .= '&bbox='.$min_long.','.$max_lat.','.$max_long.','.$min_lat;
     }
     //file_put_contents('/tmp/123', $url);

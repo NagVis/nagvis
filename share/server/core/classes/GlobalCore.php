@@ -375,18 +375,19 @@ class GlobalCore {
 
         if(isset($this->iconsetTypeCache[$iconset])) {
             $type = $this->iconsetTypeCache[$iconset];
-        }
-        else {
+        } else {
             foreach ([
                          path('sys', 'local', 'icons'),
                          path('sys', 'global', 'icons')
-                     ] as $path)
+                     ] as $path) {
                 if (file_exists($path)) {
-                    foreach (['png', 'gif', 'jpg', 'svg'] as $ext)
+                    foreach (['png', 'gif', 'jpg', 'svg'] as $ext) {
                         if (file_exists($path . $iconset . '_ok.' . $ext)) {
                             return $ext;
                         }
+                    }
                 }
+            }
         }
 
         // Catch error when iconset filetype could not be fetched
@@ -537,8 +538,7 @@ class GlobalCore {
 
                 if($setKey) {
                     $files[$arrRet[$returnPart]] = $arrRet[$returnPart];
-                }
-                else {
+                } else {
                     $files[] = $arrRet[$returnPart];
                 }
             }

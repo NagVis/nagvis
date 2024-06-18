@@ -93,8 +93,7 @@ class CoreBackendMgmt {
             // Gather the object name
             if($query == 'serviceState') {
                 $name = $OBJ->getName() . '~~' . $OBJ->getServiceDescription();
-            }
-            else {
+            } else {
                 $name = $OBJ->getName();
             }
 
@@ -255,8 +254,7 @@ class CoreBackendMgmt {
                             $counts = [];
                             $OBJ->setBackendProblem(l('This type of object is not supportd by this backend ([BACKENDID]).',
                                   ['BACKENDID' => $backendId]), $backendId);
-                        }
-                        else {
+                        } else {
                             $counts = $this->getBackend($backendId)->getServiceListCounts(
                                     $options, $OBJ->getObjectFilter());
                         }
@@ -265,8 +263,7 @@ class CoreBackendMgmt {
                             $counts = [];
                             $OBJ->setBackendProblem(l('This type of object is not supportd by this backend ([BACKENDID]).',
                                   ['BACKENDID' => $backendId]), $backendId);
-                        }
-                        else {
+                        } else {
                             $counts = $this->getBackend($backendId)->getHostAndServiceCounts(
                                     $options, $OBJ->getObjectFilter(), $OBJ->getObjectFilter(), false);
                         }
@@ -334,8 +331,7 @@ class CoreBackendMgmt {
                     foreach($aHosts AS $name => $aHost) {
                         if(isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts'])) {
                             $service_states = $aServiceStateCounts[$name]['counts'];
-                        }
-                        else {
+                        } else {
                             $service_states = null;
                         }
                         $members[] = $this->createHostObject($backendId, $name, $aHost,
@@ -459,8 +455,7 @@ class CoreBackendMgmt {
                 foreach($aHosts AS $name => $aHost) {
                     if(isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts'])) {
                         $service_states = $aServiceStateCounts[$name]['counts'];
-                    }
-                    else {
+                    } else {
                         $service_states = null;
                     }
                     $members[] = $this->createHostObject($backendId, $name, $aHost,
@@ -516,10 +511,10 @@ class CoreBackendMgmt {
         foreach($aObjs AS $name => $OBJS) {
             if(isset($aResult[$name])) {
                 if($type == 'serviceState' || $type == 'hostState') {
-                    foreach ($OBJS as $OBJ)
+                    foreach ($OBJS as $OBJ) {
                         $OBJ->setState($aResult[$name]);
-                }
-                else {
+                    }
+                } else {
                     foreach ($OBJS as $OBJ) {
                         if (isset($aResult[$name]['details'])) {
                             $OBJ->setState($aResult[$name]['details']);
@@ -534,12 +529,14 @@ class CoreBackendMgmt {
                 }
             } else {
                 if($type != 'hostMemberState') {
-                    foreach ($OBJS as $OBJ)
+                    foreach ($OBJS as $OBJ) {
                         if (isset($msg)) {
                             $OBJ->setBackendProblem($msg, $backendId);
-                        } else
+                        } else {
                             $OBJ->setBackendProblem(l('The object "[OBJ]" does not exist ([TYPE]).',
                                 ['OBJ' => $name, 'TYPE' => $OBJ->getType()]), $backendId);
+                        }
+                    }
                 }
             }
         }
@@ -627,8 +624,7 @@ class CoreBackendMgmt {
 
         if($aCounts[$statusHost][STATE] == UP) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
