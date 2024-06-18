@@ -85,8 +85,7 @@ class ViewManageBackends {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }
@@ -120,8 +119,7 @@ class ViewManageBackends {
 
         if ($mode == 'add') {
             echo '<h2>' . l('Add Backend') . '</h2>';
-        }
-        else {
+        } else {
             echo '<h2>' . l('Edit Backend') . '</h2>';
         }
 
@@ -178,8 +176,7 @@ class ViewManageBackends {
 
                 if ($mode == 'add') {
                     success(l('The new backend has been added.'));
-                }
-                else {
+                } else {
                     success(l('The changes have been saved.'));
                 }
             } catch (FieldInputError $e) {
@@ -187,8 +184,7 @@ class ViewManageBackends {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }
@@ -270,8 +266,7 @@ class ViewManageBackends {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }

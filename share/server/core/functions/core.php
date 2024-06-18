@@ -66,8 +66,7 @@ function l($txt, $vars = null) {
     }
     elseif($vars !== null) {
         return GlobalLanguage::getReplacedString($txt, $vars);
-    }
-    else {
+    } else {
         return $txt;
     }
 }

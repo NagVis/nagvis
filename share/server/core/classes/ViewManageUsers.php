@@ -69,8 +69,7 @@ class ViewManageUsers {
 
                 if ($AUTH->createUser($name, $password1)) {
                     success(l('The user has been created.'));
-                }
-                else {
+                } else {
                     throw new NagVisException('Failed to create the user.');
                 }
             } catch (FieldInputError $e) {
@@ -80,8 +79,7 @@ class ViewManageUsers {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }
@@ -131,15 +129,13 @@ class ViewManageUsers {
 
                 if (post('user_roles') !== "") {
                     $roles = explode(',', post('user_roles'));
-                }
-                else {
+                } else {
                     $roles = [];
                 }
 
                 if ($AUTHORISATION->updateUserRoles($user_id, $roles)) {
                     success(l('The roles for this user have been updated.'));
-                }
-                else {
+                } else {
                     throw new NagVisException(l('Problem while updating user roles.'));
                 }
         } catch (FieldInputError $e) {
@@ -149,8 +145,7 @@ class ViewManageUsers {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }
@@ -226,8 +221,7 @@ class ViewManageUsers {
 
                 if ($AUTHORISATION->deleteUser($user_id)) {
                     success(l('The user has been deleted.'));
-                }
-                else {
+                } else {
                     throw new NagVisException(l('Problem while deleting the user.'));
                 }
             } catch (FieldInputError $e) {
@@ -237,8 +231,7 @@ class ViewManageUsers {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }
@@ -305,8 +298,7 @@ class ViewManageUsers {
 
                 if ($AUTH->resetPassword($user_id, $password2)) {
                     success(l('The password has been reset.'));
-                }
-                else {
+                } else {
                     throw new NagVisException('Failed to reset the password.');
                 }
 
@@ -317,8 +309,7 @@ class ViewManageUsers {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }

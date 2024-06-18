@@ -75,8 +75,7 @@ class CoreUriHandler {
 
         if($this->isSetAndNotEmpty($sKey)) {
             return $this->aOpts[$sKey];
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -91,16 +90,17 @@ class CoreUriHandler {
                 if(!isset($_GET[$key])) {
                     if (isset($aDefaults[$key])) {
                         $_GET[$key] = $aDefaults[$key];
-                    } else
+                    } else {
                         $_GET[$key] = '';
+                    }
                 }
 
                 // Validate single value or multiple (array)
                 if(is_array($_GET[$key])) {
-                    foreach ($_GET[$key] as $val)
+                    foreach ($_GET[$key] as $val) {
                         $bValid = preg_match($sMatch, $val);
-                }
-                else {
+                    }
+                } else {
                     $bValid = preg_match($sMatch, $_GET[$key]);
                 }
             }

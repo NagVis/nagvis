@@ -117,8 +117,7 @@ class NagVisServicegroup extends NagVisStatefulObject {
         // Get summary state from member objects
         if($this->hasMembers()) {
             $this->calcSummaryState();
-        }
-        else {
+        } else {
             $this->sum[STATE] = ERROR;
         }
     }

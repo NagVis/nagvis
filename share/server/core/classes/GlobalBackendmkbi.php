@@ -186,8 +186,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         $secret_file_path = cfg('backend_'.$this->backendId, 'auth_secret_file');
         if ($secret_file_path) {
             return trim(file_get_contents($secret_file_path));
-        }
-        else {
+        } else {
             return cfg('backend_' . $this->backendId, 'auth_secret');
         }
     }
@@ -288,8 +287,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
     private function getAggrElements($aggr) {
         if (is_array($aggr['aggr_treestate'])) {
             return $aggr['aggr_treestate']["nodes"];
-        }
-        else {
+        } else {
             return $this->getAggrElementsFromString($aggr["aggr_treestate"]);
         }
     }
@@ -374,8 +372,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             }
             elseif ($element["acknowledged"]) {
                 $c[$state]['ack']++;
-            }
-            else {
+            } else {
                 $c[$state]['normal']++;
             }
         }

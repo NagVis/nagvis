@@ -391,8 +391,7 @@ class CorePDOHandler {
         $res = $this->query($s, $params);
         if($res === FALSE) {
             die("Could not execute the $s query: " . $this->errorString());
-        }
-        else {
+        } else {
             return $res;
         }
     }
@@ -405,8 +404,7 @@ class CorePDOHandler {
     public function error() {
         if (isset($this->lastErrorInfo)) {
             return $this->lastErrorInfo;
-        }
-        else {
+        } else {
             return $this->DB ? $this->DB->errorInfo() : '';
         }
     }
@@ -517,8 +515,7 @@ class CorePDOHandler {
         $dbVersion = 0;
         if(!$this->tableExist('version')) {
             $this->createVersionTable();
-        }
-        else {
+        } else {
             $dbVersion = GlobalCore::getInstance()->versionToTag($this->getDbVersion());
         }
 

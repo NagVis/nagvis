@@ -31,8 +31,7 @@ class ViewMapManageTmpl {
 
         if (submitted('create')) {
             $num_options = post('num_options', 1);
-        }
-        else {
+        } else {
             $num_options = 1;
         }
 
@@ -79,8 +78,7 @@ class ViewMapManageTmpl {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }
@@ -179,8 +177,7 @@ class ViewMapManageTmpl {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }
@@ -268,8 +265,7 @@ class ViewMapManageTmpl {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }

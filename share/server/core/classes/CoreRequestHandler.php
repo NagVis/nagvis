@@ -32,8 +32,7 @@ class CoreRequestHandler {
     public function get($sKey) {
         if(isset($this->aOpts[$sKey])) {
             return $this->aOpts[$sKey];
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -78,8 +77,7 @@ class CoreRequestHandler {
     public static function getReferer($default) {
         if(isset($_SERVER['HTTP_REFERER'])) {
             return $_SERVER['HTTP_REFERER'];
-        }
-        else {
+        } else {
             return $default;
         }
     }
@@ -87,8 +85,7 @@ class CoreRequestHandler {
     public static function getRequestUri($default) {
         if(isset($_SERVER['REQUEST_URI'])) {
             return $_SERVER['REQUEST_URI'];
-        }
-        else {
+        } else {
             return $default;
         }
     }

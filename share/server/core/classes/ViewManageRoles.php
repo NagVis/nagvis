@@ -51,8 +51,7 @@ class ViewManageRoles {
 
                 if ($AUTHORISATION->createRole($name)) {
                     success(l('The role has been created.'));
-                }
-                else {
+                } else {
                     throw new NagVisException('Failed to create the role');
                 }
             } catch (FieldInputError $e) {
@@ -62,8 +61,7 @@ class ViewManageRoles {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }
@@ -124,8 +122,7 @@ class ViewManageRoles {
 
                 if ($AUTHORISATION->updateRolePerms($role_id, $perms)) {
                     success(l('The permissions for this role have been updated.'));
-                }
-                else {
+                } else {
                     throw new NagVisException(l('Problem while updating role permissions.'));
                 }
             } catch (FieldInputError $e) {
@@ -135,8 +132,7 @@ class ViewManageRoles {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }
@@ -202,8 +198,7 @@ class ViewManageRoles {
             render_section_start($sec, $open);
             if ($sec == 'maps') {
                 $this->renderMapsSection($permissions, $permitted);
-            }
-            else {
+            } else {
                 $this->renderOtherSection($permissions, $permitted);
             }
             render_section_end();
@@ -280,8 +275,7 @@ class ViewManageRoles {
 
                 if ($AUTHORISATION->deleteRole($role_id)) {
                     success(l('The role has been deleted.'));
-                }
-                else {
+                } else {
                     throw new NagVisException(l('Problem while deleting the role.'));
                 }
             } catch (FieldInputError $e) {
@@ -291,8 +285,7 @@ class ViewManageRoles {
             } catch (Exception $e) {
                 if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                }
-                else {
+                } else {
                     throw $e;
                 }
             }

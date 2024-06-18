@@ -237,8 +237,7 @@ abstract class CoreModule {
         }
         elseif($msg && $type == 'ok') {
             throw new Success($msg, null, $reload, $redirectUrl);
-        }
-        else {
+        } else {
             return $ret;
         }
     }

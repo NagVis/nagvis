@@ -33,8 +33,7 @@ class CoreModuleHandler {
     public function __construct($CORE = null) {
       if($CORE === null) {
           $this->CORE = GlobalCore::getInstance();
-      }
-        else {
+      } else {
             $this->CORE = $CORE;
         }
 
