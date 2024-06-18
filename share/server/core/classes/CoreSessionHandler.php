@@ -86,7 +86,7 @@ class CoreSessionHandler {
         if(isset($_COOKIE[SESSION_NAME])) {
             // Don't reset the expiration time on every page load - only reset when
             // the half of the expiration time has passed
-            if(time() >= $this->get('sessionExpires') - ($iDuration/2)) {
+            if(time() >= $this->get('sessionExpires') - ($iDuration / 2)) {
                 $exp = time() + $iDuration;
                 setcookie(SESSION_NAME, $_COOKIE[SESSION_NAME], $exp, $sPath, $sDomain, $bSecure, $bHTTPOnly);
 

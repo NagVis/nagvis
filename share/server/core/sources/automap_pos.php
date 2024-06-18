@@ -74,7 +74,7 @@ function graphviz_config_tree(&$params, &$tree, $layer = 0) {
 
     // This is the root node
     if($layer == 0) {
-        $str .= 'pos="' . graphviz_px2inch($params['width']/2) . ',' . graphviz_px2inch($params['height']/2) . '", ';
+        $str .= 'pos="' . graphviz_px2inch($params['width'] / 2) . ',' . graphviz_px2inch($params['height'] / 2) . '", ';
     }
 
     // The object has configured x/y coords. Use them.
