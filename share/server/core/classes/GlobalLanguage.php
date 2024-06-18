@@ -79,9 +79,9 @@ class GlobalLanguage {
         $this->checkLanguageAvailable($this->sCurrentLanguage, true, true);
 
         // Set the language to us
-        putenv('LC_ALL='.$this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
-        putenv('LANG='.$this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
-        T_setlocale(LC_MESSAGES, $this->sCurrentLanguage.'.'.$this->sCurrentEncoding);
+        putenv('LC_ALL=' . $this->sCurrentLanguage . '.' . $this->sCurrentEncoding);
+        putenv('LANG=' . $this->sCurrentLanguage . '.' . $this->sCurrentEncoding);
+        T_setlocale(LC_MESSAGES, $this->sCurrentLanguage . '.' . $this->sCurrentEncoding);
     }
 
     /**
@@ -279,11 +279,11 @@ class GlobalLanguage {
         // gettext/translation mechanism. Then append the imploded
         if($id === $ret && $replace !== null) {
             if(!is_array($replace)) {
-                $ret .= 'Opts: '.$replace;
+                $ret .= 'Opts: ' . $replace;
             } else {
                 // Implode does not return the keys. So simply use json_encode here
                 // to show the keys to the user
-                $ret .= 'Opts: '.json_encode($replace);
+                $ret .= 'Opts: ' . json_encode($replace);
             }
         }
 
@@ -321,12 +321,12 @@ class GlobalLanguage {
             for($i = 0, $size = count($aReplace); $i < $size; $i++) {
                 if(isset($aReplace[$i])) {
                     $var = explode('~', $aReplace[$i]);
-                    $sLang = str_replace('['.$var[0].']', $var[1], $sLang);
+                    $sLang = str_replace('[' . $var[0] . ']', $var[1], $sLang);
                 }
             }
         } else {
             foreach($replace AS $key => $val) {
-                $sLang = str_replace('['.$key.']', $val, $sLang);
+                $sLang = str_replace('[' . $key . ']', $val, $sLang);
             }
         }
 

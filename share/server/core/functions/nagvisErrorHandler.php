@@ -36,7 +36,7 @@ function nagvisException($OBJ) {
            || get_class($OBJ) == 'NagVisErrorException') {
             echo $OBJ;
         } else {
-            echo "Error (".get_class($OBJ)."): ".$OBJ->getMessage();
+            echo "Error (" . get_class($OBJ) . "): " . $OBJ->getMessage();
             echo "<br>";
             echo "For more information check the apache error log.";
             error_log(print_r(debug_backtrace(), true));

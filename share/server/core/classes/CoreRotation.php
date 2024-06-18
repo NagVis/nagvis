@@ -157,7 +157,7 @@ class CoreRotation {
      */
     private function gatherStepInterval() {
         if($this->sPoolName !== '') {
-            $this->intInterval = cfg('rotation_'.$this->sPoolName, 'interval');
+            $this->intInterval = cfg('rotation_' . $this->sPoolName, 'interval');
         } else {
             $this->intInterval = cfg('rotation', 'interval');
         }
@@ -172,9 +172,9 @@ class CoreRotation {
         $htmlBase = cfg('paths', 'htmlbase');
         foreach($this->arrSteps AS $intId => $arrStep) {
             if(isset($arrStep['url']) && $arrStep['url'] != '') {
-                $this->arrSteps[$intId]['target'] = $htmlBase.'/frontend/nagvis-js/index.php?mod=Url&act=view&show='.$arrStep['url'].'&rotation='.$this->sPoolName.'&rotationStep='.$intId;
+                $this->arrSteps[$intId]['target'] = $htmlBase . '/frontend/nagvis-js/index.php?mod=Url&act=view&show=' . $arrStep['url'] . '&rotation=' . $this->sPoolName . '&rotationStep=' . $intId;
             } else {
-                $this->arrSteps[$intId]['target'] = $htmlBase.'/frontend/nagvis-js/index.php?mod=Map&act=view&show='.$arrStep['map'].'&rotation='.$this->sPoolName.'&rotationStep='.$intId;
+                $this->arrSteps[$intId]['target'] = $htmlBase . '/frontend/nagvis-js/index.php?mod=Map&act=view&show=' . $arrStep['map'] . '&rotation=' . $this->sPoolName . '&rotationStep=' . $intId;
             }
         }
     }
@@ -185,7 +185,7 @@ class CoreRotation {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function gatherSteps() {
-        $this->arrSteps = cfg('rotation_'.$this->sPoolName, 'maps');
+        $this->arrSteps = cfg('rotation_' . $this->sPoolName, 'maps');
     }
 
     /**

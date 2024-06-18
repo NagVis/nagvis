@@ -27,7 +27,7 @@ class CoreAuthModSQLite extends CoreAuthModPDO {
         return [
             'driver' => 'sqlite',
             'params' => [
-                'filename' => cfg('paths', 'cfg').'auth.db',
+                'filename' => cfg('paths', 'cfg') . 'auth.db',
             ],
             'username' => null,
             'password' => null,

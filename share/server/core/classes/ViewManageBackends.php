@@ -52,7 +52,7 @@ class ViewManageBackends {
 
     private function backend_options($backend_id) {
         $ret = [];
-        $backend_type = cfg('backend_'.$backend_id, 'backendtype');
+        $backend_type = cfg('backend_' . $backend_id, 'backendtype');
 
         foreach ($this->backend_attributes($backend_type) AS $key => $opt) {
             if (cfg('backend_' . $backend_id, $key, true) !== false) {
@@ -67,7 +67,7 @@ class ViewManageBackends {
 
     private function defaultForm() {
         global $CORE;
-        echo '<h2>'.l('Default Backend').'</h2>';
+        echo '<h2>' . l('Default Backend') . '</h2>';
 
         if (is_action() && post('mode') == 'default') {
             try {
@@ -95,7 +95,7 @@ class ViewManageBackends {
         js_form_start('default');
         hidden('mode', 'default');
         echo '<table name="mytable" class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Default Backend').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Default Backend') . '</td>';
         echo '<td class="tdfield">';
         $backends = ['' => l('Please choose')];
         foreach ($this->defined_backends AS $backend) {
@@ -144,10 +144,10 @@ class ViewManageBackends {
 
                 if ($mode == 'add') {
                     // Set standard values
-                    $CORE->getUserMainCfg()->setSection('backend_'.$backend_id);
-                    $CORE->getUserMainCfg()->setValue('backend_'.$backend_id, 'backendtype', $backend_type);
+                    $CORE->getUserMainCfg()->setSection('backend_' . $backend_id);
+                    $CORE->getUserMainCfg()->setValue('backend_' . $backend_id, 'backendtype', $backend_type);
                 } else {
-                    $backend_type = cfg('backend_'.$backend_id, 'backendtype');
+                    $backend_type = cfg('backend_' . $backend_id, 'backendtype');
                 }
 
                 $found_option = false;
@@ -167,7 +167,7 @@ class ViewManageBackends {
                             throw new FieldInputError($key, l('Invalid value provided. Needs to match: [P].',
                                 ['P' => $opt['match']]));
                         }
-                        $CORE->getUserMainCfg()->setValue('backend_'.$backend_id, $key, $val);
+                        $CORE->getUserMainCfg()->setValue('backend_' . $backend_id, $key, $val);
                     }
                 }
 
@@ -195,11 +195,11 @@ class ViewManageBackends {
         hidden('mode', $mode);
         echo '<table name="mytable" class="mytable">';
         if ($mode == 'add') {
-            echo '<tr><td class="tdlabel">'.l('Backend ID').'</td>';
+            echo '<tr><td class="tdlabel">' . l('Backend ID') . '</td>';
             echo '<td class="tdfield">';
             input('backend_id');
             echo '</td></tr>';
-            echo '<tr><td class="tdlabel">'.l('Backend Type').'</td>';
+            echo '<tr><td class="tdlabel">' . l('Backend Type') . '</td>';
             echo '<td class="tdfield">';
             $choices = ['' => l('Please choose')];
             foreach ($this->available_backends as $choice) {
@@ -207,7 +207,7 @@ class ViewManageBackends {
             }
             select('backend_type', $choices, '', 'updateForm(this.form)');
         } else {
-            echo '<tr><td class="tdlabel">'.l('Backend ID').'</td>';
+            echo '<tr><td class="tdlabel">' . l('Backend ID') . '</td>';
             echo '<td class="tdfield">';
             $choices = ['' => l('Please choose')];
             foreach ($this->editable_backends as $choice) {
@@ -230,7 +230,7 @@ class ViewManageBackends {
                     continue;
                 }
                 $val = isset($opts[$key]) ? $opts[$key] : null;
-                echo '<tr><td class="tdlabel">'.$key.'</td>';
+                echo '<tr><td class="tdlabel">' . $key . '</td>';
                 // FIXME: Add checkbox for selecting the option, show default values
                 echo '<td class="tdfield">';
                 input($key, $val);
@@ -246,7 +246,7 @@ class ViewManageBackends {
 
     private function delForm() {
         global $CORE;
-        echo '<h2>'.l('Delete Backend').'</h2>';
+        echo '<h2>' . l('Delete Backend') . '</h2>';
 
         if (is_action() && post('mode') == 'delete') {
             try {
@@ -257,7 +257,7 @@ class ViewManageBackends {
 
                 // FIXME: Check whether or not the backend is used anywhere
 
-                $CORE->getUserMainCfg()->delSection('backend_'.$backend_id);
+                $CORE->getUserMainCfg()->delSection('backend_' . $backend_id);
                 $CORE->getUserMainCfg()->writeConfig();
 
                 success(l('The backend has been deleted.'));
@@ -277,7 +277,7 @@ class ViewManageBackends {
         hidden('mode', 'delete');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Backend ID').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Backend ID') . '</td>';
         echo '<td class="tdfield">';
         $choices = ['' => l('Please choose')];
         foreach ($this->editable_backends AS $choice) {

@@ -168,7 +168,7 @@ function worldmap_init_db() {
         return;
     } // only init once
     $DB = new CorePDOHandler();
-    if (!$DB->open('sqlite', ['filename' => cfg('paths', 'cfg').'worldmap.db'], null, null)) {
+    if (!$DB->open('sqlite', ['filename' => cfg('paths', 'cfg') . 'worldmap.db'], null, null)) {
         throw new NagVisException(l('Unable to open worldmap database ([DB]): [MSG]',
             [
                 'DB' => $DB->getDSN(),
@@ -292,7 +292,7 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
             $oids[] = $id;
             $filter[$id] = $keys[$i - 1];
         }
-        $q = 'SELECT object FROM objects WHERE object_id IN ('.implode(', ', $oids).')';
+        $q = 'SELECT object FROM objects WHERE object_id IN (' . implode(', ', $oids) . ')';
         $RES = $DB->query($q, $filter);
         while ($data = $RES->fetch()) {
             $obj = json_decode($data['object'], true);
@@ -478,7 +478,7 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
 }
 
 function changed_worldmap($MAPCFG, $compare_time) {
-    $db_path = cfg('paths', 'cfg').'worldmap.db';
+    $db_path = cfg('paths', 'cfg') . 'worldmap.db';
     return !file_exists($db_path) || filemtime($db_path) > $compare_time;
 }
 

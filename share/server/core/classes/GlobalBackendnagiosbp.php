@@ -75,7 +75,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
     public function __construct($backendId) {
         $this->backendId = $backendId;
 
-        $this->baseUrl = cfg('backend_'.$backendId, 'base_url');
+        $this->baseUrl = cfg('backend_' . $backendId, 'base_url');
 
         $httpContext = [
                 'method'     => 'GET',
@@ -83,11 +83,11 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
                 'timeout'    => 5,
         ];
 
-        $username = cfg('backend_'.$backendId, 'auth_user');
-        $password = cfg('backend_'.$backendId, 'auth_pass');
+        $username = cfg('backend_' . $backendId, 'auth_user');
+        $password = cfg('backend_' . $backendId, 'auth_pass');
         if($username && $password) {
-            $authCred = base64_encode($username.':'.$password);
-            $httpContext['header'] = 'Authorization: Basic '.$authCred."\r\n";
+            $authCred = base64_encode($username . ':' . $password);
+            $httpContext['header'] = 'Authorization: Basic ' . $authCred . "\r\n";
         }
 
         $this->context = stream_context_create(['http' => $httpContext]);

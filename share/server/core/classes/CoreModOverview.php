@@ -113,11 +113,11 @@ class CoreModOverview extends CoreModule {
         $MAP->MAPOBJ->setConfiguration($this->getMapDefaultOpts($mapName, $MAPCFG->getAlias()));
 
         if($MAP->MAPOBJ->checkMaintenance(0)) {
-            $map['overview_url']    = $this->htmlBase.'/index.php?mod=Map&act=view&show='.$mapName;
+            $map['overview_url']    = $this->htmlBase . '/index.php?mod=Map&act=view&show=' . $mapName;
             $map['overview_class']  = '';
         } else {
             $map['overview_class']  = 'disabled';
-            $map['overview_url']    = 'javascript:alert(\''.l('The map is in maintenance mode. Please be patient.').'\');';
+            $map['overview_url']    = 'javascript:alert(\'' . l('The map is in maintenance mode. Please be patient.') . '\');';
             $map['summary_output']  = l('The map is in maintenance mode. Please be patient.');
 
             $MAP->MAPOBJ->clearMembers();
@@ -194,7 +194,7 @@ class CoreModOverview extends CoreModule {
         return [
           'type'              => 'map',
           'map_name'          => $name,
-          'object_id'         => 'map-'.$name,
+          'object_id'         => 'map-' . $name,
           'hover_menu'        => 1,
           'hover_childs_show' => 1,
           'hover_template'    => 'default',
@@ -218,7 +218,7 @@ class CoreModOverview extends CoreModule {
         $map['members']         = [];
         $map['num_members']     = 0;
         $map['overview_class']  = 'error';
-        $map['overview_url']    = $this->htmlBase.'/index.php?mod=Map&act=view&show='.$map['name'];
+        $map['overview_url']    = $this->htmlBase . '/index.php?mod=Map&act=view&show=' . $map['name'];
         $map['summary_output']  = l('Map Error: [ERR]', ['ERR' => $msg]);
         return $map;
     }

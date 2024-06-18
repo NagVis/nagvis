@@ -42,7 +42,7 @@ class NagVisHeaderMenu {
         $this->templateName = $templateName;
 
         $this->pathHtmlBase = cfg('paths','htmlbase');
-        $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName.'.header.html');
+        $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName . '.header.html');
 
         // Initialize template system
         $this->TMPL = New FrontendTemplateSystem();
@@ -141,7 +141,7 @@ class NagVisHeaderMenu {
         global $_MAINCFG, $CORE, $AUTHORISATION;
 
         // Get all the maps global content and use only those which are needed
-        $filename = cfg('paths','var').'maplist-full-global.cfg-'.CONST_VERSION.'-cache';
+        $filename = cfg('paths','var') . 'maplist-full-global.cfg-' . CONST_VERSION . '-cache';
 
         $cfgFiles = $CORE->getAvailableMaps();
         $path = $CORE->getMainCfg()->getValue('paths', 'mapcfg');
@@ -150,7 +150,7 @@ class NagVisHeaderMenu {
         }
 
         $CACHE = new GlobalFileCache($cfgFiles,
-            cfg('paths','var').'maplist-full-global.cfg-'.count($cfgFiles).'-'.CONST_VERSION.'-cache');
+            cfg('paths','var') . 'maplist-full-global.cfg-' . count($cfgFiles) . '-' . CONST_VERSION . '-cache');
 
         if ($CACHE->isCached() !== -1
            && $_MAINCFG->isCached() !== -1
@@ -365,7 +365,7 @@ class NagVisHeaderMenu {
             'currentUri'         => preg_replace('/[&?]lang=[a-z]{2}_[A-Z]{2}/', '', $UHANDLER->getRequestUri()),
             'pathImages'         => cfg('paths', 'htmlimages'),
             'showStates'         => cfg('defaults', 'header_show_states'),
-            'pathHeaderJs'       => path('html', 'global', 'templates', $this->templateName.'.header.js?v='.CONST_VERSION),
+            'pathHeaderJs'       => path('html', 'global', 'templates', $this->templateName . '.header.js?v=' . CONST_VERSION),
             'pathTemplates'      => path('html', 'global', 'templates'),
             'pathTemplateImages' => path('html', 'global', 'templateimages'),
             'langSearch'         => l('Search'),

@@ -505,31 +505,31 @@ class NagVisStatefulObject extends NagVisObject {
                 case 'critical':
                 case 'warning':
                     if($this->sum[ACK]) {
-                        $icon = $this->iconset.'_'.$stateLow.'_ack.'.$fileType;
+                        $icon = $this->iconset . '_' . $stateLow . '_ack.' . $fileType;
                     } elseif($this->sum[DOWNTIME]) {
-                        $icon = $this->iconset.'_'.$stateLow.'_dt.'.$fileType;
+                        $icon = $this->iconset . '_' . $stateLow . '_dt.' . $fileType;
                     } elseif($this->isStale(true)) {
-                        $icon = $this->iconset.'_'.$stateLow.'_stale.'.$fileType;
+                        $icon = $this->iconset . '_' . $stateLow . '_stale.' . $fileType;
                     } else {
-                        $icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
+                        $icon = $this->iconset . '_' . $stateLow . '.' . $fileType;
                     }
                 break;
                 case 'up':
                 case 'ok':
                     if($this->sum[DOWNTIME]) {
-                        $icon = $this->iconset.'_'.$stateLow.'_dt.'.$fileType;
+                        $icon = $this->iconset . '_' . $stateLow . '_dt.' . $fileType;
                     } elseif($this->isStale(true)) {
-                        $icon = $this->iconset.'_'.$stateLow.'_stale.'.$fileType;
+                        $icon = $this->iconset . '_' . $stateLow . '_stale.' . $fileType;
                     } else {
-                        $icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
+                        $icon = $this->iconset . '_' . $stateLow . '.' . $fileType;
                     }
                 break;
                 case 'unchecked':
                 case 'pending':
-                    $icon = $this->iconset.'_'.$stateLow.'.'.$fileType;
+                    $icon = $this->iconset . '_' . $stateLow . '.' . $fileType;
                 break;
                 default:
-                    $icon = $this->iconset.'_error.'.$fileType;
+                    $icon = $this->iconset . '_error.' . $fileType;
                 break;
             }
 
@@ -538,10 +538,10 @@ class NagVisStatefulObject extends NagVisObject {
                || @file_exists(NagVisStatefulObject::$iconPathLocal . $icon)) {
                 $this->icon = $icon;
             } else {
-                $this->icon = $this->iconset.'_error.'.$fileType;
+                $this->icon = $this->iconset . '_error.' . $fileType;
             }
         } else {
-            $this->icon = $this->iconset.'_error.'.$fileType;
+            $this->icon = $this->iconset . '_error.' . $fileType;
         }
     }
 
@@ -803,7 +803,7 @@ class NagVisStatefulObject extends NagVisObject {
             $this->sum[OUTPUT] .= '0 ';
         }
 
-        $this->sum[OUTPUT] .= ' '.$objLabel;
+        $this->sum[OUTPUT] .= ' ' . $objLabel;
         if ($finish) {
             $this->sum[OUTPUT] .= '.';
         }
@@ -906,15 +906,15 @@ class NagVisStatefulObject extends NagVisObject {
         $i = 0;
         foreach($this->backend_id as $backend_id) {
             if($i == 0) {
-                $arr['htmlcgi']  = cfg('backend_'.$backend_id, 'htmlcgi');
-                $arr['custom_1'] = cfg('backend_'.$backend_id, 'custom_1');
-                $arr['custom_2'] = cfg('backend_'.$backend_id, 'custom_2');
-                $arr['custom_3'] = cfg('backend_'.$backend_id, 'custom_3');
+                $arr['htmlcgi']  = cfg('backend_' . $backend_id, 'htmlcgi');
+                $arr['custom_1'] = cfg('backend_' . $backend_id, 'custom_1');
+                $arr['custom_2'] = cfg('backend_' . $backend_id, 'custom_2');
+                $arr['custom_3'] = cfg('backend_' . $backend_id, 'custom_3');
             } else {
-                $arr['htmlcgi_'.$i]  = cfg('backend_'.$backend_id, 'htmlcgi');
-                $arr['custom_1_'.$i] = cfg('backend_'.$backend_id, 'custom_1');
-                $arr['custom_2_'.$i] = cfg('backend_'.$backend_id, 'custom_2');
-                $arr['custom_3_'.$i] = cfg('backend_'.$backend_id, 'custom_3');
+                $arr['htmlcgi_' . $i]  = cfg('backend_' . $backend_id, 'htmlcgi');
+                $arr['custom_1_' . $i] = cfg('backend_' . $backend_id, 'custom_1');
+                $arr['custom_2_' . $i] = cfg('backend_' . $backend_id, 'custom_2');
+                $arr['custom_3_' . $i] = cfg('backend_' . $backend_id, 'custom_3');
             }
             $i++;
         }

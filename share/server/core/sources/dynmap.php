@@ -13,7 +13,7 @@ function dynmap_get_objects($MAPCFG, $p) {
         // only use the internal names
         foreach ($ret AS $key => $val) {
             if ($type == 'service') {
-                $obj_id = $MAPCFG->genObjId($backend_id.'~~'.$val['name1'] . '~~' . $val['name2']);
+                $obj_id = $MAPCFG->genObjId($backend_id . '~~' . $val['name1'] . '~~' . $val['name2']);
                 $object = [
                     'type'                => $type,
                     'object_id'           => $obj_id,
@@ -22,12 +22,12 @@ function dynmap_get_objects($MAPCFG, $p) {
                     'service_description' => $val['name2'],
                 ];
             } else {
-                $obj_id = $MAPCFG->genObjId($backend_id.'~~'.$val['name1']);
+                $obj_id = $MAPCFG->genObjId($backend_id . '~~' . $val['name1']);
                 $object = [
                     'type'                => $type,
                     'object_id'           => $obj_id,
                     'backend_id'          => [$backend_id],
-                    $type.'_name'         => $val['name1'],
+                    $type . '_name'         => $val['name1'],
                 ];
             }
             $objects[$obj_id] = $object;
@@ -205,8 +205,8 @@ function dynmap_sort_objects_by_name($o1, $o2) {
         $o2_str .= $o2['host_name'];
         $o2_str .= $o2['service_description'];
     } else {
-        $o1_str .= $o1[$o1['type'].'_name'];
-        $o2_str .= $o2[$o2['type'].'_name'];
+        $o1_str .= $o1[$o1['type'] . '_name'];
+        $o2_str .= $o2[$o2['type'] . '_name'];
     }
     if($o1_str == $o2_str) {
         return 0;

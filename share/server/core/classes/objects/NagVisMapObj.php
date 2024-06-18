@@ -401,12 +401,12 @@ class NagVisMapObj extends NagVisStatefulObject {
         }
     
         if(isset($parts[1]) && $objType == 'service'
-           && preg_match('/'.$parts[0].'/', $OBJ->getName())
-           && preg_match('/'.$parts[1].'/', $OBJ->getServiceDescription())) {
+           && preg_match('/' . $parts[0] . '/', $OBJ->getName())
+           && preg_match('/' . $parts[1] . '/', $OBJ->getServiceDescription())) {
             return true;
         }
 
-        if(!isset($parts[1]) && preg_match('/'.$parts[0].'/', $OBJ->getName())) {
+        if(!isset($parts[1]) && preg_match('/' . $parts[0] . '/', $OBJ->getName())) {
             return true;
         }
 
@@ -609,7 +609,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 
             $this->mergeSummaryOutput($arrStates, l('objects'));
         } else {
-            $this->sum[OUTPUT] = l('mapIsEmpty','MAP~'.$this->getName());
+            $this->sum[OUTPUT] = l('mapIsEmpty','MAP~' . $this->getName());
         }
     }
 

@@ -27,7 +27,7 @@ class ViewManageBackgrounds {
 
     private function uploadForm() {
         global $CORE;
-        echo '<h2>'.l('Upload Background Image').'</h2>';
+        echo '<h2>' . l('Upload Background Image') . '</h2>';
 
         if (is_action() && post('mode') == 'upload') {
             try {
@@ -42,7 +42,7 @@ class ViewManageBackgrounds {
                 }
 
                 $file_name = $file['name'];
-                $file_path = path('sys', '', 'backgrounds').$file_name;
+                $file_path = path('sys', '', 'backgrounds') . $file_name;
 
                 if (!preg_match(MATCH_PNG_GIF_JPG_FILE, $file_name)) {
                     throw new FieldInputError('image', l('The uploaded file is no image (png,jpg,gif) '
@@ -77,7 +77,7 @@ class ViewManageBackgrounds {
         echo '<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="3000000" />';
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Choose an Image').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Choose an Image') . '</td>';
         echo '<td class="tdfield">';
         upload('image');
         echo '</td></tr>';
@@ -89,7 +89,7 @@ class ViewManageBackgrounds {
 
     private function deleteForm() {
         global $CORE;
-        echo '<h2>'.l('Delete Background').'</h2>';
+        echo '<h2>' . l('Delete Background') . '</h2>';
 
         if (is_action() && post('mode') == 'delete') {
             try {
@@ -144,7 +144,7 @@ class ViewManageBackgrounds {
         hidden('mode', 'delete');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Background').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Background') . '</td>';
         echo '<td class="tdfield">';
         $images = ['' => l('Choose a background')];
         foreach ($CORE->getAvailableBackgroundImages() AS $name) {

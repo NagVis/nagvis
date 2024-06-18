@@ -124,7 +124,7 @@ function geomap_get_contents($url) {
         $opts = [
             'http' => [
                 'timeout'    => cfg('global', 'http_timeout'),
-                'user_agent' => 'NagVis '.CONST_VERSION.' geomap',
+                'user_agent' => 'NagVis ' . CONST_VERSION . ' geomap',
                 'max_redirects' => 0,
             ]
         ];
@@ -266,11 +266,11 @@ function geomap_files($params) {
     unset ($params['sources']);
     unset ($params['backend_id']);
 
-    $image_name  = 'geomap-'.implode('_', array_values($params)).'.png';
+    $image_name  = 'geomap-' . implode('_', array_values($params)) . '.png';
     return [
         $image_name,
-        path('sys', '', 'backgrounds').'/'.$image_name,
-        cfg('paths', 'var').$image_name.'.data',
+        path('sys', '', 'backgrounds') . '/' . $image_name,
+        cfg('paths', 'var') . $image_name . '.data',
     ];
 }
 
@@ -320,7 +320,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
     // Adapt the global section
     $map_config[0] = $saved_config[0];
-    $map_config[0]['map_image'] = $image_name.'?'.time().'.png';
+    $map_config[0]['map_image'] = $image_name . '?' . time() . '.png';
     $map_config[0]['iconset']   = $iconset;
 
     // Now add the objects to the map
@@ -398,18 +398,18 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     validate_geomap_server_base_url($geomap_server_base_url);
     $url = $geomap_server_base_url
           .'?module=map'
-          .'&width='.$params['width'].'&height='.$params['height']
-          .'&type='.$params['geomap_type'];
+          .'&width=' . $params['width'] . '&height=' . $params['height']
+          .'&type=' . $params['geomap_type'];
 
     // The geomap zoom seems to be something different than the nagvis zoom. Use
     // the dedicated geomap_zoom parameter
     if(isset($params['geomap_zoom']) && $params['geomap_zoom'] != '') {
         $mid_lat  = ($min_lat + $max_lat) / 2;
         $mid_long = ($min_long + $max_long) / 2;
-        $url .= '&zoom='.$params['geomap_zoom']
-               .'&center='.$mid_long.','.$mid_lat;
+        $url .= '&zoom=' . $params['geomap_zoom']
+               .'&center=' . $mid_long . ',' . $mid_lat;
     } else {
-        $url .= '&bbox='.$min_long.','.$max_lat.','.$max_long.','.$min_lat;
+        $url .= '&bbox=' . $min_long . ',' . $max_lat . ',' . $max_long . ',' . $min_lat;
     }
     //file_put_contents('/tmp/123', $url);
 

@@ -37,7 +37,7 @@ function NagVisAutoload($sClass) {
 	   || substr($sClass, 0, 6) === 'NagVis'
 	   || substr($sClass, 0, 6) === 'Nagios' 
 	   || substr($sClass, 0, 6) === 'Global') {
-		require($sClass.'.php');
+		require($sClass . '.php');
 		return true;
 	} else {
 		return false;
@@ -57,7 +57,7 @@ if ($handle = opendir($dir)) {
             && $file != 'autoload.php'
             && $file != 'core.php'
             && $file != 'index.php') {
-            require($dir.$file);
+            require($dir . $file);
         }
     }
     closedir($handle);
