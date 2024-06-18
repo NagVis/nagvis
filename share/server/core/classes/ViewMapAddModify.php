@@ -138,7 +138,7 @@ class ViewMapAddModify {
                 unset($attrs['object_id']);
 
                 js('document.getElementById("_submit").disabled = true;'
-                  .'window.location.href = makeuri(' . json_encode($attrs) . ');');
+                  . 'window.location.href = makeuri(' . json_encode($attrs) . ');');
                 $show_dialog = true;
             }
             elseif ($this->mode == 'view_params' && !$perm && $perm_user) {
@@ -154,7 +154,7 @@ class ViewMapAddModify {
                 scroll_up(); // On success, always scroll to top of page
                 success(l('Personal settings saved.'));
                 js('document.getElementById("_submit").disabled = true;'
-                  .'window.setTimeout(function() { window.location.reload(); }, 2000);');
+                  . 'window.setTimeout(function() { window.location.reload(); }, 2000);');
                 $show_dialog = true;
             } else {
                 if (!$this->MAPCFG->objExists($this->object_id)) {
@@ -199,7 +199,7 @@ class ViewMapAddModify {
             $obj_id = $this->MAPCFG->addElement($this->object_type, $this->attrs, true);
 
             js('popupWindowClose();'
-              .'refreshMapObject(null, "' . $obj_id . '", false);');
+              . 'refreshMapObject(null, "' . $obj_id . '", false);');
         }
 
         // delete map lock
@@ -257,8 +257,8 @@ class ViewMapAddModify {
         echo '<img src="' . cfg('paths', 'htmlimages') . 'internal/picker.png" alt="' . l('Color select') . '" />';
         echo '</a></div>';
         js('var o = document.getElementById(\'' . $propname . '_inp\');'
-          .'o.color = new jscolor.color(o, {pickerOnfocus:false,adjust:false,hash:true});'
-          .'o = null;');
+          . 'o.color = new jscolor.color(o, {pickerOnfocus:false,adjust:false,hash:true});'
+          . 'o = null;');
     }
 
     private function inputDimension($propname, $value, $hideField) {
@@ -457,7 +457,7 @@ class ViewMapAddModify {
                     select($propname, $options, $value, $onChange, $hideField);
                 } catch(BackendConnectionProblem $e) {
                     form_render_error($propname, l('Unable to fetch data from backend - '
-                                           .'falling back to input field.'));
+                                           . 'falling back to input field.'));
                     input($propname, $value, '', $hideField);
                 }
             break;

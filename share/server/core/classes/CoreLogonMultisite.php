@@ -47,7 +47,7 @@ class CoreLogonMultisite extends CoreLogonModule {
 
         } else {
             throw new NagVisException(l('LogonMultisite: The htpasswd file &quot;[HTPASSWD]&quot; or '
-                                       .'the authentication serial file &quot;[SERIAL]&quot; do not exist.',
+                                       . 'the authentication serial file &quot;[SERIAL]&quot; do not exist.',
                           ['HTPASSWD' => $this->htpasswdPath, 'SERIAL' => $this->serialsPath]));
         }
 
@@ -73,12 +73,12 @@ class CoreLogonMultisite extends CoreLogonModule {
 
     private function generateHash($username, $session_id, $user_secret) {
         $secret = $this->loadSecret();
-        return hash_hmac("sha256", $username . $session_id. $user_secret, $secret);
+        return hash_hmac("sha256", $username . $session_id . $user_secret, $secret);
     }
 
     private function generatePre22Hash($username, $session_id, $user_secret) {
         $secret = $this->loadSecret();
-        return hash("sha256", $username . $session_id. $user_secret . $secret);
+        return hash("sha256", $username . $session_id . $user_secret . $secret);
     }
 
     private function generatePre20Hash($username, $issue_time, $user_secret) {

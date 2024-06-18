@@ -410,7 +410,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                     $parts = explode('~~', $filter);
                     if(isset($parts[1])) {
                         $objFilters[] = " NOT (" . $childTable . ".name1 " . $this->re_op . " :o$idx "
-                                       ." AND " . $childTable . ".name2 " . $this->re_op . " :o" . ($idx + 1) . ")";
+                                       . " AND " . $childTable . ".name2 " . $this->re_op . " :o" . ($idx + 1) . ")";
                         $values["o$idx"] = $parts[0];
                         $values["o" . ($idx + 1)] = $parts[1];
                         $idx += 2;
@@ -1373,7 +1373,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
 
     public function getProgramStart() {
         $QUERYHANDLE = $this->DB->query('SELECT UNIX_TIMESTAMP(program_start_time) AS program_start '
-                                        .'FROM ' . $this->dbPrefix . 'programstatus WHERE instance_id=:instance',
+                                        . 'FROM ' . $this->dbPrefix . 'programstatus WHERE instance_id=:instance',
                 ['instance' => $this->dbInstanceId]);
         $data = $QUERYHANDLE->fetch();
         if($data !== false && $this->DB->is_nonnull_int($data['program_start'])) {

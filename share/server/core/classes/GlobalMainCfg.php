@@ -1896,9 +1896,9 @@ class GlobalMainCfg {
             $configVars = [];
 
             if(file_exists(path('sys', 'local', 'actions'))) {
-                include(path('sys', 'local', 'actions') . '/'. $action_file);
+                include(path('sys', 'local', 'actions') . '/' . $action_file);
             } else {
-                include(path('sys', 'global', 'actions') . '/'. $action_file);
+                include(path('sys', 'global', 'actions') . '/' . $action_file);
             }
 
             $name = substr($action_file, 0, -4);

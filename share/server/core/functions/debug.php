@@ -49,8 +49,8 @@ function debug($msg) {
  */
 function debugFinalize() {
 	debug('==> Render Time: ' . round((microtime_float() - DEBUGSTART), 2) . 'sec'
-             .' Mem peak: ' . round(memory_get_peak_usage() / 1024 / 1024, 2) . 'Mb'
-             .' URI: ' . $_SERVER['REQUEST_URI']);
+             . ' Mem peak: ' . round(memory_get_peak_usage() / 1024 / 1024, 2) . 'Mb'
+             . ' URI: ' . $_SERVER['REQUEST_URI']);
 }
 
 function log_mem($txt = 'somewhere') {

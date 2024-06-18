@@ -117,13 +117,13 @@ function worldmap_init_schema() {
     // Create initial db scheme if needed
     if (!$DB->tableExist('objects')) {
         $DB->query('CREATE TABLE objects '
-                 .'(object_id VARCHAR(20),'
-                 .' lat REAL,'
-                 .' lng REAL,'
-                 .' lat2 REAL,' // needed for line objects
-                 .' lng2 REAL,'
-                 .' object TEXT,'
-                 .' PRIMARY KEY(object_id))');
+                 . '(object_id VARCHAR(20),'
+                 . ' lat REAL,'
+                 . ' lng REAL,'
+                 . ' lat2 REAL,' // needed for line objects
+                 . ' lng2 REAL,'
+                 . ' object TEXT,'
+                 . ' PRIMARY KEY(object_id))');
         $DB->query('CREATE INDEX latlng ON objects (lat,long)');
         $DB->query('CREATE INDEX latlng2 ON objects (lat2,long2)');
         $DB->createVersionTable();
@@ -245,11 +245,11 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
 
     $q = 'SELECT lat, lng, lat2, lng2, object FROM objects WHERE'
         // object lays, or line starts within bbox
-        .'(lat BETWEEN :sw_lat AND :ne_lat AND lng BETWEEN :sw_lng AND :ne_lng)'
+        . '(lat BETWEEN :sw_lat AND :ne_lat AND lng BETWEEN :sw_lng AND :ne_lng)'
         // line ends within bbox
-        .'OR (lat2 BETWEEN :sw_lat AND :ne_lat AND lng2 BETWEEN :sw_lng AND :ne_lng)'
+        . 'OR (lat2 BETWEEN :sw_lat AND :ne_lat AND lng2 BETWEEN :sw_lng AND :ne_lng)'
         // line intersects one of 4 bbox borders
-        ."OR (lat2>0 AND lng2>0 AND ($intWithinWestBound OR $intWithinSouthBound OR $intWithinEastBound OR $intWithinNorthBound))"
+        . "OR (lat2>0 AND lng2>0 AND ($intWithinWestBound OR $intWithinSouthBound OR $intWithinEastBound OR $intWithinNorthBound))"
         ;
 
     $q = str_replace(':sw_lng', $sw_lng, $q);
@@ -323,15 +323,15 @@ function worldmap_db_update_object($obj_id, $lat, $lng, $obj,
 
     if ($insert) {
         $q = 'INSERT INTO objects (object_id, lat, lng, lat2, lng2, object)'
-            .' VALUES (:obj_id, :lat, :lng, :lat2, :lng2, :object)';
+            . ' VALUES (:obj_id, :lat, :lng, :lat2, :lng2, :object)';
     } else {
         $q = 'UPDATE objects SET '
-            .' lat=:lat,'
-            .' lng=:lng,'
-            .' lat2=:lat2,'
-            .' lng2=:lng2,'
-            .' object=:object '
-            .'WHERE object_id=:obj_id';
+            . ' lat=:lat,'
+            . ' lng=:lng,'
+            . ' lat2=:lat2,'
+            . ' lng2=:lng2,'
+            . ' object=:object '
+            . 'WHERE object_id=:obj_id';
     }
 
     if ($DB->query($q, [
@@ -397,8 +397,8 @@ function get_bounds_worldmap($MAPCFG, $map_name, &$map_config) {
     worldmap_init_db();
 
     $q = 'SELECT min(lat) as min_lat, min(lng) as min_lng, '
-        .'max(lat) as max_lat, max(lng) as max_lng '
-        .'FROM objects';
+        . 'max(lat) as max_lat, max(lng) as max_lng '
+        . 'FROM objects';
     $b = $DB->query($q)->fetch();
     return [
         [$b['min_lat'], $b['min_lng']],

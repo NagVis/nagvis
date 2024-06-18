@@ -203,12 +203,12 @@ table[name=\"$ident\"] th.OK,
 table[name=\"$ident\"] th.UP,
 table[name=\"$ident\"] td.OK,
 table[name=\"$ident\"] td.UP {
-    background: ". $table_colors['UP']. ";
+    background: " . $table_colors['UP'] . ";
     color: #000000;
 }
 table[name=\"$ident\"] th.WARNING,
 table[name=\"$ident\"] td.WARNING {
-    background: ". $table_colors['WARNING']. ";
+    background: " . $table_colors['WARNING'] . ";
     color: #000000;
     font-weight: bold;
 }
@@ -219,27 +219,27 @@ table[name=\"$ident\"] th.UNREACHABLE,
 table[name=\"$ident\"] td.CRITICAL,
 table[name=\"$ident\"] td.DOWN,
 table[name=\"$ident\"] td.UNREACHABLE {
-    background: ". $table_colors['DOWN']. ";
+    background: " . $table_colors['DOWN'] . ";
     color: #000000;
     font-weight: bold;
 }
 
 table[name=\"$ident\"] th.UNKNOWN,
 table[name=\"$ident\"] td.UNKNOWN {
-    background: ". $table_colors['UNKNOWN']. ";
+    background: " . $table_colors['UNKNOWN'] . ";
     color: #000000;
     font-weight: bold;
 }
 
 table[name=\"$ident\"] th.ERROR,
 table[name=\"$ident\"] td.ERROR {
-    background: ". $table_colors['ERROR']. ";
+    background: " . $table_colors['ERROR'] . ";
     color: #000000;
     font-weight: bold;
 }
 
 table[name=\"$ident\"] td.EMPTY {
-    background: ". $table_colors['EMPTY']. ";
+    background: " . $table_colors['EMPTY'] . ";
     color: #666B85;
 }
 ";
@@ -264,7 +264,7 @@ echo "</style>";
 // END of CSS
 
 // Write Table
-echo '<table name="'. $ident .'" class="table-gadget">';
+echo '<table name="' . $ident . '" class="table-gadget">';
 if ($show_header == 1) {
     // Write Header
     echo "<thead>";
@@ -286,7 +286,7 @@ if ($show_header == 1) {
             }
         }
         if ($colspan > 0) {
-            echo '<th colspan="'. $colspan .'">';
+            echo '<th colspan="' . $colspan . '">';
             echo $title;
             echo "</th>";
         }
@@ -323,7 +323,7 @@ foreach ($stats as $stat => $value){
             } else {
                 $class = 'EMPTY';
             }
-            echo '<td class="'. $class .' table_stat">';
+            echo '<td class="' . $class . ' table_stat">';
                 echo $value;
             echo "</td>";
         }

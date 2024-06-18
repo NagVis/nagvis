@@ -171,7 +171,7 @@ class CoreModOverview extends CoreModule {
             }
 
             $aObjs[] = $ret;
-            log_mem('post '. $mapName);
+            log_mem('post ' . $mapName);
         }
 
         // Now fetch and apply data from backend
