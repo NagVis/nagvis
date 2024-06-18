@@ -2132,7 +2132,7 @@ class GlobalMainCfg {
                 }
             } elseif ((substr($line, 0, 1) == '[') && (substr($line, -1, 1)) == ']') {
                 // section
-                $sec = trim(substr($line, 1, strlen($line)-2));
+                $sec = trim(substr($line, 1, strlen($line) - 2));
 
                 // write to array
                 if(!isset($this->config[$sec])) {
@@ -2162,7 +2162,7 @@ class GlobalMainCfg {
 
                 // remove " at beginning and at the end of the string
                 if ((substr($val,0,1) == '"') && (substr($val,-1,1)=='"')) {
-                    $val = substr($val,1,strlen($val)-2);
+                    $val = substr($val,1,strlen($val) - 2);
                 }
 
                 // Try to get the valid config array. But be aware. This is not the whole
@@ -2888,7 +2888,7 @@ class GlobalMainCfg {
             }
         }
 
-        $cfgFile = $this->configFiles[count($this->configFiles)-1];
+        $cfgFile = $this->configFiles[count($this->configFiles) - 1];
         if(!$handle = fopen($cfgFile, 'w+')) {
             throw new NagVisException(l('mainCfgNotWriteable'));
         }
@@ -2911,7 +2911,7 @@ class GlobalMainCfg {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     function checkNagVisConfigWriteable($printErr) {
-        return GlobalCore::getInstance()->checkWriteable($this->configFiles[count($this->configFiles)-1], $printErr);
+        return GlobalCore::getInstance()->checkWriteable($this->configFiles[count($this->configFiles) - 1], $printErr);
     }
 
     /**

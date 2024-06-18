@@ -1270,7 +1270,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $arrReturn = [];
         if(is_array($l) && count($l) > 0) {
             // livestatus previous 1.1.9i3 answers without hostgroup_alias - these users should update.
-            if(!isset($l[0][8+$hoffset])) {
+            if(!isset($l[0][8 + $hoffset])) {
                 throw new BackendInvalidResponse(
                     l('Livestatus version used in backend [BACKENDID] is too old. Please update.',
                         ['BACKENDID' => $this->backendId]));
@@ -1279,30 +1279,30 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 // Workaround for Icinga 2 which answers stats queries for not existing objects with
                 // 0 stats but with missing host_name and host_alias columns. So the number of answer
                 // columns is different leading to an exception in the code below.
-                if (count($e) != 12+$hoffset) {
+                if (count($e) != 12 + $hoffset) {
                     continue;
                 }
 
                 $counts = [
                     UNCHECKED => [
-                        'normal'    => intval($e[0+$hoffset]),
+                        'normal'    => intval($e[0 + $hoffset]),
                     ],
                     UP => [
-                        'normal'    => intval($e[1+$hoffset]),
-                        'stale'     => intval($e[2+$hoffset]),
-                        'downtime'  => intval($e[3+$hoffset]),
+                        'normal'    => intval($e[1 + $hoffset]),
+                        'stale'     => intval($e[2 + $hoffset]),
+                        'downtime'  => intval($e[3 + $hoffset]),
                     ],
                     DOWN => [
-                        'normal'    => intval($e[4+$hoffset]),
-                        'stale'     => intval($e[5+$hoffset]),
-                        'ack'       => intval($e[6+$hoffset]),
-                        'downtime'  => intval($e[7+$hoffset]),
+                        'normal'    => intval($e[4 + $hoffset]),
+                        'stale'     => intval($e[5 + $hoffset]),
+                        'ack'       => intval($e[6 + $hoffset]),
+                        'downtime'  => intval($e[7 + $hoffset]),
                     ],
                     UNREACHABLE => [
-                        'normal'    => intval($e[8+$hoffset]),
-                        'stale'     => intval($e[9+$hoffset]),
-                        'ack'       => intval($e[10+$hoffset]),
-                        'downtime'  => intval($e[11+$hoffset]),
+                        'normal'    => intval($e[8 + $hoffset]),
+                        'stale'     => intval($e[9 + $hoffset]),
+                        'ack'       => intval($e[10 + $hoffset]),
+                        'downtime'  => intval($e[11 + $hoffset]),
                     ],
                 ];
 
@@ -1339,36 +1339,36 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 // Workaround for Icinga 2 which answers stats queries for not existing objects with
                 // 0 stats but with missing host_name and host_alias columns. So the number of answer
                 // columns is different leading to an exception in the code below.
-                if (count($e) != 16+$soffset) {
+                if (count($e) != 16 + $soffset) {
                     continue;
                 }
 
                 $counts = [
                     PENDING => [
-                        'normal'   => intval($e[0+$soffset])
+                        'normal'   => intval($e[0 + $soffset])
                     ],
                     OK => [
-                        'normal'   => intval($e[1+$soffset]),
-                        'stale'    => intval($e[2+$soffset]),
-                        'downtime' => intval($e[3+$soffset]),
+                        'normal'   => intval($e[1 + $soffset]),
+                        'stale'    => intval($e[2 + $soffset]),
+                        'downtime' => intval($e[3 + $soffset]),
                     ],
                     WARNING => [
-                        'normal'   => intval($e[4+$soffset]),
-                        'stale'    => intval($e[5+$soffset]),
-                        'ack'      => intval($e[6+$soffset]),
-                        'downtime' => intval($e[7+$soffset]),
+                        'normal'   => intval($e[4 + $soffset]),
+                        'stale'    => intval($e[5 + $soffset]),
+                        'ack'      => intval($e[6 + $soffset]),
+                        'downtime' => intval($e[7 + $soffset]),
                     ],
                     CRITICAL => [
-                        'normal'   => intval($e[8+$soffset]),
-                        'stale'    => intval($e[9+$soffset]),
-                        'ack'      => intval($e[10+$soffset]),
-                        'downtime' => intval($e[11+$soffset]),
+                        'normal'   => intval($e[8 + $soffset]),
+                        'stale'    => intval($e[9 + $soffset]),
+                        'ack'      => intval($e[10 + $soffset]),
+                        'downtime' => intval($e[11 + $soffset]),
                     ],
                     UNKNOWN => [
-                        'normal'   => intval($e[12+$soffset]),
-                        'stale'    => intval($e[13+$soffset]),
-                        'ack'      => intval($e[14+$soffset]),
-                        'downtime' => intval($e[15+$soffset]),
+                        'normal'   => intval($e[12 + $soffset]),
+                        'stale'    => intval($e[13 + $soffset]),
+                        'ack'      => intval($e[14 + $soffset]),
+                        'downtime' => intval($e[15 + $soffset]),
                     ],
                 ];
 
