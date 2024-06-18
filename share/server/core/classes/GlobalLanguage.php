@@ -55,7 +55,7 @@ class GlobalLanguage {
         T_textdomain($this->textDomain);
 
         // Check if native gettext or php-gettext is used
-        if(DEBUG&&DEBUGLEVEL&2) {
+        if(DEBUG && DEBUGLEVEL & 2) {
             if(locale_emulation()) {
                 debug('GlobalLanguage: Using php-gettext for translations');
             } else {

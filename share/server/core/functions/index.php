@@ -128,7 +128,7 @@ if($MODULE !== false && $MODULE->offersAction($UHANDLER->get('act'))) {
 }
 
 echo $sContent;
-if (DEBUG&&DEBUGLEVEL&4) {
+if (DEBUG && DEBUGLEVEL & 4) {
     debugFinalize();
 }
 if (PROFILE) {

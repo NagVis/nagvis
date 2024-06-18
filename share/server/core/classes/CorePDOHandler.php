@@ -459,12 +459,12 @@ class CorePDOHandler {
     public function deletePermissions($mod, $name) {
         // Only create when not existing
         if($this->count('-perm-count', ['mod' => $mod, 'act' => 'view', 'obj' => $name]) > 0) {
-            if(DEBUG&&DEBUGLEVEL&2) {
+            if(DEBUG && DEBUGLEVEL & 2) {
                 debug('auth.db: delete permissions for ' . $mod . ' ' . $name);
             }
             $this->query('-role-delete-perm-by-obj', ['mod' => $mod, 'obj' => $name]);
             $this->query('-perm-delete-by-obj', ['mod' => $mod, 'obj' => $name]);
-        } elseif(DEBUG&&DEBUGLEVEL&2) {
+        } elseif(DEBUG && DEBUGLEVEL & 2) {
             debug('auth.db: won\'t delete ' . $mod . ' permissions ' . $name);
         }
     }
@@ -472,7 +472,7 @@ class CorePDOHandler {
     public function createMapPermissions($name) {
         // Only create when not existing
         if($this->count('-perm-count', ['mod' => 'Map', 'act' => 'view', 'obj' => $name]) <= 0) {
-            if(DEBUG&&DEBUGLEVEL&2) {
+            if(DEBUG && DEBUGLEVEL & 2) {
                 debug('auth.db: create permissions for map ' . $name);
             }
             if ($this->updating && !$this->inTrans) {
@@ -482,7 +482,7 @@ class CorePDOHandler {
             $this->query('-perm-add', ['mod' => 'Map', 'act' => 'view', 'obj' => $name]);
             $this->query('-perm-add', ['mod' => 'Map', 'act' => 'edit', 'obj' => $name]);
             $this->query('-perm-add', ['mod' => 'Map', 'act' => 'delete', 'obj' => $name]);
-        } elseif(DEBUG&&DEBUGLEVEL&2) {
+        } elseif(DEBUG && DEBUGLEVEL & 2) {
             debug('auth.db: won\'t create permissions for map ' . $name);
         }
 
@@ -492,11 +492,11 @@ class CorePDOHandler {
     public function createRotationPermissions($name) {
         // Only create when not existing
         if($this->count('-perm-count', ['mod' => 'Rotation', 'act' => 'view', 'obj' => $name]) <= 0) {
-            if(DEBUG&&DEBUGLEVEL&2) {
+            if(DEBUG && DEBUGLEVEL & 2) {
                 debug('auth.db: create permissions for rotation ' . $name);
             }
             $this->query('-perm-add', ['mod' => 'Rotation', 'act' => 'view', 'obj' => $name]);
-        } elseif(DEBUG&&DEBUGLEVEL&2) {
+        } elseif(DEBUG && DEBUGLEVEL & 2) {
             debug('auth.db: won\'t create permissions for rotation ' . $name);
         }
 
