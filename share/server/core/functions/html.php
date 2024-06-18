@@ -23,7 +23,7 @@
  * GENERIC HELPERS
  */
 
-define('N', "\n");
+const N = "\n";
 
 function escape_html($s) {
     return htmlentities($s, ENT_COMPAT, 'UTF-8');

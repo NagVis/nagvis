@@ -85,7 +85,7 @@ require($_nv_core_dir.'/functions/oldPhpVersionFixes.php');
 require($_nv_core_dir.'/classes/CoreExceptions.php');
 require($_nv_core_dir.'/functions/nagvisErrorHandler.php');
 
-define('CONST_AJAX', true);
+const CONST_AJAX = true;
 
 try {
     require($_nv_core_dir.'/functions/core.php');
