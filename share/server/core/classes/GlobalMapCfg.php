@@ -67,7 +67,7 @@ class GlobalMapCfg {
             $this->fetchMapSources();
         }
 
-        $this->mapLockPath = cfg('paths', 'mapcfg').$this->name.'.lock';
+        $this->mapLockPath = cfg('paths', 'mapcfg') . $this->name . '.lock';
 
         // Define the map configuration file when no one set until here
         if($this->configFile === '') {
@@ -75,8 +75,8 @@ class GlobalMapCfg {
         }
 
         if($this->cacheFile === '') {
-            $this->cacheFile = cfg('paths','var').$this->type.'-'.$name.'.cfg-'.CONST_VERSION.'-cache';
-            $this->defaultsCacheFile = $this->cacheFile.'-defs';
+            $this->cacheFile = cfg('paths','var') . $this->type . '-' . $name . '.cfg-' . CONST_VERSION . '-cache';
+            $this->defaultsCacheFile = $this->cacheFile . '-defs';
         }
 
         // Initialize the map configuration cache
@@ -241,7 +241,7 @@ class GlobalMapCfg {
             "aggr",
         ];
         foreach ($types_with_url as $type_name) {
-            $this->typeDefaults[$type_name]["url"] = $this->getValue(0, $type_name."_url");
+            $this->typeDefaults[$type_name]["url"] = $this->getValue(0, $type_name . "_url");
         }
     }
 
@@ -372,7 +372,7 @@ class GlobalMapCfg {
                     }
                     $obj['object_id']      = $new;
                     $this->mapConfig[$new] = $obj;
-                    $this->storeDeleteElement('_'.$iObjId, $this->formatElement($new));
+                    $this->storeDeleteElement('_' . $iObjId, $this->formatElement($new));
                 } else {
                     $this->mapConfig[$id] = $obj;
                 }
@@ -787,7 +787,7 @@ class GlobalMapCfg {
         }
 
         foreach($sources AS $source) {
-            $func = 'changed_'.$source;
+            $func = 'changed_' . $source;
             if($func($this, $compareTime)) {
                 return true;
             }
@@ -834,7 +834,7 @@ class GlobalMapCfg {
             unset($params['source_file']);
         }
         $param_values = $this->paramsToString($params);
-        $cacheFile = cfg('paths','var').'source-'.$this->name.'.cfg-'.$param_values.'-'.$this->isView.'-'.CONST_VERSION.'.cache';
+        $cacheFile = cfg('paths','var') . 'source-' . $this->name . '.cfg-' . $param_values . '-' . $this->isView . '-' . CONST_VERSION . '.cache';
         $CACHE = new GlobalFileCache([], $cacheFile);
 
         // 2a. Check if the cache file exists
@@ -854,7 +854,7 @@ class GlobalMapCfg {
 
         // 3b. Process all the sources
         foreach($sources AS $source) {
-            $func = 'process_'.$source;
+            $func = 'process_' . $source;
             if(!function_exists($func)) {
                 throw new NagVisException(l('Requested source "[S]" does not exist',
                     ['S' => $source]));
@@ -1387,7 +1387,7 @@ class GlobalMapCfg {
     public function handleSources($act, $id = null) {
         $sources = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : [];
         foreach($sources AS $source) {
-            $func = $act.'_'.$source;
+            $func = $act . '_' . $source;
             if (!function_exists($func)) {
                 continue;
             } // silently ignore sources not implementing this
@@ -1415,7 +1415,7 @@ class GlobalMapCfg {
         $a = [];
         $type = $this->mapConfig[$id]['type'];
 
-        $a[] = 'define '.$type." {\n";
+        $a[] = 'define ' . $type . " {\n";
 
         // Templates need a special handling here cause they can have all types
         // of options. So read all keys which are currently set
@@ -1634,7 +1634,7 @@ class GlobalMapCfg {
             $val = str_replace( "\t", ' ', $val );
             $val = preg_replace( '/[\x00-\x1f]/', '', $val );
 
-            $newLine = $key.'='.$val."\n";
+            $newLine = $key . '=' . $val . "\n";
 
             if($lineNum !== null && $newLine !== '') {
                 // if a parameter was found in file and value is not empty, replace line
@@ -1801,8 +1801,8 @@ class GlobalMapCfg {
     public function exportMap() {
         if($this->checkMapConfigReadable(1)) {
             header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename='.$this->getName().'.cfg');
-            header('Content-Length: '.filesize($this->configFile));
+            header('Content-Disposition: attachment; filename=' . $this->getName() . '.cfg');
+            header('Content-Length: ' . filesize($this->configFile));
 
             if(readfile($this->configFile)) {
                 exit;
@@ -2011,8 +2011,8 @@ class GlobalMapCfg {
             'alias'                    => $this->getValue(0, 'alias'),
             'background_image'         => $this->BACKGROUND->getFile(),
             'background_color'         => $this->getValue(0, 'background_color'),
-            'favicon_image'            => cfg('paths', 'htmlimages').'internal/favicon.png',
-            'page_title'               => $this->getValue(0, 'alias').' ([SUMMARY_STATE]) :: '.cfg('internal', 'title'),
+            'favicon_image'            => cfg('paths', 'htmlimages') . 'internal/favicon.png',
+            'page_title'               => $this->getValue(0, 'alias') . ' ([SUMMARY_STATE]) :: ' . cfg('internal', 'title'),
             'event_background'         => $this->getValue(0, 'event_background'),
             'event_highlight'          => $this->getValue(0, 'event_highlight'),
             'event_highlight_interval' => $this->getValue(0, 'event_highlight_interval'),

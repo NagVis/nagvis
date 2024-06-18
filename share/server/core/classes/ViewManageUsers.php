@@ -27,7 +27,7 @@ class ViewManageUsers {
 
     private function addForm() {
         global $AUTH;
-        echo '<h2>'.l('Create User').'</h2>';
+        echo '<h2>' . l('Create User') . '</h2>';
 
         if (is_action() && post('mode') == 'create') {
             try {
@@ -90,15 +90,15 @@ class ViewManageUsers {
         hidden('mode', 'create');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Username').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Username') . '</td>';
         echo '<td class="tdfield">';
         input('name');
         echo '</td></tr>';
-        echo '<tr><td class="tdlabel">'.l('Password').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Password') . '</td>';
         echo '<td class="tdfield">';
         password('password1');
         echo '</td></tr>';
-        echo '<tr><td class="tdlabel">'.l('Password Confirm').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Password Confirm') . '</td>';
         echo '<td class="tdfield">';
         password('password2');
         echo '</td></tr>';
@@ -113,7 +113,7 @@ class ViewManageUsers {
         if (!$AUTHORISATION->rolesConfigurable()) {
             return;
         }
-        echo '<h2>'.l('Modify User').'</h2>';
+        echo '<h2>' . l('Modify User') . '</h2>';
 
         $user_id = submitted('edit') ? post('user_id') : null;
 
@@ -155,7 +155,7 @@ class ViewManageUsers {
         js_form_start('edit');
         hidden('mode', 'edit');
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Name').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Name') . '</td>';
         echo '<td class="tdfield">';
         $choices = ['' => l('Please choose')];
         foreach ($AUTH->getAllUsers() AS $user) {
@@ -182,9 +182,9 @@ class ViewManageUsers {
 
             hidden('user_roles', implode(',', array_keys($user_roles)));
             echo '<table class="mytable">';
-            echo '<tr><td>'.l('Available Roles').'</td>';
+            echo '<tr><td>' . l('Available Roles') . '</td>';
             echo '<td style="width:30px"></td>';
-            echo '<td>'.l('Selected Roles').'</td></tr>';
+            echo '<td>' . l('Selected Roles') . '</td></tr>';
             echo '<tr><td>';
             select('roles_available', $available_roles, '', '', 'width:100%', 5);
             echo '</td><td style="vertical-align:middle">';
@@ -201,7 +201,7 @@ class ViewManageUsers {
 
     private function deleteForm() {
         global $AUTH, $AUTHORISATION;
-        echo '<h2>'.l('Delete User').'</h2>';
+        echo '<h2>' . l('Delete User') . '</h2>';
 
         if (is_action() && post('mode') == 'delete') {
             try {
@@ -242,7 +242,7 @@ class ViewManageUsers {
         hidden('mode', 'delete');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Name').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Name') . '</td>';
         echo '<td class="tdfield">';
         $choices = ['' => l('Please choose')];
         foreach ($AUTH->getAllUsers() AS $user) {
@@ -262,7 +262,7 @@ class ViewManageUsers {
             return;
         } // reset not supported
 
-        echo '<h2>'.l('Reset Password').'</h2>';
+        echo '<h2>' . l('Reset Password') . '</h2>';
 
         if (is_action() && post('mode') == 'reset_pw') {
             try {
@@ -320,7 +320,7 @@ class ViewManageUsers {
         hidden('mode', 'reset_pw');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Name').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Name') . '</td>';
         echo '<td class="tdfield">';
         $choices = ['' => l('Please choose')];
         foreach ($AUTH->getAllUsers() AS $user) {
@@ -328,11 +328,11 @@ class ViewManageUsers {
         }
         select('user_id', $choices);
         echo '</td></tr>';
-        echo '<tr><td class="tdlabel">'.l('Password').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Password') . '</td>';
         echo '<td class="tdfield">';
         password('password1');
         echo '</td></tr>';
-        echo '<tr><td class="tdlabel">'.l('Password Confirm').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Password Confirm') . '</td>';
         echo '<td class="tdfield">';
         password('password2');
         echo '</td></tr>';

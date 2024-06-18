@@ -1938,9 +1938,9 @@ class GlobalMainCfg {
         $this->fetchCustomActions();
 
         // Use the newest file as indicator for using the cache or not
-        $this->CACHE = new GlobalFileCache(CONST_MAINCFG, CONST_MAINCFG_CACHE.'-'.CONST_VERSION.'-cache'.$cacheSuffix);
+        $this->CACHE = new GlobalFileCache(CONST_MAINCFG, CONST_MAINCFG_CACHE . '-' . CONST_VERSION . '-cache' . $cacheSuffix);
         $this->PUCACHE = new GlobalFileCache(array_slice($this->configFiles, 0, count($this->configFiles) - 1),
-                                             CONST_MAINCFG_CACHE.'-pre-user-'.CONST_VERSION.'-cache'.$cacheSuffix);
+                                             CONST_MAINCFG_CACHE . '-pre-user-' . CONST_VERSION . '-cache' . $cacheSuffix);
 
         try {
   	    if($this->CACHE->isCached(false) === -1
@@ -2009,14 +2009,14 @@ class GlobalMainCfg {
         $aBackends = GlobalCore::getInstance()->getAvailableBackends();
 
         foreach($aBackends AS $backend) {
-            $class = 'GlobalBackend'.$backend;
+            $class = 'GlobalBackend' . $backend;
 
             // FIXME: Does not work in PHP 5.2 (http://bugs.php.net/bug.php?id=31318)
             //$this->validConfig['backend']['options'][$backend] = $class->getValidConfig();
             // I'd prefer to use the above but for the moment I use the fix below
 
             if (is_callable([$class, 'getValidConfig'])) {
-                $this->validConfig['backend']['options'][$backend] = call_user_func(['GlobalBackend'.$backend, 'getValidConfig']);
+                $this->validConfig['backend']['options'][$backend] = call_user_func(['GlobalBackend' . $backend, 'getValidConfig']);
                 //$this->validConfig['backend']['options'][$backend] = call_user_func('GlobalBackend'.$backend.'::getValidConfig');
             }
         }
@@ -2030,28 +2030,28 @@ class GlobalMainCfg {
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function setPathsByBase($base, $htmlBase) {
-        $this->validConfig['paths']['cfg']['default']                = $base.'etc/';
-        $this->validConfig['paths']['mapcfg']['default']             = $base.'etc/maps/';
-        $this->validConfig['paths']['geomap']['default']             = $base.'etc/geomap';
-        $this->validConfig['paths']['profiles']['default']           = $base.'etc/profiles';
-        $this->validConfig['global']['authorisation_group_perms_file']['default'] = $base.'etc/perms.db';
+        $this->validConfig['paths']['cfg']['default']                = $base . 'etc/';
+        $this->validConfig['paths']['mapcfg']['default']             = $base . 'etc/maps/';
+        $this->validConfig['paths']['geomap']['default']             = $base . 'etc/geomap';
+        $this->validConfig['paths']['profiles']['default']           = $base . 'etc/profiles';
+        $this->validConfig['global']['authorisation_group_perms_file']['default'] = $base . 'etc/perms.db';
 
-        $this->validConfig['paths']['var']['default']                = $base.'var/';
-        $this->validConfig['paths']['sharedvar']['default']          = $base.HTDOCS_DIR.'/var/';
-        $this->validConfig['paths']['htmlsharedvar']['default']      = $htmlBase.'/var/';
+        $this->validConfig['paths']['var']['default']                = $base . 'var/';
+        $this->validConfig['paths']['sharedvar']['default']          = $base . HTDOCS_DIR . '/var/';
+        $this->validConfig['paths']['htmlsharedvar']['default']      = $htmlBase . '/var/';
 
-        $this->validConfig['paths']['language']['default']           = $base.HTDOCS_DIR.'/frontend/nagvis-js/locale';
-        $this->validConfig['paths']['class']['default']              = $base.HTDOCS_DIR.'/server/core/classes/';
-        $this->validConfig['paths']['server']['default']             = $base.HTDOCS_DIR.'/server/core';
-        $this->validConfig['paths']['doc']['default']                = $base.HTDOCS_DIR.'/docs';
+        $this->validConfig['paths']['language']['default']           = $base . HTDOCS_DIR . '/frontend/nagvis-js/locale';
+        $this->validConfig['paths']['class']['default']              = $base . HTDOCS_DIR . '/server/core/classes/';
+        $this->validConfig['paths']['server']['default']             = $base . HTDOCS_DIR . '/server/core';
+        $this->validConfig['paths']['doc']['default']                = $base . HTDOCS_DIR . '/docs';
 
-        $this->validConfig['paths']['htmlcss']['default']            = $htmlBase.'/frontend/nagvis-js/css/';
+        $this->validConfig['paths']['htmlcss']['default']            = $htmlBase . '/frontend/nagvis-js/css/';
 
-        $this->validConfig['paths']['js']['default']                 = $base.HTDOCS_DIR.'/frontend/nagvis-js/js/';
-        $this->validConfig['paths']['htmljs']['default']             = $htmlBase.'/frontend/nagvis-js/js/';
+        $this->validConfig['paths']['js']['default']                 = $base . HTDOCS_DIR . '/frontend/nagvis-js/js/';
+        $this->validConfig['paths']['htmljs']['default']             = $htmlBase . '/frontend/nagvis-js/js/';
 
-        $this->validConfig['paths']['images']['default']             = $base.HTDOCS_DIR.'/frontend/nagvis-js/images/';
-        $this->validConfig['paths']['htmlimages']['default']         = $htmlBase.'/frontend/nagvis-js/images/';
+        $this->validConfig['paths']['images']['default']             = $base . HTDOCS_DIR . '/frontend/nagvis-js/images/';
+        $this->validConfig['paths']['htmlimages']['default']         = $htmlBase . '/frontend/nagvis-js/images/';
 
         $this->validConfig['paths']['templates']['default']          = 'userfiles/templates/';
         $this->validConfig['paths']['styles']['default']             = 'userfiles/styles/';
@@ -2121,7 +2121,7 @@ class GlobalMainCfg {
             if($firstChar == ';' || $line == '') {
                 if($isUserMainCfg) {
                     // comment...
-                    $key = 'comment_'.($numComments++);
+                    $key = 'comment_' . ($numComments++);
                     $val = trim($line);
 
                     if(isset($sec) && $sec != '') {
@@ -2344,10 +2344,10 @@ class GlobalMainCfg {
                                 if(preg_match('/^rotation_/', $type) && $key == 'maps') {
                                     foreach($val AS $intId => $arrStep) {
                                         if(isset($arrStep['label']) && $arrStep['label'] != '') {
-                                            $label = $arrStep['label'].':';
+                                            $label = $arrStep['label'] . ':';
                                         }
 
-                                        $val[$intId] = $label.$arrStep['url'].$arrStep['map'];
+                                        $val[$intId] = $label . $arrStep['url'] . $arrStep['map'];
                                     }
                                 }
 
@@ -2366,7 +2366,7 @@ class GlobalMainCfg {
                                 }
 
                                 // Check if the configured backend is defined in main configuration file
-                                if(!$this->onlyUserConfig && $type == 'defaults' && $key == 'backend' && !isset($this->config['backend_'.$val])) {
+                                if(!$this->onlyUserConfig && $type == 'defaults' && $key == 'backend' && !isset($this->config['backend_' . $val])) {
                                     if($printErr) {
                                         throw new NagVisException(l('The backend with the ID \"[BACKENDID]\" is not defined.', ['BACKENDID' => $val]));
                                     }
@@ -2606,7 +2606,7 @@ class GlobalMainCfg {
           'path_iconsets'      => $this->getPath('html', 'global', 'icons'),
           'path_shapes'        => $this->getPath('html', 'global', 'shapes'),
           'path_images'        => $this->getValue('paths','htmlimages'),
-          'path_server'        => $this->getValue('paths','htmlbase').'/server/core/ajax_handler.php',
+          'path_server'        => $this->getValue('paths','htmlbase') . '/server/core/ajax_handler.php',
           'internal_title'     => $this->getValue('internal', 'title'),
           'header_show_states' => intval($this->getValue('defaults', 'header_show_states')),
           'zoom_scale_objects' => intval($this->getValue('defaults', 'zoom_scale_objects')),
@@ -2621,9 +2621,9 @@ class GlobalMainCfg {
         $p['actions'] = [];
         foreach (GlobalCore::getInstance()->getDefinedCustomActions() as $id) {
             $p['actions'][$id] = [
-                'obj_type'  => $this->getValue('action_'.$id, 'obj_type'),
-                'client_os' => $this->getValue('action_'.$id, 'client_os'),
-                'condition' => $this->getValue('action_'.$id, 'condition')
+                'obj_type'  => $this->getValue('action_' . $id, 'obj_type'),
+                'client_os' => $this->getValue('action_' . $id, 'client_os'),
+                'condition' => $this->getValue('action_' . $id, 'condition')
             ];
         }
 
@@ -2670,7 +2670,7 @@ class GlobalMainCfg {
 
             if(isset($key[1]) && isset($key[2])) {
                 // at the moment only bg colors of substates
-                $arr[$state][$key[1].'_'.$key[2]] = $val;
+                $arr[$state][$key[1] . '_' . $key[2]] = $val;
             } elseif(isset($key[1])) {
                 // ack/downtime
                 $arr[$state][$key[1]] = $val;
@@ -2808,10 +2808,10 @@ class GlobalMainCfg {
         $content = '';
         foreach($this->config as $key => $item) {
             if(is_array($item)) {
-                $content .= '['.$key.']'."\n";
+                $content .= '[' . $key . ']' . "\n";
                 foreach ($item as $key2 => $item2) {
                     if(substr($key2,0,8) == 'comment_') {
-                        $content .= $item2."\n";
+                        $content .= $item2 . "\n";
                     } elseif(is_numeric($item2) || is_bool($item2)) {
                         // Don't apply config options which are set to the same
                         // value in the pre user config files
@@ -2821,7 +2821,7 @@ class GlobalMainCfg {
                            && $item2 == $this->preUserConfig[$key][$key2]) {
                             continue;
                         }
-                        $content .= $key2."=".$item2."\n";
+                        $content .= $key2 . "=" . $item2 . "\n";
                     } else {
                         if(is_array($item2) && preg_match('/^rotation_/i', $key) && $key2 == 'maps') {
                             $val = '';
@@ -2846,7 +2846,7 @@ class GlobalMainCfg {
                                 }
 
                                 // Save the extracted information to an array
-                                $val .= $seperator.$label.$step;
+                                $val .= $seperator . $label . $step;
                             }
 
                             $item2 = $val;
@@ -2879,7 +2879,7 @@ class GlobalMainCfg {
                                 $item2 = implode(',', $item2);
                             }
 
-                            $content .= $key2.'="'.$item2.'"'."\n";
+                            $content .= $key2 . '="' . $item2 . '"' . "\n";
                         }
                     }
                 }

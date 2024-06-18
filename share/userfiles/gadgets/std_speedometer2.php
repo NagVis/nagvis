@@ -305,7 +305,7 @@ for ($i=0; $i < $pdc; $i++){
 		}
 
 		if ($current == 1) {
-			imagestring($img, 1, $offX, $imgheight+$offY-10, $label.': '.$value, $oBlack);
+			imagestring($img, 1, $offX, $imgheight+$offY-10, $label . ': ' . $value, $oBlack);
 		}
 		$offG++;
 	}

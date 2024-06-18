@@ -60,8 +60,8 @@ class ViewMapAddModify {
             }
 
             if ((isset($attrDefs[$attr]['must']) && $attrDefs[$attr]['must'] == '1')
-                || !has_var('toggle_'.$attr)
-                ||  get_checkbox('toggle_'.$attr)) {
+                || !has_var('toggle_' . $attr)
+                ||  get_checkbox('toggle_' . $attr)) {
                 if (isset($attrDefs[$attr]['array']) && $attrDefs[$attr]['array']) {
                     $val = explode(',', $val);
                 }
@@ -138,7 +138,7 @@ class ViewMapAddModify {
                 unset($attrs['object_id']);
 
                 js('document.getElementById("_submit").disabled = true;'
-                  .'window.location.href = makeuri('.json_encode($attrs).');');
+                  .'window.location.href = makeuri(' . json_encode($attrs) . ');');
                 $show_dialog = true;
             }
             elseif ($this->mode == 'view_params' && !$perm && $perm_user) {
@@ -189,7 +189,7 @@ class ViewMapAddModify {
                     $refresh_code = 'refreshMapObject(null, "' . $this->object_id . '", false);';
                 }
 
-                js('popupWindowClose();'.$refresh_code);
+                js('popupWindowClose();' . $refresh_code);
             }
         } else {
             // Create the new object
@@ -199,7 +199,7 @@ class ViewMapAddModify {
             $obj_id = $this->MAPCFG->addElement($this->object_type, $this->attrs, true);
 
             js('popupWindowClose();'
-              .'refreshMapObject(null, "'.$obj_id.'", false);');
+              .'refreshMapObject(null, "' . $obj_id . '", false);');
         }
 
         // delete map lock
@@ -251,21 +251,21 @@ class ViewMapAddModify {
     }
 
     private function colorSelect($propname, $value, $hideField) {
-        echo '<div id="'.$propname.'" class=picker style="'.$hideField.'">';
+        echo '<div id="' . $propname . '" class=picker style="' . $hideField . '">';
         input($propname, $value, '', '', $propname . '_inp');
-        echo '<a href="javascript:void(0);" onClick="togglePicker(\''.$propname.'_inp\');">';
-        echo '<img src="'.cfg('paths', 'htmlimages').'internal/picker.png" alt="'.l('Color select').'" />';
+        echo '<a href="javascript:void(0);" onClick="togglePicker(\'' . $propname . '_inp\');">';
+        echo '<img src="' . cfg('paths', 'htmlimages') . 'internal/picker.png" alt="' . l('Color select') . '" />';
         echo '</a></div>';
-        js('var o = document.getElementById(\''.$propname.'_inp\');'
+        js('var o = document.getElementById(\'' . $propname . '_inp\');'
           .'o.color = new jscolor.color(o, {pickerOnfocus:false,adjust:false,hash:true});'
           .'o = null;');
     }
 
     private function inputDimension($propname, $value, $hideField) {
-        echo '<div id="'.$propname.'" class=picker style="'.$hideField.'">';
+        echo '<div id="' . $propname . '" class=picker style="' . $hideField . '">';
         input($propname, $value, '', '', $propname . '_inp');
-        echo '<a href="javascript:void(0);" onClick="pickWindowSize(\''.$propname.'_inp\', \''.$propname.'\');">';
-        echo '<img src="'.cfg('paths', 'htmlimages').'internal/dimension.png" alt="'.l('Get current size').'" />';
+        echo '<a href="javascript:void(0);" onClick="pickWindowSize(\'' . $propname . '_inp\', \'' . $propname . '\');">';
+        echo '<img src="' . cfg('paths', 'htmlimages') . 'internal/dimension.png" alt="' . l('Get current size') . '" />';
         echo '</a></div>';
     }
 
@@ -320,8 +320,8 @@ class ViewMapAddModify {
             array_push($rowClasses, 'must');
         }
 
-        echo '<tr class="'.implode(' ', $rowClasses).'"'.$rowHide.'>';
-        echo '<td class=tdlabel>'.$propname.'</td><td class=tdbox>';
+        echo '<tr class="' . implode(' ', $rowClasses) . '"' . $rowHide . '>';
+        echo '<td class=tdlabel>' . $propname . '</td><td class=tdbox>';
 
         $can_have_other = $fieldType == 'dropdown' && isset($prop['other']) && $prop['other'];
 
@@ -350,7 +350,7 @@ class ViewMapAddModify {
             } elseif (($this->object_type == 'host' || $this->object_type == 'hostgroup'
                       || $this->object_type == 'servicegroup') && $propname == 'backend_id') {
                 // For other objects clear the *_name value when backend_id changed
-                $onChange .= "clearFormValue('".$this->object_type."_name');";
+                $onChange .= "clearFormValue('" . $this->object_type . "_name');";
             }
 
             // If var is backend_id or var is host_name in service objects submit the form
@@ -361,7 +361,7 @@ class ViewMapAddModify {
         // Add a checkbox to toggle the usage of an attribute. But only add it for
         // non-must attributes.
         if (!$prop['must'] && $fieldType != 'readonly') {
-            checkbox('toggle_'.$propname, $isInherited === false, '', 'toggle_option(\''.$propname.'\');'.$onChange);
+            checkbox('toggle_' . $propname, $isInherited === false, '', 'toggle_option(\'' . $propname . '\');' . $onChange);
         }
 
         echo '</td><td class=tdfield>';
@@ -485,7 +485,7 @@ class ViewMapAddModify {
             }
         }
 
-        echo '<span id="_txt_'.$propname.'"'.$hideTxt.'>';
+        echo '<span id="_txt_' . $propname . '"' . $hideTxt . '>';
         echo htmlentities($valueTxt, ENT_COMPAT, 'UTF-8');
         echo '</span>';
 
@@ -578,10 +578,10 @@ class ViewMapAddModify {
 
         if ($this->mode == 'view_params') {
             echo '<table class=mytable>';
-            echo '<tr><td class=tdlabel style="width:70px">'.l('Make permanent').'</td>';
+            echo '<tr><td class=tdlabel style="width:70px">' . l('Make permanent') . '</td>';
             echo '<td class=tdfield>';
             checkbox('perm');
-            echo l('for all users').'<br>';
+            echo l('for all users') . '<br>';
             checkbox('perm_user');
             echo l('for you');
             echo '</td></tr>';
@@ -606,7 +606,7 @@ class ViewMapAddModify {
         }
 
         if ($map_name !== null && (!preg_match(MATCH_MAP_NAME, $map_name)
-                                   || count($CORE->getAvailableMaps('/^'.$map_name.'$/')) == 0)) {
+                                   || count($CORE->getAvailableMaps('/^' . $map_name . '$/')) == 0)) {
             throw new NagVisException(l('The map does not exist.'));
         }
 

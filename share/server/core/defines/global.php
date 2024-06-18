@@ -40,9 +40,9 @@ if(version_compare(PHP_VERSION, '5.2') >= 0) {
  */
 set_include_path(
 	get_include_path()
-	.PATH_SEPARATOR.'../../server/core/classes'
-	.PATH_SEPARATOR.'../../server/core/classes/objects'
-	.PATH_SEPARATOR.'../../server/core/ext/php-gettext-1.0.12'
+	 . PATH_SEPARATOR . '../../server/core/classes'
+	 . PATH_SEPARATOR . '../../server/core/classes/objects'
+	 . PATH_SEPARATOR . '../../server/core/ext/php-gettext-1.0.12'
 );
 
 // Enable/Disable profiling of NagVis using xhprof.  To make use of this the

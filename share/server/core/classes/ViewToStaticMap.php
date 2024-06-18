@@ -41,7 +41,7 @@ class ViewToStaticMap {
                         ['M' => MATCH_MAP_NAME]));
                 }
 
-                if (count($CORE->getAvailableMaps('/^'.$name.'$/')) > 0) {
+                if (count($CORE->getAvailableMaps('/^' . $name . '$/')) > 0) {
                     throw new FieldInputError('name', l('A map with this name already exists.'));
                 }
 
@@ -61,7 +61,7 @@ class ViewToStaticMap {
                 }
 
                 success(l('The map has been created.'));
-                reload(cfg('paths','htmlbase').'/frontend/nagvis-js/index.php?mod=Map&show='.$name, 1);
+                reload(cfg('paths','htmlbase') . '/frontend/nagvis-js/index.php?mod=Map&show=' . $name, 1);
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (NagVisException $e) {
@@ -76,7 +76,7 @@ class ViewToStaticMap {
         }
         echo $this->error;
 
-        echo '<div class="simple_form">'.N;
+        echo '<div class="simple_form">' . N;
         js_form_start('to_static_map');
         input('name');
         submit(l('Save'));
@@ -93,7 +93,7 @@ class ViewToStaticMap {
         }
 
         form_end();
-        echo '</div>'.N;
+        echo '</div>' . N;
 
         return ob_get_clean();
     }

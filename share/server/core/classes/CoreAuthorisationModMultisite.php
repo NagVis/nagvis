@@ -70,7 +70,7 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
 
         # Loop the multisite NagVis related permissions and add them
         foreach($nagvis_permissions AS $p => $_unused) {
-            if(may($username, 'nagvis.'.$p)) {
+            if(may($username, 'nagvis.' . $p)) {
                 $parts = explode('_', $p);
                 if (count($parts) == 3) {
                     // Add native multisite permissions

@@ -68,7 +68,7 @@ class CorePDOHandler {
                         .'INNER JOIN roles2perms ON roles2perms."roleId" = users2roles."roleId" '
                         .'INNER JOIN perms ON perms."permId" = roles2perms."permId" '
                         .'WHERE users2roles."userId" = :id',
-                    '-perm-rename-map' => 'UPDATE perms SET obj=:new_name '.
+                    '-perm-rename-map' => 'UPDATE perms SET obj=:new_name ' . 
                         ' WHERE "mod"=\'Map\' AND obj=:old_name',
                     '-perm-change-act' => 'UPDATE perms SET act=:new_act WHERE mod=:mod and act=:old_act',
 
@@ -83,13 +83,13 @@ class CorePDOHandler {
                     '-role-delete-perm-by-obj' => 'DELETE FROM roles2perms WHERE "permId" IN (SELECT "permId" FROM perms WHERE "mod"=:mod AND obj=:obj)',
                     '-role-get-all' => 'SELECT "roleId", name FROM roles ORDER BY name',
                     '-role-get-by-name' => 'SELECT "roleId" FROM roles WHERE name=:name',
-                    '-role-get-by-user' => 'SELECT users2roles."roleId" AS "roleId", roles.name AS name '.
-                        'FROM users2roles '.
-                        'LEFT JOIN roles ON users2roles."roleId"=roles."roleId" '.
+                    '-role-get-by-user' => 'SELECT users2roles."roleId" AS "roleId", roles.name AS name ' . 
+                        'FROM users2roles ' . 
+                        'LEFT JOIN roles ON users2roles."roleId"=roles."roleId" ' . 
                         'WHERE "userId"=:id',
                     '-role-get-perm-by-id' => 'SELECT "permId" FROM roles2perms WHERE "roleId"=:roleId',
-                    '-role-used-by' => 'SELECT users.name AS name FROM users2roles '.
-                        'LEFT JOIN users ON users2roles."userId"=users."userId" '.
+                    '-role-used-by' => 'SELECT users.name AS name FROM users2roles ' . 
+                        'LEFT JOIN users ON users2roles."userId"=users."userId" ' . 
                         'WHERE users2roles."roleId"=:roleId',
 
                     '-user-add' => 'INSERT INTO users (name,password) VALUES (:name, :password)',
@@ -103,33 +103,33 @@ class CorePDOHandler {
                     '-user-get-by-pass' => 'SELECT "userId" FROM users WHERE name=:name AND password=:password',
                     '-user-update-pass' => 'UPDATE users SET password=:password WHERE "userId"=:id',
 
-                    '-check-roles-perms' => 'SELECT COUNT(roles."name") AS num '.
-                        'FROM perms '.
-                        'INNER JOIN roles2perms ON roles2perms."permId" = perms."permId" '.
-                        'INNER JOIN roles ON roles."roleId" = roles2perms."roleId" '.
+                    '-check-roles-perms' => 'SELECT COUNT(roles."name") AS num ' . 
+                        'FROM perms ' . 
+                        'INNER JOIN roles2perms ON roles2perms."permId" = perms."permId" ' . 
+                        'INNER JOIN roles ON roles."roleId" = roles2perms."roleId" ' . 
                         'WHERE "mod" = :mod AND act = :act AND obj = :obj AND roles.name = :name',
 
-                    '-create-pop-roles-perms-1' => 'INSERT INTO roles2perms ("roleId", "permId") '.
-                        'SELECT r."roleId", p."permId" '.
-                        'FROM roles r, perms p '.
-                        'WHERE r.name = :r1 '.
+                    '-create-pop-roles-perms-1' => 'INSERT INTO roles2perms ("roleId", "permId") ' . 
+                        'SELECT r."roleId", p."permId" ' . 
+                        'FROM roles r, perms p ' . 
+                        'WHERE r.name = :r1 ' . 
                         '  AND p."mod" = :mod AND p.act = :act AND p.obj = :obj',
 
-                    '-create-pop-roles-perms-2' => 'INSERT INTO roles2perms ("roleId", "permId") '.
-                        'SELECT r."roleId", p."permId" '.
-                        'FROM roles r, perms p '.
-                        'WHERE r.name IN (:r1, :r2) '.
+                    '-create-pop-roles-perms-2' => 'INSERT INTO roles2perms ("roleId", "permId") ' . 
+                        'SELECT r."roleId", p."permId" ' . 
+                        'FROM roles r, perms p ' . 
+                        'WHERE r.name IN (:r1, :r2) ' . 
                         '  AND p."mod" = :mod AND p.act = :act AND p.obj = :obj',
 
-                    '-create-pop-roles-perms-3' => 'INSERT INTO roles2perms ("roleId", "permId") '.
-                        'SELECT r."roleId", p."permId" '.
-                        'FROM roles r, perms p '.
-                        'WHERE r.name IN (:r1, :r2, :r3) '.
+                    '-create-pop-roles-perms-3' => 'INSERT INTO roles2perms ("roleId", "permId") ' . 
+                        'SELECT r."roleId", p."permId" ' . 
+                        'FROM roles r, perms p ' . 
+                        'WHERE r.name IN (:r1, :r2, :r3) ' . 
                         '  AND p."mod" = :mod AND p.act = :act AND p.obj = :obj',
 
-                    '-create-pop-perms-from-perms' => 'INSERT INTO perms ("mod", act, obj) '.
-                        'SELECT :mod, :act, obj '.
-                        'FROM perms '.
+                    '-create-pop-perms-from-perms' => 'INSERT INTO perms ("mod", act, obj) ' . 
+                        'SELECT :mod, :act, obj ' . 
+                        'FROM perms ' . 
                         'WHERE "mod" = :fmod AND act = :fact',
 
                     '-create-update-db-version' => 'UPDATE version SET version=:version',
@@ -280,8 +280,8 @@ class CorePDOHandler {
                 're_op_neg' => '!~',
 
                 'queries' => [
-                    '-table-exists' => "SELECT table_name ".
-                        "FROM information_schema.tables ".
+                    '-table-exists' => "SELECT table_name " . 
+                        "FROM information_schema.tables " . 
                         "WHERE table_schema='public' AND table_name = :name",
                 ],
             ],
@@ -299,7 +299,7 @@ class CorePDOHandler {
             return false;
         }
         $drv_data = self::$DRIVERS[$driver];
-        $dsn = "$driver:".$drv_data['build_dsn']($params);
+        $dsn = "$driver:" . $drv_data['build_dsn']($params);
         $this->dsn = $dsn;
 
         try {
@@ -309,7 +309,7 @@ class CorePDOHandler {
                 //PDO::ATTR_TIMEOUT => 1,
             ]);
         } catch(PDOException $e) {
-            error_log('Could not initialize a database connection: '.$e->getMessage());
+            error_log('Could not initialize a database connection: ' . $e->getMessage());
             $this->lastErrorInfo = $e->getMessage();
             return false;
         }
@@ -533,7 +533,7 @@ class CorePDOHandler {
             }
 
             foreach(GlobalCore::getInstance()->demoMaps AS $map) {
-                if(count(GlobalCore::getInstance()->getAvailableMaps('/^'.$map.'$/')) <= 0) {
+                if(count(GlobalCore::getInstance()->getAvailableMaps('/^' . $map . '$/')) <= 0) {
                     continue;
                 }
 
@@ -556,18 +556,18 @@ class CorePDOHandler {
                     $this->DB->beginTransaction();
                     $this->inTrans = true;
                 }
-                $reason = 'Could not update the NagVis version in the database to '.CONST_VERSION;
+                $reason = 'Could not update the NagVis version in the database to ' . CONST_VERSION;
                 $this->query('-create-update-db-version', ['version' => CONST_VERSION]);
             }
 
             $reason = 'Could not commit the transaction for updating the database schema';
         } catch(PDOException $e) {
-            error_log($reason.': '.$e->getMessage());
+            error_log($reason . ': ' . $e->getMessage());
             if ($this->inTrans) {
                 try {
                     $this->DB->rollBack();
                 } catch (PDOException $e) {
-                    error_log('Could not roll back the database update transaction: '.$e->getMessage());
+                    error_log('Could not roll back the database update transaction: ' . $e->getMessage());
                 }
                 $this->inTrans = false;
             }
@@ -576,7 +576,7 @@ class CorePDOHandler {
             try {
                 $this->DB->commit();
             } catch (PDOException $e) {
-                error_log("Could not commit the database transaction: ".$e->getMessage());
+                error_log("Could not commit the database transaction: " . $e->getMessage());
             }
             $this->inTrans = false;
         }

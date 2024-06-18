@@ -107,7 +107,7 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
             $res = $this->DB->query('-user-update-pass', ['id' => $uid, 'password' => $pw]);
             return $res !== false && $res->rowCount() === 1;
         } catch (PDOException $e) {
-            error_log("Could not update the password of user $uid: ".$e->getMessage());
+            error_log("Could not update the password of user $uid: " . $e->getMessage());
             return false;
         }
     }
@@ -223,7 +223,7 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
     }
 
     private function createHash($password) {
-        return sha1(AUTH_PASSWORD_SALT.$password);
+        return sha1(AUTH_PASSWORD_SALT . $password);
     }
 }
 

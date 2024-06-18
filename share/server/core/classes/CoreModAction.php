@@ -55,7 +55,7 @@ class CoreModAction extends CoreModule {
                     }
 
                     // - does the map exist?
-                    if(count($CORE->getAvailableMaps('/^'.$attrs['map'].'$/')) <= 0) {
+                    if(count($CORE->getAvailableMaps('/^' . $attrs['map'] . '$/')) <= 0) {
                         throw new NagVisException(l('The map does not exist.'));
                     }
 
@@ -73,7 +73,7 @@ class CoreModAction extends CoreModule {
                     }
                     $objId = $attrs['object_id'];
 
-                    $func = 'handle_action_'.$attrs['cmd'];
+                    $func = 'handle_action_' . $attrs['cmd'];
                     if(!function_exists($func)) {
                         throw new NagVisException(l('Action handler not implemented.'));
                     }

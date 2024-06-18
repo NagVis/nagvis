@@ -27,7 +27,7 @@ class ViewManageShapes {
 
     private function uploadForm() {
         global $CORE;
-        echo '<h2>'.l('Upload Shape').'</h2>';
+        echo '<h2>' . l('Upload Shape') . '</h2>';
 
         if (is_action() && post('mode') == 'upload') {
             try {
@@ -42,7 +42,7 @@ class ViewManageShapes {
                 }
 
                 $file_name = $file['name'];
-                $file_path = path('sys', '', 'shapes').$file_name;
+                $file_path = path('sys', '', 'shapes') . $file_name;
 
                 if (!preg_match(MATCH_PNG_GIF_JPG_FILE, $file_name)) {
                     throw new FieldInputError('image', l('The uploaded file is no image (png,jpg,gif) file or contains unwanted chars.'));
@@ -76,7 +76,7 @@ class ViewManageShapes {
         echo '<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="1000000" />';
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Choose an Image').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Choose an Image') . '</td>';
         echo '<td class="tdfield">';
         upload('image');
         echo '</td></tr>';
@@ -88,7 +88,7 @@ class ViewManageShapes {
 
     private function deleteForm() {
         global $CORE;
-        echo '<h2>'.l('Delete Shape').'</h2>';
+        echo '<h2>' . l('Delete Shape') . '</h2>';
 
         if (is_action() && post('mode') == 'delete') {
             try {
@@ -147,7 +147,7 @@ class ViewManageShapes {
         hidden('mode', 'delete');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Shape').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Shape') . '</td>';
         echo '<td class="tdfield">';
         $shapes = ['' => l('Choose a shape')];
         foreach ($CORE->getAvailableShapes() AS $name) {

@@ -49,14 +49,14 @@ class NagVisHoverMenu {
         $this->templateName = $templateName;
 
         $this->pathHtmlBase     = cfg('paths','htmlbase');
-        $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName.'.hover.html');
+        $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName . '.hover.html');
 
         // Simply skip processing with an invalid template file name
         if($this->pathTemplateFile === '') {
             return;
         }
 
-        $this->CACHE = new GlobalFileCache($this->pathTemplateFile, cfg('paths','var').'hover-'.$this->templateName.'-'.curLang().'.cache');
+        $this->CACHE = new GlobalFileCache($this->pathTemplateFile, cfg('paths','var') . 'hover-' . $this->templateName . '-' . curLang() . '.cache');
 
         // Only use cache when there is
         // a) Some valid cache file
@@ -228,7 +228,7 @@ class NagVisHoverMenu {
     }
 
     public function getCssFile() {
-        return path('html', 'global', 'templates', $this->templateName.'.hover.css');
+        return path('html', 'global', 'templates', $this->templateName . '.hover.css');
     }
 }
 

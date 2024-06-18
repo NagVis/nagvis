@@ -88,9 +88,9 @@ if ($show_host_states) {
 // Init statistic array
 $stats = [];
 foreach ($show_states AS $state) {
-    $stats['S_'.$state] = 0;
-    $stats['D_'.$state] = 0;
-    $stats['A_'.$state] = 0;
+    $stats['S_' . $state] = 0;
+    $stats['D_' . $state] = 0;
+    $stats['A_' . $state] = 0;
 }
 
 // Count statistic for all members
@@ -98,17 +98,17 @@ foreach ($members as $member) {
     // Downtime
     if ($member['summary_in_downtime'] == 1 && $group_states == 0) {
         // FIXME: Check that the key exists
-        $stats['D_'.$member['summary_state']] += 1;
+        $stats['D_' . $member['summary_state']] += 1;
     }
     // Acknowledged
     elseif ($member['summary_problem_has_been_acknowledged'] == 1 && $group_states == 0) {
         // FIXME: Check that the key exists
-        $stats['A_'.$member['summary_state']] += 1;
+        $stats['A_' . $member['summary_state']] += 1;
     }
     // Standard state or all states if $group_states == 1
     else {
         // FIXME: Check that the key exists
-        $stats['S_'.$member['summary_state']] += 1;
+        $stats['S_' . $member['summary_state']] += 1;
     }
 }
 // Determine sizes with scale
@@ -300,7 +300,7 @@ if ($show_header == 1) {
             if ($group_states == 0 || strpos($stat, "S_") === 0) {
                 if ($value > 0 || $show_all == 1) {
                     $global_cls = (substr($stat, 2) == $current_state) ? $current_state : '';
-                    echo '<th class="'.$global_cls.'">';
+                    echo '<th class="' . $global_cls . '">';
                     echo substr(substr(strchr($stat, "_"), 1), 0, 4);
                     echo "</th>";
                 }

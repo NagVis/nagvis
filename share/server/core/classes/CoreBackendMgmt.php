@@ -129,7 +129,7 @@ class CoreBackendMgmt {
             return '';
         }
 
-        return $OBJ->getExcludeFilterKey($isCountQuery).'~~'.$OBJ->getExcludeFilter($isCountQuery);
+        return $OBJ->getExcludeFilterKey($isCountQuery) . '~~' . $OBJ->getExcludeFilter($isCountQuery);
     }
 
     private function parseOptions($OBJ) {
@@ -585,7 +585,7 @@ class CoreBackendMgmt {
      */
     public function checkBackendExists($backendId, $printErr) {
         global $CORE;
-        if($CORE->checkExisting(cfg('paths','class').'GlobalBackend'.cfg('backend_'.$backendId,'backendtype').'.php', false)) {
+        if($CORE->checkExisting(cfg('paths','class') . 'GlobalBackend' . cfg('backend_' . $backendId,'backendtype') . '.php', false)) {
             return true;
         }
 
@@ -683,7 +683,7 @@ class CoreBackendMgmt {
             if($printErr == 1) {
                 throw new NagVisException(l('backendNotInitialized', [
                     'BACKENDID' => $backendId,
-                    'BACKENDTYPE' => cfg('backend_'.$backendId,'backendtype')
+                    'BACKENDTYPE' => cfg('backend_' . $backendId,'backendtype')
                 ]));
             }
             return false;
@@ -698,7 +698,7 @@ class CoreBackendMgmt {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkBackendFeature($backendId, $feature, $printErr = 1) {
-        $backendClass = 'GlobalBackend'.cfg('backend_'.$backendId, 'backendtype');
+        $backendClass = 'GlobalBackend' . cfg('backend_' . $backendId, 'backendtype');
         if(method_exists($backendClass, $feature)) {
             return true;
         } else {
@@ -707,7 +707,7 @@ class CoreBackendMgmt {
                                           [
                                               'FEATURE'     => htmlentities($feature, ENT_COMPAT, 'UTF-8'),
                                                 'BACKENDID'   => $backendId,
-                                                'BACKENDTYPE' => cfg('backend_'.$backendId,'backendtype')
+                                                'BACKENDTYPE' => cfg('backend_' . $backendId,'backendtype')
                                           ]));
             }
             return false;

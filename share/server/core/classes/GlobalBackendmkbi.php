@@ -114,23 +114,23 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
     public function __construct($backendId) {
         $this->backendId = $backendId;
 
-        $this->baseUrl = cfg('backend_'.$backendId, 'base_url');
+        $this->baseUrl = cfg('backend_' . $backendId, 'base_url');
 
         $httpContext = [
             'method'     => 'GET',
             'user_agent' => 'NagVis BI Backend',
-            'timeout'    => cfg('backend_'.$backendId, 'timeout'),
+            'timeout'    => cfg('backend_' . $backendId, 'timeout'),
         ];
 
         $sslContext = [];
 
-        if (cfg('backend_'.$backendId, 'verify_peer') == true) {
+        if (cfg('backend_' . $backendId, 'verify_peer') == true) {
             $sslContext = [
                 'verify_peer'      => true,
                 'verify_peer_name' => false,
-                'verify_depth'     => cfg('backend_'.$backendId, 'verify_depth'),
+                'verify_depth'     => cfg('backend_' . $backendId, 'verify_depth'),
             ];
-            $ca_path = cfg('backend_'.$backendId, 'ca_path');
+            $ca_path = cfg('backend_' . $backendId, 'ca_path');
             if ($ca_path) {
                 $sslContext['cafile'] = $ca_path;
             }
@@ -142,11 +142,11 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         }
 
         // Always set the HTTP basic auth header
-        $username = cfg('backend_'.$backendId, 'auth_user');
+        $username = cfg('backend_' . $backendId, 'auth_user');
         $secret = $this->getSecret();
         if($username && $secret) {
-            $authCred = base64_encode($username.':'.$secret);
-            $httpContext['header'] = 'Authorization: Basic '.$authCred."\r\n";
+            $authCred = base64_encode($username . ':' . $secret);
+            $httpContext['header'] = 'Authorization: Basic ' . $authCred . "\r\n";
         }
 
         $this->context = stream_context_create([
@@ -160,7 +160,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
      *************************************************************************/
 
     private function getSecret() {
-        $secret_file_path = cfg('backend_'.$this->backendId, 'auth_secret_file');
+        $secret_file_path = cfg('backend_' . $this->backendId, 'auth_secret_file');
         if ($secret_file_path) {
             return trim(file_get_contents($secret_file_path));
         } else {
@@ -169,8 +169,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
     }
 
     private function aggrUrl($name) {
-        $html_cgi = cfg('backend_'.$this->backendId, 'htmlcgi');
-        return $html_cgi.'/view.py?view_name=aggr_single&aggr_name='.$name.'&po_aggr_expand=1';
+        $html_cgi = cfg('backend_' . $this->backendId, 'htmlcgi');
+        return $html_cgi . '/view.py?view_name=aggr_single&aggr_name=' . $name . '&po_aggr_expand=1';
     }
 
     /**
@@ -178,8 +178,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
      * about parsing, validating and processing the response.
      */
     private function getUrl($params) {
-        $url = $this->baseUrl.$params.'&output_format=json';
-        $username = cfg('backend_'.$this->backendId, 'auth_user');
+        $url = $this->baseUrl . $params . '&output_format=json';
+        $username = cfg('backend_' . $this->backendId, 'auth_user');
         $secret   = $this->getSecret();
         if ($username && $secret) {
             $url .= '&_username=' . $username . '&_secret=' . $secret;

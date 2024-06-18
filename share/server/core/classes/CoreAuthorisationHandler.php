@@ -164,7 +164,7 @@ class CoreAuthorisationHandler {
     }
 
     private function sortPerms($a, $b) {
-        return strcmp($a['mod'].$a['obj'].$a['act'], $b['mod'].$b['obj'].$b['act']);
+        return strcmp($a['mod'] . $a['obj'] . $a['act'], $b['mod'] . $b['obj'] . $b['act']);
     }
 
     public function cleanupPermissions() {
@@ -174,7 +174,7 @@ class CoreAuthorisationHandler {
         // is still available
         foreach ($this->getAllVisiblePerms() AS $perm) {
             if ($perm['mod'] == 'Map' && $perm['obj'] != '*') {
-                if(count($CORE->getAvailableMaps('/^'.$perm['obj'].'$/')) <= 0) {
+                if(count($CORE->getAvailableMaps('/^' . $perm['obj'] . '$/')) <= 0) {
                     $this->deletePermission('Map', $perm['obj']);
                 }
             }

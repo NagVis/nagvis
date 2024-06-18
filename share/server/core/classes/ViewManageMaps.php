@@ -24,7 +24,7 @@ class ViewManageMaps {
 
     private function createForm() {
         global $CORE;
-        echo '<h2>'.l('Create Map').'</h2>';
+        echo '<h2>' . l('Create Map') . '</h2>';
 
         $map_types = [
             'map'      => l('Regular map'),
@@ -41,7 +41,7 @@ class ViewManageMaps {
                     throw new FieldInputError('name', l('You need to provide a unique map name (ID) for the map'));
                 }
 
-                if (count($CORE->getAvailableMaps('/^'.preg_quote($name).'$/')) > 0) {
+                if (count($CORE->getAvailableMaps('/^' . preg_quote($name) . '$/')) > 0) {
                     throw new FieldInputError('name', l('A map with this name already exists'));
                 }
 
@@ -81,7 +81,7 @@ class ViewManageMaps {
                 $MAPCFG->storeUpdateElement(0);
 
                 success(l('The map has been created. Changing to the new map...'));
-                reload('index.php?mod=Map&act=view&show='.$name, 1);
+                reload('index.php?mod=Map&act=view&show=' . $name, 1);
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {
@@ -98,17 +98,17 @@ class ViewManageMaps {
         hidden('mode', 'create');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('ID (Internal Name)').'</td>';
+        echo '<tr><td class="tdlabel">' . l('ID (Internal Name)') . '</td>';
         echo '<td class="tdfield">';
         input('name');
         echo '</td></tr>';
 
-        echo '<tr><td class="tdlabel">'.l('Alias').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Alias') . '</td>';
         echo '<td class="tdfield">';
         input('alias');
         echo '</td></tr>';
 
-        echo '<tr><td class="tdlabel">'.l('Map Type').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Map Type') . '</td>';
         echo '<td class="tdfield">';
         select('type', $map_types);
         echo '</td></tr>';
@@ -148,13 +148,13 @@ class ViewManageMaps {
         $AUTHORISATION->renameMapPermissions($name, $new_name);
 
         // rename config file
-        rename(cfg('paths', 'mapcfg').$name.'.cfg',
-               cfg('paths', 'mapcfg').$new_name.'.cfg');
+        rename(cfg('paths', 'mapcfg') . $name . '.cfg',
+               cfg('paths', 'mapcfg') . $new_name . '.cfg');
     }
 
     private function renameForm() {
         global $CORE;
-        echo '<h2>'.l('Rename Map').'</h2>';
+        echo '<h2>' . l('Rename Map') . '</h2>';
 
         if (is_action() && post('mode') == 'rename') {
             try {
@@ -163,7 +163,7 @@ class ViewManageMaps {
                     throw new FieldInputError('name', l('Please choose a map'));
                 }
 
-                if (count($CORE->getAvailableMaps('/^'.preg_quote($name).'$/')) == 0) {
+                if (count($CORE->getAvailableMaps('/^' . preg_quote($name) . '$/')) == 0) {
                     throw new FieldInputError('name', l('The given map name is invalid'));
                 }
             
@@ -172,7 +172,7 @@ class ViewManageMaps {
                     throw new FieldInputError('new_name', l('Please provide a new name'));
                 }
 
-                if (count($CORE->getAvailableMaps('/^'.preg_quote($new_name).'$/')) > 0) {
+                if (count($CORE->getAvailableMaps('/^' . preg_quote($new_name) . '$/')) > 0) {
                     throw new FieldInputError('new_name', l('A map with this name already exists'));
                 }
             
@@ -211,7 +211,7 @@ class ViewManageMaps {
         js('document.getElementById(\'cur_map\').value = oPageProperties.map_name;');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Map').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Map') . '</td>';
         echo '<td class="tdfield">';
         $maps = ['' => l('Choose a map')];
         foreach ($CORE->getAvailableMaps() AS $map) {
@@ -220,7 +220,7 @@ class ViewManageMaps {
         select('name', $maps);
         echo '</td></tr>';
 
-        echo '<tr><td class="tdlabel">'.l('New name').'</td>';
+        echo '<tr><td class="tdlabel">' . l('New name') . '</td>';
         echo '<td class="tdfield">';
         input('new_name');
         echo '</td></tr>';
@@ -233,7 +233,7 @@ class ViewManageMaps {
 
     private function deleteForm() {
         global $CORE;
-        echo '<h2>'.l('Delete Map').'</h2>';
+        echo '<h2>' . l('Delete Map') . '</h2>';
 
         if (is_action() && post('mode') == 'delete') {
             try {
@@ -242,7 +242,7 @@ class ViewManageMaps {
                     throw new FieldInputError('name', l('Please choose a map'));
                 }
 
-                if (count($CORE->getAvailableMaps('/^'.preg_quote($name).'$/')) == 0) {
+                if (count($CORE->getAvailableMaps('/^' . preg_quote($name) . '$/')) == 0) {
                     throw new FieldInputError('name', l('The given map name is invalid'));
                 }
             
@@ -279,7 +279,7 @@ class ViewManageMaps {
         js('document.getElementById(\'current_map\').value = oPageProperties.map_name;');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Map').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Map') . '</td>';
         echo '<td class="tdfield">';
         $maps = ['' => l('Choose a map')];
         foreach ($CORE->getAvailableMaps() AS $map) {
@@ -296,7 +296,7 @@ class ViewManageMaps {
 
     private function exportForm() {
         global $CORE;
-        echo '<h2>'.l('Export Map').'</h2>';
+        echo '<h2>' . l('Export Map') . '</h2>';
 
         if (is_action() && post('mode') == 'export') {
             try {
@@ -305,11 +305,11 @@ class ViewManageMaps {
                     throw new FieldInputError('map', l('Please choose a map'));
                 }
 
-                if (count($CORE->getAvailableMaps('/^'.preg_quote($name).'$/')) == 0) {
+                if (count($CORE->getAvailableMaps('/^' . preg_quote($name) . '$/')) == 0) {
                     throw new FieldInputError('map', l('The given map name is invalid'));
                 }
 
-                reload('../../server/core/ajax_handler.php?mod=Map&act=doExportMap&show='.$name, 1);
+                reload('../../server/core/ajax_handler.php?mod=Map&act=doExportMap&show=' . $name, 1);
                 success(l('The map configuration has been exported.'));
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
@@ -327,7 +327,7 @@ class ViewManageMaps {
         hidden('mode', 'export');
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Map').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Map') . '</td>';
         echo '<td class="tdfield">';
         $maps = ['' => l('Choose a map')];
         foreach ($CORE->getAvailableMaps() AS $map) {
@@ -344,7 +344,7 @@ class ViewManageMaps {
 
     private function importForm() {
         global $CORE;
-        echo '<h2>'.l('Import Map').'</h2>';
+        echo '<h2>' . l('Import Map') . '</h2>';
 
         if (is_action() && post('mode') == 'import') {
             try {
@@ -359,7 +359,7 @@ class ViewManageMaps {
                 }
 
                 $file_name = $file['name'];
-                $file_path = cfg('paths', 'mapcfg').$file_name;
+                $file_path = cfg('paths', 'mapcfg') . $file_name;
                 $map_name  = substr($file_name, 0, -4);
 
                 if (!preg_match(MATCH_CFG_FILE, $file_name)) {
@@ -377,7 +377,7 @@ class ViewManageMaps {
                 $CORE->setPerms($file_path);
 
                 success(l('The map has been imported. Changing to the new map...'));
-                reload('index.php?mod=Map&act=view&show='.$map_name, 1);
+                reload('index.php?mod=Map&act=view&show=' . $map_name, 1);
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {
@@ -395,7 +395,7 @@ class ViewManageMaps {
         echo '<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="1000000" />';
 
         echo '<table class="mytable">';
-        echo '<tr><td class="tdlabel">'.l('Map file').'</td>';
+        echo '<tr><td class="tdlabel">' . l('Map file') . '</td>';
         echo '<td class="tdfield">';
         upload('map_file');
         echo '</td></tr>';

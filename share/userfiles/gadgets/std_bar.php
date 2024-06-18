@@ -293,19 +293,19 @@ for ($i=0; $i < $pdc; $i++){
 
       if ($current == 1) {
          $maxv = "";
-         if (isset($aPerfdata[$i]['max'])) { $maxv = " of ".$aPerfdata[$i]['max']; }
+         if (isset($aPerfdata[$i]['max'])) { $maxv = " of " . $aPerfdata[$i]['max']; }
          if ($down) { $maxv = " [down]"; }
          if (file_exists ("$font")) {
             ImageTTFText($img, $chrSize*3.5, 0, $offX+5, $offY+$sect3-1, $oBlack, $font, $desc . ':' . $value . $uom . $maxv);
          } else {
-            imagestring($img, $chrSize, $offX+3, $offY+$sect1+2, $desc.': '.$value . $uom . $maxv, $oBlack);
+            imagestring($img, $chrSize, $offX+3, $offY+$sect1+2, $desc . ': ' . $value . $uom . $maxv, $oBlack);
          }
 
       if ($label == 1) {
-         $hostname = (strlen($aOpts['name1']) > 15) ? substr($aOpts['name1'],0,14)."..." : $aOpts['name1'];
-         $svcdesc = (strlen($aOpts['name2']) > 15) ? substr($aOpts['name2'],0,14)."..." : $aOpts['name2'];
+         $hostname = (strlen($aOpts['name1']) > 15) ? substr($aOpts['name1'],0,14) . "..." : $aOpts['name1'];
+         $svcdesc = (strlen($aOpts['name2']) > 15) ? substr($aOpts['name2'],0,14) . "..." : $aOpts['name2'];
          if (strlen($desc) > 15) {
-            $desc = substr($desc,0,14)."...";
+            $desc = substr($desc,0,14) . "...";
          }
          if (file_exists ("$font")) {
             ImageTTFText($img, $chrSize*2.5, 0, $offX+3, $offY+$maxY-1, $oBlack, $font, $hostname);

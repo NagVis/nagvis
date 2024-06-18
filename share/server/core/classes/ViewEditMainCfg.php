@@ -47,8 +47,8 @@ class ViewEditMainCfg {
                     continue;
                 }
 
-                $ident = $sec.'_'.$key;
-                if (isset($_POST['toggle_'.$ident]) && $_POST['toggle_'.$ident] != '') {
+                $ident = $sec . '_' . $key;
+                if (isset($_POST['toggle_' . $ident]) && $_POST['toggle_' . $ident] != '') {
                     // set the option
                     $raw_val = $_POST[$ident];
 
@@ -72,7 +72,7 @@ class ViewEditMainCfg {
         }
 
         $UMAINCFG->writeConfig(); // persist changes
-        echo '<div class="success">'.l('The configuration has been saved.').'</div>';
+        echo '<div class="success">' . l('The configuration has been saved.') . '</div>';
         echo '<script>window.scrollTo(0, 0);'
             .'window.setTimeout(function() { window.location.reload(); }, 1500);</script>';
     }
@@ -115,8 +115,8 @@ class ViewEditMainCfg {
         $UMAINCFG = $CORE->getUserMainCfg();
 
         $cur_val = $UMAINCFG->getValue($sec, $key, $ignore_default);
-        $ident = $sec.'_'.$key;
-        if (isset($_POST['toggle_'.$ident]) && $_POST['toggle_'.$ident] != '') {
+        $ident = $sec . '_' . $key;
+        if (isset($_POST['toggle_' . $ident]) && $_POST['toggle_' . $ident] != '') {
             $cur_val = val($_POST, $ident);
         }
         if (is_array($cur_val)) {
@@ -141,7 +141,7 @@ class ViewEditMainCfg {
                 continue;
             }
 
-            $ident = $sec.'_'.$key;
+            $ident = $sec . '_' . $key;
 
             // value configured by the user. might be null when nothing is configured
             $cur_val = $this->getCurVal($sec, $key);
@@ -178,13 +178,13 @@ class ViewEditMainCfg {
                 $show_input   = ' style="display:none"';
             }
 
-            echo '<tr'.$row_class.$row_style.'>';
-            echo '<td class="tdlabel">'.$key.'</td>';
-            echo '<td class="tdbox"><input type="checkbox" name="toggle_'.$ident.'" value="1" '
-                .'onclick="toggle_option(\'box_'.$ident.'\')"'.$checked.'/></td>';
+            echo '<tr' . $row_class . $row_style . '>';
+            echo '<td class="tdlabel">' . $key . '</td>';
+            echo '<td class="tdbox"><input type="checkbox" name="toggle_' . $ident . '" value="1" '
+                .'onclick="toggle_option(\'box_' . $ident . '\')"' . $checked . '/></td>';
             echo '<td class="tdfield">';
 
-            echo '<div id="_txt_box_'.$ident.'"'.$show_default.' class="default">';
+            echo '<div id="_txt_box_' . $ident . '"' . $show_default . ' class="default">';
             switch ($field_type) {
                 case 'boolean':
                     if ($def_val == '1') {
@@ -200,10 +200,10 @@ class ViewEditMainCfg {
             }
             echo '</div>';
 
-            echo '<div id="box_'.$ident.'"'.$show_input.'>';
+            echo '<div id="box_' . $ident . '"' . $show_input . '>';
             $this->renderInput($sec, $key, $spec, $def_val, $cur_val);
             if ($this->error && $this->error->field == $ident) {
-                echo '<div class="err">'.escape_html($this->error->msg).'</div>';
+                echo '<div class="err">' . escape_html($this->error->msg) . '</div>';
             }
             echo '</div>';
 
@@ -233,37 +233,37 @@ class ViewEditMainCfg {
                 $func_name = $_MAINCFG->getListFunc($sec, $key);
                 $choices = $func_name();
         
-                echo '<select id="'.$sec.'_'.$key.'" name="'.$sec.'_'.$key.'"'.$on_change.'>';
+                echo '<select id="' . $sec . '_' . $key . '" name="' . $sec . '_' . $key . '"' . $on_change . '>';
                 echo '<option value=""></option>';
         
                 foreach ($choices AS $choice_key => $choice_val) {
                     if(is_array($choice_val)) {
-                        echo '<option value="'.$choice_val['value'].'">'.$choice_val['label'].'</option>';
+                        echo '<option value="' . $choice_val['value'] . '">' . $choice_val['label'] . '</option>';
                     } else {
                         if (is_int($choice_key)) {
                             $choice_key = $choice_val;
                         } // do not indexes of assoc arrays as values
-                        echo '<option value="'.$choice_key.'">'.$choice_val.'</option>';
+                        echo '<option value="' . $choice_key . '">' . $choice_val . '</option>';
                     }
                 }
         
                 echo '</select>';
-                echo '<script>document.edit_config.elements[\''.$sec.'_'.$key.'\'].value = \''.$cur_val.'\';</script>';
+                echo '<script>document.edit_config.elements[\'' . $sec . '_' . $key . '\'].value = \'' . $cur_val . '\';</script>';
             break;
             case 'boolean':
-                echo '<select id="'.$sec.'_'.$key.'" name="'.$sec.'_'.$key.'"'.$on_change.'>';
+                echo '<select id="' . $sec . '_' . $key . '" name="' . $sec . '_' . $key . '"' . $on_change . '>';
                 echo '<option value=""></option>';
-                echo '<option value="1">'.l('yes').'</option>';
-                echo '<option value="0">'.l('no').'</option>';
+                echo '<option value="1">' . l('yes') . '</option>';
+                echo '<option value="0">' . l('no') . '</option>';
                 echo '</select>';
         
-                echo '<script>document.edit_config.elements[\''.$sec.'_'.$key.'\'].value = \''.$cur_val.'\';</script>';
+                echo '<script>document.edit_config.elements[\'' . $sec . '_' . $key . '\'].value = \'' . $cur_val . '\';</script>';
             break;
             case 'color':
                 $this->colorSelect($sec, $key, $cur_val);
             break;
             case 'text':
-                echo '<input id="'.$sec.'_'.$key.'" type="text" name="'.$sec.'_'.$key.'" value="'.$cur_val.'">';
+                echo '<input id="' . $sec . '_' . $key . '" type="text" name="' . $sec . '_' . $key . '" value="' . $cur_val . '">';
             break;
         }
         
@@ -273,13 +273,13 @@ class ViewEditMainCfg {
     }
 
     private function colorSelect($sec, $key, $value) {
-        $propname = $sec."_".$key;
-        echo '<div id="'.$propname.'" class=picker>';
+        $propname = $sec . "_" . $key;
+        echo '<div id="' . $propname . '" class=picker>';
         input($propname, $value, '', '', $propname . '_inp');
-        echo '<a href="javascript:void(0);" onClick="togglePicker(\''.$propname.'_inp\');">';
-        echo '<img src="'.cfg('paths', 'htmlimages').'internal/picker.png" alt="'.l('Color select').'" />';
+        echo '<a href="javascript:void(0);" onClick="togglePicker(\'' . $propname . '_inp\');">';
+        echo '<img src="' . cfg('paths', 'htmlimages') . 'internal/picker.png" alt="' . l('Color select') . '" />';
         echo '</a></div>';
-        js('var o = document.getElementById(\''.$propname.'_inp\');'
+        js('var o = document.getElementById(\'' . $propname . '_inp\');'
           .'o.color = new jscolor.color(o, {pickerOnfocus:false,adjust:false,hash:true});'
           .'o = null;');
     }

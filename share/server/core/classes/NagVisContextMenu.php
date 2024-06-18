@@ -48,10 +48,10 @@ class NagVisContextMenu {
         $this->templateName = $templateName;
 
         $this->pathHtmlBase     = cfg('paths', 'htmlbase');
-        $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName.'.context.html');
+        $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName . '.context.html');
 
         $this->CACHE = new GlobalFileCache($this->pathTemplateFile,
-                                           cfg('paths','var').'context-'.$this->templateName.'-'.curLang().'.cache');
+                                           cfg('paths','var') . 'context-' . $this->templateName . '-' . curLang() . '.cache');
 
         // Only use cache when there is
         // a) Some valid cache file
@@ -184,11 +184,11 @@ class NagVisContextMenu {
 
         foreach ($action_urls as $param) {
             if (cfg('defaults', $param) != "") {
-                if(strpos($this->code,'['.$param.']') !== FALSE) {
-                    $this->code = str_replace('['.$param.']', cfg('defaults', $param), $this->code);
+                if(strpos($this->code,'[' . $param . ']') !== FALSE) {
+                    $this->code = str_replace('[' . $param . ']', cfg('defaults', $param), $this->code);
                 }
             } else {
-                $this->code = preg_replace('/<!-- BEGIN has_'.$param.' -->.*?<!-- END has_'.$param.' -->/ms',
+                $this->code = preg_replace('/<!-- BEGIN has_' . $param . ' -->.*?<!-- END has_' . $param . ' -->/ms',
                                            '', $this->code);
             }
         }
@@ -231,7 +231,7 @@ class NagVisContextMenu {
     }
 
     public function getCssFile() {
-        return path('html', 'global', 'templates', $this->templateName.'.context.css');
+        return path('html', 'global', 'templates', $this->templateName . '.context.css');
     }
 }
 

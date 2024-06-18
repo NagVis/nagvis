@@ -67,7 +67,7 @@ if(file_exists('../../server/core/defines/global.php')) {
     // handle OMD local/ hierarchy
     $_path_parts = explode('/', dirname($_SERVER["SCRIPT_FILENAME"]));
     if($_path_parts[count($_path_parts) - 6] == 'local') {
-        $_nv_core_dir = join(array_slice(explode('/' ,dirname($_SERVER["SCRIPT_FILENAME"])), 0, -6), '/').'/share/nagvis/htdocs/server/core';
+        $_nv_core_dir = join(array_slice(explode('/' ,dirname($_SERVER["SCRIPT_FILENAME"])), 0, -6), '/') . '/share/nagvis/htdocs/server/core';
     } else {
         echo 'ERROR: Unable to detect nagvis core dir';
         exit(1);
@@ -75,20 +75,20 @@ if(file_exists('../../server/core/defines/global.php')) {
 }
 
 // Include global defines
-require($_nv_core_dir.'/defines/global.php');
-require($_nv_core_dir.'/defines/matches.php');
+require($_nv_core_dir . '/defines/global.php');
+require($_nv_core_dir . '/defines/matches.php');
 
 // Include functions
-require($_nv_core_dir.'/functions/autoload.php');
-require($_nv_core_dir.'/functions/debug.php');
-require($_nv_core_dir.'/functions/oldPhpVersionFixes.php');
-require($_nv_core_dir.'/classes/CoreExceptions.php');
-require($_nv_core_dir.'/functions/nagvisErrorHandler.php');
+require($_nv_core_dir . '/functions/autoload.php');
+require($_nv_core_dir . '/functions/debug.php');
+require($_nv_core_dir . '/functions/oldPhpVersionFixes.php');
+require($_nv_core_dir . '/classes/CoreExceptions.php');
+require($_nv_core_dir . '/functions/nagvisErrorHandler.php');
 
 const CONST_AJAX = true;
 
 try {
-    require($_nv_core_dir.'/functions/core.php');
+    require($_nv_core_dir . '/functions/core.php');
 
     // Authenticate the user
     $SHANDLER = new CoreSessionHandler();
@@ -128,11 +128,11 @@ try {
     $query     = str_replace('\\\\n', "\n", $_GET['query']);
 
     if($setAuthUser) {
-        $query .= 'AuthUser: '.$username."\n";
+        $query .= 'AuthUser: ' . $username . "\n";
     }
 
     // Validate the query
-    if(!preg_match("/^".$queryTypes."\s".$queryTables."\n/", $query)) {
+    if(!preg_match("/^" . $queryTypes . "\s" . $queryTables . "\n/", $query)) {
         throw new UserInputError('Invalid livestatus query.');
     }
 
@@ -180,7 +180,7 @@ try {
             foreach($result AS $line) {
                 echo '<tr>';
                 foreach($line AS $cell) {
-                    echo '<td>'.$cell.'</td>';
+                    echo '<td>' . $cell . '</td>';
                 }
                 echo '</tr>';
             };

@@ -183,9 +183,9 @@ class CoreAuthHandler {
         }
 
         if(cfg('global', 'audit_log') == true) {
-            $ALOG = new CoreLog(cfg('paths', 'var').'nagvis-audit.log',
+            $ALOG = new CoreLog(cfg('paths', 'var') . 'nagvis-audit.log',
                               cfg('global', 'dateformat'));
-            $ALOG->l('User logged out ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
+            $ALOG->l('User logged out (' . $this->getUser() . ' / ' . $this->getUserId() . '): ' . $this->sModuleName);
         }
 
         // Remove the login information

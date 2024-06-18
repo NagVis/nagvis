@@ -159,7 +159,7 @@ function parsePerfdata($sPerfdata) {
 function errorBox($msg) {
     global $_MODE;
     if(isset($_MODE) && $_MODE === 'html') {
-        echo '<strong>'.$msg.'</strong>';
+        echo '<strong>' . $msg . '</strong>';
 	exit;
     } else {
 	$img = imagecreate(400,40);

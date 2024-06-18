@@ -36,7 +36,7 @@ class NagVisOverviewView {
         $arr['showrotations']      = (int) cfg('index', 'showrotations');
 
         $arr['page_title']         = cfg('internal', 'title');
-        $arr['favicon_image']      = cfg('paths', 'htmlimages').'internal/favicon.png';
+        $arr['favicon_image']      = cfg('paths', 'htmlimages') . 'internal/favicon.png';
         $arr['background_color']   = cfg('index','backgroundcolor');
 
         $arr['lang_mapIndex']      = l('mapIndex');

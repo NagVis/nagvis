@@ -50,8 +50,8 @@ class CoreModuleHandler {
      */
     public function loadModule($sModule) {
         // Check if module class is registered
-        if(isset($this->aRegistered[$this->sPrefix.$sModule]) && $this->aRegistered[$this->sPrefix.$sModule] === 'active') {
-            $className = $this->sPrefix.$sModule;
+        if(isset($this->aRegistered[$this->sPrefix . $sModule]) && $this->aRegistered[$this->sPrefix . $sModule] === 'active') {
+            $className = $this->sPrefix . $sModule;
 
             // create instance of module
             $MOD = new $className($this->CORE);
@@ -72,9 +72,9 @@ class CoreModuleHandler {
      */
     public function regModule($sModule) {
         // Check if module class exists
-        if(class_exists($this->sPrefix.$sModule)) {
+        if(class_exists($this->sPrefix . $sModule)) {
             // Register the module at the module handler
-            $this->aRegistered[$this->sPrefix.$sModule] = 'active';
+            $this->aRegistered[$this->sPrefix . $sModule] = 'active';
             return true;
         } else {
             throw new NagVisException(l('The module class does not exist'));

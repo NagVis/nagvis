@@ -86,7 +86,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $this->backendId = $backendId;
 
         // Parse the socket params
-        $this->socketSpec = cfg('backend_'.$backendId, 'socket');
+        $this->socketSpec = cfg('backend_' . $backendId, 'socket');
         $this->parseSocket($this->socketSpec);
 
         // Run preflight checks
@@ -194,17 +194,17 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         // errors later with an own error message
         // FIXME: Maybe use pfsockopen in the future to use persistent connections
         if($this->socketType === 'unix') {
-            $this->SOCKET = fsockopen('unix://'.$this->socketPath, -1, $errno, $errstr, (float) cfg('backend_'.$this->backendId, 'timeout'));
+            $this->SOCKET = fsockopen('unix://' . $this->socketPath, -1, $errno, $errstr, (float) cfg('backend_' . $this->backendId, 'timeout'));
 
         } elseif($this->socketType === 'tcp-tls') {
-            if (cfg('backend_'.$this->backendId, 'verify_tls_peer') == true) {
+            if (cfg('backend_' . $this->backendId, 'verify_tls_peer') == true) {
                 $ssl_options = [
                     'verify_peer' => true,
                     'verify_peer_name' => false,
                     'verify_depth' => 1,
                 ];
 
-            $ca_path = cfg('backend_'.$this->backendId, 'verify_tls_ca_path');
+            $ca_path = cfg('backend_' . $this->backendId, 'verify_tls_ca_path');
             if ($ca_path) {
                 $ssl_options['cafile'] = $ca_path;
             }
@@ -222,12 +222,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
             $this->SOCKET= stream_socket_client(
                 "tls://" . $this->socketAddress . ":" . $this->socketPort, $errno, $errstr,
-                (float) cfg('backend_'.$this->backendId, 'timeout'), STREAM_CLIENT_CONNECT,
+                (float) cfg('backend_' . $this->backendId, 'timeout'), STREAM_CLIENT_CONNECT,
                 $context);
 
         } elseif($this->socketType === 'tcp') {
             $this->SOCKET = fsockopen($this->socketAddress, $this->socketPort, $errno, $errstr,
-                                        (float) cfg('backend_'.$this->backendId, 'timeout'));
+                                        (float) cfg('backend_' . $this->backendId, 'timeout'));
         }
 
         restore_error_handler();
@@ -533,7 +533,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             case 'host':
             case 'hostgroup':
             case 'servicegroup':
-                $l = $this->queryLivestatus("GET ".$type."s\nColumns: name alias\n".$add_filter);
+                $l = $this->queryLivestatus("GET " . $type . "s\nColumns: name alias\n" . $add_filter);
             break;
             case 'service':
                 $query = "GET services\nColumns: host_name description\n";
@@ -598,10 +598,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                             $val = $OBJS[0]->getServiceDescription();
                         }
 
-                        $objFilters[] = 'Filter: '.$key.' '.$filter['op'].' '.$val."\n";
+                        $objFilters[] = 'Filter: ' . $key . ' ' . $filter['op'] . ' ' . $val . "\n";
                     break;
                     default:
-                        throw new BackendConnectionProblem('Invalid filter key ('.$key.')');
+                        throw new BackendConnectionProblem('Invalid filter key (' . $key . ')');
                     break;
                 }
             }
@@ -650,7 +650,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 $count = '';
             }
 
-            $aFilters[] = implode($objFilters).$count;
+            $aFilters[] = implode($objFilters) . $count;
         }
 
         $count = count($aFilters);
@@ -660,7 +660,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             $count = '';
         }
 
-        return implode($aFilters).$count;
+        return implode($aFilters) . $count;
     }
 
     private function serviceStateStats($stateAttr) {
@@ -670,106 +670,106 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             // Count PENDING
             "Stats: has_been_checked = 0\n" .
             // Count OK
-            "Stats: ".$stateAttr." = 0\n" .
+            "Stats: " . $stateAttr . " = 0\n" .
             "Stats: has_been_checked != 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
             "Stats: host_scheduled_downtime_depth = 0\n" .
-            "Stats: staleness < ".$staleness_thresh."\n" .
+            "Stats: staleness < " . $staleness_thresh . "\n" .
             "StatsAnd: 5\n" .
             // Count OK (STALE)
-            "Stats: ".$stateAttr." = 0\n" .
+            "Stats: " . $stateAttr . " = 0\n" .
             "Stats: has_been_checked != 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
             "Stats: host_scheduled_downtime_depth = 0\n" .
-            "Stats: staleness >= ".$staleness_thresh."\n" .
+            "Stats: staleness >= " . $staleness_thresh . "\n" .
             "StatsAnd: 5\n" .
             // Count OK (DOWNTIME)
-            "Stats: ".$stateAttr." = 0\n" .
+            "Stats: " . $stateAttr . " = 0\n" .
             "Stats: has_been_checked != 0\n" .
             "Stats: scheduled_downtime_depth > 0\n" .
             "Stats: host_scheduled_downtime_depth > 0\n" .
             "StatsOr: 2\n" .
             "StatsAnd: 3\n" .
             // Count WARNING
-            "Stats: ".$stateAttr." = 1\n" .
+            "Stats: " . $stateAttr . " = 1\n" .
             "Stats: acknowledged = 0\n" .
             "Stats: host_acknowledged = 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
             "Stats: host_scheduled_downtime_depth = 0\n" .
-            "Stats: staleness < ".$staleness_thresh."\n" .
+            "Stats: staleness < " . $staleness_thresh . "\n" .
             "StatsAnd: 6\n" .
             // Count WARNING (STALE)
-            "Stats: ".$stateAttr." = 1\n" .
+            "Stats: " . $stateAttr . " = 1\n" .
             "Stats: acknowledged = 0\n" .
             "Stats: host_acknowledged = 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
             "Stats: host_scheduled_downtime_depth = 0\n" .
-            "Stats: staleness >= ".$staleness_thresh."\n" .
+            "Stats: staleness >= " . $staleness_thresh . "\n" .
             "StatsAnd: 6\n" .
             // Count WARNING(ACK)
-            "Stats: ".$stateAttr." = 1\n" .
+            "Stats: " . $stateAttr . " = 1\n" .
             "Stats: acknowledged = 1\n" .
             "Stats: host_acknowledged = 1\n" .
             "StatsOr: 2\n" .
             "StatsAnd: 2\n" .
             // Count WARNING(DOWNTIME)
-            "Stats: ".$stateAttr." = 1\n" .
+            "Stats: " . $stateAttr . " = 1\n" .
             "Stats: scheduled_downtime_depth > 0\n" .
             "Stats: host_scheduled_downtime_depth > 0\n" .
             "StatsOr: 2\n" .
             "StatsAnd: 2\n" .
             // Count CRITICAL
-            "Stats: ".$stateAttr." = 2\n" .
+            "Stats: " . $stateAttr . " = 2\n" .
             "Stats: acknowledged = 0\n" .
             "Stats: host_acknowledged = 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
             "Stats: host_scheduled_downtime_depth = 0\n" .
-            "Stats: staleness < ".$staleness_thresh."\n" .
+            "Stats: staleness < " . $staleness_thresh . "\n" .
             "StatsAnd: 6\n" .
             // Count CRITICAL (STALE)
-            "Stats: ".$stateAttr." = 2\n" .
+            "Stats: " . $stateAttr . " = 2\n" .
             "Stats: acknowledged = 0\n" .
             "Stats: host_acknowledged = 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
             "Stats: host_scheduled_downtime_depth = 0\n" .
-            "Stats: staleness >= ".$staleness_thresh."\n" .
+            "Stats: staleness >= " . $staleness_thresh . "\n" .
             "StatsAnd: 6\n" .
             // Count CRITICAL(ACK)
-            "Stats: ".$stateAttr." = 2\n" .
+            "Stats: " . $stateAttr . " = 2\n" .
             "Stats: acknowledged = 1\n" .
             "Stats: host_acknowledged = 1\n" .
             "StatsOr: 2\n" .
             "StatsAnd: 2\n" .
             // Count CRITICAL(DOWNTIME)
-            "Stats: ".$stateAttr." = 2\n" .
+            "Stats: " . $stateAttr . " = 2\n" .
             "Stats: scheduled_downtime_depth > 0\n" .
             "Stats: host_scheduled_downtime_depth > 0\n" .
             "StatsOr: 2\n" .
             "StatsAnd: 2\n" .
             // Count UNKNOWN
-            "Stats: ".$stateAttr." = 3\n" .
+            "Stats: " . $stateAttr . " = 3\n" .
             "Stats: acknowledged = 0\n" .
             "Stats: host_acknowledged = 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
             "Stats: host_scheduled_downtime_depth = 0\n" .
-            "Stats: staleness < ".$staleness_thresh."\n" .
+            "Stats: staleness < " . $staleness_thresh . "\n" .
             "StatsAnd: 6\n" .
             // Count UNKNOWN (STALE)
-            "Stats: ".$stateAttr." = 3\n" .
+            "Stats: " . $stateAttr . " = 3\n" .
             "Stats: acknowledged = 0\n" .
             "Stats: host_acknowledged = 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
             "Stats: host_scheduled_downtime_depth = 0\n" .
-            "Stats: staleness >= ".$staleness_thresh."\n" .
+            "Stats: staleness >= " . $staleness_thresh . "\n" .
             "StatsAnd: 6\n" .
             // Count UNKNOWN(ACK)
-            "Stats: ".$stateAttr." = 3\n" .
+            "Stats: " . $stateAttr . " = 3\n" .
             "Stats: acknowledged = 1\n" .
             "Stats: host_acknowledged = 1\n" .
             "StatsOr: 2\n" .
             "StatsAnd: 2\n" .
             // Count UNKNOWN(DOWNTIME)
-            "Stats: ".$stateAttr." = 3\n" .
+            "Stats: " . $stateAttr . " = 3\n" .
             "Stats: scheduled_downtime_depth > 0\n" .
             "Stats: host_scheduled_downtime_depth > 0\n" .
             "StatsOr: 2\n" .
@@ -795,13 +795,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             $stateAttr = 'state';
         }
 
-        $q = "GET hosts\n".
-          "Columns: ".$stateAttr." plugin_output alias display_name ".
-          "address notes last_check next_check state_type ".
-          "current_attempt max_check_attempts last_state_change ".
-          "last_hard_state_change perf_data acknowledged ".
-          "scheduled_downtime_depth has_been_checked name ".
-          "check_command custom_variable_names custom_variable_values staleness\n".
+        $q = "GET hosts\n" . 
+          "Columns: " . $stateAttr . " plugin_output alias display_name " . 
+          "address notes last_check next_check state_type " . 
+          "current_attempt max_check_attempts last_state_change " . 
+          "last_hard_state_change perf_data acknowledged " . 
+          "scheduled_downtime_depth has_been_checked name " . 
+          "check_command custom_variable_names custom_variable_values staleness\n" . 
           $objFilter;
 
         $l = $this->queryLivestatus($q);
@@ -850,9 +850,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     // This handles only the first downtime. But this is not backend
                     // specific. The other backends do this as well.
                     $data = $this->queryLivestatusSingleRow(
-                        "GET downtimes\n".
+                        "GET downtimes\n" . 
                         "Columns: author comment start_time end_time\n" .
-                        "Filter: host_name = ".$e[17]."\n");
+                        "Filter: host_name = " . $e[17] . "\n");
                     if(isset($data[0])) {
                         $dt_details = $data;
                     }
@@ -913,22 +913,22 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         $l = $this->queryLivestatus(
           "GET services\n" .
-          $objFilter.
-          "Columns: description display_name ".$stateAttr." ".
-          "host_alias host_address plugin_output notes last_check next_check ".
-          "state_type current_attempt max_check_attempts last_state_change ".
-          "last_hard_state_change perf_data scheduled_downtime_depth ".
-          "acknowledged host_acknowledged host_scheduled_downtime_depth ".
-          "has_been_checked host_name check_command custom_variable_names custom_variable_values ".
+          $objFilter . 
+          "Columns: description display_name " . $stateAttr . " " . 
+          "host_alias host_address plugin_output notes last_check next_check " . 
+          "state_type current_attempt max_check_attempts last_state_change " . 
+          "last_hard_state_change perf_data scheduled_downtime_depth " . 
+          "acknowledged host_acknowledged host_scheduled_downtime_depth " . 
+          "has_been_checked host_name check_command custom_variable_names custom_variable_values " . 
           "staleness\n");
 
         $arrReturn = [];
         if(is_array($l) && count($l) > 0) {
             foreach($l as $e) {
                 // test for the correct key
-                if(isset($objects[$e[20].'~~'.$e[0]])) {
+                if(isset($objects[$e[20] . '~~' . $e[0]])) {
                     $specific = true;
-                    $key = $e[20].'~~'.$e[0];
+                    $key = $e[20] . '~~' . $e[0];
                 } else {
                     $specific = false;
                     $key = $e[20];
@@ -976,16 +976,16 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                         if(isset($e[15]) && $e[15] > 0) {
                             // Service downtime
                             $data = $this->queryLivestatusSingleRow(
-                              "GET downtimes\n".
+                              "GET downtimes\n" . 
                               "Columns: author comment start_time end_time\n" .
-                              "Filter: host_name = ".$e[20]."\n" .
-                              "Filter: service_description = ".$e[0]."\n");
+                              "Filter: host_name = " . $e[20] . "\n" .
+                              "Filter: service_description = " . $e[0] . "\n");
                         } else {
                             // Host downtime
                             $data = $this->queryLivestatusSingleRow(
-                              "GET downtimes\n".
+                              "GET downtimes\n" . 
                               "Columns: author comment start_time end_time\n" .
-                              "Filter: host_name = ".$e[20]."\n");
+                              "Filter: host_name = " . $e[20] . "\n");
                         }
                         if(isset($data[0])) {
                             $dt_details = $data;
@@ -1060,8 +1060,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         // Get service information
         $l = $this->queryLivestatus("GET services\n" .
-            $objFilter.
-            $this->serviceStateStats($stateAttr).
+            $objFilter . 
+            $this->serviceStateStats($stateAttr) . 
             "Columns: host_name host_alias\n");
 
         $arrReturn = [];
@@ -1131,7 +1131,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         // Get service information
         $l = $this->queryLivestatus("GET services\n" .
-            $filter.
+            $filter . 
             $this->serviceStateStats($stateAttr)
         );
 
@@ -1200,67 +1200,67 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         }
 
         // Get host information
-        $q = "GET hosts".$host_suffix."\n" .
-            $host_filter.
+        $q = "GET hosts" . $host_suffix . "\n" .
+            $host_filter . 
             // Count UNCHECKED
             "Stats: has_been_checked = 0\n" .
             // Count UP
-            "Stats: ".$stateAttr." = 0\n" .
+            "Stats: " . $stateAttr . " = 0\n" .
             "Stats: has_been_checked != 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: staleness < ".$staleness_thresh."\n" .
+            "Stats: staleness < " . $staleness_thresh . "\n" .
             "StatsAnd: 4\n" .
             // Count UP(STALE)
-            "Stats: ".$stateAttr." = 0\n" .
+            "Stats: " . $stateAttr . " = 0\n" .
             "Stats: has_been_checked != 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: staleness >= ".$staleness_thresh."\n" .
+            "Stats: staleness >= " . $staleness_thresh . "\n" .
             "StatsAnd: 4\n" .
             // Count UP (DOWNTIME)
-            "Stats: ".$stateAttr." = 0\n" .
+            "Stats: " . $stateAttr . " = 0\n" .
             "Stats: has_been_checked != 0\n" .
             "Stats: scheduled_downtime_depth > 0\n" .
             "StatsAnd: 3\n" .
             // Count DOWN
-            "Stats: ".$stateAttr." = 1\n" .
+            "Stats: " . $stateAttr . " = 1\n" .
             "Stats: acknowledged = 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: staleness < ".$staleness_thresh."\n" .
+            "Stats: staleness < " . $staleness_thresh . "\n" .
             "StatsAnd: 4\n" .
             // Count DOWN(STALE)
-            "Stats: ".$stateAttr." = 1\n" .
+            "Stats: " . $stateAttr . " = 1\n" .
             "Stats: acknowledged = 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: staleness >= ".$staleness_thresh."\n" .
+            "Stats: staleness >= " . $staleness_thresh . "\n" .
             "StatsAnd: 4\n" .
             // Count DOWN(ACK)
-            "Stats: ".$stateAttr." = 1\n" .
+            "Stats: " . $stateAttr . " = 1\n" .
             "Stats: acknowledged = 1\n" .
             "StatsAnd: 2\n" .
             // Count DOWN(DOWNTIME)
-            "Stats: ".$stateAttr." = 1\n" .
+            "Stats: " . $stateAttr . " = 1\n" .
             "Stats: scheduled_downtime_depth > 0\n" .
             "StatsAnd: 2\n" .
             // Count UNREACHABLE
-            "Stats: ".$stateAttr." = 2\n" .
+            "Stats: " . $stateAttr . " = 2\n" .
             "Stats: acknowledged = 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: staleness < ".$staleness_thresh."\n" .
+            "Stats: staleness < " . $staleness_thresh . "\n" .
             "StatsAnd: 4\n" .
             // Count UNREACHABLE(STALE)
-            "Stats: ".$stateAttr." = 2\n" .
+            "Stats: " . $stateAttr . " = 2\n" .
             "Stats: acknowledged = 0\n" .
             "Stats: scheduled_downtime_depth = 0\n" .
-            "Stats: staleness >= ".$staleness_thresh."\n" .
+            "Stats: staleness >= " . $staleness_thresh . "\n" .
             "StatsAnd: 4\n" .
             // Count UNREACHABLE(ACK)
-            "Stats: ".$stateAttr." = 2\n" .
+            "Stats: " . $stateAttr . " = 2\n" .
             "Stats: acknowledged = 1\n" .
             "StatsAnd: 2\n" .
             // Count UNREACHABLE(DOWNTIME)
-            "Stats: ".$stateAttr." = 2\n" .
+            "Stats: " . $stateAttr . " = 2\n" .
             "Stats: scheduled_downtime_depth > 0\n" .
-            "StatsAnd: 2\n".
+            "StatsAnd: 2\n" . 
             $host_grouping;
         $l = $this->queryLivestatus($q);
 
@@ -1329,9 +1329,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         }
 
         // Get service information
-        $l = $this->queryLivestatus("GET services".$service_suffix."\n" .
-            $service_filter.
-            $this->serviceStateStats($stateAttr).
+        $l = $this->queryLivestatus("GET services" . $service_suffix . "\n" .
+            $service_filter . 
+            $this->serviceStateStats($stateAttr) . 
             $service_grouping);
 
         if(is_array($l) && count($l) > 0) {
@@ -1430,8 +1430,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         // Get service information
         $l = $this->queryLivestatus("GET servicesbygroup\n" .
-            $objFilter.
-            $this->serviceStateStats($stateAttr).
+            $objFilter . 
+            $this->serviceStateStats($stateAttr) . 
             "Columns: servicegroup_name servicegroup_alias\n");
 
         // If the method should fetch several objects and did not find
@@ -1507,7 +1507,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectChildNamesByHostName($hostName) {
-        return $this->queryLivestatusList("GET hosts\nColumns: childs\nFilter: name = ".$hostName."\n");
+        return $this->queryLivestatusList("GET hosts\nColumns: childs\nFilter: name = " . $hostName . "\n");
     }
 
     /*
@@ -1521,11 +1521,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectParentNamesByHostName($hostName) {
-        return $this->queryLivestatusList("GET hosts\nColumns: parents\nFilter: name = ".$hostName."\n");
+        return $this->queryLivestatusList("GET hosts\nColumns: parents\nFilter: name = " . $hostName . "\n");
     }
 
     public function getHostNamesInHostgroup($name) {
-        $r = $this->queryLivestatusSingleColumn("GET hostgroups\nColumns: members\nFilter: name = ".$name."\n");
+        $r = $this->queryLivestatusSingleColumn("GET hostgroups\nColumns: members\nFilter: name = " . $name . "\n");
         if (isset($r[0])) {
             return $r[0];
         } else {
@@ -1552,7 +1552,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     public function getGeomapHosts($filterHostgroup = null) {
         $query = "GET hosts\nColumns: name custom_variable_names custom_variable_values alias\n";
         if($filterHostgroup) {
-            $query .= "Filter: groups >= ".$filterHostgroup."\n";
+            $query .= "Filter: groups >= " . $filterHostgroup . "\n";
         }
         $r = $this->queryLivestatus($query);
         $hosts = [];
@@ -1574,7 +1574,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     }
 
     private function command($cmd) {
-        return $this->queryLivestatus('COMMAND ['.time().'] '.$cmd."\n", false);
+        return $this->queryLivestatus('COMMAND [' . time() . '] ' . $cmd . "\n", false);
     }
 
     /**
@@ -1592,7 +1592,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $notify  = $notify ? '1' : '0';
         $persist = $notify ? '1' : '0';
 
-        $this->command('ACKNOWLEDGE_'.$what.'_PROBLEM;'.$spec.';'.$sticky.';'.$notify.';'.$persist.';'.$user.';'.$comment);
+        $this->command('ACKNOWLEDGE_' . $what . '_PROBLEM;' . $spec . ';' . $sticky . ';' . $notify . ';' . $persist . ';' . $user . ';' . $comment);
     }
     /**
      * PUBLIC getDirectChildDependenciesNamesByHostName()
@@ -1604,7 +1604,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @author  Thibault Cohen <thibault.cohen@savoirfairelinux.com>
      */
     public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact=false) {
-        $query = "GET hosts\nColumns: child_dependencies\nFilter: name = ".$hostName."\n";
+        $query = "GET hosts\nColumns: child_dependencies\nFilter: name = " . $hostName . "\n";
         $raw_result = $this->queryLivestatusSingleColumn($query);
         if ($min_business_impact) {
             $query = "GET hosts\nColumns: name\nFilter: name = $raw_result[0][1]\n";
@@ -1635,7 +1635,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact=false) {
-        $query = "GET hosts\nColumns: parent_dependencies\nFilter: name = ".$hostName."\n";
+        $query = "GET hosts\nColumns: parent_dependencies\nFilter: name = " . $hostName . "\n";
         $raw_result = $this->queryLivestatusSingleColumn($query);
         if ($min_business_impact) {
             $query = "GET hosts\nColumns: name\nFilter: name = $raw_result[0][1]\n";

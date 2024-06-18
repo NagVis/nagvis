@@ -141,7 +141,7 @@ class NagVisObject {
      * Get method for the name of the object
      */
     public function getName() {
-        return $this->{$this->type.'_name'};
+        return $this->{$this->type . '_name'};
     }
 
     // Returns the display_name of an object, if available, otherwise
@@ -223,7 +223,7 @@ class NagVisObject {
         if($this->type == 'service' && isset($arr['host_name'])) {
             unset($arr['host_name']);
         } else {
-            unset($arr[$this->type.'_name']);
+            unset($arr[$this->type . '_name']);
         }
 
         return $arr;
@@ -249,7 +249,7 @@ class NagVisObject {
         // completely independent from this object
         if($abstract == true) {
             unset($arr['host_name']);
-            unset($arr[$this->type.'_name']);
+            unset($arr[$this->type . '_name']);
             unset($arr['service_description']);
         }
 
@@ -278,15 +278,15 @@ class NagVisObject {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseMapCfg($globalOpts = []) {
-        $ret = 'define '.$this->type." {\n";
+        $ret = 'define ' . $this->type . " {\n";
         if($this->type === 'host' && $this instanceof NagVisHost) {
             $ret .= '  host_name=' . $this->host_name . "\n";
         }
-        $ret .= '  object_id='.$this->object_id."\n";
+        $ret .= '  object_id=' . $this->object_id . "\n";
         foreach($this->getObjectConfiguration(false) AS $key => $val) {
             // Only set options which are different to global option
             if((!isset($globalOpts[$key]) || $globalOpts[$key] != $val) && $val != '') {
-                $ret .= '  '.$key.'='.$val."\n";
+                $ret .= '  ' . $key . '=' . $val . "\n";
             }
         }
         $ret .= "}\n\n";
@@ -332,13 +332,13 @@ class NagVisObject {
      */
     public static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
         if($OBJ1->type == 'service') {
-            $name1 = strtolower($OBJ1->getName().$OBJ1->getServiceDescription());
+            $name1 = strtolower($OBJ1->getName() . $OBJ1->getServiceDescription());
         } else {
             $name1 = strtolower($OBJ1->getName());
         }
 
         if($OBJ2->type == 'service') {
-            $name2 = strtolower($OBJ2->getName().$OBJ2->getServiceDescription());
+            $name2 = strtolower($OBJ2->getName() . $OBJ2->getServiceDescription());
         } else {
             $name2 = strtolower($OBJ2->getName());
         }

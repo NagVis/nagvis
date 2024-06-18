@@ -38,7 +38,7 @@ define('DEBUGSTART',microtime_float());
  */
 function debug($msg) {
 	$fh = fopen(DEBUGFILE, 'a');
-	fwrite($fh, iso8859_1_to_utf8(microtime_float().' '.$msg."\n"));
+	fwrite($fh, iso8859_1_to_utf8(microtime_float() . ' ' . $msg . "\n"));
 	fclose($fh);
 }
 
@@ -48,9 +48,9 @@ function debug($msg) {
  * @author 	Lars Michelsen <lm@larsmichelsen.com>
  */
 function debugFinalize() {
-	debug('==> Render Time: '.round((microtime_float() - DEBUGSTART), 2).'sec'
-             .' Mem peak: '.round(memory_get_peak_usage()/1024/1024, 2).'Mb'
-             .' URI: '.$_SERVER['REQUEST_URI']);
+	debug('==> Render Time: ' . round((microtime_float() - DEBUGSTART), 2) . 'sec'
+             .' Mem peak: ' . round(memory_get_peak_usage()/1024/1024, 2) . 'Mb'
+             .' URI: ' . $_SERVER['REQUEST_URI']);
 }
 
 function log_mem($txt = 'somewhere') {

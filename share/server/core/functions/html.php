@@ -87,7 +87,7 @@ function error($msg) {
 }
 
 function msg($msg, $cls) {
-    echo '<div class="'.$cls.'">'.escape_html($msg).'</div>'.N;
+    echo '<div class="' . $cls . '">' . escape_html($msg) . '</div>' . N;
 }
 
 function submitted($form_name = null) {
@@ -109,7 +109,7 @@ function is_update() {
 }
 
 function js($code) {
-    echo '<script>'.$code.'</script>'.N;
+    echo '<script>' . $code . '</script>' . N;
 }
 
 function show_form_render_error($name) {
@@ -124,9 +124,9 @@ function show_form_render_error($name) {
 
 // Starts a HTML form which is submitted (and can be updated) via AJAX call
 function js_form_start($name) {
-    form_start($name, 'javascript:submitForm(\''.cfg('paths', 'htmlbase')
-                     .'/server/core/ajax_handler.php?mod='.$_REQUEST['mod']
-                     .'&act='.$_REQUEST['act'].'\', \''.$name.'\');');
+    form_start($name, 'javascript:submitForm(\'' . cfg('paths', 'htmlbase')
+                     .'/server/core/ajax_handler.php?mod=' . $_REQUEST['mod']
+                     .'&act=' . $_REQUEST['act'] . '\', \'' . $name . '\');');
 }
 
 function form_start($name, $target, $type = 'POST', $multipart = false) {
@@ -149,8 +149,8 @@ function form_start($name, $target, $type = 'POST', $multipart = false) {
         $multipart = '';
     }
 
-    echo '<form id="'.$name.'" name="'.$name.'" action="'.escape_html($target).'" '
-        .'method="'.$type.'"'.$multipart.'>'.N;
+    echo '<form id="' . $name . '" name="' . $name . '" action="' . escape_html($target) . '" '
+        .'method="' . $type . '"' . $multipart . '>' . N;
 
     if (submitted($form_name) || !submitted()) {
         foreach ($form_errors as $field => $message) {
@@ -167,7 +167,7 @@ function form_end($keep_context=true) {
     if ($keep_context) {
         hidden_vars();
     }
-    echo '</form>'.N;
+    echo '</form>' . N;
 }
 
 // Adds all remaining vars we got as $_POST/$_GET which have not been added to
@@ -180,7 +180,7 @@ function hidden_vars() {
         if (!isset($form_keys[$key]) && !isset($_COOKIE[$key])) {
             if (is_array($val)) {
                 foreach($val AS $val_element) {
-                    hidden($key."[]", $val_element);
+                    hidden($key . "[]", $val_element);
                 }
             } else {
                 hidden($key, $val);
@@ -193,14 +193,14 @@ function hidden_vars() {
 function hidden($name, $default = '') {
     global $form_keys;
     $form_keys[$name] = true;
-    echo '<input type="hidden" id="'.escape_html($name).'" name="'.escape_html($name).'" value="'.escape_html($default).'" />'.N;
+    echo '<input type="hidden" id="' . escape_html($name) . '" name="' . escape_html($name) . '" value="' . escape_html($default) . '" />' . N;
 }
 
 function radio($name, $value, $checked = false) {
     global $form_keys;
     $form_keys[$name] = true;
     $checked = $checked ? ' checked="checked"' : '';
-    echo '<input type="radio" name="'.$name.'" value="'.$value.'"'.$checked.' />';
+    echo '<input type="radio" name="' . $name . '" value="' . $value . '"' . $checked . ' />';
 }
 
 function field($type, $name, $default = '', $class = '', $onclick = '', $style = '', $id = null) {
@@ -232,7 +232,7 @@ function field($type, $name, $default = '', $class = '', $onclick = '', $style =
                 $value = ' value="1"';
             }
         } else {
-            $value = ' value="'.escape_html($default).'"';
+            $value = ' value="' . escape_html($default) . '"';
         }
     }
 
@@ -248,7 +248,7 @@ function field($type, $name, $default = '', $class = '', $onclick = '', $style =
         $id = $name;
     }
 
-    echo '<input id="'.$id.'" type="'.$type.'" name="'.$name.'"'.$value.$class.$onclick.$style.' />'.N;
+    echo '<input id="' . $id . '" type="' . $type . '" name="' . $name . '"' . $value . $class . $onclick . $style . ' />' . N;
 
     show_form_render_error($name);
 }
@@ -287,7 +287,7 @@ function textarea($name, $default = '', $class = '', $style = '') {
     }
 
     // plain <textarea>
-    echo '<textarea id="textarea_'.$name.'" name="'.$name.'"'.$class.$style.'>'.escape_html($default).'</textarea>'.N;
+    echo '<textarea id="textarea_' . $name . '" name="' . $name . '"' . $class . $style . '>' . escape_html($default) . '</textarea>' . N;
 
     // better <textarea>
     echo '
@@ -296,7 +296,7 @@ function textarea($name, $default = '', $class = '', $style = '') {
         script.src = "js/ExtNicEdit.js"
         document.head.appendChild(script);
         script.onload = function() {
-            new nicEditor({fullPanel : true}).panelInstance("textarea_'.$name.'")
+            new nicEditor({fullPanel : true}).panelInstance("textarea_' . $name . '")
         };
     </script>
     ';
@@ -340,18 +340,18 @@ function select($name, $options, $default = '', $onchange = '', $style = '', $si
 
     $multiple = '';
     if ($size !== null) {
-        $multiple = ' size="'.$size.'" multiple';
+        $multiple = ' size="' . $size . '" multiple';
     }
 
-    $ret = '<select id="'.$name.'" name="'.$name.'"'.$onchange.$class.$style.$multiple.'>'.N;
+    $ret = '<select id="' . $name . '" name="' . $name . '"' . $onchange . $class . $style . $multiple . '>' . N;
     foreach($options AS $value => $display) {
         $select = '';
         if($value == $default) {
             $select = ' selected';
         }
-        $ret .= '<option value="'.htmlspecialchars($value).'"'.$select.'>'.htmlspecialchars($display).'</option>'.N;
+        $ret .= '<option value="' . htmlspecialchars($value) . '"' . $select . '>' . htmlspecialchars($display) . '</option>' . N;
     }
-    $ret .= '</select>'.N;
+    $ret .= '</select>' . N;
     echo $ret;
 
     show_form_render_error($name);
@@ -363,13 +363,13 @@ function submit($label, $class = '', $name = '_submit') {
     if ($class) {
         $class = ' ' . $class;
     }
-    echo '<input class="submit'.$class.'" type="submit" name="'.$name.'" id="'.$name.'" value="'.$label.'" />'.N;
+    echo '<input class="submit' . $class . '" type="submit" name="' . $name . '" id="' . $name . '" value="' . $label . '" />' . N;
 }
 
 function button($name, $label, $onclick) {
     global $form_keys;
     $form_keys[$name] = true;
-    echo '<input type="button" name="'.$name.'" id="'.$name.'" value="'.$label.'" onclick="'.$onclick.'" />'.N;
+    echo '<input type="button" name="' . $name . '" id="' . $name . '" value="' . $label . '" onclick="' . $onclick . '" />' . N;
 }
 
 function upload($name) {
@@ -385,14 +385,14 @@ function upload($name) {
         $class = ' class="' . $class . '"';
     }
 
-    echo '<input type="file" name="'.$name.'"'.$class.' />'.N;
+    echo '<input type="file" name="' . $name . '"' . $class . ' />' . N;
 }
 
 function do_http_redirect($url = null) {
     if ($url === null) {
         $url = $_SERVER['REQUEST_URI'];
     }
-    header('Location: '.$url);
+    header('Location: ' . $url);
 }
 
 function reload($url, $sec) {
@@ -404,7 +404,7 @@ function reload($url, $sec) {
 }
 
 function focus($name) {
-    js('try{document.getElementById(\''.$name.'\').focus();}catch(e){}');
+    js('try{document.getElementById(\'' . $name . '\').focus();}catch(e){}');
 }
 
 function scroll_up() {
@@ -422,16 +422,16 @@ function render_section_navigation($open, $sections) {
     echo '<ul class="nav" id="nav">';
     foreach ($sections AS $sec => $title) {
         $class = $open == $sec ? ' class="active"' : '';
-        echo '<li id="nav_'.$sec.'" '.$class.'>';
-        echo '<a href="javascript:toggle_section(\''.$sec.'\')">';
-        echo $title.'</a></li>';
+        echo '<li id="nav_' . $sec . '" ' . $class . '>';
+        echo '<a href="javascript:toggle_section(\'' . $sec . '\')">';
+        echo $title . '</a></li>';
     }
     echo '</ul>';
 }
 
 function render_section_start($sec, $open) {
     $display = $sec != $open ? 'display:none' : '';
-    echo '<div id="sec_'.$sec.'" class="section" style="'.$display.'">';
+    echo '<div id="sec_' . $sec . '" class="section" style="' . $display . '">';
 }
 
 function render_section_end() {
