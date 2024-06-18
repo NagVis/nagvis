@@ -29,7 +29,7 @@ class NagVisMap {
     public $MAPOBJ = null;
     protected $MAPCFG;
 
-    private $linkedMaps = Array();
+    private $linkedMaps = [];
 
     /**
      * Class Constructor
@@ -77,7 +77,7 @@ class NagVisMap {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseObjectsJson($type = 'complete') {
-        $arrRet = Array();
+        $arrRet = [];
 
         // First parse the map object itselfs for having the
         // summary information in the frontend

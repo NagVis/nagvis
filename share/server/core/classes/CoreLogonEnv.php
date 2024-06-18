@@ -33,7 +33,7 @@ class CoreLogonEnv extends CoreLogonModule {
         if(!isset($_SERVER[$envVar]) || $_SERVER[$envVar] === '') {
             if($printErr) {
                 throw new NagVisException(l('Unable to authenticate user. The environment variable [VAR] is not set or empty.',
-                                            Array('VAR' => htmlentities($envVar, ENT_COMPAT, 'UTF-8'))));
+                                            ['VAR' => htmlentities($envVar, ENT_COMPAT, 'UTF-8')]));
             }
 
             return false;
@@ -52,7 +52,7 @@ class CoreLogonEnv extends CoreLogonModule {
 
         $AUTH->setTrustUsername(true);
         $AUTH->setLogoutPossible(false);
-        $AUTH->passCredentials(Array('user' => $username));
+        $AUTH->passCredentials(['user' => $username]);
         return $AUTH->isAuthenticated();
    }
 }

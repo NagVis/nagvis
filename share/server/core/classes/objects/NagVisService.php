@@ -43,7 +43,7 @@ class NagVisService extends NagVisStatefulObject {
     protected $line_label_y_offset;
 
     public function __construct($backend_id, $hostName, $serviceDescription) {
-        $this->backend_id = array($backend_id[0]); // only supports one backend
+        $this->backend_id = [$backend_id[0]]; // only supports one backend
         $this->host_name = $hostName;
         $this->service_description = $serviceDescription;
         parent::__construct();
@@ -62,7 +62,7 @@ class NagVisService extends NagVisStatefulObject {
     }
     
     public function getStateRelevantMembers() {
-        return array();
+        return [];
     }
 
     /**
@@ -70,7 +70,7 @@ class NagVisService extends NagVisStatefulObject {
      */
     public function queueState($_unused_flag = true, $_unused_flag2 = true) {
         global $_BACKEND;
-        $_BACKEND->queue(Array('serviceState' => true), $this);
+        $_BACKEND->queue(['serviceState' => true], $this);
     }
 
     /**
@@ -78,13 +78,13 @@ class NagVisService extends NagVisStatefulObject {
      */
     public function applyState() {
         if($this->problem_msg !== null) {
-            $this->setState(array(
+            $this->setState([
                 ERROR,
                 $this->problem_msg,
                 null,
                 null,
                 null,
-            ));
+            ]);
         }
 
         $this->sum = $this->state;

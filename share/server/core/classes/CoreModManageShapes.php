@@ -34,9 +34,9 @@ class CoreModManageShapes extends CoreModule {
         $this->CORE = $CORE;
 
         // Register valid actions
-        $this->aActions = Array(
+        $this->aActions = [
             'view'      => 'manage',
-        );
+        ];
     }
 
     public function handleAction() {
@@ -46,7 +46,7 @@ class CoreModManageShapes extends CoreModule {
             switch($this->sAction) {
                 case 'view':
                     $VIEW = new ViewManageShapes();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
+                    $sReturn = json_encode(['code' => $VIEW->parse()]);
                 break;
             }
         }

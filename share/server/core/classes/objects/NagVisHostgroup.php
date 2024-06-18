@@ -33,7 +33,7 @@ class NagVisHostgroup extends NagVisStatefulObject {
     protected $hostgroup_name;
     protected $alias;
 
-    protected $members = array();
+    protected $members = [];
 
     public function __construct($backend_id, $hostgroupName) {
         $this->backend_id = $backend_id;
@@ -49,7 +49,7 @@ class NagVisHostgroup extends NagVisStatefulObject {
      */
     public function queueState($_unused = true, $bFetchMemberState = true) {
         global $_BACKEND;
-        $queries = Array('hostgroupMemberState' => true);
+        $queries = ['hostgroupMemberState' => true];
 
         if($this->hover_menu == 1
            && $this->hover_childs_show == 1
@@ -64,14 +64,14 @@ class NagVisHostgroup extends NagVisStatefulObject {
      */
     public function applyState() {
         if($this->problem_msg) {
-            $this->sum = array(
+            $this->sum = [
                 ERROR,
                 $this->problem_msg,
                 null,
                 null,
                 null,
-            );
-            $this->members = Array();
+            ];
+            $this->members = [];
             return;
         }
 
@@ -109,8 +109,8 @@ class NagVisHostgroup extends NagVisStatefulObject {
      * Fetches the summary output from the object state counts
      */
     private function fetchSummaryOutputFromCounts() {
-        $arrHostStates = Array();
-        $arrServiceStates = Array();
+        $arrHostStates = [];
+        $arrServiceStates = [];
 
         // Loop all major states
         $iSumCount = 0;
@@ -142,8 +142,10 @@ class NagVisHostgroup extends NagVisStatefulObject {
         // Fallback for hostgroups without members
         if($iSumCount == 0) {
             $this->sum[OUTPUT] = l('The hostgroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
-                                     Array('GROUP' => $this->getName(),
-                                           'BACKEND' => implode(", ", $this->backend_id)));
+                                     [
+                                         'GROUP' => $this->getName(),
+                                           'BACKEND' => implode(", ", $this->backend_id)
+                                     ]);
         } else {
             // FIXME: Recode mergeSummaryOutput method
             $this->mergeSummaryOutput($arrHostStates, l('hosts'), false);
@@ -169,9 +171,11 @@ class NagVisHostgroup extends NagVisStatefulObject {
      */
     private function fetchSummaryOutput() {
         if($this->hasMembers()) {
-            $arrStates = Array(CRITICAL => 0, DOWN    => 0, WARNING   => 0,
+            $arrStates = [
+                CRITICAL => 0, DOWN    => 0, WARNING   => 0,
                                UNKNOWN  => 0, UP      => 0, OK        => 0,
-                               ERROR    => 0, PENDING => 0, UNCHECKED => 0);
+                               ERROR    => 0, PENDING => 0, UNCHECKED => 0
+            ];
 
             // Get summary state of this and child objects
             foreach($this->members AS &$MEMBER) {

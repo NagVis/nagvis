@@ -10,104 +10,104 @@ $selectable = true;
 
 // options to be modifiable by the user(url)
 global $viewParams;
-$viewParams = array(
-    'worldmap' => array(
+$viewParams = [
+    'worldmap' => [
         'backend_id',
         'worldmap_center',
         'worldmap_zoom',
         'filter_group',
-    )
-);
+    ]
+];
 
 // Config variables to be registered for this source
 global $configVars;
-$configVars = array(
+$configVars = [
     /*** GLOBAL OPTIONS ***/
-    'worldmap_center' => array(
+    'worldmap_center' => [
         'must'      => true,
         'default'   => '50.86837814203458,10.21728515625',
         'match'     => MATCH_LATLONG,
-    ),
-    'worldmap_zoom' => array(
+    ],
+    'worldmap_zoom' => [
         'must'      => true,
         'default'   => 6,
         'match'     => MATCH_WORLDMAP_ZOOM,
-    ),
-    'worldmap_tiles_saturate' => array(
+    ],
+    'worldmap_tiles_saturate' => [
         'must'      => false,
         'default'   => '',
         'match'     => MATCH_INTEGER_EMPTY,
-    ),
+    ],
 
     /*** OBJECT OPTIONS ***/
-    'min_zoom' => array(
+    'min_zoom' => [
         'must'      => false,
         'default'   => 2,
         'match'     => MATCH_WORLDMAP_ZOOM,
-    ),
-    'max_zoom' => array(
+    ],
+    'max_zoom' => [
         'must'      => false,
         'default'   => 20,
         'match'     => MATCH_WORLDMAP_ZOOM,
-    ),
+    ],
 
-    'scale_to_zoom' => Array(
+    'scale_to_zoom' => [
         'must'       => 0,
         'default'    => 0,
         'match'      => MATCH_BOOLEAN,
         'field_type' => 'boolean',
-    ),
-    'normal_size_at_zoom' => array(
+    ],
+    'normal_size_at_zoom' => [
         'must'      => false,
         'default'   => 19,
         'match'     => MATCH_WORLDMAP_ZOOM,
-    ),
+    ],
 
-);
+];
 
 // Assign config variables to specific object types
 global $configVarMap;
-$configVarMap = array(
-    'global' => array(
-        'worldmap' => array(
+$configVarMap = [
+    'global' => [
+        'worldmap' => [
             'worldmap_center' => null,
             'worldmap_zoom'   => null,
             'worldmap_tiles_saturate'   => null,
-        ),
-    ),
-);
+        ],
+    ],
+];
 
 // Assign these options to all map objects (except global)
 foreach (getMapObjectTypes() AS $type) {
-    $configVarMap[$type] = array(
-        'worldmap' => array(
+    $configVarMap[$type] = [
+        'worldmap' => [
             'min_zoom' => null,
             'max_zoom' => null,
-        ),
-    );
+        ],
+    ];
 }
 
 // Textbox-specific options
-$configVarMap['textbox']['worldmap'] = array_merge($configVarMap['textbox']['worldmap'], array(
+$configVarMap['textbox']['worldmap'] = array_merge($configVarMap['textbox']['worldmap'], [
     'scale_to_zoom' => null,
     'normal_size_at_zoom' => null,
-));
+]);
 
 // Global config vars not to show for worldmaps
-$hiddenConfigVars = array(
+$hiddenConfigVars = [
     'zoom',
     'zoombar',
-);
+];
 
 // Alter some global vars with automap specific things
-$updateConfigVars = array(
-    'iconset' => array(
+$updateConfigVars = [
+    'iconset' => [
         'default' => 'std_geo',
-    ),
-    'icon_size' => array(
-        'default' => array(24),
-    ),
-);
+    ],
+    'icon_size' => [
+        'default' => [24],
+    ],
+];
 
 // The worldmap database object
 $DB = null;
@@ -129,27 +129,27 @@ function worldmap_init_schema() {
         $DB->createVersionTable();
 
         // Install demo data
-        worldmap_db_update_object('273924', 53.5749514424993, 10.0405490398407, array(
+        worldmap_db_update_object('273924', 53.5749514424993, 10.0405490398407, [
             "x"         => "53.57495144249931",
             "y"         => "10.040549039840698",
             "type"      => "map",
             "map_name"  => "demo-ham-racks",
             "object_id" => "273924"
-        ));
-        worldmap_db_update_object('0df2d3', 48.1125317248817, 11.6794109344482, array(
+        ]);
+        worldmap_db_update_object('0df2d3', 48.1125317248817, 11.6794109344482, [
             "x"              => "48.11253172488166",
             "y"              => "11.67941093444824",
             "type"           => "hostgroup",
             "hostgroup_name" => "muc",
             "object_id"      => "0df2d3"
-        ));
-        worldmap_db_update_object('ebbf59', 50.9391761712781, 6.95863723754883, array(
+        ]);
+        worldmap_db_update_object('ebbf59', 50.9391761712781, 6.95863723754883, [
             "x"              => "50.93917617127812",
             "y"              => "6.958637237548828",
             "type"           => "hostgroup",
             "hostgroup_name" => "cgn",
             "object_id"      => "ebbf59"
-        ));
+        ]);
     }
     //else {
     //    // Maybe an update is needed
@@ -167,10 +167,12 @@ function worldmap_init_db() {
     if ($DB !== null)
         return; // only init once
     $DB = new CorePDOHandler();
-    if (!$DB->open('sqlite', array('filename' => cfg('paths', 'cfg').'worldmap.db'), null, null))
+    if (!$DB->open('sqlite', ['filename' => cfg('paths', 'cfg').'worldmap.db'], null, null))
         throw new NagVisException(l('Unable to open worldmap database ([DB]): [MSG]',
-            Array('DB' => $DB->getDSN(),
-                  'MSG' => json_encode($DB->error()))));
+            [
+                'DB' => $DB->getDSN(),
+                  'MSG' => json_encode($DB->error())
+            ]));
 
     worldmap_init_schema();
 }
@@ -193,7 +195,7 @@ function line_parameters($ax, $ay, $bx, $by) {
 
     if ($s == -0) $s = 0;
 
-    return array($r, $s, $t);
+    return [$r, $s, $t];
 }
 function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
     global $DB;
@@ -252,17 +254,18 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
 
     if ($RES == false) {
         error_log(implode($DB->error(),','));
-        throw new WorldmapError(l('Failed to fetch objects: [E]; Query was [Q]', array(
-            'E' => json_encode($DB->error()), 'Q' => $q)));
+        throw new WorldmapError(l('Failed to fetch objects: [E]; Query was [Q]', [
+            'E' => json_encode($DB->error()), 'Q' => $q
+        ]));
     }
 
-    $objects = array();
-    $referenced = array();
+    $objects = [];
+    $referenced = [];
     while ($data = $RES->fetch()) {
         $obj = json_decode($data['object'], true);
         $objects[$obj['object_id']] = $obj;
         // check all coordinates for relative coords
-        $coords = array_map('strval', array($data['lat'], $data['lng'], $data['lat2'], $data['lng2']));
+        $coords = array_map('strval', [$data['lat'], $data['lng'], $data['lat2'], $data['lng2']]);
         foreach ($coords as $coord) {
             if ($coord !== null && strpos($coord, '%') !== false) {
                 $referenced[substr($coord, 0, 6)] = null;
@@ -274,8 +277,8 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
     if ($referenced) {
         $keys = array_unique(array_keys($referenced));
         $count = count($keys);
-        $oids = array();
-        $filter = array();
+        $oids = [];
+        $filter = [];
         for ($i = 1; $i <= $count; $i++) {
             $id = ":o$i";
             $oids[] = $id;
@@ -298,7 +301,7 @@ function worldmap_get_object_by_id($id) {
 
     $q = 'SELECT object FROM objects WHERE object_id = :id LIMIT 1';
 
-    $RES = $DB->query($q, array('id' => $id));
+    $RES = $DB->query($q, ['id' => $id]);
     if ($data = $RES->fetch()) {
         return json_decode($data['object'], true);
     }
@@ -324,17 +327,19 @@ function worldmap_db_update_object($obj_id, $lat, $lng, $obj,
             .'WHERE object_id=:obj_id';
     }
 
-    if ($DB->query($q, array(
+    if ($DB->query($q, [
         'obj_id' => $obj_id,
         'lat' => $lat,
         'lng' => $lng,
         'lat2' => $lat2,
         'lng2' => $lng2,
-        'object' => json_encode($obj))))
+        'object' => json_encode($obj)
+    ]))
         return true;
     else
-        throw new WorldmapError(l('Failed to add object: [E]: [Q]', array(
-            'E' => json_encode($DB->error()), 'Q' => $q)));
+        throw new WorldmapError(l('Failed to add object: [E]: [Q]', [
+            'E' => json_encode($DB->error()), 'Q' => $q
+        ]));
 }
 
 function worldmap_update_object($MAPCFG, $map_name, &$map_config, $obj_id, $insert = true) {
@@ -385,8 +390,10 @@ function get_bounds_worldmap($MAPCFG, $map_name, &$map_config) {
         .'max(lat) as max_lat, max(lng) as max_lng '
         .'FROM objects';
     $b = $DB->query($q)->fetch();
-    return array(array($b['min_lat'], $b['min_lng']),
-                 array($b['max_lat'], $b['max_lng']));
+    return [
+        [$b['min_lat'], $b['min_lng']],
+                 [$b['max_lat'], $b['max_lng']]
+    ];
 }
 
 function load_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
@@ -397,7 +404,7 @@ function load_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
         return true; // already loaded
 
     $q = 'SELECT object FROM objects WHERE object_id=:obj_id';
-    $b = $DB->query($q, array('obj_id' => $obj_id))->fetch();
+    $b = $DB->query($q, ['obj_id' => $obj_id])->fetch();
     if ($b)
         $map_config[$obj_id] = json_decode($b['object'], true);
 }
@@ -407,11 +414,12 @@ function del_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
     worldmap_init_db();
 
     $q = 'DELETE FROM objects WHERE object_id=:obj_id';
-    if ($DB->query($q, array('obj_id' => $obj_id)))
+    if ($DB->query($q, ['obj_id' => $obj_id]))
         return true;
     else
-        throw new WorldmapError(l('Failed to delete object: [E]: [Q]', array(
-            'E' => json_encode($DB->error()), 'Q' => $q)));
+        throw new WorldmapError(l('Failed to delete object: [E]: [Q]', [
+            'E' => json_encode($DB->error()), 'Q' => $q
+        ]));
 }
 
 function update_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {

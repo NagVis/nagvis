@@ -32,11 +32,11 @@ class CoreModGeneral extends CoreModule {
         $this->sName = 'General';
         $this->CORE = $CORE;
 
-        $this->aActions = Array(
+        $this->aActions = [
             'getHoverTemplate'   => REQUIRES_AUTHORISATION,
             'getContextTemplate' => REQUIRES_AUTHORISATION,
             'getHoverUrl'        => REQUIRES_AUTHORISATION,
-        );
+        ];
     }
 
     public function handleAction() {
@@ -60,10 +60,10 @@ class CoreModGeneral extends CoreModule {
     }
 
     private function getTemplate($type) {
-        $arrReturn = Array();
+        $arrReturn = [];
 
         // Parse view specific uri params
-        $aOpts = $this->getCustomOptions(Array('name' => MATCH_STRING_NO_SPACE));
+        $aOpts = $this->getCustomOptions(['name' => MATCH_STRING_NO_SPACE]);
 
         foreach($aOpts['name'] AS $sName) {
             if($type == 'hover')
@@ -71,29 +71,31 @@ class CoreModGeneral extends CoreModule {
             else
                 $OBJ = new NagVisContextMenu($this->CORE, $sName);
 
-            $arrReturn[] = Array('name'     => $sName,
+            $arrReturn[] = [
+                'name'     => $sName,
                                  'css_file' => $OBJ->getCssFile(),
-                                 'code'     => str_replace("\r\n", "", str_replace("\n", "", $OBJ->__toString())));
+                                 'code'     => str_replace("\r\n", "", str_replace("\n", "", $OBJ->__toString()))
+            ];
         }
 
         return json_encode($arrReturn);
     }
 
     private function getHoverUrl() {
-        $arrReturn = Array();
+        $arrReturn = [];
 
         // Parse view specific uri params
-        $aOpts = $this->getCustomOptions(Array('url' => MATCH_STRING_URL));
+        $aOpts = $this->getCustomOptions(['url' => MATCH_STRING_URL]);
 
         foreach($aOpts['url'] AS $sUrl) {
             $OBJ = new NagVisHoverUrl($this->CORE, $sUrl);
-            $arrReturn[] = Array('url' => $sUrl, 'code' => $OBJ->__toString());
+            $arrReturn[] = ['url' => $sUrl, 'code' => $OBJ->__toString()];
         }
 
         $result = json_encode($arrReturn);
         if ($result === false)
             throw new NagVisException(l('Data not parsable: [URL] ([MSG])',
-                array('URL' => htmlentities($sUrl, ENT_COMPAT, 'UTF-8'), 'MSG' => json_last_error_msg())));
+                ['URL' => htmlentities($sUrl, ENT_COMPAT, 'UTF-8'), 'MSG' => json_last_error_msg()]));
         return $result;
     }
 }

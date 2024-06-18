@@ -49,7 +49,7 @@ class ViewManageBackends {
     }
 
     private function backend_options($backend_id) {
-        $ret = Array();
+        $ret = [];
         $backend_type = cfg('backend_'.$backend_id, 'backendtype');
 
         foreach ($this->backend_attributes($backend_type) AS $key => $opt)
@@ -91,7 +91,7 @@ class ViewManageBackends {
         echo '<table name="mytable" class="mytable">';
         echo '<tr><td class="tdlabel">'.l('Default Backend').'</td>';
         echo '<td class="tdfield">';
-        $backends = array('' => l('Please choose'));
+        $backends = ['' => l('Please choose')];
         foreach ($this->defined_backends AS $backend)
             $backends[$backend] = $backend;
         $default_backends = cfg('defaults', 'backend', true);
@@ -150,7 +150,7 @@ class ViewManageBackends {
                     elseif ($val != null) {
                         if (!preg_match($opt['match'], $val))
                             throw new FieldInputError($key, l('Invalid value provided. Needs to match: [P].',
-                                                                            array('P' => $opt['match'])));
+                                                                            ['P' => $opt['match']]));
                         $CORE->getUserMainCfg()->setValue('backend_'.$backend_id, $key, $val);
                     }
                 }
@@ -183,14 +183,14 @@ class ViewManageBackends {
             echo '</td></tr>';
             echo '<tr><td class="tdlabel">'.l('Backend Type').'</td>';
             echo '<td class="tdfield">';
-            $choices = array('' => l('Please choose'));
+            $choices = ['' => l('Please choose')];
             foreach ($this->available_backends as $choice)
                 $choices[$choice] = $choice;
             select('backend_type', $choices, '', 'updateForm(this.form)');
         } else {
             echo '<tr><td class="tdlabel">'.l('Backend ID').'</td>';
             echo '<td class="tdfield">';
-            $choices = array('' => l('Please choose'));
+            $choices = ['' => l('Please choose')];
             foreach ($this->editable_backends as $choice)
                 $choices[$choice] = $choice;
             select('backend_id', $choices, '', 'updateForm(this.form)');
@@ -202,7 +202,7 @@ class ViewManageBackends {
                 $opts = $this->backend_options($backend_id);
                 $backend_type = $opts['backendtype'];
             } else {
-                $opts = array();
+                $opts = [];
             }
 
             foreach ($this->backend_attributes($backend_type) as $key => $opt) {
@@ -256,7 +256,7 @@ class ViewManageBackends {
         echo '<table class="mytable">';
         echo '<tr><td class="tdlabel">'.l('Backend ID').'</td>';
         echo '<td class="tdfield">';
-        $choices = array('' => l('Please choose'));
+        $choices = ['' => l('Please choose')];
         foreach ($this->editable_backends AS $choice)
             $choices[$choice] = $choice;
         select('backend_id', $choices);

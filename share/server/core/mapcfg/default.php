@@ -1,7 +1,7 @@
 <?php
 
 function getMapObjectTypes() {
-    return array(
+    return [
         'host',
         'hostgroup',
         'service',
@@ -13,12 +13,12 @@ function getMapObjectTypes() {
         'container',
         'dyngroup',
         'aggr',
-    );
+    ];
 }
 
 function listMapNames() {
     global $CORE, $AUTHORISATION;
-    $list = Array();
+    $list = [];
     $maps = $CORE->getAvailableMaps();
     foreach($maps AS $map_name)
         if($AUTHORISATION->isPermitted('Map', 'view', $map_name))
@@ -35,38 +35,38 @@ function listMapImages() {
 }
 
 function listLineTypes() {
-    return Array(
+    return [
         '10' => '-------><-------',
         '11' => '--------------->',
         '12' => '----------------',
         '13' => '---%---><---%---',
         '14' => '--%+BW-><-%+BW--',
         '15' => '---BW--><--BW---',
-    );
+    ];
 }
 
 function listStatelessLineTypes() {
-    return Array(
+    return [
         '10' => '-------><-------',
         '11' => '--------------->',
         '12' => '----------------',
-    );
+    ];
 }
 
 function listLineArrows() {
-    return Array(
+    return [
         'forward' => '------->',
         'back'    => '<-------',
         'both'    => '<------>',
         'none'    => '--------',
-    );
+    ];
 }
 
 function listGadgetTypes() {
-    return Array(
+    return [
         'img'  => l('Image'),
         'html' => l('HTML Code'),
-    );
+    ];
 }
 
 function listGadgets() {
@@ -75,26 +75,26 @@ function listGadgets() {
 }
 
 function listViewTypesContainer() {
-    return Array('inline', 'iframe');
+    return ['inline', 'iframe'];
 }
 
 function listViewTypesObj() {
-    return Array('icon', 'line', 'gadget');
+    return ['icon', 'line', 'gadget'];
 }
 
 function listViewTypes() {
-    return Array('icon', 'line');
+    return ['icon', 'line'];
 }
 
 function listDynGroupTypes() {
-    return Array(
+    return [
         'host'    => l('Hosts'),
         'service' => l('Services')
-    );
+    ];
 }
 
 function listZoomFactors() {
-    return Array(
+    return [
         10     => ' 10%',
         25     => ' 25%',
         50     => ' 50%',
@@ -104,7 +104,7 @@ function listZoomFactors() {
         150    => '150%',
         200    => '200%',
         'fill' => l('Fill screen'),
-    );
+    ];
 }
 
 
@@ -121,8 +121,8 @@ function getObjectNames($type, $MAPCFG, $objId, $attrs) {
     }
 
     // Return simply nothing when a user just choosen to insert multiple backends
-    if(isset($attrs['backend_id']) && $attrs['backend_id'] == array('<<<other>>>'))
-        return array();
+    if(isset($attrs['backend_id']) && $attrs['backend_id'] == ['<<<other>>>'])
+        return [];
 
     // Initialize the backend
     foreach($backendIds as $backendId) {
@@ -138,11 +138,11 @@ function getObjectNames($type, $MAPCFG, $objId, $attrs) {
             $name1 = $MAPCFG->getValue($objId, 'host_name');
 
         if($name1 == '')
-            return Array();
+            return [];
     }
 
     // Read all objects of the requested type from the backend
-    $ret = Array('' => '');
+    $ret = ['' => ''];
     foreach($backendIds as $backendId) {
         $objs = $_BACKEND->getBackend($backendId)->getObjects($type, $name1, '');
         foreach($objs AS $obj) {
@@ -178,14 +178,14 @@ function listAggrNames($MAPCFG, $objId, $attrs) {
 }
 
 function listTemplateNames() {
-    return Array();
+    return [];
 }
 
 function listShapes($MAPCFG, $objId, $attrs) {
     global $CORE;
     // Return simply nothing when a user just choosen to insert "other" icon
     if(isset($attrs['icon']) && $attrs['icon'] == '<<<other>>>')
-        return array();
+        return [];
     return $CORE->getAvailableShapes();
 }
 
@@ -193,43 +193,43 @@ function listSources($MAPCFG, $objId, $attrs) {
     global $CORE;
     // Return simply nothing when a user just choosen to insert "other" sources
     if(isset($attrs['sources']) && $attrs['sources'] == '<<<other>>>')
-        return array();
+        return [];
     return $CORE->getSelectableSources();
 }
 
-$mapConfigVars = Array(
-    'type' => Array(
+$mapConfigVars = [
+    'type' => [
         'must'       => 0,
         'match'      => MATCH_OBJECTTYPE,
         'field_type' => 'hidden',
-    ),
-    'object_id' => Array(
+    ],
+    'object_id' => [
         'must'       => 0,
         'match'      => MATCH_OBJECTID,
         'field_type' => 'readonly',
-    ),
-    'map_image' => Array(
+    ],
+    'map_image' => [
         'must'       => 0,
         'default'    => '',
         'match'      => MATCH_PNG_GIF_JPG_FILE_OR_URL_NONE,
         'field_type' => 'dropdown',
         'list'       => 'listMapImages',
-    ),
-    'alias' => Array(
+    ],
+    'alias' => [
         'must'       => 0,
         'default'    => '',
         'match'      => MATCH_STRING
-    ),
-    'sources' => Array(
+    ],
+    'sources' => [
         'must'       => 0,
-        'default'    => array(),
+        'default'    => [],
         'array'      => true,
 	'other'      => true,
         'match'      => MATCH_STRING,
         'field_type' => 'hidden',
         'list'       => 'listSources',
-    ),
-    'backend_id' => Array(
+    ],
+    'backend_id' => [
         'must'       => 0,
         'default'    => cfg('defaults', 'backend'),
         'match'      => MATCH_BACKEND_ID,
@@ -237,34 +237,35 @@ $mapConfigVars = Array(
 	'other'      => true,
         'field_type' => 'dropdown',
         'list'       => 'listBackendIds',
-    ),
-    'background_color' => Array(
+    ],
+    'background_color' => [
         'must'       => 0,
         'default'    => cfg('defaults', 'backgroundcolor'),
         'field_type' => 'color',
-        'match'      => MATCH_COLOR),
-    'default_params' => Array(
+        'match'      => MATCH_COLOR
+    ],
+    'default_params' => [
         'must'       => 0,
         'default'    => '',
         'deprecated' => true,
         'match'      => MATCH_STRING_URL_EMPTY,
         'field_type' => 'hidden',
-    ),
-    'parent_map' => Array(
+    ],
+    'parent_map' => [
         'must'       => 0,
         'default'    => '',
         'match'      => MATCH_MAP_NAME_EMPTY,
         'field_type' => 'dropdown',
         'list'       => 'listMapNames',
-    ),
+    ],
 
-    'context_menu' => Array(
+    'context_menu' => [
         'must'       => 0,
         'default'    => cfg('defaults', 'contextmenu'),
         'match'      => MATCH_BOOLEAN,
         'field_type' => 'boolean',
-    ),
-    'context_template' => Array(
+    ],
+    'context_template' => [
         'must'          => 0,
         'default'       => cfg('defaults', 'contexttemplate'),
         'match'         => MATCH_STRING_NO_SPACE,
@@ -272,138 +273,154 @@ $mapConfigVars = Array(
         'depends_on'    => 'context_menu',
         'depends_value' => '1',
         'list'          => 'listContextTemplates',
-    ),
+    ],
 
-    'event_on_load' => Array(
+    'event_on_load' => [
         'must'       => 0,
         'editable'   => 1,
         'default'    => cfg('defaults', 'event_on_load'),
         'field_type' => 'boolean',
         'match'      => MATCH_BOOLEAN,
-    ),
-    'event_repeat_interval' => Array(
+    ],
+    'event_repeat_interval' => [
         'must'       => 0,
         'editable'   => 1,
         'default'    => cfg('defaults', 'event_repeat_interval'),
         'match'      => MATCH_INTEGER,
-    ),
-    'event_repeat_duration' => Array(
+    ],
+    'event_repeat_duration' => [
         'must'       => 0,
         'editable'   => 1,
         'default'    => cfg('defaults', 'event_repeat_duration'),
         'match'      => MATCH_INTEGER_PRESIGN,
-    ),
+    ],
 
-    'event_background' => Array(
+    'event_background' => [
         'must' => 0,
         'default' => cfg('defaults', 'eventbackground'),
         'match' => MATCH_BOOLEAN,
-        'field_type' => 'boolean'),
+        'field_type' => 'boolean'
+    ],
 
-    'event_highlight' => Array(
+    'event_highlight' => [
         'must' => 0,
         'default' => cfg('defaults', 'eventhighlight'),
         'match' => MATCH_BOOLEAN,
-        'field_type' => 'boolean'),
-    'event_highlight_interval' => Array(
+        'field_type' => 'boolean'
+    ],
+    'event_highlight_interval' => [
         'must' => 0,
         'default' => cfg('defaults', 'eventhighlightinterval'),
         'match' => MATCH_INTEGER,
         'depends_on' => 'event_highlight',
-        'depends_value' => '1'),
-    'event_highlight_duration' => Array(
+        'depends_value' => '1'
+    ],
+    'event_highlight_duration' => [
         'must' => 0,
         'default' => cfg('defaults', 'eventhighlightduration'),
         'match' => MATCH_INTEGER,
         'depends_on' => 'event_highlight',
-        'depends_value' => '1'),
+        'depends_value' => '1'
+    ],
 
-    'event_log' => Array(
+    'event_log' => [
         'must' => 0,
         'default' => cfg('defaults', 'eventlog'),
         'match' => MATCH_BOOLEAN,
-        'field_type' => 'boolean'),
-    'event_log_level' => Array(
+        'field_type' => 'boolean'
+    ],
+    'event_log_level' => [
         'must' => 0,
         'default' => cfg('defaults', 'eventloglevel'),
         'match' => MATCH_STRING_NO_SPACE,
         'depends_on' => 'event_log',
-        'depends_value' => '1'),
-    'event_log_events' => Array(
+        'depends_value' => '1'
+    ],
+    'event_log_events' => [
         'must' => 0,
         'default' => cfg('defaults', 'eventlogevents'),
         'match' => MATCH_INTEGER,
         'depends_on' => 'event_log',
-        'depends_value' => '1'),
-    'event_log_height' => Array(
+        'depends_value' => '1'
+    ],
+    'event_log_height' => [
         'must' => 0,
         'default' => cfg('defaults', 'eventlogheight'),
         'match' => MATCH_INTEGER,
         'depends_on' => 'event_log',
-        'depends_value' => '1'),
-    'event_log_hidden' => Array(
+        'depends_value' => '1'
+    ],
+    'event_log_hidden' => [
         'must' => 0,
         'default' => cfg('defaults', 'eventloghidden'),
         'match' => MATCH_BOOLEAN,
         'field_type' => 'boolean',
         'depends_on' => 'event_log',
-        'depends_value' => '1'),
+        'depends_value' => '1'
+    ],
 
-    'event_scroll' => Array(
+    'event_scroll' => [
         'must' => 0,
         'default' => cfg('defaults', 'eventscroll'),
         'match' => MATCH_BOOLEAN,
-        'field_type' => 'boolean'),
-    'event_sound' => Array(
+        'field_type' => 'boolean'
+    ],
+    'event_sound' => [
         'must' => 0,
         'default' => cfg('defaults', 'eventsound'),
         'match' => MATCH_BOOLEAN,
-        'field_type' => 'boolean'),
+        'field_type' => 'boolean'
+    ],
 
-    'exclude_members' => Array(
+    'exclude_members' => [
         'must'       => 0,
         'default'    => '',
         'match'      => MATCH_REGEX,
-    ),
-    'exclude_member_states' => Array(
+    ],
+    'exclude_member_states' => [
         'must'       => 0,
         'default'    => '',
         'match'      => MATCH_REGEX,
-    ),
+    ],
 
-    'grid_show' => Array(
+    'grid_show' => [
         'must' => 0,
         'default' => intval(cfg('wui', 'grid_show')),
         'match' => MATCH_BOOLEAN,
-        'field_type' => 'boolean'),
-    'grid_color' => Array(
+        'field_type' => 'boolean'
+    ],
+    'grid_color' => [
         'must'          => 0,
         'default'       => cfg('wui', 'grid_color'),
         'match'         => MATCH_COLOR,
         'field_type'    => 'color',
         'depends_on'    => 'grid_show',
-        'depends_value' => '1'),
-    'grid_steps' => Array(
+        'depends_value' => '1'
+    ],
+    'grid_steps' => [
         'must' => 0,
         'default' => intval(cfg('wui', 'grid_steps')),
         'match' => MATCH_INTEGER,
         'depends_on' => 'grid_show',
-        'depends_value' => '1'),
+        'depends_value' => '1'
+    ],
 
-    'header_menu' => Array(
+    'header_menu' => [
         'must' => 0,
         'default'        => cfg('defaults', 'headermenu'),
         'match'          => MATCH_BOOLEAN,
-        'field_type'     => 'boolean'),
-    'header_template' => Array(
+        'field_type'     => 'boolean'
+    ],
+    'header_template' => [
         'must'           => 0,
         'default'        => cfg('defaults', 'headertemplate'),
         'match'          => MATCH_STRING_NO_SPACE,
         'field_type'     => 'dropdown',
         'depends_on'     => 'header_menu',
         'depends_value'  => '1',
-        'list'           => 'listHeaderTemplates'),
-    'header_fade' => Array(
+        'list'           => 'listHeaderTemplates'
+    ],
+    'header_fade' => [
         'must'           => 0,
         'default'        => cfg('defaults', 'headerfade'),
         'match'          => MATCH_BOOLEAN,
@@ -411,20 +428,22 @@ $mapConfigVars = Array(
         'depends_on'     => 'header_menu',
         'deprecated'     => true,
         'depends_value'  => '1'
-    ),
+    ],
 
-    'hover_menu' => Array(
+    'hover_menu' => [
         'must' => 0,
         'default' => cfg('defaults', 'hovermenu'),
         'match' => MATCH_BOOLEAN,
-        'field_type' => 'boolean'),
-    'hover_delay' => Array(
+        'field_type' => 'boolean'
+    ],
+    'hover_delay' => [
         'must' => 0,
         'default' => cfg('defaults', 'hoverdelay'),
         'match' => MATCH_INTEGER,
         'depends_on' => 'hover_menu',
-        'depends_value' => '1'),
-    'hover_template' => Array(
+        'depends_value' => '1'
+    ],
+    'hover_template' => [
         'must'          => 0,
         'default'       => cfg('defaults', 'hovertemplate'),
         'match'         => MATCH_STRING_NO_SPACE,
@@ -432,28 +451,30 @@ $mapConfigVars = Array(
         'depends_on'    => 'hover_menu',
         'depends_value' => '1',
         'list'          => 'listHoverTemplates',
-     ),
-    'hover_url' => Array(
+    ],
+    'hover_url' => [
         'must'          => 0,
         'match'         => MATCH_STRING_URL,
         'depends_on'    => 'hover_menu',
         'depends_value' => '1',
         'default'       => '',
-    ),
-    'hover_childs_show' => Array(
+    ],
+    'hover_childs_show' => [
         'must' => 0,
         'default' => cfg('defaults', 'hoverchildsshow'),
         'match' => MATCH_BOOLEAN,
         'field_type' => 'boolean',
         'depends_on' => 'hover_menu',
-        'depends_value' => '1'),
-    'hover_childs_limit' => Array(
+        'depends_value' => '1'
+    ],
+    'hover_childs_limit' => [
         'must' => 0,
         'default' => cfg('defaults', 'hoverchildslimit'),
         'match' => MATCH_INTEGER_PRESIGN,
         'depends_on' => 'hover_menu',
-        'depends_value' => '1'),
-    'hover_childs_order' => Array(
+        'depends_value' => '1'
+    ],
+    'hover_childs_order' => [
         'must'          => 0,
         'default'       => cfg('defaults', 'hoverchildsorder'),
         'match'         => MATCH_ORDER,
@@ -461,8 +482,8 @@ $mapConfigVars = Array(
         'depends_on'    => 'hover_menu',
         'depends_value' => '1',
         'list'          => 'listHoverChildOrders',
-    ),
-    'hover_childs_sort' => Array(
+    ],
+    'hover_childs_sort' => [
         'must'          => 0,
         'default'       => cfg('defaults', 'hoverchildssort'),
         'match'         => MATCH_STRING_NO_SPACE,
@@ -470,9 +491,9 @@ $mapConfigVars = Array(
         'depends_on'    => 'hover_menu',
         'depends_value' => '1',
         'list'          => 'listHoverChildSorters',
-    ),
+    ],
 
-    'iconset' => Array(
+    'iconset' => [
         'must'          => 0,
         'default'       => cfg('defaults', 'icons'),
         'match'         => MATCH_STRING_NO_SPACE,
@@ -480,16 +501,16 @@ $mapConfigVars = Array(
         'depends_on'    => 'view_type',
         'depends_value' => 'icon',
         'list'          => 'listIconsets',
-    ),
-    'icon_size' => Array(
+    ],
+    'icon_size' => [
         'must'          => 0,
         'default'       => cfg('defaults', 'icon_size'),
         'match'         => MATCH_INTEGER,
         'depends_on'    => 'view_type',
         'depends_value' => 'icon',
         'array'         => true,
-    ),
-    'line_type' => Array(
+    ],
+    'line_type' => [
         'must'          => 0,
         'default'       => '11',
         'match'         => MATCH_LINE_TYPE,
@@ -497,233 +518,246 @@ $mapConfigVars = Array(
         'depends_on'    => 'view_type',
         'depends_value' => 'line',
         'list'          => 'listLineTypes',
-    ),
-    'line_color' => Array(
+    ],
+    'line_color' => [
         'must'          => 0,
         'default'       => '#ffffff',
         'field_type'    => 'color',
         'match'         => MATCH_COLOR,
         'depends_on'    => 'view_type',
         'depends_value' => 'line',
-    ),
-    'line_color_border' => Array(
+    ],
+    'line_color_border' => [
         'must'          => 0,
         'default'       => '#000000',
         'field_type'    => 'color',
         'match'         => MATCH_COLOR,
         'depends_on'    => 'view_type',
         'depends_value' => 'line',
-    ),
-    'line_cut' => Array(
+    ],
+    'line_cut' => [
         'must'          => 0,
         'default'       => '0.5',
         'match'         => MATCH_FLOAT,
         'depends_on'    => 'view_type',
         'depends_value' => 'line',
-    ),
-    'line_label_show' => Array(
+    ],
+    'line_label_show' => [
         'must'          => 0,
         'default'       => '1',
         'match'         => MATCH_BOOLEAN,
         'field_type'    => 'boolean',
         'depends_on'    => 'view_type',
         'depends_value' => 'line',
-    ),
-    'line_label_pos_in' => Array(
+    ],
+    'line_label_pos_in' => [
         'must'          => 0,
         'default'       => '0.5',
         'match'         => MATCH_FLOAT,
         'depends_on'    => 'view_type',
         'depends_value' => 'line',
-    ),
-    'line_label_pos_out' => Array(
+    ],
+    'line_label_pos_out' => [
         'must'          => 0,
         'default'       => '0.5',
         'match'         => MATCH_FLOAT,
         'depends_on'    => 'view_type',
         'depends_value' => 'line'
-    ),
-    'line_label_in' => Array(
+    ],
+    'line_label_in' => [
         'must'          => 0,
         'default'       => 'in',
         'match'         => MATCH_STRING,
         'depends_on'    => 'view_type',
         'depends_value' => 'line',
-    ),
-    'line_label_out' => Array(
+    ],
+    'line_label_out' => [
         'must'          => 0,
         'default'       => 'out',
         'match'         => MATCH_STRING,
         'depends_on'    => 'view_type',
         'depends_value' => 'line',
-    ),
-    'line_label_y_offset' => Array(
+    ],
+    'line_label_y_offset' => [
         'must'          => 0,
         'default'       => 2,
         'match'         => MATCH_INTEGER,
         'depends_on'    => 'view_type',
         'depends_value' => 'line',
-    ),
-    'line_width' => Array(
+    ],
+    'line_width' => [
         'must'          => 0,
         'default'       => cfg('defaults', 'line_width'),
         'match'         => MATCH_INTEGER,
         'depends_on'    => 'view_type',
-        'depends_value' => 'line'),
-    'line_weather_colors' => Array(
+        'depends_value' => 'line'
+    ],
+    'line_weather_colors' => [
         'must'          => 0,
         'default'       => cfg('defaults', 'line_weather_colors'),
         'match'         => MATCH_WEATHER_COLORS,
         'depends_on'    => 'view_type',
-        'depends_value' => 'line'),
+        'depends_value' => 'line'
+    ],
 
-    'in_maintenance' => Array(
+    'in_maintenance' => [
         'must'       => 0,
         'default'    => '0',
         'match'      => MATCH_BOOLEAN,
         'field_type' => 'boolean',
-    ),
+    ],
 
-    'label_show' => Array(
+    'label_show' => [
         'must'       => 0,
         'default'    => cfg('defaults', 'label_show'),
         'match'      => MATCH_BOOLEAN,
         'field_type' => 'boolean',
-    ),
-    'label_text' => Array(
+    ],
+    'label_text' => [
         'must'          => 0,
         'default'       => '[name]',
         'match'         => MATCH_ALL,
         'depends_on'    => 'label_show',
         'depends_value' => '1'
-    ),
-    'label_x' => Array(
+    ],
+    'label_x' => [
         'must'          => 0,
         'default'       => 'center',
         'match'         => MATCH_LABEL_X,
         'depends_on'    => 'label_show',
         'depends_value' => '1'
-    ),
-    'label_y' => Array(
+    ],
+    'label_y' => [
         'must'          => 0,
         'default'       => 'bottom',
         'match'         => MATCH_LABEL_Y,
         'depends_on'    => 'label_show',
         'depends_value' => '1'
-    ),
-    'label_width' => Array(
+    ],
+    'label_width' => [
         'must' => 0,
         'default' => 'auto',
         'match' => MATCH_TEXTBOX_WIDTH,
         'depends_on' => 'label_show',
-        'depends_value' => '1'),
-    'label_background' => Array(
+        'depends_value' => '1'
+    ],
+    'label_background' => [
         'must'          => 0,
         'default'       => 'transparent',
         'field_type'    => 'color',
         'match'         => MATCH_COLOR,
         'depends_on'    => 'label_show',
-        'depends_value' => '1'),
-    'label_border' => Array(
+        'depends_value' => '1'
+    ],
+    'label_border' => [
         'must'          => 0,
         'default'       => '#e5e5e5',
         'field_type'    => 'color',
         'match'         => MATCH_COLOR,
         'depends_on'    => 'label_show',
-        'depends_value' => '1'),
-    'label_style' => Array(
+        'depends_value' => '1'
+    ],
+    'label_style' => [
         'must' => 0,
         'default' => '',
         'match' => MATCH_STRING_STYLE,
         'depends_on' => 'label_show',
-        'depends_value' => '1'),
-    'label_maxlen' => Array(
+        'depends_value' => '1'
+    ],
+    'label_maxlen' => [
         'must'          => 0,
         'default'       => 0,
         'match'         => MATCH_INTEGER,
         'depends_on'    => 'label_show',
         'depends_value' => '1'
-    ),
+    ],
 
-    'only_hard_states' => Array(
+    'only_hard_states' => [
         'must' => 0,
         'default' => cfg('defaults', 'onlyhardstates'),
         'match' => MATCH_BOOLEAN,
-        'field_type' => 'boolean'),
-    'recognize_services' => Array(
+        'field_type' => 'boolean'
+    ],
+    'recognize_services' => [
         'must' => 0,
         'default' => cfg('defaults', 'recognizeservices'),
         'match' => MATCH_BOOLEAN,
-        'field_type' => 'boolean'),
-    'show_in_lists' => Array(
+        'field_type' => 'boolean'
+    ],
+    'show_in_lists' => [
         'must' => 0,
         'default' => cfg('defaults', 'showinlists'),
         'match' => MATCH_BOOLEAN,
-        'field_type' => 'boolean'),
-    'show_in_multisite' => Array(
+        'field_type' => 'boolean'
+    ],
+    'show_in_multisite' => [
         'must' => 0,
         'default'    => cfg('defaults', 'showinmultisite'),
         'match'      => MATCH_BOOLEAN,
-        'field_type' => 'boolean'),
-    'ignore_linked_maps_summary_state' => Array(
+        'field_type' => 'boolean'
+    ],
+    'ignore_linked_maps_summary_state' => [
         'must'       => 0,
         'default'    => '0',
         'match'      => MATCH_BOOLEAN,
-        'field_type' => 'boolean'),
-    'stylesheet' => Array(
+        'field_type' => 'boolean'
+    ],
+    'stylesheet' => [
         'must' => 0,
         'default' => cfg('defaults', 'stylesheet'),
-        'match' => MATCH_STRING_NO_SPACE),
-    'url_target' => Array(
+        'match' => MATCH_STRING_NO_SPACE
+    ],
+    'url_target' => [
         'must' => 0,
         'default' => cfg('defaults', 'urltarget'),
-        'match' => MATCH_STRING_NO_SPACE),
+        'match' => MATCH_STRING_NO_SPACE
+    ],
 
-    'x' => Array(
+    'x' => [
         'must' => 1,
         'match' => MATCH_COORDS_MULTI
-    ),
-    'y' => Array(
+    ],
+    'y' => [
         'must' => 1,
         'match' => MATCH_COORDS_MULTI
-    ),
-    'z' => Array(
+    ],
+    'z' => [
         'must' => 0,
         'default' => 10,
         'match' => MATCH_INTEGER
-    ),
-    'view_type' => Array(
+    ],
+    'view_type' => [
         'must'          => 0,
         'default'       => 'icon',
         'match'         => MATCH_VIEW_TYPE,
         'field_type'    => 'dropdown',
         'list'          => 'listViewTypes',
-    ),
-    'view_type_obj' => Array(
+    ],
+    'view_type_obj' => [
         'must'          => 0,
         'default'       => 'icon',
         'match'         => MATCH_VIEW_TYPE_OBJ,
         'field_type'    => 'dropdown',
         'list'          => 'listViewTypesObj',
-    ),
-    'url' => Array(
+    ],
+    'url' => [
         'must' => 0,
         'default' => '',
         'match' => MATCH_STRING_URL_EMPTY,
-    ),
-    'url_mandatory' => Array(
+    ],
+    'url_mandatory' => [
         'must' => 1,
         'default' => '',
         'match' => MATCH_STRING_URL,
-    ),
-    'use' => Array(
+    ],
+    'use' => [
         'must'    => 0,
-        'default' => array(),
+        'default' => [],
         'array'   => true,
         'match'   => MATCH_STRING_NO_SPACE,
-    ),
+    ],
 
-    'gadget_url' => Array(
+    'gadget_url' => [
         'must'          => 0,
         'match'         => MATCH_STRING_URL,
         'field_type'    => 'dropdown',
@@ -731,8 +765,8 @@ $mapConfigVars = Array(
         'depends_value' => 'gadget',
         'default'       => '',
         'list'          => 'listGadgets',
-    ),
-    'gadget_type' => Array(
+    ],
+    'gadget_type' => [
         'must'          => 0,
         'match'         => MATCH_GADGET_TYPE,
         'depends_on'    => 'view_type',
@@ -741,185 +775,187 @@ $mapConfigVars = Array(
         'list'          => 'listGadgetTypes',
         'field_type'    => 'dropdown',
         'deprecated'    => true,
-    ),
-    'gadget_scale' => Array('must' => 0,
+    ],
+    'gadget_scale' => [
+        'must' => 0,
         'default' => 100,
         'match' => MATCH_INTEGER,
         'depends_on' => 'view_type',
         'depends_value' => 'gadget',
-    ),
-    'gadget_opts' => Array('must' => 0,
+    ],
+    'gadget_opts' => [
+        'must' => 0,
         'default' => '',
         'match' => MATCH_GADGET_OPT,
         'depends_on' => 'view_type',
         'depends_value' => 'gadget',
-    ),
+    ],
 
     // GLOBAL SPECIFIC OPTIONS
-    'zoom' => Array(
+    'zoom' => [
         'must'          => 0,
         'default'       => 100,
         'match'         => MATCH_ZOOM_FACTOR,
         'field_type'    => 'dropdown',
         'list'          => 'listZoomFactors',
-    ),
-    'zoombar' => Array(
+    ],
+    'zoombar' => [
         'must' => 0,
         'default'    => cfg('defaults', 'zoombar'),
         'match'      => MATCH_BOOLEAN,
         'field_type' => 'boolean'
-    ),
+    ],
 
     // HOST SPECIFIC OPTIONS
 
-    'host_name' => Array(
+    'host_name' => [
         'must' => 1,
         'match' => MATCH_STRING,
         'field_type' => 'dropdown',
         'list' => 'listHostNames',
-    ),
-    'host_url' => Array(
+    ],
+    'host_url' => [
         'must'    => 0,
         'default' => cfg('defaults', 'hosturl'),
         'match'   => MATCH_STRING_URL_EMPTY,
-    ),
+    ],
 
     // HOSTGROUP SPECIFIC OPTIONS
 
-    'hostgroup_name' => Array(
+    'hostgroup_name' => [
         'must' => 1,
         'match' => MATCH_STRING,
         'field_type' => 'dropdown',
         'list' => 'listHostgroupNames',
-    ),
-    'hostgroup_url' => Array(
+    ],
+    'hostgroup_url' => [
         'must' => 0,
         'default' => cfg('defaults', 'hostgroupurl'),
         'match' => MATCH_STRING_URL_EMPTY
-    ),
+    ],
 
     // SERVICE SPECIFIC OPTIONS
 
-    'service_description' => Array(
+    'service_description' => [
         'must'       => 1,
         'match'      => MATCH_SERVICE_DESCRIPTION,
         'field_type' => 'dropdown',
         'list'       => 'listServiceNames',
-    ),
-    'service_label_text' => Array(
+    ],
+    'service_label_text' => [
         'must'          => 0,
         'default'       => '[service_description]',
         'match'         => MATCH_ALL,
         'depends_on'    => 'label_show',
         'depends_value' => '1'
-    ),
-    'service_url' => Array(
+    ],
+    'service_url' => [
         'must' => 0,
         'default' => cfg('defaults', 'serviceurl'),
         'match'  => MATCH_STRING_URL_EMPTY,
-    ),
+    ],
 
     // SERVICEGROUP SPECIFIC OPTIONS
 
-    'servicegroup_name' => Array(
+    'servicegroup_name' => [
         'must'       => 1,
         'match'      => MATCH_STRING,
         'field_type' => 'dropdown',
         'list'       => 'listServicegroupNames',
-    ),
-    'servicegroup_url' => Array(
+    ],
+    'servicegroup_url' => [
         'must'    => 0,
         'default' => cfg('defaults', 'servicegroupurl'),
         'match'   => MATCH_STRING_URL_EMPTY,
-    ),
+    ],
 
     // MAP SPECIFIC OPTIONS
 
-    'map_name' => Array(
+    'map_name' => [
         'must'       => 1,
         'match'      => MATCH_STRING_NO_SPACE,
         'field_type' => 'dropdown',
         'list'       => 'listMapNames',
-    ),
-    'map_url' => Array(
+    ],
+    'map_url' => [
         'must' => 0,
         'default' => cfg('defaults', 'mapurl'),
         'match' => MATCH_STRING_URL_EMPTY,
-    ),
+    ],
 
     // TEXTBOX SPECIFIC OPTIONS
 
-    'text' => Array(
+    'text' => [
         'must' => 1,
         'match' => MATCH_ALL,
         'field_type'    => 'textarea',
-    ),
-    'border_color' => Array(
+    ],
+    'border_color' => [
         'must'       => 0,
         'default'    => '#e5e5e5',
         'field_type' => 'color',
         'match'      => MATCH_COLOR,
-    ),
-    'style' => Array(
+    ],
+    'style' => [
         'must' => 0,
         'default' => '',
         'match' => MATCH_STRING_STYLE,
-    ),
-    'h' => Array(
+    ],
+    'h' => [
         'must'    => 0,
         'default' => 'auto',
         'match'   => MATCH_TEXTBOX_HEIGHT,
-    ),
-    'w' => Array(
+    ],
+    'w' => [
         'must'    => 0,
         'default' => 'auto',
         'match'   => MATCH_TEXTBOX_WIDTH,
-    ),
-    'textbox_z' => Array(
+    ],
+    'textbox_z' => [
         'must'    => 0,
         'default' => 5,
         'match'   => MATCH_INTEGER
-    ),
+    ],
 
     // SHAPE SPECIFIC OPTIONS
 
-    'icon' => Array(
+    'icon' => [
         'must'       => 1,
         'match'      => MATCH_PNG_GIF_JPG_FILE_OR_URL,
         'field_type' => 'dropdown',
 	'other'      => true,
         'list'       => 'listShapes',
-    ),
-    'enable_refresh' => Array(
+    ],
+    'enable_refresh' => [
         'must'       => 0,
         'default'    => 0,
         'match'      => MATCH_BOOLEAN,
         'field_type' => 'boolean',
-    ),
-    'shape_z' => Array(
+    ],
+    'shape_z' => [
         'must'       => 0,
         'default'    => 1,
         'match'      => MATCH_INTEGER
-    ),
+    ],
 
     // TEMPLATE SPECIFIC OPTIONS
 
-    'name' => Array(
+    'name' => [
         'must'  => 1,
         'match' => MATCH_STRING_NO_SPACE,
         'list'  => 'listTemplateNames',
-    ),
+    ],
 
     // STATELESS LINE SPECIFIC OPTIONS
 
-    'view_type_line' => Array(
+    'view_type_line' => [
         'must'          => 1,
         'default'       => 'line',
         'match'         => MATCH_VIEW_TYPE,
         'field_type'    => 'hidden',
-    ),
+    ],
 
-    'line_type_line' => Array(
+    'line_type_line' => [
         'must'          => 0,
         'default'       => '11',
         'match'         => MATCH_LINE_TYPE,
@@ -927,57 +963,57 @@ $mapConfigVars = Array(
         'depends_on'    => 'view_type',
         'depends_value' => 'line',
         'list'          => 'listStatelessLineTypes',
-    ),
+    ],
 
     // CONTAINER SPECIFIC OPTIONS
 
-    'view_type_container' => Array(
+    'view_type_container' => [
         'must'          => 0,
         'default'       => 'inline',
         'match'         => MATCH_VIEW_TYPE_CONTAINER,
         'field_type'    => 'dropdown',
         'list'          => 'listViewTypesContainer',
-    ),
+    ],
 
     // DYNAMIC GROUP SPECIFIC OPTIONS
 
-    'dyngroup_name' => Array(
+    'dyngroup_name' => [
         'must'       => 1,
         'match'      => MATCH_STRING,
         'default'    => '',
-    ),
-    'object_types' => Array(
+    ],
+    'object_types' => [
         'must'       => 1,
         'default'    => '',
         'field_type' => 'dropdown',
         'match'      => MATCH_DYN_GROUP_TYPES,
         'list'       => 'listDynGroupTypes',
-    ),
-    'object_filter' => Array(
+    ],
+    'object_filter' => [
         'must'       => 0,
         'default'    => '',
         'match'      => MATCH_LIVESTATUS_FILTER,
-    ),
-    'dyngroup_url' => Array(
+    ],
+    'dyngroup_url' => [
         'must'       => 0,
         'default'    => cfg('defaults', 'dyngroupurl'),
         'match'      => MATCH_STRING_URL_EMPTY,
-    ),
+    ],
 
     // AGGREGATION SPECIFIC
 
-    'aggr_name' => Array(
+    'aggr_name' => [
         'must'       => 1,
         'match'      => MATCH_STRING,
         'field_type' => 'dropdown',
         'list'       => 'listAggrNames',
-    ),
-    'aggr_url' => Array(
+    ],
+    'aggr_url' => [
         'must'       => 0,
         'default'    => cfg('defaults', 'aggrurl'),
         'match'      => MATCH_STRING_URL_EMPTY,
-    ),
-);
+    ],
+];
 
 // STATELESS LINE SPECIFIC OPTIONS
 $mapConfigVars['hover_menu_line'] = $mapConfigVars['hover_menu'];
@@ -987,8 +1023,8 @@ $mapConfigVars['hover_menu_line']['default'] = '0';
 // map configuration variable registration
 //
 
-$mapConfigVarMap['global'] = Array(
-    'general' => array(
+$mapConfigVarMap['global'] = [
+    'general' => [
         'sources' => null,
         'alias' => null,
         'parent_map' => null,
@@ -996,8 +1032,8 @@ $mapConfigVarMap['global'] = Array(
         'show_in_lists' => null,
         'show_in_multisite' => null,
         'ignore_linked_maps_summary_state' => null,
-    ),
-    'appearance' => array(
+    ],
+    'appearance' => [
         'map_image' => null,
         'background_color' => null,
         'grid_show' => null,
@@ -1009,8 +1045,8 @@ $mapConfigVarMap['global'] = Array(
         'stylesheet' => null,
         'zoom' => null,
         'zoombar' => null,
-    ),
-    'object_defaults' => array(
+    ],
+    'object_defaults' => [
         'backend_id' => null,
         'context_menu' => null,
         'context_template' => null,
@@ -1049,8 +1085,8 @@ $mapConfigVarMap['global'] = Array(
         'map_url' => null,
         'dyngroup_url' => null,
         'aggr_url' => null,
-    ),
-    'events' => array(
+    ],
+    'events' => [
         'event_on_load' => null,
         'event_repeat_interval' => null,
         'event_repeat_duration' => null,
@@ -1065,24 +1101,24 @@ $mapConfigVarMap['global'] = Array(
         'event_log_hidden' => null,
         'event_scroll' => null,
         'event_sound' => null,
-    ),
-    'hidden' => array(
+    ],
+    'hidden' => [
         'type' => null,
         'object_id' => null,
         'default_params' => null,
-    ),
-);
+    ],
+];
 
-$mapConfigVarMap['host'] = Array(
-    'general' => array(
+$mapConfigVarMap['host'] = [
+    'general' => [
         'host_name' => null,
         'backend_id' => null,
         'x' => null,
         'y' => null,
         'z' => null,
         'object_id' => null,
-    ),
-    'appearance' => array(
+    ],
+    'appearance' => [
         'view_type_obj' => 'view_type',
         'iconset' => null,
         'icon_size' => null,
@@ -1094,14 +1130,14 @@ $mapConfigVarMap['host'] = Array(
         'gadget_type' => null,
         'gadget_scale' => null,
         'gadget_opts' => null,
-    ),
-    'state' => array(
+    ],
+    'state' => [
         'exclude_members' => null,
         'exclude_member_states' => null,
         'only_hard_states' => null,
         'recognize_services' => null,
-    ),
-    'actions' => array(
+    ],
+    'actions' => [
         'context_menu' => null,
         'context_template' => null,
         'hover_menu' => null,
@@ -1114,8 +1150,8 @@ $mapConfigVarMap['host'] = Array(
         'hover_childs_limit' => null,
         'host_url' => 'url',
         'url_target' => null,
-    ),
-    'label' => array(
+    ],
+    'label' => [
         'label_show' => null,
         'label_text' => null,
         'label_x' => null,
@@ -1125,23 +1161,23 @@ $mapConfigVarMap['host'] = Array(
         'label_border' => null,
         'label_style' => null,
         'label_maxlen' => null,
-    ),
-    'hidden' => array(
+    ],
+    'hidden' => [
         'type' => null,
         'use' => null,
-    ),
-);
+    ],
+];
 
-$mapConfigVarMap['hostgroup'] = Array(
-    'general' => array(
+$mapConfigVarMap['hostgroup'] = [
+    'general' => [
         'hostgroup_name' => null,
         'backend_id' => null,
         'x' => null,
         'y' => null,
         'z' => null,
         'object_id' => null,
-    ),
-    'appearance' => array(
+    ],
+    'appearance' => [
         'view_type_obj' => 'view_type',
         'iconset' => null,
         'icon_size' => null,
@@ -1153,14 +1189,14 @@ $mapConfigVarMap['hostgroup'] = Array(
         'gadget_type' => null,
         'gadget_scale' => null,
         'gadget_opts' => null,
-    ),
-    'state' => array(
+    ],
+    'state' => [
         'exclude_members' => null,
         'exclude_member_states' => null,
         'only_hard_states' => null,
         'recognize_services' => null,
-    ),
-    'actions' => array(
+    ],
+    'actions' => [
         'context_menu' => null,
         'context_template' => null,
         'hover_menu' => null,
@@ -1173,8 +1209,8 @@ $mapConfigVarMap['hostgroup'] = Array(
         'hover_childs_limit' => null,
         'hostgroup_url' => 'url',
         'url_target' => null,
-    ),
-    'label' => array(
+    ],
+    'label' => [
         'label_show' => null,
         'label_text' => null,
         'label_x' => null,
@@ -1184,15 +1220,15 @@ $mapConfigVarMap['hostgroup'] = Array(
         'label_border' => null,
         'label_style' => null,
         'label_maxlen' => null,
-    ),
-    'hidden' => array(
+    ],
+    'hidden' => [
         'type' => null,
         'use' => null,
-    ),
-);
+    ],
+];
 
-$mapConfigVarMap['service'] = Array(
-    'general' => array(
+$mapConfigVarMap['service'] = [
+    'general' => [
         'host_name' => null,
         'service_description' => null,
         'backend_id' => null,
@@ -1200,8 +1236,8 @@ $mapConfigVarMap['service'] = Array(
         'y' => null,
         'z' => null,
         'object_id' => null,
-    ),
-    'appearance' => array(
+    ],
+    'appearance' => [
         'view_type_obj' => 'view_type',
         'iconset' => null,
         'icon_size' => null,
@@ -1220,11 +1256,11 @@ $mapConfigVarMap['service'] = Array(
         'gadget_scale' => null,
         'gadget_opts' => null,
 
-    ),
-    'state' => array(
+    ],
+    'state' => [
         'only_hard_states' => null,
-    ),
-    'actions' => array(
+    ],
+    'actions' => [
         'context_menu' => null,
         'context_template' => null,
         'hover_menu' => null,
@@ -1237,8 +1273,8 @@ $mapConfigVarMap['service'] = Array(
         'hover_childs_limit' => null,
         'service_url' => 'url',
         'url_target' => null,
-    ),
-    'label' => array(
+    ],
+    'label' => [
         'label_show' => null,
         'service_label_text' => 'label_text',
         'label_x' => null,
@@ -1248,23 +1284,23 @@ $mapConfigVarMap['service'] = Array(
         'label_border' => null,
         'label_style' => null,
         'label_maxlen' => null,
-    ),
-    'hidden' => array(
+    ],
+    'hidden' => [
         'type' => null,
         'use' => null,
-    ),
-);
+    ],
+];
 
-$mapConfigVarMap['servicegroup'] = Array(
-    'general' => array(
+$mapConfigVarMap['servicegroup'] = [
+    'general' => [
         'servicegroup_name' => null,
         'backend_id' => null,
         'x' => null,
         'y' => null,
         'z' => null,
         'object_id' => null,
-    ),
-    'appearance' => array(
+    ],
+    'appearance' => [
         'view_type_obj' => 'view_type',
         'iconset' => null,
         'icon_size' => null,
@@ -1276,12 +1312,12 @@ $mapConfigVarMap['servicegroup'] = Array(
         'gadget_type' => null,
         'gadget_scale' => null,
         'gadget_opts' => null,
-    ),
-    'state' => array(
+    ],
+    'state' => [
         // FIXME: exclude_members / exclude_member_states ?
         'only_hard_states' => null,
-    ),
-    'actions' => array(
+    ],
+    'actions' => [
         'context_menu' => null,
         'context_template' => null,
         'exclude_members' => null,
@@ -1296,8 +1332,8 @@ $mapConfigVarMap['servicegroup'] = Array(
         'hover_childs_limit' => null,
         'servicegroup_url' => 'url',
         'url_target' => null,
-    ),
-    'label' => array(
+    ],
+    'label' => [
         'label_show' => null,
         'label_text' => null,
         'label_x' => null,
@@ -1307,22 +1343,22 @@ $mapConfigVarMap['servicegroup'] = Array(
         'label_border' => null,
         'label_style' => null,
         'label_maxlen' => null,
-    ),
-    'hidden' => array(
+    ],
+    'hidden' => [
         'type' => null,
         'use' => null,
-    ),
-);
+    ],
+];
 
-$mapConfigVarMap['map'] = Array(
-    'general' => array(
+$mapConfigVarMap['map'] = [
+    'general' => [
         'map_name'              => null,
         'x'                     => null,
         'y'                     => null,
         'z'                     => null,
         'object_id'             => null,
-    ),
-    'appearance' => array(
+    ],
+    'appearance' => [
         'view_type_obj'         => 'view_type',
         'iconset'               => null,
         'icon_size'             => null,
@@ -1334,13 +1370,13 @@ $mapConfigVarMap['map'] = Array(
         'gadget_type'           => null,
         'gadget_scale'          => null,
         'gadget_opts'           => null,
-    ),
-    'state' => array(
+    ],
+    'state' => [
         'exclude_members'       => null,
         'exclude_member_states' => null,
         'only_hard_states'      => null,
-    ),
-    'actions' => array(
+    ],
+    'actions' => [
         'context_menu'          => null,
         'context_template'      => null,
         'hover_menu'            => null,
@@ -1353,8 +1389,8 @@ $mapConfigVarMap['map'] = Array(
         'hover_childs_limit'    => null,
         'map_url'               => 'url',
         'url_target'            => null,
-    ),
-    'label' => array(
+    ],
+    'label' => [
         'label_show'            => null,
         'label_text'            => null,
         'label_x'               => null,
@@ -1364,29 +1400,29 @@ $mapConfigVarMap['map'] = Array(
         'label_border'          => null,
         'label_style'           => null,
         'label_maxlen'          => null,
-    ),
-    'hidden' => array(
+    ],
+    'hidden' => [
         'type'                  => null,
         'use'                   => null,
-    ),
-);
+    ],
+];
 
-$mapConfigVarMap['line'] = Array(
-    'general' => array(
+$mapConfigVarMap['line'] = [
+    'general' => [
         'x' => null,
         'y' => null,
         'z' => null,
         'object_id' => null,
-    ),
-    'appearance' => array(
+    ],
+    'appearance' => [
         'view_type_line'    => 'view_type',
         'line_type_line'    => 'line_type',
         'line_cut'          => null,
         'line_width'        => null,
         'line_color'        => null,
         'line_color_border' => null,
-    ),
-    'actions' => array(
+    ],
+    'actions' => [
         'context_menu'      => null,
         'context_template'  => null,
         'hover_menu_line'   => 'hover_menu',
@@ -1395,15 +1431,15 @@ $mapConfigVarMap['line'] = Array(
         'hover_delay'       => null,
         'url'               => null,
         'url_target'        => null,
-    ),
-    'hidden' => array(
+    ],
+    'hidden' => [
         'type' => null,
         'use'  => null,
-    ),
-);
+    ],
+];
 
-$mapConfigVarMap['textbox'] = Array(
-    'general' => array(
+$mapConfigVarMap['textbox'] = [
+    'general' => [
         'text' => null,
         'x' => null,
         'y' => null,
@@ -1411,34 +1447,34 @@ $mapConfigVarMap['textbox'] = Array(
         'w' => null,
         'h' => null,
         'object_id' => null,
-    ),
-    'appearance' => array(
+    ],
+    'appearance' => [
         'style' => null,
         'background_color' => null,
         'border_color' => null,
-    ),
-    'actions' => array(
+    ],
+    'actions' => [
         'context_menu' => null,
         'context_template' => null,
 
-    ),
-    'hidden' => array(
+    ],
+    'hidden' => [
         'type' => null,
         'use' => null,
-    ),
+    ],
     // See also: core/sources/worldmap.php (textbox-specific options)
-);
+];
 
-$mapConfigVarMap['shape'] = Array(
-    'general' => array(
+$mapConfigVarMap['shape'] = [
+    'general' => [
         'icon' => null,
         'x' => null,
         'y' => null,
         'shape_z' => 'z',
         'enable_refresh' => null,
         'object_id' => null,
-    ),
-    'actions' => array(
+    ],
+    'actions' => [
         'context_menu' => null,
         'context_template' => null,
         'hover_menu' => null,
@@ -1446,26 +1482,26 @@ $mapConfigVarMap['shape'] = Array(
         'hover_delay' => null,
         'url' => null,
         'url_target' => null,
-    ),
-    'hidden' => array(
+    ],
+    'hidden' => [
         'type' => null,
         'use' => null,
-    ),
-);
+    ],
+];
 
-$mapConfigVarMap['template'] = Array(
-    'general' => array(
+$mapConfigVarMap['template'] = [
+    'general' => [
         'name' => null,
         'object_id' => null,
-    ),
-    'hidden' => array(
+    ],
+    'hidden' => [
         'type' => null,
         'use' => null,
-    ),
-);
+    ],
+];
 
-$mapConfigVarMap['container'] = Array(
-    'general' => array(
+$mapConfigVarMap['container'] = [
+    'general' => [
         'url_mandatory' => 'url',
         'view_type_container' => 'view_type',
         'enable_refresh' => null,
@@ -1475,24 +1511,24 @@ $mapConfigVarMap['container'] = Array(
         'w' => null,
         'h' => null,
         'object_id' => null,
-    ),
-    'appearance' => array(
+    ],
+    'appearance' => [
         'style' => null,
         'background_color' => null,
         'border_color' => null,
-    ),
-    'actions' => array(
+    ],
+    'actions' => [
         'context_menu' => null,
         'context_template' => null,
-    ),
-    'hidden' => array(
+    ],
+    'hidden' => [
         'type' => null,
         'use' => null,
-    ),
-);
+    ],
+];
 
-$mapConfigVarMap['dyngroup'] = array(
-    'general' => array(
+$mapConfigVarMap['dyngroup'] = [
+    'general' => [
         'dyngroup_name' => 'name',
         'backend_id'    => null,
         'object_types'  => null,
@@ -1501,8 +1537,8 @@ $mapConfigVarMap['dyngroup'] = array(
         'y'             => null,
         'z'             => null,
         'object_id'     => null,
-    ),
-    'appearance' => array(
+    ],
+    'appearance' => [
         'view_type_obj' => 'view_type',
         'iconset' => null,
         'icon_size' => null,
@@ -1514,12 +1550,12 @@ $mapConfigVarMap['dyngroup'] = array(
         'gadget_type' => null,
         'gadget_scale' => null,
         'gadget_opts' => null,
-    ),
-    'state' => array(
+    ],
+    'state' => [
         'only_hard_states' => null,
         'recognize_services' => null,
-    ),
-    'actions' => array(
+    ],
+    'actions' => [
         'context_menu' => null,
         'context_template' => null,
         'exclude_members' => null,
@@ -1534,8 +1570,8 @@ $mapConfigVarMap['dyngroup'] = array(
         'hover_childs_limit' => null,
         'dyngroup_url' => 'url',
         'url_target' => null,
-    ),
-    'label' => array(
+    ],
+    'label' => [
         'label_show' => null,
         'label_text' => null,
         'label_x' => null,
@@ -1545,23 +1581,23 @@ $mapConfigVarMap['dyngroup'] = array(
         'label_border' => null,
         'label_style' => null,
         'label_maxlen' => null,
-    ),
-    'hidden' => array(
+    ],
+    'hidden' => [
         'type'          => null,
         'use' => null,
-    ),
-);
+    ],
+];
 
-$mapConfigVarMap['aggr'] = Array(
-    'general' => array(
+$mapConfigVarMap['aggr'] = [
+    'general' => [
         'aggr_name'             => 'name',
         'backend_id'            => null,
         'x'                     => null,
         'y'                     => null,
         'z'                     => null,
         'object_id'             => null,
-    ),
-    'appearance' => array(
+    ],
+    'appearance' => [
         'view_type_obj'         => 'view_type',
         'iconset'               => null,
         'icon_size'             => null,
@@ -1573,13 +1609,13 @@ $mapConfigVarMap['aggr'] = Array(
         'gadget_type'           => null,
         'gadget_scale'          => null,
         'gadget_opts'           => null,
-    ),
-    'state' => array(
+    ],
+    'state' => [
         'exclude_members'       => null,
         'exclude_member_states' => null,
         'only_hard_states'      => null,
-    ),
-    'actions' => array(
+    ],
+    'actions' => [
         'context_menu'          => null,
         'context_template'      => null,
         'hover_menu'            => null,
@@ -1592,8 +1628,8 @@ $mapConfigVarMap['aggr'] = Array(
         'hover_childs_limit'    => null,
         'aggr_url'              => 'url',
         'url_target'            => null,
-    ),
-    'label' => array(
+    ],
+    'label' => [
         'label_show'            => null,
         'label_text'            => null,
         'label_x'               => null,
@@ -1604,11 +1640,11 @@ $mapConfigVarMap['aggr'] = Array(
         'label_style'           => null,
         'label_maxlen'          => null,
 
-    ),
-    'hidden' => array(
+    ],
+    'hidden' => [
         'type'                  => null,
         'use'                   => null,
-    ),
-);
+    ],
+];
 
 ?>

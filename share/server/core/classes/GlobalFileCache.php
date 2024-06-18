@@ -41,7 +41,7 @@ class GlobalFileCache {
      */
     public function __construct($files, $cacheFile) {
         if(is_string($files)) {
-            $this->files = Array($files);
+            $this->files = [$files];
         } else {
             $this->files = $files;
         }
@@ -106,7 +106,7 @@ class GlobalFileCache {
            || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))) {
             if(($fp = fopen($this->cacheFile, 'w+')) === FALSE){
                 if($printErr == 1) {
-                    throw new NagVisException(l('cacheFileNotWriteable', Array('FILE' => $this->cacheFile)));
+                    throw new NagVisException(l('cacheFileNotWriteable', ['FILE' => $this->cacheFile]));
                 }
                 return FALSE;
             }
@@ -139,8 +139,10 @@ class GlobalFileCache {
         } else {
             if($printErr) {
                 throw new NagVisException(l('fileNotCached',
-                                          Array('FILE' => json_encode($this->files),
-                                                'CACHEFILE' => $this->cacheFile)));
+                                          [
+                                              'FILE' => json_encode($this->files),
+                                                'CACHEFILE' => $this->cacheFile
+                                          ]));
             }
             return -1;
         }

@@ -31,11 +31,11 @@ class CoreModMainCfg extends CoreModule {
         $this->CORE = $CORE;
 
         // Register valid actions
-        $this->aActions = Array(
+        $this->aActions = [
             'edit'              => REQUIRES_AUTHORISATION,
             'manageBackends'    => 'edit',
             'doBackendEdit'     => 'edit',
-        );
+        ];
     }
 
     public function handleAction() {
@@ -45,12 +45,12 @@ class CoreModMainCfg extends CoreModule {
             switch($this->sAction) {
                 case 'edit':
                     $VIEW = new ViewEditMainCfg();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
+                    $sReturn = json_encode(['code' => $VIEW->parse()]);
                 break;
 
                 case 'manageBackends':
                     $VIEW = new ViewManageBackends();
-                    $sReturn = json_encode(Array('code' => $VIEW->parse()));
+                    $sReturn = json_encode(['code' => $VIEW->parse()]);
                 break;
             }
         }

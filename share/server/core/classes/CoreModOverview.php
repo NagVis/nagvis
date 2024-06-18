@@ -32,11 +32,11 @@ class CoreModOverview extends CoreModule {
         $this->htmlBase = cfg('paths','htmlbase');
         $this->sName = 'Overview';
 
-        $this->aActions = Array(
+        $this->aActions = [
             'getOverviewMaps'       => 'view',
             'getOverviewRotations'  => 'view',
             'getObjectStates'       => 'view',
-        );
+        ];
     }
 
     public function handleAction() {
@@ -48,11 +48,11 @@ class CoreModOverview extends CoreModule {
                     $sReturn = $this->parseRotationsJson();
                 break;
                 case 'getObjectStates':
-                    $aOpts = Array(
+                    $aOpts = [
                         'i' => MATCH_STRING_NO_SPACE,
                         'f' => MATCH_STRING_NO_SPACE_EMPTY,
-                    );
-                    $aVals = $this->getCustomOptions($aOpts, array(), true);
+                    ];
+                    $aVals = $this->getCustomOptions($aOpts, [], true);
 
                     // Is this request asked to check file ages?
                     if(isset($aVals['f']) && isset($aVals['f'][0])) {
@@ -88,12 +88,12 @@ class CoreModOverview extends CoreModule {
             // Switch the auth cookie to this user
             global $SHANDLER;
             $SHANDLER->aquire();
-            $SHANDLER->set('authCredentials', array('user' => $_GET['filterUser'], 'password' => ''));
+            $SHANDLER->set('authCredentials', ['user' => $_GET['filterUser'], 'password' => '']);
             $SHANDLER->set('authTrusted',     true);
             $SHANDLER->commit();
         }
 
-        $map = Array('object_id' => $objectId);
+        $map = ['object_id' => $objectId];
 
         $MAPCFG = new GlobalMapCfg($mapName);
         $MAPCFG->checkMapConfigExists(true);
@@ -124,7 +124,7 @@ class CoreModOverview extends CoreModule {
         if(cfg('index','showmapthumbs') == 1)
             $map['overview_image'] = $this->renderMapThumb($MAPCFG);
 
-        return array($MAP->MAPOBJ, $map);
+        return [$MAP->MAPOBJ, $map];
     }
 
     /**
@@ -136,12 +136,12 @@ class CoreModOverview extends CoreModule {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      * FIXME: More cleanups, compacting and extraction of single parts
      */
-    public function parseMapsJson($what = COMPLETE, $objects = Array()) {
+    public function parseMapsJson($what = COMPLETE, $objects = []) {
         global $_BACKEND, $CORE;
         $mapList = $objects;
 
-        $aMaps = Array();
-        $aObjs = Array();
+        $aMaps = [];
+        $aObjs = [];
         log_mem('pre');
         foreach($mapList AS $objectId) {
             $a = explode('-', $objectId, 2);
@@ -183,7 +183,7 @@ class CoreModOverview extends CoreModule {
     }
 
     private function getMapDefaultOpts($name, $alias) {
-        return Array(
+        return [
           'type'              => 'map',
           'map_name'          => $name,
           'object_id'         => 'map-'.$name,
@@ -195,9 +195,9 @@ class CoreModOverview extends CoreModule {
           'label_show'        => 0,
           // Enforce std_big iconset - don't use map default iconset
           'iconset'           => 'std_big',
-          'icon_size'         => array(22),
+          'icon_size'         => [22],
           'alias'             => $alias
-        );
+        ];
     }
 
     private function mapError($name, $msg) {
@@ -207,11 +207,11 @@ class CoreModOverview extends CoreModule {
         $map['state']           = 'ERROR';
         $map['summary_state']   = 'ERROR';
         $map['icon']            = 'std_big_error.png';
-        $map['members']         = Array();
+        $map['members']         = [];
         $map['num_members']     = 0;
         $map['overview_class']  = 'error';
         $map['overview_url']    = $this->htmlBase.'/index.php?mod=Map&act=view&show='.$map['name'];
-        $map['summary_output']  = l('Map Error: [ERR]', Array('ERR' => $msg));
+        $map['summary_output']  = l('Map Error: [ERR]', ['ERR' => $msg]);
         return $map;
     }
 
@@ -249,22 +249,26 @@ class CoreModOverview extends CoreModule {
         global $AUTHORISATION, $CORE;
         // Only display the rotation list when enabled
         if(cfg('index','showrotations') != 1)
-            return json_encode(Array());
+            return json_encode([]);
 
-        $aRotations = Array();
+        $aRotations = [];
         foreach($CORE->getPermittedRotationPools() AS $poolName) {
             $ROTATION = new CoreRotation($poolName);
             $iNum = $ROTATION->getNumSteps();
-            $aSteps = Array();
+            $aSteps = [];
             for($i = 0; $i < $iNum; $i++) {
-                $aSteps[] = Array('name' => $ROTATION->getStepLabelById($i),
-                                  'url'  => $ROTATION->getStepUrlById($i));
+                $aSteps[] = [
+                    'name' => $ROTATION->getStepLabelById($i),
+                                  'url'  => $ROTATION->getStepUrlById($i)
+                ];
             }
 
-            $aRotations[] = Array('name'      => $poolName,
+            $aRotations[] = [
+                'name'      => $poolName,
                                   'url'       => $ROTATION->getStepUrlById(0),
                                   'num_steps' => $ROTATION->getNumSteps(),
-                                  'steps'     => $aSteps);
+                                  'steps'     => $aSteps
+            ];
         }
 
         return json_encode($aRotations);

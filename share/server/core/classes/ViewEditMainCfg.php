@@ -57,7 +57,7 @@ class ViewEditMainCfg {
                     // now check for value format
                     if (!preg_match($spec['match'], $raw_val))
                         throw new FieldInputError($ident, l('Invalid format given. Regex: [r]',
-                                                                    array('r' => $spec['match'])));
+                                                                    ['r' => $spec['match']]));
 
                     $UMAINCFG->setValue($sec, $key, $val);
                 }
@@ -86,7 +86,7 @@ class ViewEditMainCfg {
             }
         }
 
-        $sections = array();
+        $sections = [];
         foreach ($_MAINCFG->getValidConfig() AS $sec => $arr) {
             if (!preg_match($this->exclude_pattern, $sec))
                 $sections[$sec] = $_MAINCFG->getSectionTitle($sec);

@@ -33,8 +33,10 @@ class CoreModAuth extends CoreModule {
         $this->sName = 'Auth';
         $this->CORE = $CORE;
 
-        $this->aActions = Array('login'  => !REQUIRES_AUTHORISATION,
-                                'logout' => REQUIRES_AUTHORISATION);
+        $this->aActions = [
+            'login'  => !REQUIRES_AUTHORISATION,
+                                'logout' => REQUIRES_AUTHORISATION
+        ];
 
         $this->FHANDLER = new CoreRequestHandler($_POST);
     }
@@ -59,8 +61,10 @@ class CoreModAuth extends CoreModule {
     }
 
     private function handleResponseAuth() {
-        $attr = Array('username' => MATCH_USER_NAME,
-                      'password' => null);
+        $attr = [
+            'username' => MATCH_USER_NAME,
+                      'password' => null
+        ];
         $this->verifyValuesSet($this->FHANDLER,   $attr);
         $this->verifyValuesMatch($this->FHANDLER, $attr);
 
@@ -75,8 +79,10 @@ class CoreModAuth extends CoreModule {
 
         // Store response data
         if($bValid)
-          return Array('user'     => $this->FHANDLER->get('username'),
-                       'password' => $this->FHANDLER->get('password'));
+          return [
+              'user'     => $this->FHANDLER->get('username'),
+                       'password' => $this->FHANDLER->get('password')
+          ];
         else
             return false;
     }

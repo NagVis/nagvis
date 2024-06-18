@@ -33,7 +33,7 @@ class NagVisAggr extends NagVisStatefulObject {
 
     protected $name;
 
-    protected $members = array();
+    protected $members = [];
 
     public function __construct($backend_id, $name) {
         $this->backend_id = $backend_id;
@@ -52,7 +52,7 @@ class NagVisAggr extends NagVisStatefulObject {
      */
     public function queueState($_unused = true, $bFetchMemberState = true) {
         global $_BACKEND;
-        $queries = Array('AGGR_MEMBER_STATE' => true);
+        $queries = ['AGGR_MEMBER_STATE' => true];
 
         if($this->hover_menu == 1
            && $this->hover_childs_show == 1
@@ -67,14 +67,14 @@ class NagVisAggr extends NagVisStatefulObject {
      */
     public function applyState() {
         if($this->problem_msg) {
-            $this->sum = array(
+            $this->sum = [
                 ERROR,
                 $this->problem_msg,
                 null,
                 null,
                 null,
-            );
-            $this->members = Array();
+            ];
+            $this->members = [];
             return;
         }
 
@@ -121,7 +121,7 @@ class NagVisAggr extends NagVisStatefulObject {
      * Fetches the summary output from the object state counts
      */
     private function fetchSummaryOutputFromCounts() {
-        $node_states = Array();
+        $node_states = [];
 
         // Loop all major states
         $iSumCount = 0;
@@ -144,8 +144,10 @@ class NagVisAggr extends NagVisStatefulObject {
         // Fallback for hostgroups without members
         if($iSumCount == 0) {
             $this->sum[OUTPUT] = l('The aggregation "[NAME]" has no members (Backend: [BACKEND]).',
-                                                       Array('NAME' => $this->name,
-                                                             'BACKEND' => implode(',', $this->backend_id)));
+                                                       [
+                                                           'NAME' => $this->name,
+                                                             'BACKEND' => implode(',', $this->backend_id)
+                                                       ]);
         } else {
             $this->mergeSummaryOutput($node_states, l('Nodes'), true);
         }
@@ -166,9 +168,11 @@ class NagVisAggr extends NagVisStatefulObject {
      */
     private function fetchSummaryOutput() {
         if($this->hasMembers()) {
-            $arrStates = Array(CRITICAL => 0, DOWN    => 0, WARNING   => 0,
+            $arrStates = [
+                CRITICAL => 0, DOWN    => 0, WARNING   => 0,
                                UNKNOWN  => 0, UP      => 0, OK        => 0,
-                               ERROR    => 0, PENDING => 0, UNCHECKED => 0);
+                               ERROR    => 0, PENDING => 0, UNCHECKED => 0
+            ];
 
             // Get summary state of this and child objects
             foreach($this->members AS &$MEMBER) {
@@ -178,8 +182,10 @@ class NagVisAggr extends NagVisStatefulObject {
             $this->mergeSummaryOutput($arrStates, l('hosts'));
         } else {
             $this->sum[OUTPUT] = l('The aggregation "[NAME]" has no members (Backend: [BACKEND]).',
-                                                       Array('NAME' => $this->name,
-                                                       'BACKEND' => implode(',', $this->backend_id)));
+                                                       [
+                                                           'NAME' => $this->name,
+                                                       'BACKEND' => implode(',', $this->backend_id)
+                                                       ]);
         }
     }
 }

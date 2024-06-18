@@ -151,7 +151,7 @@ class CoreLogonMultisite extends CoreLogonModule {
 
         $AUTH->setTrustUsername(true);
         $AUTH->setLogoutPossible(false);
-        $AUTH->passCredentials(Array('user' => $username));
+        $AUTH->passCredentials(['user' => $username]);
 
         $authenticated = $AUTH->isAuthenticated();
 
