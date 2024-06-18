@@ -149,7 +149,7 @@ $rows = ceil($pdc / $cols);	// max. no. of rows with graphs
 // Create tacho image.
 //====================
 
-$img=imagecreatetruecolor($imgwidth*$cols, $imgheight*$rows);
+$img=imagecreatetruecolor($imgwidth * $cols, $imgheight * $rows);
 
 $oBackground = imagecolorallocate($img, 122, 23, 211);
 $oBlack = imagecolorallocate($img, 0, 0, 0);
@@ -299,7 +299,7 @@ for ($i=0; $i < $pdc; $i++){
 		for($d=1; $d<=3; $d++) {
 			
 			imageline($img, ($centerx - $bediffx[$d]), ($centery + $bediffy[$d]),($centerx - $bediffx1[$d]), ($centery + $bediffy1[$d]), $oBlack);
-			imagestring($img , 1 ,($centerx - $bediffx[$d] + $iOffsetX - 8), ($centery + $bediffy[$d] - 10) , ($limit/4*$d) , $oBlack);
+			imagestring($img , 1 ,($centerx - $bediffx[$d] + $iOffsetX - 8), ($centery + $bediffy[$d] - 10) , ($limit / 4 * $d) , $oBlack);
 			
 			$iOffsetX = $iOffsetX + 10;
 		}

@@ -193,7 +193,7 @@ function line_parameters($ax, $ay, $bx, $by) {
     // r, s, t constants
     $r = $nx;
     $s = $ny;
-    $t = -($r*$ax + $s*$ay);
+    $t = -($r * $ax + $s * $ay);
 
     if ($s == -0) {
         $s = 0;
