@@ -201,8 +201,9 @@ foreach([
         ] AS $opt => $default) {
     if (isset($_GET[$opt]) && $_GET[$opt] != '') {
         $aOpts[$opt] = $_GET[$opt];
-    } elseif ($default !== null)
+    } elseif ($default !== null) {
         $aOpts[$opt] = $default;
+    }
 }
 
 if(isset($_GET['perfdata']) && $_GET['perfdata'] != '') {

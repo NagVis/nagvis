@@ -696,10 +696,12 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     foreach ($this->obj['service'][$name] as $service) {
                         if ($service[ACK] === true) {
                             $aReturn[$name]['counts'][$service[STATE]]['ack']++;
-                        } elseif ($service[DOWNTIME] === true)
+                        } elseif ($service[DOWNTIME] === true) {
                             $aReturn[$name]['counts'][$service[STATE]]['downtime']++;
-                        else
+                        }
+                        else {
                             $aReturn[$name]['counts'][$service[STATE]]['normal']++;
+                        }
                     }
                 }
             }

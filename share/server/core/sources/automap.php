@@ -304,8 +304,9 @@ function automap_load_object_ids() {
     if(!isset($automap_object_ids[0])) {
         if (GlobalCore::getInstance()->checkExisting($automap_object_id_file, false)) {
             $automap_object_ids = json_decode(file_get_contents($automap_object_id_file), true);
-        } else
+        } else {
             $automap_object_ids = [];
+        }
     }
 
     return $automap_object_ids;
