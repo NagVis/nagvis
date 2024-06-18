@@ -116,8 +116,9 @@ function show_form_render_error($name) {
     // only display form rendering errors here
     if (has_form_error($name)) {
         $err = get_error($name);
-        if (is_array($err))
+        if (is_array($err)) {
             error($err[1]);
+        }
     }
 }
 
@@ -142,17 +143,20 @@ function form_start($name, $target, $type = 'POST', $multipart = false) {
         }
     }
 
-    if ($multipart)
+    if ($multipart) {
         $multipart = ' enctype="multipart/form-data"';
-    else
+    }
+    else {
         $multipart = '';
+    }
 
     echo '<form id="'.$name.'" name="'.$name.'" action="'.escape_html($target).'" '
         .'method="'.$type.'"'.$multipart.'>'.N;
 
-    if (submitted($form_name) || !submitted())
-        foreach ($form_errors AS $field => $message)
+    if (submitted($form_name) || !submitted()) {
+        foreach ($form_errors as $field => $message)
             error($message);
+    }
 
     hidden('_form_name', $name);
     hidden('_update', '0');
@@ -160,8 +164,9 @@ function form_start($name, $target, $type = 'POST', $multipart = false) {
 
 function form_end($keep_context=true) {
     global $form_name;
-    if ($keep_context)
+    if ($keep_context) {
         hidden_vars();
+    }
     echo '</form>'.N;
 }
 
@@ -202,17 +207,21 @@ function field($type, $name, $default = '', $class = '', $onclick = '', $style =
     global $form_keys, $form_name;
     $form_keys[$name] = true;
 
-    if (has_form_error($name))
+    if (has_form_error($name)) {
         $class .= ' err';
+    }
 
-    if(trim($class))
-        $class = ' class="'.trim($class).'"';
+    if(trim($class)) {
+        $class = ' class="' . trim($class) . '"';
+    }
 
     if (submitted($form_name)) {
-        if ($type == 'checkbox')
+        if ($type == 'checkbox') {
             $default = get_checkbox($name, $default);
-        else
+        }
+        else {
             $default = post($name, $default);
+        }
     }
 
     $value = '';
@@ -228,14 +237,17 @@ function field($type, $name, $default = '', $class = '', $onclick = '', $style =
         }
     }
 
-    if($onclick != '')
-        $onclick = ' onclick="'.$onclick.'"';
+    if($onclick != '') {
+        $onclick = ' onclick="' . $onclick . '"';
+    }
 
-    if($style != '')
-        $style = ' style="'.$style.'"';
+    if($style != '') {
+        $style = ' style="' . $style . '"';
+    }
 
-    if ($id === null)
+    if ($id === null) {
         $id = $name;
+    }
 
     echo '<input id="'.$id.'" type="'.$type.'" name="'.$name.'"'.$value.$class.$onclick.$style.' />'.N;
 
@@ -259,17 +271,21 @@ function textarea($name, $default = '', $class = '', $style = '') {
     $form_keys['very_important'] = true;
 
     $err_class = '';
-    if (has_form_error($name))
+    if (has_form_error($name)) {
         $err_class = ' err';
+    }
 
-    if($class != '' || $err_class != '')
-        $class = ' class="'.$class.$err_class.'"';
+    if($class != '' || $err_class != '') {
+        $class = ' class="' . $class . $err_class . '"';
+    }
 
-    if($style != '')
-        $style = ' style="'.$style.'"';
+    if($style != '') {
+        $style = ' style="' . $style . '"';
+    }
 
-    if (submitted($form_name))
+    if (submitted($form_name)) {
         $default = post($name, $default);
+    }
 
     // plain <textarea>
     echo '<textarea id="textarea_'.$name.'" name="'.$name.'"'.$class.$style.'>'.escape_html($default).'</textarea>'.N;
@@ -293,26 +309,33 @@ function select($name, $options, $default = '', $onchange = '', $style = '', $si
     $form_keys[$name] = true;
 
     $class = '';
-    if (has_form_error($name))
+    if (has_form_error($name)) {
         $class .= ' err';
+    }
 
-    if(trim($class))
-        $class = ' class="'.trim($class).'"';
+    if(trim($class)) {
+        $class = ' class="' . trim($class) . '"';
+    }
 
     if (submitted($form_name) || !submitted()) // this or none submitted
+    {
         $default = post($name, $default);
+    }
 
-    if($onchange != '')
-        $onchange = ' onchange="'.$onchange.'"';
+    if($onchange != '') {
+        $onchange = ' onchange="' . $onchange . '"';
+    }
 
-    if($style != '')
-        $style = ' style="'.$style.'"';
+    if($style != '') {
+        $style = ' style="' . $style . '"';
+    }
 
     // for sequential arrays use the values for the keys and the values
     if (array_keys($options) === range(0, count($options) - 1)) {
         $new_options = [];
-        foreach ($options as $values)
+        foreach ($options as $values) {
             $new_options[$values] = $values;
+        }
         $options = $new_options;
     }
 
@@ -324,8 +347,9 @@ function select($name, $options, $default = '', $onchange = '', $style = '', $si
     $ret = '<select id="'.$name.'" name="'.$name.'"'.$onchange.$class.$style.$multiple.'>'.N;
     foreach($options AS $value => $display) {
         $select = '';
-        if($value == $default)
+        if($value == $default) {
             $select = ' selected';
+        }
         $ret .= '<option value="'.htmlspecialchars($value).'"'.$select.'>'.htmlspecialchars($display).'</option>'.N;
     }
     $ret .= '</select>'.N;
@@ -337,8 +361,9 @@ function select($name, $options, $default = '', $onchange = '', $style = '', $si
 function submit($label, $class = '', $name = '_submit') {
     global $form_keys;
     $form_keys['_submit'] = true;
-    if ($class)
-        $class = ' '.$class;
+    if ($class) {
+        $class = ' ' . $class;
+    }
     echo '<input class="submit'.$class.'" type="submit" name="'.$name.'" id="'.$name.'" value="'.$label.'" />'.N;
 }
 
@@ -353,26 +378,31 @@ function upload($name) {
     $form_keys[$name] = true;
 
     $class = '';
-    if (has_form_error($name))
+    if (has_form_error($name)) {
         $class .= ' err';
+    }
 
-    if(trim($class))
-        $class = ' class="'.$class.'"';
+    if(trim($class)) {
+        $class = ' class="' . $class . '"';
+    }
 
     echo '<input type="file" name="'.$name.'"'.$class.' />'.N;
 }
 
 function do_http_redirect($url = null) {
-    if ($url === null)
+    if ($url === null) {
         $url = $_SERVER['REQUEST_URI'];
+    }
     header('Location: '.$url);
 }
 
 function reload($url, $sec) {
-    if ($url == null)
-        js('setTimeout(function() {location.reload();}, '.$sec.'*1000);');
-    else
-        js('setTimeout(function() {location.href=\''.$url.'\';}, '.$sec.'*1000);');
+    if ($url == null) {
+        js('setTimeout(function() {location.reload();}, ' . $sec . '*1000);');
+    }
+    else {
+        js('setTimeout(function() {location.href=\'' . $url . '\';}, ' . $sec . '*1000);');
+    }
 }
 
 function focus($name) {

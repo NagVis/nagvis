@@ -52,16 +52,19 @@ class ViewMapAddModify {
         $attrDefs = $this->MAPCFG->getValidObjectType($this->object_type);
         foreach ($_REQUEST as $attr => $val) {
             // $_REQUEST might contain cookie infos. Skip them.
-            if (isset($_COOKIE[$attr]))
+            if (isset($_COOKIE[$attr])) {
                 continue;
-            if (substr($attr, 0, 7) == 'toggle_' || substr($attr, 0, 1) == '_' || isset($exclude[$attr]))
+            }
+            if (substr($attr, 0, 7) == 'toggle_' || substr($attr, 0, 1) == '_' || isset($exclude[$attr])) {
                 continue;
+            }
 
             if ((isset($attrDefs[$attr]['must']) && $attrDefs[$attr]['must'] == '1')
                 || !has_var('toggle_'.$attr)
                 ||  get_checkbox('toggle_'.$attr)) {
-                if (isset($attrDefs[$attr]['array']) && $attrDefs[$attr]['array'])
+                if (isset($attrDefs[$attr]['array']) && $attrDefs[$attr]['array']) {
                     $val = explode(',', $val);
+                }
                 $this->attrs[$attr] = $val;
             }
             else {
@@ -77,27 +80,32 @@ class ViewMapAddModify {
             if(isset($prop['must']) && $prop['must'] == '1') {
                 // In case of "source" options only validate the ones which belong
                 // to currently enabled sources
-                if(isset($prop['source_param']) && !in_array($prop['source_param'], $this->MAPCFG->getValue(0, 'sources')))
+                if(isset($prop['source_param']) && !in_array($prop['source_param'], $this->MAPCFG->getValue(0, 'sources'))) {
                     continue;
+                }
 
-                if (!isset($this->attrs[$propname]) || $this->attrs[$propname] == '')
+                if (!isset($this->attrs[$propname]) || $this->attrs[$propname] == '') {
                     throw new FieldInputError($propname, l('The attribute needs to be set.'));
+                }
             }
         }
 
         // FIXME: Are all given attrs valid ones?
         foreach($this->attrs AS $key => $val) {
-            if(!isset($attrDefs[$key]))
+            if(!isset($attrDefs[$key])) {
                 throw new FieldInputError($key, l('The attribute "[A]" is unknown.', ["A" => $key]));
-            if(isset($attrDefs[$key]['deprecated']) && $attrDefs[$key]['deprecated'] === true)
+            }
+            if(isset($attrDefs[$key]['deprecated']) && $attrDefs[$key]['deprecated'] === true) {
                 throw new FieldInputError($key, l('The attribute is deprecated.'));
+            }
 
             // The object has a match regex, it can be checked
             // -> In case of array attributes validate the single parts
             if(isset($attrDefs[$key]['match'])) {
                 $array = isset($attrDefs[$key]['array']) && $attrDefs[$key]['array'];
-                if(!$array)
+                if(!$array) {
                     $val = [$val];
+                }
 
                 foreach($val as $part) {
                     if(!preg_match($attrDefs[$key]['match'], $part)) {
@@ -151,8 +159,9 @@ class ViewMapAddModify {
                 $show_dialog = true;
             }
             else {
-                if (!$this->MAPCFG->objExists($this->object_id))
+                if (!$this->MAPCFG->objExists($this->object_id)) {
                     throw new NagVisException(l('The object does not exist.'));
+                }
 
                 $this->validateAttributes();
 
@@ -160,8 +169,9 @@ class ViewMapAddModify {
                 if($this->mode == 'view_params') {
                     // Only modify/add the given attributes. Don't remove any
                     // set options in the array
-                    foreach($this->attrs as $key => $val)
+                    foreach($this->attrs as $key => $val) {
                         $this->MAPCFG->setValue($this->object_id, $key, $val);
+                    }
                     $this->MAPCFG->storeUpdateElement($this->object_id);
                 } else {
                     // add/modify case: Rewrite whole object with the given attributes
@@ -175,10 +185,12 @@ class ViewMapAddModify {
                                                                ['TYPE' => $t])
                 ];
 
-                if ($this->object_type == 'global')
+                if ($this->object_type == 'global') {
                     $refresh_code = 'location.reload();';
-                else
-                    $refresh_code = 'refreshMapObject(null, "'.$this->object_id.'", false);';
+                }
+                else {
+                    $refresh_code = 'refreshMapObject(null, "' . $this->object_id . '", false);';
+                }
 
                 js('popupWindowClose();'.$refresh_code);
             }
@@ -194,8 +206,9 @@ class ViewMapAddModify {
         }
 
         // delete map lock
-        if(!$this->MAPCFG->deleteMapLock())
+        if(!$this->MAPCFG->deleteMapLock()) {
             throw new NagVisException(l('mapLockNotDeleted'));
+        }
         return $show_dialog;
     }
 
@@ -222,8 +235,9 @@ class ViewMapAddModify {
             // Get the value set in this object if there is some set
             $val = $this->MAPCFG->getValue($this->object_id, $attr, true);
             // In view_param mode this is inherited
-            if($this->mode == 'view_params')
+            if($this->mode == 'view_params') {
                 $isInherited = true;
+            }
 
         } elseif(!$update && !$only_inherited && $this->clone_id !== null && $attr !== 'object_id'
                  && $this->MAPCFG->getValue($this->clone_id, $attr, true) !== false) {
@@ -263,22 +277,26 @@ class ViewMapAddModify {
 
         // Set field type to show
         $fieldType = 'text';
-        if (isset($prop['field_type']))
+        if (isset($prop['field_type'])) {
             $fieldType = $prop['field_type'];
+        }
 
         list($isInherited, $value) = $this->getAttr($default_value, $propname, $prop['must']);
 
         if(isset($prop['array']) && $prop['array']) {
-            if(is_array($value))
+            if(is_array($value)) {
                 $value = implode(',', $value);
+            }
         }
 
         // Only add the fields of type hidden which have values
         if ($fieldType === 'hidden' || $fieldType == 'readonly') {
-            if($value != '')
+            if($value != '') {
                 hidden($propname, $value);
-            if ($fieldType === 'hidden')
+            }
+            if ($fieldType === 'hidden') {
                 return;
+            }
         }
 
         $rowHide    = '';
@@ -295,13 +313,15 @@ class ViewMapAddModify {
             list($depInherited, $depValue) = $this->getAttr(
                 $this->MAPCFG->getDefaultValue($this->object_type, $dep_on_propname),
                 $dep_on_propname, $properties[$dep_on_propname]['must']);
-            if($depValue != $prop['depends_value'])
+            if($depValue != $prop['depends_value']) {
                 $rowHide = ' style="display:none"';
+            }
         }
 
         // Highlight the must attributes
-        if($prop['must'])
+        if($prop['must']) {
             array_push($rowClasses, 'must');
+        }
 
         echo '<tr class="'.implode(' ', $rowClasses).'"'.$rowHide.'>';
         echo '<td class=tdlabel>'.$propname.'</td><td class=tdbox>';
@@ -320,8 +340,9 @@ class ViewMapAddModify {
                 && ($propname == 'host_name' || $propname == 'backend_id')) {
                 // When configuring services and the hostname changed, clear the service value.
                 // When changing the backend_id, clear hostname and service
-                if ($propname == 'backend_id')
+                if ($propname == 'backend_id') {
                     $onChange .= "clearFormValue('host_name');";
+                }
 
                 $onChange .= "clearFormValue('service_description');";
 
@@ -367,8 +388,9 @@ class ViewMapAddModify {
         }
 
         if(isset($prop['array']) && $prop['array']) {
-            if(is_array($valueTxt))
+            if(is_array($valueTxt)) {
                 $valueTxt = implode(',', $valueTxt);
+            }
         }
 
         switch($fieldType) {
@@ -392,42 +414,50 @@ class ViewMapAddModify {
                 // showing error text instead of fields
                 try {
                     try {
-                        if($this->clone_id !== null)
+                        if($this->clone_id !== null) {
                             $options = $func($this->MAPCFG, $this->clone_id, $this->attrs);
-                        else
+                        }
+                        else {
                             $options = $func($this->MAPCFG, $this->object_id, $this->attrs);
+                        }
                     } catch (Exception $e) {
-                        if (is_a($e, "NagVisException"))
+                        if (is_a($e, "NagVisException")) {
                             $msg = $e->message();
-                        else
-                            $msg = "".$e;
+                        }
+                        else {
+                            $msg = "" . $e;
+                        }
 
                         form_render_error($propname, l("Failed to get objects: [MSG]", ['MSG' => $msg]));
                         $options = [];
                     }
 
-                    if(isset($options[$valueTxt]))
+                    if(isset($options[$valueTxt])) {
                         $valueTxt = $options[$valueTxt];
+                    }
 
                     // Fallback to an input field when the attribute has an value which is not
                     // an option in the select field
                     if ($value != '' && !isset($options[$value]) && !in_array($value, $options)) {
                         // In case of "other" selected, the single objects can not be found, this is ok.
-                        if (!$can_have_other)
+                        if (!$can_have_other) {
                             form_render_error($propname, l('Current value is not a known option - '
-                                                    .'falling back to input field.'));
+                                . 'falling back to input field.'));
+                        }
 
                         input($propname, $value, '', $hideField);
 
                         // Value needs to be set to "" by js
-                        if ($can_have_other && $value == '<<<other>>>')
-                            js('clearFormValue(\''.$propname.'\');');
+                        if ($can_have_other && $value == '<<<other>>>') {
+                            js('clearFormValue(\'' . $propname . '\');');
+                        }
 
                         break;
                     }
 
-                    if($can_have_other)
+                    if($can_have_other) {
                         $options['<<<other>>>'] = l('>>> Specify other');
+                    }
 
                     select($propname, $options, $value, $onChange, $hideField);
                 } catch(BackendConnectionProblem $e) {
@@ -510,8 +540,9 @@ class ViewMapAddModify {
     private function drawFields($sec_props) {
         foreach ($sec_props as $propname => $prop) {
             // do nothing with hidden or deprecated attributes
-            if (isset($prop['deprecated']) && $prop['deprecated'] === true)
+            if (isset($prop['deprecated']) && $prop['deprecated'] === true) {
                 continue;
+            }
 
             $this->drawField($propname, $prop, $sec_props);
         }
@@ -524,15 +555,18 @@ class ViewMapAddModify {
         $props_by_section = [];
         foreach ($obj_spec AS $propname => $prop) {
             $sec = $prop['section'];
-            if (!isset($props_by_section[$sec]))
+            if (!isset($props_by_section[$sec])) {
                 $props_by_section[$sec] = [];
+            }
             $props_by_section[$sec][$propname] = $prop;
         }
 
         $sections = [];
-        foreach (array_keys($props_by_section) AS $sec)
-            if ($sec != 'hidden')
+        foreach (array_keys($props_by_section) AS $sec) {
+            if ($sec != 'hidden') {
                 $sections[$sec] = $this->MAPCFG->getSectionTitle($sec);
+            }
+        }
 
         $open = get_open_section('general');
         render_section_navigation($open, $sections);
@@ -572,12 +606,14 @@ class ViewMapAddModify {
         $this->mode = req('mode', 'addmodify');
 
         $map_name = req('show');
-        if ($this->mode != 'view_params' && $map_name == null)
+        if ($this->mode != 'view_params' && $map_name == null) {
             throw new NagVisException(l('You need to provide a map name.'));
+        }
 
         if ($map_name !== null && (!preg_match(MATCH_MAP_NAME, $map_name)
-                                   || count($CORE->getAvailableMaps('/^'.$map_name.'$/')) == 0))
+                                   || count($CORE->getAvailableMaps('/^'.$map_name.'$/')) == 0)) {
             throw new NagVisException(l('The map does not exist.'));
+        }
 
         $this->MAPCFG = new GlobalMapCfg($map_name);
         try {
@@ -587,16 +623,18 @@ class ViewMapAddModify {
         } catch(MapCfgInvalid $e) {}
 
         $this->clone_id = req('clone_id');
-        if ($this->clone_id !== null && !preg_match(MATCH_OBJECTID, $this->clone_id))
+        if ($this->clone_id !== null && !preg_match(MATCH_OBJECTID, $this->clone_id)) {
             throw new NagVisException(l('Invalid clone object id'));
+        }
 
         $this->object_id = req('object_id');
         if ($this->object_id !== null) {
             // Give the sources the chance to load the object
             $this->MAPCFG->handleSources('load_obj', $this->object_id);
 
-            if (!$this->MAPCFG->objExists($this->object_id))
+            if (!$this->MAPCFG->objExists($this->object_id)) {
                 throw new NagVisException(l('The object does not exist.'));
+            }
 
             // 'object_id' is only set when modifying existing objects
             $this->object_type = $this->MAPCFG->getValue($this->object_id, 'type');
@@ -611,17 +649,20 @@ class ViewMapAddModify {
         // Don't handle submit actions when the 'update' POST attribute is set
         if (is_action()) {
             try {
-                if (!$this->handleAddModify())
+                if (!$this->handleAddModify()) {
                     return ob_get_clean();
+                }
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->message());
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                }
+                else {
                     throw $e;
+                }
             }
         }
         $this->drawForm();

@@ -118,8 +118,9 @@ class CoreAuthHandler {
     }
 
     public function resetPassword($uid, $pw) {
-        if(!$this->checkFeature('resetPassword'))
+        if(!$this->checkFeature('resetPassword')) {
             throw new CoreAuthModNoSupport("Password reset not supported");
+        }
         return $this->MOD->resetPassword($uid, $pw);
     }
 
@@ -137,11 +138,13 @@ class CoreAuthHandler {
     }
 
     public function isAuthenticated() {
-        if(cfg('global', 'audit_log') == true)
-            $ALOG = new CoreLog(cfg('paths', 'var').'nagvis-audit.log',
-                              cfg('global', 'dateformat'));
-        else
+        if(cfg('global', 'audit_log') == true) {
+            $ALOG = new CoreLog(cfg('paths', 'var') . 'nagvis-audit.log',
+                cfg('global', 'dateformat'));
+        }
+        else {
             $ALOG = null;
+        }
 
         //$bAlreadyAuthed = $this->SESS->isSetAndNotEmpty('authCredentials');
 
@@ -161,10 +164,12 @@ class CoreAuthHandler {
         $isAuthenticated = $this->MOD->isAuthenticated($this->trustUsername);
 
         if($ALOG !== null) {
-            if($isAuthenticated)
-                $ALOG->l('User logged in ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
-            else
-                $ALOG->l('User login failed ('.$this->getUser().' / '.$this->getUserId().'): '.$this->sModuleName);
+            if($isAuthenticated) {
+                $ALOG->l('User logged in (' . $this->getUser() . ' / ' . $this->getUserId() . '): ' . $this->sModuleName);
+            }
+            else {
+                $ALOG->l('User login failed (' . $this->getUser() . ' / ' . $this->getUserId() . '): ' . $this->sModuleName);
+            }
         }
 
         return $isAuthenticated;
@@ -175,8 +180,9 @@ class CoreAuthHandler {
     }
 
     public function logout($enforce = false) {
-        if(!$enforce && !$this->logoutSupported())
+        if(!$enforce && !$this->logoutSupported()) {
             return false;
+        }
 
         if(cfg('global', 'audit_log') == true) {
             $ALOG = new CoreLog(cfg('paths', 'var').'nagvis-audit.log',
@@ -202,7 +208,9 @@ class CoreAuthHandler {
         // Remove logins which were performed with different logon/auth modules
         if($this->SESS->get('logonModule') != cfg('global', 'logonmodule')
            || $this->SESS->get('authModule') != $this->sModuleName) {
-            if(DEBUG&&DEBUGLEVEL&2) debug('removing different logon/auth module data');
+            if(DEBUG&&DEBUGLEVEL&2) {
+                debug('removing different logon/auth module data');
+            }
             $this->logout(true);
             return false;
         }

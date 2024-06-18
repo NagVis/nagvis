@@ -52,8 +52,9 @@ class NagVisHoverMenu {
         $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName.'.hover.html');
 
         // Simply skip processing with an invalid template file name
-        if($this->pathTemplateFile === '')
+        if($this->pathTemplateFile === '') {
             return;
+        }
 
         $this->CACHE = new GlobalFileCache($this->pathTemplateFile, cfg('paths','var').'hover-'.$this->templateName.'-'.curLang().'.cache');
 
@@ -187,8 +188,9 @@ class NagVisHoverMenu {
             $this->code = str_replace('[html_templates]', path('sys', 'global', 'templates'),$this->code);
         }
 
-        if(strpos($this->code,'[html_template_images]') !== FALSE)
+        if(strpos($this->code,'[html_template_images]') !== FALSE) {
             $this->code = str_replace('[html_template_images]', path('html', 'global', 'templateimages'), $this->code);
+        }
     }
 
     /**

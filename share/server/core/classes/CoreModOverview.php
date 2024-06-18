@@ -57,8 +57,9 @@ class CoreModOverview extends CoreModule {
                     // Is this request asked to check file ages?
                     if(isset($aVals['f']) && isset($aVals['f'][0])) {
                         $result = $this->checkFilesChanged($aVals['f']);
-                        if($result !== null)
+                        if($result !== null) {
                             return $result;
+                        }
                     }
 
                     $sReturn = $this->parseMapsJson(COMPLETE, $aVals['i']);
@@ -72,8 +73,9 @@ class CoreModOverview extends CoreModule {
     private function parseMapJson($objectId, $mapName, $what) {
         global $AUTHORISATION;
         // Check if the user is permitted to view this
-        if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName))
+        if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName)) {
             return null;
+        }
 
         // If the parameter filterUser is set, filter the maps by the username
         // given in this parameter. This is a mechanism to be authed as generic
@@ -82,8 +84,9 @@ class CoreModOverview extends CoreModule {
         if(cfg('global', 'user_filtering') && isset($_GET['filterUser']) && $_GET['filterUser'] != '') {
             $AUTHORISATION2 = new CoreAuthorisationHandler();
             $AUTHORISATION2->parsePermissions($_GET['filterUser']);
-            if(!$AUTHORISATION2->isPermitted('Map', 'view', $mapName))
+            if(!$AUTHORISATION2->isPermitted('Map', 'view', $mapName)) {
                 return null;
+            }
 
             // Switch the auth cookie to this user
             global $SHANDLER;
@@ -100,8 +103,9 @@ class CoreModOverview extends CoreModule {
         $MAPCFG->readMapConfig();
 
         // Only perform this check with a valid config
-        if($MAPCFG->getValue(0, 'show_in_lists') != 1)
+        if($MAPCFG->getValue(0, 'show_in_lists') != 1) {
             return null;
+        }
 
         $MAP = new NagVisMap($MAPCFG, GET_STATE, !IS_VIEW);
 
@@ -121,8 +125,9 @@ class CoreModOverview extends CoreModule {
             $MAP->MAPOBJ->fetchIcon();
         }
 
-        if(cfg('index','showmapthumbs') == 1)
+        if(cfg('index','showmapthumbs') == 1) {
             $map['overview_image'] = $this->renderMapThumb($MAPCFG);
+        }
 
         return [$MAP->MAPOBJ, $map];
     }
@@ -145,12 +150,14 @@ class CoreModOverview extends CoreModule {
         log_mem('pre');
         foreach($mapList AS $objectId) {
             $a = explode('-', $objectId, 2);
-            if(!isset($a[1]))
+            if(!isset($a[1])) {
                 continue;
+            }
             $mapName = $a[1];
             // list mode: Skip processing when this type of object should not be shown
-            if(cfg('index', 'showmaps') != 1)
+            if(cfg('index', 'showmaps') != 1) {
                 continue;
+            }
 
             try {
                 $ret = $this->parseMapJson($objectId, $mapName, $what);
@@ -173,10 +180,12 @@ class CoreModOverview extends CoreModule {
             $aObj[0]->applyState();
             $aObj[0]->fetchIcon();
 
-            if($what === ONLY_STATE)
+            if($what === ONLY_STATE) {
                 $aMaps[] = array_merge($aObj[0]->getObjectStateInformations(), $aObj[1]);
-            else
+            }
+            else {
                 $aMaps[] = array_merge($aObj[0]->parseJson(), $aObj[1]);
+            }
         }
         log_mem('post backend');
         return json_encode($aMaps);
@@ -224,8 +233,9 @@ class CoreModOverview extends CoreModule {
         // b) The image is a local one
         // c) The image exists
         // When one is not OK, then use the large map image
-        if(!$CORE->checkGd(0) || !$MAPCFG->BACKGROUND->getFileType() == 'local' || !file_exists($imgPath))
+        if(!$CORE->checkGd(0) || !$MAPCFG->BACKGROUND->getFileType() == 'local' || !file_exists($imgPath)) {
             return $MAPCFG->BACKGROUND->getFile();
+        }
 
         $sThumbFile     = $MAPCFG->getName() . '-thumb.' . $this->getFileType($imgPath);
         $sThumbPath     = cfg('paths', 'sharedvar') . $sThumbFile;
@@ -233,8 +243,9 @@ class CoreModOverview extends CoreModule {
 
         // Only create a new thumb when there is no cached one
         $FCACHE = new GlobalFileCache($imgPath, $sThumbPath);
-        if($FCACHE->isCached() === -1)
+        if($FCACHE->isCached() === -1) {
             $image = $this->createThumbnail($imgPath, $sThumbPath);
+        }
 
         return $sThumbPathHtml;
     }
@@ -248,8 +259,9 @@ class CoreModOverview extends CoreModule {
     public function parseRotationsJson() {
         global $AUTHORISATION, $CORE;
         // Only display the rotation list when enabled
-        if(cfg('index','showrotations') != 1)
+        if(cfg('index','showrotations') != 1) {
             return json_encode([]);
+        }
 
         $aRotations = [];
         foreach($CORE->getPermittedRotationPools() AS $poolName) {

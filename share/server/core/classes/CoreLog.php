@@ -20,8 +20,9 @@ class CoreLog {
     }
 
     private function closeFile() {
-        if($this->FILE !== null)
+        if($this->FILE !== null) {
             fclose($this->FILE);
+        }
     }
 
     /**
@@ -31,8 +32,9 @@ class CoreLog {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function l($msg) {
-        if($this->FILE === null)
+        if($this->FILE === null) {
             $this->openFile();
+        }
 
       fwrite($this->FILE, date($this->dateFormat).' '.$msg."\n");
     }

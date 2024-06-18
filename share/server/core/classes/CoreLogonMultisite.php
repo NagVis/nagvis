@@ -98,10 +98,12 @@ class CoreLogonMultisite extends CoreLogonModule {
         // 2nd field is "issue time" in pre 2.0 cookies. Now it's the session ID
         list($username, $sessionId, $cookieHash) = explode(':', $cookieValue, 3);
 
-        if($this->authFile == 'htpasswd')
+        if($this->authFile == 'htpasswd') {
             $users = $this->loadAuthFile($this->htpasswdPath);
-        else
+        }
+        else {
             $users = $this->loadAuthFile($this->serialsPath);
+        }
 
         if(!isset($users[$username])) {
             throw new Exception();
@@ -118,10 +120,12 @@ class CoreLogonMultisite extends CoreLogonModule {
             // to both cookie formats.
             $is_pre_20_cookie = strlen($cookieHash) == 32;
 
-            if ($is_pre_20_cookie)
-                $hash = $this->generatePre20Hash($username, $sessionId, (string) $user_secret);
-            else
-                $hash = $this->generatePre22Hash($username, $sessionId, (string) $user_secret);
+            if ($is_pre_20_cookie) {
+                $hash = $this->generatePre20Hash($username, $sessionId, (string)$user_secret);
+            }
+            else {
+                $hash = $this->generatePre22Hash($username, $sessionId, (string)$user_secret);
+            }
 	}
 	elseif ($this->cookieVersion == 1) {
             $hash = $this->generateHash($username, $sessionId, (string) $user_secret);

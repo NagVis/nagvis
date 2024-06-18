@@ -31,10 +31,12 @@ class CoreModuleHandler {
     protected $sPrefix;
 
     public function __construct($CORE = null) {
-      if($CORE === null)
-            $this->CORE = GlobalCore::getInstance();
-        else
+      if($CORE === null) {
+          $this->CORE = GlobalCore::getInstance();
+      }
+        else {
             $this->CORE = $CORE;
+        }
 
         $this->aRegistered = [];
         $this->sPrefix = 'CoreMod';

@@ -70,8 +70,9 @@ if(!($AUTH->sessionAuthPresent() && $AUTH->isAuthenticatedSession())) {
 if($AUTH->isAuthenticated()) {
     $AUTHORISATION = new CoreAuthorisationHandler();
     $AUTHORISATION->parsePermissions();
-} else
+} else {
     $AUTHORISATION = null;
+}
 
 // Make the AA information available to whole NagVis for permission checks
 $CORE->setAA($AUTH, $AUTHORISATION);
@@ -85,14 +86,16 @@ $_LANG->setLanguage(HANDLE_USERCFG);
 
 // Register valid modules
 // Unregistered modules can not be accessed
-foreach($_modules AS $mod)
+foreach($_modules AS $mod) {
     $MHANDLER->regModule($mod);
+}
 
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
-if($MODULE == null)
+if($MODULE == null) {
     throw new NagVisException(l('The module [MOD] is not known',
-                             ['MOD' => htmlentities($UHANDLER->get('mod'), ENT_COMPAT, 'UTF-8')]));
+        ['MOD' => htmlentities($UHANDLER->get('mod'), ENT_COMPAT, 'UTF-8')]));
+}
 $MODULE->setAction($UHANDLER->get('act'));
 $MODULE->initObject();
 
@@ -103,8 +106,9 @@ $MODULE->initObject();
 
 // Only check the permissions for modules which require an authorization.
 // For example the info page and the login page don't need a special authorization
-if($MODULE->actionRequiresAuthorisation())
+if($MODULE->actionRequiresAuthorisation()) {
     $MODULE->isPermitted();
+}
 
 /*
 * Module handling 2: Render the modules when permitted
@@ -124,8 +128,12 @@ if($MODULE !== false && $MODULE->offersAction($UHANDLER->get('act'))) {
 }
 
 echo $sContent;
-if (DEBUG&&DEBUGLEVEL&4) debugFinalize();
-if (PROFILE) profilingFinalize($_name.'-'.$UHANDLER->get('mod').'-'.$UHANDLER->get('act'));
+if (DEBUG&&DEBUGLEVEL&4) {
+    debugFinalize();
+}
+if (PROFILE) {
+    profilingFinalize($_name . '-' . $UHANDLER->get('mod') . '-' . $UHANDLER->get('act'));
+}
 
 exit(0);
 

@@ -69,8 +69,9 @@ class GlobalLanguage {
      * while processing the current page.
      */
     public function setLanguage($handleUserCfg = false) {
-        if($handleUserCfg)
+        if($handleUserCfg) {
             $this->USERCFG = new CoreUserCfg();
+        }
 
         $this->sCurrentLanguage = $this->gatherCurrentLanguage();
 
@@ -98,8 +99,9 @@ class GlobalLanguage {
                 switch($sMethod) {
                     case 'session':
                         // Read the user choice from user options
-                        if($this->USERCFG !== null)
+                        if($this->USERCFG !== null) {
                             $sReturn = $this->USERCFG->getValue('language', '');
+                        }
                     break;
                     case 'browser':
                         // Read the prefered language from the users browser
@@ -116,8 +118,9 @@ class GlobalLanguage {
                         // Save language to user config when user set one
                         if($sReturn != ''
                            && $this->USERCFG !== null
-                           && $sReturn != $this->USERCFG->getValue('language', ''))
+                           && $sReturn != $this->USERCFG->getValue('language', '')) {
                             $this->USERCFG->doSet(['language' => $sReturn]);
+                        }
                     break;
                     case 'config':
                         // Read default language from configuration
@@ -183,7 +186,9 @@ class GlobalLanguage {
 
                 // set default to 1 for any without q factor
                 foreach ($langs as $lang => $val) {
-                    if ($val === '') $langs[$lang] = 1;
+                    if ($val === '') {
+                        $langs[$lang] = 1;
+                    }
                 }
 
                 // sort list based on value
@@ -259,8 +264,9 @@ class GlobalLanguage {
     public function getText($id, $replace = null) {
         // Use cache if available
         // FIXME: At the moment the cache can only be used without macros
-        if($replace === null && isset($this->cache[$id]))
+        if($replace === null && isset($this->cache[$id])) {
             return $this->cache[$id];
+        }
 
         $ret = $this->getTextOfId($id);
 
@@ -282,8 +288,9 @@ class GlobalLanguage {
         }
 
         // Store in cache for this page processing
-        if($replace === null && !isset($this->cache[$id]))
+        if($replace === null && !isset($this->cache[$id])) {
             $this->cache[$id] = $ret;
+        }
 
         return $ret;
     }

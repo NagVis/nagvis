@@ -83,12 +83,14 @@ class NagVisMap {
 
         // First parse the map object itselfs for having the
         // summary information in the frontend
-        if($type === 'complete' || $type === 'summary')
+        if($type === 'complete' || $type === 'summary') {
             $arrRet[] = $this->MAPOBJ->parseJson();
+        }
 
         // In summary mode only return the map object state
-        if($type === 'summary')
+        if($type === 'summary') {
             return json_encode($arrRet);
+        }
 
         foreach($this->MAPOBJ->getMembers() AS $OBJ) {
             switch(get_class($OBJ)) {
@@ -109,8 +111,9 @@ class NagVisMap {
                     }
                 break;
                 default: // Shape, Line, Textbox and others...
-                    if ($type == 'complete' || $type == 'full')
+                    if ($type == 'complete' || $type == 'full') {
                         $arrRet[] = $OBJ->parseJson();
+                    }
                 break;
             }
         }

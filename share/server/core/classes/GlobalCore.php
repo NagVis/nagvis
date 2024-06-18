@@ -147,8 +147,9 @@ class GlobalCore {
      */
     public function checkGd($printErr) {
         if(!extension_loaded('gd')) {
-            if($printErr)
+            if($printErr) {
                 throw new NagVisException(l('gdLibNotFound'));
+            }
             return FALSE;
         } else {
             return TRUE;
@@ -372,21 +373,26 @@ class GlobalCore {
     public function getIconsetFiletype($iconset) {
         $type = '';
 
-        if(isset($this->iconsetTypeCache[$iconset]))
+        if(isset($this->iconsetTypeCache[$iconset])) {
             $type = $this->iconsetTypeCache[$iconset];
-        else
-            foreach([
-                        path('sys', 'local',  'icons'),
-                          path('sys', 'global', 'icons')
-                    ] AS $path)
-                if(file_exists($path))
-                    foreach(['png', 'gif', 'jpg', 'svg'] AS $ext)
-                        if(file_exists($path . $iconset . '_ok.'.$ext))
+        }
+        else {
+            foreach ([
+                         path('sys', 'local', 'icons'),
+                         path('sys', 'global', 'icons')
+                     ] as $path)
+                if (file_exists($path)) {
+                    foreach (['png', 'gif', 'jpg', 'svg'] as $ext)
+                        if (file_exists($path . $iconset . '_ok.' . $ext)) {
                             return $ext;
+                        }
+                }
+        }
 
         // Catch error when iconset filetype could not be fetched
-        if($type === '')
+        if($type === '') {
             throw new NagVisException(l('iconsetFiletypeUnknown', ['ICONSET' => $iconset]));
+        }
 
         $this->iconsetTypeCache[$iconset] = $type;
         return $type;
@@ -416,8 +422,9 @@ class GlobalCore {
         $list = [];
         foreach ($this->getAvailableMaps() AS $mapName) {
             // Check if the user is permitted to view this
-            if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName))
+            if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName)) {
                 continue;
+            }
 
             // If the parameter filterUser is set, filter the maps by the username
             // given in this parameter. This is a mechanism to be authed as generic
@@ -426,8 +433,9 @@ class GlobalCore {
             if(cfg('global', 'user_filtering') && isset($_GET['filterUser']) && $_GET['filterUser'] != '') {
                 $AUTHORISATION2 = new CoreAuthorisationHandler();
                 $AUTHORISATION2->parsePermissions($_GET['filterUser']);
-                if(!$AUTHORISATION2->isPermitted('Map', 'view', $mapName))
+                if(!$AUTHORISATION2->isPermitted('Map', 'view', $mapName)) {
                     continue;
+                }
 
                 // Switch the auth cookie to this user
                 global $SHANDLER;
@@ -456,8 +464,9 @@ class GlobalCore {
                 continue; // skip e.g. not read config files
             }
             
-            if($MAPCFG->getValue(0, 'show_in_lists') == 1)
+            if($MAPCFG->getValue(0, 'show_in_lists') == 1) {
                 $list[$mapName] = $MAPCFG->getAlias();
+            }
         }
         natcasesort($list);
         return array_keys($list);
@@ -503,31 +512,40 @@ class GlobalCore {
     public function listDirectory($dir, $allowRegex = null, $ignoreList = null, $allowPartRegex = null, $returnPart = null, $setKey = null, $printErr = true) {
         $files = [];
 
-        if($returnPart === null)
+        if($returnPart === null) {
             $returnPart = 1;
-        if($setKey === null)
+        }
+        if($setKey === null) {
             $setKey = false;
+        }
 
-        if(!self::checkExisting($dir, $printErr) || !self::checkReadable($dir, $printErr))
+        if(!self::checkExisting($dir, $printErr) || !self::checkReadable($dir, $printErr)) {
             return $files;
+        }
 
         if($handle = opendir($dir)) {
             while (false !== ($file = readdir($handle))) {
-                if($allowRegex && !preg_match($allowRegex, $file, $arrRet))
+                if($allowRegex && !preg_match($allowRegex, $file, $arrRet)) {
                     continue;
-                if($ignoreList && isset($ignoreList[$file]))
+                }
+                if($ignoreList && isset($ignoreList[$file])) {
                     continue;
-                if($allowPartRegex && !preg_match($allowPartRegex, $arrRet[1]))
+                }
+                if($allowPartRegex && !preg_match($allowPartRegex, $arrRet[1])) {
                     continue;
+                }
 
-                if($setKey)
+                if($setKey) {
                     $files[$arrRet[$returnPart]] = $arrRet[$returnPart];
-                else
+                }
+                else {
                     $files[] = $arrRet[$returnPart];
+                }
             }
 
-            if($files)
+            if($files) {
                 natcasesort($files);
+            }
 
             closedir($handle);
         }
@@ -537,18 +555,21 @@ class GlobalCore {
     }
 
     public function checkExisting($path, $printErr = true) {
-        if($path != '' && file_exists($path))
+        if($path != '' && file_exists($path)) {
             return true;
+        }
 
-        if($printErr)
+        if($printErr) {
             throw new NagVisException(l('The path "[PATH]" does not exist.', ['PATH' => $path]));
+        }
 
         return false;
     }
 
     public function checkReadable($path, $printErr = true) {
-        if($path != '' && is_readable($path))
+        if($path != '' && is_readable($path)) {
             return true;
+        }
 
         if($printErr) {
             throw new NagVisException(l('The path "[PATH]" is not readable.', ['PATH' => $path]));
@@ -557,11 +578,13 @@ class GlobalCore {
         return false;
     }
     public function checkWriteable($path, $printErr = true) {
-        if($path != '' && is_writeable($path))
+        if($path != '' && is_writeable($path)) {
             return true;
+        }
 
-        if($printErr)
+        if($printErr) {
             throw new NagVisException(l('The path "[PATH]" is not writeable.', ['PATH' => $path]));
+        }
 
         return false;
     }
@@ -620,8 +643,9 @@ class GlobalCore {
         try {
             $group = self::getMainCfg()->getValue('global', 'file_group');
             $old = error_reporting(0);
-            if($group !== '')
+            if($group !== '') {
                 chgrp($file, $group);
+            }
             chmod($file, octdec(self::getMainCfg()->getValue('global', 'file_mode')));
             error_reporting($old);
         } catch(Exception $e) {
@@ -648,8 +672,9 @@ class GlobalCore {
             array_push($parts, '60');
         }
         $tag = '';
-        foreach($parts AS $part)
+        foreach($parts AS $part) {
             $tag .= sprintf("%02s", $part);
+        }
         return (int) sprintf("%-08s", $tag);
     }
 

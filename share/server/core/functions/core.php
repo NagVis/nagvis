@@ -61,12 +61,15 @@ $_LANG = new GlobalLanguage();
  */
 function l($txt, $vars = null) {
     global $_LANG;
-    if(isset($_LANG))
+    if(isset($_LANG)) {
         return $_LANG->getText($txt, $vars);
-    elseif($vars !== null)
+    }
+    elseif($vars !== null) {
         return GlobalLanguage::getReplacedString($txt, $vars);
-    else
+    }
+    else {
         return $txt;
+    }
 }
 
 function curLang() {

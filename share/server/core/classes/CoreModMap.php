@@ -81,11 +81,13 @@ class CoreModMap extends CoreModule {
             case 'modifyObject':
             case 'deleteObject':
                 $FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
-                if($FHANDLER->match('map', MATCH_MAP_NAME))
+                if($FHANDLER->match('map', MATCH_MAP_NAME)) {
                     $this->name = $FHANDLER->get('map');
-                else
+                }
+                else {
                     throw new NagVisException(l('Invalid query. The parameter [NAME] is missing or has an invalid format.',
-                                                ['NAME' => 'map']));
+                        ['NAME' => 'map']));
+                }
             break;
         }
 
@@ -171,11 +173,13 @@ class CoreModMap extends CoreModule {
 
     protected function doExportMap($name) {
         global $CORE;
-        if (!$name)
+        if (!$name) {
             throw new FieldInputError(null, l('Please choose a map'));
+        }
 
-        if (count($CORE->getAvailableMaps('/^'.preg_quote($name).'$/')) == 0)
+        if (count($CORE->getAvailableMaps('/^'.preg_quote($name).'$/')) == 0) {
             throw new FieldInputError(null, l('The given map name is invalid'));
+        }
 
         $MAPCFG = new GlobalMapCfg($name);
         return $MAPCFG->exportMap();
@@ -193,15 +197,17 @@ class CoreModMap extends CoreModule {
         // Give the sources the chance to load the object
         $MAPCFG->handleSources('load_obj', $a['id']);
 
-        if(!$MAPCFG->objExists($a['id']))
+        if(!$MAPCFG->objExists($a['id'])) {
             throw new NagVisException(l('The object does not exist.'));
+        }
 
         // first delete element from array
         $MAPCFG->deleteElement($a['id'], true);
 
         // delete map lock
-        if(!$MAPCFG->deleteMapLock())
+        if(!$MAPCFG->deleteMapLock()) {
             throw new NagVisException(l('mapLockNotDeleted'));
+        }
 
         return true;
     }
@@ -213,19 +219,24 @@ class CoreModMap extends CoreModule {
         $FHANDLER = new CoreRequestHandler($_GET);
 
         // Check for needed params
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
+        if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
             $bValid = false;
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('id'))
+        }
+        if($bValid && !$FHANDLER->isSetAndNotEmpty('id')) {
             $bValid = false;
+        }
 
         // All fields: Regex check
-        if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
+        if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME)) {
             $bValid = false;
-        if($bValid && !$FHANDLER->match('id', MATCH_OBJECTID))
+        }
+        if($bValid && !$FHANDLER->match('id', MATCH_OBJECTID)) {
             $bValid = false;
+        }
 
-        if($bValid)
+        if($bValid) {
             $this->verifyMapExists($FHANDLER->get('map'));
+        }
 
         // Store response data
         if($bValid === true) {
@@ -248,8 +259,9 @@ class CoreModMap extends CoreModule {
         // Give the sources the chance to load the object
         $MAPCFG->handleSources('load_obj', $a['id']);
 
-        if(!$MAPCFG->objExists($a['id']))
+        if(!$MAPCFG->objExists($a['id'])) {
             throw new NagVisException(l('The object does not exist.'));
+        }
 
         // set options in the array
         foreach($a['opts'] AS $key => $val) {
@@ -277,19 +289,24 @@ class CoreModMap extends CoreModule {
         $FHANDLER = new CoreRequestHandler($aResponse);
 
         // Check for needed params
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('map'))
+        if($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
             $bValid = false;
-        if($bValid && !$FHANDLER->isSetAndNotEmpty('id'))
+        }
+        if($bValid && !$FHANDLER->isSetAndNotEmpty('id')) {
             $bValid = false;
+        }
 
         // All fields: Regex check
-        if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME))
+        if($bValid && !$FHANDLER->match('map', MATCH_MAP_NAME)) {
             $bValid = false;
-        if($bValid && $FHANDLER->isSetAndNotEmpty('id') && !$FHANDLER->match('id', MATCH_OBJECTID))
+        }
+        if($bValid && $FHANDLER->isSetAndNotEmpty('id') && !$FHANDLER->match('id', MATCH_OBJECTID)) {
             $bValid = false;
+        }
 
-        if($bValid)
+        if($bValid) {
             $this->verifyMapExists($FHANDLER->get('map'));
+        }
 
         // FIXME: Recode to FHANDLER
         $aOpts = $aResponse;
@@ -342,8 +359,9 @@ class CoreModMap extends CoreModule {
         // Is this request asked to check file ages?
         if(isset($aVals['f']) && isset($aVals['f'][0]) && $aVals['f'] != '') {
             $result = $this->checkFilesChanged($aVals['f']);
-            if($result !== null)
+            if($result !== null) {
                 return $result;
+            }
         }
 
         // Initialize map configuration (Needed in getMapObjConf)
@@ -352,8 +370,9 @@ class CoreModMap extends CoreModule {
 
         // i might not be set when all map objects should be fetched or when only
         // the summary of the map is called
-        if(isset($aVals['i']) && $aVals['i'] != '')
+        if(isset($aVals['i']) && $aVals['i'] != '') {
             $MAPCFG->filterMapObjects($aVals['i']);
+        }
 
         $MAP = new NagVisMap($MAPCFG, GET_STATE, IS_VIEW);
         return $MAP->parseObjectsJson($aVals['ty']);

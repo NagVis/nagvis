@@ -30,7 +30,9 @@ require('../../server/core/defines/matches.php');
 require('../../server/core/classes/CoreExceptions.php');
 require('../../server/core/functions/autoload.php');
 
-if (PROFILE) profilingStart();
+if (PROFILE) {
+    profilingStart();
+}
 
 const CONST_AJAX = true;
 header('Content-Type: application/json');

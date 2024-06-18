@@ -75,8 +75,9 @@ class NagVisHeaderMenu {
         // In case of some really bad errors, the header menu can not be rendered, because basic
         // objects like $UHANDLER, $AUTH and $AUTHORISATION have not been initialized. Catch this
         // case here and terminate rendering
-        if (!isset($UHANDLER) || !isset($AUTH) || !isset($AUTHORISATION))
+        if (!isset($UHANDLER) || !isset($AUTH) || !isset($AUTHORISATION)) {
             return '';
+        }
 
         // Get all macros
         $this->getMacros();
@@ -144,8 +145,9 @@ class NagVisHeaderMenu {
 
         $cfgFiles = $CORE->getAvailableMaps();
         $path = $CORE->getMainCfg()->getValue('paths', 'mapcfg');
-        foreach ($cfgFiles as $name)
-            $cfgFiles[$name] = $path.$name.".cfg";
+        foreach ($cfgFiles as $name) {
+            $cfgFiles[$name] = $path . $name . ".cfg";
+        }
 
         $CACHE = new GlobalFileCache($cfgFiles,
             cfg('paths','var').'maplist-full-global.cfg-'.count($cfgFiles).'-'.CONST_VERSION.'-cache');
@@ -169,8 +171,9 @@ class NagVisHeaderMenu {
                 }
 
                 // Only show maps which should be shown
-                if ($MAPCFG->getValue(0, 'show_in_lists') != 1)
+                if ($MAPCFG->getValue(0, 'show_in_lists') != 1) {
                     continue;
+                }
 
                 $list[$mapName] = [
                     'mapName'   => $MAPCFG->getName(),
@@ -204,8 +207,9 @@ class NagVisHeaderMenu {
             if ($map['parent'] === '') {
                 $aMaps[$map['mapName']] = $map;
             } else {
-                if(!isset($childMaps[$map['parent']]))
+                if(!isset($childMaps[$map['parent']])) {
                     $childMaps[$map['parent']] = [];
+                }
                 $childMaps[$map['parent']][$map['mapName']] = $map;
             }
         }
@@ -315,8 +319,9 @@ class NagVisHeaderMenu {
             $default = '';
             $USERCFG = new CoreUserCfg();
             $cfg = $USERCFG->doGet();
-            if (isset($cfg['params-']) && isset($cfg['params-']['filter_group']))
+            if (isset($cfg['params-']) && isset($cfg['params-']['filter_group'])) {
                 $default = $cfg['params-']['filter_group'];
+            }
 
             $this->aMacros['filter_group'] = isset($_GET['filter_group']) ? htmlspecialchars($_GET['filter_group']) : $default;
         }
@@ -337,10 +342,12 @@ class NagVisHeaderMenu {
      */
     private function getDocLanguage() {
         global $CORE;
-        if(in_array(curLang(), $CORE->getAvailableDocs()))
-	    return curLang();
-	else
-	    return 'en_US';
+        if(in_array(curLang(), $CORE->getAvailableDocs())) {
+            return curLang();
+        }
+	else {
+        return 'en_US';
+    }
     }
 
     /**

@@ -240,43 +240,56 @@ class CoreAuthorisationHandler {
     public function isPermitted($sModule, $sAction, $sObj = null) {
         // Module access?
         $access = [];
-        if(isset($this->aPermissions[$sModule]))
+        if(isset($this->aPermissions[$sModule])) {
             $access[$sModule] = [];
-        if(isset($this->aPermissions[AUTH_PERMISSION_WILDCARD]))
+        }
+        if(isset($this->aPermissions[AUTH_PERMISSION_WILDCARD])) {
             $access[AUTH_PERMISSION_WILDCARD] = [];
+        }
 
         if(count($access) > 0) {
             // Action access?
             foreach($access AS $mod => $acts) {
-                if(isset($this->aPermissions[$mod][$sAction]))
+                if(isset($this->aPermissions[$mod][$sAction])) {
                     $access[$mod][$sAction] = [];
-                if(isset($this->aPermissions[$mod][AUTH_PERMISSION_WILDCARD]))
+                }
+                if(isset($this->aPermissions[$mod][AUTH_PERMISSION_WILDCARD])) {
                     $access[$mod][AUTH_PERMISSION_WILDCARD] = [];
+                }
             }
 
             if(count($access[$mod]) > 0) {
                 // Don't check object permissions
-                if($sObj === null)
+                if($sObj === null) {
                     return true;
+                }
 
                 // Object access?
                 foreach($access AS $mod => $acts) {
                     foreach($acts AS $act => $objs) {
-                        if(isset($this->aPermissions[$mod][$act][$sObj]))
+                        if(isset($this->aPermissions[$mod][$act][$sObj])) {
                             return true;
-                        elseif(isset($this->aPermissions[$mod][$act][AUTH_PERMISSION_WILDCARD]))
+                        }
+                        elseif(isset($this->aPermissions[$mod][$act][AUTH_PERMISSION_WILDCARD])) {
                             return true;
-                        else
-                            if(DEBUG&&DEBUGLEVEL&2)
-                                debug('Object access denied (Mod: '.$sModule.' Act: '.$sAction.' Object: '.$sObj);
+                        }
+                        else {
+                            if (DEBUG && DEBUGLEVEL & 2) {
+                                debug('Object access denied (Mod: ' . $sModule . ' Act: ' . $sAction . ' Object: ' . $sObj);
+                            }
+                        }
                     }
                 }
-            } else
-                if(DEBUG&&DEBUGLEVEL&2)
-                    debug('Action access denied (Mod: '.$sModule.' Act: '.$sAction.' Object: '.$sObj);
-        } else
-            if(DEBUG&&DEBUGLEVEL&2)
-                debug('Module access denied (Mod: '.$sModule.' Act: '.$sAction.' Object: '.$sObj);
+            } else {
+                if (DEBUG && DEBUGLEVEL & 2) {
+                    debug('Action access denied (Mod: ' . $sModule . ' Act: ' . $sAction . ' Object: ' . $sObj);
+                }
+            }
+        } else {
+            if (DEBUG && DEBUGLEVEL & 2) {
+                debug('Module access denied (Mod: ' . $sModule . ' Act: ' . $sAction . ' Object: ' . $sObj);
+            }
+        }
 
         return false;
     }

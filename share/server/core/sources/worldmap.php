@@ -164,15 +164,17 @@ function worldmap_init_schema() {
 
 function worldmap_init_db() {
     global $DB;
-    if ($DB !== null)
-        return; // only init once
+    if ($DB !== null) {
+        return;
+    } // only init once
     $DB = new CorePDOHandler();
-    if (!$DB->open('sqlite', ['filename' => cfg('paths', 'cfg').'worldmap.db'], null, null))
+    if (!$DB->open('sqlite', ['filename' => cfg('paths', 'cfg').'worldmap.db'], null, null)) {
         throw new NagVisException(l('Unable to open worldmap database ([DB]): [MSG]',
             [
                 'DB' => $DB->getDSN(),
-                  'MSG' => json_encode($DB->error())
+                'MSG' => json_encode($DB->error())
             ]));
+    }
 
     worldmap_init_schema();
 }
@@ -193,7 +195,9 @@ function line_parameters($ax, $ay, $bx, $by) {
     $s = $ny;
     $t = -($r*$ax + $s*$ay);
 
-    if ($s == -0) $s = 0;
+    if ($s == -0) {
+        $s = 0;
+    }
 
     return [$r, $s, $t];
 }
@@ -201,8 +205,12 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
     global $DB;
     worldmap_init_db();
 
-    if ($sw_lat > $ne_lat) swap($sw_lat, $ne_lat);
-    if ($sw_lng > $ne_lng) swap($sw_lng, $ne_lng);
+    if ($sw_lat > $ne_lat) {
+        swap($sw_lat, $ne_lat);
+    }
+    if ($sw_lng > $ne_lng) {
+        swap($sw_lng, $ne_lng);
+    }
 
     // The 4 bounding lines expressed as common 2D "rx + sy + t = 0" equations
     [$rWest, $sWest, $tWest] = line_parameters($sw_lng, $sw_lat, $sw_lng, $ne_lat);
@@ -334,23 +342,27 @@ function worldmap_db_update_object($obj_id, $lat, $lng, $obj,
         'lat2' => $lat2,
         'lng2' => $lng2,
         'object' => json_encode($obj)
-    ]))
+    ])) {
         return true;
-    else
+    }
+    else {
         throw new WorldmapError(l('Failed to add object: [E]: [Q]', [
             'E' => json_encode($DB->error()), 'Q' => $q
         ]));
+    }
 }
 
 function worldmap_update_object($MAPCFG, $map_name, &$map_config, $obj_id, $insert = true) {
     $obj = $map_config[$obj_id];
 
-    if ($obj['type'] == 'global')
-        return false; // adding global section (during map creation)
+    if ($obj['type'] == 'global') {
+        return false;
+    } // adding global section (during map creation)
 
     // disable creating new objects during "view to new map" action
-    if (val($_GET, 'act', null) == 'viewToNewMap')
+    if (val($_GET, 'act', null) == 'viewToNewMap') {
         return true;
+    }
 
     $lat  = $obj['x'];
     $lng  = $obj['y'];
@@ -400,13 +412,15 @@ function load_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
     global $DB;
     worldmap_init_db();
 
-    if (isset($map_config[$obj_id]))
-        return true; // already loaded
+    if (isset($map_config[$obj_id])) {
+        return true;
+    } // already loaded
 
     $q = 'SELECT object FROM objects WHERE object_id=:obj_id';
     $b = $DB->query($q, ['obj_id' => $obj_id])->fetch();
-    if ($b)
+    if ($b) {
         $map_config[$obj_id] = json_decode($b['object'], true);
+    }
 }
 
 function del_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
@@ -414,12 +428,14 @@ function del_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
     worldmap_init_db();
 
     $q = 'DELETE FROM objects WHERE object_id=:obj_id';
-    if ($DB->query($q, ['obj_id' => $obj_id]))
+    if ($DB->query($q, ['obj_id' => $obj_id])) {
         return true;
-    else
+    }
+    else {
         throw new WorldmapError(l('Failed to delete object: [E]: [Q]', [
             'E' => json_encode($DB->error()), 'Q' => $q
         ]));
+    }
 }
 
 function update_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
@@ -446,8 +462,9 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
             $min_zoom = isset($obj['min_zoom']) ? (int)$obj['min_zoom'] : $MAPCFG->getDefaultValue('host', 'min_zoom');
             $max_zoom = isset($obj['max_zoom']) ? (int)$obj['max_zoom'] : $MAPCFG->getDefaultValue('host', 'max_zoom');
 
-            if ($min_zoom <= $max_zoom && ($zoom < $min_zoom || $zoom > $max_zoom))
+            if ($min_zoom <= $max_zoom && ($zoom < $min_zoom || $zoom > $max_zoom)) {
                 continue;
+            }
 
             $map_config[$object_id] = $obj;
         }

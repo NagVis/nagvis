@@ -32,15 +32,18 @@ class ViewToStaticMap {
         if (is_action()) {
             try {
                 $name = post('name');
-                if (!$name)
+                if (!$name) {
                     throw new FieldInputError('name', l('Please provide a map name.'));
+                }
 
-                if (!preg_match(MATCH_MAP_NAME, $name))
+                if (!preg_match(MATCH_MAP_NAME, $name)) {
                     throw new FieldInputError('name', l('This is not a valid map name (need to match [M])',
-                                                                    ['M' => MATCH_MAP_NAME]));
+                        ['M' => MATCH_MAP_NAME]));
+                }
 
-                if (count($CORE->getAvailableMaps('/^'.$name.'$/')) > 0)
+                if (count($CORE->getAvailableMaps('/^'.$name.'$/')) > 0) {
                     throw new FieldInputError('name', l('A map with this name already exists.'));
+                }
 
                 // Read the old config
                 $MAPCFG = new GlobalMapCfg($orig_name);
@@ -64,10 +67,12 @@ class ViewToStaticMap {
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                }
+                else {
                     throw $e;
+                }
             }
         }
         echo $this->error;

@@ -103,8 +103,9 @@ class FrontendModMap extends FrontendModule {
 
         // Need to load the custom stylesheet?
         $customStylesheet = $MAPCFG->getValue(0, 'stylesheet');
-        if($customStylesheet !== '')
+        if($customStylesheet !== '') {
             $INDEX->setCustomStylesheet(path('html', 'global', 'styles', $customStylesheet));
+        }
 
         // Need to parse the header menu by config or url value?
         if(isset($opts['header_menu']) && $opts['header_menu']) {
@@ -127,8 +128,9 @@ class FrontendModMap extends FrontendModule {
         $this->VIEW->setSearch($this->search);
 
         // Enable edit mode for all objects
-        if($this->sAction == 'edit')
+        if($this->sAction == 'edit') {
             $this->VIEW->setEditMode();
+        }
 
         // Maybe it is needed to handle the requested rotation
         if($this->rotation != '') {

@@ -42,28 +42,33 @@ class CoreUserCfg {
     public function doGet($onlyUserCfg = false) {
         global $AUTH, $AUTHORISATION;
         $opts = [];
-        if(!isset($AUTH) || !$AUTH->isAuthenticated())
+        if(!isset($AUTH) || !$AUTH->isAuthenticated()) {
             return $opts;
+        }
 
-        if(!file_exists($this->profilesDir))
+        if(!file_exists($this->profilesDir)) {
             return $opts;
+        }
 
         // Fetch all profile files to load
         $files = [];
-        if(!$onlyUserCfg && isset($AUTHORISATION))
-            foreach($AUTHORISATION->getUserRoles($AUTH->getUserId()) AS $role)
-                $files[] = $role['name'].'.profile';
+        if(!$onlyUserCfg && isset($AUTHORISATION)) {
+            foreach ($AUTHORISATION->getUserRoles($AUTH->getUserId()) as $role)
+                $files[] = $role['name'] . '.profile';
+        }
         $files[] = $AUTH->getUser().'.profile';
 
         // Read all configurations and append to the option array
         foreach($files AS $file) {
             $f = $this->profilesDir.'/'.$file;
-            if(!file_exists($f))
+            if(!file_exists($f)) {
                 continue;
+            }
 
             $a = json_decode(file_get_contents($f), true);
-            if(!is_array($a))
+            if(!is_array($a)) {
                 throw new NagVisException(l('Invalid data in "[FILE]".', ['FILE' => $f]));
+            }
 
             $opts = array_merge($opts, $a);
         }
@@ -79,14 +84,16 @@ class CoreUserCfg {
         global $CORE, $AUTH;
         $file = $this->profilesDir.'/'.$AUTH->getUser().'.profile';
 
-        if(!$CORE->checkExisting(dirname($file), true) || !$CORE->checkWriteable(dirname($file), true))
+        if(!$CORE->checkExisting(dirname($file), true) || !$CORE->checkWriteable(dirname($file), true)) {
             return false;
+        }
 
         $cfg = $this->doGet(true);
 
         foreach($opts AS $key => $value) {
-            if(isset($this->types[$key]))
+            if(isset($this->types[$key])) {
                 $value = $this->fixType($value, $this->types[$key]);
+            }
             $cfg[$key] = $value;
         }
 
@@ -101,14 +108,18 @@ class CoreUserCfg {
     }
 
     private function fixType($val, $type) {
-        if($type == 'i')
-            return (int) $val;
+        if($type == 'i') {
+            return (int)$val;
+        }
         elseif($type == 'b') {
-            if($val == '1' || $val === 'true')
+            if($val == '1' || $val === 'true') {
                 return true;
-            else
+            }
+            else {
                 return false;
-        } else
+            }
+        } else {
             return $val;
+        }
     }
 }

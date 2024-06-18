@@ -50,11 +50,13 @@ class CoreModAuth extends CoreModule {
         if($this->offersAction($this->sAction)) {
             switch($this->sAction) {
                 case 'logout':
-                    if($AUTH->logout())
+                    if($AUTH->logout()) {
                         return true;
-                    else
+                    }
+                    else {
                         throw new NagVisException(l('Unable to log you out. Maybe it is not supported by your authentication module.'),
-                                          null, 1, cfg('paths', 'htmlbase'));
+                            null, 1, cfg('paths', 'htmlbase'));
+                    }
                 break;
             }
         }
@@ -70,21 +72,25 @@ class CoreModAuth extends CoreModule {
 
         // Check length limits
         $bValid = true;
-        if($bValid && $this->FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH))
+        if($bValid && $this->FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH)) {
             $bValid = false;
-        if($bValid && $this->FHANDLER->isLongerThan('password', AUTH_MAX_PASSWORD_LENGTH))
+        }
+        if($bValid && $this->FHANDLER->isLongerThan('password', AUTH_MAX_PASSWORD_LENGTH)) {
             $bValid = false;
+        }
 
         //@todo Escape vars?
 
         // Store response data
-        if($bValid)
-          return [
-              'user'     => $this->FHANDLER->get('username'),
-                       'password' => $this->FHANDLER->get('password')
-          ];
-        else
+        if($bValid) {
+            return [
+                'user' => $this->FHANDLER->get('username'),
+                'password' => $this->FHANDLER->get('password')
+            ];
+        }
+        else {
             return false;
+        }
     }
 
     public function msgAlreadyLoggedIn() {

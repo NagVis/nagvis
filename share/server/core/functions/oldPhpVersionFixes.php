@@ -51,8 +51,9 @@ if(!function_exists('date_default_timezone_set')) {
 //
 // Workaround the problem by setting the systems timezone as PHP default
 // timezone. Don't let PHP know about that hack - it would cry again ;-).
-if(function_exists("date_default_timezone_get"))
+if(function_exists("date_default_timezone_get")) {
     date_default_timezone_set(@date_default_timezone_get());
+}
 
 // PHP 8.2 deprecates utf8_encode. To stay compatible with older installations
 // and installations not providing the mbstring extension, we implement an approach

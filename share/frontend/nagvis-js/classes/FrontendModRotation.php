@@ -82,8 +82,9 @@ class FrontendModRotation extends FrontendModule {
         $ROTATION = new FrontendRotation($this->name);
 
         // Set the requested step
-        if($this->type != '' && $this->step != '')
+        if($this->type != '' && $this->step != '') {
             $ROTATION->setStep($this->type, $this->step, $this->stepId);
+        }
 
         switch($this->type) {
             case '':

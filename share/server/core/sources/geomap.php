@@ -14,23 +14,27 @@ function geomap_read_csv($p) {
     $locations = [];
     $f = geomap_source_file($p);
 
-    if($p['source_file'] == '')
+    if($p['source_file'] == '') {
         throw new GeomapError(l('No location source file given. Terminate rendering geomap.'));
+    }
 
-    if(!file_exists($f))
+    if(!file_exists($f)) {
         throw new GeomapError(l('Location source file "[F]" does not exist.', ['F' => $f]));
+    }
 
     $i = 0;
     foreach(file($f) AS $line) {
         $i++;
 
         // skip lines beginning with any of the usual comment characters
-        if(preg_match('/^[;#\/]/',$line))
+        if(preg_match('/^[;#\/]/',$line)) {
             continue;
+        }
         $parts = explode(';', $line);
-        if (count($parts) < 4)
+        if (count($parts) < 4) {
             throw new GeomapError(l('Invalid source file line found: Line "[NR]" in "[F]" '
-                                   .'has less than 4 fields', ['NR' => $i, 'F' => $f]));
+                . 'has less than 4 fields', ['NR' => $i, 'F' => $f]));
+        }
 
         $locations[] = [
             'name'  => $parts[0],
@@ -67,8 +71,9 @@ function geomap_backend_program_start($p) {
         $_BACKEND->checkBackendFeature($backend_id, 'getProgramStart', true);
 
         $this_t = $_BACKEND->getBackend($backend_id)->getProgramStart();
-        if ($t === null || $this_t > $t)
+        if ($t === null || $this_t > $t) {
             $t = $this_t;
+        }
     }
     return $t;
 }
@@ -341,8 +346,9 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     process_filter($MAPCFG, $map_name, $map_config, $params);
 
     // Terminate empty views
-    if(count($map_config) <= 1)
+    if(count($map_config) <= 1) {
         throw new GeomapError(l('Got empty map after filtering. Terminate rendering geomap.'));
+    }
 
     // Now detect the upper and lower bounds of the locations to display
     // Left/upper and right/bottom
@@ -353,18 +359,23 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     $min_long = 180;
     $max_long = -180;
     foreach($map_config AS $obj) {
-        if($obj['type'] == 'global')
+        if($obj['type'] == 'global') {
             continue;
+        }
 
-        if($obj['lat'] < $min_lat)
+        if($obj['lat'] < $min_lat) {
             $min_lat = $obj['lat'];
-        if($obj['lat'] > $max_lat)
+        }
+        if($obj['lat'] > $max_lat) {
             $max_lat = $obj['lat'];
+        }
 
-        if($obj['long'] < $min_long)
+        if($obj['long'] < $min_long) {
             $min_long = $obj['long'];
-        if($obj['long'] > $max_long)
+        }
+        if($obj['long'] > $max_long) {
             $max_long = $obj['long'];
+        }
     }
 
     // Fix equal coordinates (Simply add some space on all sides)
@@ -378,8 +389,9 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     //echo $min_lat . ' - ' . $max_lat. ' - '. $mid_lat.'\n';
     //echo $min_long . ' - ' . $max_long. ' - ' . $mid_long;
 
-    if (!$params['width'] || !$params['height'])
+    if (!$params['width'] || !$params['height']) {
         throw new GeomapError(l('Missing mandatory "width" and "height" parameters."'));
+    }
 
     // Using this API: http://pafciu17.dev.openstreetmap.org/
     $geomap_server_base_url = cfg('global', 'geomap_server');
@@ -430,8 +442,11 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
                                             ['U' => $data_url]));
         }
 
-        if(!preg_match('/^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/i', $contents))
-            throw new GeomapError(l('Got invalid data from "[U]": "[C]"', ['U' => $data_url, 'C' => json_encode($contents)]));
+        if(!preg_match('/^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/i', $contents)) {
+            throw new GeomapError(l('Got invalid data from "[U]": "[C]"', [
+                'U' => $data_url, 'C' => json_encode($contents)
+            ]));
+        }
 
         file_put_contents($data_path, $contents);
         $parts = explode(',', $contents);
@@ -453,18 +468,21 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
     // Now add the coordinates to the map objects
     foreach($map_config AS &$obj) {
-        if(!isset($obj['lat']))
+        if(!isset($obj['lat'])) {
             continue;
+        }
 
         // Calculate the lat (y) coords
         $obj['y'] = round((ProjectF($img_top) - ProjectF($obj['lat'])) * $lat_mult - ($icon_h / 2));
-        if($obj['y'] < 0)
+        if($obj['y'] < 0) {
             $obj['y'] = 0;
+        }
 
         // Calculate the long (x) coords
         $obj['x'] = round(($long_para * ($obj['long'] - $img_left)) - ($icon_w / 2));
-        if($obj['x'] < 0)
+        if($obj['x'] < 0) {
             $obj['x'] = 0;
+        }
 
         unset($obj['lat']);
         unset($obj['long']);
@@ -485,17 +503,20 @@ function changed_geomap($MAPCFG, $compare_time) {
     list($image_name, $image_path, $data_path) = geomap_files($params);
 
     // a)
-    if(!file_exists($image_path) || !file_exists($data_path))
+    if(!file_exists($image_path) || !file_exists($data_path)) {
         return true;
+    }
 
     // b)
     $t = geomap_source_age($params);
-    if($t > $compare_time)
+    if($t > $compare_time) {
         return true;
+    }
 
     // c)
-    if($t > filemtime($image_path) || $t > filemtime($data_path))
+    if($t > filemtime($image_path) || $t > filemtime($data_path)) {
         return true;
+    }
 
     return false;
 }

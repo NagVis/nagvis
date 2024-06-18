@@ -98,8 +98,9 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
 
         $data = $res->fetch();
 
-        if (!isset($data['userId']))
+        if (!isset($data['userId'])) {
             return 0;
+        }
         return intval($data['userId']);
     }
 
@@ -176,8 +177,9 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
 
     public function changePassword() {
         // Check the authentication with the old password
-        if(!$this->isAuthenticated())
+        if(!$this->isAuthenticated()) {
             return false;
+        }
 
         // Set new password to current one
         $this->sPassword = $this->sPasswordNew;
@@ -191,8 +193,9 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
 
     public function isAuthenticated($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
         // Only handle known users
-        if($this->sUsername === '' || !$this->checkUserExists($this->sUsername))
+        if($this->sUsername === '' || !$this->checkUserExists($this->sUsername)) {
             return false;
+        }
 
         // Try to calculate the passowrd hash only when no hash is known at
         // this time. For example when the user just entered the password

@@ -32,32 +32,38 @@ class ViewEditMainCfg {
 
         // loop all sections
         foreach ($_MAINCFG->getValidConfig() AS $sec => $arr) {
-            if (preg_match($this->exclude_pattern, $sec))
+            if (preg_match($this->exclude_pattern, $sec)) {
                 continue;
+            }
 
             // loop all options
             foreach ($_MAINCFG->getValidObjectType($sec) AS $key => $spec) {
-                if (isset($spec['deprecated']) && $spec['deprecated'] == 1)
+                if (isset($spec['deprecated']) && $spec['deprecated'] == 1) {
                     continue;
+                }
 
                 $field_type = val($spec, 'field_type', 'text');
-                if ($field_type == 'hidden')
+                if ($field_type == 'hidden') {
                     continue;
+                }
 
                 $ident = $sec.'_'.$key;
                 if (isset($_POST['toggle_'.$ident]) && $_POST['toggle_'.$ident] != '') {
                     // set the option
                     $raw_val = $_POST[$ident];
 
-                    if (val($spec, 'array', false))
+                    if (val($spec, 'array', false)) {
                         $val = explode(',', $raw_val);
-                    else
+                    }
+                    else {
                         $val = $raw_val;
+                    }
 
                     // now check for value format
-                    if (!preg_match($spec['match'], $raw_val))
+                    if (!preg_match($spec['match'], $raw_val)) {
                         throw new FieldInputError($ident, l('Invalid format given. Regex: [r]',
-                                                                    ['r' => $spec['match']]));
+                            ['r' => $spec['match']]));
+                    }
 
                     $UMAINCFG->setValue($sec, $key, $val);
                 }
@@ -88,15 +94,17 @@ class ViewEditMainCfg {
 
         $sections = [];
         foreach ($_MAINCFG->getValidConfig() AS $sec => $arr) {
-            if (!preg_match($this->exclude_pattern, $sec))
+            if (!preg_match($this->exclude_pattern, $sec)) {
                 $sections[$sec] = $_MAINCFG->getSectionTitle($sec);
+            }
         }
 
         $open = get_open_section('global');
         render_section_navigation($open, $sections);
 
-        foreach ($sections AS $sec => $title)
+        foreach ($sections AS $sec => $title) {
             $this->renderSection($sec, $open);
+        }
 
         submit(l('save'));
         form_end();
@@ -110,10 +118,12 @@ class ViewEditMainCfg {
 
         $cur_val = $UMAINCFG->getValue($sec, $key, $ignore_default);
         $ident = $sec.'_'.$key;
-        if (isset($_POST['toggle_'.$ident]) && $_POST['toggle_'.$ident] != '')
+        if (isset($_POST['toggle_'.$ident]) && $_POST['toggle_'.$ident] != '') {
             $cur_val = val($_POST, $ident);
-        if (is_array($cur_val))
+        }
+        if (is_array($cur_val)) {
             $cur_val = implode(',', $cur_val);
+        }
         return $cur_val;
     }
 
@@ -124,12 +134,14 @@ class ViewEditMainCfg {
         echo '<table class="mytable">';
         foreach ($_MAINCFG->getValidObjectType($sec) AS $key => $spec) {
             // Skip deprecated options
-            if (isset($spec['deprecated']) && $spec['deprecated'] == 1)
+            if (isset($spec['deprecated']) && $spec['deprecated'] == 1) {
                 continue;
+            }
 
             $field_type = val($spec, 'field_type', 'text');
-            if ($field_type == 'hidden')
+            if ($field_type == 'hidden') {
                 continue;
+            }
 
             $ident = $sec.'_'.$key;
 
@@ -139,8 +151,9 @@ class ViewEditMainCfg {
             // Get either the option configured in non gui editable config files or the
             // hardcoded default value
             $def_val = $_MAINCFG->getValue($sec, $key, false, true);
-            if (is_array($def_val))
+            if (is_array($def_val)) {
                 $def_val = implode(',', $def_val);
+            }
 
             // Check if depends_on and depends_value are defined and if the value
             // is equal. If not equal hide the field
@@ -177,14 +190,17 @@ class ViewEditMainCfg {
             echo '<div id="_txt_box_'.$ident.'"'.$show_default.' class="default">';
             switch ($field_type) {
                 case 'boolean':
-                    if ($def_val == '1')
+                    if ($def_val == '1') {
                         echo l('Yes');
-                    else
+                    }
+                    else {
                         echo l('No');
+                    }
                 break;
                 default:
-                    if ($def_val !== null)
+                    if ($def_val !== null) {
                         echo escape_html($def_val);
+                    }
             }
             echo '</div>';
 
@@ -207,12 +223,14 @@ class ViewEditMainCfg {
         $field_type = val($spec, 'field_type', 'text');
 
         // Make the default value the starting value for editing
-        if ($cur_val === null)
+        if ($cur_val === null) {
             $cur_val = $def_val;
+        }
 
         $on_change = '';
-        if($_MAINCFG->hasDependants($sec, $key))
+        if($_MAINCFG->hasDependants($sec, $key)) {
             $on_change = ' onchange="updateForm(this.form)"';
+        }
         
         switch ($field_type) {
             case 'dropdown':
@@ -226,8 +244,9 @@ class ViewEditMainCfg {
                     if(is_array($choice_val)) {
                         echo '<option value="'.$choice_val['value'].'">'.$choice_val['label'].'</option>';
                     } else {
-                        if (is_int($choice_key))
-                            $choice_key = $choice_val; // do not indexes of assoc arrays as values
+                        if (is_int($choice_key)) {
+                            $choice_key = $choice_val;
+                        } // do not indexes of assoc arrays as values
                         echo '<option value="'.$choice_key.'">'.$choice_val.'</option>';
                     }
                 }
@@ -252,8 +271,9 @@ class ViewEditMainCfg {
             break;
         }
         
-        if(isset($spec['locked']) && $spec['locked'] == 1)
-            echo "<script>document.edit_config.elements['".$sec."_".$key."'].disabled=true;</script>";
+        if(isset($spec['locked']) && $spec['locked'] == 1) {
+            echo "<script>document.edit_config.elements['" . $sec . "_" . $key . "'].disabled=true;</script>";
+        }
     }
 
     private function colorSelect($sec, $key, $value) {

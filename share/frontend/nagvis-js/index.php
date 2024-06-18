@@ -33,7 +33,9 @@ require('defines/nagvis-js.php');
 require('../../server/core/classes/CoreExceptions.php');
 require('../../server/core/functions/autoload.php');
 
-if (PROFILE) profilingStart();
+if (PROFILE) {
+    profilingStart();
+}
 
 const CONST_AJAX = false;
 
@@ -55,10 +57,12 @@ try {
 } catch(NagVisException $e) {
     $VIEW = new ViewError();
 
-    if (isset($MODULE) && is_a($MODULE, "FrontendModMap"))
+    if (isset($MODULE) && is_a($MODULE, "FrontendModMap")) {
         echo $VIEW->parseWithMap($e, $MODULE->getObject());
-    else
+    }
+    else {
         echo $VIEW->parse($e);
+    }
 }
 
 

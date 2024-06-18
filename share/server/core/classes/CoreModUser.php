@@ -68,9 +68,11 @@ class CoreModUser extends CoreModule {
         $this->verifyValuesSet($FHANDLER, ['opts']);
         $opts = $FHANDLER->get('opts');
 
-        foreach($opts as $key => $val)
-            if (substr($val, 0, 1) == '{')
+        foreach($opts as $key => $val) {
+            if (substr($val, 0, 1) == '{') {
                 $opts[$key] = json_decode($val);
+            }
+        }
 
         return ['opts' => $opts];
     }

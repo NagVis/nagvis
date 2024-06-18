@@ -109,13 +109,15 @@ class CoreRotation {
     public function setStep($sType, $sStep, $iStepId = '') {
         // First check if the step exists
         if($this->stepExists($sType, $sStep)) {
-            if($iStepId != '')
-                $this->intCurrentStep = (int) $iStepId;
+            if($iStepId != '') {
+                $this->intCurrentStep = (int)$iStepId;
+            }
             else
                 // Get position of current step in the array
-                if($sStep !== '') {
-                    foreach($this->arrSteps AS $iIndex => $arrStep) {
-                        if(isset($arrStep[$sType]) && $arrStep[$sType] === $sStep) {
+            {
+                if ($sStep !== '') {
+                    foreach ($this->arrSteps as $iIndex => $arrStep) {
+                        if (isset($arrStep[$sType]) && $arrStep[$sType] === $sStep) {
                             $this->intCurrentStep = $iIndex;
                             break;
                         }
@@ -123,6 +125,7 @@ class CoreRotation {
                 } else {
                     $this->intCurrentStep = 0;
                 }
+            }
 
             // Set the next step after setting the current step
             $this->setNextStep();

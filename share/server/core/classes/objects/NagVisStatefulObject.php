@@ -92,19 +92,23 @@ class NagVisStatefulObject extends NagVisObject {
             $this->aStateCounts = $arr;
         } else {
             // Add new state counts to current ones
-            foreach($arr AS $state => $substates)
-                foreach($substates AS $substate => $num)
+            foreach($arr AS $state => $substates) {
+                foreach ($substates as $substate => $num) {
                     $this->aStateCounts[$state][$substate] += $num;
+                }
+            }
         }
     }
 
     // Returns the display_name of an object, if available, otherwise
     // the alias of an object, if available, otherwise the name
     public function getDisplayName() {
-        if (isset($this->state[DISPLAY_NAME]) && $this->state[DISPLAY_NAME] != '')
+        if (isset($this->state[DISPLAY_NAME]) && $this->state[DISPLAY_NAME] != '') {
             return $this->state[DISPLAY_NAME];
-        if (isset($this->state[ALIAS]))
+        }
+        if (isset($this->state[ALIAS])) {
             return $this->state[ALIAS];
+        }
         parent::getDisplayName();
     }
 
@@ -158,8 +162,9 @@ class NagVisStatefulObject extends NagVisObject {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getIconDetails() {
-        if($this->iconDetails == null)
+        if($this->iconDetails == null) {
             $this->iconDetails = getimagesize(NagVisStatefulObject::$iconPath . $this->icon);
+        }
         return $this->iconDetails;
     }
 
@@ -226,19 +231,25 @@ class NagVisStatefulObject extends NagVisObject {
      */
     public function getSubState($summary = false) {
         if($summary) {
-            if($this->sum[ACK] == 1)
-                return  'ack';
-            elseif($this->sum[DOWNTIME] == 1)
+            if($this->sum[ACK] == 1) {
+                return 'ack';
+            }
+            elseif($this->sum[DOWNTIME] == 1) {
                 return 'downtime';
-            elseif($this->isStale($summary))
+            }
+            elseif($this->isStale($summary)) {
                 return 'stale';
+            }
         } else {
-            if($this->state[ACK] == 1)
-                return  'ack';
-            elseif($this->state[DOWNTIME] == 1)
+            if($this->state[ACK] == 1) {
+                return 'ack';
+            }
+            elseif($this->state[DOWNTIME] == 1) {
                 return 'downtime';
-            elseif($this->isStale($summary))
+            }
+            elseif($this->isStale($summary)) {
                 return 'stale';
+            }
         }
         return 'normal';
     }
@@ -338,34 +349,42 @@ class NagVisStatefulObject extends NagVisObject {
     public function hasExcludeFilters($isCount) {
         // When this is a count use both options exclude_members and
         // exclude_member_states
-        if($isCount)
+        if($isCount) {
             return (isset($this->exclude_members) && $this->exclude_members !== '')
-                   || (isset($this->exclude_member_states) && $this->exclude_member_states !== '');
-        else
+                || (isset($this->exclude_member_states) && $this->exclude_member_states !== '');
+        }
+        else {
             return isset($this->exclude_members) && $this->exclude_members !== '';
+        }
     }
 
     public function getExcludeFilter($isCount) {
         // When this is a count use the exclude_member_states over the 
         // exclude_members
         $key = $this->getExcludeFilterKey($isCount);
-        if($key == 'exclude_member_states')
+        if($key == 'exclude_member_states') {
             return $this->exclude_member_states;
-        if($key == 'exclude_members')
+        }
+        if($key == 'exclude_members') {
             return $this->exclude_members;
-        else
+        }
+        else {
             return '';
+        }
     }
 
     public function getExcludeFilterKey($isCount) {
         // When this is a count use the exclude_member_states over the 
         // exclude_members
-        if($isCount && $this->exclude_member_states !== '')
+        if($isCount && $this->exclude_member_states !== '') {
             return 'exclude_member_states';
-        elseif($this->exclude_members !== '')
+        }
+        elseif($this->exclude_members !== '') {
             return 'exclude_members';
-        else
+        }
+        else {
             return '';
+        }
     }
 
     /**
@@ -396,10 +415,12 @@ class NagVisStatefulObject extends NagVisObject {
             $arr['custom_variables'] = val($this->state, CUSTOM_VARS);
 
             // Add (Check_MK) tags as array of tags (when available)
-            if (isset($arr['custom_variables']['TAGS']))
+            if (isset($arr['custom_variables']['TAGS'])) {
                 $arr['tags'] = explode(' ', $arr['custom_variables']['TAGS']);
-            else
+            }
+            else {
                 $arr['tags'] = [];
+            }
 
             // Now, to be very user friendly, we now try to use the Check_MK WATO php-api to gather
             // titles and grouping information of the tags. These can, for example, be used in the hover
@@ -431,9 +452,10 @@ class NagVisStatefulObject extends NagVisObject {
 
         // Enable/Disable fetching children
         $arr['members'] = [];
-        if($bFetchChilds && method_exists($this, 'getMembers'))
-            foreach($this->getSortedObjectMembers() AS $OBJ)
+        if($bFetchChilds && method_exists($this, 'getMembers')) {
+            foreach ($this->getSortedObjectMembers() as $OBJ)
                 $arr['members'][] = $OBJ->fetchObjectAsChild();
+        }
 
         $arr['num_members'] = $this->getNumMembers();
 
@@ -560,8 +582,9 @@ class NagVisStatefulObject extends NagVisObject {
         $stateFilter = [];
         foreach($stateCounts AS $aState) {
             $stateFilter[] = $aState['name'];
-            if(($objCount += $aState['count']) >= $this->hover_childs_limit)
+            if(($objCount += $aState['count']) >= $this->hover_childs_limit) {
                 break;
+            }
         }
 
         return $stateFilter;
@@ -571,8 +594,9 @@ class NagVisStatefulObject extends NagVisObject {
      * Sets output/state on backend problems
      */
     public function setBackendProblem($s, $backendId = null) {
-        if($backendId === null)
+        if($backendId === null) {
             $backendId = $this->backend_id[0];
+        }
         $this->problem_msg = l('Problem (Backend: [BACKENDID]): [MSG]',
                                ['BACKENDID' => $backendId, 'MSG' => $s]);
     }
@@ -626,8 +650,9 @@ class NagVisStatefulObject extends NagVisObject {
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function escapeStringForJson($s) {
-        if (is_null($s))
+        if (is_null($s)) {
             return '';
+        }
         return strtr($s, [
             "\r" => '<br />',
                                "\n" => '<br />',
@@ -660,10 +685,12 @@ class NagVisStatefulObject extends NagVisObject {
      * path or will remove [] when full url given
      */
     protected function parseGadgetUrl() {
-        if(preg_match('/^\[(.*)\]$/',$this->gadget_url,$match) > 0)
+        if(preg_match('/^\[(.*)\]$/',$this->gadget_url,$match) > 0) {
             $this->gadget_url = $match[1];
-        else
+        }
+        else {
             $this->gadget_url = path('html', 'global', 'gadgets', $this->gadget_url);
+        }
     }
 
     /**
@@ -699,8 +726,9 @@ class NagVisStatefulObject extends NagVisObject {
             foreach($this->aStateCounts AS $sState => $aSubstates) {
                 // Loop all substates (normal,ack,downtime,...)
                 foreach($aSubstates AS $sSubState => $iCount) {
-                    if($iCount === 0)
+                    if($iCount === 0) {
                         continue;
+                    }
 
                     // Count all child objects
                     $iSumCount += $iCount;
@@ -760,28 +788,36 @@ class NagVisStatefulObject extends NagVisObject {
      * Merges the summary output from objects and all child objects together
      */
     protected function mergeSummaryOutput($arrStates, $objLabel, $finish = true, $continue = false) {
-        if(NagVisStatefulObject::$langMemberStates === null)
+        if(NagVisStatefulObject::$langMemberStates === null) {
             NagVisStatefulObject::$langMemberStates = l('Contains');
+        }
 
-        if($this->sum[OUTPUT] === null)
+        if($this->sum[OUTPUT] === null) {
             $this->sum[OUTPUT] = '';
+        }
 
-        if (!$continue)
-            $this->sum[OUTPUT] .= NagVisStatefulObject::$langMemberStates.' ';
+        if (!$continue) {
+            $this->sum[OUTPUT] .= NagVisStatefulObject::$langMemberStates . ' ';
+        }
 
-        foreach($arrStates AS $state => $num)
-            if($num > 0)
-                $this->sum[OUTPUT] .= $num.' '.state_str($state).', ';
+        foreach($arrStates AS $state => $num) {
+            if ($num > 0) {
+                $this->sum[OUTPUT] .= $num . ' ' . state_str($state) . ', ';
+            }
+        }
 
         // If some has been added remove last comma, else add a simple 0
-        if(substr($this->sum[OUTPUT], -2, 2) == ', ')
+        if(substr($this->sum[OUTPUT], -2, 2) == ', ') {
             $this->sum[OUTPUT] = rtrim($this->sum[OUTPUT], ', ');
-        else
+        }
+        else {
             $this->sum[OUTPUT] .= '0 ';
+        }
 
         $this->sum[OUTPUT] .= ' '.$objLabel;
-        if ($finish)
-            $this->sum[OUTPUT] .=  '.';
+        if ($finish) {
+            $this->sum[OUTPUT] .= '.';
+        }
     }
 
     /**
@@ -793,18 +829,21 @@ class NagVisStatefulObject extends NagVisObject {
 
         // Initialize empty or with current object state
         $currentStateWeight = null;
-        if($this->sum[STATE] != null)
+        if($this->sum[STATE] != null) {
             $currentStateWeight = $stateWeight[$this->sum[STATE]][$this->getSubState(SUMMARY_STATE)];
+        }
 
-        if ($objects === null)
+        if ($objects === null) {
             $objects = $this->members;
+        }
 
         // Loop all object to gather the worst state and set it as summary
         // state of the current object
         foreach($objects AS $OBJ) {
             if ($this->getType()=='map' && $OBJ->getType()=='map' && $this instanceof NagVisMapObj) {
-                if ($this->MAPCFG->getValue(0, 'ignore_linked_maps_summary_state') != 0)
+                if ($this->MAPCFG->getValue(0, 'ignore_linked_maps_summary_state') != 0) {
                     continue;
+                }
             }
 
             $objSummaryState = $OBJ->sum[STATE];
@@ -815,12 +854,15 @@ class NagVisStatefulObject extends NagVisObject {
             if(isset($stateWeight[$objSummaryState])) {
                 // Gather the object summary state type
                 $objType = 'normal';
-                if($objAck == 1 && isset($stateWeight[$objSummaryState]['ack']))
+                if($objAck == 1 && isset($stateWeight[$objSummaryState]['ack'])) {
                     $objType = 'ack';
-                elseif($objDowntime == 1 && isset($stateWeight[$objSummaryState]['downtime']))
+                }
+                elseif($objDowntime == 1 && isset($stateWeight[$objSummaryState]['downtime'])) {
                     $objType = 'downtime';
-                elseif($objStale == 1 && isset($stateWeight[$objSummaryState]['stale']))
+                }
+                elseif($objStale == 1 && isset($stateWeight[$objSummaryState]['stale'])) {
                     $objType = 'stale';
+                }
 
                 if(isset($stateWeight[$objSummaryState][$objType])
                    && ($currentStateWeight === null || $stateWeight[$objSummaryState][$objType] >= $currentStateWeight)) {
@@ -839,8 +881,9 @@ class NagVisStatefulObject extends NagVisObject {
         // itselfs. So much less information are needed. Progress them here
         // If someone wants more information in hover menu children, this is
         // the place to change.
-        if (!$bFetchChilds)
+        if (!$bFetchChilds) {
             return $this->fetchObjectAsChild();
+        }
 
         $arr = parent::getObjectInformation($bFetchChilds);
 
@@ -853,19 +896,23 @@ class NagVisStatefulObject extends NagVisObject {
                 'check_command' => CHECK_COMMAND,
             ];
             foreach ($obj_attrs AS $attr => $state_key) {
-                if (isset($this->state[$state_key]) && $this->state[$state_key] != '')
+                if (isset($this->state[$state_key]) && $this->state[$state_key] != '') {
                     $arr[$attr] = $this->state[$state_key];
-                else
+                }
+                else {
                     $arr[$attr] = '';
+                }
             }
         } elseif ($this->type == 'map'
                   || $this->type == 'servicegroup'
                   || $this->type == 'hostgroup'
                   || $this->type == 'aggregation') {
-            if (isset($this->state[ALIAS]))
+            if (isset($this->state[ALIAS])) {
                 $arr['alias'] = $this->state[ALIAS];
-            else
+            }
+            else {
                 $arr['alias'] = '';
+            }
         }
 
         // Add the custom htmlcgi path for the object
@@ -889,8 +936,9 @@ class NagVisStatefulObject extends NagVisObject {
         $arr = array_merge($arr, $this->getObjectStateInformations(false));
 
         $num_members = $this->getNumMembers();
-        if($num_members !== null)
+        if($num_members !== null) {
             $arr['num_members'] = $num_members;
+        }
 
         // If there are some members fetch the information for them
         if(isset($arr['num_members']) && $arr['num_members'] > 0) {

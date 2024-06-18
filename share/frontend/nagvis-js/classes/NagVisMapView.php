@@ -133,10 +133,12 @@ class NagVisMapView {
         // (no global, no hardcoded default)
         // FIXME: Recode to use the user_params
         $userParams = $this->MAPCFG->getSourceParams(true);
-        if(isset($userParams['hover_menu']))
+        if(isset($userParams['hover_menu'])) {
             $arr['hover_menu'] = $userParams['hover_menu'];
-        if(isset($userParams['context_menu']))
+        }
+        if(isset($userParams['context_menu'])) {
             $arr['context_menu'] = $userParams['context_menu'];
+        }
 
         // This sets the user specific parameters
         $arr['user_params'] = $this->MAPCFG->getSourceParams(true, true);

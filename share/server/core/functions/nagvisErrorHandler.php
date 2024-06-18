@@ -49,8 +49,9 @@ function nagvisException($OBJ) {
 
 function nagvisExceptionErrorHandler($errno, $errstr, $errfile, $errline ) {
     // Use current error_reporting settings to skip unwanted errors
-    if(!(error_reporting() & $errno))
+    if(!(error_reporting() & $errno)) {
         return false;
+    }
     
     throw new NagVisErrorException($errstr, 0, $errno, $errfile, $errline);
 }

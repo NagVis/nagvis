@@ -356,19 +356,24 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                     case 'groups':
                     case 'servicegroup_name':
                     case 'service_description':
-                        if($filter['key'] != 'service_description')
+                        if($filter['key'] != 'service_description') {
                             $val = $OBJS[0]->getName();
-                        else
+                        }
+                        else {
                             $val = $OBJS[0]->getServiceDescription();
+                        }
 
                         // Translate field names
-                        if($filter['key'] == 'service_description')
+                        if($filter['key'] == 'service_description') {
                             $filter['key'] = 'name2';
-                        else
+                        }
+                        else {
                             $filter['key'] = 'name1';
+                        }
 
-                        if($filter['op'] == '>=')
+                        if($filter['op'] == '>=') {
                             $filter['op'] = '=';
+                        }
 
                         $oid = "o$idx";
                         $idx++;
@@ -531,11 +536,12 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                 *
                 * Thanks to Andurin and fredy82
                 */
-            if($options & 1)
-                if(!$this->DB->eq_int($data['state_type'], 0))
+            if($options & 1) {
+                if (!$this->DB->eq_int($data['state_type'], 0)) {
                     $data['current_state'] = $data['current_state'];
-                else
+                } else
                     $data['current_state'] = $data['last_hard_state'];
+            }
 
             $acknowledged = 0;
 
@@ -671,11 +677,12 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                 *
                 * Thanks to Andurin and fredy82
                 */
-            if($options & 1)
-                if(!$this->DB->eq_int($data['state_type'], 0))
+            if($options & 1) {
+                if (!$this->DB->eq_int($data['state_type'], 0)) {
                     $data['current_state'] = $data['current_state'];
-                else
+                } else
                     $data['current_state'] = $data['last_hard_state'];
+            }
 
             $acknowledged = 0;
             if($this->DB->null_or_eq_int($data['has_been_checked'], 0) || !$this->DB->is_nonnull_int($data['current_state'])) {
@@ -749,8 +756,9 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
             if($specific) {
                 $arrReturn[$key] = $svc;
             } else {
-                if(!isset($arrReturn[$key]))
+                if(!isset($arrReturn[$key])) {
                     $arrReturn[$key] = [];
+                }
 
                 $arrReturn[$key][] = $svc;
             }
@@ -806,10 +814,12 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @return  array     List of states and counts
      */
     public function getHostMemberCounts($objects, $options, $filters) {
-        if($options & 1)
+        if($options & 1) {
             $stateAttr = 'CASE WHEN ss.state_type = 0 THEN ss.last_hard_state ELSE ss.current_state END';
-        else
+        }
+        else {
             $stateAttr = 'ss.current_state';
+        }
 
         $filter = $this->parseFilter($objects, $filters, 'o', 'o', MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
         $QUERYHANDLE = $this->DB->query('SELECT
@@ -883,10 +893,12 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
     }
 
     public function getHostgroupStateCounts($objects, $options, $filters) {
-        if($options & 1)
+        if($options & 1) {
             $stateAttr = 'CASE WHEN (hs.state_type = 0) THEN hs.last_hard_state ELSE hs.current_state END';
-        else
+        }
+        else {
             $stateAttr = 'hs.current_state';
+        }
 
         $filter = $this->parseFilter($objects, $filters, 'o', 'o2', MEMBER_QUERY, COUNT_QUERY, HOST_QUERY);
         $QUERYHANDLE = $this->DB->query('SELECT
@@ -952,14 +964,17 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
             ];
         }
 
-        if($options & 1)
+        if($options & 1) {
             $stateAttr = 'CASE WHEN (ss.state_type = 0) THEN ss.last_hard_state ELSE ss.current_state END';
-        else
+        }
+        else {
             $stateAttr = 'ss.current_state';
+        }
 
         // If recognize_services are disabled don't fetch service information
-        if($options & 2)
+        if($options & 2) {
             return $arrReturn;
+        }
 
         // FIXME: Does not handle host downtimes/acks
         $filter = $this->parseFilter($objects, $filters, 'o', 'o2', MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
@@ -1022,10 +1037,12 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
     }
 
     public function getServicegroupStateCounts($objects, $options, $filters) {
-        if($options & 1)
+        if($options & 1) {
             $stateAttr = 'CASE WHEN (ss.state_type = 0) THEN ss.last_hard_state ELSE ss.current_state END';
-        else
+        }
+        else {
             $stateAttr = 'ss.current_state';
+        }
 
         // FIXME: Recognize host ack/downtime
         $filter = $this->parseFilter($objects, $filters, 'o', 'o2', MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
@@ -1363,10 +1380,12 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                                         .'FROM '.$this->dbPrefix.'programstatus WHERE instance_id=:instance',
                 ['instance' => $this->dbInstanceId]);
         $data = $QUERYHANDLE->fetch();
-        if($data !== false && $this->DB->is_nonnull_int($data['program_start']))
+        if($data !== false && $this->DB->is_nonnull_int($data['program_start'])) {
             return intval($data['program_start']);
-        else
+        }
+        else {
             return -1;
+        }
     }
 
 

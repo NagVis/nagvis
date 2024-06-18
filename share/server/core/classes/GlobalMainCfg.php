@@ -1950,13 +1950,15 @@ class GlobalMainCfg {
                 foreach($this->configFiles AS $configFile) {
                     // Only proceed when the configuration file exists and is readable
                     if(!GlobalCore::getInstance()->checkExisting($configFile, true)
-                       || !GlobalCore::getInstance()->checkReadable($configFile, true))
+                       || !GlobalCore::getInstance()->checkReadable($configFile, true)) {
                         return false;
+                    }
                     $this->readConfig($configFile, true, $configFile == end($this->configFiles));
                 }
                 $this->CACHE->writeCache($this->config, true);
-                if($this->preUserConfig !== null)
+                if($this->preUserConfig !== null) {
                     $this->PUCACHE->writeCache($this->preUserConfig, true);
+                }
             } else {
                 // Use the cache!
                 $this->config = $this->CACHE->getCache();
@@ -2219,10 +2221,12 @@ class GlobalMainCfg {
                 }
 
                 // write in config array
-                if(isset($sec))
+                if(isset($sec)) {
                     $this->config[$sec][$key] = $val;
-                else
+                }
+                else {
                     $this->config[$key] = $val;
+                }
             }
         }
 
@@ -2230,10 +2234,12 @@ class GlobalMainCfg {
         if($isUserMainCfg && $this->preUserConfig !== null) {
             foreach($this->preUserConfig AS $sec => $opts) {
                 foreach($opts AS $opt => $val) {
-                    if(!isset($this->config[$sec]))
+                    if(!isset($this->config[$sec])) {
                         $this->config[$sec] = $opts;
-                    elseif(!isset($this->config[$sec][$opt]))
+                    }
+                    elseif(!isset($this->config[$sec][$opt])) {
                         $this->config[$sec][$opt] = $val;
+                    }
                 }
             }
         }
@@ -2450,10 +2456,12 @@ class GlobalMainCfg {
         $h  = $this->getValue('paths', 'htmlbase');
 
         // Get the relative path
-        if(isset($this->config['paths']) && isset($this->config['paths'][$var]))
+        if(isset($this->config['paths']) && isset($this->config['paths'][$var])) {
             $relpath = $this->config['paths'][$var];
-        else
+        }
+        else {
             $relpath = $this->validConfig['paths'][$var]['default'];
+        }
 
         // Compute the full system paths
         $l_file = $lb !== FALSE && $lb !== '' ? $lb . '/' . $relpath . $relfile : null;
@@ -2465,12 +2473,15 @@ class GlobalMainCfg {
         // When $loc is empty it checks if the local one exist and returns this when
         // existing. Otherwise it returns the global one when existing. When the global
         // is also not existant it returns an empty string
-        if($loc === 'local' || ($loc === '' && $l_file && file_exists($l_file)))
+        if($loc === 'local' || ($loc === '' && $l_file && file_exists($l_file))) {
             return $type == 'sys' ? $l_file : $lh . '/' . $relpath . $relfile;
-        elseif($loc === 'global' || ($loc === '' && file_exists($file)))
+        }
+        elseif($loc === 'global' || ($loc === '' && file_exists($file))) {
             return $type == 'sys' ? $file : $h . '/' . $relpath . $relfile;
-        else
+        }
+        else {
             return '';
+        }
     }
 
     /**
@@ -2510,8 +2521,9 @@ class GlobalMainCfg {
             }
 
         } elseif(strpos($sec, 'action_') === 0) {
-            if(!isset($this->config[$sec]['action_type']))
+            if(!isset($this->config[$sec]['action_type'])) {
                 return null;
+            }
             $ty = $this->config[$sec]['action_type'];
 
             // This value could be emtpy - so only check if it is set
@@ -2534,10 +2546,12 @@ class GlobalMainCfg {
      * value, or the configured one
      */
     public function getValue($sec, $var, $ignoreDefault=false, $ignoreUserConfig=false) {
-        if ($ignoreUserConfig && $this->preUserConfig !== null)
+        if ($ignoreUserConfig && $this->preUserConfig !== null) {
             $arr = $this->preUserConfig;
-        else
+        }
+        else {
             $arr = $this->config;
+        }
 
         if (isset($arr[$sec]) && isset($arr[$sec][$var])) {
             return $arr[$sec][$var];
@@ -2798,8 +2812,9 @@ class GlobalMainCfg {
      */
     function writeConfig() {
         // Check for config file write permissions
-        if(!$this->checkNagVisConfigWriteable(1))
+        if(!$this->checkNagVisConfigWriteable(1)) {
             return false;
+        }
 
         $content = '';
         foreach($this->config as $key => $item) {
@@ -2815,8 +2830,9 @@ class GlobalMainCfg {
                             if($this->preUserConfig !== null
                                && isset($this->preUserConfig[$key])
                                && isset($this->preUserConfig[$key][$key2])
-                               && $item2 == $this->preUserConfig[$key][$key2])
+                               && $item2 == $this->preUserConfig[$key][$key2]) {
                                 continue;
+                            }
                             $content .= $key2."=".$item2."\n";
                         } else {
                             if(is_array($item2) && preg_match('/^rotation_/i', $key) && $key2 == 'maps') {
@@ -2827,16 +2843,20 @@ class GlobalMainCfg {
                                     $label = '';
                                     $step = '';
 
-                                    if($intId == 0)
+                                    if($intId == 0) {
                                         $seperator = '';
+                                    }
 
-                                    if(isset($arrStep['map']) && $arrStep['map'] != '')
+                                    if(isset($arrStep['map']) && $arrStep['map'] != '') {
                                         $step = $arrStep['map'];
-                                    else
-                                        $step = '['.$arrStep['url'].']';
+                                    }
+                                    else {
+                                        $step = '[' . $arrStep['url'] . ']';
+                                    }
 
-                                    if(isset($arrStep['label']) && $arrStep['label'] != '' && $arrStep['label'] != $step)
-                                        $label = $arrStep['label'].':';
+                                    if(isset($arrStep['label']) && $arrStep['label'] != '' && $arrStep['label'] != $step) {
+                                        $label = $arrStep['label'] . ':';
+                                    }
 
                                     // Save the extracted information to an array
                                     $val .= $seperator.$label.$step;
@@ -2852,36 +2872,45 @@ class GlobalMainCfg {
                                 if($this->preUserConfig !== null
                                    && isset($this->preUserConfig[$key])
                                    && isset($this->preUserConfig[$key][$key2])
-                                   && $item2 == $this->preUserConfig[$key][$key2])
+                                   && $item2 == $this->preUserConfig[$key][$key2]) {
                                     continue;
+                                }
 
-                                if (substr($key, 0, 8) == 'backend_')
+                                if (substr($key, 0, 8) == 'backend_') {
                                     $arrValidConfig = $this->getInstanceableValidConfig('backend', $key);
-                                elseif (substr($key, 0, 9) == 'rotation_')
+                                }
+                                elseif (substr($key, 0, 9) == 'rotation_') {
                                     $arrValidConfig = $this->validConfig['rotation'];
-                                elseif (substr($key, 0, 7) == 'action_')
+                                }
+                                elseif (substr($key, 0, 7) == 'action_') {
                                     $arrValidConfig = $this->getInstanceableValidConfig('action', $key);
-                                else
+                                }
+                                else {
                                     $arrValidConfig = $this->validConfig[$key];
+                                }
 
-                                if(isset($arrValidConfig[$key2]['array']) && $arrValidConfig[$key2]['array'] === true)
+                                if(isset($arrValidConfig[$key2]['array']) && $arrValidConfig[$key2]['array'] === true) {
                                     $item2 = implode(',', $item2);
+                                }
 
                                 $content .= $key2.'="'.$item2.'"'."\n";
                             }
                         }
                     }
                 }
-            } elseif(substr($key,0,8) == 'comment_')
-                $content .= $item."\n";
+            } elseif(substr($key,0,8) == 'comment_') {
+                $content .= $item . "\n";
+            }
         }
 
         $cfgFile = $this->configFiles[count($this->configFiles)-1];
-        if(!$handle = fopen($cfgFile, 'w+'))
+        if(!$handle = fopen($cfgFile, 'w+')) {
             throw new NagVisException(l('mainCfgNotWriteable'));
+        }
 
-        if(!fwrite($handle, $content))
+        if(!fwrite($handle, $content)) {
             throw new NagVisException(l('mainCfgCouldNotWriteMainConfigFile'));
+        }
 
         fclose($handle);
         GlobalCore::getInstance()->setPerms($cfgFile);
@@ -2911,8 +2940,9 @@ class GlobalMainCfg {
         $val = explode(',', $val);
 
         // Trim surrounding spaces on each element
-        foreach($val AS $trimKey => $trimVal)
+        foreach($val AS $trimKey => $trimVal) {
             $val[$trimKey] = trim($trimVal);
+        }
 
         return $val;
     }
@@ -2927,30 +2957,36 @@ class GlobalMainCfg {
             'paths'    => l('Paths'),
             'automap'  => l('Automap'),
         ];
-        if (isset($titles[$sec]))
+        if (isset($titles[$sec])) {
             return $titles[$sec];
-        else
+        }
+        else {
             return $sec;
+        }
     }
 
     /**
      * Returns the name of the list function for the given map config option
      */
     public function getListFunc($sec, $key) {
-        if(isset($this->validConfig[$sec][$key]['list']))
+        if(isset($this->validConfig[$sec][$key]['list'])) {
             return $this->validConfig[$sec][$key]['list'];
-        else
+        }
+        else {
             throw new NagVisException(l('No "list" function registered for option "[OPT]" of type "[TYPE]"',
-                                                                       ['OPT' => $sec, 'TYPE' => $key]));
+                ['OPT' => $sec, 'TYPE' => $key]));
+        }
     }
 
     /**
      * Finds out if an attribute has dependant attributes
      */
     public function hasDependants($sec, $key) {
-        foreach ($this->validConfig[$sec] AS $arr)
-            if (isset($arr['depends_on']) && $arr['depends_on'] == $key)
+        foreach ($this->validConfig[$sec] AS $arr) {
+            if (isset($arr['depends_on']) && $arr['depends_on'] == $key) {
                 return true;
+            }
+        }
         return false;
     }
 }

@@ -56,8 +56,9 @@ class NagVisAggr extends NagVisStatefulObject {
 
         if($this->hover_menu == 1
            && $this->hover_childs_show == 1
-           && $bFetchMemberState)
+           && $bFetchMemberState) {
             $queries['AGGR_MEMBER_DETAILS'] = true;
+        }
 
         $_BACKEND->queue($queries, $this);
     }
@@ -99,18 +100,22 @@ class NagVisAggr extends NagVisStatefulObject {
             // Calculate summary state and output
 
             // Only create summary from childs when not set yet (e.g by backend)
-            if($this->sum[STATE] === null)
+            if($this->sum[STATE] === null) {
                 $this->fetchSummaryStateFromCounts();
+            }
 
             // Only create summary from childs when not set yet (e.g by backend)
-            if($this->sum[OUTPUT] === null)
+            if($this->sum[OUTPUT] === null) {
                 $this->fetchSummaryOutputFromCounts();
+            }
         } else {
-            if($this->sum[STATE] === null)
+            if($this->sum[STATE] === null) {
                 $this->fetchSummaryState();
+            }
 
-            if($this->sum[OUTPUT] === null)
+            if($this->sum[OUTPUT] === null) {
                 $this->fetchSummaryOutput();
+            }
         }
     }
 
@@ -133,10 +138,12 @@ class NagVisAggr extends NagVisStatefulObject {
                     // Count all child objects
                     $iSumCount += $iCount;
 
-                    if(!isset($node_staets[$sState]))
+                    if(!isset($node_staets[$sState])) {
                         $node_states[$sState] = $iCount;
-                    else
+                    }
+                    else {
                         $node_states[$sState] += $iCount;
+                    }
                 }
             }
         }
@@ -157,10 +164,12 @@ class NagVisAggr extends NagVisStatefulObject {
      * Fetches the summary state from all members recursive
      */
     private function fetchSummaryState() {
-        if($this->hasMembers())
+        if($this->hasMembers()) {
             $this->calcSummaryState();
-        else
+        }
+        else {
             $this->sum[STATE] = ERROR;
+        }
     }
 
     /**

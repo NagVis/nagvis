@@ -242,8 +242,9 @@ function automap_get_root_hostname($params) {
             $hostsWithoutParent = $_BACKEND->getBackend($params['backend_id'][0])->getHostNamesWithNoParent();
         } catch(BackendConnectionProblem $e) {}
 
-        if(isset($hostsWithoutParent) && count($hostsWithoutParent) == 1)
+        if(isset($hostsWithoutParent) && count($hostsWithoutParent) == 1) {
             $defaultRoot = $hostsWithoutParent[0];
+        }
     }
 
     if(!isset($defaultRoot) || $defaultRoot == '') {
@@ -270,8 +271,9 @@ function automap_load_params($MAPCFG) {
      * hostname is given NagVis tries to take configured host from main
      * configuration or read the host which has no parent from backend
      */
-    if(!isset($params['root']) || $params['root'] == '')
+    if(!isset($params['root']) || $params['root'] == '') {
         $params['root'] = automap_get_root_hostname($params);
+    }
     
     return $params;
 }
@@ -299,11 +301,12 @@ function automap_hostnames_to_object_ids($names) {
  */
 function automap_load_object_ids() {
     global $automap_object_id_file, $automap_object_ids;
-    if(!isset($automap_object_ids[0]))
-        if(GlobalCore::getInstance()->checkExisting($automap_object_id_file, false))
+    if(!isset($automap_object_ids[0])) {
+        if (GlobalCore::getInstance()->checkExisting($automap_object_id_file, false)) {
             $automap_object_ids = json_decode(file_get_contents($automap_object_id_file), true);
-        else
+        } else
             $automap_object_ids = [];
+    }
 
     return $automap_object_ids;
 }
@@ -356,10 +359,12 @@ function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
         $obj['host_name'] = $obj_name;
 
         // Default to params iconset
-        if (!isset($obj['iconset']))
+        if (!isset($obj['iconset'])) {
             $obj['iconset'] = $params['iconset'];
-        if (!isset($obj['icon_size']))
+        }
+        if (!isset($obj['icon_size'])) {
             $obj['icon_size'] = $params['icon_size'];
+        }
 
         if ($obj['icon_size']) {
             if (count($obj['icon_size']) == 1) {
@@ -417,8 +422,9 @@ function automap_connector($MAPCFG, &$params, &$saved_config, $from_obj, $to_obj
  * saved to the childObjects array
  */
 function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $layers_left, &$this_tree_lvl, &$object_names) {
-    if($layers_left == 0)
-        return; // Stop recursion when the number of layers counted down
+    if($layers_left == 0) {
+        return;
+    } // Stop recursion when the number of layers counted down
 
     $relations = [];
     try {
@@ -453,8 +459,9 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
 
             // When no parents can be found for one host, this is the root node,
             // add the <<<monitoring>>> host as parent
-            if (count($relations) == 0)
+            if (count($relations) == 0) {
                 $relations[] = '<<<monitoring>>>';
+            }
         }
     } catch(BackendException $e) {}
 
@@ -565,8 +572,9 @@ function automap_filter_by_ids(&$obj, $params = null) {
  * config option. This sort of hosts should be visualized in another way.
  */
 function automap_filter_by_group(&$obj, $params) {
-    if(!isset($params['filter_group']) || $params['filter_group'] == '')
+    if(!isset($params['filter_group']) || $params['filter_group'] == '') {
         return;
+    }
 
     global $_BACKEND;
     $_BACKEND->checkBackendExists($params['backend_id'][0], true);
@@ -586,8 +594,9 @@ function automap_filter_by_group(&$obj, $params) {
  * most cases. Let's hope this is ok for most use cases.
  */
 function automap_filter_by_state(&$obj, $params) {
-    if (!isset($params['filter_by_state']) || $params['filter_by_state'] != 1)
+    if (!isset($params['filter_by_state']) || $params['filter_by_state'] != 1) {
         return;
+    }
 
     // Now ask the backend for all hosts which have
     // a) state != UP
@@ -612,8 +621,9 @@ function automap_tree_to_map_config($MAPCFG, &$params, &$saved_config, &$map_con
     $map_config[$tree['object_id']] = $tree;
 
     // Remove automap internal attribute from <<<monitoring>>> node
-    if ($map_config[$tree['object_id']]['type'] == 'shape')
+    if ($map_config[$tree['object_id']]['type'] == 'shape') {
         unset($map_config[$tree['object_id']]['host_name']);
+    }
     
     // Remove internal attributes here
     unset($map_config[$tree['object_id']]['.childs']);
@@ -679,10 +689,13 @@ function process_automap($MAPCFG, $map_name, &$map_config) {
 
     // Remove "." leaded attributes
     // FIXME: Maybe move this to general "sources" processing
-    foreach($map_config as $object_id => $conf)
-        foreach(array_keys($conf) as $key)
-            if($key[0] == '.')
+    foreach($map_config as $object_id => $conf) {
+        foreach (array_keys($conf) as $key) {
+            if ($key[0] == '.') {
                 unset($map_config[$object_id][$key]);
+            }
+        }
+    }
 
     return true; // allow caching
 }

@@ -64,8 +64,9 @@ class GlobalFileCache {
         $newestFile = '';
         foreach($this->files AS $file) {
             if(!GlobalCore::getInstance()->checkExisting($file, false)
-               || !GlobalCore::getInstance()->checkReadable($file, false))
+               || !GlobalCore::getInstance()->checkReadable($file, false)) {
                 continue;
+            }
 
             $thisAge = filemtime($file);
             if($age === -1) {

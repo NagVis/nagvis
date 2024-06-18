@@ -131,8 +131,9 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
 
         // insert new user roles
         foreach($roles AS $roleId) {
-            if ($roleId === '')
+            if ($roleId === '') {
                 continue;
+            }
             $this->DB->query('-role-add-user-by-id', ['userId' => $userId, 'roleId' => $roleId]);
         }
 
@@ -230,8 +231,9 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         global $AUTH;
         $aPerms = [];
 
-        if($sUsername === null)
+        if($sUsername === null) {
             $sUsername = $AUTH->getUser();
+        }
 
         // Only handle known users
         $userId = $this->getUserId($sUsername);

@@ -161,10 +161,12 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
 
     private function getSecret() {
         $secret_file_path = cfg('backend_'.$this->backendId, 'auth_secret_file');
-        if ($secret_file_path)
+        if ($secret_file_path) {
             return trim(file_get_contents($secret_file_path));
-        else
-            return cfg('backend_'.$this->backendId, 'auth_secret');
+        }
+        else {
+            return cfg('backend_' . $this->backendId, 'auth_secret');
+        }
     }
 
     private function aggrUrl($name) {
@@ -180,13 +182,15 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         $url = $this->baseUrl.$params.'&output_format=json';
         $username = cfg('backend_'.$this->backendId, 'auth_user');
         $secret   = $this->getSecret();
-        if ($username && $secret)
-            $url .= '&_username='.$username.'&_secret='.$secret;
+        if ($username && $secret) {
+            $url .= '&_username=' . $username . '&_secret=' . $secret;
+        }
 
         // Is there some cache to use? The cache is not persisted. It is available
         // until the request has finished.
-        if(isset($this->cache[$url]))
+        if(isset($this->cache[$url])) {
             return $this->cache[$url];
+        }
 
         //DEBUG:
         //$fh = fopen('/tmp/bi', 'a');
@@ -194,37 +198,41 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         //fclose($fh);
 
         $s = @file_get_contents($url, false, $this->context);
-        if($s === false)
+        if($s === false) {
             throw new BackendConnectionProblem(l('Unable to fetch data from URL [U]: [M]',
-                                                ['U' => $url, 'M' => json_encode(error_get_last())]));
+                ['U' => $url, 'M' => json_encode(error_get_last())]));
+        }
 
         //DEBUG:
         //$fh = fopen('/tmp/bi', 'a');
         //fwrite($fh, $s."\n\n");
         //fclose($fh);
 
-        if ($s[0] != '[')
+        if ($s[0] != '[') {
             throw new BackendInvalidResponse(l('Invalid response ([BACKENDID]): [RESPONSE]',
-                                                      [
-                                                          'BACKENDID' => $this->backendId,
-                                                            'RESPONSE'  => htmlentities($s, ENT_COMPAT, 'UTF-8')
-                                                      ]));
+                [
+                    'BACKENDID' => $this->backendId,
+                    'RESPONSE' => htmlentities($s, ENT_COMPAT, 'UTF-8')
+                ]));
+        }
 
         // Decode the json response
         // json_decode returns null on syntax problems
         $parsed = json_decode(iso8859_1_to_utf8($s), true);
-        if ($parsed === null || !is_array($parsed))
+        if ($parsed === null || !is_array($parsed)) {
             throw new BackendInvalidResponse(l('Invalid response ([BACKENDID]): [RESPONSE]',
-                                                      [
-                                                          'BACKENDID' => $this->backendId,
-                                                            'RESPONSE'  => htmlentities($s, ENT_COMPAT, 'UTF-8')
-                                                      ]));
+                [
+                    'BACKENDID' => $this->backendId,
+                    'RESPONSE' => htmlentities($s, ENT_COMPAT, 'UTF-8')
+                ]));
+        }
 
         // transform structure of the response to have an array of associative arrays
         $obj = [];
         $head = array_shift($parsed); // extract header spec
-        for ($i = 0; $i < count($parsed); $i++)
+        for ($i = 0; $i < count($parsed); $i++) {
             $obj[] = array_combine($head, $parsed[$i]);
+        }
 
         // Cache the valid response
         $this->cache[$url] = $obj;
@@ -252,10 +260,12 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
     }
 
     private function getAggrElements($aggr) {
-        if (is_array($aggr['aggr_treestate']))
+        if (is_array($aggr['aggr_treestate'])) {
             return $aggr['aggr_treestate']["nodes"];
-        else
+        }
+        else {
             return $this->getAggrElementsFromString($aggr["aggr_treestate"]);
+        }
     }
 
     // Be compatible to Check_MK <1.2.9
@@ -273,9 +283,10 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         foreach ($pairs AS $pair) {
             list($short_state, $title) = $pair;
 
-            if(!isset(GlobalBackendmkbi::$bi_short_states[$short_state]))
+            if(!isset(GlobalBackendmkbi::$bi_short_states[$short_state])) {
                 throw new BackendException(l('Invalid state: "[S]"',
-                          ['S' => $short_state]));
+                    ['S' => $short_state]));
+            }
             $bi_state = GlobalBackendmkbi::$bi_short_states[$short_state];
 
             $element = [
@@ -332,12 +343,15 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         $elements = $this->getAggrElements($aggr);
         foreach ($elements AS $element) {
             $state = $this->getAggrState($element["state"]);
-            if ($element["in_downtime"])
+            if ($element["in_downtime"]) {
                 $c[$state]['downtime']++;
-            elseif ($element["acknowledged"])
+            }
+            elseif ($element["acknowledged"]) {
                 $c[$state]['ack']++;
-            else
+            }
+            else {
                 $c[$state]['normal']++;
+            }
         }
 
         return $c;
@@ -352,8 +366,9 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
      * objects in WUI.
      */
     public function getObjects($type, $name1Pattern = '', $name2Pattern = '') {
-        if($type !== 'aggr')
+        if($type !== 'aggr') {
             throw new BackendException(l('This backend only supports "Aggregation" objects.'));
+        }
 
         $result = [];
         foreach($this->getAggregationNames() AS $id => $name) {
@@ -383,8 +398,9 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         $ret = [];
         foreach($objects AS $key => $OBJS) {
             $aggr = $this->matchAggregation($aggregations, $key);
-            if ($aggr === null)
-                continue; // did not find this aggregation
+            if ($aggr === null) {
+                continue;
+            } // did not find this aggregation
             $obj_url = $OBJS[0]->getUrl();
 
             $is_acknowledged = isset($aggr['aggr_acknowledged']) && $aggr['aggr_acknowledged'] == "1";
@@ -407,8 +423,9 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             ];
 
             // Add optional outputs which replaces the NagVis summary_output
-            if(isset($aggr['aggr_output']) && $aggr['aggr_output'] != '')
+            if(isset($aggr['aggr_output']) && $aggr['aggr_output'] != '') {
                 $ret[$key]['output'] = $aggr['aggr_output'];
+            }
         }
 
         return $ret;
@@ -424,8 +441,9 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         $ret = [];
         foreach($objects AS $key => $OBJS) {
             $aggr = $this->matchAggregation($aggregations, $key);
-            if ($aggr === null)
-                continue; // did not find this aggregation
+            if ($aggr === null) {
+                continue;
+            } // did not find this aggregation
 
             // Add the services
             // Add the single component state counts
@@ -519,12 +537,15 @@ if(!function_exists('l')) {
     }
 
     function cfg($sec, $opt) {
-        if($opt == 'base_url')
+        if($opt == 'base_url') {
             return 'http://127.0.0.1/event/check_mk/';
-        if($opt == 'auth_user')
+        }
+        if($opt == 'auth_user') {
             return 'bi-user';
-        if($opt == 'auth_secret')
+        }
+        if($opt == 'auth_secret') {
             return 'MATKBYXNV@YXLHSEJYND';
+        }
     }
 
     $O = new GlobalBackendmkbi('bi');

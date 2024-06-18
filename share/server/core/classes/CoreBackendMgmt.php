@@ -54,12 +54,14 @@ class CoreBackendMgmt {
 
     public function getBackend($id) {
         // Only try to initialize once per request
-        if(!isset($this->aInitialized[$id]) && !isset($this->aError[$id]))
+        if(!isset($this->aInitialized[$id]) && !isset($this->aError[$id])) {
             $this->initializeBackend($id);
+        }
 
         // Re-throw the stored backend exception for this request
-        if(isset($this->aError[$id]))
+        if(isset($this->aError[$id])) {
             throw $this->aError[$id];
+        }
 
         return $this->BACKENDS[$id];
     }
@@ -75,20 +77,26 @@ class CoreBackendMgmt {
      */
     public function queue($query, $OBJ) {
         $backendIds = $OBJ->getBackendIds();
-        foreach($backendIds as $backendId)
-            if(!isset($this->aQueue[$backendId]))
+        foreach($backendIds as $backendId) {
+            if (!isset($this->aQueue[$backendId])) {
                 $this->aQueue[$backendId] = [];
+            }
+        }
 
         foreach($query AS $query => $_unused) {
-            foreach($backendIds as $backendId)
-                if(!isset($this->aQueue[$backendId][$query]))
+            foreach($backendIds as $backendId) {
+                if (!isset($this->aQueue[$backendId][$query])) {
                     $this->aQueue[$backendId][$query] = [];
+                }
+            }
 
             // Gather the object name
-            if($query == 'serviceState')
-                $name = $OBJ->getName().'~~'.$OBJ->getServiceDescription();
-            else
+            if($query == 'serviceState') {
+                $name = $OBJ->getName() . '~~' . $OBJ->getServiceDescription();
+            }
+            else {
                 $name = $OBJ->getName();
+            }
 
             // Options is a mask which tells the backend how to handle this object
             $options = $this->parseOptions($OBJ);
@@ -101,13 +109,15 @@ class CoreBackendMgmt {
             // If the object is queued several times with the same options+filters
             // add it to the list of objects. The backend result will be added to
             // all objects in that list later
-            foreach($backendIds as $backendId)
-                if(!isset($this->aQueue[$backendId][$query][$options][$objFilters]))
+            foreach($backendIds as $backendId) {
+                if (!isset($this->aQueue[$backendId][$query][$options][$objFilters])) {
                     $this->aQueue[$backendId][$query][$options][$objFilters] = [$name => [$OBJ]];
-                elseif(!isset($this->aQueue[$backendId][$query][$options][$objFilters][$name]))
+                } elseif (!isset($this->aQueue[$backendId][$query][$options][$objFilters][$name]))
                     $this->aQueue[$backendId][$query][$options][$objFilters][$name] = [$OBJ];
-                else
+                else {
                     $this->aQueue[$backendId][$query][$options][$objFilters][$name][] = $OBJ;
+                }
+            }
         }
     }
 
@@ -115,18 +125,21 @@ class CoreBackendMgmt {
         $isMemberQuery = $query != 'serviceState' && $query != 'hostState';
         $isCountQuery = isset($this->countQueries[$query]);
 
-        if(!$isMemberQuery || !$OBJ->hasExcludeFilters($isCountQuery))
+        if(!$isMemberQuery || !$OBJ->hasExcludeFilters($isCountQuery)) {
             return '';
+        }
 
         return $OBJ->getExcludeFilterKey($isCountQuery).'~~'.$OBJ->getExcludeFilter($isCountQuery);
     }
 
     private function parseOptions($OBJ) {
         $options = 0;
-        if($OBJ->getOnlyHardStates())
+        if($OBJ->getOnlyHardStates()) {
             $options |= 1;
-        if(!$OBJ->getRecognizeServices())
+        }
+        if(!$OBJ->getRecognizeServices()) {
             $options |= 2;
+        }
         /*FIXME: Implement as optional filter: "Filter: in_notification_period = 1\n" .*/
 
         return $options;
@@ -319,10 +332,12 @@ class CoreBackendMgmt {
 
                     $members = [];
                     foreach($aHosts AS $name => $aHost) {
-                        if(isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts']))
+                        if(isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts'])) {
                             $service_states = $aServiceStateCounts[$name]['counts'];
-                        else
+                        }
+                        else {
                             $service_states = null;
+                        }
                         $members[] = $this->createHostObject($backendId, $name, $aHost,
                                                              $OBJ->getObjectConfiguration(), $service_states);
                     }
@@ -442,10 +457,12 @@ class CoreBackendMgmt {
 
                 $members = [];
                 foreach($aHosts AS $name => $aHost) {
-                    if(isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts']))
+                    if(isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts'])) {
                         $service_states = $aServiceStateCounts[$name]['counts'];
-                    else
+                    }
+                    else {
                         $service_states = null;
+                    }
                     $members[] = $this->createHostObject($backendId, $name, $aHost,
                                                          $OBJ->getObjectConfiguration(), $service_states);
                 }
@@ -498,26 +515,32 @@ class CoreBackendMgmt {
 
         foreach($aObjs AS $name => $OBJS) {
             if(isset($aResult[$name])) {
-                if($type == 'serviceState' || $type == 'hostState')
-                    foreach($OBJS AS $OBJ)
+                if($type == 'serviceState' || $type == 'hostState') {
+                    foreach ($OBJS as $OBJ)
                         $OBJ->setState($aResult[$name]);
-                else
-                    foreach($OBJS AS $OBJ) {
-                        if(isset($aResult[$name]['details']))
+                }
+                else {
+                    foreach ($OBJS as $OBJ) {
+                        if (isset($aResult[$name]['details'])) {
                             $OBJ->setState($aResult[$name]['details']);
-                        if(isset($aResult[$name]['attrs']))
+                        }
+                        if (isset($aResult[$name]['attrs'])) {
                             $OBJ->setObjectInformation($aResult[$name]['attrs']);
-                        if(isset($aResult[$name]['counts']))
+                        }
+                        if (isset($aResult[$name]['counts'])) {
                             $OBJ->addStateCounts($aResult[$name]['counts']);
+                        }
                     }
+                }
             } else {
-                if($type != 'hostMemberState')
-                    foreach($OBJS AS $OBJ)
-                        if(isset($msg))
+                if($type != 'hostMemberState') {
+                    foreach ($OBJS as $OBJ)
+                        if (isset($msg)) {
                             $OBJ->setBackendProblem($msg, $backendId);
-                        else
+                        } else
                             $OBJ->setBackendProblem(l('The object "[OBJ]" does not exist ([TYPE]).',
-                                                    ['OBJ' => $name, 'TYPE' => $OBJ->getType()]), $backendId);
+                                ['OBJ' => $name, 'TYPE' => $OBJ->getType()]), $backendId);
+                }
             }
         }
     }
@@ -554,8 +577,9 @@ class CoreBackendMgmt {
         global $CORE;
         $aBackends = $CORE->getDefinedBackends();
 
-        if(!count($aBackends))
+        if(!count($aBackends)) {
             throw new NagVisException(l('noBackendDefined'));
+        }
     }
 
     /**
@@ -567,14 +591,16 @@ class CoreBackendMgmt {
      */
     public function checkBackendExists($backendId, $printErr) {
         global $CORE;
-        if($CORE->checkExisting(cfg('paths','class').'GlobalBackend'.cfg('backend_'.$backendId,'backendtype').'.php', false))
+        if($CORE->checkExisting(cfg('paths','class').'GlobalBackend'.cfg('backend_'.$backendId,'backendtype').'.php', false)) {
             return true;
+        }
 
-        if($printErr == 1)
+        if($printErr == 1) {
             throw new NagVisException(l('backendNotExists', [
-                'BACKENDID'   => $backendId,
-                                                                  'BACKENDTYPE' => cfg('backend_'.$backendId,'backendtype')
+                'BACKENDID' => $backendId,
+                'BACKENDTYPE' => cfg('backend_' . $backendId, 'backendtype')
             ]));
+        }
         return false;
     }
 
@@ -587,8 +613,9 @@ class CoreBackendMgmt {
     private function backendAlive($backendId, $statusHost) {
         [$statusBackend, $statusHost] = explode(':', $statusHost, 2);
 
-        if($statusBackend == $backendId)
+        if($statusBackend == $backendId) {
             $this->aError[$backendId] = new BackendConnectionProblem(l('Configuration Error: The statusHost ([STATUSHOST]) is in same backend as the one to check.', ['STATUSHOST' => $statusHost]));
+        }
 
         try {
             $filters = [['key' => 'host_name', 'op' => '=', 'val' => 'name']];
@@ -598,10 +625,12 @@ class CoreBackendMgmt {
             return true;
         }
 
-        if($aCounts[$statusHost][STATE] == UP)
+        if($aCounts[$statusHost][STATE] == UP) {
             return true;
-        else
+        }
+        else {
             return false;
+        }
     }
 
     /**

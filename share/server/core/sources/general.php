@@ -50,23 +50,29 @@ function iconset_size($iconset) {
     $fileType = $CORE->getIconsetFiletype($iconset);
     $iconPath      = path('sys',  'global', 'icons').'/'.$iconset.'_ok.'.$fileType;
     $iconPathLocal = path('sys',  'local',  'icons').'/'.$iconset.'_ok.'.$fileType;
-    if(file_exists($iconPathLocal))
+    if(file_exists($iconPathLocal)) {
         return getimagesize($iconPathLocal);
-    elseif(file_exists($iconPath))
+    }
+    elseif(file_exists($iconPath)) {
         return getimagesize($iconPath);
-    else
+    }
+    else {
         return [0, 0];
+    }
 }
 
 function shape_size($icon) {
     $iconPath      = path('sys',  'global', 'shapes').'/'.$icon;
     $iconPathLocal = path('sys',  'local',  'shapes').'/'.$icon;
-    if(file_exists($iconPathLocal))
+    if(file_exists($iconPathLocal)) {
         return getimagesize($iconPathLocal);
-    elseif(file_exists($iconPath))
+    }
+    elseif(file_exists($iconPath)) {
         return getimagesize($iconPath);
-    else
+    }
+    else {
         return [0, 0];
+    }
 }
 
 

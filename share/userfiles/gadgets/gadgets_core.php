@@ -198,18 +198,22 @@ foreach([
             'opts'  => null, 'name1'     => null, 'name2' => null,
               'state' => null, 'stateType' => null, 'scale' => 100,
               'ack'   => null, 'downtime'  => null
-        ] AS $opt => $default)
-	if(isset($_GET[$opt]) && $_GET[$opt] != '')
-		$aOpts[$opt] = $_GET[$opt];
-	elseif($default !== null)
-		$aOpts[$opt] = $default;
+        ] AS $opt => $default) {
+    if (isset($_GET[$opt]) && $_GET[$opt] != '') {
+        $aOpts[$opt] = $_GET[$opt];
+    } elseif ($default !== null)
+        $aOpts[$opt] = $default;
+}
 
-if(isset($_GET['perfdata']) && $_GET['perfdata'] != '')
-	$aOpts['perfdata'] = $_GET['perfdata'];
-elseif(isset($_GET['conf']) &&  $_GET['conf'] != '' && isset($sDummyPerfdata) && $sDummyPerfdata != '')
-	$aOpts['perfdata'] = $sDummyPerfdata;
-elseif(!isset($_GET['opts']) || strpos($_GET['opts'], 'no_perf') === false)
-	errorBox('ERROR: The needed parameter "perfdata" is missing.');
+if(isset($_GET['perfdata']) && $_GET['perfdata'] != '') {
+    $aOpts['perfdata'] = $_GET['perfdata'];
+}
+elseif(isset($_GET['conf']) &&  $_GET['conf'] != '' && isset($sDummyPerfdata) && $sDummyPerfdata != '') {
+    $aOpts['perfdata'] = $sDummyPerfdata;
+}
+elseif(!isset($_GET['opts']) || strpos($_GET['opts'], 'no_perf') === false) {
+    errorBox('ERROR: The needed parameter "perfdata" is missing.');
+}
 
 /* Now parse the perfdata */
 if(isset($_GET['opts']) && $_GET['opts'] != '') {

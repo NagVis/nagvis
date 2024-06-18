@@ -30,10 +30,12 @@ class CoreRequestHandler {
     }
 
     public function get($sKey) {
-        if(isset($this->aOpts[$sKey]))
+        if(isset($this->aOpts[$sKey])) {
             return $this->aOpts[$sKey];
-        else
+        }
+        else {
             return null;
+        }
     }
 
     public function isLongerThan($sKey, $iLen) {
@@ -41,15 +43,18 @@ class CoreRequestHandler {
     }
 
     public function match($sKey, $regex) {
-        if(!isset($this->aOpts[$sKey]))
+        if(!isset($this->aOpts[$sKey])) {
             return false;
+        }
 
         // If this is an array validate the single values. When one of the values
         // is invalid return false.
         if(is_array($this->aOpts[$sKey])) {
-            foreach($this->aOpts[$sKey] AS $val)
-                if(!preg_match($regex, $val))
+            foreach($this->aOpts[$sKey] AS $val) {
+                if (!preg_match($regex, $val)) {
                     return false;
+                }
+            }
             return true;
         } else {
             return preg_match($regex, $this->aOpts[$sKey]);
@@ -71,17 +76,21 @@ class CoreRequestHandler {
     }
 
     public static function getReferer($default) {
-        if(isset($_SERVER['HTTP_REFERER']))
+        if(isset($_SERVER['HTTP_REFERER'])) {
             return $_SERVER['HTTP_REFERER'];
-        else
+        }
+        else {
             return $default;
+        }
     }
 
     public static function getRequestUri($default) {
-        if(isset($_SERVER['REQUEST_URI']))
+        if(isset($_SERVER['REQUEST_URI'])) {
             return $_SERVER['REQUEST_URI'];
-        else
+        }
+        else {
             return $default;
+        }
     }
 }
 
