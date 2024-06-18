@@ -153,8 +153,9 @@ function form_start($name, $target, $type = 'POST', $multipart = false) {
         .'method="'.$type.'"'.$multipart.'>'.N;
 
     if (submitted($form_name) || !submitted()) {
-        foreach ($form_errors as $field => $message)
+        foreach ($form_errors as $field => $message) {
             error($message);
+        }
     }
 
     hidden('_form_name', $name);

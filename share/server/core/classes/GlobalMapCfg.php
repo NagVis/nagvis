@@ -1434,8 +1434,9 @@ class GlobalMapCfg {
             if ($key !== 'type' && isset($this->mapConfig[$id][$key]) && $this->mapConfig[$id][$key] !== '') {
                 if (is_array($this->mapConfig[$id][$key])) {
                     $a[] = $key . '=' . implode(',', $this->mapConfig[$id][$key]) . "\n";
-                } else
+                } else {
                     $a[] = $key . '=' . $this->mapConfig[$id][$key] . "\n";
+                }
             }
         }
 

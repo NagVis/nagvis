@@ -119,8 +119,9 @@ if($value == null) {
 if(intval($max) == 0 || $max == '') {
     if (intval($crit) == 0 || $crit != '') {
         $max = $crit + 1;
-    } else
+    } else {
         $max = $warn + 1;
+    }
 }
 
 $width = (int) $value * 100 / $max;

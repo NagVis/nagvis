@@ -111,8 +111,9 @@ class CoreBackendMgmt {
             foreach($backendIds as $backendId) {
                 if (!isset($this->aQueue[$backendId][$query][$options][$objFilters])) {
                     $this->aQueue[$backendId][$query][$options][$objFilters] = [$name => [$OBJ]];
-                } elseif (!isset($this->aQueue[$backendId][$query][$options][$objFilters][$name]))
+                } elseif (!isset($this->aQueue[$backendId][$query][$options][$objFilters][$name])) {
                     $this->aQueue[$backendId][$query][$options][$objFilters][$name] = [$OBJ];
+                }
                 else {
                     $this->aQueue[$backendId][$query][$options][$objFilters][$name][] = $OBJ;
                 }
