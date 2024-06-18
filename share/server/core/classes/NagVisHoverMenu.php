@@ -66,15 +66,13 @@ class NagVisHoverMenu {
           && $this->CORE->getMainCfg()->isCached() !== -1
           && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
             $this->code = $this->CACHE->getCache();
-        } else {
+        } elseif($this->readTemplate()) {
             // Read the contents of the template file
-            if($this->readTemplate()) {
-                // The static macros should be replaced before caching
-                $this->replaceStaticMacros();
+            // The static macros should be replaced before caching
+            $this->replaceStaticMacros();
 
-                // Build cache for the template
-                $this->CACHE->writeCache($this->code, 1);
-            }
+            // Build cache for the template
+            $this->CACHE->writeCache($this->code, 1);
         }
     }
 

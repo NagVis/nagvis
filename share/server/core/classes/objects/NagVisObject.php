@@ -352,13 +352,11 @@ class NagVisObject {
             } else {
                 return -1;
             }
-        } else {
+        } elseif(self::$sSortOrder === 'asc') {
             // Sort depending on configured direction
-            if(self::$sSortOrder === 'asc') {
-                return -1;
-            } else {
-                return +1;
-            }
+            return -1;
+        } else {
+            return +1;
         }
     }
 
@@ -404,13 +402,11 @@ class NagVisObject {
             } else {
                 return -1;
             }
-        } else {
+        } elseif($sortOrder === 'asc') {
             // Sort depending on configured direction
-            if($sortOrder === 'asc') {
-                return -1;
-            } else {
-                return +1;
-            }
+            return -1;
+        } else {
+            return +1;
         }
     }
 }

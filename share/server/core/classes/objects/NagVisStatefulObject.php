@@ -240,16 +240,14 @@ class NagVisStatefulObject extends NagVisObject {
             elseif($this->isStale($summary)) {
                 return 'stale';
             }
-        } else {
-            if($this->state[ACK] == 1) {
-                return 'ack';
-            }
-            elseif($this->state[DOWNTIME] == 1) {
-                return 'downtime';
-            }
-            elseif($this->isStale($summary)) {
-                return 'stale';
-            }
+        } elseif($this->state[ACK] == 1) {
+            return 'ack';
+        }
+        elseif($this->state[DOWNTIME] == 1) {
+            return 'downtime';
+        }
+        elseif($this->isStale($summary)) {
+            return 'stale';
         }
         return 'normal';
     }
@@ -621,12 +619,10 @@ class NagVisStatefulObject extends NagVisObject {
             } else {
                 return -1;
             }
+        } elseif(NagVisObject::$sSortOrder === 'asc') {
+            return -1;
         } else {
-            if(NagVisObject::$sSortOrder === 'asc') {
-                return -1;
-            } else {
-                return +1;
-            }
+            return +1;
         }
     }
 
@@ -703,17 +699,15 @@ class NagVisStatefulObject extends NagVisObject {
         // Fetch the current state to start with
         if($this->sum[STATE] == null) {
             $currWeight = null;
+        } elseif(isset($stateWeight[$this->sum[STATE]])) {
+            $currWeight = $stateWeight[$this->sum[STATE]][$this->getSubState(SUMMARY_STATE)];
         } else {
-            if(isset($stateWeight[$this->sum[STATE]])) {
-                $currWeight = $stateWeight[$this->sum[STATE]][$this->getSubState(SUMMARY_STATE)];
-            } else {
-                throw new NagVisException(l('Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE].',
-                                            [
-                                                'STATE'    => $this->sum[STATE],
-                                                  'SUBSTATE' => $this->getSubState(SUMMARY_STATE),
-                                                  'TYPE'     => $this->getType()
-                                            ]));
-            }
+            throw new NagVisException(l('Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE].',
+                                        [
+                                            'STATE'    => $this->sum[STATE],
+                                              'SUBSTATE' => $this->getSubState(SUMMARY_STATE),
+                                              'TYPE'     => $this->getType()
+                                        ]));
         }
 
         // Loop all major states

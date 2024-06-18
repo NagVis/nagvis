@@ -465,10 +465,8 @@ class CorePDOHandler {
             }
             $this->query('-role-delete-perm-by-obj', ['mod' => $mod, 'obj' => $name]);
             $this->query('-perm-delete-by-obj', ['mod' => $mod, 'obj' => $name]);
-        } else {
-            if(DEBUG&&DEBUGLEVEL&2) {
-                debug('auth.db: won\'t delete ' . $mod . ' permissions ' . $name);
-            }
+        } elseif(DEBUG&&DEBUGLEVEL&2) {
+            debug('auth.db: won\'t delete ' . $mod . ' permissions ' . $name);
         }
     }
 
@@ -485,10 +483,8 @@ class CorePDOHandler {
             $this->query('-perm-add', ['mod' => 'Map', 'act' => 'view', 'obj' => $name]);
             $this->query('-perm-add', ['mod' => 'Map', 'act' => 'edit', 'obj' => $name]);
             $this->query('-perm-add', ['mod' => 'Map', 'act' => 'delete', 'obj' => $name]);
-        } else {
-            if(DEBUG&&DEBUGLEVEL&2) {
-                debug('auth.db: won\'t create permissions for map ' . $name);
-            }
+        } elseif(DEBUG&&DEBUGLEVEL&2) {
+            debug('auth.db: won\'t create permissions for map ' . $name);
         }
 
         return true;
@@ -501,10 +497,8 @@ class CorePDOHandler {
                 debug('auth.db: create permissions for rotation ' . $name);
             }
             $this->query('-perm-add', ['mod' => 'Rotation', 'act' => 'view', 'obj' => $name]);
-        } else {
-            if(DEBUG&&DEBUGLEVEL&2) {
-                debug('auth.db: won\'t create permissions for rotation ' . $name);
-            }
+        } elseif(DEBUG&&DEBUGLEVEL&2) {
+            debug('auth.db: won\'t create permissions for rotation ' . $name);
         }
 
         return true;
