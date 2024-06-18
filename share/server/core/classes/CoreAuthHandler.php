@@ -141,8 +141,7 @@ class CoreAuthHandler {
         if(cfg('global', 'audit_log') == true) {
             $ALOG = new CoreLog(cfg('paths', 'var') . 'nagvis-audit.log',
                 cfg('global', 'dateformat'));
-        }
-        else {
+        } else {
             $ALOG = null;
         }
 
@@ -166,8 +165,7 @@ class CoreAuthHandler {
         if($ALOG !== null) {
             if($isAuthenticated) {
                 $ALOG->l('User logged in (' . $this->getUser() . ' / ' . $this->getUserId() . '): ' . $this->sModuleName);
-            }
-            else {
+            } else {
                 $ALOG->l('User login failed (' . $this->getUser() . ' / ' . $this->getUserId() . '): ' . $this->sModuleName);
             }
         }

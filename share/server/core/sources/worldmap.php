@@ -324,8 +324,7 @@ function worldmap_db_update_object($obj_id, $lat, $lng, $obj,
     if ($insert) {
         $q = 'INSERT INTO objects (object_id, lat, lng, lat2, lng2, object)'
             .' VALUES (:obj_id, :lat, :lng, :lat2, :lng2, :object)';
-    }
-    else {
+    } else {
         $q = 'UPDATE objects SET '
             .' lat=:lat,'
             .' lng=:lng,'
@@ -344,8 +343,7 @@ function worldmap_db_update_object($obj_id, $lat, $lng, $obj,
         'object' => json_encode($obj)
     ])) {
         return true;
-    }
-    else {
+    } else {
         throw new WorldmapError(l('Failed to add object: [E]: [Q]', [
             'E' => json_encode($DB->error()), 'Q' => $q
         ]));
@@ -430,8 +428,7 @@ function del_obj_worldmap($MAPCFG, $map_name, &$map_config, $obj_id) {
     $q = 'DELETE FROM objects WHERE object_id=:obj_id';
     if ($DB->query($q, ['obj_id' => $obj_id])) {
         return true;
-    }
-    else {
+    } else {
         throw new WorldmapError(l('Failed to delete object: [E]: [Q]', [
             'E' => json_encode($DB->error()), 'Q' => $q
         ]));

@@ -146,8 +146,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
         }
         if($output === null) {
             $output = 'output ' . $name2;
-        }
-        else {
+        } else {
             $output = 'empty output';
         }
 
@@ -365,8 +364,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
     public function getHostNamesInHostgroup($group) {
         if (isset($this->obj['hostgroup'][$group])) {
             return $this->obj['hostgroup'][$group]['members'];
-        }
-        else {
+        } else {
             return [];
         }
     }
@@ -524,8 +522,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     case 'servicegroup_name':
                         if($filter['key'] != 'service_description') {
                             $val = $OBJS[0]->getName();
-                        }
-                        else {
+                        } else {
                             $val = $OBJS[0]->getServiceDescription();
                         }
 
@@ -541,8 +538,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
             $count = count($objFilters);
             if($count > 1) {
                 $count = 'And: ' . $count . "\n";
-            }
-            else {
+            } else {
                 $count = '';
             }
 
@@ -552,8 +548,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
         $count = count($aFilters);
         if($count > 1) {
             $count = 'Or: ' . $count . "\n";
-        }
-        else {
+        } else {
             $count = '';
         }
 
@@ -770,8 +765,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     }
                     elseif($host[DOWNTIME] === true) {
                         $aReturn[$name]['counts'][$host[STATE]]['downtime']++;
-                    }
-                    else {
+                    } else {
                         $aReturn[$name]['counts'][$host[STATE]]['normal']++;
                     }
 
@@ -847,8 +841,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                         }
                         elseif($service[DOWNTIME] === true) {
                             $aReturn[$name]['counts'][$state]['downtime']++;
-                        }
-                        else {
+                        } else {
                             $aReturn[$name]['counts'][$state]['normal']++;
                         }
                     }
@@ -867,8 +860,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
     public function getDirectChildNamesByHostName($hostName) {
         if(isset($this->childs[$hostName])) {
             return $this->childs[$hostName];
-        }
-        else {
+        } else {
             return [];
         }
     }
@@ -876,8 +868,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
     public function getDirectParentNamesByHostName($hostName) {
         if(isset($this->parents[$hostName])) {
             return $this->parents[$hostName];
-        }
-        else {
+        } else {
             return [];
         }
     }

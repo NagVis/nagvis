@@ -175,8 +175,7 @@ class NagVisHost extends NagVisStatefulObject {
         }
         elseif(!isset($this->aStateCounts[$sState][$sSubState])) {
             $this->aStateCounts[$sState][$sSubState] = 1;
-        }
-        else {
+        } else {
             $this->aStateCounts[$sState][$sSubState] += 1;
         }
     }

@@ -54,8 +54,7 @@ class ViewEditMainCfg {
 
                     if (val($spec, 'array', false)) {
                         $val = explode(',', $raw_val);
-                    }
-                    else {
+                    } else {
                         $val = $raw_val;
                     }
 
@@ -66,8 +65,7 @@ class ViewEditMainCfg {
                     }
 
                     $UMAINCFG->setValue($sec, $key, $val);
-                }
-                else {
+                } else {
                     $UMAINCFG->unsetValue($sec, $key);
                 }
             }
@@ -174,8 +172,7 @@ class ViewEditMainCfg {
                 $checked      = ' checked="checked"';
                 $show_default = ' style="display:none"';
                 $show_input   = '';
-            }
-            else {
+            } else {
                 $checked      = '';
                 $show_default = '';
                 $show_input   = ' style="display:none"';
@@ -192,8 +189,7 @@ class ViewEditMainCfg {
                 case 'boolean':
                     if ($def_val == '1') {
                         echo l('Yes');
-                    }
-                    else {
+                    } else {
                         echo l('No');
                     }
                 break;

@@ -182,8 +182,7 @@ class CoreModOverview extends CoreModule {
 
             if($what === ONLY_STATE) {
                 $aMaps[] = array_merge($aObj[0]->getObjectStateInformations(), $aObj[1]);
-            }
-            else {
+            } else {
                 $aMaps[] = array_merge($aObj[0]->parseJson(), $aObj[1]);
             }
         }
