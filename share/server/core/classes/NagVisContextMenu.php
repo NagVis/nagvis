@@ -119,26 +119,33 @@ class NagVisContextMenu {
             $this->code = str_replace('[lang_schedule_downtime]',l('contextScheduleDowntime'),$this->code);
         }
 
-        if(strpos($this->code,'[lang_ack]') !== FALSE)
+        if(strpos($this->code,'[lang_ack]') !== FALSE) {
             $this->code = str_replace('[lang_ack]', l('Acknowledge'), $this->code);
+        }
 
-        if(strpos($this->code,'[lang_clone]') !== FALSE)
+        if(strpos($this->code,'[lang_clone]') !== FALSE) {
             $this->code = str_replace('[lang_clone]', l('Clone object'), $this->code);
+        }
 
-        if(strpos($this->code,'[lang_lock]') !== FALSE)
+        if(strpos($this->code,'[lang_lock]') !== FALSE) {
             $this->code = str_replace('[lang_lock]', l('Lock'), $this->code);
+        }
 
-        if(strpos($this->code,'[lang_unlock]') !== FALSE)
+        if(strpos($this->code,'[lang_unlock]') !== FALSE) {
             $this->code = str_replace('[lang_unlock]', l('Unlock'), $this->code);
+        }
 
-        if(strpos($this->code,'[lang_modify]') !== FALSE)
+        if(strpos($this->code,'[lang_modify]') !== FALSE) {
             $this->code = str_replace('[lang_modify]', l('Modify object'), $this->code);
+        }
 
-        if(strpos($this->code,'[lang_delete]') !== FALSE)
+        if(strpos($this->code,'[lang_delete]') !== FALSE) {
             $this->code = str_replace('[lang_delete]', l('Delete object'), $this->code);
+        }
 
-        if(strpos($this->code,'[lang_toggle_line_mid]') !== FALSE)
+        if(strpos($this->code,'[lang_toggle_line_mid]') !== FALSE) {
             $this->code = str_replace('[lang_toggle_line_mid]', l('Lock/Unlock line middle'), $this->code);
+        }
 
         if(strpos($this->code,'[html_base]') !== FALSE) {
             $this->code = str_replace('[html_base]',cfg('paths','htmlbase'),$this->code);

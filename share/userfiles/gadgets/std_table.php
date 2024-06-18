@@ -78,10 +78,12 @@ $current_state = $_GET['state'];
 $members = json_decode($_POST['members'], True);
 
 $show_states = [];
-if ($show_service_states)
+if ($show_service_states) {
     $show_states = array_merge($show_states, ['OK', 'WARNING', 'CRITICAL', 'UNKNOWN', 'ERROR']);
-if ($show_host_states)
+}
+if ($show_host_states) {
     $show_states = array_merge($show_states, ['UP', 'DOWN', 'UNREACHABLE', 'ERROR']);
+}
 
 // Init statistic array
 $stats = [];

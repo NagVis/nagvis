@@ -54,8 +54,9 @@ function debugFinalize() {
 }
 
 function log_mem($txt = 'somewhere') {
-    if (DEBUG && DEBUGLEVEL & 2)
-        debug('mem ['.$txt.']: ' . round(memory_get_usage()/1024/1024, 2) . 'Mb');
+    if (DEBUG && DEBUGLEVEL & 2) {
+        debug('mem [' . $txt . ']: ' . round(memory_get_usage() / 1024 / 1024, 2) . 'Mb');
+    }
 }
 
 /**
@@ -82,5 +83,7 @@ function profilingFinalize($pre) {
 }
 
 // Start profiling now when configured to do so
-if (PROFILE) profilingStart();
+if (PROFILE) {
+    profilingStart();
+}
 

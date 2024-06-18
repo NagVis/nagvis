@@ -36,16 +36,19 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule {
     public function __construct() {
         $this->file     = cfg('global', 'authorisation_group_perms_file');
 
-        if($this->file == '')
+        if($this->file == '') {
             throw new NagVisException(l('No group permission file specified. Please configure one via the option authorisation_group_perms_file in global section of the main configuration.'));
+        }
 
-        if(!file_exists($this->file))
+        if(!file_exists($this->file)) {
             throw new NagVisException(l('Unable to open auth file ([FILE]).',
-                                                ['FILE' => $this->file]));
+                ['FILE' => $this->file]));
+        }
 
         $this->backends = cfg('global', 'authorisation_group_backends');
-        if(!$this->backends)
+        if(!$this->backends) {
             $this->backends = cfg('defaults', 'backend');
+        }
 
         $cacheFile = cfg('paths','var').'group-perms-'.CONST_VERSION.'-cache';
         $this->CACHE = new GlobalFileCache($this->file, $cacheFile);
@@ -80,8 +83,9 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule {
             }
             
             foreach($contacts as $contact => $groups) {
-                if(!isset($this->user_groups[$contact]))
+                if(!isset($this->user_groups[$contact])) {
                     $this->user_groups[$contact] = [];
+                }
 
                 foreach($groups as $group) {
                     if(!isset($this->user_groups[$contact][$group])) {
@@ -112,13 +116,15 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule {
             ['Auth',      'logout',             '*'],
         ];
 
-        if(!isset($this->user_groups[$username]))
+        if(!isset($this->user_groups[$username])) {
             return [];
+        }
 
         // get groups of user and summarize the permissions
         foreach(array_keys($this->user_groups[$username]) as $groupname) {
-            if(!isset($this->group_perms[$groupname]))
+            if(!isset($this->group_perms[$groupname])) {
                 continue;
+            }
             foreach($this->group_perms[$groupname] as $key => $value) {
                 if($key == 'admin' && $value == 1) {
                     // Grant full access for admins
@@ -170,21 +176,25 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule {
             $username = $sUsername;
         }
 
-        if(!isset($this->perms[$username]))
+        if(!isset($this->perms[$username])) {
             return [];
+        }
     
         # Array ( [0] => Overview [1] => view [2] => * )
         $perms = [];
         foreach($this->perms[$username] AS $value) {
             // Module entry
-            if(!isset($perms[$value[0]]))
+            if(!isset($perms[$value[0]])) {
                 $perms[$value[0]] = [];
+            }
             
-            if(!isset($perms[$value[0]][$value[1]]))
+            if(!isset($perms[$value[0]][$value[1]])) {
                 $perms[$value[0]][$value[1]] = [];
+            }
             
-            if(!isset($perms[$value[0]][$value[1]][$value[2]]))
+            if(!isset($perms[$value[0]][$value[1]][$value[2]])) {
                 $perms[$value[0]][$value[1]][$value[2]] = [];
+            }
         }
 
         return $perms;

@@ -91,8 +91,9 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
 
     private function checkUserAuth() {
         $data = $this->DB->query('-user-get-by-pass', ['name' => $this->sUsername, 'password' => $this->sPasswordHash])->fetch();
-        if (!isset($data['userId']))
+        if (!isset($data['userId'])) {
             return 0;
+        }
         return intval($data['userId']);
     }
 
@@ -189,8 +190,9 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
 
     public function changePassword() {
         // Check the authentication with the old password
-        if(!$this->isAuthenticated())
+        if(!$this->isAuthenticated()) {
             return false;
+        }
 
         // Set new password to current one
         $this->sPassword = $this->sPasswordNew;
@@ -204,8 +206,9 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
 
     public function isAuthenticated($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
         // Only handle known users
-        if($this->sUsername === '' || !$this->checkUserExists($this->sUsername))
+        if($this->sUsername === '' || !$this->checkUserExists($this->sUsername)) {
             return false;
+        }
 
         $use_bcrypt = $this->usesBcrypt($this->sUsername);
         // Try to calculate the password hash only when no hash is known at

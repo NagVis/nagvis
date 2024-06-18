@@ -66,10 +66,12 @@ class CoreModGeneral extends CoreModule {
         $aOpts = $this->getCustomOptions(['name' => MATCH_STRING_NO_SPACE]);
 
         foreach($aOpts['name'] AS $sName) {
-            if($type == 'hover')
+            if($type == 'hover') {
                 $OBJ = new NagVisHoverMenu($this->CORE, $sName);
-            else
+            }
+            else {
                 $OBJ = new NagVisContextMenu($this->CORE, $sName);
+            }
 
             $arrReturn[] = [
                 'name'     => $sName,
@@ -93,9 +95,10 @@ class CoreModGeneral extends CoreModule {
         }
 
         $result = json_encode($arrReturn);
-        if ($result === false)
+        if ($result === false) {
             throw new NagVisException(l('Data not parsable: [URL] ([MSG])',
                 ['URL' => htmlentities($sUrl, ENT_COMPAT, 'UTF-8'), 'MSG' => json_last_error_msg()]));
+        }
         return $result;
     }
 }

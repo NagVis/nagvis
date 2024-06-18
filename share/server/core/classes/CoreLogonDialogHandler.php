@@ -69,16 +69,19 @@ class CoreLogonDialogHandler {
 
         // Don't try to auth if one of the vars is missing
         if(!$FHANDLER->issetAndNotEmpty('_username')
-           || !$FHANDLER->issetAndNotEmpty('_password'))
+           || !$FHANDLER->issetAndNotEmpty('_password')) {
             return null;
+        }
 
         if(!$FHANDLER->match('_username', MATCH_USER_NAME)
-           || $FHANDLER->isLongerThan('_username', AUTH_MAX_USERNAME_LENGTH))
+           || $FHANDLER->isLongerThan('_username', AUTH_MAX_USERNAME_LENGTH)) {
             throw new FieldInputError('_username', l('Invalid username.'));
+        }
 
         if(!$FHANDLER->issetAndNotEmpty('_password')
-           || $FHANDLER->isLongerThan('_password', AUTH_MAX_PASSWORD_LENGTH))
+           || $FHANDLER->isLongerThan('_password', AUTH_MAX_PASSWORD_LENGTH)) {
             throw new FieldInputError('_password', l('Invalid password.'));
+        }
         
         $a = [
             'user'     => $FHANDLER->get('_username'),
@@ -92,18 +95,24 @@ class CoreLogonDialogHandler {
         }
     
         // Remove authentication infos. Hide it from the following code
-        if(isset($_REQUEST['_username']))
+        if(isset($_REQUEST['_username'])) {
             unset($_REQUEST['_username']);
-        if(isset($_REQUEST['_password']))
+        }
+        if(isset($_REQUEST['_password'])) {
             unset($_REQUEST['_password']);
-        if(isset($_POST['_username']))
+        }
+        if(isset($_POST['_username'])) {
             unset($_POST['_username']);
-        if(isset($_POST['_password']))
+        }
+        if(isset($_POST['_password'])) {
             unset($_POST['_password']);
-        if(isset($_GET['_username']))
+        }
+        if(isset($_GET['_username'])) {
             unset($_GET['_username']);
-        if(isset($_GET['_password']))
+        }
+        if(isset($_GET['_password'])) {
             unset($_GET['_password']);
+        }
 
         return $a;
     }

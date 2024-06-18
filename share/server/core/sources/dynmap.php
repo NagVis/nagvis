@@ -208,8 +208,9 @@ function dynmap_sort_objects_by_name($o1, $o2) {
         $o1_str .= $o1[$o1['type'].'_name'];
         $o2_str .= $o2[$o2['type'].'_name'];
     }
-    if($o1_str == $o2_str)
+    if($o1_str == $o2_str) {
         return 0;
+    }
     return ($o1_str > $o2_str) ? 1 : -1;
 }
 
@@ -284,8 +285,9 @@ function changed_dynmap($MAPCFG, $compare_time) {
     $params = $MAPCFG->getSourceParams();
 
     $t = dynmap_program_start($MAPCFG, $params);
-    if($t > $compare_time)
+    if($t > $compare_time) {
         return true;
+    }
 
     // When sorted by state the state of the objects is relevant for
     // the order of objects. Therefore we need to track state changes

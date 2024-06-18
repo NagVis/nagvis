@@ -42,19 +42,23 @@ class CoreSessionHandler {
 
         // Only add the domain when it is no simple hostname
         // This can be easily detected searching for a dot
-        if(strpos($sDomain, '.') === false)
+        if(strpos($sDomain, '.') === false) {
             $sDomain = null;
+        }
 
         // Opera has problems with ip addresses in domains. So skip them
         if(strpos($_SERVER['HTTP_USER_AGENT'], 'opera') !== false
-           && preg_match('/\d.\d+.\d+.\d+/', $sDomain))
+           && preg_match('/\d.\d+.\d+.\d+/', $sDomain)) {
             $sDomain = null;
+        }
 
         // Set custom params for the session cookie
-        if (version_compare(PHP_VERSION, '5.2') >= 0)
+        if (version_compare(PHP_VERSION, '5.2') >= 0) {
             session_set_cookie_params(0, $sPath, $sDomain, $bSecure, $bHTTPOnly);
-        else
+        }
+        else {
             session_set_cookie_params(0, $sPath, $sDomain, $bSecure);
+        }
 
         // Start a session for the user when not started yet
         if(!isset($_SESSION)) {
@@ -68,13 +72,15 @@ class CoreSessionHandler {
                 // especially on current debian/ubuntu:
                 //   PHP error in ajax request handler: Error: (8) session_start():
                 //   ps_files_cleanup_dir: opendir(/var/lib/php5) failed: Permission denied (13)
-                if(strpos($e->getMessage(), 'ps_files_cleanup_dir') === false)
+                if(strpos($e->getMessage(), 'ps_files_cleanup_dir') === false) {
                     throw $e;
+                }
             }
 
             // Store the creation time of the session
-            if(!$this->issetAndNotEmpty('sessionExpires'))
-                $this->set('sessionExpires', time()+$iDuration);
+            if(!$this->issetAndNotEmpty('sessionExpires')) {
+                $this->set('sessionExpires', time() + $iDuration);
+            }
         }
 
         // Reset the expiration time of the session cookie

@@ -32,22 +32,27 @@ class ViewChangePassword {
                 $user = $AUTH->getUser();
 
                 $password_old = post('password_old');
-                if (!$password_old)
+                if (!$password_old) {
                     throw new FieldInputError('password_old', l('You need to specify the old password.'));
+                }
 
                 $password_new1 = post('password_new1');
-                if (!$password_new1)
+                if (!$password_new1) {
                     throw new FieldInputError('password_new1', l('You need to specify the new password.'));
+                }
 
                 $password_new2 = post('password_new2');
-                if (!$password_new2)
+                if (!$password_new2) {
                     throw new FieldInputError('password_new2', l('You need to specify to confirm the new password.'));
+                }
 
-                if ($password_new1 != $password_new2)
+                if ($password_new1 != $password_new2) {
                     throw new FieldInputError('password_new1', l('The new passwords do not match.'));
+                }
 
-                if ($password_old == $password_new1)
+                if ($password_old == $password_new1) {
                     throw new FieldInputError('password_new1', l('The new and old passwords are equal. Won\'t change anything.'));
+                }
 
                 // Set new passwords in authentication module, then change it
                 $AUTH->passNewPassword([
@@ -55,8 +60,9 @@ class ViewChangePassword {
                     'password'    => $password_old,
                     'passwordNew' => $password_new1,
                 ]);
-                if (!$AUTH->changePassword())
+                if (!$AUTH->changePassword()) {
                     throw new NagVisException(l('Your password could not be changed.'));
+                }
                 success(l('Your password has been changed.'));
                 js('setTimeout(popupWindowClose, 1000);'); // close window after 1 sec
             } catch (FieldInputError $e) {
@@ -64,10 +70,12 @@ class ViewChangePassword {
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                }
+                else {
                     throw $e;
+                }
             }
         }
         echo $this->error;

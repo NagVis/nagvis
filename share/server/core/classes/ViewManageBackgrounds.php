@@ -31,25 +31,29 @@ class ViewManageBackgrounds {
 
         if (is_action() && post('mode') == 'upload') {
             try {
-                if (!isset($_FILES['image']))
+                if (!isset($_FILES['image'])) {
                     throw new FieldInputError('image', l('You need to select an image to import.'));
+                }
 
                 $file = $_FILES['image'];
-                if (!is_uploaded_file($file['tmp_name']))
+                if (!is_uploaded_file($file['tmp_name'])) {
                     throw new FieldInputError('image', l('The file could not be uploaded (Error: [ERROR]).',
-                      ['ERROR' => $file['error'].': '.$CORE->getUploadErrorMsg($file['error'])]));
+                        ['ERROR' => $file['error'] . ': ' . $CORE->getUploadErrorMsg($file['error'])]));
+                }
 
                 $file_name = $file['name'];
                 $file_path = path('sys', '', 'backgrounds').$file_name;
 
-                if (!preg_match(MATCH_PNG_GIF_JPG_FILE, $file_name))
+                if (!preg_match(MATCH_PNG_GIF_JPG_FILE, $file_name)) {
                     throw new FieldInputError('image', l('The uploaded file is no image (png,jpg,gif) '
-                                                        .'file or contains unwanted chars.'));
+                        . 'file or contains unwanted chars.'));
+                }
 
                 $data = getimagesize($file['tmp_name']);
-                if (!in_array($data[2], [IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG]))
+                if (!in_array($data[2], [IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG])) {
                     throw new FieldInputError('image', l('The uploaded file is not an image '
-                                                        .'(png, jpg and gif are allowed).'));
+                        . '(png, jpg and gif are allowed).'));
+                }
 
                 move_uploaded_file($file['tmp_name'], $file_path);
                 $CORE->setPerms($file_path);
@@ -59,10 +63,12 @@ class ViewManageBackgrounds {
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                }
+                else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -89,11 +95,13 @@ class ViewManageBackgrounds {
         if (is_action() && post('mode') == 'delete') {
             try {
                 $name = post('name');
-                if (!$name)
+                if (!$name) {
                     throw new FieldInputError('name', l('Please choose a background'));
+                }
 
-                if (!in_array($name, $CORE->getAvailableBackgroundImages()))
+                if (!in_array($name, $CORE->getAvailableBackgroundImages())) {
                     throw new FieldInputError('name', l('The background does not exist.'));
+                }
 
                 // Check whether or not the backgroun is in use
                 $using = [];
@@ -106,13 +114,15 @@ class ViewManageBackgrounds {
                     }
 
                     $bg = $MAPCFG->getValue(0, 'map_image');
-                    if (isset($bg) && $bg == $name)
+                    if (isset($bg) && $bg == $name) {
                         $using[] = $MAPCFG->getName();
+                    }
                 }
-                if ($using)
+                if ($using) {
                     throw new FieldInputError('name', l('Unable to delete this background, because it is '
-                                                       .'currently used by these maps: [M].',
-                                                            ['M' => implode(',', $using)]));
+                        . 'currently used by these maps: [M].',
+                        ['M' => implode(',', $using)]));
+                }
 
                 $BACKGROUND = new GlobalBackground($name);
                 $BACKGROUND->deleteImage();
@@ -122,10 +132,12 @@ class ViewManageBackgrounds {
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                }
+                else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -137,8 +149,9 @@ class ViewManageBackgrounds {
         echo '<tr><td class="tdlabel">'.l('Background').'</td>';
         echo '<td class="tdfield">';
         $images = ['' => l('Choose a background')];
-        foreach ($CORE->getAvailableBackgroundImages() AS $name)
+        foreach ($CORE->getAvailableBackgroundImages() AS $name) {
             $images[$name] = $name;
+        }
         select('name', $images);
         echo '</td></tr>';
 

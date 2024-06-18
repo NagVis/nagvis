@@ -31,24 +31,28 @@ class ViewManageShapes {
 
         if (is_action() && post('mode') == 'upload') {
             try {
-                if (!isset($_FILES['image']))
+                if (!isset($_FILES['image'])) {
                     throw new FieldInputError('image', l('You need to select an image to import.'));
+                }
 
                 $file = $_FILES['image'];
-                if (!is_uploaded_file($file['tmp_name']))
+                if (!is_uploaded_file($file['tmp_name'])) {
                     throw new FieldInputError('image', l('The file could not be uploaded (Error: [ERROR]).',
-                      ['ERROR' => $file['error'].': '.$CORE->getUploadErrorMsg($file['error'])]));
+                        ['ERROR' => $file['error'] . ': ' . $CORE->getUploadErrorMsg($file['error'])]));
+                }
 
                 $file_name = $file['name'];
                 $file_path = path('sys', '', 'shapes').$file_name;
 
-                if (!preg_match(MATCH_PNG_GIF_JPG_FILE, $file_name))
+                if (!preg_match(MATCH_PNG_GIF_JPG_FILE, $file_name)) {
                     throw new FieldInputError('image', l('The uploaded file is no image (png,jpg,gif) file or contains unwanted chars.'));
+                }
 
                 $data = getimagesize($file['tmp_name']);
-                if (!in_array($data[2], [IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG]))
+                if (!in_array($data[2], [IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG])) {
                     throw new FieldInputError('image', l('The uploaded file is not an image '
-                                                        .'(png, jpg and gif are allowed).'));
+                        . '(png, jpg and gif are allowed).'));
+                }
 
                 move_uploaded_file($file['tmp_name'], $file_path);
                 $CORE->setPerms($file_path);
@@ -58,10 +62,12 @@ class ViewManageShapes {
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                }
+                else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -88,12 +94,14 @@ class ViewManageShapes {
         if (is_action() && post('mode') == 'delete') {
             try {
                 $name = post('name');
-                if (!$name)
+                if (!$name) {
                     throw new FieldInputError('name', l('Please choose a shape'));
+                }
 
                 $shapes = $CORE->getAvailableShapes();
-                if (!isset($shapes[$name]))
+                if (!isset($shapes[$name])) {
                     throw new FieldInputError('name', l('The shape does not exist.'));
+                }
 
                 // Check whether or not the shape is in use
                 $using = [];
@@ -111,24 +119,28 @@ class ViewManageShapes {
                         }
                     }
                 }
-                if ($using)
+                if ($using) {
                     throw new FieldInputError('name', l('Unable to delete this shape, because it is '
-                                                       .'currently used by these maps: [M].',
-                                                            ['M' => implode(',', $using)]));
+                        . 'currently used by these maps: [M].',
+                        ['M' => implode(',', $using)]));
+                }
             
                 $path = path('sys', '', 'shapes', $name);
-                if ($path !== '')
+                if ($path !== '') {
                     unlink($path);
+                }
 
                 success(l('The shape has been deleted.'));
                 //reload(null, 1);
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                }
+                else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -140,8 +152,9 @@ class ViewManageShapes {
         echo '<tr><td class="tdlabel">'.l('Shape').'</td>';
         echo '<td class="tdfield">';
         $shapes = ['' => l('Choose a shape')];
-        foreach ($CORE->getAvailableShapes() AS $name)
+        foreach ($CORE->getAvailableShapes() AS $name) {
             $shapes[$name] = $name;
+        }
         select('name', $shapes);
         echo '</td></tr>';
 

@@ -50,8 +50,9 @@ abstract class CoreModule {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setAction($sAction) {
-        if(!$this->offersAction($sAction))
+        if(!$this->offersAction($sAction)) {
             return false;
+        }
 
         $this->sAction = $sAction;
         return true;
@@ -111,18 +112,21 @@ abstract class CoreModule {
     public function isPermitted() {
         global $AUTHORISATION;
         $authorized = true;
-        if(!isset($AUTHORISATION) || $AUTHORISATION === null)
+        if(!isset($AUTHORISATION) || $AUTHORISATION === null) {
             $authorized = false;
+        }
 
         // Maybe the requested action is summarized by some other
         $action = !is_bool($this->aActions[$this->sAction]) ? $this->aActions[$this->sAction] : $this->sAction;
 
-        if($authorized && !$AUTHORISATION->isPermitted($this->sName, $action, $this->sObject))
+        if($authorized && !$AUTHORISATION->isPermitted($this->sName, $action, $this->sObject)) {
             $authorized = false;
+        }
 
-        if(!$authorized)
+        if(!$authorized) {
             throw new NagVisException(l('You are not permitted to access this page ([PAGE]).',
-                                        ['PAGE' => $this->sName.'/'.$action.'/'.$this->sObject]));
+                ['PAGE' => $this->sName . '/' . $action . '/' . $this->sObject]));
+        }
     }
 
     /**
@@ -139,8 +143,9 @@ abstract class CoreModule {
      * exclude where the keys are the var names. Always excludes mod/act params
      */
     protected function getAllOptions($exclude = []) {
-        if(!isset($this->FHANDLER))
+        if(!isset($this->FHANDLER)) {
             $this->FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
+        }
         $exclude['mod'] = true;
         $exclude['act'] = true;
         return $this->FHANDLER->getAll($exclude);
@@ -153,28 +158,33 @@ abstract class CoreModule {
      */
     protected function getCustomOptions($aKeys, $aDefaults = [], $mixed = false) {
         if($mixed) {
-            if(!isset($this->FHANDLER))
+            if(!isset($this->FHANDLER)) {
                 $this->FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
+            }
 
             $aReturn = [];
-            foreach($aKeys AS $key => $val)
-                if($this->FHANDLER->match($key, $val))
+            foreach($aKeys AS $key => $val) {
+                if ($this->FHANDLER->match($key, $val)) {
                     $aReturn[$key] = $this->FHANDLER->get($key);
+                }
+            }
 
             return $aReturn;
         }
 
         // Initialize on first call
-        if($this->UHANDLER === null)
+        if($this->UHANDLER === null) {
             $this->initUriHandler();
+        }
 
         // Load the specific params to the UriHandler
         $this->UHANDLER->parseModSpecificUri($aKeys, $aDefaults);
 
         // Now get those params
         $aReturn = [];
-        foreach($aKeys AS $key => $val)
+        foreach($aKeys AS $key => $val) {
             $aReturn[$key] = $this->UHANDLER->get($key);
+        }
 
         return $aReturn;
     }
@@ -222,12 +232,15 @@ abstract class CoreModule {
             $msg = l('You entered invalid information.');
         }
 
-        if($msg && $type == 'error')
+        if($msg && $type == 'error') {
             throw new NagVisException($msg, null, $reload, $redirectUrl);
-        elseif($msg && $type == 'ok')
+        }
+        elseif($msg && $type == 'ok') {
             throw new Success($msg, null, $reload, $redirectUrl);
-        else
+        }
+        else {
             return $ret;
+        }
     }
 
     /**
@@ -239,14 +252,17 @@ abstract class CoreModule {
         // Check if the array is assoc. When it isn't re-format it.
         if(array_keys($list) === range(0, count($list) - 1)) {
             $assoc = [];
-            foreach($list AS $value)
+            foreach($list AS $value) {
                 $assoc[$value] = true;
+            }
             $list = $assoc;
         }
 
-        foreach($list AS $key => $value)
-            if(!$HANDLER->isSetAndNotEmpty($key))
+        foreach($list AS $key => $value) {
+            if (!$HANDLER->isSetAndNotEmpty($key)) {
                 throw new UserInputError(l('mustValueNotSet1', ['ATTRIBUTE' => $key]));
+            }
+        }
     }
 
     /**
@@ -256,10 +272,12 @@ abstract class CoreModule {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function verifyValuesMatch($HANDLER, $list) {
-        foreach($list AS $key => $pattern)
-            if($pattern && !$HANDLER->match($key, $pattern))
+        foreach($list AS $key => $pattern) {
+            if ($pattern && !$HANDLER->match($key, $pattern)) {
                 throw new UserInputError(l('The value of option "[ATTRIBUTE]" does not match the valid format.',
-                                           ['ATTRIBUTE' => $key]));
+                    ['ATTRIBUTE' => $key]));
+            }
+        }
 
     }
 
@@ -276,8 +294,9 @@ abstract class CoreModule {
         foreach($files AS $file) {
             $parts = explode(',', $file);
             // Skip invalid requested files
-            if(count($parts) != 3)
+            if(count($parts) != 3) {
                 continue;
+            }
             list($ty, $name, $age) = $parts;
             $age = (int) $age;
 

@@ -110,8 +110,9 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
 
         // Is there some cache to use? The cache is not persisted. It is available
         // until the request has finished.
-        if(isset($this->cache[$url]))
+        if(isset($this->cache[$url])) {
             return $this->cache[$url];
+        }
 
         //DEBUG:
         //$fh = fopen('/tmp/bp', 'a');
@@ -119,9 +120,10 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
         //fclose($fh);
 
         $s = @file_get_contents($url, false, $this->context);
-        if($s === false)
+        if($s === false) {
             throw new BackendConnectionProblem(l('Unable to fetch data from URL [U]: [M]',
-                                                ['U' => $url, 'M' => json_encode(error_get_last())]));
+                ['U' => $url, 'M' => json_encode(error_get_last())]));
+        }
 
         //DEBUG:
         //$fh = fopen('/tmp/bp', 'a');
@@ -135,15 +137,17 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
         // Decode the json response
         // json_decode returns null on syntax problems
         $obj = json_decode(iso8859_1_to_utf8($s), true);
-        if($obj === null || !isset($obj['json_created']))
+        if($obj === null || !isset($obj['json_created'])) {
             throw new BackendInvalidResponse(l('The response has an invalid format in backend [BACKENDID].',
-                                                      ['BACKENDID' => $this->backendId]));
+                ['BACKENDID' => $this->backendId]));
+        }
 
         // Check age of 'json_created'
         $created = strptime($obj['json_created'], '%Y-%m-%d %H:%M:%S');
-        if($created < strtotime('-60 seconds'))
-            throw new BackendInvalidResponse(l('Response data is too old (json_created: [C])', 
-                                                          ['C' => $obj['json_created']]));
+        if($created < strtotime('-60 seconds')) {
+            throw new BackendInvalidResponse(l('Response data is too old (json_created: [C])',
+                ['C' => $obj['json_created']]));
+        }
 
         // Cache the valid response
         $this->cache[$url] = $obj;
@@ -173,8 +177,9 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
     }
 
     private function getBPState($state) {
-        if($state == null)
+        if($state == null) {
             return UNKNOWN;
+        }
         return state_num($state);
     }
 
@@ -211,9 +216,10 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
         // Add the single component state counts
         foreach($bp['components'] AS $component) {
             $s = $this->getBPState($component['hardstate']);
-            if(!isset($c[$s]))
+            if(!isset($c[$s])) {
                 throw new BackendException(l('Invalid state: "[S]"',
-                          ['S' => $s]));
+                    ['S' => $s]));
+            }
             $c[$s]['normal']++;
         }
 
@@ -229,8 +235,9 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
      * objects in WUI.
      */
     public function getObjects($type, $name1Pattern = '', $name2Pattern = '') {
-        if($type !== 'servicegroup')
+        if($type !== 'servicegroup') {
             return [];
+        }
 
         $result = [];
         foreach($this->getProcessNames() AS $id => $name) {
@@ -252,8 +259,9 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
 
         $ret = [];
         foreach($objects AS $key => $OBJS) {
-            if(!isset($bps[$key]))
+            if(!isset($bps[$key])) {
                 continue;
+            }
             $bp = $bps[$key];
 
             $ret[$key] = [
@@ -266,14 +274,16 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
             ];
 
             // Add optional outputs which replaces the NagVis summary_output
-            if(isset($bp['external_info']))
+            if(isset($bp['external_info'])) {
                 $ret[$key]['output'] = $bp['external_info'];
+            }
 
             // Forces the URL to point to nagios-bp if the current url does not point to a map
-            if(strpos($OBJS[0]->getUrl(), 'show=') === false)
+            if(strpos($OBJS[0]->getUrl(), 'show=') === false) {
                 $ret[$key]['attrs'] = [
                     'url' => $this->bpUrl($key),
                 ];
+            }
         }
 
         return $ret;
@@ -289,8 +299,9 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
 
         $ret = [];
         foreach($objects AS $key => $OBJS) {
-            if(!isset($bps[$key]))
+            if(!isset($bps[$key])) {
                 continue;
+            }
             $bp = $bps[$key];
 
             // Initialize the service list
@@ -375,8 +386,9 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
                         $comp['display_name'] // descr
                     ];
 
-                    if(isset($bps[$comp['subprocess']]['external_info']))
+                    if(isset($bps[$comp['subprocess']]['external_info'])) {
                         $childBP[OUTPUT] = $bps[$comp['subprocess']]['external_info'];
+                    }
 
                     $ret[$key][] = $childBP;
                 }
@@ -436,12 +448,15 @@ if(!function_exists('l')) {
     }
 
     function cfg($sec, $opt) {
-        if($opt == 'base_url')
+        if($opt == 'base_url') {
             return 'http://127.0.0.1/nagiosbp/cgi-bin/nagios-bp.cgi';
-        if($opt == 'auth_user')
+        }
+        if($opt == 'auth_user') {
             return 'omdadmin';
-        if($opt == 'auth_pass')
+        }
+        if($opt == 'auth_pass') {
             return 'omd';
+        }
     }
 
     $O = new GlobalBackendnagiosbp([], 't');
