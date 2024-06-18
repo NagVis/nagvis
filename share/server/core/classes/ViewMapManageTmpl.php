@@ -29,17 +29,21 @@ class ViewMapManageTmpl {
         global $CORE;
         echo '<h2>'.l('Create Template').'</h2>';
 
-        if (submitted('create'))
+        if (submitted('create')) {
             $num_options = post('num_options', 1);
-        else
+        }
+        else {
             $num_options = 1;
+        }
 
         $map_name = req('show');
-        if (!$map_name)
+        if (!$map_name) {
             throw new FieldInputError(null, l('Map name missing'));
+        }
 
-        if (count($CORE->getAvailableMaps('/^'.preg_quote($map_name).'$/')) == 0)
+        if (count($CORE->getAvailableMaps('/^'.preg_quote($map_name).'$/')) == 0) {
             throw new FieldInputError(null, l('A map with this name does not exists'));
+        }
 
         $MAPCFG = new GlobalMapCfg($map_name);
         $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
@@ -47,21 +51,24 @@ class ViewMapManageTmpl {
         if (is_action() && post('mode') == 'create') {
             try {
                 $name = post('name');
-                if (!preg_match(MATCH_STRING_NO_SPACE, $name))
+                if (!preg_match(MATCH_STRING_NO_SPACE, $name)) {
                     throw new FieldInputError('name', l('You need to configure an unique name.'));
+                }
 
                 // Check if the template already exists
                 // Read map config but don't resolve templates and don't use the cache
-                if (count($MAPCFG->getTemplateNames('/^'.$name.'$/')) > 0)
+                if (count($MAPCFG->getTemplateNames('/^'.$name.'$/')) > 0) {
                     throw new FieldInputError('name', l('A template with this name already exists.'));
+                }
 
                 // Get all options from the POST vars
                 $options = ['name' => $name];
                 for ($i = 0; $i < $num_options; $i++) {
                     $key = post('key_'.$i);
                     $val = post('val_'.$i);
-                    if ($key !== '' && $val !== '')
+                    if ($key !== '' && $val !== '') {
                         $options[$key] = $val;
+                    }
                 }
 
                 // append a new object definition to the map configuration
@@ -70,10 +77,12 @@ class ViewMapManageTmpl {
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                }
+                else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -88,8 +97,9 @@ class ViewMapManageTmpl {
         input('name');
         echo '</td></tr>';
 
-        if (post('mode') == 'create' && post('_add_option'))
+        if (post('mode') == 'create' && post('_add_option')) {
             $num_options += 1;
+        }
 
         echo '<tr><td>'.l('Key').'</td><td>'.l('Value').'</td></tr>';
         for ($i = 0; $i < $num_options; $i++) {
@@ -115,11 +125,13 @@ class ViewMapManageTmpl {
         echo '<h2>'.l('Modify Template').'</h2>';
 
         $map_name = req('show');
-        if (!$map_name)
+        if (!$map_name) {
             throw new NagVisException(l('Map name missing'));
+        }
 
-        if (count($CORE->getAvailableMaps('/^'.preg_quote($map_name).'$/')) == 0)
+        if (count($CORE->getAvailableMaps('/^'.preg_quote($map_name).'$/')) == 0) {
             throw new NagVisException(l('A map with this name does not exists'));
+        }
 
         $MAPCFG = new GlobalMapCfg($map_name);
         $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
@@ -129,15 +141,18 @@ class ViewMapManageTmpl {
         // Check if the template exists
         // Read map config but don't resolve templates and don't use the cache
         if ($name) {
-            if (count($MAPCFG->getTemplateNames('/^'.$name.'$/')) == 0)
+            if (count($MAPCFG->getTemplateNames('/^'.$name.'$/')) == 0) {
                 throw new FieldInputError('name', l('A template with this name does not exist.'));
+            }
 
             $templates   = $MAPCFG->getDefinitions('template');
             $obj_id      = $MAPCFG->getTemplateIdByName($name);
             $options = [];
-            foreach ($templates[$obj_id] as $key => $val)
-                if ($key != 'type' && $key != 'object_id' && $key != 'name')
+            foreach ($templates[$obj_id] as $key => $val) {
+                if ($key != 'type' && $key != 'object_id' && $key != 'name') {
                     $options[$key] = $val;
+                }
+            }
             $num_options = max(post('num_options'), count($options));
         }
 
@@ -162,10 +177,12 @@ class ViewMapManageTmpl {
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                }
+                else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -177,15 +194,17 @@ class ViewMapManageTmpl {
         echo '<tr><td class="tdlabel">'.l('Name').'</td>';
         echo '<td class="tdfield">';
         $choices = ['' => l('Please choose')];
-        foreach (array_keys($MAPCFG->getTemplateNames()) AS $tmpl_name)
+        foreach (array_keys($MAPCFG->getTemplateNames()) AS $tmpl_name) {
             $choices[$tmpl_name] = $tmpl_name;
+        }
         select('name', $choices, '', 'updateForm(this.form)');
         echo '</td></tr>';
 
         if ($name) {
             hidden('num_options', $num_options);
-            if (post('mode') == 'edit' && post('_add_option'))
+            if (post('mode') == 'edit' && post('_add_option')) {
                 $num_options += 1;
+            }
 
             echo '<tr><td>'.l('Key').'</td><td>'.l('Value').'</td></tr>';
             for ($i = 0; $i < $num_options; $i++) {
@@ -221,11 +240,13 @@ class ViewMapManageTmpl {
         echo '<h2>'.l('Delete Template').'</h2>';
 
         $map_name = req('show');
-        if (!$map_name)
+        if (!$map_name) {
             throw new NagVisException(l('Map name missing'));
+        }
 
-        if (count($CORE->getAvailableMaps('/^'.preg_quote($map_name).'$/')) == 0)
+        if (count($CORE->getAvailableMaps('/^'.preg_quote($map_name).'$/')) == 0) {
             throw new NagVisException(l('A map with this name does not exists'));
+        }
 
         $MAPCFG = new GlobalMapCfg($map_name);
         $MAPCFG->readMapConfig(!ONLY_GLOBAL, false, false);
@@ -233,8 +254,9 @@ class ViewMapManageTmpl {
         if (is_action() && post('mode') == 'delete') {
             try {
                 $name = post('name');
-                if (count($MAPCFG->getTemplateNames('/^'.$name.'$/')) == 0)
+                if (count($MAPCFG->getTemplateNames('/^'.$name.'$/')) == 0) {
                     throw new FieldInputError('name', l('A template with this name does not exist.'));
+                }
 
                 $obj_id = $MAPCFG->getTemplateIdByName($name);
                 $MAPCFG->deleteElement($obj_id, true);
@@ -244,10 +266,12 @@ class ViewMapManageTmpl {
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                }
+                else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
@@ -259,8 +283,9 @@ class ViewMapManageTmpl {
         echo '<tr><td class="tdlabel">'.l('Name').'</td>';
         echo '<td class="tdfield">';
         $choices = ['' => l('Please choose')];
-        foreach (array_keys($MAPCFG->getTemplateNames()) AS $tmpl_name)
+        foreach (array_keys($MAPCFG->getTemplateNames()) AS $tmpl_name) {
             $choices[$tmpl_name] = $tmpl_name;
+        }
         select('name', $choices, '', 'updateForm(this.form)');
         echo '</td></tr>';
         echo '</table>';

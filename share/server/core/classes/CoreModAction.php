@@ -50,8 +50,9 @@ class CoreModAction extends CoreModule {
                     // Input validations
                     // - Valid custom action?
                     $actions = $CORE->getDefinedCustomActions();
-                    if(!isset($actions[$attrs['cmd']]))
+                    if(!isset($actions[$attrs['cmd']])) {
                         throw new NagVisException(l('The given custom action is not defined.'));
+                    }
 
                     // - does the map exist?
                     if(count($CORE->getAvailableMaps('/^'.$attrs['map'].'$/')) <= 0) {
@@ -63,16 +64,19 @@ class CoreModAction extends CoreModule {
                     $MAPCFG->skipSourceErrors();
                     $MAPCFG->readMapConfig();
 
-                    if(!isset($attrs['object_id']) && $attrs['object_id'] == '')
+                    if(!isset($attrs['object_id']) && $attrs['object_id'] == '') {
                         throw new NagVisException(l('The object_id value is missing.'));
+                    }
                     
-                    if(!$MAPCFG->objExists($attrs['object_id']))
+                    if(!$MAPCFG->objExists($attrs['object_id'])) {
                         throw new NagVisException(l('The object does not exist.'));
+                    }
                     $objId = $attrs['object_id'];
 
                     $func = 'handle_action_'.$attrs['cmd'];
-                    if(!function_exists($func))
+                    if(!function_exists($func)) {
                         throw new NagVisException(l('Action handler not implemented.'));
+                    }
 
                     $func($MAPCFG, $objId);
 

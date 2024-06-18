@@ -314,8 +314,9 @@ class CorePDOHandler {
             $this->lastErrorInfo = $e->getMessage();
             return false;
         }
-        if($this->DB === false || $this->DB === null)
+        if($this->DB === false || $this->DB === null) {
             return false;
+        }
 
         $this->driver = $driver;
         $this->data = $drv_data;
@@ -376,8 +377,9 @@ class CorePDOHandler {
     public function query($query, $params = []) {
         $this->lastErrorInfo = null;
         $st = $this->prep($query);
-        if($st === false)
+        if($st === false) {
             return false;
+        }
         if($st->execute($params) === false) {
             $this->lastErrorInfo = $st->errorInfo();
             return false;
@@ -387,10 +389,12 @@ class CorePDOHandler {
 
     public function queryFatal($s, $params = []) {
         $res = $this->query($s, $params);
-        if($res === FALSE)
-            die("Could not execute the $s query: ".$this->errorString());
-        else
+        if($res === FALSE) {
+            die("Could not execute the $s query: " . $this->errorString());
+        }
+        else {
             return $res;
+        }
     }
 
     public function count($query, $params) {
@@ -399,19 +403,23 @@ class CorePDOHandler {
     }
 
     public function error() {
-        if (isset($this->lastErrorInfo))
+        if (isset($this->lastErrorInfo)) {
             return $this->lastErrorInfo;
-        else
+        }
+        else {
             return $this->DB ? $this->DB->errorInfo() : '';
+        }
     }
 
     public function errorString() {
         $err = $this->error();
         $msg = $err[0];
-        if (isset($err[1]))
-            $msg .= '( '.$err[1].')';
-        if (isset($err[2]))
-            $msg .= ': '.$err[2];
+        if (isset($err[1])) {
+            $msg .= '( ' . $err[1] . ')';
+        }
+        if (isset($err[2])) {
+            $msg .= ': ' . $err[2];
+        }
         return $msg;
     }
 
@@ -454,18 +462,24 @@ class CorePDOHandler {
     public function deletePermissions($mod, $name) {
         // Only create when not existing
         if($this->count('-perm-count', ['mod' => $mod, 'act' => 'view', 'obj' => $name]) > 0) {
-            if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: delete permissions for '.$mod.' '.$name);
+            if(DEBUG&&DEBUGLEVEL&2) {
+                debug('auth.db: delete permissions for ' . $mod . ' ' . $name);
+            }
             $this->query('-role-delete-perm-by-obj', ['mod' => $mod, 'obj' => $name]);
             $this->query('-perm-delete-by-obj', ['mod' => $mod, 'obj' => $name]);
         } else {
-            if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: won\'t delete '.$mod.' permissions '.$name);
+            if(DEBUG&&DEBUGLEVEL&2) {
+                debug('auth.db: won\'t delete ' . $mod . ' permissions ' . $name);
+            }
         }
     }
 
     public function createMapPermissions($name) {
         // Only create when not existing
         if($this->count('-perm-count', ['mod' => 'Map', 'act' => 'view', 'obj' => $name]) <= 0) {
-            if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: create permissions for map '.$name);
+            if(DEBUG&&DEBUGLEVEL&2) {
+                debug('auth.db: create permissions for map ' . $name);
+            }
             if ($this->updating && !$this->inTrans) {
                 $this->DB->beginTransaction();
                 $this->inTrans = true;
@@ -474,7 +488,9 @@ class CorePDOHandler {
             $this->query('-perm-add', ['mod' => 'Map', 'act' => 'edit', 'obj' => $name]);
             $this->query('-perm-add', ['mod' => 'Map', 'act' => 'delete', 'obj' => $name]);
         } else {
-            if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: won\'t create permissions for map '.$name);
+            if(DEBUG&&DEBUGLEVEL&2) {
+                debug('auth.db: won\'t create permissions for map ' . $name);
+            }
         }
 
         return true;
@@ -483,10 +499,14 @@ class CorePDOHandler {
     public function createRotationPermissions($name) {
         // Only create when not existing
         if($this->count('-perm-count', ['mod' => 'Rotation', 'act' => 'view', 'obj' => $name]) <= 0) {
-            if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: create permissions for rotation '.$name);
+            if(DEBUG&&DEBUGLEVEL&2) {
+                debug('auth.db: create permissions for rotation ' . $name);
+            }
             $this->query('-perm-add', ['mod' => 'Rotation', 'act' => 'view', 'obj' => $name]);
         } else {
-            if(DEBUG&&DEBUGLEVEL&2) debug('auth.db: won\'t create permissions for rotation '.$name);
+            if(DEBUG&&DEBUGLEVEL&2) {
+                debug('auth.db: won\'t create permissions for rotation ' . $name);
+            }
         }
 
         return true;
@@ -495,10 +515,12 @@ class CorePDOHandler {
     public function updateDb() {
         // Read the current version from db
         $dbVersion = 0;
-        if(!$this->tableExist('version'))
+        if(!$this->tableExist('version')) {
             $this->createVersionTable();
-        else
+        }
+        else {
             $dbVersion = GlobalCore::getInstance()->versionToTag($this->getDbVersion());
+        }
 
         $reason = 'Could not start a database transaction';
         $this->inTrans = false;
@@ -506,8 +528,9 @@ class CorePDOHandler {
         try {
             ksort(self::$DRIVERS['_common']['updates']);
             foreach (self::$DRIVERS['_common']['updates'] as $ver => $queries) {
-                if (intval($ver) < $dbVersion)
+                if (intval($ver) < $dbVersion) {
                     continue;
+                }
 
                 if (!$this->inTrans) {
                     $this->DB->beginTransaction();
@@ -520,8 +543,9 @@ class CorePDOHandler {
             }
 
             foreach(GlobalCore::getInstance()->demoMaps AS $map) {
-                if(count(GlobalCore::getInstance()->getAvailableMaps('/^'.$map.'$/')) <= 0)
+                if(count(GlobalCore::getInstance()->getAvailableMaps('/^'.$map.'$/')) <= 0) {
                     continue;
+                }
 
                 $this->createMapPermissions($map);
 

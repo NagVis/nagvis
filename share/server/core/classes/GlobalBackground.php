@@ -90,10 +90,12 @@ class GlobalBackground {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getFile($bWebPath = true) {
-        if($bWebPath)
+        if($bWebPath) {
             return $this->webPath;
-        else
+        }
+        else {
             return $this->path;
+        }
     }
 
     /**

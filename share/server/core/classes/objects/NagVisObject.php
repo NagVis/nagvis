@@ -201,18 +201,21 @@ class NagVisObject {
 
         // Need to remove some options which are not relevant
         // FIXME: Would be much better to name the needed vars explicit
-        if(self::$arrDenyKeys == null)
+        if(self::$arrDenyKeys == null) {
             self::$arrDenyKeys = [
-                'MAPCFG' => '', 'MAP'  => '',
+                'MAPCFG' => '', 'MAP' => '',
                 'conf' => '', 'services' => '', 'fetchedChildObjects' => '', 'childObjects' => '',
                 'parentObjects' => '', 'members' => '', 'objects' => '', 'linkedMaps' => '',
                 'isSummaryObject' => '', 'isView' => '', 'dateFormat' => '', 'arrDenyKeys' => '',
-                'aStateCounts' => '',	'iconDetails' => '', 'problem_msg' => '', 'isLoopingBacklink' => ''
+                'aStateCounts' => '', 'iconDetails' => '', 'problem_msg' => '', 'isLoopingBacklink' => ''
             ];
+        }
 
-        foreach($this AS $key => $val)
-            if(!isset(self::$arrDenyKeys[$key]) && $val !== null)
+        foreach($this AS $key => $val) {
+            if (!isset(self::$arrDenyKeys[$key]) && $val !== null) {
                 $arr[$key] = $val;
+            }
+        }
 
         // I want only "name" in js
         $arr['name'] = $this->getName();
@@ -276,8 +279,9 @@ class NagVisObject {
      */
     public function parseMapCfg($globalOpts = []) {
         $ret = 'define '.$this->type." {\n";
-        if($this->type === 'host' && $this instanceof NagVisHost)
-            $ret .= '  host_name='.$this->host_name."\n";
+        if($this->type === 'host' && $this instanceof NagVisHost) {
+            $ret .= '  host_name=' . $this->host_name . "\n";
+        }
         $ret .= '  object_id='.$this->object_id."\n";
         foreach($this->getObjectConfiguration(false) AS $key => $val) {
             // Only set options which are different to global option

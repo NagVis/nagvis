@@ -183,8 +183,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     private function connectSocket() {
         // Only try to connect once per page. Re-raise the connection exception on
         // later tries to connect
-        if($this->CONNECT_EXC != null)
+        if($this->CONNECT_EXC != null) {
             throw $this->CONNECT_EXC;
+        }
 
         set_error_handler([$this, 'connectErrorHandler'], E_WARNING | E_NOTICE);
 
@@ -204,8 +205,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 ];
 
             $ca_path = cfg('backend_'.$this->backendId, 'verify_tls_ca_path');
-            if ($ca_path)
+            if ($ca_path) {
                 $ssl_options['cafile'] = $ca_path;
+            }
                 $context = stream_context_create([
                     'ssl' => $ssl_options
                 ]);
@@ -231,10 +233,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         restore_error_handler();
 
         if(!$this->SOCKET) {
-            if ($errno === 0)
+            if ($errno === 0) {
                 $error_msg = $this->CONNECT_ERR;
-            else
+            }
+            else {
                 $error_msg = $errstr;
+            }
 
             $this->SOCKET = null;
             $this->CONNECT_EXC = new BackendConnectionProblem(
@@ -305,45 +309,50 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         // Query to get a json formated array back
         // Use KeepAlive with fixed16 header
-        if($response)
+        if($response) {
             $query .= "OutputFormat: json\nKeepAlive: on\nResponseHeader: fixed16\n\n";
+        }
         // Disable regular error reporting to suppress php error messages
         $oldLevel = error_reporting(0);
         $write = fwrite($this->SOCKET, $query);
         error_reporting($oldLevel);
 
-        if($write=== false)
+        if($write=== false) {
             throw new BackendConnectionProblem(l('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
-                                                 [
-                                                     'BACKENDID' => $this->backendId,
-                                                       'SOCKET'    => $this->socketSpec,
-                                                       'MSG'       => 'Error while sending query to socket.'
-                                                 ]));
+                [
+                    'BACKENDID' => $this->backendId,
+                    'SOCKET' => $this->socketSpec,
+                    'MSG' => 'Error while sending query to socket.'
+                ]));
+        }
 
-        if($write !== strlen($query))
+        if($write !== strlen($query)) {
             throw new BackendConnectionProblem(l('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
-                                                 [
-                                                     'BACKENDID' => $this->backendId,
-                                                       'SOCKET'    => $this->socketSpec,
-                                                       'MSG'       => 'Connection terminated.'
-                                                 ]));
+                [
+                    'BACKENDID' => $this->backendId,
+                    'SOCKET' => $this->socketSpec,
+                    'MSG' => 'Connection terminated.'
+                ]));
+        }
 
 
         // Return here if no answer is expected
-        if(!$response)
+        if(!$response) {
             return;
+        }
 
         // Read 16 bytes to get the status code and body size
         $read = $this->readSocket(16);
 
         // Catch problem while reading
-        if($read === false)
+        if($read === false) {
             throw new BackendConnectionProblem(l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
-                                                 [
-                                                     'BACKENDID' => $this->backendId,
-                                                       'SOCKET'    => $this->socketSpec,
-                                                       'MSG'       => 'Error while reading socket (header)'
-                                                 ]));
+                [
+                    'BACKENDID' => $this->backendId,
+                    'SOCKET' => $this->socketSpec,
+                    'MSG' => 'Error while reading socket (header)'
+                ]));
+        }
 
         // Extract status code
         $status = substr($read, 0, 3);
@@ -567,10 +576,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         foreach($objects AS $OBJS) {
             $objFilters = [];
             foreach($filters AS $filter) {
-                if ($isHostQuery && $filter['key'] == 'host_name')
+                if ($isHostQuery && $filter['key'] == 'host_name') {
                     $key = 'name';
-                else
+                }
+                else {
                     $key = $filter['key'];
+                }
 
                 // Array('key' => 'host_name', 'operator' => '=', 'name'),
                 switch($key) {
@@ -583,10 +594,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     case 'hostgroup_name':
                     case 'group_name':
                     case 'servicegroup_name':
-                        if($key != 'service_description')
+                        if($key != 'service_description') {
                             $val = $OBJS[0]->getName();
-                        else
+                        }
+                        else {
                             $val = $OBJS[0]->getServiceDescription();
+                        }
 
                         $objFilters[] = 'Filter: '.$key.' '.$filter['op'].' '.$val."\n";
                     break;
@@ -609,41 +622,49 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
                 if($objType == 'host') {
                     $parts = explode('~~', $filter);
-                    if(!isset($parts[1]))
-                        $objFilters[] = 'Filter: service_description !~~ '.$filter."\n";
+                    if(!isset($parts[1])) {
+                        $objFilters[] = 'Filter: service_description !~~ ' . $filter . "\n";
+                    }
 
                 } elseif($objType == 'hostgroup' && $isHostQuery) {
                     $parts = explode('~~', $filter);
-                    if(!isset($parts[1]))
-                        $objFilters[] = 'Filter: host_name !~~ '.$parts[0]."\n";
+                    if(!isset($parts[1])) {
+                        $objFilters[] = 'Filter: host_name !~~ ' . $parts[0] . "\n";
+                    }
 
                 } elseif(($objType == 'hostgroup' && !$isHostQuery) || $objType == 'servicegroup') {
                     $parts = explode('~~', $filter);
-                    if(isset($parts[1]))
-                        $objFilters[] = 'Filter: host_name ~~ '.$parts[0]."\n"
-                                       .'Filter: service_description ~~ '.$parts[1]."\n"
-                                       ."And: 2\n"
-                                       ."Negate:\n";
-                    else
-                        $objFilters[] = 'Filter: host_name !~~ '.$parts[0]."\n";
+                    if(isset($parts[1])) {
+                        $objFilters[] = 'Filter: host_name ~~ ' . $parts[0] . "\n"
+                            . 'Filter: service_description ~~ ' . $parts[1] . "\n"
+                            . "And: 2\n"
+                            . "Negate:\n";
+                    }
+                    else {
+                        $objFilters[] = 'Filter: host_name !~~ ' . $parts[0] . "\n";
+                    }
                 }
             }
 
             // the object specific filters all need to match
             $count = count($objFilters);
-            if($count > 1)
-                $count = 'And: '.$count."\n";
-            else
+            if($count > 1) {
+                $count = 'And: ' . $count . "\n";
+            }
+            else {
                 $count = '';
+            }
 
             $aFilters[] = implode($objFilters).$count;
         }
 
         $count = count($aFilters);
-        if($count > 1)
-            $count = 'Or: '.$count."\n";
-        else
+        if($count > 1) {
+            $count = 'Or: ' . $count . "\n";
+        }
+        else {
             $count = '';
+        }
 
         return implode($aFilters).$count;
     }
@@ -774,10 +795,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     public function getHostState($objects, $options, $filters, $isMemberQuery = false) {
         $objFilter = $this->parseFilter($objects, $filters, $isMemberQuery, !COUNT_QUERY, HOST_QUERY);
 
-        if($options & 1)
+        if($options & 1) {
             $stateAttr = 'hard_state';
-        else
+        }
+        else {
             $stateAttr = 'state';
+        }
 
         $q = "GET hosts\n".
           "Columns: ".$stateAttr." plugin_output alias display_name ".
@@ -819,10 +842,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 $acknowledged = $state != UP && $e[14] == 1;
 
                 // 19: keys, 20: values
-                if(isset($e[19][0]) && isset($e[20][0]))
+                if(isset($e[19][0]) && isset($e[20][0])) {
                     $custom_vars = array_combine($e[19], $e[20]);
-                else
+                }
+                else {
                     $custom_vars = null;
+                }
 
                 // If there is a downtime for this object, save the data
                 // $e[15]: scheduled_downtime_depth
@@ -836,8 +861,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                         "GET downtimes\n".
                         "Columns: author comment start_time end_time\n" .
                         "Filter: host_name = ".$e[17]."\n");
-                    if(isset($data[0]))
+                    if(isset($data[0])) {
                         $dt_details = $data;
+                    }
                 } else {
                     $in_downtime = false;
                 }
@@ -887,10 +913,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     public function getServiceState($objects, $options, $filters, $isMemberQuery = false) {
         $objFilter = $this->parseFilter($objects, $filters, $isMemberQuery, !COUNT_QUERY, !HOST_QUERY);
 
-        if($options & 1)
+        if($options & 1) {
             $stateAttr = 'last_hard_state';
-        else
+        }
+        else {
             $stateAttr = 'state';
+        }
 
         $l = $this->queryLivestatus(
           "GET services\n" .
@@ -968,16 +996,19 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                               "Columns: author comment start_time end_time\n" .
                               "Filter: host_name = ".$e[20]."\n");
                         }
-                        if(isset($data[0]))
+                        if(isset($data[0])) {
                             $dt_details = $data;
+                        }
                     } else {
                         $in_downtime = false;
                     }
 
-                    if(isset($e[22][0]) && isset($e[23][0]))
+                    if(isset($e[22][0]) && isset($e[23][0])) {
                         $custom_vars = array_combine($e[22], $e[23]);
-                    else
+                    }
+                    else {
                         $custom_vars = null;
+                    }
 
                     $svc = [
                         $state,
@@ -1010,8 +1041,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 if($specific) {
                     $arrReturn[$key] = $svc;
                 } else {
-                    if(!isset($arrReturn[$key]))
+                    if(!isset($arrReturn[$key])) {
                         $arrReturn[$key] = [];
+                    }
 
                     $arrReturn[$key][] = $svc;
                 }
@@ -1030,10 +1062,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     public function getHostMemberCounts($objects, $options, $filters) {
         $objFilter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
 
-        if($options & 1)
+        if($options & 1) {
             $stateAttr = 'last_hard_state';
-        else
+        }
+        else {
             $stateAttr = 'state';
+        }
 
         // Get service information
         $l = $this->queryLivestatus("GET services\n" .
@@ -1044,17 +1078,19 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $arrReturn = [];
         if(is_array($l) && count($l) > 0) {
             // livestatus previous 1.1.9i3 answers without host_alias - these users should update.
-            if(!isset($l[0][13]))
+            if(!isset($l[0][13])) {
                 throw new BackendInvalidResponse(
                     l('Livestatus version used in backend [BACKENDID] is too old. Please update.',
-                                                           ['BACKENDID' => $this->backendId]));
+                        ['BACKENDID' => $this->backendId]));
+            }
 
             foreach ($l as $e) {
                 // Workaround for Icinga 2 which answers stats queries for not existing objects with
                 // 0 stats but with missing host_name and host_alias columns. So the number of answer
                 // columns is different leading to an exception in the code below.
-                if (count($e) != 18)
+                if (count($e) != 18) {
                     continue;
+                }
 
                 $arrReturn[$e[0]] = [
                     //'details' => Array('alias' => $e[1]),
@@ -1098,10 +1134,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * It does not return all objects, instead it returns the state counts.
      */
     public function getServiceListCounts($options, $filter) {
-        if($options & 1)
+        if($options & 1) {
             $stateAttr = 'last_hard_state';
-        else
+        }
+        else {
             $stateAttr = 'state';
+        }
 
         // Get service information
         $l = $this->queryLivestatus("GET services\n" .
@@ -1110,8 +1148,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         );
 
         $counts = [];
-        if(!is_array($l) || count($l) != 1)
+        if(!is_array($l) || count($l) != 1) {
             return [];
+        }
         $e = $l[0];
         return [
             PENDING => [
@@ -1166,10 +1205,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         $staleness_thresh = cfg('global', 'staleness_threshold');
 
-        if($options & 1)
+        if($options & 1) {
             $stateAttr = 'hard_state';
-        else
+        }
+        else {
             $stateAttr = 'state';
+        }
 
         // Get host information
         $q = "GET hosts".$host_suffix."\n" .
@@ -1242,16 +1283,18 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $arrReturn = [];
         if(is_array($l) && count($l) > 0) {
             // livestatus previous 1.1.9i3 answers without hostgroup_alias - these users should update.
-            if(!isset($l[0][8+$hoffset]))
+            if(!isset($l[0][8+$hoffset])) {
                 throw new BackendInvalidResponse(
                     l('Livestatus version used in backend [BACKENDID] is too old. Please update.',
-                                                                        ['BACKENDID' => $this->backendId]));
+                        ['BACKENDID' => $this->backendId]));
+            }
             foreach($l as $e) {
                 // Workaround for Icinga 2 which answers stats queries for not existing objects with
                 // 0 stats but with missing host_name and host_alias columns. So the number of answer
                 // columns is different leading to an exception in the code below.
-                if (count($e) != 12+$hoffset)
+                if (count($e) != 12+$hoffset) {
                     continue;
+                }
 
                 $counts = [
                     UNCHECKED => [
@@ -1288,13 +1331,16 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         }
 
         // If recognize_services are disabled don't fetch service information
-        if($options & 2)
+        if($options & 2) {
             return $arrReturn;
+        }
 
-        if($options & 1)
+        if($options & 1) {
             $stateAttr = 'last_hard_state';
-        else
+        }
+        else {
             $stateAttr = 'state';
+        }
 
         // Get service information
         $l = $this->queryLivestatus("GET services".$service_suffix."\n" .
@@ -1307,8 +1353,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 // Workaround for Icinga 2 which answers stats queries for not existing objects with
                 // 0 stats but with missing host_name and host_alias columns. So the number of answer
                 // columns is different leading to an exception in the code below.
-                if (count($e) != 16+$soffset)
+                if (count($e) != 16+$soffset) {
                     continue;
+                }
 
                 $counts = [
                     PENDING => [
@@ -1389,10 +1436,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     public function getServicegroupStateCounts($objects, $options, $filters) {
         $objFilter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
 
-        if($options & 1)
+        if($options & 1) {
             $stateAttr = 'last_hard_state';
-        else
+        }
+        else {
             $stateAttr = 'state';
+        }
 
         // Get service information
         $l = $this->queryLivestatus("GET servicesbygroup\n" .
@@ -1406,10 +1455,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $arrReturn = [];
         if(is_array($l) && count($l) > 0) {
             // livestatus previous 1.1.9i3 answers without servicegroup_alias - these users should update.
-            if(!isset($l[0][13]))
+            if(!isset($l[0][13])) {
                 throw new BackendInvalidResponse(
                     l('Livestatus version used in backend [BACKENDID] is too old. Please update.',
-                                                                        ['BACKENDID' => $this->backendId]));
+                        ['BACKENDID' => $this->backendId]));
+            }
             foreach($l as $e) {
                 $arrReturn[$e[0]] = [
                     'details' => [ALIAS => $e[1]],
@@ -1491,10 +1541,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
     public function getHostNamesInHostgroup($name) {
         $r = $this->queryLivestatusSingleColumn("GET hostgroups\nColumns: members\nFilter: name = ".$name."\n");
-        if (isset($r[0]))
+        if (isset($r[0])) {
             return $r[0];
-        else
+        }
+        else {
             return [];
+        }
     }
 
     // Returns all hostnames which have a state != UP or a service != OK
@@ -1506,10 +1558,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
     public function getProgramStart() {
 	$r = $this->queryLivestatusSingleColumn("GET status\nColumns: program_start\n");
-        if(isset($r[0]))
+        if(isset($r[0])) {
             return $r[0];
-        else
+        }
+        else {
             return -1;
+        }
     }
 
     public function getGeomapHosts($filterHostgroup = null) {
@@ -1544,10 +1598,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * Sends acknowledgement command to monitoring core
      */
     public function actionAcknowledge($what, $spec, $comment, $sticky, $notify, $persist, $user) {
-        if($what == 'host')
+        if($what == 'host') {
             $what = 'HOST';
-        elseif($what == 'service')
+        }
+        elseif($what == 'service') {
             $what = 'SVC';
+        }
         
         $sticky  = $sticky ? '2' : '0';
         $notify  = $notify ? '1' : '0';
@@ -1627,8 +1683,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $query = "GET contactgroups\nColumns: name members\n";
         foreach($this->queryLivestatus($query) as $row) {
             foreach($row[1] as $contact) {
-                if(!isset($contacts[$contact]))
+                if(!isset($contacts[$contact])) {
                     $contacts[$contact] = [];
+                }
                 $contacts[$contact][] = $row[0];
             }
         }

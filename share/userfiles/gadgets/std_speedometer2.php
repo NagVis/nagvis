@@ -74,10 +74,12 @@ $_MODE          = 'img';
 // Include the gadgets core. Also handle OMD default and local paths
 if(substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
     $core = dirname($_SERVER["SCRIPT_FILENAME"]) . '/gadgets_core.php';
-    if(file_exists($core))
+    if(file_exists($core)) {
         require($core);
-    else
+    }
+    else {
         require(str_replace('local/share/', 'share/', $core));
+    }
 } else {
     require('./gadgets_core.php');
 }

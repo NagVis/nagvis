@@ -43,27 +43,34 @@ class ViewToNewMap {
         if (is_action()) {
             try {
                 $name = post('name');
-                if (!$name)
+                if (!$name) {
                     throw new FieldInputError('name', l('Please provide a map name.'));
+                }
 
-                if (!preg_match(MATCH_MAP_NAME, $name))
+                if (!preg_match(MATCH_MAP_NAME, $name)) {
                     throw new FieldInputError('name', l('This is not a valid map name (need to match [M])',
-                                                                    ['M' => MATCH_MAP_NAME]));
+                        ['M' => MATCH_MAP_NAME]));
+                }
 
-                if (count($CORE->getAvailableMaps('/^'.$name.'$/')) > 0)
+                if (count($CORE->getAvailableMaps('/^'.$name.'$/')) > 0) {
                     throw new FieldInputError('name', l('A map with this name already exists.'));
+                }
 
-                if (!isset($view_params["worldmap_center"]))
+                if (!isset($view_params["worldmap_center"])) {
                     throw new FieldInputError('view_params', l('Please change your viewport before saving as new map.'));
+                }
 
-                if (!preg_match(MATCH_COORDS_MULTI, $view_params["worldmap_center"]))
+                if (!preg_match(MATCH_COORDS_MULTI, $view_params["worldmap_center"])) {
                     throw new FieldInputError('view_params', l('This is not a valid worldmap center'));
+                }
 
-                if (!isset($view_params["worldmap_zoom"]))
+                if (!isset($view_params["worldmap_zoom"])) {
                     throw new FieldInputError('view_params', l('Worldmap zoom parameter missing.'));
+                }
 
-                if (!preg_match(MATCH_INTEGER, $view_params["worldmap_zoom"]))
+                if (!preg_match(MATCH_INTEGER, $view_params["worldmap_zoom"])) {
                     throw new FieldInputError('view_params', l('This is not a valid worldmap zoom'));
+                }
 
                 // Read the old config
                 $MAPCFG = new GlobalMapCfg($orig_name);
@@ -87,10 +94,12 @@ class ViewToNewMap {
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                }
+                else {
                     throw $e;
+                }
             }
         }
         echo $this->error;

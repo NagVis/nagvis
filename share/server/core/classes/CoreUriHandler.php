@@ -50,11 +50,13 @@ class CoreUriHandler {
         $sReturn = false;
 
         // Transform parameter aliases
-        if(isset($this->aAliases[$sKey]))
+        if(isset($this->aAliases[$sKey])) {
             $sKey = $this->aAliases[$sKey];
+        }
 
-        if($this->isSetAndNotEmpty($sKey))
+        if($this->isSetAndNotEmpty($sKey)) {
             $sReturn = $this->aOpts[$sKey];
+        }
 
         $this->aOpts[$sKey] = $sVal;
 
@@ -67,13 +69,16 @@ class CoreUriHandler {
 
     public function get($sKey) {
         // Transform parameter aliases
-        if(isset($this->aAliases[$sKey]))
+        if(isset($this->aAliases[$sKey])) {
             $sKey = $this->aAliases[$sKey];
+        }
 
-        if($this->isSetAndNotEmpty($sKey))
+        if($this->isSetAndNotEmpty($sKey)) {
             return $this->aOpts[$sKey];
-        else
+        }
+        else {
             return false;
+        }
     }
 
     public function parseModSpecificUri($aKeys, $aDefaults = []) {
@@ -83,18 +88,21 @@ class CoreUriHandler {
             if($sMatch !== '') {
                 // When param not set initialize it as empty string
                 // or with the given defaults when some given.
-                if(!isset($_GET[$key]))
-                    if(isset($aDefaults[$key]))
+                if(!isset($_GET[$key])) {
+                    if (isset($aDefaults[$key])) {
                         $_GET[$key] = $aDefaults[$key];
-                    else
+                    } else
                         $_GET[$key] = '';
+                }
 
                 // Validate single value or multiple (array)
-                if(is_array($_GET[$key]))
-                    foreach($_GET[$key] AS $val)
+                if(is_array($_GET[$key])) {
+                    foreach ($_GET[$key] as $val)
                         $bValid = preg_match($sMatch, $val);
-                else
+                }
+                else {
                     $bValid = preg_match($sMatch, $_GET[$key]);
+                }
             }
 
             if($bValid) {
@@ -113,38 +121,46 @@ class CoreUriHandler {
         // Remove the first slash and then explode by slashes
         //$this->aOpts = explode('/', substr($sRequest,1));
 
-        if(isset($_GET['mod']))
+        if(isset($_GET['mod'])) {
             $this->aOpts['mod'] = $_GET['mod'];
-        if(isset($_GET['act']))
+        }
+        if(isset($_GET['act'])) {
             $this->aOpts['act'] = $_GET['act'];
+        }
     }
 
     private function setDefaults() {
         // Handle default options when no module given
-        if(!$this->isSetAndNotEmpty('mod'))
+        if(!$this->isSetAndNotEmpty('mod')) {
             $this->aOpts['mod'] = cfg('global', 'startmodule');
+        }
 
         // Handle default options when no action given
-        if(!$this->isSetAndNotEmpty('act'))
+        if(!$this->isSetAndNotEmpty('act')) {
             $this->aOpts['act'] = cfg('global', 'startaction');
+        }
     }
 
     private function validate() {
         $bValid = true;
 
         // Validate each param
-        foreach($this->aOpts AS $val)
-            if(!preg_match(MATCH_URI_PART, $val))
+        foreach($this->aOpts AS $val) {
+            if (!preg_match(MATCH_URI_PART, $val)) {
                 $bValid = false;
+            }
+        }
 
-        if($bValid === false)
+        if($bValid === false) {
             throw new NagVisException(l('The given url is not valid'));
+        }
     }
 
     public function isSetAndNotEmpty($sKey) {
         // Transform parameter aliases
-        if(isset($this->aAliases[$sKey]))
+        if(isset($this->aAliases[$sKey])) {
             $sKey = $this->aAliases[$sKey];
+        }
 
         return isset($this->aOpts[$sKey]) && $this->aOpts[$sKey] != '';
     }

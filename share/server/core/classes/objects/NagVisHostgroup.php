@@ -53,8 +53,9 @@ class NagVisHostgroup extends NagVisStatefulObject {
 
         if($this->hover_menu == 1
            && $this->hover_childs_show == 1
-           && $bFetchMemberState)
+           && $bFetchMemberState) {
             $queries['hostgroupMemberDetails'] = true;
+        }
 
         $_BACKEND->queue($queries, $this);
     }
@@ -87,18 +88,22 @@ class NagVisHostgroup extends NagVisStatefulObject {
             // Calculate summary state and output
 
             // Only create summary from childs when not set yet (e.g by backend)
-            if($this->sum[STATE] === null)
+            if($this->sum[STATE] === null) {
                 $this->fetchSummaryStateFromCounts();
+            }
 
             // Only create summary from childs when not set yet (e.g by backend)
-            if($this->sum[OUTPUT] === null)
+            if($this->sum[OUTPUT] === null) {
                 $this->fetchSummaryOutputFromCounts();
+            }
         } else {
-            if($this->sum[STATE] === null)
+            if($this->sum[STATE] === null) {
                 $this->fetchSummaryState();
+            }
 
-            if($this->sum[OUTPUT] === null)
+            if($this->sum[OUTPUT] === null) {
                 $this->fetchSummaryOutput();
+            }
         }
     }
 
@@ -160,10 +165,12 @@ class NagVisHostgroup extends NagVisStatefulObject {
      * Fetches the summary state from all members recursive
      */
     private function fetchSummaryState() {
-        if($this->hasMembers())
+        if($this->hasMembers()) {
             $this->calcSummaryState();
-        else
+        }
+        else {
             $this->sum[STATE] = ERROR;
+        }
     }
 
     /**

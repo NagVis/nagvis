@@ -38,8 +38,9 @@ class CoreModMultisite extends CoreModule {
     }
 
     public function handleAction() {
-        if(!$this->offersAction($this->sAction))
+        if(!$this->offersAction($this->sAction)) {
             return '';
+        }
 
         $maps = [];
 
@@ -66,11 +67,13 @@ class CoreModMultisite extends CoreModule {
         $maps = [];
         $childs = [];
         foreach ($this->getMapsCached() as $map) {
-            if($map['parent_map'] === '')
+            if($map['parent_map'] === '') {
                 $maps[$map['name']] = $this->getMapForMultisite($map);
+            }
             else {
-                if(!isset($childs[$map['parent_map']]))
+                if(!isset($childs[$map['parent_map']])) {
                     $childs[$map['parent_map']] = [];
+                }
                 $childs[$map['parent_map']][$map['name']] = $this->getMapForMultisite($map);
             }
         }
@@ -140,8 +143,9 @@ class CoreModMultisite extends CoreModule {
                 $error = $e->getMessage();
             }
 
-            if($MAPCFG->getValue(0, 'show_in_lists') != 1 || $MAPCFG->getValue(0, 'show_in_multisite') != 1)
+            if($MAPCFG->getValue(0, 'show_in_lists') != 1 || $MAPCFG->getValue(0, 'show_in_multisite') != 1) {
                 continue;
+            }
 
             $MAP = new NagVisMap($MAPCFG, GET_STATE, !IS_VIEW);
 

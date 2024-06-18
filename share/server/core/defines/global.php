@@ -30,12 +30,15 @@ const CONST_VERSION = '1.9.50';
 // some annoying strict messages which are OK for us. From version 5.2
 // everything is OK when using E_STRICT and use for compatibility issues
 // from version 8.0 and above E_DEPRECATED
-if (version_compare(PHP_VERSION, '8.0') >= 0)
+if (version_compare(PHP_VERSION, '8.0') >= 0) {
     error_reporting(E_ALL & ~E_DEPRECATED);
-elseif (version_compare(PHP_VERSION, '5.2') >= 0)
+}
+elseif (version_compare(PHP_VERSION, '5.2') >= 0) {
     error_reporting(E_ALL ^ E_STRICT);
-else
+}
+else {
     error_reporting(E_ALL);
+}
 
 /**
  * Set the search path for included files

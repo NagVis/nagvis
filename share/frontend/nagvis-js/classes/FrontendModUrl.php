@@ -71,8 +71,9 @@ class FrontendModUrl extends FrontendModule {
 
     private function showViewDialog() {
         // Only show when map name given
-        if(!isset($this->url) || $this->url == '')
+        if(!isset($this->url) || $this->url == '') {
             throw new NagVisException(l('No url given.'));
+        }
 
         // Build index template
         $INDEX = new NagVisIndexView($this->CORE);

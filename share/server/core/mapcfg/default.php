@@ -20,9 +20,11 @@ function listMapNames() {
     global $CORE, $AUTHORISATION;
     $list = [];
     $maps = $CORE->getAvailableMaps();
-    foreach($maps AS $map_name)
-        if($AUTHORISATION->isPermitted('Map', 'view', $map_name))
+    foreach($maps AS $map_name) {
+        if ($AUTHORISATION->isPermitted('Map', 'view', $map_name)) {
             $list[$map_name] = $map_name;
+        }
+    }
 
     return $list;
 }
@@ -121,8 +123,9 @@ function getObjectNames($type, $MAPCFG, $objId, $attrs) {
     }
 
     // Return simply nothing when a user just choosen to insert multiple backends
-    if(isset($attrs['backend_id']) && $attrs['backend_id'] == ['<<<other>>>'])
+    if(isset($attrs['backend_id']) && $attrs['backend_id'] == ['<<<other>>>']) {
         return [];
+    }
 
     // Initialize the backend
     foreach($backendIds as $backendId) {
@@ -132,13 +135,16 @@ function getObjectNames($type, $MAPCFG, $objId, $attrs) {
 
     $name1 = '';
     if($type === 'service') {
-        if(isset($attrs['host_name']) && $attrs['host_name'] != '')
+        if(isset($attrs['host_name']) && $attrs['host_name'] != '') {
             $name1 = $attrs['host_name'];
-        else
+        }
+        else {
             $name1 = $MAPCFG->getValue($objId, 'host_name');
+        }
 
-        if($name1 == '')
+        if($name1 == '') {
             return [];
+        }
     }
 
     // Read all objects of the requested type from the backend
@@ -146,10 +152,12 @@ function getObjectNames($type, $MAPCFG, $objId, $attrs) {
     foreach($backendIds as $backendId) {
         $objs = $_BACKEND->getBackend($backendId)->getObjects($type, $name1, '');
         foreach($objs AS $obj) {
-            if($type !== 'service')
+            if($type !== 'service') {
                 $ret[$obj['name1']] = $obj['name1'];
-            else
+            }
+            else {
                 $ret[$obj['name2']] = $obj['name2'];
+            }
         }
     }
 
@@ -184,16 +192,18 @@ function listTemplateNames() {
 function listShapes($MAPCFG, $objId, $attrs) {
     global $CORE;
     // Return simply nothing when a user just choosen to insert "other" icon
-    if(isset($attrs['icon']) && $attrs['icon'] == '<<<other>>>')
+    if(isset($attrs['icon']) && $attrs['icon'] == '<<<other>>>') {
         return [];
+    }
     return $CORE->getAvailableShapes();
 }
 
 function listSources($MAPCFG, $objId, $attrs) {
     global $CORE;
     // Return simply nothing when a user just choosen to insert "other" sources
-    if(isset($attrs['sources']) && $attrs['sources'] == '<<<other>>>')
+    if(isset($attrs['sources']) && $attrs['sources'] == '<<<other>>>') {
         return [];
+    }
     return $CORE->getSelectableSources();
 }
 

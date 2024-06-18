@@ -31,19 +31,22 @@ class ViewAck {
         ob_start();
 
         $map = req('map');
-        if (!$map || count($CORE->getAvailableMaps('/^'.$map.'$/')) == 0)
+        if (!$map || count($CORE->getAvailableMaps('/^'.$map.'$/')) == 0) {
             throw new NagVisException(l('Please provide a valid map name.'));
+        }
 
         $object_id = req('object_id');
-        if (!$object_id || !preg_match(MATCH_OBJECTID, $object_id))
+        if (!$object_id || !preg_match(MATCH_OBJECTID, $object_id)) {
             throw new NagVisException(l('Please provide a valid object id.'));
+        }
 
         $MAPCFG = new GlobalMapCfg($map);
         $MAPCFG->skipSourceErrors();
         $MAPCFG->readMapConfig();
 
-        if (!$MAPCFG->objExists($object_id))
+        if (!$MAPCFG->objExists($object_id)) {
             throw new NagVisException(l('The object does not exist.'));
+        }
 
         $backendIds = $MAPCFG->getValue($object_id, 'backend_id');
         foreach ($backendIds AS $backendId) {
@@ -58,15 +61,18 @@ class ViewAck {
         if (is_action()) {
             try {
                 $type = $MAPCFG->getValue($object_id, 'type');
-                if ($type == 'host')
+                if ($type == 'host') {
                     $spec = $MAPCFG->getValue($object_id, 'host_name');
-                else
+                }
+                else {
                     $spec = $MAPCFG->getValue($object_id, 'host_name')
-                            .';'.$MAPCFG->getValue($object_id, 'service_description');
+                        . ';' . $MAPCFG->getValue($object_id, 'service_description');
+                }
 
                 $comment = post('comment');
-                if (!$comment)
+                if (!$comment) {
                     throw new FieldInputError('comment', l('You need to provide a comment.'));
+                }
 
                 $sticky  = get_checkbox('sticky');
                 $notify  = get_checkbox('notify');
@@ -87,10 +93,12 @@ class ViewAck {
             } catch (NagVisException $e) {
                 form_error(null, $e->message());
             } catch (Exception $e) {
-                if (isset($e->msg))
+                if (isset($e->msg)) {
                     form_error(null, $e->msg);
-                else
+                }
+                else {
                     throw $e;
+                }
             }
         }
         echo $this->error;
