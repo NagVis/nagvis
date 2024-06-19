@@ -46,11 +46,9 @@ class CoreModManageShapes extends CoreModule
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
-            switch ($this->sAction) {
-                case 'view':
-                    $VIEW = new ViewManageShapes();
-                    $sReturn = json_encode(['code' => $VIEW->parse()]);
-                    break;
+            if ($this->sAction == 'view') {
+                $VIEW = new ViewManageShapes();
+                $sReturn = json_encode(['code' => $VIEW->parse()]);
             }
         }
 

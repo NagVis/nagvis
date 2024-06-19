@@ -30,7 +30,7 @@ $viewParams = [
     ],
 ];
 if (cfg('global', 'shinken_features')) {
-    array_push($viewParams['automap'], 'min_business_impact');
+    $viewParams['automap'][] = 'min_business_impact';
 }
 
 function list_automap_render_modes() {

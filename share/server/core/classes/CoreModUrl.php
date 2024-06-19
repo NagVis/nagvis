@@ -50,10 +50,8 @@ class CoreModUrl extends CoreModule
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
-            switch ($this->sAction) {
-                case 'getContents':
-                    $sReturn = $this->getContents();
-                    break;
+            if ($this->sAction == 'getContents') {
+                $sReturn = $this->getContents();
             }
         }
 

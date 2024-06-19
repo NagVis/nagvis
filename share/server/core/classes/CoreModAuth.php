@@ -52,18 +52,17 @@ class CoreModAuth extends CoreModule
     {
         global $AUTH;
         if ($this->offersAction($this->sAction)) {
-            switch ($this->sAction) {
-                case 'logout':
-                    if ($AUTH->logout()) {
-                        return true;
-                    } else {
-                        throw new NagVisException(
-                            l('Unable to log you out. Maybe it is not supported by your authentication module.'),
-                            null,
-                            1,
-                            cfg('paths', 'htmlbase')
-                        );
-                    }
+            if ($this->sAction == 'logout') {
+                if ($AUTH->logout()) {
+                    return true;
+                } else {
+                    throw new NagVisException(
+                        l('Unable to log you out. Maybe it is not supported by your authentication module.'),
+                        null,
+                        1,
+                        cfg('paths', 'htmlbase')
+                    );
+                }
             }
         }
     }
