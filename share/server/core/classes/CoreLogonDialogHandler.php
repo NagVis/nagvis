@@ -72,8 +72,8 @@ class CoreLogonDialogHandler
 
         // Don't try to auth if one of the vars is missing
         if (
-            !$FHANDLER->issetAndNotEmpty('_username')
-            || !$FHANDLER->issetAndNotEmpty('_password')
+            !$FHANDLER->isSetAndNotEmpty('_username')
+            || !$FHANDLER->isSetAndNotEmpty('_password')
         ) {
             return null;
         }
@@ -86,7 +86,7 @@ class CoreLogonDialogHandler
         }
 
         if (
-            !$FHANDLER->issetAndNotEmpty('_password')
+            !$FHANDLER->isSetAndNotEmpty('_password')
             || $FHANDLER->isLongerThan('_password', AUTH_MAX_PASSWORD_LENGTH)
         ) {
             throw new FieldInputError('_password', l('Invalid password.'));
