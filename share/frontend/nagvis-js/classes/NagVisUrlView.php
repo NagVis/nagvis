@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisUrlView {
+class NagVisUrlView
+{
     private $url = '';
     private $content = '';
     private $aRotation = [];

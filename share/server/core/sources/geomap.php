@@ -1,6 +1,8 @@
 <?php
 
-class GeomapError extends MapSourceError {}
+class GeomapError extends MapSourceError
+{
+}
 
 //
 // CSV source file handling

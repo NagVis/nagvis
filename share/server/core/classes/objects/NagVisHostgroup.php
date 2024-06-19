@@ -23,7 +23,8 @@
  *
  *****************************************************************************/
 
-class NagVisHostgroup extends NagVisStatefulObject {
+class NagVisHostgroup extends NagVisStatefulObject
+{
     protected $type = 'hostgroup';
 
     protected static $langType = null;

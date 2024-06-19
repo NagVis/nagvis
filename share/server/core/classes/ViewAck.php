@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class ViewAck {
+class ViewAck
+{
     private $error = null;
 
     public function parse() {

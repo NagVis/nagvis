@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class FrontendModOverview extends FrontendModule {
+class FrontendModOverview extends FrontendModule
+{
     private $rotation = '';
     private $rotationStep = '';
     private $CORE;

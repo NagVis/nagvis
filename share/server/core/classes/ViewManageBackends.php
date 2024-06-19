@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class ViewManageBackends {
+class ViewManageBackends
+{
     private $error = null;
     private $editable_backends;
     private $defined_backends;

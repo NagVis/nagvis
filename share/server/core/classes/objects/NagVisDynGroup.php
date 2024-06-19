@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class NagVisDynGroup extends NagVisStatefulObject {
+class NagVisDynGroup extends NagVisStatefulObject
+{
     protected $type = 'dyngroup';
 
     protected static $langType   = null;

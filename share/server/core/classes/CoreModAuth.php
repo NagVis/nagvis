@@ -25,7 +25,8 @@
 /**
  * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModAuth extends CoreModule {
+class CoreModAuth extends CoreModule
+{
     protected $CORE;
     protected $FHANDLER;
 

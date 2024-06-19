@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreUserCfg {
+class CoreUserCfg
+{
     private $profilesDir;
 
     // Optional list of value types to be fixed

@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class ViewToNewMap {
+class ViewToNewMap
+{
     private $error = null;
 
     public function parse($orig_name) {

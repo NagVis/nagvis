@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisHeaderMenu {
+class NagVisHeaderMenu
+{
     private $OBJ;
     private $TMPL;
     private $TMPLSYS;

@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreRotation {
+class CoreRotation
+{
     private $sPoolName = null;
 
     private $arrSteps = [];

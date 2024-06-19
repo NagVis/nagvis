@@ -25,7 +25,8 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModManageShapes extends CoreModule {
+class CoreModManageShapes extends CoreModule
+{
     private $name = null;
     private $CORE;
 

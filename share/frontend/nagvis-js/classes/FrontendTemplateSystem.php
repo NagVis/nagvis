@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class FrontendTemplateSystem {
+class FrontendTemplateSystem
+{
     private $TMPL;
 
     public function __construct() {

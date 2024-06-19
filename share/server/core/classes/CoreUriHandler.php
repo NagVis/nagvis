@@ -25,7 +25,8 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreUriHandler {
+class CoreUriHandler
+{
     private $sRequestUri;
     private $aOpts;
 

@@ -26,7 +26,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class FrontendRequestHandler extends CoreRequestHandler {
+class FrontendRequestHandler extends CoreRequestHandler
+{
     public function __construct($aOptions) {
         parent::__construct($aOptions);
     }

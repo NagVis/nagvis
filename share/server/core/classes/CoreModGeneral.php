@@ -25,7 +25,8 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModGeneral extends CoreModule {
+class CoreModGeneral extends CoreModule
+{
     private $CORE;
 
     public function __construct(GlobalCore $CORE) {

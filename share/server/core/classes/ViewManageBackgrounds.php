@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class ViewManageBackgrounds {
+class ViewManageBackgrounds
+{
     private $error = null;
 
     private function uploadForm() {

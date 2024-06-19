@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisMapView {
+class NagVisMapView
+{
     private $MAPCFG    = null;
     private $name      = '';
     private $search    = '';

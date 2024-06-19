@@ -25,7 +25,8 @@
 /**
  * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModUser extends CoreModule {
+class CoreModUser extends CoreModule
+{
     protected $CORE;
     protected $FHANDLER;
     protected $SHANDLER;

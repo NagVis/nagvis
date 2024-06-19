@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class GlobalBackground {
+class GlobalBackground
+{
     protected $image;
     protected $path;
     protected $webPath;

@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class GlobalFileCache {
+class GlobalFileCache
+{
     private $files;
     private $cacheFile;
 

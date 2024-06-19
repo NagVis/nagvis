@@ -25,7 +25,8 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModRoleMgmt extends CoreModule {
+class CoreModRoleMgmt extends CoreModule
+{
     protected $CORE;
 
     public function __construct($CORE) {

@@ -25,7 +25,8 @@
 /**
  * @author    Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisHoverUrl {
+class NagVisHoverUrl
+{
     private $CORE;
 
     private $url;

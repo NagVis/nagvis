@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class FrontendModLogonDialog extends FrontendModule {
+class FrontendModLogonDialog extends FrontendModule
+{
     protected $CORE;
 
     public function __construct($CORE) {

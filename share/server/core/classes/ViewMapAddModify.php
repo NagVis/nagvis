@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class ViewMapAddModify {
+class ViewMapAddModify
+{
     private $MAPCFG = null;
     private $mode = null;
 
