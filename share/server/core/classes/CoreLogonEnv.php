@@ -34,8 +34,12 @@ class CoreLogonEnv extends CoreLogonModule
         // Check if the variable exists and is not empty
         if (!isset($_SERVER[$envVar]) || $_SERVER[$envVar] === '') {
             if ($printErr) {
-                throw new NagVisException(l('Unable to authenticate user. The environment variable [VAR] is not set or empty.',
-                    ['VAR' => htmlentities($envVar, ENT_COMPAT, 'UTF-8')]));
+                throw new NagVisException(
+                    l(
+                        'Unable to authenticate user. The environment variable [VAR] is not set or empty.',
+                        ['VAR' => htmlentities($envVar, ENT_COMPAT, 'UTF-8')]
+                    )
+                );
             }
 
             return false;

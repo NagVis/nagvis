@@ -423,7 +423,16 @@ function automap_connector($MAPCFG, &$params, &$saved_config, $from_obj, $to_obj
  * Gets all child/parent objects of this host from the backend. The child objects are
  * saved to the childObjects array
  */
-function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $layers_left, &$this_tree_lvl, &$object_names) {
+function automap_fetch_tree(
+    $dir,
+    $MAPCFG,
+    $params,
+    &$saved_config,
+    $obj_name,
+    $layers_left,
+    &$this_tree_lvl,
+    &$object_names
+) {
     if ($layers_left == 0) {
         return;
     } // Stop recursion when the number of layers counted down
@@ -443,9 +452,13 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
                     $tmp_array = array_flip(list_business_impact());
                     $min_business_impact = $tmp_array[$params['min_business_impact']];
                 }
-                $relations = $_BACKEND->getBackend($params['backend_id'][0])->getDirectChildDependenciesNamesByHostName($obj_name, $min_business_impact);
+                $relations = $_BACKEND
+                    ->getBackend($params['backend_id'][0])
+                    ->getDirectChildDependenciesNamesByHostName($obj_name, $min_business_impact);
             } else {
-                $relations = $_BACKEND->getBackend($params['backend_id'][0])->getDirectChildNamesByHostName($obj_name);
+                $relations = $_BACKEND
+                    ->getBackend($params['backend_id'][0])
+                    ->getDirectChildNamesByHostName($obj_name);
             }
         }
         elseif ($obj_name != '<<<monitoring>>>') {
@@ -454,9 +467,13 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
                     $tmp_array = array_flip(list_business_impact());
                     $min_business_impact = $tmp_array[$params['min_business_impact']];
                 }
-                $relations = $_BACKEND->getBackend($params['backend_id'][0])->getDirectParentDependenciesNamesByHostName($obj_name, $min_business_impact);
+                $relations = $_BACKEND
+                    ->getBackend($params['backend_id'][0])
+                    ->getDirectParentDependenciesNamesByHostName($obj_name, $min_business_impact);
             } else {
-                $relations = $_BACKEND->getBackend($params['backend_id'][0])->getDirectParentNamesByHostName($obj_name);
+                $relations = $_BACKEND
+                    ->getBackend($params['backend_id'][0])
+                    ->getDirectParentNamesByHostName($obj_name);
             }
 
             // When no parents can be found for one host, this is the root node,
@@ -488,7 +505,16 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
         // < 0 - there is no limit
         // > 0 - there is a limit but it is no reached yet
         if ($layers_left < 0 || $layers_left > 0) {
-            automap_fetch_tree($dir, $MAPCFG, $params, $saved_config, $rel_name, $layers_left - 1, $this_tree_lvl[$obj['object_id']]['.' . $dir], $object_names);
+            automap_fetch_tree(
+                $dir,
+                $MAPCFG,
+                $params,
+                $saved_config,
+                $rel_name,
+                $layers_left - 1,
+                $this_tree_lvl[$obj['object_id']]['.' . $dir],
+                $object_names
+            );
         }
     }
 }
@@ -505,7 +531,16 @@ function automap_get_object_tree($MAPCFG, $params, &$saved_config) {
     // tuned for efficency, but should be sufficient for our needs.
     $object_names = [$root_name => true];
 
-    automap_fetch_tree('childs', $MAPCFG, $params, $saved_config, $root_name, $params['child_layers'], $root_obj['.childs'], $object_names);
+    automap_fetch_tree(
+        'childs',
+        $MAPCFG,
+        $params,
+        $saved_config,
+        $root_name,
+        $params['child_layers'],
+        $root_obj['.childs'],
+        $object_names
+    );
 
     // Get all parent object information from backend when needed
     // If some parent layers are requested: It should be checked if the used
@@ -514,7 +549,16 @@ function automap_get_object_tree($MAPCFG, $params, &$saved_config) {
         global $_BACKEND;
 
         if ($_BACKEND->checkBackendFeature($params['backend_id'][0], 'getDirectParentNamesByHostName')) {
-            automap_fetch_tree('parents', $MAPCFG, $params, $saved_config, $root_name, $params['parent_layers'], $root_obj['.parents'], $object_names);
+            automap_fetch_tree(
+                'parents',
+                $MAPCFG,
+                $params,
+                $saved_config,
+                $root_name,
+                $params['parent_layers'],
+                $root_obj['.parents'],
+                $object_names
+            );
         }
     }
 
@@ -615,7 +659,13 @@ function automap_filter_by_state(&$obj, $params) {
 /**
  * Links the object in the object tree to the map objects
  */
-function automap_tree_to_map_config($MAPCFG, &$params, &$saved_config, &$map_config, &$tree) {
+function automap_tree_to_map_config(
+    $MAPCFG,
+    &$params,
+    &$saved_config,
+    &$map_config,
+    &$tree
+) {
     if (isset($map_config[$tree['object_id']])) {
         return;
     }

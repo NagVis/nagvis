@@ -39,7 +39,11 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
         $this->file     = cfg('global', 'authorisation_group_perms_file');
 
         if ($this->file == '') {
-            throw new NagVisException(l('No group permission file specified. Please configure one via the option authorisation_group_perms_file in global section of the main configuration.'));
+            throw new NagVisException(
+                l(
+                    'No group permission file specified. Please configure one via the option authorisation_group_perms_file in global section of the main configuration.'
+                )
+            );
         }
 
         if (!file_exists($this->file)) {

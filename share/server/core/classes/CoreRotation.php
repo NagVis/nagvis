@@ -131,12 +131,16 @@ class CoreRotation
             // Set the next step after setting the current step
             $this->setNextStep();
         } else {
-            throw new NagVisException(l('The requested step [STEP] of type [TYPE] does not exist in the rotation pool [ROTATION]',
-                [
-                    'ROTATION' => htmlentities($this->sPoolName, ENT_COMPAT, 'UTF-8'),
-                    'STEP'     => htmlentities($sStep, ENT_COMPAT, 'UTF-8'),
-                    'TYPE'     => htmlentities($sType, ENT_COMPAT, 'UTF-8')
-                ]));
+            throw new NagVisException(
+                l(
+                    'The requested step [STEP] of type [TYPE] does not exist in the rotation pool [ROTATION]',
+                    [
+                        'ROTATION' => htmlentities($this->sPoolName, ENT_COMPAT, 'UTF-8'),
+                        'STEP'     => htmlentities($sStep, ENT_COMPAT, 'UTF-8'),
+                        'TYPE'     => htmlentities($sType, ENT_COMPAT, 'UTF-8')
+                    ]
+                )
+            );
         }
     }
 
@@ -179,9 +183,21 @@ class CoreRotation
         $htmlBase = cfg('paths', 'htmlbase');
         foreach ($this->arrSteps as $intId => $arrStep) {
             if (isset($arrStep['url']) && $arrStep['url'] != '') {
-                $this->arrSteps[$intId]['target'] = $htmlBase . '/frontend/nagvis-js/index.php?mod=Url&act=view&show=' . $arrStep['url'] . '&rotation=' . $this->sPoolName . '&rotationStep=' . $intId;
+                $this->arrSteps[$intId]['target'] = $htmlBase
+                    . '/frontend/nagvis-js/index.php?mod=Url&act=view&show='
+                    . $arrStep['url']
+                    . '&rotation='
+                    . $this->sPoolName
+                    . '&rotationStep='
+                    . $intId;
             } else {
-                $this->arrSteps[$intId]['target'] = $htmlBase . '/frontend/nagvis-js/index.php?mod=Map&act=view&show=' . $arrStep['map'] . '&rotation=' . $this->sPoolName . '&rotationStep=' . $intId;
+                $this->arrSteps[$intId]['target'] = $htmlBase
+                    . '/frontend/nagvis-js/index.php?mod=Map&act=view&show='
+                    . $arrStep['map']
+                    . '&rotation='
+                    . $this->sPoolName
+                    . '&rotationStep='
+                    . $intId;
             }
         }
     }

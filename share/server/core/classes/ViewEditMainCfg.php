@@ -260,22 +260,54 @@ class ViewEditMainCfg
                 }
 
                 echo '</select>';
-                echo '<script>document.edit_config.elements[\'' . $sec . '_' . $key . '\'].value = \'' . $cur_val . '\';</script>';
+                echo '<script>document.edit_config.elements[\''
+                    . $sec
+                    . '_'
+                    . $key
+                    . '\'].value = \''
+                    . $cur_val
+                    . '\';</script>';
                 break;
             case 'boolean':
-                echo '<select id="' . $sec . '_' . $key . '" name="' . $sec . '_' . $key . '"' . $on_change . '>';
+                echo '<select id="'
+                    . $sec
+                    . '_'
+                    . $key
+                    . '" name="'
+                    . $sec
+                    . '_'
+                    . $key
+                    . '"'
+                    . $on_change
+                    . '>';
                 echo '<option value=""></option>';
                 echo '<option value="1">' . l('yes') . '</option>';
                 echo '<option value="0">' . l('no') . '</option>';
                 echo '</select>';
 
-                echo '<script>document.edit_config.elements[\'' . $sec . '_' . $key . '\'].value = \'' . $cur_val . '\';</script>';
+                echo '<script>document.edit_config.elements[\''
+                    . $sec
+                    . '_'
+                    . $key
+                    . '\'].value = \''
+                    . $cur_val
+                    . '\';</script>';
                 break;
             case 'color':
                 $this->colorSelect($sec, $key, $cur_val);
                 break;
             case 'text':
-                echo '<input id="' . $sec . '_' . $key . '" type="text" name="' . $sec . '_' . $key . '" value="' . $cur_val . '">';
+                echo '<input id="'
+                    . $sec
+                    . '_'
+                    . $key
+                    . '" type="text" name="'
+                    . $sec
+                    . '_'
+                    . $key
+                    . '" value="'
+                    . $cur_val
+                    . '">';
                 break;
         }
 

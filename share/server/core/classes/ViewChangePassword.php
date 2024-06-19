@@ -53,7 +53,10 @@ class ViewChangePassword
                 }
 
                 if ($password_old == $password_new1) {
-                    throw new FieldInputError('password_new1', l('The new and old passwords are equal. Won\'t change anything.'));
+                    throw new FieldInputError(
+                        'password_new1',
+                        l('The new and old passwords are equal. Won\'t change anything.')
+                    );
                 }
 
                 // Set new passwords in authentication module, then change it

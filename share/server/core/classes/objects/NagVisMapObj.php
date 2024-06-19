@@ -230,7 +230,11 @@ class NagVisMapObj extends NagVisStatefulObject
              * When the current map object is a summary object skip the map
              * child for preventing a loop
              */
-            if ($sType == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->isSummaryObject == true) {
+            if (
+                $sType == 'map'
+                && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName()
+                && $this->isSummaryObject == true
+            ) {
                 continue;
             }
 
@@ -461,22 +465,41 @@ class NagVisMapObj extends NagVisStatefulObject
             switch ($type) {
                 case 'host':
                     log_mem('prehost');
-                    $OBJ = new NagVisHost($objConf['backend_id'], $objConf['host_name']);
+                    $OBJ = new NagVisHost(
+                        $objConf['backend_id'],
+                        $objConf['host_name']
+                    );
                     break;
                 case 'service':
-                    $OBJ = new NagVisService($objConf['backend_id'], $objConf['host_name'], $objConf['service_description']);
+                    $OBJ = new NagVisService(
+                        $objConf['backend_id'],
+                        $objConf['host_name'],
+                        $objConf['service_description']
+                    );
                     break;
                 case 'hostgroup':
-                    $OBJ = new NagVisHostgroup($objConf['backend_id'], $objConf['hostgroup_name']);
+                    $OBJ = new NagVisHostgroup(
+                        $objConf['backend_id'],
+                        $objConf['hostgroup_name']
+                    );
                     break;
                 case 'servicegroup':
-                    $OBJ = new NagVisServicegroup($objConf['backend_id'], $objConf['servicegroup_name']);
+                    $OBJ = new NagVisServicegroup(
+                        $objConf['backend_id'],
+                        $objConf['servicegroup_name']
+                    );
                     break;
                 case 'dyngroup':
-                    $OBJ = new NagVisDynGroup($objConf['backend_id'], $objConf['name']);
+                    $OBJ = new NagVisDynGroup(
+                        $objConf['backend_id'],
+                        $objConf['name']
+                    );
                     break;
                 case 'aggr':
-                    $OBJ = new NagVisAggr($objConf['backend_id'], $objConf['name']);
+                    $OBJ = new NagVisAggr(
+                        $objConf['backend_id'],
+                        $objConf['name']
+                    );
                     break;
                 case 'map':
                     // Initialize map configuration (as non view map cfg)
@@ -584,7 +607,11 @@ class NagVisMapObj extends NagVisStatefulObject
                 * When the current map object is a summary object skip the map
                 * child for preventing a loop
                 */
-                if ($sType == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->isSummaryObject == true) {
+                if (
+                    $sType == 'map'
+                    && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName()
+                    && $this->isSummaryObject == true
+                ) {
                     continue;
                 }
 
