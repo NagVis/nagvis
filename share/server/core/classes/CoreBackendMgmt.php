@@ -645,7 +645,7 @@ class CoreBackendMgmt
      */
     private function backendAlive($backendId, $statusHost)
     {
-        [$statusBackend, $statusHost] = explode(':', $statusHost, 2);
+        list($statusBackend, $statusHost) = explode(':', $statusHost, 2);
 
         if ($statusBackend == $backendId) {
             $this->aError[$backendId] = new BackendConnectionProblem(
