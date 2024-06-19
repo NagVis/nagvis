@@ -54,7 +54,7 @@ $show_host_states = $_GET['type'] == 'hostgroup'
                     || ($_GET['type'] == 'dyngroup' && $_GET['object_types'] == 'host');
 
 // Get parameters from gadget_opts
-if (isset($_GET['opts']) && ($_GET['opts'] != '')){
+if (isset($_GET['opts']) && ($_GET['opts'] != '')) {
     preg_match_all('/(\w+)=(\w+)/', $_GET['opts'], $matches, PREG_SET_ORDER);
     for ($i = 0; $i < count($matches); $i++) {
         if ($matches[$i][1] == 'show_header') { $show_header = $matches[$i][2]; }
@@ -271,14 +271,14 @@ if ($show_header == 1) {
     echo "<tr>";
     $header1 = [];
     $header1['S'] = "STATUS";
-    if ($group_states == 0){
+    if ($group_states == 0) {
         $header1['D'] = "DOWNTIME";
         $header1['A'] = "ACKNOWLEDGED";
     }
-    foreach ($header1 as $prefix => $title){
+    foreach ($header1 as $prefix => $title) {
         $current_header = $prefix;
         $colspan = 0;
-        foreach ($stats as $stat => $value){
+        foreach ($stats as $stat => $value) {
             if (strpos($stat, $prefix . "_") === 0) {
                 if ($value > 0 || $show_all == 1) {
                     $colspan++;
@@ -296,7 +296,7 @@ if ($show_header == 1) {
     echo "<tr>";
     if ($show_subheader == 1) {
         // Write Sub Header
-        foreach ($stats as $stat => $value){
+        foreach ($stats as $stat => $value) {
             if ($group_states == 0 || strpos($stat, "S_") === 0) {
                 if ($value > 0 || $show_all == 1) {
                     $global_cls = (substr($stat, 2) == $current_state) ? $current_state : '';
@@ -315,7 +315,7 @@ if ($show_header == 1) {
 // Write table body
 echo "<tbody>";
 echo '<tr>';
-foreach ($stats as $stat => $value){
+foreach ($stats as $stat => $value) {
     if ($group_states == 0 || strpos($stat, "S_") === 0) {
         if ($value > 0 || $show_all == 1) {
             if ($value > 0) {

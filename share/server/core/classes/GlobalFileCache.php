@@ -105,7 +105,7 @@ class GlobalFileCache {
         if ((!$this->checkCacheFileExists(0)
             && $this->checkCacheFolderWriteable($printErr))
             || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))) {
-            if (($fp = fopen($this->cacheFile, 'w+')) === false){
+            if (($fp = fopen($this->cacheFile, 'w+')) === false) {
                 if ($printErr == 1) {
                     throw new NagVisException(l('cacheFileNotWriteable', ['FILE' => $this->cacheFile]));
                 }
