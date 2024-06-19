@@ -159,7 +159,7 @@ class GlobalBackground {
             } else {
                 if($printErr) {
                     throw new NagVisException(l('couldNotDeleteMapImage',
-                                                ['IMGPATH' => $this->path]));
+                        ['IMGPATH' => $this->path]));
                 }
                 return false;
             }

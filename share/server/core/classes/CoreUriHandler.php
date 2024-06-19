@@ -109,7 +109,7 @@ class CoreUriHandler {
                 $this->aOpts[$key] = $_GET[$key];
             } else {
                 throw new NagVisException(l('The parameter "[key]" does not match the valid value format',
-                                            ['key' => htmlentities($key, ENT_COMPAT, 'UTF-8')]));
+                    ['key' => htmlentities($key, ENT_COMPAT, 'UTF-8')]));
             }
         }
     }

@@ -350,7 +350,7 @@ class GlobalMapCfg {
             // Fix ISO-8859-1 encoding. Convert to UTF-8. The mbstring extension might
             // be misssing. Simply skip this in that case.
             if(function_exists('mb_detect_encoding')
-               && mb_detect_encoding($file[$l], 'UTF-8, ISO-8859-1') == 'ISO-8859-1') {
+                && mb_detect_encoding($file[$l], 'UTF-8, ISO-8859-1') == 'ISO-8859-1') {
                 $file[$l] = iso8859_1_to_utf8($file[$l]);
             }
 
@@ -395,15 +395,15 @@ class GlobalMapCfg {
                 $sObjType = substr($file[$l], 7, (strpos($file[$l], '{', 8) - 8));
                 if(!isset($sObjType) || !isset(self::$validConfig[$sObjType])) {
                     throw new NagVisException(l('unknownObject',
-                                                [
-                                                    'TYPE'    => $sObjType,
-                                                      'MAPNAME' => $this->name
-                                                ]));
+                        [
+                            'TYPE'    => $sObjType,
+                            'MAPNAME' => $this->name
+                        ]));
                 }
 
                 // This is a new definition and it's a valid one
                 $obj = [
-                  'type' => $sObjType,
+                    'type' => $sObjType,
                 ];
 
                 continue;
@@ -413,7 +413,7 @@ class GlobalMapCfg {
             // there is an open object
             if($sObjType === '') {
                 throw new NagVisException(l('Attribute definition out of object. In map [MAPNAME] at line #[LINE].',
-                                          ['MAPNAME' => $this->name, 'LINE' => $l + 1]));
+                    ['MAPNAME' => $this->name, 'LINE' => $l + 1]));
             }
 
             $iDelimPos = strpos($file[$l], '=');
@@ -425,8 +425,8 @@ class GlobalMapCfg {
             }
 
             if(isset(self::$validConfig[$sObjType])
-               && isset(self::$validConfig[$sObjType][$sKey])
-               && isset(self::$validConfig[$sObjType][$sKey]['array'])) {
+                && isset(self::$validConfig[$sObjType][$sKey])
+                && isset(self::$validConfig[$sObjType][$sKey]['array'])) {
                 $obj[$sKey] = explode(',', $sValue);
             } else {
                 $obj[$sKey] = $sValue;
@@ -440,8 +440,7 @@ class GlobalMapCfg {
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function readMapConfig($onlyGlobal = false, $resolveTemplates = true,
-                                  $useCache = true, $enforceSources = false) {
+    public function readMapConfig($onlyGlobal = false, $resolveTemplates = true, $useCache = true, $enforceSources = false) {
 
         global $_MAINCFG, $AUTHORISATION;
         // Only use cache when there is
@@ -451,9 +450,9 @@ class GlobalMapCfg {
         // d) Some valid main configuration cache file
         // e) This cache file newer than main configuration cache file
         if(!$onlyGlobal && $useCache
-           && $this->CACHE->isCached() !== -1
-           && $_MAINCFG->isCached() !== -1
-           && $this->CACHE->isCached() >= $_MAINCFG->isCached()) {
+            && $this->CACHE->isCached() !== -1
+            && $_MAINCFG->isCached() !== -1
+            && $this->CACHE->isCached() >= $_MAINCFG->isCached()) {
             $this->mapConfig = $this->CACHE->getCache();
             $this->typeDefaults = $this->DCACHE->getCache();
 
@@ -643,7 +642,7 @@ class GlobalMapCfg {
             // Only get options which differ from the defaults
             // Maybe convert the type, if requested
             if(isset(self::$validConfig['global'][$key]['array'])
-               && self::$validConfig['global'][$key]['array'] === true) {
+                && self::$validConfig['global'][$key]['array'] === true) {
                 if ($_REQUEST[$key] !== '') {
                     $val = explode(',', $_REQUEST[$key]);
                 } else {
@@ -673,14 +672,13 @@ class GlobalMapCfg {
         return null;
     }
 
-    private function getSourceParamsOfSources($sources, $only_user_supplied,
-                                              $only_customized, $only_view_parameters ) {
+    private function getSourceParamsOfSources($sources, $only_user_supplied, $only_customized, $only_view_parameters ) {
         $keys = [];
         // Get keys of all view params belonging to all configured sources
         foreach($sources as $source) {
             if(!isset(self::$viewParams[$source])) {
                 throw new NagVisException(l('Requested source "[S]" does not exist',
-                                                            ['S' => $source]));
+                    ['S' => $source]));
             }
             $keys = array_merge($keys, self::$viewParams[$source]);
         }
@@ -727,14 +725,14 @@ class GlobalMapCfg {
         $config  = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : [];
         $sources = array_merge(['*'], $config);
         $params  = $this->getSourceParamsOfSources($sources, $only_user_supplied,
-                                                   $only_customized, $only_view_parameters);
+            $only_customized, $only_view_parameters);
 
         // The map sources might have changed basd on source params - we need an
         // additional run to get params which belong to this sources
         if(isset($params['sources'])) {
             $sources = array_merge(['*'], $params['sources']);
             $params = $this->getSourceParamsOfSources($sources, $only_user_supplied,
-                                                      $only_customized, $only_view_parameters);
+                $only_customized, $only_view_parameters);
         }
 
         return $params;
@@ -843,8 +841,8 @@ class GlobalMapCfg {
         $cache_map     = $this->CACHE->isCached();
         $cache_maincfg = $_MAINCFG->isCached();
         if($useCache && $cache_sources != -1 && $cache_map != -1 && $cache_maincfg != -1
-           && $cache_sources >= $cache_maincfg && $cache_sources >= $cache_map
-           && !$this->sourcesChanged($cache_sources)) {
+            && $cache_sources >= $cache_maincfg && $cache_sources >= $cache_map
+            && !$this->sourcesChanged($cache_sources)) {
             // 3a. Use the cache
             $this->mapConfig = $CACHE->getCache();
             return;
@@ -1071,10 +1069,10 @@ class GlobalMapCfg {
                 if(isset($val['must']) && $val['must'] == true) {
                     if((!isset($element[$key]) || $element[$key] == '') && (!isset($val['default']) || $val['default'] == '')) {
                         throw new $exception(l('mapCfgMustValueNotSet',
-                                             [
-                                                 'MAPNAME' => $this->name, 'ATTRIBUTE' => $key,
-                                                   'TYPE'    => $type,       'ID'        => $id
-                                             ]));
+                            [
+                                'MAPNAME' => $this->name, 'ATTRIBUTE' => $key,
+                                'TYPE'    => $type,       'ID'        => $id
+                            ]));
                     }
                 }
             }

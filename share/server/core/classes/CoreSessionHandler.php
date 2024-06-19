@@ -48,7 +48,7 @@ class CoreSessionHandler {
 
         // Opera has problems with ip addresses in domains. So skip them
         if(strpos($_SERVER['HTTP_USER_AGENT'], 'opera') !== false
-           && preg_match('/\d.\d+.\d+.\d+/', $sDomain)) {
+            && preg_match('/\d.\d+.\d+.\d+/', $sDomain)) {
             $sDomain = null;
         }
 

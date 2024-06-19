@@ -153,8 +153,8 @@ class NagVisHeaderMenu {
             cfg('paths', 'var') . 'maplist-full-global.cfg-' . count($cfgFiles) . '-' . CONST_VERSION . '-cache');
 
         if ($CACHE->isCached() !== -1
-           && $_MAINCFG->isCached() !== -1
-           && $CACHE->isCached() >= $_MAINCFG->isCached()) {
+            && $_MAINCFG->isCached() !== -1
+            && $CACHE->isCached() >= $_MAINCFG->isCached()) {
             // Read the whole list from the cache
             $list = $CACHE->getCache();
         } else {
@@ -274,7 +274,7 @@ class NagVisHeaderMenu {
         $this->aMacros['permittedChangePassword'] = $AUTHORISATION->isPermitted('ChangePassword', 'change', '*');
 
         $this->aMacros['permittedLogout'] = $AUTH->logoutSupported()
-                                        & $AUTHORISATION->isPermitted('Auth', 'logout', '*');
+            & $AUTHORISATION->isPermitted('Auth', 'logout', '*');
 
         // Replace some special macros for maps
         if($this->OBJ !== null && $this->aMacros['mod'] == 'Map') {
@@ -372,7 +372,7 @@ class NagVisHeaderMenu {
             'langUserMgmt'       => l('Manage Users'),
             'langManageRoles'    => l('Manage Roles'),
             'currentLanguage'    => curLang(),
-	    'docLanguage'        => $this->getDocLanguage(),
+            'docLanguage'        => $this->getDocLanguage(),
             'langChooseLanguage' => l('Choose Language'),
             'langUser' => l('User menu'),
             'langActions' => l('Actions'),

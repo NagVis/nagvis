@@ -33,7 +33,7 @@
 function nagvisException($OBJ) {
     try {
         if(get_class($OBJ) == 'NagVisException'
-           || get_class($OBJ) == 'NagVisErrorException') {
+            || get_class($OBJ) == 'NagVisErrorException') {
             echo $OBJ;
         } else {
             echo "Error (" . get_class($OBJ) . "): " . $OBJ->getMessage();
