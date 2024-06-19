@@ -44,7 +44,7 @@ class FrontendModInfo extends FrontendModule {
             switch ($this->sAction) {
                 case 'view':
                     $sReturn = $this->displayDialog();
-                break;
+                    break;
             }
         }
 

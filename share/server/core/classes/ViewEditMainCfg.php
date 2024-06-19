@@ -197,11 +197,12 @@ class ViewEditMainCfg {
                     } else {
                         echo l('No');
                     }
-                break;
+                    break;
                 default:
                     if ($def_val !== null) {
                         echo escape_html($def_val);
                     }
+                    break;
             }
             echo '</div>';
 
@@ -254,7 +255,7 @@ class ViewEditMainCfg {
 
                 echo '</select>';
                 echo '<script>document.edit_config.elements[\'' . $sec . '_' . $key . '\'].value = \'' . $cur_val . '\';</script>';
-            break;
+                break;
             case 'boolean':
                 echo '<select id="' . $sec . '_' . $key . '" name="' . $sec . '_' . $key . '"' . $on_change . '>';
                 echo '<option value=""></option>';
@@ -263,13 +264,13 @@ class ViewEditMainCfg {
                 echo '</select>';
 
                 echo '<script>document.edit_config.elements[\'' . $sec . '_' . $key . '\'].value = \'' . $cur_val . '\';</script>';
-            break;
+                break;
             case 'color':
                 $this->colorSelect($sec, $key, $cur_val);
-            break;
+                break;
             case 'text':
                 echo '<input id="' . $sec . '_' . $key . '" type="text" name="' . $sec . '_' . $key . '" value="' . $cur_val . '">';
-            break;
+                break;
         }
 
         if (isset($spec['locked']) && $spec['locked'] == 1) {

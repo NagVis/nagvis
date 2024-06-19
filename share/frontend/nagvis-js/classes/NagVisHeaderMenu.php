@@ -105,25 +105,25 @@ class NagVisHeaderMenu {
             switch ($lang) {
                 case 'en_US':
                     $languageLocated = l('en_US');
-                break;
+                    break;
                 case 'de_DE':
                     $languageLocated = l('de_DE');
-                break;
+                    break;
                 case 'es_ES':
                     $languageLocated = l('es_ES');
-                break;
+                    break;
                 case 'fr_FR':
                     $languageLocated = l('fr_FR');
-                break;
+                    break;
                 case 'pt_BR':
                     $languageLocated = l('pt_BR');
-                break;
+                    break;
                 case 'ru_RU':
                     $languageLocated = l('ru_RU');
-                break;
+                    break;
                 default:
                     $languageLocated = l($lang);
-                break;
+                    break;
             }
 
             $aLangs[$lang]['langLanguageLocated'] = $languageLocated;

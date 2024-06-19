@@ -147,7 +147,7 @@ try {
             }
 
             echo $result[0];
-        break;
+            break;
 
         case 'column':
             // Display one cell per row
@@ -157,7 +157,7 @@ try {
             }
 
             echo implode('<br>', $result);
-        break;
+            break;
 
         case 'row':
             // Display items comma separated
@@ -167,7 +167,7 @@ try {
             }
 
             echo implode(', ', $result);
-        break;
+            break;
 
         case 'list':
             // Display a table which formats the result in a readable way
@@ -185,11 +185,11 @@ try {
                 echo '</tr>';
             };
             echo '</table>';
-        break;
+            break;
 
         default:
             echo json_encode($B->query($type, $query));
-        break;
+            break;
     }
 
     exit(0);

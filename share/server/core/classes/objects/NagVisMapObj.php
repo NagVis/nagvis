@@ -447,22 +447,22 @@ class NagVisMapObj extends NagVisStatefulObject {
                 case 'host':
                     log_mem('prehost');
                     $OBJ = new NagVisHost($objConf['backend_id'], $objConf['host_name']);
-                break;
+                    break;
                 case 'service':
                     $OBJ = new NagVisService($objConf['backend_id'], $objConf['host_name'], $objConf['service_description']);
-                break;
+                    break;
                 case 'hostgroup':
                     $OBJ = new NagVisHostgroup($objConf['backend_id'], $objConf['hostgroup_name']);
-                break;
+                    break;
                 case 'servicegroup':
                     $OBJ = new NagVisServicegroup($objConf['backend_id'], $objConf['servicegroup_name']);
-                break;
+                    break;
                 case 'dyngroup':
                     $OBJ = new NagVisDynGroup($objConf['backend_id'], $objConf['name']);
-                break;
+                    break;
                 case 'aggr':
                     $OBJ = new NagVisAggr($objConf['backend_id'], $objConf['name']);
-                break;
+                    break;
                 case 'map':
                     // Initialize map configuration (as non view map cfg)
                     $SUBMAPCFG = new GlobalMapCfg($objConf['map_name'], false);
@@ -523,26 +523,26 @@ class NagVisMapObj extends NagVisStatefulObject {
                     if (!$this->isPermitted($OBJ)) {
                         continue 2;
                     }
-                break;
+                    break;
                 case 'shape':
                     $OBJ = new NagVisShape($objConf['icon']);
-                break;
+                    break;
                 case 'textbox':
                     $OBJ = new NagVisTextbox();
-                break;
+                    break;
                 case 'container':
                     $OBJ = new NagVisContainer();
-                break;
+                    break;
                 case 'line':
                     $OBJ = new NagVisLine();
-                break;
+                    break;
                 default:
                     throw new NagVisException(l('unknownObject',
                         [
                             'TYPE'    => $type,
                             'MAPNAME' => $this->getName()
                         ]));
-                break;
+                    break;
             }
 
             log_mem('preconf');

@@ -80,7 +80,7 @@ class FrontendModMap extends FrontendModule {
                 case 'view':
                     // Show the view dialog to the user
                     $sReturn = $this->showViewDialog();
-                break;
+                    break;
             }
         }
 

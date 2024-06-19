@@ -180,29 +180,29 @@ class CoreBackendMgmt {
                             case 'servicegroupMemberState':
                             case 'AGGR_MEMBER_STATE':
                                 $this->fetchStateCounts($backendId, $type, $option, $aObjs);
-                            break;
+                                break;
                             case 'DYN_GROUP_MEMBER_STATE':
                                 // Can not use the generic fetchStateCounts() method. It uses summarized queries
                                 // to reduce the number of backend queries, but this is not possible for member
                                 // states as this makes use of individual filter queries per objects.
                                 $this->fetchDynGroupMemberCounts($backendId, $option, $aObjs);
-                            break;
+                                break;
 
                             case 'hostMemberDetails':
                                 $this->fetchHostMemberDetails($backendId, $option, $aObjs);
-                            break;
+                                break;
                             case 'hostgroupMemberDetails':
                                 $this->fetchHostgroupMemberDetails($backendId, $option, $aObjs);
-                            break;
+                                break;
                             case 'servicegroupMemberDetails':
                                 $this->fetchServicegroupMemberDetails($backendId, $option, $aObjs);
-                            break;
+                                break;
                             case 'DYN_GROUP_MEMBER_DETAILS':
                                 $this->fetchDynGroupMemberDetails($backendId, $option, $aObjs);
-                            break;
+                                break;
                             case 'AGGR_MEMBER_DETAILS':
                                 $this->fetchAggrMemberDetails($backendId, $option, $aObjs);
-                            break;
+                                break;
                         }
                     }
                 }
@@ -472,26 +472,26 @@ class CoreBackendMgmt {
                 case 'servicegroupMemberState':
                     $filters = [['key' => 'groups', 'op' => '>=', 'val' => 'name']];
                     $aResult = $this->getBackend($backendId)->getServicegroupStateCounts($aObjs, $options, $filters);
-                break;
+                    break;
                 case 'hostgroupMemberState':
                     $filters = [['key' => 'groups', 'op' => '>=', 'val' => 'name']];
                     $aResult = $this->getBackend($backendId)->getHostgroupStateCounts($aObjs, $options, $filters);
-                break;
+                    break;
                 case 'serviceState':
                     $filters = [
                         ['key' => 'host_name', 'op' => '=', 'val' => 'name'],
                         ['key' => 'service_description', 'op' => '=', 'service_description']
                     ];
                     $aResult = $this->getBackend($backendId)->getServiceState($aObjs, $options, $filters);
-                break;
+                    break;
                 case 'hostState':
                     $filters = [['key' => 'host_name', 'op' => '=', 'val' => 'name']];
                     $aResult = $this->getBackend($backendId)->getHostState($aObjs, $options, $filters);
-                break;
+                    break;
                 case 'hostMemberState':
                     $filters = [['key' => 'host_name', 'op' => '=', 'val' => 'name']];
                     $aResult = $this->getBackend($backendId)->getHostMemberCounts($aObjs, $options, $filters);
-                break;
+                    break;
                 case 'AGGR_MEMBER_STATE':
                     if (!$this->checkBackendFeature($backendId, 'getAggrStateCounts', false)) {
                         throw new BackendException(l('This type of object is not supported by this backend ([BACKENDID]).',
@@ -500,7 +500,7 @@ class CoreBackendMgmt {
                         $filters = [['key' => 'aggr_name', 'op' => '=', 'val' => 'name']];
                         $aResult = $this->getBackend($backendId)->getAggrStateCounts($aObjs, $options, $filters);
                     }
-                break;
+                    break;
             }
         } catch (BackendException $e) {
             $aResult = [];

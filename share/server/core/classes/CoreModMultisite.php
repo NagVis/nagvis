@@ -57,7 +57,7 @@ class CoreModMultisite extends CoreModule {
                         "maps" => $this->renderTable(),
                     ];
                 }
-            break;
+                break;
         }
 
         return json_encode($maps);

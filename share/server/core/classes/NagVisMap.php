@@ -109,12 +109,12 @@ class NagVisMap {
                     } else {
                         $arrRet[] = $OBJ->parseJson();
                     }
-                break;
+                    break;
                 default: // Shape, Line, Textbox and others...
                     if ($type == 'complete' || $type == 'full') {
                         $arrRet[] = $OBJ->parseJson();
                     }
-                break;
+                    break;
             }
         }
 
