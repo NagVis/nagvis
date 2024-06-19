@@ -61,7 +61,7 @@ function filter_hostgroup(&$map_config, $p) {
 
     // Remove all hosts not found in the hostgroup
     $hosts = array_flip($hosts);
-    foreach($map_config AS $object_id => $obj) {
+    foreach($map_config as $object_id => $obj) {
         if (isset($obj['host_name']) && !isset($hosts[$obj['host_name']])) {
             unset($map_config[$object_id]);
         }

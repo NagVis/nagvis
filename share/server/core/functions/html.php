@@ -138,7 +138,7 @@ function form_start($name, $target, $type = 'POST', $multipart = false) {
     $url = parse_url($target);
     if (isset($url['query'])) {
         parse_str($url['query'], $query);
-        foreach ($query AS $key => $val) {
+        foreach ($query as $key => $val) {
             $form_keys[$key] = true;
         }
     }
@@ -175,11 +175,11 @@ function form_end($keep_context = true) {
 function hidden_vars() {
     global $form_keys, $form_name;
     //if (submitted($form_name) || !submitted()) {
-    foreach ($_REQUEST AS $key => $val) {
+    foreach ($_REQUEST as $key => $val) {
         // $_REQUEST might contain $_COOKIES. Skip these vars.
         if (!isset($form_keys[$key]) && !isset($_COOKIE[$key])) {
             if (is_array($val)) {
-                foreach($val AS $val_element) {
+                foreach($val as $val_element) {
                     hidden($key . "[]", $val_element);
                 }
             } else {
@@ -344,7 +344,7 @@ function select($name, $options, $default = '', $onchange = '', $style = '', $si
     }
 
     $ret = '<select id="' . $name . '" name="' . $name . '"' . $onchange . $class . $style . $multiple . '>' . N;
-    foreach($options AS $value => $display) {
+    foreach($options as $value => $display) {
         $select = '';
         if($value == $default) {
             $select = ' selected';
@@ -420,7 +420,7 @@ function render_section_navigation($open, $sections) {
 
     // first render navigation
     echo '<ul class="nav" id="nav">';
-    foreach ($sections AS $sec => $title) {
+    foreach ($sections as $sec => $title) {
         $class = $open == $sec ? ' class="active"' : '';
         echo '<li id="nav_' . $sec . '" ' . $class . '>';
         echo '<a href="javascript:toggle_section(\'' . $sec . '\')">';

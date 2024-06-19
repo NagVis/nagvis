@@ -58,7 +58,7 @@ class CoreLogonMultisite extends CoreLogonModule {
 
     private function loadAuthFile($path) {
         $creds = [];
-        foreach(file($path) AS $line) {
+        foreach(file($path) as $line) {
             if(strpos($line, ':') !== false) {
                 list($username, $secret) = explode(':', $line, 2);
                 $creds[$username] = rtrim($secret);
@@ -142,7 +142,7 @@ class CoreLogonMultisite extends CoreLogonModule {
     private function checkAuth() {
         // Loop all cookies trying to fetch a valid authentication
         // cookie for this installation
-        foreach(array_keys($_COOKIE) AS $cookieName) {
+        foreach(array_keys($_COOKIE) as $cookieName) {
             if(substr($cookieName, 0, 5) != 'auth_') {
                 continue;
             }

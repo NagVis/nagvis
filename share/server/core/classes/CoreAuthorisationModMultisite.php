@@ -57,8 +57,8 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
         # Gather NagVis related permissions
         $nagvis_permissions = [];
         global $mk_roles;
-        foreach ($mk_roles AS $role_id => $permissions) {
-            foreach ($permissions AS $perm_id) {
+        foreach ($mk_roles as $role_id => $permissions) {
+            foreach ($permissions as $perm_id) {
                 if (strpos($perm_id, 'nagvis.') === 0) {
                     $key = substr($perm_id, 7);
                     if (!isset($nagvis_permissions[$key])) {
@@ -69,7 +69,7 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
         }
 
         # Loop the multisite NagVis related permissions and add them
-        foreach($nagvis_permissions AS $p => $_unused) {
+        foreach($nagvis_permissions as $p => $_unused) {
             if(may($username, 'nagvis.' . $p)) {
                 $parts = explode('_', $p);
                 if (count($parts) == 3) {
@@ -79,7 +79,7 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
                     // Special permissions with two parts are controlling the permissions
                     // on the maps the user is explicitly permitted for by its contactgroup
                     // memberships
-                    foreach (permitted_maps($username) AS $map_name) {
+                    foreach (permitted_maps($username) as $map_name) {
                         $perms[] = array_merge($parts, [$map_name]);
                     }
                 }
@@ -92,7 +92,7 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
     private function readFile() {
         require_once($this->file);
         $this->permissions = [];
-        foreach(all_users() AS $username => $user) {
+        foreach(all_users() as $username => $user) {
             $this->permissions[$username] = [
                 'permissions' => $this->getPermissions($username),
                 'language'    => $user['language'],
@@ -139,7 +139,7 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
     
         # Array ( [0] => Overview [1] => view [2] => * )
         $perms = [];
-        foreach($this->permissions[$username]['permissions'] AS $value) {
+        foreach($this->permissions[$username]['permissions'] as $value) {
             // Module entry
             if(!isset($perms[$value[0]])) {
                 $perms[$value[0]] = [];

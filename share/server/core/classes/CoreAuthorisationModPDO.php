@@ -128,7 +128,7 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         $this->DB->query('-role-delete-by-user-id', ['userId' => $userId]);
 
         // insert new user roles
-        foreach($roles AS $roleId) {
+        foreach($roles as $roleId) {
             if ($roleId === '') {
                 continue;
             }
@@ -197,7 +197,7 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         $this->DB->query('-role-delete-perm-by-id', ['roleId' => $roleId]);
 
         // insert new role perms
-        foreach($perms AS $permId => $val) {
+        foreach($perms as $permId => $val) {
             if($val === true) {
                 $this->DB->query('-role-add-perm', ['roleId' => $roleId, 'permId' => $permId]);
             }

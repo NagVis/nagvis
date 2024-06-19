@@ -83,7 +83,7 @@ class CoreBackendMgmt {
             }
         }
 
-        foreach($query AS $query => $_unused) {
+        foreach($query as $query => $_unused) {
             foreach($backendIds as $backendId) {
                 if (!isset($this->aQueue[$backendId][$query])) {
                     $this->aQueue[$backendId][$query] = [];
@@ -166,12 +166,12 @@ class CoreBackendMgmt {
      */
     public function execute() {
         // Loop all backends
-        foreach($this->aQueue AS $backendId => $types) {
+        foreach($this->aQueue as $backendId => $types) {
             // Loop all different query types
-            foreach($types AS $type => $options) {
+            foreach($types as $type => $options) {
                 // Now loop the different options (Splitting by only_hard_state options etc.)
-                foreach($options AS $option => $filters) {
-                    foreach($filters AS $filter => $aObjs) {
+                foreach($options as $option => $filters) {
+                    foreach($filters as $filter => $aObjs) {
                         switch($type) {
                             case 'serviceState':
                             case 'hostState':
@@ -222,8 +222,8 @@ class CoreBackendMgmt {
      * 2.) fetch state counts for all objects
      */
     private function fetchAggrMemberDetails($backendId, $options, $aObjs) {
-        foreach($aObjs AS $name => $OBJS) {
-            foreach($OBJS AS $OBJ) {
+        foreach($aObjs as $name => $OBJS) {
+            foreach($OBJS as $OBJ) {
                 try {
                     $filters = [['key' => 'aggr_name', 'op' => '>=', 'val' => 'name']];
                     $aServices = $this->getBackend($backendId)->getServiceState([$OBJ->getName() => [$OBJ]], $options, $filters, MEMBER_QUERY);
@@ -235,8 +235,8 @@ class CoreBackendMgmt {
 
                 // Regular member adding loop
                 $members = [];
-                foreach($aServices AS $host => $serviceList) {
-                    foreach($serviceList AS $aService) {
+                foreach($aServices as $host => $serviceList) {
+                    foreach($serviceList as $aService) {
                         $members[] = $this->createServiceObject($backendId, $host, $aService[DESCRIPTION],
                                                                 $aService, $OBJ->getObjectConfiguration());
                     }
@@ -247,8 +247,8 @@ class CoreBackendMgmt {
     }
 
     private function fetchDynGroupMemberCounts($backendId, $options, $aObjs) {
-        foreach($aObjs AS $name => $OBJS) {
-            foreach($OBJS AS $OBJ) {
+        foreach($aObjs as $name => $OBJS) {
+            foreach($OBJS as $OBJ) {
                 try {
                     if($OBJ->object_types == 'service') {
                         if (!$this->checkBackendFeature($backendId, 'getServiceListCounts', false)) {
@@ -284,8 +284,8 @@ class CoreBackendMgmt {
      * already compiled in the object and ignores the given array() parameter
      */
     private function fetchDynGroupMemberDetails($backendId, $options, $aObjs) {
-        foreach($aObjs AS $name => $OBJS) {
-            foreach($OBJS AS $OBJ) {
+        foreach($aObjs as $name => $OBJS) {
+            foreach($OBJS as $OBJ) {
                 $members = [];
                 if ($OBJ->object_types == 'service') {
                     // Fist get the states for all the members
@@ -299,8 +299,8 @@ class CoreBackendMgmt {
                     }
 
                     // Regular member adding loop
-                    foreach($aServices AS $host => $serviceList) {
-                        foreach($serviceList AS $aService) {
+                    foreach($aServices as $host => $serviceList) {
+                        foreach($serviceList as $aService) {
                             $members[] = $this->createServiceObject($backendId, $host, $aService[DESCRIPTION],
                                                                     $aService, $OBJ->getObjectConfiguration());
                         }
@@ -327,7 +327,7 @@ class CoreBackendMgmt {
                     }
 
                     $members = [];
-                    foreach($aHosts AS $name => $aHost) {
+                    foreach($aHosts as $name => $aHost) {
                         if(isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts'])) {
                             $service_states = $aServiceStateCounts[$name]['counts'];
                         } else {
@@ -389,8 +389,8 @@ class CoreBackendMgmt {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchServicegroupMemberDetails($backendId, $options, $aObjs) {
-        foreach($aObjs AS $name => $OBJS) {
-            foreach($OBJS AS $OBJ) {
+        foreach($aObjs as $name => $OBJS) {
+            foreach($OBJS as $OBJ) {
                 // Fist get the host states for all the servicegroup members
                 try {
                     $filters = [['key' => 'service_groups', 'op' => '>=', 'val' => 'name']];
@@ -403,8 +403,8 @@ class CoreBackendMgmt {
 
                 // Regular member adding loop
                 $members = [];
-                foreach($aServices AS $host => $serviceList) {
-                    foreach($serviceList AS $aService) {
+                foreach($aServices as $host => $serviceList) {
+                    foreach($serviceList as $aService) {
                         $members[] = $this->createServiceObject($backendId, $host, $aService[DESCRIPTION],
                                                                 $aService, $OBJ->getObjectConfiguration());
                     }
@@ -428,8 +428,8 @@ class CoreBackendMgmt {
      */
     private function fetchHostgroupMemberDetails($backendId, $options, $aObjs) {
         // And then apply them to the objects
-        foreach($aObjs AS $name => $OBJS) {
-            foreach($OBJS AS $OBJ) {
+        foreach($aObjs as $name => $OBJS) {
+            foreach($OBJS as $OBJ) {
                 // First get the host states for all the hostgroup members
                 try {
                     $filters = [['key' => 'host_groups', 'op' => '>=', 'val' => 'name']];
@@ -451,7 +451,7 @@ class CoreBackendMgmt {
                 }
 
                 $members = [];
-                foreach($aHosts AS $name => $aHost) {
+                foreach($aHosts as $name => $aHost) {
                     if(isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts'])) {
                         $service_states = $aServiceStateCounts[$name]['counts'];
                     } else {
@@ -507,7 +507,7 @@ class CoreBackendMgmt {
             $msg = $e->getMessage();
         }
 
-        foreach($aObjs AS $name => $OBJS) {
+        foreach($aObjs as $name => $OBJS) {
             if(isset($aResult[$name])) {
                 if($type == 'serviceState' || $type == 'hostState') {
                     foreach ($OBJS as $OBJ) {
@@ -547,11 +547,11 @@ class CoreBackendMgmt {
             $aMembers = [];
         }
 
-        foreach($aObjs AS $name => $OBJS) {
+        foreach($aObjs as $name => $OBJS) {
             if(isset($aMembers[$name])) {
-                foreach($OBJS AS $OBJ) {
+                foreach($OBJS as $OBJ) {
                     $members = [];
-                    foreach($aMembers[$name] AS $service => $details) {
+                    foreach($aMembers[$name] as $service => $details) {
                         $MOBJ = new NagVisService($backendId, $OBJ->getName(), $details[DESCRIPTION]);
                         $MOBJ->setState($details);
                         $members[] = $MOBJ;

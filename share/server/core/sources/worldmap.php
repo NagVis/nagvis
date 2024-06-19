@@ -78,7 +78,7 @@ $configVarMap = [
 ];
 
 // Assign these options to all map objects (except global)
-foreach (getMapObjectTypes() AS $type) {
+foreach (getMapObjectTypes() as $type) {
     $configVarMap[$type] = [
         'worldmap' => [
             'min_zoom' => null,

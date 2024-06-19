@@ -191,7 +191,7 @@ class ViewMapManageTmpl {
         echo '<tr><td class="tdlabel">' . l('Name') . '</td>';
         echo '<td class="tdfield">';
         $choices = ['' => l('Please choose')];
-        foreach (array_keys($MAPCFG->getTemplateNames()) AS $tmpl_name) {
+        foreach (array_keys($MAPCFG->getTemplateNames()) as $tmpl_name) {
             $choices[$tmpl_name] = $tmpl_name;
         }
         select('name', $choices, '', 'updateForm(this.form)');
@@ -279,7 +279,7 @@ class ViewMapManageTmpl {
         echo '<tr><td class="tdlabel">' . l('Name') . '</td>';
         echo '<td class="tdfield">';
         $choices = ['' => l('Please choose')];
-        foreach (array_keys($MAPCFG->getTemplateNames()) AS $tmpl_name) {
+        foreach (array_keys($MAPCFG->getTemplateNames()) as $tmpl_name) {
             $choices[$tmpl_name] = $tmpl_name;
         }
         select('name', $choices, '', 'updateForm(this.form)');

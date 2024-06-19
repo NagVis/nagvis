@@ -8,10 +8,10 @@ function dynmap_get_objects($MAPCFG, $p) {
 
     $type = $p['dynmap_object_types'];
     $filter = str_replace('\n', "\n", $p['dynmap_object_filter']);
-    foreach($MAPCFG->getValue(0, 'backend_id') AS $backend_id) {
+    foreach($MAPCFG->getValue(0, 'backend_id') as $backend_id) {
         $ret = $_BACKEND->getBackend($backend_id)->getObjects($type, '', '', $filter);
         // only use the internal names
-        foreach ($ret AS $key => $val) {
+        foreach ($ret as $key => $val) {
             if ($type == 'service') {
                 $obj_id = $MAPCFG->genObjId($backend_id . '~~' . $val['name1'] . '~~' . $val['name2']);
                 $object = [
@@ -39,7 +39,7 @@ function dynmap_get_objects($MAPCFG, $p) {
 function dynmap_program_start($MAPCFG, $p) {
     global $_BACKEND;
     $newest = null;
-    foreach($MAPCFG->getValue(0, 'backend_id') AS $backend_id) {
+    foreach($MAPCFG->getValue(0, 'backend_id') as $backend_id) {
         $this_start = $_BACKEND->getBackend($backend_id)->getProgramStart();
         if($newest === null || $this_start > $newest) {
             $newest = $this_start;
@@ -163,7 +163,7 @@ function dynmap_sort_objects($MAPCFG, $map_name, &$map_config, &$params, &$objec
         case 's':
             $SORT_MAPCFG = new GlobalMapCfg($map_name);
             $SORT_MAPCFG->gatherTypeDefaults(false);
-            foreach ($objects AS $object_id => $object) {
+            foreach ($objects as $object_id => $object) {
                 $SORT_MAPCFG->addElement($object['type'], $object, false, $object_id);
             }
 
@@ -175,7 +175,7 @@ function dynmap_sort_objects($MAPCFG, $map_name, &$map_config, &$params, &$objec
 
             // Add keys for sorting to $objects entries
             // TODO: Improve this: Adding these temporary keys should not be necessary
-            foreach($g_map_obj->getStateRelevantMembers() AS $OBJ) {
+            foreach($g_map_obj->getStateRelevantMembers() as $OBJ) {
                 $object_id = $OBJ->getObjectId();
                 $objects[$object_id]['.state'] = $OBJ->sum[STATE];
                 $objects[$object_id]['.sub_state'] = $OBJ->getSubState(SUMMARY_STATE);
@@ -184,7 +184,7 @@ function dynmap_sort_objects($MAPCFG, $map_name, &$map_config, &$params, &$objec
             usort($objects, 'dynmap_sort_objects_by_state');
 
             // Cleanup sort specific keys again
-            foreach ($objects AS $object_id => $object) {
+            foreach ($objects as $object_id => $object) {
                 unset($object['.state']);
                 unset($object['.sub_state']);
             }
@@ -231,7 +231,7 @@ function process_dynmap($MAPCFG, $map_name, &$map_config) {
 
     // First remove all objects from the current map config which should 
     // not be there anymore (according to the backend response)
-    foreach ($map_config AS $object_id => $obj) {
+    foreach ($map_config as $object_id => $obj) {
         if ($obj['type'] == $type && !isset($objects[$object_id])) {
             unset($map_config[$object_id]);
         }
@@ -241,7 +241,7 @@ function process_dynmap($MAPCFG, $map_name, &$map_config) {
     // positioned in the grid anymore (they have been repositioned by the user 
     // and do not need to be handled in further processing - except that they 
     // are to be added to the map unchanged again)
-    foreach ($objects AS $object_id => $object) {
+    foreach ($objects as $object_id => $object) {
         if (isset($map_config[$object_id]) && !dynmap_object_in_grid($params, $map_config[$object_id])) {
             unset($objects[$object_id]);
         }
@@ -249,7 +249,7 @@ function process_dynmap($MAPCFG, $map_name, &$map_config) {
 
     // Now check which entries in $objects have no object on the map and
     // create one object on the map for those objects.
-    foreach ($objects AS $object_id => $object) {
+    foreach ($objects as $object_id => $object) {
         if (!isset($map_config[$object_id])) {
             $map_config[$object_id] = $object;
         }
@@ -263,7 +263,7 @@ function process_dynmap($MAPCFG, $map_name, &$map_config) {
     $step_y = $params['dynmap_offset_y'];
 
     $in_this_row = 0;
-    foreach ($objects AS $object) {
+    foreach ($objects as $object) {
         $map_config[$object['object_id']]['x'] = $x;        
         $map_config[$object['object_id']]['y'] = $y;
         $x += $step_x;

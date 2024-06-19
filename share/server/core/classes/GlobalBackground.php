@@ -155,16 +155,16 @@ class GlobalBackground {
     public function deleteImage($printErr = 1) {
         if($this->checkFolderWriteable($printErr) && $this->checkFileWriteable($printErr)) {
             if(unlink($this->path)) {
-                return TRUE;
+                return true;
             } else {
                 if($printErr) {
                     throw new NagVisException(l('couldNotDeleteMapImage',
                                                 ['IMGPATH' => $this->path]));
                 }
-                return FALSE;
+                return false;
             }
         }
-        return FALSE;
+        return false;
     }
 }
 

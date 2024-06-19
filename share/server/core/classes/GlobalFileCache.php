@@ -62,7 +62,7 @@ class GlobalFileCache {
     private function getNewestFileAge() {
         $age = -1;
         $newestFile = '';
-        foreach($this->files AS $file) {
+        foreach($this->files as $file) {
             if(!GlobalCore::getInstance()->checkExisting($file, false)
                || !GlobalCore::getInstance()->checkReadable($file, false)) {
                 continue;
@@ -105,11 +105,11 @@ class GlobalFileCache {
         if((!$this->checkCacheFileExists(0)
             && $this->checkCacheFolderWriteable($printErr))
            || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))) {
-            if(($fp = fopen($this->cacheFile, 'w+')) === FALSE){
+            if(($fp = fopen($this->cacheFile, 'w+')) === false){
                 if($printErr == 1) {
                     throw new NagVisException(l('cacheFileNotWriteable', ['FILE' => $this->cacheFile]));
                 }
-                return FALSE;
+                return false;
             }
 
             fwrite($fp, serialize($contents));
@@ -117,9 +117,9 @@ class GlobalFileCache {
 
             GlobalCore::getInstance()->setPerms($this->cacheFile);
 
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 

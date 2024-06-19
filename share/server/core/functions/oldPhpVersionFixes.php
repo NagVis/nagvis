@@ -37,7 +37,7 @@
 if(!function_exists('date_default_timezone_set')) {
 	function date_default_timezone_set($timezone_identifier) {
 		putenv("TZ=" . $timezone_identifier);
-		return TRUE;
+		return true;
 	}
 }
 

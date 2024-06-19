@@ -79,7 +79,7 @@ class ViewToNewMap {
                 // Create a new map config
                 $NEW = new GlobalMapCfg($name);
                 $NEW->createMapConfig();
-                foreach ($MAPCFG->getMapObjects() AS $object_id => $cfg) {
+                foreach ($MAPCFG->getMapObjects() as $object_id => $cfg) {
                     $NEW->addElement($cfg['type'], $cfg, $perm = true, $object_id);
                 }
 
@@ -110,7 +110,7 @@ class ViewToNewMap {
         focus('name');
 
         // Keep the view parameters the users has set
-        foreach ($view_params AS $key => $val) {
+        foreach ($view_params as $key => $val) {
             hidden($key, $val);
         }
 

@@ -172,7 +172,7 @@ class CoreAuthorisationHandler {
 
         // loop all map related permissions and check whether or not the map
         // is still available
-        foreach ($this->getAllVisiblePerms() AS $perm) {
+        foreach ($this->getAllVisiblePerms() as $perm) {
             if ($perm['mod'] == 'Map' && $perm['obj'] != '*') {
                 if(count($CORE->getAvailableMaps('/^' . $perm['obj'] . '$/')) <= 0) {
                     $this->deletePermission('Map', $perm['obj']);
@@ -188,7 +188,7 @@ class CoreAuthorisationHandler {
         $aPerms = $this->MOD->getAllPerms();
 
         // Filter perms to only display the visible ones
-        foreach($aPerms AS $perm) {
+        foreach($aPerms as $perm) {
             if(!isset($this->summarizePerms[$perm['mod']]) || (isset($this->summarizePerms[$perm['mod']]) && !isset($this->summarizePerms[$perm['mod']][$perm['act']]))) {
                 $aReturn[] = $perm;
             }
@@ -249,7 +249,7 @@ class CoreAuthorisationHandler {
 
         if(count($access) > 0) {
             // Action access?
-            foreach($access AS $mod => $acts) {
+            foreach($access as $mod => $acts) {
                 if(isset($this->aPermissions[$mod][$sAction])) {
                     $access[$mod][$sAction] = [];
                 }
@@ -265,8 +265,8 @@ class CoreAuthorisationHandler {
                 }
 
                 // Object access?
-                foreach($access AS $mod => $acts) {
-                    foreach($acts AS $act => $objs) {
+                foreach($access as $mod => $acts) {
+                    foreach($acts as $act => $objs) {
                         if(isset($this->aPermissions[$mod][$act][$sObj])) {
                             return true;
                         }

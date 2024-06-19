@@ -42,7 +42,7 @@ class NagVisContextMenu {
      * @param 	GlobalCore 	$CORE
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct($CORE, $templateName, $OBJ = NULL) {
+    public function __construct($CORE, $templateName, $OBJ = null) {
         $this->CORE = $CORE;
         $this->OBJPAGE = $OBJ;
         $this->templateName = $templateName;
@@ -82,9 +82,9 @@ class NagVisContextMenu {
     public function readTemplate() {
         if($this->checkTemplateReadable(1)) {
             $this->code = file_get_contents($this->pathTemplateFile);
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -97,83 +97,83 @@ class NagVisContextMenu {
      */
     private function replaceStaticMacros() {
         // Replace the static macros (language, paths)
-        if(strpos($this->code, '[lang_confirm_delete]') !== FALSE) {
+        if(strpos($this->code, '[lang_confirm_delete]') !== false) {
             $this->code = str_replace('[lang_confirm_delete]', l('confirmDelete'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_connect_by_ssh]') !== FALSE) {
+        if(strpos($this->code, '[lang_connect_by_ssh]') !== false) {
             $this->code = str_replace('[lang_connect_by_ssh]', l('contextConnectBySsh'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_refresh_status]') !== FALSE) {
+        if(strpos($this->code, '[lang_refresh_status]') !== false) {
             $this->code = str_replace('[lang_refresh_status]', l('contextRefreshStatus'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_reschedule_next_check]') !== FALSE) {
+        if(strpos($this->code, '[lang_reschedule_next_check]') !== false) {
             $this->code = str_replace('[lang_reschedule_next_check]', l('contextRescheduleNextCheck'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_schedule_downtime]') !== FALSE) {
+        if(strpos($this->code, '[lang_schedule_downtime]') !== false) {
             $this->code = str_replace('[lang_schedule_downtime]', l('contextScheduleDowntime'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_ack]') !== FALSE) {
+        if(strpos($this->code, '[lang_ack]') !== false) {
             $this->code = str_replace('[lang_ack]', l('Acknowledge'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_clone]') !== FALSE) {
+        if(strpos($this->code, '[lang_clone]') !== false) {
             $this->code = str_replace('[lang_clone]', l('Clone object'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_lock]') !== FALSE) {
+        if(strpos($this->code, '[lang_lock]') !== false) {
             $this->code = str_replace('[lang_lock]', l('Lock'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_unlock]') !== FALSE) {
+        if(strpos($this->code, '[lang_unlock]') !== false) {
             $this->code = str_replace('[lang_unlock]', l('Unlock'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_modify]') !== FALSE) {
+        if(strpos($this->code, '[lang_modify]') !== false) {
             $this->code = str_replace('[lang_modify]', l('Modify object'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_delete]') !== FALSE) {
+        if(strpos($this->code, '[lang_delete]') !== false) {
             $this->code = str_replace('[lang_delete]', l('Delete object'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_toggle_line_mid]') !== FALSE) {
+        if(strpos($this->code, '[lang_toggle_line_mid]') !== false) {
             $this->code = str_replace('[lang_toggle_line_mid]', l('Lock/Unlock line middle'), $this->code);
         }
 
-        if(strpos($this->code, '[html_base]') !== FALSE) {
+        if(strpos($this->code, '[html_base]') !== false) {
             $this->code = str_replace('[html_base]', cfg('paths', 'htmlbase'), $this->code);
         }
 
-        if(strpos($this->code, '[html_templates]') !== FALSE) {
+        if(strpos($this->code, '[html_templates]') !== false) {
             $this->code = str_replace('[html_templates]', path('html', 'global', 'templates'), $this->code);
         }
 
-        if(strpos($this->code, '[html_template_images]') !== FALSE) {
+        if(strpos($this->code, '[html_template_images]') !== false) {
             $this->code = str_replace('[html_template_images]', path('html', 'global', 'templateimages'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_make_root]') !== FALSE) {
+        if(strpos($this->code, '[lang_make_root]') !== false) {
             $this->code = str_replace('[lang_make_root]', l('Make root'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_action_rdp]') !== FALSE) {
+        if(strpos($this->code, '[lang_action_rdp]') !== false) {
             $this->code = str_replace('[lang_action_rdp]', l('Connect (RDP)'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_action_ssh]') !== FALSE) {
+        if(strpos($this->code, '[lang_action_ssh]') !== false) {
             $this->code = str_replace('[lang_action_ssh]', l('Connect (SSH)'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_action_http]') !== FALSE) {
+        if(strpos($this->code, '[lang_action_http]') !== false) {
             $this->code = str_replace('[lang_action_http]', l('Connect (HTTP)'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_action_https]') !== FALSE) {
+        if(strpos($this->code, '[lang_action_https]') !== false) {
             $this->code = str_replace('[lang_action_https]', l('Connect (HTTPS)'), $this->code);
         }
 
@@ -184,7 +184,7 @@ class NagVisContextMenu {
 
         foreach ($action_urls as $param) {
             if (cfg('defaults', $param) != "") {
-                if(strpos($this->code, '[' . $param . ']') !== FALSE) {
+                if(strpos($this->code, '[' . $param . ']') !== false) {
                     $this->code = str_replace('[' . $param . ']', cfg('defaults', $param), $this->code);
                 }
             } else {

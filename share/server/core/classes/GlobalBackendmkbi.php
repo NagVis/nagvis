@@ -245,7 +245,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
     private function getAggregationNames() {
         $aggregations = $this->getUrl('view.py?view_name=aggr_all_api&expansion_level=0');
         $names = [];
-        foreach($aggregations AS $aggr) {
+        foreach($aggregations as $aggr) {
             $names[$aggr['aggr_name']] = $aggr['aggr_name'];
         }
         ksort($names);
@@ -278,7 +278,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         $pairs = array_chunk($parts, 2);
 
         $elements = [];
-        foreach ($pairs AS $pair) {
+        foreach ($pairs as $pair) {
             list($short_state, $title) = $pair;
 
             if(!isset(GlobalBackendmkbi::$bi_short_states[$short_state])) {
@@ -339,7 +339,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
 
         // Add the single component state counts
         $elements = $this->getAggrElements($aggr);
-        foreach ($elements AS $element) {
+        foreach ($elements as $element) {
             $state = $this->getAggrState($element["state"]);
             if ($element["in_downtime"]) {
                 $c[$state]['downtime']++;
@@ -368,7 +368,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         }
 
         $result = [];
-        foreach($this->getAggregationNames() AS $id => $name) {
+        foreach($this->getAggregationNames() as $id => $name) {
             $result[] = ['name1' => $id, 'name2' => $name];
         }
         return $result;
@@ -393,7 +393,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         $aggregations = $this->getUrl('view.py?view_name=aggr_all_api&expansion_level=1');
 
         $ret = [];
-        foreach($objects AS $key => $OBJS) {
+        foreach($objects as $key => $OBJS) {
             $aggr = $this->matchAggregation($aggregations, $key);
             if ($aggr === null) {
                 continue;
@@ -436,7 +436,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         $aggregations = $this->getUrl('view.py?view_name=aggr_all_api&expansion_level=1');
 
         $ret = [];
-        foreach($objects AS $key => $OBJS) {
+        foreach($objects as $key => $OBJS) {
             $aggr = $this->matchAggregation($aggregations, $key);
             if ($aggr === null) {
                 continue;
@@ -445,7 +445,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             // Add the services
             // Add the single component state counts
             $elements = $this->getAggrElements($aggr);
-            foreach ($elements AS $element) {
+            foreach ($elements as $element) {
                 $child = [
                     $this->getAggrState($element["state"]),  // state
                     $element["output"],            // output

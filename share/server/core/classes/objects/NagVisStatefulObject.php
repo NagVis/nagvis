@@ -92,7 +92,7 @@ class NagVisStatefulObject extends NagVisObject {
             $this->aStateCounts = $arr;
         } else {
             // Add new state counts to current ones
-            foreach($arr AS $state => $substates) {
+            foreach($arr as $state => $substates) {
                 foreach ($substates as $substate => $num) {
                     $this->aStateCounts[$state][$substate] += $num;
                 }
@@ -557,7 +557,7 @@ class NagVisStatefulObject extends NagVisObject {
         $stateWeight = $_MAINCFG->getStateWeight();
 
         if($this->aStateCounts !== null) {
-            foreach($this->aStateCounts AS $sState => $aSubstates) {
+            foreach($this->aStateCounts as $sState => $aSubstates) {
                 if(isset($stateWeight[$sState])
                     && isset($stateWeight[$sState]['normal'])
                     && isset($aSubstates['normal'])
@@ -575,7 +575,7 @@ class NagVisStatefulObject extends NagVisObject {
 
         $objCount = 0;
         $stateFilter = [];
-        foreach($stateCounts AS $aState) {
+        foreach($stateCounts as $aState) {
             $stateFilter[] = $aState['name'];
             if(($objCount += $aState['count']) >= $this->hover_childs_limit) {
                 break;
@@ -713,9 +713,9 @@ class NagVisStatefulObject extends NagVisObject {
         // Loop all major states
         $iSumCount = 0;
         if($this->aStateCounts !== null) {
-            foreach($this->aStateCounts AS $sState => $aSubstates) {
+            foreach($this->aStateCounts as $sState => $aSubstates) {
                 // Loop all substates (normal,ack,downtime,...)
-                foreach($aSubstates AS $sSubState => $iCount) {
+                foreach($aSubstates as $sSubState => $iCount) {
                     if($iCount === 0) {
                         continue;
                     }
@@ -790,7 +790,7 @@ class NagVisStatefulObject extends NagVisObject {
             $this->sum[OUTPUT] .= NagVisStatefulObject::$langMemberStates . ' ';
         }
 
-        foreach($arrStates AS $state => $num) {
+        foreach($arrStates as $state => $num) {
             if ($num > 0) {
                 $this->sum[OUTPUT] .= $num . ' ' . state_str($state) . ', ';
             }
@@ -828,7 +828,7 @@ class NagVisStatefulObject extends NagVisObject {
 
         // Loop all object to gather the worst state and set it as summary
         // state of the current object
-        foreach($objects AS $OBJ) {
+        foreach($objects as $OBJ) {
             if ($this->getType() == 'map' && $OBJ->getType() == 'map' && $this instanceof NagVisMapObj) {
                 if ($this->MAPCFG->getValue(0, 'ignore_linked_maps_summary_state') != 0) {
                     continue;
@@ -884,7 +884,7 @@ class NagVisStatefulObject extends NagVisObject {
                 'notes'         => NOTES,
                 'check_command' => CHECK_COMMAND,
             ];
-            foreach ($obj_attrs AS $attr => $state_key) {
+            foreach ($obj_attrs as $attr => $state_key) {
                 if (isset($this->state[$state_key]) && $this->state[$state_key] != '') {
                     $arr[$attr] = $this->state[$state_key];
                 } else {
@@ -930,7 +930,7 @@ class NagVisStatefulObject extends NagVisObject {
         // If there are some members fetch the information for them
         if(isset($arr['num_members']) && $arr['num_members'] > 0) {
             $members = [];
-            foreach($this->getSortedObjectMembers() AS $OBJ) {
+            foreach($this->getSortedObjectMembers() as $OBJ) {
                 $members[] = $OBJ->fetchObjectAsChild();
             }
             $arr['members'] = $members;

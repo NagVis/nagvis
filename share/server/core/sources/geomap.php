@@ -23,7 +23,7 @@ function geomap_read_csv($p) {
     }
 
     $i = 0;
-    foreach(file($f) AS $line) {
+    foreach(file($f) as $line) {
         $i++;
 
         // skip lines beginning with any of the usual comment characters
@@ -54,7 +54,7 @@ function geomap_read_csv($p) {
 function geomap_backend_locations($p) {
     global $_BACKEND;
     $hosts = [];
-    foreach ($p['backend_id'] AS $backend_id) {
+    foreach ($p['backend_id'] as $backend_id) {
         $_BACKEND->checkBackendExists($backend_id, true);
         $_BACKEND->checkBackendFeature($backend_id, 'getGeomapHosts', true);
 
@@ -66,7 +66,7 @@ function geomap_backend_locations($p) {
 function geomap_backend_program_start($p) {
     global $_BACKEND;
     $t = null;
-    foreach ($p['backend_id'] AS $backend_id) {
+    foreach ($p['backend_id'] as $backend_id) {
         $_BACKEND->checkBackendExists($backend_id, true);
         $_BACKEND->checkBackendFeature($backend_id, 'getProgramStart', true);
 
@@ -324,7 +324,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     $map_config[0]['iconset']   = $iconset;
 
     // Now add the objects to the map
-    foreach($locations AS $loc) {
+    foreach($locations as $loc) {
         $object_id = $MAPCFG->genObjId($loc['name']);
         $map_config[$object_id] = [
             'type'      => 'host',
@@ -358,7 +358,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     // east/west
     $min_long = 180;
     $max_long = -180;
-    foreach($map_config AS $obj) {
+    foreach($map_config as $obj) {
         if($obj['type'] == 'global') {
             continue;
         }

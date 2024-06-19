@@ -177,9 +177,9 @@ try {
             }
 
             echo '<table>';
-            foreach($result AS $line) {
+            foreach($result as $line) {
                 echo '<tr>';
-                foreach($line AS $cell) {
+                foreach($line as $cell) {
                     echo '<td>' . $cell . '</td>';
                 }
                 echo '</tr>';

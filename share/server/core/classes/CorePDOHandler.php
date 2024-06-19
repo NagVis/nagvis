@@ -388,7 +388,7 @@ class CorePDOHandler {
 
     public function queryFatal($s, $params = []) {
         $res = $this->query($s, $params);
-        if($res === FALSE) {
+        if($res === false) {
             die("Could not execute the $s query: " . $this->errorString());
         } else {
             return $res;
@@ -532,7 +532,7 @@ class CorePDOHandler {
                 }
             }
 
-            foreach(GlobalCore::getInstance()->demoMaps AS $map) {
+            foreach(GlobalCore::getInstance()->demoMaps as $map) {
                 if(count(GlobalCore::getInstance()->getAvailableMaps('/^' . $map . '$/')) <= 0) {
                     continue;
                 }
@@ -632,7 +632,7 @@ class CorePDOHandler {
         $this->queryFatal('-perm-add', ['mod' => 'Action', 'act' => 'perform', 'obj' => '*']);
 
         // Access controll: Map module levels for the demo maps
-        foreach(GlobalCore::getInstance()->demoMaps AS $map) {
+        foreach(GlobalCore::getInstance()->demoMaps as $map) {
             $this->createMapPermissions($map);
         }
 
@@ -798,7 +798,7 @@ class CorePDOHandler {
         $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Guests', 'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*']);
 
         // Access assignment: Guests => Allowed to view the demo maps
-        foreach(GlobalCore::getInstance()->demoMaps AS $map) {
+        foreach(GlobalCore::getInstance()->demoMaps as $map) {
             $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Guests', 'mod' => 'Map', 'act' => 'view', 'obj' => $map]);
         }
 

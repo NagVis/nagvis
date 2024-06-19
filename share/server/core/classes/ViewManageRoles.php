@@ -99,7 +99,7 @@ class ViewManageRoles {
                 $role_id = intval($role_id);
 
                 $found = false;
-                foreach ($AUTHORISATION->getAllRoles() AS $role) {
+                foreach ($AUTHORISATION->getAllRoles() as $role) {
                     if ($role['roleId'] == $role_id) {
                         $found = true;
                     }
@@ -110,7 +110,7 @@ class ViewManageRoles {
 
                 // Load permissions from parameters
                 $perms = [];
-                foreach (array_keys($_POST) AS $key) {
+                foreach (array_keys($_POST) as $key) {
                     if(strpos($key, 'perm_') !== false) {
                         $key_parts = explode('_', $key);
                         $perm_id = $key_parts[1];
@@ -146,7 +146,7 @@ class ViewManageRoles {
         echo '<tr><td class="tdlabel">' . l('Select Role') . '</td>';
         echo '<td class="tdfield">';
         $choices = ['' => l('Please choose')];
-        foreach ($AUTHORISATION->getAllRoles() AS $role) {
+        foreach ($AUTHORISATION->getAllRoles() as $role) {
             $choices[$role['roleId']] = $role['name'];
         }
         select('role_id', $choices, '', 'updateForm(this.form)');
@@ -179,7 +179,7 @@ class ViewManageRoles {
             'maps'      => [],
             'rotations' => [],
         ];
-        foreach ($AUTHORISATION->getAllVisiblePerms() AS $perm) {
+        foreach ($AUTHORISATION->getAllVisiblePerms() as $perm) {
             if ($perm['mod'] == 'Map' && $perm['act'] != 'add' && $perm['act'] != 'manage') {
                 $map_name = $perm['obj'];
                 if (!isset($permissions_by_section['maps'][$map_name])) {
@@ -194,7 +194,7 @@ class ViewManageRoles {
         }
 
         $permitted = $AUTHORISATION->getRolePerms($role_id);
-        foreach ($permissions_by_section AS $sec => $permissions) {
+        foreach ($permissions_by_section as $sec => $permissions) {
             render_section_start($sec, $open);
             if ($sec == 'maps') {
                 $this->renderMapsSection($permissions, $permitted);
@@ -213,7 +213,7 @@ class ViewManageRoles {
         echo '<th>' . l('Edit') . '</th>';
         echo '<th>' . l('Delete') . '</th>';
         echo '</tr>';
-        foreach ($permissions AS $map_name => $map_perms) {
+        foreach ($permissions as $map_name => $map_perms) {
             echo '<tr>';
             echo '<td>' . $map_name . '</td>';
             $levels = ["view", "edit", "delete"];
@@ -237,7 +237,7 @@ class ViewManageRoles {
         echo '<th>' . l('Object') . '</th>';
         echo '<th>' . l('Permitted') . '</th>';
         echo '</tr>';
-        foreach ($permissions AS $perm) {
+        foreach ($permissions as $perm) {
             unset($_REQUEST['perm_' . $perm['permId']]);
             echo '<tr>';
             echo '<td>' . $perm['mod'] . '</td>';
@@ -299,7 +299,7 @@ class ViewManageRoles {
         echo '<tr><td class="tdlabel">' . l('Name') . '</td>';
         echo '<td class="tdfield">';
         $choices = ['' => l('Please choose')];
-        foreach ($AUTHORISATION->getAllRoles() AS $role) {
+        foreach ($AUTHORISATION->getAllRoles() as $role) {
             $choices[$role['roleId']] = $role['name'];
         }
         select('role_id', $choices);

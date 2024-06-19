@@ -81,7 +81,7 @@ class CoreUriHandler {
     }
 
     public function parseModSpecificUri($aKeys, $aDefaults = []) {
-        foreach($aKeys AS $key => $sMatch) {
+        foreach($aKeys as $key => $sMatch) {
             // Validate the value
             $bValid = true;
             if($sMatch !== '') {
@@ -145,7 +145,7 @@ class CoreUriHandler {
         $bValid = true;
 
         // Validate each param
-        foreach($this->aOpts AS $val) {
+        foreach($this->aOpts as $val) {
             if (!preg_match(MATCH_URI_PART, $val)) {
                 $bValid = false;
             }

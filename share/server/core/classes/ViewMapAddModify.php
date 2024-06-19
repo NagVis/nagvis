@@ -90,7 +90,7 @@ class ViewMapAddModify {
         }
 
         // FIXME: Are all given attrs valid ones?
-        foreach($this->attrs AS $key => $val) {
+        foreach($this->attrs as $key => $val) {
             if(!isset($attrDefs[$key])) {
                 throw new FieldInputError($key, l('The attribute "[A]" is unknown.', ["A" => $key]));
             }
@@ -522,7 +522,7 @@ class ViewMapAddModify {
                 }
 
                 // Filter unwanted global parameters
-                foreach ($this->MAPCFG->getHiddenConfigVars() AS $propname) {
+                foreach ($this->MAPCFG->getHiddenConfigVars() as $propname) {
                     unset($typeDef[$propname]);
                 }
             }
@@ -548,7 +548,7 @@ class ViewMapAddModify {
 
         $obj_spec = $this->getProperties();
         $props_by_section = [];
-        foreach ($obj_spec AS $propname => $prop) {
+        foreach ($obj_spec as $propname => $prop) {
             $sec = $prop['section'];
             if (!isset($props_by_section[$sec])) {
                 $props_by_section[$sec] = [];
@@ -557,7 +557,7 @@ class ViewMapAddModify {
         }
 
         $sections = [];
-        foreach (array_keys($props_by_section) AS $sec) {
+        foreach (array_keys($props_by_section) as $sec) {
             if ($sec != 'hidden') {
                 $sections[$sec] = $this->MAPCFG->getSectionTitle($sec);
             }

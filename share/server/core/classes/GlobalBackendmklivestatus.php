@@ -572,9 +572,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     private function parseFilter($objects, $filters, $isMemberQuery = false,
                                  $isCountQuery = false, $isHostQuery = true) {
         $aFilters = [];
-        foreach($objects AS $OBJS) {
+        foreach($objects as $OBJS) {
             $objFilters = [];
-            foreach($filters AS $filter) {
+            foreach($filters as $filter) {
                 if ($isHostQuery && $filter['key'] == 'host_name') {
                     $key = 'name';
                 } else {
@@ -1556,7 +1556,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         }
         $r = $this->queryLivestatus($query);
         $hosts = [];
-        foreach($r AS $row) {
+        foreach($r as $row) {
             if($row[1] && $row[2]) {
 	        $custom_variables = array_combine($row[1], $row[2]);
                 if(isset($custom_variables['LAT']) && isset($custom_variables['LONG'])) {
@@ -1616,7 +1616,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         } else {
             $result = [];
             foreach ($raw_result[0] as &$value) {
-                if (strpos($value, "/") == False) {
+                if (strpos($value, "/") == false) {
                     array_push($result, $value);
                 }
             }
@@ -1647,7 +1647,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         } else {
             $result = [];
             foreach ($raw_result[0] as &$value) {
-                if (strpos($value, "/") == False) {
+                if (strpos($value, "/") == false) {
                     array_push($result, $value);
                 }
             }

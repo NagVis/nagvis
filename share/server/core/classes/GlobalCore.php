@@ -89,7 +89,7 @@ class GlobalCore {
         if(!isset($_UMAINCFG)) {
             $_UMAINCFG = new GlobalMainCfg();
             $_UMAINCFG->setConfigFiles([CONST_MAINCFG]);
-            $_UMAINCFG->init(True, '-user-only');
+            $_UMAINCFG->init(true, '-user-only');
         }
         return $_UMAINCFG;
     }
@@ -150,9 +150,9 @@ class GlobalCore {
             if($printErr) {
                 throw new NagVisException(l('gdLibNotFound'));
             }
-            return FALSE;
+            return false;
         } else {
-            return TRUE;
+            return true;
         }
     }
 
@@ -169,7 +169,7 @@ class GlobalCore {
             $MAINCFG = self::getMainCfg();
         }
         $ret = [];
-        foreach($MAINCFG->getSections() AS $name) {
+        foreach($MAINCFG->getSections() as $name) {
             if(preg_match('/^backend_/i', $name)) {
                 $backend_id = $MAINCFG->getValue($name, 'backendid');
                 $ret[$backend_id] = $backend_id;
@@ -187,7 +187,7 @@ class GlobalCore {
      */
     public function getDefinedRotationPools() {
         $ret = [];
-        foreach(self::getMainCfg()->getSections() AS $name) {
+        foreach(self::getMainCfg()->getSections() as $name) {
             if(preg_match('/^rotation_/i', $name)) {
                 $id = self::getMainCfg()->getValue($name, 'rotationid');
                 $ret[$id] = $id;
@@ -203,7 +203,7 @@ class GlobalCore {
     public function getPermittedRotationPools() {
         global $AUTHORISATION;
         $list = [];
-        foreach($this->getDefinedRotationPools() AS $poolName) {
+        foreach($this->getDefinedRotationPools() as $poolName) {
             if($AUTHORISATION->isPermitted('Rotation', 'view', $poolName)) {
                 $list[$poolName] = $poolName;
             }
@@ -216,7 +216,7 @@ class GlobalCore {
      */
     public function getDefinedCustomActions() {
         $ret = [];
-        foreach(self::getMainCfg()->getSections() AS $name) {
+        foreach(self::getMainCfg()->getSections() as $name) {
             if(preg_match('/^action_/i', $name)) {
                 $id = self::getMainCfg()->getValue($name, 'action_id');
                 $ret[$id] = $id;
@@ -236,7 +236,7 @@ class GlobalCore {
     public function getAvailableAndEnabledLanguages() {
         $aRet = [];
 
-        foreach($this->getAvailableLanguages() AS $val) {
+        foreach($this->getAvailableLanguages() as $val) {
             if(in_array($val, self::getMainCfg()->getValue('global', 'language_available'))) {
                 $aRet[] = $val;
             }
@@ -421,7 +421,7 @@ class GlobalCore {
         global $AUTHORISATION;
 
         $list = [];
-        foreach ($this->getAvailableMaps() AS $mapName) {
+        foreach ($this->getAvailableMaps() as $mapName) {
             // Check if the user is permitted to view this
             if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName)) {
                 continue;
@@ -454,7 +454,7 @@ class GlobalCore {
     public function getListMaps() {
         $list = [];
         $maps = $this->getPermittedMaps();
-        foreach ($maps AS $mapName) {
+        foreach ($maps as $mapName) {
             $MAPCFG = new GlobalMapCfg($mapName);
             $MAPCFG->checkMapConfigExists(true);
             try {
@@ -672,7 +672,7 @@ class GlobalCore {
             array_push($parts, '60');
         }
         $tag = '';
-        foreach($parts AS $part) {
+        foreach($parts as $part) {
             $tag .= sprintf("%02s", $part);
         }
         return (int) sprintf("%-08s", $tag);

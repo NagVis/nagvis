@@ -102,7 +102,7 @@ class CoreModUrl extends CoreModule {
         global $CORE;
         $allowed = [];
 
-        foreach($CORE->getPermittedRotationPools() AS $pool_name) {
+        foreach($CORE->getPermittedRotationPools() as $pool_name) {
             $ROTATION = new CoreRotation($pool_name);
 
             $iNum = $ROTATION->getNumSteps();
