@@ -163,7 +163,7 @@ abstract class CoreModule {
             }
 
             $aReturn = [];
-            foreach($aKeys AS $key => $val) {
+            foreach($aKeys as $key => $val) {
                 if ($this->FHANDLER->match($key, $val)) {
                     $aReturn[$key] = $this->FHANDLER->get($key);
                 }
@@ -182,7 +182,7 @@ abstract class CoreModule {
 
         // Now get those params
         $aReturn = [];
-        foreach($aKeys AS $key => $val) {
+        foreach($aKeys as $key => $val) {
             $aReturn[$key] = $this->UHANDLER->get($key);
         }
 
@@ -251,13 +251,13 @@ abstract class CoreModule {
         // Check if the array is assoc. When it isn't re-format it.
         if(array_keys($list) === range(0, count($list) - 1)) {
             $assoc = [];
-            foreach($list AS $value) {
+            foreach($list as $value) {
                 $assoc[$value] = true;
             }
             $list = $assoc;
         }
 
-        foreach($list AS $key => $value) {
+        foreach($list as $key => $value) {
             if (!$HANDLER->isSetAndNotEmpty($key)) {
                 throw new UserInputError(l('mustValueNotSet1', ['ATTRIBUTE' => $key]));
             }
@@ -271,7 +271,7 @@ abstract class CoreModule {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function verifyValuesMatch($HANDLER, $list) {
-        foreach($list AS $key => $pattern) {
+        foreach($list as $key => $pattern) {
             if ($pattern && !$HANDLER->match($key, $pattern)) {
                 throw new UserInputError(l('The value of option "[ATTRIBUTE]" does not match the valid format.',
                     ['ATTRIBUTE' => $key]));
@@ -290,7 +290,7 @@ abstract class CoreModule {
         global $AUTHORISATION, $CORE;
         $changed = [];
 
-        foreach($files AS $file) {
+        foreach($files as $file) {
             $parts = explode(',', $file);
             // Skip invalid requested files
             if(count($parts) != 3) {

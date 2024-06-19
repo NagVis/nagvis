@@ -104,7 +104,7 @@ class ViewManageBackgrounds {
 
                 // Check whether or not the backgroun is in use
                 $using = [];
-                foreach ($CORE->getAvailableMaps() AS $map) {
+                foreach ($CORE->getAvailableMaps() as $map) {
                     $MAPCFG = new GlobalMapCfg($map);
                     try {
                         $MAPCFG->readMapConfig(ONLY_GLOBAL);
@@ -147,7 +147,7 @@ class ViewManageBackgrounds {
         echo '<tr><td class="tdlabel">' . l('Background') . '</td>';
         echo '<td class="tdfield">';
         $images = ['' => l('Choose a background')];
-        foreach ($CORE->getAvailableBackgroundImages() AS $name) {
+        foreach ($CORE->getAvailableBackgroundImages() as $name) {
             $images[$name] = $name;
         }
         select('name', $images);

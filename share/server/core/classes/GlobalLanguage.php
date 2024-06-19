@@ -94,7 +94,7 @@ class GlobalLanguage {
         $sReturn = '';
         $aMethods = cfg('global', 'language_detection');
 
-        foreach($aMethods AS $sMethod) {
+        foreach($aMethods as $sMethod) {
             if($sReturn == '') {
                 switch($sMethod) {
                     case 'session':
@@ -198,7 +198,7 @@ class GlobalLanguage {
 
         // Check if the languages are available and then return the most important language which is available
         $sLang = '';
-        foreach($langs AS $key => $val) {
+        foreach($langs as $key => $val) {
             // Format the language keys
             if(strpos($key, '-') !== false) {
                 $a = explode('-', $key);
@@ -243,12 +243,12 @@ class GlobalLanguage {
            && ($ignoreConf == true
                || ($ignoreConf == false
                    && in_array($sLang, cfg('global', 'language_available'))))) {
-            return TRUE;
+            return true;
         } else {
             if($printErr) {
                 throw new NagVisException($this->getText('languageNotFound', ['LANG' => $sLang]));
             }
-            return FALSE;
+            return false;
         }
     }
 
@@ -325,7 +325,7 @@ class GlobalLanguage {
                 }
             }
         } else {
-            foreach($replace AS $key => $val) {
+            foreach($replace as $key => $val) {
                 $sLang = str_replace('[' . $key . ']', $val, $sLang);
             }
         }

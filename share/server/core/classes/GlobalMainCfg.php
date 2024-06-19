@@ -1892,7 +1892,7 @@ class GlobalMainCfg {
      * Loads the custom action definitions from their files
      */
     private function fetchCustomActions() {
-        foreach(GlobalCore::getInstance()->getAvailableCustomActions() AS $action_file) {
+        foreach(GlobalCore::getInstance()->getAvailableCustomActions() as $action_file) {
             $configVars = [];
 
             if(file_exists(path('sys', 'local', 'actions'))) {
@@ -1919,7 +1919,7 @@ class GlobalMainCfg {
     public function getConfigFiles() {
         // Get all files from the conf.d directory
         $files = GlobalCore::getInstance()->listDirectory(CONST_MAINCFG_DIR, MATCH_MAINCFG_FILE, null, null, 0, null, false);
-        foreach($files AS $key => $filename) {
+        foreach($files as $key => $filename) {
             $files[$key] = CONST_MAINCFG_DIR . '/' . $filename;
         }
 
@@ -1947,7 +1947,7 @@ class GlobalMainCfg {
                || $this->PUCACHE->isCached(false) === -1
                || $this->PUCACHE->getCacheFileAge() < filemtime(CONST_MAINCFG_DIR)) {
                 // The cache is too old. Load all config files
-                foreach($this->configFiles AS $configFile) {
+                foreach($this->configFiles as $configFile) {
                     // Only proceed when the configuration file exists and is readable
                     if(!GlobalCore::getInstance()->checkExisting($configFile, true)
                        || !GlobalCore::getInstance()->checkReadable($configFile, true)) {
@@ -2008,7 +2008,7 @@ class GlobalMainCfg {
         // Get the configuration options from the backends
         $aBackends = GlobalCore::getInstance()->getAvailableBackends();
 
-        foreach($aBackends AS $backend) {
+        foreach($aBackends as $backend) {
             $class = 'GlobalBackend' . $backend;
 
             // FIXME: Does not work in PHP 5.2 (http://bugs.php.net/bug.php?id=31318)
@@ -2090,7 +2090,7 @@ class GlobalMainCfg {
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function readConfig($configFile, $printErr = 1, $isUserMainCfg = False) {
+    private function readConfig($configFile, $printErr = 1, $isUserMainCfg = false) {
         $numComments = 0;
         $sec = '';
 
@@ -2189,7 +2189,7 @@ class GlobalMainCfg {
                     $val = explode(',', $val);
 
                     // Check if an element has a label defined
-                    foreach($val AS $id => $element) {
+                    foreach($val as $id => $element) {
                         if(preg_match("/^([^\[.]+:)?(\[(.+)\]|(.+))$/", $element, $arrRet)) {
                             $label = '';
                             $map = '';
@@ -2229,8 +2229,8 @@ class GlobalMainCfg {
 
         // Reapply the separated config
         if($isUserMainCfg && $this->preUserConfig !== null) {
-            foreach($this->preUserConfig AS $sec => $opts) {
-                foreach($opts AS $opt => $val) {
+            foreach($this->preUserConfig as $sec => $opts) {
+                foreach($opts as $opt => $val) {
                     if(!isset($this->config[$sec])) {
                         $this->config[$sec] = $opts;
                     }
@@ -2269,7 +2269,7 @@ class GlobalMainCfg {
      */
     private function checkMainConfigIsValid($printErr) {
         // check given objects and attributes
-        foreach($this->config AS $type => &$vars) {
+        foreach($this->config as $type => &$vars) {
             if(!preg_match('/^comment_/', $type)) {
                 if(isset($this->validConfig[$type]) || preg_match('/^(backend|rotation|action)_/', $type)) {
                     // loop validConfig for checking: => missing "must" atributes
@@ -2285,20 +2285,20 @@ class GlobalMainCfg {
                     } else {
                         $arrValidConfig = $this->validConfig[$type];
                     }
-                    foreach($arrValidConfig AS $key => &$val) {
+                    foreach($arrValidConfig as $key => &$val) {
                         if((isset($val['must']) && $val['must'] == '1')) {
                             // value is "must"
                             if($this->getValue($type, $key) === null) {
                                 // a "must" value is missing or empty
                                 throw new NagVisException(l('The needed attribute [ATTRIBUTE] is missing in section [TYPE] in main configuration file. Please take a look at the documentation.',
                                                             ['ATTRIBUTE' => $key, 'TYPE' => $type]));
-                                return FALSE;
+                                return false;
                             }
                         }
                     }
 
                     // loop given elements for checking: => all given attributes valid
-                    foreach($vars AS $key => $val) {
+                    foreach($vars as $key => $val) {
                         if(!preg_match('/^comment_/', $key)) {
                             if(preg_match('/^backend_/', $type)) {
                                 $ty = $this->getValue($type, 'backendtype');
@@ -2331,18 +2331,18 @@ class GlobalMainCfg {
                                     throw new NagVisException(l('Unknown value [ATTRIBUTE] used in section [TYPE] in main configuration file.',
                                                                 ['ATTRIBUTE' => $key, 'TYPE' => $type]));
                                 }
-                                return FALSE;
+                                return false;
                             } elseif(isset($arrValidConfig[$key]['deprecated']) && $arrValidConfig[$key]['deprecated'] == 1) {
                                 // deprecated option
                                 if($printErr) {
                                     throw new NagVisException(l('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file is deprecated. Please take a look at the documentation for updating your configuration.',
                                                                 ['ATTRIBUTE' => $key, 'TYPE' => $type]));
                                 }
-                                return FALSE;
+                                return false;
                             } else {
                                 // Workaround to get the configured string back
                                 if(preg_match('/^rotation_/', $type) && $key == 'maps') {
-                                    foreach($val AS $intId => $arrStep) {
+                                    foreach($val as $intId => $arrStep) {
                                         if(isset($arrStep['label']) && $arrStep['label'] != '') {
                                             $label = $arrStep['label'] . ':';
                                         }
@@ -2362,7 +2362,7 @@ class GlobalMainCfg {
                                         throw new NagVisException(l('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file does not match the correct format. Please review your configuration.',
                                                                     ['ATTRIBUTE' => $key, 'TYPE' => $type]));
                                     }
-                                    return FALSE;
+                                    return false;
                                 }
 
                                 // Check if the configured backend is defined in main configuration file
@@ -2370,7 +2370,7 @@ class GlobalMainCfg {
                                     if($printErr) {
                                         throw new NagVisException(l('The backend with the ID \"[BACKENDID]\" is not defined.', ['BACKENDID' => $val]));
                                     }
-                                    return FALSE;
+                                    return false;
                                 }
                             }
                         }
@@ -2382,11 +2382,11 @@ class GlobalMainCfg {
                             l('The section [TYPE] is not supported in main configuration. Please take a look at the documentation.',
                               ['TYPE' => $type]));
                     }
-                    return FALSE;
+                    return false;
                 }
             }
         }
-        return TRUE;
+        return true;
     }
 
     /**
@@ -2397,7 +2397,7 @@ class GlobalMainCfg {
      */
     public function getConfigFileAge() {
         $newest = 0;
-        foreach($this->configFiles AS $configFile) {
+        foreach($this->configFiles as $configFile) {
             $age = filemtime($configFile);
             $newest = ($age > $newest ? $age : $newest);
         }
@@ -2438,7 +2438,7 @@ class GlobalMainCfg {
 
             $this->config[$sec][$var] = $val;
         }
-        return TRUE;
+        return true;
     }
 
     public function unsetValue($sec, $var) {
@@ -2446,10 +2446,10 @@ class GlobalMainCfg {
     }
 
     public function getPath($type, $loc, $var, $relfile = '') {
-        $lb = $this->getValue('paths', 'local_base', True) . HTDOCS_DIR;
+        $lb = $this->getValue('paths', 'local_base', true) . HTDOCS_DIR;
         $b  = $this->getValue('paths', 'base') . HTDOCS_DIR;
 
-        $lh = $this->getValue('paths', 'local_htmlbase', True);
+        $lh = $this->getValue('paths', 'local_htmlbase', true);
         $h  = $this->getValue('paths', 'htmlbase');
 
         // Get the relative path
@@ -2460,7 +2460,7 @@ class GlobalMainCfg {
         }
 
         // Compute the full system paths
-        $l_file = $lb !== FALSE && $lb !== '' ? $lb . '/' . $relpath . $relfile : null;
+        $l_file = $lb !== false && $lb !== '' ? $lb . '/' . $relpath . $relfile : null;
         $file   = $b . '/' . $relpath . $relfile;
 
         // Decide which path to return
@@ -2561,7 +2561,7 @@ class GlobalMainCfg {
      */
     public function getSections() {
         $aRet = [];
-        foreach($this->config AS $key => $var) {
+        foreach($this->config as $key => $var) {
             $aRet[] = $key;
         }
         return $aRet;
@@ -2577,7 +2577,7 @@ class GlobalMainCfg {
      */
     public function setRuntimeValue($var, $val) {
         $this->runtimeConfig[$var] = $val;
-        return TRUE;
+        return true;
     }
 
     /**
@@ -2650,7 +2650,7 @@ class GlobalMainCfg {
     private function parseStateWeight() {
         $arr = [];
 
-        foreach($this->validConfig['states'] AS $lowState => $aVal) {
+        foreach($this->validConfig['states'] as $lowState => $aVal) {
             $key = explode('_', $lowState);
 
             // Convert state values to int
@@ -2700,7 +2700,7 @@ class GlobalMainCfg {
      */
     public function getStateWeightJS() {
         $arr = [];
-        foreach ($this->stateWeight AS $state => $val) {
+        foreach ($this->stateWeight as $state => $val) {
             $arr[state_str($state)] = $val;
         }
         return $arr;
@@ -2754,7 +2754,7 @@ class GlobalMainCfg {
             $lastBackendIndex = 0;
             $i = 0;
             // Loop all sections to find the last defined backend
-            foreach($this->config AS $type => $vars) {
+            foreach($this->config as $type => $vars) {
                 // If the current section is a backend
                 if(preg_match('/^backend_/', $type)) {
                     $lastBackendIndex = $i;
@@ -2776,7 +2776,7 @@ class GlobalMainCfg {
             $this->config[$sec] = [];
         }
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -2790,7 +2790,7 @@ class GlobalMainCfg {
         $this->config[$sec] = '';
         unset($this->config[$sec]);
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -2826,7 +2826,7 @@ class GlobalMainCfg {
                         if(is_array($item2) && preg_match('/^rotation_/i', $key) && $key2 == 'maps') {
                             $val = '';
                             // Check if an element has a label defined
-                            foreach($item2 AS $intId => $arrStep) {
+                            foreach($item2 as $intId => $arrStep) {
                                 $seperator = ',';
                                 $label = '';
                                 $step = '';
@@ -2900,7 +2900,7 @@ class GlobalMainCfg {
         fclose($handle);
         GlobalCore::getInstance()->setPerms($cfgFile);
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -2925,7 +2925,7 @@ class GlobalMainCfg {
         $val = explode(',', $val);
 
         // Trim surrounding spaces on each element
-        foreach($val AS $trimKey => $trimVal) {
+        foreach($val as $trimKey => $trimVal) {
             $val[$trimKey] = trim($trimVal);
         }
 
@@ -2965,7 +2965,7 @@ class GlobalMainCfg {
      * Finds out if an attribute has dependant attributes
      */
     public function hasDependants($sec, $key) {
-        foreach ($this->validConfig[$sec] AS $arr) {
+        foreach ($this->validConfig[$sec] as $arr) {
             if (isset($arr['depends_on']) && $arr['depends_on'] == $key) {
                 return true;
             }

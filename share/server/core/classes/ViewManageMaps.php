@@ -131,7 +131,7 @@ class ViewManageMaps {
 
                 $i = 0;
                 // loop definitions of type map
-                foreach($MAPCFG1->getDefinitions('map') AS $key => $obj) {
+                foreach($MAPCFG1->getDefinitions('map') as $key => $obj) {
                     // check if old map name is linked...
                     if($obj['map_name'] == $name) {
                         $MAPCFG1->setValue('map', $i, 'map_name', $new_name);
@@ -214,7 +214,7 @@ class ViewManageMaps {
         echo '<tr><td class="tdlabel">' . l('Map') . '</td>';
         echo '<td class="tdfield">';
         $maps = ['' => l('Choose a map')];
-        foreach ($CORE->getAvailableMaps() AS $map) {
+        foreach ($CORE->getAvailableMaps() as $map) {
             $maps[$map] = $map;
         }
         select('name', $maps);
@@ -282,7 +282,7 @@ class ViewManageMaps {
         echo '<tr><td class="tdlabel">' . l('Map') . '</td>';
         echo '<td class="tdfield">';
         $maps = ['' => l('Choose a map')];
-        foreach ($CORE->getAvailableMaps() AS $map) {
+        foreach ($CORE->getAvailableMaps() as $map) {
             $maps[$map] = $map;
         }
         select('name', $maps);
@@ -330,7 +330,7 @@ class ViewManageMaps {
         echo '<tr><td class="tdlabel">' . l('Map') . '</td>';
         echo '<td class="tdfield">';
         $maps = ['' => l('Choose a map')];
-        foreach ($CORE->getAvailableMaps() AS $map) {
+        foreach ($CORE->getAvailableMaps() as $map) {
             $maps[$map] = $map;
         }
         select('map', $maps);

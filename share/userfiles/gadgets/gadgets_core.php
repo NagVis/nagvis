@@ -198,7 +198,7 @@ foreach([
             'opts'  => null, 'name1'     => null, 'name2' => null,
               'state' => null, 'stateType' => null, 'scale' => 100,
               'ack'   => null, 'downtime'  => null
-        ] AS $opt => $default) {
+        ] as $opt => $default) {
     if (isset($_GET[$opt]) && $_GET[$opt] != '') {
         $aOpts[$opt] = $_GET[$opt];
     } elseif ($default !== null) {

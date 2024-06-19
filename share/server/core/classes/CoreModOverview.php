@@ -148,7 +148,7 @@ class CoreModOverview extends CoreModule {
         $aMaps = [];
         $aObjs = [];
         log_mem('pre');
-        foreach($mapList AS $objectId) {
+        foreach($mapList as $objectId) {
             $a = explode('-', $objectId, 2);
             if(!isset($a[1])) {
                 continue;
@@ -176,7 +176,7 @@ class CoreModOverview extends CoreModule {
 
         // Now fetch and apply data from backend
         $_BACKEND->execute();
-        foreach($aObjs AS $aObj) {
+        foreach($aObjs as $aObj) {
             $aObj[0]->applyState();
             $aObj[0]->fetchIcon();
 
@@ -263,7 +263,7 @@ class CoreModOverview extends CoreModule {
         }
 
         $aRotations = [];
-        foreach($CORE->getPermittedRotationPools() AS $poolName) {
+        foreach($CORE->getPermittedRotationPools() as $poolName) {
             $ROTATION = new CoreRotation($poolName);
             $iNum = $ROTATION->getNumSteps();
             $aSteps = [];
@@ -317,7 +317,7 @@ class CoreModOverview extends CoreModule {
      */
     private function createThumbnail($imgPath, $thumbPath) {
         global $CORE;
-        if($CORE->checkVarFolderWriteable(TRUE) && $CORE->checkExisting($imgPath, TRUE)) {
+        if($CORE->checkVarFolderWriteable(true) && $CORE->checkExisting($imgPath, true)) {
             // 0: width, 1:height, 2:type
             $imgSize = getimagesize($imgPath);
             $strFileType = '';

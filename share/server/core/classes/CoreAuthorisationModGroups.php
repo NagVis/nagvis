@@ -182,7 +182,7 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule {
     
         # Array ( [0] => Overview [1] => view [2] => * )
         $perms = [];
-        foreach($this->perms[$username] AS $value) {
+        foreach($this->perms[$username] as $value) {
             // Module entry
             if(!isset($perms[$value[0]])) {
                 $perms[$value[0]] = [];

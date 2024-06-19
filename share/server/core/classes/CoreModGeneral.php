@@ -65,7 +65,7 @@ class CoreModGeneral extends CoreModule {
         // Parse view specific uri params
         $aOpts = $this->getCustomOptions(['name' => MATCH_STRING_NO_SPACE]);
 
-        foreach($aOpts['name'] AS $sName) {
+        foreach($aOpts['name'] as $sName) {
             if($type == 'hover') {
                 $OBJ = new NagVisHoverMenu($this->CORE, $sName);
             } else {
@@ -88,7 +88,7 @@ class CoreModGeneral extends CoreModule {
         // Parse view specific uri params
         $aOpts = $this->getCustomOptions(['url' => MATCH_STRING_URL]);
 
-        foreach($aOpts['url'] AS $sUrl) {
+        foreach($aOpts['url'] as $sUrl) {
             $OBJ = new NagVisHoverUrl($this->CORE, $sUrl);
             $arrReturn[] = ['url' => $sUrl, 'code' => $OBJ->__toString()];
         }

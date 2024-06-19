@@ -86,7 +86,7 @@ $_LANG->setLanguage(HANDLE_USERCFG);
 
 // Register valid modules
 // Unregistered modules can not be accessed
-foreach($_modules AS $mod) {
+foreach($_modules as $mod) {
     $MHANDLER->regModule($mod);
 }
 

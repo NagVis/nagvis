@@ -31,13 +31,13 @@ class ViewEditMainCfg {
         $UMAINCFG = $CORE->getUserMainCfg();
 
         // loop all sections
-        foreach ($_MAINCFG->getValidConfig() AS $sec => $arr) {
+        foreach ($_MAINCFG->getValidConfig() as $sec => $arr) {
             if (preg_match($this->exclude_pattern, $sec)) {
                 continue;
             }
 
             // loop all options
-            foreach ($_MAINCFG->getValidObjectType($sec) AS $key => $spec) {
+            foreach ($_MAINCFG->getValidObjectType($sec) as $key => $spec) {
                 if (isset($spec['deprecated']) && $spec['deprecated'] == 1) {
                     continue;
                 }
@@ -91,7 +91,7 @@ class ViewEditMainCfg {
         }
 
         $sections = [];
-        foreach ($_MAINCFG->getValidConfig() AS $sec => $arr) {
+        foreach ($_MAINCFG->getValidConfig() as $sec => $arr) {
             if (!preg_match($this->exclude_pattern, $sec)) {
                 $sections[$sec] = $_MAINCFG->getSectionTitle($sec);
             }
@@ -100,7 +100,7 @@ class ViewEditMainCfg {
         $open = get_open_section('global');
         render_section_navigation($open, $sections);
 
-        foreach ($sections AS $sec => $title) {
+        foreach ($sections as $sec => $title) {
             $this->renderSection($sec, $open);
         }
 
@@ -130,7 +130,7 @@ class ViewEditMainCfg {
 
         render_section_start($sec, $open);
         echo '<table class="mytable">';
-        foreach ($_MAINCFG->getValidObjectType($sec) AS $key => $spec) {
+        foreach ($_MAINCFG->getValidObjectType($sec) as $key => $spec) {
             // Skip deprecated options
             if (isset($spec['deprecated']) && $spec['deprecated'] == 1) {
                 continue;
@@ -236,7 +236,7 @@ class ViewEditMainCfg {
                 echo '<select id="' . $sec . '_' . $key . '" name="' . $sec . '_' . $key . '"' . $on_change . '>';
                 echo '<option value=""></option>';
         
-                foreach ($choices AS $choice_key => $choice_val) {
+                foreach ($choices as $choice_key => $choice_val) {
                     if(is_array($choice_val)) {
                         echo '<option value="' . $choice_val['value'] . '">' . $choice_val['label'] . '</option>';
                     } else {

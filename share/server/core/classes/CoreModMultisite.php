@@ -129,7 +129,7 @@ class CoreModMultisite extends CoreModule {
     private function getMaps($maps) {
         global $_BACKEND, $AUTHORISATION;
         $aObjs = [];
-        foreach($maps AS $object_id => $mapName) {
+        foreach($maps as $object_id => $mapName) {
             $MAPCFG = new GlobalMapCfg($mapName);
 
             $config_error = null;
@@ -226,7 +226,7 @@ class CoreModMultisite extends CoreModule {
         $_BACKEND->execute();
 
         $aMaps = [];
-        foreach($aObjs AS $aObj) {
+        foreach($aObjs as $aObj) {
             $MAP = $aObj[0];
             $state = $aObj[1];
             if ($state !== null) {

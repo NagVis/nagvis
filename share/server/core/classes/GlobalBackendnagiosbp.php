@@ -169,7 +169,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
     private function getProcessNames() {
         $o = $this->getUrl('');
         $names = [];
-        foreach($o['business_processes'] AS $key => $bp) {
+        foreach($o['business_processes'] as $key => $bp) {
             $names[$key] = $bp['display_name'];
         }
         ksort($names);
@@ -214,7 +214,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
         ];
 
         // Add the single component state counts
-        foreach($bp['components'] AS $component) {
+        foreach($bp['components'] as $component) {
             $s = $this->getBPState($component['hardstate']);
             if(!isset($c[$s])) {
                 throw new BackendException(l('Invalid state: "[S]"',
@@ -240,7 +240,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
         }
 
         $result = [];
-        foreach($this->getProcessNames() AS $id => $name) {
+        foreach($this->getProcessNames() as $id => $name) {
             $result[] = ['name1' => $id, 'name2' => $name];
         }
         return $result;
@@ -258,7 +258,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
         $bps = $o['business_processes'];
 
         $ret = [];
-        foreach($objects AS $key => $OBJS) {
+        foreach($objects as $key => $OBJS) {
             if(!isset($bps[$key])) {
                 continue;
             }
@@ -298,7 +298,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
         $bps = $o['business_processes'];
 
         $ret = [];
-        foreach($objects AS $key => $OBJS) {
+        foreach($objects as $key => $OBJS) {
             if(!isset($bps[$key])) {
                 continue;
             }
@@ -322,7 +322,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
 
             // Add the services
             // This can be real services or e.g. other business processes
-            foreach($bp['components'] AS $comp) {
+            foreach($bp['components'] as $comp) {
                 if(isset($comp['service'])) {
                     // Service
                     //$ret[$key][] = Array(

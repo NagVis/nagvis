@@ -75,7 +75,7 @@ if ($size < 0) {
 $current_state = $_GET['state'];
 
 // Get members of this element (Servicegroup, ...)
-$members = json_decode($_POST['members'], True);
+$members = json_decode($_POST['members'], true);
 
 $show_states = [];
 if ($show_service_states) {
@@ -87,7 +87,7 @@ if ($show_host_states) {
 
 // Init statistic array
 $stats = [];
-foreach ($show_states AS $state) {
+foreach ($show_states as $state) {
     $stats['S_' . $state] = 0;
     $stats['D_' . $state] = 0;
     $stats['A_' . $state] = 0;

@@ -60,7 +60,7 @@ class CoreUserCfg {
         $files[] = $AUTH->getUser() . '.profile';
 
         // Read all configurations and append to the option array
-        foreach($files AS $file) {
+        foreach($files as $file) {
             $f = $this->profilesDir . '/' . $file;
             if(!file_exists($f)) {
                 continue;
@@ -91,7 +91,7 @@ class CoreUserCfg {
 
         $cfg = $this->doGet(true);
 
-        foreach($opts AS $key => $value) {
+        foreach($opts as $key => $value) {
             if(isset($this->types[$key])) {
                 $value = $this->fixType($value, $this->types[$key]);
             }
