@@ -122,7 +122,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface
     /**
      * Basic initialization happens here
      */
-    public function __construct($backendId) {
+    public function __construct($backendId)
+    {
         $this->backendId = $backendId;
 
         $this->baseUrl = cfg('backend_' . $backendId, 'base_url');
@@ -191,7 +192,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface
         }
     }
 
-    private function aggrUrl($name) {
+    private function aggrUrl($name)
+    {
         $html_cgi = cfg('backend_' . $this->backendId, 'htmlcgi');
         return $html_cgi . '/view.py?view_name=aggr_single&aggr_name=' . $name . '&po_aggr_expand=1';
     }
@@ -200,7 +202,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface
      * The real data fetching method. This performs the HTTP GET and cares
      * about parsing, validating and processing the response.
      */
-    private function getUrl($params) {
+    private function getUrl($params)
+    {
         $url = $this->baseUrl . $params . '&output_format=json';
 
         if (!$this->isSiteInternalAuthEnabled()) {
@@ -268,7 +271,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface
     /**
      * Returns the identifiers and names of all business processes
      */
-    private function getAggregationNames() {
+    private function getAggregationNames()
+    {
         $aggregations = $this->getUrl('view.py?view_name=aggr_all_api&expansion_level=0');
         $names = [];
         foreach ($aggregations as $aggr) {
@@ -280,11 +284,13 @@ class GlobalBackendmkbi implements GlobalBackendInterface
 
     // Transform BI state numbers to NagVis state names and then to
     // NagVis internal state numbers
-    private function getAggrState($state) {
+    private function getAggrState($state)
+    {
         return state_num(GlobalBackendmkbi::$bi_aggr_states[(int)$state]);
     }
 
-    private function getAggrElements($aggr) {
+    private function getAggrElements($aggr)
+    {
         if (is_array($aggr['aggr_treestate'])) {
             return $aggr['aggr_treestate']["nodes"];
         } else {
@@ -332,7 +338,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface
         return $elements;
     }
 
-    private function getAggrCounts($aggr) {
+    private function getAggrCounts($aggr)
+    {
         $c = [
             PENDING => [
                 'normal'   => 0,
@@ -388,7 +395,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface
      * Used in WUI forms to populate the object lists when adding or modifying
      * objects in WUI.
      */
-    public function getObjects($type, $name1Pattern = '', $name2Pattern = '') {
+    public function getObjects($type, $name1Pattern = '', $name2Pattern = '')
+    {
         if ($type !== 'aggr') {
             throw new BackendException(l('This backend only supports "Aggregation" objects.'));
         }
@@ -400,7 +408,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface
         return $result;
     }
 
-    private function matchAggregation($aggregations, $key) {
+    private function matchAggregation($aggregations, $key)
+    {
         $aggr = null;
         foreach ($aggregations as $aggregation) {
             if ($aggregation['aggr_name'] == $key) {
@@ -415,7 +424,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface
      * Returns the service state counts for a list of aggregations. Using
      * the given objects and filters.
      */
-    public function getAggrStateCounts($objects, $options, $filters) {
+    public function getAggrStateCounts($objects, $options, $filters)
+    {
         $aggregations = $this->getUrl('view.py?view_name=aggr_all_api&expansion_level=1');
 
         $ret = [];
@@ -458,7 +468,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface
      * Returns the state with detailed information of a list of services. Using
      * the given objects and filters.
      */
-    public function getServiceState($objects, $options, $filters) {
+    public function getServiceState($objects, $options, $filters)
+    {
         $aggregations = $this->getUrl('view.py?view_name=aggr_all_api&expansion_level=1');
 
         $ret = [];
@@ -510,7 +521,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface
      * PUBLIC Method getValidConfig
      * Returns the valid config for this backend
      */
-    public static function getValidConfig() {
+    public static function getValidConfig()
+    {
         return self::$validConfig;
     }
 
@@ -518,35 +530,43 @@ class GlobalBackendmkbi implements GlobalBackendInterface
      * Not implemented methods
      **************************************************************************/
 
-    public function getHostState($objects, $options, $filters) {
+    public function getHostState($objects, $options, $filters)
+    {
         return [];
     }
 
-    public function getHostMemberCounts($objects, $options, $filters) {
+    public function getHostMemberCounts($objects, $options, $filters)
+    {
         return [];
     }
 
-    public function getHostgroupStateCounts($objects, $options, $filters) {
+    public function getHostgroupStateCounts($objects, $options, $filters)
+    {
         return [];
     }
 
-    public function getServicegroupStateCounts($objects, $options, $filters) {
+    public function getServicegroupStateCounts($objects, $options, $filters)
+    {
 
     }
 
-    public function getHostNamesWithNoParent() {
+    public function getHostNamesWithNoParent()
+    {
         return [];
     }
 
-    public function getDirectChildNamesByHostName($hostName) {
+    public function getDirectChildNamesByHostName($hostName)
+    {
         return [];
     }
 
-    public function getDirectParentNamesByHostName($hostName) {
+    public function getDirectParentNamesByHostName($hostName)
+    {
         return [];
     }
 
-    public function getDirectChildDependenciesNamesByHostName($hostName) {
+    public function getDirectChildDependenciesNamesByHostName($hostName)
+    {
         return [];
     }
 }
@@ -555,11 +575,13 @@ if (!function_exists('l')) {
     require_once('GlobalBackendInterface.php');
     require_once('CoreExceptions.php');
 
-    function l($s, $a = []) {
+    function l($s, $a = [])
+    {
         return $s . ' ' . json_encode($a);
     }
 
-    function cfg($sec, $opt) {
+    function cfg($sec, $opt)
+    {
         if ($opt == 'base_url') {
             return 'http://127.0.0.1/event/check_mk/';
         }

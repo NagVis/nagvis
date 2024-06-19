@@ -30,7 +30,8 @@ class CoreModManageShapes extends CoreModule
     private $name = null;
     private $CORE;
 
-    public function __construct(GlobalCore $CORE) {
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'ManageShapes';
         $this->CORE = $CORE;
 
@@ -40,7 +41,8 @@ class CoreModManageShapes extends CoreModule
         ];
     }
 
-    public function handleAction() {
+    public function handleAction()
+    {
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {

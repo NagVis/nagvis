@@ -25,7 +25,8 @@
 
 class CoreLogonDialogHandler
 {
-    public function check($printErr = true) {
+    public function check($printErr = true)
+    {
         global $AUTH;
 
         $err = null;
@@ -65,7 +66,8 @@ class CoreLogonDialogHandler
         }
     }
 
-    private function handleResponseAuth() {
+    private function handleResponseAuth()
+    {
         $FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
 
         // Don't try to auth if one of the vars is missing

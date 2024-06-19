@@ -38,7 +38,8 @@ class NagVisShape extends NagVisStatelessObject
      * @param		object $icon Object of class GlobalMainCfg
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct($icon) {
+    public function __construct($icon)
+    {
         if (self::$iconPath === null) {
             self::$iconPath      = path('sys',  'global', 'shapes');
             self::$iconPathLocal = path('sys',  'local', 'shapes');
@@ -58,7 +59,8 @@ class NagVisShape extends NagVisStatelessObject
      * @return	string		JSON code of the object
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parseJson() {
+    public function parseJson()
+    {
         // Checks wether the shape exists or not
         $this->fetchIcon();
 
@@ -73,7 +75,8 @@ class NagVisShape extends NagVisStatelessObject
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function fetchIcon() {
+    public function fetchIcon()
+    {
         if ($this->icon[0] != '[') {
             if (
                 !file_exists(self::$iconPath . $this->icon)

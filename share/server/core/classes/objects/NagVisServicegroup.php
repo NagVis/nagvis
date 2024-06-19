@@ -37,7 +37,8 @@ class NagVisServicegroup extends NagVisStatefulObject
 
     protected $members = [];
 
-    public function __construct($backend_id, $servicegroupName) {
+    public function __construct($backend_id, $servicegroupName)
+    {
         $this->backend_id = $backend_id;
         $this->servicegroup_name = $servicegroupName;
         parent::__construct();
@@ -46,7 +47,8 @@ class NagVisServicegroup extends NagVisStatefulObject
     /**
      * Queues the state fetching to the backend.
      */
-    public function queueState($_unused_flag = true, $bFetchMemberState = true) {
+    public function queueState($_unused_flag = true, $bFetchMemberState = true)
+    {
         global $_BACKEND;
         $queries = ['servicegroupMemberState' => true];
 
@@ -64,7 +66,8 @@ class NagVisServicegroup extends NagVisStatefulObject
     /**
      * Applies the fetched state
      */
-    public function applyState() {
+    public function applyState()
+    {
         if ($this->problem_msg) {
             $this->sum = [
                 ERROR,
@@ -116,7 +119,8 @@ class NagVisServicegroup extends NagVisStatefulObject
     /**
      * Fetches the summary state of all members
      */
-    private function fetchSummaryState() {
+    private function fetchSummaryState()
+    {
         // Get summary state from member objects
         if ($this->hasMembers()) {
             $this->calcSummaryState();
@@ -128,7 +132,8 @@ class NagVisServicegroup extends NagVisStatefulObject
     /**
      * Fetches the summary output from the object state counts
      */
-    private function fetchSummaryOutputFromCounts() {
+    private function fetchSummaryOutputFromCounts()
+    {
         $arrServiceStates = [];
 
         // Loop all major states
@@ -167,7 +172,8 @@ class NagVisServicegroup extends NagVisStatefulObject
     /**
      * Fetches the summary output from all members
      */
-    private function fetchSummaryOutput() {
+    private function fetchSummaryOutput()
+    {
         if ($this->hasMembers()) {
             $arrStates = [
                 CRITICAL => 0, WARNING => 0,

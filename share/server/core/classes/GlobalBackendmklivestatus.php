@@ -83,7 +83,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct($backendId) {
+    public function __construct($backendId)
+    {
         $this->backendId = $backendId;
 
         // Parse the socket params
@@ -113,7 +114,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __destruct() {
+    public function __destruct()
+    {
         if ($this->SOCKET !== null) {
             fclose($this->SOCKET);
             $this->SOCKET = null;
@@ -127,7 +129,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function parseSocket($socket) {
+    private function parseSocket($socket)
+    {
         // Explode the given socket definition
         list($type, $address) = explode(':', $socket, 2);
 
@@ -158,7 +161,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @return	array
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public static function getValidConfig() {
+    public static function getValidConfig()
+    {
         return self::$validConfig;
     }
 
@@ -170,7 +174,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @return  bool
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkSocketExists() {
+    private function checkSocketExists()
+    {
         return file_exists($this->socketPath);
     }
 
@@ -181,7 +186,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function connectSocket() {
+    private function connectSocket()
+    {
         // Only try to connect once per page. Re-raise the connection exception on
         // later tries to connect
         if ($this->CONNECT_EXC != null) {
@@ -255,7 +261,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     /**
      * Catch PHP errors occured during connect
      */
-    public function connectErrorHandler($errno, $errstr) {
+    public function connectErrorHandler($errno, $errstr)
+    {
             if (($errno & E_WARNING) === 0 && ($errno & E_NOTICE) === 0) {
             return false; // use default error handler
             }
@@ -287,7 +294,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function queryLivestatus($query, $response = true) {
+    private function queryLivestatus($query, $response = true)
+    {
         // Only connect when no connection opened yet
         if ($this->SOCKET === null) {
             $this->connectSocket();
@@ -413,7 +421,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @return  string   The read bytes
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function readSocket($len) {
+    private function readSocket($len)
+    {
         $offset = 0;
         $socketData = '';
 
@@ -443,7 +452,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function queryLivestatusSingleRow($query) {
+    private function queryLivestatusSingleRow($query)
+    {
         $l = $this->queryLivestatus($query);
         if (isset($l[0])) {
             return $l[0];
@@ -462,7 +472,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function queryLivestatusSingleColumn($query) {
+    private function queryLivestatusSingleColumn($query)
+    {
         $l = $this->queryLivestatus($query);
 
         $result = [];
@@ -483,7 +494,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function queryLivestatusList($query) {
+    private function queryLivestatusList($query)
+    {
         $l = $this->queryLivestatus($query);
 
         $result = [];
@@ -499,7 +511,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * This is a special method which is currently unused within NagVis.
      * It has been added as interface to the std_lq.php script.
      */
-    public function query($type, $query) {
+    public function query($type, $query)
+    {
         switch ($type) {
             case 'column':
                 return $this->queryLivestatusSingleColumn($query);
@@ -525,7 +538,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getObjects($type, $name1Pattern = '', $name2Pattern = '', $add_filter = '') {
+    public function getObjects($type, $name1Pattern = '', $name2Pattern = '', $add_filter = '')
+    {
         $ret = [];
         $filter = '';
         $sFile = '';
@@ -570,7 +584,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @return  string    Parsed filters
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function parseFilter($objects, $filters, $isMemberQuery = false, $isCountQuery = false, $isHostQuery = true) {
+    private function parseFilter($objects, $filters, $isMemberQuery = false, $isCountQuery = false, $isHostQuery = true)
+    {
         $aFilters = [];
         foreach ($objects as $OBJS) {
             $objFilters = [];
@@ -663,7 +678,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         return implode($aFilters) . $count;
     }
 
-    private function serviceStateStats($stateAttr) {
+    private function serviceStateStats($stateAttr)
+    {
         $staleness_thresh = cfg('global', 'staleness_threshold');
 
         return
@@ -786,7 +802,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getHostState($objects, $options, $filters, $isMemberQuery = false) {
+    public function getHostState($objects, $options, $filters, $isMemberQuery = false)
+    {
         $objFilter = $this->parseFilter($objects, $filters, $isMemberQuery, !COUNT_QUERY, HOST_QUERY);
 
         if ($options & 1) {
@@ -910,7 +927,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getServiceState($objects, $options, $filters, $isMemberQuery = false) {
+    public function getServiceState($objects, $options, $filters, $isMemberQuery = false)
+    {
         $objFilter = $this->parseFilter($objects, $filters, $isMemberQuery, !COUNT_QUERY, !HOST_QUERY);
 
         if ($options & 1) {
@@ -1067,7 +1085,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * host and a well performing alternative to the existing recurisve
      * algorithm.
      */
-    public function getHostMemberCounts($objects, $options, $filters) {
+    public function getHostMemberCounts($objects, $options, $filters)
+    {
         $objFilter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
 
         if ($options & 1) {
@@ -1140,7 +1159,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * Queries the livestatus socket a bunch of services matching a given livestatus filter.
      * It does not return all objects, instead it returns the state counts.
      */
-    public function getServiceListCounts($options, $filter) {
+    public function getServiceListCounts($options, $filter)
+    {
         if ($options & 1) {
             $stateAttr = 'last_hard_state';
         } else {
@@ -1188,7 +1208,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         ];
     }
 
-    public function getHostAndServiceCounts($options, $host_filter, $service_filter, $by_group = true) {
+    public function getHostAndServiceCounts($options, $host_filter, $service_filter, $by_group = true)
+    {
         if ($by_group) {
             $host_suffix    = 'bygroup';
             $service_suffix = 'byhostgroup';
@@ -1414,7 +1435,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @return  array     List of states and counts
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getHostgroupStateCounts($objects, $options, $filters) {
+    public function getHostgroupStateCounts($objects, $options, $filters)
+    {
         $host_filter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, HOST_QUERY);
 
         $service_filter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
@@ -1437,7 +1459,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @return  array     List of states and counts
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getServicegroupStateCounts($objects, $options, $filters) {
+    public function getServicegroupStateCounts($objects, $options, $filters)
+    {
         $objFilter = $this->parseFilter($objects, $filters, MEMBER_QUERY, COUNT_QUERY, !HOST_QUERY);
 
         if ($options & 1) {
@@ -1510,7 +1533,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getHostNamesWithNoParent() {
+    public function getHostNamesWithNoParent()
+    {
         return $this->queryLivestatusSingleColumn("GET hosts\nColumns: name\nFilter: parents =\n");
     }
 
@@ -1524,7 +1548,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getDirectChildNamesByHostName($hostName) {
+    public function getDirectChildNamesByHostName($hostName)
+    {
         return $this->queryLivestatusList("GET hosts\nColumns: childs\nFilter: name = " . $hostName . "\n");
     }
 
@@ -1538,11 +1563,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getDirectParentNamesByHostName($hostName) {
+    public function getDirectParentNamesByHostName($hostName)
+    {
         return $this->queryLivestatusList("GET hosts\nColumns: parents\nFilter: name = " . $hostName . "\n");
     }
 
-    public function getHostNamesInHostgroup($name) {
+    public function getHostNamesInHostgroup($name)
+    {
         $r = $this->queryLivestatusSingleColumn("GET hostgroups\nColumns: members\nFilter: name = " . $name . "\n");
         if (isset($r[0])) {
             return $r[0];
@@ -1552,13 +1579,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     }
 
     // Returns all hostnames which have a state != UP or a service != OK
-    public function getHostNamesProblematic() {
+    public function getHostNamesProblematic()
+    {
         $r = $this->queryLivestatusSingleColumn("GET hosts\nColumns: name\nFilter: state != 0\n");
         $r = array_merge($r, $this->queryLivestatusSingleColumn("GET services\nColumns: host_name\nFilter: state != 0\n"));
         return $r;
     }
 
-    public function getProgramStart() {
+    public function getProgramStart()
+    {
         $r = $this->queryLivestatusSingleColumn("GET status\nColumns: program_start\n");
         if (isset($r[0])) {
             return $r[0];
@@ -1567,7 +1596,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         }
     }
 
-    public function getGeomapHosts($filterHostgroup = null) {
+    public function getGeomapHosts($filterHostgroup = null)
+    {
         $query = "GET hosts\nColumns: name custom_variable_names custom_variable_values alias\n";
         if ($filterHostgroup) {
             $query .= "Filter: groups >= " . $filterHostgroup . "\n";
@@ -1591,14 +1621,16 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         return $hosts;
     }
 
-    private function command($cmd) {
+    private function command($cmd)
+    {
         return $this->queryLivestatus('COMMAND [' . time() . '] ' . $cmd . "\n", false);
     }
 
     /**
      * Sends acknowledgement command to monitoring core
      */
-    public function actionAcknowledge($what, $spec, $comment, $sticky, $notify, $persist, $user) {
+    public function actionAcknowledge($what, $spec, $comment, $sticky, $notify, $persist, $user)
+    {
         if ($what == 'host') {
             $what = 'HOST';
         }
@@ -1621,7 +1653,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @return  array    List of hostnames
      * @author  Thibault Cohen <thibault.cohen@savoirfairelinux.com>
      */
-    public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact = false) {
+    public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact = false)
+    {
         $query = "GET hosts\nColumns: child_dependencies\nFilter: name = " . $hostName . "\n";
         $raw_result = $this->queryLivestatusSingleColumn($query);
         if ($min_business_impact) {
@@ -1652,7 +1685,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact = false) {
+    public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact = false)
+    {
         $query = "GET hosts\nColumns: parent_dependencies\nFilter: name = " . $hostName . "\n";
         $raw_result = $this->queryLivestatusSingleColumn($query);
         if ($min_business_impact) {
@@ -1677,7 +1711,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * Returns an assoziative array with contact names as keys and
      * a list of their contactgroups as value
      */
-    public function getContactsWithGroups() {
+    public function getContactsWithGroups()
+    {
         $contacts = [];
         $query = "GET contactgroups\nColumns: name members\n";
         foreach ($this->queryLivestatus($query) as $row) {

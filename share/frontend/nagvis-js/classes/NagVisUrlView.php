@@ -38,7 +38,8 @@ class NagVisUrlView
      * @param string $url
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct(GlobalCore $CORE, $url) {
+    public function __construct(GlobalCore $CORE, $url)
+    {
         $this->url = $url;
     }
 
@@ -47,7 +48,8 @@ class NagVisUrlView
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setContent($s) {
+    public function setContent($s)
+    {
         $this->content = $s;
     }
 
@@ -57,11 +59,13 @@ class NagVisUrlView
      * @param   array $a
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setRotation($a) {
+    public function setRotation($a)
+    {
         $this->aRotation = $a;
     }
 
-    private function getProperties() {
+    private function getProperties()
+    {
         return [
             'url'       => $this->url,
             'view_type' => 'url',
@@ -74,7 +78,8 @@ class NagVisUrlView
      * @return	string 	String with JS Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parse() {
+    public function parse()
+    {
         global $_MAINCFG;
         // Initialize template system
         $TMPL = New FrontendTemplateSystem();

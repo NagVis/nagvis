@@ -24,10 +24,12 @@
 
 class NagVisOverviewView
 {
-    public function __construct($CORE) {
+    public function __construct($CORE)
+    {
     }
 
-    private function getProperties() {
+    private function getProperties()
+    {
         $arr = [];
 
         $arr['view_type']          = 'overview';
@@ -58,7 +60,8 @@ class NagVisOverviewView
      * @return	string 	String with Html Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parse() {
+    public function parse()
+    {
         global $_MAINCFG, $CORE;
         // Initialize template system
         $TMPL    = new FrontendTemplateSystem();

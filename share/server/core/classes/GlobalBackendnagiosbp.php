@@ -73,7 +73,8 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
     /**
      * Basic initialization happens here
      */
-    public function __construct($backendId) {
+    public function __construct($backendId)
+    {
         $this->backendId = $backendId;
 
         $this->baseUrl = cfg('backend_' . $backendId, 'base_url');
@@ -98,7 +99,8 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
      * HELPERS
      *************************************************************************/
 
-    private function bpUrl($key) {
+    private function bpUrl($key)
+    {
         return $this->baseUrl . '?tree=' . $key;
     }
 
@@ -106,7 +108,8 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
      * The real data fetching method. This performs the HTTP GET and cares
      * about parsing, validating and processing the response.
      */
-    private function getUrl($params) {
+    private function getUrl($params)
+    {
         $url = $this->baseUrl . '?outformat=json&' . $params;
 
         // Is there some cache to use? The cache is not persisted. It is available
@@ -159,7 +162,8 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
     /**
      * Returns the identifiers of all business processes
      */
-    private function getProcessIDs() {
+    private function getProcessIDs()
+    {
         $o = $this->getUrl('');
         return array_keys($o['business_processes']);
     }
@@ -167,7 +171,8 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
     /**
      * Returns the identifiers and names of all business processes
      */
-    private function getProcessNames() {
+    private function getProcessNames()
+    {
         $o = $this->getUrl('');
         $names = [];
         foreach ($o['business_processes'] as $key => $bp) {
@@ -177,14 +182,16 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
         return $names;
     }
 
-    private function getBPState($state) {
+    private function getBPState($state)
+    {
         if ($state == null) {
             return UNKNOWN;
         }
         return state_num($state);
     }
 
-    private function getBPCounts($bp) {
+    private function getBPCounts($bp)
+    {
         $c = [
             PENDING => [
                 'normal'   => 0,
@@ -235,7 +242,8 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
      * Used in WUI forms to populate the object lists when adding or modifying
      * objects in WUI.
      */
-    public function getObjects($type, $name1Pattern = '', $name2Pattern = '') {
+    public function getObjects($type, $name1Pattern = '', $name2Pattern = '')
+    {
         if ($type !== 'servicegroup') {
             return [];
         }
@@ -254,7 +262,8 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
      * This backend transforms all business processes to servicegroups. Each
      * business process component is used as a service.
      */
-    public function getServicegroupStateCounts($objects, $options, $filters) {
+    public function getServicegroupStateCounts($objects, $options, $filters)
+    {
         $o = $this->getUrl('');
         $bps = $o['business_processes'];
 
@@ -294,7 +303,8 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
      * Returns the state with detailed information of a list of services. Using
      * the given objects and filters.
      */
-    public function getServiceState($objects, $options, $filters) {
+    public function getServiceState($objects, $options, $filters)
+    {
         $o = $this->getUrl('');
         $bps = $o['business_processes'];
 
@@ -403,7 +413,8 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
      * PUBLIC Method getValidConfig
      * Returns the valid config for this backend
      */
-    public static function getValidConfig() {
+    public static function getValidConfig()
+    {
         return self::$validConfig;
     }
 
@@ -411,31 +422,38 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
      * Not implemented methods
      **************************************************************************/
 
-    public function getHostState($objects, $options, $filters) {
+    public function getHostState($objects, $options, $filters)
+    {
         return [];
     }
 
-    public function getHostMemberCounts($objects, $options, $filters) {
+    public function getHostMemberCounts($objects, $options, $filters)
+    {
         return [];
     }
 
-    public function getHostgroupStateCounts($objects, $options, $filters) {
+    public function getHostgroupStateCounts($objects, $options, $filters)
+    {
         return [];
     }
 
-    public function getHostNamesWithNoParent() {
+    public function getHostNamesWithNoParent()
+    {
         return [];
     }
 
-    public function getDirectChildNamesByHostName($hostName) {
+    public function getDirectChildNamesByHostName($hostName)
+    {
         return [];
     }
 
-    public function getDirectParentNamesByHostName($hostName) {
+    public function getDirectParentNamesByHostName($hostName)
+    {
         return [];
     }
 
-    public function getDirectChildDependenciesNamesByHostName($hostName) {
+    public function getDirectChildDependenciesNamesByHostName($hostName)
+    {
         return [];
     }
 }
@@ -444,11 +462,13 @@ if (!function_exists('l')) {
     require_once('GlobalBackendInterface.php');
     require_once('CoreExceptions.php');
 
-    function l($s, $a) {
+    function l($s, $a)
+    {
         return $s . ' ' . json_encode($a);
     }
 
-    function cfg($sec, $opt) {
+    function cfg($sec, $opt)
+    {
         if ($opt == 'base_url') {
             return 'http://127.0.0.1/nagiosbp/cgi-bin/nagios-bp.cgi';
         }

@@ -24,7 +24,8 @@
 
 class CoreLogonEnv extends CoreLogonModule
 {
-    public function check($printErr = true) {
+    public function check($printErr = true)
+    {
         global $AUTH, $CORE;
 
         // Get environment variable to use

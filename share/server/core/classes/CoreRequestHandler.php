@@ -26,11 +26,13 @@ class CoreRequestHandler
 {
     private $aOpts;
 
-    public function __construct($aOptions) {
+    public function __construct($aOptions)
+    {
         $this->aOpts = $aOptions;
     }
 
-    public function get($sKey) {
+    public function get($sKey)
+    {
         if (isset($this->aOpts[$sKey])) {
             return $this->aOpts[$sKey];
         } else {
@@ -38,11 +40,13 @@ class CoreRequestHandler
         }
     }
 
-    public function isLongerThan($sKey, $iLen) {
+    public function isLongerThan($sKey, $iLen)
+    {
         return strlen($this->aOpts[$sKey]) > $iLen;
     }
 
-    public function match($sKey, $regex) {
+    public function match($sKey, $regex)
+    {
         if (!isset($this->aOpts[$sKey])) {
             return false;
         }
@@ -61,11 +65,13 @@ class CoreRequestHandler
         }
     }
 
-    public function isSetAndNotEmpty($sKey) {
+    public function isSetAndNotEmpty($sKey)
+    {
         return (isset($this->aOpts[$sKey]) && $this->aOpts[$sKey] != '');
     }
 
-    public function getAll($exclude = []) {
+    public function getAll($exclude = [])
+    {
         $ret = [];
         foreach ($this->aOpts as $key => $val) {
             if (!isset($exclude[$key])) {
@@ -75,7 +81,8 @@ class CoreRequestHandler
         return $ret;
     }
 
-    public static function getReferer($default) {
+    public static function getReferer($default)
+    {
         if (isset($_SERVER['HTTP_REFERER'])) {
             return $_SERVER['HTTP_REFERER'];
         } else {
@@ -83,7 +90,8 @@ class CoreRequestHandler
         }
     }
 
-    public static function getRequestUri($default) {
+    public static function getRequestUri($default)
+    {
         if (isset($_SERVER['REQUEST_URI'])) {
             return $_SERVER['REQUEST_URI'];
         } else {

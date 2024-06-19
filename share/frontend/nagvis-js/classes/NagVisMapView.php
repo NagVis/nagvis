@@ -34,7 +34,8 @@ class NagVisMapView
     private $editMode  = false;
     private $aParams   = [];
 
-    public function __construct(GlobalCore $CORE, $name) {
+    public function __construct(GlobalCore $CORE, $name)
+    {
         $this->name = $name;
     }
 
@@ -44,7 +45,8 @@ class NagVisMapView
      * @param   string $s Search string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setSearch($s) {
+    public function setSearch($s)
+    {
         $this->search = $s;
     }
 
@@ -54,18 +56,21 @@ class NagVisMapView
      * @param   array $a
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setRotation($a) {
+    public function setRotation($a)
+    {
         $this->aRotation = $a;
     }
 
     /**
      * Set the url params
      */
-    public function setParams($a) {
+    public function setParams($a)
+    {
         $this->aParams = $a;
     }
 
-    public function setEditMode() {
+    public function setEditMode()
+    {
         $this->editMode = true;
     }
 
@@ -75,7 +80,8 @@ class NagVisMapView
      * @return	string 	String with JS Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parse() {
+    public function parse()
+    {
         global $_MAINCFG, $CORE;
         // Initialize template system
         $TMPL    = new FrontendTemplateSystem();
@@ -113,7 +119,8 @@ class NagVisMapView
      * @return  string  JSON array
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function parseViewProperties() {
+    private function parseViewProperties()
+    {
         global $AUTHORISATION;
         $arr = [];
 

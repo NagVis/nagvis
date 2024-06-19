@@ -33,22 +33,27 @@ class NagVisIndexView
     private $sHeaderMenu = '';
     private $sContent = '';
 
-    public function __construct(GlobalCore $CORE) {
+    public function __construct(GlobalCore $CORE)
+    {
     }
 
-    public function setSubtitle($s) {
+    public function setSubtitle($s)
+    {
         $this->sSubtitle = ' &rsaquo; ' . $s;
     }
 
-    public function setCustomStylesheet($s) {
+    public function setCustomStylesheet($s)
+    {
         $this->sCustomStylesheet = $s;
     }
 
-    public function setHeaderMenu($s) {
+    public function setHeaderMenu($s)
+    {
         $this->sHeaderMenu = $s;
     }
 
-    public function setContent($s) {
+    public function setContent($s)
+    {
         $this->sContent = $s;
     }
 
@@ -58,7 +63,8 @@ class NagVisIndexView
      * @return	string 	String with JS Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parse() {
+    public function parse()
+    {
         // Initialize template system
         $TMPL = New FrontendTemplateSystem();
         $TMPLSYS = $TMPL->getTmplSys();
@@ -86,7 +92,8 @@ class NagVisIndexView
      * @return	bool
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkJsCompressed() {
+    private function checkJsCompressed()
+    {
         return file_exists(cfg('paths', 'js') . 'NagVisCompressed.js');
     }
 }

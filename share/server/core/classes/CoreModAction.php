@@ -24,7 +24,8 @@
 
 class CoreModAction extends CoreModule
 {
-    public function __construct(GlobalCore $CORE) {
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'Action';
 
         // Register valid actions
@@ -34,7 +35,8 @@ class CoreModAction extends CoreModule
         ];
     }
 
-    public function handleAction() {
+    public function handleAction()
+    {
         global $CORE;
         $sReturn = '';
 

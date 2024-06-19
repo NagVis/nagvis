@@ -31,7 +31,8 @@ class CoreModMap extends CoreModule
     private $CORE;
     private $htmlBase;
 
-    public function __construct(GlobalCore $CORE) {
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'Map';
         $this->CORE = $CORE;
         $this->htmlBase = cfg('paths', 'htmlbase');
@@ -59,7 +60,8 @@ class CoreModMap extends CoreModule
         $this->aObjects = $this->CORE->getAvailableMaps(null, SET_KEYS);
     }
 
-    public function initObject() {
+    public function initObject()
+    {
         switch ($this->sAction) {
             // These have the object in GET var "show"
             case 'getMapProperties':
@@ -95,7 +97,8 @@ class CoreModMap extends CoreModule
         $this->setObject($this->name);
     }
 
-    public function handleAction() {
+    public function handleAction()
+    {
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
@@ -165,13 +168,15 @@ class CoreModMap extends CoreModule
         return $sReturn;
     }
 
-    protected function getWorldmapBounds() {
+    protected function getWorldmapBounds()
+    {
         $MAPCFG = new GlobalMapCfg($this->name);
         $MAPCFG->readMapConfig();
         return json_encode($MAPCFG->handleSources('get_bounds'));
     }
 
-    protected function doExportMap($name) {
+    protected function doExportMap($name)
+    {
         global $CORE;
         if (!$name) {
             throw new FieldInputError(null, l('Please choose a map'));
@@ -185,7 +190,8 @@ class CoreModMap extends CoreModule
         return $MAPCFG->exportMap();
     }
 
-    protected function doDeleteObject($a) {
+    protected function doDeleteObject($a)
+    {
         // initialize map and read map config
         $MAPCFG = new GlobalMapCfg($a['map']);
         // Ignore map configurations with errors in it.
@@ -212,7 +218,8 @@ class CoreModMap extends CoreModule
         return true;
     }
 
-    protected function handleResponseDeleteObject() {
+    protected function handleResponseDeleteObject()
+    {
         $bValid = true;
         // Validate the response
 
@@ -250,7 +257,8 @@ class CoreModMap extends CoreModule
         }
     }
 
-    protected function doModifyObject($a) {
+    protected function doModifyObject($a)
+    {
         $MAPCFG = new GlobalMapCfg($a['map']);
         try {
             $MAPCFG->readMapConfig();
@@ -279,7 +287,8 @@ class CoreModMap extends CoreModule
         return json_encode(['status' => 'OK', 'message' => '']);
     }
 
-    protected function handleResponseModifyObject() {
+    protected function handleResponseModifyObject()
+    {
         $bValid = true;
         // Validate the response
 
@@ -340,7 +349,8 @@ class CoreModMap extends CoreModule
         }
     }
 
-    private function getMapObjects() {
+    private function getMapObjects()
+    {
         $MAPCFG = new GlobalMapCfg($this->name);
         $MAPCFG->readMapConfig();
 
@@ -348,7 +358,8 @@ class CoreModMap extends CoreModule
         return $MAP->parseObjectsJson();
     }
 
-    private function getObjectStates() {
+    private function getObjectStates()
+    {
         $aOpts = [
             'ty' => MATCH_GET_OBJECT_TYPE,
             'i'  => MATCH_STRING_NO_SPACE_EMPTY,
@@ -379,7 +390,8 @@ class CoreModMap extends CoreModule
     }
 
     // Check if the map exists
-    private function verifyMapExists($map, $negate = false) {
+    private function verifyMapExists($map, $negate = false)
+    {
         if (!$negate) {
             if (count($this->CORE->getAvailableMaps('/^' . $map . '$/')) <= 0) {
                 throw new NagVisException(l('The map does not exist.'));

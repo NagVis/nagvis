@@ -27,7 +27,8 @@
  */
 class NagVisLoginView
 {
-    public function __construct($CORE) {
+    public function __construct($CORE)
+    {
     }
 
     /**
@@ -36,7 +37,8 @@ class NagVisLoginView
      * @return	string 	String with Html Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parse() {
+    public function parse()
+    {
         global $LOGIN_MSG, $_MAINCFG;
         // Initialize template system
         $TMPL = New FrontendTemplateSystem();

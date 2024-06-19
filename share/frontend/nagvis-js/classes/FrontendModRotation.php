@@ -33,7 +33,8 @@ class FrontendModRotation extends FrontendModule
     private $step   = '';
     private $stepId = '';
 
-    public function __construct(GlobalCore $CORE) {
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'Rotation';
         $this->CORE = $CORE;
 
@@ -63,7 +64,8 @@ class FrontendModRotation extends FrontendModule
         $this->setObject($this->name);
     }
 
-    public function handleAction() {
+    public function handleAction()
+    {
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
@@ -78,7 +80,8 @@ class FrontendModRotation extends FrontendModule
         return $sReturn;
     }
 
-    private function showViewDialog() {
+    private function showViewDialog()
+    {
         // Initialize rotation/refresh
         $ROTATION = new FrontendRotation($this->name);
 

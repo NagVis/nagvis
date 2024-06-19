@@ -40,7 +40,8 @@ class GlobalFileCache
      * @param   string $cacheFile Path to cache file
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct($files, $cacheFile) {
+    public function __construct($files, $cacheFile)
+    {
         if (is_string($files)) {
             $this->files = [$files];
         } else {
@@ -60,7 +61,8 @@ class GlobalFileCache
      * Get the newest of the given files. This is needed to test if
      * the cache file is up-to-date or needs to be renewed
      */
-    private function getNewestFileAge() {
+    private function getNewestFileAge()
+    {
         $age = -1;
         $newestFile = '';
         foreach ($this->files as $file) {
@@ -90,7 +92,8 @@ class GlobalFileCache
      * @return	mixed Cached things
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getCache() {
+    public function getCache()
+    {
         return unserialize(file_get_contents($this->cacheFile));
     }
 
@@ -102,7 +105,8 @@ class GlobalFileCache
      * @return  bool	Is Successful?
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function writeCache($contents, $printErr = 1) {
+    public function writeCache($contents, $printErr = 1)
+    {
         // Perform file writeable check only when cache file exists
         // When no cache file exists check if file can be created in directory
         if (
@@ -134,7 +138,8 @@ class GlobalFileCache
      * @return  int  Unix timestamp of cache creation time or -1 when not cached
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function isCached($printErr = false) {
+    public function isCached($printErr = false)
+    {
         // Checks
         // a) Cache file exists
         // b) Cache file older than regular file
@@ -162,7 +167,8 @@ class GlobalFileCache
      * @return  bool  Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkCacheFolderWriteable($printErr) {
+    private function checkCacheFolderWriteable($printErr)
+    {
         return GlobalCore::getInstance()->checkWriteable(dirname($this->cacheFile), $printErr);
     }
 
@@ -173,7 +179,8 @@ class GlobalFileCache
      * @return  bool  Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkCacheFileWriteable($printErr) {
+    private function checkCacheFileWriteable($printErr)
+    {
         return GlobalCore::getInstance()->checkWriteable($this->cacheFile, $printErr);
     }
 
@@ -184,7 +191,8 @@ class GlobalFileCache
      * @return  bool  Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkCacheFileExists($printErr) {
+    private function checkCacheFileExists($printErr)
+    {
         return GlobalCore::getInstance()->checkExisting($this->cacheFile, $printErr);
     }
 
@@ -194,7 +202,8 @@ class GlobalFileCache
      * @return  int  Unix Timestamp
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getFileAge() {
+    private function getFileAge()
+    {
         return $this->fileAge;
     }
 
@@ -204,7 +213,8 @@ class GlobalFileCache
      * @return  int  Unix Timestamp
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getCacheFileAge() {
+    public function getCacheFileAge()
+    {
         return $this->cacheFileAge;
     }
 }

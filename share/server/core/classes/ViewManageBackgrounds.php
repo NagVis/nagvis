@@ -26,7 +26,8 @@ class ViewManageBackgrounds
 {
     private $error = null;
 
-    private function uploadForm() {
+    private function uploadForm()
+    {
         global $CORE;
         echo '<h2>' . l('Upload Background Image') . '</h2>';
 
@@ -88,7 +89,8 @@ class ViewManageBackgrounds
         form_end();
     }
 
-    private function deleteForm() {
+    private function deleteForm()
+    {
         global $CORE;
         echo '<h2>' . l('Delete Background') . '</h2>';
 
@@ -160,7 +162,8 @@ class ViewManageBackgrounds
         form_end();
     }
 
-    public function parse() {
+    public function parse()
+    {
         ob_start();
         $this->uploadForm();
         $this->deleteForm();

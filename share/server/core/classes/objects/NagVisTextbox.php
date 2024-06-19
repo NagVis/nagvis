@@ -39,12 +39,14 @@ class NagVisTextbox extends NagVisStatelessObject
     protected $scale_to_zoom;
     protected $normal_size_at_zoom;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->type = 'textbox';
         parent::__construct();
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->object_id;
     }
 
@@ -55,7 +57,8 @@ class NagVisTextbox extends NagVisStatelessObject
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function fetchIcon() {
+    public function fetchIcon()
+    {
         // Nothing to do here, icon is set in constructor
     }
 

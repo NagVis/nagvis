@@ -24,7 +24,8 @@
 
 class CoreAuthorisationModMySQL extends CoreAuthorisationModPDO
 {
-    public function getConfig() {
+    public function getConfig()
+    {
         return [
             'driver' => 'mysql',
             'params' => [

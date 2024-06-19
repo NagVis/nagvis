@@ -29,7 +29,8 @@ class FrontendTemplateSystem
 {
     private $TMPL;
 
-    public function __construct() {
+    public function __construct()
+    {
         // Load Dwoo. It is used as external library
         require_once(cfg('paths', 'base')
             . HTDOCS_DIR . '/frontend/nagvis-js/ext/dwoo-1.1.0/dwooAutoload.php');
@@ -38,11 +39,13 @@ class FrontendTemplateSystem
             . 'tmpl/compile', cfg('paths', 'var') . 'tmpl/cache');
     }
 
-    public function getTmplSys() {
+    public function getTmplSys()
+    {
         return $this->TMPL;
     }
 
-    public function getTmplFile($sTheme, $sTmpl) {
+    public function getTmplFile($sTheme, $sTmpl)
+    {
         $F = new Dwoo_Template_File(path('sys', '', 'templates', $sTheme . '.' . $sTmpl . '.html'));
         // Would rather set this to null to make the template system not call chmod at all to use
         // the system default, but this does not work because makeDirectory() uses 0777 in case
