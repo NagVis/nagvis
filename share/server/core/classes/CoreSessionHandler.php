@@ -81,7 +81,7 @@ class CoreSessionHandler
             }
 
             // Store the creation time of the session
-            if (!$this->issetAndNotEmpty('sessionExpires')) {
+            if (!$this->isSetAndNotEmpty('sessionExpires')) {
                 $this->set('sessionExpires', time() + $iDuration);
             }
         }

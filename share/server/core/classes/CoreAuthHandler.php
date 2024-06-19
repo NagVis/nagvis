@@ -252,7 +252,7 @@ class CoreAuthHandler
 
     public function sessionAuthPresent()
     {
-        return $this->SESS->issetAndNotEmpty('authCredentials');
+        return $this->SESS->isSetAndNotEmpty('authCredentials');
     }
 
     public function storeInSession()
