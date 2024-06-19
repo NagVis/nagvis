@@ -26,14 +26,14 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 class CoreRotation {
-    private $sPoolName = NULL;
+    private $sPoolName = null;
 
     private $arrSteps = [];
-    private $intInterval = NULL;
+    private $intInterval = null;
 
-    private $intCurrentStep = NULL;
-    private $intNextStep = NULL;
-    private $strNextStep = NULL;
+    private $intCurrentStep = null;
+    private $intNextStep = null;
+    private $strNextStep = null;
 
     public function __construct($sPoolName) {
         global $CORE, $AUTHORISATION;
@@ -48,7 +48,7 @@ class CoreRotation {
         // Trigger the autorization backend to create new rotation permissions when needed
         // FIXME: maybe not the best place for that. But there is better central place to
         //        trigger thath
-        foreach($CORE->getDefinedRotationPools() AS $name) {
+        foreach($CORE->getDefinedRotationPools() as $name) {
             $AUTHORISATION->createPermission('Rotation', $name);
         }
 
@@ -87,7 +87,7 @@ class CoreRotation {
         $bRet = false;
 
         // Loop all steps and check if this step exists
-        foreach($this->arrSteps AS $intId => $arrStep) {
+        foreach($this->arrSteps as $intId => $arrStep) {
             if(isset($arrStep[$type]) && $arrStep[$type] === $step) {
                 $bRet = true;
                 break;
@@ -142,7 +142,7 @@ class CoreRotation {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function setNextStep() {
-        if($this->intCurrentStep === FALSE || ($this->intCurrentStep + 1) >= sizeof($this->arrSteps)) {
+        if($this->intCurrentStep === false || ($this->intCurrentStep + 1) >= sizeof($this->arrSteps)) {
             // if end of array reached, go to the beginning...
             $this->intNextStep = 0;
         } else {
@@ -170,7 +170,7 @@ class CoreRotation {
      */
     private function createStepUrls() {
         $htmlBase = cfg('paths', 'htmlbase');
-        foreach($this->arrSteps AS $intId => $arrStep) {
+        foreach($this->arrSteps as $intId => $arrStep) {
             if(isset($arrStep['url']) && $arrStep['url'] != '') {
                 $this->arrSteps[$intId]['target'] = $htmlBase . '/frontend/nagvis-js/index.php?mod=Url&act=view&show=' . $arrStep['url'] . '&rotation=' . $this->sPoolName . '&rotationStep=' . $intId;
             } else {

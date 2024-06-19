@@ -49,7 +49,7 @@ class ViewAck {
         }
 
         $backendIds = $MAPCFG->getValue($object_id, 'backend_id');
-        foreach ($backendIds AS $backendId) {
+        foreach ($backendIds as $backendId) {
             if(!$_BACKEND->checkBackendFeature($backendId, 'actionAcknowledge', false)) {
                 return '<div class=err>'
                  . l('The requested feature is not available for this backend. '
@@ -78,7 +78,7 @@ class ViewAck {
                 $persist = get_checkbox('persist');
 
                 // Now send the acknowledgement
-                foreach ($backendIds AS $backendId) {
+                foreach ($backendIds as $backendId) {
                     $BACKEND = $_BACKEND->getBackend($backendId);
                     $BACKEND->actionAcknowledge($type, $spec, $comment,
                                                 $sticky, $notify, $persist, $AUTH->getUser());

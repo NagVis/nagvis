@@ -71,7 +71,7 @@ function list_automap_overlaps() {
 
 function list_automaps($CORE) {
     $arr = [];
-    foreach($CORE->getAvailableAutomaps() AS $mapName) {
+    foreach($CORE->getAvailableAutomaps() as $mapName) {
         $arr[$mapName] = $mapName;
     }
     return $arr;
@@ -236,7 +236,7 @@ function automap_get_root_hostname($params) {
      * when the root cannot be fetched via backend it reads the default
      * value for the defaultroot
      */
-    $defaultRoot = cfg('automap', 'defaultroot', TRUE);
+    $defaultRoot = cfg('automap', 'defaultroot', true);
     if(!isset($defaultRoot) || $defaultRoot == '') {
         try {
             $hostsWithoutParent = $_BACKEND->getBackend($params['backend_id'][0])->getHostNamesWithNoParent();
@@ -286,7 +286,7 @@ function automap_hostnames_to_object_ids($names) {
     global $automap_object_ids;
 
     $ids = [];
-    foreach($names AS $name) {
+    foreach($names as $name) {
         if(isset($automap_object_ids[$name])) {
             $ids[] = $automap_object_ids[$name];
         }/* else {
@@ -333,7 +333,7 @@ function automap_obj_base($MAPCFG, &$params, &$saved_config, $obj_name) {
 
     // Add maybe existing explicit config from saved_config. This includes
     // initial coordinates set by the user
-    foreach($saved_config AS $conf) {
+    foreach($saved_config as $conf) {
         if($conf['type'] == 'host' && $conf['host_name'] == $obj_name) {
             $obj = $conf;
         }
@@ -466,7 +466,7 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
         }
     } catch(BackendException $e) {}
 
-    foreach($relations AS $rel_name) {
+    foreach($relations as $rel_name) {
         if (isset($object_names[$rel_name])) {
             // already seen objects
             $obj = $object_names[$rel_name];
@@ -475,7 +475,7 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
             continue; // finished with this existing object
         }
 
-        if (in_array($rel_name, $params['ignore_hosts']) == True){
+        if (in_array($rel_name, $params['ignore_hosts']) == true){
             continue;
         }
         $obj = automap_obj($MAPCFG, $params, $saved_config, $rel_name);
@@ -534,7 +534,7 @@ function automap_filter_tree($allowed_ids, &$obj, $directions = null) {
 
     // Loop both directions
     foreach($directions as $dir) {
-        foreach($obj['.' . $dir] AS $rel_id => &$rel) {
+        foreach($obj['.' . $dir] as $rel_id => &$rel) {
             // Or does a relative allow this object to remain on the map?
             $rel_remain = automap_filter_tree($allowed_ids, $rel, [$dir]);
 
@@ -630,13 +630,13 @@ function automap_tree_to_map_config($MAPCFG, &$params, &$saved_config, &$map_con
     unset($map_config[$tree['object_id']]['.childs']);
     unset($map_config[$tree['object_id']]['.parents']);
 
-    foreach($tree['.childs'] AS $child) {
+    foreach($tree['.childs'] as $child) {
         automap_tree_to_map_config($MAPCFG, $params, $saved_config, $map_config, $child);
         $line = automap_connector($MAPCFG, $params, $saved_config, $tree, $child);
         $map_config[$line['object_id']] = $line;
     }
 
-    foreach($tree['.parents'] AS $parent) {
+    foreach($tree['.parents'] as $parent) {
         automap_tree_to_map_config($MAPCFG, $params, $saved_config, $map_config, $parent);
         $line = automap_connector($MAPCFG, $params, $saved_config, $tree, $parent);
         $map_config[$line['object_id']] = $line;

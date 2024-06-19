@@ -42,7 +42,7 @@ class ViewManageBackends {
 
         // Merge global backend options with type specific options
         $opts = $backend_opts['options'][$type];
-        foreach ($backend_opts AS $key => $opt) {
+        foreach ($backend_opts as $key => $opt) {
             if ($key !== 'backendid' && $key !== 'options') {
                 $opts[$key] = $opt;
             }
@@ -54,7 +54,7 @@ class ViewManageBackends {
         $ret = [];
         $backend_type = cfg('backend_' . $backend_id, 'backendtype');
 
-        foreach ($this->backend_attributes($backend_type) AS $key => $opt) {
+        foreach ($this->backend_attributes($backend_type) as $key => $opt) {
             if (cfg('backend_' . $backend_id, $key, true) !== false) {
                 $ret[$key] = cfg('backend_' . $backend_id, $key, true);
             } else {
@@ -98,7 +98,7 @@ class ViewManageBackends {
         echo '<tr><td class="tdlabel">' . l('Default Backend') . '</td>';
         echo '<td class="tdfield">';
         $backends = ['' => l('Please choose')];
-        foreach ($this->defined_backends AS $backend) {
+        foreach ($this->defined_backends as $backend) {
             $backends[$backend] = $backend;
         }
         $default_backends = cfg('defaults', 'backend', true);
@@ -280,7 +280,7 @@ class ViewManageBackends {
         echo '<tr><td class="tdlabel">' . l('Backend ID') . '</td>';
         echo '<td class="tdfield">';
         $choices = ['' => l('Please choose')];
-        foreach ($this->editable_backends AS $choice) {
+        foreach ($this->editable_backends as $choice) {
             $choices[$choice] = $choice;
         }
         select('backend_id', $choices);

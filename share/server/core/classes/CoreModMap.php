@@ -263,7 +263,7 @@ class CoreModMap extends CoreModule {
         }
 
         // set options in the array
-        foreach($a['opts'] AS $key => $val) {
+        foreach($a['opts'] as $key => $val) {
             $MAPCFG->setValue($a['id'], $key, $val);
         }
 
@@ -318,7 +318,7 @@ class CoreModMap extends CoreModule {
         unset($aOpts['lang']);
 
         // Also remove all "helper fields" which begin with a _
-        foreach($aOpts AS $key => $val) {
+        foreach($aOpts as $key => $val) {
             if(strpos($key, '_') === 0) {
                 unset($aOpts[$key]);
             }

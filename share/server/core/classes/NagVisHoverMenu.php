@@ -42,7 +42,7 @@ class NagVisHoverMenu {
      * @param 	GlobalCore 	$CORE
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct($CORE, $templateName, $OBJ = NULL) {
+    public function __construct($CORE, $templateName, $OBJ = null) {
         $this->CORE = $CORE;
         $this->OBJPAGE = $OBJ;
 
@@ -87,9 +87,9 @@ class NagVisHoverMenu {
     private function readTemplate() {
         if($this->checkTemplateReadable(1)) {
             $this->code =  file_get_contents($this->pathTemplateFile);
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -102,91 +102,91 @@ class NagVisHoverMenu {
      */
     private function replaceStaticMacros() {
         // Replace the static macros (language, paths)
-        if(strpos($this->code, '[lang_alias]') !== FALSE) {
+        if(strpos($this->code, '[lang_alias]') !== false) {
             $this->code = str_replace('[lang_alias]', l('alias'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_address]') !== FALSE) {
+        if(strpos($this->code, '[lang_address]') !== false) {
             $this->code = str_replace('[lang_address]', l('address'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_state]') !== FALSE) {
+        if(strpos($this->code, '[lang_state]') !== false) {
             $this->code = str_replace('[lang_state]', l('state'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_summary_state]') !== FALSE) {
+        if(strpos($this->code, '[lang_summary_state]') !== false) {
             $this->code = str_replace('[lang_summary_state]', l('summaryState'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_output]') !== FALSE) {
+        if(strpos($this->code, '[lang_output]') !== false) {
             $this->code = str_replace('[lang_output]', l('output'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_perfdata]') !== FALSE) {
+        if(strpos($this->code, '[lang_perfdata]') !== false) {
             $this->code = str_replace('[lang_perfdata]', l('perfdata'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_summary_output]') !== FALSE) {
+        if(strpos($this->code, '[lang_summary_output]') !== false) {
             $this->code = str_replace('[lang_summary_output]', l('summaryOutput'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_overview]') !== FALSE) {
+        if(strpos($this->code, '[lang_overview]') !== false) {
             $this->code = str_replace('[lang_overview]', l('overview'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_instance]') !== FALSE) {
+        if(strpos($this->code, '[lang_instance]') !== false) {
             $this->code = str_replace('[lang_instance]', l('instance'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_next_check]') !== FALSE) {
+        if(strpos($this->code, '[lang_next_check]') !== false) {
         $this->code = str_replace('[lang_next_check]', l('nextCheck'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_last_check]') !== FALSE) {
+        if(strpos($this->code, '[lang_last_check]') !== false) {
             $this->code = str_replace('[lang_last_check]', l('lastCheck'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_state_type]') !== FALSE) {
+        if(strpos($this->code, '[lang_state_type]') !== false) {
             $this->code = str_replace('[lang_state_type]', l('stateType'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_current_attempt]') !== FALSE) {
+        if(strpos($this->code, '[lang_current_attempt]') !== false) {
             $this->code = str_replace('[lang_current_attempt]', l('currentAttempt'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_last_state_change]') !== FALSE) {
+        if(strpos($this->code, '[lang_last_state_change]') !== false) {
             $this->code = str_replace('[lang_last_state_change]', l('lastStateChange'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_state_duration]') !== FALSE) {
+        if(strpos($this->code, '[lang_state_duration]') !== false) {
             $this->code = str_replace('[lang_state_duration]', l('stateDuration'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_service_description]') !== FALSE) {
+        if(strpos($this->code, '[lang_service_description]') !== false) {
             $this->code = str_replace('[lang_service_description]', l('servicename'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_notes]') !== FALSE) {
+        if(strpos($this->code, '[lang_notes]') !== false) {
             $this->code = str_replace('[lang_notes]', l('notes'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_last_status_refresh]') !== FALSE) {
+        if(strpos($this->code, '[lang_last_status_refresh]') !== false) {
             $this->code = str_replace('[lang_last_status_refresh]', l('lastStatusRefresh'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_tags]') !== FALSE) {
+        if(strpos($this->code, '[lang_tags]') !== false) {
             $this->code = str_replace('[lang_tags]', l('Tags'), $this->code);
         }
 
-        if(strpos($this->code, '[html_base]') !== FALSE) {
+        if(strpos($this->code, '[html_base]') !== false) {
             $this->code = str_replace('[html_base]', cfg('paths', 'htmlbase'), $this->code);
         }
 
-        if(strpos($this->code, '[html_templates]') !== FALSE) {
+        if(strpos($this->code, '[html_templates]') !== false) {
             $this->code = str_replace('[html_templates]', path('sys', 'global', 'templates'), $this->code);
         }
 
-        if(strpos($this->code, '[html_template_images]') !== FALSE) {
+        if(strpos($this->code, '[html_template_images]') !== false) {
             $this->code = str_replace('[html_template_images]', path('html', 'global', 'templateimages'), $this->code);
         }
     }

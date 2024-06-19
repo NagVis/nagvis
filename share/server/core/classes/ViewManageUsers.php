@@ -158,7 +158,7 @@ class ViewManageUsers {
         echo '<tr><td class="tdlabel">' . l('Name') . '</td>';
         echo '<td class="tdfield">';
         $choices = ['' => l('Please choose')];
-        foreach ($AUTH->getAllUsers() AS $user) {
+        foreach ($AUTH->getAllUsers() as $user) {
             $choices[$user['userId']] = $user['name'];
         }
         select('user_id', $choices, '', 'updateForm(this.form)');
@@ -174,7 +174,7 @@ class ViewManageUsers {
             }
 
             $available_roles = [];
-            foreach ($AUTHORISATION->getAllRoles() AS $role) {
+            foreach ($AUTHORISATION->getAllRoles() as $role) {
                 if (!isset($user_roles[$role['roleId']])) {
                     $available_roles[$role['roleId']] = $role['name'];
                 }
@@ -245,7 +245,7 @@ class ViewManageUsers {
         echo '<tr><td class="tdlabel">' . l('Name') . '</td>';
         echo '<td class="tdfield">';
         $choices = ['' => l('Please choose')];
-        foreach ($AUTH->getAllUsers() AS $user) {
+        foreach ($AUTH->getAllUsers() as $user) {
             $choices[$user['userId']] = $user['name'];
         }
         select('user_id', $choices);
@@ -323,7 +323,7 @@ class ViewManageUsers {
         echo '<tr><td class="tdlabel">' . l('Name') . '</td>';
         echo '<td class="tdfield">';
         $choices = ['' => l('Please choose')];
-        foreach ($AUTH->getAllUsers() AS $user) {
+        foreach ($AUTH->getAllUsers() as $user) {
             $choices[$user['userId']] = $user['name'];
         }
         select('user_id', $choices);

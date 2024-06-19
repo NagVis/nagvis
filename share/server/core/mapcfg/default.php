@@ -20,7 +20,7 @@ function listMapNames() {
     global $CORE, $AUTHORISATION;
     $list = [];
     $maps = $CORE->getAvailableMaps();
-    foreach($maps AS $map_name) {
+    foreach($maps as $map_name) {
         if ($AUTHORISATION->isPermitted('Map', 'view', $map_name)) {
             $list[$map_name] = $map_name;
         }
@@ -150,7 +150,7 @@ function getObjectNames($type, $MAPCFG, $objId, $attrs) {
     $ret = ['' => ''];
     foreach($backendIds as $backendId) {
         $objs = $_BACKEND->getBackend($backendId)->getObjects($type, $name1, '');
-        foreach($objs AS $obj) {
+        foreach($objs as $obj) {
             if($type !== 'service') {
                 $ret[$obj['name1']] = $obj['name1'];
             } else {

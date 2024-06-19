@@ -119,7 +119,7 @@ class NagVisHost extends NagVisStatefulObject {
         }
 
         if($this->hasMembers()) {
-            foreach($this->getMembers() AS $MOBJ) {
+            foreach($this->getMembers() as $MOBJ) {
                 $MOBJ->applyState();
             }
         }
@@ -203,13 +203,13 @@ class NagVisHost extends NagVisStatefulObject {
 
             // Loop all major states
             if($this->aStateCounts !== null) {
-                foreach($this->aStateCounts AS $sState => $aSubstates) {
+                foreach($this->aStateCounts as $sState => $aSubstates) {
                     if(is_host_state($sState)) {
                         continue;
                     }
 
                     // Loop all substates (normal,ack,downtime,...)
-                    foreach($aSubstates AS $sSubState => $iCount) {
+                    foreach($aSubstates as $sSubState => $iCount) {
                         // Found some objects with this state+substate
                         if($iCount > 0) {
                             if(!isset($arrServiceStates[$sState])) {

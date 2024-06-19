@@ -175,7 +175,7 @@ class NagVisObject {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setConfiguration($obj) {
-        foreach($obj AS $key => $val) {
+        foreach($obj as $key => $val) {
             $this->{$key} = $val;
         }
     }
@@ -188,7 +188,7 @@ class NagVisObject {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setObjectInformation($obj) {
-        foreach($obj AS $key => $val) {
+        foreach($obj as $key => $val) {
             $this->{$key} = $val;
         }
     }
@@ -211,7 +211,7 @@ class NagVisObject {
             ];
         }
 
-        foreach($this AS $key => $val) {
+        foreach($this as $key => $val) {
             if (!isset(self::$arrDenyKeys[$key]) && $val !== null) {
                 $arr[$key] = $val;
             }
@@ -283,7 +283,7 @@ class NagVisObject {
             $ret .= '  host_name=' . $this->host_name . "\n";
         }
         $ret .= '  object_id=' . $this->object_id . "\n";
-        foreach($this->getObjectConfiguration(false) AS $key => $val) {
+        foreach($this->getObjectConfiguration(false) as $key => $val) {
             // Only set options which are different to global option
             if((!isset($globalOpts[$key]) || $globalOpts[$key] != $val) && $val != '') {
                 $ret .= '  ' . $key . '=' . $val . "\n";

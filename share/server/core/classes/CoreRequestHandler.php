@@ -49,7 +49,7 @@ class CoreRequestHandler {
         // If this is an array validate the single values. When one of the values
         // is invalid return false.
         if(is_array($this->aOpts[$sKey])) {
-            foreach($this->aOpts[$sKey] AS $val) {
+            foreach($this->aOpts[$sKey] as $val) {
                 if (!preg_match($regex, $val)) {
                     return false;
                 }
@@ -66,7 +66,7 @@ class CoreRequestHandler {
 
     public function getAll($exclude = []) {
         $ret = [];
-        foreach($this->aOpts AS $key => $val) {
+        foreach($this->aOpts as $key => $val) {
             if(!isset($exclude[$key])) {
                 $ret[$key] = $val;
             }

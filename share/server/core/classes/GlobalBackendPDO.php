@@ -164,10 +164,10 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                  $this->objConfigType = 0;
              }
         } else {
-            return FALSE;
+            return false;
         }
 
-        return TRUE;
+        return true;
     }
 
     /**
@@ -180,9 +180,9 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
     private function checkTablesExists() {
         if(!$this->DB->tableExist($this->dbPrefix . 'programstatus')) {
             throw new BackendConnectionProblem(l('noTablesExists', ['BACKENDID' => $this->backendId, 'PREFIX' => $this->dbPrefix]));
-            return FALSE;
+            return false;
         } else {
-            return TRUE;
+            return true;
         }
     }
 
@@ -194,7 +194,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @return    int $ret
      */
     private function getInstanceId() {
-        $intInstanceId = NULL;
+        $intInstanceId = null;
 
         $QUERYHANDLE = $this->DB->query('SELECT instance_id FROM ' . $this->dbPrefix . 'instances WHERE instance_name=:instance', ['instance' => $this->dbInstanceName]);
 
@@ -302,9 +302,9 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      */
     private function checkForIsActiveObjects() {
         if($this->DB->query('SELECT object_id FROM ' . $this->dbPrefix . 'objects WHERE is_active=1')->fetch()) {
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -317,9 +317,9 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      */
     private function checkConfigTypeObjects() {
         if($this->DB->query('SELECT host_id FROM ' . $this->dbPrefix . 'hosts WHERE config_type=1 AND instance_id=:instance LIMIT 1', ['instance' => $this->dbInstanceId])->fetch()) {
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -343,9 +343,9 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
         $aFilters = [];
         $values = [];
         $idx = 1;
-        foreach($objects AS $OBJS) {
+        foreach($objects as $OBJS) {
             $objFilters = [];
-            foreach($filters AS $filter) {
+            foreach($filters as $filter) {
                 // Array('key' => 'host_name', 'operator' => '=', 'name'),
                 switch($filter['key']) {
                     case 'host_name':

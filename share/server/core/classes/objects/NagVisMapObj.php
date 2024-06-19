@@ -211,7 +211,7 @@ class NagVisMapObj extends NagVisStatefulObject {
         $a = [];
 
         // Loop all members
-        foreach($this->members AS $OBJ) {
+        foreach($this->members as $OBJ) {
             $sType = $OBJ->getType();
 
             // Skip unrelevant object types
@@ -257,7 +257,7 @@ class NagVisMapObj extends NagVisStatefulObject {
         global $CORE;
         $i = 0;
         // Loop all objects except the stateless ones and count them
-        foreach($this->members AS $OBJ) {
+        foreach($this->members as $OBJ) {
             if(!isset($CORE->statelessObjectTypes[$OBJ->getType()])) {
                 $i++;
             }
@@ -272,7 +272,7 @@ class NagVisMapObj extends NagVisStatefulObject {
     public function hasMembers() {
         global $CORE;
         // Loop all objects except the stateless ones and count them
-        foreach($this->members AS $OBJ) {
+        foreach($this->members as $OBJ) {
             if(!isset($CORE->statelessObjectTypes[$OBJ->getType()])) {
                 return true;
             }
@@ -291,7 +291,7 @@ class NagVisMapObj extends NagVisStatefulObject {
      */
     public function queueState($_unused_flag = true, $_unused_flag2 = true) {
         // Get state of all member objects
-        foreach($this->getStateRelevantMembers() AS $OBJ) {
+        foreach($this->getStateRelevantMembers() as $OBJ) {
             // The states of the map objects members only need to be fetched when this
             // is MapObj is used as a view.
             if($this->isView === true) {
@@ -325,7 +325,7 @@ class NagVisMapObj extends NagVisStatefulObject {
         }
 
         // Get state of all member objects
-        foreach($this->getStateRelevantMembers() AS $OBJ) {
+        foreach($this->getStateRelevantMembers() as $OBJ) {
             $OBJ->applyState();
 
             // The icon is only needed when this is a view
@@ -351,7 +351,7 @@ class NagVisMapObj extends NagVisStatefulObject {
     public function objectTreeToMapObjects(&$OBJ, &$arrHostnames= []) {
         $this->members[] = $OBJ;
 
-        foreach($OBJ->getChildsAndParents() AS $OBJ1) {
+        foreach($OBJ->getChildsAndParents() as $OBJ1) {
             /*
              * Check if the host is already on the map (If it's not done, the
              * objects with more than one parent will be printed several times on
@@ -420,7 +420,7 @@ class NagVisMapObj extends NagVisStatefulObject {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function fetchMapObjects(&$arrMapNames = [], $depth = 0) {
-        foreach($this->MAPCFG->getMapObjects() AS $objConf) {
+        foreach($this->MAPCFG->getMapObjects() as $objConf) {
             $type = $objConf['type'];
 
             if($type == 'global' || $type == 'template') {
@@ -431,7 +431,7 @@ class NagVisMapObj extends NagVisStatefulObject {
             $typeDefs = $this->MAPCFG->getTypeDefaults($type);
 
             // merge with "global" settings
-            foreach($typeDefs AS $key => $default) {
+            foreach($typeDefs as $key => $default) {
                 if (!isset($objConf[$key])) {
                     $objConf[$key] = $default;
                 }
@@ -555,7 +555,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 
         // Now dig into the next map level. This has to be done here to fight
         // the loops at this level and not at the single branches of map links.
-        foreach($this->members AS $OBJ) {
+        foreach($this->members as $OBJ) {
             $sType = $OBJ->getType();
 
             if($sType == 'map') {
@@ -601,7 +601,7 @@ class NagVisMapObj extends NagVisStatefulObject {
                                PENDING     => 0
             ];
 
-            foreach($this->getStateRelevantMembers(true) AS $OBJ) {
+            foreach($this->getStateRelevantMembers(true) as $OBJ) {
                 if (isset($arrStates[$OBJ->sum[STATE]])) {
                     $arrStates[$OBJ->sum[STATE]]++;
                 }

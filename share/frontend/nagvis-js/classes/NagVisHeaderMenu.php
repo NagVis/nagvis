@@ -97,7 +97,7 @@ class NagVisHeaderMenu {
         // Build language list
         $aLang = $CORE->getAvailableAndEnabledLanguages();
         $numLang = count($aLang);
-        foreach($aLang AS $lang) {
+        foreach($aLang as $lang) {
             $aLangs[$lang] = [];
             $aLangs[$lang]['language'] = $lang;
 
@@ -160,7 +160,7 @@ class NagVisHeaderMenu {
         } else {
             // Get all the maps global config sections and cache them
             $list = [];
-            foreach($CORE->getAvailableMaps() AS $mapName) {
+            foreach($CORE->getAvailableMaps() as $mapName) {
                 $MAPCFG = new GlobalMapCfg($mapName);
                 try {
                     $MAPCFG->readMapConfig(ONLY_GLOBAL);
@@ -193,7 +193,7 @@ class NagVisHeaderMenu {
         $childMaps = [];
 
         // Perform user specific filtering on the cached data
-        foreach ($list AS $map) {
+        foreach ($list as $map) {
             // Remove unpermitted maps
             if(!$AUTHORISATION->isPermitted('Map', 'view', $map['mapName'])) {
                 unset($list[$map['mapName']]);
@@ -218,14 +218,14 @@ class NagVisHeaderMenu {
         if ($this->OBJ !== null && $this->aMacros['mod'] == 'Map'
             && isset($list[$this->OBJ->getName()])) {
 
-            $list[$this->OBJ->getName()]['selected'] = True;
+            $list[$this->OBJ->getName()]['selected'] = true;
         }
 
         return [$this->mapListToTree($aMaps, $childMaps), $permEditAnyMap];
     }
 
     private function mapListToTree($maps, $childMaps) {
-        foreach($maps AS $map) {
+        foreach($maps as $map) {
             $freeParent = $map['mapName'];
             if(isset($childMaps[$freeParent])) {
                 $maps[$freeParent]['class'] = 'title';
@@ -300,7 +300,7 @@ class NagVisHeaderMenu {
 
         // Add permitted rotations
         $this->aMacros['rotations'] = [];
-        foreach($CORE->getDefinedRotationPools() AS $poolName) {
+        foreach($CORE->getDefinedRotationPools() as $poolName) {
             if($AUTHORISATION->isPermitted('Rotation', 'view', $poolName)) {
                 $this->aMacros['rotations'][] = $poolName;
             }

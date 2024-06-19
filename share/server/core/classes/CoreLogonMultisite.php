@@ -98,7 +98,7 @@ class CoreLogonMultisite extends CoreLogonModule {
     private function checkAuth() {
         // Loop all cookies trying to fetch a valid authentication
         // cookie for this installation
-        foreach(array_keys($_COOKIE) AS $cookieName) {
+        foreach(array_keys($_COOKIE) as $cookieName) {
             if($cookieName != 'auth_' . getenv('OMD_SITE')) {
                 continue;
             }

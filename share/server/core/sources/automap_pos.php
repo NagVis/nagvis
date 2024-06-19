@@ -12,7 +12,7 @@ function automap_check_graphviz($binary) {
      * configured path. Prefer the configured path.
      */
     $bFound = false;
-    foreach([cfg('automap', 'graphvizpath') . $binary, $binary] AS $path) {
+    foreach([cfg('automap', 'graphvizpath') . $binary, $binary] as $path) {
         // Check if dot can be found in path (If it is there $returnCode is 0, if not it is 1)
         exec('which ' . $path . ' 2>/dev/null', $arrReturn, $exitCode);
 
@@ -91,12 +91,12 @@ function graphviz_config_tree(&$params, &$tree, $layer = 0) {
     $str .= 'layer="' . $layer . '"';
     $str .= ' ];' . "\n";
 
-    foreach($tree['.childs'] AS $child) {
+    foreach($tree['.childs'] as $child) {
         $str .= graphviz_config_tree($params, $child, $layer + 1);
         $str .= graphviz_config_connector($tree['object_id'], $child['object_id']);
     }
 
-    foreach($tree['.parents'] AS $parent) {
+    foreach($tree['.parents'] as $parent) {
         $str .= graphviz_config_tree($params, $parent, $layer + 1);
         $str .= graphviz_config_connector($tree['object_id'], $parent['object_id']);
     }
@@ -298,7 +298,7 @@ function graphviz_parse(&$map_config, $imagemap) {
 
     // Extract the positions from the html area definitions
     $objCoords = [];
-    foreach(explode("\n", $imagemap) AS $sLine) {
+    foreach(explode("\n", $imagemap) as $sLine) {
         $sLine = str_replace('&#45;', '-', $sLine);
         // Extract the area objects
         // Only parsing rect/polys at the moment
@@ -319,7 +319,7 @@ function graphviz_parse(&$map_config, $imagemap) {
                         $x = null;
                         $y = null;
                         $aCoords = explode(' ', $coords);
-                        foreach($aCoords AS $coord) {
+                        foreach($aCoords as $coord) {
                             list($newX, $newY) = explode(',', $coord);
                             if($x === null) {
                                 $x = $newX;

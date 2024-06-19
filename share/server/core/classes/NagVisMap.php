@@ -92,7 +92,7 @@ class NagVisMap {
             return json_encode($arrRet);
         }
 
-        foreach($this->MAPOBJ->getMembers() AS $OBJ) {
+        foreach($this->MAPOBJ->getMembers() as $OBJ) {
             switch(get_class($OBJ)) {
                 case 'NagVisHost':
                 case 'NagVisService':
