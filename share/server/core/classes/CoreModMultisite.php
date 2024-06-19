@@ -118,7 +118,12 @@ class CoreModMultisite extends CoreModule
     private function getMapsCached()
     {
         $maps = $this->CORE->getPermittedMaps();
-        $cache_file = cfg('paths', 'var') . 'snapin-' . md5(json_encode(array_keys($maps))) . '-' . CONST_VERSION . '.cache';
+        $cache_file = cfg('paths', 'var')
+            . 'snapin-'
+            . md5(json_encode(array_keys($maps)))
+            . '-'
+            . CONST_VERSION
+            . '.cache';
         $CACHE = new GlobalFileCache([], $cache_file);
         $cached = $CACHE->isCached();
 

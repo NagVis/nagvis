@@ -193,7 +193,14 @@ function hidden_vars() {
 function hidden($name, $default = '') {
     global $form_keys;
     $form_keys[$name] = true;
-    echo '<input type="hidden" id="' . escape_html($name) . '" name="' . escape_html($name) . '" value="' . escape_html($default) . '" />' . N;
+    echo '<input type="hidden" id="'
+        . escape_html($name)
+        . '" name="'
+        . escape_html($name)
+        . '" value="'
+        . escape_html($default)
+        . '" />'
+        . N;
 }
 
 function radio($name, $value, $checked = false) {
@@ -203,7 +210,15 @@ function radio($name, $value, $checked = false) {
     echo '<input type="radio" name="' . $name . '" value="' . $value . '"' . $checked . ' />';
 }
 
-function field($type, $name, $default = '', $class = '', $onclick = '', $style = '', $id = null) {
+function field(
+    $type,
+    $name,
+    $default = '',
+    $class = '',
+    $onclick = '',
+    $style = '',
+    $id = null
+) {
     global $form_keys, $form_name;
     $form_keys[$name] = true;
 
@@ -248,7 +263,19 @@ function field($type, $name, $default = '', $class = '', $onclick = '', $style =
         $id = $name;
     }
 
-    echo '<input id="' . $id . '" type="' . $type . '" name="' . $name . '"' . $value . $class . $onclick . $style . ' />' . N;
+    echo '<input id="'
+        . $id
+        . '" type="'
+        . $type
+        . '" name="'
+        . $name
+        . '"'
+        . $value
+        . $class
+        . $onclick
+        . $style
+        . ' />'
+        . N;
 
     show_form_render_error($name);
 }
@@ -287,7 +314,17 @@ function textarea($name, $default = '', $class = '', $style = '') {
     }
 
     // plain <textarea>
-    echo '<textarea id="textarea_' . $name . '" name="' . $name . '"' . $class . $style . '>' . escape_html($default) . '</textarea>' . N;
+    echo '<textarea id="textarea_'
+        . $name
+        . '" name="'
+        . $name
+        . '"'
+        . $class
+        . $style
+        . '>'
+        . escape_html($default)
+        . '</textarea>'
+        . N;
 
     // better <textarea>
     echo '
@@ -303,7 +340,14 @@ function textarea($name, $default = '', $class = '', $style = '') {
 
 }
 
-function select($name, $options, $default = '', $onchange = '', $style = '', $size = null) {
+function select(
+    $name,
+    $options,
+    $default = '',
+    $onchange = '',
+    $style = '',
+    $size = null
+) {
     global $form_keys, $form_name;
     $form_keys[$name] = true;
 
@@ -349,7 +393,14 @@ function select($name, $options, $default = '', $onchange = '', $style = '', $si
         if ($value == $default) {
             $select = ' selected';
         }
-        $ret .= '<option value="' . htmlspecialchars($value) . '"' . $select . '>' . htmlspecialchars($display) . '</option>' . N;
+        $ret .= '<option value="'
+            . htmlspecialchars($value)
+            . '"'
+            . $select
+            . '>'
+            . htmlspecialchars($display)
+            . '</option>'
+            . N;
     }
     $ret .= '</select>' . N;
     echo $ret;
@@ -363,13 +414,31 @@ function submit($label, $class = '', $name = '_submit') {
     if ($class) {
         $class = ' ' . $class;
     }
-    echo '<input class="submit' . $class . '" type="submit" name="' . $name . '" id="' . $name . '" value="' . $label . '" />' . N;
+    echo '<input class="submit'
+        . $class
+        . '" type="submit" name="'
+        . $name
+        . '" id="'
+        . $name
+        . '" value="'
+        . $label
+        . '" />'
+        . N;
 }
 
 function button($name, $label, $onclick) {
     global $form_keys;
     $form_keys[$name] = true;
-    echo '<input type="button" name="' . $name . '" id="' . $name . '" value="' . $label . '" onclick="' . $onclick . '" />' . N;
+    echo '<input type="button" name="'
+        . $name
+        . '" id="'
+        . $name
+        . '" value="'
+        . $label
+        . '" onclick="'
+        . $onclick
+        . '" />'
+        . N;
 }
 
 function upload($name) {

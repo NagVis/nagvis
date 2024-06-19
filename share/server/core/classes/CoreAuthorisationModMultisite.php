@@ -34,7 +34,11 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule
         $this->file = cfg('global', 'authorisation_multisite_file');
 
         if ($this->file == '') {
-            throw new NagVisException(l('No auth file configured. Please specify the option authorisation_multisite_file in main configuration'));
+            throw new NagVisException(
+                l(
+                    'No auth file configured. Please specify the option authorisation_multisite_file in main configuration'
+                )
+            );
         }
 
         if (!file_exists($this->file)) {

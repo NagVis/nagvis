@@ -84,7 +84,10 @@ class ViewMapAddModify
             if (isset($prop['must']) && $prop['must'] == '1') {
                 // In case of "source" options only validate the ones which belong
                 // to currently enabled sources
-                if (isset($prop['source_param']) && !in_array($prop['source_param'], $this->MAPCFG->getValue(0, 'sources'))) {
+                if (
+                    isset($prop['source_param'])
+                    && !in_array($prop['source_param'], $this->MAPCFG->getValue(0, 'sources'))
+                ) {
                     continue;
                 }
 
@@ -284,8 +287,16 @@ class ViewMapAddModify
     {
         echo '<div id="' . $propname . '" class=picker style="' . $hideField . '">';
         input($propname, $value, '', '', $propname . '_inp');
-        echo '<a href="javascript:void(0);" onClick="pickWindowSize(\'' . $propname . '_inp\', \'' . $propname . '\');">';
-        echo '<img src="' . cfg('paths', 'htmlimages') . 'internal/dimension.png" alt="' . l('Get current size') . '" />';
+        echo '<a href="javascript:void(0);" onClick="pickWindowSize(\''
+            . $propname
+            . '_inp\', \''
+            . $propname
+            . '\');">';
+        echo '<img src="'
+            . cfg('paths', 'htmlimages')
+            . 'internal/dimension.png" alt="'
+            . l('Get current size')
+            . '" />';
         echo '</a></div>';
     }
 
@@ -394,7 +405,12 @@ class ViewMapAddModify
         // Add a checkbox to toggle the usage of an attribute. But only add it for
         // non-must attributes.
         if (!$prop['must'] && $fieldType != 'readonly') {
-            checkbox('toggle_' . $propname, $isInherited === false, '', 'toggle_option(\'' . $propname . '\');' . $onChange);
+            checkbox(
+                'toggle_' . $propname,
+                $isInherited === false,
+                '',
+                'toggle_option(\'' . $propname . '\');' . $onChange
+            );
         }
 
         echo '</td><td class=tdfield>';
@@ -411,7 +427,12 @@ class ViewMapAddModify
         // Prepare translation of value to a nice display string in case of
         // e.g. boolean fields
         if ($this->mode == 'view_params' || $default_value !== null) {
-            $valueTxt = $this->getAttr($default_value, $propname, $prop['must'], true);
+            $valueTxt = $this->getAttr(
+                $default_value,
+                $propname,
+                $prop['must'],
+                true
+            );
             $valueTxt = $valueTxt[1];
         } else {
             $valueTxt = '';
@@ -707,7 +728,6 @@ class ViewMapAddModify
     }
 
     public function object_type()
-   
     {
         return $this->object_type;
     }

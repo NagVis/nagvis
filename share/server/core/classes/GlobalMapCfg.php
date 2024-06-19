@@ -454,7 +454,12 @@ class GlobalMapCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function readMapConfig($onlyGlobal = false, $resolveTemplates = true, $useCache = true, $enforceSources = false)
+    public function readMapConfig(
+        $onlyGlobal = false,
+        $resolveTemplates = true,
+        $useCache = true,
+        $enforceSources = false
+    )
     {
 
         global $_MAINCFG, $AUTHORISATION;
@@ -696,7 +701,12 @@ class GlobalMapCfg
         return null;
     }
 
-    private function getSourceParamsOfSources($sources, $only_user_supplied, $only_customized, $only_view_parameters )
+    private function getSourceParamsOfSources(
+        $sources,
+        $only_user_supplied,
+        $only_customized,
+        $only_view_parameters
+    )
     {
         $keys = [];
         // Get keys of all view params belonging to all configured sources
@@ -833,7 +843,10 @@ class GlobalMapCfg
     {
         $p = [];
         foreach ($params as $key => $val) {
-            if (isset(self::$validConfig['global'][$key]['array']) && self::$validConfig['global'][$key]['array'] === true) {
+            if (
+                isset(self::$validConfig['global'][$key]['array'])
+                && self::$validConfig['global'][$key]['array'] === true
+            ) {
                 $val = implode(',', $val);
             }
             $p[$key] = $val;
@@ -865,7 +878,16 @@ class GlobalMapCfg
             unset($params['source_file']);
         }
         $param_values = $this->paramsToString($params);
-        $cacheFile = cfg('paths', 'var') . 'source-' . $this->name . '.cfg-' . $param_values . '-' . $this->isView . '-' . CONST_VERSION . '.cache';
+        $cacheFile = cfg('paths', 'var')
+            . 'source-'
+            . $this->name
+            . '.cfg-'
+            . $param_values
+            . '-'
+            . $this->isView
+            . '-'
+            . CONST_VERSION
+            . '.cache';
         $CACHE = new GlobalFileCache([], $cacheFile);
 
         // 2a. Check if the cache file exists
@@ -1114,7 +1136,10 @@ class GlobalMapCfg
                 }
 
                 if (isset($val['must']) && $val['must'] == true) {
-                    if ((!isset($element[$key]) || $element[$key] == '') && (!isset($val['default']) || $val['default'] == '')) {
+                    if (
+                        (!isset($element[$key]) || $element[$key] == '')
+                        && (!isset($val['default']) || $val['default'] == '')
+                    ) {
                         throw new $exception(l('mapCfgMustValueNotSet',
                             [
                                 'MAPNAME' => $this->name, 'ATTRIBUTE' => $key,
@@ -1133,8 +1158,13 @@ class GlobalMapCfg
                 // check for valid attributes
                 if (!isset(self::$validConfig[$type][$key])) {
                     // unknown attribute
-                    throw new $exception(l('unknownAttribute', ['MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type]));
-                } elseif (isset(self::$validConfig[$type][$key]['deprecated']) && self::$validConfig[$type][$key]['deprecated'] === true) {
+                    throw new $exception(
+                        l('unknownAttribute', ['MAPNAME' => $this->name, 'ATTRIBUTE' => $key, 'TYPE' => $type])
+                    );
+                } elseif (
+                    isset(self::$validConfig[$type][$key]['deprecated'])
+                    && self::$validConfig[$type][$key]['deprecated'] === true
+                ) {
                     // Silently skip deprecated options. Previously version were throwing exceptions which
                     // prevented rendering the whole map, but this was not really user friendly. From now
                     // we write about deprecated options in the changelog and docs and will silently ignore
@@ -1150,12 +1180,19 @@ class GlobalMapCfg
                         foreach ($val as $key2 => $val2) {
                             if (!preg_match(self::$validConfig[$type][$key]['match'], $val2)) {
                                 // wrong format
-                                throw new $exception(l('wrongValueFormatMap', ['MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key]));
+                                throw new $exception(
+                                    l(
+                                        'wrongValueFormatMap',
+                                        ['MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key]
+                                    )
+                                );
                             }
                         }
                     } elseif (!preg_match(self::$validConfig[$type][$key]['match'], $val)) {
                         // Wrong format
-                        throw new $exception(l('wrongValueFormatMap', ['MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key]));
+                        throw new $exception(
+                            l('wrongValueFormatMap', ['MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key])
+                        );
                     }
                     // This is a string value
                 }
@@ -2101,7 +2138,9 @@ class GlobalMapCfg
             'background_image'         => $this->BACKGROUND->getFile(),
             'background_color'         => $this->getValue(0, 'background_color'),
             'favicon_image'            => cfg('paths', 'htmlimages') . 'internal/favicon.png',
-            'page_title'               => $this->getValue(0, 'alias') . ' ([SUMMARY_STATE]) :: ' . cfg('internal', 'title'),
+            'page_title'               => $this->getValue(0, 'alias')
+                                            . ' ([SUMMARY_STATE]) :: '
+                                            . cfg('internal', 'title'),
             'event_background'         => $this->getValue(0, 'event_background'),
             'event_highlight'          => $this->getValue(0, 'event_highlight'),
             'event_highlight_interval' => $this->getValue(0, 'event_highlight_interval'),

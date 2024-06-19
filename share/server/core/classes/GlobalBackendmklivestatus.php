@@ -93,13 +93,21 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
 
         // Run preflight checks
         if ($this->socketType == 'unix' && !$this->checkSocketExists()) {
-            throw new BackendConnectionProblem(l('Unable to connect to livestatus socket. The socket [SOCKET] in backend [BACKENDID] does not exist. Maybe Nagios is not running or restarting.',
-                ['BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath]));
+            throw new BackendConnectionProblem(
+                l(
+                    'Unable to connect to livestatus socket. The socket [SOCKET] in backend [BACKENDID] does not exist. Maybe Nagios is not running or restarting.',
+                    ['BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath]
+                )
+            );
         }
 
         if (!function_exists('fsockopen')) {
-            throw new BackendConnectionProblem(l('The PHP function fsockopen is not available. Needed by backend [BACKENDID].',
-                ['BACKENDID' => $this->backendId, 'SOCKET' => $this->socketSpec]));
+            throw new BackendConnectionProblem(
+                l(
+                    'The PHP function fsockopen is not available. Needed by backend [BACKENDID].',
+                    ['BACKENDID' => $this->backendId, 'SOCKET' => $this->socketSpec]
+                )
+            );
         }
 
         return true;
@@ -201,7 +209,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         // errors later with an own error message
         // FIXME: Maybe use pfsockopen in the future to use persistent connections
         if ($this->socketType === 'unix') {
-            $this->SOCKET = fsockopen('unix://' . $this->socketPath, -1, $errno, $errstr, (float) cfg('backend_' . $this->backendId, 'timeout'));
+            $this->SOCKET = fsockopen(
+                'unix://' . $this->socketPath,
+                -1,
+                $errno,
+                $errstr,
+                (float) cfg('backend_' . $this->backendId, 'timeout')
+            );
 
         } elseif ($this->socketType === 'tcp-tls') {
             if (cfg('backend_' . $this->backendId, 'verify_tls_peer') == true) {
@@ -326,21 +340,28 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         error_reporting($oldLevel);
 
         if ($write === false) {
-            throw new BackendConnectionProblem(l('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
-                [
-                    'BACKENDID' => $this->backendId,
-                    'SOCKET' => $this->socketSpec,
-                    'MSG' => 'Error while sending query to socket.'
-                ]));
+            throw new BackendConnectionProblem(
+                l(
+                    'Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
+                    [
+                        'BACKENDID' => $this->backendId,
+                        'SOCKET' => $this->socketSpec,
+                        'MSG' => 'Error while sending query to socket.'
+                    ]
+                )
+            );
         }
 
         if ($write !== strlen($query)) {
-            throw new BackendConnectionProblem(l('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
-                [
-                    'BACKENDID' => $this->backendId,
-                    'SOCKET' => $this->socketSpec,
-                    'MSG' => 'Connection terminated.'
-                ]));
+            throw new BackendConnectionProblem(
+                l('Problem while writing to socket [SOCKET] in backend [BACKENDID]: [MSG]',
+                    [
+                        'BACKENDID' => $this->backendId,
+                        'SOCKET' => $this->socketSpec,
+                        'MSG' => 'Connection terminated.'
+                    ]
+                )
+            );
         }
 
 
@@ -354,12 +375,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
 
         // Catch problem while reading
         if ($read === false) {
-            throw new BackendConnectionProblem(l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
-                [
-                    'BACKENDID' => $this->backendId,
-                    'SOCKET' => $this->socketSpec,
-                    'MSG' => 'Error while reading socket (header)'
-                ]));
+            throw new BackendConnectionProblem(
+                l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
+                    [
+                        'BACKENDID' => $this->backendId,
+                        'SOCKET' => $this->socketSpec,
+                        'MSG' => 'Error while reading socket (header)'
+                    ]
+                )
+            );
         }
 
         // Extract status code
@@ -373,22 +397,28 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
 
         // Catch problem while reading
         if ($read === false) {
-            throw new BackendConnectionProblem(l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
-                [
-                    'BACKENDID' => $this->backendId,
-                    'SOCKET'    => $this->socketSpec,
-                    'MSG'       => 'Error while reading socket (content)'
-                ]));
+            throw new BackendConnectionProblem(
+                l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
+                    [
+                        'BACKENDID' => $this->backendId,
+                        'SOCKET'    => $this->socketSpec,
+                        'MSG'       => 'Error while reading socket (content)'
+                    ]
+                )
+            );
         }
 
         // Catch errors (Like HTTP 200 is OK)
         if ($status != "200") {
-            throw new BackendConnectionProblem(l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
-                [
-                    'BACKENDID' => $this->backendId,
-                    'SOCKET'    => $this->socketSpec,
-                    'MSG'       => $read
-                ]));
+            throw new BackendConnectionProblem(
+                l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
+                    [
+                        'BACKENDID' => $this->backendId,
+                        'SOCKET'    => $this->socketSpec,
+                        'MSG'       => $read
+                    ]
+                )
+            );
         }
 
         //$fh = fopen('/tmp/live', 'a');
@@ -584,7 +614,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @return  string    Parsed filters
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function parseFilter($objects, $filters, $isMemberQuery = false, $isCountQuery = false, $isHostQuery = true)
+    private function parseFilter(
+        $objects,
+        $filters,
+        $isMemberQuery = false,
+        $isCountQuery = false,
+        $isHostQuery = true
+    )
     {
         $aFilters = [];
         foreach ($objects as $OBJS) {
@@ -1208,7 +1244,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         ];
     }
 
-    public function getHostAndServiceCounts($options, $host_filter, $service_filter, $by_group = true)
+    public function getHostAndServiceCounts(
+        $options,
+        $host_filter,
+        $service_filter,
+        $by_group = true
+    )
     {
         if ($by_group) {
             $host_suffix    = 'bygroup';
@@ -1582,7 +1623,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     public function getHostNamesProblematic()
     {
         $r = $this->queryLivestatusSingleColumn("GET hosts\nColumns: name\nFilter: state != 0\n");
-        $r = array_merge($r, $this->queryLivestatusSingleColumn("GET services\nColumns: host_name\nFilter: state != 0\n"));
+        $r = array_merge(
+            $r,
+            $this->queryLivestatusSingleColumn("GET services\nColumns: host_name\nFilter: state != 0\n")
+        );
         return $r;
     }
 
@@ -1642,7 +1686,22 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         $notify  = $notify ? '1' : '0';
         $persist = $notify ? '1' : '0';
 
-        $this->command('ACKNOWLEDGE_' . $what . '_PROBLEM;' . $spec . ';' . $sticky . ';' . $notify . ';' . $persist . ';' . $user . ';' . $comment);
+        $this->command(
+            'ACKNOWLEDGE_'
+            . $what
+            . '_PROBLEM;'
+            . $spec
+            . ';'
+            . $sticky
+            . ';'
+            . $notify
+            . ';'
+            . $persist
+            . ';'
+            . $user
+            . ';'
+            . $comment
+        );
     }
     /**
      * PUBLIC getDirectChildDependenciesNamesByHostName()
@@ -1653,7 +1712,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @return  array    List of hostnames
      * @author  Thibault Cohen <thibault.cohen@savoirfairelinux.com>
      */
-    public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact = false)
+    public function getDirectChildDependenciesNamesByHostName(
+        $hostName,
+        $min_business_impact = false
+    )
     {
         $query = "GET hosts\nColumns: child_dependencies\nFilter: name = " . $hostName . "\n";
         $raw_result = $this->queryLivestatusSingleColumn($query);
@@ -1685,7 +1747,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact = false)
+    public function getDirectParentDependenciesNamesByHostName(
+        $hostName,
+        $min_business_impact = false
+    )
     {
         $query = "GET hosts\nColumns: parent_dependencies\nFilter: name = " . $hostName . "\n";
         $raw_result = $this->queryLivestatusSingleColumn($query);

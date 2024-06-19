@@ -282,30 +282,97 @@ for ($i = 0; $i < $pdc; $i++) {
         // Warning
         if ($warn) {
             if ($warn < $crit) {
-                imageFilledRectangle($img, $offX + $warnv + 1, $offY + 1, $offX + $maxX, $offY + $sect1, $oYellow);
+                imageFilledRectangle(
+                    $img,
+                    $offX + $warnv + 1,
+                    $offY + 1,
+                    $offX + $maxX,
+                    $offY + $sect1,
+                    $oYellow
+                );
             } else {
-                imageFilledRectangle($img, $offX + 1, $offY + 1, $offX + $warnv - 1, $offY + $sect1, $oYellow);
+                imageFilledRectangle(
+                    $img,
+                    $offX + 1,
+                    $offY + 1,
+                    $offX + $warnv - 1,
+                    $offY + $sect1,
+                    $oYellow
+                );
             }
             if (file_exists ("$font")) {
-                ImageTTFText($img, $chrSize * 2, 0, $offX + $warnv + 1, $offY + $sect1, $oBlack, $font, intval($warnt));
+                ImageTTFText(
+                    $img,
+                    $chrSize * 2,
+                    0,
+                    $offX + $warnv + 1,
+                    $offY + $sect1,
+                    $oBlack,
+                    $font,
+                    intval($warnt)
+                );
             } else {
-                imagestring($img, $chrSize, $offX + $warnv + 1, $offY - 2, intval($warnt), $oBlack);
+                imagestring(
+                    $img,
+                    $chrSize,
+                    $offX + $warnv + 1,
+                    $offY - 2,
+                    intval($warnt),
+                    $oBlack
+                );
             }
         }
         // Critical
         if ($crit) {
             if ($warn < $crit) {
-                imageFilledRectangle($img, $offX + $critv + 1, $offY + 1, $offX + $maxX, $offY + $sect1, $oRed);
+                imageFilledRectangle(
+                    $img,
+                    $offX + $critv + 1,
+                    $offY + 1,
+                    $offX + $maxX,
+                    $offY + $sect1,
+                    $oRed
+                );
             } else {
-                imageFilledRectangle($img, $offX + 1, $offY + 1, $offX + $critv - 1, $offY + $sect1, $oRed);
+                imageFilledRectangle(
+                    $img,
+                    $offX + 1,
+                    $offY + 1,
+                    $offX + $critv - 1,
+                    $offY + $sect1,
+                    $oRed
+                );
             }
-            if (file_exists ("$font")) {
-                ImageTTFText($img, $chrSize * 2, 0, $offX + $critv + 1, $offY + $sect1, $oBlack, $font, intval($critt));
+            if (file_exists("$font")) {
+                ImageTTFText(
+                    $img,
+                    $chrSize * 2,
+                    0,
+                    $offX + $critv + 1,
+                    $offY + $sect1,
+                    $oBlack,
+                    $font,
+                    intval($critt)
+                );
             } else {
-                imagestring($img, $chrSize, $offX + $critv + 1, $offY - 2, intval($critt), $oBlack);
+                imagestring(
+                    $img,
+                    $chrSize,
+                    $offX + $critv + 1,
+                    $offY - 2,
+                    intval($critt),
+                    $oBlack
+                );
             }
         }
-        imagefilledRectangle($img, $offX + 1, $offY + $sect1 + 1, $offX + $valuev + 1, $offY + $sect3, $oBlue);
+        imagefilledRectangle(
+            $img,
+            $offX + 1,
+            $offY + $sect1 + 1,
+            $offX + $valuev + 1,
+            $offY + $sect3,
+            $oBlue
+        );
 
         //===================
         // Labels
@@ -320,24 +387,76 @@ for ($i = 0; $i < $pdc; $i++) {
                 $maxv = " [down]";
             }
             if (file_exists ("$font")) {
-                ImageTTFText($img, $chrSize * 3.5, 0, $offX + 5, $offY + $sect3 - 1, $oBlack, $font, $desc . ':' . $value . $uom . $maxv);
+                ImageTTFText(
+                    $img,
+                    $chrSize * 3.5,
+                    0,
+                    $offX + 5,
+                    $offY + $sect3 - 1,
+                    $oBlack,
+                    $font,
+                    $desc . ':' . $value . $uom . $maxv
+                );
             } else {
-                imagestring($img, $chrSize, $offX + 3, $offY + $sect1 + 2, $desc . ': ' . $value . $uom . $maxv, $oBlack);
+                imagestring(
+                    $img,
+                    $chrSize,
+                    $offX + 3,
+                    $offY + $sect1 + 2,
+                    $desc . ': ' . $value . $uom . $maxv,
+                    $oBlack
+                );
             }
 
         if ($label == 1) {
-            $hostname = (strlen($aOpts['name1']) > 15) ? substr($aOpts['name1'], 0, 14) . "..." : $aOpts['name1'];
-            $svcdesc = (strlen($aOpts['name2']) > 15) ? substr($aOpts['name2'], 0, 14) . "..." : $aOpts['name2'];
+            $hostname = (strlen($aOpts['name1']) > 15)
+                ? substr($aOpts['name1'], 0, 14) . "..."
+                : $aOpts['name1'];
+            $svcdesc = (strlen($aOpts['name2']) > 15)
+                ? substr($aOpts['name2'], 0, 14) . "..."
+                : $aOpts['name2'];
             if (strlen($desc) > 15) {
                 $desc = substr($desc, 0, 14) . "...";
             }
             if (file_exists ("$font")) {
-                ImageTTFText($img, $chrSize * 2.5, 0, $offX + 3, $offY + $maxY - 1, $oBlack, $font, $hostname);
-                ImageTTFText($img, $chrSize * 2.5, 0, $offX + $imgwidth / 2, $offY + $maxY - 1, $oBlack, $font, $svcdesc);
+                ImageTTFText(
+                    $img,
+                    $chrSize * 2.5,
+                    0,
+                    $offX + 3,
+                    $offY + $maxY - 1,
+                    $oBlack,
+                    $font,
+                    $hostname
+                );
+                ImageTTFText(
+                    $img,
+                    $chrSize * 2.5,
+                    0,
+                    $offX + $imgwidth / 2,
+                    $offY + $maxY - 1,
+                    $oBlack,
+                    $font,
+                    $svcdesc
+                );
 //              ImageTTFText($img, $chrSize*2.5, 0, $offX+$imgwidth/2, $offY+$maxY-1, $oBlack, $font, $desc);
             } else {
-                imagestring($img, $chrSize, $offX + 3, $offY + $sect3, $hostname, $oBlack);
-                imagestring($img, $chrSize, $offX + $imgwidth / 2, $offY + $sect3, $svcdesc, $oBlack);
+                imagestring(
+                    $img,
+                    $chrSize,
+                    $offX + 3,
+                    $offY + $sect3,
+                    $hostname,
+                    $oBlack
+                );
+                imagestring(
+                    $img,
+                    $chrSize,
+                    $offX + $imgwidth / 2,
+                    $offY + $sect3,
+                    $svcdesc,
+                    $oBlack
+                );
 //              imagestring($img, $chrSize, $offX+$imgwidth/2, $offY+$sect3, $desc, $oBlack); // perf label
             }
         }

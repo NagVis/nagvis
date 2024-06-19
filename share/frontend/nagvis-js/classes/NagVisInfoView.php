@@ -71,7 +71,11 @@ class NagVisInfoView
             'authModule'          => cfg('global', 'authmodule'),
             'authorisationModule' => cfg('global', 'authorisationmodule'),
             'logonEnvVar'         => cfg('global', 'logonenvvar'),
-            'logonEnvVal'         => (isset($_SERVER[cfg('global', 'logonenvvar')]) ? $_SERVER[cfg('global', 'logonenvvar')] : ''),
+            'logonEnvVal'         => (
+                                        isset($_SERVER[cfg('global', 'logonenvvar')])
+                                            ? $_SERVER[cfg('global', 'logonenvvar')]
+                                            : ''
+                                    ),
             'logonEnvCreateUser'  => cfg('global', 'logonenvcreateuser'),
             'logonEnvCreateRole'  => cfg('global', 'logonenvcreaterole'),
             'loggedIn'            => $userName . ' (' . $userId . ')',

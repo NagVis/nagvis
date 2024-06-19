@@ -235,7 +235,9 @@ class CoreBackendMgmt
             foreach ($OBJS as $OBJ) {
                 try {
                     $filters = [['key' => 'aggr_name', 'op' => '>=', 'val' => 'name']];
-                    $aServices = $this->getBackend($backendId)->getServiceState([$OBJ->getName() => [$OBJ]], $options, $filters, MEMBER_QUERY);
+                    $aServices = $this
+                        ->getBackend($backendId)
+                        ->getServiceState([$OBJ->getName() => [$OBJ]], $options, $filters, MEMBER_QUERY);
                 } catch (BackendException $e) {
                     $aServices = [];
                     $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
@@ -263,8 +265,13 @@ class CoreBackendMgmt
                     if ($OBJ->object_types == 'service') {
                         if (!$this->checkBackendFeature($backendId, 'getServiceListCounts', false)) {
                             $counts = [];
-                            $OBJ->setBackendProblem(l('This type of object is not supportd by this backend ([BACKENDID]).',
-                                ['BACKENDID' => $backendId]), $backendId);
+                            $OBJ->setBackendProblem(
+                                l(
+                                    'This type of object is not supportd by this backend ([BACKENDID]).',
+                                    ['BACKENDID' => $backendId]
+                                ),
+                                $backendId
+                            );
                         } else {
                             $counts = $this->getBackend($backendId)->getServiceListCounts(
                                 $options, $OBJ->getObjectFilter());
@@ -408,7 +415,9 @@ class CoreBackendMgmt
                 // Fist get the host states for all the servicegroup members
                 try {
                     $filters = [['key' => 'service_groups', 'op' => '>=', 'val' => 'name']];
-                    $aServices = $this->getBackend($backendId)->getServiceState([$OBJ->getName() => [$OBJ]], $options, $filters, MEMBER_QUERY);
+                    $aServices = $this
+                        ->getBackend($backendId)
+                        ->getServiceState([$OBJ->getName() => [$OBJ]], $options, $filters, MEMBER_QUERY);
                 } catch (BackendException $e) {
                     $aServices = [];
                     $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
@@ -448,7 +457,9 @@ class CoreBackendMgmt
                 // First get the host states for all the hostgroup members
                 try {
                     $filters = [['key' => 'host_groups', 'op' => '>=', 'val' => 'name']];
-                    $aHosts = $this->getBackend($backendId)->getHostState([$OBJ->getName() => [$OBJ]], $options, $filters, MEMBER_QUERY);
+                    $aHosts = $this
+                        ->getBackend($backendId)
+                        ->getHostState([$OBJ->getName() => [$OBJ]], $options, $filters, MEMBER_QUERY);
                 } catch (BackendException $e) {
                     $aHosts = [];
                     $OBJ->setBackendProblem(l('Connection Problem (Backend: [BACKENDID]): [MSG]',
@@ -510,8 +521,13 @@ class CoreBackendMgmt
                     break;
                 case 'AGGR_MEMBER_STATE':
                     if (!$this->checkBackendFeature($backendId, 'getAggrStateCounts', false)) {
-                        throw new BackendException(l('This type of object is not supported by this backend ([BACKENDID]).',
-                            ['BACKENDID' => $backendId]), $backendId);
+                        throw new BackendException(
+                            l(
+                                'This type of object is not supported by this backend ([BACKENDID]).',
+                                ['BACKENDID' => $backendId]
+                            ),
+                            $backendId
+                        );
                     } else {
                         $filters = [['key' => 'aggr_name', 'op' => '=', 'val' => 'name']];
                         $aResult = $this->getBackend($backendId)->getAggrStateCounts($aObjs, $options, $filters);
@@ -604,7 +620,11 @@ class CoreBackendMgmt
     public function checkBackendExists($backendId, $printErr)
     {
         global $CORE;
-        if ($CORE->checkExisting(cfg('paths', 'class') . 'GlobalBackend' . cfg('backend_' . $backendId, 'backendtype') . '.php', false)) {
+        if (
+            $CORE->checkExisting(
+                cfg('paths', 'class') . 'GlobalBackend' . cfg('backend_' . $backendId, 'backendtype') . '.php',
+                false)
+        ) {
             return true;
         }
 
@@ -619,7 +639,7 @@ class CoreBackendMgmt
 
     /**
      * Checks if a backend host is status using status
-   * information from another backend
+     * information from another backend
      *
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -628,7 +648,12 @@ class CoreBackendMgmt
         [$statusBackend, $statusHost] = explode(':', $statusHost, 2);
 
         if ($statusBackend == $backendId) {
-            $this->aError[$backendId] = new BackendConnectionProblem(l('Configuration Error: The statusHost ([STATUSHOST]) is in same backend as the one to check.', ['STATUSHOST' => $statusHost]));
+            $this->aError[$backendId] = new BackendConnectionProblem(
+                l(
+                    'Configuration Error: The statusHost ([STATUSHOST]) is in same backend as the one to check.',
+                    ['STATUSHOST' => $statusHost]
+                )
+            );
         }
 
         try {
@@ -671,7 +696,9 @@ class CoreBackendMgmt
          */
         $statusHost = cfg('backend_' . $backendId, 'statushost');
         if ($statusHost != '' && !$this->backendAlive($backendId, $statusHost)) {
-            $this->aError[$backendId] = new BackendConnectionProblem(l('The backend is reported as dead by the statusHost ([STATUSHOST]).', ['STATUSHOST' => $statusHost]));
+            $this->aError[$backendId] = new BackendConnectionProblem(
+                l('The backend is reported as dead by the statusHost ([STATUSHOST]).', ['STATUSHOST' => $statusHost])
+            );
             return false;
         }
 
@@ -726,12 +753,16 @@ class CoreBackendMgmt
             return true;
         } else {
             if ($printErr == 1) {
-                throw new NagVisException(l('The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend.',
-                    [
-                        'FEATURE'     => htmlentities($feature, ENT_COMPAT, 'UTF-8'),
-                        'BACKENDID'   => $backendId,
-                        'BACKENDTYPE' => cfg('backend_' . $backendId, 'backendtype')
-                    ]));
+                throw new NagVisException(
+                    l(
+                        'The requested feature [FEATURE] is not provided by the backend (Backend-ID: [BACKENDID], Backend-Type: [BACKENDTYPE]). The requested view may not be available using this backend.',
+                        [
+                            'FEATURE'     => htmlentities($feature, ENT_COMPAT, 'UTF-8'),
+                            'BACKENDID'   => $backendId,
+                            'BACKENDTYPE' => cfg('backend_' . $backendId, 'backendtype')
+                        ]
+                    )
+                );
             }
             return false;
         }

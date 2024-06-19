@@ -74,13 +74,21 @@ function graphviz_config_tree(&$params, &$tree, $layer = 0) {
 
     // This is the root node
     if ($layer == 0) {
-        $str .= 'pos="' . graphviz_px2inch($params['width'] / 2) . ',' . graphviz_px2inch($params['height'] / 2) . '", ';
+        $str .= 'pos="'
+            . graphviz_px2inch($params['width'] / 2)
+            . ','
+            . graphviz_px2inch($params['height'] / 2)
+            . '", ';
     }
 
     // The object has configured x/y coords. Use them.
     // FIXME: This does not work for some reason ...
     if (isset($tree['x']) && isset($tree['y'])) {
-        $str .= 'pos="' . graphviz_px2inch($tree['x'] - $width / 2) . ',' . graphviz_px2inch($tree['y'] - $height / 2) . '", ';
+        $str .= 'pos="'
+            . graphviz_px2inch($tree['x'] - $width / 2)
+            . ','
+            . graphviz_px2inch($tree['y'] - $height / 2)
+            . '", ';
         $str .= 'pin=true, ';
     }
 
@@ -302,7 +310,13 @@ function graphviz_parse(&$map_config, $imagemap) {
         $sLine = str_replace('&#45;', '-', $sLine);
         // Extract the area objects
         // Only parsing rect/polys at the moment
-        if (preg_match('/^<area\sshape="(rect|poly)"\s(?:id="[^"]+"\s)?href="([^"]+)"\stitle="[^"]+"\salt=""\scoords="([^"]+)"\s?\/>$/i', $sLine, $aMatches)) {
+        if (
+            preg_match(
+                '/^<area\sshape="(rect|poly)"\s(?:id="[^"]+"\s)?href="([^"]+)"\stitle="[^"]+"\salt=""\scoords="([^"]+)"\s?\/>$/i',
+                $sLine,
+                $aMatches
+            )
+        ) {
             if (isset($aMatches[1]) && isset($aMatches[2]) && isset($aMatches[2])) {
                 $type      = trim($aMatches[1]);
                 $object_id = trim($aMatches[2]);

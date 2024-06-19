@@ -87,8 +87,12 @@ class CoreModMap extends CoreModule
                 if ($FHANDLER->match('map', MATCH_MAP_NAME)) {
                     $this->name = $FHANDLER->get('map');
                 } else {
-                    throw new NagVisException(l('Invalid query. The parameter [NAME] is missing or has an invalid format.',
-                        ['NAME' => 'map']));
+                    throw new NagVisException(
+                        l(
+                            'Invalid query. The parameter [NAME] is missing or has an invalid format.',
+                            ['NAME' => 'map']
+                        )
+                    );
                 }
                 break;
         }

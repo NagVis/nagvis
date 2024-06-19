@@ -59,7 +59,10 @@ class ViewToNewMap
                 }
 
                 if (!isset($view_params["worldmap_center"])) {
-                    throw new FieldInputError('view_params', l('Please change your viewport before saving as new map.'));
+                    throw new FieldInputError(
+                        'view_params',
+                        l('Please change your viewport before saving as new map.')
+                    );
                 }
 
                 if (!preg_match(MATCH_COORDS_MULTI, $view_params["worldmap_center"])) {

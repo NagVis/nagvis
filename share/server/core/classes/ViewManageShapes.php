@@ -47,7 +47,10 @@ class ViewManageShapes
                 $file_path = path('sys', '', 'shapes') . $file_name;
 
                 if (!preg_match(MATCH_PNG_GIF_JPG_FILE, $file_name)) {
-                    throw new FieldInputError('image', l('The uploaded file is no image (png,jpg,gif) file or contains unwanted chars.'));
+                    throw new FieldInputError(
+                        'image',
+                        l('The uploaded file is no image (png,jpg,gif) file or contains unwanted chars.')
+                    );
                 }
 
                 $data = getimagesize($file['tmp_name']);

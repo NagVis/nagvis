@@ -1923,7 +1923,16 @@ class GlobalMainCfg
     public function getConfigFiles()
     {
         // Get all files from the conf.d directory
-        $files = GlobalCore::getInstance()->listDirectory(CONST_MAINCFG_DIR, MATCH_MAINCFG_FILE, null, null, 0, null, false);
+        $files = GlobalCore::getInstance()
+            ->listDirectory(
+                CONST_MAINCFG_DIR,
+                MATCH_MAINCFG_FILE,
+                null,
+                null,
+                0,
+                null,
+                false
+            );
         foreach ($files as $key => $filename) {
             $files[$key] = CONST_MAINCFG_DIR . '/' . $filename;
         }
@@ -1944,9 +1953,14 @@ class GlobalMainCfg
         $this->fetchCustomActions();
 
         // Use the newest file as indicator for using the cache or not
-        $this->CACHE = new GlobalFileCache(CONST_MAINCFG, CONST_MAINCFG_CACHE . '-' . CONST_VERSION . '-cache' . $cacheSuffix);
-        $this->PUCACHE = new GlobalFileCache(array_slice($this->configFiles, 0, count($this->configFiles) - 1),
-            CONST_MAINCFG_CACHE . '-pre-user-' . CONST_VERSION . '-cache' . $cacheSuffix);
+        $this->CACHE = new GlobalFileCache(
+            CONST_MAINCFG,
+            CONST_MAINCFG_CACHE . '-' . CONST_VERSION . '-cache' . $cacheSuffix
+        );
+        $this->PUCACHE = new GlobalFileCache(
+            array_slice($this->configFiles, 0, count($this->configFiles) - 1),
+            CONST_MAINCFG_CACHE . '-pre-user-' . CONST_VERSION . '-cache' . $cacheSuffix
+        );
 
         try {
               if (
@@ -1978,7 +1992,8 @@ class GlobalMainCfg
             // Update the cache time
             $this->useCache = $this->CACHE->isCached(false);
 
-            // want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
+            // want to reduce the paths in the NagVis config,
+            // but don't want to hardcode the paths relative from the bases
             $this->setPathsByBase($this->getValue('paths', 'base'), $this->getValue('paths', 'htmlbase'));
         }
         catch (Exception $e) {
@@ -2028,7 +2043,8 @@ class GlobalMainCfg
             // I'd prefer to use the above but for the moment I use the fix below
 
             if (is_callable([$class, 'getValidConfig'])) {
-                $this->validConfig['backend']['options'][$backend] = call_user_func(['GlobalBackend' . $backend, 'getValidConfig']);
+                $this->validConfig['backend']['options'][$backend] = call_user_func(
+                    ['GlobalBackend' . $backend, 'getValidConfig']);
                 //$this->validConfig['backend']['options'][$backend] = call_user_func('GlobalBackend'.$backend.'::getValidConfig');
             }
         }
@@ -2043,40 +2059,40 @@ class GlobalMainCfg
      */
     private function setPathsByBase($base, $htmlBase)
     {
-        $this->validConfig['paths']['cfg']['default']                = $base . 'etc/';
-        $this->validConfig['paths']['mapcfg']['default']             = $base . 'etc/maps/';
-        $this->validConfig['paths']['geomap']['default']             = $base . 'etc/geomap';
-        $this->validConfig['paths']['profiles']['default']           = $base . 'etc/profiles';
+        $this->validConfig['paths']['cfg']['default']            = $base . 'etc/';
+        $this->validConfig['paths']['mapcfg']['default']         = $base . 'etc/maps/';
+        $this->validConfig['paths']['geomap']['default']         = $base . 'etc/geomap';
+        $this->validConfig['paths']['profiles']['default']       = $base . 'etc/profiles';
         $this->validConfig['global']['authorisation_group_perms_file']['default'] = $base . 'etc/perms.db';
 
-        $this->validConfig['paths']['var']['default']                = $base . 'var/';
-        $this->validConfig['paths']['sharedvar']['default']          = $base . HTDOCS_DIR . '/var/';
-        $this->validConfig['paths']['htmlsharedvar']['default']      = $htmlBase . '/var/';
+        $this->validConfig['paths']['var']['default']            = $base . 'var/';
+        $this->validConfig['paths']['sharedvar']['default']      = $base . HTDOCS_DIR . '/var/';
+        $this->validConfig['paths']['htmlsharedvar']['default']  = $htmlBase . '/var/';
 
-        $this->validConfig['paths']['language']['default']           = $base . HTDOCS_DIR . '/frontend/nagvis-js/locale';
-        $this->validConfig['paths']['class']['default']              = $base . HTDOCS_DIR . '/server/core/classes/';
-        $this->validConfig['paths']['server']['default']             = $base . HTDOCS_DIR . '/server/core';
-        $this->validConfig['paths']['doc']['default']                = $base . HTDOCS_DIR . '/docs';
+        $this->validConfig['paths']['language']['default']       = $base . HTDOCS_DIR . '/frontend/nagvis-js/locale';
+        $this->validConfig['paths']['class']['default']          = $base . HTDOCS_DIR . '/server/core/classes/';
+        $this->validConfig['paths']['server']['default']         = $base . HTDOCS_DIR . '/server/core';
+        $this->validConfig['paths']['doc']['default']            = $base . HTDOCS_DIR . '/docs';
 
-        $this->validConfig['paths']['htmlcss']['default']            = $htmlBase . '/frontend/nagvis-js/css/';
+        $this->validConfig['paths']['htmlcss']['default']        = $htmlBase . '/frontend/nagvis-js/css/';
 
-        $this->validConfig['paths']['js']['default']                 = $base . HTDOCS_DIR . '/frontend/nagvis-js/js/';
-        $this->validConfig['paths']['htmljs']['default']             = $htmlBase . '/frontend/nagvis-js/js/';
+        $this->validConfig['paths']['js']['default']             = $base . HTDOCS_DIR . '/frontend/nagvis-js/js/';
+        $this->validConfig['paths']['htmljs']['default']         = $htmlBase . '/frontend/nagvis-js/js/';
 
-        $this->validConfig['paths']['images']['default']             = $base . HTDOCS_DIR . '/frontend/nagvis-js/images/';
-        $this->validConfig['paths']['htmlimages']['default']         = $htmlBase . '/frontend/nagvis-js/images/';
+        $this->validConfig['paths']['images']['default']         = $base . HTDOCS_DIR . '/frontend/nagvis-js/images/';
+        $this->validConfig['paths']['htmlimages']['default']     = $htmlBase . '/frontend/nagvis-js/images/';
 
-        $this->validConfig['paths']['templates']['default']          = 'userfiles/templates/';
-        $this->validConfig['paths']['styles']['default']             = 'userfiles/styles/';
-        $this->validConfig['paths']['gadgets']['default']            = 'userfiles/gadgets/';
-        $this->validConfig['paths']['backgrounds']['default']        = 'userfiles/images/maps/';
-        $this->validConfig['paths']['icons']['default']              = 'userfiles/images/iconsets/';
-        $this->validConfig['paths']['shapes']['default']             = 'userfiles/images/shapes/';
-        $this->validConfig['paths']['sounds']['default']             = 'userfiles/sounds/';
-        $this->validConfig['paths']['sources']['default']            = 'server/core/sources';
-        $this->validConfig['paths']['actions']['default']            = 'server/core/actions';
+        $this->validConfig['paths']['templates']['default']      = 'userfiles/templates/';
+        $this->validConfig['paths']['styles']['default']         = 'userfiles/styles/';
+        $this->validConfig['paths']['gadgets']['default']        = 'userfiles/gadgets/';
+        $this->validConfig['paths']['backgrounds']['default']    = 'userfiles/images/maps/';
+        $this->validConfig['paths']['icons']['default']          = 'userfiles/images/iconsets/';
+        $this->validConfig['paths']['shapes']['default']         = 'userfiles/images/shapes/';
+        $this->validConfig['paths']['sounds']['default']         = 'userfiles/sounds/';
+        $this->validConfig['paths']['sources']['default']        = 'server/core/sources';
+        $this->validConfig['paths']['actions']['default']        = 'server/core/actions';
 
-        $this->validConfig['paths']['templateimages']['default']     = 'userfiles/images/templates/';
+        $this->validConfig['paths']['templateimages']['default'] = 'userfiles/images/templates/';
 
         // This option directly relies on the configured htmlBase by default
         $this->validConfig['global']['sesscookiepath']['default']    = $htmlBase;
@@ -2309,8 +2325,12 @@ class GlobalMainCfg
                             // value is "must"
                             if ($this->getValue($type, $key) === null) {
                                 // a "must" value is missing or empty
-                                throw new NagVisException(l('The needed attribute [ATTRIBUTE] is missing in section [TYPE] in main configuration file. Please take a look at the documentation.',
-                                    ['ATTRIBUTE' => $key, 'TYPE' => $type]));
+                                throw new NagVisException(
+                                    l(
+                                        'The needed attribute [ATTRIBUTE] is missing in section [TYPE] in main configuration file. Please take a look at the documentation.',
+                                        ['ATTRIBUTE' => $key, 'TYPE' => $type]
+                                    )
+                                );
                                 return false;
                             }
                         }
@@ -2325,7 +2345,10 @@ class GlobalMainCfg
                                     isset($this->validConfig['backend']['options'][$ty])
                                     && is_array($this->validConfig['backend']['options'][$ty])
                                 ) {
-                                    $arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$ty]);
+                                    $arrValidConfig = array_merge(
+                                        $this->validConfig['backend'],
+                                        $this->validConfig['backend']['options'][$ty]
+                                    );
                                 } else {
                                     $arrValidConfig = $this->validConfig['backend'];
                                 }
@@ -2339,7 +2362,10 @@ class GlobalMainCfg
                                     isset($this->validConfig['action']['options'][$ty])
                                     && is_array($this->validConfig['action']['options'][$ty])
                                 ) {
-                                    $arrValidConfig = array_merge($this->validConfig['action'], $this->validConfig['action']['options'][$ty]);
+                                    $arrValidConfig = array_merge(
+                                        $this->validConfig['action'],
+                                        $this->validConfig['action']['options'][$ty]
+                                    );
                                 } else {
                                     $arrValidConfig = $this->validConfig['action'];
                                 }
@@ -2351,15 +2377,26 @@ class GlobalMainCfg
                             if (!isset($arrValidConfig[$key])) {
                                 // unknown attribute
                                 if ($printErr) {
-                                    throw new NagVisException(l('Unknown value [ATTRIBUTE] used in section [TYPE] in main configuration file.',
-                                        ['ATTRIBUTE' => $key, 'TYPE' => $type]));
+                                    throw new NagVisException(
+                                        l(
+                                            'Unknown value [ATTRIBUTE] used in section [TYPE] in main configuration file.',
+                                            ['ATTRIBUTE' => $key, 'TYPE' => $type]
+                                        )
+                                    );
                                 }
                                 return false;
-                            } elseif (isset($arrValidConfig[$key]['deprecated']) && $arrValidConfig[$key]['deprecated'] == 1) {
+                            } elseif (
+                                isset($arrValidConfig[$key]['deprecated'])
+                                && $arrValidConfig[$key]['deprecated'] == 1
+                            ) {
                                 // deprecated option
                                 if ($printErr) {
-                                    throw new NagVisException(l('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file is deprecated. Please take a look at the documentation for updating your configuration.',
-                                        ['ATTRIBUTE' => $key, 'TYPE' => $type]));
+                                    throw new NagVisException(
+                                        l(
+                                            'The attribute [ATTRIBUTE] in section [TYPE] in main configuration file is deprecated. Please take a look at the documentation for updating your configuration.',
+                                            ['ATTRIBUTE' => $key, 'TYPE' => $type]
+                                        )
+                                    );
                                 }
                                 return false;
                             } else {
@@ -2382,16 +2419,30 @@ class GlobalMainCfg
                                 if (!preg_match($arrValidConfig[$key]['match'], $val)) {
                                     // wrong format
                                     if ($printErr) {
-                                        throw new NagVisException(l('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file does not match the correct format. Please review your configuration.',
-                                            ['ATTRIBUTE' => $key, 'TYPE' => $type]));
+                                        throw new NagVisException(
+                                            l(
+                                                'The attribute [ATTRIBUTE] in section [TYPE] in main configuration file does not match the correct format. Please review your configuration.',
+                                                ['ATTRIBUTE' => $key, 'TYPE' => $type]
+                                            )
+                                        );
                                     }
                                     return false;
                                 }
 
                                 // Check if the configured backend is defined in main configuration file
-                                if (!$this->onlyUserConfig && $type == 'defaults' && $key == 'backend' && !isset($this->config['backend_' . $val])) {
+                                if (
+                                    !$this->onlyUserConfig
+                                    && $type == 'defaults'
+                                    && $key == 'backend'
+                                    && !isset($this->config['backend_' . $val])
+                                ) {
                                     if ($printErr) {
-                                        throw new NagVisException(l('The backend with the ID \"[BACKENDID]\" is not defined.', ['BACKENDID' => $val]));
+                                        throw new NagVisException(
+                                            l(
+                                                'The backend with the ID \"[BACKENDID]\" is not defined.',
+                                                ['BACKENDID' => $val]
+                                            )
+                                        );
                                     }
                                     return false;
                                 }
@@ -2402,8 +2453,11 @@ class GlobalMainCfg
                     // unknown type
                     if ($printErr) {
                         throw new NagVisException(
-                            l('The section [TYPE] is not supported in main configuration. Please take a look at the documentation.',
-                                ['TYPE' => $type]));
+                            l(
+                                'The section [TYPE] is not supported in main configuration. Please take a look at the documentation.',
+                                ['TYPE' => $type]
+                            )
+                        );
                     }
                     return false;
                 }
@@ -2458,7 +2512,11 @@ class GlobalMainCfg
             // Value is empty and there is nothing in config array yet
         } else {
             // Value is set
-            if (isset($this->validConfig[$sec][$var]['array']) && $this->validConfig[$sec][$var]['array'] == true && !is_array($val)) {
+            if (
+                isset($this->validConfig[$sec][$var]['array'])
+                && $this->validConfig[$sec][$var]['array'] == true
+                && !is_array($val)
+            ) {
                 $val = $this->stringToArray($val);
             }
 
@@ -2647,7 +2705,10 @@ class GlobalMainCfg
             'worldmap_tiles_url' => $this->getValue('global', 'worldmap_tiles_url'),
             'worldmap_tiles_attribution' => $this->getValue('global', 'worldmap_tiles_attribution'),
             'worldmap_satellite_tiles_url' => $this->getValue('global', 'worldmap_satellite_tiles_url'),
-            'worldmap_satellite_tiles_attribution' => $this->getValue('global', 'worldmap_satellite_tiles_attribution'),
+            'worldmap_satellite_tiles_attribution' => $this->getValue(
+                'global',
+                'worldmap_satellite_tiles_attribution'
+            ),
             // Add custom action configuration
         ];
 
@@ -2887,7 +2948,11 @@ class GlobalMainCfg
                                     $step = '[' . $arrStep['url'] . ']';
                                 }
 
-                                if (isset($arrStep['label']) && $arrStep['label'] != '' && $arrStep['label'] != $step) {
+                                if (
+                                    isset($arrStep['label'])
+                                    && $arrStep['label'] != ''
+                                    && $arrStep['label'] != $step
+                                ) {
                                     $label = $arrStep['label'] . ':';
                                 }
 

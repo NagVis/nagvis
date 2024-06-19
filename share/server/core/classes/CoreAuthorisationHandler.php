@@ -205,7 +205,13 @@ class CoreAuthorisationHandler
 
         // Filter perms to only display the visible ones
         foreach ($aPerms as $perm) {
-            if (!isset($this->summarizePerms[$perm['mod']]) || (isset($this->summarizePerms[$perm['mod']]) && !isset($this->summarizePerms[$perm['mod']][$perm['act']]))) {
+            if (
+                !isset($this->summarizePerms[$perm['mod']])
+                || (
+                    isset($this->summarizePerms[$perm['mod']])
+                    && !isset($this->summarizePerms[$perm['mod']][$perm['act']])
+                )
+            ) {
                 $aReturn[] = $perm;
             }
         }
@@ -297,7 +303,9 @@ class CoreAuthorisationHandler
                         elseif (isset($this->aPermissions[$mod][$act][AUTH_PERMISSION_WILDCARD])) {
                             return true;
                         } elseif (DEBUG && DEBUGLEVEL & 2) {
-                            debug('Object access denied (Mod: ' . $sModule . ' Act: ' . $sAction . ' Object: ' . $sObj);
+                            debug(
+                                'Object access denied (Mod: ' . $sModule . ' Act: ' . $sAction . ' Object: ' . $sObj
+                            );
                         }
                     }
                 }

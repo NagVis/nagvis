@@ -121,7 +121,9 @@ class CoreModOverview extends CoreModule
             $map['overview_class']  = '';
         } else {
             $map['overview_class']  = 'disabled';
-            $map['overview_url']    = 'javascript:alert(\'' . l('The map is in maintenance mode. Please be patient.') . '\');';
+            $map['overview_url']    = 'javascript:alert(\''
+                . l('The map is in maintenance mode. Please be patient.')
+                . '\');';
             $map['summary_output']  = l('The map is in maintenance mode. Please be patient.');
 
             $MAP->MAPOBJ->clearMembers();
@@ -397,7 +399,18 @@ class CoreModOverview extends CoreModule
             imagefill($thumb, 0, 0, imagecolorallocate($thumb, 255, 255, 254));
             imagecolortransparent($thumb, imagecolorallocate($thumb, 255, 255, 254));
 
-            imagecopyresampled($thumb, $image, (int)$thumbX, (int)$thumbY, 0, 0, (int)$thumbWidth, (int)$thumbHeight, (int)$bgWidth, (int)$bgHeight);
+            imagecopyresampled(
+                $thumb,
+                $image,
+                (int)$thumbX,
+                (int)$thumbY,
+                0,
+                0,
+                (int)$thumbWidth,
+                (int)$thumbHeight,
+                (int)$bgWidth,
+                (int)$bgHeight
+            );
 
             switch ($imgSize[2]) {
                 case 1:

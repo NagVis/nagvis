@@ -637,12 +637,21 @@ class CorePDOHandler
 
         // If running in OMD create the 'omdadmin' user instead of 'admin'
         if (GlobalCore::getInstance()->omdSite() !== null) {
-            $this->queryFatal('-user-add-with-id', ['userId' => 1, 'name' => 'omdadmin', 'password' => '051e0bbcfb79ea2a3ce5c487cc111051aac51ae8']);
+            $this->queryFatal(
+                '-user-add-with-id',
+                ['userId' => 1, 'name' => 'omdadmin', 'password' => '051e0bbcfb79ea2a3ce5c487cc111051aac51ae8']
+            );
         } else {
-            $this->queryFatal('-user-add-with-id', ['userId' => 1, 'name' => 'admin', 'password' => '868103841a2244768b2dbead5dbea2b533940e20']);
+            $this->queryFatal(
+                '-user-add-with-id',
+                ['userId' => 1, 'name' => 'admin', 'password' => '868103841a2244768b2dbead5dbea2b533940e20']
+            );
         }
 
-        $this->queryFatal('-user-add-with-id', ['userId' => 2, 'name' => 'guest', 'password' => 'a4e74a1d28ec981c945310d87f8d7b535d794cd2']);
+        $this->queryFatal(
+            '-user-add-with-id',
+            ['userId' => 2, 'name' => 'guest', 'password' => 'a4e74a1d28ec981c945310d87f8d7b535d794cd2']
+        );
         $this->queryFatal('-role-add-with-id', ['roleId' => 1, 'name' => 'Administrators']);
         $this->queryFatal('-role-add-with-id', ['roleId' => 2, 'name' => 'Users (read-only)']);
         $this->queryFatal('-role-add-with-id', ['roleId' => 3, 'name' => 'Guests']);
@@ -732,80 +741,158 @@ class CorePDOHandler
          */
 
         // Permit all actions in General module
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Managers', 'mod' => 'General', 'act' => '*', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'General', 'act' => '*', 'obj' => '*']
+        );
 
         // Managers are allowed to perform actions
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Managers', 'mod' => 'Action', 'act' => 'perform', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Action', 'act' => 'perform', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to update user options
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Managers', 'mod' => 'User', 'act' => 'setOption', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'User', 'act' => 'setOption', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to edit/delete all maps
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Managers', 'mod' => 'Map', 'act' => 'manage', 'obj' => '*']);
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Managers', 'mod' => 'Map', 'act' => 'delete', 'obj' => '*']);
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Managers', 'mod' => 'Map', 'act' => 'edit', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Map', 'act' => 'manage', 'obj' => '*']
+        );
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Map', 'act' => 'delete', 'obj' => '*']
+        );
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Map', 'act' => 'edit', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to create maps
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Managers', 'mod' => 'Map', 'act' => 'add', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Map', 'act' => 'add', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to manage backgrounds and shapes
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Managers', 'mod' => 'ManageBackgrounds', 'act' => 'manage', 'obj' => '*']);
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Managers', 'mod' => 'ManageShapes', 'act' => 'manage', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'ManageBackgrounds', 'act' => 'manage', 'obj' => '*']
+        );
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'ManageShapes', 'act' => 'manage', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to view the overview
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Managers', 'mod' => 'Overview', 'act' => 'view', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Overview', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to view all maps
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Managers', 'mod' => 'Map', 'act' => 'view', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Map', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to view all rotations
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Managers', 'mod' => 'Rotation', 'act' => 'view', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Rotation', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to change their passwords
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Managers', 'mod' => 'ChangePassword', 'act' => 'change', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'ChangePassword', 'act' => 'change', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to view their maps via multisite
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Managers', 'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to search objects
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Managers', 'mod' => 'Search', 'act' => 'view', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Search', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Managers => Allowed to logout
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Managers', 'mod' => 'Auth', 'act' => 'logout', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Managers', 'mod' => 'Auth', 'act' => 'logout', 'obj' => '*']
+        );
 
         /*
          * Users handling
          */
 
         // Users are allowed to perform actions
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Users (read-only)', 'mod' => 'Action', 'act' => 'perform', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'Action', 'act' => 'perform', 'obj' => '*']
+        );
 
         // Permit all actions in General module
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Users (read-only)', 'mod' => 'General', 'act' => '*', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'General', 'act' => '*', 'obj' => '*']
+        );
 
         // Access assignment: Users => Allowed to update user options
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Users (read-only)', 'mod' => 'User', 'act' => 'setOption', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'User', 'act' => 'setOption', 'obj' => '*']
+        );
 
         // Access assignment: Users => Allowed to view the overview
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Users (read-only)', 'mod' => 'Overview', 'act' => 'view', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'Overview', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Users => Allowed to view all maps
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Users (read-only)', 'mod' => 'Map', 'act' => 'view', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'Map', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Users => Allowed to view all rotations
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Users (read-only)', 'mod' => 'Rotation', 'act' => 'view', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'Rotation', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Users => Allowed to change their passwords
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Users (read-only)', 'mod' => 'ChangePassword', 'act' => 'change', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'ChangePassword', 'act' => 'change', 'obj' => '*']
+        );
 
         // Access assignment: Users => Allowed to view their maps via multisite
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Users (read-only)', 'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*']
+        );
 
         // Access assignment: Users => Allowed to search objects
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Users (read-only)', 'mod' => 'Search', 'act' => 'view', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'Search', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Users => Allowed to logout
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Users (read-only)', 'mod' => 'Auth', 'act' => 'logout', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Users (read-only)', 'mod' => 'Auth', 'act' => 'logout', 'obj' => '*']
+        );
 
         /*
          * Guest handling
@@ -815,33 +902,60 @@ class CorePDOHandler
         $this->queryFatal('-role-add-user-by-id', ['userId' => 2, 'roleId' => $data['roleId']]);
 
         // Permit all actions in General module
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Guests', 'mod' => 'General', 'act' => '*', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Guests', 'mod' => 'General', 'act' => '*', 'obj' => '*']
+        );
 
         // Access assignment: Guests => Allowed to update user options
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Guests', 'mod' => 'User', 'act' => 'setOption', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Guests', 'mod' => 'User', 'act' => 'setOption', 'obj' => '*']
+        );
 
         // Access assignment: Guests => Allowed to view the overview
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Guests', 'mod' => 'Overview', 'act' => 'view', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Guests', 'mod' => 'Overview', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Guests => Allowed to view their maps via multisite
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Guests', 'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Guests', 'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*']
+        );
 
         // Access assignment: Guests => Allowed to view the demo maps
         foreach (GlobalCore::getInstance()->demoMaps as $map) {
-            $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Guests', 'mod' => 'Map', 'act' => 'view', 'obj' => $map]);
+            $this->queryFatal(
+                '-create-pop-roles-perms-1',
+                ['r1' => 'Guests', 'mod' => 'Map', 'act' => 'view', 'obj' => $map]
+            );
         }
 
         // Access assignment: Guests => Allowed to view the demo rotation
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Guests', 'mod' => 'Rotation', 'act' => 'view', 'obj' => 'demo']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Guests', 'mod' => 'Rotation', 'act' => 'view', 'obj' => 'demo']
+        );
 
         // Access assignment: Guests => Allowed to change their passwords
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Guests', 'mod' => 'ChangePassword', 'act' => 'change', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Guests', 'mod' => 'ChangePassword', 'act' => 'change', 'obj' => '*']
+        );
 
         // Access assignment: Guests => Allowed to search objects
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Guests', 'mod' => 'Search', 'act' => 'view', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Guests', 'mod' => 'Search', 'act' => 'view', 'obj' => '*']
+        );
 
         // Access assignment: Guests => Allowed to logout
-        $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Guests', 'mod' => 'Auth', 'act' => 'logout', 'obj' => '*']);
+        $this->queryFatal(
+            '-create-pop-roles-perms-1',
+            ['r1' => 'Guests', 'mod' => 'Auth', 'act' => 'logout', 'obj' => '*']
+        );
     }
 }
 

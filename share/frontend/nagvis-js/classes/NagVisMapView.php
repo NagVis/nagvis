@@ -132,8 +132,10 @@ class NagVisMapView
         $arr['event_repeat_interval'] = intval($this->MAPCFG->getValue(0, 'event_repeat_interval'));
         $arr['event_repeat_duration'] = intval($this->MAPCFG->getValue(0, 'event_repeat_duration'));
         $arr['event_on_load']         = intval($this->MAPCFG->getValue(0, 'event_on_load'));
-        $arr['permitted_edit']        = $AUTHORISATION !== null && $AUTHORISATION->isPermitted('Map', 'edit', $this->name);
-        $arr['permitted_perform']     = $AUTHORISATION !== null && $AUTHORISATION->isPermitted('Action', 'perform', '*');
+        $arr['permitted_edit']        = $AUTHORISATION !== null
+            && $AUTHORISATION->isPermitted('Map', 'edit', $this->name);
+        $arr['permitted_perform']     = $AUTHORISATION !== null
+            && $AUTHORISATION->isPermitted('Action', 'perform', '*');
 
         // hover_menu & context_menu have to be handled separated from the others
         // It is special for them that the object individual settings have to be

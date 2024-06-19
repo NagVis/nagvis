@@ -678,7 +678,10 @@ class NagVisStatefulObject extends NagVisObject
      */
     protected function belowHoverChildsLimit($i)
     {
-        return (($this->hover_childs_limit >= 0 && $i <= $this->hover_childs_limit) || $this->hover_childs_limit == -1);
+        return (
+            ($this->hover_childs_limit >= 0 && $i <= $this->hover_childs_limit)
+            || $this->hover_childs_limit == -1
+        );
     }
 
     /**
@@ -750,12 +753,16 @@ class NagVisStatefulObject extends NagVisObject
         } elseif (isset($stateWeight[$this->sum[STATE]])) {
             $currWeight = $stateWeight[$this->sum[STATE]][$this->getSubState(SUMMARY_STATE)];
         } else {
-            throw new NagVisException(l('Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE].',
-                [
-                    'STATE'    => $this->sum[STATE],
-                    'SUBSTATE' => $this->getSubState(SUMMARY_STATE),
-                    'TYPE'     => $this->getType()
-                ]));
+            throw new NagVisException(
+                l(
+                    'Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE].',
+                    [
+                        'STATE'    => $this->sum[STATE],
+                        'SUBSTATE' => $this->getSubState(SUMMARY_STATE),
+                        'TYPE'     => $this->getType()
+                    ]
+                )
+            );
         }
 
         // Loop all major states
@@ -804,13 +811,17 @@ class NagVisStatefulObject extends NagVisObject
                             }
                         }
                     } else {
-                        throw new NagVisException(l('Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME].',
-                            [
-                                'STATE'    => $sState,
-                                'SUBSTATE' => $sSubState,
-                                'TYPE'     => $this->getType(),
-                                'NAME'     => $this->getName()
-                            ]));
+                        throw new NagVisException(
+                            l(
+                                'Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME].',
+                                [
+                                    'STATE'    => $sState,
+                                    'SUBSTATE' => $sSubState,
+                                    'TYPE'     => $this->getType(),
+                                    'NAME'     => $this->getName()
+                                ]
+                            )
+                        );
                     }
                 }
             }

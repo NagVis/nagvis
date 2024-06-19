@@ -93,7 +93,10 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
     private function checkUserAuth($bTrustUsername = AUTH_NOT_TRUST_USERNAME)
     {
         if ($bTrustUsername === AUTH_NOT_TRUST_USERNAME) {
-            $res = $this->DB->query('-user-get-by-pass', ['name' => $this->sUsername, 'password' => $this->sPasswordHash]);
+            $res = $this->DB->query(
+                '-user-get-by-pass',
+                ['name' => $this->sUsername, 'password' => $this->sPasswordHash]
+            );
         } else {
             $res = $this->DB->query('-user-get-by-name', ['name' => $this->sUsername]);
         }
