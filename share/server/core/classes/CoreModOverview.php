@@ -350,7 +350,6 @@ class CoreModOverview extends CoreModule
                     break;
                 default:
                     throw new NagVisException(l('onlyPngOrJpgImages'));
-                    break;
             }
 
             // Size of source images
@@ -424,7 +423,6 @@ class CoreModOverview extends CoreModule
                     break;
                 default:
                     throw new NagVisException(l('onlyPngOrJpgImages'));
-                    break;
             }
 
             return $thumbPath;

@@ -135,9 +135,11 @@ class GlobalLanguage
 
                     default:
                         throw new NagVisException(
-                            $this->getText('Invalid mode [MODE] in language_detection option.',
-                                ['MODE' => $sMethod]));
-                        break;
+                            $this->getText(
+                                'Invalid mode [MODE] in language_detection option.',
+                                ['MODE' => $sMethod]
+                            )
+                        );
                 }
             }
         }

@@ -205,7 +205,6 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
             throw new BackendConnectionProblem(
                 l('noTablesExists', ['BACKENDID' => $this->backendId, 'PREFIX' => $this->dbPrefix])
             );
-            return false;
         } else {
             return true;
         }
@@ -288,7 +287,6 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                 break;
             default:
                 return [];
-                break;
         }
 
         $filter = '';
@@ -431,7 +429,6 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                         break;
                     default:
                         throw new BackendConnectionProblem('Invalid filter key (' . $filter['key'] . ')');
-                        break;
                 }
             }
 
