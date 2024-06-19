@@ -179,7 +179,7 @@ class NagVisServicegroup extends NagVisStatefulObject {
 
             $this->mergeSummaryOutput($arrStates, l('services'));
         } else {
-            $this->sum[OUTPUT] = l('serviceGroupNotFoundInDB','SERVICEGROUP~' . $this->servicegroup_name);
+            $this->sum[OUTPUT] = l('serviceGroupNotFoundInDB', 'SERVICEGROUP~' . $this->servicegroup_name);
         }
     }
 }

@@ -135,7 +135,7 @@ class ViewManageMaps {
                     // check if old map name is linked...
                     if($obj['map_name'] == $name) {
                         $MAPCFG1->setValue('map', $i, 'map_name', $new_name);
-                        $MAPCFG1->writeElement('map',$i);
+                        $MAPCFG1->writeElement('map', $i);
                     }
                     $i++;
                 }

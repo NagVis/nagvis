@@ -609,7 +609,7 @@ class NagVisMapObj extends NagVisStatefulObject {
 
             $this->mergeSummaryOutput($arrStates, l('objects'));
         } else {
-            $this->sum[OUTPUT] = l('mapIsEmpty','MAP~' . $this->getName());
+            $this->sum[OUTPUT] = l('mapIsEmpty', 'MAP~' . $this->getName());
         }
     }
 

@@ -27,7 +27,7 @@
  */
  
 // Save the start time of NagVis
-define('DEBUGSTART',microtime_float());
+define('DEBUGSTART', microtime_float());
 
 
 /**

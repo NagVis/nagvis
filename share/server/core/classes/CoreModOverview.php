@@ -29,7 +29,7 @@ class CoreModOverview extends CoreModule {
     private $htmlBase;
 
     public function __construct(GlobalCore $CORE) {
-        $this->htmlBase = cfg('paths','htmlbase');
+        $this->htmlBase = cfg('paths', 'htmlbase');
         $this->sName = 'Overview';
 
         $this->aActions = [
@@ -125,7 +125,7 @@ class CoreModOverview extends CoreModule {
             $MAP->MAPOBJ->fetchIcon();
         }
 
-        if(cfg('index','showmapthumbs') == 1) {
+        if(cfg('index', 'showmapthumbs') == 1) {
             $map['overview_image'] = $this->renderMapThumb($MAPCFG);
         }
 
@@ -258,7 +258,7 @@ class CoreModOverview extends CoreModule {
     public function parseRotationsJson() {
         global $AUTHORISATION, $CORE;
         // Only display the rotation list when enabled
-        if(cfg('index','showrotations') != 1) {
+        if(cfg('index', 'showrotations') != 1) {
             return json_encode([]);
         }
 

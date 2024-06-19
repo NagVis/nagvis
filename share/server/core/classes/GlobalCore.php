@@ -597,7 +597,7 @@ class GlobalCore {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkVarFolderExists($printErr) {
-        return $this->checkExisting(substr(self::getMainCfg()->getValue('paths', 'var'),0,-1), $printErr);
+        return $this->checkExisting(substr(self::getMainCfg()->getValue('paths', 'var'), 0, -1), $printErr);
     }
 
     /**
@@ -608,7 +608,7 @@ class GlobalCore {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkVarFolderWriteable($printErr) {
-        return $this->checkWriteable(substr(self::getMainCfg()->getValue('paths', 'var'),0,-1), $printErr);
+        return $this->checkWriteable(substr(self::getMainCfg()->getValue('paths', 'var'), 0, -1), $printErr);
     }
 
     /**
@@ -619,7 +619,7 @@ class GlobalCore {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkSharedVarFolderExists($printErr) {
-        return $this->checkExisting(substr(self::getMainCfg()->getValue('paths', 'sharedvar'),0,-1), $printErr);
+        return $this->checkExisting(substr(self::getMainCfg()->getValue('paths', 'sharedvar'), 0, -1), $printErr);
     }
 
     /**
@@ -630,7 +630,7 @@ class GlobalCore {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkSharedVarFolderWriteable($printErr) {
-        return $this->checkWriteable(substr(self::getMainCfg()->getValue('paths', 'sharedvar'),0,-1), $printErr);
+        return $this->checkWriteable(substr(self::getMainCfg()->getValue('paths', 'sharedvar'), 0, -1), $printErr);
     }
 
     /**
@@ -738,7 +738,7 @@ class GlobalCore {
 
     public function omdSite() {
         if(substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
-            $site_parts = array_slice(explode('/' ,dirname($_SERVER["SCRIPT_FILENAME"])), 0, -3);
+            $site_parts = array_slice(explode('/', dirname($_SERVER["SCRIPT_FILENAME"])), 0, -3);
             return $site_parts[count($site_parts) - 1];
         }
         return null;

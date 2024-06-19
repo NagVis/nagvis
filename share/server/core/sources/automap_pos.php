@@ -12,7 +12,7 @@ function automap_check_graphviz($binary) {
      * configured path. Prefer the configured path.
      */
     $bFound = false;
-    foreach([cfg('automap','graphvizpath') . $binary, $binary] AS $path) {
+    foreach([cfg('automap', 'graphvizpath') . $binary, $binary] AS $path) {
         // Check if dot can be found in path (If it is there $returnCode is 0, if not it is 1)
         exec('which ' . $path . ' 2>/dev/null', $arrReturn, $exitCode);
 
@@ -26,7 +26,7 @@ function automap_check_graphviz($binary) {
     if(!$bFound) {
         throw new NagVisException(l('graphvizBinaryNotFound', [
             'NAME' => $binary,
-                                    'PATHS' => $_SERVER['PATH'] . ':' . cfg('automap','graphvizpath')
+                                    'PATHS' => $_SERVER['PATH'] . ':' . cfg('automap', 'graphvizpath')
         ]));
     }
 

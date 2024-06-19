@@ -188,7 +188,7 @@ class NagVisHostgroup extends NagVisStatefulObject {
 
             $this->mergeSummaryOutput($arrStates, l('hosts'));
         } else {
-            $this->sum[OUTPUT] = l('hostGroupNotFoundInDB','HOSTGROUP~' . $this->hostgroup_name);
+            $this->sum[OUTPUT] = l('hostGroupNotFoundInDB', 'HOSTGROUP~' . $this->hostgroup_name);
         }
     }
 }

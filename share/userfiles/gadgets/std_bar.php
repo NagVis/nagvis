@@ -139,7 +139,7 @@ if ($chrSize < 1) { $chrSize = 1; }
 //==================
 
 if (isset($aOpts['opts']) && ($aOpts['opts'] != '')){
-   preg_match_all ('/(\w+)=(\w+)/',$aOpts['opts'],$matches,PREG_SET_ORDER);
+   preg_match_all ('/(\w+)=(\w+)/', $aOpts['opts'], $matches, PREG_SET_ORDER);
    for ($i = 0; $i < count($matches); $i++){
       if ($matches[$i][1] == 'columns') { $cols = $matches[$i][2]; }
       if ($matches[$i][1] == 'string') { $string = $matches[$i][2]; }
@@ -170,14 +170,14 @@ imagecolortransparent($img, $oBackground);
 
 $offG = 0;              // current graph
 for ($i = 0; $i < $pdc; $i++){
-   $desc = preg_replace('(.*::)','',$aPerfdata[$i]['label']);  // omit check_multi description
-   if (preg_match("/$string/",$desc)) {
+   $desc = preg_replace('(.*::)', '', $aPerfdata[$i]['label']);  // omit check_multi description
+   if (preg_match("/$string/", $desc)) {
       $colour = '';
       $value = $aPerfdata[$i]['value'];
       $warn = $aPerfdata[$i]['warning'];
-      $warn = preg_replace ('(:.*)','',$warn);     // ignore range settings
+      $warn = preg_replace ('(:.*)', '', $warn);     // ignore range settings
       $crit = $aPerfdata[$i]['critical'];
-      $crit = preg_replace ('(:.*)','',$crit);     // ignore range settings
+      $crit = preg_replace ('(:.*)', '', $crit);     // ignore range settings
       $min = $aPerfdata[$i]['min'];
       $max = $aPerfdata[$i]['max'];
       $uom = $aPerfdata[$i]['uom'];
@@ -247,8 +247,8 @@ for ($i = 0; $i < $pdc; $i++){
       //================
 
       $p = 100 / $limit * $value;
-      $warnp = round(100 / $limit * $warn,0);
-      $critp = round(100 / $limit * $crit,0);
+      $warnp = round(100 / $limit * $warn, 0);
+      $critp = round(100 / $limit * $crit, 0);
       $valuev = ($maxX / 100 * $p);
       $warnv = intval($maxX / 100 * $warnp);
       $critv = intval($maxX / 100 * $critp);
@@ -302,10 +302,10 @@ for ($i = 0; $i < $pdc; $i++){
          }
 
       if ($label == 1) {
-         $hostname = (strlen($aOpts['name1']) > 15) ? substr($aOpts['name1'],0,14) . "..." : $aOpts['name1'];
-         $svcdesc = (strlen($aOpts['name2']) > 15) ? substr($aOpts['name2'],0,14) . "..." : $aOpts['name2'];
+         $hostname = (strlen($aOpts['name1']) > 15) ? substr($aOpts['name1'], 0, 14) . "..." : $aOpts['name1'];
+         $svcdesc = (strlen($aOpts['name2']) > 15) ? substr($aOpts['name2'], 0, 14) . "..." : $aOpts['name2'];
          if (strlen($desc) > 15) {
-            $desc = substr($desc,0,14) . "...";
+            $desc = substr($desc, 0, 14) . "...";
          }
          if (file_exists ("$font")) {
             ImageTTFText($img, $chrSize * 2.5, 0, $offX + 3, $offY + $maxY - 1, $oBlack, $font, $hostname);

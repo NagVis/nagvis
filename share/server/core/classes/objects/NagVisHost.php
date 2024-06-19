@@ -231,7 +231,7 @@ class NagVisHost extends NagVisStatefulObject {
 
                 $this->mergeSummaryOutput($arrServiceStates, NagVisHost::$langServices);
             } else {
-                $this->sum[OUTPUT] .= l('hostHasNoServices','HOST~' . $this->getName());
+                $this->sum[OUTPUT] .= l('hostHasNoServices', 'HOST~' . $this->getName());
             }
         }
     }
@@ -264,7 +264,7 @@ class NagVisHost extends NagVisStatefulObject {
 
                 $this->mergeSummaryOutput($arrStates, l('services'));
             } else {
-                $this->sum[OUTPUT] .= l('hostHasNoServices','HOST~' . $this->getName());
+                $this->sum[OUTPUT] .= l('hostHasNoServices', 'HOST~' . $this->getName());
             }
         }
     }

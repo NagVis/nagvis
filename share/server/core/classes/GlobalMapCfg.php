@@ -75,7 +75,7 @@ class GlobalMapCfg {
         }
 
         if($this->cacheFile === '') {
-            $this->cacheFile = cfg('paths','var') . $this->type . '-' . $name . '.cfg-' . CONST_VERSION . '-cache';
+            $this->cacheFile = cfg('paths', 'var') . $this->type . '-' . $name . '.cfg-' . CONST_VERSION . '-cache';
             $this->defaultsCacheFile = $this->cacheFile . '-defs';
         }
 
@@ -417,8 +417,8 @@ class GlobalMapCfg {
             }
 
             $iDelimPos = strpos($file[$l], '=');
-            $sKey = trim(substr($file[$l],0,$iDelimPos));
-            $sValue = trim(substr($file[$l],($iDelimPos + 1)));
+            $sKey = trim(substr($file[$l], 0, $iDelimPos));
+            $sValue = trim(substr($file[$l], ($iDelimPos + 1)));
 
             if(isset($ignoreKeys[$sKey])) {
                 continue;
@@ -834,7 +834,7 @@ class GlobalMapCfg {
             unset($params['source_file']);
         }
         $param_values = $this->paramsToString($params);
-        $cacheFile = cfg('paths','var') . 'source-' . $this->name . '.cfg-' . $param_values . '-' . $this->isView . '-' . CONST_VERSION . '.cache';
+        $cacheFile = cfg('paths', 'var') . 'source-' . $this->name . '.cfg-' . $param_values . '-' . $this->isView . '-' . CONST_VERSION . '.cache';
         $CACHE = new GlobalFileCache([], $cacheFile);
 
         // 2a. Check if the cache file exists
@@ -1108,7 +1108,7 @@ class GlobalMapCfg {
                                 throw new $exception(l('wrongValueFormatMap', ['MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key]));
                             }
                         }
-                    } elseif(!preg_match(self::$validConfig[$type][$key]['match'],$val)) {
+                    } elseif(!preg_match(self::$validConfig[$type][$key]['match'], $val)) {
                         // Wrong format
                         throw new $exception(l('wrongValueFormatMap', ['MAP' => $this->getName(), 'TYPE' => $type, 'ATTRIBUTE' => $key]));
                     }
@@ -1663,7 +1663,7 @@ class GlobalMapCfg {
 
         // open file for writing and replace it
         $fp = fopen($this->configFile, 'w');
-        fwrite($fp,implode('', $this->configFileContents));
+        fwrite($fp, implode('', $this->configFileContents));
         fclose($fp);
 
         // Also remove cache file
@@ -1871,7 +1871,7 @@ class GlobalMapCfg {
         $lockdata = $this->readMapLock();
         if(is_array($lockdata)) {
             // Only check locks which are not too old
-            if(time() - $lockdata['time'] < cfg('wui','maplocktime') * 60) {
+            if(time() - $lockdata['time'] < cfg('wui', 'maplocktime') * 60) {
                 // there is a lock and it should be recognized
                 // check if this is the lock of the current user (Happens e.g. by pressing F5)
                 if($AUTH->getUser() == $lockdata['user'] && $_SERVER['REMOTE_ADDR'] == $lockdata['ip']) {
@@ -1915,7 +1915,7 @@ class GlobalMapCfg {
         if($this->checkMapLockReadable(0)) {
             $fileContent = file($this->mapLockPath);
             // only recognize the first line, explode it by :
-            $arrContent = explode(':',$fileContent[0]);
+            $arrContent = explode(':', $fileContent[0]);
             // if there are more elements in the array it is OK
             if(count($arrContent) > 0) {
                 return ['time' => $arrContent[0], 'user' => $arrContent[1], 'ip' => trim($arrContent[2])];

@@ -43,7 +43,7 @@ class CoreAuthHandler {
         global $SHANDLER;
         $this->SESS = $SHANDLER;
 
-        $this->sModuleName = cfg('global','authmodule');
+        $this->sModuleName = cfg('global', 'authmodule');
         $this->MOD = new $this->sModuleName();
     }
 

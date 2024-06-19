@@ -135,7 +135,7 @@ $cols = 3;						// no. of columns with graphs
 //==================
 
 if (isset($aOpts['opts']) && ($aOpts['opts'] != '')){
-	preg_match_all ('/(\w+)=(\w+)/',$aOpts['opts'],$matches,PREG_SET_ORDER);
+	preg_match_all ('/(\w+)=(\w+)/', $aOpts['opts'], $matches, PREG_SET_ORDER);
 	for ($i = 0; $i < count($matches); $i++){
 		if ($matches[$i][1] == 'columns') { $cols = $matches[$i][2]; }
 		if ($matches[$i][1] == 'string') { $string = $matches[$i][2]; }
@@ -168,14 +168,14 @@ if ($label == 1) {
 }
 
 for ($i = 0; $i < $pdc; $i++){
-	$label = preg_replace('(.*::)','',$aPerfdata[$i]['label']);	// omit check_multi description
-	if (preg_match("/$string/",$label)) {
+	$label = preg_replace('(.*::)', '', $aPerfdata[$i]['label']);	// omit check_multi description
+	if (preg_match("/$string/", $label)) {
 		$colour = '';
 		$value = $aPerfdata[$i]['value'];
 		$warn = $aPerfdata[$i]['warning'];
-		$warn = preg_replace ('(:.*)','',$warn);		// ignore range settings
+		$warn = preg_replace ('(:.*)', '', $warn);		// ignore range settings
 		$crit = $aPerfdata[$i]['critical'];
-		$crit = preg_replace ('(:.*)','',$crit);		// ignore range settings
+		$crit = preg_replace ('(:.*)', '', $crit);		// ignore range settings
 		$min = $aPerfdata[$i]['min'];
 		$max = $aPerfdata[$i]['max'];
 		$uom = $aPerfdata[$i]['uom'];
@@ -212,7 +212,7 @@ for ($i = 0; $i < $pdc; $i++){
 		}
 		// "highlight" graph if non-ok value
 		if ($colour != '') {
-			imagefilledrectangle ($img, $offX,$offY,$offX + $imgwidth - 1,$centery + 20,$colour);
+			imagefilledrectangle ($img, $offX, $offY, $offX + $imgwidth - 1, $centery + 20, $colour);
 		}
 		
 		//================
@@ -248,7 +248,7 @@ for ($i = 0; $i < $pdc; $i++){
 		
 		
 		// Base
-		imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 180, 0, $oGreen, IMG_ARC_EDGED);
+		imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 180, 0, $oGreen, IMG_ARC_EDGED);
 		
 		// Warning
 		if($warn && $warnp <= -1) {
@@ -264,10 +264,10 @@ for ($i = 0; $i < $pdc; $i++){
 		if($crit && $critp <= -1) {
 			if ($warn < $crit) {
 				// The "360 +" fix has been worked out by hipska. Thanks for that!
-				imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 360 + $critp, 0, $oRed, IMG_ARC_EDGED);
+				imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 360 + $critp, 0, $oRed, IMG_ARC_EDGED);
 			} else {
 				// The "360 +" fix has been worked out by hipska. Thanks for that!
-				imagefilledarc($img,$centerx, $centery, $outerdia, $outerdia, 180, 360 + $critp, $oRed, IMG_ARC_EDGED);
+				imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 180, 360 + $critp, $oRed, IMG_ARC_EDGED);
 			}
 		}
 		
@@ -298,8 +298,8 @@ for ($i = 0; $i < $pdc; $i++){
 		$iOffsetX = -10;
 		for($d = 1; $d <= 3; $d++) {
 			
-			imageline($img, ($centerx - $bediffx[$d]), ($centery + $bediffy[$d]),($centerx - $bediffx1[$d]), ($centery + $bediffy1[$d]), $oBlack);
-			imagestring($img , 1 ,($centerx - $bediffx[$d] + $iOffsetX - 8), ($centery + $bediffy[$d] - 10) , ($limit / 4 * $d) , $oBlack);
+			imageline($img, ($centerx - $bediffx[$d]), ($centery + $bediffy[$d]), ($centerx - $bediffx1[$d]), ($centery + $bediffy1[$d]), $oBlack);
+			imagestring($img, 1, ($centerx - $bediffx[$d] + $iOffsetX - 8), ($centery + $bediffy[$d] - 10), ($limit / 4 * $d), $oBlack);
 			
 			$iOffsetX = $iOffsetX + 10;
 		}

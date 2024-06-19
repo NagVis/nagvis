@@ -113,7 +113,7 @@ class NagVisHoverUrl {
      * @author     Lars Michelsen <lm@larsmichelsen.com>
      */
     private function cleanCode() {
-        $this->code = str_replace('"','\\\'',str_replace('\'','\\\'',str_replace("\t",'',str_replace("\n",'',str_replace("\r\n",'',$this->code)))));
+        $this->code = str_replace('"', '\\\'', str_replace('\'', '\\\'', str_replace("\t", '', str_replace("\n", '', str_replace("\r\n", '', $this->code)))));
     }
 }
 

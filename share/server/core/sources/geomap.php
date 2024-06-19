@@ -27,7 +27,7 @@ function geomap_read_csv($p) {
         $i++;
 
         // skip lines beginning with any of the usual comment characters
-        if(preg_match('/^[;#\/]/',$line)) {
+        if(preg_match('/^[;#\/]/', $line)) {
             continue;
         }
         $parts = explode(';', $line);

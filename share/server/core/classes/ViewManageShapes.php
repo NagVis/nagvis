@@ -49,7 +49,7 @@ class ViewManageShapes {
                 }
 
                 $data = getimagesize($file['tmp_name']);
-                if (!in_array($data[2], [IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG])) {
+                if (!in_array($data[2], [IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG])) {
                     throw new FieldInputError('image', l('The uploaded file is not an image '
                         . '(png, jpg and gif are allowed).'));
                 }
