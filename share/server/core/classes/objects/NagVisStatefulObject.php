@@ -27,7 +27,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisStatefulObject extends NagVisObject {
+class NagVisStatefulObject extends NagVisObject
+{
     // "Global" Configuration variables for all stateful objects
     protected $backend_id;
     protected $problem_msg = null;

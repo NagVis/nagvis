@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisHoverMenu {
+class NagVisHoverMenu
+{
     private $CORE;
     private $OBJPAGE;
     private $CACHE;

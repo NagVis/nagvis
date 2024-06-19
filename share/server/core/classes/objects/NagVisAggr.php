@@ -23,7 +23,8 @@
  *
  *****************************************************************************/
 
-class NagVisAggr extends NagVisStatefulObject {
+class NagVisAggr extends NagVisStatefulObject
+{
     protected $type = 'aggr';
 
     protected static $langType   = null;

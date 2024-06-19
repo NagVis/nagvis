@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisMap {
+class NagVisMap
+{
     public $MAPOBJ = null;
     protected $MAPCFG;
 

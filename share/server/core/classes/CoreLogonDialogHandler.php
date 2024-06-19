@@ -23,7 +23,8 @@
  *
  *****************************************************************************/
 
-class CoreLogonDialogHandler {
+class CoreLogonDialogHandler
+{
     public function check($printErr = true) {
         global $AUTH;
 

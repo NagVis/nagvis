@@ -31,7 +31,8 @@
  *
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreAuthHandler {
+class CoreAuthHandler
+{
     private $SESS;
     private $MOD;
 

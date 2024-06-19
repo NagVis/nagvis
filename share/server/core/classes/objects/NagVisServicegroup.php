@@ -23,7 +23,8 @@
  *
  *****************************************************************************/
 
-class NagVisServicegroup extends NagVisStatefulObject {
+class NagVisServicegroup extends NagVisStatefulObject
+{
     protected $type = 'servicegroup';
 
     protected static $langType = null;

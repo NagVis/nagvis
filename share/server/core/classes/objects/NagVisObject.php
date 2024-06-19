@@ -23,7 +23,8 @@
  *
  *****************************************************************************/
 
-class NagVisObject {
+class NagVisObject
+{
     protected $conf = [];
 
     protected $type;

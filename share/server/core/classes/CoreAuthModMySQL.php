@@ -22,7 +22,8 @@
  *
  ******************************************************************************/
 
-class CoreAuthModMySQL extends CoreAuthModPDO {
+class CoreAuthModMySQL extends CoreAuthModPDO
+{
     public function getConfig() {
         return [
             'driver' => 'mysql',

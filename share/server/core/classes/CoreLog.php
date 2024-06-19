@@ -1,7 +1,8 @@
 <?php
 
 
-class CoreLog {
+class CoreLog
+{
     private $path = null;
     private $FILE = null;
     private $dateFormat = null;

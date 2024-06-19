@@ -39,7 +39,8 @@ function _build_dsn_common($params) {
         $connData));
 }
 
-class CorePDOHandler {
+class CorePDOHandler
+{
     private $DB = null;
     private $file = null;
     private $dsn = null;

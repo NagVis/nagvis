@@ -25,7 +25,8 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModMultisite extends CoreModule {
+class CoreModMultisite extends CoreModule
+{
     private $CORE;
 
     public function __construct(GlobalCore $CORE) {

@@ -26,7 +26,8 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
-class NagVisException extends Exception {
+class NagVisException extends Exception
+{
     protected $e;
 
     function __construct($msg, $title = null, $time = null, $url = null) {
@@ -81,19 +82,36 @@ class Success extends NagVisException {
 class AuthenticationException extends NagVisException {}
 class CoreAuthModNoSupport extends NagVisException {}
 
-class BackendException extends NagVisException {}
-class BackendConnectionProblem extends BackendException {}
-class BackendInvalidResponse extends BackendException {}
+class BackendException extends NagVisException
+{
+}
+class BackendConnectionProblem extends BackendException
+{
+}
+class BackendInvalidResponse extends BackendException
+{
+}
 
-class MapCfgInvalid extends NagVisException {}
-class MapCfgInvalidObject extends MapCfgInvalid {}
-class MapSourceError extends MapCfgInvalid {}
+class MapCfgInvalid extends NagVisException
+{
+}
+class MapCfgInvalidObject extends MapCfgInvalid
+{
+}
+class MapSourceError extends MapCfgInvalid
+{
+}
 
-class UserInputError extends NagVisException {}
+class UserInputError extends NagVisException
+{
+}
 
-class InputErrorRedirect extends NagVisException {}
+class InputErrorRedirect extends NagVisException
+{
+}
 
-class FieldInputError extends NagVisException {
+class FieldInputError extends NagVisException
+{
     public $field;
     public $msg;
 

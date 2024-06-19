@@ -25,7 +25,8 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModManageBackgrounds extends CoreModule {
+class CoreModManageBackgrounds extends CoreModule
+{
     private $name = null;
     private $CORE;
 

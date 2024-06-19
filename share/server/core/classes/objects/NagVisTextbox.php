@@ -26,7 +26,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisTextbox extends NagVisStatelessObject {
+class NagVisTextbox extends NagVisStatelessObject
+{
     protected $text;
     protected $w;
     protected $h;

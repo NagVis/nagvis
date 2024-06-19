@@ -23,7 +23,8 @@
  *
  *****************************************************************************/
 
-class CoreLogonModule {
+class CoreLogonModule
+{
     // Create user when not existing yet
     // Important to add a random password here. When someone
     // changes the logon mechanism to e.g. LogonDialog it

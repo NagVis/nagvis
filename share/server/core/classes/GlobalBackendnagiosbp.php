@@ -41,7 +41,8 @@ if (!function_exists('l')) {
     require_once('../defines/matches.php');
 }
 
-class GlobalBackendnagiosbp implements GlobalBackendInterface {
+class GlobalBackendnagiosbp implements GlobalBackendInterface
+{
     private $backendId = '';
     private $baseUrl   = '';
     private $context   = '';

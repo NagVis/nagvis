@@ -34,7 +34,8 @@
  * For mor information about CheckMK's Livestatus Module
  * please visit: https://docs.checkmk.com/latest/en/livestatus.html
  */
-class GlobalBackendmklivestatus implements GlobalBackendInterface {
+class GlobalBackendmklivestatus implements GlobalBackendInterface
+{
     private $backendId = '';
 
     private $CONNECT_ERR = "";

@@ -23,7 +23,8 @@
  *
  *****************************************************************************/
 
-class CoreLogonMixed {
+class CoreLogonMixed
+{
     public function check() {
         // Try to auth using the environment auth
         $ENV= new CoreLogonEnv();

@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class ViewSearch {
+class ViewSearch
+{
     public function parse() {
         ob_start();
         echo '<div class="simple_form">' . N;
