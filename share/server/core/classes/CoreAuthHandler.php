@@ -182,9 +182,13 @@ class CoreAuthHandler
 
         if ($ALOG !== null) {
             if ($isAuthenticated) {
-                $ALOG->l('User logged in (' . $this->getUser() . ' / ' . $this->getUserId() . '): ' . $this->sModuleName);
+                $ALOG->l(
+                    'User logged in (' . $this->getUser() . ' / ' . $this->getUserId() . '): ' . $this->sModuleName
+                );
             } else {
-                $ALOG->l('User login failed (' . $this->getUser() . ' / ' . $this->getUserId() . '): ' . $this->sModuleName);
+                $ALOG->l(
+                    'User login failed (' . $this->getUser() . ' / ' . $this->getUserId() . '): ' . $this->sModuleName
+                );
             }
         }
 

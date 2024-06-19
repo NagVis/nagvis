@@ -300,8 +300,19 @@ class GlobalCore
     public function getAvailableHoverTemplates()
     {
         return array_merge(
-            self::listDirectory(path('sys', 'global', 'templates'), MATCH_HOVER_TEMPLATE_FILE),
-            self::listDirectory(path('sys', 'local',  'templates'), MATCH_HOVER_TEMPLATE_FILE, null, null, null, null, false)
+            self::listDirectory(
+                path('sys', 'global', 'templates'),
+                MATCH_HOVER_TEMPLATE_FILE
+            ),
+            self::listDirectory(
+                path('sys', 'local',  'templates'),
+                MATCH_HOVER_TEMPLATE_FILE,
+                null,
+                null,
+                null,
+                null,
+                false
+            )
         );
     }
 
@@ -314,8 +325,19 @@ class GlobalCore
     public function getAvailableHeaderTemplates()
     {
         return array_merge(
-            self::listDirectory(path('sys', 'global', 'templates'), MATCH_HEADER_TEMPLATE_FILE),
-            self::listDirectory(path('sys', 'local',  'templates'), MATCH_HEADER_TEMPLATE_FILE, null, null, null, null, false)
+            self::listDirectory(
+                path('sys', 'global', 'templates'),
+                MATCH_HEADER_TEMPLATE_FILE
+            ),
+            self::listDirectory(
+                path('sys', 'local',  'templates'),
+                MATCH_HEADER_TEMPLATE_FILE,
+                null,
+                null,
+                null,
+                null,
+                false
+            )
         );
     }
 
@@ -328,8 +350,19 @@ class GlobalCore
     public function getAvailableContextTemplates()
     {
         return array_merge(
-            self::listDirectory(path('sys', 'global', 'templates'), MATCH_CONTEXT_TEMPLATE_FILE),
-            self::listDirectory(path('sys', 'local',  'templates'), MATCH_CONTEXT_TEMPLATE_FILE, null, null, null, null, false)
+            self::listDirectory(
+                path('sys', 'global', 'templates'),
+                MATCH_CONTEXT_TEMPLATE_FILE
+            ),
+            self::listDirectory(
+                path('sys', 'local',  'templates'),
+                MATCH_CONTEXT_TEMPLATE_FILE,
+                null,
+                null,
+                null,
+                null,
+                false
+            )
         );
     }
 
@@ -428,7 +461,14 @@ class GlobalCore
      */
     public function getAvailableGeomapSourceFiles($strMatch = null, $setKey = null)
     {
-        return self::listDirectory(self::getMainCfg()->getValue('paths', 'geomap'), MATCH_CSV_FILE, null, $strMatch, null, $setKey);
+        return self::listDirectory(
+            self::getMainCfg()->getValue('paths', 'geomap'),
+            MATCH_CSV_FILE,
+            null,
+            $strMatch,
+            null,
+            $setKey
+        );
     }
 
     /**
@@ -440,7 +480,14 @@ class GlobalCore
      */
     public function getAvailableMaps($strMatch = null, $setKey = null)
     {
-        return self::listDirectory(self::getMainCfg()->getValue('paths', 'mapcfg'), MATCH_CFG_FILE, null, $strMatch, null, $setKey);
+        return self::listDirectory(
+            self::getMainCfg()->getValue('paths', 'mapcfg'),
+            MATCH_CFG_FILE,
+            null,
+            $strMatch,
+            null,
+            $setKey
+        );
     }
 
     public function getPermittedMaps()
@@ -510,8 +557,22 @@ class GlobalCore
     public function getAvailableBackgroundImages()
     {
         return array_merge(
-            self::listDirectory(path('sys', 'global', 'backgrounds'), MATCH_PNG_GIF_JPG_FILE, null, null, 0),
-            self::listDirectory(path('sys', 'local',  'backgrounds'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, null, false)
+            self::listDirectory(
+                path('sys', 'global', 'backgrounds'),
+                MATCH_PNG_GIF_JPG_FILE,
+                null,
+                null,
+                0
+            ),
+            self::listDirectory(
+                path('sys', 'local',  'backgrounds'),
+                MATCH_PNG_GIF_JPG_FILE,
+                null,
+                null,
+                0,
+                null,
+                false
+            )
         );
     }
 
@@ -524,8 +585,24 @@ class GlobalCore
     public function getAvailableGadgets()
     {
         return array_merge(
-            self::listDirectory(path('sys', 'global', 'gadgets'), MATCH_PHP_FILE, ['gadgets_core.php' => true], null, null, null, true),
-            self::listDirectory(path('sys', 'local',  'gadgets'), MATCH_PHP_FILE, ['gadgets_core.php' => true], null, null, null, false)
+            self::listDirectory(
+                path('sys', 'global', 'gadgets'),
+                MATCH_PHP_FILE,
+                ['gadgets_core.php' => true],
+                null,
+                null,
+                null,
+                true
+            ),
+            self::listDirectory(
+                path('sys', 'local',  'gadgets'),
+                MATCH_PHP_FILE,
+                ['gadgets_core.php' => true],
+                null,
+                null,
+                null,
+                false
+            )
         );
     }
 
@@ -540,7 +617,15 @@ class GlobalCore
      * @return	array   Sorted list of file names/parts in this directory
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function listDirectory($dir, $allowRegex = null, $ignoreList = null, $allowPartRegex = null, $returnPart = null, $setKey = null, $printErr = true)
+    public function listDirectory(
+        $dir,
+        $allowRegex = null,
+        $ignoreList = null,
+        $allowPartRegex = null,
+        $returnPart = null,
+        $setKey = null,
+        $printErr = true
+    )
     {
         $files = [];
 

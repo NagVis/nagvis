@@ -71,7 +71,9 @@ class NagVisLoginView
             'langPassword' => l('Password'),
             'langLogin' => l('Login'),
             'langTitleCookiesDisabled' => l('Cookies disabled'),
-            'langTextCookiesDisabled' => l('NagVis is unable to set a cookie in your browser. Please enable cookies for at least the NagVis host.'),
+            'langTextCookiesDisabled' => l(
+                'NagVis is unable to set a cookie in your browser. Please enable cookies for at least the NagVis host.'
+            ),
             'loginMsg' => isset($LOGIN_MSG)  && $LOGIN_MSG !== null ? $LOGIN_MSG->msg : '',
         ];
 

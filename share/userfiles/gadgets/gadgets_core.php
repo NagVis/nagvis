@@ -94,8 +94,13 @@ function parsePerfdata($sPerfdata) {
     // Parse perfdata
     // We are trying to match the following string:
     //  temp=78.8F;55:93;50:98;0;100;
-    //               metric    current    unit      warning          critical          min           max
-    preg_match_all('/([^=]+)=([\d\.\-]+)([\w%\/]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*/', $sPerfdata, $aMatches, PREG_SET_ORDER);
+    preg_match_all(
+        //metric    current    unit      warning          critical          min           max
+        '/([^=]+)=([\d\.\-]+)([\w%\/]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*/',
+        $sPerfdata,
+        $aMatches,
+        PREG_SET_ORDER
+    );
 
     // When no match found
     if (!isset($aMatches[0])) {

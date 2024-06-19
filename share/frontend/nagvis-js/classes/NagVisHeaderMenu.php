@@ -270,8 +270,10 @@ class NagVisHeaderMenu
         $this->aMacros['permittedOverview'] = $AUTHORISATION->isPermitted('Overview', 'view', '*');
 
         // Check if the user is permitted to edit the current map
-        $this->aMacros['permittedView']  = $this->OBJ !== null && $AUTHORISATION->isPermitted($this->aMacros['mod'], 'view', $this->OBJ->getName());
-        $this->aMacros['permittedEdit']  = $this->OBJ !== null && $AUTHORISATION->isPermitted($this->aMacros['mod'], 'edit', $this->OBJ->getName());
+        $this->aMacros['permittedView']  = $this->OBJ !== null
+            && $AUTHORISATION->isPermitted($this->aMacros['mod'], 'view', $this->OBJ->getName());
+        $this->aMacros['permittedEdit']  = $this->OBJ !== null
+            && $AUTHORISATION->isPermitted($this->aMacros['mod'], 'edit', $this->OBJ->getName());
 
         // Permissions for the option menu
         $this->aMacros['permittedSearch']            = $AUTHORISATION->isPermitted('Search', 'view', '*');
@@ -279,7 +281,8 @@ class NagVisHeaderMenu
         $this->aMacros['permittedManageShapes']      = $AUTHORISATION->isPermitted('ManageShapes', 'manage', '*');
         $this->aMacros['permittedManageBackgrounds'] = $AUTHORISATION->isPermitted('ManageBackgrounds', 'manage', '*');
         $this->aMacros['permittedManageBackgrounds'] = $AUTHORISATION->isPermitted('ManageBackgrounds', 'manage', '*');
-        $this->aMacros['permittedManageMaps']        = $AUTHORISATION->isPermitted('Map', 'add', '*') && $AUTHORISATION->isPermitted('Map', 'edit', '*');
+        $this->aMacros['permittedManageMaps']        = $AUTHORISATION->isPermitted('Map', 'add', '*')
+            && $AUTHORISATION->isPermitted('Map', 'edit', '*');
 
         $this->aMacros['currentUser'] = $AUTH->getUser();
 
@@ -295,9 +298,11 @@ class NagVisHeaderMenu
             $this->aMacros['usesSources']       = count($this->OBJ->getValue(0, 'sources')) > 0;
             $this->aMacros['zoombar']           = $this->OBJ->getValue(0, 'zoombar');
 
-            $this->aMacros['canAddObjects']  = !in_array('automap', $this->OBJ->getValue(0, 'sources')) && !in_array('geomap', $this->OBJ->getValue(0, 'sources'));
+            $this->aMacros['canAddObjects']  = !in_array('automap', $this->OBJ->getValue(0, 'sources'))
+                && !in_array('geomap', $this->OBJ->getValue(0, 'sources'));
             $this->aMacros['canEditObjects'] = !in_array('automap', $this->OBJ->getValue(0, 'sources'));
-            $this->aMacros['canMoveObjects'] = !in_array('automap', $this->OBJ->getValue(0, 'sources')) && !in_array('geomap', $this->OBJ->getValue(0, 'sources'));
+            $this->aMacros['canMoveObjects'] = !in_array('automap', $this->OBJ->getValue(0, 'sources'))
+                && !in_array('geomap', $this->OBJ->getValue(0, 'sources'));
             $this->aMacros['isWorldmap']     = in_array('worldmap', $this->OBJ->getValue(0, 'sources'));
         } else {
             $this->aMacros['currentMap']        = '';
@@ -335,7 +340,9 @@ class NagVisHeaderMenu
                 $default = $cfg['params-']['filter_group'];
             }
 
-            $this->aMacros['filter_group'] = isset($_GET['filter_group']) ? htmlspecialchars($_GET['filter_group']) : $default;
+            $this->aMacros['filter_group'] = isset($_GET['filter_group'])
+                ? htmlspecialchars($_GET['filter_group'])
+                : $default;
         }
 
         $this->aMacros['mapNames'] = json_encode($CORE->getListMaps());
@@ -377,10 +384,19 @@ class NagVisHeaderMenu
         // Replace paths and language macros
         $aReturn = [
             'pathBase' => $this->pathHtmlBase,
-            'currentUri'         => preg_replace('/[&?]lang=[a-z]{2}_[A-Z]{2}/', '', $UHANDLER->getRequestUri()),
+            'currentUri'         => preg_replace(
+                                        '/[&?]lang=[a-z]{2}_[A-Z]{2}/',
+                                        '',
+                                        $UHANDLER->getRequestUri()
+                                    ),
             'pathImages'         => cfg('paths', 'htmlimages'),
             'showStates'         => cfg('defaults', 'header_show_states'),
-            'pathHeaderJs'       => path('html', 'global', 'templates', $this->templateName . '.header.js?v=' . CONST_VERSION),
+            'pathHeaderJs'       => path(
+                                        'html',
+                                        'global',
+                                        'templates',
+                                        $this->templateName . '.header.js?v=' . CONST_VERSION
+                                    ),
             'pathTemplates'      => path('html', 'global', 'templates'),
             'pathTemplateImages' => path('html', 'global', 'templateimages'),
             'langSearch'         => l('Search'),

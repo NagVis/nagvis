@@ -318,7 +318,15 @@ function worldmap_get_object_by_id($id) {
 }
 
 // Worldmap internal helper function to add an object to the worldmap
-function worldmap_db_update_object($obj_id, $lat, $lng, $obj, $lat2 = null, $lng2 = null, $insert = true) {
+function worldmap_db_update_object(
+    $obj_id,
+    $lat,
+    $lng,
+    $obj,
+    $lat2 = null,
+    $lng2 = null,
+    $insert = true
+) {
     global $DB;
     worldmap_init_db();
 
@@ -356,7 +364,13 @@ function worldmap_db_update_object($obj_id, $lat, $lng, $obj, $lat2 = null, $lng
     }
 }
 
-function worldmap_update_object($MAPCFG, $map_name, &$map_config, $obj_id, $insert = true) {
+function worldmap_update_object(
+    $MAPCFG,
+    $map_name,
+    &$map_config,
+    $obj_id,
+    $insert = true
+) {
     $obj = $map_config[$obj_id];
 
     if ($obj['type'] == 'global') {

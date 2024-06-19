@@ -53,7 +53,10 @@ class CoreModuleHandler
     public function loadModule($sModule)
     {
         // Check if module class is registered
-        if (isset($this->aRegistered[$this->sPrefix . $sModule]) && $this->aRegistered[$this->sPrefix . $sModule] === 'active') {
+        if (
+            isset($this->aRegistered[$this->sPrefix . $sModule])
+            && $this->aRegistered[$this->sPrefix . $sModule] === 'active'
+        ) {
             $className = $this->sPrefix . $sModule;
 
             // create instance of module
