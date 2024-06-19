@@ -134,9 +134,9 @@ $cols = 3;                        // no. of columns with graphs
 // scan gadget_opts
 //==================
 
-if (isset($aOpts['opts']) && ($aOpts['opts'] != '')){
+if (isset($aOpts['opts']) && ($aOpts['opts'] != '')) {
     preg_match_all ('/(\w+)=(\w+)/', $aOpts['opts'], $matches, PREG_SET_ORDER);
-    for ($i = 0; $i < count($matches); $i++){
+    for ($i = 0; $i < count($matches); $i++) {
         if ($matches[$i][1] == 'columns') { $cols = $matches[$i][2]; }
         if ($matches[$i][1] == 'string') { $string = $matches[$i][2]; }
         if ($matches[$i][1] == 'current') { $current = $matches[$i][2]; }
@@ -167,7 +167,7 @@ if ($label == 1) {
     imagestring($img, 1, 0, 8, $aOpts['name2'], $oBlack);    // print service description
 }
 
-for ($i = 0; $i < $pdc; $i++){
+for ($i = 0; $i < $pdc; $i++) {
     $label = preg_replace('(.*::)', '', $aPerfdata[$i]['label']);    // omit check_multi description
     if (preg_match("/$string/", $label)) {
         $colour = '';

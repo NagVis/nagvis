@@ -138,9 +138,9 @@ if ($chrSize < 1) { $chrSize = 1; }
 // scan gadget_opts
 //==================
 
-if (isset($aOpts['opts']) && ($aOpts['opts'] != '')){
+if (isset($aOpts['opts']) && ($aOpts['opts'] != '')) {
     preg_match_all ('/(\w+)=(\w+)/', $aOpts['opts'], $matches, PREG_SET_ORDER);
-    for ($i = 0; $i < count($matches); $i++){
+    for ($i = 0; $i < count($matches); $i++) {
         if ($matches[$i][1] == 'columns') { $cols = $matches[$i][2]; }
         if ($matches[$i][1] == 'string') { $string = $matches[$i][2]; }
         if ($matches[$i][1] == 'current') { $current = $matches[$i][2]; }
@@ -169,7 +169,7 @@ imagefill($img, 0, 0, $oBackground);
 imagecolortransparent($img, $oBackground);
 
 $offG = 0;              // current graph
-for ($i = 0; $i < $pdc; $i++){
+for ($i = 0; $i < $pdc; $i++) {
     $desc = preg_replace('(.*::)', '', $aPerfdata[$i]['label']);  // omit check_multi description
     if (preg_match("/$string/", $desc)) {
         $colour = '';
