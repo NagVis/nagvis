@@ -61,12 +61,12 @@ $setAuthUser = true;
 
 /*** *** *** *** *** *** *** END OF CONFIGURATION *** *** *** *** *** *** ***/
 
-if(file_exists('../../server/core/defines/global.php')) {
+if (file_exists('../../server/core/defines/global.php')) {
     $_nv_core_dir = '../../server/core';
 } else {
     // handle OMD local/ hierarchy
     $_path_parts = explode('/', dirname($_SERVER["SCRIPT_FILENAME"]));
-    if($_path_parts[count($_path_parts) - 6] == 'local') {
+    if ($_path_parts[count($_path_parts) - 6] == 'local') {
         $_nv_core_dir = join(array_slice(explode('/', dirname($_SERVER["SCRIPT_FILENAME"])), 0, -6), '/') . '/share/nagvis/htdocs/server/core';
     } else {
         echo 'ERROR: Unable to detect nagvis core dir';
@@ -93,7 +93,7 @@ try {
     // Authenticate the user
     $SHANDLER = new CoreSessionHandler();
     $AUTH = new CoreAuthHandler();
-    if(!($AUTH->sessionAuthPresent() && $AUTH->isAuthenticatedSession())) {
+    if (!($AUTH->sessionAuthPresent() && $AUTH->isAuthenticatedSession())) {
         // ...otherwise try to auth the user
         // Logon Module?
         // -> Received data to check the auth? Then check auth!
@@ -104,21 +104,21 @@ try {
         $ret = $MODULE->check();
     }
 
-    if(!$AUTH->isAuthenticated()) {
+    if (!$AUTH->isAuthenticated()) {
         throw new NagVisException('Not authenticated.');
     }
 
     $username = $AUTH->getUser();
 
-    if(!isset($_GET['backend_id'])) {
+    if (!isset($_GET['backend_id'])) {
         throw new UserInputError('The parameter "backend_id" is missing.');
     }
 
-    if(!isset($_GET['query'])) {
+    if (!isset($_GET['query'])) {
         throw new UserInputError('The parameter "query" is missing.');
     }
 
-    if(!isset($_GET['type'])) {
+    if (!isset($_GET['type'])) {
         $type = 'raw';
     } else {
         $type = $_GET['type'];
@@ -127,22 +127,22 @@ try {
     $backendId = $_GET['backend_id'];
     $query     = str_replace('\\\\n', "\n", $_GET['query']);
 
-    if($setAuthUser) {
+    if ($setAuthUser) {
         $query .= 'AuthUser: ' . $username . "\n";
     }
 
     // Validate the query
-    if(!preg_match("/^" . $queryTypes . "\s" . $queryTables . "\n/", $query)) {
+    if (!preg_match("/^" . $queryTypes . "\s" . $queryTables . "\n/", $query)) {
         throw new UserInputError('Invalid livestatus query.');
     }
 
     $B = $_BACKEND->getBackend($backendId);
 
-    switch($type) {
+    switch ($type) {
         case 'cell':
             // Display the string of the single result cell
             $result = $B->query('column', $query);
-            if(!isset($result[0])) {
+            if (!isset($result[0])) {
                 throw new UserInputError('Got empty response');
             }
 
@@ -152,7 +152,7 @@ try {
         case 'column':
             // Display one cell per row
             $result = $B->query($type, $query);
-            if(!isset($result[0])) {
+            if (!isset($result[0])) {
                 throw new UserInputError('Got empty response');
             }
 
@@ -162,7 +162,7 @@ try {
         case 'row':
             // Display items comma separated
             $result = $B->query($type, $query);
-            if(!isset($result[0])) {
+            if (!isset($result[0])) {
                 throw new UserInputError('Got empty response');
             }
 
@@ -172,14 +172,14 @@ try {
         case 'list':
             // Display a table which formats the result in a readable way
             $result = $B->query($type, $query);
-            if(!isset($result[0])) {
+            if (!isset($result[0])) {
                 throw new UserInputError('Got empty response');
             }
 
             echo '<table>';
-            foreach($result as $line) {
+            foreach ($result as $line) {
                 echo '<tr>';
-                foreach($line as $cell) {
+                foreach ($line as $cell) {
                     echo '<td>' . $cell . '</td>';
                 }
                 echo '</tr>';
@@ -193,7 +193,7 @@ try {
     }
 
     exit(0);
-} catch(NagVisException $e) {
+} catch (NagVisException $e) {
     echo 'Exception (std_lq.php): ' . $e->getMessage();
 }
 exit(1);

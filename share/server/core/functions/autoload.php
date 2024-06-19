@@ -30,7 +30,7 @@
  * @author 	Lars Michelsen <lm@larsmichelsen.com>
  */
 function NagVisAutoload($sClass) {
-    if(substr($sClass, 0, 8) === 'Frontend'
+    if (substr($sClass, 0, 8) === 'Frontend'
        || substr($sClass, 0, 3) === 'Wui'
        || substr($sClass, 0, 4) === 'Core'
        || substr($sClass, 0, 4) === 'View'

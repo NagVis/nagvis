@@ -31,7 +31,7 @@ class ViewSearch {
         echo '<input class="submit" type="button" name="submit" value="' . l('Search') . '"'
             . ' onclick="searchObjects(document.getElementById(\'highlightInput\').value)" />' . N;
         echo '</div>' . N;
-        js('try{document.getElementById(\'highlightInput\').focus();}catch(e){}');
+        js('try{document.getElementById(\'highlightInput\').focus();}catch (e){}');
         return ob_get_clean();
     }
 }

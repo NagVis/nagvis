@@ -72,9 +72,9 @@ $sDummyPerfdata = 'config=20%;80;90;0;100';
 $_MODE          = 'img';
 
 // Include the gadgets core. Also handle OMD default and local paths
-if(substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
+if (substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
     $core = dirname($_SERVER["SCRIPT_FILENAME"]) . '/gadgets_core.php';
-    if(file_exists($core)) {
+    if (file_exists($core)) {
         require($core);
     } else {
         require(str_replace('local/share/', 'share/', $core));
@@ -219,16 +219,16 @@ for ($i = 0; $i < $pdc; $i++){
         // Normalize / Fix value and max
         //================
 
-        if($value == null) {
+        if ($value == null) {
             $value = $default;
-        } elseif($max != '' && $value < $min) {
+        } elseif ($max != '' && $value < $min) {
             $value = $min;
-        } elseif($max != '' && $max != -1 && $value > $max) {
+        } elseif ($max != '' && $max != -1 && $value > $max) {
             $value = $max;
         }
 
         // If there is no max value given set it using the critical value
-        if(intval($max) == 0 || $max == '') {
+        if (intval($max) == 0 || $max == '') {
             $max = $crit + 1;
         }
 
@@ -242,7 +242,7 @@ for ($i = 0; $i < $pdc; $i++){
 
         // If the critp is bigger than -1 it can not be rendered by the php functions.
         // Set it to -1 for having at least a small critical area drawn
-        if($critp > -1) {
+        if ($critp > -1) {
             $critp = -1;
         }
 
@@ -251,7 +251,7 @@ for ($i = 0; $i < $pdc; $i++){
         imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 180, 0, $oGreen, IMG_ARC_EDGED);
 
         // Warning
-        if($warn && $warnp <= -1) {
+        if ($warn && $warnp <= -1) {
             if ($warn < $crit) {
                 // The "360 +" fix has been worked out by hipska. Thanks for that!
                 imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 360 + $warnp, 0, $oYellow, IMG_ARC_EDGED);
@@ -261,7 +261,7 @@ for ($i = 0; $i < $pdc; $i++){
             }
         }
         // Critical
-        if($crit && $critp <= -1) {
+        if ($crit && $critp <= -1) {
             if ($warn < $crit) {
                 // The "360 +" fix has been worked out by hipska. Thanks for that!
                 imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 360 + $critp, 0, $oRed, IMG_ARC_EDGED);
@@ -296,7 +296,7 @@ for ($i = 0; $i < $pdc; $i++){
 
         $count = 1;
         $iOffsetX = -10;
-        for($d = 1; $d <= 3; $d++) {
+        for ($d = 1; $d <= 3; $d++) {
 
             imageline($img, ($centerx - $bediffx[$d]), ($centery + $bediffy[$d]), ($centerx - $bediffx1[$d]), ($centery + $bediffy1[$d]), $oBlack);
             imagestring($img, 1, ($centerx - $bediffx[$d] + $iOffsetX - 8), ($centery + $bediffy[$d] - 10), ($limit / 4 * $d), $oBlack);
@@ -315,7 +315,7 @@ for ($i = 0; $i < $pdc; $i++){
 // Output image.
 //==============
 
-if(function_exists('imageantialias')) {
+if (function_exists('imageantialias')) {
     imageantialias($img, true);
 }
 

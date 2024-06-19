@@ -38,13 +38,13 @@ class CoreModMultisite extends CoreModule {
     }
 
     public function handleAction() {
-        if(!$this->offersAction($this->sAction)) {
+        if (!$this->offersAction($this->sAction)) {
             return '';
         }
 
         $maps = [];
 
-        switch($this->sAction) {
+        switch ($this->sAction) {
             case 'getMaps':
                 if (cfg('global', 'multisite_snapin_layout') == 'tree') {
                     $maps = [
@@ -67,10 +67,10 @@ class CoreModMultisite extends CoreModule {
         $maps = [];
         $childs = [];
         foreach ($this->getMapsCached() as $map) {
-            if($map['parent_map'] === '') {
+            if ($map['parent_map'] === '') {
                 $maps[$map['name']] = $this->getMapForMultisite($map);
             } else {
-                if(!isset($childs[$map['parent_map']])) {
+                if (!isset($childs[$map['parent_map']])) {
                     $childs[$map['parent_map']] = [];
                 }
                 $childs[$map['parent_map']][$map['name']] = $this->getMapForMultisite($map);
@@ -129,20 +129,20 @@ class CoreModMultisite extends CoreModule {
     private function getMaps($maps) {
         global $_BACKEND, $AUTHORISATION;
         $aObjs = [];
-        foreach($maps as $object_id => $mapName) {
+        foreach ($maps as $object_id => $mapName) {
             $MAPCFG = new GlobalMapCfg($mapName);
 
             $config_error = null;
             $error = null;
             try {
                 $MAPCFG->readMapConfig();
-            } catch(MapCfgInvalid $e) {
+            } catch (MapCfgInvalid $e) {
                 $config_error = $e->getMessage();
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 $error = $e->getMessage();
             }
 
-            if($MAPCFG->getValue(0, 'show_in_lists') != 1 || $MAPCFG->getValue(0, 'show_in_multisite') != 1) {
+            if ($MAPCFG->getValue(0, 'show_in_lists') != 1 || $MAPCFG->getValue(0, 'show_in_multisite') != 1) {
                 continue;
             }
 
@@ -168,7 +168,7 @@ class CoreModMultisite extends CoreModule {
             $is_worldmap = in_array('worldmap', $sources);
 
             $state = null;
-            if($config_error !== null) {
+            if ($config_error !== null) {
                 $state = [
                     ERROR,
                     l('Map Configuration Error: ') . $config_error,
@@ -176,7 +176,7 @@ class CoreModMultisite extends CoreModule {
                     null,
                     null,
                 ];
-            } elseif($error !== null) {
+            } elseif ($error !== null) {
                 $state = [
                     ERROR,
                     l('Error: ') . $error,
@@ -184,7 +184,7 @@ class CoreModMultisite extends CoreModule {
                     null,
                     null,
                 ];
-            } elseif($is_worldmap) {
+            } elseif ($is_worldmap) {
                 // To give the correct state aggregation for the area of the
                 // worldmap the user would see when opening the worldmap, we would
                 // need this:
@@ -208,7 +208,7 @@ class CoreModMultisite extends CoreModule {
                     null,
                     null,
                 ];
-            } elseif(!$MAP->MAPOBJ->checkMaintenance(0)) {
+            } elseif (!$MAP->MAPOBJ->checkMaintenance(0)) {
                 $state = [
                     PENDING,
                     l('mapInMaintenance'),
@@ -226,7 +226,7 @@ class CoreModMultisite extends CoreModule {
         $_BACKEND->execute();
 
         $aMaps = [];
-        foreach($aObjs as $aObj) {
+        foreach ($aObjs as $aObj) {
             $MAP = $aObj[0];
             $state = $aObj[1];
             if ($state !== null) {

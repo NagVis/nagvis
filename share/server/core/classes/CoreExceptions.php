@@ -30,8 +30,7 @@ class NagVisException extends Exception {
     protected $e;
 
     function __construct($msg, $title = null, $time = null, $url = null) {
-        if($title === null) {
-            $title = l('ERROR');
+        if($title === null) {            $title = l('ERROR');
         }
 
         $this->e = [
@@ -40,10 +39,10 @@ class NagVisException extends Exception {
             'type'    => 'error',
         ];
 
-        if($time !== null) {
+        if ($time !== null) {
             $this->e['reloadTime'] = $time;
         }
-        if($url !== null) {
+        if ($url !== null) {
             $this->e['reloadUrl'] = $url;
         }
 
@@ -73,7 +72,7 @@ class Success extends NagVisException {
     function __construct($msg, $title = null, $time = null, $url = null) {
         parent::__construct($msg, $title, $time, $url);
         $this->e['type'] = 'ok';
-        if($this->e['title'] == l('ERROR')) {
+        if ($this->e['title'] == l('ERROR')) {
             $this->e['title'] = l('OK');
         }
     }

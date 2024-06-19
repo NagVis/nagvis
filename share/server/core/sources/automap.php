@@ -71,7 +71,7 @@ function list_automap_overlaps() {
 
 function list_automaps($CORE) {
     $arr = [];
-    foreach($CORE->getAvailableAutomaps() as $mapName) {
+    foreach ($CORE->getAvailableAutomaps() as $mapName) {
         $arr[$mapName] = $mapName;
     }
     return $arr;
@@ -237,22 +237,22 @@ function automap_get_root_hostname($params) {
      * value for the defaultroot
      */
     $defaultRoot = cfg('automap', 'defaultroot', true);
-    if(!isset($defaultRoot) || $defaultRoot == '') {
+    if (!isset($defaultRoot) || $defaultRoot == '') {
         try {
             $hostsWithoutParent = $_BACKEND->getBackend($params['backend_id'][0])->getHostNamesWithNoParent();
-        } catch(BackendConnectionProblem $e) {}
+        } catch (BackendConnectionProblem $e) {}
 
-        if(isset($hostsWithoutParent) && count($hostsWithoutParent) == 1) {
+        if (isset($hostsWithoutParent) && count($hostsWithoutParent) == 1) {
             $defaultRoot = $hostsWithoutParent[0];
         }
     }
 
-    if(!isset($defaultRoot) || $defaultRoot == '') {
+    if (!isset($defaultRoot) || $defaultRoot == '') {
         $defaultRoot = cfg('automap', 'defaultroot');
     }
 
     // Could not get root host for the automap
-    if(!isset($defaultRoot) || $defaultRoot == '') {
+    if (!isset($defaultRoot) || $defaultRoot == '') {
         throw new NagVisException(l('couldNotGetRootHostname'));
     } else {
         return $defaultRoot;
@@ -262,7 +262,7 @@ function automap_get_root_hostname($params) {
 function automap_load_params($MAPCFG) {
     $params = $MAPCFG->getSourceParams();
 
-    if(isset($params['ignore_hosts'])) {
+    if (isset($params['ignore_hosts'])) {
         $params['ignore_hosts'] = explode(',', $params['ignore_hosts']);
     }
 
@@ -271,7 +271,7 @@ function automap_load_params($MAPCFG) {
      * hostname is given NagVis tries to take configured host from main
      * configuration or read the host which has no parent from backend
      */
-    if(!isset($params['root']) || $params['root'] == '') {
+    if (!isset($params['root']) || $params['root'] == '') {
         $params['root'] = automap_get_root_hostname($params);
     }
 
@@ -286,8 +286,8 @@ function automap_hostnames_to_object_ids($names) {
     global $automap_object_ids;
 
     $ids = [];
-    foreach($names as $name) {
-        if(isset($automap_object_ids[$name])) {
+    foreach ($names as $name) {
+        if (isset($automap_object_ids[$name])) {
             $ids[] = $automap_object_ids[$name];
         }/* else {
             echo 'DEBUG: Missing automap objid '.$name;
@@ -301,7 +301,7 @@ function automap_hostnames_to_object_ids($names) {
  */
 function automap_load_object_ids() {
     global $automap_object_id_file, $automap_object_ids;
-    if(!isset($automap_object_ids[0])) {
+    if (!isset($automap_object_ids[0])) {
         if (GlobalCore::getInstance()->checkExisting($automap_object_id_file, false)) {
             $automap_object_ids = json_decode(file_get_contents($automap_object_id_file), true);
         } else {
@@ -324,7 +324,7 @@ function automap_obj_base($MAPCFG, &$params, &$saved_config, $obj_name) {
     global $automap_object_ids, $automap_object_ids_changed;
 
     // Generate an object id if it does not exist
-    if(!isset($automap_object_ids[$obj_name])) {
+    if (!isset($automap_object_ids[$obj_name])) {
         $automap_object_ids[$obj_name] = $MAPCFG->genObjId($obj_name);
         $automap_object_ids_changed = true;
     }
@@ -333,8 +333,8 @@ function automap_obj_base($MAPCFG, &$params, &$saved_config, $obj_name) {
 
     // Add maybe existing explicit config from saved_config. This includes
     // initial coordinates set by the user
-    foreach($saved_config as $conf) {
-        if($conf['type'] == 'host' && $conf['host_name'] == $obj_name) {
+    foreach ($saved_config as $conf) {
+        if ($conf['type'] == 'host' && $conf['host_name'] == $obj_name) {
             $obj = $conf;
         }
     }
@@ -423,18 +423,18 @@ function automap_connector($MAPCFG, &$params, &$saved_config, $from_obj, $to_obj
  * saved to the childObjects array
  */
 function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $layers_left, &$this_tree_lvl, &$object_names) {
-    if($layers_left == 0) {
+    if ($layers_left == 0) {
         return;
     } // Stop recursion when the number of layers counted down
 
     $relations = [];
     try {
         global $_BACKEND;
-        if($dir == 'childs') {
-            if($obj_name == '<<<monitoring>>>') {
+        if ($dir == 'childs') {
+            if ($obj_name == '<<<monitoring>>>') {
                 try {
                     $relations = $_BACKEND->getBackend($params['backend_id'][0])->getHostNamesWithNoParent();
-                } catch(BackendConnectionProblem $e) {
+                } catch (BackendConnectionProblem $e) {
                     $relations = [];
                 }
             } elseif (cfg('global', 'shinken_features')) {
@@ -464,9 +464,9 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
                 $relations[] = '<<<monitoring>>>';
             }
         }
-    } catch(BackendException $e) {}
+    } catch (BackendException $e) {}
 
-    foreach($relations as $rel_name) {
+    foreach ($relations as $rel_name) {
         if (isset($object_names[$rel_name])) {
             // already seen objects
             $obj = $object_names[$rel_name];
@@ -486,7 +486,7 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
 
         // < 0 - there is no limit
         // > 0 - there is a limit but it is no reached yet
-        if($layers_left < 0 || $layers_left > 0) {
+        if ($layers_left < 0 || $layers_left > 0) {
             automap_fetch_tree($dir, $MAPCFG, $params, $saved_config, $rel_name, $layers_left - 1, $this_tree_lvl[$obj['object_id']]['.' . $dir], $object_names);
         }
     }
@@ -509,10 +509,10 @@ function automap_get_object_tree($MAPCFG, $params, &$saved_config) {
     // Get all parent object information from backend when needed
     // If some parent layers are requested: It should be checked if the used
     // backend supports this
-    if(isset($params['parent_layers']) && $params['parent_layers'] != 0) {
+    if (isset($params['parent_layers']) && $params['parent_layers'] != 0) {
         global $_BACKEND;
 
-        if($_BACKEND->checkBackendFeature($params['backend_id'][0], 'getDirectParentNamesByHostName')) {
+        if ($_BACKEND->checkBackendFeature($params['backend_id'][0], 'getDirectParentNamesByHostName')) {
             automap_fetch_tree('parents', $MAPCFG, $params, $saved_config, $root_name, $params['parent_layers'], $root_obj['.parents'], $object_names);
         }
     }
@@ -528,18 +528,18 @@ function automap_filter_tree($allowed_ids, &$obj, $directions = null) {
     // Is the current object allowed to remain on the map on its own?
     $remain = isset($allowed_ids[$obj['object_id']]);
 
-    if($directions == null) {
+    if ($directions == null) {
         $directions = ['parents', 'childs'];
     }
 
     // Loop both directions
-    foreach($directions as $dir) {
-        foreach($obj['.' . $dir] as $rel_id => &$rel) {
+    foreach ($directions as $dir) {
+        foreach ($obj['.' . $dir] as $rel_id => &$rel) {
             // Or does a relative allow this object to remain on the map?
             $rel_remain = automap_filter_tree($allowed_ids, $rel, [$dir]);
 
             // If there is no reason for this relative to remain on the map, remove it here
-            if(!$rel_remain) {
+            if (!$rel_remain) {
                 unset($obj['.' . $dir][$rel_id]);
             } else {
                 // If at least one rel is allowed to remain, the ancestor must stay
@@ -556,7 +556,7 @@ function automap_filter_tree($allowed_ids, &$obj, $directions = null) {
  * the child tree by the given list of host object ids.
  */
 function automap_filter_by_ids(&$obj, $params = null) {
-    if(isset($params['filter_by_ids']) && $params['filter_by_ids'] != '') {
+    if (isset($params['filter_by_ids']) && $params['filter_by_ids'] != '') {
         $allowed_ids = array_flip(explode(',', $params['filter_by_ids']));
         automap_filter_tree($allowed_ids, $obj);
     }
@@ -573,7 +573,7 @@ function automap_filter_by_ids(&$obj, $params = null) {
  * config option. This sort of hosts should be visualized in another way.
  */
 function automap_filter_by_group(&$obj, $params) {
-    if(!isset($params['filter_group']) || $params['filter_group'] == '') {
+    if (!isset($params['filter_group']) || $params['filter_group'] == '') {
         return;
     }
 
@@ -615,7 +615,7 @@ function automap_filter_by_state(&$obj, $params) {
  * Links the object in the object tree to the map objects
  */
 function automap_tree_to_map_config($MAPCFG, &$params, &$saved_config, &$map_config, &$tree) {
-    if(isset($map_config[$tree['object_id']])) {
+    if (isset($map_config[$tree['object_id']])) {
         return;
     }
 
@@ -630,13 +630,13 @@ function automap_tree_to_map_config($MAPCFG, &$params, &$saved_config, &$map_con
     unset($map_config[$tree['object_id']]['.childs']);
     unset($map_config[$tree['object_id']]['.parents']);
 
-    foreach($tree['.childs'] as $child) {
+    foreach ($tree['.childs'] as $child) {
         automap_tree_to_map_config($MAPCFG, $params, $saved_config, $map_config, $child);
         $line = automap_connector($MAPCFG, $params, $saved_config, $tree, $child);
         $map_config[$line['object_id']] = $line;
     }
 
-    foreach($tree['.parents'] as $parent) {
+    foreach ($tree['.parents'] as $parent) {
         automap_tree_to_map_config($MAPCFG, $params, $saved_config, $map_config, $parent);
         $line = automap_connector($MAPCFG, $params, $saved_config, $tree, $parent);
         $map_config[$line['object_id']] = $line;
@@ -666,7 +666,7 @@ function process_automap($MAPCFG, $map_name, &$map_config) {
 
     // Store the automap object_ids after processing the tree (all relevant object_ids)
     // have been gathered now
-    if($automap_object_ids_changed) {
+    if ($automap_object_ids_changed) {
         automap_store_object_ids();
     }
 
@@ -690,7 +690,7 @@ function process_automap($MAPCFG, $map_name, &$map_config) {
 
     // Remove "." leaded attributes
     // FIXME: Maybe move this to general "sources" processing
-    foreach($map_config as $object_id => $conf) {
+    foreach ($map_config as $object_id => $conf) {
         foreach (array_keys($conf) as $key) {
             if ($key[0] == '.') {
                 unset($map_config[$object_id][$key]);

@@ -60,7 +60,7 @@ class NagVisDynGroup extends NagVisStatefulObject {
         global $_BACKEND;
         $queries = ['DYN_GROUP_MEMBER_STATE' => true];
 
-        if($this->hover_menu == 1
+        if ($this->hover_menu == 1
             && $this->hover_childs_show == 1
             && $bFetchMemberState) {
             $queries['DYN_GROUP_MEMBER_DETAILS'] = true;
@@ -73,7 +73,7 @@ class NagVisDynGroup extends NagVisStatefulObject {
      * Applies the fetched state
      */
     public function applyState() {
-        if($this->problem_msg) {
+        if ($this->problem_msg) {
             $this->sum = [
                 ERROR,
                 $this->problem_msg,
@@ -85,32 +85,32 @@ class NagVisDynGroup extends NagVisStatefulObject {
             return;
         }
 
-        if($this->hasMembers()) {
-            foreach($this->members as $MOBJ) {
+        if ($this->hasMembers()) {
+            foreach ($this->members as $MOBJ) {
                 $MOBJ->applyState();
             }
         }
 
         // Use state summaries when some are available to
         // calculate summary state and output
-        if($this->aStateCounts !== null) {
+        if ($this->aStateCounts !== null) {
             // Calculate summary state and output
 
             // Only create summary from childs when not set yet (e.g by backend)
-            if($this->sum[STATE] === null) {
+            if ($this->sum[STATE] === null) {
                 $this->fetchSummaryStateFromCounts();
             }
 
             // Only create summary from childs when not set yet (e.g by backend)
-            if($this->sum[OUTPUT] === null) {
+            if ($this->sum[OUTPUT] === null) {
                 $this->fetchSummaryOutputFromCounts();
             }
         } else {
-            if($this->sum[STATE] === null) {
+            if ($this->sum[STATE] === null) {
                 $this->fetchSummaryState();
             }
 
-            if($this->sum[OUTPUT] === null) {
+            if ($this->sum[OUTPUT] === null) {
                 $this->fetchSummaryOutput();
             }
         }
@@ -128,21 +128,21 @@ class NagVisDynGroup extends NagVisStatefulObject {
 
         // Loop all major states
         $iSumCount = 0;
-        foreach($this->aStateCounts as $sState => $aSubstates) {
+        foreach ($this->aStateCounts as $sState => $aSubstates) {
             // Loop all substates (normal,ack,downtime,...)
-            foreach($aSubstates as $sSubState => $iCount) {
+            foreach ($aSubstates as $sSubState => $iCount) {
                 // Found some objects with this state+substate
-                if($iCount > 0) {
+                if ($iCount > 0) {
                     // Count all child objects
                     $iSumCount += $iCount;
 
-                    if(is_host_state($sState)) {
-                        if(!isset($arrHostStates[$sState])) {
+                    if (is_host_state($sState)) {
+                        if (!isset($arrHostStates[$sState])) {
                             $arrHostStates[$sState] = $iCount;
                         } else {
                             $arrHostStates[$sState] += $iCount;
                         }
-                    } elseif(!isset($arrServiceStates[$sState])) {
+                    } elseif (!isset($arrServiceStates[$sState])) {
                         $arrServiceStates[$sState] = $iCount;
                     } else {
                         $arrServiceStates[$sState] += $iCount;
@@ -152,7 +152,7 @@ class NagVisDynGroup extends NagVisStatefulObject {
         }
 
         // Fallback for hostgroups without members
-        if($iSumCount == 0) {
+        if ($iSumCount == 0) {
             $this->sum[OUTPUT] = l('The dynamic group "[GROUP]" has no members (Backend: [BACKEND]).',
                 [
                     'GROUP' => $this->name,
@@ -161,7 +161,7 @@ class NagVisDynGroup extends NagVisStatefulObject {
         } else {
             // FIXME: Recode mergeSummaryOutput method
             $this->mergeSummaryOutput($arrHostStates, l('hosts'), false);
-            if($this->recognize_services) {
+            if ($this->recognize_services) {
                 $this->sum[OUTPUT] .= ' ' . l('and') . ' ';
                 $this->mergeSummaryOutput($arrServiceStates, l('services'), true, true);
             }
@@ -172,7 +172,7 @@ class NagVisDynGroup extends NagVisStatefulObject {
      * Fetches the summary state from all members recursive
      */
     private function fetchSummaryState() {
-        if($this->hasMembers()) {
+        if ($this->hasMembers()) {
             $this->calcSummaryState();
         } else {
             $this->sum[STATE] = ERROR;
@@ -183,7 +183,7 @@ class NagVisDynGroup extends NagVisStatefulObject {
      * Fetches the summary output from all members
      */
     private function fetchSummaryOutput() {
-        if($this->hasMembers()) {
+        if ($this->hasMembers()) {
             $arrStates = [
                 CRITICAL => 0, DOWN    => 0, WARNING   => 0,
                 UNKNOWN  => 0, UP      => 0, OK        => 0,
@@ -191,7 +191,7 @@ class NagVisDynGroup extends NagVisStatefulObject {
             ];
 
             // Get summary state of this and child objects
-            foreach($this->members AS &$MEMBER) {
+            foreach ($this->members AS &$MEMBER) {
                 $arrStates[$MEMBER->getSummaryState()]++;
             }
 

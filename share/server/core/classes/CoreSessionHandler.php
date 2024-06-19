@@ -42,12 +42,12 @@ class CoreSessionHandler {
 
         // Only add the domain when it is no simple hostname
         // This can be easily detected searching for a dot
-        if(strpos($sDomain, '.') === false) {
+        if (strpos($sDomain, '.') === false) {
             $sDomain = null;
         }
 
         // Opera has problems with ip addresses in domains. So skip them
-        if(strpos($_SERVER['HTTP_USER_AGENT'], 'opera') !== false
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'opera') !== false
             && preg_match('/\d.\d+.\d+.\d+/', $sDomain)) {
             $sDomain = null;
         }
@@ -60,33 +60,33 @@ class CoreSessionHandler {
         }
 
         // Start a session for the user when not started yet
-        if(!isset($_SESSION)) {
+        if (!isset($_SESSION)) {
             try {
                 session_start();
                 // Write/close to release the lock aquired by session_start().
                 // Each write to the session needs to perform session_start() again
                 session_write_close();
-            } catch(ErrorException $e) {
+            } catch (ErrorException $e) {
                 // Catch and suppress session cleanup errors. This is a problem
                 // especially on current debian/ubuntu:
                 //   PHP error in ajax request handler: Error: (8) session_start():
                 //   ps_files_cleanup_dir: opendir(/var/lib/php5) failed: Permission denied (13)
-                if(strpos($e->getMessage(), 'ps_files_cleanup_dir') === false) {
+                if (strpos($e->getMessage(), 'ps_files_cleanup_dir') === false) {
                     throw $e;
                 }
             }
 
             // Store the creation time of the session
-            if(!$this->issetAndNotEmpty('sessionExpires')) {
+            if (!$this->issetAndNotEmpty('sessionExpires')) {
                 $this->set('sessionExpires', time() + $iDuration);
             }
         }
 
         // Reset the expiration time of the session cookie
-        if(isset($_COOKIE[SESSION_NAME])) {
+        if (isset($_COOKIE[SESSION_NAME])) {
             // Don't reset the expiration time on every page load - only reset when
             // the half of the expiration time has passed
-            if(time() >= $this->get('sessionExpires') - ($iDuration / 2)) {
+            if (time() >= $this->get('sessionExpires') - ($iDuration / 2)) {
                 $exp = time() + $iDuration;
                 setcookie(SESSION_NAME, $_COOKIE[SESSION_NAME], $exp, $sPath, $sDomain, $bSecure, $bHTTPOnly);
 
@@ -101,7 +101,7 @@ class CoreSessionHandler {
     }
 
     public function get($sKey) {
-        if(isset($_SESSION[$sKey])) {
+        if (isset($_SESSION[$sKey])) {
             return $_SESSION[$sKey];
         } else {
             return false;
@@ -109,13 +109,13 @@ class CoreSessionHandler {
     }
 
     public function set($sKey, $sVal) {
-        if(isset($_SESSION[$sKey])) {
+        if (isset($_SESSION[$sKey])) {
             $sOld = $_SESSION[$sKey];
         } else {
             $sOld = false;
         }
 
-        if($sVal == false) {
+        if ($sVal == false) {
             unset($_SESSION[$sKey]);
         } else {
             $_SESSION[$sKey] = $sVal;

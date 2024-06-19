@@ -14,20 +14,20 @@ function geomap_read_csv($p) {
     $locations = [];
     $f = geomap_source_file($p);
 
-    if($p['source_file'] == '') {
+    if ($p['source_file'] == '') {
         throw new GeomapError(l('No location source file given. Terminate rendering geomap.'));
     }
 
-    if(!file_exists($f)) {
+    if (!file_exists($f)) {
         throw new GeomapError(l('Location source file "[F]" does not exist.', ['F' => $f]));
     }
 
     $i = 0;
-    foreach(file($f) as $line) {
+    foreach (file($f) as $line) {
         $i++;
 
         // skip lines beginning with any of the usual comment characters
-        if(preg_match('/^[;#\/]/', $line)) {
+        if (preg_match('/^[;#\/]/', $line)) {
             continue;
         }
         $parts = explode(';', $line);
@@ -83,7 +83,7 @@ function geomap_backend_program_start($p) {
 //
 
 function geomap_get_locations($p) {
-    switch($p['source_type']) {
+    switch ($p['source_type']) {
         case 'csv':
             return geomap_read_csv($p);
         break;
@@ -97,7 +97,7 @@ function geomap_get_locations($p) {
 }
 
 //function geomap_backend_cache_file($p) {
-//    if(isset($p['filter_group']) && $p['filter_group'] != '') {
+//    if (isset($p['filter_group']) && $p['filter_group'] != '') {
 //        $fname = '-'.$p['filter_group'];
 //    } else {
 //        $fname = '';
@@ -106,7 +106,7 @@ function geomap_get_locations($p) {
 //}
 
 function geomap_source_age($p) {
-    switch($p['source_type']) {
+    switch ($p['source_type']) {
         case 'csv':
                 return filemtime(geomap_source_file($p));
         break;
@@ -130,11 +130,11 @@ function geomap_get_contents($url) {
         ];
 
         $proxy = cfg('global', 'http_proxy');
-        if($proxy != null) {
+        if ($proxy != null) {
             $opts['http']['proxy'] = $proxy;
             $opts['http']['request_fulluri'] = true;
             $proxy_auth = cfg('global', 'http_proxy_auth');
-            if($proxy_auth != null) {
+            if ($proxy_auth != null) {
                 $opts['http']['header'] = 'Proxy-Authorization: Basic ' . base64_encode("$proxy_auth");
             }
         }
@@ -142,7 +142,7 @@ function geomap_get_contents($url) {
         $context = stream_context_create($opts);
 
         return file_get_contents($url, false, $context);
-    } catch(Exception $e) {
+    } catch (Exception $e) {
         throw new GeomapError(l('Unable to fetch URL "[U]".<br/><br />The geomap needs to be able to fetch '
             . 'some data from the internet via webservice API. Please take a look '
             . 'at the docs for more details.<br /><br /><small>[E]</small>',
@@ -324,7 +324,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     $map_config[0]['iconset']   = $iconset;
 
     // Now add the objects to the map
-    foreach($locations as $loc) {
+    foreach ($locations as $loc) {
         $object_id = $MAPCFG->genObjId($loc['name']);
         $map_config[$object_id] = [
             'type'      => 'host',
@@ -346,7 +346,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     process_filter($MAPCFG, $map_name, $map_config, $params);
 
     // Terminate empty views
-    if(count($map_config) <= 1) {
+    if (count($map_config) <= 1) {
         throw new GeomapError(l('Got empty map after filtering. Terminate rendering geomap.'));
     }
 
@@ -358,22 +358,22 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     // east/west
     $min_long = 180;
     $max_long = -180;
-    foreach($map_config as $obj) {
-        if($obj['type'] == 'global') {
+    foreach ($map_config as $obj) {
+        if ($obj['type'] == 'global') {
             continue;
         }
 
-        if($obj['lat'] < $min_lat) {
+        if ($obj['lat'] < $min_lat) {
             $min_lat = $obj['lat'];
         }
-        if($obj['lat'] > $max_lat) {
+        if ($obj['lat'] > $max_lat) {
             $max_lat = $obj['lat'];
         }
 
-        if($obj['long'] < $min_long) {
+        if ($obj['long'] < $min_long) {
             $min_long = $obj['long'];
         }
-        if($obj['long'] > $max_long) {
+        if ($obj['long'] > $max_long) {
             $max_long = $obj['long'];
         }
     }
@@ -403,7 +403,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
     // The geomap zoom seems to be something different than the nagvis zoom. Use
     // the dedicated geomap_zoom parameter
-    if(isset($params['geomap_zoom']) && $params['geomap_zoom'] != '') {
+    if (isset($params['geomap_zoom']) && $params['geomap_zoom'] != '') {
         $mid_lat  = ($min_lat + $max_lat) / 2;
         $mid_long = ($min_long + $max_long) / 2;
         $url .= '&zoom=' . $params['geomap_zoom']
@@ -414,14 +414,14 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     //file_put_contents('/tmp/123', $url);
 
     // Fetch the background image when needed
-    if(!file_exists($image_path) || geomap_source_age($params) > filemtime($image_path)) {
+    if (!file_exists($image_path) || geomap_source_age($params) > filemtime($image_path)) {
         // Allow/enable proxy
         $contents = geomap_get_contents($url);
         file_put_contents($image_path, $contents);
     }
 
     // Fetch the map bounds when needed
-    if(!file_exists($data_path) || geomap_source_age($params) > filemtime($data_path)) {
+    if (!file_exists($data_path) || geomap_source_age($params) > filemtime($data_path)) {
         // Get the lat/long of the image bounds. The api adds a border area to the
         // generated image. This is good since this makes the outer nodes not touch
         // the border of the image. But this makes calculation of the x/y coords
@@ -432,7 +432,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
         $data_url = $url . '&bboxReturnFormat=csv';
         $contents = geomap_get_contents($data_url);
 
-        if(!$contents ||
+        if (!$contents ||
             (ord($contents[0]) == 137 &&
             ord($contents[1]) == 80 &&
             ord($contents[2]) == 78)) {
@@ -441,7 +441,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
                 ['U' => $data_url]));
         }
 
-        if(!preg_match('/^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/i', $contents)) {
+        if (!preg_match('/^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/i', $contents)) {
             throw new GeomapError(l('Got invalid data from "[U]": "[C]"', [
                 'U' => $data_url, 'C' => json_encode($contents)
             ]));
@@ -466,20 +466,20 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     $lat_mult  = $params['height'] / (ProjectF($img_top) - ProjectF($img_down));
 
     // Now add the coordinates to the map objects
-    foreach($map_config AS &$obj) {
-        if(!isset($obj['lat'])) {
+    foreach ($map_config AS &$obj) {
+        if (!isset($obj['lat'])) {
             continue;
         }
 
         // Calculate the lat (y) coords
         $obj['y'] = round((ProjectF($img_top) - ProjectF($obj['lat'])) * $lat_mult - ($icon_h / 2));
-        if($obj['y'] < 0) {
+        if ($obj['y'] < 0) {
             $obj['y'] = 0;
         }
 
         // Calculate the long (x) coords
         $obj['x'] = round(($long_para * ($obj['long'] - $img_left)) - ($icon_w / 2));
-        if($obj['x'] < 0) {
+        if ($obj['x'] < 0) {
             $obj['x'] = 0;
         }
 
@@ -502,18 +502,18 @@ function changed_geomap($MAPCFG, $compare_time) {
     list($image_name, $image_path, $data_path) = geomap_files($params);
 
     // a)
-    if(!file_exists($image_path) || !file_exists($data_path)) {
+    if (!file_exists($image_path) || !file_exists($data_path)) {
         return true;
     }
 
     // b)
     $t = geomap_source_age($params);
-    if($t > $compare_time) {
+    if ($t > $compare_time) {
         return true;
     }
 
     // c)
-    if($t > filemtime($image_path) || $t > filemtime($data_path)) {
+    if ($t > filemtime($image_path) || $t > filemtime($data_path)) {
         return true;
     }
 

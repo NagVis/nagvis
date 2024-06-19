@@ -45,7 +45,7 @@ $AUTH = new CoreAuthHandler();
 
 // Session: Logged in?
 // -> Get credentials from session and check auth
-if(!($AUTH->sessionAuthPresent() && $AUTH->isAuthenticatedSession())) {
+if (!($AUTH->sessionAuthPresent() && $AUTH->isAuthenticatedSession())) {
     // ...otherwise try to auth the user
     // Logon Module?
     // -> Received data to check the auth? Then check auth!
@@ -55,7 +55,7 @@ if(!($AUTH->sessionAuthPresent() && $AUTH->isAuthenticatedSession())) {
     $MODULE = new $logonModule($CORE);
     $ret = $MODULE->check();
     // Maybe handle other module now
-    if(is_array($ret)) {
+    if (is_array($ret)) {
         $UHANDLER->set('mod', $ret[0]);
         $UHANDLER->set('act', $ret[1]);
         $LOGIN_MSG = $ret[2];
@@ -67,7 +67,7 @@ if(!($AUTH->sessionAuthPresent() && $AUTH->isAuthenticatedSession())) {
 *                  and nothing other is saved yet
 */
 
-if($AUTH->isAuthenticated()) {
+if ($AUTH->isAuthenticated()) {
     $AUTHORISATION = new CoreAuthorisationHandler();
     $AUTHORISATION->parsePermissions();
 } else {
@@ -86,13 +86,13 @@ $_LANG->setLanguage(HANDLE_USERCFG);
 
 // Register valid modules
 // Unregistered modules can not be accessed
-foreach($_modules as $mod) {
+foreach ($_modules as $mod) {
     $MHANDLER->regModule($mod);
 }
 
 // Load the module
 $MODULE = $MHANDLER->loadModule($UHANDLER->get('mod'));
-if($MODULE == null) {
+if ($MODULE == null) {
     throw new NagVisException(l('The module [MOD] is not known',
         ['MOD' => htmlentities($UHANDLER->get('mod'), ENT_COMPAT, 'UTF-8')]));
 }
@@ -106,7 +106,7 @@ $MODULE->initObject();
 
 // Only check the permissions for modules which require an authorization.
 // For example the info page and the login page don't need a special authorization
-if($MODULE->actionRequiresAuthorisation()) {
+if ($MODULE->actionRequiresAuthorisation()) {
     $MODULE->isPermitted();
 }
 
@@ -117,7 +117,7 @@ if($MODULE->actionRequiresAuthorisation()) {
 
 // Handle regular action when everything is ok
 // When no matching module or action is found show the 404 error
-if($MODULE !== false && $MODULE->offersAction($UHANDLER->get('act'))) {
+if ($MODULE !== false && $MODULE->offersAction($UHANDLER->get('act'))) {
     $MODULE->setAction($UHANDLER->get('act'));
 
     // Handle the given action in the module

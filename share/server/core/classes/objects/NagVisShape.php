@@ -38,7 +38,7 @@ class NagVisShape extends NagVisStatelessObject {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($icon) {
-        if(self::$iconPath === null) {
+        if (self::$iconPath === null) {
             self::$iconPath      = path('sys',  'global', 'shapes');
             self::$iconPathLocal = path('sys',  'local', 'shapes');
         }
@@ -73,8 +73,8 @@ class NagVisShape extends NagVisStatelessObject {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function fetchIcon() {
-        if($this->icon[0] != '[') {
-            if(!file_exists(self::$iconPath . $this->icon)
+        if ($this->icon[0] != '[') {
+            if (!file_exists(self::$iconPath . $this->icon)
                 && !file_exists(self::$iconPathLocal . $this->icon)) {
                 $this->icon = 'std_dummy.png';
             }

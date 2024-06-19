@@ -36,7 +36,7 @@
  * - Können Services in Components auch den Status Output anzeigen?
  */
 
-if(!function_exists('l')) {
+if (!function_exists('l')) {
     require_once('GlobalBackendInterface.php');
     require_once('../defines/matches.php');
 }
@@ -85,7 +85,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
 
         $username = cfg('backend_' . $backendId, 'auth_user');
         $password = cfg('backend_' . $backendId, 'auth_pass');
-        if($username && $password) {
+        if ($username && $password) {
             $authCred = base64_encode($username . ':' . $password);
             $httpContext['header'] = 'Authorization: Basic ' . $authCred . "\r\n";
         }
@@ -110,7 +110,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
 
         // Is there some cache to use? The cache is not persisted. It is available
         // until the request has finished.
-        if(isset($this->cache[$url])) {
+        if (isset($this->cache[$url])) {
             return $this->cache[$url];
         }
 
@@ -120,7 +120,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
         //fclose($fh);
 
         $s = @file_get_contents($url, false, $this->context);
-        if($s === false) {
+        if ($s === false) {
             throw new BackendConnectionProblem(l('Unable to fetch data from URL [U]: [M]',
                 ['U' => $url, 'M' => json_encode(error_get_last())]));
         }
@@ -137,14 +137,14 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
         // Decode the json response
         // json_decode returns null on syntax problems
         $obj = json_decode(iso8859_1_to_utf8($s), true);
-        if($obj === null || !isset($obj['json_created'])) {
+        if ($obj === null || !isset($obj['json_created'])) {
             throw new BackendInvalidResponse(l('The response has an invalid format in backend [BACKENDID].',
                 ['BACKENDID' => $this->backendId]));
         }
 
         // Check age of 'json_created'
         $created = strptime($obj['json_created'], '%Y-%m-%d %H:%M:%S');
-        if($created < strtotime('-60 seconds')) {
+        if ($created < strtotime('-60 seconds')) {
             throw new BackendInvalidResponse(l('Response data is too old (json_created: [C])',
                 ['C' => $obj['json_created']]));
         }
@@ -169,7 +169,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
     private function getProcessNames() {
         $o = $this->getUrl('');
         $names = [];
-        foreach($o['business_processes'] as $key => $bp) {
+        foreach ($o['business_processes'] as $key => $bp) {
             $names[$key] = $bp['display_name'];
         }
         ksort($names);
@@ -177,7 +177,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
     }
 
     private function getBPState($state) {
-        if($state == null) {
+        if ($state == null) {
             return UNKNOWN;
         }
         return state_num($state);
@@ -214,9 +214,9 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
         ];
 
         // Add the single component state counts
-        foreach($bp['components'] as $component) {
+        foreach ($bp['components'] as $component) {
             $s = $this->getBPState($component['hardstate']);
-            if(!isset($c[$s])) {
+            if (!isset($c[$s])) {
                 throw new BackendException(l('Invalid state: "[S]"',
                     ['S' => $s]));
             }
@@ -235,12 +235,12 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
      * objects in WUI.
      */
     public function getObjects($type, $name1Pattern = '', $name2Pattern = '') {
-        if($type !== 'servicegroup') {
+        if ($type !== 'servicegroup') {
             return [];
         }
 
         $result = [];
-        foreach($this->getProcessNames() as $id => $name) {
+        foreach ($this->getProcessNames() as $id => $name) {
             $result[] = ['name1' => $id, 'name2' => $name];
         }
         return $result;
@@ -258,8 +258,8 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
         $bps = $o['business_processes'];
 
         $ret = [];
-        foreach($objects as $key => $OBJS) {
-            if(!isset($bps[$key])) {
+        foreach ($objects as $key => $OBJS) {
+            if (!isset($bps[$key])) {
                 continue;
             }
             $bp = $bps[$key];
@@ -274,12 +274,12 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
             ];
 
             // Add optional outputs which replaces the NagVis summary_output
-            if(isset($bp['external_info'])) {
+            if (isset($bp['external_info'])) {
                 $ret[$key]['output'] = $bp['external_info'];
             }
 
             // Forces the URL to point to nagios-bp if the current url does not point to a map
-            if(strpos($OBJS[0]->getUrl(), 'show=') === false) {
+            if (strpos($OBJS[0]->getUrl(), 'show=') === false) {
                 $ret[$key]['attrs'] = [
                     'url' => $this->bpUrl($key),
                 ];
@@ -298,15 +298,15 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
         $bps = $o['business_processes'];
 
         $ret = [];
-        foreach($objects as $key => $OBJS) {
-            if(!isset($bps[$key])) {
+        foreach ($objects as $key => $OBJS) {
+            if (!isset($bps[$key])) {
                 continue;
             }
             $bp = $bps[$key];
 
             // Initialize the service list
             // Add the aggregation summary state
-            if(!isset($ret[$key])) {
+            if (!isset($ret[$key])) {
                 $ret[$key] = [
                     #Array(
                     #    'host_name'           => '_BP_',
@@ -316,14 +316,14 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
                     #),
                 ];
 
-                #if(isset($bp['external_info']))
+                #if (isset($bp['external_info']))
                 #    $ret[$key][0]['output'] = $bp['external_info'];
             }
 
             // Add the services
             // This can be real services or e.g. other business processes
-            foreach($bp['components'] as $comp) {
-                if(isset($comp['service'])) {
+            foreach ($bp['components'] as $comp) {
+                if (isset($comp['service'])) {
                     // Service
                     //$ret[$key][] = Array(
                     //    STATE => $this->getBPState($comp['hardstate']),
@@ -386,7 +386,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
                         $comp['display_name'] // descr
                     ];
 
-                    if(isset($bps[$comp['subprocess']]['external_info'])) {
+                    if (isset($bps[$comp['subprocess']]['external_info'])) {
                         $childBP[OUTPUT] = $bps[$comp['subprocess']]['external_info'];
                     }
 
@@ -439,7 +439,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface {
     }
 }
 
-if(!function_exists('l')) {
+if (!function_exists('l')) {
     require_once('GlobalBackendInterface.php');
     require_once('CoreExceptions.php');
 
@@ -448,13 +448,13 @@ if(!function_exists('l')) {
     }
 
     function cfg($sec, $opt) {
-        if($opt == 'base_url') {
+        if ($opt == 'base_url') {
             return 'http://127.0.0.1/nagiosbp/cgi-bin/nagios-bp.cgi';
         }
-        if($opt == 'auth_user') {
+        if ($opt == 'auth_user') {
             return 'omdadmin';
         }
-        if($opt == 'auth_pass') {
+        if ($opt == 'auth_pass') {
             return 'omd';
         }
     }

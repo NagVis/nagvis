@@ -63,8 +63,7 @@ function iconset_size($iconset) {
             return svg_size($iconPath);
         } else {
             return getimagesize($iconPath);
-        }
-    } else {
+        }    } else {
         return [0, 0];
     }
 }
@@ -97,10 +96,10 @@ function svg_size($filepath) {
 function shape_size($icon) {
     $iconPath      = path('sys',  'global', 'shapes') . '/' . $icon;
     $iconPathLocal = path('sys',  'local',  'shapes') . '/' . $icon;
-    if(file_exists($iconPathLocal)) {
+    if (file_exists($iconPathLocal)) {
         return getimagesize($iconPathLocal);
     }
-    elseif(file_exists($iconPath)) {
+    elseif (file_exists($iconPath)) {
         return getimagesize($iconPath);
     } else {
         return [0, 0];

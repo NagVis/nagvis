@@ -30,7 +30,7 @@ class CoreRequestHandler {
     }
 
     public function get($sKey) {
-        if(isset($this->aOpts[$sKey])) {
+        if (isset($this->aOpts[$sKey])) {
             return $this->aOpts[$sKey];
         } else {
             return null;
@@ -42,14 +42,14 @@ class CoreRequestHandler {
     }
 
     public function match($sKey, $regex) {
-        if(!isset($this->aOpts[$sKey])) {
+        if (!isset($this->aOpts[$sKey])) {
             return false;
         }
 
         // If this is an array validate the single values. When one of the values
         // is invalid return false.
-        if(is_array($this->aOpts[$sKey])) {
-            foreach($this->aOpts[$sKey] as $val) {
+        if (is_array($this->aOpts[$sKey])) {
+            foreach ($this->aOpts[$sKey] as $val) {
                 if (!preg_match($regex, $val)) {
                     return false;
                 }
@@ -66,8 +66,8 @@ class CoreRequestHandler {
 
     public function getAll($exclude = []) {
         $ret = [];
-        foreach($this->aOpts as $key => $val) {
-            if(!isset($exclude[$key])) {
+        foreach ($this->aOpts as $key => $val) {
+            if (!isset($exclude[$key])) {
                 $ret[$key] = $val;
             }
         }
@@ -75,7 +75,7 @@ class CoreRequestHandler {
     }
 
     public static function getReferer($default) {
-        if(isset($_SERVER['HTTP_REFERER'])) {
+        if (isset($_SERVER['HTTP_REFERER'])) {
             return $_SERVER['HTTP_REFERER'];
         } else {
             return $default;
@@ -83,7 +83,7 @@ class CoreRequestHandler {
     }
 
     public static function getRequestUri($default) {
-        if(isset($_SERVER['REQUEST_URI'])) {
+        if (isset($_SERVER['REQUEST_URI'])) {
             return $_SERVER['REQUEST_URI'];
         } else {
             return $default;

@@ -64,10 +64,10 @@ if (!function_exists('handle_action_rdp')) {
         header('Content-Disposition: attachment; filename=' . $host_name . '.rdp');
 
         echo 'full address:s:' . $host_address . "\n";
-        if($domain) {
+        if ($domain) {
             echo 'domain:s:' . $domain . "\n";
         }
-        if($username) {
+        if ($username) {
             echo 'username:s:' . $username . "\n";
         }
     }

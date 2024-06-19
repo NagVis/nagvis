@@ -50,9 +50,9 @@ $sDummyPerfdata = 'config=20%;80;90;0;100';
 $_MODE          = 'img';
 
 // Include the gadgets core. Also handle OMD default and local paths
-if(substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
+if (substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
     $core = dirname($_SERVER["SCRIPT_FILENAME"]) . '/gadgets_core.php';
-    if(file_exists($core)) {
+    if (file_exists($core)) {
         require($core);
     } else {
         require(str_replace('local/share/', 'share/', $core));
@@ -90,16 +90,16 @@ $max = $aPerfdata[0]['max'];
 // Normalize / Fix value and max
 //================
 
-if($value == null) {
+if ($value == null) {
     $value = $default;
-} elseif($max != '' && $value < $min) {
+} elseif ($max != '' && $value < $min) {
     $value = $min;
-} elseif($max != '' && $max != -1 && $value > $max) {
+} elseif ($max != '' && $max != -1 && $value > $max) {
     $value = $max;
 }
 
 // If there is no max value given set it critical or warning value
-if(intval($max) == 0 || $max == '') {
+if (intval($max) == 0 || $max == '') {
     if (intval($crit) == 0 || $crit != '') {
         $max = $crit + 1;
     } else {
@@ -117,7 +117,7 @@ $critp = -180 + (180 / ( $max - $min ) * ( $crit - $min ) );
 
 // If the critp is bigger than -1 it can not be rendered by the php functions.
 // Set it to -1 for having at least a small critical area drawn
-if($critp > -1) {
+if ($critp > -1) {
     $critp = -1;
 }
 
@@ -162,12 +162,12 @@ imagecolortransparent($img, $oBackground);
 imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia), intval($outerdia), 180, 0, $oGreen, IMG_ARC_EDGED);
 
 // Warning
-if($warn && $warnp <= -1) {
+if ($warn && $warnp <= -1) {
     // The "360 +" fix has been worked out by hipska. Thanks for that!
     imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia), intval($outerdia), intval(360 + $warnp), 0, $oYellow, IMG_ARC_EDGED);
 }
 // Critical
-if($crit && $critp <= -1) {
+if ($crit && $critp <= -1) {
     // The "360 +" fix has been worked out by hipska. Thanks for that!
     imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia), intval($outerdia), intval(360 + $critp), 0, $oRed, IMG_ARC_EDGED);
 }
@@ -196,7 +196,7 @@ imagestring($img, 1, intval($centerx + $outerdia / 2 + 8), intval($centery - 6),
 
 $count = 1;
 $iOffsetX = -10;
-for($degrees = 45; $degrees < 180; $degrees = $degrees + 45) {
+for ($degrees = 45; $degrees < 180; $degrees = $degrees + 45) {
     $bediffy = sin (deg2rad(-$degrees + 360)) * (($outerdia + 10) / 2);
     $bediffx = cos (deg2rad(-$degrees + 360)) * (($outerdia + 10) / 2);
     $bediffy1 = sin (deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
@@ -213,7 +213,7 @@ for($degrees = 45; $degrees < 180; $degrees = $degrees + 45) {
 // Output image.
 //==============
 
-if(function_exists('imageantialias')) {
+if (function_exists('imageantialias')) {
     imageantialias($img, true);
 }
 

@@ -44,8 +44,8 @@ class NagVisLoginView {
         $target = CoreRequestHandler::getRequestUri('');
 
         // Add the language to the target url when the user requested a specific language
-        if(isset($_GET['lang']) && $_GET['lang'] != '' && strpos($target, 'lang=') === false) {
-            if(strpos($target, '?') === false) {
+        if (isset($_GET['lang']) && $_GET['lang'] != '' && strpos($target, 'lang=') === false) {
+            if (strpos($target, '?') === false) {
                 $target .= '?lang=' . $_GET['lang'];
             } else {
                 $target .= '&lang=' . $_GET['lang'];

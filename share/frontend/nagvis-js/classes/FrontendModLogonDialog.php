@@ -39,11 +39,11 @@ class FrontendModLogonDialog extends FrontendModule {
         global $AUTH;
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'view':
                     // Check if user is already authenticated
-                    if(!$AUTH->isAuthenticated()) {
+                    if (!$AUTH->isAuthenticated()) {
                         $VIEW = new NagVisLoginView($this->CORE);
                         $sReturn = $VIEW->parse();
                     } else {
