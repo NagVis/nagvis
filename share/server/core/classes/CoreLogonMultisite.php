@@ -47,8 +47,8 @@ class CoreLogonMultisite extends CoreLogonModule {
 
         } else {
             throw new NagVisException(l('LogonMultisite: The htpasswd file &quot;[HTPASSWD]&quot; or '
-                                       . 'the authentication serial file &quot;[SERIAL]&quot; do not exist.',
-                          ['HTPASSWD' => $this->htpasswdPath, 'SERIAL' => $this->serialsPath]));
+                . 'the authentication serial file &quot;[SERIAL]&quot; do not exist.',
+                ['HTPASSWD' => $this->htpasswdPath, 'SERIAL' => $this->serialsPath]));
         }
 
         if(!file_exists($this->secretPath)) {
@@ -109,8 +109,8 @@ class CoreLogonMultisite extends CoreLogonModule {
         }
         $user_secret = $users[$username];
 
-	if ($this->cookieVersion < 1) {
-	    // Older Checkmk versions do not set the cookieVersion, therefore we guess based on the length.
+        if ($this->cookieVersion < 1) {
+            // Older Checkmk versions do not set the cookieVersion, therefore we guess based on the length.
 
             // Checkmk 2.0 changed the following:
             // a) 2nd field from "issue time" to session ID
@@ -124,12 +124,12 @@ class CoreLogonMultisite extends CoreLogonModule {
             } else {
                 $hash = $this->generatePre22Hash($username, $sessionId, (string)$user_secret);
             }
-	}
-	elseif ($this->cookieVersion == 1) {
+        }
+        elseif ($this->cookieVersion == 1) {
             $hash = $this->generateHash($username, $sessionId, (string) $user_secret);
-	} else {
+        } else {
             throw new NagVisException(l('The Multisite Cookie version is not supported'));
-	}
+        }
 
         // Validate the hash
         if ($cookieHash !== $hash) {

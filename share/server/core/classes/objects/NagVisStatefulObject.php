@@ -302,7 +302,7 @@ class NagVisStatefulObject extends NagVisObject {
      */
     public function getStateDuration() {
         if(isset($this->state['last_state_change']) && $this->state['last_state_change'] != '0'
-           && $this->state['last_state_change'] != '') {
+            && $this->state['last_state_change'] != '') {
             if(self::$dateFormat == '') {
                 self::$dateFormat = cfg('global', 'dateformat');
             }
@@ -535,7 +535,7 @@ class NagVisStatefulObject extends NagVisObject {
 
             //Checks whether the needed file exists
             if(@file_exists(NagVisStatefulObject::$iconPath . $icon)
-               || @file_exists(NagVisStatefulObject::$iconPathLocal . $icon)) {
+                || @file_exists(NagVisStatefulObject::$iconPathLocal . $icon)) {
                 $this->icon = $icon;
             } else {
                 $this->icon = $this->iconset . '_error.' . $fileType;
@@ -564,8 +564,8 @@ class NagVisStatefulObject extends NagVisObject {
                     && $aSubstates['normal'] !== 0) {
                     $stateCounts[] = [
                         'name'   => $sState,
-                                           'weight' => $stateWeight[$sState]['normal'],
-                                           'count'  => $aSubstates['normal']
+                        'weight' => $stateWeight[$sState]['normal'],
+                        'count'  => $aSubstates['normal']
                     ];
                 }
             }
@@ -593,7 +593,7 @@ class NagVisStatefulObject extends NagVisObject {
             $backendId = $this->backend_id[0];
         }
         $this->problem_msg = l('Problem (Backend: [BACKENDID]): [MSG]',
-                               ['BACKENDID' => $backendId, 'MSG' => $s]);
+            ['BACKENDID' => $backendId, 'MSG' => $s]);
     }
 
     /**
@@ -648,10 +648,10 @@ class NagVisStatefulObject extends NagVisObject {
         }
         return strtr($s, [
             "\r" => '<br />',
-                               "\n" => '<br />',
-                               '"'  => '&quot;',
-                               '\'' => '&#145;',
-                               '$'  => '&#36;'
+            "\n" => '<br />',
+            '"'  => '&quot;',
+            '\'' => '&#145;',
+            '$'  => '&#36;'
         ]);
     }
 
@@ -703,11 +703,11 @@ class NagVisStatefulObject extends NagVisObject {
             $currWeight = $stateWeight[$this->sum[STATE]][$this->getSubState(SUMMARY_STATE)];
         } else {
             throw new NagVisException(l('Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE].',
-                                        [
-                                            'STATE'    => $this->sum[STATE],
-                                              'SUBSTATE' => $this->getSubState(SUMMARY_STATE),
-                                              'TYPE'     => $this->getType()
-                                        ]));
+                [
+                    'STATE'    => $this->sum[STATE],
+                    'SUBSTATE' => $this->getSubState(SUMMARY_STATE),
+                    'TYPE'     => $this->getType()
+                ]));
         }
 
         // Loop all major states
@@ -757,12 +757,12 @@ class NagVisStatefulObject extends NagVisObject {
                         }
                     } else {
                         throw new NagVisException(l('Invalid state+substate ([STATE], [SUBSTATE]) found on state comparision in an object of type [TYPE] named [NAME].',
-                                                    [
-                                                        'STATE'    => $sState,
-                                                          'SUBSTATE' => $sSubState,
-                                                          'TYPE'     => $this->getType(),
-                                                          'NAME'     => $this->getName()
-                                                    ]));
+                            [
+                                'STATE'    => $sState,
+                                'SUBSTATE' => $sSubState,
+                                'TYPE'     => $this->getType(),
+                                'NAME'     => $this->getName()
+                            ]));
                     }
                 }
             }
@@ -854,7 +854,7 @@ class NagVisStatefulObject extends NagVisObject {
                 }
 
                 if(isset($stateWeight[$objSummaryState][$objType])
-                   && ($currentStateWeight === null || $stateWeight[$objSummaryState][$objType] >= $currentStateWeight)) {
+                    && ($currentStateWeight === null || $stateWeight[$objSummaryState][$objType] >= $currentStateWeight)) {
                     $this->sum[STATE]    = $objSummaryState;
                     $this->sum[ACK]      = $objAck;
                     $this->sum[DOWNTIME] = $objDowntime;
@@ -892,9 +892,9 @@ class NagVisStatefulObject extends NagVisObject {
                 }
             }
         } elseif ($this->type == 'map'
-                  || $this->type == 'servicegroup'
-                  || $this->type == 'hostgroup'
-                  || $this->type == 'aggregation') {
+            || $this->type == 'servicegroup'
+            || $this->type == 'hostgroup'
+            || $this->type == 'aggregation') {
             if (isset($this->state[ALIAS])) {
                 $arr['alias'] = $this->state[ALIAS];
             } else {

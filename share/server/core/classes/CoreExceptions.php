@@ -111,11 +111,11 @@ class FieldInputError extends NagVisException {
 class NagVisErrorException extends ErrorException {
     public function __toString() {
         $msg = "Error: (" . $this->getCode() . ") " . $this->getMessage()
-             . "<div class=\"details\">"
-             . "URL: " . $_SERVER['REQUEST_URI'] . "<br>\n"
-             . "File: " . $this->getFile() . "<br>\n"
-             . "Line: " . $this->getLine() . "<br>\n"
-             . "<code>" . str_replace("\n", "<br>\n", $this->getTraceAsString()) . "</code>";
+            . "<div class=\"details\">"
+            . "URL: " . $_SERVER['REQUEST_URI'] . "<br>\n"
+            . "File: " . $this->getFile() . "<br>\n"
+            . "Line: " . $this->getLine() . "<br>\n"
+            . "<code>" . str_replace("\n", "<br>\n", $this->getTraceAsString()) . "</code>";
 
         if (ob_get_level() >= 1) {
             $buffer = ob_get_contents();

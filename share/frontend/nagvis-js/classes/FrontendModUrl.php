@@ -39,8 +39,8 @@ class FrontendModUrl extends FrontendModule {
         // Parse the view specific options
         $aOpts = [
             'show' => MATCH_STRING_URL,
-                       'rotation' => MATCH_ROTATION_NAME_EMPTY,
-                       'rotationStep' => MATCH_INTEGER_EMPTY
+            'rotation' => MATCH_ROTATION_NAME_EMPTY,
+            'rotationStep' => MATCH_INTEGER_EMPTY
         ];
 
         $aVals = $this->getCustomOptions($aOpts);
@@ -85,7 +85,7 @@ class FrontendModUrl extends FrontendModule {
 
             // Put rotation information to header menu
             if($this->rotation != '') {
-      	        $HEADER->setRotationEnabled();
+                      $HEADER->setRotationEnabled();
             }
 
             $INDEX->setHeaderMenu($HEADER->__toString());

@@ -60,7 +60,7 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
             throw new NagVisException(l('Unable to open auth database ([DB]): [MSG]',
                 [
                     'DB' => $this->DB->getDSN(),
-                      'MSG' => json_encode($this->DB->error())
+                    'MSG' => json_encode($this->DB->error())
                 ]));
         } elseif(!$this->DB->tableExist('users')) {
             // Create initial db scheme if needed
@@ -75,12 +75,12 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         $aPerms = [];
 
         // Get all the users in the system
-      $RES = $this->DB->query('-user-get-all');
-      while($data = $RES->fetch()) {
-      	$aPerms[] = $data;
-      }
+        $RES = $this->DB->query('-user-get-all');
+        while($data = $RES->fetch()) {
+                  $aPerms[] = $data;
+        }
 
-      return $aPerms;
+        return $aPerms;
     }
 
     public function checkUserExists($name) {
@@ -149,8 +149,8 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
     public function getCredentials() {
         return [
             'user' => $this->sUsername,
-                     'passwordHash' => $this->sPasswordHash,
-                     'userId' => $this->iUserId
+            'passwordHash' => $this->sPasswordHash,
+            'userId' => $this->iUserId
         ];
     }
 

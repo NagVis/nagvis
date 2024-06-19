@@ -138,7 +138,7 @@ class ViewMapAddModify {
                 unset($attrs['object_id']);
 
                 js('document.getElementById("_submit").disabled = true;'
-                  . 'window.location.href = makeuri(' . json_encode($attrs) . ');');
+                    . 'window.location.href = makeuri(' . json_encode($attrs) . ');');
                 $show_dialog = true;
             }
             elseif ($this->mode == 'view_params' && !$perm && $perm_user) {
@@ -154,7 +154,7 @@ class ViewMapAddModify {
                 scroll_up(); // On success, always scroll to top of page
                 success(l('Personal settings saved.'));
                 js('document.getElementById("_submit").disabled = true;'
-                  . 'window.setTimeout(function() { window.location.reload(); }, 2000);');
+                    . 'window.setTimeout(function() { window.location.reload(); }, 2000);');
                 $show_dialog = true;
             } else {
                 if (!$this->MAPCFG->objExists($this->object_id)) {
@@ -180,7 +180,7 @@ class ViewMapAddModify {
                 $t = $this->object_type == 'global' ? l('map configuration') : $this->object_type;
                 $result = [
                     2, null, l('The [TYPE] has been modified. Reloading in 2 seconds.',
-                                                               ['TYPE' => $t])
+                        ['TYPE' => $t])
                 ];
 
                 if ($this->object_type == 'global') {
@@ -199,7 +199,7 @@ class ViewMapAddModify {
             $obj_id = $this->MAPCFG->addElement($this->object_type, $this->attrs, true);
 
             js('popupWindowClose();'
-              . 'refreshMapObject(null, "' . $obj_id . '", false);');
+                . 'refreshMapObject(null, "' . $obj_id . '", false);');
         }
 
         // delete map lock
@@ -219,7 +219,7 @@ class ViewMapAddModify {
             // Use user provided value, from GET or POST
             $val = $this->attrs[$attr];
         } elseif(!$update && $this->object_id === '0'
-                 && $this->MAPCFG->getSourceParam($attr, true, true) !== null) {
+            && $this->MAPCFG->getSourceParam($attr, true, true) !== null) {
             // Get the value set by url if there is some set
             // But don't try this when running in "update" mode
             //
@@ -228,7 +228,7 @@ class ViewMapAddModify {
             $val = $this->MAPCFG->getSourceParam($attr, true, true);
 
         } elseif(!$update && ($this->mode == 'view_params' || !$only_inherited) && $this->object_id !== null
-                 && $this->MAPCFG->getValue($this->object_id, $attr, true) !== false) {
+            && $this->MAPCFG->getValue($this->object_id, $attr, true) !== false) {
             // Get the value set in this object if there is some set
             $val = $this->MAPCFG->getValue($this->object_id, $attr, true);
             // In view_param mode this is inherited
@@ -237,7 +237,7 @@ class ViewMapAddModify {
             }
 
         } elseif(!$update && !$only_inherited && $this->clone_id !== null && $attr !== 'object_id'
-                 && $this->MAPCFG->getValue($this->clone_id, $attr, true) !== false) {
+            && $this->MAPCFG->getValue($this->clone_id, $attr, true) !== false) {
             // Get the value set in the object to be cloned if there is some set
             // But don't try this when running in "update" mode
             $val = $this->MAPCFG->getValue($this->clone_id, $attr, true);
@@ -257,8 +257,8 @@ class ViewMapAddModify {
         echo '<img src="' . cfg('paths', 'htmlimages') . 'internal/picker.png" alt="' . l('Color select') . '" />';
         echo '</a></div>';
         js('var o = document.getElementById(\'' . $propname . '_inp\');'
-          . 'o.color = new jscolor.color(o, {pickerOnfocus:false,adjust:false,hash:true});'
-          . 'o = null;');
+            . 'o.color = new jscolor.color(o, {pickerOnfocus:false,adjust:false,hash:true});'
+            . 'o = null;');
     }
 
     private function inputDimension($propname, $value, $hideField) {
@@ -303,8 +303,8 @@ class ViewMapAddModify {
         // is equal. If not equal hide the field
         // Don't hide dependent fields where the dependant is not set
         if(isset($prop['depends_on'])
-           && isset($prop['depends_value'])
-           && isset($properties[$prop['depends_on']])) {
+            && isset($prop['depends_value'])
+            && isset($properties[$prop['depends_on']])) {
             array_push($rowClasses, 'child-row');
             $dep_on_propname = $prop['depends_on'];
             list($depInherited, $depValue) = $this->getAttr(
@@ -331,7 +331,7 @@ class ViewMapAddModify {
             $onChange = 'updateForm(this.form);';
         }
         elseif (($can_have_other && $value !== '<<<other>>>')
-                 || ($this->object_type == 'service' && $propname == 'host_name')) {
+            || ($this->object_type == 'service' && $propname == 'host_name')) {
 
             if ($this->object_type == 'service'
                 && ($propname == 'host_name' || $propname == 'backend_id')) {
@@ -348,7 +348,7 @@ class ViewMapAddModify {
                 $onChange .= "clearFormValue('name');";
 
             } elseif (($this->object_type == 'host' || $this->object_type == 'hostgroup'
-                      || $this->object_type == 'servicegroup') && $propname == 'backend_id') {
+                || $this->object_type == 'servicegroup') && $propname == 'backend_id') {
                 // For other objects clear the *_name value when backend_id changed
                 $onChange .= "clearFormValue('" . $this->object_type . "_name');";
             }
@@ -457,7 +457,7 @@ class ViewMapAddModify {
                     select($propname, $options, $value, $onChange, $hideField);
                 } catch(BackendConnectionProblem $e) {
                     form_render_error($propname, l('Unable to fetch data from backend - '
-                                           . 'falling back to input field.'));
+                        . 'falling back to input field.'));
                     input($propname, $value, '', $hideField);
                 }
             break;
@@ -606,7 +606,7 @@ class ViewMapAddModify {
         }
 
         if ($map_name !== null && (!preg_match(MATCH_MAP_NAME, $map_name)
-                                   || count($CORE->getAvailableMaps('/^' . $map_name . '$/')) == 0)) {
+                || count($CORE->getAvailableMaps('/^' . $map_name . '$/')) == 0)) {
             throw new NagVisException(l('The map does not exist.'));
         }
 

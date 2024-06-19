@@ -74,8 +74,8 @@ class CoreModGeneral extends CoreModule {
 
             $arrReturn[] = [
                 'name'     => $sName,
-                                 'css_file' => $OBJ->getCssFile(),
-                                 'code'     => str_replace("\r\n", "", str_replace("\n", "", $OBJ->__toString()))
+                'css_file' => $OBJ->getCssFile(),
+                'code'     => str_replace("\r\n", "", str_replace("\n", "", $OBJ->__toString()))
             ];
         }
 

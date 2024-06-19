@@ -50,8 +50,8 @@ class NagVisServicegroup extends NagVisStatefulObject {
         $queries = ['servicegroupMemberState' => true];
 
         if($this->hover_menu == 1
-           && $this->hover_childs_show == 1
-           && $bFetchMemberState) {
+            && $this->hover_childs_show == 1
+            && $bFetchMemberState) {
             $queries['servicegroupMemberDetails'] = true;
         }
 
@@ -154,10 +154,10 @@ class NagVisServicegroup extends NagVisStatefulObject {
         // Fallback for groups without members
         if($iSumCount == 0) {
             $this->sum[OUTPUT] = l('The servicegroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
-                                                [
-                                                    'GROUP' => $this->getName(),
-                                                      'BACKEND' => implode(', ', $this->backend_id)
-                                                ]);
+                [
+                    'GROUP' => $this->getName(),
+                    'BACKEND' => implode(', ', $this->backend_id)
+                ]);
         }
     }
 
@@ -168,8 +168,8 @@ class NagVisServicegroup extends NagVisStatefulObject {
         if($this->hasMembers()) {
             $arrStates = [
                 CRITICAL => 0, WARNING => 0,
-                               UNKNOWN  => 0, OK      => 0,
-                               ERROR    => 0, PENDING => 0
+                UNKNOWN  => 0, OK      => 0,
+                ERROR    => 0, PENDING => 0
             ];
 
             // Get summary state of this and child objects

@@ -280,8 +280,8 @@ class ViewEditMainCfg {
         echo '<img src="' . cfg('paths', 'htmlimages') . 'internal/picker.png" alt="' . l('Color select') . '" />';
         echo '</a></div>';
         js('var o = document.getElementById(\'' . $propname . '_inp\');'
-          . 'o.color = new jscolor.color(o, {pickerOnfocus:false,adjust:false,hash:true});'
-          . 'o = null;');
+            . 'o.color = new jscolor.color(o, {pickerOnfocus:false,adjust:false,hash:true});'
+            . 'o = null;');
     }
 }
 

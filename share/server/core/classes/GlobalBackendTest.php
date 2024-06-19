@@ -32,11 +32,11 @@ class GlobalBackendTest implements GlobalBackendInterface {
     // These are the backend local configuration options
     private static $validConfig = [
         'generate_mapcfg' => [
-          'must'       => 1,
-          'editable'   => 1,
-          'default'    => 0,
-          'field_type' => 'boolean',
-          'match'      => MATCH_BOOLEAN
+            'must'       => 1,
+            'editable'   => 1,
+            'default'    => 0,
+            'field_type' => 'boolean',
+            'match'      => MATCH_BOOLEAN
         ]
     ];
 
@@ -81,7 +81,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
         $this->genObj();
 
         if(cfg('backend_' . $backendId, 'generate_mapcfg')
-           && (isset($_POST['new']) || !file_exists(cfg('paths', 'mapcfg') . 'test-gen.cfg'))) {
+            && (isset($_POST['new']) || !file_exists(cfg('paths', 'mapcfg') . 'test-gen.cfg'))) {
             $this->genMapCfg(cfg('paths', 'mapcfg') . 'test-gen.cfg');
         }
 
@@ -208,19 +208,19 @@ class GlobalBackendTest implements GlobalBackendInterface {
         $this->obj['service']['muc-srv1']     = [
             $this->service('muc-srv1', 'CPU load',       OK, 'hard', 'normal', 'OK - 15min Load 0.05 at 2 CPUs', 'load1=0.2;2;5;0; load5=0.24;2;5;0; load15=0.17;2;5;0;'),
             $this->service('muc-srv1', 'Memory used',    OK, 'hard', 'normal',
-                           'OK - 0.79 GB RAM+SWAP used (this is 20.9% of RAM size)',
-                           'ramused=807MB;;;0;3858 swapused=0MB;;;0;1909 memused=807MB;5787;7716;0;5768'),
+                'OK - 0.79 GB RAM+SWAP used (this is 20.9% of RAM size)',
+                'ramused=807MB;;;0;3858 swapused=0MB;;;0;1909 memused=807MB;5787;7716;0;5768'),
             $this->service('muc-srv1', 'Interface eth0', OK, 'hard', 'normal',
-                           'OK - [2] (up) 100MBit/s, in: 0.00B/s(0.0%), out: 0.00B/s(0.0%)',
-                           'in=0;;;0;12500000 inucast=0;;;; innucast=0;;;; indisc=0;;;; inerr=0;0.01;0.1;; out=0;;;0;12500000 outucast=0;;;; outnucast=0;;;; outdisc=0;;;; outerr=0;0.01;0.1;; outqlen=0;;;;'),
+                'OK - [2] (up) 100MBit/s, in: 0.00B/s(0.0%), out: 0.00B/s(0.0%)',
+                'in=0;;;0;12500000 inucast=0;;;; innucast=0;;;; indisc=0;;;; inerr=0;0.01;0.1;; out=0;;;0;12500000 outucast=0;;;; outnucast=0;;;; outdisc=0;;;; outerr=0;0.01;0.1;; outqlen=0;;;;'),
             $this->service('muc-srv1', 'fs_/',           OK, 'hard', 'normal', 'OK',
-                           'OK - 73.3% used (84.71 of 115.5 GB), (levels at 80.0/90.0%), trend: +3.84MB / 24 hours',
-                           '/=86747.1757812MB;94641;106472;0;118302.46875'),
+                'OK - 73.3% used (84.71 of 115.5 GB), (levels at 80.0/90.0%), trend: +3.84MB / 24 hours',
+                '/=86747.1757812MB;94641;106472;0;118302.46875'),
             $this->service('muc-srv1', 'fs_/home',       OK, 'hard', 'normal', 'OK',
-                           'OK - 75.2% used (22.21 of 29.5 GB), (levels at 80.0/90.0%), trend: -27.68KB / 24 hours',
-                           '/usr=22746.109375MB;24190;27213;0;30237.746094'),
+                'OK - 75.2% used (22.21 of 29.5 GB), (levels at 80.0/90.0%), trend: -27.68KB / 24 hours',
+                '/usr=22746.109375MB;24190;27213;0;30237.746094'),
             $this->service('muc-srv1', 'NTP Time',       OK, 'hard', 'normal', 'OK',
-                           'OK - stratum 2, offset 0.02 ms, jitter 0.01 ms'),
+                'OK - stratum 2, offset 0.02 ms, jitter 0.01 ms'),
         ];
 
         $this->obj['host']['muc-srv2']        = $this->host('muc-srv2',     UP,   'hard', 'normal');
@@ -396,14 +396,14 @@ class GlobalBackendTest implements GlobalBackendInterface {
             foreach($this->getAllTypeObjects($type) as $obj) {
                 $t = $type == 'service' ? 'host' : $type;
                 $f .= "define " . $type . " {\n"
-                     . "  " . $t . "_name=" . $obj['name'] . "\n";
+                    . "  " . $t . "_name=" . $obj['name'] . "\n";
                 if($type == 'service') {
                     $f .= "  service_description=" . $obj['service_description'] . "\n";
                 }
                 $f .= "  x=" . $x . "\n"
-                     . "  y=" . $y . "\n"
-                   . "}\n"
-                       . "\n";
+                    . "  y=" . $y . "\n"
+                    . "}\n"
+                    . "\n";
                 $x += 22;
                 if($x > 1800) {
                     $y += 22;
@@ -477,17 +477,17 @@ class GlobalBackendTest implements GlobalBackendInterface {
             if ($type == 'host') {
                 $result[] = [
                     'name1' => $key,
-                                  'name2' => $entry[DISPLAY_NAME]
+                    'name2' => $entry[DISPLAY_NAME]
                 ];
             } elseif ($type != 'service') {
                 $result[] = [
                     'name1' => $key,
-                                  'name2' => $entry['alias']
+                    'name2' => $entry['alias']
                 ];
             } else {
                 $result[] = [
                     'name1' => $entry[DESCRIPTION],
-                                  'name2' => $entry[DESCRIPTION]
+                    'name2' => $entry[DESCRIPTION]
                 ];
             }
         }
@@ -777,7 +777,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     }
 
                     $resp = $this->getHostMemberCounts([[new NagVisHost($this->backendId, $hostname)]], $options,
-                                                                        [['key' => 'host_name', 'op' => '=', 'val' => 'name']]);
+                        [['key' => 'host_name', 'op' => '=', 'val' => 'name']]);
                     foreach($resp[$hostname]['counts'] as $state => $substates) {
                         foreach ($substates as $substate => $count) {
                             $aReturn[$name]['counts'][$state][$substate] += $count;

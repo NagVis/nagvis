@@ -64,7 +64,7 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule {
         $this->group_perms = json_decode($json, true);
         if($this->group_perms === null) {
             throw new NagVisException(l('The permissions file [FILE] could not be parsed.',
-                                                            ['FILE' => $this->file]));
+                ['FILE' => $this->file]));
         }
     }
 

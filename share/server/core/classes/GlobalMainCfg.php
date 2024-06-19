@@ -1940,17 +1940,17 @@ class GlobalMainCfg {
         // Use the newest file as indicator for using the cache or not
         $this->CACHE = new GlobalFileCache(CONST_MAINCFG, CONST_MAINCFG_CACHE . '-' . CONST_VERSION . '-cache' . $cacheSuffix);
         $this->PUCACHE = new GlobalFileCache(array_slice($this->configFiles, 0, count($this->configFiles) - 1),
-                                             CONST_MAINCFG_CACHE . '-pre-user-' . CONST_VERSION . '-cache' . $cacheSuffix);
+            CONST_MAINCFG_CACHE . '-pre-user-' . CONST_VERSION . '-cache' . $cacheSuffix);
 
         try {
-  	    if($this->CACHE->isCached(false) === -1
-               || $this->PUCACHE->isCached(false) === -1
-               || $this->PUCACHE->getCacheFileAge() < filemtime(CONST_MAINCFG_DIR)) {
+              if($this->CACHE->isCached(false) === -1
+                || $this->PUCACHE->isCached(false) === -1
+                || $this->PUCACHE->getCacheFileAge() < filemtime(CONST_MAINCFG_DIR)) {
                 // The cache is too old. Load all config files
                 foreach($this->configFiles as $configFile) {
                     // Only proceed when the configuration file exists and is readable
                     if(!GlobalCore::getInstance()->checkExisting($configFile, true)
-                       || !GlobalCore::getInstance()->checkReadable($configFile, true)) {
+                        || !GlobalCore::getInstance()->checkReadable($configFile, true)) {
                         return false;
                     }
                     $this->readConfig($configFile, true, $configFile == end($this->configFiles));
@@ -2253,7 +2253,7 @@ class GlobalMainCfg {
         $ty = $this->getValue($sec, ($what == 'backend' ? 'backendtype' : 'action_type'));
 
         if(isset($this->validConfig[$what]['options'][$ty])
-             && is_array($this->validConfig[$what]['options'][$ty])) {
+            && is_array($this->validConfig[$what]['options'][$ty])) {
             return array_merge($this->validConfig[$what], $this->validConfig[$what]['options'][$ty]);
         } else {
             return $this->validConfig[$what];
@@ -2291,7 +2291,7 @@ class GlobalMainCfg {
                             if($this->getValue($type, $key) === null) {
                                 // a "must" value is missing or empty
                                 throw new NagVisException(l('The needed attribute [ATTRIBUTE] is missing in section [TYPE] in main configuration file. Please take a look at the documentation.',
-                                                            ['ATTRIBUTE' => $key, 'TYPE' => $type]));
+                                    ['ATTRIBUTE' => $key, 'TYPE' => $type]));
                                 return false;
                             }
                         }
@@ -2303,7 +2303,7 @@ class GlobalMainCfg {
                             if(preg_match('/^backend_/', $type)) {
                                 $ty = $this->getValue($type, 'backendtype');
                                 if(isset($this->validConfig['backend']['options'][$ty])
-                                     && is_array($this->validConfig['backend']['options'][$ty])) {
+                                    && is_array($this->validConfig['backend']['options'][$ty])) {
                                     $arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$ty]);
                                 } else {
                                     $arrValidConfig = $this->validConfig['backend'];
@@ -2315,7 +2315,7 @@ class GlobalMainCfg {
                             } elseif(preg_match('/^action_/', $type)) {
                                 $ty = $this->getValue($type, 'action_type');
                                 if(isset($this->validConfig['action']['options'][$ty])
-                                     && is_array($this->validConfig['action']['options'][$ty])) {
+                                    && is_array($this->validConfig['action']['options'][$ty])) {
                                     $arrValidConfig = array_merge($this->validConfig['action'], $this->validConfig['action']['options'][$ty]);
                                 } else {
                                     $arrValidConfig = $this->validConfig['action'];
@@ -2329,14 +2329,14 @@ class GlobalMainCfg {
                                 // unknown attribute
                                 if($printErr) {
                                     throw new NagVisException(l('Unknown value [ATTRIBUTE] used in section [TYPE] in main configuration file.',
-                                                                ['ATTRIBUTE' => $key, 'TYPE' => $type]));
+                                        ['ATTRIBUTE' => $key, 'TYPE' => $type]));
                                 }
                                 return false;
                             } elseif(isset($arrValidConfig[$key]['deprecated']) && $arrValidConfig[$key]['deprecated'] == 1) {
                                 // deprecated option
                                 if($printErr) {
                                     throw new NagVisException(l('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file is deprecated. Please take a look at the documentation for updating your configuration.',
-                                                                ['ATTRIBUTE' => $key, 'TYPE' => $type]));
+                                        ['ATTRIBUTE' => $key, 'TYPE' => $type]));
                                 }
                                 return false;
                             } else {
@@ -2360,7 +2360,7 @@ class GlobalMainCfg {
                                     // wrong format
                                     if($printErr) {
                                         throw new NagVisException(l('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file does not match the correct format. Please review your configuration.',
-                                                                    ['ATTRIBUTE' => $key, 'TYPE' => $type]));
+                                            ['ATTRIBUTE' => $key, 'TYPE' => $type]));
                                     }
                                     return false;
                                 }
@@ -2380,7 +2380,7 @@ class GlobalMainCfg {
                     if($printErr) {
                         throw new NagVisException(
                             l('The section [TYPE] is not supported in main configuration. Please take a look at the documentation.',
-                              ['TYPE' => $type]));
+                                ['TYPE' => $type]));
                     }
                     return false;
                 }
@@ -2599,22 +2599,22 @@ class GlobalMainCfg {
      */
     public function parseGeneralProperties() {
         $p = [
-          'date_format'        => $this->getValue('global', 'dateformat'),
-          'path_base'          => $this->getValue('paths', 'htmlbase'),
-          'path_cgi'           => $this->getValue('paths', 'htmlcgi'),
-          'path_sounds'        => $this->getPath('html', 'global', 'sounds'),
-          'path_iconsets'      => $this->getPath('html', 'global', 'icons'),
-          'path_shapes'        => $this->getPath('html', 'global', 'shapes'),
-          'path_images'        => $this->getValue('paths', 'htmlimages'),
-          'path_server'        => $this->getValue('paths', 'htmlbase') . '/server/core/ajax_handler.php',
-          'internal_title'     => $this->getValue('internal', 'title'),
-          'header_show_states' => intval($this->getValue('defaults', 'header_show_states')),
-          'zoom_scale_objects' => intval($this->getValue('defaults', 'zoom_scale_objects')),
-          'worldmap_tiles_url' => $this->getValue('global', 'worldmap_tiles_url'),
-          'worldmap_tiles_attribution' => $this->getValue('global', 'worldmap_tiles_attribution'),
-          'worldmap_satellite_tiles_url' => $this->getValue('global', 'worldmap_satellite_tiles_url'),
-          'worldmap_satellite_tiles_attribution' => $this->getValue('global', 'worldmap_satellite_tiles_attribution'),
-          // Add custom action configuration
+            'date_format'        => $this->getValue('global', 'dateformat'),
+            'path_base'          => $this->getValue('paths', 'htmlbase'),
+            'path_cgi'           => $this->getValue('paths', 'htmlcgi'),
+            'path_sounds'        => $this->getPath('html', 'global', 'sounds'),
+            'path_iconsets'      => $this->getPath('html', 'global', 'icons'),
+            'path_shapes'        => $this->getPath('html', 'global', 'shapes'),
+            'path_images'        => $this->getValue('paths', 'htmlimages'),
+            'path_server'        => $this->getValue('paths', 'htmlbase') . '/server/core/ajax_handler.php',
+            'internal_title'     => $this->getValue('internal', 'title'),
+            'header_show_states' => intval($this->getValue('defaults', 'header_show_states')),
+            'zoom_scale_objects' => intval($this->getValue('defaults', 'zoom_scale_objects')),
+            'worldmap_tiles_url' => $this->getValue('global', 'worldmap_tiles_url'),
+            'worldmap_tiles_attribution' => $this->getValue('global', 'worldmap_tiles_attribution'),
+            'worldmap_satellite_tiles_url' => $this->getValue('global', 'worldmap_satellite_tiles_url'),
+            'worldmap_satellite_tiles_attribution' => $this->getValue('global', 'worldmap_satellite_tiles_attribution'),
+            // Add custom action configuration
         ];
 
         // Add custom action configuration
@@ -2816,9 +2816,9 @@ class GlobalMainCfg {
                         // Don't apply config options which are set to the same
                         // value in the pre user config files
                         if($this->preUserConfig !== null
-                           && isset($this->preUserConfig[$key])
-                           && isset($this->preUserConfig[$key][$key2])
-                           && $item2 == $this->preUserConfig[$key][$key2]) {
+                            && isset($this->preUserConfig[$key])
+                            && isset($this->preUserConfig[$key][$key2])
+                            && $item2 == $this->preUserConfig[$key][$key2]) {
                             continue;
                         }
                         $content .= $key2 . "=" . $item2 . "\n";
@@ -2857,9 +2857,9 @@ class GlobalMainCfg {
                             // Don't apply config options which are set to the same
                             // value in the pre user config files
                             if($this->preUserConfig !== null
-                               && isset($this->preUserConfig[$key])
-                               && isset($this->preUserConfig[$key][$key2])
-                               && $item2 == $this->preUserConfig[$key][$key2]) {
+                                && isset($this->preUserConfig[$key])
+                                && isset($this->preUserConfig[$key][$key2])
+                                && $item2 == $this->preUserConfig[$key][$key2]) {
                                 continue;
                             }
 

@@ -628,7 +628,7 @@ class CorePDOHandler {
         // Access controll: Access to all General actions
         $this->queryFatal('-perm-add', ['mod' => 'General', 'act' => '*', 'obj' => '*']);
 
-	// Create permissions for Action/peform/*
+        // Create permissions for Action/peform/*
         $this->queryFatal('-perm-add', ['mod' => 'Action', 'act' => 'perform', 'obj' => '*']);
 
         // Access controll: Map module levels for the demo maps

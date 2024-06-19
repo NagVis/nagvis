@@ -192,19 +192,19 @@ class CoreModOverview extends CoreModule {
 
     private function getMapDefaultOpts($name, $alias) {
         return [
-          'type'              => 'map',
-          'map_name'          => $name,
-          'object_id'         => 'map-' . $name,
-          'hover_menu'        => 1,
-          'hover_childs_show' => 1,
-          'hover_template'    => 'default',
-          'context_menu'      => 1,
-          'context_template'  => 'default',
-          'label_show'        => 0,
-          // Enforce std_big iconset - don't use map default iconset
-          'iconset'           => 'std_big',
-          'icon_size'         => [22],
-          'alias'             => $alias
+            'type'              => 'map',
+            'map_name'          => $name,
+            'object_id'         => 'map-' . $name,
+            'hover_menu'        => 1,
+            'hover_childs_show' => 1,
+            'hover_template'    => 'default',
+            'context_menu'      => 1,
+            'context_template'  => 'default',
+            'label_show'        => 0,
+            // Enforce std_big iconset - don't use map default iconset
+            'iconset'           => 'std_big',
+            'icon_size'         => [22],
+            'alias'             => $alias
         ];
     }
 
@@ -270,15 +270,15 @@ class CoreModOverview extends CoreModule {
             for($i = 0; $i < $iNum; $i++) {
                 $aSteps[] = [
                     'name' => $ROTATION->getStepLabelById($i),
-                                  'url'  => $ROTATION->getStepUrlById($i)
+                    'url'  => $ROTATION->getStepUrlById($i)
                 ];
             }
 
             $aRotations[] = [
                 'name'      => $poolName,
-                                  'url'       => $ROTATION->getStepUrlById(0),
-                                  'num_steps' => $ROTATION->getNumSteps(),
-                                  'steps'     => $aSteps
+                'url'       => $ROTATION->getStepUrlById(0),
+                'num_steps' => $ROTATION->getNumSteps(),
+                'steps'     => $aSteps
             ];
         }
 

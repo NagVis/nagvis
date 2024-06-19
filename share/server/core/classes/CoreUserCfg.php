@@ -30,9 +30,9 @@ class CoreUserCfg {
 
     // Optional list of value types to be fixed
     private $types = [
-      'sidebar'  => 'i',
-      'header'   => 'b',
-      'eventlog' => 'b',
+        'sidebar'  => 'i',
+        'header'   => 'b',
+        'eventlog' => 'b',
     ];
 
     public function __construct() {

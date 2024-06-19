@@ -124,7 +124,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
 
         $this->DB = new CorePDOHandler();
         if($this->DB->open($this->driverName(), ['dbhost' => $this->dbHost, 'dbport' => $this->dbPort, 'dbname' => $this->dbName], $this->dbUser, $this->dbPass) &&
-           $this->checkTablesExists()) {
+            $this->checkTablesExists()) {
             // Set the instanceId
             $this->dbInstanceId = $this->getInstanceId();
             $this->re_op = $this->DB->getRegularExpressionOperator();
@@ -158,11 +158,11 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
              *
              * http://www.nagios-portal.de/wbb/index.php?page=Thread&threadID=9269
              */
-             if($this->checkConfigTypeObjects()) {
-                 $this->objConfigType = 1;
-             } else {
-                 $this->objConfigType = 0;
-             }
+            if($this->checkConfigTypeObjects()) {
+                $this->objConfigType = 1;
+            } else {
+                $this->objConfigType = 0;
+            }
         } else {
             return false;
         }
@@ -267,8 +267,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
             }
         }
 
-	/* All objects must have the is_active=1 flag enabled. */
-	$QUERYHANDLE = $this->DB->query('SELECT name1,name2 FROM ' . $this->dbPrefix . 'objects
+        /* All objects must have the is_active=1 flag enabled. */
+        $QUERYHANDLE = $this->DB->query('SELECT name1,name2 FROM ' . $this->dbPrefix . 'objects
             WHERE objecttype_id=:objectType AND ' . $filter . ' is_active=1 AND instance_id=:instance ORDER BY name1',
             $values);
         while($data = $QUERYHANDLE->fetch()) {
@@ -338,8 +338,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @return  array    Parsed filters
      * @throws BackendConnectionProblem
      */
-    private function parseFilter($objects, $filters, $table, $childTable, $isMemberQuery = false,
-                                           $isCountQuery = false, $isHostQuery = true) {
+    private function parseFilter($objects, $filters, $table, $childTable, $isMemberQuery = false, $isCountQuery = false, $isHostQuery = true) {
         $aFilters = [];
         $values = [];
         $idx = 1;
@@ -410,7 +409,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                     $parts = explode('~~', $filter);
                     if(isset($parts[1])) {
                         $objFilters[] = " NOT (" . $childTable . ".name1 " . $this->re_op . " :o$idx "
-                                       . " AND " . $childTable . ".name2 " . $this->re_op . " :o" . ($idx + 1) . ")";
+                            . " AND " . $childTable . ".name2 " . $this->re_op . " :o" . ($idx + 1) . ")";
                         $values["o$idx"] = $parts[0];
                         $values["o" . ($idx + 1)] = $parts[1];
                         $idx += 2;
@@ -523,7 +522,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                 $in_downtime = 1;
                 $dt_details = [
                     $data['downtime_author'], $data['downtime_data'],
-                                    $data['downtime_start'], $data['downtime_end']
+                    $data['downtime_start'], $data['downtime_end']
                 ];
             }
 
@@ -665,7 +664,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                 $in_downtime = 1;
                 $dt_details = [
                     $data['downtime_author'], $data['downtime_data'],
-                                    $data['downtime_start'], $data['downtime_end']
+                    $data['downtime_start'], $data['downtime_end']
                 ];
             }
 
@@ -780,7 +779,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
     public function getHostNamesProblematic() {
         $arrReturn = [];
 
-	$QUERYHANDLE = $this->DB->query('
+        $QUERYHANDLE = $this->DB->query('
 	    select o.name1 as host_name
 	    from ' . $this->dbPrefix . 'hoststatus as hs
 	    LEFT JOIN ' . $this->dbPrefix . 'objects as o ON hs.host_object_id=o.object_id
@@ -798,7 +797,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
 	    AND o.is_active=1
 	    AND o.instance_id=:instance',
         ['instance' => $this->dbInstanceId, 'configType' => $this->objConfigType]
-	   );
+           );
         while($data = $QUERYHANDLE->fetch()) {
             $arrReturn[] = $data['name1'];
         }
@@ -919,7 +918,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                 ' . $this->dbPrefix . 'hostgroup_members AS hgm,
                 ' . $this->dbPrefix . 'objects AS o2
             LEFT JOIN
-         ' . $this->dbPrefix . 'hoststatus AS hs
+            ' . $this->dbPrefix . 'hoststatus AS hs
             ON hs.host_object_id=o2.object_id
             WHERE
                 (o.objecttype_id=3 AND (' . $filter['query'] . ')
@@ -1252,7 +1251,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @return	array			Array with hostnames
      */
     public function getHostNamesInHostgroup($hostgroupName) {
-    	return $this->getHostsByHostgroupName($hostgroupName); 
+            return $this->getHostsByHostgroupName($hostgroupName); 
     }
 
 
@@ -1373,7 +1372,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
 
     public function getProgramStart() {
         $QUERYHANDLE = $this->DB->query('SELECT UNIX_TIMESTAMP(program_start_time) AS program_start '
-                                        . 'FROM ' . $this->dbPrefix . 'programstatus WHERE instance_id=:instance',
+            . 'FROM ' . $this->dbPrefix . 'programstatus WHERE instance_id=:instance',
                 ['instance' => $this->dbInstanceId]);
         $data = $QUERYHANDLE->fetch();
         if($data !== false && $this->DB->is_nonnull_int($data['program_start'])) {

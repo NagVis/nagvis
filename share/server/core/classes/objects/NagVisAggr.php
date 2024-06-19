@@ -55,8 +55,8 @@ class NagVisAggr extends NagVisStatefulObject {
         $queries = ['AGGR_MEMBER_STATE' => true];
 
         if($this->hover_menu == 1
-           && $this->hover_childs_show == 1
-           && $bFetchMemberState) {
+            && $this->hover_childs_show == 1
+            && $bFetchMemberState) {
             $queries['AGGR_MEMBER_DETAILS'] = true;
         }
 
@@ -150,10 +150,10 @@ class NagVisAggr extends NagVisStatefulObject {
         // Fallback for hostgroups without members
         if($iSumCount == 0) {
             $this->sum[OUTPUT] = l('The aggregation "[NAME]" has no members (Backend: [BACKEND]).',
-                                                       [
-                                                           'NAME' => $this->name,
-                                                             'BACKEND' => implode(',', $this->backend_id)
-                                                       ]);
+                [
+                    'NAME' => $this->name,
+                    'BACKEND' => implode(',', $this->backend_id)
+                ]);
         } else {
             $this->mergeSummaryOutput($node_states, l('Nodes'), true);
         }
@@ -177,8 +177,8 @@ class NagVisAggr extends NagVisStatefulObject {
         if($this->hasMembers()) {
             $arrStates = [
                 CRITICAL => 0, DOWN    => 0, WARNING   => 0,
-                               UNKNOWN  => 0, UP      => 0, OK        => 0,
-                               ERROR    => 0, PENDING => 0, UNCHECKED => 0
+                UNKNOWN  => 0, UP      => 0, OK        => 0,
+                ERROR    => 0, PENDING => 0, UNCHECKED => 0
             ];
 
             // Get summary state of this and child objects
@@ -189,10 +189,10 @@ class NagVisAggr extends NagVisStatefulObject {
             $this->mergeSummaryOutput($arrStates, l('hosts'));
         } else {
             $this->sum[OUTPUT] = l('The aggregation "[NAME]" has no members (Backend: [BACKEND]).',
-                                                       [
-                                                           'NAME' => $this->name,
-                                                       'BACKEND' => implode(',', $this->backend_id)
-                                                       ]);
+                [
+                    'NAME' => $this->name,
+                    'BACKEND' => implode(',', $this->backend_id)
+                ]);
         }
     }
 }

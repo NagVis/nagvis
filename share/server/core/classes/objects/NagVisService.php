@@ -54,11 +54,11 @@ class NagVisService extends NagVisStatefulObject {
     }
 
     public function getNumMembers() {
-         return null;
+        return null;
     }
 
     public function hasMembers() {
-         return false;
+        return false;
     }
     
     public function getStateRelevantMembers() {

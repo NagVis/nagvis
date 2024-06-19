@@ -52,9 +52,9 @@ class ViewAck {
         foreach ($backendIds as $backendId) {
             if(!$_BACKEND->checkBackendFeature($backendId, 'actionAcknowledge', false)) {
                 return '<div class=err>'
-                 . l('The requested feature is not available for this backend. '
-                   . 'The MKLivestatus backend supports this feature.')
-                 . '</div>';
+                    . l('The requested feature is not available for this backend. '
+                    . 'The MKLivestatus backend supports this feature.')
+                    . '</div>';
             }
         }
 
@@ -81,12 +81,12 @@ class ViewAck {
                 foreach ($backendIds as $backendId) {
                     $BACKEND = $_BACKEND->getBackend($backendId);
                     $BACKEND->actionAcknowledge($type, $spec, $comment,
-                                                $sticky, $notify, $persist, $AUTH->getUser());
+                        $sticky, $notify, $persist, $AUTH->getUser());
                 }
 
                 success(l('The problem has been acknowledged.'));
-                 js('window.setTimeout(function() {'
-                   . 'popupWindowClose(); refreshMapObject(null, \'' . $object_id . '\');}, 2000);');
+                js('window.setTimeout(function() {'
+                    . 'popupWindowClose(); refreshMapObject(null, \'' . $object_id . '\');}, 2000);');
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (NagVisException $e) {

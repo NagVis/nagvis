@@ -69,23 +69,23 @@ class CoreLogonDialogHandler {
 
         // Don't try to auth if one of the vars is missing
         if(!$FHANDLER->issetAndNotEmpty('_username')
-           || !$FHANDLER->issetAndNotEmpty('_password')) {
+            || !$FHANDLER->issetAndNotEmpty('_password')) {
             return null;
         }
 
         if(!$FHANDLER->match('_username', MATCH_USER_NAME)
-           || $FHANDLER->isLongerThan('_username', AUTH_MAX_USERNAME_LENGTH)) {
+            || $FHANDLER->isLongerThan('_username', AUTH_MAX_USERNAME_LENGTH)) {
             throw new FieldInputError('_username', l('Invalid username.'));
         }
 
         if(!$FHANDLER->issetAndNotEmpty('_password')
-           || $FHANDLER->isLongerThan('_password', AUTH_MAX_PASSWORD_LENGTH)) {
+            || $FHANDLER->isLongerThan('_password', AUTH_MAX_PASSWORD_LENGTH)) {
             throw new FieldInputError('_password', l('Invalid password.'));
         }
         
         $a = [
             'user'     => $FHANDLER->get('_username'),
-                   'password' => $FHANDLER->get('_password')
+            'password' => $FHANDLER->get('_password')
         ];
 
         // It is possible to only request onetime access to prevent getting added

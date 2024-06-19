@@ -184,7 +184,7 @@ class CoreAuthHandler {
 
         if(cfg('global', 'audit_log') == true) {
             $ALOG = new CoreLog(cfg('paths', 'var') . 'nagvis-audit.log',
-                              cfg('global', 'dateformat'));
+                cfg('global', 'dateformat'));
             $ALOG->l('User logged out (' . $this->getUser() . ' / ' . $this->getUserId() . '): ' . $this->sModuleName);
         }
 
@@ -205,7 +205,7 @@ class CoreAuthHandler {
     public function isAuthenticatedSession() {
         // Remove logins which were performed with different logon/auth modules
         if($this->SESS->get('logonModule') != cfg('global', 'logonmodule')
-           || $this->SESS->get('authModule') != $this->sModuleName) {
+            || $this->SESS->get('authModule') != $this->sModuleName) {
             if(DEBUG && DEBUGLEVEL & 2) {
                 debug('removing different logon/auth module data');
             }

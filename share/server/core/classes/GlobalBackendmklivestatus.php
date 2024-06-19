@@ -49,29 +49,29 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     // These are the backend local configuration options
     private static $validConfig = [
         'socket' => [
-          'must'      => 1,
-          'editable'  => 1,
-          'default'   => 'unix:/usr/local/nagios/var/rw/live',
-          'match'     => MATCH_SOCKET,
+            'must'      => 1,
+            'editable'  => 1,
+            'default'   => 'unix:/usr/local/nagios/var/rw/live',
+            'match'     => MATCH_SOCKET,
         ],
         'verify_tls_peer' => [
-          'must'       => 0,
-          'editable'   => 1,
-          'default'    => 1,
-          'match'      => MATCH_BOOLEAN,
-          'field_type' => 'boolean',
+            'must'       => 0,
+            'editable'   => 1,
+            'default'    => 1,
+            'match'      => MATCH_BOOLEAN,
+            'field_type' => 'boolean',
         ],
         'verify_tls_ca_path' => [
-          'must'      => 0,
-          'editable'  => 1,
-          'default'   => '',
-          'match'     => MATCH_STRING_PATH,
+            'must'      => 0,
+            'editable'  => 1,
+            'default'   => '',
+            'match'     => MATCH_STRING_PATH,
         ],
         'timeout' => [
-          'must'      => 1,
-          'editable'  => 1,
-          'default'   => 5,
-          'match'     => MATCH_INTEGER,
+            'must'      => 1,
+            'editable'  => 1,
+            'default'   => 5,
+            'match'     => MATCH_INTEGER,
         ],
     ];
 
@@ -79,7 +79,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * PUBLIC class constructor
      *
      * @param   string $backendId ID if the backend
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
+     * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($backendId) {
@@ -92,12 +92,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         // Run preflight checks
         if($this->socketType == 'unix' && !$this->checkSocketExists()) {
             throw new BackendConnectionProblem(l('Unable to connect to livestatus socket. The socket [SOCKET] in backend [BACKENDID] does not exist. Maybe Nagios is not running or restarting.',
-                         ['BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath]));
+                ['BACKENDID' => $this->backendId, 'SOCKET' => $this->socketPath]));
         }
 
         if(!function_exists('fsockopen')) {
             throw new BackendConnectionProblem(l('The PHP function fsockopen is not available. Needed by backend [BACKENDID].',
-                               ['BACKENDID' => $this->backendId, 'SOCKET' => $this->socketSpec]));
+                ['BACKENDID' => $this->backendId, 'SOCKET' => $this->socketSpec]));
         }
 
         return true;
@@ -144,7 +144,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         } else {
             throw new BackendConnectionProblem(
-              l('Unknown socket type given in backend [BACKENDID]',
+                l('Unknown socket type given in backend [BACKENDID]',
                 ['BACKENDID' => $this->backendId]));
         }
     }
@@ -227,7 +227,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         } elseif($this->socketType === 'tcp') {
             $this->SOCKET = fsockopen($this->socketAddress, $this->socketPort, $errno, $errstr,
-                                        (float) cfg('backend_' . $this->backendId, 'timeout'));
+                (float) cfg('backend_' . $this->backendId, 'timeout'));
         }
 
         restore_error_handler();
@@ -241,12 +241,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
             $this->SOCKET = null;
             $this->CONNECT_EXC = new BackendConnectionProblem(
-                                     l('Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]',
-                                               [
-                                                   'BACKENDID' => $this->backendId,
-                                                     'SOCKET'    => $this->socketSpec,
-                                                     'MSG'       => $error_msg
-                                               ]));
+                l('Unable to connect to the [SOCKET] in backend [BACKENDID]: [MSG]',
+                    [
+                        'BACKENDID' => $this->backendId,
+                        'SOCKET'    => $this->socketSpec,
+                        'MSG'       => $error_msg
+                    ]));
             throw $this->CONNECT_EXC;
         }
     }
@@ -255,11 +255,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * Catch PHP errors occured during connect
      */
     public function connectErrorHandler($errno, $errstr) {
-    	if (($errno & E_WARNING) === 0 && ($errno & E_NOTICE) === 0) {
+            if (($errno & E_WARNING) === 0 && ($errno & E_NOTICE) === 0) {
             return false; // use default error handler
-    	}
-    	$this->CONNECT_ERR .= $errstr . "\n";
-    	return true;
+            }
+            $this->CONNECT_ERR .= $errstr . "\n";
+            return true;
     }
 
     /*private function verifyLivestatusVersion() {
@@ -365,21 +365,21 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         // Catch problem while reading
         if($read === false) {
             throw new BackendConnectionProblem(l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
-                                                 [
-                                                     'BACKENDID' => $this->backendId,
-                                                       'SOCKET'    => $this->socketSpec,
-                                                       'MSG'       => 'Error while reading socket (content)'
-                                                 ]));
+                [
+                    'BACKENDID' => $this->backendId,
+                    'SOCKET'    => $this->socketSpec,
+                    'MSG'       => 'Error while reading socket (content)'
+                ]));
         }
 
         // Catch errors (Like HTTP 200 is OK)
         if($status != "200") {
             throw new BackendConnectionProblem(l('Problem while reading from socket [SOCKET] in backend [BACKENDID]: [MSG]',
-                                                 [
-                                                     'BACKENDID' => $this->backendId,
-                                                       'SOCKET'    => $this->socketSpec,
-                                                       'MSG'       => $read
-                                                 ]));
+                [
+                    'BACKENDID' => $this->backendId,
+                    'SOCKET'    => $this->socketSpec,
+                    'MSG'       => $read
+                ]));
         }
 
         //$fh = fopen('/tmp/live', 'a');
@@ -396,7 +396,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         // json_decode returns null on syntax problems
         if($obj === null) {
             throw new BackendInvalidResponse(l('The response has an invalid format in backend [BACKENDID].',
-                                               ['BACKENDID' => $this->backendId]));
+                ['BACKENDID' => $this->backendId]));
         } else {
             // Return the response object
             return $obj;
@@ -439,7 +439,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * @param   string $query Query to send to the socket
      * @return  array    Results of the query
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
+     * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function queryLivestatusSingleRow($query) {
@@ -458,7 +458,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * @param   string $query Query to send to the socket
      * @return  array    Results of the query
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
+     * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function queryLivestatusSingleColumn($query) {
@@ -569,8 +569,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * @return  string    Parsed filters
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function parseFilter($objects, $filters, $isMemberQuery = false,
-                                 $isCountQuery = false, $isHostQuery = true) {
+    private function parseFilter($objects, $filters, $isMemberQuery = false, $isCountQuery = false, $isHostQuery = true) {
         $aFilters = [];
         foreach($objects as $OBJS) {
             $objFilters = [];
@@ -796,13 +795,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         }
 
         $q = "GET hosts\n" . 
-          "Columns: " . $stateAttr . " plugin_output alias display_name " . 
-          "address notes last_check next_check state_type " . 
-          "current_attempt max_check_attempts last_state_change " . 
-          "last_hard_state_change perf_data acknowledged " . 
-          "scheduled_downtime_depth has_been_checked name " . 
-          "check_command custom_variable_names custom_variable_values staleness\n" . 
-          $objFilter;
+            "Columns: " . $stateAttr . " plugin_output alias display_name " .
+            "address notes last_check next_check state_type " .
+            "current_attempt max_check_attempts last_state_change " .
+            "last_hard_state_change perf_data acknowledged " .
+            "scheduled_downtime_depth has_been_checked name " .
+            "check_command custom_variable_names custom_variable_values staleness\n" .
+            $objFilter;
 
         $l = $this->queryLivestatus($q);
 
@@ -912,15 +911,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         }
 
         $l = $this->queryLivestatus(
-          "GET services\n" .
-          $objFilter . 
-          "Columns: description display_name " . $stateAttr . " " . 
-          "host_alias host_address plugin_output notes last_check next_check " . 
-          "state_type current_attempt max_check_attempts last_state_change " . 
-          "last_hard_state_change perf_data scheduled_downtime_depth " . 
-          "acknowledged host_acknowledged host_scheduled_downtime_depth " . 
-          "has_been_checked host_name check_command custom_variable_names custom_variable_values " . 
-          "staleness\n");
+            "GET services\n" .
+            $objFilter .
+            "Columns: description display_name " . $stateAttr . " " .
+            "host_alias host_address plugin_output notes last_check next_check " .
+            "state_type current_attempt max_check_attempts last_state_change " .
+            "last_hard_state_change perf_data scheduled_downtime_depth " .
+            "acknowledged host_acknowledged host_scheduled_downtime_depth " .
+            "has_been_checked host_name check_command custom_variable_names custom_variable_values " .
+            "staleness\n");
 
         $arrReturn = [];
         if(is_array($l) && count($l) > 0) {
@@ -976,16 +975,16 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                         if(isset($e[15]) && $e[15] > 0) {
                             // Service downtime
                             $data = $this->queryLivestatusSingleRow(
-                              "GET downtimes\n" . 
-                              "Columns: author comment start_time end_time\n" .
-                              "Filter: host_name = " . $e[20] . "\n" .
-                              "Filter: service_description = " . $e[0] . "\n");
+                                "GET downtimes\n" . 
+                                "Columns: author comment start_time end_time\n" .
+                                "Filter: host_name = " . $e[20] . "\n" .
+                                "Filter: service_description = " . $e[0] . "\n");
                         } else {
                             // Host downtime
                             $data = $this->queryLivestatusSingleRow(
-                              "GET downtimes\n" . 
-                              "Columns: author comment start_time end_time\n" .
-                              "Filter: host_name = " . $e[20] . "\n");
+                                "GET downtimes\n" . 
+                                "Columns: author comment start_time end_time\n" .
+                                "Filter: host_name = " . $e[20] . "\n");
                         }
                         if(isset($data[0])) {
                             $dt_details = $data;
@@ -1541,7 +1540,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
     }
 
     public function getProgramStart() {
-	$r = $this->queryLivestatusSingleColumn("GET status\nColumns: program_start\n");
+        $r = $this->queryLivestatusSingleColumn("GET status\nColumns: program_start\n");
         if(isset($r[0])) {
             return $r[0];
         } else {
@@ -1558,7 +1557,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         $hosts = [];
         foreach($r as $row) {
             if($row[1] && $row[2]) {
-	        $custom_variables = array_combine($row[1], $row[2]);
+                $custom_variables = array_combine($row[1], $row[2]);
                 if(isset($custom_variables['LAT']) && isset($custom_variables['LONG'])) {
                     $hosts[] = [
                         'name'       => $row[0],

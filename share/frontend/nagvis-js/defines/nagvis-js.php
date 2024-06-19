@@ -31,7 +31,7 @@
  * Set the path to look for included files
  */
 set_include_path(
-	get_include_path()
-	 . PATH_SEPARATOR . '../../frontend/nagvis-js/classes/'
+    get_include_path()
+        . PATH_SEPARATOR . '../../frontend/nagvis-js/classes/'
 );
 

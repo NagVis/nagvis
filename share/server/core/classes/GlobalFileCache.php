@@ -64,7 +64,7 @@ class GlobalFileCache {
         $newestFile = '';
         foreach($this->files as $file) {
             if(!GlobalCore::getInstance()->checkExisting($file, false)
-               || !GlobalCore::getInstance()->checkReadable($file, false)) {
+                || !GlobalCore::getInstance()->checkReadable($file, false)) {
                 continue;
             }
 
@@ -104,7 +104,7 @@ class GlobalFileCache {
         // When no cache file exists check if file can be created in directory
         if((!$this->checkCacheFileExists(0)
             && $this->checkCacheFolderWriteable($printErr))
-           || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))) {
+            || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))) {
             if(($fp = fopen($this->cacheFile, 'w+')) === false){
                 if($printErr == 1) {
                     throw new NagVisException(l('cacheFileNotWriteable', ['FILE' => $this->cacheFile]));
@@ -140,10 +140,10 @@ class GlobalFileCache {
         } else {
             if($printErr) {
                 throw new NagVisException(l('fileNotCached',
-                                          [
-                                              'FILE' => json_encode($this->files),
-                                                'CACHEFILE' => $this->cacheFile
-                                          ]));
+                    [
+                        'FILE' => json_encode($this->files),
+                        'CACHEFILE' => $this->cacheFile
+                    ]));
             }
             return -1;
         }

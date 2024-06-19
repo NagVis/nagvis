@@ -36,6 +36,6 @@ class CoreLog {
             $this->openFile();
         }
 
-      fwrite($this->FILE, date($this->dateFormat) . ' ' . $msg . "\n");
+        fwrite($this->FILE, date($this->dateFormat) . ' ' . $msg . "\n");
     }
 }

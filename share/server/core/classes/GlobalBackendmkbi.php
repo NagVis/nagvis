@@ -38,11 +38,11 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
     private static $bi_aggr_states = [
         -2 => 'ERROR',
         -1 => 'PENDING',
-         0 => 'OK',
-         1 => 'WARNING',
-         2 => 'CRITICAL',
-         3 => 'UNKNOWN',
-         4 => 'UNREACHABLE'
+        0 => 'OK',
+        1 => 'WARNING',
+        2 => 'CRITICAL',
+        3 => 'UNKNOWN',
+        4 => 'UNREACHABLE'
     ];
 
     private static $bi_short_states = [
@@ -82,11 +82,11 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             'match'    => MATCH_STRING_PATH,
         ],
         'verify_peer' => [
-          'must'       => 0,
-          'editable'   => 1,
-          'default'    => 1,
-          'match'      => MATCH_BOOLEAN,
-          'field_type' => 'boolean',
+            'must'       => 0,
+            'editable'   => 1,
+            'default'    => 1,
+            'match'      => MATCH_BOOLEAN,
+            'field_type' => 'boolean',
         ],
         'verify_depth' => [
             'must'       => 0,
@@ -95,16 +95,16 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             'match'      => MATCH_INTEGER,
         ],
         'ca_path' => [
-          'must'      => 0,
-          'editable'  => 1,
-          'default'   => '',
-          'match'     => MATCH_STRING_PATH,
+            'must'      => 0,
+            'editable'  => 1,
+            'default'   => '',
+            'match'     => MATCH_STRING_PATH,
         ],
         'timeout' => [
-          'must'      => 1,
-          'editable'  => 1,
-          'default'   => 5,
-          'match'     => MATCH_INTEGER,
+            'must'      => 1,
+            'editable'  => 1,
+            'default'   => 5,
+            'match'     => MATCH_INTEGER,
         ],
     ];
 
@@ -298,7 +298,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
                 // Create some kind of default output when aggregation does
                 // not provide any detail output
                 "output"            => l("BI-State is: [S]",
-                   ["S" => GlobalBackendmkbi::$bi_aggr_states[$bi_state]]),
+                    ["S" => GlobalBackendmkbi::$bi_aggr_states[$bi_state]]),
             ];
             $elements[] = $element;
         }
