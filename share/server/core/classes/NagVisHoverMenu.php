@@ -200,7 +200,7 @@ class NagVisHoverMenu
      * return   String  HTML Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __toString () {
+    public function __toString() {
         return $this->code;
     }
 
