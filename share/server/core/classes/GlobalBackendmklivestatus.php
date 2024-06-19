@@ -218,7 +218,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
             );
 
         } elseif ($this->socketType === 'tcp-tls') {
-            if (cfg('backend_' . $this->backendId, 'verify_tls_peer') == true) {
+            if (cfg('backend_' . $this->backendId, 'verify_tls_peer')) {
                 $ssl_options = [
                     'verify_peer' => true,
                     'verify_peer_name' => false,
@@ -323,7 +323,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         //fclose($fh);
 
         //Add authorization data to mk livestatus query
-        if (cfg('global', 'only_permitted_objects') == true) {
+        if (cfg('global', 'only_permitted_objects')) {
             global $AUTH;
             $userName  = $AUTH->getUser();
             $query .= "AuthUser: $userName\n";

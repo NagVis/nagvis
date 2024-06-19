@@ -260,8 +260,8 @@ class GlobalLanguage
         if (
             in_array($sLang, $CORE->getAvailableLanguages())
             && (
-                $ignoreConf == true
-                || ($ignoreConf == false && in_array($sLang, cfg('global', 'language_available')))
+                $ignoreConf
+                || in_array($sLang, cfg('global', 'language_available'))
             )
         ) {
             return true;

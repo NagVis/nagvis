@@ -2513,7 +2513,7 @@ class GlobalMainCfg
             // Value is set
             if (
                 isset($this->validConfig[$sec][$var]['array'])
-                && $this->validConfig[$sec][$var]['array'] == true
+                && $this->validConfig[$sec][$var]['array']
                 && !is_array($val)
             ) {
                 $val = $this->stringToArray($val);

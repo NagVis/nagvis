@@ -122,7 +122,7 @@ class CoreSessionHandler
             $sOld = false;
         }
 
-        if ($sVal == false) {
+        if (!$sVal) {
             unset($_SESSION[$sKey]);
         } else {
             $_SESSION[$sKey] = $sVal;

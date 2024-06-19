@@ -263,7 +263,7 @@ class NagVisObject
 
         // Only remove these options when the configuration should be
         // completely independent from this object
-        if ($abstract == true) {
+        if ($abstract) {
             unset($arr['host_name']);
             unset($arr[$this->type . '_name']);
             unset($arr['service_description']);
