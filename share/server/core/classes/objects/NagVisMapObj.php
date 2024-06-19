@@ -238,8 +238,11 @@ class NagVisMapObj extends NagVisStatefulObject {
             /**
              * Exclude map objects based on "exclude_member_states" option
              */
-            if ($excludeMemberStates && $this->hasExcludeFilters(COUNT_QUERY)
-                && $this->excludeMapObject($OBJ, COUNT_QUERY)) {
+            if (
+                $excludeMemberStates
+                && $this->hasExcludeFilters(COUNT_QUERY)
+                && $this->excludeMapObject($OBJ, COUNT_QUERY)
+            ) {
                 continue;
             }
 
@@ -400,9 +403,12 @@ class NagVisMapObj extends NagVisStatefulObject {
             return false;
         }
 
-        if (isset($parts[1]) && $objType == 'service'
+        if (
+            isset($parts[1])
+            && $objType == 'service'
             && preg_match('/' . $parts[0] . '/', $OBJ->getName())
-            && preg_match('/' . $parts[1] . '/', $OBJ->getServiceDescription())) {
+            && preg_match('/' . $parts[1] . '/', $OBJ->getServiceDescription())
+        ) {
             return true;
         }
 
@@ -624,8 +630,10 @@ class NagVisMapObj extends NagVisStatefulObject {
      */
     private function isPermitted($OBJ) {
         global $AUTHORISATION;
-        if ($AUTHORISATION !== null
-            && $AUTHORISATION->isPermitted('Map', 'view', $OBJ->getName())) {
+        if (
+            $AUTHORISATION !== null
+            && $AUTHORISATION->isPermitted('Map', 'view', $OBJ->getName())
+        ) {
             return true;
         } else {
             $OBJ->sum[STATE]  = UNKNOWN;
