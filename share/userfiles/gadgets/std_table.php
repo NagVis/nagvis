@@ -57,11 +57,21 @@ $show_host_states = $_GET['type'] == 'hostgroup'
 if (isset($_GET['opts']) && ($_GET['opts'] != '')) {
     preg_match_all('/(\w+)=(\w+)/', $_GET['opts'], $matches, PREG_SET_ORDER);
     for ($i = 0; $i < count($matches); $i++) {
-        if ($matches[$i][1] == 'show_header') { $show_header = $matches[$i][2]; }
-        if ($matches[$i][1] == 'show_subheader') { $show_subheader = $matches[$i][2]; }
-        if ($matches[$i][1] == 'show_all') { $show_all = $matches[$i][2]; }
-        if ($matches[$i][1] == 'group_states') { $group_states = $matches[$i][2]; }
-        if ($matches[$i][1] == 'show_service_states') { $show_service_states = $matches[$i][2]; }
+        if ($matches[$i][1] == 'show_header') {
+            $show_header = $matches[$i][2];
+        }
+        if ($matches[$i][1] == 'show_subheader') {
+            $show_subheader = $matches[$i][2];
+        }
+        if ($matches[$i][1] == 'show_all') {
+            $show_all = $matches[$i][2];
+        }
+        if ($matches[$i][1] == 'group_states') {
+            $group_states = $matches[$i][2];
+        }
+        if ($matches[$i][1] == 'show_service_states') {
+            $show_service_states = $matches[$i][2];
+        }
     }
 }
 

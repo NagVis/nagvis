@@ -137,10 +137,18 @@ $cols = 3;                        // no. of columns with graphs
 if (isset($aOpts['opts']) && ($aOpts['opts'] != '')) {
     preg_match_all ('/(\w+)=(\w+)/', $aOpts['opts'], $matches, PREG_SET_ORDER);
     for ($i = 0; $i < count($matches); $i++) {
-        if ($matches[$i][1] == 'columns') { $cols = $matches[$i][2]; }
-        if ($matches[$i][1] == 'string') { $string = $matches[$i][2]; }
-        if ($matches[$i][1] == 'current') { $current = $matches[$i][2]; }
-        if ($matches[$i][1] == 'label') { $label = $matches[$i][2]; }
+        if ($matches[$i][1] == 'columns') {
+            $cols = $matches[$i][2];
+        }
+        if ($matches[$i][1] == 'string') {
+            $string = $matches[$i][2];
+        }
+        if ($matches[$i][1] == 'current') {
+            $current = $matches[$i][2];
+        }
+        if ($matches[$i][1] == 'label') {
+            $label = $matches[$i][2];
+        }
     }
 }
 $rows = ceil($pdc / $cols);    // max. no. of rows with graphs
@@ -203,11 +211,19 @@ for ($i = 0; $i < $pdc; $i++) {
         }
         if (isset($warn) && isset($crit)) {
             if ($warn < $crit) {
-                if ($value >= $warn) { $colour = $oYellow; };
-                if ($value >= $crit) { $colour = $oRed; };
+                if ($value >= $warn) {
+                    $colour = $oYellow;
+                }
+                if ($value >= $crit) {
+                    $colour = $oRed;
+                }
             } else {
-                if ($value <= $warn) { $colour = $oYellow; };
-                if ($value <= $crit) { $colour = $oRed; };
+                if ($value <= $warn) {
+                    $colour = $oYellow;
+                }
+                if ($value <= $crit) {
+                    $colour = $oRed;
+                }
             }
         }
         // "highlight" graph if non-ok value
