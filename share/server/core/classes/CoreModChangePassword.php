@@ -43,17 +43,15 @@ class CoreModChangePassword extends CoreModule
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
-            switch ($this->sAction) {
-                case 'view':
-                    // Check if user is already authenticated
-                    // Change password must be denied when using trusted mode
-                    if ($AUTH->isAuthenticated() && !$AUTH->authedTrusted()) {
-                        $VIEW = new ViewChangePassword();
-                        $sReturn = json_encode(['code' => $VIEW->parse()]);
-                    } else {
-                        $sReturn = '';
-                    }
-                    break;
+            if ($this->sAction == 'view') {
+                // Check if user is already authenticated
+                // Change password must be denied when using trusted mode
+                if ($AUTH->isAuthenticated() && !$AUTH->authedTrusted()) {
+                    $VIEW = new ViewChangePassword();
+                    $sReturn = json_encode(['code' => $VIEW->parse()]);
+                } else {
+                    $sReturn = '';
+                }
             }
         }
 

@@ -371,7 +371,7 @@ class CoreModMap extends CoreModule
         $aVals = $this->getCustomOptions($aOpts, [], true);
 
         // Is this request asked to check file ages?
-        if (isset($aVals['f']) && isset($aVals['f'][0]) && $aVals['f'] != '') {
+        if (isset($aVals['f'][0])) {
             $result = $this->checkFilesChanged($aVals['f']);
             if ($result !== null) {
                 return $result;

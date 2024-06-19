@@ -43,16 +43,14 @@ class CoreModSearch extends CoreModule
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
-            switch ($this->sAction) {
-                case 'view':
-                    // Check if user is already authenticated
-                    if ($AUTH->isAuthenticated()) {
-                        $VIEW = new ViewSearch();
-                        $sReturn = json_encode(['code' => $VIEW->parse()]);
-                    } else {
-                        $sReturn = '';
-                    }
-                    break;
+            if ($this->sAction == 'view') {
+                // Check if user is already authenticated
+                if ($AUTH->isAuthenticated()) {
+                    $VIEW = new ViewSearch();
+                    $sReturn = json_encode(['code' => $VIEW->parse()]);
+                } else {
+                    $sReturn = '';
+                }
             }
         }
 

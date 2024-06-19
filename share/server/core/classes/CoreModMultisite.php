@@ -47,20 +47,18 @@ class CoreModMultisite extends CoreModule
 
         $maps = [];
 
-        switch ($this->sAction) {
-            case 'getMaps':
-                if (cfg('global', 'multisite_snapin_layout') == 'tree') {
-                    $maps = [
-                        "type" => "tree",
-                        "maps" => $this->renderTree(),
-                    ];
-                } else {
-                    $maps = [
-                        "type" => "table",
-                        "maps" => $this->renderTable(),
-                    ];
-                }
-                break;
+        if ($this->sAction == 'getMaps') {
+            if (cfg('global', 'multisite_snapin_layout') == 'tree') {
+                $maps = [
+                    "type" => "tree",
+                    "maps" => $this->renderTree(),
+                ];
+            } else {
+                $maps = [
+                    "type" => "table",
+                    "maps" => $this->renderTable(),
+                ];
+            }
         }
 
         return json_encode($maps);

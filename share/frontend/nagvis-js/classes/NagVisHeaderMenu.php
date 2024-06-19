@@ -336,7 +336,7 @@ class NagVisHeaderMenu
             $default = '';
             $USERCFG = new CoreUserCfg();
             $cfg = $USERCFG->doGet();
-            if (isset($cfg['params-']) && isset($cfg['params-']['filter_group'])) {
+            if (isset($cfg['params-']['filter_group'])) {
                 $default = $cfg['params-']['filter_group'];
             }
 
