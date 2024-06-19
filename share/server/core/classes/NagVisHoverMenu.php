@@ -111,91 +111,91 @@ class NagVisHoverMenu
     private function replaceStaticMacros()
     {
         // Replace the static macros (language, paths)
-        if (strpos($this->code, '[lang_alias]') !== false) {
+        if (str_contains($this->code, '[lang_alias]')) {
             $this->code = str_replace('[lang_alias]', l('alias'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_address]') !== false) {
+        if (str_contains($this->code, '[lang_address]')) {
             $this->code = str_replace('[lang_address]', l('address'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_state]') !== false) {
+        if (str_contains($this->code, '[lang_state]')) {
             $this->code = str_replace('[lang_state]', l('state'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_summary_state]') !== false) {
+        if (str_contains($this->code, '[lang_summary_state]')) {
             $this->code = str_replace('[lang_summary_state]', l('summaryState'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_output]') !== false) {
+        if (str_contains($this->code, '[lang_output]')) {
             $this->code = str_replace('[lang_output]', l('output'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_perfdata]') !== false) {
+        if (str_contains($this->code, '[lang_perfdata]')) {
             $this->code = str_replace('[lang_perfdata]', l('perfdata'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_summary_output]') !== false) {
+        if (str_contains($this->code, '[lang_summary_output]')) {
             $this->code = str_replace('[lang_summary_output]', l('summaryOutput'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_overview]') !== false) {
+        if (str_contains($this->code, '[lang_overview]')) {
             $this->code = str_replace('[lang_overview]', l('overview'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_instance]') !== false) {
+        if (str_contains($this->code, '[lang_instance]')) {
             $this->code = str_replace('[lang_instance]', l('instance'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_next_check]') !== false) {
+        if (str_contains($this->code, '[lang_next_check]')) {
         $this->code = str_replace('[lang_next_check]', l('nextCheck'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_last_check]') !== false) {
+        if (str_contains($this->code, '[lang_last_check]')) {
             $this->code = str_replace('[lang_last_check]', l('lastCheck'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_state_type]') !== false) {
+        if (str_contains($this->code, '[lang_state_type]')) {
             $this->code = str_replace('[lang_state_type]', l('stateType'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_current_attempt]') !== false) {
+        if (str_contains($this->code, '[lang_current_attempt]')) {
             $this->code = str_replace('[lang_current_attempt]', l('currentAttempt'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_last_state_change]') !== false) {
+        if (str_contains($this->code, '[lang_last_state_change]')) {
             $this->code = str_replace('[lang_last_state_change]', l('lastStateChange'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_state_duration]') !== false) {
+        if (str_contains($this->code, '[lang_state_duration]')) {
             $this->code = str_replace('[lang_state_duration]', l('stateDuration'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_service_description]') !== false) {
+        if (str_contains($this->code, '[lang_service_description]')) {
             $this->code = str_replace('[lang_service_description]', l('servicename'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_notes]') !== false) {
+        if (str_contains($this->code, '[lang_notes]')) {
             $this->code = str_replace('[lang_notes]', l('notes'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_last_status_refresh]') !== false) {
+        if (str_contains($this->code, '[lang_last_status_refresh]')) {
             $this->code = str_replace('[lang_last_status_refresh]', l('lastStatusRefresh'), $this->code);
         }
 
-        if (strpos($this->code, '[lang_tags]') !== false) {
+        if (str_contains($this->code, '[lang_tags]')) {
             $this->code = str_replace('[lang_tags]', l('Tags'), $this->code);
         }
 
-        if (strpos($this->code, '[html_base]') !== false) {
+        if (str_contains($this->code, '[html_base]')) {
             $this->code = str_replace('[html_base]', cfg('paths', 'htmlbase'), $this->code);
         }
 
-        if (strpos($this->code, '[html_templates]') !== false) {
+        if (str_contains($this->code, '[html_templates]')) {
             $this->code = str_replace('[html_templates]', path('sys', 'global', 'templates'), $this->code);
         }
 
-        if (strpos($this->code, '[html_template_images]') !== false) {
+        if (str_contains($this->code, '[html_template_images]')) {
             $this->code = str_replace('[html_template_images]', path('html', 'global', 'templateimages'), $this->code);
         }
     }

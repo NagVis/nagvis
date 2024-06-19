@@ -74,7 +74,7 @@ class CoreModUser extends CoreModule
         $opts = $FHANDLER->get('opts');
 
         foreach ($opts as $key => $val) {
-            if (substr($val, 0, 1) == '{') {
+            if (str_starts_with($val, '{')) {
                 $opts[$key] = json_decode($val);
             }
         }

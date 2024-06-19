@@ -54,7 +54,7 @@ $sDummyPerfdata = 'config=20%;80;90;0;100';
 $_MODE          = 'html';
 
 // Include the gadgets core. Also handle OMD default and local paths
-if (substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
+if (str_starts_with($_SERVER["SCRIPT_FILENAME"], '/omd')) {
     $core = dirname($_SERVER["SCRIPT_FILENAME"]) . '/gadgets_core.php';
     if (file_exists($core)) {
         require($core);
