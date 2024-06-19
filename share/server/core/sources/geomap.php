@@ -526,7 +526,7 @@ function changed_geomap($MAPCFG, $compare_time) {
 # function copied from
 #    http://almien.co.uk/OSM/Tools/Coord/source.php
 
-function ProjectF($Lat){
+function ProjectF($Lat) {
     $Lat = deg2rad($Lat);
     $Y = log(tan($Lat) + (1 / cos($Lat)));
     return($Y);

@@ -82,7 +82,7 @@ $border                      = 1; // Border
 $perfdata                    = 0; // Perfdata
 
 // Get parameters from gadget_opts
-if (isset($_GET['opts']) && ($_GET['opts'] != '')){
+if (isset($_GET['opts']) && ($_GET['opts'] != '')) {
     preg_match_all('/(\w+)=(\d+)/', $_GET['opts'], $matches, PREG_SET_ORDER);
     for ($i = 0; $i < count($matches); $i++) {
         if ($matches[$i][1] == 'border') { $border = $matches[$i][2]; }

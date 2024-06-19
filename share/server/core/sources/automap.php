@@ -438,7 +438,7 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
                     $relations = [];
                 }
             } elseif (cfg('global', 'shinken_features')) {
-                if ($params['min_business_impact']){
+                if ($params['min_business_impact']) {
                     $tmp_array = array_flip(list_business_impact());
                     $min_business_impact = $tmp_array[$params['min_business_impact']];
                 }
@@ -449,7 +449,7 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
         }
         elseif ($obj_name != '<<<monitoring>>>') {
             if (cfg('global', 'shinken_features')) {
-                if ($params['min_business_impact']){
+                if ($params['min_business_impact']) {
                     $tmp_array = array_flip(list_business_impact());
                     $min_business_impact = $tmp_array[$params['min_business_impact']];
                 }
@@ -475,7 +475,7 @@ function automap_fetch_tree($dir, $MAPCFG, $params, &$saved_config, $obj_name, $
             continue; // finished with this existing object
         }
 
-        if (in_array($rel_name, $params['ignore_hosts']) == true){
+        if (in_array($rel_name, $params['ignore_hosts']) == true) {
             continue;
         }
         $obj = automap_obj($MAPCFG, $params, $saved_config, $rel_name);
