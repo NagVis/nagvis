@@ -546,13 +546,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         switch ($type) {
             case 'column':
                 return $this->queryLivestatusSingleColumn($query);
-                break;
             case 'row':
                 return $this->queryLivestatusSingleRow($query);
-                break;
             default:
                 return $this->queryLivestatus($query);
-                break;
         }
     }
 
@@ -592,7 +589,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
                 break;
             default:
                 return [];
-                break;
         }
         reset($l);
 
@@ -653,7 +649,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
                         break;
                     default:
                         throw new BackendConnectionProblem('Invalid filter key (' . $key . ')');
-                        break;
                 }
             }
 

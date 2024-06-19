@@ -626,12 +626,10 @@ class GlobalBackendTest implements GlobalBackendInterface
                     $l = $this->obj[$type][$name1Pattern];
                 } else {
                     throw new BackendException('Unhandled query');
-                    exit;
                 }
                 break;
             default:
                 return [];
-                break;
         }
 
         $result = [];
@@ -693,7 +691,6 @@ class GlobalBackendTest implements GlobalBackendInterface
                         break;
                     default:
                         throw new BackendConnectionProblem('Invalid filter key (' . $filter['key'] . ')');
-                        break;
                 }
             }
 
@@ -759,7 +756,6 @@ class GlobalBackendTest implements GlobalBackendInterface
             }
         } else {
             throw new BackendException('Unhandled query - filters: ' . json_encode($filters));
-            exit;
         }
 
         return $arrReturn;
@@ -963,7 +959,6 @@ class GlobalBackendTest implements GlobalBackendInterface
             }
         } else {
             throw new BackendException('Unhandled filter in backend (getHostgroupStateCounts)');
-            exit;
         }
 
         return $aReturn;

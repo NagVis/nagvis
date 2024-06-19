@@ -66,7 +66,6 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
                 return $this->DB->deletePermissions($mod, $name);
             default:
                 return false;
-                break;
         }
     }
 
@@ -83,7 +82,6 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
                 return $this->DB->createRotationPermissions($name);
             default:
                 return false;
-                break;
         }
     }
 

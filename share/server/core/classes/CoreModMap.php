@@ -154,7 +154,6 @@ class CoreModMap extends CoreModule
                     $this->doExportMap($this->name);
                     exit(0);
                     //header('Location:'.$_SERVER['HTTP_REFERER']);
-                    break;
                 case 'toStaticMap':
                     $VIEW = new ViewToStaticMap();
                     $sReturn = json_encode(['code' => $VIEW->parse($this->name)]);
