@@ -23,7 +23,8 @@
  *
  *****************************************************************************/
 
-class NagVisContainer extends NagVisStatelessObject {
+class NagVisContainer extends NagVisStatelessObject
+{
     protected $type = 'container';
 
     protected $enable_refresh;

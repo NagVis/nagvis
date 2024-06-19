@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisContextMenu {
+class NagVisContextMenu
+{
     private $CORE;
     private $OBJPAGE;
     private $CACHE;

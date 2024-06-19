@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class ViewManageUsers {
+class ViewManageUsers
+{
     private $error = null;
 
     private function addForm() {

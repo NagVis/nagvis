@@ -26,7 +26,8 @@
 /**
  * @author  Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModChangePassword extends CoreModule {
+class CoreModChangePassword extends CoreModule
+{
     public function __construct($CORE) {
         $this->sName = 'ChangePassword';
 

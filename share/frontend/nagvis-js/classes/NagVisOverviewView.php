@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class NagVisOverviewView {
+class NagVisOverviewView
+{
     public function __construct($CORE) {
     }
 

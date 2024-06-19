@@ -22,7 +22,8 @@
  *
  ******************************************************************************/
 
-class CoreAuthModSQLite extends CoreAuthModPDO {
+class CoreAuthModSQLite extends CoreAuthModPDO
+{
     public function getConfig() {
         return [
             'driver' => 'sqlite',

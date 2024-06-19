@@ -22,7 +22,8 @@
  *
  ******************************************************************************/
 
-class CoreAuthorisationModMySQL extends CoreAuthorisationModPDO {
+class CoreAuthorisationModMySQL extends CoreAuthorisationModPDO
+{
     public function getConfig() {
         return [
             'driver' => 'mysql',

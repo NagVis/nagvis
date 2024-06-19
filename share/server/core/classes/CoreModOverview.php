@@ -25,7 +25,8 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModOverview extends CoreModule {
+class CoreModOverview extends CoreModule
+{
     private $htmlBase;
 
     public function __construct(GlobalCore $CORE) {

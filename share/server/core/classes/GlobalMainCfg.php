@@ -37,7 +37,8 @@ function listAvailableLanguages() {
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class GlobalMainCfg {
+class GlobalMainCfg
+{
     private $useCache = true;
     private $CACHE;
     private $PUCACHE;

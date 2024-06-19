@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class ViewError {
+class ViewError
+{
     private function errorPage($e) {
         global $_MAINCFG;
         ob_start();

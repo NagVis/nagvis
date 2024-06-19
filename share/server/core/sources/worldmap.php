@@ -1,6 +1,8 @@
 <?php
 
-class WorldmapError extends MapSourceError {}
+class WorldmapError extends MapSourceError
+{
+}
 
 const MATCH_WORLDMAP_ZOOM = '/^1?[0-9]|20$/';
 

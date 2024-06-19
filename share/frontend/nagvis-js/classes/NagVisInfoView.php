@@ -26,7 +26,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisInfoView {
+class NagVisInfoView
+{
     public function __construct($CORE) {}
 
     /**

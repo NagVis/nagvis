@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class ViewToStaticMap {
+class ViewToStaticMap
+{
     private $error = null;
 
     public function parse($orig_name) {

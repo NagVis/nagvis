@@ -26,7 +26,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisIndexView {
+class NagVisIndexView
+{
     private $sSubtitle = '';
     private $sCustomStylesheet = '';
     private $sHeaderMenu = '';

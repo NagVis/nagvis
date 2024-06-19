@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class ViewMapManageTmpl {
+class ViewMapManageTmpl
+{
     private $error = null;
 
     private function createForm() {

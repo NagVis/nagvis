@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class CoreModUserMgmt extends CoreModule {
+class CoreModUserMgmt extends CoreModule
+{
     public function __construct($CORE) {
         $this->sName = 'UserMgmt';
 

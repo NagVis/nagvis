@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class GlobalLanguage {
+class GlobalLanguage
+{
     private $USERCFG = null;
     private $textDomain;
     private $sCurrentLanguage;

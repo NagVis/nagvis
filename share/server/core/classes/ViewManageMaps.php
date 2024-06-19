@@ -19,7 +19,8 @@
  *
  *****************************************************************************/
 
-class ViewManageMaps {
+class ViewManageMaps
+{
     private $error = null;
 
     private function createForm() {

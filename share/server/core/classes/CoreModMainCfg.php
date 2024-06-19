@@ -22,7 +22,8 @@
  *
  ******************************************************************************/
 
-class CoreModMainCfg extends CoreModule {
+class CoreModMainCfg extends CoreModule
+{
     private $name = null;
     private $CORE;
 

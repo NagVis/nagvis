@@ -26,7 +26,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisService extends NagVisStatefulObject {
+class NagVisService extends NagVisStatefulObject
+{
     protected $type = 'service';
 
     protected static $langType = null;

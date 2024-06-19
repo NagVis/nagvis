@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class ViewManageRoles {
+class ViewManageRoles
+{
     private $error = null;
 
     private function addForm() {

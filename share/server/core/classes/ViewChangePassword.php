@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class ViewChangePassword {
+class ViewChangePassword
+{
     private $error = null;
 
     private function changeForm() {

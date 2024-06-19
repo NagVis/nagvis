@@ -23,7 +23,8 @@
  *
  *****************************************************************************/
 
-class CoreLogonMultisite extends CoreLogonModule {
+class CoreLogonMultisite extends CoreLogonModule
+{
     private $htpasswdPath;
     private $serialsPath;
     private $secretPath;

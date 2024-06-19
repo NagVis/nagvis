@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class ViewManageShapes {
+class ViewManageShapes
+{
     private $error = null;
 
     private function uploadForm() {

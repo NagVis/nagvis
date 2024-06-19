@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class FrontendModuleHandler extends CoreModuleHandler {
+class FrontendModuleHandler extends CoreModuleHandler
+{
     public function __construct() {
         parent::__construct();
 

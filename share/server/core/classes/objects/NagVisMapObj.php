@@ -26,7 +26,8 @@
  *
  *****************************************************************************/
 
-class NagVisMapObj extends NagVisStatefulObject {
+class NagVisMapObj extends NagVisStatefulObject
+{
     protected $type = 'map';
 
     protected static $langType = null;

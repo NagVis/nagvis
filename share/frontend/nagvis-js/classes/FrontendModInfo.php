@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class FrontendModInfo extends FrontendModule {
+class FrontendModInfo extends FrontendModule
+{
     private $CORE;
 
     public function __construct($CORE) {

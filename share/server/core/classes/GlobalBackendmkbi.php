@@ -29,7 +29,8 @@ if (!function_exists('l')) {
     require_once('../defines/matches.php');
 }
 
-class GlobalBackendmkbi implements GlobalBackendInterface {
+class GlobalBackendmkbi implements GlobalBackendInterface
+{
     private $backendId = '';
     private $baseUrl   = '';
     private $context   = '';

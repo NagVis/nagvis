@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class CoreLogonEnv extends CoreLogonModule {
+class CoreLogonEnv extends CoreLogonModule
+{
     public function check($printErr = true) {
         global $AUTH, $CORE;
 

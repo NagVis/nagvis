@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class GlobalMapCfg {
+class GlobalMapCfg
+{
     public $BACKGROUND;
     private $CACHE;
     private $DCACHE;

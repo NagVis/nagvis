@@ -22,7 +22,8 @@
  *
  ******************************************************************************/
 
-class CoreModAction extends CoreModule {
+class CoreModAction extends CoreModule
+{
     public function __construct(GlobalCore $CORE) {
         $this->sName = 'Action';
 

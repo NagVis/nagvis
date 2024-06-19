@@ -28,7 +28,8 @@
  *
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreAuthorisationHandler {
+class CoreAuthorisationHandler
+{
     private $sModuleName = '';
     private $aPermissions = [];
 

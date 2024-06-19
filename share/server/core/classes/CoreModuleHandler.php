@@ -25,7 +25,8 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModuleHandler {
+class CoreModuleHandler
+{
     protected $CORE;
     protected $aRegistered;
     protected $sPrefix;

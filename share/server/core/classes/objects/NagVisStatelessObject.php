@@ -24,7 +24,8 @@
  *
  *****************************************************************************/
 
-class NagVisStatelessObject extends NagVisObject {
+class NagVisStatelessObject extends NagVisObject
+{
     // "Global" Configuration variables for all stateless objects
     protected $label_show;
 

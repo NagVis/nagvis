@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreBackendMgmt {
+class CoreBackendMgmt
+{
     public $BACKENDS = [];
     private $aInitialized = [];
     private $aQueue = [];

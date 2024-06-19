@@ -22,7 +22,8 @@
  *
  *****************************************************************************/
 
-class CoreRequestHandler {
+class CoreRequestHandler
+{
     private $aOpts;
 
     public function __construct($aOptions) {

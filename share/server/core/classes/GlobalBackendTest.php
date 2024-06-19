@@ -25,7 +25,8 @@
 /**
  * @author  Lars Michelsen  <lm@larsmichelsen.com>
  */
-class GlobalBackendTest implements GlobalBackendInterface {
+class GlobalBackendTest implements GlobalBackendInterface
+{
     private $backendId = '';
     private $now;
 

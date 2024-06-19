@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class NagVisLoginView {
+class NagVisLoginView
+{
     public function __construct($CORE) {
     }
 

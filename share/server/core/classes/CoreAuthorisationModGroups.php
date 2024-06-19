@@ -23,7 +23,8 @@
  *
  ******************************************************************************/
 
-class CoreAuthorisationModGroups extends CoreAuthorisationModule {
+class CoreAuthorisationModGroups extends CoreAuthorisationModule
+{
     private $CACHE;
 
     public $rolesConfigurable = false;

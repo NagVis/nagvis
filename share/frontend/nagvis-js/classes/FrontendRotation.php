@@ -25,4 +25,6 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class FrontendRotation extends CoreRotation {}
+class FrontendRotation extends CoreRotation
+{
+}

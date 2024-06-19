@@ -25,7 +25,8 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModMap extends CoreModule {
+class CoreModMap extends CoreModule
+{
     private $name = null;
     private $CORE;
     private $htmlBase;

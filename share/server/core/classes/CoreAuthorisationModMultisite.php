@@ -23,7 +23,8 @@
  *
  ******************************************************************************/
 
-class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
+class CoreAuthorisationModMultisite extends CoreAuthorisationModule
+{
     public $rolesConfigurable = false;
     private $file;
     private $permissions;

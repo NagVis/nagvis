@@ -25,7 +25,8 @@
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
-class FrontendModUrl extends FrontendModule {
+class FrontendModUrl extends FrontendModule
+{
     private $CORE;
     private $VIEW;
     private $url = '';

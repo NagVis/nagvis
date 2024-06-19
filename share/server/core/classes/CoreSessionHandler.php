@@ -28,7 +28,8 @@
  *
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreSessionHandler {
+class CoreSessionHandler
+{
 
     public function __construct() {
         $sDomain   = cfg('global', 'sesscookiedomain');

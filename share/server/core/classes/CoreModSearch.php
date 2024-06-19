@@ -25,7 +25,8 @@
 /**
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
-class CoreModSearch extends CoreModule {
+class CoreModSearch extends CoreModule
+{
     protected $CORE;
 
     public function __construct($CORE) {

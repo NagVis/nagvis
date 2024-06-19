@@ -27,7 +27,8 @@
  *
  * @author  Lars Michelsen <lm@larsmichelsen.com
  */
-class GlobalCore {
+class GlobalCore
+{
     protected static $MAINCFG = null;
     protected static $LANG = null;
     protected static $AUTHENTICATION = null;

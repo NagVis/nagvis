@@ -26,7 +26,8 @@
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
 
-class NagVisException extends Exception {
+class NagVisException extends Exception
+{
     protected $e;
 
     public function __construct($msg, $title = null, $time = null, $url = null) {
@@ -59,7 +60,8 @@ class NagVisException extends Exception {
     }
 }
 
-class MapInMaintenance extends NagVisException {
+class MapInMaintenance extends NagVisException
+{
     public function __construct($map) {
         $this->e = [
             'type'    => 'info',
@@ -69,7 +71,8 @@ class MapInMaintenance extends NagVisException {
     }
 }
 
-class Success extends NagVisException {
+class Success extends NagVisException
+{
     public function __construct($msg, $title = null, $time = null, $url = null) {
         parent::__construct($msg, $title, $time, $url);
         $this->e['type'] = 'ok';
@@ -79,21 +82,40 @@ class Success extends NagVisException {
     }
 }
 
-class CoreAuthModNoSupport extends NagVisException {}
+class CoreAuthModNoSupport extends NagVisException
+{
+}
 
-class BackendException extends NagVisException {}
-class BackendConnectionProblem extends BackendException {}
-class BackendInvalidResponse extends BackendException {}
+class BackendException extends NagVisException
+{
+}
+class BackendConnectionProblem extends BackendException
+{
+}
+class BackendInvalidResponse extends BackendException
+{
+}
 
-class MapCfgInvalid extends NagVisException {}
-class MapCfgInvalidObject extends MapCfgInvalid {}
-class MapSourceError extends MapCfgInvalid {}
+class MapCfgInvalid extends NagVisException
+{
+}
+class MapCfgInvalidObject extends MapCfgInvalid
+{
+}
+class MapSourceError extends MapCfgInvalid
+{
+}
 
-class UserInputError extends NagVisException {}
+class UserInputError extends NagVisException
+{
+}
 
-class InputErrorRedirect extends NagVisException {}
+class InputErrorRedirect extends NagVisException
+{
+}
 
-class FieldInputError extends NagVisException {
+class FieldInputError extends NagVisException
+{
     public $field;
     public $msg;
 
@@ -108,7 +130,8 @@ class FieldInputError extends NagVisException {
 }
 
 // This exception is used to handle PHP errors
-class NagVisErrorException extends ErrorException {
+class NagVisErrorException extends ErrorException
+{
     public function __toString() {
         $msg = "Error: (" . $this->getCode() . ") " . $this->getMessage()
             . "<div class=\"details\">"

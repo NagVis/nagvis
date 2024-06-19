@@ -1,6 +1,8 @@
 <?php
 
-class DynmapError extends MapSourceError {}
+class DynmapError extends MapSourceError
+{
+}
 
 function dynmap_get_objects($MAPCFG, $p) {
     global $_BACKEND;
