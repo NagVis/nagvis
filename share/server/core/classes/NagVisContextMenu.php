@@ -79,7 +79,7 @@ class NagVisContextMenu {
      * @return	bool		Result
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    function readTemplate() {
+    public function readTemplate() {
         if($this->checkTemplateReadable(1)) {
             $this->code = file_get_contents($this->pathTemplateFile);
             return TRUE;

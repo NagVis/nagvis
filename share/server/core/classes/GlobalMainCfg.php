@@ -2717,7 +2717,7 @@ class GlobalMainCfg {
      * @return  array   The validConfig array
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    function getValidObjectType($type) {
+    public function getValidObjectType($type) {
         return $this->validConfig[$type];
     }
 
@@ -2727,7 +2727,7 @@ class GlobalMainCfg {
      * @return	array The validConfig array
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    function getValidConfig() {
+    public function getValidConfig() {
         return $this->validConfig;
     }
 
@@ -2737,7 +2737,7 @@ class GlobalMainCfg {
      * @return	array The validConfig array
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    function getConfig() {
+    public function getConfig() {
         return $this->config;
     }
 
@@ -2748,7 +2748,7 @@ class GlobalMainCfg {
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    function setSection($sec) {
+    public function setSection($sec) {
         // Try to append new backends after already defined
         if(preg_match('/^backend_/', $sec)) {
             $lastBackendIndex = 0;
@@ -2786,7 +2786,7 @@ class GlobalMainCfg {
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    function delSection($sec) {
+    public function delSection($sec) {
         $this->config[$sec] = '';
         unset($this->config[$sec]);
 
@@ -2799,7 +2799,7 @@ class GlobalMainCfg {
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    function writeConfig() {
+    public function writeConfig() {
         // Check for config file write permissions
         if(!$this->checkNagVisConfigWriteable(1)) {
             return false;
@@ -2910,7 +2910,7 @@ class GlobalMainCfg {
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    function checkNagVisConfigWriteable($printErr) {
+    public function checkNagVisConfigWriteable($printErr) {
         return GlobalCore::getInstance()->checkWriteable($this->configFiles[count($this->configFiles) - 1], $printErr);
     }
 

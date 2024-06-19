@@ -1268,7 +1268,7 @@ class GlobalMapCfg {
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    function checkMapCfgFolderWriteable($printErr) {
+    public function checkMapCfgFolderWriteable($printErr) {
         global $CORE;
         return $CORE->checkReadable(dirname($this->configFile), $printErr);
     }

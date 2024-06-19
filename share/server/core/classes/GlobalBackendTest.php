@@ -373,7 +373,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
         return -1;
     }
 
-    function getAllTypeObjects($type) {
+    public function getAllTypeObjects($type) {
         if($type == 'service') {
             $s = [];
             foreach($this->obj['service'] AS $services) {
@@ -385,7 +385,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
         }
     }
 
-    function genMapCfg($path) {
+    public function genMapCfg($path) {
         $f = "define global {\n"
             . "  backend_id=test_1\n"
             . "}\n"

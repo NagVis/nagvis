@@ -315,7 +315,7 @@ class GlobalLanguage {
      * @return  string        String Replaced language string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    static public function getReplacedString($sLang, $replace) {
+    public static function getReplacedString($sLang, $replace) {
         if(!is_array($replace)) {
             $aReplace = explode(',', $replace);
             for($i = 0, $size = count($aReplace); $i < $size; $i++) {

@@ -205,7 +205,7 @@ class ViewManageRoles {
         }
     }
 
-    function renderMapsSection($permissions, $permitted) {
+    public function renderMapsSection($permissions, $permitted) {
         echo '<table class="mytable perms">';
         echo '<tr>';
         echo '<th>' . l('Map') . '</th>';
@@ -229,7 +229,7 @@ class ViewManageRoles {
         echo '</table>';
     }
 
-    function renderOtherSection($permissions, $permitted) {
+    public function renderOtherSection($permissions, $permitted) {
         echo '<table class="mytable perms">';
         echo '<tr>';
         echo '<th>' . l('Module') . '</th>';

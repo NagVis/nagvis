@@ -727,12 +727,12 @@ class GlobalCore {
     }
 
     // Sort array of map arrays by alias
-    static function cmpAlias($a, $b) {
+    public static function cmpAlias($a, $b) {
         return strnatcasecmp($a['alias'], $b['alias']);
     }
 
     // Sort array of map arrays by alias used for header menu
-    static function cmpMapAlias($a, $b) {
+    public static function cmpMapAlias($a, $b) {
         return strnatcasecmp($a['mapAlias'], $b['mapAlias']);
     }
 

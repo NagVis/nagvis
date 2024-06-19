@@ -29,7 +29,7 @@
 class NagVisException extends Exception {
     protected $e;
 
-    function __construct($msg, $title = null, $time = null, $url = null) {
+    public function __construct($msg, $title = null, $time = null, $url = null) {
         if($title === null) {
             $title = l('ERROR');
         }
@@ -50,17 +50,17 @@ class NagVisException extends Exception {
         parent::__construct($msg);
     }
 
-    function __toString() {
+    public function __toString() {
         return json_encode($this->e);
     }
 
-    function message() {
+    public function message() {
         return $this->e['message'];
     }
 }
 
 class MapInMaintenance extends NagVisException {
-    function __construct($map) {
+    public function __construct($map) {
         $this->e = [
             'type'    => 'info',
             'message' => l('mapInMaintenance', ['MAP' => $map]),
@@ -70,7 +70,7 @@ class MapInMaintenance extends NagVisException {
 }
 
 class Success extends NagVisException {
-    function __construct($msg, $title = null, $time = null, $url = null) {
+    public function __construct($msg, $title = null, $time = null, $url = null) {
         parent::__construct($msg, $title, $time, $url);
         $this->e['type'] = 'ok';
         if($this->e['title'] == l('ERROR')) {
@@ -97,19 +97,19 @@ class FieldInputError extends NagVisException {
     public $field;
     public $msg;
 
-    function __construct($field, $msg) {
+    public function __construct($field, $msg) {
         $this->field = $field;
         $this->msg   = $msg;
     }
 
-    function message() {
+    public function message() {
         return $this->msg;
     }
 }
 
 // This exception is used to handle PHP errors
 class NagVisErrorException extends ErrorException {
-    function __toString() {
+    public function __toString() {
         $msg = "Error: (" . $this->getCode() . ") " . $this->getMessage()
              . "<div class=\"details\">"
              . "URL: " . $_SERVER['REQUEST_URI'] . "<br>\n"

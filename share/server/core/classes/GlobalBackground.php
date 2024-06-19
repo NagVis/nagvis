@@ -152,7 +152,7 @@ class GlobalBackground {
      * @return	bool	Is Check Successful?
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    function deleteImage($printErr = 1) {
+    public function deleteImage($printErr = 1) {
         if($this->checkFolderWriteable($printErr) && $this->checkFileWriteable($printErr)) {
             if(unlink($this->path)) {
                 return TRUE;
