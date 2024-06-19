@@ -216,7 +216,7 @@ class GlobalLanguage
         $sLang = '';
         foreach ($langs as $key => $val) {
             // Format the language keys
-            if (strpos($key, '-') !== false) {
+            if (str_contains($key, '-')) {
                 $a = explode('-', $key);
 
                 $key = $a[0] . '_' . strtoupper($a[1]);

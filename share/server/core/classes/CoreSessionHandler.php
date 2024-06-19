@@ -44,13 +44,13 @@ class CoreSessionHandler
 
         // Only add the domain when it is no simple hostname
         // This can be easily detected searching for a dot
-        if (strpos($sDomain, '.') === false) {
+        if (!str_contains($sDomain, '.')) {
             $sDomain = null;
         }
 
         // Opera has problems with ip addresses in domains. So skip them
         if (
-            strpos($_SERVER['HTTP_USER_AGENT'], 'opera') !== false
+            str_contains($_SERVER['HTTP_USER_AGENT'], 'opera')
             && preg_match('/\d.\d+.\d+.\d+/', $sDomain)
         ) {
             $sDomain = null;
@@ -75,7 +75,7 @@ class CoreSessionHandler
                 // especially on current debian/ubuntu:
                 //   PHP error in ajax request handler: Error: (8) session_start():
                 //   ps_files_cleanup_dir: opendir(/var/lib/php5) failed: Permission denied (13)
-                if (strpos($e->getMessage(), 'ps_files_cleanup_dir') === false) {
+                if (!str_contains($e->getMessage(), 'ps_files_cleanup_dir')) {
                     throw $e;
                 }
             }

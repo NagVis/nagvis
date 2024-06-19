@@ -332,7 +332,7 @@ class CoreModMap extends CoreModule
 
         // Also remove all "helper fields" which begin with a _
         foreach ($aOpts as $key => $val) {
-            if (strpos($key, '_') === 0) {
+            if (str_starts_with($key, '_')) {
                 unset($aOpts[$key]);
             }
         }

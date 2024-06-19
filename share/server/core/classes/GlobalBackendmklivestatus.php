@@ -1724,6 +1724,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         } else {
             $result = [];
             foreach ($raw_result[0] as &$value) {
+                // todo: is this intentional use of ==
                 if (strpos($value, "/") == false) {
                     array_push($result, $value);
                 }
@@ -1759,6 +1760,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         } else {
             $result = [];
             foreach ($raw_result[0] as &$value) {
+                // todo: is this intentional use of ==
                 if (strpos($value, "/") == false) {
                     array_push($result, $value);
                 }

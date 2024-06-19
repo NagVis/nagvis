@@ -743,7 +743,7 @@ function process_automap($MAPCFG, $map_name, &$map_config) {
     // FIXME: Maybe move this to general "sources" processing
     foreach ($map_config as $object_id => $conf) {
         foreach (array_keys($conf) as $key) {
-            if ($key[0] == '.') {
+            if (str_starts_with($key, '.')) {
                 unset($map_config[$object_id][$key]);
             }
         }
