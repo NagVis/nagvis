@@ -67,7 +67,7 @@ class CoreModAction extends CoreModule {
                     if(!isset($attrs['object_id']) && $attrs['object_id'] == '') {
                         throw new NagVisException(l('The object_id value is missing.'));
                     }
-                    
+
                     if(!$MAPCFG->objExists($attrs['object_id'])) {
                         throw new NagVisException(l('The object does not exist.'));
                     }
@@ -81,7 +81,7 @@ class CoreModAction extends CoreModule {
                     $func($MAPCFG, $objId);
 
                 break;
-                
+
                 case 'acknowledge':
                     $VIEW = new ViewAck();
                     $sReturn = json_encode(['code' => $VIEW->parse()]);

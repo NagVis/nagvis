@@ -264,7 +264,7 @@ function process_dynmap($MAPCFG, $map_name, &$map_config) {
 
     $in_this_row = 0;
     foreach ($objects as $object) {
-        $map_config[$object['object_id']]['x'] = $x;        
+        $map_config[$object['object_id']]['x'] = $x;
         $map_config[$object['object_id']]['y'] = $y;
         $x += $step_x;
         $in_this_row += 1;

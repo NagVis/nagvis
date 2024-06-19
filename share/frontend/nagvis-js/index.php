@@ -51,7 +51,7 @@ try {
         'Rotation',
         'LogonDialog',
     ];
-    
+
     require('../../server/core/functions/index.php');
     exit(0);
 } catch(NagVisException $e) {

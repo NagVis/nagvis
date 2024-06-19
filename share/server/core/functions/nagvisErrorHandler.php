@@ -52,7 +52,7 @@ function nagvisExceptionErrorHandler($errno, $errstr, $errfile, $errline ) {
     if(!(error_reporting() & $errno)) {
         return false;
     }
-    
+
     throw new NagVisErrorException($errstr, 0, $errno, $errfile, $errline);
 }
 set_error_handler("nagvisExceptionErrorHandler");

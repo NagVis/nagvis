@@ -1251,7 +1251,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @return	array			Array with hostnames
      */
     public function getHostNamesInHostgroup($hostgroupName) {
-            return $this->getHostsByHostgroupName($hostgroupName); 
+            return $this->getHostsByHostgroupName($hostgroupName);
     }
 
 
@@ -1359,7 +1359,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
     public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact = false) {
         return $this->getDirectChildNamesByHostName($hostName);
     }
-    
+
     /*  
      * PUBLIC getDirectParentNamesByHostName()
      *

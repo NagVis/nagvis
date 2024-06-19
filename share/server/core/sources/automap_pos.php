@@ -60,7 +60,7 @@ function graphviz_config_tree(&$params, &$tree, $layer = 0) {
     $str .= 'label="' . $name . '", ';
     $str .= 'URL="' . $tree['object_id'] . '", ';
     $str .= 'tooltip="' . $tree['object_id'] . '", ';
-    
+
     $width  = $tree['.width'];
     $height = $tree['.height'];
 

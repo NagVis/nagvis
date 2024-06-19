@@ -21,7 +21,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 // NagVis Version
 const CONST_VERSION = '1.9.42';
 

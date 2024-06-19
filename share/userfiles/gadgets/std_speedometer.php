@@ -73,8 +73,8 @@ header("Content-type: image/png");
 
 $min = 0;
 $max = -1;
-$default = 0; 
- 
+$default = 0;
+
 /* Now read the parameters */
 
 // This gadget is simple and dirty, it only recognizes the first dataset of

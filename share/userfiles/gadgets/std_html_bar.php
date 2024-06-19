@@ -75,7 +75,7 @@ if(substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
 
 $min = 0;
 $max = -1;
-$default = 0; 
+$default = 0;
 
 // Set default parameters values
 $border                      = 1; // Border
@@ -89,7 +89,7 @@ if (isset($_GET['opts']) && ($_GET['opts'] != '')){
         if ($matches[$i][1] == 'perfdata') { $perfdata = $matches[$i][2]; }
     }
 }
- 
+
 /* Now read the parameters */
 
 // Read dataset of performance data from parameters
