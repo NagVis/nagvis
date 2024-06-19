@@ -53,3 +53,7 @@ share/nagvis/gadgets/*.php
 var/*
 
 /vendor/
+
+# Exclude IDE directories
+.idea/
+.vscode
