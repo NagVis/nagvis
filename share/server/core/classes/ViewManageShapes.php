@@ -123,7 +123,7 @@ class ViewManageShapes {
                         . 'currently used by these maps: [M].',
                         ['M' => implode(',', $using)]));
                 }
-            
+
                 $path = path('sys', '', 'shapes', $name);
                 if ($path !== '') {
                     unlink($path);

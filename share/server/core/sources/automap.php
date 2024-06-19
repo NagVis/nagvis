@@ -274,7 +274,7 @@ function automap_load_params($MAPCFG) {
     if(!isset($params['root']) || $params['root'] == '') {
         $params['root'] = automap_get_root_hostname($params);
     }
-    
+
     return $params;
 }
 
@@ -347,7 +347,7 @@ function automap_obj_base($MAPCFG, &$params, &$saved_config, $obj_name) {
 
 function automap_obj($MAPCFG, &$params, &$saved_config, $obj_name) {
     $obj = automap_obj_base($MAPCFG, $params, $saved_config, $obj_name);
-    
+
     if ($obj_name === '<<<monitoring>>>') {
         $obj['host_name'] = 'Monitoring';
         $obj['type']      = 'shape';
@@ -625,7 +625,7 @@ function automap_tree_to_map_config($MAPCFG, &$params, &$saved_config, &$map_con
     if ($map_config[$tree['object_id']]['type'] == 'shape') {
         unset($map_config[$tree['object_id']]['host_name']);
     }
-    
+
     // Remove internal attributes here
     unset($map_config[$tree['object_id']]['.childs']);
     unset($map_config[$tree['object_id']]['.parents']);

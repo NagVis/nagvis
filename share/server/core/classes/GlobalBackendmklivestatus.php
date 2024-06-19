@@ -609,7 +609,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             if($isMemberQuery && $OBJS[0]->getType() == 'dyngroup') {
                 return $OBJS[0]->getObjectFilter();
             }
-            
+
             // Are there child exclude filters defined for this object?
             // The objType is the type of the objects to query the data for
             if($isMemberQuery && $OBJS[0]->hasExcludeFilters($isCountQuery)) {
@@ -794,7 +794,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             $stateAttr = 'state';
         }
 
-        $q = "GET hosts\n" . 
+        $q = "GET hosts\n" .
             "Columns: " . $stateAttr . " plugin_output alias display_name " .
             "address notes last_check next_check state_type " .
             "current_attempt max_check_attempts last_state_change " .
@@ -849,7 +849,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     // This handles only the first downtime. But this is not backend
                     // specific. The other backends do this as well.
                     $data = $this->queryLivestatusSingleRow(
-                        "GET downtimes\n" . 
+                        "GET downtimes\n" .
                         "Columns: author comment start_time end_time\n" .
                         "Filter: host_name = " . $e[17] . "\n");
                     if(isset($data[0])) {
@@ -975,14 +975,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                         if(isset($e[15]) && $e[15] > 0) {
                             // Service downtime
                             $data = $this->queryLivestatusSingleRow(
-                                "GET downtimes\n" . 
+                                "GET downtimes\n" .
                                 "Columns: author comment start_time end_time\n" .
                                 "Filter: host_name = " . $e[20] . "\n" .
                                 "Filter: service_description = " . $e[0] . "\n");
                         } else {
                             // Host downtime
                             $data = $this->queryLivestatusSingleRow(
-                                "GET downtimes\n" . 
+                                "GET downtimes\n" .
                                 "Columns: author comment start_time end_time\n" .
                                 "Filter: host_name = " . $e[20] . "\n");
                         }
@@ -1059,8 +1059,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         // Get service information
         $l = $this->queryLivestatus("GET services\n" .
-            $objFilter . 
-            $this->serviceStateStats($stateAttr) . 
+            $objFilter .
+            $this->serviceStateStats($stateAttr) .
             "Columns: host_name host_alias\n");
 
         $arrReturn = [];
@@ -1130,7 +1130,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         // Get service information
         $l = $this->queryLivestatus("GET services\n" .
-            $filter . 
+            $filter .
             $this->serviceStateStats($stateAttr)
         );
 
@@ -1200,7 +1200,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         // Get host information
         $q = "GET hosts" . $host_suffix . "\n" .
-            $host_filter . 
+            $host_filter .
             // Count UNCHECKED
             "Stats: has_been_checked = 0\n" .
             // Count UP
@@ -1259,7 +1259,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             // Count UNREACHABLE(DOWNTIME)
             "Stats: " . $stateAttr . " = 2\n" .
             "Stats: scheduled_downtime_depth > 0\n" .
-            "StatsAnd: 2\n" . 
+            "StatsAnd: 2\n" .
             $host_grouping;
         $l = $this->queryLivestatus($q);
 
@@ -1329,8 +1329,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         // Get service information
         $l = $this->queryLivestatus("GET services" . $service_suffix . "\n" .
-            $service_filter . 
-            $this->serviceStateStats($stateAttr) . 
+            $service_filter .
+            $this->serviceStateStats($stateAttr) .
             $service_grouping);
 
         if(is_array($l) && count($l) > 0) {
@@ -1429,8 +1429,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
 
         // Get service information
         $l = $this->queryLivestatus("GET servicesbygroup\n" .
-            $objFilter . 
-            $this->serviceStateStats($stateAttr) . 
+            $objFilter .
+            $this->serviceStateStats($stateAttr) .
             "Columns: servicegroup_name servicegroup_alias\n");
 
         // If the method should fetch several objects and did not find
@@ -1586,7 +1586,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         elseif($what == 'service') {
             $what = 'SVC';
         }
-        
+
         $sticky  = $sticky ? '2' : '0';
         $notify  = $notify ? '1' : '0';
         $persist = $notify ? '1' : '0';
