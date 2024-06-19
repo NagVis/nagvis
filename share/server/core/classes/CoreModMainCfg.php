@@ -46,12 +46,12 @@ class CoreModMainCfg extends CoreModule {
                 case 'edit':
                     $VIEW = new ViewEditMainCfg();
                     $sReturn = json_encode(['code' => $VIEW->parse()]);
-                break;
+                    break;
 
                 case 'manageBackends':
                     $VIEW = new ViewManageBackends();
                     $sReturn = json_encode(['code' => $VIEW->parse()]);
-                break;
+                    break;
             }
         }
 

@@ -48,10 +48,10 @@ class CoreModUser extends CoreModule {
                 case 'getOptions':
                     $CFG = new CoreUserCfg();
                     $sReturn = json_encode($CFG->doGet());
-                break;
+                    break;
                 case 'setOption':
                     $this->handleResponse('handleResponseSet', 'doSet');
-                break;
+                    break;
             }
         }
 

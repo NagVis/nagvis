@@ -194,25 +194,25 @@ function graphviz_run($map_name, &$params, $cfg) {
     switch ($params['render_mode']) {
         case 'directed':
             $binary = 'dot';
-        break;
+            break;
         case 'undirected':
             $binary = 'neato';
-        break;
+            break;
         case 'radial':
             $binary = 'twopi';
-        break;
+            break;
         case 'circular':
             $binary = 'circo';
-        break;
+            break;
         case 'undirected2':
             $binary = 'fdp';
-        break;
+            break;
         case 'undirected3':
             $binary = 'sfdp';
-        break;
+            break;
         default:
             throw new NagVisException(l('Unknown render mode: [MODE]', ['MODE' => $params['render_mode']]));
-        break;
+            break;
     }
 
     /**
@@ -313,7 +313,7 @@ function graphviz_parse(&$map_config, $imagemap) {
                         $aCoords = explode(',', $coords);
                         $map_config[$object_id]['x'] = (int) $aCoords[0];
                         $map_config[$object_id]['y'] = (int) $aCoords[1];
-                    break;
+                        break;
                     case 'poly':
                         // Get the middle of the polygon and substract the object size
                         $x = null;
@@ -336,7 +336,7 @@ function graphviz_parse(&$map_config, $imagemap) {
 
                         $map_config[$object_id]['x'] = (int) $x;
                         $map_config[$object_id]['y'] = (int) $y;
-                    break;
+                        break;
                 }
             }
         }

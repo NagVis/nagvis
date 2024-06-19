@@ -502,13 +502,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
         switch ($type) {
             case 'column':
                 return $this->queryLivestatusSingleColumn($query);
-            break;
+                break;
             case 'row':
                 return $this->queryLivestatusSingleRow($query);
-            break;
+                break;
             default:
                 return $this->queryLivestatus($query);
-            break;
+                break;
         }
     }
 
@@ -534,7 +534,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
             case 'hostgroup':
             case 'servicegroup':
                 $l = $this->queryLivestatus("GET " . $type . "s\nColumns: name alias\n" . $add_filter);
-            break;
+                break;
             case 'service':
                 $query = "GET services\nColumns: host_name description\n";
 
@@ -544,10 +544,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 $query .= $add_filter;
 
                 $l = $this->queryLivestatus($query);
-            break;
+                break;
             default:
                 return [];
-            break;
+                break;
         }
         reset($l);
 
@@ -598,10 +598,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                         }
 
                         $objFilters[] = 'Filter: ' . $key . ' ' . $filter['op'] . ' ' . $val . "\n";
-                    break;
+                        break;
                     default:
                         throw new BackendConnectionProblem('Invalid filter key (' . $key . ')');
-                    break;
+                        break;
                 }
             }
 
@@ -824,10 +824,18 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                 }
 
                 switch ($e[0]) {
-                    case "0": $state = UP; break;
-                    case "1": $state = DOWN; break;
-                    case "2": $state = UNREACHABLE; break;
-                    default:  $state = UNKNOWN; break;
+                    case "0":
+                        $state = UP;
+                        break;
+                    case "1":
+                        $state = DOWN;
+                        break;
+                    case "2":
+                        $state = UNREACHABLE;
+                        break;
+                    default:
+                        $state = UNKNOWN;
+                        break;
                 }
 
                 // 15: acknowledged
@@ -944,11 +952,21 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
                     $svc[OUTPUT] = l('serviceNotChecked', ['SERVICE' => $e[0]]);
                 } else {
                     switch ($e[2]) {
-                        case "0": $state = OK; break;
-                        case "1": $state = WARNING; break;
-                        case "2": $state = CRITICAL; break;
-                        case "3": $state = UNKNOWN; break;
-                        default:  $state = UNKNOWN; break;
+                        case "0":
+                            $state = OK;
+                            break;
+                        case "1":
+                            $state = WARNING;
+                            break;
+                        case "2":
+                            $state = CRITICAL;
+                            break;
+                        case "3":
+                            $state = UNKNOWN;
+                            break;
+                        default:
+                            $state = UNKNOWN;
+                            break;
                     }
 
                     /**

@@ -246,21 +246,21 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
         switch ($type) {
             case 'host':
                 $objectType = 1;
-            break;
+                break;
             case 'service':
                 $objectType = 2;
 
                 $max = 2;
-            break;
+                break;
             case 'hostgroup':
                 $objectType = 3;
-            break;
+                break;
             case 'servicegroup':
                 $objectType = 4;
-            break;
+                break;
             default:
                 return [];
-            break;
+                break;
         }
 
         $filter = '';
@@ -383,10 +383,10 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                         $idx++;
                         $objFilters[] = ' ' . $table . '.' . $filter['key'] . " " . $filter['op'] . " :$oid ";
                         $values[$oid] = $val;
-                    break;
+                        break;
                     default:
                         throw new BackendConnectionProblem('Invalid filter key (' . $filter['key'] . ')');
-                    break;
+                        break;
                 }
             }
 
@@ -567,19 +567,19 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                     case 1:
                         $state = DOWN;
                         $output = $data['output'];
-                    break;
+                        break;
                     case 2:
                         $state = UNREACHABLE;
                         $output = $data['output'];
-                    break;
+                        break;
                     case 3:
                         $state = UNKNOWN;
                         $output = $data['output'];
-                    break;
+                        break;
                     default:
                         $state = UNKNOWN;
                         $output = 'GlobalBackendndomy::getHostState: Undefined state!';
-                    break;
+                        break;
                 }
             }
 
@@ -716,19 +716,19 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                     case 1:
                         $state = WARNING;
                         $output = $data['output'];
-                    break;
+                        break;
                     case 2:
                         $state = CRITICAL;
                         $output = $data['output'];
-                    break;
+                        break;
                     case 3:
                         $state = UNKNOWN;
                         $output = $data['output'];
-                    break;
+                        break;
                     default:
                         $state = UNKNOWN;
                         $output = 'GlobalBackendndomy::getServiceState: Undefined state!';
-                    break;
+                        break;
                 }
             }
 

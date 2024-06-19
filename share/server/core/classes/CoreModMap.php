@@ -71,12 +71,12 @@ class CoreModMap extends CoreModule {
                 // When e.g. submitting the addModify form the show parameter is a POST variable
                 $aVals = $this->getCustomOptions(['show' => MATCH_MAP_NAME_EMPTY], [], true);
                 $this->name = $aVals['show'];
-            break;
+                break;
             case 'toStaticMap':
             case 'viewToNewMap':
                 $aVals = $this->getCustomOptions(['show' => MATCH_MAP_NAME_EMPTY], [], true);
                 $this->name = $aVals['show'];
-            break;
+                break;
             // And those have the objecs in the POST var "map"
             case 'modifyObject':
             case 'deleteObject':
@@ -87,7 +87,7 @@ class CoreModMap extends CoreModule {
                     throw new NagVisException(l('Invalid query. The parameter [NAME] is missing or has an invalid format.',
                         ['NAME' => 'map']));
                 }
-            break;
+                break;
         }
 
         // Set the requested object for later authorisation
@@ -103,21 +103,21 @@ class CoreModMap extends CoreModule {
                     $MAPCFG = new GlobalMapCfg($this->name);
                     $MAPCFG->readMapConfig(ONLY_GLOBAL);
                     $sReturn = json_encode($MAPCFG->getMapProperties());
-                break;
+                    break;
                 case 'getMapObjects':
                     $sReturn = $this->getMapObjects();
-                break;
+                    break;
                 case 'getObjectStates':
                     $sReturn = $this->getObjectStates();
-                break;
+                    break;
                 case 'manage':
                     $VIEW = new ViewManageMaps();
                     $sReturn = json_encode(['code' => $VIEW->parse()]);
-                break;
+                    break;
                 case 'modifyObject':
                     $sReturn = $this->handleResponse('handleResponseModifyObject', 'doModifyObject',
                         null, l('The object could not be modified.'));
-                break;
+                    break;
                 case 'deleteObject':
                     $aReturn = $this->handleResponseDeleteObject();
 
@@ -130,34 +130,34 @@ class CoreModMap extends CoreModule {
                     } else {
                         throw new NagVisException(l('You entered invalid information.'));
                     }
-                break;
+                    break;
                 case 'addModify':
                     $VIEW = new ViewMapAddModify();
                     $sReturn = json_encode([
                         'code' => $VIEW->parse(),
                         'object_type' => $VIEW->object_type()
                     ]);
-                break;
+                    break;
                 case 'manageTmpl':
                     $VIEW = new ViewMapManageTmpl();
                     $sReturn = json_encode(['code' => $VIEW->parse()]);
-                break;
+                    break;
                 case 'doExportMap':
                     $this->doExportMap($this->name);
                     exit(0);
                     //header('Location:'.$_SERVER['HTTP_REFERER']);
-                break;
+                    break;
                 case 'toStaticMap':
                     $VIEW = new ViewToStaticMap();
                     $sReturn = json_encode(['code' => $VIEW->parse($this->name)]);
-                break;
+                    break;
                 case 'viewToNewMap':
                     $VIEW = new ViewToNewMap();
                     $sReturn = json_encode(['code' => $VIEW->parse($this->name)]);
-                break;
+                    break;
                 case 'getWorldmapBounds':
                     $sReturn = $this->getWorldmapBounds();
-                break;
+                    break;
             }
         }
 

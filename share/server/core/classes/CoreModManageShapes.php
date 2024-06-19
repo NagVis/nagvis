@@ -47,7 +47,7 @@ class CoreModManageShapes extends CoreModule {
                 case 'view':
                     $VIEW = new ViewManageShapes();
                     $sReturn = json_encode(['code' => $VIEW->parse()]);
-                break;
+                    break;
             }
         }
 
