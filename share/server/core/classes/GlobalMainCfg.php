@@ -2331,7 +2331,6 @@ class GlobalMainCfg
                                         ['ATTRIBUTE' => $key, 'TYPE' => $type]
                                     )
                                 );
-                                return false;
                             }
                         }
                     }

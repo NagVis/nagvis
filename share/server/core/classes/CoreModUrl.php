@@ -71,11 +71,15 @@ class CoreModUrl extends CoreModule
         // Reported here: http://news.gmane.org/find-root.php?message_id=%3cf60c42280909021938s7f36c0edhd66d3e9156a5d081%40mail.gmail.com%3e
         $url = parse_url($this->url);
         if (!isset($url['scheme']) || ($url['scheme'] != 'http' && $url['scheme'] != 'https')) {
-            throw new NagVisException(l('problemReadingUrl', [
-                'URL' => htmlentities($this->url, ENT_COMPAT, 'UTF-8'),
-                'MSG' => 'Not allowed url'
-            ]));
-            exit(1);
+            throw new NagVisException(
+                l(
+                    'problemReadingUrl',
+                    [
+                        'URL' => htmlentities($this->url, ENT_COMPAT, 'UTF-8'),
+                        'MSG' => 'Not allowed url'
+                    ]
+                )
+            );
         }
 
         // Only accept known URLs. The only place where NagVis defines URLs is in rotation steps.

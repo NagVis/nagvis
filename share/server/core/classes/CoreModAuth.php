@@ -64,7 +64,6 @@ class CoreModAuth extends CoreModule
                             cfg('paths', 'htmlbase')
                         );
                     }
-                    break;
             }
         }
     }
@@ -102,16 +101,21 @@ class CoreModAuth extends CoreModule
 
     public function msgAlreadyLoggedIn()
     {
-        throw new NagVisException(l('You are already logged in. You will be redirected.'),
-            null, 1, cfg('paths', 'htmlbase'));
-        return '';
+        throw new NagVisException(
+            l('You are already logged in. You will be redirected.'),
+            null,
+            1,
+            cfg('paths', 'htmlbase')
+        );
     }
 
     public function msgInvalidCredentials()
     {
-        throw new NagVisException(l('You entered invalid credentials.'),
+        throw new NagVisException(
+            l('You entered invalid credentials.'),
             l('Authentication failed'),
-            1, CoreRequestHandler::getReferer(''));
-        return '';
+            1,
+            CoreRequestHandler::getReferer('')
+        );
     }
 }

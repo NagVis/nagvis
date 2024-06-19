@@ -220,7 +220,6 @@ function graphviz_run($map_name, &$params, $cfg) {
             break;
         default:
             throw new NagVisException(l('Unknown render mode: [MODE]', ['MODE' => $params['render_mode']]));
-            break;
     }
 
     /**

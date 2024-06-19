@@ -45,7 +45,6 @@ class CoreModRoleMgmt extends CoreModule
                 case 'view':
                     $VIEW = new ViewManageRoles();
                     return json_encode(['code' => $VIEW->parse()]);
-                    break;
             }
         }
         return '';

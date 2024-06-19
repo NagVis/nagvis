@@ -88,13 +88,10 @@ function geomap_get_locations($p) {
     switch ($p['source_type']) {
         case 'csv':
             return geomap_read_csv($p);
-            break;
         case 'backend':
             return geomap_backend_locations($p);
-            break;
         default:
             throw new GeomapError(l('Unhandled source type "[S]"', ['S' => $p['source_type']]));
-            break;
     }
 }
 
@@ -111,13 +108,10 @@ function geomap_source_age($p) {
     switch ($p['source_type']) {
         case 'csv':
             return filemtime(geomap_source_file($p));
-            break;
         case 'backend':
             return geomap_backend_program_start($p);
-            break;
         default:
             throw new GeomapError(l('Unhandled source type "[S]"', ['S' => $p['source_type']]));
-            break;
     }
 }
 

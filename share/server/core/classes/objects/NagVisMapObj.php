@@ -580,7 +580,6 @@ class NagVisMapObj extends NagVisStatefulObject
                             'TYPE'    => $type,
                             'MAPNAME' => $this->getName()
                         ]));
-                    break;
             }
 
             log_mem('preconf');

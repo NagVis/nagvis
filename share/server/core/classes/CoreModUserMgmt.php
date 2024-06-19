@@ -40,7 +40,6 @@ class CoreModUserMgmt extends CoreModule
                 case 'view':
                     $VIEW = new ViewManageUsers();
                     return json_encode(['code' => $VIEW->parse()]);
-                    break;
             }
         }
 
