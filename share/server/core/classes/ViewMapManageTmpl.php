@@ -303,5 +303,3 @@ class ViewMapManageTmpl
         return ob_get_clean();
     }
 }
-
-

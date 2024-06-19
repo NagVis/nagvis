@@ -105,5 +105,3 @@ function shape_size($icon) {
         return [0, 0];
     }
 }
-
-

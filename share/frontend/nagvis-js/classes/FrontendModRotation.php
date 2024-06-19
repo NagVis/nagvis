@@ -102,4 +102,3 @@ class FrontendModRotation extends FrontendModule
         }
     }
 }
-

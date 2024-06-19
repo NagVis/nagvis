@@ -60,4 +60,3 @@ class CoreModChangePassword extends CoreModule
         return $sReturn;
     }
 }
-

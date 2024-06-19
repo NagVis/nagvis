@@ -280,4 +280,3 @@ class NagVisHost extends NagVisStatefulObject
         }
     }
 }
-

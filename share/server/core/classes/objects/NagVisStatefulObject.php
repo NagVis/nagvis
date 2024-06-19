@@ -1046,4 +1046,3 @@ class NagVisStatefulObject extends NagVisObject
         return $arr;
     }
 }
-

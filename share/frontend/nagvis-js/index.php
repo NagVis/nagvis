@@ -64,5 +64,3 @@ try {
         echo $VIEW->parse($e);
     }
 }
-
-

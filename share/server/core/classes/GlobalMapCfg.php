@@ -2169,4 +2169,3 @@ class GlobalMapCfg
         }
     }
 }
-

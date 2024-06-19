@@ -115,5 +115,3 @@ class CoreModAuth extends CoreModule
         return '';
     }
 }
-
-

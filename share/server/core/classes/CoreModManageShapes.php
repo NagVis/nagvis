@@ -57,4 +57,3 @@ class CoreModManageShapes extends CoreModule
         return $sReturn;
     }
 }
-

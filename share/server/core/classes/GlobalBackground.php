@@ -176,4 +176,3 @@ class GlobalBackground
         return false;
     }
 }
-

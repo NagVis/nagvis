@@ -59,4 +59,3 @@ class NagVisContainer extends NagVisStatelessObject
         // Nothing to do here, icon is set in constructor
     }
 }
-

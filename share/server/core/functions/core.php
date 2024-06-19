@@ -179,5 +179,3 @@ function listHoverChildOrders() {
         'desc' => l('Descending'),
     ];
 }
-
-

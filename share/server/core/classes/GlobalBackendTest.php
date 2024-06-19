@@ -1088,4 +1088,3 @@ class GlobalBackendTest implements GlobalBackendInterface
         return $this->getDirectParentNamesByHostName($hostName);
     }
 }
-

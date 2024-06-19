@@ -94,4 +94,3 @@ interface GlobalBackendInterface {
 #  public function getHostgroupState($hostgroupName, $onlyHardstates);
 #  public function getServicegroupState($servicegroupName, $onlyHardstates);
 }
-

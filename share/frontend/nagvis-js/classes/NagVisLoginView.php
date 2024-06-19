@@ -81,4 +81,3 @@ class NagVisLoginView
         return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'login'), $aData);
     }
 }
-

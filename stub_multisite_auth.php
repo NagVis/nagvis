@@ -102,5 +102,3 @@ function permitted_maps($username) {
     }
     return array_keys($maps);
 }
-
-

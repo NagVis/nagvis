@@ -146,5 +146,3 @@ class CoreSessionHandler
         session_write_close();
     }
 }
-
-
