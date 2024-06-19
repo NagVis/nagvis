@@ -87,7 +87,7 @@ class NagVisUrlView
 
         $iframe = false;
         $url = $this->url;
-        if (strpos($this->url, 'iframe:') === 0) {
+        if (str_starts_with($this->url, 'iframe:')) {
             $iframe = true;
             $url = substr($this->url, 7);
         }

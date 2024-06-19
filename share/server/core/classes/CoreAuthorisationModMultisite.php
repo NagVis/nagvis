@@ -66,7 +66,7 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule
         global $mk_roles;
         foreach ($mk_roles as $role_id => $permissions) {
             foreach ($permissions as $perm_id) {
-                if (strpos($perm_id, 'nagvis.') === 0) {
+                if (str_starts_with($perm_id, 'nagvis.')) {
                     $key = substr($perm_id, 7);
                     if (!isset($nagvis_permissions[$key])) {
                         $nagvis_permissions[$key] = null;

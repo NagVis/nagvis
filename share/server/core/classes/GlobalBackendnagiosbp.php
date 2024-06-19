@@ -289,7 +289,7 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
             }
 
             // Forces the URL to point to nagios-bp if the current url does not point to a map
-            if (strpos($OBJS[0]->getUrl(), 'show=') === false) {
+            if (!str_contains($OBJS[0]->getUrl(), 'show=')) {
                 $ret[$key]['attrs'] = [
                     'url' => $this->bpUrl($key),
                 ];

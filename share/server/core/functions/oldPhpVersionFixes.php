@@ -85,3 +85,24 @@ function iso8859_1_to_utf8($s) {
 
     return substr($s, 0, $j);
 }
+
+if (!function_exists('str_starts_with')) {
+    function str_starts_with($haystack, $needle)
+    {
+        return empty($needle) || strpos($haystack, $needle) === 0;
+    }
+}
+
+if (!function_exists('str_contains')) {
+    function str_contains($haystack, $needle)
+    {
+        return empty($needle) || strpos($haystack, $needle) !== false;
+    }
+}
+
+if (!function_exists('str_ends_with')) {
+    function str_ends_with($haystack, $needle)
+    {
+        return empty($needle) || substr($haystack, strlen($needle) * -1) === $needle;
+    }
+}

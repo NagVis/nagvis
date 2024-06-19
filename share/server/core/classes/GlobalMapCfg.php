@@ -403,7 +403,7 @@ class GlobalMapCfg
             }
 
             // Determine if this is a new object definition
-            if (strpos($file[$l], 'define') !== false) {
+            if (str_contains($file[$l], 'define')) {
                 $sObjType = substr($file[$l], 7, (strpos($file[$l], '{', 8) - 8));
                 if (!isset($sObjType) || !isset(self::$validConfig[$sObjType])) {
                     throw new NagVisException(l('unknownObject',
@@ -1045,7 +1045,7 @@ class GlobalMapCfg
     {
         $hash = sha1($s);
 
-        if (preg_match('/^0e/', $hash)) {
+        if (str_starts_with($hash, '0e')) {
             $hash_offset = 1;
         } else {
             $hash_offset = 0;
@@ -1078,7 +1078,7 @@ class GlobalMapCfg
             $id = strval($id);
 
             // Replace default integer object IDs (are added with "_[index]" during config parsing)
-            if ($id[0] == '_') {
+            if (str_starts_with($id, '_')) {
                 $todo = true;
             }
 
@@ -1627,10 +1627,10 @@ class GlobalMapCfg
         $inObj = false;
         $end = null;
 
-        if ($id[0] === '_') {
-            [$inObj, $start, $end] = $this->getObjectLinesByNum((int)str_replace('_', '', $id));
+        if (str_starts_with($id, '_')) {
+            list($inObj, $start, $end) = $this->getObjectLinesByNum((int)str_replace('_', '', $id));
         } else {
-            [$inObj, $start, $end] = $this->getObjectLinesById($id);
+            list($inObj, $start, $end) = $this->getObjectLinesById($id);
         }
 
         if (!$inObj) {
@@ -1684,9 +1684,9 @@ class GlobalMapCfg
         $type = $this->mapConfig[$id]['type'];
 
         if ($id === 0) {
-            [$inObj, $start, $end] = $this->getObjectLinesByNum(0);
+            list($inObj, $start, $end) = $this->getObjectLinesByNum(0);
         } else {
-            [$inObj, $start, $end] = $this->getObjectLinesById($id);
+            list($inObj, $start, $end) = $this->getObjectLinesById($id);
         }
         // Remove object head/foot
         $start += 1;
@@ -1801,7 +1801,7 @@ class GlobalMapCfg
 
         $f = $this->getConfig();
         for ($i = 0, $len = count($f); $i < $len; $i++) {
-            if (strpos($f[$i], 'define') !== false) {
+            if (str_contains($f[$i], 'define')) {
                 if ($count === $num) {
                     $inObj = true;
                     $start = $i;
@@ -1840,7 +1840,7 @@ class GlobalMapCfg
         $f = $this->getConfig();
         for ($i = 0, $len = count($f); $i < $len; $i++) {
             // Save all object beginnings
-            if (strpos($f[$i], 'define') !== false) {
+            if (str_contains($f[$i], 'define')) {
                 $start = $i;
                 continue;
             }

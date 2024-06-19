@@ -31,13 +31,13 @@
  */
 function NagVisAutoload($sClass) {
     if (
-        substr($sClass, 0, 8) === 'Frontend'
-        || substr($sClass, 0, 3) === 'Wui'
-        || substr($sClass, 0, 4) === 'Core'
-        || substr($sClass, 0, 4) === 'View'
-        || substr($sClass, 0, 6) === 'NagVis'
-        || substr($sClass, 0, 6) === 'Nagios'
-        || substr($sClass, 0, 6) === 'Global'
+        str_starts_with($sClass, 'Frontend')
+        || str_starts_with($sClass, 'Wui')
+        || str_starts_with($sClass, 'Core')
+        || str_starts_with($sClass, 'View')
+        || str_starts_with($sClass, 'NagVis')
+        || str_starts_with($sClass, 'Nagios')
+        || str_starts_with($sClass, 'Global')
     ) {
         require($sClass . '.php');
         return true;

@@ -289,7 +289,7 @@ if ($show_header == 1) {
         $current_header = $prefix;
         $colspan = 0;
         foreach ($stats as $stat => $value) {
-            if (strpos($stat, $prefix . "_") === 0) {
+            if (str_starts_with($stat, $prefix . "_")) {
                 if ($value > 0 || $show_all == 1) {
                     $colspan++;
                 }
@@ -307,7 +307,7 @@ if ($show_header == 1) {
     if ($show_subheader == 1) {
         // Write Sub Header
         foreach ($stats as $stat => $value) {
-            if ($group_states == 0 || strpos($stat, "S_") === 0) {
+            if ($group_states == 0 || str_starts_with($stat, "S_")) {
                 if ($value > 0 || $show_all == 1) {
                     $global_cls = (substr($stat, 2) == $current_state) ? $current_state : '';
                     echo '<th class="' . $global_cls . '">';
@@ -326,7 +326,7 @@ if ($show_header == 1) {
 echo "<tbody>";
 echo '<tr>';
 foreach ($stats as $stat => $value) {
-    if ($group_states == 0 || strpos($stat, "S_") === 0) {
+    if ($group_states == 0 || str_starts_with($stat, "S_")) {
         if ($value > 0 || $show_all == 1) {
             if ($value > 0) {
                 $class = substr(strchr($stat, "_"), 1);

@@ -57,7 +57,7 @@ class ViewMapAddModify
             if (isset($_COOKIE[$attr])) {
                 continue;
             }
-            if (substr($attr, 0, 7) == 'toggle_' || substr($attr, 0, 1) == '_' || isset($exclude[$attr])) {
+            if (str_starts_with($attr, 'toggle_') || str_starts_with($attr, '_') || isset($exclude[$attr])) {
                 continue;
             }
 
@@ -533,8 +533,8 @@ class ViewMapAddModify
         // At the moment the only way is to try to add a space after each ",".
         // The browsers do break automatically at & and spaces - so no need to
         // do anything there. Seems to be enough for now
-        if (strlen($valueTxt) > 36 && strpos($valueTxt, ' ') === false) {
-            if (strpos($valueTxt, ',') !== false) {
+        if (strlen($valueTxt) > 36 && !str_contains($valueTxt, ' ')) {
+            if (str_contains($valueTxt, ',')) {
                 $valueTxt = str_replace(',', ', ', $valueTxt);
             }
         }

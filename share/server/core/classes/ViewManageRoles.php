@@ -114,7 +114,7 @@ class ViewManageRoles
                 // Load permissions from parameters
                 $perms = [];
                 foreach (array_keys($_POST) as $key) {
-                    if (strpos($key, 'perm_') !== false) {
+                    if (str_contains($key, 'perm_')) {
                         $key_parts = explode('_', $key);
                         $perm_id = $key_parts[1];
                         $perms[$perm_id] = get_checkbox($key);

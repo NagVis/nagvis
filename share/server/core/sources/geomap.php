@@ -430,11 +430,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
         if (
             !$contents
-            || (
-                ord($contents[0]) == 137
-                && ord($contents[1]) == 80
-                && ord($contents[2]) == 78
-            )
+            || str_starts_with($contents, chr(137) . chr(80) . chr(78))
         ) {
             // Got an png image as answer - catch this!
             throw new GeomapError(l('Got invalid response from "[U]". This is mostly caused by an unhandled request.',

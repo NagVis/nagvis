@@ -2161,7 +2161,7 @@ class GlobalMainCfg
                         $this->config[$key] = $val;
                     }
                 }
-            } elseif ((substr($line, 0, 1) == '[') && (substr($line, -1, 1)) == ']') {
+            } elseif ((str_starts_with($line, '[')) && (substr($line, -1, 1)) == ']') {
                 // section
                 $sec = trim(substr($line, 1, strlen($line) - 2));
 
@@ -2192,17 +2192,17 @@ class GlobalMainCfg
                 $val = trim(implode('=', $arr));
 
                 // remove " at beginning and at the end of the string
-                if ((substr($val, 0, 1) == '"') && (substr($val, -1, 1) == '"')) {
+                if ((str_starts_with($val, '"')) && (str_ends_with($val, '"'))) {
                     $val = substr($val, 1, strlen($val) - 2);
                 }
 
                 // Try to get the valid config array. But be aware. This is not the whole
                 // truth. Since we might not know the (backend|action)_type, there are some
                 // vars missing in this array. But this is ok for us ... for the moment.
-                if (substr($sec, 0, 7) == 'action_') {
+                if (str_starts_with($sec, 'action_')) {
                     $validConfig = $this->validConfig['action'];
 
-                } elseif (substr($sec, 0, 8) == 'backend_') {
+                } elseif (str_starts_with($sec, 'backend_')) {
                     $validConfig = $this->validConfig['action'];
 
                 } elseif (isset($this->validConfig[$sec])) {
@@ -2215,7 +2215,7 @@ class GlobalMainCfg
                 if (isset($validConfig[$key]['array']) && $validConfig[$key]['array'] === true) {
                     $val = $this->stringToArray($val);
 
-                } elseif (substr($sec, 0, 9) == 'rotation_' && $key == 'maps') {
+                } elseif (str_starts_with($sec, 'rotation_') && $key == 'maps') {
                     // Explode comma separated list to array
                     $val = explode(',', $val);
 
@@ -2305,16 +2305,16 @@ class GlobalMainCfg
     {
         // check given objects and attributes
         foreach ($this->config as $type => &$vars) {
-            if (!preg_match('/^comment_/', $type)) {
+            if (!str_starts_with($type, 'comment_')) {
                 if (isset($this->validConfig[$type]) || preg_match('/^(backend|rotation|action)_/', $type)) {
                     // loop validConfig for checking: => missing "must" atributes
-                    if (preg_match('/^backend_/', $type)) {
+                    if (str_starts_with($type, 'backend_')) {
                         $arrValidConfig = $this->getInstanceableValidConfig('backend', $type);
 
-                    } elseif (preg_match('/^rotation_/', $type)) {
+                    } elseif (str_starts_with($type, 'rotation_')) {
                         $arrValidConfig = $this->validConfig['rotation'];
 
-                    } elseif (preg_match('/^action_/', $type)) {
+                    } elseif (str_starts_with($type, 'action_')) {
                         $arrValidConfig = $this->getInstanceableValidConfig('action', $type);
 
                     } else {
@@ -2337,8 +2337,8 @@ class GlobalMainCfg
 
                     // loop given elements for checking: => all given attributes valid
                     foreach ($vars as $key => $val) {
-                        if (!preg_match('/^comment_/', $key)) {
-                            if (preg_match('/^backend_/', $type)) {
+                        if (!str_starts_with($key, 'comment_')) {
+                            if (str_starts_with($type, 'backend_')) {
                                 $ty = $this->getValue($type, 'backendtype');
                                 if (
                                     isset($this->validConfig['backend']['options'][$ty])
@@ -2352,10 +2352,10 @@ class GlobalMainCfg
                                     $arrValidConfig = $this->validConfig['backend'];
                                 }
 
-                            } elseif (preg_match('/^rotation_/', $type)) {
+                            } elseif (str_starts_with($type, 'rotation_')) {
                                 $arrValidConfig = $this->validConfig['rotation'];
 
-                            } elseif (preg_match('/^action_/', $type)) {
+                            } elseif (str_starts_with($type, 'action_')) {
                                 $ty = $this->getValue($type, 'action_type');
                                 if (
                                     isset($this->validConfig['action']['options'][$ty])
@@ -2400,7 +2400,7 @@ class GlobalMainCfg
                                 return false;
                             } else {
                                 // Workaround to get the configured string back
-                                if (preg_match('/^rotation_/', $type) && $key == 'maps') {
+                                if (str_starts_with($type, 'rotation_') && $key == 'maps') {
                                     foreach ($val as $intId => $arrStep) {
                                         if (isset($arrStep['label']) && $arrStep['label'] != '') {
                                             $label = $arrStep['label'] . ':';
@@ -2574,7 +2574,7 @@ class GlobalMainCfg
         // they don't match try to match the backend_ and rotation_ sections
         if ($sec == 'global' || $sec == 'defaults' || $sec == 'paths') {
             return $this->validConfig[$sec][$var]['default'];
-        } elseif (strpos($sec, 'backend_') === 0) {
+        } elseif (str_starts_with($sec, 'backend_')) {
 
             // Choose the backend type (Configured one or the system default)
             $backendType = '';
@@ -2592,14 +2592,14 @@ class GlobalMainCfg
                 return $this->validConfig['backend'][$var]['default'];
             }
 
-        } elseif (strpos($sec, 'rotation_') === 0) {
+        } elseif (str_starts_with($sec, 'rotation_')) {
             if (isset($this->config[$sec]) && is_array($this->config[$sec])) {
                 return $this->validConfig['rotation'][$var]['default'];
             } else {
                 return null;
             }
 
-        } elseif (strpos($sec, 'action_') === 0) {
+        } elseif (str_starts_with($sec, 'action_')) {
             if (!isset($this->config[$sec]['action_type'])) {
                 return null;
             }
@@ -2852,13 +2852,13 @@ class GlobalMainCfg
     public function setSection($sec)
     {
         // Try to append new backends after already defined
-        if (preg_match('/^backend_/', $sec)) {
+        if (str_starts_with($sec, 'backend_')) {
             $lastBackendIndex = 0;
             $i = 0;
             // Loop all sections to find the last defined backend
             foreach ($this->config as $type => $vars) {
                 // If the current section is a backend
-                if (preg_match('/^backend_/', $type)) {
+                if (str_starts_with($type, 'backend_')) {
                     $lastBackendIndex = $i;
                 }
                 $i++;
@@ -2914,7 +2914,7 @@ class GlobalMainCfg
             if (is_array($item)) {
                 $content .= '[' . $key . ']' . "\n";
                 foreach ($item as $key2 => $item2) {
-                    if (substr($key2, 0, 8) == 'comment_') {
+                    if (str_starts_with($key2, 'comment_')) {
                         $content .= $item2 . "\n";
                     } elseif (is_numeric($item2) || is_bool($item2)) {
                         // Don't apply config options which are set to the same
@@ -2975,13 +2975,13 @@ class GlobalMainCfg
                                 continue;
                             }
 
-                            if (substr($key, 0, 8) == 'backend_') {
+                            if (str_starts_with($key, 'backend_')) {
                                 $arrValidConfig = $this->getInstanceableValidConfig('backend', $key);
                             }
-                            elseif (substr($key, 0, 9) == 'rotation_') {
+                            elseif (str_starts_with($key, 'rotation_')) {
                                 $arrValidConfig = $this->validConfig['rotation'];
                             }
-                            elseif (substr($key, 0, 7) == 'action_') {
+                            elseif (str_starts_with($key, 'action_')) {
                                 $arrValidConfig = $this->getInstanceableValidConfig('action', $key);
                             } else {
                                 $arrValidConfig = $this->validConfig[$key];
@@ -2995,7 +2995,7 @@ class GlobalMainCfg
                         }
                     }
                 }
-            } elseif (substr($key, 0, 8) == 'comment_') {
+            } elseif (str_starts_with($key, 'comment_')) {
                 $content .= $item . "\n";
             }
         }

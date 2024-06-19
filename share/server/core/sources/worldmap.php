@@ -277,7 +277,7 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
         // check all coordinates for relative coords
         $coords = array_map('strval', [$data['lat'], $data['lng'], $data['lat2'], $data['lng2']]);
         foreach ($coords as $coord) {
-            if ($coord !== null && strpos($coord, '%') !== false) {
+            if ($coord !== null && str_contains($coord, '%')) {
                 $referenced[substr($coord, 0, 6)] = null;
             }
         }

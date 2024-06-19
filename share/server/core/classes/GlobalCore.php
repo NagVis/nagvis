@@ -875,7 +875,7 @@ class GlobalCore
 
     public function omdSite()
     {
-        if (substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
+        if (str_starts_with($_SERVER["SCRIPT_FILENAME"], '/omd')) {
             $site_parts = array_slice(explode('/', dirname($_SERVER["SCRIPT_FILENAME"])), 0, -3);
             return $site_parts[count($site_parts) - 1];
         }

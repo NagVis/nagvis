@@ -62,7 +62,7 @@ class CoreLogonMultisite extends CoreLogonModule
     {
         $creds = [];
         foreach (file($path) as $line) {
-            if (strpos($line, ':') !== false) {
+            if (str_contains($line, ':')) {
                 list($username, $secret) = explode(':', $line, 2);
                 $creds[$username] = rtrim($secret);
             }
@@ -152,7 +152,7 @@ class CoreLogonMultisite extends CoreLogonModule
         // Loop all cookies trying to fetch a valid authentication
         // cookie for this installation
         foreach (array_keys($_COOKIE) as $cookieName) {
-            if (substr($cookieName, 0, 5) != 'auth_') {
+            if (!str_starts_with($cookieName, 'auth_')) {
                 continue;
             }
             try {

@@ -857,7 +857,7 @@ class NagVisStatefulObject extends NagVisObject
         }
 
         // If some has been added remove last comma, else add a simple 0
-        if (substr($this->sum[OUTPUT], -2, 2) == ', ') {
+        if (str_ends_with($this->sum[OUTPUT], ', ')) {
             $this->sum[OUTPUT] = rtrim($this->sum[OUTPUT], ', ');
         } else {
             $this->sum[OUTPUT] .= '0 ';
