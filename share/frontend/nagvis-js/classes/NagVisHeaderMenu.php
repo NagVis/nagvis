@@ -152,9 +152,11 @@ class NagVisHeaderMenu {
         $CACHE = new GlobalFileCache($cfgFiles,
             cfg('paths', 'var') . 'maplist-full-global.cfg-' . count($cfgFiles) . '-' . CONST_VERSION . '-cache');
 
-        if ($CACHE->isCached() !== -1
+        if (
+            $CACHE->isCached() !== -1
             && $_MAINCFG->isCached() !== -1
-            && $CACHE->isCached() >= $_MAINCFG->isCached()) {
+            && $CACHE->isCached() >= $_MAINCFG->isCached()
+        ) {
             // Read the whole list from the cache
             $list = $CACHE->getCache();
         } else {
@@ -215,8 +217,10 @@ class NagVisHeaderMenu {
         }
 
         // auto select current map and apply map specific options to the header menu 
-        if ($this->OBJ !== null && $this->aMacros['mod'] == 'Map'
-            && isset($list[$this->OBJ->getName()])) {
+        if (
+            $this->OBJ !== null && $this->aMacros['mod'] == 'Map'
+            && isset($list[$this->OBJ->getName()])
+        ) {
 
             $list[$this->OBJ->getName()]['selected'] = true;
         }

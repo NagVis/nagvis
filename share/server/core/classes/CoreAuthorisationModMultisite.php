@@ -132,8 +132,10 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
             $username = $sUsername;
         }
 
-        if (!isset($this->permissions[$username])
-            || !isset($this->permissions[$username]['permissions'])) {
+        if (
+            !isset($this->permissions[$username])
+            || !isset($this->permissions[$username]['permissions'])
+        ) {
             return [];
         }
 

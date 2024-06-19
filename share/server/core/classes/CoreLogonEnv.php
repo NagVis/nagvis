@@ -43,10 +43,14 @@ class CoreLogonEnv extends CoreLogonModule {
         $username = $_SERVER[$envVar];
 
         // Check if the user exists
-        if ($this->verifyUserExists($username,
-                        cfg('global', 'logonenvcreateuser'),
-                        cfg('global', 'logonenvcreaterole'),
-                        $printErr) === false) {
+        if (
+            $this->verifyUserExists(
+                $username,
+                cfg('global', 'logonenvcreateuser'),
+                cfg('global', 'logonenvcreaterole'),
+                $printErr
+            ) === false
+        ) {
             return false;
         }
 

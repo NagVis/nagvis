@@ -60,9 +60,11 @@ class NagVisDynGroup extends NagVisStatefulObject {
         global $_BACKEND;
         $queries = ['DYN_GROUP_MEMBER_STATE' => true];
 
-        if ($this->hover_menu == 1
+        if (
+            $this->hover_menu == 1
             && $this->hover_childs_show == 1
-            && $bFetchMemberState) {
+            && $bFetchMemberState
+        ) {
             $queries['DYN_GROUP_MEMBER_DETAILS'] = true;
         }
 
