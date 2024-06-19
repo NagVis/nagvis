@@ -26,7 +26,8 @@ class ViewManageShapes
 {
     private $error = null;
 
-    private function uploadForm() {
+    private function uploadForm()
+    {
         global $CORE;
         echo '<h2>' . l('Upload Shape') . '</h2>';
 
@@ -87,7 +88,8 @@ class ViewManageShapes
         form_end();
     }
 
-    private function deleteForm() {
+    private function deleteForm()
+    {
         global $CORE;
         echo '<h2>' . l('Delete Shape') . '</h2>';
 
@@ -164,7 +166,8 @@ class ViewManageShapes
 
     }
 
-    public function parse() {
+    public function parse()
+    {
         ob_start();
 
         $this->uploadForm();

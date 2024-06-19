@@ -24,7 +24,8 @@
 
 class CoreAuthModSQLite extends CoreAuthModPDO
 {
-    public function getConfig() {
+    public function getConfig()
+    {
         return [
             'driver' => 'sqlite',
             'params' => [

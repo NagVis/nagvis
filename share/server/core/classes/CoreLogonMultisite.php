@@ -31,7 +31,8 @@ class CoreLogonMultisite extends CoreLogonModule
     private $cookieVersion;
     private $authFile;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->htpasswdPath  = cfg('global', 'logon_multisite_htpasswd');
         $this->serialsPath   = cfg('global', 'logon_multisite_serials');
         $this->secretPath    = cfg('global', 'logon_multisite_secret');
@@ -57,7 +58,8 @@ class CoreLogonMultisite extends CoreLogonModule
         }
     }
 
-    private function loadAuthFile($path) {
+    private function loadAuthFile($path)
+    {
         $creds = [];
         foreach (file($path) as $line) {
             if (strpos($line, ':') !== false) {
@@ -68,26 +70,31 @@ class CoreLogonMultisite extends CoreLogonModule
         return $creds;
     }
 
-    private function loadSecret() {
+    private function loadSecret()
+    {
         return file_get_contents($this->secretPath);
     }
 
-    private function generateHash($username, $session_id, $user_secret) {
+    private function generateHash($username, $session_id, $user_secret)
+    {
         $secret = $this->loadSecret();
         return hash_hmac("sha256", $username . $session_id . $user_secret, $secret);
     }
 
-    private function generatePre22Hash($username, $session_id, $user_secret) {
+    private function generatePre22Hash($username, $session_id, $user_secret)
+    {
         $secret = $this->loadSecret();
         return hash("sha256", $username . $session_id . $user_secret . $secret);
     }
 
-    private function generatePre20Hash($username, $issue_time, $user_secret) {
+    private function generatePre20Hash($username, $issue_time, $user_secret)
+    {
         $secret = $this->loadSecret();
         return md5($username . $issue_time . $user_secret . $secret);
     }
 
-    private function checkAuthCookie($cookieName) {
+    private function checkAuthCookie($cookieName)
+    {
         if (!isset($_COOKIE[$cookieName]) || $_COOKIE[$cookieName] == '') {
             throw new Exception();
         }
@@ -140,7 +147,8 @@ class CoreLogonMultisite extends CoreLogonModule
         return $username;
     }
 
-    private function checkAuth() {
+    private function checkAuth()
+    {
         // Loop all cookies trying to fetch a valid authentication
         // cookie for this installation
         foreach (array_keys($_COOKIE) as $cookieName) {
@@ -160,7 +168,8 @@ class CoreLogonMultisite extends CoreLogonModule
         return '';
     }
 
-    private function redirectToLogin() {
+    private function redirectToLogin()
+    {
         // Do not redirect on ajax calls. Print out errors instead
         if (CONST_AJAX) {
             throw new NagVisException(l('LogonMultisite: Not authenticated.'));
@@ -169,7 +178,8 @@ class CoreLogonMultisite extends CoreLogonModule
         header('Location:../../../check_mk/login.py?_origtarget=' . urlencode($_SERVER['REQUEST_URI']));
     }
 
-    public function check($printErr = true) {
+    public function check($printErr = true)
+    {
         global $AUTH, $CORE;
 
         // Try to auth using the environment auth

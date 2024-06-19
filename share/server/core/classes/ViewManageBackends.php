@@ -29,14 +29,16 @@ class ViewManageBackends
     private $defined_backends;
     private $available_backends;
 
-    public function __construct() {
+    public function __construct()
+    {
         global $CORE;
         $this->editable_backends  = $CORE->getDefinedBackends(ONLY_USERCFG);
         $this->defined_backends   = $CORE->getDefinedBackends();
         $this->available_backends = $CORE->getAvailableBackends();
     }
 
-    private function backend_attributes($type) {
+    private function backend_attributes($type)
+    {
         global $_MAINCFG;
         // Loop all options for this backend type
         $backend_opts = $_MAINCFG->getValidObjectType('backend');
@@ -51,7 +53,8 @@ class ViewManageBackends
         return $opts;
     }
 
-    private function backend_options($backend_id) {
+    private function backend_options($backend_id)
+    {
         $ret = [];
         $backend_type = cfg('backend_' . $backend_id, 'backendtype');
 
@@ -66,7 +69,8 @@ class ViewManageBackends
         return $ret;
     }
 
-    private function defaultForm() {
+    private function defaultForm()
+    {
         global $CORE;
         echo '<h2>' . l('Default Backend') . '</h2>';
 
@@ -115,7 +119,8 @@ class ViewManageBackends
         }
     }
 
-    private function editForm($mode = 'add') {
+    private function editForm($mode = 'add')
+    {
         global $CORE;
 
         if ($mode == 'add') {
@@ -245,7 +250,8 @@ class ViewManageBackends
         form_end();
     }
 
-    private function delForm() {
+    private function delForm()
+    {
         global $CORE;
         echo '<h2>' . l('Delete Backend') . '</h2>';
 
@@ -293,7 +299,8 @@ class ViewManageBackends
         form_end();
     }
 
-    public function parse() {
+    public function parse()
+    {
         ob_start();
         $this->defaultForm();
         $this->editForm('add');

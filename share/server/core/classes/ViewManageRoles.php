@@ -26,7 +26,8 @@ class ViewManageRoles
 {
     private $error = null;
 
-    private function addForm() {
+    private function addForm()
+    {
         global $AUTHORISATION;
         echo '<h2>' . l('Create Role') . '</h2>';
 
@@ -83,7 +84,8 @@ class ViewManageRoles
         form_end();
     }
 
-    private function modifyForm() {
+    private function modifyForm()
+    {
         global $AUTHORISATION;
         echo '<h2>' . l('Modify Role') . '</h2>';
 
@@ -159,7 +161,8 @@ class ViewManageRoles
         form_end();
     }
 
-    private function renderPermissions($role_id) {
+    private function renderPermissions($role_id)
+    {
         global $AUTHORISATION;
         if (!$role_id) {
             return;
@@ -206,7 +209,8 @@ class ViewManageRoles
         }
     }
 
-    public function renderMapsSection($permissions, $permitted) {
+    public function renderMapsSection($permissions, $permitted)
+    {
         echo '<table class="mytable perms">';
         echo '<tr>';
         echo '<th>' . l('Map') . '</th>';
@@ -230,7 +234,8 @@ class ViewManageRoles
         echo '</table>';
     }
 
-    public function renderOtherSection($permissions, $permitted) {
+    public function renderOtherSection($permissions, $permitted)
+    {
         echo '<table class="mytable perms">';
         echo '<tr>';
         echo '<th>' . l('Module') . '</th>';
@@ -252,7 +257,8 @@ class ViewManageRoles
         echo '</table>';
     }
 
-    private function deleteForm() {
+    private function deleteForm()
+    {
         global $AUTHORISATION;
         echo '<h2>' . l('Delete Role') . '</h2>';
 
@@ -312,7 +318,8 @@ class ViewManageRoles
         form_end();
     }
 
-    public function parse() {
+    public function parse()
+    {
         global $AUTHORISATION;
         ob_start();
 

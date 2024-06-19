@@ -26,7 +26,8 @@ class ViewMapManageTmpl
 {
     private $error = null;
 
-    private function createForm() {
+    private function createForm()
+    {
         global $CORE;
         echo '<h2>' . l('Create Template') . '</h2>';
 
@@ -119,7 +120,8 @@ class ViewMapManageTmpl
         form_end();
     }
 
-    private function editForm() {
+    private function editForm()
+    {
         global $CORE;
         echo '<h2>' . l('Modify Template') . '</h2>';
 
@@ -233,7 +235,8 @@ class ViewMapManageTmpl
         form_end();
     }
 
-    private function deleteForm() {
+    private function deleteForm()
+    {
         global $CORE;
         echo '<h2>' . l('Delete Template') . '</h2>';
 
@@ -291,7 +294,8 @@ class ViewMapManageTmpl
         form_end();
     }
 
-    public function parse() {
+    public function parse()
+    {
         ob_start();
         $this->createForm();
         $this->editForm();

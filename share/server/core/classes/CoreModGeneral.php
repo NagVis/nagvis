@@ -29,7 +29,8 @@ class CoreModGeneral extends CoreModule
 {
     private $CORE;
 
-    public function __construct(GlobalCore $CORE) {
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'General';
         $this->CORE = $CORE;
 
@@ -40,7 +41,8 @@ class CoreModGeneral extends CoreModule
         ];
     }
 
-    public function handleAction() {
+    public function handleAction()
+    {
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
@@ -60,7 +62,8 @@ class CoreModGeneral extends CoreModule
         return $sReturn;
     }
 
-    private function getTemplate($type) {
+    private function getTemplate($type)
+    {
         $arrReturn = [];
 
         // Parse view specific uri params
@@ -83,7 +86,8 @@ class CoreModGeneral extends CoreModule
         return json_encode($arrReturn);
     }
 
-    private function getHoverUrl() {
+    private function getHoverUrl()
+    {
         $arrReturn = [];
 
         // Parse view specific uri params

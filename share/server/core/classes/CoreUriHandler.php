@@ -32,7 +32,8 @@ class CoreUriHandler
 
     private $aAliases;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->aAliases = ['module' => 'mod', 'action' => 'act'];
 
         $this->sRequestUri = strip_tags($_SERVER['REQUEST_URI']);
@@ -43,11 +44,13 @@ class CoreUriHandler
         $this->validate();
     }
 
-    public function getRequestUri() {
+    public function getRequestUri()
+    {
         return $this->sRequestUri;
     }
 
-    public function set($sKey, $sVal) {
+    public function set($sKey, $sVal)
+    {
         $sReturn = false;
 
         // Transform parameter aliases
@@ -68,7 +71,8 @@ class CoreUriHandler
         return $sReturn;
     }
 
-    public function get($sKey) {
+    public function get($sKey)
+    {
         // Transform parameter aliases
         if (isset($this->aAliases[$sKey])) {
             $sKey = $this->aAliases[$sKey];
@@ -81,7 +85,8 @@ class CoreUriHandler
         }
     }
 
-    public function parseModSpecificUri($aKeys, $aDefaults = []) {
+    public function parseModSpecificUri($aKeys, $aDefaults = [])
+    {
         foreach ($aKeys as $key => $sMatch) {
             // Validate the value
             $bValid = true;
@@ -115,7 +120,8 @@ class CoreUriHandler
         }
     }
 
-    private function parseUri() {
+    private function parseUri()
+    {
         // Maybe for later use when using nice urls
         // Cleanup some bad things from the URI
         //$sRequest = str_replace(cfg('paths','htmlbase'), '', $this->sRequestUri);
@@ -130,7 +136,8 @@ class CoreUriHandler
         }
     }
 
-    private function setDefaults() {
+    private function setDefaults()
+    {
         // Handle default options when no module given
         if (!$this->isSetAndNotEmpty('mod')) {
             $this->aOpts['mod'] = cfg('global', 'startmodule');
@@ -142,7 +149,8 @@ class CoreUriHandler
         }
     }
 
-    private function validate() {
+    private function validate()
+    {
         $bValid = true;
 
         // Validate each param
@@ -157,7 +165,8 @@ class CoreUriHandler
         }
     }
 
-    public function isSetAndNotEmpty($sKey) {
+    public function isSetAndNotEmpty($sKey)
+    {
         // Transform parameter aliases
         if (isset($this->aAliases[$sKey])) {
             $sKey = $this->aAliases[$sKey];

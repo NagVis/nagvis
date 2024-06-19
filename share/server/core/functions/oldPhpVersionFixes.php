@@ -35,7 +35,8 @@
  * @author 	Lars Michelsen <lm@larsmichelsen.com>
  */
 if (!function_exists('date_default_timezone_set')) {
-        function date_default_timezone_set($timezone_identifier) {
+        function date_default_timezone_set($timezone_identifier)
+        {
                 putenv("TZ=" . $timezone_identifier);
                 return true;
         }

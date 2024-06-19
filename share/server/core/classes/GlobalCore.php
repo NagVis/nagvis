@@ -75,7 +75,8 @@ class GlobalCore
      * @author Lars Michelsen <lm@larsmichelsen.com>
      * FIXME: Remove this wrapper
      */
-    public static function getMainCfg() {
+    public static function getMainCfg()
+    {
         global $_MAINCFG;
         return $_MAINCFG;
     }
@@ -85,7 +86,8 @@ class GlobalCore
      * Only needed in some rare cases when only the values from
      * the user (web) controllable nagvis.ini.php file are needed
      */
-    public static function getUserMainCfg() {
+    public static function getUserMainCfg()
+    {
         global $_UMAINCFG;
         if (!isset($_UMAINCFG)) {
             $_UMAINCFG = new GlobalMainCfg();
@@ -100,7 +102,8 @@ class GlobalCore
      *
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    public static function setAA(CoreAuthHandler $A1, CoreAuthorisationHandler $A2 = null) {
+    public static function setAA(CoreAuthHandler $A1, CoreAuthorisationHandler $A2 = null)
+    {
         self::$AUTHENTICATION = $A1;
         self::$AUTHORIZATION = $A2;
     }
@@ -110,7 +113,8 @@ class GlobalCore
      *
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    public static function getAuthorization() {
+    public static function getAuthorization()
+    {
         return self::$AUTHORIZATION;
     }
 
@@ -119,7 +123,8 @@ class GlobalCore
      *
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    public static function getAuthentication() {
+    public static function getAuthentication()
+    {
         return self::$AUTHENTICATION;
     }
 
@@ -128,7 +133,8 @@ class GlobalCore
      *
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (self::$instance === null) {
             self::$instance = new self;
         }
@@ -146,7 +152,8 @@ class GlobalCore
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkGd($printErr) {
+    public function checkGd($printErr)
+    {
         if (!extension_loaded('gd')) {
             if ($printErr) {
                 throw new NagVisException(l('gdLibNotFound'));
@@ -163,7 +170,8 @@ class GlobalCore
      * @return	array Backend-IDs
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getDefinedBackends($onlyUserCfg = false) {
+    public function getDefinedBackends($onlyUserCfg = false)
+    {
         if ($onlyUserCfg) {
             $MAINCFG = self::getUserMainCfg();
         } else {
@@ -186,7 +194,8 @@ class GlobalCore
      * @return	array pools
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getDefinedRotationPools() {
+    public function getDefinedRotationPools()
+    {
         $ret = [];
         foreach (self::getMainCfg()->getSections() as $name) {
             if (preg_match('/^rotation_/i', $name)) {
@@ -201,7 +210,8 @@ class GlobalCore
     /**
      * Only returns rotations the users is permitted for
      */
-    public function getPermittedRotationPools() {
+    public function getPermittedRotationPools()
+    {
         global $AUTHORISATION;
         $list = [];
         foreach ($this->getDefinedRotationPools() as $poolName) {
@@ -215,7 +225,8 @@ class GlobalCore
     /**
      * Gets all available custom actions
      */
-    public function getDefinedCustomActions() {
+    public function getDefinedCustomActions()
+    {
         $ret = [];
         foreach (self::getMainCfg()->getSections() as $name) {
             if (preg_match('/^action_/i', $name)) {
@@ -234,7 +245,8 @@ class GlobalCore
      * @return	array list
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableAndEnabledLanguages() {
+    public function getAvailableAndEnabledLanguages()
+    {
         $aRet = [];
 
         foreach ($this->getAvailableLanguages() as $val) {
@@ -252,7 +264,8 @@ class GlobalCore
      * @return	array list
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableLanguages() {
+    public function getAvailableLanguages()
+    {
         return self::listDirectory(self::getMainCfg()->getValue('paths', 'language'), MATCH_LANGUAGE_FILE);
     }
 
@@ -262,7 +275,8 @@ class GlobalCore
      * @return	array list
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableDocs() {
+    public function getAvailableDocs()
+    {
         return self::listDirectory(self::getMainCfg()->getValue('paths', 'doc'), MATCH_DOC_DIR);
     }
 
@@ -272,7 +286,8 @@ class GlobalCore
      * @return	array Html
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableBackends() {
+    public function getAvailableBackends()
+    {
         return self::listDirectory(self::getMainCfg()->getValue('paths', 'class'), MATCH_BACKEND_FILE);
     }
 
@@ -282,7 +297,8 @@ class GlobalCore
      * @return	array hover templates
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableHoverTemplates() {
+    public function getAvailableHoverTemplates()
+    {
         return array_merge(
             self::listDirectory(path('sys', 'global', 'templates'), MATCH_HOVER_TEMPLATE_FILE),
             self::listDirectory(path('sys', 'local',  'templates'), MATCH_HOVER_TEMPLATE_FILE, null, null, null, null, false)
@@ -295,7 +311,8 @@ class GlobalCore
      * @return	array list
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableHeaderTemplates() {
+    public function getAvailableHeaderTemplates()
+    {
         return array_merge(
             self::listDirectory(path('sys', 'global', 'templates'), MATCH_HEADER_TEMPLATE_FILE),
             self::listDirectory(path('sys', 'local',  'templates'), MATCH_HEADER_TEMPLATE_FILE, null, null, null, null, false)
@@ -308,7 +325,8 @@ class GlobalCore
      * @return	array list
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableContextTemplates() {
+    public function getAvailableContextTemplates()
+    {
         return array_merge(
             self::listDirectory(path('sys', 'global', 'templates'), MATCH_CONTEXT_TEMPLATE_FILE),
             self::listDirectory(path('sys', 'local',  'templates'), MATCH_CONTEXT_TEMPLATE_FILE, null, null, null, null, false)
@@ -321,7 +339,8 @@ class GlobalCore
      * @return	array Shapes
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableShapes() {
+    public function getAvailableShapes()
+    {
         return array_merge(
             self::listDirectory(path('sys', 'global', 'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, true),
             self::listDirectory(path('sys', 'local',  'shapes'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, true, false)
@@ -334,7 +353,8 @@ class GlobalCore
      * @return	array iconsets
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableIconsets() {
+    public function getAvailableIconsets()
+    {
         return array_merge(
             self::listDirectory(path('sys', 'global', 'icons'), MATCH_ICONSET),
             self::listDirectory(path('sys', 'local',  'icons'), MATCH_ICONSET, null, null, null, null, false)
@@ -347,7 +367,8 @@ class GlobalCore
      * @return	array hover templates
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableSources() {
+    public function getAvailableSources()
+    {
         return array_merge(
             self::listDirectory(path('sys', 'global', 'sources'), MATCH_SOURCE_FILE),
             self::listDirectory(path('sys', 'local',  'sources'), MATCH_SOURCE_FILE, null, null, null, null, false)
@@ -357,7 +378,8 @@ class GlobalCore
     /**
      * Returns the list of available custom action files
      */
-    public function getAvailableCustomActions() {
+    public function getAvailableCustomActions()
+    {
         return array_merge(
             self::listDirectory(path('sys', 'global', 'actions'), MATCH_PHP_FILE),
             self::listDirectory(path('sys', 'local',  'actions'), MATCH_PHP_FILE, null, null, null, null, false)
@@ -371,7 +393,8 @@ class GlobalCore
      * @return	string  Iconset file type
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getIconsetFiletype($iconset) {
+    public function getIconsetFiletype($iconset)
+    {
         $type = '';
 
         if (isset($this->iconsetTypeCache[$iconset])) {
@@ -403,7 +426,8 @@ class GlobalCore
     /**
      * Reads all source files for the geomap in the specified path
      */
-    public function getAvailableGeomapSourceFiles($strMatch = null, $setKey = null) {
+    public function getAvailableGeomapSourceFiles($strMatch = null, $setKey = null)
+    {
         return self::listDirectory(self::getMainCfg()->getValue('paths', 'geomap'), MATCH_CSV_FILE, null, $strMatch, null, $setKey);
     }
 
@@ -414,11 +438,13 @@ class GlobalCore
      * @return	array   Array of maps
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableMaps($strMatch = null, $setKey = null) {
+    public function getAvailableMaps($strMatch = null, $setKey = null)
+    {
         return self::listDirectory(self::getMainCfg()->getValue('paths', 'mapcfg'), MATCH_CFG_FILE, null, $strMatch, null, $setKey);
     }
 
-    public function getPermittedMaps() {
+    public function getPermittedMaps()
+    {
         global $AUTHORISATION;
 
         $list = [];
@@ -452,7 +478,8 @@ class GlobalCore
         return $list;
     }
 
-    public function getListMaps() {
+    public function getListMaps()
+    {
         $list = [];
         $maps = $this->getPermittedMaps();
         foreach ($maps as $mapName) {
@@ -480,7 +507,8 @@ class GlobalCore
      * @return	array map images
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableBackgroundImages() {
+    public function getAvailableBackgroundImages()
+    {
         return array_merge(
             self::listDirectory(path('sys', 'global', 'backgrounds'), MATCH_PNG_GIF_JPG_FILE, null, null, 0),
             self::listDirectory(path('sys', 'local',  'backgrounds'), MATCH_PNG_GIF_JPG_FILE, null, null, 0, null, false)
@@ -493,7 +521,8 @@ class GlobalCore
      * @return	array   Array of gadgets
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAvailableGadgets() {
+    public function getAvailableGadgets()
+    {
         return array_merge(
             self::listDirectory(path('sys', 'global', 'gadgets'), MATCH_PHP_FILE, ['gadgets_core.php' => true], null, null, null, true),
             self::listDirectory(path('sys', 'local',  'gadgets'), MATCH_PHP_FILE, ['gadgets_core.php' => true], null, null, null, false)
@@ -511,7 +540,8 @@ class GlobalCore
      * @return	array   Sorted list of file names/parts in this directory
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function listDirectory($dir, $allowRegex = null, $ignoreList = null, $allowPartRegex = null, $returnPart = null, $setKey = null, $printErr = true) {
+    public function listDirectory($dir, $allowRegex = null, $ignoreList = null, $allowPartRegex = null, $returnPart = null, $setKey = null, $printErr = true)
+    {
         $files = [];
 
         if ($returnPart === null) {
@@ -555,7 +585,8 @@ class GlobalCore
 
     }
 
-    public function checkExisting($path, $printErr = true) {
+    public function checkExisting($path, $printErr = true)
+    {
         if ($path != '' && file_exists($path)) {
             return true;
         }
@@ -567,7 +598,8 @@ class GlobalCore
         return false;
     }
 
-    public function checkReadable($path, $printErr = true) {
+    public function checkReadable($path, $printErr = true)
+    {
         if ($path != '' && is_readable($path)) {
             return true;
         }
@@ -578,7 +610,8 @@ class GlobalCore
 
         return false;
     }
-    public function checkWriteable($path, $printErr = true) {
+    public function checkWriteable($path, $printErr = true)
+    {
         if ($path != '' && is_writeable($path)) {
             return true;
         }
@@ -597,7 +630,8 @@ class GlobalCore
      * @return	bool		Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkVarFolderExists($printErr) {
+    public function checkVarFolderExists($printErr)
+    {
         return $this->checkExisting(substr(self::getMainCfg()->getValue('paths', 'var'), 0, -1), $printErr);
     }
 
@@ -608,7 +642,8 @@ class GlobalCore
      * @return	bool		Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkVarFolderWriteable($printErr) {
+    public function checkVarFolderWriteable($printErr)
+    {
         return $this->checkWriteable(substr(self::getMainCfg()->getValue('paths', 'var'), 0, -1), $printErr);
     }
 
@@ -619,7 +654,8 @@ class GlobalCore
      * @return	bool		Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkSharedVarFolderExists($printErr) {
+    public function checkSharedVarFolderExists($printErr)
+    {
         return $this->checkExisting(substr(self::getMainCfg()->getValue('paths', 'sharedvar'), 0, -1), $printErr);
     }
 
@@ -630,7 +666,8 @@ class GlobalCore
      * @return	bool		Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkSharedVarFolderWriteable($printErr) {
+    public function checkSharedVarFolderWriteable($printErr)
+    {
         return $this->checkWriteable(substr(self::getMainCfg()->getValue('paths', 'sharedvar'), 0, -1), $printErr);
     }
 
@@ -640,7 +677,8 @@ class GlobalCore
      *
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setPerms($file) {
+    public function setPerms($file)
+    {
         try {
             $group = self::getMainCfg()->getValue('global', 'file_group');
             $old = error_reporting(0);
@@ -663,7 +701,8 @@ class GlobalCore
      * @return  int   Version as integer
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function versionToTag($s) {
+    public function versionToTag($s)
+    {
         $s = str_replace('a', '.0.0', str_replace('b', '.0.2', str_replace('rc', '.0.4', $s)));
         $parts = explode('.', $s);
         if (count($parts) == 2) {
@@ -687,7 +726,8 @@ class GlobalCore
      * @return  string    The error message
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getUploadErrorMsg($id) {
+    public function getUploadErrorMsg($id)
+    {
         switch ($id) {
             case 1:
                 return l('File is too large (PHP limit)');
@@ -710,7 +750,8 @@ class GlobalCore
 
     // Returns localalized strings which are used by different pages
     // in the JS frontend and not only used on some specific pages.
-    public function getGeneralJSLocales() {
+    public function getGeneralJSLocales()
+    {
         return [
             'more items...'      => l('more items...'),
             'Create Object'      => l('Create Object'),
@@ -736,16 +777,19 @@ class GlobalCore
     }
 
     // Sort array of map arrays by alias
-    public static function cmpAlias($a, $b) {
+    public static function cmpAlias($a, $b)
+    {
         return strnatcasecmp($a['alias'], $b['alias']);
     }
 
     // Sort array of map arrays by alias used for header menu
-    public static function cmpMapAlias($a, $b) {
+    public static function cmpMapAlias($a, $b)
+    {
         return strnatcasecmp($a['mapAlias'], $b['mapAlias']);
     }
 
-    public function omdSite() {
+    public function omdSite()
+    {
         if (substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
             $site_parts = array_slice(explode('/', dirname($_SERVER["SCRIPT_FILENAME"])), 0, -3);
             return $site_parts[count($site_parts) - 1];
@@ -753,11 +797,13 @@ class GlobalCore
         return null;
     }
 
-    public function addSelectableSource($source_name) {
+    public function addSelectableSource($source_name)
+    {
         $this->selectable_sources[$source_name] = $source_name;
     }
 
-    public function getSelectableSources() {
+    public function getSelectableSources()
+    {
         return $this->selectable_sources;
     }
 }

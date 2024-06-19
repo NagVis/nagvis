@@ -43,7 +43,8 @@ class NagVisContextMenu
      * @param 	GlobalCore 	$CORE
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct($CORE, $templateName, $OBJ = null) {
+    public function __construct($CORE, $templateName, $OBJ = null)
+    {
         $this->CORE = $CORE;
         $this->OBJPAGE = $OBJ;
         $this->templateName = $templateName;
@@ -82,7 +83,8 @@ class NagVisContextMenu
      * @return	bool		Result
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function readTemplate() {
+    public function readTemplate()
+    {
         if ($this->checkTemplateReadable(1)) {
             $this->code = file_get_contents($this->pathTemplateFile);
             return true;
@@ -98,7 +100,8 @@ class NagVisContextMenu
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function replaceStaticMacros() {
+    private function replaceStaticMacros()
+    {
         // Replace the static macros (language, paths)
         if (strpos($this->code, '[lang_confirm_delete]') !== false) {
             $this->code = str_replace('[lang_confirm_delete]', l('confirmDelete'), $this->code);
@@ -203,7 +206,8 @@ class NagVisContextMenu
      * return   String  HTML Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __toString() {
+    public function __toString()
+    {
         return $this->code;
     }
 
@@ -216,7 +220,8 @@ class NagVisContextMenu
      * @return	bool		Check Result
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkTemplateReadable($printErr) {
+    private function checkTemplateReadable($printErr)
+    {
         return GlobalCore::getInstance()->checkReadable($this->pathTemplateFile, $printErr);
     }
 
@@ -229,11 +234,13 @@ class NagVisContextMenu
      * @return	bool		Check Result
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkTemplateExists($printErr) {
+    private function checkTemplateExists($printErr)
+    {
         return GlobalCore::getInstance()->checkExisting($this->pathTemplateFile, $printErr);
     }
 
-    public function getCssFile() {
+    public function getCssFile()
+    {
         return path('html', 'global', 'templates', $this->templateName . '.context.css');
     }
 }

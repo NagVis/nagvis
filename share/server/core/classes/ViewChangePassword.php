@@ -26,7 +26,8 @@ class ViewChangePassword
 {
     private $error = null;
 
-    private function changeForm() {
+    private function changeForm()
+    {
         global $CORE, $AUTH;
         if (is_action()) {
             try {
@@ -101,7 +102,8 @@ class ViewChangePassword
         form_end();
     }
 
-    public function parse() {
+    public function parse()
+    {
         ob_start();
         $this->changeForm();
         return ob_get_clean();

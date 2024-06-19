@@ -36,7 +36,8 @@ class NagVisInfoView
      * @return	string 	String with Html Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parse() {
+    public function parse()
+    {
         global $AUTH, $AUTHORISATION;
         // Initialize template system
         $TMPL = New FrontendTemplateSystem();

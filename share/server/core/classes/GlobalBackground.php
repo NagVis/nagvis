@@ -32,7 +32,8 @@ class GlobalBackground
     protected $webPath;
     protected $type;
 
-    public function __construct($image) {
+    public function __construct($image)
+    {
         $this->image = $image;
 
         $this->fetchPath();
@@ -44,7 +45,8 @@ class GlobalBackground
      * @return	string File Name
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getFileName() {
+    private function getFileName()
+    {
         return $this->image;
     }
 
@@ -54,14 +56,16 @@ class GlobalBackground
      * @return	string File Name
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getFileType() {
+    public function getFileType()
+    {
         return $this->type;
     }
 
     /**
      * Fetches the path and saves it on initial load
      */
-    private function fetchPath() {
+    private function fetchPath()
+    {
         if ($this->getFileName() != '' && $this->getFileName() != 'none') {
             // Extract url when used to show an url
             if (preg_match('/^\[(http.*)\]$/', $this->getFileName(), $match) > 0) {
@@ -90,7 +94,8 @@ class GlobalBackground
      * @return  string  HTML Path to background file
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getFile($bWebPath = true) {
+    public function getFile($bWebPath = true)
+    {
         if ($bWebPath) {
             return $this->webPath;
         } else {
@@ -105,7 +110,8 @@ class GlobalBackground
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function checkFileExists($printErr) {
+    protected function checkFileExists($printErr)
+    {
         global $CORE;
         return $CORE->checkExisting($this->path, $printErr);
     }
@@ -117,7 +123,8 @@ class GlobalBackground
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function checkFileReadable($printErr) {
+    protected function checkFileReadable($printErr)
+    {
         global $CORE;
         return $CORE->checkReadable($this->path, $printErr);
     }
@@ -129,7 +136,8 @@ class GlobalBackground
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function checkFileWriteable($printErr) {
+    protected function checkFileWriteable($printErr)
+    {
         global $CORE;
         return $CORE->checkWriteable($this->path, $printErr);
     }
@@ -141,7 +149,8 @@ class GlobalBackground
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function checkFolderWriteable($printErr) {
+    protected function checkFolderWriteable($printErr)
+    {
         global $CORE;
         return $CORE->checkWriteable(dirname($this->path), $printErr);
     }
@@ -153,7 +162,8 @@ class GlobalBackground
      * @return	bool	Is Check Successful?
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function deleteImage($printErr = 1) {
+    public function deleteImage($printErr = 1)
+    {
         if ($this->checkFolderWriteable($printErr) && $this->checkFileWriteable($printErr)) {
             if (unlink($this->path)) {
                 return true;

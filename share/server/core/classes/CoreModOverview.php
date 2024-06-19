@@ -29,7 +29,8 @@ class CoreModOverview extends CoreModule
 {
     private $htmlBase;
 
-    public function __construct(GlobalCore $CORE) {
+    public function __construct(GlobalCore $CORE)
+    {
         $this->htmlBase = cfg('paths', 'htmlbase');
         $this->sName = 'Overview';
 
@@ -40,7 +41,8 @@ class CoreModOverview extends CoreModule
         ];
     }
 
-    public function handleAction() {
+    public function handleAction()
+    {
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
@@ -71,7 +73,8 @@ class CoreModOverview extends CoreModule
         return $sReturn;
     }
 
-    private function parseMapJson($objectId, $mapName, $what) {
+    private function parseMapJson($objectId, $mapName, $what)
+    {
         global $AUTHORISATION;
         // Check if the user is permitted to view this
         if (!$AUTHORISATION->isPermitted('Map', 'view', $mapName)) {
@@ -142,7 +145,8 @@ class CoreModOverview extends CoreModule
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      * FIXME: More cleanups, compacting and extraction of single parts
      */
-    public function parseMapsJson($what = COMPLETE, $objects = []) {
+    public function parseMapsJson($what = COMPLETE, $objects = [])
+    {
         global $_BACKEND, $CORE;
         $mapList = $objects;
 
@@ -191,7 +195,8 @@ class CoreModOverview extends CoreModule
         return json_encode($aMaps);
     }
 
-    private function getMapDefaultOpts($name, $alias) {
+    private function getMapDefaultOpts($name, $alias)
+    {
         return [
             'type'              => 'map',
             'map_name'          => $name,
@@ -209,7 +214,8 @@ class CoreModOverview extends CoreModule
         ];
     }
 
-    private function mapError($name, $msg) {
+    private function mapError($name, $msg)
+    {
         $map = $this->getMapDefaultOpts($name, $name);
         $map['name']            = $map['map_name'];
         unset($map['map_name']);
@@ -224,7 +230,8 @@ class CoreModOverview extends CoreModule
         return $map;
     }
 
-    private function renderMapThumb($MAPCFG) {
+    private function renderMapThumb($MAPCFG)
+    {
         global $CORE;
         $imgPath     = $MAPCFG->BACKGROUND->getFile(GET_PHYSICAL_PATH);
 
@@ -256,7 +263,8 @@ class CoreModOverview extends CoreModule
      * @return	string  Json Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parseRotationsJson() {
+    public function parseRotationsJson()
+    {
         global $AUTHORISATION, $CORE;
         // Only display the rotation list when enabled
         if (cfg('index', 'showrotations') != 1) {
@@ -291,7 +299,8 @@ class CoreModOverview extends CoreModule
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getFileType($imgPath) {
+    public function getFileType($imgPath)
+    {
         $imgSize = getimagesize($imgPath);
         switch ($imgSize[2]) {
             case 1:
@@ -316,7 +325,8 @@ class CoreModOverview extends CoreModule
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function createThumbnail($imgPath, $thumbPath) {
+    private function createThumbnail($imgPath, $thumbPath)
+    {
         global $CORE;
         if ($CORE->checkVarFolderWriteable(true) && $CORE->checkExisting($imgPath, true)) {
             // 0: width, 1:height, 2:type

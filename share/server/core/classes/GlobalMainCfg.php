@@ -58,7 +58,8 @@ class GlobalMainCfg
      *
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->validConfig = [
             'global' => [
                 'audit_log' => [
@@ -1892,7 +1893,8 @@ class GlobalMainCfg
     /**
      * Loads the custom action definitions from their files
      */
-    private function fetchCustomActions() {
+    private function fetchCustomActions()
+    {
         foreach (GlobalCore::getInstance()->getAvailableCustomActions() as $action_file) {
             $configVars = [];
 
@@ -1909,7 +1911,8 @@ class GlobalMainCfg
         }
     }
 
-    public function setConfigFiles($arr) {
+    public function setConfigFiles($arr)
+    {
         $this->configFiles = $arr;
     }
 
@@ -1917,7 +1920,8 @@ class GlobalMainCfg
      * Returns an array of all config files to be used by NagVis.
      * The paths are given as paths.
      */
-    public function getConfigFiles() {
+    public function getConfigFiles()
+    {
         // Get all files from the conf.d directory
         $files = GlobalCore::getInstance()->listDirectory(CONST_MAINCFG_DIR, MATCH_MAINCFG_FILE, null, null, 0, null, false);
         foreach ($files as $key => $filename) {
@@ -1930,7 +1934,8 @@ class GlobalMainCfg
         return $files;
     }
 
-    public function init($onlyUserConfig = false, $cacheSuffix = '') {
+    public function init($onlyUserConfig = false, $cacheSuffix = '')
+    {
         $this->onlyUserConfig = $onlyUserConfig;
         // Get the valid configuration definitions from the available backends
         $this->getBackendValidConf();
@@ -1996,7 +2001,8 @@ class GlobalMainCfg
      *
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function setCookieDomainByEnv() {
+    private function setCookieDomainByEnv()
+    {
         if (isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME'] !== '') {
             $this->validConfig['global']['sesscookiedomain']['default'] = $_SERVER['SERVER_NAME'];
         }
@@ -2009,7 +2015,8 @@ class GlobalMainCfg
      *
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getBackendValidConf() {
+    private function getBackendValidConf()
+    {
         // Get the configuration options from the backends
         $aBackends = GlobalCore::getInstance()->getAvailableBackends();
 
@@ -2034,7 +2041,8 @@ class GlobalMainCfg
      * @param string $htmlBase
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function setPathsByBase($base, $htmlBase) {
+    private function setPathsByBase($base, $htmlBase)
+    {
         $this->validConfig['paths']['cfg']['default']                = $base . 'etc/';
         $this->validConfig['paths']['mapcfg']['default']             = $base . 'etc/maps/';
         $this->validConfig['paths']['geomap']['default']             = $base . 'etc/geomap';
@@ -2081,7 +2089,8 @@ class GlobalMainCfg
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      * @author    Roman Kyrylych <rkyrylych@op5.com>
      */
-    private function getBasePath() {
+    private function getBasePath()
+    {
         // Go 3 levels up from nagvis/share/nagvis to nagvis base path
         return realpath(dirname($_SERVER['SCRIPT_FILENAME']) . '/../../..') . '/';
         // Note: the method below causes problems when <docroot>/nagvis is a symlink to <nagvis-base>/share
@@ -2095,7 +2104,8 @@ class GlobalMainCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function readConfig($configFile, $printErr = 1, $isUserMainCfg = false) {
+    private function readConfig($configFile, $printErr = 1, $isUserMainCfg = false)
+    {
         $numComments = 0;
         $sec = '';
 
@@ -2254,7 +2264,8 @@ class GlobalMainCfg
      * Returns the computed (merged) valid configuration for the instanciated section
      * of a specific type. Is used for "backend" and "action" at the moment.
      */
-    private function getInstanceableValidConfig($what, $sec) {
+    private function getInstanceableValidConfig($what, $sec)
+    {
         $ty = $this->getValue($sec, ($what == 'backend' ? 'backendtype' : 'action_type'));
 
         if (
@@ -2274,7 +2285,8 @@ class GlobalMainCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkMainConfigIsValid($printErr) {
+    private function checkMainConfigIsValid($printErr)
+    {
         // check given objects and attributes
         foreach ($this->config as $type => &$vars) {
             if (!preg_match('/^comment_/', $type)) {
@@ -2406,7 +2418,8 @@ class GlobalMainCfg
      * @return	int	Unix Timestamp
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getConfigFileAge() {
+    public function getConfigFileAge()
+    {
         $newest = 0;
         foreach ($this->configFiles as $configFile) {
             $age = filemtime($configFile);
@@ -2422,7 +2435,8 @@ class GlobalMainCfg
      * @return  int  Unix timestamp of cache creation time or -1 when not cached
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function isCached() {
+    public function isCached()
+    {
         return $this->useCache;
     }
 
@@ -2435,7 +2449,8 @@ class GlobalMainCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setValue($sec, $var, $val) {
+    public function setValue($sec, $var, $val)
+    {
         if (isset($this->config[$sec][$var]) && $val == '') {
             // Value is empty and there is an entry in the config array
             unset($this->config[$sec][$var]);
@@ -2452,11 +2467,13 @@ class GlobalMainCfg
         return true;
     }
 
-    public function unsetValue($sec, $var) {
+    public function unsetValue($sec, $var)
+    {
         unset($this->config[$sec][$var]);
     }
 
-    public function getPath($type, $loc, $var, $relfile = '') {
+    public function getPath($type, $loc, $var, $relfile = '')
+    {
         $lb = $this->getValue('paths', 'local_base', true) . HTDOCS_DIR;
         $b  = $this->getValue('paths', 'base') . HTDOCS_DIR;
 
@@ -2494,7 +2511,8 @@ class GlobalMainCfg
      * returns the hard coded default value of a config option
      * FIXME: Needs to be simplified
      */
-    public function getDefaultValue($sec, $var) {
+    public function getDefaultValue($sec, $var)
+    {
         // Speed up this method by first checking for major sections and only if
         // they don't match try to match the backend_ and rotation_ sections
         if ($sec == 'global' || $sec == 'defaults' || $sec == 'paths') {
@@ -2547,7 +2565,8 @@ class GlobalMainCfg
      * Returns the value of a main configuration option. Either the hard coded default
      * value, or the configured one
      */
-    public function getValue($sec, $var, $ignoreDefault = false, $ignoreUserConfig = false) {
+    public function getValue($sec, $var, $ignoreDefault = false, $ignoreUserConfig = false)
+    {
         if ($ignoreUserConfig && $this->preUserConfig !== null) {
             $arr = $this->preUserConfig;
         } else {
@@ -2570,7 +2589,8 @@ class GlobalMainCfg
      * @return  array  List of all sections as values
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getSections() {
+    public function getSections()
+    {
         $aRet = [];
         foreach ($this->config as $key => $var) {
             $aRet[] = $key;
@@ -2586,7 +2606,8 @@ class GlobalMainCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setRuntimeValue($var, $val) {
+    public function setRuntimeValue($var, $val)
+    {
         $this->runtimeConfig[$var] = $val;
         return true;
     }
@@ -2598,7 +2619,8 @@ class GlobalMainCfg
      * @return	string	$val	Value
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getRuntimeValue($var) {
+    public function getRuntimeValue($var)
+    {
         return isset($this->runtimeConfig[$var]) ? $this->runtimeConfig[$var] : '';
     }
 
@@ -2608,7 +2630,8 @@ class GlobalMainCfg
      * @return	string 	JSON Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parseGeneralProperties() {
+    public function parseGeneralProperties()
+    {
         $p = [
             'date_format'        => $this->getValue('global', 'dateformat'),
             'path_base'          => $this->getValue('paths', 'htmlbase'),
@@ -2647,7 +2670,8 @@ class GlobalMainCfg
      * @return	string 	JSON Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parseWorkerProperties() {
+    public function parseWorkerProperties()
+    {
         return json_encode([
             'worker_interval'             => $this->getValue('worker', 'interval'),
             'worker_update_object_states' => $this->getValue('worker', 'updateobjectstates')
@@ -2658,7 +2682,8 @@ class GlobalMainCfg
      * Populates the state weight structure, provided by hardcoded defaults
      * and maybe the user configuration
      */
-    private function parseStateWeight() {
+    private function parseStateWeight()
+    {
         $arr = [];
 
         foreach ($this->validConfig['states'] as $lowState => $aVal) {
@@ -2700,7 +2725,8 @@ class GlobalMainCfg
      * @return  array
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getStateWeight() {
+    public function getStateWeight()
+    {
         return $this->stateWeight;
     }
 
@@ -2709,7 +2735,8 @@ class GlobalMainCfg
      * JS frontend, which is not yet aware of numeric state codes. So
      * translate the states here.
      */
-    public function getStateWeightJS() {
+    public function getStateWeightJS()
+    {
         $arr = [];
         foreach ($this->stateWeight as $state => $val) {
             $arr[state_str($state)] = $val;
@@ -2728,7 +2755,8 @@ class GlobalMainCfg
      * @return  array   The validConfig array
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getValidObjectType($type) {
+    public function getValidObjectType($type)
+    {
         return $this->validConfig[$type];
     }
 
@@ -2738,7 +2766,8 @@ class GlobalMainCfg
      * @return	array The validConfig array
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getValidConfig() {
+    public function getValidConfig()
+    {
         return $this->validConfig;
     }
 
@@ -2748,7 +2777,8 @@ class GlobalMainCfg
      * @return	array The validConfig array
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getConfig() {
+    public function getConfig()
+    {
         return $this->config;
     }
 
@@ -2759,7 +2789,8 @@ class GlobalMainCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setSection($sec) {
+    public function setSection($sec)
+    {
         // Try to append new backends after already defined
         if (preg_match('/^backend_/', $sec)) {
             $lastBackendIndex = 0;
@@ -2797,7 +2828,8 @@ class GlobalMainCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function delSection($sec) {
+    public function delSection($sec)
+    {
         $this->config[$sec] = '';
         unset($this->config[$sec]);
 
@@ -2810,7 +2842,8 @@ class GlobalMainCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function writeConfig() {
+    public function writeConfig()
+    {
         // Check for config file write permissions
         if (!$this->checkNagVisConfigWriteable(1)) {
             return false;
@@ -2925,7 +2958,8 @@ class GlobalMainCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkNagVisConfigWriteable($printErr) {
+    public function checkNagVisConfigWriteable($printErr)
+    {
         return GlobalCore::getInstance()->checkWriteable($this->configFiles[count($this->configFiles) - 1], $printErr);
     }
 
@@ -2935,7 +2969,8 @@ class GlobalMainCfg
      * @param  string $val Comma separated value
      * @return array   Exploded Array
      */
-    private function stringToArray($val) {
+    private function stringToArray($val)
+    {
         // Explode comma separated list to array
         $val = explode(',', $val);
 
@@ -2947,7 +2982,8 @@ class GlobalMainCfg
         return $val;
     }
 
-    public function getSectionTitle($sec) {
+    public function getSectionTitle($sec)
+    {
         $titles = [
             'global'   => l('Global Settings'),
             'defaults' => l('Object Defaults'),
@@ -2967,7 +3003,8 @@ class GlobalMainCfg
     /**
      * Returns the name of the list function for the given map config option
      */
-    public function getListFunc($sec, $key) {
+    public function getListFunc($sec, $key)
+    {
         if (isset($this->validConfig[$sec][$key]['list'])) {
             return $this->validConfig[$sec][$key]['list'];
         } else {
@@ -2979,7 +3016,8 @@ class GlobalMainCfg
     /**
      * Finds out if an attribute has dependant attributes
      */
-    public function hasDependants($sec, $key) {
+    public function hasDependants($sec, $key)
+    {
         foreach ($this->validConfig[$sec] as $arr) {
             if (isset($arr['depends_on']) && $arr['depends_on'] == $key) {
                 return true;

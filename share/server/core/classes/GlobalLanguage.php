@@ -39,7 +39,8 @@ class GlobalLanguage
      * @param string $textDomain
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct($textDomain = 'nagvis') {
+    public function __construct($textDomain = 'nagvis')
+    {
         $this->textDomain = $textDomain;
 
         // Append encoding (UTF8)
@@ -69,7 +70,8 @@ class GlobalLanguage
      * Sets the language to be used for future localized strings
      * while processing the current page.
      */
-    public function setLanguage($handleUserCfg = false) {
+    public function setLanguage($handleUserCfg = false)
+    {
         if ($handleUserCfg) {
             $this->USERCFG = new CoreUserCfg();
         }
@@ -91,7 +93,8 @@ class GlobalLanguage
      * @return  string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function gatherCurrentLanguage() {
+    private function gatherCurrentLanguage()
+    {
         $sReturn = '';
         $aMethods = cfg('global', 'language_detection');
 
@@ -148,7 +151,8 @@ class GlobalLanguage
      * @return  string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getUserLanguage() {
+    private function getUserLanguage()
+    {
         $sLang = '';
 
         $UHANDLER = new CoreUriHandler();
@@ -177,7 +181,8 @@ class GlobalLanguage
      * @return  string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getBrowserLanguage() {
+    private function getBrowserLanguage()
+    {
         $return = [];
         $langs = [];
 
@@ -226,7 +231,8 @@ class GlobalLanguage
      * @return  string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getCurrentLanguage() {
+    public function getCurrentLanguage()
+    {
         return $this->sCurrentLanguage;
     }
 
@@ -239,7 +245,8 @@ class GlobalLanguage
      * @return  bool
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkLanguageAvailable($sLang, $printErr = 1, $ignoreConf = false) {
+    private function checkLanguageAvailable($sLang, $printErr = 1, $ignoreConf = false)
+    {
         global $CORE;
         // Checks two things:
         // a) The language availabilty in the filesyste,
@@ -269,7 +276,8 @@ class GlobalLanguage
      * @return	string	Localized String
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getText($id, $replace = null) {
+    public function getText($id, $replace = null)
+    {
         // Use cache if available
         // FIXME: At the moment the cache can only be used without macros
         if ($replace === null && isset($this->cache[$id])) {
@@ -310,7 +318,8 @@ class GlobalLanguage
      * @return	string	Localized String
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getTextOfId($s) {
+    private function getTextOfId($s)
+    {
         return T_gettext($s);
     }
 
@@ -323,7 +332,8 @@ class GlobalLanguage
      * @return  string        String Replaced language string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public static function getReplacedString($sLang, $replace) {
+    public static function getReplacedString($sLang, $replace)
+    {
         if (!is_array($replace)) {
             $aReplace = explode(',', $replace);
             for ($i = 0, $size = count($aReplace); $i < $size; $i++) {

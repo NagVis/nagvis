@@ -55,7 +55,8 @@ class CorePDOHandler
     // initializing it here is a syntax error in PHP 5.3
     private static $DRIVERS = null;
 
-    public static function initialize_static() {
+    public static function initialize_static()
+    {
         self::$DRIVERS = [
             '_common' => [
                 'queries' => [
@@ -291,7 +292,8 @@ class CorePDOHandler
 
     public function __construct() {}
 
-    public function open($driver, $params, $username, $password) {
+    public function open($driver, $params, $username, $password)
+    {
         if ($driver == '_common') {
             error_log("Internal error: '_common' is not supposed to be used as a driver name");
             return false;
@@ -336,19 +338,23 @@ class CorePDOHandler
         return true;
     }
 
-    public function getDSN() {
+    public function getDSN()
+    {
         return $this->dsn;
     }
 
-    public function getRegularExpressionOperator() {
+    public function getRegularExpressionOperator()
+    {
         return $this->data['re_op'];
     }
 
-    public function getNegatedRegularExpressionOperator() {
+    public function getNegatedRegularExpressionOperator()
+    {
         return $this->data['re_op_neg'];
     }
 
-    public function prep($q) {
+    public function prep($q)
+    {
         // TODO: some kind of LRU cache for the dynamically built queries
         if (array_key_exists($q, $this->data['queries'])) {
             $sql = $this->data['queries'][$q];
@@ -368,13 +374,15 @@ class CorePDOHandler
         return $st;
     }
 
-    public function tableExist($table) {
+    public function tableExist($table)
+    {
         $res = $this->query('-table-exists', ['name' => $table]);
         /* rowCount() is not always available for SELECT statements, so try the next best thing... */
         return $res !== false && $res->fetch() !== false;
     }
 
-    public function query($query, $params = []) {
+    public function query($query, $params = [])
+    {
         $this->lastErrorInfo = null;
         $st = $this->prep($query);
         if ($st === false) {
@@ -387,7 +395,8 @@ class CorePDOHandler
         return $st;
     }
 
-    public function queryFatal($s, $params = []) {
+    public function queryFatal($s, $params = [])
+    {
         $res = $this->query($s, $params);
         if ($res === false) {
             die("Could not execute the $s query: " . $this->errorString());
@@ -396,12 +405,14 @@ class CorePDOHandler
         }
     }
 
-    public function count($query, $params) {
+    public function count($query, $params)
+    {
         $RET = $this->query($query, $params)->fetch();
         return intval($RET['num']);
     }
 
-    public function error() {
+    public function error()
+    {
         if (isset($this->lastErrorInfo)) {
             return $this->lastErrorInfo;
         } else {
@@ -409,7 +420,8 @@ class CorePDOHandler
         }
     }
 
-    public function errorString() {
+    public function errorString()
+    {
         $err = $this->error();
         $msg = $err[0];
         if (isset($err[1])) {
@@ -421,7 +433,8 @@ class CorePDOHandler
         return $msg;
     }
 
-    public function close() {
+    public function close()
+    {
         $this->DB = null;
     }
 
@@ -431,7 +444,8 @@ class CorePDOHandler
      * Checks whether a value (a string or an integer) returned by a database query
      * represents a valid integer.
      */
-    public function is_nonnull_int($v) {
+    public function is_nonnull_int($v)
+    {
         return isset($v) && preg_match('/^-? (?: 0 | [1-9][0-9]* ) $/x', $v);
     }
 
@@ -441,7 +455,8 @@ class CorePDOHandler
      * Checks whether a value (a string or an integer) returned by a database query
      * is a valid integer and is equal to the specified one.
      */
-    public function eq_int($v, $exp) {
+    public function eq_int($v, $exp)
+    {
         return $this->is_nonnull_int($v) && intval($v) == $exp;
     }
 
@@ -453,11 +468,13 @@ class CorePDOHandler
      * Returns true for an empty string; the caller should take care to use this
      * function only on database fields that are supposed to be integers.
      */
-    public function null_or_eq_int($v, $exp) {
+    public function null_or_eq_int($v, $exp)
+    {
         return !isset($v) || $v === '' || $this->eq_int($v, $exp);
     }
 
-    public function deletePermissions($mod, $name) {
+    public function deletePermissions($mod, $name)
+    {
         // Only create when not existing
         if ($this->count('-perm-count', ['mod' => $mod, 'act' => 'view', 'obj' => $name]) > 0) {
             if (DEBUG && DEBUGLEVEL & 2) {
@@ -470,7 +487,8 @@ class CorePDOHandler
         }
     }
 
-    public function createMapPermissions($name) {
+    public function createMapPermissions($name)
+    {
         // Only create when not existing
         if ($this->count('-perm-count', ['mod' => 'Map', 'act' => 'view', 'obj' => $name]) <= 0) {
             if (DEBUG && DEBUGLEVEL & 2) {
@@ -490,7 +508,8 @@ class CorePDOHandler
         return true;
     }
 
-    public function createRotationPermissions($name) {
+    public function createRotationPermissions($name)
+    {
         // Only create when not existing
         if ($this->count('-perm-count', ['mod' => 'Rotation', 'act' => 'view', 'obj' => $name]) <= 0) {
             if (DEBUG && DEBUGLEVEL & 2) {
@@ -504,7 +523,8 @@ class CorePDOHandler
         return true;
     }
 
-    public function updateDb() {
+    public function updateDb()
+    {
         // Read the current version from db
         $dbVersion = 0;
         if (!$this->tableExist('version')) {
@@ -588,21 +608,25 @@ class CorePDOHandler
         $this->updating = false;
     }
 
-    public function getDbVersion() {
+    public function getDbVersion()
+    {
         $data = $this->query('SELECT version FROM version')->fetch();
         return $data['version'];
     }
 
-    public function updateDbVersion() {
+    public function updateDbVersion()
+    {
         $this->query('-version-update', ['version' => CONST_VERSION]);
     }
 
-    public function createVersionTable() {
+    public function createVersionTable()
+    {
         $this->query('-create-auth-version');
         $this->query('-version-insert', ['version' => CONST_VERSION]);
     }
 
-    public function createInitialDb() {
+    public function createInitialDb()
+    {
         $this->queryFatal('-create-auth-users');
         $this->queryFatal('-create-auth-roles');
         $this->queryFatal('-create-auth-perms');

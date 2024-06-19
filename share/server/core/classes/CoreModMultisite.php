@@ -29,7 +29,8 @@ class CoreModMultisite extends CoreModule
 {
     private $CORE;
 
-    public function __construct(GlobalCore $CORE) {
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'Multisite';
         $this->CORE = $CORE;
 
@@ -38,7 +39,8 @@ class CoreModMultisite extends CoreModule
         ];
     }
 
-    public function handleAction() {
+    public function handleAction()
+    {
         if (!$this->offersAction($this->sAction)) {
             return '';
         }
@@ -64,7 +66,8 @@ class CoreModMultisite extends CoreModule
         return json_encode($maps);
     }
 
-    private function renderTree() {
+    private function renderTree()
+    {
         $maps = [];
         $childs = [];
         foreach ($this->getMapsCached() as $map) {
@@ -83,7 +86,8 @@ class CoreModMultisite extends CoreModule
         ];
     }
 
-    private function renderTable() {
+    private function renderTable()
+    {
         $maps = [];
         foreach ($this->getMapsCached() as $map) {
             $maps[] = $this->getMapForMultisite($map);
@@ -91,7 +95,8 @@ class CoreModMultisite extends CoreModule
         return $maps;
     }
 
-    private function getMapForMultisite($map) {
+    private function getMapForMultisite($map)
+    {
         return [
             "name" => $map["name"],
             "title" => $map['summary_state'],
@@ -110,7 +115,8 @@ class CoreModMultisite extends CoreModule
     // The cache optimizes the case where a lot of users having the Check_MK
     // NagVis maps snapin open at the same time while most of the users have
     // equal permissions.
-    private function getMapsCached() {
+    private function getMapsCached()
+    {
         $maps = $this->CORE->getPermittedMaps();
         $cache_file = cfg('paths', 'var') . 'snapin-' . md5(json_encode(array_keys($maps))) . '-' . CONST_VERSION . '.cache';
         $CACHE = new GlobalFileCache([], $cache_file);
@@ -127,7 +133,8 @@ class CoreModMultisite extends CoreModule
 
     // Gathers an array of maps and their states to be shown to the user
     // in the multisite snapin
-    private function getMaps($maps) {
+    private function getMaps($maps)
+    {
         global $_BACKEND, $AUTHORISATION;
         $aObjs = [];
         foreach ($maps as $object_id => $mapName) {

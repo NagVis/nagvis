@@ -29,7 +29,8 @@ class CoreLogonModule
     // Important to add a random password here. When someone
     // changes the logon mechanism to e.g. LogonDialog it
     // would be possible to logon with a hardcoded password
-    protected function createUser($username, $role) {
+    protected function createUser($username, $role)
+    {
         global $AUTH;
         $AUTH->createUser($username, (time() * rand(1, 10)));
         if ($role !== '') {
@@ -39,7 +40,8 @@ class CoreLogonModule
         }
     }
 
-    protected function verifyUserExists($username, $createUser, $createRole, $printErr) {
+    protected function verifyUserExists($username, $createUser, $createRole, $printErr)
+    {
         global $AUTH;
         if (!$AUTH->checkUserExists($username)) {
             settype($createUser, 'boolean');

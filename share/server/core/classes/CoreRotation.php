@@ -36,7 +36,8 @@ class CoreRotation
     private $intNextStep = null;
     private $strNextStep = null;
 
-    public function __construct($sPoolName) {
+    public function __construct($sPoolName)
+    {
         global $CORE, $AUTHORISATION;
         $this->sPoolName = $sPoolName;
 
@@ -84,7 +85,8 @@ class CoreRotation
      * @param   string $step Step identifier map name, url, ...
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function stepExists($type, $step) {
+    public function stepExists($type, $step)
+    {
         $bRet = false;
 
         // Loop all steps and check if this step exists
@@ -107,7 +109,8 @@ class CoreRotation
      * @param   string $sStep Step identifier map name, url, ...
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setStep($sType, $sStep, $iStepId = '') {
+    public function setStep($sType, $sStep, $iStepId = '')
+    {
         // First check if the step exists
         if ($this->stepExists($sType, $sStep)) {
             if ($iStepId != '') {
@@ -142,7 +145,8 @@ class CoreRotation
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function setNextStep() {
+    private function setNextStep()
+    {
         if ($this->intCurrentStep === false || ($this->intCurrentStep + 1) >= sizeof($this->arrSteps)) {
             // if end of array reached, go to the beginning...
             $this->intNextStep = 0;
@@ -156,7 +160,8 @@ class CoreRotation
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function gatherStepInterval() {
+    private function gatherStepInterval()
+    {
         if ($this->sPoolName !== '') {
             $this->intInterval = cfg('rotation_' . $this->sPoolName, 'interval');
         } else {
@@ -169,7 +174,8 @@ class CoreRotation
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function createStepUrls() {
+    private function createStepUrls()
+    {
         $htmlBase = cfg('paths', 'htmlbase');
         foreach ($this->arrSteps as $intId => $arrStep) {
             if (isset($arrStep['url']) && $arrStep['url'] != '') {
@@ -185,7 +191,8 @@ class CoreRotation
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function gatherSteps() {
+    private function gatherSteps()
+    {
         $this->arrSteps = cfg('rotation_' . $this->sPoolName, 'maps');
     }
 
@@ -194,7 +201,8 @@ class CoreRotation
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkPoolExists() {
+    private function checkPoolExists()
+    {
         global $CORE;
         $pools = $CORE->getDefinedRotationPools();
 
@@ -211,7 +219,8 @@ class CoreRotation
      * @return    int|null        Returns The next rotation time in seconds
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getStepInterval() {
+    public function getStepInterval()
+    {
         return $this->intInterval;
     }
 
@@ -222,7 +231,8 @@ class CoreRotation
      * @return	string  URL to rotate to
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getCurrentStepLabel() {
+    public function getCurrentStepLabel()
+    {
         return $this->arrSteps[$this->intCurrentStep]['label'];
     }
 
@@ -233,7 +243,8 @@ class CoreRotation
      * @return	string  URL to rotate to
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getCurrentStepUrl() {
+    public function getCurrentStepUrl()
+    {
         return $this->arrSteps[$this->intCurrentStep]['target'];
     }
 
@@ -244,7 +255,8 @@ class CoreRotation
      * @return	string  URL to rotate to
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getNextStepUrl() {
+    public function getNextStepUrl()
+    {
         return $this->arrSteps[$this->intNextStep]['target'];
     }
 
@@ -254,7 +266,8 @@ class CoreRotation
      * @return    int|null
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getPoolName() {
+    public function getPoolName()
+    {
         return $this->sPoolName;
     }
 
@@ -264,11 +277,13 @@ class CoreRotation
      * @return	int
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getStepUrlById($intId) {
+    public function getStepUrlById($intId)
+    {
         return $this->arrSteps[$intId]['target'];
     }
 
-    public function getStepById($intId) {
+    public function getStepById($intId)
+    {
         return $this->arrSteps[$intId];
     }
 
@@ -278,7 +293,8 @@ class CoreRotation
      * @return	int
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getStepLabelById($intId) {
+    public function getStepLabelById($intId)
+    {
         return $this->arrSteps[$intId]['label'];
     }
 
@@ -288,7 +304,8 @@ class CoreRotation
      * @return	int
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getNumSteps() {
+    public function getNumSteps()
+    {
         return sizeof($this->arrSteps);
     }
 
@@ -300,7 +317,8 @@ class CoreRotation
      * @return  array    Rotation properties
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getRotationProperties() {
+    public function getRotationProperties()
+    {
         $arr = [];
 
         if ($this->sPoolName !== '') {

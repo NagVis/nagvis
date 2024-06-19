@@ -40,7 +40,8 @@ abstract class CoreModule {
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function offersAction($sAction) {
+    public function offersAction($sAction)
+    {
         return isset($this->aActions[$sAction]);
     }
 
@@ -49,7 +50,8 @@ abstract class CoreModule {
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setAction($sAction) {
+    public function setAction($sAction)
+    {
         if (!$this->offersAction($sAction)) {
             return false;
         }
@@ -63,7 +65,8 @@ abstract class CoreModule {
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function actionRequiresAuthorisation() {
+    public function actionRequiresAuthorisation()
+    {
         return isset($this->aActions[$this->sAction]) && $this->aActions[$this->sAction] !== !REQUIRES_AUTHORISATION;
     }
 
@@ -72,7 +75,8 @@ abstract class CoreModule {
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function offersObject($sObject) {
+    public function offersObject($sObject)
+    {
         return isset($this->aObjects[$sObject]);
     }
 
@@ -82,7 +86,8 @@ abstract class CoreModule {
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setObject($sObject) {
+    public function setObject($sObject)
+    {
         if (!$this->offersObject($sObject)) {
             // Set sObject to an empty string. This tells the isPermitted() check that
             // this module uses object based authorisation checks. In that case it
@@ -100,7 +105,8 @@ abstract class CoreModule {
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getObject() {
+    public function getObject()
+    {
         return $this->sObject;
     }
 
@@ -109,7 +115,8 @@ abstract class CoreModule {
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function isPermitted() {
+    public function isPermitted()
+    {
         global $AUTHORISATION;
         $authorized = true;
         if (!isset($AUTHORISATION) || $AUTHORISATION === null) {
@@ -134,7 +141,8 @@ abstract class CoreModule {
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function initUriHandler() {
+    protected function initUriHandler()
+    {
         $this->UHANDLER = new CoreUriHandler();
     }
 
@@ -142,7 +150,8 @@ abstract class CoreModule {
      * Returns all _GET+_POST vars. Supports optional array of attributes to
      * exclude where the keys are the var names. Always excludes mod/act params
      */
-    protected function getAllOptions($exclude = []) {
+    protected function getAllOptions($exclude = [])
+    {
         if (!isset($this->FHANDLER)) {
             $this->FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
         }
@@ -156,7 +165,8 @@ abstract class CoreModule {
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function getCustomOptions($aKeys, $aDefaults = [], $mixed = false) {
+    protected function getCustomOptions($aKeys, $aDefaults = [], $mixed = false)
+    {
         if ($mixed) {
             if (!isset($this->FHANDLER)) {
                 $this->FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
@@ -213,7 +223,8 @@ abstract class CoreModule {
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function handleResponse($validationHandler, $action, $successMsg = null, $failMessage = null, $reload = null, $redirectUrl = null) {
+    protected function handleResponse($validationHandler, $action, $successMsg = null, $failMessage = null, $reload = null, $redirectUrl = null)
+    {
         $aReturn = $this->{$validationHandler}();
 
         $type = 'ok';
@@ -246,7 +257,8 @@ abstract class CoreModule {
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function verifyValuesSet($HANDLER, $list) {
+    protected function verifyValuesSet($HANDLER, $list)
+    {
         // Check if the array is assoc. When it isn't re-format it.
         if (array_keys($list) === range(0, count($list) - 1)) {
             $assoc = [];
@@ -269,7 +281,8 @@ abstract class CoreModule {
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function verifyValuesMatch($HANDLER, $list) {
+    protected function verifyValuesMatch($HANDLER, $list)
+    {
         foreach ($list as $key => $pattern) {
             if ($pattern && !$HANDLER->match($key, $pattern)) {
                 throw new UserInputError(l('The value of option "[ATTRIBUTE]" does not match the valid format.',
@@ -285,7 +298,8 @@ abstract class CoreModule {
      *
      * Returns null when nothing changed or a structure of the changed objects
      */
-    protected function checkFilesChanged($files) {
+    protected function checkFilesChanged($files)
+    {
         global $AUTHORISATION, $CORE;
         $changed = [];
 

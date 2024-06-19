@@ -26,7 +26,8 @@ class ViewManageUsers
 {
     private $error = null;
 
-    private function addForm() {
+    private function addForm()
+    {
         global $AUTH;
         echo '<h2>' . l('Create User') . '</h2>';
 
@@ -109,7 +110,8 @@ class ViewManageUsers
         form_end(false);
     }
 
-    private function editForm() {
+    private function editForm()
+    {
         global $AUTH, $AUTHORISATION;
         if (!$AUTHORISATION->rolesConfigurable()) {
             return;
@@ -200,7 +202,8 @@ class ViewManageUsers
         form_end(false);
     }
 
-    private function deleteForm() {
+    private function deleteForm()
+    {
         global $AUTH, $AUTHORISATION;
         echo '<h2>' . l('Delete User') . '</h2>';
 
@@ -257,7 +260,8 @@ class ViewManageUsers
         form_end(false);
     }
 
-    private function resetPwForm() {
+    private function resetPwForm()
+    {
         global $AUTH, $AUTHORISATION;
         if (!$AUTH->checkFeature('changePassword') || $AUTH->authedTrusted()) {
             return;
@@ -343,7 +347,8 @@ class ViewManageUsers
         form_end(false);
     }
 
-    public function parse() {
+    public function parse()
+    {
         ob_start();
         $this->addForm();
         $this->editForm();

@@ -36,7 +36,8 @@ class NagVisHostgroup extends NagVisStatefulObject
 
     protected $members = [];
 
-    public function __construct($backend_id, $hostgroupName) {
+    public function __construct($backend_id, $hostgroupName)
+    {
         $this->backend_id = $backend_id;
         $this->hostgroup_name = $hostgroupName;
         parent::__construct();
@@ -48,7 +49,8 @@ class NagVisHostgroup extends NagVisStatefulObject
      * @param   bool $_unused Unused flag here
      * @param   bool $bFetchMemberState Optional flag to disable fetching of member status
      */
-    public function queueState($_unused = true, $bFetchMemberState = true) {
+    public function queueState($_unused = true, $bFetchMemberState = true)
+    {
         global $_BACKEND;
         $queries = ['hostgroupMemberState' => true];
 
@@ -66,7 +68,8 @@ class NagVisHostgroup extends NagVisStatefulObject
     /**
      * Applies the fetched state
      */
-    public function applyState() {
+    public function applyState()
+    {
         if ($this->problem_msg) {
             $this->sum = [
                 ERROR,
@@ -116,7 +119,8 @@ class NagVisHostgroup extends NagVisStatefulObject
     /**
      * Fetches the summary output from the object state counts
      */
-    private function fetchSummaryOutputFromCounts() {
+    private function fetchSummaryOutputFromCounts()
+    {
         $arrHostStates = [];
         $arrServiceStates = [];
 
@@ -165,7 +169,8 @@ class NagVisHostgroup extends NagVisStatefulObject
     /**
      * Fetches the summary state from all members recursive
      */
-    private function fetchSummaryState() {
+    private function fetchSummaryState()
+    {
         if ($this->hasMembers()) {
             $this->calcSummaryState();
         } else {
@@ -176,7 +181,8 @@ class NagVisHostgroup extends NagVisStatefulObject
     /**
      * Fetches the summary output from all members
      */
-    private function fetchSummaryOutput() {
+    private function fetchSummaryOutput()
+    {
         if ($this->hasMembers()) {
             $arrStates = [
                 CRITICAL => 0, DOWN    => 0, WARNING   => 0,

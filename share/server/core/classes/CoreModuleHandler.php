@@ -31,7 +31,8 @@ class CoreModuleHandler
     protected $aRegistered;
     protected $sPrefix;
 
-    public function __construct($CORE = null) {
+    public function __construct($CORE = null)
+    {
         if ($CORE === null) {
             $this->CORE = GlobalCore::getInstance();
         } else {
@@ -49,7 +50,8 @@ class CoreModuleHandler
      * @param  string $sModule Name of the module to load
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function loadModule($sModule) {
+    public function loadModule($sModule)
+    {
         // Check if module class is registered
         if (isset($this->aRegistered[$this->sPrefix . $sModule]) && $this->aRegistered[$this->sPrefix . $sModule] === 'active') {
             $className = $this->sPrefix . $sModule;
@@ -71,7 +73,8 @@ class CoreModuleHandler
      * @param  string $sModule Name of the module to register
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function regModule($sModule) {
+    public function regModule($sModule)
+    {
         // Check if module class exists
         if (class_exists($this->sPrefix . $sModule)) {
             // Register the module at the module handler

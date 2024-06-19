@@ -32,7 +32,8 @@ class FrontendModOverview extends FrontendModule
     private $CORE;
     private $VIEW;
 
-    public function __construct(GlobalCore $CORE) {
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'Overview';
         $this->CORE = $CORE;
 
@@ -50,7 +51,8 @@ class FrontendModOverview extends FrontendModule
         ];
     }
 
-    public function handleAction() {
+    public function handleAction()
+    {
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
@@ -65,7 +67,8 @@ class FrontendModOverview extends FrontendModule
         return $sReturn;
     }
 
-    private function showViewDialog() {
+    private function showViewDialog()
+    {
         // Build index template
         $INDEX = new NagVisIndexView($this->CORE);
 

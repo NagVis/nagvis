@@ -56,7 +56,8 @@ class GlobalMapCfg
     /**
      * Class Constructor
      */
-    public function __construct($name = '', $isView = true) {
+    public function __construct($name = '', $isView = true)
+    {
         $this->name = $name;
         $this->isView = $isView;
 
@@ -90,7 +91,8 @@ class GlobalMapCfg
      * object types. The Infos fetched from these files contain all data about
      * the options like variable format, validation regexes and so on.
      */
-    private function fetchValidConfig() {
+    private function fetchValidConfig()
+    {
         global $CORE;
         self::$validConfig = [];
         // Holds all registered config vars
@@ -108,7 +110,8 @@ class GlobalMapCfg
         $this->registerConfigVars($mapConfigVars, $mapConfigVarMap);
     }
 
-    private function registerConfigVars($configVars, $configVarMap, $source_name = null) {
+    private function registerConfigVars($configVars, $configVarMap, $source_name = null)
+    {
         foreach ($configVarMap as $type => $sections) {
             if (!isset(self::$validConfig[$type])) {
                 self::$validConfig[$type] = [];
@@ -137,7 +140,8 @@ class GlobalMapCfg
      * @param   bool $onlyGlobal Only fetch global type settings
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function gatherTypeDefaults($onlyGlobal) {
+    public function gatherTypeDefaults($onlyGlobal)
+    {
         $types = ['global'];
 
         if (!$onlyGlobal) {
@@ -252,7 +256,8 @@ class GlobalMapCfg
      * @param   string $file Path to the configuration file
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function setConfigFile($file) {
+    protected function setConfigFile($file)
+    {
         $this->configFile = $file;
     }
 
@@ -261,7 +266,8 @@ class GlobalMapCfg
      *
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function initCache() {
+    protected function initCache()
+    {
         if ($this->cacheFile !== '') {
             $this->CACHE = new GlobalFileCache($this->configFile, $this->cacheFile);
             $this->DCACHE = new GlobalFileCache($this->configFile, $this->defaultsCacheFile);
@@ -274,7 +280,8 @@ class GlobalMapCfg
      * @return	GlobalBackground
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getBackground() {
+    private function getBackground()
+    {
         $RET = new GlobalBackground($this->getValue(0, 'map_image'));
         return $RET;
     }
@@ -285,7 +292,8 @@ class GlobalMapCfg
      * @return	bool	Is Successful?
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function createMapConfig() {
+    public function createMapConfig()
+    {
         global $CORE;
         // does file exist?
         if ($this->checkMapConfigReadable(false)) {
@@ -305,7 +313,8 @@ class GlobalMapCfg
     /**
      * Really parses a map configuration file
      */
-    public function parseConfigFile($onlyGlobal) {
+    public function parseConfigFile($onlyGlobal)
+    {
         if (!$this->checkMapConfigExists(true) || !$this->checkMapConfigReadable(true)) {
             return false;
         }
@@ -445,7 +454,8 @@ class GlobalMapCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function readMapConfig($onlyGlobal = false, $resolveTemplates = true, $useCache = true, $enforceSources = false) {
+    public function readMapConfig($onlyGlobal = false, $resolveTemplates = true, $useCache = true, $enforceSources = false)
+    {
 
         global $_MAINCFG, $AUTHORISATION;
         // Only use cache when there is
@@ -549,7 +559,8 @@ class GlobalMapCfg
     /**
      * Performs the initial map source loading
      */
-    private function fetchMapSources() {
+    private function fetchMapSources()
+    {
         global $CORE;
         foreach ($CORE->getAvailableSources() as $source_name) {
             $viewParams       = [];
@@ -597,7 +608,8 @@ class GlobalMapCfg
     /**
      * Returns possible options for the source params to make them selectable by lists
      */
-    public function getSourceParamChoices($params) {
+    public function getSourceParamChoices($params)
+    {
         global $CORE;
         $values = [];
         $validConfig = self::$validConfig['global'];
@@ -632,7 +644,8 @@ class GlobalMapCfg
         return $values;
     }
 
-    public function getSourceParamDefs($params) {
+    public function getSourceParamDefs($params)
+    {
         $defs = [];
         foreach ($params as $param) {
             $defs[$param] = self::$validConfig['global'][$param];
@@ -644,7 +657,8 @@ class GlobalMapCfg
     // a) map config
     // b) user config
     // c) url parameters
-    public function getSourceParam($key, $only_user_supplied = false, $only_customized = false) {
+    public function getSourceParam($key, $only_user_supplied = false, $only_customized = false)
+    {
         // Allow _GET or _POST (_POST is needed for add/modify dialog submission)
         if (isset($_REQUEST[$key])) {
             // Only get options which differ from the defaults
@@ -682,7 +696,8 @@ class GlobalMapCfg
         return null;
     }
 
-    private function getSourceParamsOfSources($sources, $only_user_supplied, $only_customized, $only_view_parameters ) {
+    private function getSourceParamsOfSources($sources, $only_user_supplied, $only_customized, $only_view_parameters )
+    {
         $keys = [];
         // Get keys of all view params belonging to all configured sources
         foreach ($sources as $source) {
@@ -730,7 +745,8 @@ class GlobalMapCfg
      * enabled sources. But in some cases the function on returns the view parameters.
      */
     public function getSourceParams($only_user_supplied = false, $only_customized = false,
-                                    $only_view_parameters = false) {
+                                    $only_view_parameters = false)
+    {
         // First get a list of source names to get the parameters for
         $config  = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : [];
         $sources = array_merge(['*'], $config);
@@ -748,7 +764,8 @@ class GlobalMapCfg
         return $params;
     }
 
-    public function getHiddenConfigVars() {
+    public function getHiddenConfigVars()
+    {
         $hidden = [];
         $sources = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : [];
         foreach ($sources as $source_name) {
@@ -759,7 +776,8 @@ class GlobalMapCfg
         return $hidden;
     }
 
-    private function addSourceDefaults() {
+    private function addSourceDefaults()
+    {
         $sources = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : [];
         foreach ($sources as $source_name) {
             if (isset(self::$updateValidConfig[$source_name])) {
@@ -776,7 +794,8 @@ class GlobalMapCfg
      * Stores the user given options as parameters in the map configuration when
      * the user requested this.
      */
-    public function storeParams() {
+    public function storeParams()
+    {
         // FIXME: Only make permanent for current user. Make it optinally
         // permanent for all users by a second flag
         foreach ($this->getSourceParams(true) as $param => $value) {
@@ -788,7 +807,8 @@ class GlobalMapCfg
     /**
      * Returns true on the first source which reports it has changed.
      */
-    private function sourcesChanged($compareTime) {
+    private function sourcesChanged($compareTime)
+    {
         $sources = $this->getValue(0, 'sources');
         if (!$sources) {
             return false;
@@ -803,12 +823,14 @@ class GlobalMapCfg
         return false;
     }
 
-    public function skipSourceErrors($flag = true) {
+    public function skipSourceErrors($flag = true)
+    {
         $this->ignoreSourceErrors = $flag;
     }
 
     // converts params to their string representations, like used in filenames for caches
-    private function paramsToString($params) {
+    private function paramsToString($params)
+    {
         $p = [];
         foreach ($params as $key => $val) {
             if (isset(self::$validConfig['global'][$key]['array']) && self::$validConfig['global'][$key]['array'] === true) {
@@ -828,7 +850,8 @@ class GlobalMapCfg
      *  3. tell the source processing that the data used in this source has changed and the
      *     source needs processed again
      */
-    private function processSources($useCache) {
+    private function processSources($useCache)
+    {
         global $_MAINCFG;
         $sources = $this->getValue(0, 'sources');
         if (!$sources) {
@@ -899,7 +922,8 @@ class GlobalMapCfg
      * @return  int  ID of the template
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getTemplateIdByName($name) {
+    public function getTemplateIdByName($name)
+    {
         foreach ($this->mapConfig as $id => $arr) {
             if ($arr['type'] !== 'template') {
                 continue;
@@ -916,7 +940,8 @@ class GlobalMapCfg
     /**
      * Merges the object which "use" a template with the template values
      */
-    private function mergeTemplates() {
+    private function mergeTemplates()
+    {
         // Loop all objects
         foreach ($this->mapConfig as $id => $element) {
             // Global type objects do not support templates, makes no sense
@@ -955,7 +980,8 @@ class GlobalMapCfg
      * It might be possible that a map does not use a configuration file and is only
      * computed on-demand using parameters, this informs the callers about this
      */
-    public function hasConfigFile() {
+    public function hasConfigFile()
+    {
         return $this->name != '';
     }
 
@@ -966,7 +992,8 @@ class GlobalMapCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkMapConfigExists($printErr) {
+    public function checkMapConfigExists($printErr)
+    {
         global $CORE;
         return $CORE->checkExisting($this->configFile, $printErr);
     }
@@ -980,7 +1007,8 @@ class GlobalMapCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function checkMapConfigReadable($printErr) {
+    protected function checkMapConfigReadable($printErr)
+    {
         global $CORE;
         return $CORE->checkReadable($this->configFile, $printErr);
     }
@@ -991,7 +1019,8 @@ class GlobalMapCfg
      * @return  string  The object ID
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function genObjId($s) {
+    public function genObjId($s)
+    {
         $hash = sha1($s);
 
         if (preg_match('/^0e/', $hash)) {
@@ -1010,7 +1039,8 @@ class GlobalMapCfg
      *
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function verifyObjectIds() {
+    private function verifyObjectIds()
+    {
         $toBeWritten = [];
         $alreadySeen = [];
 
@@ -1059,7 +1089,8 @@ class GlobalMapCfg
     /**
      * Checks if the config file is valid
      */
-    private function checkMapConfigIsValid() {
+    private function checkMapConfigIsValid()
+    {
         global $CORE;
 
         $sources = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : [];
@@ -1136,7 +1167,8 @@ class GlobalMapCfg
     /**
      * Finds out if an attribute has dependant attributes
      */
-    public function hasDependants($type, $attr) {
+    public function hasDependants($type, $attr)
+    {
         foreach (self::$validConfig[$type] as $arr) {
             if (isset($arr['depends_on']) && $arr['depends_on'] == $attr) {
                 return true;
@@ -1152,7 +1184,8 @@ class GlobalMapCfg
      * @return  array   Valid object keys
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getValidTypeKeys($sType) {
+    public function getValidTypeKeys($sType)
+    {
         $aRet = [];
         foreach (self::$validConfig[$sType] as $key => $arr) {
             if (!isset($arr['deprecated']) || $arr['deprecated'] !== true) {
@@ -1168,7 +1201,8 @@ class GlobalMapCfg
      * @return  array  Valid object types
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getValidObjectTypes() {
+    public function getValidObjectTypes()
+    {
         $aRet = [];
         foreach ($this->typeDefaults as $key => $arr) {
             $aRet[] = $key;
@@ -1182,11 +1216,13 @@ class GlobalMapCfg
      * @return  array  Array of default options
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getTypeDefaults($type) {
+    public function getTypeDefaults($type)
+    {
         return $this->typeDefaults[$type];
     }
 
-    public function getDefaultValue($type, $key) {
+    public function getDefaultValue($type, $key)
+    {
         if (isset($this->typeDefaults[$type][$key])) {
             return $this->typeDefaults[$type][$key];
         } else {
@@ -1201,7 +1237,8 @@ class GlobalMapCfg
      * @return	array	All elements of this type
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getDefinitions($type) {
+    public function getDefinitions($type)
+    {
         // FIXME: Can be replaced?
         $arr = [];
         foreach ($this->mapConfig as $id => &$elem) {
@@ -1212,14 +1249,16 @@ class GlobalMapCfg
         return $arr;
     }
 
-    public function getMapObject($objId) {
+    public function getMapObject($objId)
+    {
         if (!isset($this->mapConfig[$objId])) {
             return null;
         }
         return $this->mapConfig[$objId];
     }
 
-    public function getMapObjects() {
+    public function getMapObjects()
+    {
         return $this->mapConfig;
     }
 
@@ -1231,7 +1270,8 @@ class GlobalMapCfg
      * @return  array	  List of templates as keys
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getTemplateNames($strMatch = null) {
+    public function getTemplateNames($strMatch = null)
+    {
         $a = [];
         foreach ($this->getDefinitions('template') as $id => $aOpts) {
             if ($strMatch == null || ($strMatch != null && preg_match($strMatch, $aOpts['name']))) {
@@ -1248,7 +1288,8 @@ class GlobalMapCfg
      * has changed since either the compare time or the update time of
      * the map configuration file
      */
-    public function getFileModificationTime($compareTime = null) {
+    public function getFileModificationTime($compareTime = null)
+    {
         // on-demand maps have no age, return the compare time
         if (!$this->hasConfigFile()) {
             return $compareTime;
@@ -1282,12 +1323,14 @@ class GlobalMapCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkMapCfgFolderWriteable($printErr) {
+    public function checkMapCfgFolderWriteable($printErr)
+    {
         global $CORE;
         return $CORE->checkReadable(dirname($this->configFile), $printErr);
     }
 
-    private function getConfig() {
+    private function getConfig()
+    {
         if ($this->configFileContents === null) {
             $this->configFileContents = file($this->configFile);
         }
@@ -1299,7 +1342,8 @@ class GlobalMapCfg
      *
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function objExists($id) {
+    public function objExists($id)
+    {
         return isset($this->mapConfig[$id]);
     }
 
@@ -1312,7 +1356,8 @@ class GlobalMapCfg
      * @return	bool	TRUE
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setValue($id, $key, $value) {
+    public function setValue($id, $key, $value)
+    {
         $prop = $this->getValidObjectType($this->mapConfig[$id]['type']);
         if (isset($prop['array']) && $prop['array']) {
             $value = explode(',', $value);
@@ -1331,7 +1376,8 @@ class GlobalMapCfg
      * @return	string	Value
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getValue($id, $key, $ignoreDefault = false) {
+    public function getValue($id, $key, $ignoreDefault = false)
+    {
         if (isset($this->mapConfig[$id]) && isset($this->mapConfig[$id][$key])) {
             return $this->mapConfig[$id][$key];
         } elseif (!$ignoreDefault && isset($this->mapConfig[$id]['type'])) {
@@ -1348,7 +1394,8 @@ class GlobalMapCfg
      * @return	string	MapName
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
@@ -1358,11 +1405,13 @@ class GlobalMapCfg
      * @return	string	Map alias
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getAlias() {
+    public function getAlias()
+    {
         return $this->getValue(0, 'alias');
     }
 
-    public function objIdToTypeAndNum($objId) {
+    public function objIdToTypeAndNum($objId)
+    {
         foreach ($this->mapConfig as $type => $objects) {
             foreach ($objects as $typeId => $opts) {
                 if ($opts['object_id'] == $objId) {
@@ -1379,7 +1428,8 @@ class GlobalMapCfg
      * @param   array $objIds of object ids
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function filterMapObjects($objIds) {
+    public function filterMapObjects($objIds)
+    {
         $newConfig =  [0 => $this->mapConfig[0]]; // keep the global section
         foreach ($objIds as $id) {
             if (isset($this->mapConfig[$id])) {
@@ -1398,7 +1448,8 @@ class GlobalMapCfg
     // What happes with the returned data depends on the $act. For example
     // add_obj, when the function handles the task and wants to prevent NagVis from
     // performing the default action, the function returns: true
-    public function handleSources($act, $id = null) {
+    public function handleSources($act, $id = null)
+    {
         $sources = $this->getValue(0, 'sources') !== false ? $this->getValue(0, 'sources') : [];
         foreach ($sources as $source) {
             $func = $act . '_' . $source;
@@ -1425,7 +1476,8 @@ class GlobalMapCfg
      *
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function formatElement($id) {
+    private function formatElement($id)
+    {
         $a = [];
         $type = $this->mapConfig[$id]['type'];
 
@@ -1462,7 +1514,8 @@ class GlobalMapCfg
      * @return	int	Id of the Element
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function addElement($type, $properties, $perm = false, $id = null) {
+    public function addElement($type, $properties, $perm = false, $id = null)
+    {
         if ($id === null) {
             $id = $this->genObjId((count($this->mapConfig) + 1) . time());
         }
@@ -1481,7 +1534,8 @@ class GlobalMapCfg
      *
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function storeAddElement($id) {
+    private function storeAddElement($id)
+    {
         // First try whether or not there is a source which wants to store
         // the object instead of storing it in the map config file
         if ($this->handleSources('add_obj', $id) === true) {
@@ -1506,7 +1560,8 @@ class GlobalMapCfg
      * @return	bool	TRUE
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function deleteElement($id, $perm = false) {
+    public function deleteElement($id, $perm = false)
+    {
         unset($this->mapConfig[$id]);
         if ($perm) {
             $this->storeDeleteElement($id);
@@ -1523,7 +1578,8 @@ class GlobalMapCfg
      * @param   int $id
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function storeDeleteElement($id, $replaceWith = null) {
+    public function storeDeleteElement($id, $replaceWith = null)
+    {
         // First try whether or not there is a source which wants to store
         // the object instead of storing it in the map config file
         if ($this->handleSources('del_obj', $id) === true) {
@@ -1557,7 +1613,8 @@ class GlobalMapCfg
      * Updates an existing map object with the given attributes.
      * Existing attribtes are changed and new ones are set.
      */
-    public function updateElement($id, $properties, $perm = false) {
+    public function updateElement($id, $properties, $perm = false)
+    {
         if (!isset($this->mapConfig[$id])) {
             return false;
         }
@@ -1579,7 +1636,8 @@ class GlobalMapCfg
      *
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function storeUpdateElement($id) {
+    public function storeUpdateElement($id)
+    {
         // First try whether or not there is a source which wants to store
         // the object instead of storing it in the map config file
         if ($this->handleSources('update_obj', $id) === true) {
@@ -1670,7 +1728,8 @@ class GlobalMapCfg
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function writeConfig($cfg = null) {
+    private function writeConfig($cfg = null)
+    {
         if ($cfg !== null) {
             $this->configFileContents = $cfg;
         }
@@ -1696,7 +1755,8 @@ class GlobalMapCfg
      * @param   int $num
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getObjectLinesByNum($num) {
+    private function getObjectLinesByNum($num)
+    {
         $count = 0;
         $start = null;
         $inObj = false;
@@ -1734,7 +1794,8 @@ class GlobalMapCfg
      * @param   int $id
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getObjectLinesById($id) {
+    private function getObjectLinesById($id)
+    {
         $start = null;
         $inObj = false;
         $end   = null;
@@ -1779,7 +1840,8 @@ class GlobalMapCfg
      * @return  array   The validConfig array
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getValidObjectType($type) {
+    public function getValidObjectType($type)
+    {
         return self::$validConfig[$type];
     }
 
@@ -1789,14 +1851,16 @@ class GlobalMapCfg
      * @return    array|null The validConfig array
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getValidConfig() {
+    public function getValidConfig()
+    {
         return self::$validConfig;
     }
 
     /**
      * Returns the name of the list function for the given map config option
      */
-    public function getListFunc($type, $var) {
+    public function getListFunc($type, $var)
+    {
         if (isset(self::$validConfig[$type][$var]['list'])) {
             return self::$validConfig[$type][$var]['list'];
         } else {
@@ -1812,7 +1876,8 @@ class GlobalMapCfg
      * @return	bool   Only returns FALSE if something went wrong
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function exportMap() {
+    public function exportMap()
+    {
         if ($this->checkMapConfigReadable(1)) {
             header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename=' . $this->getName() . '.cfg');
@@ -1835,7 +1900,8 @@ class GlobalMapCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkMapConfigWriteable($printErr) {
+    public function checkMapConfigWriteable($printErr)
+    {
         global $CORE;
         return $CORE->checkWriteable($this->configFile, $printErr);
     }
@@ -1846,7 +1912,8 @@ class GlobalMapCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function deleteMapConfig($printErr = 1) {
+    public function deleteMapConfig($printErr = 1)
+    {
         global $AUTHORISATION;
         // is file writeable?
         if ($this->checkMapConfigWriteable($printErr)) {
@@ -1879,7 +1946,8 @@ class GlobalMapCfg
      * @return	bool   Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
    */
-    public function checkMapLocked($printErr = 1) {
+    public function checkMapLocked($printErr = 1)
+    {
         global $AUTH;
         // read lockfile
         $lockdata = $this->readMapLock();
@@ -1925,7 +1993,8 @@ class GlobalMapCfg
      * @return	array/Boolean   Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function readMapLock() {
+    private function readMapLock()
+    {
         if ($this->checkMapLockReadable(0)) {
             $fileContent = file($this->mapLockPath);
             // only recognize the first line, explode it by :
@@ -1947,7 +2016,8 @@ class GlobalMapCfg
      * @return	bool     Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function writeMapLock() {
+    public function writeMapLock()
+    {
         global $CORE, $AUTH;
         // Can an existing lock be updated?
         if ($this->checkMapLockExists(0) && !$this->checkMapLockWriteable(0)) {
@@ -1972,7 +2042,8 @@ class GlobalMapCfg
      * @return	bool     Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function deleteMapLock() {
+    public function deleteMapLock()
+    {
         if ($this->checkMapLockWriteable(0)) {
             return unlink($this->mapLockPath);
         } else {
@@ -1988,7 +2059,8 @@ class GlobalMapCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkMapLockExists($printErr) {
+    private function checkMapLockExists($printErr)
+    {
         global $CORE;
         return $CORE->checkExisting($this->mapLockPath, $printErr);
     }
@@ -2000,7 +2072,8 @@ class GlobalMapCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkMapLockReadable($printErr) {
+    private function checkMapLockReadable($printErr)
+    {
         global $CORE;
         return $CORE->checkReadable($this->mapLockPath, $printErr);
     }
@@ -2012,13 +2085,15 @@ class GlobalMapCfg
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkMapLockWriteable($printErr) {
+    private function checkMapLockWriteable($printErr)
+    {
         global $CORE;
         return $CORE->checkWriteable($this->mapLockPath, $printErr);
     }
 
     // Put the general map options needed for the frontend in an array
-    public function getMapProperties() {
+    public function getMapProperties()
+    {
         return [
             'view_type'                => 'map',
             'map_name'                 => $this->getName(),
@@ -2043,7 +2118,8 @@ class GlobalMapCfg
         ];
     }
 
-    public function getSectionTitle($sec) {
+    public function getSectionTitle($sec)
+    {
         $titles = [
             'general'           => l('General'),
             'appearance'        => l('Appearance'),

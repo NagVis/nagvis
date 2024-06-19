@@ -70,7 +70,8 @@ class NagVisObject
      * @return	mixed  Value of the given option
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function get($option) {
+    public function get($option)
+    {
         return $this->{$option};
     }
 
@@ -80,7 +81,8 @@ class NagVisObject
      * @return	int		x coordinate on the map
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getX() {
+    public function getX()
+    {
         return $this->x;
     }
 
@@ -90,7 +92,8 @@ class NagVisObject
      * @return	int		y coordinate on the map
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getY() {
+    public function getY()
+    {
         return $this->y;
     }
 
@@ -100,7 +103,8 @@ class NagVisObject
      * @return	int		z coordinate on the map
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getZ() {
+    public function getZ()
+    {
         return $this->z;
     }
 
@@ -110,7 +114,8 @@ class NagVisObject
      * @return	string		Type of the object
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
 
@@ -122,7 +127,8 @@ class NagVisObject
      * @return	int		Object ID
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getObjectId() {
+    public function getObjectId()
+    {
         return $this->object_id;
     }
 
@@ -134,20 +140,23 @@ class NagVisObject
      * @param   int $id Object id to set for the object
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setObjectId($id) {
+    public function setObjectId($id)
+    {
         $this->object_id = $id;
     }
 
     /**
      * Get method for the name of the object
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->{$this->type . '_name'};
     }
 
     // Returns the display_name of an object, if available, otherwise
     // the alias of an object, if available, otherwise the name
-    public function getDisplayName() {
+    public function getDisplayName()
+    {
         return $this->getName();
     }
 
@@ -157,14 +166,16 @@ class NagVisObject
      * @return	string		Hover template of the object
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getHoverTemplate() {
+    public function getHoverTemplate()
+    {
         return $this->hover_template;
     }
 
     /**
      * Set method for the object coords
      */
-    public function setMapCoords($arrCoords) {
+    public function setMapCoords($arrCoords)
+    {
         $this->setConfiguration($arrCoords);
     }
 
@@ -175,7 +186,8 @@ class NagVisObject
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setConfiguration($obj) {
+    public function setConfiguration($obj)
+    {
         foreach ($obj as $key => $val) {
             $this->{$key} = $val;
         }
@@ -188,7 +200,8 @@ class NagVisObject
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setObjectInformation($obj) {
+    public function setObjectInformation($obj)
+    {
         foreach ($obj as $key => $val) {
             $this->{$key} = $val;
         }
@@ -197,7 +210,8 @@ class NagVisObject
     /**
      * Gets all necessary information of the object as array
      */
-    public function getObjectInformation() {
+    public function getObjectInformation()
+    {
         $arr = [];
 
         // Need to remove some options which are not relevant
@@ -239,7 +253,8 @@ class NagVisObject
      * @return	array		Object configuration
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getObjectConfiguration($abstract = true) {
+    public function getObjectConfiguration($abstract = true)
+    {
         // Some options have to be removed which are only for this object
         $arr = $this->conf;
         unset($arr['id']);
@@ -265,7 +280,8 @@ class NagVisObject
      * @return	string  JSON code of the object
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parseJson() {
+    public function parseJson()
+    {
         return $this->getObjectInformation();
     }
 
@@ -278,7 +294,8 @@ class NagVisObject
      * @return	string  This object in map config format
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parseMapCfg($globalOpts = []) {
+    public function parseMapCfg($globalOpts = [])
+    {
         $ret = 'define ' . $this->type . " {\n";
         if ($this->type === 'host' && $this instanceof NagVisHost) {
             $ret .= '  host_name=' . $this->host_name . "\n";
@@ -299,7 +316,8 @@ class NagVisObject
      * PUBLIC getUrl()
      * Returns the url for the object link
      */
-    public function getUrl() {
+    public function getUrl()
+    {
         if (isset($this->url)) {
             return $this->url;
         } else {
@@ -318,7 +336,8 @@ class NagVisObject
      * @return	string	Target
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function getUrlTarget() {
+    protected function getUrlTarget()
+    {
         return $this->url_target;
     }
 
@@ -331,7 +350,8 @@ class NagVisObject
      * @param	object $OBJ2 Second object to sort
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
+    public static function sortObjectsAlphabetical($OBJ1, $OBJ2)
+    {
         if ($OBJ1->type == 'service') {
             $name1 = strtolower($OBJ1->getName() . $OBJ1->getServiceDescription());
         } else {
@@ -370,7 +390,8 @@ class NagVisObject
      * @param	object $OBJ2 Second object to sort
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public static function sortObjectsByState($OBJ1, $OBJ2) {
+    public static function sortObjectsByState($OBJ1, $OBJ2)
+    {
         $state1 = $OBJ1->sum[STATE];
         $subState1 = $OBJ1->getSubState(SUMMARY_STATE);
 
@@ -383,7 +404,8 @@ class NagVisObject
     /**
      * Helper to sort states independent of objects
      */
-    public static function sortStatesByStateValues($state1, $subState1, $state2, $subState2, $sortOrder) {
+    public static function sortStatesByStateValues($state1, $subState1, $state2, $subState2, $sortOrder)
+    {
         global $_MAINCFG;
 
         // Quit when nothing to compare

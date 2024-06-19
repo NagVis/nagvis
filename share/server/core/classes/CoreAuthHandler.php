@@ -40,7 +40,8 @@ class CoreAuthHandler
     private $trustUsername  = false;
     private $logoutPossible = true;
 
-    public function __construct() {
+    public function __construct()
+    {
         global $SHANDLER;
         $this->SESS = $SHANDLER;
 
@@ -48,20 +49,24 @@ class CoreAuthHandler
         $this->MOD = new $this->sModuleName();
     }
 
-    public function checkFeature($name) {
+    public function checkFeature($name)
+    {
         $a = $this->MOD->getSupportedFeatures();
         return isset($a[$name]) && $a[$name];
     }
 
-    public function getModule() {
+    public function getModule()
+    {
         return $this->sModuleName;
     }
 
-    public function passCredentials($aData) {
+    public function passCredentials($aData)
+    {
         $this->MOD->passCredentials($aData);
     }
 
-    public function passNewPassword($aData) {
+    public function passNewPassword($aData)
+    {
         // FIXME: First check if the auth module supports this mechanism
 
         // Some simple validations
@@ -72,37 +77,44 @@ class CoreAuthHandler
         }
     }
 
-    private function getCredentials() {
+    private function getCredentials()
+    {
         return $this->MOD->getCredentials();
     }
 
-    public function getUser() {
+    public function getUser()
+    {
         return $this->MOD->getUser();
     }
 
-    public function getUserId() {
+    public function getUserId()
+    {
         return $this->MOD->getUserId();
     }
 
-    public function getAllUsers() {
+    public function getAllUsers()
+    {
         // FIXME: First check if the auth module supports this mechanism
 
         // Ask the module
         return $this->MOD->getAllUsers();
     }
 
-    public function checkUserExists($name) {
+    public function checkUserExists($name)
+    {
         return $name !== '' && $this->MOD->checkUserExists($name);
     }
 
-    public function createUser($username, $password) {
+    public function createUser($username, $password)
+    {
         // FIXME: First check if the auth module supports this mechanism
 
         // Ask the module
         return $this->MOD->createUser($username, $password);
     }
 
-    public function changePassword() {
+    public function changePassword()
+    {
         // FIXME: First check if the auth module supports this mechanism
 
         // Ask the module
@@ -118,7 +130,8 @@ class CoreAuthHandler
         return $bChanged;
     }
 
-    public function resetPassword($uid, $pw) {
+    public function resetPassword($uid, $pw)
+    {
         if (!$this->checkFeature('resetPassword')) {
             throw new CoreAuthModNoSupport("Password reset not supported");
         }
@@ -126,19 +139,23 @@ class CoreAuthHandler
     }
 
     // Did the user authenticate using trusted auth?
-    public function authedTrusted() {
+    public function authedTrusted()
+    {
         return $this->trustUsername;
     }
 
-    public function getLogonModule() {
+    public function getLogonModule()
+    {
         return $this->SESS->get('logonModule');
     }
 
-    public function getAuthModule() {
+    public function getAuthModule()
+    {
         return $this->SESS->get('authModule');
     }
 
-    public function isAuthenticated() {
+    public function isAuthenticated()
+    {
         if (cfg('global', 'audit_log') == true) {
             $ALOG = new CoreLog(cfg('paths', 'var') . 'nagvis-audit.log',
                 cfg('global', 'dateformat'));
@@ -174,11 +191,13 @@ class CoreAuthHandler
         return $isAuthenticated;
     }
 
-    public function logoutSupported() {
+    public function logoutSupported()
+    {
         return $this->logoutPossible;
     }
 
-    public function logout($enforce = false) {
+    public function logout($enforce = false)
+    {
         if (!$enforce && !$this->logoutSupported()) {
             return false;
         }
@@ -203,7 +222,8 @@ class CoreAuthHandler
         return true;
     }
 
-    public function isAuthenticatedSession() {
+    public function isAuthenticatedSession()
+    {
         // Remove logins which were performed with different logon/auth modules
         if (
             $this->SESS->get('logonModule') != cfg('global', 'logonmodule')
@@ -226,11 +246,13 @@ class CoreAuthHandler
         return $this->isAuthenticated();
     }
 
-    public function sessionAuthPresent() {
+    public function sessionAuthPresent()
+    {
         return $this->SESS->issetAndNotEmpty('authCredentials');
     }
 
-    public function storeInSession() {
+    public function storeInSession()
+    {
         $this->SESS->aquire();
         $this->SESS->set('logonModule',        cfg('global', 'logonmodule'));
         $this->SESS->set('authModule',         $this->sModuleName);
@@ -240,11 +262,13 @@ class CoreAuthHandler
         $this->SESS->commit();
     }
 
-    public function setTrustUsername($flag) {
+    public function setTrustUsername($flag)
+    {
         $this->trustUsername = $flag;
     }
 
-    public function setLogoutPossible($flag) {
+    public function setLogoutPossible($flag)
+    {
         $this->logoutPossible = $flag;
     }
 }

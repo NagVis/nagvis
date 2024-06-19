@@ -33,7 +33,8 @@ class FrontendModUrl extends FrontendModule
     private $rotation = '';
     private $rotationStep = '';
 
-    public function __construct(GlobalCore $CORE) {
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'Url';
         $this->CORE = $CORE;
 
@@ -55,7 +56,8 @@ class FrontendModUrl extends FrontendModule
         ];
     }
 
-    public function handleAction() {
+    public function handleAction()
+    {
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
@@ -70,7 +72,8 @@ class FrontendModUrl extends FrontendModule
         return $sReturn;
     }
 
-    private function showViewDialog() {
+    private function showViewDialog()
+    {
         // Only show when map name given
         if (!isset($this->url) || $this->url == '') {
             throw new NagVisException(l('No url given.'));

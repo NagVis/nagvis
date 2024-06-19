@@ -24,7 +24,8 @@
 
 class CoreModUserMgmt extends CoreModule
 {
-    public function __construct($CORE) {
+    public function __construct($CORE)
+    {
         $this->sName = 'UserMgmt';
 
         $this->aActions = [
@@ -32,7 +33,8 @@ class CoreModUserMgmt extends CoreModule
         ];
     }
 
-    public function handleAction() {
+    public function handleAction()
+    {
         if ($this->offersAction($this->sAction)) {
             switch ($this->sAction) {
                 case 'view':

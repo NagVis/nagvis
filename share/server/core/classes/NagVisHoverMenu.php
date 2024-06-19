@@ -43,7 +43,8 @@ class NagVisHoverMenu
      * @param 	GlobalCore 	$CORE
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct($CORE, $templateName, $OBJ = null) {
+    public function __construct($CORE, $templateName, $OBJ = null)
+    {
         $this->CORE = $CORE;
         $this->OBJPAGE = $OBJ;
 
@@ -87,7 +88,8 @@ class NagVisHoverMenu
      * @return    bool        HTML Code for the hover menu
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function readTemplate() {
+    private function readTemplate()
+    {
         if ($this->checkTemplateReadable(1)) {
             $this->code =  file_get_contents($this->pathTemplateFile);
             return true;
@@ -103,7 +105,8 @@ class NagVisHoverMenu
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function replaceStaticMacros() {
+    private function replaceStaticMacros()
+    {
         // Replace the static macros (language, paths)
         if (strpos($this->code, '[lang_alias]') !== false) {
             $this->code = str_replace('[lang_alias]', l('alias'), $this->code);
@@ -200,7 +203,8 @@ class NagVisHoverMenu
      * return   String  HTML Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __toString() {
+    public function __toString()
+    {
         return $this->code;
     }
 
@@ -213,7 +217,8 @@ class NagVisHoverMenu
      * @return	bool		Check Result
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkTemplateReadable($printErr) {
+    private function checkTemplateReadable($printErr)
+    {
         return GlobalCore::getInstance()->checkReadable($this->pathTemplateFile, $printErr);
     }
 
@@ -226,11 +231,13 @@ class NagVisHoverMenu
      * @return	bool		Check Result
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkTemplateExists($printErr) {
+    private function checkTemplateExists($printErr)
+    {
         return GlobalCore::getInstance()->checkExisting($this->pathTemplateFile, $printErr);
     }
 
-    public function getCssFile() {
+    public function getCssFile()
+    {
         return path('html', 'global', 'templates', $this->templateName . '.hover.css');
     }
 }

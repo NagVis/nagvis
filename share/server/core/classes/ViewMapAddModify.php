@@ -38,7 +38,8 @@ class ViewMapAddModify
     // Filter the attributes using the helper fields
     // Each attribute can have the toggle_* field set. If present
     // use it's value to filter out the attributes
-    private function filterMapAttrs() {
+    private function filterMapAttrs()
+    {
         $exclude = [
             'mod'       => true,
             'act'       => true,
@@ -75,7 +76,8 @@ class ViewMapAddModify
         }
     }
 
-    private function validateAttributes() {
+    private function validateAttributes()
+    {
         $attrDefs = $this->MAPCFG->getValidObjectType($this->object_type);
         // Are some must values missing?
         foreach ($attrDefs as $propname => $prop) {
@@ -121,7 +123,8 @@ class ViewMapAddModify
 
 
     // Validate and process addModify form submissions
-    private function handleAddModify() {
+    private function handleAddModify()
+    {
         $perm        = get_checkbox('perm');
         $perm_user   = get_checkbox('perm_user');
         $show_dialog = false;
@@ -212,7 +215,8 @@ class ViewMapAddModify
         return $show_dialog;
     }
 
-    private function getAttr($default_value, $attr, $must, $only_inherited = false) {
+    private function getAttr($default_value, $attr, $must, $only_inherited = false)
+    {
         $update = !is_action() && is_update();
         // update is true during view repaint
         // only_inherited is true when only asking for inherited value
@@ -264,7 +268,8 @@ class ViewMapAddModify
         return [$isInherited, $val];
     }
 
-    private function colorSelect($propname, $value, $hideField) {
+    private function colorSelect($propname, $value, $hideField)
+    {
         echo '<div id="' . $propname . '" class=picker style="' . $hideField . '">';
         input($propname, $value, '', '', $propname . '_inp');
         echo '<a href="javascript:void(0);" onClick="togglePicker(\'' . $propname . '_inp\');">';
@@ -275,7 +280,8 @@ class ViewMapAddModify
             . 'o = null;');
     }
 
-    private function inputDimension($propname, $value, $hideField) {
+    private function inputDimension($propname, $value, $hideField)
+    {
         echo '<div id="' . $propname . '" class=picker style="' . $hideField . '">';
         input($propname, $value, '', '', $propname . '_inp');
         echo '<a href="javascript:void(0);" onClick="pickWindowSize(\'' . $propname . '_inp\', \'' . $propname . '\');">';
@@ -283,7 +289,8 @@ class ViewMapAddModify
         echo '</a></div>';
     }
 
-    private function drawField($propname, $prop, $properties) {
+    private function drawField($propname, $prop, $properties)
+    {
         $default_value = $this->MAPCFG->getDefaultValue($this->object_type, $propname);
 
         // Set field type to show
@@ -520,7 +527,8 @@ class ViewMapAddModify
 
     // Returns an array of property spec arrays which should be shown for the current object.
     // These are already filtered depnding on the configured sources (in case of map global obj)
-    private function getProperties() {
+    private function getProperties()
+    {
         $default_value = $this->MAPCFG->getDefaultValue($this->object_type, 'sources');
 
         list($isInherited, $sources) = $this->getAttr($default_value, 'sources', false);
@@ -558,7 +566,8 @@ class ViewMapAddModify
         return $typeDef;
     }
 
-    private function drawFields($sec_props) {
+    private function drawFields($sec_props)
+    {
         foreach ($sec_props as $propname => $prop) {
             // do nothing with hidden or deprecated attributes
             if (isset($prop['deprecated']) && $prop['deprecated'] === true) {
@@ -569,7 +578,8 @@ class ViewMapAddModify
         }
     }
 
-    private function drawForm() {
+    private function drawForm()
+    {
         js_form_start('addmodify');
 
         $obj_spec = $this->getProperties();
@@ -617,7 +627,8 @@ class ViewMapAddModify
         form_end();
     }
 
-    public function parse() {
+    public function parse()
+    {
         global $CORE;
         ob_start();
 
@@ -696,6 +707,7 @@ class ViewMapAddModify
     }
 
     public function object_type()
+   
     {
         return $this->object_type;
     }

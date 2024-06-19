@@ -30,7 +30,8 @@ class CoreModUrl extends CoreModule
     private $CORE;
     private $url = null;
 
-    public function __construct(GlobalCore $CORE) {
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'Url';
         $this->CORE = $CORE;
 
@@ -44,7 +45,8 @@ class CoreModUrl extends CoreModule
         ];
     }
 
-    public function handleAction() {
+    public function handleAction()
+    {
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
@@ -58,7 +60,8 @@ class CoreModUrl extends CoreModule
         return $sReturn;
     }
 
-    private function getContents() {
+    private function getContents()
+    {
         $content = '';
 
         // Suppress error messages from file_get_contents
@@ -99,7 +102,8 @@ class CoreModUrl extends CoreModule
         return json_encode(['content' => $content]);
     }
 
-    private function isAllowedUrl() {
+    private function isAllowedUrl()
+    {
         global $CORE;
         $allowed = [];
 

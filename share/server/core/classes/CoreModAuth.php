@@ -30,7 +30,8 @@ class CoreModAuth extends CoreModule
     protected $CORE;
     protected $FHANDLER;
 
-    public function __construct($CORE) {
+    public function __construct($CORE)
+    {
         $this->sName = 'Auth';
         $this->CORE = $CORE;
 
@@ -42,11 +43,13 @@ class CoreModAuth extends CoreModule
         $this->FHANDLER = new CoreRequestHandler($_POST);
     }
 
-    public function check($printErr) {
+    public function check($printErr)
+    {
 
     }
 
-    public function handleAction() {
+    public function handleAction()
+    {
         global $AUTH;
         if ($this->offersAction($this->sAction)) {
             switch ($this->sAction) {
@@ -62,7 +65,8 @@ class CoreModAuth extends CoreModule
         }
     }
 
-    private function handleResponseAuth() {
+    private function handleResponseAuth()
+    {
         $attr = [
             'username' => MATCH_USER_NAME,
             'password' => null
@@ -92,13 +96,15 @@ class CoreModAuth extends CoreModule
         }
     }
 
-    public function msgAlreadyLoggedIn() {
+    public function msgAlreadyLoggedIn()
+    {
         throw new NagVisException(l('You are already logged in. You will be redirected.'),
             null, 1, cfg('paths', 'htmlbase'));
         return '';
     }
 
-    public function msgInvalidCredentials() {
+    public function msgInvalidCredentials()
+    {
         throw new NagVisException(l('You entered invalid credentials.'),
             l('Authentication failed'),
             1, CoreRequestHandler::getReferer(''));

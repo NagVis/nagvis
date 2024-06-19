@@ -23,7 +23,8 @@ class ViewManageMaps
 {
     private $error = null;
 
-    private function createForm() {
+    private function createForm()
+    {
         global $CORE;
         echo '<h2>' . l('Create Map') . '</h2>';
 
@@ -120,7 +121,8 @@ class ViewManageMaps
         form_end();
     }
 
-    private function doRename($name, $new_name) {
+    private function doRename($name, $new_name)
+    {
         global $CORE, $AUTHORISATION;
         $files = [];
 
@@ -153,7 +155,8 @@ class ViewManageMaps
             cfg('paths', 'mapcfg') . $new_name . '.cfg');
     }
 
-    private function renameForm() {
+    private function renameForm()
+    {
         global $CORE;
         echo '<h2>' . l('Rename Map') . '</h2>';
 
@@ -232,7 +235,8 @@ class ViewManageMaps
         form_end();
     }
 
-    private function deleteForm() {
+    private function deleteForm()
+    {
         global $CORE;
         echo '<h2>' . l('Delete Map') . '</h2>';
 
@@ -295,7 +299,8 @@ class ViewManageMaps
         form_end();
     }
 
-    private function exportForm() {
+    private function exportForm()
+    {
         global $CORE;
         echo '<h2>' . l('Export Map') . '</h2>';
 
@@ -343,7 +348,8 @@ class ViewManageMaps
         form_end();
     }
 
-    private function importForm() {
+    private function importForm()
+    {
         global $CORE;
         echo '<h2>' . l('Import Map') . '</h2>';
 
@@ -406,7 +412,8 @@ class ViewManageMaps
         form_end();
     }
 
-    public function parse() {
+    public function parse()
+    {
         ob_start();
 
         $this->createForm();

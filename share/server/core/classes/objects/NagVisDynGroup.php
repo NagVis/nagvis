@@ -37,17 +37,20 @@ class NagVisDynGroup extends NagVisStatefulObject
 
     protected $members = [];
 
-    public function __construct($backend_id, $name) {
+    public function __construct($backend_id, $name)
+    {
         $this->backend_id = $backend_id;
         $this->name       = $name;
         parent::__construct();
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function getObjectFilter() {
+    public function getObjectFilter()
+    {
         // convert '\n' to \n
         return str_replace('\n', "\n", $this->object_filter);
     }
@@ -57,7 +60,8 @@ class NagVisDynGroup extends NagVisStatefulObject
      * @param   bool $_unused Unused flag here
      * @param   bool $bFetchMemberState Optional flag to disable fetching of member status
      */
-    public function queueState($_unused = true, $bFetchMemberState = true) {
+    public function queueState($_unused = true, $bFetchMemberState = true)
+    {
         global $_BACKEND;
         $queries = ['DYN_GROUP_MEMBER_STATE' => true];
 
@@ -75,7 +79,8 @@ class NagVisDynGroup extends NagVisStatefulObject
     /**
      * Applies the fetched state
      */
-    public function applyState() {
+    public function applyState()
+    {
         if ($this->problem_msg) {
             $this->sum = [
                 ERROR,
@@ -125,7 +130,8 @@ class NagVisDynGroup extends NagVisStatefulObject
     /**
      * Fetches the summary output from the object state counts
      */
-    private function fetchSummaryOutputFromCounts() {
+    private function fetchSummaryOutputFromCounts()
+    {
         $arrHostStates = [];
         $arrServiceStates = [];
 
@@ -174,7 +180,8 @@ class NagVisDynGroup extends NagVisStatefulObject
     /**
      * Fetches the summary state from all members recursive
      */
-    private function fetchSummaryState() {
+    private function fetchSummaryState()
+    {
         if ($this->hasMembers()) {
             $this->calcSummaryState();
         } else {
@@ -185,7 +192,8 @@ class NagVisDynGroup extends NagVisStatefulObject
     /**
      * Fetches the summary output from all members
      */
-    private function fetchSummaryOutput() {
+    private function fetchSummaryOutput()
+    {
         if ($this->hasMembers()) {
             $arrStates = [
                 CRITICAL => 0, DOWN    => 0, WARNING   => 0,

@@ -43,33 +43,39 @@ class NagVisService extends NagVisStatefulObject
     protected $line_label_pos_out;
     protected $line_label_y_offset;
 
-    public function __construct($backend_id, $hostName, $serviceDescription) {
+    public function __construct($backend_id, $hostName, $serviceDescription)
+    {
         $this->backend_id = [$backend_id[0]]; // only supports one backend
         $this->host_name = $hostName;
         $this->service_description = $serviceDescription;
         parent::__construct();
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->host_name;
     }
 
-    public function getNumMembers() {
+    public function getNumMembers()
+    {
         return null;
     }
 
-    public function hasMembers() {
+    public function hasMembers()
+    {
         return false;
     }
 
-    public function getStateRelevantMembers() {
+    public function getStateRelevantMembers()
+    {
         return [];
     }
 
     /**
      * Queues state fetching for this object
      */
-    public function queueState($_unused_flag = true, $_unused_flag2 = true) {
+    public function queueState($_unused_flag = true, $_unused_flag2 = true)
+    {
         global $_BACKEND;
         $_BACKEND->queue(['serviceState' => true], $this);
     }
@@ -77,7 +83,8 @@ class NagVisService extends NagVisStatefulObject
     /**
      * Applies the fetched state
      */
-    public function applyState() {
+    public function applyState()
+    {
         if ($this->problem_msg !== null) {
             $this->setState([
                 ERROR,
@@ -91,11 +98,13 @@ class NagVisService extends NagVisStatefulObject
         $this->sum = $this->state;
     }
 
-    public function getServiceDescription() {
+    public function getServiceDescription()
+    {
         return $this->service_description;
     }
 
-    protected function fetchObjectAsChild() {
+    protected function fetchObjectAsChild()
+    {
         $aChild = parent::fetchObjectAsChild();
         $aChild['service_description'] = $this->getServiceDescription();
         return $aChild;

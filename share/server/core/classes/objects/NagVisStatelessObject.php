@@ -32,7 +32,8 @@ class NagVisStatelessObject extends NagVisObject
     protected static $iconPath      = null;
     protected static $iconPathLocal = null;
 
-    public function getName() {
+    public function getName()
+    {
         return $this->object_id;
     }
 }

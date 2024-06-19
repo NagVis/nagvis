@@ -31,7 +31,8 @@ class CoreModUser extends CoreModule
     protected $FHANDLER;
     protected $SHANDLER;
 
-    public function __construct($CORE) {
+    public function __construct($CORE)
+    {
         $this->sName = 'User';
         $this->CORE = $CORE;
 
@@ -41,7 +42,8 @@ class CoreModUser extends CoreModule
         ];
     }
 
-    public function handleAction() {
+    public function handleAction()
+    {
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
@@ -59,12 +61,14 @@ class CoreModUser extends CoreModule
         return $sReturn;
     }
 
-    protected function doSet($a) {
+    protected function doSet($a)
+    {
         $CFG = new CoreUserCfg();
         return $CFG->doSet($a['opts']);
     }
 
-    protected function handleResponseSet() {
+    protected function handleResponseSet()
+    {
         $FHANDLER = new CoreRequestHandler($_GET);
         $this->verifyValuesSet($FHANDLER, ['opts']);
         $opts = $FHANDLER->get('opts');

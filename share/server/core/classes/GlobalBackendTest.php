@@ -76,7 +76,8 @@ class GlobalBackendTest implements GlobalBackendInterface
         UNKNOWN     => ['hard'],
     ];
 
-    public function __construct($backendId) {
+    public function __construct($backendId)
+    {
         $this->backendId = $backendId;
         $this->now = time();
         $this->genObj();
@@ -91,7 +92,8 @@ class GlobalBackendTest implements GlobalBackendInterface
         return true;
     }
 
-    private function host($name, $state, $stateType = 'hard', $substate = 'normal') {
+    private function host($name, $state, $stateType = 'hard', $substate = 'normal')
+    {
         $ack = $substate == 'ack';
         $in_downtime = $substate == 'downtime';
         if ($in_downtime) {
@@ -133,7 +135,8 @@ class GlobalBackendTest implements GlobalBackendInterface
         ];
     }
 
-    private function service($name1, $name2, $state, $stateType = 'hard', $substate = 'normal', $output = null, $perfdata = '') {
+    private function service($name1, $name2, $state, $stateType = 'hard', $substate = 'normal', $output = null, $perfdata = '')
+    {
         $ack = $substate == 'ack';
         $in_downtime = $substate == 'downtime';
         if ($in_downtime) {
@@ -181,7 +184,8 @@ class GlobalBackendTest implements GlobalBackendInterface
         ];
     }
 
-    private function hostgroup($name, $members) {
+    private function hostgroup($name, $members)
+    {
         return  [
             'name'    => $name,
             'alias'   => 'Alias ' . $name,
@@ -189,7 +193,8 @@ class GlobalBackendTest implements GlobalBackendInterface
         ];
     }
 
-    private function servicegroup($name, $members) {
+    private function servicegroup($name, $members)
+    {
         return [
             'name'    => $name,
             'alias'   => 'Alias ' . $name,
@@ -197,7 +202,8 @@ class GlobalBackendTest implements GlobalBackendInterface
         ];
     }
 
-    private function genObj() {
+    private function genObj()
+    {
         /**
          * Generate objects for demo maps
          */
@@ -345,7 +351,8 @@ class GlobalBackendTest implements GlobalBackendInterface
         }
     }
 
-    public function getHostNamesProblematic() {
+    public function getHostNamesProblematic()
+    {
         $a = [];
         foreach ($this->obj['host'] as $hostname => $host) {
             if ($host[0] != UP) {
@@ -364,7 +371,8 @@ class GlobalBackendTest implements GlobalBackendInterface
         return $a;
     }
 
-    public function getHostNamesInHostgroup($group) {
+    public function getHostNamesInHostgroup($group)
+    {
         if (isset($this->obj['hostgroup'][$group])) {
             return $this->obj['hostgroup'][$group]['members'];
         } else {
@@ -372,11 +380,13 @@ class GlobalBackendTest implements GlobalBackendInterface
         }
     }
 
-    public function getProgramStart() {
+    public function getProgramStart()
+    {
         return -1;
     }
 
-    public function getAllTypeObjects($type) {
+    public function getAllTypeObjects($type)
+    {
         if ($type == 'service') {
             $s = [];
             foreach ($this->obj['service'] as $services) {
@@ -388,7 +398,8 @@ class GlobalBackendTest implements GlobalBackendInterface
         }
     }
 
-    public function genMapCfg($path) {
+    public function genMapCfg($path)
+    {
         $f = "define global {\n"
             . "  backend_id=test_1\n"
             . "}\n"
@@ -439,7 +450,8 @@ class GlobalBackendTest implements GlobalBackendInterface
      * @return	array
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public static function getValidConfig() {
+    public static function getValidConfig()
+    {
         return [];
     }
 
@@ -455,7 +467,8 @@ class GlobalBackendTest implements GlobalBackendInterface
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getObjects($type, $name1Pattern = '', $name2Pattern = '') {
+    public function getObjects($type, $name1Pattern = '', $name2Pattern = '')
+    {
         switch ($type) {
             case 'host':
             case 'hostgroup':
@@ -508,7 +521,8 @@ class GlobalBackendTest implements GlobalBackendInterface
      * @return  string    Parsed filters
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function parseFilter($objects, $filters) {
+    private function parseFilter($objects, $filters)
+    {
         $aFilters = [];
         foreach ($objects as $OBJS) {
             $objFilters = [];
@@ -569,7 +583,8 @@ class GlobalBackendTest implements GlobalBackendInterface
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getHostState($objects, $options, $filters) {
+    public function getHostState($objects, $options, $filters)
+    {
         /*if ($options & 1)
             $stateAttr = 'hard_state';
         else
@@ -614,7 +629,8 @@ class GlobalBackendTest implements GlobalBackendInterface
      * @param   array $options List of filters to apply
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getServiceState($objects, $options, $filters) {
+    public function getServiceState($objects, $options, $filters)
+    {
         $objFilter = $this->parseFilter($objects, $filters);
         /*if ($options & 1)
             $stateAttr = 'last_hard_state';
@@ -688,7 +704,8 @@ class GlobalBackendTest implements GlobalBackendInterface
      * @return  array     List of states and counts
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getHostMemberCounts($objects, $options, $filters) {
+    public function getHostMemberCounts($objects, $options, $filters)
+    {
         /*if ($options & 1)
             $stateAttr = 'last_hard_state';
         else
@@ -747,7 +764,8 @@ class GlobalBackendTest implements GlobalBackendInterface
      * @return  array     List of states and counts
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getHostgroupStateCounts($objects, $options, $filters) {
+    public function getHostgroupStateCounts($objects, $options, $filters)
+    {
         /*if ($options & 1)
             $stateAttr = 'hard_state';
         else
@@ -814,7 +832,8 @@ class GlobalBackendTest implements GlobalBackendInterface
      * @return  array     List of states and counts
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getServicegroupStateCounts($objects, $options, $filters) {
+    public function getServicegroupStateCounts($objects, $options, $filters)
+    {
         /*if ($options & 1)
             $stateAttr = 'last_hard_state';
         else
@@ -863,11 +882,13 @@ class GlobalBackendTest implements GlobalBackendInterface
         return $aReturn;
     }
 
-    public function getHostNamesWithNoParent() {
+    public function getHostNamesWithNoParent()
+    {
         return ['muc-srv2'];
     }
 
-    public function getDirectChildNamesByHostName($hostName) {
+    public function getDirectChildNamesByHostName($hostName)
+    {
         if (isset($this->childs[$hostName])) {
             return $this->childs[$hostName];
         } else {
@@ -875,7 +896,8 @@ class GlobalBackendTest implements GlobalBackendInterface
         }
     }
 
-    public function getDirectParentNamesByHostName($hostName) {
+    public function getDirectParentNamesByHostName($hostName)
+    {
         if (isset($this->parents[$hostName])) {
             return $this->parents[$hostName];
         } else {
@@ -890,7 +912,8 @@ class GlobalBackendTest implements GlobalBackendInterface
      * @return  array    List of hostnames
      * @author  Thibault Cohen <thibault.cohen@savoirfairelinux.com>
      */
-    public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact = false) {
+    public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact = false)
+    {
         return $this->getDirectChildNamesByHostName($hostName);
     }
 
@@ -902,7 +925,8 @@ class GlobalBackendTest implements GlobalBackendInterface
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact = false) {
+    public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact = false)
+    {
         return $this->getDirectParentNamesByHostName($hostName);
     }
 }

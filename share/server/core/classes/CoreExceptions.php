@@ -30,7 +30,8 @@ class NagVisException extends Exception
 {
     protected $e;
 
-    public function __construct($msg, $title = null, $time = null, $url = null) {
+    public function __construct($msg, $title = null, $time = null, $url = null)
+    {
         if ($title === null) {
             $title = l('ERROR');
         }
@@ -51,18 +52,21 @@ class NagVisException extends Exception
         parent::__construct($msg);
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return json_encode($this->e);
     }
 
-    public function message() {
+    public function message()
+    {
         return $this->e['message'];
     }
 }
 
 class MapInMaintenance extends NagVisException
 {
-    public function __construct($map) {
+    public function __construct($map)
+    {
         $this->e = [
             'type'    => 'info',
             'message' => l('mapInMaintenance', ['MAP' => $map]),
@@ -73,7 +77,8 @@ class MapInMaintenance extends NagVisException
 
 class Success extends NagVisException
 {
-    public function __construct($msg, $title = null, $time = null, $url = null) {
+    public function __construct($msg, $title = null, $time = null, $url = null)
+    {
         parent::__construct($msg, $title, $time, $url);
         $this->e['type'] = 'ok';
         if ($this->e['title'] == l('ERROR')) {
@@ -119,12 +124,14 @@ class FieldInputError extends NagVisException
     public $field;
     public $msg;
 
-    public function __construct($field, $msg) {
+    public function __construct($field, $msg)
+    {
         $this->field = $field;
         $this->msg   = $msg;
     }
 
-    public function message() {
+    public function message()
+    {
         return $this->msg;
     }
 }
@@ -132,7 +139,8 @@ class FieldInputError extends NagVisException
 // This exception is used to handle PHP errors
 class NagVisErrorException extends ErrorException
 {
-    public function __toString() {
+    public function __toString()
+    {
         $msg = "Error: (" . $this->getCode() . ") " . $this->getMessage()
             . "<div class=\"details\">"
             . "URL: " . $_SERVER['REQUEST_URI'] . "<br>\n"

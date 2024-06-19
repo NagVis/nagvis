@@ -105,70 +105,84 @@ class CoreAuthorisationHandler
         ]
     ];
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->sModuleName = cfg('global', 'authorisationmodule');
         $this->MOD = new $this->sModuleName();
     }
 
-    public function renameMapPermissions($old_name, $new_name) {
+    public function renameMapPermissions($old_name, $new_name)
+    {
         return $this->MOD->renameMapPermissions($old_name, $new_name);
     }
 
-    public function createPermission($mod, $name) {
+    public function createPermission($mod, $name)
+    {
         return $this->MOD->createPermission($mod, $name);
     }
 
-    public function deletePermission($mod, $name) {
+    public function deletePermission($mod, $name)
+    {
         return $this->MOD->deletePermission($mod, $name);
     }
 
-    public function getModule() {
+    public function getModule()
+    {
         return $this->sModuleName;
     }
 
-    public function rolesConfigurable() {
+    public function rolesConfigurable()
+    {
         return $this->MOD->rolesConfigurable;
     }
 
-    public function deleteRole($roleId) {
+    public function deleteRole($roleId)
+    {
         // FIXME: First check if this is supported
 
         return $this->MOD->deleteRole($roleId);
     }
 
-    public function roleUsedBy($roleId) {
+    public function roleUsedBy($roleId)
+    {
         return $this->MOD->roleUsedBy($roleId);
     }
 
-    public function deleteUser($userId) {
+    public function deleteUser($userId)
+    {
         // FIXME: First check if this is supported
 
         return $this->MOD->deleteUser($userId);
     }
 
-    public function updateUserRoles($userId, $roles) {
+    public function updateUserRoles($userId, $roles)
+    {
         // FIXME: First check if this is supported
 
         return $this->MOD->updateUserRoles($userId, $roles);
     }
 
-    public function getUserRoles($userId) {
+    public function getUserRoles($userId)
+    {
         // FIXME: First check if this is supported
 
         return $this->MOD->getUserRoles($userId);
     }
 
-    public function getAllRoles() {
+    public function getAllRoles()
+    {
         // FIXME: First check if this is supported
 
         return $this->MOD->getAllRoles();
     }
 
-    private function sortPerms($a, $b) {
+    private function sortPerms($a, $b)
+    {
         return strcmp($a['mod'] . $a['obj'] . $a['act'], $b['mod'] . $b['obj'] . $b['act']);
     }
 
-    public function cleanupPermissions() {
+    public function cleanupPermissions()
+    {
         global $CORE;
 
         // loop all map related permissions and check whether or not the map
@@ -182,7 +196,8 @@ class CoreAuthorisationHandler
         }
     }
 
-    public function getAllVisiblePerms() {
+    public function getAllVisiblePerms()
+    {
         $aReturn = [];
         // FIXME: First check if this is supported
 
@@ -200,45 +215,53 @@ class CoreAuthorisationHandler
         return $aReturn;
     }
 
-    public function checkRoleExists($name) {
+    public function checkRoleExists($name)
+    {
         // FIXME: First check if this is supported
 
         return $this->MOD->checkRoleExists($name);
     }
 
-    public function createRole($name) {
+    public function createRole($name)
+    {
         // FIXME: First check if this is supported
 
         return $this->MOD->createRole($name);
     }
 
-    public function getRolePerms($roleId) {
+    public function getRolePerms($roleId)
+    {
         // FIXME: First check if this is supported
 
         return $this->MOD->getRolePerms($roleId);
     }
 
-    public function getUserId($sName) {
+    public function getUserId($sName)
+    {
         // FIXME: First check if this is supported
         return $this->MOD->getUserId($sName);
     }
 
-    public function getRoleId($sName) {
+    public function getRoleId($sName)
+    {
         // FIXME: First check if this is supported
         return $this->MOD->getRoleId($sName);
     }
 
-    public function updateRolePerms($roleId, $perms) {
+    public function updateRolePerms($roleId, $perms)
+    {
         // FIXME: First check if this is supported
         return $this->MOD->updateRolePerms($roleId, $perms);
     }
 
-    public function parsePermissions($sUsername = null) {
+    public function parsePermissions($sUsername = null)
+    {
         $this->aPermissions = $this->MOD->parsePermissions($sUsername);
         return $this->aPermissions;
     }
 
-    public function isPermitted($sModule, $sAction, $sObj = null) {
+    public function isPermitted($sModule, $sAction, $sObj = null)
+    {
         // Module access?
         $access = [];
         if (isset($this->aPermissions[$sModule])) {

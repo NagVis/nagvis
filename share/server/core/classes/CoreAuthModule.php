@@ -39,7 +39,8 @@ abstract class CoreAuthModule {
      * @return	array
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function getSupportedFeatures() {
+    public function getSupportedFeatures()
+    {
         return self::$aFeatures;
     }
 

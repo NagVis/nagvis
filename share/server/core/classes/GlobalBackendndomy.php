@@ -26,7 +26,8 @@
 
 class GlobalBackendndomy extends GlobalBackendPDO
 {
-    public function driverName() {
+    public function driverName()
+    {
         return 'mysql';
     }
 }

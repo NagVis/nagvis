@@ -171,7 +171,8 @@ $configVarMap = [
 ];
 
 if (cfg('global', 'shinken_features')) {
-    function list_business_impact() {
+    function list_business_impact()
+    {
         return [
             '0'          => '0_development',
             '1'          => '1_testing',

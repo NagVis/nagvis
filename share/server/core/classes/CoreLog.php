@@ -7,20 +7,24 @@ class CoreLog
     private $FILE = null;
     private $dateFormat = null;
 
-    public function __construct($file, $dateFormat) {
+    public function __construct($file, $dateFormat)
+    {
         $this->path = $file;
     $this->dateFormat = $dateFormat;
     }
 
-    public function __destruct() {
+    public function __destruct()
+    {
         $this->closeFile();
     }
 
-    private function openFile() {
+    private function openFile()
+    {
         $this->FILE = fopen($this->path, 'a');
     }
 
-    private function closeFile() {
+    private function closeFile()
+    {
         if ($this->FILE !== null) {
             fclose($this->FILE);
         }
@@ -32,7 +36,8 @@ class CoreLog
      * @param   string $msg Debug message
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function l($msg) {
+    public function l($msg)
+    {
         if ($this->FILE === null) {
             $this->openFile();
         }

@@ -27,7 +27,8 @@ class ViewEditMainCfg
     private $exclude_pattern = '/^(backend|internal|rotation|auth|action|wui)/i';
     private $error = null;
 
-    private function handleAction() {
+    private function handleAction()
+    {
         global $CORE, $_MAINCFG;
         $UMAINCFG = $CORE->getUserMainCfg();
 
@@ -78,7 +79,8 @@ class ViewEditMainCfg
             . 'window.setTimeout(function() { window.location.reload(); }, 1500);</script>';
     }
 
-    public function parse() {
+    public function parse()
+    {
         global $_MAINCFG;
         ob_start();
         js_form_start('edit_config');
@@ -111,7 +113,8 @@ class ViewEditMainCfg
         return ob_get_clean();
     }
 
-    private function getCurVal($sec, $key, $ignore_default = true) {
+    private function getCurVal($sec, $key, $ignore_default = true)
+    {
         global $CORE;
         $UMAINCFG = $CORE->getUserMainCfg();
 
@@ -126,7 +129,8 @@ class ViewEditMainCfg
         return $cur_val;
     }
 
-    private function renderSection($sec, $open) {
+    private function renderSection($sec, $open)
+    {
         global $_MAINCFG, $CORE;
 
         render_section_start($sec, $open);
@@ -221,7 +225,8 @@ class ViewEditMainCfg
         render_section_end();
     }
 
-    private function renderInput($sec, $key, $spec, $def_val, $cur_val) {
+    private function renderInput($sec, $key, $spec, $def_val, $cur_val)
+    {
         global $_MAINCFG;
         $field_type = val($spec, 'field_type', 'text');
 
@@ -279,7 +284,8 @@ class ViewEditMainCfg
         }
     }
 
-    private function colorSelect($sec, $key, $value) {
+    private function colorSelect($sec, $key, $value)
+    {
         $propname = $sec . "_" . $key;
         echo '<div id="' . $propname . '" class=picker>';
         input($propname, $value, '', '', $propname . '_inp');

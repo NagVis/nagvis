@@ -38,7 +38,8 @@ class NagVisHeaderMenu
     private $aMacros = [];
     private $bRotation = false;
 
-    public function __construct($templateName, $OBJ = null) {
+    public function __construct($templateName, $OBJ = null)
+    {
         $this->OBJ = $OBJ;
         $this->templateName = $templateName;
 
@@ -60,7 +61,8 @@ class NagVisHeaderMenu
      *
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function setRotationEnabled() {
+    public function setRotationEnabled()
+    {
         $this->bRotation = true;
     }
 
@@ -70,7 +72,8 @@ class NagVisHeaderMenu
      * return   String  HTML Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __toString() {
+    public function __toString()
+    {
         global $AUTH, $AUTHORISATION, $UHANDLER;
 
         // In case of some really bad errors, the header menu can not be rendered, because basic
@@ -93,7 +96,8 @@ class NagVisHeaderMenu
      * return   Array
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getLangList() {
+    private function getLangList()
+    {
         global $CORE;
         // Build language list
         $aLang = $CORE->getAvailableAndEnabledLanguages();
@@ -138,7 +142,8 @@ class NagVisHeaderMenu
      * return   Array
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getMapList() {
+    private function getMapList()
+    {
         global $_MAINCFG, $CORE, $AUTHORISATION;
 
         // Get all the maps global content and use only those which are needed
@@ -229,7 +234,8 @@ class NagVisHeaderMenu
         return [$this->mapListToTree($aMaps, $childMaps), $permEditAnyMap];
     }
 
-    private function mapListToTree($maps, $childMaps) {
+    private function mapListToTree($maps, $childMaps)
+    {
         foreach ($maps as $map) {
             $freeParent = $map['mapName'];
             if (isset($childMaps[$freeParent])) {
@@ -248,7 +254,8 @@ class NagVisHeaderMenu
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getMacros() {
+    private function getMacros()
+    {
         global $CORE, $AUTH, $AUTHORISATION, $UHANDLER;
         // First get all static macros
         $this->aMacros = $this->getStaticMacros();
@@ -334,7 +341,8 @@ class NagVisHeaderMenu
         $this->aMacros['mapNames'] = json_encode($CORE->getListMaps());
     }
 
-    private function sortHostgroups($a, $b) {
+    private function sortHostgroups($a, $b)
+    {
         return strnatcasecmp($a['name1'], $b['name1']);
     }
 
@@ -345,7 +353,8 @@ class NagVisHeaderMenu
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getDocLanguage() {
+    private function getDocLanguage()
+    {
         global $CORE;
         if (in_array(curLang(), $CORE->getAvailableDocs())) {
             return curLang();
@@ -361,7 +370,8 @@ class NagVisHeaderMenu
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function getStaticMacros() {
+    private function getStaticMacros()
+    {
         global $SHANDLER, $AUTH, $AUTHORISATION, $UHANDLER;
 
         // Replace paths and language macros
@@ -446,7 +456,8 @@ class NagVisHeaderMenu
      * @return	bool	Is Check Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function checkTemplateReadable($printErr) {
+    private function checkTemplateReadable($printErr)
+    {
         global $CORE;
         return $CORE->checkReadable($this->pathTemplateFile, $printErr);
     }

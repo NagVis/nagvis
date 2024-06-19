@@ -49,11 +49,13 @@ class CoreBackendMgmt
      * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->loadBackends();
     }
 
-    public function getBackend($id) {
+    public function getBackend($id)
+    {
         // Only try to initialize once per request
         if (!isset($this->aInitialized[$id]) && !isset($this->aError[$id])) {
             $this->initializeBackend($id);
@@ -76,7 +78,8 @@ class CoreBackendMgmt
      * @param   object $OBJ Map object to fetch the informations for
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function queue($query, $OBJ) {
+    public function queue($query, $OBJ)
+    {
         $backendIds = $OBJ->getBackendIds();
         foreach ($backendIds as $backendId) {
             if (!isset($this->aQueue[$backendId])) {
@@ -122,7 +125,8 @@ class CoreBackendMgmt
         }
     }
 
-    private function parseObjFilters($query, $OBJ) {
+    private function parseObjFilters($query, $OBJ)
+    {
         $isMemberQuery = $query != 'serviceState' && $query != 'hostState';
         $isCountQuery = isset($this->countQueries[$query]);
 
@@ -133,7 +137,8 @@ class CoreBackendMgmt
         return $OBJ->getExcludeFilterKey($isCountQuery) . '~~' . $OBJ->getExcludeFilter($isCountQuery);
     }
 
-    private function parseOptions($OBJ) {
+    private function parseOptions($OBJ)
+    {
         $options = 0;
         if ($OBJ->getOnlyHardStates()) {
             $options |= 1;
@@ -153,7 +158,8 @@ class CoreBackendMgmt
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function clearQueue() {
+    public function clearQueue()
+    {
         $this->aQueue = [];
     }
 
@@ -165,7 +171,8 @@ class CoreBackendMgmt
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function execute() {
+    public function execute()
+    {
         // Loop all backends
         foreach ($this->aQueue as $backendId => $types) {
             // Loop all different query types
@@ -222,7 +229,8 @@ class CoreBackendMgmt
      * 1.) fetch states for all objects
      * 2.) fetch state counts for all objects
      */
-    private function fetchAggrMemberDetails($backendId, $options, $aObjs) {
+    private function fetchAggrMemberDetails($backendId, $options, $aObjs)
+    {
         foreach ($aObjs as $name => $OBJS) {
             foreach ($OBJS as $OBJ) {
                 try {
@@ -247,7 +255,8 @@ class CoreBackendMgmt
         }
     }
 
-    private function fetchDynGroupMemberCounts($backendId, $options, $aObjs) {
+    private function fetchDynGroupMemberCounts($backendId, $options, $aObjs)
+    {
         foreach ($aObjs as $name => $OBJS) {
             foreach ($OBJS as $OBJ) {
                 try {
@@ -284,7 +293,8 @@ class CoreBackendMgmt
      * Sending "array()" as filter construct to the backend since the backend uses the filters which are
      * already compiled in the object and ignores the given array() parameter
      */
-    private function fetchDynGroupMemberDetails($backendId, $options, $aObjs) {
+    private function fetchDynGroupMemberDetails($backendId, $options, $aObjs)
+    {
         foreach ($aObjs as $name => $OBJS) {
             foreach ($OBJS as $OBJ) {
                 $members = [];
@@ -344,7 +354,8 @@ class CoreBackendMgmt
         }
     }
 
-    private function createServiceObject($backendId, $host, $descr, $state, $config) {
+    private function createServiceObject($backendId, $host, $descr, $state, $config)
+    {
         $OBJ = new NagVisService($backendId, $host, $state[DESCRIPTION]);
         $OBJ->setState($state);
 
@@ -356,7 +367,8 @@ class CoreBackendMgmt
         return $OBJ;
     }
 
-    private function createHostObject($backendId, $name, $state, $config, $service_states) {
+    private function createHostObject($backendId, $name, $state, $config, $service_states)
+    {
         $OBJ = new NagVisHost($backendId, $name);
         $OBJ->setState($state);
 
@@ -389,7 +401,8 @@ class CoreBackendMgmt
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function fetchServicegroupMemberDetails($backendId, $options, $aObjs) {
+    private function fetchServicegroupMemberDetails($backendId, $options, $aObjs)
+    {
         foreach ($aObjs as $name => $OBJS) {
             foreach ($OBJS as $OBJ) {
                 // Fist get the host states for all the servicegroup members
@@ -427,7 +440,8 @@ class CoreBackendMgmt
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function fetchHostgroupMemberDetails($backendId, $options, $aObjs) {
+    private function fetchHostgroupMemberDetails($backendId, $options, $aObjs)
+    {
         // And then apply them to the objects
         foreach ($aObjs as $name => $OBJS) {
             foreach ($OBJS as $OBJ) {
@@ -467,7 +481,8 @@ class CoreBackendMgmt
         }
     }
 
-    private function fetchStateCounts($backendId, $type, $options, $aObjs) {
+    private function fetchStateCounts($backendId, $type, $options, $aObjs)
+    {
         try {
             switch ($type) {
                 case 'servicegroupMemberState':
@@ -540,7 +555,8 @@ class CoreBackendMgmt
         }
     }
 
-    private function fetchHostMemberDetails($backendId, $options, $aObjs) {
+    private function fetchHostMemberDetails($backendId, $options, $aObjs)
+    {
         try {
             $filters = [['key' => 'host_name', 'op' => '=', 'val' => 'name']];
             $aMembers = $this->getBackend($backendId)->getServiceState($aObjs, $options, $filters, MEMBER_QUERY);
@@ -568,7 +584,8 @@ class CoreBackendMgmt
      *
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function loadBackends() {
+    private function loadBackends()
+    {
         global $CORE;
         $aBackends = $CORE->getDefinedBackends();
 
@@ -584,7 +601,8 @@ class CoreBackendMgmt
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkBackendExists($backendId, $printErr) {
+    public function checkBackendExists($backendId, $printErr)
+    {
         global $CORE;
         if ($CORE->checkExisting(cfg('paths', 'class') . 'GlobalBackend' . cfg('backend_' . $backendId, 'backendtype') . '.php', false)) {
             return true;
@@ -605,7 +623,8 @@ class CoreBackendMgmt
      *
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function backendAlive($backendId, $statusHost) {
+    private function backendAlive($backendId, $statusHost)
+    {
         [$statusBackend, $statusHost] = explode(':', $statusHost, 2);
 
         if ($statusBackend == $backendId) {
@@ -633,7 +652,8 @@ class CoreBackendMgmt
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function initializeBackend($backendId) {
+    private function initializeBackend($backendId)
+    {
         if (!$this->checkBackendExists($backendId, false)) {
             $this->aError[$backendId] = new BackendConnectionProblem(l('backendNotDefined',
                 ['BACKENDID'   => $backendId]));
@@ -677,7 +697,8 @@ class CoreBackendMgmt
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      * @deprecated Please don't use this function anymore
      */
-    public function checkBackendInitialized($backendId, $printErr) {
+    public function checkBackendInitialized($backendId, $printErr)
+    {
         if (isset($this->aInitialized[$backendId])) {
             return true;
         } else {
@@ -698,7 +719,8 @@ class CoreBackendMgmt
      * @return	bool	Is Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkBackendFeature($backendId, $feature, $printErr = 1) {
+    public function checkBackendFeature($backendId, $feature, $printErr = 1)
+    {
         $backendClass = 'GlobalBackend' . cfg('backend_' . $backendId, 'backendtype');
         if (method_exists($backendClass, $feature)) {
             return true;
