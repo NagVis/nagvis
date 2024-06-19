@@ -84,7 +84,7 @@ class NagVisHoverUrl {
         // Only allow urls not paths for security reasons
         // Reported here: http://news.gmane.org/find-root.php?message_id=%3cf60c42280909021938s7f36c0edhd66d3e9156a5d081%40mail.gmail.com%3e
         $aUrl = parse_url($this->url);
-        if(!isset($aUrl['scheme']) || $aUrl['scheme'] == '' || ($aUrl['scheme'] != 'http' && $aUrl['scheme'] != 'https')) {
+        if (!isset($aUrl['scheme']) || $aUrl['scheme'] == '' || ($aUrl['scheme'] != 'http' && $aUrl['scheme'] != 'https')) {
             throw new NagVisException(l('problemReadingUrl', [
                 'URL' => $this->url,
                 'MSG' => l('Not allowed url')
@@ -92,7 +92,7 @@ class NagVisHoverUrl {
         }
 
 
-        if(!$content = file_get_contents($this->url)) {
+        if (!$content = file_get_contents($this->url)) {
             throw new NagVisException(l('couldNotGetHoverUrl', ['URL' => $this->url]));
         }
 

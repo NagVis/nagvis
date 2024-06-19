@@ -211,11 +211,11 @@ class NagVisMapObj extends NagVisStatefulObject {
         $a = [];
 
         // Loop all members
-        foreach($this->members as $OBJ) {
+        foreach ($this->members as $OBJ) {
             $sType = $OBJ->getType();
 
             // Skip unrelevant object types
-            if(isset($CORE->statelessObjectTypes[$sType])) {
+            if (isset($CORE->statelessObjectTypes[$sType])) {
                 continue;
             }
 
@@ -223,7 +223,7 @@ class NagVisMapObj extends NagVisStatefulObject {
              * When the current map object is a summary object skip the map
              * child for preventing a loop
              */
-            if($sType == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->isSummaryObject == true) {
+            if ($sType == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->isSummaryObject == true) {
                 continue;
             }
 
@@ -231,14 +231,14 @@ class NagVisMapObj extends NagVisStatefulObject {
              * All maps which produce a loop by linking back to earlier maps
              * need to be skipped here.
              */
-            if($sType == 'map' && $OBJ->isLoopingBacklink) {
+            if ($sType == 'map' && $OBJ->isLoopingBacklink) {
                 continue;
             }
 
             /**
              * Exclude map objects based on "exclude_member_states" option
              */
-            if($excludeMemberStates && $this->hasExcludeFilters(COUNT_QUERY)
+            if ($excludeMemberStates && $this->hasExcludeFilters(COUNT_QUERY)
                 && $this->excludeMapObject($OBJ, COUNT_QUERY)) {
                 continue;
             }
@@ -257,8 +257,8 @@ class NagVisMapObj extends NagVisStatefulObject {
         global $CORE;
         $i = 0;
         // Loop all objects except the stateless ones and count them
-        foreach($this->members as $OBJ) {
-            if(!isset($CORE->statelessObjectTypes[$OBJ->getType()])) {
+        foreach ($this->members as $OBJ) {
+            if (!isset($CORE->statelessObjectTypes[$OBJ->getType()])) {
                 $i++;
             }
         }
@@ -272,8 +272,8 @@ class NagVisMapObj extends NagVisStatefulObject {
     public function hasMembers() {
         global $CORE;
         // Loop all objects except the stateless ones and count them
-        foreach($this->members as $OBJ) {
-            if(!isset($CORE->statelessObjectTypes[$OBJ->getType()])) {
+        foreach ($this->members as $OBJ) {
+            if (!isset($CORE->statelessObjectTypes[$OBJ->getType()])) {
                 return true;
             }
         }
@@ -291,10 +291,10 @@ class NagVisMapObj extends NagVisStatefulObject {
      */
     public function queueState($_unused_flag = true, $_unused_flag2 = true) {
         // Get state of all member objects
-        foreach($this->getStateRelevantMembers() as $OBJ) {
+        foreach ($this->getStateRelevantMembers() as $OBJ) {
             // The states of the map objects members only need to be fetched when this
             // is MapObj is used as a view.
-            if($this->isView === true) {
+            if ($this->isView === true) {
                 $OBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
             } else {
                 // Get the summary state of the host but not the single member states
@@ -312,7 +312,7 @@ class NagVisMapObj extends NagVisStatefulObject {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function applyState() {
-        if($this->problem_msg) {
+        if ($this->problem_msg) {
             $this->sum = [
                 ERROR,
                 $this->problem_msg,
@@ -325,11 +325,11 @@ class NagVisMapObj extends NagVisStatefulObject {
         }
 
         // Get state of all member objects
-        foreach($this->getStateRelevantMembers() as $OBJ) {
+        foreach ($this->getStateRelevantMembers() as $OBJ) {
             $OBJ->applyState();
 
             // The icon is only needed when this is a view
-            if($this->isView === true) {
+            if ($this->isView === true) {
                 $OBJ->fetchIcon();
             }
         }
@@ -351,13 +351,13 @@ class NagVisMapObj extends NagVisStatefulObject {
     public function objectTreeToMapObjects(&$OBJ, &$arrHostnames= []) {
         $this->members[] = $OBJ;
 
-        foreach($OBJ->getChildsAndParents() as $OBJ1) {
+        foreach ($OBJ->getChildsAndParents() as $OBJ1) {
             /*
              * Check if the host is already on the map (If it's not done, the
              * objects with more than one parent will be printed several times on
              * the map, especially the links to child objects will be too many.
              */
-            if(is_object($OBJ1) && !in_array($OBJ1->getName(), $arrHostnames)){
+            if (is_object($OBJ1) && !in_array($OBJ1->getName(), $arrHostnames)){
                 // Add the name of this host to the array with hostnames which are
                 // already on the map
                 $arrHostnames[] = $OBJ1->getName();
@@ -375,8 +375,8 @@ class NagVisMapObj extends NagVisStatefulObject {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkMaintenance($printErr) {
-        if($this->MAPCFG->getValue(0, 'in_maintenance')) {
-            if($printErr) {
+        if ($this->MAPCFG->getValue(0, 'in_maintenance')) {
+            if ($printErr) {
                 throw new MapInMaintenance($this->getName());
             }
             return false;
@@ -396,17 +396,17 @@ class NagVisMapObj extends NagVisStatefulObject {
         $parts   = explode('~~', $filter);
 
         // Never exclude stateless objects
-        if(isset($CORE->statelessObjectTypes[$objType])) {
+        if (isset($CORE->statelessObjectTypes[$objType])) {
             return false;
         }
 
-        if(isset($parts[1]) && $objType == 'service'
+        if (isset($parts[1]) && $objType == 'service'
             && preg_match('/' . $parts[0] . '/', $OBJ->getName())
             && preg_match('/' . $parts[1] . '/', $OBJ->getServiceDescription())) {
             return true;
         }
 
-        if(!isset($parts[1]) && preg_match('/' . $parts[0] . '/', $OBJ->getName())) {
+        if (!isset($parts[1]) && preg_match('/' . $parts[0] . '/', $OBJ->getName())) {
             return true;
         }
 
@@ -420,10 +420,10 @@ class NagVisMapObj extends NagVisStatefulObject {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function fetchMapObjects(&$arrMapNames = [], $depth = 0) {
-        foreach($this->MAPCFG->getMapObjects() as $objConf) {
+        foreach ($this->MAPCFG->getMapObjects() as $objConf) {
             $type = $objConf['type'];
 
-            if($type == 'global' || $type == 'template') {
+            if ($type == 'global' || $type == 'template') {
                 continue;
             }
 
@@ -431,13 +431,13 @@ class NagVisMapObj extends NagVisStatefulObject {
             $typeDefs = $this->MAPCFG->getTypeDefaults($type);
 
             // merge with "global" settings
-            foreach($typeDefs as $key => $default) {
+            foreach ($typeDefs as $key => $default) {
                 if (!isset($objConf[$key])) {
                     $objConf[$key] = $default;
                 }
             }
 
-            switch($type) {
+            switch ($type) {
                 case 'host':
                     log_mem('prehost');
                     $OBJ = new NagVisHost($objConf['backend_id'], $objConf['host_name']);
@@ -462,23 +462,23 @@ class NagVisMapObj extends NagVisStatefulObject {
                     $SUBMAPCFG = new GlobalMapCfg($objConf['map_name'], false);
 
                     $mapCfgInvalid = null;
-                    if($SUBMAPCFG->checkMapConfigExists(0)) {
+                    if ($SUBMAPCFG->checkMapConfigExists(0)) {
                         try {
                             $SUBMAPCFG->readMapConfig();
-                        } catch(MapCfgInvalid $e) {
+                        } catch (MapCfgInvalid $e) {
                             $mapCfgInvalid = l('Map Configuration Error: [ERR]', ['ERR' => $e->getMessage()]);
-                        } catch(Exception $e) {
+                        } catch (Exception $e) {
                             $mapCfgInvalid = l('Problem while processing map: [ERR]', ['ERR' => (string) $e]);
                         }
                     }
 
                     $OBJ = new NagVisMapObj($SUBMAPCFG, !IS_VIEW);
 
-                    if($mapCfgInvalid) {
+                    if ($mapCfgInvalid) {
                         $OBJ->setProblem($mapCfgInvalid);
                     }
 
-                    if(!$SUBMAPCFG->checkMapConfigExists(0)) {
+                    if (!$SUBMAPCFG->checkMapConfigExists(0)) {
                         $OBJ->setProblem(l('mapCfgNotExists', 'MAP~' . $objConf['map_name']));
                     }
 
@@ -486,7 +486,7 @@ class NagVisMapObj extends NagVisStatefulObject {
                     * When the current map object is a summary object skip the map
                     * child for preventing a loop
                     */
-                    if($this->MAPCFG->getName() == $SUBMAPCFG->getName() && $this->isSummaryObject == true) {
+                    if ($this->MAPCFG->getName() == $SUBMAPCFG->getName() && $this->isSummaryObject == true) {
                         continue 2;
                     }
 
@@ -496,7 +496,7 @@ class NagVisMapObj extends NagVisStatefulObject {
                     * The object will be marked as summary object and is ignored on next level.
                     * See the code above.
                     */
-                    if($this->MAPCFG->getName() == $SUBMAPCFG->getName()) {
+                    if ($this->MAPCFG->getName() == $SUBMAPCFG->getName()) {
                         $OBJ->isSummaryObject = true;
                     }
 
@@ -505,7 +505,7 @@ class NagVisMapObj extends NagVisStatefulObject {
                      * they are already in the list and depth is more than 3 levels,
                      * skip them to prevent loops.
                      */
-                    if(isset($arrMapNames[$SUBMAPCFG->getName()]) && ($depth > 3)) {
+                    if (isset($arrMapNames[$SUBMAPCFG->getName()]) && ($depth > 3)) {
                         $OBJ->isLoopingBacklink = true;
                         continue 2;
                     }
@@ -514,7 +514,7 @@ class NagVisMapObj extends NagVisStatefulObject {
                     $arrMapNames[$SUBMAPCFG->getName()] = true;
 
                     // Skip this map when the user is not permitted toview this map
-                    if(!$this->isPermitted($OBJ)) {
+                    if (!$this->isPermitted($OBJ)) {
                         continue 2;
                     }
                 break;
@@ -544,7 +544,7 @@ class NagVisMapObj extends NagVisStatefulObject {
             $OBJ->setConfiguration($objConf);
 
             // Skip object by exclude filter? => Totally exclude (exclude_members)
-            if($this->hasExcludeFilters(!COUNT_QUERY) && $this->excludeMapObject($OBJ, !COUNT_QUERY)) {
+            if ($this->hasExcludeFilters(!COUNT_QUERY) && $this->excludeMapObject($OBJ, !COUNT_QUERY)) {
                 continue;
             }
 
@@ -555,15 +555,15 @@ class NagVisMapObj extends NagVisStatefulObject {
 
         // Now dig into the next map level. This has to be done here to fight
         // the loops at this level and not at the single branches of map links.
-        foreach($this->members as $OBJ) {
+        foreach ($this->members as $OBJ) {
             $sType = $OBJ->getType();
 
-            if($sType == 'map') {
+            if ($sType == 'map') {
                 /**
                 * When the current map object is a summary object skip the map
                 * child for preventing a loop
                 */
-                if($sType == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->isSummaryObject == true) {
+                if ($sType == 'map' && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName() && $this->isSummaryObject == true) {
                     continue;
                 }
 
@@ -571,11 +571,11 @@ class NagVisMapObj extends NagVisStatefulObject {
                     * All maps which produce a loop by linking back to earlier maps
                     * need to be skipped here.
                     */
-                if($sType == 'map' && $OBJ->isLoopingBacklink) {
+                if ($sType == 'map' && $OBJ->isLoopingBacklink) {
                     continue;
                 }
 
-                if(!$OBJ->hasProblem()) {
+                if (!$OBJ->hasProblem()) {
                     $OBJ->fetchMapObjects($arrMapNames, $depth + 1);
                 }
             }
@@ -593,7 +593,7 @@ class NagVisMapObj extends NagVisStatefulObject {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchSummaryOutput() {
-        if($this->hasMembers()) {
+        if ($this->hasMembers()) {
             $arrStates = [
                 UNREACHABLE => 0, CRITICAL => 0, DOWN => 0,
                 WARNING     => 0, UNKNOWN  => 0, UP   => 0,
@@ -601,7 +601,7 @@ class NagVisMapObj extends NagVisStatefulObject {
                 PENDING     => 0
             ];
 
-            foreach($this->getStateRelevantMembers(true) as $OBJ) {
+            foreach ($this->getStateRelevantMembers(true) as $OBJ) {
                 if (isset($arrStates[$OBJ->sum[STATE]])) {
                     $arrStates[$OBJ->sum[STATE]]++;
                 }
@@ -624,7 +624,7 @@ class NagVisMapObj extends NagVisStatefulObject {
      */
     private function isPermitted($OBJ) {
         global $AUTHORISATION;
-        if($AUTHORISATION !== null
+        if ($AUTHORISATION !== null
             && $AUTHORISATION->isPermitted('Map', 'view', $OBJ->getName())) {
             return true;
         } else {
@@ -644,7 +644,7 @@ class NagVisMapObj extends NagVisStatefulObject {
      */
     private function fetchSummaryState() {
         // Get summary state of this object from single objects
-        if($this->hasMembers()) {
+        if ($this->hasMembers()) {
             $this->calcSummaryState($this->getStateRelevantMembers(true));
         } else {
             $this->sum[STATE] = UNKNOWN;

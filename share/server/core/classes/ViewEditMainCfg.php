@@ -157,12 +157,12 @@ class ViewEditMainCfg {
             // is equal. If not equal hide the field
             $row_class = '';
             $row_style = '';
-            if(isset($spec['depends_on']) && isset($spec['depends_value'])
+            if (isset($spec['depends_on']) && isset($spec['depends_value'])
                 && $this->getCurVal($sec, $spec['depends_on'], false) != $spec['depends_value']) {
 
                 $row_class = ' class="child-row"';
                 $row_style = ' style="display:none;"';
-            } elseif(isset($spec['depends_on']) && isset($spec['depends_value'])
+            } elseif (isset($spec['depends_on']) && isset($spec['depends_value'])
                 && $this->getCurVal($sec, $spec['depends_on'], false) == $spec['depends_value']) {
 
                 $row_class = ' class="child-row"';
@@ -224,7 +224,7 @@ class ViewEditMainCfg {
         }
 
         $on_change = '';
-        if($_MAINCFG->hasDependants($sec, $key)) {
+        if ($_MAINCFG->hasDependants($sec, $key)) {
             $on_change = ' onchange="updateForm(this.form)"';
         }
 
@@ -237,7 +237,7 @@ class ViewEditMainCfg {
                 echo '<option value=""></option>';
 
                 foreach ($choices as $choice_key => $choice_val) {
-                    if(is_array($choice_val)) {
+                    if (is_array($choice_val)) {
                         echo '<option value="' . $choice_val['value'] . '">' . $choice_val['label'] . '</option>';
                     } else {
                         if (is_int($choice_key)) {
@@ -267,7 +267,7 @@ class ViewEditMainCfg {
             break;
         }
 
-        if(isset($spec['locked']) && $spec['locked'] == 1) {
+        if (isset($spec['locked']) && $spec['locked'] == 1) {
             echo "<script>document.edit_config.elements['" . $sec . "_" . $key . "'].disabled=true;</script>";
         }
     }

@@ -37,8 +37,8 @@ class CoreModAction extends CoreModule {
         global $CORE;
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'custom_action':
                     $aOpts = [
                         'map'       => MATCH_MAP_NAME,
@@ -50,12 +50,12 @@ class CoreModAction extends CoreModule {
                     // Input validations
                     // - Valid custom action?
                     $actions = $CORE->getDefinedCustomActions();
-                    if(!isset($actions[$attrs['cmd']])) {
+                    if (!isset($actions[$attrs['cmd']])) {
                         throw new NagVisException(l('The given custom action is not defined.'));
                     }
 
                     // - does the map exist?
-                    if(count($CORE->getAvailableMaps('/^' . $attrs['map'] . '$/')) <= 0) {
+                    if (count($CORE->getAvailableMaps('/^' . $attrs['map'] . '$/')) <= 0) {
                         throw new NagVisException(l('The map does not exist.'));
                     }
 
@@ -64,17 +64,17 @@ class CoreModAction extends CoreModule {
                     $MAPCFG->skipSourceErrors();
                     $MAPCFG->readMapConfig();
 
-                    if(!isset($attrs['object_id']) && $attrs['object_id'] == '') {
+                    if (!isset($attrs['object_id']) && $attrs['object_id'] == '') {
                         throw new NagVisException(l('The object_id value is missing.'));
                     }
 
-                    if(!$MAPCFG->objExists($attrs['object_id'])) {
+                    if (!$MAPCFG->objExists($attrs['object_id'])) {
                         throw new NagVisException(l('The object does not exist.'));
                     }
                     $objId = $attrs['object_id'];
 
                     $func = 'handle_action_' . $attrs['cmd'];
-                    if(!function_exists($func)) {
+                    if (!function_exists($func)) {
                         throw new NagVisException(l('Action handler not implemented.'));
                     }
 

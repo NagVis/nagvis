@@ -12,18 +12,18 @@ function automap_check_graphviz($binary) {
      * configured path. Prefer the configured path.
      */
     $bFound = false;
-    foreach([cfg('automap', 'graphvizpath') . $binary, $binary] as $path) {
+    foreach ([cfg('automap', 'graphvizpath') . $binary, $binary] as $path) {
         // Check if dot can be found in path (If it is there $returnCode is 0, if not it is 1)
         exec('which ' . $path . ' 2>/dev/null', $arrReturn, $exitCode);
 
-        if($exitCode == 0) {
+        if ($exitCode == 0) {
             $automap_graphviz_path = str_replace($binary, '', $arrReturn[0]);
             $bFound = true;
             break;
         }
     }
 
-    if(!$bFound) {
+    if (!$bFound) {
         throw new NagVisException(l('graphvizBinaryNotFound', [
             'NAME' => $binary,
                                     'PATHS' => $_SERVER['PATH'] . ':' . cfg('automap', 'graphvizpath')
@@ -65,38 +65,38 @@ function graphviz_config_tree(&$params, &$tree, $layer = 0) {
     $height = $tree['.height'];
 
     // This should be scaled by the choosen iconset
-    if($width != 22) {
+    if ($width != 22) {
         $str .= 'width="' . graphviz_px2inch($width) . '", ';
     }
-    if($height != 22) {
+    if ($height != 22) {
         $str .= 'height="' . graphviz_px2inch($height) . '", ';
     }
 
     // This is the root node
-    if($layer == 0) {
+    if ($layer == 0) {
         $str .= 'pos="' . graphviz_px2inch($params['width'] / 2) . ',' . graphviz_px2inch($params['height'] / 2) . '", ';
     }
 
     // The object has configured x/y coords. Use them.
     // FIXME: This does not work for some reason ...
-    if(isset($tree['x']) && isset($tree['y'])) {
+    if (isset($tree['x']) && isset($tree['y'])) {
         $str .= 'pos="' . graphviz_px2inch($tree['x'] - $width / 2) . ',' . graphviz_px2inch($tree['y'] - $height / 2) . '", ';
         $str .= 'pin=true, ';
     }
 
     // The automap connector hosts could be smaller
-    //if($this->automapConnector)
+    //if ($this->automapConnector)
     //	$str .= 'height="'.$this->pxToInch($width/2).'", width="'.$this->pxToInch($width/2).'", ';
 
     $str .= 'layer="' . $layer . '"';
     $str .= ' ];' . "\n";
 
-    foreach($tree['.childs'] as $child) {
+    foreach ($tree['.childs'] as $child) {
         $str .= graphviz_config_tree($params, $child, $layer + 1);
         $str .= graphviz_config_connector($tree['object_id'], $child['object_id']);
     }
 
-    foreach($tree['.parents'] as $parent) {
+    foreach ($tree['.parents'] as $parent) {
         $str .= graphviz_config_tree($params, $parent, $layer + 1);
         $str .= graphviz_config_connector($tree['object_id'], $parent['object_id']);
     }
@@ -121,7 +121,7 @@ function graphviz_config(&$params, &$tree) {
     $str .= 'center=true, ';
 
     /* Directed (dot) only */
-    if($params['render_mode'] == 'directed') {
+    if ($params['render_mode'] == 'directed') {
         $str .= 'nodesep="0", ';
         //rankdir: LR,
         //$str .= 'rankdir="LR", ';
@@ -131,12 +131,12 @@ function graphviz_config(&$params, &$tree) {
     }
 
     /* Directed (dot) and radial (twopi) only */
-    if($params['render_mode'] == 'directed' || $params['render_mode'] == 'radial') {
+    if ($params['render_mode'] == 'directed' || $params['render_mode'] == 'radial') {
         $str .= 'ranksep="0.8", ';
     }
 
     /* All but directed (dot) */
-    if($params['render_mode'] != 'directed') {
+    if ($params['render_mode'] != 'directed') {
         //overlap: true,false,scale,scalexy,ortho,orthoxy,orthoyx,compress,ipsep,vpsc
         $str .= 'overlap="' . $params['overlap'] . '", ';
     }
@@ -191,7 +191,7 @@ function graphviz_run($map_name, &$params, $cfg) {
      *  circo - filter for circular layout of graphs
      *  fdp - filter for drawing undirected graphs
      */
-    switch($params['render_mode']) {
+    switch ($params['render_mode']) {
         case 'directed':
             $binary = 'dot';
         break;
@@ -230,7 +230,7 @@ function graphviz_run($map_name, &$params, $cfg) {
 
     exec($cmd, $arrMapCode, $returnCode);
 
-    if($returnCode !== 0) {
+    if ($returnCode !== 0) {
         throw new NagVisException(l('Graphviz call failed ([CODE]): [OUTPUT]<br /><br >Command was: "[CMD]"',
             ['CODE' => $returnCode, 'OUTPUT' => implode("\n", $arrMapCode), 'CMD' => $cmd]));
     }
@@ -298,17 +298,17 @@ function graphviz_parse(&$map_config, $imagemap) {
 
     // Extract the positions from the html area definitions
     $objCoords = [];
-    foreach(explode("\n", $imagemap) as $sLine) {
+    foreach (explode("\n", $imagemap) as $sLine) {
         $sLine = str_replace('&#45;', '-', $sLine);
         // Extract the area objects
         // Only parsing rect/polys at the moment
-        if(preg_match('/^<area\sshape="(rect|poly)"\s(?:id="[^"]+"\s)?href="([^"]+)"\stitle="[^"]+"\salt=""\scoords="([^"]+)"\s?\/>$/i', $sLine, $aMatches)) {
-            if(isset($aMatches[1]) && isset($aMatches[2]) && isset($aMatches[2])) {
+        if (preg_match('/^<area\sshape="(rect|poly)"\s(?:id="[^"]+"\s)?href="([^"]+)"\stitle="[^"]+"\salt=""\scoords="([^"]+)"\s?\/>$/i', $sLine, $aMatches)) {
+            if (isset($aMatches[1]) && isset($aMatches[2]) && isset($aMatches[2])) {
                 $type      = trim($aMatches[1]);
                 $object_id = trim($aMatches[2]);
                 $coords    = trim($aMatches[3]);
 
-                switch($type) {
+                switch ($type) {
                     case 'rect':
                         $aCoords = explode(',', $coords);
                         $map_config[$object_id]['x'] = (int) $aCoords[0];
@@ -319,9 +319,9 @@ function graphviz_parse(&$map_config, $imagemap) {
                         $x = null;
                         $y = null;
                         $aCoords = explode(' ', $coords);
-                        foreach($aCoords as $coord) {
+                        foreach ($aCoords as $coord) {
                             list($newX, $newY) = explode(',', $coord);
-                            if($x === null) {
+                            if ($x === null) {
                                 $x = $newX;
                                 $y = $newY;
                             } else {
@@ -343,8 +343,8 @@ function graphviz_parse(&$map_config, $imagemap) {
     }
 
     // Now apply the coords
-    //foreach($map_config AS $object_id => $obj) {
-    //    if(isset($aObjCoords[$getName()])) {
+    //foreach ($map_config AS $object_id => $obj) {
+    //    if (isset($aObjCoords[$getName()])) {
     //        $OBJ->setMapCoords($aObjCoords[$OBJ->getName()]);
     //    } else {
     //        $f = cfg('paths', 'var').$this->name.'.imagemap';

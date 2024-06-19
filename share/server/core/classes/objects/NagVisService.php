@@ -77,7 +77,7 @@ class NagVisService extends NagVisStatefulObject {
      * Applies the fetched state
      */
     public function applyState() {
-        if($this->problem_msg !== null) {
+        if ($this->problem_msg !== null) {
             $this->setState([
                 ERROR,
                 $this->problem_msg,

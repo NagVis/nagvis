@@ -119,7 +119,7 @@ class CoreLogonMultisite extends CoreLogonModule {
 
     private function redirectToLogin() {
         // Do not redirect on ajax calls. Print out errors instead
-        if(CONST_AJAX) {
+        if (CONST_AJAX) {
             throw new NagVisException(l('LogonMultisite: Not authenticated.'));
         }
         // FIXME: Get the real path to multisite
@@ -131,18 +131,18 @@ class CoreLogonMultisite extends CoreLogonModule {
 
         // Try to auth using the environment auth
         $ENV= new CoreLogonEnv();
-        if($ENV->check(false) === true) {
+        if ($ENV->check(false) === true) {
             return true;
         }
 
         $username = $this->checkAuth();
-        if($username === '') {
+        if ($username === '') {
             $this->redirectToLogin();
             return false;
         }
 
         // Check if the user exists
-        if($this->verifyUserExists($username,
+        if ($this->verifyUserExists($username,
                         cfg('global', 'logon_multisite_createuser'),
                         cfg('global', 'logon_multisite_createrole'),
                         $printErr) === false) {

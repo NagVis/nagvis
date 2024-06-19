@@ -175,7 +175,7 @@ class NagVisObject {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setConfiguration($obj) {
-        foreach($obj as $key => $val) {
+        foreach ($obj as $key => $val) {
             $this->{$key} = $val;
         }
     }
@@ -188,7 +188,7 @@ class NagVisObject {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setObjectInformation($obj) {
-        foreach($obj as $key => $val) {
+        foreach ($obj as $key => $val) {
             $this->{$key} = $val;
         }
     }
@@ -201,7 +201,7 @@ class NagVisObject {
 
         // Need to remove some options which are not relevant
         // FIXME: Would be much better to name the needed vars explicit
-        if(self::$arrDenyKeys == null) {
+        if (self::$arrDenyKeys == null) {
             self::$arrDenyKeys = [
                 'MAPCFG' => '', 'MAP' => '',
                 'conf' => '', 'services' => '', 'fetchedChildObjects' => '', 'childObjects' => '',
@@ -211,7 +211,7 @@ class NagVisObject {
             ];
         }
 
-        foreach($this as $key => $val) {
+        foreach ($this as $key => $val) {
             if (!isset(self::$arrDenyKeys[$key]) && $val !== null) {
                 $arr[$key] = $val;
             }
@@ -220,7 +220,7 @@ class NagVisObject {
         // I want only "name" in js
         $arr['name'] = $this->getName();
 
-        if($this->type == 'service' && isset($arr['host_name'])) {
+        if ($this->type == 'service' && isset($arr['host_name'])) {
             unset($arr['host_name']);
         } else {
             unset($arr[$this->type . '_name']);
@@ -247,7 +247,7 @@ class NagVisObject {
 
         // Only remove these options when the configuration should be
         // completely independent from this object
-        if($abstract == true) {
+        if ($abstract == true) {
             unset($arr['host_name']);
             unset($arr[$this->type . '_name']);
             unset($arr['service_description']);
@@ -279,13 +279,13 @@ class NagVisObject {
      */
     public function parseMapCfg($globalOpts = []) {
         $ret = 'define ' . $this->type . " {\n";
-        if($this->type === 'host' && $this instanceof NagVisHost) {
+        if ($this->type === 'host' && $this instanceof NagVisHost) {
             $ret .= '  host_name=' . $this->host_name . "\n";
         }
         $ret .= '  object_id=' . $this->object_id . "\n";
-        foreach($this->getObjectConfiguration(false) as $key => $val) {
+        foreach ($this->getObjectConfiguration(false) as $key => $val) {
             // Only set options which are different to global option
-            if((!isset($globalOpts[$key]) || $globalOpts[$key] != $val) && $val != '') {
+            if ((!isset($globalOpts[$key]) || $globalOpts[$key] != $val) && $val != '') {
                 $ret .= '  ' . $key . '=' . $val . "\n";
             }
         }
@@ -299,7 +299,7 @@ class NagVisObject {
      * Returns the url for the object link
      */
     public function getUrl() {
-        if(isset($this->url)) {
+        if (isset($this->url)) {
             return $this->url;
         } else {
             return '';
@@ -331,13 +331,13 @@ class NagVisObject {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function sortObjectsAlphabetical($OBJ1, $OBJ2) {
-        if($OBJ1->type == 'service') {
+        if ($OBJ1->type == 'service') {
             $name1 = strtolower($OBJ1->getName() . $OBJ1->getServiceDescription());
         } else {
             $name1 = strtolower($OBJ1->getName());
         }
 
-        if($OBJ2->type == 'service') {
+        if ($OBJ2->type == 'service') {
             $name2 = strtolower($OBJ2->getName() . $OBJ2->getServiceDescription());
         } else {
             $name2 = strtolower($OBJ2->getName());
@@ -345,14 +345,14 @@ class NagVisObject {
 
         if ($name1 == $name2) {
             return 0;
-        } elseif($name1 > $name2) {
+        } elseif ($name1 > $name2) {
             // Sort depending on configured direction
-            if(self::$sSortOrder === 'asc') {
+            if (self::$sSortOrder === 'asc') {
                 return +1;
             } else {
                 return -1;
             }
-        } elseif(self::$sSortOrder === 'asc') {
+        } elseif (self::$sSortOrder === 'asc') {
             // Sort depending on configured direction
             return -1;
         } else {
@@ -386,23 +386,23 @@ class NagVisObject {
         global $_MAINCFG;
 
         // Quit when nothing to compare
-        if($state1 === null || $state2 === null) {
+        if ($state1 === null || $state2 === null) {
             return 0;
         }
 
         $stateWeight = $_MAINCFG->getStateWeight();
 
         // Handle normal/ack/downtime states
-        if($stateWeight[$state1][$subState1] == $stateWeight[$state2][$subState2]) {
+        if ($stateWeight[$state1][$subState1] == $stateWeight[$state2][$subState2]) {
             return 0;
-        } elseif($stateWeight[$state1][$subState1] < $stateWeight[$state2][$subState2]) {
+        } elseif ($stateWeight[$state1][$subState1] < $stateWeight[$state2][$subState2]) {
             // Sort depending on configured direction
-            if($sortOrder === 'asc') {
+            if ($sortOrder === 'asc') {
                 return + 1;
             } else {
                 return -1;
             }
-        } elseif($sortOrder === 'asc') {
+        } elseif ($sortOrder === 'asc') {
             // Sort depending on configured direction
             return -1;
         } else {

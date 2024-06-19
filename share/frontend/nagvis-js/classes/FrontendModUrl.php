@@ -57,8 +57,8 @@ class FrontendModUrl extends FrontendModule {
     public function handleAction() {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'view':
                     // Show the view dialog to the user
                     $sReturn = $this->showViewDialog();
@@ -71,7 +71,7 @@ class FrontendModUrl extends FrontendModule {
 
     private function showViewDialog() {
         // Only show when map name given
-        if(!isset($this->url) || $this->url == '') {
+        if (!isset($this->url) || $this->url == '') {
             throw new NagVisException(l('No url given.'));
         }
 
@@ -79,12 +79,12 @@ class FrontendModUrl extends FrontendModule {
         $INDEX = new NagVisIndexView($this->CORE);
 
         // Need to parse the header menu?
-        if(cfg('index', 'headermenu')) {
+        if (cfg('index', 'headermenu')) {
             // Parse the header menu
             $HEADER = new NagVisHeaderMenu(cfg('index', 'headertemplate'));
 
             // Put rotation information to header menu
-            if($this->rotation != '') {
+            if ($this->rotation != '') {
                       $HEADER->setRotationEnabled();
             }
 
@@ -95,7 +95,7 @@ class FrontendModUrl extends FrontendModule {
         $this->VIEW = new NagVisUrlView($this->CORE, $this->url);
 
         // Maybe it is needed to handle the requested rotation
-        if($this->rotation != '') {
+        if ($this->rotation != '') {
             $ROTATION = new FrontendRotation($this->rotation);
             $ROTATION->setStep('url', $this->url, $this->rotationStep);
             $this->VIEW->setRotation($ROTATION->getRotationProperties());

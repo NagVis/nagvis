@@ -47,10 +47,10 @@ class CoreModAuth extends CoreModule {
 
     public function handleAction() {
         global $AUTH;
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'logout':
-                    if($AUTH->logout()) {
+                    if ($AUTH->logout()) {
                         return true;
                     } else {
                         throw new NagVisException(l('Unable to log you out. Maybe it is not supported by your authentication module.'),
@@ -71,17 +71,17 @@ class CoreModAuth extends CoreModule {
 
         // Check length limits
         $bValid = true;
-        if($bValid && $this->FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH)) {
+        if ($bValid && $this->FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH)) {
             $bValid = false;
         }
-        if($bValid && $this->FHANDLER->isLongerThan('password', AUTH_MAX_PASSWORD_LENGTH)) {
+        if ($bValid && $this->FHANDLER->isLongerThan('password', AUTH_MAX_PASSWORD_LENGTH)) {
             $bValid = false;
         }
 
         //@todo Escape vars?
 
         // Store response data
-        if($bValid) {
+        if ($bValid) {
             return [
                 'user' => $this->FHANDLER->get('username'),
                 'password' => $this->FHANDLER->get('password')
