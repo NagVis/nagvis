@@ -132,7 +132,9 @@ $sect1 = intval($imgheight / 5);
 $sect2 = intval($imgheight / 2);
 $sect3 = intval($imgheight / 5) * 3;
 $chrSize = $ratio * 5;
-if ($chrSize < 1) { $chrSize = 1; }
+if ($chrSize < 1) {
+    $chrSize = 1;
+}
 
 //==================
 // scan gadget_opts
@@ -141,11 +143,21 @@ if ($chrSize < 1) { $chrSize = 1; }
 if (isset($aOpts['opts']) && ($aOpts['opts'] != '')) {
     preg_match_all ('/(\w+)=(\w+)/', $aOpts['opts'], $matches, PREG_SET_ORDER);
     for ($i = 0; $i < count($matches); $i++) {
-        if ($matches[$i][1] == 'columns') { $cols = $matches[$i][2]; }
-        if ($matches[$i][1] == 'string') { $string = $matches[$i][2]; }
-        if ($matches[$i][1] == 'current') { $current = $matches[$i][2]; }
-        if ($matches[$i][1] == 'label') { $label = $matches[$i][2]; }
-        if ($matches[$i][1] == 'threshold') { $threshold = $matches[$i][2]; }
+        if ($matches[$i][1] == 'columns') {
+            $cols = $matches[$i][2];
+        }
+        if ($matches[$i][1] == 'string') {
+            $string = $matches[$i][2];
+        }
+        if ($matches[$i][1] == 'current') {
+            $current = $matches[$i][2];
+        }
+        if ($matches[$i][1] == 'label') {
+            $label = $matches[$i][2];
+        }
+        if ($matches[$i][1] == 'threshold') {
+            $threshold = $matches[$i][2];
+        }
     }
 }
 $rows = ceil($pdc / $cols);   // max. no. of rows with graphs
@@ -207,11 +219,19 @@ for ($i = 0; $i < $pdc; $i++) {
         }
         if (isset($warn) && isset($crit)) {
             if ($warn < $crit) {
-                if ($value >= $warn) { $colour = ($ack) ? $oYellowAck : $oYellow; };
-                if ($value >= $crit) { $colour = ($ack) ? $oRedAck : $oRed; };
+                if ($value >= $warn) {
+                    $colour = ($ack) ? $oYellowAck : $oYellow;
+                }
+                if ($value >= $crit) {
+                    $colour = ($ack) ? $oRedAck : $oRed;
+                }
             } else {
-                if ($value <= $warn) { $colour = ($ack) ? $oYellowAck : $oYellow; };
-                if ($value <= $crit) { $colour = ($ack) ? $oRedAck : $oRed; };
+                if ($value <= $warn) {
+                    $colour = ($ack) ? $oYellowAck : $oYellow;
+                }
+                if ($value <= $crit) {
+                    $colour = ($ack) ? $oRedAck : $oRed;
+                }
             }
         }
         // create box
@@ -293,8 +313,12 @@ for ($i = 0; $i < $pdc; $i++) {
 
         if ($current == 1) {
             $maxv = "";
-            if (isset($aPerfdata[$i]['max'])) { $maxv = " of " . $aPerfdata[$i]['max']; }
-            if ($down) { $maxv = " [down]"; }
+            if (isset($aPerfdata[$i]['max'])) {
+                $maxv = " of " . $aPerfdata[$i]['max'];
+            }
+            if ($down) {
+                $maxv = " [down]";
+            }
             if (file_exists ("$font")) {
                 ImageTTFText($img, $chrSize * 3.5, 0, $offX + 5, $offY + $sect3 - 1, $oBlack, $font, $desc . ':' . $value . $uom . $maxv);
             } else {
