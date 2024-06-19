@@ -399,7 +399,7 @@ class NagVisMapObj extends NagVisStatefulObject {
         if(isset($CORE->statelessObjectTypes[$objType])) {
             return false;
         }
-    
+
         if(isset($parts[1]) && $objType == 'service'
             && preg_match('/' . $parts[0] . '/', $OBJ->getName())
             && preg_match('/' . $parts[1] . '/', $OBJ->getServiceDescription())) {

@@ -464,7 +464,7 @@ class GlobalCore {
             } catch(NagVisException $e) {
                 continue; // skip e.g. not read config files
             }
-            
+
             if($MAPCFG->getValue(0, 'show_in_lists') == 1) {
                 $list[$mapName] = $MAPCFG->getAlias();
             }

@@ -166,7 +166,7 @@ class ViewManageMaps {
                 if (count($CORE->getAvailableMaps('/^' . preg_quote($name) . '$/')) == 0) {
                     throw new FieldInputError('name', l('The given map name is invalid'));
                 }
-            
+
                 $new_name = post('new_name');
                 if (!$new_name) {
                     throw new FieldInputError('new_name', l('Please provide a new name'));
@@ -175,7 +175,7 @@ class ViewManageMaps {
                 if (count($CORE->getAvailableMaps('/^' . preg_quote($new_name) . '$/')) > 0) {
                     throw new FieldInputError('new_name', l('A map with this name already exists'));
                 }
-            
+
                 if (!preg_match(MATCH_MAP_NAME, $new_name)) {
                     throw new FieldInputError('new_name', l('This is not a valid map name (need to match [M])',
                         ['M' => MATCH_MAP_NAME]));
@@ -245,7 +245,7 @@ class ViewManageMaps {
                 if (count($CORE->getAvailableMaps('/^' . preg_quote($name) . '$/')) == 0) {
                     throw new FieldInputError('name', l('The given map name is invalid'));
                 }
-            
+
                 $MAPCFG = new GlobalMapCfg($name);
                 try {
                     $MAPCFG->readMapConfig();

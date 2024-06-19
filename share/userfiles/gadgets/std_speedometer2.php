@@ -122,8 +122,8 @@ for ($i = 1; $i <= 3; $i++) {
 
 $min = 0;
 $max = -1;
-$default = 0; 
- 
+$default = 0;
+
 $pdc = count($aPerfdata);    // performance data count
 $string = '';                    // string in perfdata label
 $current = 1;                    // show current value
@@ -214,11 +214,11 @@ for ($i = 0; $i < $pdc; $i++){
         if ($colour != '') {
             imagefilledrectangle ($img, $offX, $offY, $offX + $imgwidth - 1, $centery + 20, $colour);
         }
-        
+
         //================
         // Normalize / Fix value and max
         //================
-        
+
         if($value == null) {
             $value = $default;
         } elseif($max != '' && $value < $min) {
@@ -231,25 +231,25 @@ for ($i = 0; $i < $pdc; $i++){
         if(intval($max) == 0 || $max == '') {
             $max = $crit + 1;
         }
-        
+
         //================
         // Calculate degrees of value, warn, critical
         //================
-        
+
         $p = 180 / $limit * $value;
         $warnp = -180 + (180 / $limit * $warn);
         $critp = -180 + (180 / $limit * $crit);
-        
+
         // If the critp is bigger than -1 it can not be rendered by the php functions.
         // Set it to -1 for having at least a small critical area drawn
         if($critp > -1) {
             $critp = -1;
         }
-        
-        
+
+
         // Base
         imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 180, 0, $oGreen, IMG_ARC_EDGED);
-        
+
         // Warning
         if($warn && $warnp <= -1) {
             if ($warn < $crit) {
@@ -270,37 +270,37 @@ for ($i = 0; $i < $pdc; $i++){
                 imagefilledarc($img, $centerx, $centery, $outerdia, $outerdia, 180, 360 + $critp, $oRed, IMG_ARC_EDGED);
             }
         }
-        
+
         // Borders
         imagearc($img, $centerx, $centery + 1, $outerdia + 2, $outerdia + 2, 180, 0, $oBlack);
         imagefilledarc($img, $centerx, $centery, $innerrad, $innerrad, 180, 0, $oBlue, IMG_ARC_EDGED);
-        
+
         //===================
         // Create tacho line.
         //===================
-        
+
         $degrees = deg2rad(-$p + 360);
         $diffx = cos ($degrees) * $outerrad2;
         $diffy = sin ($degrees) * $outerrad2;
         imagefilledarc($img, ($centerx - $diffx), ($centery + $diffy), $outerdia2, $outerdia2, ($p - 1), ($p + 1), $oBlue, IMG_ARC_EDGED);
-        
+
         //===================
         // Labels
         //===================
-        
+
         // Speedometer labels
-        
+
         imageline($img, ($centerx - $outerrad - 5), ($centery + 1), ($centerx + $outerrad + 5), ($centery + 1), $oBlack);
         imagestring($img, 1, ($centerx - $outerrad - 15), ($centery - 6), 0, $oBlack);
         imagestring($img, 1, ($centerx + $outerrad + 8), ($centery - 6), "$limit $uom", $oBlack);
-        
+
         $count = 1;
         $iOffsetX = -10;
         for($d = 1; $d <= 3; $d++) {
 
             imageline($img, ($centerx - $bediffx[$d]), ($centery + $bediffy[$d]), ($centerx - $bediffx1[$d]), ($centery + $bediffy1[$d]), $oBlack);
             imagestring($img, 1, ($centerx - $bediffx[$d] + $iOffsetX - 8), ($centery + $bediffy[$d] - 10), ($limit / 4 * $d), $oBlack);
-            
+
             $iOffsetX = $iOffsetX + 10;
         }
 

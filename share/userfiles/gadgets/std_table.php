@@ -67,7 +67,7 @@ if (isset($_GET['opts']) && ($_GET['opts'] != '')){
 
 // Determine scale from POST request
 $size = $_GET['scale'] / 100;
-if ($size < 0) { 
+if ($size < 0) {
     $size = 1;
 }
 

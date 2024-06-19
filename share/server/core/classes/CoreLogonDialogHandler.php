@@ -82,7 +82,7 @@ class CoreLogonDialogHandler {
             || $FHANDLER->isLongerThan('_password', AUTH_MAX_PASSWORD_LENGTH)) {
             throw new FieldInputError('_password', l('Invalid password.'));
         }
-        
+
         $a = [
             'user'     => $FHANDLER->get('_username'),
             'password' => $FHANDLER->get('_password')
@@ -93,7 +93,7 @@ class CoreLogonDialogHandler {
         if(isset($_REQUEST['_onetime'])) {
             $a['onetime'] = true;
         }
-    
+
         // Remove authentication infos. Hide it from the following code
         if(isset($_REQUEST['_username'])) {
             unset($_REQUEST['_username']);

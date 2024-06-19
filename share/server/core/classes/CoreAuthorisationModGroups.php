@@ -81,7 +81,7 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule {
             } catch(BackendConnectionProblem $e) {
                 continue; // skip this backend silently
             }
-            
+
             foreach($contacts as $contact => $groups) {
                 if(!isset($this->user_groups[$contact])) {
                     $this->user_groups[$contact] = [];
@@ -90,7 +90,7 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule {
                 foreach($groups as $group) {
                     if(!isset($this->user_groups[$contact][$group])) {
                         $this->user_groups[$contact][$group] = 1;
-                    }                        
+                    }
                 }
             }
         }
@@ -179,7 +179,7 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule {
         if(!isset($this->perms[$username])) {
             return [];
         }
-    
+
         # Array ( [0] => Overview [1] => view [2] => * )
         $perms = [];
         foreach($this->perms[$username] as $value) {
@@ -187,11 +187,11 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule {
             if(!isset($perms[$value[0]])) {
                 $perms[$value[0]] = [];
             }
-            
+
             if(!isset($perms[$value[0]][$value[1]])) {
                 $perms[$value[0]][$value[1]] = [];
             }
-            
+
             if(!isset($perms[$value[0]][$value[1]][$value[2]])) {
                 $perms[$value[0]][$value[1]][$value[2]] = [];
             }

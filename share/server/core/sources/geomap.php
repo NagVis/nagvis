@@ -138,7 +138,7 @@ function geomap_get_contents($url) {
                 $opts['http']['header'] = 'Proxy-Authorization: Basic ' . base64_encode("$proxy_auth");
             }
         }
-        
+
         $context = stream_context_create($opts);
 
         return file_get_contents($url, false, $context);

@@ -21,7 +21,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * Load required files for NagVis. This autoloader has no compatibility
  * problem with other autoloaders from external code

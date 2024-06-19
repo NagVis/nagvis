@@ -227,15 +227,15 @@ class ViewEditMainCfg {
         if($_MAINCFG->hasDependants($sec, $key)) {
             $on_change = ' onchange="updateForm(this.form)"';
         }
-        
+
         switch ($field_type) {
             case 'dropdown':
                 $func_name = $_MAINCFG->getListFunc($sec, $key);
                 $choices = $func_name();
-        
+
                 echo '<select id="' . $sec . '_' . $key . '" name="' . $sec . '_' . $key . '"' . $on_change . '>';
                 echo '<option value=""></option>';
-        
+
                 foreach ($choices as $choice_key => $choice_val) {
                     if(is_array($choice_val)) {
                         echo '<option value="' . $choice_val['value'] . '">' . $choice_val['label'] . '</option>';
@@ -246,7 +246,7 @@ class ViewEditMainCfg {
                         echo '<option value="' . $choice_key . '">' . $choice_val . '</option>';
                     }
                 }
-        
+
                 echo '</select>';
                 echo '<script>document.edit_config.elements[\'' . $sec . '_' . $key . '\'].value = \'' . $cur_val . '\';</script>';
             break;
@@ -256,7 +256,7 @@ class ViewEditMainCfg {
                 echo '<option value="1">' . l('yes') . '</option>';
                 echo '<option value="0">' . l('no') . '</option>';
                 echo '</select>';
-        
+
                 echo '<script>document.edit_config.elements[\'' . $sec . '_' . $key . '\'].value = \'' . $cur_val . '\';</script>';
             break;
             case 'color':
@@ -266,7 +266,7 @@ class ViewEditMainCfg {
                 echo '<input id="' . $sec . '_' . $key . '" type="text" name="' . $sec . '_' . $key . '" value="' . $cur_val . '">';
             break;
         }
-        
+
         if(isset($spec['locked']) && $spec['locked'] == 1) {
             echo "<script>document.edit_config.elements['" . $sec . "_" . $key . "'].disabled=true;</script>";
         }

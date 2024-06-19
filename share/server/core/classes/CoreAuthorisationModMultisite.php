@@ -136,7 +136,7 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
             || !isset($this->permissions[$username]['permissions'])) {
             return [];
         }
-    
+
         # Array ( [0] => Overview [1] => view [2] => * )
         $perms = [];
         foreach($this->permissions[$username]['permissions'] as $value) {
@@ -144,11 +144,11 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
             if(!isset($perms[$value[0]])) {
                 $perms[$value[0]] = [];
             }
-            
+
             if(!isset($perms[$value[0]][$value[1]])) {
                 $perms[$value[0]][$value[1]] = [];
             }
-            
+
             if(!isset($perms[$value[0]][$value[1]][$value[2]])) {
                 $perms[$value[0]][$value[1]][$value[2]] = [];
             }

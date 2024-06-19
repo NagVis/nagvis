@@ -21,11 +21,11 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *****************************************************************************/
- 
+
 /**
  * @author	Lars Michelsen <lm@larsmichelsen.com>
  */
- 
+
 // Save the start time of NagVis
 define('DEBUGSTART', microtime_float());
 
