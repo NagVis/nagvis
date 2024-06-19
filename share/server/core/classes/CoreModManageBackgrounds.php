@@ -47,7 +47,7 @@ class CoreModManageBackgrounds extends CoreModule {
                 case 'view':
                     $VIEW = new ViewManageBackgrounds();
                     $sReturn = json_encode(['code' => $VIEW->parse()]);
-                break;
+                    break;
             }
         }
 

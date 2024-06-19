@@ -50,7 +50,7 @@ class CoreModUrl extends CoreModule {
             switch ($this->sAction) {
                 case 'getContents':
                     $sReturn = $this->getContents();
-                break;
+                    break;
             }
         }
 

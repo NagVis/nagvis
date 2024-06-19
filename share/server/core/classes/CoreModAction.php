@@ -80,12 +80,12 @@ class CoreModAction extends CoreModule {
 
                     $func($MAPCFG, $objId);
 
-                break;
+                    break;
 
                 case 'acknowledge':
                     $VIEW = new ViewAck();
                     $sReturn = json_encode(['code' => $VIEW->parse()]);
-                break;
+                    break;
             }
         }
 

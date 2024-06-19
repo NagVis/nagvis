@@ -516,7 +516,7 @@ class NagVisStatefulObject extends NagVisObject {
                     } else {
                         $icon = $this->iconset . '_' . $stateLow . '.' . $fileType;
                     }
-                break;
+                    break;
                 case 'up':
                 case 'ok':
                     if ($this->sum[DOWNTIME]) {
@@ -526,14 +526,14 @@ class NagVisStatefulObject extends NagVisObject {
                     } else {
                         $icon = $this->iconset . '_' . $stateLow . '.' . $fileType;
                     }
-                break;
+                    break;
                 case 'unchecked':
                 case 'pending':
                     $icon = $this->iconset . '_' . $stateLow . '.' . $fileType;
-                break;
+                    break;
                 default:
                     $icon = $this->iconset . '_error.' . $fileType;
-                break;
+                    break;
             }
 
             //Checks whether the needed file exists
@@ -969,15 +969,15 @@ class NagVisStatefulObject extends NagVisObject {
             case 's':
                 // Order by State
                 usort($aTmpMembers, ["NagVisObject", "sortObjectsByState"]);
-            break;
+                break;
             case 'k':
                 // Keep original order (as provided by backend)
-            break;
+                break;
             case 'a':
             default:
                 // Order alhpabetical
                 usort($aTmpMembers, ["NagVisObject", "sortObjectsAlphabetical"]);
-            break;
+                break;
         }
 
         // Count only once, not in loop header

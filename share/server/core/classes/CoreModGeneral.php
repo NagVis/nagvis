@@ -46,13 +46,13 @@ class CoreModGeneral extends CoreModule {
             switch ($this->sAction) {
                 case 'getHoverTemplate':
                     $sReturn = $this->getTemplate('hover');
-                break;
+                    break;
                 case 'getContextTemplate':
                     $sReturn = $this->getTemplate('context');
-                break;
+                    break;
                 case 'getHoverUrl':
                     $sReturn = $this->getHoverUrl();
-                break;
+                    break;
             }
         }
 

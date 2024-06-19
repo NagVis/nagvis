@@ -49,7 +49,7 @@ class CoreModSearch extends CoreModule {
                     } else {
                         $sReturn = '';
                     }
-                break;
+                    break;
             }
         }
 

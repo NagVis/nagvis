@@ -70,7 +70,7 @@ class FrontendModRotation extends FrontendModule {
                 case 'view':
                     // Show the view dialog to the user
                     $sReturn = $this->showViewDialog();
-                break;
+                    break;
             }
         }
 
@@ -90,11 +90,11 @@ class FrontendModRotation extends FrontendModule {
             case '':
                 // If no step given redirect to first step
                 header('Location: ' . $ROTATION->getStepUrlById(0));
-            break;
+                break;
             case 'map':
             case 'url':
                 header('Location: ' . $ROTATION->getCurrentStepUrl());
-            break;
+                break;
         }
     }
 }

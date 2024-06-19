@@ -418,7 +418,7 @@ class ViewMapAddModify {
         switch ($fieldType) {
             case 'readonly':
                 echo $value;
-            break;
+                break;
             case 'boolean':
                 $options = [
                     '1' => l('yes'),
@@ -427,7 +427,7 @@ class ViewMapAddModify {
                 $valueTxt = $options[$valueTxt];
                 // FIXME: !isset($options[$value]) -> fallback to input field
                 select($propname, $options, $value, $onChange, $hideField);
-            break;
+                break;
             case 'dropdown':
                 $array    = isset($prop['array']) && $prop['array'];
 
@@ -485,19 +485,19 @@ class ViewMapAddModify {
                         . 'falling back to input field.'));
                     input($propname, $value, '', $hideField);
                 }
-            break;
+                break;
             case 'color':
                 $this->colorSelect($propname, $value, $hideField);
-            break;
+                break;
             case 'dimension':
                 $this->inputDimension($propname, $value, $hideField);
-            break;
+                break;
             case 'text':
                 input($propname, $value, '', $hideField);
-            break;
+                break;
             case 'textarea':
                 textarea($propname, $value, '', $hideField);
-            break;
+                break;
         }
 
         // Try to split too long values in chunks

@@ -46,7 +46,7 @@ class CoreModOverview extends CoreModule {
             switch ($this->sAction) {
                 case 'getOverviewRotations':
                     $sReturn = $this->parseRotationsJson();
-                break;
+                    break;
                 case 'getObjectStates':
                     $aOpts = [
                         'i' => MATCH_STRING_NO_SPACE,
@@ -63,7 +63,7 @@ class CoreModOverview extends CoreModule {
                     }
 
                     $sReturn = $this->parseMapsJson(COMPLETE, $aVals['i']);
-                break;
+                    break;
             }
         }
 
@@ -295,16 +295,16 @@ class CoreModOverview extends CoreModule {
         switch ($imgSize[2]) {
             case 1:
                 $strFileType = 'gif';
-            break;
+                break;
             case 2:
                 $strFileType = 'jpg';
-            break;
+                break;
             case 3:
                 $strFileType = 'png';
-            break;
+                break;
             default:
                 $strFileType = '';
-            break;
+                break;
         }
 
         return $strFileType;
@@ -326,18 +326,18 @@ class CoreModOverview extends CoreModule {
                 case 1:
                     $image = imagecreatefromgif ($imgPath);
                     $strFileType = 'gif';
-                break;
+                    break;
                 case 2:
                     $image = imagecreatefromjpeg($imgPath);
                     $strFileType = 'jpg';
-                break;
+                    break;
                 case 3:
                     $image = imagecreatefrompng($imgPath);
                     $strFileType = 'png';
-                break;
+                    break;
                 default:
                     throw new NagVisException(l('onlyPngOrJpgImages'));
-                break;
+                    break;
             }
 
             // Size of source images
@@ -391,16 +391,16 @@ class CoreModOverview extends CoreModule {
             switch ($imgSize[2]) {
                 case 1:
                     imagegif ($thumb, $thumbPath);
-                break;
+                    break;
                 case 2:
                     imagejpeg($thumb, $thumbPath);
-                break;
+                    break;
                 case 3:
                     imagepng($thumb, $thumbPath);
-                break;
+                    break;
                 default:
                     throw new NagVisException(l('onlyPngOrJpgImages'));
-                break;
+                    break;
             }
 
             return $thumbPath;

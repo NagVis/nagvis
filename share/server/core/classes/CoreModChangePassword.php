@@ -50,7 +50,7 @@ class CoreModChangePassword extends CoreModule {
                     } else {
                         $sReturn = '';
                     }
-                break;
+                    break;
             }
         }
 

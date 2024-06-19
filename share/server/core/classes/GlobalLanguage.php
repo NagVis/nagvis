@@ -102,15 +102,15 @@ class GlobalLanguage {
                         if ($this->USERCFG !== null) {
                             $sReturn = $this->USERCFG->getValue('language', '');
                         }
-                    break;
+                        break;
                     case 'browser':
                         // Read the prefered language from the users browser
                         $sReturn = $this->getBrowserLanguage();
-                    break;
+                        break;
                     case 'ip':
                         //@todo: It is also possible to get the country via IP and
                         //       indirectly the language from that country.
-                    break;
+                        break;
                     case 'user':
                         // Read the language from url or user config
                         $sReturn = $this->getUserLanguage();
@@ -123,17 +123,17 @@ class GlobalLanguage {
                         ) {
                             $this->USERCFG->doSet(['language' => $sReturn]);
                         }
-                    break;
+                        break;
                     case 'config':
                         // Read default language from configuration
                         $sReturn = cfg('global', 'language');
-                    break;
+                        break;
 
                     default:
                         throw new NagVisException(
                             $this->getText('Invalid mode [MODE] in language_detection option.',
                                 ['MODE' => $sMethod]));
-                    break;
+                        break;
                 }
             }
         }

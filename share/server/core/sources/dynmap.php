@@ -188,11 +188,11 @@ function dynmap_sort_objects($MAPCFG, $map_name, &$map_config, &$params, &$objec
                 unset($object['.state']);
                 unset($object['.sub_state']);
             }
-        break;
+            break;
         case 'a':
         default:
             usort($objects, 'dynmap_sort_objects_by_name');
-        break;
+            break;
     }
 }
 

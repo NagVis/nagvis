@@ -460,7 +460,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
             case 'hostgroup':
             case 'servicegroup':
                 $l = $this->obj[$type];
-            break;
+                break;
             case 'service':
                 if ($name1Pattern) {
                     $l = $this->obj[$type][$name1Pattern];
@@ -468,10 +468,10 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     throw new BackendException('Unhandled query');
                     exit;
                 }
-            break;
+                break;
             default:
                 return [];
-            break;
+                break;
         }
 
         $result = [];
@@ -529,10 +529,10 @@ class GlobalBackendTest implements GlobalBackendInterface {
                         }
 
                         $objFilters[] = 'Filter: ' . $filter['key'] . ' ' . $filter['op'] . ' ' . $val . "\n";
-                    break;
+                        break;
                     default:
                         throw new BackendConnectionProblem('Invalid filter key (' . $filter['key'] . ')');
-                    break;
+                        break;
                 }
             }
 

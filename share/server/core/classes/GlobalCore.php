@@ -688,14 +688,22 @@ class GlobalCore {
      */
     public function getUploadErrorMsg($id) {
         switch ($id) {
-            case 1:  return l('File is too large (PHP limit)');
-            case 2:  return l('File is too large (FORM limit)');
-            case 3:  return l('Upload incomplete');
-            case 4:  return l('No file uploaded');
-            case 6:  return l('Missing a temporary folder');
-            case 7:  return l('Failed to write file to disk');
-            case 8:  return l('File upload stopped by extension');
-            default: return l('Unhandled error');
+            case 1:
+                return l('File is too large (PHP limit)');
+            case 2:
+                return l('File is too large (FORM limit)');
+            case 3:
+                return l('Upload incomplete');
+            case 4:
+                return l('No file uploaded');
+            case 6:
+                return l('Missing a temporary folder');
+            case 7:
+                return l('Failed to write file to disk');
+            case 8:
+                return l('File upload stopped by extension');
+            default:
+                return l('Unhandled error');
         }
     }
 

@@ -56,7 +56,7 @@ class CoreModAuth extends CoreModule {
                         throw new NagVisException(l('Unable to log you out. Maybe it is not supported by your authentication module.'),
                             null, 1, cfg('paths', 'htmlbase'));
                     }
-                break;
+                    break;
             }
         }
     }

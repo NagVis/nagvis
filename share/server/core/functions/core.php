@@ -93,17 +93,28 @@ function val($arr, $key, $dflt = null) {
 
 function state_str($state) {
     switch ($state) {
-        case UNCHECKED:   return 'UNCHECKED';
-        case UNREACHABLE: return 'UNREACHABLE';
-        case DOWN:        return 'DOWN';
-        case UP:          return 'UP';
-        case PENDING:     return 'PENDING';
-        case UNKNOWN:     return 'UNKNOWN';
-        case CRITICAL:    return 'CRITICAL';
-        case WARNING:     return 'WARNING';
-        case OK:          return 'OK';
-        case ERROR:       return 'ERROR';
-        default:          return 'ERROR'; // unspecified state
+        case UNCHECKED:
+            return 'UNCHECKED';
+        case UNREACHABLE:
+            return 'UNREACHABLE';
+        case DOWN:
+            return 'DOWN';
+        case UP:
+            return 'UP';
+        case PENDING:
+            return 'PENDING';
+        case UNKNOWN:
+            return 'UNKNOWN';
+        case CRITICAL:
+            return 'CRITICAL';
+        case WARNING:
+            return 'WARNING';
+        case OK:
+            return 'OK';
+        case ERROR:
+            return 'ERROR';
+        default:
+            return 'ERROR'; // unspecified state
     }
 }
 
