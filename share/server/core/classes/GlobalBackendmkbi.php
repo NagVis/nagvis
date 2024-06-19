@@ -573,5 +573,3 @@ if (!function_exists('l')) {
     $O = new GlobalBackendmkbi('bi');
     print_r($O->getAggregationNames());
 }
-
-

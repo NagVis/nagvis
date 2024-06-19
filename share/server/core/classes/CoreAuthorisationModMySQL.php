@@ -38,4 +38,3 @@ class CoreAuthorisationModMySQL extends CoreAuthorisationModPDO
         ];
     }
 }
-

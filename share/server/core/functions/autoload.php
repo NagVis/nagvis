@@ -66,5 +66,3 @@ if ($handle = opendir($dir)) {
     }
     closedir($handle);
 }
-
-

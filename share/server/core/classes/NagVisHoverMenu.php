@@ -244,4 +244,3 @@ class NagVisHoverMenu
         return path('html', 'global', 'templates', $this->templateName . '.hover.css');
     }
 }
-

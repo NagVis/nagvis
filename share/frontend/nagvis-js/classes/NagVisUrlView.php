@@ -109,4 +109,3 @@ class NagVisUrlView
         return $TMPLSYS->get($TMPL->getTmplFile(cfg('defaults', 'view_template'), 'url'), $aData);
     }
 }
-

@@ -83,5 +83,3 @@ function process_filter($MAPCFG, $map_name, &$map_config, $params = null) {
     filter_hostgroup($map_config, $params);
     return true; // allow caching
 }
-
-

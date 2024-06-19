@@ -118,4 +118,3 @@ const MATCH_WEATHER_COLORS = '/^(?:[0-9]{1,4}(\.[0-9]{1,2})?:#[0-9a-f]{6},?)+$/'
 const MATCH_SOCKET = '/^(unix:[a-zA-Z0-9\-_.\/]+|tcp(-tls)?:[a-zA-Z0-9.-]+:[0-9]{1,5})$/';
 
 const MATCH_WUI_ADDMODIFY_DO = '/^(add|modify)$/';
-

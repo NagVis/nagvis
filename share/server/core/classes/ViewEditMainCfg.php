@@ -329,4 +329,3 @@ class ViewEditMainCfg
             . 'o = null;');
     }
 }
-

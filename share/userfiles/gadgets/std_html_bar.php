@@ -138,4 +138,3 @@ echo "<table style='width:100px;border:"
     . $width
     . "px'></td><td></td></tr></table>";
 exit(0);
-

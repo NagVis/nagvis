@@ -313,4 +313,3 @@ if (function_exists('imageantialias')) {
 
 imagepng($img);
 imagedestroy($img);
-

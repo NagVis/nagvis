@@ -85,5 +85,3 @@ function iso8859_1_to_utf8($s) {
 
     return substr($s, 0, $j);
 }
-
-

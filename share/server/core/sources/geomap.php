@@ -537,5 +537,3 @@ function ProjectF($Lat) {
     $Y = log(tan($Lat) + (1 / cos($Lat)));
     return($Y);
 }
-
-

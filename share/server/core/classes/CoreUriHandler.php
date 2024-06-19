@@ -175,5 +175,3 @@ class CoreUriHandler
         return isset($this->aOpts[$sKey]) && $this->aOpts[$sKey] != '';
     }
 }
-
-

@@ -244,4 +244,3 @@ class NagVisContextMenu
         return path('html', 'global', 'templates', $this->templateName . '.context.css');
     }
 }
-

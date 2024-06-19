@@ -704,4 +704,3 @@ class NagVisMapObj extends NagVisStatefulObject
         }
     }
 }
-

@@ -204,5 +204,3 @@ try {
     echo 'Exception (std_lq.php): ' . $e->getMessage();
 }
 exit(1);
-
-

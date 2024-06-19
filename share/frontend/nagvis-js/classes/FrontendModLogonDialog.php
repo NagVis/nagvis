@@ -60,5 +60,3 @@ class FrontendModLogonDialog extends FrontendModule
         return $sReturn;
     }
 }
-
-

@@ -319,4 +319,3 @@ class CoreAuthorisationHandler
         return false;
     }
 }
-

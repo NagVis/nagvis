@@ -356,4 +356,3 @@ class GlobalLanguage
         return $sLang;
     }
 }
-

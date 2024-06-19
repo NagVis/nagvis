@@ -504,5 +504,3 @@ function swap(&$x, &$y) {
     $x = $y;
     $y = $tmp;
 }
-
-

@@ -90,4 +90,3 @@ class NagVisShape extends NagVisStatelessObject
     # End public methods
     # #########################################################################
 }
-

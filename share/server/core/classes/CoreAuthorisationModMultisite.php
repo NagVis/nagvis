@@ -229,4 +229,3 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule
         return false;
     }
 }
-

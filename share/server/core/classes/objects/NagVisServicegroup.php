@@ -192,4 +192,3 @@ class NagVisServicegroup extends NagVisStatefulObject
         }
     }
 }
-

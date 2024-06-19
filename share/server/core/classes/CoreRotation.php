@@ -348,4 +348,3 @@ class CoreRotation
         return $arr;
     }
 }
-

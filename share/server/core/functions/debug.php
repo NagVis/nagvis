@@ -86,4 +86,3 @@ function profilingFinalize($pre) {
 if (PROFILE) {
     profilingStart();
 }
-

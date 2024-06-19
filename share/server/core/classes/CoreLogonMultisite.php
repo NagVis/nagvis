@@ -211,5 +211,3 @@ class CoreLogonMultisite extends CoreLogonModule
         return $AUTH->isAuthenticated();
     }
 }
-
-

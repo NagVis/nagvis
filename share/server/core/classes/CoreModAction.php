@@ -95,4 +95,3 @@ class CoreModAction extends CoreModule
         return $sReturn;
     }
 }
-

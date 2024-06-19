@@ -892,4 +892,3 @@ class GlobalCore
         return $this->selectable_sources;
     }
 }
-

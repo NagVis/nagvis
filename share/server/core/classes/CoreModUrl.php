@@ -122,4 +122,3 @@ class CoreModUrl extends CoreModule
         return isset($allowed[$this->url]);
     }
 }
-

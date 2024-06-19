@@ -506,5 +506,3 @@ function render_section_start($sec, $open) {
 function render_section_end() {
     echo '</div>';
 }
-
-
