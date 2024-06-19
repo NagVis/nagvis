@@ -26,7 +26,8 @@ class ViewToNewMap
 {
     private $error = null;
 
-    public function parse($orig_name) {
+    public function parse($orig_name)
+    {
         global $CORE;
 
         ob_start();

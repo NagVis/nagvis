@@ -150,7 +150,8 @@ class NagVisMapObj extends NagVisStatefulObject
     // This controlls wether this is MapObj is used as view or as object on a map
     protected $isView;
 
-    public function __construct($MAPCFG, $bIsView = IS_VIEW) {
+    public function __construct($MAPCFG, $bIsView = IS_VIEW)
+    {
         $this->MAPCFG = $MAPCFG;
 
         $this->map_name = $this->MAPCFG->getName();
@@ -175,7 +176,8 @@ class NagVisMapObj extends NagVisStatefulObject
     /**
      * Special handling for maps, because the alias has been set before
      */
-    public function setState($arr) {
+    public function setState($arr)
+    {
         $alias = $this->state[ALIAS];
         $this->state = $arr;
         $this->state[ALIAS] = $alias;
@@ -184,21 +186,24 @@ class NagVisMapObj extends NagVisStatefulObject
     /**
      * Clears the map
      */
-    public function clearMembers() {
+    public function clearMembers()
+    {
         $this->members = [];
     }
 
     /**
      * Returns the array of objects on the map
      */
-    public function getMembers() {
+    public function getMembers()
+    {
         return $this->members;
     }
 
     /**
      * Adds several members to the map
      */
-    public function addMembers($add) {
+    public function addMembers($add)
+    {
         $this->members = array_merge($this->members, $add);
     }
 
@@ -207,7 +212,8 @@ class NagVisMapObj extends NagVisStatefulObject
      * textboxes, shapes and "summary objects" are
      * excluded here
      */
-    public function getStateRelevantMembers($excludeMemberStates = false) {
+    public function getStateRelevantMembers($excludeMemberStates = false)
+    {
         global $CORE;
         $a = [];
 
@@ -257,7 +263,8 @@ class NagVisMapObj extends NagVisStatefulObject
     /**
      * Returns the number of stateful objects on the map
      */
-    public function getNumMembers() {
+    public function getNumMembers()
+    {
         global $CORE;
         $i = 0;
         // Loop all objects except the stateless ones and count them
@@ -273,7 +280,8 @@ class NagVisMapObj extends NagVisStatefulObject
     /**
      * With current data the best way to check wether the map has stateful members
      */
-    public function hasMembers() {
+    public function hasMembers()
+    {
         global $CORE;
         // Loop all objects except the stateless ones and count them
         foreach ($this->members as $OBJ) {
@@ -293,7 +301,8 @@ class NagVisMapObj extends NagVisStatefulObject
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function queueState($_unused_flag = true, $_unused_flag2 = true) {
+    public function queueState($_unused_flag = true, $_unused_flag2 = true)
+    {
         // Get state of all member objects
         foreach ($this->getStateRelevantMembers() as $OBJ) {
             // The states of the map objects members only need to be fetched when this
@@ -315,7 +324,8 @@ class NagVisMapObj extends NagVisStatefulObject
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function applyState() {
+    public function applyState()
+    {
         if ($this->problem_msg) {
             $this->sum = [
                 ERROR,
@@ -352,7 +362,8 @@ class NagVisMapObj extends NagVisStatefulObject
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function objectTreeToMapObjects(&$OBJ, &$arrHostnames= []) {
+    public function objectTreeToMapObjects(&$OBJ, &$arrHostnames= [])
+    {
         $this->members[] = $OBJ;
 
         foreach ($OBJ->getChildsAndParents() as $OBJ1) {
@@ -378,7 +389,8 @@ class NagVisMapObj extends NagVisStatefulObject
      * @return	bool	Is Check Successful?
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function checkMaintenance($printErr) {
+    public function checkMaintenance($printErr)
+    {
         if ($this->MAPCFG->getValue(0, 'in_maintenance')) {
             if ($printErr) {
                 throw new MapInMaintenance($this->getName());
@@ -392,7 +404,8 @@ class NagVisMapObj extends NagVisStatefulObject
      * Cares about excluding members of map objects. The other objects excludes
      * are handled by the backends, not in the NagVis code.
      */
-    private function excludeMapObject($OBJ, $isCount) {
+    private function excludeMapObject($OBJ, $isCount)
+    {
         global $CORE;
         // at the moment only handle the complete exclusion
         $filter  = $this->getExcludeFilter($isCount);
@@ -426,7 +439,8 @@ class NagVisMapObj extends NagVisStatefulObject
      * @author	Thomas Casteleyn <thomas.casteleyn@super-visions.com>
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function fetchMapObjects(&$arrMapNames = [], $depth = 0) {
+    public function fetchMapObjects(&$arrMapNames = [], $depth = 0)
+    {
         foreach ($this->MAPCFG->getMapObjects() as $objConf) {
             $type = $objConf['type'];
 
@@ -599,7 +613,8 @@ class NagVisMapObj extends NagVisStatefulObject
      *
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function fetchSummaryOutput() {
+    private function fetchSummaryOutput()
+    {
         if ($this->hasMembers()) {
             $arrStates = [
                 UNREACHABLE => 0, CRITICAL => 0, DOWN => 0,
@@ -629,7 +644,8 @@ class NagVisMapObj extends NagVisStatefulObject
      * @return	bool		Permitted/Not permitted
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function isPermitted($OBJ) {
+    private function isPermitted($OBJ)
+    {
         global $AUTHORISATION;
         if (
             $AUTHORISATION !== null
@@ -651,7 +667,8 @@ class NagVisMapObj extends NagVisStatefulObject
      *
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function fetchSummaryState() {
+    private function fetchSummaryState()
+    {
         // Get summary state of this object from single objects
         if ($this->hasMembers()) {
             $this->calcSummaryState($this->getStateRelevantMembers(true));

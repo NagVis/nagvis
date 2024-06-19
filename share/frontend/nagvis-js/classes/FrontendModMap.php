@@ -35,7 +35,8 @@ class FrontendModMap extends FrontendModule
     private $rotationStep = '';
     private $perm = '';
 
-    public function __construct(GlobalCore $CORE) {
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'Map';
         $this->CORE  = $CORE;
 
@@ -72,7 +73,8 @@ class FrontendModMap extends FrontendModule
         $this->setObject($this->name);
     }
 
-    public function handleAction() {
+    public function handleAction()
+    {
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
@@ -88,7 +90,8 @@ class FrontendModMap extends FrontendModule
         return $sReturn;
     }
 
-    private function showViewDialog() {
+    private function showViewDialog()
+    {
         global $AUTHORISATION;
         // Initialize map configuration
         $MAPCFG = new GlobalMapCfg($this->name);

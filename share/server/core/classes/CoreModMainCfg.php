@@ -27,7 +27,8 @@ class CoreModMainCfg extends CoreModule
     private $name = null;
     private $CORE;
 
-    public function __construct(GlobalCore $CORE) {
+    public function __construct(GlobalCore $CORE)
+    {
         $this->sName = 'MainCfg';
         $this->CORE = $CORE;
 
@@ -39,7 +40,8 @@ class CoreModMainCfg extends CoreModule
         ];
     }
 
-    public function handleAction() {
+    public function handleAction()
+    {
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {

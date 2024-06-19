@@ -34,7 +34,8 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
     private $user_groups;
     private $perms;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->file     = cfg('global', 'authorisation_group_perms_file');
 
         if ($this->file == '') {
@@ -59,7 +60,8 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
         $this->calcPermissions();
     }
 
-    private function readFile() {
+    private function readFile()
+    {
         $json = iso8859_1_to_utf8(file_get_contents($this->file));
         $json = preg_replace("#(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/)|([\s\t](//).*)#", '', $json);
         $this->group_perms = json_decode($json, true);
@@ -69,7 +71,8 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
         }
     }
 
-    private function fetchUserGroups() {
+    private function fetchUserGroups()
+    {
         global $_BACKEND;
 
         // FIXME: Create a cache and use it!
@@ -99,13 +102,15 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
         // FIXME: Write $this->user_groups to cache
     }
 
-    private function calcPermissions() {
+    private function calcPermissions()
+    {
         foreach (array_keys($this->user_groups) as $username) {
             $this->perms[$username] = $this->calcUserPermissions($username);
         }
     }
 
-    private function calcUserPermissions($username) {
+    private function calcUserPermissions($username)
+    {
         # Add implicit permissions. These are basic permissions
         # which are needed for most users.
         $perms =  [
@@ -145,31 +150,38 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
         return $perms;
     }
 
-    public function getUserRoles($userId) {
+    public function getUserRoles($userId)
+    {
         return [];
     }
 
-    public function getAllRoles() {
+    public function getAllRoles()
+    {
         return [];
     }
 
-    public function getRoleId($sRole) {
+    public function getRoleId($sRole)
+    {
         return false;
     }
 
-    public function getAllPerms() {
+    public function getAllPerms()
+    {
         return [];
     }
 
-    public function getRolePerms($roleId) {
+    public function getRolePerms($roleId)
+    {
         return [];
     }
 
-    public function checkRoleExists($name) {
+    public function checkRoleExists($name)
+    {
         return false;
     }
 
-    public function parsePermissions($sUsername = null) {
+    public function parsePermissions($sUsername = null)
+    {
         global $AUTH;
         if ($sUsername === null) {
             $username = $AUTH->getUser();
@@ -201,7 +213,8 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
         return $perms;
     }
 
-    public function getUserId($username) {
+    public function getUserId($username)
+    {
         return $username;
     }
 
@@ -210,39 +223,48 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
      * It is simply read-only.
      */
 
-    public function renameMapPermissions($old_name, $new_name) {
+    public function renameMapPermissions($old_name, $new_name)
+    {
         return false;
     }
 
-    public function deletePermission($mod, $name) {
+    public function deletePermission($mod, $name)
+    {
         return false;
     }
 
-    public function createPermission($mod, $name) {
+    public function createPermission($mod, $name)
+    {
         return false;
     }
 
-    public function roleUsedBy($roleId) {
+    public function roleUsedBy($roleId)
+    {
         return false;
     }
 
-    public function deleteRole($roleId) {
+    public function deleteRole($roleId)
+    {
         return false;
     }
 
-    public function deleteUser($userId) {
+    public function deleteUser($userId)
+    {
         return false;
     }
 
-    public function updateUserRoles($userId, $roles) {
+    public function updateUserRoles($userId, $roles)
+    {
         return false;
     }
 
-    public function updateRolePerms($roleId, $perms) {
+    public function updateRolePerms($roleId, $perms)
+    {
         return false;
     }
 
-    public function createRole($name) {
+    public function createRole($name)
+    {
         return false;
     }
 }

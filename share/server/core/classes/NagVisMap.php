@@ -41,7 +41,8 @@ class NagVisMap
      * @throws NagVisException
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct($MAPCFG, $getState = GET_STATE, $bIsView = IS_VIEW) {
+    public function __construct($MAPCFG, $getState = GET_STATE, $bIsView = IS_VIEW)
+    {
         global $_BACKEND;
         $this->MAPCFG = $MAPCFG;
 
@@ -79,7 +80,8 @@ class NagVisMap
      * @return	string  Json Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function parseObjectsJson($type = 'complete') {
+    public function parseObjectsJson($type = 'complete')
+    {
         $arrRet = [];
 
         // First parse the map object itselfs for having the

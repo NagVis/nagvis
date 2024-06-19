@@ -107,7 +107,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param string $backendId
      * @throws BackendConnectionProblem
      */
-    public function __construct($backendId) {
+    public function __construct($backendId)
+    {
         $this->backendId = $backendId;
 
         $this->hostCache = [];
@@ -184,7 +185,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @return	bool
      */
-    private function checkTablesExists() {
+    private function checkTablesExists()
+    {
         if (!$this->DB->tableExist($this->dbPrefix . 'programstatus')) {
             throw new BackendConnectionProblem(l('noTablesExists', ['BACKENDID' => $this->backendId, 'PREFIX' => $this->dbPrefix]));
             return false;
@@ -200,7 +202,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @return    int $ret
      */
-    private function getInstanceId() {
+    private function getInstanceId()
+    {
         $intInstanceId = null;
 
         $QUERYHANDLE = $this->DB->query('SELECT instance_id FROM ' . $this->dbPrefix . 'instances WHERE instance_name=:instance', ['instance' => $this->dbInstanceName]);
@@ -226,7 +229,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @return	array
      */
-    public static function getValidConfig() {
+    public static function getValidConfig()
+    {
         return self::$validConfig;
     }
 
@@ -239,7 +243,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param	string $type, string $name1Pattern, string $name2Pattern
      * @return	array $ret
      */
-    public function getObjects($type, $name1Pattern = '', $name2Pattern = '') {
+    public function getObjects($type, $name1Pattern = '', $name2Pattern = '')
+    {
         $ret = [];
 
         $max = 1;
@@ -294,7 +299,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param	string $type
      * @return	array $ret
      */
-    public function getObjectsEx($type) {
+    public function getObjectsEx($type)
+    {
         $ret = [];
 
         return $ret;
@@ -307,7 +313,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @return	bool
      */
-    private function checkForIsActiveObjects() {
+    private function checkForIsActiveObjects()
+    {
         if ($this->DB->query('SELECT object_id FROM ' . $this->dbPrefix . 'objects WHERE is_active=1')->fetch()) {
             return true;
         } else {
@@ -322,7 +329,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * @return	bool
      */
-    private function checkConfigTypeObjects() {
+    private function checkConfigTypeObjects()
+    {
         if ($this->DB->query('SELECT host_id FROM ' . $this->dbPrefix . 'hosts WHERE config_type=1 AND instance_id=:instance LIMIT 1', ['instance' => $this->dbInstanceId])->fetch()) {
             return true;
         } else {
@@ -345,7 +353,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @return  array    Parsed filters
      * @throws BackendConnectionProblem
      */
-    private function parseFilter($objects, $filters, $table, $childTable, $isMemberQuery = false, $isCountQuery = false, $isHostQuery = true) {
+    private function parseFilter($objects, $filters, $table, $childTable, $isMemberQuery = false, $isCountQuery = false, $isHostQuery = true)
+    {
         $aFilters = [];
         $values = [];
         $idx = 1;
@@ -450,7 +459,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param	string $hostName
      * @return	bool $ack
      */
-    private function getHostAckByHostname($hostName) {
+    private function getHostAckByHostname($hostName)
+    {
         $return = 0;
 
         // Read from cache or fetch from NDO
@@ -484,7 +494,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * Returns the Nagios state and additional information for the requested host
      */
-    public function getHostState($objects, $options, $filters, $isMemberQuery = false) {
+    public function getHostState($objects, $options, $filters, $isMemberQuery = false)
+    {
         $arrReturn = [];
 
         $filter = $this->parseFilter($objects, $filters, 'o', 'o', $isMemberQuery, false, HOST_QUERY);
@@ -618,7 +629,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      *
      * Returns the state and additional information of the requested service
      */
-    public function getServiceState($objects, $options, $filters, $isMemberQuery = false) {
+    public function getServiceState($objects, $options, $filters, $isMemberQuery = false)
+    {
         $arrReturn = [];
 
         $filter = $this->parseFilter($objects, $filters, 'o', 'o', $isMemberQuery, false, !HOST_QUERY);
@@ -783,7 +795,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @return array of hostnames
      */
 
-    public function getHostNamesProblematic() {
+    public function getHostNamesProblematic()
+    {
         $arrReturn = [];
 
         $QUERYHANDLE = $this->DB->query('
@@ -819,7 +832,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param   array $options List of filters to apply
      * @return  array     List of states and counts
      */
-    public function getHostMemberCounts($objects, $options, $filters) {
+    public function getHostMemberCounts($objects, $options, $filters)
+    {
         if ($options & 1) {
             $stateAttr = 'CASE WHEN ss.state_type = 0 THEN ss.last_hard_state ELSE ss.current_state END';
         } else {
@@ -897,7 +911,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
         return $arrReturn;
     }
 
-    public function getHostgroupStateCounts($objects, $options, $filters) {
+    public function getHostgroupStateCounts($objects, $options, $filters)
+    {
         if ($options & 1) {
             $stateAttr = 'CASE WHEN (hs.state_type = 0) THEN hs.last_hard_state ELSE hs.current_state END';
         } else {
@@ -1039,7 +1054,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
         return $arrReturn;
     }
 
-    public function getServicegroupStateCounts($objects, $options, $filters) {
+    public function getServicegroupStateCounts($objects, $options, $filters)
+    {
         if ($options & 1) {
             $stateAttr = 'CASE WHEN (ss.state_type = 0) THEN ss.last_hard_state ELSE ss.current_state END';
         } else {
@@ -1128,7 +1144,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * Gets all hosts with no parent host. This method is needed by the automap
      * to get the root host.
      */
-    public function getHostNamesWithNoParent() {
+    public function getHostNamesWithNoParent()
+    {
         $arrReturn = [];
 
         $QUERYHANDLE = $this->DB->query('SELECT o1.name1
@@ -1158,7 +1175,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param		string $hostName Name of host to get the parents of
      * @return	array			Array with hostnames
      */
-    public function getDirectParentNamesByHostName($hostName) {
+    public function getDirectParentNamesByHostName($hostName)
+    {
         $aParentNames = [];
 
         $QUERYHANDLE = $this->DB->query('SELECT o2.name1
@@ -1189,7 +1207,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param		string $hostName Name of host to get the children of
      * @return	array			Array with hostnames
      */
-    public function getDirectChildNamesByHostName($hostName) {
+    public function getDirectChildNamesByHostName($hostName)
+    {
         $arrChildNames = [];
 
         $QUERYHANDLE = $this->DB->query('SELECT o2.name1
@@ -1222,7 +1241,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param		string $hostgroupName Name of hostgroup to get the hosts of
      * @return	array			Array with hostnames
      */
-    public function getHostsByHostgroupName($hostgroupName) {
+    public function getHostsByHostgroupName($hostgroupName)
+    {
         $arrReturn = [];
 
         $QUERYHANDLE = $this->DB->query('SELECT
@@ -1257,7 +1277,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param		string $hostgroupName Name of hostgroup to get the hosts of
      * @return	array			Array with hostnames
      */
-    public function getHostNamesInHostgroup($hostgroupName) {
+    public function getHostNamesInHostgroup($hostgroupName)
+    {
             return $this->getHostsByHostgroupName($hostgroupName);
     }
 
@@ -1270,7 +1291,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param		string $servicegroupName Name of servicegroup to get the services of
      * @return	array			Array with hostnames and service descriptions
      */
-    public function getServicesByServicegroupName($servicegroupName) {
+    public function getServicesByServicegroupName($servicegroupName)
+    {
         $arrReturn = [];
 
         $QUERYHANDLE = $this->DB->query('SELECT
@@ -1305,7 +1327,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param	string $servicegroupName Name of servicegroup
      * @return	array			Array with object information
      */
-    public function getServicegroupInformations($servicegroupName) {
+    public function getServicegroupInformations($servicegroupName)
+    {
         $arrReturn = [];
 
         $QUERYHANDLE = $this->DB->query('SELECT
@@ -1335,7 +1358,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param	string $groupName Name of group
      * @return	array			Array with object information
      */
-    public function getHostgroupInformations($groupName) {
+    public function getHostgroupInformations($groupName)
+    {
         $arrReturn = [];
 
         $QUERYHANDLE = $this->DB->query('SELECT
@@ -1363,7 +1387,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param   string $hostName Hostname
      * @return  array    List of hostnames
      */
-    public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact = false) {
+    public function getDirectChildDependenciesNamesByHostName($hostName, $min_business_impact = false)
+    {
         return $this->getDirectChildNamesByHostName($hostName);
     }
 
@@ -1373,11 +1398,13 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param   string   Hostname
      * @return  array    List of hostnames
      */
-    public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact = false) {
+    public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact = false)
+    {
         return $this->getDirectParentNamesByHostName($hostName);
     }
 
-    public function getProgramStart() {
+    public function getProgramStart()
+    {
         $QUERYHANDLE = $this->DB->query('SELECT UNIX_TIMESTAMP(program_start_time) AS program_start '
             . 'FROM ' . $this->dbPrefix . 'programstatus WHERE instance_id=:instance',
                 ['instance' => $this->dbInstanceId]);

@@ -26,7 +26,8 @@ class ViewAck
 {
     private $error = null;
 
-    public function parse() {
+    public function parse()
+    {
         global $CORE, $_BACKEND, $AUTH;
 
         ob_start();

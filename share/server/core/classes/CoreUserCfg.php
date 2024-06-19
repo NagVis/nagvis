@@ -36,11 +36,13 @@ class CoreUserCfg
         'eventlog' => 'b',
     ];
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->profilesDir = cfg('paths', 'profiles');
     }
 
-    public function doGet($onlyUserCfg = false) {
+    public function doGet($onlyUserCfg = false)
+    {
         global $AUTH, $AUTHORISATION;
         $opts = [];
         if (!isset($AUTH) || !$AUTH->isAuthenticated()) {
@@ -78,11 +80,13 @@ class CoreUserCfg
         return $opts;
     }
 
-    public function doGetAsJson($onlyUserCfg = false) {
+    public function doGetAsJson($onlyUserCfg = false)
+    {
         return json_encode($this->doGet($onlyUserCfg));
     }
 
-    public function doSet($opts) {
+    public function doSet($opts)
+    {
         global $CORE, $AUTH;
         $file = $this->profilesDir . '/' . $AUTH->getUser() . '.profile';
 
@@ -104,12 +108,14 @@ class CoreUserCfg
         return $ret;
     }
 
-    public function getValue($key, $default = null) {
+    public function getValue($key, $default = null)
+    {
         $opts = $this->doGet();
         return isset($opts[$key]) ? $opts[$key] : $default;
     }
 
-    private function fixType($val, $type) {
+    private function fixType($val, $type)
+    {
         if ($type == 'i') {
             return (int)$val;
         }

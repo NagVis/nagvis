@@ -31,7 +31,8 @@ class NagVisLine extends NagVisStatelessObject
     protected $line_color;
     protected $line_color_border;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->type = 'line';
         parent::__construct();
     }
@@ -43,7 +44,8 @@ class NagVisLine extends NagVisStatelessObject
      *
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function fetchIcon() {
+    public function fetchIcon()
+    {
         // Nothing to do here, icon is set in constructor
     }
 

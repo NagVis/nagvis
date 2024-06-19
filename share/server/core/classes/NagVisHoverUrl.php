@@ -38,7 +38,8 @@ class NagVisHoverUrl
      * @param     GlobalCore     $CORE
      * @author     Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __construct($CORE, $url) {
+    public function __construct($CORE, $url)
+    {
         $this->CORE = $CORE;
         $this->url = $url;
         $this->code = '';
@@ -55,7 +56,8 @@ class NagVisHoverUrl
      *
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    public function __toString() {
+    public function __toString()
+    {
         return $this->code;
     }
 
@@ -66,7 +68,8 @@ class NagVisHoverUrl
      *
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function readHoverUrl() {
+    private function readHoverUrl()
+    {
         /* Context is supported in php >= 5.0
         * This could be usefull someday...
         * $http_opts = array(
@@ -113,7 +116,8 @@ class NagVisHoverUrl
      *
      * @author     Lars Michelsen <lm@larsmichelsen.com>
      */
-    private function cleanCode() {
+    private function cleanCode()
+    {
         $this->code = str_replace('"', '\\\'', str_replace('\'', '\\\'', str_replace("\t", '', str_replace("\n", '', str_replace("\r\n", '', $this->code)))));
     }
 }

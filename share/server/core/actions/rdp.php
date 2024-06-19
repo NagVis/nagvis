@@ -43,7 +43,8 @@ $configVars = [
 ];
 
 if (!function_exists('handle_action_rdp')) {
-    function handle_action_rdp($MAPCFG, $objId) {
+    function handle_action_rdp($MAPCFG, $objId)
+    {
         $host_name = $MAPCFG->getValue($objId, 'host_name');
         $domain    = $MAPCFG->getValue($objId, 'domain');
         $username  = $MAPCFG->getValue($objId, 'username');

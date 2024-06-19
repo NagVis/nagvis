@@ -31,7 +31,8 @@
 class CoreSessionHandler
 {
 
-    public function __construct() {
+    public function __construct()
+    {
         $sDomain   = cfg('global', 'sesscookiedomain');
         $sPath     = cfg('global', 'sesscookiepath');
         $iDuration = cfg('global', 'sesscookieduration');
@@ -99,11 +100,13 @@ class CoreSessionHandler
         }
     }
 
-    public function isSetAndNotEmpty($sKey) {
+    public function isSetAndNotEmpty($sKey)
+    {
         return isset($_SESSION[$sKey]) && $_SESSION[$sKey] != '';
     }
 
-    public function get($sKey) {
+    public function get($sKey)
+    {
         if (isset($_SESSION[$sKey])) {
             return $_SESSION[$sKey];
         } else {
@@ -111,7 +114,8 @@ class CoreSessionHandler
         }
     }
 
-    public function set($sKey, $sVal) {
+    public function set($sKey, $sVal)
+    {
         if (isset($_SESSION[$sKey])) {
             $sOld = $_SESSION[$sKey];
         } else {
@@ -127,15 +131,18 @@ class CoreSessionHandler
         return $sOld;
     }
 
-    public function del($key) {
+    public function del($key)
+    {
         unset($_SESSION[$key]);
     }
 
-    public function aquire() {
+    public function aquire()
+    {
         session_start();
     }
 
-    public function commit() {
+    public function commit()
+    {
         session_write_close();
     }
 }

@@ -24,7 +24,8 @@
 
 class ViewSearch
 {
-    public function parse() {
+    public function parse()
+    {
         ob_start();
         echo '<div class="simple_form">' . N;
         echo '<input type="text" name="highlightInput" id="highlightInput" '

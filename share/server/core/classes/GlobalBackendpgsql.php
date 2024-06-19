@@ -26,7 +26,8 @@
 
 class GlobalBackendpgsql extends GlobalBackendPDO
 {
-    public function driverName() {
+    public function driverName()
+    {
         return 'pgsql';
     }
 }

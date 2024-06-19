@@ -29,7 +29,8 @@ global $configVars;
 $configVars = [];
 
 if (!function_exists('handle_action_win_ssh')) {
-    function handle_action_win_ssh($MAPCFG, $objId) {
+    function handle_action_win_ssh($MAPCFG, $objId)
+    {
         $host_name = $MAPCFG->getValue($objId, 'host_name');
 
         // Get the host address! erm ... looks a little complicated...

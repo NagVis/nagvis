@@ -29,7 +29,8 @@ class FrontendModInfo extends FrontendModule
 {
     private $CORE;
 
-    public function __construct($CORE) {
+    public function __construct($CORE)
+    {
         $this->sName = 'Info';
         $this->CORE = $CORE;
 
@@ -38,7 +39,8 @@ class FrontendModInfo extends FrontendModule
         $this->FHANDLER = new FrontendRequestHandler($_POST);
     }
 
-    public function handleAction() {
+    public function handleAction()
+    {
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
@@ -52,7 +54,8 @@ class FrontendModInfo extends FrontendModule
         return $sReturn;
     }
 
-    private function displayDialog() {
+    private function displayDialog()
+    {
         $VIEW = new NagVisInfoView($this->CORE);
         return $VIEW->parse();
     }
