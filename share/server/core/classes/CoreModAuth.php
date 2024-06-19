@@ -79,7 +79,7 @@ class CoreModAuth extends CoreModule
 
         // Check length limits
         $bValid = true;
-        if ($bValid && $this->FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH)) {
+        if ($this->FHANDLER->isLongerThan('username', AUTH_MAX_USERNAME_LENGTH)) {
             $bValid = false;
         }
         if ($bValid && $this->FHANDLER->isLongerThan('password', AUTH_MAX_PASSWORD_LENGTH)) {

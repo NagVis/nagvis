@@ -126,7 +126,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface
 
         $sslContext = [];
 
-        if (cfg('backend_' . $backendId, 'verify_peer') == true) {
+        if (cfg('backend_' . $backendId, 'verify_peer')) {
             $sslContext = [
                 'verify_peer'      => true,
                 'verify_peer_name' => false,
@@ -223,7 +223,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface
         // Decode the json response
         // json_decode returns null on syntax problems
         $parsed = json_decode(iso8859_1_to_utf8($s), true);
-        if ($parsed === null || !is_array($parsed)) {
+        if (!is_array($parsed)) {
             throw new BackendInvalidResponse(l('Invalid response ([BACKENDID]): [RESPONSE]',
                 [
                     'BACKENDID' => $this->backendId,

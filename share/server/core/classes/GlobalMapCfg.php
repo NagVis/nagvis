@@ -517,7 +517,7 @@ class GlobalMapCfg
         $this->gatherTypeDefaults($onlyGlobal);
 
         if (!$onlyGlobal) {
-            if ($resolveTemplates == true) {
+            if ($resolveTemplates) {
                 // Merge the objects with the linked templates
                 $this->mergeTemplates();
             }
@@ -635,7 +635,7 @@ class GlobalMapCfg
                         $vals = $new;
                     }
 
-                    if (isset($validConfig[$param]['must']) && $validConfig[$param]['must'] == false) {
+                    if (isset($validConfig[$param]['must']) && !$validConfig[$param]['must']) {
                         $values[$param] = array_merge(['' => ''], $vals);
                     } else {
                         $values[$param] = $vals;
@@ -1135,7 +1135,7 @@ class GlobalMapCfg
                     continue;
                 }
 
-                if (isset($val['must']) && $val['must'] == true) {
+                if (isset($val['must']) && $val['must']) {
                     if (
                         (!isset($element[$key]) || $element[$key] == '')
                         && (!isset($val['default']) || $val['default'] == '')
@@ -1311,7 +1311,7 @@ class GlobalMapCfg
     {
         $a = [];
         foreach ($this->getDefinitions('template') as $id => $aOpts) {
-            if ($strMatch == null || ($strMatch != null && preg_match($strMatch, $aOpts['name']))) {
+            if ($strMatch == null || preg_match($strMatch, $aOpts['name'])) {
                 $a[$aOpts['name']] = true;
             }
         }
@@ -1683,7 +1683,7 @@ class GlobalMapCfg
 
         $type = $this->mapConfig[$id]['type'];
 
-        if (is_numeric($id) && $id === 0) {
+        if ($id === 0) {
             [$inObj, $start, $end] = $this->getObjectLinesByNum(0);
         } else {
             [$inObj, $start, $end] = $this->getObjectLinesById($id);

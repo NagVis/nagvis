@@ -316,7 +316,7 @@ function graphviz_parse(&$map_config, $imagemap) {
                 $aMatches
             )
         ) {
-            if (isset($aMatches[1]) && isset($aMatches[2]) && isset($aMatches[2])) {
+            if (isset($aMatches[1]) && isset($aMatches[2])) {
                 $type      = trim($aMatches[1]);
                 $object_id = trim($aMatches[2]);
                 $coords    = trim($aMatches[3]);

@@ -262,7 +262,7 @@ function worldmap_get_objects_by_bounds($sw_lng, $sw_lat, $ne_lng, $ne_lat) {
 
     $RES = $DB->query($q);
 
-    if ($RES == false) {
+    if (!$RES) {
         error_log(implode($DB->error(), ','));
         throw new WorldmapError(l('Failed to fetch objects: [E]; Query was [Q]', [
             'E' => json_encode($DB->error()), 'Q' => $q

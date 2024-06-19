@@ -117,7 +117,7 @@ if ($MODULE->actionRequiresAuthorisation()) {
 
 // Handle regular action when everything is ok
 // When no matching module or action is found show the 404 error
-if ($MODULE !== false && $MODULE->offersAction($UHANDLER->get('act'))) {
+if ($MODULE->offersAction($UHANDLER->get('act'))) {
     $MODULE->setAction($UHANDLER->get('act'));
 
     // Handle the given action in the module

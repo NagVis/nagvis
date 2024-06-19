@@ -229,7 +229,7 @@ class CoreModMap extends CoreModule
         $FHANDLER = new CoreRequestHandler($_GET);
 
         // Check for needed params
-        if ($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+        if (!$FHANDLER->isSetAndNotEmpty('map')) {
             $bValid = false;
         }
         if ($bValid && !$FHANDLER->isSetAndNotEmpty('id')) {
@@ -301,7 +301,7 @@ class CoreModMap extends CoreModule
         $FHANDLER = new CoreRequestHandler($aResponse);
 
         // Check for needed params
-        if ($bValid && !$FHANDLER->isSetAndNotEmpty('map')) {
+        if (!$FHANDLER->isSetAndNotEmpty('map')) {
             $bValid = false;
         }
         if ($bValid && !$FHANDLER->isSetAndNotEmpty('id')) {

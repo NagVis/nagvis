@@ -233,7 +233,7 @@ class NagVisMapObj extends NagVisStatefulObject
             if (
                 $sType == 'map'
                 && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName()
-                && $this->isSummaryObject == true
+                && $this->isSummaryObject
             ) {
                 continue;
             }
@@ -530,7 +530,7 @@ class NagVisMapObj extends NagVisStatefulObject
                     * When the current map object is a summary object skip the map
                     * child for preventing a loop
                     */
-                    if ($this->MAPCFG->getName() == $SUBMAPCFG->getName() && $this->isSummaryObject == true) {
+                    if ($this->MAPCFG->getName() == $SUBMAPCFG->getName() && $this->isSummaryObject) {
                         continue 2;
                     }
 
@@ -603,22 +603,21 @@ class NagVisMapObj extends NagVisStatefulObject
 
             if ($sType == 'map') {
                 /**
-                * When the current map object is a summary object skip the map
-                * child for preventing a loop
-                */
+                 * When the current map object is a summary object skip the map
+                 * child for preventing a loop
+                 */
                 if (
-                    $sType == 'map'
-                    && $this->MAPCFG->getName() == $OBJ->MAPCFG->getName()
-                    && $this->isSummaryObject == true
+                    $this->MAPCFG->getName() == $OBJ->MAPCFG->getName()
+                    && $this->isSummaryObject
                 ) {
                     continue;
                 }
 
                 /**
-                    * All maps which produce a loop by linking back to earlier maps
-                    * need to be skipped here.
-                    */
-                if ($sType == 'map' && $OBJ->isLoopingBacklink) {
+                 * All maps which produce a loop by linking back to earlier maps
+                 * need to be skipped here.
+                 */
+                if ($OBJ->isLoopingBacklink) {
                     continue;
                 }
 

@@ -90,7 +90,6 @@ class NagVisHoverUrl
         $aUrl = parse_url($this->url);
         if (
             !isset($aUrl['scheme'])
-            || $aUrl['scheme'] == ''
             || ($aUrl['scheme'] != 'http' && $aUrl['scheme'] != 'https')
         ) {
             throw new NagVisException(l('problemReadingUrl', [

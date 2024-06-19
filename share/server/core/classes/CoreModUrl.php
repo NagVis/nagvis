@@ -92,7 +92,7 @@ class CoreModUrl extends CoreModule
             ]));
         }
 
-        if (false == ($content = file_get_contents($this->url))) {
+        if (!($content = file_get_contents($this->url))) {
             $error = error_get_last();
             throw new NagVisException(l('problemReadingUrl', [
                 'URL' => htmlentities($this->url, ENT_COMPAT, 'UTF-8'),

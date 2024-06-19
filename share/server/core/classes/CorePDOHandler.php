@@ -316,9 +316,6 @@ class CorePDOHandler
             $this->lastErrorInfo = $e->getMessage();
             return false;
         }
-        if ($this->DB === false || $this->DB === null) {
-            return false;
-        }
 
         $this->driver = $driver;
         $this->data = $drv_data;

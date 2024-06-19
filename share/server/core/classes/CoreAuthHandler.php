@@ -156,7 +156,7 @@ class CoreAuthHandler
 
     public function isAuthenticated()
     {
-        if (cfg('global', 'audit_log') == true) {
+        if (cfg('global', 'audit_log')) {
             $ALOG = new CoreLog(cfg('paths', 'var') . 'nagvis-audit.log',
                 cfg('global', 'dateformat'));
         } else {
@@ -206,7 +206,7 @@ class CoreAuthHandler
             return false;
         }
 
-        if (cfg('global', 'audit_log') == true) {
+        if (cfg('global', 'audit_log')) {
             $ALOG = new CoreLog(cfg('paths', 'var') . 'nagvis-audit.log',
                 cfg('global', 'dateformat'));
             $ALOG->l('User logged out (' . $this->getUser() . ' / ' . $this->getUserId() . '): ' . $this->sModuleName);
