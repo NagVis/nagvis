@@ -767,14 +767,14 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
     }
 
     /**
-    * PUBLIC getHostNamesProblematic()
-    *
-    * Queries PostgreSQL for hosts with problems
-    * A problem is given when the host state != UP
-    * or a service != OK
-    *
-    * @return array of hostnames
-    */
+     * PUBLIC getHostNamesProblematic()
+     *
+     * Queries PostgreSQL for hosts with problems
+     * A problem is given when the host state != UP
+     * or a service != OK
+     *
+     * @return array of hostnames
+     */
 
     public function getHostNamesProblematic() {
         $arrReturn = [];

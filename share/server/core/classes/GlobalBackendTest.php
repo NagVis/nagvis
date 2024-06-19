@@ -449,7 +449,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @param   string $name1Pattern Name1 of the objecs
      * @param   string $name2Pattern Name2 of the objecs
      * @return  array    Results of the query
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
+     * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getObjects($type, $name1Pattern = '', $name2Pattern = '') {
@@ -891,7 +891,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
      *
      * @param   string   Hostname
      * @return  array    List of hostnames
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
+     * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact = false) {

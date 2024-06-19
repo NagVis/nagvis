@@ -2915,11 +2915,11 @@ class GlobalMainCfg {
     }
 
     /**
-   * Transforms a string option to an array with trimmed values
-   *
-   * @param  string $val Comma separated value
-   * @return array   Exploded Array
-   */
+     * Transforms a string option to an array with trimmed values
+     *
+     * @param  string $val Comma separated value
+     * @return array   Exploded Array
+     */
     private function stringToArray($val) {
         // Explode comma separated list to array
         $val = explode(',', $val);
