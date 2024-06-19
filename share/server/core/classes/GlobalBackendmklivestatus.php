@@ -696,7 +696,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
                 $count = '';
             }
 
-            $aFilters[] = implode($objFilters) . $count;
+            $aFilters[] = implode('', $objFilters) . $count;
         }
 
         $count = count($aFilters);
@@ -706,7 +706,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
             $count = '';
         }
 
-        return implode($aFilters) . $count;
+        return implode('', $aFilters) . $count;
     }
 
     private function serviceStateStats($stateAttr)

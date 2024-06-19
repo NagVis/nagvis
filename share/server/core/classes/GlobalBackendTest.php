@@ -705,7 +705,7 @@ class GlobalBackendTest implements GlobalBackendInterface
                 $count = '';
             }
 
-            $aFilters[] = implode($objFilters) . $count;
+            $aFilters[] = implode('', $objFilters) . $count;
         }
 
         $count = count($aFilters);
@@ -715,7 +715,7 @@ class GlobalBackendTest implements GlobalBackendInterface
             $count = '';
         }
 
-        return implode($aFilters) . $count;
+        return implode('', $aFilters) . $count;
     }
 
 
