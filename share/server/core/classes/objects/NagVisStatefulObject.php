@@ -88,11 +88,11 @@ class NagVisStatefulObject extends NagVisObject {
      * Adds state counts of members to the object. Works incremental!
      */
     public function addStateCounts($arr) {
-        if($this->aStateCounts === null) {
+        if ($this->aStateCounts === null) {
             $this->aStateCounts = $arr;
         } else {
             // Add new state counts to current ones
-            foreach($arr as $state => $substates) {
+            foreach ($arr as $state => $substates) {
                 foreach ($substates as $substate => $num) {
                     $this->aStateCounts[$state][$substate] += $num;
                 }
@@ -162,7 +162,7 @@ class NagVisStatefulObject extends NagVisObject {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getIconDetails() {
-        if($this->iconDetails == null) {
+        if ($this->iconDetails == null) {
             $this->iconDetails = getimagesize(NagVisStatefulObject::$iconPath . $this->icon);
         }
         return $this->iconDetails;
@@ -230,23 +230,23 @@ class NagVisStatefulObject extends NagVisObject {
      * Returns the current sub-state of the object
      */
     public function getSubState($summary = false) {
-        if($summary) {
-            if($this->sum[ACK] == 1) {
+        if ($summary) {
+            if ($this->sum[ACK] == 1) {
                 return 'ack';
             }
-            elseif($this->sum[DOWNTIME] == 1) {
+            elseif ($this->sum[DOWNTIME] == 1) {
                 return 'downtime';
             }
-            elseif($this->isStale($summary)) {
+            elseif ($this->isStale($summary)) {
                 return 'stale';
             }
-        } elseif($this->state[ACK] == 1) {
+        } elseif ($this->state[ACK] == 1) {
             return 'ack';
         }
-        elseif($this->state[DOWNTIME] == 1) {
+        elseif ($this->state[DOWNTIME] == 1) {
             return 'downtime';
         }
-        elseif($this->isStale($summary)) {
+        elseif ($this->isStale($summary)) {
             return 'stale';
         }
         return 'normal';
@@ -301,9 +301,9 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getStateDuration() {
-        if(isset($this->state['last_state_change']) && $this->state['last_state_change'] != '0'
+        if (isset($this->state['last_state_change']) && $this->state['last_state_change'] != '0'
             && $this->state['last_state_change'] != '') {
-            if(self::$dateFormat == '') {
+            if (self::$dateFormat == '') {
                 self::$dateFormat = cfg('global', 'dateformat');
             }
 
@@ -317,8 +317,8 @@ class NagVisStatefulObject extends NagVisObject {
      * Returns state timestamp as human readable date
      */
     public function get_date($attr) {
-        if(isset($this->state[$attr]) && $this->state[$attr] != '0' && $this->state[$attr] != '') {
-            if(self::$dateFormat == '') {
+        if (isset($this->state[$attr]) && $this->state[$attr] != '0' && $this->state[$attr] != '') {
+            if (self::$dateFormat == '') {
                 self::$dateFormat = cfg('global', 'dateformat');
             }
             return date(self::$dateFormat, intval($this->state[$attr]));
@@ -336,7 +336,7 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getStateType() {
-        if(isset($this->state[STATE_TYPE]) && $this->state[STATE_TYPE] != '') {
+        if (isset($this->state[STATE_TYPE]) && $this->state[STATE_TYPE] != '') {
             $stateTypes = [0 => 'SOFT', 1 => 'HARD'];
             return $stateTypes[$this->state[STATE_TYPE]];
         } else {
@@ -347,7 +347,7 @@ class NagVisStatefulObject extends NagVisObject {
     public function hasExcludeFilters($isCount) {
         // When this is a count use both options exclude_members and
         // exclude_member_states
-        if($isCount) {
+        if ($isCount) {
             return (isset($this->exclude_members) && $this->exclude_members !== '')
                 || (isset($this->exclude_member_states) && $this->exclude_member_states !== '');
         } else {
@@ -359,10 +359,10 @@ class NagVisStatefulObject extends NagVisObject {
         // When this is a count use the exclude_member_states over the 
         // exclude_members
         $key = $this->getExcludeFilterKey($isCount);
-        if($key == 'exclude_member_states') {
+        if ($key == 'exclude_member_states') {
             return $this->exclude_member_states;
         }
-        if($key == 'exclude_members') {
+        if ($key == 'exclude_members') {
             return $this->exclude_members;
         } else {
             return '';
@@ -372,10 +372,10 @@ class NagVisStatefulObject extends NagVisObject {
     public function getExcludeFilterKey($isCount) {
         // When this is a count use the exclude_member_states over the 
         // exclude_members
-        if($isCount && $this->exclude_member_states !== '') {
+        if ($isCount && $this->exclude_member_states !== '') {
             return 'exclude_member_states';
         }
-        elseif($this->exclude_members !== '') {
+        elseif ($this->exclude_members !== '') {
             return 'exclude_members';
         } else {
             return '';
@@ -406,7 +406,7 @@ class NagVisStatefulObject extends NagVisObject {
         $arr['summary_output']                = $this->escapeStringForJson(val($this->sum, OUTPUT, ''));
 
         // Macros which are only for services and hosts
-        if($this->type == 'host' || $this->type == 'service') {
+        if ($this->type == 'host' || $this->type == 'service') {
             $arr['custom_variables'] = val($this->state, CUSTOM_VARS);
 
             // Add (Check_MK) tags as array of tags (when available)
@@ -446,7 +446,7 @@ class NagVisStatefulObject extends NagVisObject {
 
         // Enable/Disable fetching children
         $arr['members'] = [];
-        if($bFetchChilds && method_exists($this, 'getMembers')) {
+        if ($bFetchChilds && method_exists($this, 'getMembers')) {
             foreach ($this->getSortedObjectMembers() as $OBJ) {
                 $arr['members'][] = $OBJ->fetchObjectAsChild();
             }
@@ -470,7 +470,7 @@ class NagVisStatefulObject extends NagVisObject {
         $this->url = $this->getUrl();
 
         // When this is a gadget parse the url
-        if($this->view_type == 'gadget') {
+        if ($this->view_type == 'gadget') {
             $this->parseGadgetUrl();
         }
 
@@ -487,7 +487,7 @@ class NagVisStatefulObject extends NagVisObject {
      */
     public function fetchIcon() {
         // Set the paths of this iconset
-        if(NagVisStatefulObject::$iconPath === null) {
+        if (NagVisStatefulObject::$iconPath === null) {
             NagVisStatefulObject::$iconPath      = path('sys',  'global', 'icons');
             NagVisStatefulObject::$iconPathLocal = path('sys',  'local',  'icons');
         }
@@ -498,17 +498,17 @@ class NagVisStatefulObject extends NagVisObject {
 
         if ($this->sum[STATE] !== null) {
             $stateLow = strtolower(state_str($this->sum[STATE]));
-            switch($stateLow) {
+            switch ($stateLow) {
                 case 'unknown':
                 case 'unreachable':
                 case 'down':
                 case 'critical':
                 case 'warning':
-                    if($this->sum[ACK]) {
+                    if ($this->sum[ACK]) {
                         $icon = $this->iconset . '_' . $stateLow . '_ack.' . $fileType;
-                    } elseif($this->sum[DOWNTIME]) {
+                    } elseif ($this->sum[DOWNTIME]) {
                         $icon = $this->iconset . '_' . $stateLow . '_dt.' . $fileType;
-                    } elseif($this->isStale(true)) {
+                    } elseif ($this->isStale(true)) {
                         $icon = $this->iconset . '_' . $stateLow . '_stale.' . $fileType;
                     } else {
                         $icon = $this->iconset . '_' . $stateLow . '.' . $fileType;
@@ -516,9 +516,9 @@ class NagVisStatefulObject extends NagVisObject {
                 break;
                 case 'up':
                 case 'ok':
-                    if($this->sum[DOWNTIME]) {
+                    if ($this->sum[DOWNTIME]) {
                         $icon = $this->iconset . '_' . $stateLow . '_dt.' . $fileType;
-                    } elseif($this->isStale(true)) {
+                    } elseif ($this->isStale(true)) {
                         $icon = $this->iconset . '_' . $stateLow . '_stale.' . $fileType;
                     } else {
                         $icon = $this->iconset . '_' . $stateLow . '.' . $fileType;
@@ -534,7 +534,7 @@ class NagVisStatefulObject extends NagVisObject {
             }
 
             //Checks whether the needed file exists
-            if(@file_exists(NagVisStatefulObject::$iconPath . $icon)
+            if (@file_exists(NagVisStatefulObject::$iconPath . $icon)
                 || @file_exists(NagVisStatefulObject::$iconPathLocal . $icon)) {
                 $this->icon = $icon;
             } else {
@@ -556,9 +556,9 @@ class NagVisStatefulObject extends NagVisObject {
         $stateCounts = [];
         $stateWeight = $_MAINCFG->getStateWeight();
 
-        if($this->aStateCounts !== null) {
-            foreach($this->aStateCounts as $sState => $aSubstates) {
-                if(isset($stateWeight[$sState])
+        if ($this->aStateCounts !== null) {
+            foreach ($this->aStateCounts as $sState => $aSubstates) {
+                if (isset($stateWeight[$sState])
                     && isset($stateWeight[$sState]['normal'])
                     && isset($aSubstates['normal'])
                     && $aSubstates['normal'] !== 0) {
@@ -575,9 +575,9 @@ class NagVisStatefulObject extends NagVisObject {
 
         $objCount = 0;
         $stateFilter = [];
-        foreach($stateCounts as $aState) {
+        foreach ($stateCounts as $aState) {
             $stateFilter[] = $aState['name'];
-            if(($objCount += $aState['count']) >= $this->hover_childs_limit) {
+            if (($objCount += $aState['count']) >= $this->hover_childs_limit) {
                 break;
             }
         }
@@ -589,7 +589,7 @@ class NagVisStatefulObject extends NagVisObject {
      * Sets output/state on backend problems
      */
     public function setBackendProblem($s, $backendId = null) {
-        if($backendId === null) {
+        if ($backendId === null) {
             $backendId = $this->backend_id[0];
         }
         $this->problem_msg = l('Problem (Backend: [BACKENDID]): [MSG]',
@@ -611,15 +611,15 @@ class NagVisStatefulObject extends NagVisObject {
     # #########################################################################
 
     public static function sortStateCountsByState($a1, $a2) {
-        if($a1['weight'] == $a2['weight']) {
+        if ($a1['weight'] == $a2['weight']) {
             return 0;
-        } elseif($a1['weight'] < $a2['weight']) {
-            if(NagVisObject::$sSortOrder === 'asc') {
+        } elseif ($a1['weight'] < $a2['weight']) {
+            if (NagVisObject::$sSortOrder === 'asc') {
                 return +1;
             } else {
                 return -1;
             }
-        } elseif(NagVisObject::$sSortOrder === 'asc') {
+        } elseif (NagVisObject::$sSortOrder === 'asc') {
             return -1;
         } else {
             return +1;
@@ -678,7 +678,7 @@ class NagVisStatefulObject extends NagVisObject {
      * path or will remove [] when full url given
      */
     protected function parseGadgetUrl() {
-        if(preg_match('/^\[(.*)\]$/', $this->gadget_url, $match) > 0) {
+        if (preg_match('/^\[(.*)\]$/', $this->gadget_url, $match) > 0) {
             $this->gadget_url = $match[1];
         } else {
             $this->gadget_url = path('html', 'global', 'gadgets', $this->gadget_url);
@@ -697,9 +697,9 @@ class NagVisStatefulObject extends NagVisObject {
         $stateWeight = $_MAINCFG->getStateWeight();
 
         // Fetch the current state to start with
-        if($this->sum[STATE] == null) {
+        if ($this->sum[STATE] == null) {
             $currWeight = null;
-        } elseif(isset($stateWeight[$this->sum[STATE]])) {
+        } elseif (isset($stateWeight[$this->sum[STATE]])) {
             $currWeight = $stateWeight[$this->sum[STATE]][$this->getSubState(SUMMARY_STATE)];
         } else {
             throw new NagVisException(l('Invalid state+substate ([STATE], [SUBSTATE]) found while loading the current summary state of an object of type [TYPE].',
@@ -712,11 +712,11 @@ class NagVisStatefulObject extends NagVisObject {
 
         // Loop all major states
         $iSumCount = 0;
-        if($this->aStateCounts !== null) {
-            foreach($this->aStateCounts as $sState => $aSubstates) {
+        if ($this->aStateCounts !== null) {
+            foreach ($this->aStateCounts as $sState => $aSubstates) {
                 // Loop all substates (normal,ack,downtime,...)
-                foreach($aSubstates as $sSubState => $iCount) {
-                    if($iCount === 0) {
+                foreach ($aSubstates as $sSubState => $iCount) {
+                    if ($iCount === 0) {
                         continue;
                     }
 
@@ -724,12 +724,12 @@ class NagVisStatefulObject extends NagVisObject {
                     $iSumCount += $iCount;
 
                     // Get weight
-                    if(isset($stateWeight[$sState]) && isset($stateWeight[$sState][$sSubState])) {
+                    if (isset($stateWeight[$sState]) && isset($stateWeight[$sState][$sSubState])) {
                         $weight = $stateWeight[$sState][$sSubState];
 
                         // No "current state" yet
                         // The new state is worse than the current state
-                        if($currWeight === null || $currWeight < $weight) {
+                        if ($currWeight === null || $currWeight < $weight) {
                             // Set the new weight for next compare
                             $currWeight = $weight;
 
@@ -737,19 +737,19 @@ class NagVisStatefulObject extends NagVisObject {
 
                             $this->sum[STATE] = $sState;
 
-                            if($sSubState == 'ack') {
+                            if ($sSubState == 'ack') {
                                 $this->sum[ACK] = 1;
                             } else {
                                 $this->sum[ACK] = 0;
                             }
 
-                            if($sSubState == 'downtime') {
+                            if ($sSubState == 'downtime') {
                                 $this->sum[DOWNTIME] = 1;
                             } else {
                                 $this->sum[DOWNTIME] = 0;
                             }
 
-                            if($sSubState == 'stale') {
+                            if ($sSubState == 'stale') {
                                 $this->sum[STALE] = 1;
                             } else {
                                 $this->sum[STALE] = 0;
@@ -769,7 +769,7 @@ class NagVisStatefulObject extends NagVisObject {
         }
 
         // Fallback for objects without state and without members
-        if($this->sum[STATE] == null && $iSumCount == 0) {
+        if ($this->sum[STATE] == null && $iSumCount == 0) {
             $this->sum[STATE] = ERROR;
         }
     }
@@ -778,11 +778,11 @@ class NagVisStatefulObject extends NagVisObject {
      * Merges the summary output from objects and all child objects together
      */
     protected function mergeSummaryOutput($arrStates, $objLabel, $finish = true, $continue = false) {
-        if(NagVisStatefulObject::$langMemberStates === null) {
+        if (NagVisStatefulObject::$langMemberStates === null) {
             NagVisStatefulObject::$langMemberStates = l('Contains');
         }
 
-        if($this->sum[OUTPUT] === null) {
+        if ($this->sum[OUTPUT] === null) {
             $this->sum[OUTPUT] = '';
         }
 
@@ -790,14 +790,14 @@ class NagVisStatefulObject extends NagVisObject {
             $this->sum[OUTPUT] .= NagVisStatefulObject::$langMemberStates . ' ';
         }
 
-        foreach($arrStates as $state => $num) {
+        foreach ($arrStates as $state => $num) {
             if ($num > 0) {
                 $this->sum[OUTPUT] .= $num . ' ' . state_str($state) . ', ';
             }
         }
 
         // If some has been added remove last comma, else add a simple 0
-        if(substr($this->sum[OUTPUT], -2, 2) == ', ') {
+        if (substr($this->sum[OUTPUT], -2, 2) == ', ') {
             $this->sum[OUTPUT] = rtrim($this->sum[OUTPUT], ', ');
         } else {
             $this->sum[OUTPUT] .= '0 ';
@@ -818,7 +818,7 @@ class NagVisStatefulObject extends NagVisObject {
 
         // Initialize empty or with current object state
         $currentStateWeight = null;
-        if($this->sum[STATE] != null) {
+        if ($this->sum[STATE] != null) {
             $currentStateWeight = $stateWeight[$this->sum[STATE]][$this->getSubState(SUMMARY_STATE)];
         }
 
@@ -828,7 +828,7 @@ class NagVisStatefulObject extends NagVisObject {
 
         // Loop all object to gather the worst state and set it as summary
         // state of the current object
-        foreach($objects as $OBJ) {
+        foreach ($objects as $OBJ) {
             if ($this->getType() == 'map' && $OBJ->getType() == 'map' && $this instanceof NagVisMapObj) {
                 if ($this->MAPCFG->getValue(0, 'ignore_linked_maps_summary_state') != 0) {
                     continue;
@@ -840,20 +840,20 @@ class NagVisStatefulObject extends NagVisObject {
             $objDowntime     = $OBJ->sum[DOWNTIME];
             $objStale        = $OBJ->sum[STALE];
 
-            if(isset($stateWeight[$objSummaryState])) {
+            if (isset($stateWeight[$objSummaryState])) {
                 // Gather the object summary state type
                 $objType = 'normal';
-                if($objAck == 1 && isset($stateWeight[$objSummaryState]['ack'])) {
+                if ($objAck == 1 && isset($stateWeight[$objSummaryState]['ack'])) {
                     $objType = 'ack';
                 }
-                elseif($objDowntime == 1 && isset($stateWeight[$objSummaryState]['downtime'])) {
+                elseif ($objDowntime == 1 && isset($stateWeight[$objSummaryState]['downtime'])) {
                     $objType = 'downtime';
                 }
-                elseif($objStale == 1 && isset($stateWeight[$objSummaryState]['stale'])) {
+                elseif ($objStale == 1 && isset($stateWeight[$objSummaryState]['stale'])) {
                     $objType = 'stale';
                 }
 
-                if(isset($stateWeight[$objSummaryState][$objType])
+                if (isset($stateWeight[$objSummaryState][$objType])
                     && ($currentStateWeight === null || $stateWeight[$objSummaryState][$objType] >= $currentStateWeight)) {
                     $this->sum[STATE]    = $objSummaryState;
                     $this->sum[ACK]      = $objAck;
@@ -904,8 +904,8 @@ class NagVisStatefulObject extends NagVisObject {
 
         // Add the custom htmlcgi path for the object
         $i = 0;
-        foreach($this->backend_id as $backend_id) {
-            if($i == 0) {
+        foreach ($this->backend_id as $backend_id) {
+            if ($i == 0) {
                 $arr['htmlcgi']  = cfg('backend_' . $backend_id, 'htmlcgi');
                 $arr['custom_1'] = cfg('backend_' . $backend_id, 'custom_1');
                 $arr['custom_2'] = cfg('backend_' . $backend_id, 'custom_2');
@@ -923,14 +923,14 @@ class NagVisStatefulObject extends NagVisObject {
         $arr = array_merge($arr, $this->getObjectStateInformations(false));
 
         $num_members = $this->getNumMembers();
-        if($num_members !== null) {
+        if ($num_members !== null) {
             $arr['num_members'] = $num_members;
         }
 
         // If there are some members fetch the information for them
-        if(isset($arr['num_members']) && $arr['num_members'] > 0) {
+        if (isset($arr['num_members']) && $arr['num_members'] > 0) {
             $members = [];
-            foreach($this->getSortedObjectMembers() as $OBJ) {
+            foreach ($this->getSortedObjectMembers() as $OBJ) {
                 $members[] = $OBJ->fetchObjectAsChild();
             }
             $arr['members'] = $members;
@@ -951,7 +951,7 @@ class NagVisStatefulObject extends NagVisObject {
         self::$sSortOrder = $this->hover_childs_order;
 
         // Sort the array of child objects by the sort option
-        switch($this->hover_childs_sort) {
+        switch ($this->hover_childs_sort) {
             case 's':
                 // Order by State
                 usort($aTmpMembers, ["NagVisObject", "sortObjectsByState"]);
@@ -970,7 +970,7 @@ class NagVisStatefulObject extends NagVisObject {
         $iNumObjects = count($aTmpMembers);
 
         // Loop all child object until all looped or the child limit is reached
-        for($i = 0; $this->belowHoverChildsLimit($i) && $i < $iNumObjects; $i++) {
+        for ($i = 0; $this->belowHoverChildsLimit($i) && $i < $iNumObjects; $i++) {
             $arr[] = $aTmpMembers[$i];
         }
 

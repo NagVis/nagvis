@@ -52,9 +52,9 @@ class ViewToStaticMap {
                 // Create a new map config
                 $NEW = new GlobalMapCfg($name);
                 $NEW->createMapConfig();
-                foreach($MAPCFG->getMapObjects() as $object_id => $cfg) {
+                foreach ($MAPCFG->getMapObjects() as $object_id => $cfg) {
                     // Remove "sources" from the global section. Cause this makes the maps dynamic
-                    if($cfg['type'] == 'global') {
+                    if ($cfg['type'] == 'global') {
                         unset($cfg['sources']);
                     }
                     $NEW->addElement($cfg['type'], $cfg, $perm = true, $object_id);

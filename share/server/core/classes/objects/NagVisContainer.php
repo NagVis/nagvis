@@ -41,7 +41,7 @@ class NagVisContainer extends NagVisStatelessObject {
         // Prepare the URL attribute. If it is an absolute url, leave it as it is
         // If it is a simple filename add the url to the scripts path
         $parts = parse_url($this->url);
-        if(!isset($parts['scheme']) && $parts['path'][0] !== '/') {
+        if (!isset($parts['scheme']) && $parts['path'][0] !== '/') {
             $this->url = cfg('paths', 'htmlbase') . '/userfiles/scripts/' . $this->url;
         }
 

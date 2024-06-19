@@ -75,11 +75,11 @@ class ViewMapAddModify {
     private function validateAttributes() {
         $attrDefs = $this->MAPCFG->getValidObjectType($this->object_type);
         // Are some must values missing?
-        foreach($attrDefs as $propname => $prop) {
-            if(isset($prop['must']) && $prop['must'] == '1') {
+        foreach ($attrDefs as $propname => $prop) {
+            if (isset($prop['must']) && $prop['must'] == '1') {
                 // In case of "source" options only validate the ones which belong
                 // to currently enabled sources
-                if(isset($prop['source_param']) && !in_array($prop['source_param'], $this->MAPCFG->getValue(0, 'sources'))) {
+                if (isset($prop['source_param']) && !in_array($prop['source_param'], $this->MAPCFG->getValue(0, 'sources'))) {
                     continue;
                 }
 
@@ -90,24 +90,24 @@ class ViewMapAddModify {
         }
 
         // FIXME: Are all given attrs valid ones?
-        foreach($this->attrs as $key => $val) {
-            if(!isset($attrDefs[$key])) {
+        foreach ($this->attrs as $key => $val) {
+            if (!isset($attrDefs[$key])) {
                 throw new FieldInputError($key, l('The attribute "[A]" is unknown.', ["A" => $key]));
             }
-            if(isset($attrDefs[$key]['deprecated']) && $attrDefs[$key]['deprecated'] === true) {
+            if (isset($attrDefs[$key]['deprecated']) && $attrDefs[$key]['deprecated'] === true) {
                 throw new FieldInputError($key, l('The attribute is deprecated.'));
             }
 
             // The object has a match regex, it can be checked
             // -> In case of array attributes validate the single parts
-            if(isset($attrDefs[$key]['match'])) {
+            if (isset($attrDefs[$key]['match'])) {
                 $array = isset($attrDefs[$key]['array']) && $attrDefs[$key]['array'];
-                if(!$array) {
+                if (!$array) {
                     $val = [$val];
                 }
 
-                foreach($val as $part) {
-                    if(!preg_match($attrDefs[$key]['match'], $part)) {
+                foreach ($val as $part) {
+                    if (!preg_match($attrDefs[$key]['match'], $part)) {
                         throw new FieldInputError($key, l('The attribute has the wrong format (Regex: [MATCH]).',
                             ['MATCH' => $attrDefs[$key]['match']]));
                     }
@@ -126,7 +126,7 @@ class ViewMapAddModify {
         // Modification/Creation?
         // The object_id is known on modification. When it is not known 'type' is set
         // to create new objects
-        if($this->object_id !== null) {
+        if ($this->object_id !== null) {
             // The handler has been called in "view_params" mode. In this case the user has
             // less options and the options to
             // 1. modify these parameters only for the current open view
@@ -164,10 +164,10 @@ class ViewMapAddModify {
                 $this->validateAttributes();
 
                 // Update the map configuration
-                if($this->mode == 'view_params') {
+                if ($this->mode == 'view_params') {
                     // Only modify/add the given attributes. Don't remove any
                     // set options in the array
-                    foreach($this->attrs as $key => $val) {
+                    foreach ($this->attrs as $key => $val) {
                         $this->MAPCFG->setValue($this->object_id, $key, $val);
                     }
                     $this->MAPCFG->storeUpdateElement($this->object_id);
@@ -203,7 +203,7 @@ class ViewMapAddModify {
         }
 
         // delete map lock
-        if(!$this->MAPCFG->deleteMapLock()) {
+        if (!$this->MAPCFG->deleteMapLock()) {
             throw new NagVisException(l('mapLockNotDeleted'));
         }
         return $show_dialog;
@@ -215,10 +215,10 @@ class ViewMapAddModify {
         // only_inherited is true when only asking for inherited value
         $val = '';
         $isInherited = false;
-        if(!$only_inherited && isset($this->attrs[$attr])) {
+        if (!$only_inherited && isset($this->attrs[$attr])) {
             // Use user provided value, from GET or POST
             $val = $this->attrs[$attr];
-        } elseif(!$update && $this->object_id === '0'
+        } elseif (!$update && $this->object_id === '0'
             && $this->MAPCFG->getSourceParam($attr, true, true) !== null) {
             // Get the value set by url if there is some set
             // But don't try this when running in "update" mode
@@ -227,22 +227,22 @@ class ViewMapAddModify {
             // the shown values
             $val = $this->MAPCFG->getSourceParam($attr, true, true);
 
-        } elseif(!$update && ($this->mode == 'view_params' || !$only_inherited) && $this->object_id !== null
+        } elseif (!$update && ($this->mode == 'view_params' || !$only_inherited) && $this->object_id !== null
             && $this->MAPCFG->getValue($this->object_id, $attr, true) !== false) {
             // Get the value set in this object if there is some set
             $val = $this->MAPCFG->getValue($this->object_id, $attr, true);
             // In view_param mode this is inherited
-            if($this->mode == 'view_params') {
+            if ($this->mode == 'view_params') {
                 $isInherited = true;
             }
 
-        } elseif(!$update && !$only_inherited && $this->clone_id !== null && $attr !== 'object_id'
+        } elseif (!$update && !$only_inherited && $this->clone_id !== null && $attr !== 'object_id'
             && $this->MAPCFG->getValue($this->clone_id, $attr, true) !== false) {
             // Get the value set in the object to be cloned if there is some set
             // But don't try this when running in "update" mode
             $val = $this->MAPCFG->getValue($this->clone_id, $attr, true);
 
-        } elseif(!$must && $default_value !== null) {
+        } elseif (!$must && $default_value !== null) {
             // Get the inherited value
             $val = $default_value;
             $isInherited = true;
@@ -280,15 +280,15 @@ class ViewMapAddModify {
 
         list($isInherited, $value) = $this->getAttr($default_value, $propname, $prop['must']);
 
-        if(isset($prop['array']) && $prop['array']) {
-            if(is_array($value)) {
+        if (isset($prop['array']) && $prop['array']) {
+            if (is_array($value)) {
                 $value = implode(',', $value);
             }
         }
 
         // Only add the fields of type hidden which have values
         if ($fieldType === 'hidden' || $fieldType == 'readonly') {
-            if($value != '') {
+            if ($value != '') {
                 hidden($propname, $value);
             }
             if ($fieldType === 'hidden') {
@@ -302,7 +302,7 @@ class ViewMapAddModify {
         // Check if depends_on and depends_value are defined and if the value
         // is equal. If not equal hide the field
         // Don't hide dependent fields where the dependant is not set
-        if(isset($prop['depends_on'])
+        if (isset($prop['depends_on'])
             && isset($prop['depends_value'])
             && isset($properties[$prop['depends_on']])) {
             array_push($rowClasses, 'child-row');
@@ -310,13 +310,13 @@ class ViewMapAddModify {
             list($depInherited, $depValue) = $this->getAttr(
                 $this->MAPCFG->getDefaultValue($this->object_type, $dep_on_propname),
                 $dep_on_propname, $properties[$dep_on_propname]['must']);
-            if($depValue != $prop['depends_value']) {
+            if ($depValue != $prop['depends_value']) {
                 $rowHide = ' style="display:none"';
             }
         }
 
         // Highlight the must attributes
-        if($prop['must']) {
+        if ($prop['must']) {
             array_push($rowClasses, 'must');
         }
 
@@ -327,7 +327,7 @@ class ViewMapAddModify {
 
         $onChange = '';
         // Submit the form when an attribute which has dependant attributes is changed
-        if($this->MAPCFG->hasDependants($this->object_type, $propname)) {
+        if ($this->MAPCFG->hasDependants($this->object_type, $propname)) {
             $onChange = 'updateForm(this.form);';
         }
         elseif (($can_have_other && $value !== '<<<other>>>')
@@ -384,13 +384,13 @@ class ViewMapAddModify {
             $valueTxt = '';
         }
 
-        if(isset($prop['array']) && $prop['array']) {
-            if(is_array($valueTxt)) {
+        if (isset($prop['array']) && $prop['array']) {
+            if (is_array($valueTxt)) {
                 $valueTxt = implode(',', $valueTxt);
             }
         }
 
-        switch($fieldType) {
+        switch ($fieldType) {
             case 'readonly':
                 echo $value;
             break;
@@ -411,7 +411,7 @@ class ViewMapAddModify {
                 // showing error text instead of fields
                 try {
                     try {
-                        if($this->clone_id !== null) {
+                        if ($this->clone_id !== null) {
                             $options = $func($this->MAPCFG, $this->clone_id, $this->attrs);
                         } else {
                             $options = $func($this->MAPCFG, $this->object_id, $this->attrs);
@@ -427,7 +427,7 @@ class ViewMapAddModify {
                         $options = [];
                     }
 
-                    if(isset($options[$valueTxt])) {
+                    if (isset($options[$valueTxt])) {
                         $valueTxt = $options[$valueTxt];
                     }
 
@@ -450,12 +450,12 @@ class ViewMapAddModify {
                         break;
                     }
 
-                    if($can_have_other) {
+                    if ($can_have_other) {
                         $options['<<<other>>>'] = l('>>> Specify other');
                     }
 
                     select($propname, $options, $value, $onChange, $hideField);
-                } catch(BackendConnectionProblem $e) {
+                } catch (BackendConnectionProblem $e) {
                     form_render_error($propname, l('Unable to fetch data from backend - '
                         . 'falling back to input field.'));
                     input($propname, $value, '', $hideField);
@@ -479,8 +479,8 @@ class ViewMapAddModify {
         // At the moment the only way is to try to add a space after each ",".
         // The browsers do break automatically at & and spaces - so no need to
         // do anything there. Seems to be enough for now
-        if(strlen($valueTxt) > 36 && strpos($valueTxt, ' ') === false) {
-            if(strpos($valueTxt, ',') !== false) {
+        if (strlen($valueTxt) > 36 && strpos($valueTxt, ' ') === false) {
+            if (strpos($valueTxt, ',') !== false) {
                 $valueTxt = str_replace(',', ', ', $valueTxt);
             }
         }
@@ -504,7 +504,7 @@ class ViewMapAddModify {
             // It might contain some source related parameters (if some sources are enabled).
             // Another speciality ist that the dialog can be opened in "view_params" mode
             // where only the view params (parameters modifyable by the user) shal be shown.
-            if($this->mode == 'view_params') {
+            if ($this->mode == 'view_params') {
                 $source_params = $this->MAPCFG->getSourceParams(false, false, true);
                 $typeDef = $this->MAPCFG->getSourceParamDefs(array_keys($source_params));
             } else {
@@ -513,10 +513,10 @@ class ViewMapAddModify {
 
                 // Filter unwanted source parameters from the typedef list. Only leave
                 // source parameters which apply to the current map.
-                foreach($typeDef as $propname => $prop) {
+                foreach ($typeDef as $propname => $prop) {
                     // Exclude the entries which are not mentioned in source_params construct
                     // and are really source params
-                    if(!isset($source_params[$propname]) && isset($prop['source_param'])) {
+                    if (!isset($source_params[$propname]) && isset($prop['source_param'])) {
                         unset($typeDef[$propname]);
                     }
                 }
@@ -615,7 +615,7 @@ class ViewMapAddModify {
             // FIXME: When to ignore?
             //$this->MAPCFG->skipSourceErrors();
             $this->MAPCFG->readMapConfig();
-        } catch(MapCfgInvalid $e) {}
+        } catch (MapCfgInvalid $e) {}
 
         $this->clone_id = req('clone_id');
         if ($this->clone_id !== null && !preg_match(MATCH_OBJECTID, $this->clone_id)) {

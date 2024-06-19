@@ -30,8 +30,8 @@ class CoreLogonEnv extends CoreLogonModule {
         $envVar = cfg('global', 'logonenvvar');
 
         // Check if the variable exists and is not empty
-        if(!isset($_SERVER[$envVar]) || $_SERVER[$envVar] === '') {
-            if($printErr) {
+        if (!isset($_SERVER[$envVar]) || $_SERVER[$envVar] === '') {
+            if ($printErr) {
                 throw new NagVisException(l('Unable to authenticate user. The environment variable [VAR] is not set or empty.',
                     ['VAR' => htmlentities($envVar, ENT_COMPAT, 'UTF-8')]));
             }
@@ -43,7 +43,7 @@ class CoreLogonEnv extends CoreLogonModule {
         $username = $_SERVER[$envVar];
 
         // Check if the user exists
-        if($this->verifyUserExists($username,
+        if ($this->verifyUserExists($username,
                         cfg('global', 'logonenvcreateuser'),
                         cfg('global', 'logonenvcreaterole'),
                         $printErr) === false) {

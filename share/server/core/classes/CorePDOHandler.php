@@ -308,12 +308,12 @@ class CorePDOHandler {
                 // TODO: This should be loaded from the configuration (e.g. in cae of backends)
                 //PDO::ATTR_TIMEOUT => 1,
             ]);
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             error_log('Could not initialize a database connection: ' . $e->getMessage());
             $this->lastErrorInfo = $e->getMessage();
             return false;
         }
-        if($this->DB === false || $this->DB === null) {
+        if ($this->DB === false || $this->DB === null) {
             return false;
         }
 
@@ -322,10 +322,10 @@ class CorePDOHandler {
         $this->updating = false;
         $this->lastErrorInfo = null;
 
-        if(isset($drv_data['init'])) {
-            foreach($drv_data['init'] as $q) {
+        if (isset($drv_data['init'])) {
+            foreach ($drv_data['init'] as $q) {
                 $res = $this->DB->exec($q);
-                if($res === false) {
+                if ($res === false) {
                     $this->DB = null;
                     $this->lastErrorInfo = "Initial DB query ($q) failed";
                     return false;
@@ -376,10 +376,10 @@ class CorePDOHandler {
     public function query($query, $params = []) {
         $this->lastErrorInfo = null;
         $st = $this->prep($query);
-        if($st === false) {
+        if ($st === false) {
             return false;
         }
-        if($st->execute($params) === false) {
+        if ($st->execute($params) === false) {
             $this->lastErrorInfo = $st->errorInfo();
             return false;
         }
@@ -388,7 +388,7 @@ class CorePDOHandler {
 
     public function queryFatal($s, $params = []) {
         $res = $this->query($s, $params);
-        if($res === false) {
+        if ($res === false) {
             die("Could not execute the $s query: " . $this->errorString());
         } else {
             return $res;
@@ -458,21 +458,21 @@ class CorePDOHandler {
 
     public function deletePermissions($mod, $name) {
         // Only create when not existing
-        if($this->count('-perm-count', ['mod' => $mod, 'act' => 'view', 'obj' => $name]) > 0) {
-            if(DEBUG && DEBUGLEVEL & 2) {
+        if ($this->count('-perm-count', ['mod' => $mod, 'act' => 'view', 'obj' => $name]) > 0) {
+            if (DEBUG && DEBUGLEVEL & 2) {
                 debug('auth.db: delete permissions for ' . $mod . ' ' . $name);
             }
             $this->query('-role-delete-perm-by-obj', ['mod' => $mod, 'obj' => $name]);
             $this->query('-perm-delete-by-obj', ['mod' => $mod, 'obj' => $name]);
-        } elseif(DEBUG && DEBUGLEVEL & 2) {
+        } elseif (DEBUG && DEBUGLEVEL & 2) {
             debug('auth.db: won\'t delete ' . $mod . ' permissions ' . $name);
         }
     }
 
     public function createMapPermissions($name) {
         // Only create when not existing
-        if($this->count('-perm-count', ['mod' => 'Map', 'act' => 'view', 'obj' => $name]) <= 0) {
-            if(DEBUG && DEBUGLEVEL & 2) {
+        if ($this->count('-perm-count', ['mod' => 'Map', 'act' => 'view', 'obj' => $name]) <= 0) {
+            if (DEBUG && DEBUGLEVEL & 2) {
                 debug('auth.db: create permissions for map ' . $name);
             }
             if ($this->updating && !$this->inTrans) {
@@ -482,7 +482,7 @@ class CorePDOHandler {
             $this->query('-perm-add', ['mod' => 'Map', 'act' => 'view', 'obj' => $name]);
             $this->query('-perm-add', ['mod' => 'Map', 'act' => 'edit', 'obj' => $name]);
             $this->query('-perm-add', ['mod' => 'Map', 'act' => 'delete', 'obj' => $name]);
-        } elseif(DEBUG && DEBUGLEVEL & 2) {
+        } elseif (DEBUG && DEBUGLEVEL & 2) {
             debug('auth.db: won\'t create permissions for map ' . $name);
         }
 
@@ -491,12 +491,12 @@ class CorePDOHandler {
 
     public function createRotationPermissions($name) {
         // Only create when not existing
-        if($this->count('-perm-count', ['mod' => 'Rotation', 'act' => 'view', 'obj' => $name]) <= 0) {
-            if(DEBUG && DEBUGLEVEL & 2) {
+        if ($this->count('-perm-count', ['mod' => 'Rotation', 'act' => 'view', 'obj' => $name]) <= 0) {
+            if (DEBUG && DEBUGLEVEL & 2) {
                 debug('auth.db: create permissions for rotation ' . $name);
             }
             $this->query('-perm-add', ['mod' => 'Rotation', 'act' => 'view', 'obj' => $name]);
-        } elseif(DEBUG && DEBUGLEVEL & 2) {
+        } elseif (DEBUG && DEBUGLEVEL & 2) {
             debug('auth.db: won\'t create permissions for rotation ' . $name);
         }
 
@@ -506,7 +506,7 @@ class CorePDOHandler {
     public function updateDb() {
         // Read the current version from db
         $dbVersion = 0;
-        if(!$this->tableExist('version')) {
+        if (!$this->tableExist('version')) {
             $this->createVersionTable();
         } else {
             $dbVersion = GlobalCore::getInstance()->versionToTag($this->getDbVersion());
@@ -532,8 +532,8 @@ class CorePDOHandler {
                 }
             }
 
-            foreach(GlobalCore::getInstance()->demoMaps as $map) {
-                if(count(GlobalCore::getInstance()->getAvailableMaps('/^' . $map . '$/')) <= 0) {
+            foreach (GlobalCore::getInstance()->demoMaps as $map) {
+                if (count(GlobalCore::getInstance()->getAvailableMaps('/^' . $map . '$/')) <= 0) {
                     continue;
                 }
 
@@ -561,7 +561,7 @@ class CorePDOHandler {
             }
 
             $reason = 'Could not commit the transaction for updating the database schema';
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             error_log($reason . ': ' . $e->getMessage());
             if ($this->inTrans) {
                 try {
@@ -607,7 +607,7 @@ class CorePDOHandler {
         $this->createVersionTable();
 
         // If running in OMD create the 'omdadmin' user instead of 'admin'
-        if(GlobalCore::getInstance()->omdSite() !== null) {
+        if (GlobalCore::getInstance()->omdSite() !== null) {
             $this->queryFatal('-user-add-with-id', ['userId' => 1, 'name' => 'omdadmin', 'password' => '051e0bbcfb79ea2a3ce5c487cc111051aac51ae8']);
         } else {
             $this->queryFatal('-user-add-with-id', ['userId' => 1, 'name' => 'admin', 'password' => '868103841a2244768b2dbead5dbea2b533940e20']);
@@ -632,7 +632,7 @@ class CorePDOHandler {
         $this->queryFatal('-perm-add', ['mod' => 'Action', 'act' => 'perform', 'obj' => '*']);
 
         // Access controll: Map module levels for the demo maps
-        foreach(GlobalCore::getInstance()->demoMaps as $map) {
+        foreach (GlobalCore::getInstance()->demoMaps as $map) {
             $this->createMapPermissions($map);
         }
 
@@ -798,7 +798,7 @@ class CorePDOHandler {
         $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Guests', 'mod' => 'Multisite', 'act' => 'getMaps', 'obj' => '*']);
 
         // Access assignment: Guests => Allowed to view the demo maps
-        foreach(GlobalCore::getInstance()->demoMaps as $map) {
+        foreach (GlobalCore::getInstance()->demoMaps as $map) {
             $this->queryFatal('-create-pop-roles-perms-1', ['r1' => 'Guests', 'mod' => 'Map', 'act' => 'view', 'obj' => $map]);
         }
 

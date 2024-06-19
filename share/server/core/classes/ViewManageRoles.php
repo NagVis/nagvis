@@ -111,7 +111,7 @@ class ViewManageRoles {
                 // Load permissions from parameters
                 $perms = [];
                 foreach (array_keys($_POST) as $key) {
-                    if(strpos($key, 'perm_') !== false) {
+                    if (strpos($key, 'perm_') !== false) {
                         $key_parts = explode('_', $key);
                         $perm_id = $key_parts[1];
                         $perms[$perm_id] = get_checkbox($key);
@@ -268,7 +268,7 @@ class ViewManageRoles {
 
                 // Check not to delete any referenced role
                 $used_by = $AUTHORISATION->roleUsedBy($role_id);
-                if(count($used_by) > 0) {
+                if (count($used_by) > 0) {
                     throw new NagVisException(l('Not deleting this role, the role is in use by the users [U].',
                         ['U' => implode(', ', $used_by)]));
                 }

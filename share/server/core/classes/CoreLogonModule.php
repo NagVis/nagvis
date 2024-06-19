@@ -31,7 +31,7 @@ class CoreLogonModule {
     protected function createUser($username, $role) {
         global $AUTH;
         $AUTH->createUser($username, (time() * rand(1, 10)));
-        if($role !== '') {
+        if ($role !== '') {
             $A = new CoreAuthorisationHandler();
             $A->parsePermissions();
             $A->updateUserRoles($A->getUserId($username), [$A->getRoleId($role)]);
@@ -40,12 +40,12 @@ class CoreLogonModule {
 
     protected function verifyUserExists($username, $createUser, $createRole, $printErr) {
         global $AUTH;
-        if(!$AUTH->checkUserExists($username)) {
+        if (!$AUTH->checkUserExists($username)) {
             settype($createUser, 'boolean');
-            if($createUser === true) {
+            if ($createUser === true) {
                 $this->createUser($username, $createRole);
             } else {
-                if($printErr) {
+                if ($printErr) {
                     throw new NagVisException(l('Unable to authenticate user. User does not exist.'));
                 }
                 return false;

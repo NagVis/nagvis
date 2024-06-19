@@ -57,11 +57,11 @@ class NagVisContextMenu {
         // a) Some valid cache file
         // b) Some valid main configuration cache file
         // c) This cache file newer than main configuration cache file
-        if($this->CACHE->isCached() !== -1
+        if ($this->CACHE->isCached() !== -1
             && $this->CORE->getMainCfg()->isCached() !== -1
             && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
             $this->code = $this->CACHE->getCache();
-        } elseif($this->readTemplate()) {
+        } elseif ($this->readTemplate()) {
             // Read the contents of the template file
             // The static macros should be replaced before caching
             $this->replaceStaticMacros();
@@ -80,7 +80,7 @@ class NagVisContextMenu {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function readTemplate() {
-        if($this->checkTemplateReadable(1)) {
+        if ($this->checkTemplateReadable(1)) {
             $this->code = file_get_contents($this->pathTemplateFile);
             return true;
         } else {
@@ -97,83 +97,83 @@ class NagVisContextMenu {
      */
     private function replaceStaticMacros() {
         // Replace the static macros (language, paths)
-        if(strpos($this->code, '[lang_confirm_delete]') !== false) {
+        if (strpos($this->code, '[lang_confirm_delete]') !== false) {
             $this->code = str_replace('[lang_confirm_delete]', l('confirmDelete'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_connect_by_ssh]') !== false) {
+        if (strpos($this->code, '[lang_connect_by_ssh]') !== false) {
             $this->code = str_replace('[lang_connect_by_ssh]', l('contextConnectBySsh'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_refresh_status]') !== false) {
+        if (strpos($this->code, '[lang_refresh_status]') !== false) {
             $this->code = str_replace('[lang_refresh_status]', l('contextRefreshStatus'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_reschedule_next_check]') !== false) {
+        if (strpos($this->code, '[lang_reschedule_next_check]') !== false) {
             $this->code = str_replace('[lang_reschedule_next_check]', l('contextRescheduleNextCheck'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_schedule_downtime]') !== false) {
+        if (strpos($this->code, '[lang_schedule_downtime]') !== false) {
             $this->code = str_replace('[lang_schedule_downtime]', l('contextScheduleDowntime'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_ack]') !== false) {
+        if (strpos($this->code, '[lang_ack]') !== false) {
             $this->code = str_replace('[lang_ack]', l('Acknowledge'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_clone]') !== false) {
+        if (strpos($this->code, '[lang_clone]') !== false) {
             $this->code = str_replace('[lang_clone]', l('Clone object'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_lock]') !== false) {
+        if (strpos($this->code, '[lang_lock]') !== false) {
             $this->code = str_replace('[lang_lock]', l('Lock'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_unlock]') !== false) {
+        if (strpos($this->code, '[lang_unlock]') !== false) {
             $this->code = str_replace('[lang_unlock]', l('Unlock'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_modify]') !== false) {
+        if (strpos($this->code, '[lang_modify]') !== false) {
             $this->code = str_replace('[lang_modify]', l('Modify object'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_delete]') !== false) {
+        if (strpos($this->code, '[lang_delete]') !== false) {
             $this->code = str_replace('[lang_delete]', l('Delete object'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_toggle_line_mid]') !== false) {
+        if (strpos($this->code, '[lang_toggle_line_mid]') !== false) {
             $this->code = str_replace('[lang_toggle_line_mid]', l('Lock/Unlock line middle'), $this->code);
         }
 
-        if(strpos($this->code, '[html_base]') !== false) {
+        if (strpos($this->code, '[html_base]') !== false) {
             $this->code = str_replace('[html_base]', cfg('paths', 'htmlbase'), $this->code);
         }
 
-        if(strpos($this->code, '[html_templates]') !== false) {
+        if (strpos($this->code, '[html_templates]') !== false) {
             $this->code = str_replace('[html_templates]', path('html', 'global', 'templates'), $this->code);
         }
 
-        if(strpos($this->code, '[html_template_images]') !== false) {
+        if (strpos($this->code, '[html_template_images]') !== false) {
             $this->code = str_replace('[html_template_images]', path('html', 'global', 'templateimages'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_make_root]') !== false) {
+        if (strpos($this->code, '[lang_make_root]') !== false) {
             $this->code = str_replace('[lang_make_root]', l('Make root'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_action_rdp]') !== false) {
+        if (strpos($this->code, '[lang_action_rdp]') !== false) {
             $this->code = str_replace('[lang_action_rdp]', l('Connect (RDP)'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_action_ssh]') !== false) {
+        if (strpos($this->code, '[lang_action_ssh]') !== false) {
             $this->code = str_replace('[lang_action_ssh]', l('Connect (SSH)'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_action_http]') !== false) {
+        if (strpos($this->code, '[lang_action_http]') !== false) {
             $this->code = str_replace('[lang_action_http]', l('Connect (HTTP)'), $this->code);
         }
 
-        if(strpos($this->code, '[lang_action_https]') !== false) {
+        if (strpos($this->code, '[lang_action_https]') !== false) {
             $this->code = str_replace('[lang_action_https]', l('Connect (HTTPS)'), $this->code);
         }
 
@@ -184,7 +184,7 @@ class NagVisContextMenu {
 
         foreach ($action_urls as $param) {
             if (cfg('defaults', $param) != "") {
-                if(strpos($this->code, '[' . $param . ']') !== false) {
+                if (strpos($this->code, '[' . $param . ']') !== false) {
                     $this->code = str_replace('[' . $param . ']', cfg('defaults', $param), $this->code);
                 }
             } else {

@@ -124,22 +124,22 @@ class ViewManageMaps {
         $files = [];
 
         // loop all map configs to replace mapname in all map configs
-        foreach($CORE->getAvailableMaps() as $mapName) {
+        foreach ($CORE->getAvailableMaps() as $mapName) {
             try {
                 $MAPCFG1 = new GlobalMapCfg($mapName);
                 $MAPCFG1->readMapConfig();
 
                 $i = 0;
                 // loop definitions of type map
-                foreach($MAPCFG1->getDefinitions('map') as $key => $obj) {
+                foreach ($MAPCFG1->getDefinitions('map') as $key => $obj) {
                     // check if old map name is linked...
-                    if($obj['map_name'] == $name) {
+                    if ($obj['map_name'] == $name) {
                         $MAPCFG1->setValue('map', $i, 'map_name', $new_name);
                         $MAPCFG1->writeElement('map', $i);
                     }
                     $i++;
                 }
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 // Do nothing. Siletly pass config errors here...
             }
         }
@@ -249,7 +249,7 @@ class ViewManageMaps {
                 $MAPCFG = new GlobalMapCfg($name);
                 try {
                     $MAPCFG->readMapConfig();
-                } catch(MapCfgInvalid $e) {}
+                } catch (MapCfgInvalid $e) {}
                 $MAPCFG->deleteMapConfig();
 
                 success(l('The map has been deleted.'));

@@ -61,9 +61,9 @@ class GlobalBackground {
      * Fetches the path and saves it on initial load
      */
     private function fetchPath() {
-        if($this->getFileName() != '' && $this->getFileName() != 'none') {
+        if ($this->getFileName() != '' && $this->getFileName() != 'none') {
             // Extract url when used to show an url
-            if(preg_match('/^\[(http.*)\]$/', $this->getFileName(), $match) > 0) {
+            if (preg_match('/^\[(http.*)\]$/', $this->getFileName(), $match) > 0) {
                 $this->type = 'url';
 
                 $this->path = $match[1];
@@ -90,7 +90,7 @@ class GlobalBackground {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getFile($bWebPath = true) {
-        if($bWebPath) {
+        if ($bWebPath) {
             return $this->webPath;
         } else {
             return $this->path;
@@ -153,11 +153,11 @@ class GlobalBackground {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function deleteImage($printErr = 1) {
-        if($this->checkFolderWriteable($printErr) && $this->checkFileWriteable($printErr)) {
-            if(unlink($this->path)) {
+        if ($this->checkFolderWriteable($printErr) && $this->checkFileWriteable($printErr)) {
+            if (unlink($this->path)) {
                 return true;
             } else {
-                if($printErr) {
+                if ($printErr) {
                     throw new NagVisException(l('couldNotDeleteMapImage',
                         ['IMGPATH' => $this->path]));
                 }

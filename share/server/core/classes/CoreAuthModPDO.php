@@ -56,13 +56,13 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
 
         // Open the database
         $config = $this->getConfig();
-        if(!$this->DB->open($config['driver'], $config['params'], $config['username'], $config['password'])) {
+        if (!$this->DB->open($config['driver'], $config['params'], $config['username'], $config['password'])) {
             throw new NagVisException(l('Unable to open auth database ([DB]): [MSG]',
                 [
                     'DB' => $this->DB->getDSN(),
                     'MSG' => json_encode($this->DB->error())
                 ]));
-        } elseif(!$this->DB->tableExist('users')) {
+        } elseif (!$this->DB->tableExist('users')) {
             // Create initial db scheme if needed
             $this->DB->createInitialDb();
         } else {
@@ -76,7 +76,7 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
 
         // Get all the users in the system
         $RES = $this->DB->query('-user-get-all');
-        while($data = $RES->fetch()) {
+        while ($data = $RES->fetch()) {
                   $aPerms[] = $data;
         }
 
@@ -88,7 +88,7 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
     }
 
     private function checkUserAuth($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
-        if($bTrustUsername === AUTH_NOT_TRUST_USERNAME) {
+        if ($bTrustUsername === AUTH_NOT_TRUST_USERNAME) {
             $res = $this->DB->query('-user-get-by-pass', ['name' => $this->sUsername, 'password' => $this->sPasswordHash]);
         } else {
             $res = $this->DB->query('-user-get-by-name', ['name' => $this->sUsername]);
@@ -117,31 +117,31 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
     }
 
     public function passCredentials($aData) {
-        if(isset($aData['user'])) {
+        if (isset($aData['user'])) {
             $this->sUsername = $aData['user'];
         }
-        if(isset($aData['password'])) {
+        if (isset($aData['password'])) {
             $this->sPassword = $aData['password'];
 
             // Remove the password hash when setting a new password
             $this->sPasswordHash = '';
         }
-        if(isset($aData['passwordHash'])) {
+        if (isset($aData['passwordHash'])) {
             $this->sPasswordHash = $aData['passwordHash'];
         }
     }
 
     public function passNewPassword($aData) {
-        if(isset($aData['user'])) {
+        if (isset($aData['user'])) {
             $this->sUsername = $aData['user'];
         }
-        if(isset($aData['password'])) {
+        if (isset($aData['password'])) {
             $this->sPassword = $aData['password'];
 
             // Remove the password hash when setting a new password
             $this->sPasswordHash = '';
         }
-        if(isset($aData['passwordNew'])) {
+        if (isset($aData['passwordNew'])) {
             $this->sPasswordNew = $aData['passwordNew'];
         }
     }
@@ -175,7 +175,7 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
 
     public function changePassword() {
         // Check the authentication with the old password
-        if(!$this->isAuthenticated()) {
+        if (!$this->isAuthenticated()) {
             return false;
         }
 
@@ -191,7 +191,7 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
 
     public function isAuthenticated($bTrustUsername = AUTH_NOT_TRUST_USERNAME) {
         // Only handle known users
-        if($this->sUsername === '' || !$this->checkUserExists($this->sUsername)) {
+        if ($this->sUsername === '' || !$this->checkUserExists($this->sUsername)) {
             return false;
         }
 
@@ -199,14 +199,14 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         // this time. For example when the user just entered the password
         // for logging in. If the user is already logged in and this is just
         // a session check don't try to rehash the password.
-        if($bTrustUsername === AUTH_NOT_TRUST_USERNAME && $this->sPasswordHash === '') {
+        if ($bTrustUsername === AUTH_NOT_TRUST_USERNAME && $this->sPasswordHash === '') {
             // Compose the password hash for comparing with the stored hash
             $this->sPasswordHash = $this->createHash($this->sPassword);
         }
 
         // Check the password hash
         $userId = $this->checkUserAuth($bTrustUsername);
-        if($userId > 0) {
+        if ($userId > 0) {
             $this->iUserId = $userId;
             return true;
         }

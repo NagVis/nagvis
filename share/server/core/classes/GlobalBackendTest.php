@@ -80,7 +80,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
         $this->now = time();
         $this->genObj();
 
-        if(cfg('backend_' . $backendId, 'generate_mapcfg')
+        if (cfg('backend_' . $backendId, 'generate_mapcfg')
             && (isset($_POST['new']) || !file_exists(cfg('paths', 'mapcfg') . 'test-gen.cfg'))) {
             $this->genMapCfg(cfg('paths', 'mapcfg') . 'test-gen.cfg');
         }
@@ -144,7 +144,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
             $downtime_start  = null;
             $downtime_end    = null;
         }
-        if($output === null) {
+        if ($output === null) {
             $output = 'output ' . $name2;
         } else {
             $output = 'empty output';
@@ -275,9 +275,9 @@ class GlobalBackendTest implements GlobalBackendInterface {
             'ham-gw1'  => ['ham-srv1', 'ham-srv2', 'ham-printer1'],
         ];
 
-        foreach($this->childs as $parent => $childs) {
-            foreach($childs as $child) {
-                if(!isset($this->parents[$child])) {
+        foreach ($this->childs as $parent => $childs) {
+            foreach ($childs as $child) {
+                if (!isset($this->parents[$child])) {
                     $this->parents[$child] = [$parent];
                 } else {
                     $this->parents[$child][] = $parent;
@@ -288,9 +288,9 @@ class GlobalBackendTest implements GlobalBackendInterface {
         /**
          * a) HOSTS without services of all states/substates
          */
-        foreach($this->hostStates as $state => $substates) {
-            foreach($this->canBeSoft[$state] as $stateType) {
-                foreach(array_keys($substates) as $substate) {
+        foreach ($this->hostStates as $state => $substates) {
+            foreach ($this->canBeSoft[$state] as $stateType) {
+                foreach (array_keys($substates) as $substate) {
                     $ident    = 'host-' . $state . '-' . $stateType . '-' . $substate;
                     $hostname = $ident;
 
@@ -304,9 +304,9 @@ class GlobalBackendTest implements GlobalBackendInterface {
         /**
          * b) SERVICES of all states/substates
          */
-        foreach($this->serviceStates as $state => $substates) {
-            foreach($this->canBeSoft[$state] as $stateType) {
-                foreach(array_keys($substates) as $substate) {
+        foreach ($this->serviceStates as $state => $substates) {
+            foreach ($this->canBeSoft[$state] as $stateType) {
+                foreach (array_keys($substates) as $substate) {
                     $ident = 'service-' . $state . '-' . $substate;
                     $hostname = 'host-' . $ident;
                     $this->obj['host'][$hostname] = $this->host($hostname, UNCHECKED);
@@ -320,13 +320,13 @@ class GlobalBackendTest implements GlobalBackendInterface {
         /**
          * c) HOSTS of all states with one of all service states
          */
-        foreach($this->hostStates as $hostState => $hostSubstates) {
-            foreach($this->canBeSoft[$hostState] as $hostStateType) {
-                foreach(array_keys($hostSubstates) as $hostSubstate) {
+        foreach ($this->hostStates as $hostState => $hostSubstates) {
+            foreach ($this->canBeSoft[$hostState] as $hostStateType) {
+                foreach (array_keys($hostSubstates) as $hostSubstate) {
                     // Now service stuff
-                    foreach($this->serviceStates as $state => $substates) {
-                        foreach($this->canBeSoft[$state] as $stateType) {
-                            foreach(array_keys($substates) as $substate) {
+                    foreach ($this->serviceStates as $state => $substates) {
+                        foreach ($this->canBeSoft[$state] as $stateType) {
+                            foreach (array_keys($substates) as $substate) {
                                 $ident = 'host-' . $hostState . '-' . $hostStateType . '-' . $hostSubstate . '-service-' . $state . '-' . $substate;
                                 $hostname = $ident;
 
@@ -374,9 +374,9 @@ class GlobalBackendTest implements GlobalBackendInterface {
     }
 
     public function getAllTypeObjects($type) {
-        if($type == 'service') {
+        if ($type == 'service') {
             $s = [];
-            foreach($this->obj['service'] as $services) {
+            foreach ($this->obj['service'] as $services) {
                 $s = array_merge($s, $services);
             }
             return $s;
@@ -392,12 +392,12 @@ class GlobalBackendTest implements GlobalBackendInterface {
                 . "\n";
         $x = 0;
         $y = 0;
-        foreach(array_keys($this->obj) as $type) {
-            foreach($this->getAllTypeObjects($type) as $obj) {
+        foreach (array_keys($this->obj) as $type) {
+            foreach ($this->getAllTypeObjects($type) as $obj) {
                 $t = $type == 'service' ? 'host' : $type;
                 $f .= "define " . $type . " {\n"
                     . "  " . $t . "_name=" . $obj['name'] . "\n";
-                if($type == 'service') {
+                if ($type == 'service') {
                     $f .= "  service_description=" . $obj['service_description'] . "\n";
                 }
                 $f .= "  x=" . $x . "\n"
@@ -405,7 +405,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     . "}\n"
                     . "\n";
                 $x += 22;
-                if($x > 1800) {
+                if ($x > 1800) {
                     $y += 22;
                     $x = 0;
                 }
@@ -453,14 +453,14 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getObjects($type, $name1Pattern = '', $name2Pattern = '') {
-        switch($type) {
+        switch ($type) {
             case 'host':
             case 'hostgroup':
             case 'servicegroup':
                 $l = $this->obj[$type];
             break;
             case 'service':
-                if($name1Pattern) {
+                if ($name1Pattern) {
                     $l = $this->obj[$type][$name1Pattern];
                 } else {
                     throw new BackendException('Unhandled query');
@@ -507,11 +507,11 @@ class GlobalBackendTest implements GlobalBackendInterface {
      */
     private function parseFilter($objects, $filters) {
         $aFilters = [];
-        foreach($objects as $OBJS) {
+        foreach ($objects as $OBJS) {
             $objFilters = [];
-            foreach($filters as $filter) {
+            foreach ($filters as $filter) {
                 // Array('key' => 'host_name', 'operator' => '=', 'name'),
-                switch($filter['key']) {
+                switch ($filter['key']) {
                     case 'host_name':
                     case 'host_groups':
                     case 'service_description':
@@ -520,7 +520,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     case 'hostgroup_name':
                     case 'group_name':
                     case 'servicegroup_name':
-                        if($filter['key'] != 'service_description') {
+                        if ($filter['key'] != 'service_description') {
                             $val = $OBJS[0]->getName();
                         } else {
                             $val = $OBJS[0]->getServiceDescription();
@@ -536,7 +536,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
 
             // the object specific filters all need to match
             $count = count($objFilters);
-            if($count > 1) {
+            if ($count > 1) {
                 $count = 'And: ' . $count . "\n";
             } else {
                 $count = '';
@@ -546,7 +546,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
         }
 
         $count = count($aFilters);
-        if($count > 1) {
+        if ($count > 1) {
             $count = 'Or: ' . $count . "\n";
         } else {
             $count = '';
@@ -567,28 +567,28 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostState($objects, $options, $filters) {
-        /*if($options & 1)
+        /*if ($options & 1)
             $stateAttr = 'hard_state';
         else
             $stateAttr = 'state';*/
 
         $arrReturn = [];
-        if(count($filters) == 1 && $filters[0]['key'] == 'host_name' && $filters[0]['op'] == '=') {
-            foreach($objects as $OBJS) {
+        if (count($filters) == 1 && $filters[0]['key'] == 'host_name' && $filters[0]['op'] == '=') {
+            foreach ($objects as $OBJS) {
                 $name = $OBJS[0]->getName();
-                if(isset($this->obj['host'][$name])) {
+                if (isset($this->obj['host'][$name])) {
                     $arrReturn[$name] = $this->obj['host'][$name];
                 }
             }
-        } elseif(count($filters) == 1 && $filters[0]['key'] == 'host_groups' && $filters[0]['op'] == '>=') {
-            foreach($objects as $OBJS) {
+        } elseif (count($filters) == 1 && $filters[0]['key'] == 'host_groups' && $filters[0]['op'] == '>=') {
+            foreach ($objects as $OBJS) {
                 $name = $OBJS[0]->getName();
 
                 if (!isset($this->obj['hostgroup'][$name])) {
                     continue;
                 } // skip not existing hostgroups
 
-                foreach($this->obj['hostgroup'][$name]['members'] as $hostname) {
+                foreach ($this->obj['hostgroup'][$name]['members'] as $hostname) {
                     $host = $this->obj['host'][$hostname];
                     $arrReturn[$hostname] = $this->obj['host'][$hostname];
                 }
@@ -613,48 +613,48 @@ class GlobalBackendTest implements GlobalBackendInterface {
      */
     public function getServiceState($objects, $options, $filters) {
         $objFilter = $this->parseFilter($objects, $filters);
-        /*if($options & 1)
+        /*if ($options & 1)
             $stateAttr = 'last_hard_state';
         else
             $stateAttr = 'state';*/
 
         $arrReturn = [];
-        if(count($filters) == 1 && $filters[0]['key'] == 'host_name' && $filters[0]['op'] == '=') {
+        if (count($filters) == 1 && $filters[0]['key'] == 'host_name' && $filters[0]['op'] == '=') {
             // All services of a host
-            foreach($objects as $OBJS) {
+            foreach ($objects as $OBJS) {
                 if (isset($this->obj['service'][$OBJS[0]->getName()])) {
                     $arrReturn[$OBJS[0]->getName()] = $this->obj['service'][$OBJS[0]->getName()];
                 }
             }
-        } elseif(count($filters) == 1 && $filters[0]['key'] == 'service_groups' && $filters[0]['op'] == '>=') {
+        } elseif (count($filters) == 1 && $filters[0]['key'] == 'service_groups' && $filters[0]['op'] == '>=') {
             // All services of a servicegroup
-            foreach($objects as $OBJS) {
+            foreach ($objects as $OBJS) {
                 $name = $OBJS[0]->getName();
 
                 // Skip not existing objects
-                if(!isset($this->obj['servicegroup'][$name])) {
+                if (!isset($this->obj['servicegroup'][$name])) {
                     continue;
                 }
 
-                foreach($this->obj['servicegroup'][$name]['members'] as $attr) {
+                foreach ($this->obj['servicegroup'][$name]['members'] as $attr) {
                     list($name1, $name2) = $attr;
-                    foreach($this->obj['service'][$name1] as $service) {
-                        if($service[DESCRIPTION] != $name2) {
+                    foreach ($this->obj['service'][$name1] as $service) {
+                        if ($service[DESCRIPTION] != $name2) {
                             continue;
                         }
                         $arrReturn[$name1][] = $service;
                     }
                 }
             }
-        } elseif(count($filters) == 2 && $filters[0]['key'] == 'host_name' && $filters[0]['op'] == '='
+        } elseif (count($filters) == 2 && $filters[0]['key'] == 'host_name' && $filters[0]['op'] == '='
             && $filters[1]['key'] == 'service_description' && $filters[1]['op'] == '=') {
             // One specific service of a host
-            foreach($objects as $OBJS) {
+            foreach ($objects as $OBJS) {
                 if (!isset($this->obj['service'][$OBJS[0]->getName()])) {
                     continue;
                 }
-                foreach($arrReturn[$OBJS[0]->getName()] = $this->obj['service'][$OBJS[0]->getName()] as $service) {
-                    if($service[DESCRIPTION] == $OBJS[0]->getServiceDescription()) {
+                foreach ($arrReturn[$OBJS[0]->getName()] = $this->obj['service'][$OBJS[0]->getName()] as $service) {
+                    if ($service[DESCRIPTION] == $OBJS[0]->getServiceDescription()) {
                         $arrReturn[$OBJS[0]->getName() . '~~' . $OBJS[0]->getServiceDescription()] = $service;
                     }
                 }
@@ -681,18 +681,18 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostMemberCounts($objects, $options, $filters) {
-        /*if($options & 1)
+        /*if ($options & 1)
             $stateAttr = 'last_hard_state';
         else
             $stateAttr = 'state';*/
 
         $aReturn = [];
-        if(count($filters) == 1 && $filters[0]['key'] == 'host_name' && $filters[0]['op'] == '=') {
+        if (count($filters) == 1 && $filters[0]['key'] == 'host_name' && $filters[0]['op'] == '=') {
             // Get service state counts of one host
-            foreach($objects as $OBJS) {
+            foreach ($objects as $OBJS) {
                 $name = $OBJS[0]->getName();
                 $aReturn[$name] = ['counts' => $this->serviceStates];
-                if(isset($this->obj['service'][$name])) {
+                if (isset($this->obj['service'][$name])) {
                     foreach ($this->obj['service'][$name] as $service) {
                         if ($service[ACK] === true) {
                             $aReturn[$name]['counts'][$service[STATE]]['ack']++;
@@ -705,16 +705,16 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     }
                 }
             }
-        } elseif(count($filters) == 1 && $filters[0]['key'] == 'host_groups' && $filters[0]['op'] == '>=') {
+        } elseif (count($filters) == 1 && $filters[0]['key'] == 'host_groups' && $filters[0]['op'] == '>=') {
             // Get service state counts for all hosts in a hostgroup (separated by host)
-            foreach($objects as $OBJS) {
+            foreach ($objects as $OBJS) {
                 $name = $OBJS[0]->getName();
 
                 if (!isset($this->obj['hostgroup'][$name])) {
                     continue;
                 } // skip not existing hostgroups
 
-                foreach($this->obj['hostgroup'][$name]['members'] as $hostname) {
+                foreach ($this->obj['hostgroup'][$name]['members'] as $hostname) {
                     $resp = $this->getHostMemberCounts([[new NagVisHost($this->backendId, $hostname)]], $options, [['key' => 'host_name', 'op' => '=', 'val' => 'name']]);
                     $aReturn[$hostname] = $resp[$hostname];
                 }
@@ -740,17 +740,17 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostgroupStateCounts($objects, $options, $filters) {
-        /*if($options & 1)
+        /*if ($options & 1)
             $stateAttr = 'hard_state';
         else
             $stateAttr = 'state';*/
 
         $aReturn = [];
         // Get all host and service states of a hostgroup
-        if(count($filters) == 1 && $filters[0]['key'] == 'groups' && $filters[0]['op'] == '>=') {
-            foreach($objects as $OBJS) {
+        if (count($filters) == 1 && $filters[0]['key'] == 'groups' && $filters[0]['op'] == '>=') {
+            foreach ($objects as $OBJS) {
                 $name = $OBJS[0]->getName();
-                if(!isset($aReturn[$name])) {
+                if (!isset($aReturn[$name])) {
                     $aReturn[$name] = ['counts' => $this->serviceStates];
                     $aReturn[$name]['counts'] += $this->hostStates;
                 }
@@ -759,26 +759,26 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     continue;
                 } // skip not existing objects
 
-                foreach($this->obj['hostgroup'][$name]['members'] as $hostname) {
+                foreach ($this->obj['hostgroup'][$name]['members'] as $hostname) {
                     $host = $this->obj['host'][$hostname];
 
-                    if($host[ACK] === true) {
+                    if ($host[ACK] === true) {
                         $aReturn[$name]['counts'][$host[STATE]]['ack']++;
                     }
-                    elseif($host[DOWNTIME] === true) {
+                    elseif ($host[DOWNTIME] === true) {
                         $aReturn[$name]['counts'][$host[STATE]]['downtime']++;
                     } else {
                         $aReturn[$name]['counts'][$host[STATE]]['normal']++;
                     }
 
                     // If recognize_services are disabled don't fetch service information
-                    if($options & 2) {
+                    if ($options & 2) {
                         continue;
                     }
 
                     $resp = $this->getHostMemberCounts([[new NagVisHost($this->backendId, $hostname)]], $options,
                         [['key' => 'host_name', 'op' => '=', 'val' => 'name']]);
-                    foreach($resp[$hostname]['counts'] as $state => $substates) {
+                    foreach ($resp[$hostname]['counts'] as $state => $substates) {
                         foreach ($substates as $substate => $count) {
                             $aReturn[$name]['counts'][$state][$substate] += $count;
                         }
@@ -807,41 +807,41 @@ class GlobalBackendTest implements GlobalBackendInterface {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServicegroupStateCounts($objects, $options, $filters) {
-        /*if($options & 1)
+        /*if ($options & 1)
             $stateAttr = 'last_hard_state';
         else
             $stateAttr = 'state';*/
         $aReturn = [];
         // Get all service state counts of a servicegroup
-        if(count($filters) == 1 && $filters[0]['key'] == 'groups' && $filters[0]['op'] == '>=') {
-            foreach($objects as $OBJS) {
+        if (count($filters) == 1 && $filters[0]['key'] == 'groups' && $filters[0]['op'] == '>=') {
+            foreach ($objects as $OBJS) {
                 $name = $OBJS[0]->getName();
 
                 // Skip not existing objects
-                if(!isset($this->obj['servicegroup'][$name])) {
+                if (!isset($this->obj['servicegroup'][$name])) {
                     continue;
                 }
 
-                if(!isset($aReturn[$name])) {
+                if (!isset($aReturn[$name])) {
                     $aReturn[$name] = ['counts' => []];
                 }
 
-                foreach($this->obj['servicegroup'][$name]['members'] as $attr) {
+                foreach ($this->obj['servicegroup'][$name]['members'] as $attr) {
                     list($name1, $name2) = $attr;
-                    foreach($this->obj['service'][$name1] as $service) {
-                        if($service[DESCRIPTION] != $name2) {
+                    foreach ($this->obj['service'][$name1] as $service) {
+                        if ($service[DESCRIPTION] != $name2) {
                             continue;
                         }
 
                         $state = $service[STATE];
-                        if(!isset($aReturn[$name]['counts'][$state])) {
+                        if (!isset($aReturn[$name]['counts'][$state])) {
                             $aReturn[$name]['counts'][$state] = $this->serviceStates[$state];
                         }
 
-                        if($service[ACK] === true) {
+                        if ($service[ACK] === true) {
                             $aReturn[$name]['counts'][$state]['ack']++;
                         }
-                        elseif($service[DOWNTIME] === true) {
+                        elseif ($service[DOWNTIME] === true) {
                             $aReturn[$name]['counts'][$state]['downtime']++;
                         } else {
                             $aReturn[$name]['counts'][$state]['normal']++;
@@ -860,7 +860,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
     }
 
     public function getDirectChildNamesByHostName($hostName) {
-        if(isset($this->childs[$hostName])) {
+        if (isset($this->childs[$hostName])) {
             return $this->childs[$hostName];
         } else {
             return [];
@@ -868,7 +868,7 @@ class GlobalBackendTest implements GlobalBackendInterface {
     }
 
     public function getDirectParentNamesByHostName($hostName) {
-        if(isset($this->parents[$hostName])) {
+        if (isset($this->parents[$hostName])) {
             return $this->parents[$hostName];
         } else {
             return [];

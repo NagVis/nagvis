@@ -94,7 +94,7 @@ class ViewChangePassword {
         password('password_new2');
         echo '</td></tr>';
         echo '</table>';
-        js('try{document.getElementById(\'password_old\').focus();}catch(e){}');
+        js('try{document.getElementById(\'password_old\').focus();}catch (e){}');
 
         submit(l('Change password'));
         form_end();

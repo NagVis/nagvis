@@ -40,7 +40,7 @@ class GlobalFileCache {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($files, $cacheFile) {
-        if(is_string($files)) {
+        if (is_string($files)) {
             $this->files = [$files];
         } else {
             $this->files = $files;
@@ -50,7 +50,7 @@ class GlobalFileCache {
 
         $this->fileAge = $this->getNewestFileAge();
 
-        if($this->checkCacheFileExists(0)) {
+        if ($this->checkCacheFileExists(0)) {
             $this->cacheFileAge = filemtime($this->cacheFile);
         }
     }
@@ -62,17 +62,17 @@ class GlobalFileCache {
     private function getNewestFileAge() {
         $age = -1;
         $newestFile = '';
-        foreach($this->files as $file) {
-            if(!GlobalCore::getInstance()->checkExisting($file, false)
+        foreach ($this->files as $file) {
+            if (!GlobalCore::getInstance()->checkExisting($file, false)
                 || !GlobalCore::getInstance()->checkReadable($file, false)) {
                 continue;
             }
 
             $thisAge = filemtime($file);
-            if($age === -1) {
+            if ($age === -1) {
                 $age = $thisAge;
                 $newestFile = $file;
-            } elseif($thisAge > $age) {
+            } elseif ($thisAge > $age) {
                 $age = $thisAge;
                 $newestFile = $file;
             }
@@ -102,11 +102,11 @@ class GlobalFileCache {
     public function writeCache($contents, $printErr = 1) {
         // Perform file writeable check only when cache file exists
         // When no cache file exists check if file can be created in directory
-        if((!$this->checkCacheFileExists(0)
+        if ((!$this->checkCacheFileExists(0)
             && $this->checkCacheFolderWriteable($printErr))
             || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))) {
-            if(($fp = fopen($this->cacheFile, 'w+')) === false){
-                if($printErr == 1) {
+            if (($fp = fopen($this->cacheFile, 'w+')) === false){
+                if ($printErr == 1) {
                     throw new NagVisException(l('cacheFileNotWriteable', ['FILE' => $this->cacheFile]));
                 }
                 return false;
@@ -134,11 +134,11 @@ class GlobalFileCache {
         // Checks
         // a) Cache file exists
         // b) Cache file older than regular file
-        if($this->checkCacheFileExists($printErr)
+        if ($this->checkCacheFileExists($printErr)
             && $this->getFileAge() <= $this->getCacheFileAge()) {
             return $this->getCacheFileAge();
         } else {
-            if($printErr) {
+            if ($printErr) {
                 throw new NagVisException(l('fileNotCached',
                     [
                         'FILE' => json_encode($this->files),

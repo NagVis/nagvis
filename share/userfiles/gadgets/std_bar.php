@@ -77,9 +77,9 @@ $sDummyPerfdata = 'config=20%;80;90;0;100';
 $_MODE          = 'html';
 
 // Include the gadgets core. Also handle OMD default and local paths
-if(substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
+if (substr($_SERVER["SCRIPT_FILENAME"], 0, 4) == '/omd') {
     $core = dirname($_SERVER["SCRIPT_FILENAME"]) . '/gadgets_core.php';
-    if(file_exists($core)) {
+    if (file_exists($core)) {
         require($core);
     } else {
         require(str_replace('local/share/', 'share/', $core));
@@ -229,16 +229,16 @@ for ($i = 0; $i < $pdc; $i++){
         // Normalize / Fix value and max
         //================
 
-        if($value == null) {
+        if ($value == null) {
             $value = $default;
-        } elseif($max != '' && $value < $min) {
+        } elseif ($max != '' && $value < $min) {
             $value = $min;
-        } elseif($max != '' && $max != -1 && $value > $max) {
+        } elseif ($max != '' && $max != -1 && $value > $max) {
             $value = $max;
         }
 
         // If there is no max value given set it using the critical value
-        if(intval($max) == 0 || $max == '') {
+        if (intval($max) == 0 || $max == '') {
             $max = $crit + 1;
         }
 
@@ -260,7 +260,7 @@ for ($i = 0; $i < $pdc; $i++){
         //===================
 
         // Warning
-        if($warn) {
+        if ($warn) {
             if ($warn < $crit) {
                 imageFilledRectangle($img, $offX + $warnv + 1, $offY + 1, $offX + $maxX, $offY + $sect1, $oYellow);
             } else {
@@ -273,7 +273,7 @@ for ($i = 0; $i < $pdc; $i++){
             }
         }
         // Critical
-        if($crit) {
+        if ($crit) {
             if ($warn < $crit) {
                 imageFilledRectangle($img, $offX + $critv + 1, $offY + 1, $offX + $maxX, $offY + $sect1, $oRed);
             } else {
@@ -326,7 +326,7 @@ for ($i = 0; $i < $pdc; $i++){
 // Output image.
 //==============
 
-if(function_exists('imageantialias')) {
+if (function_exists('imageantialias')) {
     imageantialias($img, true);
 }
 

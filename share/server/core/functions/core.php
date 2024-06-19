@@ -61,10 +61,10 @@ $_LANG = new GlobalLanguage();
  */
 function l($txt, $vars = null) {
     global $_LANG;
-    if(isset($_LANG)) {
+    if (isset($_LANG)) {
         return $_LANG->getText($txt, $vars);
     }
-    elseif($vars !== null) {
+    elseif ($vars !== null) {
         return GlobalLanguage::getReplacedString($txt, $vars);
     } else {
         return $txt;
@@ -92,7 +92,7 @@ function val($arr, $key, $dflt = null) {
 }
 
 function state_str($state) {
-    switch($state) {
+    switch ($state) {
         case UNCHECKED:   return 'UNCHECKED';
         case UNREACHABLE: return 'UNREACHABLE';
         case DOWN:        return 'DOWN';

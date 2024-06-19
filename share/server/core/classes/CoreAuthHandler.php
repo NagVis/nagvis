@@ -64,7 +64,7 @@ class CoreAuthHandler {
         // FIXME: First check if the auth module supports this mechanism
 
         // Some simple validations
-        if($aData !== false) {
+        if ($aData !== false) {
             $this->MOD->passNewPassword($aData);
         } else {
             throw new NagVisException(l('Data has an invalid format'));
@@ -108,7 +108,7 @@ class CoreAuthHandler {
         $bChanged = $this->MOD->changePassword();
 
         // Save success to session
-        if($bChanged === true) {
+        if ($bChanged === true) {
             $this->SESS->aquire();
             $this->SESS->set('authCredentials', $this->getCredentials());
             $this->SESS->commit();
@@ -118,7 +118,7 @@ class CoreAuthHandler {
     }
 
     public function resetPassword($uid, $pw) {
-        if(!$this->checkFeature('resetPassword')) {
+        if (!$this->checkFeature('resetPassword')) {
             throw new CoreAuthModNoSupport("Password reset not supported");
         }
         return $this->MOD->resetPassword($uid, $pw);
@@ -138,7 +138,7 @@ class CoreAuthHandler {
     }
 
     public function isAuthenticated() {
-        if(cfg('global', 'audit_log') == true) {
+        if (cfg('global', 'audit_log') == true) {
             $ALOG = new CoreLog(cfg('paths', 'var') . 'nagvis-audit.log',
                 cfg('global', 'dateformat'));
         } else {
@@ -151,9 +151,9 @@ class CoreAuthHandler {
         // out if the auth_* cookie does not exist anymore. The cookie name has been
         // stored in the session var multisiteLogonCookie
         // This is a bad hacky place for this but I see no other good solution atm
-        /*if($bAlreadyAuthed && $this->SESS->isSetAndNotEmpty('multisiteLogonCookie')) {
+        /*if ($bAlreadyAuthed && $this->SESS->isSetAndNotEmpty('multisiteLogonCookie')) {
             $cookieName = $this->SESS->get('multisiteLogonCookie');
-            if(!$cookieName || !isset($_COOKIE[$cookieName])) {
+            if (!$cookieName || !isset($_COOKIE[$cookieName])) {
                 $this->logout(true);
                 return false;
             }
@@ -162,8 +162,8 @@ class CoreAuthHandler {
         // Ask the module
         $isAuthenticated = $this->MOD->isAuthenticated($this->trustUsername);
 
-        if($ALOG !== null) {
-            if($isAuthenticated) {
+        if ($ALOG !== null) {
+            if ($isAuthenticated) {
                 $ALOG->l('User logged in (' . $this->getUser() . ' / ' . $this->getUserId() . '): ' . $this->sModuleName);
             } else {
                 $ALOG->l('User login failed (' . $this->getUser() . ' / ' . $this->getUserId() . '): ' . $this->sModuleName);
@@ -178,11 +178,11 @@ class CoreAuthHandler {
     }
 
     public function logout($enforce = false) {
-        if(!$enforce && !$this->logoutSupported()) {
+        if (!$enforce && !$this->logoutSupported()) {
             return false;
         }
 
-        if(cfg('global', 'audit_log') == true) {
+        if (cfg('global', 'audit_log') == true) {
             $ALOG = new CoreLog(cfg('paths', 'var') . 'nagvis-audit.log',
                 cfg('global', 'dateformat'));
             $ALOG->l('User logged out (' . $this->getUser() . ' / ' . $this->getUserId() . '): ' . $this->sModuleName);
@@ -204,9 +204,9 @@ class CoreAuthHandler {
 
     public function isAuthenticatedSession() {
         // Remove logins which were performed with different logon/auth modules
-        if($this->SESS->get('logonModule') != cfg('global', 'logonmodule')
+        if ($this->SESS->get('logonModule') != cfg('global', 'logonmodule')
             || $this->SESS->get('authModule') != $this->sModuleName) {
-            if(DEBUG && DEBUGLEVEL & 2) {
+            if (DEBUG && DEBUGLEVEL & 2) {
                 debug('removing different logon/auth module data');
             }
             $this->logout(true);

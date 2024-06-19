@@ -179,7 +179,7 @@ function hidden_vars() {
         // $_REQUEST might contain $_COOKIES. Skip these vars.
         if (!isset($form_keys[$key]) && !isset($_COOKIE[$key])) {
             if (is_array($val)) {
-                foreach($val as $val_element) {
+                foreach ($val as $val_element) {
                     hidden($key . "[]", $val_element);
                 }
             } else {
@@ -211,7 +211,7 @@ function field($type, $name, $default = '', $class = '', $onclick = '', $style =
         $class .= ' err';
     }
 
-    if(trim($class)) {
+    if (trim($class)) {
         $class = ' class="' . trim($class) . '"';
     }
 
@@ -225,7 +225,7 @@ function field($type, $name, $default = '', $class = '', $onclick = '', $style =
 
     $value = '';
     if ($default != '') {
-        if($type == 'checkbox') {
+        if ($type == 'checkbox') {
             if ($default === true) {
                 $value = ' value="1" checked="yes"';
             } else {
@@ -236,11 +236,11 @@ function field($type, $name, $default = '', $class = '', $onclick = '', $style =
         }
     }
 
-    if($onclick != '') {
+    if ($onclick != '') {
         $onclick = ' onclick="' . $onclick . '"';
     }
 
-    if($style != '') {
+    if ($style != '') {
         $style = ' style="' . $style . '"';
     }
 
@@ -274,11 +274,11 @@ function textarea($name, $default = '', $class = '', $style = '') {
         $err_class = ' err';
     }
 
-    if($class != '' || $err_class != '') {
+    if ($class != '' || $err_class != '') {
         $class = ' class="' . $class . $err_class . '"';
     }
 
-    if($style != '') {
+    if ($style != '') {
         $style = ' style="' . $style . '"';
     }
 
@@ -312,7 +312,7 @@ function select($name, $options, $default = '', $onchange = '', $style = '', $si
         $class .= ' err';
     }
 
-    if(trim($class)) {
+    if (trim($class)) {
         $class = ' class="' . trim($class) . '"';
     }
 
@@ -321,11 +321,11 @@ function select($name, $options, $default = '', $onchange = '', $style = '', $si
         $default = post($name, $default);
     }
 
-    if($onchange != '') {
+    if ($onchange != '') {
         $onchange = ' onchange="' . $onchange . '"';
     }
 
-    if($style != '') {
+    if ($style != '') {
         $style = ' style="' . $style . '"';
     }
 
@@ -344,9 +344,9 @@ function select($name, $options, $default = '', $onchange = '', $style = '', $si
     }
 
     $ret = '<select id="' . $name . '" name="' . $name . '"' . $onchange . $class . $style . $multiple . '>' . N;
-    foreach($options as $value => $display) {
+    foreach ($options as $value => $display) {
         $select = '';
-        if($value == $default) {
+        if ($value == $default) {
             $select = ' selected';
         }
         $ret .= '<option value="' . htmlspecialchars($value) . '"' . $select . '>' . htmlspecialchars($display) . '</option>' . N;
@@ -381,7 +381,7 @@ function upload($name) {
         $class .= ' err';
     }
 
-    if(trim($class)) {
+    if (trim($class)) {
         $class = ' class="' . $class . '"';
     }
 
@@ -404,7 +404,7 @@ function reload($url, $sec) {
 }
 
 function focus($name) {
-    js('try{document.getElementById(\'' . $name . '\').focus();}catch(e){}');
+    js('try{document.getElementById(\'' . $name . '\').focus();}catch (e){}');
 }
 
 function scroll_up() {

@@ -65,8 +65,8 @@ class FrontendModRotation extends FrontendModule {
     public function handleAction() {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'view':
                     // Show the view dialog to the user
                     $sReturn = $this->showViewDialog();
@@ -82,11 +82,11 @@ class FrontendModRotation extends FrontendModule {
         $ROTATION = new FrontendRotation($this->name);
 
         // Set the requested step
-        if($this->type != '' && $this->step != '') {
+        if ($this->type != '' && $this->step != '') {
             $ROTATION->setStep($this->type, $this->step, $this->stepId);
         }
 
-        switch($this->type) {
+        switch ($this->type) {
             case '':
                 // If no step given redirect to first step
                 header('Location: ' . $ROTATION->getStepUrlById(0));

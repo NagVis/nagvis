@@ -174,7 +174,7 @@ class CoreAuthorisationHandler {
         // is still available
         foreach ($this->getAllVisiblePerms() as $perm) {
             if ($perm['mod'] == 'Map' && $perm['obj'] != '*') {
-                if(count($CORE->getAvailableMaps('/^' . $perm['obj'] . '$/')) <= 0) {
+                if (count($CORE->getAvailableMaps('/^' . $perm['obj'] . '$/')) <= 0) {
                     $this->deletePermission('Map', $perm['obj']);
                 }
             }
@@ -188,8 +188,8 @@ class CoreAuthorisationHandler {
         $aPerms = $this->MOD->getAllPerms();
 
         // Filter perms to only display the visible ones
-        foreach($aPerms as $perm) {
-            if(!isset($this->summarizePerms[$perm['mod']]) || (isset($this->summarizePerms[$perm['mod']]) && !isset($this->summarizePerms[$perm['mod']][$perm['act']]))) {
+        foreach ($aPerms as $perm) {
+            if (!isset($this->summarizePerms[$perm['mod']]) || (isset($this->summarizePerms[$perm['mod']]) && !isset($this->summarizePerms[$perm['mod']][$perm['act']]))) {
                 $aReturn[] = $perm;
             }
         }
@@ -240,37 +240,37 @@ class CoreAuthorisationHandler {
     public function isPermitted($sModule, $sAction, $sObj = null) {
         // Module access?
         $access = [];
-        if(isset($this->aPermissions[$sModule])) {
+        if (isset($this->aPermissions[$sModule])) {
             $access[$sModule] = [];
         }
-        if(isset($this->aPermissions[AUTH_PERMISSION_WILDCARD])) {
+        if (isset($this->aPermissions[AUTH_PERMISSION_WILDCARD])) {
             $access[AUTH_PERMISSION_WILDCARD] = [];
         }
 
-        if(count($access) > 0) {
+        if (count($access) > 0) {
             // Action access?
-            foreach($access as $mod => $acts) {
-                if(isset($this->aPermissions[$mod][$sAction])) {
+            foreach ($access as $mod => $acts) {
+                if (isset($this->aPermissions[$mod][$sAction])) {
                     $access[$mod][$sAction] = [];
                 }
-                if(isset($this->aPermissions[$mod][AUTH_PERMISSION_WILDCARD])) {
+                if (isset($this->aPermissions[$mod][AUTH_PERMISSION_WILDCARD])) {
                     $access[$mod][AUTH_PERMISSION_WILDCARD] = [];
                 }
             }
 
-            if(count($access[$mod]) > 0) {
+            if (count($access[$mod]) > 0) {
                 // Don't check object permissions
-                if($sObj === null) {
+                if ($sObj === null) {
                     return true;
                 }
 
                 // Object access?
-                foreach($access as $mod => $acts) {
-                    foreach($acts as $act => $objs) {
-                        if(isset($this->aPermissions[$mod][$act][$sObj])) {
+                foreach ($access as $mod => $acts) {
+                    foreach ($acts as $act => $objs) {
+                        if (isset($this->aPermissions[$mod][$act][$sObj])) {
                             return true;
                         }
-                        elseif(isset($this->aPermissions[$mod][$act][AUTH_PERMISSION_WILDCARD])) {
+                        elseif (isset($this->aPermissions[$mod][$act][AUTH_PERMISSION_WILDCARD])) {
                             return true;
                         } elseif (DEBUG && DEBUGLEVEL & 2) {
                             debug('Object access denied (Mod: ' . $sModule . ' Act: ' . $sAction . ' Object: ' . $sObj);

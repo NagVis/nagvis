@@ -44,7 +44,7 @@ class NagVisMap {
         global $_BACKEND;
         $this->MAPCFG = $MAPCFG;
 
-        if($getState === GET_STATE) {
+        if ($getState === GET_STATE) {
             $this->MAPOBJ = new NagVisMapObj($MAPCFG, $bIsView);
             // FIXME: needed? $this->MAPOBJ->setConfiguration($this->MAPCFG->getTypeDefaults('global'));
             $objConf = $MAPCFG->getMapObject(0);
@@ -55,7 +55,7 @@ class NagVisMap {
             log_mem('map ' . $this->MAPCFG->getName() . ' ' . count($this->MAPOBJ->getMembers()));
             log_mem('postmapobjects');
 
-            if($bIsView === IS_VIEW) {
+            if ($bIsView === IS_VIEW) {
                 $this->MAPOBJ->queueState(GET_STATE, GET_SINGLE_MEMBER_STATES);
                 $_BACKEND->execute();
                 $this->MAPOBJ->applyState();
@@ -83,17 +83,17 @@ class NagVisMap {
 
         // First parse the map object itselfs for having the
         // summary information in the frontend
-        if($type === 'complete' || $type === 'summary') {
+        if ($type === 'complete' || $type === 'summary') {
             $arrRet[] = $this->MAPOBJ->parseJson();
         }
 
         // In summary mode only return the map object state
-        if($type === 'summary') {
+        if ($type === 'summary') {
             return json_encode($arrRet);
         }
 
-        foreach($this->MAPOBJ->getMembers() as $OBJ) {
-            switch(get_class($OBJ)) {
+        foreach ($this->MAPOBJ->getMembers() as $OBJ) {
+            switch (get_class($OBJ)) {
                 case 'NagVisHost':
                 case 'NagVisService':
                 case 'NagVisHostgroup':
@@ -101,7 +101,7 @@ class NagVisMap {
                 case 'NagVisAggr':
                 case 'NagVisServicegroup':
                 case 'NagVisMapObj':
-                    if($type == 'state') {
+                    if ($type == 'state') {
                         $arr = $OBJ->getObjectStateInformations();
                         $arr['object_id'] = $OBJ->getObjectId();
                         $arr['icon'] = $OBJ->get('icon');

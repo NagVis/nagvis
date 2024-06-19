@@ -55,8 +55,8 @@ class GlobalLanguage {
         T_textdomain($this->textDomain);
 
         // Check if native gettext or php-gettext is used
-        if(DEBUG && DEBUGLEVEL & 2) {
-            if(locale_emulation()) {
+        if (DEBUG && DEBUGLEVEL & 2) {
+            if (locale_emulation()) {
                 debug('GlobalLanguage: Using php-gettext for translations');
             } else {
                 debug('GlobalLanguage: Using native gettext for translations');
@@ -69,7 +69,7 @@ class GlobalLanguage {
      * while processing the current page.
      */
     public function setLanguage($handleUserCfg = false) {
-        if($handleUserCfg) {
+        if ($handleUserCfg) {
             $this->USERCFG = new CoreUserCfg();
         }
 
@@ -94,12 +94,12 @@ class GlobalLanguage {
         $sReturn = '';
         $aMethods = cfg('global', 'language_detection');
 
-        foreach($aMethods as $sMethod) {
-            if($sReturn == '') {
-                switch($sMethod) {
+        foreach ($aMethods as $sMethod) {
+            if ($sReturn == '') {
+                switch ($sMethod) {
                     case 'session':
                         // Read the user choice from user options
-                        if($this->USERCFG !== null) {
+                        if ($this->USERCFG !== null) {
                             $sReturn = $this->USERCFG->getValue('language', '');
                         }
                     break;
@@ -116,7 +116,7 @@ class GlobalLanguage {
                         $sReturn = $this->getUserLanguage();
 
                         // Save language to user config when user set one
-                        if($sReturn != ''
+                        if ($sReturn != ''
                             && $this->USERCFG !== null
                             && $sReturn != $this->USERCFG->getValue('language', '')) {
                             $this->USERCFG->doSet(['language' => $sReturn]);
@@ -153,7 +153,7 @@ class GlobalLanguage {
         // Load the specific params to the UriHandler
         $UHANDLER->parseModSpecificUri(['lang' => MATCH_LANGUAGE_EMPTY]);
 
-        if($UHANDLER->isSetAndNotEmpty('lang')
+        if ($UHANDLER->isSetAndNotEmpty('lang')
             // Check if language is available
             && $this->checkLanguageAvailable($UHANDLER->get('lang'), false)) {
 
@@ -176,11 +176,11 @@ class GlobalLanguage {
         $return = [];
         $langs = [];
 
-        if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+        if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             // break up string into pieces (languages and q factors)
             preg_match_all('/([a-z]{1,8}(-[a-z]{1,8})?)\s*(;\s*q\s*=\s*(1|0\.[0-9]+))?/i', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $lang_parse);
 
-            if(count($lang_parse[1])) {
+            if (count($lang_parse[1])) {
                 // create a list like "en" => 0.8
                 $langs = array_combine($lang_parse[1], $lang_parse[4]);
 
@@ -198,15 +198,15 @@ class GlobalLanguage {
 
         // Check if the languages are available and then return the most important language which is available
         $sLang = '';
-        foreach($langs as $key => $val) {
+        foreach ($langs as $key => $val) {
             // Format the language keys
-            if(strpos($key, '-') !== false) {
+            if (strpos($key, '-') !== false) {
                 $a = explode('-', $key);
 
                 $key = $a[0] . '_' . strtoupper($a[1]);
             }
 
-            if($this->checkLanguageAvailable($key, false)) {
+            if ($this->checkLanguageAvailable($key, false)) {
                 $sLang = $key;
                 break;
             }
@@ -239,13 +239,13 @@ class GlobalLanguage {
         // Checks two things:
         // a) The language availabilty in the filesyste,
         // b) Listed language in global/language_available config option
-        if(in_array($sLang, $CORE->getAvailableLanguages())
+        if (in_array($sLang, $CORE->getAvailableLanguages())
             && ($ignoreConf == true
             || ($ignoreConf == false
             && in_array($sLang, cfg('global', 'language_available'))))) {
             return true;
         } else {
-            if($printErr) {
+            if ($printErr) {
                 throw new NagVisException($this->getText('languageNotFound', ['LANG' => $sLang]));
             }
             return false;
@@ -264,21 +264,21 @@ class GlobalLanguage {
     public function getText($id, $replace = null) {
         // Use cache if available
         // FIXME: At the moment the cache can only be used without macros
-        if($replace === null && isset($this->cache[$id])) {
+        if ($replace === null && isset($this->cache[$id])) {
             return $this->cache[$id];
         }
 
         $ret = $this->getTextOfId($id);
 
-        if($replace !== null) {
+        if ($replace !== null) {
             $ret = self::getReplacedString($ret, $replace);
         }
 
         // When the translated string is equal to the requested id and some macros
         // should be replaced it is possible that there is a problem with the
         // gettext/translation mechanism. Then append the imploded
-        if($id === $ret && $replace !== null) {
-            if(!is_array($replace)) {
+        if ($id === $ret && $replace !== null) {
+            if (!is_array($replace)) {
                 $ret .= 'Opts: ' . $replace;
             } else {
                 // Implode does not return the keys. So simply use json_encode here
@@ -288,7 +288,7 @@ class GlobalLanguage {
         }
 
         // Store in cache for this page processing
-        if($replace === null && !isset($this->cache[$id])) {
+        if ($replace === null && !isset($this->cache[$id])) {
             $this->cache[$id] = $ret;
         }
 
@@ -316,16 +316,16 @@ class GlobalLanguage {
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public static function getReplacedString($sLang, $replace) {
-        if(!is_array($replace)) {
+        if (!is_array($replace)) {
             $aReplace = explode(',', $replace);
-            for($i = 0, $size = count($aReplace); $i < $size; $i++) {
-                if(isset($aReplace[$i])) {
+            for ($i = 0, $size = count($aReplace); $i < $size; $i++) {
+                if (isset($aReplace[$i])) {
                     $var = explode('~', $aReplace[$i]);
                     $sLang = str_replace('[' . $var[0] . ']', $var[1], $sLang);
                 }
             }
         } else {
-            foreach($replace as $key => $val) {
+            foreach ($replace as $key => $val) {
                 $sLang = str_replace('[' . $key . ']', $val, $sLang);
             }
         }

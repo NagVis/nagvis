@@ -31,11 +31,11 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
     public function __construct() {
         $this->file = cfg('global', 'authorisation_multisite_file');
 
-        if($this->file == '') {
+        if ($this->file == '') {
             throw new NagVisException(l('No auth file configured. Please specify the option authorisation_multisite_file in main configuration'));
         }
 
-        if(!file_exists($this->file)) {
+        if (!file_exists($this->file)) {
             throw new NagVisException(l('Unable to open auth file ([FILE]).',
                 ['FILE' => $this->file]));
         }
@@ -69,8 +69,8 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
         }
 
         # Loop the multisite NagVis related permissions and add them
-        foreach($nagvis_permissions as $p => $_unused) {
-            if(may($username, 'nagvis.' . $p)) {
+        foreach ($nagvis_permissions as $p => $_unused) {
+            if (may($username, 'nagvis.' . $p)) {
                 $parts = explode('_', $p);
                 if (count($parts) == 3) {
                     // Add native multisite permissions
@@ -92,7 +92,7 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
     private function readFile() {
         require_once($this->file);
         $this->permissions = [];
-        foreach(all_users() as $username => $user) {
+        foreach (all_users() as $username => $user) {
             $this->permissions[$username] = [
                 'permissions' => $this->getPermissions($username),
                 'language'    => $user['language'],
@@ -126,30 +126,30 @@ class CoreAuthorisationModMultisite extends CoreAuthorisationModule {
 
     public function parsePermissions($sUsername = null) {
         global $AUTH;
-        if($sUsername === null) {
+        if ($sUsername === null) {
             $username = $AUTH->getUser();
         } else {
             $username = $sUsername;
         }
 
-        if(!isset($this->permissions[$username])
+        if (!isset($this->permissions[$username])
             || !isset($this->permissions[$username]['permissions'])) {
             return [];
         }
 
         # Array ( [0] => Overview [1] => view [2] => * )
         $perms = [];
-        foreach($this->permissions[$username]['permissions'] as $value) {
+        foreach ($this->permissions[$username]['permissions'] as $value) {
             // Module entry
-            if(!isset($perms[$value[0]])) {
+            if (!isset($perms[$value[0]])) {
                 $perms[$value[0]] = [];
             }
 
-            if(!isset($perms[$value[0]][$value[1]])) {
+            if (!isset($perms[$value[0]][$value[1]])) {
                 $perms[$value[0]][$value[1]] = [];
             }
 
-            if(!isset($perms[$value[0]][$value[1]][$value[2]])) {
+            if (!isset($perms[$value[0]][$value[1]][$value[2]])) {
                 $perms[$value[0]][$value[1]][$value[2]] = [];
             }
         }

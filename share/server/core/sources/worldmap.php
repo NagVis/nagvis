@@ -157,7 +157,7 @@ function worldmap_init_schema() {
 
     //    // Only apply the new version when this is the real release or newer
     //    // (While development the version string remains on the old value)
-    //    //if($CORE->versionToTag(CONST_VERSION) >= 1060100)
+    //    //if ($CORE->versionToTag(CONST_VERSION) >= 1060100)
     //        $DB->updateDbVersion();
     //}
 }

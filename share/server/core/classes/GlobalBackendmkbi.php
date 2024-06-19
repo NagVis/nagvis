@@ -24,7 +24,7 @@
  *****************************************************************************/
 
 // needed for isolated tests (direct calling)
-if(!function_exists('l')) {
+if (!function_exists('l')) {
     require_once('GlobalBackendInterface.php');
     require_once('../defines/matches.php');
 }
@@ -144,7 +144,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         // Always set the HTTP basic auth header
         $username = cfg('backend_' . $backendId, 'auth_user');
         $secret = $this->getSecret();
-        if($username && $secret) {
+        if ($username && $secret) {
             $authCred = base64_encode($username . ':' . $secret);
             $httpContext['header'] = 'Authorization: Basic ' . $authCred . "\r\n";
         }
@@ -187,7 +187,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
 
         // Is there some cache to use? The cache is not persisted. It is available
         // until the request has finished.
-        if(isset($this->cache[$url])) {
+        if (isset($this->cache[$url])) {
             return $this->cache[$url];
         }
 
@@ -197,7 +197,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         //fclose($fh);
 
         $s = @file_get_contents($url, false, $this->context);
-        if($s === false) {
+        if ($s === false) {
             throw new BackendConnectionProblem(l('Unable to fetch data from URL [U]: [M]',
                 ['U' => $url, 'M' => json_encode(error_get_last())]));
         }
@@ -245,7 +245,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
     private function getAggregationNames() {
         $aggregations = $this->getUrl('view.py?view_name=aggr_all_api&expansion_level=0');
         $names = [];
-        foreach($aggregations as $aggr) {
+        foreach ($aggregations as $aggr) {
             $names[$aggr['aggr_name']] = $aggr['aggr_name'];
         }
         ksort($names);
@@ -281,7 +281,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         foreach ($pairs as $pair) {
             list($short_state, $title) = $pair;
 
-            if(!isset(GlobalBackendmkbi::$bi_short_states[$short_state])) {
+            if (!isset(GlobalBackendmkbi::$bi_short_states[$short_state])) {
                 throw new BackendException(l('Invalid state: "[S]"',
                     ['S' => $short_state]));
             }
@@ -363,12 +363,12 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
      * objects in WUI.
      */
     public function getObjects($type, $name1Pattern = '', $name2Pattern = '') {
-        if($type !== 'aggr') {
+        if ($type !== 'aggr') {
             throw new BackendException(l('This backend only supports "Aggregation" objects.'));
         }
 
         $result = [];
-        foreach($this->getAggregationNames() as $id => $name) {
+        foreach ($this->getAggregationNames() as $id => $name) {
             $result[] = ['name1' => $id, 'name2' => $name];
         }
         return $result;
@@ -393,7 +393,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         $aggregations = $this->getUrl('view.py?view_name=aggr_all_api&expansion_level=1');
 
         $ret = [];
-        foreach($objects as $key => $OBJS) {
+        foreach ($objects as $key => $OBJS) {
             $aggr = $this->matchAggregation($aggregations, $key);
             if ($aggr === null) {
                 continue;
@@ -420,7 +420,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
             ];
 
             // Add optional outputs which replaces the NagVis summary_output
-            if(isset($aggr['aggr_output']) && $aggr['aggr_output'] != '') {
+            if (isset($aggr['aggr_output']) && $aggr['aggr_output'] != '') {
                 $ret[$key]['output'] = $aggr['aggr_output'];
             }
         }
@@ -436,7 +436,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
         $aggregations = $this->getUrl('view.py?view_name=aggr_all_api&expansion_level=1');
 
         $ret = [];
-        foreach($objects as $key => $OBJS) {
+        foreach ($objects as $key => $OBJS) {
             $aggr = $this->matchAggregation($aggregations, $key);
             if ($aggr === null) {
                 continue;
@@ -525,7 +525,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface {
     }
 }
 
-if(!function_exists('l')) {
+if (!function_exists('l')) {
     require_once('GlobalBackendInterface.php');
     require_once('CoreExceptions.php');
 
@@ -534,13 +534,13 @@ if(!function_exists('l')) {
     }
 
     function cfg($sec, $opt) {
-        if($opt == 'base_url') {
+        if ($opt == 'base_url') {
             return 'http://127.0.0.1/event/check_mk/';
         }
-        if($opt == 'auth_user') {
+        if ($opt == 'auth_user') {
             return 'bi-user';
         }
-        if($opt == 'auth_secret') {
+        if ($opt == 'auth_secret') {
             return 'MATKBYXNV@YXLHSEJYND';
         }
     }

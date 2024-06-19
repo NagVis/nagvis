@@ -98,47 +98,47 @@ function parsePerfdata($sPerfdata) {
     preg_match_all('/([^=]+)=([\d\.\-]+)([\w%\/]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*/', $sPerfdata, $aMatches, PREG_SET_ORDER);
 
     // When no match found
-    if(!isset($aMatches[0])) {
+    if (!isset($aMatches[0])) {
         errorBox('ERROR: Found no valid performance data in string');
     }
-    for($i = 0, $len = sizeof($aMatches); $i < $len; $i++) {
+    for ($i = 0, $len = sizeof($aMatches); $i < $len; $i++) {
         $aTmp = $aMatches[$i];
 
         // Save needed values
         $aSet = ['label' => $aTmp[1], 'value' => $aTmp[2]];
 
         // Save optional values
-        if(isset($aTmp[3])) {
+        if (isset($aTmp[3])) {
             $aSet['uom'] = $aTmp[3];
         } else {
             $aSet['uom'] = null;
         }
-        if(isset($aTmp[4])) {
+        if (isset($aTmp[4])) {
             $aSet['warning'] = $aTmp[4];
             preg_match_all('/([\d\.]+):([\d\.]+)/', $aTmp[4], $matches);
-            if(isset($matches[0]) && isset($matches[0][0])) {
+            if (isset($matches[0]) && isset($matches[0][0])) {
                 $aSet['warning_min'] = $matches[1][0];
                 $aSet['warning_max'] = $matches[2][0];
             }
         } else {
             $aSet['warning'] = null;
         }
-        if(isset($aTmp[5])) {
+        if (isset($aTmp[5])) {
             $aSet['critical'] = $aTmp[5];
             preg_match_all('/([\d\.]+):([\d\.]+)/', $aTmp[5], $matches);
-            if(isset($matches[0]) && isset($matches[0][0])) {
+            if (isset($matches[0]) && isset($matches[0][0])) {
                 $aSet['critical_min'] = $matches[1][0];
                 $aSet['critical_max'] = $matches[2][0];
             }
         } else {
             $aSet['critical'] = null;
         }
-        if(isset($aTmp[6])) {
+        if (isset($aTmp[6])) {
             $aSet['min'] = $aTmp[6];
         } else {
             $aSet['min'] = null;
         }
-        if(isset($aTmp[7])) {
+        if (isset($aTmp[7])) {
             $aSet['max'] = $aTmp[7];
         } else {
             $aSet['max'] = null;
@@ -158,7 +158,7 @@ function parsePerfdata($sPerfdata) {
  */
 function errorBox($msg) {
     global $_MODE;
-    if(isset($_MODE) && $_MODE === 'html') {
+    if (isset($_MODE) && $_MODE === 'html') {
         echo '<strong>' . $msg . '</strong>';
         exit;
     } else {
@@ -194,7 +194,7 @@ $aPerfdata = [];
  */
 
 // Get params without default values
-foreach([
+foreach ([
     'opts'  => null, 'name1'     => null, 'name2' => null,
     'state' => null, 'stateType' => null, 'scale' => 100,
     'ack'   => null, 'downtime'  => null
@@ -206,19 +206,19 @@ foreach([
     }
 }
 
-if(isset($_GET['perfdata']) && $_GET['perfdata'] != '') {
+if (isset($_GET['perfdata']) && $_GET['perfdata'] != '') {
     $aOpts['perfdata'] = $_GET['perfdata'];
 }
-elseif(isset($_GET['conf']) &&  $_GET['conf'] != '' && isset($sDummyPerfdata) && $sDummyPerfdata != '') {
+elseif (isset($_GET['conf']) &&  $_GET['conf'] != '' && isset($sDummyPerfdata) && $sDummyPerfdata != '') {
     $aOpts['perfdata'] = $sDummyPerfdata;
 }
-elseif(!isset($_GET['opts']) || strpos($_GET['opts'], 'no_perf') === false) {
+elseif (!isset($_GET['opts']) || strpos($_GET['opts'], 'no_perf') === false) {
     errorBox('ERROR: The needed parameter "perfdata" is missing.');
 }
 
 /* Now parse the perfdata */
-if(isset($_GET['opts']) && $_GET['opts'] != '') {
-    if(strpos($_GET['opts'], 'no_perf') === false) {
+if (isset($_GET['opts']) && $_GET['opts'] != '') {
+    if (strpos($_GET['opts'], 'no_perf') === false) {
         $aPerfdata = parsePerfdata($aOpts['perfdata']);
     }
 } else {

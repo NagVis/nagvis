@@ -42,8 +42,8 @@ class CoreModOverview extends CoreModule {
     public function handleAction() {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'getOverviewRotations':
                     $sReturn = $this->parseRotationsJson();
                 break;
@@ -55,9 +55,9 @@ class CoreModOverview extends CoreModule {
                     $aVals = $this->getCustomOptions($aOpts, [], true);
 
                     // Is this request asked to check file ages?
-                    if(isset($aVals['f']) && isset($aVals['f'][0])) {
+                    if (isset($aVals['f']) && isset($aVals['f'][0])) {
                         $result = $this->checkFilesChanged($aVals['f']);
-                        if($result !== null) {
+                        if ($result !== null) {
                             return $result;
                         }
                     }
@@ -73,7 +73,7 @@ class CoreModOverview extends CoreModule {
     private function parseMapJson($objectId, $mapName, $what) {
         global $AUTHORISATION;
         // Check if the user is permitted to view this
-        if(!$AUTHORISATION->isPermitted('Map', 'view', $mapName)) {
+        if (!$AUTHORISATION->isPermitted('Map', 'view', $mapName)) {
             return null;
         }
 
@@ -81,10 +81,10 @@ class CoreModOverview extends CoreModule {
         // given in this parameter. This is a mechanism to be authed as generic
         // user but see the maps of another user. This feature is disabled by
         // default but could be enabled if you need it.
-        if(cfg('global', 'user_filtering') && isset($_GET['filterUser']) && $_GET['filterUser'] != '') {
+        if (cfg('global', 'user_filtering') && isset($_GET['filterUser']) && $_GET['filterUser'] != '') {
             $AUTHORISATION2 = new CoreAuthorisationHandler();
             $AUTHORISATION2->parsePermissions($_GET['filterUser']);
-            if(!$AUTHORISATION2->isPermitted('Map', 'view', $mapName)) {
+            if (!$AUTHORISATION2->isPermitted('Map', 'view', $mapName)) {
                 return null;
             }
 
@@ -103,7 +103,7 @@ class CoreModOverview extends CoreModule {
         $MAPCFG->readMapConfig();
 
         // Only perform this check with a valid config
-        if($MAPCFG->getValue(0, 'show_in_lists') != 1) {
+        if ($MAPCFG->getValue(0, 'show_in_lists') != 1) {
             return null;
         }
 
@@ -112,7 +112,7 @@ class CoreModOverview extends CoreModule {
         // Apply overview related configuration to object
         $MAP->MAPOBJ->setConfiguration($this->getMapDefaultOpts($mapName, $MAPCFG->getAlias()));
 
-        if($MAP->MAPOBJ->checkMaintenance(0)) {
+        if ($MAP->MAPOBJ->checkMaintenance(0)) {
             $map['overview_url']    = $this->htmlBase . '/index.php?mod=Map&act=view&show=' . $mapName;
             $map['overview_class']  = '';
         } else {
@@ -125,7 +125,7 @@ class CoreModOverview extends CoreModule {
             $MAP->MAPOBJ->fetchIcon();
         }
 
-        if(cfg('index', 'showmapthumbs') == 1) {
+        if (cfg('index', 'showmapthumbs') == 1) {
             $map['overview_image'] = $this->renderMapThumb($MAPCFG);
         }
 
@@ -148,24 +148,24 @@ class CoreModOverview extends CoreModule {
         $aMaps = [];
         $aObjs = [];
         log_mem('pre');
-        foreach($mapList as $objectId) {
+        foreach ($mapList as $objectId) {
             $a = explode('-', $objectId, 2);
-            if(!isset($a[1])) {
+            if (!isset($a[1])) {
                 continue;
             }
             $mapName = $a[1];
             // list mode: Skip processing when this type of object should not be shown
-            if(cfg('index', 'showmaps') != 1) {
+            if (cfg('index', 'showmaps') != 1) {
                 continue;
             }
 
             try {
                 $ret = $this->parseMapJson($objectId, $mapName, $what);
-                if($ret === null) {
+                if ($ret === null) {
                     // Skip maps which shal not be shown to the user
                     continue;
                 }
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 $aMaps[] = $this->mapError($mapName, $e->getMessage());
                 continue;
             }
@@ -176,11 +176,11 @@ class CoreModOverview extends CoreModule {
 
         // Now fetch and apply data from backend
         $_BACKEND->execute();
-        foreach($aObjs as $aObj) {
+        foreach ($aObjs as $aObj) {
             $aObj[0]->applyState();
             $aObj[0]->fetchIcon();
 
-            if($what === ONLY_STATE) {
+            if ($what === ONLY_STATE) {
                 $aMaps[] = array_merge($aObj[0]->getObjectStateInformations(), $aObj[1]);
             } else {
                 $aMaps[] = array_merge($aObj[0]->parseJson(), $aObj[1]);
@@ -232,7 +232,7 @@ class CoreModOverview extends CoreModule {
         // b) The image is a local one
         // c) The image exists
         // When one is not OK, then use the large map image
-        if(!$CORE->checkGd(0) || !$MAPCFG->BACKGROUND->getFileType() == 'local' || !file_exists($imgPath)) {
+        if (!$CORE->checkGd(0) || !$MAPCFG->BACKGROUND->getFileType() == 'local' || !file_exists($imgPath)) {
             return $MAPCFG->BACKGROUND->getFile();
         }
 
@@ -242,7 +242,7 @@ class CoreModOverview extends CoreModule {
 
         // Only create a new thumb when there is no cached one
         $FCACHE = new GlobalFileCache($imgPath, $sThumbPath);
-        if($FCACHE->isCached() === -1) {
+        if ($FCACHE->isCached() === -1) {
             $image = $this->createThumbnail($imgPath, $sThumbPath);
         }
 
@@ -258,16 +258,16 @@ class CoreModOverview extends CoreModule {
     public function parseRotationsJson() {
         global $AUTHORISATION, $CORE;
         // Only display the rotation list when enabled
-        if(cfg('index', 'showrotations') != 1) {
+        if (cfg('index', 'showrotations') != 1) {
             return json_encode([]);
         }
 
         $aRotations = [];
-        foreach($CORE->getPermittedRotationPools() as $poolName) {
+        foreach ($CORE->getPermittedRotationPools() as $poolName) {
             $ROTATION = new CoreRotation($poolName);
             $iNum = $ROTATION->getNumSteps();
             $aSteps = [];
-            for($i = 0; $i < $iNum; $i++) {
+            for ($i = 0; $i < $iNum; $i++) {
                 $aSteps[] = [
                     'name' => $ROTATION->getStepLabelById($i),
                     'url'  => $ROTATION->getStepUrlById($i)
@@ -292,7 +292,7 @@ class CoreModOverview extends CoreModule {
      */
     public function getFileType($imgPath) {
         $imgSize = getimagesize($imgPath);
-        switch($imgSize[2]) {
+        switch ($imgSize[2]) {
             case 1:
                 $strFileType = 'gif';
             break;
@@ -317,14 +317,14 @@ class CoreModOverview extends CoreModule {
      */
     private function createThumbnail($imgPath, $thumbPath) {
         global $CORE;
-        if($CORE->checkVarFolderWriteable(true) && $CORE->checkExisting($imgPath, true)) {
+        if ($CORE->checkVarFolderWriteable(true) && $CORE->checkExisting($imgPath, true)) {
             // 0: width, 1:height, 2:type
             $imgSize = getimagesize($imgPath);
             $strFileType = '';
 
-            switch($imgSize[2]) {
+            switch ($imgSize[2]) {
                 case 1:
-                    $image = imagecreatefromgif($imgPath);
+                    $image = imagecreatefromgif ($imgPath);
                     $strFileType = 'gif';
                 break;
                 case 2:
@@ -347,7 +347,7 @@ class CoreModOverview extends CoreModule {
             $thumbResWidth = 200;
             $thumbResHeight = 150;
 
-            if($bgWidth > $bgHeight) {
+            if ($bgWidth > $bgHeight) {
                 // Calculate size
                 $thumbWidth = $thumbResWidth;
                 $thumbHeight = $bgHeight / ($bgWidth / $thumbWidth);
@@ -355,7 +355,7 @@ class CoreModOverview extends CoreModule {
                 // Calculate offset
                 $thumbX = 0;
                 $thumbY = ($thumbResHeight - $thumbHeight) / 2;
-            } elseif($bgHeight > $bgWidth) {
+            } elseif ($bgHeight > $bgWidth) {
                 // Calculate size
                 $thumbHeight = $thumbResHeight;
                 $thumbWidth = $bgWidth / ($bgHeight / $thumbResHeight);
@@ -365,10 +365,10 @@ class CoreModOverview extends CoreModule {
                 $thumbY = 0;
             } else {
                 // Calculate size
-                if($thumbResWidth > $thumbResHeight) {
+                if ($thumbResWidth > $thumbResHeight) {
                         $thumbHeight = $thumbResHeight;
                         $thumbWidth = $thumbResHeight;
-                } elseif($thumbResHeight > $thumbResWidth) {
+                } elseif ($thumbResHeight > $thumbResWidth) {
                         $thumbHeight = $thumbResWidth;
                         $thumbWidth = $thumbResWidth;
                 } else {
@@ -388,9 +388,9 @@ class CoreModOverview extends CoreModule {
 
             imagecopyresampled($thumb, $image, (int)$thumbX, (int)$thumbY, 0, 0, (int)$thumbWidth, (int)$thumbHeight, (int)$bgWidth, (int)$bgHeight);
 
-            switch($imgSize[2]) {
+            switch ($imgSize[2]) {
                 case 1:
-                    imagegif($thumb, $thumbPath);
+                    imagegif ($thumb, $thumbPath);
                 break;
                 case 2:
                     imagejpeg($thumb, $thumbPath);

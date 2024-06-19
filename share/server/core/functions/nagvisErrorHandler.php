@@ -32,7 +32,7 @@
 
 function nagvisException($OBJ) {
     try {
-        if(get_class($OBJ) == 'NagVisException'
+        if (get_class($OBJ) == 'NagVisException'
             || get_class($OBJ) == 'NagVisErrorException') {
             echo $OBJ;
         } else {
@@ -41,7 +41,7 @@ function nagvisException($OBJ) {
         }
 
         die();
-    } catch(Exception $e) {
+    } catch (Exception $e) {
         echo "Error: Unexpected Problem in Exception Handler!: " . $e->getMessage();
         die();
     }
@@ -49,7 +49,7 @@ function nagvisException($OBJ) {
 
 function nagvisExceptionErrorHandler($errno, $errstr, $errfile, $errline ) {
     // Use current error_reporting settings to skip unwanted errors
-    if(!(error_reporting() & $errno)) {
+    if (!(error_reporting() & $errno)) {
         return false;
     }
 
@@ -58,7 +58,7 @@ function nagvisExceptionErrorHandler($errno, $errstr, $errfile, $errline ) {
 set_error_handler("nagvisExceptionErrorHandler");
 
 // Enable custom error handling
-if(function_exists('set_exception_handler')) {
+if (function_exists('set_exception_handler')) {
     set_exception_handler('nagvisException');
 }
 

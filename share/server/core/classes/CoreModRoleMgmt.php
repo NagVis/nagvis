@@ -37,8 +37,8 @@ class CoreModRoleMgmt extends CoreModule {
     }
 
     public function handleAction() {
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'view':
                     $VIEW = new ViewManageRoles();
                     return json_encode(['code' => $VIEW->parse()]);

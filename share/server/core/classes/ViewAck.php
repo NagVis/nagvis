@@ -50,7 +50,7 @@ class ViewAck {
 
         $backendIds = $MAPCFG->getValue($object_id, 'backend_id');
         foreach ($backendIds as $backendId) {
-            if(!$_BACKEND->checkBackendFeature($backendId, 'actionAcknowledge', false)) {
+            if (!$_BACKEND->checkBackendFeature($backendId, 'actionAcknowledge', false)) {
                 return '<div class=err>'
                     . l('The requested feature is not available for this backend. '
                     . 'The MKLivestatus backend supports this feature.')

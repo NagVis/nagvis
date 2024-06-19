@@ -54,7 +54,7 @@ try {
 
     require('../../server/core/functions/index.php');
     exit(0);
-} catch(NagVisException $e) {
+} catch (NagVisException $e) {
     $VIEW = new ViewError();
 
     if (isset($MODULE) && is_a($MODULE, "FrontendModMap")) {

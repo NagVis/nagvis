@@ -104,7 +104,7 @@ class ViewManageShapes {
 
                 // Check whether or not the shape is in use
                 $using = [];
-                foreach($CORE->getAvailableMaps() as $map) {
+                foreach ($CORE->getAvailableMaps() as $map) {
                     $MAPCFG = new GlobalMapCfg($map);
                     try {
                         $MAPCFG->readMapConfig();
@@ -112,8 +112,8 @@ class ViewManageShapes {
                         continue; // don't fail on broken map configs
                     }
 
-                    foreach($MAPCFG->getDefinitions('shape') as $key => $obj) {
-                        if(isset($obj['icon']) && $obj['icon'] == $name) {
+                    foreach ($MAPCFG->getDefinitions('shape') as $key => $obj) {
+                        if (isset($obj['icon']) && $obj['icon'] == $name) {
                             $using[] = $MAPCFG->getName();
                         }
                     }

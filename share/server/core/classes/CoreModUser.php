@@ -43,8 +43,8 @@ class CoreModUser extends CoreModule {
     public function handleAction() {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'getOptions':
                     $CFG = new CoreUserCfg();
                     $sReturn = json_encode($CFG->doGet());
@@ -68,7 +68,7 @@ class CoreModUser extends CoreModule {
         $this->verifyValuesSet($FHANDLER, ['opts']);
         $opts = $FHANDLER->get('opts');
 
-        foreach($opts as $key => $val) {
+        foreach ($opts as $key => $val) {
             if (substr($val, 0, 1) == '{') {
                 $opts[$key] = json_decode($val);
             }

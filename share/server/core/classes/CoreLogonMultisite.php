@@ -39,10 +39,10 @@ class CoreLogonMultisite extends CoreLogonModule {
         // When the auth.serial file exists, use this instead of the htpasswd
         // for validating the cookie. The structure of the file is equal, so
         // the same code can be used.
-        if(file_exists($this->serialsPath)) {
+        if (file_exists($this->serialsPath)) {
             $this->authFile = 'serial';
 
-        } elseif(file_exists($this->htpasswdPath)) {
+        } elseif (file_exists($this->htpasswdPath)) {
             $this->authFile = 'htpasswd';
 
         } else {
@@ -51,15 +51,15 @@ class CoreLogonMultisite extends CoreLogonModule {
                 ['HTPASSWD' => $this->htpasswdPath, 'SERIAL' => $this->serialsPath]));
         }
 
-        if(!file_exists($this->secretPath)) {
+        if (!file_exists($this->secretPath)) {
             $this->redirectToLogin();
         }
     }
 
     private function loadAuthFile($path) {
         $creds = [];
-        foreach(file($path) as $line) {
-            if(strpos($line, ':') !== false) {
+        foreach (file($path) as $line) {
+            if (strpos($line, ':') !== false) {
                 list($username, $secret) = explode(':', $line, 2);
                 $creds[$username] = rtrim($secret);
             }
@@ -87,7 +87,7 @@ class CoreLogonMultisite extends CoreLogonModule {
     }
 
     private function checkAuthCookie($cookieName) {
-        if(!isset($_COOKIE[$cookieName]) || $_COOKIE[$cookieName] == '') {
+        if (!isset($_COOKIE[$cookieName]) || $_COOKIE[$cookieName] == '') {
             throw new Exception();
         }
 
@@ -98,13 +98,13 @@ class CoreLogonMultisite extends CoreLogonModule {
         // 2nd field is "issue time" in pre 2.0 cookies. Now it's the session ID
         list($username, $sessionId, $cookieHash) = explode(':', $cookieValue, 3);
 
-        if($this->authFile == 'htpasswd') {
+        if ($this->authFile == 'htpasswd') {
             $users = $this->loadAuthFile($this->htpasswdPath);
         } else {
             $users = $this->loadAuthFile($this->serialsPath);
         }
 
-        if(!isset($users[$username])) {
+        if (!isset($users[$username])) {
             throw new Exception();
         }
         $user_secret = $users[$username];
@@ -142,8 +142,8 @@ class CoreLogonMultisite extends CoreLogonModule {
     private function checkAuth() {
         // Loop all cookies trying to fetch a valid authentication
         // cookie for this installation
-        foreach(array_keys($_COOKIE) as $cookieName) {
-            if(substr($cookieName, 0, 5) != 'auth_') {
+        foreach (array_keys($_COOKIE) as $cookieName) {
+            if (substr($cookieName, 0, 5) != 'auth_') {
                 continue;
             }
             try {
@@ -154,14 +154,14 @@ class CoreLogonMultisite extends CoreLogonModule {
                 session_write_close();
 
                 return $name;
-            } catch(Exception $e) {}
+            } catch (Exception $e) {}
         }
         return '';
     }
 
     private function redirectToLogin() {
         // Do not redirect on ajax calls. Print out errors instead
-        if(CONST_AJAX) {
+        if (CONST_AJAX) {
             throw new NagVisException(l('LogonMultisite: Not authenticated.'));
         }
         // FIXME: Get the real path to multisite
@@ -173,18 +173,18 @@ class CoreLogonMultisite extends CoreLogonModule {
 
         // Try to auth using the environment auth
         $ENV= new CoreLogonEnv();
-        if($ENV->check(false) === true) {
+        if ($ENV->check(false) === true) {
             return true;
         }
 
         $username = $this->checkAuth();
-        if($username === '') {
+        if ($username === '') {
             $this->redirectToLogin();
             return false;
         }
 
         // Check if the user exists
-        if($this->verifyUserExists($username,
+        if ($this->verifyUserExists($username,
                         cfg('global', 'logon_multisite_createuser'),
                         cfg('global', 'logon_multisite_createrole'),
                         $printErr) === false) {

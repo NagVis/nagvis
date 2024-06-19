@@ -40,7 +40,7 @@ class CoreRotation {
         $this->sPoolName = $sPoolName;
 
         // Check wether the pool is defined
-        if(!$this->checkPoolExists()) {
+        if (!$this->checkPoolExists()) {
             throw new NagVisException(l('mapRotationPoolNotExists',
                 ['ROTATION' => htmlentities($this->sPoolName, ENT_COMPAT, 'UTF-8')]));
         }
@@ -48,7 +48,7 @@ class CoreRotation {
         // Trigger the autorization backend to create new rotation permissions when needed
         // FIXME: maybe not the best place for that. But there is better central place to
         //        trigger thath
-        foreach($CORE->getDefinedRotationPools() as $name) {
+        foreach ($CORE->getDefinedRotationPools() as $name) {
             $AUTHORISATION->createPermission('Rotation', $name);
         }
 
@@ -87,8 +87,8 @@ class CoreRotation {
         $bRet = false;
 
         // Loop all steps and check if this step exists
-        foreach($this->arrSteps as $intId => $arrStep) {
-            if(isset($arrStep[$type]) && $arrStep[$type] === $step) {
+        foreach ($this->arrSteps as $intId => $arrStep) {
+            if (isset($arrStep[$type]) && $arrStep[$type] === $step) {
                 $bRet = true;
                 break;
             }
@@ -108,8 +108,8 @@ class CoreRotation {
      */
     public function setStep($sType, $sStep, $iStepId = '') {
         // First check if the step exists
-        if($this->stepExists($sType, $sStep)) {
-            if($iStepId != '') {
+        if ($this->stepExists($sType, $sStep)) {
+            if ($iStepId != '') {
                 $this->intCurrentStep = (int)$iStepId;
             }
             elseif ($sStep !== '') {
@@ -142,7 +142,7 @@ class CoreRotation {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function setNextStep() {
-        if($this->intCurrentStep === false || ($this->intCurrentStep + 1) >= sizeof($this->arrSteps)) {
+        if ($this->intCurrentStep === false || ($this->intCurrentStep + 1) >= sizeof($this->arrSteps)) {
             // if end of array reached, go to the beginning...
             $this->intNextStep = 0;
         } else {
@@ -156,7 +156,7 @@ class CoreRotation {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function gatherStepInterval() {
-        if($this->sPoolName !== '') {
+        if ($this->sPoolName !== '') {
             $this->intInterval = cfg('rotation_' . $this->sPoolName, 'interval');
         } else {
             $this->intInterval = cfg('rotation', 'interval');
@@ -170,8 +170,8 @@ class CoreRotation {
      */
     private function createStepUrls() {
         $htmlBase = cfg('paths', 'htmlbase');
-        foreach($this->arrSteps as $intId => $arrStep) {
-            if(isset($arrStep['url']) && $arrStep['url'] != '') {
+        foreach ($this->arrSteps as $intId => $arrStep) {
+            if (isset($arrStep['url']) && $arrStep['url'] != '') {
                 $this->arrSteps[$intId]['target'] = $htmlBase . '/frontend/nagvis-js/index.php?mod=Url&act=view&show=' . $arrStep['url'] . '&rotation=' . $this->sPoolName . '&rotationStep=' . $intId;
             } else {
                 $this->arrSteps[$intId]['target'] = $htmlBase . '/frontend/nagvis-js/index.php?mod=Map&act=view&show=' . $arrStep['map'] . '&rotation=' . $this->sPoolName . '&rotationStep=' . $intId;
@@ -197,7 +197,7 @@ class CoreRotation {
         global $CORE;
         $pools = $CORE->getDefinedRotationPools();
 
-        if(isset($pools[$this->sPoolName])) {
+        if (isset($pools[$this->sPoolName])) {
             return true;
         } else {
             return false;
@@ -302,7 +302,7 @@ class CoreRotation {
     public function getRotationProperties() {
         $arr = [];
 
-        if($this->sPoolName !== '') {
+        if ($this->sPoolName !== '') {
             $arr['rotationEnabled'] = 1;
             $arr['nextStepUrl'] = $this->getNextStepUrl();
             $arr['nextStepTime'] = $this->getStepInterval();

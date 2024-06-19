@@ -8,7 +8,7 @@ function dynmap_get_objects($MAPCFG, $p) {
 
     $type = $p['dynmap_object_types'];
     $filter = str_replace('\n', "\n", $p['dynmap_object_filter']);
-    foreach($MAPCFG->getValue(0, 'backend_id') as $backend_id) {
+    foreach ($MAPCFG->getValue(0, 'backend_id') as $backend_id) {
         $ret = $_BACKEND->getBackend($backend_id)->getObjects($type, '', '', $filter);
         // only use the internal names
         foreach ($ret as $key => $val) {
@@ -39,9 +39,9 @@ function dynmap_get_objects($MAPCFG, $p) {
 function dynmap_program_start($MAPCFG, $p) {
     global $_BACKEND;
     $newest = null;
-    foreach($MAPCFG->getValue(0, 'backend_id') as $backend_id) {
+    foreach ($MAPCFG->getValue(0, 'backend_id') as $backend_id) {
         $this_start = $_BACKEND->getBackend($backend_id)->getProgramStart();
-        if($newest === null || $this_start > $newest) {
+        if ($newest === null || $this_start > $newest) {
             $newest = $this_start;
         }
     }
@@ -159,7 +159,7 @@ function dynmap_sort_objects($MAPCFG, $map_name, &$map_config, &$params, &$objec
     // Now recalculate and reposition all map objects which are currently
     // positioned on the map using the grid mechanism. But first sort all
     // objects.
-    switch($params['dynmap_sort']) {
+    switch ($params['dynmap_sort']) {
         case 's':
             $SORT_MAPCFG = new GlobalMapCfg($map_name);
             $SORT_MAPCFG->gatherTypeDefaults(false);
@@ -175,7 +175,7 @@ function dynmap_sort_objects($MAPCFG, $map_name, &$map_config, &$params, &$objec
 
             // Add keys for sorting to $objects entries
             // TODO: Improve this: Adding these temporary keys should not be necessary
-            foreach($g_map_obj->getStateRelevantMembers() as $OBJ) {
+            foreach ($g_map_obj->getStateRelevantMembers() as $OBJ) {
                 $object_id = $OBJ->getObjectId();
                 $objects[$object_id]['.state'] = $OBJ->sum[STATE];
                 $objects[$object_id]['.sub_state'] = $OBJ->getSubState(SUMMARY_STATE);
@@ -208,7 +208,7 @@ function dynmap_sort_objects_by_name($o1, $o2) {
         $o1_str .= $o1[$o1['type'] . '_name'];
         $o2_str .= $o2[$o2['type'] . '_name'];
     }
-    if($o1_str == $o2_str) {
+    if ($o1_str == $o2_str) {
         return 0;
     }
     return ($o1_str > $o2_str) ? 1 : -1;
@@ -285,7 +285,7 @@ function changed_dynmap($MAPCFG, $compare_time) {
     $params = $MAPCFG->getSourceParams();
 
     $t = dynmap_program_start($MAPCFG, $params);
-    if($t > $compare_time) {
+    if ($t > $compare_time) {
         return true;
     }
 

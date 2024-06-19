@@ -48,7 +48,7 @@ $configVarMap = [
  * not change anything.
  */
 function filter_hostgroup(&$map_config, $p) {
-    if(!isset($p['filter_group']) || $p['filter_group'] == '') {
+    if (!isset($p['filter_group']) || $p['filter_group'] == '') {
         return;
     }
 
@@ -61,7 +61,7 @@ function filter_hostgroup(&$map_config, $p) {
 
     // Remove all hosts not found in the hostgroup
     $hosts = array_flip($hosts);
-    foreach($map_config as $object_id => $obj) {
+    foreach ($map_config as $object_id => $obj) {
         if (isset($obj['host_name']) && !isset($hosts[$obj['host_name']])) {
             unset($map_config[$object_id]);
         }
@@ -71,12 +71,12 @@ function filter_hostgroup(&$map_config, $p) {
 function process_filter($MAPCFG, $map_name, &$map_config, $params = null) {
     global $filter_processed;
     // Skip implicit calls if already processed explicit
-    if($params === null && $filter_processed) {
+    if ($params === null && $filter_processed) {
         return true;
     }
     $filter_processed = true;
 
-    if($params === null) {
+    if ($params === null) {
         $params = $MAPCFG->getSourceParams();
     }
 

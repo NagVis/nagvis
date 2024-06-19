@@ -30,7 +30,7 @@ class CoreLogonDialogHandler {
         $err = null;
         try {
             $data = $this->handleResponseAuth();
-            if($data !== null) {
+            if ($data !== null) {
                 // Set credentials to authenticate
                 $AUTH->setTrustUsername(false);
                 $AUTH->setLogoutPossible(true);
@@ -38,8 +38,8 @@ class CoreLogonDialogHandler {
 
                 // Try to authenticate the user
                 $result = $AUTH->isAuthenticated();
-                if($result === true) {
-                    if(!isset($data['onetime'])) {
+                if ($result === true) {
+                    if (!isset($data['onetime'])) {
                         // Success: Store in session
                         $AUTH->storeInSession();
                     }
@@ -51,13 +51,13 @@ class CoreLogonDialogHandler {
                     throw new FieldInputError(null, l('Authentication failed.'));
                 }
             }
-        } catch(FieldInputError $e) {
+        } catch (FieldInputError $e) {
             $err = $e;
         }
 
         // Authentication failed. Show the login dialog with the error message to
         // the user again. In case of an ajax request, simply raise an exception
-        if(!CONST_AJAX) {
+        if (!CONST_AJAX) {
             return ['LogonDialog', 'view', $err];
         } else {
             throw new NagVisException(l('You are not authenticated'), null, l('Access denied'));
@@ -68,17 +68,17 @@ class CoreLogonDialogHandler {
         $FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));
 
         // Don't try to auth if one of the vars is missing
-        if(!$FHANDLER->issetAndNotEmpty('_username')
+        if (!$FHANDLER->issetAndNotEmpty('_username')
             || !$FHANDLER->issetAndNotEmpty('_password')) {
             return null;
         }
 
-        if(!$FHANDLER->match('_username', MATCH_USER_NAME)
+        if (!$FHANDLER->match('_username', MATCH_USER_NAME)
             || $FHANDLER->isLongerThan('_username', AUTH_MAX_USERNAME_LENGTH)) {
             throw new FieldInputError('_username', l('Invalid username.'));
         }
 
-        if(!$FHANDLER->issetAndNotEmpty('_password')
+        if (!$FHANDLER->issetAndNotEmpty('_password')
             || $FHANDLER->isLongerThan('_password', AUTH_MAX_PASSWORD_LENGTH)) {
             throw new FieldInputError('_password', l('Invalid password.'));
         }
@@ -90,27 +90,27 @@ class CoreLogonDialogHandler {
 
         // It is possible to only request onetime access to prevent getting added
         // and authentication cookie
-        if(isset($_REQUEST['_onetime'])) {
+        if (isset($_REQUEST['_onetime'])) {
             $a['onetime'] = true;
         }
 
         // Remove authentication infos. Hide it from the following code
-        if(isset($_REQUEST['_username'])) {
+        if (isset($_REQUEST['_username'])) {
             unset($_REQUEST['_username']);
         }
-        if(isset($_REQUEST['_password'])) {
+        if (isset($_REQUEST['_password'])) {
             unset($_REQUEST['_password']);
         }
-        if(isset($_POST['_username'])) {
+        if (isset($_POST['_username'])) {
             unset($_POST['_username']);
         }
-        if(isset($_POST['_password'])) {
+        if (isset($_POST['_password'])) {
             unset($_POST['_password']);
         }
-        if(isset($_GET['_username'])) {
+        if (isset($_GET['_username'])) {
             unset($_GET['_username']);
         }
-        if(isset($_GET['_password'])) {
+        if (isset($_GET['_password'])) {
             unset($_GET['_password']);
         }
 

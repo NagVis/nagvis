@@ -1892,10 +1892,10 @@ class GlobalMainCfg {
      * Loads the custom action definitions from their files
      */
     private function fetchCustomActions() {
-        foreach(GlobalCore::getInstance()->getAvailableCustomActions() as $action_file) {
+        foreach (GlobalCore::getInstance()->getAvailableCustomActions() as $action_file) {
             $configVars = [];
 
-            if(file_exists(path('sys', 'local', 'actions'))) {
+            if (file_exists(path('sys', 'local', 'actions'))) {
                 include(path('sys', 'local', 'actions') . '/' . $action_file);
             } else {
                 include(path('sys', 'global', 'actions') . '/' . $action_file);
@@ -1919,7 +1919,7 @@ class GlobalMainCfg {
     public function getConfigFiles() {
         // Get all files from the conf.d directory
         $files = GlobalCore::getInstance()->listDirectory(CONST_MAINCFG_DIR, MATCH_MAINCFG_FILE, null, null, 0, null, false);
-        foreach($files as $key => $filename) {
+        foreach ($files as $key => $filename) {
             $files[$key] = CONST_MAINCFG_DIR . '/' . $filename;
         }
 
@@ -1943,20 +1943,20 @@ class GlobalMainCfg {
             CONST_MAINCFG_CACHE . '-pre-user-' . CONST_VERSION . '-cache' . $cacheSuffix);
 
         try {
-              if($this->CACHE->isCached(false) === -1
+              if ($this->CACHE->isCached(false) === -1
                 || $this->PUCACHE->isCached(false) === -1
                 || $this->PUCACHE->getCacheFileAge() < filemtime(CONST_MAINCFG_DIR)) {
                 // The cache is too old. Load all config files
-                foreach($this->configFiles as $configFile) {
+                foreach ($this->configFiles as $configFile) {
                     // Only proceed when the configuration file exists and is readable
-                    if(!GlobalCore::getInstance()->checkExisting($configFile, true)
+                    if (!GlobalCore::getInstance()->checkExisting($configFile, true)
                         || !GlobalCore::getInstance()->checkReadable($configFile, true)) {
                         return false;
                     }
                     $this->readConfig($configFile, true, $configFile == end($this->configFiles));
                 }
                 $this->CACHE->writeCache($this->config, true);
-                if($this->preUserConfig !== null) {
+                if ($this->preUserConfig !== null) {
                     $this->PUCACHE->writeCache($this->preUserConfig, true);
                 }
             } else {
@@ -1992,7 +1992,7 @@ class GlobalMainCfg {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function setCookieDomainByEnv() {
-        if(isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME'] !== '') {
+        if (isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME'] !== '') {
             $this->validConfig['global']['sesscookiedomain']['default'] = $_SERVER['SERVER_NAME'];
         }
     }
@@ -2008,7 +2008,7 @@ class GlobalMainCfg {
         // Get the configuration options from the backends
         $aBackends = GlobalCore::getInstance()->getAvailableBackends();
 
-        foreach($aBackends as $backend) {
+        foreach ($aBackends as $backend) {
             $class = 'GlobalBackend' . $backend;
 
             // FIXME: Does not work in PHP 5.2 (http://bugs.php.net/bug.php?id=31318)
@@ -2104,7 +2104,7 @@ class GlobalMainCfg {
         // when the user did not define anything different.
         // This is needed to keep the lines of the maincfg file in correct order
         $tmpConfig = null;
-        if($isUserMainCfg) {
+        if ($isUserMainCfg) {
             $this->preUserConfig = $this->config;
             $this->config = [];
         }
@@ -2118,13 +2118,13 @@ class GlobalMainCfg {
             $firstChar = substr($line, 0, 1);
 
             // check what's in this line
-            if($firstChar == ';' || $line == '') {
-                if($isUserMainCfg) {
+            if ($firstChar == ';' || $line == '') {
+                if ($isUserMainCfg) {
                     // comment...
                     $key = 'comment_' . ($numComments++);
                     $val = trim($line);
 
-                    if(isset($sec) && $sec != '') {
+                    if (isset($sec) && $sec != '') {
                         $this->config[$sec][$key] = $val;
                     } else {
                         $this->config[$key] = $val;
@@ -2135,14 +2135,14 @@ class GlobalMainCfg {
                 $sec = trim(substr($line, 1, strlen($line) - 2));
 
                 // write to array
-                if(!isset($this->config[$sec])) {
-                    if(preg_match('/^backend_/i', $sec)) {
+                if (!isset($this->config[$sec])) {
+                    if (preg_match('/^backend_/i', $sec)) {
                         $this->config[$sec] = [];
                         $this->config[$sec]['backendid'] = str_replace('backend_', '', $sec);
-                    } elseif(preg_match('/^rotation_/i', $sec)) {
+                    } elseif (preg_match('/^rotation_/i', $sec)) {
                         $this->config[$sec] = [];
                         $this->config[$sec]['rotationid'] = str_replace('rotation_', '', $sec);
-                    } elseif(preg_match('/^action_/i', $sec)) {
+                    } elseif (preg_match('/^action_/i', $sec)) {
                         $this->config[$sec] = [];
                         $this->config[$sec]['action_id'] = str_replace('action_', '', $sec);
                     } else {
@@ -2181,29 +2181,29 @@ class GlobalMainCfg {
                 }
 
                 // Special options (Arrays)
-                if(isset($validConfig[$key]['array']) && $validConfig[$key]['array'] === true) {
+                if (isset($validConfig[$key]['array']) && $validConfig[$key]['array'] === true) {
                     $val = $this->stringToArray($val);
 
-                } elseif(substr($sec, 0, 9) == 'rotation_' && $key == 'maps') {
+                } elseif (substr($sec, 0, 9) == 'rotation_' && $key == 'maps') {
                     // Explode comma separated list to array
                     $val = explode(',', $val);
 
                     // Check if an element has a label defined
-                    foreach($val as $id => $element) {
-                        if(preg_match("/^([^\[.]+:)?(\[(.+)\]|(.+))$/", $element, $arrRet)) {
+                    foreach ($val as $id => $element) {
+                        if (preg_match("/^([^\[.]+:)?(\[(.+)\]|(.+))$/", $element, $arrRet)) {
                             $label = '';
                             $map = '';
 
                             // When no label is set, set map or url as label
-                            if($arrRet[1] != '') {
+                            if ($arrRet[1] != '') {
                                 $label = substr($arrRet[1], 0, -1);
-                            } elseif($arrRet[3] != '') {
+                            } elseif ($arrRet[3] != '') {
                                 $label = $arrRet[3];
                             } else {
                                 $label = $arrRet[4];
                             }
 
-                            if(isset($arrRet[4]) && $arrRet[4] != '') {
+                            if (isset($arrRet[4]) && $arrRet[4] != '') {
                                 // Remove leading/trailing spaces
                                 $map = $arrRet[4];
                             }
@@ -2219,7 +2219,7 @@ class GlobalMainCfg {
                 }
 
                 // write in config array
-                if(isset($sec)) {
+                if (isset($sec)) {
                     $this->config[$sec][$key] = $val;
                 } else {
                     $this->config[$key] = $val;
@@ -2228,13 +2228,13 @@ class GlobalMainCfg {
         }
 
         // Reapply the separated config
-        if($isUserMainCfg && $this->preUserConfig !== null) {
-            foreach($this->preUserConfig as $sec => $opts) {
-                foreach($opts as $opt => $val) {
-                    if(!isset($this->config[$sec])) {
+        if ($isUserMainCfg && $this->preUserConfig !== null) {
+            foreach ($this->preUserConfig as $sec => $opts) {
+                foreach ($opts as $opt => $val) {
+                    if (!isset($this->config[$sec])) {
                         $this->config[$sec] = $opts;
                     }
-                    elseif(!isset($this->config[$sec][$opt])) {
+                    elseif (!isset($this->config[$sec][$opt])) {
                         $this->config[$sec][$opt] = $val;
                     }
                 }
@@ -2252,7 +2252,7 @@ class GlobalMainCfg {
     private function getInstanceableValidConfig($what, $sec) {
         $ty = $this->getValue($sec, ($what == 'backend' ? 'backendtype' : 'action_type'));
 
-        if(isset($this->validConfig[$what]['options'][$ty])
+        if (isset($this->validConfig[$what]['options'][$ty])
             && is_array($this->validConfig[$what]['options'][$ty])) {
             return array_merge($this->validConfig[$what], $this->validConfig[$what]['options'][$ty]);
         } else {
@@ -2269,26 +2269,26 @@ class GlobalMainCfg {
      */
     private function checkMainConfigIsValid($printErr) {
         // check given objects and attributes
-        foreach($this->config as $type => &$vars) {
-            if(!preg_match('/^comment_/', $type)) {
-                if(isset($this->validConfig[$type]) || preg_match('/^(backend|rotation|action)_/', $type)) {
+        foreach ($this->config as $type => &$vars) {
+            if (!preg_match('/^comment_/', $type)) {
+                if (isset($this->validConfig[$type]) || preg_match('/^(backend|rotation|action)_/', $type)) {
                     // loop validConfig for checking: => missing "must" atributes
-                    if(preg_match('/^backend_/', $type)) {
+                    if (preg_match('/^backend_/', $type)) {
                         $arrValidConfig = $this->getInstanceableValidConfig('backend', $type);
 
-                    } elseif(preg_match('/^rotation_/', $type)) {
+                    } elseif (preg_match('/^rotation_/', $type)) {
                         $arrValidConfig = $this->validConfig['rotation'];
 
-                    } elseif(preg_match('/^action_/', $type)) {
+                    } elseif (preg_match('/^action_/', $type)) {
                         $arrValidConfig = $this->getInstanceableValidConfig('action', $type);
 
                     } else {
                         $arrValidConfig = $this->validConfig[$type];
                     }
-                    foreach($arrValidConfig as $key => &$val) {
-                        if((isset($val['must']) && $val['must'] == '1')) {
+                    foreach ($arrValidConfig as $key => &$val) {
+                        if ((isset($val['must']) && $val['must'] == '1')) {
                             // value is "must"
-                            if($this->getValue($type, $key) === null) {
+                            if ($this->getValue($type, $key) === null) {
                                 // a "must" value is missing or empty
                                 throw new NagVisException(l('The needed attribute [ATTRIBUTE] is missing in section [TYPE] in main configuration file. Please take a look at the documentation.',
                                     ['ATTRIBUTE' => $key, 'TYPE' => $type]));
@@ -2298,23 +2298,23 @@ class GlobalMainCfg {
                     }
 
                     // loop given elements for checking: => all given attributes valid
-                    foreach($vars as $key => $val) {
-                        if(!preg_match('/^comment_/', $key)) {
-                            if(preg_match('/^backend_/', $type)) {
+                    foreach ($vars as $key => $val) {
+                        if (!preg_match('/^comment_/', $key)) {
+                            if (preg_match('/^backend_/', $type)) {
                                 $ty = $this->getValue($type, 'backendtype');
-                                if(isset($this->validConfig['backend']['options'][$ty])
+                                if (isset($this->validConfig['backend']['options'][$ty])
                                     && is_array($this->validConfig['backend']['options'][$ty])) {
                                     $arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$ty]);
                                 } else {
                                     $arrValidConfig = $this->validConfig['backend'];
                                 }
 
-                            } elseif(preg_match('/^rotation_/', $type)) {
+                            } elseif (preg_match('/^rotation_/', $type)) {
                                 $arrValidConfig = $this->validConfig['rotation'];
 
-                            } elseif(preg_match('/^action_/', $type)) {
+                            } elseif (preg_match('/^action_/', $type)) {
                                 $ty = $this->getValue($type, 'action_type');
-                                if(isset($this->validConfig['action']['options'][$ty])
+                                if (isset($this->validConfig['action']['options'][$ty])
                                     && is_array($this->validConfig['action']['options'][$ty])) {
                                     $arrValidConfig = array_merge($this->validConfig['action'], $this->validConfig['action']['options'][$ty]);
                                 } else {
@@ -2325,25 +2325,25 @@ class GlobalMainCfg {
                                 $arrValidConfig = $this->validConfig[$type];
                             }
 
-                            if(!isset($arrValidConfig[$key])) {
+                            if (!isset($arrValidConfig[$key])) {
                                 // unknown attribute
-                                if($printErr) {
+                                if ($printErr) {
                                     throw new NagVisException(l('Unknown value [ATTRIBUTE] used in section [TYPE] in main configuration file.',
                                         ['ATTRIBUTE' => $key, 'TYPE' => $type]));
                                 }
                                 return false;
-                            } elseif(isset($arrValidConfig[$key]['deprecated']) && $arrValidConfig[$key]['deprecated'] == 1) {
+                            } elseif (isset($arrValidConfig[$key]['deprecated']) && $arrValidConfig[$key]['deprecated'] == 1) {
                                 // deprecated option
-                                if($printErr) {
+                                if ($printErr) {
                                     throw new NagVisException(l('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file is deprecated. Please take a look at the documentation for updating your configuration.',
                                         ['ATTRIBUTE' => $key, 'TYPE' => $type]));
                                 }
                                 return false;
                             } else {
                                 // Workaround to get the configured string back
-                                if(preg_match('/^rotation_/', $type) && $key == 'maps') {
-                                    foreach($val as $intId => $arrStep) {
-                                        if(isset($arrStep['label']) && $arrStep['label'] != '') {
+                                if (preg_match('/^rotation_/', $type) && $key == 'maps') {
+                                    foreach ($val as $intId => $arrStep) {
+                                        if (isset($arrStep['label']) && $arrStep['label'] != '') {
                                             $label = $arrStep['label'] . ':';
                                         }
 
@@ -2351,14 +2351,14 @@ class GlobalMainCfg {
                                     }
                                 }
 
-                                if(isset($val) && is_array($val)) {
+                                if (isset($val) && is_array($val)) {
                                     $val = implode(',', $val);
                                 }
 
                                 // valid attribute, now check for value format
-                                if(!preg_match($arrValidConfig[$key]['match'], $val)) {
+                                if (!preg_match($arrValidConfig[$key]['match'], $val)) {
                                     // wrong format
-                                    if($printErr) {
+                                    if ($printErr) {
                                         throw new NagVisException(l('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file does not match the correct format. Please review your configuration.',
                                             ['ATTRIBUTE' => $key, 'TYPE' => $type]));
                                     }
@@ -2366,8 +2366,8 @@ class GlobalMainCfg {
                                 }
 
                                 // Check if the configured backend is defined in main configuration file
-                                if(!$this->onlyUserConfig && $type == 'defaults' && $key == 'backend' && !isset($this->config['backend_' . $val])) {
-                                    if($printErr) {
+                                if (!$this->onlyUserConfig && $type == 'defaults' && $key == 'backend' && !isset($this->config['backend_' . $val])) {
+                                    if ($printErr) {
                                         throw new NagVisException(l('The backend with the ID \"[BACKENDID]\" is not defined.', ['BACKENDID' => $val]));
                                     }
                                     return false;
@@ -2377,7 +2377,7 @@ class GlobalMainCfg {
                     }
                 } else {
                     // unknown type
-                    if($printErr) {
+                    if ($printErr) {
                         throw new NagVisException(
                             l('The section [TYPE] is not supported in main configuration. Please take a look at the documentation.',
                                 ['TYPE' => $type]));
@@ -2397,7 +2397,7 @@ class GlobalMainCfg {
      */
     public function getConfigFileAge() {
         $newest = 0;
-        foreach($this->configFiles as $configFile) {
+        foreach ($this->configFiles as $configFile) {
             $age = filemtime($configFile);
             $newest = ($age > $newest ? $age : $newest);
         }
@@ -2425,14 +2425,14 @@ class GlobalMainCfg {
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setValue($sec, $var, $val) {
-        if(isset($this->config[$sec][$var]) && $val == '') {
+        if (isset($this->config[$sec][$var]) && $val == '') {
             // Value is empty and there is an entry in the config array
             unset($this->config[$sec][$var]);
-        } elseif(!isset($this->config[$sec][$var]) && $val == '') {
+        } elseif (!isset($this->config[$sec][$var]) && $val == '') {
             // Value is empty and there is nothing in config array yet
         } else {
             // Value is set
-            if(isset($this->validConfig[$sec][$var]['array']) && $this->validConfig[$sec][$var]['array'] == true && !is_array($val)) {
+            if (isset($this->validConfig[$sec][$var]['array']) && $this->validConfig[$sec][$var]['array'] == true && !is_array($val)) {
                 $val = $this->stringToArray($val);
             }
 
@@ -2453,7 +2453,7 @@ class GlobalMainCfg {
         $h  = $this->getValue('paths', 'htmlbase');
 
         // Get the relative path
-        if(isset($this->config['paths']) && isset($this->config['paths'][$var])) {
+        if (isset($this->config['paths']) && isset($this->config['paths'][$var])) {
             $relpath = $this->config['paths'][$var];
         } else {
             $relpath = $this->validConfig['paths'][$var]['default'];
@@ -2469,10 +2469,10 @@ class GlobalMainCfg {
         // When $loc is empty it checks if the local one exist and returns this when
         // existing. Otherwise it returns the global one when existing. When the global
         // is also not existant it returns an empty string
-        if($loc === 'local' || ($loc === '' && $l_file && file_exists($l_file))) {
+        if ($loc === 'local' || ($loc === '' && $l_file && file_exists($l_file))) {
             return $type == 'sys' ? $l_file : $lh . '/' . $relpath . $relfile;
         }
-        elseif($loc === 'global' || ($loc === '' && file_exists($file))) {
+        elseif ($loc === 'global' || ($loc === '' && file_exists($file))) {
             return $type == 'sys' ? $file : $h . '/' . $relpath . $relfile;
         } else {
             return '';
@@ -2486,43 +2486,43 @@ class GlobalMainCfg {
     public function getDefaultValue($sec, $var) {
         // Speed up this method by first checking for major sections and only if
         // they don't match try to match the backend_ and rotation_ sections
-        if($sec == 'global' || $sec == 'defaults' || $sec == 'paths') {
+        if ($sec == 'global' || $sec == 'defaults' || $sec == 'paths') {
             return $this->validConfig[$sec][$var]['default'];
-        } elseif(strpos($sec, 'backend_') === 0) {
+        } elseif (strpos($sec, 'backend_') === 0) {
 
             // Choose the backend type (Configured one or the system default)
             $backendType = '';
-            if(isset($this->config[$sec]['backendtype']) && $this->config[$sec]['backendtype'] !== '') {
+            if (isset($this->config[$sec]['backendtype']) && $this->config[$sec]['backendtype'] !== '') {
                 $backendType = $this->config[$sec]['backendtype'];
             } else {
                 $backendType = $this->validConfig['backend']['backendtype']['default'];
             }
 
             // This value could be emtpy - so only check if it is set
-            if(isset($this->validConfig['backend']['options'][$backendType][$var]['default'])) {
+            if (isset($this->validConfig['backend']['options'][$backendType][$var]['default'])) {
                 return $this->validConfig['backend']['options'][$backendType][$var]['default'];
-            } elseif(isset($this->validConfig['backend'][$var]['default'])) {
+            } elseif (isset($this->validConfig['backend'][$var]['default'])) {
                 // This value could be emtpy - so only check if it is set
                 return $this->validConfig['backend'][$var]['default'];
             }
 
-        } elseif(strpos($sec, 'rotation_') === 0) {
-            if(isset($this->config[$sec]) && is_array($this->config[$sec])) {
+        } elseif (strpos($sec, 'rotation_') === 0) {
+            if (isset($this->config[$sec]) && is_array($this->config[$sec])) {
                 return $this->validConfig['rotation'][$var]['default'];
             } else {
                 return null;
             }
 
-        } elseif(strpos($sec, 'action_') === 0) {
-            if(!isset($this->config[$sec]['action_type'])) {
+        } elseif (strpos($sec, 'action_') === 0) {
+            if (!isset($this->config[$sec]['action_type'])) {
                 return null;
             }
             $ty = $this->config[$sec]['action_type'];
 
             // This value could be emtpy - so only check if it is set
-            if(isset($this->validConfig['action']['options'][$ty][$var]['default'])) {
+            if (isset($this->validConfig['action']['options'][$ty][$var]['default'])) {
                 return $this->validConfig['action']['options'][$ty][$var]['default'];
-            } elseif(isset($this->validConfig['action'][$var]['default'])) {
+            } elseif (isset($this->validConfig['action'][$var]['default'])) {
                 // This value could be emtpy - so only check if it is set
                 return $this->validConfig['action'][$var]['default'];
             }
@@ -2561,7 +2561,7 @@ class GlobalMainCfg {
      */
     public function getSections() {
         $aRet = [];
-        foreach($this->config as $key => $var) {
+        foreach ($this->config as $key => $var) {
             $aRet[] = $key;
         }
         return $aRet;
@@ -2650,12 +2650,12 @@ class GlobalMainCfg {
     private function parseStateWeight() {
         $arr = [];
 
-        foreach($this->validConfig['states'] as $lowState => $aVal) {
+        foreach ($this->validConfig['states'] as $lowState => $aVal) {
             $key = explode('_', $lowState);
 
             // Convert state values to int
             $last_part = $key[sizeof($key) - 1];
-            if($last_part != 'color' && $last_part != 'bgcolor' && $last_part != 'sound') {
+            if ($last_part != 'color' && $last_part != 'bgcolor' && $last_part != 'sound') {
                 $val = intval($this->getValue('states', $lowState));
             } else {
                 $val = $this->getValue('states', $lowState);
@@ -2664,14 +2664,14 @@ class GlobalMainCfg {
             $state = state_num(strtoupper($key[0]));
 
             // First create array when not exists
-            if(!isset($arr[$state])) {
+            if (!isset($arr[$state])) {
                 $arr[$state] = [];
             }
 
-            if(isset($key[1]) && isset($key[2])) {
+            if (isset($key[1]) && isset($key[2])) {
                 // at the moment only bg colors of substates
                 $arr[$state][$key[1] . '_' . $key[2]] = $val;
-            } elseif(isset($key[1])) {
+            } elseif (isset($key[1])) {
                 // ack/downtime
                 $arr[$state][$key[1]] = $val;
             } else {
@@ -2750,19 +2750,19 @@ class GlobalMainCfg {
      */
     public function setSection($sec) {
         // Try to append new backends after already defined
-        if(preg_match('/^backend_/', $sec)) {
+        if (preg_match('/^backend_/', $sec)) {
             $lastBackendIndex = 0;
             $i = 0;
             // Loop all sections to find the last defined backend
-            foreach($this->config as $type => $vars) {
+            foreach ($this->config as $type => $vars) {
                 // If the current section is a backend
-                if(preg_match('/^backend_/', $type)) {
+                if (preg_match('/^backend_/', $type)) {
                     $lastBackendIndex = $i;
                 }
                 $i++;
             }
 
-            if($lastBackendIndex != 0) {
+            if ($lastBackendIndex != 0) {
                 // Append the new section after the already defined
                 $slicedBefore = array_slice($this->config, 0, ($lastBackendIndex + 1));
                 $slicedAfter = array_slice($this->config, ($lastBackendIndex + 1));
@@ -2801,21 +2801,21 @@ class GlobalMainCfg {
      */
     public function writeConfig() {
         // Check for config file write permissions
-        if(!$this->checkNagVisConfigWriteable(1)) {
+        if (!$this->checkNagVisConfigWriteable(1)) {
             return false;
         }
 
         $content = '';
-        foreach($this->config as $key => $item) {
-            if(is_array($item)) {
+        foreach ($this->config as $key => $item) {
+            if (is_array($item)) {
                 $content .= '[' . $key . ']' . "\n";
                 foreach ($item as $key2 => $item2) {
-                    if(substr($key2, 0, 8) == 'comment_') {
+                    if (substr($key2, 0, 8) == 'comment_') {
                         $content .= $item2 . "\n";
-                    } elseif(is_numeric($item2) || is_bool($item2)) {
+                    } elseif (is_numeric($item2) || is_bool($item2)) {
                         // Don't apply config options which are set to the same
                         // value in the pre user config files
-                        if($this->preUserConfig !== null
+                        if ($this->preUserConfig !== null
                             && isset($this->preUserConfig[$key])
                             && isset($this->preUserConfig[$key][$key2])
                             && $item2 == $this->preUserConfig[$key][$key2]) {
@@ -2823,25 +2823,25 @@ class GlobalMainCfg {
                         }
                         $content .= $key2 . "=" . $item2 . "\n";
                     } else {
-                        if(is_array($item2) && preg_match('/^rotation_/i', $key) && $key2 == 'maps') {
+                        if (is_array($item2) && preg_match('/^rotation_/i', $key) && $key2 == 'maps') {
                             $val = '';
                             // Check if an element has a label defined
-                            foreach($item2 as $intId => $arrStep) {
+                            foreach ($item2 as $intId => $arrStep) {
                                 $seperator = ',';
                                 $label = '';
                                 $step = '';
 
-                                if($intId == 0) {
+                                if ($intId == 0) {
                                     $seperator = '';
                                 }
 
-                                if(isset($arrStep['map']) && $arrStep['map'] != '') {
+                                if (isset($arrStep['map']) && $arrStep['map'] != '') {
                                     $step = $arrStep['map'];
                                 } else {
                                     $step = '[' . $arrStep['url'] . ']';
                                 }
 
-                                if(isset($arrStep['label']) && $arrStep['label'] != '' && $arrStep['label'] != $step) {
+                                if (isset($arrStep['label']) && $arrStep['label'] != '' && $arrStep['label'] != $step) {
                                     $label = $arrStep['label'] . ':';
                                 }
 
@@ -2853,10 +2853,10 @@ class GlobalMainCfg {
                         }
 
                         // Don't write the backendid/rotationid attributes (Are internal)
-                        if($key2 !== 'backendid' && $key2 !== 'rotationid' && $key2 !== 'action_id') {
+                        if ($key2 !== 'backendid' && $key2 !== 'rotationid' && $key2 !== 'action_id') {
                             // Don't apply config options which are set to the same
                             // value in the pre user config files
-                            if($this->preUserConfig !== null
+                            if ($this->preUserConfig !== null
                                 && isset($this->preUserConfig[$key])
                                 && isset($this->preUserConfig[$key][$key2])
                                 && $item2 == $this->preUserConfig[$key][$key2]) {
@@ -2875,7 +2875,7 @@ class GlobalMainCfg {
                                 $arrValidConfig = $this->validConfig[$key];
                             }
 
-                            if(isset($arrValidConfig[$key2]['array']) && $arrValidConfig[$key2]['array'] === true) {
+                            if (isset($arrValidConfig[$key2]['array']) && $arrValidConfig[$key2]['array'] === true) {
                                 $item2 = implode(',', $item2);
                             }
 
@@ -2883,17 +2883,17 @@ class GlobalMainCfg {
                         }
                     }
                 }
-            } elseif(substr($key, 0, 8) == 'comment_') {
+            } elseif (substr($key, 0, 8) == 'comment_') {
                 $content .= $item . "\n";
             }
         }
 
         $cfgFile = $this->configFiles[count($this->configFiles) - 1];
-        if(!$handle = fopen($cfgFile, 'w+')) {
+        if (!$handle = fopen($cfgFile, 'w+')) {
             throw new NagVisException(l('mainCfgNotWriteable'));
         }
 
-        if(!fwrite($handle, $content)) {
+        if (!fwrite($handle, $content)) {
             throw new NagVisException(l('mainCfgCouldNotWriteMainConfigFile'));
         }
 
@@ -2925,7 +2925,7 @@ class GlobalMainCfg {
         $val = explode(',', $val);
 
         // Trim surrounding spaces on each element
-        foreach($val as $trimKey => $trimVal) {
+        foreach ($val as $trimKey => $trimVal) {
             $val[$trimKey] = trim($trimVal);
         }
 
@@ -2953,7 +2953,7 @@ class GlobalMainCfg {
      * Returns the name of the list function for the given map config option
      */
     public function getListFunc($sec, $key) {
-        if(isset($this->validConfig[$sec][$key]['list'])) {
+        if (isset($this->validConfig[$sec][$key]['list'])) {
             return $this->validConfig[$sec][$key]['list'];
         } else {
             throw new NagVisException(l('No "list" function registered for option "[OPT]" of type "[TYPE]"',

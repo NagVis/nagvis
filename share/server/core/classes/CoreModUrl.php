@@ -46,8 +46,8 @@ class CoreModUrl extends CoreModule {
     public function handleAction() {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'getContents':
                     $sReturn = $this->getContents();
                 break;
@@ -66,7 +66,7 @@ class CoreModUrl extends CoreModule {
         // Only allow urls not paths for security reasons
         // Reported here: http://news.gmane.org/find-root.php?message_id=%3cf60c42280909021938s7f36c0edhd66d3e9156a5d081%40mail.gmail.com%3e
         $url = parse_url($this->url);
-        if(!isset($url['scheme']) || ($url['scheme'] != 'http' && $url['scheme'] != 'https')) {
+        if (!isset($url['scheme']) || ($url['scheme'] != 'http' && $url['scheme'] != 'https')) {
             throw new NagVisException(l('problemReadingUrl', [
                 'URL' => htmlentities($this->url, ENT_COMPAT, 'UTF-8'),
                 'MSG' => 'Not allowed url'
@@ -102,13 +102,13 @@ class CoreModUrl extends CoreModule {
         global $CORE;
         $allowed = [];
 
-        foreach($CORE->getPermittedRotationPools() as $pool_name) {
+        foreach ($CORE->getPermittedRotationPools() as $pool_name) {
             $ROTATION = new CoreRotation($pool_name);
 
             $iNum = $ROTATION->getNumSteps();
-            for($i = 0; $i < $iNum; $i++) {
+            for ($i = 0; $i < $iNum; $i++) {
                 $step = $ROTATION->getStepById($i);
-                if(isset($step['url']) && $step['url'] != '') {
+                if (isset($step['url']) && $step['url'] != '') {
                     $allowed[$step['url']] = true;
                 }
             }

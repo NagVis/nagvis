@@ -74,8 +74,8 @@ class FrontendModMap extends FrontendModule {
     public function handleAction() {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'edit':
                 case 'view':
                     // Show the view dialog to the user
@@ -103,17 +103,17 @@ class FrontendModMap extends FrontendModule {
 
         // Need to load the custom stylesheet?
         $customStylesheet = $MAPCFG->getValue(0, 'stylesheet');
-        if($customStylesheet !== '') {
+        if ($customStylesheet !== '') {
             $INDEX->setCustomStylesheet(path('html', 'global', 'styles', $customStylesheet));
         }
 
         // Need to parse the header menu by config or url value?
-        if(isset($opts['header_menu']) && $opts['header_menu']) {
+        if (isset($opts['header_menu']) && $opts['header_menu']) {
             // Parse the header menu
             $HEADER = new NagVisHeaderMenu($MAPCFG->getValue(0, 'header_template'), $MAPCFG);
 
             // Put rotation information to header menu
-            if($this->rotation != '') {
+            if ($this->rotation != '') {
                     $HEADER->setRotationEnabled();
             }
 
@@ -128,14 +128,14 @@ class FrontendModMap extends FrontendModule {
         $this->VIEW->setSearch($this->search);
 
         // Enable edit mode for all objects
-        if($this->sAction == 'edit') {
+        if ($this->sAction == 'edit') {
             $this->VIEW->setEditMode();
         }
 
         // Maybe it is needed to handle the requested rotation
-        if($this->rotation != '') {
+        if ($this->rotation != '') {
             // Only allow the rotation if the user is permitted to use it
-            if($AUTHORISATION->isPermitted('Rotation', 'view', $this->rotation)) {
+            if ($AUTHORISATION->isPermitted('Rotation', 'view', $this->rotation)) {
                 $ROTATION = new FrontendRotation($this->rotation);
                 $ROTATION->setStep('map', $this->name, $this->rotationStep);
                 $this->VIEW->setRotation($ROTATION->getRotationProperties());

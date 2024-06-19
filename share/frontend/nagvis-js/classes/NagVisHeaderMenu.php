@@ -97,12 +97,12 @@ class NagVisHeaderMenu {
         // Build language list
         $aLang = $CORE->getAvailableAndEnabledLanguages();
         $numLang = count($aLang);
-        foreach($aLang as $lang) {
+        foreach ($aLang as $lang) {
             $aLangs[$lang] = [];
             $aLangs[$lang]['language'] = $lang;
 
             // Get translated language name
-            switch($lang) {
+            switch ($lang) {
                 case 'en_US':
                     $languageLocated = l('en_US');
                 break;
@@ -160,13 +160,13 @@ class NagVisHeaderMenu {
         } else {
             // Get all the maps global config sections and cache them
             $list = [];
-            foreach($CORE->getAvailableMaps() as $mapName) {
+            foreach ($CORE->getAvailableMaps() as $mapName) {
                 $MAPCFG = new GlobalMapCfg($mapName);
                 try {
                     $MAPCFG->readMapConfig(ONLY_GLOBAL);
-                } catch(MapCfgInvalid $e) {
+                } catch (MapCfgInvalid $e) {
                     $map['configError'] = true;
-                } catch(NagVisException $e) {
+                } catch (NagVisException $e) {
                     $map['configError'] = true;
                 }
 
@@ -195,7 +195,7 @@ class NagVisHeaderMenu {
         // Perform user specific filtering on the cached data
         foreach ($list as $map) {
             // Remove unpermitted maps
-            if(!$AUTHORISATION->isPermitted('Map', 'view', $map['mapName'])) {
+            if (!$AUTHORISATION->isPermitted('Map', 'view', $map['mapName'])) {
                 unset($list[$map['mapName']]);
                 continue;
             }
@@ -207,7 +207,7 @@ class NagVisHeaderMenu {
             if ($map['parent'] === '') {
                 $aMaps[$map['mapName']] = $map;
             } else {
-                if(!isset($childMaps[$map['parent']])) {
+                if (!isset($childMaps[$map['parent']])) {
                     $childMaps[$map['parent']] = [];
                 }
                 $childMaps[$map['parent']][$map['mapName']] = $map;
@@ -225,9 +225,9 @@ class NagVisHeaderMenu {
     }
 
     private function mapListToTree($maps, $childMaps) {
-        foreach($maps as $map) {
+        foreach ($maps as $map) {
             $freeParent = $map['mapName'];
-            if(isset($childMaps[$freeParent])) {
+            if (isset($childMaps[$freeParent])) {
                 $maps[$freeParent]['class'] = 'title';
                 $maps[$freeParent]['childs'] = $this->mapListToTree($childMaps[$freeParent], $childMaps);
             }
@@ -277,7 +277,7 @@ class NagVisHeaderMenu {
             & $AUTHORISATION->isPermitted('Auth', 'logout', '*');
 
         // Replace some special macros for maps
-        if($this->OBJ !== null && $this->aMacros['mod'] == 'Map') {
+        if ($this->OBJ !== null && $this->aMacros['mod'] == 'Map') {
             $this->aMacros['currentMap']        = $this->OBJ->getName();
             $this->aMacros['currentMapAlias']   = $this->OBJ->getValue(0, 'alias');
             $this->aMacros['usesSources']       = count($this->OBJ->getValue(0, 'sources')) > 0;
@@ -300,8 +300,8 @@ class NagVisHeaderMenu {
 
         // Add permitted rotations
         $this->aMacros['rotations'] = [];
-        foreach($CORE->getDefinedRotationPools() as $poolName) {
-            if($AUTHORISATION->isPermitted('Rotation', 'view', $poolName)) {
+        foreach ($CORE->getDefinedRotationPools() as $poolName) {
+            if ($AUTHORISATION->isPermitted('Rotation', 'view', $poolName)) {
                 $this->aMacros['rotations'][] = $poolName;
             }
         }
@@ -342,7 +342,7 @@ class NagVisHeaderMenu {
      */
     private function getDocLanguage() {
         global $CORE;
-        if(in_array(curLang(), $CORE->getAvailableDocs())) {
+        if (in_array(curLang(), $CORE->getAvailableDocs())) {
             return curLang();
         } else {
             return 'en_US';

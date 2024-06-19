@@ -32,8 +32,8 @@ class CoreModUserMgmt extends CoreModule {
     }
 
     public function handleAction() {
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'view':
                     $VIEW = new ViewManageUsers();
                     return json_encode(['code' => $VIEW->parse()]);

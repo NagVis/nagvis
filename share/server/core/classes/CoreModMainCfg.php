@@ -41,8 +41,8 @@ class CoreModMainCfg extends CoreModule {
     public function handleAction() {
         $sReturn = '';
 
-        if($this->offersAction($this->sAction)) {
-            switch($this->sAction) {
+        if ($this->offersAction($this->sAction)) {
+            switch ($this->sAction) {
                 case 'edit':
                     $VIEW = new ViewEditMainCfg();
                     $sReturn = json_encode(['code' => $VIEW->parse()]);
