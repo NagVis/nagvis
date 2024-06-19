@@ -304,7 +304,7 @@ class NagVisStatefulObject extends NagVisObject {
         if(isset($this->state['last_state_change']) && $this->state['last_state_change'] != '0'
            && $this->state['last_state_change'] != '') {
             if(self::$dateFormat == '') {
-                self::$dateFormat = cfg('global','dateformat');
+                self::$dateFormat = cfg('global', 'dateformat');
             }
 
             return date(self::$dateFormat, ($_SERVER['REQUEST_TIME'] - $this->state['last_state_change']));
@@ -319,7 +319,7 @@ class NagVisStatefulObject extends NagVisObject {
     public function get_date($attr) {
         if(isset($this->state[$attr]) && $this->state[$attr] != '0' && $this->state[$attr] != '') {
             if(self::$dateFormat == '') {
-                self::$dateFormat = cfg('global','dateformat');
+                self::$dateFormat = cfg('global', 'dateformat');
             }
             return date(self::$dateFormat, intval($this->state[$attr]));
         } else {
@@ -678,7 +678,7 @@ class NagVisStatefulObject extends NagVisObject {
      * path or will remove [] when full url given
      */
     protected function parseGadgetUrl() {
-        if(preg_match('/^\[(.*)\]$/',$this->gadget_url,$match) > 0) {
+        if(preg_match('/^\[(.*)\]$/', $this->gadget_url, $match) > 0) {
             $this->gadget_url = $match[1];
         } else {
             $this->gadget_url = path('html', 'global', 'gadgets', $this->gadget_url);

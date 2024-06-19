@@ -115,7 +115,7 @@ function parsePerfdata($sPerfdata) {
 		}
 		if(isset($aTmp[4])) {
 			$aSet['warning'] = $aTmp[4];
-			preg_match_all('/([\d\.]+):([\d\.]+)/',$aTmp[4], $matches);
+			preg_match_all('/([\d\.]+):([\d\.]+)/', $aTmp[4], $matches);
 			if(isset($matches[0]) && isset($matches[0][0])) {
 				$aSet['warning_min'] = $matches[1][0];
 				$aSet['warning_max'] = $matches[2][0];
@@ -125,7 +125,7 @@ function parsePerfdata($sPerfdata) {
 		}
 		if(isset($aTmp[5])) {
 			$aSet['critical'] = $aTmp[5];
-			preg_match_all('/([\d\.]+):([\d\.]+)/',$aTmp[5], $matches);
+			preg_match_all('/([\d\.]+):([\d\.]+)/', $aTmp[5], $matches);
 			if(isset($matches[0]) && isset($matches[0][0])) {
 				$aSet['critical_min'] = $matches[1][0];
 				$aSet['critical_max'] = $matches[2][0];
@@ -162,7 +162,7 @@ function errorBox($msg) {
         echo '<strong>' . $msg . '</strong>';
 	exit;
     } else {
-	$img = imagecreate(400,40);
+	$img = imagecreate(400, 40);
     	
     	$bgColor = imagecolorallocate($img, 255, 255, 255);
     	imagefill($img, 0, 0, $bgColor);

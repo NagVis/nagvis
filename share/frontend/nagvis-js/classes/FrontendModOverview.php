@@ -69,7 +69,7 @@ class FrontendModOverview extends FrontendModule {
         $INDEX = new NagVisIndexView($this->CORE);
 
         // Need to parse the header menu?
-        if(cfg('index','headermenu')) {
+        if(cfg('index', 'headermenu')) {
             // Parse the header menu
             $HEADER = new NagVisHeaderMenu(cfg('index', 'headertemplate'));
 

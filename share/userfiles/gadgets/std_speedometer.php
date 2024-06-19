@@ -182,7 +182,7 @@ imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia / 10),
 
 $diffy = sin(deg2rad(-$p + 360)) * (($outerdia + 10) / 2);
 $diffx = cos(deg2rad(-$p + 360)) * (($outerdia + 10) / 2);
-imagefilledarc($img, intval($centerx - $diffx), intval($centery + $diffy), intval($outerdia + 10), intval($outerdia + 10),intval($p - 1),intval($p + 1), $oBlue, IMG_ARC_EDGED);
+imagefilledarc($img, intval($centerx - $diffx), intval($centery + $diffy), intval($outerdia + 10), intval($outerdia + 10), intval($p - 1), intval($p + 1), $oBlue, IMG_ARC_EDGED);
 
 //===================
 // Labels
@@ -191,7 +191,7 @@ imagefilledarc($img, intval($centerx - $diffx), intval($centery + $diffy), intva
 // Speedometer labels
 
 imageline($img, intval($centerx - $outerdia / 2 - 5), intval($centery + 1), intval($centerx + $outerdia / 2 + 5), intval($centery + 1), $oBlack);
-imagestring($img, 1, intval($centerx - $outerdia / 2 - 15), intval($centery - 6), $min , $oBlack);
+imagestring($img, 1, intval($centerx - $outerdia / 2 - 15), intval($centery - 6), $min, $oBlack);
 imagestring($img, 1, intval($centerx + $outerdia / 2 + 8), intval($centery - 6), $max, $oBlack);
 
 $count = 1;
@@ -202,8 +202,8 @@ for($degrees = 45; $degrees < 180; $degrees = $degrees + 45) {
 	$bediffy1 = sin (deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
 	$bediffx1 = cos (deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
 
-	imageline($img, intval($centerx - $bediffx), intval($centery + $bediffy),intval($centerx - $bediffx1), intval($centery + $bediffy1), $oBlack);
-	imagestring($img , 1 ,intval($centerx - $bediffx + $iOffsetX - 8), intval($centery + $bediffy - 10) , intval(($max - $min) / 4 * $count + $min) , $oBlack);
+	imageline($img, intval($centerx - $bediffx), intval($centery + $bediffy), intval($centerx - $bediffx1), intval($centery + $bediffy1), $oBlack);
+	imagestring($img, 1, intval($centerx - $bediffx + $iOffsetX - 8), intval($centery + $bediffy - 10), intval(($max - $min) / 4 * $count + $min), $oBlack);
 
 	$count = $count + 1;
 	$iOffsetX = $iOffsetX + 10;
