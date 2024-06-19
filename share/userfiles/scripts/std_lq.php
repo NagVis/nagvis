@@ -67,7 +67,7 @@ if(file_exists('../../server/core/defines/global.php')) {
     // handle OMD local/ hierarchy
     $_path_parts = explode('/', dirname($_SERVER["SCRIPT_FILENAME"]));
     if($_path_parts[count($_path_parts) - 6] == 'local') {
-        $_nv_core_dir = join(array_slice(explode('/' ,dirname($_SERVER["SCRIPT_FILENAME"])), 0, -6), '/') . '/share/nagvis/htdocs/server/core';
+        $_nv_core_dir = join(array_slice(explode('/', dirname($_SERVER["SCRIPT_FILENAME"])), 0, -6), '/') . '/share/nagvis/htdocs/server/core';
     } else {
         echo 'ERROR: Unable to detect nagvis core dir';
         exit(1);

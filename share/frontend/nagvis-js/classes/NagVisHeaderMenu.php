@@ -41,7 +41,7 @@ class NagVisHeaderMenu {
         $this->OBJ = $OBJ;
         $this->templateName = $templateName;
 
-        $this->pathHtmlBase = cfg('paths','htmlbase');
+        $this->pathHtmlBase = cfg('paths', 'htmlbase');
         $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName . '.header.html');
 
         // Initialize template system
@@ -141,7 +141,7 @@ class NagVisHeaderMenu {
         global $_MAINCFG, $CORE, $AUTHORISATION;
 
         // Get all the maps global content and use only those which are needed
-        $filename = cfg('paths','var') . 'maplist-full-global.cfg-' . CONST_VERSION . '-cache';
+        $filename = cfg('paths', 'var') . 'maplist-full-global.cfg-' . CONST_VERSION . '-cache';
 
         $cfgFiles = $CORE->getAvailableMaps();
         $path = $CORE->getMainCfg()->getValue('paths', 'mapcfg');
@@ -150,7 +150,7 @@ class NagVisHeaderMenu {
         }
 
         $CACHE = new GlobalFileCache($cfgFiles,
-            cfg('paths','var') . 'maplist-full-global.cfg-' . count($cfgFiles) . '-' . CONST_VERSION . '-cache');
+            cfg('paths', 'var') . 'maplist-full-global.cfg-' . count($cfgFiles) . '-' . CONST_VERSION . '-cache');
 
         if ($CACHE->isCached() !== -1
            && $_MAINCFG->isCached() !== -1

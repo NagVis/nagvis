@@ -232,7 +232,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
      * @param	string $type, string $name1Pattern, string $name2Pattern
      * @return	array $ret
      */
-    public function getObjects($type,$name1Pattern = '',$name2Pattern = '') {
+    public function getObjects($type, $name1Pattern = '', $name2Pattern = '') {
         $ret = [];
 
         $max = 1;
@@ -272,7 +272,7 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
             WHERE objecttype_id=:objectType AND ' . $filter . ' is_active=1 AND instance_id=:instance ORDER BY name1',
             $values);
         while($data = $QUERYHANDLE->fetch()) {
-            $ret[] = ['name1' => $data['name1'],'name2' => $data['name2']];
+            $ret[] = ['name1' => $data['name1'], 'name2' => $data['name2']];
         }
 
         return $ret;

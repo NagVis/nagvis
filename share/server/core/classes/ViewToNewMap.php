@@ -88,7 +88,7 @@ class ViewToNewMap {
                 $NEW->storeUpdateElement(0);
 
                 success(l('The map has been created.'));
-                reload(cfg('paths','htmlbase') . '/frontend/nagvis-js/index.php?mod=Map&show=' . $name, 1);
+                reload(cfg('paths', 'htmlbase') . '/frontend/nagvis-js/index.php?mod=Map&show=' . $name, 1);
             } catch (FieldInputError $e) {
                 form_error($e->field, $e->msg);
             } catch (NagVisException $e) {

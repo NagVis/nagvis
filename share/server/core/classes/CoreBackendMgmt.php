@@ -684,7 +684,7 @@ class CoreBackendMgmt {
             if($printErr == 1) {
                 throw new NagVisException(l('backendNotInitialized', [
                     'BACKENDID' => $backendId,
-                    'BACKENDTYPE' => cfg('backend_' . $backendId,'backendtype')
+                    'BACKENDTYPE' => cfg('backend_' . $backendId, 'backendtype')
                 ]));
             }
             return false;
@@ -708,7 +708,7 @@ class CoreBackendMgmt {
                                           [
                                               'FEATURE'     => htmlentities($feature, ENT_COMPAT, 'UTF-8'),
                                                 'BACKENDID'   => $backendId,
-                                                'BACKENDTYPE' => cfg('backend_' . $backendId,'backendtype')
+                                                'BACKENDTYPE' => cfg('backend_' . $backendId, 'backendtype')
                                           ]));
             }
             return false;

@@ -236,7 +236,7 @@ function automap_get_root_hostname($params) {
      * when the root cannot be fetched via backend it reads the default
      * value for the defaultroot
      */
-    $defaultRoot = cfg('automap','defaultroot', TRUE);
+    $defaultRoot = cfg('automap', 'defaultroot', TRUE);
     if(!isset($defaultRoot) || $defaultRoot == '') {
         try {
             $hostsWithoutParent = $_BACKEND->getBackend($params['backend_id'][0])->getHostNamesWithNoParent();
@@ -248,7 +248,7 @@ function automap_get_root_hostname($params) {
     }
 
     if(!isset($defaultRoot) || $defaultRoot == '') {
-        $defaultRoot = cfg('automap','defaultroot');
+        $defaultRoot = cfg('automap', 'defaultroot');
     }
 
     // Could not get root host for the automap

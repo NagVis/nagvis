@@ -1882,7 +1882,7 @@ class GlobalMainCfg {
 
         // Try to get the base path via $_SERVER['SCRIPT_FILENAME']
         $this->validConfig['paths']['base']['default'] = $this->getBasePath();
-        $this->setPathsByBase($this->getValue('paths','base'), $this->getValue('paths','htmlbase'));
+        $this->setPathsByBase($this->getValue('paths', 'base'), $this->getValue('paths', 'htmlbase'));
 
         // Define the main configuration files
         $this->setConfigFiles($this->getConfigFiles());
@@ -1969,11 +1969,11 @@ class GlobalMainCfg {
             $this->useCache = $this->CACHE->isCached(false);
 
             // want to reduce the paths in the NagVis config, but don't want to hardcode the paths relative from the bases
-            $this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
+            $this->setPathsByBase($this->getValue('paths', 'base'), $this->getValue('paths', 'htmlbase'));
         }
         catch (Exception $e) {
             // Try our best to set the correct paths - even in case of exceptions
-            $this->setPathsByBase($this->getValue('paths','base'),$this->getValue('paths','htmlbase'));
+            $this->setPathsByBase($this->getValue('paths', 'base'), $this->getValue('paths', 'htmlbase'));
             throw $e;
         }
 
@@ -1981,8 +1981,8 @@ class GlobalMainCfg {
         $this->parseStateWeight();
 
         // set default value
-        $this->validConfig['rotation']['interval']['default'] = $this->getValue('global','refreshtime');
-        $this->validConfig['backend']['htmlcgi']['default'] = $this->getValue('paths','htmlcgi');
+        $this->validConfig['rotation']['interval']['default'] = $this->getValue('global', 'refreshtime');
+        $this->validConfig['backend']['htmlcgi']['default'] = $this->getValue('paths', 'htmlcgi');
     }
 
     /**
@@ -2115,7 +2115,7 @@ class GlobalMainCfg {
             $line = trim($file[$i]);
 
             // get first char of actual line
-            $firstChar = substr($line,0,1);
+            $firstChar = substr($line, 0, 1);
 
             // check what's in this line
             if($firstChar == ';' || $line == '') {
@@ -2161,8 +2161,8 @@ class GlobalMainCfg {
                 $val = trim(implode('=', $arr));
 
                 // remove " at beginning and at the end of the string
-                if ((substr($val,0,1) == '"') && (substr($val,-1,1) == '"')) {
-                    $val = substr($val,1,strlen($val) - 2);
+                if ((substr($val, 0, 1) == '"') && (substr($val, -1, 1) == '"')) {
+                    $val = substr($val, 1, strlen($val) - 2);
                 }
 
                 // Try to get the valid config array. But be aware. This is not the whole
@@ -2196,7 +2196,7 @@ class GlobalMainCfg {
 
                             // When no label is set, set map or url as label
                             if($arrRet[1] != '') {
-                                $label = substr($arrRet[1],0,-1);
+                                $label = substr($arrRet[1], 0, -1);
                             } elseif($arrRet[3] != '') {
                                 $label = $arrRet[3];
                             } else {
@@ -2270,7 +2270,7 @@ class GlobalMainCfg {
     private function checkMainConfigIsValid($printErr) {
         // check given objects and attributes
         foreach($this->config AS $type => &$vars) {
-            if(!preg_match('/^comment_/',$type)) {
+            if(!preg_match('/^comment_/', $type)) {
                 if(isset($this->validConfig[$type]) || preg_match('/^(backend|rotation|action)_/', $type)) {
                     // loop validConfig for checking: => missing "must" atributes
                     if(preg_match('/^backend_/', $type)) {
@@ -2288,7 +2288,7 @@ class GlobalMainCfg {
                     foreach($arrValidConfig AS $key => &$val) {
                         if((isset($val['must']) && $val['must'] == '1')) {
                             // value is "must"
-                            if($this->getValue($type,$key) === null) {
+                            if($this->getValue($type, $key) === null) {
                                 // a "must" value is missing or empty
                                 throw new NagVisException(l('The needed attribute [ATTRIBUTE] is missing in section [TYPE] in main configuration file. Please take a look at the documentation.',
                                                             ['ATTRIBUTE' => $key, 'TYPE' => $type]));
@@ -2301,7 +2301,7 @@ class GlobalMainCfg {
                     foreach($vars AS $key => $val) {
                         if(!preg_match('/^comment_/', $key)) {
                             if(preg_match('/^backend_/', $type)) {
-                                $ty = $this->getValue($type,'backendtype');
+                                $ty = $this->getValue($type, 'backendtype');
                                 if(isset($this->validConfig['backend']['options'][$ty])
                                      && is_array($this->validConfig['backend']['options'][$ty])) {
                                     $arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$ty]);
@@ -2352,11 +2352,11 @@ class GlobalMainCfg {
                                 }
 
                                 if(isset($val) && is_array($val)) {
-                                    $val = implode(',',$val);
+                                    $val = implode(',', $val);
                                 }
 
                                 // valid attribute, now check for value format
-                                if(!preg_match($arrValidConfig[$key]['match'],$val)) {
+                                if(!preg_match($arrValidConfig[$key]['match'], $val)) {
                                     // wrong format
                                     if($printErr) {
                                         throw new NagVisException(l('The attribute [ATTRIBUTE] in section [TYPE] in main configuration file does not match the correct format. Please review your configuration.',
@@ -2600,13 +2600,13 @@ class GlobalMainCfg {
     public function parseGeneralProperties() {
         $p = [
           'date_format'        => $this->getValue('global', 'dateformat'),
-          'path_base'          => $this->getValue('paths','htmlbase'),
-          'path_cgi'           => $this->getValue('paths','htmlcgi'),
+          'path_base'          => $this->getValue('paths', 'htmlbase'),
+          'path_cgi'           => $this->getValue('paths', 'htmlcgi'),
           'path_sounds'        => $this->getPath('html', 'global', 'sounds'),
           'path_iconsets'      => $this->getPath('html', 'global', 'icons'),
           'path_shapes'        => $this->getPath('html', 'global', 'shapes'),
-          'path_images'        => $this->getValue('paths','htmlimages'),
-          'path_server'        => $this->getValue('paths','htmlbase') . '/server/core/ajax_handler.php',
+          'path_images'        => $this->getValue('paths', 'htmlimages'),
+          'path_server'        => $this->getValue('paths', 'htmlbase') . '/server/core/ajax_handler.php',
           'internal_title'     => $this->getValue('internal', 'title'),
           'header_show_states' => intval($this->getValue('defaults', 'header_show_states')),
           'zoom_scale_objects' => intval($this->getValue('defaults', 'zoom_scale_objects')),
@@ -2767,7 +2767,7 @@ class GlobalMainCfg {
                 $slicedBefore = array_slice($this->config, 0, ($lastBackendIndex + 1));
                 $slicedAfter = array_slice($this->config, ($lastBackendIndex + 1));
                 $tmp[$sec] = [];
-                $this->config = array_merge($slicedBefore,$tmp,$slicedAfter);
+                $this->config = array_merge($slicedBefore, $tmp, $slicedAfter);
             } else {
                 // If no defined backend found, add it to the EOF
                 $this->config[$sec] = [];
@@ -2810,7 +2810,7 @@ class GlobalMainCfg {
             if(is_array($item)) {
                 $content .= '[' . $key . ']' . "\n";
                 foreach ($item as $key2 => $item2) {
-                    if(substr($key2,0,8) == 'comment_') {
+                    if(substr($key2, 0, 8) == 'comment_') {
                         $content .= $item2 . "\n";
                     } elseif(is_numeric($item2) || is_bool($item2)) {
                         // Don't apply config options which are set to the same
@@ -2883,7 +2883,7 @@ class GlobalMainCfg {
                         }
                     }
                 }
-            } elseif(substr($key,0,8) == 'comment_') {
+            } elseif(substr($key, 0, 8) == 'comment_') {
                 $content .= $item . "\n";
             }
         }
