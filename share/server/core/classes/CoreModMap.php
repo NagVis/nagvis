@@ -116,7 +116,7 @@ class CoreModMap extends CoreModule {
                 break;
                 case 'modifyObject':
                     $sReturn = $this->handleResponse('handleResponseModifyObject', 'doModifyObject',
-                                                     null, l('The object could not be modified.'));
+                        null, l('The object could not be modified.'));
                 break;
                 case 'deleteObject':
                     $aReturn = $this->handleResponseDeleteObject();
@@ -242,7 +242,7 @@ class CoreModMap extends CoreModule {
             // Return the data
             return [
                 'map' => $FHANDLER->get('map'),
-                         'id' => $FHANDLER->get('id')
+                'id' => $FHANDLER->get('id')
             ];
         } else {
             return false;
@@ -330,9 +330,9 @@ class CoreModMap extends CoreModule {
             // Return the data
             return [
                 'map'     => $FHANDLER->get('map'),
-                         'id'      => $id,
-                         'refresh' => $FHANDLER->get('ref'),
-                         'opts'    => $aOpts
+                'id'      => $id,
+                'refresh' => $FHANDLER->get('ref'),
+                'opts'    => $aOpts
             ];
         } else {
             return false;

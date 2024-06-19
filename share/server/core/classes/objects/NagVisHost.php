@@ -94,9 +94,9 @@ class NagVisHost extends NagVisStatefulObject {
         }
 
         if($this->hover_menu == 1
-           && $this->hover_childs_show == 1
-           && $bFetchMemberState
-           && !$this->hasMembers()) {
+            && $this->hover_childs_show == 1
+            && $bFetchMemberState
+            && !$this->hasMembers()) {
             $queries['hostMemberDetails'] = true;
         }
 
@@ -254,8 +254,8 @@ class NagVisHost extends NagVisStatefulObject {
             if($this->hasMembers()) {
                 $arrStates = [
                     CRITICAL => 0, DOWN    => 0, WARNING   => 0,
-                                   UNKNOWN  => 0, UP      => 0, OK        => 0,
-                                   ERROR    => 0, PENDING => 0, UNCHECKED => 0
+                    UNKNOWN  => 0, UP      => 0, OK        => 0,
+                    ERROR    => 0, PENDING => 0, UNCHECKED => 0
                 ];
 
                 foreach($this->members AS &$SERVICE) {

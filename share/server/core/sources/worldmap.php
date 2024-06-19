@@ -117,13 +117,13 @@ function worldmap_init_schema() {
     // Create initial db scheme if needed
     if (!$DB->tableExist('objects')) {
         $DB->query('CREATE TABLE objects '
-                 . '(object_id VARCHAR(20),'
-                 . ' lat REAL,'
-                 . ' lng REAL,'
-                 . ' lat2 REAL,' // needed for line objects
-                 . ' lng2 REAL,'
-                 . ' object TEXT,'
-                 . ' PRIMARY KEY(object_id))');
+            . '(object_id VARCHAR(20),'
+            . ' lat REAL,'
+            . ' lng REAL,'
+            . ' lat2 REAL,' // needed for line objects
+            . ' lng2 REAL,'
+            . ' object TEXT,'
+            . ' PRIMARY KEY(object_id))');
         $DB->query('CREATE INDEX latlng ON objects (lat,long)');
         $DB->query('CREATE INDEX latlng2 ON objects (lat2,long2)');
         $DB->createVersionTable();
@@ -316,8 +316,7 @@ function worldmap_get_object_by_id($id) {
 }
 
 // Worldmap internal helper function to add an object to the worldmap
-function worldmap_db_update_object($obj_id, $lat, $lng, $obj,
-                                   $lat2 = null, $lng2 = null, $insert = true) {
+function worldmap_db_update_object($obj_id, $lat, $lng, $obj, $lat2 = null, $lng2 = null, $insert = true) {
     global $DB;
     worldmap_init_db();
 
@@ -402,7 +401,7 @@ function get_bounds_worldmap($MAPCFG, $map_name, &$map_config) {
     $b = $DB->query($q)->fetch();
     return [
         [$b['min_lat'], $b['min_lng']],
-                 [$b['max_lat'], $b['max_lng']]
+        [$b['max_lat'], $b['max_lng']]
     ];
 }
 

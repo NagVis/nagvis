@@ -81,73 +81,73 @@
  * @author      Lars Michelsen <lm@larsmichelsen.com>
  */
 function parsePerfdata($sPerfdata) {
-	$aMatches = [];
-	$aPerfdata = [];
-	
-	// Cleanup
-	$sPerfdata = str_replace(',', '.', $sPerfdata);
-	$sPerfdata = preg_replace('/\s*=\s*/', '=', $sPerfdata);
-	
-	// Nagios::Plugin::Performance
-	$sTmpPerfdata = $sPerfdata;
-	
-	// Parse perfdata
-	// We are trying to match the following string:
-	//  temp=78.8F;55:93;50:98;0;100;
-	//               metric    current    unit      warning          critical          min           max
-	preg_match_all('/([^=]+)=([\d\.\-]+)([\w%\/]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*/', $sPerfdata, $aMatches, PREG_SET_ORDER);
-	
-	// When no match found
-	if(!isset($aMatches[0])) {
-		errorBox('ERROR: Found no valid performance data in string');
-	}
-	for($i = 0, $len = sizeof($aMatches); $i < $len; $i++) {
-		$aTmp = $aMatches[$i];
-		
-		// Save needed values
-		$aSet = ['label' => $aTmp[1], 'value' => $aTmp[2]];
-		
-		// Save optional values
-		if(isset($aTmp[3])) {
-			$aSet['uom'] = $aTmp[3];
-		} else {
-			$aSet['uom'] = null;
-		}
-		if(isset($aTmp[4])) {
-			$aSet['warning'] = $aTmp[4];
-			preg_match_all('/([\d\.]+):([\d\.]+)/', $aTmp[4], $matches);
-			if(isset($matches[0]) && isset($matches[0][0])) {
-				$aSet['warning_min'] = $matches[1][0];
-				$aSet['warning_max'] = $matches[2][0];
-			}
-		} else {
-			$aSet['warning'] = null;
-		}
-		if(isset($aTmp[5])) {
-			$aSet['critical'] = $aTmp[5];
-			preg_match_all('/([\d\.]+):([\d\.]+)/', $aTmp[5], $matches);
-			if(isset($matches[0]) && isset($matches[0][0])) {
-				$aSet['critical_min'] = $matches[1][0];
-				$aSet['critical_max'] = $matches[2][0];
-			}
-		} else {
-			$aSet['critical'] = null;
-		}
-		if(isset($aTmp[6])) {
-			$aSet['min'] = $aTmp[6];
-		} else {
-			$aSet['min'] = null;
-		}
-		if(isset($aTmp[7])) {
-			$aSet['max'] = $aTmp[7];
-		} else {
-			$aSet['max'] = null;
-		}
-		
-		$aPerfdata[] = $aSet;
-	}
+    $aMatches = [];
+    $aPerfdata = [];
 
-	return $aPerfdata;
+    // Cleanup
+    $sPerfdata = str_replace(',', '.', $sPerfdata);
+    $sPerfdata = preg_replace('/\s*=\s*/', '=', $sPerfdata);
+
+    // Nagios::Plugin::Performance
+    $sTmpPerfdata = $sPerfdata;
+
+    // Parse perfdata
+    // We are trying to match the following string:
+    //  temp=78.8F;55:93;50:98;0;100;
+    //               metric    current    unit      warning          critical          min           max
+    preg_match_all('/([^=]+)=([\d\.\-]+)([\w%\/]*);?([\d\.\-:~@]+)?;?([\d\.\-:~@]+)?;?([\d\.\-]+)?;?([\d\.\-]+)?\s*/', $sPerfdata, $aMatches, PREG_SET_ORDER);
+
+    // When no match found
+    if(!isset($aMatches[0])) {
+        errorBox('ERROR: Found no valid performance data in string');
+    }
+    for($i = 0, $len = sizeof($aMatches); $i < $len; $i++) {
+        $aTmp = $aMatches[$i];
+
+        // Save needed values
+        $aSet = ['label' => $aTmp[1], 'value' => $aTmp[2]];
+
+        // Save optional values
+        if(isset($aTmp[3])) {
+            $aSet['uom'] = $aTmp[3];
+        } else {
+            $aSet['uom'] = null;
+        }
+        if(isset($aTmp[4])) {
+            $aSet['warning'] = $aTmp[4];
+            preg_match_all('/([\d\.]+):([\d\.]+)/', $aTmp[4], $matches);
+            if(isset($matches[0]) && isset($matches[0][0])) {
+                $aSet['warning_min'] = $matches[1][0];
+                $aSet['warning_max'] = $matches[2][0];
+            }
+        } else {
+            $aSet['warning'] = null;
+        }
+        if(isset($aTmp[5])) {
+            $aSet['critical'] = $aTmp[5];
+            preg_match_all('/([\d\.]+):([\d\.]+)/', $aTmp[5], $matches);
+            if(isset($matches[0]) && isset($matches[0][0])) {
+                $aSet['critical_min'] = $matches[1][0];
+                $aSet['critical_max'] = $matches[2][0];
+            }
+        } else {
+            $aSet['critical'] = null;
+        }
+        if(isset($aTmp[6])) {
+            $aSet['min'] = $aTmp[6];
+        } else {
+            $aSet['min'] = null;
+        }
+        if(isset($aTmp[7])) {
+            $aSet['max'] = $aTmp[7];
+        } else {
+            $aSet['max'] = null;
+        }
+
+        $aPerfdata[] = $aSet;
+    }
+
+    return $aPerfdata;
 }
 
 /**
@@ -160,19 +160,19 @@ function errorBox($msg) {
     global $_MODE;
     if(isset($_MODE) && $_MODE === 'html') {
         echo '<strong>' . $msg . '</strong>';
-	exit;
+        exit;
     } else {
-	$img = imagecreate(400, 40);
-    	
-    	$bgColor = imagecolorallocate($img, 255, 255, 255);
-    	imagefill($img, 0, 0, $bgColor);
-    	
-    	$fontColor = imagecolorallocate($img, 10, 36, 106);
-    	imagestring($img, 2, 8, 8, $msg, $fontColor);
-    	
-    	imagepng($img);
-    	imagedestroy($img);
-    	exit;
+        $img = imagecreate(400, 40);
+
+        $bgColor = imagecolorallocate($img, 255, 255, 255);
+        imagefill($img, 0, 0, $bgColor);
+
+        $fontColor = imagecolorallocate($img, 10, 36, 106);
+        imagestring($img, 2, 8, 8, $msg, $fontColor);
+
+        imagepng($img);
+        imagedestroy($img);
+        exit;
     }
 }
 
@@ -195,10 +195,10 @@ $aPerfdata = [];
 
 // Get params without default values
 foreach([
-            'opts'  => null, 'name1'     => null, 'name2' => null,
-              'state' => null, 'stateType' => null, 'scale' => 100,
-              'ack'   => null, 'downtime'  => null
-        ] as $opt => $default) {
+    'opts'  => null, 'name1'     => null, 'name2' => null,
+    'state' => null, 'stateType' => null, 'scale' => 100,
+    'ack'   => null, 'downtime'  => null
+] as $opt => $default) {
     if (isset($_GET[$opt]) && $_GET[$opt] != '') {
         $aOpts[$opt] = $_GET[$opt];
     } elseif ($default !== null) {
@@ -218,11 +218,9 @@ elseif(!isset($_GET['opts']) || strpos($_GET['opts'], 'no_perf') === false) {
 
 /* Now parse the perfdata */
 if(isset($_GET['opts']) && $_GET['opts'] != '') {
-	if(strpos($_GET['opts'], 'no_perf') === false) {
-		$aPerfdata = parsePerfdata($aOpts['perfdata']);
-	}
+    if(strpos($_GET['opts'], 'no_perf') === false) {
+        $aPerfdata = parsePerfdata($aOpts['perfdata']);
+    }
 } else {
-	$aPerfdata = parsePerfdata($aOpts['perfdata']);
+    $aPerfdata = parsePerfdata($aOpts['perfdata']);
 }
-
-

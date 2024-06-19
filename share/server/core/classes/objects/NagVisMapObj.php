@@ -239,7 +239,7 @@ class NagVisMapObj extends NagVisStatefulObject {
              * Exclude map objects based on "exclude_member_states" option
              */
             if($excludeMemberStates && $this->hasExcludeFilters(COUNT_QUERY)
-               && $this->excludeMapObject($OBJ, COUNT_QUERY)) {
+                && $this->excludeMapObject($OBJ, COUNT_QUERY)) {
                 continue;
             }
 
@@ -401,8 +401,8 @@ class NagVisMapObj extends NagVisStatefulObject {
         }
     
         if(isset($parts[1]) && $objType == 'service'
-           && preg_match('/' . $parts[0] . '/', $OBJ->getName())
-           && preg_match('/' . $parts[1] . '/', $OBJ->getServiceDescription())) {
+            && preg_match('/' . $parts[0] . '/', $OBJ->getName())
+            && preg_match('/' . $parts[1] . '/', $OBJ->getServiceDescription())) {
             return true;
         }
 
@@ -532,10 +532,10 @@ class NagVisMapObj extends NagVisStatefulObject {
                 break;
                 default:
                     throw new NagVisException(l('unknownObject',
-                                              [
-                                                  'TYPE'    => $type,
-                                                    'MAPNAME' => $this->getName()
-                                              ]));
+                        [
+                            'TYPE'    => $type,
+                            'MAPNAME' => $this->getName()
+                        ]));
                 break;
             }
 
@@ -596,9 +596,9 @@ class NagVisMapObj extends NagVisStatefulObject {
         if($this->hasMembers()) {
             $arrStates = [
                 UNREACHABLE => 0, CRITICAL => 0, DOWN => 0,
-                               WARNING     => 0, UNKNOWN  => 0, UP   => 0,
-                               OK          => 0, ERROR    => 0, UNCHECKED => 0,
-                               PENDING     => 0
+                WARNING     => 0, UNKNOWN  => 0, UP   => 0,
+                OK          => 0, ERROR    => 0, UNCHECKED => 0,
+                PENDING     => 0
             ];
 
             foreach($this->getStateRelevantMembers(true) as $OBJ) {
@@ -625,7 +625,7 @@ class NagVisMapObj extends NagVisStatefulObject {
     private function isPermitted($OBJ) {
         global $AUTHORISATION;
         if($AUTHORISATION !== null
-           && $AUTHORISATION->isPermitted('Map', 'view', $OBJ->getName())) {
+            && $AUTHORISATION->isPermitted('Map', 'view', $OBJ->getName())) {
             return true;
         } else {
             $OBJ->sum[STATE]  = UNKNOWN;

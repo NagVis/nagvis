@@ -37,7 +37,7 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
             throw new NagVisException(l('Unable to open auth database ([DB]): [MSG]',
                 [
                     'DB' => $this->DB->getDSN(),
-                      'MSG' => json_encode($this->DB->error())
+                    'MSG' => json_encode($this->DB->error())
                 ]));
         } elseif(!$this->DB->tableExist('users')) {
             // Create initial db scheme if needed
@@ -142,24 +142,24 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         $aRoles = [];
 
         // Get all the roles of the user
-      $RES = $this->DB->query('-role-get-by-user', ['id' => $userId]);
-      while($data = $RES->fetch()) {
-      	$aRoles[] = $data;
-      }
+        $RES = $this->DB->query('-role-get-by-user', ['id' => $userId]);
+        while($data = $RES->fetch()) {
+                $aRoles[] = $data;
+        }
 
-      return $aRoles;
+        return $aRoles;
     }
 
     public function getAllRoles() {
         $aRoles = [];
 
         // Get all the roles of the user
-      $RES = $this->DB->query('-role-get-all');
-      while($data = $RES->fetch()) {
-      	$aRoles[] = $data;
-      }
+        $RES = $this->DB->query('-role-get-all');
+        while($data = $RES->fetch()) {
+                $aRoles[] = $data;
+        }
 
-      return $aRoles;
+        return $aRoles;
     }
 
     public function getRoleId($sRole) {
@@ -172,24 +172,24 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         $aPerms = [];
 
         // Get all the roles of the user
-      $RES = $this->DB->query('-perm-get-all');
-      while($data = $RES->fetch()) {
-      	$aPerms[] = $data;
-      }
+        $RES = $this->DB->query('-perm-get-all');
+        while($data = $RES->fetch()) {
+                  $aPerms[] = $data;
+        }
 
-      return $aPerms;
+        return $aPerms;
     }
 
     public function getRolePerms($roleId) {
         $aRoles = [];
 
         // Get all the roles of the user
-      $RES = $this->DB->query('-role-get-perm-by-id', ['roleId' => $roleId]);
-      while($data = $RES->fetch()) {
-      	$aRoles[$data['permId']] = true;
-      }
+        $RES = $this->DB->query('-role-get-perm-by-id', ['roleId' => $roleId]);
+        while($data = $RES->fetch()) {
+                  $aRoles[$data['permId']] = true;
+        }
 
-      return $aRoles;
+        return $aRoles;
     }
 
     public function updateRolePerms($roleId, $perms) {
@@ -236,8 +236,8 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         // Only handle known users
         $userId = $this->getUserId($sUsername);
         if($userId > 0) {
-          // Get all the roles of the user
-          $RES = $this->DB->query('-perm-get-by-user', ['id' => $userId]);
+            // Get all the roles of the user
+            $RES = $this->DB->query('-perm-get-by-user', ['id' => $userId]);
 
             while($data = $RES->fetch()) {
                 if(!isset($aPerms[$data['mod']])) {

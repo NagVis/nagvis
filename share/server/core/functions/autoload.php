@@ -30,18 +30,18 @@
  * @author 	Lars Michelsen <lm@larsmichelsen.com>
  */
 function NagVisAutoload($sClass) {
-	if(substr($sClass, 0, 8) === 'Frontend' 
-	   || substr($sClass, 0, 3) === 'Wui' 
-	   || substr($sClass, 0, 4) === 'Core' 
-	   || substr($sClass, 0, 4) === 'View'
-	   || substr($sClass, 0, 6) === 'NagVis'
-	   || substr($sClass, 0, 6) === 'Nagios' 
-	   || substr($sClass, 0, 6) === 'Global') {
-		require($sClass . '.php');
-		return true;
-	} else {
-		return false;
-	}
+    if(substr($sClass, 0, 8) === 'Frontend'
+       || substr($sClass, 0, 3) === 'Wui'
+       || substr($sClass, 0, 4) === 'Core'
+       || substr($sClass, 0, 4) === 'View'
+       || substr($sClass, 0, 6) === 'NagVis'
+       || substr($sClass, 0, 6) === 'Nagios'
+       || substr($sClass, 0, 6) === 'Global') {
+        require($sClass . '.php');
+        return true;
+    } else {
+        return false;
+    }
 }
 
 spl_autoload_register('NagVisAutoload');

@@ -149,7 +149,7 @@ class ViewManageMaps {
 
         // rename config file
         rename(cfg('paths', 'mapcfg') . $name . '.cfg',
-               cfg('paths', 'mapcfg') . $new_name . '.cfg');
+            cfg('paths', 'mapcfg') . $new_name . '.cfg');
     }
 
     private function renameForm() {

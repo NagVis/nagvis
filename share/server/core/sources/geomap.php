@@ -108,7 +108,7 @@ function geomap_get_locations($p) {
 function geomap_source_age($p) {
     switch($p['source_type']) {
         case 'csv':
-    	    return filemtime(geomap_source_file($p));
+                return filemtime(geomap_source_file($p));
         break;
         case 'backend':
             return geomap_backend_program_start($p);
@@ -144,9 +144,9 @@ function geomap_get_contents($url) {
         return file_get_contents($url, false, $context);
     } catch(Exception $e) {
         throw new GeomapError(l('Unable to fetch URL "[U]".<br/><br />The geomap needs to be able to fetch '
-                                   . 'some data from the internet via webservice API. Please take a look '
-                                   . 'at the docs for more details.<br /><br /><small>[E]</small>',
-                                    ['U' => $url, 'E' => $e->getMessage()]));
+            . 'some data from the internet via webservice API. Please take a look '
+            . 'at the docs for more details.<br /><br /><small>[E]</small>',
+            ['U' => $url, 'E' => $e->getMessage()]));
     }
 }
 
@@ -397,9 +397,9 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
     $geomap_server_base_url = cfg('global', 'geomap_server');
     validate_geomap_server_base_url($geomap_server_base_url);
     $url = $geomap_server_base_url
-          . '?module=map'
-          . '&width=' . $params['width'] . '&height=' . $params['height']
-          . '&type=' . $params['geomap_type'];
+        . '?module=map'
+        . '&width=' . $params['width'] . '&height=' . $params['height']
+        . '&type=' . $params['geomap_type'];
 
     // The geomap zoom seems to be something different than the nagvis zoom. Use
     // the dedicated geomap_zoom parameter
@@ -407,7 +407,7 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
         $mid_lat  = ($min_lat + $max_lat) / 2;
         $mid_long = ($min_long + $max_long) / 2;
         $url .= '&zoom=' . $params['geomap_zoom']
-               . '&center=' . $mid_long . ',' . $mid_lat;
+            . '&center=' . $mid_long . ',' . $mid_lat;
     } else {
         $url .= '&bbox=' . $min_long . ',' . $max_lat . ',' . $max_long . ',' . $min_lat;
     }
@@ -434,11 +434,11 @@ function process_geomap($MAPCFG, $map_name, &$map_config) {
 
         if(!$contents ||
             (ord($contents[0]) == 137 &&
-             ord($contents[1]) == 80 &&
-             ord($contents[2]) == 78)) {
+            ord($contents[1]) == 80 &&
+            ord($contents[2]) == 78)) {
             // Got an png image as answer - catch this!
             throw new GeomapError(l('Got invalid response from "[U]". This is mostly caused by an unhandled request.',
-                                            ['U' => $data_url]));
+                ['U' => $data_url]));
         }
 
         if(!preg_match('/^-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*,-?[0-9]+\.?[0-9]*$/i', $contents)) {
@@ -527,9 +527,9 @@ function changed_geomap($MAPCFG, $compare_time) {
 #    http://almien.co.uk/OSM/Tools/Coord/source.php
 
 function ProjectF($Lat){
-  $Lat = deg2rad($Lat);
-  $Y = log(tan($Lat) + (1 / cos($Lat)));
-  return($Y);
+    $Lat = deg2rad($Lat);
+    $Y = log(tan($Lat) + (1 / cos($Lat)));
+    return($Y);
 }
 
 

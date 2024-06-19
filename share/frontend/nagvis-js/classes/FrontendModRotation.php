@@ -39,9 +39,9 @@ class FrontendModRotation extends FrontendModule {
         // Parse the view specific options
         $aOpts = [
             'show' => MATCH_ROTATION_NAME,
-                       'type' => MATCH_ROTATION_STEP_TYPES_EMPTY,
-                       'step' => MATCH_STRING_NO_SPACE_EMPTY,
-                       'stepId' => MATCH_INTEGER_EMPTY
+            'type' => MATCH_ROTATION_STEP_TYPES_EMPTY,
+            'step' => MATCH_STRING_NO_SPACE_EMPTY,
+            'stepId' => MATCH_INTEGER_EMPTY
         ];
 
         $aVals = $this->getCustomOptions($aOpts);

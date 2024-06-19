@@ -61,8 +61,8 @@ class NagVisDynGroup extends NagVisStatefulObject {
         $queries = ['DYN_GROUP_MEMBER_STATE' => true];
 
         if($this->hover_menu == 1
-           && $this->hover_childs_show == 1
-           && $bFetchMemberState) {
+            && $this->hover_childs_show == 1
+            && $bFetchMemberState) {
             $queries['DYN_GROUP_MEMBER_DETAILS'] = true;
         }
 
@@ -154,10 +154,10 @@ class NagVisDynGroup extends NagVisStatefulObject {
         // Fallback for hostgroups without members
         if($iSumCount == 0) {
             $this->sum[OUTPUT] = l('The dynamic group "[GROUP]" has no members (Backend: [BACKEND]).',
-                                                       [
-                                                           'GROUP' => $this->name,
-                                                       'BACKEND' => implode(',', $this->backend_id)
-                                                       ]);
+                [
+                    'GROUP' => $this->name,
+                    'BACKEND' => implode(',', $this->backend_id)
+                ]);
         } else {
             // FIXME: Recode mergeSummaryOutput method
             $this->mergeSummaryOutput($arrHostStates, l('hosts'), false);
@@ -186,8 +186,8 @@ class NagVisDynGroup extends NagVisStatefulObject {
         if($this->hasMembers()) {
             $arrStates = [
                 CRITICAL => 0, DOWN    => 0, WARNING   => 0,
-                               UNKNOWN  => 0, UP      => 0, OK        => 0,
-                               ERROR    => 0, PENDING => 0, UNCHECKED => 0
+                UNKNOWN  => 0, UP      => 0, OK        => 0,
+                ERROR    => 0, PENDING => 0, UNCHECKED => 0
             ];
 
             // Get summary state of this and child objects
@@ -198,10 +198,10 @@ class NagVisDynGroup extends NagVisStatefulObject {
             $this->mergeSummaryOutput($arrStates, l('hosts'));
         } else {
             $this->sum[OUTPUT] = l('The dynamic group "[GROUP]" has no members (Backend: [BACKEND]).',
-                                                       [
-                                                           'GROUP' => $this->name,
-                                                       'BACKEND' => implode(',', $this->backend_id)
-                                                       ]);
+                [
+                    'GROUP' => $this->name,
+                    'BACKEND' => implode(',', $this->backend_id)
+                ]);
         }
     }
 }

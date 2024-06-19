@@ -64,7 +64,7 @@ class CoreModAuth extends CoreModule {
     private function handleResponseAuth() {
         $attr = [
             'username' => MATCH_USER_NAME,
-                      'password' => null
+            'password' => null
         ];
         $this->verifyValuesSet($this->FHANDLER,   $attr);
         $this->verifyValuesMatch($this->FHANDLER, $attr);
@@ -93,14 +93,14 @@ class CoreModAuth extends CoreModule {
 
     public function msgAlreadyLoggedIn() {
         throw new NagVisException(l('You are already logged in. You will be redirected.'),
-                          null, 1, cfg('paths', 'htmlbase'));
+            null, 1, cfg('paths', 'htmlbase'));
         return '';
     }
 
     public function msgInvalidCredentials() {
         throw new NagVisException(l('You entered invalid credentials.'),
-                                  l('Authentication failed'),
-                                  1, CoreRequestHandler::getReferer(''));
+            l('Authentication failed'),
+            1, CoreRequestHandler::getReferer(''));
         return '';
     }
 }

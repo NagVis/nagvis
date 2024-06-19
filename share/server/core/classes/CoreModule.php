@@ -213,8 +213,7 @@ abstract class CoreModule {
      *
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
-    protected function handleResponse($validationHandler, $action, $successMsg = null,
-                                        $failMessage = null, $reload = null, $redirectUrl = null) {
+    protected function handleResponse($validationHandler, $action, $successMsg = null, $failMessage = null, $reload = null, $redirectUrl = null) {
         $aReturn = $this->{$validationHandler}();
 
         $type = 'ok';

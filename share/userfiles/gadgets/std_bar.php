@@ -139,14 +139,14 @@ if ($chrSize < 1) { $chrSize = 1; }
 //==================
 
 if (isset($aOpts['opts']) && ($aOpts['opts'] != '')){
-   preg_match_all ('/(\w+)=(\w+)/', $aOpts['opts'], $matches, PREG_SET_ORDER);
-   for ($i = 0; $i < count($matches); $i++){
-      if ($matches[$i][1] == 'columns') { $cols = $matches[$i][2]; }
-      if ($matches[$i][1] == 'string') { $string = $matches[$i][2]; }
-      if ($matches[$i][1] == 'current') { $current = $matches[$i][2]; }
-      if ($matches[$i][1] == 'label') { $label = $matches[$i][2]; }
-      if ($matches[$i][1] == 'threshold') { $threshold = $matches[$i][2]; }
-   }
+    preg_match_all ('/(\w+)=(\w+)/', $aOpts['opts'], $matches, PREG_SET_ORDER);
+    for ($i = 0; $i < count($matches); $i++){
+        if ($matches[$i][1] == 'columns') { $cols = $matches[$i][2]; }
+        if ($matches[$i][1] == 'string') { $string = $matches[$i][2]; }
+        if ($matches[$i][1] == 'current') { $current = $matches[$i][2]; }
+        if ($matches[$i][1] == 'label') { $label = $matches[$i][2]; }
+        if ($matches[$i][1] == 'threshold') { $threshold = $matches[$i][2]; }
+    }
 }
 $rows = ceil($pdc / $cols);   // max. no. of rows with graphs
 
@@ -170,156 +170,156 @@ imagecolortransparent($img, $oBackground);
 
 $offG = 0;              // current graph
 for ($i = 0; $i < $pdc; $i++){
-   $desc = preg_replace('(.*::)', '', $aPerfdata[$i]['label']);  // omit check_multi description
-   if (preg_match("/$string/", $desc)) {
-      $colour = '';
-      $value = $aPerfdata[$i]['value'];
-      $warn = $aPerfdata[$i]['warning'];
-      $warn = preg_replace ('(:.*)', '', $warn);     // ignore range settings
-      $crit = $aPerfdata[$i]['critical'];
-      $crit = preg_replace ('(:.*)', '', $crit);     // ignore range settings
-      $min = $aPerfdata[$i]['min'];
-      $max = $aPerfdata[$i]['max'];
-      $uom = $aPerfdata[$i]['uom'];
-      $ack = $aPerfdata[$i]['ack'];
-      $downtime = $aPerfdata[$i]['downtime'];
-      $offX = ($offG % $cols) * $imgwidth;         // calculate left x-axis position
-      $offY = floor($offG / $cols) * $imgheight;   // calculate upper y-axis position
-      $maxX = $imgwidth - 15;
-      $maxY = $imgheight - 5;
+    $desc = preg_replace('(.*::)', '', $aPerfdata[$i]['label']);  // omit check_multi description
+    if (preg_match("/$string/", $desc)) {
+        $colour = '';
+        $value = $aPerfdata[$i]['value'];
+        $warn = $aPerfdata[$i]['warning'];
+        $warn = preg_replace ('(:.*)', '', $warn);     // ignore range settings
+        $crit = $aPerfdata[$i]['critical'];
+        $crit = preg_replace ('(:.*)', '', $crit);     // ignore range settings
+        $min = $aPerfdata[$i]['min'];
+        $max = $aPerfdata[$i]['max'];
+        $uom = $aPerfdata[$i]['uom'];
+        $ack = $aPerfdata[$i]['ack'];
+        $downtime = $aPerfdata[$i]['downtime'];
+        $offX = ($offG % $cols) * $imgwidth;         // calculate left x-axis position
+        $offY = floor($offG / $cols) * $imgheight;   // calculate upper y-axis position
+        $maxX = $imgwidth - 15;
+        $maxY = $imgheight - 5;
 
-      // determine the upper limit
-      $limit = $max;
-      if ($limit < $crit) {
-         $limit = $crit;
-      }
-      if (($warn > $crit) && ($limit < $warn)) {
-         $limit = $warn;
-      }
-      if ($value > $limit) {
-         $limit = $value;
-      }
-      if ($limit < 1) {
-         $limit = 1;
-      }
-      if ($uom == '%') {
-         $limit = 100;
-      }
-      if (isset($warn) && isset($crit)) {
-         if ($warn < $crit) {
-            if ($value >= $warn) { $colour = ($ack) ? $oYellowAck : $oYellow; };
-            if ($value >= $crit) { $colour = ($ack) ? $oRedAck : $oRed; };
-         } else {
-            if ($value <= $warn) { $colour = ($ack) ? $oYellowAck : $oYellow; };
-            if ($value <= $crit) { $colour = ($ack) ? $oRedAck : $oRed; };
-         }
-      }
-      // create box
-      imagefilledrectangle ($img, $offX, $offY + 1, $offX + $maxX, $offY + $maxY, $oGreen);
-      imageRectangle($img, $offX, $offY, $offX + $maxX, $offY + $maxY, $oBlack);
-      $maxX--;
-      $maxY--;
+        // determine the upper limit
+        $limit = $max;
+        if ($limit < $crit) {
+            $limit = $crit;
+        }
+        if (($warn > $crit) && ($limit < $warn)) {
+            $limit = $warn;
+        }
+        if ($value > $limit) {
+            $limit = $value;
+        }
+        if ($limit < 1) {
+            $limit = 1;
+        }
+        if ($uom == '%') {
+            $limit = 100;
+        }
+        if (isset($warn) && isset($crit)) {
+            if ($warn < $crit) {
+                if ($value >= $warn) { $colour = ($ack) ? $oYellowAck : $oYellow; };
+                if ($value >= $crit) { $colour = ($ack) ? $oRedAck : $oRed; };
+            } else {
+                if ($value <= $warn) { $colour = ($ack) ? $oYellowAck : $oYellow; };
+                if ($value <= $crit) { $colour = ($ack) ? $oRedAck : $oRed; };
+            }
+        }
+        // create box
+        imagefilledrectangle ($img, $offX, $offY + 1, $offX + $maxX, $offY + $maxY, $oGreen);
+        imageRectangle($img, $offX, $offY, $offX + $maxX, $offY + $maxY, $oBlack);
+        $maxX--;
+        $maxY--;
 
-      // "highlight" graph if non-ok value
-      if ($colour != '') {
-         imagefilledrectangle ($img, $offX + 1, $offY + $sect3 + 1, $offX + $maxX, $offY + $maxY, $colour);
-      }
+        // "highlight" graph if non-ok value
+        if ($colour != '') {
+            imagefilledrectangle ($img, $offX + 1, $offY + $sect3 + 1, $offX + $maxX, $offY + $maxY, $colour);
+        }
 
-      //================
-      // Normalize / Fix value and max
-      //================
+        //================
+        // Normalize / Fix value and max
+        //================
 
-      if($value == null) {
-         $value = $default;
-      } elseif($max != '' && $value < $min) {
-        $value = $min;
-      } elseif($max != '' && $max != -1 && $value > $max) {
-        $value = $max;
-      }
+        if($value == null) {
+            $value = $default;
+        } elseif($max != '' && $value < $min) {
+            $value = $min;
+        } elseif($max != '' && $max != -1 && $value > $max) {
+            $value = $max;
+        }
 
-      // If there is no max value given set it using the critical value
-      if(intval($max) == 0 || $max == '') {
-         $max = $crit + 1;
-      }
+        // If there is no max value given set it using the critical value
+        if(intval($max) == 0 || $max == '') {
+            $max = $crit + 1;
+        }
 
-      //================
-      // Calculate value, warn, critical percentages/values
-      //================
+        //================
+        // Calculate value, warn, critical percentages/values
+        //================
 
-      $p = 100 / $limit * $value;
-      $warnp = round(100 / $limit * $warn, 0);
-      $critp = round(100 / $limit * $crit, 0);
-      $valuev = ($maxX / 100 * $p);
-      $warnv = intval($maxX / 100 * $warnp);
-      $critv = intval($maxX / 100 * $critp);
-      $warnt = ($threshold == 'pct') ? $warnp : $warn;
-      $critt = ($threshold == 'pct') ? $critp : $crit;
+        $p = 100 / $limit * $value;
+        $warnp = round(100 / $limit * $warn, 0);
+        $critp = round(100 / $limit * $crit, 0);
+        $valuev = ($maxX / 100 * $p);
+        $warnv = intval($maxX / 100 * $warnp);
+        $critv = intval($maxX / 100 * $critp);
+        $warnt = ($threshold == 'pct') ? $warnp : $warn;
+        $critt = ($threshold == 'pct') ? $critp : $crit;
 
-      //===================
-      // create warning/critical areas, current value
-      //===================
+        //===================
+        // create warning/critical areas, current value
+        //===================
 
-      // Warning
-      if($warn) {
-         if ($warn < $crit) {
-            imageFilledRectangle($img, $offX + $warnv + 1, $offY + 1, $offX + $maxX, $offY + $sect1, $oYellow);
-         } else {
-            imageFilledRectangle($img, $offX + 1, $offY + 1, $offX + $warnv - 1, $offY + $sect1, $oYellow);
-         }
-         if (file_exists ("$font")) {
-            ImageTTFText($img, $chrSize * 2, 0, $offX + $warnv + 1, $offY + $sect1, $oBlack, $font, intval($warnt));
-         } else {
-            imagestring($img, $chrSize, $offX + $warnv + 1, $offY - 2, intval($warnt), $oBlack);
-         }
-      }
-      // Critical
-      if($crit) {
-         if ($warn < $crit) {
-            imageFilledRectangle($img, $offX + $critv + 1, $offY + 1, $offX + $maxX, $offY + $sect1, $oRed);
-         } else {
-            imageFilledRectangle($img, $offX + 1, $offY + 1, $offX + $critv - 1, $offY + $sect1, $oRed);
-         }
-         if (file_exists ("$font")) {
-            ImageTTFText($img, $chrSize * 2, 0, $offX + $critv + 1, $offY + $sect1, $oBlack, $font, intval($critt));
-         } else {
-            imagestring($img, $chrSize, $offX + $critv + 1, $offY - 2, intval($critt), $oBlack);
-         }
-      }
-      imagefilledRectangle($img, $offX + 1, $offY + $sect1 + 1, $offX + $valuev + 1, $offY + $sect3, $oBlue);
+        // Warning
+        if($warn) {
+            if ($warn < $crit) {
+                imageFilledRectangle($img, $offX + $warnv + 1, $offY + 1, $offX + $maxX, $offY + $sect1, $oYellow);
+            } else {
+                imageFilledRectangle($img, $offX + 1, $offY + 1, $offX + $warnv - 1, $offY + $sect1, $oYellow);
+            }
+            if (file_exists ("$font")) {
+                ImageTTFText($img, $chrSize * 2, 0, $offX + $warnv + 1, $offY + $sect1, $oBlack, $font, intval($warnt));
+            } else {
+                imagestring($img, $chrSize, $offX + $warnv + 1, $offY - 2, intval($warnt), $oBlack);
+            }
+        }
+        // Critical
+        if($crit) {
+            if ($warn < $crit) {
+                imageFilledRectangle($img, $offX + $critv + 1, $offY + 1, $offX + $maxX, $offY + $sect1, $oRed);
+            } else {
+                imageFilledRectangle($img, $offX + 1, $offY + 1, $offX + $critv - 1, $offY + $sect1, $oRed);
+            }
+            if (file_exists ("$font")) {
+                ImageTTFText($img, $chrSize * 2, 0, $offX + $critv + 1, $offY + $sect1, $oBlack, $font, intval($critt));
+            } else {
+                imagestring($img, $chrSize, $offX + $critv + 1, $offY - 2, intval($critt), $oBlack);
+            }
+        }
+        imagefilledRectangle($img, $offX + 1, $offY + $sect1 + 1, $offX + $valuev + 1, $offY + $sect3, $oBlue);
 
-      //===================
-      // Labels
-      //===================
+        //===================
+        // Labels
+        //===================
 
-      if ($current == 1) {
-         $maxv = "";
-         if (isset($aPerfdata[$i]['max'])) { $maxv = " of " . $aPerfdata[$i]['max']; }
-         if ($down) { $maxv = " [down]"; }
-         if (file_exists ("$font")) {
-            ImageTTFText($img, $chrSize * 3.5, 0, $offX + 5, $offY + $sect3 - 1, $oBlack, $font, $desc . ':' . $value . $uom . $maxv);
-         } else {
-            imagestring($img, $chrSize, $offX + 3, $offY + $sect1 + 2, $desc . ': ' . $value . $uom . $maxv, $oBlack);
-         }
+        if ($current == 1) {
+            $maxv = "";
+            if (isset($aPerfdata[$i]['max'])) { $maxv = " of " . $aPerfdata[$i]['max']; }
+            if ($down) { $maxv = " [down]"; }
+            if (file_exists ("$font")) {
+                ImageTTFText($img, $chrSize * 3.5, 0, $offX + 5, $offY + $sect3 - 1, $oBlack, $font, $desc . ':' . $value . $uom . $maxv);
+            } else {
+                imagestring($img, $chrSize, $offX + 3, $offY + $sect1 + 2, $desc . ': ' . $value . $uom . $maxv, $oBlack);
+            }
 
-      if ($label == 1) {
-         $hostname = (strlen($aOpts['name1']) > 15) ? substr($aOpts['name1'], 0, 14) . "..." : $aOpts['name1'];
-         $svcdesc = (strlen($aOpts['name2']) > 15) ? substr($aOpts['name2'], 0, 14) . "..." : $aOpts['name2'];
-         if (strlen($desc) > 15) {
-            $desc = substr($desc, 0, 14) . "...";
-         }
-         if (file_exists ("$font")) {
-            ImageTTFText($img, $chrSize * 2.5, 0, $offX + 3, $offY + $maxY - 1, $oBlack, $font, $hostname);
-            ImageTTFText($img, $chrSize * 2.5, 0, $offX + $imgwidth / 2, $offY + $maxY - 1, $oBlack, $font, $svcdesc);
-//          ImageTTFText($img, $chrSize*2.5, 0, $offX+$imgwidth/2, $offY+$maxY-1, $oBlack, $font, $desc);
-         } else {
-            imagestring($img, $chrSize, $offX + 3, $offY + $sect3, $hostname, $oBlack);
-            imagestring($img, $chrSize, $offX + $imgwidth / 2, $offY + $sect3, $svcdesc, $oBlack);
-//          imagestring($img, $chrSize, $offX+$imgwidth/2, $offY+$sect3, $desc, $oBlack); // perf label
-         }
-      }
-      }
-      $offG++;
-   }
+        if ($label == 1) {
+            $hostname = (strlen($aOpts['name1']) > 15) ? substr($aOpts['name1'], 0, 14) . "..." : $aOpts['name1'];
+            $svcdesc = (strlen($aOpts['name2']) > 15) ? substr($aOpts['name2'], 0, 14) . "..." : $aOpts['name2'];
+            if (strlen($desc) > 15) {
+                $desc = substr($desc, 0, 14) . "...";
+            }
+            if (file_exists ("$font")) {
+                ImageTTFText($img, $chrSize * 2.5, 0, $offX + 3, $offY + $maxY - 1, $oBlack, $font, $hostname);
+                ImageTTFText($img, $chrSize * 2.5, 0, $offX + $imgwidth / 2, $offY + $maxY - 1, $oBlack, $font, $svcdesc);
+//              ImageTTFText($img, $chrSize*2.5, 0, $offX+$imgwidth/2, $offY+$maxY-1, $oBlack, $font, $desc);
+            } else {
+                imagestring($img, $chrSize, $offX + 3, $offY + $sect3, $hostname, $oBlack);
+                imagestring($img, $chrSize, $offX + $imgwidth / 2, $offY + $sect3, $svcdesc, $oBlack);
+//              imagestring($img, $chrSize, $offX+$imgwidth/2, $offY+$sect3, $desc, $oBlack); // perf label
+            }
+        }
+        }
+        $offG++;
+    }
 }
 
 //==============
@@ -327,7 +327,7 @@ for ($i = 0; $i < $pdc; $i++){
 //==============
 
 if(function_exists('imageantialias')) {
-   imageantialias($img, true);
+    imageantialias($img, true);
 }
 
 imagepng($img);

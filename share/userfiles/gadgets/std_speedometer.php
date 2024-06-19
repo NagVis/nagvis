@@ -91,7 +91,7 @@ $max = $aPerfdata[0]['max'];
 //================
 
 if($value == null) {
-	$value = $default;
+    $value = $default;
 } elseif($max != '' && $value < $min) {
     $value = $min;
 } elseif($max != '' && $max != -1 && $value > $max) {
@@ -118,7 +118,7 @@ $critp = -180 + (180 / ( $max - $min ) * ( $crit - $min ) );
 // If the critp is bigger than -1 it can not be rendered by the php functions.
 // Set it to -1 for having at least a small critical area drawn
 if($critp > -1) {
-	$critp = -1;
+    $critp = -1;
 }
 
 /**
@@ -163,13 +163,13 @@ imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia), intv
 
 // Warning
 if($warn && $warnp <= -1) {
-	// The "360 +" fix has been worked out by hipska. Thanks for that!
-	imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia), intval($outerdia), intval(360 + $warnp), 0, $oYellow, IMG_ARC_EDGED);
+    // The "360 +" fix has been worked out by hipska. Thanks for that!
+    imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia), intval($outerdia), intval(360 + $warnp), 0, $oYellow, IMG_ARC_EDGED);
 }
 // Critical
 if($crit && $critp <= -1) {
-	// The "360 +" fix has been worked out by hipska. Thanks for that!
-	imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia), intval($outerdia), intval(360 + $critp), 0, $oRed, IMG_ARC_EDGED);
+    // The "360 +" fix has been worked out by hipska. Thanks for that!
+    imagefilledarc($img, intval($centerx), intval($centery), intval($outerdia), intval($outerdia), intval(360 + $critp), 0, $oRed, IMG_ARC_EDGED);
 }
 
 // Borders
@@ -197,16 +197,16 @@ imagestring($img, 1, intval($centerx + $outerdia / 2 + 8), intval($centery - 6),
 $count = 1;
 $iOffsetX = -10;
 for($degrees = 45; $degrees < 180; $degrees = $degrees + 45) {
-	$bediffy = sin (deg2rad(-$degrees + 360)) * (($outerdia + 10) / 2);
-	$bediffx = cos (deg2rad(-$degrees + 360)) * (($outerdia + 10) / 2);
-	$bediffy1 = sin (deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
-	$bediffx1 = cos (deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
+    $bediffy = sin (deg2rad(-$degrees + 360)) * (($outerdia + 10) / 2);
+    $bediffx = cos (deg2rad(-$degrees + 360)) * (($outerdia + 10) / 2);
+    $bediffy1 = sin (deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
+    $bediffx1 = cos (deg2rad(-$degrees + 360)) * (($outerdia - 10) / 2);
 
-	imageline($img, intval($centerx - $bediffx), intval($centery + $bediffy), intval($centerx - $bediffx1), intval($centery + $bediffy1), $oBlack);
-	imagestring($img, 1, intval($centerx - $bediffx + $iOffsetX - 8), intval($centery + $bediffy - 10), intval(($max - $min) / 4 * $count + $min), $oBlack);
+    imageline($img, intval($centerx - $bediffx), intval($centery + $bediffy), intval($centerx - $bediffx1), intval($centery + $bediffy1), $oBlack);
+    imagestring($img, 1, intval($centerx - $bediffx + $iOffsetX - 8), intval($centery + $bediffy - 10), intval(($max - $min) / 4 * $count + $min), $oBlack);
 
-	$count = $count + 1;
-	$iOffsetX = $iOffsetX + 10;
+    $count = $count + 1;
+    $iOffsetX = $iOffsetX + 10;
 }
 
 //==============
@@ -214,7 +214,7 @@ for($degrees = 45; $degrees < 180; $degrees = $degrees + 45) {
 //==============
 
 if(function_exists('imageantialias')) {
-	imageantialias($img, true);
+    imageantialias($img, true);
 }
 
 imagepng($img);

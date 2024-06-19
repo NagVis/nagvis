@@ -75,7 +75,7 @@ class NagVisShape extends NagVisStatelessObject {
     public function fetchIcon() {
         if($this->icon[0] != '[') {
             if(!file_exists(self::$iconPath . $this->icon)
-               && !file_exists(self::$iconPathLocal . $this->icon)) {
+                && !file_exists(self::$iconPathLocal . $this->icon)) {
                 $this->icon = 'std_dummy.png';
             }
         }

@@ -51,15 +51,15 @@ class NagVisContextMenu {
         $this->pathTemplateFile = path('sys', '', 'templates', $this->templateName . '.context.html');
 
         $this->CACHE = new GlobalFileCache($this->pathTemplateFile,
-                                           cfg('paths', 'var') . 'context-' . $this->templateName . '-' . curLang() . '.cache');
+            cfg('paths', 'var') . 'context-' . $this->templateName . '-' . curLang() . '.cache');
 
         // Only use cache when there is
         // a) Some valid cache file
         // b) Some valid main configuration cache file
         // c) This cache file newer than main configuration cache file
         if($this->CACHE->isCached() !== -1
-          && $this->CORE->getMainCfg()->isCached() !== -1
-          && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
+            && $this->CORE->getMainCfg()->isCached() !== -1
+            && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
             $this->code = $this->CACHE->getCache();
         } elseif($this->readTemplate()) {
             // Read the contents of the template file
@@ -179,7 +179,7 @@ class NagVisContextMenu {
 
         $action_urls = [
             "host_downtime_url", "host_ack_url",
-                             "service_downtime_url", "service_ack_url"
+            "service_downtime_url", "service_ack_url"
         ];
 
         foreach ($action_urls as $param) {
@@ -189,7 +189,7 @@ class NagVisContextMenu {
                 }
             } else {
                 $this->code = preg_replace('/<!-- BEGIN has_' . $param . ' -->.*?<!-- END has_' . $param . ' -->/ms',
-                                           '', $this->code);
+                    '', $this->code);
             }
         }
     }

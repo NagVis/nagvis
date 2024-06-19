@@ -29,15 +29,15 @@ class ViewError {
         $USERCFG = new CoreUserCfg();
 
         js('oGeneralProperties = ' . $_MAINCFG->parseGeneralProperties() . ';' . N
-          . 'oUserProperties = ' . $USERCFG->doGetAsJson() . ';' . N);
+            . 'oUserProperties = ' . $USERCFG->doGetAsJson() . ';' . N);
 
         echo '<div id="page">';
         js('frontendMessage({' . N
-          . '    "type"    : "error",' . N
-          . '    "closable": false,' . N
-          . '    "title"   : ' . json_encode(l('Error')) . ',' . N
-          . '    "message" : ' . json_encode(htmlentities($e->getMessage(), ENT_COMPAT, 'UTF-8')) . N
-          . '});');
+            . '    "type"    : "error",' . N
+            . '    "closable": false,' . N
+            . '    "title"   : ' . json_encode(l('Error')) . ',' . N
+            . '    "message" : ' . json_encode(htmlentities($e->getMessage(), ENT_COMPAT, 'UTF-8')) . N
+            . '});');
         echo '</div>';
 
         return ob_get_clean();

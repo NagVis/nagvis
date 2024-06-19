@@ -52,8 +52,8 @@ class NagVisHostgroup extends NagVisStatefulObject {
         $queries = ['hostgroupMemberState' => true];
 
         if($this->hover_menu == 1
-           && $this->hover_childs_show == 1
-           && $bFetchMemberState) {
+            && $this->hover_childs_show == 1
+            && $bFetchMemberState) {
             $queries['hostgroupMemberDetails'] = true;
         }
 
@@ -145,10 +145,10 @@ class NagVisHostgroup extends NagVisStatefulObject {
         // Fallback for hostgroups without members
         if($iSumCount == 0) {
             $this->sum[OUTPUT] = l('The hostgroup "[GROUP]" has no members or does not exist (Backend: [BACKEND]).',
-                                     [
-                                         'GROUP' => $this->getName(),
-                                           'BACKEND' => implode(", ", $this->backend_id)
-                                     ]);
+                [
+                    'GROUP' => $this->getName(),
+                    'BACKEND' => implode(", ", $this->backend_id)
+                ]);
         } else {
             // FIXME: Recode mergeSummaryOutput method
             $this->mergeSummaryOutput($arrHostStates, l('hosts'), false);
@@ -177,8 +177,8 @@ class NagVisHostgroup extends NagVisStatefulObject {
         if($this->hasMembers()) {
             $arrStates = [
                 CRITICAL => 0, DOWN    => 0, WARNING   => 0,
-                               UNKNOWN  => 0, UP      => 0, OK        => 0,
-                               ERROR    => 0, PENDING => 0, UNCHECKED => 0
+                UNKNOWN  => 0, UP      => 0, OK        => 0,
+                ERROR    => 0, PENDING => 0, UNCHECKED => 0
             ];
 
             // Get summary state of this and child objects
