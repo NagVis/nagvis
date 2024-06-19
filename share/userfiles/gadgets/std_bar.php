@@ -236,7 +236,7 @@ for ($i = 0; $i < $pdc; $i++) {
         }
         // create box
         imagefilledrectangle ($img, $offX, $offY + 1, $offX + $maxX, $offY + $maxY, $oGreen);
-        imageRectangle($img, $offX, $offY, $offX + $maxX, $offY + $maxY, $oBlack);
+        imagerectangle($img, $offX, $offY, $offX + $maxX, $offY + $maxY, $oBlack);
         $maxX--;
         $maxY--;
 
@@ -282,7 +282,7 @@ for ($i = 0; $i < $pdc; $i++) {
         // Warning
         if ($warn) {
             if ($warn < $crit) {
-                imageFilledRectangle(
+                imagefilledrectangle(
                     $img,
                     $offX + $warnv + 1,
                     $offY + 1,
@@ -291,7 +291,7 @@ for ($i = 0; $i < $pdc; $i++) {
                     $oYellow
                 );
             } else {
-                imageFilledRectangle(
+                imagefilledrectangle(
                     $img,
                     $offX + 1,
                     $offY + 1,
@@ -301,7 +301,7 @@ for ($i = 0; $i < $pdc; $i++) {
                 );
             }
             if (file_exists ("$font")) {
-                ImageTTFText(
+                imagettftext(
                     $img,
                     $chrSize * 2,
                     0,
@@ -325,7 +325,7 @@ for ($i = 0; $i < $pdc; $i++) {
         // Critical
         if ($crit) {
             if ($warn < $crit) {
-                imageFilledRectangle(
+                imagefilledrectangle(
                     $img,
                     $offX + $critv + 1,
                     $offY + 1,
@@ -334,7 +334,7 @@ for ($i = 0; $i < $pdc; $i++) {
                     $oRed
                 );
             } else {
-                imageFilledRectangle(
+                imagefilledrectangle(
                     $img,
                     $offX + 1,
                     $offY + 1,
@@ -344,7 +344,7 @@ for ($i = 0; $i < $pdc; $i++) {
                 );
             }
             if (file_exists("$font")) {
-                ImageTTFText(
+                imagettftext(
                     $img,
                     $chrSize * 2,
                     0,
@@ -365,7 +365,7 @@ for ($i = 0; $i < $pdc; $i++) {
                 );
             }
         }
-        imagefilledRectangle(
+        imagefilledrectangle(
             $img,
             $offX + 1,
             $offY + $sect1 + 1,
@@ -387,7 +387,7 @@ for ($i = 0; $i < $pdc; $i++) {
                 $maxv = " [down]";
             }
             if (file_exists ("$font")) {
-                ImageTTFText(
+                imagettftext(
                     $img,
                     $chrSize * 3.5,
                     0,
@@ -419,7 +419,7 @@ for ($i = 0; $i < $pdc; $i++) {
                 $desc = substr($desc, 0, 14) . "...";
             }
             if (file_exists ("$font")) {
-                ImageTTFText(
+                imagettftext(
                     $img,
                     $chrSize * 2.5,
                     0,
@@ -429,7 +429,7 @@ for ($i = 0; $i < $pdc; $i++) {
                     $font,
                     $hostname
                 );
-                ImageTTFText(
+                imagettftext(
                     $img,
                     $chrSize * 2.5,
                     0,
