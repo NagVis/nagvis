@@ -44,10 +44,8 @@ class FrontendModInfo extends FrontendModule
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
-            switch ($this->sAction) {
-                case 'view':
-                    $sReturn = $this->displayDialog();
-                    break;
+            if ($this->sAction == 'view') {
+                $sReturn = $this->displayDialog();
             }
         }
 

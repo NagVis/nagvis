@@ -793,8 +793,8 @@ class GlobalCore
         if (count($parts) == 2) {
             // e.g. 1.6   -> 106060
             // e.g. 1.5   -> 105060
-            array_push($parts, '0');
-            array_push($parts, '60');
+            $parts[] = '0';
+            $parts[] = '60';
         }
         $tag = '';
         foreach ($parts as $part) {

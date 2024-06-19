@@ -346,7 +346,7 @@ class CoreBackendMgmt
 
                     $members = [];
                     foreach ($aHosts as $name => $aHost) {
-                        if (isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts'])) {
+                        if (isset($aServiceStateCounts[$name]['counts'])) {
                             $service_states = $aServiceStateCounts[$name]['counts'];
                         } else {
                             $service_states = null;
@@ -478,7 +478,7 @@ class CoreBackendMgmt
 
                 $members = [];
                 foreach ($aHosts as $name => $aHost) {
-                    if (isset($aServiceStateCounts[$name]) && isset($aServiceStateCounts[$name]['counts'])) {
+                    if (isset($aServiceStateCounts[$name]['counts'])) {
                         $service_states = $aServiceStateCounts[$name]['counts'];
                     } else {
                         $service_states = null;

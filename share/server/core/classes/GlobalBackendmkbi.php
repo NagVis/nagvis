@@ -427,7 +427,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface
                 ],
                 'attrs' => [
                     // Forces the URL to point to the BI aggregate
-                    'url' => $obj_url ? $obj_url : $this->aggrUrl($key),
+                    'url' => $obj_url ?: $this->aggrUrl($key),
                 ],
                 'counts'  => $this->getAggrCounts($aggr),
             ];

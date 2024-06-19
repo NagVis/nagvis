@@ -436,11 +436,7 @@ class GlobalMapCfg
                 continue;
             }
 
-            if (
-                isset(self::$validConfig[$sObjType])
-                && isset(self::$validConfig[$sObjType][$sKey])
-                && isset(self::$validConfig[$sObjType][$sKey]['array'])
-            ) {
+            if (isset(self::$validConfig[$sObjType][$sKey]['array'])) {
                 $obj[$sKey] = explode(',', $sValue);
             } else {
                 $obj[$sKey] = $sValue;
@@ -619,7 +615,7 @@ class GlobalMapCfg
         $values = [];
         $validConfig = self::$validConfig['global'];
         foreach ($params as $param) {
-            if (isset($validConfig[$param]) && isset($validConfig[$param]['list'])) {
+            if (isset($validConfig[$param]['list'])) {
                 $func = $validConfig[$param]['list'];
                 try {
                     $vals = $func($CORE, $this, 0, []);
@@ -1415,7 +1411,7 @@ class GlobalMapCfg
      */
     public function getValue($id, $key, $ignoreDefault = false)
     {
-        if (isset($this->mapConfig[$id]) && isset($this->mapConfig[$id][$key])) {
+        if (isset($this->mapConfig[$id][$key])) {
             return $this->mapConfig[$id][$key];
         } elseif (!$ignoreDefault && isset($this->mapConfig[$id]['type'])) {
             $type = $this->mapConfig[$id]['type'];
@@ -1862,7 +1858,6 @@ class GlobalMapCfg
                 $value = trim(substr($f[$i], ($delimPos + 1)));
                 if ($key === 'object_id' && $value === $id) {
                     $inObj = true;
-                    continue;
                 }
             }
         }

@@ -46,11 +46,9 @@ class CoreModManageBackgrounds extends CoreModule
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
-            switch ($this->sAction) {
-                case 'view':
-                    $VIEW = new ViewManageBackgrounds();
-                    $sReturn = json_encode(['code' => $VIEW->parse()]);
-                    break;
+            if ($this->sAction == 'view') {
+                $VIEW = new ViewManageBackgrounds();
+                $sReturn = json_encode(['code' => $VIEW->parse()]);
             }
         }
 

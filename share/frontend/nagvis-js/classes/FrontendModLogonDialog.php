@@ -43,17 +43,15 @@ class FrontendModLogonDialog extends FrontendModule
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
-            switch ($this->sAction) {
-                case 'view':
-                    // Check if user is already authenticated
-                    if (!$AUTH->isAuthenticated()) {
-                        $VIEW = new NagVisLoginView($this->CORE);
-                        $sReturn = $VIEW->parse();
-                    } else {
-                        // When the user is already authenticated redirect to start page (overview)
-                        Header('Location:' . CoreRequestHandler::getRequestUri(cfg('paths', 'htmlbase')));
-                    }
-                    break;
+            if ($this->sAction == 'view') {
+                // Check if user is already authenticated
+                if (!$AUTH->isAuthenticated()) {
+                    $VIEW = new NagVisLoginView($this->CORE);
+                    $sReturn = $VIEW->parse();
+                } else {
+                    // When the user is already authenticated redirect to start page (overview)
+                    Header('Location:' . CoreRequestHandler::getRequestUri(cfg('paths', 'htmlbase')));
+                }
             }
         }
 

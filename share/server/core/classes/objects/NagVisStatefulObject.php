@@ -596,10 +596,7 @@ class NagVisStatefulObject extends NagVisObject
         if ($this->aStateCounts !== null) {
             foreach ($this->aStateCounts as $sState => $aSubstates) {
                 if (
-                    isset($stateWeight[$sState])
-                    && isset($stateWeight[$sState]['normal'])
-                    && isset($aSubstates['normal'])
-                    && $aSubstates['normal'] !== 0
+                    isset($stateWeight[$sState]['normal']) && isset($aSubstates['normal']) && $aSubstates['normal'] !== 0
                 ) {
                     $stateCounts[] = [
                         'name'   => $sState,
@@ -779,7 +776,7 @@ class NagVisStatefulObject extends NagVisObject
                     $iSumCount += $iCount;
 
                     // Get weight
-                    if (isset($stateWeight[$sState]) && isset($stateWeight[$sState][$sSubState])) {
+                    if (isset($stateWeight[$sState][$sSubState])) {
                         $weight = $stateWeight[$sState][$sSubState];
 
                         // No "current state" yet

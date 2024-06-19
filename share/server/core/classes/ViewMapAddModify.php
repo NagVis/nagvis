@@ -339,7 +339,7 @@ class ViewMapAddModify
             && isset($prop['depends_value'])
             && isset($properties[$prop['depends_on']])
         ) {
-            array_push($rowClasses, 'child-row');
+            $rowClasses[] = 'child-row';
             $dep_on_propname = $prop['depends_on'];
             list($depInherited, $depValue) = $this->getAttr(
                 $this->MAPCFG->getDefaultValue($this->object_type, $dep_on_propname),
@@ -351,7 +351,7 @@ class ViewMapAddModify
 
         // Highlight the must attributes
         if ($prop['must']) {
-            array_push($rowClasses, 'must');
+            $rowClasses[] = 'must';
         }
 
         echo '<tr class="' . implode(' ', $rowClasses) . '"' . $rowHide . '>';

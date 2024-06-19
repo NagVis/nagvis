@@ -2335,6 +2335,7 @@ class GlobalMainCfg
                         }
                     }
 
+                    unset($val);
                     // loop given elements for checking: => all given attributes valid
                     foreach ($vars as $key => $val) {
                         if (!str_starts_with($key, 'comment_')) {
@@ -2538,7 +2539,7 @@ class GlobalMainCfg
         $h  = $this->getValue('paths', 'htmlbase');
 
         // Get the relative path
-        if (isset($this->config['paths']) && isset($this->config['paths'][$var])) {
+        if (isset($this->config['paths'][$var])) {
             $relpath = $this->config['paths'][$var];
         } else {
             $relpath = $this->validConfig['paths'][$var]['default'];
@@ -2630,7 +2631,7 @@ class GlobalMainCfg
             $arr = $this->config;
         }
 
-        if (isset($arr[$sec]) && isset($arr[$sec][$var])) {
+        if (isset($arr[$sec][$var])) {
             return $arr[$sec][$var];
         }
         elseif (!$ignoreDefault) {
@@ -2920,9 +2921,8 @@ class GlobalMainCfg
                         // Don't apply config options which are set to the same
                         // value in the pre user config files
                         if (
-                            $this->preUserConfig !== null
-                            && isset($this->preUserConfig[$key])
-                            && isset($this->preUserConfig[$key][$key2])
+                            isset($this->preUserConfig[$key][$key2])
+                            && $this->preUserConfig !== null
                             && $item2 == $this->preUserConfig[$key][$key2]
                         ) {
                             continue;
@@ -2967,9 +2967,8 @@ class GlobalMainCfg
                             // Don't apply config options which are set to the same
                             // value in the pre user config files
                             if (
-                                $this->preUserConfig !== null
-                                && isset($this->preUserConfig[$key])
-                                && isset($this->preUserConfig[$key][$key2])
+                                isset($this->preUserConfig[$key][$key2])
+                                && $this->preUserConfig !== null
                                 && $item2 == $this->preUserConfig[$key][$key2]
                             ) {
                                 continue;

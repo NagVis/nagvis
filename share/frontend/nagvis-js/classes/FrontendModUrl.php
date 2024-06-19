@@ -61,11 +61,9 @@ class FrontendModUrl extends FrontendModule
         $sReturn = '';
 
         if ($this->offersAction($this->sAction)) {
-            switch ($this->sAction) {
-                case 'view':
-                    // Show the view dialog to the user
-                    $sReturn = $this->showViewDialog();
-                    break;
+            if ($this->sAction == 'view') {
+                // Show the view dialog to the user
+                $sReturn = $this->showViewDialog();
             }
         }
 

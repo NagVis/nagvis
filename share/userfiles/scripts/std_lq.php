@@ -190,7 +190,7 @@ try {
                     echo '<td>' . $cell . '</td>';
                 }
                 echo '</tr>';
-            };
+            }
             echo '</table>';
             break;
 
