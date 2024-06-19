@@ -38,5 +38,3 @@ class CoreLogonMixed
         return $DIALOG->check(false);
     }
 }
-
-

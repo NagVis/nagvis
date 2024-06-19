@@ -73,5 +73,3 @@ if (!function_exists('handle_action_rdp')) {
         }
     }
 }
-
-

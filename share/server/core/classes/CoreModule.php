@@ -348,4 +348,3 @@ abstract class CoreModule {
         }
     }
 }
-

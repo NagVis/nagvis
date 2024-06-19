@@ -29,4 +29,3 @@ header(
     . (($_SERVER["QUERY_STRING"] != '') ? '?':'')
     . $_SERVER["QUERY_STRING"]
 );
-

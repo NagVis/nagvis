@@ -357,5 +357,3 @@ class ViewManageUsers
         return ob_get_clean();
     }
 }
-
-

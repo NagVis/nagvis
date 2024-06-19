@@ -47,5 +47,3 @@ class CoreModUserMgmt extends CoreModule
         return '';
     }
 }
-
-

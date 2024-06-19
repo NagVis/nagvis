@@ -34,4 +34,3 @@ class FrontendModuleHandler extends CoreModuleHandler
         $this->sPrefix = 'FrontendMod';
     }
 }
-

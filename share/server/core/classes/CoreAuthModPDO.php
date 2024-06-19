@@ -278,4 +278,3 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         return password_hash($password, PASSWORD_BCRYPT);
     }
 }
-

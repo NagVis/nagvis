@@ -56,5 +56,3 @@ if (!function_exists('handle_action_win_ssh')) {
         echo "putty -ssh " . $host_address . " 22\n";
     }
 }
-
-

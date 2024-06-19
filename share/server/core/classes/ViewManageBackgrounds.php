@@ -170,4 +170,3 @@ class ViewManageBackgrounds
         return ob_get_clean();
     }
 }
-

@@ -52,4 +52,3 @@ class NagVisLine extends NagVisStatelessObject
     # End public methods
     # #########################################################################
 }
-

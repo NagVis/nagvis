@@ -201,4 +201,3 @@ class NagVisHostgroup extends NagVisStatefulObject
         }
     }
 }
-

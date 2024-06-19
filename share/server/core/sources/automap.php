@@ -763,5 +763,3 @@ function changed_automap($MAPCFG, $compare_time) {
     $params = $MAPCFG->getSourceParams();
     return automap_program_start($params) > $compare_time;
 }
-
-

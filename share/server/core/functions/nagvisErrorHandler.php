@@ -65,4 +65,3 @@ set_error_handler("nagvisExceptionErrorHandler");
 if (function_exists('set_exception_handler')) {
     set_exception_handler('nagvisException');
 }
-

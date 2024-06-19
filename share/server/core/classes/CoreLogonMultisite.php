@@ -168,5 +168,3 @@ class CoreLogonMultisite extends CoreLogonModule {
         return $authenticated;
     }
 }
-
-

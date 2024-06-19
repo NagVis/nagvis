@@ -272,4 +272,3 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
         return false;
     }
 }
-

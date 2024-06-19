@@ -405,4 +405,3 @@ class CoreModMap extends CoreModule
         }
     }
 }
-

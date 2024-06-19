@@ -279,4 +279,3 @@ class CoreAuthHandler
         $this->logoutPossible = $flag;
     }
 }
-
