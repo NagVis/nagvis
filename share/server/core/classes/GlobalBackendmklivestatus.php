@@ -479,7 +479,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * @param   string $query Query to send to the socket
      * @return  array    Results of the query
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
+     * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function queryLivestatusList($query) {
@@ -1488,7 +1488,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      * Queries the livestatus socket for all hosts without parent
      *
      * @return  array    List of hostnames which have no parent
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
+     * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostNamesWithNoParent() {
@@ -1502,7 +1502,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * @param   string $hostName Hostname
      * @return  array    List of hostnames
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
+     * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectChildNamesByHostName($hostName) {
@@ -1516,7 +1516,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * @param   string   Hostname
      * @return  array    List of hostnames
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
+     * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectParentNamesByHostName($hostName) {
@@ -1630,7 +1630,7 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface {
      *
      * @param   string   Hostname
      * @return  array    List of hostnames
-   * @author  Mathias Kettner <mk@mathias-kettner.de>
+     * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getDirectParentDependenciesNamesByHostName($hostName, $min_business_impact = false) {
