@@ -93,10 +93,12 @@ class NagVisHost extends NagVisStatefulObject {
             $queries['hostMemberState'] = true;
         }
 
-        if ($this->hover_menu == 1
+        if (
+            $this->hover_menu == 1
             && $this->hover_childs_show == 1
             && $bFetchMemberState
-            && !$this->hasMembers()) {
+            && !$this->hasMembers()
+        ) {
             $queries['hostMemberDetails'] = true;
         }
 

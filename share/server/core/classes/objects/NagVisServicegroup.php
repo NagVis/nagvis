@@ -49,9 +49,11 @@ class NagVisServicegroup extends NagVisStatefulObject {
         global $_BACKEND;
         $queries = ['servicegroupMemberState' => true];
 
-        if ($this->hover_menu == 1
+        if (
+            $this->hover_menu == 1
             && $this->hover_childs_show == 1
-            && $bFetchMemberState) {
+            && $bFetchMemberState
+        ) {
             $queries['servicegroupMemberDetails'] = true;
         }
 

@@ -184,10 +184,13 @@ class CoreLogonMultisite extends CoreLogonModule {
         }
 
         // Check if the user exists
-        if ($this->verifyUserExists($username,
-                        cfg('global', 'logon_multisite_createuser'),
-                        cfg('global', 'logon_multisite_createrole'),
-                        $printErr) === false) {
+        if (
+            $this->verifyUserExists($username,
+                cfg('global', 'logon_multisite_createuser'),
+                cfg('global', 'logon_multisite_createrole'),
+                $printErr
+            ) === false
+        ) {
             return false;
         }
 

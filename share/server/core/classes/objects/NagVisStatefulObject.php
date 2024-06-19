@@ -301,8 +301,11 @@ class NagVisStatefulObject extends NagVisObject {
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getStateDuration() {
-        if (isset($this->state['last_state_change']) && $this->state['last_state_change'] != '0'
-            && $this->state['last_state_change'] != '') {
+        if (
+            isset($this->state['last_state_change'])
+            && $this->state['last_state_change'] != '0'
+            && $this->state['last_state_change'] != ''
+        ) {
             if (self::$dateFormat == '') {
                 self::$dateFormat = cfg('global', 'dateformat');
             }
@@ -534,8 +537,10 @@ class NagVisStatefulObject extends NagVisObject {
             }
 
             //Checks whether the needed file exists
-            if (@file_exists(NagVisStatefulObject::$iconPath . $icon)
-                || @file_exists(NagVisStatefulObject::$iconPathLocal . $icon)) {
+            if (
+                @file_exists(NagVisStatefulObject::$iconPath . $icon)
+                || @file_exists(NagVisStatefulObject::$iconPathLocal . $icon)
+            ) {
                 $this->icon = $icon;
             } else {
                 $this->icon = $this->iconset . '_error.' . $fileType;
@@ -558,10 +563,12 @@ class NagVisStatefulObject extends NagVisObject {
 
         if ($this->aStateCounts !== null) {
             foreach ($this->aStateCounts as $sState => $aSubstates) {
-                if (isset($stateWeight[$sState])
+                if (
+                    isset($stateWeight[$sState])
                     && isset($stateWeight[$sState]['normal'])
                     && isset($aSubstates['normal'])
-                    && $aSubstates['normal'] !== 0) {
+                    && $aSubstates['normal'] !== 0
+                ) {
                     $stateCounts[] = [
                         'name'   => $sState,
                         'weight' => $stateWeight[$sState]['normal'],
@@ -853,8 +860,13 @@ class NagVisStatefulObject extends NagVisObject {
                     $objType = 'stale';
                 }
 
-                if (isset($stateWeight[$objSummaryState][$objType])
-                    && ($currentStateWeight === null || $stateWeight[$objSummaryState][$objType] >= $currentStateWeight)) {
+                if (
+                    isset($stateWeight[$objSummaryState][$objType])
+                    && (
+                        $currentStateWeight === null
+                        || $stateWeight[$objSummaryState][$objType] >= $currentStateWeight
+                    )
+                ) {
                     $this->sum[STATE]    = $objSummaryState;
                     $this->sum[ACK]      = $objAck;
                     $this->sum[DOWNTIME] = $objDowntime;
@@ -891,10 +903,12 @@ class NagVisStatefulObject extends NagVisObject {
                     $arr[$attr] = '';
                 }
             }
-        } elseif ($this->type == 'map'
+        } elseif (
+            $this->type == 'map'
             || $this->type == 'servicegroup'
             || $this->type == 'hostgroup'
-            || $this->type == 'aggregation') {
+            || $this->type == 'aggregation'
+        ) {
             if (isset($this->state[ALIAS])) {
                 $arr['alias'] = $this->state[ALIAS];
             } else {

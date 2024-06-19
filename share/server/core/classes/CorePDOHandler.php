@@ -540,8 +540,12 @@ class CorePDOHandler {
                 $this->createMapPermissions($map);
 
                 // Ignore errors here; these may already have been set up
-                if ($this->count('-check-roles-perms', ['name' => 'Guests', 'mod' => 'map', 'act' => 'view', 'obj' => $map]) > 1)
-                {
+                if (
+                    $this->count(
+                        '-check-roles-perms',
+                        ['name' => 'Guests', 'mod' => 'map', 'act' => 'view', 'obj' => $map]
+                    ) > 1
+                ) {
                     if (!$this->inTrans) {
                         $this->DB->beginTransaction();
                         $this->inTrans = true;

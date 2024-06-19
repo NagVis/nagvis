@@ -333,14 +333,19 @@ function worldmap_db_update_object($obj_id, $lat, $lng, $obj, $lat2 = null, $lng
             . 'WHERE object_id=:obj_id';
     }
 
-    if ($DB->query($q, [
-        'obj_id' => $obj_id,
-        'lat' => $lat,
-        'lng' => $lng,
-        'lat2' => $lat2,
-        'lng2' => $lng2,
-        'object' => json_encode($obj)
-    ])) {
+    if (
+        $DB->query(
+            $q,
+            [
+                'obj_id' => $obj_id,
+                'lat' => $lat,
+                'lng' => $lng,
+                'lat2' => $lat2,
+                'lng2' => $lng2,
+                'object' => json_encode($obj)
+            ]
+        )
+    ) {
         return true;
     } else {
         throw new WorldmapError(l('Failed to add object: [E]: [Q]', [
@@ -446,8 +451,7 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
     $bbox = val($_GET, 'bbox', null);
     $clone_id = val($_GET, 'clone_id', null);
 
-    if ($bbox !== null)
-    {
+    if ($bbox !== null) {
         $params = $MAPCFG->getSourceParams();
         $zoom = (int)$params['worldmap_zoom'];
 
@@ -466,9 +470,7 @@ function process_worldmap($MAPCFG, $map_name, &$map_config) {
         }
 
         return true;
-    }
-    elseif ($clone_id !== null)
-    {
+    } elseif ($clone_id !== null) {
         $map_config[$clone_id] = worldmap_get_object_by_id($clone_id);
         return true;
     }

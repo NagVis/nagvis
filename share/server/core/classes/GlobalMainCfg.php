@@ -1943,14 +1943,18 @@ class GlobalMainCfg {
             CONST_MAINCFG_CACHE . '-pre-user-' . CONST_VERSION . '-cache' . $cacheSuffix);
 
         try {
-              if ($this->CACHE->isCached(false) === -1
-                || $this->PUCACHE->isCached(false) === -1
-                || $this->PUCACHE->getCacheFileAge() < filemtime(CONST_MAINCFG_DIR)) {
+              if (
+                  $this->CACHE->isCached(false) === -1
+                  || $this->PUCACHE->isCached(false) === -1
+                  || $this->PUCACHE->getCacheFileAge() < filemtime(CONST_MAINCFG_DIR)
+              ) {
                 // The cache is too old. Load all config files
                 foreach ($this->configFiles as $configFile) {
                     // Only proceed when the configuration file exists and is readable
-                    if (!GlobalCore::getInstance()->checkExisting($configFile, true)
-                        || !GlobalCore::getInstance()->checkReadable($configFile, true)) {
+                    if (
+                        !GlobalCore::getInstance()->checkExisting($configFile, true)
+                        || !GlobalCore::getInstance()->checkReadable($configFile, true)
+                    ) {
                         return false;
                     }
                     $this->readConfig($configFile, true, $configFile == end($this->configFiles));
@@ -2252,8 +2256,10 @@ class GlobalMainCfg {
     private function getInstanceableValidConfig($what, $sec) {
         $ty = $this->getValue($sec, ($what == 'backend' ? 'backendtype' : 'action_type'));
 
-        if (isset($this->validConfig[$what]['options'][$ty])
-            && is_array($this->validConfig[$what]['options'][$ty])) {
+        if (
+            isset($this->validConfig[$what]['options'][$ty])
+            && is_array($this->validConfig[$what]['options'][$ty])
+        ) {
             return array_merge($this->validConfig[$what], $this->validConfig[$what]['options'][$ty]);
         } else {
             return $this->validConfig[$what];
@@ -2302,8 +2308,10 @@ class GlobalMainCfg {
                         if (!preg_match('/^comment_/', $key)) {
                             if (preg_match('/^backend_/', $type)) {
                                 $ty = $this->getValue($type, 'backendtype');
-                                if (isset($this->validConfig['backend']['options'][$ty])
-                                    && is_array($this->validConfig['backend']['options'][$ty])) {
+                                if (
+                                    isset($this->validConfig['backend']['options'][$ty])
+                                    && is_array($this->validConfig['backend']['options'][$ty])
+                                ) {
                                     $arrValidConfig = array_merge($this->validConfig['backend'], $this->validConfig['backend']['options'][$ty]);
                                 } else {
                                     $arrValidConfig = $this->validConfig['backend'];
@@ -2314,8 +2322,10 @@ class GlobalMainCfg {
 
                             } elseif (preg_match('/^action_/', $type)) {
                                 $ty = $this->getValue($type, 'action_type');
-                                if (isset($this->validConfig['action']['options'][$ty])
-                                    && is_array($this->validConfig['action']['options'][$ty])) {
+                                if (
+                                    isset($this->validConfig['action']['options'][$ty])
+                                    && is_array($this->validConfig['action']['options'][$ty])
+                                ) {
                                     $arrValidConfig = array_merge($this->validConfig['action'], $this->validConfig['action']['options'][$ty]);
                                 } else {
                                     $arrValidConfig = $this->validConfig['action'];
@@ -2815,10 +2825,12 @@ class GlobalMainCfg {
                     } elseif (is_numeric($item2) || is_bool($item2)) {
                         // Don't apply config options which are set to the same
                         // value in the pre user config files
-                        if ($this->preUserConfig !== null
+                        if (
+                            $this->preUserConfig !== null
                             && isset($this->preUserConfig[$key])
                             && isset($this->preUserConfig[$key][$key2])
-                            && $item2 == $this->preUserConfig[$key][$key2]) {
+                            && $item2 == $this->preUserConfig[$key][$key2]
+                        ) {
                             continue;
                         }
                         $content .= $key2 . "=" . $item2 . "\n";
@@ -2856,10 +2868,12 @@ class GlobalMainCfg {
                         if ($key2 !== 'backendid' && $key2 !== 'rotationid' && $key2 !== 'action_id') {
                             // Don't apply config options which are set to the same
                             // value in the pre user config files
-                            if ($this->preUserConfig !== null
+                            if (
+                                $this->preUserConfig !== null
                                 && isset($this->preUserConfig[$key])
                                 && isset($this->preUserConfig[$key][$key2])
-                                && $item2 == $this->preUserConfig[$key][$key2]) {
+                                && $item2 == $this->preUserConfig[$key][$key2]
+                            ) {
                                 continue;
                             }
 

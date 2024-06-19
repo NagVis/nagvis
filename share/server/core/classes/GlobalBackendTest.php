@@ -80,8 +80,10 @@ class GlobalBackendTest implements GlobalBackendInterface {
         $this->now = time();
         $this->genObj();
 
-        if (cfg('backend_' . $backendId, 'generate_mapcfg')
-            && (isset($_POST['new']) || !file_exists(cfg('paths', 'mapcfg') . 'test-gen.cfg'))) {
+        if (
+            cfg('backend_' . $backendId, 'generate_mapcfg')
+            && (isset($_POST['new']) || !file_exists(cfg('paths', 'mapcfg') . 'test-gen.cfg'))
+        ) {
             $this->genMapCfg(cfg('paths', 'mapcfg') . 'test-gen.cfg');
         }
 
@@ -646,8 +648,13 @@ class GlobalBackendTest implements GlobalBackendInterface {
                     }
                 }
             }
-        } elseif (count($filters) == 2 && $filters[0]['key'] == 'host_name' && $filters[0]['op'] == '='
-            && $filters[1]['key'] == 'service_description' && $filters[1]['op'] == '=') {
+        } elseif (
+            count($filters) == 2
+            && $filters[0]['key'] == 'host_name'
+            && $filters[0]['op'] == '='
+            && $filters[1]['key'] == 'service_description'
+            && $filters[1]['op'] == '='
+        ) {
             // One specific service of a host
             foreach ($objects as $OBJS) {
                 if (!isset($this->obj['service'][$OBJS[0]->getName()])) {

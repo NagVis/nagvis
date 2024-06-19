@@ -30,13 +30,15 @@
  * @author 	Lars Michelsen <lm@larsmichelsen.com>
  */
 function NagVisAutoload($sClass) {
-    if (substr($sClass, 0, 8) === 'Frontend'
-       || substr($sClass, 0, 3) === 'Wui'
-       || substr($sClass, 0, 4) === 'Core'
-       || substr($sClass, 0, 4) === 'View'
-       || substr($sClass, 0, 6) === 'NagVis'
-       || substr($sClass, 0, 6) === 'Nagios'
-       || substr($sClass, 0, 6) === 'Global') {
+    if (
+        substr($sClass, 0, 8) === 'Frontend'
+        || substr($sClass, 0, 3) === 'Wui'
+        || substr($sClass, 0, 4) === 'Core'
+        || substr($sClass, 0, 4) === 'View'
+        || substr($sClass, 0, 6) === 'NagVis'
+        || substr($sClass, 0, 6) === 'Nagios'
+        || substr($sClass, 0, 6) === 'Global'
+    ) {
         require($sClass . '.php');
         return true;
     } else {
@@ -53,10 +55,12 @@ spl_autoload_register('NagVisAutoload');
 $dir = '../../server/core/functions/';
 if ($handle = opendir($dir)) {
     while (false !== ($file = readdir($handle))) {
-        if (preg_match(MATCH_PHP_FILE, $file)
+        if (
+            preg_match(MATCH_PHP_FILE, $file)
             && $file != 'autoload.php'
             && $file != 'core.php'
-            && $file != 'index.php') {
+            && $file != 'index.php'
+        ) {
             require($dir . $file);
         }
     }

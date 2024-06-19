@@ -63,8 +63,10 @@ class GlobalFileCache {
         $age = -1;
         $newestFile = '';
         foreach ($this->files as $file) {
-            if (!GlobalCore::getInstance()->checkExisting($file, false)
-                || !GlobalCore::getInstance()->checkReadable($file, false)) {
+            if (
+                !GlobalCore::getInstance()->checkExisting($file, false)
+                || !GlobalCore::getInstance()->checkReadable($file, false)
+            ) {
                 continue;
             }
 
@@ -102,9 +104,10 @@ class GlobalFileCache {
     public function writeCache($contents, $printErr = 1) {
         // Perform file writeable check only when cache file exists
         // When no cache file exists check if file can be created in directory
-        if ((!$this->checkCacheFileExists(0)
-            && $this->checkCacheFolderWriteable($printErr))
-            || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))) {
+        if (
+            (!$this->checkCacheFileExists(0) && $this->checkCacheFolderWriteable($printErr))
+            || ($this->checkCacheFileExists(0) && $this->checkCacheFileWriteable($printErr))
+        ) {
             if (($fp = fopen($this->cacheFile, 'w+')) === false) {
                 if ($printErr == 1) {
                     throw new NagVisException(l('cacheFileNotWriteable', ['FILE' => $this->cacheFile]));
@@ -134,8 +137,10 @@ class GlobalFileCache {
         // Checks
         // a) Cache file exists
         // b) Cache file older than regular file
-        if ($this->checkCacheFileExists($printErr)
-            && $this->getFileAge() <= $this->getCacheFileAge()) {
+        if (
+            $this->checkCacheFileExists($printErr)
+            && $this->getFileAge() <= $this->getCacheFileAge()
+        ) {
             return $this->getCacheFileAge();
         } else {
             if ($printErr) {

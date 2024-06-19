@@ -123,8 +123,15 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
         $this->dbInstanceName = cfg('backend_' . $backendId, 'dbinstancename');
 
         $this->DB = new CorePDOHandler();
-        if ($this->DB->open($this->driverName(), ['dbhost' => $this->dbHost, 'dbport' => $this->dbPort, 'dbname' => $this->dbName], $this->dbUser, $this->dbPass) &&
-            $this->checkTablesExists()) {
+        if (
+            $this->DB->open(
+                $this->driverName(),
+                ['dbhost' => $this->dbHost, 'dbport' => $this->dbPort, 'dbname' => $this->dbName],
+                $this->dbUser,
+                $this->dbPass
+            )
+            && $this->checkTablesExists()
+        ) {
             // Set the instanceId
             $this->dbInstanceId = $this->getInstanceId();
             $this->re_op = $this->DB->getRegularExpressionOperator();

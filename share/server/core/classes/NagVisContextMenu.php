@@ -57,9 +57,11 @@ class NagVisContextMenu {
         // a) Some valid cache file
         // b) Some valid main configuration cache file
         // c) This cache file newer than main configuration cache file
-        if ($this->CACHE->isCached() !== -1
+        if (
+            $this->CACHE->isCached() !== -1
             && $this->CORE->getMainCfg()->isCached() !== -1
-            && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()) {
+            && $this->CACHE->isCached() >= $this->CORE->getMainCfg()->isCached()
+        ) {
             $this->code = $this->CACHE->getCache();
         } elseif ($this->readTemplate()) {
             // Read the contents of the template file

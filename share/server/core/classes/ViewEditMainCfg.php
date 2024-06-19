@@ -157,13 +157,18 @@ class ViewEditMainCfg {
             // is equal. If not equal hide the field
             $row_class = '';
             $row_style = '';
-            if (isset($spec['depends_on']) && isset($spec['depends_value'])
-                && $this->getCurVal($sec, $spec['depends_on'], false) != $spec['depends_value']) {
+            if (
+                isset($spec['depends_on'])
+                && isset($spec['depends_value'])
+                && $this->getCurVal($sec, $spec['depends_on'], false) != $spec['depends_value']
+            ) {
 
                 $row_class = ' class="child-row"';
                 $row_style = ' style="display:none;"';
-            } elseif (isset($spec['depends_on']) && isset($spec['depends_value'])
-                && $this->getCurVal($sec, $spec['depends_on'], false) == $spec['depends_value']) {
+            } elseif (
+                isset($spec['depends_on']) && isset($spec['depends_value'])
+                && $this->getCurVal($sec, $spec['depends_on'], false) == $spec['depends_value']
+            ) {
 
                 $row_class = ' class="child-row"';
             }

@@ -59,9 +59,11 @@ class ViewMapAddModify {
                 continue;
             }
 
-            if ((isset($attrDefs[$attr]['must']) && $attrDefs[$attr]['must'] == '1')
+            if (
+                (isset($attrDefs[$attr]['must']) && $attrDefs[$attr]['must'] == '1')
                 || !has_var('toggle_' . $attr)
-                ||  get_checkbox('toggle_' . $attr)) {
+                ||  get_checkbox('toggle_' . $attr)
+            ) {
                 if (isset($attrDefs[$attr]['array']) && $attrDefs[$attr]['array']) {
                     $val = explode(',', $val);
                 }
@@ -218,8 +220,10 @@ class ViewMapAddModify {
         if (!$only_inherited && isset($this->attrs[$attr])) {
             // Use user provided value, from GET or POST
             $val = $this->attrs[$attr];
-        } elseif (!$update && $this->object_id === '0'
-            && $this->MAPCFG->getSourceParam($attr, true, true) !== null) {
+        } elseif (
+            !$update && $this->object_id === '0'
+            && $this->MAPCFG->getSourceParam($attr, true, true) !== null
+        ) {
             // Get the value set by url if there is some set
             // But don't try this when running in "update" mode
             //
@@ -227,8 +231,12 @@ class ViewMapAddModify {
             // the shown values
             $val = $this->MAPCFG->getSourceParam($attr, true, true);
 
-        } elseif (!$update && ($this->mode == 'view_params' || !$only_inherited) && $this->object_id !== null
-            && $this->MAPCFG->getValue($this->object_id, $attr, true) !== false) {
+        } elseif (
+            !$update
+            && ($this->mode == 'view_params' || !$only_inherited)
+            && $this->object_id !== null
+            && $this->MAPCFG->getValue($this->object_id, $attr, true) !== false
+        ) {
             // Get the value set in this object if there is some set
             $val = $this->MAPCFG->getValue($this->object_id, $attr, true);
             // In view_param mode this is inherited
@@ -236,8 +244,13 @@ class ViewMapAddModify {
                 $isInherited = true;
             }
 
-        } elseif (!$update && !$only_inherited && $this->clone_id !== null && $attr !== 'object_id'
-            && $this->MAPCFG->getValue($this->clone_id, $attr, true) !== false) {
+        } elseif (
+            !$update
+            && !$only_inherited
+            && $this->clone_id !== null
+            && $attr !== 'object_id'
+            && $this->MAPCFG->getValue($this->clone_id, $attr, true) !== false
+        ) {
             // Get the value set in the object to be cloned if there is some set
             // But don't try this when running in "update" mode
             $val = $this->MAPCFG->getValue($this->clone_id, $attr, true);
@@ -302,9 +315,11 @@ class ViewMapAddModify {
         // Check if depends_on and depends_value are defined and if the value
         // is equal. If not equal hide the field
         // Don't hide dependent fields where the dependant is not set
-        if (isset($prop['depends_on'])
+        if (
+            isset($prop['depends_on'])
             && isset($prop['depends_value'])
-            && isset($properties[$prop['depends_on']])) {
+            && isset($properties[$prop['depends_on']])
+        ) {
             array_push($rowClasses, 'child-row');
             $dep_on_propname = $prop['depends_on'];
             list($depInherited, $depValue) = $this->getAttr(
@@ -330,11 +345,15 @@ class ViewMapAddModify {
         if ($this->MAPCFG->hasDependants($this->object_type, $propname)) {
             $onChange = 'updateForm(this.form);';
         }
-        elseif (($can_have_other && $value !== '<<<other>>>')
-            || ($this->object_type == 'service' && $propname == 'host_name')) {
+        elseif (
+            ($can_have_other && $value !== '<<<other>>>')
+            || ($this->object_type == 'service' && $propname == 'host_name')
+        ) {
 
-            if ($this->object_type == 'service'
-                && ($propname == 'host_name' || $propname == 'backend_id')) {
+            if (
+                $this->object_type == 'service'
+                && ($propname == 'host_name' || $propname == 'backend_id')
+            ) {
                 // When configuring services and the hostname changed, clear the service value.
                 // When changing the backend_id, clear hostname and service
                 if ($propname == 'backend_id') {
@@ -347,8 +366,14 @@ class ViewMapAddModify {
                 // For other objects clear the *_name value when backend_id changed
                 $onChange .= "clearFormValue('name');";
 
-            } elseif (($this->object_type == 'host' || $this->object_type == 'hostgroup'
-                || $this->object_type == 'servicegroup') && $propname == 'backend_id') {
+            } elseif (
+                (
+                    $this->object_type == 'host'
+                    || $this->object_type == 'hostgroup'
+                    || $this->object_type == 'servicegroup'
+                )
+                && $propname == 'backend_id'
+            ) {
                 // For other objects clear the *_name value when backend_id changed
                 $onChange .= "clearFormValue('" . $this->object_type . "_name');";
             }
@@ -605,8 +630,13 @@ class ViewMapAddModify {
             throw new NagVisException(l('You need to provide a map name.'));
         }
 
-        if ($map_name !== null && (!preg_match(MATCH_MAP_NAME, $map_name)
-                || count($CORE->getAvailableMaps('/^' . $map_name . '$/')) == 0)) {
+        if (
+            $map_name !== null
+            && (
+                !preg_match(MATCH_MAP_NAME, $map_name)
+                || count($CORE->getAvailableMaps('/^' . $map_name . '$/')) == 0
+            )
+        ) {
             throw new NagVisException(l('The map does not exist.'));
         }
 

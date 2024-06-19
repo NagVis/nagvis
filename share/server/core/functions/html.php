@@ -316,8 +316,8 @@ function select($name, $options, $default = '', $onchange = '', $style = '', $si
         $class = ' class="' . trim($class) . '"';
     }
 
-    if (submitted($form_name) || !submitted()) // this or none submitted
-    {
+    if (submitted($form_name) || !submitted()) {
+        // this or none submitted
         $default = post($name, $default);
     }
 

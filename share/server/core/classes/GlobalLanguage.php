@@ -116,9 +116,11 @@ class GlobalLanguage {
                         $sReturn = $this->getUserLanguage();
 
                         // Save language to user config when user set one
-                        if ($sReturn != ''
+                        if (
+                            $sReturn != ''
                             && $this->USERCFG !== null
-                            && $sReturn != $this->USERCFG->getValue('language', '')) {
+                            && $sReturn != $this->USERCFG->getValue('language', '')
+                        ) {
                             $this->USERCFG->doSet(['language' => $sReturn]);
                         }
                     break;
@@ -153,9 +155,11 @@ class GlobalLanguage {
         // Load the specific params to the UriHandler
         $UHANDLER->parseModSpecificUri(['lang' => MATCH_LANGUAGE_EMPTY]);
 
-        if ($UHANDLER->isSetAndNotEmpty('lang')
+        if (
+            $UHANDLER->isSetAndNotEmpty('lang')
             // Check if language is available
-            && $this->checkLanguageAvailable($UHANDLER->get('lang'), false)) {
+            && $this->checkLanguageAvailable($UHANDLER->get('lang'), false)
+        ) {
 
             // Get given language
             $sLang = $UHANDLER->get('lang');
@@ -239,10 +243,13 @@ class GlobalLanguage {
         // Checks two things:
         // a) The language availabilty in the filesyste,
         // b) Listed language in global/language_available config option
-        if (in_array($sLang, $CORE->getAvailableLanguages())
-            && ($ignoreConf == true
-            || ($ignoreConf == false
-            && in_array($sLang, cfg('global', 'language_available'))))) {
+        if (
+            in_array($sLang, $CORE->getAvailableLanguages())
+            && (
+                $ignoreConf == true
+                || ($ignoreConf == false && in_array($sLang, cfg('global', 'language_available')))
+            )
+        ) {
             return true;
         } else {
             if ($printErr) {

@@ -349,8 +349,10 @@ class GlobalMapCfg {
 
             // Fix ISO-8859-1 encoding. Convert to UTF-8. The mbstring extension might
             // be misssing. Simply skip this in that case.
-            if (function_exists('mb_detect_encoding')
-                && mb_detect_encoding($file[$l], 'UTF-8, ISO-8859-1') == 'ISO-8859-1') {
+            if (
+                function_exists('mb_detect_encoding')
+                && mb_detect_encoding($file[$l], 'UTF-8, ISO-8859-1') == 'ISO-8859-1'
+            ) {
                 $file[$l] = iso8859_1_to_utf8($file[$l]);
             }
 
@@ -424,9 +426,11 @@ class GlobalMapCfg {
                 continue;
             }
 
-            if (isset(self::$validConfig[$sObjType])
+            if (
+                isset(self::$validConfig[$sObjType])
                 && isset(self::$validConfig[$sObjType][$sKey])
-                && isset(self::$validConfig[$sObjType][$sKey]['array'])) {
+                && isset(self::$validConfig[$sObjType][$sKey]['array'])
+            ) {
                 $obj[$sKey] = explode(',', $sValue);
             } else {
                 $obj[$sKey] = $sValue;
@@ -449,10 +453,13 @@ class GlobalMapCfg {
         // c) Some valid cache file
         // d) Some valid main configuration cache file
         // e) This cache file newer than main configuration cache file
-        if (!$onlyGlobal && $useCache
+        if (
+            !$onlyGlobal
+            && $useCache
             && $this->CACHE->isCached() !== -1
             && $_MAINCFG->isCached() !== -1
-            && $this->CACHE->isCached() >= $_MAINCFG->isCached()) {
+            && $this->CACHE->isCached() >= $_MAINCFG->isCached()
+        ) {
             $this->mapConfig = $this->CACHE->getCache();
             $this->typeDefaults = $this->DCACHE->getCache();
 
@@ -641,8 +648,10 @@ class GlobalMapCfg {
         if (isset($_REQUEST[$key])) {
             // Only get options which differ from the defaults
             // Maybe convert the type, if requested
-            if (isset(self::$validConfig['global'][$key]['array'])
-                && self::$validConfig['global'][$key]['array'] === true) {
+            if (
+                isset(self::$validConfig['global'][$key]['array'])
+                && self::$validConfig['global'][$key]['array'] === true
+            ) {
                 if ($_REQUEST[$key] !== '') {
                     $val = explode(',', $_REQUEST[$key]);
                 } else {
@@ -840,9 +849,15 @@ class GlobalMapCfg {
         $cache_sources = $CACHE->isCached();
         $cache_map     = $this->CACHE->isCached();
         $cache_maincfg = $_MAINCFG->isCached();
-        if ($useCache && $cache_sources != -1 && $cache_map != -1 && $cache_maincfg != -1
-            && $cache_sources >= $cache_maincfg && $cache_sources >= $cache_map
-            && !$this->sourcesChanged($cache_sources)) {
+        if (
+            $useCache
+            && $cache_sources != -1
+            && $cache_map != -1
+            && $cache_maincfg != -1
+            && $cache_sources >= $cache_maincfg
+            && $cache_sources >= $cache_map
+            && !$this->sourcesChanged($cache_sources)
+        ) {
             // 3a. Use the cache
             $this->mapConfig = $CACHE->getCache();
             return;
