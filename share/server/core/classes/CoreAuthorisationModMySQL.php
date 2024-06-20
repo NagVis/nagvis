@@ -24,6 +24,9 @@
 
 class CoreAuthorisationModMySQL extends CoreAuthorisationModPDO
 {
+    /**
+     * @return array
+     */
     public function getConfig()
     {
         return [

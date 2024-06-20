@@ -25,13 +25,25 @@
 
 class CoreAuthorisationModGroups extends CoreAuthorisationModule
 {
+    /** @var GlobalFileCache */
     private $CACHE;
 
+    /** @var bool */
     public $rolesConfigurable = false;
+
+    /** @var string */
     private $file;
+
+    /** @var array */
     private $backends;
+
+    /** @var array|null */
     private $group_perms;
+
+    /** @var array */
     private $user_groups;
+
+    /** @var array */
     private $perms;
 
     public function __construct()
@@ -64,6 +76,10 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
         $this->calcPermissions();
     }
 
+    /**
+     * @return void
+     * @throws NagVisException
+     */
     private function readFile()
     {
         $json = iso8859_1_to_utf8(file_get_contents($this->file));
@@ -75,6 +91,10 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
         }
     }
 
+    /**
+     * @return void
+     * @throws NagVisException
+     */
     private function fetchUserGroups()
     {
         global $_BACKEND;
@@ -106,6 +126,9 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
         // FIXME: Write $this->user_groups to cache
     }
 
+    /**
+     * @return void
+     */
     private function calcPermissions()
     {
         foreach (array_keys($this->user_groups) as $username) {
@@ -113,6 +136,10 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
         }
     }
 
+    /**
+     * @param string $username
+     * @return array
+     */
     private function calcUserPermissions($username)
     {
         # Add implicit permissions. These are basic permissions
@@ -154,36 +181,62 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
         return $perms;
     }
 
+    /**
+     * @param int $userId
+     * @return array
+     */
     public function getUserRoles($userId)
     {
         return [];
     }
 
+    /**
+     * @return array
+     */
     public function getAllRoles()
     {
         return [];
     }
 
+    /**
+     * @param string $sRole
+     * @return false
+     */
     public function getRoleId($sRole)
     {
         return false;
     }
 
+    /**
+     * @return array
+     */
     public function getAllPerms()
     {
         return [];
     }
 
+    /**
+     * @param int $roleId
+     * @return array
+     */
     public function getRolePerms($roleId)
     {
         return [];
     }
 
+    /**
+     * @param string $name
+     * @return false
+     */
     public function checkRoleExists($name)
     {
         return false;
     }
 
+    /**
+     * @param string|null $sUsername
+     * @return array
+     */
     public function parsePermissions($sUsername = null)
     {
         global $AUTH;
@@ -217,6 +270,10 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
         return $perms;
     }
 
+    /**
+     * @param string $username
+     * @return string
+     */
     public function getUserId($username)
     {
         return $username;
@@ -227,46 +284,87 @@ class CoreAuthorisationModGroups extends CoreAuthorisationModule
      * It is simply read-only.
      */
 
+    /**
+     * @param string $old_name
+     * @param string $new_name
+     * @return false
+     */
     public function renameMapPermissions($old_name, $new_name)
     {
         return false;
     }
 
+    /**
+     * @param string $mod
+     * @param string $name
+     * @return false
+     */
     public function deletePermission($mod, $name)
     {
         return false;
     }
 
+    /**
+     * @param string $mod
+     * @param string $name
+     * @return false
+     */
     public function createPermission($mod, $name)
     {
         return false;
     }
 
+    /**
+     * @param int $roleId
+     * @return false
+     */
     public function roleUsedBy($roleId)
     {
         return false;
     }
 
+    /**
+     * @param int $roleId
+     * @return false
+     */
     public function deleteRole($roleId)
     {
         return false;
     }
 
+    /**
+     * @param int $userId
+     * @return false
+     */
     public function deleteUser($userId)
     {
         return false;
     }
 
+    /**
+     * @param int $userId
+     * @param array $roles
+     * @return false
+     */
     public function updateUserRoles($userId, $roles)
     {
         return false;
     }
 
+    /**
+     * @param int $roleId
+     * @param array $perms
+     * @return false
+     */
     public function updateRolePerms($roleId, $perms)
     {
         return false;
     }
 
+    /**
+     * @param string $name
+     * @return false
+     */
     public function createRole($name)
     {
         return false;

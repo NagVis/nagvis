@@ -24,14 +24,28 @@
 
 abstract class CoreAuthModPDO extends CoreAuthModule {
     private $USERCFG;
+
+    /** @var CorePDOHandler */
     private $DB;
 
+    /** @var int */
     private $iUserId = -1;
+
+    /** @var string */
     private $sUsername = '';
+
+    /** @var string */
     private $sPassword = '';
+
+    /** @var string */
     private $sPasswordNew = '';
+
+    /** @var string */
     private $sPasswordHash = '';
 
+    /**
+     * @return array
+     */
     abstract public function getConfig();
 
     public function __construct()
@@ -72,11 +86,15 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         }
     }
 
+    /**
+     * Get all the users in the system
+     *
+     * @return array
+     */
     public function getAllUsers()
     {
         $aPerms = [];
 
-        // Get all the users in the system
         $RES = $this->DB->query('-user-get-all');
         while ($data = $RES->fetch()) {
                   $aPerms[] = $data;
@@ -85,6 +103,10 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         return $aPerms;
     }
 
+    /**
+     * @param string $name
+     * @return int
+     */
     public function checkUserExists($name)
     {
         return $this->DB->count('-user-count', ['name' => $name]);
@@ -128,11 +150,20 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         }
     }
 
+    /**
+     * @param string $user
+     * @param string $hash
+     * @return void
+     */
     private function addUser($user, $hash)
     {
         $this->DB->query('-user-add', ['name' => $user, 'password' => $hash]);
     }
 
+    /**
+     * @param array $aData
+     * @return void
+     */
     public function passCredentials($aData)
     {
         if (isset($aData['user'])) {
@@ -149,6 +180,10 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         }
     }
 
+    /**
+     * @param array $aData
+     * @return void
+     */
     public function passNewPassword($aData)
     {
         if (isset($aData['user'])) {
@@ -165,6 +200,9 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         }
     }
 
+    /**
+     * @return array
+     */
     public function getCredentials()
     {
         return [
@@ -174,6 +212,11 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         ];
     }
 
+    /**
+     * @param string $user
+     * @param string $password
+     * @return int
+     */
     public function createUser($user, $password)
     {
         $bReturn = false;
@@ -188,6 +231,11 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         return $this->checkUserExists($user);
     }
 
+    /**
+     * @param int $uid
+     * @param string $pw
+     * @return true
+     */
     public function resetPassword($uid, $pw)
     {
         // FIXME: To be coded
@@ -195,6 +243,9 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function changePassword()
     {
         // Check the authentication with the old password
@@ -212,6 +263,10 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         return $this->updatePassword($this->iUserId, $this->sPasswordHash);
     }
 
+    /**
+     * @param bool $bTrustUsername
+     * @return bool
+     */
     public function isAuthenticated($bTrustUsername = AUTH_NOT_TRUST_USERNAME)
     {
         // Only handle known users
@@ -260,11 +315,17 @@ abstract class CoreAuthModPDO extends CoreAuthModule {
         return false;
     }
 
+    /**
+     * @return string
+     */
     public function getUser()
     {
         return $this->sUsername;
     }
 
+    /**
+     * @return int
+     */
     public function getUserId()
     {
         return $this->iUserId;
