@@ -27,8 +27,12 @@
  */
 class CoreModOverview extends CoreModule
 {
+    /** @var string */
     private $htmlBase;
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct(GlobalCore $CORE)
     {
         $this->htmlBase = cfg('paths', 'htmlbase');
@@ -41,6 +45,9 @@ class CoreModOverview extends CoreModule
         ];
     }
 
+    /**
+     * @return false|string
+     */
     public function handleAction()
     {
         $sReturn = '';
@@ -73,6 +80,15 @@ class CoreModOverview extends CoreModule
         return $sReturn;
     }
 
+    /**
+     * @param int $objectId
+     * @param string $mapName
+     * @param bool $what
+     * @return array|null
+     * @throws MapCfgInvalid
+     * @throws MapInMaintenance
+     * @throws NagVisException
+     */
     private function parseMapJson($objectId, $mapName, $what)
     {
         global $AUTHORISATION;
@@ -143,8 +159,11 @@ class CoreModOverview extends CoreModule
      * Then it is called for a list of maps to return the current state
      * for the listed objects.
      *
-     * @return	string  Json Code
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $what
+     * @param string[] $objects
+     * @return    string  Json Code
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      * FIXME: More cleanups, compacting and extraction of single parts
      */
     public function parseMapsJson($what = COMPLETE, $objects = [])
@@ -197,6 +216,11 @@ class CoreModOverview extends CoreModule
         return json_encode($aMaps);
     }
 
+    /**
+     * @param string $name
+     * @param string $alias
+     * @return array
+     */
     private function getMapDefaultOpts($name, $alias)
     {
         return [
@@ -216,6 +240,11 @@ class CoreModOverview extends CoreModule
         ];
     }
 
+    /**
+     * @param string $name
+     * @param string $msg
+     * @return array
+     */
     private function mapError($name, $msg)
     {
         $map = $this->getMapDefaultOpts($name, $name);
@@ -232,6 +261,11 @@ class CoreModOverview extends CoreModule
         return $map;
     }
 
+    /**
+     * @param GlobalMapCfg $MAPCFG
+     * @return string
+     * @throws NagVisException
+     */
     private function renderMapThumb($MAPCFG)
     {
         global $CORE;
@@ -299,6 +333,8 @@ class CoreModOverview extends CoreModule
     /**
      * Returns the filetype
      *
+     * @param string $imgPath
+     * @return string
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getFileType($imgPath)
@@ -325,6 +361,9 @@ class CoreModOverview extends CoreModule
     /**
      * Creates thumbnail images for the index map
      *
+     * @param string $imgPath
+     * @param string $thumbPath
+     * @return string
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function createThumbnail($imgPath, $thumbPath)

@@ -24,13 +24,21 @@
 
 class CoreRequestHandler
 {
+    /** @var array */
     private $aOpts;
 
+    /**
+     * @param array $aOptions
+     */
     public function __construct($aOptions)
     {
         $this->aOpts = $aOptions;
     }
 
+    /**
+     * @param string $sKey
+     * @return mixed|null
+     */
     public function get($sKey)
     {
         if (isset($this->aOpts[$sKey])) {
@@ -40,11 +48,21 @@ class CoreRequestHandler
         }
     }
 
+    /**
+     * @param string $sKey
+     * @param int $iLen
+     * @return bool
+     */
     public function isLongerThan($sKey, $iLen)
     {
         return strlen($this->aOpts[$sKey]) > $iLen;
     }
 
+    /**
+     * @param string $sKey
+     * @param string $regex
+     * @return bool|int
+     */
     public function match($sKey, $regex)
     {
         if (!isset($this->aOpts[$sKey])) {
@@ -65,11 +83,19 @@ class CoreRequestHandler
         }
     }
 
+    /**
+     * @param string $sKey
+     * @return bool
+     */
     public function isSetAndNotEmpty($sKey)
     {
         return (isset($this->aOpts[$sKey]) && $this->aOpts[$sKey] != '');
     }
 
+    /**
+     * @param array $exclude
+     * @return array
+     */
     public function getAll($exclude = [])
     {
         $ret = [];
@@ -81,6 +107,10 @@ class CoreRequestHandler
         return $ret;
     }
 
+    /**
+     * @param string $default
+     * @return mixed
+     */
     public static function getReferer($default)
     {
         if (isset($_SERVER['HTTP_REFERER'])) {
@@ -90,6 +120,10 @@ class CoreRequestHandler
         }
     }
 
+    /**
+     * @param string $default
+     * @return mixed
+     */
     public static function getRequestUri($default)
     {
         if (isset($_SERVER['REQUEST_URI'])) {

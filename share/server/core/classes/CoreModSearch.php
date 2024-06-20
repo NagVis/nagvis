@@ -27,8 +27,12 @@
  */
 class CoreModSearch extends CoreModule
 {
+    /** @var GlobalCore */
     protected $CORE;
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct($CORE)
     {
         $this->sName = 'Search';
@@ -37,6 +41,9 @@ class CoreModSearch extends CoreModule
         $this->aActions = ['view' => REQUIRES_AUTHORISATION];
     }
 
+    /**
+     * @return false|string
+     */
     public function handleAction()
     {
         global $AUTH;

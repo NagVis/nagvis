@@ -27,8 +27,12 @@
  */
 class CoreModMultisite extends CoreModule
 {
+    /** @var GlobalCore */
     private $CORE;
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct(GlobalCore $CORE)
     {
         $this->sName = 'Multisite';
@@ -39,6 +43,9 @@ class CoreModMultisite extends CoreModule
         ];
     }
 
+    /**
+     * @return false|string
+     */
     public function handleAction()
     {
         if (!$this->offersAction($this->sAction)) {
@@ -64,6 +71,9 @@ class CoreModMultisite extends CoreModule
         return json_encode($maps);
     }
 
+    /**
+     * @return array[]
+     */
     private function renderTree()
     {
         $maps = [];
@@ -84,6 +94,9 @@ class CoreModMultisite extends CoreModule
         ];
     }
 
+    /**
+     * @return array
+     */
     private function renderTable()
     {
         $maps = [];
@@ -93,6 +106,10 @@ class CoreModMultisite extends CoreModule
         return $maps;
     }
 
+    /**
+     * @param $map
+     * @return array
+     */
     private function getMapForMultisite($map)
     {
         return [
@@ -108,11 +125,16 @@ class CoreModMultisite extends CoreModule
         ];
     }
 
-    // Wraps the getMaps() function by applying a short livetime cache based
-    // on the maps a user can access. This respects the map access permissions.
-    // The cache optimizes the case where a lot of users having the Check_MK
-    // NagVis maps snapin open at the same time while most of the users have
-    // equal permissions.
+    /**
+     * Wraps the getMaps() function by applying a short livetime cache based
+     * on the maps a user can access. This respects the map access permissions.
+     * The cache optimizes the case where a lot of users having the Check_MK
+     * NagVis maps snapin open at the same time while most of the users have
+     * equal permissions.
+     *
+     * @return array
+     * @throws NagVisException
+     */
     private function getMapsCached()
     {
         $maps = $this->CORE->getPermittedMaps();
@@ -134,8 +156,15 @@ class CoreModMultisite extends CoreModule
         }
     }
 
-    // Gathers an array of maps and their states to be shown to the user
-    // in the multisite snapin
+    /**
+     * Gathers an array of maps and their states to be shown to the user
+     * in the multisite snapin
+     *
+     * @param string[] $maps
+     * @return array
+     * @throws MapInMaintenance
+     * @throws NagVisException
+     */
     private function getMaps($maps)
     {
         global $_BACKEND, $AUTHORISATION;

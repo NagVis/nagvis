@@ -26,18 +26,32 @@
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
 abstract class CoreModule {
+    /** @var CoreUriHandler|null */
     protected $UHANDLER = null;
+
+    /** @var CoreRequestHandler|null  */
     protected $FHANDLER = null;
 
+    /** @var array */
     protected $aActions = [];
+
+    /** @var array */
     protected $aObjects = [];
+
+    /** @var string */
     protected $sName = '';
+
+    /** @var string */
     protected $sAction = '';
+
+    /** @var string|null */
     protected $sObject = null;
 
     /**
      * Tells if the module offers the requested action
      *
+     * @param string $sAction
+     * @return bool
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function offersAction($sAction)
@@ -48,6 +62,8 @@ abstract class CoreModule {
     /**
      * Stores the requested action in the module
      *
+     * @param string $sAction
+     * @return bool
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setAction($sAction)
@@ -63,6 +79,7 @@ abstract class CoreModule {
     /**
      * Tells wether the requested action requires the users autorisation
      *
+     * @return bool
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function actionRequiresAuthorisation()
@@ -73,6 +90,8 @@ abstract class CoreModule {
     /**
      * Tells wether the requested object is available
      *
+     * @param string $sObject
+     * @return bool
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function offersObject($sObject)
@@ -84,6 +103,8 @@ abstract class CoreModule {
      * Stores the requested object name in the module
      * when it is supported
      *
+     * @param string $sObject
+     * @return bool
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setObject($sObject)
@@ -103,6 +124,7 @@ abstract class CoreModule {
     /**
      *  Returns the object string
      *
+     * @return string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getObject()
@@ -113,6 +135,8 @@ abstract class CoreModule {
     /**
      * Checks if the user is permitted to perform the requested action
      *
+     * @return void
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function isPermitted()
@@ -139,6 +163,7 @@ abstract class CoreModule {
     /**
      * Initializes the URI handler object
      *
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function initUriHandler()
@@ -149,6 +174,9 @@ abstract class CoreModule {
     /**
      * Returns all _GET+_POST vars. Supports optional array of attributes to
      * exclude where the keys are the var names. Always excludes mod/act params
+     *
+     * @param array $exclude
+     * @return array
      */
     protected function getAllOptions($exclude = [])
     {
@@ -163,6 +191,10 @@ abstract class CoreModule {
     /**
      * Reads a list of custom variables from the request
      *
+     * @param array $aKeys
+     * @param array $aDefaults
+     * @param bool $mixed
+     * @return array
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function getCustomOptions($aKeys, $aDefaults = [], $mixed = false)
@@ -206,6 +238,7 @@ abstract class CoreModule {
      * when using different actions. So these special modules
      * can implement that by overriding this method.
      *
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function initObject() {}
@@ -214,6 +247,7 @@ abstract class CoreModule {
      * This method needs to be implemented by each module
      * to handle the user called action
      *
+     * @return string
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     abstract public function handleAction();
@@ -221,6 +255,13 @@ abstract class CoreModule {
     /**
      * Helper function to handle default form responses
      *
+     * @param string $validationHandler
+     * @param string $action
+     * @param string|null $successMsg
+     * @param string|null $failMessage
+     * @param string|null $reload
+     * @param string|null $redirectUrl
+     * @return mixed
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function handleResponse(
@@ -262,6 +303,10 @@ abstract class CoreModule {
     /**
      * Checks if the listed values are set. Otherwise it raises and error message
      *
+     * @param CoreRequestHandler $HANDLER
+     * @param array $list
+     * @return void
+     * @throws UserInputError
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function verifyValuesSet($HANDLER, $list)
@@ -286,6 +331,10 @@ abstract class CoreModule {
      * Checks if the listes values match the given patterns. Otherwise it raises
      * an error message.
      *
+     * @param CoreRequestHandler $HANDLER
+     * @param array $list
+     * @return void
+     * @throws UserInputError
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     protected function verifyValuesMatch($HANDLER, $list)
@@ -303,7 +352,9 @@ abstract class CoreModule {
      * Is called with an array of files and timestamps to check if the file ages
      * have changed since these timestamps.
      *
-     * Returns null when nothing changed or a structure of the changed objects
+     * @param string[] $files
+     * @return false|string|null Returns null when nothing changed or a structure of the changed objects
+     * @throws MapCfgInvalid
      */
     protected function checkFilesChanged($files)
     {

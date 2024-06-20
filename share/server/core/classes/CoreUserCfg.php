@@ -27,9 +27,10 @@
  */
 class CoreUserCfg
 {
+    /** @var string|null */
     private $profilesDir;
 
-    // Optional list of value types to be fixed
+    /** @var string[] Optional list of value types to be fixed */
     private $types = [
         'sidebar'  => 'i',
         'header'   => 'b',
@@ -41,6 +42,11 @@ class CoreUserCfg
         $this->profilesDir = cfg('paths', 'profiles');
     }
 
+    /**
+     * @param bool $onlyUserCfg
+     * @return array
+     * @throws NagVisException
+     */
     public function doGet($onlyUserCfg = false)
     {
         global $AUTH, $AUTHORISATION;
@@ -80,11 +86,21 @@ class CoreUserCfg
         return $opts;
     }
 
+    /**
+     * @param bool $onlyUserCfg
+     * @return false|string
+     * @throws NagVisException
+     */
     public function doGetAsJson($onlyUserCfg = false)
     {
         return json_encode($this->doGet($onlyUserCfg));
     }
 
+    /**
+     * @param array $opts
+     * @return bool
+     * @throws NagVisException
+     */
     public function doSet($opts)
     {
         global $CORE, $AUTH;
@@ -108,18 +124,28 @@ class CoreUserCfg
         return $ret;
     }
 
+    /**
+     * @param string $key
+     * @param string $default
+     * @return mixed|null
+     * @throws NagVisException
+     */
     public function getValue($key, $default = null)
     {
         $opts = $this->doGet();
         return isset($opts[$key]) ? $opts[$key] : $default;
     }
 
+    /**
+     * @param mixed $val
+     * @param string $type
+     * @return bool|int|mixed
+     */
     private function fixType($val, $type)
     {
         if ($type == 'i') {
             return (int)$val;
-        }
-        elseif ($type == 'b') {
+        } elseif ($type == 'b') {
             if ($val == '1' || $val === 'true') {
                 return true;
             } else {

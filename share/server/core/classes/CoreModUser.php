@@ -27,10 +27,18 @@
  */
 class CoreModUser extends CoreModule
 {
+    /** @var GlobalCore */
     protected $CORE;
+
+    /** @var CoreRequestHandler */
     protected $FHANDLER;
+
+    /** @var CoreSessionHandler */
     protected $SHANDLER;
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct($CORE)
     {
         $this->sName = 'User';
@@ -42,6 +50,11 @@ class CoreModUser extends CoreModule
         ];
     }
 
+    /**
+     * @return false|string
+     * @throws NagVisException
+     * @throws Success
+     */
     public function handleAction()
     {
         $sReturn = '';
@@ -61,12 +74,20 @@ class CoreModUser extends CoreModule
         return $sReturn;
     }
 
+    /**
+     * @param array $a
+     * @return bool
+     */
     protected function doSet($a)
     {
         $CFG = new CoreUserCfg();
         return $CFG->doSet($a['opts']);
     }
 
+    /**
+     * @return array
+     * @throws UserInputError
+     */
     protected function handleResponseSet()
     {
         $FHANDLER = new CoreRequestHandler($_GET);

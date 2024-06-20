@@ -27,9 +27,15 @@
  */
 class CoreModAuth extends CoreModule
 {
+    /** @var GlobalCore */
     protected $CORE;
+
+    /** @var CoreRequestHandler */
     protected $FHANDLER;
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct($CORE)
     {
         $this->sName = 'Auth';
@@ -43,11 +49,19 @@ class CoreModAuth extends CoreModule
         $this->FHANDLER = new CoreRequestHandler($_POST);
     }
 
+    /**
+     * @param bool $printErr
+     * @return void
+     */
     public function check($printErr)
     {
 
     }
 
+    /**
+     * @return true|void
+     * @throws NagVisException
+     */
     public function handleAction()
     {
         global $AUTH;
@@ -67,6 +81,10 @@ class CoreModAuth extends CoreModule
         }
     }
 
+    /**
+     * @return array|false
+     * @throws UserInputError
+     */
     private function handleResponseAuth()
     {
         $attr = [
@@ -98,6 +116,10 @@ class CoreModAuth extends CoreModule
         }
     }
 
+    /**
+     * @return void
+     * @throws NagVisException
+     */
     public function msgAlreadyLoggedIn()
     {
         throw new NagVisException(
@@ -108,6 +130,10 @@ class CoreModAuth extends CoreModule
         );
     }
 
+    /**
+     * @return void
+     * @throws NagVisException
+     */
     public function msgInvalidCredentials()
     {
         throw new NagVisException(
