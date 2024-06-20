@@ -112,7 +112,6 @@ function state_str($state) {
         case OK:
             return 'OK';
         case ERROR:
-            return 'ERROR';
         default:
             return 'ERROR'; // unspecified state
     }
