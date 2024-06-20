@@ -24,6 +24,9 @@
 
 class CoreModAction extends CoreModule
 {
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct(GlobalCore $CORE)
     {
         $this->sName = 'Action';
@@ -35,6 +38,12 @@ class CoreModAction extends CoreModule
         ];
     }
 
+    /**
+     * @return false|string
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws NagVisException
+     */
     public function handleAction()
     {
         global $CORE;

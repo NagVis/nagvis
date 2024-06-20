@@ -27,8 +27,12 @@
  */
 class CoreModMultisite extends CoreModule
 {
+    /** @var GlobalCore */
     private $CORE;
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct(GlobalCore $CORE)
     {
         $this->sName = 'Multisite';
@@ -39,6 +43,9 @@ class CoreModMultisite extends CoreModule
         ];
     }
 
+    /**
+     * @return false|string
+     */
     public function handleAction()
     {
         if (!$this->offersAction($this->sAction)) {
@@ -64,6 +71,9 @@ class CoreModMultisite extends CoreModule
         return json_encode($maps);
     }
 
+    /**
+     * @return array[]
+     */
     private function renderTree()
     {
         $maps = [];
@@ -84,6 +94,9 @@ class CoreModMultisite extends CoreModule
         ];
     }
 
+    /**
+     * @return array
+     */
     private function renderTable()
     {
         $maps = [];
@@ -93,6 +106,10 @@ class CoreModMultisite extends CoreModule
         return $maps;
     }
 
+    /**
+     * @param $map
+     * @return array
+     */
     private function getMapForMultisite($map)
     {
         return [
@@ -134,8 +151,15 @@ class CoreModMultisite extends CoreModule
         }
     }
 
-    // Gathers an array of maps and their states to be shown to the user
-    // in the multisite snapin
+    /**
+     * Gathers an array of maps and their states to be shown to the user
+     * in the multisite snapin
+     *
+     * @param string[] $maps
+     * @return array
+     * @throws MapInMaintenance
+     * @throws NagVisException
+     */
     private function getMaps($maps)
     {
         global $_BACKEND, $AUTHORISATION;

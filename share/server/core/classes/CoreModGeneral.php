@@ -27,8 +27,12 @@
  */
 class CoreModGeneral extends CoreModule
 {
+    /** @var GlobalCore */
     private $CORE;
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct(GlobalCore $CORE)
     {
         $this->sName = 'General';
@@ -41,6 +45,10 @@ class CoreModGeneral extends CoreModule
         ];
     }
 
+    /**
+     * @return false|string
+     * @throws NagVisException
+     */
     public function handleAction()
     {
         $sReturn = '';
@@ -62,6 +70,10 @@ class CoreModGeneral extends CoreModule
         return $sReturn;
     }
 
+    /**
+     * @param string $type
+     * @return false|string
+     */
     private function getTemplate($type)
     {
         $arrReturn = [];
@@ -86,6 +98,10 @@ class CoreModGeneral extends CoreModule
         return json_encode($arrReturn);
     }
 
+    /**
+     * @return string
+     * @throws NagVisException
+     */
     private function getHoverUrl()
     {
         $arrReturn = [];

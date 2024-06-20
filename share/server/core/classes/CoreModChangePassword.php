@@ -28,6 +28,9 @@
  */
 class CoreModChangePassword extends CoreModule
 {
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct($CORE)
     {
         $this->sName = 'ChangePassword';
@@ -37,6 +40,9 @@ class CoreModChangePassword extends CoreModule
         ];
     }
 
+    /**
+     * @return false|string
+     */
     public function handleAction()
     {
         global $AUTH;

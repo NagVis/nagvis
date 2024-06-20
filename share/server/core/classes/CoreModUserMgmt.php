@@ -24,6 +24,9 @@
 
 class CoreModUserMgmt extends CoreModule
 {
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct($CORE)
     {
         $this->sName = 'UserMgmt';
@@ -33,6 +36,9 @@ class CoreModUserMgmt extends CoreModule
         ];
     }
 
+    /**
+     * @return false|string
+     */
     public function handleAction()
     {
         if ($this->offersAction($this->sAction)) {
