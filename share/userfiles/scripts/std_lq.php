@@ -73,7 +73,7 @@ if (file_exists('../../server/core/defines/global.php')) {
                 explode('/', dirname($_SERVER["SCRIPT_FILENAME"])),
                 0,
                 -6
-            ),
+            )
         ) . '/share/nagvis/htdocs/server/core';
     } else {
         echo 'ERROR: Unable to detect nagvis core dir';

@@ -63,7 +63,8 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         switch ($mod) {
             case 'Map':
             case 'Rotation':
-                return $this->DB->deletePermissions($mod, $name);
+                $this->DB->deletePermissions($mod, $name);
+                return true;
             default:
                 return false;
         }
