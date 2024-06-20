@@ -1012,8 +1012,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
                             $state = CRITICAL;
                             break;
                         case "3":
-                            $state = UNKNOWN;
-                            break;
                         default:
                             $state = UNKNOWN;
                             break;

@@ -584,12 +584,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                 *
                 * Thanks to Andurin and fredy82
                 */
-            if ($options & 1) {
-                if (!$this->DB->eq_int($data['state_type'], 0)) {
-                    $data['current_state'] = $data['current_state'];
-                } else {
-                    $data['current_state'] = $data['last_hard_state'];
-                }
+            if ($options & 1 && $this->DB->eq_int($data['state_type'], 0)) {
+                $data['current_state'] = $data['last_hard_state'];
             }
 
             $acknowledged = 0;
@@ -730,12 +726,8 @@ abstract class GlobalBackendPDO implements GlobalBackendInterface {
                 *
                 * Thanks to Andurin and fredy82
                 */
-            if ($options & 1) {
-                if (!$this->DB->eq_int($data['state_type'], 0)) {
-                    $data['current_state'] = $data['current_state'];
-                } else {
-                    $data['current_state'] = $data['last_hard_state'];
-                }
+            if ($options & 1 && $this->DB->eq_int($data['state_type'], 0)) {
+                $data['current_state'] = $data['last_hard_state'];
             }
 
             $acknowledged = 0;
