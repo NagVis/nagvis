@@ -24,6 +24,9 @@
 
 class CoreAuthModMySQL extends CoreAuthModPDO
 {
+    /**
+     * @return array
+     */
     public function getConfig()
     {
         return [

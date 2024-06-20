@@ -29,11 +29,10 @@
  * @author Lars Michelsen <lm@larsmichelsen.com>
  */
 abstract class CoreAuthModule {
+    /** @var array */
     protected static $aFeatures;
 
     /**
-     * PUBLIC Method getSupportedFeatures
-     *
      * Returns a list of supported features
      *
      * @return	array
@@ -44,11 +43,40 @@ abstract class CoreAuthModule {
         return self::$aFeatures;
     }
 
+    /**
+     * @param array $aData
+     * @return void
+     */
     abstract public function passCredentials($aData);
+
+    /**
+     * @param array $aData
+     * @return void
+     */
     abstract public function passNewPassword($aData);
+
+    /**
+     * @return bool
+     */
     abstract public function changePassword();
+
+    /**
+     * @return array
+     */
     abstract public function getCredentials();
+
+    /**
+     * @return bool
+     */
     abstract public function isAuthenticated();
+
+    /**
+     * @return string
+     */
     abstract public function getUser();
+
+    /**
+     * @return int
+     */
     abstract public function getUserId();
 }

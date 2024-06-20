@@ -33,11 +33,19 @@
  */
 class CoreAuthHandler
 {
+    /** @var CoreSessionHandler */
     private $SESS;
+
+    /** @var CoreAuthModule */
     private $MOD;
 
+    /** @var string|null */
     private $sModuleName;
+
+    /** @var bool */
     private $trustUsername  = false;
+
+    /** @var bool */
     private $logoutPossible = true;
 
     public function __construct()
@@ -49,22 +57,38 @@ class CoreAuthHandler
         $this->MOD = new $this->sModuleName();
     }
 
+    /**
+     * @param $name
+     * @return bool
+     */
     public function checkFeature($name)
     {
         $a = $this->MOD->getSupportedFeatures();
         return isset($a[$name]) && $a[$name];
     }
 
+    /**
+     * @return string|null
+     */
     public function getModule()
     {
         return $this->sModuleName;
     }
 
+    /**
+     * @param array $aData
+     * @return void
+     */
     public function passCredentials($aData)
     {
         $this->MOD->passCredentials($aData);
     }
 
+    /**
+     * @param array $aData
+     * @return void
+     * @throws NagVisException
+     */
     public function passNewPassword($aData)
     {
         // FIXME: First check if the auth module supports this mechanism
@@ -77,21 +101,33 @@ class CoreAuthHandler
         }
     }
 
+    /**
+     * @return array
+     */
     private function getCredentials()
     {
         return $this->MOD->getCredentials();
     }
 
+    /**
+     * @return string
+     */
     public function getUser()
     {
         return $this->MOD->getUser();
     }
 
+    /**
+     * @return int
+     */
     public function getUserId()
     {
         return $this->MOD->getUserId();
     }
 
+    /**
+     * @return mixed
+     */
     public function getAllUsers()
     {
         // FIXME: First check if the auth module supports this mechanism
@@ -100,11 +136,20 @@ class CoreAuthHandler
         return $this->MOD->getAllUsers();
     }
 
+    /**
+     * @param $name
+     * @return bool
+     */
     public function checkUserExists($name)
     {
         return $name !== '' && $this->MOD->checkUserExists($name);
     }
 
+    /**
+     * @param string $username
+     * @param string $password
+     * @return int
+     */
     public function createUser($username, $password)
     {
         // FIXME: First check if the auth module supports this mechanism
@@ -113,6 +158,9 @@ class CoreAuthHandler
         return $this->MOD->createUser($username, $password);
     }
 
+    /**
+     * @return bool
+     */
     public function changePassword()
     {
         // FIXME: First check if the auth module supports this mechanism
@@ -130,6 +178,12 @@ class CoreAuthHandler
         return $bChanged;
     }
 
+    /**
+     * @param int $uid
+     * @param string $pw
+     * @return true
+     * @throws CoreAuthModNoSupport
+     */
     public function resetPassword($uid, $pw)
     {
         if (!$this->checkFeature('resetPassword')) {
@@ -138,22 +192,35 @@ class CoreAuthHandler
         return $this->MOD->resetPassword($uid, $pw);
     }
 
-    // Did the user authenticate using trusted auth?
+    /**
+     * Did the user authenticate using trusted auth?
+     *
+     * @return bool
+     */
     public function authedTrusted()
     {
         return $this->trustUsername;
     }
 
+    /**
+     * @return false|mixed
+     */
     public function getLogonModule()
     {
         return $this->SESS->get('logonModule');
     }
 
+    /**
+     * @return false|mixed
+     */
     public function getAuthModule()
     {
         return $this->SESS->get('authModule');
     }
 
+    /**
+     * @return bool
+     */
     public function isAuthenticated()
     {
         if (cfg('global', 'audit_log')) {
@@ -195,11 +262,18 @@ class CoreAuthHandler
         return $isAuthenticated;
     }
 
+    /**
+     * @return bool
+     */
     public function logoutSupported()
     {
         return $this->logoutPossible;
     }
 
+    /**
+     * @param bool $enforce
+     * @return bool
+     */
     public function logout($enforce = false)
     {
         if (!$enforce && !$this->logoutSupported()) {
@@ -226,6 +300,9 @@ class CoreAuthHandler
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function isAuthenticatedSession()
     {
         // Remove logins which were performed with different logon/auth modules
@@ -250,11 +327,17 @@ class CoreAuthHandler
         return $this->isAuthenticated();
     }
 
+    /**
+     * @return bool
+     */
     public function sessionAuthPresent()
     {
         return $this->SESS->isSetAndNotEmpty('authCredentials');
     }
 
+    /**
+     * @return void
+     */
     public function storeInSession()
     {
         $this->SESS->aquire();
@@ -266,11 +349,19 @@ class CoreAuthHandler
         $this->SESS->commit();
     }
 
+    /**
+     * @param bool $flag
+     * @return void
+     */
     public function setTrustUsername($flag)
     {
         $this->trustUsername = $flag;
     }
 
+    /**
+     * @param bool $flag
+     * @return void
+     */
     public function setLogoutPossible($flag)
     {
         $this->logoutPossible = $flag;

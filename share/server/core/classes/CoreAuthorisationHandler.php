@@ -30,14 +30,22 @@
  */
 class CoreAuthorisationHandler
 {
+    /** @var string */
     private $sModuleName = '';
+
+    /** @var array */
     private $aPermissions = [];
 
+    /** @var CoreAuthorisationModule */
     private $MOD;
 
-    // FIXME: This is not really used anymore. It is only needed to hide the "hidden"
-    // permissions from the user. Those hidden permissions are not used anymore. So
-    // cleanup the auth DB and then remove this list.
+    /**
+     * FIXME: This is not really used anymore. It is only needed to hide the "hidden"
+     * permissions from the user. Those hidden permissions are not used anymore. So
+     * cleanup the auth DB and then remove this list.
+     *
+     * @var array[]
+     */
     private $summarizePerms = [
         'MainCfg' => [
             'doEdit' => 'edit'
@@ -111,31 +119,56 @@ class CoreAuthorisationHandler
         $this->MOD = new $this->sModuleName();
     }
 
+    /**
+     * @param string $old_name
+     * @param string $new_name
+     * @return bool
+     */
     public function renameMapPermissions($old_name, $new_name)
     {
         return $this->MOD->renameMapPermissions($old_name, $new_name);
     }
 
+    /**
+     * @param string $mod
+     * @param string $name
+     * @return bool
+     */
     public function createPermission($mod, $name)
     {
         return $this->MOD->createPermission($mod, $name);
     }
 
+    /**
+     * @param string $mod
+     * @param string $name
+     * @return bool
+     */
     public function deletePermission($mod, $name)
     {
         return $this->MOD->deletePermission($mod, $name);
     }
 
+    /**
+     * @return string
+     */
     public function getModule()
     {
         return $this->sModuleName;
     }
 
+    /**
+     * @return bool
+     */
     public function rolesConfigurable()
     {
         return $this->MOD->rolesConfigurable;
     }
 
+    /**
+     * @param int $roleId
+     * @return bool
+     */
     public function deleteRole($roleId)
     {
         // FIXME: First check if this is supported
@@ -143,11 +176,19 @@ class CoreAuthorisationHandler
         return $this->MOD->deleteRole($roleId);
     }
 
+    /**
+     * @param int $roleId
+     * @return array|false
+     */
     public function roleUsedBy($roleId)
     {
         return $this->MOD->roleUsedBy($roleId);
     }
 
+    /**
+     * @param int $userId
+     * @return bool
+     */
     public function deleteUser($userId)
     {
         // FIXME: First check if this is supported
@@ -155,6 +196,11 @@ class CoreAuthorisationHandler
         return $this->MOD->deleteUser($userId);
     }
 
+    /**
+     * @param int $userId
+     * @param array $roles
+     * @return bool
+     */
     public function updateUserRoles($userId, $roles)
     {
         // FIXME: First check if this is supported
@@ -162,6 +208,10 @@ class CoreAuthorisationHandler
         return $this->MOD->updateUserRoles($userId, $roles);
     }
 
+    /**
+     * @param int $userId
+     * @return array
+     */
     public function getUserRoles($userId)
     {
         // FIXME: First check if this is supported
@@ -169,6 +219,9 @@ class CoreAuthorisationHandler
         return $this->MOD->getUserRoles($userId);
     }
 
+    /**
+     * @return array
+     */
     public function getAllRoles()
     {
         // FIXME: First check if this is supported
@@ -176,11 +229,19 @@ class CoreAuthorisationHandler
         return $this->MOD->getAllRoles();
     }
 
+    /**
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
     private function sortPerms($a, $b)
     {
         return strcmp($a['mod'] . $a['obj'] . $a['act'], $b['mod'] . $b['obj'] . $b['act']);
     }
 
+    /**
+     * @return void
+     */
     public function cleanupPermissions()
     {
         global $CORE;
@@ -196,6 +257,9 @@ class CoreAuthorisationHandler
         }
     }
 
+    /**
+     * @return array
+     */
     public function getAllVisiblePerms()
     {
         $aReturn = [];
@@ -221,6 +285,10 @@ class CoreAuthorisationHandler
         return $aReturn;
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function checkRoleExists($name)
     {
         // FIXME: First check if this is supported
@@ -228,6 +296,10 @@ class CoreAuthorisationHandler
         return $this->MOD->checkRoleExists($name);
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function createRole($name)
     {
         // FIXME: First check if this is supported
@@ -235,6 +307,10 @@ class CoreAuthorisationHandler
         return $this->MOD->createRole($name);
     }
 
+    /**
+     * @param int $roleId
+     * @return array
+     */
     public function getRolePerms($roleId)
     {
         // FIXME: First check if this is supported
@@ -242,30 +318,53 @@ class CoreAuthorisationHandler
         return $this->MOD->getRolePerms($roleId);
     }
 
+    /**
+     * @param string $sName
+     * @return int|string
+     */
     public function getUserId($sName)
     {
         // FIXME: First check if this is supported
         return $this->MOD->getUserId($sName);
     }
 
+    /**
+     * @param string $sName
+     * @return int|false
+     */
     public function getRoleId($sName)
     {
         // FIXME: First check if this is supported
         return $this->MOD->getRoleId($sName);
     }
 
+    /**
+     * @param int $roleId
+     * @param array $perms
+     * @return bool
+     */
     public function updateRolePerms($roleId, $perms)
     {
         // FIXME: First check if this is supported
         return $this->MOD->updateRolePerms($roleId, $perms);
     }
 
+    /**
+     * @param string $sUsername
+     * @return array
+     */
     public function parsePermissions($sUsername = null)
     {
         $this->aPermissions = $this->MOD->parsePermissions($sUsername);
         return $this->aPermissions;
     }
 
+    /**
+     * @param string $sModule
+     * @param string $sAction
+     * @param string $sObj
+     * @return bool
+     */
     public function isPermitted($sModule, $sAction, $sObj = null)
     {
         // Module access?

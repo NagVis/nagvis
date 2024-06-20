@@ -24,6 +24,9 @@
 
 class CoreAuthModSQLite extends CoreAuthModPDO
 {
+    /**
+     * @return array
+     */
     public function getConfig()
     {
         return [
