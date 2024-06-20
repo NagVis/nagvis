@@ -25,10 +25,16 @@
 
 class CoreLogonModule
 {
-    // Create user when not existing yet
-    // Important to add a random password here. When someone
-    // changes the logon mechanism to e.g. LogonDialog it
-    // would be possible to logon with a hardcoded password
+    /**
+     * Create user when not existing yet
+     * Important to add a random password here. When someone
+     * changes the logon mechanism to e.g. LogonDialog it
+     * would be possible to logon with a hardcoded password
+     *
+     * @param string $username
+     * @param string $role
+     * @return void
+     */
     protected function createUser($username, $role)
     {
         global $AUTH;
@@ -40,6 +46,14 @@ class CoreLogonModule
         }
     }
 
+    /**
+     * @param string $username
+     * @param bool $createUser
+     * @param bool $createRole
+     * @param bool $printErr
+     * @return bool
+     * @throws NagVisException
+     */
     protected function verifyUserExists($username, $createUser, $createRole, $printErr)
     {
         global $AUTH;

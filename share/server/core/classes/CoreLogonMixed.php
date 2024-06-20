@@ -25,6 +25,10 @@
 
 class CoreLogonMixed
 {
+    /**
+     * @return array|true
+     * @throws NagVisException
+     */
     public function check()
     {
         // Try to auth using the environment auth

@@ -24,6 +24,11 @@
 
 class CoreLogonEnv extends CoreLogonModule
 {
+    /**
+     * @param bool $printErr
+     * @return bool
+     * @throws NagVisException
+     */
     public function check($printErr = true)
     {
         global $AUTH, $CORE;
