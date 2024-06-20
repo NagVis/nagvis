@@ -23,9 +23,15 @@
  ******************************************************************************/
 
 abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
+    /** @var bool */
     public $rolesConfigurable = true;
+
+    /** @var CorePDOHandler|null */
     private $DB = null;
 
+    /**
+     * @return array
+     */
     abstract public function getConfig();
 
     public function __construct()
@@ -49,11 +55,21 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         }
     }
 
+    /**
+     * @param string $old_name
+     * @param string $new_name
+     * @return void
+     */
     public function renameMapPermissions($old_name, $new_name)
     {
         $this->DB->query('-perm-rename-map', ['old_name' => $old_name, 'new_name' => $new_name]);
     }
 
+    /**
+     * @param string $mod
+     * @param string $name
+     * @return bool
+     */
     public function deletePermission($mod, $name)
     {
         if ($name === '') {
@@ -70,6 +86,11 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         }
     }
 
+    /**
+     * @param string $mod
+     * @param string $name
+     * @return bool
+     */
     public function createPermission($mod, $name)
     {
         if ($name === '') {
@@ -86,6 +107,10 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         }
     }
 
+    /**
+     * @param int $roleId
+     * @return array
+     */
     public function roleUsedBy($roleId)
     {
         $RES = $this->DB->query('-role-used-by', ['roleId' => $roleId]);
@@ -97,6 +122,10 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         return $users;
     }
 
+    /**
+     * @param int $roleId
+     * @return bool
+     */
     public function deleteRole($roleId)
     {
         // Delete role
@@ -113,6 +142,10 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         }
     }
 
+    /**
+     * @param int $userId
+     * @return bool
+     */
     public function deleteUser($userId)
     {
         // Delete user
@@ -129,6 +162,11 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         }
     }
 
+    /**
+     * @param int $userId
+     * @param array $roles
+     * @return true
+     */
     public function updateUserRoles($userId, $roles)
     {
         // First delete all role perms
@@ -145,6 +183,10 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         return true;
     }
 
+    /**
+     * @param int $userId
+     * @return array
+     */
     public function getUserRoles($userId)
     {
         $aRoles = [];
@@ -158,6 +200,9 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         return $aRoles;
     }
 
+    /**
+     * @return array
+     */
     public function getAllRoles()
     {
         $aRoles = [];
@@ -171,6 +216,10 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         return $aRoles;
     }
 
+    /**
+     * @param string $sRole
+     * @return int
+     */
     public function getRoleId($sRole)
     {
         $ret = $this->DB->query('-role-get-by-name', ['name' => $sRole])->fetch();
@@ -178,6 +227,9 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         return intval($ret['roleId']);
     }
 
+    /**
+     * @return array
+     */
     public function getAllPerms()
     {
         $aPerms = [];
@@ -191,6 +243,10 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         return $aPerms;
     }
 
+    /**
+     * @param int $roleId
+     * @return array
+     */
     public function getRolePerms($roleId)
     {
         $aRoles = [];
@@ -204,6 +260,11 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         return $aRoles;
     }
 
+    /**
+     * @param int $roleId
+     * @param array $perms
+     * @return true
+     */
     public function updateRolePerms($roleId, $perms)
     {
         // First delete all role perms
@@ -219,6 +280,10 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         return true;
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function checkRoleExists($name)
     {
         if ($this->DB->count('-role-count-by-name', ['name' => $name]) > 0) {
@@ -228,6 +293,10 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         }
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function createRole($name)
     {
         $this->DB->query('-role-add', ['name' => $name]);
@@ -240,6 +309,10 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         }
     }
 
+    /**
+     * @param string|null $sUsername
+     * @return array
+     */
     public function parsePermissions($sUsername = null)
     {
         global $AUTH;
@@ -273,11 +346,19 @@ abstract class CoreAuthorisationModPDO extends CoreAuthorisationModule {
         return $aPerms;
     }
 
+    /**
+     * @param int $id
+     * @return int
+     */
     private function checkUserExistsById($id)
     {
         return $this->DB->count('-user-count-by-id', ['userId' => $id]);
     }
 
+    /**
+     * @param string $sUsername
+     * @return int
+     */
     public function getUserId($sUsername)
     {
         $ret = $this->DB->query('-user-get-by-name', ['name' => $sUsername])->fetch();
