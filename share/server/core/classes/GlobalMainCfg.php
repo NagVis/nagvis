@@ -2505,11 +2505,9 @@ class GlobalMainCfg
      */
     public function setValue($sec, $var, $val)
     {
-        if (isset($this->config[$sec][$var]) && $val == '') {
-            // Value is empty and there is an entry in the config array
+        if ($val == '') {
+            // Value is empty
             unset($this->config[$sec][$var]);
-        } elseif (!isset($this->config[$sec][$var]) && $val == '') {
-            // Value is empty and there is nothing in config array yet
         } else {
             // Value is set
             if (
