@@ -87,6 +87,7 @@ class CoreBackendMgmt
             }
         }
 
+        // todo: is this overwriting intentional?
         foreach ($query as $query => $_unused) {
             foreach ($backendIds as $backendId) {
                 if (!isset($this->aQueue[$backendId][$query])) {

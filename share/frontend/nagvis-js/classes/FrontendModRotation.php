@@ -71,7 +71,7 @@ class FrontendModRotation extends FrontendModule
         if ($this->offersAction($this->sAction)) {
             if ($this->sAction == 'view') {
                 // Show the view dialog to the user
-                $sReturn = $this->showViewDialog();
+                $this->showViewDialog();
             }
         }
 
