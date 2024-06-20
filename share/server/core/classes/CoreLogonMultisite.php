@@ -95,6 +95,9 @@ class CoreLogonMultisite extends CoreLogonModule {
         return $username;
     }
 
+    /**
+     * @return string
+     */
     private function checkAuth()
     {
         // Loop all cookies trying to fetch a valid authentication
@@ -118,6 +121,10 @@ class CoreLogonMultisite extends CoreLogonModule {
         return '';
     }
 
+    /**
+     * @return void
+     * @throws NagVisException
+     */
     private function redirectToLogin()
     {
         // Do not redirect on ajax calls. Print out errors instead
@@ -128,6 +135,11 @@ class CoreLogonMultisite extends CoreLogonModule {
         header('Location:../../../check_mk/login.py?_origtarget=' . urlencode($_SERVER['REQUEST_URI']));
     }
 
+    /**
+     * @param bool $printErr
+     * @return bool
+     * @throws NagVisException
+     */
     public function check($printErr = true)
     {
         global $AUTH, $CORE;

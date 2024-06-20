@@ -3,14 +3,23 @@
 
 class CoreLog
 {
+    /** @var string|null */
     private $path = null;
+
+    /** @var resource|false|null */
     private $FILE = null;
+
+    /** @var string|null */
     private $dateFormat = null;
 
+    /**
+     * @param string $file
+     * @param string $dateFormat
+     */
     public function __construct($file, $dateFormat)
     {
         $this->path = $file;
-    $this->dateFormat = $dateFormat;
+        $this->dateFormat = $dateFormat;
     }
 
     public function __destruct()
@@ -18,6 +27,9 @@ class CoreLog
         $this->closeFile();
     }
 
+    /**
+     * @return void
+     */
     private function openFile()
     {
         $this->FILE = fopen($this->path, 'a');
@@ -33,7 +45,8 @@ class CoreLog
     /**
      * Writes the debug output to the debug file
      *
-     * @param   string $msg Debug message
+     * @param string $msg Debug message
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function l($msg)

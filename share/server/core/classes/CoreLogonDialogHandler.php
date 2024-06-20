@@ -25,6 +25,11 @@
 
 class CoreLogonDialogHandler
 {
+    /**
+     * @param bool $printErr
+     * @return array
+     * @throws NagVisException
+     */
     public function check($printErr = true)
     {
         global $AUTH;
@@ -66,6 +71,10 @@ class CoreLogonDialogHandler
         }
     }
 
+    /**
+     * @return array|null
+     * @throws FieldInputError
+     */
     private function handleResponseAuth()
     {
         $FHANDLER = new CoreRequestHandler(array_merge($_GET, $_POST));

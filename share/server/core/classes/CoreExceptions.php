@@ -28,6 +28,7 @@
 
 class NagVisException extends Exception
 {
+    /** @var array */
     protected $e;
 
     function __construct($msg, $title = null, $time = null, $url = null) {
