@@ -27,10 +27,18 @@
  */
 class CoreModMap extends CoreModule
 {
+    /** @var string|null */
     private $name = null;
+
+    /** @var GlobalCore */
     private $CORE;
+
+    /** @var string */
     private $htmlBase;
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct(GlobalCore $CORE)
     {
         $this->sName = 'Map';
@@ -60,6 +68,10 @@ class CoreModMap extends CoreModule
         $this->aObjects = $this->CORE->getAvailableMaps(null, SET_KEYS);
     }
 
+    /**
+     * @return void
+     * @throws NagVisException
+     */
     public function initObject()
     {
         switch ($this->sAction) {
@@ -101,6 +113,13 @@ class CoreModMap extends CoreModule
         $this->setObject($this->name);
     }
 
+    /**
+     * @return false|string|void
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws NagVisException
+     * @throws Success
+     */
     public function handleAction()
     {
         $sReturn = '';
@@ -171,6 +190,10 @@ class CoreModMap extends CoreModule
         return $sReturn;
     }
 
+    /**
+     * @return false|string
+     * @throws MapCfgInvalid
+     */
     protected function getWorldmapBounds()
     {
         $MAPCFG = new GlobalMapCfg($this->name);
@@ -178,6 +201,11 @@ class CoreModMap extends CoreModule
         return json_encode($MAPCFG->handleSources('get_bounds'));
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     * @throws FieldInputError
+     */
     protected function doExportMap($name)
     {
         global $CORE;
@@ -193,6 +221,11 @@ class CoreModMap extends CoreModule
         return $MAPCFG->exportMap();
     }
 
+    /**
+     * @param array $a
+     * @return true
+     * @throws NagVisException
+     */
     protected function doDeleteObject($a)
     {
         // initialize map and read map config
@@ -221,6 +254,10 @@ class CoreModMap extends CoreModule
         return true;
     }
 
+    /**
+     * @return array|false
+     * @throws NagVisException
+     */
     protected function handleResponseDeleteObject()
     {
         $bValid = true;
@@ -260,6 +297,11 @@ class CoreModMap extends CoreModule
         }
     }
 
+    /**
+     * @param $a
+     * @return false|string
+     * @throws NagVisException
+     */
     protected function doModifyObject($a)
     {
         $MAPCFG = new GlobalMapCfg($a['map']);
@@ -290,6 +332,10 @@ class CoreModMap extends CoreModule
         return json_encode(['status' => 'OK', 'message' => '']);
     }
 
+    /**
+     * @return array|false
+     * @throws NagVisException
+     */
     protected function handleResponseModifyObject()
     {
         $bValid = true;
@@ -352,6 +398,11 @@ class CoreModMap extends CoreModule
         }
     }
 
+    /**
+     * @return string
+     * @throws MapCfgInvalid
+     * @throws NagVisException
+     */
     private function getMapObjects()
     {
         $MAPCFG = new GlobalMapCfg($this->name);
@@ -361,6 +412,11 @@ class CoreModMap extends CoreModule
         return $MAP->parseObjectsJson();
     }
 
+    /**
+     * @return false|string
+     * @throws MapCfgInvalid
+     * @throws NagVisException
+     */
     private function getObjectStates()
     {
         $aOpts = [
@@ -392,7 +448,14 @@ class CoreModMap extends CoreModule
         return $MAP->parseObjectsJson($aVals['ty']);
     }
 
-    // Check if the map exists
+    /**
+     * Check if the map exists
+     *
+     * @param string $map
+     * @param bool $negate
+     * @return void
+     * @throws NagVisException
+     */
     private function verifyMapExists($map, $negate = false)
     {
         if (!$negate) {

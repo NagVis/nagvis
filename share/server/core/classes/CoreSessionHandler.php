@@ -100,11 +100,19 @@ class CoreSessionHandler
         }
     }
 
+    /**
+     * @param string $sKey
+     * @return bool
+     */
     public function isSetAndNotEmpty($sKey)
     {
         return isset($_SESSION[$sKey]) && $_SESSION[$sKey] != '';
     }
 
+    /**
+     * @param string $sKey
+     * @return false|mixed
+     */
     public function get($sKey)
     {
         if (isset($_SESSION[$sKey])) {
@@ -114,6 +122,11 @@ class CoreSessionHandler
         }
     }
 
+    /**
+     * @param string $sKey
+     * @param mixed $sVal
+     * @return false|mixed
+     */
     public function set($sKey, $sVal)
     {
         if (isset($_SESSION[$sKey])) {
@@ -131,16 +144,26 @@ class CoreSessionHandler
         return $sOld;
     }
 
+    /**
+     * @param string $key
+     * @return void
+     */
     public function del($key)
     {
         unset($_SESSION[$key]);
     }
 
+    /**
+     * @return void
+     */
     public function aquire()
     {
         session_start();
     }
 
+    /**
+     * @return void
+     */
     public function commit()
     {
         session_write_close();

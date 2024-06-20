@@ -27,8 +27,12 @@
  */
 class CoreModRoleMgmt extends CoreModule
 {
+    /** @var GlobalCore */
     protected $CORE;
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct($CORE)
     {
         $this->sName = 'RoleMgmt';
@@ -38,6 +42,9 @@ class CoreModRoleMgmt extends CoreModule
         ];
     }
 
+    /**
+     * @return false|string
+     */
     public function handleAction()
     {
         if ($this->offersAction($this->sAction)) {

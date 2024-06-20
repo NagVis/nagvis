@@ -27,10 +27,18 @@
  */
 class CoreModuleHandler
 {
+    /** @var GlobalCore */
     protected $CORE;
+
+    /** @var array */
     protected $aRegistered;
+
+    /** @var string */
     protected $sPrefix;
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct($CORE = null)
     {
         if ($CORE === null) {
@@ -47,7 +55,9 @@ class CoreModuleHandler
      * Loads an instance of the given module. The module needs to be registered
      * before loading.
      *
-     * @param  string $sModule Name of the module to load
+     * @param string $sModule Name of the module to load
+     * @return CoreModule
+     * @throws NagVisException
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public function loadModule($sModule)
@@ -73,7 +83,9 @@ class CoreModuleHandler
      * Registers a module by its name. After registering it is available
      * to be loaded.
      *
-     * @param  string $sModule Name of the module to register
+     * @param string $sModule Name of the module to register
+     * @return true
+     * @throws NagVisException
      * @author Lars Michelsen <lm@larsmichelsen.com>
      */
     public function regModule($sModule)

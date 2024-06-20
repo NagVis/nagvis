@@ -27,9 +27,13 @@
  */
 class CoreUriHandler
 {
+    /** @var string */
     private $sRequestUri;
+
+    /** @var array */
     private $aOpts;
 
+    /** @var string[] */
     private $aAliases;
 
     public function __construct()
@@ -44,11 +48,19 @@ class CoreUriHandler
         $this->validate();
     }
 
+    /**
+     * @return string
+     */
     public function getRequestUri()
     {
         return $this->sRequestUri;
     }
 
+    /**
+     * @param string $sKey
+     * @param string $sVal
+     * @return false|mixed
+     */
     public function set($sKey, $sVal)
     {
         $sReturn = false;
@@ -71,6 +83,10 @@ class CoreUriHandler
         return $sReturn;
     }
 
+    /**
+     * @param string $sKey
+     * @return false|mixed
+     */
     public function get($sKey)
     {
         // Transform parameter aliases
@@ -85,6 +101,12 @@ class CoreUriHandler
         }
     }
 
+    /**
+     * @param array $aKeys
+     * @param array $aDefaults
+     * @return void
+     * @throws NagVisException
+     */
     public function parseModSpecificUri($aKeys, $aDefaults = [])
     {
         foreach ($aKeys as $key => $sMatch) {
@@ -120,6 +142,9 @@ class CoreUriHandler
         }
     }
 
+    /**
+     * @return void
+     */
     private function parseUri()
     {
         // Maybe for later use when using nice urls
@@ -136,6 +161,9 @@ class CoreUriHandler
         }
     }
 
+    /**
+     * @return void
+     */
     private function setDefaults()
     {
         // Handle default options when no module given
@@ -149,6 +177,10 @@ class CoreUriHandler
         }
     }
 
+    /**
+     * @return void
+     * @throws NagVisException
+     */
     private function validate()
     {
         $bValid = true;
@@ -165,6 +197,10 @@ class CoreUriHandler
         }
     }
 
+    /**
+     * @param string $sKey
+     * @return bool
+     */
     public function isSetAndNotEmpty($sKey)
     {
         // Transform parameter aliases

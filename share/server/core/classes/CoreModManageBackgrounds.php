@@ -27,9 +27,15 @@
  */
 class CoreModManageBackgrounds extends CoreModule
 {
+    /** @var string|null */
     private $name = null;
+
+    /** @var GlobalCore */
     private $CORE;
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct(GlobalCore $CORE)
     {
         $this->sName = 'ManageBackgrounds';
@@ -41,6 +47,9 @@ class CoreModManageBackgrounds extends CoreModule
         ];
     }
 
+    /**
+     * @return false|string
+     */
     public function handleAction()
     {
         $sReturn = '';

@@ -27,9 +27,15 @@
  */
 class CoreModUrl extends CoreModule
 {
+    /** @var GlobalCore */
     private $CORE;
+
+    /** @var string|null */
     private $url = null;
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct(GlobalCore $CORE)
     {
         $this->sName = 'Url';
@@ -45,6 +51,10 @@ class CoreModUrl extends CoreModule
         ];
     }
 
+    /**
+     * @return false|string
+     * @throws NagVisException
+     */
     public function handleAction()
     {
         $sReturn = '';
@@ -58,6 +68,10 @@ class CoreModUrl extends CoreModule
         return $sReturn;
     }
 
+    /**
+     * @return false|string
+     * @throws NagVisException
+     */
     private function getContents()
     {
         $content = '';
@@ -104,6 +118,10 @@ class CoreModUrl extends CoreModule
         return json_encode(['content' => $content]);
     }
 
+    /**
+     * @return bool
+     * @throws NagVisException
+     */
     private function isAllowedUrl()
     {
         global $CORE;

@@ -27,15 +27,28 @@
  */
 class CoreRotation
 {
+    /** @var string|null */
     private $sPoolName = null;
 
+    /** @var array */
     private $arrSteps = [];
+
+    /** @var int|null */
     private $intInterval = null;
 
+    /** @var int|null */
     private $intCurrentStep = null;
+
+    /** @var int|null */
     private $intNextStep = null;
+
+    /** @var string|null */
     private $strNextStep = null;
 
+    /**
+     * @param string $sPoolName
+     * @throws NagVisException
+     */
     public function __construct($sPoolName)
     {
         global $CORE, $AUTHORISATION;
@@ -77,12 +90,11 @@ class CoreRotation
     }
 
     /**
-     * PUBLIC stepExists()
-     *
      * Checks if the state of given type and identifier exists
      *
      * @param   string $type Type of the step (map,url)
      * @param   string $step Step identifier map name, url, ...
+     * @return bool
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function stepExists($type, $step)
@@ -101,12 +113,12 @@ class CoreRotation
     }
 
     /**
-     * PUBLIC setStep()
-     *
      * Sets the current step
      *
-     * @param   string $sType Type of the step (map,url)
-     * @param   string $sStep Step identifier map name, url, ...
+     * @param string $sType Type of the step (map,url)
+     * @param string $sStep Step identifier map name, url, ...
+     * @return void
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setStep($sType, $sStep, $iStepId = '')
@@ -147,6 +159,7 @@ class CoreRotation
     /**
      * Sets the next step to take
      *
+     * @return void
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function setNextStep()
@@ -160,8 +173,9 @@ class CoreRotation
     }
 
     /**
-     * Sets the step intervall
+     * Sets the step interval
      *
+     * @return void
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function gatherStepInterval()
@@ -176,6 +190,7 @@ class CoreRotation
     /**
      * Sets the urls of each step in this pool
      *
+     * @return void
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function createStepUrls()
@@ -205,6 +220,7 @@ class CoreRotation
     /**
      * Sets the steps which are defined in this pool
      *
+     * @return void
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function gatherSteps()
@@ -215,6 +231,7 @@ class CoreRotation
     /**
      * Checks if the specified rotation pool exists
      *
+     * @return bool
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkPoolExists()
@@ -279,7 +296,7 @@ class CoreRotation
     /**
      * Gets the name of the pool
      *
-     * @return    int|null
+     * @return    string|null
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getPoolName()
@@ -298,6 +315,10 @@ class CoreRotation
         return $this->arrSteps[$intId]['target'];
     }
 
+    /**
+     * @param int $intId
+     * @return array
+     */
     public function getStepById($intId)
     {
         return $this->arrSteps[$intId];
@@ -306,6 +327,7 @@ class CoreRotation
     /**
      * Gets the label of a specific step
      *
+     * @param int $intId
      * @return	int
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
