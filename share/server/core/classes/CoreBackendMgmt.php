@@ -27,10 +27,19 @@
  */
 class CoreBackendMgmt
 {
+    /** @var array */
     public $BACKENDS = [];
+
+    /** @var array */
     private $aInitialized = [];
+
+    /** @var array */
     private $aQueue = [];
+
+    /** @var array */
     private $aError = [];
+
+    /** @var string[] */
     private $countQueries = [
         'serviceState'            => '',
         'hostState'               => '',
@@ -54,6 +63,10 @@ class CoreBackendMgmt
         $this->loadBackends();
     }
 
+    /**
+     * @param string $id
+     * @return GlobalBackendInterface
+     */
     public function getBackend($id)
     {
         // Only try to initialize once per request
@@ -70,12 +83,10 @@ class CoreBackendMgmt
     }
 
     /**
-     * PUBLIC queue()
-     *
      * Add a backend query to the queue
      *
      * @param   array $query Queries to be added to the queue
-     * @param   object $OBJ Map object to fetch the informations for
+     * @param   NagVisStatefulObject $OBJ Map object to fetch the informations for
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function queue($query, $OBJ)
@@ -126,6 +137,11 @@ class CoreBackendMgmt
         }
     }
 
+    /**
+     * @param string $query
+     * @param NagVisStatefulObject $OBJ
+     * @return string
+     */
     private function parseObjFilters($query, $OBJ)
     {
         $isMemberQuery = $query != 'serviceState' && $query != 'hostState';
@@ -138,6 +154,10 @@ class CoreBackendMgmt
         return $OBJ->getExcludeFilterKey($isCountQuery) . '~~' . $OBJ->getExcludeFilter($isCountQuery);
     }
 
+    /**
+     * @param NagVisStatefulObject $OBJ
+     * @return int
+     */
     private function parseOptions($OBJ)
     {
         $options = 0;
@@ -153,10 +173,9 @@ class CoreBackendMgmt
     }
 
     /**
-     * PUBLIC clearQueue()
-     *
      * Resets the backend queue
      *
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function clearQueue()
@@ -165,11 +184,11 @@ class CoreBackendMgmt
     }
 
     /**
-     * PUBLIC execute()
-     *
      * Executes all backend queries and assigns the gathered information
      * to the objects
      *
+     * @return void
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function execute()
@@ -229,6 +248,11 @@ class CoreBackendMgmt
      * This is trimmed to reduce the number of queries to the backend:
      * 1.) fetch states for all objects
      * 2.) fetch state counts for all objects
+     *
+     * @param string $backendId
+     * @param int $options
+     * @param array<array<NagvisStatefulObject>> $aObjs
+     * @return void
      */
     private function fetchAggrMemberDetails($backendId, $options, $aObjs)
     {
@@ -258,6 +282,13 @@ class CoreBackendMgmt
         }
     }
 
+    /**
+     * @param string $backendId
+     * @param int $options
+     * @param array<array<NagvisStatefulObject>> $aObjs
+     * @return void
+     * @throws NagVisException
+     */
     private function fetchDynGroupMemberCounts($backendId, $options, $aObjs)
     {
         foreach ($aObjs as $name => $OBJS) {
@@ -300,6 +331,11 @@ class CoreBackendMgmt
      * Fetches details for all given dynamic groups
      * Sending "array()" as filter construct to the backend since the backend uses the filters which are
      * already compiled in the object and ignores the given array() parameter
+     *
+     * @param string $backendId
+     * @param int $options
+     * @param array<array<NagvisStatefulObject>> $aObjs
+     * @return void
      */
     private function fetchDynGroupMemberDetails($backendId, $options, $aObjs)
     {
@@ -362,6 +398,14 @@ class CoreBackendMgmt
         }
     }
 
+    /**
+     * @param string $backendId
+     * @param string $host
+     * @param string $descr
+     * @param array $state
+     * @param array $config
+     * @return NagVisService
+     */
     private function createServiceObject($backendId, $host, $descr, $state, $config)
     {
         $OBJ = new NagVisService($backendId, $host, $state[DESCRIPTION]);
@@ -375,6 +419,14 @@ class CoreBackendMgmt
         return $OBJ;
     }
 
+    /**
+     * @param string $backendId
+     * @param string $name
+     * @param array $state
+     * @param array $config
+     * @param array|null $service_states
+     * @return NagVisHost
+     */
     private function createHostObject($backendId, $name, $state, $config, $service_states)
     {
         $OBJ = new NagVisHost($backendId, $name);
@@ -398,8 +450,6 @@ class CoreBackendMgmt
     }
 
     /**
-     * PRIVATE fetchServicegroupMemberDetails()
-     *
      * Loops all queued servicegroups and executes the queries for each group.
      * Gets all services of the servicegroup and saves them to the members array
      *
@@ -407,6 +457,10 @@ class CoreBackendMgmt
      * 1.) fetch states for all services
      * 2.) fetch state counts for all services
      *
+     * @param string $backendId
+     * @param int $options
+     * @param array<array<NagvisStatefulObject>> $aObjs
+     * @return void
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchServicegroupMemberDetails($backendId, $options, $aObjs)
@@ -439,8 +493,6 @@ class CoreBackendMgmt
     }
 
     /**
-     * PRIVATE fetchHostgroupMemberDetails()
-     *
      * Loops all queued objects.
      * Gets all hosts of the hostgroup and saves them to the members array
      *
@@ -448,6 +500,10 @@ class CoreBackendMgmt
      * 1.) fetch states for all hosts
      * 2.) fetch state counts for all hosts
      *
+     * @param string $backendId
+     * @param int $options
+     * @param array<array<NagvisStatefulObject>> $aObjs
+     * @return void
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchHostgroupMemberDetails($backendId, $options, $aObjs)
@@ -493,6 +549,14 @@ class CoreBackendMgmt
         }
     }
 
+    /**
+     * @param string $backendId
+     * @param string $type
+     * @param int $options
+     * @param array<array<NagvisStatefulObject>> $aObjs
+     * @return void
+     * @throws NagVisException
+     */
     private function fetchStateCounts($backendId, $type, $options, $aObjs)
     {
         try {
@@ -572,6 +636,12 @@ class CoreBackendMgmt
         }
     }
 
+    /**
+     * @param string $backendId
+     * @param int $options
+     * @param array<array<NagvisStatefulObject>> $aObjs
+     * @return void
+     */
     private function fetchHostMemberDetails($backendId, $options, $aObjs)
     {
         try {
@@ -599,6 +669,8 @@ class CoreBackendMgmt
     /**
      * Loads all backends and prints an error when no backend defined
      *
+     * @return void
+     * @throws NagVisException
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function loadBackends()
@@ -614,9 +686,11 @@ class CoreBackendMgmt
     /**
      * Checks for existing backend file
      *
-     * @param	bool $printErr
-     * @return	bool	Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param string $backendId
+     * @param bool $printErr
+     * @return    bool    Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkBackendExists($backendId, $printErr)
     {
@@ -642,6 +716,8 @@ class CoreBackendMgmt
      * Checks if a backend host is status using status
      * information from another backend
      *
+     * @param string $backendId
+     * @param string $statusHost
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function backendAlive($backendId, $statusHost)
@@ -675,8 +751,10 @@ class CoreBackendMgmt
     /**
      * Initializes a backend
      *
-     * @return	bool	Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param string $backendId
+     * @return    bool    Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function initializeBackend($backendId)
     {
@@ -720,10 +798,12 @@ class CoreBackendMgmt
     /**
      * Checks for an initialized backend
      *
-     * @param	bool $printErr
-     * @return	bool	Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param string $backendId
+     * @param bool $printErr
+     * @return    bool    Is Successful?
+     * @throws NagVisException
      * @deprecated Please don't use this function anymore
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkBackendInitialized($backendId, $printErr)
     {
@@ -743,9 +823,12 @@ class CoreBackendMgmt
     /**
      * Checks if the given feature is provided by the given backend
      *
-     * @param	bool $printErr
-     * @return	bool	Is Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param string $backendId
+     * @param string $feature
+     * @param int $printErr
+     * @return    bool    Is Successful?
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkBackendFeature($backendId, $feature, $printErr = 1)
     {

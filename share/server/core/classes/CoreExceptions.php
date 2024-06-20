@@ -28,8 +28,15 @@
 
 class NagVisException extends Exception
 {
+    /** @var array */
     protected $e;
 
+    /**
+     * @param string $msg
+     * @param string $title
+     * @param string $time
+     * @param string $url
+     */
     public function __construct($msg, $title = null, $time = null, $url = null)
     {
         if ($title === null) {
@@ -52,11 +59,17 @@ class NagVisException extends Exception
         parent::__construct($msg);
     }
 
+    /**
+     * @return false|string
+     */
     public function __toString()
     {
         return json_encode($this->e);
     }
 
+    /**
+     * @return string
+     */
     public function message()
     {
         return $this->e['message'];
@@ -65,6 +78,9 @@ class NagVisException extends Exception
 
 class MapInMaintenance extends NagVisException
 {
+    /**
+     * @param string $map
+     */
     public function __construct($map)
     {
         $this->e = [
@@ -77,6 +93,12 @@ class MapInMaintenance extends NagVisException
 
 class Success extends NagVisException
 {
+    /**
+     * @param string $msg
+     * @param string $title
+     * @param string $time
+     * @param string $url
+     */
     public function __construct($msg, $title = null, $time = null, $url = null)
     {
         parent::__construct($msg, $title, $time, $url);
@@ -124,12 +146,19 @@ class FieldInputError extends NagVisException
     public $field;
     public $msg;
 
+    /**
+     * @param string $field
+     * @param string $msg
+     */
     public function __construct($field, $msg)
     {
         $this->field = $field;
         $this->msg   = $msg;
     }
 
+    /**
+     * @return string
+     */
     public function message()
     {
         return $this->msg;
@@ -139,6 +168,9 @@ class FieldInputError extends NagVisException
 // This exception is used to handle PHP errors
 class NagVisErrorException extends ErrorException
 {
+    /**
+     * @return string
+     */
     public function __toString()
     {
         $msg = "Error: (" . $this->getCode() . ") " . $this->getMessage()

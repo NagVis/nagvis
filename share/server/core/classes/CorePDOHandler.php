@@ -41,20 +41,41 @@ function _build_dsn_common($params) {
 
 class CorePDOHandler
 {
+    /** @var PDO|null */
     private $DB = null;
+
+    /** @var string|null */
     private $file = null;
+
+    /** @var string|null */
     private $dsn = null;
 
+    /** @var string|null */
     private $driver = null;
+
+    /** @var array|null */
     private $data = null;
+
+    /** @var bool */
     private $updating = false;
+
+    /** @var string|null */
     private $lastErrorInfo = null;
+
+    /** @var bool */
     private $inTrans = false;
 
-    // needs to be initialized after class declaration because directly
-    // initializing it here is a syntax error in PHP 5.3
+    /**
+     * needs to be initialized after class declaration because directly
+     * initializing it here is a syntax error in PHP 5.3
+     *
+     * @var array|null
+     */
     private static $DRIVERS = null;
 
+    /**
+     * @return void
+     */
     public static function initialize_static()
     {
         self::$DRIVERS = [
@@ -292,6 +313,13 @@ class CorePDOHandler
 
     public function __construct() {}
 
+    /**
+     * @param string $driver
+     * @param array $params
+     * @param string $username
+     * @param string $password
+     * @return bool
+     */
     public function open($driver, $params, $username, $password)
     {
         if ($driver == '_common') {
@@ -335,21 +363,34 @@ class CorePDOHandler
         return true;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDSN()
     {
         return $this->dsn;
     }
 
+    /**
+     * @return string
+     */
     public function getRegularExpressionOperator()
     {
         return $this->data['re_op'];
     }
 
+    /**
+     * @return string
+     */
     public function getNegatedRegularExpressionOperator()
     {
         return $this->data['re_op_neg'];
     }
 
+    /**
+     * @param string $q
+     * @return false|PDOStatement
+     */
     public function prep($q)
     {
         // TODO: some kind of LRU cache for the dynamically built queries
@@ -371,6 +412,10 @@ class CorePDOHandler
         return $st;
     }
 
+    /**
+     * @param string $table
+     * @return bool
+     */
     public function tableExist($table)
     {
         $res = $this->query('-table-exists', ['name' => $table]);
@@ -378,6 +423,11 @@ class CorePDOHandler
         return $res !== false && $res->fetch() !== false;
     }
 
+    /**
+     * @param string $query
+     * @param array $params
+     * @return false|PDOStatement
+     */
     public function query($query, $params = [])
     {
         $this->lastErrorInfo = null;
@@ -392,6 +442,11 @@ class CorePDOHandler
         return $st;
     }
 
+    /**
+     * @param string $s
+     * @param array $params
+     * @return PDOStatement|void
+     */
     public function queryFatal($s, $params = [])
     {
         $res = $this->query($s, $params);
@@ -402,12 +457,20 @@ class CorePDOHandler
         }
     }
 
+    /**
+     * @param string $query
+     * @param array $params
+     * @return int
+     */
     public function count($query, $params)
     {
         $RET = $this->query($query, $params)->fetch();
         return intval($RET['num']);
     }
 
+    /**
+     * @return array|string|null
+     */
     public function error()
     {
         if (isset($this->lastErrorInfo)) {
@@ -417,6 +480,9 @@ class CorePDOHandler
         }
     }
 
+    /**
+     * @return mixed|string
+     */
     public function errorString()
     {
         $err = $this->error();
@@ -430,16 +496,20 @@ class CorePDOHandler
         return $msg;
     }
 
+    /**
+     * @return void
+     */
     public function close()
     {
         $this->DB = null;
     }
 
     /**
-     * PUBLIC is_nonnull_int()
-     *
      * Checks whether a value (a string or an integer) returned by a database query
      * represents a valid integer.
+     *
+     * @param int|string $v
+     * @return bool
      */
     public function is_nonnull_int($v)
     {
@@ -447,10 +517,12 @@ class CorePDOHandler
     }
 
     /**
-     * PUBLIC eq_int()
-     *
      * Checks whether a value (a string or an integer) returned by a database query
      * is a valid integer and is equal to the specified one.
+     *
+     * @param int|string $v
+     * @param int|string $exp
+     * @return bool
      */
     public function eq_int($v, $exp)
     {
@@ -458,18 +530,25 @@ class CorePDOHandler
     }
 
     /**
-     * PUBLIC eq_int()
-     *
      * Checks whether a value (a string or an integer) returned by a database query
      * is either null or a valid integer equal to the specified one.
      * Returns true for an empty string; the caller should take care to use this
      * function only on database fields that are supposed to be integers.
+     *
+     * @param int|string $v
+     * @param int|string $exp
+     * @return bool
      */
     public function null_or_eq_int($v, $exp)
     {
         return !isset($v) || $v === '' || $this->eq_int($v, $exp);
     }
 
+    /**
+     * @param string $mod
+     * @param string $name
+     * @return void
+     */
     public function deletePermissions($mod, $name)
     {
         // Only create when not existing
@@ -484,6 +563,10 @@ class CorePDOHandler
         }
     }
 
+    /**
+     * @param string $name
+     * @return true
+     */
     public function createMapPermissions($name)
     {
         // Only create when not existing
@@ -505,6 +588,10 @@ class CorePDOHandler
         return true;
     }
 
+    /**
+     * @param string $name
+     * @return true
+     */
     public function createRotationPermissions($name)
     {
         // Only create when not existing
@@ -520,6 +607,9 @@ class CorePDOHandler
         return true;
     }
 
+    /**
+     * @return void
+     */
     public function updateDb()
     {
         // Read the current version from db
@@ -605,23 +695,35 @@ class CorePDOHandler
         $this->updating = false;
     }
 
+    /**
+     * @return string
+     */
     public function getDbVersion()
     {
         $data = $this->query('SELECT version FROM version')->fetch();
         return $data['version'];
     }
 
+    /**
+     * @return void
+     */
     public function updateDbVersion()
     {
         $this->query('-version-update', ['version' => CONST_VERSION]);
     }
 
+    /**
+     * @return void
+     */
     public function createVersionTable()
     {
         $this->query('-create-auth-version');
         $this->query('-version-insert', ['version' => CONST_VERSION]);
     }
 
+    /**
+     * @return void
+     */
     public function createInitialDb()
     {
         $this->queryFatal('-create-auth-users');
