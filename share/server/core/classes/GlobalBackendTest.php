@@ -27,10 +27,13 @@
  */
 class GlobalBackendTest implements GlobalBackendInterface
 {
+    /** @var string */
     private $backendId = '';
+
+    /** @var int */
     private $now;
 
-    // These are the backend local configuration options
+    /** @var array[] These are the backend local configuration options */
     private static $validConfig = [
         'generate_mapcfg' => [
             'must'       => 1,
@@ -41,21 +44,29 @@ class GlobalBackendTest implements GlobalBackendInterface
         ]
     ];
 
+    /** @var array */
     private $parents = [];
+
+    /** @var array */
     private $childs  = [];
 
+    /** @var array[] */
     private $obj = [
         'host' => [],
         'service' => [],
         'hostgroup' => [],
         'servicegroup' => [],
     ];
+
+    /** @var array[] */
     private $hostStates = [
         UP          => ['normal' => 0, 'stale' => 0, 'downtime' => 0],
         DOWN        => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
         UNREACHABLE => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
         UNCHECKED   => ['normal' => 0, 'stale' => 0, 'downtime' => 0],
     ];
+
+    /** @var array[] */
     private $serviceStates = [
         OK          => ['normal' => 0, 'stale' => 0, 'downtime' => 0],
         WARNING     => ['normal' => 0, 'stale' => 0, 'ack' => 0, 'downtime' => 0],
@@ -64,6 +75,7 @@ class GlobalBackendTest implements GlobalBackendInterface
         PENDING     => ['normal' => 0, 'stale' => 0, 'downtime' => 0],
     ];
 
+    /** @var array[] */
     private $canBeSoft = [
         UP          => ['hard'],
         DOWN        => ['hard', 'soft'],
@@ -76,6 +88,9 @@ class GlobalBackendTest implements GlobalBackendInterface
         UNKNOWN     => ['hard'],
     ];
 
+    /**
+     * @param string $backendId
+     */
     public function __construct($backendId)
     {
         $this->backendId = $backendId;
@@ -92,6 +107,13 @@ class GlobalBackendTest implements GlobalBackendInterface
         return true;
     }
 
+    /**
+     * @param string $name
+     * @param string $state
+     * @param string $stateType
+     * @param string $substate
+     * @return array
+     */
     private function host($name, $state, $stateType = 'hard', $substate = 'normal')
     {
         $ack = $substate == 'ack';
@@ -135,6 +157,16 @@ class GlobalBackendTest implements GlobalBackendInterface
         ];
     }
 
+    /**
+     * @param string $name1
+     * @param string $name2
+     * @param string $state
+     * @param string $stateType
+     * @param string $substate
+     * @param string|null $output
+     * @param string $perfdata
+     * @return array
+     */
     private function service(
         $name1,
         $name2,
@@ -192,6 +224,11 @@ class GlobalBackendTest implements GlobalBackendInterface
         ];
     }
 
+    /**
+     * @param string $name
+     * @param string[] $members
+     * @return array
+     */
     private function hostgroup($name, $members)
     {
         return  [
@@ -201,6 +238,11 @@ class GlobalBackendTest implements GlobalBackendInterface
         ];
     }
 
+    /**
+     * @param string $name
+     * @param string[] $members
+     * @return array
+     */
     private function servicegroup($name, $members)
     {
         return [
@@ -210,6 +252,9 @@ class GlobalBackendTest implements GlobalBackendInterface
         ];
     }
 
+    /**
+     * @return void
+     */
     private function genObj()
     {
         /**
@@ -500,6 +545,9 @@ class GlobalBackendTest implements GlobalBackendInterface
         }
     }
 
+    /**
+     * @return array
+     */
     public function getHostNamesProblematic()
     {
         $a = [];
@@ -520,6 +568,10 @@ class GlobalBackendTest implements GlobalBackendInterface
         return $a;
     }
 
+    /**
+     * @param string $group
+     * @return array|mixed
+     */
     public function getHostNamesInHostgroup($group)
     {
         if (isset($this->obj['hostgroup'][$group])) {
@@ -529,11 +581,18 @@ class GlobalBackendTest implements GlobalBackendInterface
         }
     }
 
+    /**
+     * @return int
+     */
     public function getProgramStart()
     {
         return -1;
     }
 
+    /**
+     * @param string $type
+     * @return array
+     */
     public function getAllTypeObjects($type)
     {
         if ($type == 'service') {
@@ -547,6 +606,10 @@ class GlobalBackendTest implements GlobalBackendInterface
         }
     }
 
+    /**
+     * @param string $path
+     * @return void
+     */
     public function genMapCfg($path)
     {
         $f = "define global {\n"
@@ -581,8 +644,6 @@ class GlobalBackendTest implements GlobalBackendInterface
     }
 
     /**
-     * PUBLIC class destructor
-     *
      * The descrutcor closes the socket when some is open
      * at the moment when the class is destroyed. It is
      * important to close the socket in a clean way.
@@ -592,8 +653,6 @@ class GlobalBackendTest implements GlobalBackendInterface
     public function __destruct() {}
 
     /**
-     * PUBLIC getValidConfig
-     *
      * Returns the valid config for this backend
      *
      * @return	array
@@ -605,16 +664,15 @@ class GlobalBackendTest implements GlobalBackendInterface
     }
 
     /**
-     * PUBLIC getObjects()
-     *
      * Queries the livestatus socket for a list of objects
      *
-     * @param   string $type Type of object
-     * @param   string $name1Pattern Name1 of the objecs
-     * @param   string $name2Pattern Name2 of the objecs
-     * @return  array    Results of the query
-     * @author  Mathias Kettner <mk@mathias-kettner.de>
+     * @param string $type Type of object
+     * @param string $name1Pattern Name1 of the objecs
+     * @param string $name2Pattern Name2 of the objecs
+     * @return array Results of the query
+     * @throws BackendException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
+     * @author  Mathias Kettner <mk@mathias-kettner.de>
      */
     public function getObjects($type, $name1Pattern = '', $name2Pattern = '')
     {
@@ -659,13 +717,12 @@ class GlobalBackendTest implements GlobalBackendInterface
     }
 
     /**
-     * PRIVATE parseFilter()
-     *
      * Parses the filter array to backend
      *
-     * @param   array $objects List of objects to query
-     * @param   array $filters List of filters to apply
-     * @return  string    Parsed filters
+     * @param array $objects List of objects to query
+     * @param array $filters List of filters to apply
+     * @return string Parsed filters
+     * @throws BackendConnectionProblem
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function parseFilter($objects, $filters)
@@ -720,14 +777,14 @@ class GlobalBackendTest implements GlobalBackendInterface
 
 
     /**
-     * PUBLIC getHostState()
-     *
      * Queries the livestatus socket for the state of a host
      *
-     * @param   array $objects List of objects to query
-     * @param   array $options List of filters to apply
-     * @author  Mathias Kettner <mk@mathias-kettner.de>
+     * @param array $objects List of objects to query
+     * @param array $options List of filters to apply
+     * @return array
+     * @throws BackendException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
+     * @author  Mathias Kettner <mk@mathias-kettner.de>
      */
     public function getHostState($objects, $options, $filters)
     {
@@ -765,13 +822,15 @@ class GlobalBackendTest implements GlobalBackendInterface
     }
 
     /**
-     * PUBLIC getServiceState()
-     *
      * Queries the livestatus socket for a specific service
      * or all services of a host
      *
-     * @param   array $objects List of objects to query
-     * @param   array $options List of filters to apply
+     * @param array $objects List of objects to query
+     * @param int $options
+     * @param array $filters List of filters to apply
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServiceState($objects, $options, $filters)
@@ -836,17 +895,16 @@ class GlobalBackendTest implements GlobalBackendInterface
     }
 
     /**
-     * PUBLIC getHostMemberCounts()
-     *
      * Queries the livestatus socket for host state counts. The information
      * are used to calculate the summary output and the summary state of a
      * host and a well performing alternative to the existing recurisve
      * algorithm.
      *
-     * @param   array $objects List of objects to query
-     * @param   int $options This is a mask of options to use during the query
-     * @param   array $filters List of filters to apply
-     * @return  array     List of states and counts
+     * @param array $objects List of objects to query
+     * @param int $options This is a mask of options to use during the query
+     * @param array $filters List of filters to apply
+     * @return array List of states and counts
+     * @throws BackendException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostMemberCounts($objects, $options, $filters)
@@ -901,16 +959,15 @@ class GlobalBackendTest implements GlobalBackendInterface
     }
 
     /**
-     * PUBLIC getHostgroupStateCounts()
-     *
      * Queries the livestatus socket for hostgroup state counts. The information
      * are used to calculate the summary output and the summary state of a
      * hostgroup and a well performing alternative to the existing recurisve
      * algorithm.
      *
-     * @param   array $objects List of objects to query
-     * @param   array $options List of filters to apply
-     * @return  array     List of states and counts
+     * @param array $objects List of objects to query
+     * @param array $options List of filters to apply
+     * @return array List of states and counts
+     * @throws BackendException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostgroupStateCounts($objects, $options, $filters)
@@ -968,16 +1025,15 @@ class GlobalBackendTest implements GlobalBackendInterface
     }
 
     /**
-     * PUBLIC getServicegroupStateCounts()
-     *
      * Queries the livestatus socket for servicegroup state counts. The information
      * are used to calculate the summary output and the summary state of a
      * servicegroup and a well performing alternative to the existing recurisve
      * algorithm.
      *
-     * @param   array $objects List of objects to query
-     * @param   array $options List of filters to apply
-     * @return  array     List of states and counts
+     * @param array $objects List of objects to query
+     * @param array $options List of filters to apply
+     * @return array List of states and counts
+     * @throws BackendException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServicegroupStateCounts($objects, $options, $filters)
@@ -1032,11 +1088,18 @@ class GlobalBackendTest implements GlobalBackendInterface
         return $aReturn;
     }
 
+    /**
+     * @return string[]
+     */
     public function getHostNamesWithNoParent()
     {
         return ['muc-srv2'];
     }
 
+    /**
+     * @param $hostName
+     * @return array|mixed
+     */
     public function getDirectChildNamesByHostName($hostName)
     {
         if (isset($this->childs[$hostName])) {
@@ -1046,6 +1109,10 @@ class GlobalBackendTest implements GlobalBackendInterface
         }
     }
 
+    /**
+     * @param $hostName
+     * @return array|mixed
+     */
     public function getDirectParentNamesByHostName($hostName)
     {
         if (isset($this->parents[$hostName])) {
@@ -1056,10 +1123,9 @@ class GlobalBackendTest implements GlobalBackendInterface
     }
 
     /**
-     * PUBLIC getDirectChildDependenciesNamesByHostName()
-     *
-     * @param   string $hostName Hostname
-     * @return  array    List of hostnames
+     * @param string $hostName Hostname
+     * @param bool $min_business_impact
+     * @return array List of hostnames
      * @author  Thibault Cohen <thibault.cohen@savoirfairelinux.com>
      */
     public function getDirectChildDependenciesNamesByHostName(
@@ -1070,11 +1136,12 @@ class GlobalBackendTest implements GlobalBackendInterface
         return $this->getDirectChildNamesByHostName($hostName);
     }
 
-    /*
+    /**
      * PUBLIC getDirectParentNamesByHostName()
      *
-     * @param   string   Hostname
-     * @return  array    List of hostnames
+     * @param string $hostName Hostname
+     * @param bool $min_business_impact
+     * @return array List of hostnames
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */

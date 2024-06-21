@@ -36,18 +36,34 @@
  */
 class GlobalBackendmklivestatus implements GlobalBackendInterface
 {
+    /** @var string */
     private $backendId = '';
 
+    /** @var string */
     private $CONNECT_ERR = "";
+
+    /** @var Exception|null */
     private $CONNECT_EXC = null;
+
+    /** @var false|resource|null  */
     private $SOCKET = null;
+
+    /** @var string */
     private $socketType = '';
+
+    /** @var string */
     private $socketPath = '';
+
+    /** @var string */
     private $socketAddress = '';
+
+    /** @var int */
     private $socketPort = 0;
+
+    /** @var string */
     private $socketSpec = '';
 
-    // These are the backend local configuration options
+    /** @var array These are the backend local configuration options */
     private static $validConfig = [
         'socket' => [
             'must'      => 1,
@@ -79,9 +95,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     /**
      * PUBLIC class constructor
      *
-     * @param   string $backendId ID if the backend
-     * @author  Mathias Kettner <mk@mathias-kettner.de>
+     * @param string $backendId ID if the backend
+     * @throws BackendConnectionProblem
      * @author  Lars Michelsen <lm@larsmichelsen.com>
+     * @author  Mathias Kettner <mk@mathias-kettner.de>
      */
     public function __construct($backendId)
     {
@@ -114,8 +131,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     }
 
     /**
-     * PUBLIC class destructor
-     *
      * The descrutcor closes the socket when some is open
      * at the moment when the class is destroyed. It is
      * important to close the socket in a clean way.
@@ -131,10 +146,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     }
 
     /**
-     * PRIVATE parseSocket
-     *
      * Parses and sets the socket options
      *
+     * @param string $socket
+     * @throws BackendConnectionProblem
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function parseSocket($socket)
@@ -162,8 +177,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     }
 
     /**
-     * PUBLIC getValidConfig
-     *
      * Returns the valid config for this backend
      *
      * @return	array
@@ -175,8 +188,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     }
 
     /**
-     * PRIVATE checkSocketExists()
-     *
      * Checks if the socket exists
      *
      * @return  bool
@@ -188,10 +199,9 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     }
 
     /**
-     * PRIVATE connectSocket()
-     *
      * Connects to the livestatus socket when no connection is open
      *
+     * @throws Exception
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function connectSocket()
@@ -274,6 +284,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
 
     /**
      * Catch PHP errors occured during connect
+     *
+     * @param int $errno
+     * @param string $errstr
+     * @return bool
      */
     public function connectErrorHandler($errno, $errstr)
     {
@@ -303,8 +317,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      *
      * Queries the livestatus socket and returns the result as array
      *
-     * @param   string $query Query to send to the socket
-     * @return  array    Results of the query
+     * @param string $query Query to send to the socket
+     * @param bool $response
+     * @return  array|void    Results of the query
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
+     * @throws Exception
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -443,8 +461,6 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     }
 
     /**
-     * PRIVATE readSocket()
-     *
      * Method for reading a fixed amount of bytest from the socket
      *
      * @param   int $len Number of bytes to read
@@ -477,8 +493,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      *
      * Queries the livestatus socket for a single row
      *
-     * @param   string $query Query to send to the socket
+     * @param string $query Query to send to the socket
      * @return  array    Results of the query
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -493,12 +511,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     }
 
     /**
-     * PRIVATE queryLivestatusSingleColumn()
-     *
      * Queries the livestatus socket for a single column in several rows
      *
-     * @param   string $query Query to send to the socket
+     * @param string $query Query to send to the socket
      * @return  array    Results of the query
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -515,12 +533,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     }
 
     /**
-     * PRIVATE queryLivestatusList()
-     *
      * Queries the livestatus socket for a list of objects
      *
-     * @param   string $query Query to send to the socket
+     * @param string $query Query to send to the socket
      * @return  array    Results of the query
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -537,9 +555,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     }
 
     /**
-     * PUBLIC query()
      * This is a special method which is currently unused within NagVis.
      * It has been added as interface to the std_lq.php script.
+     *
+     * @param string $type
+     * @param string $query
+     * @return array|null
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
     public function query($type, $query)
     {
@@ -558,10 +581,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      *
      * Queries the livestatus socket for a list of objects
      *
-     * @param   string $type Type of object
-     * @param   string $name1Pattern Name1 of the objecs
-     * @param   string $name2Pattern Name2 of the objecs
+     * @param string $type Type of object
+     * @param string $name1Pattern Name1 of the objecs
+     * @param string $name2Pattern Name2 of the objecs
+     * @param string $add_filter
      * @return  array    Results of the query
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -601,13 +627,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     }
 
     /**
-     * PRIVATE parseFilter()
-     *
      * Parses the filter array to backend
      *
-     * @param   array $objects List of objects to query
-     * @param   array $filters List of filters to apply
+     * @param array<array<NagVisObject>> $objects List of objects to query
+     * @param array $filters List of filters to apply
      * @return  string    Parsed filters
+     * @throws BackendConnectionProblem
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function parseFilter(
@@ -709,6 +734,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         return implode('', $aFilters) . $count;
     }
 
+    /**
+     * @param string $stateAttr
+     * @return string
+     */
     private function serviceStateStats($stateAttr)
     {
         $staleness_thresh = cfg('global', 'staleness_threshold');
@@ -828,8 +857,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      *
      * Queries the livestatus socket for the state of one or several hosts
      *
-     * @param   array $objects List of objects to query
-     * @param   array $options List of filters to apply
+     * @param array $objects List of objects to query
+     * @param int $options
+     * @param array $filters List of filters to apply
+     * @param bool $isMemberQuery
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -948,13 +982,16 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     }
 
     /**
-     * PUBLIC getServiceState()
-     *
      * Queries the livestatus socket for a specific service
      * or all services of a host
      *
-     * @param   array $objects List of objects to query
-     * @param   array $options List of filters to apply
+     * @param array $objects List of objects to query
+     * @param int $options
+     * @param array $filters List of filters to apply
+     * @param bool $isMemberQuery
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -1113,6 +1150,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * are used to calculate the summary output and the summary state of a
      * host and a well performing alternative to the existing recurisve
      * algorithm.
+     *
+     * @param array $objects
+     * @param int $options
+     * @param array $filters
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
     public function getHostMemberCounts($objects, $options, $filters)
     {
@@ -1187,6 +1231,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     /**
      * Queries the livestatus socket a bunch of services matching a given livestatus filter.
      * It does not return all objects, instead it returns the state counts.
+     *
+     * @param int $options
+     * @param string $filter
+     * @return array|array[]
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
     public function getServiceListCounts($options, $filter)
     {
@@ -1237,6 +1287,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         ];
     }
 
+    /**
+     * @param int $options
+     * @param string $host_filter
+     * @param string $service_filter
+     * @param bool $by_group
+     * @return array|array[]
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
+     */
     public function getHostAndServiceCounts(
         $options,
         $host_filter,
@@ -1464,9 +1523,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * hostgroup and a well performing alternative to the existing recurisve
      * algorithm.
      *
-     * @param   array $objects List of objects to query
-     * @param   array $options List of filters to apply
+     * @param array $objects List of objects to query
+     * @param int $options
+     * @param array $filters List of filters to apply
      * @return  array     List of states and counts
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getHostgroupStateCounts($objects, $options, $filters)
@@ -1488,9 +1550,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * servicegroup and a well performing alternative to the existing recurisve
      * algorithm.
      *
-     * @param   array $objects List of objects to query
-     * @param   array $options List of filters to apply
+     * @param array $objects List of objects to query
+     * @param int $options
+     * @param array $filters List of filters to apply
      * @return  array     List of states and counts
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function getServicegroupStateCounts($objects, $options, $filters)
@@ -1564,6 +1629,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      * Queries the livestatus socket for all hosts without parent
      *
      * @return  array    List of hostnames which have no parent
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -1577,8 +1644,10 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
      *
      * Queries the livestatus socket for all direct childs of a host
      *
-     * @param   string $hostName Hostname
+     * @param string $hostName Hostname
      * @return  array    List of hostnames
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -1587,13 +1656,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         return $this->queryLivestatusList("GET hosts\nColumns: childs\nFilter: name = " . $hostName . "\n");
     }
 
-    /*
-     * PUBLIC getDirectParentNamesByHostName()
-     *
+    /**
      * Queries the livestatus socket for all direct parents of a host
      *
-     * @param   string   Hostname
+     * @param string $hostName Hostname
      * @return  array    List of hostnames
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -1602,6 +1671,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         return $this->queryLivestatusList("GET hosts\nColumns: parents\nFilter: name = " . $hostName . "\n");
     }
 
+    /**
+     * @param string $name
+     * @return array|mixed
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
+     */
     public function getHostNamesInHostgroup($name)
     {
         $r = $this->queryLivestatusSingleColumn("GET hostgroups\nColumns: members\nFilter: name = " . $name . "\n");
@@ -1612,7 +1687,13 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         }
     }
 
-    // Returns all hostnames which have a state != UP or a service != OK
+    /**
+     * Returns all hostnames which have a state != UP or a service != OK
+     *
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
+     */
     public function getHostNamesProblematic()
     {
         $r = $this->queryLivestatusSingleColumn("GET hosts\nColumns: name\nFilter: state != 0\n");
@@ -1623,6 +1704,11 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         return $r;
     }
 
+    /**
+     * @return int|mixed
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
+     */
     public function getProgramStart()
     {
         $r = $this->queryLivestatusSingleColumn("GET status\nColumns: program_start\n");
@@ -1633,6 +1719,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         }
     }
 
+    /**
+     * @param string|null $filterHostgroup
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
+     */
     public function getGeomapHosts($filterHostgroup = null)
     {
         $query = "GET hosts\nColumns: name custom_variable_names custom_variable_values alias\n";
@@ -1658,6 +1750,12 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         return $hosts;
     }
 
+    /**
+     * @param string $cmd
+     * @return array|null
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
+     */
     private function command($cmd)
     {
         return $this->queryLivestatus('COMMAND [' . time() . '] ' . $cmd . "\n", false);
@@ -1665,6 +1763,17 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
 
     /**
      * Sends acknowledgement command to monitoring core
+     *
+     * @param string $what
+     * @param string $spec
+     * @param string $comment
+     * @param bool $sticky
+     * @param bool $notify
+     * @param bool $persist
+     * @param string $user
+     * @return void
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
     public function actionAcknowledge($what, $spec, $comment, $sticky, $notify, $persist, $user)
     {
@@ -1696,13 +1805,15 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
             . $comment
         );
     }
+
     /**
-     * PUBLIC getDirectChildDependenciesNamesByHostName()
-     *
      * Queries the livestatus socket for all direct childs dependencies of a host
      *
-     * @param   string $hostName Hostname
+     * @param string $hostName Hostname
+     * @param bool $min_business_impact
      * @return  array    List of hostnames
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      * @author  Thibault Cohen <thibault.cohen@savoirfairelinux.com>
      */
     public function getDirectChildDependenciesNamesByHostName(
@@ -1731,13 +1842,14 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
         return $result;
     }
 
-    /*
-     * PUBLIC getDirectParentNamesByHostName()
-     *
+    /**
      * Queries the livestatus socket for all direct parents of a host
      *
-     * @param   string   Hostname
+     * @param string   Hostname
+     * @param bool $min_business_impact
      * @return  array    List of hostnames
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      * @author  Mathias Kettner <mk@mathias-kettner.de>
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
@@ -1770,6 +1882,8 @@ class GlobalBackendmklivestatus implements GlobalBackendInterface
     /**
      * Returns an assoziative array with contact names as keys and
      * a list of their contactgroups as value
+     *
+     * @return array
      */
     public function getContactsWithGroups()
     {

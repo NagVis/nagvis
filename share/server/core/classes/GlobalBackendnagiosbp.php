@@ -43,12 +43,19 @@ if (!function_exists('l')) {
 
 class GlobalBackendnagiosbp implements GlobalBackendInterface
 {
+    /** @var string */
     private $backendId = '';
+
+    /** @var string */
     private $baseUrl   = '';
+
+    /** @var false|resource|string */
     private $context   = '';
+
+    /** @var array */
     private $cache     = [];
 
-    // These are the backend local configuration options
+    /** @var array These are the backend local configuration options */
     private static $validConfig = [
         'base_url' => [
             'must'     => 1,
@@ -72,6 +79,8 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
 
     /**
      * Basic initialization happens here
+     *
+     * @param string $backendId
      */
     public function __construct($backendId)
     {
@@ -99,6 +108,10 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
      * HELPERS
      *************************************************************************/
 
+    /**
+     * @param string $key
+     * @return string
+     */
     private function bpUrl($key)
     {
         return $this->baseUrl . '?tree=' . $key;
@@ -107,6 +120,11 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
     /**
      * The real data fetching method. This performs the HTTP GET and cares
      * about parsing, validating and processing the response.
+     *
+     * @param string $params
+     * @return mixed
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
     private function getUrl($params)
     {
@@ -161,6 +179,10 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
 
     /**
      * Returns the identifiers of all business processes
+     *
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
     private function getProcessIDs()
     {
@@ -170,6 +192,10 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
 
     /**
      * Returns the identifiers and names of all business processes
+     *
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
     private function getProcessNames()
     {
@@ -182,6 +208,10 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
         return $names;
     }
 
+    /**
+     * @param string|null $state
+     * @return int|mixed
+     */
     private function getBPState($state)
     {
         if ($state == null) {
@@ -190,6 +220,11 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
         return state_num($state);
     }
 
+    /**
+     * @param array $bp
+     * @return array|array[]
+     * @throws BackendException
+     */
     private function getBPCounts($bp)
     {
         $c = [
@@ -241,6 +276,13 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
     /**
      * Used in WUI forms to populate the object lists when adding or modifying
      * objects in WUI.
+     *
+     * @param string $type
+     * @param string $name1Pattern
+     * @param string $name2Pattern
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
     public function getObjects($type, $name1Pattern = '', $name2Pattern = '')
     {
@@ -261,6 +303,14 @@ class GlobalBackendnagiosbp implements GlobalBackendInterface
      *
      * This backend transforms all business processes to servicegroups. Each
      * business process component is used as a service.
+     *
+     * @param array<array<NagVisObject>> $objects
+     * @param int $options
+     * @param array $filters
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendException
+     * @throws BackendInvalidResponse
      */
     public function getServicegroupStateCounts($objects, $options, $filters)
     {
