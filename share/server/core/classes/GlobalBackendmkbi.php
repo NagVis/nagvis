@@ -31,11 +31,19 @@ if (!function_exists('l')) {
 
 class GlobalBackendmkbi implements GlobalBackendInterface
 {
+    /** @var string */
     private $backendId = '';
+
+    /** @var string */
     private $baseUrl   = '';
+
+    /** @var string|resource */
     private $context   = '';
+
+    /** @var array */
     private $cache     = [];
 
+    /** @var string[] */
     private static $bi_aggr_states = [
         -2 => 'ERROR',
         -1 => 'PENDING',
@@ -46,6 +54,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface
         4 => 'UNREACHABLE'
     ];
 
+    /** @var int[] */
     private static $bi_short_states = [
         'PD' => -1,
         'OK' =>  0,
@@ -56,7 +65,7 @@ class GlobalBackendmkbi implements GlobalBackendInterface
         'NA' =>  4,
     ];
 
-    // These are the backend local configuration options
+    /** @var array These are the backend local configuration options */
     private static $validConfig = [
         'base_url' => [
             'must'     => 1,
@@ -121,6 +130,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface
 
     /**
      * Basic initialization happens here
+     *
+     * @param string $backendId
      */
     public function __construct($backendId)
     {
@@ -192,6 +203,10 @@ class GlobalBackendmkbi implements GlobalBackendInterface
         }
     }
 
+    /**
+     * @param string $name
+     * @return string
+     */
     private function aggrUrl($name)
     {
         $html_cgi = cfg('backend_' . $this->backendId, 'htmlcgi');
@@ -201,6 +216,11 @@ class GlobalBackendmkbi implements GlobalBackendInterface
     /**
      * The real data fetching method. This performs the HTTP GET and cares
      * about parsing, validating and processing the response.
+     *
+     * @param string $params
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
     private function getUrl($params)
     {
@@ -270,6 +290,10 @@ class GlobalBackendmkbi implements GlobalBackendInterface
 
     /**
      * Returns the identifiers and names of all business processes
+     *
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendInvalidResponse
      */
     private function getAggregationNames()
     {
@@ -282,13 +306,23 @@ class GlobalBackendmkbi implements GlobalBackendInterface
         return $names;
     }
 
-    // Transform BI state numbers to NagVis state names and then to
-    // NagVis internal state numbers
+    /**
+     * Transform BI state numbers to NagVis state names and then to
+     * NagVis internal state numbers
+     *
+     * @param int $state
+     * @return int
+     */
     private function getAggrState($state)
     {
         return state_num(GlobalBackendmkbi::$bi_aggr_states[(int)$state]);
     }
 
+    /**
+     * @param array $aggr
+     * @return array
+     * @throws BackendException
+     */
     private function getAggrElements($aggr)
     {
         if (is_array($aggr['aggr_treestate'])) {
@@ -338,6 +372,11 @@ class GlobalBackendmkbi implements GlobalBackendInterface
         return $elements;
     }
 
+    /**
+     * @param array $aggr
+     * @return array|array[]
+     * @throws BackendException
+     */
     private function getAggrCounts($aggr)
     {
         $c = [
@@ -394,6 +433,11 @@ class GlobalBackendmkbi implements GlobalBackendInterface
     /**
      * Used in WUI forms to populate the object lists when adding or modifying
      * objects in WUI.
+     *
+     * @param string $type
+     * @param string $name1Pattern
+     * @param string $name2Pattern
+     * @return array
      */
     public function getObjects($type, $name1Pattern = '', $name2Pattern = '')
     {
@@ -408,6 +452,11 @@ class GlobalBackendmkbi implements GlobalBackendInterface
         return $result;
     }
 
+    /**
+     * @param array[] $aggregations
+     * @param string $key
+     * @return null
+     */
     private function matchAggregation($aggregations, $key)
     {
         $aggr = null;
@@ -423,6 +472,14 @@ class GlobalBackendmkbi implements GlobalBackendInterface
     /**
      * Returns the service state counts for a list of aggregations. Using
      * the given objects and filters.
+     *
+     * @param array $objects
+     * @param $options
+     * @param $filters
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendException
+     * @throws BackendInvalidResponse
      */
     public function getAggrStateCounts($objects, $options, $filters)
     {
@@ -467,6 +524,14 @@ class GlobalBackendmkbi implements GlobalBackendInterface
     /**
      * Returns the state with detailed information of a list of services. Using
      * the given objects and filters.
+     *
+     * @param array $objects
+     * @param $options
+     * @param $filters
+     * @return array
+     * @throws BackendConnectionProblem
+     * @throws BackendException
+     * @throws BackendInvalidResponse
      */
     public function getServiceState($objects, $options, $filters)
     {
@@ -520,6 +585,8 @@ class GlobalBackendmkbi implements GlobalBackendInterface
     /**
      * PUBLIC Method getValidConfig
      * Returns the valid config for this backend
+     *
+     * @return array
      */
     public static function getValidConfig()
     {
@@ -530,41 +597,80 @@ class GlobalBackendmkbi implements GlobalBackendInterface
      * Not implemented methods
      **************************************************************************/
 
+    /**
+     * @param $objects
+     * @param $options
+     * @param $filters
+     * @return array
+     */
     public function getHostState($objects, $options, $filters)
     {
         return [];
     }
 
+    /**
+     * @param $objects
+     * @param $options
+     * @param $filters
+     * @return array
+     */
     public function getHostMemberCounts($objects, $options, $filters)
     {
         return [];
     }
 
+    /**
+     * @param $objects
+     * @param $options
+     * @param $filters
+     * @return array
+     */
     public function getHostgroupStateCounts($objects, $options, $filters)
     {
         return [];
     }
 
+    /**
+     * @param $objects
+     * @param $options
+     * @param $filters
+     * @return void
+     */
     public function getServicegroupStateCounts($objects, $options, $filters)
     {
 
     }
 
+    /**
+     * @return array
+     */
     public function getHostNamesWithNoParent()
     {
         return [];
     }
 
+    /**
+     * @param $hostName
+     * @return array
+     */
     public function getDirectChildNamesByHostName($hostName)
     {
         return [];
     }
 
+    /**
+     * @param $hostName
+     * @return array
+     */
     public function getDirectParentNamesByHostName($hostName)
     {
         return [];
     }
 
+    /**
+     * @param $hostName
+     * @return array
+     */
     public function getDirectChildDependenciesNamesByHostName($hostName)
     {
         return [];
@@ -575,11 +681,21 @@ if (!function_exists('l')) {
     require_once('GlobalBackendInterface.php');
     require_once('CoreExceptions.php');
 
+    /**
+     * @param string $s
+     * @param array $a
+     * @return string
+     */
     function l($s, $a = [])
     {
         return $s . ' ' . json_encode($a);
     }
 
+    /**
+     * @param $sec
+     * @param string $opt
+     * @return string|void
+     */
     function cfg($sec, $opt)
     {
         if ($opt == 'base_url') {
