@@ -24,10 +24,16 @@
 
 class ViewManageShapes
 {
+    /** @var string|null */
     private $error = null;
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     */
     private function uploadForm()
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         echo '<h2>' . l('Upload Shape') . '</h2>';
 
@@ -91,8 +97,15 @@ class ViewManageShapes
         form_end();
     }
 
+    /**
+     * @return void
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
     private function deleteForm()
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         echo '<h2>' . l('Delete Shape') . '</h2>';
 
@@ -169,6 +182,13 @@ class ViewManageShapes
 
     }
 
+    /**
+     * @return string
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
     public function parse()
     {
         ob_start();

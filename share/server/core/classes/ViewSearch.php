@@ -24,6 +24,9 @@
 
 class ViewSearch
 {
+    /**
+     * @return string
+     */
     public function parse()
     {
         ob_start();
