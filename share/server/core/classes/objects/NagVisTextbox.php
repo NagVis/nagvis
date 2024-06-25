@@ -28,9 +28,16 @@
  */
 class NagVisTextbox extends NagVisStatelessObject
 {
+    /** @var string */
     protected $text;
+
+    /** @var int */
     protected $w;
+
+    /** @var int */
     protected $h;
+
+    /** @var string */
     protected $style;
     protected $background_color;
     protected $border_color;
@@ -45,16 +52,18 @@ class NagVisTextbox extends NagVisStatelessObject
         parent::__construct();
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->object_id;
     }
 
     /**
-     * PUBLIC fetchIcon()
-     *
      * Just a dummy here (Textbox won't need an icon)
      *
+     * @return void
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function fetchIcon()

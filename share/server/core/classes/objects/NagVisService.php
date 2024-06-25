@@ -28,13 +28,19 @@
  */
 class NagVisService extends NagVisStatefulObject
 {
+    /** @var string */
     protected $type = 'service';
 
     protected static $langType = null;
     protected static $langSelf = null;
 
+    /** @var string */
     protected $gadget_url;
+
+    /** @var string */
     protected $host_name;
+
+    /** @var string */
     protected $service_description;
     protected $line_label_show;
     protected $line_label_in;
@@ -43,6 +49,11 @@ class NagVisService extends NagVisStatefulObject
     protected $line_label_pos_out;
     protected $line_label_y_offset;
 
+    /**
+     * @param array $backend_id
+     * @param string $hostName
+     * @param string $serviceDescription
+     */
     public function __construct($backend_id, $hostName, $serviceDescription)
     {
         $this->backend_id = [$backend_id[0]]; // only supports one backend
@@ -51,21 +62,33 @@ class NagVisService extends NagVisStatefulObject
         parent::__construct();
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->host_name;
     }
 
+    /**
+     * @return null
+     */
     public function getNumMembers()
     {
         return null;
     }
 
+    /**
+     * @return false
+     */
     public function hasMembers()
     {
         return false;
     }
 
+    /**
+     * @return array
+     */
     public function getStateRelevantMembers()
     {
         return [];
@@ -73,6 +96,10 @@ class NagVisService extends NagVisStatefulObject
 
     /**
      * Queues state fetching for this object
+     *
+     * @param bool $_unused_flag
+     * @param bool $_unused_flag2
+     * @return void
      */
     public function queueState($_unused_flag = true, $_unused_flag2 = true)
     {
@@ -98,11 +125,17 @@ class NagVisService extends NagVisStatefulObject
         $this->sum = $this->state;
     }
 
+    /**
+     * @return string
+     */
     public function getServiceDescription()
     {
         return $this->service_description;
     }
 
+    /**
+     * @return array
+     */
     protected function fetchObjectAsChild()
     {
         $aChild = parent::fetchObjectAsChild();

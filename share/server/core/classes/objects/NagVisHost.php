@@ -25,19 +25,32 @@
 
 class NagVisHost extends NagVisStatefulObject
 {
+    /** @var string */
     protected $type = 'host';
 
     protected static $langType = null;
     protected static $langSelf = null;
     protected static $langChild = null;
+
+    /** @var string */
     protected static $langHostStateIs = null;
+
+    /** @var string */
     protected static $langServices = null;
 
+    /** @var string */
     protected $host_name;
+
+    /** @var string */
     protected $alias;
 
+    /** @var NagVisService[] */
     protected $members = [];
 
+    /**
+     * @param array $backend_id
+     * @param string $hostName
+     */
     public function __construct($backend_id, $hostName)
     {
         $this->backend_id = $backend_id;
@@ -46,10 +59,10 @@ class NagVisHost extends NagVisStatefulObject
     }
 
     /**
-     * PUBLIC fetchSummariesFromCounts()
-     *
      * Fetches the summary state and output from the already set state counts
      *
+     * @return void
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function fetchSummariesFromCounts()
@@ -76,12 +89,11 @@ class NagVisHost extends NagVisStatefulObject
     }
 
     /**
-     * PUBLIC queueState()
-     *
      * Queues the state fetching to the backend.
      *
-     * @param   bool $bFetchObjectState Optional flag to disable fetching of the object status
-     * @param   bool $bFetchMemberState Optional flag to disable fetching of member status
+     * @param bool $bFetchObjectState Optional flag to disable fetching of the object status
+     * @param bool $bFetchMemberState Optional flag to disable fetching of member status
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function queueState($bFetchObjectState = true, $bFetchMemberState = true)
@@ -110,10 +122,10 @@ class NagVisHost extends NagVisStatefulObject
     }
 
     /**
-     * PUBLIC applyState()
-     *
      * Applies the fetched state
      *
+     * @return void
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function applyState()
@@ -149,11 +161,10 @@ class NagVisHost extends NagVisStatefulObject
     # #########################################################################
 
     /**
-     * PRIVATE fetchSummaryState()
-     *
      * Fetches the summary state from all services
      *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @return void
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchSummaryState()
     {
@@ -169,11 +180,10 @@ class NagVisHost extends NagVisStatefulObject
     }
 
     /**
-     * PUBLIC addHostStateToStateCounts()
-     *
      * Adds the current host state to the member state counts
      *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @return void
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function addHostStateToStateCounts()
     {
@@ -190,11 +200,10 @@ class NagVisHost extends NagVisStatefulObject
     }
 
     /**
-     * PRIVATE fetchSummaryOutputFromCounts()
-     *
      * Fetches the summary output from the object state counts
      *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @return void
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchSummaryOutputFromCounts()
     {
@@ -247,11 +256,10 @@ class NagVisHost extends NagVisStatefulObject
     }
 
     /**
-     * PRIVATE fetchSummaryOutput()
-     *
      * Fetches the summary output from host and all services
      *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @return void
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchSummaryOutput()
     {
