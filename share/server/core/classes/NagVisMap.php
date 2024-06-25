@@ -27,17 +27,21 @@
  */
 class NagVisMap
 {
+    /** @var NagVisMapObj|null */
     public $MAPOBJ = null;
+
+    /** @var GlobalMapCfg */
     protected $MAPCFG;
 
+    /** @var array */
     private $linkedMaps = [];
 
     /**
      * Class Constructor
      *
      * @param GlobalMapCfg $MAPCFG
-     * @param true $getState
-     * @param true $bIsView
+     * @param bool $getState
+     * @param bool $bIsView
      * @throws NagVisException
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
