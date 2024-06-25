@@ -28,16 +28,24 @@
  */
 class NagVisInfoView
 {
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct($CORE) {}
 
     /**
      * Parses the information in html format
      *
-     * @return	string 	String with Html Code
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return string String with Html Code
+     * @throws Dwoo_Exception
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parse()
     {
+        /**
+         * @var CoreAuthHandler $AUTH
+         * @var CoreAuthorisationHandler $AUTHORISATION
+         */
         global $AUTH, $AUTHORISATION;
         // Initialize template system
         $TMPL = New FrontendTemplateSystem();

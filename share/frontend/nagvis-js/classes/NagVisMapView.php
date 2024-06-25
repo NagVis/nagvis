@@ -27,13 +27,28 @@
  */
 class NagVisMapView
 {
+    /** @var GlobalMapCfg|null */
     private $MAPCFG    = null;
+
+    /** @var string */
     private $name      = '';
+
+    /** @var string */
     private $search    = '';
+
+    /** @var array  */
     private $aRotation = [];
+
+    /** @var bool */
     private $editMode  = false;
+
+    /** @var array */
     private $aParams   = [];
 
+    /**
+     * @param GlobalCore $CORE
+     * @param string $name
+     */
     public function __construct(GlobalCore $CORE, $name)
     {
         $this->name = $name;
@@ -42,7 +57,8 @@ class NagVisMapView
     /**
      * Set the search value if the user searches for an object
      *
-     * @param   string $s Search string
+     * @param string $s Search string
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setSearch($s)
@@ -53,7 +69,8 @@ class NagVisMapView
     /**
      * Set the rotation properties if the user wants a rotation
      *
-     * @param   array $a
+     * @param array $a
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setRotation($a)
@@ -63,12 +80,18 @@ class NagVisMapView
 
     /**
      * Set the url params
+     *
+     * @param array $a
+     * @return void
      */
     public function setParams($a)
     {
         $this->aParams = $a;
     }
 
+    /**
+     * @return void
+     */
     public function setEditMode()
     {
         $this->editMode = true;
@@ -77,11 +100,19 @@ class NagVisMapView
     /**
      * Parses the map and the objects for the nagvis-js frontend
      *
-     * @return	string 	String with JS Code
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return string String with JS Code
+     * @throws Dwoo_Exception
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parse()
     {
+        /**
+         * @var GlobalMainCfg $_MAINCFG
+         * @var GlobalCore $CORE
+         */
         global $_MAINCFG, $CORE;
         // Initialize template system
         $TMPL    = new FrontendTemplateSystem();
@@ -116,11 +147,13 @@ class NagVisMapView
      * Parses the view specific properties. In most cases this will be user
      * defined values which maybe given by url or session
      *
-     * @return  string  JSON array
+     * @return string JSON array
+     * @throws NagVisException
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function parseViewProperties()
     {
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTHORISATION;
         $arr = [];
 

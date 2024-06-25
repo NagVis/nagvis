@@ -24,10 +24,16 @@
 
 class NagVisOverviewView
 {
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct($CORE)
     {
     }
 
+    /**
+     * @return array
+     */
     private function getProperties()
     {
         $arr = [];
@@ -57,11 +63,17 @@ class NagVisOverviewView
     /**
      * Parses the information for json
      *
-     * @return	string 	String with Html Code
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return string String with Html Code
+     * @throws Dwoo_Exception
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parse()
     {
+        /**
+         * @var GlobalMainCfg $_MAINCFG
+         * @var GlobalCore $CORE
+         */
         global $_MAINCFG, $CORE;
         // Initialize template system
         $TMPL    = new FrontendTemplateSystem();
