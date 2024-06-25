@@ -25,6 +25,7 @@
 
 class NagVisServicegroup extends NagVisStatefulObject
 {
+    /** @var string */
     protected $type = 'servicegroup';
 
     protected static $langType = null;
@@ -32,11 +33,19 @@ class NagVisServicegroup extends NagVisStatefulObject
     protected static $langChild = null;
     protected static $langChild1 = null;
 
+    /** @var string */
     protected $servicegroup_name;
+
+    /** @var string */
     protected $alias;
 
+    /** @var NagVisService[] */
     protected $members = [];
 
+    /**
+     * @param array $backend_id
+     * @param string $servicegroupName
+     */
     public function __construct($backend_id, $servicegroupName)
     {
         $this->backend_id = $backend_id;
@@ -46,6 +55,10 @@ class NagVisServicegroup extends NagVisStatefulObject
 
     /**
      * Queues the state fetching to the backend.
+     *
+     * @param bool $_unused_flag
+     * @param bool $bFetchMemberState
+     * @return void
      */
     public function queueState($_unused_flag = true, $bFetchMemberState = true)
     {
@@ -65,6 +78,9 @@ class NagVisServicegroup extends NagVisStatefulObject
 
     /**
      * Applies the fetched state
+     *
+     * @return void
+     * @throws NagVisException
      */
     public function applyState()
     {
@@ -118,6 +134,8 @@ class NagVisServicegroup extends NagVisStatefulObject
 
     /**
      * Fetches the summary state of all members
+     *
+     * @return void
      */
     private function fetchSummaryState()
     {
@@ -131,6 +149,8 @@ class NagVisServicegroup extends NagVisStatefulObject
 
     /**
      * Fetches the summary output from the object state counts
+     *
+     * @return void
      */
     private function fetchSummaryOutputFromCounts()
     {
@@ -171,6 +191,8 @@ class NagVisServicegroup extends NagVisStatefulObject
 
     /**
      * Fetches the summary output from all members
+     *
+     * @return void
      */
     private function fetchSummaryOutput()
     {

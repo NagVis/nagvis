@@ -25,17 +25,26 @@
 
 class NagVisHostgroup extends NagVisStatefulObject
 {
+    /** @var string */
     protected $type = 'hostgroup';
 
     protected static $langType = null;
     protected static $langSelf = null;
     protected static $langChild = null;
 
+    /** @var string */
     protected $hostgroup_name;
+
+    /**@var string */
     protected $alias;
 
+    /** @var NagVisHost[] */
     protected $members = [];
 
+    /**
+     * @param array $backend_id
+     * @param string $hostgroupName
+     */
     public function __construct($backend_id, $hostgroupName)
     {
         $this->backend_id = $backend_id;
@@ -46,11 +55,14 @@ class NagVisHostgroup extends NagVisStatefulObject
 
     /**
      * Queues the state fetching to the backend.
-     * @param   bool $_unused Unused flag here
-     * @param   bool $bFetchMemberState Optional flag to disable fetching of member status
+     *
+     * @param bool $_unused Unused flag here
+     * @param bool $bFetchMemberState Optional flag to disable fetching of member status
+     * @return void
      */
     public function queueState($_unused = true, $bFetchMemberState = true)
     {
+        /** @var CoreBackendMgmt $_BACKEND */
         global $_BACKEND;
         $queries = ['hostgroupMemberState' => true];
 
@@ -67,6 +79,9 @@ class NagVisHostgroup extends NagVisStatefulObject
 
     /**
      * Applies the fetched state
+     *
+     * @return void
+     * @throws NagVisException
      */
     public function applyState()
     {
@@ -118,6 +133,8 @@ class NagVisHostgroup extends NagVisStatefulObject
 
     /**
      * Fetches the summary output from the object state counts
+     *
+     * @return void
      */
     private function fetchSummaryOutputFromCounts()
     {
@@ -168,6 +185,8 @@ class NagVisHostgroup extends NagVisStatefulObject
 
     /**
      * Fetches the summary state from all members recursive
+     *
+     * @return void
      */
     private function fetchSummaryState()
     {
@@ -180,6 +199,8 @@ class NagVisHostgroup extends NagVisStatefulObject
 
     /**
      * Fetches the summary output from all members
+     *
+     * @return void
      */
     private function fetchSummaryOutput()
     {

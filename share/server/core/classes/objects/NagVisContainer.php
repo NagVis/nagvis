@@ -25,6 +25,7 @@
 
 class NagVisContainer extends NagVisStatelessObject
 {
+    /** @var string */
     protected $type = 'container';
 
     protected $enable_refresh;
@@ -35,8 +36,9 @@ class NagVisContainer extends NagVisStatelessObject
     protected $border_color;
 
     /**
-     * PUBLIC parseJson()
      * Parses the object in json format
+     *
+     * @return array
      */
     public function parseJson()
     {
@@ -51,8 +53,9 @@ class NagVisContainer extends NagVisStatelessObject
     }
 
     /**
-     * PUBLIC fetchIcon()
      * Just a dummy here (Container won't need an icon)
+     *
+     * @return void
      */
     public function fetchIcon()
     {
