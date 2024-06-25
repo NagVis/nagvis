@@ -33,8 +33,9 @@ define('DEBUGSTART', microtime_float());
 /**
  * Writes the debug output to the debug file
  *
- * @param		string $msg Debug message
- * @author 	Lars Michelsen <lm@larsmichelsen.com>
+ * @param string $msg Debug message
+ * @return void
+ * @author    Lars Michelsen <lm@larsmichelsen.com>
  */
 function debug($msg) {
         $fh = fopen(DEBUGFILE, 'a');
@@ -45,6 +46,7 @@ function debug($msg) {
 /**
  * Writes the render time and the called URI to the debug file
  *
+ * @return void
  * @author 	Lars Michelsen <lm@larsmichelsen.com>
  */
 function debugFinalize() {
@@ -53,6 +55,10 @@ function debugFinalize() {
         . ' URI: ' . $_SERVER['REQUEST_URI']);
 }
 
+/**
+ * @param string $txt
+ * @return void
+ */
 function log_mem($txt = 'somewhere') {
     if (DEBUG && DEBUGLEVEL & 2) {
         debug('mem [' . $txt . ']: ' . round(memory_get_usage() / 1024 / 1024, 2) . 'Mb');
@@ -62,18 +68,25 @@ function log_mem($txt = 'somewhere') {
 /**
  * Returns the current time in microtime as float
  *
- * @return	Float		Microtime
+ * @return float Microtime
  * @author 	Lars Michelsen <lm@larsmichelsen.com>
  */
 function microtime_float() {
-        list($usec, $sec) = explode(' ', microtime());
-        return ((float)$usec + (float)$sec);
+    list($usec, $sec) = explode(' ', microtime());
+    return ((float)$usec + (float)$sec);
 }
 
+/**
+ * @return void
+ */
 function profilingStart() {
-        //xhprof_enable(XHPROF_FLAGS_CPU + XHPROF_FLAGS_MEMORY);
+    //xhprof_enable(XHPROF_FLAGS_CPU + XHPROF_FLAGS_MEMORY);
 }
 
+/**
+ * @param $pre
+ * @return void
+ */
 function profilingFinalize($pre) {
         //include_once "/usr/share/php5-xhprof/xhprof_lib/utils/xhprof_lib.php";
         //include_once "/usr/share/php5-xhprof/xhprof_lib/utils/xhprof_runs.php";

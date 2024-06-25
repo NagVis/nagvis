@@ -27,6 +27,8 @@
  * This is a custom error handling function for submitting PHP errors to the
  * ajax requesting frontend
  *
+ * @param Exception $OBJ
+ * @return void
  * @author     Lars Michelsen <lm@larsmichelsen.com>
  */
 
@@ -49,6 +51,14 @@ function nagvisException($OBJ) {
     }
 }
 
+/**
+ * @param int $errno
+ * @param string $errstr
+ * @param string $errfile
+ * @param int $errline
+ * @return false
+ * @throws NagVisErrorException
+ */
 function nagvisExceptionErrorHandler($errno, $errstr, $errfile, $errline ) {
     // Use current error_reporting settings to skip unwanted errors
     if (!(error_reporting() & $errno)) {

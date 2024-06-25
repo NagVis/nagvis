@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @return string[]
+ */
 function getMapObjectTypes() {
     return [
         'host',
@@ -16,6 +19,10 @@ function getMapObjectTypes() {
     ];
 }
 
+/**
+ * @return array
+ * @throws NagVisException
+ */
 function listMapNames() {
     global $CORE, $AUTHORISATION;
     $list = [];
@@ -29,6 +36,10 @@ function listMapNames() {
     return $list;
 }
 
+/**
+ * @return array
+ * @throws NagVisException
+ */
 function listMapImages() {
     global $CORE;
     $options = $CORE->getAvailableBackgroundImages();
@@ -36,6 +47,9 @@ function listMapImages() {
     return $options;
 }
 
+/**
+ * @return string[]
+ */
 function listLineTypes() {
     return [
         '10' => '-------><-------',
@@ -47,6 +61,9 @@ function listLineTypes() {
     ];
 }
 
+/**
+ * @return string[]
+ */
 function listStatelessLineTypes() {
     return [
         '10' => '-------><-------',
@@ -55,6 +72,9 @@ function listStatelessLineTypes() {
     ];
 }
 
+/**
+ * @return string[]
+ */
 function listLineArrows() {
     return [
         'forward' => '------->',
@@ -64,6 +84,9 @@ function listLineArrows() {
     ];
 }
 
+/**
+ * @return array
+ */
 function listGadgetTypes() {
     return [
         'img'  => l('Image'),
@@ -71,23 +94,39 @@ function listGadgetTypes() {
     ];
 }
 
+/**
+ * @return array
+ * @throws NagVisException
+ */
 function listGadgets() {
     global $CORE;
     return $CORE->getAvailableGadgets();
 }
 
+/**
+ * @return string[]
+ */
 function listViewTypesContainer() {
     return ['inline', 'iframe'];
 }
 
+/**
+ * @return string[]
+ */
 function listViewTypesObj() {
     return ['icon', 'line', 'gadget'];
 }
 
+/**
+ * @return string[]
+ */
 function listViewTypes() {
     return ['icon', 'line'];
 }
 
+/**
+ * @return array
+ */
 function listDynGroupTypes() {
     return [
         'host'    => l('Hosts'),
@@ -95,6 +134,9 @@ function listDynGroupTypes() {
     ];
 }
 
+/**
+ * @return array
+ */
 function listZoomFactors() {
     return [
         10     => ' 10%',
@@ -109,7 +151,14 @@ function listZoomFactors() {
     ];
 }
 
-
+/**
+ * @param string $type
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $objId
+ * @param array $attrs
+ * @return array|string[]
+ * @throws NagVisException
+ */
 function getObjectNames($type, $MAPCFG, $objId, $attrs) {
     global $_BACKEND;
     $backendIds = false;
@@ -163,30 +212,75 @@ function getObjectNames($type, $MAPCFG, $objId, $attrs) {
     return $ret;
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $objId
+ * @param array $attrs
+ * @return array|string[]
+ * @throws NagVisException
+ */
 function listHostNames($MAPCFG, $objId, $attrs) {
     return getObjectNames('host', $MAPCFG, $objId, $attrs);
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $objId
+ * @param array $attrs
+ * @return array|string[]
+ * @throws NagVisException
+ */
 function listHostgroupNames($MAPCFG, $objId, $attrs) {
     return getObjectNames('hostgroup', $MAPCFG, $objId, $attrs);
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $objId
+ * @param array $attrs
+ * @return array|string[]
+ * @throws NagVisException
+ */
 function listServiceNames($MAPCFG, $objId, $attrs) {
     return getObjectNames('service', $MAPCFG, $objId, $attrs);
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $objId
+ * @param array $attrs
+ * @return array|string[]
+ * @throws NagVisException
+ */
 function listServicegroupNames($MAPCFG, $objId, $attrs) {
     return getObjectNames('servicegroup', $MAPCFG, $objId, $attrs);
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $objId
+ * @param array $attrs
+ * @return array|string[]
+ * @throws NagVisException
+ */
 function listAggrNames($MAPCFG, $objId, $attrs) {
     return getObjectNames('aggr', $MAPCFG, $objId, $attrs);
 }
 
+/**
+ * @return array
+ */
 function listTemplateNames() {
     return [];
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $objId
+ * @param array $attrs
+ * @return array|string[]
+ * @throws NagVisException
+ */
 function listShapes($MAPCFG, $objId, $attrs) {
     global $CORE;
     // Return simply nothing when a user just choosen to insert "other" icon
@@ -196,6 +290,12 @@ function listShapes($MAPCFG, $objId, $attrs) {
     return $CORE->getAvailableShapes();
 }
 
+/**
+ * @param GlobalMapCfg $MAPCFG
+ * @param string $objId
+ * @param array $attrs
+ * @return array|string[]
+ */
 function listSources($MAPCFG, $objId, $attrs) {
     global $CORE;
     // Return simply nothing when a user just choosen to insert "other" sources

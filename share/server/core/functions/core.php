@@ -87,10 +87,20 @@ $_BACKEND = new CoreBackendMgmt();
 // ----------------------------------------------------------------------------
 // some untilities
 
+/**
+ * @param array $arr
+ * @param string $key
+ * @param mixed|null $dflt
+ * @return mixed|null
+ */
 function val($arr, $key, $dflt = null) {
     return isset($arr[$key]) ? $arr[$key] : $dflt;
 }
 
+/**
+ * @param int $state
+ * @return string
+ */
 function state_str($state) {
     switch ($state) {
         case UNCHECKED:
@@ -117,6 +127,10 @@ function state_str($state) {
     }
 }
 
+/**
+ * @param string $state_str
+ * @return mixed
+ */
 function state_num($state_str) {
     $a = [
         'UNCHECKED'     => UNCHECKED,
@@ -135,35 +149,67 @@ function state_num($state_str) {
     return $a[$state_str];
 }
 
+/**
+ * @param int $state
+ * @return bool
+ */
 function is_host_state($state) {
     return $state == UNCHECKED || $state == UNREACHABLE || $state == DOWN || $state == UP;
 }
 
+/**
+ * @return array
+ * @throws NagVisException
+ */
 function listIconsets() {
+    /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableIconsets();
 }
 
+/**
+ * @return array
+ * @throws Exception
+ */
 function listBackendIds() {
+    /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getDefinedBackends();
 }
 
+/**
+ * @return array
+ * @throws NagVisException
+ */
 function listHeaderTemplates() {
+    /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableHeaderTemplates();
 }
 
+/**
+ * @return array
+ * @throws NagVisException
+ */
 function listHoverTemplates() {
+    /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableHoverTemplates();
 }
 
+/**
+ * @return array
+ * @throws NagVisException
+ */
 function listContextTemplates() {
+    /** @var GlobalCore $CORE */
     global $CORE;
     return $CORE->getAvailableContextTemplates();
 }
 
+/**
+ * @return array
+ */
 function listHoverChildSorters() {
     return [
         'a' => l('Alphabetically'),
@@ -172,6 +218,9 @@ function listHoverChildSorters() {
     ];
 }
 
+/**
+ * @return array
+ */
 function listHoverChildOrders() {
     return [
         'asc'  => l('Ascending'),
