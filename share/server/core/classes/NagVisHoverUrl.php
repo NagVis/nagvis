@@ -27,15 +27,21 @@
  */
 class NagVisHoverUrl
 {
+    /** @var GlobalCore */
     private $CORE;
 
+    /** @var string */
     private $url;
+
+    /** @var string */
     private $code;
 
     /**
      * Class Constructor
      *
-     * @param     GlobalCore     $CORE
+     * @param GlobalCore $CORE
+     * @param string $url
+     * @throws NagVisException
      * @author     Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($CORE, $url)
@@ -50,10 +56,9 @@ class NagVisHoverUrl
     }
 
     /**
-     * PUBLIC __toString()
-     *
      * "Magic method" returns the contents of the hover url
      *
+     * @return string
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __toString()
@@ -66,6 +71,8 @@ class NagVisHoverUrl
      *
      * Reads the given hover url form an object and forms it to a readable format for the hover box
      *
+     * @return void
+     * @throws NagVisException
      * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function readHoverUrl()
@@ -113,10 +120,9 @@ class NagVisHoverUrl
 
 
     /**
-     * PRIVATE cleanCode()
-     *
      * Replace unwanted things from the code
      *
+     * @return void
      * @author     Lars Michelsen <lm@larsmichelsen.com>
      */
     private function cleanCode()

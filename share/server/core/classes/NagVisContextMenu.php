@@ -27,21 +27,35 @@
  */
 class NagVisContextMenu
 {
+    /** @var GlobalCore */
     private $CORE;
+
+    /** @var mixed|null */
     private $OBJPAGE;
+
+    /** @var GlobalFileCache */
     private $CACHE;
 
+    /** @var string */
     private $templateName;
+
+    /** @var string */
     private $pathHtmlBase;
+
+    /** @var string */
     private $pathTemplateFile;
 
+    /** @var mixed */
     private $code;
 
     /**
      * Class Constructor
      *
-     * @param 	GlobalCore 	$CORE
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param GlobalCore $CORE
+     * @param string $templateName
+     * @param $OBJ
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($CORE, $templateName, $OBJ = null)
     {
@@ -80,8 +94,9 @@ class NagVisContextMenu
      *
      * Reads the contents of the template file
      *
-     * @return	bool		Result
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return bool Result
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function readTemplate()
     {
@@ -98,6 +113,7 @@ class NagVisContextMenu
      *
      * Replaces static macros like paths and language strings in template code
      *
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     private function replaceStaticMacros()
@@ -203,7 +219,7 @@ class NagVisContextMenu
     /**
      * Print the HTML code
      *
-     * return   String  HTML Code
+     * @return string HTML Code
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __toString()
@@ -216,9 +232,10 @@ class NagVisContextMenu
      *
      * Checks if the requested template file is readable
      *
-     * @param		bool $printErr Switch for enabling/disabling error messages
-     * @return	bool		Check Result
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr Switch for enabling/disabling error messages
+     * @return bool Check Result
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkTemplateReadable($printErr)
     {
@@ -230,15 +247,19 @@ class NagVisContextMenu
      *
      * Checks if the requested template file exists
      *
-     * @param		bool $printErr Switch for enabling/disabling error messages
-     * @return	bool		Check Result
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr Switch for enabling/disabling error messages
+     * @return bool Check Result
+     * @throws NagVisException
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkTemplateExists($printErr)
     {
         return GlobalCore::getInstance()->checkExisting($this->pathTemplateFile, $printErr);
     }
 
+    /**
+     * @return string|null
+     */
     public function getCssFile()
     {
         return path('html', 'global', 'templates', $this->templateName . '.context.css');
