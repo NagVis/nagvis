@@ -24,6 +24,11 @@
 
 class ViewError
 {
+    /**
+     * @param Exception $e
+     * @return false|string
+     * @throws NagVisException
+     */
     private function errorPage($e)
     {
         global $_MAINCFG;
@@ -45,6 +50,13 @@ class ViewError
         return ob_get_clean();
     }
 
+    /**
+     * @param Exception $e
+     * @param GlobalMapCfg $MAPCFG
+     * @return string
+     * @throws Dwoo_Exception
+     * @throws NagVisException
+     */
     public function parse($e, $MAPCFG = null)
     {
         global $CORE;
@@ -58,6 +70,13 @@ class ViewError
         return $INDEX->parse();
     }
 
+    /**
+     * @param Exception $e
+     * @param string $map_name
+     * @return string
+     * @throws Dwoo_Exception
+     * @throws NagVisException
+     */
     public function parseWithMap($e, $map_name)
     {
         $MAPCFG = new GlobalMapCfg($map_name);

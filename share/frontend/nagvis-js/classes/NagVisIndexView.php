@@ -28,30 +28,56 @@
  */
 class NagVisIndexView
 {
+    /** @var string */
     private $sSubtitle = '';
+
+    /** @var string */
     private $sCustomStylesheet = '';
+
+    /** @var string */
     private $sHeaderMenu = '';
+
+    /** @var string */
     private $sContent = '';
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct(GlobalCore $CORE)
     {
     }
 
+    /**
+     * @param string $s
+     * @return void
+     */
     public function setSubtitle($s)
     {
         $this->sSubtitle = ' &rsaquo; ' . $s;
     }
 
+    /**
+     * @param string $s
+     * @return void
+     */
     public function setCustomStylesheet($s)
     {
         $this->sCustomStylesheet = $s;
     }
 
+    /**
+     * @param string $s
+     * @return void
+     */
     public function setHeaderMenu($s)
     {
         $this->sHeaderMenu = $s;
     }
 
+    /**
+     * @param string $s
+     * @return void
+     */
     public function setContent($s)
     {
         $this->sContent = $s;
@@ -60,8 +86,9 @@ class NagVisIndexView
     /**
      * Parses the map and the objects for the nagvis-js frontend
      *
-     * @return	string 	String with JS Code
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return string String with JS Code
+     * @throws Dwoo_Exception
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parse()
     {
@@ -89,7 +116,7 @@ class NagVisIndexView
     /**
      * Checks if the compressed javascript file exists
      *
-     * @return	bool
+     * @return bool
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function checkJsCompressed()

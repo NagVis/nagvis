@@ -27,8 +27,13 @@
  */
 class NagVisUrlView
 {
+    /** @var string */
     private $url = '';
+
+    /** @var string */
     private $content = '';
+
+    /** @var array */
     private $aRotation = [];
 
     /**
@@ -46,6 +51,7 @@ class NagVisUrlView
     /**
      * Set the page content
      *
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setContent($s)
@@ -56,7 +62,8 @@ class NagVisUrlView
     /**
      * Set the rotation properties if the user wants a rotation
      *
-     * @param   array $a
+     * @param array $a
+     * @return void
      * @author  Lars Michelsen <lm@larsmichelsen.com>
      */
     public function setRotation($a)
@@ -64,6 +71,9 @@ class NagVisUrlView
         $this->aRotation = $a;
     }
 
+    /**
+     * @return array
+     */
     private function getProperties()
     {
         return [
@@ -75,11 +85,13 @@ class NagVisUrlView
     /**
      * Parses the url and the objects for the nagvis-js frontend
      *
-     * @return	string 	String with JS Code
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return string String with JS Code
+     * @throws Dwoo_Exception
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parse()
     {
+        /** @var GlobalMainCfg $_MAINCFG */
         global $_MAINCFG;
         // Initialize template system
         $TMPL = New FrontendTemplateSystem();

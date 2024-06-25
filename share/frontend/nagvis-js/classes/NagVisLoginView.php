@@ -27,6 +27,9 @@
  */
 class NagVisLoginView
 {
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct($CORE)
     {
     }
@@ -34,11 +37,16 @@ class NagVisLoginView
     /**
      * Parses the information in html format
      *
-     * @return	string 	String with Html Code
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return string String with Html Code
+     * @throws Dwoo_Exception
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parse()
     {
+        /**
+         * @var FieldInputError|null $LOGIN_MSG
+         * @var GlobalMainCfg $_MAINCFG
+         */
         global $LOGIN_MSG, $_MAINCFG;
         // Initialize template system
         $TMPL = New FrontendTemplateSystem();
