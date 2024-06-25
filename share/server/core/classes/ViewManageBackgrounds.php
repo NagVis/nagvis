@@ -24,10 +24,16 @@
 
 class ViewManageBackgrounds
 {
+    /** @var string */
     private $error = null;
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     */
     private function uploadForm()
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         echo '<h2>' . l('Upload Background Image') . '</h2>';
 
@@ -89,8 +95,15 @@ class ViewManageBackgrounds
         form_end();
     }
 
+    /**
+     * @return void
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
     private function deleteForm()
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         echo '<h2>' . l('Delete Background') . '</h2>';
 
@@ -162,6 +175,13 @@ class ViewManageBackgrounds
         form_end();
     }
 
+    /**
+     * @return string
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
     public function parse()
     {
         ob_start();

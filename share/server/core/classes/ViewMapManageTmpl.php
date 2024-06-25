@@ -24,10 +24,19 @@
 
 class ViewMapManageTmpl
 {
+    /** @var string|null */
     private $error = null;
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
     private function createForm()
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         echo '<h2>' . l('Create Template') . '</h2>';
 
@@ -120,8 +129,17 @@ class ViewMapManageTmpl
         form_end();
     }
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     * @throws Exception
+     */
     private function editForm()
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         echo '<h2>' . l('Modify Template') . '</h2>';
 
@@ -235,8 +253,16 @@ class ViewMapManageTmpl
         form_end();
     }
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
     private function deleteForm()
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         echo '<h2>' . l('Delete Template') . '</h2>';
 
@@ -294,6 +320,13 @@ class ViewMapManageTmpl
         form_end();
     }
 
+    /**
+     * @return string
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
     public function parse()
     {
         ob_start();
