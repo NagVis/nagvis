@@ -27,14 +27,31 @@
  */
 class FrontendModMap extends FrontendModule
 {
+    /** @var GlobalCore */
     private $CORE;
+
+    /** @var NagVisMapView */
     private $VIEW;
+
+    /** @var string */
     private $name = '';
+
+    /** @var string */
     private $search = '';
+
+    /** @var string */
     private $rotation = '';
+
+    /** @var string */
     private $rotationStep = '';
+
+    /** @var string */
     private $perm = '';
 
+    /**
+     * @param GlobalCore $CORE
+     * @throws NagVisException
+     */
     public function __construct(GlobalCore $CORE)
     {
         $this->sName = 'Map';
@@ -73,6 +90,12 @@ class FrontendModMap extends FrontendModule
         $this->setObject($this->name);
     }
 
+    /**
+     * @return string
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
     public function handleAction()
     {
         $sReturn = '';
@@ -90,8 +113,15 @@ class FrontendModMap extends FrontendModule
         return $sReturn;
     }
 
+    /**
+     * @return string
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
     private function showViewDialog()
     {
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTHORISATION;
         // Initialize map configuration
         $MAPCFG = new GlobalMapCfg($this->name);

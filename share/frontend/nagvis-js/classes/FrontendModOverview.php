@@ -27,11 +27,21 @@
  */
 class FrontendModOverview extends FrontendModule
 {
+    /** @var string */
     private $rotation = '';
+
+    /** @var string */
     private $rotationStep = '';
+
+    /** @var GlobalCore */
     private $CORE;
+
+    /** @var NagVisOverviewView */
     private $VIEW;
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct(GlobalCore $CORE)
     {
         $this->sName = 'Overview';
@@ -51,6 +61,9 @@ class FrontendModOverview extends FrontendModule
         ];
     }
 
+    /**
+     * @return string
+     */
     public function handleAction()
     {
         $sReturn = '';
@@ -65,6 +78,10 @@ class FrontendModOverview extends FrontendModule
         return $sReturn;
     }
 
+    /**
+     * @return string
+     * @throws NagVisException
+     */
     private function showViewDialog()
     {
         // Build index template
