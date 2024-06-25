@@ -27,12 +27,24 @@
  */
 class FrontendModUrl extends FrontendModule
 {
+    /** @var GlobalCore */
     private $CORE;
+
+    /** @var NagVisUrlView */
     private $VIEW;
+
+    /** @var string */
     private $url = '';
+
+    /** @var string */
     private $rotation = '';
+
+    /** @var string */
     private $rotationStep = '';
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct(GlobalCore $CORE)
     {
         $this->sName = 'Url';
@@ -56,6 +68,10 @@ class FrontendModUrl extends FrontendModule
         ];
     }
 
+    /**
+     * @return string
+     * @throws NagVisException
+     */
     public function handleAction()
     {
         $sReturn = '';
@@ -70,6 +86,10 @@ class FrontendModUrl extends FrontendModule
         return $sReturn;
     }
 
+    /**
+     * @return string
+     * @throws NagVisException
+     */
     private function showViewDialog()
     {
         // Only show when map name given

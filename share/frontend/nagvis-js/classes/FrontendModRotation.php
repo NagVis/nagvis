@@ -27,12 +27,24 @@
  */
 class FrontendModRotation extends FrontendModule
 {
+    /** @var GlobalCore */
     private $CORE;
+
+    /** @var string */
     private $name   = '';
+
+    /** @var string */
     private $type   = '';
+
+    /** @var string */
     private $step   = '';
+
+    /** @var string */
     private $stepId = '';
 
+    /**
+     * @param GlobalCore $CORE
+     */
     public function __construct(GlobalCore $CORE)
     {
         $this->sName = 'Rotation';
@@ -64,6 +76,9 @@ class FrontendModRotation extends FrontendModule
         $this->setObject($this->name);
     }
 
+    /**
+     * @return string
+     */
     public function handleAction()
     {
         $sReturn = '';
@@ -78,6 +93,10 @@ class FrontendModRotation extends FrontendModule
         return $sReturn;
     }
 
+    /**
+     * @return void
+     * @throws NagVisException
+     */
     private function showViewDialog()
     {
         // Initialize rotation/refresh
