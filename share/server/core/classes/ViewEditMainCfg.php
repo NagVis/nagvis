@@ -24,11 +24,21 @@
 
 class ViewEditMainCfg
 {
+    /** @var string */
     private $exclude_pattern = '/^(backend|internal|rotation|auth|action|wui)/i';
+
+    /** @var string|null */
     private $error = null;
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     private function handleAction()
     {
+        /** @var GlobalCore $CORE */
+        /** @var GlobalMainCfg $_MAINCFG */
         global $CORE, $_MAINCFG;
         $UMAINCFG = $CORE->getUserMainCfg();
 
@@ -79,8 +89,13 @@ class ViewEditMainCfg
             . 'window.setTimeout(function() { window.location.reload(); }, 1500);</script>';
     }
 
+    /**
+     * @return false|string
+     * @throws NagVisException
+     */
     public function parse()
     {
+        /** @var GlobalMainCfg $_MAINCFG */
         global $_MAINCFG;
         ob_start();
         js_form_start('edit_config');
@@ -113,8 +128,16 @@ class ViewEditMainCfg
         return ob_get_clean();
     }
 
+    /**
+     * @param string $sec
+     * @param string $key
+     * @param bool $ignore_default
+     * @return mixed|string|null
+     * @throws Exception
+     */
     private function getCurVal($sec, $key, $ignore_default = true)
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         $UMAINCFG = $CORE->getUserMainCfg();
 
@@ -129,8 +152,16 @@ class ViewEditMainCfg
         return $cur_val;
     }
 
+    /**
+     * @param string $sec
+     * @param bool $open
+     * @return void
+     * @throws Exception
+     */
     private function renderSection($sec, $open)
     {
+        /** @var GlobalMainCfg $_MAINCFG */
+        /** @var GlobalCore $CORE */
         global $_MAINCFG, $CORE;
 
         render_section_start($sec, $open);
@@ -225,8 +256,18 @@ class ViewEditMainCfg
         render_section_end();
     }
 
+    /**
+     * @param string $sec
+     * @param string $key
+     * @param array $spec
+     * @param mixed $def_val
+     * @param mixed $cur_val
+     * @return void
+     * @throws NagVisException
+     */
     private function renderInput($sec, $key, $spec, $def_val, $cur_val)
     {
+        /** @var GlobalMainCfg $_MAINCFG */
         global $_MAINCFG;
         $field_type = val($spec, 'field_type', 'text');
 
@@ -316,6 +357,12 @@ class ViewEditMainCfg
         }
     }
 
+    /**
+     * @param string $sec
+     * @param string $key
+     * @param mixed $value
+     * @return void
+     */
     private function colorSelect($sec, $key, $value)
     {
         $propname = $sec . "_" . $key;

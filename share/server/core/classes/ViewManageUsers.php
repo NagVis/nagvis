@@ -24,10 +24,17 @@
 
 class ViewManageUsers
 {
+    /** @var string|null */
     private $error = null;
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     private function addForm()
     {
+        /** @var CoreAuthHandler $AUTH */
         global $AUTH;
         echo '<h2>' . l('Create User') . '</h2>';
 
@@ -110,8 +117,15 @@ class ViewManageUsers
         form_end(false);
     }
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     private function editForm()
     {
+        /** @var CoreAuthHandler $AUTH */
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTH, $AUTHORISATION;
         if (!$AUTHORISATION->rolesConfigurable()) {
             return;
@@ -202,8 +216,15 @@ class ViewManageUsers
         form_end(false);
     }
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     private function deleteForm()
     {
+        /** @var CoreAuthHandler $AUTH */
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTH, $AUTHORISATION;
         echo '<h2>' . l('Delete User') . '</h2>';
 
@@ -260,8 +281,16 @@ class ViewManageUsers
         form_end(false);
     }
 
+    /**
+     * @return void
+     * @throws CoreAuthModNoSupport
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     private function resetPwForm()
     {
+        /** @var CoreAuthHandler $AUTH */
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTH, $AUTHORISATION;
         if (!$AUTH->checkFeature('changePassword') || $AUTH->authedTrusted()) {
             return;
@@ -347,6 +376,12 @@ class ViewManageUsers
         form_end(false);
     }
 
+    /**
+     * @return string
+     * @throws CoreAuthModNoSupport
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     public function parse()
     {
         ob_start();

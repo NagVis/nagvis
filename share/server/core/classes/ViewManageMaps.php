@@ -21,8 +21,14 @@
 
 class ViewManageMaps
 {
+    /** @var string|null */
     private $error = null;
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     private function createForm()
     {
         global $CORE;
@@ -121,8 +127,16 @@ class ViewManageMaps
         form_end();
     }
 
+    /**
+     * @param string $name
+     * @param string $new_name
+     * @return void
+     * @throws NagVisException
+     */
     private function doRename($name, $new_name)
     {
+        /** @var GlobalCore $CORE */
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $CORE, $AUTHORISATION;
         $files = [];
 
@@ -155,8 +169,14 @@ class ViewManageMaps
             cfg('paths', 'mapcfg') . $new_name . '.cfg');
     }
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     private function renameForm()
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         echo '<h2>' . l('Rename Map') . '</h2>';
 
@@ -235,8 +255,15 @@ class ViewManageMaps
         form_end();
     }
 
+    /**
+     * @return void
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
     private function deleteForm()
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         echo '<h2>' . l('Delete Map') . '</h2>';
 
@@ -299,8 +326,14 @@ class ViewManageMaps
         form_end();
     }
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     private function exportForm()
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         echo '<h2>' . l('Export Map') . '</h2>';
 
@@ -348,8 +381,13 @@ class ViewManageMaps
         form_end();
     }
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     */
     private function importForm()
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         echo '<h2>' . l('Import Map') . '</h2>';
 
@@ -412,6 +450,13 @@ class ViewManageMaps
         form_end();
     }
 
+    /**
+     * @return string
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
     public function parse()
     {
         ob_start();

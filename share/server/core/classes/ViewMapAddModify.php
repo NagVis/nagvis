@@ -24,20 +24,35 @@
 
 class ViewMapAddModify
 {
+    /** @var GlobalMapCfg */
     private $MAPCFG = null;
+
+    /** @var string|null */
     private $mode = null;
 
     // object related vars
+    /** @var string|null */
     private $object_id   = null;
+
+    /** @var string|null */
     private $object_type = null;
+
+    /** @var string|null */
     private $clone_id    = null;
 
+    /** @var array */
     private $attrs          = [];
+
+    /** @var array */
     private $attrs_filtered = [];
 
-    // Filter the attributes using the helper fields
-    // Each attribute can have the toggle_* field set. If present
-    // use it's value to filter out the attributes
+    /**
+     * Filter the attributes using the helper fields
+     * Each attribute can have the toggle_* field set. If present
+     * use it's value to filter out the attributes
+     *
+     * @return void
+     */
     private function filterMapAttrs()
     {
         $exclude = [
@@ -76,6 +91,10 @@ class ViewMapAddModify
         }
     }
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     */
     private function validateAttributes()
     {
         $attrDefs = $this->MAPCFG->getValidObjectType($this->object_type);
@@ -124,8 +143,14 @@ class ViewMapAddModify
         }
     }
 
-
-    // Validate and process addModify form submissions
+    /**
+     * Validate and process addModify form submissions
+     *
+     * @return bool
+     * @throws FieldInputError
+     * @throws NagVisException
+     * @throws Exception
+     */
     private function handleAddModify()
     {
         $perm        = get_checkbox('perm');
@@ -218,6 +243,14 @@ class ViewMapAddModify
         return $show_dialog;
     }
 
+    /**
+     * @param string $default_value
+     * @param string $attr
+     * @param bool $must
+     * @param bool $only_inherited
+     * @return array
+     * @throws NagVisException
+     */
     private function getAttr($default_value, $attr, $must, $only_inherited = false)
     {
         $update = !is_action() && is_update();
@@ -271,6 +304,12 @@ class ViewMapAddModify
         return [$isInherited, $val];
     }
 
+    /**
+     * @param string $propname
+     * @param string $value
+     * @param string $hideField
+     * @return void
+     */
     private function colorSelect($propname, $value, $hideField)
     {
         echo '<div id="' . $propname . '" class=picker style="' . $hideField . '">';
@@ -283,6 +322,12 @@ class ViewMapAddModify
             . 'o = null;');
     }
 
+    /**
+     * @param string $propname
+     * @param string $value
+     * @param string $hideField
+     * @return void
+     */
     private function inputDimension($propname, $value, $hideField)
     {
         echo '<div id="' . $propname . '" class=picker style="' . $hideField . '">';
@@ -300,6 +345,13 @@ class ViewMapAddModify
         echo '</a></div>';
     }
 
+    /**
+     * @param string $propname
+     * @param array $prop
+     * @param array $properties
+     * @return void
+     * @throws NagVisException
+     */
     private function drawField($propname, $prop, $properties)
     {
         $default_value = $this->MAPCFG->getDefaultValue($this->object_type, $propname);
@@ -546,8 +598,13 @@ class ViewMapAddModify
         echo '</td></tr>';
     }
 
-    // Returns an array of property spec arrays which should be shown for the current object.
-    // These are already filtered depnding on the configured sources (in case of map global obj)
+    /**
+     * Returns an array of property spec arrays which should be shown for the current object.
+     * These are already filtered depnding on the configured sources (in case of map global obj)
+     *
+     * @return array
+     * @throws NagVisException
+     */
     private function getProperties()
     {
         $default_value = $this->MAPCFG->getDefaultValue($this->object_type, 'sources');
@@ -587,6 +644,11 @@ class ViewMapAddModify
         return $typeDef;
     }
 
+    /**
+     * @param array $sec_props
+     * @return void
+     * @throws NagVisException
+     */
     private function drawFields($sec_props)
     {
         foreach ($sec_props as $propname => $prop) {
@@ -599,6 +661,10 @@ class ViewMapAddModify
         }
     }
 
+    /**
+     * @return void
+     * @throws NagVisException
+     */
     private function drawForm()
     {
         js_form_start('addmodify');
@@ -648,8 +714,16 @@ class ViewMapAddModify
         form_end();
     }
 
+    /**
+     * @return false|string
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     * @throws Exception
+     */
     public function parse()
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         ob_start();
 
@@ -727,6 +801,9 @@ class ViewMapAddModify
         return ob_get_clean();
     }
 
+    /**
+     * @return string
+     */
     public function object_type()
     {
         return $this->object_type;

@@ -24,10 +24,18 @@
 
 class ViewChangePassword
 {
+    /** @var string|null */
     private $error = null;
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     private function changeForm()
     {
+        /** @var GlobalCore $CORE */
+        /** @var CoreAuthHandler $AUTH */
         global $CORE, $AUTH;
         if (is_action()) {
             try {
@@ -105,6 +113,11 @@ class ViewChangePassword
         form_end();
     }
 
+    /**
+     * @return string
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     public function parse()
     {
         ob_start();

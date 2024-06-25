@@ -24,10 +24,20 @@
 
 class ViewToNewMap
 {
+    /** @var string|null */
     private $error = null;
 
+    /**
+     * @param string $orig_name
+     * @return string
+     * @throws FieldInputError
+     * @throws MapCfgInvalid
+     * @throws MapCfgInvalidObject
+     * @throws NagVisException
+     */
     public function parse($orig_name)
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
 
         ob_start();

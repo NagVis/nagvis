@@ -24,21 +24,37 @@
 
 class ViewManageBackends
 {
+    /** @var string|null */
     private $error = null;
+
+    /** @var array */
     private $editable_backends;
+
+    /** @var array */
     private $defined_backends;
+
+    /** @var array */
     private $available_backends;
 
+    /**
+     * @throws NagVisException
+     */
     public function __construct()
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         $this->editable_backends  = $CORE->getDefinedBackends(ONLY_USERCFG);
         $this->defined_backends   = $CORE->getDefinedBackends();
         $this->available_backends = $CORE->getAvailableBackends();
     }
 
+    /**
+     * @param string $type
+     * @return mixed
+     */
     private function backend_attributes($type)
     {
+        /** @var GlobalMainCfg $_MAINCFG */
         global $_MAINCFG;
         // Loop all options for this backend type
         $backend_opts = $_MAINCFG->getValidObjectType('backend');
@@ -53,6 +69,10 @@ class ViewManageBackends
         return $opts;
     }
 
+    /**
+     * @param string $backend_id
+     * @return array
+     */
     private function backend_options($backend_id)
     {
         $ret = [];
@@ -69,8 +89,14 @@ class ViewManageBackends
         return $ret;
     }
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     private function defaultForm()
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         echo '<h2>' . l('Default Backend') . '</h2>';
 
@@ -119,8 +145,15 @@ class ViewManageBackends
         }
     }
 
+    /**
+     * @param string $mode
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     private function editForm($mode = 'add')
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
 
         if ($mode == 'add') {
@@ -250,8 +283,14 @@ class ViewManageBackends
         form_end();
     }
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     private function delForm()
     {
+        /** @var GlobalCore $CORE */
         global $CORE;
         echo '<h2>' . l('Delete Backend') . '</h2>';
 
@@ -299,6 +338,11 @@ class ViewManageBackends
         form_end();
     }
 
+    /**
+     * @return string
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     public function parse()
     {
         ob_start();

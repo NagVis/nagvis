@@ -24,10 +24,17 @@
 
 class ViewManageRoles
 {
+    /** @var string|null */
     private $error = null;
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     private function addForm()
     {
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTHORISATION;
         echo '<h2>' . l('Create Role') . '</h2>';
 
@@ -84,8 +91,14 @@ class ViewManageRoles
         form_end();
     }
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     private function modifyForm()
     {
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTHORISATION;
         echo '<h2>' . l('Modify Role') . '</h2>';
 
@@ -161,8 +174,13 @@ class ViewManageRoles
         form_end();
     }
 
+    /**
+     * @param string $role_id
+     * @return void
+     */
     private function renderPermissions($role_id)
     {
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTHORISATION;
         if (!$role_id) {
             return;
@@ -234,6 +252,11 @@ class ViewManageRoles
         echo '</table>';
     }
 
+    /**
+     * @param array $permissions
+     * @param array$permitted
+     * @return void
+     */
     public function renderOtherSection($permissions, $permitted)
     {
         echo '<table class="mytable perms">';
@@ -257,8 +280,14 @@ class ViewManageRoles
         echo '</table>';
     }
 
+    /**
+     * @return void
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     private function deleteForm()
     {
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTHORISATION;
         echo '<h2>' . l('Delete Role') . '</h2>';
 
@@ -318,8 +347,14 @@ class ViewManageRoles
         form_end();
     }
 
+    /**
+     * @return string
+     * @throws FieldInputError
+     * @throws NagVisException
+     */
     public function parse()
     {
+        /** @var CoreAuthorisationHandler $AUTHORISATION */
         global $AUTHORISATION;
         ob_start();
 
