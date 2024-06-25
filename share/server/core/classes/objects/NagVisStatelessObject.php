@@ -27,11 +27,18 @@
 class NagVisStatelessObject extends NagVisObject
 {
     // "Global" Configuration variables for all stateless objects
+    /** @var bool */
     protected $label_show;
 
+    /** @var string|null */
     protected static $iconPath      = null;
+
+    /** @var string|null */
     protected static $iconPathLocal = null;
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->object_id;

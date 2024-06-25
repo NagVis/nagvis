@@ -29,13 +29,14 @@
 class NagVisShape extends NagVisStatelessObject
 {
     protected $enable_refresh;
+    /** @var string */
     protected $icon;
     protected $icon_size;
 
     /**
      * Class constructor
      *
-     * @param		object $icon Object of class GlobalMainCfg
+     * @param string $icon
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function __construct($icon)
@@ -52,11 +53,9 @@ class NagVisShape extends NagVisStatelessObject
     }
 
     /**
-     * PUBLIC parseJson()
-     *
      * Parses the object in json format
      *
-     * @return	string		JSON code of the object
+     * @return array JSON code of the object
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function parseJson()
@@ -68,12 +67,11 @@ class NagVisShape extends NagVisStatelessObject
     }
 
     /**
-     * PUBLIC fetchIcon()
-     *
      * Is executed to detect missing shape images. Is not doing anything
      * when the shape image is an URL.
      *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @return void
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function fetchIcon()
     {

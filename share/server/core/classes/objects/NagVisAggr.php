@@ -25,6 +25,7 @@
 
 class NagVisAggr extends NagVisStatefulObject
 {
+    /** @var string */
     protected $type = 'aggr';
 
     protected static $langType   = null;
@@ -32,10 +33,16 @@ class NagVisAggr extends NagVisStatefulObject
     protected static $langChild  = null;
     protected static $langChild1 = null;
 
+    /** @var string */
     protected $name;
 
+    /** @var array */
     protected $members = [];
 
+    /**
+     * @param array $backend_id
+     * @param string $name
+     */
     public function __construct($backend_id, $name)
     {
         $this->backend_id = $backend_id;
@@ -43,6 +50,9 @@ class NagVisAggr extends NagVisStatefulObject
         parent::__construct();
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -50,8 +60,10 @@ class NagVisAggr extends NagVisStatefulObject
 
     /**
      * Queues the state fetching to the backend.
-     * @param   bool $_unused Unused flag here
-     * @param   bool $bFetchMemberState Optional flag to disable fetching of member status
+     *
+     * @param bool $_unused Unused flag here
+     * @param bool $bFetchMemberState Optional flag to disable fetching of member status
+     * @return void
      */
     public function queueState($_unused = true, $bFetchMemberState = true)
     {
@@ -71,6 +83,9 @@ class NagVisAggr extends NagVisStatefulObject
 
     /**
      * Applies the fetched state
+     *
+     * @return void
+     * @throws NagVisException
      */
     public function applyState()
     {
@@ -131,6 +146,8 @@ class NagVisAggr extends NagVisStatefulObject
 
     /**
      * Fetches the summary output from the object state counts
+     *
+     * @return void
      */
     private function fetchSummaryOutputFromCounts()
     {
@@ -169,6 +186,8 @@ class NagVisAggr extends NagVisStatefulObject
 
     /**
      * Fetches the summary state from all members recursive
+     *
+     * @return void
      */
     private function fetchSummaryState()
     {
@@ -181,6 +200,8 @@ class NagVisAggr extends NagVisStatefulObject
 
     /**
      * Fetches the summary output from all members
+     *
+     * @return void
      */
     private function fetchSummaryOutput()
     {

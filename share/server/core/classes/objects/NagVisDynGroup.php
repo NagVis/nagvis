@@ -24,6 +24,7 @@
 
 class NagVisDynGroup extends NagVisStatefulObject
 {
+    /** @var string */
     protected $type = 'dyngroup';
 
     protected static $langType   = null;
@@ -31,12 +32,22 @@ class NagVisDynGroup extends NagVisStatefulObject
     protected static $langChild  = null;
     protected static $langChild1 = null;
 
+    /** @var string */
     protected $name;
+
+    /** @var string */
     public $object_types;
+
+    /** @var string */
     protected $object_filter;
 
+    /** @var NagVisStatefulObject[] */
     protected $members = [];
 
+    /**
+     * @param array $backend_id
+     * @param string $name
+     */
     public function __construct($backend_id, $name)
     {
         $this->backend_id = $backend_id;
@@ -44,11 +55,17 @@ class NagVisDynGroup extends NagVisStatefulObject
         parent::__construct();
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @return string
+     */
     public function getObjectFilter()
     {
         // convert '\n' to \n

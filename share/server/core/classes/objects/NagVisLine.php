@@ -38,10 +38,9 @@ class NagVisLine extends NagVisStatelessObject
     }
 
     /**
-     * PUBLIC fetchIcon()
-     *
      * Just a dummy here (Shape won't need an icon)
      *
+     * @return void
      * @author	Lars Michelsen <lm@larsmichelsen.com>
      */
     public function fetchIcon()

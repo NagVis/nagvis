@@ -34,13 +34,22 @@ class NagVisMapObj extends NagVisStatefulObject
     protected static $langSelf = null;
     protected static $langChild = null;
 
+    /** @var GlobalMapCfg */
     protected $MAPCFG;
+
+    /** @var NagVisMap */
     private $MAP;
 
+    /** @var NagVisStatefulObject[] */
     protected $members = [];
+
+    /** @var array[] */
     protected $linkedMaps;
 
+    /** @var string */
     protected $map_name;
+
+    /** @var string */
     protected $alias;
 
     // globals of a map are loaded into the NagVisMapObj
@@ -61,7 +70,10 @@ class NagVisMapObj extends NagVisStatefulObject
     protected $stylesheet;
     protected $zoom;
     protected $zoombar;
+
+    /** @var array */
     protected $backend_id;
+
     protected $context_menu;
     protected $context_template;
     protected $exclude_members;
@@ -139,17 +151,33 @@ class NagVisMapObj extends NagVisStatefulObject
     protected $dynmap_sort;
     protected $dynmap_order;
 
-    // When this map object summarizes the state of a map this is true
-    // Prevents loops
+    /**
+     * When this map object summarizes the state of a map this is true
+     * Prevents loops
+     *
+     * @var bool
+     */
     protected $isSummaryObject;
 
-    // When this map points back to an earlier map and produces a loop
-    // this option is set to true
+    /**
+     * When this map points back to an earlier map and produces a loop
+     * this option is set to true
+     *
+     * @var bool
+     */
     protected $isLoopingBacklink;
 
-    // This controlls wether this is MapObj is used as view or as object on a map
+    /**
+     * This controlls wether this is MapObj is used as view or as object on a map
+     *
+     * @var bool
+     */
     protected $isView;
 
+    /**
+     * @param GlobalMapCfg $MAPCFG
+     * @param bool $bIsView
+     */
     public function __construct($MAPCFG, $bIsView = IS_VIEW)
     {
         $this->MAPCFG = $MAPCFG;
@@ -175,6 +203,9 @@ class NagVisMapObj extends NagVisStatefulObject
 
     /**
      * Special handling for maps, because the alias has been set before
+     *
+     * @param array $arr
+     * @return void
      */
     public function setState($arr)
     {
@@ -185,6 +216,8 @@ class NagVisMapObj extends NagVisStatefulObject
 
     /**
      * Clears the map
+     *
+     * @return void
      */
     public function clearMembers()
     {
@@ -193,6 +226,8 @@ class NagVisMapObj extends NagVisStatefulObject
 
     /**
      * Returns the array of objects on the map
+     *
+     * @return array
      */
     public function getMembers()
     {
@@ -201,6 +236,9 @@ class NagVisMapObj extends NagVisStatefulObject
 
     /**
      * Adds several members to the map
+     *
+     * @param array $add
+     * @return void
      */
     public function addMembers($add)
     {
@@ -211,6 +249,9 @@ class NagVisMapObj extends NagVisStatefulObject
      * Returns an array of state relevant members
      * textboxes, shapes and "summary objects" are
      * excluded here
+     *
+     * @param bool $excludeMemberStates
+     * @return array
      */
     public function getStateRelevantMembers($excludeMemberStates = false)
     {
@@ -266,6 +307,8 @@ class NagVisMapObj extends NagVisStatefulObject
 
     /**
      * Returns the number of stateful objects on the map
+     *
+     * @return int
      */
     public function getNumMembers()
     {
@@ -283,6 +326,8 @@ class NagVisMapObj extends NagVisStatefulObject
 
     /**
      * With current data the best way to check wether the map has stateful members
+     *
+     * @return bool
      */
     public function hasMembers()
     {
@@ -297,13 +342,14 @@ class NagVisMapObj extends NagVisStatefulObject
     }
 
     /**
-     * PUBLIC queueState()
-     *
      * Queues fetching of the object state to the assigned backend. After all objects
      * are queued they can be executed. Then all fetched information gets assigned to
      * the single objects.
      *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $_unused_flag
+     * @param bool $_unused_flag2
+     * @return void
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function queueState($_unused_flag = true, $_unused_flag2 = true)
     {
@@ -322,11 +368,10 @@ class NagVisMapObj extends NagVisStatefulObject
     }
 
     /**
-     * PUBLIC applyState()
-     *
      * Apllies the object state after queueing and fetching by the backend.
      *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @return void
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function applyState()
     {
@@ -360,16 +405,18 @@ class NagVisMapObj extends NagVisStatefulObject
     }
 
     /**
-     * PUBLIC objectTreeToMapObjects()
-     *
      * Links the object in the object tree to the map objects
      *
-     * @author	Lars Michelsen <lm@larsmichelsen.com>
+     * @param object $OBJ
+     * @param array $arrHostnames
+     * @return void
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function objectTreeToMapObjects(&$OBJ, &$arrHostnames= [])
     {
         $this->members[] = $OBJ;
 
+        // TODO: this method doesn't exist anywhere?
         foreach ($OBJ->getChildsAndParents() as $OBJ1) {
             /*
              * Check if the host is already on the map (If it's not done, the
@@ -389,9 +436,10 @@ class NagVisMapObj extends NagVisStatefulObject
     /**
      * Checks if the map is in maintenance mode
      *
-     * @param 	bool	$printErr
-     * @return	bool	Is Check Successful?
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param bool $printErr
+     * @return bool Is Check Successful?
+     * @throws MapInMaintenance
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function checkMaintenance($printErr)
     {
@@ -407,6 +455,10 @@ class NagVisMapObj extends NagVisStatefulObject
     /**
      * Cares about excluding members of map objects. The other objects excludes
      * are handled by the backends, not in the NagVis code.
+     *
+     * @param NagVisStatefulObject $OBJ
+     * @param bool $isCount
+     * @return bool
      */
     private function excludeMapObject($OBJ, $isCount)
     {
@@ -440,8 +492,12 @@ class NagVisMapObj extends NagVisStatefulObject
     /**
      * Gets all objects of the map
      *
-     * @author	Thomas Casteleyn <thomas.casteleyn@super-visions.com>
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @param array $arrMapNames
+     * @param int $depth
+     * @return void
+     * @throws NagVisException
+     * @author    Thomas Casteleyn <thomas.casteleyn@super-visions.com>
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     public function fetchMapObjects(&$arrMapNames = [], $depth = 0)
     {
@@ -632,11 +688,10 @@ class NagVisMapObj extends NagVisStatefulObject
     # #########################################################################
 
     /**
-     * PRIVATE fetchSummaryOutput()
-     *
      * Fetches the summary output of the map
      *
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return void
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchSummaryOutput()
     {
@@ -661,12 +716,10 @@ class NagVisMapObj extends NagVisStatefulObject
     }
 
     /**
-     * PRIVATE isPermitted()
-     *
      * check for permissions to view the state of the map
      *
-     * @param		object $OBJ Map object to check
-     * @return	bool		Permitted/Not permitted
+     * @param NagVisStatefulObject $OBJ Map object to check
+     * @return bool Permitted/Not permitted
      * @author 	Lars Michelsen <lm@larsmichelsen.com>
      */
     private function isPermitted($OBJ)
@@ -686,11 +739,10 @@ class NagVisMapObj extends NagVisStatefulObject
     }
 
     /**
-     * PUBLIC fetchSummaryState()
-     *
      * Fetches the summary state of the map object and all members/childs
      *
-     * @author 	Lars Michelsen <lm@larsmichelsen.com>
+     * @return void
+     * @author    Lars Michelsen <lm@larsmichelsen.com>
      */
     private function fetchSummaryState()
     {
